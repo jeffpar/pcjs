@@ -1,0 +1,67 @@
+  .pcjsContainer:
+    background-color: slategray;
+    border: 1px solid black;
+    border-radius: 15px;
+    overflow: auto;
+    padding: 8px;
+  .pcjsTitle:
+    font-weight: bold;
+  .pcjsControls:
+    display: table;
+  .pcjsControl:
+    display: table-cell;
+    padding-right: 8px;
+    vertical-align: middle;
+  .pcjsDiagnostics:
+    clear: both;
+  .pcjsConsole:
+    font-family: Monaco,"Lucida Console",monospace;
+    width: 100%;
+  _lifeDemo:
+    position: relative;
+    display: inline-block;
+    float: left;
+    margin-right: 32px;
+    margin-bottom: 16px;
+  _lifeColorDemo:
+    position: relative;
+    display: inline-block;
+    float: left;
+    margin-right: 32px;
+    margin-bottom: 16px;
+  _displayLife:
+    position: relative;
+  _colorSwatchLife:
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 1px solid;
+    border-radius: 50%;
+    vertical-align: middle;
+    background-color: green;
+  _lbDemo:
+    position: relative;
+    display: inline-block;
+    float: left;
+    margin-right: 32px;
+    margin-bottom: 16px;
+  _displayLB:
+    position: relative;
+    line-height: 0;
+    margin-bottom: 8px;
+    background-color: rgb(26,26,26);
+    background-image: none;
+    background-size: 100% 100%;
+    -webkit-tap-highlight-color: transparent;
+  .colorSwatchLB:
+    display: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid;
+    border-radius: 50%;
+    vertical-align: middle;
+    background-color: green;
+  _diagsLB:
+    float: left;
+  _printLB:
+    font-family: Monaco,"Lucida Console",monospace;

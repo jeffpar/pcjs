@@ -322,7 +322,7 @@
       "FACTORY",
       "VERSION"
     ],
-    "factory": "LED",
+    "factory": "LEDs",
     "scripts": [
       "./machines/lib/defs.js",
       "./machines/lib/numio.js",

@@ -1,4 +1,13 @@
 {
+  "arcade": {
+    "@title": "Arcade Machines",
+    "@instances": {
+      "invaders": {
+        "@title": "Space Invaders",
+        "@redirect_from": "/devices/pc8080/machine/invaders/"
+      }
+    }
+  },
   "pcx86": {
     "@title": "IBM PC and compatibles",
     "ibm": {
@@ -177,6 +186,27 @@
             "@source": "PCjs"
           }
         ]
+      }
+    }
+  },
+  "led": {
+    "@title": "LED Simulations",
+    "@instances": {
+      "life": {
+        "@title": "&quot;Game of Life&quot; Demo",
+        "@redirect_from": "/devices/leds/life/"
+      },
+      "life/colors": {
+        "@title": "&quot;Game of Life&quot; Color Demo",
+        "@redirect_from": "/devices/leds/life/colors/"
+      },
+      "litebrite": {
+        "@title": "&quot;Lite-Brite&quot; Demo",
+        "@redirect_from": "/devices/leds/litebrite/"
+      },
+      "litebrite/images": {
+        "@title": "&quot;Lite-Brite&quot; Images",
+        "@redirect_from": "/devices/leds/litebrite/images/"
       }
     }
   },

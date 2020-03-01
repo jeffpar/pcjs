@@ -8,6 +8,7 @@ machines:
     type: ti57
     name: TI-57 Programmable Calculator
     config: /configs/ti57/ti57-rev0.json
+    layout: /_includes/ti57/ti57-bare.html
 ---
 
 ### Powering Off The TI-57 Display
@@ -88,4 +89,4 @@ etc.)
 
 ### PCjs TI-57 Emulator
 
-{% include machine.html id="ti57-rev0" layout="machine/ti57-bare" %}
+{% include machine.html id="ti57-rev0" %}
