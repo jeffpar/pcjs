@@ -4,6 +4,7 @@ description: Welcome to PCjs, home of the original IBM PC emulator for web brows
 author: Jeff Parsons
 logo: /assets/img/logo-home.png
 data_dir: configs
+google_analytics: UA-155982505-1
 
 exclude:
   - Gemfile
