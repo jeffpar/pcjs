@@ -8,6 +8,7 @@ machines:
     type: ti57
     name: TI-57 Programmable Calculator
     config: /configs/ti57/ti57-rev0.json
+    layout: /_includes/ti57/ti57-diag.html
 ---
 
 Our TI-57 emulator below is one of the most faithful TI-57 emulations currently available.  It should run at
@@ -33,4 +34,4 @@ version of Chrome, Firefox, Safari, Edge, etc.
 If any errors occur during operation, the Diagnostics window should display the last instruction decoded.
 The window also accepts a few debugging commands.  Use '?' for help.
 
-{% include machine.html id="ti57-rev0" layout="machine/ti57-diag" %}
+{% include machine.html id="ti57-rev0" %}

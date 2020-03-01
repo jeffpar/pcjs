@@ -8,6 +8,7 @@ machines:
     type: ti57
     name: TI-57 Programmable Calculator
     config: /configs/ti57/ti57-rev0.json
+    layout: /_includes/ti57/ti57-debug.html
 ---
 
 For years, we all assumed that **PCjs** meant "Personal Computers in JavaScript."  Even I thought that.  But now
@@ -128,4 +129,4 @@ to date), you have to be running a modern web browser.  I'll probably add an ES5
 for now, it's rather refreshing to be using modern JavaScript language features and not constantly worrying about
 backward-compatibility. 
 
-{% include machine.html id="ti57-rev0" layout="machine/ti57-debug" %}
+{% include machine.html id="ti57-rev0" %}

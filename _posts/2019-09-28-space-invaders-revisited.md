@@ -9,6 +9,7 @@ machines:
     type: invaders
     name: Space Invaders
     config: /configs/invaders/invaders.json
+    layout: /_includes/invaders/invaders-full.html
 ---
 
 When I first started working on PCjs, JavaScript features like
@@ -96,4 +97,4 @@ more work to make them usable.
 An emulator is never really done, because an emulation can always be made just a little bit better.  But I feel like
 this is a nice fresh start.
 
-{% include machine.html id="invaders" layout="machine/invaders-full" %}
+{% include machine.html id="invaders" %}

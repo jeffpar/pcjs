@@ -1,17 +1,15 @@
 {%- assign machine_id = include.id -%}
 {%- assign machine_type = include.type -%}
 {%- assign machine_config = include.config -%}
+{%- assign machine_layout = include.layout -%}
 {%- capture machine_name -%}{{ include.name | default: "PCjs Machine" }}{%- endcapture -%}
 {%- assign machine_does_not_exist = true -%}
 {%- for candidate in page.machines -%}
   {%- if candidate.id == machine_id -%}
     {%- assign machine = candidate -%}
-    {%- if candidate.type -%}
-      {%- assign machine_type = candidate.type -%}
-    {%- endif -%}
-    {%- if candidate.config -%}
-      {%- assign machine_config = candidate.config -%}
-    {%- endif -%}
+    {%- if candidate.type -%}{%- assign machine_type = candidate.type -%}{%- endif -%}
+    {%- if candidate.config -%}{%- assign machine_config = candidate.config -%}{%- endif -%}
+    {%- if candidate.layout -%}{%- assign machine_layout = candidate.layout | replace: "/_includes/", "" | replace: ".html", "" -%}{%- endif -%}
     {%- assign machine_does_not_exist = false -%}
     {%- break -%}
   {%- endif -%}
@@ -24,8 +22,8 @@
 </div>
     {%- assign machine = nil -%}
     {%- assign machine_does_not_exist = false -%}
-  {%- elsif include.layout -%}
-    {%- include {{ include.layout }}.html id=machine_id -%}
+  {%- elsif machine_layout -%}
+    {%- include {{ machine_layout }}.html id=machine_id -%}
     {%- assign machine = nil -%}
     {%- assign machine_does_not_exist = false -%}
   {%- else -%}

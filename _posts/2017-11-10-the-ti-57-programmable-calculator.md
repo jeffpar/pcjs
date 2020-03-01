@@ -4,10 +4,11 @@ title: The TI-57 Programmable Calculator
 date: 2017-11-10 15:00:00
 permalink: /blog/2017/11/10/
 machines:
-  - id: ti57
+  - id: ti57-rev0
     type: ti57
     name: TI-57 Programmable Calculator
     config: /configs/ti57/ti57-rev0.json
+    layout: /_includes/ti57/ti57-diag.html
 ---
 
 The new [TI-57 Programmable Calculator](/machines/ti/ti57/) emulator, shown below, is the latest addition to the
@@ -104,4 +105,4 @@ bugs.  If you run into any, or you have a browser or device where it doesn't wor
 
 ## PCjs TI-57 Emulator
 
-{% include machine.html id="ti57-rev0" layout="machine/ti57-diag" %}
+{% include machine.html id="ti57-rev0" %}

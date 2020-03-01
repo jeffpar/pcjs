@@ -11,11 +11,12 @@ machines:
     type: ti57
     name: TI-57 Programmable Calculator
     config: /configs/ti57/ti57-rev0.json
+    layout: /_includes/ti57/ti57-full.html
 ---
 
 A PCjs emulation of the Texas Instruments TI-57 Programmable Calculator is shown below.
 
-{% include machine.html id="ti57-rev0" layout="machine/ti57-full" %}
+{% include machine.html id="ti57-rev0" %}
 
 Additional ready-to-run configurations include:
 
