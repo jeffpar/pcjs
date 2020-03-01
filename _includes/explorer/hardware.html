@@ -1,0 +1,80 @@
+          <ul class="pcjs-explorer-top">
+            <li class="pcjs-explorer-fixed">Hardware
+              <ul>
+              {%- for machine in site.data.hardware %}
+                {%- capture machine_type -%}{{ machine[0] }}{%- endcapture -%}
+                {%- capture hardware_path1 -%}/machines/{{ machine[0] }}{%- endcapture %}
+                <li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ machine[1]['@title'] }}
+                  <ul>
+                  {%- for category in machine[1] -%}
+                    {%- if site.developer %}
+                    <!-- category: {{ category[0] }} -->
+                    {%- endif -%}
+                    {%- if category[0] == "@instances" -%}
+                      {%- assign subcategories = machine[1] -%}
+                      {%- capture hardware_path2 -%}{%- endcapture -%}
+                    {%- elsif category[0] == "@documents" -%}
+                      {%- assign documents = category[1] %}
+                      {%- capture documents_link -%}{{ hardware_path1 }}/{%- endcapture %}
+{% include explorer/doclinks.html docs=documents link=documents_link -%}
+                      {%- continue -%}
+                    {%- elsif category[0] contains '@' -%}
+                      {%- continue -%}
+                    {%- else -%}
+                      {%- assign subcategories = category[1] %}
+                      {%- capture hardware_path2 -%}/{{ category[0] }}{%- endcapture %}
+                    <li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ category[1]['@title'] }}
+                      <ul>
+                    {%- endif -%}
+                    {%- for subcategory in subcategories -%}
+                      {%- if site.developer %}
+                        <!-- subcategory: {{ subcategory[0] }} -->
+                      {%- endif -%}
+                      {%- if subcategory[0] == "@instances" -%}
+                        {%- capture hardware_path3 -%}{%- endcapture -%}
+                      {%- elsif subcategory[0] == "@documents" -%}
+                        {%- assign documents = subcategory[1] %}
+                        {%- capture documents_link -%}{{ hardware_path1 }}{{ hardware_path2 }}/{%- endcapture %}
+{% include explorer/doclinks.html docs=documents link=documents_link -%}
+                        {%- continue -%}
+                      {%- elsif subcategory[0] contains '@' -%}
+                        {%- continue -%}
+                      {%- else -%}
+                        {%- capture hardware_path3 -%}/{{ subcategory[0] }}{%- endcapture %}
+                        <li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ subcategory[1]['@title'] }}
+                          <ul>
+                      {%- endif -%}
+                      {%- for instance in subcategory[1] -%}
+                        {%- if site.developer %}
+                            <!-- instance: {{ instance[0] }} -->
+                        {%- endif -%}
+                        {%- if instance[0] == "@documents" -%}
+                          {%- assign documents = instance[1] %}
+                          {%- capture documents_link -%}{{ hardware_path1 }}{{ hardware_path2 }}{{ hardware_path3 }}/{%- endcapture %}
+{% include explorer/doclinks.html docs=documents link=documents_link -%}
+                          {%- continue -%}
+                        {%- endif -%}
+                        {%- if instance[0] contains '@' -%}{%- continue -%}{%- endif -%}
+                        {%- capture hardware_path4 -%}{%- endcapture %}
+                        {%- if instance[0] != "" -%}{%- capture hardware_path4 -%}/{{ instance[0] }}{%- endcapture %}{%- endif -%}
+                        {%- capture hardware_url -%}{{ hardware_path1 }}{{ hardware_path2 }}{{ hardware_path3 }}{{ hardware_path4 }}{%- endcapture %}
+                        {%- capture hardware_id -%}{{ hardware_url | remove_first: "/machines" | remove_first: "/" | replace: "/", "-" }}{%- endcapture -%}
+                        {%- capture hardware_link -%}{% if instance[1]['@permalink'] %}{{ instance[1]['@permalink'] }}{% else %}{{ hardware_url | replace: "-", "/" }}/{% endif %}{%- endcapture %}
+                            <li id="{{ hardware_id }}" class="pcjs-explorer-item"><a href="{{ hardware_link }}">{{ instance[1]['@title'] }}</a></li>
+                      {%- endfor -%}
+                      {%- if subcategory[0] != "@instances" and subcategory[0] != "@documents" %}
+                          </ul>
+                        </li>
+                      {%- endif -%}
+                    {%- endfor %}
+                    {%- if category[0] != "@instances" and category[0] != "@documents"  %}
+                      </ul>
+                    </li>
+                    {%- endif -%}
+                  {%- endfor %}
+                  </ul>
+                </li>
+              {%- endfor %}
+              </ul>
+            </li>
+          </ul>

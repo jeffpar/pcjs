@@ -1,0 +1,59 @@
+{
+  "@title": "IBM PC (Model 5150) with Monochrome Display",
+  "defaults": {
+    "ram": "64K",
+    "fpu": "None",
+    "fdc": "2 diskette drives",
+    "parallel": "LPT1",
+    "serial": "COM1"
+  },
+  "components": [
+    {
+      "id": "pcMDA",
+      "type": "computer"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/rom-basic-100.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/rom-bios-rev1.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/video-mda.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/fdc.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/ram.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/cpu.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/keyboard.json"
+    },
+    {
+      "id": "chipset",
+      "type": "chipset",
+      "model": 5150,
+      "scaleTimers": false,
+      "sw1": "01000001",
+      "sw2": "11111000",
+      "sound": true,
+      "floppies": "",
+      "monitor": "",
+      "dateRTC": ""
+    },
+    {
+      "id": "lpt1",
+      "type": "parallel",
+      "adapter": 2
+    },
+    {
+      "id": "com1",
+      "type": "serial",
+      "adapter": 1
+    }
+  ]
+}

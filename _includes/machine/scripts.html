@@ -1,0 +1,252 @@
+{%- comment -%}
+
+The following machine properties are supported in the 'machines' Front Matter of PCjs Markdown pages:
+
+    'id' (eg: ibm5150)
+    'name' (eg: "IBM PC (Model 5150) with Monochrome Display")
+    'type' (eg: c1p, pcx86, pc8080, pdp10, pdp11, leds, ti42, ti55, ti57) ["-dbg" suffixes are DEPRECATED]
+    'debugger' (default: true) [DEPRECATED along with the "-dbg" suffixes on 'type'; all debuggers are built-in now]
+    'class' (eg: "machine-left", "machine-right", etc; default: none)
+    'config' (default: machine.xml)
+    'template' (default: machine.xsl)
+    'debug' (default: false; true enables asserts and is much slower)
+    'uncompiled' (default: false; true is useful for debugging but slower)
+    'parms' (stringified object that collects additional machine properties listed below)
+
+Note that if you want BACKTRACK support enabled in a machine, 'uncompiled' must be true, because that isn't
+currently compiled into any machines.  Also note that while multiple machines ARE supported on a single page, there
+are some limitations; for example, loading two or more machines of the same 'type' but with different 'debug',
+'debugger' and/or 'uncompiled' settings may not work properly.
+
+The following optional machine properties will be added to the 'parms' property:
+
+    'autoMount' (eg: {"A":{"name":"OS/2 FOOTBALL (v7.68.17)","path":"/disks-demo/pcx86/os2/misc/football/FOOTBALL-76817.json"}})
+    'autoScript' (eg, type Keyboard "$date\r$time\r")
+    'autoStart' (eg: true)
+    'autoType' (eg: $date\r$time\r)
+    'drives' (eg: '[{name:"68Mb Hard Disk",type:4,path:"/disks-demo/pcx86/drives/68mb/WIN95.json"}]')
+    'cdromDrives' (eg: '[{name:"CD",type:0,path:"/disks-cds/cds005/microsoft/reference/Bookshelf-Windows-1991/cdrom"}]')
+    'floppyDrives' (eg: '[{boot:false}]')
+    'resume' (eg: 1)
+    'sound' (eg: true)
+    'state' (eg: state.json)
+    'commands' (debugger commands, if any)
+    'messages' (eg: fault)
+    'connection' (eg: serialPort->vt100a.serialPort)
+
+{%- endcomment -%}
+{%- for candidate in page.machines -%}
+  {%- assign machine_id = candidate.id -%}
+  {%- capture machine_type -%}{{ candidate.type | remove: "-dbg" }}{%- endcapture -%}
+  {%- if candidate.components or candidate.config -%}
+    {%- assign machine = candidate -%}
+  {%- else -%}
+    {%- assign machine = site.data[candidate.type][candidate.id] -%}
+  {%- endif -%}
+  {%- unless machine -%}
+    {%- continue -%}
+  {%- endunless -%}
+  {%- assign machine_data = site.data.machines[machine_type] -%}
+  {%- assign machine_folder = machine_data.folder -%}
+  {%- if machine_data.copy != nil -%}
+    {%- assign machine_data = site.data.machines[machine_data.copy] -%}
+    {%- unless machine_folder -%}
+      {%- assign machine_folder = machine_data.folder -%}
+    {%- endunless -%}
+  {%- endif -%}
+  {%- unless machine_folder -%}
+    {%- assign machine_folder = machine_type -%}
+  {%- endunless -%}
+  {%- if machine_data.version != nil -%}
+    {%- capture machine_version -%}{{ machine_data.version }}{%- endcapture -%}
+  {%- else -%}
+    {%- capture machine_version -%}{{ site.data.machines.shared.version }}{%- endcapture -%}
+  {%- endif -%}
+  {%- capture machine_embed -%}{{ machine_data.factory }}{%- endcapture -%}
+  {%- assign machine_config = "" -%}
+  {%- assign machine_template = "" -%}
+  {%- unless machine.components or machine.config contains ".json" and machine_embed contains "embed" -%}
+    {%- unless machine.config -%}
+      {%- assign machine_config = "machine.xml" -%}
+    {%- else -%}
+      {%- assign machine_config = machine.config -%}
+    {%- endunless -%}
+  {%- endunless -%}
+  {%- if machine.autoMount == nil -%}
+    {%- assign machine_autoMount = "" -%}
+  {%- else -%}
+    {%- capture machine_autoMount -%}autoMount:{{ machine.autoMount | jsonify }}{%- endcapture -%}
+  {%- endif -%}
+  {%- if machine.autoScript == nil -%}
+    {%- assign machine_autoScript = "" -%}
+  {%- else -%}
+    {%- capture machine_autoScript -%},autoScript:"{{ page.machineScripts[machine.autoScript] | strip_newlines | replace:'"':"\\\\&quot;" | replace:"\r":"\\\\r" | replace:"\n":"\\\\n" | replace:"\t":"\\\\t" | replace:"\x":"\\\\x" }}"{%- endcapture -%}
+  {%- endif -%}
+  {%- if machine.autoStart == nil -%}
+    {%- assign machine_autoStart = "" -%}
+  {%- else -%}
+    {%- capture machine_autoStart -%},autoStart:{{ machine.autoStart }}{%- endcapture -%}
+  {%- endif -%}
+  {%- if machine.autoType == nil -%}
+    {%- assign machine_autoType = "" -%}
+  {%- else -%}
+    {%- capture machine_autoType -%},autoType:"{{ machine.autoType | replace:"\\":"\\\\\\\\" | replace:"\r":"\\\\r" | newline_to_br | replace:"<br />":"\\\\r" | strip_newlines | replace:"\n":"\\\\n" | replace:"\t":"\\\\t" | replace:"\x":"\\\\x" | replace:"&":"&amp;" | replace:"<":"&lt;" | replace:">":"&gt;" }}"{%- endcapture -%}
+  {%- endif -%}
+  {%- if machine.class == nil -%}
+    {%- assign machine_class = "" -%}
+  {%- else -%}
+    {%- capture machine_class -%},'{{ machine.class }}'{%- endcapture -%}
+  {%- endif -%}
+  {%- if machine.resume == nil -%}
+    {%- assign machine_resume = "" -%}
+  {%- else -%}
+    {%- capture machine_resume -%},resume:"{{ machine.resume }}"{%- endcapture -%}
+  {%- endif -%}
+  {%- if machine.sound == nil -%}
+    {%- assign machine_sound = "" -%}
+  {%- else -%}
+    {%- capture machine_sound -%},sound:{{ machine.sound }}{%- endcapture -%}
+  {%- endif -%}
+  {%- if machine.state == nil -%}
+    {%- assign machine_state = "" -%}
+  {%- else -%}
+    {%- capture machine_state -%},state:"{{ machine.state }}"{%- endcapture -%}
+  {%- endif -%}
+  {%- if machine.testRAM == nil -%}
+    {%- assign machine_testRAM = "" -%}
+  {%- else -%}
+    {%- capture machine_testRAM -%},testRAM:{{ machine.testRAM }}{%- endcapture -%}
+  {%- endif -%}
+  {%- if machine.commands == nil -%}
+    {%- assign machine_commands = "" -%}
+  {%- else -%}
+    {%- capture machine_commands -%},commands:"{{ machine.commands | replace:"&":"&amp;" | replace:"#":"&#35;" | replace:'"':"\\\\&quot;" }}"{%- endcapture -%}
+  {%- endif -%}
+  {%- if machine.messages == nil -%}
+    {%- assign machine_messages = "" -%}
+  {%- else -%}
+    {%- capture machine_messages -%},messages:"{{ machine.messages }}"{%- endcapture -%}
+  {%- endif -%}
+  {%- if machine.drives != nil -%}
+    {%- if machine.drives == "" -%}
+      {%- assign machine_drives = ",drives:[]" -%}
+    {%- else -%}
+      {%- capture machine_drives -%},drives:{{ machine.drives }}{%- endcapture -%}
+    {%- endif -%}
+  {%- else -%}
+    {%- assign machine_drives = "" -%}
+  {%- endif -%}
+  {%- if machine.cdromDrives != nil -%}
+    {%- if machine.cdromDrives == "" -%}
+      {%- assign machine_cdroms = ",cdromDrives:[]" -%}
+    {%- else -%}
+      {%- capture machine_cdroms -%},cdromDrives:{{ machine.cdromDrives }}{%- endcapture -%}
+    {%- endif -%}
+  {%- else -%}
+    {%- assign machine_cdroms = "" -%}
+  {%- endif -%}
+  {%- if machine.floppyDrives != nil -%}
+    {%- if machine.floppyDrives == "" -%}
+      {%- assign machine_floppies = ",floppyDrives:[]" -%}
+    {%- else -%}
+      {%- capture machine_floppies -%},floppyDrives:{{ machine.floppyDrives }}{%- endcapture -%}
+    {%- endif -%}
+  {%- else -%}
+    {%- assign machine_floppies = "" -%}
+  {%- endif -%}
+  {%- if machine.connection == nil -%}
+    {%- assign machine_connection = "" -%}
+  {%- else -%}
+    {%- capture machine_connection -%},connection:"{{ machine.connection }}"{%- endcapture -%}
+  {%- endif -%}
+  {%- capture machine_parms -%}{{ site.left_brace }}{{ machine_autoMount }}{{ machine_autoScript }}{{ machine_autoStart }}{{ machine_autoType }}{{ machine_cdroms }}{{ machine_floppies }}{{ machine_drives }}{{ machine_resume }}{{ machine_sound }}{{ machine_state }}{{ machine_testRAM }}{{ machine_commands }}{{ machine_messages }}{{ machine_connection }}{{ site.right_brace }}{%- endcapture -%}
+  {%- if site.pcjs.uncompiled -%}
+    {%- if site.pcjs.unbundled -%}
+      {%- for script in machine_data.scripts -%}
+        {%- capture page_script %}
+    <script src="{{ site.baseurl }}/{{ script }}"></script>
+        {%- endcapture -%}
+        {%- unless page_scripts contains page_script -%}
+          {{ page_script }}
+        {%- endunless -%}
+        {%- capture page_scripts -%}{{ page_scripts }}{{ page_script }}{%- endcapture -%}
+      {%- endfor -%}
+    {%- else -%}
+      {% capture page_script %}
+    <script src="{{ site.baseurl }}/machines/{{ machine_folder }}/releases/{{ machine_version }}/{{ machine_type }}-uncompiled.js"></script>
+      {% endcapture -%}
+      {%- unless page_scripts contains page_script %}
+        {{ page_script }}
+      {%- endunless -%}
+      {%- capture page_scripts -%}{{ page_scripts }}{{ page_script }}{%- endcapture -%}
+    {%- endif -%}
+  {%- else -%}
+    {% capture page_script %}
+    <script src="{{ site.baseurl }}/machines/{{ machine_folder }}/releases/{{ machine_version }}/{{ machine_type }}.js"></script>
+    {% endcapture -%}
+    {%- unless page_scripts contains page_script -%}
+      {{ page_script }}
+    {%- endunless -%}
+    {%- capture page_scripts -%}{{ page_scripts }}{{ page_script }}{%- endcapture -%}
+  {%- endif -%}
+  {%- if machine_config contains ".xml" and machine_template == "" -%}
+    {%- capture machine_template -%}{{ site.baseurl }}/configs/{{ machine_type }}/xml/components.xsl{%- endcapture -%}
+  {%- endif -%}
+  {% if machine_embed contains "embed" %}
+    <script>{{ machine_embed }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});</script>
+  {% else %}
+    <script>{{ machine_embed }}('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
+  {% endif %}
+  {%- if machine.sticky == "top" %}
+    <script src="{{ site.baseurl }}/machines/shared/lib/sticky.js"></script>
+    <script>addStickyMachine('{{ machine_id }}');</script>
+  {%- endif -%}
+  {%- endfor %}
+    <script type="text/javascript">
+      function pcjsGetURLVars() {
+        let vars = {};
+        let parts = window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+          vars[key] = value;
+        });
+        return vars;
+      }
+      function pcjsExplorerClick(element, event) {
+        if (element.classList.contains("pcjs-explorer-open")) {
+          element.classList.add("pcjs-explorer-closed");
+          element.classList.remove("pcjs-explorer-open");
+        } else {
+          element.classList.add("pcjs-explorer-open");
+          element.classList.remove("pcjs-explorer-closed");
+        }
+        event.stopPropagation();
+      }
+      function pcjsExplorerExpand(path) {
+        if (path) {
+          let element;
+          let id = path.substr(1).replace(/\//g, '-').replace(/^(documents|machines|software)-/, '').replace(/-$/, '');
+          do {
+            element = document.getElementById(id);
+            if (element) break;
+            let idNew = id.replace(/-[^-]+$/, '');
+            if (idNew == id) break;
+            id = idNew;
+          } while (true);
+          if (element) {
+            let parent;
+            element.classList.add("pcjs-explorer-selected");
+            while ((parent = element.parentElement)) {
+              if (parent.classList.contains("pcjs-explorer-closed")) {
+                parent.classList.add("pcjs-explorer-open");
+                parent.classList.remove("pcjs-explorer-closed");
+              }
+              element = parent;
+            }
+          }
+        }
+      }
+      function pcjsExplorerInit() {
+        pcjsExplorerExpand(window.location.pathname);
+        pcjsExplorerExpand(pcjsGetURLVars()['software']);
+      }
+      pcjsExplorerInit();
+    </script>

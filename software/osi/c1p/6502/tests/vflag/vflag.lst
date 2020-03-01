@@ -1,0 +1,150 @@
+ca65 V2.15 - Git b3d84d5
+Main file   : vflag.asm
+Current file: vflag.asm
+
+000000r 1               ;
+000000r 1               ; The following code comes from:
+000000r 1               ;
+000000r 1               ;	http://www.6502.org/tutorials/vflag.html
+000000r 1               ;
+000000r 1               ; and is built with:
+000000r 1               ;
+000000r 1               ;	ca65 vflag.asm -I ../.. -l -o vflag.obj
+000000r 1               ;	ld65 vflag.obj -o vflag.bin --target none
+000000r 1               ;
+000000r 1               ; An ASCII hex file which the OSI machine-language monitor can load
+000000r 1               ; is produced with the following commands:
+000000r 1               ;
+000000r 1               ;	echo -n ".0200/" > vflag.txt
+000000r 1               ;	hexdump -e '1/1 "%02X\n"' -v vflag.bin >> vflag.txt
+000000r 1               ;	echo -n ".0200" >> vflag.txt
+000000r 1               ;
+000000r 1               		.include "sim.inc"
+000000r 2               		.code
+000000r 2               		.org	$200
+000200  2               ;
+000200  2               ; These must be kept in sync with the "opSim operation codes" in c1p.js
+000200  2               ;
+000200  2               .define	OP_SIM			$02
+000200  2               .define	SIMOP_HLT		$00
+000200  2               .define	SIMOP_MSG		$01
+000200  2               
+000200  2               .macro	SIM_MSG	msg
+000200  2               		.local	addr
+000200  2               		.byte	OP_SIM,SIMOP_MSG
+000200  2               addr:	.ASCIIZ	msg
+000200  2               .endmacro
+000200  2               
+000200  2               .macro	SIM_HLT
+000200  2               		.byte	OP_SIM,SIMOP_HLT
+000200  2               .endmacro
+000200  2               
+000200  1               
+000200  1               ; Demonstrate that the V flag works as described
+000200  1               ;
+000200  1               ; Returns with ERROR = 0 if the test passes, ERROR = 1 if the test fails
+000200  1               ;
+000200  1               ; Five (additional) memory locations are used: ERROR, S1, S2, U1, and U2
+000200  1               ; which can be located anywhere convenient in RAM
+000200  1               ;
+000200  1               ; The program below takes about 16 seconds to complete at 1 MHz.
+000200  1               ;
+000200  1  D8           TEST:	CLD       ; Clear decimal mode (just in case) for test
+000201  1  A9 01        		LDA #1
+000203  1  8D 99 02     		STA ERROR ; Store 1 in ERROR until test passes
+000206  1  A9 80        		LDA #$80
+000208  1  8D 9A 02     		STA S1    ; Initalize S1 and S2 to -128 ($80)
+00020B  1  8D 9B 02     		STA S2
+00020E  1  A9 00        		LDA #0
+000210  1  8D 9C 02     		STA U1    ; Initialize U1 and U2 to 0
+000213  1  8D 9D 02     		STA U2
+000216  1  A0 01        		LDY #1    ; Initialize Y (used to set and clear the carry flag) to 1
+000218  1  20 50 02     LOOP:	JSR ADD   ; Test ADC
+00021B  1  E0 01        		CPX #1
+00021D  1  F0 28        		BEQ ERR   ; End if V and unsigned result do not agree (X = 1)
+00021F  1  20 6F 02     		JSR SUB   ; Test SBC
+000222  1  E0 01        		CPX #1
+000224  1  F0 21        		BEQ ERR   ; End if V and unsigned result do not agree (X = 1)
+000226  1  EE 9A 02     		INC S1
+000229  1  EE 9C 02     		INC U1
+00022C  1  D0 EA        		BNE LOOP  ; Loop until all 256 possibilities of S1 and U1 are tested
+00022E  1  EE 9B 02     		INC S2
+000231  1  EE 9D 02     		INC U2
+000234  1  D0 E2        		BNE LOOP  ; Loop until all 256 possibilities of S2 and U2 are tested
+000236  1  88           		DEY
+000237  1  10 DF        		BPL LOOP  ; Loop until both possiblities of the carry flag are tested
+000239  1  A9 00        		LDA #0
+00023B  1  8D 99 02     		STA ERROR ; All tests pass, so store 0 in ERROR
+00023E  1  02 01 50 41  		SIM_MSG "PASS"
+000242  1  53 53 00     
+000245  1  F0 07        		BEQ DONE
+000247  1  02 01 46 41  ERR:	SIM_MSG "FAIL"
+00024B  1  49 4C 00     
+00024E  1  02 00        DONE:	SIM_HLT
+000250  1               ;
+000250  1               ; Test ADC
+000250  1               ;
+000250  1               ; X is initialized to 0
+000250  1               ; X is incremented when V = 1
+000250  1               ; X is incremented when the unsigned result predicts an overflow
+000250  1               ; Therefore, if the V flag and the unsigned result agree, X will be
+000250  1               ; incremented zero or two times (returning X = 0 or X = 2), and if they do
+000250  1               ; not agree X will be incremented once (returning X = 1)
+000250  1               ;
+000250  1  C0 01        ADD:	CPY #1   ; Set carry when Y = 1, clear carry when Y = 0
+000252  1  AD 9A 02     		LDA S1   ; Test twos complement addition
+000255  1  6D 9B 02     		ADC S2
+000258  1  A2 00        		LDX #0   ; Initialize X to 0
+00025A  1  50 01        		BVC ADD1
+00025C  1  E8           		INX      ; Increment X if V = 1
+00025D  1  C0 01        ADD1:	CPY #1   ; Set carry when Y = 1, clear carry when Y = 0
+00025F  1  AD 9C 02     		LDA U1   ; Test unsigned addition
+000262  1  6D 9D 02     		ADC U2
+000265  1  B0 04        		BCS ADD3 ; Carry is set if U1 + U2 >= 256
+000267  1  30 01        		BMI ADD2 ; U1 + U2 < 256, A >= 128 if U1 + U2 >= 128
+000269  1  E8           		INX      ; Increment X if U1 + U2 < 128
+00026A  1  60           ADD2:	RTS
+00026B  1  10 01        ADD3:	BPL ADD4 ; U1 + U2 >= 256, A <= 127 if U1 + U2 <= 383 ($17F)
+00026D  1  E8           		INX      ; Increment X if U1 + U2 > 383
+00026E  1  60           ADD4:	RTS
+00026F  1               ;
+00026F  1               ; Test SBC
+00026F  1               ;
+00026F  1               ; X is initialized to 0
+00026F  1               ; X is incremented when V = 1
+00026F  1               ; X is incremented when the unsigned result predicts an overflow
+00026F  1               ; Therefore, if the V flag and the unsigned result agree, X will be
+00026F  1               ; incremented zero or two times (returning X = 0 or X = 2), and if they do
+00026F  1               ; not agree X will be incremented once (returning X = 1)
+00026F  1               ;
+00026F  1  C0 01        SUB:	CPY #1   ; Set carry when Y = 1, clear carry when Y = 0
+000271  1  AD 9A 02     		LDA S1   ; Test twos complement subtraction
+000274  1  ED 9B 02     		SBC S2
+000277  1  A2 00        		LDX #0   ; Initialize X to 0
+000279  1  50 01        		BVC SUB1
+00027B  1  E8           		INX      ; Increment X if V = 1
+00027C  1  C0 01        SUB1:	CPY #1   ; Set carry when Y = 1, clear carry when Y = 0
+00027E  1  AD 9C 02     		LDA U1   ; Test unsigned subtraction
+000281  1  ED 9D 02     		SBC U2
+000284  1  48           		PHA      ; Save the low byte of result on the stack
+000285  1  A9 FF        		LDA #$FF
+000287  1  E9 00        		SBC #$00 ; result = (65280 + U1) - U2, 65280 = $FF00
+000289  1  C9 FE        		CMP #$FE
+00028B  1  D0 05        		BNE SUB4 ; Branch if result >= 65280 ($FF00) or result < 65024 ($FE00)
+00028D  1  68           		PLA      ; Get the low byte of result
+00028E  1  30 01        		BMI SUB3 ; result < 65280 ($FF00), A >= 128 if result >= 65152 ($FE80)
+000290  1  E8           SUB2:	INX      ; Increment X if result < 65152 ($FE80)
+000291  1  60           SUB3:	RTS
+000292  1  68           SUB4:	PLA      ; Get the low byte of result (does not affect the carry flag)
+000293  1  90 FB        		BCC SUB2 ; The carry flag is clear if result < 65024 ($FE00)
+000295  1  10 01        		BPL SUB5 ; result >= 65280 ($FF00), A <= 127 if result <= 65407 ($FF7F)
+000297  1  E8           		INX      ; Increment X if result > 65407 ($FF7F)
+000298  1  60           SUB5:	RTS
+000299  1               
+000299  1               		.data
+000299  1  00           ERROR:	.byte	0
+00029A  1  00           S1:		.byte	0
+00029B  1  00           S2:		.byte	0
+00029C  1  00           U1:		.byte	0
+00029D  1  00           U2:		.byte	0
+00029D  1               

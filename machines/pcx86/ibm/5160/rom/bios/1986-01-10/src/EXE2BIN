@@ -1,0 +1,10 @@
+n xtbiosv2.exe
+l
+r bx
+1
+r cx
+0
+n xtbiosv2.bin
+e cs:fffe fb a3
+w cs:0
+q

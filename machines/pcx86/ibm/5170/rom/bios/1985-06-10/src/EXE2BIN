@@ -1,0 +1,10 @@
+n atbiosv2.exe
+l
+r bx
+1
+r cx
+0
+n atbiosv2.bin
+e cs:fffe fc 07
+w cs:0
+q

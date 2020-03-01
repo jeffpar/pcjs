@@ -1,0 +1,1 @@
+/map test1 test2 test3 test4 test5 test6 test7 sysinit1 gdt_bld sidt_bld dskette disk kybd prt rs232 video1 bios bios1 bios2 fill orgs,atbios,atbios;

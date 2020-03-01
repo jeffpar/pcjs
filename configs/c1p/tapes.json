@@ -1,0 +1,53 @@
+{
+  "basic": {
+    "@title": "BASIC Programs",
+    "osi": {
+      "@title": "OSI Programs",
+      "@products": {
+        "math": {"@title": "BASIC MATH", "@tape": "MATH.BAS", "@type": "ASCII"},
+        "checking": {"@title": "CHECKING", "@tape": "CHECKING.BAS", "@type": "ASCII"},
+        "counter": {"@title": "COUNTER", "@tape": "COUNTER.BAS", "@type": "ASCII"},
+        "poker": {"@title": "POKER", "@tape": "POKER.BAS", "@type": "ASCII"},
+        "presidents": {"@title": "PRESIDENTS", "@tape": "PRESIDENTS.BAS", "@type": "ASCII"},
+        "starwars": {"@title": "STAR WARS", "@tape": "STARWARS.BAS", "@type": "ASCII"},
+        "trigtutor": {"@title": "TRIG TUTOR", "@tape": "TRIGTUTOR.BAS", "@type": "ASCII"}
+      }
+    },
+    "jeffpar": {
+      "@title": "Jeff's Programs",
+      "@products": {
+        "checkers": {"@title": "CHECKERS", "@tape": "CHECKERS.BAS", "@type": "ASCII"},
+        "hangwoman": {"@title": "HANGWOMAN", "@tape": "HANGWOMAN.BAS", "@type": "ASCII"},
+        "life": {"@title": "LIFE", "@tape": "LIFE.BAS", "@type": "ASCII"},
+        "othello": {"@title": "OTHELLO", "@tape": "OTHELLO.BAS", "@type": "ASCII"},
+        "soforecast": {"@title": "SOFORECAST", "@tape": "SOFORECAST.BAS", "@type": "ASCII"},
+        "tubelist": {"@title": "TUBELIST", "@tape": "TUBELIST.BAS", "@type": "ASCII"}
+      }
+    },
+    "other": {
+      "@title": "Other Programs",
+      "@products": {
+        "seawolfe": {"@title": "SEAWOLFE", "@tape": "SEAWOLFE.BAS", "@type": "ASCII"},
+        "tankfortwo": {"@title": "TANK FOR TWO", "@tape": "TANKFORTWO.BAS", "@type": "ASCII"}
+      }
+    }
+  },
+  "6502": {
+    "@title": "6502 Programs",
+    "tests": {
+      "@title": "6502 Tests",
+      "@products": {
+        "bcd": {"@title": "BCD Tests", "@tape": "BCD.ASM", "@type": "ASCII"},
+        "vflag": {"@title": "Overflow Tests", "@tape": "VFLAG.ASM", "@type": "ASCII"}
+      }
+    },
+    "programs": {
+      "@title": "Jeff's 6502 Programs",
+      "@products": {
+        "assembler": {"@title": "6502 Assembler (8K)", "@tape": "ASSEMBLER-8K.json", "@type": "BINARY"},
+        "basicext": {"@title": "BASIC Extensions", "@tape": "BASICEXT.json", "@type": "BINARY"},
+        "life": {"@title": "LIFE", "@tape": "LIFE.json", "@type": "BINARY"}
+      }
+    }
+  }
+}

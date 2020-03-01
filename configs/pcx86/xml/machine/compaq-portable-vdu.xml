@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
+<machine id="compaq-portable-128kb" type="pcx86" border="1" pos="center" background="default">
+	<computer id="compaq-vdu-128k" name="COMPAQ Portable"/>
+	<ram id="ramLow" addr="0x00000" test="false"/>
+	<rom id="romBIOS" addr="0xfe000" size="0x2000" file="/machines/pcx86/compaq/portable/rom/bios/100518-001-REVB.json"/>
+	<video ref="/configs/pcx86/xml/video/compaq-vdu.xml"/>
+	<fdc ref="/configs/pcx86/xml/fdc/library.xml" autoMount='{A:{name:"COMPAQ MS-DOS 1.10 Rev B"}, B:{name:"None"}}'/>
+	<cpu id="cpu8088" model="8088" pos="left" padLeft="8px" padBottom="8px">
+		<control type="button" binding="run">Run</control>
+		<control type="button" binding="reset">Reset</control>
+		<control type="button" binding="setSpeed">Speed</control>
+	</cpu>
+	<keyboard ref="/configs/pcx86/xml/keyboard/us83-softkeys.xml"/>
+	<chipset id="chipset" model="5150" sw1="01001001" sw2="10111000"/>
+	<serial id="com1" adapter="1"/>
+	<parallel id="lpt1" adapter="1"/>
+</machine>

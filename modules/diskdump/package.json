@@ -1,0 +1,21 @@
+{
+  "name": "diskdump",
+  "description": "Converts disk images to/from JSON",
+  "main": "./lib/diskdump",
+  "scripts": {
+    "test": "echo \"error: no test specified\" && exit 1"
+  },
+  "author": "Jeff Parsons <Jeff@pcjs.org>",
+  "licenses": [
+    {
+      "type": "GPLv3",
+      "url": "http://www.gnu.org/licenses/gpl.html"
+    }
+  ],
+  "bin": {
+    "diskdump": "./bin/diskdump"
+  },
+  "dependencies": {
+    "mkdirp": "^0.3.5"
+  }
+}

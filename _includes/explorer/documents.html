@@ -1,0 +1,62 @@
+          <ul class="pcjs-explorer-top">
+            <li class="pcjs-explorer-fixed">Documents
+              <ul>
+              {%- for group in site.data.documents %}
+                {%- capture group_type -%}{{ group[0] }}{%- endcapture -%}
+                {%- capture docs_path1 -%}/{{ group[0] }}{%- endcapture %}
+                <li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ group[1]['@title'] }}
+                  <ul>
+                  {%- for category in group[1] -%}
+                    {%- if category[0] == "@instances" -%}
+                      {%- assign subcategories = group[1] -%}
+                      {%- capture docs_path2 -%}{%- endcapture -%}
+                    {%- elsif category[0] contains '@' -%}
+                      {%- continue -%}
+                    {%- else -%}
+                      {%- assign subcategories = category[1] %}
+                      {%- capture docs_path2 -%}/{{ category[0] }}{%- endcapture %}
+                    <li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ category[1]['@title'] }}
+                      <ul>
+                    {%- endif -%}
+                    {%- for subcategory in subcategories -%}
+                      {%- if subcategory[0] == "@instances" -%}
+                        {%- capture docs_path3 -%}{%- endcapture -%}
+                      {%- elsif subcategory[0] == "@documents" -%}
+                        {%- assign documents = subcategory[1] -%}
+                        {%- include explorer-doclinks.html docs=documents -%}
+                        {%- continue -%}
+                      {%- elsif subcategory[0] contains '@' -%}
+                        {%- continue -%}
+                      {%- else -%}
+                        {%- capture docs_path3 -%}/{{ subcategory[0] }}{%- endcapture %}
+                        <li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ subcategory[1]['@title'] }}
+                          <ul>
+                      {%- endif -%}
+                      {%- for instance in subcategory[1] -%}
+                        {%- if instance[0] contains '@' -%}{%- continue -%}{%- endif -%}
+                        {%- capture docs_path4 -%}{%- endcapture %}
+                        {%- if instance[0] != "" -%}{%- capture docs_path4 -%}/{{ instance[0] }}{%- endcapture %}{%- endif -%}
+                        {%- capture docs_url -%}{{ docs_path1 }}{{ docs_path2 }}{{ docs_path3 }}{{ docs_path4 }}{%- endcapture %}
+                        {%- capture docs_link -%}{% if instance[1]['@permalink'] %}{{ instance[1]['@permalink'] }}{% else %}/documents{{ docs_url | replace: "-", "/" }}/{% endif %}{%- endcapture -%}
+                        {%- assign docs_item = instance[1]['@title'] -%}
+                        {%- if instance[1]['@documents'] -%}
+                          {%- capture docs_item -%}<a href="{{ docs_link }}">{{ docs_item }}</a>{%- endcapture -%}
+                        {%- endif %}
+                            <li id="{{ docs_url | remove_first: "/" | replace: "/", "-" }}" class="pcjs-explorer-item">{{ docs_item }}</li>
+                      {%- endfor -%}
+                      {%- if subcategory[0] != "@instances" %}
+                          </ul>
+                        </li>
+                      {%- endif -%}
+                    {%- endfor %}
+                    {%- if category[0] != "@instances" %}
+                      </ul>
+                    </li>
+                    {%- endif -%}
+                  {%- endfor %}
+                  </ul>
+                </li>
+              {%- endfor %}
+              </ul>
+            </li>
+          </ul>

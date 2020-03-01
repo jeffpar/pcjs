@@ -1,0 +1,71 @@
+{
+  "@title": "IBM PC XT (Model 5160) with Color Display and Debugger",
+  "defaults": {
+    "ram": "256K",
+    "fpu": "None",
+    "fdc": "2 diskette drives",
+    "parallel": "LPT1",
+    "serial": "COM1,COM2",
+    "mouse": "COM2"
+  },
+  "components": [
+    {
+      "id": "pcCGA",
+      "type": "computer"
+    },
+    {
+      "id": "debugger",
+      "type": "debugger"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/rom-basic-110.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/rom-bios-rev1.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/video-cga.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/fdc.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/ram.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/cpu.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/keyboard.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/panel.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/chipset.json",
+      "sw1": "01001001"
+    },
+    {
+      "id": "lpt1",
+      "type": "parallel",
+      "adapter": 2,
+      "binding": "print"
+    },
+    {
+      "id": "com1",
+      "type": "serial",
+      "adapter": 1,
+      "binding": "print"
+    },
+    {
+      "id": "com2",
+      "type": "serial",
+      "adapter": 2
+    },
+    {
+      "id": "mouse",
+      "type": "mouse",
+      "serial": "com2"
+    }
+  ]
+}

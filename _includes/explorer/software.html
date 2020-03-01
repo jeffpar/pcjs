@@ -1,0 +1,175 @@
+          {%- comment %}
+            Here's the complete hierarchy of software.json:
+
+              The "top" level is the object type (eg, hardware, software, documentation)
+              The second level is a "machine" aka platform key (eg, osi, pcx86, etc.)
+              The third level is a set of category keys (eg, app, driver, lang, etc.)
+              The fourth level is a set of subcategory keys (eg, apl, basic, c, pascal, etc.)
+              The fifth level is a set of vendor keys (eg, borland, dresearch, ibm, microsoft, etc.)
+              The sixth level is a set of product keys (eg, quickbasic, visualbasic, etc.)
+              The seventh level is a set of versions (eg, 1.00, 2.00, etc.) inside a @versions object
+              The eighth level is a list of media items inside a @media array
+
+            However, entries in software.json are allowed to "short-circuit" this hierarchy to some extent;
+            ie, you can "jump" from platform, category, or subcategory directly to products by placing
+            a "@products" key inside any of those three levels.  The "osi" section is one example: there
+            is a limited amount of software for that platform, so there's no need to force users to drill
+            down as much; the subcategories of BASIC programs are more like vendors, each subcategory has a
+            list of products, and each product is a single media item (assumed whenever @versions is omitted).
+
+            Other special keys include:
+
+              @title: this should generally appear at every level, because the keys only describe
+              the hierarchy of the objects, not their names; one exception are version entries, where
+              the version key *is* the version number, and if a no @title is present for a version,
+              a default title (product @title plus version key) will be used instead.
+
+              @hardware: an optional entry inside a version to define a default hardware configuration.
+
+              @autoMount: an optional entry inside a version to define a "custom" autoMount URL parameter,
+              instead of the one automatically generated from the list of @media items; eg:
+
+                "@autoMount": {
+                  "A": {"@diskette": "IBM-PCDOS-200-DISK1"},
+                  "B": {"@diskette": "IBM-PCDOS-200-DISK2"}
+                }
+
+              @bootable: if there is no "custom" autoMount setting, then one will be automatically generated
+              from the @media items, and @bootable determines whether or not the first item will be loaded into
+              the boot drive (assumed to be "A").
+
+          {%- endcomment %}
+          <ul class="pcjs-explorer-top">
+            <li class="pcjs-explorer-fixed">Software
+              <ul>
+              {%- for machine in site.data.software -%}
+                {%- capture machine_type -%}{{ machine[0] }}{%- endcapture -%}
+                {%- capture software_type -%}{{ machine[1]['@type'] }}{%- endcapture %}
+                {%- capture software_path1 -%}/{{ machine[1]['@path'] }}{%- endcapture %}
+                {%- capture machine_url -%}/machines/{{ software_path1 }}/{%- endcapture %}
+                {%- assign diskette_drives = machine[1]['@diskette_drives'] -%}
+                <li class="pcjs-explorer-platform pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ machine[1]['@title'] }}
+                  <ul>
+                  {%- for category in site.data[machine_type][software_type] %}
+                    {%- if category[0] == "@products" -%}
+                      {%- assign subcategories = machine[1] %}
+                      {%- capture software_path2 -%}{%- endcapture -%}
+                    {%- elsif category[0] contains '@' -%}
+                      {%- continue -%}
+                    {%- else -%}
+                      {%- assign subcategories = category[1] -%}
+                      {%- capture software_path2 -%}/{{ category[0] }}{%- endcapture %}
+                    <li class="pcjs-explorer-category pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ category[1]['@title'] }}
+                      <ul>
+                    {%- endif -%}
+
+                    {%- for subcategory in subcategories %}
+                      {%- if subcategory[0] == "@products" -%}
+                        {%- assign vendors = subcategories %}
+                        {%- capture software_path3 -%}{%- endcapture -%}
+                      {%- elsif subcategory[0] contains '@' -%}
+                        {%- continue -%}
+                      {% else -%}
+                        {%- assign vendors = subcategory[1] -%}
+                        {%- capture software_path3 -%}/{{ subcategory[0] }}{%- endcapture %}
+                        <li class="pcjs-explorer-subcategory pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ subcategory[1]['@title'] }}
+                          <ul>
+                      {%- endif -%}
+
+                      {%- for vendor in vendors %}
+                        {%- assign vendor_product = false -%}
+                        {%- capture software_path4 -%}{%- endcapture -%}
+                        {%- if vendor[0] == "@products" -%}
+                          {%- assign products = vendor[1] %}
+                        {%- elsif vendor[0] contains '@' -%}
+                          {%- continue -%}
+                        {% else -%}
+                          {%- if vendor[1]['@versions'] -%}
+                            {%- assign products = vendors -%}
+                            {%- assign vendor_product = true -%}
+                          {%- else -%}
+                            {%- assign products = vendor[1] -%}
+                            {%- capture software_path4 -%}/{{ vendor[0] }}{%- endcapture %}
+                          {%- endif %}
+                            <li class="pcjs-explorer-vendor pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ vendor[1]['@title'] }}
+                              <ul>
+                        {%- endif -%}
+
+                        {%- for product in products %}
+                          {%- capture product_creator %}{% if product[1]['@creator'] %}{{ product[1]['@creator'] }} {% endif %}{% endcapture -%}
+                          {%- capture product_title %}{{ product[1]['@title'] }}{% endcapture -%}
+                          {%- capture software_path5 %}{% if product[0] != "" %}/{{ product[0] }}{% endif %}{% endcapture -%}
+                          {%- if product[1]['@versions'] %}
+                            {%- unless vendor_product %}
+                              <li class="pcjs-explorer-product pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ product_creator }}{{ product_title }}
+                                <ul>
+                            {%- endunless -%}
+                            {%- for version in product[1]['@versions'] -%}
+                              {%- if version[1]['@title'] -%}
+                                {%- capture software_title %}{{ product_creator }}{{ version[1]['@title'] }}{% endcapture -%}
+                              {%- else -%}
+                                {%- capture software_title %}{{ product_creator }}{{ product_title }}{% if version[0] != "" %} {{ version[0] }}{% endif %}{% endcapture -%}
+                              {%- endif -%}
+                              {%- capture hardware_url -%}{{ version[1]['@hardware'] }}{%- endcapture -%}
+                              {%- capture software_host -%}https://{{ product[1]['@subdomain'] | default: "diskettes" }}.pcjs.org{%- endcapture -%}
+                              {%- capture software_url -%}{{ software_path1 }}{{ software_path2 }}{{ software_path3 }}{{ software_path4 }}{{ software_path5 }}{% if version[0] != "" %}/{{ version[0] }}{% endif %}{%- endcapture -%}
+                              {%- capture software_id -%}{{ software_url | remove_first: "/" | replace: "/", "-" }}{%- endcapture -%}
+                              {%- capture autoMount -%}{%- endcapture -%}
+                              {%- if hardware_url or page.permalink contains machine_url -%}
+                                {%- if version[1]['@autoMount'] -%}
+                                  {%- capture autoMount -%}{% assign disk_num = 0 %}{% for drive in version[1]['@autoMount'] %}{% assign disk_num = disk_num | plus:1 %}{{ drive[0] }}:{name:%27{{ software_title }} (Disk {{ disk_num }})%27,path:%27{{ software_host }}{{ software_url }}/{{ drive[1]['@diskette'] }}.json%27},{% endfor %}@{%- endcapture -%}
+                                {%- elsif diskette_drives -%}
+                                   {%- if version[1]['@bootable'] -%}{%- assign drive_num = 0 -%}{%- else -%}{%- assign drive_num = 1 -%}{%- endif -%}
+                                  {%- capture autoMount -%}{% assign disk_num = 0 %}{% for disk in version[1]['@media'] %}{{ diskette_drives[drive_num] }}{% assign disk_num = disk_num | plus:1 %}{% assign drive_num = drive_num | plus:1 %}:{name:%27{{ software_title }}{% if version[1]['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}%27,path:%27{{ software_host }}{{ software_url }}/{{ disk['@diskette'] }}.json%27},{% if drive_num >= diskette_drives.size %}{% break %}{% endif %}{% endfor %}@{%- endcapture -%}
+                                {%- endif -%}
+                                {%- capture autoMount -%}&autoMount={ {{ autoMount | replace: ",@", "" }} }{%- endcapture -%}
+                              {%- endif -%}
+                              {%- capture software_parms -%}{%- if hardware_url contains '?' -%}&{%- else -%}?{%- endif -%}software={{ software_url }}{{ autoMount }}{%- endcapture %}
+                                  <li id="{{ software_id }}" class="pcjs-explorer-version pcjs-explorer-item">
+                                    <a href="{{ hardware_url }}{{ software_parms }}">{{ software_title }}</a>
+                                  </li>
+                            {%- endfor -%}
+                            {%- unless vendor_product %}
+                                </ul>
+                              </li>
+                            {%- endunless -%}
+                          {%- elsif product_title != "" -%}
+                            {%- if subcategory[1]['@permalink'] -%}
+                              {%- capture software_url -%}{{ subcategory[1]['@permalink'] }}{{ software_path5 }}{%- endcapture -%}
+                            {%- else -%}
+                              {%- capture software_url -%}/software{{ software_path1 }}{{ software_path2 }}{{ software_path3 }}{{ software_path4 }}{{ software_path5 }}{%- endcapture -%}
+                            {%- endif -%}
+                            {%- capture software_id -%}{{ software_url | remove_first: "/software" | remove_first: "/" | replace: "/", "-" }}{%- endcapture -%}
+                            {%- assign software_parms = "" -%}
+                            {%- if product[1]['@tape'] -%}
+                              {%- capture software_parms -%}?autoStart=true&autoMount={name:%27{{ product_title }}%27,path:%27{{ software_url }}/{{ product[1]['@tape'] }}%27}{%- endcapture -%}
+                            {%- endif %}
+                              <li id="{{ software_id }}" class="pcjs-explorer-product pcjs-explorer-item">
+                                <a href="{{ software_url }}/{{ software_parms }}">{{ product_title }}</a>
+                              </li>
+                          {%- endif -%}
+                        {%- endfor -%}
+
+                        {%- if vendor[0] != "@products" %}
+                              </ul>
+                            </li>
+                        {%- endif -%}
+                      {%- endfor -%}
+
+                      {%- if subcategory[0] != "@products" %}
+                          </ul>
+                        </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+
+                    {%- if category[0] != "@products" %}
+                      </ul>
+                    </li>
+                    {%- endif -%}
+                  {%- endfor %}
+                  </ul>
+                </li>
+              {%- endfor %}
+              </ul>
+            </li>
+          </ul>

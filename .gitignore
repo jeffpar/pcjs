@@ -1,0 +1,10 @@
+*.log
+*.obj
+.DS_Store
+.history
+.sass-cache
+archive
+private
+/_site
+/node_modules
+/.vscode/settings.json

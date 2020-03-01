@@ -1,0 +1,149 @@
+{
+  "id": "chipset",
+  "type": "chipset",
+  "model": 5150,
+  "scaleTimers": false,
+  "sw1": "01001001",
+  "sw2": "11111000",
+  "@note": "The above switch settings indicate '64K, No FPU, Color Monitor, 2 Floppy Drives'; see 'swdesc' below.",
+  "sound": true,
+  "floppies": "",
+  "monitor": "",
+  "dateRTC": "",
+  "style": {
+    "float": "left",
+    "padding-bottom": "8px",
+    "padding-left": "8px"
+  },
+  "controls": [
+    {
+      "id": "sw1",
+      "type": "switches",
+      "title": "SW1",
+      "style": {
+        "position": "relative",
+        "left": "0px"
+      },
+      "switches": [
+        {
+          "id": "sw1-1",
+          "title": "Reserved",
+          "label": "1",
+          "value": 0
+        },
+        {
+          "id": "sw1-2",
+          "title": "FPU",
+          "label": "2",
+          "value": 1
+        },
+        {
+          "id": "sw1-3",
+          "title": "Base Memory (16K Increments)",
+          "label": "3",
+          "value": 0
+        },
+        {
+          "id": "sw1-4",
+          "title": "Base Memory (16K Increments)",
+          "label": "4",
+          "value": 0
+        },
+        {
+          "id": "sw1-5",
+          "title": "Monitor Type",
+          "label": "5",
+          "value": 1
+        },
+        {
+          "id": "sw1-6",
+          "title": "Monitor Type",
+          "label": "6",
+          "value": 0
+        },
+        {
+          "id": "sw1-7",
+          "title": "Number of Floppy Drives",
+          "label": "7",
+          "value": 0
+        },
+        {
+          "id": "sw1-8",
+          "title": "Number of Floppy Drives",
+          "label": "8",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "sw2",
+      "type": "switches",
+      "title": "SW2",
+      "style": {
+        "position": "relative",
+        "left": "0px",
+        "clear": "both"
+      },
+      "switches": [
+        {
+          "id": "sw2-1",
+          "title": "Expansion Memory (32K Increments)",
+          "label": "1",
+          "value": 1
+        },
+        {
+          "id": "sw2-2",
+          "title": "Expansion Memory (32K Increments)",
+          "label": "2",
+          "value": 1
+        },
+        {
+          "id": "sw2-3",
+          "title": "Expansion Memory (32K Increments)",
+          "label": "3",
+          "value": 1
+        },
+        {
+          "id": "sw2-4",
+          "title": "Expansion Memory (32K Increments)",
+          "label": "4",
+          "value": 1
+        },
+        {
+          "id": "sw2-5",
+          "title": "Expansion Memory (32K Increments)",
+          "label": "5",
+          "value": 1
+        },
+        {
+          "id": "sw2-6",
+          "title": "Reserved",
+          "label": "6",
+          "value": 0
+        },
+        {
+          "id": "sw2-7",
+          "title": "Reserved",
+          "label": "7",
+          "value": 0
+        },
+        {
+          "id": "sw2-8",
+          "title": "Reserved",
+          "label": "8",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "swdesc",
+      "type": "description",
+      "label": "64K, No FPU, Color Monitor, 2 Floppy Drives",
+      "style": {
+        "position": "relative",
+        "left": "0px",
+        "clear": "both"
+      }
+    }
+  ]
+}

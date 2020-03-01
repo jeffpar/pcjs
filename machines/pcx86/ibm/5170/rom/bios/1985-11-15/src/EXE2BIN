@@ -1,0 +1,10 @@
+n atbiosv3.exe
+l
+r bx
+1
+r cx
+0
+n atbiosv3.bin
+e cs:fffe fc b7
+w cs:0
+q

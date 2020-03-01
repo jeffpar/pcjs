@@ -1,0 +1,69 @@
+{
+  "@title": "IBM PC XT (Model 5160) with Monochrome Display",
+  "defaults": {
+    "ram": "256K",
+    "fpu": "None",
+    "fdc": "2 diskette drives",
+    "parallel": "LPT1",
+    "serial": "COM1,COM2",
+    "mouse": "COM2"
+  },
+  "components": [
+    {
+      "id": "pcMDA",
+      "type": "computer"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/rom-basic-110.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/rom-bios-rev1.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/video-mda.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/fdc.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/ram.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/cpu.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5160/keyboard.json"
+    },
+    {
+      "id": "chipset",
+      "type": "chipset",
+      "model": 5160,
+      "scaleTimers": false,
+      "sw1": "01000001",
+      "sound": true,
+      "floppies": "",
+      "monitor": "",
+      "dateRTC": ""
+    },
+    {
+      "id": "lpt1",
+      "type": "parallel",
+      "adapter": 2
+    },
+    {
+      "id": "com1",
+      "type": "serial",
+      "adapter": 1
+    },
+    {
+      "id": "com2",
+      "type": "serial",
+      "adapter": 2
+    },
+    {
+      "id": "mouse",
+      "type": "mouse",
+      "serial": "com2"
+    }
+  ]
+}

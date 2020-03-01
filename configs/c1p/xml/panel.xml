@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panel id="panel" left="528px" top="8px" width="362px">
+	<name>Control Panel</name>
+	<control type="textarea" binding="print" width="240px" height="280px"/>
+	<control type="text" binding="debugInput" width="240px" pos=""/>
+	<control type="button" binding="debugEnter" top="290px" left="256px">Enter</control>
+	<control type="register" label="A" labelwidth="10px" binding="A" width="50px" height="18px" top="0px" left="256px" style="text-align:right"/>
+	<control type="register" label="X" labelwidth="10px" binding="X" width="50px" height="18px" top="19px" left="256px" style="text-align:right"/>
+	<control type="register" label="Y" labelwidth="10px" binding="Y" width="50px" height="18px" top="38px" left="256px" style="text-align:right"/>
+	<control type="register" label="C" labelwidth="10px" binding="C" width="50px" height="18px" top="57px" left="256px" style="text-align:right"/>
+	<control type="register" label="Z" labelwidth="10px" binding="Z" width="50px" height="18px" top="76px" left="256px" style="text-align:right"/>
+	<control type="register" label="I" labelwidth="10px" binding="I" width="50px" height="18px" top="95px" left="256px" style="text-align:right"/>
+	<control type="register" label="D" labelwidth="10px" binding="D" width="50px" height="18px" top="114px" left="256px" style="text-align:right"/>
+	<control type="register" label="B" labelwidth="10px" binding="B" width="50px" height="18px" top="133px" left="256px" style="text-align:right"/>
+	<control type="register" label="V" labelwidth="10px" binding="V" width="50px" height="18px" top="152px" left="256px" style="text-align:right"/>
+	<control type="register" label="N" labelwidth="10px" binding="N" width="50px" height="18px" top="171px" left="256px" style="text-align:right"/>
+	<control type="register" label="S" labelwidth="10px" binding="S" width="50px" height="18px" top="190px" left="256px" style="text-align:right"/>
+	<control type="register" label="PC" labelwidth="10px" binding="PC" width="50px" height="18px" top="209px" left="256px" style="text-align:right"/>
+	<control type="register" binding="speed" width="78px" height="18px" top="235px" left="256px" style="text-align:right"/>
+	<control pos=""/>
+	<control type="button" binding="run">Run</control>
+	<control type="button" binding="step">Step</control>
+	<control type="button" binding="reset">Reset</control>
+	<control type="button" binding="setSpeed">Fast</control>
+</panel>

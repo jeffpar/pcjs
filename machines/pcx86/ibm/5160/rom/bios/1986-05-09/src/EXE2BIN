@@ -1,0 +1,10 @@
+n xtbiosv3.exe
+l
+r bx
+1
+r cx
+0
+n xtbiosv3.bin
+e cs:fffe fb 12
+w cs:0
+q

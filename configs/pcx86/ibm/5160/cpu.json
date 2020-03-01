@@ -1,0 +1,15 @@
+{
+  "id": "cpu8088",
+  "type": "cpu",
+  "model": 8088,
+  "controls": [
+    {
+      "id": "reset",
+      "type": "button",
+      "label": "Reset",
+      "style": {
+        "padding-right": "8px"
+      }
+    }
+  ]
+}

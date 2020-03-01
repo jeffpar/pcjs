@@ -1,0 +1,23 @@
+DESCR_DEF MACRO ARG1,ARG2,ARG3,ARG4,ARG5
+        IFIDN   <ARG1>,<SEG>
+        DW      ARG2            ; Segment limit
+        DW      ARG3            ; Segment base address - low word
+        DB      ARG4            ; Segment base address - high byte
+        DB      ARG5            ; Access rights byte
+        DW      0               ; Reserved
+        ENDIF
+        IFIDN   <ARG1>,<GATE>
+        DW      ARG2            ; Destination offset
+        DW      ARG3            ; Destination segment selector
+        DB      ARG4            ; Word count for stack-to-stack copy (only for call gates when PL changes)
+        DB      ARG5            ; Access rights byte
+        DW      0               ; Reserved
+        ENDIF
+        ENDM
+
+IDT_GDT_DEF MACRO ARG1,ARG2,ARG3
+        DW      ARG1            ; Segment limit
+        DW      ARG2            ; Segment base address - low word
+        DB      ARG3            ; Segment base address - high byte
+        DB      0               ; Reserved
+        ENDM

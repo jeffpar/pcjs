@@ -1,0 +1,277 @@
+{
+  "pcx86": {
+    "@title": "IBM PC and compatibles",
+    "ibm": {
+      "@title": "IBM PC",
+      "5150": {
+        "@title": "PC (Model 5150)",
+        "cga": {
+          "@title": "Color Display",
+          "@redirect_from": "/devices/pcx86/machine/5150/cga/64kb/"
+        },
+        "cga-debugger": {
+          "@title": "Color Display with Debugger",
+          "@redirect_from": "/devices/pcx86/machine/5150/cga/64kb/debugger/"
+        },
+        "mda": {
+          "@title": "Monochrome Display",
+          "@redirect_from": "/devices/pcx86/machine/5150/cga/64kb/"
+        },
+        "mda-debugger": {
+          "@title": "Monochrome Display with Debugger",
+          "@redirect_from": "/devices/pcx86/machine/5150/mda/64kb/debugger/"
+        },
+        "dual": {
+          "@title": "Dual Displays",
+          "@redirect_from": "/devices/pcx86/machine/5150/dual/64kb/"
+        },
+        "@documents": [
+          {
+            "@title": "IBM 5150 Guide to Operations (Aug 1981)",
+            "@file": "IBM_5150_Guide_to_Operations_6025000_1981-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEHlreeAL-NbpxGVg?e=zyjiew",
+            "@cover": "jpg",
+            "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Guide_to_Operations_6025000_AUG81.pdf"
+          },
+          {
+            "@title": "IBM 5150 Guide to Operations (Apr 1984)",
+            "@file": "IBM_5150_Guide_to_Operations_6322510_1984-04.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEIEyguxuImec_aLA?e=C91ffv",
+            "@cover": "jpg",
+            "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Guide_to_Operations_6322510_APR84.pdf"
+          },
+          {
+            "@title": "IBM 5150 Technical Reference (Aug 1981)",
+            "@file": "IBM_5150_Technical_Reference_6025005_1981-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqELFEzc8B_rRcEPrA?e=2TJqcJ",
+            "@cover": "jpg",
+            "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Technical_Reference_6025005_AUG81.pdf",
+            "@altsource": "http://bitsavers.org/pdf/ibm/pc/pc/6025008_PC_Technical_Reference_Aug81.pdf"
+          },
+          {
+            "@title": "IBM 5150 Technical Reference (Apr 1983)",
+            "@file": "IBM_5150_Technical_Reference_1502234_1983-04.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEJiwNxqCk17DLlxw?e=CaTFg4",
+            "@cover": "jpg",
+            "@source": "http://bitsavers.org/pdf/ibm/pc/pc/1502234_PC_Technical_Reference_Apr83.pdf"
+          },
+          {
+            "@title": "IBM 5150 Technical Reference (Apr 1984)",
+            "@file": "IBM_5150_Technical_Reference_6322507_1984-04.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEKmmBoHcZHx06phA?e=cwe8cT",
+            "@cover": "jpg",
+            "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Technical_Reference_6322507_APR84.pdf"
+          }
+        ]
+      },
+      "5160": {
+        "@title": "PC XT (Model 5160)",
+        "cga": {
+          "@title": "Color Display",
+          "@redirect_from": "/devices/pcx86/machine/5160/cga/256kb/"
+        },
+        "cga-debugger": {
+          "@title": "Color Display with Debugger",
+          "@redirect_from": "/devices/pcx86/machine/5160/cga/256kb/debugger/"
+        },
+        "mda": {
+          "@title": "Monochrome Display",
+          "@redirect_from": "/devices/pcx86/machine/5160/mda/256kb/"
+        },
+        "mda-debugger": {
+          "@title": "Monochrome Display with Debugger",
+          "@redirect_from": "/devices/pcx86/machine/5160/mda/256kb/debugger/"
+        }
+      },
+      "5170": {
+        "@title": "PC AT (Model 5170)",
+        "cga": {
+          "@title": "Color Display",
+          "redirect_from": "/devices/pcx86/machine/5170/cga/640kb/rev3/"
+        }
+      }
+    },
+    "compaq": {
+      "@title": "COMPAQ",
+      "portable": {
+        "@title": "Portable",
+        "vdu": {
+          "@title": "Monochrome Graphics",
+          "@redirect_from": "/devices/pcx86/machine/compaq/portable/vdu/128kb/"
+        },
+        "@documents": [
+          {
+            "@title": "COMPAQ Portable Operations Guide (Nov 1982)",
+            "@file": "COMPAQ_Operations_Guide_1982-11.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEafO5tOghjO67McQ?e=QsXzCl",
+            "@cover": "jpg",
+            "@source": "PCjs"
+          }
+        ]
+      },
+      "deskpro286": {
+        "@title": "DeskPro 286",
+        "@documents": [
+          {
+            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, May 1987)"
+          },
+          {
+            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, May 1987)",
+            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol2_1987-05.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq463rsLHiJe9AY7FQ?e=Xxtt3j",
+            "@cover": "jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, Dec 1987)",
+            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol1_1987-12.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvAnh2ZAxwmv7UMrSw?e=nQPirJ",
+            "@cover": "jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, Dec 1987)",
+            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol2_1987-12.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvAok6a1GZWGWEvr-g?e=EToJaL",
+            "@cover": "jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ DeskPro 286 Operations Guide (Feb 1987)",
+            "@file": "COMPAQ_DeskPro_286_Operations_Guide_1987-02.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq1_tSCFGeiC6Yghpw?e=wI7uEo",
+            "@cover": "jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ DeskPro 286 Operations Guide - READ THIS FIRST (Sep 1987)",
+            "@file": "COMPAQ_DeskPro_286_Operations_Guide_READ_THIS_FIRST_1987-09.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq4Cb6j-SlhNicPrCg?e=cGbEsS",
+            "@cover": "jpg",
+            "@source": "PCjs"
+          }
+        ]
+      },
+      "deskpro386": {
+        "@title": "DeskPro 386",
+        "@documents": [
+          {
+            "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume I, Sep 1986)",
+            "@file": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol1_1986-09.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-kRDehAMRp7BDfn0A?e=MNNw9w",
+            "@cover": "jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume II, Sep 1986)",
+            "@file": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol2_1986-09.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-kS9Xp8xd_kHMKCqg?e=fWqJ0F",
+            "@cover": "jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ DeskPro 386/25 Technical Reference Guide (Volume I, Aug 1988)",
+            "@file": "COMPAQ_DeskPro_386-25_Technical_Reference_Guide_Vol1_1988-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq5BThwmEpfyp0EBdA?e=53SAyY",
+            "@cover": "jpg",
+            "@source": "PCjs"
+          }
+        ]
+      }
+    }
+  },
+  "osi": {
+    "@title": "Ohio Scientific",
+    "@instances": {
+      "c1p": {
+        "@title": "Challenger 1P",
+        "@documents": [
+          {
+            "@title": "OSI BASIC-IN-ROM Manual",
+            "@file": "OSI_BASIC-IN-ROM_Reference_Manual.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gt4LfVeqHp1eNX_xsA?e=ochWkV",
+            "@cover": "jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "OSI C1P Graphics Manual",
+            "@file": "OSI_C1P_Character_Graphics_Reference_Manual.pdf",
+            "@link": "ttps://1drv.ms/b/s!ArcO_mFRe1Z9gt4M_mo_3EnvSCoo_Q?e=Ft2NMa",
+            "@cover": "jpg",
+            "@source": ""
+          },
+          {
+            "@title": "OSI C1P Users Manual",
+            "@file": "OSI_C1P_Users_Manual.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gt4N9BbxGdyef1BQWQ?e=6bbg4c",
+            "@cover": "jpg",
+            "@source": ""
+          }
+        ],
+        "@redirect_from": ["/devices/c1p/machine/", "/docs/c1pjs/", "/docs/c1pjs/embed/"]
+      },
+      "c1p-array": {
+        "@title": "Challenger 1P \"Array\"",
+        "@redirect_from": "/devices/c1p/machine/8kb/array/",
+        "machines": [
+          {"id": "osi1", "config": "/configs/c1p/xml/c1p8k-small.xml"},
+          {"id": "osi2", "config": "/configs/c1p/xml/c1p8k-small.xml"},
+          {"id": "osi3", "config": "/configs/c1p/xml/c1p8k-small.xml"},
+          {"id": "osi4", "config": "/configs/c1p/xml/c1p8k-small.xml"},
+          {"id": "osi5", "config": "/configs/c1p/xml/c1p8k-small.xml"},
+          {"id": "osi6", "config": "/configs/c1p/xml/c1p8k-small.xml"}
+        ]
+      },
+      "c1p-debugger": {
+        "@title": "Challenger 1P with Debugger",
+        "@redirect_from": ["/devices/c1p/machine/", "/docs/c1pjs/", "/docs/c1pjs/embed/"]
+      }
+    }
+  },
+  "ti": {
+    "@title": "Texas Instruments",
+    "ti57": {
+      "@title": "TI-57 Programmable Calculator",
+      "@instances": {
+        "": {
+          "@title": "TI-57",
+          "@redirect_from": ["/devices/ti57/", "/devices/ti57/machine", "/machines/ti/ti57/docs/"],
+          "@documents": [
+            {
+              "@title": "Train-ing With Your EC-4000 Programmable Calculator",
+              "@file": "Train-ing_With_Your_EC-4000_Programmable_Calculator.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9yia_fdpsnBaOeEXc?e=uCJpdM",
+              "@cover": "jpg",
+              "@source": "PCjs",
+              "@tags": "manuals"
+            },
+            {
+              "@title": "EC-4000 Reference Card",
+              "@file": "EC-4000_Reference_Card.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9yihm64HQPkW9LnL_?e=1v7Iex",
+              "@cover": "jpg",
+              "@source": "PCjs",
+              "@tags": "manuals"
+            },
+            {
+              "@title": "EC-4000 Programs By Jeff Parsons (1978-1979)",
+              "@file": "EC-4000_Programs_1978-1979_By_Jeff_Parsons.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9yifU2u9RCXFKPWKK?e=c6cjos",
+              "@cover": "jpg",
+              "@source": "PCjs",
+              "@tags": "programs"
+            }
+          ]
+        },
+        "rev0": {
+          "@title": "TI-57 with Debugger",
+          "@redirect_from": "/devices/ti57/machine/rev0/"
+        },
+        "rev1": {
+          "@title": "TI-57 with Revised ROM",
+          "@redirect_from": "/devices/ti57/machine/rev1/"
+        }
+      }
+    }
+  }
+}

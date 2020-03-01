@@ -1,0 +1,56 @@
+{% capture group %}{{ include.group | default: "@documents" }}{% endcapture %}
+{% capture group_id %}{{ group | replace: "@", "" }}{% endcapture %}
+{% capture cover_width %}{{ include.cover_width | default: "200" }}{% endcapture %}
+{% capture cover_height %}{{ include.cover_height | default: "" }}{% endcapture %}
+{% capture title %}{{ include.title | default: "Documentation" }}{% endcapture %}
+{% assign path = include.path | default: page.permalink %}
+{% assign path_parts = path | split: "/" %}
+{% assign tag = include.tag | default: "" %}
+{%- assign docs_exist = false -%}
+{%- for part in path_parts -%}
+  {%- if part == "" -%}{% continue %}{%- endif -%}
+  {%- if part == "machines" -%}
+    {%- assign data = site.data.hardware -%}
+  {%- elsif part == "documents" -%}
+    {%- assign data = site.data.documents -%}
+  {%- else -%}
+    {%- if part == "magazines" -%}{%- unless include.title -%}{%- assign title = "Issues" -%}{%- endunless -%}{%- endif -%}
+    {%- if data[part] -%}
+      {%- assign data = data[part] %}
+    {%- else %}
+      {%- assign data = data['@instances'][part] -%}
+    {%- endif -%}
+    {%- unless data -%}{%- break -%}{%- endunless %}
+    {%- assign docs = data[group] -%}
+    {%- unless docs -%}
+      {%- assign docs = data['@instances'][''][group] -%}
+    {%- endunless -%}
+    {%- if docs -%}
+      {%- if docs_exist == false %}
+  <h3 id="{{ group_id }}">{{ title }}</h3>
+      {%- endif -%}
+      {%- assign docs_exist = true -%}
+      {%- include gallery/begin.html -%}
+      {%- for doc in docs -%}
+        {%- assign doc_file = doc['@file'] -%}
+        {%- assign doc_tags = doc['@tags'] | default: "" -%}
+        {%- if doc_file and doc_tags contains tag -%}
+          {%- assign doc_id = doc_file | replace: ".pdf","" | downcase -%}
+          {%- assign doc_link = doc['@link'] -%}
+          {%- assign doc_title = doc['@title'] -%}
+          {%- assign doc_cover = doc['@cover'] -%}
+          {%- if doc_cover == "jpg" or doc_cover == "png -%}
+            {%- capture doc_cover -%}{{ path }}covers/{{ doc_file | replace: "pdf",doc_cover }}{%- endcapture -%}
+          {%- endif -%}
+          {%- assign doc_source = doc['@source'] -%}
+          {%- include gallery/image.html id=doc_id image=doc_cover link=doc_link title=doc_title width=cover_width height=cover_height source=doc_source external=true -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- include gallery/end.html -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- if docs_exist == false %}
+  <h3 id="{{ group_id }}">{{ title }}</h3>
+  <p>No documents available for {{ page.title }}</p>
+{%- endif -%}

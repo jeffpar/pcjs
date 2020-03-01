@@ -1,0 +1,37 @@
+title: PCjs Machines
+domain: pcjs.dev
+description: Welcome to PCjs, home of the original IBM PC emulator for web browsers.
+author: Jeff Parsons
+logo: /assets/img/logo-home.png
+data_dir: configs
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - gulpfile.js
+  - README.md
+  - "**/archive"
+  - "**/private"
+  - /package*.json
+  - /.history
+  - /modules
+  - /node_modules
+
+github:
+  owner_name: "jeffpar"
+  owner_url: https://github.com/jeffpar
+  repository_url: https://github.com/jeffpar/pcjs
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: highlight
+
+plugins:
+  - jekyll-feed
+  - jekyll-redirect-from
+
+software:
+  diskettes:
+    server: https://diskettes.pcjs.org

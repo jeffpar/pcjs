@@ -1,0 +1,16 @@
+{
+  "globals": {
+    "APPNAME": true,
+    "APPVERSION": true,
+    "DEBUGGER": true,
+    "PRIVATE": true,
+    "SITEURL": true,
+    "XMLVERSION": true,
+    "resources": true
+  },
+  "rules": {
+    "no-useless-constructor": "off",
+    "no-confusing-arrow": "off",
+    "no-var": 0
+  }
+}

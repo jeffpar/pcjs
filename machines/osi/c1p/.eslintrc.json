@@ -1,0 +1,23 @@
+{
+  "globals": {
+    "APPVERSION": true,
+    "C1PJS": true,
+    "COMPILED": true,
+    "COPYRIGHT": true,
+    "CSSCLASS": true,
+    "DEBUG": true,
+    "DEBUGGER": true,
+    "LICENSE": true,
+    "MAXDEBUG": true,
+    "PRIVATE": true,
+    "RS232": true,
+    "SITEURL": true,
+    "XMLVERSION": true,
+    "resources": true
+  },
+  "rules": {
+    "no-useless-constructor": "off",
+    "no-confusing-arrow": "off",
+    "no-var": 0
+  }
+}

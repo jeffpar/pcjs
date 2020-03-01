@@ -1,0 +1,18 @@
+{
+  "name": "filedump",
+  "description": "Converts file contents to JSON",
+  "main": "./lib/filedump",
+  "scripts": {
+    "test": "echo \"error: no test specified\" && exit 1"
+  },
+  "author": "Jeff Parsons <Jeff@pcjs.org>",
+  "licenses": [
+    {
+      "type": "GPLv3",
+      "url": "http://www.gnu.org/licenses/gpl.html"
+    }
+  ],
+  "bin": {
+    "filedump": "./bin/filedump"
+  }
+}

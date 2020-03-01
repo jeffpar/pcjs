@@ -1,0 +1,15 @@
+---
+layout: default
+---
+
+<h2>{{ page.title }}</h2>
+
+{{content}}
+
+<br/>
+<p class="view"><a href="https://jeffpar.com">{{ page.author | default: site.author }}</a><br/>
+	<small>{{ page.date | date: "%b %-d, %Y" }}</small>
+</p>
+{% if page.tags and page.tags[0] %}
+	<small>tags: <em>{{ page.tags | join: "</em> - <em>" }}</em></small>
+{% endif %}

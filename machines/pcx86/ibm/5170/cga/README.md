@@ -1,0 +1,12 @@
+---
+layout: page
+title: IBM PC AT (Model 5170), Color Display
+permalink: /machines/pcx86/ibm/5170/cga/
+redirect_from: /devices/pcx86/machine/5170/cga/64kb/
+machines:
+  - id: ibm-5170-cga
+    type: pcx86
+    config: /configs/pcx86/xml/machine/ibm-5170-cga.xml
+---
+
+{% include machine.html id="ibm-5170-cga" %}

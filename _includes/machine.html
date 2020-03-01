@@ -1,0 +1,244 @@
+{%- assign machine_id = include.id -%}
+{%- assign machine_type = include.type -%}
+{%- assign machine_config = include.config -%}
+{%- capture machine_name -%}{{ include.name | default: "PCjs Machine" }}{%- endcapture -%}
+{%- assign machine_does_not_exist = true -%}
+{%- for candidate in page.machines -%}
+  {%- if candidate.id == machine_id -%}
+    {%- assign machine = candidate -%}
+    {%- if candidate.type -%}
+      {%- assign machine_type = candidate.type -%}
+    {%- endif -%}
+    {%- if candidate.config -%}
+      {%- assign machine_config = candidate.config -%}
+    {%- endif -%}
+    {%- assign machine_does_not_exist = false -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- if machine_config -%}
+  {%- if machine_config contains ".xml" %}
+<div id="{{ machine_id }}" class="machine-placeholder">
+  <p>{{ machine_name }}</p>
+  <p class="machine-warning">Waiting for machine "{{machine_id }}" to load....</p>
+</div>
+    {%- assign machine = nil -%}
+    {%- assign machine_does_not_exist = false -%}
+  {%- elsif include.layout -%}
+    {%- include {{ include.layout }}.html id=machine_id -%}
+    {%- assign machine = nil -%}
+    {%- assign machine_does_not_exist = false -%}
+  {%- else -%}
+    {%- assign machine_data = site.data -%}
+    {%- assign machine_paths = machine_config | replace: "/configs/", "" | replace: ".json", "" | split: "/" -%}
+    {%- for machine_path in machine_paths -%}{%- assign machine_data = machine_data[machine_path] -%}{%- endfor -%}
+    {%- assign machine = machine_data -%}
+  {%- endif -%}
+{%- elsif machine -%}
+  {%- unless machine.components -%}
+    {%- assign machine = site.data[machine_type][machine_id] -%}
+  {%- endunless -%}
+{%- endif -%}
+{%- if machine -%}
+  {%- if machine_name == "PCjs Machine" -%}
+    {%- if machine.name -%}
+      {%- assign machine_name = machine.name -%}
+    {%- elsif machine_type -%}
+      {%- capture machine_name -%}{{ machine_type | upcase | replace:"X86","x86" }} Machine{%- endcapture -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- assign machine_style = "" -%}
+  {%- if machine.style -%}
+    {%- capture machine_style -%}
+      {%- for style in machine.style -%}{{ style[0] }}:{{style[1]}};{%- endfor -%}
+    {%- endcapture -%}
+  {%- endif -%}
+  {%- assign machine_parms = "" -%}
+  {%- if machine.parms -%}
+    {%- capture machine_parms %} data-value="{ {% for prop in machine.parms %}{{ prop[0] }}:'{{ prop[1] }}',{% endfor %}@ }"{%- endcapture -%}
+  {%- endif %}
+<div class="machine {{ machine_type }}" id="{{ machine_id }}">
+  <div id="{{ machine_id }}.machine" class="pcjs-machine {{ machine_type }}-machine {{ machine_type }}-component"{{ machine_parms | replace: ",@", "" }}>
+    {%- if machine_name != page.title %}
+    <!-- {{ machine_name }} -->
+    {%- endif %}
+    <div class="pcjs-chassis" style="{{ machine_style }}">
+  {%- for machine_component in machine.components -%}
+    {%- if machine_component.config -%}
+      {%- assign config_data = site.data -%}
+      {%- assign config_paths = machine_component.config | replace: "/configs/", "" | replace: ".json", "" | split: "/" -%}
+      {%- for config_path in config_paths -%}{%- assign config_data = config_data[config_path] -%}{%- endfor -%}
+      {%- assign component = config_data -%}
+    {%- else -%}
+      {%- assign component = machine_component -%}
+    {%- endif -%}
+    {%- assign component_class = "" %}
+    {%- assign component_config = "" %}
+    {%- assign component_title = "" %}
+    {%- assign component_style = "" %}
+    {%- assign component_controls = "" %}
+    {%- assign component_elements = "" %}
+    {%- capture default_config -%}id:'{{ machine_id }}.{{ component.id }}',name:'{{ component.name }}'{%- endcapture -%}
+    {%- if component.type == "computer" -%}
+      {%- if component.modules -%}
+        {%- capture module_config -%},modules:[{% for module in component.modules %}{ type:'{{ module.type }}',refID:'{{ module.id }}',start:{{ module.start }},end:{{ module.end }} },{% endfor %}@]{%- endcapture -%}
+        {%- capture component_config -%}{ {{ default_config }}{{ module_config | replace: ",@", "" }} }{%- endcapture -%}
+      {%- else -%}
+        {%- capture component_config -%}{ {{ default_config }},autoPower:{{ component.autoPower | default: "true" }},busWidth:{{ component.busWidth | default: "0" }},resume:'{{ component.resume | default: "0" }}',state:'{{ component.state }}' }{%- endcapture -%}
+      {%- endif -%}
+    {%- elsif component.type == "chipset" -%}
+      {%- capture component_config -%}{ {{ default_config }},model:'{{ component.model }}',scaleTimers:{{ component.scaleTimers | default: "false" }},sw1:'{{ machine_component.sw1 | default: component.sw1 }}',sw2:'{{ machine_component.sw2  | default: component.sw2 }}',sound:{{ component.sound | default: "true" }},floppies:{ {{ component.floppies }} },monitor:'{{ component.monitor }}',dateRTC:'{{ component.dateRTC }}' }{%- endcapture -%}
+    {%- elsif component.type == "cpu" -%}
+      {%- capture component_config -%}{ {{ default_config }},model:'{{ component.model }}',stepping:'{{ component.stepping }}',fpu:{{ component.fpu | default: "0" }},multiplier:{{ component.multiplier | default: "1" }},autoStart:{{ component.autoStart | default: "undefined" }},addrReset:{{ component.addrReset | default: "0" }} }{%- endcapture -%}
+    {%- elsif component.type == "debugger" -%}
+      {%- capture component_config -%}{ {{ default_config }},base:{{ component.base | default: "16" }},commands:'{{ component.commands }}',messages:'{{ component.messages }}' }{%- endcapture -%}
+    {%- elsif component.type == "fdc" -%}
+      {%- if component.autoMount -%}
+        {%- capture component_autoMount -%}{%- for drive in component.autoMount -%}{{ drive[0] }}:{disk:&quot;{{ drive[1].disk }}&quot;},{%- endfor -%}@{%- endcapture -%}
+      {%- endif -%}
+      {%- capture component_config -%}{ {{ default_config }},autoMount:'{ {{ component_autoMount | replace: ",@", "" }} }',diskettes:'{{ component.diskettes }}',server:'https://diskettes.pcjs.org' }{%- endcapture -%}
+    {%- elsif component.type == "keyboard" -%}
+      {%- capture component_config -%}{ {{ default_config }},model:'{{ component.model }}' }{%- endcapture -%}
+    {%- elsif component.type == "mouse" -%}
+      {%- capture component_config -%}{ {{ default_config }},adapter:{{ component.adapter | default: "0" }},binding:'{{ component.binding }}',type:'{{ component.type }}',scaleMouse:{{ component.scaleMouse | default: "0.5" }},serial:'{{ component.serial }}'}{%- endcapture -%}
+    {%- elsif component.type == "panel" -%}
+      {%- capture component_config -%}{ {{ default_config }} }{%- endcapture -%}
+    {%- elsif component.type == "parallel" -%}
+      {%- capture component_config -%}{ {{ default_config }},adapter:{{ component.adapter | default: "0" }},binding:'{{ component.binding }}'}{%- endcapture -%}
+    {%- elsif component.type == "ram" -%}
+      {%- comment -%}The RAM component has a 'size' property, but Front Matter objects apparently also have a 'size' property, so we look for 'length' instead.{%- endcomment -%}
+      {%- capture component_config -%}{ {{ default_config }},addr:{{ component.addr | default: "0" }},size:{{ component.length | default: "0" }},file:'{{ component.file }}',load:{{ component.load | default: "null" }},exec:{{ component.exec | default: "null" }},test:{{ component.test | default: "true" }} }{%- endcapture -%}
+    {%- elsif component.type == "rom" -%}
+      {%- capture component_config -%}{ {{ default_config }},addr:{{ component.addr | default: "0" }},size:{{ component.length | default: "0" }},file:'{{ component.file }}',alias:{{ component.alias | default: "null" }},notify:'{{ component.notify }}' }{%- endcapture -%}
+    {%- elsif component.type == "serial" -%}
+      {%- capture component_config -%}{ {{ default_config }},adapter:{{ component.adapter | default: "0" }},binding:'{{ component.binding }}',baudReceive:{{ component.baudReceive | default: "0" }},baudTransmit:{{ component.baudTransmit | default: "0" }},tabSize:{{ component.tabSize | default: "0" }},charBOL:{{ component.charBOL | default: "0" }},upperCase:{{ component.upperCase | default: "false" }} }{%- endcapture -%}
+    {%- elsif component.type == "video" -%}
+      {%- capture component_class %} pcjs-screen{%- endcapture -%}
+      {%- capture component_config -%}{ {{ default_config }},model:'{{ machine_component.model | default: component.model }}',screenWidth:{{ component.screenWidth | default: "640" }},screenHeight:{{ component.screenHeight | default: "400" }},screenColor:'{{ component.screenColor }}',fontROM:'{{ component.fontROM }}',fontColor:'{{ component.fontColor }}',charCols:{{ component.charCols | default: 80 }},charRows:{{ component.charRows | default: 25 }},touchScreen:'{{ component.fontColor }}',scale:{{ component.scale | default: false }},switches:'{{ component.switches }}',autoLock:{{ component.autoLock | default: false }},aspectRatio:{{ component.aspectRatio | default: 0 }},smoothing:{{ component.smoothing | default: "null" }},flicker:{{ component.flicker | default: 1.0 }} }{%- endcapture -%}
+      {%- capture component_elements %}
+          <canvas class="pcjs-canvas" width="{{ component.screenWidth }}" height="{{ component.screenHeight }}" style="height:auto;background-color:{{ component.screenColor }};opacity:1;"></canvas>
+        {%- if component.overlay %}
+          <textarea class="pcjs-overlay" style="line-height: normal;"></textarea>
+        {%- endif %}
+      {% endcapture -%}
+    {%- endif -%}
+    {%- if component_config -%}
+      {%- assign component_style = "" -%}
+      {%- if component.style -%}
+        {%- capture component_style -%}
+          {%- for style in component.style -%}{{ style[0] }}:{{style[1]}};{%- endfor -%}
+        {%- endcapture -%}
+      {%- endif -%}
+      {%- if component.title -%}
+        {%- capture component_title %}
+        <div class="pcjs-title">{{ component.title }}</div>
+        {%- endcapture -%}
+      {%- endif -%}
+      {%- assign machine_controls = machine_component.controls | default: component.controls -%}
+      {%- if machine_controls and machine_controls != "none" -%}
+        {%- capture component_controls -%}
+          {%- assign control_group = "" -%}
+          {%- for control in machine_controls -%}
+            {%- assign control_class = "" -%}
+            {%- assign control_style = "" -%}
+            {%- if control.class -%}
+              {%- capture control_class %} {{ control.class }}{%- endcapture -%}
+            {%- endif -%}
+            {%- if control.style -%}
+              {%- capture control_style -%}
+                {%- for style in control.style -%}{{ style[0] }}:{{style[1]}};{%- endfor -%}
+              {%- endcapture -%}
+            {%- endif %}
+            {%- if control.type == "group" -%}
+              {%- if control_group != "" -%}
+        </div>
+              {%- endif %}
+        <div class="pcjs-group{{ control_class }}" style="{{ control_style }}">
+              {%- capture control_group -%}{{ control.group }}.{{ control.id }}{%- endcapture -%}
+              {%- continue -%}
+            {%- endif %}
+          <div class="pcjs-control {{ machine_type }}-control{{ control_class }}"{% if control.id %} id="{{ machine_id }}.{{ control.id }}"{% endif %}{% if control_style != "" %} style="{{ control_style }}"{% endif %}>
+            {%- if control.title %}
+            <div class="pcjs-control-title" style="text-align:right;">{{ control.title }}</div>
+            {%- endif %}
+            {%- if control.type == "button" %}
+            <button class="{{ machine_type }}-binding pcjs-button" data-value="{type:'{{ control.type }}',binding:'{{ control.id }}',value:''}">{{ control.label }}</button>
+            {%- elsif control.type == "description" -%}
+              {%- unless control.id %}
+            <div class="pcjs-description">{{ control.label }}</div>
+              {%- else %}
+            <div class="{{ machine_type }}-binding pcjs-description" data-value="{type:'{{ control.type }}',binding:'{{ control.id }}'}">{{ control.label }}</div>
+              {%- endunless -%}
+            {%- elsif control.type == "file" %}
+            <form class="{{ machine_type }}-binding" data-value="{type:'{{ control.type }}',binding:'{{ control.id }}'}">
+              <fieldset class="pcjs-fieldset">
+                <input type="file"><input type="submit" value="{{ control.label }}" disabled="">
+              </fieldset>
+            </form>
+            {%- elsif control.type == "keyboard" %}
+              {%- for key in site.data[machine_type].keyboard[control.model] %}
+                {%- assign key_style = "" -%}{%- if key[1].height -%}{%- capture key_style %} style="height:{{ key[1].height }};"{%- endcapture -%}{%- endif %}
+            <div class="{{ machine_type }}-control" style="position:relative;left:{{ key[1].left }};top:{{ key[1].top }};width:{{ key[1].width }};">
+              <div class="{{ machine_type }}-binding pcjs-soft-key"{{ key_style}} data-value="{type:'key',binding:'{{ key[0] }}'}">{{ key[1].label }}</div>
+            </div>
+              {%- endfor -%}
+            {%- elsif control.type == "led" %}
+            <div class="{{ machine_type }}-binding pcjs-{{ control.type }}" data-value="{type:'{{ control.type }}',binding:'{{ control.id }}',value:''}"></div>
+            <div style="clear:both"></div>
+            {%- elsif control.type == "list" %}
+            <select class="{{ machine_type }}-binding" data-value="{type:'{{ control.type }}',binding:'{{ control.id }}'}" style="">
+              {%- if control.options -%}
+                {%- for option in control.options %}
+              <option value="{{ option[0] }}">{{ option[1] }}</option>
+                {%- endfor -%}
+              {%- endif %}
+            </select>
+            {%- elsif control.type == "register" %}
+            <div class="{{ machine_type }}-control" style="float:left;padding-right:8px;padding-bottom:8px;">
+              <div class="pcjs-control-title" style="text-align:right;">{{ control.label | default: control.id }}</div>
+              <div class="{{ machine_type }}-binding pcjs-control-title pcjs-register" data-value="{type:'register',binding:'{{ control.id }}'}">{{ control.value | default: "0000" }}</div>
+              <div style="clear:both"></div>
+            </div>
+            {%- elsif control.type == "flag" %}
+            <div class="{{ machine_type }}-control" style="float:left;padding-right:4px;padding-bottom:8px;">
+              <div class="pcjs-control-title" style="text-align:right;">{{ control.label | default: control.id }}</div>
+              <div class="{{ machine_type }}-binding pcjs-control-title pcjs-flag" data-value="{type:'flag',binding:'{{ control.id }}'}">{{ control.value | default: "0" }}</div>
+              <div style="clear:both"></div>
+            </div>
+            {%- elsif control.type == "switches" %}
+            <div class="{{ machine_type }}-binding pcjs-control-title pcjs-switches" data-value="{type:'{{ control.type }}',binding:'{{ control.id }}'}">
+              {%- for switch in control.switches -%}
+                {%- if switch.value == "0"}
+                  {%- assign switch_color = "color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" -%}
+                {%- else -%}
+                  {%- assign switch_color = "color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);" -%}
+                {% endif %}
+              <div id="{{ switch.id }}" class="pcjs-bitCell" data-value="{{ switch.value }}" title="{{ switch.title }}" style="{{ switch_color }}">{{ switch.label }}</div>
+              {%- endfor %}
+            </div>
+            {%- elsif control.type == "text" %}
+            <input class="{{ machine_type }}-binding" type="text" style="width:auto;" data-value="{type:'text',binding:'{{ control.id }}'}" value="" autocapitalize="off">
+            {%- elsif control.type == "textarea" %}
+            <textarea class="{{ machine_type }}-binding pcjs-textarea" style="width:{{ control.width | default: "100%" }};height:{{ control.height | default: "auto" }};resize:{{ control.resize | default: "vertical" }};" data-value="{type:'{{ control.type }}',binding:'{{ control.id }}'}" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+            {%- else %}
+            <!-- unrecognized control type: {{ control.type }} -->
+            {%- endif %}
+          </div>
+          {%- endfor %}
+          {%- if control_group != "" %}
+        </div>
+          {%- endif -%}
+        {%- endcapture -%}
+      {%- endif -%}
+    {%- endif %}
+      <div id="{{ machine_id }}.{{ component.id }}" class="pcjs-{{ component.type }} {{ machine_type }}-{{ component.type }} {{ machine_type }}-component" style="{{ component_style }}">{{ component_title }}{{ component_controls }}
+        <div class="{{ machine_type }}-{{ component.type }}-object{{ component_class }}" data-value="{{ component_config }}">{{ component_elements }}</div>
+      </div>
+  {%- endfor %}
+    </div>
+  </div>
+</div>
+{%- endif -%}
+{%- if machine_does_not_exist -%}
+<p>{{ machine_name }} "{{ include.id }}" does not exist.</p>
+{%- endif -%}

@@ -1,0 +1,18 @@
+IBM PC AT BIOS dated 06/10/85 based on the BIOS listings in the IBM PC AT Technical Reference dated September 1985.
+The BIOS was originally built using IBM MASM 2.0.
+
+Notes:
+- FILL.ASM was added to properly link the BIOS, this defines the area between the end of the main BIOS code and the ORGS data at E000.
+- IAPX286.INC was derived based upon the generated code in the listings.
+- In TEST1.ASM there is an invalid POP instruction with no operands which MASM 2.0 assembles as PUSH 0.
+- The code at FF5A in ORGS.ASM is hidden from the BIOS listings with .XLIST.
+
+Additional files:
+FILL.ASM - see above
+ATLINK - linker response file
+EXE2BIN - DEBUG script to convert the EXE file to a BIN file
+
+Steps to build the PC AT BIOS:
+for %a in (*.asm) do masm %a;
+link @atlink
+debug < exe2bin

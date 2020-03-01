@@ -1,0 +1,502 @@
+{
+  "f1": {
+    "label": "F1",
+    "top": "0",
+    "left": "0",
+    "width": "3.95%"
+  },
+  "f2": {
+    "label": "F2",
+    "top": "0",
+    "left": "4.88%",
+    "width": "3.95%"
+  },
+  "f3": {
+    "label": "F3",
+    "top": "42px",
+    "left": "0",
+    "width": "3.95%"
+  },
+  "f4": {
+    "label": "F4",
+    "top": "42px",
+    "left": "4.88%",
+    "width": "3.95%"
+  },
+  "f5": {
+    "label": "F5",
+    "top": "84px",
+    "left": "0",
+    "width": "3.95%"
+  },
+  "f6": {
+    "label": "F6",
+    "top": "84px",
+    "left": "4.88%",
+    "width": "3.95%"
+  },
+  "f7": {
+    "label": "F7",
+    "top": "126px",
+    "left": "0",
+    "width": "3.95%"
+  },
+  "f8": {
+    "label": "F8",
+    "top": "126px",
+    "left": "4.88%",
+    "width": "3.95%"
+  },
+  "f9": {
+    "label": "F9",
+    "top": "168px",
+    "left": "0",
+    "width": "3.95%"
+  },
+  "f10": {
+    "label": "F10",
+    "top": "168px",
+    "left": "4.88%",
+    "width": "3.95%"
+  },
+  "esc": {
+    "label": "Esc",
+    "top": "0",
+    "left": "11.16%",
+    "width": "3.95%"
+  },
+  "1": {
+    "label": "1 !",
+    "top": "0",
+    "left": "16.05%",
+    "width": "3.95%"
+  },
+  "2": {
+    "label": "2 @",
+    "top": "0",
+    "left": "20.93%",
+    "width": "3.95%"
+  },
+  "3": {
+    "label": "3 #",
+    "top": "0",
+    "left": "25.81%",
+    "width": "3.95%"
+  },
+  "4": {
+    "label": "4 $",
+    "top": "0",
+    "left": "30.70%",
+    "width": "3.95%"
+  },
+  "5": {
+    "label": "5 %",
+    "top": "0",
+    "left": "35.58%",
+    "width": "3.95%"
+  },
+  "6": {
+    "label": "6 ^",
+    "top": "0",
+    "left": "40.47%",
+    "width": "3.95%"
+  },
+  "7": {
+    "label": "7 &amp;",
+    "top": "0",
+    "left": "45.35%",
+    "width": "3.95%"
+  },
+  "8": {
+    "label": "8 *",
+    "top": "0",
+    "left": "50.23%",
+    "width": "3.95%"
+  },
+  "9": {
+    "label": "9 (",
+    "top": "0",
+    "left": "55.12%",
+    "width": "3.95%"
+  },
+  "0": {
+    "label": "0 )",
+    "top": "0",
+    "left": "60.00%",
+    "width": "3.95%"
+  },
+  "-": {
+    "label": "- _",
+    "top": "0",
+    "left": "64.88%",
+    "width": "3.95%"
+  },
+  "=": {
+    "label": "= +",
+    "top": "0",
+    "left": "69.77%",
+    "width": "3.95%"
+  },
+  "bs": {
+    "label": "Back",
+    "top": "0",
+    "left": "74.65%",
+    "width": "3.95%"
+  },
+  "num-sub": {
+    "label": "-",
+    "top": "42px",
+    "left": "95.58%",
+    "width": "3.95%"
+  },
+  "num-lock": {
+    "label": "Num",
+    "top": "0",
+    "left": "80.93%",
+    "width": "8.84%"
+  },
+  "scroll-lock": {
+    "label": "Scroll",
+    "top": "0",
+    "left": "90.70%",
+    "width": "8.84%"
+  },
+  "tab": {
+    "label": "Tab",
+    "top": "42px",
+    "left": "11.16%",
+    "width": "3.95%"
+  },
+  "q": {
+    "label": "Q",
+    "top": "42px",
+    "left": "16.05%",
+    "width": "3.95%"
+  },
+  "w": {
+    "label": "W",
+    "top": "42px",
+    "left": "20.93%",
+    "width": "3.95%"
+  },
+  "e": {
+    "label": "E",
+    "top": "42px",
+    "left": "25.81%",
+    "width": "3.95%"
+  },
+  "r": {
+    "label": "R",
+    "top": "42px",
+    "left": "30.70%",
+    "width": "3.95%"
+  },
+  "t": {
+    "label": "T",
+    "top": "42px",
+    "left": "35.58%",
+    "width": "3.95%"
+  },
+  "y": {
+    "label": "Y",
+    "top": "42px",
+    "left": "40.47%",
+    "width": "3.95%"
+  },
+  "u": {
+    "label": "U",
+    "top": "42px",
+    "left": "45.35%",
+    "width": "3.95%"
+  },
+  "i": {
+    "label": "I",
+    "top": "42px",
+    "left": "50.23%",
+    "width": "3.95%"
+  },
+  "o": {
+    "label": "O",
+    "top": "42px",
+    "left": "55.12%",
+    "width": "3.95%"
+  },
+  "p": {
+    "label": "P",
+    "top": "42px",
+    "left": "60.00%",
+    "width": "3.95%"
+  },
+  "[": {
+    "label": "[ {",
+    "top": "42px",
+    "left": "64.88%",
+    "width": "3.95%"
+  },
+  "]": {
+    "label": "] }",
+    "top": "42px",
+    "left": "69.77%",
+    "width": "3.95%"
+  },
+  "enter": {
+    "label": "&#8629;",
+    "top": "42px",
+    "left": "74.65%",
+    "width": "3.95%",
+    "height": "76px"
+  },
+  "num-home": {
+    "label": "7",
+    "top": "42px",
+    "left": "80.93%",
+    "width": "3.95%"
+  },
+  "num-up": {
+    "label": "&#8593; 8",
+    "top": "42px",
+    "left": "85.81%",
+    "width": "3.95%"
+  },
+  "num-pgup": {
+    "label": "9",
+    "top": "42px",
+    "left": "90.70%",
+    "width": "3.95%"
+  },
+  "ctrl": {
+    "label": "Ctrl",
+    "top": "84px",
+    "left": "11.16%",
+    "width": "3.95%"
+  },
+  "a": {
+    "label": "A",
+    "top": "84px",
+    "left": "16.05%",
+    "width": "3.95%"
+  },
+  "s": {
+    "label": "S",
+    "top": "84px",
+    "left": "20.93%",
+    "width": "3.95%"
+  },
+  "d": {
+    "label": "D",
+    "top": "84px",
+    "left": "25.81%",
+    "width": "3.95%"
+  },
+  "f": {
+    "label": "F",
+    "top": "84px",
+    "left": "30.70%",
+    "width": "3.95%"
+  },
+  "g": {
+    "label": "G",
+    "top": "84px",
+    "left": "35.58%",
+    "width": "3.95%"
+  },
+  "h": {
+    "label": "H",
+    "top": "84px",
+    "left": "40.47%",
+    "width": "3.95%"
+  },
+  "j": {
+    "label": "J",
+    "top": "84px",
+    "left": "45.35%",
+    "width": "3.95%"
+  },
+  "k": {
+    "label": "K",
+    "top": "84px",
+    "left": "50.23%",
+    "width": "3.95%"
+  },
+  "l": {
+    "label": "L",
+    "top": "84px",
+    "left": "55.12%",
+    "width": "3.95%"
+  },
+  ";": {
+    "label": "; :",
+    "top": "84px",
+    "left": "60.00%",
+    "width": "3.95%"
+  },
+  "quote": {
+    "label": "' &quot;",
+    "top": "84px",
+    "left": "64.88%",
+    "width": "3.95%"
+  },
+  "`": {
+    "label": "` ~",
+    "top": "84px",
+    "left": "69.77%",
+    "width": "3.95%"
+  },
+  "num-left": {
+    "label": "&#8592; 4",
+    "top": "84px",
+    "left": "80.93%",
+    "width": "3.95%"
+  },
+  "num-center": {
+    "label": "5",
+    "top": "84px",
+    "left": "85.81%",
+    "width": "3.95%"
+  },
+  "num-right": {
+    "label": "&#8594; 6",
+    "top": "84px",
+    "left": "90.70%",
+    "width": "3.95%"
+  },
+  "num-add": {
+    "label": "+",
+    "top": "84px",
+    "left": "95.58%",
+    "width": "3.95%",
+    "height": "118px"
+  },
+  "shift": {
+    "label": "Shift",
+    "top": "126px",
+    "left": "11.16%",
+    "width": "3.95%"
+  },
+  "\\\\": {
+    "label": "\\ |",
+    "top": "126px",
+    "left": "16.05%",
+    "width": "3.95%"
+  },
+  "z": {
+    "label": "Z",
+    "top": "126px",
+    "left": "20.93%",
+    "width": "3.95%"
+  },
+  "x": {
+    "label": "X",
+    "top": "126px",
+    "left": "25.81%",
+    "width": "3.95%"
+  },
+  "c": {
+    "label": "C",
+    "top": "126px",
+    "left": "30.70%",
+    "width": "3.95%"
+  },
+  "v": {
+    "label": "V",
+    "top": "126px",
+    "left": "35.58%",
+    "width": "3.95%"
+  },
+  "b": {
+    "label": "B",
+    "top": "126px",
+    "left": "40.47%",
+    "width": "3.95%"
+  },
+  "n": {
+    "label": "N",
+    "top": "126px",
+    "left": "45.35%",
+    "width": "3.95%"
+  },
+  "m": {
+    "label": "M",
+    "top": "126px",
+    "left": "50.23%",
+    "width": "3.95%"
+  },
+  ",": {
+    "label": ", &lt;",
+    "top": "126px",
+    "left": "55.12%",
+    "width": "3.95%"
+  },
+  ".": {
+    "label": ". &gt;",
+    "top": "126px",
+    "left": "60.00%",
+    "width": "3.95%"
+  },
+  "/": {
+    "label": "/ ?",
+    "top": "126px",
+    "left": "64.88%",
+    "width": "3.95%"
+  },
+  "right-shift": {
+    "label": "Shift",
+    "top": "126px",
+    "left": "69.77%",
+    "width": "3.95%"
+  },
+  "prtsc": {
+    "label": "PrtSc",
+    "top": "126px",
+    "left": "74.65%",
+    "width": "3.95%"
+  },
+  "num-end": {
+    "label": "1",
+    "top": "126px",
+    "left": "80.93%",
+    "width": "3.95%"
+  },
+  "num-down": {
+    "label": "&#8595; 2",
+    "top": "126px",
+    "left": "85.81%",
+    "width": "3.95%"
+  },
+  "num-pgdn": {
+    "label": "3",
+    "top": "126px",
+    "left": "90.70%",
+    "width": "3.95%"
+  },
+  "alt": {
+    "label": "Alt",
+    "top": "168px",
+    "left": "11.16%",
+    "width": "6.28%"
+  },
+  "space": {
+    "label": "Space",
+    "top": "168px",
+    "left": "18.37%",
+    "width": "53.02%"
+  },
+  "caps-lock": {
+    "label": "Caps",
+    "top": "168px",
+    "left": "72.33%",
+    "width": "6.28%"
+  },
+  "num-ins": {
+    "label": "Ins 0",
+    "top": "168px",
+    "left": "80.93%",
+    "width": "6.28%"
+  },
+  "num-del": {
+    "label": "Del .",
+    "top": "168px",
+    "left": "88.37%",
+    "width": "6.28%"
+  }
+}

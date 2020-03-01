@@ -1,0 +1,26 @@
+{
+  "globals": {
+    "APPVERSION": true,
+    "BACKTRACK": true,
+    "BYTEARRAYS": true,
+    "COPYRIGHT": true,
+    "CSSCLASS": true,
+    "DEBUGGER": true,
+    "LICENSE": true,
+    "PDP10": true,
+    "PRIVATE": true,
+    "RS232": true,
+    "SIMH": true,
+    "SITEURL": true,
+    "SYMBOLS": true,
+    "TYPEDARRAYS": true,
+    "XMLVERSION": true,
+    "resources": true
+  },
+  "rules": {
+    "no-useless-constructor": "off",
+    "no-confusing-arrow": "off",
+    "no-var": 0,
+    "no-empty": "off"
+  }
+}

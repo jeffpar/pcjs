@@ -1,0 +1,275 @@
+@CHARSET "UTF-8";
+/**
+    @author Jeff Parsons (@jeffpar)
+    @copyright © 2012-2020 Jeff Parsons
+    @license MIT <https://www.pcjs.org/LICENSE.txt>
+ */
+body {
+    margin: 0;
+    background: #ffffff;
+}
+h1, h2 {
+    margin-top: 0;
+
+}
+h1, h2, h3, h4 {
+    word-wrap: break-word;
+}
+
+h4 a {
+
+}
+p {
+    line-height: 1.5em;
+}
+img {
+    max-width: 100%;
+}
+a img {
+    vertical-align: bottom;
+}
+pre, code {
+
+    background-color: #cccccc;
+    font-family: Monaco, Consolas, "Lucida Console", monospace;
+    font-size: 12px;
+}
+pre {
+    margin: 1em 2em;
+    padding: 1em;
+    border-radius: 5px;
+    overflow: auto;
+}
+code {
+    padding: 1px;
+}
+pre a, code a {
+
+}
+.common {
+    width: 100%;
+    margin: 0 auto;
+
+}
+.common a {
+    text-decoration: none;
+}
+.common hr {
+    border-color: #808080;
+}
+.common a:hover {
+    text-decoration: underline;
+}
+.common, .machine {
+    font-family: "Titillium Web", "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;
+    font-size: 16px;
+}
+.machine {
+    overflow: hidden;
+}
+.pcjs-canvas {
+  width: 100%;
+  height: auto;
+}
+.machine-placeholder {
+    text-align: center;
+    font-weight: bold;
+}
+.machine-floating {
+    position: relative;
+    z-index: auto;
+    background-color: transparent;
+    padding-right: 0;
+}
+.machine-sticky {
+    position: fixed !important;
+    z-index: 1 !important;
+    background-color: #ffffff !important;
+    padding-right: 16px !important;
+    top: 0 !important;
+}
+.common-top {
+
+    padding: 1px 1em 1px 1em;
+}
+.common-top h2 {
+    margin: 8px 0px 8px 0px;
+}
+.common-top-left {
+    float: left;
+}
+.common-top-right {
+    float: right;
+    line-height: 56px;
+}
+.common-top-right p {
+    float: right;
+    margin: 0;
+    padding: 1em;
+}
+.common-top-right ul {
+    list-style-type: none;
+    margin: 0;
+    overflow: hidden;
+}
+.common-top-right ul li {
+    display: block;
+    float: left;
+    margin-left: 1em;
+}
+.common-top-left ul li a {
+    border-right: 1px solid #6f6f6f;
+    padding: 2px 6px 2px 6px;
+}
+.common-top-left ul li:last-child a {
+    border-right: none;
+}
+.common-middle {
+    clear: both;
+    padding: 1px 1em 1px 1em;
+
+}
+.common-sidebar {
+    float: left;
+    font-size: small;
+    width: 140px;
+    padding-bottom: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    word-wrap: break-word;
+}
+.common-list {
+    list-style-type: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+}
+.common-list li {
+
+
+}
+.common-list-data {
+    list-style-type: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+}
+.common-list-data li {
+    line-height: 1.5em;
+}
+.common-list-data-items, .common-list-data-subitems {
+    font-size: x-small;
+    list-style-type: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 2em;
+}
+.common-list-data-items li, .common-list-data-subitems li {
+    padding-bottom: 0;
+}
+.common-main {
+    margin-left: 150px;
+
+}
+.common-main blockquote {
+    text-align: justify;
+}
+.common-image-gallery {
+    margin: 0 auto;
+    text-align: center;
+}
+.common-image-gallery:after {
+    content: '';
+    display: block;
+}
+.common-image-frame {
+    display: inline-block;
+    margin: 8px;
+    text-align: center;
+}
+.common-image-link {
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+
+}
+.common-image-label {
+    font-size: x-small;
+}
+.common-bottom {
+    clear: both;
+    padding: 1em 1em 1px 1em;
+}
+.common-bottom:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+.common-reference {
+    float: left;
+    font-size: x-small;
+}
+.common-reference a {
+    text-decoration: none;
+}
+.common-copyright {
+    float: right;
+    font-size: x-small;
+}
+.common-copyright a {
+    text-decoration: none;
+}
+.md-list {
+}
+.md-list li {
+    line-height: 1.5em;
+    margin-bottom: 1em;
+}
+.md-list li p {
+    padding-left: 2em;
+}
+.md-list-compact {
+}
+.md-list-compact li {
+    margin-bottom: 0;
+}
+.md-list-none {
+    list-style-type: none;
+    padding-left: 2em;
+}
+.md-list-none li {
+    margin-bottom: 0;
+}
+@media screen and (max-width: 900px) {
+
+    .common-sidebar {
+        width: 100%;
+        white-space: normal;
+    }
+    .common-list {
+        padding-left: 0;
+    }
+    .common-list-data {
+        padding-left: 0;
+    }
+    .common-sidebar h4, .common-list li, .common-list-data li, .common-list-data-items li {
+        width: 130px;
+        float: left;
+        overflow: hidden;
+        vertical-align: top;
+        padding-right: 1em;
+        margin-top: 0;
+    }
+    .common-list-data-subitems {
+        display: none;
+    }
+    .common-main {
+        clear: both;
+        margin-left: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .md-list-none {
+        padding-left: 1em;
+    }
+}

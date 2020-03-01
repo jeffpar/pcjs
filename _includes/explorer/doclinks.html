@@ -1,0 +1,11 @@
+{%- capture document_id -%}{{ include.link | append: "@" | remove_first: "/machines" | remove_first: "/" | replace: "/", "-" | replace: "-@", "" }}{%- endcapture %}
+<li id="{{ document_id }}" class="pcjs-explorer-item"><a href="{{ include.link }}#documents">Documentation</a>
+{% comment %}
+<li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">Documentation
+  <ul>
+  {%- for document in include.docs %}
+    <li class="pcjs-explorer-item"><a href="{{ document['@link'] }}">{{ document['@title'] }}</a></li>
+  {%- endfor %}
+  </ul>
+</li>
+{%- endcomment -%}

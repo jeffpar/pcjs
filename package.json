@@ -1,0 +1,46 @@
+{
+  "name": "pcjs",
+  "version": "1.76.0",
+  "year": 2020,
+  "description": "PCjs",
+  "license": "MIT",
+  "engine": "node ^6.7.0",
+  "scripts": {
+    "build": "gulp",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jeffpar/pcjs.git"
+  },
+  "keywords": [
+    "pcjs",
+    "pcx86",
+    "ibm",
+    "pc",
+    "x86",
+    "emulator",
+    "javscript"
+  ],
+  "author": "Jeff Parsons <Jeff@pcjs.org>",
+  "bugs": {
+    "url": "https://github.com/jeffpar/pcjs/issues"
+  },
+  "homepage": "https://www.pcjs.org/",
+  "dependencies": {
+    "editorconfig": "^0.15.3",
+    "eslint": "^6.8.0",
+    "glob": "^7.1.6",
+    "google-closure-compiler": "^20200112.0.0",
+    "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-foreach": "^0.1.0",
+    "gulp-header": "^2.0.9",
+    "gulp-newer": "^1.4.0",
+    "gulp-replace": "^1.0.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "mkdirp": "^0.5.1",
+    "path": "^0.12.7",
+    "replace": "^1.1.5"
+  }
+}

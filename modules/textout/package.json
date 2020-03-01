@@ -1,0 +1,18 @@
+{
+  "name": "textout",
+  "description": "Miscellaneous text (eg, assembly language) file transformations",
+  "main": "./lib/textout",
+  "scripts": {
+    "test": "echo \"error: no test specified\" && exit 1"
+  },
+  "author": "Jeff Parsons <Jeff@pcjs.org>",
+  "licenses": [
+    {
+      "type": "GPLv3",
+      "url": "http://www.gnu.org/licenses/gpl.html"
+    }
+  ],
+  "bin": {
+    "textout": "./bin/textout"
+  }
+}

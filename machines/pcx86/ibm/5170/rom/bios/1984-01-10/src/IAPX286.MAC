@@ -1,0 +1,243 @@
+SEGOV   MACRO   REG
+        IFIDN   <REG>,<CS>
+        DB      02EH
+        ENDIF
+        IFIDN   <REG>,<DS>
+        DB      03EH
+        ENDIF
+        IFIDN   <REG>,<ES>
+        DB      026H
+        ENDIF
+        IFIDN   <REG>,<SS>
+        DB      036H
+        ENDIF
+        ENDM
+
+JUMPFAR MACRO   ARG1,ARG2
+        DB      0EAH                    ; Jump far direct
+        DW      (OFFSET ARG1)           ;   to this offset
+        DW      ARG2                    ;     in this segment
+        ENDM
+
+IPUSH   MACRO   ARG1
+        DB      068H
+        DW      ARG1
+        ENDM
+
+ISHL    MACRO   ARG1,ARG2
+        LOCAL   L1,L2
+L1      LABEL   BYTE
+        SHL     ARG1,1
+L2      LABEL   BYTE
+        ORG     L1
+X       =       0
+        IRP     ARG,<AX,BX,CX,DX,SI,DI,BP>
+        IFIDN   <ARG>,<ARG1>
+X       =       1
+        ENDIF
+        ENDM
+        IF      X EQ 1
+        DB      0C1H
+        ELSE
+        DB      0C0H
+        ENDIF
+        ORG     L2
+        DB      ARG2
+        ENDM
+
+ISHR    MACRO   ARG1,ARG2
+        LOCAL   L1,L2
+L1      LABEL   BYTE
+        SHR     ARG1,1
+L2      LABEL   BYTE
+        ORG     L1
+X       =       0
+        IRP     ARG,<AX,BX,CX,DX,SI,DI,BP>
+        IFIDN   <ARG>,<ARG1>
+X       =       1
+        ENDIF
+        ENDM
+        IF      X EQ 1
+        DB      0C1H
+        ELSE
+        DB      0C0H
+        ENDIF
+        ORG     L2
+        DB      ARG2
+        ENDM
+
+POPA    MACRO
+        DB      061H
+        ENDM
+
+PUSHA   MACRO
+        DB      060H
+        ENDM
+
+REP_INSW        MACRO
+                DB      0F3H,06DH
+                ENDM
+
+REP_OUTSW       MACRO
+                DB      0F3H,06FH
+                ENDM
+
+ARPL    MACRO   ARG1,ARG2
+        LOCAL   L1,L2
+L1      LABEL   BYTE
+        MOV     ARG1,ARG2
+L2      LABEL   BYTE
+        ORG     L1
+        DB      063H
+        ORG     L2
+        ENDM
+
+BOUND   MACRO   ARG1,ARG2
+        LOCAL   L1,L2
+L1      LABEL   BYTE
+        MOV     ARG1,ARG2
+L2      LABEL   BYTE
+        ORG     L1
+        DB      062H
+        ORG     L2
+        ENDM
+
+LAR     MACRO   ARG1,ARG2
+        LOCAL   L1,L2
+        DB      0FH
+L1      LABEL   BYTE
+        MOV     ARG1,ARG2
+L2      LABEL   BYTE
+        ORG     L1
+        DB      02H
+        ORG     L2
+        ENDM
+
+LGDT    MACRO   ARG1
+        LOCAL   L1,L2
+        DB      0FH
+L1      LABEL   BYTE
+        MOV     DX,WORD PTR ARG1
+L2      LABEL   BYTE
+        ORG     L1
+        DB      01H
+        ORG     L2
+        ENDM
+
+LIDT    MACRO   ARG1
+        LOCAL   L1,L2
+        DB      0FH
+L1      LABEL   BYTE
+        MOV     BX,WORD PTR ARG1
+L2      LABEL   BYTE
+        ORG     L1
+        DB      01H
+        ORG     L2
+        ENDM
+
+LLDT    MACRO   ARG1
+        LOCAL   L1,L2
+        DB      0FH
+L1      LABEL   BYTE
+        MOV     DX,ARG1
+L2      LABEL   BYTE
+        ORG     L1
+        DB      00H
+        ORG     L2
+        ENDM
+
+LMSW    MACRO
+        DB      0FH,01H,0F0H
+        ENDM
+
+LSL     MACRO   ARG1,ARG2
+        LOCAL   L1,L2
+        DB      0FH
+L1      LABEL   BYTE
+        MOV     ARG1,ARG2
+L2      LABEL   BYTE
+        ORG     L1
+        DB      03H
+        ORG     L2
+        ENDM
+
+LTR     MACRO   ARG1
+        LOCAL   L1,L2
+        DB      0FH
+L1      LABEL   BYTE
+        MOV     BX,ARG1
+L2      LABEL   BYTE
+        ORG     L1
+        DB      00H
+        ORG     L2
+        ENDM
+
+SGDT    MACRO   ARG1
+        LOCAL   L1,L2
+        DB      0FH
+L1      LABEL   BYTE
+        ADD     AX,WORD PTR ARG1
+L2      LABEL   BYTE
+        ORG     L1
+        DB      01H
+        ORG     L2
+        ENDM
+
+SIDT    MACRO   ARG1
+        LOCAL   L1,L2
+        DB      0FH
+L1      LABEL   BYTE
+        MOV     CX,WORD PTR ARG1
+L2      LABEL   BYTE
+        ORG     L1
+        DB      01H
+        ORG     L2
+        ENDM
+
+SLDT    MACRO   ARG1
+        LOCAL   L1,L2
+        DB      0FH
+L1      LABEL   BYTE
+        ADD     AX,ARG1
+L2      LABEL   BYTE
+        ORG     L1
+        DB      00H
+        ORG     L2
+        ENDM
+
+SMSW    MACRO
+        DB      0FH,01H,0E0H
+        ENDM
+
+STR     MACRO   ARG1
+        LOCAL   L1,L2
+        DB      0FH
+L1      LABEL   BYTE
+        MOV     CX,ARG1
+L2      LABEL   BYTE
+        ORG     L1
+        DB      00H
+        ORG     L2
+        ENDM
+
+VERR    MACRO   ARG1
+        LOCAL   L1,L2
+        DB      0FH
+L1      LABEL   BYTE
+        MOV     SP,ARG1
+L2      LABEL   BYTE
+        ORG     L1
+        DB      00H
+        ORG     L2
+        ENDM
+
+VERW    MACRO   ARG1
+        LOCAL   L1,L2
+        DB      0FH
+L1      LABEL   BYTE
+        MOV     BP,ARG1
+L2      LABEL   BYTE
+        ORG     L1
+        DB      00H
+        ORG     L2
+        ENDM
