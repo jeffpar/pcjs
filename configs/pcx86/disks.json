@@ -213,10 +213,10 @@
       "dresearch": {},
       "ibm": {
         "@title": "PC DOS",
-        "@subdomain": "diskettes",
         "@versions": {
           "2.00": {
             "@bootable": true,
+            "@subdomain": "diskettes",
             "@hardware": "/machines/pcx86/ibm/5150/cga/",
             "@media": [
               {"@diskette": "IBM-PCDOS-200-DISK1", "@type": "PC180K", "@image": "jpg"},
@@ -245,7 +245,22 @@
       "other": {}
     },
     "windows": {
-      "@title": "Windows"
+      "@title": "Windows",
+      "@products": {
+        "@creator": "Microsoft",
+        "@title": "Windows",
+        "@versions": {
+          "1.01": {
+            "@bootable": true,
+            "@subdomain": "harddisks",
+            "@hardware": "/machines/pcx86/ibm/5160/cga/debugger/",
+            "@media": [
+              {"@name": "PC DOS 2.00 with Windows 1.01", "@harddisk": "PCDOS200-WIN101-CGA", "@type": "3", "@size": "10Mb"}
+            ],
+            "@note": "The final path for each piece of media shall be formed by the key hierarchy (eg, /pcx86/sys/dos/ibm/2.00/) and the predefined media server (eg, https://harddisks.pcjs.org)"
+          }
+        }
+      }
     }
   },
   "util": {

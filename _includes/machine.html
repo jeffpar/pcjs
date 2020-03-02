@@ -95,6 +95,11 @@
         {%- capture component_autoMount -%}{%- for drive in component.autoMount -%}{{ drive[0] }}:{disk:&quot;{{ drive[1].disk }}&quot;},{%- endfor -%}@{%- endcapture -%}
       {%- endif -%}
       {%- capture component_config -%}{ {{ default_config }},autoMount:'{ {{ component_autoMount | replace: ",@", "" }} }',diskettes:'{{ component.diskettes }}',server:'https://diskettes.pcjs.org' }{%- endcapture -%}
+    {%- elsif component.type == "hdc" -%}
+      {%- if component.drives -%}
+        {%- capture component_drives -%}{%- for drive in component.drives -%}{ name:'{{ drive[1].name }}',type:{{ drive[1].type }} },{%- endfor -%}@{%- endcapture -%}
+      {%- endif -%}
+      {%- capture component_config -%}{ {{ default_config }},drives:[{{ component_drives | replace: ",@", "" }}],server:'https://harddisks.pcjs.org' }{%- endcapture -%}
     {%- elsif component.type == "keyboard" -%}
       {%- capture component_config -%}{ {{ default_config }},model:'{{ component.model }}' }{%- endcapture -%}
     {%- elsif component.type == "mouse" -%}

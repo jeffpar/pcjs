@@ -5,7 +5,7 @@
     "A": {"disk": "IBM-PCDOS-200-DISK1"},
     "B": {"disk": "IBM-PCDOS-200-DISK1"}
   },
-  "diskettes": "/configs/pcx86/diskettes.json",
+  "diskettes": "/configs/pcx86/disks.json",
   "style": {
     "float": "left",
     "padding-right": "8px",

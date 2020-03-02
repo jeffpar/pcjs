@@ -26,6 +26,9 @@
       "config": "/configs/pcx86/ibm/5160/fdc.json"
     },
     {
+      "config": "/configs/pcx86/ibm/5160/hdc.json"
+    },
+    {
       "config": "/configs/pcx86/ibm/5160/ram.json"
     },
     {
