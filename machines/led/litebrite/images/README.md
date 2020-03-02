@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 'Original "Lite-Brite" Images'
+title: Original Lite-Brite Images
 permalink: /machines/led/litebrite/images/
 redirect_from: /devices/leds/litebrite/images/
 ---

@@ -8776,7 +8776,7 @@ class Ports extends Memory {
     {
         for (let port in table) {
             let handlers = table[port];
-            this.addIOHandlers(this, +port + portBase, +port + portBase, handlers[0], handlers[1], handlers[2], handlers[3]);
+            this.addIOHandlers(device, +port + portBase, +port + portBase, handlers[0], handlers[1], handlers[2], handlers[3]);
         }
     }
 

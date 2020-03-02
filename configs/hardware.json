@@ -1,10 +1,19 @@
 {
   "arcade": {
-    "@title": "Arcade Machines",
+    "@title": "Arcade",
     "@instances": {
       "invaders": {
         "@title": "Space Invaders",
         "@redirect_from": "/devices/pc8080/machine/invaders/"
+      }
+    }
+  },
+  "dec": {
+    "@title": "DEC",
+    "@instances": {
+      "vt100": {
+        "@title": "VT100 Terminal",
+        "@redirect_from": "/devices/pc8080/machine/vt100/new/"
       }
     }
   },
@@ -193,19 +202,19 @@
     "@title": "LED Simulations",
     "@instances": {
       "life": {
-        "@title": "&quot;Game of Life&quot; Demo",
+        "@title": "Game of Life",
         "@redirect_from": "/devices/leds/life/"
       },
       "life/colors": {
-        "@title": "&quot;Game of Life&quot; Color Demo",
+        "@title": "Game of Life (Color)",
         "@redirect_from": "/devices/leds/life/colors/"
       },
       "litebrite": {
-        "@title": "&quot;Lite-Brite&quot; Demo",
+        "@title": "Lite-Brite",
         "@redirect_from": "/devices/leds/litebrite/"
       },
       "litebrite/images": {
-        "@title": "&quot;Lite-Brite&quot; Images",
+        "@title": "Lite-Brite Images",
         "@redirect_from": "/devices/leds/litebrite/images/"
       }
     }

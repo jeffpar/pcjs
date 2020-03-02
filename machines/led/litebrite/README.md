@@ -1,6 +1,6 @@
 ---
 layout: page
-title: '"Lite-Brite" Demo'
+title: Lite-Brite Demo
 permalink: /machines/led/litebrite/
 redirect_from: /devices/leds/litebrite/
 machines:
