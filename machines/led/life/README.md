@@ -1,6 +1,6 @@
 ---
 layout: page
-title: '"Game of Life" Demo'
+title: Game of Life Demo
 permalink: /machines/led/life/
 redirect_from: /devices/leds/life/
 machines:

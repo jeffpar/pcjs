@@ -47,6 +47,16 @@
   float: right;
   padding-bottom: 4px;
 }
+.pcjs-controls-top {
+  display: table;
+  float: right;
+  margin-bottom: 4px;
+}
+.pcjs-controls-bottom {
+  display: table;
+  float: right;
+  margin-top: 4px;
+}
 .pcjs-monitor {
   width: 100%;
   height: auto;
@@ -57,6 +67,7 @@
 .pcjs-surface {
   width: 100%;
   height: auto;
+  background-color: black;
 }
 .pcjs-video {
   margin: 0 auto;
@@ -294,6 +305,11 @@
   text-align: center;
   vertical-align: middle;
   background-color: #000000;
+}
+.pcjs-led-large {
+  float: left;
+  width: 16px;
+  height: 16px;
 }
 .pcjs-rled {
   float: left;

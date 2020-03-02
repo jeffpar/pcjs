@@ -9,7 +9,7 @@ machines:
     type: invaders
     name: Space Invaders
     config: /configs/invaders/invaders.json
-    layout: /_includes/invaders/invaders-full.html
+    layout: /_includes/invaders/invaders-diag.html
 ---
 
 When I first started working on PCjs, JavaScript features like

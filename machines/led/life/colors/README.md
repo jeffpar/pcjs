@@ -1,6 +1,6 @@
 ---
 layout: page
-title: '"Game of Life" Color Demo'
+title: Game of Life Color Demo
 permalink: /machines/led/life/colors/
 redirect_from: /devices/leds/life/colors/
 machines:

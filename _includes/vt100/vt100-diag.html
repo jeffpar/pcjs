@@ -1,0 +1,37 @@
+<div id="vt100" class="pcjs-chassis">
+  <div class="pcjs-controls-top">
+    <div class="pcjs-block-control"><button class="pcjs-block-button" id="powerVT100">Power</button></div>
+    <div class="pcjs-block-control"><div class="pcjs-label-right">ON LINE</div><div class="pcjs-led-large" id="ledOnline"></div></div>
+    <div class="pcjs-block-control"><div class="pcjs-label-right">LOCAL</div><div class="pcjs-led-large" id="ledLocal"></div></div>
+    <div class="pcjs-block-control"><div class="pcjs-label-right">LOCKED</div><div class="pcjs-led-large" id="ledLocked"></div></div>
+    <div class="pcjs-block-control"><div class="pcjs-label-right">L1</div><div class="pcjs-led-large" id="led1"></div></div>
+    <div class="pcjs-block-control"><div class="pcjs-label-right">L2</div><div class="pcjs-led-large" id="led2"></div></div>
+    <div class="pcjs-block-control"><div class="pcjs-label-right">L3</div><div class="pcjs-led-large" id="led3"></div></div>
+    <div class="pcjs-block-control"><div class="pcjs-label-right">L4</div><div class="pcjs-led-large" id="led4"></div></div>
+    <div class="pcjs-block-control"><div class="pcjs-label-right">CAPS</div><div class="pcjs-led-large" id="ledCaps"></div></div>
+  </div>
+  <div id="monitorVT100" class="pcjs-monitor">
+    <canvas id="surfaceVT100" class="pcjs-surface" width="1600" height="960"/>
+  </div>
+  <div class="pcjs-controls-bottom">
+    <div class="pcjs-block-control"><button class="pcjs-block-button" id="keyCapsLock">CAPS LOCK</button></div>
+    <div class="pcjs-block-control"><button class="pcjs-block-button" id="keyCtrlC">CTRL-C</button></div>
+    <div class="pcjs-block-control"><button class="pcjs-block-button" id="keyBreak">BREAK</button></div>
+    <div class="pcjs-block-control"><button class="pcjs-block-button" id="keyEsc">ESC</button></div>
+    <div class="pcjs-block-control"><button class="pcjs-block-button" id="keyTab">TAB</button></div>
+    <div class="pcjs-block-control"><button class="pcjs-block-button" id="keyLineFeed">LINE FEED</button></div>
+    <div class="pcjs-block-control"><button class="pcjs-block-button" id="keySetup">SET-UP</button></div>
+    <div class="pcjs-block-control"><button class="pcjs-block-button" id="zoomVT100">Full Screen</button></div>
+  </div>
+</div>
+<div class="pcjs-diagnostics">
+  <div>
+    <div>Diagnostics</div>
+    <textarea id="printVT100" class="pcjs-console" cols="128" rows="20"></textarea>
+  </div>
+  <button id="resetVT100">Reset</button>
+  <button id="runVT100">Run</button>
+  <button id="stepVT100">Step</button>
+  <button id="clearVT100">Clear</button>
+  <span id="speedVT100" style="font-size:small">Stopped</span>
+</div>

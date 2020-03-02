@@ -2,13 +2,13 @@
 layout: page
 title: Space Invaders
 permalink: /machines/arcade/invaders/
-redirect_from: /devices/pc8080/machine/invaders/new/
+redirect_from: /devices/pc8080/machine/invaders/
 machines:
   - id: invaders
     type: invaders
     name: Space Invaders
     config: /configs/invaders/invaders.json
-    layout: /_includes/invaders/invaders-full.html
+    layout: /_includes/invaders/invaders-diag.html
 ---
 
 This 8080-based PCjs machine emulates the original Space Invaders arcade machine.
