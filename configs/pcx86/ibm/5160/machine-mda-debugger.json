@@ -11,11 +11,11 @@
   "components": [
     {
       "id": "pcMDA",
-      "type": "computer"
+      "class": "computer"
     },
     {
       "id": "debugger",
-      "type": "debugger"
+      "class": "debugger"
     },
     {
       "config": "/configs/pcx86/ibm/5160/rom-basic-110.json"
@@ -24,25 +24,29 @@
       "config": "/configs/pcx86/ibm/5160/rom-bios-rev1.json"
     },
     {
-      "config": "/configs/pcx86/ibm/5160/video-mda.json"
+      "config": "/configs/pcx86/ibm/5160/rom-hdc.json"
     },
     {
-      "config": "/configs/pcx86/ibm/5160/fdc.json"
+      "config": "/configs/pcx86/ibm/5150/video-mda.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/fdc.json"
     },
     {
       "config": "/configs/pcx86/ibm/5160/hdc.json"
     },
     {
-      "config": "/configs/pcx86/ibm/5160/ram.json"
+      "config": "/configs/pcx86/ibm/5160/ram.json",
+      "test": "false"
     },
     {
-      "config": "/configs/pcx86/ibm/5160/cpu.json"
+      "config": "/configs/pcx86/ibm/5150/cpu.json"
     },
     {
-      "config": "/configs/pcx86/ibm/5160/keyboard.json"
+      "config": "/configs/pcx86/ibm/5150/keyboard.json"
     },
     {
-      "config": "/configs/pcx86/ibm/5160/panel.json"
+      "config": "/configs/pcx86/ibm/5150/panel.json"
     },
     {
       "config": "/configs/pcx86/ibm/5160/chipset.json",
@@ -50,24 +54,24 @@
     },
     {
       "id": "lpt1",
-      "type": "parallel",
+      "class": "parallel",
       "adapter": 2,
       "binding": "print"
     },
     {
       "id": "com1",
-      "type": "serial",
+      "class": "serial",
       "adapter": 1,
       "binding": "print"
     },
     {
       "id": "com2",
-      "type": "serial",
+      "class": "serial",
       "adapter": 2
     },
     {
       "id": "mouse",
-      "type": "mouse",
+      "class": "mouse",
       "serial": "com2"
     }
   ]

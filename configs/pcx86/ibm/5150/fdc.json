@@ -1,6 +1,6 @@
 {
   "id": "fdcNEC",
-  "type": "fdc",
+  "class": "fdc",
   "autoMount": {
     "A": {"disk": "IBM-PCDOS-200-DISK1"},
     "B": {"disk": "IBM-PCDOS-200-DISK1"}

@@ -10,7 +10,7 @@
   "components": [
     {
       "id": "pcMDA",
-      "type": "computer"
+      "class": "computer"
     },
     {
       "config": "/configs/pcx86/ibm/5150/rom-basic-100.json"
@@ -35,7 +35,7 @@
     },
     {
       "id": "chipset",
-      "type": "chipset",
+      "class": "chipset",
       "model": 5150,
       "scaleTimers": false,
       "sw1": "01000001",
@@ -47,12 +47,12 @@
     },
     {
       "id": "lpt1",
-      "type": "parallel",
+      "class": "parallel",
       "adapter": 2
     },
     {
       "id": "com1",
-      "type": "serial",
+      "class": "serial",
       "adapter": 1
     }
   ]

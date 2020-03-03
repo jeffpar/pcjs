@@ -1,6 +1,6 @@
 {
   "id": "cpu8088",
-  "type": "cpu",
+  "class": "cpu",
   "model": 8088,
   "controls": [
     {

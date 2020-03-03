@@ -11,7 +11,7 @@
   "components": [
     {
       "id": "pcCGA",
-      "type": "computer"
+      "class": "computer"
     },
     {
       "config": "/configs/pcx86/ibm/5160/rom-basic-110.json"
@@ -20,10 +20,13 @@
       "config": "/configs/pcx86/ibm/5160/rom-bios-rev1.json"
     },
     {
-      "config": "/configs/pcx86/ibm/5160/video-cga.json"
+      "config": "/configs/pcx86/ibm/5160/rom-hdc.json"
     },
     {
-      "config": "/configs/pcx86/ibm/5160/fdc.json"
+      "config": "/configs/pcx86/ibm/5150/video-cga.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/fdc.json"
     },
     {
       "config": "/configs/pcx86/ibm/5160/hdc.json"
@@ -32,14 +35,14 @@
       "config": "/configs/pcx86/ibm/5160/ram.json"
     },
     {
-      "config": "/configs/pcx86/ibm/5160/cpu.json"
+      "config": "/configs/pcx86/ibm/5150/cpu.json"
     },
     {
-      "config": "/configs/pcx86/ibm/5160/keyboard.json"
+      "config": "/configs/pcx86/ibm/5150/keyboard.json"
     },
     {
       "id": "chipset",
-      "type": "chipset",
+      "class": "chipset",
       "model": 5160,
       "scaleTimers": false,
       "sw1": "01001001",
@@ -50,22 +53,22 @@
     },
     {
       "id": "lpt1",
-      "type": "parallel",
+      "class": "parallel",
       "adapter": 2
     },
     {
       "id": "com1",
-      "type": "serial",
+      "class": "serial",
       "adapter": 1
     },
     {
       "id": "com2",
-      "type": "serial",
+      "class": "serial",
       "adapter": 2
     },
     {
       "id": "mouse",
-      "type": "mouse",
+      "class": "mouse",
       "serial": "com2"
     }
   ]

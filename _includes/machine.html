@@ -3,6 +3,7 @@
 {%- assign machine_config = include.config -%}
 {%- assign machine_layout = include.layout -%}
 {%- capture machine_name -%}{{ include.name | default: "PCjs Machine" }}{%- endcapture -%}
+{%- assign machine_errors = "" -%}
 {%- assign machine_does_not_exist = true -%}
 {%- for candidate in page.machines -%}
   {%- if candidate.id == machine_id -%}
@@ -31,6 +32,11 @@
     {%- assign machine_paths = machine_config | replace: "/configs/", "" | replace: ".json", "" | split: "/" -%}
     {%- for machine_path in machine_paths -%}{%- assign machine_data = machine_data[machine_path] -%}{%- endfor -%}
     {%- assign machine = machine_data -%}
+    {%- unless machine %}
+      {%- capture machine_errors %}{{ machine_errors }}
+<p class="machine-error">Missing machine configuration file: {{ machine_config }}</p>
+      {%- endcapture -%}
+    {%- endunless -%}
   {%- endif -%}
 {%- elsif machine -%}
   {%- unless machine.components -%}
@@ -67,57 +73,63 @@
       {%- assign config_paths = machine_component.config | replace: "/configs/", "" | replace: ".json", "" | split: "/" -%}
       {%- for config_path in config_paths -%}{%- assign config_data = config_data[config_path] -%}{%- endfor -%}
       {%- assign component = config_data -%}
+      {%- unless component %}
+        {%- capture machine_errors %}{{ machine_errors }}
+<p class="machine-error">Missing component configuration file: {{ machine_component.config }}</p>
+        {%- endcapture -%}
+        {%- continue -%}
+      {%- endunless -%}
     {%- else -%}
       {%- assign component = machine_component -%}
     {%- endif -%}
-    {%- assign component_class = "" %}
     {%- assign component_config = "" %}
     {%- assign component_title = "" %}
+    {%- assign component_class = "" %}
     {%- assign component_style = "" %}
     {%- assign component_controls = "" %}
     {%- assign component_elements = "" %}
     {%- capture default_config -%}id:'{{ machine_id }}.{{ component.id }}',name:'{{ component.name }}'{%- endcapture -%}
-    {%- if component.type == "computer" -%}
+    {%- if component.class == "computer" -%}
       {%- if component.modules -%}
         {%- capture module_config -%},modules:[{% for module in component.modules %}{ type:'{{ module.type }}',refID:'{{ module.id }}',start:{{ module.start }},end:{{ module.end }} },{% endfor %}@]{%- endcapture -%}
         {%- capture component_config -%}{ {{ default_config }}{{ module_config | replace: ",@", "" }} }{%- endcapture -%}
       {%- else -%}
         {%- capture component_config -%}{ {{ default_config }},autoPower:{{ component.autoPower | default: "true" }},busWidth:{{ component.busWidth | default: "0" }},resume:'{{ component.resume | default: "0" }}',state:'{{ component.state }}' }{%- endcapture -%}
       {%- endif -%}
-    {%- elsif component.type == "chipset" -%}
-      {%- capture component_config -%}{ {{ default_config }},model:'{{ component.model }}',scaleTimers:{{ component.scaleTimers | default: "false" }},sw1:'{{ machine_component.sw1 | default: component.sw1 }}',sw2:'{{ machine_component.sw2  | default: component.sw2 }}',sound:{{ component.sound | default: "true" }},floppies:{ {{ component.floppies }} },monitor:'{{ component.monitor }}',dateRTC:'{{ component.dateRTC }}' }{%- endcapture -%}
-    {%- elsif component.type == "cpu" -%}
+    {%- elsif component.class == "chipset" -%}
+      {%- capture component_config -%}{ {{ default_config }},model:'{{ component.model }}',scaleTimers:{{ component.scaleTimers | default: "false" }},sw1:'{{ machine_component.sw1 | default: component.sw1 }}',sw2:'{{ machine_component.sw2 | default: component.sw2 }}',sound:{{ component.sound | default: "true" }},floppies:{ {{ component.floppies }} },monitor:'{{ component.monitor }}',dateRTC:'{{ component.dateRTC }}' }{%- endcapture -%}
+    {%- elsif component.class == "cpu" -%}
       {%- capture component_config -%}{ {{ default_config }},model:'{{ component.model }}',stepping:'{{ component.stepping }}',fpu:{{ component.fpu | default: "0" }},multiplier:{{ component.multiplier | default: "1" }},autoStart:{{ component.autoStart | default: "undefined" }},addrReset:{{ component.addrReset | default: "0" }} }{%- endcapture -%}
-    {%- elsif component.type == "debugger" -%}
+    {%- elsif component.class == "debugger" -%}
       {%- capture component_config -%}{ {{ default_config }},base:{{ component.base | default: "16" }},commands:'{{ component.commands }}',messages:'{{ component.messages }}' }{%- endcapture -%}
-    {%- elsif component.type == "fdc" -%}
+    {%- elsif component.class == "fdc" -%}
       {%- if component.autoMount -%}
         {%- capture component_autoMount -%}{%- for drive in component.autoMount -%}{{ drive[0] }}:{disk:&quot;{{ drive[1].disk }}&quot;},{%- endfor -%}@{%- endcapture -%}
       {%- endif -%}
       {%- capture component_config -%}{ {{ default_config }},autoMount:'{ {{ component_autoMount | replace: ",@", "" }} }',diskettes:'{{ component.diskettes }}',server:'https://diskettes.pcjs.org' }{%- endcapture -%}
-    {%- elsif component.type == "hdc" -%}
+    {%- elsif component.class == "hdc" -%}
       {%- if component.drives -%}
         {%- capture component_drives -%}{%- for drive in component.drives -%}{ name:'{{ drive[1].name }}',type:{{ drive[1].type }} },{%- endfor -%}@{%- endcapture -%}
       {%- endif -%}
-      {%- capture component_config -%}{ {{ default_config }},drives:[{{ component_drives | replace: ",@", "" }}],server:'https://harddisks.pcjs.org' }{%- endcapture -%}
-    {%- elsif component.type == "keyboard" -%}
+      {%- capture component_config -%}{ {{ default_config }},drives:'[{{ component_drives | replace: ",@", "" }}]',type:'{{ component.type | default: "XT" }}',server:'https://harddisks.pcjs.org' }{%- endcapture -%}
+    {%- elsif component.class == "keyboard" -%}
       {%- capture component_config -%}{ {{ default_config }},model:'{{ component.model }}' }{%- endcapture -%}
-    {%- elsif component.type == "mouse" -%}
+    {%- elsif component.class == "mouse" -%}
       {%- capture component_config -%}{ {{ default_config }},adapter:{{ component.adapter | default: "0" }},binding:'{{ component.binding }}',type:'{{ component.type }}',scaleMouse:{{ component.scaleMouse | default: "0.5" }},serial:'{{ component.serial }}'}{%- endcapture -%}
-    {%- elsif component.type == "panel" -%}
+    {%- elsif component.class == "panel" -%}
       {%- capture component_config -%}{ {{ default_config }} }{%- endcapture -%}
-    {%- elsif component.type == "parallel" -%}
+    {%- elsif component.class == "parallel" -%}
       {%- capture component_config -%}{ {{ default_config }},adapter:{{ component.adapter | default: "0" }},binding:'{{ component.binding }}'}{%- endcapture -%}
-    {%- elsif component.type == "ram" -%}
+    {%- elsif component.class == "ram" -%}
       {%- comment -%}The RAM component has a 'size' property, but Front Matter objects apparently also have a 'size' property, so we look for 'length' instead.{%- endcomment -%}
-      {%- capture component_config -%}{ {{ default_config }},addr:{{ component.addr | default: "0" }},size:{{ component.length | default: "0" }},file:'{{ component.file }}',load:{{ component.load | default: "null" }},exec:{{ component.exec | default: "null" }},test:{{ component.test | default: "true" }} }{%- endcapture -%}
-    {%- elsif component.type == "rom" -%}
+      {%- capture component_config -%}{ {{ default_config }},addr:{{ component.addr | default: "0" }},size:{{ component.length | default: "0" }},file:'{{ component.file }}',load:{{ component.load | default: "null" }},exec:{{ component.exec | default: "null" }},test:{{ machine_component.test | default: component.test | default: "true" }} }{%- endcapture -%}
+    {%- elsif component.class == "rom" -%}
       {%- capture component_config -%}{ {{ default_config }},addr:{{ component.addr | default: "0" }},size:{{ component.length | default: "0" }},file:'{{ component.file }}',alias:{{ component.alias | default: "null" }},notify:'{{ component.notify }}' }{%- endcapture -%}
-    {%- elsif component.type == "serial" -%}
+    {%- elsif component.class == "serial" -%}
       {%- capture component_config -%}{ {{ default_config }},adapter:{{ component.adapter | default: "0" }},binding:'{{ component.binding }}',baudReceive:{{ component.baudReceive | default: "0" }},baudTransmit:{{ component.baudTransmit | default: "0" }},tabSize:{{ component.tabSize | default: "0" }},charBOL:{{ component.charBOL | default: "0" }},upperCase:{{ component.upperCase | default: "false" }} }{%- endcapture -%}
-    {%- elsif component.type == "video" -%}
+    {%- elsif component.class == "video" -%}
       {%- capture component_class %} pcjs-screen{%- endcapture -%}
-      {%- capture component_config -%}{ {{ default_config }},model:'{{ machine_component.model | default: component.model }}',screenWidth:{{ component.screenWidth | default: "640" }},screenHeight:{{ component.screenHeight | default: "400" }},screenColor:'{{ component.screenColor }}',fontROM:'{{ component.fontROM }}',fontColor:'{{ component.fontColor }}',charCols:{{ component.charCols | default: 80 }},charRows:{{ component.charRows | default: 25 }},touchScreen:'{{ component.fontColor }}',scale:{{ component.scale | default: false }},switches:'{{ component.switches }}',autoLock:{{ component.autoLock | default: false }},aspectRatio:{{ component.aspectRatio | default: 0 }},smoothing:{{ component.smoothing | default: "null" }},flicker:{{ component.flicker | default: 1.0 }} }{%- endcapture -%}
+      {%- capture component_config -%}{ {{ default_config }},model:'{{ machine_component.model | default: component.model }}',screenWidth:{{ component.screenWidth | default: "640" }},screenHeight:{{ component.screenHeight | default: "400" }},screenColor:'{{ component.screenColor }}',fontROM:'{{ component.fontROM }}',fontColor:'{{ component.fontColor }}',charCols:{{ component.charCols | default: 80 }},charRows:{{ component.charRows | default: 25 }},touchScreen:'{{ component.touchScreen }}',scale:{{ component.scale | default: false }},switches:'{{ component.switches }}',autoLock:{{ component.autoLock | default: false }},aspectRatio:{{ component.aspectRatio | default: 0 }},smoothing:{{ component.smoothing | default: "null" }},flicker:{{ component.flicker | default: 1.0 }} }{%- endcapture -%}
       {%- capture component_elements %}
           <canvas class="pcjs-canvas" width="{{ component.screenWidth }}" height="{{ component.screenHeight }}" style="height:auto;background-color:{{ component.screenColor }};opacity:1;"></canvas>
         {%- if component.overlay %}
@@ -234,8 +246,8 @@
         {%- endcapture -%}
       {%- endif -%}
     {%- endif %}
-      <div id="{{ machine_id }}.{{ component.id }}" class="pcjs-{{ component.type }} {{ machine_type }}-{{ component.type }} {{ machine_type }}-component" style="{{ component_style }}">{{ component_title }}{{ component_controls }}
-        <div class="{{ machine_type }}-{{ component.type }}-object{{ component_class }}" data-value="{{ component_config }}">{{ component_elements }}</div>
+      <div id="{{ machine_id }}.{{ component.id }}" class="pcjs-{{ component.class }} {{ machine_type }}-{{ component.class }} {{ machine_type }}-component" style="{{ component_style }}">{{ component_title }}{{ component_controls }}
+        <div class="{{ machine_type }}-{{ component.class }}-object{{ component_class }}" data-value="{{ component_config }}">{{ component_elements }}</div>
       </div>
   {%- endfor %}
     </div>
@@ -243,5 +255,6 @@
 </div>
 {%- endif -%}
 {%- if machine_does_not_exist -%}
-<p>{{ machine_name }} "{{ include.id }}" does not exist.</p>
+<p class="machine-error">{{ machine_name }} does not exist: {{ include.id }}</p>
 {%- endif -%}
+{{ machine_errors }}
