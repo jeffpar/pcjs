@@ -1,0 +1,7 @@
+     0003   @   VIDEO_SETUP
+     0092   @   POR_1
+     009B   @   RD_SWS
+     00CE   @   F_BTS
+     00F3   @   MK_ENV
+     0148   @   ENV_X ; SET 40x25 COLOR ALPHA
+     0D20   @   BEEP

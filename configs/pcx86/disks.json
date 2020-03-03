@@ -264,7 +264,7 @@
             "@title": "Windows 1.01 (EGA)",
             "@bootable": true,
             "@subdomain": "harddisks",
-            "@hardware": "/machines/pcx86/ibm/5160/ega/debugger/",
+            "@hardware": "/machines/pcx86/ibm/5160/ega/debugger/?sizeRAM=640",
             "@state": "PCDOS200-WIN101-EGA-STATE.json",
             "@media": [
               {"@name": "PC DOS 2.00 with Windows 1.01 (EGA)", "@harddisk": "PCDOS200-WIN101-EGA-DISK", "@type": "3", "@size": "10Mb"}
