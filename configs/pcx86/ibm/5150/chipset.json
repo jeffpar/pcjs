@@ -1,6 +1,6 @@
 {
   "id": "chipset",
-  "type": "chipset",
+  "class": "chipset",
   "model": 5150,
   "scaleTimers": false,
   "sw1": "01001001",

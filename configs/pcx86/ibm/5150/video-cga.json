@@ -1,7 +1,7 @@
 {
   "id": "videoCGA",
-  "type": "video",
-  "title": "IBM Color Display",
+  "class": "video",
+  "title": "Color Display",
   "screenWidth": 1280,
   "screenHeight": 800,
   "screenColor": "black",
@@ -10,6 +10,8 @@
   "fontROM": "/machines/pcx86/ibm/video/cga/ibm-cga.json",
   "flicker": 0.5,
   "overlay": true,
+  "autoLock": true,
+  "touchScreen": "mouse",
   "controls": [
     {
       "type": "group",

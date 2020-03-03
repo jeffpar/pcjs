@@ -10,11 +10,11 @@
   "components": [
     {
       "id": "pcMDA",
-      "type": "computer"
+      "class": "computer"
     },
     {
       "id": "debugger",
-      "type": "debugger"
+      "class": "debugger"
     },
     {
       "config": "/configs/pcx86/ibm/5150/rom-basic-100.json"
@@ -47,13 +47,13 @@
     },
     {
       "id": "lpt1",
-      "type": "parallel",
+      "class": "parallel",
       "adapter": 2,
       "binding": "print"
     },
     {
       "id": "com1",
-      "type": "serial",
+      "class": "serial",
       "adapter": 1,
       "binding": "print"
     }

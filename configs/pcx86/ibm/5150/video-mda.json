@@ -1,7 +1,7 @@
 {
   "id": "videoMDA",
-  "type": "video",
-  "title": "IBM Monochrome Display",
+  "class": "video",
+  "title": "Monochrome Display",
   "screenWidth": 1440,
   "screenHeight": 900,
   "screenColor": "black",

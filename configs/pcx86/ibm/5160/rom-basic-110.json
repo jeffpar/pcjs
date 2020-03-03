@@ -1,6 +1,6 @@
 {
   "id": "romBASIC",
-  "type": "rom",
+  "class": "rom",
   "addr": "0xf6000",
   "size": "0x08000",
   "alias": null,

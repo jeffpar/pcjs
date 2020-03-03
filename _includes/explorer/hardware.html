@@ -8,7 +8,7 @@
                   <ul>
                   {%- for category in machine[1] -%}
                     {%- if site.developer %}
-                    <!-- category: {{ category[0] }} -->
+                    <!-- hardware category: {{ category[0] }} -->
                     {%- endif -%}
                     {%- if category[0] == "@instances" -%}
                       {%- assign subcategories = machine[1] -%}
@@ -28,7 +28,7 @@
                     {%- endif -%}
                     {%- for subcategory in subcategories -%}
                       {%- if site.developer %}
-                        <!-- subcategory: {{ subcategory[0] }} -->
+                        <!-- hardware subcategory: {{ subcategory[0] }} -->
                       {%- endif -%}
                       {%- if subcategory[0] == "@instances" -%}
                         {%- capture hardware_path3 -%}{%- endcapture -%}
@@ -46,7 +46,7 @@
                       {%- endif -%}
                       {%- for instance in subcategory[1] -%}
                         {%- if site.developer %}
-                            <!-- instance: {{ instance[0] }} -->
+                            <!-- hardware instance: {{ instance[0] }} -->
                         {%- endif -%}
                         {%- if instance[0] == "@documents" -%}
                           {%- assign documents = instance[1] %}

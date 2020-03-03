@@ -1,7 +1,7 @@
 
 {
   "id": "panel",
-  "type": "panel",
+  "class": "panel",
   "title": "Control Panel",
   "style": {
     "width": "auto",

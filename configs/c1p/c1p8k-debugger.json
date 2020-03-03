@@ -10,7 +10,7 @@
   "components": [
     {
       "id": "c1p",
-      "type": "computer",
+      "class": "computer",
       "name": "Challenger 1P",
       "modules": [
         {
@@ -65,37 +65,37 @@
     },
     {
       "id": "cpu6502",
-      "type": "cpu"
+      "class": "cpu"
     },
     {
       "id": "debugger",
-      "type": "debugger"
+      "class": "debugger"
     },
     {
       "id": "ram8K",
-      "type": "ram",
+      "class": "ram",
       "size": "0x2000"
     },
     {
       "id": "romNull",
-      "type": "rom",
+      "class": "rom",
       "size": "0x8000"
     },
     {
       "id": "romBASIC",
-      "type": "rom",
+      "class": "rom",
       "size": "0x2000",
       "file": "/machines/osi/c1p/rom/basic-gcpatch.hex"
     },
     {
       "id": "romSystem",
-      "type": "rom",
+      "class": "rom",
       "size": "0x0800",
       "file": "/machines/osi/c1p/rom/system.hex"
     },
     {
       "id": "video",
-      "type": "video",
+      "class": "video",
       "title": "Challenger 1P",
       "model": 600,
       "screenWidth": 1024,
@@ -107,7 +107,7 @@
     },
     {
       "id": "keyboard",
-      "type": "keyboard",
+      "class": "keyboard",
       "model": 600,
       "controls": [
         {
@@ -129,7 +129,7 @@
     },
     {
       "id": "serialPort",
-      "type": "serial",
+      "class": "serial",
       "demo": false,
       "controls": [
         {
@@ -150,7 +150,7 @@
     },
     {
       "id": "panel",
-      "type": "panel",
+      "class": "panel",
       "title": "Control Panel",
       "style": {
         "width": "auto",

@@ -12,6 +12,10 @@ IBM PC XT (Model 5160) BIOS ROMs include:
 - [Model 5160: Jan 10, 1986](bios/1986-01-10/XTBIOS-REV2.json) (includes [IBM BASIC C1.10](basic/BASIC110.json))
 - [Model 5160: May 09, 1986](bios/1986-05-09/XTBIOS-REV3.json) (includes [IBM BASIC C1.10](basic/BASIC110.json))
 
+and the following expansion card ROMs:
+
+- [Xebec Hard Drive Controller ROM](hdc/)
+
 In general, IBM BASIC ROM images are 32Kb and IBM BIOS ROM images are 8Kb, and together they provide 40Kb of contiguous
 read-only memory, with the BASIC ROM spanning physical addresses 0xF6000-0xFDFFF and the BIOS ROM spanning addresses
 0xFE000-0xFFFFF.
