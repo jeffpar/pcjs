@@ -75,7 +75,7 @@
           "1.00-MDA": {
             "@title": "Exploring the IBM PC (MDA)",
             "@bootable": true,
-            "@hardware": "/machines/pcx86/ibm/5150/mda/?sizeRAM=128",
+            "@hardware": "/machines/pcx86/ibm/5150/mda/",
             "@media": [
               {"@diskette": "EXPLORING-THE-IBM-PC-100-MDA", "@type": "PC160K", "@image": "jpg"}
             ]

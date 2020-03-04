@@ -1,8 +1,10 @@
 {
   "id": "videoEGA",
   "class": "video",
-  "title": "Enhanced Color Display",
+  "title": "EGA (128K) with Color Display",
   "model": "ega",
+  "memory": "0x20000",
+  "switches": "0001",
   "screenWidth": 1280,
   "screenHeight": 700,
   "screenColor": "black",
