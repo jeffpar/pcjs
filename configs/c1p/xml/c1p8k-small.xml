@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="/configs/c1p/xml/machine.xsl"?>
+<?xml-stylesheet type="text/xsl" href="/configs/c1p/xsl/machine.xsl"?>
 <machine id="c1pSmall" type="c1p" border="1" width="272px" pos="left" padding="16px" background="default" style="padding-bottom:8px">
 	<computer id="c1p" name="Challenger 1P">
 		<module type="cpu" refid="cpu6502" start="0x0000" end="0xffff"/>

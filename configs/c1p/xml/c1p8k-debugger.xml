@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="/configs/c1p/xml/machine.xsl"?>
+<?xml-stylesheet type="text/xsl" href="/configs/c1p/xsl/machine.xsl"?>
 <machine id="c1p8kb" type="c1p" border="1" width="100%" background="default" style="padding-bottom:8px">
 	<name>Ohio Scientific Challenger 1P, 8K RAM, Debugger</name>
 	<computer id="c1p" name="Challenger 1P">

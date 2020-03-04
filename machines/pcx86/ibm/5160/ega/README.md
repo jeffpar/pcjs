@@ -10,3 +10,5 @@ machines:
 ---
 
 {% include machine.html id="ibm-5160-ega" %}
+
+This machine is also available with the <a href="debugger/" onclick="pcjsOnClick(this)">PCjs Debugger</a>.

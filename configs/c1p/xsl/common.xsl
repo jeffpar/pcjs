@@ -22,7 +22,7 @@
 		<link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png"/>
 		<link rel="shortcut icon" href="/assets/icons/favicon.ico"/>
 		<link rel="mask-icon" href="/assets/icons/safari-pinned-tab.svg" color="#5bbad5"/>
-		<link rel="stylesheet" type="text/css" href="/configs/c1p/xml/common.css"/>
+		<link rel="stylesheet" type="text/css" href="/configs/c1p/xsl/common.css"/>
 		<link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet"/>
 	</xsl:template>
 

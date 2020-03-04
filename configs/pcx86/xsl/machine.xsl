@@ -8,8 +8,8 @@
 
 	<xsl:output doctype-system="about:legacy-compat" method="html"/>
 
-	<xsl:include href="/configs/pcx86/xml/common.xsl"/>
-	<xsl:include href="/configs/pcx86/xml/components.xsl"/>
+	<xsl:include href="/configs/pcx86/xsl/common.xsl"/>
+	<xsl:include href="/configs/pcx86/xsl/components.xsl"/>
 
 	<xsl:template match="/machine">
 		<xsl:variable name="machineType">

@@ -7,6 +7,13 @@ machines:
   - id: ibm-5150-cga
     type: pcx86
     config: /configs/pcx86/ibm/5150/machine-cga.json
+    autoMount:
+        A:
+            name: PC DOS 2.00 (Disk 1)
+        B:
+            name: PC DOS 2.00 (Disk 2)
 ---
 
 {% include machine.html id="ibm-5150-cga" %}
+
+This machine is also available with the <a href="debugger/" onclick="pcjsOnClick(this)">PCjs Debugger</a>.

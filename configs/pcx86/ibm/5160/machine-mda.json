@@ -26,7 +26,7 @@
       "config": "/configs/pcx86/ibm/5150/video-mda.json"
     },
     {
-      "config": "/configs/pcx86/ibm/5150/fdc.json"
+      "config": "/configs/pcx86/ibm/5160/fdc.json"
     },
     {
       "config": "/configs/pcx86/ibm/5160/hdc.json"

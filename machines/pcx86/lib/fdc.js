@@ -1542,6 +1542,8 @@ class FDC extends Component {
      */
     addDiskettes()
     {
+        this.addDiskette("None", "", true);
+
         if (this.aDiskettes) {
             for (let i = 0; i < this.aDiskettes.length; i++) {
                 let diskette = this.aDiskettes[i];
@@ -1549,7 +1551,6 @@ class FDC extends Component {
             }
         }
 
-        this.addDiskette("None", "", true);
         if (this.fLocalDisks) this.addDiskette("Local Disk", "?");
         this.addDiskette("Remote Disk", "??");
 

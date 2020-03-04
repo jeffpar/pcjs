@@ -1,6 +1,6 @@
 ---
 layout: page
-title: IBM PC AT (Model 5170), Color Display
+title: IBM PC AT (Model 5170) with Color Display
 permalink: /machines/pcx86/ibm/5170/cga/
 redirect_from: /devices/pcx86/machine/5170/cga/64kb/
 machines:

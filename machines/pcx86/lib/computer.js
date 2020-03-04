@@ -82,20 +82,13 @@ class Computer extends Component {
      *
      * The parmsMachine object, if provided, may contain any of:
      *
-     *      autoMount: if set, this should override any 'autoMount' property in the FDC's
-     *      parmsFDC object.
-     *
-     *      autoPower: if set, this should override any 'autoPower' property in the Computer's
-     *      parmsComputer object.
-     *
-     *      messages: if set, this should override any 'messages' property in the Debugger's
-     *      parmsDbg object.
-     *
-     *      state: if set, this should override any 'state' property in the Computer's
-     *      parmsComputer object.
-     *
+     *      autoMount: overrides any 'autoMount' property in the FDC's parmsFDC object
+     *      autoPower: overrides any 'autoPower' property in the Computer's parmsComputer object
+     *      autoScript: overrides any 'autoScript' property in the Computer's parmsComputer object
+     *      messages: overrides any 'messages' property in the Debugger's  parmsDbg object
+     *      resume: override any 'resume' property in the Computer's parmsComputer object
+     *      state: overrides any 'state' property in the Computer's parmsComputer object
      *      url: the location of the machine XML file
-     *
      *      diagnostics: 0 for none, 1 for normal diagnostics, and 2 for diagnostics with prompting
      *
      * If a predefined state is supplied AND it's successfully loaded, then resume behavior
@@ -482,8 +475,8 @@ class Computer extends Component {
     setMachineParms(parmsMachine)
     {
         if (!parmsMachine) {
-            let sParms;
-            if (typeof resources == 'object' && (sParms = resources['parms'])) {
+            let sParms, resMachine;
+            if (typeof resources == 'object' && (sParms = resources['parms']) || (resMachine = Component.getMachineResources(this.idMachine)) && (sParms = resMachine['parms'])) {
                 try {
                     parmsMachine = /** @type {Object} */ (eval("(" + sParms + ")"));    // jshint ignore:line
                 } catch(err) {
