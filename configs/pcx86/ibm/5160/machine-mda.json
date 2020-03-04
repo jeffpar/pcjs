@@ -26,7 +26,7 @@
       "config": "/configs/pcx86/ibm/5150/video-mda.json"
     },
     {
-      "config": "/configs/pcx86/ibm/5150/fdc.json"
+      "config": "/configs/pcx86/ibm/5160/fdc.json"
     },
     {
       "config": "/configs/pcx86/ibm/5160/hdc.json"
@@ -46,6 +46,7 @@
       "model": 5160,
       "scaleTimers": false,
       "sw1": "01000001",
+      "@note": "The above switch settings indicate '256K, No FPU, Monochrome Monitor, 2 Floppy Drives'.",
       "sound": true,
       "floppies": "",
       "monitor": "",

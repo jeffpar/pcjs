@@ -1,5 +1,11 @@
 {
   "id": "hdcXT",
   "class": "hdc",
-  "type": "XT"
+  "type": "XT",
+  "drives": [
+    {
+      "name": "10Mb Hard Disk",
+      "type": 3
+    }
+  ]
 }

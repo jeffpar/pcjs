@@ -30,9 +30,13 @@ The following optional machine properties will be added to the 'parms' property:
     'resume' (eg: 1)
     'sound' (eg: true)
     'state' (eg: state.json)
+    'testRAM' (eg, false)
     'commands' (debugger commands, if any)
     'messages' (eg: fault)
     'connection' (eg: serialPort->vt100a.serialPort)
+
+Note that the 'resume' and 'state' properties were originally (and still are) Computer component properties, but the machine.html
+template doesn't add them to the Computer component anymore, since we started supporting them here as machine "override" properties.
 
 {%- endcomment -%}
 {%- for candidate in page.machines -%}
@@ -73,7 +77,7 @@ The following optional machine properties will be added to the 'parms' property:
     {%- endunless -%}
   {%- endunless -%}
   {%- if machine.autoMount == nil -%}
-    {%- assign machine_autoMount = "" -%}
+    {%- assign machine_autoMount = "autoMount:null" -%}
   {%- else -%}
     {%- capture machine_autoMount -%}autoMount:{{ machine.autoMount | jsonify }}{%- endcapture -%}
   {%- endif -%}
@@ -190,7 +194,7 @@ The following optional machine properties will be added to the 'parms' property:
     {%- capture page_scripts -%}{{ page_scripts }}{{ page_script }}{%- endcapture -%}
   {%- endif -%}
   {%- if machine_config contains ".xml" and machine_template == "" -%}
-    {%- capture machine_template -%}{{ site.baseurl }}/configs/{{ machine_type }}/xml/components.xsl{%- endcapture -%}
+    {%- capture machine_template -%}{{ site.baseurl }}/configs/{{ machine_type }}/xsl/components.xsl{%- endcapture -%}
   {%- endif -%}
   {% if machine_embed contains "embed" %}
     <script>{{ machine_embed }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});</script>
@@ -209,6 +213,9 @@ The following optional machine properties will be added to the 'parms' property:
           vars[key] = value;
         });
         return vars;
+      }
+      function pcjsOnClick(element, event) {
+        element.href += window.location.search;
       }
       function pcjsExplorerClick(element, event) {
         if (element.classList.contains("pcjs-explorer-open")) {

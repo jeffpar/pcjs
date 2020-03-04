@@ -94,7 +94,7 @@
         {%- capture module_config -%},modules:[{% for module in component.modules %}{ type:'{{ module.type }}',refID:'{{ module.id }}',start:{{ module.start }},end:{{ module.end }} },{% endfor %}@]{%- endcapture -%}
         {%- capture component_config -%}{ {{ default_config }}{{ module_config | replace: ",@", "" }} }{%- endcapture -%}
       {%- else -%}
-        {%- capture component_config -%}{ {{ default_config }},autoPower:{{ component.autoPower | default: "true" }},busWidth:{{ component.busWidth | default: "0" }},resume:'{{ component.resume | default: "0" }}',state:'{{ component.state }}' }{%- endcapture -%}
+        {%- capture component_config -%}{ {{ default_config }},autoPower:{{ component.autoPower | default: "true" }},busWidth:{{ component.busWidth | default: "0" }} }{%- endcapture -%}
       {%- endif -%}
     {%- elsif component.class == "chipset" -%}
       {%- capture component_config -%}{ {{ default_config }},model:'{{ component.model }}',scaleTimers:{{ component.scaleTimers | default: "false" }},sw1:'{{ machine_component.sw1 | default: component.sw1 }}',sw2:'{{ machine_component.sw2 | default: component.sw2 }}',sound:{{ component.sound | default: "true" }},floppies:{ {{ component.floppies }} },monitor:'{{ component.monitor }}',dateRTC:'{{ component.dateRTC }}' }{%- endcapture -%}
@@ -104,13 +104,11 @@
       {%- capture component_config -%}{ {{ default_config }},base:{{ component.base | default: "16" }},commands:'{{ component.commands }}',messages:'{{ component.messages }}' }{%- endcapture -%}
     {%- elsif component.class == "fdc" -%}
       {%- if component.autoMount -%}
-        {%- capture component_autoMount -%}{%- for drive in component.autoMount -%}{{ drive[0] }}:{disk:&quot;{{ drive[1].disk }}&quot;},{%- endfor -%}@{%- endcapture -%}
+        {%- capture component_autoMount -%}{%- for drive in component.autoMount -%}{{ drive[0] }}:{%- if drive[1].name -%}{name:&quot;{{ drive[1].name }}&quot;}{%- else -%}{path:&quot;{{ drive[1].path }}&quot;}{%- endif -%},{%- endfor -%}@{%- endcapture -%}
       {%- endif -%}
       {%- capture component_config -%}{ {{ default_config }},autoMount:'{ {{ component_autoMount | replace: ",@", "" }} }',diskettes:'{{ component.diskettes }}',server:'https://diskettes.pcjs.org' }{%- endcapture -%}
     {%- elsif component.class == "hdc" -%}
-      {%- if component.drives -%}
-        {%- capture component_drives -%}{%- for drive in component.drives -%}{ name:'{{ drive[1].name }}',type:{{ drive[1].type }} },{%- endfor -%}@{%- endcapture -%}
-      {%- endif -%}
+      {%- capture component_drives -%}{%- for drive in component.drives -%}{ name:&quot;{{ drive.name }}&quot;,type:{{ drive.type | default: "3" }},path:&quot;{{ drive.path }}&quot; },{%- endfor -%}@{%- endcapture -%}
       {%- capture component_config -%}{ {{ default_config }},drives:'[{{ component_drives | replace: ",@", "" }}]',type:'{{ component.type | default: "XT" }}',server:'https://harddisks.pcjs.org' }{%- endcapture -%}
     {%- elsif component.class == "keyboard" -%}
       {%- capture component_config -%}{ {{ default_config }},model:'{{ component.model }}' }{%- endcapture -%}
@@ -129,7 +127,7 @@
       {%- capture component_config -%}{ {{ default_config }},adapter:{{ component.adapter | default: "0" }},binding:'{{ component.binding }}',baudReceive:{{ component.baudReceive | default: "0" }},baudTransmit:{{ component.baudTransmit | default: "0" }},tabSize:{{ component.tabSize | default: "0" }},charBOL:{{ component.charBOL | default: "0" }},upperCase:{{ component.upperCase | default: "false" }} }{%- endcapture -%}
     {%- elsif component.class == "video" -%}
       {%- capture component_class %} pcjs-screen{%- endcapture -%}
-      {%- capture component_config -%}{ {{ default_config }},model:'{{ machine_component.model | default: component.model }}',screenWidth:{{ component.screenWidth | default: "640" }},screenHeight:{{ component.screenHeight | default: "400" }},screenColor:'{{ component.screenColor }}',fontROM:'{{ component.fontROM }}',fontColor:'{{ component.fontColor }}',charCols:{{ component.charCols | default: 80 }},charRows:{{ component.charRows | default: 25 }},touchScreen:'{{ component.touchScreen }}',scale:{{ component.scale | default: false }},switches:'{{ component.switches }}',autoLock:{{ component.autoLock | default: false }},aspectRatio:{{ component.aspectRatio | default: 0 }},smoothing:{{ component.smoothing | default: "null" }},flicker:{{ component.flicker | default: 1.0 }} }{%- endcapture -%}
+      {%- capture component_config -%}{ {{ default_config }},model:'{{ machine_component.model | default: component.model }}',memory:'{{ machine_component.memory | default: component.memory }}',screenWidth:{{ component.screenWidth | default: "640" }},screenHeight:{{ component.screenHeight | default: "400" }},screenColor:'{{ component.screenColor }}',fontROM:'{{ component.fontROM }}',fontColor:'{{ component.fontColor }}',charCols:{{ component.charCols | default: 80 }},charRows:{{ component.charRows | default: 25 }},touchScreen:'{{ component.touchScreen }}',scale:{{ component.scale | default: false }},switches:'{{ component.switches }}',autoLock:{{ component.autoLock | default: false }},aspectRatio:{{ component.aspectRatio | default: 0 }},smoothing:{{ component.smoothing | default: "null" }},flicker:{{ component.flicker | default: 1.0 }} }{%- endcapture -%}
       {%- capture component_elements %}
           <canvas class="pcjs-canvas" width="{{ component.screenWidth }}" height="{{ component.screenHeight }}" style="height:auto;background-color:{{ component.screenColor }};opacity:1;"></canvas>
         {%- if component.overlay %}

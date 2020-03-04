@@ -51469,7 +51469,7 @@ class VideoX86 extends Component {
         this.nCardFont = 0;
         this.nActiveFont = this.nAlternateFont = 0;
         this.nFontSelect = 0;                       // current set of selectable logical fonts
-        this.cbMemory = parmsVideo['memory'] || 0;  // zero means fallback to the cardSpec's default size
+        this.cbMemory = +parmsVideo['memory'] || 0; // zero means fallback to the cardSpec's default size
         this.sSwitches = parmsVideo['switches'];
         this.nRandomize = parmsVideo['randomize'];
         if (this.nRandomize == null) this.nRandomize = 1;
@@ -65463,6 +65463,8 @@ class FDC extends Component {
      */
     addDiskettes()
     {
+        this.addDiskette("None", "", true);
+
         if (this.aDiskettes) {
             for (let i = 0; i < this.aDiskettes.length; i++) {
                 let diskette = this.aDiskettes[i];
@@ -65470,7 +65472,6 @@ class FDC extends Component {
             }
         }
 
-        this.addDiskette("None", "", true);
         if (this.fLocalDisks) this.addDiskette("Local Disk", "?");
         this.addDiskette("Remote Disk", "??");
 
@@ -80382,20 +80383,13 @@ class Computer extends Component {
      *
      * The parmsMachine object, if provided, may contain any of:
      *
-     *      autoMount: if set, this should override any 'autoMount' property in the FDC's
-     *      parmsFDC object.
-     *
-     *      autoPower: if set, this should override any 'autoPower' property in the Computer's
-     *      parmsComputer object.
-     *
-     *      messages: if set, this should override any 'messages' property in the Debugger's
-     *      parmsDbg object.
-     *
-     *      state: if set, this should override any 'state' property in the Computer's
-     *      parmsComputer object.
-     *
+     *      autoMount: overrides any 'autoMount' property in the FDC's parmsFDC object
+     *      autoPower: overrides any 'autoPower' property in the Computer's parmsComputer object
+     *      autoScript: overrides any 'autoScript' property in the Computer's parmsComputer object
+     *      messages: overrides any 'messages' property in the Debugger's  parmsDbg object
+     *      resume: override any 'resume' property in the Computer's parmsComputer object
+     *      state: overrides any 'state' property in the Computer's parmsComputer object
      *      url: the location of the machine XML file
-     *
      *      diagnostics: 0 for none, 1 for normal diagnostics, and 2 for diagnostics with prompting
      *
      * If a predefined state is supplied AND it's successfully loaded, then resume behavior
@@ -80782,8 +80776,8 @@ class Computer extends Component {
     setMachineParms(parmsMachine)
     {
         if (!parmsMachine) {
-            let sParms;
-            if (typeof resources == 'object' && (sParms = resources['parms'])) {
+            let sParms, resMachine;
+            if (typeof resources == 'object' && (sParms = resources['parms']) || (resMachine = Component.getMachineResources(this.idMachine)) && (sParms = resMachine['parms'])) {
                 try {
                     parmsMachine = /** @type {Object} */ (eval("(" + sParms + ")"));    // jshint ignore:line
                 } catch(err) {
@@ -82944,10 +82938,26 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
     };
 
     if (!sXMLFile) {
+        /*
+         * For a machine whose layout is now pre-built based on a JSON config file, the method of passing any machine "parms" to
+         * the machine via a "parms" attribute of the XML <machine> tag no longer works, so we must also stash them as a property
+         * of the machine's resource object.
+         *
+         * An alternative approach would be to change the machine HTML template file to build the parms directly into the machine
+         * layout, but this is more expedient.
+         */
+        if (sParms) {
+            Component.addMachineResource(idMachine, "parms", sParms);
+        }
+        /*
+         * We use to replace a missing XML configuration file with a default path, but since we now support JSON-based configs,
+         * that had to change.
+         *
+         *      sXMLFile = "machine.xml";
+         *      if (!sXSLFile) sXSLFile = "components.xsl";
+         */
         doneMachine();
         return fSuccess;
-        // sXMLFile = "machine.xml";
-        // if (!sXSLFile) sXSLFile = "components.xsl";
     }
 
     let displayError = function(sError) {

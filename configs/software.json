@@ -1,12 +1,12 @@
 {
   "c1p": {
     "@title": "Ohio Scientific C1P",
-    "@path": "osi/c1p",
+    "@path": "/osi/c1p",
     "@type": "tapes"
   },
   "pcx86": {
     "@title": "IBM PC software",
-    "@path": "pcx86",
+    "@path": "/pcx86",
     "@type": "disks",
     "@diskette_drives": ["A", "B"]
   }

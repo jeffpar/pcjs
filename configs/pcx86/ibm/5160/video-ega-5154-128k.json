@@ -1,0 +1,64 @@
+{
+  "id": "videoEGA",
+  "class": "video",
+  "title": "EGA (128K) with Enhanced Color Display",
+  "model": "ega",
+  "memory": "0x20000",
+  "switches": "0110",
+  "screenWidth": 1280,
+  "screenHeight": 700,
+  "screenColor": "black",
+  "overlay": true,
+  "autoLock": true,
+  "touchScreen": "mouse",
+  "@note": [
+    "If [Wikipedia](https://en.wikipedia.org/wiki/Enhanced_Graphics_Adapter) is correct that the IBM EGA",
+    "(presumably when paired with an IBM 5154 EGA monitor) has a 'pixel aspect ratio' of 1:1.37 at its highest",
+    "resolution (640x350), that suggests we should 'stretch' our screen size vertically to 350 * 1.37, or 640x480",
+    "(or something proportional, like 1280x960), assuming the native display has a 'pixel aspect ratio' of 1:1.",
+    "But testing reveals that round images appear roundest when we stick with a screen size proportional to 640x350.",
+    "Also note that 1280x700 produces crisper results than 640x350, and 2560x1400 is sharper still (at least when",
+    "using Chrome).  I'm going to split the difference and go with 1280x700."
+  ],
+  "controls": [
+    {
+      "type": "group",
+      "style": {
+        "float": "right"
+      }
+    },
+    {
+      "id": "caps-lock",
+      "type": "led",
+      "title": "Caps",
+      "style": {
+        "padding-left": "8px"
+      }
+    },
+    {
+      "id": "num-lock",
+      "type": "led",
+      "title": "Num",
+      "style": {
+        "padding-left": "8px"
+      }
+    },
+    {
+      "id": "scroll-lock",
+      "type": "led",
+      "title": "Scroll",
+      "style": {
+        "padding-left": "8px"
+      }
+    },
+    {
+      "id": "fullScreen",
+      "type": "button",
+      "label": "Full Screen",
+      "style": {
+        "padding-left": "8px",
+        "line-height": "1em"
+      }
+    }
+  ]
+}

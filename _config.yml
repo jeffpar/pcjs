@@ -5,6 +5,9 @@ author: Jeff Parsons
 logo: /assets/img/logo-home.png
 data_dir: configs
 google_analytics: UA-155982505-1
+left_brace: "{"
+right_brace: "}"
+encoding: UTF-8
 
 exclude:
   - Gemfile
@@ -36,3 +39,5 @@ plugins:
 software:
   diskettes:
     server: https://diskettes.pcjs.org
+  harddisks:
+    server: https://harddisks.pcjs.org

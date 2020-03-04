@@ -32550,10 +32550,26 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
     };
 
     if (!sXMLFile) {
+        /*
+         * For a machine whose layout is now pre-built based on a JSON config file, the method of passing any machine "parms" to
+         * the machine via a "parms" attribute of the XML <machine> tag no longer works, so we must also stash them as a property
+         * of the machine's resource object.
+         *
+         * An alternative approach would be to change the machine HTML template file to build the parms directly into the machine
+         * layout, but this is more expedient.
+         */
+        if (sParms) {
+            Component.addMachineResource(idMachine, "parms", sParms);
+        }
+        /*
+         * We use to replace a missing XML configuration file with a default path, but since we now support JSON-based configs,
+         * that had to change.
+         *
+         *      sXMLFile = "machine.xml";
+         *      if (!sXSLFile) sXSLFile = "components.xsl";
+         */
         doneMachine();
         return fSuccess;
-        // sXMLFile = "machine.xml";
-        // if (!sXSLFile) sXSLFile = "components.xsl";
     }
 
     let displayError = function(sError) {

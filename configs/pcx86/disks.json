@@ -75,7 +75,7 @@
           "1.00-MDA": {
             "@title": "Exploring the IBM PC (MDA)",
             "@bootable": true,
-            "@hardware": "/machines/pcx86/ibm/5150/mda/?sizeRAM=128",
+            "@hardware": "/machines/pcx86/ibm/5150/mda/",
             "@media": [
               {"@diskette": "EXPLORING-THE-IBM-PC-100-MDA", "@type": "PC160K", "@image": "jpg"}
             ]
@@ -216,7 +216,6 @@
         "@versions": {
           "2.00": {
             "@bootable": true,
-            "@subdomain": "diskettes",
             "@hardware": "/machines/pcx86/ibm/5150/cga/",
             "@media": [
               {"@diskette": "IBM-PCDOS-200-DISK1", "@type": "PC180K", "@image": "jpg"},
@@ -250,26 +249,29 @@
         "@creator": "Microsoft",
         "@title": "Windows",
         "@versions": {
-          "1.01-CGA": {
-            "@title": "Windows 1.01 (CGA)",
-            "@bootable": true,
-            "@subdomain": "harddisks",
-            "@hardware": "/machines/pcx86/ibm/5160/cga/debugger/",
-            "@state": "PCDOS200-WIN101-CGA-STATE.json",
-            "@media": [
-              {"@name": "PC DOS 2.00 with Windows 1.01 (CGA)", "@harddisk": "PCDOS200-WIN101-CGA-DISK", "@type": "3", "@size": "10Mb"}
-            ]
-          },
-          "1.01-EGA": {
-            "@title": "Windows 1.01 (EGA)",
-            "@bootable": true,
-            "@subdomain": "harddisks",
-            "@hardware": "/machines/pcx86/ibm/5160/ega/debugger/",
-            "@state": "PCDOS200-WIN101-EGA-STATE.json",
-            "@media": [
-              {"@name": "PC DOS 2.00 with Windows 1.01 (EGA)", "@harddisk": "PCDOS200-WIN101-EGA-DISK", "@type": "3", "@size": "10Mb"}
-            ],
-            "@note": "The final path for each piece of media shall be formed by the key hierarchy (eg, /pcx86/sys/dos/ibm/2.00/) and the predefined media server (eg, https://harddisks.pcjs.org)"
+          "1.01": {
+            "@title": "Windows 1.01",
+            "@demos": {
+              "cga": {
+                "@title": "Windows 1.01 (CGA)",
+                "@bootable": true,
+                "@hardware": "/machines/pcx86/ibm/5160/cga/",
+                "@state": "PCDOS200-WIN101-CGA-STATE.json",
+                "@media": [
+                  {"@name": "PC DOS 2.00 with Windows 1.01 (CGA)", "@harddisk": "PCDOS200-WIN101-CGA-DISK", "@type": "3", "@size": "10Mb"}
+                ]
+              },
+              "ega": {
+                "@title": "Windows 1.01 (EGA)",
+                "@bootable": true,
+                "@hardware": "/machines/pcx86/ibm/5160/ega/debugger/?sizeRAM=640",
+                "@state": "PCDOS200-WIN101-EGA-STATE.json",
+                "@media": [
+                  {"@name": "PC DOS 2.00 with Windows 1.01 (EGA)", "@harddisk": "PCDOS200-WIN101-EGA-DISK", "@type": "3", "@size": "10Mb"}
+                ],
+                "@note": "The final path for each piece of media shall be formed by the key hierarchy (eg, /pcx86/sys/dos/ibm/2.00/) and the predefined media server (eg, https://harddisks.pcjs.org)"
+              }
+            }
           }
         }
       }

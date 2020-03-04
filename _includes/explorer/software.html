@@ -45,8 +45,8 @@
               {%- for machine in site.data.software -%}
                 {%- capture machine_type -%}{{ machine[0] }}{%- endcapture -%}
                 {%- capture software_type -%}{{ machine[1]['@type'] }}{%- endcapture %}
-                {%- capture software_path1 -%}/{{ machine[1]['@path'] }}{%- endcapture %}
-                {%- capture machine_url -%}/machines/{{ software_path1 }}/{%- endcapture %}
+                {%- capture software_path1 -%}{{ machine[1]['@path'] }}{%- endcapture %}
+                {%- capture machine_url -%}/machines{{ software_path1 }}/{%- endcapture %}
                 {%- assign diskette_drives = machine[1]['@diskette_drives'] -%}
                 <li class="pcjs-explorer-platform pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ machine[1]['@title'] }}
                   <ul>
@@ -138,25 +138,34 @@
                                 {%- capture software_title %}{{ product_creator }}{{ product_title }}{% if version[0] != "" %} {{ version[0] }}{% endif %}{% endcapture -%}
                               {%- endif -%}
                               {%- capture hardware_url -%}{{ version[1]['@hardware'] }}{%- endcapture -%}
-                              {%- capture software_host -%}https://{{ version[1]['@subdomain'] | default: "diskettes" }}.pcjs.org{%- endcapture -%}
+                              {%- capture diskette_server -%}https://{{ version[1]['@subdomain'] | default: "diskettes" }}.pcjs.org{%- endcapture -%}
+                              {%- capture harddisk_server -%}https://{{ version[1]['@subdomain'] | default: "harddisks" }}.pcjs.org{%- endcapture -%}
                               {%- capture software_url -%}{{ software_path1 }}{{ software_path2 }}{{ software_path3 }}{{ software_path4 }}{{ software_path5 }}{% if version[0] != "" %}/{{ version[0] }}{% endif %}{%- endcapture -%}
                               {%- capture software_id -%}{{ software_url | remove_first: "/" | replace: "/", "-" }}{%- endcapture -%}
+                              {%- if site.developer %}
+                                  <!-- machine_url: {{ machine_url }} -->
+                                  <!-- hardware_url: {{ hardware_url }} -->
+                                  <!-- software_url: {{ software_url }} -->
+                                  <!-- software_id: {{ software_id }} -->
+                              {%- endif -%}
                               {%- assign autoMount = "" -%}{%- assign autoDrive = "" -%}{%- assign autoState = "" -%}
-                              {%- if hardware_url or page.permalink contains machine_url -%}
+                              {%- if hardware_url != "" -%}{%- comment -%} or page.permalink contains machine_url {%- endcomment -%}
                                 {%- if version[1]['@autoMount'] -%}
-                                  {%- capture autoMount -%}{% assign disk_num = 0 %}{% for drive in version[1]['@autoMount'] %}{% assign disk_num = disk_num | plus:1 %}{{ drive[0] }}:{name:%27{{ software_title }} (Disk {{ disk_num }})%27,path:%27{{ software_host }}{{ software_url }}/{{ drive[1]['@diskette'] }}.json%27},{% endfor %}@{%- endcapture -%}
+                                  {%- capture autoMount -%}{% assign disk_num = 0 %}{% for drive in version[1]['@autoMount'] %}{% assign disk_num = disk_num | plus:1 %}{{ drive[0] }}:{name:%22{{ software_title }} (Disk {{ disk_num }})%22,path:%22{{ diskette_server }}{{ software_url }}/{{ drive[1]['@diskette'] }}.json%22},{% endfor %}@{%- endcapture -%}
                                 {%- elsif version[1]['@media'][0]['@diskette'] -%}
-                                   {%- if version[1]['@bootable'] -%}{%- assign drive_num = 0 -%}{%- else -%}{%- assign drive_num = 1 -%}{%- endif -%}
-                                  {%- capture autoMount -%}{% assign disk_num = 0 %}{% for disk in version[1]['@media'] %}{{ diskette_drives[drive_num] }}{% assign disk_num = disk_num | plus:1 %}{% assign drive_num = drive_num | plus:1 %}:{name:%27{{ software_title }}{% if version[1]['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}%27,path:%27{{ software_host }}{{ software_url }}/{{ disk['@diskette'] }}.json%27},{% if drive_num >= diskette_drives.size %}{% break %}{% endif %}{% endfor %}@{%- endcapture -%}
+                                  {%- if version[1]['@bootable'] -%}{%- assign drive_num = 0 -%}{%- else -%}{%- assign drive_num = 1 -%}{%- endif -%}
+                                  {%- capture autoMount -%}{% assign disk_num = 0 %}{% for disk in version[1]['@media'] %}{{ diskette_drives[drive_num] }}{% assign disk_num = disk_num | plus:1 %}{% assign drive_num = drive_num | plus:1 %}:{name:%22{{ software_title }}{% if version[1]['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}%22,path:%22{{ diskette_server }}{{ software_url }}/{{ disk['@diskette'] }}.json%22},{% if drive_num >= diskette_drives.size %}{% break %}{% endif %}{% endfor %}@{%- endcapture -%}
                                 {%- endif -%}
                                 {%- if version[1]['@media'][0]['@harddisk'] -%}
-                                  {%- capture autoDrive -%}{% for disk in version[1]['@media'] %}{ name:%27{{ disk['@name'] }}%27,type:{{ disk['@type'] }},path:%27{{ software_host }}{{ software_url }}/{{ disk['@harddisk'] }}.json%27 },{% endfor %}@{%- endcapture -%}
+                                  {%- capture autoDrive -%}{% for disk in version[1]['@media'] %}{ name:%22{{ disk['@name'] }}%22,type:{{ disk['@type'] }},path:%22{{ harddisk_server }}{{ software_url }}/{{ disk['@harddisk'] }}.json%22 },{% endfor %}@{%- endcapture -%}
                                 {%- endif -%}
                                 {%- if autoDrive != "" -%}{%- capture autoDrive -%}&drives=[ {{ autoDrive | replace: ",@", "" }} ]{%- endcapture -%}{%- endif -%}
                                 {%- if autoMount != "" -%}{%- capture autoMount -%}&autoMount={ {{ autoMount | replace: ",@", "" }} }{%- endcapture -%}{%- endif -%}
-                                {%- if version[1]['@state'] != "" -%}{%- capture autoState -%}&state={{ software_host }}{{ software_url }}/{{ version[1]['@state'] }}{%- endcapture -%}{%- endif -%}
+                                {%- if version[1]['@state'] -%}{%- capture autoState -%}&state={{ harddisk_server }}{{ software_url }}/{{ version[1]['@state'] }}{%- endcapture -%}{%- endif -%}
+                                {%- capture software_parms -%}{%- if hardware_url contains '?' -%}&{%- else -%}?{%- endif -%}software={{ software_url }}/{{ autoMount }}{{ autoDrive }}{{ autoState }}{%- endcapture %}
+                              {%- else -%}
+                                {%- capture software_parms -%}/software{{ software_url }}/{%- endcapture %}
                               {%- endif -%}
-                              {%- capture software_parms -%}{%- if hardware_url contains '?' -%}&{%- else -%}?{%- endif -%}software={{ software_url }}{{ autoMount }}{{ autoDrive }}{{ autoState }}{%- endcapture %}
                                   <li id="{{ software_id }}" class="pcjs-explorer-version pcjs-explorer-item">
                                     <a href="{{ hardware_url }}{{ software_parms }}">{{ software_title }}</a>
                                   </li>
@@ -174,7 +183,7 @@
                             {%- capture software_id -%}{{ software_url | remove_first: "/software" | remove_first: "/" | replace: "/", "-" }}{%- endcapture -%}
                             {%- assign software_parms = "" -%}
                             {%- if product[1]['@tape'] -%}
-                              {%- capture software_parms -%}?autoStart=true&autoMount={name:%27{{ product_title }}%27,path:%27{{ software_url }}/{{ product[1]['@tape'] }}%27}{%- endcapture -%}
+                              {%- capture software_parms -%}?autoStart=true&autoMount={name:%22{{ product_title }}%22,path:%22{{ software_url }}/{{ product[1]['@tape'] }}%22}{%- endcapture -%}
                             {%- endif %}
                               <li id="{{ software_id }}" class="pcjs-explorer-product pcjs-explorer-item">
                                 <a href="{{ software_url }}/{{ software_parms }}">{{ product_title }}</a>

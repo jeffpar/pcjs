@@ -19,7 +19,7 @@
 	<xsl:variable name="BGNDCOLOR">#FAEBD7</xsl:variable>
 
 	<xsl:template name="componentStyles">
-		<link rel="stylesheet" type="text/css" href="/configs/{$APPCLASS}/xml/components.css"/>
+		<link rel="stylesheet" type="text/css" href="/configs/{$APPCLASS}/xsl/components.css"/>
 	</xsl:template>
 
 	<xsl:template name="componentScripts">
@@ -29,7 +29,7 @@
 				<script src="/versions/pdpjs/{$APPVERSION}/{$component}.js"> </script>
 			</xsl:when>
 			<xsl:otherwise>
-				<script src="/versions/{$APPCLASS}/{$APPVERSION}/{$component}.js"> </script>
+				<script src="/machines/{$APPCLASS}/releases/{$APPVERSION}/{$component}.js"> </script>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

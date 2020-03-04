@@ -2385,7 +2385,7 @@ class VideoX86 extends Component {
         this.nCardFont = 0;
         this.nActiveFont = this.nAlternateFont = 0;
         this.nFontSelect = 0;                       // current set of selectable logical fonts
-        this.cbMemory = parmsVideo['memory'] || 0;  // zero means fallback to the cardSpec's default size
+        this.cbMemory = +parmsVideo['memory'] || 0; // zero means fallback to the cardSpec's default size
         this.sSwitches = parmsVideo['switches'];
         this.nRandomize = parmsVideo['randomize'];
         if (this.nRandomize == null) this.nRandomize = 1;

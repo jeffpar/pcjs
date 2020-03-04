@@ -312,7 +312,7 @@ class NumIO extends Defs {
              */
             let v, shift = 0;
             if (base <= 10) {
-                let match = s.match(/(-?[0-9]+)B([0-9]*)/);
+                let match = s.match(/(-?[0-9]+)B([0-9]*)$/);
                 if (match) {
                     s = match[1];
                     shift = 35 - ((match[2] || 35) & 0xff);

@@ -27,17 +27,9 @@
           "@title": "Color Display",
           "@redirect_from": "/devices/pcx86/machine/5150/cga/64kb/"
         },
-        "cga-debugger": {
-          "@title": "Color Display with Debugger",
-          "@redirect_from": "/devices/pcx86/machine/5150/cga/64kb/debugger/"
-        },
         "mda": {
           "@title": "Monochrome Display",
           "@redirect_from": "/devices/pcx86/machine/5150/cga/64kb/"
-        },
-        "mda-debugger": {
-          "@title": "Monochrome Display with Debugger",
-          "@redirect_from": "/devices/pcx86/machine/5150/mda/64kb/debugger/"
         },
         "dual": {
           "@title": "Dual Displays",
@@ -88,17 +80,13 @@
           "@title": "Color Display",
           "@redirect_from": "/devices/pcx86/machine/5160/cga/256kb/"
         },
-        "cga-debugger": {
-          "@title": "Color Display with Debugger",
-          "@redirect_from": "/devices/pcx86/machine/5160/cga/256kb/debugger/"
+        "ega": {
+          "@title": "Enhanced Color Display",
+          "@redirect_from": "/devices/pcx86/machine/5160/ega/640kb/"
         },
         "mda": {
           "@title": "Monochrome Display",
           "@redirect_from": "/devices/pcx86/machine/5160/mda/256kb/"
-        },
-        "mda-debugger": {
-          "@title": "Monochrome Display with Debugger",
-          "@redirect_from": "/devices/pcx86/machine/5160/mda/256kb/debugger/"
         }
       },
       "5170": {
