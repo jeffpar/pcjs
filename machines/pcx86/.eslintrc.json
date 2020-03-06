@@ -25,7 +25,7 @@
   "rules": {
     "no-useless-constructor": "off",
     "no-confusing-arrow": "off",
-    "no-var": 0,
-    "no-empty": "off"
+    "no-empty": "off",
+    "no-var": 0
   }
 }

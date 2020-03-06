@@ -1,0 +1,13 @@
+{
+  "globals": {
+    "Buffer": true,
+    "COPYRIGHT": true,
+    "process": true
+  },
+  "rules": {
+    "no-useless-constructor": "off",
+    "no-confusing-arrow": "off",
+    "no-var": 0,
+    "no-catch-shadow": "off"
+  }
+}

@@ -1,8 +1,8 @@
 ---
 layout: page
 title: PC Disk Magazine Diskettes
-permalink: /software/pcx86/shareware/pcdm/
-redirect_from: /disks/pcx86/shareware/pcdiskmag/
+permalink: /software/pcx86/sw/pcdm/
+redirect_from: /disks/pcx86/sw/pcdiskmag/
 ---
 
 In addition to [Directory Listings](#pc-disk-magazine-disk-1) and [Diskette Scans](#diskette-scans) of the first 7
@@ -185,18 +185,18 @@ diskettes of PC Disk Magazine, we also have the [Magazines](#documents) that acc
 
 ### Diskette Scans
 
-![PC Disk Magazine (Disk 1)]({{ site.software.diskettes.server }}/pcx86/shareware/pcdm/PCDISKMAG-DISK1.jpg)
+![PC Disk Magazine (Disk 1)]({{ site.software.diskettes.server }}/pcx86/sw/pcdm/PCDISKMAG-DISK1.jpg)
 
-![PC Disk Magazine (Disk 2)]({{ site.software.diskettes.server }}/pcx86/shareware/pcdm/PCDISKMAG-DISK2.jpg)
+![PC Disk Magazine (Disk 2)]({{ site.software.diskettes.server }}/pcx86/sw/pcdm/PCDISKMAG-DISK2.jpg)
 
-![PC Disk Magazine (Disk 3)]({{ site.software.diskettes.server }}/pcx86/shareware/pcdm/PCDISKMAG-DISK3.jpg)
+![PC Disk Magazine (Disk 3)]({{ site.software.diskettes.server }}/pcx86/sw/pcdm/PCDISKMAG-DISK3.jpg)
 
-![PC Disk Magazine (Disk 4)]({{ site.software.diskettes.server }}/pcx86/shareware/pcdm/PCDISKMAG-DISK4.jpg)
+![PC Disk Magazine (Disk 4)]({{ site.software.diskettes.server }}/pcx86/sw/pcdm/PCDISKMAG-DISK4.jpg)
 
-![PC Disk Magazine (Disk 5)]({{ site.software.diskettes.server }}/pcx86/shareware/pcdm/PCDISKMAG-DISK5.jpg)
+![PC Disk Magazine (Disk 5)]({{ site.software.diskettes.server }}/pcx86/sw/pcdm/PCDISKMAG-DISK5.jpg)
 
-![PC Disk Magazine (Disk 6)]({{ site.software.diskettes.server }}/pcx86/shareware/pcdm/PCDISKMAG-DISK6.jpg)
+![PC Disk Magazine (Disk 6)]({{ site.software.diskettes.server }}/pcx86/sw/pcdm/PCDISKMAG-DISK6.jpg)
 
-![PC Disk Magazine (Disk 7)]({{ site.software.diskettes.server }}/pcx86/shareware/pcdm/PCDISKMAG-DISK7.jpg)
+![PC Disk Magazine (Disk 7)]({{ site.software.diskettes.server }}/pcx86/sw/pcdm/PCDISKMAG-DISK7.jpg)
 
 {% include gallery/documents.html path="/documents/magazines/pcdm/" %}

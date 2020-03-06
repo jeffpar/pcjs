@@ -9,6 +9,11 @@
 
 "use strict";
 
+if (typeof module !== "undefined") {
+    var Defs = require("../../machines/lib/defs");      // eslint-disable-line no-var
+    var NumIO = require("../../machines/lib/numio");    // eslint-disable-line no-var
+}
+
 /**
  * Define the Formatter function type for addFormatType().
  *
@@ -654,3 +659,5 @@ StdIO.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Fr
 StdIO.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 Defs.CLASSES["StdIO"] = StdIO;
+
+if (typeof module !== "undefined") module.exports = StdIO;
