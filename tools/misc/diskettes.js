@@ -36,6 +36,7 @@ let remappings = {
     "/personal": "/sw/personal",
     "/roms": "/dev/rom",
     "/shareware": "/sw",
+    "/shareware/pcdiskmag": "/sw/pcdm",
     "/tools/borland": "/lang/borland",
     "/tools/borland/sidekick": "/util/borland/sidekick",
     "/tools/borland/skplus": "/util/borland/skplus",
@@ -126,9 +127,9 @@ function processFiles(sDir, diskettes)
                 let srcPath = paths[0].replace(/^.*\/pcx86/, srcDir);
                 let dstPath = paths[1].replace(/\/diskettes\//, "../../../pcjs-diskettes/");
                 fileCopy(srcPath, dstPath);
-                if (item['@image']) {
-                    let srcImage = srcPath.replace(".json", "." + item['@image']);
-                    let dstImage = dstPath.replace(".json", "." + item['@image']);
+                if (item['@photo']) {
+                    let srcImage = srcPath.replace(".json", "." + item['@photo']);
+                    let dstImage = dstPath.replace(".json", "." + item['@photo']);
                     fileCopy(srcImage, dstImage);
                 }
                 if (i == 0) {
@@ -144,10 +145,12 @@ function processFiles(sDir, diskettes)
                         s = s.replace(/\npermalink: ([^\n]*)\n/, "\npermalink: " + permalink + "\nredirect_from: $1\n");
                         s = s.replace(/\n\{% include machine\.html .*?%\}\n/g, "");
                         s = s.replace(/\{\{ site\.demo-disks\.baseurl \}\}.*?([^/]*\.)(jpg|jpeg|png)/g, "{{ site.software.diskettes.server }}" + path.dirname(paths[1].replace("/diskettes/", "/")) + "/$1$2");
+                        mkdirp.sync(path.dirname(dstPath));
                         fs.writeFileSync(dstPath, s);
                     }
                 }
                 delete item['@copy'];
+                nCopied++;
             }
         }
     };
@@ -237,7 +240,7 @@ function processManifests(sDir, output, fDebug)
                             let j = sDir.indexOf("/" + pathParts[1] + "/");
                             if (j >= 0) pathDisk = sDir.substring(0, j) + pathDisk;
                             if (!fs.existsSync(pathDisk)) printf("error: diskette missing: %s\n", pathDisk);
-                            if (fs.existsSync(pathDisk.replace(".json", s = ".jpg")) || fs.existsSync(pathDisk.replace(".json", s = ".png"))) item['@image'] = s.substr(1);
+                            if (fs.existsSync(pathDisk.replace(".json", s = ".jpg")) || fs.existsSync(pathDisk.replace(".json", s = ".png"))) item['@photo'] = s.substr(1);
                         } else {
                             printf("error: missing 'href' attribute for disk '%s' in %s\n", disk[idAttrs].id, sFile);
                         }
@@ -251,14 +254,6 @@ function processManifests(sDir, output, fDebug)
                 printf("error: %s\n", err.message);
             }
         }, fDebug);
-    }
-    if (output) {
-        let json = stdio.sprintf("%2j\n", diskettes);
-        if (typeof output == "string") {
-            fs.writeFileSync(output, json);
-        } else {
-            printf(json);
-        }
     }
     return diskettes;
 }
@@ -356,8 +351,15 @@ if (args.argc < 2) {
 } else {
     let argv = args.argv;
     let sDir = argv[1].replace(/^~/, os.homedir());
-    let diskettes = processManifests(sDir, argv['output'], argv['debug']);
+    let output = argv['output'];
+    let fDebug = argv['debug'];
+    let diskettes = processManifests(sDir, output, fDebug);
     if (processFiles(sDir, diskettes)) {
-        printf("%2j\n", diskettes);
+        let json = stdio.sprintf("%2j\n", diskettes);
+        if (typeof output == "string") {
+            fs.writeFileSync(output, json);
+        } else {
+            printf(json);
+        }
     }
 }

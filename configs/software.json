@@ -7,7 +7,7 @@
   "pcx86": {
     "@title": "IBM PC software",
     "@path": "/pcx86",
-    "@type": "disks",
+    "@type": "diskettes",
     "@diskette_drives": ["A", "B"]
   }
 }
