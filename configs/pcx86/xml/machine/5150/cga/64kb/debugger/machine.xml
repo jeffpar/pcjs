@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
+<machine id="ibm5150" type="pcx86" border="1" pos="center" background="default">
+	<name pos="center">IBM PC (Model 5150), 64Kb RAM, Color Display</name>
+	<computer id="pc-cga-64k" name="IBM PC"/>
+	<ram id="ramLow" addr="0x00000"/>
+	<rom id="romBASIC" addr="0xf6000" size="0x8000" file="/machines/pcx86/ibm/5150/rom/basic/BASIC100.json"/>
+	<rom id="romBIOS" addr="0xfe000" size="0x2000" file="/machines/pcx86/ibm/5150/rom/bios/1981-04-24/PCBIOS-REV1.json"/>
+	<video ref="/configs/pcx86/xml/video/ibm/cga/ibm-cga.xml"/>
+	<fdc ref="/configs/pcx86/xml/fdc/library.xml"/>
+	<cpu id="cpu8088" model="8088" autostart="true"/>
+	<keyboard ref="/configs/pcx86/xml/keyboard/us83-softkeys.xml"/>
+	<debugger id="debugger"/>
+	<panel ref="/configs/pcx86/xml/panel/wide.xml"/>
+	<chipset ref="/configs/pcx86/xml/chipset/5150-cga-max.xml"/>
+	<serial id="com1" adapter="1" binding="print"/>
+	<parallel id="lpt1" adapter="2" binding="print"/>
+</machine>

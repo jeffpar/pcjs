@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
+<machine id="ibm4860" type="pcx86" border="1" pos="center" background="default">
+	<name pos="center">IBM PCjr (Model 4860) with 64Kb RAM</name>
+	<computer id="pcjr-cga-64k" name="IBM PCjr"/>
+	<cpu id="cpu8088" model="8088"/>
+	<ram id="ramLow" addr="0x00000" size="0x10000"/>
+	<rom id="romBIOS" addr="0xf0000" size="0x10000" file="/devices/pcx86/rom/4860/JRBIOS.json"/>
+	<video ref="/configs/pcx86/xml/video/ibm/cga/ibm-cga.xml"/>
+	<fdc ref="/configs/pcx86/xml/fdc/library.xml"/>
+	<keyboard ref="/configs/pcx86/xml/keyboard/us62-buttons-minimal.xml"/>
+	<debugger id="debugger"/>
+	<panel ref="/configs/pcx86/xml/panel/wide.xml"/>
+	<chipset id="chipset" model="4860"/>
+</machine>

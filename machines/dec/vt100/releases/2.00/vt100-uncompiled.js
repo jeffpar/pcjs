@@ -4,7 +4,7 @@
  * @copyright https://www.pcjs.org/machines/lib/defs.js (C) 2012-2020 Jeff Parsons
  */
 
-/* eslint no-var: 0 */
+/* eslint-disable no-var */
 
 /**
  * COMMAND is the default name of the global command handler we will define, to provide
@@ -314,7 +314,7 @@ class NumIO extends Defs {
              */
             let v, shift = 0;
             if (base <= 10) {
-                let match = s.match(/(-?[0-9]+)B([0-9]*)/);
+                let match = s.match(/(-?[0-9]+)B([0-9]*)$/);
                 if (match) {
                     s = match[1];
                     shift = 35 - ((match[2] || 35) & 0xff);

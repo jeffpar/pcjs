@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdc id="hdcAT" type="AT" drives='[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/sys/dos/compaq/3.10/COMPAQ310-WIN386201-VGA.json"}]' pos="left" padLeft="8px" padBottom="8px">
+	<control type="button" binding="saveHD0">Save HD</control>
+</hdc>

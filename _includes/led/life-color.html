@@ -1,25 +1,25 @@
-<div id="lifeColorDemo" class="pcjsContainer">
-  <div id="game-of-life" class="pcjsTitle">Game of Life</div>
+<div id="lifeColorDemo" class="pcjs-chassis">
+  <div id="game-of-life" class="pcjs-title">Game of Life</div>
   <div id="displayLife"></div>
-  <div class="pcjsControls">
-    <div class="pcjsControl"><button id="runLife">Run</button></div>
-    <div class="pcjsControl"><button id="stepLife">Step</button></div>
-    <div class="pcjsControl"><button id="resetLife">Reset</button></div>
-    <div class="pcjsControl"><input type="range" min="1" max="120" value="15" class="slider" id="throttleLife"></div>
-    <div class="pcjsControl"><span id="speedLife" style="font-size:small">Stopped</span></div>
+  <div class="pcjs-block">
+    <div class="pcjs-block-control"><button id="runLife">Run</button></div>
+    <div class="pcjs-block-control"><button id="stepLife">Step</button></div>
+    <div class="pcjs-block-control"><button id="resetLife">Reset</button></div>
+    <div class="pcjs-block-control"><input type="range" min="1" max="120" value="15" class="slider" id="throttleLife"></div>
+    <div class="pcjs-block-control"><span id="speedLife" style="font-size:small">Stopped</span></div>
   </div>
-  <div class="pcjsControls">
-    <div class="pcjsControl"><select id="colorPaletteLife"></select></div>
-    <div class="pcjsControl"><select id="colorSelectionLife"></select></div>
-    <div class="pcjsControl"><div id="colorSwatchLife"></div></div>
-    <div class="pcjsControl"><select id="patternsLife"><option value="">None</option></select></div>
-    <div class="pcjsControl"><button id="saveLife">Save to URL</button></div>
+  <div class="pcjs-block">
+    <div class="pcjs-block-control"><select id="colorPaletteLife"></select></div>
+    <div class="pcjs-block-control"><select id="colorSelectionLife"></select></div>
+    <div class="pcjs-block-control"><div id="colorSwatchLife"></div></div>
+    <div class="pcjs-block-control"><select id="patternsLife"><option value="">None</option></select></div>
+    <div class="pcjs-block-control"><button id="saveLife">Save to URL</button></div>
   </div>
 </div>
-<div class="pcjsDiagnostics">
+<div class="pcjs-diagnostics">
   <div>
     <div>Diagnostics</div>
-    <textarea id="printLife" class="pcjsConsole" cols="128" rows="20"></textarea>
+    <textarea id="printLife" class="pcjs-console" cols="128" rows="20"></textarea>
   </div>
   <button id="clearLife">Clear</button>
 </div>

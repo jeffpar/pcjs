@@ -15,11 +15,6 @@ machines:
     autoType: $date\r$time\r
 ---
 
-IBM Multiplan 1.00
-------------------
-
-The machine below is also available with the [PCjs Debugger](debugger/).
-
 ### Directory of IBM Multiplan 1.00 (Program)
 
 	 Volume in drive A has no label

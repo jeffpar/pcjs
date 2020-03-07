@@ -179,24 +179,26 @@ class Web {
             return response;
         }
 
-        let sURLRedirect = sURL;
-        if (Web.getHost() == "pcjs:8088" || typeof module !== "undefined") {
-            /*
-             * The larger resources that I've put on archive.pcjs.org are assumed to also be available locally
-             * whenever the hostname is "pcjs" (or NODE is true); otherwise, use "localhost" when debugging locally.
-             *
-             * NOTE: http://archive.pcjs.org is currently redirected to https://s3-us-west-2.amazonaws.com/archive.pcjs.org
-             */
-            sURLRedirect = sURL.replace(/^(http:\/\/archive\.pcjs\.org\/|https:\/\/[a-z0-9-]+\.amazonaws\.com\/archive\.pcjs\.org\/)([^/]*)\/(.*?)\/([^/]*)$/, "/$2-demo/$3/archive/$4");
-            sURLRedirect = sURLRedirect.replace(/^https:\/\/([a-z0-9]+)-disks\.pcjs\.org\/(.*)$/, "/disks-$1/$2").replace(/^https:\/\/(cds[0-9]+)\.pcjs\.org\/(.*)$/, "/disks-cds/$1/$2");
-        }
-        else {
-            /*
-             * TODO: Perhaps it's time for our code in netlib.js to finally add support for HTTPS; for now
-             * though, it's just as well that the NODE environment assumes all resources are available locally.
-             */
-            sURLRedirect = sURL.replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/").replace(/^\/disks-([a-z0-9]+)\//, "https://$1-disks.pcjs.org/");
-        }
+        // let sURLRedirect = sURL;
+        // if (Web.getHost() == "pcjs:8088" || typeof module !== "undefined") {
+        //     /*
+        //      * The larger resources that I've put on archive.pcjs.org are assumed to also be available locally
+        //      * whenever the hostname is "pcjs" (or NODE is true); otherwise, use "localhost" when debugging locally.
+        //      *
+        //      * NOTE: http://archive.pcjs.org is currently redirected to https://s3-us-west-2.amazonaws.com/archive.pcjs.org
+        //      */
+        //     sURLRedirect = sURL.replace(/^(http:\/\/archive\.pcjs\.org\/|https:\/\/[a-z0-9-]+\.amazonaws\.com\/archive\.pcjs\.org\/)([^/]*)\/(.*?)\/([^/]*)$/, "/$2-demo/$3/archive/$4");
+        //     sURLRedirect = sURLRedirect.replace(/^https:\/\/([a-z0-9]+)-disks\.pcjs\.org\/(.*)$/, "/disks-$1/$2").replace(/^https:\/\/(cds[0-9]+)\.pcjs\.org\/(.*)$/, "/disks-cds/$1/$2");
+        // }
+        // else {
+        //     /*
+        //      * TODO: Perhaps it's time for our code in netlib.js to finally add support for HTTPS; for now
+        //      * though, it's just as well that the NODE environment assumes all resources are available locally.
+        //      */
+        //     sURLRedirect = sURL.replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/").replace(/^\/disks-([a-z0-9]+)\//, "https://$1-disks.pcjs.org/");
+        // }
+
+        let sURLRedirect = sURL.replace(/^\/(diskettes|harddisks)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
 
         if (typeof module !== "undefined") {
             /*

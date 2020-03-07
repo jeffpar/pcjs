@@ -277,7 +277,7 @@
 				<xsl:otherwise/>
 			</xsl:choose>
 		</xsl:variable>
-		<h3 style="{$pos}"><xsl:apply-templates/></h3>
+		<!-- <h3 style="{$pos}"><xsl:apply-templates/></h3> -->
 	</xsl:template>
 
 	<xsl:template match="name" mode="component">

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdc id="cdrom" type="ATAPI" drives='[{name:"CD",type:0,path:"/disks-cds/cds005/microsoft/reference/Bookshelf-Windows-1991/cdrom"}]'>
+	<control type="list" binding="listDisks" style="display:none">
+		<disk path="/disks-cds/cds002/microsoft/tools/MSPL10/cdrom">Programmer's Library 1.0 (1988)</disk>
+		<disk path="/disks-cds/cds005/microsoft/reference/Bookshelf-Windows-1991/cdrom">Bookshelf for Windows (1991)</disk>
+	</control>
+</hdc>

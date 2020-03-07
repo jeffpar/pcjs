@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<video id="videoVGA" model="vga" screenWidth="1280" screenHeight="960" autoLock="true" pos="center" padding="8px">
+	<menu>
+		<title>COMPAQ VGA Color Display</title>
+		<control type="container" pos="right">
+			<control type="led" label="Caps" binding="caps-lock" padLeft="8px"/>
+			<control type="led" label="Num" binding="num-lock" padLeft="8px"/>
+			<control type="led" label="Scroll" binding="scroll-lock" padLeft="8px"/>
+			<control type="button" binding="fullScreen" padLeft="8px">Full Screen</control>
+		</control>
+	</menu>
+	<rom id="romVGA" addr="0xc0000" size="0x8000" file="/configs/pcx86/xml/video/compaq/vga/109360-001/1987-10-27.json" notify="videoVGA"/>
+</video>

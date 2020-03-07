@@ -13,18 +13,14 @@ machines:
     autoType: $date\r$time\rb:\r123\r
 ---
 
-Lotus 1-2-3 Release 1A
-----------------------
-
 This version of 1-2-3 is known as **Release 1A**, which differs from the later
-[Release 1A\*](/disks/pcx86/apps/lotus/123/1as/).  This version contained files dated `6-07-83`,
-whereas [Release 1A\*](/disks/pcx86/apps/lotus/123/1as/) contained files dated `7-01-83`.
+[Release 1A\*](/software/pcx86/app/lotus/123/1aa/).  This version contained files dated `6-07-83`,
+whereas [Release 1A\*](/software/pcx86/app/lotus/123/1aa/) contained files dated `7-01-83`.
 
 WARNING: These disk images are from [WinWorld](https://winworldpc.com/product/lotus-1-2-3/1x) and are not exact
 copies of the original distribution disks.  We've tried to recreate the System Disk as it was originally distributed
 (aside from the [Copy-Protection Patch](#copy-protection-patch)), but the other disks have been left as we found them:
-original Lotus 1-2-3 files dated `6-07-83` along with a random mixture of PC DOS 1.10 and PC DOS 2.10 binaries
-(eg, `COMMAND.COM`, `DISKCOPY.COM`, `DISKCOMP.COM`, etc.)
+original Lotus 1-2-3 files dated `6-07-83` along with a random mixture of PC DOS 1.10 and PC DOS 2.10 binaries.
 
 ### Directory of Lotus 1-2-3 1A (1-System) (PATCHED)
 
@@ -168,7 +164,7 @@ original Lotus 1-2-3 files dated `6-07-83` along with a random mixture of PC DOS
 
 The PCjs **Release 1A** System disk does not include any copy-protection.  Instead, the disk contains a patched
 copy of `123.EXE` which bypasses the usual copy-protection tests.  The patch is described in the "unprotect" document
-[LOTUS.TXT](https://raw.githubusercontent.com/jeffpar/pcjs-demo-disks/master/pcx86/shareware/unprot/disks/unprot-1/LOTUS.TXT):
+[LOTUS.TXT](https://diskettes.pcjs.org/pcx86/sw/unprot/UNPROT-1/LOTUS.TXT):
 
 	1. Rename 123.EXE 123.XYZ
 	2. DEBUG 123.XYZ

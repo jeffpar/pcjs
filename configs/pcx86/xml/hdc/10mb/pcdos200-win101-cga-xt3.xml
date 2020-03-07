@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdc id="hdcXT" type="XT" drives='[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/sys/dos/ibm/2.00/PCDOS200-WIN101-CGA.json"}]'>
+	<control type="button" binding="saveHD0" padLeft="8px" padBottom="8px" padRight="8px">Save HD</control>
+</hdc>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdc id="hdcAT" type="ATAPI1" drives='[{name:"47Mb Hard Disk",type:5}]'>
+	<control type="button" binding="saveHD0" padLeft="8px" padBottom="8px" padRight="8px">Save HD</control>
+	<control type="list" binding="listDisks" style="display:none">
+		<disk path="/disks-cds/cds001/microsoft/games/Pandoras-Box/cdrom">Pandora's Box</disk>
+		<disk path="/disks-cds/cds002/microsoft/tools/MSPL10/cdrom">Programmer's Library 1.0 (1988)</disk>
+		<disk path="/disks-cds/cds005/microsoft/reference/Bookshelf-Windows-1991/cdrom">Bookshelf for Windows (1991)</disk>
+	</control>
+</hdc>

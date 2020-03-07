@@ -11,13 +11,9 @@ We have only one IBM EGA ROM revision, dated September 13, 1984.
 
 To (re)build the JSON-encoded IBM EGA ROM with symbols, run the following command:
 
-	filedump --file=archive/ibm-ega.rom --format=bytes --decimal
+	filedump --file=archive/IBM-EGA.rom --format=bytes --decimal
 	
 The symbol information in the MAP file will be automatically converted and appended to the dump of the ROM file. 
-
-The PCjs server's Dump API can be used as well:
-
-	https://www.pcjs.org/api/v1/dump?file=https://www.pcjs.org/devices/pcx86/video/ibm/ega/1984-09-13/ibm-ega.rom&format=bytes&decimal=true
 
 ### IBM EGA Font Information
 
