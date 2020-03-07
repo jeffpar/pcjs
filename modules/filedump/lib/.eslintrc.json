@@ -1,7 +1,0 @@
-{
-  "globals": {
-    "Buffer": true,
-    "COPYRIGHT": true,
-    "process": true
-  }
-}

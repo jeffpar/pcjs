@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<keyboard id="keyboard" model="us83" pos="left" padLeft="8px" padBottom="8px">
+	<control type="button" binding="esc">Esc</control>
+	<control type="button" binding="f1">F1</control>
+	<control type="button" binding="left">&#x2190;</control>
+	<control type="button" binding="up">&#x2191;</control>
+	<control type="button" binding="down">&#x2193;</control>
+	<control type="button" binding="right">&#x2192;</control>
+	<control type="button" binding="num-home">Home</control>
+	<control type="button" binding="num-end">End</control>
+	<control type="button" binding="num-pgup">PgUp</control>
+	<control type="button" binding="num-pgdn">PgDn</control>
+	<control type="button" binding="alt">Alt</control>
+</keyboard>

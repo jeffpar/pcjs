@@ -4,7 +4,7 @@
   "autoMount": {
     "A": {"name": "PC DOS 1.00 (Disk 1)"}
   },
-  "diskettes": "/configs/pcx86/disks.json",
+  "diskettes": "/configs/pcx86/diskettes.json",
   "style": {
     "float": "left",
     "padding-right": "8px",

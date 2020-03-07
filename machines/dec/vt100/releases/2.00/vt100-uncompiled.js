@@ -4,7 +4,7 @@
  * @copyright https://www.pcjs.org/machines/lib/defs.js (C) 2012-2020 Jeff Parsons
  */
 
-/* eslint no-var: 0 */
+/* eslint-disable no-var */
 
 /**
  * COMMAND is the default name of the global command handler we will define, to provide
@@ -144,9 +144,11 @@ class Defs {
 Defs.CLASSES = {};
 Defs.CLASSES["Defs"] = Defs;
 
+
 /**
  * @copyright https://www.pcjs.org/machines/lib/numio.js (C) 2012-2020 Jeff Parsons
  */
+
 
 /**
  * @class {NumIO}
@@ -312,7 +314,7 @@ class NumIO extends Defs {
              */
             let v, shift = 0;
             if (base <= 10) {
-                let match = s.match(/(-?[0-9]+)B([0-9]*)/);
+                let match = s.match(/(-?[0-9]+)B([0-9]*)$/);
                 if (match) {
                     s = match[1];
                     shift = 35 - ((match[2] || 35) & 0xff);
@@ -746,9 +748,11 @@ NumIO.TWO_POW32 = Math.pow(2, 32);
 
 Defs.CLASSES["NumIO"] = NumIO;
 
+
 /**
  * @copyright https://www.pcjs.org/machines/lib/stdio.js (C) 2012-2020 Jeff Parsons
  */
+
 
 /** @typedef {Function} */
 var Formatter;
@@ -1386,6 +1390,7 @@ StdIO.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Fr
 StdIO.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 Defs.CLASSES["StdIO"] = StdIO;
+
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/webio.js (C) 2012-2020 Jeff Parsons

@@ -9,7 +9,7 @@
 
 "use strict";
 
-/* eslint no-var: 0 */
+/* eslint-disable no-var */
 
 /**
  * COMMAND is the default name of the global command handler we will define, to provide
@@ -148,3 +148,5 @@ class Defs {
 
 Defs.CLASSES = {};
 Defs.CLASSES["Defs"] = Defs;
+
+if (typeof module !== "undefined") module.exports = Defs;

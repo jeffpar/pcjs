@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdc id="hdcXT" type="XT" drives='[{name:"10Mb Hard Disk 0",type:3,path:"/harddisks/pcx86/sys/dos/ibm/2.00/PCDOS200-EMPTY.json"},{name:"10Mb Hard Disk 1",type:3,path:"/harddisks/pcx86/sys/dos/ibm/2.00/PCDOS200-EMPTY.json"}]'>
+	<control type="button" binding="saveHD0" padLeft="8px" padBottom="8px">Save HD0</control>
+	<control type="button" binding="saveHD1" padLeft="8px" padBottom="8px" padRight="8px">Save HD1</control>
+</hdc>

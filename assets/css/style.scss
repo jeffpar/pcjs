@@ -85,6 +85,9 @@
 .pcjs-group, .pcjs-dip {
   float: left;
 }
+.pcjs-block {
+  display: table;
+}
 .pcjs-block-control {
   display: table-cell;
   padding-right: 8px;

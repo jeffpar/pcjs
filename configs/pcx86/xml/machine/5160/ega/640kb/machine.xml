@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
+<machine id="ibm5160" type="pcx86" border="1" pos="center" background="default">
+	<name pos="center">IBM PC XT, 640Kb RAM, 10Mb Hard Disk (Formatted), 128Kb EGA, Enhanced Color Display</name>
+	<computer id="xt-ega-640k" name="IBM PC XT"/>
+	<ram id="ramLow" addr="0x00000" test="false" size="0xa0000" comment="0xa0000 (640Kb) size overrides SW1|ROM BIOS memory test has been disabled"/>
+	<rom id="romHDC" addr="0xc8000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/hdc/IBM-XEBEC-1982.json"/>
+	<rom id="romBASIC" addr="0xf6000" size="0x8000" file="/machines/pcx86/ibm/5160/rom/basic/BASIC110.json"/>
+	<rom id="romBIOS" addr="0xfe000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/bios/1982-11-08/XTBIOS-REV1.json"/>
+	<video ref="/configs/pcx86/xml/video/ibm/ega/1984-09-13/ibm-ega-5154-128k-autolockfs.xml"/>
+	<fdc ref="/configs/pcx86/xml/fdc/library.xml" autoMount='{A:{name:"PC DOS 3.20 (Disk 1)"},B:{name:"PC DOS 3.20 (Disk 2)"}}'/>
+	<hdc ref="/configs/pcx86/xml/hdc/10mb/pcdos200-empty-xt3.xml"/>
+	<keyboard ref="/configs/pcx86/xml/keyboard/us83-softkeys.xml"/>
+	<cpu id="cpu8088" model="8088" pos="right" padRight="8px" padBottom="8px">
+		<control type="button" binding="run">Run</control>
+		<control type="button" binding="reset">Reset</control>
+		<control type="button" binding="setSpeed">Speed</control>
+	</cpu>
+	<chipset id="chipset" model="5160" sw1="01001101"/>
+	<serial id="com1" adapter="1"/>
+	<serial id="com2" adapter="2"/>
+	<mouse serial="com2"/>
+</machine>

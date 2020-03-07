@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
+<machine id="ibm5170" type="pcx86" border="1" pos="center" background="default">
+	<name pos="center">IBM PC AT (8Mhz), 640Kb RAM, Dual Floppy Drives, Monochrome Display</name>
+	<computer id="at-mda-640k" name="IBM PC AT" buswidth="24"/>
+	<cpu id="cpu286" model="80286" cycles="8000000"/>
+	<ram id="ramLow" addr="0x00000" size="0xa0000"/>
+	<rom id="romBIOS" addr="0xf0000" size="0x10000" alias="0xff0000" file="/machines/pcx86/ibm/5170/rom/bios/1985-11-15/ATBIOS-REV3.json"/>
+	<video ref="/configs/pcx86/xml/video/ibm/mda/ibm-mda.xml"/>
+	<fdc ref="/configs/pcx86/xml/fdc/library.xml" autoMount='{A: {name: "PC DOS 3.00 (Disk 1)"}, B: {name: "PC DOS 3.00 (Disk 2)"}}'/>
+	<keyboard ref="/configs/pcx86/xml/keyboard/us84-softkeys.xml"/>
+	<debugger id="debugger" messages="fault" commands=""/>
+	<panel ref="/configs/pcx86/xml/panel/wide.xml"/>
+	<comment>
+		The 5170 doesn't have DIP switches like previous models, but it still has a few switches and jumpers.
+
+		First and foremost, there is a "Display Switch" near the battery connector that must be pushed "toward the
+		front of your system unit" if you have a CGA that is your only (or primary) display adapter, or "toward the
+		back of your system unit" if you're using an MDA as your only (or primary) display.
+
+		We support the "Display Switch" setting with the *monitor* property, which you can set to either "mono"
+		(aka "mda") or "color" (aka "cga").  However, unlike the model 5150/5160 DIP switches, we currently offer no
+		UI for this switch, so it cannot be changed by the user.
+
+		Second, there is the "keyboard inhibit switch"; it defaults to UNLOCKED and stays UNLOCKED, since no UI or
+		configuration property is currently provided.
+
+		Finally, there is a "manufacturing jumper" that can be installed, enabling additional diagnostic functions
+		in the ROM; it defaults to UNINSTALLED and stays UNINSTALLED, since no UI or configuration property is currently
+		provided.
+
+		The rest of a 5170 machine's configuration is handled through CMOS settings, which PCjs configures automatically
+		based on other settings (eg, the chipset's *floppies* property).
+	</comment>
+	<chipset id="chipset" model="5170" floppies="[1200,1200]" monitor="mono"/>
+	<serial id="com1" adapter="1"/>
+	<serial id="com2" adapter="2" binding="print"/>
+	<mouse serial="com1"/>
+</machine>

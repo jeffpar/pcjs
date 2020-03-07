@@ -9,6 +9,10 @@
 
 "use strict";
 
+if (typeof module !== "undefined") {
+    var Defs = require("../../machines/lib/defs");      // eslint-disable-line no-var
+}
+
 /**
  * @class {NumIO}
  * @unrestricted
@@ -173,7 +177,7 @@ class NumIO extends Defs {
              */
             let v, shift = 0;
             if (base <= 10) {
-                let match = s.match(/(-?[0-9]+)B([0-9]*)/);
+                let match = s.match(/(-?[0-9]+)B([0-9]*)$/);
                 if (match) {
                     s = match[1];
                     shift = 35 - ((match[2] || 35) & 0xff);
@@ -606,3 +610,5 @@ class NumIO extends Defs {
 NumIO.TWO_POW32 = Math.pow(2, 32);
 
 Defs.CLASSES["NumIO"] = NumIO;
+
+if (typeof module !== "undefined") module.exports = NumIO;

@@ -1,6 +1,19 @@
 developer: true
 baseurl: ""
 url: "http://localhost:4000"
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - gulpfile.js
+  - README.md
+  - "**/archive"
+  - "**/private"
+  - /package*.json
+  - /.history
+  - /modules
+  - /node_modules
+
 #
 # In the following pcjs section, setting "uncompiled: true" works only for pages with a single machine,
 # because the uncompiled scripts use shared classes that can only be instantiated once on a page (unless

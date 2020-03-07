@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panel id="panel" width="100%" padding="8px">
+	<name>Control Panel</name>
+	<control type="container" class="pcjs-textarea" width="58%" padBottom="8px" padRight="8px">
+		<control type="textarea" binding="print" width="100%" height="260px" pos="relative" padBottom="4px" style="resize:vertical;"/>
+		<control type="container">
+			<control type="text" binding="debugInput" width="auto"/>
+			<control type="button" binding="debugEnter">Enter</control>
+			<control type="button" binding="clear">Clear</control>
+		</control>
+	</control>
+	<control type="container" class="pcjs-registers" width="38%" padLeft="8px">
+		<control type="register" label="AX" binding="AX" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="BX" binding="BX" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="CX" binding="CX" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="DX" binding="DX" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="SP" binding="SP" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="BP" binding="BP" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="SI" binding="SI" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="DI" binding="DI" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="DS" binding="DS" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="ES" binding="ES" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="SS" binding="SS" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="CS" binding="CS" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="IP" binding="IP" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="container" width="200px" pos="left">
+			<control type="flag" label="V" binding="V" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="D" binding="D" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="I" binding="I" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="T" binding="T" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="S" binding="S" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="Z" binding="Z" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="A" binding="A" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="P" binding="P" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="C" binding="C" width="8px" padRight="4px" padBottom="8px">0</control>
+		</control>
+		<control pos=""/>
+		<control type="description" padBottom="8px">Speed:</control>
+		<control type="description" binding="speed" padLeft="4px" padBottom="8px">Stopped</control>
+	</control>
+	<control type="container" padLeft="8px" padBottom="8px">
+		<control type="button" binding="run">Run</control>
+		<control type="button" binding="step">Step</control>
+		<control type="button" binding="reset">Reset</control>
+		<control type="button" binding="setSpeed">Speed</control>
+		<control type="button" binding="save">Save</control>
+	</control>
+</panel>

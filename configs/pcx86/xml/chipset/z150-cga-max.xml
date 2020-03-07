@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chipset id="chipset" model="z150" sw1="01001001" sw2="11110000" pos="left" padLeft="8px" padBottom="8px">
+	<control type="switches" label="SW1" binding="sw1" left="0px"/>
+	<control type="description" binding="swdesc" left="0px"/>
+</chipset>

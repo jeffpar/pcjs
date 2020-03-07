@@ -41,6 +41,7 @@
     "gulp-sourcemaps": "^2.6.5",
     "mkdirp": "^0.5.1",
     "path": "^0.12.7",
-    "replace": "^1.1.5"
+    "replace": "^1.1.5",
+    "xml2js": "^0.4.23"
   }
 }

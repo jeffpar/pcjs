@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<keyboard id="keyboard" model="us62" pos="left" padLeft="8px" padBottom="8px">
+	<control type="button" binding="esc">Esc</control>
+</keyboard>

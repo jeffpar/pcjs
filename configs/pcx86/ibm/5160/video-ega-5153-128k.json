@@ -6,7 +6,7 @@
   "memory": "0x20000",
   "switches": "0001",
   "screenWidth": 1280,
-  "screenHeight": 700,
+  "screenHeight": 800,
   "screenColor": "black",
   "overlay": true,
   "autoLock": true,

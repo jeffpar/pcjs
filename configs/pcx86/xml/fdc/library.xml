@@ -869,8 +869,10 @@
 		<disk path="/disks-demo/pcx86/tools/other/flickerfree/FLICKERFREE.json">FlickerFree 1.0</disk>
 		<disk path="/disks-demo/pcx86/tools/other/norton/2.00/NU200-SIDEA.json">Norton Utilities 2.00 (Side A)</disk>
 		<disk path="/disks-demo/pcx86/tools/other/norton/2.00/NU200-SIDEB.json">Norton Utilities 2.00 (Side B)</disk>
-		<disk path="/disks-demo/pcx86/tools/other/norton/2.01/NU201-SIDEA.json">Norton Utilities 2.01 (Side A)</disk>
-		<disk path="/disks-demo/pcx86/tools/other/norton/2.01/NU201-SIDEB.json">Norton Utilities 2.01 (Side B)</disk>
+		<disk path="/disks-demo/pcx86/tools/other/norton/2.01/1983-07-04/NU201-1983-07-04-SIDEA.json">Norton Utilities 2.01 (1983-07-04-A)</disk>
+		<disk path="/disks-demo/pcx86/tools/other/norton/2.01/1983-07-04/NU201-1983-07-04-SIDEB.json">Norton Utilities 2.01 (1983-07-04-B)</disk>
+		<disk path="/disks-demo/pcx86/tools/other/norton/2.01/1983-11-03/NU201-1983-11-03-SIDEA.json">Norton Utilities 2.01 (1983-11-03-A)</disk>
+		<disk path="/disks-demo/pcx86/tools/other/norton/2.01/1983-11-03/NU201-1983-11-03-SIDEB.json">Norton Utilities 2.01 (1983-11-03-B)</disk>
 		<disk path="/disks-demo/pcx86/tools/other/norton/3.00/1984-12-07/NU300-1984-12-07.json">Norton Utilities 3.00 (1984-12-07)</disk>
 		<disk path="/disks-demo/pcx86/tools/other/norton/3.00/1985-01-14/NU300-1985-01-14.json">Norton Utilities 3.00 (1985-01-14)</disk>
 		<disk path="/disks-demo/pcx86/tools/other/norton/3.00/1985-01-21/NU300-1985-01-21.json">Norton Utilities 3.00 (1985-01-21)</disk>

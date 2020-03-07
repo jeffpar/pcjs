@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<keyboard id="keyboard" model="us84" pos="left" padLeft="8px" padBottom="8px">
+	<control type="button" binding="esc">Esc</control>
+	<control type="button" binding="num-ins">Ins</control>
+	<control type="button" binding="ctrl-break">Ctrl-Break</control>
+	<control type="button" binding="ctrl-c">Ctrl-C</control>
+	<control type="button" binding="ctrl-alt-del">Ctrl-Alt-Del</control>
+	<control type="button" binding="f1">F1</control>
+	<control type="button" binding="f2">F2</control>
+	<control type="button" binding="f3">F3</control>
+	<control type="button" binding="f4">F4</control>
+	<control type="button" binding="f5">F5</control>
+	<control type="button" binding="f6">F6</control>
+	<control type="button" binding="f7">F7</control>
+	<control type="button" binding="f8">F8</control>
+	<control type="button" binding="f9">F9</control>
+	<control type="button" binding="f10">F10</control>
+	<control type="button" binding="sys-req">SysReq</control>
+</keyboard>

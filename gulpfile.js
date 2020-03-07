@@ -77,7 +77,7 @@ var fs = require("fs");
 var path = require("path");
 var pkg = require("./package.json");
 
-var proc = require("./machines/lib/proc.js");
+var proc = require("./machines/shared/lib/proclib.js");
 var args = proc.getArgs();
 var argv = args.argv;
 

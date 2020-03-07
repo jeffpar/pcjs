@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
+<machine id="z150" type="pcx86" border="1" pos="center" background="default">
+	<name pos="center">Zenith Z-150 with Color Display</name>
+	<computer id="z150-640k" name="Z-150"/>
+	<cpu id="cpu8088" model="8088"/>
+	<ram id="ramLow" addr="0x00000" size="0xa0000"/>
+	<ram id="ramBIOS" addr="0xf0000" size="0x4000" comment="16Kb of scratchpad RAM"/>
+	<rom ref="/configs/pcx86/xml/rom/zenith/z150/bios-z150-1988.xml"/>
+	<video ref="/configs/pcx86/xml/video/ibm/cga/ibm-cga.xml"/>
+	<fdc ref="/configs/pcx86/xml/fdc/library.xml"/>
+	<keyboard ref="/configs/pcx86/xml/keyboard/us83-buttons-z150.xml"/>
+	<debugger id="debugger"/>
+	<panel ref="/configs/pcx86/xml/panel/wide.xml"/>
+	<chipset ref="/configs/pcx86/xml/chipset/z150-cga-max.xml"/>
+</machine>

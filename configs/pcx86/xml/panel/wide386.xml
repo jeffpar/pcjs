@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panel id="panel" width="100%" padding="8px">
+	<name>Control Panel</name>
+	<control type="container" class="pcjs-textarea" width="60%" padBottom="8px" padRight="8px">
+		<control type="textarea" binding="print" width="100%" height="260px" pos="relative" padBottom="4px" style="resize:vertical;"/>
+		<control type="container" width="100%">
+			<control type="text" binding="debugInput" width="auto"/>
+			<control type="button" binding="debugEnter">Enter</control>
+			<control type="button" binding="clear">Clear</control>
+			<control type="button" binding="run" padLeft="16px">Run</control>
+			<control type="button" binding="step">Step</control>
+			<control type="button" binding="reset">Reset</control>
+			<control type="button" binding="save">Save</control>
+			<control type="button" binding="setSpeed" padLeft="16px">Speed</control>
+			<control type="description" binding="speed" padLeft="8px">Stopped</control>
+		</control>
+	</control>
+	<control type="container" class="pcjs-registers" width="35%" padLeft="8px">
+		<control type="register" label="EAX" binding="EAX" pos="left" width="80px" padRight="8px" padBottom="8px">00000000</control>
+		<control type="register" label="EBX" binding="EBX" pos="left" width="80px" padRight="8px" padBottom="8px">00000000</control>
+		<control type="register" label="ECX" binding="ECX" pos="left" width="80px" padRight="8px" padBottom="8px">00000000</control>
+		<control type="register" label="EDX" binding="EDX" pos="left" width="80px" padRight="8px" padBottom="8px">00000000</control>
+		<control type="register" label="ESP" binding="ESP" pos="left" width="80px" padRight="8px" padBottom="8px">00000000</control>
+		<control type="register" label="EBP" binding="EBP" pos="left" width="80px" padRight="8px" padBottom="8px">00000000</control>
+		<control type="register" label="ESI" binding="ESI" pos="left" width="80px" padRight="8px" padBottom="8px">00000000</control>
+		<control type="register" label="EDI" binding="EDI" pos="left" width="80px" padRight="8px" padBottom="8px">00000000</control>
+		<control type="register" label="CR0" binding="CR0" pos="left" width="80px" padRight="8px" padBottom="8px">00000000</control>
+		<control type="register" label="CR2" binding="CR2" pos="left" width="80px" padRight="8px" padBottom="8px">00000000</control>
+		<control type="register" label="CR3" binding="CR3" pos="left" width="80px" padRight="8px" padBottom="8px">00000000</control>
+		<control type="register" label="EIP" binding="EIP" pos="left" width="80px" padRight="8px" padBottom="8px">00000000</control>
+		<control type="register" label="PSW" binding="PS" pos="left" width="80px" padRight="8px" padBottom="8px">00000000</control>
+		<control type="container" width="200px" pos="left">
+			<control type="flag" label="V" binding="V" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="D" binding="D" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="I" binding="I" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="T" binding="T" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="S" binding="S" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="Z" binding="Z" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="A" binding="A" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="P" binding="P" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="C" binding="C" width="8px" padRight="4px" padBottom="8px">0</control>
+		</control>
+		<control pos=""/>
+		<control type="register" label="CS" binding="CS" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="SS" binding="SS" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="DS" binding="DS" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="ES" binding="ES" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="FS" binding="FS" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="GS" binding="GS" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+	</control>
+</panel>

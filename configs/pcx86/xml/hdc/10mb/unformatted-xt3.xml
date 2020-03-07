@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdc id="hdcXT" type="XT" drives='[{name:"10Mb Hard Disk",type:3}]'>
+	<control type="button" binding="saveHD0" padLeft="8px" padBottom="8px" padRight="8px">Save HD</control>
+</hdc>
