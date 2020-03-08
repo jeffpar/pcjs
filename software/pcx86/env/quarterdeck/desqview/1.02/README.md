@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/desqview/1.02/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/640kb/rev3/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev3/machine.xml
     autoMount:
       A:
         name: "PC DOS 3.00 (Disk 1)"
@@ -22,6 +22,8 @@ DESQview 1.02
 Diskette and [Manual](/pubs/pc/software/tools/other/desqview/) are courtesy of the [OS/2 Museum](http://os2museum.com).
 
 A directory listing of the 360Kb diskette is provided [below](#directory-of-desqview-102).
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of DESQview 1.02
 

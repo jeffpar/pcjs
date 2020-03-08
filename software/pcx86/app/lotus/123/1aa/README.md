@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/lotus/123/1as/
 machines:
   - id: ibm5150-123-1aa
     type: pcx86
-    config: /devices/pcx86/machine/5150/cga/256kb/machine.xml
+    config: /configs/pcx86/xml/machine/5150/cga/256kb/machine.xml
     autoMount:
       B:
         name: Lotus 1-2-3 1A* (1-System)
@@ -20,6 +20,8 @@ whereas [Release 1A](/software/pcx86/app/lotus/123/1a/) contained files dated `6
 Unlike the [Release 1A](/software/pcx86/app/lotus/123/1a/) disks, these disk images are from the private PCjs disk
 collection, and aside from the [Copy-Protection Patch](#copy-protection-patch), we believe they are authentic copies
 of the original distribution disks.
+
+{% include machine.html id="ibm5150-123-1aa" %}
 
 ### Directory of Lotus 1-2-3 1A* (1-System) (PATCHED)
 

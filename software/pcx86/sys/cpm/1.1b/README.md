@@ -30,6 +30,8 @@ along with two related disks from our private collection:
 
 which contain assorted [Useful CP/M-86 Utilities](#useful-cpm-86-utilities).  [Directory Listings](#directory-listings) are provided below.
 
+{% include machine.html id="cpm-mda-256k" %}
+
 The above machine is also available with a [Debugger](debugger/).
 
 Directory Listings

@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/3.10/
 machines:
   - id: ibm5170-pcdos310
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/640kb/rev1/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev1/machine.xml
     resume: 1
     autoMount:
       A:
@@ -47,6 +47,8 @@ any contemporary reports (e.g., press releases or magazine articles) regarding t
 Also, a note of thanks to [Jeff Duntemann](https://www.contrapositivediary.com/?p=2107) for sharing his collection
 of old diskettes with PCjs, which included, among other things, IBM's "patched" version of PC DOS 3.10.  The earlier
 "unpatched" disk images were obtained from [WinWorld](https://winworldpc.com/product/pc-dos/3x).
+
+{% include machine.html id="ibm5170-pcdos310" %}
 
 ### Feature Summary
 

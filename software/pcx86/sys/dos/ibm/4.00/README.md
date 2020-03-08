@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/4.00/
 machines:
   - id: ibm5170-pcdos400
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/2048kb/rev3/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
     autoMount:
       A:
         name: PC DOS 4.00 (Disk 1)
@@ -21,6 +21,8 @@ PC DOS 4.00 was released in July 1988.
 
 A [Feature Summary](#feature-summary), along with [Directory Listings](#directory-of-pc-dos-400-disk-1) of the five
 360Kb distribution diskettes, are provided below.
+
+{% include machine.html id="ibm5170-pcdos400" %}
 
 ### Feature Summary
 

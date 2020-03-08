@@ -7,7 +7,7 @@ machines:
   - id: ibm5170
     type: pcx86
     debugger: true
-    config: /devices/pcx86/machine/5170/ega/1024kb/rev1/debugger/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/1024kb/rev1/debugger/machine.xml
     autoMount:
       A:
         name: SCO Xenix 286 2.1.3 (N1-BOOT)
@@ -26,6 +26,8 @@ When prompted, use the following serial number and activation key:
 	Activation key: tjmbrmbz
 
 We've also archived some [SCO Xenix 286 Installation and Emulation Notes](#sco-xenix-286-installation-and-emulation-notes) below.
+
+{% include machine.html id="ibm5170" %}
 
 ### SCO Xenix 286 Installation and Emulation Notes
 

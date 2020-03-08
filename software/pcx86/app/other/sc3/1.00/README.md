@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/other/sc3/1.00/
 machines:
   - id: ibm5160-sc3
     type: pcx86
-    config: /devices/pcx86/machine/5160/cga/640kb/machine.xml
+    config: /configs/pcx86/xml/machine/5160/cga/640kb/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)
@@ -17,6 +17,8 @@ machines:
 
 Sorcim SuperCalc3 v1.00
 -----------------------
+
+{% include machine.html id="ibm5160-sc3" %}
 
 ### Directory of SuperCalc3 v1.00 Setup Disk
 

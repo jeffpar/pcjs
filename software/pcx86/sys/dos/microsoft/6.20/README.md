@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/microsoft/6.20/1200K/
 machines:
   - id: ibm5170-msdos620
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/640kb/rev1/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev1/machine.xml
     autoMount:
       A:
         name: MS-DOS 6.20 (1.2M Disk 1)
@@ -16,6 +16,8 @@ Microsoft MS-DOS 6.20 (1.2M Disks)
 ----------------------------------
 
 [Directory Listings](#directory-of-ms-dos-620-12m-disk-1) of the five 1.2M distribution diskettes are provided below.
+
+{% include machine.html id="ibm5170-msdos620" %}
 
 ### Directory of MS-DOS 6.20 (1.2M Disk 1)
 

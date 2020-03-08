@@ -8,7 +8,7 @@ redirect_from:
 machines:
   - id: compaq386
     type: pcx86
-    config: /devices/pcx86/machine/compaq/deskpro386/vga/4096kb/machine.xml
+    config: /configs/pcx86/xml/machine/compaq/deskpro386/vga/4096kb/machine.xml
     autoMount:
       A:
         name: PC DOS 3.30 (720K)
@@ -23,6 +23,8 @@ Omniview 386 was a multitasking application manager for DOS produced by Sunny Hi
 was reviewed in the February 13, 1989 issue of [InfoWorld](https://books.google.com/books?id=QDoEAAAAMBAJ&lpg=PT73&dq=omniview%20386&pg=PT72#v=onepage&q&f=false).
 
 The COMPAQ DeskPro 386 machine below is recommended for Omniview 386 4.30.  A [directory listing](#directory-of-omniview-386-430) is also provided.
+
+{% include machine.html id="compaq386" %}
 
 ### Directory of Omniview 386 4.30
 

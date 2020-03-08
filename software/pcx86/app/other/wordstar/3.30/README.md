@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/other/wordstar/3.30/
 machines:
   - id: ibm5150
     type: pcx86
-    config: /devices/pcx86/machine/5150/mda/256kb/machine.xml
+    config: /configs/pcx86/xml/machine/5150/mda/256kb/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)
@@ -20,6 +20,8 @@ MicroPro WordStar 3.30
 
 [Directory Listings](#directory-of-wordstar-330-disk-1) of the five single-sided (160Kb) distribution diskettes
 are provided below.  The disk images were obtained from [WinWorld](https://winworldpc.com/product/wordstar/330-z-100).
+
+{% include machine.html id="ibm5150" %}
 
 ### Directory of WordStar 3.30 (Disk 1)
 

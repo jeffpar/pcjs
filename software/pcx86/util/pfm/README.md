@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/pfm/
 machines:
   - id: ibm5160-pcdos200
     type: pcx86
-    config: /devices/pcx86/machine/5160/cga/256kb/machine.xml
+    config: /configs/pcx86/xml/machine/5160/cga/256kb/machine.xml
     resume: 1
     autoMount:
       A:
@@ -48,6 +48,8 @@ Mode and then save it as plain text, which I've pasted below and modified slight
 
 `PFM.COM` is version 3.14 with an internal date of February 14, 1991, and according to Microsoft Word, `PFM.DOC`
 was last modified on January 2, 1997.
+
+{% include machine.html id="ibm5160-pcdos200" %}
 
 PFM Documentation
 -----------------

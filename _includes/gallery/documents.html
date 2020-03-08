@@ -1,7 +1,7 @@
 {% capture group %}{{ include.group | default: "@documents" }}{% endcapture %}
 {% capture group_id %}{{ group | replace: "@", "" }}{% endcapture %}
-{% capture cover_width %}{{ include.cover_width | default: "200" }}{% endcapture %}
-{% capture cover_height %}{{ include.cover_height | default: "" }}{% endcapture %}
+{% capture cover_width %}{{ include.width | default: "200" }}{% endcapture %}
+{% capture cover_height %}{{ include.height | default: "" }}{% endcapture %}
 {% capture title %}{{ include.title | default: "Documentation" }}{% endcapture %}
 {% assign path = include.path | default: page.permalink %}
 {% assign path_parts = path | split: "/" %}

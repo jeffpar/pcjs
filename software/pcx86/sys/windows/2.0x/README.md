@@ -8,7 +8,7 @@ machines:
   - id: deskpro386
     type: pcx86
     state: state.json
-    config: /devices/pcx86/machine/compaq/deskpro386/vga/2048kb/machine.xml
+    config: /configs/pcx86/xml/machine/compaq/deskpro386/vga/2048kb/machine.xml
     drives: '[{name:"20Mb Hard Disk",type:2,path:"/disks-demo/pcx86/drives/20mb/COMPAQ310-WIN386201-VGA.json"}]'
     autoMount:
       A:
@@ -32,6 +32,8 @@ Directory listings of the three 1.2Mb Microsoft Windows/386 2.01 distribution di
 
 In the [COMPAQ DeskPro 386](/devices/pcx86/machine/compaq/deskpro386/vga/2048kb/) machine below, you can run `WIN86`
 to start Windows in real-mode, or `WIN386` to start Windows in V86-mode.
+
+{% include machine.html id="deskpro386" %}
 
 ### Directory of Windows/386 2.01 (Disk 1)
 

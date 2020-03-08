@@ -1,0 +1,609 @@
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:46
+
+download.asm                                                Page     1-1
+                                                            
+
+                                	title	download.asm 
+                                	page	,120 
+                                ; 
+                                ;	By Jeff Parsons (@jeffpar) 2018-03-15 
+                                ;	Monitors INT 14h for file download requests 
+                                ; 
+                                ;	This very tiny and simplistic file downloader relies on having our 
+                                ;	INT 14h	extensions TSR (INT14.COM) loaded first.  You may load INT14.COM 
+                                ;	in "polled mode" (/P), but if you do, it's probably best to use the COM port 
+                                ;	at its default speed of 2400 baud.  Also, if you loaded it for a non-default 
+                                ;	port (/1), then make sure you run DOWNLOAD.COM with the same option (/1). 
+                                ; 
+                                ;	The 'protocol" is currently very fragile, and if unusual things happen 
+                                ;	(eg, a block is interrupted or comes up short), we may wait indefinitely; 
+                                ;	fortunately, you should always be able to press a key (eg, ESC) to abort 
+                                ;	the operation and try again. 
+                                ; 
+                                ;	Currently, the only component that knows how to send files to DOWNLOAD.COM 
+                                ;	is our Node test utility: https://www.pcjs.org/tests/pcx86/testmon/testmon.js: 
+                                ; 
+                                ;		node testmon.js [--baud=xxxx] 
+                                ; 
+                                ;	After running DOWNLOAD.COM, run testmon.js and press Ctrl-F to initiate a 
+                                ;	file transfer.  You can use the DOS MODE command before running DOWNLOAD.COM 
+                                ;	to specify a baud rate other than 2400, eg: 
+                                ; 
+                                ;		MODE COM2:9600,N,8,1 
+                                ; 
+                                ;	but make sure you pass the same baud rate (eg, --baud=9600) to testmon.js. 
+                                ; 
+ = 0400                         MAXBLK	equ	1024 
+ = 000C                         MAXNAM	equ	12 
+                                 
+ 0000                           code	segment word public 'code' 
+                                 
+ 0100                           	org	100h 
+                                 
+                                	assume	cs:code, ds:code, es:code, ss:code 
+                                 
+ 0100                           main	proc	near 
+ 0100  E8 02C9 R                	call	chkCOM			; verify that INT14.COM is installed 
+ 0103  72 05                    	jc	m1a			; abort 
+                                 
+ 0105  E8 0251 R                m1:	call	readB			; read a COM byte 
+ 0108  73 02                    	jnc	m2			; got one 
+                                 
+ 010A  CD 20                    m1a:	int	20h			; abort 
+                                 
+ 010C  3C 06                    m2:	cmp	al,06h			; Ctrl-F? 
+ 010E  75 F5                    	jne	m1			; no 
+                                 
+ 0110  BA 07A3 R                	mov	dx,offset begXFR	; DX -> beginning transfer message 
+ 0113  B4 09                    	mov	ah,09h 
+ 0115  CD 21                    	int	21h 
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:46
+
+download.asm                                                Page     1-2
+                                                            
+
+                                 
+ 0117  E8 0212 R                	call	readBlk			; read initial block (with file info) 
+ 011A  72 23                    	jc	m4a			; on error, just start over 
+                                 
+                                	; 
+                                	; First up: the 8.3 filename (after the first '|' separator) 
+                                	; 
+ 011C  AC                       	lodsb				; get next character 
+ 011D  3C 7C                    	cmp	al,'|'			; there IS a separator, right? 
+ 011F  75 34                    	jne	m4x			; um, no, error 
+ 0121  BF 073C R                	mov	di,offset fName		; DI -> filename buffer 
+ 0124  B9 000C                  	mov	cx,MAXNAM		; CX == maximum filename size 
+ 0127  3B DE                    m3:	cmp	bx,si			; passed the end of buffer? 
+ 0129  72 14                    	jb	m4a			; yes, error 
+ 012B  AC                       	lodsb				; get next character 
+ 012C  3C 7C                    	cmp	al,'|'			; reached the next separator? 
+ 012E  74 06                    	je	m4			; yes 
+ 0130  49                       	dec	cx			; reached the 8.3 limit? 
+ 0131  7C F4                    	jl	m3			; yes, just keep looking for the separator 
+ 0133  AA                       	stosb				; no, save the next filename character 
+ 0134  EB F1                    	jmp	m3			; get more 
+ 0136  C6 05 00                 m4:	mov	byte ptr [di],0		; filename complete 
+                                 
+                                	; 
+                                	; Next up: the file's size, as 8 hex digits 
+                                	; 
+ 0139  B9 0008                  	mov	cx,8			; CX == # digits 
+ 013C  E8 028F R                	call	getHex			; DS:SI -> hex digits, BX is still buffer limit 
+ 013F  72 14                    m4a:	jc	m4x 
+ 0141  A3 0749 R                	mov	fSize,ax		; AX == file size (low) 
+ 0144  89 16 074B R             	mov	fSize+2,dx		; DX == file size (high) 
+                                 
+ 0148  AC                       	lodsb				; get next character 
+ 0149  3C 7C                    	cmp	al,'|'			; hopefully it's a separator 
+ 014B  75 08                    	jne	m4x			; no, error 
+                                 
+                                	; 
+                                	; Next up: the file's date and time, also as 8 hex digits 
+                                	; 
+ 014D  B9 0008                  	mov	cx,8			; CX == # digits 
+ 0150  E8 028F R                	call	getHex			; DS:SI -> hex digits, BX is still buffer limit 
+ 0153  73 03                    	jnc	m5 
+ 0155  E9 01E7 R                m4x:	jmp	m8err 
+                                 
+ 0158  A3 074F R                m5:	mov	fTime,ax		; AX == file time 
+ 015B  89 16 074D R             	mov	fDate,dx		; DX == file date 
+                                 
+ 015F  8A 04                    	mov	al,[si]			; get the FINAL character in the first block 
+ 0161  3C 7C                    	cmp	al,'|'			; which should be another separator 
+ 0163  75 F0                    	jne	m4x			; but it's not :-( 
+                                 
+ 0165  3B DE                    	cmp	bx,si			; are we at the end of the block now? 
+ 0167  75 EC                    	jne	m4x			; no, something's wrong 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:46
+
+download.asm                                                Page     1-3
+                                                            
+
+                                	; 
+                                	; Display the filename we're about to download 
+                                	; 
+ 0169  BA 07C3 R                	mov	dx,offset doXFR		; we have enough info to begin 
+ 016C  B4 09                    	mov	ah,09h			; so let the user know 
+ 016E  CD 21                    	int	21h 
+                                 
+ 0170  BA 073C R                	mov	dx,offset fName		; DX -> filename 
+ 0173  8B CF                    	mov	cx,di			; DI still points to the end of filename 
+ 0175  2B CA                    	sub	cx,dx			; CX == length of filename 
+ 0177  BB 0001                  	mov	bx,1			; BX == STDOUT 
+ 017A  B4 40                    	mov	ah,40h			; display the filename 
+ 017C  CD 21                    	int	21h 
+                                 
+ 017E  52                       	push	dx			; lot of work just to display a CR/LF... 
+ 017F  BA 07C0 R                	mov	dx,offset crLF 
+ 0182  B4 09                    	mov	ah,09h 
+ 0184  CD 21                    	int	21h 
+ 0186  5A                       	pop	dx 
+                                 
+                                	; 
+                                	; Create the file 
+                                	; 
+ 0187  2B C9                    	sub	cx,cx			; CX == no special attributes 
+ 0189  B4 3C                    	mov	ah,3Ch			; create the file 
+ 018B  CD 21                    	int	21h 
+ 018D  72 53                    	jc	m7err 
+                                 
+ 018F  A3 0751 R                	mov	fHandle,ax 
+ 0192  93                       	xchg	bx,ax 
+                                 
+                                	; 
+                                	; Start reading and writing blocks 
+                                	; 
+ 0193  BF 0003                  m6:	mov	di,3			; DI == retries + 1 
+ 0196  B8 010D                  	mov	ax,010Dh		; send a Ctrl-M accepting the last block 
+ 0199  8B 16 0338 R             m6r:	mov	dx,comID		; and requesting the next block 
+ 019D  CD 14                    	int	14h			; write to COM port 
+ 019F  F6 C4 80                 	test	ah,80h			; error? 
+ 01A2  75 43                    	jnz	m8err			; yes (weird) 
+ 01A4  83 3E 0749 R 00          	cmp	fSize,0			; any more blocks expected? 
+ 01A9  75 07                    	jne	m7			; yes 
+ 01AB  83 3E 074B R 00          	cmp	fSize+2,0		; well? 
+ 01B0  74 2B                    	je	m7end			; no, all done 
+ 01B2  E8 0212 R                m7:	call	readBlk			; read next block 
+ 01B5  73 08                    	jnc	m7a			; no error 
+ 01B7  B8 0112                  	mov	ax,0112h		; preload AX with Ctrl-R retry command 
+ 01BA  4F                       	dec	di			; any retries left? 
+ 01BB  75 DC                    	jnz	m6r			; yes 
+ 01BD  EB 28                    	jmp	short m8err		; no, report an error 
+ 01BF  8B CB                    m7a:	mov	cx,bx			; calculate block size 
+ 01C1  2B CE                    	sub	cx,si			; 
+ 01C3  41                       	inc	cx			; CX == total bytes (BX-SI+1) 
+ 01C4  29 0E 0749 R             	sub	fSize,cx		; subtract from total size 
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:46
+
+download.asm                                                Page     1-4
+                                                            
+
+ 01C8  83 1E 074B R 00          	sbb	fSize+2,0		; 
+ 01CD  72 18                    	jc	m8err			; file size error (too MUCH data?) 
+ 01CF  8B 1E 0751 R             	mov	bx,fHandle		; BX == handle 
+ 01D3  8B D6                    	mov	dx,si			; DS:DX -> block buffer 
+ 01D5  B4 40                    	mov	ah,40h			; write to file 
+ 01D7  CD 21                    	int	21h			; 
+ 01D9  72 07                    	jc	m7err			; file write failed 
+ 01DB  EB B6                    	jmp	m6			; read next block 
+                                 
+                                	; 
+                                	; Download complete; close the file and print message 
+                                	; 
+ 01DD  BA 07D6 R                m7end:	mov	dx,offset endXFR 
+ 01E0  EB 08                    	jmp	short m9 
+                                 
+                                	; 
+                                	; Assorted error paths (make sure any open file gets closed) 
+                                	; 
+ 01E2  BA 07EF R                m7err:	mov	dx,offset filErr 
+ 01E5  EB 03                    	jmp	short m9 
+                                 
+ 01E7  BA 0807 R                m8err:	mov	dx,offset reqErr 
+                                 
+                                	; 
+                                	; TODO: If the message isn't endXFR, perhaps we should delete the file 
+                                	; 
+ 01EA  8B 1E 0751 R             m9:	mov	bx,fHandle 
+ 01EE  85 DB                    	test	bx,bx 
+ 01F0  74 19                    	jz	m9msg 
+ 01F2  52                       	push	dx 
+ 01F3  8B 0E 074F R             	mov	cx,fTime		; before we close the file 
+ 01F7  8B 16 074D R             	mov	dx,fDate		; set the date/time we were given 
+ 01FB  B8 5701                  	mov	ax,5701h 
+ 01FE  CD 21                    	int	21h 
+ 0200  B4 3E                    	mov	ah,3Eh			; now go ahead and close 
+ 0202  CD 21                    	int	21h 
+ 0204  C7 06 0751 R 0000        	mov	fHandle,0 
+ 020A  5A                       	pop	dx 
+                                 
+ 020B  B4 09                    m9msg:	mov	ah,09h 
+ 020D  CD 21                    	int	21h 
+ 020F  E9 0105 R                	jmp	m1 
+                                main	endp 
+                                 
+                                ; 
+                                ; Read a block of data into our block buffer. 
+                                ; 
+                                ; If successful, CARRY is clear and SI and BX contain the block boundaries. 
+                                ; 
+ 0212                           readBlk	proc	near 
+ 0212  51                       	push	cx 
+ 0213  57                       	push	di 
+                                 
+ 0214  E8 0274 R                	call	readBB			; read block byte 
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:46
+
+download.asm                                                Page     1-5
+                                                            
+
+ 0217  72 35                    	jc	rblk9			; error, pass it on to caller 
+ 0219  8A C8                    	mov	cl,al 
+ 021B  E8 0274 R                	call	readBB 
+ 021E  72 2E                    	jc	rblk9 
+ 0220  8A E8                    	mov	ch,al			; CX now has 16-bit block length 
+ 0222  81 F9 0401               	cmp	cx,MAXBLK+1		; too large? 
+ 0226  F5                       	cmc 
+ 0227  72 25                    	jc	rblk9			; yes 
+ 0229  8B F1                    	mov	si,cx			; save block length in SI 
+ 022B  B4 00                    	mov	ah,0			; AH == CRC 
+ 022D  FC                       	cld 
+ 022E  BF 033C R                	mov	di,offset block		; DI -> block buffer 
+ 0231  E8 0274 R                rblk1:	call	readBB			; read a byte 
+ 0234  72 18                    	jc	rblk9			; exit on error 
+ 0236  AA                       	stosb				; save the byte 
+ 0237  02 E0                    	add	ah,al			; update the CRC 
+ 0239  E2 F6                    	loop	rblk1			; loop for more 
+ 023B  E8 0274 R                	call	readBB			; read one more byte: the CRC byte 
+ 023E  72 0E                    	jc	rblk9 
+ 0240  3A C4                    	cmp	al,ah			; CRC match? 
+ 0242  F9                       	stc 
+ 0243  75 09                    	jne	rblk9			; no 
+                                 
+ 0245  8B DE                    	mov	bx,si 
+ 0247  BE 033C R                	mov	si,offset block		; SI is starting block address 
+ 024A  03 DE                    	add	bx,si 
+ 024C  4B                       	dec	bx			; and BX is the maximum block address 
+ 024D  F8                       	clc 
+                                 
+ 024E  5F                       rblk9:	pop	di 
+ 024F  59                       	pop	cx 
+ 0250  C3                       	ret 
+                                readBlk	endp 
+                                 
+                                ; 
+                                ; Read a character from the COM port. 
+                                ; 
+                                ; If CARRY is clear, AL has the character.  No other registers modified. 
+                                ; 
+ 0251                           readB	proc	near 
+ 0251  51                       	push	cx 
+ 0252  52                       	push	dx 
+ 0253  91                       	xchg	cx,ax			; save AH (in CH) 
+                                 
+ 0254  8B 16 0338 R             rb1:	mov	dx,comID		; DX == adapter # 
+ 0258  B4 02                    	mov	ah,2			; AH == read request 
+ 025A  CD 14                    	int	14h			; do INT 14h 
+ 025C  84 E4                    	test	ah,ah			; anything (valid) available yet? 
+ 025E  74 0F                    	jz	rb9			; yes (and CARRY is clear) 
+                                 
+ 0260  B4 01                    	mov	ah,1			; peek the keyboard 
+ 0262  CD 16                    	int	16h			; anything? 
+ 0264  74 EE                    	jz	rb1			; no 
+ 0266  B4 00                    	mov	ah,0			; read it 
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:46
+
+download.asm                                                Page     1-6
+                                                            
+
+ 0268  CD 16                    	int	16h			; 
+ 026A  3C 1B                    	cmp	al,1Bh			; ESC? 
+ 026C  75 E6                    	jne	rb1			; no 
+ 026E  F9                       	stc				; set CARRY to indicate error/abort 
+                                 
+ 026F  8A E5                    rb9:	mov	ah,ch			; restore AH 
+ 0271  5A                       	pop	dx 
+ 0272  59                       	pop	cx 
+ 0273  C3                       	ret 
+                                readB	endp 
+                                 
+                                ; 
+                                ; Read a block byte from the COM port. 
+                                ; 
+                                ; If CARRY is clear, AL has the character.  No other registers modified. 
+                                ; 
+ 0274                           readBB	proc	near 
+ 0274  E8 0251 R                	call	readB			; read a byte 
+ 0277  72 15                    	jc	rbb9			; abort 
+ 0279  3C 5E                    	cmp	al,'^'			; control character lead byte? 
+ 027B  F8                       	clc				; 
+ 027C  75 10                    	jne	rbb9			; no, return as-is 
+ 027E  E8 0251 R                	call	readB			; read another byte 
+ 0281  72 0B                    	jc	rbb9			; abort 
+ 0283  3C 5E                    	cmp	al,'^'			; special double lead byte sequence? 
+ 0285  74 07                    	je	rbb9			; yes, pass through 
+ 0287  2C 40                    	sub	al,'@' 
+ 0289  72 03                    	jb	rbb9			; invalid sequence 
+ 028B  3C 1C                    	cmp	al,28			; in the control-character range? 
+ 028D  F5                       	cmc				; set carry if not 
+ 028E  C3                       rbb9:	ret 
+                                readBB	endp 
+                                 
+                                ; 
+                                ; Get CX hex characters from the block buffer at SI (up to BX) and convert to a number i
+				n DX:AX. 
+                                ; 
+ 028F                           getHex	proc	near 
+ 028F  57                       	push	di 
+ 0290  2B C0                    	sub	ax,ax 
+ 0292  2B FF                    	sub	di,di 
+ 0294  2B D2                    	sub	dx,dx			; DX:DI will accumulate the result 
+                                 
+ 0296  FC                       	cld 
+ 0297  3B DE                    gh1:	cmp	bx,si			; still in bounds? 
+ 0299  72 2C                    	jb	gh9			; no 
+ 029B  AC                       	lodsb 
+ 029C  2C 30                    	sub	al,'0' 
+ 029E  72 27                    	jb	gh9			; error, invalid digit 
+ 02A0  3C 0A                    	cmp	al,10			; was the digit 0-9? 
+ 02A2  72 0B                    	jb	gh2			; yes 
+ 02A4  2C 07                    	sub	al,'A'-'0'-10		; assuming it was A-F, subtract a bit more 
+ 02A6  3C 0A                    	cmp	al,10			; did we get 10-15 as a result? 
+ 02A8  72 1D                    	jb	gh9			; no 
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:46
+
+download.asm                                                Page     1-7
+                                                            
+
+ 02AA  3C 10                    	cmp	al,16 
+ 02AC  F5                       	cmc 
+ 02AD  72 18                    	jb	gh9 
+ 02AF  0B F8                    gh2:	or	di,ax 
+ 02B1  49                       	dec	cx 
+ 02B2  7E 12                    	jle	gh8 
+ 02B4  D1 E7                    	shl	di,1			; shift DX:DI left 4 bits for next digit 
+ 02B6  D1 D2                    	rcl	dx,1 
+ 02B8  D1 E7                    	shl	di,1 
+ 02BA  D1 D2                    	rcl	dx,1 
+ 02BC  D1 E7                    	shl	di,1 
+ 02BE  D1 D2                    	rcl	dx,1 
+ 02C0  D1 E7                    	shl	di,1 
+ 02C2  D1 D2                    	rcl	dx,1 
+ 02C4  EB D1                    	jmp	gh1 
+                                 
+ 02C6  97                       gh8:	xchg	ax,di			; result is now in DX:AX 
+                                 
+ 02C7  5F                       gh9:	pop	di 
+ 02C8  C3                       	ret 
+                                getHex	endp 
+                                 
+                                ; 
+                                ; Check for a /1 or /2 to determine which adapter we should monitor. 
+                                ; 
+ 02C9                           chkCom	proc	near 
+ 02C9  FC                       	cld 
+ 02CA  BE 0080                  	mov	si,80h			; DS:SI -> command line 
+ 02CD  AC                       	lodsb 
+ 02CE  98                       	cbw 
+ 02CF  91                       	xchg	cx,ax			; CX == line length (as a fail-safe) 
+ 02D0  AC                       chk1:	lodsb 
+ 02D1  49                       	dec	cx 
+ 02D2  3C 0D                    	cmp	al,0Dh			; end of command-line? 
+ 02D4  74 14                    	je	chk3			; yes 
+ 02D6  3C 2F                    	cmp	al,'/' 
+ 02D8  75 0C                    	jne	chk2 
+ 02DA  AC                       	lodsb 
+ 02DB  49                       	dec	cx 
+ 02DC  3C 31                    	cmp	al,'1'			; /1? 
+ 02DE  75 06                    	jne	chk2			; no 
+ 02E0  81 06 033A R 0100        	add	comAddr,100h		; bump 2F8h to 3F8h 
+ 02E6  85 C9                    chk2:	test	cx,cx			; any more command-line characters? 
+ 02E8  7F E6                    	jg	chk1			; yes 
+                                 
+ 02EA  06                       chk3:	push	es 
+ 02EB  2B C0                    	sub	ax,ax 
+ 02ED  8E C0                    	mov	es,ax 
+                                	assume	es:nothing		; since ES is zero 
+                                 
+ 02EF  A1 033A R                	mov	ax,comAddr 
+ 02F2  BB 0400                  	mov	bx,400h			; access RBDA @0:400 instead of 40:0 
+ 02F5  2B D2                    	sub	dx,dx 
+ 02F7  26: 39 07                chk4:	cmp	word ptr es:[bx],ax	; matching port? 
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:46
+
+download.asm                                                Page     1-8
+                                                            
+
+ 02FA  74 12                    	je	chk5			; yes 
+ 02FC  43                       	inc	bx 
+ 02FD  43                       	inc	bx 
+ 02FE  42                       	inc	dx 
+ 02FF  80 FA 04                 	cmp	dl,4 
+ 0302  72 F3                    	jb	chk4 
+ 0304  BA 078E R                	mov	dx,offset errMsg	; no matching port was found; abort 
+ 0307  B4 09                    	mov	ah,09h 
+ 0309  CD 21                    	int	21h 
+ 030B  F9                       	stc 
+ 030C  EB 28                    	jmp	short chk9 
+                                 
+ 030E  89 16 0338 R             chk5:	mov	comID,dx		; comID is 0 for COM1, 1 for COM2, etc. 
+ 0312  B4 AA                    	mov	ah,0AAh			; quick-and-dirty INT14.COM installation check 
+ 0314  CD 14                    	int	14h 
+ 0316  F6 D4                    	not	ah 
+ 0318  80 FC AA                 	cmp	ah,0AAh 
+ 031B  74 0A                    	je	chk6 
+ 031D  BA 0764 R                	mov	dx,offset chkMsg	; INT14.COM needs to be installed for that port first 
+ 0320  B4 09                    	mov	ah,09h 
+ 0322  CD 21                    	int	21h 
+ 0324  F9                       	stc 
+ 0325  EB 0F                    	jmp	short chk9 
+                                 
+ 0327  80 C2 31                 chk6:	add	dl,'1' 
+ 032A  88 16 0756 R             	mov	comMsg+3,dl 
+ 032E  BA 0753 R                	mov	dx,offset comMsg 
+ 0331  B4 09                    	mov	ah,09h 
+ 0333  CD 21                    	int	21h 
+ 0335  F8                       	clc 
+                                 
+ 0336  07                       chk9:	pop	es 
+                                	assume	es:code 
+ 0337  C3                       	ret 
+                                chkCOM	endp 
+                                 
+ 0338  FFFF                     comID	dw	-1			; 0-based index of COM port in BIOS data area 
+ 033A  02F8                     comAddr	dw	2F8h 
+                                 
+ 033C  0400[                    block	db	MAXBLK dup (?) 
+            ??                  
+                         ]      
+                                
+ 073C  000D[                    fName	db	MAXNAM+1 dup (0)	; enough space for an 8.3 name plus terminating NUL 
+            00                  
+                         ]      
+                                
+ 0749  0000 0000                fSize	dw	0,0 
+ 074D  0000                     fDate	dw	0 
+ 074F  0000                     fTime	dw	0 
+ 0751  0000                     fHandle	dw	0 
+                                 
+ 0753  43 4F 4D 3F 20 6D 6F     comMsg	db	"COM? monitored",13,10,'$' 
+       6E 69 74 6F 72 65 64     
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:46
+
+download.asm                                                Page     1-9
+                                                            
+
+       0D 0A 24                 
+ 0764  52 75 6E 20 49 4E 54     chkMsg	db	"Run INT14 to install I/O handlers first",13,10,'$' 
+       31 34 20 74 6F 20 69     
+       6E 73 74 61 6C 6C 20     
+       49 2F 4F 20 68 61 6E     
+       64 6C 65 72 73 20 66     
+       69 72 73 74 0D 0A 24     
+ 078E  43 4F 4D 20 70 6F 72     errMsg	db	"COM port not found",13,10,'$' 
+       74 20 6E 6F 74 20 66     
+       6F 75 6E 64 0D 0A 24     
+                                 
+ 07A3  52 65 63 65 69 76 69     begXFR	db	"Receiving transfer request..." 
+       6E 67 20 74 72 61 6E     
+       73 66 65 72 20 72 65     
+       71 75 65 73 74 2E 2E     
+       2E                       
+ 07C0  0D 0A 24                 crLF	db	13,10,'$' 
+ 07C3  44 6F 77 6E 6C 6F 61     doXFR	db	"Downloading file: $" 
+       64 69 6E 67 20 66 69     
+       6C 65 3A 20 24           
+ 07D6  46 69 6C 65 20 74 72     endXFR	db	"File transfer complete",13,10,'$' 
+       61 6E 73 66 65 72 20     
+       63 6F 6D 70 6C 65 74     
+       65 0D 0A 24              
+                                 
+ 07EF  55 6E 61 62 6C 65 20     filErr	db	"Unable to create file",13,10,'$' 
+       74 6F 20 63 72 65 61     
+       74 65 20 66 69 6C 65     
+       0D 0A 24                 
+ 0807  49 6E 76 61 6C 69 64     reqErr	db	"Invalid transfer request",13,10,'$' 
+       20 74 72 61 6E 73 66     
+       65 72 20 72 65 71 75     
+       65 73 74 0D 0A 24        
+                                 
+ 0822                           code	ends 
+                                 
+                                	end	main 
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:46
+
+download.asm                                                Symbols-1
+                                                             
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+CODE . . . . . . . . . . . . . .  	0822	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+BEGXFR . . . . . . . . . . . . .  	L BYTE 	07A3	CODE
+BLOCK  . . . . . . . . . . . . .  	L BYTE 	033C	CODE	Length = 0400
+
+CHK1 . . . . . . . . . . . . . .  	L NEAR	02D0	CODE
+CHK2 . . . . . . . . . . . . . .  	L NEAR	02E6	CODE
+CHK3 . . . . . . . . . . . . . .  	L NEAR	02EA	CODE
+CHK4 . . . . . . . . . . . . . .  	L NEAR	02F7	CODE
+CHK5 . . . . . . . . . . . . . .  	L NEAR	030E	CODE
+CHK6 . . . . . . . . . . . . . .  	L NEAR	0327	CODE
+CHK9 . . . . . . . . . . . . . .  	L NEAR	0336	CODE
+CHKCOM . . . . . . . . . . . . .  	N PROC	02C9	CODE	Length = 006F
+CHKMSG . . . . . . . . . . . . .  	L BYTE 	0764	CODE
+COMADDR  . . . . . . . . . . . .  	L WORD 	033A	CODE
+COMID  . . . . . . . . . . . . .  	L WORD 	0338	CODE
+COMMSG . . . . . . . . . . . . .  	L BYTE 	0753	CODE
+CRLF . . . . . . . . . . . . . .  	L BYTE 	07C0	CODE
+
+DOXFR  . . . . . . . . . . . . .  	L BYTE 	07C3	CODE
+
+ENDXFR . . . . . . . . . . . . .  	L BYTE 	07D6	CODE
+ERRMSG . . . . . . . . . . . . .  	L BYTE 	078E	CODE
+
+FDATE  . . . . . . . . . . . . .  	L WORD 	074D	CODE
+FHANDLE  . . . . . . . . . . . .  	L WORD 	0751	CODE
+FILERR . . . . . . . . . . . . .  	L BYTE 	07EF	CODE
+FNAME  . . . . . . . . . . . . .  	L BYTE 	073C	CODE	Length = 000D
+FSIZE  . . . . . . . . . . . . .  	L WORD 	0749	CODE
+FTIME  . . . . . . . . . . . . .  	L WORD 	074F	CODE
+
+GETHEX . . . . . . . . . . . . .  	N PROC	028F	CODE	Length = 003A
+GH1  . . . . . . . . . . . . . .  	L NEAR	0297	CODE
+GH2  . . . . . . . . . . . . . .  	L NEAR	02AF	CODE
+GH8  . . . . . . . . . . . . . .  	L NEAR	02C6	CODE
+GH9  . . . . . . . . . . . . . .  	L NEAR	02C7	CODE
+
+M1 . . . . . . . . . . . . . . .  	L NEAR	0105	CODE
+M1A  . . . . . . . . . . . . . .  	L NEAR	010A	CODE
+M2 . . . . . . . . . . . . . . .  	L NEAR	010C	CODE
+M3 . . . . . . . . . . . . . . .  	L NEAR	0127	CODE
+M4 . . . . . . . . . . . . . . .  	L NEAR	0136	CODE
+M4A  . . . . . . . . . . . . . .  	L NEAR	013F	CODE
+M4X  . . . . . . . . . . . . . .  	L NEAR	0155	CODE
+M5 . . . . . . . . . . . . . . .  	L NEAR	0158	CODE
+M6 . . . . . . . . . . . . . . .  	L NEAR	0193	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:46
+
+download.asm                                                Symbols-2
+                                                             
+
+M6R  . . . . . . . . . . . . . .  	L NEAR	0199	CODE
+M7 . . . . . . . . . . . . . . .  	L NEAR	01B2	CODE
+M7A  . . . . . . . . . . . . . .  	L NEAR	01BF	CODE
+M7END  . . . . . . . . . . . . .  	L NEAR	01DD	CODE
+M7ERR  . . . . . . . . . . . . .  	L NEAR	01E2	CODE
+M8ERR  . . . . . . . . . . . . .  	L NEAR	01E7	CODE
+M9 . . . . . . . . . . . . . . .  	L NEAR	01EA	CODE
+M9MSG  . . . . . . . . . . . . .  	L NEAR	020B	CODE
+MAIN . . . . . . . . . . . . . .  	N PROC	0100	CODE	Length = 0112
+MAXBLK . . . . . . . . . . . . .  	Number	0400	
+MAXNAM . . . . . . . . . . . . .  	Number	000C	
+
+RB1  . . . . . . . . . . . . . .  	L NEAR	0254	CODE
+RB9  . . . . . . . . . . . . . .  	L NEAR	026F	CODE
+RBB9 . . . . . . . . . . . . . .  	L NEAR	028E	CODE
+RBLK1  . . . . . . . . . . . . .  	L NEAR	0231	CODE
+RBLK9  . . . . . . . . . . . . .  	L NEAR	024E	CODE
+READB  . . . . . . . . . . . . .  	N PROC	0251	CODE	Length = 0023
+READBB . . . . . . . . . . . . .  	N PROC	0274	CODE	Length = 001B
+READBLK  . . . . . . . . . . . .  	N PROC	0212	CODE	Length = 003F
+REQERR . . . . . . . . . . . . .  	L BYTE 	0807	CODE
+
+
+    438 Source  Lines
+    438 Total   Lines
+     80 Symbols
+
+  48242 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

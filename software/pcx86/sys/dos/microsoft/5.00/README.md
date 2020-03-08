@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/microsoft/5.00/360K/
 machines:
   - id: ibm5170-msdos500
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/640kb/rev1/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev1/machine.xml
     autoMount:
       A:
         name: MS-DOS 5.00 (360K Disk 1)
@@ -16,6 +16,8 @@ Microsoft MS-DOS 5.00 (360K Disks)
 ----------------------------------
 
 [Directory Listings](#directory-of-ms-dos-500-360k-disk-1) of the five 360Kb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5170-msdos500" %}
 
 ### Directory of MS-DOS 5.00 (360K Disk 1) 
 

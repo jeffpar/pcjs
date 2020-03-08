@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/6.10/
 machines:
   - id: ibm5170-pcdos610
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/2048kb/rev3/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
     autoMount:
       A:
         name: PC DOS 6.10 (Disk 1)
@@ -20,6 +20,8 @@ IBM PC DOS 6.10
 PC DOS 6.10 was released in June 1993.
 
 Directory listings of the four 1.44Mb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5170-pcdos610" %}
 
 ### Directory of PC DOS 6.10 (Disk 1)
 

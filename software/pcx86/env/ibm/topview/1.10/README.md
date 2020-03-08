@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/ibm/topview/1.10/
 machines:
   - id: ibm5160
     type: pcx86
-    config: /devices/pcx86/machine/5160/cga/640kb/mouse/machine.xml
+    config: /configs/pcx86/xml/machine/5160/cga/640kb/mouse/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)
@@ -27,6 +27,8 @@ which is why the `SETUP` batch file is run first.
 
 NOTE: This disk image is from the PCjs disk collection.  Presumably, as in [TopView 1.01](../1.01/), there was a
 second (Tutorial) disk, but we don't have a copy of it.  The machine below is also available with the [PCjs Debugger](debugger/).
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of IBM TopView 1.10
 

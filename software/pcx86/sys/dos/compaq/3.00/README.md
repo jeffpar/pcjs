@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/compaq/3.00/
 machines:
   - id: ibm5170-compaq300
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/640kb/rev1/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev1/machine.xml
     resume: 1
     autoMount:
       A:
@@ -29,6 +29,8 @@ Released in 1985 by COMPAQ Computer Corp, this version of MS-DOS displays the fo
 
 [Directory Listings](#directory-of-compaq-ms-dos-300-disk-1) of the distribution diskettes are provided below.
 Thanks (again) to the [OS/2 Museum](http://www.os2museum.com/) for sharing these disks with us.
+
+{% include machine.html id="ibm5170-compaq300" %}
 
 ### Directory of COMPAQ MS-DOS 3.00 (Disk 1)
 

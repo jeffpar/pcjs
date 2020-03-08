@@ -1,0 +1,30 @@
+{
+  "dos": {
+    "prompt": ["\nA>", "\nC:\\>"],
+    "commands": {
+      "dir": "dir $1>con\r",
+      "echo": "echo now is the time for all characters to be printed\r",
+      "mode0e": "symdeb\ra\rmov ax,e\rint 10\rint 3\r\rg\rq\rdir c:\\dos>con\r",
+      "debug": { "op": "b:debug\r", "mode": "prompt" },
+      "symdeb": { "op": "symdeb\r", "mode": "prompt" }
+    }
+  },
+  "debug": {
+    "prompt": "\n-",
+    "commands": {
+      "dos": { "op": "q\r", "mode": "prompt" },
+      "nap": "a 100\rmov dx,80\rsub cx,cx\rloop 105\rdec dx\rjnz 103\rint 3\r\rrip 100\rg\r",
+      "print": "printf(\"you typed %d\n\", $1)",
+      "cursor": "o 3d4 a\ro 3d5 %1\ro 3d4 b\ro 3d5 %2\r",
+      "curstart": "o 3d4 a\ro 3d5 %1\r",
+      "curend": "o 3d4 b\ro 3d5 %1\r",
+      "curtest": "for i=0 to 13 { cursor $i $i; printf('cursor %d %d\n',$i,$i); wait; }",
+      "mcursor": "o 3b4 a\ro 3b5 %1\ro 3b4 b\ro 3b5 %2\r",
+      "mcurstart": "o 3b4 a\ro 3b5 %1\r",
+      "mcurend": "o 3b4 b\ro 3b5 %1\r",
+      "mcurtest": "for i=0 to 13 { mcursor $i $i; printf('mcursor %d %d\n',$i,$i); wait; }",
+      "mcsloop": "for i=0 to 13 { mcurstart $i; printf('mcurstart %d\n',$i); wait; }",
+      "reboot": "a cs:ip\rjmp ffff:0\r\rg\r"
+    }
+  }
+}

@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/ibm/topview/1.01/
 machines:
   - id: ibm5160
     type: pcx86
-    config: /devices/pcx86/machine/5160/cga/640kb/mouse/machine.xml
+    config: /configs/pcx86/xml/machine/5160/cga/640kb/mouse/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)
@@ -54,6 +54,8 @@ as mouse buttons.  Mouse support is automatically loaded in the [PCjs Debugger](
 
 Directory listings of the original [Program](#directory-of-ibm-topview-101-program) and [Tutorial](#directory-of-ibm-topview-101-tutorial)
 disks are provided below.
+
+{% include machine.html id="ibm5160" %}
 
 {% comment %}
 To manually start TopView: {% include machine-command.html type='button' label='Load' machine='ibm5160' command='startKbd' %}

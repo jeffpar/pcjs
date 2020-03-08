@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/dresearch/5.00/
 machines:
   - id: ibm5170-drdos500
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/1024kb/rev1/debugger/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/1024kb/rev1/debugger/machine.xml
     autoMount:
       A:
         name: DR DOS 5.00 (Disk 1)
@@ -16,6 +16,8 @@ machines:
 
 Digital Research DR DOS 5.00
 ----------------------------
+
+{% include machine.html id="ibm5170-drdos500" %}
 
 ### Directory of DR DOS 5.00 (Disk 1)
 

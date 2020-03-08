@@ -9,7 +9,7 @@ redirect_from:
 machines:
   - id: ibm5160
     type: pcx86
-    config: /devices/pcx86/machine/5160/ega/256kb/color/machine.xml
+    config: /configs/pcx86/xml/machine/5160/ega/256kb/color/machine.xml
     autoMount:
       A:
         name: IBM EGA Fantasy Land Demo
@@ -34,6 +34,8 @@ Watch Fantasy Land run through its automated tour in the machine below.  Wait fo
 display "PRESS ANY KEY TO CONTINUE", press a key, and then the tour will begin.
 Until PCx86 supports pixel panning in text modes, Fantasy Land's scrolling operations will not be as smooth as they
 should be, but that will be addressed in a future PCjs update.
+
+{% include machine.html id="ibm5160" %}
 
 ### Description of Fantasy Land
 

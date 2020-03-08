@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/compaq/1.11/
 machines:
   - id: ibm5150-compaq111
     type: pcx86
-    config: /devices/pcx86/machine/5150/mda/256kb/debugger/machine.xml
+    config: /configs/pcx86/xml/machine/5150/mda/256kb/debugger/machine.xml
     autoMount:
       A:
         name: COMPAQ MS-DOS 1.11
@@ -29,6 +29,8 @@ Released in 1983 by COMPAQ Computer Corp, this version of MS-DOS reports itself 
 
 To learn more about this double-sided 320Kb diskette, see the
 [Directory Listing](#directory-of-compaq-ms-dos-111) and [Boot Sector](#compaq-ms-dos-111-boot-sector) below.
+
+{% include machine.html id="ibm5150-compaq111" %}
 
 ### Directory of COMPAQ MS-DOS 1.11
 

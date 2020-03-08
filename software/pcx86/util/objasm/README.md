@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/objasm/
 machines:
   - id: ibm5160
     type: pcx86
-    config: /devices/pcx86/machine/5160/cga/640kb/machine.xml
+    config: /configs/pcx86/xml/machine/5160/cga/640kb/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:3,path:"/disks-demo/pcx86/drives/10mb/MSDOS320-C400.json"}]'
     autoMount:
       A:
@@ -16,8 +16,7 @@ machines:
     autoType: B:OBJASM\r$30MKDIR OBJASM\r$10CD OBJASM\r$10B:OBJUNARC\rMAKE O\r
 ---
 
-OBJASM: An Object Module Disassembler
--------------------------------------
+{% include machine.html id="ibm5160" %}
 
 ### Original OBJASM Documentation
 

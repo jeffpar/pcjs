@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/compaq/1.10/
 machines:
   - id: compaq-portable-128kb
     type: pcx86
-    config: /devices/pcx86/machine/compaq/portable/vdu/128kb/machine.xml
+    config: /configs/pcx86/xml/machine/compaq/portable/vdu/128kb/machine.xml
     autoType: \r\r$20demo\r
 ---
 
@@ -34,6 +34,8 @@ from COMPAQ we are aware of are [1.11](../1.11/) and [1.12](../1.12/).
 To learn more about this double-sided 320Kb diskette, see the
 [Directory Listing](#directory-of-compaq-ms-dos-110-rev-b) and [Boot Sector](#compaq-ms-dos-110-boot-sector) below.
 We also have copies of the original [COMPAQ MS-DOS 1.10 Documentation](/pubs/pc/software/dos/COMPAQ110/).
+
+{% include machine.html id="compaq-portable-128kb" %}
 
 ### Directory of COMPAQ MS-DOS 1.10 Rev B
 

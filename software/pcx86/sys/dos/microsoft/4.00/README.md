@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/microsoft/4.00/
 machines:
   - id: ibm5170-msdos400
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/640kb/rev1/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev1/machine.xml
     autoMount:
       A:
         name: MS-DOS 4.00 (Disk 1)
@@ -20,6 +20,8 @@ MS-DOS 4.00 was released in October 1988.
 See the [PC DOS 4.00 Feature Summary](/disks/pcx86/dos/ibm/4.00/#feature-summary) for more details.
 
 [Directory Listings](#directory-of-ms-dos-400-disk-1) of the six 360Kb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5170-msdos400" %}
 
 ### Directory of MS-DOS 4.00 (Disk 1)
 

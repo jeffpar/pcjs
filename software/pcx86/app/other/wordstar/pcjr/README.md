@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/other/wordstar/pcjr/
 machines:
   - id: ibm5150
     type: pcx86
-    config: /devices/pcx86/machine/5150/cga/256kb/machine.xml
+    config: /configs/pcx86/xml/machine/5150/cga/256kb/machine.xml
     autoMount:
       A:
         name: PC DOS 2.10 (Disk 1)
@@ -32,6 +32,8 @@ We have also included another variation of the WordStar for PCjr binary (`WS.EXE
 is slightly smaller than the "official" PCjr binary (`WSU.EXE`), but given WordStar's propensity for "patching", and the
 fact that both files have dates well past the apparent release date of August 17, 1984, it's not clear to what extent
 *either* of the programs on Disk 1 can be considered "official".
+
+{% include machine.html id="ibm5150" %}
 
 ### Directory of WordStar for PCjr (Disk 1)
 

@@ -24,6 +24,8 @@ On startup, it reports:
 
 The machine below is also available with a [Debugger](debugger/).
 
+{% include machine.html id="cpm-mda-256k" %}
+
 ### Directory of CP/M-86 1.00 diskette
 
      Drive A:                         User :  0                                     

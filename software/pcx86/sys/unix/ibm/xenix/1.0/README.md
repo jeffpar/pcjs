@@ -7,7 +7,7 @@ machines:
   - id: ibm5170
     type: pcx86
     debugger: true
-    config: /devices/pcx86/machine/5170/cga/640kb/rev3/debugger/machine.xml
+    config: /configs/pcx86/xml/machine/5170/cga/640kb/rev3/debugger/machine.xml
     autoMount:
       A:
         name: IBM XENIX 1.0 (BOOT)
@@ -16,15 +16,14 @@ machines:
     autoStart: true
 ---
 
-IBM PC XENIX 1.0
-----------------
-
 IBM PC XENIX was the first protected-mode operating system available for the IBM PC AT, and one of the first 286
 operating systems.  It was a multi-tasking, multi-user operating system which, unlike PC/IX on the IBM PC XT,
 could replace a modest UNIX workstation.
 
 Some "[Quick Start](#notes-from-the-os2-museum)" notes that XENIX newbies (myself included) will probably find useful
 are provided below.
+
+{% include machine.html id="ibm5170" %}
 
 ### Notes from The OS/2 Museum
 

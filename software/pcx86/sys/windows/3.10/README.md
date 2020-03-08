@@ -9,7 +9,7 @@ redirect_from:
 machines:
   - id: ibm5170
     type: pcx86
-    config: /devices/pcx86/machine/5170/vga/2048kb/machine.xml
+    config: /configs/pcx86/xml/machine/5170/vga/2048kb/machine.xml
     drives: '[{name:"20Mb Hard Disk",type:2,path:"/disks-demo/pcx86/drives/20mb/PCDOS330-WIN310-VGA.json"}]'
     autoMount:
       A:
@@ -26,6 +26,8 @@ The PCjs machine below starts Microsoft Windows 3.10, using an IBM PC AT running
 The machine is also available with the [PCjs Debugger](debugger/).
 
 Directory listings of the seven 1.2Mb distribution diskettes are provided [below](#directory-of-windows-3-10-disk-1).
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Windows 3.10 (Disk 1)
 

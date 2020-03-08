@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/microsoft/3.30/
 machines:
   - id: ibm5170-msdos330
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/640kb/rev1/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev1/machine.xml
     autoMount:
       A:
         name: MS-DOS 3.30 (Disk 1)
@@ -20,6 +20,8 @@ MS-DOS 3.30 was released in February 1988.
 See the [PC DOS 3.30 Feature Summary](/disks/pcx86/dos/ibm/3.30/#feature-summary) for more details.
 
 [Directory Listings](#directory-of-ms-dos-330-disk-1) of the two 360Kb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5170-msdos330" %}
 
 ### Directory of MS-DOS 3.30 (Disk 1)
 

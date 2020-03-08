@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/enhdebug/
 machines:
   - id: ibm5160-pcdos200
     type: pcx86
-    config: /devices/pcx86/machine/5160/cga/256kb/machine.xml
+    config: /configs/pcx86/xml/machine/5160/cga/256kb/machine.xml
     resume: 1
     autoMount:
       A:
@@ -24,6 +24,8 @@ maintained by [PC DOS Retro](https://sites.google.com/site/pcdosretro/).
 
 A [Directory Listing](#directory-of-enhanced-debug-132b), along with copies of [README.TXT](#readmetxt) and
 [HISTORY.TXT](#historytxt) for v1.32b, are provided below.
+
+{% include machine.html id="ibm5160-pcdos200" %}
 
 This machine is also available with the [PCjs Debugger](debugger/).  Because you can never have too many debuggers.
 

@@ -1,15 +1,8 @@
-{%- assign include_width = "" -%}
-{%- assign include_height = "" -%}
-{%- if include.width -%}
-  {% capture include_width %} width="{{ include.width }}"{% endcapture %}
-{%- endif -%}
-{%- if include.height -%}
-  {% capture include_height %} height="{{ include.height }}"{% endcapture %}
-{%- endif -%}
-{%- if include.id -%}
-  {% capture include_id %} id="{{ include.id }}"{% endcapture %}
-{%- endif -%}
-<div class="pcjs-gallery-frame"{{ include_id }}>
+{%- capture include_id -%}{%- if include.id %} id="{{ include.id }}"{%- endif -%}{%- endcapture -%}
+{%- capture include_width -%}{%- if include.width %} width="{{ include.width }}"{%- endif -%}{%- endcapture -%}
+{%- capture include_height -%}{%- if include.height %} height="{{ include.height }}"{%- endif -%}{%- endcapture -%}
+{%- capture include_style -%}{%- if include.width != "" %} style="width:{{ include.width }}px;"{%- endif -%}{%- endcapture -%}
+<div class="pcjs-gallery-frame"{{ include_id }}{{ include_style }}>
 {%- capture include_image -%}{{ site.baseurl }}{{ include.image | default: include.src }}{%- endcapture -%}
 {%- if include_image %}
 	<div class="pcjs-gallery-image">

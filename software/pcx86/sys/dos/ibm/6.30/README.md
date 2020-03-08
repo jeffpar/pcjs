@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/6.30/
 machines:
   - id: ibm5170-pcdos630
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/2048kb/rev3/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
     autoMount:
       A:
         name: PC DOS 6.30 (Disk 1)
@@ -20,6 +20,8 @@ IBM PC DOS 6.30
 PC DOS 6.30 was released in December 1993.
 
 Directory listings of the five 1.44Mb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5170-pcdos630" %}
 
 ### Directory of PC DOS 6.30 (Disk 1)
 

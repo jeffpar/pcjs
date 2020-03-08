@@ -1,0 +1,166 @@
+     1                                  bits 16
+     2                                  cpu 8086
+     3                                  
+     4                                  CPU_86 equ 0
+     5                                  CPU_NEC equ 1
+     6                                  CPU_186 equ 2
+     7                                  CPU_286 equ 3
+     8                                  CPU_386 equ 4
+     9                                  
+    10                                  section code start=0 vstart=0x100
+    11                                  
+    12                                  start:
+    13 00000000 BA[0000]                    mov dx, .tcpu
+    14 00000003 E87B00                      call print
+    15 00000006 E87D00                      call getcpu
+    16 00000009 98                          cbw
+    17 0000000A 50                          push ax
+    18 0000000B 96                          xchg si, ax
+    19 0000000C D1E6                        shl si, 1
+    20 0000000E 8B94[0600]                  mov dx, [si+.tt]
+    21 00000012 E86C00                      call print
+    22 00000015 58                          pop ax
+    23 00000016 3C03                        cmp al, CPU_286
+    24 00000018 7302                        jnb .getmsw
+    25 0000001A CD20                        int 0x20
+    26                                      cpu 286
+    27                                  .getmsw:
+    28 0000001C 50                          push ax
+    29 0000001D BA[3300]                    mov dx, .tmsw
+    30 00000020 E85E00                      call print
+    31 00000023 0F01E0                      smsw ax
+    32 00000026 E89600                      call hex2
+    33 00000029 BA[3D00]                    mov dx, .tibase
+    34 0000002C E85200                      call print
+    35 0000002F 81EC0600                    sub sp, 6
+    36 00000033 89E5                        mov bp, sp
+    37 00000035 0F014E00                    sidt [bp]
+    38 00000039 59                          pop cx
+    39 0000003A 5A                          pop dx
+    40 0000003B 58                          pop ax
+    41 0000003C E88000                      call hex2
+    42 0000003F 92                          xchg ax, dx
+    43 00000040 E87C00                      call hex2
+    44 00000043 BA[4D00]                    mov dx, .tilimit
+    45 00000046 E83800                      call print
+    46 00000049 91                          xchg ax, cx
+    47 0000004A E87200                      call hex2
+    48 0000004D 58                          pop ax
+    49 0000004E 3C04                        cmp al, CPU_386
+    50 00000050 7302                        jnb .getcr
+    51 00000052 CD20                        int 0x20
+    52                                      cpu 386
+    53                                  .getcr:
+    54 00000054 50                          push ax
+    55 00000055 BA[5700]                    mov dx, .tcr0
+    56 00000058 E82600                      call print
+    57 0000005B 0F20C0                      mov eax, cr0
+    58 0000005E 6650                        push eax
+    59 00000060 E87700                      call hex3
+    60 00000063 BA[6100]                    mov dx, .tccr0
+    61 00000066 E81800                      call print
+    62 00000069 6631C0                      xor eax, eax
+    63 0000006C 0F22C0                      mov cr0, eax
+    64 0000006F EB00                        jmp $+2 ; just in case...
+    65 00000071 0F20C0                      mov eax, cr0
+    66 00000074 6659                        pop ecx
+    67 00000076 0F22C1                      mov cr0, ecx
+    68 00000079 EB00                        jmp $+2
+    69 0000007B E85C00                      call hex3
+    70                                      
+    71 0000007E 58                          pop ax
+    72                                      
+    73 0000007F CD20                        int 0x20
+    74                                      cpu 8086
+    75                                      
+    76                                  section data follows=code vfollows=code
+    77                                  
+    78 00000000 4350553A2024            .tcpu:      db "CPU: $"
+    79 00000006 [1000][1A00][2200]-     .tt:        dw .t86,.tnec,.t186,.t286,.t386
+    80 0000000C [2A00][2E00]       
+    81 00000010 383038382F38303836-     .t86:       db "8088/8086$"
+    82 00000019 24                 
+    83 0000001A 5632302F56333024        .tnec:      db "V20/V30$"
+    84 00000022 3138382F31383624        .t186:      db "188/186$"
+    85 0000002A 32383624                .t286:      db "286$"
+    86 0000002E 3338362B24              .t386:      db "386+$"
+    87 00000033 0D0A4D53573A203078-     .tmsw:      db 13,10,"MSW: 0x$"
+    88 0000003C 24                 
+    89 0000003D 0D0A494454523A2062-     .tibase:    db 13,10,"IDTR: base 0x$"
+    90 00000046 61736520307824     
+    91 0000004D 206C696D6974203078-     .tilimit:   db " limit 0x$"
+    92 00000056 24                 
+    93 00000057 0D0A4352303A203078-     .tcr0:      db 13,10,"CR0: 0x$"
+    94 00000060 24                 
+    95 00000061 0D0A436C6561726564-     .tccr0:     db 13,10,"Cleared CR0: 0x$"
+    96 0000006A 204352303A20307824 
+    97                                  
+    98                                  section code
+    99                                  
+   100                                  print:
+   101 00000081 B409                        mov ah, 0x09
+   102 00000083 CD21                        int 0x21
+   103 00000085 C3                          ret
+   104                                  
+   105                                  getcpu:
+   106 00000086 81EC0600                    sub sp, 6
+   107 0000008A 54                          push sp
+   108 0000008B 5D                          pop bp
+   109 0000008C 39EC                        cmp sp, bp
+   110 0000008E 741F                        je ._286
+   111 00000090 B8FFFF                      mov ax, -1
+   112 00000093 B121                        mov cl, 0x21
+   113 00000095 D3E8                        shr ax, cl
+   114 00000097 08C0                        or al, al
+   115 00000099 B002                        mov al, CPU_186
+   116 0000009B 750D                        jnz .done
+   117 0000009D B80101                      mov ax, 0x101
+   118 000000A0 D510                        aad 0x10
+   119 000000A2 3C11                        cmp al, 0x11
+   120 000000A4 B001                        mov al, CPU_NEC
+   121 000000A6 7502                        jne .done
+   122 000000A8 B000                        mov al, CPU_86
+   123                                  .done:
+   124 000000AA 81C40600                    add sp, 6
+   125 000000AE C3                          ret
+   126                                  ._286:
+   127                                      cpu 286
+   128 000000AF 0F014E00                    sidt [bp]
+   129 000000B3 58                          pop ax
+   130 000000B4 58                          pop ax
+   131 000000B5 58                          pop ax
+   132 000000B6 08E4                        or ah, ah
+   133 000000B8 B003                        mov al, CPU_286
+   134 000000BA 7502                        jnz .done2
+   135 000000BC B004                        mov al, CPU_386
+   136                                  .done2:
+   137 000000BE C3                          ret
+   138                                      cpu 8086
+   139                                  
+   140                                  hex2:
+   141                                      cpu 286
+   142 000000BF 60                          pusha
+   143 000000C0 89C3                        mov bx, ax
+   144 000000C2 B90400                      mov cx, 4
+   145                                  .hexloop:
+   146 000000C5 C1C304                      rol bx, 4
+   147 000000C8 89D8                        mov ax, bx
+   148 000000CA 240F                        and al, 0x0f
+   149 000000CC 3C0A                        cmp al, 0x0a
+   150 000000CE 1C69                        sbb al, 0x69
+   151 000000D0 2F                          das
+   152 000000D1 92                          xchg ax, dx
+   153 000000D2 B402                        mov ah, 0x02
+   154 000000D4 CD21                        int 0x21
+   155 000000D6 E2ED                        loop .hexloop
+   156 000000D8 61                          popa
+   157 000000D9 C3                          ret
+   158                                      cpu 8086
+   159                                      
+   160                                  hex3:
+   161                                      cpu 386
+   162 000000DA 66C1C010                    rol eax, 16
+   163 000000DE E8DEFF                      call hex2
+   164 000000E1 66C1C010                    rol eax, 16
+   165 000000E5 EBD8                        jmp hex2
+   166                                      cpu 8086

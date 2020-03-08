@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/other/wordstar/3.24/
 machines:
   - id: ibm5150
     type: pcx86
-    config: /devices/pcx86/machine/5150/mda/256kb/machine.xml
+    config: /configs/pcx86/xml/machine/5150/mda/256kb/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)
@@ -23,6 +23,8 @@ is provided below.
 
 We've also archived the article "[WordStar 3.24 and 3.3: MicroPro Does It Again... And Again](../#pc-magazine-review)",
 an interesting review/rant from 1983 on this and other versions of WordStar for the IBM PC.  It includes a number of useful patches and tips.
+
+{% include machine.html id="ibm5150" %}
 
 ### Directory of WordStar 3.24
 

@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/borland/pascal/3.01a/
 machines:
   - id: ibm5170-msdos320
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/640kb/rev3/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev3/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:1,path:"/disks-demo/pcx86/drives/10mb/MSDOS320-C400.json"}]'
     autoMount:
       A:
@@ -35,6 +35,8 @@ Additional files were included with the additional compilers:
 The following documentation is available online:
 
 - [Turbo Pascal Version 3.0 Reference Manual (1985)](http://bitsavers.org/pdf/borland/turbo_pascal/Turbo_Pascal_Version_3.0_Reference_Manual_1985.pdf)
+
+{% include machine.html id="ibm5170-msdos320" %}
 
 ### Directory of Borland Turbo Pascal 3.01A
 

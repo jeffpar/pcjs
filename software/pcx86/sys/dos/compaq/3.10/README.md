@@ -7,7 +7,7 @@ machines:
   - id: deskpro386
     type: pcx86
     debugger: true
-    config: /devices/pcx86/machine/compaq/deskpro386/ega/2048kb/debugger/machine.xml
+    config: /configs/pcx86/xml/machine/compaq/deskpro386/ega/2048kb/debugger/machine.xml
     autoMount:
       A:
         name: COMPAQ MS-DOS 3.10 (Disk 1)
@@ -29,6 +29,8 @@ However, the older release is not a distribution copy.  It is provided for histo
 All COMPAQ Supplemental User Programs, as well as diagnostics and setup utilities, are now filed under
 [COMPAQ Diagnostics and Utilities](/disks/pcx86/diags/compaq/).  The earliest known version of `CEMM` can be found on the
 [COMPAQ DeskPro 386 (1986)](/disks/pcx86/diags/compaq/utilities/1986/) diskette.
+
+{% include machine.html id="deskpro386" %}
 
 COMPAQ MS-DOS 3.10 (10-31-86)
 -----------------------------

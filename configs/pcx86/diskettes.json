@@ -495,6 +495,20 @@
           }
         }
       },
+      "visicalc": {
+        "@title": "VisiCalc",
+        "@versions": {
+          "1981": {
+            "@media": [
+              {
+                "@title": "VisiCalc",
+                "@diskette": "VISICALC1981",
+                "@type": "PC160K"
+              }
+            ]
+          }
+        }
+      },
       "wordstar": {
         "@title": "WordStar",
         "@versions": {
@@ -1100,7 +1114,7 @@
       }
     },
     "quarterdeck": {
-      "@title": "Quarterdeck Office Systems",
+      "@title": "Quarterdeck",
       "desqview": {
         "@title": "DESQview",
         "@versions": {
@@ -1167,7 +1181,7 @@
       }
     },
     "softlogic": {
-      "@title": "SoftLogic Solutions",
+      "@title": "SoftLogic",
       "carousel": {
         "@title": "Software Carousel",
         "@versions": {
@@ -2603,6 +2617,80 @@
   },
   "sw": {
     "@title": "Shareware",
+    "books": {
+      "@title": "Books",
+      "@versions": {
+        "dos_internals": {
+          "@media": [
+            {
+              "@title": "DOS Internals",
+              "@diskette": "DOS-INTERN.json",
+              "@type": "PC1200K"
+            }
+          ]
+        },
+        "unauthorized_windows_95": {
+          "@title": "Unauthorized Windows 95",
+          "@media": [
+            {
+              "@title": "Unauthorized Windows 95 (BIN)",
+              "@diskette": "UNAUTH-W95B.json",
+              "@type": "PC1440K"
+            },
+            {
+              "@title": "Unauthorized Windows 95 (SRC)",
+              "@diskette": "UNAUTH-W95S.json",
+              "@type": "PC1200K"
+            }
+          ]
+        },
+        "undocumented_dos": {
+          "@title": "Undocumented DOS",
+          "@media": [
+            {
+              "@title": "Undocumented DOS (1E Disk 1)",
+              "@diskette": "UNDOC-DOS-DISK1.json",
+              "@type": "PC1200K"
+            },
+            {
+              "@title": "Undocumented DOS (1E Disk 2)",
+              "@diskette": "UNDOC-DOS-DISK2.json",
+              "@type": "PC1200K"
+            },
+            {
+              "@title": "Undocumented DOS (2E BIN)",
+              "@diskette": "UNDOC-DOS2B.json",
+              "@type": "PC1200K"
+            },
+            {
+              "@title": "Undocumented DOS (2E SRC)",
+              "@diskette": "UNDOC-DOS2S.json",
+              "@type": "PC1200K"
+            }
+          ]
+        },
+        "undocumented_pc": {
+          "@title": "The Undocumented PC",
+          "@media": [
+            {
+              "@title": "Undocumented PC",
+              "@diskette": "UNDOC.json",
+              "@type": "PC1200K"
+            }
+          ]
+        },
+        "undocumented_windows": {
+          "@title": "Undocumented Windows",
+          "@media": [
+            {
+              "@title": "Undocumented Windows",
+              "@diskette": "UNDOC-WIN.json",
+              "@type": "PC1200K"
+            }
+          ]
+        }
+      }
+    },
     "personal": {
       "@title": "PCjs Personal Disk Collection",
       "@versions": {
@@ -5147,29 +5235,19 @@
       "misc": {
         "@title": "OS/2 Prototype Disks",
         "@versions": {
-          "1.00": {
-            "@title": "OS/2 Prototype Disks",
+          "86295": {
+            "@title": "OS/2 CP-DOS (v7.68)",
             "@media": [
               {
                 "@title": "OS/2 CP-DOS (v7.68)",
                 "@diskette": "286DOS-76800",
                 "@type": "PC1200K"
-              },
-              {
-                "@title": "OS/2 FOOTBALL (v7.68.17)",
-                "@diskette": "FOOTBALL-76817",
-                "@type": "PC1200K"
-              },
-              {
-                "@title": "OS/2 FOOTBALL (v4.41.00)",
-                "@diskette": "FOOTBALL-44100",
-                "@type": "PC1200K"
-              },
-              {
-                "@title": "OS/2 1.0 Debugger",
-                "@diskette": "OS210-88286",
-                "@type": "PC1200K"
-              },
+              }
+            ]
+          },
+          "87007": {
+            "@title": "OS/2 SIZZLE (v7.68.18)",
+            "@media": [
               {
                 "@title": "OS/2 SIZZLE (v7.68.18)",
                 "@diskette": "SIZZLE-76818-19870107",
@@ -5178,6 +5256,36 @@
               {
                 "@title": "OS/2 SIZZLE (v7.68.18 DEBUG)",
                 "@diskette": "SIZZLE-76818-19870107-DEBUG",
+                "@type": "PC1200K"
+              }
+            ]
+          },
+          "87058": {
+            "@title": "OS/2 FOOTBALL (v7.68.17)",
+            "@media": [
+              {
+                "@title": "OS/2 FOOTBALL (v7.68.17)",
+                "@diskette": "FOOTBALL-76817",
+                "@type": "PC1200K"
+              }
+            ]
+          },
+          "87357": {
+            "@title": "OS/2 FOOTBALL (v4.41.00)",
+            "@media": [
+              {
+                "@title": "OS/2 FOOTBALL (v4.41.00)",
+                "@diskette": "FOOTBALL-44100",
+                "@type": "PC1200K"
+              }
+            ]
+          },
+          "88286": {
+            "@title": "OS/2 1.0 Debugger (1988)",
+            "@media": [
+              {
+                "@title": "OS/2 1.0 Debugger (1988)",
+                "@diskette": "OS210-88286",
                 "@type": "PC1200K"
               }
             ]
@@ -6801,6 +6909,44 @@
             ]
           }
         }
+      }
+    }
+  },
+  "test": {
+    "@title": "Tests",
+    "@versions": {
+      "cpu": {
+        "@title": "PCx86 CPU Tests",
+        "@media": [
+          {
+            "@diskette": "CPUTESTS.json",
+            "@type": "PC160K"
+          }
+        ]
+      },
+      "testmon": {
+        "@title": "PCx86 INT14 Utilities",
+        "@media": [
+          {
+            "@diskette": "INT14.json",
+            "@type": "PC160K"
+          }
+        ]
+      },
+      "vga": {
+        "@title": "VGA Black Book Tests",
+        "@media": [
+          {
+            "@title": "VGA Black Book Binaries",
+            "@diskette": "VGABIN.json",
+            "@type": "PC160K"
+          },
+          {
+            "@title": "VGA Black Book Sources",
+            "@diskette": "VGASRC.json",
+            "@type": "PC320K"
+          }
+        ]
       }
     }
   },

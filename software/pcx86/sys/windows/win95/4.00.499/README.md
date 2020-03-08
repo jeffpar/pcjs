@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/windows/win95/4.00.499/
 machines:
   - id: deskpro386
     type: pcx86
-    config: /devices/pcx86/machine/compaq/deskpro386/vga/4096kb/machine.xml
+    config: /configs/pcx86/xml/machine/compaq/deskpro386/vga/4096kb/machine.xml
 ---
 
 Microsoft Windows 95: Build 499
@@ -19,3 +19,5 @@ at midnight on August 24, 1995.
 
 This pre-release is an upgrade version consisting of 13 1.44Mb diskettes.  You can use the machine below to test the
 installation process.  Start with "Windows 95 (Build 499 Disk 1)" in Drive A.
+
+{% include machine.html id="deskpro386" %}

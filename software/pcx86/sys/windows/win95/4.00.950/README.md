@@ -10,7 +10,7 @@ machines:
   - id: deskpro386
     type: pcx86
     state: state.json
-    config: /devices/pcx86/machine/compaq/deskpro386/vga/4096kb/machine.xml
+    config: /configs/pcx86/xml/machine/compaq/deskpro386/vga/4096kb/machine.xml
     drives: '[{name:"68Mb Hard Disk",type:4,path:"/disks-demo/pcx86/drives/68mb/WIN95.json"}]'
     autoMount:
       A:
@@ -37,3 +37,5 @@ start, it must download the disk image, which may take a minute or two, dependin
 internet connection.  You can also run Windows 95 with the [PCjs Debugger](debugger/).
 
 More information about this Windows 95 demo is available in the [PCjs Blog](/blog/2015/09/21/).
+
+{% include machine.html id="deskpro386" %}

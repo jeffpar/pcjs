@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/other/wordstar/3.20/
 machines:
   - id: ibm5150
     type: pcx86
-    config: /devices/pcx86/machine/5150/mda/256kb/machine.xml
+    config: /configs/pcx86/xml/machine/5150/mda/256kb/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)
@@ -14,9 +14,6 @@ machines:
         name: WordStar 3.20 (Original)
     autoType: $date\r$time\rB:\rWS\r
 ---
-
-MicroPro WordStar 3.20 for the IBM PC
--------------------------------------
 
 [Directory Listings](#directory-of-wordstar-320-original) of original single-sided (160Kb)
 WordStar 3.20 diskettes are provided below.  Before we acquired the originals, all we had was a
@@ -34,14 +31,7 @@ The same acquisition included:
 
  You can browse all of the [Additional Materials](#additional-materials) below.
 
-{% include gallery/begin.html %}
-{% include gallery/image.html src="/disks/pcx86/apps/other/wordstar/3.20/WordStar32-Binder.png" width="320" height="460" title="WordStar 3.0 Training Guide" link="https://1drv.ms/u/s!ArcO_mFRe1Z9gqlTMVtF-s8OxtSNpA" %}
-{% include gallery/image.html src="/disks/pcx86/apps/other/wordstar/3.20/WordStar30-Training-Guide.png" width="320" height="460" title="WordStar 3.0 Training Guide" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqlYINZ_GQ3Y6NVSUA?e=cUZyft" %}
-{% include gallery/image.html src="/disks/pcx86/apps/other/wordstar/3.20/WordStar32-General-Information.png" width="320" height="460" title="WordStar 3.2 General Information" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqkVkrQ_SzATTmls_Q?e=D3kVDU" %}
-{% include gallery/image.html src="/disks/pcx86/apps/other/wordstar/3.20/WordStar32-Reference-Manual.png" width="320" height="460" title="WordStar 3.2 Reference Manual" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqkWhsTCHW7gkQ2W7A?e=VLlYyf" %}
-{% include gallery/image.html src="/disks/pcx86/apps/other/wordstar/3.20/WordStar32-Technical-Information.png" width="320" height="460" title="WordStar 3.2 Technical Information" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqkUQdVG_FL8aYm3fg?e=yffrXl" %}
-{% include gallery/image.html src="/disks/pcx86/apps/other/wordstar/3.20/WordStar30-Reference-Card.png" width="320" height="460" title="WordStar 3.0 Reference Card" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqkTDr8PVob3Mpvnxg?e=XPFAEC" %}
-{% include gallery/end.html %}
+{% include machine.html id="ibm5150" %}
 
 ### Directory of WordStar 3.20 (Original)
 
@@ -81,7 +71,7 @@ The same acquisition included:
 	        7 file(s)     122496 bytes
 	                       36352 bytes free
 
-### Diskette Pictures
+### Diskette Photos
 
 ![WordStar 3.20 Disk 1]({{ site.software.diskettes.server }}/pcx86/app/other/wordstar/3.20/WS320-ORIG.png)
 
@@ -90,5 +80,14 @@ The same acquisition included:
 ### Additional Materials
 
 The following materials were acquired at the same time (May 2019) as the original diskettes.
+
+{% include gallery/begin.html %}
+{% include gallery/image.html src="WordStar32-Binder.png" width="320" height="460" title="WordStar 3.0 Training Guide" link="https://1drv.ms/u/s!ArcO_mFRe1Z9gqlTMVtF-s8OxtSNpA" %}
+{% include gallery/image.html src="WordStar30-Training-Guide.png" width="320" height="460" title="WordStar 3.0 Training Guide" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqlYINZ_GQ3Y6NVSUA?e=cUZyft" %}
+{% include gallery/image.html src="WordStar32-General-Information.png" width="320" height="460" title="WordStar 3.2 General Information" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqkVkrQ_SzATTmls_Q?e=D3kVDU" %}
+{% include gallery/image.html src="WordStar32-Reference-Manual.png" width="320" height="460" title="WordStar 3.2 Reference Manual" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqkWhsTCHW7gkQ2W7A?e=VLlYyf" %}
+{% include gallery/image.html src="WordStar32-Technical-Information.png" width="320" height="460" title="WordStar 3.2 Technical Information" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqkUQdVG_FL8aYm3fg?e=yffrXl" %}
+{% include gallery/image.html src="WordStar30-Reference-Card.png" width="320" height="460" title="WordStar 3.0 Reference Card" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqkTDr8PVob3Mpvnxg?e=XPFAEC" %}
+{% include gallery/end.html %}
 
 <iframe src="https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2138076&authkey=AH1jOI7I0LbFzLU" width="165" height="128" frameborder="0" scrolling="no"></iframe>

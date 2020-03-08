@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/ibm/apl/1.00/
 machines:
   - id: ibm5160
     type: pcx86
-    config: /devices/pcx86/machine/5160/cga/512kb/machine.xml
+    config: /configs/pcx86/xml/machine/5160/cga/512kb/machine.xml
     autoMount:
       B:
         name: "IBM APL 1.00"
@@ -19,6 +19,8 @@ IBM APL 1.00
 [APL Documentation](http://bitsavers.org/pdf/ibm/pc/languages/1502219_APL_Reference_May83.pdf) is available online.
 
 A directory listing of the 360Kb distribution diskette is provided [below](#directory-of-ibm-apl-100).
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of IBM APL 1.00
 

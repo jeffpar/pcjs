@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/0.90/
 machines:
   - id: ibm5150-pcdos090
     type: pcx86
-    config: /devices/pcx86/machine/5150/cga/256kb/machine.xml
+    config: /configs/pcx86/xml/machine/5150/cga/256kb/machine.xml
     autoMount:
       A:
         name: PC DOS 0.90
@@ -27,6 +27,8 @@ was rather slow to boot.  A similar configuration with [Monochrome Display and D
 
 PC DOS 0.90 files were distributed on one single-sided (160Kb) diskette.  A [Directory Listing](#directory-of-pc-dos-090)
 of the disk is provided below.
+
+{% include machine.html id="ibm5150-pcdos090" %}
 
 ### Directory of PC DOS 0.90
 

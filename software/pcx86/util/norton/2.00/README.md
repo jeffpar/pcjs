@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/norton/2.00/
 machines:
   - id: ibm5160
     type: pcx86
-    config: /devices/pcx86/machine/5160/cga/512kb/machine.xml
+    config: /configs/pcx86/xml/machine/5160/cga/512kb/machine.xml
     drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/disks-demo/pcx86/drives/10mb/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/disks-demo/pcx86/dos/microsoft/2.00/MSDOS-SRC.json"}]'
     autoMount:
       A:
@@ -26,6 +26,8 @@ IBM PC, including the earliest machines that shipped only with single-sided driv
 
 Directory listings of [Side A](#directory-of-norton-utilities-201-side-a) and [Side B](#directory-of-norton-utilities-201-side-b)
 are provided below.
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of Norton Utilities 2.00 (Side A)
 

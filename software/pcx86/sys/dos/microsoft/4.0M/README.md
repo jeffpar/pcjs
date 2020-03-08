@@ -12,7 +12,7 @@ machines:
   - id: ibm5160
     type: pcx86
     debugger: true
-    config: /devices/pcx86/machine/5160/cga/640kb/debugger/machine.xml
+    config: /configs/pcx86/xml/machine/5160/cga/640kb/debugger/machine.xml
     autoMount:
       A:
         name: MS-DOS 4.0M (Disk 1)
@@ -36,6 +36,8 @@ differentiate these disk images from those of the official MS-DOS 4.00 release i
 The [IBM Model 5160](/devices/pcx86/machine/) machine configuration below boots MS-DOS 4.0M.  To access the MS-DOS
 "Session Manager" after it's booted, tap the **Alt** key.  Since the **Alt** key is not available in all browsers,
 you may need to click the "Keys" button and use the **Alt** key on the on-screen keyboard.
+
+{% include machine.html id="ibm5160" %}
 
 ### Additional Information From [PC DOS Retro](https://sites.google.com/site/pcdosretro/multitaskingdos4)
 

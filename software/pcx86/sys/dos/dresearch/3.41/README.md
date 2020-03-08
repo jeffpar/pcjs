@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/dresearch/3.41/
 machines:
   - id: ibm5170-drdos341
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/640kb/rev1/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev1/machine.xml
     autoMount:
       A:
         name: DR DOS 3.41 (Disk 1)
@@ -16,6 +16,8 @@ machines:
 
 Digital Research DR DOS 3.41
 ----------------------------
+
+{% include machine.html id="ibm5170-drdos341" %}
 
 ### Directory of DR DOS 3.41 (Disk 1)
 

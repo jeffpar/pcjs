@@ -1015,9 +1015,21 @@
 				<xsl:otherwise><xsl:value-of select="@autoMount"/></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
+		<xsl:variable name="diskettes">
+			<xsl:choose>
+				<xsl:when test="@diskettes"><xsl:value-of select="@diskettes"/></xsl:when>
+				<xsl:otherwise/>
+			</xsl:choose>
+		</xsl:variable>
 		<xsl:variable name="drives">
 			<xsl:choose>
 				<xsl:when test="@drives"><xsl:value-of select="@drives"/></xsl:when>
+				<xsl:otherwise/>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="server">
+			<xsl:choose>
+				<xsl:when test="@server"><xsl:value-of select="@server"/></xsl:when>
 				<xsl:otherwise/>
 			</xsl:choose>
 		</xsl:variable>
@@ -1030,7 +1042,7 @@
 		<xsl:call-template name="component">
 			<xsl:with-param name="machine" select="$machine"/>
 			<xsl:with-param name="class">fdc</xsl:with-param>
-			<xsl:with-param name="parms">,autoMount:'<xsl:value-of select="$autoMount"/>',drives:'<xsl:value-of select="$drives"/>',sortBy:'<xsl:value-of select="$sortBy"/>'</xsl:with-param>
+			<xsl:with-param name="parms">,autoMount:'<xsl:value-of select="$autoMount"/>',diskettes:'<xsl:value-of select="$diskettes"/>',drives:'<xsl:value-of select="$drives"/>',server:'<xsl:value-of select="$server"/>',sortBy:'<xsl:value-of select="$sortBy"/>'</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 

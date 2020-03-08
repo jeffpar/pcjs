@@ -8,7 +8,7 @@ redirect_from:
 machines:
   - id: ibm5170-msdos320
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/640kb/rev1/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev1/machine.xml
     autoMount:
       A:
         name: MS-DOS 3.20 (Disk 1)
@@ -24,6 +24,8 @@ Seiko Epson, etc.) and can be found on sites like [WinWorld](https://winworldpc.
 See the [PC DOS 3.20 Feature Summary](/disks/pcx86/dos/ibm/3.20/#feature-summary) for more details.
 
 [Directory Listings](#directory-listings) of the four 360Kb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5170-msdos320" %}
 
 ### Directory Listings
 
