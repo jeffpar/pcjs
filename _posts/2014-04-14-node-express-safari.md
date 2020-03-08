@@ -13,7 +13,7 @@ Don't believe me?  Just ask [Google](https://www.google.com/#q=node+express+safa
 stylesheets.  And occasionally Safari -- and ONLY Safari -- will render those XML files as blank pages.
 
 For example, here's the
-[machine.xml](/devices/pcx86/machine/5150/mda/64kb/machine.xml) file that's also embedded on the
+[machine.xml](/configs/pcx86/xml/machine/5150/mda/64kb/machine.xml) file that's also embedded on the
 [{{ site.pcjs.domain }}]({{ site.url }}/) home page.
 
 When Safari fetched that XML file from an Apache web server (what I used before switching to Node),
@@ -151,6 +151,3 @@ this was a bug in Safari did not actually reproduce the bug themselves.
 I don't know the right answer, but I do know that the current situation adversely affects users of other Node-powered
 websites, who will probably get blank pages when they shouldn't, and other developers, who must all discover/debug/work-around
 this problem on their own.
-
-*[@jeffpar](https://jeffpar.com)*  
-*April 14, 2014*

@@ -4158,7 +4158,6 @@
             "@title": "PC DOS 0.90",
             "@media": [
               {
-                "@title": "PC DOS 0.90",
                 "@diskette": "PCDOS090",
                 "@type": "PC160K"
               }
@@ -4168,7 +4167,6 @@
             "@title": "PC DOS 1.00",
             "@media": [
               {
-                "@title": "PC DOS 1.00",
                 "@diskette": "PCDOS100",
                 "@type": "PC160K"
               }
@@ -4178,7 +4176,6 @@
             "@title": "PC DOS 1.10",
             "@media": [
               {
-                "@title": "PC DOS 1.10",
                 "@diskette": "PCDOS110",
                 "@type": "PC160K"
               }

@@ -13,18 +13,18 @@ Of these 9 patents, the first 8 were filed on October 27, 1976, and the last was
 dates are in the same order as the patent numbers, with the first issue date being almost one and a half years later
 (March, 7, 1978).
 
-- [U.S. Pat. No. 4,078,251: ELECTRONIC CALCULATOR OR MICROPROCESSOR WITH MASK LOGIC EFFECTIVE DURING DATA EXCHANGE OPERATION](us4078251/)
-- [U.S. Pat. No. 4,079,459: TWO SPEED SHIFT REGISTER FOR ELECTRONIC CALCULATOR OR MICROPROCESSOR SYSTEM](us4079459/)
-- [U.S. Pat. No. 4,100,600: DATA DISPLAY SYSTEM FOR ELECTRONIC CALCULATOR OR MICROPROCESSOR](us4100600/)
-- [U.S. Pat. No. 4,107,781: ELECTRONIC CALCULATOR OR MICROPROCESSOR WITH INDIRECT ADDRESSING](us4107781/)
-- [U.S. Pat. No. 4,125,867: ELECTRONIC CALCULATOR OR MICROPROCESSOR HAVING A HEXADECIMAL/BINARY CODED DECIMAL ARITHMETIC UNIT](us4125867/)
+- [U.S. Pat. No. 4,078,251: ELECTRONIC CALCULATOR OR MICROPROCESSOR WITH MASK LOGIC EFFECTIVE DURING DATA EXCHANGE OPERATION](https://patents.google.com/patent/US4078251A/en)
+- [U.S. Pat. No. 4,079,459: TWO SPEED SHIFT REGISTER FOR ELECTRONIC CALCULATOR OR MICROPROCESSOR SYSTEM](https://patents.google.com/patent/US4079459A/en)
+- [U.S. Pat. No. 4,100,600: DATA DISPLAY SYSTEM FOR ELECTRONIC CALCULATOR OR MICROPROCESSOR](https://patents.google.com/patent/US4100600A/en)
+- [U.S. Pat. No. 4,107,781: ELECTRONIC CALCULATOR OR MICROPROCESSOR WITH INDIRECT ADDRESSING](https://patents.google.com/patent/US4107781A/en)
+- [U.S. Pat. No. 4,125,867: ELECTRONIC CALCULATOR OR MICROPROCESSOR HAVING A HEXADECIMAL/BINARY CODED DECIMAL ARITHMETIC UNIT](https://patents.google.com/patent/US4125867A/en)
 - [U.S. Pat. No. 4,125,901: ELECTRONIC CALCULATOR OR MICROPROCESSOR HAVING A MULTI-INPUT ARITHMETIC UNIT](us4125901/)
-- [U.S. Pat. No. 4,146,928: POWER UP CLEAR SYSTEM FOR AN ELECTRONIC CALCULATOR OR MICROPROCESSOR](us4146928/)
-- [U.S. Pat. No. 4,164,037: ELECTRONIC CALCULATOR OR MICROPROCESSOR SYSTEM HAVING COMBINED DATA AND FLAG BIT STORAGE SYSTEM](us4164037/)
-- [U.S. Pat. No. 4,277,675: NON-SEQUENTIAL COUNTER](us4277675/)
+- [U.S. Pat. No. 4,146,928: POWER UP CLEAR SYSTEM FOR AN ELECTRONIC CALCULATOR OR MICROPROCESSOR](https://patents.google.com/patent/US4146928A/en)
+- [U.S. Pat. No. 4,164,037: ELECTRONIC CALCULATOR OR MICROPROCESSOR SYSTEM HAVING COMBINED DATA AND FLAG BIT STORAGE SYSTEM](https://patents.google.com/patent/US4164037A/en)
+- [U.S. Pat. No. 4,277,675: NON-SEQUENTIAL COUNTER](https://patents.google.com/patent/US4277675A/en)
 
 I've compared a few of these patent texts to each other.  Using [4,125,901](us4125901/) as an arbitrary baseline,
-I compared it to the first patent in the list, [4,078,251](us4078251/), and aside from the introductory text and claims,
+I compared it to the first patent in the list (4,078,251), and aside from the introductory text and claims,
 the vast majority of the text and diagrams are identical, with most differences being either typist mistakes or OCR quirks.
 
 I should add that the text for *all* of the patents above came from [Google](https://patents.google.com),

@@ -14,9 +14,6 @@ machines:
         name: None
 ---
 
-IBM PC DOS 0.90
----------------
-
 There was no PC DOS 0.90 product *per se*.  It has been dubbed version 0.90 simply because it predates
 [PC DOS 1.00](../1.00/) by several months.  More information about this preliminary version of PC DOS can
 be found at the [OS/2 Museum](http://www.os2museum.com/wp/pc-dos-1-0-but-not-quite/).

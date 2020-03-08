@@ -14,6 +14,3 @@ Initial goals for 2014 include
 - Deciding how best (or even whether) to accomodate PCjs running from both **node** and **non-node** web servers.
 
 I guess we'll learn more as the year progresses.
-
-*[@jeffpar](https://jeffpar.com)*  
-*January 20, 2014*

@@ -16,9 +16,6 @@ machines:
     autoType: $date\r$time\r
 ---
 
-IBM PC DOS 1.10
----------------
-
 PC DOS 1.10 was released in May 1982 on one single-sided (160Kb) diskette.
 A [Feature Summary](#feature-summary), along with the disk's [Directory Listing](#directory-of-pc-dos-110),
 is provided below.  Also see IBM's

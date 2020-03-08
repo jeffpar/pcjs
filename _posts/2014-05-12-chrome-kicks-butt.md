@@ -28,6 +28,3 @@ single browser.
 
 Chrome's approach to making regular JavaScript run faster seems to be a winning strategy so far, at least for apps
 like PCjs.
-
-*[@jeffpar](https://jeffpar.com)*  
-*May 12, 2014*

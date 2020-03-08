@@ -6,12 +6,12 @@ category: Releases
 permalink: /blog/2014/04/12/
 ---
 
-The latest version adds support for "software manifests", which you can read more about [here](/apps/).  Basically, manifests
-are simple XML files that describe a piece of software (an application, an operating system, whatever).  They can also
-link to a PCjs machine configuration capable of running the software, along with a "ready-to-run" machine state file.
+The latest version adds support for "software manifests", which you can read more about [here](https://web.archive.org/web/20200201162714/https://www.pcjs.org/apps/).
+Basically, manifests are simple XML files that describe a piece of software (an application, an operating system, whatever).
+They can also link to a PCjs machine configuration capable of running the software, along with a "ready-to-run" machine state file.
 Conversely, a PCjs machine XML file can refer back to the manifest, to obtain a list of disk images.
 
-Here are some [Demos](/apps/pcx86/) of "ready-to-run" apps on [PCjs](/docs/about/). 
+Here are some [Demos](https://web.archive.org/web/20200201162744/https://www.pcjs.org/apps/pcx86/) of "ready-to-run" apps on [PCjs](https://web.archive.org/web/20200201162714/https://www.pcjs.org/docs/about/).
 
 There have been lots of server-side changes recently, including API improvements that make it easy (well, *easier*)
 to dynamically create diskette images from a list of files, or even an entire folder (including all subfolders),
@@ -21,6 +21,3 @@ hasn't been ported to the newer **diskdump** Node module yet).
 
 Almost nothing has changed in the PCjs client-side code (which is where the emulator runs), except for changes to use
 the new **diskdump** API.
-
-*[@jeffpar](https://jeffpar.com)*  
-*April 12, 2014*

@@ -15,7 +15,6 @@ exclude:
   - gulpfile.js
   - README.md
   - "**/archive"
-  - "**/private"
   - /package*.json
   - /.history
   - /modules
@@ -25,6 +24,7 @@ github:
   owner_name: "jeffpar"
   owner_url: https://github.com/jeffpar
   repository_url: https://github.com/jeffpar/pcjs
+  master: https://github.com/jeffpar/pcjs/tree/master
 
 kramdown:
   input: GFM

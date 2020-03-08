@@ -16,9 +16,6 @@ machines:
     autoType: $date\r$time\r
 ---
 
-IBM PC DOS 2.10
----------------
-
 PC DOS 2.10 was finalized in October 1983 and released on November 1, 1983.
 
 [Directory Listings](#directory-of-pc-dos-210-disk-1) of the two 360Kb distribution diskettes are provided below.
