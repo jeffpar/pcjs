@@ -7,7 +7,7 @@ machines:
   - id: deskpro386
     type: pcx86
     debugger: true
-    config: /devices/pcx86/machine/compaq/deskpro386/ega/2048kb/debugger/machine.xml
+    config: /configs/pcx86/xml/machine/compaq/deskpro386/ega/2048kb/debugger/machine.xml
     autoMount:
       A:
         name: SCO Xenix 386 2.3.4h (N1-BOOT)
@@ -27,3 +27,5 @@ When prompted, use the following serial number and activation key:
 	Activation key: khrpljip
 
 NOTE: The PCjs SCO Xenix 386 machines are still being debugged, so don't expect the operating system to work here quite yet.
+
+{% include machine.html id="deskpro386" %}

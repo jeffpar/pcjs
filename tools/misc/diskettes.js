@@ -29,6 +29,7 @@ let remappings = {
     "/apps/ibm/exploring": "/demo/ibm/exploring",
     "/apps/ibm/fland": "/demo/ibm/ega",
     "/apps/ibm/topview": "/env/ibm/topview",
+    "/apps/lotus/123/1as": "/app/lotus/123/1aa",
     "/cpm": "/sys/cpm",
     "/diags": "/diag",
     "/dos": "/sys/dos",
@@ -50,10 +51,10 @@ let remappings = {
     "/tools/microsoft/os2/sdk": "/sdk/os2/microsoft",
     "/tools/microsoft/windows/sdk": "/sdk/windows",
     "/tools/other": "/util",
-    "/tools/omniview": "/env/other/omniview",
     "/tools/softlogic": "/env/softlogic",
     "/tools/other/desqview": "/env/quarterdeck/desqview",
     "/tools/other/qemm386": "/env/quarterdeck/qemm386",
+    "/tools/other/omniview": "/env/other/omniview",
     "/unix": "/sys/unix",
     "/windows": "/sys/windows"
 };
@@ -143,9 +144,10 @@ function processFiles(sDir, diskettes)
                         printf("mv %s %s\n", srcPath, dstPath);
                         let s = fs.readFileSync(srcPath, {encoding: "utf8"});
                         s = s.replace(/\npermalink: ([^\n]*)\n/, "\npermalink: " + permalink + "\nredirect_from: $1\n");
-                        s = s.replace(/\n\{% include machine\.html .*?%\}\n/g, "");
+                        s = s.replace(/\n(\s*config:\s*)\/devices\/pcx86\/machine\//, "\n$1/configs/pcx86/xml/machine/");
+                        s = s.replace(/gallery-(begin|image|end)\.html/g, "gallery/$1.html");
                         s = s.replace(/\{\{ site\.demo-disks\.baseurl \}\}.*?([^/]*\.)(jpg|jpeg|png)/g, "{{ site.software.diskettes.server }}" + path.dirname(paths[1].replace("/diskettes/", "/")) + "/$1$2");
-                        mkdirp.sync(path.dirname(dstPath));
+                        if (!fileExists(dstPath)) mkdirp.sync(path.dirname(dstPath));
                         fs.writeFileSync(dstPath, s);
                     }
                 }

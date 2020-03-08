@@ -6,12 +6,15 @@ redirect_from: /disks/pcx86/apps/lotus/123/1a/
 machines:
   - id: ibm5150-123-1a
     type: pcx86
-    config: /devices/pcx86/machine/5150/cga/256kb/machine.xml
+    config: /configs/pcx86/xml/machine/5150/cga/256kb/machine.xml
     autoMount:
       B:
         name: Lotus 1-2-3 1A (1-System)
     autoType: $date\r$time\rb:\r123\r
 ---
+
+Lotus 1-2-3 Release 1A
+----------------------
 
 This version of 1-2-3 is known as **Release 1A**, which differs from the later
 [Release 1A\*](/software/pcx86/app/lotus/123/1aa/).  This version contained files dated `6-07-83`,
@@ -20,7 +23,10 @@ whereas [Release 1A\*](/software/pcx86/app/lotus/123/1aa/) contained files dated
 WARNING: These disk images are from [WinWorld](https://winworldpc.com/product/lotus-1-2-3/1x) and are not exact
 copies of the original distribution disks.  We've tried to recreate the System Disk as it was originally distributed
 (aside from the [Copy-Protection Patch](#copy-protection-patch)), but the other disks have been left as we found them:
-original Lotus 1-2-3 files dated `6-07-83` along with a random mixture of PC DOS 1.10 and PC DOS 2.10 binaries.
+original Lotus 1-2-3 files dated `6-07-83` along with a random mixture of PC DOS 1.10 and PC DOS 2.10 binaries
+(eg, COMMAND.COM, DISKCOPY.COM, DISKCOMP.COM, etc.)
+
+{% include machine.html id="ibm5150-123-1a" %}
 
 ### Directory of Lotus 1-2-3 1A (1-System) (PATCHED)
 

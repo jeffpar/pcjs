@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/microsoft/3.31/
 machines:
   - id: ibm5170-msdos331
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/640kb/rev1/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev1/machine.xml
     autoMount:
       A:
         name: MS-DOS 3.31 (1.44M Disk)
@@ -35,6 +35,8 @@ Many of the utilities, such as `TREE.COM`, contain strings suggesting they are u
 
 and indeed, with the exception of a one-byte difference in the utility's DOS version check, the 3.30 and 3.31
 `TREE.COM` binaries *are* identical.
+
+{% include machine.html id="ibm5170-msdos331" %}
 
 ### Directory of MS-DOS 3.31 (1.44M Disk)
 

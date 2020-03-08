@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/ibm/multiplan/1.00/
 machines:
   - id: ibm5150
     type: pcx86
-    config: /devices/pcx86/machine/5150/cga/64kb/machine.xml
+    config: /configs/pcx86/xml/machine/5150/cga/64kb/machine.xml
     autoMount:
       A:
         name: "IBM Multiplan 1.00 (Program)"
@@ -14,6 +14,8 @@ machines:
         name: None
     autoType: $date\r$time\r
 ---
+
+{% include machine.html id="ibm5150" %}
 
 ### Directory of IBM Multiplan 1.00 (Program)
 

@@ -4,20 +4,35 @@ title: Microsoft Windows 1.01
 permalink: /software/pcx86/sys/windows/1.01/
 redirect_from: /disks/pcx86/windows/1.01/
 preview: /disks/pcx86/windows/1.01/screenshot.png
+redirect_from:
+  - /configs/pc/machines/5160/ega/640kb/win101/
+  - /devices/pc/machine/5160/ega/640kb/win101/
+  - /devices/pc/machine/5160/ega/640kb/win101/debugger/
+  - /disks/pc/windows/1.01/
+machines:
+  - id: ibm5160-ega-win101
+    type: pcx86
+    resume: 1
+    state: /disks/pcx86/windows/1.01/state.json
+    config: /configs/pcx86/xml/machine/5160/ega/640kb/machine.xml
+    drives: '[{name:"10Mb Hard Disk",type:3,path:"/disks-demo/pcx86/drives/10mb/PCDOS200-WIN101-EGA.json"}]'
 ---
 
+Microsoft Windows 1.01
+----------------------
+
 Microsoft Windows 1.01, the first public version of Windows, was released on November 20, 1985.
-An earlier pre-release version, [Windows 1.0 ("Premiere Edition")](../1.00/), is also available.
+It is shown here running on an IBM PC XT (Model 5160) with an EGA Display.  You can also run Windows 1.01
+with a [Debugger](debugger/) or a [CGA Display](cga/). 
 
-Windows 1.01 has been installed on the following PCjs machines:
+A demo of an earlier pre-release version, [Windows 1.0 ("Premiere Edition")](../1.00/), is also available.
 
-- [IBM PC XT (Model 5160) with a Color Display](/machines/pcx86/ibm/5160/cga/?software=/pcx86/sys/windows/1.01/&testRAM=false&drives=[{name:%22PC%20DOS%202.00%20with%20Windows%201.01%20(CGA)%22,type:3,path:%22https://harddisks.pcjs.org/pcx86/sys/windows/1.01/PCDOS200-WIN101-CGA-DISK.json%22}]&state=https://harddisks.pcjs.org/pcx86/sys/windows/1.01/PCDOS200-WIN101-CGA-STATE.json)
-- [IBM PC XT (Model 5160) with an Enhanced Color Display](/machines/pcx86/ibm/5160/ega/?software=/pcx86/sys/windows/1.01/&sizeRAM=640&testRAM=false&drives=[{name:%22PC%20DOS%202.00%20with%20Windows%201.01%20(EGA)%22,type:3,path:%22https://harddisks.pcjs.org/pcx86/sys/windows/1.01/PCDOS200-WIN101-EGA-DISK.json%22}]&state=https://harddisks.pcjs.org/pcx86/sys/windows/1.01/PCDOS200-WIN101-EGA-STATE.json)
+[Directory Listings](#directory-listings) of the five 360Kb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5160-ega-win101" %}
 
 Directory Listings
 ------------------
-
-The contents of the five 360Kb Windows 1.01 distribution diskettes are listed below.
 
 ### Directory of Windows 1.01 (SETUP)
 

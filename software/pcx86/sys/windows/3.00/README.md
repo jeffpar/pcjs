@@ -7,7 +7,7 @@ preview: /disks/pcx86/windows/3.00/screenshot.png
 machines:
   - id: ibm5170-win300
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/1024kb/rev3/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/1024kb/rev3/machine.xml
     drives: '[{name:"20Mb Hard Disk",type:2,path:"/disks-demo/pcx86/drives/20mb/PCDOS320-WIN300-EGA.json"}]'
     autoMount:
       A:
@@ -22,6 +22,8 @@ Microsoft Windows 3.00
 The PCjs machine below starts Microsoft Windows 3.00, using an IBM PC AT running PC DOS 3.20.
 
 Directory listings of the five 1.2Mb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5170-win300" %}
 
 ### Directory of Windows 3.00 (Disk 1)
 

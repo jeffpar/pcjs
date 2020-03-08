@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/norton/4.00/
 machines:
   - id: ibm5160
     type: pcx86
-    config: /devices/pcx86/machine/5160/cga/512kb/machine.xml
+    config: /configs/pcx86/xml/machine/5160/cga/512kb/machine.xml
     drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/disks-demo/pcx86/drives/10mb/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/disks-demo/pcx86/dos/microsoft/2.00/MSDOS-SRC.json"}]'
     autoMount:
       A:
@@ -28,6 +28,8 @@ Two variations of Norton Utilities 4.00 (Standard Edition) are currently availab
 Scans of the [May 15, 1987](#directory-of-norton-utilities-400-1987-05-15-1) diskettes are provided [below](#diskette-scans).
 
 We also have a copy of [Version 4.00 (Advanced Edition)](advanced/), which contains a Speed Disk utility and an "unformat" feature.
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of Norton Utilities 4.00 (1987-03-01 #1)
 

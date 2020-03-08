@@ -7,7 +7,7 @@ machines:
   - id: ibm5160-msdos320
     type: pcx86
     state: /apps/pcx86/1984/modula2/state.json
-    config: /devices/pcx86/machine/5160/ega/256kb/machine.xml
+    config: /configs/pcx86/xml/machine/5160/ega/256kb/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:3,path:"/disks-demo/pcx86/drives/10mb/MSDOS320-C400.json"}]'
     autoMount:
       A:
@@ -41,6 +41,8 @@ Afterward, AUTOEXEC.BAT was modified to include `C:\M2BIN` in the PATH, along wi
     SET M2MAP=C:\M2LIB\MAP
 
 Directory listings of the distribution diskettes are also provided [below](#directory-of-modula-286-110-1-system).
+
+{% include machine.html id="ibm5160-msdos320" %}
 
 ### Directory of Modula-2/86 1.10 (1-System)
 

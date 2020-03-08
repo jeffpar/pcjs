@@ -10,6 +10,9 @@ machines:
     autoType: \r\r$20demo\r
 ---
 
+COMPAQ MS-DOS 1.10
+------------------
+
 Released in 1983 by COMPAQ Computer Corp, this version of MS-DOS reports itself as:
 
 	The COMPAQ Personal Computer DOS

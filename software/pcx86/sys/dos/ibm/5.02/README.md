@@ -7,7 +7,7 @@ machines:
   - id: ibm5170-pcdos502
     type: pcx86
     debugger: true
-    config: /devices/pcx86/machine/5170/ega/2048kb/rev3/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
     autoMount:
       A:
         name: PC DOS 5.02 (Disk 1)
@@ -22,6 +22,8 @@ PC DOS 5.02 was released in September 1992.
 
 A [Feature Summary](#feature-summary), along with [Directory Listings](#directory-of-pc-dos-502-disk-1) of the three
 720Kb distribution diskettes, are provided below.
+
+{% include machine.html id="ibm5170-pcdos502" %}
 
 ### Feature Summary
 

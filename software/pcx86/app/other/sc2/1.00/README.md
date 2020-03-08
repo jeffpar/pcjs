@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/other/sc2/1.00/
 machines:
   - id: ibm5150-sc2
     type: pcx86
-    config: /devices/pcx86/machine/5150/cga/256kb/machine.xml
+    config: /configs/pcx86/xml/machine/5150/cga/256kb/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)
@@ -17,6 +17,8 @@ machines:
 
 Sorcim SuperCalc2 v1.00
 -----------------------
+
+{% include machine.html id="ibm5150-sc2" %}
 
 ### Directory of SuperCalc2 v1.00
 

@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/1.10/
 machines:
   - id: ibm5150-pcdos110
     type: pcx86
-    config: /devices/pcx86/machine/5150/mda/64kb/machine.xml
+    config: /configs/pcx86/xml/machine/5150/mda/64kb/machine.xml
     resume: 1
     autoMount:
       A:
@@ -27,6 +27,8 @@ for important information about changes from [PC DOS 1.00](../1.00/).
 
 You can also dig into the [PC DOS 1.10 Boot Sector](debugger/#pc-dos-110-boot-sector) using the
 [PCjs Debugger](debugger/).
+
+{% include machine.html id="ibm5150-pcdos110" %}
 
 ### Feature Summary
 

@@ -7,7 +7,7 @@ machines:
   - id: ibm5150
     type: pcx86
     debugger: true
-    config: /devices/pcx86/machine/5150/mda/64kb/debugger/machine.xml
+    config: /configs/pcx86/xml/machine/5150/mda/64kb/debugger/machine.xml
     autoMount:
       A:
         name: IBM PC Diagnostics 1.02 (Adv)
@@ -30,3 +30,5 @@ This disk displays the following startup messages:
     9 - EXIT TO SYSTEM DISKETTE                                                     
                                                                                     
     INSERT  DIAGNOSTIC DISKETTE  IN DRIVE A AND ENTER THE ACTION DESIRED
+
+{% include machine.html id="ibm5150" %}

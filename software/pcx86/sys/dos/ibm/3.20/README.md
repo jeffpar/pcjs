@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/3.20/
 machines:
   - id: ibm5170-pcdos320
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/2048kb/rev3/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
     resume: 1
     autoMount:
       A:
@@ -50,6 +50,8 @@ include:
 Changes to KEYBFR.COM and KEYGR.COM are not surprising, since IBM's new 12-function-key keyboard
 would have likely affected those programs as well.  However, the reasons for changing DISKCOPY.COM are unclear and
 we're unaware of any public explanation from IBM.
+
+{% include machine.html id="ibm5170-pcdos320" %}
 
 ### Feature Summary
 

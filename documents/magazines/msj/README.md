@@ -12,4 +12,4 @@ Microsoft abandoned the MSDN index altogether -- an unfortunate trend (see "[Cor
 Fortunately, we have a few early Microsoft Systems Journal issues for your out-dated programming enjoyment, including the first issue from October 1986
 and the OS/2 Issue from May 1987.
 
-{% include gallery/documents.html %}
+{% include gallery/documents.html width="200" height="260" %}

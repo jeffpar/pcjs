@@ -8,7 +8,7 @@ redirect_from:
 machines:
   - id: ibm5150-pcdos100
     type: pcx86
-    config: /devices/pcx86/machine/5150/mda/64kb/machine.xml
+    config: /configs/pcx86/xml/machine/5150/mda/64kb/machine.xml
     resume: 1
     autoMount:
       A:
@@ -27,6 +27,8 @@ The disk's [Directory Listing](#directory-of-pc-dos-100) is provided below.
 Also see IBM's original [PC DOS 1.00 Documentation](/pubs/pc/software/dos/ibm/1.00/).
 
 You can also dig into the [PC DOS 1.00 Boot Sector](debugger/#pc-dos-100-boot-sector) using the [PCjs Debugger](debugger/).
+
+{% include machine.html id="ibm5150-pcdos100" %}
 
 ### Directory of PC DOS 1.00
 

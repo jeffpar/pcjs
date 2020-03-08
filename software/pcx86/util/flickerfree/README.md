@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/flickerfree/
 machines:
   - id: ibm5150
     type: pcx86
-    config: /devices/pcx86/machine/5150/cga/256kb/machine.xml
+    config: /configs/pcx86/xml/machine/5150/cga/256kb/machine.xml
     autoMount:
       B:
         name: FlickerFree 1.0
@@ -32,6 +32,8 @@ than they should.
 
 The demo machine below is configured as an IBM PC (Model 5150) with a CGA and 256Kb of RAM.  It will automatically
 load FlickerFree (`FF.COM`) and then run the companion FlickerFree Performance Analyzer (`FPA.COM`).
+
+{% include machine.html id="ibm5150" %}
 
 ### Directory of FlickerFree 1.0
 

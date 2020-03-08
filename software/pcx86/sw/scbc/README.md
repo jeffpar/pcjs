@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/shareware/scbc/
 machines:
   - id: scbc
     type: pcx86
-    config: /devices/pcx86/machine/5160/ega/640kb/machine.xml
+    config: /configs/pcx86/xml/machine/5160/ega/640kb/machine.xml
     autoMount:
       B:
         name: "Small Computer Book Club (1990)"
@@ -15,6 +15,8 @@ machines:
 
 Small Computer Book Club
 ------------------------
+
+{% include machine.html id="scbc" %}
 
 ### Directory of Small Computer Book Club (1990)
 

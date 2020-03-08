@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/microsoft/2.00/
 machines:
   - id: ibm5160
     type: pcx86
-    config: /devices/pcx86/machine/5160/cga/512kb/machine.xml
+    config: /configs/pcx86/xml/machine/5160/cga/512kb/machine.xml
     drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/disks-demo/pcx86/drives/10mb/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/disks-demo/pcx86/dos/microsoft/2.00/MSDOS-SRC.json"}]'
     autoMount:
       A:
@@ -408,6 +408,8 @@ In addition, all the build products (**OBJ**, **EXE**, **COM**, **LST**, and **M
 folder.
 
 This machine is also available with the [PCjs Debugger](/disks/pcx86/dos/microsoft/2.00/debugger/).
+
+{% include machine.html id="ibm5160" %}
 
 The results of running `MK ALL` on the 2.11 sources are shown below:
 

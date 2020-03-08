@@ -53,20 +53,14 @@
                   <ul>
                   {%- for category in categories -%}
                     {%- if site.developer %}
-                    <!-- software category: {{ category[0] }} -->
+                    <!-- software category: {{ category[0] }} (hidden: {{ category[1]['@hidden'] }})-->
                     {%- endif -%}
                     {%- if category[0] contains '@' -%}{%- continue -%}{%- endif -%}
                     {%- if category[1]['@hidden'] -%}{%- continue -%}{%- endif -%}
-                    {%- if category[1]['@versions'] -%}
-                      {%- assign subcategories = categories %}
-                      {%- capture software_path2 -%}{%- endcapture -%}
-                    {%- else -%}
-                      {%- assign subcategories = category[1] -%}
-                      {%- capture software_path2 -%}/{{ category[0] }}{%- endcapture %}
+                    {%- assign subcategories = category[1] -%}
+                    {%- capture software_path2 -%}/{{ category[0] }}{%- endcapture %}
                     <li class="pcjs-explorer-category pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ category[1]['@title'] }}
                       <ul>
-                    {%- endif -%}
-
                     {%- for subcategory in subcategories -%}
                       {%- if site.developer %}
                         <!-- software subcategory: {{ subcategory[0] }} -->
@@ -124,9 +118,9 @@
                             {%- endif -%}
                             {%- assign release = version[1] -%}
                             {%- if release['@title'] -%}
-                              {%- capture software_title %}{{ product_creator }}{{ release['@title'] }}{% endcapture -%}
+                              {%- capture software_title %}{{ release['@title'] }}{% endcapture -%}
                             {%- else -%}
-                              {%- capture software_title %}{{ product_creator }}{{ product[1]['@title'] }}{% if version[0] != "" %} {{ version[0] }}{% endif %}{% endcapture -%}
+                              {%- capture software_title %}{{ product[1]['@title'] }}{% if version[0] != "" %} {{ version[0] }}{% endif %}{% endcapture -%}
                             {%- endif -%}
                             {%- capture hardware_url -%}{{ release['@hardware'] }}{%- endcapture -%}
                             {%- capture diskette_server -%}https://{{ release['@subdomain'] | default: "diskettes" }}.pcjs.org{%- endcapture -%}
@@ -142,10 +136,10 @@
                             {%- assign autoMount = "" -%}{%- assign autoDrive = "" -%}{%- assign autoState = "" -%}
                             {%- if hardware_url != "" -%}{%- comment -%} or page.permalink contains machine_url {%- endcomment -%}
                               {%- if release['@autoMount'] -%}
-                                {%- capture autoMount -%}{% assign disk_num = 0 %}{% for drive in release['@autoMount'] %}{% assign disk_num = disk_num | plus:1 %}{{ drive[0] }}:{name:%22{{ software_title }} (Disk {{ disk_num }})%22,path:%22{{ diskette_server }}{{ software_url }}/{{ drive[1]['@diskette'] }}.json%22},{% endfor %}@{%- endcapture -%}
+                                {%- capture autoMount -%}{% assign disk_num = 0 %}{% for drive in release['@autoMount'] %}{% assign disk_num = disk_num | plus:1 %}{{ drive[0] }}:{name:%22{% if drive[1]['@title'] %}{{ drive[1]['@title'] }}{% else %}{{ software_title }}{% if release['@title'] == nil and release['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}{% endif %}%22,path:%22{{ diskette_server }}{{ software_url }}/{{ drive[1]['@diskette'] }}.json%22},{% endfor %}@{%- endcapture -%}
                               {%- elsif release['@media'][0]['@diskette'] -%}
                                 {%- if release['@bootable'] -%}{%- assign drive_num = 0 -%}{%- else -%}{%- assign drive_num = 1 -%}{%- endif -%}
-                                {%- capture autoMount -%}{% assign disk_num = 0 %}{% for disk in release['@media'] %}{{ diskette_drives[drive_num] }}{% assign disk_num = disk_num | plus:1 %}{% assign drive_num = drive_num | plus:1 %}:{name:%22{{ software_title }}{% if release['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}%22,path:%22{{ diskette_server }}{{ software_url }}/{{ disk['@diskette'] }}.json%22},{% if drive_num >= diskette_drives.size %}{% break %}{% endif %}{% endfor %}@{%- endcapture -%}
+                                {%- capture autoMount -%}{% assign disk_num = 0 %}{% for disk in release['@media'] %}{{ diskette_drives[drive_num] }}{% assign disk_num = disk_num | plus:1 %}{% assign drive_num = drive_num | plus:1 %}:{name:%22{% if disk['@title'] %}{{ disk['@title'] }}{% else %}{{ software_title }}{% if release['@title'] == nil and release['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}{% endif %}%22,path:%22{{ diskette_server }}{{ software_url }}/{{ disk['@diskette'] }}.json%22},{% if drive_num >= diskette_drives.size %}{% break %}{% endif %}{% endfor %}@{%- endcapture -%}
                               {%- endif -%}
                               {%- if release['@media'][0]['@harddisk'] -%}
                                 {%- capture autoDrive -%}{% for disk in release['@media'] %}{ name:%22{{ disk['@name'] }}%22,type:{{ disk['@type'] }},path:%22{{ harddisk_server }}{{ software_url }}/{{ disk['@harddisk'] }}.json%22 },{% endfor %}@{%- endcapture -%}

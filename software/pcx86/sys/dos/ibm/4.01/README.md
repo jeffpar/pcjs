@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/4.01/
 machines:
   - id: ibm5170-pcdos401
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/2048kb/rev3/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
     autoMount:
       A:
         name: PC DOS 4.01 (Disk 1)
@@ -22,6 +22,8 @@ PC DOS 4.01 was released in August 1988.  This maintenance release is only about
 which was released in April 1989.
 
 [Directory Listings](#directory-of-pc-dos-401-disk-1) of the two 720Kb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5170-pcdos401" %}
 
 ### Directory of PC DOS 4.01 (Disk 1)
 

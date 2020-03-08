@@ -7,7 +7,7 @@ machines:
   - id: deskpro386
     type: pcx86
     debugger: true
-    config: /devices/pcx86/machine/compaq/deskpro386/ega/2048kb/machine.xml
+    config: /configs/pcx86/xml/machine/compaq/deskpro386/ega/2048kb/machine.xml
     autoMount:
       A:
         name: COMPAQ MS-DOS 3.31 (Disk 1)
@@ -57,6 +57,8 @@ The `FASTART` program on Disk 1 expects a "USER PROGRAMS" disk, which we have fi
 COMPAQ MS-DOS 4.01 release, since COMPAQ states that the disk "supersedes earlier versions".
 
 [Directory Listings](#directory-of-compaq-ms-dos-331-disk-1) of the distribution diskettes are provided below.
+
+{% include machine.html id="deskpro386" %}
 
 ### Directory of COMPAQ MS-DOS 3.31 (1987)
 

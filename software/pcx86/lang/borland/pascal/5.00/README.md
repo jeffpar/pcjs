@@ -7,7 +7,7 @@ machines:
   - id: ibm5170-msdos320
     type: pcx86
     state: /disks/pcx86/tools/microsoft/pascal/quickpascal/1.00/state.json
-    config: /devices/pcx86/machine/5170/ega/640kb/rev3/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev3/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:1,path:"/disks-demo/pcx86/drives/10mb/MSDOS320-C400.json"}]'
     autoMount:
       A:
@@ -25,6 +25,8 @@ The following documentation is available online:
 
 - [Turbo Pascal Version 5.0 User's Guide (1989)](http://bitsavers.org/pdf/borland/turbo_pascal/Turbo_Pascal_Version_5.0_Users_Guide_1989.pdf)
 - [Turbo Pascal Version 5.0 Reference Guide (1989)](http://bitsavers.org/pdf/borland/turbo_pascal/Turbo_Pascal_Version_5.0_Reference_Guide_1989.pdf)
+
+{% include machine.html id="ibm5170-msdos320" %}
 
 ### Directory of Borland Turbo Pascal 5.00 (Disk 1) ("INSTALL")
 

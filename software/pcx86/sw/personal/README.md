@@ -8,7 +8,7 @@ redirect_from:
 machines:
   - id: ibm5170
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/640kb/rev3/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev3/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:1,path:"/disks-demo/pcx86/drives/10mb/MSDOS320-C400.json"}]'
     autoMount:
       A:
@@ -38,6 +38,8 @@ Some disks from this collection *have* been archived elsewhere, including:
 
 Any other disks you see [below](#directory-listings) are primarily ones that don't neatly fit into another PCjs category,
 usually either because the disks contain a variety of unrelated files and/or unique content.
+
+{% include machine.html id="ibm5170" %}
 
 ## Directory Listings
 

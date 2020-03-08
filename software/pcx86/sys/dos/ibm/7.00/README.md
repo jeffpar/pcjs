@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/7.00/
 machines:
   - id: ibm5170-pcdos700
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/2048kb/rev3/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
     autoMount:
       A:
         name: PC DOS 7.00 (Disk 1)
@@ -20,6 +20,8 @@ IBM PC DOS 7.00
 PC DOS 7.00 was released in April 1995.  The disks used the [XDF Format](/blog/2014/10/28/).
 
 Directory listings of the five 1.44Mb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5170-pcdos700" %}
 
 ### Directory of PC DOS 7.00 (Disk 1)
 

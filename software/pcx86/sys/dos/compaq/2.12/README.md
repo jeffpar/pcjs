@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/compaq/2.12/
 machines:
   - id: ibm5160-compaq212
     type: pcx86
-    config: /devices/pcx86/machine/5160/cga/256kb/machine.xml
+    config: /configs/pcx86/xml/machine/5160/cga/256kb/machine.xml
     autoMount:
       A:
         name: COMPAQ MS-DOS 2.12
@@ -28,6 +28,8 @@ Released in 1984 by COMPAQ Computer Corp, this early version of MS-DOS displays 
 
 A directory listing of the diskette is provided [below](#directory-of-compaq-ms-dos-212).
 We also have copies of the original [COMPAQ MS-DOS Version 2 Documentation](/pubs/pc/software/dos/COMPAQ200/).
+
+{% include machine.html id="ibm5160-compaq212" %}
 
 ### Directory of COMPAQ MS-DOS 2.12
 

@@ -7,7 +7,7 @@ machines:
   - id: ibm5160
     type: pcx86
     debugger: true
-    config: /devices/pcx86/machine/5160/cga/640kb/debugger/machine.xml
+    config: /configs/pcx86/xml/machine/5160/cga/640kb/debugger/machine.xml
     drives: '[{name:"XENIX 8086 (10Mb Hard Disk)",type:3,path:"/disks-demo/pcx86/drives/10mb/XENIX086.json"}]'
     autoMount:
       A:
@@ -28,3 +28,5 @@ When prompted, use the following serial number and activation key:
 	Activation key: thmjvbqz
 
 Note: The machine below is configured with a CGA.  Monochrome and EGA video cards should work as well (not VGA).
+
+{% include machine.html id="ibm5160" %}

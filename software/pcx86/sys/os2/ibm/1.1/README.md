@@ -8,7 +8,7 @@ machines:
     type: pcx86
     debugger: true
     messages: fault
-    config: /devices/pcx86/machine/5170/vga/4096kb/debugger/machine.xml
+    config: /configs/pcx86/xml/machine/5170/vga/4096kb/debugger/machine.xml
     drives: '[{name:"20Mb Hard Disk",type:2,path:"/disks-demo/pcx86/drives/20mb/IBMOS211-VGA.json"}]'
     autoMount:
       A:
@@ -16,9 +16,6 @@ machines:
       B:
         name: None
 ---
-
-IBM OS/2 1.1
-------------
 
 IBM OS/2 1.1 was announced on April 2, 1987 (the same day as OS/2 1.0) and released on October 31, 1988.
 
@@ -34,6 +31,8 @@ The 5-digit number indicates the day the files were built.  The first 2 digits (
 digits (300) are the day of the year (October 26, since 1988 was a leap year).
 
 Directory listings of the seven 1.44Mb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of IBM OS/2 1.1 (Install)
 

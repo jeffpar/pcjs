@@ -64189,55 +64189,6 @@ class FDC extends Component {
 
         case "listDisks":
             this.bindings[sBinding] = controlSelect;
-            /*
-             * Since binding is a one-time initialization operation, it's also the perfect time to
-             * perform whatever sorting (if any) is indicated by the FDC component's "sortBy" property.
-             *
-             * And since setBinding() is called before initBus(), that means any "special" disk entries
-             * will be added after the sorting, so we won't be "burying" those entries somewhere in the
-             * middle.
-             */
-            if (this.sortBy) {
-                let i, aOptions = [];
-                /*
-                 * NOTE: All this monkeying around with copying the elements from control.options to aOptions
-                 * and then back again is necessary because control.options isn't a *real* Array (at least not
-                 * in all browsers); consequently, it may have no sort() method.  It has a length property,
-                 * along with numeric properties 0 to length-1, but it's still probably just an Object, not
-                 * an Array.
-                 *
-                 * Also note that changing the order of the control's options would ordinarily mean that the
-                 * control's selectedIndex may now be incorrect, but in our case, it doesn't matter, because
-                 * we have a special function, displayDiskette(), that will be called at LEAST once during
-                 * initialization, ensuring that selectedIndex is set correctly.
-                 */
-                for (i = 0; i < controlSelect.options.length; i++)  {
-                    aOptions.push(controlSelect.options[i]);
-                }
-                aOptions.sort(function(a, b) {
-                    /*
-                     * I've switched to localeCompare() because it offers case-insensitivity by default;
-                     * I'm still a little concerned that we could somehow end up with list elements whose text
-                     * and/or value properties are undefined (because calling a method on an undefined variable
-                     * will throw an exception), but maybe I'm being overly paranoid....
-                     */
-                    if (fdc.sortBy != "path") {
-                        return a.text.localeCompare(b.text);
-                    } else {
-                        return a.value.localeCompare(b.value);
-                    }
-                });
-                for (i = 0; i < aOptions.length; i++)  {
-                    try {
-                        /*
-                         * TODO: Determine why this line blows up in IE8; are the properties of an options object not settable in IE8?
-                         */
-                        controlSelect.options[i] = aOptions[i];
-                    } catch(e) {
-                        break;
-                    }
-                }
-            }
             controlSelect.onchange = function onChangeListDisks(event) {
                 fdc.updateSelectedDiskette();
             };
@@ -65465,15 +65416,62 @@ class FDC extends Component {
      */
     addDiskettes()
     {
-        this.addDiskette("None", "", true);
-
         if (this.aDiskettes) {
             for (let i = 0; i < this.aDiskettes.length; i++) {
                 let diskette = this.aDiskettes[i];
                 this.addDiskette(diskette['name'], diskette['path']);
             }
         }
+        /*
+         * Why didn't we sorted aDiskettes before adding them to the controlDisks list control?
+         * Because that wouldn't handle any prepopulated entries already stroed in the list control.
+         */
+        if (this.sortBy) {
+            let i, aOptions = [], fdc = this;
+            let controlDisks = this.bindings["listDisks"];
+            if (controlDisks) {
+                /*
+                 * NOTE: All this monkeying around with copying the elements from control.options to aOptions
+                 * and then back again is necessary because control.options isn't a *real* Array (at least not
+                 * in all browsers); consequently, it may have no sort() method.  It has a length property,
+                 * along with numeric properties 0 to length-1, but it's still probably just an Object, not
+                 * an Array.
+                 *
+                 * Also note that changing the order of the control's options would ordinarily mean that the
+                 * control's selectedIndex may now be incorrect, but in our case, it doesn't matter, because
+                 * we have a special function, displayDiskette(), that will be called at LEAST once during
+                 * initialization, ensuring that selectedIndex is set correctly.
+                 */
+                for (i = 0; i < controlDisks.options.length; i++)  {
+                    aOptions.push(controlDisks.options[i]);
+                }
+                aOptions.sort(function(a, b) {
+                    /*
+                     * I've switched to localeCompare() because it offers case-insensitivity by default;
+                     * I'm still a little concerned that we could somehow end up with list elements whose text
+                     * and/or value properties are undefined (because calling a method on an undefined variable
+                     * will throw an exception), but maybe I'm being overly paranoid....
+                     */
+                    if (fdc.sortBy != "path") {
+                        return a.text.localeCompare(b.text);
+                    } else {
+                        return a.value.localeCompare(b.value);
+                    }
+                });
+                for (i = 0; i < aOptions.length; i++)  {
+                    try {
+                        /*
+                         * TODO: Determine why this line blows up in IE8; are the properties of an options object not settable in IE8?
+                         */
+                        controlDisks.options[i] = aOptions[i];
+                    } catch(e) {
+                        break;
+                    }
+                }
+            }
+        }
 
+        this.addDiskette("None", "", true);
         if (this.fLocalDisks) this.addDiskette("Local Disk", "?");
         this.addDiskette("Remote Disk", "??");
 
@@ -65504,16 +65502,16 @@ class FDC extends Component {
                     if (!media) continue;
                     for (let i = 0; i < media.length; i++) {
                         let item = media[i];
-                        let name = release['@title'];
+                        let name = item['@title'];
                         if (!name) {
-                            name = group['@title'];
-                            if (version) name += ' ' + version;
-                        }
-                        let itemTitle = item['@title'];
-                        if (itemTitle) {
-                            name += ' (' + itemTitle + ')';
-                        } else if (media.length > 1) {
-                            name += " (Disk " + (i + 1) + ")";
+                            name = release['@title'];
+                            if (!name) {
+                                name = group['@title'];
+                                if (version) name += ' ' + version;
+                            }
+                            if (media.length > 1) {
+                                name += " (Disk " + (i + 1) + ")";
+                            }
                         }
                         let path = this.sDisketteServer + propPath + '/' + category + '/' + version + '/' + item['@diskette'] + '.json';
                         this.aDiskettes.push({name, path});

@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/3.00/
 machines:
   - id: ibm5170-pcdos300
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/640kb/rev1/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev1/machine.xml
     resume: 1
     autoMount:
       A:
@@ -23,6 +23,8 @@ PC DOS 3.00 was announced on August 14, 1984 and released in September 1984.
 
 A [Feature Summary](#feature-summary), along with [Directory Listings](#directory-of-pc-dos-300-disk-1) of the two
 360Kb distribution diskettes, are provided below.
+
+{% include machine.html id="ibm5170-pcdos300" %}
 
 ### Feature Summary
 
