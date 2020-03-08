@@ -1,0 +1,240 @@
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:50
+
+fakectty.asm                                                Page     1-1
+                                                            
+
+                                	title	fakectty.asm 
+                                	page	,120 
+                                 
+                                ;	By Jeff Parsons (@jeffpar) 2018-03-15 
+                                ;	Fake CTTY utility for debugging purposes 
+                                 
+ = 0001                         DEBUG	equ	1 
+                                 
+ 0000                           code	segment word public 'code' 
+                                 
+ 0100                           	org	100h 
+                                 
+                                	assume	cs:code, ds:code, es:code, ss:code 
+                                 
+                                ; 
+                                ; What does FAKECTTY do exactly? 
+                                ; 
+                                ; I'm glad you asked.  It displays a fake DOS prompt, and then polls a COM port, 
+                                ; waiting for input, echoing that input, until ENTER is detected, at which point it 
+                                ; displays "Bad command or file name", and starts over. 
+                                ; 
+ 0100                           main	proc	near 
+ 0100  E8 0150 R                	call	chkCOM			; verify that INT14.COM is installed 
+ 0103  72 3D                    	jc	m9			; abort 
+                                 
+ 0105  BE 0213 R                m1:	mov	si,offset prompt 
+ 0108  E8 0144 R                	call	print 
+                                 
+ 010B  B4 01                    m2:	mov	ah,1 
+ 010D  CD 16                    	int	16h 
+ 010F  74 07                    	jz	m3 
+ 0111  B4 00                    	mov	ah,0 
+ 0113  CD 16                    	int	16h 
+ 0115  90                       	nop				; set a breakpoint here 
+ 0116  EB 2A                    	jmp	short m9 
+                                 
+ 0118  B4 03                    m3:	mov	ah,3			; poll the COM port 
+ 011A  8B 16 01BF R             	mov	dx,comID 
+ 011E  CD 14                    	int	14h 
+ 0120  F6 C4 01                 	test	ah,01h			; any COM data available? 
+ 0123  74 E6                    	jz	m2			; no 
+                                 
+ 0125  B4 02                    	mov	ah,2			; read the COM port 
+ 0127  CD 14                    	int	14h 
+ 0129  84 E4                    	test	ah,ah			; success? 
+ 012B  75 DE                    	jnz	m2			; no 
+                                 
+ 012D  B4 01                    	mov	ah,1			; write the COM port 
+ 012F  CD 14                    	int	14h 
+                                 
+ 0131  3C 0D                    	cmp	al,0Dh			; carriage return? 
+ 0133  75 D6                    	jne	m2			; no 
+                                 
+ 0135  B8 010A                  	mov	ax,010Ah		; echo a linefeed as well 
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:50
+
+fakectty.asm                                                Page     1-2
+                                                            
+
+ 0138  CD 14                    	int	14h 
+                                 
+ 013A  BE 0218 R                	mov	si,offset badcmd	; display a fake response 
+ 013D  E8 0144 R                	call	print 
+ 0140  EB C3                    	jmp	m1			; and then display another fake prompt 
+                                 
+ 0142  CD 20                    m9:	int	20h 
+                                main	endp 
+                                 
+ 0144                           print	proc	near 
+ 0144  AC                       p1:	lodsb 
+ 0145  3C 24                    	cmp	al,'$' 
+ 0147  74 06                    	je	p9 
+ 0149  B4 01                    	mov	ah,1 
+ 014B  CD 14                    	int	14h 
+ 014D  EB F5                    	jmp	p1 
+ 014F  C3                       p9:	ret 
+                                print	endp 
+                                 
+                                ; 
+                                ; Check for a /1 or /2 to determine which adapter we should monitor. 
+                                ; 
+ 0150                           chkCom	proc	near 
+ 0150  FC                       	cld 
+ 0151  BE 0080                  	mov	si,80h			; DS:SI -> command line 
+ 0154  AC                       	lodsb 
+ 0155  98                       	cbw 
+ 0156  91                       	xchg	cx,ax			; CX == line length (as a fail-safe) 
+ 0157  AC                       chk1:	lodsb 
+ 0158  49                       	dec	cx 
+ 0159  3C 0D                    	cmp	al,0Dh			; end of command-line? 
+ 015B  74 14                    	je	chk3			; yes 
+ 015D  3C 2F                    	cmp	al,'/' 
+ 015F  75 0C                    	jne	chk2 
+ 0161  AC                       	lodsb 
+ 0162  49                       	dec	cx 
+ 0163  3C 31                    	cmp	al,'1'			; /1? 
+ 0165  75 06                    	jne	chk2			; no 
+ 0167  81 06 01C1 R 0100        	add	comAddr,100h		; bump 2F8h to 3F8h 
+ 016D  85 C9                    chk2:	test	cx,cx			; any more command-line characters? 
+ 016F  7F E6                    	jg	chk1			; yes 
+                                 
+ 0171  06                       chk3:	push	es 
+ 0172  2B C0                    	sub	ax,ax 
+ 0174  8E C0                    	mov	es,ax 
+                                	assume	es:nothing		; since ES is zero 
+                                 
+ 0176  A1 01C1 R                	mov	ax,comAddr 
+ 0179  BB 0400                  	mov	bx,400h			; access RBDA @0:400 instead of 40:0 
+ 017C  2B D2                    	sub	dx,dx 
+ 017E  26: 39 07                chk4:	cmp	word ptr es:[bx],ax	; matching port? 
+ 0181  74 12                    	je	chk5			; yes 
+ 0183  43                       	inc	bx 
+ 0184  43                       	inc	bx 
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:50
+
+fakectty.asm                                                Page     1-3
+                                                            
+
+ 0185  42                       	inc	dx 
+ 0186  80 FA 04                 	cmp	dl,4 
+ 0189  72 F3                    	jb	chk4 
+ 018B  BA 01FE R                	mov	dx,offset errMsg	; no matching port was found; abort 
+ 018E  B4 09                    	mov	ah,09h 
+ 0190  CD 21                    	int	21h 
+ 0192  F9                       	stc 
+ 0193  EB 28                    	jmp	short chk9 
+                                 
+ 0195  89 16 01BF R             chk5:	mov	comID,dx		; comID is 0 for COM1, 1 for COM2, etc. 
+ 0199  B4 AA                    	mov	ah,0AAh			; quick-and-dirty INT14.COM installation check 
+ 019B  CD 14                    	int	14h 
+ 019D  F6 D4                    	not	ah 
+ 019F  80 FC AA                 	cmp	ah,0AAh 
+ 01A2  74 0A                    	je	chk6 
+ 01A4  BA 01D4 R                	mov	dx,offset chkMsg	; INT14.COM needs to be installed for that port first 
+ 01A7  B4 09                    	mov	ah,09h 
+ 01A9  CD 21                    	int	21h 
+ 01AB  F9                       	stc 
+ 01AC  EB 0F                    	jmp	short chk9 
+                                 
+ 01AE  80 C2 31                 chk6:	add	dl,'1' 
+ 01B1  88 16 01C6 R             	mov	comMsg+3,dl 
+ 01B5  BA 01C3 R                	mov	dx,offset comMsg 
+ 01B8  B4 09                    	mov	ah,09h 
+ 01BA  CD 21                    	int	21h 
+ 01BC  F8                       	clc 
+                                 
+ 01BD  07                       chk9:	pop	es 
+                                	assume	es:code 
+ 01BE  C3                       	ret 
+                                chkCOM	endp 
+                                 
+ 01BF  FFFF                     comID	dw	-1			; 0-based index of COM port in BIOS data area 
+ 01C1  02F8                     comAddr	dw	2F8h 
+                                 
+ 01C3  43 4F 4D 3F 20 6D 6F     comMsg	db	"COM? monitored",13,10,'$' 
+       6E 69 74 6F 72 65 64     
+       0D 0A 24                 
+ 01D4  52 75 6E 20 49 4E 54     chkMsg	db	"Run INT14 to install I/O handlers first",13,10,'$' 
+       31 34 20 74 6F 20 69     
+       6E 73 74 61 6C 6C 20     
+       49 2F 4F 20 68 61 6E     
+       64 6C 65 72 73 20 66     
+       69 72 73 74 0D 0A 24     
+ 01FE  43 4F 4D 20 70 6F 72     errMsg	db	"COM port not found",13,10,'$' 
+       74 20 6E 6F 74 20 66     
+       6F 75 6E 64 0D 0A 24     
+                                 
+ 0213  43 3A 5C 3E 24           prompt	db	"C:\>",'$' 
+ 0218  42 61 64 20 63 6F 6D     badcmd	db	"Bad command or file name",13,10,'$' 
+       6D 61 6E 64 20 6F 72     
+       20 66 69 6C 65 20 6E     
+       61 6D 65 0D 0A 24        
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:50
+
+fakectty.asm                                                Page     1-4
+                                                            
+
+                                 
+ 0233                           code	ends 
+                                 
+                                	end	main 
+Microsoft (R) Macro Assembler  Version 4.00                 3/16/18 13:04:50
+
+fakectty.asm                                                Symbols-1
+                                                             
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+CODE . . . . . . . . . . . . . .  	0233	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+BADCMD . . . . . . . . . . . . .  	L BYTE 	0218	CODE
+
+CHK1 . . . . . . . . . . . . . .  	L NEAR	0157	CODE
+CHK2 . . . . . . . . . . . . . .  	L NEAR	016D	CODE
+CHK3 . . . . . . . . . . . . . .  	L NEAR	0171	CODE
+CHK4 . . . . . . . . . . . . . .  	L NEAR	017E	CODE
+CHK5 . . . . . . . . . . . . . .  	L NEAR	0195	CODE
+CHK6 . . . . . . . . . . . . . .  	L NEAR	01AE	CODE
+CHK9 . . . . . . . . . . . . . .  	L NEAR	01BD	CODE
+CHKCOM . . . . . . . . . . . . .  	N PROC	0150	CODE	Length = 006F
+CHKMSG . . . . . . . . . . . . .  	L BYTE 	01D4	CODE
+COMADDR  . . . . . . . . . . . .  	L WORD 	01C1	CODE
+COMID  . . . . . . . . . . . . .  	L WORD 	01BF	CODE
+COMMSG . . . . . . . . . . . . .  	L BYTE 	01C3	CODE
+
+DEBUG  . . . . . . . . . . . . .  	Number	0001	
+
+ERRMSG . . . . . . . . . . . . .  	L BYTE 	01FE	CODE
+
+M1 . . . . . . . . . . . . . . .  	L NEAR	0105	CODE
+M2 . . . . . . . . . . . . . . .  	L NEAR	010B	CODE
+M3 . . . . . . . . . . . . . . .  	L NEAR	0118	CODE
+M9 . . . . . . . . . . . . . . .  	L NEAR	0142	CODE
+MAIN . . . . . . . . . . . . . .  	N PROC	0100	CODE	Length = 0044
+
+P1 . . . . . . . . . . . . . . .  	L NEAR	0144	CODE
+P9 . . . . . . . . . . . . . . .  	L NEAR	014F	CODE
+PRINT  . . . . . . . . . . . . .  	N PROC	0144	CODE	Length = 000C
+PROMPT . . . . . . . . . . . . .  	L BYTE 	0213	CODE
+
+
+    154 Source  Lines
+    154 Total   Lines
+     46 Symbols
+
+  49310 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors
