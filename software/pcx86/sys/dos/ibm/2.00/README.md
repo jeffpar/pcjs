@@ -16,9 +16,6 @@ machines:
     autoType: $date\r$time\r
 ---
 
-IBM PC DOS 2.00
----------------
-
 PC DOS 2.00 was released in March 1983.
 
 A [Feature Summary](#feature-summary), along with [Directory Listings](#directory-of-pc-dos-200-disk-1) of the two

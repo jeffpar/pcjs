@@ -40,6 +40,3 @@ see a *different* shiny object along another fork in the road, and everyone will
 
 Will [EmpireJS](http://2014.empirejs.org) answer any of these big questions?  It doesn't really matter.  I just expect to learn stuff,
 and learning is fun!
-
-*[@jeffpar](https://jeffpar.com)*  
-*April 30, 2014*
