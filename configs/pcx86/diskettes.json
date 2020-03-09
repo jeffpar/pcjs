@@ -2621,11 +2621,19 @@
       "@title": "Books",
       "@versions": {
         "dos_internals": {
+          "@title": "DOS Internals",
           "@media": [
             {
-              "@title": "DOS Internals",
-              "@diskette": "DOS-INTERN.json",
+              "@diskette": "DOS-INTERN",
               "@type": "PC1200K"
+            }
+          ]
+        },
+        "graphics_for_the_ibm_pc": {
+          "@title": "Graphics for the IBM PC",
+          "@media": [
+            {
+              "@diskette": "BASIC-GRAPHICS"
             }
           ]
         },
@@ -2634,12 +2642,12 @@
           "@media": [
             {
               "@title": "Unauthorized Windows 95 (BIN)",
-              "@diskette": "UNAUTH-W95B.json",
+              "@diskette": "UNAUTH-W95B",
               "@type": "PC1440K"
             },
             {
               "@title": "Unauthorized Windows 95 (SRC)",
-              "@diskette": "UNAUTH-W95S.json",
+              "@diskette": "UNAUTH-W95S",
               "@type": "PC1200K"
             }
           ]
@@ -2649,22 +2657,22 @@
           "@media": [
             {
               "@title": "Undocumented DOS (1E Disk 1)",
-              "@diskette": "UNDOC-DOS-DISK1.json",
+              "@diskette": "UNDOC-DOS-DISK1",
               "@type": "PC1200K"
             },
             {
               "@title": "Undocumented DOS (1E Disk 2)",
-              "@diskette": "UNDOC-DOS-DISK2.json",
+              "@diskette": "UNDOC-DOS-DISK2",
               "@type": "PC1200K"
             },
             {
               "@title": "Undocumented DOS (2E BIN)",
-              "@diskette": "UNDOC-DOS2B.json",
+              "@diskette": "UNDOC-DOS2B",
               "@type": "PC1200K"
             },
             {
               "@title": "Undocumented DOS (2E SRC)",
-              "@diskette": "UNDOC-DOS2S.json",
+              "@diskette": "UNDOC-DOS2S",
               "@type": "PC1200K"
             }
           ]
@@ -2674,7 +2682,7 @@
           "@media": [
             {
               "@title": "Undocumented PC",
-              "@diskette": "UNDOC.json",
+              "@diskette": "UNDOC-PC",
               "@type": "PC1200K"
             }
           ]
@@ -2684,32 +2692,17 @@
           "@media": [
             {
               "@title": "Undocumented Windows",
-              "@diskette": "UNDOC-WIN.json",
+              "@diskette": "UNDOC-WIN",
               "@type": "PC1200K"
             }
           ]
         }
       }
     },
-    "personal": {
-      "@title": "PCjs Personal Disk Collection",
+    "magazines": {
+      "@title": "Magazines",
       "@versions": {
-        "1.00": {
-          "@title": "PCjs Personal Disk Collection",
-          "@media": [
-            {
-              "@title": "JEFFPAR DISK001",
-              "@diskette": "JEFFPAR-DISK001",
-              "@type": "PC360K"
-            }
-          ]
-        }
-      }
-    },
-    "pcdm": {
-      "@title": "PC Disk Magazine",
-      "@versions": {
-        "1.00": {
+        "pcdm": {
           "@title": "PC Disk Magazine",
           "@media": [
             {
@@ -2755,13 +2748,8 @@
               "@type": "PC160K"
             }
           ]
-        }
-      }
-    },
-    "pcmag": {
-      "@title": "PC Magazine Diskettes",
-      "@versions": {
-        "1.00": {
+        },
+        "pcmag": {
           "@title": "PC Magazine Diskettes",
           "@media": [
             {
@@ -3635,13 +3623,8 @@
               "@type": "PC360K"
             }
           ]
-        }
-      }
-    },
-    "pctj": {
-      "@title": "PC Tech Journal",
-      "@versions": {
-        "1.00": {
+        },
+        "pctj": {
           "@title": "PC Tech Journal Diskettes",
           "@media": [
             {
@@ -3748,10 +3731,20 @@
         }
       }
     },
-    "scbc": {
-      "@title": "Small Computer Book Club",
+    "misc": {
+      "@title": "Miscellaneous",
       "@versions": {
-        "1.00": {
+        "pcjs": {
+          "@title": "PCjs Personal Disks",
+          "@media": [
+            {
+              "@title": "JEFFPAR DISK001",
+              "@diskette": "JEFFPAR-DISK001",
+              "@type": "PC360K"
+            }
+          ]
+        },
+        "scbc": {
           "@title": "Small Computer Book Club",
           "@media": [
             {
@@ -3761,13 +3754,8 @@
               "@type": "PC360K"
             }
           ]
-        }
-      }
-    },
-    "unprot": {
-      "@title": "Unprotect Assortment",
-      "@versions": {
-        "1.00": {
+        },
+        "unprot": {
           "@title": "Unprotect Assortment",
           "@media": [
             {
@@ -6916,7 +6904,7 @@
         "@title": "PCx86 CPU Tests",
         "@media": [
           {
-            "@diskette": "CPUTESTS.json",
+            "@diskette": "CPUTESTS",
             "@type": "PC160K"
           }
         ]
@@ -6925,7 +6913,7 @@
         "@title": "PCx86 INT14 Utilities",
         "@media": [
           {
-            "@diskette": "INT14.json",
+            "@diskette": "INT14",
             "@type": "PC160K"
           }
         ]
@@ -6935,12 +6923,12 @@
         "@media": [
           {
             "@title": "VGA Black Book Binaries",
-            "@diskette": "VGABIN.json",
+            "@diskette": "VGABIN",
             "@type": "PC160K"
           },
           {
             "@title": "VGA Black Book Sources",
-            "@diskette": "VGASRC.json",
+            "@diskette": "VGASRC",
             "@type": "PC320K"
           }
         ]

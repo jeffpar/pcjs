@@ -2,7 +2,13 @@
   "books": {
     "@title": "Books",
     "programming": {
-      "@title": "Programming"
+      "@title": "Programming",
+      "@instances": {
+        "graphics_for_the_ibm_pc": {
+          "@title": "Graphics for the IBM PC",
+          "@redirect_from": "/pubs/pc/programming/Graphics_for_the_IBM_PC/"
+        }
+      }
     }
   },
   "datasheets": {
