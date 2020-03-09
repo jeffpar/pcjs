@@ -32,164 +32,150 @@
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: COMPAQ Portable with Monochrome Graphics",
+        "name": "COMPAQ Portable with Monochrome Graphics",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/compaq/portable/vdu/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: IBM PC Model 5150 with Color Display",
+        "name": "Exploring the IBM PC (MDA)",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/?software=/pcx86/demo/ibm/exploring/1.00-MDA&autoMount={%20A:{name:%22Exploring%20the%20IBM%20PC%20(MDA)%22,path:%22https://diskettes.pcjs.org/pcx86/demo/ibm/exploring/1.00-MDA/EXPLORING-THE-IBM-PC-100-MDA.json%22}%20}",
+        "webRoot": "${workspaceFolder}"
+      }
+      {
+        "name": "IBM PC Model 5150 with Color Display",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/cga/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: IBM PC Model 5150 with Color Display and Debugger",
+        "name": "IBM PC Model 5150 with Color Display and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/cga/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: IBM PC Model 5150 with Monochrome Display",
+        "name": "IBM PC Model 5150 with Monochrome Display",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: IBM PC Model 5150 with Monochrome Display and Debugger",
+        "name": "IBM PC Model 5150 with Monochrome Display and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: IBM PC Model 5150 with Dual Displays",
+        "name": "IBM PC Model 5150 with Dual Displays",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/dual/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: IBM PC Model 5160 with Color Display",
+        "name": "IBM PC Model 5160 with Color Display",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/cga/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: IBM PC Model 5160 with Color Display and Debugger",
+        "name": "IBM PC Model 5160 with Color Display and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/cga/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: IBM PC Model 5160 with Enhanced Color Display",
+        "name": "IBM PC Model 5160 with Enhanced Color Display",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/ega/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: IBM PC Model 5160 with Enhanced Color Display and Debugger",
+        "name": "IBM PC Model 5160 with Enhanced Color Display and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/ega/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: IBM PC Model 5160 with Monochrome Display",
+        "name": "IBM PC Model 5160 with Monochrome Display",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/mda/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: IBM PC Model 5160 with Monochrome Display and Debugger",
+        "name": "IBM PC Model 5160 with Monochrome Display and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/mda/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: IBM PC Model 5170 with Color Display",
+        "name": "IBM PC Model 5170 with Color Display",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5170/cga/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: IBM Color Graphics Adapter (CGA)",
-        "type": "chrome",
-        "request": "launch",
-        "url": "http://localhost:4000/machines/pcx86/ibm/video/cga/",
-        "webRoot": "${workspaceFolder}"
-      },
-      {
-        "name": "HW: IBM Monochrome Display Adapter (MDA)",
-        "type": "chrome",
-        "request": "launch",
-        "url": "http://localhost:4000/machines/pcx86/ibm/video/mda/",
-        "webRoot": "${workspaceFolder}"
-      },
-      {
-        "name": "HW: Ohio Scientific Challenger 1P",
+        "name": "Ohio Scientific Challenger 1P",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/osi/c1p/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: Ohio Scientific Challenger 1P with Debugger",
+        "name": "Ohio Scientific Challenger 1P with Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/osi/c1p/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: Ohio Scientific Challenger 1P \"Array\"",
+        "name": "Ohio Scientific Challenger 1P with Debugger (XML)",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:4000/configs/c1p/xml/c1p8k-debugger.xml",
+        "webRoot": "${workspaceFolder}"
+      }
+      {
+        "name": "Ohio Scientific Challenger 1P \"Array\"",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/osi/c1p/array/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: TI-57 Programmable Calculator",
+        "name": "TI-57 Programmable Calculator",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/ti/ti57/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: TI-57 with Original ROM and Debugger",
+        "name": "TI-57 with Original ROM and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/ti/ti57/rev0/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "HW: TI-57 with Revised ROM and Debugger",
+        "name": "TI-57 with Revised ROM and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/ti/ti57/rev1/",
-        "webRoot": "${workspaceFolder}"
-      },
-      {
-        "name": "SW: Exploring the IBM PC (MDA)",
-        "type": "chrome",
-        "request": "launch",
-        "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/?software=/pcx86/demo/ibm/exploring/1.00-MDA&autoMount={%20A:{name:%22Exploring%20the%20IBM%20PC%20(MDA)%22,path:%22https://diskettes.pcjs.org/pcx86/demo/ibm/exploring/1.00-MDA/EXPLORING-THE-IBM-PC-100-MDA.json%22}%20}",
-        "webRoot": "${workspaceFolder}"
-      },
-      {
-        "name": "XML: Ohio Scientific Challenger 1P with Debugger",
-        "type": "chrome",
-        "request": "launch",
-        "url": "http://localhost:4000/configs/c1p/xml/c1p8k-debugger.xml",
         "webRoot": "${workspaceFolder}"
       }
     ]

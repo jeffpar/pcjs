@@ -1,15 +1,13 @@
 ---
 layout: page
-title: PCjs Personal Disk Collection
-permalink: /software/pcx86/sw/personal/
+title: PCjs Personal Disks
+permalink: /software/pcx86/sw/misc/pcjs/
 redirect_from: /disks/pcx86/personal/
-redirect_from:
-  - /disks/pcx86/personal/random/
 machines:
   - id: ibm5170
     type: pcx86
     config: /configs/pcx86/xml/machine/5170/ega/640kb/rev3/machine.xml
-    drives: '[{name:"10Mb Hard Disk",type:1,path:"/disks-demo/pcx86/drives/10mb/MSDOS320-C400.json"}]'
+    drives: '[{name:"10Mb Hard Disk",type:1,path:"/harddisks/pcx86/sys/dos/microsoft/3.20/MSDOS320-C400.json"}]'
     autoMount:
       A:
         name: None
@@ -17,24 +15,21 @@ machines:
         name: JEFFPAR DISK001
 ---
 
-PCjs Personal Disk Collection
------------------------------
-
-Much like the [PCjs Personal Document Collection](/docs/personal/), this is an assortment of disk images
+Much like the collection of [PCjs Personal Documents](/documents/misc/pcjs/), this is an assortment of disk images
 archived by [@jeffpar](https://jeffpar.com) that may or may not be of historical interest.
 
-Some disks from this collection *have* been archived elsewhere, including:
+Some disks from this collection have already been archived elsewhere, including:
 
-* [COMPAQ Diagnostics 5.08](/disks/pcx86/diags/compaq/5.08/)
-* [COMPAQ DeskPro 386 (1986)](/disks/pcx86/diags/compaq/utilities/1986/)
-* [COMPAQ MS-DOS 3.10 (12-17-85)](/disks/pcx86/dos/compaq/3.10/#compaq-ms-dos-310-12-17-85)
-* [COMPAQ MS-DOS 3.31 (1987)](/disks/pcx86/dos/compaq/3.31/#directory-of-compaq-ms-dos-331-1987)
-* [DoubleDOS 2.0F](/disks/pcx86/tools/softlogic/doubledos/2.0f/)
-* [Multitasking MS-DOS 4.00](/disks/pcx86/dos/microsoft/4.0M/)
-* [The Norton Utilities 3.00 (1984-12-07)](/disks/pcx86/tools/other/norton/3.00/)
-* [The Norton Utilities 4.00 (Standard Edition)](/disks/pcx86/tools/other/norton/4.00/)
-* [The Norton Utilities 4.00 (Advanced Edition)](/disks/pcx86/tools/other/norton/4.00/advanced/)
-* [Early OS/2 Prototypes](/disks/pcx86/os2/misc/) (eg, [CP-DOS](/disks/pcx86/os2/misc/cpdos/) and [FOOTBALL](/disks/pcx86/os2/misc/football/))
+* [COMPAQ Diagnostics 5.08](/software/pcx86/diag/compaq/5.08/)
+* [COMPAQ DeskPro 386 (1986)](/software/pcx86/diag/compaq/utilities/1986/)
+* [COMPAQ MS-DOS 3.10 (12-17-85)](/software/pcx86/sys/dos/compaq/3.10/#compaq-ms-dos-310-12-17-85)
+* [COMPAQ MS-DOS 3.31 (1987)](/software/pcx86/sys/dos/compaq/3.31/#directory-of-compaq-ms-dos-331-1987)
+* [DoubleDOS 2.0F](/software/pcx86/env/softlogic/doubledos/2.0f/)
+* [Multitasking MS-DOS 4.00](/software/pcx86/sys/dos/microsoft/4.0M/)
+* [The Norton Utilities 3.00 (1984-12-07)](/software/pcx86/util/norton/3.00/)
+* [The Norton Utilities 4.00 (Standard Edition)](/software/pcx86/util/norton/4.00/)
+* [The Norton Utilities 4.00 (Advanced Edition)](/software/pcx86/util/norton/4.00/advanced/)
+* [Early OS/2 Prototypes](/software/pcx86/sys/os2/misc/) (eg, CP-DOS and FOOTBALL)
 
 Any other disks you see [below](#directory-listings) are primarily ones that don't neatly fit into another PCjs category,
 usually either because the disks contain a variety of unrelated files and/or unique content.

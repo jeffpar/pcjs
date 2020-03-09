@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Small Computer Book Club
-permalink: /software/pcx86/sw/scbc/
+permalink: /software/pcx86/sw/misc/scbc/
 redirect_from: /disks/pcx86/shareware/scbc/
 machines:
   - id: scbc
@@ -12,9 +12,6 @@ machines:
         name: "Small Computer Book Club (1990)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
-
-Small Computer Book Club
-------------------------
 
 {% include machine.html id="scbc" %}
 
@@ -36,6 +33,4 @@ Small Computer Book Club
 	        6 file(s)     352901 bytes
 	                        5120 bytes free
 
-### Diskette Scans
-
-![Small Computer Book Club (1990)]({{ site.software.diskettes.server }}/pcx86/sw/scbc/SCBC-1990.jpg)
+![Small Computer Book Club (1990)]({{ site.software.diskettes.server }}/pcx86/sw/misc/scbc/SCBC-1990.jpg)

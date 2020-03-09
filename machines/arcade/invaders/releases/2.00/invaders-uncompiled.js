@@ -14777,6 +14777,7 @@ class Debugger extends Device {
          */
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.time.addUpdate(this);
+        this.cTransitions = 0;
 
         /*
          * Initialize additional properties required for our onCommand() handler, including
@@ -17045,6 +17046,7 @@ class Debugger extends Device {
         let stateDbg = [];
         this.saveState(stateDbg);
         state.push(stateDbg);
+        this.cTransitions = 0;
     }
 
     /**
@@ -17070,6 +17072,7 @@ class Debugger extends Device {
                     if (this.fStepQuietly == undefined) this.setFocus();
                 }
             }
+            this.cTransitions++;
         }
     }
 
@@ -17089,11 +17092,14 @@ class Debugger extends Device {
     /**
      * restoreFocus()
      *
+     * We don't want to "rip" focus from the user if this is the first transition (ie, the page containing
+     * the machine has just finished loading); we use a transition count as a simple way of achieving that.
+     *
      * @this {Debugger}
      */
     restoreFocus()
     {
-        if (this.input) this.input.setFocus();
+        if (this.cTransitions && this.input) this.input.setFocus();
     }
 
     /**
@@ -17103,8 +17109,10 @@ class Debugger extends Device {
      */
     setFocus()
     {
-        let element = this.findBinding(WebIO.BINDING.PRINT, true);
-        if (element) element.focus();
+        if (this.cTransitions) {
+            let element = this.findBinding(WebIO.BINDING.PRINT, true);
+            if (element) element.focus();
+        }
     }
 
     /**

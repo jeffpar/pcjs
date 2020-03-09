@@ -5,7 +5,6 @@ permalink: /software/pcx86/sw/books/the_undocumented_pc/
 redirect_from: /pubs/pc/programming/The_Undocumented_PC/
 ---
 
-**The Undocumented PC**
 by Frank van Gilluwe (December 1996)
 
 A directory listing of *The Undocumented PC* diskette that accompanied the book is provided below.
