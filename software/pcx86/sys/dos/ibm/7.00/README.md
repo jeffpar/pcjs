@@ -14,9 +14,6 @@ machines:
         name: None
 ---
 
-IBM PC DOS 7.00
----------------
-
 PC DOS 7.00 was released in April 1995.  The disks used the [XDF Format](/blog/2014/10/28/).
 
 Directory listings of the five 1.44Mb distribution diskettes are provided below.

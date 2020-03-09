@@ -5,9 +5,6 @@ permalink: /software/pcx86/env/softlogic/doubledos/2.0v/
 redirect_from: /disks/pcx86/tools/softlogic/doubledos/2.0v/
 ---
 
-DoubleDOS 2.0V
---------------
-
 ### Directory of DoubleDOS 2.0V (Disk 1)
 
 	 Volume in drive A has no label

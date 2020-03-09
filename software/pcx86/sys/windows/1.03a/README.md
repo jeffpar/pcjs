@@ -5,9 +5,6 @@ permalink: /software/pcx86/sys/windows/1.03a/
 redirect_from: /disks/pcx86/windows/1.03a/
 ---
 
-Microsoft Windows 1.03a
------------------------
-
 These Windows 1.03 disks are from our private collection.  They may have been Microsoft-internal disks designed
 for use with the Windows 1.03 SDK, since they include two additional disks containing Windows SYM files.  Consequently,
 they have been designated 1.03a.

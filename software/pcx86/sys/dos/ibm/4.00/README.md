@@ -14,9 +14,6 @@ machines:
         name: None
 ---
 
-IBM PC DOS 4.00
----------------
-
 PC DOS 4.00 was released in July 1988.
 
 A [Feature Summary](#feature-summary), along with [Directory Listings](#directory-of-pc-dos-400-disk-1) of the five

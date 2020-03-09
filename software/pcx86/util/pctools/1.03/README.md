@@ -5,9 +5,6 @@ permalink: /software/pcx86/util/pctools/1.03/
 redirect_from: /disks/pcx86/tools/other/pctools/1.03/
 ---
 
-Central Point PC Tools 1.03
----------------------------
-
 ### Directory of Central Point PC Tools 1.03
  
 	 Volume in drive A has no label

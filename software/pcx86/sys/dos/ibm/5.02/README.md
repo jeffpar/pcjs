@@ -15,9 +15,6 @@ machines:
         name: None
 ---
 
-IBM PC DOS 5.02
----------------
-
 PC DOS 5.02 was released in September 1992.
 
 A [Feature Summary](#feature-summary), along with [Directory Listings](#directory-of-pc-dos-502-disk-1) of the three

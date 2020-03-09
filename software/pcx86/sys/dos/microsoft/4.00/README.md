@@ -12,9 +12,6 @@ machines:
         name: MS-DOS 4.00 (Disk 1)
 ---
 
-Microsoft MS-DOS 4.00
----------------------
-
 MS-DOS 4.00 was released in October 1988.
 
 See the [PC DOS 4.00 Feature Summary](/disks/pcx86/dos/ibm/4.00/#feature-summary) for more details.

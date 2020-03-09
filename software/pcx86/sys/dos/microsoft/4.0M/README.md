@@ -20,9 +20,6 @@ machines:
         name: MS-DOS 4.0M (Disk 2)
 ---
 
-Multitasking MS-DOS 4.00
-------------------------
-
 These disk images contain the first unearthed copy of Microsoft's "multitasking" version of MS-DOS
 since its *extremely* limited release around late 1985 or early 1986.  They were were discovered by the
 [PCjs Project](/docs/about/) in March 2013.  More information is available at

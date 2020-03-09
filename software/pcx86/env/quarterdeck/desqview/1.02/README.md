@@ -16,9 +16,6 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-DESQview 1.02
--------------
-
 Diskette and [Manual](/pubs/pc/software/tools/other/desqview/) are courtesy of the [OS/2 Museum](http://os2museum.com).
 
 A directory listing of the 360Kb diskette is provided [below](#directory-of-desqview-102).

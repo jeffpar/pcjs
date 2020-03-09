@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/microsoft/pascal/compiler/3.31/
 redirect_from: /disks/pcx86/tools/microsoft/pascal/compiler/3.31/
 ---
 
-Microsoft Pascal Compiler 3.31
-------------------------------
-
 ### Directory of MS Pascal 3.31 (Disk 1)
 
 	 Volume in drive A is DISK1

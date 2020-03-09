@@ -7,9 +7,6 @@ redirect_from:
   - /disks/pc/tools/microsoft/masm/3.00/
 ---
 
-Microsoft Macro Assembler 3.00
-------------------------------
-
 Directory listing of the 360Kb distribution diskette is provided below.
 
 ### Directory of MS Macro Assembler 3.00

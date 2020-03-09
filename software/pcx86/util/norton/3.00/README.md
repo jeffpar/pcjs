@@ -16,9 +16,6 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-Norton Utilities 3.00
----------------------
-
 [Norton Utilities 3.00 (1984-12-07)](#directory-of-norton-utilities-300-1984-12-07) is from the
 [PCjs Personal Disk Collection](/disks/pcx86/personal/) and predates previously known copies of version 3.00.
 Scans of the diskette and accompanying note from Peter Norton are provided [below](#diskette-scans).

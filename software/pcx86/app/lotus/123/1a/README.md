@@ -13,9 +13,6 @@ machines:
     autoType: $date\r$time\rb:\r123\r
 ---
 
-Lotus 1-2-3 Release 1A
-----------------------
-
 This version of 1-2-3 is known as **Release 1A**, which differs from the later
 [Release 1A\*](/software/pcx86/app/lotus/123/1aa/).  This version contained files dated `6-07-83`,
 whereas [Release 1A\*](/software/pcx86/app/lotus/123/1aa/) contained files dated `7-01-83`.

@@ -16,9 +16,6 @@ machines:
     autoType: \r\r
 ---
 
-IBM PC DOS 3.20
----------------
-
 PC DOS 3.20 was first announced on March 18, 1986 and released April 1986.  Read the early
 [PC Magazine Review](#pc-magazine-review) below.
 

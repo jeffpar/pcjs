@@ -14,9 +14,6 @@ machines:
         name: DR DOS 3.40 (Disk 2)
 ---
 
-Digital Research DR DOS 3.40
-----------------------------
-
 {% include machine.html id="ibm5170-drdos340" %}
 
 ### Directory of DR DOS 3.40 (Disk 1)

@@ -5,9 +5,6 @@ permalink: /software/pcx86/dev/mouse/microsoft/2.50/
 redirect_from: /disks/pcx86/tools/microsoft/mouse/2.50/
 ---
 
-Microsoft Mouse 2.50
---------------------
-
 NOTE: The [MS Mouse 2.50 (Bus)](#directory-of-ms-mouse-250-bus) diskette is from a
 "Microsoft Word with Microsoft Mouse combination package", and it appears to be a complete copy of the original diskette,
 whereas the [MS Mouse 2.50 (Serial)](#directory-of-ms-mouse-250-serial) diskette is a custom diskette that contains only the

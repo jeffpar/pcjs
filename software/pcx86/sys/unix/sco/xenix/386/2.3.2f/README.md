@@ -18,9 +18,6 @@ machines:
     commands: bp #003F:00000054
 ---
 
-SCO Xenix 386 v2.3.2f
----------------------
-
 When prompted, use the following serial number and activation key:  
 
 	Serial number:  pcjs.org!

@@ -15,9 +15,6 @@ machines:
         name: None
 ---
 
-IBM PC DOS 5.00
----------------
-
 PC DOS 5.00 was released in June 1991.
 
 A [Feature Summary](#feature-summary), along with [Directory Listings](#directory-of-pc-dos-500-disk-1) of the three

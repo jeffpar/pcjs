@@ -5,9 +5,6 @@ permalink: /software/pcx86/util/borland/sidekick/1.11c/
 redirect_from: /disks/pcx86/tools/borland/sidekick/1.11c/
 ---
 
-Borland Sidekick 1.11
----------------------
-
 ### Directory of Borland Sidekick 1.11C
 
      Volume in drive A has no label

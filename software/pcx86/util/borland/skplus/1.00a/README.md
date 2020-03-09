@@ -5,9 +5,6 @@ permalink: /software/pcx86/util/borland/skplus/1.00a/
 redirect_from: /disks/pcx86/tools/borland/skplus/1.00a/
 ---
 
-Borland SideKick Plus 1.00A
----------------------------
-
 ### Directory of SideKick Plus 1.00A (Disk 1)
 
 	 Volume in drive A is INSTALL_1  

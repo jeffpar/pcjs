@@ -12,9 +12,6 @@ machines:
         name: MS-DOS 3.30 (Disk 1)
 ---
 
-Microsoft MS-DOS 3.30
----------------------
-
 MS-DOS 3.30 was released in February 1988.
 
 See the [PC DOS 3.30 Feature Summary](/disks/pcx86/dos/ibm/3.30/#feature-summary) for more details.

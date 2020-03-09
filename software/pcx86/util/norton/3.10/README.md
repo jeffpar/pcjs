@@ -16,9 +16,6 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-Norton Utilities 3.10
----------------------
-
 {% include machine.html id="ibm5160" %}
 
 ### Directory of Norton Utilities 3.10 (1985-11-01)

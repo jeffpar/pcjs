@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/logitech/modula2/1.00/
 redirect_from: /disks/pcx86/tools/logitech/modula2/1.00/
 ---
 
-Logitech Modula-2/86 Compiler 1.00
-----------------------------------
-
 Links to [Modula-2/86 Documentation](http://www.bitsavers.org/pdf/logitech/modula-2/):
 
 - [Logitech Modula-2/86 v1.0 Manual](http://www.bitsavers.org/pdf/logitech/modula-2/Logitech_Modula-2_86_1.0_Feb84.pdf)

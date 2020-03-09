@@ -5,9 +5,6 @@ permalink: /software/pcx86/util/norton/5.00/
 redirect_from: /disks/pcx86/tools/other/norton/5.00/
 ---
 
-Norton Utilities 5.00
----------------------
-
 ### Directory of Norton Utilities 5.00 (Disk 1)
 
 	 Volume in drive A is NU 5.0 1of6

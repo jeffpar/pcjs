@@ -5,9 +5,6 @@ permalink: /software/pcx86/sdk/os2/microsoft/1.02/
 redirect_from: /disks/pcx86/tools/microsoft/os2/sdk/1.02/
 ---
 
-Microsoft OS/2 SDK 1.02
------------------------
-
 This copy of the Microsoft OS/2 SDK (1.02) was obtained from the [WinWorld](https://winworldpc.com/product/os-2-1x/10)
 website.  Unfortunately, it's missing the **NETWORK** disk, so we've included an empty **NETWORK** disk
 that allows the SDK installation script to finish.

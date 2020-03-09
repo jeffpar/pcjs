@@ -17,9 +17,6 @@ machines:
     autoStart: true
 ---
 
-SCO Xenix System V Release 2.1.3 for i8086
-------------------------------------------
-
 To (re)install this version of Xenix, load the "SCO Xenix 8086 (N1-BOOT)" diskette into drive A: and reboot.
 
 When prompted, use the following serial number and activation key:  

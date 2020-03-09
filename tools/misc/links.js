@@ -121,20 +121,34 @@ function processFiles(sDir, fDebug, fFix)
         let sText = fs.readFileSync(asFiles[i], {encoding: "utf8"});
         let match = sText.match(/^permalink: (.*)$/m);
         if (match) {
-            let sPermaLink = sFileDir + (sFileDir != "/"? "/" : "");
+            let sPermaLink = match[1];
+            let sCorrectLink = sFileDir + (sFileDir != "/"? "/" : "");
             let matchBlog = sFilePath.match(/^\/_posts\/(?:[0-9]*\/|)([0-9]+)-([0-9]+)-([0-9]+)-.*/);
             if (matchBlog) {
-                sPermaLink = "/blog/" + matchBlog[1] + "/" + matchBlog[2] + "/" + matchBlog[3] + "/";
+                sCorrectLink = "/blog/" + matchBlog[1] + "/" + matchBlog[2] + "/" + matchBlog[3] + "/";
             }
-            if (sPermaLink != "/" && match[1] != sPermaLink) {
-                printf("warning: %s permalink (%s) does not match path (%s)\n", sFilePath, match[1], sPermaLink);
+            if (sCorrectLink != "/" && sPermaLink != sCorrectLink) {
+                printf("%s: permalink (%s) does not match correct link (%s)\n", sFilePath, sPermaLink, sCorrectLink);
                 if (fFix) {
                     sText = sText.substr(0, match.index) + "permalink: " + sPermaLink + sText.substr(match.index + match[0].length);
                     fs.writeFileSync(asFiles[i], sText);
                 }
             }
         } else {
-            printf("warning: %s missing permalink\n", sFilePath);
+            printf("%s: missing permalink\n", sFilePath);
+        }
+        match = sText.match(/^title: (.*)$/m);
+        if (match) {
+            let sTitle = match[1];
+            let reTitle = new RegExp("\n" + sTitle + "\n---+\n\n");
+            let matchTitle = sText.match(reTitle);
+            if (matchTitle) {
+                printf("%s: redundant title: '%s'\n", sFilePath, sTitle);
+                if (fFix) {
+                    sText = sText.substr(0, matchTitle.index) + "\n" + sText.substr(matchTitle.index + matchTitle[0].length);
+                    fs.writeFileSync(asFiles[i], sText);
+                }
+            }
         }
     }
 }

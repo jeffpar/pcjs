@@ -15,9 +15,6 @@ machines:
     autoType: $date\r$time\rB:\rWS\r
 ---
 
-MicroPro WordStar 3.24
-----------------------
-
 A [Directory Listing](#directory-of-wordstar-324) of the single-sided (160Kb) WordStar 3.24 diskette from the PCjs Archives
 is provided below.
 

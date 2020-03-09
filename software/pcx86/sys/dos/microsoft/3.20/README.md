@@ -14,9 +14,6 @@ machines:
         name: MS-DOS 3.20 (Disk 1)
 ---
 
-Microsoft MS-DOS 3.20
----------------------
-
 The MS-DOS 3.20 disks in the PCjs collection are the only known non-OEM copies of that release
 available online.  All other known MS-DOS 3.20 disk images are OEM releases (eg, HP, Zenith, Data General,
 Seiko Epson, etc.) and can be found on sites like [WinWorld](https://winworldpc.com/product/ms-dos/320).

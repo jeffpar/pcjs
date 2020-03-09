@@ -16,9 +16,6 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-Norton Utilities 2.01
----------------------
-
 Like [Norton Utilities 2.00](../2.00/), version 2.01 was distributed as two single-sided 160K disks on a single "flippy"
 diskette, which we have preserved as two separate (side "A" and side "B") disk images.
 

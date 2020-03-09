@@ -5,9 +5,6 @@ permalink: /software/pcx86/sys/unix/ibm/pcix/1.0/
 redirect_from: /disks/pcx86/unix/ibm/pcix/1.0/
 ---
 
-PC/IX 1.0
----------
-
 From [WinWorld](https://winworldpc.com/product/pc-ix):
 
 > Interactive UNIX, also known as PC/IX, and 386/ix were UNIX System V derivatives created for the IBM PC in the

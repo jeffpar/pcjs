@@ -16,9 +16,6 @@ machines:
     autoStart: true
 ---
 
-COMPAQ MS-DOS 3.10
-------------------
-
 This directory contains two different releases of COMPAQ MS-DOS 3.10:
 
 * [COMPAQ MS-DOS 3.10 (dated 10-31-86)](#compaq-ms-dos-310-10-31-86)

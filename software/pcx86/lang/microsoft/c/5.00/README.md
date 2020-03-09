@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/microsoft/c/5.00/
 redirect_from: /disks/pcx86/tools/microsoft/c/5.00/
 ---
 
-Microsoft C Compiler 5.0
----
-
 Directory listings of the four 360Kb distribution diskettes are provided below.
 
 NOTE: This appears to be an *incomplete* set.

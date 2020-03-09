@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/microsoft/pascal/compiler/4.00/
 redirect_from: /disks/pcx86/tools/microsoft/pascal/compiler/4.00/
 ---
 
-Microsoft Pascal Compiler 4.00
-------------------------------
-
 We do not have copies of the original distribution disks, but using the archive
 [Microsoft Pascal.ver.4.00.English.zip](https://vetusware.com/download/Microsoft%20Pascal%20Compiler%204.0/?id=11015)
 and the disk contents described in PACKING.LST, we were able to recreate the nine original 360Kb disk images.  All that

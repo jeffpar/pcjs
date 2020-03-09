@@ -16,9 +16,6 @@ machines:
     autoType: $date\r$time\r\B:\rDOUBLEDOS\r
 ---
 
-DoubleDOS 2.0F
---------------
-
 This version of DoubleDOS was archived by [@jeffpar](/disks/pcx86/personal/random/) and likely patched as well (e.g.,
 to disable copy protection), since the date for `DOUBLEDO.EXE` is almost a year newer than the rest of the files.
 

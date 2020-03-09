@@ -16,9 +16,6 @@ machines:
     autoType: $date\r$time\rB:DEBUGX /F\r?\r$20\r$10v\r$10\r
 ---
 
-Enhanced DEBUG for PC DOS and MS-DOS
-------------------------------------
-
 [Enhanced DEBUG](https://sites.google.com/site/pcdosretro/enhdebug) is a debugger for DOS that is
 maintained by [PC DOS Retro](https://sites.google.com/site/pcdosretro/).
 

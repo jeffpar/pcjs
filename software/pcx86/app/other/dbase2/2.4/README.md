@@ -5,9 +5,6 @@ permalink: /software/pcx86/app/other/dbase2/2.4/
 redirect_from: /disks/pcx86/apps/other/dbase2/2.4/
 ---
 
-dBASE II v2.4
--------------
-
 ### Directory of dBASE II 2.4 (PROGRAM)
 
 	 Volume in drive A has no label

@@ -5,9 +5,6 @@ permalink: /software/pcx86/sdk/windows/1.03/
 redirect_from: /disks/pcx86/tools/microsoft/windows/sdk/1.03/
 ---
 
-Microsoft Windows SDK 1.03
----
-
 Directory listings of the seven 360Kb distribution diskettes are provided below.
 
 ### Directory of Windows SDK 1.03 (Disk 1)

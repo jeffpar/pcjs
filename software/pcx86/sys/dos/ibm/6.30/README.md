@@ -14,9 +14,6 @@ machines:
         name: None
 ---
 
-IBM PC DOS 6.30
----------------
-
 PC DOS 6.30 was released in December 1993.
 
 Directory listings of the five 1.44Mb distribution diskettes are provided below.

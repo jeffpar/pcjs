@@ -17,9 +17,6 @@ machines:
         name: None
 ---
 
-IBM OS/2 1.0
-------------
-
 IBM OS/2 1.0 was announced on April 2, 1987, finalized in October 1987, and released in December 1987.
 
 When the installation disk boots, the following message is displayed on-screen:

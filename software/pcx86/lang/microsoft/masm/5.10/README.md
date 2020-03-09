@@ -7,9 +7,6 @@ redirect_from:
   - /disks/pc/tools/microsoft/masm/5.10/
 ---
 
-Microsoft Macro Assembler 5.10
-------------------------------
-
 Directory listings of the five distribution diskettes (plus an update disk issued by Microsoft in March 1990)
 are provided below.
 

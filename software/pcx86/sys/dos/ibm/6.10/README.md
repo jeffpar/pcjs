@@ -14,9 +14,6 @@ machines:
         name: None
 ---
 
-IBM PC DOS 6.10
----------------
-
 PC DOS 6.10 was released in June 1993.
 
 Directory listings of the four 1.44Mb distribution diskettes are provided below.

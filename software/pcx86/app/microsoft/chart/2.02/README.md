@@ -5,9 +5,6 @@ permalink: /software/pcx86/app/microsoft/chart/2.02/
 redirect_from: /disks/pcx86/apps/microsoft/chart/2.02/
 ---
 
-Microsoft Chart 2.02
---------------------
-
 NOTE: The Microsoft Chart 2.02 disk below is *not* an original distribution disk.
 
 The disk image contains "SPERRY Personal Computer MS-DOS 2.11 version 1.11 Copyright 1981,82,83 Microsoft Corp."

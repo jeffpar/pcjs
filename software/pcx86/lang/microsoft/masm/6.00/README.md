@@ -7,9 +7,6 @@ redirect_from:
   - /disks/pc/tools/microsoft/masm/6.00/
 ---
 
-Microsoft Macro Assembler 6.00
-------------------------------
-
 Directory listings of the five 1.44Mb distribution diskettes are provided below.
 
 ### Directory of MS Macro Assembler 6.00 (Disk 1)

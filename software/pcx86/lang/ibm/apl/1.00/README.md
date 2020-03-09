@@ -13,9 +13,6 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-IBM APL 1.00
-------------
-
 [APL Documentation](http://bitsavers.org/pdf/ibm/pc/languages/1502219_APL_Reference_May83.pdf) is available online.
 
 A directory listing of the 360Kb distribution diskette is provided [below](#directory-of-ibm-apl-100).

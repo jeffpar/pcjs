@@ -5,9 +5,6 @@ permalink: /software/pcx86/util/norton/6.01/
 redirect_from: /disks/pcx86/tools/other/norton/6.01/
 ---
 
-Norton Utilities 6.01
----------------------
-
 ### Directory of Norton Utilities 6.01 (Install)
 
 	 Volume in drive A is Disk 1of8  

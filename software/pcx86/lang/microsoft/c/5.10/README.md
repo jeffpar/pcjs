@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/microsoft/c/5.10/
 redirect_from: /disks/pcx86/tools/microsoft/c/5.10/
 ---
 
-Microsoft C Compiler 5.1 for DOS
----
-
 NOTE: Microsoft released the 5.1 C compiler in two different packages: this 11-disk set containing
 only files for DOS, and a larger 14-disk set with files for both DOS and OS/2.  For the latter, see
 [Microsoft C Compiler 5.1 for DOS and OS/2](../5.10-os2/).

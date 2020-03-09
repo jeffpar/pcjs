@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/ibm/basic/compiler/2.00/
 redirect_from: /disks/pcx86/tools/ibm/basic/compiler/2.00/
 ---
 
-IBM BASIC Compiler 2.00
------------------------
-
 ### Directory of IBM BASIC Compiler 2.00 Diskette
 
      Volume in drive A has no label

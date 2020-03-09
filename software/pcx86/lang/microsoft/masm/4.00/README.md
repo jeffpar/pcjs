@@ -7,9 +7,6 @@ redirect_from:
   - /disks/pc/tools/microsoft/masm/4.00/
 ---
 
-Microsoft Macro Assembler 4.00
-------------------------------
-
 Directory listing of the 360Kb distribution diskette is provided below.
 
 ### Directory of MS Macro Assembler 4.00

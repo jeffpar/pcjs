@@ -16,9 +16,6 @@ machines:
     autoStart: true
 ---
 
-COMPAQ MS-DOS 3.31
-------------------
-
 First released in 1987 by COMPAQ Computer Corp, this version of MS-DOS displays the following messages on boot:
 
 	The COMPAQ Personal Computer MS-DOS

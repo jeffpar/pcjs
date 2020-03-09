@@ -5,9 +5,6 @@ permalink: /software/pcx86/dev/mouse/microsoft/4.00/
 redirect_from: /disks/pcx86/tools/microsoft/mouse/4.00/
 ---
 
-Microsoft Mouse 4.00
---------------------
-
 ### Directory of MS Mouse 4.00 (SYSTEM)
 
 	 Volume in drive A has no label

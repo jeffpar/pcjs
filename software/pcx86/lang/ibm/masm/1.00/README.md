@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/ibm/masm/1.00/
 redirect_from: /disks/pcx86/tools/ibm/masm/1.00/
 ---
 
-IBM Macro Assembler 1.00
-------------------------
-
 Directory listing of the 160Kb distribution diskette is provided below.
 
 ### Directory of IBM Macro Assembler 1.00

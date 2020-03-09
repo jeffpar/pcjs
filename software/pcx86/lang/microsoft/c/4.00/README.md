@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/microsoft/c/4.00/
 redirect_from: /disks/pcx86/tools/microsoft/c/4.00/
 ---
 
-Microsoft C Compiler 4.0
----
-
 Directory listings of the eight 360Kb distribution diskettes are provided below.
 
 [Microsoft C Compiler 4.0 Documentation](/pubs/pc/software/tools/microsoft/c/4.00/) is also available.

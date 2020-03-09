@@ -12,9 +12,6 @@ machines:
         name: MS-DOS 3.31 (1.44M Disk)
 ---
 
-Microsoft MS-DOS 3.31
----------------------
-
 It's unclear where this [June 1989](#directory-of-ms-dos-331-144m-disk) release of MS-DOS 3.31 fits in the
 MS-DOS timeline, because it comes *after* [MS-DOS 4.00](/disks/pcx86/dos/microsoft/4.00/) (October 1988) and
 [MS-DOS 4.01](/disks/pcx86/dos/microsoft/4.01/) (April 1989).

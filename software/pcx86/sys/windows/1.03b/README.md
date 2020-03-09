@@ -5,9 +5,6 @@ permalink: /software/pcx86/sys/windows/1.03b/
 redirect_from: /disks/pcx86/windows/1.03b/
 ---
 
-Microsoft Windows 1.03b
----
-
 These disks are from [WinWorld](https://winworldpc.com/product/windows-10/103). They contain newer `USER.EXE` and
 `MOUSE.DRV`, and *no* `DEMO` files on the PROGRAM disk. 
 

@@ -18,9 +18,6 @@ machines:
     commands: bp #003F:00000054
 ---
 
-SCO Xenix 386 v2.2.3b
----------------------
-
 PCjs has archived an original copy of what may be the oldest surviving 386-based PC operating system.
 
 Previously, that honor went to (a reconstructed copy of) SCO Xenix 386 v2.2.3c, as explained in this series of

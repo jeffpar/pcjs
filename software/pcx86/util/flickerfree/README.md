@@ -14,9 +14,6 @@ machines:
     autoType: $date\r$time\rDIR\r$15B:\rDIR\r$15$5FF\r\rFPA\rYFF_HIST\r\r
 ---
 
-FlickerFree 1.0
----------------
-
 FlickerFree was a DOS utility created by Steve Gibson in 1986 that improved common IBM PC display operations.
 It was reviewed by Peter Norton in the
 [July 1986 Issue of PC Magazine](https://books.google.com/books?id=5hdeC0k_JHwC&lpg=PP1&pg=PA73#v=onepage&q&f=false),

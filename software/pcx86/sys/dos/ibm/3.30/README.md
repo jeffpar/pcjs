@@ -16,9 +16,6 @@ machines:
     autoType: \r\r
 ---
 
-IBM PC DOS 3.30
----------------
-
 PC DOS 3.30 was announced and released on April 2, 1987, along with the first PS/2 models. 
 
 A [Feature Summary](#feature-summary), along with [Directory Listings](#directory-of-pc-dos-330-disk-1) of the two

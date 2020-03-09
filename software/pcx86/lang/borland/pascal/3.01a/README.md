@@ -16,9 +16,6 @@ machines:
     autoStart: true
 ---
 
-Borland Turbo Pascal 3.01A
---------------------------
-
 The Turbo Pascal 3.01A disk image below is from the PCjs Archives and contains all three "flavors" of the
 compiler.  According to the 1986 Reference Manual, the BCD and 8087 versions were normally sold separately.
 
