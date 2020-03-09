@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Microsoft Windows 1.01 with Debugger
-permalink: /disks/pcx86/windows/1.01/debugger/
+permalink: /software/pcx86/sys/windows/1.01/debugger/
 machines:
   - id: ibm5160-ega-win101
     type: pcx86

@@ -83,7 +83,7 @@ function parseDiskettes(library, propPath = "/pcx86")
                         }
                     }
                     let sPath = propPath + '/' + category + '/' + version + '/' + item['@diskette'] + '.json';
-                    let sFilePath = "../../../pcjs-diskettes/" + sPath;
+                    let sFilePath = "../pcjs-diskettes/" + sPath;
                     if (!fileExists(sFilePath)) {
                         printf("warning: missing diskette %s\n", sPath);
                     }
@@ -97,12 +97,13 @@ function parseDiskettes(library, propPath = "/pcx86")
 }
 
 /**
- * processFiles(sDir, fDebug)
+ * processFiles(sDir, fDebug, fFix)
  *
  * @param {string} sDir
- * @param {boolean} [fDebug] (true if --debug is specified on the command-line)
+ * @param {boolean} [fDebug]
+ * @param {boolean} [fFix]
  */
-function processFiles(sDir, fDebug)
+function processFiles(sDir, fDebug, fFix)
 {
     let sDiskettes = path.join(sDir, "/configs/pcx86/diskettes.json");
     if (fileExists(sDiskettes)) {
@@ -110,24 +111,27 @@ function processFiles(sDir, fDebug)
     }
     let asFiles = glob.sync(path.join(sDir, "**", "*.md"));
     for (let i = 0; i < asFiles.length; i++) {
-        let aKeys = [];
-        let sFile = asFiles[i];
-        if (sFile.indexOf("/archive") >= 0 || sFile.indexOf("/private") >= 0 || sFile.indexOf("/node_modules") >= 0) continue;
-        let sFileName = path.basename(sFile);
+        let sFilePath = asFiles[i];
+        let sFileName = path.basename(sFilePath);
         if (sFileName == "index.md") continue;
-        let sFilePath = sFile.replace(sDir, "");
+        if (sFilePath.indexOf(sDir) == 0) sFilePath = sFilePath.substr(sDir.length);
+        if (sFilePath[0] != "/") sFilePath = "/" + sFilePath;
         let sFileDir = path.dirname(sFilePath);
-        if (sFileDir != "/") sFileDir += "/";
-        let sText = fs.readFileSync(sFile, {encoding: "utf8"});
+        if (sFileDir.indexOf("/archive") >= 0 || sFileDir.indexOf("/private") >= 0 || sFileDir.indexOf("/node_modules") >= 0) continue;
+        let sText = fs.readFileSync(asFiles[i], {encoding: "utf8"});
         let match = sText.match(/^permalink: (.*)$/m);
         if (match) {
-            let sPermaLink = sFileDir;
+            let sPermaLink = sFileDir + (sFileDir != "/"? "/" : "");
             let matchBlog = sFilePath.match(/^\/_posts\/(?:[0-9]*\/|)([0-9]+)-([0-9]+)-([0-9]+)-.*/);
             if (matchBlog) {
                 sPermaLink = "/blog/" + matchBlog[1] + "/" + matchBlog[2] + "/" + matchBlog[3] + "/";
             }
             if (sPermaLink != "/" && match[1] != sPermaLink) {
                 printf("warning: %s permalink (%s) does not match path (%s)\n", sFilePath, match[1], sPermaLink);
+                if (fFix) {
+                    sText = sText.substr(0, match.index) + "permalink: " + sPermaLink + sText.substr(match.index + match[0].length);
+                    fs.writeFileSync(asFiles[i], sText);
+                }
             }
         } else {
             printf("warning: %s missing permalink\n", sFilePath);
@@ -140,6 +144,5 @@ if (args.argc < 2) {
 } else {
     let argv = args.argv;
     let sDir = argv[1].replace(/^~/, os.homedir());
-    let fDebug = argv['debug'];
-    processFiles(sDir, fDebug);
+    processFiles(sDir, argv['debug'], argv['fix']);
 }

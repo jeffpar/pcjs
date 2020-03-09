@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Norton Utilities 3.00
-permalink: /disks/pcx86/tools/other/norton/3.00/
+permalink: /software/pcx86/util/norton/3.00/
 machines:
   - id: ibm5160
     type: pcx86

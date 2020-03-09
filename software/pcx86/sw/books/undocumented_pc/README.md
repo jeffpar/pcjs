@@ -1,7 +1,7 @@
 ---
 layout: page
 title: The Undocumented PC
-permalink: /software/pcx86/sw/books/the_undocumented_pc/
+permalink: /software/pcx86/sw/books/undocumented_pc/
 redirect_from: /pubs/pc/programming/The_Undocumented_PC/
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Omniview 386 4.30
-permalink: /software/pcx86/util/omniview/4.30/
+permalink: /software/pcx86/env/other/omniview/4.30/
 redirect_from: /disks/pcx86/tools/other/omniview/4.30/
 redirect_from:
   - /disks/pcx86/apps/other/omniview/4.30/

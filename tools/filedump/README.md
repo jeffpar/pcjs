@@ -1,7 +1,7 @@
 ---
 layout: default
 title: FileDump Module
-permalink: /modules/filedump/
+permalink: /tools/filedump/
 ---
 
 FileDump Module

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Challenger 1P ROMs
-permalink: /machines/c1p/rom/
+permalink: /machines/osi/c1p/rom/
 ---
 
 The following ROMs are available:

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: PC Tech Journal Disks
-permalink: /software/pcx86/sw/magazines/pctj
+permalink: /software/pcx86/sw/magazines/pctj/
 redirect_from: /disks/pcx86/shareware/pctj/
 machines:
   - id: pctj

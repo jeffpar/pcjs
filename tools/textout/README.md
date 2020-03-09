@@ -1,7 +1,7 @@
 ---
 layout: default
 title: TextOut
-permalink: /modules/textout/
+permalink: /tools/textout/
 ---
 
 TextOut

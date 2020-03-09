@@ -1,7 +1,7 @@
 ---
 layout: page
 title: COMPAQ Portable Computer ROMs
-permalink: /devices/pcx86/rom/compaq/portable/
+permalink: /machines/pcx86/compaq/portable/rom/bios/
 preview: COMPAQ_Portable_System_Board.jpg
 ---
 

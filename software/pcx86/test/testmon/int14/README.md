@@ -1,7 +1,7 @@
 ---
 layout: page
 title: PCx86 INT 14h TSR
-permalink: /tests/pcx86/testmon/int14/
+permalink: /software/pcx86/test/testmon/int14/
 ---
 
 PCx86 INT 14h TSR

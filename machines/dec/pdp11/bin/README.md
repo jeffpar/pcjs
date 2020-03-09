@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Running PDP11 From The Command-Line
-permalink: /machines/pdp11/bin/
+permalink: /machines/dec/pdp11/bin/
 ---
 
 Running PDP11 From The Command-Line

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: DiskDump Module
-permalink: /modules/diskdump/
+permalink: /tools/diskdump/
 ---
 
 DiskDump Module

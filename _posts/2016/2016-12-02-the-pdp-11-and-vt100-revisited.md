@@ -2,7 +2,7 @@
 layout: post
 title: The PDP-11 and VT100 Revisited
 date: 2016-12-03 01:00:00
-permalink: /blog/2016/12/03/
+permalink: /blog/2016/12/02/
 ---
 
 I recently did some more work on the PCjs [VT100 Terminal](/devices/pc8080/machine/vt100/) emulation, making

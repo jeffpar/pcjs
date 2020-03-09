@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "VisiCalc (1981)"
-permalink: /software/pcx86/app/other/visicalc/
+permalink: /software/pcx86/app/other/visicalc/1981/
 redirect_from: /apps/pcx86/1981/visicalc/
 preview: /apps/pcx86/1981/visicalc/screenshot.png
 machines:
