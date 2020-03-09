@@ -9,7 +9,7 @@
   {%- endfor -%}
 {%- endunless -%}
 {%- if page_styles %}
-    <style type="text/css">
+    <style>
   {%- for id in page_styles %}
     {%- if id[0] contains "_" %}
       #{{ id[0] | remove_first:"_" }} {

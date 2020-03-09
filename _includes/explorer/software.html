@@ -139,16 +139,16 @@
                             {%- assign autoMount = "" -%}{%- assign autoDrive = "" -%}{%- assign autoState = "" -%}
                             {%- if hardware_url != "" -%}{%- comment -%} or page.permalink contains machine_url {%- endcomment -%}
                               {%- if release['@autoMount'] -%}
-                                {%- capture autoMount -%}{% assign disk_num = 0 %}{% for drive in release['@autoMount'] %}{% assign disk_num = disk_num | plus:1 %}{{ drive[0] }}:{name:%22{% if drive[1]['@title'] %}{{ drive[1]['@title'] }}{% else %}{{ software_title }}{% if release['@title'] == nil and release['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}{% endif %}%22,path:%22{{ diskette_server }}{{ software_url }}/{{ drive[1]['@diskette'] }}.json%22},{% endfor %}@{%- endcapture -%}
+                                {%- capture autoMount -%}{% assign disk_num = 0 %}{% for drive in release['@autoMount'] %}{% assign disk_num = disk_num | plus:1 %}{{ drive[0] }}:%7Bname:%22{% if drive[1]['@title'] %}{{ drive[1]['@title'] }}{% else %}{{ software_title }}{% if release['@title'] == nil and release['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}{% endif %}%22,path:%22{{ diskette_server }}{{ software_url }}/{{ drive[1]['@diskette'] }}.json%22%7D,{% endfor %}@{%- endcapture -%}
                               {%- elsif release['@media'][0]['@diskette'] -%}
                                 {%- if release['@bootable'] -%}{%- assign drive_num = 0 -%}{%- else -%}{%- assign drive_num = 1 -%}{%- endif -%}
-                                {%- capture autoMount -%}{% assign disk_num = 0 %}{% for disk in release['@media'] %}{{ diskette_drives[drive_num] }}{% assign disk_num = disk_num | plus:1 %}{% assign drive_num = drive_num | plus:1 %}:{name:%22{% if disk['@title'] %}{{ disk['@title'] }}{% else %}{{ software_title }}{% if release['@title'] == nil and release['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}{% endif %}%22,path:%22{{ diskette_server }}{{ software_url }}/{{ disk['@diskette'] }}.json%22},{% if drive_num >= diskette_drives.size %}{% break %}{% endif %}{% endfor %}@{%- endcapture -%}
+                                {%- capture autoMount -%}{% assign disk_num = 0 %}{% for disk in release['@media'] %}{{ diskette_drives[drive_num] }}{% assign disk_num = disk_num | plus:1 %}{% assign drive_num = drive_num | plus:1 %}:%7Bname:%22{% if disk['@title'] %}{{ disk['@title'] }}{% else %}{{ software_title }}{% if release['@title'] == nil and release['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}{% endif %}%22,path:%22{{ diskette_server }}{{ software_url }}/{{ disk['@diskette'] }}.json%22%7D,{% if drive_num >= diskette_drives.size %}{% break %}{% endif %}{% endfor %}@{%- endcapture -%}
                               {%- endif -%}
                               {%- if release['@media'][0]['@harddisk'] -%}
-                                {%- capture autoDrive -%}{% for disk in release['@media'] %}{ name:%22{{ disk['@name'] }}%22,type:{{ disk['@type'] }},path:%22{{ harddisk_server }}{{ software_url }}/{{ disk['@harddisk'] }}.json%22 },{% endfor %}@{%- endcapture -%}
+                                {%- capture autoDrive -%}{% for disk in release['@media'] %}%7Bname:%22{{ disk['@name'] }}%22,type:{{ disk['@type'] }},path:%22{{ harddisk_server }}{{ software_url }}/{{ disk['@harddisk'] }}.json%22%7D,{% endfor %}@{%- endcapture -%}
                               {%- endif -%}
-                              {%- if autoDrive != "" -%}{%- capture autoDrive -%}&drives=[ {{ autoDrive | replace: ",@", "" }} ]{%- endcapture -%}{%- endif -%}
-                              {%- if autoMount != "" -%}{%- capture autoMount -%}&autoMount={ {{ autoMount | replace: ",@", "" }} }{%- endcapture -%}{%- endif -%}
+                              {%- if autoDrive != "" -%}{%- capture autoDrive -%}&drives=[{{ autoDrive | replace: ",@", "" | replace: " ","%20" }}]{%- endcapture -%}{%- endif -%}
+                              {%- if autoMount != "" -%}{%- capture autoMount -%}&autoMount=%7B{{ autoMount | replace: ",@", "" | replace: " ","%20" }}%7D{%- endcapture -%}{%- endif -%}
                               {%- if release['@state'] -%}{%- capture autoState -%}&state={{ harddisk_server }}{{ software_url }}/{{ release['@state'] }}{%- endcapture -%}{%- endif -%}
                               {%- capture software_parms -%}{%- if hardware_url contains '?' -%}&{%- else -%}?{%- endif -%}software={{ software_url }}/{{ autoMount }}{{ autoDrive }}{{ autoState }}{%- endcapture -%}
                             {%- elsif alternate_url != "" -%}
@@ -157,7 +157,7 @@
                             {%- else -%}
                               {%- capture software_parms -%}/software{{ software_url }}/{%- endcapture -%}
                               {%- if release['@tape'] -%}
-                                {%- capture software_parms -%}{{ software_parms }}?autoStart=true&autoMount={name:%22{{ software_title }}%22,path:%22/software{{ software_url }}/{{ release['@tape'] }}%22}{%- endcapture -%}
+                                {%- capture software_parms -%}{{ software_parms }}?autoStart=true&autoMount=%7Bname:%22{{ software_title | replace: " ","%20" }}%22,path:%22/software{{ software_url }}/{{ release['@tape'] }}%22%7D{%- endcapture -%}
                               {%- endif -%}
                             {%- endif %}
                                     <li id="{{ software_id }}" class="pcjs-explorer-version pcjs-explorer-item">

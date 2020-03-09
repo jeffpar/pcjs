@@ -7,7 +7,7 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /configs/pcx86/xml/machine/5160/cga/512kb/machine.xml
-    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/disks-demo/pcx86/drives/10mb/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/disks-demo/pcx86/dos/microsoft/2.00/MSDOS-SRC.json"}]'
+    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/harddisks/pcx86/sys/dos/ibm/2.00/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/harddisks/pcx86/sys/dos/microsoft/2.00/MSDOS-SRC.json"}]'
     autoMount:
       A:
         name: None
@@ -16,9 +16,6 @@ machines:
     autoStart: true
     autoType: $date\r$time\rB:\rDIR\r
 ---
-
-Norton Utilities 2.00
----------------------
 
 Norton Utilities 2.00 was distributed as two single-sided 160K disks on a single "flippy" diskette, which we have preserved
 as two separate (side "A" and side "B") disk images.  Presumably this was done to ensure that the diskette would work on every
@@ -50,6 +47,8 @@ are provided below.
 	       13 file(s)     150378 bytes
 	                        6144 bytes free
 
+![Norton Utilities 2.00 (Side A)]({{ site.software.diskettes.server }}/pcx86/util/norton/2.00/NU200-SIDEA.jpg)
+
 ### Directory of Norton Utilities 2.00 (Side B)
 
 	 Volume in drive A is NU-2.00, #2
@@ -67,9 +66,5 @@ are provided below.
 	UE       COM     26026 06-01-83   2:00p
 	       10 file(s)     140793 bytes
 	                       17408 bytes free
-
-### Diskette Scans
-
-![Norton Utilities 2.00 (Side A)]({{ site.software.diskettes.server }}/pcx86/util/norton/2.00/NU200-SIDEA.jpg)
 
 ![Norton Utilities 2.00 (Side B)]({{ site.software.diskettes.server }}/pcx86/util/norton/2.00/NU200-SIDEB.jpg)
