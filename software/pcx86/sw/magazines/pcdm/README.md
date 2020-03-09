@@ -1,7 +1,7 @@
 ---
 layout: page
 title: PC Disk Magazine Diskettes
-permalink: /software/pcx86/sw/pcdm/
+permalink: /software/pcx86/sw/magazines/pcdm/
 redirect_from: /disks/pcx86/shareware/pcdiskmag/
 machines:
   - id: pcdm

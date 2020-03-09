@@ -47,6 +47,8 @@ The same acquisition included:
 	        6 file(s)     113920 bytes
 	                       45568 bytes free
 
+![WordStar 3.20 Disk 1]({{ site.software.diskettes.server }}/pcx86/app/other/wordstar/3.20/WS320-ORIG.png)
+
 ### Directory of WordStar 3.20 (MailMerge)
 
 	 Volume in drive A has no label
@@ -55,6 +57,8 @@ The same acquisition included:
 	MAILMRGE OVR     11520
 	        1 file(s)      11520 bytes
 	                      148480 bytes free
+
+![WordStar 3.20 Disk 2]({{ site.software.diskettes.server }}/pcx86/app/other/wordstar/3.20/MM320-ORIG.png)
 
 ### Directory of WordStar 3.20 (Recreated)
 
@@ -70,12 +74,6 @@ The same acquisition included:
 	WSBAUD   BAS      1152 02-23-13   8:45a
 	        7 file(s)     122496 bytes
 	                       36352 bytes free
-
-### Diskette Photos
-
-![WordStar 3.20 Disk 1]({{ site.software.diskettes.server }}/pcx86/app/other/wordstar/3.20/WS320-ORIG.png)
-
-![WordStar 3.20 Disk 2]({{ site.software.diskettes.server }}/pcx86/app/other/wordstar/3.20/MM320-ORIG.png)
 
 ### Additional Materials
 

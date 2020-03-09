@@ -5,7 +5,6 @@ permalink: /software/pcx86/sw/books/undocumented_dos/
 redirect_from: /pubs/pc/programming/Undocumented_DOS/
 ---
 
-**Undocumented DOS (1st Edition)**
 by Schulman, Michels, Kyle, Paterson, Maxey, Brown
 	
 * [READ.ME](#read-me-1st-edition)

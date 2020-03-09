@@ -1,9 +1,8 @@
 ---
 layout: page
-title: PCx86 Machine Emulation
+title: PCx86 Machines
 permalink: /machines/pcx86/
-redirect_from:
-  - /modules/pcx86/
+redirect_from: /modules/pcx86/
 ---
 
 Available PCx86 machines include:

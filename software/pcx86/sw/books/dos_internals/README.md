@@ -5,7 +5,6 @@ permalink: /software/pcx86/sw/books/dos_internals/
 redirect_from: /pubs/pc/programming/DOS_Internals/
 ---
 
-**DOS Internals**
 by Geoff Chappell (January 1994)
 
 A directory listing of the *DOS Internals* diskette that accompanied the book is provided below.

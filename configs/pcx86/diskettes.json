@@ -877,10 +877,10 @@
   "diag": {
     "@title": "Diagnostics",
     "compaq": {
-      "@title": "COMPAQ Diagnostics and Utilities",
+      "@title": "COMPAQ",
       "@versions": {
-        "1.00": {
-          "@title": "COMPAQ Diagnostics and Utilities",
+        "5.02": {
+          "@title": "COMPAQ Diagnostics 5.02",
           "@media": [
             {
               "@title": "COMPAQ Diagnostics 5.02",
@@ -893,31 +893,51 @@
               "@diskette": "COMPAQ-UTILS-502-052087-REVC",
               "@photo": "jpg",
               "@type": "PC360K"
-            },
+            }
+          ]
+        },
+        "5.08": {
+          "@title": "COMPAQ Diagnostics 5.08",
+          "@media": [
             {
-              "@title": "COMPAQ Diagnostics 5.08",
               "@diskette": "COMPAQ-DIAGS-508-012988-REVK",
               "@photo": "jpg",
               "@type": "PC360K"
-            },
+            }
+          ]
+        },
+        "6.12": {
+          "@title": "COMPAQ Diagnostics 6.12",
+          "@media": [
             {
-              "@title": "COMPAQ Diagnostics 6.12",
               "@diskette": "COMPAQ-DIAGS-612-062189",
               "@type": "PC720K"
-            },
+            }
+          ]
+        },
+        "1986": {
+          "@title": "COMPAQ DeskPro 386 (1986)",
+          "@media": [
             {
-              "@title": "COMPAQ DeskPro 386 (1986)",
               "@diskette": "COMPAQ-DESKPRO386-SUPP-1986-08-08",
               "@type": "PC360K"
-            },
+            }
+          ]
+        },
+        "1987": {
+          "@title": "COMPAQ User Programs (1987)",
+          "@media": [
             {
-              "@title": "COMPAQ User Programs (1987)",
               "@diskette": "COMPAQ-UTILS-506-110387-REVG",
               "@photo": "jpg",
               "@type": "PC360K"
-            },
+            }
+          ]
+        },
+        "1988": {
+          "@title": "COMPAQ User Programs (1989)",
+          "@media": [
             {
-              "@title": "COMPAQ User Programs (1989)",
               "@diskette": "COMPAQ-UTILS-072789",
               "@type": "PC720K"
             }
@@ -926,75 +946,126 @@
       }
     },
     "ibm": {
-      "@title": "IBM PC Diagnostics",
-      "@versions": {
-        "1.00": {
-          "@title": "IBM PC Diagnostics",
-          "@media": [
-            {
-              "@title": "IBM PC Diagnostics 1.02 (Adv)",
-              "@diskette": "5150-DIAG-102A",
-              "@type": "PC160K"
-            },
-            {
-              "@title": "IBM PC Diagnostics 2.05",
-              "@diskette": "5150-DIAG-205",
-              "@photo": "jpg",
-              "@type": "PC180K"
-            },
-            {
-              "@title": "IBM PC Diagnostics 2.05 (Adv)",
-              "@diskette": "5150-DIAG-205A",
-              "@photo": "jpg",
-              "@type": "PC180K"
-            },
-            {
-              "@title": "IBM PC Diagnostics 2.20 (Adv)",
-              "@diskette": "5150-5155-5160-DIAG-220A",
-              "@type": "PC180K"
-            },
-            {
-              "@title": "IBM PC AT Diagnostics 1.01 (Adv)",
-              "@diskette": "5170-DIAG-101A",
-              "@photo": "jpg",
-              "@type": "PC360K"
-            },
-            {
-              "@title": "IBM PC AT Diagnostics 2.07 (Adv)",
-              "@diskette": "5170-DIAG-207A",
-              "@type": "PC360K"
-            },
-            {
-              "@title": "IBM PC Diagnostics 1.00",
-              "@diskette": "5150-DIAG-100",
-              "@type": "PC160K"
-            },
-            {
-              "@title": "IBM PC Diagnostics 1.02",
-              "@diskette": "5150-DIAG-102",
-              "@type": "PC160K"
-            },
-            {
-              "@title": "IBM PC Diagnostics 2.02",
-              "@diskette": "5150-DIAG-202",
-              "@type": "PC160K"
-            },
-            {
-              "@title": "IBM PC Diagnostics 2.07",
-              "@diskette": "5150-DIAG-207",
-              "@type": "PC180K"
-            },
-            {
-              "@title": "IBM PC AT Diagnostics 1.02",
-              "@diskette": "5170-DIAG-102",
-              "@type": "PC360K"
-            },
-            {
-              "@title": "IBM PC AT Diagnostics 2.00",
-              "@diskette": "5170-DIAG-200",
-              "@type": "PC360K"
-            }
-          ]
+      "@title": "IBM Diagnostics",
+      "5150": {
+        "@title": "IBM PC",
+        "@versions": {
+          "1.00": {
+            "@title": "IBM PC Diagnostics 1.00",
+            "@media": [
+              {
+                "@diskette": "5150-DIAG-100",
+                "@type": "PC160K"
+              }
+            ]
+          },
+          "1.02": {
+            "@title": "IBM PC Diagnostics 1.02",
+            "@media": [
+              {
+                "@diskette": "5150-DIAG-102",
+                "@type": "PC160K"
+              }
+            ]
+          },
+          "1.02A": {
+            "@title": "IBM PC Diagnostics 1.02 (Adv)",
+            "@media": [
+              {
+                "@diskette": "5150-DIAG-102A",
+                "@type": "PC160K"
+              }
+            ]
+          },
+          "2.02": {
+            "@title": "IBM PC Diagnostics 2.02",
+            "@media": [
+              {
+                "@diskette": "5150-DIAG-202",
+                "@type": "PC160K"
+              }
+            ]
+          },
+          "2.05": {
+            "@title": "IBM PC Diagnostics 2.05",
+            "@media": [
+              {
+                "@diskette": "5150-DIAG-205",
+                "@photo": "jpg",
+                "@type": "PC180K"
+              }
+            ]
+          },
+          "2.05A": {
+            "@title": "IBM PC Diagnostics 2.05 (Adv)",
+            "@media": [
+              {
+                "@diskette": "5150-DIAG-205A",
+                "@photo": "jpg",
+                "@type": "PC180K"
+              }
+            ]
+          },
+          "2.07": {
+            "@title": "IBM PC Diagnostics 2.07",
+            "@media": [
+              {
+                "@diskette": "5150-DIAG-207",
+                "@type": "PC180K"
+              }
+            ]
+          },
+          "2.20A": {
+            "@title": "IBM PC Diagnostics 2.20 (Adv)",
+            "@media": [
+              {
+                "@diskette": "5150-5155-5160-DIAG-220A",
+                "@type": "PC180K"
+              }
+            ]
+          }
+        }
+      },
+      "5170": {
+        "@title": "IBM PC AT",
+        "@versions": {
+          "1.01A": {
+            "@title": "IBM PC AT Diagnostics 1.01 (Adv)",
+            "@media": [
+              {
+                "@diskette": "5170-DIAG-101A",
+                "@photo": "jpg",
+                "@type": "PC360K"
+              }
+            ]
+          },
+          "1.02": {
+            "@title": "IBM PC AT Diagnostics 1.02",
+            "@media": [
+              {
+                "@diskette": "5170-DIAG-102",
+                "@type": "PC360K"
+              }
+            ]
+          },
+          "2.00": {
+            "@title": "IBM PC AT Diagnostics 2.00",
+            "@media": [
+              {
+                "@diskette": "5170-DIAG-200",
+                "@type": "PC360K"
+              }
+            ]
+          },
+          "2.07A": {
+            "@title": "IBM PC AT Diagnostics 2.07 (Adv)",
+            "@media": [
+              {
+                "@diskette": "5170-DIAG-207A",
+                "@type": "PC360K"
+              }
+            ]
+          }
         }
       }
     }
@@ -2631,6 +2702,7 @@
         },
         "graphics_for_the_ibm_pc": {
           "@title": "Graphics for the IBM PC",
+          "@permalink": "/documents/books/programming/graphics_for_the_ibm_pc/",
           "@media": [
             {
               "@diskette": "BASIC-GRAPHICS"
