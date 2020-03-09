@@ -25,6 +25,16 @@
         "console": "internalConsole"
       },
       {
+        "name": "Node: links.js",
+        "type": "node",
+        "request": "launch",
+        "program": "${workspaceFolder}/tools/misc/links.js",
+        "args": ["~/Sites/pcjs.dev", "--debug"],
+        "cwd": "${workspaceFolder}/tools/misc",
+        "stopOnEntry": false,
+        "console": "internalConsole"
+      },
+      {
         "name": "Site: PCjs Machines",
         "type": "chrome",
         "request": "launch",
@@ -44,7 +54,7 @@
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/?software=/pcx86/demo/ibm/exploring/1.00-MDA&autoMount={%20A:{name:%22Exploring%20the%20IBM%20PC%20(MDA)%22,path:%22https://diskettes.pcjs.org/pcx86/demo/ibm/exploring/1.00-MDA/EXPLORING-THE-IBM-PC-100-MDA.json%22}%20}",
         "webRoot": "${workspaceFolder}"
-      }
+      },
       {
         "name": "IBM PC Model 5150 with Color Display",
         "type": "chrome",
@@ -149,7 +159,7 @@
         "request": "launch",
         "url": "http://localhost:4000/configs/c1p/xml/c1p8k-debugger.xml",
         "webRoot": "${workspaceFolder}"
-      }
+      },
       {
         "name": "Ohio Scientific Challenger 1P \"Array\"",
         "type": "chrome",

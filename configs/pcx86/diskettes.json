@@ -703,7 +703,7 @@
       "ega": {
         "@title": "IBM EGA Demos and Utilities",
         "@versions": {
-          "1.00": {
+          "": {
             "@title": "Fantasy Land",
             "@media": [
               {
@@ -725,61 +725,23 @@
   },
   "dev": {
     "@title": "Devices",
-    "rom": {
-      "@title": "IBM",
-      "ibm": {
-        "@title": "IBM ROM BIOS Source Code",
-        "@versions": {
-          "": {
-            "@title": "IBM ROM BIOS Source Code ",
-            "@media": [
-              {
-                "@title": "IBM PC BIOS Sources (V1)",
-                "@diskette": "IBM-BIOS-SRC-5150V1",
-                "@type": "PC320K"
-              },
-              {
-                "@title": "IBM PC BIOS Sources (V2)",
-                "@diskette": "IBM-BIOS-SRC-5150V2",
-                "@type": "PC320K"
-              },
-              {
-                "@title": "IBM PC BIOS Sources (V3)",
-                "@diskette": "IBM-BIOS-SRC-5150V3",
-                "@type": "PC320K"
-              },
-              {
-                "@title": "IBM PC XT BIOS Sources (V1)",
-                "@diskette": "IBM-BIOS-SRC-5160V1",
-                "@type": "PC320K"
-              },
-              {
-                "@title": "IBM PC XT BIOS Sources (V2)",
-                "@diskette": "IBM-BIOS-SRC-5160V2",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "IBM PC XT BIOS Sources (V3)",
-                "@diskette": "IBM-BIOS-SRC-5160V3",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "IBM PC AT BIOS Sources (V1)",
-                "@diskette": "IBM-BIOS-SRC-5170V1",
-                "@type": "PC1200K"
-              },
-              {
-                "@title": "IBM PC AT BIOS Sources (V2)",
-                "@diskette": "IBM-BIOS-SRC-5170V2",
-                "@type": "PC1200K"
-              },
-              {
-                "@title": "IBM PC AT BIOS Sources (V3)",
-                "@diskette": "IBM-BIOS-SRC-5170V3",
-                "@type": "PC1200K"
-              }
-            ]
-          }
+    "cdrom": {
+      "@title": "CD-ROM",
+      "@versions": {
+        "": {
+          "@title": "CD-ROM DOS Drivers",
+          "@media": [
+            {
+              "@title": "DOS Drivers: ATAPI Boot",
+              "@diskette": "BOOT-CDROM-ATAPI",
+              "@type": "PC1200K"
+            },
+            {
+              "@title": "DOS Drivers: ATAPI CD-ROM",
+              "@diskette": "DRIVERS-CDROM-ATAPI",
+              "@type": "PC360K"
+            }
+          ]
         }
       }
     },
@@ -872,6 +834,64 @@
           }
         }
       }
+    },
+    "rom": {
+      "@title": "IBM",
+      "ibm": {
+        "@title": "IBM ROM BIOS Source Code",
+        "@versions": {
+          "": {
+            "@title": "IBM ROM BIOS Source Code ",
+            "@media": [
+              {
+                "@title": "IBM PC BIOS Sources (V1)",
+                "@diskette": "IBM-BIOS-SRC-5150V1",
+                "@type": "PC320K"
+              },
+              {
+                "@title": "IBM PC BIOS Sources (V2)",
+                "@diskette": "IBM-BIOS-SRC-5150V2",
+                "@type": "PC320K"
+              },
+              {
+                "@title": "IBM PC BIOS Sources (V3)",
+                "@diskette": "IBM-BIOS-SRC-5150V3",
+                "@type": "PC320K"
+              },
+              {
+                "@title": "IBM PC XT BIOS Sources (V1)",
+                "@diskette": "IBM-BIOS-SRC-5160V1",
+                "@type": "PC320K"
+              },
+              {
+                "@title": "IBM PC XT BIOS Sources (V2)",
+                "@diskette": "IBM-BIOS-SRC-5160V2",
+                "@type": "PC360K"
+              },
+              {
+                "@title": "IBM PC XT BIOS Sources (V3)",
+                "@diskette": "IBM-BIOS-SRC-5160V3",
+                "@type": "PC360K"
+              },
+              {
+                "@title": "IBM PC AT BIOS Sources (V1)",
+                "@diskette": "IBM-BIOS-SRC-5170V1",
+                "@type": "PC1200K"
+              },
+              {
+                "@title": "IBM PC AT BIOS Sources (V2)",
+                "@diskette": "IBM-BIOS-SRC-5170V2",
+                "@type": "PC1200K"
+              },
+              {
+                "@title": "IBM PC AT BIOS Sources (V3)",
+                "@diskette": "IBM-BIOS-SRC-5170V3",
+                "@type": "PC1200K"
+              }
+            ]
+          }
+        }
+      }
     }
   },
   "diag": {
@@ -934,7 +954,7 @@
             }
           ]
         },
-        "1988": {
+        "1989": {
           "@title": "COMPAQ User Programs (1989)",
           "@media": [
             {
@@ -1074,8 +1094,7 @@
     "@hidden": true,
     "@title": "Empty Diskettes",
     "@versions": {
-      "1.00": {
-        "@title": "Empty Diskettes",
+      "": {
         "@media": [
           {
             "@title": "Empty Diskette (160K)",
@@ -2728,23 +2747,23 @@
           "@title": "Undocumented DOS",
           "@media": [
             {
-              "@title": "Undocumented DOS (1E Disk 1)",
+              "@title": "Undocumented DOS (Disk 1)",
               "@diskette": "UNDOC-DOS-DISK1",
               "@type": "PC1200K"
             },
             {
-              "@title": "Undocumented DOS (1E Disk 2)",
+              "@title": "Undocumented DOS (Disk 2)",
               "@diskette": "UNDOC-DOS-DISK2",
               "@type": "PC1200K"
             },
             {
-              "@title": "Undocumented DOS (2E BIN)",
-              "@diskette": "UNDOC-DOS2B",
+              "@title": "Undocumented DOS (2nd Ed. BIN)",
+              "@diskette": "UNDOC-DOS-2ED-BIN",
               "@type": "PC1200K"
             },
             {
-              "@title": "Undocumented DOS (2E SRC)",
-              "@diskette": "UNDOC-DOS2S",
+              "@title": "Undocumented DOS (2nd Ed. SRC)",
+              "@diskette": "UNDOC-DOS-2ED-SRC",
               "@type": "PC1200K"
             }
           ]
@@ -4191,26 +4210,6 @@
           }
         }
       },
-      "drivers": {
-        "@title": "DOS Drivers",
-        "@versions": {
-          "1.00": {
-            "@title": "DOS Drivers",
-            "@media": [
-              {
-                "@title": "DOS Drivers: ATAPI Boot",
-                "@diskette": "BOOT-CDROM-ATAPI",
-                "@type": "PC1200K"
-              },
-              {
-                "@title": "DOS Drivers: ATAPI CD-ROM",
-                "@diskette": "DRIVERS-CDROM-ATAPI",
-                "@type": "PC360K"
-              }
-            ]
-          }
-        }
-      },
       "ibm": {
         "@title": "IBM",
         "@versions": {
@@ -4679,47 +4678,47 @@
             "@media": [
               {
                 "@title": "MS-DOS 4.01 (360K Disk 1)",
-                "@diskette": "MSDOS401-DISK1",
+                "@diskette": "MSDOS401-DISK1-360K",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 4.01 (360K Disk 2)",
-                "@diskette": "MSDOS401-DISK2",
+                "@diskette": "MSDOS401-DISK2-360K",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 4.01 (360K Disk 3)",
-                "@diskette": "MSDOS401-DISK3",
+                "@diskette": "MSDOS401-DISK3-360K",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 4.01 (360K Disk 4)",
-                "@diskette": "MSDOS401-DISK4",
+                "@diskette": "MSDOS401-DISK4-360K",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 4.01 (360K Disk 5)",
-                "@diskette": "MSDOS401-DISK5",
+                "@diskette": "MSDOS401-DISK5-360K",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 4.01 (360K Disk 6)",
-                "@diskette": "MSDOS401-DISK6",
+                "@diskette": "MSDOS401-DISK6-360K",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 4.01 (720K Disk 1)",
-                "@diskette": "MSDOS401-DISK1",
+                "@diskette": "MSDOS401-DISK1-720K",
                 "@type": "PC720K"
               },
               {
                 "@title": "MS-DOS 4.01 (720K Disk 2)",
-                "@diskette": "MSDOS401-DISK2",
+                "@diskette": "MSDOS401-DISK2-720K",
                 "@type": "PC720K"
               },
               {
                 "@title": "MS-DOS 4.01 (720K Disk 3)",
-                "@diskette": "MSDOS401-DISK3",
+                "@diskette": "MSDOS401-DISK3-720K",
                 "@type": "PC720K"
               }
             ]
@@ -4744,42 +4743,42 @@
             "@media": [
               {
                 "@title": "MS-DOS 5.00 (360K Disk 1)",
-                "@diskette": "MSDOS500-DISK1",
+                "@diskette": "MSDOS500-DISK1-360K",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 5.00 (360K Disk 2)",
-                "@diskette": "MSDOS500-DISK2",
+                "@diskette": "MSDOS500-DISK2-360K",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 5.00 (360K Disk 3)",
-                "@diskette": "MSDOS500-DISK3",
+                "@diskette": "MSDOS500-DISK3-360K",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 5.00 (360K Disk 4)",
-                "@diskette": "MSDOS500-DISK4",
+                "@diskette": "MSDOS500-DISK4-360K",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 5.00 (360K Disk 5)",
-                "@diskette": "MSDOS500-DISK5",
+                "@diskette": "MSDOS500-DISK5-360K",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 5.00 (720K Disk 1)",
-                "@diskette": "MSDOS500-DISK1",
+                "@diskette": "MSDOS500-DISK1-720K",
                 "@type": "PC720K"
               },
               {
                 "@title": "MS-DOS 5.00 (720K Disk 2)",
-                "@diskette": "MSDOS500-DISK2",
+                "@diskette": "MSDOS500-DISK2-720K",
                 "@type": "PC720K"
               },
               {
                 "@title": "MS-DOS 5.00 (720K Disk 3)",
-                "@diskette": "MSDOS500-DISK3",
+                "@diskette": "MSDOS500-DISK3-720K",
                 "@type": "PC720K"
               }
             ]
@@ -4789,37 +4788,37 @@
             "@media": [
               {
                 "@title": "MS-DOS 6.00 (1.2M Disk 1)",
-                "@diskette": "MSDOS600-DISK1",
+                "@diskette": "MSDOS600-DISK1-1200K",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.00 (1.2M Disk 2)",
-                "@diskette": "MSDOS600-DISK2",
+                "@diskette": "MSDOS600-DISK2-1200K",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.00 (1.2M Disk 3)",
-                "@diskette": "MSDOS600-DISK3",
+                "@diskette": "MSDOS600-DISK3-1200K",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.00 (1.2M Disk 4)",
-                "@diskette": "MSDOS600-DISK4",
+                "@diskette": "MSDOS600-DISK4-1200K",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.00 (1.44M Disk 1)",
-                "@diskette": "MSDOS600-DISK1",
+                "@diskette": "MSDOS600-DISK1-1440K",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.00 (1.44M Disk 2)",
-                "@diskette": "MSDOS600-DISK2",
+                "@diskette": "MSDOS600-DISK2-1440K",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.00 (1.44M Disk 3)",
-                "@diskette": "MSDOS600-DISK3",
+                "@diskette": "MSDOS600-DISK3-1440K",
                 "@type": "PC1440K"
               }
             ]
@@ -4829,47 +4828,47 @@
             "@media": [
               {
                 "@title": "MS-DOS 6.20 (1.2M Disk 1)",
-                "@diskette": "MSDOS620-DISK1",
+                "@diskette": "MSDOS620-DISK1-1200K",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.2M Disk 2)",
-                "@diskette": "MSDOS620-DISK2",
+                "@diskette": "MSDOS620-DISK2-1200K",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.2M Disk 3)",
-                "@diskette": "MSDOS620-DISK3",
+                "@diskette": "MSDOS620-DISK3-1200K",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.2M Disk 4)",
-                "@diskette": "MSDOS620-DISK4",
+                "@diskette": "MSDOS620-DISK4-1200K",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.2M Supp)",
-                "@diskette": "MSDOS620-SUPPDISK",
+                "@diskette": "MSDOS620-SUPPDISK-1200K",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.44M Disk 1)",
-                "@diskette": "MSDOS620-DISK1",
+                "@diskette": "MSDOS620-DISK1-1440K",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.44M Disk 2)",
-                "@diskette": "MSDOS620-DISK2",
+                "@diskette": "MSDOS620-DISK2-1440K",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.44M Disk 3)",
-                "@diskette": "MSDOS620-DISK3",
+                "@diskette": "MSDOS620-DISK3-1440K",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.44M Supp)",
-                "@diskette": "MSDOS620-SUPPDISK",
+                "@diskette": "MSDOS620-SUPPDISK-1440K",
                 "@type": "PC1440K"
               }
             ]
@@ -4879,47 +4878,47 @@
             "@media": [
               {
                 "@title": "MS-DOS 6.22 (1.2M Boot)",
-                "@diskette": "MSDOS622-BOOT",
+                "@diskette": "MSDOS622-BOOT-1200K",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.2M Disk 1)",
-                "@diskette": "MSDOS622-DISK1",
+                "@diskette": "MSDOS622-DISK1-1200K",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.2M Disk 2)",
-                "@diskette": "MSDOS622-DISK2",
+                "@diskette": "MSDOS622-DISK2-1200K",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.2M Disk 3)",
-                "@diskette": "MSDOS622-DISK3",
+                "@diskette": "MSDOS622-DISK3-1200K",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.2M Disk 4)",
-                "@diskette": "MSDOS622-DISK4",
+                "@diskette": "MSDOS622-DISK4-1200K",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.44M Disk 1)",
-                "@diskette": "MSDOS622-DISK1",
+                "@diskette": "MSDOS622-DISK1-1440K",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.44M Disk 2)",
-                "@diskette": "MSDOS622-DISK2",
+                "@diskette": "MSDOS622-DISK2-1440K",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.44M Disk 3)",
-                "@diskette": "MSDOS622-DISK3",
+                "@diskette": "MSDOS622-DISK3-1440K",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.44M Supp)",
-                "@diskette": "MSDOS622-SUPPDISK",
+                "@diskette": "MSDOS622-SUPPDISK-1440K",
                 "@type": "PC1440K"
               }
             ]
@@ -6638,28 +6637,63 @@
           "@media": [
             {
               "@title": "Windows 3.00 (Disk 1)",
-              "@diskette": "WIN300-DISK1",
+              "@diskette": "WIN300-DISK1-1200K",
               "@type": "PC1200K"
             },
             {
               "@title": "Windows 3.00 (Disk 2)",
-              "@diskette": "WIN300-DISK2",
+              "@diskette": "WIN300-DISK2-1200K",
               "@type": "PC1200K"
             },
             {
               "@title": "Windows 3.00 (Disk 3)",
-              "@diskette": "WIN300-DISK3",
+              "@diskette": "WIN300-DISK3-1200K",
               "@type": "PC1200K"
             },
             {
               "@title": "Windows 3.00 (Disk 4)",
-              "@diskette": "WIN300-DISK4",
+              "@diskette": "WIN300-DISK4-1200K",
               "@type": "PC1200K"
             },
             {
               "@title": "Windows 3.00 (Disk 5)",
-              "@diskette": "WIN300-DISK5",
+              "@diskette": "WIN300-DISK5-1200K",
               "@type": "PC1200K"
+            },
+            {
+              "@title": "Windows 3.00 (720K Disk 1)",
+              "@diskette": "WIN300-DISK1-720K",
+              "@type": "PC720K"
+            },
+            {
+              "@title": "Windows 3.00 (720K Disk 2)",
+              "@diskette": "WIN300-DISK2-720K",
+              "@type": "PC720K"
+            },
+            {
+              "@title": "Windows 3.00 (720K Disk 3)",
+              "@diskette": "WIN300-DISK3-720K",
+              "@type": "PC720K"
+            },
+            {
+              "@title": "Windows 3.00 (720K Disk 4)",
+              "@diskette": "WIN300-DISK4-720K",
+              "@type": "PC720K"
+            },
+            {
+              "@title": "Windows 3.00 (720K Disk 5)",
+              "@diskette": "WIN300-DISK5-720K",
+              "@type": "PC720K"
+            },
+            {
+              "@title": "Windows 3.00 (720K Disk 6)",
+              "@diskette": "WIN300-DISK6-720K",
+              "@type": "PC720K"
+            },
+            {
+              "@title": "Windows 3.00 (720K Disk 7)",
+              "@diskette": "WIN300-DISK7-720K",
+              "@type": "PC720K"
             }
           ]
         },
@@ -6747,223 +6781,175 @@
               "@type": "PC1440K"
             }
           ]
-        }
-      },
-      "3.00": {
-        "@title": "",
-        "720K": {
-          "@title": "Microsoft Windows 3.00",
+        },
+        "win95": {
+          "@title": "Windows 95 (Build 499)",
           "@versions": {
-            "1.00": {
-              "@title": "Microsoft Windows 3.00",
+            "4.00.499": {
+              "@title": "Windows 95 (Build 499)",
               "@media": [
                 {
-                  "@title": "Windows 3.00 (720K Disk 1)",
-                  "@diskette": "WIN300-DISK1",
-                  "@type": "PC720K"
+                  "@title": "Windows 95 (Build 499 Disk 01)",
+                  "@diskette": "WIN95-DISK01",
+                  "@type": "PC1440K"
                 },
                 {
-                  "@title": "Windows 3.00 (720K Disk 2)",
-                  "@diskette": "WIN300-DISK2",
-                  "@type": "PC720K"
+                  "@title": "Windows 95 (Build 499 Disk 02)",
+                  "@diskette": "WIN95-DISK02",
+                  "@type": "PC1680K"
                 },
                 {
-                  "@title": "Windows 3.00 (720K Disk 3)",
-                  "@diskette": "WIN300-DISK3",
-                  "@type": "PC720K"
+                  "@title": "Windows 95 (Build 499 Disk 03)",
+                  "@diskette": "WIN95-DISK03",
+                  "@type": "PC1680K"
                 },
                 {
-                  "@title": "Windows 3.00 (720K Disk 4)",
-                  "@diskette": "WIN300-DISK4",
-                  "@type": "PC720K"
+                  "@title": "Windows 95 (Build 499 Disk 04)",
+                  "@diskette": "WIN95-DISK04",
+                  "@type": "PC1680K"
                 },
                 {
-                  "@title": "Windows 3.00 (720K Disk 5)",
-                  "@diskette": "WIN300-DISK5",
-                  "@type": "PC720K"
+                  "@title": "Windows 95 (Build 499 Disk 05)",
+                  "@diskette": "WIN95-DISK05",
+                  "@type": "PC1680K"
                 },
                 {
-                  "@title": "Windows 3.00 (720K Disk 6)",
-                  "@diskette": "WIN300-DISK6",
-                  "@type": "PC720K"
+                  "@title": "Windows 95 (Build 499 Disk 06)",
+                  "@diskette": "WIN95-DISK06",
+                  "@type": "PC1680K"
                 },
                 {
-                  "@title": "Windows 3.00 (720K Disk 7)",
-                  "@diskette": "WIN300-DISK7",
-                  "@type": "PC720K"
+                  "@title": "Windows 95 (Build 499 Disk 07)",
+                  "@diskette": "WIN95-DISK07",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (Build 499 Disk 08)",
+                  "@diskette": "WIN95-DISK08",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (Build 499 Disk 09)",
+                  "@diskette": "WIN95-DISK09",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (Build 499 Disk 10)",
+                  "@diskette": "WIN95-DISK10",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (Build 499 Disk 11)",
+                  "@diskette": "WIN95-DISK11",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (Build 499 Disk 12)",
+                  "@diskette": "WIN95-DISK12",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (Build 499 Disk 13)",
+                  "@diskette": "WIN95-DISK13",
+                  "@type": "PC1680K"
+                }
+              ]
+            },
+            "4.00.950": {
+              "@title": "Windows 95 (RTM) 4.00.950",
+              "@media": [
+                {
+                  "@title": "Windows 95 (RTM Boot)",
+                  "@diskette": "WIN95-BOOT",
+                  "@type": "PC1440K"
+                },
+                {
+                  "@title": "Windows 95 (RTM Disk 01)",
+                  "@diskette": "WIN95-DISK01",
+                  "@type": "PC1440K"
+                },
+                {
+                  "@title": "Windows 95 (RTM Disk 02)",
+                  "@diskette": "WIN95-DISK02",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (RTM Disk 03)",
+                  "@diskette": "WIN95-DISK03",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (RTM Disk 04)",
+                  "@diskette": "WIN95-DISK04",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (RTM Disk 05)",
+                  "@diskette": "WIN95-DISK05",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (RTM Disk 06)",
+                  "@diskette": "WIN95-DISK06",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (RTM Disk 07)",
+                  "@diskette": "WIN95-DISK07",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (RTM Disk 08)",
+                  "@diskette": "WIN95-DISK08",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (RTM Disk 09)",
+                  "@diskette": "WIN95-DISK09",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (RTM Disk 10)",
+                  "@diskette": "WIN95-DISK10",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (RTM Disk 11)",
+                  "@diskette": "WIN95-DISK11",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (RTM Disk 12)",
+                  "@diskette": "WIN95-DISK12",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (RTM Disk 13)",
+                  "@diskette": "WIN95-DISK13",
+                  "@type": "PC1680K"
+                },
+                {
+                  "@title": "Windows 95 (Startup Disk)",
+                  "@diskette": "WIN95-STARTUP",
+                  "@type": "PC1440K"
                 }
               ]
             }
           }
-        }
-      },
-      "win95": {
-        "@title": "Windows 95 (Build 499)",
-        "@versions": {
-          "4.00.499": {
-            "@title": "Windows 95 (Build 499)",
-            "@media": [
-              {
-                "@title": "Windows 95 (Build 499 Disk 01)",
-                "@diskette": "WIN95-DISK01",
-                "@type": "PC1440K"
-              },
-              {
-                "@title": "Windows 95 (Build 499 Disk 02)",
-                "@diskette": "WIN95-DISK02",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (Build 499 Disk 03)",
-                "@diskette": "WIN95-DISK03",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (Build 499 Disk 04)",
-                "@diskette": "WIN95-DISK04",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (Build 499 Disk 05)",
-                "@diskette": "WIN95-DISK05",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (Build 499 Disk 06)",
-                "@diskette": "WIN95-DISK06",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (Build 499 Disk 07)",
-                "@diskette": "WIN95-DISK07",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (Build 499 Disk 08)",
-                "@diskette": "WIN95-DISK08",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (Build 499 Disk 09)",
-                "@diskette": "WIN95-DISK09",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (Build 499 Disk 10)",
-                "@diskette": "WIN95-DISK10",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (Build 499 Disk 11)",
-                "@diskette": "WIN95-DISK11",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (Build 499 Disk 12)",
-                "@diskette": "WIN95-DISK12",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (Build 499 Disk 13)",
-                "@diskette": "WIN95-DISK13",
-                "@type": "PC1680K"
-              }
-            ]
-          },
-          "4.00.950": {
-            "@title": "Windows 95 (RTM) 4.00.950",
-            "@media": [
-              {
-                "@title": "Windows 95 (RTM Boot)",
-                "@diskette": "WIN95-BOOT",
-                "@type": "PC1440K"
-              },
-              {
-                "@title": "Windows 95 (RTM Disk 01)",
-                "@diskette": "WIN95-DISK01",
-                "@type": "PC1440K"
-              },
-              {
-                "@title": "Windows 95 (RTM Disk 02)",
-                "@diskette": "WIN95-DISK02",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (RTM Disk 03)",
-                "@diskette": "WIN95-DISK03",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (RTM Disk 04)",
-                "@diskette": "WIN95-DISK04",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (RTM Disk 05)",
-                "@diskette": "WIN95-DISK05",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (RTM Disk 06)",
-                "@diskette": "WIN95-DISK06",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (RTM Disk 07)",
-                "@diskette": "WIN95-DISK07",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (RTM Disk 08)",
-                "@diskette": "WIN95-DISK08",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (RTM Disk 09)",
-                "@diskette": "WIN95-DISK09",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (RTM Disk 10)",
-                "@diskette": "WIN95-DISK10",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (RTM Disk 11)",
-                "@diskette": "WIN95-DISK11",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (RTM Disk 12)",
-                "@diskette": "WIN95-DISK12",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (RTM Disk 13)",
-                "@diskette": "WIN95-DISK13",
-                "@type": "PC1680K"
-              },
-              {
-                "@title": "Windows 95 (Startup Disk)",
-                "@diskette": "WIN95-STARTUP",
-                "@type": "PC1440K"
-              }
-            ]
-          }
-        }
-      },
-      "wincomm": {
-        "@title": "Windows COMM Driver (Source)",
-        "@versions": {
-          "1.00": {
-            "@title": "Windows COMM Driver (Source)",
-            "@media": [
-              {
-                "@title": "WINCOMM",
-                "@diskette": "WINCOMM",
-                "@type": "PC360K"
-              }
-            ]
+        },
+        "wincomm": {
+          "@title": "Windows COMM Driver (Source)",
+          "@versions": {
+            "1.00": {
+              "@title": "Windows COMM Driver (Source)",
+              "@media": [
+                {
+                  "@title": "WINCOMM",
+                  "@diskette": "WINCOMM",
+                  "@type": "PC360K"
+                }
+              ]
+            }
           }
         }
       }

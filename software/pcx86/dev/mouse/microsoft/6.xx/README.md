@@ -1,12 +1,9 @@
 ---
 layout: page
 title: Microsoft Mouse 6.xx
-permalink: /software/pcx86/dev/mouse/microsoft/6.00/
+permalink: /software/pcx86/dev/mouse/microsoft/6.xx/
 redirect_from: /disks/pcx86/tools/microsoft/mouse/6.00/
 ---
-
-Microsoft Mouse 6.xx
---------------------
 
 The [MS Mouse 6.14 (SETUP)](#directory-of-ms-mouse-614-setup) disk was labeled:
 
