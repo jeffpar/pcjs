@@ -5,7 +5,6 @@ permalink: /documents/magazines/pcdm/
 redirect_from: /pubs/pc/magazines/pcdiskmag/
 ---
 
-In addition to a set of [PC Disk Magazine Diskettes](/disks/pcx86/shareware/pcdiskmag/), we also have the
-User Guides that accompanied those diskettes.
+PCjs has archived the following PC Disk Magazine issues, along with the [Diskettes](/software/pcx86/sw/pcdm/) that accompanied them.
 
 {% include gallery/documents.html %}

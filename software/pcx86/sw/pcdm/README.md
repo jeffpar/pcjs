@@ -4,11 +4,11 @@ title: PC Disk Magazine Diskettes
 permalink: /software/pcx86/sw/pcdm/
 redirect_from: /disks/pcx86/shareware/pcdiskmag/
 machines:
-  - id: pcdiskmag
+  - id: pcdm
     type: pcx86
     config: /configs/pcx86/xml/machine/5160/ega/640kb/machine.xml
     resume: 1
-    drives: '[{name:"10Mb Hard Disk",type:3,path:"/disks-demo/pcx86/drives/10mb/MSDOS320-C400.json"}]'
+    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/sys/dos/microsoft/3.20/MSDOS320-C400.json"}]'
     autoMount:
       A:
         name: None
@@ -17,26 +17,13 @@ machines:
     autoType: B:\rDIR\r
 ---
 
-PC Disk Magazine Diskettes
---------------------------
+[Directory Listings](#directory-of-pc-disk-magazine-disk-1) of the following
+PC Disk Magazine diskettes are provided below.  Copies of the magazines are available as well,
+both [here](#documents) and in our [Documents](/documents/magazines/pcdm/) section.
 
-In addition to [Directory Listings](#pc-disk-magazine-disk-1) and [Diskette Scans](#diskette-scans) of the first 7
-diskettes of PC Disk Magazine, we also have the [User Guides](/pubs/pc/magazines/pcdiskmag/) that accompanied those diskettes.
+You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the machine below.
 
-{% include gallery/begin.html %}
-{% include gallery/image.html src="https://demo-disks.pcjs.org/pcx86/shareware/pcdiskmag/PC-DISK-MAG-VOL1-NO1.jpg" width="120" height="190" title="PC Disk Magazine Vol. 1 No. 1" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqYSeCoXKlzL6H11pA" %}
-{% include gallery/image.html src="https://demo-disks.pcjs.org/pcx86/shareware/pcdiskmag/PC-DISK-MAG-VOL1-NO2.jpg" width="120" height="190" title="PC Disk Magazine Vol. 1 No. 2" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqYRr0Q7wLXUGnj2Xg" %}
-{% include gallery/image.html src="https://demo-disks.pcjs.org/pcx86/shareware/pcdiskmag/PC-DISK-MAG-VOL1-NO3.jpg" width="120" height="190" title="PC Disk Magazine Vol. 1 No. 3" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqYQrTt5mhvb4-rUOA" %}
-{% include gallery/image.html src="https://demo-disks.pcjs.org/pcx86/shareware/pcdiskmag/PC-DISK-MAG-VOL1-NO4.jpg" width="120" height="190" title="PC Disk Magazine Vol. 1 No. 4" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqYTxo40Dp1rhT1zYQ" %}
-{% include gallery/image.html src="https://demo-disks.pcjs.org/pcx86/shareware/pcdiskmag/PC-DISK-MAG-VOL1-NO5.jpg" width="120" height="190" title="PC Disk Magazine Vol. 1 No. 5" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqYU6ckonKErhNnsLQ" %}
-{% include gallery/image.html src="https://demo-disks.pcjs.org/pcx86/shareware/pcdiskmag/PC-DISK-MAG-VOL1-NO6.jpg" width="120" height="190" title="PC Disk Magazine Vol. 1 No. 6" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqYVLQi9UE-cWHWh2A" %}
-{% include gallery/image.html src="https://demo-disks.pcjs.org/pcx86/shareware/pcdiskmag/PC-DISK-MAG-VOL1-NO7.jpg" width="120" height="190" title="PC Disk Magazine Vol. 1 No. 7" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqYWgm_0GTM-B7Y7kw" %}
-{% include gallery/end.html %}
-
-You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the machine below
-(also available with the [PCjs Debugger](debugger/)).
-
-{% include machine.html id="pcdiskmag" %}
+{% include machine.html id="pcdm" %}
 
 ### Directory of PC Disk Magazine (Disk 1)
 
@@ -61,6 +48,8 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the mac
 	       15 file(s)     155460 bytes
 	                        1024 bytes free
 
+![PC Disk Magazine (Disk 1)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK1.jpg)
+
 ### Directory of PC Disk Magazine (Disk 2)
 
 	 Volume in drive A has no label
@@ -79,6 +68,8 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the mac
 	CASH-BLD BAS      1506 09-15-83   7:40a
 	       11 file(s)     127909 bytes
 	                       30720 bytes free
+
+![PC Disk Magazine (Disk 2)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK2.jpg)
 
 ### Directory of PC Disk Magazine (Disk 3)
 
@@ -103,6 +94,8 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the mac
 	       15 file(s)     156784 bytes
 	                         512 bytes free
 
+![PC Disk Magazine (Disk 3)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK3.jpg)
+
 ### Directory of PC Disk Magazine (Disk 4)
 
 	 Volume in drive A has no label
@@ -124,6 +117,8 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the mac
 	FEDTAX83 BAS      1699 12-10-83   2:02p
 	       14 file(s)     156713 bytes
 	                         512 bytes free
+
+![PC Disk Magazine (Disk 4)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK4.jpg)
 
 ### Directory of PC Disk Magazine (Disk 5)
 
@@ -157,6 +152,8 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the mac
 	       24 file(s)     155859 bytes
 	                           0 bytes free
 
+![PC Disk Magazine (Disk 5)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK5.jpg)
+
 ### Directory of PC Disk Magazine (Disk 6)
 
 	 Volume in drive A has no label
@@ -184,6 +181,8 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the mac
 	FOG      EXE     21248 05-28-84  12:40a
 	       20 file(s)     155211 bytes
 	                        1024 bytes free
+
+![PC Disk Magazine (Disk 6)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK6.jpg)
 
 ### Directory of PC Disk Magazine (Disk 7)
 
@@ -213,18 +212,6 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the mac
 	       20 file(s)     148501 bytes
 	                        6144 bytes free
 
-### Diskette Scans
+![PC Disk Magazine (Disk 7)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK7.jpg)
 
-![PC Disk Magazine (Disk 1)]({{ site.software.diskettes.server }}/pcx86/sw/pcdm/PCDISKMAG-DISK1.jpg)
-
-![PC Disk Magazine (Disk 2)]({{ site.software.diskettes.server }}/pcx86/sw/pcdm/PCDISKMAG-DISK2.jpg)
-
-![PC Disk Magazine (Disk 3)]({{ site.software.diskettes.server }}/pcx86/sw/pcdm/PCDISKMAG-DISK3.jpg)
-
-![PC Disk Magazine (Disk 4)]({{ site.software.diskettes.server }}/pcx86/sw/pcdm/PCDISKMAG-DISK4.jpg)
-
-![PC Disk Magazine (Disk 5)]({{ site.software.diskettes.server }}/pcx86/sw/pcdm/PCDISKMAG-DISK5.jpg)
-
-![PC Disk Magazine (Disk 6)]({{ site.software.diskettes.server }}/pcx86/sw/pcdm/PCDISKMAG-DISK6.jpg)
-
-![PC Disk Magazine (Disk 7)]({{ site.software.diskettes.server }}/pcx86/sw/pcdm/PCDISKMAG-DISK7.jpg)
+{% include gallery/documents.html path="/documents/magazines/pcdm/" %}
