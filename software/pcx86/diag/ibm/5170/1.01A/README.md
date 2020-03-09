@@ -36,4 +36,4 @@ This disk displays the following startup messages:
 
 {% include machine.html id="ibm5170" %}
 
-![IBM PC AT Diagnostics 1.01 (Adv)]({{ site.software.diskettes.server }}/pcx86/diag/ibm/5170-DIAG-101A.jpg)
+![IBM PC AT Diagnostics 1.01 (Adv)]({{ site.software.diskettes.server }}/pcx86/diag/ibm/5170/1.01A/5170-DIAG-101A.jpg)

@@ -31,4 +31,4 @@ This disk displays the following startup messages:
 
 {% include machine.html id="ibm5150" %}
 
-![IBM PC Diagnostics 2.05 (Adv)]({{ site.demo-disks.baseurl }}/pcx86/diags/ibm/5150/2.05a/5150-DIAG-205A.jpg)
+![IBM PC Diagnostics 2.05 (Adv)]({{ site.software.diskettes.server }}/pcx86/diag/ibm/5150/2.05A/5150-DIAG-205A.jpg)
