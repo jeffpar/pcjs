@@ -1,8 +1,8 @@
 ---
 layout: page
+title: Welcome to the NEW PCjs Website
+permalink: /
 ---
-
-## Welcome to the NEW PCjs Website
 
 Well, almost.
 
