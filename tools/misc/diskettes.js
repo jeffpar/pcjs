@@ -129,8 +129,8 @@ function processFiles(sDir, diskettes)
                 let dstPath = paths[1].replace(/\/diskettes\//, "../../../pcjs-diskettes/");
                 fileCopy(srcPath, dstPath);
                 if (item['@photo']) {
-                    let srcImage = srcPath.replace(".json", "." + item['@photo']);
-                    let dstImage = dstPath.replace(".json", "." + item['@photo']);
+                    let srcImage = srcPath.replace(".json", item['@photo']);
+                    let dstImage = dstPath.replace(".json", item['@photo']);
                     fileCopy(srcImage, dstImage);
                 }
                 if (i == 0) {
@@ -242,7 +242,7 @@ function processManifests(sDir, output, fDebug)
                             let j = sDir.indexOf("/" + pathParts[1] + "/");
                             if (j >= 0) pathDisk = sDir.substring(0, j) + pathDisk;
                             if (!fs.existsSync(pathDisk)) printf("error: diskette missing: %s\n", pathDisk);
-                            if (fs.existsSync(pathDisk.replace(".json", s = ".jpg")) || fs.existsSync(pathDisk.replace(".json", s = ".png"))) item['@photo'] = s.substr(1);
+                            if (fs.existsSync(pathDisk.replace(".json", s = ".jpg")) || fs.existsSync(pathDisk.replace(".json", s = ".png"))) item['@photo'] = s;
                         } else {
                             printf("error: missing 'href' attribute for disk '%s' in %s\n", disk[idAttrs].id, sFile);
                         }

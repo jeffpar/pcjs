@@ -118,12 +118,16 @@ function processFiles(sDir, fDebug, fFix)
         if (sFilePath[0] != "/") sFilePath = "/" + sFilePath;
         let sFileDir = path.dirname(sFilePath);
         if (sFileDir.indexOf("/archive") >= 0 || sFileDir.indexOf("/private") >= 0 || sFileDir.indexOf("/node_modules") >= 0) continue;
+        sFilePath = "." + sFilePath;
         let sText = fs.readFileSync(asFiles[i], {encoding: "utf8"});
-        let match = sText.match(/^permalink: (.*)$/m);
+        /*
+         * Fix #1: correct bad permalink entries
+         */
+        let match = sText.match(/^permalink:\s*(.*)$/m);
         if (match) {
             let sPermaLink = match[1];
             let sCorrectLink = sFileDir + (sFileDir != "/"? "/" : "");
-            let matchBlog = sFilePath.match(/^\/_posts\/(?:[0-9]*\/|)([0-9]+)-([0-9]+)-([0-9]+)-.*/);
+            let matchBlog = sFilePath.match(/^\.?\/_posts\/(?:[0-9]*\/|)([0-9]+)-([0-9]+)-([0-9]+)-.*/);
             if (matchBlog) {
                 sCorrectLink = "/blog/" + matchBlog[1] + "/" + matchBlog[2] + "/" + matchBlog[3] + "/";
             }
@@ -137,7 +141,10 @@ function processFiles(sDir, fDebug, fFix)
         } else {
             printf("%s: missing permalink\n", sFilePath);
         }
-        match = sText.match(/^title: (.*)$/m);
+        /*
+         * Fix #2: remove redundant page titles
+         */
+        match = sText.match(/^title:\s*(.*)$/m);
         if (match) {
             let sTitle = match[1];
             let reTitle = new RegExp("\n" + sTitle + "\n---+\n\n");
@@ -148,6 +155,27 @@ function processFiles(sDir, fDebug, fFix)
                     sText = sText.substr(0, matchTitle.index) + "\n" + sText.substr(matchTitle.index + matchTitle[0].length);
                     fs.writeFileSync(asFiles[i], sText);
                 }
+            }
+        }
+        /*
+         * Fix #3: find and display extra redirect_from entries
+         */
+        let matchAll = sText.match(/^redirect_from:.*$/gm);
+        if (matchAll && matchAll.length > 1) {
+            match = sText.match(/\nredirect_from: *\n( +[^\n]*\n)*/);
+            if (match) {
+                printf("%s: old redirect_from: '%s'\n", sFilePath, match[0].replace(/\s+/g, ' '));
+            }
+        }
+        /*
+         * Fix #4: validate optional preview entries
+         */
+        match = sText.match(/^preview:\s*(.*)$/m);
+        if (match) {
+            let sFile = match[1].replace("https://diskettes.pcjs.org", "../pcjs-diskettes");
+            if (sFile[0] == "/") sFile = "." + sFile;
+            if (!fileExists(sFile)) {
+                printf("%s: preview image not found: %s\n", sFilePath, sFile);
             }
         }
     }

@@ -3,7 +3,7 @@ layout: post
 title: An Update on Early Norton Utilities
 date: 2019-01-10 22:00:00
 permalink: /blog/2019/01/10/
-preview: https://demo-disks.pcjs.org/pcx86/shareware/pcdiskmag/PCDISKMAG-DISK1.jpg
+preview: https://diskettes.pcjs.org/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK1.jpg
 ---
 
 As I lamented in my [last blog post](/blog/2018/12/28/), finding copies of the earliest versions

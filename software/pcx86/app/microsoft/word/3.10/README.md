@@ -3,8 +3,6 @@ layout: page
 title: Microsoft Word 3.10 (for DOS)
 permalink: /software/pcx86/app/microsoft/word/3.10/
 redirect_from: /disks/pcx86/apps/microsoft/word/3.10/
-redirect_from:
-  - /disks/pcx86/apps/microsoft/word/3.1/
 ---
 
 Microsoft Word 3.10

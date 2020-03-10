@@ -2,8 +2,8 @@
 layout: page
 title: Microsoft MS-DOS 3.20
 permalink: /software/pcx86/sys/dos/microsoft/3.20/
-redirect_from: /disks/pcx86/dos/microsoft/3.20/
 redirect_from:
+  - /disks/pcx86/dos/microsoft/3.20/
   - /disks/pc/dos/microsoft/3.20/
 machines:
   - id: ibm5170-msdos320

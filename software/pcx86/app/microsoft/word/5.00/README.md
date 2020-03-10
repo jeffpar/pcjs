@@ -3,8 +3,6 @@ layout: page
 title: Microsoft Word 5.00 (for DOS)
 permalink: /software/pcx86/app/microsoft/word/5.00/
 redirect_from: /disks/pcx86/apps/microsoft/word/5.00/
-redirect_from:
-  - /disks/pcx86/apps/microsoft/word/5.0/
 ---
 
 Microsoft Word 5.00

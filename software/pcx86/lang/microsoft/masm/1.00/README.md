@@ -2,8 +2,8 @@
 layout: page
 title: Microsoft Macro Assembler 1.00 (1982)
 permalink: /software/pcx86/lang/microsoft/masm/1.00/
-redirect_from: /disks/pcx86/tools/microsoft/masm/1.00/
 redirect_from:
+  - /disks/pcx86/tools/microsoft/masm/1.00/
   - /disks/pc/tools/microsoft/masm/1.00/
 ---
 

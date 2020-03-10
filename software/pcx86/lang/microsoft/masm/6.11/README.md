@@ -2,8 +2,8 @@
 layout: page
 title: Microsoft Macro Assembler 6.11
 permalink: /software/pcx86/lang/microsoft/masm/6.11/
-redirect_from: /disks/pcx86/tools/microsoft/masm/6.11/
 redirect_from:
+  - /disks/pcx86/tools/microsoft/masm/6.11/
   - /disks/pc/tools/microsoft/masm/6.11/
 ---
 

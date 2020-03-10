@@ -2,11 +2,11 @@
 layout: page
 title: Multitasking MS-DOS 4.00
 permalink: /software/pcx86/sys/dos/microsoft/4.0M/
-redirect_from: /disks/pcx86/dos/microsoft/4.0M/
 redirect_from:
+  - /disks/pcx86/dos/microsoft/4.0M/
+  - /disks/pc/dos/microsoft/4.0M/
   - /configs/pc/machines/5160/cga/640kb/dos400m/
   - /devices/pc/machine/5160/cga/640kb/dos400m/
-  - /disks/pc/dos/microsoft/4.0M/
   - /videos/pcjs/
 machines:
   - id: ibm5160
