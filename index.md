@@ -1,8 +1,8 @@
 ---
 layout: page
+title: Welcome to the NEW PCjs Website
+permalink: /
 ---
-
-## Welcome to the NEW PCjs Website
 
 Well, almost.
 
@@ -18,9 +18,9 @@ Jeff
 The main goals are:
 
 - Simplify the structure of the site, improve usability, and minimize fragility
-- Make it easier to find the [Hardware](/configs/hardware.json), [Software](/configs/software.json) (e.g, [Diskettes](/configs/pcx86/diskettes.json) or [Tapes](/configs/c1p/tapes.json)), and [Documentation](/configs/documents.json) you're looking for
-- Reduce the number of hardware configurations and make the remaining machines easier to reconfigure
-- Do a better job automatically launching a piece of software on the appropriate hardware
+- Make it easier to find the [Hardware](/configs/hardware.json), [Software](/configs/software.json) and [Documents](/configs/documents.json) you're looking for
+- Reduce the number of hardware configurations and make machines easier to reconfigure
+- Do a better job automatically launching software on the appropriate hardware
 
 One of the new features that's central to these goals is the PCjs Explorer, which allows you to quickly navigate all the site's content without having to click through page after page.
 
