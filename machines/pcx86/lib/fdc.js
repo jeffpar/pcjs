@@ -1590,7 +1590,7 @@ class FDC extends Component {
                                 name += " (Disk " + (i + 1) + ")";
                             }
                         }
-                        let path = this.sDisketteServer + propPath + '/' + category + '/' + version + '/' + item['@diskette'] + '.json';
+                        let path = this.sDisketteServer + propPath + '/' + category + '/' + version + '/' + item['@diskette'];
                         this.aDiskettes.push({name, path});
                     }
                 }

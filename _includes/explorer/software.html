@@ -30,8 +30,8 @@
               instead of the one automatically generated from the list of @media items; eg:
 
                 "@autoMount": {
-                  "A": {"@diskette": "IBM-PCDOS-200-DISK1"},
-                  "B": {"@diskette": "IBM-PCDOS-200-DISK2"}
+                  "A": {"@diskette": "IBM-PCDOS-200-DISK1.json"},
+                  "B": {"@diskette": "IBM-PCDOS-200-DISK2.json"}
                 }
 
               @bootable: if there is no "custom" autoMount setting, then one will be automatically generated
@@ -139,10 +139,10 @@
                             {%- assign autoMount = "" -%}{%- assign autoDrive = "" -%}{%- assign autoState = "" -%}
                             {%- if hardware_url != "" -%}{%- comment -%} or page.permalink contains machine_url {%- endcomment -%}
                               {%- if release['@autoMount'] -%}
-                                {%- capture autoMount -%}{% assign disk_num = 0 %}{% for drive in release['@autoMount'] %}{% assign disk_num = disk_num | plus:1 %}{{ drive[0] }}:%7Bname:%22{% if drive[1]['@title'] %}{{ drive[1]['@title'] }}{% else %}{{ software_title }}{% if release['@title'] == nil and release['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}{% endif %}%22,path:%22{{ diskette_server }}{{ software_url }}/{{ drive[1]['@diskette'] }}.json%22%7D,{% endfor %}@{%- endcapture -%}
+                                {%- capture autoMount -%}{% assign disk_num = 0 %}{% for drive in release['@autoMount'] %}{% assign disk_num = disk_num | plus:1 %}{{ drive[0] }}:%7Bname:%22{% if drive[1]['@title'] %}{{ drive[1]['@title'] }}{% else %}{{ software_title }}{% if release['@title'] == nil and release['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}{% endif %}%22,path:%22{{ diskette_server }}{{ software_url }}/{{ drive[1]['@diskette'] }}%22%7D,{% endfor %}@{%- endcapture -%}
                               {%- elsif release['@media'][0]['@diskette'] -%}
                                 {%- if release['@bootable'] -%}{%- assign drive_num = 0 -%}{%- else -%}{%- assign drive_num = 1 -%}{%- endif -%}
-                                {%- capture autoMount -%}{% assign disk_num = 0 %}{% for disk in release['@media'] %}{{ diskette_drives[drive_num] }}{% assign disk_num = disk_num | plus:1 %}{% assign drive_num = drive_num | plus:1 %}:%7Bname:%22{% if disk['@title'] %}{{ disk['@title'] }}{% else %}{{ software_title }}{% if release['@title'] == nil and release['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}{% endif %}%22,path:%22{{ diskette_server }}{{ software_url }}/{{ disk['@diskette'] }}.json%22%7D,{% if drive_num >= diskette_drives.size %}{% break %}{% endif %}{% endfor %}@{%- endcapture -%}
+                                {%- capture autoMount -%}{% assign disk_num = 0 %}{% for disk in release['@media'] %}{{ diskette_drives[drive_num] }}{% assign disk_num = disk_num | plus:1 %}{% assign drive_num = drive_num | plus:1 %}:%7Bname:%22{% if disk['@title'] %}{{ disk['@title'] }}{% else %}{{ software_title }}{% if release['@title'] == nil and release['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}{% endif %}%22,path:%22{{ diskette_server }}{{ software_url }}/{{ disk['@diskette'] }}%22%7D,{% if drive_num >= diskette_drives.size %}{% break %}{% endif %}{% endfor %}@{%- endcapture -%}
                               {%- endif -%}
                               {%- if release['@media'][0]['@harddisk'] -%}
                                 {%- capture autoDrive -%}{% for disk in release['@media'] %}%7Bname:%22{{ disk['@name'] }}%22,type:{{ disk['@type'] }},path:%22{{ harddisk_server }}{{ software_url }}/{{ disk['@harddisk'] }}.json%22%7D,{% endfor %}@{%- endcapture -%}

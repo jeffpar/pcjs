@@ -236,7 +236,7 @@ function processManifests(sDir, output, fDebug)
                         }
                         if (disk[idAttrs].href) {
                             let s;
-                            item['@diskette'] = path.basename(disk[idAttrs].href, ".json");
+                            item['@diskette'] = path.basename(disk[idAttrs].href);
                             let pathDisk = disk[idAttrs].href;
                             let pathParts = pathDisk.split('/');
                             let j = sDir.indexOf("/" + pathParts[1] + "/");

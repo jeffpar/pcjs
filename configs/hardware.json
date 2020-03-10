@@ -35,6 +35,9 @@
           "@title": "Dual Displays",
           "@redirect_from": "/devices/pcx86/machine/5150/dual/64kb/"
         },
+        "vga": {
+          "@title": "VGA Display"
+        },
         "@documents": [
           {
             "@title": "IBM 5150 Guide to Operations (Aug 1981)",

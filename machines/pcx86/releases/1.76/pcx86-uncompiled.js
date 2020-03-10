@@ -65424,7 +65424,7 @@ class FDC extends Component {
         }
         /*
          * Why didn't we sorted aDiskettes before adding them to the controlDisks list control?
-         * Because that wouldn't handle any prepopulated entries already stroed in the list control.
+         * Because that wouldn't handle any prepopulated entries already stored in the list control.
          */
         if (this.sortBy) {
             let i, aOptions = [], fdc = this;
@@ -65513,7 +65513,7 @@ class FDC extends Component {
                                 name += " (Disk " + (i + 1) + ")";
                             }
                         }
-                        let path = this.sDisketteServer + propPath + '/' + category + '/' + version + '/' + item['@diskette'] + '.json';
+                        let path = this.sDisketteServer + propPath + '/' + category + '/' + version + '/' + item['@diskette'];
                         this.aDiskettes.push({name, path});
                     }
                 }

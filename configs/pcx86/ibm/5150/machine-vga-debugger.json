@@ -1,0 +1,64 @@
+{
+  "@title": "IBM PC (Model 5150) with VGA Display and Debugger",
+  "defaults": {
+    "ram": "64K",
+    "fpu": "None",
+    "fdc": "2 diskette drives",
+    "parallel": "LPT1",
+    "serial": "COM1"
+  },
+  "components": [
+    {
+      "id": "pcVGA",
+      "class": "computer"
+    },
+    {
+      "id": "debugger",
+      "class": "debugger"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/rom-basic-100.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/rom-bios-rev1.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/rom-vga.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/video-vga.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/fdc.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/ram.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/cpu.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/keyboard.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/panel.json"
+    },
+    {
+      "config": "/configs/pcx86/ibm/5150/chipset.json",
+      "sw1": "01001101",
+      "sw2": "11111000"
+    },
+    {
+      "id": "lpt1",
+      "class": "parallel",
+      "adapter": 2,
+      "binding": "print"
+    },
+    {
+      "id": "com1",
+      "class": "serial",
+      "adapter": 1,
+      "binding": "print"
+    }
+  ]
+}
