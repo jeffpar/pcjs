@@ -1,41 +1,27 @@
 ---
-layout: default
+layout: page
 ---
 
-## Welcome to GitHub Pages
+## Welcome to the NEW PCjs Website
 
-You can use the [editor on GitHub](https://github.com/jeffpar/pcjs.dev/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+Well, almost.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+I haven't quite finished migrating all the content from [pcjs.org](https://www.pcjs.org) yet, so head over there and ignore this site for now.
 
-### Markdown
+When pcjs.dev is ready, it will become the new pcjs.org, so don't bother bookmarking anything here (do people still bookmark things anyway?)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Thanks,
+Jeff
 
-```markdown
-Syntax highlighted code block
+## What's New?
 
-# Header 1
-## Header 2
-### Header 3
+The main goals are:
 
-- Bulleted
-- List
+- Simplify the structure of the site, improve usability, and minimize fragility
+- Make it easier to find the [Hardware](/configs/hardware.json), [Software](/configs/software.json) (e.g, [Diskettes](/configs/pcx86/diskettes.json) or [Tapes](/configs/c1p/tapes.json)), and [Documentation](/configs/documents.json) you're looking for
+- Reduce the number of hardware configurations and make the remaining machines easier to reconfigure
+- Do a better job automatically launching a piece of software on the appropriate hardware
 
-1. Numbered
-2. List
+One of the new features that's central to these goals is the PCjs Explorer, which allows you to quickly navigate all the site's content without having to click through page after page.
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/jeffpar/pcjs.dev/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+The PCjs Explorer isn't fully populated yet, but it will be before it goes "live" on pcjs.org.
