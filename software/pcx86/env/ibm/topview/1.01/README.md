@@ -31,9 +31,6 @@ machineScripts:
     type Keyboard "B:\rSETUP\r$70.3\r$30n\r$30y\r$30\r$30\r$30\r";
 ---
 
-IBM TopView 1.01
-----------------
-
 From IBM's [August 14, 1984 Announcement Letter](http://www-01.ibm.com/common/ssi/ShowDoc.wss?docURL=/common/ssi/rep_ca/2/897/ENUS284-282/index.html&lang=en&request_locale=en):
 
 > The IBM Personal Computer TopView program and TopView Programmer's ToolKit provide windowing capability with

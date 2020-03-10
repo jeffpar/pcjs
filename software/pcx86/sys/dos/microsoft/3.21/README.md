@@ -12,9 +12,6 @@ machines:
         name: MS-DOS 3.21 (Disk 1)
 ---
 
-Microsoft MS-DOS 3.21
----------------------
-
 [Directory Listings](#directory-of-ms-dos-321-disk-1) of the two 360Kb distribution diskettes are provided below.
 
 {% include machine.html id="ibm5170-msdos321" %}

@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/borland/pascal/2.00/
 redirect_from: /disks/pcx86/tools/borland/pascal/2.00/
 ---
 
-Borland Turbo Pascal 2.00
--------------------------
-
 The following documentation is available online:
 
 - [Turbo Pascal Version 2.0 Reference Manual (1984)](http://bitsavers.org/pdf/borland/turbo_pascal/Turbo_Pascal_Version_2.0_Reference_1984.pdf)

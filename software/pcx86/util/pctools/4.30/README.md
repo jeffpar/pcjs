@@ -5,9 +5,6 @@ permalink: /software/pcx86/util/pctools/4.30/
 redirect_from: /disks/pcx86/tools/other/pctools/4.30/
 ---
 
-Central Point PC Tools Deluxe 4.30
-----------------------------------
-
 ### Directory of Central Point PC Tools 4.30
 
 	 Volume in drive A has no label

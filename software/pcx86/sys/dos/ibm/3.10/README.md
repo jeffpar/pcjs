@@ -16,9 +16,6 @@ machines:
     autoType: \r\r
 ---
 
-IBM PC DOS 3.10
----------------
-
 PC DOS 3.10 was announced on August 14, 1984 (along with [PC DOS 3.00](/disks/pcx86/dos/ibm/3.00/)) and released
 on April 2, 1985.
 

@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/microsoft/c/3.00/
 redirect_from: /disks/pcx86/tools/microsoft/c/3.00/
 ---
 
-Microsoft C Compiler 3.00
----
-
 Directory listings of the three 360Kb distribution diskettes are provided below.
 
 ### Directory of MS C 3.00 (Disk 1)

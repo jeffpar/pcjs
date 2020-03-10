@@ -29,8 +29,8 @@
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/tools/misc/links.js",
-        "args": ["~/Sites/pcjs.dev", "--debug"],
-        "cwd": "${workspaceFolder}/tools/misc",
+        "args": [".", "--debug"],
+        "cwd": "${workspaceFolder}",
         "stopOnEntry": false,
         "console": "internalConsole"
       },

@@ -5,9 +5,6 @@ permalink: /software/pcx86/sys/windows/1.03/
 redirect_from: /disks/pcx86/windows/1.03/
 ---
 
-Microsoft Windows 1.03
-----------------------
-
 Windows 1.03 was released in August 1986.
 
 Directory listings of the six 360Kb distribution diskettes are provided below.

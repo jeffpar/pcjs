@@ -14,9 +14,6 @@ machines:
         name: None
 ---
 
-Digital Research DR DOS 3.32
-----------------------------
-
 {% include machine.html id="ibm5170-drdos332" %}
 
 ### Directory of DR DOS 3.32

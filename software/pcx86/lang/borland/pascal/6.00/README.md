@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/borland/pascal/6.00/
 redirect_from: /disks/pcx86/tools/borland/pascal/6.00/
 ---
 
-Borland Turbo Pascal 6.00
--------------------------
-
 The following documentation is available online:
 
 - [Turbo Pascal Version 6.0 User's Guide (1990)](http://bitsavers.org/pdf/borland/turbo_pascal/Turbo_Pascal_Version_6.0_Users_Guide_1990.pdf)

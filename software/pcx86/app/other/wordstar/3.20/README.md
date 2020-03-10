@@ -20,7 +20,7 @@ WordStar 3.20 diskettes are provided below.  Before we acquired the originals, a
 disk image recreated by [The OS/2 Museum](http://www.os2museum.com/).  We have retained both
 sets of files for comparison purposes.
 
-The same acquisition included:
+The same May 2019 acquisition included:
 
 - WordStar 3.2 General Information Manual
 - WordStar 3.0 Reference Card
@@ -29,7 +29,7 @@ The same acquisition included:
 - WordStar 3.0 Training Guide (20 lessons)
 - Official WordStar MicroPro Binder
 
- You can browse all of the [Additional Materials](#additional-materials) below.
+You can browse all of the [Additional Materials](#documents) below.
 
 {% include machine.html id="ibm5150" %}
 
@@ -75,17 +75,4 @@ The same acquisition included:
 	        7 file(s)     122496 bytes
 	                       36352 bytes free
 
-### Additional Materials
-
-The following materials were acquired at the same time (May 2019) as the original diskettes.
-
-{% include gallery/begin.html %}
-{% include gallery/image.html src="WordStar32-Binder.png" width="320" height="460" title="WordStar 3.0 Training Guide" link="https://1drv.ms/u/s!ArcO_mFRe1Z9gqlTMVtF-s8OxtSNpA" %}
-{% include gallery/image.html src="WordStar30-Training-Guide.png" width="320" height="460" title="WordStar 3.0 Training Guide" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqlYINZ_GQ3Y6NVSUA?e=cUZyft" %}
-{% include gallery/image.html src="WordStar32-General-Information.png" width="320" height="460" title="WordStar 3.2 General Information" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqkVkrQ_SzATTmls_Q?e=D3kVDU" %}
-{% include gallery/image.html src="WordStar32-Reference-Manual.png" width="320" height="460" title="WordStar 3.2 Reference Manual" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqkWhsTCHW7gkQ2W7A?e=VLlYyf" %}
-{% include gallery/image.html src="WordStar32-Technical-Information.png" width="320" height="460" title="WordStar 3.2 Technical Information" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqkUQdVG_FL8aYm3fg?e=yffrXl" %}
-{% include gallery/image.html src="WordStar30-Reference-Card.png" width="320" height="460" title="WordStar 3.0 Reference Card" link="https://1drv.ms/b/s!ArcO_mFRe1Z9gqkTDr8PVob3Mpvnxg?e=XPFAEC" %}
-{% include gallery/end.html %}
-
-<iframe src="https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2138076&authkey=AH1jOI7I0LbFzLU" width="165" height="128" frameborder="0" scrolling="no"></iframe>
+{% include gallery/documents.html title="Additional Materials" width="320" height="460" %}

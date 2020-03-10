@@ -5,7 +5,7 @@ permalink: /documents/misc/pcjs/
 redirect_from: /docs/personal/
 ---
 
-Much like the collection of [PCjs Personal Disks](/disks/pcx86/personal/), this is an assortment of old
+Much like the collection of [PCjs Personal Disks](/software/pcx86/sw/misc/pcjs/), this is an assortment of old
 documents archived by [@jeffpar](https://jeffpar.com) that may or may not be of historical interest.
 
 We're kicking off this new section of the site with a couple of documents created by [@jeffpar](https://jeffpar.com)

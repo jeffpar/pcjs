@@ -2,13 +2,10 @@
 layout: page
 title: Microsoft Macro Assembler 3.01
 permalink: /software/pcx86/lang/microsoft/masm/3.01/
-redirect_from: /disks/pcx86/tools/microsoft/masm/3.01/
 redirect_from:
+  - /disks/pcx86/tools/microsoft/masm/3.01/
   - /disks/pc/tools/microsoft/masm/3.01/
 ---
-
-Microsoft Macro Assembler 3.01
-------------------------------
 
 Directory listing of the 360Kb distribution diskette is provided below.
 

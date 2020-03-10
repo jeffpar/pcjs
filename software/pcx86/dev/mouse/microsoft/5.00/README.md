@@ -15,9 +15,6 @@ machines:
     autoType: \r\rB:\rMOUSE\r$40PIANO\r
 ---
 
-Microsoft Mouse 5.00
---------------------
-
 The following PCjs diskette images come from our private disk collection, and they include additional files
 that were probably not on the original Microsoft distribution disks.
 

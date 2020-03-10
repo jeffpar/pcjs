@@ -5,7 +5,4 @@ permalink: /software/pcx86/env/softlogic/optimizer/2.0.3/
 redirect_from: /disks/pcx86/tools/softlogic/optimizer/2.0.3/
 ---
 
-Disk Optimizer 2.0.3
---------------------
-
 ![Disk Optimizer Diskette]({{ site.software.diskettes.server }}/pcx86/env/softlogic/optimizer/2.0.3/DISK-OPTIMIZER.jpg)

@@ -18,9 +18,6 @@ machines:
     autoType: CD TP\rTURBO\r$9$altF$right$right$right$right$right$right$right
 ---
 
-Borland Turbo Pascal 5.00
--------------------------
-
 The following documentation is available online:
 
 - [Turbo Pascal Version 5.0 User's Guide (1989)](http://bitsavers.org/pdf/borland/turbo_pascal/Turbo_Pascal_Version_5.0_Users_Guide_1989.pdf)

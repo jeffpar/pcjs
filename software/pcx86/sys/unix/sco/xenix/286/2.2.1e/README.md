@@ -17,9 +17,6 @@ machines:
     messages: fault
 ---
 
-SCO Xenix 286 v2.2.1e
----------------------
-
 When prompted, use the following serial number and activation key:  
 
 	Serial number:  pcjs.org!

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Norton Utilities 3.10
-permalink: /disks/pcx86/tools/other/norton/3.10/
+permalink: /software/pcx86/util/norton/3.10/
 machines:
   - id: ibm5160
     type: pcx86
@@ -15,9 +15,6 @@ machines:
     autoStart: true
     autoType: $date\r$time\rB:\rDIR\r
 ---
-
-Norton Utilities 3.10
----------------------
 
 {% include machine.html id="ibm5160" %}
 

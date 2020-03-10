@@ -5,9 +5,6 @@ permalink: /software/pcx86/util/borland/sidekick/1.56/
 redirect_from: /disks/pcx86/tools/borland/sidekick/1.56/
 ---
 
-Borland Sidekick 1.56
----------------------
-
 ### Directory of Borland Sidekick 1.56
 
      Volume in drive A is SIDEKICK156

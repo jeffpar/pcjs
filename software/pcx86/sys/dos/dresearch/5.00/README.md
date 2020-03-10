@@ -14,9 +14,6 @@ machines:
         name: DR DOS 5.00 (Disk 2)
 ---
 
-Digital Research DR DOS 5.00
-----------------------------
-
 {% include machine.html id="ibm5170-drdos500" %}
 
 ### Directory of DR DOS 5.00 (Disk 1)

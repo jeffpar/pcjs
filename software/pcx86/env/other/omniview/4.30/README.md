@@ -1,10 +1,8 @@
 ---
 layout: page
 title: Omniview 386 4.30
-permalink: /software/pcx86/util/omniview/4.30/
+permalink: /software/pcx86/env/other/omniview/4.30/
 redirect_from: /disks/pcx86/tools/other/omniview/4.30/
-redirect_from:
-  - /disks/pcx86/apps/other/omniview/4.30/
 machines:
   - id: compaq386
     type: pcx86
@@ -15,9 +13,6 @@ machines:
       B:
         name: Omniview 386 4.30
 ---
-
-Omniview 386 4.30
------------------
 
 Omniview 386 was a multitasking application manager for DOS produced by Sunny Hill Software in the late 1980's.  Version 4.11
 was reviewed in the February 13, 1989 issue of [InfoWorld](https://books.google.com/books?id=QDoEAAAAMBAJ&lpg=PT73&dq=omniview%20386&pg=PT72#v=onepage&q&f=false).

@@ -2,13 +2,10 @@
 layout: page
 title: Microsoft Macro Assembler 5.10
 permalink: /software/pcx86/lang/microsoft/masm/5.10/
-redirect_from: /disks/pcx86/tools/microsoft/masm/5.10/
 redirect_from:
+  - /disks/pcx86/tools/microsoft/masm/5.10/
   - /disks/pc/tools/microsoft/masm/5.10/
 ---
-
-Microsoft Macro Assembler 5.10
-------------------------------
 
 Directory listings of the five distribution diskettes (plus an update disk issued by Microsoft in March 1990)
 are provided below.

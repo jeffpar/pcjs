@@ -2,13 +2,10 @@
 layout: page
 title: Microsoft Macro Assembler 4.00
 permalink: /software/pcx86/lang/microsoft/masm/4.00/
-redirect_from: /disks/pcx86/tools/microsoft/masm/4.00/
 redirect_from:
+  - /disks/pcx86/tools/microsoft/masm/4.00/
   - /disks/pc/tools/microsoft/masm/4.00/
 ---
-
-Microsoft Macro Assembler 4.00
-------------------------------
 
 Directory listing of the 360Kb distribution diskette is provided below.
 

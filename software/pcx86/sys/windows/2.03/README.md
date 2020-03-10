@@ -5,9 +5,6 @@ permalink: /software/pcx86/sys/windows/2.03/
 redirect_from: /disks/pcx86/windows/2.03/
 ---
 
-Microsoft Windows 2.03
----
-
 Windows 2.03 was finalized in November 1987 and released on December 9, 1987.
 
 Directory listings of the nine 360Kb distribution diskettes are provided below.

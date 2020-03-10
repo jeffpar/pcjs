@@ -16,9 +16,6 @@ machines:
     autoType: $date\r$time\rB:\rWS\r
 ---
 
-MicroPro WordStar for PCjr
---------------------------
-
 [Directory Listings](#directory-of-wordstar-for-pcjr-disk-1) of the double-sided (360Kb) WordStar for PCjr diskettes
 are provided below.  The disk images were obtained from [WinWorld](https://winworldpc.com/product/wordstar/for-pcjr).
 

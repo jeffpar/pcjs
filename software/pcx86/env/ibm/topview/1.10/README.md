@@ -15,9 +15,6 @@ machines:
     autoType: $date\r$time\rB:\rSETUP\r$70y \r$20.1\r
 ---
 
-IBM TopView 1.10
-----------------
-
 The machine below is configured to automatically start TopView 1.10 on top of PC DOS 2.00.  No mouse driver is loaded,
 so you must use TopView's "Keyboard Mouse" support: arrow keys move the cursor and **Home**, **PgUp**, and **Alt**
 act as mouse buttons.  The machine is also available with the [PCjs Debugger](debugger/).

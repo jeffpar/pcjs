@@ -15,9 +15,6 @@ machines:
     autoType: $date\r$time\rB:\rWS\r
 ---
 
-MicroPro WordStar 3.30
-----------------------
-
 [Directory Listings](#directory-of-wordstar-330-disk-1) of the five single-sided (160Kb) distribution diskettes
 are provided below.  The disk images were obtained from [WinWorld](https://winworldpc.com/product/wordstar/330-z-100).
 

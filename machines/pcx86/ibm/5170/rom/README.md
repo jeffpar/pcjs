@@ -1,7 +1,7 @@
 ---
 layout: page
 title: IBM PC AT (Model 5170) ROMs
-permalink: /devices/pcx86/rom/5170/
+permalink: /machines/pcx86/ibm/5170/rom/
 ---
 
 IBM PC AT (Model 5170) ROM Revisions

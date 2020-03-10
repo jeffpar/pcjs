@@ -1,11 +1,8 @@
 ---
 layout: default
 title: DiskDump Module
-permalink: /modules/diskdump/
+permalink: /tools/diskdump/
 ---
-
-DiskDump Module
----------------
 
 DiskDump is a Node [module](lib/diskdump.js) with both a command-line [utility](bin/diskdump) and a web server API
 for converting disk images to/from various formats (eg, JSON files, JSON files with comments, IMG disk images, etc). 

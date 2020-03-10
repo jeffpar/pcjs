@@ -2,13 +2,10 @@
 layout: page
 title: Microsoft Macro Assembler 6.11
 permalink: /software/pcx86/lang/microsoft/masm/6.11/
-redirect_from: /disks/pcx86/tools/microsoft/masm/6.11/
 redirect_from:
+  - /disks/pcx86/tools/microsoft/masm/6.11/
   - /disks/pc/tools/microsoft/masm/6.11/
 ---
-
-Microsoft Macro Assembler 6.11
-------------------------------
 
 Directory listings of the five 1.44Mb distribution diskettes are provided below.
 

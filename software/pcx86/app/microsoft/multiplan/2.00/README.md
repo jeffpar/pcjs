@@ -5,9 +5,6 @@ permalink: /software/pcx86/app/microsoft/multiplan/2.00/
 redirect_from: /disks/pcx86/apps/microsoft/multiplan/2.00/
 ---
 
-Microsoft Multiplan 2.00
-------------------------
-
 NOTE: The Microsoft Multiplan 2.00 disk below is *not* an original distribution disk.  It was obtained from
 [VETUSWARE](https://vetusware.com/download/Multiplan%202%20FR/?id=3417) and contains a pre-installed copy of
 `MP.COM`.  No installation files were included with the disk.

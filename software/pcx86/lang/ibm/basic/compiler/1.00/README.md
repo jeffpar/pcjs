@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/ibm/basic/compiler/1.00/
 redirect_from: /disks/pcx86/tools/ibm/basic/compiler/1.00/
 ---
 
-IBM BASIC Compiler 1.00
------------------------
-
 ### Directory of IBM BASIC Compiler 1.00 (Disk 1)
 
 	 Volume in drive A has no label

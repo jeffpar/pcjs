@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Norton Utilities 3.00
-permalink: /disks/pcx86/tools/other/norton/3.00/
+permalink: /software/pcx86/util/norton/3.00/
 machines:
   - id: ibm5160
     type: pcx86
@@ -15,9 +15,6 @@ machines:
     autoStart: true
     autoType: $date\r$time\rB:\rDIR\r
 ---
-
-Norton Utilities 3.00
----------------------
 
 [Norton Utilities 3.00 (1984-12-07)](#directory-of-norton-utilities-300-1984-12-07) is from the
 [PCjs Personal Disk Collection](/disks/pcx86/personal/) and predates previously known copies of version 3.00.

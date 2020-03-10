@@ -5,9 +5,6 @@ permalink: /software/pcx86/env/quarterdeck/qemm386/5.13/
 redirect_from: /disks/pcx86/tools/other/qemm386/5.13/
 ---
 
-QEMM-386 v5.13
---------------
-
 ### Directory of QEMM-386 5.13
     
      Volume in drive A is QEMM386-513

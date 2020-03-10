@@ -5,9 +5,6 @@ permalink: /software/pcx86/sys/windows/1.02/
 redirect_from: /disks/pcx86/windows/1.02/
 ---
 
-Microsoft Windows 1.02
-----------------------
-
 Directory listings of the six 360Kb distribution diskettes are provided below.
 
 ### Directory of Windows 1.02 (SETUP)

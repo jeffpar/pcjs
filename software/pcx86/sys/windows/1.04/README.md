@@ -5,9 +5,6 @@ permalink: /software/pcx86/sys/windows/1.04/
 redirect_from: /disks/pcx86/windows/1.04/
 ---
 
-Microsoft Windows 1.04
----
-
 Directory listings of the seven 360Kb distribution diskettes are provided below.
 
 ### Directory of Windows 1.04 (SETUP)

@@ -11,12 +11,19 @@
   {%- if part == "" -%}{% continue %}{%- endif -%}
   {%- if part == "machines" -%}
     {%- assign data = site.data.hardware -%}
+  {%- elsif part == "software" -%}
+    {%- assign data = site.data.software -%}
   {%- elsif part == "documents" -%}
     {%- assign data = site.data.documents -%}
   {%- else -%}
     {%- if part == "magazines" -%}{%- unless include.title -%}{%- assign title = "Issues" -%}{%- endunless -%}{%- endif -%}
     {%- if data[part] -%}
       {%- assign data = data[part] %}
+      {%- if data['@type'] == "diskettes" -%}
+        {%- assign data = site.data.pcx86.diskettes -%}
+      {%- endif -%}
+    {%- elsif data['@versions'] -%}
+      {%- assign data = data['@versions'][part] -%}
     {%- else %}
       {%- assign data = data['@instances'][part] -%}
     {%- endif -%}
@@ -35,12 +42,12 @@
         {%- assign doc_file = doc['@file'] -%}
         {%- assign doc_tags = doc['@tags'] | default: "" -%}
         {%- if doc_file and doc_tags contains tag -%}
-          {%- assign doc_id = doc_file | replace: ".pdf","" | downcase -%}
+          {%- assign doc_id = doc_file | replace: ".pdf","" | replace: ".png","" | downcase -%}
           {%- assign doc_link = doc['@link'] -%}
           {%- assign doc_title = doc['@title'] -%}
           {%- assign doc_cover = doc['@cover'] -%}
-          {%- if doc_cover == "jpg" or doc_cover == "png -%}
-            {%- capture doc_cover -%}{{ path }}covers/{{ doc_file | replace: "pdf",doc_cover }}{%- endcapture -%}
+          {%- if doc_cover == ".jpg" or doc_cover == ".png" -%}
+            {%- capture doc_cover -%}{{ path }}covers/{{ doc_file | replace: ".pdf",doc_cover | replace: ".png",doc_cover }}{%- endcapture -%}
           {%- endif -%}
           {%- assign doc_source = doc['@source'] -%}
           {%- include gallery/image.html id=doc_id image=doc_cover link=doc_link title=doc_title width=cover_width height=cover_height source=doc_source external=true -%}

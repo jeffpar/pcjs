@@ -5,9 +5,6 @@ permalink: /software/pcx86/sys/os2/microsoft/1.0/
 redirect_from: /disks/pcx86/os2/microsoft/1.0/
 ---
 
-Microsoft OS/2 1.0
-------------------
-
 Microsoft OS/2 1.0 was released in December 1987.
 
 Directory listings of the three 1.2Mb distribution diskettes are provided below.

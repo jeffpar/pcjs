@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/ibm/pascal/1.00/
 redirect_from: /disks/pcx86/tools/ibm/pascal/1.00/
 ---
 
-IBM Pascal Compiler 1.00
-------------------------
-
 When the IBM Pascal Compiler 1.00 was originally released in August 1981, the standard IBM PC contained at most
 two diskette drives (no hard drive), so compiling Pascal programs required using a "scratch disk" in drive B:
 and then inserting each of the three 160Kb Pascal Compiler disks into drive A: to complete the compilation and

@@ -1,11 +1,8 @@
 ---
 layout: page
 title: PCx86 INT 14h TSR
-permalink: /tests/pcx86/testmon/int14/
+permalink: /software/pcx86/test/testmon/int14/
 ---
-
-PCx86 INT 14h TSR
------------------
 
 [INT14.ASM](INT14.ASM) is a Terminate-and-Stay-Resident (TSR) utility that scans the ROM BIOS Data Area for a COM port
 whose I/O address is 0x2F8 (or 0x3F8 if the /1 option is specified).  If the port is found, then the utility installs

@@ -2,8 +2,8 @@
 layout: page
 title: Microsoft MS-DOS 3.20
 permalink: /software/pcx86/sys/dos/microsoft/3.20/
-redirect_from: /disks/pcx86/dos/microsoft/3.20/
 redirect_from:
+  - /disks/pcx86/dos/microsoft/3.20/
   - /disks/pc/dos/microsoft/3.20/
 machines:
   - id: ibm5170-msdos320
@@ -13,9 +13,6 @@ machines:
       A:
         name: MS-DOS 3.20 (Disk 1)
 ---
-
-Microsoft MS-DOS 3.20
----------------------
 
 The MS-DOS 3.20 disks in the PCjs collection are the only known non-OEM copies of that release
 available online.  All other known MS-DOS 3.20 disk images are OEM releases (eg, HP, Zenith, Data General,

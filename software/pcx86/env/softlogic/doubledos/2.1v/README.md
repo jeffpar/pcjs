@@ -1,14 +1,11 @@
 ---
 layout: page
-title: DoubleDOS 2.0V
-permalink: /software/pcx86/env/softlogic/doubledos/2.0v/
-redirect_from: /disks/pcx86/tools/softlogic/doubledos/2.0v/
+title: DoubleDOS 2.1V
+permalink: /software/pcx86/env/softlogic/doubledos/2.1v/
+redirect_from: /disks/pcx86/tools/softlogic/doubledos/2.1v/
 ---
 
-DoubleDOS 2.0V
---------------
-
-### Directory of DoubleDOS 2.0V (Disk 1)
+### Directory of DoubleDOS 2.1V (Disk 1)
 
 	 Volume in drive A has no label
 
@@ -119,7 +116,7 @@ DoubleDOS 2.0V
 	       95 file(s)     308703 bytes
 	                        4096 bytes free
 
-### Directory of DoubleDOS 2.0V (Disk 2)
+### Directory of DoubleDOS 2.1V (Disk 2)
 
 	 Volume in drive A has no label
 
@@ -151,4 +148,4 @@ DoubleDOS 2.0V
 	       20 file(s)     159605 bytes
 	                      191488 bytes free
 
-![DoubleDOS Diskette]({{ site.software.diskettes.server }}/pcx86/env/softlogic/doubledos/2.0v/DOUBLEDOS-DISK1.jpg)
+![DoubleDOS Diskette]({{ site.software.diskettes.server }}/pcx86/env/softlogic/doubledos/2.1v/DOUBLEDOS-21V-DISK1.jpg)

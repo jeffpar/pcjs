@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/borland/pascal/5.50/
 redirect_from: /disks/pcx86/tools/borland/pascal/5.50/
 ---
 
-Borland Turbo Pascal 5.50
--------------------------
-
 The following documentation is available online:
 
 - [Turbo Pascal Version 5.5 Object-Oriented Programming Guide (1989)](http://bitsavers.org/pdf/borland/turbo_pascal/Turbo_Pascal_Version_5.5_Object-Oriented_Programming_Guide_1989.pdf)

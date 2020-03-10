@@ -20,9 +20,6 @@ No disks are available at this time.
 
 In the meantime, take a look at [Windows/286 2.11](/disks/pcx86/windows/2.11/#microsoft-windows286-211).   
 
-Microsoft Windows/386 2.10
----
-
 Reportedly, Windows/386 2.10 was also released on May 27, 1988.  However, as you can see from the directory listings
 below, these disks may not have been released until September 1988, if the timestamps are accurate.
 

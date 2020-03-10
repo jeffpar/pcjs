@@ -3,7 +3,7 @@ layout: post
 title: Unerasing The Norton Utilities
 date: 2018-12-28 10:00:00
 permalink: /blog/2018/12/28/
-preview: https://demo-disks.pcjs.org/pcx86/tools/other/norton/3.00/1984-12-07/NU300-1984-12-07.jpg
+preview: https://diskettes.pcjs.org/pcx86/util/norton/3.00/NU300-1984-12-07.jpg
 ---
 
 Appearing in 1982, The Norton Utilities was an interesting set of DOS tools that solved some vexing problems,

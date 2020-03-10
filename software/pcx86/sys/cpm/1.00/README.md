@@ -8,9 +8,6 @@ machines:
     type: pcx86
 ---
 
-CP/M-86 1.00 for the IBM Personal Computer
-------------------------------------------
-
 This is the first IBM version of CP/M-86, produced by Digital Research Inc. in 1982.
 
 On startup, it reports:

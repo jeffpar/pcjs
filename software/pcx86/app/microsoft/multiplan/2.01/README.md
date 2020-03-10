@@ -5,9 +5,6 @@ permalink: /software/pcx86/app/microsoft/multiplan/2.01/
 redirect_from: /disks/pcx86/apps/microsoft/multiplan/2.01/
 ---
 
-Microsoft Multiplan 2.01
-------------------------
-
 NOTE: The Microsoft Multiplan 2.01 disks below are *not* original distribution disks.  They were obtained from
 [VETUSWARE](https://vetusware.com/download/Multiplan%20Version%202/?id=5148).  Unlike older versions of Multiplan
 found online, this copy *does* include installation files, so we have attempted to recreate the `INSTALL` and

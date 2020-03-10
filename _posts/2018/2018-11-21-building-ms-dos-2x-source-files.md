@@ -3,7 +3,7 @@ layout: post
 title: Building MS-DOS Source Files
 date: 2018-11-21 10:00:00
 permalink: /blog/2018/11/21/
-preview: https://demo-disks.pcjs.org/pcx86/dos/microsoft/2.00/MSDOS200-DISKS.jpg
+preview: https://diskettes.pcjs.org/pcx86/sys/dos/microsoft/2.00/MSDOS200-DISKS.jpg
 machines:
   - id: ibm5160
     type: pcx86

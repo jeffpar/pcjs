@@ -15,9 +15,6 @@ machines:
     autoType: $date\r$time\r
 ---
 
-COMPAQ MS-DOS 2.12
-------------------
-
 Released in 1984 by COMPAQ Computer Corp, this early version of MS-DOS displays the following messages on boot:
 
 	The COMPAQ Personal Computer MS-DOS

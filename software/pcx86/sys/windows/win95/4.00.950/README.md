@@ -2,10 +2,10 @@
 layout: page
 title: "Microsoft Windows 95: First Retail Release"
 permalink: /software/pcx86/sys/windows/win95/4.00.950/
-redirect_from: /disks/pcx86/windows/win95/4.00.950/
-preview: /disks/pcx86/windows/win95/4.00.950/screenshot.png
 redirect_from:
+  - /disks/pcx86/windows/win95/4.00.950/
   - /disks/pc/windows/win95/4.00.950/
+preview: /disks/pcx86/windows/win95/4.00.950/screenshot.png
 machines:
   - id: deskpro386
     type: pcx86

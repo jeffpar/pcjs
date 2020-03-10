@@ -14,9 +14,6 @@ machines:
         name: DR DOS 3.41 (Disk 2)
 ---
 
-Digital Research DR DOS 3.41
-----------------------------
-
 {% include machine.html id="ibm5170-drdos341" %}
 
 ### Directory of DR DOS 3.41 (Disk 1)

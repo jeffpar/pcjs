@@ -5,9 +5,6 @@ permalink: /software/pcx86/app/other/wordstar/4.00/
 redirect_from: /disks/pcx86/apps/other/wordstar/4.00/
 ---
 
-MicroPro WordStar 4.00
-----------------------
-
 Directory listings of the six 360Kb distribution diskettes from the PCjs Archives are provided below.
 
 ### Directory of WordStar 4.00 (INSTALL)

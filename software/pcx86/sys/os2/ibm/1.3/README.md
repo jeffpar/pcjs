@@ -5,9 +5,6 @@ permalink: /software/pcx86/sys/os2/ibm/1.3/
 redirect_from: /disks/pcx86/os2/ibm/1.3/
 ---
 
-IBM OS/2 1.3
-------------
-
 ### Directory of IBM OS/2 1.3 (Install)
 
 	 Volume in drive A is OS2 INSTALL
