@@ -20,7 +20,7 @@
       "config": "/configs/pcx86/ibm/5150/rom-basic-100.json"
     },
     {
-      "config": "/configs/pcx86/ibm/5150/rom-bios-rev1.json"
+      "config": "/configs/pcx86/ibm/5150/rom-bios-rev3.json"
     },
     {
       "config": "/configs/pcx86/ibm/5150/rom-vga.json"
@@ -32,7 +32,8 @@
       "config": "/configs/pcx86/ibm/5150/fdc.json"
     },
     {
-      "config": "/configs/pcx86/ibm/5150/ram.json"
+      "config": "/configs/pcx86/ibm/5150/ram.json",
+      "test": "false"
     },
     {
       "config": "/configs/pcx86/ibm/5150/cpu.json"

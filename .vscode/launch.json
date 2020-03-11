@@ -56,84 +56,98 @@
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC Model 5150 with Color Display",
+        "name": "IBM PC with Color Display",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/cga/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC Model 5150 with Color Display and Debugger",
+        "name": "IBM PC with Color Display and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/cga/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC Model 5150 with Monochrome Display",
+        "name": "IBM PC with Monochrome Display",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC Model 5150 with Monochrome Display and Debugger",
+        "name": "IBM PC with Monochrome Display and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC Model 5150 with Dual Displays",
+        "name": "IBM PC with Dual Displays",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/dual/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC Model 5160 with Color Display",
+        "name": "IBM PC with VGA Display",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:4000/machines/pcx86/ibm/5150/vga/",
+        "webRoot": "${workspaceFolder}"
+      },
+      {
+        "name": "IBM PC with VGA Display and Debugger",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:4000/machines/pcx86/ibm/5150/vga/debugger/",
+        "webRoot": "${workspaceFolder}"
+      },
+      {
+        "name": "IBM PC XT with Color Display",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/cga/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC Model 5160 with Color Display and Debugger",
+        "name": "IBM PC XT with Color Display and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/cga/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC Model 5160 with Enhanced Color Display",
+        "name": "IBM PC XT with Enhanced Color Display",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/ega/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC Model 5160 with Enhanced Color Display and Debugger",
+        "name": "IBM PC XT with Enhanced Color Display and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/ega/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC Model 5160 with Monochrome Display",
+        "name": "IBM PC XT with Monochrome Display",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/mda/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC Model 5160 with Monochrome Display and Debugger",
+        "name": "IBM PC XT with Monochrome Display and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/mda/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC Model 5170 with Color Display",
+        "name": "IBM PC AT with Color Display",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5170/cga/",
