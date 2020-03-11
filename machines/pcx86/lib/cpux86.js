@@ -3839,8 +3839,13 @@ class CPUx86 extends CPULib {
         /*
          * With the following cycle penalty (which really only affects 8086/8088 CPUs), PC Tools 4.30
          * correctly reports an IBM PC-relative speed of 100% (assuming you're using a 4.77Mhz configuration).
+         *
+         * Unfortunately, adding this penalty creates other side-effects, including a timing failure in
+         * the VGA BIOS when using a VGA with an IBM PC.  So, we'll have to take a second look at how PC Tools
+         * calculates the machine's speed.
+         *
+         *      this.nStepCycles -= this.cycleCounts.nWordCyclePenalty;
          */
-        this.nStepCycles -= this.cycleCounts.nWordCyclePenalty;
         this.regLIP = newLIP;
         return b;
     }

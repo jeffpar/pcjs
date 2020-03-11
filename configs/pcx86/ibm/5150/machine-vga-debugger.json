@@ -32,7 +32,8 @@
       "config": "/configs/pcx86/ibm/5150/fdc.json"
     },
     {
-      "config": "/configs/pcx86/ibm/5150/ram.json"
+      "config": "/configs/pcx86/ibm/5150/ram.json",
+      "test": "false"
     },
     {
       "config": "/configs/pcx86/ibm/5150/cpu.json"
