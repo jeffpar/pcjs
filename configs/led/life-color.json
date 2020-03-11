@@ -2,7 +2,7 @@
   "lifeColorDemo": {
     "class": "Machine",
     "type": "LED",
-    "name": "Game of Life Demo",
+    "name": "Game of Life",
     "version": 2.00,
     "autoStart": false,
     "bindings": {

@@ -2,7 +2,7 @@
   "lifeDemo": {
     "class": "Machine",
     "type": "LED",
-    "name": "Game of Life Demo",
+    "name": "Game of Life (Mono)",
     "version": 2.00,
     "autoStart": false,
     "bindings": {
