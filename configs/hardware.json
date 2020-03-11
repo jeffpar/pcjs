@@ -35,6 +35,9 @@
           "@title": "Dual Displays",
           "@redirect_from": "/devices/pcx86/machine/5150/dual/64kb/"
         },
+        "vga": {
+          "@title": "VGA Display"
+        },
         "@documents": [
           {
             "@title": "IBM 5150 Guide to Operations (Aug 1981)",
@@ -189,21 +192,13 @@
   "led": {
     "@title": "LED Simulations",
     "@instances": {
-      "life": {
+      "life/color": {
         "@title": "Game of Life",
-        "@redirect_from": "/devices/leds/life/"
+        "@redirect_from": "/devices/leds/life/colors"
       },
-      "life/colors": {
-        "@title": "Game of Life (Color)",
-        "@redirect_from": "/devices/leds/life/colors/"
-      },
-      "litebrite": {
+      "lite-brite": {
         "@title": "Lite-Brite",
-        "@redirect_from": "/devices/leds/litebrite/"
-      },
-      "litebrite/images": {
-        "@title": "Lite-Brite Images",
-        "@redirect_from": "/devices/leds/litebrite/images/"
+        "@redirect_from": "/devices/leds/lite-brite/"
       }
     }
   },

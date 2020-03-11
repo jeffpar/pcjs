@@ -914,5 +914,302 @@
     "intel": {
       "@title": "Intel"
     }
+  },
+  "photos": {
+    "@title": "Photos",
+    "@instances": {
+      "lite-brite": {
+        "@title": "Lite-Brite",
+        "@documents": [
+          {
+            "@title": "Toy Soldier",
+            "@file": "Toy_Soldier.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Toy_Soldier.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Surfer",
+            "@file": "Surfer.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Surfer.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Antique Auto",
+            "@file": "Antique_Auto.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Antique_Auto.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Indian Chief",
+            "@file": "Indian_Chief.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Indian_Chief.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Cowboy and Indian",
+            "@file": "Cowboy_and_Indian.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Cowboy_and_Indian.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "The Skier",
+            "@file": "The_Skier.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/The_Skier.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Basketball Player",
+            "@file": "Basketball_Player.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Basketball_Player.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Steamboat",
+            "@file": "Steamboat.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Steamboat.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Little Bo Peep",
+            "@file": "Little_Bo_Peep.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Little_Bo_Peep.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Pumpkin Coach",
+            "@file": "Pumpkin_Coach.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Pumpkin_Coach.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "The Witch",
+            "@file": "The_Witch.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/The_Witch.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Dancing Ballerina",
+            "@file": "Dancing_Ballerina.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Dancing_Ballerina.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Girl in the Rain",
+            "@file": "Girl_in_the_Rain.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Girl_in_the_Rain.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Ring Around the Rosy",
+            "@file": "Ring_Around_the_Rosy.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Ring_Around_the_Rosy.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Fruit Bowl",
+            "@file": "Fruit_Bowl.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Fruit_Bowl.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Flower Garden",
+            "@file": "Flower_Garden.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Flower_Garden.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Performing Seal",
+            "@file": "Performing_Seal.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Performing_Seal.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "The Red Balloon",
+            "@file": "The_Red_Balloon.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/The_Red_Balloon.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Cat on Fence",
+            "@file": "Cat_on_Fence.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Cat_on_Fence.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Jack be Nimble",
+            "@file": "Jack_be_Nimble.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Jack_be_Nimble.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Jungle Scene",
+            "@file": "Jungle_Scene.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Jungle_Scene.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "American Eagle",
+            "@file": "American_Eagle.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/American_Eagle.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Barnyard Scene",
+            "@file": "Barnyard_Scene.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Barnyard_Scene.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Merry-Go-Round Horse",
+            "@file": "Merry-Go-Round_Horse.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Merry-Go-Round_Horse.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Windmill",
+            "@file": "Windmill.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Windmill.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Bird of Paradise",
+            "@file": "Bird_of_Paradise.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Bird_of_Paradise.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Clown",
+            "@file": "Clown.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Clown.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Butterflies",
+            "@file": "Butterflies.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Butterflies.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "House and Light",
+            "@file": "House_and_Light.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/House_and_Light.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Snow Man",
+            "@file": "Snow_Man.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Snow_Man.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Lighthouse",
+            "@file": "Lighthouse.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Lighthouse.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Ducks",
+            "@file": "Ducks.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Ducks.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Christmas Tree",
+            "@file": "Christmas_Tree.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Christmas_Tree.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Lemonade Sign",
+            "@file": "Lemonade_Sign.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Lemonade_Sign.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Boy and Girl",
+            "@file": "Boy_and_Girl.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Boy_and_Girl.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Tropical Fish",
+            "@file": "Tropical_Fish.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Tropical_Fish.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "American Flag",
+            "@file": "American_Flag.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/American_Flag.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Choo-Choo Train",
+            "@file": "Choo-Choo_Train.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Choo-Choo_Train.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Chicken",
+            "@file": "Chicken.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Chicken.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "Sailboat",
+            "@file": "Sailboat.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/Sailboat.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          },
+          {
+            "@title": "The Wizard of Light",
+            "@file": "The_Wizard_of_Light.png",
+            "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/The_Wizard_of_Light.png&pattern=",
+            "@cover": ".png",
+            "@source": ""
+          }
+        ]
+      }
+    }
   }
 }

@@ -37,7 +37,7 @@
                         {%- capture docs_path4 -%}{%- endcapture %}
                         {%- if instance[0] != "" -%}{%- capture docs_path4 -%}/{{ instance[0] }}{%- endcapture %}{%- endif -%}
                         {%- capture docs_url -%}{{ docs_path1 }}{{ docs_path2 }}{{ docs_path3 }}{{ docs_path4 }}{%- endcapture %}
-                        {%- capture docs_link -%}{% if instance[1]['@permalink'] %}{{ instance[1]['@permalink'] }}{% else %}/documents{{ docs_url | replace: "-", "/" }}/{% endif %}{%- endcapture -%}
+                        {%- capture docs_link -%}{% if instance[1]['@permalink'] %}{{ instance[1]['@permalink'] }}{% else %}/documents{{ docs_url }}/{% endif %}{%- endcapture -%}
                         {%- assign docs_item = instance[1]['@title'] -%}
                         {%- if instance[1]['@redirect_from'] or instance[1]['@documents'] -%}
                           {%- capture docs_item -%}<a href="{{ docs_link }}">{{ docs_item }}</a>{%- endcapture -%}

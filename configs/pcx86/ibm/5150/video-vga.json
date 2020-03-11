@@ -1,0 +1,53 @@
+{
+  "id": "videoVGA",
+  "class": "video",
+  "title": "VGA Display",
+  "model": "vga",
+  "screenWidth": 1280,
+  "screenHeight": 960,
+  "screenColor": "black",
+  "overlay": true,
+  "autoLock": true,
+  "touchScreen": "mouse",
+  "controls": [
+    {
+      "type": "group",
+      "style": {
+        "float": "right"
+      }
+    },
+    {
+      "id": "caps-lock",
+      "type": "led",
+      "title": "Caps",
+      "style": {
+        "padding-left": "8px"
+      }
+    },
+    {
+      "id": "num-lock",
+      "type": "led",
+      "title": "Num",
+      "style": {
+        "padding-left": "8px"
+      }
+    },
+    {
+      "id": "scroll-lock",
+      "type": "led",
+      "title": "Scroll",
+      "style": {
+        "padding-left": "8px"
+      }
+    },
+    {
+      "id": "fullScreen",
+      "type": "button",
+      "label": "Full Screen",
+      "style": {
+        "padding-left": "8px",
+        "line-height": "1em"
+      }
+    }
+  ]
+}

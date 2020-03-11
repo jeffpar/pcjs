@@ -7,7 +7,7 @@ preview: /software/pcx86/demo/ibm/ega/fland-legend.png
 machines:
   - id: ibm5160
     type: pcx86
-    config: /devices/pcx86/machine/5160/ega/256kb/color/machine.xml
+    config: /configs/pcx86/xml/machine/5160/ega/256kb/color/machine.xml
     autoMount:
       A:
         name: IBM EGA Fantasy Land Demo
@@ -18,7 +18,7 @@ machines:
 
 On February 19, 2018, I received a pleasantly surprising email from a person named Eric, who had stumbled across
 a PCjs [blog post](/blog/2017/07/03/) where I was lamenting the disappearance of an old IBM EGA demonstration program
-called "[Fantasy Land](/disks/pcx86/apps/ibm/fland/)":
+called "[Fantasy Land](/software/pcx86/demo/ibm/ega/)":
 
     From: Eric
     Subject: FantasyLand - Software for the IBM Enhanced Graphics Adapter
@@ -32,10 +32,10 @@ called "[Fantasy Land](/disks/pcx86/apps/ibm/fland/)":
 Eric then went out of his way to have the disk professionally duplicated, after which he sent me a disk image
 and eventually the actual diskette.
 
-![Fantasy Land]({{ site.demo-disks.baseurl }}/pcx86/apps/ibm/fland/FLAND.jpg)
+![Fantasy Land]({{ site.software.diskettes.server }}/pcx86/demo/ibm/ega/EGA-FLAND.jpg)
 
 Based on John T. Cockerham's October 1986 PC Tech Journal article
-"[Evaluating the EGA: The EGA Standard](/modules/shared/templates/pdf.html?url=/pubs/pc/magazines/pctj/PCTJ-1986-10/pages/PCTJ-1986-10%2053.pdf&page=53&total=228)",
+"[Evaluating the EGA: The EGA Standard](/documents/magazines/pctj/#pctj-1986-10)",
 I knew the software would not run properly in PCjs, because it made use of programmable fonts, split screens,
 and text-mode pixel panning -- all features that PCjs did not support yet.  So I first tried running it on a genuine
 IBM PC with an original IBM EGA.
@@ -175,7 +175,7 @@ any extension from the file name, and then looks first for a matching `COM` file
 a matching `BAT` file.  In this case, DOS *always* runs `FLAND.EXE`. 
 
 Since the application seemed designed to run from drive B, that's where I decided to auto-mount it in my
-[IBM EGA Fantasy Land Demo](/disks/pcx86/apps/ibm/fland/) test machine, along with a standard PC DOS 2.00 boot disk
+[IBM EGA Fantasy Land Demo](/software/pcx86/demo/ibm/ega/) test machine, along with a standard PC DOS 2.00 boot disk
 in drive A.
 
 But that didn't completely solve all the problems.  Just before FLAND.EXE begins its automated demo, it reads
@@ -199,7 +199,7 @@ To avoid this second problem, I decided to auto-mount the disk in *both* the A a
 
 ### Getting The Lay Of The Land
 
-Although more work is required in PCjs to get [Fantasy Land](/disks/pcx86/apps/ibm/fland/) running in all its original glory,
+Although more work is required in PCjs to get [Fantasy Land](/software/pcx86/demo/ibm/ega/) running in all its original glory,
 you can already get a good sense of what the map looked like, and enjoy all the little animated touches that Joel Gould and his
 wife Daphne created, using the newfound power of character cell animation made possible by IBM's Enhanced Graphics
 Adapter.
@@ -234,9 +234,6 @@ insight into the active fonts and colors used by Fantasy Land and the EGA.
 
 ### Fantasy Land Screenshots from PCjs
 
-![Fantasy Land Intro](/disks/pcx86/apps/ibm/fland/fland-intro.png)
+![Fantasy Land Intro](/software/pcx86/demo/ibm/ega/fland-intro.png)
 
-![Fantasy Land Legend](/disks/pcx86/apps/ibm/fland/fland-legend.png)
-
-*[@jeffpar](https://jeffpar.com)*  
-*Apr 23, 2018*
+![Fantasy Land Legend](/software/pcx86/demo/ibm/ega/fland-legend.png)
