@@ -82,8 +82,8 @@ function parseDiskettes(library, propPath = "/pcx86")
                             name += " (Disk " + (i + 1) + ")";
                         }
                     }
-                    let sPath = propPath + '/' + category + '/' + version + '/' + item['@diskette'] + '.json';
-                    let sFilePath = "../pcjs-diskettes/" + sPath;
+                    let sPath = propPath + '/' + category + '/' + version + '/' + item['@diskette'];
+                    let sFilePath = (sPath.indexOf("/pcx86/game/") < 0? "../pcjs-diskettes/" : "../pcjs-gamedisks/") + sPath;
                     if (!fileExists(sFilePath)) {
                         printf("warning: missing diskette %s\n", sPath);
                     }

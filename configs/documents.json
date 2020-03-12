@@ -911,8 +911,45 @@
   },
   "manuals": {
     "@title": "Manuals",
-    "intel": {
-      "@title": "Intel"
+    "@instances": {
+      "intel": {
+        "@title": "Intel"
+      },
+      "microsoft": {
+        "@title": "Microsoft",
+        "@documents": [
+          {
+            "@title": "Microsoft Adventure Manual",
+            "@file": "Adventure_Manual.pdf",
+            "@link": "https://gamedisks.pcjs.org/pcx86/game/microsoft/adventure/Adventure_Manual.pdf",
+            "@cover": ".jpg",
+            "@source": "",
+            "@tags": "adventure"
+          }
+        ]
+      }
+    }
+  },
+  "papers": {
+    "@title": "Papers",
+    "@instances": {
+      "pcjs": {
+        "@title": "PCjs Personal Documents",
+        "@documents": [
+          {
+            "@title": "dBASE III Debugging Notes",
+            "@file": "1984-09-16--DBASE_III_DEBUG.pdf",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "dBASE III Patching Procedure",
+            "@file": "1984-09-25--DBASE_III_PATCH.pdf",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          }
+        ]
+      }
     }
   },
   "photos": {

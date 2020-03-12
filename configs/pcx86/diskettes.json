@@ -1402,6 +1402,42 @@
   "game": {
     "@title": "Games",
     "@server": "https://gamedisks.pcjs.org",
+    "microsoft": {
+      "@title": "Microsoft",
+      "@versions": {
+        "adventure": {
+          "@title": "Microsoft Adventure",
+          "@media": [
+            {
+              "@title": "Microsoft Adventure",
+              "@diskette": "ADVENTURE-1981.json"
+            },
+            {
+              "@title": "Microsoft Adventure (Unmodified)",
+              "@diskette": "ADVENTURE-1981-UNMODIFIED.json"
+            }
+          ]
+        },
+        "flightsim/1982": {
+          "@title": "Flight Simulator (1982)",
+          "@media": [
+            {
+              "@diskette": "FLIGHTSIM-1982.json",
+              "@type": "PC160K"
+            }
+          ]
+        },
+        "flightsim/1984": {
+          "@title": "Flight Simulator (1984)",
+          "@media": [
+            {
+              "@diskette": "FLIGHTSIM-1984.json",
+              "@type": "PC360K"
+            }
+          ]
+        }
+      }
+    },
     "other": {
       "@title": "Other (By Year)",
       "1982": {

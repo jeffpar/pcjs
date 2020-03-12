@@ -65484,13 +65484,14 @@ class FDC extends Component {
     }
 
     /**
-     * parseDiskettes(library, propPath)
+     * parseDiskettes(library, propPath, server)
      *
      * @this {FDC}
      * @param {Object} library
      * @param {string} propPath
+     * @param {string} server
      */
-    parseDiskettes(library, propPath = "/pcx86")
+    parseDiskettes(library, propPath = "/pcx86", server = this.sDisketteServer)
     {
         for (let category in library) {
             let group = library[category];
@@ -65518,14 +65519,14 @@ class FDC extends Component {
                                 name += " (Disk " + (i + 1) + ")";
                             }
                         }
-                        let path = this.sDisketteServer + propPath + '/' + category + '/' + version + '/' + item['@diskette'];
+                        let path = server + propPath + '/' + category + '/' + version + '/' + item['@diskette'];
                         this.aDiskettes.push({name, path});
                     }
                 }
                 continue;
             }
             if (category[0] == '@') continue;
-            this.parseDiskettes(group, propPath + '/' + category);
+            this.parseDiskettes(group, propPath + '/' + category, group['@server'] || server);
         }
     }
 

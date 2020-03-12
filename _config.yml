@@ -38,5 +38,7 @@ plugins:
 software:
   diskettes:
     server: https://diskettes.pcjs.org
+  gamedisks:
+    server: https://gamedisks.pcjs.org
   harddisks:
     server: https://harddisks.pcjs.org

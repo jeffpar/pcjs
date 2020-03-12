@@ -1,8 +1,8 @@
+{% capture title %}{{ include.title | default: "Documents" }}{% endcapture %}
 {% capture group %}{{ include.group | default: "@documents" }}{% endcapture %}
-{% capture group_id %}{{ group | replace: "@", "" }}{% endcapture %}
+{% capture group_id %}{{ title | replace: "@", "" | replace: " ", "-" | downcase }}{% endcapture %}
 {% capture cover_width %}{{ include.width | default: "200" }}{% endcapture %}
 {% capture cover_height %}{{ include.height | default: "" }}{% endcapture %}
-{% capture title %}{{ include.title | default: "Documentation" }}{% endcapture %}
 {% assign path = include.path | default: page.permalink %}
 {% assign path_parts = path | split: "/" %}
 {% assign tag = include.tag | default: "" %}
@@ -43,9 +43,9 @@
         {%- assign doc_tags = doc['@tags'] | default: "" -%}
         {%- if doc_file and doc_tags contains tag -%}
           {%- assign doc_id = doc_file | replace: ".pdf","" | replace: ".png","" | downcase -%}
-          {%- assign doc_link = doc['@link'] -%}
+          {%- assign doc_link = doc['@link'] | default: doc_file -%}
           {%- assign doc_title = doc['@title'] -%}
-          {%- assign doc_cover = doc['@cover'] -%}
+          {%- assign doc_cover = doc['@cover'] | default: "/documents/covers/default.jpg" -%}
           {%- if doc_cover == ".jpg" or doc_cover == ".png" -%}
             {%- capture doc_cover -%}{{ path }}covers/{{ doc_file | replace: ".pdf",doc_cover | replace: ".png",doc_cover }}{%- endcapture -%}
           {%- endif -%}

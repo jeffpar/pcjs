@@ -29,7 +29,7 @@ The same May 2019 acquisition included:
 - WordStar 3.0 Training Guide (20 lessons)
 - Official WordStar MicroPro Binder
 
-You can browse all of the [Additional Materials](#documents) below.
+You can browse all of the [Additional Materials](#additional-materials) below.
 
 {% include machine.html id="ibm5150" %}
 

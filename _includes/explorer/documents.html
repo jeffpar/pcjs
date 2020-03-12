@@ -23,7 +23,7 @@
                         {%- capture docs_path3 -%}{%- endcapture -%}
                       {%- elsif subcategory[0] == "@documents" -%}
                         {%- assign documents = subcategory[1] -%}
-                        {%- include explorer-doclinks.html docs=documents -%}
+                        {%- include explorer/doclinks.html docs=documents -%}
                         {%- continue -%}
                       {%- elsif subcategory[0] contains '@' -%}
                         {%- continue -%}

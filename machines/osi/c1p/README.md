@@ -18,7 +18,7 @@ C1Pjs is a JavaScript simulation of the Ohio Scientific Challenger 1P, an 8-bit 
 manufactured in 1978.  The base configuration included an 8Kb BASIC-in-ROM from Microsoft and 4Kb of RAM
 (user-expandable to 8Kb).  Below is a simulation of the 8Kb RAM configuration.
 
-Original [Documentation](#documents) is available, along with other machine configurations, such as
+Original [Documentation](#c1p-documentation) is available, along with other machine configurations, such as
 [C1P with Debugger](debugger/) and [C1P "Array"](array/).
 
 {% include machine.html id="c1p8k" %}
