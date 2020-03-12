@@ -198,7 +198,7 @@ class Web {
         //     sURLRedirect = sURL.replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/").replace(/^\/disks-([a-z0-9]+)\//, "https://$1-disks.pcjs.org/");
         // }
 
-        let sURLRedirect = sURL.replace(/^\/(diskettes|harddisks)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+        let sURLRedirect = sURL.replace(/^\/(diskettes|gamedisks|harddisks)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
 
         if (typeof module !== "undefined") {
             /*

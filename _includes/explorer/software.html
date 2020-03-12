@@ -49,7 +49,7 @@
                 {%- capture machine_url -%}/machines{{ software_path1 }}/{%- endcapture -%}
                 {%- assign diskette_drives = machine[1]['@diskette_drives'] -%}
                 {%- assign categories = site.data[machine_type][software_type] %}
-                <li class="pcjs-explorer-platform pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ machine[1]['@title'] }}
+                <li class="pcjs-explorer-platform pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ machine[1]['@title'] | default: machine[0] }}
                   <ul>
                   {%- for category in categories -%}
                     {%- if site.developer %}
@@ -59,7 +59,7 @@
                     {%- if category[1]['@hidden'] -%}{%- continue -%}{%- endif -%}
                     {%- assign subcategories = category[1] -%}
                     {%- capture software_path2 -%}/{{ category[0] }}{%- endcapture %}
-                    <li class="pcjs-explorer-category pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ category[1]['@title'] }}
+                    <li class="pcjs-explorer-category pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ category[1]['@title'] | default: category[0] }}
                       <ul>
                     {%- for subcategory in subcategories -%}
                       {%- if site.developer %}
@@ -74,7 +74,7 @@
                       {%- else -%}
                         {%- assign vendors = subcategory[1] -%}
                         {%- capture software_path3 -%}/{{ subcategory[0] }}{%- endcapture %}
-                        <li class="pcjs-explorer-subcategory pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ subcategory[1]['@title'] }}
+                        <li class="pcjs-explorer-subcategory pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ subcategory[1]['@title'] | default: subcategory[0] }}
                           <ul>
                       {%- endif -%}
 
@@ -94,7 +94,7 @@
                         {% else -%}
                             {%- assign products = vendor[1] -%}
                             {%- capture software_path4 -%}/{{ vendor[0] }}{%- endcapture %}
-                            <li class="pcjs-explorer-vendor pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ vendor[1]['@title'] }}
+                            <li class="pcjs-explorer-vendor pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ vendor[1]['@title'] | default: vendor [0] }}
                               <ul>
                         {%- endif -%}
 
@@ -110,7 +110,7 @@
                           {%- else -%}
                             {%- assign versions = product[1]['@versions'] %}
                             {%- capture software_path5 %}/{{ product[0] }}{% endcapture -%}
-                                <li class="pcjs-explorer-product pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ product[1]['@title'] }}
+                                <li class="pcjs-explorer-product pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ product[1]['@title'] | default: product[0] }}
                                   <ul>
                           {%- endif -%}
 
@@ -126,8 +126,9 @@
                             {%- endif -%}
                             {%- capture hardware_url -%}{{ release['@hardware'] }}{%- endcapture -%}
                             {%- capture alternate_url -%}{{ release['@permalink'] }}{%- endcapture -%}
-                            {%- capture diskette_server -%}https://{{ release['@subdomain'] | default: "diskettes" }}.pcjs.org{%- endcapture -%}
-                            {%- capture harddisk_server -%}https://{{ release['@subdomain'] | default: "harddisks" }}.pcjs.org{%- endcapture -%}
+                            {%- if category[0] != "game" -%}{%- assign diskette_default = "https://diskettes.pcjs.org" -%}{%- else -%}{%- assign diskette_default = "https://gamedisks.pcjs.org" -%}{%- endif -%}
+                            {%- capture diskette_server -%}{{ release['@server'] | default: diskette_default }}{%- endcapture -%}
+                            {%- capture harddisk_server -%}{{ release['@server'] | default: "https://harddisks.pcjs.org" }}{%- endcapture -%}
                             {%- capture software_url -%}{{ software_path1 }}{{ software_path2 }}{{ software_path3 }}{{ software_path4 }}{{ software_path5 }}{% if version[0] != "" %}/{{ version[0] }}{% endif %}{%- endcapture -%}
                             {%- capture software_id -%}{{ software_url | remove_first: "/" | replace: "/", "-" }}{%- endcapture -%}
                             {%- if site.developer %}
@@ -143,13 +144,13 @@
                               {%- elsif release['@media'][0]['@diskette'] -%}
                                 {%- if release['@bootable'] -%}{%- assign drive_num = 0 -%}{%- else -%}{%- assign drive_num = 1 -%}{%- endif -%}
                                 {%- capture autoMount -%}{% assign disk_num = 0 %}{% for disk in release['@media'] %}{{ diskette_drives[drive_num] }}{% assign disk_num = disk_num | plus:1 %}{% assign drive_num = drive_num | plus:1 %}:%7Bname:%22{% if disk['@title'] %}{{ disk['@title'] }}{% else %}{{ software_title }}{% if release['@title'] == nil and release['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}{% endif %}%22,path:%22{{ diskette_server }}{{ software_url }}/{{ disk['@diskette'] }}%22%7D,{% if drive_num >= diskette_drives.size %}{% break %}{% endif %}{% endfor %}@{%- endcapture -%}
-                              {%- endif -%}
-                              {%- if release['@media'][0]['@harddisk'] -%}
+                                {%- if release['@state'] -%}{%- capture autoState -%}&state={{ diskette_server }}{{ software_url }}/{{ release['@state'] }}{%- endcapture -%}{%- endif -%}
+                              {%- elsif release['@media'][0]['@harddisk'] -%}
                                 {%- capture autoDrive -%}{% for disk in release['@media'] %}%7Bname:%22{{ disk['@name'] }}%22,type:{{ disk['@type'] }},path:%22{{ harddisk_server }}{{ software_url }}/{{ disk['@harddisk'] }}.json%22%7D,{% endfor %}@{%- endcapture -%}
+                                {%- if release['@state'] -%}{%- capture autoState -%}&state={{ harddisk_server }}{{ software_url }}/{{ release['@state'] }}{%- endcapture -%}{%- endif -%}
                               {%- endif -%}
                               {%- if autoDrive != "" -%}{%- capture autoDrive -%}&drives=[{{ autoDrive | replace: ",@", "" | replace: " ","%20" }}]{%- endcapture -%}{%- endif -%}
                               {%- if autoMount != "" -%}{%- capture autoMount -%}&autoMount=%7B{{ autoMount | replace: ",@", "" | replace: " ","%20" }}%7D{%- endcapture -%}{%- endif -%}
-                              {%- if release['@state'] -%}{%- capture autoState -%}&state={{ harddisk_server }}{{ software_url }}/{{ release['@state'] }}{%- endcapture -%}{%- endif -%}
                               {%- capture software_parms -%}{%- if hardware_url contains '?' -%}&{%- else -%}?{%- endif -%}software={{ software_url }}/{{ autoMount }}{{ autoDrive }}{{ autoState }}{%- endcapture -%}
                             {%- elsif alternate_url != "" -%}
                               {%- assign hardware_url = alternate_url -%}

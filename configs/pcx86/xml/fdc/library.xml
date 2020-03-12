@@ -2,22 +2,6 @@
 <fdc id="fdcNEC" autoMount='{A:{name:"PC DOS 2.00 (Disk 1)"}, B:{name:"PC DOS 2.00 (Disk 2)"}}' diskettes="/configs/pcx86/diskettes.json" server="https://diskettes.pcjs.org" sortBy="name" pos="left" padLeft="8px" padBottom="8px">
 	<control type="list" binding="listDrives"/>
 	<control type="list" binding="listDisks">
-		<disk path="/apps/pcx86/1982/esuite/disk.json">Executive Suite (1982)</disk>
-		<disk path="/apps/pcx86/1982/ratbas/RATBAS213.json">RatBas 2.13</disk>
-		<disk path="/apps/pcx86/1983/adventmath/ADVENTMATH100.json">Adventures in Math 1.00</disk>
-		<disk path="/apps/pcx86/1985/castle_adventure/CASTLE-ADVENTURE-1985.json">Castle Adventure (1985)</disk>
-		<disk path="/apps/pcx86/1985/rogue/disk.json">Rogue (1985)</disk>
-		<disk path="/apps/pcx86/1987/thinktank/disk.json">ThinkTank (1987)</disk>
-		<disk path="/apps/pcx86/1992/moria/disk.json">Moria 5.5 (1992)</disk>
-		<disk path="/disks-game/pcx86/id/commander_keen/episode1/KEEN1-V11.json">Commander Keen: Episode One</disk>
-		<disk path="/disks-game/pcx86/id/wolf3d/1WOLF14.json">Wolfenstein 3D 1.4</disk>
-		<disk path="/disks-game/pcx86/microsoft/flightsim/1982/FLIGHTSIM-1982.json">MS Flight Simulator (1982)</disk>
-		<disk path="/disks-game/pcx86/microsoft/flightsim/1984/FLIGHTSIM-1984.json">MS Flight Simulator (1984)</disk>
-		<disk path="/disks-game/pcx86/other/1984/wizardry1/WIZARDRY1-MASTER.json">Wizardry I - Master Disk</disk>
-		<disk path="/disks-game/pcx86/other/1984/wizardry1/WIZARDRY1-SCENARIO.json">Wizardry I - Scenario Disk</disk>
-		<disk path="/disks-game/pcx86/other/1988/trump_castle/TRUMP-CASTLE-120.json">Trump Castle 1.20 (1988)</disk>
-		<disk path="/disks-game/pcx86/other/1990/oregon_trail/OREGON_TRAIL-210.json">Oregon Trail 2.1 (1990)</disk>
-		<disk path="/disks-game/pcx86/other/1991/lemmings/LEMMINGS.json">Lemmings (1991)</disk>
 	</control>
 	<control type="button" binding="loadDisk">Load</control>
 	<control type="button" binding="saveDisk" padRight="8px">Save</control>
