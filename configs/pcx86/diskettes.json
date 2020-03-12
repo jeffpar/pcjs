@@ -687,23 +687,6 @@
       }
     }
   },
-  "boot": {
-    "@title": "Boot Sectors",
-    "@versions": {
-      "invaders": {
-        "@title": "Invaders Boot Sector",
-        "@bootable": true,
-        "@hardware": "/machines/pcx86/ibm/5150/vga/",
-        "@media": [
-          {
-            "@diskette": "INVADERS.json",
-            "@type": "PC160K",
-            "@source": "https://github.com/nanochess/Invaders"
-          }
-        ]
-      }
-    }
-  },
   "demo": {
     "@title": "Demos",
     "ibm": {
@@ -1409,6 +1392,76 @@
                 "@title": "Omniview 386 4.30",
                 "@diskette": "OMNIVIEW386-430.json",
                 "@type": "PC720K"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "game": {
+    "@title": "Games",
+    "@server": "https://gamedisks.pcjs.org",
+    "other": {
+      "@title": "Other (By Year)",
+      "1982": {
+        "@versions": {
+          "esuite": {
+            "@title": "Executive Suite (1982)",
+            "@media": [
+              {
+                "@diskette": "ESUITE-1982.json",
+                "@type": "PC360K",
+                "@author": "Armonk Corporation",
+                "@source": ""
+              }
+            ]
+          }
+        }
+      },
+      "1985": {
+        "@versions": {
+          "rogue": {
+            "@title": "Rogue (1985)",
+            "@version": "1.49",
+            "@media": [
+              {
+                "@diskette": "ROGUE-1985.json",
+                "@type": "PC160K",
+                "@author": "Ken Arnold, Jon Lane, Michael Toy",
+                "@source": ""
+              }
+            ]
+          }
+        }
+      },
+      "1992": {
+        "@versions": {
+          "moria": {
+            "@title": "Moria (1992)",
+            "@version": "5.5",
+            "@media": [
+              {
+                "@diskette": "MORIA-1992.json",
+                "@type": "PC360K",
+                "@author": "Robert A. Koeneke, Jimmey W. Todd Jr., David J. Grabiner, James E. Wilson",
+                "@source": ""
+              }
+            ]
+          }
+        }
+      },
+      "2019": {
+        "@versions": {
+          "invaders": {
+            "@title": "Invaders (Boot Sector)",
+            "@bootable": true,
+            "@hardware": "/machines/pcx86/ibm/5150/vga/",
+            "@media": [
+              {
+                "@diskette": "INVADERS-BOOT.json",
+                "@type": "PC160K",
+                "@source": "https://github.com/nanochess/Invaders"
               }
             ]
           }
