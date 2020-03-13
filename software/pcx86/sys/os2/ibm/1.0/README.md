@@ -3,13 +3,13 @@ layout: page
 title: IBM OS/2 1.0
 permalink: /software/pcx86/sys/os2/ibm/1.0/
 redirect_from: /disks/pcx86/os2/ibm/1.0/
-preview: /disks/pcx86/os2/ibm/1.0/screenshot.png
+preview: screenshot.png
 machines:
   - id: ibm5170
     type: pcx86
     debugger: true
     config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/debugger/machine.xml
-    drives: '[{name:"20Mb Hard Disk",type:2,path:"/disks-demo/pcx86/drives/20mb/IBMOS210-EGA.json"}]'
+    drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/sys/os2/ibm/1.0/IBMOS210-EGA.json"}]'
     autoMount:
       A:
         name: None
@@ -33,7 +33,7 @@ digits (294) are the day of the year (October 21).
 Directory listings of the four 1.44Mb distribution diskettes are provided below.
 
 IBM OS/2 1.0 has been pre-installed on this machine's 20Mb hard disk, along with a copy of the
-[Microsoft OS/2 SDK 1.02](/disks/pcx86/tools/microsoft/os2/sdk/1.02/), as discussed in the
+[Microsoft OS/2 SDK 1.02](/software/pcx86/sdk/os2/microsoft/1.02/), as discussed in the
 [PCjs Blog](/blog/2015/12/27/).
 
 {% include machine.html id="ibm5170" %}

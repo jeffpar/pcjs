@@ -3,14 +3,14 @@ layout: post
 title: A Quick Post
 date: 2019-07-28 10:00:00
 permalink: /blog/2019/07/28/
-preview: https://demo-disks.pcjs.org/pcx86/tools/microsoft/basic/quickbasic/1.00/QUICKBAS100.png
+preview: https://diskettes.pcjs.org/pcx86/lang/microsoft/basic/QUICKBAS100.png
 ---
 
 There have been a number of small additions to the website over the last month:
 
-- A set of [COMPAQ Technical Reference Guides](/pubs/pc/reference/compaq/80286/) (thanks to Ray Knights of Las Vegas, NV)
-- A few more 1989 issues of [PC Tech Journal](/pubs/pc/magazines/pctj/) magazine, which now makes the collection complete
-- [QuickBASIC 1.0](/disks/pcx86/tools/microsoft/basic/quickbasic/1.00/) and [QuickBASIC 2.0](/disks/pcx86/tools/microsoft/basic/quickbasic/2.00/) original diskettes; version 1.0 had been particularly hard to find
+- A set of [COMPAQ Technical Reference Guides](/machines/pcx86/compaq/deskpro286/#documents) (thanks to Ray Knights of Las Vegas, NV)
+- A few more 1989 issues of [PC Tech Journal](/documents/magazines/pctj/) magazine, which now makes the collection complete
+- [QuickBASIC 1.0](/software/pcx86/lang/microsoft/basic/quickbasic/1.00/) and [QuickBASIC 2.0](/software/pcx86/lang/microsoft/basic/quickbasic/2.00/) original diskettes; version 1.0 had been particularly hard to find
 
 as well as a few PCx86 tweaks:
 
@@ -40,14 +40,11 @@ something.
 I haven't turned off AWS yet, primarily because there's a number of "archive.pcjs.org" links out in the wild that are
 still served by AWS, but I plan to address that in the near future.
 
-I'd also like to spend some time playing with the old versions of [QuickBASIC](/disks/pcx86/tools/microsoft/basic/quickbasic/).
+I'd also like to spend some time playing with the old versions of QuickBASIC.
 The diskettes I picked up didn't come with any manuals, but I do have a copy of "Microsoft QuickBASIC" by Douglas Hergert
 from Microsoft Press (1987).  I'm thinking about mailing in a request for the "Companion Disk", too.  I'll let you know if
 Microsoft Press comes through.
 
-[![Microsoft QuickBASIC (1987)](/pubs/pc/programming/Microsoft_QuickBASIC/cover.jpg)](https://1drv.ms/b/s!ArcO_mFRe1Z9gvA_O6gyOmFPqAMhDw?e=GaqGs8)
+{% include gallery/documents.html title="Microsoft QuickBASIC" path="/documents/manuals/microsoft/" tag="quickbasic" width="200" height="260" %}
 
-![Microsoft QuickBASIC Companion Disk Offer](/pubs/pc/programming/Microsoft_QuickBASIC/disk-offer.jpg)
-
-*[@jeffpar](https://jeffpar.com)*  
-*July 28, 2019*
+![Microsoft QuickBASIC Companion Disk Offer](/documents/manuals/microsoft/covers/Microsoft_QuickBASIC-1987-Offer.jpg)

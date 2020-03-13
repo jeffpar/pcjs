@@ -54,4 +54,4 @@ From `README.CPQ`:
             17 file(s)        325,724 bytes
              0 dir(s)          16,384 bytes free
 
-![COMPAQ Diagnostics 5.08]({{ site.software.diskettes.server }}/pcx86/diag/compaq/COMPAQ-DIAGS-508-012988-REVK.jpg)
+![COMPAQ Diagnostics 5.08]({{ site.software.diskettes.server }}/pcx86/diag/compaq/5.08/COMPAQ-DIAGS-508-012988-REVK.jpg)

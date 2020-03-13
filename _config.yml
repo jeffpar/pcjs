@@ -19,6 +19,7 @@ exclude:
   - /.history
   - /modules
   - /node_modules
+  - /software/pcx86/sys/dos/microsoft/2.11
 
 github:
   owner_name: "jeffpar"
@@ -39,5 +40,7 @@ plugins:
 software:
   diskettes:
     server: https://diskettes.pcjs.org
+  gamedisks:
+    server: https://gamedisks.pcjs.org
   harddisks:
     server: https://harddisks.pcjs.org

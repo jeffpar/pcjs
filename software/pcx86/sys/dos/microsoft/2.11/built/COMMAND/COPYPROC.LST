@@ -1,0 +1,1599 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-1
+                                                            
+
+                                TITLE   COPYRPOC             ;Procedures called
+				 by COPY 
+                                 
+                             C          INCLUDE COMSW.ASM 
+                             C  ; Use the following booleans to set assembly fl
+				ags 
+ = 0000                      C  FALSE   EQU     0 
+ = FFFF                      C  TRUE    EQU     NOT FALSE 
+                             C   
+                             C  ENDIF 
+                             C   
+ =                           C  IBMVER  EQU     IBM  	; Switch to build IBM ver
+				sion of Command 
+ = FFFF                      C  MSVER   EQU     NOT IBM ; Switch to build MS-DO
+				S version of Command 
+                             C   
+ =                           C  HIGHMEM EQU     FALSE   ; Run resident part abo
+				ve transient (high memory) 
+ =                           C  KANJI   EQU     FALSE   ; Support for dual byte
+				 Microsoft KANJI standard 
+ =                           C  IBMJAPAN        EQU     FALSE   ;MUST BE TRUE (
+				along with IBM and KANJI) 
+                                 
+                                 
+                                .list 
+                                .cref 
+                                 
+                             C          INCLUDE COMEQU.ASM 
+                             C  ;************************************* 
+                             C  ; COMMAND EQUs which are not switch dependant 
+                             C   
+                             C  IFDEF   IBM 
+                             C          INCLUDE IFEQU.ASM 
+                             C  ;************************************* 
+                             C  ; COMMAND EQUs which are switch dependant 
+                             C   
+                             C  ENDIF 
+                             C   
+                             C  ENDIF 
+                             C   
+                             C   
+ = 003E                      C  SYM     EQU     ">" 
+                             C   
+ = 0017                      C  LINPERPAG       EQU     23 
+ = 0001                      C  NORMPERLIN      EQU     1 
+ = 0005                      C  WIDEPERLIN      EQU     5 
+ = 0080                      C  COMBUFLEN       EQU     128     ; Length of com
+				mmand buffer 
+                             C   
+ = 003A                      C  DRVCHAR         EQU     ":" 
+                             C   
+ = 005C                      C  FCB     EQU     5CH 
+                             C   
+                             C  VARSTRUC        STRUC 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0000  ??                    C  ISDIR   DB      ? 
+ 0001  ??                    C  SIZ     DB      ? 
+ 0002  ????                  C  TTAIL   DW      ? 
+ 0004  ??                    C  INFO    DB      ? 
+ 0005  0054[                 C  BUF     DB      DIRSTRLEN + 20 DUP (?) 
+            ??               C  
+                         ]   C  
+                             C  
+ 0059                        C  VARSTRUC        ENDS 
+                             C   
+ = 0001                      C  WSWITCH EQU     1               ; Wide display 
+				during DIR 
+ = 0002                      C  PSWITCH EQU     2               ; Pause (or Pag
+				e) mode during DIR 
+ = 0004                      C  ASWITCH EQU     4               ; ASCII mode du
+				ring COPY 
+ = 0008                      C  BSWITCH EQU     8               ; Binary mode d
+				uring COPY 
+ = 0010                      C  VSWITCH EQU     10H             ; Verify switch
+				 
+ = 8000                      C  GOTSWITCH EQU   8000H           ; Meta switch s
+				et if switch character encountered 
+                                 
+                                 
+ 0000                           DATARES SEGMENT PUBLIC 
+ 0000                           DATARES ENDS 
+                                 
+ 0000                           TRANDATA        SEGMENT PUBLIC 
+                                 
+                                        EXTRN   OVERWR:BYTE,FULDIR:BYTE,LOSTERR
+				:BYTE 
+                                        EXTRN   DEVWMES:BYTE,INBDEV:BYTE,NOSPAC
+				E:BYTE 
+                                 
+ 0000                           TRANDATA        ENDS 
+                                 
+ 0000                           TRANSPACE       SEGMENT PUBLIC 
+                                 
+                                        EXTRN   CFLAG:BYTE,NXTADD:WORD,DESTCLOS
+				ED:BYTE 
+                                        EXTRN   PLUS:BYTE,BINARY:BYTE,ASCII:BYT
+				E,FILECNT:WORD 
+                                        EXTRN   WRITTEN:BYTE,CONCAT:BYTE,DESTBU
+				F:BYTE,SRCBUF:BYTE 
+                                        EXTRN   SDIRBUF:BYTE,DIRBUF:BYTE,DESTFC
+				B:BYTE,MELCOPY:BYTE 
+                                        EXTRN   FIRSTDEST:BYTE,DESTISDIR:BYTE,D
+				ESTSWITCH:WORD 
+                                        EXTRN   DESTTAIL:WORD,DESTINFO:BYTE,INE
+				XACT:BYTE 
+                                        EXTRN   DESTVARS:BYTE,SRCINFO:BYTE,RDEO
+				F:BYTE 
+                                        EXTRN   USERDIR1:BYTE,NOWRITE:BYTE 
+                                        EXTRN   SRCHAND:WORD,CPDATE:WORD,CPTIME
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-3
+DEVICE TABLE AND SRH DEFINITION                             
+
+				:WORD 
+                                        EXTRN   SRCISDEV:BYTE,BYTCNT:WORD,TPA:W
+				ORD,TERMREAD:BYTE 
+                                        EXTRN   DESTHAND:WORD,DESTISDEV:BYTE,DI
+				RCHAR:BYTE 
+                                 
+ 0000                           TRANSPACE       ENDS 
+                                 
+ 0000                           TRANCODE        SEGMENT PUBLIC BYTE 
+                                 
+                                        PUBLIC  SEARCH,SEARCHNEXT,DOCOPY,CLOSED
+				EST,FLSHFIL,SETASC 
+                                        PUBLIC  BUILDNAME,COPERR 
+                                 
+                                        EXTRN   PRINT:NEAR,BUILDPATH:NEAR,RESTU
+				DIR1:NEAR 
+                                        EXTRN   COMPNAME:NEAR,ENDCOPY:NEAR 
+                                 
+                                ASSUME  CS:TRANGROUP,DS:TRANGROUP,ES:TRANGROUP,
+				SS:NOTHING 
+                                 
+                                 
+ 0000                           SEARCHNEXT: 
+ 0000  B4 12                            MOV     AH,DIR_SEARCH_NEXT 
+ 0002  F6 06 0000 E 02                  TEST    [SRCINFO],2 
+ 0007  75 03                            JNZ     SEARCH                  ; Do se
+				rach-next if ambig 
+ 0009  0A E4                            OR      AH,AH                   ; Reset
+				 zero flag 
+                                        return 
+ 000B                         1 ??0000:
+ 000B  C3                     1  RET
+ 000C                           SEARCH: 
+ 000C  50                               PUSH    AX 
+ 000D  B4 1A                            MOV     AH,SET_DMA 
+ 000F  BA 0000 E                        MOV     DX,OFFSET TRANGROUP:DIRBUF 
+ 0012  CD 21                            INT     int_command             ; Put r
+				esult of search in DIRBUF 
+ 0014  58                               POP     AX                      ; Resto
+				re search first/next command 
+ 0015  BA 005C                          MOV     DX,FCB 
+ 0018  CD 21                            INT     int_command             ; Do th
+				e search 
+ 001A  0A C0                            OR      AL,AL 
+                                        return 
+ 001C                         1 ??0001:
+ 001C  C3                     1  RET
+                                 
+ 001D                           DOCOPY: 
+ 001D  C6 06 0000 E 00                  mov     [RDEOF],0               ; No EO
+				F yet 
+ 0022  BA 0000 E                        mov     dx,offset trangroup:SRCBUF 
+ 0025  B8 3D00                          mov     ax,OPEN SHL 8 
+ 0028  CD 21                            INT     int_command 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-4
+DEVICE TABLE AND SRH DEFINITION                             
+
+                                        retc                            ; If op
+				en fails, ignore 
+ 002A  72 F0                  2  ??0002: jc ret_l
+ 002C  8B D8                            mov     bx,ax                   ; Save 
+				handle 
+ 002E  89 1E 0000 E                     mov     [SRCHAND],bx            ; Save 
+				handle 
+ 0032  B8 5700                          mov     ax,(FILE_TIMES SHL 8) 
+ 0035  CD 21                            INT     int_command 
+ 0037  89 16 0000 E                     mov     [CPDATE],dx             ; Save 
+				DATE 
+ 003B  89 0E 0000 E                     mov     [CPTIME],cx             ; Save 
+				TIME 
+ 003F  B8 4400                          mov     ax,(IOCTL SHL 8) 
+ 0042  CD 21                            INT     int_command             ; Get d
+				evice stuff 
+ 0044  80 E2 80                         and     dl,devid_ISDEV 
+ 0047  88 16 0000 E                     mov     [SRCISDEV],dl           ; Set s
+				ource info 
+ 004B  74 0D                            jz      COPYLP                  ; Sourc
+				e not a device 
+ 004D  80 3E 0000 E 00                  cmp     [BINARY],0 
+ 0052  74 06                            jz      COPYLP                  ; ASCII
+				 device OK 
+ 0054  BA 0000 E                        mov     dx,offset trangroup:INBDEV  ; C
+				annot do binary input 
+ 0057  E9 02A7 R                        jmp     COPERR 
+                                 
+ 005A                           COPYLP: 
+ 005A  8B 1E 0000 E                     mov     bx,[SRCHAND] 
+ 005E  8B 0E 0000 E                     mov     cx,[BYTCNT] 
+ 0062  8B 16 0000 E                     mov     dx,[NXTADD] 
+ 0066  2B CA                            sub     cx,dx                   ; Compu
+				te available space 
+ 0068  75 0E                            jnz     GOTROOM 
+ 006A  E8 01AD R                        call    FLSHFIL 
+ 006D  80 3E 0000 E 00                  CMP     [TERMREAD],0 
+ 0072  75 65                            JNZ     CLOSESRC                ; Give 
+				up 
+ 0074  8B 0E 0000 E                     mov     cx,[BYTCNT] 
+ 0078                           GOTROOM: 
+ 0078  1E                               push    ds 
+ 0079  8E 1E 0000 E                     mov     ds,[TPA] 
+                                ASSUME  DS:NOTHING 
+ 007D  B4 3F                            mov     ah,READ 
+ 007F  CD 21                            INT     int_command 
+ 0081  1F                               pop     ds 
+                                ASSUME  DS:TRANGROUP 
+ 0082  72 55                            jc      CLOSESRC                ; Give 
+				up if error 
+ 0084  8B C8                            mov     cx,ax                   ; Get c
+				ount 
+ 0086  E3 51                            jcxz    CLOSESRC                ; No mo
+				re to read 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-5
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0088  80 3E 0000 E 00                  cmp     [SRCISDEV],0 
+ 008D  75 07                            jnz     NOTESTA                 ; Is a 
+				device, ASCII mode 
+ 008F  80 3E 0000 E 00                  cmp     [ASCII],0 
+ 0094  74 1B                            jz      BINREAD 
+ 0096                           NOTESTA: 
+ 0096  8B D1                            MOV     DX,CX 
+ 0098  8B 3E 0000 E                     MOV     DI,[NXTADD] 
+ 009C  B0 1A                            MOV     AL,1AH 
+ 009E  06                               PUSH    ES 
+ 009F  8E 06 0000 E                     MOV     ES,[TPA] 
+ 00A3  F2/ AE                           REPNE   SCASB                   ; Scan 
+				for EOF 
+ 00A5  07                               POP     ES 
+ 00A6  75 05                            JNZ     USEALL 
+ 00A8  FE 06 0000 E                     INC     [RDEOF] 
+ 00AC  41                               INC     CX 
+ 00AD                           USEALL: 
+ 00AD  2B D1                            SUB     DX,CX 
+ 00AF  8B CA                            MOV     CX,DX 
+ 00B1                           BINREAD: 
+ 00B1  03 0E 0000 E                     ADD     CX,[NXTADD] 
+ 00B5  89 0E 0000 E                     MOV     [NXTADD],CX 
+ 00B9  3B 0E 0000 E                     CMP     CX,[BYTCNT]             ; Is bu
+				ffer full? 
+ 00BD  72 0C                            JB      TESTDEV                 ; If no
+				t, we may have found EOF 
+ 00BF  E8 01AD R                        CALL    FLSHFIL 
+ 00C2  80 3E 0000 E 00                  CMP     [TERMREAD],0 
+ 00C7  75 10                            JNZ     CLOSESRC                ; Give 
+				up 
+ 00C9  EB 8F                            JMP     SHORT COPYLP 
+                                 
+ 00CB                           TESTDEV: 
+ 00CB  80 3E 0000 E 00                  cmp     [SRCISDEV],0 
+ 00D0  74 07                            JZ      CLOSESRC                ; If fi
+				le then EOF 
+ 00D2  80 3E 0000 E 00                  CMP     [RDEOF],0 
+ 00D7  74 81                            JZ      COPYLP                  ; On de
+				vice, go till ^Z 
+ 00D9                           CLOSESRC: 
+ 00D9  8B 1E 0000 E                     mov     bx,[SRCHAND] 
+ 00DD  B4 3E                            mov     ah,CLOSE 
+ 00DF  CD 21                            INT     int_command 
+                                        return 
+ 00E1                         1 ??0004:
+ 00E1  C3                     1  RET
+                                 
+ 00E2                           CLOSEDEST: 
+ 00E2  80 3E 0000 E 00                  cmp     [DESTCLOSED],0 
+                                        retnz                           ; Don't
+				 double close 
+ 00E7  75 F8                  2  ??0005: jnz ret_l
+ 00E9  A0 0000 E                        MOV     AL,BYTE PTR [DESTSWITCH] 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-6
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 00EC  E8 02E1 R                        CALL    SETASC                  ; Check
+				 for B or A switch on destination 
+ 00EF  74 36                            JZ      BINCLOS 
+ 00F1  8B 1E 0000 E                     MOV     BX,[NXTADD] 
+ 00F5  3B 1E 0000 E                     CMP     BX,[BYTCNT]             ; Is me
+				mory full? 
+ 00F9  75 09                            JNZ     PUTZ 
+ 00FB  E8 01A0 R                        call    TRYFLUSH                ; Make 
+				room for one lousy byte 
+ 00FE  74 02                            jz      NOCONC 
+ 0100                           CONCHNG:                                ; Conca
+				t flag changed on us 
+ 0100  F9                               stc 
+                                        return 
+ 0101                         1 ??0007:
+ 0101  C3                     1  RET
+ 0102                           NOCONC: 
+ 0102  33 DB                            XOR     BX,BX 
+ 0104                           PUTZ: 
+ 0104  1E                               PUSH    DS 
+ 0105  8E 1E 0000 E                     MOV     DS,[TPA] 
+ 0109  C7 07 001A                       MOV     WORD PTR [BX],1AH       ; Add E
+				nd-of-file mark (Ctrl-Z) 
+ 010D  1F                               POP     DS 
+ 010E  FF 06 0000 E                     INC     [NXTADD] 
+ 0112  C6 06 0000 E 00                  MOV     [NOWRITE],0             ; Make 
+				sure our ^Z gets written 
+ 0117  A0 0000 E                        MOV     AL,[WRITTEN] 
+ 011A  32 E4                            XOR     AH,AH 
+ 011C  03 06 0000 E                     ADD     AX,[NXTADD] 
+ 0120  72 05                            JC      BINCLOS                 ; > 1 
+ 0122  3D 0001                          CMP     AX,1 
+ 0125  74 63                            JZ      FORGETIT                ; WRITT
+				EN = 0 NXTADD = 1 (the ^Z) 
+ 0127                           BINCLOS: 
+ 0127  E8 01A0 R                        call    TRYFLUSH 
+ 012A  75 D4                            jnz     CONCHNG 
+ 012C  80 3E 0000 E 00                  cmp     [WRITTEN],0 
+ 0131  74 57                            jz      FORGETIT                ; Never
+				 wrote nothin 
+ 0133  8B 1E 0000 E                     MOV     BX,[DESTHAND] 
+ 0137  8B 0E 0000 E                     MOV     CX,[CPTIME] 
+ 013B  8B 16 0000 E                     MOV     DX,[CPDATE] 
+ 013F  80 3E 0000 E 00                  CMP     [INEXACT],0             ; Copy 
+				not exact? 
+ 0144  74 31                            JZ      DODCLOSE                ; If no
+				, copy date & time 
+ 0146  B4 2C                            MOV     AH,GET_TIME 
+ 0148  CD 21                            INT     int_command 
+ 014A  D0 E1                            SHL     CL,1 
+ 014C  D0 E1                            SHL     CL,1                    ; Left 
+				justify min in CL 
+ 014E  D1 E1                            SHL     CX,1 
+ 0150  D1 E1                            SHL     CX,1 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-7
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0152  D1 E1                            SHL     CX,1                    ; hours
+				 to high 5 bits, min to 5-10 
+ 0154  D0 EE                            SHR     DH,1                    ; Divid
+				e seconds by 2 (now 5 bits) 
+ 0156  0A CE                            OR      CL,DH                   ; And s
+				tick into low 5 bits of CX 
+ 0158  51                               PUSH    CX                      ; Save 
+				packed time 
+ 0159  B4 2A                            MOV     AH,GET_DATE 
+ 015B  CD 21                            INT     int_command 
+ 015D  81 E9 07BC                       SUB     CX,1980 
+ 0161  86 E9                            XCHG    CH,CL 
+ 0163  D1 E1                            SHL     CX,1                    ; Year 
+				to high 7 bits 
+ 0165  D0 E6                            SHL     DH,1                    ; Month
+				 to high 3 bits 
+ 0167  D0 E6                            SHL     DH,1 
+ 0169  D0 E6                            SHL     DH,1 
+ 016B  D0 E6                            SHL     DH,1 
+ 016D  D0 E6                            SHL     DH,1                    ; Most 
+				sig bit of month in carry 
+ 016F  80 D5 00                         ADC     CH,0                    ; Put t
+				hat bit next to year 
+ 0172  0A D6                            OR      DL,DH                   ; Or lo
+				w three of month into day 
+ 0174  8A F5                            MOV     DH,CH                   ; Get y
+				ear and high bit of month 
+ 0176  59                               POP     CX                      ; Get t
+				ime back 
+ 0177                           DODCLOSE: 
+ 0177  B8 5701                          MOV     AX,(FILE_TIMES SHL 8) OR 1 
+ 017A  CD 21                            INT     int_command             ; Set d
+				ate and time 
+ 017C  B4 3E                            MOV     AH,CLOSE 
+ 017E  CD 21                            INT     int_command 
+ 0180  FF 06 0000 E                     INC     [FILECNT] 
+ 0184  FE 06 0000 E                     INC     [DESTCLOSED] 
+ 0188                           RET50: 
+ 0188  F8                               CLC 
+                                        return 
+ 0189                         1 ??0008:
+ 0189  C3                     1  RET
+                                 
+ 018A                           FORGETIT: 
+ 018A  8B 1E 0000 E                     MOV     BX,[DESTHAND] 
+ 018E  E8 0177 R                        CALL    DODCLOSE                ; Close
+				 the dest 
+ 0191  BA 0000 E                        MOV     DX,OFFSET TRANGROUP:DESTBUF 
+ 0194  B4 41                            MOV     AH,UNLINK 
+ 0196  CD 21                            INT     int_command             ; And d
+				elete it 
+ 0198  C7 06 0000 E 0000                MOV     [FILECNT],0             ; No fi
+				les transferred 
+ 019E  EB E8                            JMP     RET50 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-8
+DEVICE TABLE AND SRH DEFINITION                             
+
+                                 
+ 01A0                           TRYFLUSH: 
+ 01A0  A0 0000 E                        mov     al,[CONCAT] 
+ 01A3  50                               push    ax 
+ 01A4  E8 01AD R                        call    FLSHFIL 
+ 01A7  58                               pop     ax 
+ 01A8  3A 06 0000 E                     cmp     al,[CONCAT] 
+                                        return 
+ 01AC                         1 ??0009:
+ 01AC  C3                     1  RET
+                                 
+ 01AD                           FLSHFIL: 
+                                ; Write out any data remaining in memory. 
+                                ; Inputs: 
+                                ;       [NXTADD] = No. of bytes to write 
+                                ;       [CFLAG] <>0 if file has been created 
+                                ; Outputs: 
+                                ;       [NXTADD] = 0 
+                                 
+ 01AD  C6 06 0000 E 00                  MOV     [TERMREAD],0 
+ 01B2  80 3E 0000 E 00                  cmp     [CFLAG],0 
+ 01B7  74 03                            JZ      NOTEXISTS 
+ 01B9  E9 023C R                        JMP     EXISTS 
+ 01BC                           NOTEXISTS: 
+ 01BC  E8 02FB R                        call    BUILDDEST               ; Find 
+				out all about the destination 
+ 01BF  E8 0000 E                        CALL    COMPNAME                ; Sourc
+				e and dest. the same? 
+ 01C2  75 16                            JNZ     PROCDEST                ; If no
+				t, go ahead 
+ 01C4  80 3E 0000 E 00                  CMP     [SRCISDEV],0 
+ 01C9  75 0F                            JNZ     PROCDEST                ; Same 
+				name on device OK 
+ 01CB  80 3E 0000 E 00                  CMP     [CONCAT],0              ; Conca
+				tenation? 
+ 01D0  BA 0000 E                        MOV     DX,OFFSET TRANGROUP:OVERWR 
+ 01D3  74 5B                            JZ      COPERRJ                 ; If no
+				t, overwrite error 
+ 01D5  C6 06 0000 E 01                  MOV     [NOWRITE],1             ; Flag 
+				not writting (just seeking) 
+ 01DA                           PROCDEST: 
+ 01DA  B8 3D01                          mov     ax,(OPEN SHL 8) OR 1 
+ 01DD  80 3E 0000 E 00                  CMP     [NOWRITE],0 
+ 01E2  75 04                            JNZ     DODESTOPEN              ; Don't
+				 actually create if NOWRITE set 
+ 01E4  B4 3C                            mov     ah,CREAT 
+ 01E6  33 C9                            xor     cx,cx 
+ 01E8                           DODESTOPEN: 
+ 01E8  BA 0000 E                        mov     dx,offset trangroup:DESTBUF 
+ 01EB  CD 21                            INT     int_command 
+ 01ED  BA 0000 E                        MOV     DX,OFFSET TRANGROUP:FULDIR 
+ 01F0  72 3E                            JC      COPERRJ 
+ 01F2  A3 0000 E                        mov     [DESTHAND],ax           ; Save 
+				handle 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-9
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 01F5  C6 06 0000 E 01                  mov     [CFLAG],1               ; Desti
+				nation now exists 
+ 01FA  8B D8                            mov     bx,ax 
+ 01FC  B8 4400                          mov     ax,(IOCTL SHL 8) 
+ 01FF  CD 21                            INT     int_command             ; Get d
+				evice stuff 
+ 0201  88 16 0000 E                     mov     [DESTISDEV],dl          ; Set d
+				est info 
+ 0205  F6 C2 80                         test    dl,devid_ISDEV 
+ 0208  74 32                            jz      EXISTS                  ; Dest 
+				not a device 
+ 020A  A0 0000 E                        mov     al,BYTE PTR [DESTSWITCH] 
+ 020D  24 0C                            AND     AL,ASWITCH+BSWITCH 
+ 020F  75 09                            JNZ     TESTBOTH 
+ 0211  A0 0000 E                        MOV     AL,[ASCII]              ; Neith
+				er set, use current setting 
+ 0214  0A 06 0000 E                     OR      AL,[BINARY] 
+ 0218  74 18                            JZ      EXSETA                  ; Neith
+				er set, default to ASCII 
+ 021A                           TESTBOTH: 
+ 021A  7A 20                            JPE     EXISTS                  ; Both 
+				are set, ignore 
+ 021C  A8 08                            test    AL,BSWITCH 
+ 021E  74 1C                            jz      EXISTS                  ; Leave
+				 in cooked mode 
+ 0220  B8 4401                          mov     ax,(IOCTL SHL 8) OR 1 
+ 0223  32 F6                            xor     dh,dh 
+ 0225  80 CA 20                         or      dl,devid_RAW 
+ 0228  88 16 0000 E                     mov     [DESTISDEV],dl          ; New v
+				alue 
+ 022C  CD 21                            INT     int_command             ; Set d
+				evice to RAW mode 
+ 022E  EB 0C                            jmp     short EXISTS 
+                                 
+ 0230                           COPERRJ: 
+ 0230  EB 75                            jmp     SHORT COPERR 
+                                 
+ 0232                           EXSETA: 
+                                ; What we read in may have been in binary mode,
+				 flag zapped write OK 
+ 0232  C6 06 0000 E 04                  mov     [ASCII],ASWITCH         ; Set A
+				SCII mode 
+ 0237  80 0E 0000 E 04                  or      [INEXACT],ASWITCH       ; ASCII
+				 -> INEXACT 
+ 023C                           EXISTS: 
+ 023C  80 3E 0000 E 00                  cmp     [NOWRITE],0 
+ 0241  75 1D                            jnz     NOCHECKING              ; If no
+				write don't bother with name check 
+ 0243  E8 0000 E                        CALL    COMPNAME                ; Sourc
+				e and dest. the same? 
+ 0246  75 18                            JNZ     NOCHECKING              ; If no
+				t, go ahead 
+ 0248  80 3E 0000 E 00                  CMP     [SRCISDEV],0 
+ 024D  75 11                            JNZ     NOCHECKING              ; Same 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-10
+DEVICE TABLE AND SRH DEFINITION                             
+
+				name on device OK 
+                                ; At this point we know in append (would have g
+				otten overwrite error on first 
+                                ; destination create otherwise), and user tryin
+				g to specify destination which 
+                                ; has been scribbled already (if dest had been 
+				named first, NOWRITE would 
+                                ; be set). 
+ 024F  BA 0000 E                        MOV     DX,OFFSET TRANGROUP:LOSTERR ; T
+				ell him he's not going to get it 
+ 0252  E8 0000 E                        CALL    PRINT 
+ 0255  C7 06 0000 E 0000                MOV     [NXTADD],0              ; Set r
+				eturn 
+ 025B  FE 06 0000 E                     INC     [TERMREAD]              ; Tell 
+				Read to give up 
+ 025F                           RET60: 
+                                        return 
+ 025F                         1 ??000A:
+ 025F  C3                     1  RET
+                                 
+ 0260                           NOCHECKING: 
+ 0260  8B 1E 0000 E                     mov     bx,[DESTHAND]           ; Get h
+				andle 
+ 0264  33 C9                            XOR     CX,CX 
+ 0266  87 0E 0000 E                     XCHG    CX,[NXTADD] 
+ 026A  E3 F3                            JCXZ    RET60                   ; If No
+				thing to write, forget it 
+ 026C  FE 06 0000 E                     INC     [WRITTEN]               ; Flag 
+				that we wrote something 
+ 0270  80 3E 0000 E 00                  CMP     [NOWRITE],0             ; If NO
+				WRITE set, just seek CX bytes 
+ 0275  75 55                            JNZ     SEEKEND 
+ 0277  33 D2                            XOR     DX,DX 
+ 0279  1E                               PUSH    DS 
+ 027A  8E 1E 0000 E                     MOV     DS,[TPA] 
+                                ASSUME  DS:NOTHING 
+ 027E  B4 40                            MOV     AH,WRITE 
+ 0280  CD 21                            INT     int_command 
+ 0282  1F                               POP     DS 
+                                ASSUME  DS:TRANGROUP 
+ 0283  BA 0000 E                        MOV     DX,OFFSET TRANGROUP:NOSPACE 
+ 0286  72 1F                            JC      COPERR                  ; Failu
+				re 
+ 0288  2B C8                            sub     cx,ax 
+                                        retz                            ; Wrote
+				 all supposed to 
+ 028A  74 D3                  2  ??000B: jz ret_l
+ 028C  F6 06 0000 E 80                  test    [DESTISDEV],devid_ISDEV 
+ 0291  74 14                            jz      COPERR                  ; Is a 
+				file, error 
+ 0293  F6 06 0000 E 20                  test    [DESTISDEV],devid_RAW 
+ 0298  75 0A                            jnz     DEVWRTERR               ; Is a 
+				raw device, error 
+ 029A  80 3E 0000 E 00                  cmp     [INEXACT],0 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-11
+DEVICE TABLE AND SRH DEFINITION                             
+
+                                        retnz                           ; INEXA
+				CT so OK 
+ 029F  75 BE                  2  ??000D: jnz ret_l
+ 02A1  49                               dec     cx 
+                                        retz                            ; Wrote
+				 one byte less (the ^Z) 
+ 02A2  74 BB                  2  ??000F: jz ret_l
+ 02A4                           DEVWRTERR: 
+ 02A4  BA 0000 E                        MOV     DX,OFFSET TRANGROUP:DEVWMES 
+ 02A7                           COPERR: 
+ 02A7  E8 0000 E                        CALL    PRINT 
+ 02AA  FE 06 0000 E                     inc     [DESTCLOSED] 
+ 02AE  80 3E 0000 E 00                  cmp     [CFLAG],0 
+ 02B3  74 14                            jz      ENDCOPYJ                ; Never
+				 actually got it open 
+ 02B5  8B 1E 0000 E                     MOV     bx,[DESTHAND] 
+ 02B9  B4 3E                            MOV     AH,CLOSE                ; Close
+				 the file 
+ 02BB  CD 21                            INT     int_command 
+ 02BD  BA 0000 E                        MOV     DX,OFFSET TRANGROUP:DESTBUF 
+ 02C0  B4 41                            MOV     AH,UNLINK 
+ 02C2  CD 21                            INT     int_command             ; And d
+				elete it 
+ 02C4  C6 06 0000 E 00                  MOV     [CFLAG],0 
+ 02C9                           ENDCOPYJ: 
+ 02C9  E9 0000 E                        JMP   ENDCOPY 
+                                 
+                                 
+ 02CC                           SEEKEND: 
+ 02CC  33 D2                            xor     dx,dx                   ; Zero 
+				high half of offset 
+ 02CE  87 D1                            xchg    dx,cx                   ; cx:dx
+				 is seek location 
+ 02D0  B8 4201                          mov     ax,(LSEEK SHL 8) OR 1 
+ 02D3  CD 21                            INT     int_command             ; Seek 
+				ahead in the file 
+ 02D5  80 3E 0000 E 00                  cmp     [RDEOF],0 
+                                        retz 
+ 02DA  74 83                  2  ??0011: jz ret_l
+                                ; If a ^Z has been read we must set the file si
+				ze to the current 
+                                ; file pointer location 
+ 02DC  B4 40                            MOV     AH,WRITE 
+ 02DE  CD 21                            INT     int_command             ; CX is
+				 zero, truncates file 
+                                        return 
+ 02E0                         1 ??0013:
+ 02E0  C3                     1  RET
+                                 
+ 02E1                           SETASC: 
+                                ; Given switch vector in AX, 
+                                ;       Set ASCII switch if A is set 
+                                ;       Clear ASCII switch if B is set 
+                                ;       BINARY set if B specified 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-12
+DEVICE TABLE AND SRH DEFINITION                             
+
+                                ;       Leave ASCII unchanged if neither or bot
+				h are set 
+                                ; Also sets INEXACT if ASCII is ever set. AL = 
+				ASCII on exit, flags set 
+ 02E1  24 0C                            AND     AL,ASWITCH+BSWITCH 
+ 02E3  7A 10                            JPE     LOADSW                  ; PE me
+				ans both or neither are set 
+ 02E5  50                               PUSH    AX 
+ 02E6  24 08                            AND     AL,BSWITCH 
+ 02E8  A2 0000 E                        MOV     [BINARY],AL 
+ 02EB  58                               POP     AX 
+ 02EC  24 04                            AND     AL,ASWITCH 
+ 02EE  A2 0000 E                        MOV     [ASCII],AL 
+ 02F1  08 06 0000 E                     OR      [INEXACT],AL 
+ 02F5                           LOADSW: 
+ 02F5  A0 0000 E                        MOV     AL,[ASCII] 
+ 02F8  0A C0                            OR      AL,AL 
+                                        return 
+ 02FA                         1 ??0014:
+ 02FA  C3                     1  RET
+                                 
+ 02FB                           BUILDDEST: 
+ 02FB  80 3E 0000 E FF                  cmp     [DESTISDIR],-1 
+ 0300  75 0C                            jnz     KNOWABOUTDEST           ; Alrea
+				dy done the figuring 
+ 0302  BF 0000 E                        MOV     DI,OFFSET TRANGROUP:USERDIR1 
+ 0305  BD 0000 E                        mov     bp,offset trangroup:DESTVARS 
+ 0308  E8 0000 E                        call    BUILDPATH 
+ 030B  E8 0000 E                        call    RESTUDIR1 
+                                 
+                                ; Now know all about the destination 
+                                 
+ 030E                           KNOWABOUTDEST: 
+ 030E  32 C0                            xor     al,al 
+ 0310  86 06 0000 E                     xchg    al,[FIRSTDEST] 
+ 0314  0A C0                            or      al,al 
+ 0316  75 03                            jnz     FIRSTDST 
+ 0318  E9 039A R                        jmp     NOTFIRSTDEST 
+ 031B                           FIRSTDST: 
+ 031B  8B 36 0000 E                     mov     si,[DESTTAIL]           ; Creat
+				e an FCB of the original DEST 
+ 031F  BF 0000 E                        mov     di,offset trangroup:DESTFCB 
+ 0322  B8 2900                          mov     ax,PARSE_FILE_DESCRIPTOR SHL 8 
+ 0325  CD 21                            INT     int_command 
+ 0327  A1 0000 E                        mov     ax,word ptr [DESTBUF]   ; Get d
+				rive 
+ 032A  80 FC 3A                         cmp     ah,':' 
+ 032D  74 02                            jz      DRVSPEC4 
+ 032F  B0 40                            mov     al,'@' 
+ 0331                           DRVSPEC4: 
+ 0331  8A 0E 0000 E                     MOV     CL,[ASCII]              ; Save 
+				current ASCII setting 
+ 0335  2C 40                            sub     al,'@' 
+ 0337  A2 0000 E                        mov     [DESTFCB],al 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-13
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 033A  A0 0000 E                        mov     al,[DESTINFO] 
+ 033D  8A 26 0000 E                     mov     ah,[SRCINFO] 
+ 0341  25 0202                          and     ax,0202H 
+ 0344  0A C0                            or      al,al 
+ 0346  74 13                            jz      NOTMELCOPY 
+ 0348  3A C4                            cmp     al,ah 
+ 034A  75 0F                            jnz     NOTMELCOPY 
+ 034C  80 3E 0000 E 00                  cmp     [PLUS],0 
+ 0351  74 08                            jz      NOTMELCOPY 
+ 0353  FE 06 0000 E                     inc     [MELCOPY]               ; ambig
+				 source, ambig dest, and pluses 
+ 0357  32 C0                            xor     al,al 
+ 0359  EB 06                            jmp     short SETCONC 
+                                 
+ 035B                           NOTMELCOPY: 
+ 035B  34 02                            xor     al,2                    ; al=2 
+				if unambig dest, =0 if ambig dest 
+ 035D  22 C4                            and     al,ah 
+ 035F  D0 E8                            shr     al,1                    ; al=1 
+				if unambig dest AND ambig sorce 
+                                                                        ;   Imp
+				lies concatination 
+ 0361                           SETCONC: 
+ 0361  0A 06 0000 E                     or      al,[PLUS]               ; al=1 
+				if concat 
+ 0365  A2 0000 E                        mov     [CONCAT],al 
+ 0368  D0 E0                            shl     al,1 
+ 036A  D0 E0                            shl     al,1 
+ 036C  A2 0000 E                        mov     [INEXACT],al            ; Conca
+				t -> inexact copy 
+ 036F  80 3E 0000 E 00                  cmp     [BINARY],0 
+ 0374  75 24                            jnz     NOTFIRSTDEST            ; Binar
+				y explicitly given, all OK 
+ 0376  A2 0000 E                        mov     [ASCII],al              ; Conca
+				t -> ASCII 
+ 0379  0A C9                            or      cl,cl 
+ 037B  75 1D                            jnz     NOTFIRSTDEST            ; ASCII
+				 flag set before, DATA read correctly 
+ 037D  0A C0                            or      al,al 
+ 037F  74 19                            JZ      NOTFIRSTDEST            ; ASCII
+				 flag did not change states 
+                                ; At this point there may already be binary rea
+				d data in the read buffer. 
+                                ; We need to find the first ^Z (if there is one
+				) and trim the amount 
+                                ; of data in the buffer correctly. 
+ 0381  8B 0E 0000 E                     MOV     CX,[NXTADD] 
+ 0385  E3 13                            JCXZ    NOTFIRSTDEST            ; No da
+				ta, everything OK 
+ 0387  B0 1A                            MOV     AL,1AH 
+ 0389  06                               PUSH    ES 
+ 038A  33 FF                            XOR     DI,DI 
+ 038C  8E 06 0000 E                     MOV     ES,[TPA] 
+ 0390  F2/ AE                           REPNE   SCASB                   ; Scan 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-14
+DEVICE TABLE AND SRH DEFINITION                             
+
+				for EOF 
+ 0392  07                               POP     ES 
+ 0393  75 05                            JNZ     NOTFIRSTDEST            ; No ^Z
+				 in buffer, everything OK 
+ 0395  4F                               DEC     DI                      ; Point
+				 at ^Z 
+ 0396  89 3E 0000 E                     MOV     [NXTADD],DI             ; New b
+				uffer 
+ 039A                           NOTFIRSTDEST: 
+ 039A  BB 0001 E                        mov     bx,offset trangroup:DIRBUF+1   
+				 ; Source of replacement chars 
+ 039D  80 3E 0000 E 00                  cmp     [CONCAT],0 
+ 03A2  74 03                            jz      GOTCHRSRC               ; Not a
+				 concat 
+ 03A4  BB 0001 E                        mov     bx,offset trangroup:SDIRBUF+1  
+				 ; Source of replacement chars 
+ 03A7                           GOTCHRSRC: 
+ 03A7  BE 0001 E                        mov     si,offset trangroup:DESTFCB+1  
+				 ; Original dest name 
+ 03AA  8B 3E 0000 E                     mov     di,[DESTTAIL]           ; Where
+				 to put result 
+                                 
+ 03AE                           BUILDNAME: 
+ 03AE  B9 0008                          mov     cx,8 
+ 03B1                           BUILDMAIN: 
+ 03B1  AC                               lodsb 
+ 03B2  3C 3F                            cmp     al,"?" 
+ 03B4  75 02                            jnz     NOTAMBIG 
+ 03B6  8A 07                            mov     al,byte ptr [BX] 
+ 03B8                           NOTAMBIG: 
+ 03B8  3C 20                            cmp     al,' ' 
+ 03BA  74 01                            jz      NOSTORE 
+ 03BC  AA                               stosb 
+ 03BD                           NOSTORE: 
+ 03BD  43                               inc     bx 
+ 03BE  E2 F1                            loop    BUILDMAIN 
+ 03C0  B1 03                            mov     cl,3 
+ 03C2  80 3C 20                         cmp     byte ptr [SI],' ' 
+ 03C5  74 12                            jz      ENDDEST                 ; No ex
+				tension 
+ 03C7  B0 2E                            mov     al,'.' 
+ 03C9  AA                               stosb 
+ 03CA                           BUILDEXT: 
+ 03CA  AC                               lodsb 
+ 03CB  3C 3F                            cmp     al,"?" 
+ 03CD  75 02                            jnz     NOTAMBIGE 
+ 03CF  8A 07                            mov     al,byte ptr [BX] 
+ 03D1                           NOTAMBIGE: 
+ 03D1  3C 20                            cmp     al,' ' 
+ 03D3  74 01                            jz      NOSTOREE 
+ 03D5  AA                               stosb 
+ 03D6                           NOSTOREE: 
+ 03D6  43                               inc     bx 
+ 03D7  E2 F1                            loop    BUILDEXT 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Page     1-15
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 03D9                           ENDDEST: 
+ 03D9  32 C0                            xor     al,al 
+ 03DB  AA                               stosb                           ; NUL t
+				erminate 
+                                        return 
+ 03DC                         1 ??0015:
+ 03DC  C3                     1  RET
+                                 
+ 03DD                           TRANCODE    ENDS 
+                                            END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+VARSTRUC . . . . . . . . . . . .  	0059	0005
+  ISDIR  . . . . . . . . . . . .  	0000
+  SIZ  . . . . . . . . . . . . .  	0001
+  TTAIL  . . . . . . . . . . . .  	0002
+  INFO . . . . . . . . . . . . .  	0004
+  BUF  . . . . . . . . . . . . .  	0005
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Symbols-5
+                                                             
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+EGROUP . . . . . . . . . . . . .  	GROUP
+  ZEXEC_CODE . . . . . . . . . .  	0000	PARA	PUBLIC	
+  ZEXEC_DATA . . . . . . . . . .  	0000	PARA	PUBLIC	
+RESGROUP . . . . . . . . . . . .  	GROUP
+  CODERES  . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  DATARES  . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  ENVIRONMENT  . . . . . . . . .  	0000	PARA	PUBLIC	
+  INIT . . . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  TAIL . . . . . . . . . . . . .  	0000	PARA	PUBLIC	
+TRANGROUP  . . . . . . . . . . .  	GROUP
+  TRANCODE . . . . . . . . . . .  	03DD	BYTE	PUBLIC	
+  TRANDATA . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  TRANSPACE  . . . . . . . . . .  	0000	PARA	PUBLIC	
+  TRANTAIL . . . . . . . . . . .  	0000	PARA	PUBLIC	
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASCII  . . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ASWITCH  . . . . . . . . . . . .  	Number	0004	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Symbols-6
+                                                             
+
+
+BINARY . . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+BINCLOS  . . . . . . . . . . . .  	L NEAR	0127	TRANCODE
+BINREAD  . . . . . . . . . . . .  	L NEAR	00B1	TRANCODE
+BSWITCH  . . . . . . . . . . . .  	Number	0008	
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+BUILDDEST  . . . . . . . . . . .  	L NEAR	02FB	TRANCODE
+BUILDEXT . . . . . . . . . . . .  	L NEAR	03CA	TRANCODE
+BUILDMAIN  . . . . . . . . . . .  	L NEAR	03B1	TRANCODE
+BUILDNAME  . . . . . . . . . . .  	L NEAR	03AE	TRANCODE	Global
+BUILDPATH  . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+BYTCNT . . . . . . . . . . . . .  	V WORD 	0000	TRANSPACE	External
+
+CFLAG  . . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSEDEST  . . . . . . . . . . .  	L NEAR	00E2	TRANCODE	Global
+CLOSESRC . . . . . . . . . . . .  	L NEAR	00D9	TRANCODE
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+COMBUFLEN  . . . . . . . . . . .  	Number	0080	
+COMPNAME . . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+CONCAT . . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+CONCHNG  . . . . . . . . . . . .  	L NEAR	0100	TRANCODE
+COPERR . . . . . . . . . . . . .  	L NEAR	02A7	TRANCODE	Global
+COPERRJ  . . . . . . . . . . . .  	L NEAR	0230	TRANCODE
+COPYLP . . . . . . . . . . . . .  	L NEAR	005A	TRANCODE
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CPDATE . . . . . . . . . . . . .  	V WORD 	0000	TRANSPACE	External
+CPTIME . . . . . . . . . . . . .  	V WORD 	0000	TRANSPACE	External
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Symbols-7
+                                                             
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DESTBUF  . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+DESTCLOSED . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+DESTFCB  . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+DESTHAND . . . . . . . . . . . .  	V WORD 	0000	TRANSPACE	External
+DESTINFO . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+DESTISDEV  . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+DESTISDIR  . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+DESTSWITCH . . . . . . . . . . .  	V WORD 	0000	TRANSPACE	External
+DESTTAIL . . . . . . . . . . . .  	V WORD 	0000	TRANSPACE	External
+DESTVARS . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWMES  . . . . . . . . . . . .  	V BYTE 	0000	TRANDATA	External
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTERR  . . . . . . . . . . .  	L NEAR	02A4	TRANCODE
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRBUF . . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+DIRCHAR  . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Symbols-8
+                                                             
+
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DOCOPY . . . . . . . . . . . . .  	L NEAR	001D	TRANCODE	Global
+DODCLOSE . . . . . . . . . . . .  	L NEAR	0177	TRANCODE
+DODESTOPEN . . . . . . . . . . .  	L NEAR	01E8	TRANCODE
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DRVCHAR  . . . . . . . . . . . .  	Number	003A	
+DRVSPEC4 . . . . . . . . . . . .  	L NEAR	0331	TRANCODE
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENDCOPY  . . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+ENDCOPYJ . . . . . . . . . . . .  	L NEAR	02C9	TRANCODE
+ENDDEST  . . . . . . . . . . . .  	L NEAR	03D9	TRANCODE
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Symbols-9
+                                                             
+
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXISTS . . . . . . . . . . . . .  	L NEAR	023C	TRANCODE
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+EXSETA . . . . . . . . . . . . .  	L NEAR	0232	TRANCODE
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB  . . . . . . . . . . . . . .  	Number	005C	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILECNT  . . . . . . . . . . . .  	V WORD 	0000	TRANSPACE	External
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FIRSTDEST  . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+FIRSTDST . . . . . . . . . . . .  	L NEAR	031B	TRANCODE
+FLSHFIL  . . . . . . . . . . . .  	L NEAR	01AD	TRANCODE	Global
+FORGETIT . . . . . . . . . . . .  	L NEAR	018A	TRANCODE
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+FULDIR . . . . . . . . . . . . .  	V BYTE 	0000	TRANDATA	External
+
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Symbols-10
+                                                             
+
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+GOTCHRSRC  . . . . . . . . . . .  	L NEAR	03A7	TRANCODE
+GOTROOM  . . . . . . . . . . . .  	L NEAR	0078	TRANCODE
+GOTSWITCH  . . . . . . . . . . .  	Number	8000	
+
+HIGHMEM  . . . . . . . . . . . .  	Alias	 FALSE		
+
+IBM  . . . . . . . . . . . . . .  	Alias	 FALSE		
+IBMJAPAN . . . . . . . . . . . .  	Alias	 FALSE		
+IBMVER . . . . . . . . . . . . .  	Alias	 IBM		
+INBDEV . . . . . . . . . . . . .  	V BYTE 	0000	TRANDATA	External
+INEXACT  . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KANJI  . . . . . . . . . . . . .  	Alias	 FALSE		
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+KNOWABOUTDEST  . . . . . . . . .  	L NEAR	030E	TRANCODE
+
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LINPERPAG  . . . . . . . . . . .  	Number	0017	
+LOADSW . . . . . . . . . . . . .  	L NEAR	02F5	TRANCODE
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LOSTERR  . . . . . . . . . . . .  	V BYTE 	0000	TRANDATA	External
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Symbols-11
+                                                             
+
+
+MELCOPY  . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MSVER  . . . . . . . . . . . . .  	Number	FFFF	
+
+NOCHECKING . . . . . . . . . . .  	L NEAR	0260	TRANCODE
+NOCONC . . . . . . . . . . . . .  	L NEAR	0102	TRANCODE
+NORMPERLIN . . . . . . . . . . .  	Number	0001	
+NOSPACE  . . . . . . . . . . . .  	V BYTE 	0000	TRANDATA	External
+NOSTORE  . . . . . . . . . . . .  	L NEAR	03BD	TRANCODE
+NOSTOREE . . . . . . . . . . . .  	L NEAR	03D6	TRANCODE
+NOTAMBIG . . . . . . . . . . . .  	L NEAR	03B8	TRANCODE
+NOTAMBIGE  . . . . . . . . . . .  	L NEAR	03D1	TRANCODE
+NOTESTA  . . . . . . . . . . . .  	L NEAR	0096	TRANCODE
+NOTEXISTS  . . . . . . . . . . .  	L NEAR	01BC	TRANCODE
+NOTFIRSTDEST . . . . . . . . . .  	L NEAR	039A	TRANCODE
+NOTMELCOPY . . . . . . . . . . .  	L NEAR	035B	TRANCODE
+NOWRITE  . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+NXTADD . . . . . . . . . . . . .  	V WORD 	0000	TRANSPACE	External
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+OVERWR . . . . . . . . . . . . .  	V BYTE 	0000	TRANDATA	External
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+PLUS . . . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+PRINT  . . . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+PROCDEST . . . . . . . . . . . .  	L NEAR	01DA	TRANCODE
+PSWITCH  . . . . . . . . . . . .  	Number	0002	
+PUTZ . . . . . . . . . . . . . .  	L NEAR	0104	TRANCODE
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Symbols-12
+                                                             
+
+RDEOF  . . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RESTUDIR1  . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+RET50  . . . . . . . . . . . . .  	L NEAR	0188	TRANCODE
+RET60  . . . . . . . . . . . . .  	L NEAR	025F	TRANCODE
+RET_C  . . . . . . . . . . . . .  	NEAR 	002A	TRANCODE
+RET_L  . . . . . . . . . . . . .  	NEAR 	03DC	TRANCODE
+RET_NZ . . . . . . . . . . . . .  	NEAR 	029F	TRANCODE
+RET_Z  . . . . . . . . . . . . .  	NEAR 	02DA	TRANCODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SDIRBUF  . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+SEARCH . . . . . . . . . . . . .  	L NEAR	000C	TRANCODE	Global
+SEARCHNEXT . . . . . . . . . . .  	L NEAR	0000	TRANCODE	Global
+SEEKEND  . . . . . . . . . . . .  	L NEAR	02CC	TRANCODE
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETASC . . . . . . . . . . . . .  	L NEAR	02E1	TRANCODE	Global
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETCONC  . . . . . . . . . . . .  	L NEAR	0361	TRANCODE
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+SRCBUF . . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+SRCHAND  . . . . . . . . . . . .  	V WORD 	0000	TRANSPACE	External
+SRCINFO  . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+SRCISDEV . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Symbols-13
+                                                             
+
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+SYM  . . . . . . . . . . . . . .  	Number	003E	
+
+TERMREAD . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+TESTBOTH . . . . . . . . . . . .  	L NEAR	021A	TRANCODE
+TESTDEV  . . . . . . . . . . . .  	L NEAR	00CB	TRANCODE
+TPA  . . . . . . . . . . . . . .  	V WORD 	0000	TRANSPACE	External
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+TRYFLUSH . . . . . . . . . . . .  	L NEAR	01A0	TRANCODE
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USEALL . . . . . . . . . . . . .  	L NEAR	00AD	TRANCODE
+USERDIR1 . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+VSWITCH  . . . . . . . . . . . .  	Number	0010	
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WIDEPERLIN . . . . . . . . . . .  	Number	0005	
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+WRITTEN  . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+WSWITCH  . . . . . . . . . . . .  	Number	0001	
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+??0000 . . . . . . . . . . . . .  	L NEAR	000B	TRANCODE
+??0001 . . . . . . . . . . . . .  	L NEAR	001C	TRANCODE
+??0002 . . . . . . . . . . . . .  	L NEAR	002A	TRANCODE
+??0004 . . . . . . . . . . . . .  	L NEAR	00E1	TRANCODE
+??0005 . . . . . . . . . . . . .  	L NEAR	00E7	TRANCODE
+??0007 . . . . . . . . . . . . .  	L NEAR	0101	TRANCODE
+??0008 . . . . . . . . . . . . .  	L NEAR	0189	TRANCODE
+??0009 . . . . . . . . . . . . .  	L NEAR	01AC	TRANCODE
+??000A . . . . . . . . . . . . .  	L NEAR	025F	TRANCODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:56:13
+COPYRPOC             ;Procedures called by COPY             Symbols-14
+                                                             
+
+??000B . . . . . . . . . . . . .  	L NEAR	028A	TRANCODE
+??000D . . . . . . . . . . . . .  	L NEAR	029F	TRANCODE
+??000F . . . . . . . . . . . . .  	L NEAR	02A2	TRANCODE
+??0011 . . . . . . . . . . . . .  	L NEAR	02DA	TRANCODE
+??0013 . . . . . . . . . . . . .  	L NEAR	02E0	TRANCODE
+??0014 . . . . . . . . . . . . .  	L NEAR	02FA	TRANCODE
+??0015 . . . . . . . . . . . . .  	L NEAR	03DC	TRANCODE
+
+
+   1960 Source  Lines
+   2197 Total   Lines
+    686 Symbols
+
+  16726 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

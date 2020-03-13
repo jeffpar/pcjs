@@ -1,0 +1,3346 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-1
+                                                            
+
+                                        title   EDLIN for MSDOS 2.0 
+                                 
+                                ;----------------------------------------------
+				-------------------------; 
+                                ;               REVISION HISTORY:              
+				                         ; 
+                                ;                                              
+				                         ; 
+                                ;       V1.02                                  
+				                         ; 
+                                ;                                              
+				                         ; 
+                                ;       V2.00   9/13/82  M.A. Ulloa            
+				                         ; 
+                                ;                  Modified to use Pathnames in
+				 command line file       ; 
+                                ;               specification, modified REPLACE
+				 to use an empty         ; 
+                                ;               string intead of the old replac
+				e string when this       ; 
+                                ;               is missing, and search and repl
+				ace now start from       ; 
+                                ;               first line of buffer (like old 
+				version of EDLIN)        ; 
+                                ;               instead than current+1 line. Al
+				so added the U and       ; 
+                                ;               V commands that search (replace
+				) starting from the      ; 
+                                ;               current+1 line.                
+				                         ; 
+                                ;                                              
+				                         ; 
+                                ;               9/15/82  M.A. Ulloa            
+				                         ; 
+                                ;                  Added the quote character (^
+				V).                      ; 
+                                ;                                              
+				                         ; 
+                                ;               9/16/82  M.A. Ulloa            
+				                         ; 
+                                ;                  Corrected bug about use of q
+				uote char when going     ; 
+                                ;               into default insert mode. Also 
+				corrected the problem    ; 
+                                ;               with ^Z being the end of file m
+				arker. End of file is    ; 
+                                ;               reached when an attempt to read
+				 returns less chars      ; 
+                                ;               than requested.                
+				                         ; 
+                                ;                                              
+				                         ; 
+                                ;               9/17/82  M.A. Ulloa            
+				                         ; 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-2
+                                                            
+
+                                ;                  Corrected bug about boundari
+				es for Copy              ; 
+                                ;                                              
+				                         ; 
+                                ;               10/4/82  Rev. 1         M.A. Ul
+				loa                      ; 
+                                ;                  The IBM version now does NOT
+				 have the U and V        ; 
+                                ;               commands. The MSDOS version HAS
+				 the U and V commands.   ; 
+                                ;                  Added the B switch, and modi
+				fied the effect of       ; 
+                                ;               the quote char.                
+				                         ; 
+                                ;                                              
+				                         ; 
+                                ;               10/7/82  Rev. 2         M.A. Ul
+				loa                      ; 
+                                ;                  Changed the S and R commands
+				 to start from the       ; 
+                                ;               current line+1 (as U and V did)
+				. Took away U and V in   ; 
+                                ;               all versions.                  
+				                         ; 
+                                ;                                              
+				                         ; 
+                                ;               10/13/82 Rev. 3         M.A. Ul
+				loa                      ; 
+                                ;                  Now if parameter1 < 1 then p
+				arameter1 = 1            ; 
+                                ;                                              
+				                         ; 
+                                ;               10/15/82 Rev. 4         M.A. Ul
+				loa                      ; 
+                                ;                  Param4 if specified must be 
+				an absolute number that  ; 
+                                ;               reprecents the count.          
+				                         ; 
+                                ;                                              
+				                         ; 
+                                ;               10/18/82 Rev. 5         M.A. Ul
+				loa                      ; 
+                                ;                  Fixed problem with trying to
+				 edit files with the     ; 
+                                ;               same name as directories. Also,
+				 if the end of file is   ; 
+                                ;               reached it checks that a LF is 
+				the last character,      ; 
+                                ;               otherwise it inserts a CRLF pai
+				r at the end.            ; 
+                                ;                                              
+				                         ; 
+                                ;               10/20/82 Rev. 6         M.A.Ull
+				oa                       ; 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-3
+                                                            
+
+                                ;                  Changed the text of some err
+				or messages for IBM and  ; 
+                                ;               rewrite PAGE.                  
+				                         ; 
+                                ;                                              
+				                         ; 
+                                ;               10/25/82 Rev. 7         M.A.Ull
+				oa                       ; 
+                                ;                  Made all messages as in the 
+				IBM vers.                ; 
+                                ;                                              
+				                         ; 
+                                ;               10/28/82 Rev. 8         M.A.Ull
+				oa                       ; 
+                                ;                  Corrected problem with parsi
+				ng for options.          ; 
+                                ;                                              
+				                         ; 
+                                ;                        Rev. 9         Aaron R
+				eynolds                  ; 
+                                ;                  Made error messages external
+				.                        ; 
+                                ;                                              
+				                         ; 
+                                ;               12/08/82 Rev. 10        M.A. Ul
+				loa                      ; 
+                                ;                  Corrected problem arising wi
+				th having to restore     ; 
+                                ;               the old directory in case of a 
+				file name error.         ; 
+                                ;                                              
+				                         ; 
+                                ;               12/17/82 Rev. 11        M.A. Ul
+				loa                      ; 
+                                ;                  Added the ROPROT equate for 
+				R/O file protection.     ; 
+                                ;               It causes only certain operatio
+				ns (L,P,S,W,A, and Q)    ; 
+                                ;               to be allowed on read only file
+				s.                       ; 
+                                ;                                              
+				                         ; 
+                                ;               12/29/82 Rev. 12        M.A. Ul
+				loa                      : 
+                                ;                  Added the creation error mes
+				sage.                    ; 
+                                ;                                              
+				                         ; 
+                                ;               4/14/83  Rev. 13        N.Panne
+				rs                       ; 
+                                ;                  Fixed bug in Merge which los
+				t char if not ^Z.        ; 
+                                ;                  Fixed bug in Copy to correct
+				ly check                 ; 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-4
+                                                            
+
+                                ;                  for full buffers.           
+				                         ; 
+                                ;                                              
+				                         ; 
+                                ;                                              
+				                         ; 
+                                ;               7/23/83 Rev. 14         N.Panne
+				rs                       ; 
+                                ;                   Split EDLIN into two sepera
+				te modules to            ; 
+                                ;                   allow assembly of sources o
+				n an IBM PC              ; 
+                                ;                   EDLIN and EDLPROC          
+				                         ; 
+                                ;                                              
+				                         ; 
+                                ;----------------------------------------------
+				-------------------------; 
+                                 
+                                 
+ = 0000                         FALSE   EQU     0 
+ = FFFF                         TRUE    EQU     NOT FALSE 
+                                 
+ =                              KANJI   EQU     FALSE 
+                                 
+ =                              roprot  equ     true            ;set to TRUE if
+				 protection to r/o files 
+                                                                ; desired. 
+ = 005C                         FCB     EQU     5CH 
+                                 
+ = 0080                         Comand_Line_Length equ 128 
+ = 0016                         quote_char equ  16h             ;quote characte
+				r = ^V 
+                                 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-5
+                                                            
+
+                                PAGE 
+                                 
+                                        .list 
+                                 
+                                 
+                                SUBTTL  Contants and Data areas 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-6
+Contants and Data areas                                     
+
+                                PAGE 
+                                 
+ = 002A                         PROMPT  EQU     "*" 
+ = 0080                         STKSIZ  EQU     80H 
+                                 
+ 0000                           CODE    SEGMENT PUBLIC 
+ 0000                           CODE    ENDS 
+                                 
+ 0000                           CONST   SEGMENT PUBLIC WORD 
+ 0000                           CONST   ENDS 
+                                 
+ 0000                           DATA    SEGMENT PUBLIC WORD 
+ 0000                           DATA    ENDS 
+                                 
+                                DG      GROUP   CODE,CONST,DATA 
+                                 
+ 0000                           CONST   SEGMENT PUBLIC WORD 
+                                 
+                                        EXTRN   BADDRV:BYTE,NDNAME:BYTE,bad_ver
+				s_err:BYTE,opt_err:BYTE 
+                                        EXTRN   NOBAK:BYTE,BADCOM:BYTE,NEWFIL:B
+				YTE,DEST:BYTE,MRGERR:BYTE 
+                                        EXTRN   NODIR:BYTE,DSKFUL:BYTE,MEMFUL:B
+				YTE,FILENM:BYTE 
+                                        EXTRN   NOSUCH:BYTE,TOOLNG:BYTE,EOF:BYT
+				E,ro_err:byte,bcreat:byte 
+                                 
+                                        PUBLIC  TXT1,TXT2,FUDGE,USERDIR,HARDCH 
+                                 
+ 0000  42 41 4B                 BAK     DB      "BAK" 
+                                 
+ 0003  2A 2A 2A 4D 41 55 6C     make    db      "***MAUlloa/Microsoft/V20***" 
+       6C 6F 61 2F 4D 69 63     
+       72 6F 73 6F 66 74 2F     
+       56 32 30 2A 2A 2A        
+ 001E  31 34                    rev     db      "14" 
+                                 
+                                        if      roprot                  ;***** 
+				R/O ***** 
+ 0020  00                       roflag  db      0                       ; =1 if
+				 file is r/o 
+                                        endif 
+                                 
+ 0021  00                       fourth  db      0                       ;fourth
+				 parameter flag 
+                                 
+ 0022  00                       loadmod db      0                       ;Load m
+				ode flag, 0 = ^Z marks the 
+                                                                        ; end o
+				f a file, 1 = viceversa. 
+ 0023  ????????                 hardch  dd      ? 
+                                 
+ 0027  00                       the_root db     0                       ;root d
+				irectory flag 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-7
+Contants and Data areas                                     
+
+                                 
+ 0028  00                       fudge   db      0                       ;direct
+				ory changed flag 
+ 0029  00                       user_drive db   0 
+                                 
+                                 
+ 002A  2D                       optchar db      "-" 
+                                 
+ 002B  2F 00                    dirchar db      "/",0 
+                                 
+ 002D  2F 00                    userdir db      "/",0 
+ 002F  0040[                            db      (dirstrlen) dup(0) 
+            00                  
+                         ]      
+                                
+                                 
+ 006F  0080[                    fname_buffer db Comand_Line_Length dup(0) 
+            00                  
+                         ]      
+                                
+                                ;----------------------------------------------
+				-------------------------; 
+                                 
+ 00EF  00                       TXT1    DB      0,80H DUP (?) 
+       0080[                    TXT1    DB      0,80H DUP (?) 
+            ??                  
+                         ]      
+                                
+ 0170  00                       TXT2    DB      0,80H DUP (?) 
+       0080[                    TXT2    DB      0,80H DUP (?) 
+            ??                  
+                         ]      
+                                
+ 01F1  00                       DELFLG  DB      0 
+                                 
+ 01F2                           CONST   ENDS 
+                                 
+ 0000                           DATA    SEGMENT PUBLIC WORD 
+                                 
+                                        PUBLIC  QFLG,FCB2,OLDLEN,PARAM1,PARAM2,
+				OLDDAT,SRCHFLG 
+                                        PUBLIC  COMLINE,NEWLEN,SRCHMOD,CURRENT,
+				LSTFND,NUMPOS 
+                                        PUBLIC  LSTNUM,SRCHCNT,POINTER,START,EN
+				DTXT,USER_DRIVE 
+                                 
+                                ;----------------------------------------------
+				-------------------------; 
+                                ;    Be carefull when adding parameters, they h
+				ave to follow the 
+                                ; order in which they apperar here. (this is a 
+				table, ergo it 
+                                ; is indexed thru a pointer, and random additio
+				ns will cause the 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-8
+Contants and Data areas                                     
+
+                                ; wrong item to be accessed). Also param4 is kn
+				own to be the 
+                                ; count parameter, and known to be the fourth e
+				ntry in the table 
+                                ; so it receives special treatment. (See GETNUM
+				) 
+                                 
+ 0000  0001[                    PARAM1  DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 0002  0001[                    PARAM2  DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 0004  0001[                    PARAM3  DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 0006  0001[                    PARAM4  DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+                                 
+                                ;----------------------------------------------
+				-------------------------; 
+                                 
+ 0008  0001[                    PTR_1   DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 000A  0001[                    PTR_2   DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 000C  0001[                    PTR_3   DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 000E  0001[                    COPYSIZ DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 0010  0001[                    OLDLEN  DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 0012  0001[                    NEWLEN  DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 0014  0001[                    LSTFND  DW      1 DUP (?) 
+            ????                
+                         ]      
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-9
+Contants and Data areas                                     
+
+                                
+ 0016  0001[                    LSTNUM  DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 0018  0001[                    NUMPOS  DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 001A  0001[                    SRCHCNT DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 001C  0001[                    CURRENT DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 001E  0001[                    POINTER DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 0020  0001[                    ONE4TH  DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 0022  0001[                    THREE4TH DW     1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 0024  0001[                    LAST    DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 0026  0001[                    ENDTXT  DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 0028  0001[                    COMLINE DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 002A  0001[                    LASTLIN DW      1 DUP (?) 
+            ????                
+                         ]      
+                                
+ 002C  0082[                    COMBUF  DB      82H DUP (?) 
+            ??                  
+                         ]      
+                                
+ 00AE  0102[                    EDITBUF DB      258 DUP (?) 
+            ??                  
+                         ]      
+                                
+ 01B0  0001[                    EOL     DB      1 DUP (?) 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-10
+Contants and Data areas                                     
+
+            ??                  
+                         ]      
+                                
+ 01B1  0025[                    FCB2    DB      37 DUP (?) 
+            ??                  
+                         ]      
+                                
+ 01D6  0025[                    FCB3    DB      37 DUP (?) 
+            ??                  
+                         ]      
+                                
+ 01FB  0025[                    fake_fcb db     37 dup (?)              ;fake f
+				or size figuring 
+            ??                  
+                         ]      
+                                
+ 0220  0001[                    QFLG    DB      1 DUP (?) 
+            ??                  
+                         ]      
+                                
+ 0221  0001[                    HAVEOF  DB      1 DUP (?) 
+            ??                  
+                         ]      
+                                
+ 0222  0001[                    ENDING  DB      1 DUP (?) 
+            ??                  
+                         ]      
+                                
+ 0223  0001[                    SRCHFLG DB      1 DUP (?) 
+            ??                  
+                         ]      
+                                
+ 0224  0001[                    amnt_req dw     1 dup (?)               ;ammoun
+				t of bytes requested to read 
+            ????                
+                         ]      
+                                
+ 0226  0001[                    olddat  db      1 dup (?)               ;Used i
+				n replace and search, 
+            ??                  
+                         ]      
+                                
+                                                                        ; repla
+				ce by old data flag (1=yes) 
+ 0227  0001[                    srchmod db      1 dup (?)               ;Search
+				 mode: 1=from current+1 to 
+            ??                  
+                         ]      
+                                
+                                                                        ; end o
+				f buffer, 0=from beg. of 
+                                                                        ; buffe
+				r to the end (old way). 
+ 0228  0001[                    MOVFLG  DB      1 DUP (?) 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-11
+Contants and Data areas                                     
+
+            ??                  
+                         ]      
+                                
+ 0229  0080[                            DB      STKSIZ DUP (?) 
+            ??                  
+                         ]      
+                                
+                                 
+ 02A9                           STACK   LABEL   BYTE 
+ 02A9                           START   LABEL   WORD 
+                                 
+ 02A9                           DATA    ENDS 
+                                 
+                                SUBTTL  Main Body 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-12
+Main Body                                                   
+
+                                PAGE 
+                                 
+ 0000                           CODE SEGMENT PUBLIC 
+                                 
+                                ASSUME  CS:DG,DS:DG,SS:DG,ES:DG 
+                                 
+                                        EXTRN   QUIT:NEAR,QUERY:NEAR,FNDFIRST:N
+				EAR,FNDNEXT:NEAR 
+                                        EXTRN   UNQUOTE:NEAR,LF:NEAR,CRLF:NEAR,
+				OUT:NEAR 
+                                        EXTRN   REST_DIR:NEAR,KILL_BL:NEAR,INT_
+				24:NEAR 
+                                        EXTRN   FINDLIN:NEAR,SHOWNUM:NEAR,SCANL
+				N:NEAR 
+                                 
+                                        endif 
+                                 
+                                        PUBLIC  CHKRANGE 
+                                 
+ 0100                                   ORG     100H 
+                                 
+ 0100                           EDLIN: 
+ 0100  E9 0F12 R                        JMP     SIMPED 
+                                 
+ 0103  0E00[                    edl_pad db      0e00h dup (?) 
+            ??                  
+                         ]      
+                                
+                                 
+ 0F03  56 65 72 73 20 32 2E     HEADER  DB      "Vers 2.14" 
+       31 34                    
+                                 
+ 0F0C                           NONAME: 
+ 0F0C  BA 0000 E                        MOV     DX,OFFSET DG:NDNAME 
+ 0F0F  E9 149A R                ERRJ:   JMP     xERROR 
+                                 
+ 0F12                           SIMPED: 
+ 0F12  C6 06 0222 R 00                  MOV     BYTE PTR [ENDING],0 
+ 0F17  BC 02A9 R                        MOV     SP,OFFSET DG:STACK 
+                                 
+                                ;Code to print header 
+                                ;       PUSH    AX 
+                                ;       MOV     DX,OFFSET DG:HEADER 
+                                ;       MOV     AH,STD_CON_STRING_OUTPUT 
+                                ;       INT     21H 
+                                ;       POP     AX 
+                                 
+                                ;----- Check Version Number -------------------
+				-------------------------; 
+ 0F1A  50                               push    ax 
+ 0F1B  B4 30                            mov     ah,Get_Version 
+ 0F1D  CD 21                            int     21h 
+ 0F1F  3C 02                            cmp     al,2 
+ 0F21  73 05                            jae     vers_ok                        
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-13
+Main Body                                                   
+
+				 ; version >= 2, enter editor 
+ 0F23  BA 0000 E                        mov     dx,offset dg:bad_vers_err 
+ 0F26  EB E7                            jmp     short errj 
+                                ;----------------------------------------------
+				-------------------------; 
+                                 
+ 0F28                           vers_ok: 
+                                 
+                                ;----- Process Pathnames ----------------------
+				-------------------------; 
+                                 
+ 0F28  B8 3700                          mov     ax,(char_oper shl 8)    ;get sw
+				itch character 
+ 0F2B  CD 21                            int     21h 
+ 0F2D  80 FA 2F                         cmp     dl,"/" 
+ 0F30  75 0F                            jnz     slashok                 ;if not
+				 / , then not PC 
+ 0F32  C6 06 002B R 5C                  mov     [dirchar],"\"           ;in PC,
+				 dir separator = \ 
+ 0F37  C6 06 002D R 5C                  mov     [userdir],"\" 
+ 0F3C  C6 06 002A R 2F                  mov     [optchar],"/"           ;in PC,
+				 option char = / 
+                                 
+ 0F41                           slashok: 
+ 0F41  BE 0081                          mov     si,81h                  ;point 
+				to cammand line 
+                                 
+ 0F44  E8 0000 E                        call    kill_bl 
+ 0F47  3C 0D                            cmp     al,13                   ;A carr
+				iage return? 
+ 0F49  74 C1                            je      noname                  ;yes, f
+				ile name missing 
+                                 
+ 0F4B  BF 006F R                        mov     di,offset dg:fname_buffer 
+ 0F4E  33 C9                            xor     cx,cx                   ;zero p
+				athname length 
+                                 
+ 0F50                           next_char: 
+ 0F50  AA                               stosb                           ;put pa
+				tname in buffer 
+ 0F51  41                               inc     cx 
+ 0F52  AC                               lodsb 
+ 0F53  3C 20                            cmp     al,' ' 
+ 0F55  74 0C                            je      xx1 
+ 0F57  3C 0D                            cmp     al,13                   ; a CR 
+				? 
+ 0F59  74 26                            je      name_copied 
+ 0F5B  3A 06 002A R                     cmp     al,[optchar]            ; an op
+				tion character? 
+ 0F5F  74 0C                            je      an_option 
+ 0F61  EB ED                            jmp     short next_char 
+                                 
+ 0F63                           xx1: 
+ 0F63  4E                               dec     si 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-14
+Main Body                                                   
+
+ 0F64  E8 0000 E                        call    kill_bl 
+ 0F67  3A 06 002A R                     cmp     al,[optchar] 
+ 0F6B  75 14                            jne     name_copied 
+                                 
+ 0F6D                           an_option: 
+ 0F6D  AC                               lodsb                           ;get th
+				e option 
+ 0F6E  3C 42                            cmp     al,'B' 
+ 0F70  74 0A                            je      b_opt 
+ 0F72  3C 62                            cmp     al,'b' 
+ 0F74  74 06                            je      b_opt 
+ 0F76  BA 0000 E                        mov     dx,offset dg:opt_err    ;bad op
+				tion specified 
+ 0F79  E9 149A R                        jmp     xerror 
+                                 
+ 0F7C                           b_opt: 
+ 0F7C  C6 06 0022 R 01                  mov     [loadmod],1 
+                                 
+ 0F81                           name_copied: 
+ 0F81  C6 05 00                         mov     byte ptr dg:[di],0      ;nul te
+				rminate the pathname 
+                                 
+                                        if      roprot                  ;***** 
+				R/O ***** 
+                                ;----- Check that file is not R/O -------------
+				-------------------------; 
+ 0F84  51                               push    cx                      ;save c
+				haracter count 
+ 0F85  BA 006F R                        mov     dx,offset dg:fname_buffer 
+ 0F88  B0 00                            mov     al,0                    ;get at
+				tributes 
+ 0F8A  B4 43                            mov     ah,chmod 
+ 0F8C  CD 21                            int     21h 
+ 0F8E  72 0A                            jc      attr_are_ok 
+ 0F90  80 E1 01                         and     cl,00000001b            ;mask a
+				ll but: r/o 
+ 0F93  74 05                            jz      attr_are_ok             ;if all
+				 = 0 then file ok to edit, 
+ 0F95  C6 06 0020 R 01                  mov     dg:[roflag],01h         ;otherw
+				ise: Error (GONG!!!) 
+ 0F9A                           attr_are_ok: 
+ 0F9A  59                               pop     cx                      ;restor
+				e character count 
+                                        endif 
+                                 
+                                ;----- Scan for directory ---------------------
+				-------------------------; 
+ 0F9B  4F                               dec     di                      ;adjust
+				 to the end of the pathname 
+                                 
+                                        ELSE 
+ 0F9C  A0 002B R                        mov     al,dg:[dirchar]         ;get di
+				rectory separator character 
+ 0F9F  FD                               std                             ;scan b
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-15
+Main Body                                                   
+
+				ackwards 
+ 0FA0  F2/ AE                           repnz   scasb                   ;(cx ha
+				s the pathname length) 
+ 0FA2  FC                               cld                             ;reset 
+				direction, just in case 
+ 0FA3  74 03                            jz      sj1 
+                                        ENDIF 
+                                 
+ 0FA5  E9 103C R                        jmp     same_dir                ;no dir
+				 separator char. found, the 
+                                                                        ; file 
+				is in the current directory 
+                                                                        ; of th
+				e corresponding drive. Ergo, 
+                                                                        ; the F
+				CB contains the data already. 
+                                 
+ 0FA8                           sj1: 
+ 0FA8  E3 05                            jcxz    sj2                     ;no mor
+				e chars left, it refers to root 
+ 0FAA  80 3D 3A                         cmp     byte ptr [di],':'       ;is the
+				 prvious character a disk def? 
+ 0FAD  75 05                            jne     not_root 
+ 0FAF                           sj2: 
+ 0FAF  C6 06 0027 R 01                  mov     dg:[the_root],01h       ;file i
+				s in the root 
+ 0FB4                           not_root: 
+ 0FB4  47                               inc     di                      ;point 
+				to dir separator char. 
+ 0FB5  B0 00                            mov     al,0 
+ 0FB7  AA                               stosb                           ;nul te
+				rminate directory name 
+ 0FB8  58                               pop     ax 
+ 0FB9  57                               push    di                      ;save p
+				ointer to file name 
+ 0FBA  C6 06 0028 R 01                  mov     dg:[fudge],01h          ;rememb
+				er that the current directory 
+                                                                        ; has b
+				een changed. 
+                                 
+                                ;----- Save current directory for exit --------
+				-------------------------; 
+ 0FBF  B4 19                            mov     ah,get_default_drive    ;save c
+				urrent drive 
+ 0FC1  CD 21                            int     21h 
+ 0FC3  A2 0029 R                        mov     dg:[user_drive],al 
+                                 
+ 0FC6  8A 16 005C                       mov     dl,byte ptr ds:[fcb]    ;get sp
+				ecified drive if any 
+ 0FCA  0A D2                            or      dl,dl                   ;defaul
+				t disk? 
+ 0FCC  74 10                            jz      same_drive 
+ 0FCE  FE CA                            dec     dl                      ;adjust
+				 to real drive (a=0,b=1,...) 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-16
+Main Body                                                   
+
+ 0FD0  B4 0E                            mov     ah,set_default_drive    ;change
+				 disks 
+ 0FD2  CD 21                            int     21h 
+ 0FD4  3C FF                            cmp     al,-1                   ;error?
+				 
+ 0FD6  75 06                            jne     same_drive 
+ 0FD8  BA 0000 E                        mov     dx,offset dg:baddrv 
+ 0FDB  E9 149A R                        jmp     xerror 
+                                 
+ 0FDE                           same_drive: 
+ 0FDE  B4 1F                            mov     ah,get_default_dpb 
+ 0FE0  CD 21                            int     21h 
+                                 
+                                assume  ds:nothing 
+                                 
+ 0FE2  3C FF                            cmp     al,-1                   ;bad dr
+				ive? (should always be ok) 
+ 0FE4  75 06                            jne     drvisok 
+ 0FE6  BA 0000 E                        mov     dx,offset dg:baddrv 
+ 0FE9  E9 149A R                        jmp     xerror 
+                                 
+ 0FEC                           drvisok: 
+ 0FEC  83 7F 1C 00                      cmp     [bx.dpb_current_dir],0 
+ 0FF0  74 0E                            je      curr_is_root 
+ 0FF2  8B F3                            mov     si,bx 
+ 0FF4  83 C6 1E                         add     si,dpb_dir_text 
+ 0FF7  BF 002E R                        mov     di,offset dg:userdir + 1 
+                                 
+ 0FFA                           dir_save_loop: 
+ 0FFA  AC                               lodsb 
+ 0FFB  AA                               stosb 
+ 0FFC  0A C0                            or      al,al 
+ 0FFE  75 FA                            jnz     dir_save_loop 
+                                 
+ 1000                           curr_is_root: 
+ 1000  0E                               push    cs 
+ 1001  1F                               pop     ds 
+                                 
+                                assume  ds:dg 
+                                 
+                                 
+                                ;----- Change directories ---------------------
+				-------------------------; 
+ 1002  80 3E 0027 R 01                  cmp     [the_root],01h 
+ 1007  BA 002B R                        mov     dx,offset dg:[dirchar]         
+				;assume the root 
+ 100A  74 03                            je      sj3 
+ 100C  BA 006F R                        mov     dx,offset dg:[fname_buffer] 
+ 100F                           sj3: 
+ 100F  B4 3B                            mov     ah,chdir                       
+				 ;change directory 
+ 1011  CD 21                            int     21h 
+ 1013  BA 0000 E                        mov     dx,offset dg:baddrv 
+ 1016  73 03                            jnc     no_errors 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-17
+Main Body                                                   
+
+ 1018  E9 149A R                        jmp     xerror 
+ 101B                           no_errors: 
+                                 
+                                ;----- Set Up int 24 intercept ----------------
+				-------------------------; 
+                                 
+ 101B  B8 3524                          mov     ax,(get_interrupt_vector shl 8)
+				 or 24h 
+ 101E  CD 21                            int     21h 
+ 1020  89 1E 0023 R                     mov     word ptr [hardch],bx 
+ 1024  8C 06 0025 R                     mov     word ptr [hardch+2],es 
+ 1028  B8 2524                          mov     ax,(set_interrupt_vector shl 8)
+				 or 24h 
+ 102B  BA 0000 E                        mov     dx,offset dg:int_24 
+ 102E  CD 21                            int     21h 
+ 1030  0E                               push    cs 
+ 1031  07                               pop     es 
+                                 
+                                ;----- Parse filename to FCB ------------------
+				-------------------------; 
+ 1032  5E                               pop     si 
+ 1033  BF 005C                          mov     di,fcb 
+ 1036  B8 2901                          mov     ax,(parse_file_descriptor shl 8
+				) or 1 
+ 1039  CD 21                            int     21h 
+ 103B  50                               push    ax 
+                                 
+                                ;----------------------------------------------
+				-------------------------; 
+                                 
+ 103C                           same_dir: 
+ 103C  58                               pop     ax 
+ 103D  0A C0                            OR      AL,AL 
+ 103F  BA 0000 E                        MOV     DX,OFFSET DG:BADDRV 
+ 1042  74 03                            jz      sj4 
+ 1044  E9 149A R                        jmp     xerror 
+ 1047                           sj4: 
+ 1047  80 3E 005D 20                    CMP     BYTE PTR DS:[FCB+1]," " 
+ 104C  75 03                            jnz     sj5 
+ 104E  E9 0F0C R                        jmp     noname 
+ 1051                           sj5: 
+ 1051  BE 0000 R                        MOV     SI,OFFSET DG:BAK 
+ 1054  BF 0065                          MOV     DI,FCB+9 
+ 1057  B9 0003                          MOV     CX,3 
+                                        ;File must not have .BAK extension 
+ 105A  F3/ A6                           REPE    CMPSB 
+ 105C  74 61                            JZ      NOTBAK 
+                                        ;Open input file 
+ 105E  B4 0F                            MOV     AH,FCB_OPEN 
+ 1060  BA 005C                          MOV     DX,FCB 
+ 1063  CD 21                            INT     21H 
+ 1065  A2 0221 R                        MOV     [HAVEOF],AL 
+ 1068  0A C0                            OR      AL,AL 
+ 106A  74 26                            JZ      HAVFIL 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-18
+Main Body                                                   
+
+                                 
+                                ;----- Check that file is not a directory -----
+				------- 
+ 106C  B4 16                            mov     ah,fcb_create 
+ 106E  BA 005C                          mov     dx,fcb 
+ 1071  CD 21                            int     21h 
+ 1073  0A C0                            or      al,al 
+ 1075  74 06                            jz      sj50                    ;no err
+				or found 
+ 1077  BA 0000 E                        mov     dx,offset dg:bcreat     ;creati
+				on error 
+ 107A  E9 149A R                        jmp     xerror 
+ 107D                           sj50: 
+ 107D  B4 10                            mov     ah,fcb_close            ;no err
+				or, close the file 
+ 107F  BA 005C                          mov     dx,fcb 
+ 1082  CD 21                            int     21h 
+ 1084  B4 13                            mov     ah,fcb_delete           ;delete
+				 the file 
+ 1086  BA 005C                          mov     dx,fcb 
+ 1089  CD 21                            int     21h 
+                                 
+                                ;----------------------------------------------
+				------- 
+                                 
+ 108B  BA 0000 E                        MOV     DX,OFFSET DG:NEWFIL 
+ 108E  B4 09                            MOV     AH,STD_CON_STRING_OUTPUT 
+ 1090  CD 21                            INT     21H 
+ 1092                           HAVFIL: 
+ 1092  BE 005C                          MOV     SI,FCB 
+ 1095  BF 01B1 R                        MOV     DI,OFFSET DG:FCB2 
+ 1098  B9 0009                          MOV     CX,9 
+ 109B  F3/ A4                           REP     MOVSB 
+ 109D  B0 24                            MOV     AL,"$" 
+ 109F  AA                               STOSB 
+ 10A0  AA                               STOSB 
+ 10A1  AA                               STOSB 
+ 10A2                           MAKFIL: 
+                                        ;Create .$$$ file to make sure director
+				y has room 
+ 10A2  BA 01B1 R                        MOV     DX,OFFSET DG:FCB2 
+ 10A5  B4 16                            MOV     AH,FCB_CREATE 
+ 10A7  CD 21                            INT     21H 
+ 10A9  0A C0                            OR      AL,AL 
+ 10AB  74 18                            JZ      SETUP 
+ 10AD  80 3E 01F1 R 00                  CMP     BYTE PTR [DELFLG],0 
+ 10B2  75 05                            JNZ     NOROOM 
+ 10B4  E8 1A74 R                        CALL    DELBAK 
+ 10B7  EB E9                            JMP     MAKFIL 
+ 10B9                           NOROOM: 
+ 10B9  BA 0000 E                        MOV     DX,OFFSET DG:NODIR 
+ 10BC  E9 149A R                        JMP     xERROR 
+ 10BF                           NOTBAK: 
+ 10BF  BA 0000 E                        MOV     DX,OFFSET DG:NOBAK 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-19
+Main Body                                                   
+
+ 10C2  E9 149A R                        JMP     xERROR 
+ 10C5                           SETUP: 
+ 10C5  33 C0                            XOR     AX,AX 
+ 10C7  A3 007D                          MOV     WORD PTR DS:[FCB+fcb_RR],AX    
+				     ;Set RR field to zero 
+ 10CA  A3 007F                          MOV     WORD PTR DS:[FCB+fcb_RR+2],AX 
+ 10CD  A3 01D2 R                        MOV     WORD PTR [FCB2+fcb_RR],AX 
+ 10D0  A3 01D4 R                        MOV     WORD PTR [FCB2+fcb_RR+2],AX 
+ 10D3  40                               INC     AX 
+ 10D4  A3 006A                          MOV     WORD PTR DS:[FCB+fcb_RECSIZ],AX
+				         ;Set record length to 1 
+ 10D7  A3 01BF R                        MOV     WORD PTR [FCB2+fcb_RECSIZ],AX 
+ 10DA  BA 02A9 R                        MOV     DX,OFFSET DG:START 
+ 10DD  8B FA                            MOV     DI,DX 
+ 10DF  B4 1A                            MOV     AH,SET_DMA 
+ 10E1  CD 21                            INT     21H 
+ 10E3  8B 0E 0006                       MOV     CX,DS:[6] 
+ 10E7  49                               DEC     CX 
+ 10E8  89 0E 0024 R                     MOV     [LAST],CX 
+ 10EC  F6 06 0221 R FF                  TEST    BYTE PTR [HAVEOF],-1 
+ 10F1  75 2A                            JNZ     SAVEND 
+ 10F3  81 E9 02A9 R                     SUB     CX,OFFSET DG:START      ;Availa
+				ble memory 
+ 10F7  D1 E9                            SHR     CX,1            ;1/2 of availab
+				le memory 
+ 10F9  8B C1                            MOV     AX,CX 
+ 10FB  D1 E9                            SHR     CX,1            ;1/4 of availab
+				le memory 
+ 10FD  89 0E 0020 R                     MOV     [ONE4TH],CX     ;Save amount of
+				 1/4 full 
+ 1101  03 C8                            ADD     CX,AX           ;3/4 of availab
+				le memory 
+ 1103  8B D1                            MOV     DX,CX 
+ 1105  81 C2 02A9 R                     ADD     DX,OFFSET DG:START 
+ 1109  89 16 0022 R                     MOV     [THREE4TH],DX   ;Save pointer t
+				o 3/4 full 
+                                        ;Read in input file 
+ 110D  BA 005C                          MOV     DX,FCB 
+ 1110  B4 27                            MOV     AH,FCB_RANDOM_READ_BLOCK 
+ 1112  89 0E 0224 R                     mov     [amnt_req],cx   ;save ammount o
+				f chars requested 
+ 1116  CD 21                            INT     21H 
+ 1118  E8 1319 R                        CALL    SCANEOF 
+ 111B  03 F9                            ADD     DI,CX           ;Point to last 
+				byte 
+ 111D                           SAVEND: 
+ 111D  FC                               CLD 
+ 111E  C6 05 1A                         MOV     BYTE PTR [DI],1AH 
+ 1121  89 3E 0026 R                     MOV     [ENDTXT],DI 
+ 1125  C6 06 002C R 80                  MOV     BYTE PTR [COMBUF],128 
+ 112A  C6 06 00AE R FF                  MOV     BYTE PTR [EDITBUF],255 
+ 112F  C6 06 01B0 R 0A                  MOV     BYTE PTR [EOL],10 
+ 1134  C7 06 001E R 02A9 R              MOV     [POINTER],OFFSET DG:START 
+ 113A  C7 06 001C R 0001                MOV     [CURRENT],1 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-20
+Main Body                                                   
+
+ 1140  C7 06 0000 R 0001                MOV     [PARAM1],1 
+ 1146  F6 06 0221 R FF                  TEST    BYTE PTR [HAVEOF],-1 
+ 114B  75 03                            JNZ     COMMAND 
+ 114D  E8 137B R                        CALL    APPEND 
+                                 
+ 1150                           COMMAND: 
+ 1150  BC 02A9 R                        MOV     SP, OFFSET DG:STACK 
+ 1153  B8 2523                          MOV     AX,(SET_INTERRUPT_VECTOR SHL 8)
+				 OR 23H 
+ 1156  BA 1A62 R                        MOV     DX,OFFSET DG:ABORTCOM 
+ 1159  CD 21                            INT     21H 
+ 115B  B0 2A                            MOV     AL,PROMPT 
+ 115D  E8 0000 E                        CALL    OUT 
+ 1160  BA 002C R                        MOV     DX,OFFSET DG:COMBUF 
+ 1163  B4 0A                            MOV     AH,STD_CON_STRING_INPUT 
+ 1165  CD 21                            INT     21H 
+ 1167  C7 06 0028 R 002E R              MOV     [COMLINE],OFFSET DG:COMBUF + 2 
+ 116D  B0 0A                            MOV     AL,10 
+ 116F  E8 0000 E                        CALL    OUT 
+ 1172                           PARSE: 
+ 1172  C7 06 0002 R 0000                MOV     [PARAM2],0 
+ 1178  C7 06 0004 R 0000                MOV     [PARAM3],0 
+ 117E  C7 06 0006 R 0000                MOV     [PARAM4],0 
+ 1184  C6 06 0021 R 00                  mov     [fourth],0              ;reset 
+				the fourth parameter flag 
+ 1189  C6 06 0220 R 00                  MOV     BYTE PTR [QFLG],0 
+ 118E  8B 36 0028 R                     MOV     SI,[COMLINE] 
+ 1192  BD 0000 R                        MOV     BP,OFFSET DG:PARAM1 
+ 1195  33 FF                            XOR     DI,DI 
+ 1197                           CHKLP: 
+ 1197  E8 1232 R                        CALL    GETNUM 
+ 119A  89 13                            MOV     [BP+DI],DX 
+ 119C  47                               INC     DI 
+ 119D  47                               INC     DI 
+ 119E  E8 1216 R                        CALL    SKIP1 
+ 11A1  3C 2C                            CMP     AL,"," 
+ 11A3  75 01                            JNZ     CHKNXT 
+ 11A5  46                               INC     SI 
+ 11A6                           CHKNXT: 
+ 11A6  4E                               DEC     SI 
+ 11A7  83 FF 08                         CMP     DI,8 
+ 11AA  72 EB                            JB      CHKLP 
+ 11AC  E8 1215 R                        CALL    SKIP 
+ 11AF  3C 3F                            CMP     AL,"?" 
+ 11B1  75 06                            JNZ     DISPATCH 
+ 11B3  A2 0220 R                        MOV     [QFLG],AL 
+ 11B6  E8 1215 R                        CALL    SKIP 
+ 11B9                           DISPATCH: 
+ 11B9  3C 5F                            CMP     AL,5FH 
+ 11BB  76 02                            JBE     UPCASE 
+ 11BD  24 5F                            AND     AL,5FH 
+ 11BF                           UPCASE: 
+ 11BF  BF 12C3 R                        MOV     DI,OFFSET DG:COMTAB 
+ 11C2  B9 000F 90                       MOV     CX,NUMCOM 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-21
+Main Body                                                   
+
+ 11C6  F2/ AE                           REPNE   SCASB 
+ 11C8  75 5E                            JNZ     COMERR 
+ 11CA  8B D9                            MOV     BX,CX 
+ 11CC  A1 0002 R                        MOV     AX,[PARAM2] 
+ 11CF  0B C0                            OR      AX,AX 
+ 11D1  74 06                            JZ      PARMOK 
+ 11D3  3B 06 0000 R                     CMP     AX,[PARAM1] 
+ 11D7  72 4F                            JB      COMERR          ;Param. 2 must 
+				be >= param 1 
+ 11D9                           PARMOK: 
+ 11D9  89 36 0028 R                     MOV     [COMLINE],SI 
+                                 
+                                        if      roprot                         
+				 ;***** R/O ***** 
+ 11DD  80 3E 0020 R 01                  cmp     [roflag],01                    
+				 ;file r/o? 
+ 11E2  75 0C                            jne     paramok2 
+ 11E4  80 BF 12F0 R 01                  cmp     byte ptr [bx+rotable],01       
+				 ;operation allowed? 
+ 11E9  74 05                            je      paramok2 
+ 11EB  BA 0000 E                        mov     dx,offset dg:ro_err            
+				 ;error 
+ 11EE  EB 3B                            jmp     short comerr1 
+ 11F0                           paramok2: 
+                                        endif 
+                                 
+ 11F0  D1 E3                            SHL     BX,1 
+ 11F2  FF 97 12D2 R                     CALL    [BX+TABLE] 
+ 11F6                           COMOVER: 
+ 11F6  8B 36 0028 R                     MOV     SI,[COMLINE] 
+ 11FA  E8 1215 R                        CALL    SKIP 
+ 11FD  3C 0D                            CMP     AL,0DH 
+ 11FF  74 11                            JZ      COMMANDJ 
+ 1201  3C 1A                            CMP     AL,1AH 
+ 1203  74 04                            JZ      DELIM 
+ 1205  3C 3B                            CMP     AL,";" 
+ 1207  75 01                            JNZ     NODELIM 
+ 1209                           DELIM: 
+ 1209  46                               INC     SI 
+ 120A                           NODELIM: 
+ 120A  4E                               DEC     SI 
+ 120B  89 36 0028 R                     MOV     [COMLINE],SI 
+ 120F  E9 1172 R                        JMP     PARSE 
+                                 
+ 1212                           COMMANDJ: 
+ 1212  E9 1150 R                        JMP     COMMAND 
+                                 
+ 1215                           SKIP: 
+ 1215  AC                               LODSB 
+ 1216                           SKIP1: 
+ 1216  3C 20                            CMP     AL," " 
+ 1218  74 FB                            JZ      SKIP 
+ 121A  C3                       RET1:   RET 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-22
+Main Body                                                   
+
+ 121B                           CHKRANGE: 
+ 121B  83 3E 0002 R 00                  CMP     [PARAM2],0 
+ 1220  74 F8                            JZ      RET1 
+ 1222  3B 1E 0002 R                     CMP     BX,[PARAM2] 
+ 1226  76 F2                            JBE     RET1 
+ 1228                           COMERR: 
+ 1228  BA 0000 E                        MOV     DX,OFFSET DG:BADCOM 
+ 122B                           COMERR1: 
+ 122B  B4 09                            MOV     AH,STD_CON_STRING_OUTPUT 
+ 122D  CD 21                            INT     21H 
+ 122F  E9 1150 R                        JMP     COMMAND 
+                                 
+                                 
+ 1232                           GETNUM: 
+ 1232  E8 1215 R                        CALL    SKIP 
+ 1235  83 FF 06                         cmp     di,6            ;Is this the fo
+				urth parameter? 
+ 1238  75 05                            jne     sk1 
+ 123A  C6 06 0021 R 01                  mov     [fourth],1      ;yes, set the f
+				lag 
+ 123F                           sk1: 
+ 123F  3C 2E                            CMP     AL,"." 
+ 1241  74 3D                            JZ      CURLIN 
+ 1243  3C 23                            CMP     AL,"#" 
+ 1245  74 46                            JZ      MAXLIN 
+ 1247  3C 2B                            CMP     AL,"+" 
+ 1249  74 4E                            JZ      FORLIN 
+ 124B  3C 2D                            CMP     AL,"-" 
+ 124D  74 59                            JZ      BACKLIN 
+ 124F  BA 0000                          MOV     DX,0 
+ 1252  B1 00                            MOV     CL,0            ;Flag no parame
+				ter seen yet 
+ 1254                           NUMLP: 
+ 1254  3C 30                            CMP     AL,"0" 
+ 1256  72 1E                            JB      NUMCHK 
+ 1258  3C 39                            CMP     AL,"9" 
+ 125A  77 1A                            JA      NUMCHK 
+ 125C  81 FA 1999                       CMP     DX,6553         ;Max line/10 
+ 1260  73 C6                            JAE     COMERR          ;Ten times this
+				 is too big 
+ 1262  B1 01                            MOV     CL,1            ;Parameter digi
+				t has been found 
+ 1264  2C 30                            SUB     AL,"0" 
+ 1266  8B DA                            MOV     BX,DX 
+ 1268  D1 E2                            SHL     DX,1 
+ 126A  D1 E2                            SHL     DX,1 
+ 126C  03 D3                            ADD     DX,BX 
+ 126E  D1 E2                            SHL     DX,1 
+ 1270  98                               CBW 
+ 1271  03 D0                            ADD     DX,AX 
+ 1273  AC                               LODSB 
+ 1274  EB DE                            JMP     SHORT NUMLP 
+ 1276                           NUMCHK: 
+ 1276  80 F9 00                         CMP     CL,0 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-23
+Main Body                                                   
+
+ 1279  74 9F                            JZ      RET1 
+ 127B  0B D2                            OR      DX,DX 
+ 127D  74 A9                            JZ      COMERR          ;Don't allow ze
+				ro as a parameter 
+ 127F  C3                               RET 
+                                 
+ 1280                           CURLIN: 
+ 1280  80 3E 0021 R 01                  cmp     [fourth],1      ;the fourth par
+				ameter? 
+ 1285  74 39                            je      comerra         ;yes, an error 
+ 1287  8B 16 001C R                     MOV     DX,[CURRENT] 
+ 128B  AC                               LODSB 
+ 128C  C3                               RET 
+ 128D                           MAXLIN: 
+ 128D  80 3E 0021 R 01                  cmp     [fourth],1      ;the fourth par
+				ameter? 
+ 1292  74 2C                            je      comerra         ;yes, an error 
+ 1294  BA FFFE                          MOV     DX,-2 
+ 1297  AC                               LODSB 
+ 1298  C3                               RET 
+ 1299                           FORLIN: 
+ 1299  80 3E 0021 R 01                  cmp     [fourth],1      ;the fourth par
+				ameter? 
+ 129E  74 20                            je      comerra         ;yes, an error 
+ 12A0  E8 1232 R                        CALL    GETNUM 
+ 12A3  03 16 001C R                     ADD     DX,[CURRENT] 
+ 12A7  C3                               RET 
+ 12A8                           BACKLIN: 
+ 12A8  80 3E 0021 R 01                  cmp     [fourth],1      ;the fourth par
+				ameter? 
+ 12AD  74 11                            je      comerra         ;yes, an error 
+ 12AF  E8 1232 R                        CALL    GETNUM 
+ 12B2  8B 1E 001C R                     MOV     BX,[CURRENT] 
+ 12B6  2B DA                            SUB     BX,DX 
+ 12B8  79 03                            jns     sk2     ;if below beg of buffer
+				 then default to the 
+ 12BA  BB 0001                          mov     bx,1    ; beg of buffer (line1)
+				 
+ 12BD                           sk2: 
+ 12BD  8B D3                            MOV     DX,BX 
+ 12BF  C3                               RET 
+                                 
+ 12C0                           comerra: 
+ 12C0  E9 1228 R                        jmp     comerr 
+                                 
+                                 
+ 12C3  51 54 43 4D 57 41 53     COMTAB  DB      "QTCMWASRDLPIE;",13 
+       52 44 4C 50 49 45 3B     
+       0D                       
+                                 
+ = 000F                         NUMCOM  EQU     $-COMTAB 
+                                 
+                                ;----------------------------------------------
+				-------------------------; 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-24
+Main Body                                                   
+
+                                ;       Carefull changing the order of the next
+				 two tables. They are 
+                                ;      linked and chnges should be be to both. 
+                                 
+ 12D2  16C1 R                   TABLE   DW      NOCOM   ;No command--edit line 
+ 12D4  16C1 R                           DW      NOCOM 
+ 12D6  1A0F R                           DW      ENDED 
+ 12D8  1967 R                           DW      INSERT 
+ 12DA  14A4 R                           DW      PAGE 
+ 12DC  14FC R                           DW      LIST 
+ 12DE  1687 R                           DW      DELETE 
+ 12E0  1584 R                           dw      replac_from_curr        ;replac
+				e from current+1 line 
+ 12E2  1625 R                           dw      search_from_curr        ;search
+				 from current+1 line 
+ 12E4  137B R                           DW      APPEND 
+ 12E6  1429 R                           DW      EWRITE 
+ 12E8  1763 R                           DW      MOVE 
+ 12EA  176A R                           DW      COPY 
+ 12EC  18BD R                           DW      MERGE 
+                                 
+                                        if      roprot                  ;***** 
+				R/O ***** 
+ 12EE  12FF R                           DW      QUIT1 
+                                        endif 
+                                 
+                                        if      roprot                  ;***** 
+				R/O ***** 
+                                ;----------------------------------------------
+				-------------------------; 
+                                ;       If = 1 then the command can be executed
+				 with a file that 
+                                ;      is r/o. If = 0 the command can not be ex
+				ecuted, and error. 
+                                 
+ 12F0  00                       ROTABLE db      0               ;NOCOM 
+ 12F1  00                               db      0               ;NOCOM 
+ 12F2  00                               db      0               ;ENDED 
+ 12F3  00                               db      0               ;INSERT 
+ 12F4  01                               db      1               ;PAGE 
+ 12F5  01                               db      1               ;LIST 
+ 12F6  00                               db      0               ;DELETE 
+ 12F7  00                               db      0               ;replac_from_cu
+				rr 
+ 12F8  01                               db      1               ;search_from_cu
+				rr 
+ 12F9  01                               db      1               ;APPEND 
+ 12FA  01                               db      1               ;EWRITE 
+ 12FB  00                               db      0               ;MOVE 
+ 12FC  00                               db      0               ;COPY 
+ 12FD  00                               db      0               ;MERGE 
+ 12FE  01                               db      1               ;QUIT 
+                                 
+                                ;----------------------------------------------
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-25
+Main Body                                                   
+
+				-------------------------; 
+                                        endif 
+                                 
+                                        if      roprot                  ;***** 
+				R/O ***** 
+ 12FF                           quit1: 
+ 12FF  80 3E 0020 R 01                  cmp     [roflag],01             ;are we
+				 in r/o mode? 
+ 1304  75 10                            jne     q3                      ;no que
+				ry.... 
+ 1306  BA 01B1 R                        MOV     DX,OFFSET DG:FCB2       ;yes, q
+				uit without query. 
+ 1309  B4 10                            MOV     AH,FCB_CLOSE 
+ 130B  CD 21                            INT     21H 
+ 130D  B4 13                            MOV     AH,FCB_DELETE 
+ 130F  CD 21                            INT     21H 
+ 1311  E8 0000 E                        call    rest_dir                ;restor
+				e directory if needed 
+ 1314  CD 20                            INT     20H 
+ 1316                           q3: 
+ 1316  E8 0000 E                        call    quit 
+                                        endif 
+                                 
+ 1319                           SCANEOF: 
+ 1319  80 3E 0022 R 00                  cmp     [loadmod],0 
+ 131E  74 1E                            je      sj52 
+                                 
+                                ;----- Load till physical end of file 
+ 1320  3B 0E 0224 R                     cmp     cx,word ptr[amnt_req] 
+ 1324  72 05                            jb      sj51 
+ 1326  32 C0                            xor     al,al 
+ 1328  FE C0                            inc     al              ;reset zero fla
+				g 
+ 132A  C3                               ret 
+ 132B                           sj51: 
+ 132B  E3 0B                            jcxz    sj51b 
+ 132D  57                               push    di              ;get rid of any
+				 ^Z at the end of the file 
+ 132E  03 F9                            add     di,cx 
+ 1330  4F                               dec     di              ;points to last
+				 char 
+ 1331  80 3D 1A                         cmp     byte ptr [di],1ah 
+ 1334  5F                               pop     di 
+ 1335  75 01                            jne     sj51b 
+ 1337  49                               dec     cx 
+ 1338                           sj51b: 
+ 1338  32 C0                            xor     al,al           ;set zero flag 
+ 133A  E8 1359 R                        call    check_end       ;check that we 
+				have a CRLF pair at the end 
+ 133D  C3                               ret 
+                                 
+                                ;----- Load till first ^Z is found 
+ 133E                           sj52: 
+ 133E  57                               PUSH    DI 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-26
+Main Body                                                   
+
+ 133F  51                               PUSH    CX 
+ 1340  B0 1A                            MOV     AL,1AH 
+ 1342  0B C9                            or      cx,cx 
+ 1344  74 07                            jz      not_found       ;skip with zero
+				 flag set 
+ 1346  F2/ AE                           REPNE   SCASB           ;Scan for end o
+				f file mark 
+ 1348  75 03                            jnz     not_found 
+ 134A  9F                               LAHF                    ;Save flags mom
+				entarily 
+ 134B  41                               inc     cx              ;include the ^Z
+				 
+ 134C  9E                               SAHF                    ;Restore flags 
+ 134D                           not_found: 
+ 134D  8B F9                            mov     di,cx           ;not found at t
+				he end 
+ 134F  59                               POP     CX 
+ 1350  9F                               LAHF                    ;Save flags mom
+				entarily 
+ 1351  2B CF                            SUB     CX,DI           ;Reduce byte co
+				unt if EOF found 
+ 1353  9E                               SAHF                    ;Restore flags 
+ 1354  5F                               POP     DI 
+ 1355  E8 1359 R                        call    check_end       ;check that we 
+				have a CRLF pair at the end 
+                                 
+ 1358  C3                       RET2:   RET 
+                                 
+                                 
+                                ;----------------------------------------------
+				------------------------- 
+                                ;       If the end of file was found, then chec
+				k that the last character 
+                                ; in the file is a LF. If not put a CRLF pair i
+				n. 
+                                 
+ 1359                           check_end: 
+ 1359  75 1C                            jnz     not_end                 ;end wa
+				s not reached 
+ 135B  9C                               pushf                           ;save r
+				eturn flag 
+ 135C  57                               push    di                      ;save p
+				ointer to buffer 
+ 135D  03 F9                            add     di,cx                   ;points
+				 to one past end on text 
+ 135F  4F                               dec     di                      ;points
+				 to last character 
+ 1360  81 FF 02A9 R                     cmp     di,offset dg:start 
+ 1364  74 05                            je      check_no 
+ 1366  80 3D 0A                         cmp     byte ptr[di],0ah        ;is a L
+				F the last character? 
+ 1369  74 0A                            je      check_done              ;yes, e
+				xit 
+ 136B                           check_no: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-27
+Main Body                                                   
+
+ 136B  C6 45 01 0D                      mov     byte ptr[di+1],0dh      ;no, pu
+				t a CR 
+ 136F  41                               inc     cx                      ;one mo
+				re char in text 
+ 1370  C6 45 02 0A                      mov     byte ptr[di+2],0ah      ;put a 
+				LF 
+ 1374  41                               inc     cx                      ;anothe
+				r character at the end 
+ 1375                           check_done: 
+ 1375  5F                               pop     di 
+ 1376  9D                               popf 
+ 1377                           not_end: 
+ 1377  C3                               ret 
+                                 
+                                 
+                                 
+ 1378  E9 1410 R                NOMOREJ:JMP     NOMORE 
+                                 
+ 137B                           APPEND: 
+ 137B  F6 06 0221 R FF                  TEST    BYTE PTR [HAVEOF],-1 
+ 1380  75 F6                            JNZ     NOMOREJ 
+ 1382  8B 16 0026 R                     MOV     DX,[ENDTXT] 
+ 1386  83 3E 0000 R 00                  CMP     [PARAM1],0      ;See if paramet
+				er is missing 
+ 138B  75 06                            JNZ     PARMAPP 
+ 138D  3B 16 0022 R                     CMP     DX,[THREE4TH]   ;See if already
+				 3/4ths full 
+ 1391  73 C5                            JAE     RET2            ;If so, then do
+				ne already 
+ 1393                           PARMAPP: 
+ 1393  8B FA                            MOV     DI,DX 
+ 1395  B4 1A                            MOV     AH,SET_DMA 
+ 1397  CD 21                            INT     21H 
+ 1399  8B 0E 0024 R                     MOV     CX,[LAST] 
+ 139D  2B CA                            SUB     CX,DX           ;Amount of memo
+				ry available 
+ 139F  75 03                            jnz     sj53 
+ 13A1  E9 1753 R                        jmp     memerr 
+ 13A4                           sj53: 
+ 13A4  BA 005C                          MOV     DX,FCB 
+ 13A7  89 0E 0224 R                     mov     [amnt_req],cx   ;save ammount o
+				f chars requested 
+ 13AB  B4 27                            MOV     AH,FCB_RANDOM_READ_BLOCK 
+ 13AD  CD 21                            INT     21H              ;Fill memory w
+				ith file data 
+ 13AF  A2 0221 R                        MOV     [HAVEOF],AL 
+ 13B2  51                               PUSH    CX              ;Save actual by
+				te count 
+ 13B3  E8 1319 R                        CALL    SCANEOF 
+ 13B6  75 05                            JNZ     NOTEND 
+ 13B8  C6 06 0221 R 01                  MOV     BYTE PTR [HAVEOF],1     ;Set fl
+				ag if 1AH found in file 
+ 13BD                           NOTEND: 
+ 13BD  33 D2                            XOR     DX,DX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-28
+Main Body                                                   
+
+ 13BF  8B 1E 0000 R                     MOV     BX,[PARAM1] 
+ 13C3  0B DB                            OR      BX,BX 
+ 13C5  75 15                            JNZ     COUNTLN 
+ 13C7  8B C7                            MOV     AX,DI 
+ 13C9  03 C1                            ADD     AX,CX           ;First byte aft
+				er loaded text 
+ 13CB  3B 06 0022 R                     CMP     AX,[THREE4TH]   ;See if we made
+				 3/4 full 
+ 13CF  76 0B                            JBE     COUNTLN 
+ 13D1  8B 3E 0022 R                     MOV     DI,[THREE4TH] 
+ 13D5  8B C8                            MOV     CX,AX 
+ 13D7  2B CF                            SUB     CX,DI           ;Length remaini
+				ng over 3/4 
+ 13D9  BB 0001                          MOV     BX,1            ;Look for one m
+				ore line 
+ 13DC                           COUNTLN: 
+ 13DC  E8 0000 E                        CALL    SCANLN          ;Look for BX li
+				nes 
+ 13DF  38 45 FF                         CMP     [DI-1],AL       ;Check for full
+				 line 
+ 13E2  74 0C                            JZ      FULLN 
+ 13E4  FD                               STD 
+ 13E5  4F                               DEC     DI 
+ 13E6  8B 0E 0024 R                     MOV     CX,[LAST] 
+ 13EA  F2/ AE                           REPNE   SCASB                   ;Scan b
+				ackwards for last line 
+ 13EC  47                               INC     DI 
+ 13ED  47                               INC     DI 
+ 13EE  4A                               DEC     DX 
+ 13EF  FC                               CLD 
+ 13F0                           FULLN: 
+ 13F0  59                               POP     CX                             
+				 ;Actual amount read 
+ 13F1  C7 05 001A                       MOV     WORD PTR [DI],1AH              
+				 ;Place EOF after last line 
+ 13F5  2B CF                            SUB     CX,DI 
+ 13F7  87 3E 0026 R                     XCHG    DI,[ENDTXT] 
+ 13FB  03 F9                            ADD     DI,CX                          
+				 ;Amount of file read but not used 
+ 13FD  29 3E 007D                       SUB     WORD PTR DS:[FCB+fcb_RR],DI    
+				     ;Adjust RR field in case end of file 
+ 1401  83 1E 007F 00                    SBB     WORD PTR DS:[FCB+fcb_RR+2],0   
+				        ;   was not reached 
+ 1406  3B DA                            CMP     BX,DX 
+ 1408  75 0E                            JNZ     EOFCHK 
+ 140A  C6 06 0221 R 00                  MOV     BYTE PTR [HAVEOF],0 
+ 140F  C3                               RET 
+ 1410                           NOMORE: 
+ 1410  BA 0000 E                        MOV     DX,OFFSET DG:EOF 
+ 1413  B4 09                            MOV     AH,STD_CON_STRING_OUTPUT 
+ 1415  CD 21                            INT     21H 
+ 1417  C3                       RET3:   RET 
+ 1418                           EOFCHK: 
+ 1418  F6 06 0221 R FF                  TEST    BYTE PTR [HAVEOF],-1 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-29
+Main Body                                                   
+
+ 141D  75 F1                            JNZ     NOMORE 
+ 141F  F6 06 0222 R FF                  TEST    BYTE PTR [ENDING],-1 
+ 1424  75 F1                            JNZ     RET3            ;Suppress memor
+				y error during End 
+ 1426  E9 1753 R                        JMP     MEMERR 
+                                 
+ 1429                           EWRITE: 
+ 1429  8B 1E 0000 R                     MOV     BX,[PARAM1] 
+ 142D  0B DB                            OR      BX,BX 
+ 142F  75 1C                            JNZ     WRT 
+ 1431  8B 0E 0020 R                     MOV     CX,[ONE4TH] 
+ 1435  8B 3E 0026 R                     MOV     DI,[ENDTXT] 
+ 1439  2B F9                            SUB     DI,CX           ;Write everythi
+				ng in front of here 
+ 143B  76 DA                            JBE     RET3 
+ 143D  81 FF 02A9 R                     CMP     DI,OFFSET DG:START      ;See if
+				 there's anything to write 
+ 1441  76 D4                            JBE     RET3 
+ 1443  33 D2                            XOR     DX,DX 
+ 1445  BB 0001                          MOV     BX,1            ;Look for one m
+				ore line 
+ 1448  E8 0000 E                        CALL    SCANLN 
+ 144B  EB 04                            JMP     SHORT WRTADD 
+ 144D                           WRT: 
+ 144D  43                               INC     BX 
+ 144E  E8 0000 E                        CALL    FINDLIN 
+ 1451                           WRTADD: 
+ 1451  80 3E 01F1 R 00                  CMP     BYTE PTR [DELFLG],0 
+ 1456  75 05                            JNZ     WRTADD1 
+ 1458  57                               PUSH    DI 
+ 1459  E8 1A74 R                        CALL    DELBAK                  ;Want t
+				o delete the .BAK file 
+                                                                        ;as soo
+				n as the first write occurs 
+ 145C  5F                               POP     DI 
+ 145D                           WRTADD1: 
+ 145D  8B CF                            MOV     CX,DI 
+ 145F  BA 02A9 R                        MOV     DX,OFFSET DG:START 
+ 1462  2B CA                            SUB     CX,DX                   ;Amount
+				 to write 
+ 1464  74 B1                            JZ      RET3 
+ 1466  B4 1A                            MOV     AH,SET_DMA 
+ 1468  CD 21                            INT     21H 
+ 146A  BA 01B1 R                        MOV     DX,OFFSET DG:FCB2 
+ 146D  B4 28                            MOV     AH,FCB_RANDOM_WRITE_BLOCK 
+ 146F  CD 21                            INT     21H 
+ 1471  0A C0                            OR      AL,AL 
+ 1473  75 1E                            JNZ     WRTERR 
+ 1475  8B F7                            MOV     SI,DI 
+ 1477  BF 02A9 R                        MOV     DI,OFFSET DG:START 
+ 147A  89 3E 001E R                     MOV     [POINTER],DI 
+ 147E  8B 0E 0026 R                     MOV     CX,[ENDTXT] 
+ 1482  2B CE                            SUB     CX,SI 
+ 1484  41                               INC     CX              ;Amount of text
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-30
+Main Body                                                   
+
+				 remaining 
+ 1485  F3/ A4                           REP     MOVSB 
+ 1487  4F                               DEC     DI              ;Point to EOF 
+ 1488  89 3E 0026 R                     MOV     [ENDTXT],DI 
+ 148C  C7 06 001C R 0001                MOV     [CURRENT],1 
+ 1492  C3                               RET 
+                                 
+ 1493                           WRTERR: 
+ 1493  B4 10                            MOV     AH,FCB_CLOSE 
+ 1495  CD 21                            INT     21H 
+ 1497  BA 0000 E                        MOV     DX,OFFSET DG:DSKFUL 
+ 149A                           xERROR: 
+ 149A  B4 09                            MOV     AH,STD_CON_STRING_OUTPUT 
+ 149C  CD 21                            INT     21H 
+                                ;----------------------------------------------
+				------------------------- 
+ 149E  E8 0000 E                        call    rest_dir                ;restor
+				e to the proper directory 
+                                ;----------------------------------------------
+				------------------------- 
+ 14A1  CD 20                            INT     32 
+                                 
+ 14A3  C3                       RET$5:  RET 
+                                 
+ 14A4                           PAGE: 
+ 14A4  33 DB                            xor     bx,bx           ;get last line 
+				in the buffer 
+ 14A6  E8 0000 E                        call    findlin 
+ 14A9  89 16 002A R                     mov     [lastlin],dx 
+                                 
+ 14AD  8B 1E 0000 R                     mov     bx,[param1] 
+ 14B1  0B DB                            or      bx,bx           ;was it specifi
+				ed? 
+ 14B3  75 0A                            jnz     frstok          ;yes, use it 
+ 14B5  8B 1E 001C R                     mov     bx,[current] 
+ 14B9  83 FB 01                         cmp     bx,1            ;if current lin
+				e =1 start from there 
+ 14BC  74 01                            je      frstok 
+ 14BE  43                               inc     bx              ;start from cur
+				rent+1 line 
+ 14BF                           frstok: 
+ 14BF  3B 1E 002A R                     cmp     bx,[lastlin]    ;check that we 
+				are in the buffer 
+ 14C3  77 DE                            ja      ret$5           ;if not just qu
+				it 
+ 14C5                           infile: 
+ 14C5  8B 16 0002 R                     mov     dx,[param2] 
+ 14C9  0B D2                            or      dx,dx           ;was param2 spe
+				cified? 
+ 14CB  75 05                            jnz     scndok          ;yes,.... 
+ 14CD  8B D3                            mov     dx,bx           ;no, take the e
+				nd line to be the 
+ 14CF  83 C2 16                         add     dx,22           ;  start line +
+				 23 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-31
+Main Body                                                   
+
+ 14D2                           scndok: 
+ 14D2  42                               inc     dx 
+ 14D3  3B 16 002A R                     cmp     dx,[lastlin]    ;check that we 
+				are in the buffer 
+ 14D7  76 04                            jbe     infile2 
+ 14D9  8B 16 002A R                     mov     dx,[lastlin]    ;we are not, ta
+				ke the last line as end 
+ 14DD                           infile2: 
+ 14DD  3B D3                            cmp     dx,bx           ;is param1 < pa
+				ram2 ? 
+ 14DF  76 C2                            jbe     ret$5           ;yes, no backwa
+				rds listing, quit 
+ 14E1  52                               push    dx              ;save the end l
+				ine 
+ 14E2  53                               push    bx              ;save start lin
+				e 
+ 14E3  8B DA                            mov     bx,dx           ;set the curren
+				t line 
+ 14E5  4B                               dec     bx 
+ 14E6  E8 0000 E                        call    findlin 
+ 14E9  89 3E 001E R                     mov     [pointer],di 
+ 14ED  89 16 001C R                     mov     [current],dx 
+ 14F1  5B                               pop     bx              ;restore start 
+				line 
+ 14F2  E8 0000 E                        call    findlin         ;get pointer to
+				 start line 
+ 14F5  8B F7                            mov     si,di           ;save pointer 
+ 14F7  5F                               pop     di              ;get end line 
+ 14F8  2B FB                            sub     di,bx           ;number of line
+				s 
+ 14FA  EB 2C                            jmp     short display 
+                                 
+                                 
+ 14FC                           LIST: 
+ 14FC  8B 1E 0000 R                     MOV     BX,[PARAM1] 
+ 1500  0B DB                            OR      BX,BX 
+ 1502  75 0C                            JNZ     CHKP2 
+ 1504  8B 1E 001C R                     MOV     BX,[CURRENT] 
+ 1508  83 EB 0B                         SUB     BX,11 
+ 150B  77 03                            JA      CHKP2 
+ 150D  BB 0001                          MOV     BX,1 
+ 1510                           CHKP2: 
+ 1510  E8 0000 E                        CALL    FINDLIN 
+ 1513  75 4C                            JNZ     RET7 
+ 1515  8B F7                            MOV     SI,DI 
+ 1517  8B 3E 0002 R                     MOV     DI,[PARAM2] 
+ 151B  47                               INC     DI 
+ 151C  2B FB                            SUB     DI,BX 
+ 151E  77 08                            JA      DISPLAY 
+ 1520  BF 0017                          MOV     DI,23 
+ 1523  EB 03                            JMP     SHORT DISPLAY 
+                                 
+                                 
+ 1525                           DISPONE: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-32
+Main Body                                                   
+
+ 1525  BF 0001                          MOV     DI,1 
+                                 
+ 1528                           DISPLAY: 
+                                 
+                                ; Inputs: 
+                                ;       BX = Line number 
+                                ;       SI = Pointer to text buffer 
+                                ;       DI = No. of lines 
+                                ; Function: 
+                                ;       Ouputs specified no. of line to termina
+				l, each 
+                                ;       with leading line number. 
+                                ; Outputs: 
+                                ;       BX = Last line output. 
+                                ; All registers destroyed. 
+                                 
+ 1528  8B 0E 0026 R                     MOV     CX,[ENDTXT] 
+ 152C  2B CE                            SUB     CX,SI 
+ 152E  74 31                            JZ      RET7 
+ 1530  8B 2E 001C R                     MOV     BP,[CURRENT] 
+ 1534                           DISPLN: 
+ 1534  51                               PUSH    CX 
+ 1535  E8 0000 E                        CALL    SHOWNUM 
+ 1538  59                               POP     CX 
+ 1539                           OUTLN: 
+ 1539  AC                               LODSB 
+ 153A  3C 20                            CMP     AL," " 
+ 153C  73 15                            JAE     SEND 
+ 153E  3C 0A                            CMP     AL,10 
+ 1540  74 11                            JZ      SEND 
+ 1542  3C 0D                            CMP     AL,13 
+ 1544  74 0D                            JZ      SEND 
+ 1546  3C 09                            CMP     AL,9 
+ 1548  74 09                            JZ      SEND 
+ 154A  50                               PUSH    AX 
+ 154B  B0 5E                            MOV     AL,"^" 
+ 154D  E8 0000 E                        CALL    OUT 
+ 1550  58                               POP     AX 
+ 1551  0C 40                            OR      AL,40H 
+ 1553                           SEND: 
+ 1553  E8 0000 E                        CALL    OUT 
+ 1556  3C 0A                            CMP     AL,10 
+ 1558  E0 DF                            LOOPNZ  OUTLN 
+ 155A  E3 05                            JCXZ    RET7 
+ 155C  43                               INC     BX 
+ 155D  4F                               DEC     DI 
+ 155E  75 D4                            JNZ     DISPLN 
+ 1560  4B                               DEC     BX 
+ 1561  C3                       RET7:   RET 
+                                 
+ 1562                           LOADBUF: 
+ 1562  BF 00B0 R                        MOV     DI,2 + OFFSET DG:EDITBUF 
+ 1565  B9 00FF                          MOV     CX,255 
+ 1568  BA FFFF                          MOV     DX,-1 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-33
+Main Body                                                   
+
+ 156B                           LOADLP: 
+ 156B  AC                               LODSB 
+ 156C  AA                               STOSB 
+ 156D  42                               INC     DX 
+ 156E  3C 0D                            CMP     AL,13 
+ 1570  E0 F9                            LOOPNZ  LOADLP 
+ 1572  88 16 00AF R                     MOV     [EDITBUF+1],DL 
+ 1576  74 E9                            JZ      RET7 
+ 1578                           TRUNCLP: 
+ 1578  AC                               LODSB 
+ 1579  42                               INC     DX 
+ 157A  3C 0D                            CMP     AL,13 
+ 157C  75 FA                            JNZ     TRUNCLP 
+ 157E  4F                               DEC     DI 
+ 157F  AA                               STOSB 
+ 1580  C3                               RET 
+                                 
+ 1581  E9 166E R                NOTFNDJ:JMP     NOTFND 
+                                 
+ 1584                           replac_from_curr: 
+ 1584  C6 06 0227 R 01                  mov     byte ptr [srchmod],1   ;search 
+				from curr+1 line 
+ 1589  EB 05                            jmp     short sj6 
+                                 
+ 158B                           REPLAC: 
+ 158B  C6 06 0227 R 00                  mov     byte ptr [srchmod],0   ;search 
+				from beg of buffer 
+ 1590                           sj6: 
+ 1590  C6 06 0223 R 00                  MOV     BYTE PTR [SRCHFLG],0 
+ 1595  E8 0000 E                        CALL    FNDFIRST 
+ 1598  75 E7                            JNZ     NOTFNDJ 
+ 159A                           REPLP: 
+ 159A  8B 36 0018 R                     MOV     SI,[NUMPOS] 
+ 159E  E8 1562 R                        CALL    LOADBUF         ;Count length o
+				f line 
+ 15A1  2B 16 0010 R                     SUB     DX,[OLDLEN] 
+ 15A5  8B 0E 0012 R                     MOV     CX,[NEWLEN] 
+ 15A9  03 D1                            ADD     DX,CX           ;Length of new 
+				line 
+ 15AB  81 FA 00FE                       CMP     DX,254 
+ 15AF  77 6F                            JA      TOOLONG 
+ 15B1  8B 1E 0016 R                     MOV     BX,[LSTNUM] 
+ 15B5  52                               PUSH    DX 
+ 15B6  E8 0000 E                        CALL    SHOWNUM 
+ 15B9  5A                               POP     DX 
+ 15BA  8B 0E 0014 R                     MOV     CX,[LSTFND] 
+ 15BE  8B 36 0018 R                     MOV     SI,[NUMPOS] 
+ 15C2  2B CE                            SUB     CX,SI           ;Get no. of cha
+				r on line before change 
+ 15C4  49                               DEC     CX 
+ 15C5  E8 1616 R                        CALL    OUTCNT          ;Output first p
+				art of line 
+ 15C8  56                               PUSH    SI 
+ 15C9  BE 0171 R                        MOV     SI,1+ OFFSET DG:TXT2 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-34
+Main Body                                                   
+
+ 15CC  8B 0E 0012 R                     MOV     CX,[NEWLEN] 
+ 15D0  E8 1616 R                        CALL    OUTCNT          ;Output change 
+ 15D3  5E                               POP     SI 
+ 15D4  03 36 0010 R                     ADD     SI,[OLDLEN]     ;Skip over old 
+				stuff in line 
+ 15D8  8B CA                            MOV     CX,DX           ;DX=no. of char
+				 left in line 
+ 15DA  83 C1 02                         ADD     CX,2            ;Include CR/LF 
+ 15DD  E8 1616 R                        CALL    OUTCNT          ;Output last pa
+				rt of line 
+ 15E0  E8 0000 E                        CALL    QUERY           ;Check if chang
+				e OK 
+ 15E3  75 2A                            JNZ     REPNXT 
+ 15E5  E8 1676 R                        CALL    PUTCURS 
+ 15E8  8B 3E 0014 R                     MOV     DI,[LSTFND] 
+ 15EC  4F                               DEC     DI 
+ 15ED  BE 0171 R                        MOV     SI,1+ OFFSET DG:TXT2 
+ 15F0  8B 16 0010 R                     MOV     DX,[OLDLEN] 
+ 15F4  8B 0E 0012 R                     MOV     CX,[NEWLEN] 
+ 15F8  49                               DEC     CX 
+ 15F9  01 0E 0014 R                     ADD     [LSTFND],CX     ;Bump pointer b
+				eyond new text 
+ 15FD  41                               INC     CX 
+ 15FE  4A                               DEC     DX 
+ 15FF  29 16 001A R                     SUB     [SRCHCNT],DX    ;Old text will 
+				not be searched 
+ 1603  73 06                            JAE     SOMELEFT 
+ 1605  C7 06 001A R 0000                MOV     [SRCHCNT],0 
+ 160B                           SOMELEFT: 
+ 160B  42                               INC     DX 
+ 160C  E8 171E R                        CALL    REPLACE 
+ 160F                           REPNXT: 
+ 160F  E8 0000 E                        CALL    FNDNEXT 
+ 1612  75 0B                            JNZ     RET8 
+ 1614  EB 84                            JMP     REPLP 
+                                 
+ 1616                           OUTCNT: 
+ 1616  E3 07                            JCXZ    RET8 
+ 1618                           OUTLP: 
+ 1618  AC                               LODSB 
+ 1619  E8 0000 E                        CALL    OUT 
+ 161C  4A                               DEC     DX 
+ 161D  E2 F9                            LOOP    OUTLP 
+ 161F  C3                       RET8:   RET 
+                                 
+ 1620                           TOOLONG: 
+ 1620  BA 0000 E                        MOV     DX,OFFSET DG:TOOLNG 
+ 1623  EB 4C                            JMP     SHORT PERR 
+                                 
+ 1625                           search_from_curr: 
+ 1625  C6 06 0227 R 01                  mov     byte ptr [srchmod],1   ;search 
+				from curr+1 line 
+ 162A  EB 05                            jmp     short sj7 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-35
+Main Body                                                   
+
+ 162C                           SEARCH: 
+ 162C  C6 06 0227 R 00                  mov     byte ptr [srchmod],0   ;search 
+				from beg of buffer 
+ 1631                           sj7: 
+ 1631  C6 06 0223 R 01                  MOV     BYTE PTR [SRCHFLG],1 
+ 1636  E8 0000 E                        CALL    FNDFIRST 
+ 1639  75 33                            JNZ     NOTFND 
+ 163B                           SRCH: 
+ 163B  8B 1E 0016 R                     MOV     BX,[LSTNUM] 
+ 163F  8B 36 0018 R                     MOV     SI,[NUMPOS] 
+ 1643  E8 1525 R                        CALL    DISPONE 
+ 1646  8B 3E 0014 R                     MOV     DI,[LSTFND] 
+ 164A  8B 0E 001A R                     MOV     CX,[SRCHCNT] 
+ 164E  B0 0A                            MOV     AL,10 
+ 1650  F2/ AE                           REPNE   SCASB 
+ 1652  75 1A                            JNZ     NOTFND 
+ 1654  89 3E 0014 R                     MOV     [LSTFND],DI 
+ 1658  89 3E 0018 R                     MOV     [NUMPOS],DI 
+ 165C  89 0E 001A R                     MOV     [SRCHCNT],CX 
+ 1660  FF 06 0016 R                     INC     [LSTNUM] 
+ 1664  E8 0000 E                        CALL    QUERY 
+ 1667  74 0D                            JZ      PUTCURS 
+ 1669  E8 0000 E                        CALL    FNDNEXT 
+ 166C  74 CD                            JZ      SRCH 
+ 166E                           NOTFND: 
+ 166E  BA 0000 E                        MOV     DX,OFFSET DG:NOSUCH 
+ 1671                           PERR: 
+ 1671  B4 09                            MOV     AH,STD_CON_STRING_OUTPUT 
+ 1673  CD 21                            INT     21H 
+ 1675  C3                               RET 
+                                 
+ 1676                           PUTCURS: 
+ 1676  8B 1E 0016 R                     MOV     BX,[LSTNUM] 
+ 167A  4B                               DEC     BX                      ;Curren
+				t <= Last matched line 
+ 167B  E8 0000 E                        CALL    FINDLIN 
+ 167E  89 16 001C R                     MOV     [CURRENT],DX 
+ 1682  89 3E 001E R                     MOV     [POINTER],DI 
+ 1686  C3                       RET9:   RET 
+                                 
+ 1687                           DELETE: 
+ 1687  8B 1E 0000 R                     MOV     BX,[PARAM1] 
+ 168B  0B DB                            OR      BX,BX 
+ 168D  75 07                            JNZ     DELFIN1 
+ 168F  8B 1E 001C R                     MOV     BX,[CURRENT] 
+ 1693  E8 121B R                        CALL    CHKRANGE 
+ 1696                           DELFIN1: 
+ 1696  E8 0000 E                        CALL    FINDLIN 
+ 1699  75 EB                            JNZ     RET9 
+ 169B  53                               PUSH    BX 
+ 169C  57                               PUSH    DI 
+ 169D  8B 1E 0002 R                     MOV     BX,[PARAM2] 
+ 16A1  0B DB                            OR      BX,BX 
+ 16A3  75 02                            JNZ     DELFIN2 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-36
+Main Body                                                   
+
+ 16A5  8B DA                            MOV     BX,DX 
+ 16A7                           DELFIN2: 
+ 16A7  43                               INC     BX 
+ 16A8  E8 0000 E                        CALL    FINDLIN 
+ 16AB  8B D7                            MOV     DX,DI 
+ 16AD  5F                               POP     DI 
+ 16AE  2B D7                            SUB     DX,DI 
+ 16B0  76 0C                            JBE     COMERRJ 
+ 16B2  8F 06 001C R                     POP     [CURRENT] 
+ 16B6  89 3E 001E R                     MOV     [POINTER],DI 
+ 16BA  33 C9                            XOR     CX,CX 
+ 16BC  EB 60                            JMP     SHORT REPLACE 
+                                 
+ 16BE  E9 1228 R                COMERRJ:JMP     COMERR 
+                                 
+                                 
+ 16C1                           NOCOM: 
+ 16C1  FF 0E 0028 R                     DEC     [COMLINE] 
+ 16C5  8B 1E 0000 R                     MOV     BX,[PARAM1] 
+ 16C9  0B DB                            OR      BX,BX 
+ 16CB  75 08                            JNZ     HAVLIN 
+ 16CD  8B 1E 001C R                     MOV     BX,[CURRENT] 
+ 16D1  43                               INC     BX      ;Default is current lin
+				e plus one 
+ 16D2  E8 121B R                        CALL    CHKRANGE 
+ 16D5                           HAVLIN: 
+ 16D5  E8 0000 E                        CALL    FINDLIN 
+ 16D8  8B F7                            MOV     SI,DI 
+ 16DA  89 16 001C R                     MOV     [CURRENT],DX 
+ 16DE  89 36 001E R                     MOV     [POINTER],SI 
+ 16E2  74 01                            jz      sj12 
+ 16E4  C3                               ret 
+ 16E5                           sj12: 
+ 16E5  3B 36 0026 R                     CMP     SI,[ENDTXT] 
+ 16E9  74 67                            JZ      RET12 
+ 16EB  E8 1562 R                        CALL    LOADBUF 
+ 16EE  89 16 0010 R                     MOV     [OLDLEN],DX 
+ 16F2  8B 36 001E R                     MOV     SI,[POINTER] 
+ 16F6  E8 1525 R                        CALL    DISPONE 
+ 16F9  E8 0000 E                        CALL    SHOWNUM 
+ 16FC  B4 0A                            MOV     AH,STD_CON_STRING_INPUT        
+				   ;Get input buffer 
+ 16FE  BA 00AE R                        MOV     DX,OFFSET DG:EDITBUF 
+ 1701  CD 21                            INT     21H 
+ 1703  B0 0A                            MOV     AL,10 
+ 1705  E8 0000 E                        CALL    OUT 
+ 1708  8A 0E 00AF R                     MOV     CL,[EDITBUF+1] 
+ 170C  B5 00                            MOV     CH,0 
+ 170E  E3 42                            JCXZ    RET12 
+ 1710  8B 16 0010 R                     MOV     DX,[OLDLEN] 
+ 1714  BE 00B0 R                        MOV     SI,2 + OFFSET DG:EDITBUF 
+                                ;----------------------------------------------
+				------------------------- 
+ 1717  E8 0000 E                        call    unquote                 ;scan f
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-37
+Main Body                                                   
+
+				or quote chars if any 
+                                ;----------------------------------------------
+				------------------------- 
+ 171A  8B 3E 001E R                     MOV     DI,[POINTER] 
+                                 
+ 171E                           REPLACE: 
+                                 
+                                ; Inputs: 
+                                ;       CX = Length of new text 
+                                ;       DX = Length of original text 
+                                ;       SI = Pointer to new text 
+                                ;       DI = Pointer to old text in buffer 
+                                ; Function: 
+                                ;       New text replaces old text in buffer an
+				d buffer 
+                                ;       size is adjusted. CX or DX may be zero.
+				 
+                                ; CX, SI, DI all destroyed. No other registers 
+				affected. 
+                                 
+ 171E  3B CA                            CMP     CX,DX 
+ 1720  74 2E                            JZ      COPYIN 
+ 1722  56                               PUSH    SI 
+ 1723  57                               PUSH    DI 
+ 1724  51                               PUSH    CX 
+ 1725  8B F7                            MOV     SI,DI 
+ 1727  03 F2                            ADD     SI,DX 
+ 1729  03 F9                            ADD     DI,CX 
+ 172B  A1 0026 R                        MOV     AX,[ENDTXT] 
+ 172E  2B C2                            SUB     AX,DX 
+ 1730  03 C1                            ADD     AX,CX 
+ 1732  3B 06 0024 R                     CMP     AX,[LAST] 
+ 1736  73 1B                            JAE     MEMERR 
+ 1738  87 06 0026 R                     XCHG    AX,[ENDTXT] 
+ 173C  8B C8                            MOV     CX,AX 
+ 173E  2B CE                            SUB     CX,SI 
+ 1740  3B F7                            CMP     SI,DI 
+ 1742  77 05                            JA      DOMOV 
+ 1744  03 F1                            ADD     SI,CX 
+ 1746  03 F9                            ADD     DI,CX 
+ 1748  FD                               STD 
+ 1749                           DOMOV: 
+ 1749  41                               INC     CX 
+                                 
+ 174A  F3/ A4                           REP     MOVSB 
+ 174C  FC                               CLD 
+ 174D  59                               POP     CX 
+ 174E  5F                               POP     DI 
+ 174F  5E                               POP     SI 
+ 1750                           COPYIN: 
+ 1750  F3/ A4                           REP     MOVSB 
+ 1752  C3                       RET12:  RET 
+                                 
+ 1753                           MEMERR: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-38
+Main Body                                                   
+
+ 1753  BA 0000 E                        MOV     DX,OFFSET DG:MEMFUL 
+ 1756  B4 09                            MOV     AH,STD_CON_STRING_OUTPUT 
+ 1758  CD 21                            INT     21H 
+ 175A  E9 1150 R                        JMP     COMMAND 
+                                 
+ 175D                           MOVERR: 
+ 175D  BA 0000 E                        MOV     DX,OFFSET DG:BADCOM 
+ 1760                           ERRORJ: 
+ 1760  E9 1228 R                        JMP     COMERR 
+                                 
+ 1763                           MOVE: 
+ 1763  C6 06 0228 R 01                  MOV     BYTE PTR [MOVFLG],1 
+ 1768  EB 05                            JMP     SHORT BLKMOVE 
+ 176A                           COPY: 
+ 176A  C6 06 0228 R 00                  MOV     BYTE PTR [MOVFLG],0 
+                                 
+ 176F                           BLKMOVE: 
+ 176F  8B 1E 0004 R                     MOV     BX,[PARAM3]             ;Third 
+				parameter must be specified 
+ 1773  0B DB                            OR      BX,BX 
+ 1775  BA 0000 E                        MOV     DX,OFFSET DG:DEST 
+ 1778  74 E6                            JZ      ERRORJ 
+ 177A  8B 1E 0000 R                     MOV     BX,[PARAM1]             ;Get th
+				e first parameter 
+ 177E  0B DB                            OR      BX,BX                   ;Not sp
+				ecified? 
+ 1780  75 0B                            JNZ     NXTARG 
+ 1782  8B 1E 001C R                     MOV     BX,[CURRENT]            ;Defaul
+				ts to the current line 
+ 1786  E8 121B R                        CALL    CHKRANGE 
+ 1789  89 1E 0000 R                     MOV     [PARAM1],BX             ;Save i
+				t since current line may change 
+ 178D                            NXTARG: 
+ 178D  E8 0000 E                        CALL    FINDLIN                 ;Get a 
+				pointer to the line 
+ 1790  89 3E 0008 R                     MOV     [PTR_1],DI              ;Save i
+				t 
+ 1794  8B 1E 0002 R                     MOV     BX,[PARAM2]             ;Get th
+				e second parameter 
+ 1798  0B DB                            OR      BX,BX                   ;Not sp
+				ecified? 
+ 179A  75 08                            JNZ     HAVARGS 
+ 179C  8B 1E 001C R                     MOV     BX,[CURRENT]            ;Defaul
+				ts to the current line 
+ 17A0  89 1E 0002 R                     MOV     [PARAM2],BX             ;Save i
+				t since current line may change 
+ 17A4                           HAVARGS: 
+                                        ;Parameters must not overlap 
+ 17A4  8B 16 0004 R                     MOV     DX,[PARAM3] 
+ 17A8  3B 16 0000 R                     CMP     DX,[PARAM1] 
+ 17AC  76 06                            JBE     NOERROR 
+ 17AE  3B 16 0002 R                     CMP     DX,[PARAM2] 
+ 17B2  76 A9                            JBE     MOVERR 
+ 17B4                           NOERROR: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-39
+Main Body                                                   
+
+ 17B4  43                               INC     BX                      ;Get po
+				inter to line Param2+1 
+ 17B5  E8 0000 E                        CALL    FINDLIN 
+ 17B8  8B F7                            MOV     SI,DI 
+ 17BA  89 36 000A R                     MOV     [PTR_2],SI              ;Save i
+				t 
+ 17BE  8B CF                            MOV     CX,DI 
+ 17C0  8B 3E 0008 R                     MOV     DI,[PTR_1]              ;Restor
+				e pointer to line Param1 
+ 17C4  2B CF                            SUB     CX,DI                   ;Calcul
+				ate number of bytes to copy 
+ 17C6  89 0E 000E R                     MOV     [COPYSIZ],CX            ;Save i
+				n COPYSIZ 
+ 17CA  51                               PUSH    CX                      ;And on
+				 the stack 
+ 17CB  A1 0006 R                        MOV     AX,[PARAM4]             ;Is cou
+				nt specified? 
+ 17CE  0B C0                            OR      AX,AX 
+ 17D0  74 11                            JZ      MEM_CHECK 
+ 17D2  F7 26 000E R                     MUL     [COPYSIZ] 
+ 17D6  0B D2                            OR      DX,DX 
+ 17D8  74 03                            JZ      COPYSIZ_OK 
+ 17DA  E9 1753 R                        JMP     MEMERR 
+ 17DD                           COPYSIZ_OK: 
+ 17DD  8B C8                            MOV     CX,AX 
+ 17DF  89 0E 000E R                     MOV     [COPYSIZ],CX 
+ 17E3                           MEM_CHECK: 
+ 17E3  A1 0026 R                        MOV     AX,[ENDTXT] 
+ 17E6  8B 3E 0024 R                     MOV     DI,[LAST] 
+ 17EA  2B F8                            SUB     DI,AX 
+ 17EC  3B F9                            CMP     DI,CX 
+ 17EE  73 03                            JAE     HAV_ROOM 
+ 17F0  E9 1753 R                        JMP     MEMERR 
+ 17F3                           HAV_ROOM: 
+ 17F3  8B 1E 0004 R                     MOV     BX,[PARAM3] 
+ 17F7  53                               PUSH    BX 
+ 17F8  E8 0000 E                        CALL    FINDLIN 
+ 17FB  89 3E 000C R                     MOV     [PTR_3],DI 
+ 17FF  8B 0E 0026 R                     MOV     CX,[ENDTXT] 
+ 1803  2B CF                            SUB     CX,DI 
+ 1805  41                               INC     CX 
+ 1806  8B 36 0026 R                     MOV     SI,[ENDTXT] 
+ 180A  8B FE                            MOV     DI,SI 
+ 180C  03 3E 000E R                     ADD     DI,[COPYSIZ] 
+ 1810  89 3E 0026 R                     MOV     [ENDTXT],DI 
+ 1814  FD                               STD 
+ 1815  F3/ A4                           REP     MOVSB 
+ 1817  FC                               CLD 
+ 1818  5B                               POP     BX 
+ 1819  3B 1E 0000 R                     CMP     BX,[PARAM1] 
+ 181D  72 06                            JB      GET_PTR_2 
+ 181F  8B 36 0008 R                     MOV     SI,[PTR_1] 
+ 1823  EB 04                            JMP     SHORT COPY_TEXT 
+ 1825                           GET_PTR_2: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-40
+Main Body                                                   
+
+ 1825  8B 36 000A R                     MOV     SI,[PTR_2] 
+ 1829                           COPY_TEXT: 
+ 1829  8B 1E 0006 R                     MOV     BX,[PARAM4] 
+ 182D  8B 3E 000C R                     MOV     DI,[PTR_3] 
+ 1831  59                               POP     CX 
+ 1832  89 0E 000E R                     MOV     [COPYSIZ],CX 
+ 1836                           COPY_TEXT_1: 
+ 1836  F3/ A4                           REP     MOVSB 
+ 1838  4B                               DEC     BX 
+ 1839  83 FB 00                         CMP     BX,0 
+ 183C  7E 0E                            JLE     MOV_CHK 
+ 183E  89 1E 0006 R                     MOV     [PARAM4],BX 
+ 1842  2B 36 000E R                     SUB     SI,[COPYSIZ] 
+ 1846  8B 0E 000E R                     MOV     CX,[COPYSIZ] 
+ 184A  EB EA                            JMP     SHORT COPY_TEXT_1 
+ 184C                           MOV_CHK: 
+ 184C  80 3E 0228 R 00                  CMP     BYTE PTR[MOVFLG],0 
+ 1851  74 36                            JZ      COPY_DONE 
+ 1853  8B 3E 0008 R                     MOV     DI,[PTR_1] 
+ 1857  8B 36 000A R                     MOV     SI,[PTR_2] 
+ 185B  8B 1E 0004 R                     MOV     BX,[PARAM3] 
+ 185F  3B 1E 0000 R                     CMP     BX,[PARAM1] 
+ 1863  73 08                            JAE     DEL_TEXT 
+ 1865  03 3E 000E R                     ADD     DI,[COPYSIZ] 
+ 1869  03 36 000E R                     ADD     SI,[COPYSIZ] 
+ 186D                           DEL_TEXT: 
+ 186D  8B 0E 0026 R                     MOV     CX,[ENDTXT] 
+ 1871  2B CE                            SUB     CX,SI 
+ 1873  F3/ A4                           REP     MOVSB 
+ 1875  89 3E 0026 R                     MOV     [ENDTXT],DI 
+ 1879  8B 0E 0002 R                     MOV     CX,[PARAM2] 
+ 187D  2B 0E 0000 R                     SUB     CX,[PARAM1] 
+ 1881  8B 1E 0004 R                     MOV     BX,[PARAM3] 
+ 1885  2B D9                            SUB     BX,CX 
+ 1887  73 04                            JNC     MOVE_DONE 
+ 1889                           COPY_DONE: 
+ 1889  8B 1E 0004 R                     MOV     BX,[PARAM3] 
+ 188D                           MOVE_DONE: 
+ 188D  E8 0000 E                        CALL    FINDLIN 
+ 1890  89 3E 001E R                     MOV     [POINTER],DI 
+ 1894  89 1E 001C R                     MOV     [CURRENT],BX 
+ 1898  C3                               RET 
+                                 
+                                 
+ 1899                           MOVEFILE: 
+ 1899  8B 0E 0026 R                     MOV     CX,[ENDTXT]             ;Get En
+				d-of-text marker 
+ 189D  8B F1                            MOV     SI,CX 
+ 189F  2B CF                            SUB     CX,DI                   ;Calcul
+				ate number of bytes to copy 
+ 18A1  41                               INC     CX 
+ 18A2  8B FA                            MOV     DI,DX 
+ 18A4  FD                               STD 
+ 18A5  F3/ A4                           REP     MOVSB                   ;Copy C
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-41
+Main Body                                                   
+
+				X bytes 
+ 18A7  87 F7                            XCHG    SI,DI 
+ 18A9  FC                               CLD 
+ 18AA  47                               INC     DI 
+ 18AB  8B EE                            MOV     BP,SI 
+ 18AD                           SETPTS: 
+ 18AD  89 3E 001E R                     MOV     [POINTER],DI            ;Curren
+				t line is first free loc 
+ 18B1  89 1E 001C R                     MOV     [CURRENT],BX            ;   in 
+				the file 
+ 18B5  89 2E 0026 R                     MOV     [ENDTXT],BP             ;End-of
+				-text is last free loc before 
+ 18B9  C3                               RET 
+                                 
+ 18BA                           NAMERR: 
+ 18BA  E9 122B R                        JMP     COMERR1 
+                                 
+                                 
+ 18BD                           MERGE: 
+ 18BD  B8 2901                          MOV     AX,(PARSE_FILE_DESCRIPTOR SHL 8
+				) OR 1 
+ 18C0  BF 01D6 R                        MOV     DI,OFFSET DG:FCB3 
+ 18C3  CD 21                            INT     21H 
+ 18C5  0A C0                            OR      AL,AL 
+ 18C7  BA 0000 E                        MOV     DX,OFFSET DG:BADDRV 
+ 18CA  75 EE                            JNZ     NAMERR 
+ 18CC  89 36 0028 R                     MOV     [COMLINE],SI 
+ 18D0  BA 01D6 R                        MOV     DX,OFFSET DG:FCB3 
+ 18D3  B4 0F                            MOV     AH,FCB_OPEN 
+ 18D5  CD 21                            INT     21H 
+ 18D7  0A C0                            OR      AL,AL 
+ 18D9  BA 0000 E                        MOV     DX,OFFSET DG:FILENM 
+ 18DC  75 DC                            JNZ     NAMERR 
+ 18DE  B8 2523                          MOV     AX,(SET_INTERRUPT_VECTOR SHL 8)
+				 OR 23H 
+ 18E1  BA 19C5 R                        MOV     DX,OFFSET DG:ABORTMERGE 
+ 18E4  CD 21                            INT     21H 
+ 18E6  8B 1E 0000 R                     MOV     BX,[PARAM1] 
+ 18EA  0B DB                            OR      BX,BX 
+ 18EC  75 07                            JNZ     MRG 
+ 18EE  8B 1E 001C R                     MOV     BX,[CURRENT] 
+ 18F2  E8 121B R                        CALL    CHKRANGE 
+ 18F5                           MRG: 
+ 18F5  E8 0000 E                        CALL    FINDLIN 
+ 18F8  8B DA                            MOV     BX,DX 
+ 18FA  8B 16 0024 R                     MOV     DX,[LAST] 
+ 18FE  E8 1899 R                        CALL    MOVEFILE 
+                                        ;Set DMA address for reading in new fil
+				e 
+ 1901  8B 16 001E R                     MOV     DX,[POINTER] 
+ 1905  B4 1A                            MOV     AH,SET_DMA 
+ 1907  CD 21                            INT     21H 
+ 1909  33 C0                            XOR     AX,AX 
+ 190B  A3 01F7 R                        MOV     WORD PTR DS:[FCB3+fcb_RR],AX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-42
+Main Body                                                   
+
+ 190E  A3 01F9 R                        MOV     WORD PTR DS:[FCB3+fcb_RR+2],AX 
+ 1911  40                               INC     AX 
+ 1912  A3 01E4 R                        MOV     WORD PTR DS:[FCB3+fcb_RECSIZ],A
+				X 
+ 1915  BA 01D6 R                        MOV     DX,OFFSET DG:FCB3 
+ 1918  8B 0E 0026 R                     MOV     CX,[ENDTXT] 
+ 191C  2B 0E 001E R                     SUB     CX,[POINTER] 
+ 1920  B4 27                            MOV     AH,FCB_RANDOM_READ_BLOCK 
+ 1922  CD 21                            INT     21H 
+ 1924  3C 01                            CMP     AL,1 
+ 1926  74 0D                            JZ      FILEMRG 
+ 1928  BA 0000 E                        MOV     DX,OFFSET DG:MRGERR 
+ 192B  B4 09                            MOV     AH,STD_CON_STRING_OUTPUT 
+ 192D  CD 21                            INT     21H 
+ 192F  8B 0E 001E R                     MOV     CX,[POINTER] 
+ 1933  EB 0D                            JMP     SHORT RESTORE 
+ 1935                           FILEMRG: 
+ 1935  03 0E 001E R                     ADD     CX,[POINTER] 
+ 1939  8B F1                            MOV     SI,CX 
+ 193B  4E                               DEC     SI 
+ 193C  AC                               LODSB 
+ 193D  3C 1A                            CMP     AL,1AH 
+ 193F  75 01                            JNZ     RESTORE 
+ 1941  49                               DEC     CX 
+ 1942                           RESTORE: 
+ 1942  8B F9                            MOV     DI,CX 
+ 1944  8B 36 0026 R                     MOV     SI,[ENDTXT] 
+ 1948  46                               INC     SI 
+ 1949  8B 0E 0024 R                     MOV     CX,[LAST] 
+ 194D  2B CE                            SUB     CX,SI 
+ 194F  F3/ A4                           REP     MOVSB 
+ 1951  89 3E 0026 R                     MOV     [ENDTXT],DI 
+ 1955  C6 05 1A                         MOV     BYTE PTR [DI],1AH 
+ 1958  BA 01D6 R                        MOV     DX,OFFSET DG:FCB3 
+ 195B  B4 10                            MOV     AH,FCB_CLOSE 
+ 195D  CD 21                            INT     21H 
+ 195F  BA 02A9 R                        MOV     DX,OFFSET DG:START 
+ 1962  B4 1A                            MOV     AH,SET_DMA 
+ 1964  CD 21                            INT     21H 
+ 1966  C3                               RET 
+                                 
+                                 
+ 1967                           INSERT: 
+ 1967  B8 2523                          MOV     AX,(SET_INTERRUPT_VECTOR SHL 8)
+				 OR 23H        ;Set vector 23H 
+ 196A  BA 19CC R                        MOV     DX,OFFSET DG:ABORTINS 
+ 196D  CD 21                            INT     21H 
+ 196F  8B 1E 0000 R                     MOV     BX,[PARAM1] 
+ 1973  0B DB                            OR      BX,BX 
+ 1975  75 07                            JNZ     INS 
+ 1977  8B 1E 001C R                     MOV     BX,[CURRENT] 
+ 197B  E8 121B R                        CALL    CHKRANGE 
+ 197E                           INS: 
+ 197E  E8 0000 E                        CALL    FINDLIN 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-43
+Main Body                                                   
+
+ 1981  8B DA                            MOV     BX,DX 
+ 1983  8B 16 0024 R                     MOV     DX,[LAST] 
+ 1987  E8 1899 R                        CALL    MOVEFILE 
+ 198A                           INLP: 
+ 198A  E8 18AD R                        CALL    SETPTS                  ;Update
+				 the pointers into file 
+ 198D  E8 0000 E                        CALL    SHOWNUM 
+ 1990  BA 00AE R                        MOV     DX,OFFSET DG:EDITBUF 
+ 1993  B4 0A                            MOV     AH,STD_CON_STRING_INPUT 
+ 1995  CD 21                            INT     21H 
+ 1997  E8 0000 E                        CALL    LF 
+ 199A  BE 00B0 R                        MOV     SI,2 + OFFSET DG:EDITBUF 
+ 199D  80 3C 1A                         CMP     BYTE PTR [SI],1AH 
+ 19A0  74 3F                            JZ      ENDINS 
+                                ;----------------------------------------------
+				------------------------- 
+ 19A2  E8 0000 E                        call    unquote                 ;scan f
+				or quote chars if any 
+                                ;----------------------------------------------
+				------------------------- 
+ 19A5  8A 4C FF                         MOV     CL,[SI-1] 
+ 19A8  B5 00                            MOV     CH,0 
+ 19AA  8B D7                            MOV     DX,DI 
+ 19AC  41                               INC     CX 
+ 19AD  03 D1                            ADD     DX,CX 
+ 19AF  72 06                            JC      MEMERRJ1 
+ 19B1  74 04                            JZ      MEMERRJ1 
+ 19B3  3B D5                            CMP     DX,BP 
+ 19B5  72 06                            JB      MEMOK 
+ 19B7                           MEMERRJ1: 
+ 19B7  E8 19E5 R                        CALL    END_INS 
+ 19BA  E9 1753 R                        JMP     MEMERR 
+ 19BD                           MEMOK: 
+ 19BD  F3/ A4                           REP     MOVSB 
+ 19BF  B0 0A                            MOV     AL,10 
+ 19C1  AA                               STOSB 
+ 19C2  43                               INC     BX 
+ 19C3  EB C5                            JMP     SHORT INLP 
+                                 
+ 19C5                           ABORTMERGE: 
+ 19C5  BA 02A9 R                        MOV     DX,OFFSET DG:START 
+ 19C8  B4 1A                            MOV     AH,SET_DMA 
+ 19CA  CD 21                            INT     21H 
+                                 
+ 19CC                           ABORTINS: 
+ 19CC  8C C8                            MOV     AX,CS           ;Restore segmen
+				t registers 
+ 19CE  8E D8                            MOV     DS,AX 
+ 19D0  8E C0                            MOV     ES,AX 
+ 19D2  8E D0                            MOV     SS,AX 
+ 19D4  BC 02A9 R                        MOV     SP,OFFSET DG:STACK 
+ 19D7  FB                               STI 
+ 19D8  E8 0000 E                        CALL    CRLF 
+ 19DB  E8 19E1 R                        CALL    ENDINS 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-44
+Main Body                                                   
+
+ 19DE  E9 11F6 R                        JMP     COMOVER 
+                                 
+ 19E1                           ENDINS: 
+ 19E1  E8 19E5 R                        CALL    END_INS 
+ 19E4  C3                               RET 
+                                 
+ 19E5                           END_INS: 
+ 19E5  8B 2E 0026 R                     MOV     BP,[ENDTXT] 
+ 19E9  8B 3E 001E R                     MOV     DI,[POINTER] 
+ 19ED  8B F5                            MOV     SI,BP 
+ 19EF  46                               INC     SI 
+ 19F0  8B 0E 0024 R                     MOV     CX,[LAST] 
+ 19F4  2B CD                            SUB     CX,BP 
+ 19F6  F3/ A4                           REP     MOVSB 
+ 19F8  4F                               DEC     DI 
+ 19F9  89 3E 0026 R                     MOV     [ENDTXT],DI 
+ 19FD  B8 2523                          MOV     AX,(SET_INTERRUPT_VECTOR SHL 8)
+				 OR 23H 
+ 1A00  BA 1A62 R                        MOV     DX,OFFSET DG:ABORTCOM 
+ 1A03  CD 21                            INT     21H 
+ 1A05  C3                               RET 
+                                 
+ 1A06                           FILLBUF: 
+ 1A06  C7 06 0000 R FFFF                MOV     [PARAM1],-1     ;Read in max. n
+				o of lines 
+ 1A0C  E8 137B R                        CALL    APPEND 
+ 1A0F                           ENDED: 
+                                ;Write text out to .$$$ file 
+ 1A0F  C6 06 0222 R 01                  MOV     BYTE PTR [ENDING],1     ;Suppre
+				ss memory errors 
+ 1A14  BB FFFF                          MOV     BX,-1           ;Write max. no 
+				of lines 
+ 1A17  E8 144D R                        CALL    WRT 
+ 1A1A  F6 06 0221 R FF                  TEST    BYTE PTR [HAVEOF],-1 
+ 1A1F  74 E5                            JZ      FILLBUF 
+ 1A21  8B 16 0026 R                     MOV     DX,[ENDTXT] 
+ 1A25  B4 1A                            MOV     AH,SET_DMA 
+ 1A27  CD 21                            INT     21H 
+ 1A29  B9 0001                          MOV     CX,1 
+ 1A2C  BA 01B1 R                        MOV     DX,OFFSET DG:FCB2 
+ 1A2F  B4 28                            MOV     AH,FCB_RANDOM_WRITE_BLOCK 
+ 1A31  CD 21                            INT     21H              ;Write end-of-
+				file byte 
+                                ;Close .$$$ file 
+ 1A33  B4 10                            MOV     AH,FCB_CLOSE 
+ 1A35  CD 21                            INT     21H 
+ 1A37  BE 005C                          MOV     SI,FCB 
+ 1A3A  8D 7C 10                         LEA     DI,[SI+fcb_FILSIZ] 
+ 1A3D  8B D6                            MOV     DX,SI 
+ 1A3F  B9 0009                          MOV     CX,9 
+ 1A42  F3/ A4                           REP     MOVSB 
+ 1A44  BE 0000 R                        MOV     SI,OFFSET DG:BAK 
+ 1A47  A5                               MOVSW 
+ 1A48  A4                               MOVSB 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Page     1-45
+Main Body                                                   
+
+                                ;Rename original file .BAK 
+ 1A49  B4 17                            MOV     AH,FCB_RENAME 
+ 1A4B  CD 21                            INT     21H 
+ 1A4D  BE 005C                          MOV     SI,FCB 
+ 1A50  BF 01C1 R                        MOV     DI,OFFSET DG:FCB2 + fcb_FILSIZ 
+ 1A53  B9 0006                          MOV     CX,6 
+ 1A56  F3/ A5                           REP     MOVSW 
+                                ;Rename .$$$ file to original name 
+ 1A58  BA 01B1 R                        MOV     DX,OFFSET DG:FCB2 
+ 1A5B  CD 21                            INT     21H 
+ 1A5D  E8 0000 E                        call    rest_dir                ;restor
+				e directory if needed 
+ 1A60  CD 20                            INT     20H 
+                                 
+ 1A62                           ABORTCOM: 
+ 1A62  8C C8                            MOV     AX,CS 
+ 1A64  8E D8                            MOV     DS,AX 
+ 1A66  8E C0                            MOV     ES,AX 
+ 1A68  8E D0                            MOV     SS,AX 
+ 1A6A  BC 02A9 R                        MOV     SP,OFFSET DG:STACK 
+ 1A6D  FB                               STI 
+ 1A6E  E8 0000 E                        CALL    CRLF 
+ 1A71  E9 1150 R                        JMP     COMMAND 
+                                 
+ 1A74                           DELBAK: 
+ 1A74  C6 06 01F1 R 01                  MOV     BYTE PTR [DELFLG],1 
+ 1A79  BF 01BA R                        MOV     DI,9+OFFSET DG:FCB2 
+ 1A7C  BE 0000 R                        MOV     SI,OFFSET DG:BAK 
+ 1A7F  A5                               MOVSW 
+ 1A80  A4                               MOVSB 
+                                        ;Delete old backup file (.BAK) 
+ 1A81  B4 13                            MOV     AH,FCB_DELETE 
+ 1A83  BA 01B1 R                        MOV     DX,OFFSET DG:FCB2 
+ 1A86  CD 21                            INT     21H 
+ 1A88  BF 01BA R                        MOV     DI,9+OFFSET DG:FCB2 
+ 1A8B  B0 24                            MOV     AL,"$" 
+ 1A8D  AA                               STOSB 
+ 1A8E  AA                               STOSB 
+ 1A8F  AA                               STOSB 
+ 1A90  C3                               RET 
+                                 
+ 1A91                           CODE    ENDS 
+                                        END     EDLIN 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-4
+                                                             
+
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DG . . . . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	1A91	PARA	PUBLIC	
+  CONST  . . . . . . . . . . . .  	01F2	WORD	PUBLIC	
+  DATA . . . . . . . . . . . . .  	02A9	WORD	PUBLIC	
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ABORTCOM . . . . . . . . . . . .  	L NEAR	1A62	CODE
+ABORTINS . . . . . . . . . . . .  	L NEAR	19CC	CODE
+ABORTMERGE . . . . . . . . . . .  	L NEAR	19C5	CODE
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-5
+                                                             
+
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+AMNT_REQ . . . . . . . . . . . .  	L WORD 	0224	DATA
+AN_OPTION  . . . . . . . . . . .  	L NEAR	0F6D	CODE
+APPEND . . . . . . . . . . . . .  	L NEAR	137B	CODE
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_ARE_OK  . . . . . . . . . .  	L NEAR	0F9A	CODE
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BACKLIN  . . . . . . . . . . . .  	L NEAR	12A8	CODE
+BADCOM . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+BADDRV . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+BAD_VERS_ERR . . . . . . . . . .  	V BYTE 	0000	CONST	External
+BAK  . . . . . . . . . . . . . .  	L BYTE 	0000	CONST
+BCREAT . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+BLKMOVE  . . . . . . . . . . . .  	L NEAR	176F	CODE
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+B_OPT  . . . . . . . . . . . . .  	L NEAR	0F7C	CODE
+
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHECK_DONE . . . . . . . . . . .  	L NEAR	1375	CODE
+CHECK_END  . . . . . . . . . . .  	L NEAR	1359	CODE
+CHECK_NO . . . . . . . . . . . .  	L NEAR	136B	CODE
+CHKLP  . . . . . . . . . . . . .  	L NEAR	1197	CODE
+CHKNXT . . . . . . . . . . . . .  	L NEAR	11A6	CODE
+CHKP2  . . . . . . . . . . . . .  	L NEAR	1510	CODE
+CHKRANGE . . . . . . . . . . . .  	L NEAR	121B	CODE	Global
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-6
+                                                             
+
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+COMAND_LINE_LENGTH . . . . . . .  	Number	0080	
+COMBUF . . . . . . . . . . . . .  	L BYTE 	002C	DATA	Length = 0082
+COMERR . . . . . . . . . . . . .  	L NEAR	1228	CODE
+COMERR1  . . . . . . . . . . . .  	L NEAR	122B	CODE
+COMERRA  . . . . . . . . . . . .  	L NEAR	12C0	CODE
+COMERRJ  . . . . . . . . . . . .  	L NEAR	16BE	CODE
+COMLINE  . . . . . . . . . . . .  	L WORD 	0028	DATA	Global
+COMMAND  . . . . . . . . . . . .  	L NEAR	1150	CODE
+COMMANDJ . . . . . . . . . . . .  	L NEAR	1212	CODE
+COMOVER  . . . . . . . . . . . .  	L NEAR	11F6	CODE
+COMTAB . . . . . . . . . . . . .  	L BYTE 	12C3	CODE
+COPY . . . . . . . . . . . . . .  	L NEAR	176A	CODE
+COPYIN . . . . . . . . . . . . .  	L NEAR	1750	CODE
+COPYSIZ  . . . . . . . . . . . .  	L WORD 	000E	DATA
+COPYSIZ_OK . . . . . . . . . . .  	L NEAR	17DD	CODE
+COPY_DONE  . . . . . . . . . . .  	L NEAR	1889	CODE
+COPY_TEXT  . . . . . . . . . . .  	L NEAR	1829	CODE
+COPY_TEXT_1  . . . . . . . . . .  	L NEAR	1836	CODE
+COUNTLN  . . . . . . . . . . . .  	L NEAR	13DC	CODE
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CRLF . . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURLIN . . . . . . . . . . . . .  	L NEAR	1280	CODE
+CURRENT  . . . . . . . . . . . .  	L WORD 	001C	DATA	Global
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+CURR_IS_ROOT . . . . . . . . . .  	L NEAR	1000	CODE
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DELBAK . . . . . . . . . . . . .  	L NEAR	1A74	CODE
+DELETE . . . . . . . . . . . . .  	L NEAR	1687	CODE
+DELFIN1  . . . . . . . . . . . .  	L NEAR	1696	CODE
+DELFIN2  . . . . . . . . . . . .  	L NEAR	16A7	CODE
+DELFLG . . . . . . . . . . . . .  	L BYTE 	01F1	CONST
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-7
+                                                             
+
+DELIM  . . . . . . . . . . . . .  	L NEAR	1209	CODE
+DEL_TEXT . . . . . . . . . . . .  	L NEAR	186D	CODE
+DEST . . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DIRCHAR  . . . . . . . . . . . .  	L BYTE 	002B	CONST
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SAVE_LOOP  . . . . . . . . .  	L NEAR	0FFA	CODE
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DISPATCH . . . . . . . . . . . .  	L NEAR	11B9	CODE
+DISPLAY  . . . . . . . . . . . .  	L NEAR	1528	CODE
+DISPLN . . . . . . . . . . . . .  	L NEAR	1534	CODE
+DISPONE  . . . . . . . . . . . .  	L NEAR	1525	CODE
+DOMOV  . . . . . . . . . . . . .  	L NEAR	1749	CODE
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRVISOK  . . . . . . . . . . . .  	L NEAR	0FEC	CODE
+DSKFUL . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+EDITBUF  . . . . . . . . . . . .  	L BYTE 	00AE	DATA	Length = 0102
+EDLIN  . . . . . . . . . . . . .  	L NEAR	0100	CODE
+EDL_PAD  . . . . . . . . . . . .  	L BYTE 	0103	CODE	Length = 0E00
+ENDED  . . . . . . . . . . . . .  	L NEAR	1A0F	CODE
+ENDING . . . . . . . . . . . . .  	L BYTE 	0222	DATA
+ENDINS . . . . . . . . . . . . .  	L NEAR	19E1	CODE
+ENDTXT . . . . . . . . . . . . .  	L WORD 	0026	DATA	Global
+END_INS  . . . . . . . . . . . .  	L NEAR	19E5	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-8
+                                                             
+
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+EOF  . . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+EOFCHK . . . . . . . . . . . . .  	L NEAR	1418	CODE
+EOL  . . . . . . . . . . . . . .  	L BYTE 	01B0	DATA
+ERRJ . . . . . . . . . . . . . .  	L NEAR	0F0F	CODE
+ERRORJ . . . . . . . . . . . . .  	L NEAR	1760	CODE
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+EWRITE . . . . . . . . . . . . .  	L NEAR	1429	CODE
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FAKE_FCB . . . . . . . . . . . .  	L BYTE 	01FB	DATA	Length = 0025
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB  . . . . . . . . . . . . . .  	Number	005C	
+FCB2 . . . . . . . . . . . . . .  	L BYTE 	01B1	DATA	Global	Length = 0025
+FCB3 . . . . . . . . . . . . . .  	L BYTE 	01D6	DATA	Length = 0025
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-9
+                                                             
+
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILEMRG  . . . . . . . . . . . .  	L NEAR	1935	CODE
+FILENM . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILLBUF  . . . . . . . . . . . .  	L NEAR	1A06	CODE
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDLIN  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FNAME_BUFFER . . . . . . . . . .  	L BYTE 	006F	CONST	Length = 0080
+FNDFIRST . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+FNDNEXT  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+FORLIN . . . . . . . . . . . . .  	L NEAR	1299	CODE
+FOURTH . . . . . . . . . . . . .  	L BYTE 	0021	CONST
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+FRSTOK . . . . . . . . . . . . .  	L NEAR	14BF	CODE
+FUDGE  . . . . . . . . . . . . .  	L BYTE 	0028	CONST	Global
+FULLN  . . . . . . . . . . . . .  	L NEAR	13F0	CODE
+
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GETNUM . . . . . . . . . . . . .  	L NEAR	1232	CODE
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_PTR_2  . . . . . . . . . . .  	L NEAR	1825	CODE
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+
+HARDCH . . . . . . . . . . . . .  	L DWORD	0023	CONST	Global
+HAVARGS  . . . . . . . . . . . .  	L NEAR	17A4	CODE
+HAVEOF . . . . . . . . . . . . .  	L BYTE 	0221	DATA
+HAVFIL . . . . . . . . . . . . .  	L NEAR	1092	CODE
+HAVLIN . . . . . . . . . . . . .  	L NEAR	16D5	CODE
+HAV_ROOM . . . . . . . . . . . .  	L NEAR	17F3	CODE
+HEADER . . . . . . . . . . . . .  	L BYTE 	0F03	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-10
+                                                             
+
+
+INFILE . . . . . . . . . . . . .  	L NEAR	14C5	CODE
+INFILE2  . . . . . . . . . . . .  	L NEAR	14DD	CODE
+INLP . . . . . . . . . . . . . .  	L NEAR	198A	CODE
+INS  . . . . . . . . . . . . . .  	L NEAR	197E	CODE
+INSERT . . . . . . . . . . . . .  	L NEAR	1967	CODE
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_24 . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+KANJI  . . . . . . . . . . . . .  	Alias	 FALSE		
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+KILL_BL  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+
+LAST . . . . . . . . . . . . . .  	L WORD 	0024	DATA
+LASTLIN  . . . . . . . . . . . .  	L WORD 	002A	DATA
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LF . . . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+LIST . . . . . . . . . . . . . .  	L NEAR	14FC	CODE
+LOADBUF  . . . . . . . . . . . .  	L NEAR	1562	CODE
+LOADLP . . . . . . . . . . . . .  	L NEAR	156B	CODE
+LOADMOD  . . . . . . . . . . . .  	L BYTE 	0022	CONST
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+LSTFND . . . . . . . . . . . . .  	L WORD 	0014	DATA	Global
+LSTNUM . . . . . . . . . . . . .  	L WORD 	0016	DATA	Global
+
+MAKE . . . . . . . . . . . . . .  	L BYTE 	0003	CONST
+MAKFIL . . . . . . . . . . . . .  	L NEAR	10A2	CODE
+MAXLIN . . . . . . . . . . . . .  	L NEAR	128D	CODE
+MEMERR . . . . . . . . . . . . .  	L NEAR	1753	CODE
+MEMERRJ1 . . . . . . . . . . . .  	L NEAR	19B7	CODE
+MEMFUL . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+MEMOK  . . . . . . . . . . . . .  	L NEAR	19BD	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-11
+                                                             
+
+MEM_CHECK  . . . . . . . . . . .  	L NEAR	17E3	CODE
+MERGE  . . . . . . . . . . . . .  	L NEAR	18BD	CODE
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MOVE . . . . . . . . . . . . . .  	L NEAR	1763	CODE
+MOVEFILE . . . . . . . . . . . .  	L NEAR	1899	CODE
+MOVERR . . . . . . . . . . . . .  	L NEAR	175D	CODE
+MOVE_DONE  . . . . . . . . . . .  	L NEAR	188D	CODE
+MOVFLG . . . . . . . . . . . . .  	L BYTE 	0228	DATA
+MOV_CHK  . . . . . . . . . . . .  	L NEAR	184C	CODE
+MRG  . . . . . . . . . . . . . .  	L NEAR	18F5	CODE
+MRGERR . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+
+NAMERR . . . . . . . . . . . . .  	L NEAR	18BA	CODE
+NAME_COPIED  . . . . . . . . . .  	L NEAR	0F81	CODE
+NDNAME . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+NEWFIL . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+NEWLEN . . . . . . . . . . . . .  	L WORD 	0012	DATA	Global
+NEXT_CHAR  . . . . . . . . . . .  	L NEAR	0F50	CODE
+NOBAK  . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+NOCOM  . . . . . . . . . . . . .  	L NEAR	16C1	CODE
+NODELIM  . . . . . . . . . . . .  	L NEAR	120A	CODE
+NODIR  . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+NOERROR  . . . . . . . . . . . .  	L NEAR	17B4	CODE
+NOMORE . . . . . . . . . . . . .  	L NEAR	1410	CODE
+NOMOREJ  . . . . . . . . . . . .  	L NEAR	1378	CODE
+NONAME . . . . . . . . . . . . .  	L NEAR	0F0C	CODE
+NOROOM . . . . . . . . . . . . .  	L NEAR	10B9	CODE
+NOSUCH . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+NOTBAK . . . . . . . . . . . . .  	L NEAR	10BF	CODE
+NOTEND . . . . . . . . . . . . .  	L NEAR	13BD	CODE
+NOTFND . . . . . . . . . . . . .  	L NEAR	166E	CODE
+NOTFNDJ  . . . . . . . . . . . .  	L NEAR	1581	CODE
+NOT_END  . . . . . . . . . . . .  	L NEAR	1377	CODE
+NOT_FOUND  . . . . . . . . . . .  	L NEAR	134D	CODE
+NOT_ROOT . . . . . . . . . . . .  	L NEAR	0FB4	CODE
+NO_ERRORS  . . . . . . . . . . .  	L NEAR	101B	CODE
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+NUMCHK . . . . . . . . . . . . .  	L NEAR	1276	CODE
+NUMCOM . . . . . . . . . . . . .  	Number	000F	
+NUMLP  . . . . . . . . . . . . .  	L NEAR	1254	CODE
+NUMPOS . . . . . . . . . . . . .  	L WORD 	0018	DATA	Global
+NXTARG . . . . . . . . . . . . .  	L NEAR	178D	CODE
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-12
+                                                             
+
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OLDDAT . . . . . . . . . . . . .  	L BYTE 	0226	DATA	Global
+OLDLEN . . . . . . . . . . . . .  	L WORD 	0010	DATA	Global
+ONE4TH . . . . . . . . . . . . .  	L WORD 	0020	DATA
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+OPTCHAR  . . . . . . . . . . . .  	L BYTE 	002A	CONST
+OPT_ERR  . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+OUT  . . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+OUTCNT . . . . . . . . . . . . .  	L NEAR	1616	CODE
+OUTLN  . . . . . . . . . . . . .  	L NEAR	1539	CODE
+OUTLP  . . . . . . . . . . . . .  	L NEAR	1618	CODE
+
+PAGE . . . . . . . . . . . . . .  	L NEAR	14A4	CODE
+PARAM1 . . . . . . . . . . . . .  	L WORD 	0000	DATA	Global
+PARAM2 . . . . . . . . . . . . .  	L WORD 	0002	DATA	Global
+PARAM3 . . . . . . . . . . . . .  	L WORD 	0004	DATA
+PARAM4 . . . . . . . . . . . . .  	L WORD 	0006	DATA
+PARAMOK2 . . . . . . . . . . . .  	L NEAR	11F0	CODE
+PARMAPP  . . . . . . . . . . . .  	L NEAR	1393	CODE
+PARMOK . . . . . . . . . . . . .  	L NEAR	11D9	CODE
+PARSE  . . . . . . . . . . . . .  	L NEAR	1172	CODE
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+PERR . . . . . . . . . . . . . .  	L NEAR	1671	CODE
+POINTER  . . . . . . . . . . . .  	L WORD 	001E	DATA	Global
+PROMPT . . . . . . . . . . . . .  	Number	002A	
+PTR_1  . . . . . . . . . . . . .  	L WORD 	0008	DATA
+PTR_2  . . . . . . . . . . . . .  	L WORD 	000A	DATA
+PTR_3  . . . . . . . . . . . . .  	L WORD 	000C	DATA
+PUTCURS  . . . . . . . . . . . .  	L NEAR	1676	CODE
+
+Q3 . . . . . . . . . . . . . . .  	L NEAR	1316	CODE
+QFLG . . . . . . . . . . . . . .  	L BYTE 	0220	DATA	Global
+QUERY  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+QUIT . . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+QUIT1  . . . . . . . . . . . . .  	L NEAR	12FF	CODE
+QUOTE_CHAR . . . . . . . . . . .  	Number	0016	
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-13
+                                                             
+
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+REPLAC . . . . . . . . . . . . .  	L NEAR	158B	CODE
+REPLACE  . . . . . . . . . . . .  	L NEAR	171E	CODE
+REPLAC_FROM_CURR . . . . . . . .  	L NEAR	1584	CODE
+REPLP  . . . . . . . . . . . . .  	L NEAR	159A	CODE
+REPNXT . . . . . . . . . . . . .  	L NEAR	160F	CODE
+RESTORE  . . . . . . . . . . . .  	L NEAR	1942	CODE
+REST_DIR . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+RET$5  . . . . . . . . . . . . .  	L NEAR	14A3	CODE
+RET1 . . . . . . . . . . . . . .  	L NEAR	121A	CODE
+RET12  . . . . . . . . . . . . .  	L NEAR	1752	CODE
+RET2 . . . . . . . . . . . . . .  	L NEAR	1358	CODE
+RET3 . . . . . . . . . . . . . .  	L NEAR	1417	CODE
+RET7 . . . . . . . . . . . . . .  	L NEAR	1561	CODE
+RET8 . . . . . . . . . . . . . .  	L NEAR	161F	CODE
+RET9 . . . . . . . . . . . . . .  	L NEAR	1686	CODE
+REV  . . . . . . . . . . . . . .  	L BYTE 	001E	CONST
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+ROFLAG . . . . . . . . . . . . .  	L BYTE 	0020	CONST
+ROPROT . . . . . . . . . . . . .  	Alias	 TRUE		
+ROTABLE  . . . . . . . . . . . .  	L BYTE 	12F0	CODE
+RO_ERR . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SAME_DIR . . . . . . . . . . . .  	L NEAR	103C	CODE
+SAME_DRIVE . . . . . . . . . . .  	L NEAR	0FDE	CODE
+SAVEND . . . . . . . . . . . . .  	L NEAR	111D	CODE
+SCANEOF  . . . . . . . . . . . .  	L NEAR	1319	CODE
+SCANLN . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+SCNDOK . . . . . . . . . . . . .  	L NEAR	14D2	CODE
+SEARCH . . . . . . . . . . . . .  	L NEAR	162C	CODE
+SEARCH_FROM_CURR . . . . . . . .  	L NEAR	1625	CODE
+SEND . . . . . . . . . . . . . .  	L NEAR	1553	CODE
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SETPTS . . . . . . . . . . . . .  	L NEAR	18AD	CODE
+SETUP  . . . . . . . . . . . . .  	L NEAR	10C5	CODE
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-14
+                                                             
+
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+SHOWNUM  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+SIMPED . . . . . . . . . . . . .  	L NEAR	0F12	CODE
+SJ1  . . . . . . . . . . . . . .  	L NEAR	0FA8	CODE
+SJ12 . . . . . . . . . . . . . .  	L NEAR	16E5	CODE
+SJ2  . . . . . . . . . . . . . .  	L NEAR	0FAF	CODE
+SJ3  . . . . . . . . . . . . . .  	L NEAR	100F	CODE
+SJ4  . . . . . . . . . . . . . .  	L NEAR	1047	CODE
+SJ5  . . . . . . . . . . . . . .  	L NEAR	1051	CODE
+SJ50 . . . . . . . . . . . . . .  	L NEAR	107D	CODE
+SJ51 . . . . . . . . . . . . . .  	L NEAR	132B	CODE
+SJ51B  . . . . . . . . . . . . .  	L NEAR	1338	CODE
+SJ52 . . . . . . . . . . . . . .  	L NEAR	133E	CODE
+SJ53 . . . . . . . . . . . . . .  	L NEAR	13A4	CODE
+SJ6  . . . . . . . . . . . . . .  	L NEAR	1590	CODE
+SJ7  . . . . . . . . . . . . . .  	L NEAR	1631	CODE
+SK1  . . . . . . . . . . . . . .  	L NEAR	123F	CODE
+SK2  . . . . . . . . . . . . . .  	L NEAR	12BD	CODE
+SKIP . . . . . . . . . . . . . .  	L NEAR	1215	CODE
+SKIP1  . . . . . . . . . . . . .  	L NEAR	1216	CODE
+SLASHOK  . . . . . . . . . . . .  	L NEAR	0F41	CODE
+SOMELEFT . . . . . . . . . . . .  	L NEAR	160B	CODE
+SRCH . . . . . . . . . . . . . .  	L NEAR	163B	CODE
+SRCHCNT  . . . . . . . . . . . .  	L WORD 	001A	DATA	Global
+SRCHFLG  . . . . . . . . . . . .  	L BYTE 	0223	DATA	Global
+SRCHMOD  . . . . . . . . . . . .  	L BYTE 	0227	DATA	Global
+STACK  . . . . . . . . . . . . .  	L BYTE 	02A9	DATA
+START  . . . . . . . . . . . . .  	L WORD 	02A9	DATA	Global
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STKSIZ . . . . . . . . . . . . .  	Number	0080	
+
+TABLE  . . . . . . . . . . . . .  	L WORD 	12D2	CODE
+THE_ROOT . . . . . . . . . . . .  	L BYTE 	0027	CONST
+THREE4TH . . . . . . . . . . . .  	L WORD 	0022	DATA
+TOOLNG . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+TOOLONG  . . . . . . . . . . . .  	L NEAR	1620	CODE
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+TRUNCLP  . . . . . . . . . . . .  	L NEAR	1578	CODE
+TXT1 . . . . . . . . . . . . . .  	L BYTE 	00EF	CONST	Global
+TXT2 . . . . . . . . . . . . . .  	L BYTE 	0170	CONST	Global
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:14:54
+EDLIN for MSDOS 2.0                                         Symbols-15
+                                                             
+
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+UNQUOTE  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+UPCASE . . . . . . . . . . . . .  	L NEAR	11BF	CODE
+USERDIR  . . . . . . . . . . . .  	L BYTE 	002D	CONST	Global
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+USER_DRIVE . . . . . . . . . . .  	L BYTE 	0029	CONST	Global
+
+VER  . . . . . . . . . . . . . .  	Text  		
+VERS_OK  . . . . . . . . . . . .  	L NEAR	0F28	CODE
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+WRT  . . . . . . . . . . . . . .  	L NEAR	144D	CODE
+WRTADD . . . . . . . . . . . . .  	L NEAR	1451	CODE
+WRTADD1  . . . . . . . . . . . .  	L NEAR	145D	CODE
+WRTERR . . . . . . . . . . . . .  	L NEAR	1493	CODE
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+XERROR . . . . . . . . . . . . .  	L NEAR	149A	CODE
+XX1  . . . . . . . . . . . . . .  	L NEAR	0F63	CODE
+
+
+   3115 Source  Lines
+   3177 Total   Lines
+    762 Symbols
+
+  11962 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

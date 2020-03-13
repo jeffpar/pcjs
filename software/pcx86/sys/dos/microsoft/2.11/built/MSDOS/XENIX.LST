@@ -1,0 +1,2084 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-1
+                                                            
+
+                                ; 
+                                ; xenix file calls for MSDOS 
+                                ; 
+                                 
+                             C  INCLUDE DOSSEG.ASM 
+                             C  ; 
+                             C  ; segment ordering for MSDOS 
+                             C  ; 
+                             C   
+ 0000                        C  CONSTANTS       SEGMENT BYTE PUBLIC 'CONST' 
+ 0000                        C  CONSTANTS       ENDS 
+                             C   
+ 0000                        C  DATA            SEGMENT BYTE PUBLIC 'DATA' 
+ 0000                        C  DATA            ENDS 
+                             C   
+ 0000                        C  CODE            SEGMENT BYTE PUBLIC 'CODE' 
+ 0000                        C  CODE            ENDS 
+                             C   
+ 0000                        C  LAST            SEGMENT BYTE PUBLIC 'LAST' 
+ 0000                        C  LAST            ENDS 
+                             C   
+                             C  DOSGROUP    GROUP   CODE,CONSTANTS,DATA,LAST 
+                                 
+                                 
+                                ENDIF 
+                                 
+ 0000                           CODE    SEGMENT BYTE PUBLIC  'CODE' 
+                                        ASSUME  SS:DOSGROUP,CS:DOSGROUP 
+                                 
+                                .list 
+                                 
+                                TITLE   XENIX - IO system to mimic UNIX 
+                                NAME    XENIX 
+                                 
+                                        i_need  NoSetDir,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CURDRV,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  IOCALL,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  IOMED,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  IOSCNT,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  IOXAD,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DIRSTART,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0000                         1  DATA ENDS
+                                        i_need  ATTRIB,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  THISFCB,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  AuxStack,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  Creating,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  ThisDRV,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  NAME1,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  LastEnt,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  ThisDPB,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  EntLast,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CurrentPDB,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  sft_addr,DWORD              ; p
+				ointer to head of table 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CURBUF,DWORD                ; p
+				ointer to current buffer 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DMAADD,DWORD                ; p
+				ointer to current dma address 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                 
+                                BREAK <Local data> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-3
+Local data                                                  
+
+                                 
+ 0000                           CODE        ENDS 
+ 0000                           DATA        SEGMENT BYTE PUBLIC 'DATA' 
+                                 
+ 0000  ????                     open_name   DW  ? 
+ 0002  ????                                 DW  ? 
+ 0004  ??                       open_access DB  ? 
+ 0005  ????                     open_jfn    DW  ?                       ; acces
+				sed as DD 
+ 0007  ????                     open_jfn_b  DW  ?                       ; acces
+				sed as DD with above 
+ 0009  ????                     open_sfn    DW  ? 
+ 000B  ????                     open_sfoff  DW  ?                       ; acces
+				sed as DD 
+ 000D  ????                     open_sfn_b  DW  ?                       ; acces
+				sed as DD with above 
+ 000F  ??                       open_devid  DB  ? 
+ 0010  ??                       Cr_read_only    DB  ? 
+ 0011  ????????                 rename_source   DD  ? 
+ 0015  ????????                 rename_dest     DD  ? 
+                                 
+ 0019                           DATA        ENDS 
+ 0000                           CODE        SEGMENT BYTE PUBLIC 'CODE' 
+                                 
+                                BREAK <Validate_path - check to see if there ar
+				e meta characters in path> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-4
+Validate_path - check to see if there are meta characters in
+
+                                 
+                                ; 
+                                ; Input: DS:DX is an ASCIZ path 
+                                ; Output: Carry set if meta-characters present 
+				or path malformed and 
+                                ;           Zero is set if the only problem is 
+				that meta-characters 
+                                ;               are present in the last element
+				 of the path 
+                                procedure Validate_path,near 
+ 0000                         1 Validate_path PROC near
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 0000  50                               PUSH    AX 
+ 0001  51                               PUSH    CX 
+ 0002  56                               PUSH    SI 
+ 0003  8B F2                            MOV     SI,DX 
+ 0005  B9 00FF                          MOV     CX,0FFH                 ;No pat
+				h seps yet 
+ 0008  8B 04                            MOV     AX,[SI]                 ; Get f
+				irst two bytes 
+ 000A  0A C0                            OR      AL,AL 
+ 000C  74 29                            JZ      validate_malformed      ; NUL p
+				ath 
+ 000E  80 FC 3A                         CMP     AH,':' 
+ 0011  75 06                            JNZ     validate_loop           ; OK so
+				 far 
+ 0013  80 7C 02 00                      CMP     BYTE PTR [SI+2],0 
+ 0017  74 1E                            JZ      validate_malformed      ; NUL p
+				ath (just d:) 
+ 0019                           validate_loop: 
+ 0019  AC                               LODSB 
+ 001A                           validate_loop1: 
+                                 
+                                        ENDIF 
+                                 
+ 001A  0A C0                            OR      AL,AL 
+ 001C  74 36                            JZ      validate_end 
+ 001E  3C 3F                            CMP     AL,"?" 
+ 0020  74 1A                            JZ      validate_error 
+ 0022  3C 2A                            CMP     AL,"*" 
+ 0024  74 16                            JZ      validate_error 
+                                        invoke  PathChrCmp 
+ 0026  E8 0000 E              1  CALL PathChrCmp
+ 0029  75 EE                            JNZ     validate_loop 
+ 002B  E3 0A                            JCXZ    validate_malformed      ;If pat
+				h sep, cannot have meta yet 
+ 002D  AC                               LODSB                           ;Look a
+				head one char 
+ 002E  0A C0                            OR      AL,AL 
+ 0030  74 0E                            JZ      validate_checktslsh     ;Traili
+				ng path sep 
+                                        invoke  PathChrCmp 
+ 0032  E8 0000 E              1  CALL PathChrCmp
+ 0035  75 E3                            JNZ     validate_loop1          ;Double
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-5
+Validate_path - check to see if there are meta characters in
+
+				 path sep? 
+ 0037                           validate_malformed: 
+ 0037  41                               INC     CX 
+ 0038  0B C9                            OR      CX,CX                   ;Reset 
+				zero 
+ 003A  EB 1C                            JMP     SHORT validate_set_carry 
+                                 
+ 003C                           validate_error: 
+ 003C  33 C9                            XOR     CX,CX                   ;Flag m
+				etas found 
+ 003E  EB D9                            JMP     validate_loop 
+                                 
+ 0040                           validate_checktslsh: 
+                                ;A bizarre case, "/" is OK, "d:/" is OK, anythi
+				ng else is an error 
+ 0040  2B F2                            SUB     SI,DX 
+ 0042  83 FE 02                         CMP     SI,2 
+ 0045  74 0D                            JZ      validate_end            ;Two ch
+				ars, the '/' and the NUL 
+ 0047  83 FE 04                         CMP     SI,4 
+ 004A  75 EB                            JNZ     validate_malformed      ;Four c
+				hars, "D:/<NUL>" 
+ 004C  8B F2                            MOV     SI,DX 
+ 004E  80 7C 01 3A                      CMP     BYTE PTR [SI+1],':' 
+ 0052  75 E3                            JNZ     validate_malformed      ;Second
+				 char must be a ':' 
+                                 
+ 0054                           validate_end: 
+ 0054  0B C9                            OR      CX,CX                   ;Clears
+				 carry 
+ 0056  75 01                            JNZ     validate_ok             ;No met
+				as found, leave carry clear 
+ 0058                           validate_set_carry: 
+ 0058  F9                               STC 
+ 0059                           validate_ok: 
+ 0059  5E                               POP     SI 
+ 005A  59                               POP     CX 
+ 005B  58                               POP     AX 
+                                        return 
+ 005C                         1 ??0000:
+ 005C  C3                     1  RET
+                                validate_path   ENDP 
+                                 
+                                BREAK <Access_path - determine if file found> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-6
+Access_path - determine if file found                       
+
+                                 
+                                ; 
+                                ; Input: DS:DX point to a path 
+                                ; Output: Carry reset - outputs of GetPath 
+                                ;         carry set - AL has error code 
+                                ; 
+                                        procedure   Access_path,NEAR 
+ 005D                         1 Access_path PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 005D  E8 0000 R                        CALL    Validate_path 
+ 0060  72 0D                            JC      access_no_path 
+ 0062  8B F2                            MOV     SI,DX 
+                                        invoke  GetPath 
+ 0064  E8 0000 E              1  CALL GetPath
+                                        retnc 
+ 0067  73 F3                  2  ??0001: jnc ret_l
+ 0069  B0 02                            MOV     AL,error_file_not_found 
+ 006B  0A C9                            OR      CL,CL 
+ 006D  75 02                            JNZ     access_ret 
+ 006F                           access_no_path: 
+ 006F  B0 03                            MOV     AL,error_path_not_found 
+ 0071                           access_ret: 
+ 0071  F9                               STC 
+                                        return 
+ 0072                         1 ??0003:
+ 0072  C3                     1  RET
+                                access_path ENDP 
+                                 
+                                BREAK <Find_free_jfn - return a free jfn in use
+				rs PDB> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-7
+Find_free_jfn - return a free jfn in users PDB              
+
+                                ; 
+                                ; system file table data 
+                                ; 
+                                 
+                                ; 
+                                ; The system file table is two linear tables.  
+				The first table is the 
+                                ; DOS initialization table containing a default
+				 number of FCBs.  The 
+                                ; first word in the table is a link to the seco
+				nd table, which 
+                                ; SYSINIT sets up, the second word is the numbe
+				r of FCBs in the table. 
+                                ; 
+                                 
+                                ; 
+                                ; find_free_jfn 
+                                ; input:    none 
+                                ; output:   JNC <found> 
+                                ;               ES:DI is pointer to free JFN 
+                                ;           JC  <no free jfns> 
+                                ;               ES,DI indeterminate 
+                                ; 
+                                        procedure   Find_free_jfn,NEAR 
+ 0073                         1 Find_free_jfn PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 0073  50                               PUSH    AX 
+ 0074  51                               PUSH    CX 
+ 0075  B0 FF                            MOV     AL,0FFh 
+ 0077  36: 8E 06 0000 E                 MOV     ES,[CurrentPDB] 
+ 007C  BF 0018                          MOV     DI,PDB_JFN_Table 
+ 007F  B9 0014                          MOV     CX,FilPerProc 
+ 0082  F2/ AE                           REPNE   SCASB 
+ 0084  F9                               STC 
+ 0085  75 02                            JNZ     Find_jfn_ret 
+ 0087  4F                               DEC     DI 
+ 0088  F8                               CLC 
+ 0089                           Find_jfn_ret: 
+ 0089  59                               POP     CX 
+ 008A  58                               POP     AX 
+                                        return 
+ 008B                         1 ??0004:
+ 008B  C3                     1  RET
+                                Find_free_jfn   ENDP 
+                                 
+                                BREAK <find_free_sfn - return a free sfn and sf
+				 pointer> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-8
+find_free_sfn - return a free sfn and sf pointer            
+
+                                ; 
+                                ; find_free_sfn 
+                                ; input:    none 
+                                ; output:   JNC <found> 
+                                ;               ES:DI is free sf entry 
+                                ;               SI is sfn 
+                                ;           JC  <not found> 
+                                ;               ES,DI,SI indeterminate 
+                                ; 
+                                ; sft_addr -->  (link) count (fcbs) 
+                                ; links = -1 means end of list 
+                                ; 
+                                        procedure   Find_free_sfn,NEAR 
+ 008C                         1 Find_free_sfn PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 008C  53                               PUSH    BX 
+ 008D  51                               PUSH    CX 
+ 008E  36: C4 1E 0000 E                 LES     BX,sft_addr             ; head 
+				of chain of tables 
+ 0093  33 F6                            XOR     SI,SI                   ; count
+				 of sfn 
+                                 
+                                        ; ES:BX points to table... search throu
+				gh table 
+ 0095                           Find_sfn_in_table: 
+ 0095  83 FB FF                         CMP     BX,-1                   ; end o
+				f chain 
+ 0098  74 18                            JZ      Find_no_free_sfns 
+ 009A  BF 0006                          MOV     DI,sft_table            ; offse
+				t to sf entry 
+ 009D  26: 8B 4F 04                     MOV     CX,ES:[BX].sft_count    ; count
+				 of fcbs in table 
+                                 
+ 00A1                           Find_sfn: 
+ 00A1  26: 80 39 00                     CMP     ES:BYTE PTR [BX+DI].sf_ref_coun
+				t,0h 
+ 00A5  74 0E                            JZ      Find_got_sfn            ; ref c
+				ount is 0 -> free entry 
+ 00A7  83 C7 28                         ADD     DI,SIZE sf_entry        ; look 
+				to next entry 
+ 00AA  46                               INC     SI                      ; bump 
+				sfn 
+ 00AB  E2 F4                            LOOP    Find_sfn 
+ 00AD  26: C4 1F                        LES     BX,ES:[BX].sft_link     ; link 
+				to next 
+ 00B0  EB E3                            JMP     SHORT Find_sfn_in_table ; look 
+				for more 
+                                 
+ 00B2                           Find_no_free_sfns: 
+ 00B2  F9                               STC 
+ 00B3  EB 03                            JMP     SHORT find_ret 
+ 00B5                           Find_got_sfn: 
+ 00B5  03 FB                            ADD     DI,BX 
+ 00B7  F8                               CLC 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-9
+find_free_sfn - return a free sfn and sf pointer            
+
+ 00B8                           Find_ret: 
+ 00B8  59                               POP     CX 
+ 00B9  5B                               POP     BX 
+ 00BA  C3                               RET 
+                                Find_free_sfn   ENDP 
+                                 
+                                BREAK <$Open - open a file handle> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-10
+$Open - open a file handle                                  
+
+                                ; 
+                                ;   Assembler usage: 
+                                ;           LDS     DX, Name 
+                                ;           MOV     AH, Open 
+                                ;           MOV     AL, access 
+                                ;           INT     int_command 
+                                ; 
+                                ;       ACCESS          Function 
+                                ;       ------          -------- 
+                                ;       open_for_read   file is opened for read
+				ing 
+                                ;       open_for_write  file is opened for writ
+				ing 
+                                ;       open_for_both   file is opened for both
+				 reading and writing. 
+                                ; 
+                                ;   Error returns: 
+                                ;           AX = error_invalid_access 
+                                ;              = error_file_not_found 
+                                ;              = error_access_denied 
+                                ;              = error_too_many_open_files 
+                                ; 
+                                 
+                                        procedure   $Open,NEAR 
+ 00BB                         1 $Open PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 00BB  36: C6 06 0010 R 00              MOV     [Cr_read_only],0 
+ 00C1                           Open_create: 
+ 00C1  3C 02                            CMP     AL,open_for_both        ; valid
+				ate access 
+ 00C3  76 05                            JBE     OPEN_get_jfn 
+                                        error   error_invalid_access 
+ 00C5  B0 0C                  1  MOV AL,error_invalid_access
+ 00C7                         3  ??0006:
+ 00C7  E9 0000 E              3  JMP SYS_RET_ERR
+                                 
+ 00CA                           OPEN_get_jfn: 
+ 00CA  36: 8C 1E 0002 R                 MOV     [open_name+2],DS 
+                                        context DS 
+ 00CF  16                     1  PUSH SS
+ 00D0  1F                     1  POP DS
+ 00D1  89 16 0000 R                     MOV     open_name,DX 
+ 00D5  A2 0004 R                        MOV     open_access,AL 
+                                 
+                                        invoke  Find_free_jfn           ; scan 
+				through user's area 
+ 00D8  E8 0073 R              1  CALL Find_free_jfn
+                                        ; ES:DI is the jfn entry 
+ 00DB  73 04                            JNC     OPEN_get_sfn 
+ 00DD                           OPEN_too_many: 
+                                        error   error_too_many_open_files 
+ 00DD  B0 04                  1  MOV AL,error_too_many_open_files
+ 00DF                         3  ??0008:
+ 00DF  EB E6                  3  JMP SYS_RET_ERR_J
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-11
+$Open - open a file handle                                  
+
+                                 
+ 00E1                           OPEN_get_sfn: 
+ 00E1  8C 06 0007 R                     MOV     OPEN_jfn_b,ES 
+ 00E5  89 3E 0005 R                     MOV     OPEN_jfn,DI 
+                                        invoke  Find_free_sfn           ; get a
+				 free sft entry 
+ 00E9  E8 008C R              1  CALL Find_free_sfn
+                                        ; ES:DI is the SFT entry that's free, S
+				I is the sfn 
+ 00EC  72 EF                            JC      OPEN_too_many 
+                                 
+ 00EE                           OPEN_file: 
+ 00EE  89 36 0009 R                     MOV     OPEN_sfn,SI 
+ 00F2  89 3E 000B R                     MOV     OPEN_sfoff,DI 
+ 00F6  8C 06 000D R                     MOV     OPEN_sfn_b,ES 
+                                ; 
+                                ; open the file 
+                                ; 
+ 00FA  1E                               PUSH    DS 
+ 00FB  C5 16 0000 R                     LDS     DX,DWORD PTR [open_name] 
+                                        ASSUME  DS:NOTHING 
+ 00FF  E8 005D R                        CALL    access_path 
+ 0102  1F                               POP     DS 
+                                        ASSUME  DS:DOSGROUP 
+ 0103  73 02                            JNC     open_check_access       ; carry
+				 set -> error 
+                                        transfer    SYS_RET_ERR 
+ 0105                         2  ??0009:
+ 0105  EB D8                  2  JMP SYS_RET_ERR_J
+                                 
+ 0107                           open_check_access: 
+ 0107  8E 06 0002 E                     MOV     ES,WORD PTR [CURBUF+2]         
+				  ; get buffer location 
+ 010B  88 26 000F R                     MOV     open_devid,AH 
+ 010F  F6 C4 80                         TEST    AH,080h 
+ 0112  75 24                            JNZ     open_set_FCB_dev        ;is a d
+				evice 
+ 0114  26: 8A 47 0B                     MOV     AL,ES:[BX].dir_attr 
+ 0118  A8 10                            TEST    AL,attr_directory       ; can't
+				 open directories 
+ 011A  74 04                            JZ      open_try_volid 
+                                 
+ 011C                           open_bad_access: 
+                                        error   error_access_denied 
+ 011C  B0 05                  1  MOV AL,error_access_denied
+ 011E                         3  ??000B:
+ 011E  EB E5                  3  JMP SYS_RET_ERR_J
+                                 
+ 0120                           open_try_volid: 
+ 0120  A8 08                            TEST    AL,attr_volume_id       ; can't
+				 open volume ids 
+ 0122  75 F8                            JNZ     open_bad_access 
+ 0124  A8 01                            TEST    AL,attr_read_only       ; check
+				 write on read only 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-12
+$Open - open a file handle                                  
+
+ 0126  74 12                            JZ      open_set_FCB 
+ 0128  80 3E 0010 R 00                  CMP     [Cr_read_only],0 
+ 012D  75 0B                            JNZ     open_set_FCB            ; ok if
+				 creating read only file 
+ 012F  80 3E 0004 R 00                  CMP     open_access, open_for_read 
+ 0134  75 E6                            JNZ     open_bad_access         ; writi
+				ng on a read only file 
+ 0136  EB 02                            JMP     SHORT open_set_FCB 
+                                 
+ 0138                           open_set_FCB_dev: 
+ 0138  16                               PUSH    SS 
+ 0139  07                               POP     ES                      ;Device
+				 opens are DOSGROUP relative 
+                                 
+ 013A                           open_set_FCB: 
+ 013A  B9 000B                          MOV     CX,11                   ; copy 
+				name into FCB... 
+ 013D  56                               PUSH    SI                      ; ES:BX
+				 is source, must change 
+ 013E  8B F3                            MOV     SI,BX                   ; ES:SI
+				 is source 
+ 0140  8B 3E 000B R                     MOV     DI,open_sfoff           ; ??:DI
+				 is dest 
+ 0144  1E                               PUSH    DS 
+ 0145  06                               PUSH    ES 
+ 0146  8E 06 000D R                     MOV     ES,open_sfn_b           ; ES:DI
+				 is dest 
+ 014A  1F                               POP     DS                      ; DS:SI
+				 is source 
+                                        ASSUME  DS:NOTHING 
+                                ; 
+                                ; need to save attribute for the close operatio
+				n 
+                                ; 
+ 014B  8A 67 0B                         MOV     AH,DS:[BX.dir_attr]     ; save 
+				attribute for close 
+ 014E  26: 88 65 02                     MOV     ES:[DI.sf_attr],AH 
+                                 
+ 0152  83 C7 04                         ADD     DI,sf_fcb+1             ; point
+				 to name 
+                                 
+                                        ENDIF 
+                                 
+ 0155  F3/ A4                           REP     MOVSB                   ; move 
+				in parsed name 
+ 0157  1F                               POP     DS 
+                                        ASSUME  DS:DOSGROUP 
+ 0158  5E                               POP     SI 
+ 0159  C4 3E 000B R                     LES     DI,DWORD PTR [open_sfoff] 
+ 015D  83 C7 03                         ADD     DI,sf_fcb               ; offse
+				t on fcb in sf entry 
+ 0160  8A 26 000F R                     MOV     AH,open_devid 
+                                        invoke  DOOPEN                  ; let o
+				pen code fill in blanks 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-13
+$Open - open a file handle                                  
+
+ 0164  E8 0000 E              1  CALL DOOPEN
+                                        context DS 
+ 0167  16                     1  PUSH SS
+ 0168  1F                     1  POP DS
+ 0169  C4 3E 000B R                     LES     DI,DWORD PTR [open_sfoff] 
+ 016D  26: FE 05                        INC     ES:[DI].sf_ref_count    ; refer
+				ence this FCB 
+ 0170  A0 0004 R                        MOV     AL,open_access          ; stash
+				 the access 
+ 0173  26: 88 45 01                     MOV     ES:BYTE PTR [DI].sf_mode,AL 
+ 0177  33 C0                            XOR     AX,AX 
+ 0179  26: 89 45 24                     MOV     ES:WORD PTR [DI.sf_FCB.fcb_RR],
+				AX       ; beginning of file 
+ 017D  26: 89 45 26                     MOV     ES:WORD PTR [DI.sf_FCB.fcb_RR+2
+				],AX 
+ 0181  40                               INC     AX 
+ 0182  26: 89 45 11                     MOV     ES:WORD PTR [DI.sf_FCB.fcb_RECS
+				IZ],AX   ; byte io only 
+ 0186  C4 3E 0005 R                     LES     DI,DWORD PTR [open_jfn] 
+ 018A  A1 0009 R                        MOV     AX,open_sfn 
+ 018D  26: 88 05                        MOV     ES:BYTE PTR [DI],AL     ; stash
+				 sfn in PDB 
+ 0190  83 EF 18                         SUB     DI,PDB_jfn_table        ; get j
+				fn for user 
+ 0193  8B C7                            MOV     AX,DI 
+                                        transfer    SYS_RET_OK 
+ 0195                         2  ??000C:
+ 0195  E9 0000 E              2  JMP SYS_RET_OK
+                                $Open   ENDP 
+                                 
+                                 
+                                BREAK <$UNLINK - delete a file entry> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-14
+$UNLINK - delete a file entry                               
+
+                                ; 
+                                ;   Assembler usage: 
+                                ;           LDS     DX, name 
+                                ;           MOV     AH, Unlink 
+                                ;           INT     21h 
+                                ; 
+                                ;   Error returns: 
+                                ;           AX = error_file_not_found 
+                                ;              = error_access_denied 
+                                ; 
+                                        procedure   $UNLINK,NEAR 
+ 0198                         1 $UNLINK PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 0198  E8 005D R                        CALL    access_path 
+ 019B  73 03                            JNC     unlink_check_attr 
+                                        transfer    SYS_RET_ERR 
+ 019D                         2  ??000D:
+ 019D  E9 0000 E              2  JMP SYS_RET_ERR
+                                 
+ 01A0                           unlink_check_attr: 
+ 01A0  74 0B                            JZ      unlink_dir 
+ 01A2  36: C5 3E 0000 E                 LDS     DI,DWORD PTR [CURBUF]   ; get d
+				irectory entry 
+ 01A7  F6 47 0B 01                      TEST    DS:[BX.dir_attr],attr_read_only
+				 
+ 01AB  74 04                            JZ      unlink_doit 
+                                 
+ 01AD                           unlink_dir: 
+                                        error   error_access_denied 
+ 01AD  B0 05                  1  MOV AL,error_access_denied
+ 01AF                         3  ??000F:
+ 01AF  EB EC                  3  JMP SYS_RET_ERR_J
+                                 
+ 01B1                           unlink_doit: 
+ 01B1  C6 07 E5                         MOV     BYTE PTR DS:[BX.dir_name],0E5h 
+				 ; delete dir entry 
+ 01B4  C6 45 05 01                      MOV     BYTE PTR DS:[DI.BUFDIRTY],1    
+				 ; dirty the buffer 
+ 01B8  AD                               LODSW 
+ 01B9  8B D8                            MOV     BX,AX 
+ 01BB  81 E3 0FFF                       AND     BX,0FFFh 
+                                        context DS 
+ 01BF  16                     1  PUSH SS
+ 01C0  1F                     1  POP DS
+ 01C1  74 03                            JZ      unlink_flush 
+                                        invoke  RELEASE 
+ 01C3  E8 0000 E              1  CALL RELEASE
+ 01C6                           unlink_flush: 
+ 01C6  26: 8A 46 00                     MOV     AL,BYTE PTR ES:[BP.DPB_drive] 
+                                        invoke  FLUSHBUF 
+ 01CA  E8 0000 E              1  CALL FLUSHBUF
+                                        transfer    SYS_RET_OK 
+ 01CD                         2  ??0010:
+ 01CD  EB C6                  2  JMP SYS_RET_OK_J
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-15
+$UNLINK - delete a file entry                               
+
+                                $UNLINK ENDP 
+                                 
+                                BREAK <$CREAT - creat a new file and open him f
+				or input> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-16
+$CREAT - creat a new file and open him for input            
+
+                                ; 
+                                ;   Assembler usage: 
+                                ;           LDS     DX, name 
+                                ;           MOV     AH, Creat 
+                                ;           MOV     CX, access 
+                                ;           INT     21h 
+                                ;       ; AX now has the handle 
+                                ; 
+                                ;   Error returns: 
+                                ;           AX = error_access_denied 
+                                ;              = error_path_not_found 
+                                ;              = error_too_many_open_files 
+                                ; 
+                                 
+                                 
+                                        procedure   $CREAT,NEAR 
+ 01CF                         1 $CREAT PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 01CF  E8 0000 R                        CALL    Validate_path 
+ 01D2  73 04                            JNC     unlink_do_make 
+                                        error   error_path_not_found 
+ 01D4  B0 03                  1  MOV AL,error_path_not_found
+ 01D6                         3  ??0012:
+ 01D6  EB D7                  3  JMP SYS_RET_ERR_J
+ 01D8                           unlink_do_make: 
+ 01D8  52                               PUSH    DX 
+ 01D9  1E                               PUSH    DS 
+                                        context DS 
+ 01DA  16                     1  PUSH SS
+ 01DB  1F                     1  POP DS
+ 01DC  C7 06 0000 E E5FF                MOV     WORD PTR [CREATING],0E5FFh 
+ 01E2  8C 16 0002 E                     MOV     WORD PTR [ThisFCB+2],SS 
+ 01E6  C7 06 0000 E FFD8 E              MOV     WORD PTR [ThisFCB],OFFSET DOSGR
+				OUP:AUXSTACK-40 
+ 01EC  8B F2                            MOV     SI,DX 
+ 01EE  8A C1                            MOV     AL,CL 
+ 01F0  80 E1 01                         AND     CL,attr_read_only 
+ 01F3  88 0E 0010 R                     MOV     [Cr_read_only],CL 
+ 01F7  1F                               POP     DS 
+ 01F8  1E                               PUSH    DS 
+                                ASSUME  DS:NOTHING 
+                                        invoke  MakeNode 
+ 01F9  E8 0000 E              1  CALL MakeNode
+ 01FC  1F                               POP     DS 
+ 01FD  5A                               POP     DX 
+ 01FE  0A C0                            OR      AL,AL 
+ 0200  74 08                            JZ      creat_open 
+ 0202  3C 03                            CMP     AL,3 
+ 0204  74 04                            JZ      creat_open 
+ 0206                           creat_no_access: 
+                                        error   error_access_denied 
+ 0206  B0 05                  1  MOV AL,error_access_denied
+ 0208                         3  ??0014:
+ 0208  EB CC                  3  JMP SYS_RET_ERR_J
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-17
+$CREAT - creat a new file and open him for input            
+
+ 020A                           creat_open: 
+ 020A  B0 02                            MOV     AL,open_for_both 
+ 020C  E9 00C1 R                        JMP     Open_create 
+                                 
+                                $CREAT ENDP 
+                                 
+                                 
+                                BREAK <$DUP - duplicate a jfn> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-18
+$DUP - duplicate a jfn                                      
+
+                                ; 
+                                ;   Assembler usage: 
+                                ;           MOV     BX, fh 
+                                ;           MOV     AH, Dup 
+                                ;           INT     int_command 
+                                ;         AX has the returned handle 
+                                ;   Errors: 
+                                ;           AX = dup_invalid_handle 
+                                ;              = dup_too_many_open_files 
+                                        procedure   $DUP,NEAR 
+ 020F                         1 $DUP PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+                                        context DS 
+ 020F  16                     1  PUSH SS
+ 0210  1F                     1  POP DS
+                                        invoke  Find_free_jfn 
+ 0211  E8 0073 R              1  CALL Find_free_jfn
+ 0214  72 18                            JC      dup_no_free_handles 
+                                 
+ 0216                           dup_force: 
+ 0216  06                               PUSH    ES 
+ 0217  57                               PUSH    DI 
+                                        invoke  Get_sf_from_jfn 
+ 0218  E8 0000 E              1  CALL Get_sf_from_jfn
+ 021B  5E                               POP     SI 
+ 021C  1F                               POP     DS 
+ 021D  72 13                            JC      dup_bad_handle 
+                                        ; ES:DI is pointer to sf entry 
+                                        ; DS:DI is pointer to jfn 
+ 021F  26: FE 05                        INC     ES:[DI].sf_ref_count    ; anoth
+				er jfn reference... 
+ 0222  8A 47 18                         MOV     AL,[BX].PDB_JFN_table   ; get o
+				ld sfn 
+ 0225  88 04                            MOV     [SI],AL                 ; store
+				 in new place 
+ 0227  83 EE 18                         SUB     SI,PDB_JFN_table        ; get j
+				fn 
+ 022A  8B C6                            MOV     AX,SI 
+                                        transfer    SYS_RET_OK 
+ 022C                         2  ??0015:
+ 022C  EB 9F                  2  JMP SYS_RET_OK_J
+                                 
+ 022E                           dup_no_free_handles: 
+                                        error   error_too_many_open_files 
+ 022E  B0 04                  1  MOV AL,error_too_many_open_files
+ 0230                         3  ??0017:
+ 0230  EB D6                  3  JMP SYS_RET_ERR_J
+                                 
+ 0232                           dup_bad_handle: 
+                                        error   error_invalid_handle 
+ 0232  B0 06                  1  MOV AL,error_invalid_handle
+ 0234                         3  ??0019:
+ 0234  EB FA                  3  JMP SYS_RET_ERR_J
+                                $DUP    ENDP 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-19
+$DUP - duplicate a jfn                                      
+
+                                 
+                                BREAK <$DUP2 - force a dup on a particular jfn>
+				 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-20
+$DUP2 - force a dup on a particular jfn                     
+
+                                ; 
+                                ;   Assembler usage: 
+                                ;           MOV     BX, fh 
+                                ;           MOV     CX, newfh 
+                                ;           MOV     AH, Dup2 
+                                ;           INT     int_command 
+                                ;   Error returns: 
+                                ;           AX = error_invalid_handle 
+                                ; 
+                                        procedure   $DUP2,NEAR 
+ 0236                         1 $DUP2 PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 0236  87 D9                            XCHG    BX,CX                   ; BX < 
+				destination jfn 
+ 0238  53                               PUSH    BX 
+ 0239  51                               PUSH    CX 
+                                        invoke  $CLOSE                  ; close
+				 BX 
+ 023A  E8 0000 E              1  CALL $CLOSE
+                                        context DS 
+ 023D  16                     1  PUSH SS
+ 023E  1F                     1  POP DS
+ 023F  59                               POP     CX 
+ 0240  5B                               POP     BX 
+                                        invoke  Get_jfn_pointer 
+ 0241  E8 0000 E              1  CALL Get_jfn_pointer
+ 0244  87 D9                            XCHG    BX,CX 
+ 0246  73 CE                            JNC     dup_force 
+ 0248                           lseek_bad_handle: 
+                                        error   error_invalid_handle 
+ 0248  B0 06                  1  MOV AL,error_invalid_handle
+ 024A                         3  ??001B:
+ 024A  EB E8                  3  JMP SYS_RET_ERR_J
+                                $DUP2   ENDP 
+                                 
+                                 
+                                BREAK <$CHMOD - change file attributes> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-21
+$CHMOD - change file attributes                             
+
+                                ; 
+                                ;   Assembler usage: 
+                                ;           LDS     DX, name 
+                                ;           MOV     CX, attributes 
+                                ;           INT     21h 
+                                ;   Error returns: 
+                                ;           AX = error_path_not_found 
+                                ;           AX = error_access_denied 
+                                ; 
+                                        procedure   $CHMOD,NEAR 
+ 024C                         1 $CHMOD PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 024C  3C 01                            CMP     AL,1 
+ 024E  76 04                            JBE     chmod_save 
+                                        error   error_invalid_function 
+ 0250  B0 01                  1  MOV AL,error_invalid_function
+ 0252                         3  ??001D:
+ 0252  EB F6                  3  JMP SYS_RET_ERR_J
+ 0254                           chmod_save: 
+ 0254  72 0E                            JB      chmod_try_file 
+ 0256  8B D9                            MOV     BX,CX 
+ 0258  81 E3 FFD8                       AND     BX,NOT attr_changeable 
+ 025C  74 06                            JZ      chmod_try_file 
+                                 
+ 025E                           chmod_bad: 
+                                        error   error_access_denied 
+ 025E  B0 05                  1  MOV AL,error_access_denied
+ 0260                         3  ??001F:
+ 0260  EB F0                  3  JMP SYS_RET_ERR_J
+                                 
+ 0262                           chmod_bye: 
+                                        transfer    SYS_RET_ERR 
+ 0262                         2  ??0020:
+ 0262  EB FC                  2  JMP SYS_RET_ERR_J
+ 0264                           chmod_try_file: 
+ 0264  51                               PUSH    CX 
+ 0265  50                               PUSH    AX 
+ 0266  E8 005D R                        CALL    access_path 
+ 0269  5A                               POP     DX 
+ 026A  59                               POP     CX 
+ 026B  72 F5                            JC      chmod_bye 
+ 026D  36: C4 3E 0000 E                 LES     DI,[CURBUF] 
+                                        context DS 
+ 0272  16                     1  PUSH SS
+ 0273  1F                     1  POP DS
+ 0274  0A D2                            OR      DL,DL 
+ 0276  74 15                            JZ      chmod_fetch 
+ 0278  26: 80 67 0B D8                  AND     BYTE PTR ES:[BX].dir_attr,NOT a
+				ttr_changeable 
+ 027D  26: 08 4F 0B                     OR      BYTE PTR ES:[BX].dir_attr,CL 
+ 0281  26: C6 45 05 01                  MOV     ES:[DI.BUFDIRTY],1 
+ 0286  B0 FF                            MOV     AL,-1 
+                                        invoke  FlushBuf 
+ 0288  E8 0000 E              1  CALL FlushBuf
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-22
+$CHMOD - change file attributes                             
+
+                                        transfer    SYS_RET_OK 
+ 028B                         2  ??0021:
+ 028B  EB 9F                  2  JMP SYS_RET_OK_J
+ 028D                           chmod_fetch: 
+ 028D  33 C9                            XOR     CX,CX 
+ 028F  26: 8A 4F 0B                     MOV     CL,BYTE PTR ES:[BX].dir_attr 
+                                        invoke  Get_user_stack 
+ 0293  E8 0000 E              1  CALL Get_user_stack
+ 0296  89 4C 04                         MOV     [SI.user_CX],CX 
+                                        transfer    SYS_RET_OK 
+ 0299                         2  ??0022:
+ 0299  EB F0                  2  JMP SYS_RET_OK_J
+                                $chmod  ENDP 
+                                 
+                                BREAK <$CURRENT_DIR - dump the current director
+				y into user space> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-23
+$CURRENT_DIR - dump the current directory into user space   
+
+                                ; 
+                                ;   Assembler usage: 
+                                ;               LDS     SI,area 
+                                ;               MOV     DL,drive 
+                                ;               INT     21h 
+                                ;           ; DS:SI is a pointer to 64 byte are
+				a that contains drive 
+                                ;           ; current directory. 
+                                ;   Error returns: 
+                                ;           AX = error_invalid_drive 
+                                ; 
+                                procedure   $CURRENT_DIR,NEAR 
+ 029B                         1 $CURRENT_DIR PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 029B  1E                               PUSH    DS 
+ 029C  53                               PUSH    BX 
+ 029D  56                               PUSH    SI 
+                                        invoke  $get_DPB 
+ 029E  E8 0000 E              1  CALL $get_DPB
+                                ; 
+                                ; ES:BP points to DPB.  DS:SI points to user st
+				ack, unless error 
+                                ; 
+ 02A1  3C FF                            CMP     AL,0FFh 
+ 02A3  75 07                            JNZ     current_copy 
+ 02A5  58                               POP     AX              ; Clean Stack 
+ 02A6  58                               POP     AX 
+ 02A7  58                               POP     AX 
+                                        error   error_invalid_drive 
+ 02A8  B0 0F                  1  MOV AL,error_invalid_drive
+ 02AA                         3  ??0024:
+ 02AA  EB B6                  3  JMP SYS_RET_ERR_J
+                                 
+ 02AC                           current_copy: 
+ 02AC  5F                               POP     DI              ; where to move
+				 to 
+ 02AD  8F 44 02                         POP     [SI.user_BX]    ; restore old B
+				X 
+ 02B0  5B                               POP     BX 
+ 02B1  89 5C 0E                         MOV     [SI.user_DS],BX ; and restore o
+				ld DS 
+                                ; 
+                                ; ES:BP is pointer to DPB. BX:DI is pointer to 
+				destination 
+                                ; 
+ 02B4  26: 83 7E 1C FF                  CMP     ES:[BP.dpb_current_dir],-1 
+ 02B9  75 0D                            JNZ     current_ok 
+ 02BB  53                               PUSH    BX 
+ 02BC  57                               PUSH    DI 
+ 02BD  36: C6 06 0000 E 16              MOV     [ATTRIB],attr_all 
+                                        invoke  GETCURRDIR 
+ 02C3  E8 0000 E              1  CALL GETCURRDIR
+ 02C6  5F                               POP     DI 
+ 02C7  5B                               POP     BX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-24
+$CURRENT_DIR - dump the current directory into user space   
+
+ 02C8                           current_ok: 
+ 02C8  8B F5                            MOV     SI,BP           ; ES:SI is sour
+				ce 
+ 02CA  06                               PUSH    ES 
+ 02CB  1F                               POP     DS              ; DS:SI is sour
+				ce 
+ 02CC  8E C3                            MOV     ES,BX           ; ES:DI is dest
+				ination 
+ 02CE  83 7C 1C 00                      CMP     [SI.dpb_current_dir],0 
+ 02D2  75 04                            JNZ     current_move 
+ 02D4  C6 44 1E 00                      MOV     BYTE PTR [SI.dpb_dir_text],0 
+                                 
+ 02D8                           current_move: 
+ 02D8  83 C6 1E                         ADD     SI,dpb_dir_text 
+ 02DB  B9 0040                          MOV     CX,DIRSTRLEN 
+ 02DE                           current_loop: 
+ 02DE  AC                               LODSB 
+ 02DF  AA                               STOSB 
+ 02E0  0A C0                            OR      AL,AL 
+ 02E2  E0 FA                            LOOPNZ  current_loop 
+                                        transfer    SYS_RET_OK 
+ 02E4                         2  ??0025:
+ 02E4  EB B3                  2  JMP SYS_RET_OK_J
+                                $CURRENT_DIR    ENDP 
+                                 
+                                 
+                                BREAK <$RENAME - move directory entries around>
+				 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-25
+$RENAME - move directory entries around                     
+
+                                ; 
+                                ;   Assembler usage: 
+                                ;           LDS     DX, source 
+                                ;           LES     DI, dest 
+                                ;           MOV     AH, Rename 
+                                ;           INT     21h 
+                                ; 
+                                ;   Error returns: 
+                                ;           AX = error_file_not_found 
+                                ;              = error_not_same_device 
+                                ;              = error_access_denied 
+                                procedure   $RENAME,near 
+ 02E6                         1 $RENAME PROC near
+                                 
+ 02E6  36: 89 16 0011 R                 MOV     WORD PTR [rename_source],DX 
+ 02EB  36: 8C 1E 0013 R                 MOV     WORD PTR [rename_source+2],DS 
+ 02F0  36: 89 3E 0015 R                 MOV     WORD PTR [rename_dest],DI 
+ 02F5  36: 8C 06 0017 R                 MOV     WORD PTR [rename_dest+2],ES 
+ 02FA  E8 005D R                        CALL    Access_path 
+ 02FD  73 02                            JNC     rename_check_dir 
+                                        transfer    SYS_RET_ERR 
+ 02FF                         2  ??0026:
+ 02FF  EB A9                  2  JMP SYS_RET_ERR_J
+                                 
+ 0301                           rename_check_dir: 
+ 0301  74 2A                            JZ      rename_no_access 
+ 0303  36: 8E 1E 0002 E                 MOV     DS,WORD PTR [CurBuf+2] 
+ 0308  FF 77 18                         PUSH    [BX.dir_date] 
+ 030B  FF 77 1A                         PUSH    [BX.dir_first] 
+ 030E  FF 77 1E                         PUSH    [BX.dir_size_h] 
+ 0311  FF 77 1C                         PUSH    [BX.dir_size_l] 
+ 0314  FF 77 16                         PUSH    [BX.dir_time] 
+ 0317  FF 77 0B                         PUSH    WORD PTR [BX.dir_attr] 
+ 031A  36: FF 36 0000 E                 PUSH    WORD PTR [ThisDrv] 
+ 031F  36: C5 36 0015 R                 LDS     SI,[rename_dest] 
+                                        invoke  GetPath 
+ 0324  E8 0000 E              1  CALL GetPath
+ 0327  58                               POP     AX 
+ 0328  72 07                            JC      rename_check_drives 
+ 032A                           rename_bad_access: 
+ 032A  83 C4 0C                         ADD     SP,12 
+ 032D                           rename_no_access: 
+                                        error   error_access_denied 
+ 032D  B0 05                  1  MOV AL,error_access_denied
+ 032F                         3  ??0028:
+ 032F  EB CE                  3  JMP SYS_RET_ERR_J
+ 0331                           rename_check_drives: 
+ 0331  36: 3A 06 0000 E                 CMP     AL,[ThisDrv] 
+ 0336  74 07                            JZ      rename_create 
+ 0338  83 C4 0C                         ADD     SP,12 
+                                        error   error_not_same_device 
+ 033B  B0 11                  1  MOV AL,error_not_same_device
+ 033D                         3  ??002A:
+ 033D  EB F0                  3  JMP SYS_RET_ERR_J
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-26
+$RENAME - move directory entries around                     
+
+ 033F                           rename_create: 
+ 033F  36: C5 36 0015 R                 LDS     SI,[rename_dest] 
+ 0344  58                               POP     AX 
+ 0345  50                               PUSH    AX 
+ 0346  36: C7 06 0000 E E5FF            MOV     WORD PTR [Creating],0E5FFh 
+ 034D  36: 8C 16 0002 E                 MOV     WORD PTR [ThisFCB+2],SS 
+ 0352  36: C7 06 0000 E FFD8            MOV     WORD PTR [ThisFCB],OFFSET DOSGR
+				OUP:AUXStack-40 
+        E                               MOV     WORD PTR [ThisFCB],OFFSET DOSGR
+				OUP:AUXStack-40 
+                                        invoke  MakeNode 
+ 0359  E8 0000 E              1  CALL MakeNode
+ 035C  72 CC                            JC      rename_bad_access 
+ 035E  36: C5 36 0000 E                 LDS     SI,[CurBuf] 
+ 0363  58                               POP     AX 
+ 0364  88 47 0B                         MOV     [BX.dir_attr],AL 
+ 0367  8F 47 16                         POP     [BX.dir_time] 
+ 036A  8F 47 1C                         POP     [BX.dir_size_l] 
+ 036D  8F 47 1E                         POP     [BX.dir_size_h] 
+ 0370  8F 47 1A                         POP     [BX.dir_first] 
+ 0373  8F 47 18                         POP     [BX.dir_date] 
+ 0376  C6 44 05 01                      MOV     [SI.BUFDIRTY],1 
+ 037A  36: C5 36 0011 R                 LDS     SI,[rename_source] 
+                                        invoke  GetPath 
+ 037F  E8 0000 E              1  CALL GetPath
+ 0382  36: C5 36 0000 E                 LDS     SI,[CurBuf] 
+ 0387  C6 07 E5                         MOV     BYTE PTR [BX],0E5h 
+ 038A  C6 44 05 01                      MOV     [SI.BUFDIRTY],1 
+                                        context DS 
+ 038E  16                     1  PUSH SS
+ 038F  1F                     1  POP DS
+ 0390  B0 FF                            MOV     AL,0FFh 
+                                        invoke  FlushBuf 
+ 0392  E8 0000 E              1  CALL FlushBuf
+                                        transfer    SYS_RET_OK 
+ 0395                         2  ??002B:
+ 0395  E9 0000 E              2  JMP SYS_RET_OK
+                                 
+                                $RENAME ENDP 
+                                 
+                                BREAK <$FIND_FIRST - find first matching xenix 
+				filename> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-27
+$FIND_FIRST - find first matching xenix filename            
+
+                                ; 
+                                ;   Assembler usage: 
+                                ;           MOV AH, FindFirst 
+                                ;           LDS DX, name 
+                                ;           MOV CX, attr 
+                                ;           INT 21h 
+                                ;       ; DMA address has datablock 
+                                ; 
+                                ;   Error Returns: 
+                                ;           AX = error_file_not_found 
+                                ;              = error_no_more_files 
+                                ; 
+                                procedure   $FIND_FIRST,near 
+ 0398                         1 $FIND_FIRST PROC near
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 0398  E8 0000 R                        CALL    Validate_path 
+ 039B  73 06                            JNC     find_get 
+ 039D  74 04                            JZ      find_get 
+                                        error   error_file_not_found 
+ 039F  B0 02                  1  MOV AL,error_file_not_found
+ 03A1                         3  ??002D:
+ 03A1  EB 9A                  3  JMP SYS_RET_ERR_J
+ 03A3                           find_get: 
+ 03A3  8B F2                            MOV     SI,DX 
+ 03A5  51                               PUSH    CX 
+ 03A6  36: FE 06 0000 E                 INC     BYTE PTR [NoSetDir] ; if we fin
+				d a dir, don't change to it 
+ 03AB  36: C7 06 0000 E E500            MOV     WORD PTR [Creating],0E500h 
+ 03B2  E8 0000 E                        CALL    GetPath 
+ 03B5  59                               POP     CX 
+ 03B6  36: 88 0E 0000 E                 MOV     [Attrib],CL 
+ 03BB                           find_check: 
+ 03BB  73 04                            JNC     find_check_attr 
+ 03BD                           find_no_more: 
+                                        error   error_no_more_files 
+ 03BD  B0 12                  1  MOV AL,error_no_more_files
+ 03BF                         3  ??002F:
+ 03BF  EB E0                  3  JMP SYS_RET_ERR_J
+ 03C1                           find_check_attr: 
+ 03C1  36: 8E 1E 0002 E                 MOV     DS,WORD PTR [CURBUF+2] 
+ 03C6  8A 6F 0B                         MOV     CH,[BX.dir_attr] 
+                                        invoke  MatchAttributes 
+ 03C9  E8 0000 E              1  CALL MatchAttributes
+ 03CC  74 0D                            JZ      found_it 
+ 03CE  36: FF 36 0000 E                 PUSH    [LastEnt] 
+ 03D3  36: 8B 1E 0000 E                 MOV     BX,[DirStart] 
+ 03D8  E9 047B R                        JMP     find_it_next 
+ 03DB                           found_it: 
+ 03DB  36: C4 3E 0000 E                 LES     DI,[DMAADD] 
+ 03E0  36: A0 0000 E                    MOV     AL,[Attrib] 
+ 03E4  AA                               STOSB                           ; find_
+				buf 0 = attribute in search 
+ 03E5  36: A0 0000 E                    MOV     AL,[ThisDrv] 
+ 03E9  AA                               STOSB                           ; find_
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-28
+$FIND_FIRST - find first matching xenix filename            
+
+				buf 1 = drive 
+ 03EA  B9 000B                          MOV     CX,11 
+ 03ED  53                               PUSH    BX 
+ 03EE  BE 0000 E                        MOV     SI,OFFSET DOSGROUP:NAME1; find_
+				buf 2 = formatted name 
+ 03F1  1E                               PUSH    DS 
+ 03F2  16                               PUSH    SS 
+ 03F3  1F                               POP     DS 
+                                 
+                                        ENDIF 
+                                 
+ 03F4  F3/ A4                           REP     MOVSB 
+ 03F6  1F                               POP     DS 
+ 03F7  36: A1 0000 E                    MOV     AX,[LastEnt] 
+ 03FB  AB                               STOSW                           ; find_
+				buf 13 = LastEnt 
+ 03FC  36: A1 0000 E                    MOV     AX,WORD PTR [ThisDPB] 
+ 0400  AB                               STOSW                           ; find_
+				buf 15 = ThisDPB 
+ 0401  36: A1 0002 E                    MOV     AX,WORD PTR [ThisDPB+2] 
+ 0405  AB                               STOSW 
+ 0406  36: A1 0000 E                    MOV     AX,[DirStart] 
+ 040A  AB                               STOSW                           ; find_
+				buf 19 = DirStart 
+ 040B  8A 47 0B                         MOV     AL,[BX].dir_attr 
+ 040E  AA                               STOSB                           ; find_
+				buf 21 = attribute found 
+ 040F  8B 47 16                         MOV     AX,[BX].dir_time 
+ 0412  AB                               STOSW                           ; find_
+				buf 22 = time 
+ 0413  8B 47 18                         MOV     AX,[BX].dir_date 
+ 0416  AB                               STOSW                           ; find_
+				buf 24 = date 
+ 0417  8B 47 1C                         MOV     AX,[BX].dir_size_l 
+ 041A  AB                               STOSW                           ; find_
+				buf 26 = low(size) 
+ 041B  8B 47 1E                         MOV     AX,[BX].dir_size_h 
+ 041E  AB                               STOSW                           ; find_
+				buf 28 = high(size) 
+ 041F  5E                               POP     SI 
+ 0420  B9 0008                          MOV     CX,8                    ; find_
+				buf 30 = packed name 
+ 0423                           find_loop_name: 
+ 0423  AC                               LODSB 
+ 0424  AA                               STOSB 
+ 0425  3C 20                            CMP     AL," " 
+ 0427  E0 FA                            LOOPNZ  find_loop_name 
+ 0429  75 01                            JNZ     find_check_dot 
+ 042B  4F                               DEC     DI 
+ 042C                           find_check_dot: 
+ 042C  03 F1                            ADD     SI,CX 
+ 042E  80 3C 20                         CMP     BYTE PTR [SI]," " 
+ 0431  74 0F                            JZ      find_done 
+ 0433  B0 2E                            MOV     AL,"." 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-29
+$FIND_FIRST - find first matching xenix filename            
+
+ 0435  AA                               STOSB 
+ 0436  B9 0003                          MOV     CX,3 
+ 0439                           find_loop_ext: 
+ 0439  AC                               LODSB 
+ 043A  AA                               STOSB 
+ 043B  3C 20                            CMP     AL," " 
+ 043D  E0 FA                            LOOPNZ  find_loop_ext 
+ 043F  75 01                            JNZ     find_done 
+ 0441  4F                               DEC     DI 
+ 0442                           find_done: 
+ 0442  32 C0                            XOR     AL,AL 
+ 0444  AA                               STOSB 
+                                        transfer    SYS_RET_OK 
+ 0445                         2  ??0030:
+ 0445  E9 0000 E              2  JMP SYS_RET_OK
+                                $FIND_FIRST ENDP 
+                                 
+                                BREAK <$FIND_NEXT - scan for match in directory
+				> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-30
+$FIND_NEXT - scan for match in directory                    
+
+                                ; 
+                                ;   Assembler usage: 
+                                ;       ; dma points at area returned by find_f
+				irst 
+                                ;           MOV AH, findnext 
+                                ;           INT 21h 
+                                ;       ; next entry is at dma 
+                                ; 
+                                ;   Error Returns: 
+                                ;           AX = error_no_more_files 
+                                ; 
+                                procedure   $FIND_NEXT,near 
+ 0448                         1 $FIND_NEXT PROC near
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 0448  36: C5 36 0000 E                 LDS     SI,[DMAADD] 
+ 044D  8B D6                            MOV     DX,SI 
+ 044F  42                               INC     DX 
+ 0450  56                               PUSH    SI 
+                                        invoke  MOVNAMENOSET 
+ 0451  E8 0000 E              1  CALL MOVNAMENOSET
+ 0454  5E                               POP     SI 
+ 0455  73 05                            JNC     find_load 
+ 0457                           findnext_no_more: 
+                                        error   error_no_more_files 
+ 0457  B0 12                  1  MOV AL,error_no_more_files
+ 0459                         3  ??0032:
+ 0459  E9 0000 E              3  JMP SYS_RET_ERR
+ 045C                           find_load: 
+ 045C  8B 44 0D                         MOV     AX,[SI.find_buf_LastEnt] 
+ 045F  C4 6C 0F                         LES     BP,[SI.find_buf_ThisDPB] 
+ 0462  0B C0                            OR      AX,AX 
+ 0464  78 F1                            JS      findnext_no_more 
+ 0466  8B 5C 13                         MOV     BX,[SI.find_buf_DirStart] 
+ 0469  8A 14                            MOV     DL,[SI.find_buf_sattr] 
+ 046B  36: 88 16 0000 E                 MOV     [Attrib],DL 
+ 0470  50                               PUSH    AX 
+ 0471  36: 89 2E 0000 E                 MOV     WORD PTR [ThisDPB],BP 
+ 0476  36: 8C 06 0002 E                 MOV     WORD PTR [ThisDPB+2],ES 
+ 047B                           find_it_next: 
+                                        invoke  SetDirSrch 
+ 047B  E8 0000 E              1  CALL SetDirSrch
+                                        ASSUME  DS:DOSGROUP 
+ 047E  58                               POP     AX 
+ 047F  C7 06 0000 E FFFF                MOV     [ENTLAST],-1 
+                                        invoke  GetEnt 
+ 0485  E8 0000 E              1  CALL GetEnt
+                                        invoke  NextEnt 
+ 0488  E8 0000 E              1  CALL NextEnt
+ 048B  E9 03BB R                        JMP     find_check 
+                                $find_next  ENDP 
+                                 
+                                do_ext 
+                                 
+ 048E                           CODE    ENDS 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Page     1-31
+$FIND_NEXT - scan for match in directory                    
+
+                                    END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DOSGROUP . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	048E	BYTE	PUBLIC	'CODE'
+  CONSTANTS  . . . . . . . . . .  	0000	BYTE	PUBLIC	'CONST'
+  DATA . . . . . . . . . . . . .  	0019	BYTE	PUBLIC	'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Symbols-5
+                                                             
+
+  LAST . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'LAST'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ACCESS_NO_PATH . . . . . . . . .  	L NEAR	006F	CODE
+ACCESS_PATH  . . . . . . . . . .  	N PROC	005D	CODE	Global	Length = 0016
+ACCESS_RET . . . . . . . . . . .  	L NEAR	0071	CODE
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTRIB . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+AUXSTACK . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_BAD  . . . . . . . . . . .  	L NEAR	025E	CODE
+CHMOD_BYE  . . . . . . . . . . .  	L NEAR	0262	CODE
+CHMOD_FETCH  . . . . . . . . . .  	L NEAR	028D	CODE
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHMOD_SAVE . . . . . . . . . . .  	L NEAR	0254	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Symbols-6
+                                                             
+
+CHMOD_TRY_FILE . . . . . . . . .  	L NEAR	0264	CODE
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREATING . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_NO_ACCESS  . . . . . . . .  	L NEAR	0206	CODE
+CREAT_OPEN . . . . . . . . . . .  	L NEAR	020A	CODE
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CR_READ_ONLY . . . . . . . . . .  	L BYTE 	0010	DATA
+CURBUF . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURDRV . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+CURRENTPDB . . . . . . . . . . .  	V WORD 	0000	DATA	External
+CURRENT_COPY . . . . . . . . . .  	L NEAR	02AC	CODE
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+CURRENT_LOOP . . . . . . . . . .  	L NEAR	02DE	CODE
+CURRENT_MOVE . . . . . . . . . .  	L NEAR	02D8	CODE
+CURRENT_OK . . . . . . . . . . .  	L NEAR	02C8	CODE
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Symbols-7
+                                                             
+
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTART . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMAADD . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_BAD_HANDLE . . . . . . . . .  	L NEAR	0232	CODE
+DUP_FORCE  . . . . . . . . . . .  	L NEAR	0216	CODE
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_NO_FREE_HANDLES  . . . . . .  	L NEAR	022E	CODE
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENTLAST  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Symbols-8
+                                                             
+
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE . . . . . . . .  	L NEAR	0457	CODE
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_CHECK . . . . . . . . . . .  	L NEAR	03BB	CODE
+FIND_CHECK_ATTR  . . . . . . . .  	L NEAR	03C1	CODE
+FIND_CHECK_DOT . . . . . . . . .  	L NEAR	042C	CODE
+FIND_DONE  . . . . . . . . . . .  	L NEAR	0442	CODE
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_FREE_JFN  . . . . . . . . .  	N PROC	0073	CODE	Global	Length = 0019
+FIND_FREE_SFN  . . . . . . . . .  	N PROC	008C	CODE	Global	Length = 002F
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Symbols-9
+                                                             
+
+FIND_GET . . . . . . . . . . . .  	L NEAR	03A3	CODE
+FIND_GOT_SFN . . . . . . . . . .  	L NEAR	00B5	CODE
+FIND_IT_NEXT . . . . . . . . . .  	L NEAR	047B	CODE
+FIND_JFN_RET . . . . . . . . . .  	L NEAR	0089	CODE
+FIND_LOAD  . . . . . . . . . . .  	L NEAR	045C	CODE
+FIND_LOOP_EXT  . . . . . . . . .  	L NEAR	0439	CODE
+FIND_LOOP_NAME . . . . . . . . .  	L NEAR	0423	CODE
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FIND_NO_FREE_SFNS  . . . . . . .  	L NEAR	00B2	CODE
+FIND_NO_MORE . . . . . . . . . .  	L NEAR	03BD	CODE
+FIND_RET . . . . . . . . . . . .  	L NEAR	00B8	CODE
+FIND_SFN . . . . . . . . . . . .  	L NEAR	00A1	CODE
+FIND_SFN_IN_TABLE  . . . . . . .  	L NEAR	0095	CODE
+FOUND_IT . . . . . . . . . . . .  	L NEAR	03DB	CODE
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCALL . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+IOMED  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Symbols-10
+                                                             
+
+IOSCNT . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+IOXAD  . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KANJI  . . . . . . . . . . . . .  	Number	0000	
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LASTENT  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_BAD_HANDLE . . . . . . . .  	L NEAR	0248	CODE
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+
+NAME1  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+NOSETDIR . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS  . . . . . . . . . .  	L BYTE 	0004	DATA
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_BAD_ACCESS  . . . . . . . .  	L NEAR	011C	CODE
+OPEN_CHECK_ACCESS  . . . . . . .  	L NEAR	0107	CODE
+OPEN_CREATE  . . . . . . . . . .  	L NEAR	00C1	CODE
+OPEN_DEVID . . . . . . . . . . .  	L BYTE 	000F	DATA
+OPEN_FILE  . . . . . . . . . . .  	L NEAR	00EE	CODE
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_GET_JFN . . . . . . . . . .  	L NEAR	00CA	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Symbols-11
+                                                             
+
+OPEN_GET_SFN . . . . . . . . . .  	L NEAR	00E1	CODE
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_JFN . . . . . . . . . . . .  	L WORD 	0005	DATA
+OPEN_JFN_B . . . . . . . . . . .  	L WORD 	0007	DATA
+OPEN_NAME  . . . . . . . . . . .  	L WORD 	0000	DATA
+OPEN_SET_FCB . . . . . . . . . .  	L NEAR	013A	CODE
+OPEN_SET_FCB_DEV . . . . . . . .  	L NEAR	0138	CODE
+OPEN_SFN . . . . . . . . . . . .  	L WORD 	0009	DATA
+OPEN_SFN_B . . . . . . . . . . .  	L WORD 	000D	DATA
+OPEN_SFOFF . . . . . . . . . . .  	L WORD 	000B	DATA
+OPEN_TOO_MANY  . . . . . . . . .  	L NEAR	00DD	CODE
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+OPEN_TRY_VOLID . . . . . . . . .  	L NEAR	0120	CODE
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_BAD_ACCESS  . . . . . . .  	L NEAR	032A	CODE
+RENAME_CHECK_DIR . . . . . . . .  	L NEAR	0301	CODE
+RENAME_CHECK_DRIVES  . . . . . .  	L NEAR	0331	CODE
+RENAME_CREATE  . . . . . . . . .  	L NEAR	033F	CODE
+RENAME_DEST  . . . . . . . . . .  	L DWORD	0015	DATA
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RENAME_NO_ACCESS . . . . . . . .  	L NEAR	032D	CODE
+RENAME_SOURCE  . . . . . . . . .  	L DWORD	0011	DATA
+RET_L  . . . . . . . . . . . . .  	NEAR 	008B	CODE
+RET_NC . . . . . . . . . . . . .  	NEAR 	0067	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Symbols-12
+                                                             
+
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SFT_ADDR . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+SYS_RET_ERR_J  . . . . . . . . .  	NEAR 	0459	CODE
+SYS_RET_OK_J . . . . . . . . . .  	NEAR 	0445	CODE
+
+THISDPB  . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+THISDRV  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+THISFCB  . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_CHECK_ATTR  . . . . . . .  	L NEAR	01A0	CODE
+UNLINK_DIR . . . . . . . . . . .  	L NEAR	01AD	CODE
+UNLINK_DOIT  . . . . . . . . . .  	L NEAR	01B1	CODE
+UNLINK_DO_MAKE . . . . . . . . .  	L NEAR	01D8	CODE
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+UNLINK_FLUSH . . . . . . . . . .  	L NEAR	01C6	CODE
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VALIDATE_CHECKTSLSH  . . . . . .  	L NEAR	0040	CODE
+VALIDATE_END . . . . . . . . . .  	L NEAR	0054	CODE
+VALIDATE_ERROR . . . . . . . . .  	L NEAR	003C	CODE
+VALIDATE_LOOP  . . . . . . . . .  	L NEAR	0019	CODE
+VALIDATE_LOOP1 . . . . . . . . .  	L NEAR	001A	CODE
+VALIDATE_MALFORMED . . . . . . .  	L NEAR	0037	CODE
+VALIDATE_OK  . . . . . . . . . .  	L NEAR	0059	CODE
+VALIDATE_PATH  . . . . . . . . .  	N PROC	0000	CODE	Global	Length = 005D
+VALIDATE_SET_CARRY . . . . . . .  	L NEAR	0058	CODE
+VER  . . . . . . . . . . . . . .  	Text  		
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:57:26
+XENIX - IO system to mimic UNIX                             Symbols-13
+                                                             
+
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+$CHMOD . . . . . . . . . . . . .  	N PROC	024C	CODE	Global	Length = 004F
+$CREAT . . . . . . . . . . . . .  	N PROC	01CF	CODE	Global	Length = 0040
+$CURRENT_DIR . . . . . . . . . .  	N PROC	029B	CODE	Global	Length = 004B
+$DUP . . . . . . . . . . . . . .  	N PROC	020F	CODE	Global	Length = 0027
+$DUP2  . . . . . . . . . . . . .  	N PROC	0236	CODE	Global	Length = 0016
+$FIND_FIRST  . . . . . . . . . .  	N PROC	0398	CODE	Global	Length = 00B0
+$FIND_NEXT . . . . . . . . . . .  	N PROC	0448	CODE	Global	Length = 0046
+$OPEN  . . . . . . . . . . . . .  	N PROC	00BB	CODE	Global	Length = 00DD
+$RENAME  . . . . . . . . . . . .  	N PROC	02E6	CODE	Global	Length = 00B2
+$UNLINK  . . . . . . . . . . . .  	N PROC	0198	CODE	Global	Length = 0037
+??0000 . . . . . . . . . . . . .  	L NEAR	005C	CODE
+??0001 . . . . . . . . . . . . .  	L NEAR	0067	CODE
+??0003 . . . . . . . . . . . . .  	L NEAR	0072	CODE
+??0004 . . . . . . . . . . . . .  	L NEAR	008B	CODE
+??0006 . . . . . . . . . . . . .  	L NEAR	00C7	CODE
+??0008 . . . . . . . . . . . . .  	L NEAR	00DF	CODE
+??0009 . . . . . . . . . . . . .  	L NEAR	0105	CODE
+??000B . . . . . . . . . . . . .  	L NEAR	011E	CODE
+??000C . . . . . . . . . . . . .  	L NEAR	0195	CODE
+??000D . . . . . . . . . . . . .  	L NEAR	019D	CODE
+??000F . . . . . . . . . . . . .  	L NEAR	01AF	CODE
+??0010 . . . . . . . . . . . . .  	L NEAR	01CD	CODE
+??0012 . . . . . . . . . . . . .  	L NEAR	01D6	CODE
+??0014 . . . . . . . . . . . . .  	L NEAR	0208	CODE
+??0015 . . . . . . . . . . . . .  	L NEAR	022C	CODE
+??0017 . . . . . . . . . . . . .  	L NEAR	0230	CODE
+??0019 . . . . . . . . . . . . .  	L NEAR	0234	CODE
+??001B . . . . . . . . . . . . .  	L NEAR	024A	CODE
+??001D . . . . . . . . . . . . .  	L NEAR	0252	CODE
+??001F . . . . . . . . . . . . .  	L NEAR	0260	CODE
+??0020 . . . . . . . . . . . . .  	L NEAR	0262	CODE
+??0021 . . . . . . . . . . . . .  	L NEAR	028B	CODE
+??0022 . . . . . . . . . . . . .  	L NEAR	0299	CODE
+??0024 . . . . . . . . . . . . .  	L NEAR	02AA	CODE
+??0025 . . . . . . . . . . . . .  	L NEAR	02E4	CODE
+??0026 . . . . . . . . . . . . .  	L NEAR	02FF	CODE
+??0028 . . . . . . . . . . . . .  	L NEAR	032F	CODE
+??002A . . . . . . . . . . . . .  	L NEAR	033D	CODE
+??002B . . . . . . . . . . . . .  	L NEAR	0395	CODE
+??002D . . . . . . . . . . . . .  	L NEAR	03A1	CODE
+??002F . . . . . . . . . . . . .  	L NEAR	03BF	CODE
+??0030 . . . . . . . . . . . . .  	L NEAR	0445	CODE
+??0032 . . . . . . . . . . . . .  	L NEAR	0459	CODE
+
+
+   2251 Source  Lines
+   3653 Total   Lines
+    698 Symbols
+
+  16200 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

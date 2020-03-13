@@ -1,0 +1,2232 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-1
+                                                            
+
+                                .list 
+                                .cref 
+                                 
+ 0000                           CODE    SEGMENT PUBLIC BYTE 'CODE' 
+ 0000                           CODE    ENDS 
+                                 
+ 0000                           CONST   SEGMENT PUBLIC BYTE 
+ 0000                           CONST   ENDS 
+                                 
+ 0000                           DATA    SEGMENT PUBLIC BYTE 
+ 0000                           DATA    ENDS 
+                                 
+                                DG      GROUP   CODE,CONST,DATA 
+                                 
+ 0000                           CODE    SEGMENT PUBLIC  BYTE 'CODE' 
+                                 
+                                        EXTRN       ALUFROMREG:NEAR,ALUTOREG:NE
+				AR,ACCIMM:NEAR 
+                                        EXTRN       SEGOP:NEAR,ESPRE:NEAR,SSPRE
+				:NEAR,CSPRE:NEAR 
+                                        EXTRN       DSPRE:NEAR,REGOP:NEAR,NOOPE
+				RANDS:NEAR 
+                                        EXTRN       SAVHEX:NEAR,SHORTJMP:NEAR,M
+				OVSEGTO:NEAR 
+                                        EXTRN       WORDTOALU:NEAR,MOVSEGFROM:N
+				EAR,GETADDR:NEAR 
+                                        EXTRN       XCHGAX:NEAR,LONGJMP:NEAR,LO
+				ADACC:NEAR,STOREACC:NEAR 
+                                        EXTRN       REGIMMB:NEAR,SAV16:NEAR,MEM
+				IMM:NEAR,INT3:NEAR,SAV8:NEAR 
+                                        EXTRN       CHK10:NEAR,M8087:NEAR,M8087
+				_D9:NEAR,M8087_DB:NEAR 
+                                        EXTRN       M8087_DD:NEAR,M8087_DF:NEAR
+				,INFIXB:NEAR,INFIXW:NEAR 
+                                        EXTRN       OUTFIXB:NEAR,OUTFIXW:NEAR,J
+				MPCALL:NEAR,INVARB:NEAR 
+                                        EXTRN       INVARW:NEAR,OUTVARB:NEAR,OU
+				TVARW:NEAR,PREFIX:NEAR 
+                                        EXTRN       IMMED:NEAR,SIGNIMM:NEAR,SHI
+				FT:NEAR,SHIFTV:NEAR 
+                                        EXTRN       GRP1:NEAR,GRP2:NEAR,REGIMMW
+				:NEAR 
+                                 
+                                 
+                                        EXTRN       DB_OPER:NEAR,DW_OPER:NEAR,A
+				SSEMLOOP:NEAR,GROUP2:NEAR 
+                                        EXTRN       NO_OPER:NEAR,GROUP1:NEAR,FG
+				ROUPP:NEAR,FGROUPX:NEAR 
+                                        EXTRN       FGROUPZ:NEAR,FD9_OPER:NEAR,
+				FGROUPB:NEAR,FGROUP:NEAR 
+                                        EXTRN       FGROUPDS:NEAR,DCINC_OPER:NE
+				AR,INT_OPER:NEAR,IN_OPER:NEAR 
+                                        EXTRN       DISP8_OPER:NEAR,JMP_OPER:NE
+				AR,L_OPER:NEAR,MOV_OPER:NEAR 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-2
+                                                            
+
+                                        EXTRN       OUT_OPER:NEAR,PUSH_OPER:NEA
+				R,GET_DATA16:NEAR 
+                                        EXTRN       FGROUP3:NEAR,FGROUP3W:NEAR,
+				FDE_OPER:NEAR,ESC_OPER:NEAR 
+                                        EXTRN       AA_OPER:NEAR,CALL_OPER:NEAR
+				,FDB_OPER:NEAR,POP_OPER:NEAR 
+                                        EXTRN       ROTOP:NEAR,TST_OPER:NEAR,EX
+				_OPER:NEAR 
+                                 
+ 0000                           CODE    ENDS 
+                                 
+ 0000                           CONST   SEGMENT PUBLIC BYTE 
+                                 
+                                        PUBLIC  REG8,REG16,SREG,SIZ8,DISTAB,DBM
+				N,ADDMN,ADCMN,SUBMN 
+                                        PUBLIC  SBBMN,XORMN,ORMN,ANDMN,AAAMN,AA
+				DMN,AASMN,CALLMN,CBWMN 
+                                        PUBLIC  UPMN,DIMN,CMCMN,CMPMN,CWDMN,DAA
+				MN,DASMN,DECMN,DIVMN 
+                                        PUBLIC  ESCMN,HLTMN,IDIVMN,IMULMN,INCMN
+				,INTOMN,INTMN,INMN,IRETMN 
+                                        PUBLIC  JAMN,JCXZMN,JNCMN,JBEMN,JZMN,JG
+				EMN,JGMN,JLEMN,JLMN,JMPMN 
+                                        PUBLIC  JNZMN,JPEMN,JNZMN,JPEMN,JPOMN,J
+				NSMN,JNOMN,JOMN,JSMN,LAHFMN 
+                                        PUBLIC  LDSMN,LEAMN,LESMN,LOCKMN,LODBMN
+				,LODWMN,LOOPNZMN,LOOPZMN 
+                                        PUBLIC  LOOPMN,MOVBMN,MOVWMN,MOVMN,MULM
+				N,NEGMN,NOPMN,NOTMN,OUTMN 
+                                        PUBLIC  POPFMN,POPMN,PUSHFMN,PUSHMN,RCL
+				MN,RCRMN,REPZMN,REPNZMN 
+                                        PUBLIC  RETFMN,RETMN,ROLMN,RORMN,SAHFMN
+				,SARMN,SCABMN,SCAWMN,SHLMN 
+                                        PUBLIC  SHRMN,STCMN,DOWNMN,EIMN,STOBMN,
+				STOWMN,TESTMN,WAITMN,XCHGMN 
+                                        PUBLIC  XLATMN,ESSEGMN,CSSEGMN,SSSEGMN,
+				DSSEGMN,BADMN 
+                                 
+                                        PUBLIC  M8087_TAB,FI_TAB,SIZE_TAB,MD9_T
+				AB,MD9_TAB2,MDB_TAB 
+                                        PUBLIC  MDB_TAB2,MDD_TAB,MDD_TAB2,MDF_T
+				AB,OPTAB,MAXOP,SHFTAB,IMMTAB 
+                                        PUBLIC  GRP1TAB,GRP2TAB,SEGTAB,REGTAB,F
+				LAGTAB,STACK 
+                                 
+                                        PUBLIC  AXSAVE,BXSAVE,CXSAVE,DXSAVE,BPS
+				AVE,SPSAVE,SISAVE 
+                                        PUBLIC  DISAVE,DSSAVE,ESSAVE,SSSAVE,CSS
+				AVE,IPSAVE,FSAVE,RSTACK 
+                                        PUBLIC  REGDIF,RDFLG,TOTREG,DSIZ,NOREGL
+				,DISPB,LBUFSIZ,LBUFFCNT 
+                                        PUBLIC  LINEBUF,PFLAG,COLPOS 
+                                 
+                                        ENDIF 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-3
+                                                            
+
+                                 
+                                        PUBLIC  QFLAG,NEWEXEC,RETSAVE,USER_PROC
+				_PDB,HEADSAVE,EXEC_BLOCK 
+                                        PUBLIC  COM_LINE,COM_FCB1,COM_FCB2,COM_
+				SSSP,COM_CSIP 
+                                 
+ 0000  41 4C 43 4C 44 4C 42     REG8    DB      "ALCLDLBLAHCHDHBH" 
+       4C 41 48 43 48 44 48     
+       42 48                    
+ 0010  41 58 43 58 44 58 42     REG16   DB      "AXCXDXBXSPBPSIDI" 
+       58 53 50 42 50 53 49     
+       44 49                    
+ 0020  45 53 43 53 53 53 44     SREG    DB      "ESCSSSDS",0,0 
+       53 00 00                 
+ 002A  42 59 57 4F 44 57 51     SIZ8    DB      "BYWODWQWTB",0,0 
+       57 54 42 00 00           
+                                ; 0 
+ 0036  043B R 0000 E            DISTAB  DW      OFFSET DG:ADDMN,ALUFROMREG 
+ 003A  043B R 0000 E                    DW      OFFSET DG:ADDMN,ALUFROMREG 
+ 003E  043B R 0000 E                    DW      OFFSET DG:ADDMN,ALUTOREG 
+ 0042  043B R 0000 E                    DW      OFFSET DG:ADDMN,ALUTOREG 
+ 0046  043B R 0000 E                    DW      OFFSET DG:ADDMN,ACCIMM 
+ 004A  043B R 0000 E                    DW      OFFSET DG:ADDMN,ACCIMM 
+ 004E  06BC R 0000 E                    DW      OFFSET DG:PUSHMN,SEGOP 
+ 0052  06B4 R 0000 E                    DW      OFFSET DG:POPMN,SEGOP 
+ 0056  044A R 0000 E                    DW      OFFSET DG:ORMN,ALUFROMREG 
+ 005A  044A R 0000 E                    DW      OFFSET DG:ORMN,ALUFROMREG 
+ 005E  044A R 0000 E                    DW      OFFSET DG:ORMN,ALUTOREG 
+ 0062  044A R 0000 E                    DW      OFFSET DG:ORMN,ALUTOREG 
+ 0066  044A R 0000 E                    DW      OFFSET DG:ORMN,ACCIMM 
+ 006A  044A R 0000 E                    DW      OFFSET DG:ORMN,ACCIMM 
+ 006E  06BC R 0000 E                    DW      OFFSET DG:PUSHMN,SEGOP 
+ 0072  06B4 R 0000 E                    DW      OFFSET DG:POPMN,SEGOP 
+                                ; 10H 
+ 0076  043E R 0000 E                    DW      OFFSET DG:ADCMN,ALUFROMREG 
+ 007A  043E R 0000 E                    DW      OFFSET DG:ADCMN,ALUFROMREG 
+ 007E  043E R 0000 E                    DW      OFFSET DG:ADCMN,ALUTOREG 
+ 0082  043E R 0000 E                    DW      OFFSET DG:ADCMN,ALUTOREG 
+ 0086  043E R 0000 E                    DW      OFFSET DG:ADCMN,ACCIMM 
+ 008A  043E R 0000 E                    DW      OFFSET DG:ADCMN,ACCIMM 
+ 008E  06BC R 0000 E                    DW      OFFSET DG:PUSHMN,SEGOP 
+ 0092  06B4 R 0000 E                    DW      OFFSET DG:POPMN,SEGOP 
+ 0096  0444 R 0000 E                    DW      OFFSET DG:SBBMN,ALUFROMREG 
+ 009A  0444 R 0000 E                    DW      OFFSET DG:SBBMN,ALUFROMREG 
+ 009E  0444 R 0000 E                    DW      OFFSET DG:SBBMN,ALUTOREG 
+ 00A2  0444 R 0000 E                    DW      OFFSET DG:SBBMN,ALUTOREG 
+ 00A6  0444 R 0000 E                    DW      OFFSET DG:SBBMN,ACCIMM 
+ 00AA  0444 R 0000 E                    DW      OFFSET DG:SBBMN,ACCIMM 
+ 00AE  06BC R 0000 E                    DW      OFFSET DG:PUSHMN,SEGOP 
+ 00B2  06B4 R 0000 E                    DW      OFFSET DG:POPMN,SEGOP 
+                                ; 20H 
+ 00B6  044C R 0000 E                    DW      OFFSET DG:ANDMN,ALUFROMREG 
+ 00BA  044C R 0000 E                    DW      OFFSET DG:ANDMN,ALUFROMREG 
+ 00BE  044C R 0000 E                    DW      OFFSET DG:ANDMN,ALUTOREG 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-4
+                                                            
+
+ 00C2  044C R 0000 E                    DW      OFFSET DG:ANDMN,ALUTOREG 
+ 00C6  044C R 0000 E                    DW      OFFSET DG:ANDMN,ACCIMM 
+ 00CA  044C R 0000 E                    DW      OFFSET DG:ANDMN,ACCIMM 
+ 00CE  0722 R 0000 E                    DW      OFFSET DG:ESSEGMN,ESPRE 
+ 00D2  047E R 0000 E                    DW      OFFSET DG:DAAMN,NOOPERANDS 
+ 00D6  0441 R 0000 E                    DW      OFFSET DG:SUBMN,ALUFROMREG 
+ 00DA  0441 R 0000 E                    DW      OFFSET DG:SUBMN,ALUFROMREG 
+ 00DE  0441 R 0000 E                    DW      OFFSET DG:SUBMN,ALUTOREG 
+ 00E2  0441 R 0000 E                    DW      OFFSET DG:SUBMN,ALUTOREG 
+ 00E6  0441 R 0000 E                    DW      OFFSET DG:SUBMN,ACCIMM 
+ 00EA  0441 R 0000 E                    DW      OFFSET DG:SUBMN,ACCIMM 
+ 00EE  0725 R 0000 E                    DW      OFFSET DG:CSSEGMN,CSPRE 
+ 00F2  0481 R 0000 E                    DW      OFFSET DG:DASMN,NOOPERANDS 
+                                ; 30H 
+ 00F6  0447 R 0000 E                    DW      OFFSET DG:XORMN,ALUFROMREG 
+ 00FA  0447 R 0000 E                    DW      OFFSET DG:XORMN,ALUFROMREG 
+ 00FE  0447 R 0000 E                    DW      OFFSET DG:XORMN,ALUTOREG 
+ 0102  0447 R 0000 E                    DW      OFFSET DG:XORMN,ALUTOREG 
+ 0106  0447 R 0000 E                    DW      OFFSET DG:XORMN,ACCIMM 
+ 010A  0447 R 0000 E                    DW      OFFSET DG:XORMN,ACCIMM 
+ 010E  0728 R 0000 E                    DW      OFFSET DG:SSSEGMN,SSPRE 
+ 0112  044F R 0000 E                    DW      OFFSET DG:AAAMN,NOOPERANDS 
+ 0116  0478 R 0000 E                    DW      OFFSET DG:CMPMN,ALUFROMREG 
+ 011A  0478 R 0000 E                    DW      OFFSET DG:CMPMN,ALUFROMREG 
+ 011E  0478 R 0000 E                    DW      OFFSET DG:CMPMN,ALUTOREG 
+ 0122  0478 R 0000 E                    DW      OFFSET DG:CMPMN,ALUTOREG 
+ 0126  0478 R 0000 E                    DW      OFFSET DG:CMPMN,ACCIMM 
+ 012A  0478 R 0000 E                    DW      OFFSET DG:CMPMN,ACCIMM 
+ 012E  072B R 0000 E                    DW      OFFSET DG:DSSEGMN,DSPRE 
+ 0132  0458 R 0000 E                    DW      OFFSET DG:AASMN,NOOPERANDS 
+                                ; 40H 
+ 0136  05F4 R 0000 E                    DW      OFFSET DG:INCMN,REGOP 
+ 013A  05F4 R 0000 E                    DW      OFFSET DG:INCMN,REGOP 
+ 013E  05F4 R 0000 E                    DW      OFFSET DG:INCMN,REGOP 
+ 0142  05F4 R 0000 E                    DW      OFFSET DG:INCMN,REGOP 
+ 0146  05F4 R 0000 E                    DW      OFFSET DG:INCMN,REGOP 
+ 014A  05F4 R 0000 E                    DW      OFFSET DG:INCMN,REGOP 
+ 014E  05F4 R 0000 E                    DW      OFFSET DG:INCMN,REGOP 
+ 0152  05F4 R 0000 E                    DW      OFFSET DG:INCMN,REGOP 
+ 0156  0484 R 0000 E                    DW      OFFSET DG:DECMN,REGOP 
+ 015A  0484 R 0000 E                    DW      OFFSET DG:DECMN,REGOP 
+ 015E  0484 R 0000 E                    DW      OFFSET DG:DECMN,REGOP 
+ 0162  0484 R 0000 E                    DW      OFFSET DG:DECMN,REGOP 
+ 0166  0484 R 0000 E                    DW      OFFSET DG:DECMN,REGOP 
+ 016A  0484 R 0000 E                    DW      OFFSET DG:DECMN,REGOP 
+ 016E  0484 R 0000 E                    DW      OFFSET DG:DECMN,REGOP 
+ 0172  0484 R 0000 E                    DW      OFFSET DG:DECMN,REGOP 
+                                ; 50H 
+ 0176  06BC R 0000 E                    DW      OFFSET DG:PUSHMN,REGOP 
+ 017A  06BC R 0000 E                    DW      OFFSET DG:PUSHMN,REGOP 
+ 017E  06BC R 0000 E                    DW      OFFSET DG:PUSHMN,REGOP 
+ 0182  06BC R 0000 E                    DW      OFFSET DG:PUSHMN,REGOP 
+ 0186  06BC R 0000 E                    DW      OFFSET DG:PUSHMN,REGOP 
+ 018A  06BC R 0000 E                    DW      OFFSET DG:PUSHMN,REGOP 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-5
+                                                            
+
+ 018E  06BC R 0000 E                    DW      OFFSET DG:PUSHMN,REGOP 
+ 0192  06BC R 0000 E                    DW      OFFSET DG:PUSHMN,REGOP 
+ 0196  06B4 R 0000 E                    DW      OFFSET DG:POPMN,REGOP 
+ 019A  06B4 R 0000 E                    DW      OFFSET DG:POPMN,REGOP 
+ 019E  06B4 R 0000 E                    DW      OFFSET DG:POPMN,REGOP 
+ 01A2  06B4 R 0000 E                    DW      OFFSET DG:POPMN,REGOP 
+ 01A6  06B4 R 0000 E                    DW      OFFSET DG:POPMN,REGOP 
+ 01AA  06B4 R 0000 E                    DW      OFFSET DG:POPMN,REGOP 
+ 01AE  06B4 R 0000 E                    DW      OFFSET DG:POPMN,REGOP 
+ 01B2  06B4 R 0000 E                    DW      OFFSET DG:POPMN,REGOP 
+                                ; 60H 
+ 01B6  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01BA  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01BE  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01C2  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01C6  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01CA  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01CE  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01D2  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01D6  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01DA  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01DE  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01E2  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01E6  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01EA  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01EE  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 01F2  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+                                ; 70H 
+ 01F6  0659 R 0000 E                    DW      OFFSET DG:JOMN,SHORTJMP 
+ 01FA  0656 R 0000 E                    DW      OFFSET DG:JNOMN,SHORTJMP 
+ 01FE  0617 R 0000 E                    DW      OFFSET DG:JCMN,SHORTJMP 
+ 0202  0611 R 0000 E                    DW      OFFSET DG:JNCMN,SHORTJMP 
+ 0206  0625 R 0000 E                    DW      OFFSET DG:JZMN,SHORTJMP 
+ 020A  0644 R 0000 E                    DW      OFFSET DG:JNZMN,SHORTJMP 
+ 020E  0614 R 0000 E                    DW      OFFSET DG:JBEMN,SHORTJMP 
+ 0212  060B R 0000 E                    DW      OFFSET DG:JAMN,SHORTJMP 
+ 0216  065B R 0000 E                    DW      OFFSET DG:JSMN,SHORTJMP 
+ 021A  0653 R 0000 E                    DW      OFFSET DG:JNSMN,SHORTJMP 
+ 021E  064A R 0000 E                    DW      OFFSET DG:JPEMN,SHORTJMP 
+ 0222  064D R 0000 E                    DW      OFFSET DG:JPOMN,SHORTJMP 
+ 0226  0638 R 0000 E                    DW      OFFSET DG:JLMN,SHORTJMP 
+ 022A  0629 R 0000 E                    DW      OFFSET DG:JGEMN,SHORTJMP 
+ 022E  0635 R 0000 E                    DW      OFFSET DG:JLEMN,SHORTJMP 
+ 0232  062C R 0000 E                    DW      OFFSET DG:JGMN,SHORTJMP 
+                                ; 80H 
+ 0236  0000 0000 E                      DW      0,IMMED 
+ 023A  0000 0000 E                      DW      0,IMMED 
+ 023E  0000 0000 E                      DW      0,IMMED 
+ 0242  0000 0000 E                      DW      0,SIGNIMM 
+ 0246  0712 R 0000 E                    DW      OFFSET DG:TESTMN,ALUFROMREG 
+ 024A  0712 R 0000 E                    DW      OFFSET DG:TESTMN,ALUFROMREG 
+ 024E  071A R 0000 E                    DW      OFFSET DG:XCHGMN,ALUFROMREG 
+ 0252  071A R 0000 E                    DW      OFFSET DG:XCHGMN,ALUFROMREG 
+ 0256  069E R 0000 E                    DW      OFFSET DG:MOVMN,ALUFROMREG 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-6
+                                                            
+
+ 025A  069E R 0000 E                    DW      OFFSET DG:MOVMN,ALUFROMREG 
+ 025E  069E R 0000 E                    DW      OFFSET DG:MOVMN,ALUTOREG 
+ 0262  069E R 0000 E                    DW      OFFSET DG:MOVMN,ALUTOREG 
+ 0266  069E R 0000 E                    DW      OFFSET DG:MOVMN,MOVSEGTO 
+ 026A  0666 R 0000 E                    DW      OFFSET DG:LEAMN,WORDTOALU 
+ 026E  069E R 0000 E                    DW      OFFSET DG:MOVMN,MOVSEGFROM 
+ 0272  06B4 R 0000 E                    DW      OFFSET DG:POPMN,GETADDR 
+                                ; 90H 
+ 0276  06A7 R 0000 E                    DW      OFFSET DG:NOPMN,NOOPERANDS 
+ 027A  071A R 0000 E                    DW      OFFSET DG:XCHGMN,XCHGAX 
+ 027E  071A R 0000 E                    DW      OFFSET DG:XCHGMN,XCHGAX 
+ 0282  071A R 0000 E                    DW      OFFSET DG:XCHGMN,XCHGAX 
+ 0286  071A R 0000 E                    DW      OFFSET DG:XCHGMN,XCHGAX 
+ 028A  071A R 0000 E                    DW      OFFSET DG:XCHGMN,XCHGAX 
+ 028E  071A R 0000 E                    DW      OFFSET DG:XCHGMN,XCHGAX 
+ 0292  071A R 0000 E                    DW      OFFSET DG:XCHGMN,XCHGAX 
+ 0296  045F R 0000 E                    DW      OFFSET DG:CBWMN,NOOPERANDS 
+ 029A  047B R 0000 E                    DW      OFFSET DG:CWDMN,NOOPERANDS 
+ 029E  045B R 0000 E                    DW      OFFSET DG:CALLMN,LONGJMP 
+ 02A2  0716 R 0000 E                    DW      OFFSET DG:WAITMN,NOOPERANDS 
+ 02A6  06B7 R 0000 E                    DW      OFFSET DG:PUSHFMN,NOOPERANDS 
+ 02AA  06B0 R 0000 E                    DW      OFFSET DG:POPFMN,NOOPERANDS 
+ 02AE  06E8 R 0000 E                    DW      OFFSET DG:SAHFMN,NOOPERANDS 
+ 02B2  065F R 0000 E                    DW      OFFSET DG:LAHFMN,NOOPERANDS 
+                                ; A0H 
+ 02B6  069E R 0000 E                    DW      OFFSET DG:MOVMN,LOADACC 
+ 02BA  069E R 0000 E                    DW      OFFSET DG:MOVMN,LOADACC 
+ 02BE  069E R 0000 E                    DW      OFFSET DG:MOVMN,STOREACC 
+ 02C2  069E R 0000 E                    DW      OFFSET DG:MOVMN,STOREACC 
+ 02C6  0694 R 0000 E                    DW      OFFSET DG:MOVBMN,NOOPERANDS 
+ 02CA  0699 R 0000 E                    DW      OFFSET DG:MOVWMN,NOOPERANDS 
+ 02CE  046E R 0000 E                    DW      OFFSET DG:CMPBMN,NOOPERANDS 
+ 02D2  0473 R 0000 E                    DW      OFFSET DG:CMPWMN,NOOPERANDS 
+ 02D6  0712 R 0000 E                    DW      OFFSET DG:TESTMN,ACCIMM 
+ 02DA  0712 R 0000 E                    DW      OFFSET DG:TESTMN,ACCIMM 
+ 02DE  0708 R 0000 E                    DW      OFFSET DG:STOBMN,NOOPERANDS 
+ 02E2  070D R 0000 E                    DW      OFFSET DG:STOWMN,NOOPERANDS 
+ 02E6  0670 R 0000 E                    DW      OFFSET DG:LODBMN,NOOPERANDS 
+ 02EA  0675 R 0000 E                    DW      OFFSET DG:LODWMN,NOOPERANDS 
+ 02EE  06EF R 0000 E                    DW      OFFSET DG:SCABMN,NOOPERANDS 
+ 02F2  06F4 R 0000 E                    DW      OFFSET DG:SCAWMN,NOOPERANDS 
+                                ; B0H 
+ 02F6  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMB 
+ 02FA  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMB 
+ 02FE  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMB 
+ 0302  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMB 
+ 0306  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMB 
+ 030A  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMB 
+ 030E  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMB 
+ 0312  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMB 
+ 0316  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMW 
+ 031A  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMW 
+ 031E  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMW 
+ 0322  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMW 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-7
+                                                            
+
+ 0326  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMW 
+ 032A  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMW 
+ 032E  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMW 
+ 0332  069E R 0000 E                    DW      OFFSET DG:MOVMN,REGIMMW 
+                                ; C0H 
+ 0336  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 033A  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 033E  06DF R 0000 E                    DW      OFFSET DG:RETMN,SAV16 
+ 0342  06DF R 0000 E                    DW      OFFSET DG:RETMN,NOOPERANDS 
+ 0346  0669 R 0000 E                    DW      OFFSET DG:LESMN,WORDTOALU 
+ 034A  0663 R 0000 E                    DW      OFFSET DG:LDSMN,WORDTOALU 
+ 034E  069E R 0000 E                    DW      OFFSET DG:MOVMN,MEMIMM 
+ 0352  069E R 0000 E                    DW      OFFSET DG:MOVMN,MEMIMM 
+ 0356  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 035A  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 035E  06DB R 0000 E                    DW      OFFSET DG:RETFMN,SAV16 
+ 0362  06DB R 0000 E                    DW      OFFSET DG:RETFMN,NOOPERANDS 
+ 0366  05FB R 0000 E                    DW      OFFSET DG:INTMN,INT3 
+ 036A  05FB R 0000 E                    DW      OFFSET DG:INTMN,SAV8 
+ 036E  05F7 R 0000 E                    DW      OFFSET DG:INTOMN,NOOPERANDS 
+ 0372  0600 R 0000 E                    DW      OFFSET DG:IRETMN,NOOPERANDS 
+                                ; D0H 
+ 0376  0000 0000 E                      DW      0,SHIFT 
+ 037A  0000 0000 E                      DW      0,SHIFT 
+ 037E  0000 0000 E                      DW      0,SHIFTV 
+ 0382  0000 0000 E                      DW      0,SHIFTV 
+ 0386  0455 R 0000 E                    DW      OFFSET DG:AAMMN,CHK10 
+ 038A  0452 R 0000 E                    DW      OFFSET DG:AADMN,CHK10 
+ 038E  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 0392  071E R 0000 E                    DW      OFFSET DG:XLATMN,NOOPERANDS 
+ 0396  0000 0000 E                      DW      0,M8087                 ; d8 
+ 039A  0000 0000 E                      DW      0,M8087_D9              ; d9 
+ 039E  0000 0000 E                      DW      0,M8087                 ; da 
+ 03A2  0000 0000 E                      DW      0,M8087_DB              ; db 
+ 03A6  0000 0000 E                      DW      0,M8087                 ; dc 
+ 03AA  0000 0000 E                      DW      0,M8087_DD              ; dd 
+ 03AE  0000 0000 E                      DW      0,M8087                 ; de 
+ 03B2  0000 0000 E                      DW      0,M8087_DF              ; df 
+                                ; E0H 
+ 03B6  067A R 0000 E                    DW      OFFSET DG:LOOPNZMN,SHORTJMP 
+ 03BA  0680 R 0000 E                    DW      OFFSET DG:LOOPZMN,SHORTJMP 
+ 03BE  0690 R 0000 E                    DW      OFFSET DG:LOOPMN,SHORTJMP 
+ 03C2  060D R 0000 E                    DW      OFFSET DG:JCXZMN,SHORTJMP 
+ 03C6  05FE R 0000 E                    DW      OFFSET DG:INMN,INFIXB 
+ 03CA  05FE R 0000 E                    DW      OFFSET DG:INMN,INFIXW 
+ 03CE  06AD R 0000 E                    DW      OFFSET DG:OUTMN,OUTFIXB 
+ 03D2  06AD R 0000 E                    DW      OFFSET DG:OUTMN,OUTFIXW 
+ 03D6  045B R 0000 E                    DW      OFFSET DG:CALLMN,JMPCALL 
+ 03DA  0641 R 0000 E                    DW      OFFSET DG:JMPMN,JMPCALL 
+ 03DE  0641 R 0000 E                    DW      OFFSET DG:JMPMN,LONGJMP 
+ 03E2  0641 R 0000 E                    DW      OFFSET DG:JMPMN,SHORTJMP 
+ 03E6  05FE R 0000 E                    DW      OFFSET DG:INMN,INVARB 
+ 03EA  05FE R 0000 E                    DW      OFFSET DG:INMN,INVARW 
+ 03EE  06AD R 0000 E                    DW      OFFSET DG:OUTMN,OUTVARB 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-8
+                                                            
+
+ 03F2  06AD R 0000 E                    DW      OFFSET DG:OUTMN,OUTVARW 
+                                ; F0H 
+ 03F6  066C R 0000 E                    DW      OFFSET DG:LOCKMN,PREFIX 
+ 03FA  0436 R 0000 E                    DW      OFFSET DG:DBMN,SAVHEX 
+ 03FE  06CA R 0000 E                    DW      OFFSET DG:REPNZMN,PREFIX 
+ 0402  06C6 R 0000 E                    DW      OFFSET DG:REPZMN,PREFIX 
+ 0406  05E9 R 0000 E                    DW      OFFSET DG:HLTMN,NOOPERANDS 
+ 040A  046B R 0000 E                    DW      OFFSET DG:CMCMN,NOOPERANDS 
+ 040E  0000 0000 E                      DW      0,GRP1 
+ 0412  0000 0000 E                      DW      0,GRP1 
+ 0416  0462 R 0000 E                    DW      OFFSET DG:CLCMN,NOOPERANDS 
+ 041A  06FF R 0000 E                    DW      OFFSET DG:STCMN,NOOPERANDS 
+ 041E  0468 R 0000 E                    DW      OFFSET DG:DIMN,NOOPERANDS 
+ 0422  0705 R 0000 E                    DW      OFFSET DG:EIMN,NOOPERANDS 
+ 0426  0465 R 0000 E                    DW      OFFSET DG:UPMN,NOOPERANDS 
+ 042A  0702 R 0000 E                    DW      OFFSET DG:DOWNMN,NOOPERANDS 
+ 042E  0000 0000 E                      DW      0,GRP2 
+ 0432  0000 0000 E                      DW      0,GRP2 
+                                 
+ 0436  44 C2                    DBMN    DB      "D","B"+80H 
+ 0438  44 D7                            DB      "D","W"+80H 
+ 043A  BB                               DB      ";"+80H 
+ 043B  41 44 C4                 ADDMN   DB      "AD","D"+80H 
+ 043E  41 44 C3                 ADCMN   DB      "AD","C"+80H 
+ 0441  53 55 C2                 SUBMN   DB      "SU","B"+80H 
+ 0444  53 42 C2                 SBBMN   DB      "SB","B"+80H 
+ 0447  58 4F D2                 XORMN   DB      "XO","R"+80H 
+ 044A  4F D2                    ORMN    DB      "O","R"+80H 
+ 044C  41 4E C4                 ANDMN   DB      "AN","D"+80H 
+ 044F  41 41 C1                 AAAMN   DB      "AA","A"+80H 
+ 0452  41 41 C4                 AADMN   DB      "AA","D"+80H 
+ 0455  41 41 CD                 AAMMN   DB      "AA","M"+80H 
+ 0458  41 41 D3                 AASMN   DB      "AA","S"+80H 
+ 045B  43 41 4C CC              CALLMN  DB      "CAL","L"+80H 
+ 045F  43 42 D7                 CBWMN   DB      "CB","W"+80H 
+ 0462  43 4C C3                 CLCMN   DB      "CL","C"+80H 
+ 0465  43 4C C4                 UPMN    DB      "CL","D"+80H            ; CLD+8
+				0H 
+ 0468  43 4C C9                 DIMN    DB      "CL","I"+80H 
+ 046B  43 4D C3                 CMCMN   DB      "CM","C"+80H 
+ 046E  43 4D 50 53 C2           CMPBMN  DB      "CMPS","B"+80H          ; CMPSB
+				 
+ 0473  43 4D 50 53 D7           CMPWMN  DB      "CMPS","W"+80H          ; CMPSW
+				+80H 
+ 0478  43 4D D0                 CMPMN   DB      "CM","P"+80H 
+ 047B  43 57 C4                 CWDMN   DB      "CW","D"+80H 
+ 047E  44 41 C1                 DAAMN   DB      "DA","A"+80H 
+ 0481  44 41 D3                 DASMN   DB      "DA","S"+80H 
+ 0484  44 45 C3                 DECMN   DB      "DE","C"+80H 
+ 0487  44 49 D6                 DIVMN   DB      "DI","V"+80H 
+ 048A  45 53 C3                 ESCMN   DB      "ES","C"+80H 
+ 048D  46 58 43 C8                      DB      "FXC","H"+80H 
+ 0491  46 46 52 45 C5                   DB      "FFRE","E"+80H 
+ 0496  46 43 4F 4D 50 D0                DB      "FCOMP","P"+80H 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-9
+                                                            
+
+ 049C  46 43 4F 4D D0                   DB      "FCOM","P"+80H 
+ 04A1  46 43 4F CD                      DB      "FCO","M"+80H 
+ 04A5  46 49 43 4F 4D D0                DB      "FICOM","P"+80H 
+ 04AB  46 49 43 4F CD                   DB      "FICO","M"+80H 
+ 04B0  46 4E 4F D0                      DB      "FNO","P"+80H 
+ 04B4  46 43 48 D3                      DB      "FCH","S"+80H 
+ 04B8  46 41 42 D3                      DB      "FAB","S"+80H 
+ 04BC  46 54 53 D4                      DB      "FTS","T"+80H 
+ 04C0  46 58 41 CD                      DB      "FXA","M"+80H 
+ 04C4  46 4C 44 4C 32 D4                DB      "FLDL2","T"+80H 
+ 04CA  46 4C 44 4C 32 C5                DB      "FLDL2","E"+80H 
+ 04D0  46 4C 44 4C 47 B2                DB      "FLDLG","2"+80H 
+ 04D6  46 4C 44 4C 4E B2                DB      "FLDLN","2"+80H 
+ 04DC  46 4C 44 50 C9                   DB      "FLDP","I"+80H 
+ 04E1  46 4C 44 B1                      DB      "FLD","1"+80H 
+ 04E5  46 4C 44 DA                      DB      "FLD","Z"+80H 
+ 04E9  46 32 58 4D B1                   DB      "F2XM","1"+80H 
+ 04EE  46 59 4C 32 58 50 B1             DB      "FYL2XP","1"+80H 
+ 04F5  46 59 4C 32 D8                   DB      "FYL2","X"+80H 
+ 04FA  46 50 54 41 CE                   DB      "FPTA","N"+80H 
+ 04FF  46 50 41 54 41 CE                DB      "FPATA","N"+80H 
+ 0505  46 58 54 52 41 43 D4             DB      "FXTRAC","T"+80H 
+ 050C  46 44 45 43 53 54 D0             DB      "FDECST","P"+80H 
+ 0513  46 49 4E 43 53 54 D0             DB      "FINCST","P"+80H 
+ 051A  46 50 52 45 CD                   DB      "FPRE","M"+80H 
+ 051F  46 53 51 52 D4                   DB      "FSQR","T"+80H 
+ 0524  46 52 4E 44 49 4E D4             DB      "FRNDIN","T"+80H 
+ 052B  46 53 43 41 4C C5                DB      "FSCAL","E"+80H 
+ 0531  46 49 4E 49 D4                   DB      "FINI","T"+80H 
+ 0536  46 44 49 53 C9                   DB      "FDIS","I"+80H 
+ 053B  46 45 4E C9                      DB      "FEN","I"+80H 
+ 053F  46 43 4C 45 D8                   DB      "FCLE","X"+80H 
+ 0544  46 42 4C C4                      DB      "FBL","D"+80H 
+ 0548  46 42 53 54 D0                   DB      "FBST","P"+80H 
+ 054D  46 4C 44 43 D7                   DB      "FLDC","W"+80H 
+ 0552  46 53 54 43 D7                   DB      "FSTC","W"+80H 
+ 0557  46 53 54 53 D7                   DB      "FSTS","W"+80H 
+ 055C  46 53 54 45 4E D6                DB      "FSTEN","V"+80H 
+ 0562  46 4C 44 45 4E D6                DB      "FLDEN","V"+80H 
+ 0568  46 53 41 56 C5                   DB      "FSAV","E"+80H 
+ 056D  46 52 53 54 4F D2                DB      "FRSTO","R"+80H 
+ 0573  46 41 44 44 D0                   DB      "FADD","P"+80H 
+ 0578  46 41 44 C4                      DB      "FAD","D"+80H 
+ 057C  46 49 41 44 C4                   DB      "FIAD","D"+80H 
+ 0581  46 53 55 42 52 D0                DB      "FSUBR","P"+80H 
+ 0587  46 53 55 42 D2                   DB      "FSUB","R"+80H 
+ 058C  46 53 55 42 D0                   DB      "FSUB","P"+80H 
+ 0591  46 53 55 C2                      DB      "FSU","B"+80H 
+ 0595  46 49 53 55 42 D2                DB      "FISUB","R"+80H 
+ 059B  46 49 53 55 C2                   DB      "FISU","B"+80H 
+ 05A0  46 4D 55 4C D0                   DB      "FMUL","P"+80H 
+ 05A5  46 4D 55 CC                      DB      "FMU","L"+80H 
+ 05A9  46 49 4D 55 CC                   DB      "FIMU","L"+80H 
+ 05AE  46 44 49 56 52 D0                DB      "FDIVR","P"+80H 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-10
+                                                            
+
+ 05B4  46 44 49 56 D2                   DB      "FDIV","R"+80H 
+ 05B9  46 44 49 56 D0                   DB      "FDIV","P"+80H 
+ 05BE  46 44 49 D6                      DB      "FDI","V"+80H 
+ 05C2  46 49 44 49 56 D2                DB      "FIDIV","R"+80H 
+ 05C8  46 49 44 49 D6                   DB      "FIDI","V"+80H 
+ 05CD  46 57 41 49 D4                   DB      "FWAI","T"+80H 
+ 05D2  46 49 4C C4                      DB      "FIL","D"+80H 
+ 05D6  46 4C C4                         DB      "FL","D"+80H 
+ 05D9  46 53 54 D0                      DB      "FST","P"+80H 
+ 05DD  46 53 D4                         DB      "FS","T"+80H 
+ 05E0  46 49 53 54 D0                   DB      "FIST","P"+80H 
+ 05E5  46 49 53 D4                      DB      "FIS","T"+80H 
+ 05E9  48 4C D4                 HLTMN   DB      "HL","T"+80H 
+ 05EC  49 44 49 D6              IDIVMN  DB      "IDI","V"+80H 
+ 05F0  49 4D 55 CC              IMULMN  DB      "IMU","L"+80H 
+ 05F4  49 4E C3                 INCMN   DB      "IN","C"+80H 
+ 05F7  49 4E 54 CF              INTOMN  DB      "INT","O"+80H 
+ 05FB  49 4E D4                 INTMN   DB      "IN","T"+80H 
+ 05FE  49 CE                    INMN    DB      "I","N"+80H             ; IN 
+ 0600  49 52 45 D4              IRETMN  DB      "IRE","T"+80H 
+ 0604  4A 4E 42 C5                      DB      "JNB","E"+80H 
+ 0608  4A 41 C5                         DB      "JA","E"+80H 
+ 060B  4A C1                    JAMN    DB      "J","A"+80H 
+ 060D  4A 43 58 DA              JCXZMN  DB      "JCX","Z"+80H 
+ 0611  4A 4E C2                 JNCMN   DB      "JN","B"+80H 
+ 0614  4A 42 C5                 JBEMN   DB      "JB","E"+80H 
+ 0617  4A C2                    JCMN    DB      "J","B"+80H 
+ 0619  4A 4E C3                         DB      "JN","C"+80H 
+ 061C  4A C3                            DB      "J","C"+80H 
+ 061E  4A 4E 41 C5                      DB      "JNA","E"+80H 
+ 0622  4A 4E C1                         DB      "JN","A"+80H 
+ 0625  4A DA                    JZMN    DB      "J","Z"+80H 
+ 0627  4A C5                            DB      "J","E"+80H 
+ 0629  4A 47 C5                 JGEMN   DB      "JG","E"+80H 
+ 062C  4A C7                    JGMN    DB      "J","G"+80H 
+ 062E  4A 4E 4C C5                      DB      "JNL","E"+80H 
+ 0632  4A 4E CC                         DB      "JN","L"+80H 
+ 0635  4A 4C C5                 JLEMN   DB      "JL","E"+80H 
+ 0638  4A CC                    JLMN    DB      "J","L"+80H 
+ 063A  4A 4E 47 C5                      DB      "JNG","E"+80H 
+ 063E  4A 4E C7                         DB      "JN","G"+80H 
+ 0641  4A 4D D0                 JMPMN   DB      "JM","P"+80H 
+ 0644  4A 4E DA                 JNZMN   DB      "JN","Z"+80H 
+ 0647  4A 4E C5                         DB      "JN","E"+80H 
+ 064A  4A 50 C5                 JPEMN   DB      "JP","E"+80H 
+ 064D  4A 50 CF                 JPOMN   DB      "JP","O"+80H 
+ 0650  4A 4E D0                         DB      "JN","P"+80H 
+ 0653  4A 4E D3                 JNSMN   DB      "JN","S"+80H 
+ 0656  4A 4E CF                 JNOMN   DB      "JN","O"+80H 
+ 0659  4A CF                    JOMN    DB      "J","O"+80H 
+ 065B  4A D3                    JSMN    DB      "J","S"+80H 
+ 065D  4A D0                            DB      "J","P"+80H 
+ 065F  4C 41 48 C6              LAHFMN  DB      "LAH","F"+80H 
+ 0663  4C 44 D3                 LDSMN   DB      "LD","S"+80H 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-11
+                                                            
+
+ 0666  4C 45 C1                 LEAMN   DB      "LE","A"+80H 
+ 0669  4C 45 D3                 LESMN   DB      "LE","S"+80H 
+ 066C  4C 4F 43 CB              LOCKMN  DB      "LOC","K"+80H 
+ 0670  4C 4F 44 53 C2           LODBMN  DB      "LODS","B"+80H          ; LODSB
+				 
+ 0675  4C 4F 44 53 D7           LODWMN  DB      "LODS","W"+80H          ; LODSW
+				+80H 
+ 067A  4C 4F 4F 50 4E DA        LOOPNZMN DB     "LOOPN","Z"+80H 
+ 0680  4C 4F 4F 50 DA           LOOPZMN DB      "LOOP","Z"+80H 
+ 0685  4C 4F 4F 50 4E C5                DB      "LOOPN","E"+80H 
+ 068B  4C 4F 4F 50 C5                   DB      "LOOP","E"+80H 
+ 0690  4C 4F 4F D0              LOOPMN  DB      "LOO","P"+80H 
+ 0694  4D 4F 56 53 C2           MOVBMN  DB      "MOVS","B"+80H          ; MOVSB
+				 
+ 0699  4D 4F 56 53 D7           MOVWMN  DB      "MOVS","W"+80H          ; MOVSW
+				+80H 
+ 069E  4D 4F D6                 MOVMN   DB      "MO","V"+80H 
+ 06A1  4D 55 CC                 MULMN   DB      "MU","L"+80H 
+ 06A4  4E 45 C7                 NEGMN   DB      "NE","G"+80H 
+ 06A7  4E 4F D0                 NOPMN   DB      "NO","P"+80H 
+ 06AA  4E 4F D4                 NOTMN   DB      "NO","T"+80H 
+ 06AD  4F 55 D4                 OUTMN   DB      "OU","T"+80H            ; OUT 
+ 06B0  50 4F 50 C6              POPFMN  DB      "POP","F"+80H 
+ 06B4  50 4F D0                 POPMN   DB      "PO","P"+80H 
+ 06B7  50 55 53 48 C6           PUSHFMN DB      "PUSH","F"+80H 
+ 06BC  50 55 53 C8              PUSHMN  DB      "PUS","H"+80H 
+ 06C0  52 43 CC                 RCLMN   DB      "RC","L"+80H 
+ 06C3  52 43 D2                 RCRMN   DB      "RC","R"+80H 
+ 06C6  52 45 50 DA              REPZMN  DB      "REP","Z"+80H 
+ 06CA  52 45 50 4E DA           REPNZMN DB      "REPN","Z"+80H 
+ 06CF  52 45 50 C5                      DB      "REP","E"+80H 
+ 06D3  52 45 50 4E C5                   DB      "REPN","E"+80H 
+ 06D8  52 45 D0                         DB      "RE","P"+80H 
+ 06DB  52 45 54 C6              RETFMN  DB      "RET","F"+80H 
+ 06DF  52 45 D4                 RETMN   DB      "RE","T"+80H 
+ 06E2  52 4F CC                 ROLMN   DB      "RO","L"+80H 
+ 06E5  52 4F D2                 RORMN   DB      "RO","R"+80H 
+ 06E8  53 41 48 C6              SAHFMN  DB      "SAH","F"+80H 
+ 06EC  53 41 D2                 SARMN   DB      "SA","R"+80H 
+ 06EF  53 43 41 53 C2           SCABMN  DB      "SCAS","B"+80H          ; SCASB
+				 
+ 06F4  53 43 41 53 D7           SCAWMN  DB      "SCAS","W"+80H          ; SCASW
+				+80H 
+ 06F9  53 48 CC                 SHLMN   DB      "SH","L"+80H 
+ 06FC  53 48 D2                 SHRMN   DB      "SH","R"+80H 
+ 06FF  53 54 C3                 STCMN   DB      "ST","C"+80H 
+ 0702  53 54 C4                 DOWNMN  DB      "ST","D"+80H            ; STD 
+ 0705  53 54 C9                 EIMN    DB      "ST","I"+80H            ; STI 
+ 0708  53 54 4F 53 C2           STOBMN  DB      "STOS","B"+80H          ; STOSB
+				 
+ 070D  53 54 4F 53 D7           STOWMN  DB      "STOS","W"+80H          ; STOSW
+				+80H 
+ 0712  54 45 53 D4              TESTMN  DB      "TES","T"+80H 
+ 0716  57 41 49 D4              WAITMN  DB      "WAI","T"+80H 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-12
+                                                            
+
+ 071A  58 43 48 C7              XCHGMN  DB      "XCH","G"+80H 
+ 071E  58 4C 41 D4              XLATMN  DB      "XLA","T"+80H 
+ 0722  45 53 BA                 ESSEGMN DB      "ES",":"+80H 
+ 0725  43 53 BA                 CSSEGMN DB      "CS",":"+80H 
+ 0728  53 53 BA                 SSSEGMN DB      "SS",":"+80H 
+ 072B  44 53 BA                 DSSEGMN DB      "DS",":"+80H 
+ 072E  3F 3F BF                 BADMN   DB      "??","?"+80H 
+                                 
+ 0731  41 44 44 24 4D 55 4C     M8087_TAB DB "ADD$MUL$COM$COMP$SUB$SUBR$DIV$DIV
+				R$" 
+       24 43 4F 4D 24 43 4F     
+       4D 50 24 53 55 42 24     
+       53 55 42 52 24 44 49     
+       56 24 44 49 56 52 24     
+                                
+ 0754  46 24 46 49 24 46 24     FI_TAB    DB "F$FI$F$FI$" 
+       46 49 24                 
+ 075E  44 57 4F 52 44 20 50     SIZE_TAB  DB "DWORD PTR $DWORD PTR $QWORD PTR $
+				WORD PTR $" 
+       54 52 20 24 44 57 4F     
+       52 44 20 50 54 52 20     
+       24 51 57 4F 52 44 20     
+       50 54 52 20 24 57 4F     
+       52 44 20 50 54 52 20     
+       24                       
+ 0789  42 59 54 45 20 50 54               DB "BYTE PTR $TBYTE PTR $" 
+       52 20 24 54 42 59 54     
+       45 20 50 54 52 20 24     
+                                
+                                 
+ 079E  4C 44 24 40 24 53 54     MD9_TAB   DB "LD$@$ST$STP$LDENV$LDCW$STENV$STCW
+				$" 
+       24 53 54 50 24 4C 44     
+       45 4E 56 24 4C 44 43     
+       57 24 53 54 45 4E 56     
+       24 53 54 43 57 24        
+ 07C0  43 48 53 24 41 42 53     MD9_TAB2  DB "CHS$ABS$@$@$TST$XAM$@$@$LD1$LDL2T
+				$LDL2E$" 
+       24 40 24 40 24 54 53     
+       54 24 58 41 4D 24 40     
+       24 40 24 4C 44 31 24     
+       4C 44 4C 32 54 24 4C     
+       44 4C 32 45 24           
+ 07E8  4C 44 50 49 24 4C 44               DB "LDPI$LDLG2$LDLN2$LDZ$@$2XM1$YL2X$
+				PTAN$PATAN$XTRACT$" 
+       4C 47 32 24 4C 44 4C     
+       4E 32 24 4C 44 5A 24     
+       40 24 32 58 4D 31 24     
+       59 4C 32 58 24 50 54     
+       41 4E 24 50 41 54 41     
+       4E 24 58 54 52 41 43     
+       54 24                    
+ 081B  40 24 44 45 43 53 54               DB "@$DECSTP$INCSTP$PREM$YL2XP1$SQRT$
+				@$RNDINT$SCALE$@$@$" 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-13
+                                                            
+
+       50 24 49 4E 43 53 54     
+       50 24 50 52 45 4D 24     
+       59 4C 32 58 50 31 24     
+       53 51 52 54 24 40 24     
+       52 4E 44 49 4E 54 24     
+       53 43 41 4C 45 24 40     
+       24 40 24                 
+                                 
+ 084F  49 4C 44 24 40 24 49     MDB_TAB   DB  "ILD$@$IST$ISTP$@$LD$@$STP$" 
+       53 54 24 49 53 54 50     
+       24 40 24 4C 44 24 40     
+       24 53 54 50 24           
+ 0869  45 4E 49 24 44 49 53     MDB_TAB2  DB  "ENI$DISI$CLEX$INIT$" 
+       49 24 43 4C 45 58 24     
+       49 4E 49 54 24           
+                                 
+ 087C  4C 44 24 40 24 53 54     MDD_TAB   DB "LD$@$ST$STP$RSTOR$@$SAVE$STSW$" 
+       24 53 54 50 24 52 53     
+       54 4F 52 24 40 24 53     
+       41 56 45 24 53 54 53     
+       57 24                    
+ 089A  46 52 45 45 24 58 43     MDD_TAB2  DB "FREE$XCH$ST$STP$" 
+       48 24 53 54 24 53 54     
+       50 24                    
+                                 
+ 08AA  49 4C 44 24 40 24 49     MDF_TAB   DB "ILD$@$IST$ISTP$BLD$ILD$BSTP$ISTP$
+				" 
+       53 54 24 49 53 54 50     
+       24 42 4C 44 24 49 4C     
+       44 24 42 53 54 50 24     
+       49 53 54 50 24           
+                                 
+                                 
+ 08CB  FF                       OPTAB   DB      11111111B               ; DB 
+ 08CC  0000 E                           DW      DB_OPER 
+ 08CE  FF                               DB      11111111B               ; DW 
+ 08CF  0000 E                           DW      DW_OPER 
+ 08D1  FF                               DB      11111111B               ; COMME
+				NT 
+ 08D2  0000 E                           DW      ASSEMLOOP 
+ 08D4  00                               DB      0 * 8                   ; ADD 
+ 08D5  0000 E                           DW      GROUP2 
+ 08D7  10                               DB      2 * 8                   ; ADC 
+ 08D8  0000 E                           DW      GROUP2 
+ 08DA  28                               DB      5 * 8                   ; SUB 
+ 08DB  0000 E                           DW      GROUP2 
+ 08DD  18                               DB      3 * 8                   ; SBB 
+ 08DE  0000 E                           DW      GROUP2 
+ 08E0  30                               DB      6 * 8                   ; XOR 
+ 08E1  0000 E                           DW      GROUP2 
+ 08E3  08                               DB      1 * 8                   ; OR 
+ 08E4  0000 E                           DW      GROUP2 
+ 08E6  20                               DB      4 * 8                   ; AND 
+ 08E7  0000 E                           DW      GROUP2 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-14
+                                                            
+
+ 08E9  37                               DB      00110111B               ; AAA 
+ 08EA  0000 E                           DW      NO_OPER 
+ 08EC  D5                               DB      11010101B               ; AAD 
+ 08ED  0000 E                           DW      AA_OPER 
+ 08EF  D4                               DB      11010100B               ; AAM 
+ 08F0  0000 E                           DW      AA_OPER 
+ 08F2  3F                               DB      00111111B               ; AAS 
+ 08F3  0000 E                           DW      NO_OPER 
+ 08F5  10                               DB      2 * 8                   ; CALL 
+ 08F6  0000 E                           DW      CALL_OPER 
+ 08F8  98                               DB      10011000B               ; CBW 
+ 08F9  0000 E                           DW      NO_OPER 
+ 08FB  F8                               DB      11111000B               ; CLC 
+ 08FC  0000 E                           DW      NO_OPER 
+ 08FE  FC                               DB      11111100B               ; CLD 
+ 08FF  0000 E                           DW      NO_OPER 
+ 0901  FA                               DB      11111010B               ; DIM 
+ 0902  0000 E                           DW      NO_OPER 
+ 0904  F5                               DB      11110101B               ; CMC 
+ 0905  0000 E                           DW      NO_OPER 
+ 0907  A6                               DB      10100110B               ; CMPB 
+ 0908  0000 E                           DW      NO_OPER 
+ 090A  A7                               DB      10100111B               ; CMPW 
+ 090B  0000 E                           DW      NO_OPER 
+ 090D  38                               DB      7 * 8                   ; CMP 
+ 090E  0000 E                           DW      GROUP2 
+ 0910  99                               DB      10011001B               ; CWD 
+ 0911  0000 E                           DW      NO_OPER 
+ 0913  27                               DB      00100111B               ; DAA 
+ 0914  0000 E                           DW      NO_OPER 
+ 0916  2F                               DB      00101111B               ; DAS 
+ 0917  0000 E                           DW      NO_OPER 
+ 0919  08                               DB      1 * 8                   ; DEC 
+ 091A  0000 E                           DW      DCINC_OPER 
+ 091C  30                               DB      6 * 8                   ; DIV 
+ 091D  0000 E                           DW      GROUP1 
+ 091F  D8                               DB      11011000B               ; ESC 
+ 0920  0000 E                           DW      ESC_OPER 
+ 0922  09                               DB      00001001B               ; FXCH 
+ 0923  0000 E                           DW      FGROUPP 
+ 0925  28                               DB      00101000B               ; FFREE
+				 
+ 0926  0000 E                           DW      FGROUPP 
+ 0928  D9                               DB      11011001B               ; FCOMP
+				P 
+ 0929  0000 E                           DW      FDE_OPER 
+ 092B  03                               DB      00000011B               ; FCOMP
+				 
+ 092C  0000 E                           DW      FGROUPX                 ; Excep
+				tion to normal P instructions 
+ 092E  02                               DB      00000010B               ; FCOM 
+ 092F  0000 E                           DW      FGROUPX 
+ 0931  13                               DB      00010011B               ; FICOM
+				P 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-15
+                                                            
+
+ 0932  0000 E                           DW      FGROUPZ 
+ 0934  12                               DB      00010010B               ; FICOM
+				 
+ 0935  0000 E                           DW      FGROUPZ 
+ 0937  D0                               DB      11010000B               ; FNOP 
+ 0938  0000 E                           DW      FD9_OPER 
+ 093A  E0                               DB      11100000B               ; FCHS 
+ 093B  0000 E                           DW      FD9_OPER 
+ 093D  E1                               DB      11100001B               ; FABS 
+ 093E  0000 E                           DW      FD9_OPER 
+ 0940  E4                               DB      11100100B               ; FTST 
+ 0941  0000 E                           DW      FD9_OPER 
+ 0943  E5                               DB      11100101B               ; FXAM 
+ 0944  0000 E                           DW      FD9_OPER 
+ 0946  E9                               DB      11101001B               ; FLDL2
+				T 
+ 0947  0000 E                           DW      FD9_OPER 
+ 0949  EA                               DB      11101010B               ; FLDL2
+				E 
+ 094A  0000 E                           DW      FD9_OPER 
+ 094C  EC                               DB      11101100B               ; FLDLG
+				2 
+ 094D  0000 E                           DW      FD9_OPER 
+ 094F  ED                               DB      11101101B               ; FLDLN
+				2 
+ 0950  0000 E                           DW      FD9_OPER 
+ 0952  EB                               DB      11101011B               ; FLDPI
+				 
+ 0953  0000 E                           DW      FD9_OPER 
+ 0955  E8                               DB      11101000B               ; FLD1 
+ 0956  0000 E                           DW      FD9_OPER 
+ 0958  EE                               DB      11101110B               ; FLDZ 
+ 0959  0000 E                           DW      FD9_OPER 
+ 095B  F0                               DB      11110000B               ; F2XM1
+				 
+ 095C  0000 E                           DW      FD9_OPER 
+ 095E  F9                               DB      11111001B               ; FYL2X
+				P1 
+ 095F  0000 E                           DW      FD9_OPER 
+ 0961  F1                               DB      11110001B               ; FYL2X
+				 
+ 0962  0000 E                           DW      FD9_OPER 
+ 0964  F2                               DB      11110010B               ; FPTAN
+				 
+ 0965  0000 E                           DW      FD9_OPER 
+ 0967  F3                               DB      11110011B               ; FPATA
+				N 
+ 0968  0000 E                           DW      FD9_OPER 
+ 096A  F4                               DB      11110100B               ; FXTRA
+				CT 
+ 096B  0000 E                           DW      FD9_OPER 
+ 096D  F6                               DB      11110110B               ; FDECS
+				TP 
+ 096E  0000 E                           DW      FD9_OPER 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-16
+                                                            
+
+ 0970  F7                               DB      11110111B               ; FINCS
+				TP 
+ 0971  0000 E                           DW      FD9_OPER 
+ 0973  F8                               DB      11111000B               ; FPREM
+				 
+ 0974  0000 E                           DW      FD9_OPER 
+ 0976  FA                               DB      11111010B               ; FSQRT
+				 
+ 0977  0000 E                           DW      FD9_OPER 
+ 0979  FC                               DB      11111100B               ; FRNDI
+				NT 
+ 097A  0000 E                           DW      FD9_OPER 
+ 097C  FD                               DB      11111101B               ; FSCAL
+				E 
+ 097D  0000 E                           DW      FD9_OPER 
+ 097F  E3                               DB      11100011B               ; FINIT
+				 
+ 0980  0000 E                           DW      FDB_OPER 
+ 0982  E1                               DB      11100001B               ; FDISI
+				 
+ 0983  0000 E                           DW      FDB_OPER 
+ 0985  E0                               DB      11100000B               ; FENI 
+ 0986  0000 E                           DW      FDB_OPER 
+ 0988  E2                               DB      11100010B               ; FCLEX
+				 
+ 0989  0000 E                           DW      FDB_OPER 
+ 098B  3C                               DB      00111100B               ; FBLD 
+ 098C  0000 E                           DW      FGROUPB 
+ 098E  3E                               DB      00111110B               ; FBSTP
+				 
+ 098F  0000 E                           DW      FGROUPB 
+ 0991  0D                               DB      00001101B               ; FLDCW
+				 
+ 0992  0000 E                           DW      FGROUP3W 
+ 0994  0F                               DB      00001111B               ; FSTCW
+				 
+ 0995  0000 E                           DW      FGROUP3W 
+ 0997  2F                               DB      00101111B               ; FSTSW
+				 
+ 0998  0000 E                           DW      FGROUP3W 
+ 099A  0E                               DB      00001110B               ; FSTEN
+				V 
+ 099B  0000 E                           DW      FGROUP3 
+ 099D  0C                               DB      00001100B               ; FLDEN
+				V 
+ 099E  0000 E                           DW      FGROUP3 
+ 09A0  2E                               DB      00101110B               ; FSAVE
+				 
+ 09A1  0000 E                           DW      FGROUP3 
+ 09A3  2C                               DB      00101100B               ; FRSTO
+				R 
+ 09A4  0000 E                           DW      FGROUP3 
+ 09A6  30                               DB      00110000B               ; FADDP
+				 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-17
+                                                            
+
+ 09A7  0000 E                           DW      FGROUPP 
+ 09A9  00                               DB      00000000B               ; FADD 
+ 09AA  0000 E                           DW      FGROUP 
+ 09AC  10                               DB      00010000B               ; FIADD
+				 
+ 09AD  0000 E                           DW      FGROUPZ 
+ 09AF  34                               DB      00110100B               ; FSUBR
+				P 
+ 09B0  0000 E                           DW      FGROUPP 
+ 09B2  05                               DB      00000101B               ; FSUBR
+				 
+ 09B3  0000 E                           DW      FGROUPDS 
+ 09B5  35                               DB      00110101B               ; FSUBP
+				 
+ 09B6  0000 E                           DW      FGROUPP 
+ 09B8  04                               DB      00000100B               ; FSUB 
+ 09B9  0000 E                           DW      FGROUPDS 
+ 09BB  15                               DB      00010101B               ; FISUB
+				R 
+ 09BC  0000 E                           DW      FGROUPZ 
+ 09BE  14                               DB      00010100B               ; FISUB
+				 
+ 09BF  0000 E                           DW      FGROUPZ 
+ 09C1  31                               DB      00110001B               ; FMULP
+				 
+ 09C2  0000 E                           DW      FGROUPP 
+ 09C4  01                               DB      00000001B               ; FMUL 
+ 09C5  0000 E                           DW      FGROUP 
+ 09C7  11                               DB      00010001B               ; FIMUL
+				 
+ 09C8  0000 E                           DW      FGROUPZ 
+ 09CA  36                               DB      00110110B               ; FDIVR
+				P 
+ 09CB  0000 E                           DW      FGROUPP 
+ 09CD  07                               DB      00000111B               ; FDIVR
+				 
+ 09CE  0000 E                           DW      FGROUPDS 
+ 09D0  37                               DB      00110111B               ; FDIVP
+				 
+ 09D1  0000 E                           DW      FGROUPP 
+ 09D3  06                               DB      00000110B               ; FDIV 
+ 09D4  0000 E                           DW      FGROUPDS 
+ 09D6  17                               DB      00010111B               ; FIDIV
+				R 
+ 09D7  0000 E                           DW      FGROUPZ 
+ 09D9  16                               DB      00010110B               ; FIDIV
+				 
+ 09DA  0000 E                           DW      FGROUPZ 
+ 09DC  9B                               DB      10011011B               ; FWAIT
+				 
+ 09DD  0000 E                           DW      NO_OPER 
+ 09DF  18                               DB      00011000B               ; FILD 
+ 09E0  0000 E                           DW      FGROUPZ 
+ 09E2  08                               DB      00001000B               ; FLD 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-18
+                                                            
+
+ 09E3  0000 E                           DW      FGROUPX 
+ 09E5  0B                               DB      00001011B               ; FSTP 
+ 09E6  0000 E                           DW      FGROUPX 
+ 09E8  2A                               DB      00101010B               ; FST 
+ 09E9  0000 E                           DW      FGROUPX 
+ 09EB  1B                               DB      00011011B               ; FISTP
+				 
+ 09EC  0000 E                           DW      FGROUPZ 
+ 09EE  1A                               DB      00011010B               ; FIST 
+ 09EF  0000 E                           DW      FGROUPZ 
+ 09F1  F4                               DB      11110100B               ; HLT 
+ 09F2  0000 E                           DW      NO_OPER 
+ 09F4  38                               DB      7 * 8                   ; IDIV 
+ 09F5  0000 E                           DW      GROUP1 
+ 09F7  28                               DB      5 * 8                   ; IMUL 
+ 09F8  0000 E                           DW      GROUP1 
+ 09FA  00                               DB      0 * 8                   ; INC 
+ 09FB  0000 E                           DW      DCINC_OPER 
+ 09FD  CE                               DB      11001110B               ; INTO 
+ 09FE  0000 E                           DW      NO_OPER 
+ 0A00  CC                               DB      11001100B               ; INTM 
+ 0A01  0000 E                           DW      INT_OPER 
+ 0A03  EC                               DB      11101100B               ; IN 
+ 0A04  0000 E                           DW      IN_OPER 
+ 0A06  CF                               DB      11001111B               ; IRET 
+ 0A07  0000 E                           DW      NO_OPER 
+ 0A09  77                               DB      01110111B               ; JNBE 
+ 0A0A  0000 E                           DW      DISP8_OPER 
+ 0A0C  73                               DB      01110011B               ; JAE 
+ 0A0D  0000 E                           DW      DISP8_OPER 
+ 0A0F  77                               DB      01110111B               ; JA 
+ 0A10  0000 E                           DW      DISP8_OPER 
+ 0A12  E3                               DB      11100011B               ; JCXZ 
+ 0A13  0000 E                           DW      DISP8_OPER 
+ 0A15  73                               DB      01110011B               ; JNB 
+ 0A16  0000 E                           DW      DISP8_OPER 
+ 0A18  76                               DB      01110110B               ; JBE 
+ 0A19  0000 E                           DW      DISP8_OPER 
+ 0A1B  72                               DB      01110010B               ; JB 
+ 0A1C  0000 E                           DW      DISP8_OPER 
+ 0A1E  73                               DB      01110011B               ; JNC 
+ 0A1F  0000 E                           DW      DISP8_OPER 
+ 0A21  72                               DB      01110010B               ; JC 
+ 0A22  0000 E                           DW      DISP8_OPER 
+ 0A24  72                               DB      01110010B               ; JNAE 
+ 0A25  0000 E                           DW      DISP8_OPER 
+ 0A27  76                               DB      01110110B               ; JNA 
+ 0A28  0000 E                           DW      DISP8_OPER 
+ 0A2A  74                               DB      01110100B               ; JZ 
+ 0A2B  0000 E                           DW      DISP8_OPER 
+ 0A2D  74                               DB      01110100B               ; JE 
+ 0A2E  0000 E                           DW      DISP8_OPER 
+ 0A30  7D                               DB      01111101B               ; JGE 
+ 0A31  0000 E                           DW      DISP8_OPER 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-19
+                                                            
+
+ 0A33  7F                               DB      01111111B               ; JG 
+ 0A34  0000 E                           DW      DISP8_OPER 
+ 0A36  7F                               DB      01111111B               ; JNLE 
+ 0A37  0000 E                           DW      DISP8_OPER 
+ 0A39  7D                               DB      01111101B               ; JNL 
+ 0A3A  0000 E                           DW      DISP8_OPER 
+ 0A3C  7E                               DB      01111110B               ; JLE 
+ 0A3D  0000 E                           DW      DISP8_OPER 
+ 0A3F  7C                               DB      01111100B               ; JL 
+ 0A40  0000 E                           DW      DISP8_OPER 
+ 0A42  7C                               DB      01111100B               ; JNGE 
+ 0A43  0000 E                           DW      DISP8_OPER 
+ 0A45  7E                               DB      01111110B               ; JNG 
+ 0A46  0000 E                           DW      DISP8_OPER 
+ 0A48  20                               DB      4 * 8                   ; JMP 
+ 0A49  0000 E                           DW      JMP_OPER 
+ 0A4B  75                               DB      01110101B               ; JNZ 
+ 0A4C  0000 E                           DW      DISP8_OPER 
+ 0A4E  75                               DB      01110101B               ; JNE 
+ 0A4F  0000 E                           DW      DISP8_OPER 
+ 0A51  7A                               DB      01111010B               ; JPE 
+ 0A52  0000 E                           DW      DISP8_OPER 
+ 0A54  7B                               DB      01111011B               ; JPO 
+ 0A55  0000 E                           DW      DISP8_OPER 
+ 0A57  7B                               DB      01111011B               ; JNP 
+ 0A58  0000 E                           DW      DISP8_OPER 
+ 0A5A  79                               DB      01111001B               ; JNS 
+ 0A5B  0000 E                           DW      DISP8_OPER 
+ 0A5D  71                               DB      01110001B               ; JNO 
+ 0A5E  0000 E                           DW      DISP8_OPER 
+ 0A60  70                               DB      01110000B               ; JO 
+ 0A61  0000 E                           DW      DISP8_OPER 
+ 0A63  78                               DB      01111000B               ; JS 
+ 0A64  0000 E                           DW      DISP8_OPER 
+ 0A66  7A                               DB      01111010B               ; JP 
+ 0A67  0000 E                           DW      DISP8_OPER 
+ 0A69  9F                               DB      10011111B               ; LAHF 
+ 0A6A  0000 E                           DW      NO_OPER 
+ 0A6C  C5                               DB      11000101B               ; LDS 
+ 0A6D  0000 E                           DW      L_OPER 
+ 0A6F  8D                               DB      10001101B               ; LEA 
+ 0A70  0000 E                           DW      L_OPER 
+ 0A72  C4                               DB      11000100B               ; LES 
+ 0A73  0000 E                           DW      L_OPER 
+ 0A75  F0                               DB      11110000B               ; LOCK 
+ 0A76  0000 E                           DW      NO_OPER 
+ 0A78  AC                               DB      10101100B               ; LODB 
+ 0A79  0000 E                           DW      NO_OPER 
+ 0A7B  AD                               DB      10101101B               ; LODW 
+ 0A7C  0000 E                           DW      NO_OPER 
+ 0A7E  E0                               DB      11100000B               ; LOOPN
+				Z 
+ 0A7F  0000 E                           DW      DISP8_OPER 
+ 0A81  E1                               DB      11100001B               ; LOOPZ
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-20
+                                                            
+
+				 
+ 0A82  0000 E                           DW      DISP8_OPER 
+ 0A84  E0                               DB      11100000B               ; LOOPN
+				E 
+ 0A85  0000 E                           DW      DISP8_OPER 
+ 0A87  E1                               DB      11100001B               ; LOOPE
+				 
+ 0A88  0000 E                           DW      DISP8_OPER 
+ 0A8A  E2                               DB      11100010B               ; LOOP 
+ 0A8B  0000 E                           DW      DISP8_OPER 
+ 0A8D  A4                               DB      10100100B               ; MOVB 
+ 0A8E  0000 E                           DW      NO_OPER 
+ 0A90  A5                               DB      10100101B               ; MOVW 
+ 0A91  0000 E                           DW      NO_OPER 
+ 0A93  C6                               DB      11000110B               ; MOV 
+ 0A94  0000 E                           DW      MOV_OPER 
+ 0A96  20                               DB      4 * 8                   ; MUL 
+ 0A97  0000 E                           DW      GROUP1 
+ 0A99  18                               DB      3 * 8                   ; NEG 
+ 0A9A  0000 E                           DW      GROUP1 
+ 0A9C  90                               DB      10010000B               ; NOP 
+ 0A9D  0000 E                           DW      NO_OPER 
+ 0A9F  10                               DB      2 * 8                   ; NOT 
+ 0AA0  0000 E                           DW      GROUP1 
+ 0AA2  EE                               DB      11101110B               ; OUT 
+ 0AA3  0000 E                           DW      OUT_OPER 
+ 0AA5  9D                               DB      10011101B               ; POPF 
+ 0AA6  0000 E                           DW      NO_OPER 
+ 0AA8  00                               DB      0 * 8                   ; POP 
+ 0AA9  0000 E                           DW      POP_OPER 
+ 0AAB  9C                               DB      10011100B               ; PUSHF
+				 
+ 0AAC  0000 E                           DW      NO_OPER 
+ 0AAE  30                               DB      6 * 8                   ; PUSH 
+ 0AAF  0000 E                           DW      PUSH_OPER 
+ 0AB1  10                               DB      2 * 8                   ; RCL 
+ 0AB2  0000 E                           DW      ROTOP 
+ 0AB4  18                               DB      3 * 8                   ; RCR 
+ 0AB5  0000 E                           DW      ROTOP 
+ 0AB7  F3                               DB      11110011B               ; REPZ 
+ 0AB8  0000 E                           DW      NO_OPER 
+ 0ABA  F2                               DB      11110010B               ; REPNZ
+				 
+ 0ABB  0000 E                           DW      NO_OPER 
+ 0ABD  F3                               DB      11110011B               ; REPE 
+ 0ABE  0000 E                           DW      NO_OPER 
+ 0AC0  F2                               DB      11110010B               ; REPNE
+				 
+ 0AC1  0000 E                           DW      NO_OPER 
+ 0AC3  F3                               DB      11110011B               ; REP 
+ 0AC4  0000 E                           DW      NO_OPER 
+ 0AC6  CB                               DB      11001011B               ; RETF 
+ 0AC7  0000 E                           DW      GET_DATA16 
+ 0AC9  C3                               DB      11000011B               ; RET 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-21
+                                                            
+
+ 0ACA  0000 E                           DW      GET_DATA16 
+ 0ACC  00                               DB      0 * 8                   ; ROL 
+ 0ACD  0000 E                           DW      ROTOP 
+ 0ACF  08                               DB      1 * 8                   ; ROR 
+ 0AD0  0000 E                           DW      ROTOP 
+ 0AD2  9E                               DB      10011110B               ; SAHF 
+ 0AD3  0000 E                           DW      NO_OPER 
+ 0AD5  38                               DB      7 * 8                   ; SAR 
+ 0AD6  0000 E                           DW      ROTOP 
+ 0AD8  AE                               DB      10101110B               ; SCAB 
+ 0AD9  0000 E                           DW      NO_OPER 
+ 0ADB  AF                               DB      10101111B               ; SCAW 
+ 0ADC  0000 E                           DW      NO_OPER 
+ 0ADE  20                               DB      4 * 8                   ; SHL 
+ 0ADF  0000 E                           DW      ROTOP 
+ 0AE1  28                               DB      5 * 8                   ; SHR 
+ 0AE2  0000 E                           DW      ROTOP 
+ 0AE4  F9                               DB      11111001B               ; STC 
+ 0AE5  0000 E                           DW      NO_OPER 
+ 0AE7  FD                               DB      11111101B               ; STD 
+ 0AE8  0000 E                           DW      NO_OPER 
+ 0AEA  FB                               DB      11111011B               ; EI 
+ 0AEB  0000 E                           DW      NO_OPER 
+ 0AED  AA                               DB      10101010B               ; STOB 
+ 0AEE  0000 E                           DW      NO_OPER 
+ 0AF0  AB                               DB      10101011B               ; STOW 
+ 0AF1  0000 E                           DW      NO_OPER 
+ 0AF3  F6                               DB      11110110B               ; TEST 
+ 0AF4  0000 E                           DW      TST_OPER 
+ 0AF6  9B                               DB      10011011B               ; WAIT 
+ 0AF7  0000 E                           DW      NO_OPER 
+ 0AF9  86                               DB      10000110B               ; XCHG 
+ 0AFA  0000 E                           DW      EX_OPER 
+ 0AFC  D7                               DB      11010111B               ; XLAT 
+ 0AFD  0000 E                           DW      NO_OPER 
+ 0AFF  26                               DB      00100110B               ; ESSEG
+				 
+ 0B00  0000 E                           DW      NO_OPER 
+ 0B02  2E                               DB      00101110B               ; CSSEG
+				 
+ 0B03  0000 E                           DW      NO_OPER 
+ 0B05  36                               DB      00110110B               ; SSSEG
+				 
+ 0B06  0000 E                           DW      NO_OPER 
+ 0B08  3E                               DB      00111110B               ; DSSEG
+				 
+ 0B09  0000 E                           DW      NO_OPER 
+                                 
+ 0B0B                           zzopcode label  byte 
+ = 00C0                         MAXOP   = (zzopcode-optab)/3 
+                                 
+ 0B0B  06E2 R 06E5 R 06C0 R     SHFTAB  DW             OFFSET DG:ROLMN,OFFSET D
+				G:RORMN,OFFSET DG:RCLMN 
+ 0B11  06C3 R 06F9 R 06FC R             DW             OFFSET DG:RCRMN,OFFSET D
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-22
+                                                            
+
+				G:SHLMN,OFFSET DG:SHRMN 
+ 0B17  072E R 06EC R                    DW             OFFSET DG:BADMN,OFFSET D
+				G:SARMN 
+                                 
+ 0B1B  043B R 044A R 043E R     IMMTAB  DW      OFFSET DG:ADDMN,OFFSET DG:ORMN,
+				OFFSET DG:ADCMN 
+ 0B21  0444 R 044C R 0441 R             DW      OFFSET DG:SBBMN,OFFSET DG:ANDMN
+				,OFFSET DG:SUBMN 
+ 0B27  0447 R 0478 R                    DW      OFFSET DG:XORMN,OFFSET DG:CMPMN
+				 
+                                 
+ 0B2B  0712 R 072E R 06AA R     GRP1TAB DW      OFFSET DG:TESTMN,OFFSET DG:BADM
+				N,OFFSET DG:NOTMN 
+ 0B31  06A4 R 06A1 R 05F0 R             DW      OFFSET DG:NEGMN,OFFSET DG:MULMN
+				,OFFSET DG:IMULMN 
+ 0B37  0487 R 05EC R                    DW      OFFSET DG:DIVMN,OFFSET DG:IDIVM
+				N 
+                                 
+ 0B3B  05F4 R 0484 R 045B R     GRP2TAB DW      OFFSET DG:INCMN,OFFSET DG:DECMN
+				,OFFSET DG:CALLMN 
+ 0B41  045B R 0641 R 0641 R             DW      OFFSET DG:CALLMN,OFFSET DG:JMPM
+				N,OFFSET DG:JMPMN 
+ 0B47  06BC R 072E R                    DW      OFFSET DG:PUSHMN,OFFSET DG:BADM
+				N 
+                                 
+ 0B4B  0C41 R 0C45 R 0C43 R     SEGTAB  DW      OFFSET DG:ESSAVE,OFFSET DG:CSSA
+				VE,OFFSET DG:SSSAVE 
+ 0B51  0C3F R                           DW      OFFSET DG:DSSAVE 
+                                 
+ 0B53  41 58 42 58 43 58 44     REGTAB  DB      "AXBXCXDXSPBPSIDIDSESSSCSIPPC" 
+       58 53 50 42 50 53 49     
+       44 49 44 53 45 53 53     
+       53 43 53 49 50 50 43     
+                                
+                                 
+                                ; Flags are ordered to correspond with the bits
+				 of the flag 
+                                ; register, most significant bit first, zero if
+				 bit is not 
+                                ; a flag. First 16 entries are for bit set, sec
+				ond 16 for 
+                                ; bit reset. 
+                                 
+ 0B6F  0000                     FLAGTAB DW      0 
+ 0B71  0000                             DW      0 
+ 0B73  0000                             DW      0 
+ 0B75  0000                             DW      0 
+ 0B77  4F 56                            DB      "OV" 
+ 0B79  44 4E                            DB      "DN" 
+ 0B7B  45 49                            DB      "EI"                    ; "STI"
+				 
+ 0B7D  0000                             DW      0 
+ 0B7F  4E 47                            DB      "NG" 
+ 0B81  5A 52                            DB      "ZR" 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-23
+                                                            
+
+ 0B83  0000                             DW      0 
+ 0B85  41 43                            DB      "AC" 
+ 0B87  0000                             DW      0 
+ 0B89  50 45                            DB      "PE" 
+ 0B8B  0000                             DW      0 
+ 0B8D  43 59                            DB      "CY" 
+ 0B8F  0000                             DW      0 
+ 0B91  0000                             DW      0 
+ 0B93  0000                             DW      0 
+ 0B95  0000                             DW      0 
+ 0B97  4E 56                            DB      "NV" 
+ 0B99  55 50                            DB      "UP"                    ; "CLD"
+				 
+ 0B9B  44 49                            DB      "DI" 
+ 0B9D  0000                             DW      0 
+ 0B9F  50 4C                            DB      "PL" 
+ 0BA1  4E 5A                            DB      "NZ" 
+ 0BA3  0000                             DW      0 
+ 0BA5  4E 41                            DB      "NA" 
+ 0BA7  0000                             DW      0 
+ 0BA9  50 4F                            DB      "PO" 
+ 0BAB  0000                             DW      0 
+ 0BAD  4E 43                            DB      "NC" 
+                                 
+ 0BAF  0080[                            DB      80H DUP(?) 
+            ??                  
+                         ]      
+                                
+ 0C2F                           STACK   LABEL   BYTE 
+                                 
+                                 
+                                ; Register save area 
+                                 
+ 0C2F  0000                     AXSAVE  DW      0 
+ 0C31  0000                     BXSAVE  DW      0 
+ 0C33  0000                     CXSAVE  DW      0 
+ 0C35  0000                     DXSAVE  DW      0 
+ 0C37  005A                     SPSAVE  DW      5AH 
+ 0C39  0000                     BPSAVE  DW      0 
+ 0C3B  0000                     SISAVE  DW      0 
+ 0C3D  0000                     DISAVE  DW      0 
+ 0C3F  0000                     DSSAVE  DW      0 
+ 0C41  0000                     ESSAVE  DW      0 
+ 0C43                           RSTACK  LABEL   WORD                    ; Stack
+				 set here so registers can be saved by pushing 
+ 0C43  0000                     SSSAVE  DW      0 
+ 0C45  0000                     CSSAVE  DW      0 
+ 0C47  0100                     IPSAVE  DW      100H 
+ 0C49  0000                     FSAVE   DW      0 
+                                 
+ = 00DC                         REGDIF  EQU      AXSAVE-REGTAB 
+                                 
+                                ; RAM area. 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Page     1-24
+                                                            
+
+ 0C4B  3F                       RDFLG   DB      READ 
+ 0C4C  0D                       TOTREG  DB      13 
+ 0C4D  0F                       DSIZ    DB      0FH 
+ 0C4E  08                       NOREGL  DB      8 
+ 0C4F  0080                     DISPB   DW      128 
+                                 
+ 0C51  50                       LBUFSIZ         DB      BUFLEN 
+ 0C52  00                       LBUFFCNT        DB      0 
+ 0C53  0D                       LINEBUF DB      0DH 
+ 0C54  0050[                            DB      BUFLEN DUP (?) 
+            ??                  
+                         ]      
+                                
+ 0CA4  00                       PFLAG   DB      0 
+ 0CA5  00                       COLPOS  DB      0 
+                                 
+                                        ENDIF 
+                                 
+ 0CA6  00                       QFLAG   DB      0 
+ 0CA7  00                       NEWEXEC DB      0 
+ 0CA8  ????                     RETSAVE DW      ? 
+                                 
+ 0CAA  ????                     USER_PROC_PDB DW ? 
+                                 
+ 0CAC  ????                     HEADSAVE DW     ? 
+                                 
+ 0CAE                           EXEC_BLOCK LABEL BYTE 
+ 0CAE  0000                             DW      0 
+ 0CB0                           COM_LINE LABEL  DWORD 
+ 0CB0  0080                             DW      80H 
+ 0CB2  ????                             DW      ? 
+ 0CB4                           COM_FCB1 LABEL  DWORD 
+ 0CB4  005C                             DW      FCB 
+ 0CB6  ????                             DW      ? 
+ 0CB8                           COM_FCB2 LABEL  DWORD 
+ 0CB8  006C                             DW      FCB + 10H 
+ 0CBA  ????                             DW      ? 
+ 0CBC  ????????                 COM_SSSP DD     ? 
+ 0CC0  ????????                 COM_CSIP DD     ? 
+                                 
+ 0CC4                           CONST   ENDS 
+                                        END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-4
+                                                             
+
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DG . . . . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'CODE'
+  CONST  . . . . . . . . . . . .  	0CC4	BYTE	PUBLIC	
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+AAAMN  . . . . . . . . . . . . .  	L BYTE 	044F	CONST	Global
+AADMN  . . . . . . . . . . . . .  	L BYTE 	0452	CONST	Global
+AAMMN  . . . . . . . . . . . . .  	L BYTE 	0455	CONST
+AASMN  . . . . . . . . . . . . .  	L BYTE 	0458	CONST	Global
+AA_OPER  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-5
+                                                             
+
+ACCIMM . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+ADCMN  . . . . . . . . . . . . .  	L BYTE 	043E	CONST	Global
+ADDMN  . . . . . . . . . . . . .  	L BYTE 	043B	CONST	Global
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ALUFROMREG . . . . . . . . . . .  	L NEAR	0000	CODE	External
+ALUTOREG . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+ANDMN  . . . . . . . . . . . . .  	L BYTE 	044C	CONST	Global
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSEMLOOP  . . . . . . . . . . .  	L NEAR	0000	CODE	External
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+AXSAVE . . . . . . . . . . . . .  	L WORD 	0C2F	CONST	Global
+
+BADMN  . . . . . . . . . . . . .  	L BYTE 	072E	CONST	Global
+BPLEN  . . . . . . . . . . . . .  	Number	0032	
+BPMAX  . . . . . . . . . . . . .  	Number	000A	
+BPREG  . . . . . . . . . . . . .  	Number	5042	
+BPSAVE . . . . . . . . . . . . .  	L WORD 	0C39	CONST	Global
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+BUFLEN . . . . . . . . . . . . .  	Number	0050	
+BUFSIZ . . . . . . . . . . . . .  	Number	0200	
+BXREG  . . . . . . . . . . . . .  	Number	5842	
+BXSAVE . . . . . . . . . . . . .  	L WORD 	0C31	CONST	Global
+
+CALLMN . . . . . . . . . . . . .  	L BYTE 	045B	CONST	Global
+CALL_OPER  . . . . . . . . . . .  	L NEAR	0000	CODE	External
+CBWMN  . . . . . . . . . . . . .  	L BYTE 	045F	CONST	Global
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-6
+                                                             
+
+CHK10  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLCMN  . . . . . . . . . . . . .  	L BYTE 	0462	CONST
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+CMCMN  . . . . . . . . . . . . .  	L BYTE 	046B	CONST	Global
+CMPBMN . . . . . . . . . . . . .  	L BYTE 	046E	CONST
+CMPMN  . . . . . . . . . . . . .  	L BYTE 	0478	CONST	Global
+CMPWMN . . . . . . . . . . . . .  	L BYTE 	0473	CONST
+COLPOS . . . . . . . . . . . . .  	L BYTE 	0CA5	CONST	Global
+COMMA  . . . . . . . . . . . . .  	Number	2C00	
+COM_CSIP . . . . . . . . . . . .  	L DWORD	0CC0	CONST	Global
+COM_FCB1 . . . . . . . . . . . .  	L DWORD	0CB4	CONST	Global
+COM_FCB2 . . . . . . . . . . . .  	L DWORD	0CB8	CONST	Global
+COM_LINE . . . . . . . . . . . .  	L DWORD	0CB0	CONST	Global
+COM_SSSP . . . . . . . . . . . .  	L DWORD	0CBC	CONST	Global
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CSPRE  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+CSSAVE . . . . . . . . . . . . .  	L WORD 	0C45	CONST	Global
+CSSEGMN  . . . . . . . . . . . .  	L BYTE 	0725	CONST	Global
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+CWDMN  . . . . . . . . . . . . .  	L BYTE 	047B	CONST	Global
+CXSAVE . . . . . . . . . . . . .  	L WORD 	0C33	CONST	Global
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DAAMN  . . . . . . . . . . . . .  	L BYTE 	047E	CONST	Global
+DASMN  . . . . . . . . . . . . .  	L BYTE 	0481	CONST	Global
+DBMN . . . . . . . . . . . . . .  	L BYTE 	0436	CONST	Global
+DB_OPER  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+DCINC_OPER . . . . . . . . . . .  	L NEAR	0000	CODE	External
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DECMN  . . . . . . . . . . . . .  	L BYTE 	0484	CONST	Global
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-7
+                                                             
+
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DIMN . . . . . . . . . . . . . .  	L BYTE 	0468	CONST	Global
+DIREG  . . . . . . . . . . . . .  	Number	4944	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISAVE . . . . . . . . . . . . .  	L WORD 	0C3D	CONST	Global
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DISP8_OPER . . . . . . . . . . .  	L NEAR	0000	CODE	External
+DISPB  . . . . . . . . . . . . .  	L WORD 	0C4F	CONST	Global
+DISTAB . . . . . . . . . . . . .  	L WORD 	0036	CONST	Global
+DIVMN  . . . . . . . . . . . . .  	L BYTE 	0487	CONST	Global
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DOWNMN . . . . . . . . . . . . .  	L BYTE 	0702	CONST	Global
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DSIZ . . . . . . . . . . . . . .  	L BYTE 	0C4D	CONST	Global
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSPRE  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+DSSAVE . . . . . . . . . . . . .  	L WORD 	0C3F	CONST	Global
+DSSEGMN  . . . . . . . . . . . .  	L BYTE 	072B	CONST	Global
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+DW_OPER  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+DXSAVE . . . . . . . . . . . . .  	L WORD 	0C35	CONST	Global
+
+EIMN . . . . . . . . . . . . . .  	L BYTE 	0705	CONST	Global
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-8
+                                                             
+
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+ESCMN  . . . . . . . . . . . . .  	L BYTE 	048A	CONST	Global
+ESC_OPER . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+ESPRE  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+ESSAVE . . . . . . . . . . . . .  	L WORD 	0C41	CONST	Global
+ESSEGMN  . . . . . . . . . . . .  	L BYTE 	0722	CONST	Global
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_BLOCK . . . . . . . . . . .  	L BYTE 	0CAE	CONST	Global
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXEFCB . . . . . . . . . . . . .  	Alias	 FCB		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+EX_OPER  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB  . . . . . . . . . . . . . .  	Number	005C	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FD9_OPER . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+FDB_OPER . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+FDE_OPER . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-9
+                                                             
+
+FGROUP . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+FGROUP3  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+FGROUP3W . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+FGROUPB  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+FGROUPDS . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+FGROUPP  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+FGROUPX  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+FGROUPZ  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FI_TAB . . . . . . . . . . . . .  	L BYTE 	0754	CONST	Global
+FLAGTAB  . . . . . . . . . . . .  	L WORD 	0B6F	CONST	Global
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+FSAVE  . . . . . . . . . . . . .  	L WORD 	0C49	CONST	Global
+
+GETADDR  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATA16 . . . . . . . . . . .  	L NEAR	0000	CODE	External
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+GROUP1 . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+GROUP2 . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+GRP1 . . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+GRP1TAB  . . . . . . . . . . . .  	L WORD 	0B2B	CONST	Global
+GRP2 . . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+GRP2TAB  . . . . . . . . . . . .  	L WORD 	0B3B	CONST	Global
+
+HEADSAVE . . . . . . . . . . . .  	L WORD 	0CAC	CONST	Global
+HLTMN  . . . . . . . . . . . . .  	L BYTE 	05E9	CONST	Global
+
+IBMJAPAN . . . . . . . . . . . .  	Alias	 FALSE		
+IBMVER . . . . . . . . . . . . .  	Alias	 TRUE		
+IDIVMN . . . . . . . . . . . . .  	L BYTE 	05EC	CONST	Global
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-10
+                                                             
+
+IMMED  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+IMMTAB . . . . . . . . . . . . .  	L WORD 	0B1B	CONST	Global
+IMULMN . . . . . . . . . . . . .  	L BYTE 	05F0	CONST	Global
+INCMN  . . . . . . . . . . . . .  	L BYTE 	05F4	CONST	Global
+INFIXB . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+INFIXW . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+INMN . . . . . . . . . . . . . .  	L BYTE 	05FE	CONST	Global
+INT3 . . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTMN  . . . . . . . . . . . . .  	L BYTE 	05FB	CONST	Global
+INTOMN . . . . . . . . . . . . .  	L BYTE 	05F7	CONST	Global
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_OPER . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+INVARB . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+INVARW . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+IN_OPER  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+IPSAVE . . . . . . . . . . . . .  	L WORD 	0C47	CONST	Global
+IRETMN . . . . . . . . . . . . .  	L BYTE 	0600	CONST	Global
+
+JAMN . . . . . . . . . . . . . .  	L BYTE 	060B	CONST	Global
+JBEMN  . . . . . . . . . . . . .  	L BYTE 	0614	CONST	Global
+JCMN . . . . . . . . . . . . . .  	L BYTE 	0617	CONST
+JCXZMN . . . . . . . . . . . . .  	L BYTE 	060D	CONST	Global
+JGEMN  . . . . . . . . . . . . .  	L BYTE 	0629	CONST	Global
+JGMN . . . . . . . . . . . . . .  	L BYTE 	062C	CONST	Global
+JLEMN  . . . . . . . . . . . . .  	L BYTE 	0635	CONST	Global
+JLMN . . . . . . . . . . . . . .  	L BYTE 	0638	CONST	Global
+JMPCALL  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+JMPMN  . . . . . . . . . . . . .  	L BYTE 	0641	CONST	Global
+JMP_OPER . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+JNCMN  . . . . . . . . . . . . .  	L BYTE 	0611	CONST	Global
+JNOMN  . . . . . . . . . . . . .  	L BYTE 	0656	CONST	Global
+JNSMN  . . . . . . . . . . . . .  	L BYTE 	0653	CONST	Global
+JNZMN  . . . . . . . . . . . . .  	L BYTE 	0644	CONST	Global
+JOMN . . . . . . . . . . . . . .  	L BYTE 	0659	CONST	Global
+JPEMN  . . . . . . . . . . . . .  	L BYTE 	064A	CONST	Global
+JPOMN  . . . . . . . . . . . . .  	L BYTE 	064D	CONST	Global
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-11
+                                                             
+
+JSMN . . . . . . . . . . . . . .  	L BYTE 	065B	CONST	Global
+JZMN . . . . . . . . . . . . . .  	L BYTE 	0625	CONST	Global
+
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LAHFMN . . . . . . . . . . . . .  	L BYTE 	065F	CONST	Global
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBUFFCNT . . . . . . . . . . . .  	L BYTE 	0C52	CONST	Global
+LBUFSIZ  . . . . . . . . . . . .  	L BYTE 	0C51	CONST	Global
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LDSMN  . . . . . . . . . . . . .  	L BYTE 	0663	CONST	Global
+LEAMN  . . . . . . . . . . . . .  	L BYTE 	0666	CONST	Global
+LESMN  . . . . . . . . . . . . .  	L BYTE 	0669	CONST	Global
+LINEBUF  . . . . . . . . . . . .  	L BYTE 	0C53	CONST	Global
+LOADACC  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+LOCKMN . . . . . . . . . . . . .  	L BYTE 	066C	CONST	Global
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LODBMN . . . . . . . . . . . . .  	L BYTE 	0670	CONST	Global
+LODWMN . . . . . . . . . . . . .  	L BYTE 	0675	CONST	Global
+LONGJMP  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+LOOPMN . . . . . . . . . . . . .  	L BYTE 	0690	CONST	Global
+LOOPNZMN . . . . . . . . . . . .  	L BYTE 	067A	CONST	Global
+LOOPZMN  . . . . . . . . . . . .  	L BYTE 	0680	CONST	Global
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+L_OPER . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+
+M8087  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+M8087_D9 . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+M8087_DB . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+M8087_DD . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+M8087_DF . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+M8087_TAB  . . . . . . . . . . .  	L BYTE 	0731	CONST	Global
+MAXOP  . . . . . . . . . . . . .  	Number	00C0		Global
+MD9_TAB  . . . . . . . . . . . .  	L BYTE 	079E	CONST	Global
+MD9_TAB2 . . . . . . . . . . . .  	L BYTE 	07C0	CONST	Global
+MDB_TAB  . . . . . . . . . . . .  	L BYTE 	084F	CONST	Global
+MDB_TAB2 . . . . . . . . . . . .  	L BYTE 	0869	CONST	Global
+MDD_TAB  . . . . . . . . . . . .  	L BYTE 	087C	CONST	Global
+MDD_TAB2 . . . . . . . . . . . .  	L BYTE 	089A	CONST	Global
+MDF_TAB  . . . . . . . . . . . .  	L BYTE 	08AA	CONST	Global
+MEMIMM . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MOVBMN . . . . . . . . . . . . .  	L BYTE 	0694	CONST	Global
+MOVMN  . . . . . . . . . . . . .  	L BYTE 	069E	CONST	Global
+MOVSEGFROM . . . . . . . . . . .  	L NEAR	0000	CODE	External
+MOVSEGTO . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-12
+                                                             
+
+MOVWMN . . . . . . . . . . . . .  	L BYTE 	0699	CONST	Global
+MOV_OPER . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+MSVER  . . . . . . . . . . . . .  	Alias	 FALSE		
+MULMN  . . . . . . . . . . . . .  	L BYTE 	06A1	CONST	Global
+
+NEGMN  . . . . . . . . . . . . .  	L BYTE 	06A4	CONST	Global
+NEWEXEC  . . . . . . . . . . . .  	L BYTE 	0CA7	CONST	Global
+NOOPERANDS . . . . . . . . . . .  	L NEAR	0000	CODE	External
+NOPMN  . . . . . . . . . . . . .  	L BYTE 	06A7	CONST	Global
+NOREGL . . . . . . . . . . . . .  	L BYTE 	0C4E	CONST	Global
+NOTMN  . . . . . . . . . . . . .  	L BYTE 	06AA	CONST	Global
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+NO_OPER  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OPBUFLEN . . . . . . . . . . . .  	Number	0023	
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+OPTAB  . . . . . . . . . . . . .  	L BYTE 	08CB	CONST	Global
+ORMN . . . . . . . . . . . . . .  	L BYTE 	044A	CONST	Global
+OUTFIXB  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+OUTFIXW  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+OUTMN  . . . . . . . . . . . . .  	L BYTE 	06AD	CONST	Global
+OUTVARB  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+OUTVARW  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+OUT_OPER . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+PFLAG  . . . . . . . . . . . . .  	L BYTE 	0CA4	CONST	Global
+POPFMN . . . . . . . . . . . . .  	L BYTE 	06B0	CONST	Global
+POPMN  . . . . . . . . . . . . .  	L BYTE 	06B4	CONST	Global
+POP_OPER . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+PREFIX . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+PROMPT . . . . . . . . . . . . .  	Number	002D	
+PUSHFMN  . . . . . . . . . . . .  	L BYTE 	06B7	CONST	Global
+PUSHMN . . . . . . . . . . . . .  	L BYTE 	06BC	CONST	Global
+PUSH_OPER  . . . . . . . . . . .  	L NEAR	0000	CODE	External
+
+QFLAG  . . . . . . . . . . . . .  	L BYTE 	0CA6	CONST	Global
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-13
+                                                             
+
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+RCLMN  . . . . . . . . . . . . .  	L BYTE 	06C0	CONST	Global
+RCRMN  . . . . . . . . . . . . .  	L BYTE 	06C3	CONST	Global
+RDFLG  . . . . . . . . . . . . .  	L BYTE 	0C4B	CONST	Global
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+REG16  . . . . . . . . . . . . .  	L BYTE 	0010	CONST	Global
+REG8 . . . . . . . . . . . . . .  	L BYTE 	0000	CONST	Global
+REGDIF . . . . . . . . . . . . .  	Number	00DC		Global
+REGIMMB  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+REGIMMW  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+REGOP  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+REGTAB . . . . . . . . . . . . .  	L BYTE 	0B53	CONST	Global
+REGTABLEN  . . . . . . . . . . .  	Number	000E	
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+REPNZMN  . . . . . . . . . . . .  	L BYTE 	06CA	CONST	Global
+REPZMN . . . . . . . . . . . . .  	L BYTE 	06C6	CONST	Global
+RETFMN . . . . . . . . . . . . .  	L BYTE 	06DB	CONST	Global
+RETMN  . . . . . . . . . . . . .  	L BYTE 	06DF	CONST	Global
+RETSAVE  . . . . . . . . . . . .  	L WORD 	0CA8	CONST	Global
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+ROLMN  . . . . . . . . . . . . .  	L BYTE 	06E2	CONST	Global
+RORMN  . . . . . . . . . . . . .  	L BYTE 	06E5	CONST	Global
+ROTOP  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+RSTACK . . . . . . . . . . . . .  	L WORD 	0C43	CONST	Global
+
+SAHFMN . . . . . . . . . . . . .  	L BYTE 	06E8	CONST	Global
+SARMN  . . . . . . . . . . . . .  	L BYTE 	06EC	CONST	Global
+SAV16  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+SAV8 . . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+SAVHEX . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+SBBMN  . . . . . . . . . . . . .  	L BYTE 	0444	CONST	Global
+SCABMN . . . . . . . . . . . . .  	L BYTE 	06EF	CONST	Global
+SCAWMN . . . . . . . . . . . . .  	L BYTE 	06F4	CONST	Global
+SEGDIF . . . . . . . . . . . . .  	Number	0000	
+SEGOP  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+SEGTAB . . . . . . . . . . . . .  	L WORD 	0B4B	CONST	Global
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETCNTC  . . . . . . . . . . . .  	Alias	 TRUE		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-14
+                                                             
+
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+SHFTAB . . . . . . . . . . . . .  	L WORD 	0B0B	CONST	Global
+SHIFT  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+SHIFTV . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+SHLMN  . . . . . . . . . . . . .  	L BYTE 	06F9	CONST	Global
+SHORTJMP . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+SHRMN  . . . . . . . . . . . . .  	L BYTE 	06FC	CONST	Global
+SIGNIMM  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+SIREG  . . . . . . . . . . . . .  	Number	4953	
+SISAVE . . . . . . . . . . . . .  	L WORD 	0C3B	CONST	Global
+SIZ8 . . . . . . . . . . . . . .  	L BYTE 	002A	CONST	Global
+SIZE_TAB . . . . . . . . . . . .  	L BYTE 	075E	CONST	Global
+SPSAVE . . . . . . . . . . . . .  	L WORD 	0C37	CONST	Global
+SREG . . . . . . . . . . . . . .  	L BYTE 	0020	CONST	Global
+SSPRE  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+SSSAVE . . . . . . . . . . . . .  	L WORD 	0C43	CONST	Global
+SSSEGMN  . . . . . . . . . . . .  	L BYTE 	0728	CONST	Global
+STACK  . . . . . . . . . . . . .  	L BYTE 	0C2F	CONST	Global
+STCMN  . . . . . . . . . . . . .  	L BYTE 	06FF	CONST	Global
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STOBMN . . . . . . . . . . . . .  	L BYTE 	0708	CONST	Global
+STOREACC . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+STOWMN . . . . . . . . . . . . .  	L BYTE 	070D	CONST	Global
+SUBMN  . . . . . . . . . . . . .  	L BYTE 	0441	CONST	Global
+SYSVER . . . . . . . . . . . . .  	Alias	 FALSE		
+
+TESTMN . . . . . . . . . . . . .  	L BYTE 	0712	CONST	Global
+TOTREG . . . . . . . . . . . . .  	L BYTE 	0C4C	CONST	Global
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+TST_OPER . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:08:15
+                                                            Symbols-15
+                                                             
+
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+UPMN . . . . . . . . . . . . . .  	L BYTE 	0465	CONST	Global
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+USER_PROC_PDB  . . . . . . . . .  	L WORD 	0CAA	CONST	Global
+
+VER  . . . . . . . . . . . . . .  	Text  		
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WAITMN . . . . . . . . . . . . .  	L BYTE 	0716	CONST	Global
+WORDTOALU  . . . . . . . . . . .  	L NEAR	0000	CODE	External
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+XCHGAX . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+XCHGMN . . . . . . . . . . . . .  	L BYTE 	071A	CONST	Global
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+XLATMN . . . . . . . . . . . . .  	L BYTE 	071E	CONST	Global
+XORMN  . . . . . . . . . . . . .  	L BYTE 	0447	CONST	Global
+
+ZIBO . . . . . . . . . . . . . .  	Alias	 TRUE		
+ZZOPCODE . . . . . . . . . . . .  	L BYTE 	0B0B	CONST
+
+
+   2403 Source  Lines
+   2466 Total   Lines
+    758 Symbols
+
+  14794 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

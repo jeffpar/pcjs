@@ -30,6 +30,8 @@ The following optional machine properties will be added to the 'parms' property:
     'resume' (eg: 1)
     'sound' (eg: true)
     'state' (eg: state.json)
+    'flicker' (eg: 0 to disable CGA flicker)
+    'sizeRAM' (eg, 640 for 640K of base memory)
     'testRAM' (eg, false)
     'commands' (debugger commands, if any)
     'messages' (eg: fault)
@@ -79,7 +81,7 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- if machine.autoMount == nil -%}
     {%- assign machine_autoMount = "autoMount:null" -%}
   {%- else -%}
-    {%- capture machine_autoMount -%}autoMount:{{ machine.autoMount | jsonify }}{%- endcapture -%}
+    {%- capture machine_autoMount -%}autoMount:{{ machine.autoMount | jsonify | replace: "'", "\\'" }}{%- endcapture -%}
   {%- endif -%}
   {%- if machine.autoScript == nil -%}
     {%- assign machine_autoScript = "" -%}
@@ -115,6 +117,16 @@ template doesn't add them to the Computer component anymore, since we started su
     {%- assign machine_state = "" -%}
   {%- else -%}
     {%- capture machine_state -%},state:"{{ machine.state }}"{%- endcapture -%}
+  {%- endif -%}
+  {%- if machine.flicker == nil -%}
+    {%- assign machine_flicker = "" -%}
+  {%- else -%}
+    {%- capture machine_flicker -%},flicker:{{ machine.flicker }}{%- endcapture -%}
+  {%- endif -%}
+  {%- if machine.sizeRAM == nil -%}
+    {%- assign machine_sizeRAM = "" -%}
+  {%- else -%}
+    {%- capture machine_sizeRAM -%},sizeRAM:{{ machine.sizeRAM }}{%- endcapture -%}
   {%- endif -%}
   {%- if machine.testRAM == nil -%}
     {%- assign machine_testRAM = "" -%}
@@ -163,7 +175,7 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- else -%}
     {%- capture machine_connection -%},connection:"{{ machine.connection }}"{%- endcapture -%}
   {%- endif -%}
-  {%- capture machine_parms -%}{{ site.left_brace }}{{ machine_autoMount }}{{ machine_autoScript }}{{ machine_autoStart }}{{ machine_autoType }}{{ machine_cdroms }}{{ machine_floppies }}{{ machine_drives }}{{ machine_resume }}{{ machine_sound }}{{ machine_state }}{{ machine_testRAM }}{{ machine_commands }}{{ machine_messages }}{{ machine_connection }}{{ site.right_brace }}{%- endcapture -%}
+  {%- capture machine_parms -%}{{ site.left_brace }}{{ machine_autoMount }}{{ machine_autoScript }}{{ machine_autoStart }}{{ machine_autoType }}{{ machine_cdroms }}{{ machine_floppies }}{{ machine_drives }}{{ machine_resume }}{{ machine_sound }}{{ machine_state }}{{ machine_flicker }}{{ machine_sizeRAM }}{{ machine_testRAM }}{{ machine_commands }}{{ machine_messages }}{{ machine_connection }}{{ site.right_brace }}{%- endcapture -%}
   {%- if site.pcjs.uncompiled -%}
     {%- if site.pcjs.unbundled -%}
       {%- for script in machine_data.scripts -%}

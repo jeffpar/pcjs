@@ -1,0 +1,1284 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Page     1-1
+                                                            
+
+                                ; 
+                                ; Device call routines for MSDOS 
+                                ; 
+                                 
+                             C  INCLUDE DOSSEG.ASM 
+                             C  ; 
+                             C  ; segment ordering for MSDOS 
+                             C  ; 
+                             C   
+ 0000                        C  CONSTANTS       SEGMENT BYTE PUBLIC 'CONST' 
+ 0000                        C  CONSTANTS       ENDS 
+                             C   
+ 0000                        C  DATA            SEGMENT BYTE PUBLIC 'DATA' 
+ 0000                        C  DATA            ENDS 
+                             C   
+ 0000                        C  CODE            SEGMENT BYTE PUBLIC 'CODE' 
+ 0000                        C  CODE            ENDS 
+                             C   
+ 0000                        C  LAST            SEGMENT BYTE PUBLIC 'LAST' 
+ 0000                        C  LAST            ENDS 
+                             C   
+                             C  DOSGROUP    GROUP   CODE,CONSTANTS,DATA,LAST 
+                                 
+                                 
+                                ENDIF 
+                                 
+ 0000                           CODE    SEGMENT BYTE PUBLIC  'CODE' 
+                                        ASSUME  SS:DOSGROUP,CS:DOSGROUP 
+                                 
+                                .list 
+                                 
+                                TITLE   DEV - Device call routines 
+                                NAME    Dev 
+                                 
+                                        i_need  IOXAD,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  IOSCNT,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DEVIOBUF,4 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  IOCALL,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  IOMED,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  IORCHR,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CALLSCNT,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0000                         1  DATA ENDS
+                                        i_need  DMAAdd,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  NullDevPt,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CallDevAd,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  Attrib,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  NULDEV,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  Name1,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DevPt,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DPBHead,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  NumIO,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  ThisDPB,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DevCall,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  VerFlg,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                 
+                                SUBTTL IOFUNC -- DO FUNCTION 1-12 I/O 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Page     1-3
+IOFUNC -- DO FUNCTION 1-12 I/O                              
+
+                                PAGE 
+ 0000                           IOFUNC_RETRY: 
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                        invoke  restore_world 
+ 0000  E8 0000 E              1  CALL restore_world
+                                 
+                                        procedure   IOFUNC,NEAR 
+ 0003                         1 IOFUNC PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:SI Points to FCB 
+                                ;       AH is function code 
+                                ;               = 0 Input 
+                                ;               = 1 Input Status 
+                                ;               = 2 Output 
+                                ;               = 3 Output Status 
+                                ;               = 4 Flush 
+                                ;       AL = character if output 
+                                ; Function: 
+                                ;       Perform indicated I/O to device or file
+				 
+                                ; Outputs: 
+                                ;       AL is character if input 
+                                ;       If a status call 
+                                ;               zero set if not ready 
+                                ;               zero reset if ready (character 
+				in AL for input status) 
+                                ; For regular files: 
+                                ;       Input Status 
+                                ;               Gets character but restores fcb
+				_RR field 
+                                ;               Zero set on EOF 
+                                ;       Input 
+                                ;               Gets character advances fcb_RR 
+				field 
+                                ;               Returns ^Z on EOF 
+                                ;       Output Status 
+                                ;               Always ready 
+                                ; AX altered, all other registers preserved 
+                                 
+ 0003  36: 8C 16 0002 E                 MOV     WORD PTR [IOXAD+2],SS 
+ 0008  36: C7 06 0000 E 0000            MOV     WORD PTR [IOXAD],OFFSET DOSGROU
+				P:DEVIOBUF 
+        E                               MOV     WORD PTR [IOXAD],OFFSET DOSGROU
+				P:DEVIOBUF 
+ 000F  36: C7 06 0000 E 0001            MOV     WORD PTR [IOSCNT],1 
+ 0016  36: A3 0000 E                    MOV     WORD PTR [DEVIOBUF],AX 
+                                 
+ 001A                           IOFUNC2: 
+ 001A  F6 44 18 80                      TEST    [SI.fcb_DEVID],080H 
+ 001E  75 03                            JNZ     IOTODEV 
+ 0020  E9 00A3 R                        JMP     IOTOFILE 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Page     1-4
+IOFUNC -- DO FUNCTION 1-12 I/O                              
+
+ 0023                           IOTODEV: 
+                                        invoke  save_world 
+ 0023  E8 0000 E              1  CALL save_world
+ 0026  1E                               PUSH    DS 
+ 0027  16                               PUSH    SS 
+ 0028  07                               POP     ES 
+ 0029  16                               PUSH    SS 
+ 002A  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 002B  33 DB                            XOR     BX,BX 
+ 002D  89 1E 0003 E                     MOV     [IOCALL.REQSTAT],BX 
+ 0031  88 1E 0000 E                     MOV     BYTE PTR [IOMED],BL 
+                                 
+ 0035  BB 0000 E                        MOV     BX,OFFSET DOSGROUP:IOCALL 
+                                 
+ 0038  B9 0416                          MOV     CX,(DEVRD SHL 8) OR DRDWRHL 
+ 003B  0A E4                            OR      AH,AH 
+ 003D  74 18                            JZ      DCALLR 
+ 003F  B9 050E                          MOV     CX,(DEVRDND SHL 8) OR DRDNDHL 
+ 0042  FE CC                            DEC     AH 
+ 0044  74 11                            JZ      DCALLR 
+ 0046  B9 0816                          MOV     CX,(DEVWRT SHL 8) OR DRDWRHL 
+ 0049  FE CC                            DEC     AH 
+ 004B  74 52                            JZ      DCALLO 
+ 004D  B9 0A0D                          MOV     CX,(DEVOST SHL 8) OR DSTATHL 
+ 0050  FE CC                            DEC     AH 
+ 0052  74 4B                            JZ      DCALLO 
+ 0054                           DFLUSH: 
+ 0054  B9 070F                          MOV     CX,(DEVIFL SHL 8) OR DFLSHL 
+ 0057                           DCALLR: 
+ 0057  B4 86                            MOV     AH,86H 
+ 0059                           DCALL: 
+ 0059  88 0E 0000 E                     MOV     [IOCALL.REQLEN],CL 
+ 005D  88 2E 0002 E                     MOV     [IOCALL.REQFUNC],CH 
+ 0061  8A CC                            MOV     CL,AH 
+ 0063  1F                               POP     DS 
+                                ASSUME  DS:NOTHING 
+ 0064  E8 0133 R                        CALL    DEVIOCALL 
+ 0067  36: 8B 3E 0003 E                 MOV     DI,[IOCALL.REQSTAT] 
+ 006C  F7 C7 8000                       TEST    DI,STERR 
+ 0070  74 0F                            JZ      OKDEVIO 
+ 0072  8A E1                            MOV     AH,CL 
+                                        invoke  CHARHARD 
+ 0074  E8 0000 E              1  CALL CHARHARD
+ 0077  3C 01                            CMP     AL,1 
+ 0079  74 85                            JZ      IOFUNC_RETRY 
+                                ;Know user must have wanted ignore. Make sure d
+				evice shows ready so 
+                                ;that DOS doesn't get caught in a status loop w
+				hen user simply wants 
+                                ;to ignore the error. 
+ 007B  36: 80 26 0004 E FD              AND     BYTE PTR [IOCALL.REQSTAT+1], NO
+				T (STBUI SHR 8) 
+ 0081                           OKDEVIO: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Page     1-5
+IOFUNC -- DO FUNCTION 1-12 I/O                              
+
+ 0081  16                               PUSH    SS 
+ 0082  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 0083  80 FD 05                         CMP     CH,DEVRDND 
+ 0086  75 06                            JNZ     DNODRD 
+ 0088  A0 0000 E                        MOV     AL,BYTE PTR [IORCHR] 
+ 008B  A2 0000 E                        MOV     [DEVIOBUF],AL 
+                                 
+ 008E  8A 26 0004 E             DNODRD: MOV     AH,BYTE PTR [IOCALL.REQSTAT+1] 
+ 0092  F6 D4                            NOT     AH                      ; Zero 
+				= busy, not zero = ready 
+ 0094  80 E4 02                         AND     AH,STBUI SHR 8 
+                                 
+                                        invoke  restore_world 
+ 0097  E8 0000 E              1  CALL restore_world
+                                ASSUME  DS:NOTHING 
+ 009A  36: A1 0000 E                    MOV     AX,WORD PTR [DEVIOBUF] 
+                                        return 
+ 009E                         1 ??0000:
+ 009E  C3                     1  RET
+                                 
+ 009F                           DCALLO: 
+ 009F  B4 87                            MOV     AH,87H 
+ 00A1  EB B6                            JMP     SHORT DCALL 
+                                 
+ 00A3                           IOTOFILE: 
+                                ASSUME  DS:NOTHING 
+ 00A3  0A E4                            OR      AH,AH 
+ 00A5  74 26                            JZ      IOIN 
+ 00A7  FE CC                            DEC     AH 
+ 00A9  74 05                            JZ      IOIST 
+ 00AB  FE CC                            DEC     AH 
+ 00AD  74 11                            JZ      IOUT 
+                                        return                  ; NON ZERO FLAG
+				 FOR OUTPUT STATUS 
+ 00AF                         1 ??0001:
+ 00AF  C3                     1  RET
+                                 
+ 00B0                           IOIST: 
+ 00B0  FF 74 21                         PUSH    WORD PTR [SI.fcb_RR]        ; S
+				ave position 
+ 00B3  FF 74 23                         PUSH    WORD PTR [SI.fcb_RR+2] 
+ 00B6  E8 00CD R                        CALL    IOIN 
+ 00B9  8F 44 23                         POP     WORD PTR [SI.fcb_RR+2]      ; R
+				estore position 
+ 00BC  8F 44 21                         POP     WORD PTR [SI.fcb_RR] 
+                                        return 
+ 00BF                         1 ??0002:
+ 00BF  C3                     1  RET
+                                 
+ 00C0                           IOUT: 
+ 00C0  E8 00E6 R                        CALL    SETXADDR 
+                                        invoke  STORE 
+ 00C3  E8 0000 E              1  CALL STORE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Page     1-6
+IOFUNC -- DO FUNCTION 1-12 I/O                              
+
+                                        invoke  FINNOSAV 
+ 00C6  E8 0000 E              1  CALL FINNOSAV
+ 00C9  E8 011C R                        CALL    RESTXADDR       ; If you change
+				 this into a jmp don't come 
+                                        return                  ; crying to me 
+				when things don't work ARR 
+ 00CC                         1 ??0003:
+ 00CC  C3                     1  RET
+                                 
+ 00CD                           IOIN: 
+ 00CD  E8 00E6 R                        CALL    SETXADDR 
+                                        invoke  LOAD 
+ 00D0  E8 0000 E              1  CALL LOAD
+ 00D3  51                               PUSH    CX 
+                                        invoke  FINNOSAV 
+ 00D4  E8 0000 E              1  CALL FINNOSAV
+ 00D7  59                               POP     CX 
+ 00D8  0B C9                            OR      CX,CX           ; Check EOF 
+ 00DA  E8 011C R                        CALL    RESTXADDR 
+ 00DD  36: A0 0000 E                    MOV     AL,[DEVIOBUF]   ; Get byte from
+				 trans addr 
+                                        retnz 
+ 00E1  75 E9                  2  ??0004: jnz ret_l
+ 00E3  B0 1A                            MOV     AL,1AH          ; ^Z if EOF 
+                                        return 
+ 00E5                         1 ??0006:
+ 00E5  C3                     1  RET
+                                 
+ 00E6                           SETXADDR: 
+ 00E6  36: 8F 06 0000 E                 POP     WORD PTR [CALLSCNT]     ; Retur
+				n address 
+                                        invoke  save_world 
+ 00EB  E8 0000 E              1  CALL save_world
+ 00EE  36: FF 36 0000 E                 PUSH    WORD PTR [DMAADD]       ; Save 
+				Disk trans addr 
+ 00F3  36: FF 36 0002 E                 PUSH    WORD PTR [DMAADD+2] 
+ 00F8  1E                               PUSH    DS 
+ 00F9  16                               PUSH    SS 
+ 00FA  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 00FB  8B 0E 0002 E                     MOV     CX,WORD PTR [IOXAD+2] 
+ 00FF  89 0E 0002 E                     MOV     WORD PTR [DMAADD+2],CX 
+ 0103  8B 0E 0000 E                     MOV     CX,WORD PTR [IOXAD] 
+ 0107  89 0E 0000 E                     MOV     WORD PTR [DMAADD],CX    ; Set b
+				yte trans addr 
+ 010B  8B 0E 0000 E                     MOV     CX,[IOSCNT]             ; ioscn
+				t specifies length of buffer 
+ 010F  1F                               POP     DS 
+                                ASSUME  DS:NOTHING 
+ 0110  C7 44 0E 0001                    MOV     [SI.fcb_RECSIZ],1           ; O
+				ne byte per record 
+ 0115  8B D6                            MOV     DX,SI                   ; FCB t
+				o DS:DX 
+                                        invoke  GETRRPOS 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Page     1-7
+IOFUNC -- DO FUNCTION 1-12 I/O                              
+
+ 0117  E8 0000 E              1  CALL GETRRPOS
+ 011A  EB 12                            JMP     SHORT RESTRET           ; RETUR
+				N ADDRESS 
+                                 
+ 011C                           RESTXADDR: 
+ 011C  36: 8F 06 0000 E                 POP     WORD PTR [CALLSCNT]     ; Retur
+				n address 
+ 0121  36: 8F 06 0002 E                 POP     WORD PTR [DMAADD+2]     ; Resto
+				re Disk trans addr 
+ 0126  36: 8F 06 0000 E                 POP     WORD PTR [DMAADD] 
+                                        invoke  restore_world 
+ 012B  E8 0000 E              1  CALL restore_world
+ 012E  36: FF 26 0000 E         RESTRET:JMP     WORD PTR [CALLSCNT]      ; Retu
+				rn address 
+                                IOFUNC  ENDP 
+                                 
+                                SUBTTL DEVIOCALL, DEVIOCALL2 - CALL A DEVICE 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Page     1-8
+DEVIOCALL, DEVIOCALL2 - CALL A DEVICE                       
+
+                                PAGE 
+                                        procedure   DEVIOCALL,NEAR 
+ 0133                         1 DEVIOCALL PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:SI Points to device FCB 
+                                ;       ES:BX Points to request data 
+                                ; Function: 
+                                ;       Call the device 
+                                ; Outputs: 
+                                ;       None 
+                                ; DS:SI,AX destroyed, others preserved 
+                                 
+ 0133  C5 74 19                         LDS     SI,DWORD PTR [SI.fcb_FIRCLUS] 
+                                 
+                                       entry   DEVIOCALL2 
+ 0136                         1 DEVIOCALL2:
+                                ; As above only DS:SI points to device header o
+				n entry, and DS:SI is preserved 
+ 0136  8B 44 06                         MOV     AX,[SI.SDEVSTRAT] 
+ 0139  36: A3 0000 E                    MOV     WORD PTR [CALLDEVAD],AX 
+ 013D  36: 8C 1E 0002 E                 MOV     WORD PTR [CALLDEVAD+2],DS 
+ 0142  36: FF 1E 0000 E                 CALL    DWORD PTR [CALLDEVAD] 
+ 0147  8B 44 08                         MOV     AX,[SI.SDEVINT] 
+ 014A  36: A3 0000 E                    MOV     WORD PTR [CALLDEVAD],AX 
+ 014E  36: FF 1E 0000 E                 CALL    DWORD PTR [CALLDEVAD] 
+                                        return 
+ 0153                         1 ??0007:
+ 0153  C3                     1  RET
+                                DEVIOCALL   ENDP 
+                                 
+                                SUBTTL DEVNAME - LOOK FOR NAME OF DEVICE 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Page     1-9
+DEVNAME - LOOK FOR NAME OF DEVICE                           
+
+                                PAGE 
+                                        procedure   DEVNAME,NEAR 
+ 0154                         1 DEVNAME PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:DOSGROUP 
+                                 
+                                ; Inputs: 
+                                ;       DS,ES:DOSGROUP 
+                                ;       Filename in NAME1 
+                                ; Function: 
+                                ;       Determine if file is in list of I/O dri
+				vers 
+                                ; Outputs: 
+                                ;       Carry set if name not found 
+                                ;       ELSE 
+                                ;       Zero flag set 
+                                ;       BH = Bit 7,6 = 1, bit 5 = 0 (cooked mod
+				e) 
+                                ;            bits 0-4 set from low byte of attr
+				ibute word 
+                                ;       DEVPT = DWORD pointer to Device header 
+				of device 
+                                ; Registers BX destroyed 
+                                 
+ 0154  56                               PUSH    SI 
+ 0155  57                               PUSH    DI 
+ 0156  51                               PUSH    CX 
+                                 
+                                        ENDIF 
+                                 
+ 0157  F6 06 0000 E 08                  TEST    BYTE PTR [ATTRIB],attr_volume_i
+				d ; If looking for VOL id don't find devs 
+ 015C  75 20                            JNZ     RET31 
+ 015E  BE 0000 E                        MOV     SI,OFFSET DOSGROUP:NULDEV 
+ 0161                           LOOKIO: 
+                                ASSUME  DS:NOTHING 
+ 0161  F7 44 04 8000                    TEST    [SI.SDEVATT],DEVTYP 
+ 0166  74 0F                            JZ      SKIPDEV                 ; Skip 
+				block devices 
+ 0168  56                               PUSH    SI 
+ 0169  83 C6 0A                         ADD     SI,SDEVNAME 
+ 016C  BF 0000 E                        MOV     DI,OFFSET DOSGROUP:NAME1 
+ 016F  B9 0004                          MOV     CX,4                    ; All d
+				evices are 8 letters 
+ 0172  F3/ A7                           REPE    CMPSW                   ; Check
+				 for name in list 
+ 0174  5E                               POP     SI 
+ 0175  74 0E                            JZ      IOCHK                   ; Found
+				 it? 
+ 0177                           SKIPDEV: 
+ 0177  C5 34                            LDS     SI,DWORD PTR [SI]       ; Get a
+				ddress of next device 
+ 0179  83 FE FF                         CMP     SI,-1                   ; At en
+				d of list? 
+ 017C  75 E3                            JNZ     LOOKIO 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Page     1-10
+DEVNAME - LOOK FOR NAME OF DEVICE                           
+
+ 017E  F9                       RET31:  STC                             ; Not f
+				ound 
+ 017F  16                       RETNV:  PUSH    SS 
+ 0180  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+                                 
+                                        ENDIF 
+                                 
+ 0181  59                               POP     CX 
+ 0182  5F                               POP     DI 
+ 0183  5E                               POP     SI 
+ 0184  C3                               RET 
+                                 
+ 0185                           IOCHK: 
+                                ASSUME  DS:NOTHING 
+ 0185  36: 8C 1E 0002 E                 MOV     WORD PTR [DEVPT+2],DS         ;
+				 Save pointer to device 
+ 018A  8A 7C 04                         MOV     BH,BYTE PTR [SI.SDEVATT] 
+ 018D  80 CF C0                         OR      BH,0C0H 
+ 0190  80 E7 DF                         AND     BH,NOT 020H             ;Clears
+				 Carry 
+ 0193  36: 89 36 0000 E                 MOV     WORD PTR [DEVPT],SI 
+ 0198  EB E5                            JMP     RETNV 
+                                DevName ENDP 
+                                 
+                                        procedure   GetBP,NEAR 
+ 019A                         1 GetBP PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       AL = Logical unit number (A = 0) 
+                                ; Function: 
+                                ;       Find Drive Parameter Block 
+                                ; Outputs: 
+                                ;       ES:BP points to DPB 
+                                ;       [THISDPB] = ES:BP 
+                                ;       Carry set if unit number bad 
+                                ; No other registers altered 
+                                 
+ 019A  C4 2E 0000 E                     LES     BP,[DPBHEAD]    ; Just in case 
+				drive isn't valid 
+ 019E  24 3F                            AND     AL,3FH          ; Mask out dirt
+				y and device bits 
+ 01A0  3A 06 0000 E                     CMP     AL,BYTE PTR [NUMIO] 
+ 01A4  F5                               CMC 
+ 01A5  72 0C                            JC      GOTDPB          ; Get drive A 
+ 01A7                           FNDDPB: 
+ 01A7  26: 3A 46 00                     CMP     AL,ES:[BP.dpb_drive] 
+ 01AB  74 06                            JZ      GOTDPB          ; Carry is clea
+				r if jump executed 
+ 01AD  26: C4 6E 18                     LES     BP,ES:[BP.dpb_next_dpb] 
+ 01B1  EB F4                            JMP     SHORT FNDDPB 
+ 01B3                           GOTDPB: 
+ 01B3  89 2E 0000 E                     MOV     WORD PTR [THISDPB],BP 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Page     1-11
+DEVNAME - LOOK FOR NAME OF DEVICE                           
+
+ 01B7  8C 06 0002 E                     MOV     WORD PTR [THISDPB+2],ES 
+ 01BB  C3                               RET 
+                                GetBP   ENDP 
+                                 
+                                SUBTTL SETREAD, SETWRITE -- SET UP HEADER BLOCK
+				 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Page     1-12
+SETREAD, SETWRITE -- SET UP HEADER BLOCK                    
+
+                                PAGE 
+                                        procedure   SETREAD,NEAR 
+ 01BC                         1 SETREAD PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:BX = Transfer Address 
+                                ;       CX = Record Count 
+                                ;       DX = Starting Record 
+                                ;       AH = Media Byte 
+                                ;       AL = Unit Code 
+                                ; Function: 
+                                ;       Set up the device call header at DEVCAL
+				L 
+                                ; Output: 
+                                ;       ES:BX Points to DEVCALL 
+                                ; No other registers effected 
+                                 
+ 01BC  57                               PUSH    DI 
+ 01BD  51                               PUSH    CX 
+ 01BE  50                               PUSH    AX 
+ 01BF  B1 04                            MOV     CL,DEVRD 
+ 01C1                           SETCALLHEAD: 
+ 01C1  B0 16                            MOV     AL,DRDWRHL 
+ 01C3  16                               PUSH    SS 
+ 01C4  07                               POP     ES 
+ 01C5  BF 0000 E                        MOV     DI,OFFSET DOSGROUP:DEVCALL 
+ 01C8  AA                               STOSB                   ; length 
+ 01C9  58                               POP     AX 
+ 01CA  AA                               STOSB                   ; Unit 
+ 01CB  50                               PUSH    AX 
+ 01CC  8A C1                            MOV     AL,CL 
+ 01CE  AA                               STOSB                   ; Command code 
+ 01CF  33 C0                            XOR     AX,AX 
+ 01D1  AB                               STOSW                   ; Status 
+ 01D2  83 C7 08                         ADD     DI,8            ; Skip link fie
+				lds 
+ 01D5  58                               POP     AX 
+ 01D6  86 E0                            XCHG    AH,AL 
+ 01D8  AA                               STOSB                   ; Media byte 
+ 01D9  86 C4                            XCHG    AL,AH 
+ 01DB  50                               PUSH    AX 
+ 01DC  8B C3                            MOV     AX,BX 
+ 01DE  AB                               STOSW 
+ 01DF  8C D8                            MOV     AX,DS 
+ 01E1  AB                               STOSW                   ; Transfer addr
+				 
+ 01E2  59                               POP     CX              ; Real AX 
+ 01E3  58                               POP     AX              ; Real CX 
+ 01E4  AB                               STOSW                   ; Count 
+ 01E5  92                               XCHG    AX,DX           ; AX=Real DX, D
+				X=real CX, CX=real AX 
+ 01E6  AB                               STOSW                   ; Start 
+ 01E7  91                               XCHG    AX,CX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Page     1-13
+SETREAD, SETWRITE -- SET UP HEADER BLOCK                    
+
+ 01E8  87 D1                            XCHG    DX,CX 
+ 01EA  5F                               POP     DI 
+ 01EB  BB 0000 E                        MOV     BX,OFFSET DOSGROUP:DEVCALL 
+ 01EE  C3                               RET 
+                                 
+                                        entry   SETWRITE 
+ 01EF                         1 SETWRITE:
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:BX = Transfer Address 
+                                ;       CX = Record Count 
+                                ;       DX = Starting Record 
+                                ;       AH = Media Byte 
+                                ;       AL = Unit Code 
+                                ; Function: 
+                                ;       Set up the device call header at DEVCAL
+				L 
+                                ; Output: 
+                                ;       ES:BX Points to DEVCALL 
+                                ; No other registers effected 
+                                 
+ 01EF  57                               PUSH    DI 
+ 01F0  51                               PUSH    CX 
+ 01F1  50                               PUSH    AX 
+ 01F2  B1 08                            MOV     CL,DEVWRT 
+ 01F4  36: 02 0E 0000 E                 ADD     CL,[VERFLG] 
+ 01F9  EB C6                            JMP     SHORT SETCALLHEAD 
+                                SETREAD ENDP 
+                                 
+                                do_ext 
+                                 
+ 01FB                           CODE    ENDS 
+                                    END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DOSGROUP . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	01FB	BYTE	PUBLIC	'CODE'
+  CONSTANTS  . . . . . . . . . .  	0000	BYTE	PUBLIC	'CONST'
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Symbols-5
+                                                             
+
+  LAST . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'LAST'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTRIB . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+
+CALLDEVAD  . . . . . . . . . . .  	V DWORD	0000	DATA	External
+CALLSCNT . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Symbols-6
+                                                             
+
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DCALL  . . . . . . . . . . . . .  	L NEAR	0059	CODE
+DCALLO . . . . . . . . . . . . .  	L NEAR	009F	CODE
+DCALLR . . . . . . . . . . . . .  	L NEAR	0057	CODE
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVCALL  . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOBUF . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DEVIOCALL  . . . . . . . . . . .  	N PROC	0133	CODE	Global	Length = 0021
+DEVIOCALL2 . . . . . . . . . . .  	L NEAR	0136	CODE	Global
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVNAME  . . . . . . . . . . . .  	N PROC	0154	CODE	Global	Length = 0046
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Symbols-7
+                                                             
+
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVPT  . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DFLUSH . . . . . . . . . . . . .  	L NEAR	0054	CODE
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMAADD . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DNODRD . . . . . . . . . . . . .  	L NEAR	008E	CODE
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBHEAD  . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Symbols-8
+                                                             
+
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FNDDPB . . . . . . . . . . . . .  	L NEAR	01A7	CODE
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+
+GETBP  . . . . . . . . . . . . .  	N PROC	019A	CODE	Global	Length = 0022
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Symbols-9
+                                                             
+
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+GOTDPB . . . . . . . . . . . . .  	L NEAR	01B3	CODE
+
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCALL . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+IOCHK  . . . . . . . . . . . . .  	L NEAR	0185	CODE
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+IOFUNC . . . . . . . . . . . . .  	N PROC	0003	CODE	Global	Length = 0130
+IOFUNC2  . . . . . . . . . . . .  	L NEAR	001A	CODE
+IOFUNC_RETRY . . . . . . . . . .  	L NEAR	0000	CODE
+IOIN . . . . . . . . . . . . . .  	L NEAR	00CD	CODE
+IOIST  . . . . . . . . . . . . .  	L NEAR	00B0	CODE
+IOMED  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+IORCHR . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+IOSCNT . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+IOTODEV  . . . . . . . . . . . .  	L NEAR	0023	CODE
+IOTOFILE . . . . . . . . . . . .  	L NEAR	00A3	CODE
+IOUT . . . . . . . . . . . . . .  	L NEAR	00C0	CODE
+IOXAD  . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KANJI  . . . . . . . . . . . . .  	Number	0000	
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LOOKIO . . . . . . . . . . . . .  	L NEAR	0161	CODE
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Symbols-10
+                                                             
+
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+
+NAME1  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+NULDEV . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+NULLDEVPT  . . . . . . . . . . .  	V DWORD	0000	DATA	External
+NUMIO  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OKDEVIO  . . . . . . . . . . . .  	L NEAR	0081	CODE
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RESTRET  . . . . . . . . . . . .  	L NEAR	012E	CODE
+RESTXADDR  . . . . . . . . . . .  	L NEAR	011C	CODE
+RET31  . . . . . . . . . . . . .  	L NEAR	017E	CODE
+RETNV  . . . . . . . . . . . . .  	L NEAR	017F	CODE
+RET_L  . . . . . . . . . . . . .  	NEAR 	0153	CODE
+RET_NZ . . . . . . . . . . . . .  	NEAR 	00E1	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Symbols-11
+                                                             
+
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETCALLHEAD  . . . . . . . . . .  	L NEAR	01C1	CODE
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SETREAD  . . . . . . . . . . . .  	N PROC	01BC	CODE	Global	Length = 003F
+SETWRITE . . . . . . . . . . . .  	L NEAR	01EF	CODE	Global
+SETXADDR . . . . . . . . . . . .  	L NEAR	00E6	CODE
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+SKIPDEV  . . . . . . . . . . . .  	L NEAR	0177	CODE
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+
+THISDPB  . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+VERFLG . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:31:22
+DEV - Device call routines                                  Symbols-12
+                                                             
+
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+??0000 . . . . . . . . . . . . .  	L NEAR	009E	CODE
+??0001 . . . . . . . . . . . . .  	L NEAR	00AF	CODE
+??0002 . . . . . . . . . . . . .  	L NEAR	00BF	CODE
+??0003 . . . . . . . . . . . . .  	L NEAR	00CC	CODE
+??0004 . . . . . . . . . . . . .  	L NEAR	00E1	CODE
+??0006 . . . . . . . . . . . . .  	L NEAR	00E5	CODE
+??0007 . . . . . . . . . . . . .  	L NEAR	0153	CODE
+
+
+   1783 Source  Lines
+   2208 Total   Lines
+    600 Symbols
+
+  20088 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

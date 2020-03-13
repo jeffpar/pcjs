@@ -1,0 +1,63 @@
+
+
+Warning: no stack segment
+
+ Start  Stop   Length Name                   Class
+ 00000H 0043BH 0043CH CODE                   
+ 0043CH 00680H 00245H CONST                  
+ 00681H 00681H 00000H DATA                   
+
+ Origin   Group
+ 0000:0   DG
+
+  Address         Publics by Name
+
+ 0000:0533       ANOPROMPT
+ 0000:02A8       ASKANOTHER
+ 0000:0543       CPYMSG
+ 0000:067E       CRLF
+ 0000:0613       DRVERR1
+ 0000:0633       DRVERR3
+ 0000:02DD       DSKRD
+ 0000:0355       DSKWRT
+ 0000:05F3       DSTLET
+ 0000:05D1       DSTMSG
+ 0000:05CE       FDSTLET
+ 0000:05A2       FDSTMSG
+ 0000:0552       GOOD1
+ 0000:0556       GOODMSG
+ 0000:05F6       KEYMSG
+ 0000:011D       PCRLF
+ 0000:0120       PRINT
+ 0000:02B8       PROMPTYN
+ 0000:0116       SEC64K
+ 0000:0112       SECSIZ
+ 0000:059F       SRCLET
+ 0000:057B       SRCMSG
+
+  Address         Publics by Value
+
+ 0000:0112       SECSIZ
+ 0000:0116       SEC64K
+ 0000:011D       PCRLF
+ 0000:0120       PRINT
+ 0000:02A8       ASKANOTHER
+ 0000:02B8       PROMPTYN
+ 0000:02DD       DSKRD
+ 0000:0355       DSKWRT
+ 0000:0533       ANOPROMPT
+ 0000:0543       CPYMSG
+ 0000:0552       GOOD1
+ 0000:0556       GOODMSG
+ 0000:057B       SRCMSG
+ 0000:059F       SRCLET
+ 0000:05A2       FDSTMSG
+ 0000:05CE       FDSTLET
+ 0000:05D1       DSTMSG
+ 0000:05F3       DSTLET
+ 0000:05F6       KEYMSG
+ 0000:0613       DRVERR1
+ 0000:0633       DRVERR3
+ 0000:067E       CRLF
+
+Program entry point at 0000:0100

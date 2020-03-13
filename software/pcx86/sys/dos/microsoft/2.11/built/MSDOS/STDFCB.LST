@@ -1,0 +1,1335 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Page     1-1
+                                                            
+
+                                ; 
+                                ; Standard FCB calls for MSDOS (first 12 functi
+				on calls) 
+                                ; 
+                                 
+                                .list 
+                                 
+                                TITLE   STDFCB - FCB calls for MSDOS 
+                                NAME    STDFCB 
+                                 
+                             C  INCLUDE FCB.ASM 
+                             C  ; 
+                             C  ; FCB management routines for MSDOS 
+                             C  ; 
+                             C   
+                             C  INCLUDE DOSSEG.ASM 
+                             C  ; 
+                             C  ; segment ordering for MSDOS 
+                             C  ; 
+                             C   
+ 0000                        C  CONSTANTS       SEGMENT BYTE PUBLIC 'CONST' 
+ 0000                        C  CONSTANTS       ENDS 
+                             C   
+ 0000                        C  DATA            SEGMENT BYTE PUBLIC 'DATA' 
+ 0000                        C  DATA            ENDS 
+                             C   
+ 0000                        C  CODE            SEGMENT BYTE PUBLIC 'CODE' 
+ 0000                        C  CODE            ENDS 
+                             C   
+ 0000                        C  LAST            SEGMENT BYTE PUBLIC 'LAST' 
+ 0000                        C  LAST            ENDS 
+                             C   
+                             C  DOSGROUP    GROUP   CODE,CONSTANTS,DATA,LAST 
+                             C   
+                             C   
+                             C  ENDIF 
+                             C   
+ 0000                        C  CODE    SEGMENT BYTE PUBLIC  'CODE' 
+                             C          ASSUME  SS:DOSGROUP,CS:DOSGROUP 
+                             C   
+                             C  .list 
+                             C   
+                             C          i_need  Name1,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  NumIO,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  DevFCB,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  Creating,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+                             C          i_need  ExtFCB,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  Attrib,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  SpaceFlag,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  Current_Country,WORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C   
+                             C          procedure   MakeFcb,NEAR 
+ 0000                        C1 MakeFcb PROC NEAR
+ = 0002                      C  DRVBIT  EQU     2 
+ = 0004                      C  NAMBIT  EQU     4 
+ = 0008                      C  EXTBIT  EQU     8 
+ 0000  36: C6 06 0000 E 00   C          MOV     BYTE PTR [SpaceFlag],0 
+ 0006  32 D2                 C          XOR     DL,DL           ; Flag--not amb
+				iguous file name 
+ 0008  A8 02                 C          TEST    AL,DRVBIT       ; Use current d
+				rive field if default? 
+ 000A  75 04                 C          JNZ     DEFDRV 
+ 000C  26: C6 05 00          C          MOV     BYTE PTR ES:[DI],0      ; No - 
+				use default drive 
+ 0010                        C  DEFDRV: 
+ 0010  47                    C          INC     DI 
+ 0011  B9 0008               C          MOV     CX,8 
+ 0014  A8 04                 C          TEST    AL,NAMBIT       ; Use current n
+				ame fields as defualt? 
+ 0016  93                    C          XCHG    AX,BX           ; Save bits in 
+				BX 
+ 0017  B0 20                 C          MOV     AL," " 
+ 0019  74 04                 C          JZ      FILLB           ; If not, go fi
+				ll with blanks 
+ 001B  03 F9                 C          ADD     DI,CX 
+ 001D  33 C9                 C          XOR     CX,CX           ; Don't fill an
+				y 
+ 001F                        C  FILLB: 
+ 001F  F3/ AA                C          REP     STOSB 
+ 0021  B1 03                 C          MOV     CL,3 
+ 0023  F6 C3 08              C          TEST    BL,EXTBIT       ; Use current e
+				xtension as default 
+ 0026  74 04                 C          JZ      FILLB2 
+ 0028  03 F9                 C          ADD     DI,CX 
+ 002A  33 C9                 C          XOR     CX,CX 
+ 002C                        C  FILLB2: 
+ 002C  F3/ AA                C          REP     STOSB 
+ 002E  91                    C          XCHG    AX,CX           ; Put zero in A
+				X 
+ 002F  AB                    C          STOSW 
+ 0030  AB                    C          STOSW                   ; Initialize tw
+				o words after to zero 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Page     1-3
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0031  83 EF 10              C          SUB     DI,16           ; Point back at
+				 start 
+ 0034  F6 C3 01              C          TEST    BL,1            ; Scan off sepa
+				rators if not zero 
+ 0037  74 09                 C          JZ      SKPSPC 
+ 0039  E8 00AF R             C          CALL    SCANB           ; Peel off blan
+				ks and tabs 
+ 003C  E8 01BF R             C          CALL    DELIM           ; Is it a one-t
+				ime-only delimiter? 
+ 003F  75 04                 C          JNZ     NOSCAN 
+ 0041  46                    C          INC     SI              ; Skip over the
+				 delimiter 
+ 0042                        C  SKPSPC: 
+ 0042  E8 00AF R             C          CALL    SCANB           ; Always kill p
+				receding blanks and tabs 
+ 0045                        C  NOSCAN: 
+ 0045  E8 0191 R             C          CALL    GETLET 
+ 0048  76 16                 C          JBE     NODRV           ; Quit if termi
+				nation character 
+ 004A  80 3C 3A              C          CMP     BYTE PTR[SI],":"        ; Check
+				 for potential drive specifier 
+ 004D  75 11                 C          JNZ     NODRV 
+ 004F  46                    C          INC     SI              ; Skip over col
+				on 
+ 0050  2C 40                 C          SUB     AL,"@"          ; Convert drive
+				 letter to binary drive number 
+ 0052  76 07                 C          JBE     BADDRV          ; Valid drive n
+				umbers are <= NUMIO 
+ 0054  36: 3A 06 0000 E      C          CMP     AL,BYTE PTR [NUMIO] 
+ 0059  76 02                 C          JBE     HAVDRV 
+ 005B                        C  BADDRV: 
+ 005B  B2 FF                 C          MOV     DL,-1 
+ 005D                        C  HAVDRV: 
+ 005D  AA                    C          STOSB           ; Put drive specifier i
+				n first byte 
+ 005E  46                    C          INC     SI 
+ 005F  4F                    C          DEC     DI      ; Counteract next two i
+				nstructions 
+ 0060                        C  NODRV: 
+ 0060  4E                    C          DEC     SI      ; Back up 
+ 0061  47                    C          INC     DI      ; Skip drive byte 
+ 0062                        C  NORMSCAN: 
+ 0062  B9 0008               C          MOV     CX,8 
+ 0065  E8 007B R             C          CALL    GETWORD         ; Get 8-letter 
+				file name 
+ 0068  80 3C 2E              C          CMP     BYTE PTR [SI],"." 
+ 006B  75 07                 C          JNZ     NODOT 
+ 006D  46                    C          INC     SI              ; Skip over dot
+				 if present 
+ 006E  B9 0003               C          MOV     CX,3            ; Get 3-letter 
+				extension 
+ 0071  E8 0081 R             C          CALL    MUSTGETWORD 
+ 0074                        C  NODOT: 
+ 0074  8A C2                 C          MOV     AL,DL 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Page     1-4
+DEVICE TABLE AND SRH DEFINITION                             
+
+                             C          return 
+ 0076                        C1 ??0000:
+ 0076  C3                    C1  RET
+                             C   
+ 0077                        C  NONAM: 
+ 0077  03 F9                 C          ADD     DI,CX 
+ 0079  4E                    C          DEC     SI 
+                             C          return 
+ 007A                        C1 ??0001:
+ 007A  C3                    C1  RET
+                             C   
+ 007B                        C  GETWORD: 
+ 007B  E8 0191 R             C          CALL    GETLET 
+ 007E  76 F7                 C          JBE     NONAM           ; Exit if inval
+				id character 
+ 0080  4E                    C          DEC     SI 
+                             C  ; 
+                             C  ; UGH!!! Horrible bug here that should be fixed
+				 at some point: 
+                             C  ; If the name we are scanning is longer than CX
+				, we keep on reading! 
+                             C  ; 
+ 0081                        C  MUSTGETWORD: 
+ 0081  E8 0191 R             C          CALL    GETLET 
+                             C  ; 
+                             C  ; If spaceFlag is set then we allow spaces in a
+				 pathname 
+                             C  ; 
+ 0084  72 23                 C          JB      FILLNAM 
+ 0086  75 0C                 C          JNZ     MustCheckCX 
+ 0088  36: F6 06 0000 E FF   C          TEST    BYTE PTR [SpaceFlag],0FFh 
+ 008E  74 19                 C          JZ      FILLNAM 
+ 0090  3C 20                 C          CMP     AL," " 
+ 0092  75 15                 C          JNZ     FILLNAM 
+                             C   
+ 0094                        C  MustCheckCX: 
+ 0094  E3 EB                 C          JCXZ    MUSTGETWORD 
+ 0096  49                    C          DEC     CX 
+ 0097  3C 2A                 C          CMP     AL,"*"                  ; Check
+				 for ambiguous file specifier 
+ 0099  75 04                 C          JNZ     NOSTAR 
+ 009B  B0 3F                 C          MOV     AL,"?" 
+ 009D  F3/ AA                C          REP     STOSB 
+ 009F                        C  NOSTAR: 
+ 009F  AA                    C          STOSB 
+                             C   
+                             C          ENDIF 
+                             C   
+ 00A0  3C 3F                 C          CMP     AL,"?" 
+ 00A2  75 DD                 C          JNZ     MUSTGETWORD 
+ 00A4  80 CA 01              C          OR      DL,1                    ; Flag 
+				ambiguous file name 
+ 00A7  EB D8                 C          JMP     MUSTGETWORD 
+ 00A9                        C  FILLNAM: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Page     1-5
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 00A9  B0 20                 C          MOV     AL," " 
+ 00AB  F3/ AA                C          REP     STOSB 
+ 00AD  4E                    C          DEC     SI 
+                             C          return 
+ 00AE                        C1 ??0002:
+ 00AE  C3                    C1  RET
+                             C   
+ 00AF                        C  SCANB: 
+ 00AF  AC                    C          LODSB 
+ 00B0  E8 01DF R             C          CALL    SPCHK 
+ 00B3  74 FA                 C          JZ      SCANB 
+ 00B5  4E                    C          DEC     SI 
+                             C          return 
+ 00B6                        C1 ??0003:
+ 00B6  C3                    C1  RET
+                             C  MakeFCB ENDP 
+                             C   
+                             C  ; 
+                             C  ; NameTrans is used by FindPath to scan off an 
+				element 
+                             C  ; of a path.  We must allow spaces in pathnames
+				 
+                             C  ; Inputs:   SS - DOSGROUP 
+                             C  ;           DS:SI name 
+                             C  ; Outputs:  DS:SI advanced over spot 
+                             C  ;           ES:DI point to after Name1 
+                             C  ; registers modified: AX, BX, CX, DX 
+                             C  procedure   NameTrans,near 
+ 00B7                        C1 NameTrans PROC near
+ 00B7  36: C6 06 0000 E 01   C          MOV     BYTE PTR [SpaceFlag],1 
+ 00BD  16                    C          PUSH    SS 
+ 00BE  07                    C          POP     ES 
+ 00BF  BF 0000 E             C          MOV     DI,OFFSET DOSGROUP:NAME1 
+ 00C2  57                    C          PUSH    DI 
+ 00C3  B0 20                 C          MOV     AL,' ' 
+ 00C5  B9 000B               C          MOV     CX,11 
+ 00C8  F3/ AA                C          REP     STOSB 
+ 00CA  32 C0                 C          XOR     AL,AL 
+ 00CC  8A D0                 C          MOV     DL,AL 
+ 00CE  AA                    C          STOSB 
+ 00CF  5F                    C          POP     DI 
+ 00D0  80 3C 2E              C          CMP     BYTE PTR [SI],'.' 
+                             C   
+                             C          ELSE 
+ 00D3  75 8D                 C          JNZ     NORMSCAN 
+                             C          ENDIF 
+                             C   
+ 00D5  A4                    C          MOVSB 
+ 00D6  AC                    C          LODSB 
+ 00D7  E8 01E6 R             C          CALL    PATHCHRCMP 
+ 00DA  74 15                 C          JZ      GOTDOTNAME 
+ 00DC  0A C0                 C          OR      AL,AL 
+ 00DE  74 11                 C          JZ      GOTDOTNAME 
+ 00E0  3C 2E                 C          CMP     AL,'.' 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Page     1-6
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 00E2  75 0C                 C          JNZ     BADDOTS 
+ 00E4  AA                    C          STOSB 
+ 00E5  AC                    C          LODSB 
+ 00E6  E8 01E6 R             C          CALL    PATHCHRCMP 
+ 00E9  74 06                 C          JZ      GOTDOTNAME 
+ 00EB  0A C0                 C          OR      AL,AL 
+ 00ED  74 02                 C          JZ      GOTDOTNAME 
+ 00EF  4E                    C          DEC     SI 
+ 00F0                        C  BADDOTS: 
+ 00F0  4E                    C          DEC     SI 
+ 00F1                        C  GOTDOTNAME: 
+ 00F1  4E                    C          DEC     SI 
+ 00F2  32 C0                 C          XOR     AL,AL 
+                             C          return 
+ 00F4                        C1 ??0004:
+ 00F4  C3                    C1  RET
+                             C  nametrans   ENDP 
+                             C   
+                             C  SUBTTL BUILDFCB -- MAKE A BLANK FCB FOR A DEVIC
+				E 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Page     1-7
+BUILDFCB -- MAKE A BLANK FCB FOR A DEVICE                   
+
+                             C  PAGE 
+                             C          procedure BuildFCB,near 
+ 00F5                        C1 BuildFCB PROC near
+                             C  ASSUME  DS:DOSGROUP,ES:DOSGROUP 
+                             C   
+                             C  ; Function: 
+                             C  ;       Build a blank FCB for I/O to a device 
+                             C  ; Outputs: 
+                             C  ;       Same as GETNAME 
+                             C   
+ 00F5  B8 2020               C          MOV     AX,"  " 
+ 00F8  BF 0008 E             C          MOV     DI,OFFSET DOSGROUP:DEVFCB+8    
+				 ; Point to extent field 
+ 00FB  AB                    C          STOSW 
+ 00FC  AA                    C          STOSB                   ; Blank out ext
+				ent field 
+ 00FD  33 C0                 C          XOR     AX,AX 
+ 00FF  B9 000A               C          MOV     CX,10 
+ 0102  F3/ AB                C          REP     STOSW           ; Fill FCB with
+				 zeros 
+ 0104  AA                    C          STOSB 
+                             C          invoke  DATE16 
+ 0105  E8 0000 E             C1  CALL DATE16
+ 0108  BF 0016 E             C          MOV     DI,OFFSET DOSGROUP:DEVFCB+22 
+ 010B  92                    C          XCHG    AX,DX 
+ 010C  AB                    C          STOSW 
+ 010D  92                    C          XCHG    AX,DX 
+ 010E  AB                    C          STOSW 
+ 010F  93                    C          XCHG    AX,BX           ; But device nu
+				mber in AH 
+ 0110  BB 0000 E             C          MOV     BX,OFFSET DOSGROUP:DEVFCB 
+ 0113  8B F7                 C          MOV     SI,DI 
+ 0115  32 C0                 C          XOR     AL,AL           ; Set zero, cle
+				ar carry 
+                             C          return 
+ 0117                        C1 ??0005:
+ 0117  C3                    C1  RET
+                             C  BuildFCB    ENDP 
+                             C   
+                             C  SUBTTL MOVENAME, LODNAME -- EXAMINE FCB AND SET
+				UP 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Page     1-8
+MOVENAME, LODNAME -- EXAMINE FCB AND SETUP                  
+
+                             C  PAGE 
+                             C          procedure   FCB_move,NEAR 
+ 0118                        C1 FCB_move PROC NEAR
+                             C   
+                             C          entry   MOVNAMENOSET 
+ 0118                        C1 MOVNAMENOSET:
+ 0118  BF 0001               C          MOV     DI,1 
+ 011B  EB 02                 C          JMP     SHORT MOVSTART 
+                             C   
+                             C          entry   MOVNAME 
+ 011D                        C1 MOVNAME:
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       DS, DX point to FCB or extended FCB 
+                             C  ; Outputs: 
+                             C  ;       DS:DX point to normal FCB 
+                             C  ;       DS:SI point after end of NAME/EXT in FC
+				B 
+                             C  ;       ES = DOSGROUP 
+                             C  ;       If file name OK: 
+                             C  ;       [NAME1] has name in upper case 
+                             C  ; All registers destroyed 
+                             C  ; Carry set if bad file name or drive 
+                             C   
+ 011D  33 FF                 C          XOR     DI,DI 
+ 011F                        C  MOVSTART: 
+ 011F  36: C7 06 0000 E E500 C          MOV     WORD PTR [CREATING],0E500H   ; 
+				Not creating, not DEL *.* 
+ 0126  8B F2                 C          MOV     SI,DX 
+ 0128  AC                    C          LODSB 
+ 0129  36: A2 0000 E         C          MOV     [EXTFCB],AL     ; Set flag if e
+				xtended FCB in use 
+ 012D  32 E4                 C          XOR     AH,AH           ; Set default a
+				ttributes 
+ 012F  3C FF                 C          CMP     AL,-1           ; Is it an exte
+				nded FCB? 
+ 0131  75 0A                 C          JNZ     HAVATTRB 
+ 0133  83 C2 07              C          ADD     DX,7            ; Adjust to poi
+				nt to normal FCB 
+ 0136  83 C6 06              C          ADD     SI,6 
+ 0139  8A 64 FF              C          MOV     AH,[SI-1]       ; Attribute byt
+				e 
+ 013C  AC                    C          LODSB                   ; Get drive sel
+				ect byte 
+ 013D                        C  HAVATTRB: 
+                             C          invoke  GETTHISDRV 
+ 013D  E8 0000 E             C1  CALL GETTHISDRV
+                             C          retc 
+ 0140  72 D5                 C2  ??0006: jc ret_l
+ 0142  1E                    C          PUSH    DS 
+ 0143  52                    C          PUSH    DX 
+ 0144  56                    C          PUSH    SI 
+ 0145  50                    C          PUSH    AX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Page     1-9
+MOVENAME, LODNAME -- EXAMINE FCB AND SETUP                  
+
+                             C  ; 
+                             C  ; DS:DX is pointer to good FCB 
+                             C  ; DS:SI is same 
+                             C  ; 
+                             C  ; Move the file into Name1 and UCASE it 
+                             C  ; 
+ 0146  57                    C          PUSH    DI 
+                             C          context ES 
+ 0147  16                    C1  PUSH SS
+ 0148  07                    C1  POP ES
+ 0149  BF 0000 E             C          MOV     DI,OFFSET DOSGROUP:NAME1 
+ 014C  E8 0177 R             C          CALL    LodName 
+ 014F  5F                    C          POP     DI 
+ 0150  72 17                 C          JC      DrvNoSet 
+                             C   
+                             C  ; 
+                             C  ; are we setting current dir info? 
+                             C  ; 
+ 0152  0B FF                 C          OR      DI,DI 
+ 0154  75 13                 C          JNZ     DrvNoSet        ; do not set di
+				r info 
+                             C   
+                             C  ; 
+                             C  ; check for device name first, eliminating driv
+				e hits on devices 
+                             C  ; 
+                             C          context DS 
+ 0156  16                    C1  PUSH SS
+ 0157  1F                    C1  POP DS
+                             C          invoke  DEVNAME 
+ 0158  E8 0000 E             C1  CALL DEVNAME
+ 015B  73 0C                 C          JNC     DrvNoSet            ; we have a
+				 device 
+                             C   
+                             C  ; 
+                             C  ; make sure that everything is current 
+                             C  ; 
+                             C          invoke  FATREAD 
+ 015D  E8 0000 E             C1  CALL FATREAD
+                             C          ASSUME  DS:NOTHING,ES:NOTHING 
+ 0160  36: C6 06 0000 E 16   C          MOV     BYTE PTR [ATTRIB],attr_director
+				y+attr_hidden+attr_system 
+                             C          invoke  GETCURRDIR 
+ 0166  E8 0000 E             C1  CALL GETCURRDIR
+ 0169                        C  DrvNoSet: 
+ 0169  58                    C          POP     AX 
+ 016A  36: 88 26 0000 E      C          MOV     BYTE PTR [ATTRIB],AH 
+                             C   
+ 016F  5E                    C          POP     SI 
+ 0170  5A                    C          POP     DX 
+ 0171  1F                    C          POP     DS 
+                             C          context ES 
+ 0172  16                    C1  PUSH SS
+ 0173  07                    C1  POP ES
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Page     1-10
+MOVENAME, LODNAME -- EXAMINE FCB AND SETUP                  
+
+ 0174  BF 0000 E             C          MOV     DI,OFFSET DOSGROUP:NAME1 
+                             C   
+                             C          entry   LODNAME 
+ 0177                        C1 LODNAME:
+                             C  ; Inputs:   DS:SI point to an FCB 
+                             C  ;           ES:DI point to an FCB 
+                             C  ; Outputs:  DS:SI point to after FCB 
+                             C  ;           ES:DI point to after FCB 
+                             C  ;                 FCB from DS:SI copied and uca
+				sed to ES:DI 
+                             C  ; Carry set if there was an error. 
+                             C  ; Destroys AX,CX 
+ 0177  80 3C 20              C          CMP     BYTE PTR [SI]," "       ; Don't
+				 allow blank as first letter 
+ 017A  F9                    C          STC                     ; In case of er
+				ror 
+                             C          retz 
+ 017B  74 9A                 C2  ??0008: jz ret_l
+                             C   
+                             C          ELSE 
+ 017D  B9 000B               C          MOV     CX,11 
+ 0180                        C  MOVCHK: 
+ 0180  E8 0191 R             C          CALL    GETLET 
+ 0183  72 0B                 C          JB      RET6 
+ 0185  75 05                 C          JNZ     STOLET          ; Is it a delim
+				iter? 
+ 0187  3C 20                 C          CMP     AL," "          ; This is the o
+				nly delimiter allowed 
+ 0189  F9                    C          STC                     ; In case of er
+				ror 
+                             C          retnz 
+ 018A  75 8B                 C2  ??000A: jnz ret_l
+ 018C                        C  STOLET: 
+ 018C  AA                    C          STOSB 
+ 018D  E2 F1                 C          LOOP    MOVCHK 
+                             C          ENDIF 
+                             C   
+ 018F  F8                    C          CLC                     ; Got through w
+				hole name - no error 
+ 0190                        C  RET6:   return 
+ 0190                        C1 ??000C:
+ 0190  C3                    C1  RET
+                             C  FCB_Move    ENDP 
+                             C   
+                             C  SUBTTL GETLET, DELIM -- CHECK CHARACTERS AND CO
+				NVERT 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Page     1-11
+GETLET, DELIM -- CHECK CHARACTERS AND CONVERT               
+
+                             C  PAGE 
+                             C          procedure   GetLet,NEAR 
+ 0191                        C1 GetLet PROC NEAR
+                             C  ; Get a byte from [SI], convert it to upper cas
+				e, and compare for delimiter. 
+                             C  ; ZF set if a delimiter, CY set if a control ch
+				aracter (other than TAB). 
+ 0191  AC                    C          LODSB 
+                             C   
+ 0192  3C 61                 C          CMP     AL,"a" 
+ 0194  72 06                 C          JB      CHK1 
+ 0196  3C 7A                 C          CMP     AL,"z" 
+ 0198  77 02                 C          JA      CHK1 
+ 019A  2C 20                 C          SUB     AL,20H          ; Convert to up
+				per case 
+ 019C                        C  CHK1: 
+ 019C  56                    C          PUSH    SI 
+ 019D  36: 8B 36 0000 E      C          MOV     SI,[Current_Country] 
+ 01A2  83 C6 12              C          ADD     SI,Map_call 
+ 01A5  0E                    C          PUSH    CS              ; CS for long r
+				eturn 
+ 01A6  2E: FF 14             C          CALL    WORD PTR CS:[SI] 
+ 01A9  5E                    C          POP     SI 
+                             C          entry   CHK 
+ 01AA                        C1 CHK:
+ 01AA  3C 2E                 C          CMP     AL,"." 
+                             C          retz 
+ 01AC  74 E2                 C2  ??000D: jz ret_l
+ 01AE  3C 22                 C          CMP     AL,'"' 
+                             C          retz 
+ 01B0  74 DE                 C2  ??000F: jz ret_l
+ 01B2  E8 01E6 R             C          CALL    PATHCHRCMP 
+                             C          retz 
+ 01B5  74 D9                 C2  ??0011: jz ret_l
+ 01B7  3C 5B                 C          CMP     AL,"[" 
+                             C          retz 
+ 01B9  74 D5                 C2  ??0013: jz ret_l
+ 01BB  3C 5D                 C          CMP     AL,"]" 
+                             C          retz 
+ 01BD  74 D1                 C2  ??0015: jz ret_l
+                             C   
+ 01BF                        C  DELIM: 
+ 01BF  3C 3A                 C          CMP     AL,":"          ; Allow ":" as 
+				separator in IBM version 
+                             C          retz 
+ 01C1  74 CD                 C2  ??0017: jz ret_l
+                             C   
+ 01C3  3C 3C                 C          CMP     AL,"<" 
+                             C          retz 
+ 01C5  74 C9                 C2  ??0019: jz ret_l
+ 01C7  3C 7C                 C          CMP     AL,"|" 
+                             C          retz 
+ 01C9  74 C5                 C2  ??001B: jz ret_l
+ 01CB  3C 3E                 C          CMP     AL,">" 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Page     1-12
+GETLET, DELIM -- CHECK CHARACTERS AND CONVERT               
+
+                             C          retz 
+ 01CD  74 C1                 C2  ??001D: jz ret_l
+                             C   
+ 01CF  3C 2B                 C          CMP     AL,"+" 
+                             C          retz 
+ 01D1  74 BD                 C2  ??001F: jz ret_l
+ 01D3  3C 3D                 C          CMP     AL,"=" 
+                             C          retz 
+ 01D5  74 B9                 C2  ??0021: jz ret_l
+ 01D7  3C 3B                 C          CMP     AL,";" 
+                             C          retz 
+ 01D9  74 B5                 C2  ??0023: jz ret_l
+ 01DB  3C 2C                 C          CMP     AL,"," 
+                             C          retz 
+ 01DD  74 B1                 C2  ??0025: jz ret_l
+ 01DF                        C  SPCHK: 
+ 01DF  3C 09                 C          CMP     AL,9            ; Filter out ta
+				bs too 
+                             C          retz 
+ 01E1  74 AD                 C2  ??0027: jz ret_l
+                             C  ; WARNING! " " MUST be the last compare 
+ 01E3  3C 20                 C          CMP     AL," " 
+                             C          return 
+ 01E5                        C1 ??0029:
+ 01E5  C3                    C1  RET
+                             C  GetLet  ENDP 
+                             C   
+                             C          procedure   PATHCHRCMP,NEAR 
+ 01E6                        C1 PATHCHRCMP PROC NEAR
+ 01E6  3C 2F                 C          CMP     AL,'/' 
+                             C          retz 
+ 01E8  74 FB                 C2  ??002A: jz ret_l
+ 01EA  3C 5C                 C          CMP     AL,'\' 
+                             C          return 
+ 01EC                        C1 ??002C:
+ 01EC  C3                    C1  RET
+                             C  PathChrCMP  ENDP 
+                             C   
+                             C          ENDIF 
+                             C  do_ext 
+                             C   
+ 01ED                        C  CODE    ENDS 
+                             C      END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DOSGROUP . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	01ED	BYTE	PUBLIC	'CODE'
+  CONSTANTS  . . . . . . . . . .  	0000	BYTE	PUBLIC	'CONST'
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Symbols-5
+                                                             
+
+  LAST . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'LAST'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Alias	 FALSE		
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTRIB . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BADDOTS  . . . . . . . . . . . .  	L NEAR	00F0	CODE
+BADDRV . . . . . . . . . . . . .  	L NEAR	005B	CODE
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+BUILDFCB . . . . . . . . . . . .  	N PROC	00F5	CODE	Global	Length = 0023
+
+CANCEL . . . . . . . . . . . . .  	Number	0018	
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHK  . . . . . . . . . . . . . .  	L NEAR	01AA	CODE	Global
+CHK1 . . . . . . . . . . . . . .  	L NEAR	019C	CODE
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Symbols-6
+                                                             
+
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREATING . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENT_COUNTRY  . . . . . . . .  	V WORD 	0000	DATA	External
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEFDRV . . . . . . . . . . . . .  	L NEAR	0010	CODE
+DELIM  . . . . . . . . . . . . .  	L NEAR	01BF	CODE
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVFCB . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Symbols-7
+                                                             
+
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DRVBIT . . . . . . . . . . . . .  	Number	0002	
+DRVNOSET . . . . . . . . . . . .  	L NEAR	0169	CODE
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+ESCCH  . . . . . . . . . . . . .  	Number	001B	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Symbols-8
+                                                             
+
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+EXTBIT . . . . . . . . . . . . .  	Number	0008	
+EXTFCB . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_MOVE . . . . . . . . . . . .  	N PROC	0118	CODE	Global	Length = 0079
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILLB  . . . . . . . . . . . . .  	L NEAR	001F	CODE
+FILLB2 . . . . . . . . . . . . .  	L NEAR	002C	CODE
+FILLNAM  . . . . . . . . . . . .  	L NEAR	00A9	CODE
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GETLET . . . . . . . . . . . . .  	N PROC	0191	CODE	Global	Length = 0055
+GETWORD  . . . . . . . . . . . .  	L NEAR	007B	CODE
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Symbols-9
+                                                             
+
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+GOTDOTNAME . . . . . . . . . . .  	L NEAR	00F1	CODE
+
+HAVATTRB . . . . . . . . . . . .  	L NEAR	013D	CODE
+HAVDRV . . . . . . . . . . . . .  	L NEAR	005D	CODE
+HIGHMEM  . . . . . . . . . . . .  	Alias	 FALSE		
+
+IBM  . . . . . . . . . . . . . .  	Alias	 FALSE		
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KANJI  . . . . . . . . . . . . .  	Number	0000	
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LODNAME  . . . . . . . . . . . .  	L NEAR	0177	CODE	Global
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MAKEFCB  . . . . . . . . . . . .  	N PROC	0000	CODE	Global	Length = 00B7
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Symbols-10
+                                                             
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MOVCHK . . . . . . . . . . . . .  	L NEAR	0180	CODE
+MOVNAME  . . . . . . . . . . . .  	L NEAR	011D	CODE	Global
+MOVNAMENOSET . . . . . . . . . .  	L NEAR	0118	CODE	Global
+MOVSTART . . . . . . . . . . . .  	L NEAR	011F	CODE
+MSVER  . . . . . . . . . . . . .  	Alias	 TRUE		
+MUSTCHECKCX  . . . . . . . . . .  	L NEAR	0094	CODE
+MUSTGETWORD  . . . . . . . . . .  	L NEAR	0081	CODE
+
+NAMBIT . . . . . . . . . . . . .  	Number	0004	
+NAME1  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+NAMETRANS  . . . . . . . . . . .  	N PROC	00B7	CODE	Global	Length = 003E
+NODOT  . . . . . . . . . . . . .  	L NEAR	0074	CODE
+NODRV  . . . . . . . . . . . . .  	L NEAR	0060	CODE
+NONAM  . . . . . . . . . . . . .  	L NEAR	0077	CODE
+NORMSCAN . . . . . . . . . . . .  	L NEAR	0062	CODE
+NOSCAN . . . . . . . . . . . . .  	L NEAR	0045	CODE
+NOSTAR . . . . . . . . . . . . .  	L NEAR	009F	CODE
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+NUMIO  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+PATHCHRCMP . . . . . . . . . . .  	N PROC	01E6	CODE	Global	Length = 0007
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Symbols-11
+                                                             
+
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RET6 . . . . . . . . . . . . . .  	L NEAR	0190	CODE
+RET_C  . . . . . . . . . . . . .  	NEAR 	0140	CODE
+RET_L  . . . . . . . . . . . . .  	NEAR 	01EC	CODE
+RET_NZ . . . . . . . . . . . . .  	NEAR 	018A	CODE
+RET_Z  . . . . . . . . . . . . .  	NEAR 	01E8	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SCANB  . . . . . . . . . . . . .  	L NEAR	00AF	CODE
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+SKPSPC . . . . . . . . . . . . .  	L NEAR	0042	CODE
+SPACEFLAG  . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+SPCHK  . . . . . . . . . . . . .  	L NEAR	01DF	CODE
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+STOLET . . . . . . . . . . . . .  	L NEAR	018C	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:52:04
+STDFCB - FCB calls for MSDOS                                Symbols-12
+                                                             
+
+
+TOGLINS  . . . . . . . . . . . .  	Alias	 WANG		
+TOGLPRN  . . . . . . . . . . . .  	Alias	 FALSE		
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WANG . . . . . . . . . . . . . .  	Alias	 FALSE		
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+ZEROEXT  . . . . . . . . . . . .  	Alias	 TRUE		
+
+??0000 . . . . . . . . . . . . .  	L NEAR	0076	CODE
+??0001 . . . . . . . . . . . . .  	L NEAR	007A	CODE
+??0002 . . . . . . . . . . . . .  	L NEAR	00AE	CODE
+??0003 . . . . . . . . . . . . .  	L NEAR	00B6	CODE
+??0004 . . . . . . . . . . . . .  	L NEAR	00F4	CODE
+??0005 . . . . . . . . . . . . .  	L NEAR	0117	CODE
+??0006 . . . . . . . . . . . . .  	L NEAR	0140	CODE
+??0008 . . . . . . . . . . . . .  	L NEAR	017B	CODE
+??000A . . . . . . . . . . . . .  	L NEAR	018A	CODE
+??000C . . . . . . . . . . . . .  	L NEAR	0190	CODE
+??000D . . . . . . . . . . . . .  	L NEAR	01AC	CODE
+??000F . . . . . . . . . . . . .  	L NEAR	01B0	CODE
+??0011 . . . . . . . . . . . . .  	L NEAR	01B5	CODE
+??0013 . . . . . . . . . . . . .  	L NEAR	01B9	CODE
+??0015 . . . . . . . . . . . . .  	L NEAR	01BD	CODE
+??0017 . . . . . . . . . . . . .  	L NEAR	01C1	CODE
+??0019 . . . . . . . . . . . . .  	L NEAR	01C5	CODE
+??001B . . . . . . . . . . . . .  	L NEAR	01C9	CODE
+??001D . . . . . . . . . . . . .  	L NEAR	01CD	CODE
+??001F . . . . . . . . . . . . .  	L NEAR	01D1	CODE
+??0021 . . . . . . . . . . . . .  	L NEAR	01D5	CODE
+??0023 . . . . . . . . . . . . .  	L NEAR	01D9	CODE
+??0025 . . . . . . . . . . . . .  	L NEAR	01DD	CODE
+??0027 . . . . . . . . . . . . .  	L NEAR	01E1	CODE
+??0029 . . . . . . . . . . . . .  	L NEAR	01E5	CODE
+??002A . . . . . . . . . . . . .  	L NEAR	01E8	CODE
+??002C . . . . . . . . . . . . .  	L NEAR	01EC	CODE
+
+
+   1908 Source  Lines
+   2535 Total   Lines
+    630 Symbols
+
+  19162 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

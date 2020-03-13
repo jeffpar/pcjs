@@ -1,0 +1,202 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:25
+File Compare Routine for MSDOS 2.0                          Page     1-1
+                                                            
+
+                                        title   File Compare Routine for MSDOS 
+				2.0 
+                                 
+ = 000D                         CR      equ     0dh 
+ = 000A                         LF      equ     0ah 
+                                 
+ = 0000                         FALSE   equ     0 
+ = 00FF                         TRUE    equ     0ffh 
+                                 
+                                 
+ 0000                           const   segment public byte 
+                                 
+                                        PUBLIC  vers_err,opt_err,opt_e,crlf,opt
+				_err_len 
+                                        PUBLIC  found_err_pre,found_err_pre_len
+				,found_err_post 
+                                        PUBLIC  found_err_post_len,read_err_pre
+				,read_err_pre_len 
+                                        PUBLIC  read_err_post,read_err_post_len
+				,file_err,file_err_len 
+                                        PUBLIC  bf1ne,bf1ne_len,bf2ne,bf2ne_len
+				,bhead,bhead_len 
+                                        PUBLIC  int_err,int_err_len,dif_err,dif
+				_err_len,diff_sep,diff_sep_len 
+                                        PUBLIC  args_err,args_err_len,fname_sep
+				,fname_sep_len 
+                                 
+ 0000  49 6E 63 6F 72 72 65     vers_err db     "Incorrect DOS version$" 
+       63 74 20 44 4F 53 20     
+       76 65 72 73 69 6F 6E     
+       24                       
+                                 
+ 0016  49 6E 76 61 6C 69 64     opt_err db      "Invalid parameter:" 
+       20 70 61 72 61 6D 65     
+       74 65 72 3A              
+ 0028  00                       opt_e   db      0 
+ 0029  0D 0A                    crlf    db      CR,LF 
+ 002B  15                       opt_err_len db  $ - opt_err 
+                                 
+                                ;"found_err_pre<name of file>found_err_post" 
+ 002C  46 69 6C 65 20 6E 6F     found_err_pre      db     "File not found:" 
+       74 20 66 6F 75 6E 64     
+       3A                       
+ 003B  0F                       found_err_pre_len  db     $ - found_err_pre 
+ 003C                           found_err_post     label  byte 
+ 003C  00                       found_err_post_len db     $ - found_err_post 
+                                 
+                                ;"read_err_pre<name of file>read_err_post" 
+ 003D  52 65 61 64 20 65 72     read_err_pre       db     "Read error in:" 
+       72 6F 72 20 69 6E 3A     
+                                
+ 004B  0E                       read_err_pre_len   db     $ - read_err_pre 
+ 004C                           read_err_post      label  byte 
+ 004C  00                       read_err_post_len  db     $ - read_err_post 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:25
+File Compare Routine for MSDOS 2.0                          Page     1-2
+                                                            
+
+                                 
+ 004D  42 61 64 20 66 69 6C     file_err db     "Bad file" 
+       65                       
+ 0055  08                       file_err_len db  $ - file_err 
+                                 
+ 0056  49 6E 74 65 72 6E 61     int_err db      "Internal Error" 
+       6C 20 45 72 72 6F 72     
+                                
+ 0064  0E                       int_err_len db   $ - int_err 
+                                 
+ 0065  2A 2A 2A 20 46 69 6C     dif_err db      "*** Files are different ***" 
+       65 73 20 61 72 65 20     
+       64 69 66 66 65 72 65     
+       6E 74 20 2A 2A 2A        
+ 0080  1B                       dif_err_len db   $ - dif_err 
+                                 
+ 0081  49 6E 76 61 6C 69 64     args_err db     "Invalid number of parameters" 
+       20 6E 75 6D 62 65 72     
+       20 6F 66 20 70 61 72     
+       61 6D 65 74 65 72 73     
+                                
+ 009D  1C                       args_err_len db  $ - args_err 
+                                 
+ 009E  0D 0A 2D 2D 2D 2D 2D     fname_sep db    CR,LF,"----------" 
+       2D 2D 2D 2D 2D           
+ 00AA  0C                       fname_sep_len db  $ - fname_sep 
+                                 
+ 00AB  0D 0A 2D 2D 2D 2D 2D     diff_sep db     CR,LF,"------------------------
+				-----------------------",CR,LF 
+       2D 2D 2D 2D 2D 2D 2D     
+       2D 2D 2D 2D 2D 2D 2D     
+       2D 2D 2D 2D 2D 2D 2D     
+       2D 2D 2D 2D 2D 2D 2D     
+       2D 2D 2D 2D 2D 2D 2D     
+       2D 2D 2D 2D 2D 2D 2D     
+       0D 0A                    
+ 00DE  33                       diff_sep_len db  $ - diff_sep 
+                                 
+ 00DF  0D 0A 2A 2A 2A 20 44     bf1ne   db      CR,LF,"*** Data left in F1 ***"
+				,CR,LF 
+       61 74 61 20 6C 65 66     
+       74 20 69 6E 20 46 31     
+       20 2A 2A 2A 0D 0A        
+ 00FA  1B                       bf1ne_len db    $ - bf1ne 
+                                 
+ 00FB  0D 0A 2A 2A 2A 20 44     bf2ne   db      CR,LF,"*** Data left in F2 ***"
+				,CR,LF 
+       61 74 61 20 6C 65 66     
+       74 20 69 6E 20 46 32     
+       20 2A 2A 2A 0D 0A        
+ 0116  1B                       bf2ne_len db    $ - bf2ne 
+                                 
+ 0117  0D 0A 2D 2D 41 44 44     bhead   db      CR,LF,'--ADDRS----F1---F2-',CR,
+				LF 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:25
+File Compare Routine for MSDOS 2.0                          Page     1-3
+                                                            
+
+       52 53 2D 2D 2D 2D 46     
+       31 2D 2D 2D 46 32 2D     
+       0D 0A                    
+ 012E  17                       bhead_len db    $ - bhead 
+                                 
+ 012F                           const   ends 
+                                        end 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:25
+File Compare Routine for MSDOS 2.0                          Symbols-1
+                                                             
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+CONST  . . . . . . . . . . . . .  	012F	BYTE	PUBLIC	
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ARGS_ERR . . . . . . . . . . . .  	L BYTE 	0081	CONST	Global
+ARGS_ERR_LEN . . . . . . . . . .  	L BYTE 	009D	CONST	Global
+
+BF1NE  . . . . . . . . . . . . .  	L BYTE 	00DF	CONST	Global
+BF1NE_LEN  . . . . . . . . . . .  	L BYTE 	00FA	CONST	Global
+BF2NE  . . . . . . . . . . . . .  	L BYTE 	00FB	CONST	Global
+BF2NE_LEN  . . . . . . . . . . .  	L BYTE 	0116	CONST	Global
+BHEAD  . . . . . . . . . . . . .  	L BYTE 	0117	CONST	Global
+BHEAD_LEN  . . . . . . . . . . .  	L BYTE 	012E	CONST	Global
+
+CR . . . . . . . . . . . . . . .  	Number	000D	
+CRLF . . . . . . . . . . . . . .  	L BYTE 	0029	CONST	Global
+
+DIFF_SEP . . . . . . . . . . . .  	L BYTE 	00AB	CONST	Global
+DIFF_SEP_LEN . . . . . . . . . .  	L BYTE 	00DE	CONST	Global
+DIF_ERR  . . . . . . . . . . . .  	L BYTE 	0065	CONST	Global
+DIF_ERR_LEN  . . . . . . . . . .  	L BYTE 	0080	CONST	Global
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FILE_ERR . . . . . . . . . . . .  	L BYTE 	004D	CONST	Global
+FILE_ERR_LEN . . . . . . . . . .  	L BYTE 	0055	CONST	Global
+FNAME_SEP  . . . . . . . . . . .  	L BYTE 	009E	CONST	Global
+FNAME_SEP_LEN  . . . . . . . . .  	L BYTE 	00AA	CONST	Global
+FOUND_ERR_POST . . . . . . . . .  	L BYTE 	003C	CONST	Global
+FOUND_ERR_POST_LEN . . . . . . .  	L BYTE 	003C	CONST	Global
+FOUND_ERR_PRE  . . . . . . . . .  	L BYTE 	002C	CONST	Global
+FOUND_ERR_PRE_LEN  . . . . . . .  	L BYTE 	003B	CONST	Global
+
+INT_ERR  . . . . . . . . . . . .  	L BYTE 	0056	CONST	Global
+INT_ERR_LEN  . . . . . . . . . .  	L BYTE 	0064	CONST	Global
+
+LF . . . . . . . . . . . . . . .  	Number	000A	
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OPT_E  . . . . . . . . . . . . .  	L BYTE 	0028	CONST	Global
+OPT_ERR  . . . . . . . . . . . .  	L BYTE 	0016	CONST	Global
+OPT_ERR_LEN  . . . . . . . . . .  	L BYTE 	002B	CONST	Global
+
+READ_ERR_POST  . . . . . . . . .  	L BYTE 	004C	CONST	Global
+READ_ERR_POST_LEN  . . . . . . .  	L BYTE 	004C	CONST	Global
+READ_ERR_PRE . . . . . . . . . .  	L BYTE 	003D	CONST	Global
+READ_ERR_PRE_LEN . . . . . . . .  	L BYTE 	004B	CONST	Global
+
+TRUE . . . . . . . . . . . . . .  	Number	00FF	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:25
+File Compare Routine for MSDOS 2.0                          Symbols-2
+                                                             
+
+
+VER  . . . . . . . . . . . . . .  	Text  		
+VERS_ERR . . . . . . . . . . . .  	L BYTE 	0000	CONST	Global
+
+
+     67 Source  Lines
+     67 Total   Lines
+     59 Symbols
+
+  49468 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

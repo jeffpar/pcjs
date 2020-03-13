@@ -1,0 +1,22 @@
+
+
+Warning: no stack segment
+
+ Start  Stop   Length Name                   Class
+ 00000H 0121BH 0121CH CODE                   
+
+  Address         Publics by Name
+
+ 0000:01FC       BADVER
+ 0000:021A       BUFFER
+ 0000:0217       CRLFTXT
+ 0000:01F0       MORETXT
+
+  Address         Publics by Value
+
+ 0000:01F0       MORETXT
+ 0000:01FC       BADVER
+ 0000:0217       CRLFTXT
+ 0000:021A       BUFFER
+
+Program entry point at 0000:0100

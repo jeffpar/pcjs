@@ -1,0 +1,33 @@
+
+
+ Start  Stop   Length Name                   Class
+ 00000H 002ADH 002AEH CODE                   
+ 002AEH 00470H 001C3H DATA                   
+ 00480H 004FFH 00080H STACK                  
+ 00500H 00500H 00000H ZLOAD                  
+
+  Address         Publics by Name
+
+ 002A:00D5       BAD_VERS_ERR
+ 002A:0163       CANTFIX
+ 002A:0160       CRLF
+ 002A:010E       DIRFULL
+ 002A:0122       FULL
+ 002A:00FA       NOROOM
+ 002A:00EB       NOTFND
+ 002A:013A       PROMPT
+ 002A:017C       RDBAD
+
+  Address         Publics by Value
+
+ 002A:00D5       BAD_VERS_ERR
+ 002A:00EB       NOTFND
+ 002A:00FA       NOROOM
+ 002A:010E       DIRFULL
+ 002A:0122       FULL
+ 002A:013A       PROMPT
+ 002A:0160       CRLF
+ 002A:0163       CANTFIX
+ 002A:017C       RDBAD
+
+Program entry point at 0000:0000

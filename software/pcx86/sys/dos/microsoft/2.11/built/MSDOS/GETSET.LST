@@ -1,0 +1,1571 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-1
+                                                            
+
+                                TITLE  GETSET - GETting and SETting MS-DOS syst
+				em calls 
+                                NAME   GETSET 
+                                ; 
+                                ; System Calls which get and set various things
+				 
+                                ; 
+                                ; $GET_VERSION 
+                                ; $GET_VERIFY_ON_WRITE 
+                                ; $SET_VERIFY_ON_WRITE 
+                                ; $SET_CTRL_C_TRAPPING 
+                                ; $INTERNATIONAL 
+                                ; $GET_DRIVE_FREESPACE 
+                                ; $GET_DMA 
+                                ; $SET_DMA 
+                                ; $GET_DEFAULT_DRIVE 
+                                ; $SET_DEFAULT_DRIVE 
+                                ; $GET_INTERRUPT_VECTOR 
+                                ; $SET_INTERRUPT_VECTOR 
+                                ; RECSET 
+                                ; $CHAR_OPER 
+                                ; 
+                                .list 
+                                 
+                                 
+                                        i_need  VERFLG,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CNTCFLAG,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DMAADD,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CURDRV,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  Current_Country,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  international_table,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  INDOS,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  SYSINITVAR,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  NUMIO,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  SWITCH_CHARACTER,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0000                         1  DATA ENDS
+                                        i_need  DEVICE_AVAILABILITY,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                 
+ 0000  ????                     USERNUM DW      ?                       ; 24 bi
+				t user number 
+ 0002  ??                               DB      ? 
+                                        ELSE 
+ 0003  FF                       OEMNUM  DB      0FFH                    ; 8 bit
+				 OEM number 
+                                        ENDIF 
+                                 
+ = 0004                         MSVERS  EQU     THIS WORD               ; MS-DO
+				S version in hex for $GET_VERSION 
+ 0004  02                       MSMAJOR DB      DOS_MAJOR_VERSION 
+ 0005  0B                       MSMINOR DB      DOS_MINOR_VERSION 
+                                 
+                                 
+                                BREAK <$Get_Version -- Return MSDOS version num
+				ber> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-3
+$Get_Version -- Return MSDOS version number                 
+
+                                        procedure   $GET_VERSION,NEAR 
+ 0006                         1 $GET_VERSION PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       None 
+                                ; Function: 
+                                ;       Return MS-DOS version number 
+                                ; Outputs: 
+                                ;       OEM number in BH 
+                                ;       User number in BL:CX (24 bits) 
+                                ;       Version number as AL.AH in binary 
+                                ;       NOTE: On pre 1.28 DOSs AL will be zero 
+                                 
+ 0006  16                               PUSH    SS 
+ 0007  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 0008  8B 1E 0002 R                     MOV     BX,[USERNUM + 2] 
+ 000C  8B 0E 0000 R                     MOV     CX,[USERNUM] 
+ 0010  A1 0004 R                        MOV     AX,[MSVERS] 
+                                        invoke  get_user_stack 
+ 0013  E8 0000 E              1  CALL get_user_stack
+                                ASSUME  DS:NOTHING 
+ 0016  89 5C 02                         MOV     [SI.user_BX],BX 
+ 0019  89 4C 04                         MOV     [SI.user_CX],CX 
+ 001C  89 04                            MOV     [SI.user_AX],AX  ; Really only 
+				sets AH 
+                                        return 
+ 001E                         1 ??0000:
+ 001E  C3                     1  RET
+                                $GET_VERSION  ENDP 
+                                 
+                                BREAK <$International - return country-dependen
+				t information> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-4
+$International - return country-dependent information       
+
+                                ; 
+                                ; Inputs: 
+                                ;       DS:DX point to a block 
+                                ; Function: 
+                                ;       give users an idea of what country the 
+				application is running 
+                                ; Outputs: 
+                                ;       AX = number of bytes transferred 
+                                ;       DS:DX ->+------------------------------
+				---+ 
+                                ;               | WORD Date/time format        
+				   | 
+                                ;               +------------------------------
+				---+ 
+                                ;               | BYTE ASCIZ currency symbol   
+				   | 
+                                ;               +------------------------------
+				---+ 
+                                ;               | BYTE ASCIZ thousands separato
+				r  | 
+                                ;               +------------------------------
+				---+ 
+                                ;               | BYTE ASCIZ decimal separator 
+				   | 
+                                ;               +------------------------------
+				---+ 
+                                 
+                                        procedure   $INTERNATIONAL,NEAR 
+ 001F                         1 $INTERNATIONAL PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+ 001F  8A D8                            MOV     BL,AL 
+ 0021  1E                               PUSH    DS 
+ 0022  07                               POP     ES 
+ 0023  52                               PUSH    DX 
+ 0024  5F                               POP     DI 
+ 0025  16                               PUSH    SS 
+ 0026  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 0027  83 FF FF                         CMP     DI,-1 
+ 002A  74 40                            JZ      international_set 
+ 002C  0A DB                            OR      BL,BL 
+ 002E  75 0B                            JNZ     international_find 
+ 0030  8B 36 0000 E                     MOV     SI,[Current_Country] 
+ 0034  8B 44 FE                         MOV     AX,WORD PTR [SI-2]      ; Get s
+				ize in AL, country code in AH 
+ 0037  8A DC                            MOV     BL,AH                   ; Set c
+				ountry code 
+ 0039  EB 1E                            JMP     SHORT international_copy 
+                                 
+ 003B                           international_find: 
+ 003B  E8 0045 R                        CALL    international_get 
+ 003E  73 19                            JNC     international_copy 
+                                        error   country_not_found 
+ 0040  B0 02                  1  MOV AL,country_not_found
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-5
+$International - return country-dependent information       
+
+ 0042                         3  ??0002:
+ 0042  E9 0000 E              3  JMP SYS_RET_ERR
+                                 
+ 0045                           international_get: 
+ 0045  BE 0000 E                        MOV     SI,OFFSET DOSGROUP:internationa
+				l_table 
+ 0048                           international_next: 
+ 0048  AD                               LODSW                           ; Get s
+				ize in AL, country code in AH 
+ 0049  3C FF                            CMP     AL,-1 
+ 004B  75 02                            JNZ     check_code 
+ 004D  F9                               STC 
+ 004E                           RET35: 
+ 004E  C3                               RET 
+                                 
+ 004F                           check_code: 
+ 004F  3A DC                            CMP     BL,AH 
+ 0051  74 FB                            JZ      RET35                   ; Carry
+				 clear 
+ 0053  32 E4                            XOR     AH,AH 
+ 0055  03 F0                            ADD     SI,AX 
+ 0057  EB EF                            JMP     international_next 
+                                 
+ 0059                           international_copy: 
+ 0059  8A C8                            MOV     CL,AL 
+ 005B  32 ED                            XOR     CH,CH 
+ 005D  57                               PUSH    DI 
+ 005E  F3/ A4                           REP     MOVSB 
+ 0060  5F                               POP     DI 
+ 0061  26: 8C 4D 14                     MOV     WORD PTR ES:[DI.MAP_CALL + 2],C
+				S   ; Set segment for case map call 
+ 0065                           international_ok: 
+ 0065  33 C0                            XOR     AX,AX 
+ 0067  8A C3                            MOV     AL,BL           ; Return countr
+				y code in AX 
+                                        transfer SYS_RET_OK 
+ 0069                         2  ??0003:
+ 0069  E9 0000 E              2  JMP SYS_RET_OK
+                                 
+ 006C                           international_set: 
+ 006C  E8 0045 R                        CALL    international_get 
+ 006F  73 04                            JNC     international_store 
+                                        error   country_not_found 
+ 0071  B0 02                  1  MOV AL,country_not_found
+ 0073                         3  ??0005:
+ 0073  EB CD                  3  JMP SYS_RET_ERR_J
+                                 
+ 0075                           international_store: 
+ 0075  89 36 0000 E                     MOV     [Current_Country],SI 
+ 0079  EB EA                            JMP     international_ok 
+                                 
+                                $INTERNATIONAL  ENDP 
+                                 
+                                BREAK <$Get_Verify_on_Write - return verify-aft
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-6
+$International - return country-dependent information       
+
+				er-write flag> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-7
+$Get_Verify_on_Write - return verify-after-write flag       
+
+                                        procedure   $GET_VERIFY_ON_WRITE,NEAR 
+ 007B                         1 $GET_VERIFY_ON_WRITE PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       none. 
+                                ; Function: 
+                                ;       returns flag 
+                                ; Returns: 
+                                ;       AL = value of VERIFY flag 
+                                 
+ 007B  36: A0 0000 E                    MOV     AL,[VERFLG] 
+                                        return 
+ 007F                         1 ??0006:
+ 007F  C3                     1  RET
+                                $GET_VERIFY_ON_WRITE  ENDP 
+                                 
+                                BREAK <$Set_Verify_on_Write - Toggle verify-aft
+				er-write flag> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-8
+$Set_Verify_on_Write - Toggle verify-after-write flag       
+
+                                        procedure   $SET_VERIFY_ON_WRITE,NEAR 
+ 0080                         1 $SET_VERIFY_ON_WRITE PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       AL = desired value of VERIFY flag 
+                                ; Function: 
+                                ;       Sets flag 
+                                ; Returns: 
+                                ;       None 
+                                 
+ 0080  24 01                            AND     AL,1 
+ 0082  36: A2 0000 E                    MOV     [VERFLG],AL 
+                                        return 
+ 0086                         1 ??0007:
+ 0086  C3                     1  RET
+                                $SET_VERIFY_ON_WRITE  ENDP 
+                                 
+                                BREAK <$Set_CTRL_C_Trapping -- En/Disable ^C ch
+				eck in dispatcher> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-9
+$Set_CTRL_C_Trapping -- En/Disable ^C check in dispatcher   
+
+                                        procedure   $SET_CTRL_C_TRAPPING,NEAR 
+ 0087                         1 $SET_CTRL_C_TRAPPING PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       AL = 0 read ^C status 
+                                ;       AL = 1 Set ^C status, DL = 0/1 for ^C o
+				ff/on 
+                                ; Function: 
+                                ;       Enable disable ^C checking in dispatche
+				r 
+                                ; Outputs: 
+                                ;       If AL = 0 then DL = 0/1 for ^C off/on 
+                                 
+ 0087  0A C0                            OR      AL,AL 
+ 0089  75 0B                            JNZ     CTRL_C_set 
+                                        invoke  get_user_stack 
+ 008B  E8 0000 E              1  CALL get_user_stack
+ 008E  36: A0 0000 E                    MOV     AL,[CNTCFLAG] 
+ 0092  88 44 06                         MOV     BYTE PTR [SI.user_DX],AL 
+                                        return 
+ 0095                         1 ??0008:
+ 0095  C3                     1  RET
+ 0096                           CTRL_C_set: 
+ 0096  FE C8                            DEC     AL 
+ 0098  75 09                            JNZ     bad_val 
+ 009A  80 E2 01                         AND     DL,01h 
+ 009D  36: 88 16 0000 E                 MOV     [CNTCFLAG],DL 
+                                        return 
+ 00A2                         1 ??0009:
+ 00A2  C3                     1  RET
+ 00A3                           bad_val: 
+ 00A3  B0 FF                            MOV     AL,0FFH 
+                                        return 
+ 00A5                         1 ??000A:
+ 00A5  C3                     1  RET
+                                $SET_CTRL_C_TRAPPING ENDP 
+                                 
+                                BREAK <$Get_INDOS_Flag -- Return location of DO
+				S critical-section flag> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-10
+$Get_INDOS_Flag -- Return location of DOS critical-section f
+
+                                        procedure   $GET_INDOS_FLAG,NEAR 
+ 00A6                         1 $GET_INDOS_FLAG PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       None 
+                                ; Function: 
+                                ;       Returns location of DOS status for inte
+				rrupt routines 
+                                ; Returns: 
+                                ;       Flag location in ES:BX 
+                                 
+                                        invoke  get_user_stack 
+ 00A6  E8 0000 E              1  CALL get_user_stack
+ 00A9  C7 44 02 0000 E                  MOV     [SI.user_BX],OFFSET DOSGROUP:IN
+				DOS 
+ 00AE  8C 54 10                         MOV     [SI.user_ES],SS 
+                                        return 
+ 00B1                         1 ??000B:
+ 00B1  C3                     1  RET
+                                $GET_INDOS_FLAG ENDP 
+                                 
+                                ;----+----+----+----+----+----+----+----+----+-
+				---+----+----+----+----+----; 
+                                ;            C  A  V  E  A  T     P  R  O  G  R
+				  A  M  M  E  R             ; 
+                                ;                                              
+				                            ; 
+                                        procedure   $GET_IN_VARS,NEAR 
+ 00B2                         1 $GET_IN_VARS PROC NEAR
+                                ; Return a pointer to interesting DOS variables
+				 This call is version 
+                                ; dependent and is subject to change without no
+				tice in future versions. 
+                                ; Use at risk. 
+                                        invoke  get_user_stack 
+ 00B2  E8 0000 E              1  CALL get_user_stack
+ 00B5  C7 44 02 0000 E                  MOV     [SI.user_BX],OFFSET DOSGROUP:SY
+				SINITVAR 
+ 00BA  8C 54 10                         MOV     [SI.user_ES],SS 
+                                        return 
+ 00BD                         1 ??000C:
+ 00BD  C3                     1  RET
+                                $GET_IN_VARS    ENDP 
+                                ;                                              
+				                            ; 
+                                ;            C  A  V  E  A  T     P  R  O  G  R
+				  A  M  M  E  R             ; 
+                                ;----+----+----+----+----+----+----+----+----+-
+				---+----+----+----+----+----; 
+                                 
+                                BREAK <$Get_Drive_Freespace -- Return bytes of 
+				free disk space on a drive> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-11
+$Get_Drive_Freespace -- Return bytes of free disk space on a
+
+                                        procedure   $GET_DRIVE_FREESPACE,NEAR 
+ 00BE                         1 $GET_DRIVE_FREESPACE PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DL = Drive number 
+                                ; Function: 
+                                ;       Return number of free allocation units 
+				on drive 
+                                ; Outputs: 
+                                ;       BX = Number of free allocation units 
+                                ;       DX = Total Number of allocation units o
+				n disk 
+                                ;       CX = Sector size 
+                                ;       AX = Sectors per allocation unit 
+                                ;          = -1 if bad drive specified 
+                                ; This call returns the same info in the same r
+				egisters (except for FAT pointer) 
+                                ;      as the old FAT pointer calls 
+                                 
+ 00BE  16                               PUSH    SS 
+ 00BF  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 00C0  8A C2                            MOV     AL,DL 
+                                        invoke  GETTHISDRV 
+ 00C2  E8 0000 E              1  CALL GETTHISDRV
+ 00C5  B8 FFFF                          MOV     AX,-1 
+ 00C8  72 24                            JC      BADFRDRIVE 
+                                        invoke  FATREAD 
+ 00CA  E8 0000 E              1  CALL FATREAD
+ 00CD  33 D2                            XOR     DX,DX 
+ 00CF  BB 0002                          MOV     BX,2 
+ 00D2  26: 8B 4E 0D                     MOV     CX,ES:[BP.dpb_max_cluster] 
+ 00D6  49                               DEC     CX 
+ 00D7  51                               PUSH    CX              ; Save Total 
+ 00D8                           SCANFREE: 
+                                        invoke  UNPACK 
+ 00D8  E8 0000 E              1  CALL UNPACK
+ 00DB  75 01                            JNZ     NOTFREECLUS 
+ 00DD  42                               INC     DX 
+ 00DE                           NOTFREECLUS: 
+ 00DE  43                               INC     BX 
+ 00DF  E2 F7                            LOOP    SCANFREE 
+ 00E1  5B                               POP     BX              ; Remember Tota
+				l 
+ 00E2  26: 8A 46 04                     MOV     AL,ES:[BP.dpb_cluster_mask] 
+ 00E6  FE C0                            INC     AL 
+ 00E8  32 E4                            XOR     AH,AH 
+ 00EA  26: 8B 4E 02                     MOV     CX,ES:[BP.dpb_sector_size] 
+ 00EE                           BADFRDRIVE: 
+                                        invoke  get_user_stack 
+ 00EE  E8 0000 E              1  CALL get_user_stack
+                                ASSUME  DS:NOTHING 
+ 00F1  89 4C 04                         MOV     [SI. user_CX],CX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-12
+$Get_Drive_Freespace -- Return bytes of free disk space on a
+
+ 00F4  89 5C 06                         MOV     [SI.user_DX],BX 
+ 00F7  89 54 02                         MOV     [SI.user_BX],DX 
+ 00FA  89 04                            MOV     [SI.user_AX],AX 
+                                        return 
+ 00FC                         1 ??000D:
+ 00FC  C3                     1  RET
+                                 
+                                $GET_DRIVE_FREESPACE ENDP 
+                                 
+                                BREAK <$Get_DMA, $Set_DMA -- Get/Set current DM
+				A address> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-13
+$Get_DMA, $Set_DMA -- Get/Set current DMA address           
+
+                                        procedure   $GET_DMA,NEAR 
+ 00FD                         1 $GET_DMA PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       None 
+                                ; Function: 
+                                ;       Get DISK TRANSFER ADDRESS 
+                                ; Returns: 
+                                ;       ES:BX is current transfer address 
+                                 
+ 00FD  36: 8B 1E 0000 E                 MOV     BX,WORD PTR [DMAADD] 
+ 0102  36: 8B 0E 0002 E                 MOV     CX,WORD PTR [DMAADD+2] 
+                                        invoke  get_user_stack 
+ 0107  E8 0000 E              1  CALL get_user_stack
+ 010A  89 5C 02                         MOV     [SI.user_BX],BX 
+ 010D  89 4C 10                         MOV     [SI.user_ES],CX 
+                                        return 
+ 0110                         1 ??000E:
+ 0110  C3                     1  RET
+                                $GET_DMA ENDP 
+                                 
+                                        procedure   $SET_DMA,NEAR   ; System ca
+				ll 26 
+ 0111                         1 $SET_DMA PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:DX is desired new disk transfer addr
+				ess 
+                                ; Function: 
+                                ;       Set DISK TRANSFER ADDRESS 
+                                ; Returns: 
+                                ;       None 
+                                 
+ 0111  36: 89 16 0000 E                 MOV     WORD PTR [DMAADD],DX 
+ 0116  36: 8C 1E 0002 E                 MOV     WORD PTR [DMAADD+2],DS 
+                                        return 
+ 011B                         1 ??000F:
+ 011B  C3                     1  RET
+                                $SET_DMA  ENDP 
+                                 
+                                BREAK <$Get_Default_DPB,$Get_DPB -- Return poin
+				ter to DPB> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-14
+$Get_Default_DPB,$Get_DPB -- Return pointer to DPB          
+
+                                ;----+----+----+----+----+----+----+----+----+-
+				---+----+----+----+----+----; 
+                                ;            C  A  V  E  A  T     P  R  O  G  R
+				  A  M  M  E  R             ; 
+                                ;                                              
+				                            ; 
+                                        procedure   $GET_DEFAULT_DPB,NEAR 
+ 011C                         1 $GET_DEFAULT_DPB PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DL = Drive number (always default drive
+				 for call 31) 
+                                ; Function: 
+                                ;       Return pointer to drive parameter table
+				 for default drive 
+                                ; Returns: 
+                                ;       DS:BX points to the DPB 
+                                ;       AL = 0 If OK, = -1 if bad drive (call 5
+				0 only) 
+                                 
+ 011C  B2 00                            MOV     DL,0 
+                                        entry   $GET_DPB 
+ 011E                         1 $GET_DPB:
+ 011E  16                               PUSH    SS 
+ 011F  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 0120  8A C2                            MOV     AL,DL 
+                                        invoke  GETTHISDRV 
+ 0122  E8 0000 E              1  CALL GETTHISDRV
+ 0125  72 0F                            JC      ISNODRV 
+                                        invoke  FATREAD 
+ 0127  E8 0000 E              1  CALL FATREAD
+                                        invoke  get_user_stack 
+ 012A  E8 0000 E              1  CALL get_user_stack
+                                ASSUME  DS:NOTHING 
+ 012D  89 6C 02                         MOV     [SI.user_BX],BP 
+ 0130  8C 44 0E                         MOV     [SI.user_DS],ES 
+ 0133  32 C0                            XOR     AL,AL 
+                                        return 
+ 0135                         1 ??0010:
+ 0135  C3                     1  RET
+                                 
+ 0136                           ISNODRV: 
+ 0136  B0 FF                            MOV     AL,-1 
+                                        return 
+ 0138                         1 ??0011:
+ 0138  C3                     1  RET
+                                $GET_Default_dpb    ENDP 
+                                ;                                              
+				                            ; 
+                                ;            C  A  V  E  A  T     P  R  O  G  R
+				  A  M  M  E  R             ; 
+                                ;----+----+----+----+----+----+----+----+----+-
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-15
+$Get_Default_DPB,$Get_DPB -- Return pointer to DPB          
+
+				---+----+----+----+----+----; 
+                                 
+                                 
+                                BREAK <$Get_Default_Drive, $Set_Default_Drive -
+				- Set/Get default drive> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-16
+$Get_Default_Drive, $Set_Default_Drive -- Set/Get default dr
+
+                                        procedure   $GET_DEFAULT_DRIVE,NEAR 
+ 0139                         1 $GET_DEFAULT_DRIVE PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       None 
+                                ; Function: 
+                                ;       Return current drive number 
+                                ; Returns: 
+                                ;       AL = drive number 
+                                 
+ 0139  36: A0 0000 E                    MOV     AL,[CURDRV] 
+                                        return 
+ 013D                         1 ??0012:
+ 013D  C3                     1  RET
+                                $GET_DEFAULT_DRIVE  ENDP 
+                                 
+                                        procedure   $SET_DEFAULT_DRIVE,NEAR 
+ 013E                         1 $SET_DEFAULT_DRIVE PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DL = Drive number for new default drive
+				 
+                                ; Function: 
+                                ;       Set the default drive 
+                                ; Returns: 
+                                ;       AL = Number of drives, NO ERROR RETURN 
+				IF DRIVE NUMBER BAD 
+                                 
+ 013E  36: A0 0000 E                    MOV     AL,[NUMIO] 
+ 0142  3A D0                            CMP     DL,AL 
+ 0144  73 05                            JNB     RET17 
+ 0146  36: 88 16 0000 E                 MOV     [CURDRV],DL 
+ 014B                           RET17:  return 
+ 014B                         1 ??0013:
+ 014B  C3                     1  RET
+                                $SET_DEFAULT_DRIVE  ENDP 
+                                 
+                                 
+                                BREAK <$Get_Interrupt_Vector - Get/Set interrup
+				t vectors> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-17
+$Get_Interrupt_Vector - Get/Set interrupt vectors           
+
+                                        procedure   $GET_INTERRUPT_VECTOR,NEAR 
+ 014C                         1 $GET_INTERRUPT_VECTOR PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       AL = interrupt number 
+                                ; Function: 
+                                ;       Get the interrupt vector 
+                                ; Returns: 
+                                ;       ES:BX is current interrupt vector 
+                                 
+ 014C  E8 0167 R                        CALL    RECSET 
+ 014F  26: C4 1F                        LES     BX,DWORD PTR ES:[BX] 
+                                        invoke  get_user_stack 
+ 0152  E8 0000 E              1  CALL get_user_stack
+ 0155  89 5C 02                         MOV     [SI.user_BX],BX 
+ 0158  8C 44 10                         MOV     [SI.user_ES],ES 
+                                        return 
+ 015B                         1 ??0014:
+ 015B  C3                     1  RET
+                                $GET_INTERRUPT_VECTOR ENDP 
+                                 
+                                        procedure   $SET_INTERRUPT_VECTOR,NEAR 
+				  ; System call 37 
+ 015C                         1 $SET_INTERRUPT_VECTOR PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       AL = interrupt number 
+                                ;       DS:DX is desired new interrupt vector 
+                                ; Function: 
+                                ;       Set the interrupt vector 
+                                ; Returns: 
+                                ;       None 
+                                 
+ 015C  E8 0167 R                        CALL    RECSET 
+ 015F  26: 89 17                        MOV     ES:[BX],DX 
+ 0162  26: 8C 5F 02                     MOV     ES:[BX+2],DS 
+                                        return 
+ 0166                         1 ??0015:
+ 0166  C3                     1  RET
+                                $SET_INTERRUPT_VECTOR ENDP 
+                                 
+                                        ENDIF 
+                                 
+                                procedure   RECSET,NEAR 
+ 0167                         1 RECSET PROC NEAR
+                                 
+                                        ENDIF 
+                                 
+ 0167  33 DB                            XOR     BX,BX 
+ 0169  8E C3                            MOV     ES,BX 
+ 016B  8A D8                            MOV     BL,AL 
+ 016D  D1 E3                            SHL     BX,1 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-18
+$Get_Interrupt_Vector - Get/Set interrupt vectors           
+
+ 016F  D1 E3                            SHL     BX,1 
+                                        return 
+ 0171                         1 ??0016:
+ 0171  C3                     1  RET
+                                recset  ENDP 
+                                 
+                                BREAK <$Char_Oper - hack on paths, switches so 
+				that xenix can look like PCDOS> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-19
+$Char_Oper - hack on paths, switches so that xenix can look 
+
+                                ; 
+                                ; input:    AL = function: 
+                                ;                   0 - read switch char 
+                                ;                   1 - set switch char (char i
+				n DL) 
+                                ;                   2 - read device availabilit
+				y 
+                                ;                   3 - set device availability
+				 (0/FF in DL) 
+                                ;                       DL = 0 means /DEV/ must
+				 preceed device names 
+                                ;                       DL = Non0 means /DEV/ n
+				eed not preeceed 
+                                ; output:   (get) DL - character/flag 
+                                ; 
+                                        procedure $CHAR_OPER,NEAR 
+ 0172                         1 $CHAR_OPER PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 0172  16                               PUSH    SS 
+ 0173  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 0174  0A C0                            OR      AL,AL 
+ 0176  75 06                            JNZ     char_oper_set_switch 
+ 0178  8A 16 0000 E                     MOV     DL,[switch_character] 
+ 017C  EB 1F                            JMP     SHORT char_oper_ret 
+ 017E                           char_oper_set_switch: 
+ 017E  FE C8                            DEC     AL 
+ 0180  75 05                            JNZ     char_oper_read_avail 
+ 0182  88 16 0000 E                     MOV     [switch_character],DL 
+                                        return 
+ 0186                         1 ??0017:
+ 0186  C3                     1  RET
+ 0187                           char_oper_read_avail: 
+ 0187  FE C8                            DEC     AL 
+ 0189  75 06                            JNZ     char_oper_set_avail 
+ 018B  8A 16 0000 E                     MOV     DL,[device_availability] 
+ 018F  EB 0C                            JMP     SHORT char_oper_ret 
+ 0191                           char_oper_set_avail: 
+ 0191  FE C8                            DEC     AL 
+ 0193  75 05                            JNZ     char_oper_bad_ret 
+ 0195  88 16 0000 E                     MOV     [device_availability],DL 
+                                        return 
+ 0199                         1 ??0018:
+ 0199  C3                     1  RET
+ 019A                           char_oper_bad_ret: 
+ 019A  B0 FF                            MOV     AL,0FFh 
+                                        return 
+ 019C                         1 ??0019:
+ 019C  C3                     1  RET
+ 019D                           char_oper_ret: 
+                                        invoke  get_user_stack 
+ 019D  E8 0000 E              1  CALL get_user_stack
+ 01A0  89 54 06                         MOV     [SI.user_DX],DX 
+                                        return 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-20
+$Char_Oper - hack on paths, switches so that xenix can look 
+
+ 01A3                         1 ??001A:
+ 01A3  C3                     1  RET
+                                $CHAR_OPER  ENDP 
+                                 
+                                BREAK <$SetDPB - Create a valid DPB from a user
+				-specified BPB> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-21
+$SetDPB - Create a valid DPB from a user-specified BPB      
+
+                                        procedure   $SETDPB,NEAR 
+ 01A4                         1 $SETDPB PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       ES:BP Points to DPB 
+                                ;       DS:SI Points to BPB 
+                                ; Function: 
+                                ;       Build a correct DPB from the BPB 
+                                ; Outputs: 
+                                ; ES:BP and DS preserved all others destroyed 
+                                 
+ 01A4  8B FD                            MOV     DI,BP 
+ 01A6  83 C7 02                         ADD     DI,2                    ; Skip 
+				over dpb_drive and dpb_UNIT 
+ 01A9  AD                               LODSW 
+ 01AA  AB                               STOSW                           ; dpb_s
+				ector_size 
+ 01AB  8B D0                            MOV     DX,AX 
+ 01AD  AC                               LODSB 
+ 01AE  FE C8                            DEC     AL 
+ 01B0  AA                               STOSB                           ; dpb_c
+				luster_mask 
+ 01B1  FE C0                            INC     AL 
+ 01B3  32 E4                            XOR     AH,AH 
+ 01B5                           LOG2LOOP: 
+ 01B5  A8 01                            TEST    AL,1 
+ 01B7  75 06                            JNZ     SAVLOG 
+ 01B9  FE C4                            INC     AH 
+ 01BB  D0 E8                            SHR     AL,1 
+ 01BD  EB F6                            JMP     SHORT LOG2LOOP 
+ 01BF                           SAVLOG: 
+ 01BF  8A C4                            MOV     AL,AH 
+ 01C1  AA                               STOSB                           ; dpb_c
+				luster_shift 
+ 01C2  8A D8                            MOV     BL,AL 
+ 01C4  A5                               MOVSW                           ; dpb_f
+				irst_FAT Start of FAT (# of reserved sectors) 
+ 01C5  AC                               LODSB 
+ 01C6  AA                               STOSB                           ; dpb_F
+				AT_count Number of FATs 
+ 01C7  8A F8                            MOV     BH,AL 
+ 01C9  AD                               LODSW 
+ 01CA  AB                               STOSW                           ; dpb_r
+				oot_entries Number of directory entries 
+ 01CB  B1 05                            MOV     CL,5 
+ 01CD  D3 EA                            SHR     DX,CL                   ; Direc
+				tory entries per sector 
+ 01CF  48                               DEC     AX 
+ 01D0  03 C2                            ADD     AX,DX                   ; Cause
+				 Round Up 
+ 01D2  8B CA                            MOV     CX,DX 
+ 01D4  33 D2                            XOR     DX,DX 
+ 01D6  F7 F1                            DIV     CX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Page     1-22
+$SetDPB - Create a valid DPB from a user-specified BPB      
+
+ 01D8  8B C8                            MOV     CX,AX                   ; Numbe
+				r of directory sectors 
+ 01DA  47                               INC     DI 
+ 01DB  47                               INC     DI                      ; Skip 
+				dpb_first_sector 
+ 01DC  A5                               MOVSW                           ; Total
+				 number of sectors in DSKSIZ (temp as dpb_max_c
+				luster) 
+ 01DD  AC                               LODSB 
+ 01DE  26: 88 46 16                     MOV     ES:[BP.dpb_media],AL    ; Media
+				 byte 
+ 01E2  AD                               LODSW                           ; Numbe
+				r of sectors in a FAT 
+ 01E3  AA                               STOSB                           ; dpb_F
+				AT_size 
+ 01E4  F6 E7                            MUL     BH                      ; Space
+				 occupied by all FATs 
+ 01E6  26: 03 46 06                     ADD     AX,ES:[BP.dpb_first_FAT] 
+ 01EA  AB                               STOSW                           ; dpb_d
+				ir_sector 
+ 01EB  03 C1                            ADD     AX,CX                   ; Add n
+				umber of directory sectors 
+ 01ED  26: 89 46 0B                     MOV     ES:[BP.dpb_first_sector],AX 
+ 01F1  26: 2B 46 0D                     SUB     AX,ES:[BP.DSKSIZ] 
+ 01F5  F7 D8                            NEG     AX                      ; Secto
+				rs in data area 
+ 01F7  8A CB                            MOV     CL,BL                   ; dpb_c
+				luster_shift 
+ 01F9  D3 E8                            SHR     AX,CL                   ; Div b
+				y sectors/cluster 
+ 01FB  40                               INC     AX 
+ 01FC  26: 89 46 0D                     MOV     ES:[BP.dpb_max_cluster],AX 
+ 0200  26: C7 46 1C 0000                MOV     ES:[BP.dpb_current_dir],0     ;
+				 Current directory is root 
+                                        return 
+ 0206                         1 ??001B:
+ 0206  C3                     1  RET
+                                $SETDPB ENDP 
+                                ;                                              
+				                            ; 
+                                ;            C  A  V  E  A  T     P  R  O  G  R
+				  A  M  M  E  R             ; 
+                                ;----+----+----+----+----+----+----+----+----+-
+				---+----+----+----+----+----; 
+                                 
+                                        do_ext 
+                                 
+ 0207                           CODE    ENDS 
+                                        END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DOSGROUP . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	0207	BYTE	PUBLIC	'CODE'
+  CONSTANTS  . . . . . . . . . .  	0000	BYTE	PUBLIC	'CONST'
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Symbols-5
+                                                             
+
+  LAST . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'LAST'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BADFRDRIVE . . . . . . . . . . .  	L NEAR	00EE	CODE
+BAD_VAL  . . . . . . . . . . . .  	L NEAR	00A3	CODE
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHAR_OPER_BAD_RET  . . . . . . .  	L NEAR	019A	CODE
+CHAR_OPER_READ_AVAIL . . . . . .  	L NEAR	0187	CODE
+CHAR_OPER_RET  . . . . . . . . .  	L NEAR	019D	CODE
+CHAR_OPER_SET_AVAIL  . . . . . .  	L NEAR	0191	CODE
+CHAR_OPER_SET_SWITCH . . . . . .  	L NEAR	017E	CODE
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHECK_CODE . . . . . . . . . . .  	L NEAR	004F	CODE
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Symbols-6
+                                                             
+
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+CNTCFLAG . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CTRL_C_SET . . . . . . . . . . .  	L NEAR	0096	CODE
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURDRV . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+CURRENT_COUNTRY  . . . . . . . .  	V WORD 	0000	DATA	External
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVICE_AVAILABILITY  . . . . . .  	V BYTE 	0000	DATA	External
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Symbols-7
+                                                             
+
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMAADD . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Symbols-8
+                                                             
+
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Symbols-9
+                                                             
+
+IBM  . . . . . . . . . . . . . .  	Number	0000	
+INDOS  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_COPY . . . . . . .  	L NEAR	0059	CODE
+INTERNATIONAL_FIND . . . . . . .  	L NEAR	003B	CODE
+INTERNATIONAL_GET  . . . . . . .  	L NEAR	0045	CODE
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNATIONAL_NEXT . . . . . . .  	L NEAR	0048	CODE
+INTERNATIONAL_OK . . . . . . . .  	L NEAR	0065	CODE
+INTERNATIONAL_SET  . . . . . . .  	L NEAR	006C	CODE
+INTERNATIONAL_STORE  . . . . . .  	L NEAR	0075	CODE
+INTERNATIONAL_TABLE  . . . . . .  	V BYTE 	0000	DATA	External
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNODRV  . . . . . . . . . . . .  	L NEAR	0136	CODE
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LOG2LOOP . . . . . . . . . . . .  	L NEAR	01B5	CODE
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Symbols-10
+                                                             
+
+MSMAJOR  . . . . . . . . . . . .  	L BYTE 	0004	CODE
+MSMINOR  . . . . . . . . . . . .  	L BYTE 	0005	CODE
+MSVERS . . . . . . . . . . . . .  	WORD 	0004	CODE
+
+NOTFREECLUS  . . . . . . . . . .  	L NEAR	00DE	CODE
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+NUMIO  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEMNUM . . . . . . . . . . . . .  	L BYTE 	0003	CODE
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RECSET . . . . . . . . . . . . .  	N PROC	0167	CODE	Global	Length = 000B
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RET17  . . . . . . . . . . . . .  	L NEAR	014B	CODE
+RET35  . . . . . . . . . . . . .  	L NEAR	004E	CODE
+RET_L  . . . . . . . . . . . . .  	NEAR 	0206	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SAVLOG . . . . . . . . . . . . .  	L NEAR	01BF	CODE
+SCANFREE . . . . . . . . . . . .  	L NEAR	00D8	CODE
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Symbols-11
+                                                             
+
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+SWITCH_CHARACTER . . . . . . . .  	V BYTE 	0000	DATA	External
+SYSINITVAR . . . . . . . . . . .  	V WORD 	0000	DATA	External
+SYS_RET_ERR_J  . . . . . . . . .  	NEAR 	0073	CODE
+SYS_RET_OK_J . . . . . . . . . .  	NEAR 	0069	CODE
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+USERNUM  . . . . . . . . . . . .  	L WORD 	0000	CODE
+
+VER  . . . . . . . . . . . . . .  	Text  		
+VERFLG . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:39:08
+GETSET - GETting and SETting MS-DOS system calls            Symbols-12
+                                                             
+
+
+$CHAR_OPER . . . . . . . . . . .  	N PROC	0172	CODE	Global	Length = 0032
+$GET_DEFAULT_DPB . . . . . . . .  	N PROC	011C	CODE	Global	Length = 001D
+$GET_DEFAULT_DRIVE . . . . . . .  	N PROC	0139	CODE	Global	Length = 0005
+$GET_DMA . . . . . . . . . . . .  	N PROC	00FD	CODE	Global	Length = 0014
+$GET_DPB . . . . . . . . . . . .  	L NEAR	011E	CODE	Global
+$GET_DRIVE_FREESPACE . . . . . .  	N PROC	00BE	CODE	Global	Length = 003F
+$GET_INDOS_FLAG  . . . . . . . .  	N PROC	00A6	CODE	Global	Length = 000C
+$GET_INTERRUPT_VECTOR  . . . . .  	N PROC	014C	CODE	Global	Length = 0010
+$GET_IN_VARS . . . . . . . . . .  	N PROC	00B2	CODE	Global	Length = 000C
+$GET_VERIFY_ON_WRITE . . . . . .  	N PROC	007B	CODE	Global	Length = 0005
+$GET_VERSION . . . . . . . . . .  	N PROC	0006	CODE	Global	Length = 0019
+$INTERNATIONAL . . . . . . . . .  	N PROC	001F	CODE	Global	Length = 005C
+$SETDPB  . . . . . . . . . . . .  	N PROC	01A4	CODE	Global	Length = 0063
+$SET_CTRL_C_TRAPPING . . . . . .  	N PROC	0087	CODE	Global	Length = 001F
+$SET_DEFAULT_DRIVE . . . . . . .  	N PROC	013E	CODE	Global	Length = 000E
+$SET_DMA . . . . . . . . . . . .  	N PROC	0111	CODE	Global	Length = 000B
+$SET_INTERRUPT_VECTOR  . . . . .  	N PROC	015C	CODE	Global	Length = 000B
+$SET_VERIFY_ON_WRITE . . . . . .  	N PROC	0080	CODE	Global	Length = 0007
+??0000 . . . . . . . . . . . . .  	L NEAR	001E	CODE
+??0002 . . . . . . . . . . . . .  	L NEAR	0042	CODE
+??0003 . . . . . . . . . . . . .  	L NEAR	0069	CODE
+??0005 . . . . . . . . . . . . .  	L NEAR	0073	CODE
+??0006 . . . . . . . . . . . . .  	L NEAR	007F	CODE
+??0007 . . . . . . . . . . . . .  	L NEAR	0086	CODE
+??0008 . . . . . . . . . . . . .  	L NEAR	0095	CODE
+??0009 . . . . . . . . . . . . .  	L NEAR	00A2	CODE
+??000A . . . . . . . . . . . . .  	L NEAR	00A5	CODE
+??000B . . . . . . . . . . . . .  	L NEAR	00B1	CODE
+??000C . . . . . . . . . . . . .  	L NEAR	00BD	CODE
+??000D . . . . . . . . . . . . .  	L NEAR	00FC	CODE
+??000E . . . . . . . . . . . . .  	L NEAR	0110	CODE
+??000F . . . . . . . . . . . . .  	L NEAR	011B	CODE
+??0010 . . . . . . . . . . . . .  	L NEAR	0135	CODE
+??0011 . . . . . . . . . . . . .  	L NEAR	0138	CODE
+??0012 . . . . . . . . . . . . .  	L NEAR	013D	CODE
+??0013 . . . . . . . . . . . . .  	L NEAR	014B	CODE
+??0014 . . . . . . . . . . . . .  	L NEAR	015B	CODE
+??0015 . . . . . . . . . . . . .  	L NEAR	0166	CODE
+??0016 . . . . . . . . . . . . .  	L NEAR	0171	CODE
+??0017 . . . . . . . . . . . . .  	L NEAR	0186	CODE
+??0018 . . . . . . . . . . . . .  	L NEAR	0199	CODE
+??0019 . . . . . . . . . . . . .  	L NEAR	019C	CODE
+??001A . . . . . . . . . . . . .  	L NEAR	01A3	CODE
+??001B . . . . . . . . . . . . .  	L NEAR	0206	CODE
+
+
+   1975 Source  Lines
+   2534 Total   Lines
+    627 Symbols
+
+  19094 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

@@ -7,9 +7,6 @@ redirect_from:
   - /disks/pc/tools/microsoft/masm/1.00/
 ---
 
-Microsoft Macro Assembler 1.00 (1982)
--------------------------------------
-
 Directory listing of the 160Kb distribution diskette is provided below.
 
 ### Directory of MS Macro Assembler 1.00 (1982)

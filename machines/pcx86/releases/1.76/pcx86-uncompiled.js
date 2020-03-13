@@ -51539,7 +51539,6 @@ class VideoX86 extends Component {
          * screen "flicker".
          */
         this.colorScreen = parmsVideo['screenColor'] || "black";
-        this.opacityFlicker = (1 - (Web.getURLParm('flicker') || parmsVideo['flicker'] || 0)).toString();
         this.fOpacityReduced = false;
         this.fStyleCanvasFullScreen = false;
         if (canvas) {
@@ -51744,6 +51743,12 @@ class VideoX86 extends Component {
                 i += 2;
             }
         }
+
+        /*
+         * Moved this from the constructor (and changed Web.getURLParm() to cmp.etMachineParm()),
+         * so that the flicker setting can be easily overridden from the page, not just from the URL.
+         */
+        this.opacityFlicker = (1 - (cmp.getMachineParm('flicker', this.parmsVideo) || 0)).toString();
 
         /*
          * nCard will be undefined if no model was explicitly set (whereas this.nCard is ALWAYS defined).
@@ -65484,13 +65489,14 @@ class FDC extends Component {
     }
 
     /**
-     * parseDiskettes(library, propPath)
+     * parseDiskettes(library, propPath, server)
      *
      * @this {FDC}
      * @param {Object} library
      * @param {string} propPath
+     * @param {string} server
      */
-    parseDiskettes(library, propPath = "/pcx86")
+    parseDiskettes(library, propPath = "/pcx86", server = this.sDisketteServer)
     {
         for (let category in library) {
             let group = library[category];
@@ -65518,14 +65524,14 @@ class FDC extends Component {
                                 name += " (Disk " + (i + 1) + ")";
                             }
                         }
-                        let path = this.sDisketteServer + propPath + '/' + category + '/' + version + '/' + item['@diskette'];
+                        let path = server + propPath + '/' + category + '/' + version + '/' + item['@diskette'];
                         this.aDiskettes.push({name, path});
                     }
                 }
                 continue;
             }
             if (category[0] == '@') continue;
-            this.parseDiskettes(group, propPath + '/' + category);
+            this.parseDiskettes(group, propPath + '/' + category, group['@server'] || server);
         }
     }
 

@@ -1,0 +1,562 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:43:53
+COMMAND Resident DATA                                       Page     1-1
+                                                            
+
+                                TITLE   COMMAND Resident DATA 
+                                 
+                             C          INCLUDE COMSW.ASM 
+                             C  ; Use the following booleans to set assembly fl
+				ags 
+ = 0000                      C  FALSE   EQU     0 
+ = FFFF                      C  TRUE    EQU     NOT FALSE 
+                             C   
+                             C  ENDIF 
+                             C   
+ =                           C  IBMVER  EQU     IBM  	; Switch to build IBM ver
+				sion of Command 
+ = FFFF                      C  MSVER   EQU     NOT IBM ; Switch to build MS-DO
+				S version of Command 
+                             C   
+ =                           C  HIGHMEM EQU     FALSE   ; Run resident part abo
+				ve transient (high memory) 
+ =                           C  KANJI   EQU     FALSE   ; Support for dual byte
+				 Microsoft KANJI standard 
+ =                           C  IBMJAPAN        EQU     FALSE   ;MUST BE TRUE (
+				along with IBM and KANJI) 
+                                 
+                                .list 
+                                .cref 
+                                 
+                             C          INCLUDE IFEQU.ASM 
+                             C  ;************************************* 
+                             C  ; COMMAND EQUs which are switch dependant 
+                             C   
+                             C  ENDIF 
+                                 
+                                 
+ 0000                           CODERES SEGMENT PUBLIC 
+                                        EXTRN   THEADFIX:NEAR,EXT_EXEC:NEAR,TRE
+				MCHECK:NEAR 
+ 0000                           CODERES ENDS 
+                                 
+ 0000                           TRANCODE        SEGMENT PUBLIC 
+                                        EXTRN   COMMAND:NEAR 
+ 0000                           TRANCODE        ENDS 
+                                 
+ 0000                           ZEXEC_CODE      SEGMENT PUBLIC 
+                                        ENDIF 
+ 0000                           ZEXEC_CODE      ENDS 
+                                 
+                                 
+                                ; Data for resident portion 
+                                 
+ 0000                           DATARES SEGMENT PUBLIC BYTE 
+                                 
+                                        PUBLIC  MESBAS,MESADD,MREAD,MWRITE,ERRM
+				ES,IOTYP,DRVNUM,DRVLET,NEWLIN 
+                                        PUBLIC  DEVEMES,DEVENAM,REQUEST,CDEVAT,
+				BADFAT,COMBAD,NEEDCOM,DRVMSG 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:43:53
+COMMAND Resident DATA                                       Page     1-2
+                                                            
+
+                                        PUBLIC  COMLET,DEFMSG,PROMPT,ENDBATMES,
+				EXECEMES,EXEBAD,TOOBIG,NOCOM 
+                                        PUBLIC  NOHANDMES,BMEMMES,HALTMES,FRETM
+				ES,RBADNAM,INT_2E_RET,SAVE_PDB 
+                                        PUBLIC  PARENT,ERRCD_24,HANDLE01,LOADIN
+				G,BATCH,BATLOC,COMSPEC,TRANS 
+                                        PUBLIC  TRNSEG,COMDRV,BATBYT,MEMSIZ,SUM
+				,EXTCOM,RETCODE,ECHOFLAG 
+                                        PUBLIC  IO_SAVE,RESTDIR,PERMCOM,SINGLEC
+				OM,VERVAL,FORFLAG,UFORDRV 
+                                        PUBLIC  FORSET,FORCOM,FORVAR,FORPTR,FOR
+				UFCB,FORFCB,RE_INSTR,RE_OUT_APP 
+                                        PUBLIC  RE_OUTSTR,PIPEFLAG,PIPEFILES,PI
+				PEPTR,PIPESTR,PIPE1,PIPE2 
+                                        PUBLIC  INPIPEPTR,OUTPIPEPTR,EXEC_BLOCK
+				,ENVIRSEG,COM_PTR,COM_FCB1 
+                                        PUBLIC  COM_FCB2,PARMBUF,TRANVARS,MYSEG
+				,LTPA,RSWITCHAR,RDIRCHAR 
+                                        PUBLIC  MYSEG1,MYSEG2 
+                                        PUBLIC  DATARESEND 
+                                 
+                                        ENDIF 
+                                 
+ 0000                                   ORG     0 
+ = 0000                         ZERO    =       $ 
+ 0000  002E R                   MESBAS  DW      OFFSET RESGROUP:ERR0 
+ 0002  003B R                           DW      OFFSET RESGROUP:ERR1 
+ 0004  0043 R                           DW      OFFSET RESGROUP:ERR2 
+ 0006  004C R                           DW      OFFSET RESGROUP:ERR3 
+ 0008  0058 R                           DW      OFFSET RESGROUP:ERR4 
+ 000A  005C R                           DW      OFFSET RESGROUP:ERR5 
+ 000C  006B R                           DW      OFFSET RESGROUP:ERR6 
+ 000E  006F R                           DW      OFFSET RESGROUP:ERR7 
+ 0010  007B R                           DW      OFFSET RESGROUP:ERR8 
+ 0012  008B R                           DW      OFFSET RESGROUP:ERR9 
+ 0014  0093 R                           DW      OFFSET RESGROUP:ERR10 
+ 0016  009E R                           DW      OFFSET RESGROUP:ERR11 
+ 0018  00A8 R                           DW      OFFSET RESGROUP:ERR12 
+                                 
+ 001A  00C6 R                   MESADD  DW      OFFSET RESGROUP:NEWLIN         
+				 ;"0" 
+ 001C  00DB R                           DW      OFFSET RESGROUP:COM$1          
+				 ;"1" 
+ 001E  004C R                           DW      OFFSET RESGROUP:ERR3           
+				 ;"2" 
+ 0020  00E3 R                           DW      OFFSET RESGROUP:ALLOC$3        
+				 ;"3" 
+ 0022  00EF R                           DW      OFFSET RESGROUP:FILE$4         
+				 ;"4" 
+ 0024  00F5 R                           DW      OFFSET RESGROUP:RROR$5         
+				 ;"5" 
+ 0026  00FA R                           DW      OFFSET RESGROUP:CAN$6          
+				 ;"6" 
+ 0028  0101 R                           DW      OFFSET RESGROUP:EMORY$7        
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:43:53
+COMMAND Resident DATA                                       Page     1-3
+                                                            
+
+				 ;"7" 
+ 002A  0106 R                           DW      OFFSET RESGROUP:BAT$8          
+				 ;"8" 
+ 002C  010C R                           DW      OFFSET RESGROUP:INS$9          
+				 ;"9" 
+                                 
+ 002E  57 72 69 74 65 20 70     ERR0    DB      "Write protec","t"+80h 
+       72 6F 74 65 63 F4        
+ 003B  42 61 64 20 75 6E 69     ERR1    DB      "Bad uni","t"+80h 
+       F4                       
+ 0043  4E 6F 74 20 72 65 61     ERR2    DB      "Not read","y"+80h 
+       64 F9                    
+ 004C  42 61 64 20 63 6F 6D     ERR3    DB      "Bad command"," "+80h 
+       6D 61 6E 64 A0           
+ 0058  44 61 74 E1              ERR4    DB      "Dat","a"+80h 
+ 005C  42 61 64 20 63 61 6C     ERR5    DB      "Bad call forma","t"+80h 
+       6C 20 66 6F 72 6D 61     
+       F4                       
+ 006B  53 65 65 EB              ERR6    DB      "See","k"+80h 
+ 006F  4E 6F 6E 2D 44 4F 53     ERR7    DB      "Non-DOS dis","k"+80h 
+       20 64 69 73 EB           
+ 007B  53 65 63 74 6F 72 20     ERR8    DB      "Sector not foun","d"+80h 
+       6E 6F 74 20 66 6F 75     
+       6E E4                    
+ 008B  4E 6F 20 70 61 70 65     ERR9    DB      "No pape","r"+80h 
+       F2                       
+ 0093  57 72 69 74 65 20 66     ERR10   DB      "Write faul","t"+80h 
+       61 75 6C F4              
+ 009E  52 65 61 64 20 66 61     ERR11   DB      "Read faul","t"+80h 
+       75 6C F4                 
+ 00A8  44 69 73 EB              ERR12   DB      "Dis","k"+80h 
+ 00AC  72 65 61 64              MREAD   DB      "read" 
+ 00B0  77 72 69 74              MWRITE  DB      "writ" 
+ 00B4  20 65 35                 ERRMES  DB      " e5" 
+ 00B7  77 72 69 74 69 6E E7     IOTYP   DB      "writin","g"+80h 
+ 00BE  20 64 72 69 76 65 20     DRVNUM  DB      " drive " 
+                                
+ 00C5  41                       DRVLET  DB      "A" 
+ 00C6  0D 8A                    NEWLIN  DB      13,10+80h 
+ 00C8  20 64 65 76 69 63 65     DEVEMES DB      " device " 
+       20                       
+ 00D0  0008[                    DEVENAM DB      8 DUP (?) 
+            ??                  
+                         ]      
+                                
+ 00D8  0D 0A 24                         DB      13,10,"$"                      
+				 ;Must be $ terminated 
+ 00DB  20 43 4F 4D 4D 41 4E     COM$1   DB      " COMMAN","D"+80h 
+       C4                       
+ 00E3  20 61 6C 6C 6F 63 61     ALLOC$3 DB      " allocation"," "+80h 
+       74 69 6F 6E A0           
+ 00EF  20 66 69 6C 65 A0        FILE$4  DB      " file"," "+80h 
+ 00F5  72 72 6F 72 A0           RROR$5  DB      "rror"," "+80h 
+ 00FA  43 61 6E 6E 6F 74 A0     CAN$6   DB      "Cannot"," "+80h 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:43:53
+COMMAND Resident DATA                                       Page     1-4
+                                                            
+
+ 0101  65 6D 6F 72 F9           EMORY$7 DB      "emor","y"+80h 
+ 0106  20 62 61 74 63 E8        BAT$8   DB      " batc","h"+80h 
+ 010C  49 6E 73 65 72 F4        INS$9   DB      "Inser","t"+80h 
+ 0112  41 62 6F 72 74 2C 20     REQUEST DB      "Abort, Retry, Ignore?"," "+80h
+				 
+       52 65 74 72 79 2C 20     
+       49 67 6E 6F 72 65 3F     
+       A0                       
+ 0128  ??                       CDEVAT  DB      ? 
+ 0129  30 46 69 6C 65 33 74     BADFAT  DB      "0File3table bad",","+80h 
+       61 62 6C 65 20 62 61     
+       64 AC                    
+ 0139  30 49 6E 76 61 6C 69     COMBAD  DB      "0Invalid1.COM" 
+       64 31 2E 43 4F 4D        
+ 0146  30 39 31 2E 43 4F 4D     NEEDCOM DB      "091.COM disk in"," "+80h 
+       20 64 69 73 6B 20 69     
+       6E A0                    
+ 0156  64 72 69 76 65 20        DRVMSG  DB      "drive " 
+ 015C  41 A0                    COMLET  DB      "A"," "+80h 
+ 015E  64 65 66 61 75 6C 74     DEFMSG  DB      "default driv","e"+80h 
+       20 64 72 69 76 E5        
+ 016B  30 61 6E 64 20 73 74     PROMPT  DB      "0and strike any key when ready
+				","0"+80h 
+       72 69 6B 65 20 61 6E     
+       79 20 6B 65 79 20 77     
+       68 65 6E 20 72 65 61     
+       64 79 B0                 
+ 018A  30 54 65 72 6D 69 6E     ENDBATMES DB    "0Terminate8 job (Y/N)?"," "+80
+				h 
+       61 74 65 38 20 6A 6F     
+       62 20 28 59 2F 4E 29     
+       3F A0                    
+ 01A1  45 58 45 43 20 66 61     EXECEMES DB     "EXEC failure","0"+80h 
+       69 6C 75 72 65 B0        
+ 01AE  45 35 69 6E 20 45 58     EXEBAD  DB      "E5in EXE4","0"+80h 
+       45 34 B0                 
+ 01B8  50 72 6F 67 72 61 6D     TOOBIG  DB      "Program too big to fit in m7",
+				"0"+80h 
+       20 74 6F 6F 20 62 69     
+       67 20 74 6F 20 66 69     
+       74 20 69 6E 20 6D 37     
+       B0                       
+ 01D5  30 42 61 64 20 6F 72     NOCOM   DB      "0Bad or missing Command Interp
+				rete","r"+80H 
+       20 6D 69 73 73 69 6E     
+       67 20 43 6F 6D 6D 61     
+       6E 64 20 49 6E 74 65     
+       72 70 72 65 74 65 F2     
+ 01F8  30 4E 6F 20 66 72 65     NOHANDMES DB    "0No free4handle","s"+80h 
+       65 34 68 61 6E 64 6C     
+       65 F3                    
+ 0208  30 4D 37 33 65 B5        BMEMMES DB      "0M73e","5"+80h 
+ 020E  30 36 6C 6F 61 64 31     HALTMES DB      "06load1, system halte","d"+80h
+				 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:43:53
+COMMAND Resident DATA                                       Page     1-5
+                                                            
+
+       2C 20 73 79 73 74 65     
+       6D 20 68 61 6C 74 65     
+       E4                       
+ 0224  30 36 73 74 61 72 74     FRETMES DB      "06start1, exiting","0"+80h 
+       31 2C 20 65 78 69 74     
+       69 6E 67 B0              
+ 0236  32 6F 72 34 6E 61 6D     RBADNAM DB      "2or4name","0"+80h 
+       65 B0                    
+                                 
+ 023F  ????????                 INT_2E_RET DD   ?               ; Magic command
+				 executer return address 
+ 0243  ????                     SAVE_PDB DW     ? 
+ 0245  ????                     PARENT   DW     ? 
+ 0247  ????                     ERRCD_24 DW     ? 
+ 0249  ????                     HANDLE01 DW     ? 
+ 024B  00                       LOADING DB      0 
+ 024C  0000                     BATCH   DW      0               ; Assume no bat
+				ch mode initially 
+ 024E  00 00 00 00              BATLOC  DD      0               ; Position in b
+				atch file 
+ 0252  0028[                    COMSPEC DB      40 DUP(0) 
+            00                  
+                         ]      
+                                
+ 027A  0000 E                   TRANS   DW      OFFSET TRANGROUP:COMMAND 
+ 027C  ????                     TRNSEG  DW      ? 
+ 027E  ??                       COMDRV  DB      ?               ; DRIVE SPEC TO
+				 LOAD AUTOEXEC AND COMMAND 
+ 027F  ??                       BATBYT  DB      ? 
+ 0280  ????                     MEMSIZ  DW      ? 
+ 0282  ????                     SUM     DW      ? 
+ 0284  01                       EXTCOM  DB      1               ; For init, pre
+				tend just did an external 
+ 0285  ????                     RETCODE DW      ? 
+ 0287  01                       ECHOFLAG DB     1 
+ 0288  ????                     IO_SAVE DW      ? 
+ 028A  00                       RESTDIR DB      0 
+ 028B  00                       PERMCOM DB      0 
+ 028C  0000                     SINGLECOM DW    0 
+ 028E  FFFF                     VERVAL  DW      -1 
+                                 
+ 0290  ??                       FORFLAG DB      ? 
+ 0291  00                       UFORDRV DB      0 
+ 0292  0028[                    FORSET  DB      40 DUP (?) 
+            ??                  
+                         ]      
+                                
+ 02BA  005A[                    FORCOM  DB      90 DUP (?) 
+            ??                  
+                         ]      
+                                
+ 0314  ??                       FORVAR  DB      ? 
+ 0315  ????                     FORPTR  DW      ? 
+ 0317  FF                       FORUFCB DB      -1 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:43:53
+COMMAND Resident DATA                                       Page     1-6
+                                                            
+
+ 0318  00                       FORFCB  DB      0 
+ 0319  0022[                            DB      34 DUP(?) 
+            ??                  
+                         ]      
+                                
+ 033B  0000                             DW      0 
+ 033D  0000                             DW      0               ; Initialize RR
+				 field to zero 
+                                 
+ 033F  0028[                    RE_INSTR DB     40 DUP(0) 
+            00                  
+                         ]      
+                                
+ 0367  00                       RE_OUT_APP DB   0 
+ 0368  0028[                    RE_OUTSTR DB    40 DUP(0) 
+            00                  
+                         ]      
+                                
+                                 
+                                ;These two bytes refed as a word 
+ 0390  00                       PIPEFLAG  DB    0 
+ 0391  00                       PIPEFILES DB    0 
+                                 
+ 0392  ????                     PIPEPTR DW      ? 
+ 0394  0081[                    PIPESTR DB      129 DUP(?) 
+            ??                  
+                         ]      
+                                
+ 0415  5F 3A 2F 25 50 49 50     PIPE1   DB      "_:/%PIPE1.$$$",0 
+       45 31 2E 24 24 24 00     
+ 0423  5F 3A 2F 25 50 49 50     PIPE2   DB      "_:/%PIPE2.$$$",0 
+       45 32 2E 24 24 24 00     
+ 0431  0415 R                   INPIPEPTR DW    OFFSET RESGROUP:PIPE1 
+ 0433  0423 R                   OUTPIPEPTR DW   OFFSET RESGROUP:PIPE2 
+                                 
+ 0435                           EXEC_BLOCK LABEL BYTE           ; The data bloc
+				k for EXEC calls 
+ 0435  ????                     ENVIRSEG DW     ? 
+ 0437                           COM_PTR LABEL   DWORD 
+ 0437  0080                             DW      80H             ; Point at unfo
+				rmatted parameters 
+ 0439  ????                             DW      ? 
+ 043B                           COM_FCB1 LABEL  DWORD 
+ 043B  005C                             DW      5CH 
+ 043D  ????                             DW      ? 
+ 043F                           COM_FCB2 LABEL  DWORD 
+ 043F  006C                             DW      6CH 
+ 0441  ????                             DW      ? 
+                                 
+ 0443  0081[                    PARMBUF DB      129 DUP (?) 
+            ??                  
+                         ]      
+                                
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:43:53
+COMMAND Resident DATA                                       Page     1-7
+                                                            
+
+                                ENDIF 
+                                 
+ 04C4                           TRANVARS LABEL  BYTE            ; Variables pas
+				sed to transient 
+ 04C4  0000 E                           DW      OFFSET RESGROUP:THEADFIX 
+ 04C6  0000                     MYSEG   DW      0               ; Put our own s
+				egment here 
+ 04C8  0000                     LTPA    DW      0               ; WILL STORE TP
+				A SEGMENT HERE 
+ 04CA  2D                       RSWITCHAR DB    "-" 
+ 04CB  2F                       RDIRCHAR DB     "/" 
+ 04CC  0000 E                           DW      OFFSET RESGROUP:EXT_EXEC 
+ 04CE  ????                     MYSEG1  DW      ? 
+ 04D0  0000 E                           DW      OFFSET RESGROUP:TREMCHECK 
+ 04D2  0000                     MYSEG2  DW      0 
+                                 
+ 04D4                           DATARESEND      LABEL   BYTE 
+                                 
+ 04D4                           DATARES ENDS 
+                                        END 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:43:53
+COMMAND Resident DATA                                       Symbols-1
+                                                             
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+EGROUP . . . . . . . . . . . . .  	GROUP
+  ZEXEC_CODE . . . . . . . . . .  	0000	PARA	PUBLIC	
+  ZEXEC_DATA . . . . . . . . . .  	0000	PARA	PUBLIC	
+RESGROUP . . . . . . . . . . . .  	GROUP
+  CODERES  . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  DATARES  . . . . . . . . . . .  	04D4	BYTE	PUBLIC	
+  ENVIRONMENT  . . . . . . . . .  	0000	PARA	PUBLIC	
+  INIT . . . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  TAIL . . . . . . . . . . . . .  	0000	PARA	PUBLIC	
+TRANGROUP  . . . . . . . . . . .  	GROUP
+  TRANCODE . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  TRANDATA . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  TRANSPACE  . . . . . . . . . .  	0000	PARA	PUBLIC	
+  TRANTAIL . . . . . . . . . . .  	0000	PARA	PUBLIC	
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ALLOC$3  . . . . . . . . . . . .  	L BYTE 	00E3	DATARES
+
+BADFAT . . . . . . . . . . . . .  	L BYTE 	0129	DATARES	Global
+BAT$8  . . . . . . . . . . . . .  	L BYTE 	0106	DATARES
+BATBYT . . . . . . . . . . . . .  	L BYTE 	027F	DATARES	Global
+BATCH  . . . . . . . . . . . . .  	L WORD 	024C	DATARES	Global
+BATLOC . . . . . . . . . . . . .  	L DWORD	024E	DATARES	Global
+BMEMMES  . . . . . . . . . . . .  	L BYTE 	0208	DATARES	Global
+
+CAN$6  . . . . . . . . . . . . .  	L BYTE 	00FA	DATARES
+CDEVAT . . . . . . . . . . . . .  	L BYTE 	0128	DATARES	Global
+COM$1  . . . . . . . . . . . . .  	L BYTE 	00DB	DATARES
+COMBAD . . . . . . . . . . . . .  	L BYTE 	0139	DATARES	Global
+COMDRV . . . . . . . . . . . . .  	L BYTE 	027E	DATARES	Global
+COMLET . . . . . . . . . . . . .  	L BYTE 	015C	DATARES	Global
+COMMAND  . . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+COMSPEC  . . . . . . . . . . . .  	L BYTE 	0252	DATARES	Global	Length = 0028
+COM_FCB1 . . . . . . . . . . . .  	L DWORD	043B	DATARES	Global
+COM_FCB2 . . . . . . . . . . . .  	L DWORD	043F	DATARES	Global
+COM_PTR  . . . . . . . . . . . .  	L DWORD	0437	DATARES	Global
+
+DATARESEND . . . . . . . . . . .  	L BYTE 	04D4	DATARES	Global
+DEFMSG . . . . . . . . . . . . .  	L BYTE 	015E	DATARES	Global
+DEVEMES  . . . . . . . . . . . .  	L BYTE 	00C8	DATARES	Global
+DEVENAM  . . . . . . . . . . . .  	L BYTE 	00D0	DATARES	Global	Length = 0008
+DRVLET . . . . . . . . . . . . .  	L BYTE 	00C5	DATARES	Global
+DRVMSG . . . . . . . . . . . . .  	L BYTE 	0156	DATARES	Global
+DRVNUM . . . . . . . . . . . . .  	L BYTE 	00BE	DATARES	Global
+
+ECHOFLAG . . . . . . . . . . . .  	L BYTE 	0287	DATARES	Global
+EMORY$7  . . . . . . . . . . . .  	L BYTE 	0101	DATARES
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:43:53
+COMMAND Resident DATA                                       Symbols-2
+                                                             
+
+ENDBATMES  . . . . . . . . . . .  	L BYTE 	018A	DATARES	Global
+ENVIRSEG . . . . . . . . . . . .  	L WORD 	0435	DATARES	Global
+ERR0 . . . . . . . . . . . . . .  	L BYTE 	002E	DATARES
+ERR1 . . . . . . . . . . . . . .  	L BYTE 	003B	DATARES
+ERR10  . . . . . . . . . . . . .  	L BYTE 	0093	DATARES
+ERR11  . . . . . . . . . . . . .  	L BYTE 	009E	DATARES
+ERR12  . . . . . . . . . . . . .  	L BYTE 	00A8	DATARES
+ERR2 . . . . . . . . . . . . . .  	L BYTE 	0043	DATARES
+ERR3 . . . . . . . . . . . . . .  	L BYTE 	004C	DATARES
+ERR4 . . . . . . . . . . . . . .  	L BYTE 	0058	DATARES
+ERR5 . . . . . . . . . . . . . .  	L BYTE 	005C	DATARES
+ERR6 . . . . . . . . . . . . . .  	L BYTE 	006B	DATARES
+ERR7 . . . . . . . . . . . . . .  	L BYTE 	006F	DATARES
+ERR8 . . . . . . . . . . . . . .  	L BYTE 	007B	DATARES
+ERR9 . . . . . . . . . . . . . .  	L BYTE 	008B	DATARES
+ERRCD_24 . . . . . . . . . . . .  	L WORD 	0247	DATARES	Global
+ERRMES . . . . . . . . . . . . .  	L BYTE 	00B4	DATARES	Global
+EXEBAD . . . . . . . . . . . . .  	L BYTE 	01AE	DATARES	Global
+EXECEMES . . . . . . . . . . . .  	L BYTE 	01A1	DATARES	Global
+EXEC_BLOCK . . . . . . . . . . .  	L BYTE 	0435	DATARES	Global
+EXTCOM . . . . . . . . . . . . .  	L BYTE 	0284	DATARES	Global
+EXT_EXEC . . . . . . . . . . . .  	L NEAR	0000	CODERES	External
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FILE$4 . . . . . . . . . . . . .  	L BYTE 	00EF	DATARES
+FORCOM . . . . . . . . . . . . .  	L BYTE 	02BA	DATARES	Global	Length = 005A
+FORFCB . . . . . . . . . . . . .  	L BYTE 	0318	DATARES	Global
+FORFLAG  . . . . . . . . . . . .  	L BYTE 	0290	DATARES	Global
+FORPTR . . . . . . . . . . . . .  	L WORD 	0315	DATARES	Global
+FORSET . . . . . . . . . . . . .  	L BYTE 	0292	DATARES	Global	Length = 0028
+FORUFCB  . . . . . . . . . . . .  	L BYTE 	0317	DATARES	Global
+FORVAR . . . . . . . . . . . . .  	L BYTE 	0314	DATARES	Global
+FRETMES  . . . . . . . . . . . .  	L BYTE 	0224	DATARES	Global
+
+HALTMES  . . . . . . . . . . . .  	L BYTE 	020E	DATARES	Global
+HANDLE01 . . . . . . . . . . . .  	L WORD 	0249	DATARES	Global
+HIGHMEM  . . . . . . . . . . . .  	Alias	 FALSE		
+
+IBM  . . . . . . . . . . . . . .  	Alias	 FALSE		
+IBMJAPAN . . . . . . . . . . . .  	Alias	 FALSE		
+IBMVER . . . . . . . . . . . . .  	Alias	 IBM		
+INPIPEPTR  . . . . . . . . . . .  	L WORD 	0431	DATARES	Global
+INS$9  . . . . . . . . . . . . .  	L BYTE 	010C	DATARES
+INT_2E_RET . . . . . . . . . . .  	L DWORD	023F	DATARES	Global
+IOTYP  . . . . . . . . . . . . .  	L BYTE 	00B7	DATARES	Global
+IO_SAVE  . . . . . . . . . . . .  	L WORD 	0288	DATARES	Global
+
+KANJI  . . . . . . . . . . . . .  	Alias	 FALSE		
+
+LOADING  . . . . . . . . . . . .  	L BYTE 	024B	DATARES	Global
+LTPA . . . . . . . . . . . . . .  	L WORD 	04C8	DATARES	Global
+
+MEMSIZ . . . . . . . . . . . . .  	L WORD 	0280	DATARES	Global
+MESADD . . . . . . . . . . . . .  	L WORD 	001A	DATARES	Global
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:43:53
+COMMAND Resident DATA                                       Symbols-3
+                                                             
+
+MESBAS . . . . . . . . . . . . .  	L WORD 	0000	DATARES	Global
+MREAD  . . . . . . . . . . . . .  	L BYTE 	00AC	DATARES	Global
+MSVER  . . . . . . . . . . . . .  	Number	FFFF	
+MWRITE . . . . . . . . . . . . .  	L BYTE 	00B0	DATARES	Global
+MYSEG  . . . . . . . . . . . . .  	L WORD 	04C6	DATARES	Global
+MYSEG1 . . . . . . . . . . . . .  	L WORD 	04CE	DATARES	Global
+MYSEG2 . . . . . . . . . . . . .  	L WORD 	04D2	DATARES	Global
+
+NEEDCOM  . . . . . . . . . . . .  	L BYTE 	0146	DATARES	Global
+NEWLIN . . . . . . . . . . . . .  	L BYTE 	00C6	DATARES	Global
+NOCOM  . . . . . . . . . . . . .  	L BYTE 	01D5	DATARES	Global
+NOHANDMES  . . . . . . . . . . .  	L BYTE 	01F8	DATARES	Global
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OUTPIPEPTR . . . . . . . . . . .  	L WORD 	0433	DATARES	Global
+
+PARENT . . . . . . . . . . . . .  	L WORD 	0245	DATARES	Global
+PARMBUF  . . . . . . . . . . . .  	L BYTE 	0443	DATARES	Global	Length = 0081
+PERMCOM  . . . . . . . . . . . .  	L BYTE 	028B	DATARES	Global
+PIPE1  . . . . . . . . . . . . .  	L BYTE 	0415	DATARES	Global
+PIPE2  . . . . . . . . . . . . .  	L BYTE 	0423	DATARES	Global
+PIPEFILES  . . . . . . . . . . .  	L BYTE 	0391	DATARES	Global
+PIPEFLAG . . . . . . . . . . . .  	L BYTE 	0390	DATARES	Global
+PIPEPTR  . . . . . . . . . . . .  	L WORD 	0392	DATARES	Global
+PIPESTR  . . . . . . . . . . . .  	L BYTE 	0394	DATARES	Global	Length = 0081
+PROMPT . . . . . . . . . . . . .  	L BYTE 	016B	DATARES	Global
+
+RBADNAM  . . . . . . . . . . . .  	L BYTE 	0236	DATARES	Global
+RDIRCHAR . . . . . . . . . . . .  	L BYTE 	04CB	DATARES	Global
+REQUEST  . . . . . . . . . . . .  	L BYTE 	0112	DATARES	Global
+RESTDIR  . . . . . . . . . . . .  	L BYTE 	028A	DATARES	Global
+RETCODE  . . . . . . . . . . . .  	L WORD 	0285	DATARES	Global
+RE_INSTR . . . . . . . . . . . .  	L BYTE 	033F	DATARES	Global	Length = 0028
+RE_OUTSTR  . . . . . . . . . . .  	L BYTE 	0368	DATARES	Global	Length = 0028
+RE_OUT_APP . . . . . . . . . . .  	L BYTE 	0367	DATARES	Global
+RROR$5 . . . . . . . . . . . . .  	L BYTE 	00F5	DATARES
+RSWITCHAR  . . . . . . . . . . .  	L BYTE 	04CA	DATARES	Global
+
+SAVE_PDB . . . . . . . . . . . .  	L WORD 	0243	DATARES	Global
+SINGLECOM  . . . . . . . . . . .  	L WORD 	028C	DATARES	Global
+SUM  . . . . . . . . . . . . . .  	L WORD 	0282	DATARES	Global
+
+THEADFIX . . . . . . . . . . . .  	L NEAR	0000	CODERES	External
+TOOBIG . . . . . . . . . . . . .  	L BYTE 	01B8	DATARES	Global
+TRANS  . . . . . . . . . . . . .  	L WORD 	027A	DATARES	Global
+TRANVARS . . . . . . . . . . . .  	L BYTE 	04C4	DATARES	Global
+TREMCHECK  . . . . . . . . . . .  	L NEAR	0000	CODERES	External
+TRNSEG . . . . . . . . . . . . .  	L WORD 	027C	DATARES	Global
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+
+UFORDRV  . . . . . . . . . . . .  	L BYTE 	0291	DATARES	Global
+
+VER  . . . . . . . . . . . . . .  	Text  		
+VERVAL . . . . . . . . . . . . .  	L WORD 	028E	DATARES	Global
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:43:53
+COMMAND Resident DATA                                       Symbols-4
+                                                             
+
+
+ZERO . . . . . . . . . . . . . .  	NEAR 	0000	DATARES
+
+
+    289 Source  Lines
+    292 Total   Lines
+    157 Symbols
+
+  44822 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

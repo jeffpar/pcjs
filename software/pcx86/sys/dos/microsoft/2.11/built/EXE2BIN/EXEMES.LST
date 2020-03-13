@@ -1,0 +1,113 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:34:34
+LOCATE (EXE2BIN) Messages                                   Page     1-1
+                                                            
+
+                                        title   LOCATE (EXE2BIN) Messages 
+                                 
+ = 0000                         FALSE   EQU     0 
+ = FFFF                         TRUE    EQU     NOT FALSE 
+                                 
+ 0000                           DATA    SEGMENT PUBLIC BYTE 
+                                 
+                                        PUBLIC  bad_vers_err,NOTFND,NOROOM,DIRF
+				ULL,FULL,PROMPT,CRLF 
+                                        PUBLIC  CANTFIX,RDBAD 
+                                 
+ 0000  49 6E 63 6F 72 72 65     bad_vers_err db "Incorrect DOS version$" 
+       63 74 20 44 4F 53 20     
+       76 65 72 73 69 6F 6E     
+       24                       
+ 0016  46 69 6C 65 20 6E 6F     NOTFND  DB      "File not found$" 
+       74 20 66 6F 75 6E 64     
+       24                       
+ 0025  49 6E 73 75 66 66 69     NOROOM  DB      "Insufficient memory$" 
+       63 69 65 6E 74 20 6D     
+       65 6D 6F 72 79 24        
+ 0039  46 69 6C 65 20 63 72     DIRFULL DB      "File creation error$" 
+       65 61 74 69 6F 6E 20     
+       65 72 72 6F 72 24        
+ 004D  49 6E 73 75 66 66 69     FULL    DB      "Insufficient disk space$" 
+       63 69 65 6E 74 20 64     
+       69 73 6B 20 73 70 61     
+       63 65 24                 
+ 0065  46 69 78 2D 75 70 73     PROMPT  DB      "Fix-ups needed - base segment 
+				(hex): $" 
+       20 6E 65 65 64 65 64     
+       20 2D 20 62 61 73 65     
+       20 73 65 67 6D 65 6E     
+       74 20 28 68 65 78 29     
+       3A 20 24                 
+ 008B  0D 0A 24                 CRLF    DB      13,10,"$" 
+ 008E  46 69 6C 65 20 63 61     CANTFIX DB      "File cannot be converted$" 
+       6E 6E 6F 74 20 62 65     
+       20 63 6F 6E 76 65 72     
+       74 65 64 24              
+ 00A7  57 41 52 4E 49 4E 47     RDBAD   DB      "WARNING - Read error on EXE fi
+				le." 
+       20 2D 20 52 65 61 64     
+       20 65 72 72 6F 72 20     
+       6F 6E 20 45 58 45 20     
+       66 69 6C 65 2E           
+ 00C8  0D 0A 20 20 20 20 20             DB      13,10,"          Amount read le
+				ss than size in header.",13,10,"$" 
+       20 20 20 20 20 41 6D     
+       6F 75 6E 74 20 72 65     
+       61 64 20 6C 65 73 73     
+       20 74 68 61 6E 20 73     
+       69 7A 65 20 69 6E 20     
+       68 65 61 64 65 72 2E     
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:34:34
+LOCATE (EXE2BIN) Messages                                   Page     1-2
+                                                            
+
+       0D 0A 24                 
+                                 
+                                 
+ 00FC                           DATA    ENDS 
+                                        END 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:34:34
+LOCATE (EXE2BIN) Messages                                   Symbols-1
+                                                             
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DATA . . . . . . . . . . . . . .  	00FC	BYTE	PUBLIC	
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+BAD_VERS_ERR . . . . . . . . . .  	L BYTE 	0000	DATA	Global
+
+CANTFIX  . . . . . . . . . . . .  	L BYTE 	008E	DATA	Global
+CRLF . . . . . . . . . . . . . .  	L BYTE 	008B	DATA	Global
+
+DIRFULL  . . . . . . . . . . . .  	L BYTE 	0039	DATA	Global
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FULL . . . . . . . . . . . . . .  	L BYTE 	004D	DATA	Global
+
+NOROOM . . . . . . . . . . . . .  	L BYTE 	0025	DATA	Global
+NOTFND . . . . . . . . . . . . .  	L BYTE 	0016	DATA	Global
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+
+PROMPT . . . . . . . . . . . . .  	L BYTE 	0065	DATA	Global
+
+RDBAD  . . . . . . . . . . . . .  	L BYTE 	00A7	DATA	Global
+
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+
+
+     24 Source  Lines
+     24 Total   Lines
+     35 Symbols
+
+  49490 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

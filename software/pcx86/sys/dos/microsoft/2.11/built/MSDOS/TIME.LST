@@ -1,0 +1,981 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Page     1-1
+                                                            
+
+                                ; 
+                                ; Time and date functions for MSDOS 
+                                ; 
+                                 
+                             C  INCLUDE DOSSEG.ASM 
+                             C  ; 
+                             C  ; segment ordering for MSDOS 
+                             C  ; 
+                             C   
+ 0000                        C  CONSTANTS       SEGMENT BYTE PUBLIC 'CONST' 
+ 0000                        C  CONSTANTS       ENDS 
+                             C   
+ 0000                        C  DATA            SEGMENT BYTE PUBLIC 'DATA' 
+ 0000                        C  DATA            ENDS 
+                             C   
+ 0000                        C  CODE            SEGMENT BYTE PUBLIC 'CODE' 
+ 0000                        C  CODE            ENDS 
+                             C   
+ 0000                        C  LAST            SEGMENT BYTE PUBLIC 'LAST' 
+ 0000                        C  LAST            ENDS 
+                             C   
+                             C  DOSGROUP    GROUP   CODE,CONSTANTS,DATA,LAST 
+                                 
+                                 
+ 0000                           CODE        SEGMENT BYTE PUBLIC  'CODE' 
+                                        ASSUME  SS:DOSGROUP,CS:DOSGROUP 
+                                 
+                                .list 
+                                 
+                                TITLE   TIME - time and date functions 
+                                NAME    TIME 
+                                 
+                                 
+                                    i_need  DAY,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                    i_need  MONTH,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                    i_need  YEAR,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                    i_need  WEEKDAY,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                    i_need  TIMEBUF,6 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                    i_need  BCLOCK,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                    i_need  DAYCNT,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+                                    i_need  YRTAB,8 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                    i_need  MONTAB,12 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                 
+ = 05B5                             FOURYEARS = 3*365 + 366 
+                                 
+                                SUBTTL DATE16, READTIME, DODATE -- GUTS OF TIME
+				 AND DATE 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Page     1-3
+DATE16, READTIME, DODATE -- GUTS OF TIME AND DATE           
+
+                                PAGE 
+                                ; 
+                                ; Date16 returns the current date in AX, curren
+				t time in DX 
+                                ;   AX - YYYYYYYMMMMDDDDD  years months days 
+                                ;   DX - HHHHHMMMMMMSSSSS  hours minutes second
+				s/2 
+                                ; 
+                                        procedure   DATE16,NEAR 
+ 0000                         1 DATE16 PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+ 0000  51                               PUSH    CX 
+ 0001  06                               PUSH    ES 
+ 0002  E8 0025 R                        CALL    READTIME 
+ 0005  07                               POP     ES 
+ 0006  D0 E1                            SHL     CL,1            ;Minutes to lef
+				t part of byte 
+ 0008  D0 E1                            SHL     CL,1 
+ 000A  D1 E1                            SHL     CX,1            ;Push hours and
+				 minutes to left end 
+ 000C  D1 E1                            SHL     CX,1 
+ 000E  D1 E1                            SHL     CX,1 
+ 0010  D0 EE                            SHR     DH,1            ;Count every tw
+				o seconds 
+ 0012  0A CE                            OR      CL,DH           ;Combine second
+				s with hours and minutes 
+ 0014  8B D1                            MOV     DX,CX 
+ 0016  A1 0000 E                        MOV     AX,WORD PTR [MONTH]     ;Fetch 
+				month and year 
+ 0019  B1 04                            MOV     CL,4 
+ 001B  D2 E0                            SHL     AL,CL                   ;Push m
+				onth to left to make room for day 
+ 001D  D1 E0                            SHL     AX,1 
+ 001F  59                               POP     CX 
+ 0020  0A 06 0000 E                     OR      AL,[DAY] 
+ 0024  C3                               RET 
+                                DATE16  ENDP 
+                                 
+                                        procedure   READTIME,NEAR 
+ 0025                         1 READTIME PROC NEAR
+                                 
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                ;Gets time in CX:DX. Figures new date if it has
+				 changed. 
+                                ;Uses AX, CX, DX. 
+                                 
+ 0025  56                               PUSH    SI 
+ 0026  53                               PUSH    BX 
+ 0027  BB 0000 E                        MOV     BX,OFFSET DOSGROUP:TIMEBUF 
+ 002A  B9 0006                          MOV     CX,6 
+ 002D  33 D2                            XOR     DX,DX 
+ 002F  8B C2                            MOV     AX,DX 
+                                        invoke  SETREAD 
+ 0031  E8 0000 E              1  CALL SETREAD
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Page     1-4
+DATE16, READTIME, DODATE -- GUTS OF TIME AND DATE           
+
+ 0034  1E                               PUSH    DS 
+ 0035  C5 36 0000 E                     LDS     SI,[BCLOCK] 
+                                ASSUME  DS:NOTHING 
+                                        invoke  DEVIOCALL2      ;Get correct da
+				te and time 
+ 0039  E8 0000 E              1  CALL DEVIOCALL2
+ 003C  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 003D  5B                               POP     BX 
+ 003E  5E                               POP     SI 
+ 003F  A1 0000 E                        MOV     AX,WORD PTR [TIMEBUF] 
+ 0042  8B 0E 0002 E                     MOV     CX,WORD PTR [TIMEBUF+2] 
+ 0046  8B 16 0004 E                     MOV     DX,WORD PTR [TIMEBUF+4] 
+ 004A  3B 06 0000 E                     CMP     AX,[DAYCNT]     ;See if day cou
+				nt is the same 
+ 004E  74 42                            JZ      RET22 
+ 0050  3D AB36                          CMP     AX,FOURYEARS*30 ;Number of days
+				 in 120 years 
+ 0053  73 3D                            JAE     RET22           ;Ignore if too 
+				large 
+ 0055  A3 0000 E                        MOV     [DAYCNT],AX 
+ 0058  56                               PUSH    SI 
+ 0059  51                               PUSH    CX 
+ 005A  52                               PUSH    DX              ;Save time 
+ 005B  33 D2                            XOR     DX,DX 
+ 005D  B9 05B5                          MOV     CX,FOURYEARS    ;Number of days
+				 in 4 years 
+ 0060  F7 F1                            DIV     CX              ;Compute number
+				 of 4-year units 
+ 0062  D1 E0                            SHL     AX,1 
+ 0064  D1 E0                            SHL     AX,1 
+ 0066  D1 E0                            SHL     AX,1            ;Multiply by 8 
+				(no. of half-years) 
+ 0068  8B C8                            MOV     CX,AX           ;<240 implies A
+				H=0 
+ 006A  BE 0000 E                        MOV     SI,OFFSET DOSGROUP:YRTAB       
+				 ;Table of days in each year 
+ 006D  E8 0093 R                        CALL    DSLIDE          ;Find out which
+				 of four years we're in 
+ 0070  D1 E9                            SHR     CX,1            ;Convert half-y
+				ears to whole years 
+ 0072  73 04                            JNC     SK              ;Extra half-yea
+				r? 
+ 0074  81 C2 00C8                       ADD     DX,200 
+ 0078                           SK: 
+ 0078  E8 009F R                        CALL    SETYEAR 
+ 007B  B1 01                            MOV     CL,1            ;At least at fi
+				rst month in year 
+ 007D  BE 0000 E                        MOV     SI,OFFSET DOSGROUP:MONTAB      
+				 ;Table of days in each month 
+ 0080  E8 0093 R                        CALL    DSLIDE          ;Find out which
+				 month we're in 
+ 0083  88 0E 0000 E                     MOV     [MONTH],CL 
+ 0087  42                               INC     DX              ;Remainder is d
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Page     1-5
+DATE16, READTIME, DODATE -- GUTS OF TIME AND DATE           
+
+				ay of month (start with one) 
+ 0088  88 16 0000 E                     MOV     [DAY],DL 
+ 008C  E8 0121 R                        CALL    WKDAY           ;Set day of wee
+				k 
+ 008F  5A                               POP     DX 
+ 0090  59                               POP     CX 
+ 0091  5E                               POP     SI 
+ 0092  C3                       RET22:  RET 
+                                READTIME    ENDP 
+                                 
+                                        procedure   DSLIDE,NEAR 
+ 0093                         1 DSLIDE PROC NEAR
+ 0093  B4 00                            MOV     AH,0 
+ 0095                           DSLIDE1: 
+ 0095  AC                               LODSB           ;Get count of days 
+ 0096  3B D0                            CMP     DX,AX           ;See if it will
+				 fit 
+ 0098  72 15                            JB      RET23           ;If not, done 
+ 009A  2B D0                            SUB     DX,AX 
+ 009C  41                               INC     CX              ;Count one more
+				 month/year 
+ 009D  EB F6                            JMP     SHORT DSLIDE1 
+                                DSLIDE  ENDP 
+                                 
+                                        procedure   SETYEAR,NEAR 
+ 009F                         1 SETYEAR PROC NEAR
+                                ;Set year with value in CX. Adjust length of Fe
+				bruary for this year. 
+ 009F  88 0E 0000 E                     MOV     BYTE PTR [YEAR],CL 
+                                 
+ 00A3                           CHKYR: 
+ 00A3  F6 C1 03                         TEST    CL,3            ;Check for leap
+				 year 
+ 00A6  B0 1C                            MOV     AL,28 
+ 00A8  75 02                            JNZ     SAVFEB          ;28 days if no 
+				leap year 
+ 00AA  FE C0                            INC     AL              ;Add leap day 
+ 00AC                           SAVFEB: 
+ 00AC  A2 0001 E                        MOV     [MONTAB+1],AL   ;Store for Febr
+				uary 
+ 00AF  C3                       RET23:  RET 
+                                SETYEAR ENDP 
+                                 
+                                        procedure   DODATE,NEAR 
+ 00B0                         1 DODATE PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+ 00B0  E8 00A3 R                        CALL    CHKYR           ;Set Feb. up fo
+				r new year 
+ 00B3  8A C6                            MOV     AL,DH 
+ 00B5  BB FFFF E                        MOV     BX,OFFSET DOSGROUP:MONTAB-1 
+ 00B8  D7                               XLAT                    ;Look up days i
+				n month 
+ 00B9  3A C2                            CMP     AL,DL 
+ 00BB  B0 FF                            MOV     AL,-1           ;Restore error 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Page     1-6
+DATE16, READTIME, DODATE -- GUTS OF TIME AND DATE           
+
+				flag, just in case 
+ 00BD  72 74                            JB      RET25           ;Error if too m
+				any days 
+ 00BF  E8 009F R                        CALL    SETYEAR 
+ 00C2  89 16 0000 E                     MOV     WORD PTR [DAY],DX       ;Set bo
+				th day and month 
+ 00C6  D1 E9                            SHR     CX,1 
+ 00C8  D1 E9                            SHR     CX,1 
+ 00CA  B8 05B5                          MOV     AX,FOURYEARS 
+ 00CD  8B DA                            MOV     BX,DX 
+ 00CF  F7 E1                            MUL     CX 
+ 00D1  8A 0E 0000 E                     MOV     CL,BYTE PTR [YEAR] 
+ 00D5  80 E1 03                         AND     CL,3 
+ 00D8  BE 0000 E                        MOV     SI,OFFSET DOSGROUP:YRTAB 
+ 00DB  8B D0                            MOV     DX,AX 
+ 00DD  D1 E1                            SHL     CX,1            ;Two entries pe
+				r year, so double count 
+ 00DF  E8 0134 R                        CALL    DSUM            ;Add up the day
+				s in each year 
+ 00E2  8A CF                            MOV     CL,BH           ;Month of year 
+ 00E4  BE 0000 E                        MOV     SI,OFFSET DOSGROUP:MONTAB 
+ 00E7  49                               DEC     CX              ;Account for mo
+				nths starting with one 
+ 00E8  E8 0134 R                        CALL    DSUM            ;Add up days in
+				 each month 
+ 00EB  8A CB                            MOV     CL,BL           ;Day of month 
+ 00ED  49                               DEC     CX              ;Account for da
+				ys starting with one 
+ 00EE  03 D1                            ADD     DX,CX           ;Add in to day 
+				total 
+ 00F0  92                               XCHG    AX,DX           ;Get day count 
+				in AX 
+ 00F1  A3 0000 E                        MOV     [DAYCNT],AX 
+ 00F4  56                               PUSH    SI 
+ 00F5  53                               PUSH    BX 
+ 00F6  50                               PUSH    AX 
+ 00F7  BB 0000 E                        MOV     BX,OFFSET DOSGROUP:TIMEBUF 
+ 00FA  B9 0006                          MOV     CX,6 
+ 00FD  33 D2                            XOR     DX,DX 
+ 00FF  8B C2                            MOV     AX,DX 
+ 0101  53                               PUSH    BX 
+                                        invoke  SETREAD 
+ 0102  E8 0000 E              1  CALL SETREAD
+                                ASSUME  ES:DOSGROUP 
+ 0105  1E                               PUSH    DS 
+ 0106  C5 36 0000 E                     LDS     SI,[BCLOCK] 
+                                ASSUME  DS:NOTHING 
+                                        invoke  DEVIOCALL2      ;Get correct da
+				te and time 
+ 010A  E8 0000 E              1  CALL DEVIOCALL2
+ 010D  1F                               POP     DS 
+ 010E  5B                               POP     BX 
+                                ASSUME  DS:DOSGROUP 
+                                        invoke  SETWRITE 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Page     1-7
+DATE16, READTIME, DODATE -- GUTS OF TIME AND DATE           
+
+ 010F  E8 0000 E              1  CALL SETWRITE
+ 0112  8F 06 0000 E                     POP     WORD PTR [TIMEBUF] 
+ 0116  1E                               PUSH    DS 
+ 0117  C5 36 0000 E                     LDS     SI,[BCLOCK] 
+                                ASSUME  DS:NOTHING 
+                                        invoke  DEVIOCALL2      ;Set the date 
+ 011B  E8 0000 E              1  CALL DEVIOCALL2
+ 011E  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 011F  5B                               POP     BX 
+ 0120  5E                               POP     SI 
+ 0121                           WKDAY: 
+ 0121  A1 0000 E                        MOV     AX,[DAYCNT] 
+ 0124  33 D2                            XOR     DX,DX 
+ 0126  B9 0007                          MOV     CX,7 
+ 0129  40                               INC     AX 
+ 012A  40                               INC     AX              ;First day was 
+				Tuesday 
+ 012B  F7 F1                            DIV     CX              ;Compute day of
+				 week 
+ 012D  88 16 0000 E                     MOV     [WEEKDAY],DL 
+ 0131  32 C0                            XOR     AL,AL           ;Flag OK 
+ 0133  C3                       RET25:  RET 
+                                DODATE  ENDP 
+                                 
+                                        procedure   DSUM,NEAR 
+ 0134                         1 DSUM PROC NEAR
+ 0134  B4 00                            MOV     AH,0 
+ 0136  E3 FB                            JCXZ    RET25 
+ 0138                           DSUM1: 
+ 0138  AC                               LODSB 
+ 0139  03 D0                            ADD     DX,AX 
+ 013B  E2 FB                            LOOP    DSUM1 
+ 013D  C3                               RET 
+                                DSUM    ENDP 
+                                 
+                                do_ext 
+                                 
+ 013E                           CODE         ENDS 
+                                    END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DOSGROUP . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	013E	BYTE	PUBLIC	'CODE'
+  CONSTANTS  . . . . . . . . . .  	0000	BYTE	PUBLIC	'CONST'
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Symbols-5
+                                                             
+
+  LAST . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'LAST'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BCLOCK . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHKYR  . . . . . . . . . . . . .  	L NEAR	00A3	CODE
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Symbols-6
+                                                             
+
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DATE16 . . . . . . . . . . . . .  	N PROC	0000	CODE	Global	Length = 0025
+DAY  . . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DAYCNT . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Symbols-7
+                                                             
+
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DODATE . . . . . . . . . . . . .  	N PROC	00B0	CODE	Global	Length = 0084
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSLIDE . . . . . . . . . . . . .  	N PROC	0093	CODE	Global	Length = 000C
+DSLIDE1  . . . . . . . . . . . .  	L NEAR	0095	CODE
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DSUM . . . . . . . . . . . . . .  	N PROC	0134	CODE	Global	Length = 000A
+DSUM1  . . . . . . . . . . . . .  	L NEAR	0138	CODE
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Symbols-8
+                                                             
+
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FOURYEARS  . . . . . . . . . . .  	Number	05B5	
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Symbols-9
+                                                             
+
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MONTAB . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+MONTH  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Symbols-10
+                                                             
+
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READTIME . . . . . . . . . . . .  	N PROC	0025	CODE	Global	Length = 006E
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RET22  . . . . . . . . . . . . .  	L NEAR	0092	CODE
+RET23  . . . . . . . . . . . . .  	L NEAR	00AF	CODE
+RET25  . . . . . . . . . . . . .  	L NEAR	0133	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SAVFEB . . . . . . . . . . . . .  	L NEAR	00AC	CODE
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SETYEAR  . . . . . . . . . . . .  	N PROC	009F	CODE	Global	Length = 0011
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+SK . . . . . . . . . . . . . . .  	L NEAR	0078	CODE
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:56:28
+TIME - time and date functions                              Symbols-11
+                                                             
+
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+
+TIMEBUF  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WEEKDAY  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+WKDAY  . . . . . . . . . . . . .  	L NEAR	0121	CODE
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+YEAR . . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+YRTAB  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+
+   1575 Source  Lines
+   1798 Total   Lines
+    561 Symbols
+
+  21026 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

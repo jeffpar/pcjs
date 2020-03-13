@@ -1,0 +1,1457 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-1
+                                                            
+
+                                ; 
+                                ; Disk utilities of MSDOS 
+                                ; 
+                                 
+                             C  INCLUDE DOSSEG.ASM 
+                             C  ; 
+                             C  ; segment ordering for MSDOS 
+                             C  ; 
+                             C   
+ 0000                        C  CONSTANTS       SEGMENT BYTE PUBLIC 'CONST' 
+ 0000                        C  CONSTANTS       ENDS 
+                             C   
+ 0000                        C  DATA            SEGMENT BYTE PUBLIC 'DATA' 
+ 0000                        C  DATA            ENDS 
+                             C   
+ 0000                        C  CODE            SEGMENT BYTE PUBLIC 'CODE' 
+ 0000                        C  CODE            ENDS 
+                             C   
+ 0000                        C  LAST            SEGMENT BYTE PUBLIC 'LAST' 
+ 0000                        C  LAST            ENDS 
+                             C   
+                             C  DOSGROUP    GROUP   CODE,CONSTANTS,DATA,LAST 
+                                 
+                                 
+ 0000                           CODE    SEGMENT BYTE PUBLIC  'CODE' 
+                                        ASSUME  SS:DOSGROUP,CS:DOSGROUP 
+                                 
+                                .list 
+                                 
+                                TITLE   ROM - miscellaneous routines 
+                                NAME    ROM 
+                                 
+                                        i_need  CLUSNUM,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  NEXTADD,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  LASTPOS,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  SECCLUSPOS,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  FATBYT,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  RECPOS,4 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  THISFCB,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  TRANS,BYTE 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  BYTCNT1,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CURBUF,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  BYTSECPOS,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DMAADD,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  SECPOS,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  VALSEC,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                 
+                                        procedure   GET_random_record,NEAR 
+ 0000                         1 GET_random_record PROC NEAR
+                                        entry   GETRRPOS1 
+ 0000                         1 GETRRPOS1:
+ 0000  B9 0001                          MOV     CX,1 
+                                        entry   GetRRPos 
+ 0003                         1 GetRRPos:
+ 0003  8B FA                            MOV     DI,DX 
+ 0005  80 3D FF                         CMP     BYTE PTR [DI],-1 
+ 0008  75 03                            JNZ     NORMFCB1 
+ 000A  83 C7 07                         ADD     DI,7 
+ 000D                           NORMFCB1: 
+ 000D  8B 45 21                         MOV     AX,WORD PTR [DI.fcb_RR] 
+ 0010  8B 55 23                         MOV     DX,WORD PTR [DI.fcb_RR+2] 
+                                        return 
+ 0013                         1 ??0000:
+ 0013  C3                     1  RET
+                                GET_random_record   ENDP 
+                                 
+                                SUBTTL FNDCLUS -- Skip over allocation units 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-3
+FNDCLUS -- Skip over allocation units                       
+
+                                PAGE 
+                                        procedure   FNDCLUS,NEAR 
+ 0014                         1 FNDCLUS PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       CX = No. of clusters to skip 
+                                ;       ES:BP = Base of drive parameters 
+                                ;       [THISFCB] point to FCB 
+                                ; Outputs: 
+                                ;       BX = Last cluster skipped to 
+                                ;       CX = No. of clusters remaining (0 unles
+				s EOF) 
+                                ;       DX = Position of last cluster 
+                                ; DI destroyed. No other registers affected. 
+                                 
+ 0014  06                               PUSH    ES 
+ 0015  C4 3E 0000 E                     LES     DI,[THISFCB] 
+ 0019  26: 8B 5D 1D                     MOV     BX,ES:[DI.fcb_LSTCLUS]  ; fcb_l
+				stclus is packed with dir clus 
+ 001D  81 E3 0FFF                       AND     BX,0FFFh                ; get r
+				id of dir nibble 
+ 0021  26: 8B 55 1B                     MOV     DX,ES:[DI.fcb_CLUSPOS] 
+ 0025  0B DB                            OR      BX,BX 
+ 0027  74 1E                            JZ      NOCLUS 
+ 0029  2B CA                            SUB     CX,DX 
+ 002B  73 08                            JNB     FINDIT 
+ 002D  03 CA                            ADD     CX,DX 
+ 002F  33 D2                            XOR     DX,DX 
+ 0031  26: 8B 5D 19                     MOV     BX,ES:[DI.fcb_FIRCLUS] 
+ 0035                           FINDIT: 
+ 0035  07                               POP     ES 
+ 0036  E3 0E                            JCXZ    RET10 
+                                entry   SKPCLP 
+ 0038                         1 SKPCLP:
+                                        invoke  UNPACK 
+ 0038  E8 0000 E              1  CALL UNPACK
+ 003B  81 FF 0FF8                       CMP     DI,0FF8H 
+ 003F  73 05                            JAE     RET10 
+ 0041  87 DF                            XCHG    BX,DI 
+ 0043  42                               INC     DX 
+ 0044  E2 F2                            LOOP    SKPCLP 
+ 0046                           RET10:  return 
+ 0046                         1 ??0001:
+ 0046  C3                     1  RET
+                                 
+ 0047                           NOCLUS: 
+ 0047  07                               POP     ES 
+ 0048  41                               INC     CX 
+ 0049  4A                               DEC     DX 
+                                        return 
+ 004A                         1 ??0002:
+ 004A  C3                     1  RET
+                                FNDCLUS ENDP 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-4
+FNDCLUS -- Skip over allocation units                       
+
+                                 
+                                SUBTTL BUFSEC -- BUFFER A SECTOR AND SET UP A T
+				RANSFER 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-5
+BUFSEC -- BUFFER A SECTOR AND SET UP A TRANSFER             
+
+                                PAGE 
+                                        procedure   BUFSEC,NEAR 
+ 004B                         1 BUFSEC PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       AH = priority of buffer 
+                                ;       AL = 0 if buffer must be read, 1 if no 
+				pre-read needed 
+                                ;       ES:BP = Base of drive parameters 
+                                ;       [CLUSNUM] = Physical cluster number 
+                                ;       [SECCLUSPOS] = Sector position of trans
+				fer within cluster 
+                                ;       [BYTCNT1] = Size of transfer 
+                                ; Function: 
+                                ;       Insure specified sector is in buffer, f
+				lushing buffer before 
+                                ;       read if necessary. 
+                                ; Outputs: 
+                                ;       ES:DI = Pointer to buffer 
+                                ;       SI = Pointer to transfer address 
+                                ;       CX = Number of bytes 
+                                ;       [NEXTADD] updated 
+                                ;       [TRANS] set to indicate a transfer will
+				 occur 
+                                 
+ 004B  8B 16 0000 E                     MOV     DX,[CLUSNUM] 
+ 004F  8A 1E 0000 E                     MOV     BL,[SECCLUSPOS] 
+ 0053  E8 0176 R                        CALL    FIGREC 
+                                        invoke  GETBUFFR 
+ 0056  E8 0000 E              1  CALL GETBUFFR
+ 0059  C6 06 0000 E 01                  MOV     BYTE PTR [TRANS],1      ; A tra
+				nsfer is taking place 
+ 005E  8B 36 0000 E                     MOV     SI,[NEXTADD] 
+ 0062  8B FE                            MOV     DI,SI 
+ 0064  8B 0E 0000 E                     MOV     CX,[BYTCNT1] 
+ 0068  03 F9                            ADD     DI,CX 
+ 006A  89 3E 0000 E                     MOV     [NEXTADD],DI 
+ 006E  C4 3E 0000 E                     LES     DI,[CURBUF] 
+ 0072  83 C7 10                         ADD     DI,BUFINSIZ             ; Point
+				 to buffer 
+ 0075  03 3E 0000 E                     ADD     DI,[BYTSECPOS] 
+                                        return 
+ 0079                         1 ??0003:
+ 0079  C3                     1  RET
+                                BUFSEC  ENDP 
+                                 
+                                SUBTTL BUFRD, BUFWRT -- PERFORM BUFFERED READ A
+				ND WRITE 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-6
+BUFRD, BUFWRT -- PERFORM BUFFERED READ AND WRITE            
+
+                                PAGE 
+                                        procedure   BUFRD,NEAR 
+ 007A                         1 BUFRD PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                ; Do a partial sector read via one of the syste
+				m buffers 
+                                ; ES:BP Points to DPB 
+                                 
+ 007A  06                               PUSH    ES 
+ 007B  B8 0200                          MOV     AX,LBRPRI SHL 8         ; Assum
+				e last byte read 
+ 007E  E8 004B R                        CALL    BUFSEC 
+ 0081  8C C3                            MOV     BX,ES 
+ 0083  8E 06 0002 E                     MOV     ES,[DMAADD+2] 
+ 0087  8E DB                            MOV     DS,BX 
+                                ASSUME  DS:NOTHING 
+ 0089  87 FE                            XCHG    DI,SI 
+ 008B  D1 E9                            SHR     CX,1 
+ 008D  73 01                            JNC     EVENRD 
+ 008F  A4                               MOVSB 
+ 0090                           EVENRD: 
+ 0090  F3/ A5                           REP     MOVSW 
+ 0092  07                               POP     ES 
+ 0093  36: C5 3E 0000 E                 LDS     DI,[CURBUF] 
+ 0098  8D 5D 10                         LEA     BX,[DI.BufInSiz] 
+ 009B  2B F3                            SUB     SI,BX                   ; Posit
+				ion in buffer 
+                                        invoke  PLACEBUF 
+ 009D  E8 0000 E              1  CALL PLACEBUF
+ 00A0  26: 3B 76 02                     CMP     SI,ES:[BP.dpb_sector_size] 
+ 00A4  72 03                            JB      RBUFPLACED 
+                                        invoke  PLACEHEAD 
+ 00A6  E8 0000 E              1  CALL PLACEHEAD
+ 00A9                           RBUFPLACED: 
+ 00A9  16                               PUSH    SS 
+ 00AA  1F                               POP     DS 
+                                        return 
+ 00AB                         1 ??0004:
+ 00AB  C3                     1  RET
+                                BUFRD   ENDP 
+                                 
+                                        procedure   BUFWRT,NEAR 
+ 00AC                         1 BUFWRT PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                ; Do a partial sector write via one of the syst
+				em buffers 
+                                ; ES:BP Points to DPB 
+                                 
+ 00AC  A1 0000 E                        MOV     AX,[SECPOS] 
+ 00AF  40                               INC     AX              ; Set for next 
+				sector 
+ 00B0  A3 0000 E                        MOV     [SECPOS],AX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-7
+BUFRD, BUFWRT -- PERFORM BUFFERED READ AND WRITE            
+
+ 00B3  3B 06 0000 E                     CMP     AX,[VALSEC]     ; Has sector be
+				en written before? 
+ 00B7  B0 01                            MOV     AL,1 
+ 00B9  77 02                            JA      NOREAD          ; Skip preread 
+				if SECPOS>VALSEC 
+ 00BB  32 C0                            XOR     AL,AL 
+ 00BD                           NOREAD: 
+ 00BD  06                               PUSH    ES 
+ 00BE  E8 004B R                        CALL    BUFSEC 
+ 00C1  8E 1E 0002 E                     MOV     DS,[DMAADD+2] 
+                                ASSUME  DS:NOTHING 
+ 00C5  D1 E9                            SHR     CX,1 
+ 00C7  73 01                            JNC     EVENWRT 
+ 00C9  A4                               MOVSB 
+ 00CA                           EVENWRT: 
+ 00CA  F3/ A5                           REP     MOVSW 
+ 00CC  07                               POP     ES 
+ 00CD  36: C5 1E 0000 E                 LDS     BX,[CURBUF] 
+ 00D2  C6 47 05 01                      MOV     BYTE PTR [BX.BUFDIRTY],1 
+ 00D6  8D 77 10                         LEA     SI,[BX.BufInSiz] 
+ 00D9  2B FE                            SUB     DI,SI                   ; Posit
+				ion in buffer 
+ 00DB  8B F7                            MOV     SI,DI 
+ 00DD  8B FB                            MOV     DI,BX 
+                                        invoke  PLACEBUF 
+ 00DF  E8 0000 E              1  CALL PLACEBUF
+ 00E2  26: 3B 76 02                     CMP     SI,ES:[BP.dpb_sector_size] 
+ 00E6  72 03                            JB      WBUFPLACED 
+                                        invoke  PLACEHEAD 
+ 00E8  E8 0000 E              1  CALL PLACEHEAD
+ 00EB                           WBUFPLACED: 
+ 00EB  16                               PUSH    SS 
+ 00EC  1F                               POP     DS 
+                                        return 
+ 00ED                         1 ??0005:
+ 00ED  C3                     1  RET
+                                BUFWRT  ENDP 
+                                 
+                                SUBTTL NEXTSEC -- Compute next sector to read o
+				r write 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-8
+NEXTSEC -- Compute next sector to read or write             
+
+                                PAGE 
+                                        procedure   NEXTSEC,NEAR 
+ 00EE                         1 NEXTSEC PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                ; Compute the next sector to read or write 
+                                ; ES:BP Points to DPB 
+                                 
+ 00EE  F6 06 0000 E FF                  TEST    BYTE PTR [TRANS],-1 
+ 00F3  74 25                            JZ      CLRET 
+ 00F5  A0 0000 E                        MOV     AL,[SECCLUSPOS] 
+ 00F8  FE C0                            INC     AL 
+ 00FA  26: 3A 46 04                     CMP     AL,ES:[BP.dpb_cluster_mask] 
+ 00FE  76 17                            JBE     SAVPOS 
+ 0100  8B 1E 0000 E                     MOV     BX,[CLUSNUM] 
+ 0104  81 FB 0FF8                       CMP     BX,0FF8H 
+ 0108  73 12                            JAE     NONEXT 
+                                        invoke  UNPACK 
+ 010A  E8 0000 E              1  CALL UNPACK
+ 010D  89 3E 0000 E                     MOV     [CLUSNUM],DI 
+ 0111  FF 06 0000 E                     INC     [LASTPOS] 
+ 0115  B0 00                            MOV     AL,0 
+ 0117                           SAVPOS: 
+ 0117  A2 0000 E                        MOV     [SECCLUSPOS],AL 
+ 011A                           CLRET: 
+ 011A  F8                               CLC 
+                                        return 
+ 011B                         1 ??0006:
+ 011B  C3                     1  RET
+ 011C                           NONEXT: 
+ 011C  F9                               STC 
+                                        return 
+ 011D                         1 ??0007:
+ 011D  C3                     1  RET
+                                NEXTSEC ENDP 
+                                 
+                                SUBTTL OPTIMIZE -- DO A USER DISK REQUEST WELL 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-9
+OPTIMIZE -- DO A USER DISK REQUEST WELL                     
+
+                                PAGE 
+                                        procedure   OPTIMIZE,NEAR 
+ 011E                         1 OPTIMIZE PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       BX = Physical cluster 
+                                ;       CX = No. of records 
+                                ;       DL = sector within cluster 
+                                ;       ES:BP = Base of drives parameters 
+                                ;       [NEXTADD] = transfer address 
+                                ; Outputs: 
+                                ;       AX = No. of records remaining 
+                                ;       BX = Transfer address 
+                                ;       CX = No. or records to be transferred 
+                                ;       DX = Physical sector address 
+                                ;       DI = Next cluster 
+                                ;       [CLUSNUM] = Last cluster accessed 
+                                ;       [NEXTADD] updated 
+                                ; ES:BP unchanged. Note that segment of transfe
+				r not set. 
+                                 
+ 011E  52                               PUSH    DX 
+ 011F  53                               PUSH    BX 
+ 0120  26: 8A 46 04                     MOV     AL,ES:[BP.dpb_cluster_mask] 
+ 0124  FE C0                            INC     AL              ; Number of sec
+				tors per cluster 
+ 0126  8A E0                            MOV     AH,AL 
+ 0128  2A C2                            SUB     AL,DL           ; AL = Number o
+				f sectors left in first cluster 
+ 012A  8B D1                            MOV     DX,CX 
+ 012C  B9 0000                          MOV     CX,0 
+ 012F                           OPTCLUS: 
+                                ; AL has number of sectors available in current
+				 cluster 
+                                ; AH has number of sectors available in next cl
+				uster 
+                                ; BX has current physical cluster 
+                                ; CX has number of sequential sectors found so 
+				far 
+                                ; DX has number of sectors left to transfer 
+                                ; ES:BP Points to DPB 
+                                ; ES:SI has FAT pointer 
+                                        invoke  UNPACK 
+ 012F  E8 0000 E              1  CALL UNPACK
+ 0132  02 C8                            ADD     CL,AL 
+ 0134  80 D5 00                         ADC     CH,0 
+ 0137  3B CA                            CMP     CX,DX 
+ 0139  73 2D                            JAE     BLKDON 
+ 013B  8A C4                            MOV     AL,AH 
+ 013D  43                               INC     BX 
+ 013E  3B FB                            CMP     DI,BX 
+ 0140  74 ED                            JZ      OPTCLUS 
+ 0142  4B                               DEC     BX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-10
+OPTIMIZE -- DO A USER DISK REQUEST WELL                     
+
+ 0143                           FINCLUS: 
+ 0143  89 1E 0000 E                     MOV     [CLUSNUM],BX    ; Last cluster 
+				accessed 
+ 0147  2B D1                            SUB     DX,CX           ; Number of sec
+				tors still needed 
+ 0149  52                               PUSH    DX 
+ 014A  8B C1                            MOV     AX,CX 
+ 014C  26: F7 66 02                     MUL     ES:[BP.dpb_sector_size]  ; Numb
+				er of sectors times sector size 
+ 0150  8B 36 0000 E                     MOV     SI,[NEXTADD] 
+ 0154  03 C6                            ADD     AX,SI           ; Adjust by siz
+				e of transfer 
+ 0156  A3 0000 E                        MOV     [NEXTADD],AX 
+ 0159  58                               POP     AX              ; Number of sec
+				tors still needed 
+ 015A  5A                               POP     DX              ; Starting clus
+				ter 
+ 015B  2B DA                            SUB     BX,DX           ; Number of new
+				 clusters accessed 
+ 015D  01 1E 0000 E                     ADD     [LASTPOS],BX 
+ 0161  5B                               POP     BX              ; BL = sector p
+				ostion within cluster 
+                                        invoke  FIGREC 
+ 0162  E8 0176 R              1  CALL FIGREC
+ 0165  8B DE                            MOV     BX,SI 
+                                        return 
+ 0167                         1 ??0008:
+ 0167  C3                     1  RET
+ 0168                           BLKDON: 
+ 0168  2B CA                            SUB     CX,DX           ; Number of sec
+				tors in cluster we don't want 
+ 016A  2A E1                            SUB     AH,CL           ; Number of sec
+				tors in cluster we accepted 
+ 016C  FE CC                            DEC     AH              ; Adjust to mea
+				n position within cluster 
+ 016E  88 26 0000 E                     MOV     [SECCLUSPOS],AH 
+ 0172  8B CA                            MOV     CX,DX           ; Anyway, make 
+				the total equal to the request 
+ 0174  EB CD                            JMP     SHORT FINCLUS 
+                                OPTIMIZE        ENDP 
+                                 
+                                SUBTTL FIGREC -- Figure sector in allocation un
+				it 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-11
+FIGREC -- Figure sector in allocation unit                  
+
+                                PAGE 
+                                        procedure   FIGREC,NEAR 
+ 0176                         1 FIGREC PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DX = Physical cluster number 
+                                ;       BL = Sector postion within cluster 
+                                ;       ES:BP = Base of drive parameters 
+                                ; Outputs: 
+                                ;       DX = physical sector number 
+                                ; No other registers affected. 
+                                 
+ 0176  51                               PUSH    CX 
+ 0177  26: 8A 4E 05                     MOV     CL,ES:[BP.dpb_cluster_shift] 
+ 017B  4A                               DEC     DX 
+ 017C  4A                               DEC     DX 
+ 017D  D3 E2                            SHL     DX,CL 
+ 017F  0A D3                            OR      DL,BL 
+ 0181  26: 03 56 0B                     ADD     DX,ES:[BP.dpb_first_sector] 
+ 0185  59                               POP     CX 
+                                        return 
+ 0186                         1 ??0009:
+ 0186  C3                     1  RET
+                                FIGREC  ENDP 
+                                 
+                                SUBTTL GETREC -- Figure record in file from fcb
+				 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-12
+GETREC -- Figure record in file from fcb                    
+
+                                PAGE 
+                                        procedure   GETREC,NEAR 
+ 0187                         1 GETREC PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:DX point to FCB 
+                                ; Outputs: 
+                                ;       CX = 1 
+                                ;       DX:AX = Record number determined by fcb
+				_EXTENT and fcb_NR fields 
+                                ;       DS:DI point to FCB 
+                                ; No other registers affected. 
+                                 
+ 0187  8B FA                            MOV     DI,DX 
+ 0189  80 3D FF                         CMP     BYTE PTR [DI],-1        ; Check
+				 for extended FCB 
+ 018C  75 03                            JNZ     NORMFCB2 
+ 018E  83 C7 07                         ADD     DI,7 
+ 0191                           NORMFCB2: 
+ 0191  B9 0001                          MOV     CX,1 
+ 0194  8A 45 20                         MOV     AL,[DI.fcb_NR] 
+ 0197  8B 55 0C                         MOV     DX,[DI.fcb_EXTENT] 
+ 019A  D0 E0                            SHL     AL,1 
+ 019C  D1 EA                            SHR     DX,1 
+ 019E  D0 D8                            RCR     AL,1 
+ 01A0  8A E2                            MOV     AH,DL 
+ 01A2  8A D6                            MOV     DL,DH 
+ 01A4  B6 00                            MOV     DH,0 
+                                        return 
+ 01A6                         1 ??000A:
+ 01A6  C3                     1  RET
+                                GETREC  ENDP 
+                                 
+                                SUBTTL ALLOCATE -- Assign disk space 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-13
+ALLOCATE -- Assign disk space                               
+
+                                PAGE 
+                                        procedure   ALLOCATE,NEAR 
+ 01A7                         1 ALLOCATE PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       BX = Last cluster of file (0 if null fi
+				le) 
+                                ;       CX = No. of clusters to allocate 
+                                ;       DX = Position of cluster BX 
+                                ;       ES:BP = Base of drive parameters 
+                                ;       [THISFCB] = Points to FCB 
+                                ; Outputs: 
+                                ;       IF insufficient space 
+                                ;         THEN 
+                                ;       Carry set 
+                                ;       CX = max. no. of records that could be 
+				added to file 
+                                ;         ELSE 
+                                ;       Carry clear 
+                                ;       BX = First cluster allocated 
+                                ;       FAT is fully updated including dirty bi
+				t 
+                                ;       fcb_FIRCLUS field of FCB set if file wa
+				s null 
+                                ; SI,BP unchanged. All other registers destroye
+				d. 
+                                 
+ 01A7  53                               PUSH    BX                      ; save 
+				the fat byte 
+ 01A8  33 DB                            XOR     BX,BX 
+                                        invoke  UNPACK 
+ 01AA  E8 0000 E              1  CALL UNPACK
+ 01AD  89 3E 0000 E                     MOV     [FATBYT],DI 
+ 01B1  5B                               POP     BX 
+                                 
+ 01B2  52                               PUSH    DX 
+ 01B3  51                               PUSH    CX 
+ 01B4  53                               PUSH    BX 
+ 01B5  8B C3                            MOV     AX,BX 
+ 01B7                           CLUSALLOC: 
+ 01B7  8B D3                            MOV     DX,BX 
+ 01B9                           FINDFRE: 
+ 01B9  43                               INC     BX 
+ 01BA  26: 3B 5E 0D                     CMP     BX,ES:[BP.dpb_max_cluster] 
+ 01BE  7E 2B                            JLE     TRYOUT 
+ 01C0  3D 0001                          CMP     AX,1 
+ 01C3  7F 2B                            JG      TRYIN 
+ 01C5  5B                               POP     BX 
+ 01C6  BA 0FFF                          MOV     DX,0FFFH 
+                                        invoke  RELBLKS 
+ 01C9  E8 0247 R              1  CALL RELBLKS
+ 01CC  58                               POP     AX              ; No. of cluste
+				rs requested 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-14
+ALLOCATE -- Assign disk space                               
+
+ 01CD  2B C1                            SUB     AX,CX           ; AX=No. of clu
+				sters allocated 
+ 01CF  5A                               POP     DX 
+                                        invoke  RESTFATBYT 
+ 01D0  E8 0235 R              1  CALL RESTFATBYT
+ 01D3  42                               INC     DX              ; Position of f
+				irst cluster allocated 
+ 01D4  03 C2                            ADD     AX,DX           ; AX=max no. of
+				 cluster in file 
+ 01D6  26: 8A 56 04                     MOV     DL,ES:[BP.dpb_cluster_mask] 
+ 01DA  B6 00                            MOV     DH,0 
+ 01DC  42                               INC     DX              ; DX=records/cl
+				uster 
+ 01DD  F7 E2                            MUL     DX              ; AX=max no. of
+				 records in file 
+ 01DF  8B C8                            MOV     CX,AX 
+ 01E1  2B 0E 0000 E                     SUB     CX,WORD PTR [RECPOS]    ; CX=ma
+				x no. of records that could be written 
+ 01E5  77 02                            JA      MAXREC 
+ 01E7  33 C9                            XOR     CX,CX           ; If CX was neg
+				ative, zero it 
+ 01E9                           MAXREC: 
+ 01E9  F9                               STC 
+                                        return 
+ 01EA                         1 ??000B:
+ 01EA  C3                     1  RET
+                                 
+ 01EB                           TRYOUT: 
+                                        invoke  UNPACK 
+ 01EB  E8 0000 E              1  CALL UNPACK
+ 01EE  74 0C                            JZ      HAVFRE 
+ 01F0                           TRYIN: 
+ 01F0  48                               DEC     AX 
+ 01F1  7E C6                            JLE     FINDFRE 
+ 01F3  93                               XCHG    AX,BX 
+                                        invoke  UNPACK 
+ 01F4  E8 0000 E              1  CALL UNPACK
+ 01F7  74 03                            JZ      HAVFRE 
+ 01F9  93                               XCHG    AX,BX 
+ 01FA  EB BD                            JMP     SHORT FINDFRE 
+ 01FC                           HAVFRE: 
+ 01FC  87 DA                            XCHG    BX,DX 
+ 01FE  8B C2                            MOV     AX,DX 
+                                        invoke  PACK 
+ 0200  E8 0000 E              1  CALL PACK
+ 0203  8B D8                            MOV     BX,AX 
+ 0205  E2 B0                            LOOP    CLUSALLOC 
+ 0207  BA 0FFF                          MOV     DX,0FFFH 
+                                        invoke  PACK 
+ 020A  E8 0000 E              1  CALL PACK
+ 020D  5B                               POP     BX 
+ 020E  59                               POP     CX              ; Don't need th
+				is stuff since we're successful 
+ 020F  5A                               POP     DX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-15
+ALLOCATE -- Assign disk space                               
+
+                                        invoke  UNPACK 
+ 0210  E8 0000 E              1  CALL UNPACK
+                                        invoke  RESTFATBYT 
+ 0213  E8 0235 R              1  CALL RESTFATBYT
+ 0216  87 DF                            XCHG    BX,DI 
+ 0218  0B FF                            OR      DI,DI 
+                                        retnz 
+ 021A  75 CE                  2  ??000C: jnz ret_l
+ 021C  06                               PUSH    ES 
+ 021D  C4 3E 0000 E                     LES     DI,[THISFCB] 
+ 0221  81 E3 0FFF                       AND     BX,0FFFh 
+ 0225  26: 89 5D 19                     MOV     ES:[DI.fcb_FIRCLUS],BX 
+ 0229  26: 81 65 1D F000                AND     ES:[DI.fcb_LSTCLUS],0F000h  ; c
+				lear out old lstclus 
+ 022F  26: 09 5D 1D                     OR      ES:[DI.fcb_LSTCLUS],BX      ; o
+				r the new guy in... 
+ 0233  07                               POP     ES 
+                                        return 
+ 0234                         1 ??000E:
+ 0234  C3                     1  RET
+                                ALLOCATE    ENDP 
+                                 
+                                        procedure   RESTFATBYT,NEAR 
+ 0235                         1 RESTFATBYT PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+ 0235  53                               PUSH    BX 
+ 0236  52                               PUSH    DX 
+ 0237  57                               PUSH    DI 
+ 0238  33 DB                            XOR     BX,BX 
+ 023A  8B 16 0000 E                     MOV     DX,[FATBYT] 
+                                        invoke  PACK 
+ 023E  E8 0000 E              1  CALL PACK
+ 0241  5F                               POP     DI 
+ 0242  5A                               POP     DX 
+ 0243  5B                               POP     BX 
+                                        return 
+ 0244                         1 ??000F:
+ 0244  C3                     1  RET
+                                RESTFATBYT  ENDP 
+                                 
+                                SUBTTL RELEASE -- DEASSIGN DISK SPACE 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-16
+RELEASE -- DEASSIGN DISK SPACE                              
+
+                                PAGE 
+                                        procedure   RELEASE,NEAR 
+ 0245                         1 RELEASE PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       BX = Cluster in file 
+                                ;       ES:BP = Base of drive parameters 
+                                ; Function: 
+                                ;       Frees cluster chain starting with [BX] 
+                                ; AX,BX,DX,DI all destroyed. Other registers un
+				changed. 
+                                 
+ 0245  33 D2                            XOR     DX,DX 
+                                entry   RELBLKS 
+ 0247                         1 RELBLKS:
+                                ; Enter here with DX=0FFFH to put an end-of-fil
+				e mark 
+                                ; in the first cluster and free the rest in the
+				 chain. 
+                                        invoke  UNPACK 
+ 0247  E8 0000 E              1  CALL UNPACK
+                                        retz 
+ 024A  74 F8                  2  ??0010: jz ret_l
+ 024C  8B C7                            MOV     AX,DI 
+                                        invoke  PACK 
+ 024E  E8 0000 E              1  CALL PACK
+ 0251  3D 0FF8                          CMP     AX,0FF8H 
+ 0254  8B D8                            MOV     BX,AX 
+ 0256  72 ED                            JB      RELEASE 
+ 0258                           RET12:  return 
+ 0258                         1 ??0012:
+ 0258  C3                     1  RET
+                                RELEASE ENDP 
+                                 
+                                SUBTTL GETEOF -- Find the end of a file 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Page     1-17
+GETEOF -- Find the end of a file                            
+
+                                PAGE 
+                                        procedure   GETEOF,NEAR 
+ 0259                         1 GETEOF PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       ES:BP Points to DPB 
+                                ;       BX = Cluster in a file 
+                                ;       DS = CS 
+                                ; Outputs: 
+                                ;       BX = Last cluster in the file 
+                                ; DI destroyed. No other registers affected. 
+                                 
+                                        invoke  UNPACK 
+ 0259  E8 0000 E              1  CALL UNPACK
+ 025C  81 FF 0FF8                       CMP     DI,0FF8H 
+ 0260  73 F6                            JAE     RET12 
+ 0262  8B DF                            MOV     BX,DI 
+ 0264  EB F3                            JMP     SHORT GETEOF 
+                                GETEOF  ENDP 
+                                 
+                                do_ext 
+                                 
+ 0266                           CODE    ENDS 
+                                    END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DOSGROUP . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	0266	BYTE	PUBLIC	'CODE'
+  CONSTANTS  . . . . . . . . . .  	0000	BYTE	PUBLIC	'CONST'
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Symbols-5
+                                                             
+
+  LAST . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'LAST'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCATE . . . . . . . . . . . .  	N PROC	01A7	CODE	Global	Length = 008E
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BLKDON . . . . . . . . . . . . .  	L NEAR	0168	CODE
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+BUFRD  . . . . . . . . . . . . .  	N PROC	007A	CODE	Global	Length = 0032
+BUFSEC . . . . . . . . . . . . .  	N PROC	004B	CODE	Global	Length = 002F
+BUFWRT . . . . . . . . . . . . .  	N PROC	00AC	CODE	Global	Length = 0042
+BYTCNT1  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+BYTSECPOS  . . . . . . . . . . .  	V WORD 	0000	DATA	External
+
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Symbols-6
+                                                             
+
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+CLRET  . . . . . . . . . . . . .  	L NEAR	011A	CODE
+CLUSALLOC  . . . . . . . . . . .  	L NEAR	01B7	CODE
+CLUSNUM  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CURBUF . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Symbols-7
+                                                             
+
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMAADD . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+EVENRD . . . . . . . . . . . . .  	L NEAR	0090	CODE
+EVENWRT  . . . . . . . . . . . .  	L NEAR	00CA	CODE
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Symbols-8
+                                                             
+
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FATBYT . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FIGREC . . . . . . . . . . . . .  	N PROC	0176	CODE	Global	Length = 0011
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINCLUS  . . . . . . . . . . . .  	L NEAR	0143	CODE
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDFRE  . . . . . . . . . . . .  	L NEAR	01B9	CODE
+FINDIT . . . . . . . . . . . . .  	L NEAR	0035	CODE
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FNDCLUS  . . . . . . . . . . . .  	N PROC	0014	CODE	Global	Length = 0037
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+
+GETEOF . . . . . . . . . . . . .  	N PROC	0259	CODE	Global	Length = 000D
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GETREC . . . . . . . . . . . . .  	N PROC	0187	CODE	Global	Length = 0020
+GETRRPOS . . . . . . . . . . . .  	L NEAR	0003	CODE	Global
+GETRRPOS1  . . . . . . . . . . .  	L NEAR	0000	CODE	Global
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Symbols-9
+                                                             
+
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_RANDOM_RECORD  . . . . . . .  	N PROC	0000	CODE	Global	Length = 0014
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+
+HAVFRE . . . . . . . . . . . . .  	L NEAR	01FC	CODE
+
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LASTPOS  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MAXREC . . . . . . . . . . . . .  	L NEAR	01E9	CODE
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Symbols-10
+                                                             
+
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+
+NEXTADD  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+NEXTSEC  . . . . . . . . . . . .  	N PROC	00EE	CODE	Global	Length = 0030
+NOCLUS . . . . . . . . . . . . .  	L NEAR	0047	CODE
+NONEXT . . . . . . . . . . . . .  	L NEAR	011C	CODE
+NOREAD . . . . . . . . . . . . .  	L NEAR	00BD	CODE
+NORMFCB1 . . . . . . . . . . . .  	L NEAR	000D	CODE
+NORMFCB2 . . . . . . . . . . . .  	L NEAR	0191	CODE
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+OPTCLUS  . . . . . . . . . . . .  	L NEAR	012F	CODE
+OPTIMIZE . . . . . . . . . . . .  	N PROC	011E	CODE	Global	Length = 0058
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+RBUFPLACED . . . . . . . . . . .  	L NEAR	00A9	CODE
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RECPOS . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+RELBLKS  . . . . . . . . . . . .  	L NEAR	0247	CODE	Global
+RELEASE  . . . . . . . . . . . .  	N PROC	0245	CODE	Global	Length = 0014
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RESTFATBYT . . . . . . . . . . .  	N PROC	0235	CODE	Global	Length = 0010
+RET10  . . . . . . . . . . . . .  	L NEAR	0046	CODE
+RET12  . . . . . . . . . . . . .  	L NEAR	0258	CODE
+RET_L  . . . . . . . . . . . . .  	NEAR 	0258	CODE
+RET_NZ . . . . . . . . . . . . .  	NEAR 	021A	CODE
+RET_Z  . . . . . . . . . . . . .  	NEAR 	024A	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Symbols-11
+                                                             
+
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SAVPOS . . . . . . . . . . . . .  	L NEAR	0117	CODE
+SECCLUSPOS . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+SECPOS . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+SKPCLP . . . . . . . . . . . . .  	L NEAR	0038	CODE	Global
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+
+THISFCB  . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+TRANS  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+TRYIN  . . . . . . . . . . . . .  	L NEAR	01F0	CODE
+TRYOUT . . . . . . . . . . . . .  	L NEAR	01EB	CODE
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:46:44
+ROM - miscellaneous routines                                Symbols-12
+                                                             
+
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VALSEC . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+VER  . . . . . . . . . . . . . .  	Text  		
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WBUFPLACED . . . . . . . . . . .  	L NEAR	00EB	CODE
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+??0000 . . . . . . . . . . . . .  	L NEAR	0013	CODE
+??0001 . . . . . . . . . . . . .  	L NEAR	0046	CODE
+??0002 . . . . . . . . . . . . .  	L NEAR	004A	CODE
+??0003 . . . . . . . . . . . . .  	L NEAR	0079	CODE
+??0004 . . . . . . . . . . . . .  	L NEAR	00AB	CODE
+??0005 . . . . . . . . . . . . .  	L NEAR	00ED	CODE
+??0006 . . . . . . . . . . . . .  	L NEAR	011B	CODE
+??0007 . . . . . . . . . . . . .  	L NEAR	011D	CODE
+??0008 . . . . . . . . . . . . .  	L NEAR	0167	CODE
+??0009 . . . . . . . . . . . . .  	L NEAR	0186	CODE
+??000A . . . . . . . . . . . . .  	L NEAR	01A6	CODE
+??000B . . . . . . . . . . . . .  	L NEAR	01EA	CODE
+??000C . . . . . . . . . . . . .  	L NEAR	021A	CODE
+??000E . . . . . . . . . . . . .  	L NEAR	0234	CODE
+??000F . . . . . . . . . . . . .  	L NEAR	0244	CODE
+??0010 . . . . . . . . . . . . .  	L NEAR	024A	CODE
+??0012 . . . . . . . . . . . . .  	L NEAR	0258	CODE
+
+
+   1874 Source  Lines
+   2417 Total   Lines
+    612 Symbols
+
+  19150 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

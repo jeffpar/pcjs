@@ -2,13 +2,15 @@
 layout: page
 title: Logitech Modula-2/86 Compiler 1.10
 permalink: /software/pcx86/lang/logitech/modula2/1.10/
-redirect_from: /disks/pcx86/tools/logitech/modula2/1.10/
+redirect_from:
+  - /disks/pcx86/tools/logitech/modula2/1.10/
+  - /apps/pcx86/1984/modula2/
 machines:
   - id: ibm5160-msdos320
     type: pcx86
-    state: /apps/pcx86/1984/modula2/state.json
+    state: state.json
     config: /configs/pcx86/xml/machine/5160/ega/256kb/machine.xml
-    drives: '[{name:"10Mb Hard Disk",type:3,path:"/disks-demo/pcx86/drives/10mb/MSDOS320-C400.json"}]'
+    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/sys/dos/microsoft/3.20/MSDOS320-C400.json"}]'
     autoMount:
       A:
         name: None
@@ -21,8 +23,14 @@ Links to [Modula-2/86 Documentation](http://www.bitsavers.org/pdf/logitech/modul
 - [Logitech Modula-2/86 v1.0 Manual](http://www.bitsavers.org/pdf/logitech/modula-2/Logitech_Modula-2_86_1.0_Feb84.pdf)
 - [Logitech Modula-2/86 v2.0 Manual](http://www.bitsavers.org/pdf/logitech/modula-2/Modula-2_86_Ver_2.00_Users_Manual_Apr86.pdf)
 
-The machine created for our [Module-2/86 Demo](/apps/pcx86/1984/modula2/) is shown below.  We used the same
-hard disk installation procedure described in the v1.0 manual:
+The machine below demonstrates Modula-2/86. The compiler has been installed in an
+IBM PC XT (Model 5160) with 640Kb RAM, an EGA Display, and a 10Mb Hard Disk containing
+[MS-DOS 3.20](/software/pcx86/sys/dos/microsoft/3.20/) and [Microsoft C 4.00](/software/pcx86/lang/microsoft/c/4.00/).
+
+PCjs has also archived some Modula-2 sample code.  See the "[FantasyLand](/blog/2017/07/03/)" PCjs blog post
+for details.
+
+We used the same hard disk installation procedure described in the Logitech Modula-2/86 v1.0 Manual:
 
 - At the C:\&gt; prompt: `MKDIR M2BIN`
 - Load diskette in drive A: `Modula-2/86 1.10 (1-System)`

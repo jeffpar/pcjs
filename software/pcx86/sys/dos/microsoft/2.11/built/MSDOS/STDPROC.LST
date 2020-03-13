@@ -1,0 +1,2056 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-1
+                                                            
+
+                                ; 
+                                ; Pseudo EXEC system call for MSDOS 
+                                ; 
+                                 
+                                .list 
+                                 
+                                TITLE   STDPROC - process maintenance for MSDOS
+				 
+                                NAME    STDPROC 
+                                 
+                             C  INCLUDE PROC.ASM 
+                             C  ; 
+                             C  ; process control system calls for MSDOS 
+                             C  ; 
+                             C   
+                             C  INCLUDE DOSSEG.ASM 
+                             C  ; 
+                             C  ; segment ordering for MSDOS 
+                             C  ; 
+                             C   
+ 0000                        C  CONSTANTS       SEGMENT BYTE PUBLIC 'CONST' 
+ 0000                        C  CONSTANTS       ENDS 
+                             C   
+ 0000                        C  DATA            SEGMENT BYTE PUBLIC 'DATA' 
+ 0000                        C  DATA            ENDS 
+                             C   
+ 0000                        C  CODE            SEGMENT BYTE PUBLIC 'CODE' 
+ 0000                        C  CODE            ENDS 
+                             C   
+ 0000                        C  LAST            SEGMENT BYTE PUBLIC 'LAST' 
+ 0000                        C  LAST            ENDS 
+                             C   
+                             C  DOSGROUP    GROUP   CODE,CONSTANTS,DATA,LAST 
+                             C   
+                             C   
+ 0000                        C  CODE    SEGMENT BYTE PUBLIC  'CODE' 
+                             C          ASSUME  SS:DOSGROUP,CS:DOSGROUP 
+                             C   
+                             C  .list 
+                             C   
+                             C      i_need  CurrentPDB,WORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C      i_need  CreatePDB,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C      i_need  NUMIO,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C      i_need  Exit_type,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C      i_need  INDOS,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0000                        C1  DATA ENDS
+                             C      i_need  DMAADD,DWORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C      i_need  DidCTRLC,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C   
+                             C  SUBTTL $WAIT - return previous process error co
+				de 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-3
+$WAIT - return previous process error code                  
+
+                             C  PAGE 
+                             C  ; 
+                             C  ; process control data 
+                             C  ; 
+                             C          i_need  exit_code,WORD          ; code 
+				of exit 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C   
+                             C  ; 
+                             C  ;   Assembler usage: 
+                             C  ;           MOV     AH, Wait 
+                             C  ;           INT     int_command 
+                             C  ;         AX has the exit code 
+                             C          procedure   $WAIT,NEAR 
+ 0000                        C1 $WAIT PROC NEAR
+                             C          ASSUME  DS:NOTHING,ES:NOTHING 
+ 0000  36: A1 0000 E         C          MOV     AX,[exit_code] 
+ 0004  33 D2                 C          XOR     DX,DX 
+ 0006  36: 89 16 0000 E      C          MOV     [exit_code],DX 
+                             C          transfer    SYS_RET_OK 
+ 000B                        C2  ??0000:
+ 000B  E9 0000 E             C2  JMP SYS_RET_OK
+                             C  $WAIT   ENDP 
+                             C   
+                             C  ENDIF 
+                             C  IF NOT IBM 
+                             C  INCLUDE EXEC.ASM 
+                             C  SUBTTL $exec - load/go a program 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-4
+$exec - load/go a program                                   
+
+                             C  PAGE 
+                             C  ; 
+                             C  ; Assembler usage: 
+                             C  ;           LDS     DX, name 
+                             C  ;           LES     BX, blk 
+                             C  ;           MOV     AH, Exec 
+                             C  ;           MOV     AL, func 
+                             C  ;           INT     int_command 
+                             C  ; 
+                             C  ;       AL  Function 
+                             C  ;       --  -------- 
+                             C  ;        0  Load and execute the program. 
+                             C  ;        1  Load, create  the  program  header 
+				 but  do  not 
+                             C  ;           begin execution. 
+                             C  ;        3  Load overlay. No header created. 
+                             C  ; 
+                             C  ;           AL = 0 -> load/execute program 
+                             C  ; 
+                             C  ;           +---------------------------+ 
+                             C  ;           | WORD segment address of   | 
+                             C  ;           | environment.              | 
+                             C  ;           +---------------------------+ 
+                             C  ;           | DWORD pointer to ASCIZ    | 
+                             C  ;           | command line at 80h       | 
+                             C  ;           +---------------------------+ 
+                             C  ;           | DWORD pointer to default  | 
+                             C  ;           | FCB to be passed at 5Ch   | 
+                             C  ;           +---------------------------+ 
+                             C  ;           | DWORD pointer to default  | 
+                             C  ;           | FCB to be passed at 6Ch   | 
+                             C  ;           +---------------------------+ 
+                             C  ; 
+                             C  ;           AL = 1 -> load program 
+                             C  ; 
+                             C  ;           +---------------------------+ 
+                             C  ;           | WORD segment address of   | 
+                             C  ;           | environment.              | 
+                             C  ;           +---------------------------+ 
+                             C  ;           | DWORD pointer to ASCIZ    | 
+                             C  ;           | command line at 80h       | 
+                             C  ;           +---------------------------+ 
+                             C  ;           | DWORD pointer to default  | 
+                             C  ;           | FCB to be passed at 5Ch   | 
+                             C  ;           +---------------------------+ 
+                             C  ;           | DWORD pointer to default  | 
+                             C  ;           | FCB to be passed at 6Ch   | 
+                             C  ;           +---------------------------+ 
+                             C  ;           | DWORD returned value of   | 
+                             C  ;           | CS:IP                     | 
+                             C  ;           +---------------------------+ 
+                             C  ;           | DWORD returned value of   | 
+                             C  ;           | SS:IP                     | 
+                             C  ;           +---------------------------+ 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-5
+$exec - load/go a program                                   
+
+                             C  ; 
+                             C  ;           AL = 3 -> load overlay 
+                             C  ; 
+                             C  ;           +---------------------------+ 
+                             C  ;           | WORD segment address where| 
+                             C  ;           | file will be loaded.      | 
+                             C  ;           +---------------------------+ 
+                             C  ;           | WORD relocation factor to | 
+                             C  ;           | be applied to the image.  | 
+                             C  ;           +---------------------------+ 
+                             C  ; 
+                             C  ; Returns: 
+                             C  ;           AX = exec_invalid_function 
+                             C  ;              = exec_bad_format 
+                             C  ;              = exec_bad_environment 
+                             C  ;              = exec_not_enough_memory 
+                             C  ;              = exec_file_not_found 
+                             C  ; 
+                             C   
+                             C  ENDIF 
+                             C   
+ 000E  ????????              C  exec_blk            DD  ? 
+ 0012  ??                    C  exec_func           DB  ? 
+ 0013  ????                  C  exec_fh             DW  ? 
+ 0015  ????                  C  exec_rel_fac        DW  ? 
+ 0017  ????                  C  exec_res_len_para   DW  ? 
+ 0019  ????                  C  exec_init_IP        DW  ? 
+ 001B  ????                  C  exec_init_CS        DW  ? 
+ 001D  ????                  C  exec_init_SP        DW  ? 
+ 001F  ????                  C  exec_init_SS        DW  ? 
+ 0021  ????                  C  exec_environ        DW  ? 
+ 0023  ????                  C  exec_size           DW  ? 
+ 0025  ????                  C  exec_load_block     DW  ? 
+                             C   
+ 0027  ??                    C  exec_load_high      DB  ? 
+                             C   
+ = 0028                      C  exec_internal_buffer    EQU $ 
+ 0028  ????                  C  exec_signature      DW  ?               ; must 
+				contain 4D5A  (yay zibo!) 
+ 002A  ????                  C  exec_len_mod_512    DW  ?               ; low 9
+				 bits of length 
+ 002C  ????                  C  exec_pages          DW  ?               ; numbe
+				r of 512b pages in file 
+ 002E  ????                  C  exec_rle_count      DW  ?               ; count
+				 of reloc entries 
+ 0030  ????                  C  exec_par_dir        DW  ?               ; numbe
+				r of paragraphs before image 
+ 0032  ????                  C  exec_min_BSS        DW  ?               ; minim
+				um number of para of BSS 
+ 0034  ????                  C  exec_max_BSS        DW  ?               ; max n
+				umber of para of BSS 
+ 0036  ????                  C  exec_SS             DW  ?               ; stack
+				 of image 
+ 0038  ????                  C  exec_SP             DW  ?               ; SP of
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-6
+$exec - load/go a program                                   
+
+				 image 
+ 003A  ????                  C  exec_chksum         DW  ?               ; check
+				sum  of file (ignored) 
+ 003C  ????                  C  exec_IP             DW  ?               ; IP of
+				 entry 
+ 003E  ????                  C  exec_CS             DW  ?               ; CS of
+				 entry 
+ 0040  ????                  C  exec_rle_table      DW  ?               ; byte 
+				offset of reloc table 
+ 0042  ????                  C  exec_iov            DW  ?               ; overl
+				ay number (0 for root) 
+ 0044  ????                  C  exec_dma            DW  ? 
+ = 001E                      C  exec_internal_buffer_size   EQU $-exec_internal
+				_buffer 
+                             C   
+                             C  ENDIF 
+                             C  IF NOT IBM 
+                             C          procedure   $Exec,NEAR 
+ 0046                        C1 $Exec PROC NEAR
+                             C          ASSUME  DS:NOTHING, ES:NOTHING 
+                             C  ENDIF 
+                             C  ; 
+                             C  ; validate function 
+                             C  ; 
+                             C   
+                             C  ENDIF 
+                             C   
+ 0046  3C 03                 C          CMP     AL,3                    ; only 
+				0, 1 or 3 are allowed 
+ 0048  76 07                 C          JNA     exec_check_2 
+                             C   
+ 004A                        C  exec_bad_fun: 
+                             C          error   error_invalid_function 
+ 004A  B0 01                 C1  MOV AL,error_invalid_function
+ 004C                        C3  ??0002:
+ 004C  E9 0000 E             C3  JMP SYS_RET_ERR
+                             C   
+ 004F                        C  exec_ret_err: 
+                             C          transfer    SYS_RET_ERR 
+ 004F                        C2  ??0003:
+ 004F  EB FB                 C2  JMP SYS_RET_ERR_J
+                             C   
+ 0051                        C  exec_check_2: 
+ 0051  3C 02                 C          CMP     AL,2 
+ 0053  74 F5                 C          JZ      exec_bad_fun 
+                             C   
+ 0055  36: 89 1E 000E R      C          MOV     WORD PTR [exec_blk],BX  ; stash
+				 args 
+ 005A  36: 8C 06 0010 R      C          MOV     WORD PTR [exec_blk+2],ES 
+ 005F  36: A2 0012 R         C          MOV     BYTE PTR [exec_func],AL 
+ 0063  36: C6 06 0027 R 00   C          MOV     BYTE PTR [exec_load_high],0 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+ 0069  32 C0                 C          XOR     AL,AL                   ; open 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-7
+$exec - load/go a program                                   
+
+				for reading 
+                             C          invoke  $OPEN                   ; is th
+				e file there? 
+ 006B  E8 0000 E             C1  CALL $OPEN
+                             C  ENDIF 
+ 006E  72 DF                 C          JC      exec_ret_err 
+ 0070  36: A3 0013 R         C          MOV     [exec_fh],AX 
+ 0074  8B D8                 C          MOV     BX,AX 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+ 0076  32 C0                 C          XOR     AL,AL 
+                             C          invoke  $IOCTL 
+ 0078  E8 0000 E             C1  CALL $IOCTL
+                             C  ENDIF 
+ 007B  F6 C2 80              C          TEST    DL,devid_ISDEV 
+ 007E  74 04                 C          JZ      exec_check_environ 
+ 0080  B0 02                 C          MOV     AL,exec_file_not_found 
+                             C          transfer    SYS_RET_ERR 
+ 0082                        C2  ??0004:
+ 0082  EB CB                 C2  JMP SYS_RET_ERR_J
+                             C   
+ 0084                        C  exec_check_environ: 
+ 0084  36: C7 06 0025 R 0000 C          MOV     [exec_load_block],0 
+                             C   
+ 008B  36: F6 06 0012 R 02   C          TEST    BYTE PTR [exec_func],exec_func_
+				overlay   ; overlays... no environment 
+ 0091  75 52                 C          JNZ     exec_read_header 
+ 0093  36: C5 36 000E R      C          LDS     SI,DWORD PTR [exec_blk] ; get b
+				lock 
+ 0098  8B 04                 C          MOV     AX,[SI].Exec1_environ   ; addre
+				ss of environ 
+ 009A  0B C0                 C          OR      AX,AX 
+ 009C  75 10                 C          JNZ     exec_scan_env 
+ 009E  36: 8E 1E 0000 E      C          MOV     DS,[CurrentPDB] 
+ 00A3  A1 002C               C          MOV     AX,DS:[PDB_environ] 
+ 00A6  36: A3 0021 R         C          MOV     [exec_environ],AX 
+ 00AA  0B C0                 C          OR      AX,AX 
+ 00AC  74 37                 C          JZ      exec_read_header 
+                             C   
+ 00AE                        C  exec_scan_env: 
+ 00AE  FC                    C          CLD 
+ 00AF  8E C0                 C          MOV     ES,AX 
+ 00B1  33 FF                 C          XOR     DI,DI 
+ 00B3  B9 7FFF               C          MOV     CX,07FFFh               ; at mo
+				st 32k of environment 
+ 00B6  32 C0                 C          XOR     AL,AL 
+                             C   
+ 00B8                        C  exec_get_environ_len: 
+ 00B8  F2/ AE                C          REPNZ   SCASB                   ; find 
+				that nul byte 
+ 00BA  74 05                 C          JZ      exec_check              ; CX is
+				 out... bad environment 
+ 00BC  B0 0A                 C          MOV     AL,exec_bad_environment 
+ 00BE  E9 014F R             C          JMP     exec_bomb 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-8
+$exec - load/go a program                                   
+
+                             C   
+ 00C1                        C  exec_check: 
+ 00C1  AE                    C          SCASB                           ; is th
+				ere another nul byte? 
+ 00C2  75 F4                 C          JNZ     exec_get_environ_len    ; no, s
+				can some more 
+ 00C4  57                    C          PUSH    DI 
+ 00C5  8B DF                 C          MOV     BX,DI                   ; AX <-
+				 length of environment 
+ 00C7  83 C3 0F              C          ADD     BX,0Fh 
+ 00CA  B1 04                 C          MOV     CL,4 
+ 00CC  D3 EB                 C          SHR     BX,CL                   ; numbe
+				r of paragraphs needed 
+ 00CE  06                    C          PUSH    ES 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+                             C          invoke  $ALLOC                  ; can w
+				e get the space? 
+ 00CF  E8 0000 E             C1  CALL $ALLOC
+                             C  ENDIF 
+ 00D2  1F                    C          POP     DS 
+ 00D3  59                    C          POP     CX 
+ 00D4  73 03                 C          JNC     exec_save_environ 
+ 00D6  EB 71 90              C          JMP     exec_no_mem             ; nope.
+				.. cry and sob 
+                             C   
+ 00D9                        C  exec_save_environ: 
+ 00D9  8E C0                 C          MOV     ES,AX 
+ 00DB  36: A3 0021 R         C          MOV     [exec_environ],AX       ; save 
+				him for a rainy day 
+                             C  ENDIF 
+ 00DF  33 F6                 C          XOR     SI,SI 
+ 00E1  33 FF                 C          XOR     DI,DI 
+ 00E3  F3/ A4                C          REP     MOVSB                   ; copy 
+				the environment 
+                             C   
+ 00E5                        C  exec_read_header: 
+                             C  ; 
+                             C  ; We read in the program header into the above 
+				data area and determine 
+                             C  ; where in this memory the image will be locate
+				d. 
+                             C  ; 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+ 00E5  16                    C          PUSH    SS 
+ 00E6  1F                    C          POP     DS                      ; and p
+				ut it in DS:DX 
+                             C          ASSUME  DS:DOSGROUP 
+                             C  ENDIF 
+ 00E7  B9 001E               C          MOV     CX,exec_internal_buffer_size; h
+				eader size 
+ 00EA  8B 1E 0013 R          C          MOV     BX,[exec_fh]            ; from 
+				the handle 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-9
+$exec - load/go a program                                   
+
+                             C  ENDIF 
+                             C  IF NOT IBM 
+ 00EE  BA 0028 R             C          MOV     DX,OFFSET DOSGROUP:exec_signatu
+				re 
+                             C  ENDIF 
+ 00F1  06                    C          PUSH    ES 
+ 00F2  1E                    C          PUSH    DS 
+ 00F3  E8 0468 R             C          CALL    exec_dealloc 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+                             C          invoke  $READ 
+ 00F6  E8 0000 E             C1  CALL $READ
+                             C  ENDIF 
+ 00F9  E8 0471 R             C          CALL    exec_alloc 
+ 00FC  1F                    C          POP     DS 
+ 00FD  07                    C          POP     ES 
+ 00FE  72 4D                 C          JC      exec_bad_file 
+ 0100  3D 001E               C          CMP     AX,exec_internal_buffer_size; d
+				id we read the right number? 
+ 0103  75 19                 C          JNZ     exec_com_filej          ; yep..
+				. continue 
+ 0105  83 3E 0034 R 00       C          CMP     [exec_max_BSS],0 
+ 010A  75 05                 C          JNZ     exec_check_sig 
+ 010C  C6 06 0027 R FF       C          MOV     [exec_load_high],-1 
+ 0111                        C  exec_check_sig: 
+ 0111  A1 0028 R             C          MOV     AX,[exec_signature] 
+ 0114  3D 5A4D               C          CMP     AX,exe_valid_signature  ; zibo 
+				arises! 
+ 0117  74 08                 C          JZ      exec_save_start         ; assum
+				e com file if no signature 
+ 0119  3D 4D5A               C          CMP     AX,exe_valid_old_signature  ; z
+				ibo arises! 
+ 011C  74 03                 C          JZ      exec_save_start         ; assum
+				e com file if no signature 
+                             C   
+ 011E                        C  exec_com_filej: 
+ 011E  E9 029E R             C          JMP     exec_com_file 
+                             C   
+                             C  ; 
+                             C  ; We have the program header... determine memor
+				y requirements 
+                             C  ; 
+ 0121                        C  exec_save_start: 
+ 0121  A1 002C R             C          MOV     AX,[exec_pages]         ; get 5
+				12-byte pages 
+ 0124  B1 05                 C          MOV     CL,5                    ; conve
+				rt to paragraphs 
+ 0126  D3 E0                 C          SHL     AX,CL 
+ 0128  2B 06 0030 R          C          SUB     AX,[exec_par_dir]       ; AX = 
+				size in paragraphs 
+ 012C  A3 0017 R             C          MOV     [exec_res_len_para],AX 
+                             C   
+                             C  ; 
+                             C  ; Do we need to allocate memory?  Yes if functi
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-10
+$exec - load/go a program                                   
+
+				on is not load-overlay 
+                             C  ; 
+ 012F  F6 06 0012 R 02       C          TEST    BYTE PTR [exec_func],exec_func_
+				overlay 
+ 0134  74 29                 C          JZ      exec_allocate           ; alloc
+				ation of space 
+                             C  ; 
+                             C  ; get load address from block 
+                             C  ; 
+ 0136  C4 3E 000E R          C          LES     DI,DWORD PTR [exec_blk] 
+ 013A  26: 8B 05             C          MOV     AX,ES:[DI].exec3_load_addr 
+ 013D  A3 0044 R             C          MOV     [exec_dma],AX 
+ 0140  26: 8B 45 02          C          MOV     AX,ES:[DI].exec3_reloc_fac 
+ 0144  A3 0015 R             C          MOV     [exec_rel_fac],AX 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+ 0147  EB 78                 C          JMP     SHORT exec_find_res 
+                             C  ENDIF 
+                             C   
+ 0149                        C  exec_no_mem: 
+ 0149  B0 08                 C          MOV     AL,exec_not_enough_memory 
+ 014B  EB 02                 C          JMP     SHORT exec_bomb             ; A
+				X should be set by $ALLOC 
+                             C   
+ 014D                        C  exec_bad_file: 
+ 014D  B0 0B                 C          MOV     AL,exec_bad_format 
+                             C   
+ 014F                        C  exec_bomb: 
+                             C          ASSUME  DS:NOTHING,ES:NOTHING 
+ 014F  50                    C          PUSH    AX 
+ 0150  36: 8B 1E 0013 R      C          MOV     BX,[exec_fh] 
+ 0155  E8 0468 R             C          CALL    exec_dealloc 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+                             C          invoke  $CLOSE 
+ 0158  E8 0000 E             C1  CALL $CLOSE
+                             C  ENDIF 
+ 015B  58                    C          POP     AX 
+                             C          transfer    SYS_RET_ERR 
+ 015C                        C2  ??0005:
+ 015C  E9 0000 E             C2  JMP SYS_RET_ERR
+                             C   
+ 015F                        C  exec_allocate: 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+                             C          ASSUME  DS:DOSGROUP 
+                             C  ENDIF 
+ 015F  50                    C          PUSH    AX 
+ 0160  BB FFFF               C          MOV     BX,0FFFFh               ; see h
+				ow much room in arena 
+ 0163  1E                    C          PUSH    DS 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+                             C          invoke  $ALLOC                  ; shoul
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-11
+$exec - load/go a program                                   
+
+				d have carry set and BX has max 
+ 0164  E8 0000 E             C1  CALL $ALLOC
+                             C  ENDIF 
+ 0167  1F                    C          POP     DS 
+ 0168  58                    C          POP     AX 
+ 0169  05 0010               C          ADD     AX,10h                  ; room 
+				for header 
+ 016C  83 FB 11              C          CMP     BX,11h                  ; enoug
+				h room for a header 
+ 016F  72 D8                 C          JB      exec_no_mem 
+ 0171  3B C3                 C          CMP     AX,BX                   ; is th
+				ere enough for bare image? 
+ 0173  77 D4                 C          JA      exec_no_mem 
+ 0175  80 3E 0027 R 00       C          CMP     [exec_load_high],0      ; if lo
+				ad high, use max 
+ 017A  75 18                 C          JNZ     exec_BX_max             ; use m
+				ax 
+ 017C  03 06 0032 R          C          ADD     AX,[exec_min_BSS]       ; go fo
+				r min allocation 
+ 0180  72 C7                 C          JC      exec_no_mem             ; oops!
+				 carry 
+ 0182  3B C3                 C          CMP     AX,BX                   ; enoug
+				h space? 
+ 0184  77 C3                 C          JA      exec_no_mem             ; nope.
+				.. 
+ 0186  2B 06 0032 R          C          SUB     AX,[exec_min_BSS] 
+ 018A  03 06 0034 R          C          ADD     AX,[exec_max_BSS]       ; go fo
+				r the MAX 
+ 018E  72 04                 C          JC      exec_BX_max 
+ 0190  3B C3                 C          CMP     AX,BX 
+ 0192  76 02                 C          JBE     exec_got_block 
+                             C   
+ 0194                        C  exec_BX_max: 
+ 0194  8B C3                 C          MOV     AX,BX 
+                             C   
+ 0196                        C  exec_got_block: 
+ 0196  1E                    C          PUSH    DS 
+ 0197  8B D8                 C          MOV     BX,AX 
+ 0199  89 1E 0023 R          C          MOV     [exec_size],BX 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+                             C          invoke  $ALLOC                  ; get t
+				he space 
+ 019D  E8 0000 E             C1  CALL $ALLOC
+                             C  ENDIF 
+ 01A0  1F                    C          POP     DS 
+ 01A1  72 A6                 C          JC      exec_no_mem 
+ 01A3  A3 0025 R             C          MOV     [exec_load_block],AX 
+ 01A6  05 0010               C          ADD     AX,10h 
+ 01A9  80 3E 0027 R 00       C          CMP     [exec_load_high],0 
+ 01AE  74 0B                 C          JZ      exec_use_ax             ; use a
+				x for load info 
+ 01B0  03 06 0023 R          C          ADD     AX,[exec_size]          ; go to
+				 end 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-12
+$exec - load/go a program                                   
+
+ 01B4  2B 06 0017 R          C          SUB     AX,[exec_res_len_para]  ; drop 
+				off header 
+ 01B8  2D 0010               C          SUB     AX,10h                  ; drop 
+				off pdb 
+ 01BB                        C  exec_use_ax: 
+ 01BB  A3 0015 R             C          MOV     [exec_rel_fac],AX       ; new s
+				egment 
+ 01BE  A3 0044 R             C          MOV     [exec_dma],AX           ; begin
+				ning of dma 
+                             C  ENDIF 
+                             C   
+                             C  ; 
+                             C  ; Determine the location in the file of the beg
+				inning of the resident 
+                             C  ; 
+ 01C1                        C  exec_find_res: 
+ 01C1  8B 16 0030 R          C          MOV     DX,[exec_par_dir] 
+ 01C5  52                    C          PUSH    DX 
+ 01C6  B1 04                 C          MOV     CL,4 
+ 01C8  D3 E2                 C          SHL     DX,CL                   ; low w
+				ord of location 
+ 01CA  58                    C          POP     AX 
+ 01CB  B1 0C                 C          MOV     CL,12 
+ 01CD  D3 E8                 C          SHR     AX,CL                   ; high 
+				word of location 
+ 01CF  8B C8                 C          MOV     CX,AX                   ; CX <-
+				 high 
+                             C   
+                             C  ; 
+                             C  ; Read in the resident image (first, seek to it
+				) 
+                             C  ; 
+ 01D1  8B 1E 0013 R          C          MOV     BX,[exec_fh] 
+ 01D5  1E                    C          PUSH    DS 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+ 01D6  32 C0                 C          XOR     AL,AL 
+                             C          invoke  $LSEEK                  ; seek 
+				to resident 
+ 01D8  E8 0000 E             C1  CALL $LSEEK
+                             C  ENDIF 
+ 01DB  1F                    C          POP     DS 
+                             C   
+ 01DC                        C  exec_big_read:                          ; Read 
+				resident into memory 
+ 01DC  8B 1E 0017 R          C          MOV     BX,[exec_res_len_para] 
+ 01E0  81 FB 1000            C          CMP     BX,1000h                ; too m
+				any bytes to read? 
+ 01E4  72 03                 C          JB      exec_read_ok 
+ 01E6  BB 0FE0               C          MOV     BX,0FE0h                ; max i
+				n one chunk FE00 bytes 
+                             C   
+ 01E9                        C  exec_read_ok: 
+ 01E9  29 1E 0017 R          C          SUB     [exec_res_len_para],BX  ; we re
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-13
+$exec - load/go a program                                   
+
+				ad (soon) this many 
+ 01ED  53                    C          PUSH    BX 
+ 01EE  B1 04                 C          MOV     CL,4 
+ 01F0  D3 E3                 C          SHL     BX,CL                   ; get c
+				ount in bytes from paras 
+ 01F2  8B CB                 C          MOV     CX,BX                   ; count
+				 in correct register 
+ 01F4  8B 1E 0013 R          C          MOV     BX,[exec_fh]            ; handl
+				e in correct register 
+ 01F8  1E                    C          PUSH    DS 
+ 01F9  8E 1E 0044 R          C          MOV     DS,[exec_dma]           ; Set u
+				p read buffer 
+                             C          ASSUME  DS:NOTHING 
+ 01FD  33 D2                 C          XOR     DX,DX 
+ 01FF  51                    C          PUSH    CX                      ; save 
+				our count 
+ 0200  E8 0468 R             C          CALL    exec_dealloc 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+                             C          invoke  $READ                   ; WOMP!
+				 
+ 0203  E8 0000 E             C1  CALL $READ
+                             C  ENDIF 
+ 0206  E8 0471 R             C          CALL    exec_alloc 
+ 0209  59                    C          POP     CX                      ; get o
+				ld count to verify 
+ 020A  1F                    C          POP     DS 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+                             C          ASSUME  DS:DOSGROUP 
+                             C  ENDIF 
+ 020B  3B C8                 C          CMP     CX,AX                   ; did w
+				e read enough? 
+ 020D  5B                    C          POP     BX                      ; get p
+				aragraph count back 
+ 020E  75 0B                 C          JNZ     exec_do_reloc           ; and d
+				o reloc if no more to read 
+                             C  ; 
+                             C  ; We've read in CX bytes... bump DTA location 
+                             C  ; 
+                             C   
+ 0210  01 1E 0044 R          C          ADD     [exec_dma],BX           ; bump 
+				dma address 
+ 0214  83 3E 0017 R 00       C          CMP     [exec_res_len_para],0 
+ 0219  75 C1                 C          JNZ     exec_big_read 
+                             C   
+                             C  ; 
+                             C  ; The image has now been read in.  We must perf
+				orm relocation to 
+                             C  ; the current location. 
+                             C  ; 
+                             C   
+ 021B                        C  exec_do_reloc: 
+ 021B  8B 0E 0015 R          C          MOV     CX,[exec_rel_fac] 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-14
+$exec - load/go a program                                   
+
+ 021F  A1 0036 R             C          MOV     AX,[exec_SS]            ; get i
+				nitial SS 
+ 0222  03 C1                 C          ADD     AX,CX                   ; and r
+				elocate him 
+ 0224  A3 001F R             C          MOV     [exec_init_SS],AX 
+                             C   
+ 0227  A1 0038 R             C          MOV     AX,[exec_SP]            ; initi
+				al SP 
+ 022A  A3 001D R             C          MOV     [exec_init_SP],AX 
+                             C   
+ 022D  C4 06 003C R          C          LES     AX,DWORD PTR [exec_IP] 
+ 0231  A3 0019 R             C          MOV     [exec_init_IP],AX 
+ 0234  8C C0                 C          MOV     AX,ES 
+ 0236  03 C1                 C          ADD     AX,CX                   ; reloc
+				ated... 
+ 0238  A3 001B R             C          MOV     [exec_init_CS],AX 
+                             C   
+ 023B  33 C9                 C          XOR     CX,CX 
+ 023D  8B 16 0040 R          C          MOV     DX,[exec_rle_table] 
+ 0241  8B 1E 0013 R          C          MOV     BX,[exec_fh] 
+ 0245  1E                    C          PUSH    DS 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+ 0246  33 C0                 C          XOR     AX,AX 
+                             C          invoke  $LSEEK 
+ 0248  E8 0000 E             C1  CALL $LSEEK
+                             C  ENDIF 
+ 024B  1F                    C          POP     DS 
+                             C   
+ 024C  73 03                 C          JNC     exec_get_entries 
+ 024E                        C  exec_bad_filej: 
+ 024E  E9 014D R             C          JMP     exec_bad_file 
+                             C   
+ 0251                        C  exec_get_entries: 
+ 0251  8B 16 002E R          C          MOV     DX,[exec_rle_count]     ; Numbe
+				r of entries left 
+                             C   
+ 0255                        C  exec_read_reloc: 
+                             C          ASSUME  DS:NOTHING 
+ 0255  52                    C          PUSH    DX 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+ 0256  BA 0028 R             C          MOV     DX,OFFSET DOSGROUP:exec_signatu
+				re 
+                             C  ENDIF 
+ 0259  B9 001C               C          MOV     CX,((exec_internal_buffer_size)
+				/4)*4 
+ 025C  36: 8B 1E 0013 R      C          MOV     BX,[exec_fh] 
+ 0261  1E                    C          PUSH    DS 
+ 0262  E8 0468 R             C          CALL    exec_dealloc 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+                             C          invoke  $READ 
+ 0265  E8 0000 E             C1  CALL $READ
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-15
+$exec - load/go a program                                   
+
+                             C  ENDIF 
+ 0268  E8 0471 R             C          CALL    exec_alloc 
+ 026B  07                    C          POP     ES 
+ 026C  5A                    C          POP     DX 
+ 026D  72 DF                 C          JC      exec_bad_filej 
+ 026F  B9 0007               C          MOV     CX,(exec_internal_buffer_size)/
+				4 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+ 0272  BF 0028 R             C          MOV     DI,OFFSET DOSGROUP:exec_signatu
+				re   ; Pointer to byte location in header 
+                             C  ENDIF 
+                             C  ; 
+                             C  ; Relocate a single address 
+                             C  ; 
+ 0275  36: 8B 36 0015 R      C          MOV     SI,[exec_rel_fac] 
+                             C   
+ 027A                        C  exec_reloc_one: 
+ 027A  83 FA 00              C          CMP     DX,0                    ; Any m
+				ore entries? 
+ 027D  75 03                 C          JNE     exec_get_addr 
+ 027F  E9 033A R             C          JMP     Exec_set_PDB 
+                             C   
+ 0282                        C  exec_get_addr: 
+ 0282  26: C5 1D             C          LDS     BX,DWORD PTR ES:[DI]    ; Get r
+				a/sa of entry 
+ 0285  8C D8                 C          MOV     AX,DS                   ; Reloc
+				ate address of item 
+ 0287  03 C6                 C          ADD     AX,SI 
+ 0289  8E D8                 C          MOV     DS,AX 
+ 028B  8B 07                 C          MOV     AX,WORD PTR DS:[BX]     ; Reloc
+				ate item 
+ 028D  03 C6                 C          ADD     AX,SI 
+ 028F  89 07                 C          MOV     WORD PTR DS:[BX],AX 
+ 0291  83 C7 04              C          ADD     DI,4 
+ 0294  4A                    C          DEC     DX 
+ 0295  E2 E3                 C          LOOP    exec_reloc_one              ; E
+				nd of internal buffer? 
+                             C   
+                             C  ; 
+                             C  ; We've exhausted a single buffer's worth.  Rea
+				d in the next piece 
+                             C  ; of the relocation table. 
+                             C  ; 
+                             C   
+ 0297  06                    C          PUSH    ES 
+ 0298  1F                    C          POP     DS 
+ 0299  EB BA                 C          JMP     exec_read_reloc 
+                             C   
+ 029B                        C  exec_no_memj: 
+ 029B  E9 0149 R             C          JMP     exec_no_mem 
+                             C   
+                             C  ; 
+                             C  ; we have a .COM file.  First, determine if we 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-16
+$exec - load/go a program                                   
+
+				are merely loading an overlay. 
+                             C  ; 
+ 029E                        C  exec_com_file: 
+ 029E  36: F6 06 0012 R 02   C          TEST    BYTE PTR [exec_func],exec_func_
+				overlay 
+ 02A4  74 0C                 C          JZ      exec_alloc_com_file 
+ 02A6  36: C5 36 000E R      C          LDS     SI,DWORD PTR [exec_blk]        
+				   ; get arg block 
+ 02AB  AD                    C          LODSW                           ; get l
+				oad address 
+ 02AC  36: A3 0044 R         C          MOV     [exec_dma],AX 
+ 02B0  EB 30                 C          JMP     SHORT exec_64k          ; read 
+				it all! 
+                             C   
+                             C  ; We must allocate the max possible size block 
+				(ick!)  and set up 
+                             C  ; CS=DS=ES=SS=PDB pointer, IP=100, SP=max size 
+				of block. 
+                             C  ; 
+ 02B2                        C  exec_alloc_com_file: 
+ 02B2  BB FFFF               C          MOV     BX,0FFFFh 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+                             C          invoke  $ALLOC                  ; large
+				st piece available as error 
+ 02B5  E8 0000 E             C1  CALL $ALLOC
+                             C  ENDIF 
+ 02B8  0B DB                 C          OR      BX,BX 
+ 02BA  74 DF                 C          JZ      exec_no_memj 
+ 02BC  36: 89 1E 0023 R      C          MOV     [exec_size],BX          ; save 
+				size of allocation block 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+ 02C1  53                    C          PUSH    BX 
+                             C          invoke  $ALLOC                  ; large
+				st piece available as error 
+ 02C2  E8 0000 E             C1  CALL $ALLOC
+ 02C5  5B                    C          POP     BX                      ; get s
+				ize of block... 
+                             C  ENDIF 
+ 02C6  36: A3 0025 R         C          MOV     [exec_load_block],AX 
+ 02CA  05 0010               C          ADD     AX,10h                  ; incre
+				ment for header 
+ 02CD  36: A3 0044 R         C          MOV     [exec_dma],AX 
+ 02D1  83 EB 10              C          SUB     BX,10h                  ; remem
+				ber header 
+                             C  ENDIF 
+ 02D4  81 FB 1000            C          CMP     BX,1000h                ; 64k o
+				r more? 
+ 02D8  73 08                 C          JAE     exec_64k                ; yes, 
+				read only 64k 
+ 02DA  8B C3                 C          MOV     AX,BX                   ; conve
+				rt size to bytes 
+ 02DC  B1 04                 C          MOV     CL,4 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-17
+$exec - load/go a program                                   
+
+ 02DE  D3 E0                 C          SHL     AX,CL 
+ 02E0  EB 03                 C          JMP     SHORT exec_read_com 
+                             C   
+ 02E2                        C  exec_64k: 
+ 02E2  B8 FFFF               C          MOV     AX,0FFFFh               ; 64k-1
+				 bytes 
+                             C   
+ 02E5                        C  exec_read_com: 
+ 02E5  50                    C          PUSH    AX                      ; save 
+				number to read 
+ 02E6  36: 8B 1E 0013 R      C          MOV     BX,[exec_fh]            ; of co
+				m file 
+ 02EB  33 C9                 C          XOR     CX,CX                   ; but s
+				eek to 0:0 
+ 02ED  8B D1                 C          MOV     DX,CX 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+ 02EF  33 C0                 C          XOR     AX,AX                   ; seek 
+				relative to beginning 
+                             C          invoke  $LSEEK                  ; back 
+				to beginning of file 
+ 02F1  E8 0000 E             C1  CALL $LSEEK
+                             C  ENDIF 
+ 02F4  36: 8B 1E 0013 R      C          MOV     BX,[exec_fh] 
+ 02F9  59                    C          POP     CX                      ; numbe
+				r to read 
+ 02FA  36: 8E 1E 0044 R      C          MOV     DS,[exec_dma] 
+ 02FF  33 D2                 C          XOR     DX,DX 
+ 0301  51                    C          PUSH    CX 
+ 0302  E8 0468 R             C          CALL    exec_dealloc 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+                             C          invoke  $READ                   ; read 
+				in com file 
+ 0305  E8 0000 E             C1  CALL $READ
+                             C  ENDIF 
+ 0308  E8 0471 R             C          CALL    exec_alloc 
+ 030B  5E                    C          POP     SI                      ; get n
+				umber of bytes to read 
+ 030C  3B C6                 C          CMP     AX,SI                   ; did w
+				e read them all? 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+ 030E  74 8B                 C          JZ      exec_no_memj            ; exact
+				ly the wrong number... no memory 
+                             C  ENDIF 
+ 0310  36: F6 06 0012 R 02   C          TEST    BYTE PTR [exec_func],exec_func_
+				overlay 
+ 0316  75 22                 C          JNZ     exec_set_PDB            ; no st
+				arto, chumo! 
+ 0318  36: A1 0044 R         C          MOV     AX,[exec_DMA] 
+ 031C  2D 0010               C          SUB     AX,10h 
+ 031F  36: A3 001B R         C          MOV     [exec_init_CS],AX 
+ 0323  36: C7 06 0019 R 0100 C          MOV     [exec_init_IP],100h     ; initi
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-18
+$exec - load/go a program                                   
+
+				al IP is 100 
+                             C          ; SI is at most FFFFh 
+ 032A  4E                    C          DEC     SI                      ; make 
+				room for stack 
+                             C          ; SI is at most FFFEh, room for a 0! 
+ 032B  36: 89 36 001D R      C          MOV     [exec_init_SP],SI       ; max v
+				alue for read is also SP! 
+ 0330  36: A3 001F R         C          MOV     [exec_init_SS],AX 
+ 0334  8E D8                 C          MOV     DS,AX 
+ 0336  C7 04 0000            C          MOV     WORD PTR DS:[SI],0      ; 0 for
+				 return 
+                             C   
+ 033A                        C  exec_set_PDB: 
+ 033A  36: 8B 1E 0013 R      C          MOV     BX,[exec_fh]            ; we ar
+				e finished with the file. 
+ 033F  E8 0468 R             C          CALL    exec_dealloc 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+                             C          invoke  $CLOSE                  ; relea
+				se the jfn 
+ 0342  E8 0000 E             C1  CALL $CLOSE
+                             C  ENDIF 
+ 0345  E8 0471 R             C          CALL    exec_alloc 
+ 0348  36: F6 06 0012 R 02   C          TEST    BYTE PTR [exec_func],exec_func_
+				overlay 
+ 034E  74 03                 C          JZ      exec_build_header 
+                             C          transfer    SYS_RET_OK          ; overl
+				ay load -> done 
+ 0350                        C2  ??0006:
+ 0350  E9 0000 E             C2  JMP SYS_RET_OK
+                             C   
+ 0353                        C  exec_build_header: 
+ 0353  36: 8B 16 0025 R      C          MOV     DX,[exec_load_block] 
+                             C  ; 
+                             C  ; assign the space to the process 
+                             C  ; 
+                             C   
+ 0358  BE 0001               C          MOV     SI,arena_owner          ; point
+				er to owner field 
+                             C   
+ 035B  36: A1 0021 R         C          MOV     AX,[exec_environ]       ; get e
+				nviron pointer 
+ 035F  0B C0                 C          OR      AX,AX 
+ 0361  74 05                 C          JZ      NO_OWNER                ; no en
+				vironment 
+ 0363  48                    C          DEC     AX                      ; point
+				 to header 
+ 0364  8E D8                 C          MOV     DS,AX 
+ 0366  89 14                 C          MOV     DS:[SI],DX              ; assig
+				n ownership 
+ 0368                        C  NO_OWNER: 
+ 0368  36: A1 0025 R         C          MOV     AX,[exec_load_block]    ; get l
+				oad block pointer 
+ 036C  48                    C          DEC     AX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-19
+$exec - load/go a program                                   
+
+ 036D  8E D8                 C          MOV     DS,AX                   ; point
+				 to header 
+ 036F  89 14                 C          MOV     DS:[SI],DX              ; assig
+				n ownership 
+                             C   
+ 0371  52                    C          PUSH    DX 
+                             C  ENDIF 
+                             C  IF NOT IBM 
+ 0372  36: C6 06 0000 E FF   C          MOV     BYTE PTR [CreatePDB], 0FFH  ; i
+				ndicate a new process 
+                             C          invoke  $Dup_PDB                    ; E
+				S is now PDB 
+ 0378  E8 0000 E             C1  CALL $Dup_PDB
+                             C  ENDIF 
+ 037B  5A                    C          POP     DX 
+ 037C  36: FF 36 0021 R      C          PUSH    [exec_environ] 
+ 0381  26: 8F 06 002C        C          POP     ES:[PDB_environ] 
+ 0386  36: 8B 36 0023 R      C          MOV     SI,[exec_size] 
+ 038B  03 F2                 C          ADD     SI,DX 
+ 038D  26: 89 36 0002        C          MOV     ES:[PDB_block_len],SI 
+                             C  ; 
+                             C  ; set up proper command line stuff 
+                             C  ; 
+ 0392  36: C5 36 000E R      C          LDS     SI,DWORD PTR [exec_blk]        
+				   ; get the block 
+ 0397  1E                    C          PUSH    DS                      ; save 
+				its location 
+ 0398  56                    C          PUSH    SI 
+ 0399  C5 74 06              C          LDS     SI,DS:[SI.exec0_5C_FCB] ; get t
+				he 5c fcb 
+ 039C  B9 000C               C          MOV     CX,12                   ; copy 
+				drive, name and ext 
+ 039F  51                    C          PUSH    CX 
+ 03A0  BF 005C               C          MOV     DI,5Ch 
+ 03A3  8A 1C                 C          MOV     BL,DS:[SI] 
+ 03A5  F3/ A4                C          REP     MOVSB 
+ 03A7  33 C0                 C          XOR     AX,AX                   ; zero 
+				extent, etc for CPM 
+ 03A9  AB                    C          STOSW 
+ 03AA  AB                    C          STOSW 
+ 03AB  59                    C          POP     CX 
+ 03AC  5E                    C          POP     SI                      ; get b
+				lock 
+ 03AD  1F                    C          POP     DS 
+ 03AE  1E                    C          PUSH    DS                      ; save 
+				(again) 
+ 03AF  56                    C          PUSH    SI 
+ 03B0  C5 74 0A              C          LDS     SI,DS:[SI.exec0_6C_FCB] ; get 6
+				C FCB 
+ 03B3  BF 006C               C          MOV     DI,6Ch                  ; do sa
+				me as above 
+ 03B6  8A 3C                 C          MOV     BH,DS:[SI] 
+ 03B8  F3/ A4                C          REP     MOVSB 
+ 03BA  AB                    C          STOSW 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-20
+$exec - load/go a program                                   
+
+ 03BB  AB                    C          STOSW 
+ 03BC  5E                    C          POP     SI                      ; get b
+				lock (last time) 
+ 03BD  1F                    C          POP     DS 
+ 03BE  C5 74 02              C          LDS     SI,DS:[SI.exec0_com_line]   ; c
+				ommand line 
+ 03C1  B9 0080               C          MOV     CX,80h 
+ 03C4  8B F9                 C          MOV     DI,CX 
+ 03C6  F3/ A4                C          REP     MOVSB                   ; Wham!
+				 
+                             C   
+                             C  ; 
+                             C  ; Process BX into default AX (validity of drive
+				 specs on args) 
+                             C  ; 
+ 03C8  FE C9                 C          DEC     CL                      ; get 0
+				FFh in CX 
+ 03CA  36: 3A 3E 0000 E      C          CMP     BH,[NUMIO] 
+ 03CF  76 04                 C          JBE     exec_BH_good 
+ 03D1  8A F9                 C          MOV     BH,CL 
+ 03D3  EB 02                 C          JMP     SHORT exec_BL 
+ 03D5                        C  exec_BH_good: 
+ 03D5  32 FF                 C          XOR     BH,BH 
+ 03D7                        C  exec_BL: 
+ 03D7  36: 3A 1E 0000 E      C          CMP     BL,[NUMIO] 
+ 03DC  76 04                 C          JBE     exec_BL_good 
+ 03DE  8A D9                 C          MOV     BL,CL 
+ 03E0  EB 02                 C          JMP     SHORT exec_set_return 
+ 03E2                        C  exec_BL_good: 
+ 03E2  32 DB                 C          XOR     BL,BL 
+ 03E4                        C  exec_set_return: 
+                             C          invoke  get_user_stack          ; get h
+				is return address 
+ 03E4  E8 0000 E             C1  CALL get_user_stack
+ 03E7  FF 74 14              C          PUSH    [SI.user_CS]            ; suck 
+				out the CS and IP 
+ 03EA  FF 74 12              C          PUSH    [SI.user_IP] 
+ 03ED  FF 74 14              C          PUSH    [SI.user_CS]            ; suck 
+				out the CS and IP 
+ 03F0  FF 74 12              C          PUSH    [SI.user_IP] 
+ 03F3  26: 8F 06 000A        C          POP     WORD PTR ES:[PDB_Exit] 
+ 03F8  26: 8F 06 000C        C          POP     WORD PTR ES:[PDB_Exit+2] 
+ 03FD  33 C0                 C          XOR     AX,AX 
+ 03FF  8E D8                 C          MOV     DS,AX 
+ 0401  8F 06 0088            C          POP     DS:[addr_int_terminate] ; save 
+				them where we can get them later 
+ 0405  8F 06 008A            C          POP     DS:[addr_int_terminate+2]   ; w
+				hen the child exits. 
+                             C  IF NOT IBM 
+ 0409  36: C7 06 0000 E 0080 C          MOV     WORD PTR [DMAADD],80h 
+ 0410  36: 8E 1E 0000 E      C          MOV     DS,[CurrentPDB] 
+ 0415  36: 8C 1E 0002 E      C          MOV     WORD PTR [DMAADD+2],DS 
+                             C  ENDIF 
+                             C  ENDIF 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-21
+$exec - load/go a program                                   
+
+ 041A  36: F6 06 0012 R 01   C          TEST    BYTE PTR [exec_func],exec_func_
+				no_execute 
+ 0420  74 26                 C          JZ      exec_go 
+                             C   
+ 0422  36: C5 36 001D R      C          LDS     SI,DWORD PTR [exec_init_SP] ; g
+				et stack 
+ 0427  36: C4 3E 000E R      C          LES     DI,DWORD PTR [exec_blk]        
+				   ; and block for return 
+ 042C  26: 8C 5D 10          C          MOV     ES:[DI].exec1_SS,DS     ; retur
+				n SS 
+                             C   
+ 0430  4E                    C          DEC     SI                      ; 'push
+				' default AX 
+ 0431  4E                    C          DEC     SI 
+ 0432  89 1C                 C          MOV     DS:[SI],BX              ; save 
+				default AX reg 
+ 0434  26: 89 75 0E          C          MOV     ES:[DI].exec1_SP,SI     ; retur
+				n 'SP' 
+                             C   
+ 0438  36: C5 06 0019 R      C          LDS     AX,DWORD PTR [exec_init_IP] 
+ 043D  26: 8C 5D 14          C          MOV     ES:[DI].exec1_CS,DS     ; initi
+				al entry stuff 
+                             C   
+ 0441  26: 89 45 12          C          MOV     ES:[DI].exec1_IP,AX 
+                             C          transfer    SYS_RET_OK 
+ 0445                        C2  ??0007:
+ 0445  E9 0000 E             C2  JMP SYS_RET_OK
+                             C   
+ 0448                        C  exec_go: 
+                             C  ENDIF 
+ 0448  36: C5 36 0019 R      C          LDS     SI,DWORD PTR [exec_init_IP] ; g
+				et entry point 
+ 044D  FA                    C          CLI 
+                             C  IF NOT IBM 
+ 044E  36: C6 06 0000 E 00   C          MOV     BYTE PTR INDOS,0 
+                             C  ENDIF 
+ 0454  36: 8E 16 001F R      C          MOV     SS,[exec_init_SS]       ; set u
+				p user's stack 
+                             C          ASSUME  SS:NOTHING 
+ 0459  2E: 8B 26 001D R      C          MOV     SP,[exec_init_SP]       ; and S
+				P 
+ 045E  FB                    C          STI 
+ 045F  1E                    C          PUSH    DS                      ; fake 
+				long call to entry 
+ 0460  56                    C          PUSH    SI 
+ 0461  8E C2                 C          MOV     ES,DX                   ; set u
+				p proper seg registers 
+ 0463  8E DA                 C          MOV     DS,DX 
+ 0465  8B C3                 C          MOV     AX,BX                   ; set u
+				p proper AX 
+                             C          procedure   exec_long_ret,FAR 
+ 0467                        C1 exec_long_ret PROC FAR
+ 0467  CB                    C          RET 
+                             C  exec_long_ret   ENDP 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-22
+$exec - load/go a program                                   
+
+                             C   
+                             C  $Exec   ENDP 
+                             C   
+                             C          procedure   exec_dealloc,near 
+ 0468                        C1 exec_dealloc PROC near
+                             C          ASSUME      DS:NOTHING,ES:NOTHING 
+ 0468  53                    C          PUSH        BX 
+ 0469  BB 0000               C          MOV         BX,arena_owner_system 
+ 046C  E8 047C R             C          CALL        exec_do_change_owner 
+ 046F  5B                    C          POP         BX 
+                             C          return 
+ 0470                        C1 ??0008:
+ 0470  C3                    C1  RET
+                             C  exec_dealloc  ENDP 
+                             C   
+                             C          procedure   exec_alloc,near 
+ 0471                        C1 exec_alloc PROC near
+ 0471  53                    C          PUSH        BX 
+ 0472  2E: 8B 1E 0000 E      C          MOV         BX,[CurrentPDB] 
+ 0477  E8 047C R             C          CALL        exec_do_change_owner 
+ 047A  5B                    C          POP         BX 
+                             C          return 
+ 047B                        C1 ??0009:
+ 047B  C3                    C1  RET
+                             C  exec_alloc  ENDP 
+                             C   
+                             C          procedure   exec_do_change_owner,NEAR 
+ 047C                        C1 exec_do_change_owner PROC NEAR
+ 047C  1E                    C          PUSH    DS 
+ 047D  50                    C          PUSH    AX 
+ 047E  2E: A1 0021 R         C          MOV     AX,[exec_environ] 
+ 0482  0B C0                 C          OR      AX,AX 
+ 0484  74 07                 C          JZ      exec_alloc_try_load 
+ 0486  48                    C          DEC     AX 
+ 0487  8E D8                 C          MOV     DS,AX 
+ 0489  89 1E 0001            C          MOV     DS:[arena_owner],BX 
+ 048D                        C  exec_alloc_try_load: 
+ 048D  2E: A1 0025 R         C          MOV     AX,[exec_load_block] 
+ 0491  0B C0                 C          OR      AX,AX 
+ 0493  74 07                 C          JZ      exec_alloc_done 
+ 0495  48                    C          DEC     AX 
+ 0496  8E D8                 C          MOV     DS,AX 
+ 0498  89 1E 0001            C          MOV     DS:[arena_owner],BX 
+ 049C                        C  exec_alloc_done: 
+ 049C  58                    C          POP     AX 
+ 049D  1F                    C          POP     DS 
+ 049E  C3                    C          RET 
+                             C  exec_do_change_owner    ENDP 
+                             C   
+                             C  ENDIF 
+                             C   
+                             C  ENDIF 
+                             C   
+                             C  SUBTTL Terminate and stay resident handler 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-23
+Terminate and stay resident handler                         
+
+                             C  PAGE 
+                             C  ; 
+                             C  ; Input:    DX is  an  offset  from  CurrentPDB
+				  at which to 
+                             C  ;           truncate the current block. 
+                             C  ; 
+                             C  ; output:   The current block is truncated (exp
+				anded) to be [DX+15]/16 
+                             C  ;           paragraphs long.  An exit is simula
+				ted via resetting CurrentPDB 
+                             C  ;           and restoring the vectors. 
+                             C  ; 
+                             C          procedure   $Keep_process,NEAR 
+ 049F                        C1 $Keep_process PROC NEAR
+                             C          ASSUME DS:NOTHING,ES:NOTHING,SS:DOSGROU
+				P 
+                             C   
+ 049F  50                    C          PUSH    AX                      ; keep 
+				exit code around 
+ 04A0  36: C6 06 0000 E 03   C          MOV     BYTE PTR [Exit_type],Exit_keep_
+				process 
+ 04A6  36: 8E 06 0000 E      C          MOV     ES,[CurrentPDB] 
+ 04AB  83 FA 06              C          CMP     DX,6h                   ; keep 
+				enough space around for system 
+ 04AE  73 03                 C          JAE     Keep_shrink             ; info 
+ 04B0  BA 0006               C          MOV     DX,6h 
+ 04B3                        C  keep_shrink: 
+ 04B3  8B DA                 C          MOV     BX,DX 
+ 04B5  53                    C          PUSH    BX 
+ 04B6  06                    C          PUSH    ES 
+                             C          invoke  $SETBLOCK               ; ignor
+				e return codes. 
+ 04B7  E8 0000 E             C1  CALL $SETBLOCK
+ 04BA  1F                    C          POP     DS 
+ 04BB  5B                    C          POP     BX 
+ 04BC  72 07                 C          JC      keep_done               ; faile
+				d on modification 
+ 04BE  8C D8                 C          MOV     AX,DS 
+ 04C0  03 C3                 C          ADD     AX,BX 
+ 04C2  A3 0002               C          MOV     DS:[PDB_block_len],AX 
+                             C   
+ 04C5                        C  keep_done: 
+ 04C5  58                    C          POP     AX 
+ 04C6  EB 24                 C          JMP     SHORT exit_inner        ; and l
+				et abort take care of the rest 
+                             C   
+                             C  $Keep_process   ENDP 
+                             C   
+                             C          procedure   Stay_resident,NEAR 
+ 04C8                        C1 Stay_resident PROC NEAR
+                             C          ASSUME  DS:NOTHING,ES:NOTHING,SS:NOTHIN
+				G 
+ 04C8  B8 3100               C          MOV     AX,(Keep_process SHL 8) + 0 ; L
+				ower part is return code 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-24
+Terminate and stay resident handler                         
+
+ 04CB  83 C2 0F              C          ADD     DX,15 
+ 04CE  B1 04                 C          MOV     CL,4 
+ 04D0  D3 EA                 C          SHR     DX,CL 
+                             C   
+                             C          transfer    COMMAND 
+ 04D2                        C2  ??000A:
+ 04D2  E9 0000 E             C2  JMP COMMAND
+                             C  Stay_resident   ENDP 
+                             C   
+                             C  SUBTTL $EXIT - return to parent process 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Page     1-25
+$EXIT - return to parent process                            
+
+                             C  PAGE 
+                             C  ; 
+                             C  ;   Assembler usage: 
+                             C  ;           MOV     AL, code 
+                             C  ;           MOV     AH, Exit 
+                             C  ;           INT     int_command 
+                             C  ;   Error return: 
+                             C  ;           None. 
+                             C  ; 
+                             C          procedure   $EXIT,NEAR 
+ 04D5                        C1 $EXIT PROC NEAR
+                             C          ASSUME  DS:NOTHING,ES:NOTHING,SS:DOSGRO
+				UP 
+ 04D5  32 E4                 C          XOR     AH,AH 
+ 04D7  36: 86 26 0000 E      C          XCHG    AH,BYTE PTR [DidCTRLC] 
+ 04DC  0A E4                 C          OR      AH,AH 
+ 04DE  36: C6 06 0000 E 00   C          MOV     BYTE PTR [Exit_type],exit_termi
+				nate 
+ 04E4  74 06                 C          JZ      exit_inner 
+ 04E6  36: C6 06 0000 E 01   C          MOV     BYTE PTR [Exit_type],exit_ctrl_
+				c 
+                             C   
+ 04EC                        C  Exit_inner: 
+                             C          invoke  get_user_stack 
+ 04EC  E8 0000 E             C1  CALL get_user_stack
+ 04EF  36: FF 36 0000 E      C          PUSH    [CurrentPDB] 
+ 04F4  8F 44 14              C          POP     [SI.user_CS] 
+                             C          transfer    abort_inner 
+ 04F7                        C2  ??000B:
+ 04F7  E9 0000 E             C2  JMP abort_inner
+                             C  $EXIT   ENDP 
+                             C   
+                             C  do_ext 
+                             C   
+ 04FA                        C  CODE    ENDS 
+                             C      END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DOSGROUP . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	04FA	BYTE	PUBLIC	'CODE'
+  CONSTANTS  . . . . . . . . . .  	0000	BYTE	PUBLIC	'CONST'
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Symbols-5
+                                                             
+
+  LAST . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'LAST'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ABORT_INNER_J  . . . . . . . . .  	NEAR 	04F7	CODE
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Alias	 FALSE		
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+
+CANCEL . . . . . . . . . . . . .  	Number	0018	
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+COMMAND_J  . . . . . . . . . . .  	NEAR 	04D2	CODE
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Symbols-6
+                                                             
+
+CREATEPDB  . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENTPDB . . . . . . . . . . .  	V WORD 	0000	DATA	External
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Symbols-7
+                                                             
+
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DIDCTRLC . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMAADD . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+ESCCH  . . . . . . . . . . . . .  	Number	001B	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_64K . . . . . . . . . . . .  	L NEAR	02E2	CODE
+EXEC_ALLOC . . . . . . . . . . .  	N PROC	0471	CODE	Global	Length = 000B
+EXEC_ALLOCATE  . . . . . . . . .  	L NEAR	015F	CODE
+EXEC_ALLOC_COM_FILE  . . . . . .  	L NEAR	02B2	CODE
+EXEC_ALLOC_DONE  . . . . . . . .  	L NEAR	049C	CODE
+EXEC_ALLOC_TRY_LOAD  . . . . . .  	L NEAR	048D	CODE
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FILE  . . . . . . . . .  	L NEAR	014D	CODE
+EXEC_BAD_FILEJ . . . . . . . . .  	L NEAR	024E	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Symbols-8
+                                                             
+
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_BAD_FUN . . . . . . . . . .  	L NEAR	004A	CODE
+EXEC_BH_GOOD . . . . . . . . . .  	L NEAR	03D5	CODE
+EXEC_BIG_READ  . . . . . . . . .  	L NEAR	01DC	CODE
+EXEC_BL  . . . . . . . . . . . .  	L NEAR	03D7	CODE
+EXEC_BLK . . . . . . . . . . . .  	L DWORD	000E	CODE
+EXEC_BL_GOOD . . . . . . . . . .  	L NEAR	03E2	CODE
+EXEC_BOMB  . . . . . . . . . . .  	L NEAR	014F	CODE
+EXEC_BUILD_HEADER  . . . . . . .  	L NEAR	0353	CODE
+EXEC_BX_MAX  . . . . . . . . . .  	L NEAR	0194	CODE
+EXEC_CHECK . . . . . . . . . . .  	L NEAR	00C1	CODE
+EXEC_CHECK_2 . . . . . . . . . .  	L NEAR	0051	CODE
+EXEC_CHECK_ENVIRON . . . . . . .  	L NEAR	0084	CODE
+EXEC_CHECK_SIG . . . . . . . . .  	L NEAR	0111	CODE
+EXEC_CHKSUM  . . . . . . . . . .  	L WORD 	003A	CODE
+EXEC_COM_FILE  . . . . . . . . .  	L NEAR	029E	CODE
+EXEC_COM_FILEJ . . . . . . . . .  	L NEAR	011E	CODE
+EXEC_CS  . . . . . . . . . . . .  	L WORD 	003E	CODE
+EXEC_DEALLOC . . . . . . . . . .  	N PROC	0468	CODE	Global	Length = 0009
+EXEC_DMA . . . . . . . . . . . .  	L WORD 	0044	CODE
+EXEC_DO_CHANGE_OWNER . . . . . .  	N PROC	047C	CODE	Global	Length = 0023
+EXEC_DO_RELOC  . . . . . . . . .  	L NEAR	021B	CODE
+EXEC_ENVIRON . . . . . . . . . .  	L WORD 	0021	CODE
+EXEC_FH  . . . . . . . . . . . .  	L WORD 	0013	CODE
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FIND_RES  . . . . . . . . .  	L NEAR	01C1	CODE
+EXEC_FUNC  . . . . . . . . . . .  	L BYTE 	0012	CODE
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_GET_ADDR  . . . . . . . . .  	L NEAR	0282	CODE
+EXEC_GET_ENTRIES . . . . . . . .  	L NEAR	0251	CODE
+EXEC_GET_ENVIRON_LEN . . . . . .  	L NEAR	00B8	CODE
+EXEC_GO  . . . . . . . . . . . .  	L NEAR	0448	CODE
+EXEC_GOT_BLOCK . . . . . . . . .  	L NEAR	0196	CODE
+EXEC_INIT_CS . . . . . . . . . .  	L WORD 	001B	CODE
+EXEC_INIT_IP . . . . . . . . . .  	L WORD 	0019	CODE
+EXEC_INIT_SP . . . . . . . . . .  	L WORD 	001D	CODE
+EXEC_INIT_SS . . . . . . . . . .  	L WORD 	001F	CODE
+EXEC_INTERNAL_BUFFER . . . . . .  	NEAR 	0028	CODE
+EXEC_INTERNAL_BUFFER_SIZE  . . .  	Number	001E	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_IOV . . . . . . . . . . . .  	L WORD 	0042	CODE
+EXEC_IP  . . . . . . . . . . . .  	L WORD 	003C	CODE
+EXEC_LEN_MOD_512 . . . . . . . .  	L WORD 	002A	CODE
+EXEC_LOAD_BLOCK  . . . . . . . .  	L WORD 	0025	CODE
+EXEC_LOAD_HIGH . . . . . . . . .  	L BYTE 	0027	CODE
+EXEC_LONG_RET  . . . . . . . . .  	F PROC	0467	CODE	Global	Length = 0001
+EXEC_MAX_BSS . . . . . . . . . .  	L WORD 	0034	CODE
+EXEC_MIN_BSS . . . . . . . . . .  	L WORD 	0032	CODE
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXEC_NO_MEM  . . . . . . . . . .  	L NEAR	0149	CODE
+EXEC_NO_MEMJ . . . . . . . . . .  	L NEAR	029B	CODE
+EXEC_PAGES . . . . . . . . . . .  	L WORD 	002C	CODE
+EXEC_PAR_DIR . . . . . . . . . .  	L WORD 	0030	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Symbols-9
+                                                             
+
+EXEC_READ_COM  . . . . . . . . .  	L NEAR	02E5	CODE
+EXEC_READ_HEADER . . . . . . . .  	L NEAR	00E5	CODE
+EXEC_READ_OK . . . . . . . . . .  	L NEAR	01E9	CODE
+EXEC_READ_RELOC  . . . . . . . .  	L NEAR	0255	CODE
+EXEC_RELOC_ONE . . . . . . . . .  	L NEAR	027A	CODE
+EXEC_REL_FAC . . . . . . . . . .  	L WORD 	0015	CODE
+EXEC_RES_LEN_PARA  . . . . . . .  	L WORD 	0017	CODE
+EXEC_RET_ERR . . . . . . . . . .  	L NEAR	004F	CODE
+EXEC_RLE_COUNT . . . . . . . . .  	L WORD 	002E	CODE
+EXEC_RLE_TABLE . . . . . . . . .  	L WORD 	0040	CODE
+EXEC_SAVE_ENVIRON  . . . . . . .  	L NEAR	00D9	CODE
+EXEC_SAVE_START  . . . . . . . .  	L NEAR	0121	CODE
+EXEC_SCAN_ENV  . . . . . . . . .  	L NEAR	00AE	CODE
+EXEC_SET_PDB . . . . . . . . . .  	L NEAR	033A	CODE
+EXEC_SET_RETURN  . . . . . . . .  	L NEAR	03E4	CODE
+EXEC_SIGNATURE . . . . . . . . .  	L WORD 	0028	CODE
+EXEC_SIZE  . . . . . . . . . . .  	L WORD 	0023	CODE
+EXEC_SP  . . . . . . . . . . . .  	L WORD 	0038	CODE
+EXEC_SS  . . . . . . . . . . . .  	L WORD 	0036	CODE
+EXEC_USE_AX  . . . . . . . . . .  	L NEAR	01BB	CODE
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CODE  . . . . . . . . . . .  	V WORD 	0000	DATA	External
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_INNER . . . . . . . . . . .  	L NEAR	04EC	CODE
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+EXIT_TYPE  . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Symbols-10
+                                                             
+
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+
+HIGHMEM  . . . . . . . . . . . .  	Alias	 FALSE		
+
+IBM  . . . . . . . . . . . . . .  	Alias	 FALSE		
+INDOS  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KEEP_DONE  . . . . . . . . . . .  	L NEAR	04C5	CODE
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+KEEP_SHRINK  . . . . . . . . . .  	L NEAR	04B3	CODE
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Symbols-11
+                                                             
+
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MSVER  . . . . . . . . . . . . .  	Alias	 TRUE		
+
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+NO_OWNER . . . . . . . . . . . .  	L NEAR	0368	CODE
+NUMIO  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RET_L  . . . . . . . . . . . . .  	NEAR 	047B	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Symbols-12
+                                                             
+
+
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+STAY_RESIDENT  . . . . . . . . .  	N PROC	04C8	CODE	Global	Length = 000D
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+SYS_RET_ERR_J  . . . . . . . . .  	NEAR 	015C	CODE
+SYS_RET_OK_J . . . . . . . . . .  	NEAR 	0445	CODE
+
+TOGLINS  . . . . . . . . . . . .  	Alias	 WANG		
+TOGLPRN  . . . . . . . . . . . .  	Alias	 FALSE		
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WANG . . . . . . . . . . . . . .  	Alias	 FALSE		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:54:45
+STDPROC - process maintenance for MSDOS                     Symbols-13
+                                                             
+
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+ZEROEXT  . . . . . . . . . . . .  	Alias	 TRUE		
+
+$EXEC  . . . . . . . . . . . . .  	N PROC	0046	CODE	Global	Length = 0422
+$EXIT  . . . . . . . . . . . . .  	N PROC	04D5	CODE	Global	Length = 0025
+$KEEP_PROCESS  . . . . . . . . .  	N PROC	049F	CODE	Global	Length = 0029
+$WAIT  . . . . . . . . . . . . .  	N PROC	0000	CODE	Global	Length = 000E
+??0000 . . . . . . . . . . . . .  	L NEAR	000B	CODE
+??0002 . . . . . . . . . . . . .  	L NEAR	004C	CODE
+??0003 . . . . . . . . . . . . .  	L NEAR	004F	CODE
+??0004 . . . . . . . . . . . . .  	L NEAR	0082	CODE
+??0005 . . . . . . . . . . . . .  	L NEAR	015C	CODE
+??0006 . . . . . . . . . . . . .  	L NEAR	0350	CODE
+??0007 . . . . . . . . . . . . .  	L NEAR	0445	CODE
+??0008 . . . . . . . . . . . . .  	L NEAR	0470	CODE
+??0009 . . . . . . . . . . . . .  	L NEAR	047B	CODE
+??000A . . . . . . . . . . . . .  	L NEAR	04D2	CODE
+??000B . . . . . . . . . . . . .  	L NEAR	04F7	CODE
+
+
+   2561 Source  Lines
+   3132 Total   Lines
+    666 Symbols
+
+  17136 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

@@ -13,6 +13,7 @@ exclude:
   - /.history
   - /modules
   - /node_modules
+  - /software/pcx86/sys/dos/microsoft/2.11
 
 github:
   owner_name: "jeffpar"

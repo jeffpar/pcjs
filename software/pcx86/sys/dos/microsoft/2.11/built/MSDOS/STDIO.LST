@@ -1,0 +1,1586 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-1
+                                                            
+
+                                ; 
+                                ; Standard device IO for MSDOS (first 12 functi
+				on calls) 
+                                ; 
+                                 
+                                .list 
+                                 
+                                TITLE   STDIO - device IO for MSDOS 
+                                NAME    STDIO 
+                                 
+                             C  include	DOSSEG.ASM 
+                             C  ; 
+                             C  ; segment ordering for MSDOS 
+                             C  ; 
+                             C   
+ 0000                        C  CONSTANTS       SEGMENT BYTE PUBLIC 'CONST' 
+ 0000                        C  CONSTANTS       ENDS 
+                             C   
+ 0000                        C  DATA            SEGMENT BYTE PUBLIC 'DATA' 
+ 0000                        C  DATA            ENDS 
+                             C   
+ 0000                        C  CODE            SEGMENT BYTE PUBLIC 'CODE' 
+ 0000                        C  CODE            ENDS 
+                             C   
+ 0000                        C  LAST            SEGMENT BYTE PUBLIC 'LAST' 
+ 0000                        C  LAST            ENDS 
+                             C   
+                             C  DOSGROUP    GROUP   CODE,CONSTANTS,DATA,LAST 
+                                 
+ 0000                           CODE    SEGMENT BYTE PUBLIC  'CODE' 
+                                 
+                             C  INCLUDE IO.ASM 
+                             C  ; 
+                             C  ; (Reconstructed) IO.ASM for MSDOS 
+                             C  ; 
+                             C          ASSUME  SS:DOSGROUP,CS:DOSGROUP 
+                             C   
+                             C  	public	$STD_AUX_OUTPUT 
+                             C  	public	$STD_PRINTER_OUTPUT 
+                             C  	public	FunctionKeys 
+                             C  	public	FunctionHandlers 
+                             C  	public	Tab 
+                             C   
+                             C  	extrn	ESCCHAR:BYTE 
+                             C  	extrn	PFLAG:BYTE 
+                             C  	extrn	CARPOS:BYTE 
+                             C  	extrn	STARTPOS:BYTE 
+                             C  	extrn	INBUF:BYTE 
+                             C  	extrn	INSMODE:BYTE 
+                             C  	extrn	CHARCO:BYTE 
+                             C  	extrn	STATCHK:NEAR 
+                             C  	extrn	RAWOUT:NEAR 
+                             C  	extrn	RAWOUT2:NEAR 
+                             C  	extrn	SPOOLINT:NEAR 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-2
+                                                            
+
+                             C  	extrn	IOFUNC:NEAR 
+                             C   
+                             C  .list 
+                             C   
+                             C  ; 
+                             C  ; Function keys for editing. Note that the Func
+				tionKeys and FunctionHandlers 
+                             C  ; tables are in the opposite order from each ot
+				her -- the first entry in 
+                             C  ; FunctionKeys corresponds to the last entry in
+				 FunctionHandlers. 
+                             C  ; 
+ 0000                        C  FunctionKeys	label	WORD 
+                             C   
+                             C  		else 
+                             C  		else 
+                             C  ; 
+                             C  ; Generic has thirteen function handlers 
+                             C  ; 
+                             C   
+ 0000  5A                    C  		db	'Z'	;Esc+Z: Insert Ctrl+Z 
+ 0001  53                    C  		db	'S'	;Esc+S: Copy single character 
+ 0002  56                    C  		db	'V'	;Esc+V: Skip single character 
+ 0003  54                    C  		db	'T'	;Esc+T: Copy to a character 
+ 0004  57                    C  		db	'W'	;Esc+W: Skip to a character 
+ 0005  55                    C  		db	'U'	;Esc+U: Copy entire line 
+ 0006  45                    C  		db	'E'	;Esc+E: Clear line leaving template 
+ 0007  4A                    C  		db	'J'	;Esc+J: Clear line 
+ 0008  44                    C  		db	'D'	;Esc+D: Backspace 
+ 0009  50                    C  		db	'P'	;Esc+P: Overwrite mode 
+ 000A  51                    C  		db	'Q'	;Esc+Q: Insert mode 
+ 000B  52                    C  		db	'R'	;Esc+R: Literal Esc 
+ 000C  52                    C  		db	'R' 
+ = 000D                      C  FunctionKeyCount	equ	$ - FunctionKeys 
+                             C   
+ 000D                        C  FunctionHandlers label WORD 
+                             C  		short_addr GETCH 
+ 000D  0150 R                C1  DW OFFSET DOSGROUP:GETCH
+                             C  		short_addr TwoEsc	;Esc+R 
+ 000F  0240 R                C1  DW OFFSET DOSGROUP:TwoEsc
+                             C  		short_addr ENTERINS	;Esc+Q 
+ 0011  02C9 R                C1  DW OFFSET DOSGROUP:ENTERINS
+                             C  		short_addr EXITINS	;Esc+P 
+ 0013  02C9 R                C1  DW OFFSET DOSGROUP:EXITINS
+                             C  		short_addr BACKSP	;Esc+D 
+ 0015  01D5 R                C1  DW OFFSET DOSGROUP:BACKSP
+                             C  		short_addr REEDIT	;Esc+J 
+ 0017  02B5 R                C1  DW OFFSET DOSGROUP:REEDIT
+                             C  		short_addr KILNEW	;Esc+E 
+ 0019  01C2 R                C1  DW OFFSET DOSGROUP:KILNEW
+                             C  		short_addr COPYLIN	;Esc+U 
+ 001B  0247 R                C1  DW OFFSET DOSGROUP:COPYLIN
+                             C  		short_addr SKIPSTR	;Esc+W 
+ 001D  027A R                C1  DW OFFSET DOSGROUP:SKIPSTR
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-3
+DEVICE TABLE AND SRH DEFINITION                             
+
+                             C  		short_addr CopyStr	;Esc+T 
+ 001F  024D R                C1  DW OFFSET DOSGROUP:CopyStr
+                             C  		short_addr SKIPONE	;Esc+V 
+ 0021  0270 R                C1  DW OFFSET DOSGROUP:SKIPONE
+                             C  		short_addr CopyOne	;Esc+S 
+ 0023  0252 R                C1  DW OFFSET DOSGROUP:CopyOne
+                             C  		short_addr CTRLZ	;Esc+Z 
+ 0025  02D1 R                C1  DW OFFSET DOSGROUP:CTRLZ
+                             C   
+                             C  		endif	;IBM 
+                             C  		endif	;WANG 
+                             C   
+                             C   
+                             C   
+                             C  	procedure	$STD_CON_INPUT, NEAR 
+ 0027                        C1 $STD_CON_INPUT PROC NEAR
+ 0027  E8 00FA R             C  	call	$STD_CON_INPUT_NO_ECHO 
+ 002A  50                    C  	push	ax 
+ 002B  E8 0032 R             C  	call	OUT 
+ 002E  58                    C  	pop	ax 
+                             C  	return 
+ 002F                        C1 ??0000:
+ 002F  C3                    C1  RET
+                             C  $STD_CON_INPUT	endp 
+                             C  ; 
+                             C  	procedure	$STD_CON_OUTPUT, NEAR 
+ 0030                        C1 $STD_CON_OUTPUT PROC NEAR
+ 0030  8A C2                 C  	mov	al, dl 
+                             C  	entry	OUT 
+ 0032                        C1 OUT:
+ 0032  3C 20                 C  	cmp	al, ' ' 
+ 0034  72 43                 C  	jc	out_controlch 
+ 0036  3C 7F                 C  	cmp	al, c_DEL	;DEL does not increase CARPOS 
+ 0038  74 05                 C  	jz	out_notprint 
+ 003A  36: FE 06 0000 E      C  	inc	ss:CARPOS 
+ 003F                        C  out_notprint: 
+ 003F  1E                    C  	push	ds 
+ 0040  56                    C  	push	si 
+ 0041  36: FE 06 0000 E      C  	inc	ss:charco 
+ 0046  36: 80 26 0000 E 03   C  	and	ss:charco, 3 
+ 004C  75 05                 C  	jnz	out_nobreak 
+ 004E  50                    C  	push	ax 
+ 004F  E8 0000 E             C  	call	STATCHK 
+ 0052  58                    C  	pop	ax 
+ 0053                        C  out_nobreak: 
+ 0053  E8 0000 E             C  	call	RAWOUT 
+ 0056  5E                    C  	pop	si 
+ 0057  1F                    C  	pop	ds 
+ 0058  36: F6 06 0000 E FF   C  	test	ss:PFLAG, 0FFH		;Echoing to printer? 
+                             C  	retz 
+ 005E  74 CF                 C2  ??0001: jz ret_l
+ 0060  53                    C  	push	bx 
+ 0061  1E                    C  	push	ds 
+ 0062  56                    C  	push	si 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-4
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0063  BB 0001               C  	mov	bx, 1			;STDOUT 
+                             C  	invoke	GET_IO_FCB 
+ 0066  E8 0000 E             C1  CALL GET_IO_FCB
+ 0069  72 0C                 C  	jc	j_out_finish 
+ 006B  F6 44 18 80           C  	test	[SI.fcb_DEVID],080H	;If STDOUT is redirec
+				ted to a file, 
+ 006F  74 06                 C  	jz	j_out_finish		;don't echo to printer. 
+ 0071  BB 0004               C  	mov	bx, 4 
+ 0074  EB 7D                 C  	jmp	short out_rawout2	;Otherwise echo to stdlp
+				t 
+ 0076  C3                    C  	ret 
+                             C   
+ 0077                        C  j_out_finish: 
+ 0077  EB 7D                 C  	jmp	short out_finish 
+                             C   
+ 0079                        C  out_controlch: 
+ 0079  3C 0D                 C  	cmp	al, c_CR	;CR resets console X to 0 
+ 007B  74 20                 C  	jz	out_cr 
+ 007D  3C 08                 C  	cmp	al, c_BS	;BS decreases console X 
+ 007F  74 26                 C  	jz	out_bs 
+ 0081  3C 09                 C  	cmp	al, c_HT	;HT moves to next tabstop 
+ 0083  75 BA                 C  	jnz	out_notprint 
+ 0085  36: A0 0000 E         C  	mov	al, ss:CARPOS 
+ 0089  0C F8                 C  	or	al, 0F8h 
+ 008B  F6 D8                 C  	neg	al		;Spaces to next tabstop 
+                             C   
+ 008D                        C  TAB: 
+ 008D  51                    C  	push	cx 
+ 008E  8A C8                 C  	mov	cl, al 
+ 0090  B5 00                 C  	mov	ch, 0 
+ 0092  E3 07                 C  	jcxz	TAB_end 
+ 0094                        C  TAB1: 
+ 0094  B0 20                 C  	mov	al, ' ' 
+ 0096  E8 0032 R             C  	call	OUT 
+ 0099  E2 F9                 C  	loop	TAB1 
+ 009B                        C  TAB_end: 
+ 009B  59                    C  	pop	cx 
+ 009C  C3                    C  	ret 
+                             C  ; 
+ 009D                        C  out_cr: 
+ 009D  36: C6 06 0000 E 00   C  	mov	ss:CARPOS, 0 
+ 00A3  EB 9A                 C  	jmp	short out_notprint 
+                             C  ; 
+ 00A5  EB 8B                 C  j_OUT:	jmp	short OUT 
+                             C  ; 
+ 00A7                        C  out_bs: 
+ 00A7  36: FE 0E 0000 E      C  	dec	ss:CARPOS 
+ 00AC  EB 91                 C  	jmp	short out_notprint 
+                             C   
+                             C  $STD_CON_OUTPUT	endp 
+                             C   
+                             C  	procedure BUFOUT, NEAR 
+ 00AE                        C1 BUFOUT PROC NEAR
+ 00AE  3C 20                 C  	cmp	al, ' '		;Render printable characters 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-5
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 00B0  73 F3                 C  	jnc	j_OUT 
+ 00B2  3C 09                 C  	cmp	al, c_HT	;and tabs 
+ 00B4  74 EF                 C  	jz	j_OUT 
+ 00B6  50                    C  	push	ax 
+ 00B7  B0 5E                 C  	mov	al, '^' 
+ 00B9  E8 0032 R             C  	call	OUT 
+ 00BC  58                    C  	pop	ax 
+ 00BD  0C 40                 C  	or	al, 40h 
+ 00BF  E8 0032 R             C  	call	OUT 
+                             C  	return 
+ 00C2                        C1 ??0003:
+ 00C2  C3                    C1  RET
+                             C  BUFOUT	endp 
+                             C   
+                             C  	procedure   $STD_AUX_INPUT,NEAR   ;System call
+				 3 
+ 00C3                        C1 $STD_AUX_INPUT PROC NEAR
+ 00C3  E8 0000 E             C  	call	STATCHK 
+ 00C6  BB 0003               C  	mov	bx, 3	;stdaux file handle 
+ 00C9  E8 0000 E             C  	call	GET_IO_FCB 
+                             C  	retc 
+ 00CC  72 F4                 C2  ??0004: jc ret_l
+ 00CE  EB 03                 C  	jmp	short auxin2 
+                             C  ; 
+ 00D0  E8 0000 E             C  auxin1:	call	SPOOLINT 
+ 00D3  B4 01                 C  auxin2:	mov	ah, 1	;Get input status 
+ 00D5  E8 0000 E             C  	call	IOFUNC 
+ 00D8  74 F6                 C  	jz	auxin1	;Spin until there's something there 
+ 00DA  32 E4                 C  	xor	ah, ah 
+ 00DC  E8 0000 E             C  	call	IOFUNC	;Get the byte 
+ 00DF  C3                    C  	ret 
+                             C   
+                             C  $STD_AUX_INPUT	endp 
+                             C   
+                             C  	procedure   $STD_AUX_OUTPUT,NEAR	;System call 
+				4 
+ 00E0                        C1 $STD_AUX_OUTPUT PROC NEAR
+ 00E0  53                    C  	push	bx 
+ 00E1  BB 0003               C  	mov	bx, 3	;stdaux file handle 
+ 00E4  EB 04                 C  	jmp	short aux_lpt_out 
+                             C  ; 
+                             C  	entry $STD_PRINTER_OUTPUT 
+ 00E6                        C1 $STD_PRINTER_OUTPUT:
+ 00E6  53                    C  	push	bx 
+ 00E7  BB 0004               C  	mov	bx, 4	;stdlpt file handle 
+ 00EA                        C  aux_lpt_out: 
+ 00EA  8A C2                 C  	mov	al, dl 
+ 00EC  50                    C  	push	ax 
+ 00ED  E8 0000 E             C  	call	STATCHK 
+ 00F0  58                    C  	pop	ax 
+ 00F1  1E                    C  	push	ds 
+ 00F2  56                    C  	push	si 
+ 00F3                        C  out_rawout2: 
+ 00F3  E8 0000 E             C  	call	RAWOUT2 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-6
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 00F6                        C  out_finish: 
+ 00F6  5E                    C  	pop	si 
+ 00F7  1F                    C  	pop	ds 
+ 00F8  5B                    C  	pop	bx 
+ 00F9  C3                    C  	ret 
+                             C  $STD_AUX_OUTPUT	endp 
+                             C   
+                             C   
+                             C   
+                             C  	public	$STD_CON_INPUT_NO_ECHO 
+                             C  	public	$STD_CON_STRING_OUTPUT 
+                             C   
+                             C          procedure   $STD_CON_INPUT_NO_ECHO,NEAR
+				   ;System call 8 
+ 00FA                        C1 $STD_CON_INPUT_NO_ECHO PROC NEAR
+ 00FA  1E                    C  	push	ds 
+ 00FB  56                    C  	push	si 
+ 00FC  E8 0000 E             C  conin1:	call	STATCHK	;Wait for input ready 
+ 00FF  74 FB                 C  	jz	conin1 
+ 0101  32 E4                 C  	xor	ah, ah 
+ 0103  E8 0000 E             C  	call	IOFUNC 
+ 0106  5E                    C  	pop	si 
+ 0107  1F                    C  	pop	ds 
+                             C  	return 
+ 0108                        C1 ??0006:
+ 0108  C3                    C1  RET
+                             C   
+                             C  $STD_CON_INPUT_NO_ECHO	endp 
+                             C   
+                             C          procedure   $STD_CON_STRING_OUTPUT,NEAR
+				   ;System call 9 
+ 0109                        C1 $STD_CON_STRING_OUTPUT PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+ 0109  8B F2                 C  	mov	si, dx 
+ 010B                        C  output1: 
+ 010B  AC                    C  	lodsb 
+ 010C  3C 24                 C  	cmp	al,'$' 
+                             C  	retz 
+ 010E  74 F8                 C2  ??0007: jz ret_l
+ 0110  E8 0032 R             C  	call	OUT 
+ 0113  EB F6                 C  	jmp	short output1 
+                             C   
+                             C   
+                             C  $STD_CON_STRING_OUTPUT endp 
+                             C   
+                             C   
+                                 
+                             C  INCLUDE STRIN.ASM 
+                             C          procedure   $STD_CON_STRING_INPUT,NEAR 
+				  ;System call 10 
+ 0115                        C1 $STD_CON_STRING_INPUT PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-7
+DEVICE TABLE AND SRH DEFINITION                             
+
+                             C  ; Inputs: 
+                             C  ;       DS:DX Point to an input buffer 
+                             C  ; Function: 
+                             C  ;       Fill buffer from console input until CR
+				 
+                             C  ; Returns: 
+                             C  ;       None 
+                             C   
+ 0115  8C D0                 C          MOV     AX,SS 
+ 0117  8E C0                 C          MOV     ES,AX 
+ 0119  8B F2                 C          MOV     SI,DX 
+ 011B  32 ED                 C          XOR     CH,CH 
+ 011D  AD                    C          LODSW 
+ 011E  0A C0                 C          OR      AL,AL 
+                             C          retz                    ;Buffer is 0 le
+				ngth!!? 
+ 0120  74 E6                 C2  ??0009: jz ret_l
+ 0122  8A DC                 C          MOV     BL,AH           ;Init template 
+				counter 
+ 0124  8A FD                 C          MOV     BH,CH           ;Init template 
+				counter 
+ 0126  3A C3                 C          CMP     AL,BL 
+ 0128  76 05                 C          JBE     NOEDIT          ;If length of b
+				uffer inconsistent with contents 
+ 012A  80 38 0D              C          CMP     BYTE PTR [BX+SI],c_CR 
+ 012D  74 02                 C          JZ      EDITON          ;If CR correctl
+				y placed EDIT is OK 
+ 012F                        C  NOEDIT: 
+ 012F  8A DD                 C          MOV     BL,CH           ;Reset buffer 
+ 0131                        C  EDITON: 
+ 0131  8A D0                 C          MOV     DL,AL 
+ 0133  4A                    C          DEC     DX              ;DL is # of byt
+				es we can put in the buffer 
+ 0134                        C  NEWLIN: 
+ 0134  36: A0 0000 E         C          MOV     AL,[CARPOS] 
+ 0138  36: A2 0000 E         C          MOV     [STARTPOS],AL   ;Remember posit
+				ion in raw buffer 
+ 013C  56                    C          PUSH    SI 
+ 013D  BF 0000 E             C          MOV     DI,OFFSET DOSGROUP:INBUF       
+				 ;Build the new line here 
+ 0140  36: 88 2E 0000 E      C          MOV     [INSMODE],CH    ;Insert mode of
+				f 
+ 0145  8A FD                 C          MOV     BH,CH           ;No chars from 
+				template yet 
+ 0147  8A F5                 C          MOV     DH,CH           ;No chars to ne
+				w line yet 
+                             C          invoke  $STD_CON_INPUT_NO_ECHO         
+				 ;Get first char 
+ 0149  E8 00FA R             C1  CALL $STD_CON_INPUT_NO_ECHO
+ 014C  3C 0A                 C          CMP     AL,c_LF         ;Linefeed 
+ 014E  75 03                 C          JNZ     GOTCH           ;Filter out LF 
+				so < works 
+                             C          entry   GETCH 
+ 0150                        C1 GETCH:
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-8
+DEVICE TABLE AND SRH DEFINITION                             
+
+                             C          invoke  $STD_CON_INPUT_NO_ECHO 
+ 0150  E8 00FA R             C1  CALL $STD_CON_INPUT_NO_ECHO
+ 0153                        C  GOTCH: 
+ 0153  3C 06                 C          CMP     AL,"F"-"@"      ;Ignore ^F 
+ 0155  74 F9                 C          JZ      GETCH 
+ 0157  36: 3A 06 0000 E      C          CMP     AL,[ESCCHAR] 
+ 015C  74 38                 C          JZ      ESC 
+ 015E  3C 7F                 C          CMP     AL,c_DEL 
+ 0160  74 2B                 C          JZ      BACKSPJ 
+ 0162  3C 08                 C          CMP     AL,c_BS 
+ 0164  74 27                 C          JZ      BACKSPJ 
+ 0166  3C 0D                 C          CMP     AL,c_CR 
+ 0168  74 2F                 C          JZ      ENDLIN 
+ 016A  3C 0A                 C          CMP     AL,c_LF 
+ 016C  74 4F                 C          JZ      PHYCRLF 
+ 016E  3C 18                 C          CMP     AL,CANCEL 
+ 0170  74 50                 C          JZ      KILNEW 
+ 0172                        C  SAVCH: 
+ 0172  3A F2                 C          CMP     DH,DL 
+ 0174  73 19                 C          JAE     BUFFUL          ;No room 
+ 0176  AA                    C          STOSB 
+ 0177  FE C6                 C          INC     DH              ;Got a char 
+                             C          invoke  BUFOUT          ;Print control 
+				chars nicely 
+ 0179  E8 00AE R             C1  CALL BUFOUT
+ 017C  36: 80 3E 0000 E 00   C          CMP     BYTE PTR [INSMODE],0 
+ 0182  75 CC                 C          JNZ     GETCH           ;In insert mode
+				, get more chars 
+ 0184  3A FB                 C          CMP     BH,BL 
+ 0186  73 C8                 C          JAE     GETCH           ;We are out of 
+				chars in template 
+ 0188  46                    C          INC     SI              ;Skip to next c
+				har in template 
+ 0189  FE C7                 C          INC     BH 
+ 018B  EB C3                 C          JMP     SHORT GETCH 
+                             C   
+ 018D  EB 46                 C  BACKSPJ: JMP    SHORT BACKSP 
+                             C   
+ 018F                        C  BUFFUL: 
+ 018F  B0 07                 C          MOV     AL,7            ;Bell 
+                             C          invoke  OUT 
+ 0191  E8 0032 R             C1  CALL OUT
+ 0194  EB BA                 C          JMP     SHORT GETCH 
+                             C   
+ 0196                        C  ESC: 
+                             C          transfer    OEMFunctionKey 
+ 0196                        C2  ??000B:
+ 0196  E9 0000 E             C2  JMP OEMFunctionKey
+                             C   
+ 0199                        C  ENDLIN: 
+ 0199  AA                    C          STOSB                   ;Put the CR in 
+				the buffer 
+                             C          invoke  OUT             ;Echo it 
+ 019A  E8 0032 R             C1  CALL OUT
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-9
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 019D  5F                    C          POP     DI              ;Get start of b
+				uffer 
+ 019E  88 75 FF              C          MOV     [DI-1],DH       ;Tell user how 
+				many bytes 
+ 01A1  FE C6                 C          INC     DH              ;DH is length i
+				ncluding CR 
+ 01A3                        C  COPYNEW: 
+ 01A3  8C C5                 C          MOV     BP,ES           ;XCHG ES,DS 
+ 01A5  8C DB                 C          MOV     BX,DS 
+ 01A7  8E C3                 C          MOV     ES,BX 
+ 01A9  8E DD                 C          MOV     DS,BP 
+ 01AB  BE 0000 E             C          MOV     SI,OFFSET DOSGROUP:INBUF 
+ 01AE  8A CE                 C          MOV     CL,DH 
+ 01B0  F3/ A4                C          REP     MOVSB           ;Copy final lin
+				e to user buffer 
+                             C          return                  ;All done 
+ 01B2                        C1 ??000C:
+ 01B2  C3                    C1  RET
+                             C   
+                             C  ;Output a CRLF 
+                             C          entry   CRLF 
+ 01B3                        C1 CRLF:
+ 01B3  B0 0D                 C          MOV     AL,c_CR 
+                             C          invoke  OUT 
+ 01B5  E8 0032 R             C1  CALL OUT
+ 01B8  B0 0A                 C          MOV     AL,c_LF 
+ 01BA  E9 0032 R             C          JMP     OUT 
+                             C   
+                             C  ;Output a CRLF which is not terminate buffer 
+ 01BD                        C  PHYCRLF: 
+                             C          invoke  CRLF 
+ 01BD  E8 01B3 R             C1  CALL CRLF
+ 01C0  EB 8E                 C          JMP     GETCH 
+                             C   
+                             C  ;Zap the line without zapping the template 
+                             C          entry   KILNEW 
+ 01C2                        C1 KILNEW:
+ 01C2  B0 5C                 C          MOV     AL,"\" 
+                             C          invoke  OUT             ;Print the CANC
+				EL indicator 
+ 01C4  E8 0032 R             C1  CALL OUT
+ 01C7  5E                    C          POP     SI              ;Remember start
+				 of edit buffer 
+ 01C8                        C  PUTNEW: 
+                             C          invoke  CRLF            ;Go to next lin
+				e on screen 
+ 01C8  E8 01B3 R             C1  CALL CRLF
+ 01CB  36: A0 0000 E         C          MOV     AL,[STARTPOS] 
+                             C          invoke  TAB             ;Tab over 
+ 01CF  E8 008D R             C1  CALL TAB
+ 01D2  E9 0134 R             C          JMP     NEWLIN          ;Start over aga
+				in 
+                             C   
+                             C  ;Back up one char 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-10
+DEVICE TABLE AND SRH DEFINITION                             
+
+                             C          entry   BACKSP 
+ 01D5                        C1 BACKSP:
+ 01D5  0A F6                 C          OR      DH,DH 
+ 01D7  74 11                 C          JZ      OLDBAK          ;No chars in li
+				ne, do nothing to line 
+ 01D9  E8 022E R             C          CALL    BACKUP          ;Do the backup 
+ 01DC  26: 8A 05             C          MOV     AL,ES:[DI]      ;Get the delete
+				d char 
+ 01DF  3C 20                 C          CMP     AL," " 
+ 01E1  73 07                 C          JAE     OLDBAK          ;Was a normal c
+				har 
+ 01E3  3C 09                 C          CMP     AL,c_HT 
+ 01E5  74 15                 C          JZ      BAKTAB          ;Was a tab, fix
+				 up users display 
+ 01E7  E8 0231 R             C          CALL    BACKMES         ;Was a control 
+				char, zap the '^' 
+ 01EA                        C  OLDBAK: 
+ 01EA  36: 80 3E 0000 E 00   C          CMP     BYTE PTR [INSMODE],0 
+ 01F0  75 07                 C          JNZ     GETCH1          ;In insert mode
+				, get more chars 
+ 01F2  0A FF                 C          OR      BH,BH 
+ 01F4  74 03                 C          JZ      GETCH1          ;Not advanced i
+				n template, stay where we are 
+ 01F6  FE CF                 C          DEC     BH              ;Go back in tem
+				plate 
+ 01F8  4E                    C          DEC     SI 
+ 01F9                        C  GETCH1: 
+ 01F9  E9 0150 R             C          JMP     GETCH 
+                             C   
+ 01FC                        C  BAKTAB: 
+ 01FC  57                    C          PUSH    DI 
+ 01FD  4F                    C          DEC     DI              ;Back up one ch
+				ar 
+ 01FE  FD                    C          STD                     ;Go backward 
+ 01FF  8A CE                 C          MOV     CL,DH           ;Number of char
+				s currently in line 
+ 0201  B0 20                 C          MOV     AL," " 
+ 0203  53                    C          PUSH    BX 
+ 0204  B3 07                 C          MOV     BL,7            ;Max 
+ 0206  E3 0E                 C          JCXZ    FIGTAB          ;At start, do n
+				othing 
+ 0208                        C  FNDPOS: 
+ 0208  AE                    C          SCASB                   ;Look back 
+ 0209  76 09                 C          JNA     CHKCNT 
+ 020B  26: 80 7D 01 09       C          CMP     BYTE PTR ES:[DI+1],9 
+ 0210  74 09                 C          JZ      HAVTAB          ;Found a tab 
+ 0212  FE CB                 C          DEC     BL              ;Back one char 
+				if non tab control char 
+ 0214                        C  CHKCNT: 
+ 0214  E2 F2                 C          LOOP    FNDPOS 
+ 0216                        C  FIGTAB: 
+ 0216  36: 2A 1E 0000 E      C          SUB     BL,[STARTPOS] 
+ 021B                        C  HAVTAB: 
+ 021B  2A DE                 C          SUB     BL,DH 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-11
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 021D  02 CB                 C          ADD     CL,BL 
+ 021F  80 E1 07              C          AND     CL,7            ;CX has correct
+				 number to erase 
+ 0222  FC                    C          CLD                     ;Back to normal
+				 
+ 0223  5B                    C          POP     BX 
+ 0224  5F                    C          POP     DI 
+ 0225  74 C3                 C          JZ      OLDBAK          ;Nothing to era
+				se 
+ 0227                        C  TABBAK: 
+                             C          invoke  BACKMES 
+ 0227  E8 0231 R             C1  CALL BACKMES
+ 022A  E2 FB                 C          LOOP    TABBAK          ;Erase correct 
+				number of chars 
+ 022C  EB BC                 C          JMP     SHORT OLDBAK 
+                             C   
+ 022E                        C  BACKUP: 
+ 022E  FE CE                 C          DEC     DH              ;Back up in lin
+				e 
+ 0230  4F                    C          DEC     DI 
+ 0231                        C  BACKMES: 
+ 0231  B0 08                 C          MOV     AL,c_BS         ;Backspace 
+                             C          invoke  OUT 
+ 0233  E8 0032 R             C1  CALL OUT
+ 0236  B0 20                 C          MOV     AL," "          ;Erase 
+                             C          invoke  OUT 
+ 0238  E8 0032 R             C1  CALL OUT
+ 023B  B0 08                 C          MOV     AL,c_BS         ;Backspace 
+ 023D  E9 0032 R             C          JMP     OUT             ;Done 
+                             C   
+                             C  ;User really wants an ESC character in his line
+				 
+                             C          entry   TwoEsc 
+ 0240                        C1 TwoEsc:
+ 0240  36: A0 0000 E         C          MOV     AL,[ESCCHAR] 
+ 0244  E9 0172 R             C          JMP     SAVCH 
+                             C   
+                             C  ;Copy the rest of the template 
+                             C          entry   COPYLIN 
+ 0247                        C1 COPYLIN:
+ 0247  8A CB                 C          MOV     CL,BL           ;Total size of 
+				template 
+ 0249  2A CF                 C          SUB     CL,BH           ;Minus position
+				 in template, is number to move 
+ 024B  EB 07                 C          JMP     SHORT COPYEACH 
+                             C   
+                             C          entry   CopyStr 
+ 024D                        C1 CopyStr:
+                             C          invoke  FINDOLD         ;Find the char 
+ 024D  E8 0284 R             C1  CALL FINDOLD
+ 0250  EB 02                 C          JMP     SHORT COPYEACH  ;Copy up to it 
+                             C   
+                             C  ;Copy one char from template to line 
+                             C          entry   COPYONE 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-12
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0252                        C1 COPYONE:
+ 0252  B1 01                 C          MOV     CL,1 
+                             C  ;Copy CX chars from template to line 
+ 0254                        C  COPYEACH: 
+ 0254  36: C6 06 0000 E 00   C          MOV     BYTE PTR [INSMODE],0    ;All co
+				pies turn off insert mode 
+ 025A  3A F2                 C          CMP     DH,DL 
+ 025C  74 0F                 C          JZ      GETCH2                  ;At end
+				 of line, can't do anything 
+ 025E  3A FB                 C          CMP     BH,BL 
+ 0260  74 0B                 C          JZ      GETCH2                  ;At end
+				 of template, can't do anything 
+ 0262  AC                    C          LODSB 
+ 0263  AA                    C          STOSB 
+                             C          invoke  BUFOUT 
+ 0264  E8 00AE R             C1  CALL BUFOUT
+ 0267  FE C7                 C          INC     BH                      ;Ahead 
+				in template 
+ 0269  FE C6                 C          INC     DH                      ;Ahead 
+				in line 
+ 026B  E2 E7                 C          LOOP    COPYEACH 
+ 026D                        C  GETCH2: 
+ 026D  E9 0150 R             C          JMP     GETCH 
+                             C   
+                             C  ;Skip one char in template 
+                             C          entry   SKIPONE 
+ 0270                        C1 SKIPONE:
+ 0270  3A FB                 C          CMP     BH,BL 
+ 0272  74 F9                 C          JZ      GETCH2                  ;At end
+				 of template 
+ 0274  FE C7                 C          INC     BH                      ;Ahead 
+				in template 
+ 0276  46                    C          INC     SI 
+ 0277  E9 0150 R             C          JMP     GETCH 
+                             C   
+                             C          entry   SKIPSTR 
+ 027A                        C1 SKIPSTR:
+                             C          invoke  FINDOLD                 ;Find o
+				ut how far to go 
+ 027A  E8 0284 R             C1  CALL FINDOLD
+ 027D  03 F1                 C          ADD     SI,CX                   ;Go the
+				re 
+ 027F  02 F9                 C          ADD     BH,CL 
+ 0281  E9 0150 R             C          JMP     GETCH 
+                             C   
+                             C  ;Get the next user char, and look ahead in temp
+				late for a match 
+                             C  ;CX indicates how many chars to skip to get the
+				re on output 
+                             C  ;NOTE: WARNING: If the operation cannot be done
+				, the return 
+                             C  ;       address is popped off and a jump to GET
+				CH is taken. 
+                             C  ;       Make sure nothing extra on stack when t
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-13
+DEVICE TABLE AND SRH DEFINITION                             
+
+				his routine 
+                             C  ;       is called!!! (no PUSHes before calling 
+				it). 
+ 0284                        C  FINDOLD: 
+                             C          invoke  $STD_CON_INPUT_NO_ECHO 
+ 0284  E8 00FA R             C1  CALL $STD_CON_INPUT_NO_ECHO
+ 0287  36: 3A 06 0000 E      C          CMP     AL,[ESCCHAR]            ; did h
+				e type a function key? 
+ 028C  75 06                 C          JNZ     FindSetup               ; no, s
+				et up for scan 
+                             C          invoke  $STD_CON_INPUT_NO_ECHO  ; eat n
+				ext char 
+ 028E  E8 00FA R             C1  CALL $STD_CON_INPUT_NO_ECHO
+ 0291  EB 1E 90              C          JMP     NotFnd                  ; go tr
+				y again 
+ 0294                        C  FindSetup: 
+ 0294  8A CB                 C          MOV     CL,BL 
+ 0296  2A CF                 C          SUB     CL,BH           ;CX is number o
+				f chars to end of template 
+ 0298  74 17                 C          JZ      NOTFND          ;At end of temp
+				late 
+ 029A  49                    C          DEC     CX              ;Cannot point p
+				ast end, limit search 
+ 029B  74 14                 C          JZ      NOTFND          ;If only one ch
+				ar in template, forget it 
+ 029D  06                    C          PUSH    ES 
+ 029E  1E                    C          PUSH    DS 
+ 029F  07                    C          POP     ES 
+ 02A0  57                    C          PUSH    DI 
+ 02A1  8B FE                 C          MOV     DI,SI           ;Template to ES
+				:DI 
+ 02A3  47                    C          INC     DI 
+ 02A4  F2/ AE                C          REPNE   SCASB           ;Look 
+ 02A6  5F                    C          POP     DI 
+ 02A7  07                    C          POP     ES 
+ 02A8  75 07                 C          JNZ     NOTFND          ;Didn't find th
+				e char 
+ 02AA  F6 D1                 C          NOT     CL              ;Turn how far t
+				o go into how far we went 
+ 02AC  02 CB                 C          ADD     CL,BL           ;Add size of te
+				mplate 
+ 02AE  2A CF                 C          SUB     CL,BH           ;Subtract curre
+				nt pos, result distance to skip 
+                             C          return 
+ 02B0                        C1 ??000D:
+ 02B0  C3                    C1  RET
+                             C   
+ 02B1                        C  NOTFND: 
+ 02B1  5D                    C          POP     BP              ;Chuck return a
+				ddress 
+ 02B2  E9 0150 R             C          JMP     GETCH 
+                             C   
+                             C          entry   REEDIT 
+ 02B5                        C1 REEDIT:
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-14
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 02B5  B0 40                 C          MOV     AL,"@"          ;Output re-edit
+				 character 
+                             C          invoke  OUT 
+ 02B7  E8 0032 R             C1  CALL OUT
+ 02BA  5F                    C          POP     DI 
+ 02BB  57                    C          PUSH    DI 
+ 02BC  06                    C          PUSH    ES 
+ 02BD  1E                    C          PUSH    DS 
+                             C          invoke  COPYNEW         ;Copy current l
+				ine into template 
+ 02BE  E8 01A3 R             C1  CALL COPYNEW
+ 02C1  1F                    C          POP     DS 
+ 02C2  07                    C          POP     ES 
+ 02C3  5E                    C          POP     SI 
+ 02C4  8A DE                 C          MOV     BL,DH           ;Size of line i
+				s new size template 
+ 02C6  E9 01C8 R             C          JMP     PUTNEW          ;Start over aga
+				in 
+                             C   
+                             C          entry   EXITINS 
+ 02C9                        C1 EXITINS:
+                             C          entry   ENTERINS 
+ 02C9                        C1 ENTERINS:
+ 02C9  36: F6 16 0000 E      C          NOT     BYTE PTR [INSMODE] 
+ 02CE  E9 0150 R             C          JMP     GETCH 
+                             C   
+                             C  ;Put a real live ^Z in the buffer (embedded) 
+                             C          entry   CTRLZ 
+ 02D1                        C1 CTRLZ:
+ 02D1  B0 1A                 C          MOV     AL,"Z"-"@" 
+ 02D3  E9 0172 R             C          JMP     SAVCH 
+                             C  $STD_CON_STRING_INPUT   ENDP 
+                                 
+                             C  INCLUDE IO2.ASM 
+                             C  ; 
+                             C  ; (Reconstructed) IO.ASM for MSDOS 
+                             C  ; 
+                             C          ASSUME  SS:DOSGROUP,CS:DOSGROUP 
+                             C   
+                             C  	public	$STD_CON_INPUT_STATUS 
+                             C  	public	$STD_CON_INPUT_FLUSH 
+                             C   
+                             C  	extrn 	REDISP:NEAR 
+                             C   
+                             C  	procedure $STD_CON_INPUT_STATUS, NEAR	;System 
+				call 11 
+ 02D6                        C1 $STD_CON_INPUT_STATUS PROC NEAR
+ 02D6  E8 0000 E             C  	call	STATCHK 
+ 02D9  B0 00                 C  	mov	al, 0 
+                             C  	retz 
+ 02DB  74 D3                 C2  ??000E: jz ret_l
+ 02DD  0C FF                 C  	or	al, 0FFH 
+ 02DF  C3                    C  	ret 
+                             C   
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Page     1-15
+DEVICE TABLE AND SRH DEFINITION                             
+
+                             C  $STD_CON_INPUT_STATUS	endp 
+                             C   
+                             C  	procedure $STD_CON_INPUT_FLUSH, NEAR	;System c
+				all 12 
+ 02E0                        C1 $STD_CON_INPUT_FLUSH PROC NEAR
+ 02E0  50                    C  	push	ax 
+ 02E1  52                    C  	push	dx 
+ 02E2  33 DB                 C  	xor	bx, bx 
+ 02E4  E8 0000 E             C  	call	GET_IO_FCB 
+ 02E7  72 05                 C  	jc	flush1 
+ 02E9  B4 04                 C  	mov	ah, 4 
+ 02EB  E8 0000 E             C  	call	IOFUNC 
+ 02EE  5A                    C  flush1:	pop	dx 
+ 02EF  58                    C  	pop	ax 
+ 02F0  8A E0                 C  	mov	ah, al 
+ 02F2  3C 01                 C  	cmp	al, STD_CON_INPUT 
+ 02F4  74 13                 C  	jz	flush2 
+ 02F6  3C 06                 C  	cmp	al, RAW_CON_IO 
+ 02F8  74 0F                 C  	jz	flush2 
+ 02FA  3C 07                 C  	cmp	al, RAW_CON_INPUT 
+ 02FC  74 0B                 C  	jz	flush2 
+ 02FE  3C 08                 C  	cmp	al, STD_CON_INPUT_NO_ECHO 
+ 0300  74 07                 C  	jz	flush2 
+ 0302  3C 0A                 C  	cmp	al, STD_CON_STRING_INPUT 
+ 0304  74 03                 C  	jz	flush2 
+ 0306  B0 00                 C  	mov	al, 0	 
+ 0308  C3                    C  	ret 
+                             C  ; 
+ 0309  FA                    C  flush2:	cli	 
+ 030A  E9 0000 E             C  	jmp	REDISP 
+                             C  $STD_CON_INPUT_FLUSH	endp 
+                             C   
+                             C   
+                             C   
+                                 
+                                 
+ 030D                           CODE	ENDS 
+                                	END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DOSGROUP . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	030D	BYTE	PUBLIC	'CODE'
+  CONSTANTS  . . . . . . . . . .  	0000	BYTE	PUBLIC	'CONST'
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Symbols-5
+                                                             
+
+  LAST . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'LAST'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Alias	 FALSE		
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+AUXIN1 . . . . . . . . . . . . .  	L NEAR	00D0	CODE
+AUXIN2 . . . . . . . . . . . . .  	L NEAR	00D3	CODE
+AUX_LPT_OUT  . . . . . . . . . .  	L NEAR	00EA	CODE
+
+BACKMES  . . . . . . . . . . . .  	L NEAR	0231	CODE
+BACKSP . . . . . . . . . . . . .  	L NEAR	01D5	CODE	Global
+BACKSPJ  . . . . . . . . . . . .  	L NEAR	018D	CODE
+BACKUP . . . . . . . . . . . . .  	L NEAR	022E	CODE
+BAKTAB . . . . . . . . . . . . .  	L NEAR	01FC	CODE
+BUFFUL . . . . . . . . . . . . .  	L NEAR	018F	CODE
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+BUFOUT . . . . . . . . . . . . .  	N PROC	00AE	CODE	Global	Length = 0015
+
+CANCEL . . . . . . . . . . . . .  	Number	0018	
+CARPOS . . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+CHARCO . . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Symbols-6
+                                                             
+
+CHKCNT . . . . . . . . . . . . .  	L NEAR	0214	CODE
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+CONIN1 . . . . . . . . . . . . .  	L NEAR	00FC	CODE
+COPYEACH . . . . . . . . . . . .  	L NEAR	0254	CODE
+COPYLIN  . . . . . . . . . . . .  	L NEAR	0247	CODE	Global
+COPYNEW  . . . . . . . . . . . .  	L NEAR	01A3	CODE
+COPYONE  . . . . . . . . . . . .  	L NEAR	0252	CODE	Global
+COPYSTR  . . . . . . . . . . . .  	L NEAR	024D	CODE	Global
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CRLF . . . . . . . . . . . . . .  	L NEAR	01B3	CODE	Global
+CTRLZ  . . . . . . . . . . . . .  	L NEAR	02D1	CODE	Global
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Symbols-7
+                                                             
+
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+EDITON . . . . . . . . . . . . .  	L NEAR	0131	CODE
+ENDLIN . . . . . . . . . . . . .  	L NEAR	0199	CODE
+ENTERINS . . . . . . . . . . . .  	L NEAR	02C9	CODE	Global
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Symbols-8
+                                                             
+
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+ESC  . . . . . . . . . . . . . .  	L NEAR	0196	CODE
+ESCCH  . . . . . . . . . . . . .  	Number	001B	
+ESCCHAR  . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXITINS  . . . . . . . . . . . .  	L NEAR	02C9	CODE	Global
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FIGTAB . . . . . . . . . . . . .  	L NEAR	0216	CODE
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDOLD  . . . . . . . . . . . .  	L NEAR	0284	CODE
+FINDSETUP  . . . . . . . . . . .  	L NEAR	0294	CODE
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Symbols-9
+                                                             
+
+FLUSH1 . . . . . . . . . . . . .  	L NEAR	02EE	CODE
+FLUSH2 . . . . . . . . . . . . .  	L NEAR	0309	CODE
+FNDPOS . . . . . . . . . . . . .  	L NEAR	0208	CODE
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+FUNCTIONHANDLERS . . . . . . . .  	L WORD 	000D	CODE	Global
+FUNCTIONKEYCOUNT . . . . . . . .  	Number	000D	
+FUNCTIONKEYS . . . . . . . . . .  	L WORD 	0000	CODE	Global
+
+GETCH  . . . . . . . . . . . . .  	L NEAR	0150	CODE	Global
+GETCH1 . . . . . . . . . . . . .  	L NEAR	01F9	CODE
+GETCH2 . . . . . . . . . . . . .  	L NEAR	026D	CODE
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+GOTCH  . . . . . . . . . . . . .  	L NEAR	0153	CODE
+
+HAVTAB . . . . . . . . . . . . .  	L NEAR	021B	CODE
+HIGHMEM  . . . . . . . . . . . .  	Alias	 FALSE		
+
+IBM  . . . . . . . . . . . . . .  	Alias	 FALSE		
+INBUF  . . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+INSMODE  . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Symbols-10
+                                                             
+
+IOFUNC . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+J_OUT  . . . . . . . . . . . . .  	L NEAR	00A5	CODE
+J_OUT_FINISH . . . . . . . . . .  	L NEAR	0077	CODE
+
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+KILNEW . . . . . . . . . . . . .  	L NEAR	01C2	CODE	Global
+
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MSVER  . . . . . . . . . . . . .  	Alias	 TRUE		
+
+NEWLIN . . . . . . . . . . . . .  	L NEAR	0134	CODE
+NOEDIT . . . . . . . . . . . . .  	L NEAR	012F	CODE
+NOTFND . . . . . . . . . . . . .  	L NEAR	02B1	CODE
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEMFUNCTIONKEY_J . . . . . . . .  	NEAR 	0196	CODE
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OLDBAK . . . . . . . . . . . . .  	L NEAR	01EA	CODE
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+OUT  . . . . . . . . . . . . . .  	L NEAR	0032	CODE	Global
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Symbols-11
+                                                             
+
+OUTPUT1  . . . . . . . . . . . .  	L NEAR	010B	CODE
+OUT_BS . . . . . . . . . . . . .  	L NEAR	00A7	CODE
+OUT_CONTROLCH  . . . . . . . . .  	L NEAR	0079	CODE
+OUT_CR . . . . . . . . . . . . .  	L NEAR	009D	CODE
+OUT_FINISH . . . . . . . . . . .  	L NEAR	00F6	CODE
+OUT_NOBREAK  . . . . . . . . . .  	L NEAR	0053	CODE
+OUT_NOTPRINT . . . . . . . . . .  	L NEAR	003F	CODE
+OUT_RAWOUT2  . . . . . . . . . .  	L NEAR	00F3	CODE
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+PFLAG  . . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+PHYCRLF  . . . . . . . . . . . .  	L NEAR	01BD	CODE
+PUTNEW . . . . . . . . . . . . .  	L NEAR	01C8	CODE
+
+RAWOUT . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+RAWOUT2  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+REDISP . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+REEDIT . . . . . . . . . . . . .  	L NEAR	02B5	CODE	Global
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RET_C  . . . . . . . . . . . . .  	NEAR 	00CC	CODE
+RET_L  . . . . . . . . . . . . .  	NEAR 	02B0	CODE
+RET_Z  . . . . . . . . . . . . .  	NEAR 	02DB	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SAVCH  . . . . . . . . . . . . .  	L NEAR	0172	CODE
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Symbols-12
+                                                             
+
+SKIPONE  . . . . . . . . . . . .  	L NEAR	0270	CODE	Global
+SKIPSTR  . . . . . . . . . . . .  	L NEAR	027A	CODE	Global
+SPOOLINT . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+STARTPOS . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+STATCHK  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+
+TAB  . . . . . . . . . . . . . .  	L NEAR	008D	CODE	Global
+TAB1 . . . . . . . . . . . . . .  	L NEAR	0094	CODE
+TABBAK . . . . . . . . . . . . .  	L NEAR	0227	CODE
+TAB_END  . . . . . . . . . . . .  	L NEAR	009B	CODE
+TOGLINS  . . . . . . . . . . . .  	Alias	 WANG		
+TOGLPRN  . . . . . . . . . . . .  	Alias	 FALSE		
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+TWOESC . . . . . . . . . . . . .  	L NEAR	0240	CODE	Global
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WANG . . . . . . . . . . . . . .  	Alias	 FALSE		
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+ZEROEXT  . . . . . . . . . . . .  	Alias	 TRUE		
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:53:21
+STDIO - device IO for MSDOS                                 Symbols-13
+                                                             
+
+$STD_AUX_INPUT . . . . . . . . .  	N PROC	00C3	CODE	Global	Length = 001D
+$STD_AUX_OUTPUT  . . . . . . . .  	N PROC	00E0	CODE	Global	Length = 001A
+$STD_CON_INPUT . . . . . . . . .  	N PROC	0027	CODE	Global	Length = 0009
+$STD_CON_INPUT_FLUSH . . . . . .  	N PROC	02E0	CODE	Global	Length = 002D
+$STD_CON_INPUT_NO_ECHO . . . . .  	N PROC	00FA	CODE	Global	Length = 000F
+$STD_CON_INPUT_STATUS  . . . . .  	N PROC	02D6	CODE	Global	Length = 000A
+$STD_CON_OUTPUT  . . . . . . . .  	N PROC	0030	CODE	Global	Length = 007E
+$STD_CON_STRING_INPUT  . . . . .  	N PROC	0115	CODE	Global	Length = 01C1
+$STD_CON_STRING_OUTPUT . . . . .  	N PROC	0109	CODE	Global	Length = 000C
+$STD_PRINTER_OUTPUT  . . . . . .  	L NEAR	00E6	CODE	Global
+??0000 . . . . . . . . . . . . .  	L NEAR	002F	CODE
+??0001 . . . . . . . . . . . . .  	L NEAR	005E	CODE
+??0003 . . . . . . . . . . . . .  	L NEAR	00C2	CODE
+??0004 . . . . . . . . . . . . .  	L NEAR	00CC	CODE
+??0006 . . . . . . . . . . . . .  	L NEAR	0108	CODE
+??0007 . . . . . . . . . . . . .  	L NEAR	010E	CODE
+??0009 . . . . . . . . . . . . .  	L NEAR	0120	CODE
+??000B . . . . . . . . . . . . .  	L NEAR	0196	CODE
+??000C . . . . . . . . . . . . .  	L NEAR	01B2	CODE
+??000D . . . . . . . . . . . . .  	L NEAR	02B0	CODE
+??000E . . . . . . . . . . . . .  	L NEAR	02DB	CODE
+
+
+   2047 Source  Lines
+   2641 Total   Lines
+    649 Symbols
+
+  18146 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

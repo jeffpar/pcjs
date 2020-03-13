@@ -1,6 +1,6 @@
 ---
 layout: page
-title: PCjs Personal Disks
+title: PCjs Software Archive
 permalink: /software/pcx86/sw/misc/pcjs/
 redirect_from: /disks/pcx86/personal/
 machines:
@@ -15,7 +15,7 @@ machines:
         name: JEFFPAR DISK001
 ---
 
-Much like the collection of [PCjs Personal Documents](/documents/misc/pcjs/), this is an assortment of disk images
+Much like the collection of [PCjs Document Archive](/documents/papers/pcjs/), this is an assortment of disk images
 archived by [@jeffpar](https://jeffpar.com) that may or may not be of historical interest.
 
 Some disks from this collection have already been archived elsewhere, including:

@@ -7,7 +7,7 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /configs/pcx86/xml/machine/5160/cga/512kb/machine.xml
-    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/disks-demo/pcx86/drives/10mb/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/disks-demo/pcx86/dos/microsoft/2.00/MSDOS-SRC.json"}]'
+    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/harddisks/pcx86/sys/dos/ibm/2.00/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/harddisks/pcx86/sys/dos/microsoft/2.00/MSDOS-SRC.json"}]'
     autoMount:
       A:
         name: None
@@ -20,8 +20,8 @@ machines:
 There was no MS-DOS 2.00 product *per se*.  Instead, there were OEM releases of MS-DOS based on version 2.00,
 including:
 
-* [COMPAQ MS-DOS 2.11](/disks/pcx86/dos/compaq/2.11/)
-* [COMPAQ MS-DOS 2.12](/disks/pcx86/dos/compaq/2.12/)
+* [COMPAQ MS-DOS 2.11](/software/pcx86/sys/dos/compaq/2.11/)
+* [COMPAQ MS-DOS 2.12](/software/pcx86/sys/dos/compaq/2.12/)
 
 ### MS-DOS 2.00 Source Code
 
@@ -41,7 +41,7 @@ OEM diskettes pictured above are primarily *binary* files, not source code.  The
 from a much later snapshot of source code, used to build MS-DOS 2.11, so at best, the collection should be referred to as
 "MS-DOS 2.x".
 
-To add to the confusion, some [WordStar 3.20](/disks/pcx86/apps/other/wordstar/3.20/) binary files were included in the
+To add to the confusion, some [WordStar 3.20](/software/pcx86/app/other/wordstar/3.20/) binary files were included in the
 `v20source` folder, completely unrelated to MS-DOS--and also completely useless, since the main executable, `WS.COM`, was not
 included.
 
@@ -319,35 +319,35 @@ original timestamps:
 
 The 2.11 source files were further organized into folders corresponding to their respective binaries,
 along with makefiles where appropriate
-(eg, [MSDOS.MAK](https://github.com/jeffpar/pcjs-demo-disks/blob/master/pcx86/dos/microsoft/2.11/src/MSDOS/MSDOS.MAK)).
-Also, in the 2.11 [INC](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/INC) folder,
+(eg, [MSDOS.MAK]({{ site.github.repository_url }}/blob/master/pcx86/sys/dos/microsoft/2.11/src/MSDOS/MSDOS.MAK)).
+Also, in the 2.11 [INC]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/INC) folder,
 `DOSMAC_v211.ASM` was copied to `DOSMAC.ASM`, and `DOSSYM_v211.ASM` was copied to `DOSSYM.ASM`.
 
-- [CHKDSK](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/CHKDSK)
-- [COMMAND](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/COMMAND)
-- [DEBUG](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/DEBUG)
-- [DISKCOPY](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/DISKCOPY)
-- [EDLIN](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/EDLIN)
-- [EXE2BIN](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/EXE2BIN)
-- [FC](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/FC)
-- [FIND](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/FIND)
-- [FORMAT](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/FORMAT)
-- [INC](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/INC)
-- [IO](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/IO)
-- [MORE](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/MORE)
-- [MSDOS](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/MSDOS)
-- [PRINT](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/PRINT)
-- [RECOVER](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/RECOVER)
-- [SORT](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/SORT)
-- [SYS](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/SYS)
+- [CHKDSK]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/CHKDSK)
+- [COMMAND]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/COMMAND)
+- [DEBUG]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/DEBUG)
+- [DISKCOPY]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/DISKCOPY)
+- [EDLIN]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/EDLIN)
+- [EXE2BIN]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/EXE2BIN)
+- [FC]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/FC)
+- [FIND]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/FIND)
+- [FORMAT]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/FORMAT)
+- [INC]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/INC)
+- [IO]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/IO)
+- [MORE]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/MORE)
+- [MSDOS]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/MSDOS)
+- [PRINT]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/PRINT)
+- [RECOVER]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/RECOVER)
+- [SORT]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/SORT)
+- [SYS]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/SYS)
 
-Then the [MSDOS](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/MSDOS)
+Then the [MSDOS]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/MSDOS)
 folder was supplemented with reconstructed
-[IO.ASM](https://demo-disks.pcjs.org/pcx86/dos/microsoft/2.11/src/MSDOS/IO.ASM) and
-[IO2.ASM](https://demo-disks.pcjs.org/pcx86/dos/microsoft/2.11/src/MSDOS/IO2.ASM) files from
+[IO.ASM](https://demo-disks.pcjs.org/pcx86/sys/dos/microsoft/2.11/src/MSDOS/IO.ASM) and
+[IO2.ASM](https://demo-disks.pcjs.org/pcx86/sys/dos/microsoft/2.11/src/MSDOS/IO2.ASM) files from
 [John Elliott](http://www.seasip.info/DOS/).
 
-The resulting files, along with a [MK.BAT](https://github.com/jeffpar/pcjs-demo-disks/blob/master/pcx86/dos/microsoft/2.11/src/MK.BAT)
+The resulting files, along with a [MK.BAT]({{ site.github.repository_url }}/blob/master/pcx86/sys/dos/microsoft/2.11/src/MK.BAT)
 batch file, were installed in the machine below on drive D.  Drive C contains a bootable copy of PC DOS 2.00, along with
 Microsoft MASM 4.00 and other assorted tools.
 
@@ -358,7 +358,7 @@ folder; to build all the folders, use `MK ALL`.
 folder with symbols **OEMIBM** and **VER200** defined.  Over time, the PCjs Project will use those symbols to
 tweak the source files, in order to produce binaries that match the corresponding original release.
 
-[DOSSYM.ASM](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/INC/DOSSYM.ASM) has been
+[DOSSYM.ASM]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/INC/DOSSYM.ASM) has been
 modified to check for "OEM" and "VER" symbols, and to display messages indicating the current build selection, alerting
 you that the resulting binaries may differ from those produced by the original source code snapshot.
 
@@ -373,12 +373,12 @@ However, you will sometimes see these messages:
     VERSION 2.00 selected 
 
 which means that another file, such as
-[COMSW.ASM](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/COMMAND/COMSW.ASM) or
-[STDSW.ASM](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/MSDOS/STDSW.ASM),
+[COMSW.ASM]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/COMMAND/COMSW.ASM) or
+[STDSW.ASM]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/MSDOS/STDSW.ASM),
 defined **IBM** before including
-[DOSSYM.ASM](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/INC/DOSSYM.ASM).
+[DOSSYM.ASM]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/INC/DOSSYM.ASM).
 And sometimes a file will set **IBM** itself, such as
-[GETSET.ASM](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/MSDOS/GETSET.ASM).
+[GETSET.ASM]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/MSDOS/GETSET.ASM).
 The "pre-selected" messages help you catch any build discrepancies due to these oddities.
 
 Other files have been modified here as well, primarily to eliminate extraneous characters that caused warnings or
@@ -396,15 +396,13 @@ More information on [The MASM Question](/blog/2018/11/21/#the-masm-question) is 
 
 A quick note about speed: the typical PC in the early 1980s was still a 4.77Mhz 8088-based machine, so it took
 a considerable amount of time to assemble all the MS-DOS 2.x sources.  If you're impatient, you can load the machine
-on this page with a higher speed multiplier (eg, [multiplier=8](https://www.pcjs.org/disks/pcx86/dos/microsoft/2.00/?multiplier=8))
+on this page with a higher speed multiplier (eg, [multiplier=8](https://www.pcjs.org/software/pcx86/sys/dos/microsoft/2.00/?multiplier=8))
 or click the *Speed* button below until it's running at speed that you prefer (and that your browser supports).
 
 In addition, all the build products (**OBJ**, **EXE**, **COM**, **LST**, and **MAP** files) from a successful
-`MK ALL` command have already been saved in the [pcjs-disks](https://github.com/jeffpar/pcjs-demo-disks) repository, in the
-[/pcx86/dos/microsoft/2.11/built](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/built)
+`MK ALL` command have already been saved in the [PCjs repository]({{ site.github.repository_url }}), in the
+[/pcx86/sys/dos/microsoft/2.11/built]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/built)
 folder.
-
-This machine is also available with the [PCjs Debugger](/disks/pcx86/dos/microsoft/2.00/debugger/).
 
 {% include machine.html id="ibm5160" %}
 

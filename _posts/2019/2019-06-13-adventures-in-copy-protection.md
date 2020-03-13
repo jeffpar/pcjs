@@ -3,21 +3,21 @@ layout: post
 title: Adventures in Copy Protection
 date: 2019-06-13 10:00:00
 permalink: /blog/2019/06/13/
-preview: https://game-disks.pcjs.org/pcx86/microsoft/adventure/Adventure_Booklet_Cover.jpg
+preview: https://gamedisks.pcjs.org/pcx86/game/microsoft/adventure/Adventure_Booklet_Cover.jpg
 machines:
-  - id: ibm5150-msadvent
+  - id: ibm5150-adventure
     type: pcx86
     resume: 1
-    config: /disks/pcx86/games/microsoft/adventure/machine.xml
+    config: /configs/pcx86/ibm/5150/machine-mda.json
     autoMount:
       A:
         name: Microsoft Adventure (Unmodified)
 ---
 
 Thanks to a contribution from a PCjs user, I was able to examine a KryoFlux dump of an original
-[Microsoft Adventure](/disks/pcx86/games/microsoft/adventure/) diskette:
+[Microsoft Adventure](/software/pcx86/game/microsoft/adventure/) diskette:
 
-![Microsoft Adventure Diskette]({{ site.game-disks.baseurl }}/pcx86/microsoft/adventure/Adventure_Diskette-HxC.png)
+![Microsoft Adventure Diskette]({{ site.software.gamedisks.server }}/pcx86/game/microsoft/adventure/Adventure_Diskette-HxC.png)
 
 You can see that the first sector on the (outermost) track is a normal 512-byte sector -- which it must
 be in order to function as a boot disk -- but the rest of the disk is primarily 256-byte sectors, along
@@ -48,7 +48,7 @@ from `.pri` (PCE Raw Image) files; eg:
 
 The nice thing about a `.psi` file is that the format is fairly straightforward, and with the help of
 a little [documentation](https://github.com/jeffpar/pce/blob/master/doc/psi-format.txt), I was able to
-update my [DiskDump](/modules/diskdump/) utility to read `.psi` files directly and create
+update my [DiskDump](/tools/diskdump/) utility to read `.psi` files directly and create
 JSON-encoded PCjs disk images that replicate the structure of the original diskettes.
 
 There are now *two* Microsoft Adventure disk images in the PCjs Disk Library:
@@ -63,7 +63,4 @@ there may be some historical or diagnostic value in keeping both versions.
 
 OK, enough with the boring blog post.  Time to play!
 
-{% include machine.html id="ibm5150-msadvent" %}
-
-*[@jeffpar](https://jeffpar.com)*  
-*June 13, 2019*
+{% include machine.html id="ibm5150-adventure" %}

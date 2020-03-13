@@ -10,7 +10,7 @@ machines:
     config: /configs/pcx86/xml/machine/5170/ega/1024kb/rev3/debugger/machine.xml
     autoMount:
       A:
-        name: OS/2 1.0 Debugger
+        name: OS/2 1.0 Debugger (1988)
 ---
 
 This disk contained a version of OS/2 1.0 built on October 12, 1988, which included the built-in kernel debugger

@@ -1,0 +1,18 @@
+
+
+Warning: no stack segment
+
+ Start  Stop   Length Name                   Class
+ 00000H 00FEBH 00FECH CODE                   
+ 00FECH 01299H 002AEH DATA                   
+
+ Origin   Group
+ 0000:0   DG
+
+  Address         Publics by Name
+
+
+  Address         Publics by Value
+
+
+Program entry point at 0000:0100
