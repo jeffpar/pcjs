@@ -3,7 +3,7 @@ layout: page
 title: Fantasy Land EGA Demo and Utilities
 permalink: /software/pcx86/demo/ibm/ega/
 redirect_from: /disks/pcx86/apps/ibm/fland/
-preview: /disks/pcx86/apps/ibm/fland/fland-legend.png
+preview: fland-legend.png
 machines:
   - id: ibm5160
     type: pcx86

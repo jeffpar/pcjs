@@ -5,7 +5,7 @@ permalink: /software/pcx86/game/infocom/zork1/
 redirect_from:
   - /disks/pcx86/games/infocom/zork1/
   - /disks/pc/games/infocom/zork1/
-preview: /screenshot.png
+preview: screenshot.png
 machines:
   - id: ibm5150-zork1
     type: pcx86

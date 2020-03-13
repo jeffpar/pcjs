@@ -1,13 +1,13 @@
 ---
 layout: page
-title: "IBM PC (Model 5150) running CP/M-86 1.1B"
+title: "CP/M-86 1.1B (Eagle Computer)"
 permalink: /software/pcx86/sys/cpm/1.1b/
 redirect_from: /disks/pcx86/cpm/1.1b/
-preview: /disks/pcx86/cpm/1.1b/screenshot.png
+preview: screenshot.png
 machines:
   - id: cpm-mda-256k
     type: pcx86
-    config: /disks/pcx86/cpm/1.00/machine.xml
+    config: /configs/pcx86/ibm/5150/machine-mda.json
     autoMount:
       A:
         name: Eagle CP/M-86 1.1B (Disk 1)
@@ -15,27 +15,18 @@ machines:
         name: Eagle CP/M-86 1.1B (Disk 2)
 ---
 
-CP/M-86 1.1B (Eagle Computer)
------------------------------
-
 This is an OEM version of CP/M-86 by Eagle Computer.  On startup, it reports:
 
 	Eagle CP/M-86 Ver 1.1B 05/20/83                                                 
 
-The [PCjs Disk Library](/disks/pcx86/) includes the two Eagle Computer distribution diskettes,
-along with two related disks from our private collection:
+The PCjs Disk Library includes the two Eagle Computer distribution diskettes, along with two related disks from our private collection:
 
 - [PCjs CP/M-86 (Disk 1)](#directory-of-pcjs-cpm-86-disk-1)
 - [PCjs CP/M-86 (Disk 2)](#directory-of-pcjs-cpm-86-disk-2)
 
-which contain assorted [Useful CP/M-86 Utilities](#useful-cpm-86-utilities).  [Directory Listings](#directory-listings) are provided below.
+which contain assorted [Useful CP/M-86 Utilities](#useful-cpm-86-utilities).  [Directory Listings](#directory-of-cpm-86-11b-disk-1) are provided below.
 
 {% include machine.html id="cpm-mda-256k" %}
-
-The above machine is also available with a [Debugger](debugger/).
-
-Directory Listings
-------------------
 
 ### Directory of CP/M-86 1.1B (Disk 1)
 

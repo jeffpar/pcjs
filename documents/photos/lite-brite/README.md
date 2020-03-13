@@ -3,6 +3,7 @@ layout: page
 title: Original Lite-Brite Images
 permalink: /documents/photos/lite-brite/
 redirect_from: /devices/leds/litebrite/images/
+preview: Choo-Choo_Train-1986.jpg
 ---
 
 Any of the original Lite-Brite images below can be turned on underneath our virtual [Lite-Brite](/machines/led/lite-brite), to help you recreate the image with LEDs.

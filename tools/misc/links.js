@@ -172,8 +172,15 @@ function processFiles(sDir, fDebug, fFix)
          */
         match = sText.match(/^preview:\s*(.*)$/m);
         if (match) {
-            let sFile = match[1].replace("https://diskettes.pcjs.org", "../pcjs-diskettes");
-            if (sFile[0] == "/") sFile = "." + sFile;
+            let sFile = match[1];
+            if (sFile.indexOf("http") == 0) {
+                sFile = sFile.replace(/https?:\/\/(diskettes|gamedisks|harddisks)\.pcjs\.org/, "../pcjs-$1").replace(/https?:\/\/(cds[0-9]+)\.pcjs\.org/, "../pcjs/disks-cds/$1");
+            }
+            else if (sFile[0] == "/") {
+                sFile = "." + sFile;
+            } else {
+                sFile = "." + sFileDir + "/" + sFile;
+            }
             if (!fileExists(sFile)) {
                 printf("%s: preview image not found: %s\n", sFilePath, sFile);
             }

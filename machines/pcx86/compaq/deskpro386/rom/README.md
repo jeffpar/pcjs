@@ -3,7 +3,7 @@ layout: page
 title: COMPAQ DeskPro 386 ROMs
 permalink: /machines/pcx86/compaq/deskpro386/rom/
 redirect_from: /devices/pcx86/rom/compaq/deskpro386/
-preview: Compaq_DeskPro_386-16_System_Board_V2-640.jpg
+preview: photos/Compaq_DeskPro_386-16_System_Board_V2-640.jpg
 ---
 
 Originally, the oldest COMPAQ DeskPro 386 ROM I had was a `Rev J.4` ROM from a "Version 2" motherboard designed

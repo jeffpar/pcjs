@@ -3,7 +3,7 @@ layout: page
 title: Microsoft Windows 3.00
 permalink: /software/pcx86/sys/windows/3.00/
 redirect_from: /disks/pcx86/windows/3.00/
-preview: /disks/pcx86/windows/3.00/screenshot.png
+preview: screenshot.png
 machines:
   - id: ibm5170-win300
     type: pcx86

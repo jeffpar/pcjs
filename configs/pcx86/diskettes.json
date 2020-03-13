@@ -711,6 +711,10 @@
       "exploring": {
         "@title": "Exploring the IBM PC",
         "@versions": {
+          "": {
+            "@title": "Exploring the IBM PC",
+            "@permalink": "/software/pcx86/demo/ibm/exploring/"
+          },
           "1.00-CGA": {
             "@title": "Exploring the IBM PC (CGA)",
             "@bootable": true,

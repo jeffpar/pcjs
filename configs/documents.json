@@ -1,13 +1,28 @@
 {
   "books": {
     "@title": "Books",
-    "programming": {
-      "@title": "Programming",
-      "@instances": {
-        "graphics_for_the_ibm_pc": {
-          "@title": "Graphics for the IBM PC",
-          "@redirect_from": "/pubs/pc/programming/Graphics_for_the_IBM_PC/"
-        }
+    "@instances": {
+      "programming": {
+        "@title": "Programming",
+        "@documents": [
+          {
+            "@title": "Microsoft QuickBASIC (1987)",
+            "@file": "Microsoft_QuickBASIC-1987.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvA_O6gyOmFPqAMhDw?e=GaqGs8",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "quickbasic"
+          },
+          {
+            "@title": "Graphics for the IBM PC",
+            "@file": "Graphics_for_the_IBM_PC.pdf",
+            "@link": "/software/pcx86/sw/books/graphics_for_the_ibm_pc/",
+            "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBjvPCIs98PvKf1UA?e=FxSYne",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "graphics"
+          }
+        ]
       }
     }
   },
@@ -989,14 +1004,6 @@
             "@cover": ".jpg",
             "@source": "PCjs",
             "@tags": "masm50"
-          },
-          {
-            "@title": "Microsoft QuickBASIC (1987)",
-            "@file": "Microsoft_QuickBASIC-1987.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvA_O6gyOmFPqAMhDw?e=GaqGs8",
-            "@cover": ".jpg",
-            "@source": "PCjs",
-            "@tags": "quickbasic"
           }
         ]
       }
@@ -1016,7 +1023,7 @@
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV7M0pbf40DJ4Dh-A?e=SAF3Ay",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
-              "@tags": "eci"
+              "@tags": "ecp"
             },
             {
               "@title": "First Progress Report",
@@ -1024,7 +1031,7 @@
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV4ArnBifdbfjcL_w?e=lSPHvu",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
-              "@tags": "eci"
+              "@tags": "ecp"
             },
             {
               "@title": "Planning and Coding of Problems for an Electronic Computing Instrument Volume I-III",
@@ -1032,7 +1039,7 @@
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grhb2dQou3dlDHUTuQ?e=eTHSr8",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
-              "@tags": "eci"
+              "@tags": "ecp"
             },
             {
               "@title": "Second Progress Report",
@@ -1040,7 +1047,7 @@
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grhZnqWtH6skeRPw8g?e=MdVxdJ",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
-              "@tags": "eci"
+              "@tags": "ecp"
             },
             {
               "@title": "Preliminary Discussion of the Logical Design of an Electronic Computing Instrument",
@@ -1048,7 +1055,7 @@
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grVz9pjWlNhZTZkxNQ?e=vd7aKK",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
-              "@tags": "eci"
+              "@tags": "ecp"
             },
             {
               "@title": "Third Progress Report",
@@ -1056,7 +1063,7 @@
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV1t6ytR6dOdhNdMQ?e=gD0kix",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
-              "@tags": "eci"
+              "@tags": "ecp"
             },
             {
               "@title": "Planning and Coding of Problems for an Electronic Computing Instrument Volume II",
@@ -1064,7 +1071,7 @@
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV9ydwIr_A5xZY0Gw?e=1hx356",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
-              "@tags": "eci"
+              "@tags": "ecp"
             },
             {
               "@title": "Fourth Progress Report",
@@ -1072,7 +1079,7 @@
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grdBu1ICZ8NpdblkZQ?e=VNQuLp",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
-              "@tags": "eci"
+              "@tags": "ecp"
             },
             {
               "@title": "Magnetic Drum Memory",
@@ -1080,7 +1087,7 @@
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grVyp1t3l0jFHdpSwQ?e=5UIXxR",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
-              "@tags": "eci"
+              "@tags": "ecp"
             },
             {
               "@title": "Planning and Coding of Problems for an Electronic Computing Instrument Volume III",
@@ -1088,7 +1095,7 @@
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV8NpRPrC_f7Pqomw?e=lRuNdH",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
-              "@tags": "eci"
+              "@tags": "ecp"
             },
             {
               "@title": "Fifth Progress Report",
@@ -1096,7 +1103,7 @@
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV3blg-YSnk_iiC8g?e=qEGh4H",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
-              "@tags": "eci"
+              "@tags": "ecp"
             },
             {
               "@title": "Sixth Progress Report",
@@ -1104,7 +1111,7 @@
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grYB9MQXaD7G_V4hog?e=gonvvb",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
-              "@tags": "eci"
+              "@tags": "ecp"
             },
             {
               "@title": "Final Progress Report",
@@ -1112,7 +1119,7 @@
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grhtAsdmjpJBCaWyew?e=jf7BTU",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
-              "@tags": "eci"
+              "@tags": "ecp"
             }
           ]
         }
@@ -1137,6 +1144,23 @@
               "@cover": ".jpg",
               "@source": "PCjs",
               "@tags": "dbase3"
+            }
+          ]
+        }
+      }
+    },
+    "projects": {
+      "@title": "Projects",
+      "@instances": {
+        "estelita": {
+          "@title": "Tom Estelita",
+          "@documents": [
+            {
+              "@title": "Educational Projects for a Digital Logic Laboratory",
+              "@file": "Educational Projects For A Digital Logic Laboratory--Internet Archive.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grhVyjPaqs6MZv_88w?e=ib6khN",
+              "@cover": ".jpg",
+              "@source": "http://archive.org/details/educationalproje535este"
             }
           ]
         }
