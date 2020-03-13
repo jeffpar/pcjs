@@ -1149,18 +1149,19 @@
         }
       }
     },
-    "projects": {
-      "@title": "Projects",
+    "research": {
+      "@title": "Research",
       "@instances": {
         "estelita": {
           "@title": "Tom Estelita",
           "@documents": [
             {
               "@title": "Educational Projects for a Digital Logic Laboratory",
-              "@file": "Educational Projects For A Digital Logic Laboratory--Internet Archive.pdf",
+              "@file": "Educational_Projects_For_A_Digital_Logic_Laboratory--Internet_Archive.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grhVyjPaqs6MZv_88w?e=ib6khN",
               "@cover": ".jpg",
-              "@source": "http://archive.org/details/educationalproje535este"
+              "@source": "http://archive.org/details/educationalproje535este",
+              "@tags": "thesis"
             }
           ]
         }
