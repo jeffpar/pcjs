@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Graphics for the IBM PC
-permalink: /documents/books/programming/graphics_for_the_ibm_pc/
+permalink: /software/pcx86/sw/books/graphics_for_the_ibm_pc/
 redirect_from: /pubs/pc/programming/Graphics_for_the_IBM_PC/
 machines:
   - id: xt-cga-256k-1
@@ -26,11 +26,11 @@ machines:
 
 by Dan Illowsky and Michael Abrash (1984)
 
-Check out the [Live Demos](#demos) we've created from this classic text.
+Check out the [Live Demos](#live-demos) we've created from this classic text.
 
 {% include embed.html src="https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2136963&authkey=AArOJJZY9sEp0qA&em=2" %}
 
-### Demos
+### Live Demos
 
 From Page 46:
 

@@ -5,22 +5,19 @@ permalink: /software/pcx86/sys/windows/win95/4.00.950/
 redirect_from:
   - /disks/pcx86/windows/win95/4.00.950/
   - /disks/pc/windows/win95/4.00.950/
-preview: /disks/pcx86/windows/win95/4.00.950/screenshot.png
+preview: screenshot.png
 machines:
   - id: deskpro386
     type: pcx86
     state: state.json
     config: /configs/pcx86/xml/machine/compaq/deskpro386/vga/4096kb/machine.xml
-    drives: '[{name:"68Mb Hard Disk",type:4,path:"/disks-demo/pcx86/drives/68mb/WIN95.json"}]'
+    drives: '[{name:"68Mb Hard Disk",type:4,path:"/harddisks/pcx86/sys/windows/win95/WIN95.json"}]'
     autoMount:
       A:
         name: None
       B:
         name: None
 ---
-
-Microsoft Windows 95: First Retail Release
-------------------------------------------
 
 Windows 95 was the successor to Windows 3.1 and included a number of important new features:
 
@@ -34,7 +31,7 @@ Windows 95 was released to manufacturing on July 14, 1995 and went on sale at mi
 
 It is shown running below, following a "Compact Installation" on a 68Mb hard disk.  Before the machine can
 start, it must download the disk image, which may take a minute or two, depending on the speed of your
-internet connection.  You can also run Windows 95 with the [PCjs Debugger](debugger/).
+internet connection.
 
 More information about this Windows 95 demo is available in the [PCjs Blog](/blog/2015/09/21/).
 

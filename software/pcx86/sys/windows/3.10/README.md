@@ -5,7 +5,7 @@ permalink: /software/pcx86/sys/windows/3.10/
 redirect_from:
   - /disks/pcx86/windows/3.10/
   - /disks/pc/windows/3.10/
-preview: /disks/pcx86/windows/3.10/screenshot.png
+preview: screenshot.png
 machines:
   - id: ibm5170
     type: pcx86
@@ -19,8 +19,6 @@ machines:
 ---
 
 The PCjs machine below starts Microsoft Windows 3.10, using an IBM PC AT running PC DOS 3.30.
-
-The machine is also available with the [PCjs Debugger](debugger/).
 
 Directory listings of the seven 1.2Mb distribution diskettes are provided [below](#directory-of-windows-3-10-disk-1).
 

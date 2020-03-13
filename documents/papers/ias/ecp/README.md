@@ -2,6 +2,7 @@
 layout: page
 title: IAS Electronic Computer Project
 permalink: /documents/papers/ias/ecp/
+preview: covers/1947-01-01--First Progress Report.jpg
 ---
 
 Below are documents from the [Institute for Advanced Study](https://www.ias.edu/)'s [Electronic Computer Project (1946-1954)](https://www.ias.edu/electronic-computer-project),

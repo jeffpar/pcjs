@@ -2,6 +2,7 @@
 layout: page
 title: PCjs Programming Notes
 permalink: /documents/papers/pcjs/programming/
+preview: covers/1984-09-16--DBASE_III_DEBUG.jpg
 ---
 
 We kick off the [PCjs Document Archive](/documents/papers/pcjs/) with a couple of documents [@jeffpar](https://jeffpar.com)

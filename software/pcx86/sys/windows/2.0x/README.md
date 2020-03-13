@@ -3,13 +3,13 @@ layout: page
 title: Microsoft Windows/386 2.0x
 permalink: /software/pcx86/sys/windows/2.0x/
 redirect_from: /disks/pcx86/windows/2.0x/
-preview: /disks/pcx86/windows/2.0x/screenshot.png
+preview: screenshot.png
 machines:
   - id: deskpro386
     type: pcx86
     state: state.json
     config: /configs/pcx86/xml/machine/compaq/deskpro386/vga/2048kb/machine.xml
-    drives: '[{name:"20Mb Hard Disk",type:2,path:"/disks-demo/pcx86/drives/20mb/COMPAQ310-WIN386201-VGA.json"}]'
+    drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/sys/windows/2.01/COMPAQ310-WIN386201-VGA.json"}]'
     autoMount:
       A:
         name: None
@@ -25,13 +25,12 @@ Microsoft Windows/386 2.0 existed as the following "point releases":
 Microsoft Windows/386 2.01
 --------------------------
 
-This Windows/386 release was finalized in September 1987, predating [Windows 2.03](/disks/pcx86/windows/2.03/)
+This Windows/386 release was finalized in September 1987, predating [Windows 2.03](/software/pcx86/sys/windows/2.03/)
 by several months.
 
 Directory listings of the three 1.2Mb Microsoft Windows/386 2.01 distribution diskettes are provided below.
 
-In the [COMPAQ DeskPro 386](/devices/pcx86/machine/compaq/deskpro386/vga/2048kb/) machine below, you can run `WIN86`
-to start Windows in real-mode, or `WIN386` to start Windows in V86-mode.
+In the COMPAQ DeskPro 386 machine below, you can run `WIN86` to start Windows in real-mode, or `WIN386` to start Windows in V86-mode.
 
 {% include machine.html id="deskpro386" %}
 
@@ -247,7 +246,7 @@ Microsoft Windows/386 2.03
 
 Windows/386 2.03 appears to have been finalized in December 1987.
 
-Note that only about two months separated this release from [Windows/386 2.01](/disks/pcx86/windows/2.0x/#microsoft-windows386-201).
+Note that only about two months separated this release from [Windows/386 2.01](/software/pcx86/sys/windows/2.0x/#microsoft-windows386-201).
 
 Directory listings of the five 720Kb distribution diskettes are provided below.
 
