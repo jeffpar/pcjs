@@ -495,14 +495,31 @@
           }
         }
       },
+      "thinktank": {
+        "@title": "ThinkTank",
+        "@versions": {
+          "1987": {
+            "@media": [
+              {
+                "@title": "ThinkTank (1987)",
+                "@diskette": "THINKTANK-1987.json",
+                "@type": "PC360K"
+              }
+            ],
+            "@author": "Living Videotext",
+            "@releaseDate": "September 25, 1987",
+            "@version": "2.41NP"
+          }
+        }
+      },
       "visicalc": {
         "@title": "VisiCalc",
         "@versions": {
           "1981": {
             "@media": [
               {
-                "@title": "VisiCalc",
-                "@diskette": "VISICALC1981.json",
+                "@title": "VisiCalc (1981)",
+                "@diskette": "VISICALC-1981.json",
                 "@type": "PC160K"
               }
             ]
@@ -1402,6 +1419,90 @@
   "game": {
     "@title": "Games",
     "@server": "https://gamedisks.pcjs.org",
+    "id": {
+      "@title": "Id Software",
+      "@versions": {
+        "commander_keen": {
+          "@title": "Commander Keen (1991)",
+          "@media": [
+            {
+              "@title": "Commander Keen: Episode One",
+              "@diskette": "KEEN1-V11.json",
+              "@type": "PC320K"
+            }
+          ]
+        },
+        "wolf3d": {
+          "@title": "Wolfenstein 3D (1993)",
+          "@media": [
+            {
+              "@title": "Wolfenstein 3D 1.4",
+              "@diskette": "1WOLF-V14.json",
+              "@type": "PC1200K"
+            }
+          ]
+        }
+      }
+    },
+    "infocom": {
+      "@title": "Infocom",
+      "@versions": {
+        "hhiker": {
+          "@title": "The Hitchhiker's Guide to the Galaxy",
+          "@media": [
+            {
+              "@title": "Hitchhiker's Guide",
+              "@diskette": "HHIKER-READONLY.json"
+            }
+          ]
+        },
+        "phobos": {
+          "@title": "Leather Goddesses of Phobos",
+          "@media": [
+            {
+              "@title": "Leather Goddesses of Phobos",
+              "@diskette": "PHOBOS.json"
+            }
+          ]
+        },
+        "planetfall": {
+          "@title": "Planetfall",
+          "@media": [
+            {
+              "@title": "Planetfall",
+              "@diskette": "PLANET-READONLY.json"
+            }
+          ]
+        },
+        "zork1": {
+          "@title": "Zork I: The Great Underground Empire",
+          "@media": [
+            {
+              "@title": "Zork I",
+              "@diskette": "ZORK1-READONLY.json"
+            }
+          ]
+        },
+        "zork2": {
+          "@title": "Zork II: The Wizard of Frobozz ",
+          "@media": [
+            {
+              "@title": "Zork II",
+              "@diskette": "ZORK2-READONLY.json"
+            }
+          ]
+        },
+        "zork3": {
+          "@title": "Zork III: The Dungeon Master",
+          "@media": [
+            {
+              "@title": "Zork III",
+              "@diskette": "ZORK3-READONLY.json"
+            }
+          ]
+        }
+      }
+    },
     "microsoft": {
       "@title": "Microsoft",
       "@versions": {
@@ -1448,26 +1549,127 @@
               {
                 "@diskette": "ESUITE-1982.json",
                 "@type": "PC360K",
-                "@author": "Armonk Corporation",
                 "@source": ""
               }
-            ]
+            ],
+            "@author": "Armonk Corporation"
+          }
+        }
+      },
+      "1983": {
+        "@versions": {
+          "adventmath": {
+            "@title": "Adventures in Math (1983)",
+            "@media": [
+              {
+                "@title": "Adventures in Math 1.00",
+                "@diskette": "ADVENTMATH-100.json",
+                "@type": "PC160K",
+                "@source": ""
+              }
+            ],
+            "@author": "Scott A. Harris",
+            "@publisher": "IBM"
+          }
+        }
+      },
+      "1984": {
+        "@versions": {
+          "wizardry1": {
+            "@title": "Wizardry I (1984)",
+            "@media": [
+              {
+                "@title": "Wizardry I - Master Disk",
+                "@diskette": "WIZARDRY1-MASTER.json",
+                "@type": "PC320K",
+                "@source": ""
+              },
+              {
+                "@title": "Wizardry I - Scenario Disk",
+                "@diskette": "WIZARDRY1-SCENARIO.json",
+                "@type": "PC320K",
+                "@source": ""
+              }
+            ],
+            "@author": "Sir-Tech Software",
+            "@version": "1.0"
           }
         }
       },
       "1985": {
         "@versions": {
+          "castle_adventure": {
+            "@title": "Castle Adventure (1985)",
+            "@media": [
+              {
+                "@diskette": "CASTLE-ADVENTURE-1985.json",
+                "@type": "PC160K",
+                "@source": ""
+              }
+            ],
+            "@author": "Kevin Bales"
+          },
           "rogue": {
             "@title": "Rogue (1985)",
-            "@version": "1.49",
             "@media": [
               {
                 "@diskette": "ROGUE-1985.json",
                 "@type": "PC160K",
-                "@author": "Ken Arnold, Jon Lane, Michael Toy",
                 "@source": ""
               }
-            ]
+            ],
+            "@author": "Ken Arnold, Jon Lane, Michael Toy",
+            "@version": "1.49"
+          }
+        }
+      },
+      "1988": {
+        "@versions": {
+          "trump_castle": {
+            "@title": "Trump Castle (1988)",
+            "@media": [
+              {
+                "@title": "Trump Castle 1.20 (1988)",
+                "@diskette": "TRUMP-CASTLE-120.json",
+                "@type": "PC1200K",
+                "@source": ""
+              }
+            ],
+            "@version": "1.20"
+          }
+        }
+      },
+      "1990": {
+        "@versions": {
+          "oregon_trail": {
+            "@title": "The Oregon Trail (1990)",
+            "@media": [
+              {
+                "@title": "Oregon Trail 2.1 (1990)",
+                "@diskette": "OREGON_TRAIL-210.json",
+                "@type": "PC1200K",
+                "@source": ""
+              }
+            ],
+            "@author": "MECC",
+            "@version": "2.1"
+          }
+        }
+      },
+      "1991": {
+        "@versions": {
+          "lemmings": {
+            "@title": "Lemmings (1991)",
+            "@media": [
+              {
+                "@title": "Lemmings (1991)",
+                "@diskette": "LEMMINGS-1991.json",
+                "@type": "PC1200K",
+                "@source": ""
+              }
+            ],
+            "@author": "DMA Design",
+            "@publisher": "Psygnosis"
           }
         }
       },
@@ -1475,22 +1677,22 @@
         "@versions": {
           "moria": {
             "@title": "Moria (1992)",
-            "@version": "5.5",
             "@media": [
               {
                 "@diskette": "MORIA-1992.json",
                 "@type": "PC360K",
-                "@author": "Robert A. Koeneke, Jimmey W. Todd Jr., David J. Grabiner, James E. Wilson",
                 "@source": ""
               }
-            ]
+            ],
+            "@author": "Robert A. Koeneke, Jimmey W. Todd Jr., David J. Grabiner, James E. Wilson",
+            "@version": "5.5"
           }
         }
       },
       "2019": {
         "@versions": {
           "invaders": {
-            "@title": "Invaders (Boot Sector)",
+            "@title": "Invaders Boot Sector (2019)",
             "@bootable": true,
             "@hardware": "/machines/pcx86/ibm/5150/vga/",
             "@media": [
@@ -2549,6 +2751,27 @@
                 }
               ]
             }
+          }
+        }
+      }
+    },
+    "other": {
+      "@title": "Other",
+      "ratbas": {
+        "@title": "RatBas",
+        "@versions": {
+          "1982": {
+            "@title": "RatBas (1982)",
+            "@media": [
+              {
+                "@title": "RatBas (1982)",
+                "@diskette": "RATBAS-213.json",
+                "@type": "PC160K"
+              }
+            ],
+            "@author": "William F. Sharpe, Brent D. Weaver",
+            "@publisher": "Wells Fargo Investment Advisors",
+            "@version": "2.13"
           }
         }
       }

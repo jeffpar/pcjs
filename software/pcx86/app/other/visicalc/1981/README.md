@@ -9,7 +9,7 @@ machines:
     type: pcx86
     config: /configs/pcx86/xml/machine/5150/mda/64kb/machine.xml
     resume: 1
-    state: /software/pcx86/app/other/visicalc/state.json
+    state: state.json
     autoMount:
       A:
         name: PC DOS 1.00
