@@ -1,0 +1,1281 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-1
+                                                            
+
+                                ; 
+                                ; Standard buffer management for MSDOS 
+                                ; 
+                                 
+                                .list 
+                                 
+                                TITLE   STDBUF - MSDOS buffer management 
+                                NAME    STDBUF 
+                                 
+                             C  INCLUDE BUF.ASM 
+                             C  ; 
+                             C  ; buffer management for MSDOS 
+                             C  ; 
+                             C   
+                             C  INCLUDE DOSSEG.ASM 
+                             C  ; 
+                             C  ; segment ordering for MSDOS 
+                             C  ; 
+                             C   
+ 0000                        C  CONSTANTS       SEGMENT BYTE PUBLIC 'CONST' 
+ 0000                        C  CONSTANTS       ENDS 
+                             C   
+ 0000                        C  DATA            SEGMENT BYTE PUBLIC 'DATA' 
+ 0000                        C  DATA            ENDS 
+                             C   
+ 0000                        C  CODE            SEGMENT BYTE PUBLIC 'CODE' 
+ 0000                        C  CODE            ENDS 
+                             C   
+ 0000                        C  LAST            SEGMENT BYTE PUBLIC 'LAST' 
+ 0000                        C  LAST            ENDS 
+                             C   
+                             C  DOSGROUP    GROUP   CODE,CONSTANTS,DATA,LAST 
+                             C   
+                             C   
+ 0000                        C  CODE    SEGMENT BYTE PUBLIC  'CODE' 
+                             C          ASSUME  SS:DOSGROUP,CS:DOSGROUP 
+                             C   
+                             C  .list 
+                             C   
+                             C          i_need  BuffHead,DWORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  PreRead,WORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  LastBuffer,DWORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  CurBuf,DWORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  WPErr,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+                             C   
+                             C  SUBTTL SETVISIT,SKIPVISIT -- MANAGE BUFFER SCAN
+				S 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-3
+SETVISIT,SKIPVISIT -- MANAGE BUFFER SCANS                   
+
+                             C  PAGE 
+                             C          procedure   SETVISIT,near 
+ 0000                        C1 SETVISIT PROC near
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       None 
+                             C  ; Function: 
+                             C  ;       Set up a scan of I/O buffers 
+                             C  ; Outputs: 
+                             C  ;       All visit flags = 0 
+                             C  ;               NOTE: This pre-scan is needed b
+				ecause a hard disk error 
+                             C  ;                     may cause a scan to stop 
+				in the middle leaving some 
+                             C  ;                     visit flags set, and some
+				 not set. 
+                             C  ;       DS:DI Points to [BUFFHEAD] 
+                             C  ; No other registers altered 
+                             C   
+ 0000  36: C5 3E 0000 E      C          LDS     DI,[BUFFHEAD] 
+ 0005  50                    C          PUSH    AX 
+ 0006  33 C0                 C          XOR     AX,AX 
+ 0008                        C  SETLOOP: 
+ 0008  88 45 07              C          MOV     [DI.VISIT],AL 
+ 000B  C5 3D                 C          LDS     DI,[DI.NEXTBUF] 
+ 000D  83 FF FF              C          CMP     DI,-1 
+ 0010  75 F6                 C          JNZ     SETLOOP 
+ 0012  36: C5 3E 0000 E      C          LDS     DI,[BUFFHEAD] 
+ 0017  58                    C          POP     AX 
+                             C          return 
+ 0018                        C1 ??0000:
+ 0018  C3                    C1  RET
+                             C   
+                             C          entry   SKIPVISIT 
+ 0019                        C1 SKIPVISIT:
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       DS:DI Points to a buffer 
+                             C  ; Function: 
+                             C  ;       Skip visited buffers 
+                             C  ; Outputs: 
+                             C  ;       DS:DI Points to next unvisited buffer 
+                             C  ;       Zero is set if skip to LAST buffer 
+                             C  ; No other registers altered 
+                             C   
+ 0019  83 FF FF              C          CMP     DI,-1 
+                             C          retz 
+ 001C  74 FA                 C2  ??0001: jz ret_l
+ 001E  80 7D 07 01           C          CMP     [DI.VISIT],1 
+                             C          retnz 
+ 0022  75 F4                 C2  ??0003: jnz ret_l
+ 0024  C5 3D                 C          LDS     DI,[DI.NEXTBUF] 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-4
+SETVISIT,SKIPVISIT -- MANAGE BUFFER SCANS                   
+
+ 0026  EB F1                 C          JMP     SHORT SKIPVISIT 
+                             C          return 
+ 0028                        C1 ??0005:
+ 0028  C3                    C1  RET
+                             C  SetVisit    ENDP 
+                             C   
+                             C   
+                             C  SUBTTL SCANPLACE, PLACEBUF -- PUT A BUFFER BACK
+				 IN THE POOL 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-5
+SCANPLACE, PLACEBUF -- PUT A BUFFER BACK IN THE POOL        
+
+                             C  PAGE 
+                             C          procedure   ScanPlace,near 
+ 0029                        C1 ScanPlace PROC near
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       Same as PLACEBUF 
+                             C  ; Function: 
+                             C  ;       Save scan location and call PLACEBUF 
+                             C  ; Outputs: 
+                             C  ;       DS:DI Points to saved scan location 
+                             C  ; SI destroyed, other registers unchanged 
+                             C   
+ 0029  06                    C          PUSH    ES 
+ 002A  C4 35                 C          LES     SI,[DI.NEXTBUF]         ; Save 
+				scan location 
+ 002C  E8 0037 R             C          CALL    PLACEBUF 
+ 002F  06                    C          PUSH    ES 
+ 0030  1F                    C          POP     DS                      ; Resto
+				re scan location 
+ 0031  8B FE                 C          MOV     DI,SI 
+ 0033  07                    C          POP     ES 
+                             C          return 
+ 0034                        C1 ??0006:
+ 0034  C3                    C1  RET
+                             C  ScanPlace   ENDP 
+                             C   
+ 0035  EB 57                 C  NRETJ:  JMP     SHORT NRET 
+                             C   
+                             C          procedure   PLACEBUF,NEAR 
+ 0037                        C1 PLACEBUF PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Input: 
+                             C  ;       DS:DI points to buffer 
+                             C  ; Function: 
+                             C  ;       Remove buffer from queue and re-insert 
+				it in proper place. 
+                             C  ;       If buffer doesn't go at end, and isn't 
+				free, decrement 
+                             C  ;       priorities. 
+                             C  ; NO registers altered 
+                             C  ; 
+                             C  ; DS:SI -- Curbuf, current buffer in list 
+                             C  ; ES:DI -- Buf, buffer passed as argument 
+                             C  ; BP:CX -- Pointsave, saved Buf.nextbuf 
+                             C  ; DX:BX -- Lastbuf, previous buffer in list 
+                             C  ; AL    -- Inserted, Buf has been inserted 
+                             C  ; AH    -- Removed, Buf has been removed 
+                             C   
+                             C          ENDIF 
+                             C   
+                             C          invoke  save_world 
+ 0037  E8 0000 E             C1  CALL save_world
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-6
+SCANPLACE, PLACEBUF -- PUT A BUFFER BACK IN THE POOL        
+
+ 003A  C4 0D                 C          LES     CX,[DI.NEXTBUF] 
+ 003C  83 F9 FF              C          CMP     CX,-1           ; Buf is LAST? 
+ 003F  74 4D                 C          JZ      NRET            ; Buffer alread
+				y last 
+ 0041  8C C5                 C          MOV     BP,ES           ; Pointsave = B
+				uf.nextbuf 
+ 0043  1E                    C          PUSH    DS 
+ 0044  07                    C          POP     ES              ; Buf is ES:DI 
+ 0045  36: C5 36 0000 E      C          LDS     SI,[BUFFHEAD]   ; Curbuf = HEAD
+				 
+ 004A  E8 00C7 R             C          CALL    POINTCOMP       ; Buf == HEAD? 
+ 004D  75 0C                 C          JNZ     BUFLOOP 
+ 004F  36: 89 0E 0000 E      C          MOV     WORD PTR [BUFFHEAD],CX 
+ 0054  36: 89 2E 0002 E      C          MOV     WORD PTR [BUFFHEAD+2],BP       
+				 ; HEAD = Pointsave 
+ 0059  EB 14                 C          JMP     SHORT LOOKEND 
+                             C   
+ 005B                        C  BUFLOOP: 
+ 005B  1E                    C          PUSH    DS 
+ 005C  56                    C          PUSH    SI 
+ 005D  C5 34                 C          LDS     SI,[SI.NEXTBUF] 
+ 005F  E8 00C7 R             C          CALL    POINTCOMP 
+ 0062  74 04                 C          JZ      GOTTHEBUF 
+ 0064  58                    C          POP     AX 
+ 0065  58                    C          POP     AX 
+ 0066  EB F3                 C          JMP     SHORT BUFLOOP 
+                             C   
+ 0068                        C  GOTTHEBUF: 
+ 0068  5E                    C          POP     SI 
+ 0069  1F                    C          POP     DS 
+ 006A  89 0C                 C          MOV     WORD PTR [SI.NEXTBUF],CX       
+				 ; If Curbuf.nextbuf == buf 
+ 006C  89 6C 02              C          MOV     WORD PTR [SI.NEXTBUF+2],BP     
+				 ; Curbuf.nextbuf = Pointsave 
+ 006F                        C  LOOKEND: 
+ 006F  1E                    C          PUSH    DS 
+ 0070  56                    C          PUSH    SI 
+ 0071  C5 34                 C          LDS     SI,[SI.NEXTBUF] 
+ 0073  83 FE FF              C          CMP     SI,-1 
+ 0076  74 04                 C          JZ      GOTHEEND 
+ 0078  58                    C          POP     AX 
+ 0079  58                    C          POP     AX 
+ 007A  EB F3                 C          JMP     SHORT LOOKEND 
+                             C   
+ 007C                        C  GOTHEEND: 
+ 007C  5E                    C          POP     SI 
+ 007D  1F                    C          POP     DS 
+ 007E  89 3C                 C          MOV     WORD PTR [SI.NEXTBUF],DI 
+ 0080  8C 44 02              C          MOV     WORD PTR [SI.NEXTBUF+2],ES     
+				 ; Curbuf.nextbuf = Buf 
+ 0083  26: C7 05 FFFF        C          MOV     WORD PTR ES:[DI.NEXTBUF],-1 
+ 0088  26: C7 45 02 FFFF     C          MOV     WORD PTR ES:[DI.NEXTBUF+2],-1  
+				    ; Buf is LAST 
+ 008E                        C  NRET: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-7
+SCANPLACE, PLACEBUF -- PUT A BUFFER BACK IN THE POOL        
+
+                             C          invoke  restore_world 
+ 008E  E8 0000 E             C1  CALL restore_world
+                             C          return 
+ 0091                        C1 ??0007:
+ 0091  C3                    C1  RET
+                             C   
+                             C  PLACEBUF    ENDP 
+                             C   
+                             C          procedure   PLACEHEAD,NEAR 
+ 0092                        C1 PLACEHEAD PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; SAME AS PLACEBUF except places buffer at head
+				 
+                             C   
+                             C          invoke  save_world 
+ 0092  E8 0000 E             C1  CALL save_world
+ 0095  1E                    C          PUSH    DS 
+ 0096  07                    C          POP     ES 
+ 0097  36: C5 36 0000 E      C          LDS     SI,[BUFFHEAD] 
+ 009C  36: 89 3E 0000 E      C          MOV     WORD PTR [BUFFHEAD],DI 
+ 00A1  36: 8C 06 0002 E      C          MOV     WORD PTR [BUFFHEAD+2],ES 
+ 00A6  26: 89 35             C          MOV     WORD PTR ES:[DI.NEXTBUF],SI 
+ 00A9  26: 8C 5D 02          C          MOV     WORD PTR ES:[DI.NEXTBUF+2],DS 
+ 00AD                        C  LOOKEND2: 
+ 00AD  1E                    C          PUSH    DS 
+ 00AE  56                    C          PUSH    SI 
+ 00AF  C5 34                 C          LDS     SI,[SI.NEXTBUF] 
+ 00B1  E8 00C7 R             C          CALL    POINTCOMP 
+ 00B4  74 04                 C          JZ      GOTHEEND2 
+ 00B6  58                    C          POP     AX 
+ 00B7  58                    C          POP     AX 
+ 00B8  EB F3                 C          JMP     SHORT LOOKEND2 
+                             C   
+ 00BA                        C  GOTHEEND2: 
+ 00BA  5E                    C          POP     SI 
+ 00BB  1F                    C          POP     DS 
+ 00BC  C7 04 FFFF            C          MOV     WORD PTR [SI.NEXTBUF],-1 
+ 00C0  C7 44 02 FFFF         C          MOV     WORD PTR [SI.NEXTBUF+2],-1     
+				 ; Buf is LAST 
+ 00C5  EB C7                 C          JMP     SHORT NRET 
+                             C   
+                             C  PLACEHEAD   ENDP 
+                             C   
+                             C  SUBTTL POINTCOMP -- 20 BIT POINTER COMPARE 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-8
+POINTCOMP -- 20 BIT POINTER COMPARE                         
+
+                             C  PAGE 
+                             C          procedure   PointComp,NEAR 
+ 00C7                        C1 PointComp PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Compare DS:SI to ES:DI (or DS:DI to ES:SI) fo
+				r equality 
+                             C  ; DO NOT USE FOR < or > 
+                             C  ; No Registers altered 
+                             C   
+ 00C7  3B F7                 C          CMP     SI,DI 
+                             C          retnz 
+ 00C9  75 C6                 C2  ??0008: jnz ret_l
+ 00CB  51                    C          PUSH    CX 
+ 00CC  52                    C          PUSH    DX 
+ 00CD  8C D9                 C          MOV     CX,DS 
+ 00CF  8C C2                 C          MOV     DX,ES 
+ 00D1  3B CA                 C          CMP     CX,DX 
+ 00D3  5A                    C          POP     DX 
+ 00D4  59                    C          POP     CX 
+                             C          return 
+ 00D5                        C1 ??000A:
+ 00D5  C3                    C1  RET
+                             C  PointComp   ENDP 
+                             C   
+                             C  SUBTTL GETBUFFR -- GET A SECTOR INTO A BUFFER 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-9
+GETBUFFR -- GET A SECTOR INTO A BUFFER                      
+
+                             C  PAGE 
+                             C          procedure   GETBUFFR,NEAR 
+ 00D6                        C1 GETBUFFR PROC NEAR
+                             C  ASSUME  DS:DOSGROUP,ES:NOTHING 
+                             C   
+                             C  ; Input: 
+                             C  ;       AH = Priority buffer is to have 
+                             C  ;       AL = 0 means sector must be pre-read 
+                             C  ;          ELSE no pre-read 
+                             C  ;       DX = Desired physical sector number 
+                             C  ;       ES:BP = Pointer to drive parameters 
+                             C  ; Function: 
+                             C  ;       Get the specified sector into one of th
+				e I/O buffers 
+                             C  ;       And shuffle the queue 
+                             C  ; Output: 
+                             C  ;       [CURBUF] Points to the Buffer for the s
+				ector 
+                             C  ; DX,ES:BP unchanged, all other registers destr
+				oyed 
+                             C   
+ 00D6  33 F6                 C          XOR     SI,SI 
+                             C          entry   GETBUFFRB 
+ 00D8                        C1 GETBUFFRB:
+ 00D8  A3 0000 E             C          MOV     [PREREAD],AX 
+ 00DB  26: 8A 46 00          C          MOV     AL,ES:[BP.dpb_drive] 
+ 00DF  C5 3E 0000 E          C          LDS     DI,[LASTBUFFER] 
+                             C  ASSUME  DS:NOTHING 
+ 00E3  83 FF FF              C          CMP     DI,-1                          
+				 ; Recency pointer valid? 
+ 00E6  74 0C                 C          JZ      SKBUF                          
+				 ; No 
+ 00E8  3B 55 08              C          CMP     DX,[DI.BUFSECNO] 
+ 00EB  75 07                 C          JNZ     SKBUF                          
+				 ; Wrong sector 
+ 00ED  3A 45 04              C          CMP     AL,[DI.BUFDRV] 
+ 00F0  75 02                 C          JNZ     SKBUF                          
+				 ; Wrong Drive 
+ 00F2  EB 6F                 C          JMP     SHORT JUSTBUF                  
+				 ; Just asked for same buffer 
+ 00F4                        C  SKBUF: 
+ 00F4  36: C5 3E 0000 E      C          LDS     DI,[BUFFHEAD] 
+ 00F9                        C  NXTBFF: 
+ 00F9  3B 55 08              C          CMP     DX,[DI.BUFSECNO] 
+ 00FC  75 07                 C          JNZ     BUMP 
+ 00FE  3A 45 04              C          CMP     AL,[DI.BUFDRV] 
+ 0101  75 02                 C          JNZ     BUMP 
+ 0103  EB 49                 C          JMP     SHORT SETINF 
+ 0105                        C  BUMP: 
+ 0105  C5 3D                 C          LDS     DI,[DI.NEXTBUF] 
+ 0107  83 FF FF              C          CMP     DI,-1 
+ 010A  75 ED                 C          JNZ     NXTBFF 
+ 010C  36: C5 3E 0000 E      C          LDS     DI,[BUFFHEAD] 
+ 0111  56                    C          PUSH    SI 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-10
+GETBUFFR -- GET A SECTOR INTO A BUFFER                      
+
+ 0112  52                    C          PUSH    DX 
+ 0113  55                    C          PUSH    BP 
+ 0114  06                    C          PUSH    ES 
+ 0115  E8 01B3 R             C          CALL    BUFWRITE        ; Write out the
+				 dirty buffer 
+ 0118  07                    C          POP     ES 
+ 0119  5D                    C          POP     BP 
+ 011A  5A                    C          POP     DX 
+ 011B  5E                    C          POP     SI 
+ 011C                        C  RDSEC:                          ; Read in the n
+				ew sector 
+ 011C  36: F6 06 0000 E FF   C          TEST    BYTE PTR [PREREAD],-1 
+ 0122  75 18                 C          JNZ     SETBUF 
+ 0124  8D 5D 10              C          LEA     BX,[DI.BufInSiz]        ; Point
+				 at buffer 
+ 0127  B9 0001               C          MOV     CX,1 
+ 012A  56                    C          PUSH    SI 
+ 012B  57                    C          PUSH    DI 
+ 012C  52                    C          PUSH    DX 
+ 012D  0B F6                 C          OR      SI,SI 
+ 012F  74 05                 C          JZ      NORMSEC 
+                             C          invoke  FATSECRD 
+ 0131  E8 0000 E             C1  CALL FATSECRD
+ 0134  EB 03                 C          JMP     SHORT GOTTHESEC         ; Buffe
+				r is marked free if read barfs 
+ 0136                        C  NORMSEC: 
+                             C          invoke  DREAD                   ; Buffe
+				r is marked free if read barfs 
+ 0136  E8 0000 E             C1  CALL DREAD
+ 0139                        C  GOTTHESEC: 
+ 0139  5A                    C          POP     DX 
+ 013A  5F                    C          POP     DI 
+ 013B  5E                    C          POP     SI 
+ 013C                        C  SETBUF: 
+ 013C  89 55 08              C          MOV     [DI.BUFSECNO],DX 
+ 013F  89 6D 0C              C          MOV     WORD PTR [DI.BUFDRVDP],BP 
+ 0142  8C 45 0E              C          MOV     WORD PTR [DI.BUFDRVDP+2],ES 
+ 0145  32 E4                 C          XOR     AH,AH 
+ 0147  26: 8A 46 00          C          MOV     AL,ES:[BP.dpb_drive] 
+ 014B  89 45 04              C          MOV     WORD PTR [DI.BUFDRV],AX 
+ 014E                        C  SETINF: 
+ 014E  B8 0001               C          MOV     AX,1                           
+				 ; Default to not a FAT sector 
+ 0151  0B F6                 C          OR      SI,SI 
+ 0153  74 08                 C          JZ      SETSTUFFOK 
+ 0155  26: 8A 46 08          C          MOV     AL,ES:[BP.dpb_FAT_count] 
+ 0159  26: 8A 66 0F          C          MOV     AH,ES:[BP.dpb_FAT_size] 
+ 015D                        C  SETSTUFFOK: 
+ 015D  89 45 0A              C          MOV     WORD PTR [DI.BUFWRTCNT],AX 
+ 0160  E8 0037 R             C          CALL    PLACEBUF 
+ 0163                        C  JUSTBUF: 
+ 0163  36: 8C 1E 0002 E      C          MOV     WORD PTR [CURBUF+2],DS 
+ 0168  36: 8C 1E 0002 E      C          MOV     WORD PTR [LASTBUFFER+2],DS 
+ 016D  16                    C          PUSH    SS 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-11
+GETBUFFR -- GET A SECTOR INTO A BUFFER                      
+
+ 016E  1F                    C          POP     DS 
+                             C  ASSUME  DS:DOSGROUP 
+ 016F  89 3E 0000 E          C          MOV     WORD PTR [CURBUF],DI 
+ 0173  89 3E 0000 E          C          MOV     WORD PTR [LASTBUFFER],DI 
+                             C          return 
+ 0177                        C1 ??000B:
+ 0177  C3                    C1  RET
+                             C  GETBUFFR    ENDP 
+                             C   
+                             C   
+                             C  SUBTTL FLUSHBUF -- WRITE OUT DIRTY BUFFERS 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-12
+FLUSHBUF -- WRITE OUT DIRTY BUFFERS                         
+
+                             C  PAGE 
+                             C          procedure   FlushBuf,NEAR 
+ 0178                        C1 FlushBuf PROC NEAR
+                             C  ASSUME  DS:DOSGROUP,ES:NOTHING 
+                             C   
+                             C  ; Input: 
+                             C  ;       DS = DOSGROUP 
+                             C  ;       AL = Physical unit number 
+                             C  ;          = -1 for all units 
+                             C  ; Function: 
+                             C  ;       Write out all dirty buffers for unit, a
+				nd flag them as clean 
+                             C  ; DS Preserved, all others destroyed (ES too) 
+                             C   
+ 0178  C5 3E 0000 E          C          LDS     DI,[BUFFHEAD] 
+                             C  ASSUME  DS:NOTHING 
+ 017C  B4 FF                 C          MOV     AH,-1 
+ 017E                        C  NXTBUFF: 
+ 017E  38 65 04              C          CMP     [DI.BUFDRV],AH 
+ 0181  74 26                 C          JZ      SKIPBFF                 ; Skip 
+				free buffers 
+ 0183  3A E0                 C          CMP     AH,AL 
+ 0185  74 05                 C          JZ      DOBUFFER                ; Do al
+				l dirty buffers 
+ 0187  3A 45 04              C          CMP     AL,[DI.BUFDRV] 
+ 018A  75 1D                 C          JNZ     SKIPBFF                 ; Buffe
+				r not for this unit 
+ 018C                        C  DOBUFFER: 
+ 018C  80 7D 05 00           C          CMP     BYTE PTR [DI.BUFDIRTY],0 
+ 0190  74 17                 C          JZ      SKIPBFF                 ; Buffe
+				r not dirty 
+ 0192  50                    C          PUSH    AX 
+ 0193  FF 75 04              C          PUSH    WORD PTR [DI.BUFDRV] 
+ 0196  E8 01B3 R             C          CALL    BUFWRITE 
+ 0199  58                    C          POP     AX 
+ 019A  32 E4                 C          XOR     AH,AH                   ; Buffe
+				r is clean 
+ 019C  36: 3A 06 0000 E      C          CMP     AL,BYTE PTR [WPERR] 
+ 01A1  75 02                 C          JNZ     NOZAP 
+ 01A3  B0 FF                 C          MOV     AL,0FFH                 ; Inval
+				idate buffer, it is inconsistent 
+ 01A5                        C  NOZAP: 
+ 01A5  89 45 04              C          MOV     WORD PTR [DI.BUFDRV],AX 
+ 01A8  58                    C          POP     AX                      ; Searc
+				h info 
+ 01A9                        C  SKIPBFF: 
+ 01A9  C5 3D                 C          LDS     DI,[DI.NEXTBUF] 
+ 01AB  83 FF FF              C          CMP     DI,-1 
+ 01AE  75 CE                 C          JNZ     NXTBUFF 
+ 01B0  16                    C          PUSH    SS 
+ 01B1  1F                    C          POP     DS 
+                             C          return 
+ 01B2                        C1 ??000C:
+ 01B2  C3                    C1  RET
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-13
+FLUSHBUF -- WRITE OUT DIRTY BUFFERS                         
+
+                             C  FlushBuf    ENDP 
+                             C   
+                             C   
+                             C  SUBTTL BUFWRITE -- WRITE OUT A BUFFER IF DIRTY 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-14
+BUFWRITE -- WRITE OUT A BUFFER IF DIRTY                     
+
+                             C  PAGE 
+                             C          procedure   BufWrite,NEAR 
+ 01B3                        C1 BufWrite PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Input: 
+                             C  ;       DS:DI Points to the buffer 
+                             C  ; Function: 
+                             C  ;       Write out all the buffer if dirty. 
+                             C  ; Output: 
+                             C  ;       Buffer marked free 
+                             C  ; DS:DI Preserved, ALL others destroyed (ES too
+				) 
+                             C   
+ 01B3  B8 00FF               C          MOV     AX,00FFH 
+ 01B6  87 45 04              C          XCHG    AX,WORD PTR [DI.BUFDRV] ; Free,
+				 in case write barfs 
+ 01B9  3C FF                 C          CMP     AL,0FFH 
+                             C          retz                            ; Buffe
+				r is free. 
+ 01BB  74 F5                 C2  ??000D: jz ret_l
+ 01BD  0A E4                 C          OR      AH,AH 
+                             C          retz                            ; Buffe
+				r is clean. 
+ 01BF  74 F1                 C2  ??000F: jz ret_l
+ 01C1  36: 3A 06 0000 E      C          CMP     AL,BYTE PTR [WPERR] 
+                             C          retz                            ; If in
+				 WP error zap buffer 
+ 01C6  74 EA                 C2  ??0011: jz ret_l
+ 01C8  C4 6D 0C              C          LES     BP,[DI.BUFDRVDP] 
+ 01CB  8D 5D 10              C          LEA     BX,[DI.BufInSiz]        ; Point
+				 at buffer 
+ 01CE  8B 55 08              C          MOV     DX,[DI.BUFSECNO] 
+ 01D1  8B 4D 0A              C          MOV     CX,WORD PTR [DI.BUFWRTCNT] 
+ 01D4  8A C5                 C          MOV     AL,CH                   ; [DI.B
+				UFWRTINC] 
+ 01D6  32 ED                 C          XOR     CH,CH 
+ 01D8  8A E5                 C          MOV     AH,CH 
+ 01DA  57                    C          PUSH    DI 
+ 01DB                        C  WRTAGAIN: 
+ 01DB  51                    C          PUSH    CX 
+ 01DC  50                    C          PUSH    AX 
+ 01DD  B9 0001               C          MOV     CX,1 
+ 01E0  53                    C          PUSH    BX 
+ 01E1  52                    C          PUSH    DX 
+                             C          invoke  DWRITE          ; Write out the
+				 dirty buffer 
+ 01E2  E8 0000 E             C1  CALL DWRITE
+ 01E5  5A                    C          POP     DX 
+ 01E6  5B                    C          POP     BX 
+ 01E7  58                    C          POP     AX 
+ 01E8  59                    C          POP     CX 
+ 01E9  03 D0                 C          ADD     DX,AX 
+ 01EB  E2 EE                 C          LOOP    WRTAGAIN 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Page     1-15
+BUFWRITE -- WRITE OUT A BUFFER IF DIRTY                     
+
+ 01ED  5F                    C          POP     DI 
+                             C          return 
+ 01EE                        C1 ??0013:
+ 01EE  C3                    C1  RET
+                             C  BufWrite    ENDP 
+                             C   
+                             C  do_ext 
+                             C   
+ 01EF                        C  CODE    ENDS 
+                             C      END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DOSGROUP . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	01EF	BYTE	PUBLIC	'CODE'
+  CONSTANTS  . . . . . . . . . .  	0000	BYTE	PUBLIC	'CONST'
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Symbols-5
+                                                             
+
+  LAST . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'LAST'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Alias	 FALSE		
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BUFFHEAD . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+BUFLOOP  . . . . . . . . . . . .  	L NEAR	005B	CODE
+BUFWRITE . . . . . . . . . . . .  	N PROC	01B3	CODE	Global	Length = 003C
+BUMP . . . . . . . . . . . . . .  	L NEAR	0105	CODE
+
+CANCEL . . . . . . . . . . . . .  	Number	0018	
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Symbols-6
+                                                             
+
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CURBUF . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Symbols-7
+                                                             
+
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DOBUFFER . . . . . . . . . . . .  	L NEAR	018C	CODE
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+ESCCH  . . . . . . . . . . . . .  	Number	001B	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Symbols-8
+                                                             
+
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FLUSHBUF . . . . . . . . . . . .  	N PROC	0178	CODE	Global	Length = 003B
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+
+GETBUFFR . . . . . . . . . . . .  	N PROC	00D6	CODE	Global	Length = 00A2
+GETBUFFRB  . . . . . . . . . . .  	L NEAR	00D8	CODE	Global
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+GOTHEEND . . . . . . . . . . . .  	L NEAR	007C	CODE
+GOTHEEND2  . . . . . . . . . . .  	L NEAR	00BA	CODE
+GOTTHEBUF  . . . . . . . . . . .  	L NEAR	0068	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Symbols-9
+                                                             
+
+GOTTHESEC  . . . . . . . . . . .  	L NEAR	0139	CODE
+
+HIGHMEM  . . . . . . . . . . . .  	Alias	 FALSE		
+
+IBM  . . . . . . . . . . . . . .  	Alias	 FALSE		
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+JUSTBUF  . . . . . . . . . . . .  	L NEAR	0163	CODE
+
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LASTBUFFER . . . . . . . . . . .  	V DWORD	0000	DATA	External
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LOOKEND  . . . . . . . . . . . .  	L NEAR	006F	CODE
+LOOKEND2 . . . . . . . . . . . .  	L NEAR	00AD	CODE
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MSVER  . . . . . . . . . . . . .  	Alias	 TRUE		
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Symbols-10
+                                                             
+
+NORMSEC  . . . . . . . . . . . .  	L NEAR	0136	CODE
+NOZAP  . . . . . . . . . . . . .  	L NEAR	01A5	CODE
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+NRET . . . . . . . . . . . . . .  	L NEAR	008E	CODE
+NRETJ  . . . . . . . . . . . . .  	L NEAR	0035	CODE
+NXTBFF . . . . . . . . . . . . .  	L NEAR	00F9	CODE
+NXTBUFF  . . . . . . . . . . . .  	L NEAR	017E	CODE
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+PLACEBUF . . . . . . . . . . . .  	N PROC	0037	CODE	Global	Length = 005B
+PLACEHEAD  . . . . . . . . . . .  	N PROC	0092	CODE	Global	Length = 0035
+POINTCOMP  . . . . . . . . . . .  	N PROC	00C7	CODE	Global	Length = 000F
+PREREAD  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+RDSEC  . . . . . . . . . . . . .  	L NEAR	011C	CODE
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RET_L  . . . . . . . . . . . . .  	NEAR 	01EE	CODE
+RET_NZ . . . . . . . . . . . . .  	NEAR 	00C9	CODE
+RET_Z  . . . . . . . . . . . . .  	NEAR 	01C6	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SCANPLACE  . . . . . . . . . . .  	N PROC	0029	CODE	Global	Length = 000C
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Symbols-11
+                                                             
+
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETBUF . . . . . . . . . . . . .  	L NEAR	013C	CODE
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SETINF . . . . . . . . . . . . .  	L NEAR	014E	CODE
+SETLOOP  . . . . . . . . . . . .  	L NEAR	0008	CODE
+SETSTUFFOK . . . . . . . . . . .  	L NEAR	015D	CODE
+SETVISIT . . . . . . . . . . . .  	N PROC	0000	CODE	Global	Length = 0029
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+SKBUF  . . . . . . . . . . . . .  	L NEAR	00F4	CODE
+SKIPBFF  . . . . . . . . . . . .  	L NEAR	01A9	CODE
+SKIPVISIT  . . . . . . . . . . .  	L NEAR	0019	CODE	Global
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+
+TOGLINS  . . . . . . . . . . . .  	Alias	 WANG		
+TOGLPRN  . . . . . . . . . . . .  	Alias	 FALSE		
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:48:00
+STDBUF - MSDOS buffer management                            Symbols-12
+                                                             
+
+WANG . . . . . . . . . . . . . .  	Alias	 FALSE		
+WPERR  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+WRTAGAIN . . . . . . . . . . . .  	L NEAR	01DB	CODE
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+ZEROEXT  . . . . . . . . . . . .  	Alias	 TRUE		
+
+??0000 . . . . . . . . . . . . .  	L NEAR	0018	CODE
+??0001 . . . . . . . . . . . . .  	L NEAR	001C	CODE
+??0003 . . . . . . . . . . . . .  	L NEAR	0022	CODE
+??0005 . . . . . . . . . . . . .  	L NEAR	0028	CODE
+??0006 . . . . . . . . . . . . .  	L NEAR	0034	CODE
+??0007 . . . . . . . . . . . . .  	L NEAR	0091	CODE
+??0008 . . . . . . . . . . . . .  	L NEAR	00C9	CODE
+??000A . . . . . . . . . . . . .  	L NEAR	00D5	CODE
+??000B . . . . . . . . . . . . .  	L NEAR	0177	CODE
+??000C . . . . . . . . . . . . .  	L NEAR	01B2	CODE
+??000D . . . . . . . . . . . . .  	L NEAR	01BB	CODE
+??000F . . . . . . . . . . . . .  	L NEAR	01BF	CODE
+??0011 . . . . . . . . . . . . .  	L NEAR	01C6	CODE
+??0013 . . . . . . . . . . . . .  	L NEAR	01EE	CODE
+
+
+   1904 Source  Lines
+   2252 Total   Lines
+    605 Symbols
+
+  19026 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

@@ -1,0 +1,1340 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Page     1-1
+                                                            
+
+                                TITLE DIRCALL - Directory manipulation internal
+				 calls 
+                                NAME  DIRCALL 
+                                 
+                                ; $MKDIR 
+                                ; $CHDIR 
+                                ; $RMDIR 
+                                 
+                                .list 
+                                 
+                                endif 
+                                 
+                                        i_need  AUXSTACK,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  NoSetDir,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CURBUF, DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DIRSTART,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  THISDPB,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  NAME1,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  LASTENT,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  ATTRIB,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  THISFCB,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  AUXSTACK,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CREATING,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DRIVESPEC,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  ROOTSTART,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  SWITCH_CHARACTER,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+                                 
+                                        extrn   sys_ret_ok:near,sys_ret_err:nea
+				r 
+                                 
+                                 
+                                ; XENIX CALLS 
+                                BREAK <$MkDir - Make a directory entry> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Page     1-3
+$MkDir - Make a directory entry                             
+
+ 0000  E9 00B3 R                MKNERRJ: JMP    MKNERR 
+ 0003  E9 00B1 R                NODEEXISTSJ: JMP NODEEXISTS 
+                                        procedure   $MKDIR,NEAR 
+ 0006                         1 $MKDIR PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:DX Points to asciz name 
+                                ; Function: 
+                                ;       Make a new directory 
+                                ; Returns: 
+                                ;       STD XENIX Return 
+                                ;       AX = mkdir_path_not_found if path bad 
+                                ;       AX = mkdir_access_denied  If 
+                                ;               Directory cannot be created 
+                                ;               Node already exists 
+                                ;               Device name given 
+                                ;               Disk or directory(root) full 
+                                        invoke  validate_path 
+ 0006  E8 0000 E              1  CALL validate_path
+ 0009  72 F5                            JC      MKNERRJ 
+ 000B  8B F2                            MOV     SI,DX 
+ 000D  36: 8C 16 0002 E                 MOV     WORD PTR [THISFCB+2],SS 
+ 0012  36: C7 06 0000 E FFD8            MOV     WORD PTR [THISFCB],OFFSET DOSGR
+				OUP:AUXSTACK-40  ; Scratch space 
+        E                               MOV     WORD PTR [THISFCB],OFFSET DOSGR
+				OUP:AUXSTACK-40  ; Scratch space 
+ 0019  B0 10                            MOV     AL,attr_directory 
+ 001B  36: C7 06 0000 E E500            MOV     WORD PTR [CREATING],0E500h 
+                                        invoke  MAKENODE 
+ 0022  E8 0000 E              1  CALL MAKENODE
+                                ASSUME  DS:DOSGROUP 
+ 0025  B0 03                            MOV     AL,mkdir_path_not_found 
+ 0027  72 D7                            JC      MKNERRJ 
+ 0029  75 D8                            JNZ     NODEEXISTSJ 
+ 002B  C5 3E 0000 E                     LDS     DI,[CURBUF] 
+                                ASSUME  DS:NOTHING 
+ 002F  2B F7                            SUB     SI,DI 
+ 0031  56                               PUSH    SI              ; Pointer to fc
+				b_FIRCLUS 
+ 0032  FF 75 08                         PUSH    [DI.BUFSECNO]   ; Sector of new
+				 node 
+ 0035  16                               PUSH    SS 
+ 0036  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 0037  FF 36 0000 E                     PUSH    [DIRSTART]      ; Parent for ..
+				 entry 
+ 003B  33 C0                            XOR     AX,AX 
+ 003D  A3 0000 E                        MOV     [DIRSTART],AX   ; Null director
+				y 
+                                        invoke  NEWDIR 
+ 0040  E8 0000 E              1  CALL NEWDIR
+ 0043  72 51                            JC      NODEEXISTSPOPDEL    ; No room 
+                                        invoke  GETENT          ; First entry 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Page     1-4
+$MkDir - Make a directory entry                             
+
+ 0045  E8 0000 E              1  CALL GETENT
+ 0048  C4 3E 0000 E                     LES     DI,[CURBUF] 
+ 004C  26: C6 45 05 01                  MOV     ES:[DI.BUFDIRTY],1 
+ 0051  83 C7 10                         ADD     DI,BUFINSIZ     ; Point at buff
+				er 
+ 0054  B8 202E                          MOV     AX,202EH        ; ". " 
+ 0057  AB                               STOSW 
+ 0058  8B 16 0000 E                     MOV     DX,[DIRSTART]   ; Point at itse
+				lf 
+                                        invoke  SETDOTENT 
+ 005C  E8 0000 E              1  CALL SETDOTENT
+ 005F  B8 2E2E                          MOV     AX,2E2EH        ; ".." 
+ 0062  AB                               STOSW 
+ 0063  5A                               POP     DX              ; Parent 
+                                        invoke  SETDOTENT 
+ 0064  E8 0000 E              1  CALL SETDOTENT
+ 0067  C4 2E 0000 E                     LES     BP,[THISDPB] 
+ 006B  5A                               POP     DX              ; Entry sector 
+ 006C  32 C0                            XOR     AL,AL           ; Pre read 
+                                        invoke  GETBUFFR 
+ 006E  E8 0000 E              1  CALL GETBUFFR
+ 0071  8B 16 0000 E                     MOV     DX,[DIRSTART] 
+ 0075  C5 3E 0000 E                     LDS     DI,[CURBUF] 
+                                ASSUME  DS:NOTHING 
+ 0079                           ZAPENT: 
+ 0079  5E                               POP     SI              ; fcb_Firclus p
+				ointer 
+ 007A  03 F7                            ADD     SI,DI 
+ 007C  89 14                            MOV     [SI],DX 
+ 007E  33 D2                            XOR     DX,DX 
+ 0080  89 54 02                         MOV     [SI+2],DX 
+ 0083  89 54 04                         MOV     [SI+4],DX 
+ 0086                           DIRUP: 
+ 0086  C6 45 05 01                      MOV     [DI.BUFDIRTY],1 
+ 008A  16                               PUSH    SS 
+ 008B  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 008C  26: 8A 46 00                     MOV     AL,ES:[BP.dpb_drive] 
+                                        invoke  FLUSHBUF 
+ 0090  E8 0000 E              1  CALL FLUSHBUF
+ 0093                           SYS_RET_OKJ: 
+ 0093  E9 0000 E                        JMP     SYS_RET_OK 
+                                 
+ 0096                           NODEEXISTSPOPDEL: 
+ 0096  5A                               POP     DX              ; Parent 
+ 0097  5A                               POP     DX              ; Entry sector 
+ 0098  C4 2E 0000 E                     LES     BP,[THISDPB] 
+ 009C  32 C0                            XOR     AL,AL           ; Pre read 
+                                        invoke  GETBUFFR 
+ 009E  E8 0000 E              1  CALL GETBUFFR
+ 00A1  C5 3E 0000 E                     LDS     DI,[CURBUF] 
+                                ASSUME  DS:NOTHING 
+ 00A5  5E                               POP     SI              ; dir_first poi
+				nter 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Page     1-5
+$MkDir - Make a directory entry                             
+
+ 00A6  03 F7                            ADD     SI,DI 
+ 00A8  83 EE 1A                         SUB     SI,dir_first    ; Point back to
+				 start of dir entry 
+ 00AB  C6 04 E5                         MOV     BYTE PTR [SI],0E5H    ; Free th
+				e entry 
+ 00AE  E8 0086 R                        CALL    DIRUP 
+ 00B1                           NODEEXISTS: 
+ 00B1  B0 05                            MOV     AL,mkdir_access_denied 
+ 00B3                           MKNERR: 
+ 00B3  E9 0000 E                        JMP     SYS_RET_ERR 
+                                $MKDIR  ENDP 
+                                 
+                                BREAK <$ChDir -- Change current directory on a 
+				drive> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Page     1-6
+$ChDir -- Change current directory on a drive               
+
+                                        procedure   $CHDIR,NEAR 
+ 00B6                         1 $CHDIR PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:DX Points to asciz name 
+                                ; Function: 
+                                ;       Change current directory 
+                                ; Returns: 
+                                ;       STD XENIX Return 
+                                ;       AX = chdir_path_not_found if error 
+                                 
+                                        invoke  validate_path 
+ 00B6  E8 0000 E              1  CALL validate_path
+ 00B9  72 5A                            JC      PathTooLong 
+                                 
+ 00BB  1E                               PUSH    DS 
+ 00BC  52                               PUSH    DX 
+ 00BD  8B F2                            MOV     SI,DX 
+                                        invoke  GETPATH 
+ 00BF  E8 0000 E              1  CALL GETPATH
+ 00C2  72 4F                            JC      PATHNOGOOD 
+ 00C4  75 4D                            JNZ     PATHNOGOOD 
+                                ASSUME  DS:DOSGROUP 
+ 00C6  A1 0000 E                        MOV     AX,[DIRSTART] 
+ 00C9  8B D8                            MOV     BX,AX 
+ 00CB  26: 87 5E 1C                     XCHG    BX,ES:[BP.dpb_current_dir] 
+ 00CF  0B C0                            OR      AX,AX 
+ 00D1  5E                               POP     SI 
+ 00D2  1F                               POP     DS 
+                                ASSUME  DS:NOTHING 
+ 00D3  74 BE                            JZ      SYS_RET_OKJ 
+ 00D5  8B FD                            MOV     DI,BP 
+ 00D7  83 C7 1E                         ADD     DI,dpb_dir_text 
+ 00DA  8B D7                            MOV     DX,DI 
+ 00DC  36: 80 3E 0000 E 00              CMP     [DRIVESPEC],0 
+ 00E2  74 02                            JZ      NODRIVESPEC 
+ 00E4  46                               INC     SI 
+ 00E5  46                               INC     SI 
+ 00E6                           NODRIVESPEC: 
+ 00E6  8B CE                            MOV     CX,SI 
+ 00E8  36: 80 3E 0000 E 00              CMP     [ROOTSTART],0 
+ 00EE  74 04                            JZ      NOTROOTPATH 
+ 00F0  46                               INC     SI 
+ 00F1  41                               INC     CX 
+ 00F2  EB 2B                            JMP     SHORT COPYTHESTRINGBXZ 
+ 00F4                           NOTROOTPATH: 
+ 00F4  0B DB                            OR      BX,BX           ; Previous path
+				 root? 
+ 00F6  74 29                            JZ      COPYTHESTRING   ; Yes 
+ 00F8  33 DB                            XOR     BX,BX 
+ 00FA                           ENDLOOP: 
+ 00FA  26: 80 3D 00                     CMP     BYTE PTR ES:[DI],0 
+ 00FE  74 04                            JZ      PATHEND 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Page     1-7
+$ChDir -- Change current directory on a drive               
+
+ 0100  47                               INC     DI 
+ 0101  43                               INC     BX 
+ 0102  EB F6                            JMP     SHORT ENDLOOP 
+ 0104                           PATHEND: 
+ 0104  B0 2F                            MOV     AL,'/' 
+ 0106  36: 3A 06 0000 E                 CMP     AL,[switch_character] 
+ 010B  75 02                            JNZ     SLASHOK 
+ 010D  B0 5C                            MOV     AL,'\'                  ; Use t
+				he alternate character 
+ 010F                           SLASHOK: 
+ 010F  AA                               STOSB 
+ 0110  43                               INC     BX 
+ 0111  EB 1D                            JMP     SHORT CHECK_LEN 
+                                 
+ 0113                           PATHNOGOOD: 
+ 0113  58                               POP     AX 
+ 0114  58                               POP     AX 
+ 0115                           PATHTOOLONG: 
+                                        error   error_path_not_found 
+ 0115  B0 03                  1  MOV AL,error_path_not_found
+ 0117                         3  ??0001:
+ 0117  E9 0000 E              3  JMP SYS_RET_ERR
+                                 
+                                ASSUME  DS:NOTHING 
+                                 
+ 011A                           INCBXCHK: 
+ 011A  43                               INC     BX 
+ 011B                           BXCHK: 
+ 011B  83 FB 40                         CMP     BX,DIRSTRLEN 
+                                        return 
+ 011E                         1 ??0002:
+ 011E  C3                     1  RET
+                                 
+ 011F                           COPYTHESTRINGBXZ: 
+ 011F  33 DB                            XOR     BX,BX 
+ 0121                           COPYTHESTRING: 
+ 0121  AC                               LODSB 
+ 0122  0A C0                            OR      AL,AL 
+                                 
+ 0124  75 03                            JNZ     FOOB 
+ 0126  E9 01B2 R                        JMP     CPSTDONE 
+ 0129                           FOOB: 
+ 0129  3C 2E                            CMP     AL,'.' 
+ 012B  74 1D                            JZ      SEEDOT 
+ 012D  E8 015D R                        CALL    COPYELEM 
+ 0130                           CHECK_LEN: 
+ 0130  83 FB 40                         CMP     BX,DIRSTRLEN 
+ 0133  72 EC                            JB      COPYTHESTRING 
+ 0135  26: 8A 45 FF                     MOV     AL,ES:[DI-1] 
+                                        invoke  PATHCHRCMP 
+ 0139  E8 0000 E              1  CALL PATHCHRCMP
+ 013C  75 01                            JNZ     OK_DI 
+ 013E  4F                               DEC     DI 
+ 013F                           OK_DI: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Page     1-8
+$ChDir -- Change current directory on a drive               
+
+ 013F  32 C0                            XOR     AL,AL 
+ 0141  AA                               STOSB                   ; Correctly ter
+				minate the path 
+ 0142  26: C7 46 1C FFFF                MOV     ES:[BP.dpb_current_dir],-1     
+				 ; Force re-validation 
+ 0148  EB CB                            JMP     SHORT PATHTOOLONG 
+                                 
+ 014A                           SEEDOT: 
+ 014A  AC                               LODSB 
+ 014B  0A C0                            OR      AL,AL           ; Check for nul
+				l 
+ 014D  74 62                            JZ      CPSTDONEDEC 
+ 014F  3C 2E                            CMP     AL,'.' 
+ 0151  75 CE                            JNZ     COPYTHESTRING   ; eat ./ 
+ 0153  E8 019C R                        CALL    DELELMES        ; have   .. 
+ 0156  AC                               LODSB                   ; eat the / 
+ 0157  0A C0                            OR      AL,AL           ; Check for nul
+				l 
+ 0159  74 56                            JZ      CPSTDONEDEC 
+ 015B  EB C4                            JMP     SHORT COPYTHESTRING 
+                                 
+                                ; Copy one element from DS:SI to ES:DI include 
+				trailing / not trailing null 
+                                ; LODSB has already been done 
+ 015D                           COPYELEM: 
+ 015D  57                               PUSH    DI                      ; Save 
+				in case too long 
+ 015E  51                               PUSH    CX 
+ 015F  B9 0800                          MOV     CX,800h                 ; lengt
+				h of filename 
+ 0162  B4 2E                            MOV     AH,'.'                  ; char 
+				to stop on 
+ 0164  E8 01B6 R                        CALL    CopyPiece               ; go fo
+				r it! 
+ 0167  E8 011B R                        CALL    BXCHK                   ; did w
+				e go over? 
+ 016A  73 13                            JAE     POPCXDI                 ; yep, 
+				go home 
+ 016C  3A E0                            CMP     AH,AL                   ; did w
+				e stop on .? 
+ 016E  74 12                            JZ      CopyExt                 ; yes, 
+				go copy ext 
+ 0170  0A C0                            OR      AL,AL                   ; did w
+				e end on nul? 
+ 0172  74 07                            JZ      DECSIRet                ; yes, 
+				bye 
+ 0174                           CopyPathEnd: 
+ 0174  AA                               STOSB                           ; save 
+				the path char 
+ 0175  E8 011A R                        CALL    INCBXCHK                ; was t
+				here room for it? 
+ 0178  73 05                            JAE     POPCXDI                 ; Nope 
+ 017A  46                               INC     SI                      ; guard
+				 against following dec 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Page     1-9
+$ChDir -- Change current directory on a drive               
+
+ 017B                           DECSIRET: 
+ 017B  4E                               DEC     SI                      ; point
+				 back at null 
+ 017C  59                               POP     CX 
+ 017D  58                               POP     AX                      ; toss 
+				away saved DI 
+                                        return 
+ 017E                         1 ??0003:
+ 017E  C3                     1  RET
+ 017F                           POPCXDI: 
+ 017F  59                               POP     CX                      ; resto
+				re 
+ 0180  5F                               POP     DI                      ; point
+				 back... 
+                                        return 
+ 0181                         1 ??0004:
+ 0181  C3                     1  RET
+ 0182                           CopyExt: 
+ 0182  AA                               STOSB                           ; save 
+				the dot 
+ 0183  E8 011A R                        CALL    INCBXCHK                ; room?
+				 
+ 0186  73 F7                            JAE     POPCXDI                 ; nope.
+				 
+ 0188  AC                               LODSB                           ; get n
+				ext char 
+ 0189  32 E4                            XOR     AH,AH                   ; NUL h
+				ere 
+ 018B  B9 0300                          MOV     CX,300h                 ; at mo
+				st 3 chars 
+ 018E  E8 01B6 R                        CALL    CopyPiece               ; go co
+				py it 
+ 0191  E8 011B R                        CALL    BXCHK                   ; did w
+				e go over 
+ 0194  73 E9                            JAE     POPCXDI                 ; yep 
+ 0196  0A C0                            OR      AL,AL                   ; suces
+				sful end? 
+ 0198  74 E1                            JZ      DECSIRET                ; yes 
+ 019A  EB D8                            JMP     CopyPathEnd             ; go st
+				ash path char 
+                                 
+ 019C                           DELELMES: 
+                                ; Delete one path element from ES:DI 
+ 019C  4F                               DEC     DI                      ; the '
+				/' 
+ 019D  4B                               DEC     BX 
+                                 
+                                        ELSE 
+ 019E                           DELLOOP: 
+ 019E  3B FA                            CMP     DI,DX 
+                                        retz 
+ 01A0  74 DF                  2  ??0005: jz ret_l
+ 01A2  50                               PUSH    AX 
+ 01A3  26: 8A 45 FF                     MOV     AL,ES:[DI-1] 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Page     1-10
+$ChDir -- Change current directory on a drive               
+
+                                        invoke  PATHCHRCMP 
+ 01A7  E8 0000 E              1  CALL PATHCHRCMP
+ 01AA  58                               POP     AX 
+                                        retz 
+ 01AB  74 D4                  2  ??0007: jz ret_l
+ 01AD  4F                               DEC     DI 
+ 01AE  4B                               DEC     BX 
+ 01AF  EB ED                            JMP     SHORT DELLOOP 
+                                        ENDIF 
+                                 
+ 01B1                           CPSTDONEDEC: 
+ 01B1  4F                               DEC     DI                      ; Back 
+				up over trailing / 
+ 01B2                           CPSTDONE: 
+ 01B2  AA                               STOSB                           ; The N
+				UL 
+ 01B3  E9 0000 E                        JMP     SYS_RET_OK 
+                                 
+                                ; copy a piece CH chars max until the char in A
+				H (or path or NUL) 
+ 01B6                           CopyPiece: 
+ 01B6  AA                               STOSB                           ; store
+				 the character 
+ 01B7  FE C1                            INC     CL                      ; moved
+				 a byte 
+ 01B9  E8 011A R                        CALL    INCBXCHK                ; room 
+				enough? 
+ 01BC  73 14                            JAE     CopyPieceRet            ; no, p
+				op CX and DI 
+ 01BE  0A C0                            OR      AL,AL                   ; end o
+				f string? 
+ 01C0  74 10                            JZ      CopyPieceRet            ; yes, 
+				dec si and return 
+                                 
+                                        ENDIF 
+                                 
+ 01C2  3A CD                            CMP     CL,CH                   ; move 
+				too many? 
+ 01C4  76 02                            JBE     CopyPieceNext           ; nope 
+                                 
+                                        ENDIF 
+                                 
+ 01C6  4F                               DEC     DI                      ; back 
+				up a char 
+ 01C7  4B                               DEC     BX 
+ 01C8                           CopyPieceNext: 
+ 01C8  AC                               LODSB                           ; get n
+				ext character 
+                                        invoke  PathChrCmp              ; end o
+				f road? 
+ 01C9  E8 0000 E              1  CALL PathChrCmp
+ 01CC  74 04                            JZ      CopyPieceRet            ; yep, 
+				return and don't dec SI 
+ 01CE  3A C4                            CMP     AL,AH                   ; end o
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Page     1-11
+$ChDir -- Change current directory on a drive               
+
+				f filename? 
+ 01D0  75 E4                            JNZ     CopyPiece               ; go do
+				 name 
+ 01D2                           CopyPieceRet: 
+                                        return                          ; bye! 
+ 01D2                         1 ??0009:
+ 01D2  C3                     1  RET
+                                 
+                                $CHDIR  ENDP 
+                                 
+                                BREAK <$RmDir -- Remove a directory> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Page     1-12
+$RmDir -- Remove a directory                                
+
+ 01D3  E9 027B R                NOPATHJ: JMP    NOPATH 
+                                 
+                                        procedure   $RMDIR,NEAR         ; Syste
+				m call 47 
+ 01D6                         1 $RMDIR PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:DX Points to asciz name 
+                                ; Function: 
+                                ;       Delete directory if empty 
+                                ; Returns: 
+                                ;       STD XENIX Return 
+                                ;       AX = rmdir_path_not_found If path bad 
+                                ;       AX = rmdir_access_denied If 
+                                ;               Directory not empty 
+                                ;               Path not directory 
+                                ;               Root directory specified 
+                                ;               Directory malformed (. and .. n
+				ot first two entries) 
+                                ;       AX = rmdir_current_directory 
+                                 
+                                        invoke  Validate_path 
+ 01D6  E8 0000 E              1  CALL Validate_path
+ 01D9  72 F8                            JC      NoPathJ 
+ 01DB  8B F2                            MOV     SI,DX 
+                                        invoke  GETPATH 
+ 01DD  E8 0000 E              1  CALL GETPATH
+ 01E0  72 F1                            JC      NOPATHJ 
+                                ASSUME  DS:DOSGROUP 
+ 01E2  75 21                            JNZ     NOTDIRPATH 
+ 01E4  8B 3E 0000 E                     MOV     DI,[DIRSTART] 
+ 01E8  0B FF                            OR      DI,DI 
+ 01EA  74 19                            JZ      NOTDIRPATH 
+ 01EC  26: 8B 4E 1C                     MOV     CX,ES:[BP.dpb_current_dir] 
+ 01F0  83 F9 FF                         CMP     CX,-1 
+ 01F3  75 15                            JNZ     rmdir_current_dir_check 
+                                        invoke  GetCurrDir 
+ 01F5  E8 0000 E              1  CALL GetCurrDir
+                                        invoke  Get_user_stack 
+ 01F8  E8 0000 E              1  CALL Get_user_stack
+ 01FB  8B 54 06                         MOV     DX,[SI.user_DX] 
+ 01FE  8E 5C 0E                         MOV     DS,[SI.user_DS] 
+ 0201  EB D3                            JMP     $RMDIR 
+                                 
+ 0203                           NOTDIRPATHPOP: 
+ 0203  58                               POP     AX 
+ 0204  58                               POP     AX 
+ 0205                           NOTDIRPATH: 
+                                        error   error_access_denied 
+ 0205  B0 05                  1  MOV AL,error_access_denied
+ 0207                         3  ??000B:
+ 0207  E9 0000 E              3  JMP SYS_RET_ERR
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Page     1-13
+$RmDir -- Remove a directory                                
+
+ 020A                           rmdir_current_dir_check: 
+ 020A  3B F9                            CMP     DI,CX 
+ 020C  75 04                            JNZ     rmdir_get_buf 
+                                        error   error_current_directory 
+ 020E  B0 10                  1  MOV AL,error_current_directory
+ 0210                         3  ??000D:
+ 0210  EB F5                  3  JMP SYS_RET_ERR_J
+                                 
+ 0212                           rmdir_get_buf: 
+ 0212  C5 3E 0000 E                     LDS     DI,[CURBUF] 
+                                ASSUME  DS:NOTHING 
+ 0216  2B DF                            SUB     BX,DI 
+ 0218  53                               PUSH    BX                      ; Save 
+				entry pointer 
+ 0219  FF 75 08                         PUSH    [DI.BUFSECNO]           ; Save 
+				sector number 
+ 021C  16                               PUSH    SS 
+ 021D  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 021E  16                               PUSH    SS 
+ 021F  07                               POP     ES 
+ 0220  BF 0000 E                        MOV     DI,OFFSET DOSGROUP:NAME1 
+ 0223  B0 3F                            MOV     AL,'?' 
+ 0225  B9 000B                          MOV     CX,11 
+ 0228  F3/ AA                           REP     STOSB 
+ 022A  32 C0                            XOR     AL,AL 
+ 022C  AA                               STOSB 
+                                        invoke  STARTSRCH 
+ 022D  E8 0000 E              1  CALL STARTSRCH
+                                        invoke  GETENTRY 
+ 0230  E8 0000 E              1  CALL GETENTRY
+ 0233  8E 1E 0002 E                     MOV     DS,WORD PTR [CURBUF+2] 
+                                ASSUME  DS:NOTHING 
+ 0237  8B F3                            MOV     SI,BX 
+ 0239  AD                               LODSW 
+ 023A  3D 202E                          CMP     AX,(' ' SHL 8) OR '.' 
+ 023D  75 C4                            JNZ     NOTDIRPATHPOP 
+ 023F  83 C6 1E                         ADD     SI,32-2 
+ 0242  AD                               LODSW 
+ 0243  3D 2E2E                          CMP     AX,('.' SHL 8) OR '.' 
+ 0246  75 BB                            JNZ     NOTDIRPATHPOP 
+ 0248  16                               PUSH    SS 
+ 0249  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 024A  C7 06 0000 E 0002                MOV     [LASTENT],2             ; Skip 
+				. and .. 
+                                        invoke  GETENTRY 
+ 0250  E8 0000 E              1  CALL GETENTRY
+ 0253  C6 06 0000 E 16                  MOV     [ATTRIB],attr_directory+attr_hi
+				dden+attr_system 
+                                        invoke  SRCH 
+ 0258  E8 0000 E              1  CALL SRCH
+ 025B  73 A6                            JNC     NOTDIRPATHPOP 
+ 025D  C4 2E 0000 E                     LES     BP,[THISDPB] 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Page     1-14
+$RmDir -- Remove a directory                                
+
+ 0261  8B 1E 0000 E                     MOV     BX,[DIRSTART] 
+                                        invoke  RELEASE 
+ 0265  E8 0000 E              1  CALL RELEASE
+ 0268  5A                               POP     DX 
+ 0269  32 C0                            XOR     AL,AL 
+                                        invoke  GETBUFFR 
+ 026B  E8 0000 E              1  CALL GETBUFFR
+ 026E  C5 3E 0000 E                     LDS     DI,[CURBUF] 
+                                ASSUME  DS:NOTHING 
+ 0272  5B                               POP     BX 
+ 0273  03 DF                            ADD     BX,DI 
+ 0275  C6 07 E5                         MOV     BYTE PTR [BX],0E5H      ; Free 
+				the entry 
+ 0278  E9 0086 R                        JMP     DIRUP 
+                                 
+ 027B                           NOPATH: 
+                                        error   error_path_not_found 
+ 027B  B0 03                  1  MOV AL,error_path_not_found
+ 027D                         3  ??000F:
+ 027D  EB 91                  3  JMP SYS_RET_ERR_J
+                                 
+                                $RMDIR  ENDP 
+                                 
+                                        do_ext 
+                                 
+ 027F                           CODE    ENDS 
+                                        END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DOSGROUP . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	027F	BYTE	PUBLIC	'CODE'
+  CONSTANTS  . . . . . . . . . .  	0000	BYTE	PUBLIC	'CONST'
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Symbols-5
+                                                             
+
+  LAST . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'LAST'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTRIB . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+AUXSTACK . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+BXCHK  . . . . . . . . . . . . .  	L NEAR	011B	CODE
+
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHECK_LEN  . . . . . . . . . . .  	L NEAR	0130	CODE
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+COPYELEM . . . . . . . . . . . .  	L NEAR	015D	CODE
+COPYEXT  . . . . . . . . . . . .  	L NEAR	0182	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Symbols-6
+                                                             
+
+COPYPATHEND  . . . . . . . . . .  	L NEAR	0174	CODE
+COPYPIECE  . . . . . . . . . . .  	L NEAR	01B6	CODE
+COPYPIECENEXT  . . . . . . . . .  	L NEAR	01C8	CODE
+COPYPIECERET . . . . . . . . . .  	L NEAR	01D2	CODE
+COPYTHESTRING  . . . . . . . . .  	L NEAR	0121	CODE
+COPYTHESTRINGBXZ . . . . . . . .  	L NEAR	011F	CODE
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CPSTDONE . . . . . . . . . . . .  	L NEAR	01B2	CODE
+CPSTDONEDEC  . . . . . . . . . .  	L NEAR	01B1	CODE
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREATING . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CURBUF . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DECSIRET . . . . . . . . . . . .  	L NEAR	017B	CODE
+DELELMES . . . . . . . . . . . .  	L NEAR	019C	CODE
+DELLOOP  . . . . . . . . . . . .  	L NEAR	019E	CODE
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Symbols-7
+                                                             
+
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTART . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIRUP  . . . . . . . . . . . . .  	L NEAR	0086	CODE
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DRIVESPEC  . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENDLOOP  . . . . . . . . . . . .  	L NEAR	00FA	CODE
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Symbols-8
+                                                             
+
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FOOB . . . . . . . . . . . . . .  	L NEAR	0129	CODE
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Symbols-9
+                                                             
+
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+
+INCBXCHK . . . . . . . . . . . .  	L NEAR	011A	CODE
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KANJI  . . . . . . . . . . . . .  	Number	0000	
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LASTENT  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Symbols-10
+                                                             
+
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MKNERR . . . . . . . . . . . . .  	L NEAR	00B3	CODE
+MKNERRJ  . . . . . . . . . . . .  	L NEAR	0000	CODE
+
+NAME1  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+NODEEXISTS . . . . . . . . . . .  	L NEAR	00B1	CODE
+NODEEXISTSJ  . . . . . . . . . .  	L NEAR	0003	CODE
+NODEEXISTSPOPDEL . . . . . . . .  	L NEAR	0096	CODE
+NODRIVESPEC  . . . . . . . . . .  	L NEAR	00E6	CODE
+NOPATH . . . . . . . . . . . . .  	L NEAR	027B	CODE
+NOPATHJ  . . . . . . . . . . . .  	L NEAR	01D3	CODE
+NOSETDIR . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+NOTDIRPATH . . . . . . . . . . .  	L NEAR	0205	CODE
+NOTDIRPATHPOP  . . . . . . . . .  	L NEAR	0203	CODE
+NOTROOTPATH  . . . . . . . . . .  	L NEAR	00F4	CODE
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OK_DI  . . . . . . . . . . . . .  	L NEAR	013F	CODE
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+PATHEND  . . . . . . . . . . . .  	L NEAR	0104	CODE
+PATHNOGOOD . . . . . . . . . . .  	L NEAR	0113	CODE
+PATHTOOLONG  . . . . . . . . . .  	L NEAR	0115	CODE
+POPCXDI  . . . . . . . . . . . .  	L NEAR	017F	CODE
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RET_L  . . . . . . . . . . . . .  	NEAR 	01D2	CODE
+RET_Z  . . . . . . . . . . . . .  	NEAR 	01AB	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Symbols-11
+                                                             
+
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_CURRENT_DIR_CHECK  . . . .  	L NEAR	020A	CODE
+RMDIR_GET_BUF  . . . . . . . . .  	L NEAR	0212	CODE
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+ROOTSTART  . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SEEDOT . . . . . . . . . . . . .  	L NEAR	014A	CODE
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+SLASHOK  . . . . . . . . . . . .  	L NEAR	010F	CODE
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+SWITCH_CHARACTER . . . . . . . .  	V BYTE 	0000	DATA	External
+SYS_RET_ERR  . . . . . . . . . .  	L NEAR	0000	CODE	External
+SYS_RET_ERR_J  . . . . . . . . .  	NEAR 	027D	CODE
+SYS_RET_OK . . . . . . . . . . .  	L NEAR	0000	CODE	External
+SYS_RET_OKJ  . . . . . . . . . .  	L NEAR	0093	CODE
+
+THISDPB  . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+THISFCB  . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:30:07
+DIRCALL - Directory manipulation internal calls             Symbols-12
+                                                             
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+ZAPENT . . . . . . . . . . . . .  	L NEAR	0079	CODE
+
+$CHDIR . . . . . . . . . . . . .  	N PROC	00B6	CODE	Global	Length = 011D
+$MKDIR . . . . . . . . . . . . .  	N PROC	0006	CODE	Global	Length = 00B0
+$RMDIR . . . . . . . . . . . . .  	N PROC	01D6	CODE	Global	Length = 00A9
+??0001 . . . . . . . . . . . . .  	L NEAR	0117	CODE
+??0002 . . . . . . . . . . . . .  	L NEAR	011E	CODE
+??0003 . . . . . . . . . . . . .  	L NEAR	017E	CODE
+??0004 . . . . . . . . . . . . .  	L NEAR	0181	CODE
+??0005 . . . . . . . . . . . . .  	L NEAR	01A0	CODE
+??0007 . . . . . . . . . . . . .  	L NEAR	01AB	CODE
+??0009 . . . . . . . . . . . . .  	L NEAR	01D2	CODE
+??000B . . . . . . . . . . . . .  	L NEAR	0207	CODE
+??000D . . . . . . . . . . . . .  	L NEAR	0210	CODE
+??000F . . . . . . . . . . . . .  	L NEAR	027D	CODE
+
+
+   1851 Source  Lines
+   2449 Total   Lines
+    621 Symbols
+
+  19132 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

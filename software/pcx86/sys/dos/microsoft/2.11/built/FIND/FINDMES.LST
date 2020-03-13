@@ -1,0 +1,132 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:22:33
+FIND Messages                                               Page     1-1
+                                                            
+
+                                      title   FIND Messages 
+                                 
+                                 
+ = 000D                         CR      equ     0dh                     ;A Carr
+				iage Return 
+ = 000A                         LF      equ     0ah                     ;A Line
+				 Feed 
+                                 
+ 0000                           code    segment public 
+                                 
+                                        PUBLIC  bad_vers,crlf,errmsg1,errlen1,e
+				rrmsg2,errlen2 
+                                        PUBLIC  errmsg3_pre,errlen3_pre,errmsg4
+				_pre,errlen4_pre 
+                                        PUBLIC  errmsg3_post,errlen3_post,errms
+				g4_post,errlen4_post 
+                                        PUBLIC  errmsg5,errlen5,errmsg5_opt 
+                                        PUBLIC  heading,heading_len 
+                                 
+ 0000  49 6E 63 6F 72 72 65     bad_vers db     "Incorrect DOS version$" 
+       63 74 20 44 4F 53 20     
+       76 65 72 73 69 6F 6E     
+       24                       
+ 0016  0D 0A                    crlf     db      CR,LF 
+                                 
+ 0018  46 49 4E 44 3A 20 49     errmsg1 db      "FIND: Invalid number of parame
+				ters",CR,LF 
+       6E 76 61 6C 69 64 20     
+       6E 75 6D 62 65 72 20     
+       6F 66 20 70 61 72 61     
+       6D 65 74 65 72 73 0D     
+       0A                       
+ 003C  24                       errlen1 db      $ - errmsg1 
+                                 
+ 003D  46 49 4E 44 3A 20 53     errmsg2 db      "FIND: Syntax error",CR,LF 
+       79 6E 74 61 78 20 65     
+       72 72 6F 72 0D 0A        
+ 0051  14                       errlen2 db      $ - errmsg2 
+                                 
+                                ;"errmsg3_pre<name of file>errmsg3_post" 
+ 0052  46 49 4E 44 3A 20 46     errmsg3_pre     db      "FIND: File not found "
+				 
+       69 6C 65 20 6E 6F 74     
+       20 66 6F 75 6E 64 20     
+                                
+ 0067  15                       errlen3_pre     db      $ - errmsg3_pre 
+ 0068  0D 0A                    errmsg3_post    db      CR,LF 
+ 006A  02                       errlen3_post    db      $ - errmsg3_post 
+                                 
+                                ;"errmsg4_pre<name of file>errmsg4_post" 
+ 006B  46 49 4E 44 3A 20 52     errmsg4_pre     db      "FIND: Read error in " 
+       65 61 64 20 65 72 72     
+       6F 72 20 69 6E 20        
+ 007F  14                       errlen4_pre     db      $ - errmsg4_pre 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:22:33
+FIND Messages                                               Page     1-2
+                                                            
+
+ 0080  0D 0A                    errmsg4_post    db      CR,LF 
+ 0082  02                       errlen4_post    db      $ - errmsg4_post 
+                                 
+ 0083  46 49 4E 44 3A 20 49     errmsg5         db      "FIND: Invalid Paramete
+				r " 
+       6E 76 61 6C 69 64 20     
+       50 61 72 61 6D 65 74     
+       65 72 20                 
+ 009B  ??                       errmsg5_opt     db      ? 
+ 009C  19                       errlen5         db      $ - errmsg5 
+                                 
+ 009D  0D 0A 2D 2D 2D 2D 2D     heading db      CR,LF,"---------- " 
+       2D 2D 2D 2D 2D 20        
+ 00AA  0D                       heading_len db  $ - heading 
+                                 
+ 00AB                           code    ends 
+                                        end 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:22:33
+FIND Messages                                               Symbols-1
+                                                             
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+CODE . . . . . . . . . . . . . .  	00AB	PARA	PUBLIC	
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+BAD_VERS . . . . . . . . . . . .  	L BYTE 	0000	CODE	Global
+
+CR . . . . . . . . . . . . . . .  	Number	000D	
+CRLF . . . . . . . . . . . . . .  	L BYTE 	0016	CODE	Global
+
+ERRLEN1  . . . . . . . . . . . .  	L BYTE 	003C	CODE	Global
+ERRLEN2  . . . . . . . . . . . .  	L BYTE 	0051	CODE	Global
+ERRLEN3_POST . . . . . . . . . .  	L BYTE 	006A	CODE	Global
+ERRLEN3_PRE  . . . . . . . . . .  	L BYTE 	0067	CODE	Global
+ERRLEN4_POST . . . . . . . . . .  	L BYTE 	0082	CODE	Global
+ERRLEN4_PRE  . . . . . . . . . .  	L BYTE 	007F	CODE	Global
+ERRLEN5  . . . . . . . . . . . .  	L BYTE 	009C	CODE	Global
+ERRMSG1  . . . . . . . . . . . .  	L BYTE 	0018	CODE	Global
+ERRMSG2  . . . . . . . . . . . .  	L BYTE 	003D	CODE	Global
+ERRMSG3_POST . . . . . . . . . .  	L BYTE 	0068	CODE	Global
+ERRMSG3_PRE  . . . . . . . . . .  	L BYTE 	0052	CODE	Global
+ERRMSG4_POST . . . . . . . . . .  	L BYTE 	0080	CODE	Global
+ERRMSG4_PRE  . . . . . . . . . .  	L BYTE 	006B	CODE	Global
+ERRMSG5  . . . . . . . . . . . .  	L BYTE 	0083	CODE	Global
+ERRMSG5_OPT  . . . . . . . . . .  	L BYTE 	009B	CODE	Global
+
+HEADING  . . . . . . . . . . . .  	L BYTE 	009D	CODE	Global
+HEADING_LEN  . . . . . . . . . .  	L BYTE 	00AA	CODE	Global
+
+LF . . . . . . . . . . . . . . .  	Number	000A	
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+
+VER  . . . . . . . . . . . . . .  	Text  		
+
+
+     44 Source  Lines
+     44 Total   Lines
+     45 Symbols
+
+  49456 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

@@ -1,0 +1,1243 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Page     1-1
+                                                            
+
+                                ; 
+                                ; xenix memory calls for MSDOS 
+                                ; 
+                                ; CAUTION: The following routines rely on the f
+				act that arena_signature and 
+                                ; arena_owner_system are all equal to zero and 
+				are contained in DI. 
+                                ; 
+                             C  INCLUDE DOSSEG.ASM 
+                             C  ; 
+                             C  ; segment ordering for MSDOS 
+                             C  ; 
+                             C   
+ 0000                        C  CONSTANTS       SEGMENT BYTE PUBLIC 'CONST' 
+ 0000                        C  CONSTANTS       ENDS 
+                             C   
+ 0000                        C  DATA            SEGMENT BYTE PUBLIC 'DATA' 
+ 0000                        C  DATA            ENDS 
+                             C   
+ 0000                        C  CODE            SEGMENT BYTE PUBLIC 'CODE' 
+ 0000                        C  CODE            ENDS 
+                             C   
+ 0000                        C  LAST            SEGMENT BYTE PUBLIC 'LAST' 
+ 0000                        C  LAST            ENDS 
+                             C   
+                             C  DOSGROUP    GROUP   CODE,CONSTANTS,DATA,LAST 
+                                 
+                                 
+ 0000                           CODE    SEGMENT BYTE PUBLIC  'CODE' 
+                                        ASSUME  SS:DOSGROUP,CS:DOSGROUP 
+                                 
+                                .list 
+                                 
+                                TITLE ALLOC.ASM - memory arena manager 
+                                NAME Alloc 
+                                 
+                                SUBTTL memory allocation utility routines 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Page     1-2
+memory allocation utility routines                          
+
+                                PAGE 
+                                ; 
+                                ; arena data 
+                                ; 
+                                        i_need  arena_head,WORD         ; seg a
+				ddress of start of arena 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CurrentPDB,WORD         ; curre
+				nt process data block addr 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  FirstArena,WORD         ; first
+				 free block found 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  BestArena,WORD          ; best 
+				free block found 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  LastArena,WORD          ; last 
+				free block found 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  AllocMethod,BYTE        ; how t
+				o alloc first(best)last 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                 
+                                ; 
+                                ; arena_free_process 
+                                ; input:    BX - PID of process 
+                                ; output:   free all blocks allocated to that P
+				ID 
+                                ; 
+                                        procedure   arena_free_process,NEAR 
+ 0000                         1 arena_free_process PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 0000  BF 0000                          MOV     DI,arena_signature 
+ 0003  36: A1 0000 E                    MOV     AX,[arena_head] 
+ 0007  E8 002A R                        CALL    Check_Signature         ; ES <-
+				 AX, check for valid block 
+                                 
+ 000A                           arena_free_process_loop: 
+                                        retc 
+ 000A  73 01                  3  jnc ??0002
+ 000C                         4 ??0003:
+ 000C  C3                     4  RET
+ 000D                         3  ??0002:
+ 000D  06                               PUSH    ES 
+ 000E  1F                               POP     DS 
+ 000F  39 1E 0001                       CMP     DS:[arena_owner],BX     ; is bl
+				ock owned by pid? 
+ 0013  75 04                            JNZ     arena_free_next         ; no, s
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Page     1-3
+memory allocation utility routines                          
+
+				kip to next 
+ 0015  89 3E 0001                       MOV     DS:[arena_owner],DI     ; yes..
+				. free him 
+                                 
+ 0019                           arena_free_next: 
+ 0019  80 3D 5A                         CMP     BYTE PTR DS:[DI],arena_signatur
+				e_end 
+                                                                        ; end o
+				f road, Jack? 
+                                        retz                            ; never
+				 come back no more 
+ 001C  74 EE                  2  ??0004: jz ret_l
+ 001E  E8 0023 R                        CALL    arena_next              ; next 
+				item in ES/AX carry set if trash 
+ 0021  EB E7                            JMP     arena_free_process_loop 
+                                 
+                                arena_free_process  ENDP 
+                                 
+                                ; 
+                                ; arena_next 
+                                ; input:    DS - pointer to block head 
+                                ; output:   AX,ES - pointers to next head 
+                                ;           carry set if trashed arena 
+                                ; 
+                                        procedure   arena_next,NEAR 
+ 0023                         1 arena_next PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 0023  8C D8                            MOV     AX,DS                   ; AX <-
+				 current block 
+ 0025  03 06 0003                       ADD     AX,DS:[arena_size]      ; AX <-
+				 AX + current block length 
+ 0029  40                               INC     AX                      ; remem
+				ber that header! 
+                                ; 
+                                ;       fall into check_signature and return 
+                                ; 
+                                ;       CALL    check_signature         ; ES <-
+				 AX, carry set if error 
+                                ;       RET 
+                                arena_next  ENDP 
+                                 
+                                ; 
+                                ; check_signature 
+                                ; input:    AX - address of block header 
+                                ; output:   ES=AX, carry set if signature is ba
+				d 
+                                ; 
+                                        procedure   check_signature,NEAR 
+ 002A                         1 check_signature PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 002A  8E C0                            MOV     ES,AX                   ; ES <-
+				 AX 
+ 002C  26: 80 3D 4D                     CMP     BYTE PTR ES:[DI],arena_signatur
+				e_normal 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Page     1-4
+memory allocation utility routines                          
+
+                                                                        ; IF ne
+				xt signature = not_end THEN 
+ 0030  74 08                            JZ      check_signature_ok      ;   GOT
+				O ok 
+ 0032  26: 80 3D 5A                     CMP     BYTE PTR ES:[DI],arena_signatur
+				e_end 
+                                                                        ; IF ne
+				xt signature = end then 
+ 0036  74 02                            JZ      check_signature_ok      ;   GOT
+				O ok 
+ 0038  F9                               STC                             ; set e
+				rror 
+                                        return 
+ 0039                         1 ??0006:
+ 0039  C3                     1  RET
+                                 
+ 003A                           check_signature_ok: 
+ 003A  F8                               CLC 
+                                        return 
+ 003B                         1 ??0007:
+ 003B  C3                     1  RET
+                                Check_signature ENDP 
+                                 
+                                ; 
+                                ; Coalesce - combine free blocks ahead with cur
+				rent block 
+                                ; input:    DS - pointer to head of free block 
+                                ; output:   updated head of block, AX is next b
+				lock 
+                                ;           carry set -> trashed arena 
+                                ; 
+                                        procedure   Coalesce,NEAR 
+ 003C                         1 Coalesce PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 003C  80 3D 5A                         CMP     BYTE PTR DS:[DI],arena_signatur
+				e_end 
+                                                                        ; IF cu
+				rrent signature = END THEN 
+                                        retz                            ;   GOT
+				O ok 
+ 003F  74 FA                  2  ??0008: jz ret_l
+ 0041  E8 0023 R                        CALL    arena_next              ; ES, A
+				X <- next block, Carry set if error 
+                                        retc                            ; IF no
+				 error THEN GOTO check 
+ 0044  72 F5                  2  ??000A: jc ret_l
+                                 
+ 0046                           coalesce_check: 
+ 0046  26: 39 3E 0001                   CMP     ES:[arena_owner],DI 
+                                        retnz                           ; IF ne
+				xt block isnt free THEN return 
+ 004B  75 EE                  2  ??000C: jnz ret_l
+ 004D  26: 8B 0E 0003                   MOV     CX,ES:[arena_size]      ; CX <-
+				 next block size 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Page     1-5
+memory allocation utility routines                          
+
+ 0052  41                               INC     CX                      ; CX <-
+				 CX + 1 (for header size) 
+ 0053  01 0E 0003                       ADD     DS:[arena_size],CX      ; curre
+				nt size <- current size + CX 
+ 0057  26: 8A 0D                        MOV     CL,ES:[DI]              ; move 
+				up signature 
+ 005A  88 0D                            MOV     DS:[DI],CL 
+ 005C  EB DE                            JMP     coalesce                ; try a
+				gain 
+                                Coalesce    ENDP 
+                                 
+                                SUBTTL $Alloc - allocate space in memory 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Page     1-6
+$Alloc - allocate space in memory                           
+
+                                PAGE 
+                                ; 
+                                ;   Assembler usage: 
+                                ;           MOV     BX,size 
+                                ;           MOV     AH,Alloc 
+                                ;           INT     21h 
+                                ;         AX:0 is pointer to allocated memory 
+                                ;         BX is max size if not enough memory 
+                                ; 
+                                ;   Description: 
+                                ;           Alloc returns  a  pointer  to  a  f
+				ree  block of 
+                                ;       memory that has the requested  size  in
+				  paragraphs. 
+                                ; 
+                                ;   Error return: 
+                                ;           AX = error_not_enough_memory 
+                                ;              = error_arena_trashed 
+                                ; 
+                                        procedure   $ALLOC,NEAR 
+ 005E                         1 $ALLOC PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+ 005E  33 C0                            XOR     AX,AX 
+ 0060  8B F8                            MOV     DI,AX 
+                                 
+ 0062  36: A3 0000 E                    MOV     [FirstArena],AX         ; init 
+				the options 
+ 0066  36: A3 0000 E                    MOV     [BestArena],AX 
+ 006A  36: A3 0000 E                    MOV     [LastArena],AX 
+                                 
+ 006E  50                               PUSH    AX                      ; alloc
+				_max <- 0 
+ 006F  36: A1 0000 E                    MOV     AX,[arena_head]         ; AX <-
+				 beginning of arena 
+ 0073  E8 002A R                        CALL    Check_signature         ; ES <-
+				 AX, carry set if error 
+ 0076  72 12                            JC      alloc_err               ; IF er
+				ror THEN GOTO err 
+                                 
+ 0078                           alloc_scan: 
+ 0078  06                               PUSH    ES 
+ 0079  1F                               POP     DS                      ; DS <-
+				 ES 
+ 007A  39 3E 0001                       CMP     DS:[arena_owner],DI 
+ 007E  74 23                            JZ      alloc_free              ; IF cu
+				rrent block is free THEN examine 
+                                 
+ 0080                           alloc_next: 
+ 0080  80 3D 5A                         CMP     BYTE PTR DS:[DI],arena_signatur
+				e_end 
+                                                                        ; IF cu
+				rrent block is last THEN 
+ 0083  74 0B                            JZ      alloc_end               ;   GOT
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Page     1-7
+$Alloc - allocate space in memory                           
+
+				O end 
+ 0085  E8 0023 R                        CALL    arena_next              ; AX, E
+				S <- next block, Carry set if error 
+ 0088  73 EE                            JNC     alloc_scan              ; IF no
+				 error THEN GOTO scan 
+                                 
+ 008A                           alloc_err: 
+ 008A  58                               POP     AX 
+                                 
+ 008B                           alloc_trashed: 
+                                        error   error_arena_trashed 
+ 008B  B0 07                  1  MOV AL,error_arena_trashed
+ 008D                         3  ??000F:
+ 008D  E9 0000 E              3  JMP SYS_RET_ERR
+                                 
+ 0090                           alloc_end: 
+ 0090  36: 83 3E 0000 E 00              CMP     [FirstArena],0 
+ 0096  75 68                            JNZ     alloc_do_split 
+                                 
+ 0098                           alloc_fail: 
+                                        invoke  get_user_stack 
+ 0098  E8 0000 E              1  CALL get_user_stack
+ 009B  5B                               POP     BX 
+ 009C  89 5C 02                         MOV     [SI].user_BX,BX 
+                                        error   error_not_enough_memory 
+ 009F  B0 08                  1  MOV AL,error_not_enough_memory
+ 00A1                         3  ??0011:
+ 00A1  EB EA                  3  JMP SYS_RET_ERR_J
+                                 
+ 00A3                           alloc_free: 
+ 00A3  E8 003C R                        CALL    coalesce                ; add f
+				ollowing free block to current 
+ 00A6  72 E2                            JC      alloc_err               ; IF er
+				ror THEN GOTO err 
+ 00A8  8B 0E 0003                       MOV     CX,DS:[arena_size] 
+                                 
+ 00AC  5A                               POP     DX                      ; check
+				 for max found size 
+ 00AD  3B CA                            CMP     CX,DX 
+ 00AF  76 02                            JNA     alloc_test 
+ 00B1  8B D1                            MOV     DX,CX 
+                                 
+ 00B3                           alloc_test: 
+ 00B3  52                               PUSH    DX 
+ 00B4  3B D9                            CMP     BX,CX                   ; IF BX
+				 > size of current block THEN 
+ 00B6  77 C8                            JA      alloc_next              ;   GOT
+				O next 
+                                 
+ 00B8  36: 83 3E 0000 E 00              CMP     [FirstArena],0 
+ 00BE  75 05                            JNZ     alloc_best 
+ 00C0  36: 8C 1E 0000 E                 MOV     [FirstArena],DS         ; save 
+				first one found 
+ 00C5                           alloc_best: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Page     1-8
+$Alloc - allocate space in memory                           
+
+ 00C5  36: 83 3E 0000 E 00              CMP     [BestArena],0 
+ 00CB  74 0E                            JZ      alloc_make_best         ; initi
+				al best 
+ 00CD  06                               PUSH    ES 
+ 00CE  36: 8E 06 0000 E                 MOV     ES,[BestArena] 
+ 00D3  26: 39 0E 0003                   CMP     ES:[arena_size],CX      ; is si
+				ze of best larger than found? 
+ 00D8  07                               POP     ES 
+ 00D9  76 05                            JBE     alloc_last 
+ 00DB                           alloc_make_best: 
+ 00DB  36: 8C 1E 0000 E                 MOV     [BestArena],DS          ; assig
+				n best 
+ 00E0                           alloc_last: 
+ 00E0  36: 8C 1E 0000 E                 MOV     [LastArena],DS          ; assig
+				n last 
+ 00E5  EB 99                            JMP     alloc_next 
+                                 
+                                ; 
+                                ; split the block high 
+                                ; 
+ 00E7                           alloc_do_split_high: 
+ 00E7  36: 8E 1E 0000 E                 MOV     DS,[LastArena] 
+ 00EC  8B 0E 0003                       MOV     CX,DS:[arena_size] 
+ 00F0  2B CB                            SUB     CX,BX 
+ 00F2  8C DA                            MOV     DX,DS 
+ 00F4  74 45                            JE      alloc_set_owner         ; sizes
+				 are equal, no split 
+ 00F6  03 D1                            ADD     DX,CX                   ; point
+				 to next block 
+ 00F8  8E C2                            MOV     ES,DX                   ; no de
+				crement! 
+ 00FA  49                               DEC     CX 
+ 00FB  87 D9                            XCHG    BX,CX                   ; bx ha
+				s size of lower block 
+ 00FD  EB 27 90                         JMP     alloc_set_sizes         ; cx ha
+				s upper (requested) size 
+                                 
+                                ; 
+                                ; we have scanned memory and have found all app
+				ropriate blocks 
+                                ; check for the type of allocation desired; fir
+				st and best are identical 
+                                ; last must be split high 
+                                ; 
+ 0100                           alloc_do_split: 
+ 0100  36: 80 3E 0000 E 01              CMP     BYTE PTR [AllocMethod], 1 
+ 0106  77 DF                            JA      alloc_do_split_high 
+ 0108  36: 8E 1E 0000 E                 MOV     DS,[FirstArena] 
+ 010D  72 05                            JB      alloc_get_size 
+ 010F  36: 8E 1E 0000 E                 MOV     DS,[BestArena] 
+ 0114                           alloc_get_size: 
+ 0114  8B 0E 0003                       MOV     CX,DS:[arena_size] 
+ 0118  2B CB                            SUB     CX,BX                   ; get r
+				oom left over 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Page     1-9
+$Alloc - allocate space in memory                           
+
+ 011A  8C D8                            MOV     AX,DS 
+ 011C  8B D0                            MOV     DX,AX                   ; save 
+				for owner setting 
+ 011E  74 1B                            JE      alloc_set_owner         ; IF BX
+				 = size THEN (don't split) 
+ 0120  03 C3                            ADD     AX,BX 
+ 0122  40                               INC     AX                      ; remem
+				ber the header 
+ 0123  8E C0                            MOV     ES,AX                   ; ES <-
+				 DS + BX (new header location) 
+ 0125  49                               DEC     CX                      ; CX <-
+				 size of split block 
+ 0126                           alloc_set_sizes: 
+ 0126  89 1E 0003                       MOV     DS:[arena_size],BX      ; curre
+				nt size <- BX 
+ 012A  26: 89 0E 0003                   MOV     ES:[arena_size],CX      ; split
+				 size <- CX 
+ 012F  B3 4D                            MOV     BL,arena_signature_normal 
+ 0131  86 1D                            XCHG    BL,DS:[DI]              ; curre
+				nt signature <- 4D 
+ 0133  26: 88 1D                        MOV     ES:[DI],BL              ; new b
+				lock sig <- old block sig 
+ 0136  26: 89 3E 0001                   MOV     ES:[arena_owner],DI 
+                                 
+ 013B                           alloc_set_owner: 
+ 013B  8E DA                            MOV     DS,DX 
+ 013D  36: A1 0000 E                    MOV     AX,[CurrentPDB] 
+ 0141  A3 0001                          MOV     DS:[arena_owner],AX 
+ 0144  8C D8                            MOV     AX,DS 
+ 0146  40                               INC     AX 
+ 0147  5B                               POP     BX 
+                                        transfer    SYS_RET_OK 
+ 0148                         2  ??0012:
+ 0148  E9 0000 E              2  JMP SYS_RET_OK
+                                 
+                                $alloc  ENDP 
+                                 
+                                SUBTTL $SETBLOCK - change size of an allocated 
+				block (if possible) 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Page     1-10
+$SETBLOCK - change size of an allocated block (if possible) 
+
+                                PAGE 
+                                ; 
+                                ;   Assembler usage: 
+                                ;           MOV     ES,block 
+                                ;           MOV     BX,newsize 
+                                ;           MOV     AH,setblock 
+                                ;           INT     21h 
+                                ;         if setblock fails for growing, BX wil
+				l have the maximum 
+                                ;         size possible 
+                                ;   Error return: 
+                                ;           AX = error_invalid_block 
+                                ;              = error_arena_trashed 
+                                ;              = error_not_enough_memory 
+                                ;              = error_invalid_function 
+                                ; 
+                                        procedure   $SETBLOCK,NEAR 
+ 014B                         1 $SETBLOCK PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 014B  BF 0000                          MOV     DI,arena_signature 
+ 014E  8C C0                            MOV     AX,ES 
+ 0150  48                               DEC     AX 
+ 0151  E8 002A R                        CALL    check_signature 
+ 0154  73 03                            JNC     setblock_grab 
+                                 
+ 0156                           setblock_bad: 
+ 0156  E9 008B R                        JMP     alloc_trashed 
+                                 
+ 0159                           setblock_grab: 
+ 0159  8E D8                            MOV     DS,AX 
+ 015B  E8 003C R                        CALL    coalesce 
+ 015E  72 F6                            JC      setblock_bad 
+ 0160  8B 0E 0003                       MOV     CX,DS:[arena_size] 
+ 0164  51                               PUSH    CX 
+ 0165  3B D9                            CMP     BX,CX 
+ 0167  76 AB                            JBE     alloc_get_size 
+ 0169  E9 0098 R                        JMP     alloc_fail 
+                                $setblock   ENDP 
+                                 
+                                SUBTTL $DEALLOC - free previously allocated pie
+				ce of memory 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Page     1-11
+$DEALLOC - free previously allocated piece of memory        
+
+                                PAGE 
+                                ; 
+                                ;   Assembler usage: 
+                                ;           MOV     ES,block 
+                                ;           MOV     AH,dealloc 
+                                ;           INT     21h 
+                                ; 
+                                ;   Error return: 
+                                ;           AX = error_invalid_block 
+                                ;              = error_arena_trashed 
+                                ; 
+                                        procedure   $DEALLOC,NEAR 
+ 016C                         1 $DEALLOC PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 016C  BF 0000                          MOV     DI,arena_signature 
+ 016F  8C C0                            MOV     AX,ES 
+ 0171  48                               DEC     AX 
+ 0172  E8 002A R                        CALL    check_signature 
+ 0175  72 07                            JC      dealloc_err 
+ 0177  26: 89 3E 0001                   MOV     ES:[arena_owner],DI 
+                                        transfer    SYS_RET_OK 
+ 017C                         2  ??0013:
+ 017C  EB CA                  2  JMP SYS_RET_OK_J
+                                 
+ 017E                           dealloc_err: 
+                                        error   error_invalid_block 
+ 017E  B0 09                  1  MOV AL,error_invalid_block
+ 0180                         3  ??0015:
+ 0180  E9 0000 E              3  JMP SYS_RET_ERR
+                                $DEALLOC    ENDP 
+                                 
+                                SUBTTL $AllocOper - get/set allocation mechanis
+				m 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Page     1-12
+$AllocOper - get/set allocation mechanism                   
+
+                                PAGE 
+                                ; 
+                                ;   Assembler usage: 
+                                ;           MOV     AH,AllocOper 
+                                ;           MOV     BX,method 
+                                ;           MOV     AL,func 
+                                ;           INT     21h 
+                                ; 
+                                ;   Error return: 
+                                ;           AX = error_invalid_function 
+                                ; 
+                                        procedure   $AllocOper,NEAR 
+ 0183                         1 $AllocOper PROC NEAR
+                                        ASSUME  DS:NOTHING,ES:NOTHING 
+ 0183  3C 01                            CMP     AL,1 
+ 0185  72 06                            JB      AllocOperGet 
+ 0187  74 0C                            JZ      AllocOperSet 
+                                        error   error_invalid_function 
+ 0189  B0 01                  1  MOV AL,error_invalid_function
+ 018B                         3  ??0017:
+ 018B  EB F3                  3  JMP SYS_RET_ERR_J
+ 018D                           AllocOperGet: 
+ 018D  36: A0 0000 E                    MOV     AL,BYTE PTR [AllocMethod] 
+ 0191  32 E4                            XOR     AH,AH 
+                                        transfer    SYS_RET_OK 
+ 0193                         2  ??0018:
+ 0193  EB E7                  2  JMP SYS_RET_OK_J
+ 0195                           AllocOperSet: 
+ 0195  36: 88 1E 0000 E                 MOV     [AllocMethod],BL 
+                                        transfer    SYS_RET_OK 
+ 019A                         2  ??0019:
+ 019A  EB F7                  2  JMP SYS_RET_OK_J
+                                $AllocOper  ENDP 
+                                 
+                                do_ext 
+                                 
+ 019C                           CODE    ENDS 
+                                    END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DOSGROUP . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	019C	BYTE	PUBLIC	'CODE'
+  CONSTANTS  . . . . . . . . . .  	0000	BYTE	PUBLIC	'CONST'
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Symbols-5
+                                                             
+
+  LAST . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'LAST'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCMETHOD  . . . . . . . . . .  	V BYTE 	0000	DATA	External
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOCOPERGET . . . . . . . . . .  	L NEAR	018D	CODE
+ALLOCOPERSET . . . . . . . . . .  	L NEAR	0195	CODE
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_BEST . . . . . . . . . . .  	L NEAR	00C5	CODE
+ALLOC_DO_SPLIT . . . . . . . . .  	L NEAR	0100	CODE
+ALLOC_DO_SPLIT_HIGH  . . . . . .  	L NEAR	00E7	CODE
+ALLOC_END  . . . . . . . . . . .  	L NEAR	0090	CODE
+ALLOC_ERR  . . . . . . . . . . .  	L NEAR	008A	CODE
+ALLOC_FAIL . . . . . . . . . . .  	L NEAR	0098	CODE
+ALLOC_FREE . . . . . . . . . . .  	L NEAR	00A3	CODE
+ALLOC_GET_SIZE . . . . . . . . .  	L NEAR	0114	CODE
+ALLOC_LAST . . . . . . . . . . .  	L NEAR	00E0	CODE
+ALLOC_MAKE_BEST  . . . . . . . .  	L NEAR	00DB	CODE
+ALLOC_NEXT . . . . . . . . . . .  	L NEAR	0080	CODE
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALLOC_SCAN . . . . . . . . . . .  	L NEAR	0078	CODE
+ALLOC_SET_OWNER  . . . . . . . .  	L NEAR	013B	CODE
+ALLOC_SET_SIZES  . . . . . . . .  	L NEAR	0126	CODE
+ALLOC_TEST . . . . . . . . . . .  	L NEAR	00B3	CODE
+ALLOC_TRASHED  . . . . . . . . .  	L NEAR	008B	CODE
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ARENA_FREE_NEXT  . . . . . . . .  	L NEAR	0019	CODE
+ARENA_FREE_PROCESS . . . . . . .  	N PROC	0000	CODE	Global	Length = 0023
+ARENA_FREE_PROCESS_LOOP  . . . .  	L NEAR	000A	CODE
+ARENA_HEAD . . . . . . . . . . .  	V WORD 	0000	DATA	External
+ARENA_NEXT . . . . . . . . . . .  	N PROC	0023	CODE	Global	Length = 0007
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Symbols-6
+                                                             
+
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BESTARENA  . . . . . . . . . . .  	V WORD 	0000	DATA	External
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHECK_SIGNATURE  . . . . . . . .  	N PROC	002A	CODE	Global	Length = 0012
+CHECK_SIGNATURE_OK . . . . . . .  	L NEAR	003A	CODE
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+COALESCE . . . . . . . . . . . .  	N PROC	003C	CODE	Global	Length = 0022
+COALESCE_CHECK . . . . . . . . .  	L NEAR	0046	CODE
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENTPDB . . . . . . . . . . .  	V WORD 	0000	DATA	External
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_ERR  . . . . . . . . . .  	L NEAR	017E	CODE
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Symbols-7
+                                                             
+
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Symbols-8
+                                                             
+
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FIRSTARENA . . . . . . . . . . .  	V WORD 	0000	DATA	External
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Symbols-9
+                                                             
+
+
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LASTARENA  . . . . . . . . . . .  	V WORD 	0000	DATA	External
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Symbols-10
+                                                             
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RET_C  . . . . . . . . . . . . .  	NEAR 	0044	CODE
+RET_L  . . . . . . . . . . . . .  	NEAR 	003B	CODE
+RET_NZ . . . . . . . . . . . . .  	NEAR 	004B	CODE
+RET_Z  . . . . . . . . . . . . .  	NEAR 	003F	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_BAD . . . . . . . . . .  	L NEAR	0156	CODE
+SETBLOCK_GRAB  . . . . . . . . .  	L NEAR	0159	CODE
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Symbols-11
+                                                             
+
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+SYS_RET_ERR_J  . . . . . . . . .  	NEAR 	018B	CODE
+SYS_RET_OK_J . . . . . . . . . .  	NEAR 	019A	CODE
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+$ALLOC . . . . . . . . . . . . .  	N PROC	005E	CODE	Global	Length = 00ED
+$ALLOCOPER . . . . . . . . . . .  	N PROC	0183	CODE	Global	Length = 0019
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:28:58
+ALLOC.ASM - memory arena manager                            Symbols-12
+                                                             
+
+$DEALLOC . . . . . . . . . . . .  	N PROC	016C	CODE	Global	Length = 0017
+$SETBLOCK  . . . . . . . . . . .  	N PROC	014B	CODE	Global	Length = 0021
+??0002 . . . . . . . . . . . . .  	L NEAR	000D	CODE
+??0003 . . . . . . . . . . . . .  	L NEAR	000C	CODE
+??0004 . . . . . . . . . . . . .  	L NEAR	001C	CODE
+??0006 . . . . . . . . . . . . .  	L NEAR	0039	CODE
+??0007 . . . . . . . . . . . . .  	L NEAR	003B	CODE
+??0008 . . . . . . . . . . . . .  	L NEAR	003F	CODE
+??000A . . . . . . . . . . . . .  	L NEAR	0044	CODE
+??000C . . . . . . . . . . . . .  	L NEAR	004B	CODE
+??000F . . . . . . . . . . . . .  	L NEAR	008D	CODE
+??0011 . . . . . . . . . . . . .  	L NEAR	00A1	CODE
+??0012 . . . . . . . . . . . . .  	L NEAR	0148	CODE
+??0013 . . . . . . . . . . . . .  	L NEAR	017C	CODE
+??0015 . . . . . . . . . . . . .  	L NEAR	0180	CODE
+??0017 . . . . . . . . . . . . .  	L NEAR	018B	CODE
+??0018 . . . . . . . . . . . . .  	L NEAR	0193	CODE
+??0019 . . . . . . . . . . . . .  	L NEAR	019A	CODE
+
+
+   1715 Source  Lines
+   2204 Total   Lines
+    597 Symbols
+
+  20102 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

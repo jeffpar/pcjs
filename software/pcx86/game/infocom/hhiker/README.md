@@ -8,10 +8,12 @@ machines:
     type: pcx86
     resume: 1
     config: /configs/pcx86/ibm/5150/machine-cga.json
+    flicker: 0
     sizeRAM: 256
+    testRAM: false
     autoMount:
       A:
-        name: Hitchhiker&#39;s Guide
+        name: Hitchhiker's Guide
 ---
 
 {% include machine.html id="ibm5150-hhiker" %}

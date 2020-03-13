@@ -1,0 +1,1464 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-1
+                                                            
+
+                                ; 
+                                ; ^C and error handler for MSDOS 
+                                ; 
+                                 
+                                .list 
+                                 
+                                TITLE   STDCTRLC - error handler for MSDOS 
+                                NAME    STDCTRLC 
+                                 
+                             C  INCLUDE CTRLC.ASM 
+                             C  ; 
+                             C  ; ^C status routines for MSDOS 
+                             C  ; 
+                             C   
+                             C  INCLUDE DOSSEG.ASM 
+                             C  ; 
+                             C  ; segment ordering for MSDOS 
+                             C  ; 
+                             C   
+ 0000                        C  CONSTANTS       SEGMENT BYTE PUBLIC 'CONST' 
+ 0000                        C  CONSTANTS       ENDS 
+                             C   
+ 0000                        C  DATA            SEGMENT BYTE PUBLIC 'DATA' 
+ 0000                        C  DATA            ENDS 
+                             C   
+ 0000                        C  CODE            SEGMENT BYTE PUBLIC 'CODE' 
+ 0000                        C  CODE            ENDS 
+                             C   
+ 0000                        C  LAST            SEGMENT BYTE PUBLIC 'LAST' 
+ 0000                        C  LAST            ENDS 
+                             C   
+                             C  DOSGROUP    GROUP   CODE,CONSTANTS,DATA,LAST 
+                             C   
+                             C   
+ 0000                        C  CODE    SEGMENT BYTE PUBLIC  'CODE' 
+                             C          ASSUME  SS:DOSGROUP,CS:DOSGROUP 
+                             C   
+                             C  .list 
+                             C   
+                             C          i_need  DevIOBuf,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  DidCTRLC,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  INDOS,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  DSKSTCOM,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  DSKSTCALL,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+                             C          i_need  DSKSTST,WORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  BCON,DWORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  DSKCHRET,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  DSKSTCNT,WORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  IDLEINT,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  CONSWAP,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  user_SS,WORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  user_SP,WORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  ERRORMODE,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  ConC_spSave,WORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  Exit_type,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  PFLAG,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  ExitHold,DWORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  WPErr,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  ReadOp,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  CONTSTK,WORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  Exit_Code,WORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  CurrentPDB,WORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-3
+DEVICE TABLE AND SRH DEFINITION                             
+
+                             C          i_need  DIVMES,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  DivMesLen,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C   
+                             C  SUBTTL Checks for ^C in CON I/O 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-4
+Checks for ^C in CON I/O                                    
+
+                             C  PAGE 
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C          procedure   DSKSTATCHK,NEAR ; Check for
+				 ^C if only one level in 
+ 0000                        C1 DSKSTATCHK PROC NEAR
+ 0000  36: 80 3E 0000 E 01   C          CMP     BYTE PTR [INDOS],1 
+                             C          retnz                   ; Do NOTHING 
+ 0006  74 01                 C3  jz ??0002
+ 0008                        C4 ??0003:
+ 0008  C3                    C4  RET
+ 0009                        C3  ??0002:
+ 0009  51                    C          PUSH    CX 
+ 000A  06                    C          PUSH    ES 
+ 000B  53                    C          PUSH    BX 
+ 000C  1E                    C          PUSH    DS 
+ 000D  56                    C          PUSH    SI 
+ 000E  0E                    C          PUSH    CS 
+ 000F  07                    C          POP     ES 
+ 0010  0E                    C          PUSH    CS 
+ 0011  1F                    C          POP     DS 
+                             C  ASSUME  DS:DOSGROUP 
+ 0012  33 C9                 C          XOR     CX,CX 
+ 0014  C6 06 0000 E 05       C          MOV     BYTE PTR [DSKSTCOM],DEVRDND 
+ 0019  C6 06 0000 E 0E       C          MOV     BYTE PTR [DSKSTCALL],DRDNDHL 
+ 001E  89 0E 0000 E          C          MOV     [DSKSTST],CX 
+ 0022  BB 0000 E             C          MOV     BX,OFFSET DOSGROUP:DSKSTCALL 
+ 0025  C5 36 0000 E          C          LDS     SI,[BCON] 
+                             C  ASSUME  DS:NOTHING 
+                             C          invoke  DEVIOCALL2 
+ 0029  E8 0000 E             C1  CALL DEVIOCALL2
+ 002C  36: F7 06 0000 E 0200 C          TEST    [DSKSTST],STBUI 
+ 0033  75 2E                 C          JNZ     ZRET                    ; No ch
+				aracters available 
+ 0035  36: A0 0000 E         C          MOV     AL,BYTE PTR [DSKCHRET] 
+ 0039                        C  DSK1: 
+ 0039  3C 03                 C          CMP     AL,"C"-"@" 
+ 003B  75 28                 C          JNZ     RET36 
+ 003D  36: C6 06 0000 E 04   C          MOV     BYTE PTR [DSKSTCOM],DEVRD 
+ 0043  36: C6 06 0000 E 16   C          MOV     BYTE PTR [DSKSTCALL],DRDWRHL 
+ 0049  36: 88 0E 0000 E      C          MOV     BYTE PTR [DSKCHRET],CL 
+ 004E  36: 89 0E 0000 E      C          MOV     [DSKSTST],CX 
+ 0053  41                    C          INC     CX 
+ 0054  36: 89 0E 0000 E      C          MOV     [DSKSTCNT],CX 
+                             C          invoke  DEVIOCALL2              ; Eat t
+				he ^C 
+ 0059  E8 0000 E             C1  CALL DEVIOCALL2
+ 005C  5E                    C          POP     SI 
+ 005D  1F                    C          POP     DS 
+ 005E  5B                    C          POP     BX                      ; Clean
+				 stack 
+ 005F  07                    C          POP     ES 
+ 0060  59                    C          POP     CX 
+ 0061  EB 72                 C          JMP     SHORT CNTCHAND 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-5
+Checks for ^C in CON I/O                                    
+
+                             C   
+ 0063                        C  ZRET: 
+ 0063  32 C0                 C          XOR     AL,AL                   ; Set z
+				ero 
+ 0065                        C  RET36: 
+ 0065  5E                    C          POP     SI 
+ 0066  1F                    C          POP     DS 
+ 0067  5B                    C          POP     BX 
+ 0068  07                    C          POP     ES 
+ 0069  59                    C          POP     CX 
+                             C          return 
+ 006A                        C1 ??0004:
+ 006A  C3                    C1  RET
+                             C   
+ 006B                        C  NOSTOP: 
+ 006B  3C 10                 C          CMP     AL,"P"-"@" 
+ 006D  74 4C                 C          JZ      INCHK 
+                             C   
+                             C          IF      NOT TOGLPRN 
+ 006F  3C 0E                 C          CMP     AL,"N"-"@" 
+ 0071  74 48                 C          JZ      INCHK 
+                             C          ENDIF 
+                             C   
+ 0073  3C 03                 C          CMP     AL,"C"-"@" 
+ 0075  74 44                 C          JZ      INCHK 
+                             C          return 
+ 0077                        C1 ??0005:
+ 0077  C3                    C1  RET
+                             C  DSKSTATCHK  ENDP 
+                             C   
+                             C          procedure   SPOOLINT,NEAR 
+ 0078                        C1 SPOOLINT PROC NEAR
+ 0078  9C                    C          PUSHF 
+ 0079  36: 80 3E 0000 E 00   C          CMP     BYTE PTR [IDLEINT],0 
+ 007F  74 0A                 C          JZ      POPFRET 
+ 0081  36: 80 3E 0000 E 00   C          CMP     BYTE PTR [ERRORMODE],0 
+ 0087  75 02                 C          JNZ     POPFRET                 ;No spo
+				ol ints in error mode 
+ 0089  CD 28                 C          INT     int_spooler 
+ 008B                        C  POPFRET: 
+ 008B  9D                    C          POPF 
+ 008C                        C  RET18:  return 
+ 008C                        C1 ??0006:
+ 008C  C3                    C1  RET
+                             C  SPOOLINT    ENDP 
+                             C   
+                             C          procedure   STATCHK,NEAR 
+ 008D                        C1 STATCHK PROC NEAR
+                             C   
+                             C          invoke  DSKSTATCHK              ; Allow
+				s ^C to be detected under 
+ 008D  E8 0000 R             C1  CALL DSKSTATCHK
+                             C                                          ; input
+				 redirection 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-6
+Checks for ^C in CON I/O                                    
+
+ 0090  53                    C          PUSH    BX 
+ 0091  33 DB                 C          XOR     BX,BX 
+                             C          invoke  GET_IO_FCB 
+ 0093  E8 0000 E             C1  CALL GET_IO_FCB
+ 0096  5B                    C          POP     BX 
+ 0097  72 F3                 C          JC      RET18 
+ 0099  B4 01                 C          MOV     AH,1 
+                             C          invoke  IOFUNC 
+ 009B  E8 0000 E             C1  CALL IOFUNC
+ 009E  74 D8                 C          JZ      SPOOLINT 
+ 00A0  3C 13                 C          CMP     AL,'S'-'@' 
+ 00A2  75 C7                 C          JNZ     NOSTOP 
+ 00A4  32 E4                 C          XOR     AH,AH 
+                             C          invoke  IOFUNC                  ; Eat C
+				ntrl-S 
+ 00A6  E8 0000 E             C1  CALL IOFUNC
+ 00A9  EB 09                 C          JMP     SHORT PAUSOSTRT 
+ 00AB                        C  PRINTOFF: 
+ 00AB                        C  PRINTON: 
+ 00AB  36: F6 16 0000 E      C          NOT     BYTE PTR [PFLAG] 
+                             C          return 
+ 00B0                        C1 ??0007:
+ 00B0  C3                    C1  RET
+                             C   
+ 00B1                        C  PAUSOLP: 
+ 00B1  E8 0078 R             C          CALL    SPOOLINT 
+ 00B4                        C  PAUSOSTRT: 
+ 00B4  B4 01                 C          MOV     AH,1 
+                             C          invoke  IOFUNC 
+ 00B6  E8 0000 E             C1  CALL IOFUNC
+ 00B9  74 F6                 C          JZ      PAUSOLP 
+ 00BB                        C  INCHK: 
+ 00BB  53                    C          PUSH    BX 
+ 00BC  33 DB                 C          XOR     BX,BX 
+                             C          invoke  GET_IO_FCB 
+ 00BE  E8 0000 E             C1  CALL GET_IO_FCB
+ 00C1  5B                    C          POP     BX 
+ 00C2  72 C8                 C          JC      RET18 
+ 00C4  32 E4                 C          XOR     AH,AH 
+                             C          invoke  IOFUNC 
+ 00C6  E8 0000 E             C1  CALL IOFUNC
+ 00C9  3C 10                 C          CMP     AL,'P'-'@' 
+ 00CB  74 DE                 C          JZ      PRINTON 
+                             C          IF      NOT TOGLPRN 
+ 00CD  3C 0E                 C          CMP     AL,'N'-'@' 
+ 00CF  74 DA                 C          JZ      PRINTOFF 
+                             C          ENDIF 
+ 00D1  3C 03                 C          CMP     AL,'C'-'@' 
+                             C          retnz 
+ 00D3  75 DB                 C2  ??0008: jnz ret_l
+                             C  STATCHK ENDP 
+                             C   
+                             C          procedure   CNTCHAND,NEAR 
+ 00D5                        C1 CNTCHAND PROC NEAR
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-7
+Checks for ^C in CON I/O                                    
+
+                             C  ; Ctrl-C handler. 
+                             C  ; "^C" and CR/LF is printed.  Then the user reg
+				isters are restored and 
+                             C  ; the user CTRL-C handler is executed.  At this
+				 point the top of the stack 
+                             C  ; has 1) the interrupt return address should th
+				e user CTRL-C handler wish 
+                             C  ; to allow processing to continue; 2) the origi
+				nal interrupt return address 
+                             C  ; to the code that performed the function call 
+				in the first place.  If 
+                             C  ; the user CTRL-C handler wishes to continue, i
+				t must leave all registers 
+                             C  ; unchanged and RET (not IRET) with carry CLEAR
+				.  If carry is SET then 
+                             C  ; an terminate system call is simulated. 
+ 00D5  B0 03                 C          MOV     AL,3                ; Display "
+				^C" 
+                             C          invoke  BUFOUT 
+ 00D7  E8 0000 E             C1  CALL BUFOUT
+                             C          invoke  CRLF 
+ 00DA  E8 0000 E             C1  CALL CRLF
+ 00DD  16                    C          PUSH    SS 
+ 00DE  1F                    C          POP     DS 
+                             C  ASSUME  DS:DOSGROUP 
+ 00DF  80 3E 0000 E 00       C          CMP     BYTE PTR [CONSWAP],0 
+ 00E4  74 03                 C          JZ      NOSWAP 
+                             C          invoke  SWAPBACK 
+ 00E6  E8 0000 E             C1  CALL SWAPBACK
+ 00E9                        C  NOSWAP: 
+ 00E9  FA                    C          CLI                         ; Prepare t
+				o play with stack 
+ 00EA  8B 26 0000 E          C          MOV     SP,[user_SP] 
+ 00EE  8E 16 0000 E          C          MOV     SS,[user_SS]        ; User stac
+				k now restored 
+                             C  ASSUME  SS:NOTHING 
+                             C          invoke  restore_world       ; User regi
+				sters now restored 
+ 00F2  E8 0000 E             C1  CALL restore_world
+                             C  ASSUME  DS:NOTHING 
+ 00F5  2E: C6 06 0000 E 00   C          MOV     BYTE PTR [INDOS],0  ; Go to kno
+				wn state 
+ 00FB  2E: C6 06 0000 E 00   C          MOV     BYTE PTR [ERRORMODE],0 
+ 0101  2E: 89 26 0000 E      C          MOV     [ConC_spsave],SP    ; save his 
+				SP 
+ 0106  CD 23                 C          INT     int_ctrl_c          ; Execute u
+				ser Ctrl-C handler 
+ 0108  2E: A3 0000 E         C          MOV     [user_SS],AX        ; save the 
+				AX 
+ 010C  9C                    C          PUSHF                       ; and the f
+				lags (maybe new call) 
+ 010D  58                    C          POP     AX 
+ 010E  2E: 3B 26 0000 E      C          CMP     SP,[ConC_spsave] 
+ 0113  75 07                 C          JNZ     ctrlc_try_new       ; new sysca
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-8
+Checks for ^C in CON I/O                                    
+
+				ll maybe? 
+ 0115                        C  ctrlc_repeat: 
+ 0115  2E: A1 0000 E         C          MOV     AX,[user_SS]        ; no... 
+                             C          transfer    COMMAND         ; Repeat co
+				mmand otherwise 
+ 0119                        C2  ??000A:
+ 0119  E9 0000 E             C2  JMP COMMAND
+                             C   
+ 011C                        C  ctrlc_try_new: 
+ 011C  2E: 83 2E 0000 E 02   C          SUB     [ConC_spsave],2     ; Are there
+				 flags on the stack? 
+ 0122  2E: 3B 26 0000 E      C          CMP     SP,[ConC_spsave] 
+ 0127  74 0B                 C          JZ      ctrlc_new           ; yes, new 
+				system call 
+                             C   
+ 0129                        C  ctrlc_abort: 
+ 0129  B8 4C00               C          MOV     AX,(EXIT SHL 8) + 0 
+ 012C  2E: C6 06 0000 E FF   C          MOV     BYTE PTR [DidCTRLC],0FFh 
+                             C   
+                             C          transfer    COMMAND         ; give up b
+				y faking $EXIT 
+ 0132                        C2  ??000B:
+ 0132  EB E5                 C2  JMP COMMAND_J
+                             C   
+ 0134                        C  ctrlc_new: 
+ 0134  50                    C          PUSH    AX 
+ 0135  9D                    C          POPF 
+ 0136  2E: 8F 06 0000 E      C          POP     [user_SS] 
+ 013B  73 D8                 C          JNC     ctrlc_repeat        ; repeat op
+				eration 
+ 013D  EB EA                 C          JMP     ctrlc_abort         ; indicate 
+				^ced 
+                             C   
+                             C  CNTCHAND ENDP 
+                             C   
+                             C  SUBTTL DIVISION OVERFLOW INTERRUPT 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-9
+DIVISION OVERFLOW INTERRUPT                                 
+
+                             C  PAGE 
+                             C  ; Default handler for division overflow trap 
+                             C          procedure   DIVOV,NEAR 
+ 013F                        C1 DIVOV PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING,SS:NOTHING 
+ 013F  BE 0000 E             C          MOV     SI,OFFSET DOSGROUP:DIVMES 
+ 0142  E8 0147 R             C          CALL    RealDivOv 
+ 0145  EB E2                 C          JMP     ctrlc_abort     ; Use Ctrl-C ab
+				ort on divide overflow 
+                             C  DIVOV   ENDP 
+                             C   
+                             C  ; 
+                             C  ; RealDivOv: perform actual divide overflow stu
+				ff. 
+                             C  ; Inputs:   none 
+                             C  ; Outputs:  message to BCON 
+                             C  ; 
+                             C          procedure   RealDivOv,NEAR  ; Do divide
+				 overflow and clock process 
+ 0147                        C1 RealDivOv PROC NEAR
+                             C   
+ 0147  0E                    C          PUSH    CS                  ; get ES ad
+				dressability 
+ 0148  07                    C          POP     ES 
+                             C   
+ 0149  0E                    C          PUSH    CS                  ; get DS ad
+				dressability 
+ 014A  1F                    C          POP     DS 
+                             C  ASSUME  DS:DOSGROUP 
+                             C   
+ 014B  C6 06 0000 E 08       C          MOV     BYTE PTR [DskStCom],DevWrt 
+ 0150  C6 06 0000 E 16       C          MOV     BYTE PTR [DskStCall],DRdWrHL 
+ 0155  C7 06 0000 E 0000     C          MOV     [DskSTST],0 
+ 015B  8A 1E 0000 E          C          MOV     BL,[DivMesLen] 
+ 015F  32 FF                 C          XOR     BH,BH 
+ 0161  89 1E 0000 E          C          MOV     [DskStCnt],BX 
+ 0165  BB 0000 E             C          MOV     BX,OFFSET DOSGROUP:DskStCall 
+ 0168  89 36 0001 E          C          MOV     WORD PTR [DskChRet+1],SI    ; t
+				ransfer address (need an EQU) 
+ 016C  C5 36 0000 E          C          LDS     SI,[BCON] 
+                             C  ASSUME  DS:NOTHING 
+                             C          invoke  DEVIOCALL2 
+ 0170  E8 0000 E             C1  CALL DEVIOCALL2
+ 0173  2E: C7 06 0001 E 0000 C          MOV     WORD PTR [DskChRet+1],OFFSET DO
+				SGROUP:DevIOBuf 
+        E                    C          MOV     WORD PTR [DskChRet+1],OFFSET DO
+				SGROUP:DevIOBuf 
+ 017A  2E: C7 06 0000 E 0001 C          MOV     [DskStCnt],1 
+                             C          return 
+ 0181                        C1 ??000C:
+ 0181  C3                    C1  RET
+                             C  RealDivOv   ENDP 
+                             C   
+                             C  SUBTTL CHARHRD,HARDERR,ERROR -- HANDLE DISK ERR
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-10
+CHARHRD,HARDERR,ERROR -- HANDLE DISK ERRORS AND RETURN TO US
+
+				ORS AND RETURN TO USER 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-11
+CHARHRD,HARDERR,ERROR -- HANDLE DISK ERRORS AND RETURN TO US
+
+                             C  PAGE 
+                             C          procedure   CHARHARD,NEAR 
+ 0182                        C1 CHARHARD PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING,SS:DOSGROUP 
+                             C   
+                             C  ; Character device error handler 
+                             C  ; Same function as HARDERR 
+                             C   
+ 0182  36: 8C 06 0002 E      C          MOV     WORD PTR [EXITHOLD+2],ES 
+ 0187  36: 89 2E 0000 E      C          MOV     WORD PTR [EXITHOLD],BP 
+ 018C  56                    C          PUSH    SI 
+ 018D  81 E7 00FF            C          AND     DI,STECODE 
+ 0191  8C DD                 C          MOV     BP,DS                   ;Device
+				 pointer is BP:SI 
+ 0193  E8 01ED R             C          CALL    FATALC 
+ 0196  5E                    C          POP     SI 
+                             C          return 
+ 0197                        C1 ??000D:
+ 0197  C3                    C1  RET
+                             C  CHARHARD    ENDP 
+                             C   
+                             C          procedure   HardErr,NEAR 
+ 0198                        C1 HardErr PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Hard disk error handler. Entry conditions: 
+                             C  ;       DS:BX = Original disk transfer address 
+                             C  ;       DX = Original logical sector number 
+                             C  ;       CX = Number of sectors to go (first one
+				 gave the error) 
+                             C  ;       AX = Hardware error code 
+                             C  ;       DI = Original sector transfer count 
+                             C  ;       ES:BP = Base of drive parameters 
+                             C  ;       [READOP] = 0 for read, 1 for write 
+                             C                                          ; 
+ 0198  97                    C          XCHG    AX,DI                   ; Error
+				 code in DI, count in AX 
+ 0199  81 E7 00FF            C          AND     DI,STECODE              ; And o
+				ff status bits 
+ 019D  83 FF 00              C          CMP     DI,WRECODE              ; Write
+				 Protect Error? 
+ 01A0  75 0A                 C          JNZ     NOSETWRPERR 
+ 01A2  50                    C          PUSH    AX 
+ 01A3  26: 8A 46 00          C          MOV     AL,ES:[BP.dpb_drive] 
+ 01A7  36: A2 0000 E         C          MOV     BYTE PTR [WPERR],AL            
+				  ; Flag drive with WP error 
+ 01AB  58                    C          POP     AX 
+ 01AC                        C  NOSETWRPERR: 
+ 01AC  2B C1                 C          SUB     AX,CX                   ; Numbe
+				r of sectors successfully transferred 
+ 01AE  03 D0                 C          ADD     DX,AX                   ; First
+				 sector number to retry 
+ 01B0  52                    C          PUSH    DX 
+ 01B1  26: F7 66 02          C          MUL     ES:[BP.dpb_sector_size]        
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-12
+CHARHRD,HARDERR,ERROR -- HANDLE DISK ERRORS AND RETURN TO US
+
+				  ; Number of bytes transferred 
+ 01B5  5A                    C          POP     DX 
+ 01B6  03 D8                 C          ADD     BX,AX                   ; First
+				 address for retry 
+ 01B8  32 E4                 C          XOR     AH,AH                   ; Flag 
+				disk section in error 
+ 01BA  26: 3B 56 06          C          CMP     DX,ES:[BP.dpb_first_FAT]    ; I
+				n reserved area? 
+ 01BE  72 12                 C          JB      ERRINT 
+ 01C0  FE C4                 C          INC     AH                      ; Flag 
+				for FAT 
+ 01C2  26: 3B 56 10          C          CMP     DX,ES:[BP.dpb_dir_sector]   ; I
+				n FAT? 
+ 01C6  72 0A                 C          JB      ERRINT 
+ 01C8  FE C4                 C          INC     AH 
+ 01CA  26: 3B 56 0B          C          CMP     DX,ES:[BP.dpb_first_sector]    
+				   ; In directory? 
+ 01CE  72 02                 C          JB      ERRINT 
+ 01D0  FE C4                 C          INC     AH                      ; Must 
+				be in data area 
+ 01D2                        C  ERRINT: 
+ 01D2  D0 E4                 C          SHL     AH,1                    ; Make 
+				room for read/write bit 
+ 01D4  36: 0A 26 0000 E      C          OR      AH,BYTE PTR [READOP] 
+                             C          entry   FATAL 
+ 01D9                        C1 FATAL:
+ 01D9  26: 8A 46 00          C          MOV     AL,ES:[BP.dpb_drive]      ; Get
+				 drive number 
+                             C          entry   FATAL1 
+ 01DD                        C1 FATAL1:
+ 01DD  36: 8C 06 0002 E      C          MOV     WORD PTR [EXITHOLD+2],ES 
+ 01E2  36: 89 2E 0000 E      C          MOV     WORD PTR [EXITHOLD],BP  ; The o
+				nly things we preserve 
+ 01E7  26: C4 76 12          C          LES     SI,ES:[BP.dpb_driver_addr] 
+ 01EB  8C C5                 C          MOV     BP,ES                   ; BP:SI
+				 points to the device involved 
+ 01ED                        C  FATALC: 
+ 01ED  36: 80 3E 0000 E 00   C          CMP     BYTE PTR [ERRORMODE],0 
+ 01F3  75 4D                 C          JNZ     SETIGN                  ; No IN
+				T 24s if already INT 24 
+ 01F5  36: 89 26 0000 E      C          MOV     [CONTSTK],SP 
+ 01FA  16                    C          PUSH    SS 
+ 01FB  07                    C          POP     ES 
+                             C  ASSUME  ES:DOSGROUP 
+ 01FC  FA                    C          CLI                             ; Prepa
+				re to play with stack 
+ 01FD  36: FE 06 0000 E      C          INC     BYTE PTR [ERRORMODE]    ; Flag 
+				INT 24 in progress 
+ 0202  36: FE 0E 0000 E      C          DEC     BYTE PTR [INDOS]        ; INT 2
+				4 handler might not return 
+ 0207  36: 8E 16 0000 E      C          MOV     SS,[user_SS] 
+                             C  ASSUME  SS:NOTHING 
+ 020C  26: 8B 26 0000 E      C          MOV     SP,ES:[user_SP]         ; User 
+				stack pointer restored 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-13
+CHARHRD,HARDERR,ERROR -- HANDLE DISK ERRORS AND RETURN TO US
+
+ 0211  CD 24                 C          INT     int_fatal_abort         ; Fatal
+				 error interrupt vector, must preserve ES 
+ 0213  26: 89 26 0000 E      C          MOV     ES:[user_SP],SP         ; resto
+				re our stack 
+ 0218  26: 8C 16 0000 E      C          MOV     ES:[user_SS],SS 
+ 021D  8C C4                 C          MOV     SP,ES 
+ 021F  8E D4                 C          MOV     SS,SP 
+                             C  ASSUME  SS:DOSGROUP 
+ 0221  36: 8B 26 0000 E      C          MOV     SP,[CONTSTK] 
+ 0226  36: FE 06 0000 E      C          INC     BYTE PTR [INDOS]        ; Back 
+				in the DOS 
+ 022B  36: C6 06 0000 E 00   C          MOV     BYTE PTR [ERRORMODE],0  ; Back 
+				from INT 24 
+ 0231  FB                    C          STI 
+ 0232                        C  IGNRET: 
+ 0232  36: C4 2E 0000 E      C          LES     BP,[EXITHOLD] 
+                             C  ASSUME  ES:NOTHING 
+ 0237  3C 02                 C          CMP     AL,2 
+ 0239  74 0B                 C          JZ      error_abort 
+ 023B  36: C6 06 0000 E FF   C          MOV     BYTE PTR [WPERR],-1            
+				  ;Forget about WP error 
+                             C          return 
+ 0241                        C1 ??000E:
+ 0241  C3                    C1  RET
+                             C   
+ 0242                        C  SETIGN: 
+ 0242  32 C0                 C          XOR     AL,AL                   ;Flag i
+				gnore 
+ 0244  EB EC                 C          JMP     SHORT IGNRET 
+                             C   
+ 0246                        C  error_abort: 
+ 0246  16                    C          PUSH    SS 
+ 0247  1F                    C          POP     DS 
+                             C  ASSUME  DS:DOSGROUP 
+ 0248  80 3E 0000 E 00       C          CMP     BYTE PTR [CONSWAP],0 
+ 024D  74 03                 C          JZ      NOSWAP2 
+                             C          invoke  SWAPBACK 
+ 024F  E8 0000 E             C1  CALL SWAPBACK
+ 0252                        C  NOSWAP2: 
+ 0252  C6 06 0000 E 02       C          MOV     BYTE PTR [exit_Type],Exit_hard_
+				error 
+ 0257  8E 1E 0000 E          C          MOV     DS,[CurrentPDB] 
+                             C  ASSUME  DS:NOTHING 
+                             C   
+                             C  ; 
+                             C  ; reset_environment checks the DS value against
+				 the CurrentPDB.  If they 
+                             C  ; are different, then an old-style return is pe
+				rformed.  If they are 
+                             C  ; the same, then we release jfns and restore to
+				 parent.  We still use 
+                             C  ; the PDB at DS:0 as the source of the terminat
+				e addresses. 
+                             C  ; 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-14
+CHARHRD,HARDERR,ERROR -- HANDLE DISK ERRORS AND RETURN TO US
+
+                             C  ; output:   none. 
+                             C  ; 
+                             C          entry   reset_environment 
+ 025B                        C1 reset_environment:
+                             C          ASSUME  DS:NOTHING,ES:NOTHING 
+ 025B  1E                    C          PUSH    DS                      ; save 
+				PDB of process 
+                             C   
+ 025C  B0 22                 C          MOV     AL,int_Terminate 
+                             C          invoke  $Get_interrupt_vector   ; and w
+				ho to go to 
+ 025E  E8 0000 E             C1  CALL $Get_interrupt_vector
+ 0261  36: 8C 06 0002 E      C          MOV     WORD PTR [EXITHOLD+2],ES ; save
+				 return address 
+ 0266  36: 89 1E 0000 E      C          MOV     WORD PTR [EXITHOLD],BX 
+                             C   
+ 026B  36: 8B 1E 0000 E      C          MOV     BX,[CurrentPDB]         ; get c
+				urrent process 
+ 0270  8E DB                 C          MOV     DS,BX                   ; 
+ 0272  A1 0016               C          MOV     AX,DS:[PDB_Parent_PID]  ; get p
+				arent to return to 
+ 0275  59                    C          POP     CX 
+                             C  ; 
+                             C  ; AX = parentPDB, BX = CurrentPDB, CX = ThisPDB
+				 
+                             C  ; Only free handles if AX <> BX and BX = CX and
+				 [exit_code].upper is not 
+                             C  ; Exit_keep_process 
+                             C  ; 
+ 0276  3B C3                 C          CMP     AX,BX 
+ 0278  74 22                 C          JZ      reset_return            ; paren
+				tPDB = CurrentPDB 
+ 027A  3B D9                 C          CMP     BX,CX 
+ 027C  75 1E                 C          JNZ     reset_return            ; Curre
+				ntPDB <> ThisPDB 
+ 027E  50                    C          PUSH    AX                      ; save 
+				parent 
+ 027F  36: 80 3E 0000 E 03   C          CMP     BYTE PTR [exit_type],Exit_keep_
+				process 
+ 0285  74 10                 C          JZ      reset_to_parent         ; keepi
+				ng this process 
+                             C   
+                             C          invoke  arena_free_process 
+ 0287  E8 0000 E             C1  CALL arena_free_process
+                             C   
+                             C          ; reset environment at [CurrentPDB]; cl
+				ose those handles 
+ 028A  B9 0014               C          MOV     CX,FilPerProc 
+                             C   
+ 028D                        C  reset_free_jfn: 
+ 028D  8B D9                 C          MOV     BX,CX 
+ 028F  51                    C          PUSH    CX 
+ 0290  4B                    C          DEC     BX                      ; get j
+				fn 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-15
+CHARHRD,HARDERR,ERROR -- HANDLE DISK ERRORS AND RETURN TO US
+
+                             C          invoke  $CLOSE                  ; close
+				 it, ignore return 
+ 0291  E8 0000 E             C1  CALL $CLOSE
+ 0294  59                    C          POP     CX 
+ 0295  E2 F6                 C          LOOP    reset_free_jfn          ; and d
+				o 'em all 
+                             C   
+ 0297                        C  reset_to_parent: 
+ 0297  36: 8F 06 0000 E      C          POP     [CurrentPDB]            ; set u
+				p process as parent 
+                             C   
+ 029C                        C  reset_return:                           ; come 
+				here for normal return 
+ 029C  0E                    C          PUSH    CS 
+ 029D  1F                    C          POP     DS 
+                             C          ASSUME  DS:DOSGROUP 
+ 029E  B0 FF                 C          MOV     AL,-1 
+                             C          invoke  FLUSHBUF                ; make 
+				sure that everything is clean 
+ 02A0  E8 0000 E             C1  CALL FLUSHBUF
+                             C   
+ 02A3  FA                    C          CLI 
+ 02A4  C6 06 0000 E 00       C          MOV     BYTE PTR [INDOS],0             
+				  ;Go to known state 
+ 02A9  C6 06 0000 E FF       C          MOV     BYTE PTR [WPERR],-1            
+				  ;Forget about WP error 
+                             C  ; 
+                             C  ; Snake into multitasking... Get stack from Cur
+				rentPDB person 
+                             C  ; 
+ 02AE  8E 1E 0000 E          C          MOV     DS,[CurrentPDB] 
+                             C          ASSUME  DS:NOTHING 
+ 02B2  8E 16 0030            C          MOV     SS,WORD PTR DS:[PDB_user_stack+
+				2] 
+ 02B6  8B 26 002E            C          MOV     SP,WORD PTR DS:[PDB_user_stack]
+				 
+                             C   
+                             C          ASSUME  SS:NOTHING 
+                             C          invoke  restore_world 
+ 02BA  E8 0000 E             C1  CALL restore_world
+                             C          ASSUME  ES:NOTHING 
+ 02BD  58                    C          POP     AX                      ; suck 
+				off CS:IP of interrupt... 
+ 02BE  58                    C          POP     AX 
+ 02BF  58                    C          POP     AX 
+ 02C0  B8 F202               C          MOV     AX,0F202h               ; STI 
+ 02C3  50                    C          PUSH    AX 
+ 02C4  2E: FF 36 0002 E      C          PUSH    WORD PTR [EXITHOLD+2] 
+ 02C9  2E: FF 36 0000 E      C          PUSH    WORD PTR [EXITHOLD] 
+ 02CE  FB                    C          STI 
+ 02CF  CF                    C          IRET            ; Long return back to u
+				ser terminate address 
+                             C  HardErr ENDP 
+                             C   
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Page     1-16
+CHARHRD,HARDERR,ERROR -- HANDLE DISK ERRORS AND RETURN TO US
+
+                             C          ASSUME  SS:DOSGROUP 
+                             C   
+                             C  do_ext 
+                             C   
+ 02D0                        C  CODE    ENDS 
+                             C      END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DOSGROUP . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	02D0	BYTE	PUBLIC	'CODE'
+  CONSTANTS  . . . . . . . . . .  	0000	BYTE	PUBLIC	'CONST'
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Symbols-5
+                                                             
+
+  LAST . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'LAST'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Alias	 FALSE		
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BCON . . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+
+CANCEL . . . . . . . . . . . . .  	Number	0018	
+CHARHARD . . . . . . . . . . . .  	N PROC	0182	CODE	Global	Length = 0016
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+CNTCHAND . . . . . . . . . . . .  	N PROC	00D5	CODE	Global	Length = 006A
+COMMAND_J  . . . . . . . . . . .  	NEAR 	0132	CODE
+CONC_SPSAVE  . . . . . . . . . .  	V WORD 	0000	DATA	External
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Symbols-6
+                                                             
+
+CONSWAP  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+CONTSTK  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CTRLC_ABORT  . . . . . . . . . .  	L NEAR	0129	CODE
+CTRLC_NEW  . . . . . . . . . . .  	L NEAR	0134	CODE
+CTRLC_REPEAT . . . . . . . . . .  	L NEAR	0115	CODE
+CTRLC_TRY_NEW  . . . . . . . . .  	L NEAR	011C	CODE
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENTPDB . . . . . . . . . . .  	V WORD 	0000	DATA	External
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOBUF . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Symbols-7
+                                                             
+
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DIDCTRLC . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DIVMES . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DIVMESLEN  . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DIVOV  . . . . . . . . . . . . .  	N PROC	013F	CODE	Global	Length = 0008
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DSK1 . . . . . . . . . . . . . .  	L NEAR	0039	CODE
+DSKCHRET . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSKSTATCHK . . . . . . . . . . .  	N PROC	0000	CODE	Global	Length = 0078
+DSKSTCALL  . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DSKSTCNT . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+DSKSTCOM . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DSKSTST  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERRINT . . . . . . . . . . . . .  	L NEAR	01D2	CODE
+ERRORMODE  . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+ERROR_ABORT  . . . . . . . . . .  	L NEAR	0246	CODE
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Symbols-8
+                                                             
+
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+ESCCH  . . . . . . . . . . . . .  	Number	001B	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXITHOLD . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CODE  . . . . . . . . . . .  	V WORD 	0000	DATA	External
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+EXIT_TYPE  . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FATAL  . . . . . . . . . . . . .  	L NEAR	01D9	CODE	Global
+FATAL1 . . . . . . . . . . . . .  	L NEAR	01DD	CODE	Global
+FATALC . . . . . . . . . . . . .  	L NEAR	01ED	CODE
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Symbols-9
+                                                             
+
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+
+HARDERR  . . . . . . . . . . . .  	N PROC	0198	CODE	Global	Length = 0138
+HIGHMEM  . . . . . . . . . . . .  	Alias	 FALSE		
+
+IBM  . . . . . . . . . . . . . .  	Alias	 FALSE		
+IDLEINT  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+IGNRET . . . . . . . . . . . . .  	L NEAR	0232	CODE
+INCHK  . . . . . . . . . . . . .  	L NEAR	00BB	CODE
+INDOS  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Symbols-10
+                                                             
+
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MSVER  . . . . . . . . . . . . .  	Alias	 TRUE		
+
+NOSETWRPERR  . . . . . . . . . .  	L NEAR	01AC	CODE
+NOSTOP . . . . . . . . . . . . .  	L NEAR	006B	CODE
+NOSWAP . . . . . . . . . . . . .  	L NEAR	00E9	CODE
+NOSWAP2  . . . . . . . . . . . .  	L NEAR	0252	CODE
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+PAUSOLP  . . . . . . . . . . . .  	L NEAR	00B1	CODE
+PAUSOSTRT  . . . . . . . . . . .  	L NEAR	00B4	CODE
+PFLAG  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+POPFRET  . . . . . . . . . . . .  	L NEAR	008B	CODE
+PRINTOFF . . . . . . . . . . . .  	L NEAR	00AB	CODE
+PRINTON  . . . . . . . . . . . .  	L NEAR	00AB	CODE
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Symbols-11
+                                                             
+
+READOP . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+REALDIVOV  . . . . . . . . . . .  	N PROC	0147	CODE	Global	Length = 003B
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RESET_ENVIRONMENT  . . . . . . .  	L NEAR	025B	CODE	Global
+RESET_FREE_JFN . . . . . . . . .  	L NEAR	028D	CODE
+RESET_RETURN . . . . . . . . . .  	L NEAR	029C	CODE
+RESET_TO_PARENT  . . . . . . . .  	L NEAR	0297	CODE
+RET18  . . . . . . . . . . . . .  	L NEAR	008C	CODE
+RET36  . . . . . . . . . . . . .  	L NEAR	0065	CODE
+RET_L  . . . . . . . . . . . . .  	NEAR 	0241	CODE
+RET_NZ . . . . . . . . . . . . .  	NEAR 	00D3	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SETIGN . . . . . . . . . . . . .  	L NEAR	0242	CODE
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+SPOOLINT . . . . . . . . . . . .  	N PROC	0078	CODE	Global	Length = 0015
+STATCHK  . . . . . . . . . . . .  	N PROC	008D	CODE	Global	Length = 0048
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:50:44
+STDCTRLC - error handler for MSDOS                          Symbols-12
+                                                             
+
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+
+TOGLINS  . . . . . . . . . . . .  	Alias	 WANG		
+TOGLPRN  . . . . . . . . . . . .  	Alias	 FALSE		
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+USER_SP  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+USER_SS  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+
+VER  . . . . . . . . . . . . . .  	Text  		
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WANG . . . . . . . . . . . . . .  	Alias	 FALSE		
+WPERR  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+ZEROEXT  . . . . . . . . . . . .  	Alias	 TRUE		
+ZRET . . . . . . . . . . . . . .  	L NEAR	0063	CODE
+
+??0002 . . . . . . . . . . . . .  	L NEAR	0009	CODE
+??0003 . . . . . . . . . . . . .  	L NEAR	0008	CODE
+??0004 . . . . . . . . . . . . .  	L NEAR	006A	CODE
+??0005 . . . . . . . . . . . . .  	L NEAR	0077	CODE
+??0006 . . . . . . . . . . . . .  	L NEAR	008C	CODE
+??0007 . . . . . . . . . . . . .  	L NEAR	00B0	CODE
+??0008 . . . . . . . . . . . . .  	L NEAR	00D3	CODE
+??000A . . . . . . . . . . . . .  	L NEAR	0119	CODE
+??000B . . . . . . . . . . . . .  	L NEAR	0132	CODE
+??000C . . . . . . . . . . . . .  	L NEAR	0181	CODE
+??000D . . . . . . . . . . . . .  	L NEAR	0197	CODE
+??000E . . . . . . . . . . . . .  	L NEAR	0241	CODE
+
+
+   1864 Source  Lines
+   2520 Total   Lines
+    633 Symbols
+
+  19052 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

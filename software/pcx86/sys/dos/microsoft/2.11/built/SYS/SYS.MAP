@@ -1,0 +1,48 @@
+
+
+Warning: no stack segment
+
+ Start  Stop   Length Name                   Class
+ 00000H 00376H 00377H CODE                   
+ 00377H 00454H 000DEH CONST                  
+ 00455H 00499H 00045H DATA                   
+ 004A0H 004A0H 00000H CODE                   
+
+ Origin   Group
+ 0000:0   DG
+
+  Address         Publics by Name
+
+ 0000:038F       BADDRV
+ 0000:03AA       BADDRVLEN
+ 0000:03AC       BADPARM
+ 0000:03BD       BADPARMLEN
+ 0000:03E7       BADSIZ
+ 0000:03FF       BADSIZLEN
+ 0000:0377       BADVER
+ 0000:0401       DONE
+ 0000:0413       DONELEN
+ 0000:0415       GETSYS
+ 0000:0453       GETSYSLEN
+ 0000:03BF       NODEST
+ 0000:03E5       NODESTLEN
+ 0000:0431       SYSDRV
+
+  Address         Publics by Value
+
+ 0000:0377       BADVER
+ 0000:038F       BADDRV
+ 0000:03AA       BADDRVLEN
+ 0000:03AC       BADPARM
+ 0000:03BD       BADPARMLEN
+ 0000:03BF       NODEST
+ 0000:03E5       NODESTLEN
+ 0000:03E7       BADSIZ
+ 0000:03FF       BADSIZLEN
+ 0000:0401       DONE
+ 0000:0413       DONELEN
+ 0000:0415       GETSYS
+ 0000:0431       SYSDRV
+ 0000:0453       GETSYSLEN
+
+Program entry point at 0000:0100

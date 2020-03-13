@@ -1,0 +1,1338 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Page     1-1
+                                                            
+
+                                TITLE   SORT FILTER FOR MS-DOS 
+                                ; 
+                                ; Sort  /R /+n 
+                                ; /R -> reverse sort 
+                                ; /+n -> sort on column n 
+                                ; 
+                                ; Written by:   Chris Peters 
+                                ; 
+                                ; Modification History: 
+                                ;           3-18-83 MZ  Fix CR-LF at end of buf
+				fer 
+                                ;                       Fix small file sorting 
+                                ;                       Fix CR-LF line terminat
+				ion bug 
+                                ;                       Comment the Damn source
+				 
+                                ; 
+ = 0000                         FALSE   EQU     0 
+ = FFFF                         TRUE    EQU     NOT FALSE 
+                                 
+                                ;NOTE:	"internat" must be false if KANJI versio
+				n 
+ =                              internat	equ	true 
+                                ;NOTE:	see above 
+                                 
+                                .list 
+                                 
+                                sys     MACRO   name                    ; syste
+				m call macro 
+                                        MOV     AH,name 
+                                        INT     21h 
+                                        ENDM 
+                                save    MACRO   reglist                 ; push 
+				those registers 
+                                IRP reg,<reglist> 
+                                        PUSH    reg 
+                                ENDM 
+                                ENDM 
+                                restore MACRO   reglist                 ; pop t
+				hose registers 
+                                IRP reg,<reglist> 
+                                        POP     reg 
+                                ENDM 
+                                ENDM 
+                                 
+ = 0100                         MAXREC  EQU     256                     ; MAXIM
+				UM NUL RECORD SIZE 
+                                 
+ = 0000                         SPACE   EQU     0                       ; Offse
+				t zero in the allocated block 
+ =                              BUFFER  EQU     MAXREC                  ; Offse
+				t MAXREC in the allocated block 
+                                 
+                                SUBTTL  Segments used in load order 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Page     1-2
+Segments used in load order                                 
+
+                                 
+                                 
+ 0000                           CODE    SEGMENT 
+ 0000                           CODE    ENDS 
+                                 
+ 0000                           CONST   SEGMENT PUBLIC BYTE 
+ 0000                           CONST   ENDS 
+                                 
+ 0000                           CSTACK  SEGMENT STACK 
+ 0000  0080[                            DB 128 DUP (0)                  ; initi
+				al stack to be clear 
+            00                  
+                         ]      
+                                
+ 0080                           CSTACK  ENDS 
+                                 
+                                DG      GROUP   CODE,CONST,CSTACK 
+                                 
+ 0000                           CODE    SEGMENT 
+                                ASSUME  CS:DG,DS:NOTHING,ES:NOTHING,SS:CSTACK 
+                                 
+ 0000  0000                     COLUMN  DW      0                       ; COLUM
+				N TO USE FOR KEY + 1 
+ 0002  2F                       SWITCH  DB      '/' 
+                                 
+ 0003                           SORT: 
+                                ; 
+                                ; check for proper version number of system 
+                                ; 
+                                        sys     GET_VERSION 
+ 0003  B4 30                  1         MOV     AH,GET_VERSION
+ 0005  CD 21                  1         INT     21h
+ 0007  86 E0                            XCHG    AH,AL                   ; Turn 
+				it around to AH.AL 
+ 0009  3D 0200                          CMP     AX,200H                 ; Versi
+				on 2.00 only 
+ 000C  73 10                            JAE     OKDOS                   ; Succe
+				ss 
+ 000E  BA 0000 E                        MOV     DX,OFFSET DG:BADVER     ; Get e
+				rror message 
+ 0011  0E                               PUSH    CS                      ; Get D
+				S addressability 
+ 0012  1F                               POP     DS 
+                                        sys     STD_CON_STRING_OUTPUT   ; Send 
+				to STDOUT 
+ 0013  B4 09                  1         MOV     AH,STD_CON_STRING_OUTPUT
+ 0015  CD 21                  1         INT     21h
+ 0017  06                               PUSH    ES                      ; long 
+				segment 
+ 0018  2E: FF 36 0000 R                 PUSH    COLUMN                  ; offse
+				t zero 
+ 001D                           LONG_RET    PROC    FAR 
+ 001D  CB                               RET                             ; long 
+				return to OS 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Page     1-3
+Segments used in load order                                 
+
+                                LONG_RET    ENDP 
+                                ; 
+                                ; get proper switch character 
+                                ; 
+ 001E                           OKDOS: 
+ 001E  B0 00                            MOV     AL,0                    ; Get c
+				urrent switch character 
+                                        sys     CHAR_OPER 
+ 0020  B4 37                  1         MOV     AH,CHAR_OPER
+ 0022  CD 21                  1         INT     21h
+ 0024  2E: 88 16 0002 R                 MOV     SWITCH,DL 
+                                ; 
+                                ; parse command line 
+                                ; 
+ 0029  BE 0080                          MOV     SI,80H                  ; point
+				er to command line 
+ 002C  FC                               CLD                             ; go le
+				ft to right 
+ 002D  33 C9                            XOR     CX,CX 
+ 002F  AC                               LODSB 
+ 0030  8A C8                            MOV     CL,AL                   ; CX = 
+				length of command line 
+ 0032                           SWITCH_LOOP: 
+ 0032  E8 0077 R                        CALL    GET_CHAR                ; get a
+				 character 
+ 0035  2E: 3A 06 0002 R                 CMP     AL,SWITCH               ; begin
+				ning of switch? 
+ 003A  75 F6                            JNZ     SWITCH_LOOP             ; No, g
+				et next character 
+ 003C  E8 0077 R                        CALL    GET_CHAR                ; get 1
+				st char of switch 
+ 003F  3C 2B                            CMP     AL,'+'                  ; Colum
+				n to sort? 
+ 0041  74 0F                            JZ      SWITCH_NUMBER           ; Yes, 
+				parse a number 
+ 0043  0C 20                            OR      AL,20h                  ; conve
+				rt to lower case 
+ 0045  3C 72                            CMP     AL,'r'                  ; Rever
+				se sort? 
+ 0047  75 E9                            JNZ     SWITCH_LOOP             ; No, g
+				et next switch 
+ 0049  2E: C6 06 01A2 R 72              MOV     CS:CODE_PATCH,72h       ; sleaz
+				e JAE into JB 
+       90                       
+ 0050  EB E0                            JMP     SWITCH_LOOP             ; get n
+				ext switch 
+ 0052                           SWITCH_NUMBER: 
+ 0052  2E: C7 06 0000 R 0000            MOV     COLUMN,0                ; start
+				 off at 0 
+ 0059                           SWITCH_NEXT_NUMBER: 
+ 0059  E8 0077 R                        CALL    GET_CHAR                ; get s
+				upposed digit 
+ 005C  2C 30                            SUB     AL,'0'                  ; conve
+				rt to number 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Page     1-4
+Segments used in load order                                 
+
+ 005E  72 D2                            JB      SWITCH_LOOP             ; less 
+				than '0' 
+ 0060  3C 09                            CMP     AL,9                    ; is it
+				 a valid digit? 
+ 0062  77 CE                            JA      SWITCH_LOOP             ; nope,
+				 get next switch 
+ 0064  98                               CBW                             ; make 
+				it a full word 
+ 0065  8B D8                            MOV     BX,AX                   ; save 
+				byte away 
+ 0067  B8 000A                          MOV     AX,10                   ; decim
+				al number system 
+ 006A  2E: F7 26 0000 R                 MUL     COLUMN                  ; take 
+				previous result 
+ 006F  03 C3                            ADD     AX,BX                   ; add i
+				n low order digit 
+ 0071  2E: A3 0000 R                    MOV     COLUMN,AX               ; save 
+				away value 
+ 0075  EB E2                            JMP     SWITCH_NEXT_NUMBER      ; get n
+				ext character 
+ 0077                           GET_CHAR: 
+ 0077  E3 03                            JCXZ    END_GET                 ; End o
+				f line 
+ 0079  49                               DEC     CX                      ; dec c
+				har count 
+ 007A  AC                               LODSB                           ; get t
+				he character 
+ 007B  C3                               RET                             ; retur
+				n 
+ 007C                           END_GET: 
+ 007C  58                               POP     AX                      ; nuke 
+				return on stack 
+                                ; 
+                                ; set up column for proper sort offset 
+                                ; 
+ 007D                           END_SWITCH: 
+ 007D  2E: 83 06 0000 R 02              ADD     COLUMN,2 
+ 0083  2E: 83 3E 0000 R 02              CMP     COLUMN,2 
+ 0089  74 05                            JZ      GOT_COL 
+ 008B  2E: FF 0E 0000 R                 DEC     COLUMN 
+                                 
+                                ; 
+                                ; Get sorting area, no more than 64K 
+                                ; 
+ 0090                           GOT_COL: 
+ 0090  BB 1000                          MOV     BX,1000H                ; 64K w
+				orth of paragraphs 
+ 0093                           GET_MEM: 
+                                        sys     ALLOC                   ; alloc
+				ate them from somewhere 
+ 0093  B4 48                  1         MOV     AH,ALLOC
+ 0095  CD 21                  1         INT     21h
+ 0097  73 07                            JNC     GOT_MEM                 ; if er
+				ror, BX has amount free, try to get it 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Page     1-5
+Segments used in load order                                 
+
+ 0099  0B DB                            OR      BX,BX                   ; but, 
+				is BX = 0? 
+ 009B  75 F6                            JNZ     GET_MEM                 ; nope,
+				 try to allocate it 
+ 009D  EB 2F 90                         JMP     SIZERR                  ; compl
+				ain 
+                                 
+ 00A0                           GOT_MEM: 
+ 00A0  8E D8                            MOV     DS,AX                   ; Point
+				 DS to buffer 
+ 00A2  8E C0                            MOV     ES,AX                   ; and p
+				oint ES to buffer 
+ 00A4  B1 04                            MOV     CL,4                    ; 2^4 b
+				ytes per paragraph 
+ 00A6  D3 E3                            SHL     BX,CL                   ; Find 
+				out how many bytes we have 
+                                 
+                                ; 
+                                ; clear out temporary record area 
+                                ; 
+ 00A8  B9 0080                          MOV     CX,MAXREC/2             ; Size 
+				of temporary buffer (words) 
+ 00AB  B8 2020                          MOV     AX,'  '                 ; Chara
+				cter to fill with 
+ 00AE  BF 0000                          MOV     DI,SPACE                ; Begin
+				ning of temp buffer 
+ 00B1  F3/ AB                           REP     STOSW                   ; Blam.
+				 
+                                ; 
+                                ; read in file from standard input 
+                                ; 
+ 00B3  BA 0102                          MOV     DX,BUFFER + 2           ; DX = 
+				place to begin reading 
+ 00B6  8B CB                            MOV     CX,BX                   ; CX is
+				 the max number to read 
+ 00B8  81 E9 0102                       SUB     CX,MAXREC + 2           ; remem
+				ber offset of temp buffer 
+ 00BC                           SORTL: 
+ 00BC  33 DB                            XOR     BX,BX                   ; Stand
+				ard input 
+                                        sys     READ                    ; Read 
+				it in 
+ 00BE  B4 3F                  1         MOV     AH,READ
+ 00C0  CD 21                  1         INT     21h
+ 00C2  03 D0                            ADD     DX,AX                   ; Bump 
+				pointer by count read 
+ 00C4  2B C8                            SUB     CX,AX                   ; subtr
+				act from remaining the count read 
+ 00C6  74 06                            JZ      SIZERR                  ; if bu
+				ffer is full then error 
+ 00C8  0B C0                            OR      AX,AX                   ; no ch
+				ars read -> end of file 
+ 00CA  75 F0                            JNZ     SORTL                   ; there
+				 were chars read. go read again 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Page     1-6
+Segments used in load order                                 
+
+ 00CC  EB 17                            JMP     SHORT SIZOK             ; trim 
+				last ^Z terminated record 
+ 00CE                           SIZERR: 
+ 00CE  BE 0000 E                        MOV     SI,OFFSET DG:ERRMSG     ; not e
+				nough memory error 
+ 00D1                           ERROR_EXIT: 
+ 00D1  0E                               PUSH    CS                      ; DS ad
+				dressability 
+ 00D2  1F                               POP     DS 
+ 00D3  AD                               LODSW                           ; get l
+				ength 
+ 00D4  8B C8                            MOV     CX,AX                   ; put i
+				nto appropriate register 
+ 00D6  8B D6                            MOV     DX,SI                   ; get o
+				utput destination 
+ 00D8  BB 0002                          MOV     BX,2                    ; outpu
+				t to standard error 
+                                        sys     WRITE                   ; and w
+				rite it out 
+ 00DB  B4 40                  1         MOV     AH,WRITE
+ 00DD  CD 21                  1         INT     21h
+ 00DF  B0 01                            MOV     AL,1                    ; retur
+				n an error code 
+                                        sys     EXIT 
+ 00E1  B4 4C                  1         MOV     AH,EXIT
+ 00E3  CD 21                  1         INT     21h
+                                 
+                                ; 
+                                ; Look for a ^Z. Terminate buffer at 1st ^Z. 
+                                ; 
+ 00E5                           SIZOK: 
+ 00E5  8B DA                            MOV     BX,DX                   ; save 
+				end pointer 
+ 00E7  8B CA                            MOV     CX,DX                   ; get p
+				ointer to end of text 
+ 00E9  81 E9 0102                       SUB     CX,BUFFER+2             ; dif i
+				n pointers is count 
+ 00ED  B0 1A                            MOV     AL,1AH                  ; char 
+				is ^Z 
+ 00EF  BF 0102                          MOV     DI,BUFFER+2             ; point
+				 to beginning of text 
+ 00F2  F2/ AE                           REPNZ   SCASB                   ; find 
+				one 
+ 00F4  75 01                            JNZ     NoBack                  ; nope,
+				 try to find CRLF 
+ 00F6  4B                               DEC     BX                      ; prete
+				nd that we didn't see ^Z 
+ 00F7                           NoBack: 
+ 00F7  2B D9                            SUB     BX,CX                   ; sub f
+				rom endpointer the number left 
+ 00F9  83 EB 02                         SUB     BX,2                    ; Hope 
+				for a CR LF at end 
+ 00FC  81 3F 0A0D                       CMP     WORD PTR [BX],0A0Dh     ; Was t
+				here one there? 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Page     1-7
+Segments used in load order                                 
+
+ 0100  74 08                            JZ      GOTEND                  ; yep, 
+				here is the end 
+ 0102  83 C3 02                         ADD     BX,2                    ; nope,
+				 bump back to SCASB spot 
+ 0105  38 07                            CMP     BYTE PTR [BX],AL        ; Was t
+				here ^Z there? 
+ 0107  74 01                            JZ      GOTEND                  ; yep, 
+				chop it 
+ 0109  43                               INC     BX                      ; Nope,
+				 skip last char 
+ 010A                           GOTEND: 
+ 010A  8B EB                            MOV     BP,BX                   ; BP = 
+				filesize-2(CRLF)+temp buffer+2 
+ 010C  3E: C7 46 00 0000                MOV     WORD PTR DS:[BP],0      ; 0 at 
+				end of the file 
+                                ; 
+                                ;  We now turn the entire buffer into a linked 
+				list of chains by 
+                                ;  replacing CRLFs with the length of the follo
+				wing line (with 2 for CRLF) 
+                                ; 
+ 0112  BB 0100                          MOV     BX,BUFFER               ; point
+				er to line head (length) 
+ 0115  BF 0102                          MOV     DI,BUFFER+2             ; point
+				er to line text 
+ 0118                           REPLACE_LOOP: 
+ 0118  B0 0D                            MOV     AL,13                   ; char 
+				to look for is CR 
+ 011A  8B CD                            MOV     CX,BP                   ; count
+				 = end pointer 
+ 011C  2B CF                            SUB     CX,DI                   ; chop 
+				off start point to get length 
+ 011E  41                               INC     CX                      ; add 1
+				??? 
+ 011F                           REPLACE_SCAN: 
+ 011F  F2/ AE                           REPNZ   SCASB                   ; look 
+				for CR 
+ 0121  75 05                            JNZ     REPLACE_SKIP            ; count
+				 exhausted 
+ 0123  80 3D 0A                         CMP     BYTE PTR [DI],10        ; LF th
+				ere? 
+ 0126  75 F7                            JNZ     REPLACE_SCAN            ; nope,
+				 continue scanning 
+ 0128                           REPLACE_SKIP: 
+ 0128  8B C7                            MOV     AX,DI                   ; AX to
+				 point after CR 
+ 012A  48                               DEC     AX                      ; AX to
+				 point to CR 
+                                        save    <AX>                    ; save 
+				pointer 
+ 012B  50                     2         PUSH    AX
+ 012C  2B C3                            SUB     AX,BX                   ; AX is
+				 length of line found 
+ 012E  89 07                            MOV     [BX],AX                 ; stuff
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Page     1-8
+Segments used in load order                                 
+
+				 it in previous link 
+                                        restore <BX>                    ; get p
+				ointer to next 
+ 0130  5B                     2         POP     BX
+ 0131  47                               INC     DI                      ; skip 
+				LF??? 
+ 0132  E3 02                            JCXZ    END_REPLACE_LOOP        ; no mo
+				re to scan -> go sort 
+ 0134  EB E2                            JMP     REPLACE_LOOP            ; look 
+				for next 
+                                 
+ 0136                           END_REPLACE_LOOP: 
+ 0136  C7 07 0000                       MOV     WORD PTR [BX],0         ; termi
+				nate file with nul 
+ 013A  8D 6F 02                         LEA     BP,[BX+2]               ; remem
+				ber the null line at end 
+ 013D  BF 0100                          MOV     DI,BUFFER               ; DI is
+				 start of unsorted section 
+                                 
+                                ; 
+                                ; begin sort. Outer loop steps over all unsorte
+				d lines 
+                                ; 
+ 0140                           OUTER_SORT_LOOP: 
+ 0140  8B DF                            MOV     BX,DI                   ; BX is
+				 start of unsorted section 
+ 0142  8B F3                            MOV     SI,BX                   ; SI is
+				 scanning place link 
+ 0144  83 3F 00                         CMP     WORD PTR [BX],0         ; are w
+				e at the end of the buffer? 
+ 0147  75 03                            JNZ     INNER_SORT_LOOP         ; No, d
+				o inner process 
+ 0149  E9 01E9 R                        JMP     END_OUTER_SORT_LOOP     ; yes, 
+				go dump out 
+                                 
+                                ; 
+                                ; BX points to best guy found so far. We scan t
+				hrough the sorted section 
+                                ; to find an appropriate insertion point 
+                                ; 
+ 014C                           INNER_SORT_LOOP: 
+ 014C  03 34                            ADD     SI,[SI]                 ; link 
+				to next fellow 
+ 014E  8B 04                            MOV     AX,[SI]                 ; get l
+				ength of comparison guy 
+ 0150  0B C0                            OR      AX,AX                   ; test 
+				for end of buffer 
+ 0152  74 54                            JZ      END_INNER_SORT_LOOP     ; if ze
+				ro then figure out insertion 
+                                        save    <SI,DI>                 ; save 
+				SI,DI 
+ 0154  56                     2         PUSH    SI
+ 0155  57                     2         PUSH    DI
+ 0156  8B FB                            MOV     DI,BX                   ; DI = 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Page     1-9
+Segments used in load order                                 
+
+				pointer to tester link 
+ 0158  2E: 2B 06 0000 R                 SUB     AX,COLUMN               ; adjus
+				t length for column 
+ 015D  77 06                            JA      AXOK                    ; more 
+				chars in tester than column? 
+ 015F  BE 0000                          MOV     SI,SPACE                ; point
+				 SI to blank area 
+ 0162  B8 0100                          MOV     AX,MAXREC               ; make 
+				AX be max length 
+ 0165                           AXOK: 
+ 0165  8B 15                            MOV     DX,[DI]                 ; get l
+				ength of best guy 
+ 0167  2E: 2B 16 0000 R                 SUB     DX,COLUMN               ; adjus
+				t length for column 
+ 016C  77 06                            JA      DXOK                    ; there
+				 are more chars after column 
+ 016E  BF 0000                          MOV     DI,SPACE                ; point
+				 air to a space 
+ 0171  BA 0100                          MOV     DX,MAXREC               ; reall
+				y big record 
+ 0174                           DXOK: 
+ 0174  8B C8                            MOV     CX,AX                   ; AX is
+				 shortest record 
+ 0176  3B C2                            CMP     AX,DX                   ; perha
+				ps DX is shorter 
+ 0178  72 02                            JB      SMALL                   ; nope,
+				 leace CX alone 
+ 017A  8B CA                            MOV     CX,DX                   ; DX is
+				 shorter, put length in CX 
+ 017C                           SMALL: 
+ 017C  2E: 03 3E 0000 R                 ADD     DI,COLUMN               ; offse
+				t into record 
+ 0181  2E: 03 36 0000 R                 ADD     SI,COLUMN               ; offse
+				t into other record 
+                                	endif 
+                                if	internat 
+ 0186  53                       	push	bx 
+ 0187  50                       	push	ax 
+ 0188  BB 0000 E                	mov	bx,offset dg:table 
+ 018B  AC                       tloop:	lodsb 
+ 018C  2E: D7                   	xlat	byte ptr cs:[bx] 
+ 018E  8A E0                    	mov	ah,al 
+ 0190  26: 8A 05                	mov	al,es:[di] 
+ 0193  47                       	inc	di 
+ 0194  2E: D7                   	xlat	byte ptr cs:[bx] 
+ 0196  3A E0                    	cmp	ah,al 
+ 0198  E1 F1                    	loopz	tloop 
+ 019A  58                       	pop	ax 
+ 019B  5B                       	pop	bx 
+                                	endif 
+                                        restore <DI,SI>                 ; get h
+				ead pointers back 
+ 019C  5F                     2         POP     DI
+ 019D  5E                     2         POP     SI
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Page     1-10
+Segments used in load order                                 
+
+ 019E  75 02                            JNZ     TESTED_NOT_EQUAL        ; didn'
+				t exhaust counter, conditions set 
+ 01A0  3B C2                            CMP     AX,DX                   ; check
+				 string lengths 
+ 01A2                           TESTED_NOT_EQUAL: 
+                                ; 
+                                ; note! jae is patched to a jbe if file is to b
+				e sorted in reverse! 
+                                ; 
+ 01A2                           CODE_PATCH LABEL BYTE 
+ 01A2  73 A8                            JAE     INNER_SORT_LOOP         ; if th
+				is one wasn't better then go again 
+ 01A4  8B DE                            MOV     BX,SI                   ; it wa
+				s better, save header 
+ 01A6  EB A4                            JMP     INNER_SORT_LOOP         ; and s
+				can again 
+                                 
+ 01A8                           END_INNER_SORT_LOOP: 
+ 01A8  8B F3                            MOV     SI,BX                   ; SI is
+				 now the best person 
+ 01AA  3B F7                            CMP     SI,DI                   ; check
+				 best for current 
+ 01AC  74 36                            JZ      END_INSERT              ; best 
+				equals current, all done 
+                                 
+                                ; 
+                                ; SI points to best line found so far 
+                                ; DI points to a place to insert this line 
+                                ; DI is guaranteed to be < SI 
+                                ; make room for line at destination 
+                                ; 
+ 01AE  8B 14                            MOV     DX,[SI]                 ; get l
+				ength of line 
+                                        save    <SI,DI>                 ; save 
+				positions of people 
+ 01B0  56                     2         PUSH    SI
+ 01B1  57                     2         PUSH    DI
+ 01B2  FD                               STD                             ; go ri
+				ght to left 
+ 01B3  8B CD                            MOV     CX,BP                   ; get e
+				nd of file pointer 
+ 01B5  2B CF                            SUB     CX,DI                   ; get l
+				ength from destination to end 
+ 01B7  8B F5                            MOV     SI,BP                   ; start
+				 from end 
+ 01B9  4E                               DEC     SI                      ; SI po
+				ints to end of file 
+ 01BA  8B FE                            MOV     DI,SI                   ; desti
+				nation is end of file 
+ 01BC  03 FA                            ADD     DI,DX                   ; DI po
+				ints to new end of file 
+ 01BE  F3/ A4                           REP     MOVSB                   ; blam.
+				 Move every one up 
+ 01C0  FC                               CLD                             ; back 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Page     1-11
+Segments used in load order                                 
+
+				left to right 
+                                        restore <DI,SI>                 ; get o
+				ld source and destination 
+ 01C1  5F                     2         POP     DI
+ 01C2  5E                     2         POP     SI
+                                ; 
+                                ;  MOVE NEW LINE INTO PLACE 
+                                ; 
+                                        save    <DI>                    ; save 
+				destination 
+ 01C3  57                     2         PUSH    DI
+ 01C4  03 F2                            ADD     SI,DX                   ; adjus
+				t for previous movement 
+                                        save    <SI>                    ; save 
+				this value 
+ 01C6  56                     2         PUSH    SI
+ 01C7  8B CA                            MOV     CX,DX                   ; get n
+				umber to move 
+ 01C9  F3/ A4                           REP     MOVSB                   ; blam.
+				 move the new line in 
+                                        restore <SI,DI>                 ; get b
+				ack destination and new source 
+ 01CB  5E                     2         POP     SI
+ 01CC  5F                     2         POP     DI
+                                ; 
+                                ;  DELETE LINE FROM OLD PLACE 
+                                ; 
+                                        save    <DI>                    ; save 
+				destination 
+ 01CD  57                     2         PUSH    DI
+ 01CE  8B CD                            MOV     CX,BP                   ; point
+				er to end 
+ 01D0  03 CA                            ADD     CX,DX                   ; remem
+				ber bump 
+ 01D2  2B CE                            SUB     CX,SI                   ; get c
+				ount of bytes to move 
+ 01D4  41                               INC     CX                      ; turn 
+				it into a word 
+ 01D5  D1 E9                            SHR     CX,1                    ; or a 
+				count of words 
+ 01D7  8B FE                            MOV     DI,SI                   ; new d
+				estination of move 
+ 01D9  03 F2                            ADD     SI,DX                   ; offse
+				t of block 
+ 01DB  F3/ A5                           REP     MOVSW                   ; blam,
+				 squeeze out the space 
+                                        restore <DI>                    ; get b
+				ack original destination 
+ 01DD  5F                     2         POP     DI
+ 01DE  3E: C7 46 FE 0000                MOV     WORD PTR DS:[BP-2],0    ; remak
+				e the end of file mark 
+                                 
+ 01E4                           END_INSERT: 
+ 01E4  03 3D                            ADD     DI,[DI]                 ; link 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Page     1-12
+Segments used in load order                                 
+
+				to next guy 
+ 01E6  E9 0140 R                        JMP     OUTER_SORT_LOOP         ; and c
+				ontinue 
+                                ; 
+                                ;       PUT BACK IN THE CR-LF 
+                                ; 
+ 01E9                           END_OUTER_SORT_LOOP: 
+ 01E9  BF 0100                          MOV     DI,BUFFER               ; start
+				 at beginning (where else) 
+ 01EC  8B 0D                            MOV     CX,[DI]                 ; count
+				 of butes 
+                                 
+ 01EE                           INSERT_LOOP: 
+ 01EE  03 F9                            ADD     DI,CX                   ; point
+				 to next length 
+ 01F0  8B 0D                            MOV     CX,[DI]                 ; get l
+				ength 
+ 01F2  C7 05 0A0D                       MOV     WORD PTR [DI],0A0DH     ; repla
+				ce length with CRLF 
+ 01F6  83 F9 00                         CMP     CX,0                    ; check
+				 for end of file 
+ 01F9  75 F3                            JNZ     INSERT_LOOP             ; nope,
+				 try again 
+                                 
+ 01FB                           WRITE_FILE: 
+ 01FB  BA 0102                          MOV     DX,BUFFER+2             ; get s
+				tarting point 
+ 01FE  8B CD                            MOV     CX,BP                   ; point
+				er to end of buffer 
+ 0200  2B CA                            SUB     CX,DX                   ; dif i
+				n pointers is number of bytes 
+ 0202  BB 0001                          MOV     BX,1                    ; to st
+				andard output 
+                                        sys     WRITE                   ; write
+				 'em out 
+ 0205  B4 40                  1         MOV     AH,WRITE
+ 0207  CD 21                  1         INT     21h
+ 0209  72 04                            JC      BADWRT                  ; some 
+				bizarre error -> flag it 
+ 020B  3B C1                            CMP     AX,CX                   ; did w
+				e write what was expected? 
+ 020D  74 06                            JZ      WRTOK                   ; yes, 
+				say bye bye 
+ 020F                           BADWRT: 
+ 020F  BE 0000 E                        MOV     SI,OFFSET dg:ERRMSG2    ; stran
+				ge write error 
+ 0212  E9 00D1 R                        JMP     ERROR_EXIT              ; bye b
+				ye 
+ 0215                           WRTOK: 
+ 0215  32 C0                            XOR     AL,AL                   ; perfe
+				ct return (by convention) 
+                                        sys     EXIT                    ; bye! 
+ 0217  B4 4C                  1         MOV     AH,EXIT
+ 0219  CD 21                  1         INT     21h
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Page     1-13
+Segments used in load order                                 
+
+                                 
+ 021B                           CODE    ENDS 
+                                 
+ 0000                           CONST   SEGMENT PUBLIC BYTE 
+                                        EXTRN   BADVER:BYTE,ERRMSG:BYTE,ERRMSG2
+				:BYTE 
+                                if	internat 
+                                	extrn	table:byte 
+                                	endif 
+ 0000                           CONST   ENDS 
+                                 
+                                SUBTTL  Initialized Data 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Page     1-14
+Initialized Data                                            
+
+                                PAGE 
+ 0080                           CSTACK   SEGMENT STACK 
+ 0080  0060[                             DB      96 dup (0) 
+            00                  
+                         ]      
+                                
+ 00E0                           CSTACK   ENDS 
+                                 
+                                        END     SORT 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RESTORE  . . . . . . . . . . . .  	   3
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SAVE . . . . . . . . . . . . . .  	   3
+SHORT_ADDR . . . . . . . . . . .  	  12
+SYS  . . . . . . . . . . . . . .  	   2
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Symbols-2
+                                                             
+
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Symbols-3
+                                                             
+
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Symbols-4
+                                                             
+
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DG . . . . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	021B	PARA	NONE	
+  CONST  . . . . . . . . . . . .  	0000	BYTE	PUBLIC	
+  CSTACK . . . . . . . . . . . .  	00E0	PARA	STACK	
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Symbols-5
+                                                             
+
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+AXOK . . . . . . . . . . . . . .  	L NEAR	0165	CODE
+
+BADVER . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+BADWRT . . . . . . . . . . . . .  	L NEAR	020F	CODE
+BUFFER . . . . . . . . . . . . .  	Alias	 MAXREC		
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+CODE_PATCH . . . . . . . . . . .  	L BYTE 	01A2	CODE
+COLUMN . . . . . . . . . . . . .  	L WORD 	0000	CODE
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Symbols-6
+                                                             
+
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+DXOK . . . . . . . . . . . . . .  	L NEAR	0174	CODE
+
+END_GET  . . . . . . . . . . . .  	L NEAR	007C	CODE
+END_INNER_SORT_LOOP  . . . . . .  	L NEAR	01A8	CODE
+END_INSERT . . . . . . . . . . .  	L NEAR	01E4	CODE
+END_OUTER_SORT_LOOP  . . . . . .  	L NEAR	01E9	CODE
+END_REPLACE_LOOP . . . . . . . .  	L NEAR	0136	CODE
+END_SWITCH . . . . . . . . . . .  	L NEAR	007D	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Symbols-7
+                                                             
+
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERRMSG . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+ERRMSG2  . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_EXIT . . . . . . . . . . .  	L NEAR	00D1	CODE
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Symbols-8
+                                                             
+
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CHAR . . . . . . . . . . . .  	L NEAR	0077	CODE
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_MEM  . . . . . . . . . . . .  	L NEAR	0093	CODE
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+GOTEND . . . . . . . . . . . . .  	L NEAR	010A	CODE
+GOT_COL  . . . . . . . . . . . .  	L NEAR	0090	CODE
+GOT_MEM  . . . . . . . . . . . .  	L NEAR	00A0	CODE
+
+INNER_SORT_LOOP  . . . . . . . .  	L NEAR	014C	CODE
+INSERT_LOOP  . . . . . . . . . .  	L NEAR	01EE	CODE
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNAT . . . . . . . . . . . .  	Alias	 TRUE		
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Symbols-9
+                                                             
+
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LONG_RET . . . . . . . . . . . .  	F PROC	001D	CODE	Length = 0001
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MAXREC . . . . . . . . . . . . .  	Number	0100	
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+
+NOBACK . . . . . . . . . . . . .  	L NEAR	00F7	CODE
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OKDOS  . . . . . . . . . . . . .  	L NEAR	001E	CODE
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+OUTER_SORT_LOOP  . . . . . . . .  	L NEAR	0140	CODE
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+REPLACE_LOOP . . . . . . . . . .  	L NEAR	0118	CODE
+REPLACE_SCAN . . . . . . . . . .  	L NEAR	011F	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Symbols-10
+                                                             
+
+REPLACE_SKIP . . . . . . . . . .  	L NEAR	0128	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+SIZERR . . . . . . . . . . . . .  	L NEAR	00CE	CODE
+SIZOK  . . . . . . . . . . . . .  	L NEAR	00E5	CODE
+SMALL  . . . . . . . . . . . . .  	L NEAR	017C	CODE
+SORT . . . . . . . . . . . . . .  	L NEAR	0003	CODE
+SORTL  . . . . . . . . . . . . .  	L NEAR	00BC	CODE
+SPACE  . . . . . . . . . . . . .  	Number	0000	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+SWITCH . . . . . . . . . . . . .  	L BYTE 	0002	CODE
+SWITCH_LOOP  . . . . . . . . . .  	L NEAR	0032	CODE
+SWITCH_NEXT_NUMBER . . . . . . .  	L NEAR	0059	CODE
+SWITCH_NUMBER  . . . . . . . . .  	L NEAR	0052	CODE
+
+TABLE  . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+TESTED_NOT_EQUAL . . . . . . . .  	L NEAR	01A2	CODE
+TLOOP  . . . . . . . . . . . . .  	L NEAR	018B	CODE
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 16:07:33
+SORT FILTER FOR MS-DOS                                      Symbols-11
+                                                             
+
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_FILE . . . . . . . . . . .  	L NEAR	01FB	CODE
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+WRTOK  . . . . . . . . . . . . .  	L NEAR	0215	CODE
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+
+   1687 Source  Lines
+   1816 Total   Lines
+    539 Symbols
+
+  22648 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

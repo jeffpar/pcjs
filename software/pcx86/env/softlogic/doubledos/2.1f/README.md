@@ -4,7 +4,7 @@ title: DoubleDOS 2.1F
 permalink: /software/pcx86/env/softlogic/doubledos/2.1f/
 redirect_from: /disks/pcx86/tools/softlogic/doubledos/2.1f/
 machines:
-  - id: ibm5160-pcdos210
+  - id: ibm5160-doubledos
     type: pcx86
     config: /configs/pcx86/xml/machine/5160/cga/256kb/machine.xml
     resume: 1
@@ -22,7 +22,7 @@ to disable copy protection), since the date for `DOUBLEDO.EXE` is almost a year 
 It also seems to be very DOS version-sensitive.  It crashes on PC DOS 2.00 but appears to work OK on PC DOS 2.10, so
 that's what we boot with here.  A directory listing of the 160Kb diskette is provided [below](#directory-of-doubledos-21f).
 
-{% include machine.html id="ibm5160-pcdos210" %}
+{% include machine.html id="ibm5160-doubledos" %}
 
 ### Directory of DoubleDOS 2.1F
 

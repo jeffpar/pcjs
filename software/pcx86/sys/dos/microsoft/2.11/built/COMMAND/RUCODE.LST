@@ -1,0 +1,1035 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Page     1-1
+                                                            
+
+                                TITLE   COMMAND Language modifiable Code Reside
+				nt 
+                                 
+                                 
+                                .list 
+                                .cref 
+                                 
+                             C          INCLUDE COMEQU.ASM 
+                             C  ;************************************* 
+                             C  ; COMMAND EQUs which are not switch dependant 
+                             C   
+                             C  IFDEF   IBM 
+                             C          INCLUDE IFEQU.ASM 
+                             C  ;************************************* 
+                             C  ; COMMAND EQUs which are switch dependant 
+                             C   
+                             C  ENDIF 
+                             C   
+                             C  ENDIF 
+                             C   
+                             C   
+ = 003E                      C  SYM     EQU     ">" 
+                             C   
+ = 0017                      C  LINPERPAG       EQU     23 
+ = 0001                      C  NORMPERLIN      EQU     1 
+ = 0005                      C  WIDEPERLIN      EQU     5 
+ = 0080                      C  COMBUFLEN       EQU     128     ; Length of com
+				mmand buffer 
+                             C   
+ = 003A                      C  DRVCHAR         EQU     ":" 
+                             C   
+ = 005C                      C  FCB     EQU     5CH 
+                             C   
+                             C  VARSTRUC        STRUC 
+ 0000  ??                    C  ISDIR   DB      ? 
+ 0001  ??                    C  SIZ     DB      ? 
+ 0002  ????                  C  TTAIL   DW      ? 
+ 0004  ??                    C  INFO    DB      ? 
+ 0005  0054[                 C  BUF     DB      DIRSTRLEN + 20 DUP (?) 
+            ??               C  
+                         ]   C  
+                             C  
+ 0059                        C  VARSTRUC        ENDS 
+                             C   
+ = 0001                      C  WSWITCH EQU     1               ; Wide display 
+				during DIR 
+ = 0002                      C  PSWITCH EQU     2               ; Pause (or Pag
+				e) mode during DIR 
+ = 0004                      C  ASWITCH EQU     4               ; ASCII mode du
+				ring COPY 
+ = 0008                      C  BSWITCH EQU     8               ; Binary mode d
+				uring COPY 
+ = 0010                      C  VSWITCH EQU     10H             ; Verify switch
+				 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+ = 8000                      C  GOTSWITCH EQU   8000H           ; Meta switch s
+				et if switch character encountered 
+                                 
+                                 
+ 0000                           DATARES SEGMENT PUBLIC 
+                                        EXTRN   ENDBATMES:BYTE,BATCH:WORD,ECHOF
+				LAG:BYTE,CDEVAT:BYTE 
+                                        EXTRN   DEVENAM:BYTE,DRVLET:BYTE,MREAD:
+				BYTE,MWRITE:BYTE,IOTYP:BYTE 
+                                        EXTRN   ERRCD_24:WORD,MESBAS:BYTE,ERRME
+				S:BYTE,DEVEMES:BYTE 
+                                        EXTRN   DRVNUM:BYTE,LOADING:BYTE,REQUES
+				T:BYTE,PIPEFLAG:BYTE 
+                                        EXTRN   SINGLECOM:WORD,FORFLAG:BYTE,BAD
+				FAT:BYTE,NEWLIN:BYTE 
+                                        EXTRN   MESADD:BYTE 
+ 0000                           DATARES ENDS 
+                                 
+                                 
+ 0000                           CODERES SEGMENT PUBLIC BYTE 
+                                 
+                                        EXTRN   SAVHAND:NEAR,RESTHAND:NEAR,CONT
+				CTERM:NEAR 
+                                        EXTRN   GETCOMDSK2:NEAR 
+                                 
+                                        PUBLIC  ASKEND,DSKERR,RPRINT 
+                                 
+                                ASSUME  CS:RESGROUP,DS:NOTHING,ES:NOTHING,SS:NO
+				THING 
+                                 
+                                ;******************************************** 
+                                ; TERMINATE BATCH JOB PROMPTER 
+                                 
+                                ASSUME  DS:RESGROUP 
+ 0000                           ASKEND: 
+ 0000  E8 0000 E                        CALL    SAVHAND 
+ 0003                           ASKEND2: 
+ 0003  BA 0000 E                        MOV     DX,OFFSET RESGROUP:ENDBATMES 
+ 0006  E8 0142 R                        CALL    RPRINT 
+ 0009  B8 0C01                          MOV     AX,(STD_CON_INPUT_FLUSH SHL 8)+
+				STD_CON_INPUT 
+ 000C  CD 21                            INT     int_command 
+ 000E  24 5F                            AND     AL,5FH 
+ 0010  3C 4E                            CMP     AL,"N" 
+ 0012  74 17                            JZ      RESTHJ 
+ 0014  3C 59                            CMP     AL,"Y" 
+ 0016  75 EB                            JNZ     ASKEND2 
+ 0018  8E 06 0000 E                     MOV     ES,[BATCH] 
+ 001C  B4 49                            MOV     AH,DEALLOC 
+ 001E  CD 21                            INT     int_command 
+ 0020  C7 06 0000 E 0000                MOV     [BATCH],0               ; Flag 
+				no batch AFTER DEALLOC in case 
+                                                                        ;   of 
+				^C 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Page     1-3
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0026  C6 06 0000 E 01                  MOV     [ECHOFLAG],1            ; Make 
+				sure ECHO turned back on 
+ 002B                           RESTHJ: 
+ 002B  E8 0000 E                        CALL    RESTHAND 
+ 002E  E9 0000 E                        JMP     CONTCTERM 
+                                 
+                                 
+                                 
+ 0031                           DSKERR: 
+                                ASSUME  DS:NOTHING,ES:NOTHING,SS:NOTHING 
+                                        ; *************************************
+				***************** 
+                                        ;       THIS IS THE DEFAULT DISK ERROR 
+				HANDLING CODE 
+                                        ;       AVAILABLE TO ALL USERS IF THEY 
+				DO NOT TRY TO 
+                                        ;       INTERCEPT INTERRUPT 24H. 
+                                        ; *************************************
+				***************** 
+ 0031  FB                               STI 
+ 0032  1E                               PUSH    DS 
+ 0033  06                               PUSH    ES 
+ 0034  57                               PUSH    DI 
+ 0035  51                               PUSH    CX 
+ 0036  50                               PUSH    AX 
+ 0037  8E DD                            MOV     DS,BP 
+ 0039  8B 44 04                         MOV     AX,[SI.SDEVATT] 
+ 003C  2E: 88 26 0000 E                 MOV     [CDEVAT],AH 
+ 0041  0E                               PUSH    CS 
+ 0042  07                               POP     ES 
+ 0043  BF 0000 E                        MOV     DI,OFFSET RESGROUP:DEVENAM 
+ 0046  B9 0008                          MOV     CX,8 
+ 0049  83 C6 0A                         ADD     SI,SDEVNAME             ; Suck 
+				up device name (even on Block) 
+ 004C  F3/ A4                           REP     MOVSB 
+ 004E  58                               POP     AX 
+ 004F  59                               POP     CX 
+ 0050  5F                               POP     DI 
+ 0051  07                               POP     ES                      ; Stack
+				 just contains DS at this point 
+ 0052  E8 0000 E                        CALL    SAVHAND 
+ 0055  0E                               PUSH    CS 
+ 0056  1F                               POP     DS              ; Set up local 
+				data segment 
+                                ASSUME  DS:RESGROUP 
+                                 
+ 0057  52                               PUSH    DX 
+ 0058  E8 013F R                        CALL    CRLF 
+ 005B  5A                               POP     DX 
+                                 
+ 005C  04 41                            ADD     AL,"A"          ; Compute drive
+				 letter (even on character) 
+ 005E  A2 0000 E                        MOV     [DRVLET],AL 
+ 0061  F6 C4 80                         TEST    AH,80H          ; Check if hard
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Page     1-4
+DEVICE TABLE AND SRH DEFINITION                             
+
+				 disk error 
+ 0064  74 0A                            JZ      NOHARDE 
+ 0066  F6 06 0000 E 80                  TEST    [CDEVAT],DEVTYP SHR 8 
+ 006B  75 03                            JNZ     NOHARDE 
+ 006D  E9 0129 R                        JMP     FATERR 
+ 0070                           NOHARDE: 
+ 0070  BE 0000 E                        MOV     SI,OFFSET RESGROUP:MREAD 
+ 0073  F6 C4 01                         TEST    AH,1 
+ 0076  74 03                            JZ      SAVMES 
+ 0078  BE 0000 E                        MOV     SI,OFFSET RESGROUP:MWRITE 
+ 007B                           SAVMES: 
+ 007B  AD                               LODSW 
+ 007C  A3 0000 E                        MOV     WORD PTR [IOTYP],AX 
+ 007F  AD                               LODSW 
+ 0080  A3 0002 E                        MOV     WORD PTR [IOTYP+2],AX 
+ 0083  81 E7 00FF                       AND     DI,0FFH 
+ 0087  83 FF 0C                         CMP     DI,12 
+ 008A  76 03                            JBE     HAVCOD 
+ 008C  BF 000C                          MOV     DI,12 
+ 008F                           HAVCOD: 
+ 008F  89 3E 0000 E                     MOV     [ERRCD_24],DI 
+ 0093  D1 E7                            SHL     DI,1 
+ 0095  8B BD 0000 E                     MOV     DI,WORD PTR [DI+MESBAS] ; Get p
+				ointer to error message 
+ 0099  87 FA                            XCHG    DI,DX           ; May need DX l
+				ater 
+ 009B  E8 0142 R                        CALL    RPRINT          ; Print error t
+				ype 
+ 009E  BA 0000 E                        MOV     DX,OFFSET RESGROUP:ERRMES 
+ 00A1  E8 0142 R                        CALL    RPRINT 
+ 00A4  F6 06 0000 E 80                  TEST    [CDEVAT],DEVTYP SHR 8 
+ 00A9  74 09                            JZ      BLKERR 
+ 00AB  BA 0000 E                        MOV     DX,OFFSET RESGROUP:DEVEMES 
+ 00AE  B4 09                            MOV     AH,STD_CON_STRING_OUTPUT 
+ 00B0  CD 21                            INT     int_command 
+ 00B2  EB 13                            JMP     SHORT ASK       ; Don't ralph o
+				n COMMAND 
+                                 
+ 00B4                           BLKERR: 
+ 00B4  BA 0000 E                        MOV     DX,OFFSET RESGROUP:DRVNUM 
+ 00B7  E8 0142 R                        CALL    RPRINT 
+ 00BA  80 3E 0000 E 00                  CMP     [LOADING],0 
+ 00BF  74 06                            JZ      ASK 
+ 00C1  E8 0000 E                        CALL    RESTHAND 
+ 00C4  E9 0000 E                        JMP     GETCOMDSK2      ; If error load
+				ing COMMAND, re-prompt 
+ 00C7                           ASK: 
+ 00C7  BA 0000 E                        MOV     DX,OFFSET RESGROUP:REQUEST 
+ 00CA  E8 0142 R                        CALL    RPRINT 
+ 00CD  B8 0C01                          MOV     AX,(STD_CON_INPUT_FLUSH SHL 8)+
+				STD_CON_INPUT 
+ 00D0  CD 21                            INT     int_command             ; Get r
+				esponse 
+ 00D2  E8 013F R                        CALL    CRLF 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Page     1-5
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 00D5  0C 20                            OR      AL,20H          ; Convert to lo
+				wer case 
+ 00D7  B4 00                            MOV     AH,0            ; Return code f
+				or ignore 
+ 00D9  3C 69                            CMP     AL,"i"          ; Ignore? 
+ 00DB  74 43                            JZ      EEXIT 
+ 00DD  FE C4                            INC     AH 
+ 00DF  3C 72                            CMP     AL,"r"          ; Retry? 
+ 00E1  74 3D                            JZ      EEXIT 
+ 00E3  FE C4                            INC     AH 
+ 00E5  3C 61                            CMP     AL,"a"          ; Abort? 
+ 00E7  75 DE                            JNZ     ASK 
+ 00E9  33 D2                            XOR     DX,DX 
+ 00EB  86 16 0000 E                     XCHG    DL,[PIPEFLAG]   ; Abort a pipe 
+				in progress 
+ 00EF  0A D2                            OR      DL,DL 
+ 00F1  74 0D                            JZ      CHECKFORA 
+ 00F3  83 3E 0000 E 00                  CMP     [SINGLECOM],0 
+ 00F8  74 06                            JZ      CHECKFORA 
+ 00FA  C7 06 0000 E FFFF                MOV     [SINGLECOM],-1   ; Make sure SI
+				NGLECOM exits 
+ 0100                           CHECKFORA: 
+ 0100  83 3E 0000 E 00                  CMP     [ERRCD_24],0    ; Write protect
+				 
+ 0105  74 07                            JZ      ABORTFOR 
+ 0107  83 3E 0000 E 02                  CMP     [ERRCD_24],2    ; Drive not rea
+				dy 
+ 010C  75 12                            JNZ     EEXIT           ; Don't abort t
+				he FOR 
+ 010E                           ABORTFOR: 
+ 010E  C6 06 0000 E 00                  MOV     [FORFLAG],0     ; Abort a FOR i
+				n progress 
+ 0113  83 3E 0000 E 00                  CMP     [SINGLECOM],0 
+ 0118  74 06                            JZ      EEXIT 
+ 011A  C7 06 0000 E FFFF                MOV     [SINGLECOM],-1   ; Make sure SI
+				NGLECOM exits 
+ 0120                           EEXIT: 
+ 0120  8A C4                            MOV     AL,AH 
+ 0122  8B D7                            MOV     DX,DI 
+ 0124                           RESTHD: 
+ 0124  E8 0000 E                        CALL    RESTHAND 
+ 0127  1F                               POP     DS 
+ 0128  CF                               IRET 
+                                 
+ 0129                           FATERR: 
+ 0129  BA 0000 E                        MOV     DX,OFFSET RESGROUP:BADFAT 
+ 012C  E8 0142 R                        CALL    RPRINT 
+ 012F  BA 0000 E                        MOV     DX,OFFSET RESGROUP:ERRMES 
+ 0132  E8 0142 R                        CALL    RPRINT 
+ 0135  BA 0000 E                        MOV     DX,OFFSET RESGROUP:DRVNUM 
+ 0138  E8 0142 R                        CALL    RPRINT 
+ 013B  B0 02                            MOV     AL,2            ; Abort 
+ 013D  EB E5                            JMP     RESTHD 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Page     1-6
+DEVICE TABLE AND SRH DEFINITION                             
+
+                                 
+                                ;********************************************* 
+                                ; Print routines for Tokenized resident message
+				s 
+                                 
+                                ASSUME DS:RESGROUP,SS:RESGROUP 
+                                 
+ 013F                           CRLF: 
+ 013F  BA 0000 E                        MOV     DX,OFFSET RESGROUP:NEWLIN 
+                                 
+ 0142                           RPRINT: 
+ 0142  50                               PUSH    AX              ; Tokenized mes
+				sage printer 
+ 0143  53                               PUSH    BX 
+ 0144  52                               PUSH    DX 
+ 0145  56                               PUSH    SI 
+ 0146  8B F2                            MOV     SI,DX 
+ 0148                           RPRINT1: 
+ 0148  AC                               LODSB 
+ 0149  50                               PUSH    AX 
+ 014A  24 7F                            AND     AL,7FH 
+ 014C  3C 30                            CMP     AL,"0" 
+ 014E  72 15                            JB      RPRINT2 
+ 0150  3C 39                            CMP     AL,"9" 
+ 0152  77 11                            JA      RPRINT2 
+ 0154  2C 30                            SUB     AL,"0" 
+ 0156  98                               CBW 
+ 0157  D1 E0                            SHL     AX,1 
+ 0159  BB 0000 E                        MOV     BX,OFFSET RESGROUP:MESADD 
+ 015C  03 D8                            ADD     BX,AX 
+ 015E  8B 17                            MOV     DX,[BX] 
+ 0160  E8 0142 R                        CALL    RPRINT 
+ 0163  EB 06                            JMP     SHORT RPRINT3 
+ 0165                           RPRINT2: 
+ 0165  8A D0                            MOV     DL,AL 
+ 0167  B4 02                            MOV     AH,STD_CON_OUTPUT 
+ 0169  CD 21                            INT     int_command 
+ 016B                           RPRINT3: 
+ 016B  58                               POP     AX 
+ 016C  A8 80                            TEST    AL,10000000B                   
+				 ; High bit set indicates end 
+ 016E  74 D8                            JZ      RPRINT1 
+ 0170  5E                               POP     SI 
+ 0171  5A                               POP     DX 
+ 0172  5B                               POP     BX 
+ 0173  58                               POP     AX 
+ 0174  C3                               RET 
+                                 
+ 0175                           CODERES ENDS 
+                                        END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+VARSTRUC . . . . . . . . . . . .  	0059	0005
+  ISDIR  . . . . . . . . . . . .  	0000
+  SIZ  . . . . . . . . . . . . .  	0001
+  TTAIL  . . . . . . . . . . . .  	0002
+  INFO . . . . . . . . . . . . .  	0004
+  BUF  . . . . . . . . . . . . .  	0005
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Symbols-5
+                                                             
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+EGROUP . . . . . . . . . . . . .  	GROUP
+  ZEXEC_CODE . . . . . . . . . .  	0000	PARA	PUBLIC	
+  ZEXEC_DATA . . . . . . . . . .  	0000	PARA	PUBLIC	
+RESGROUP . . . . . . . . . . . .  	GROUP
+  CODERES  . . . . . . . . . . .  	0175	BYTE	PUBLIC	
+  DATARES  . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  ENVIRONMENT  . . . . . . . . .  	0000	PARA	PUBLIC	
+  INIT . . . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  TAIL . . . . . . . . . . . . .  	0000	PARA	PUBLIC	
+TRANGROUP  . . . . . . . . . . .  	GROUP
+  TRANCODE . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  TRANDATA . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  TRANSPACE  . . . . . . . . . .  	0000	PARA	PUBLIC	
+  TRANTAIL . . . . . . . . . . .  	0000	PARA	PUBLIC	
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ABORTFOR . . . . . . . . . . . .  	L NEAR	010E	CODERES
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASK  . . . . . . . . . . . . . .  	L NEAR	00C7	CODERES
+ASKEND . . . . . . . . . . . . .  	L NEAR	0000	CODERES	Global
+ASKEND2  . . . . . . . . . . . .  	L NEAR	0003	CODERES
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ASWITCH  . . . . . . . . . . . .  	Number	0004	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Symbols-6
+                                                             
+
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BADFAT . . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+BATCH  . . . . . . . . . . . . .  	V WORD 	0000	DATARES	External
+BLKERR . . . . . . . . . . . . .  	L NEAR	00B4	CODERES
+BSWITCH  . . . . . . . . . . . .  	Number	0008	
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+
+CDEVAT . . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHECKFORA  . . . . . . . . . . .  	L NEAR	0100	CODERES
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+COMBUFLEN  . . . . . . . . . . .  	Number	0080	
+CONTCTERM  . . . . . . . . . . .  	L NEAR	0000	CODERES	External
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CRLF . . . . . . . . . . . . . .  	L NEAR	013F	CODERES
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVEMES  . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+DEVENAM  . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Symbols-7
+                                                             
+
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DRVCHAR  . . . . . . . . . . . .  	Number	003A	
+DRVLET . . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+DRVNUM . . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+DSKERR . . . . . . . . . . . . .  	L NEAR	0031	CODERES	Global
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Symbols-8
+                                                             
+
+
+ECHOFLAG . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+EEXIT  . . . . . . . . . . . . .  	L NEAR	0120	CODERES
+ENDBATMES  . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERRCD_24 . . . . . . . . . . . .  	V WORD 	0000	DATARES	External
+ERRMES . . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FATERR . . . . . . . . . . . . .  	L NEAR	0129	CODERES
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB  . . . . . . . . . . . . . .  	Number	005C	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Symbols-9
+                                                             
+
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FORFLAG  . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+
+GETCOMDSK2 . . . . . . . . . . .  	L NEAR	0000	CODERES	External
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+GOTSWITCH  . . . . . . . . . . .  	Number	8000	
+
+HAVCOD . . . . . . . . . . . . .  	L NEAR	008F	CODERES
+HIGHMEM  . . . . . . . . . . . .  	Alias	 FALSE		
+
+IBM  . . . . . . . . . . . . . .  	Alias	 FALSE		
+IBMJAPAN . . . . . . . . . . . .  	Alias	 FALSE		
+IBMVER . . . . . . . . . . . . .  	Alias	 IBM		
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Symbols-10
+                                                             
+
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+IOTYP  . . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KANJI  . . . . . . . . . . . . .  	Alias	 FALSE		
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LINPERPAG  . . . . . . . . . . .  	Number	0017	
+LOADING  . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MESADD . . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+MESBAS . . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MREAD  . . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+MSVER  . . . . . . . . . . . . .  	Number	FFFF	
+MWRITE . . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+
+NEWLIN . . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+NOHARDE  . . . . . . . . . . . .  	L NEAR	0070	CODERES
+NORMPERLIN . . . . . . . . . . .  	Number	0001	
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Symbols-11
+                                                             
+
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+PIPEFLAG . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+PSWITCH  . . . . . . . . . . . .  	Number	0002	
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+REQUEST  . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+RESTHAND . . . . . . . . . . . .  	L NEAR	0000	CODERES	External
+RESTHD . . . . . . . . . . . . .  	L NEAR	0124	CODERES
+RESTHJ . . . . . . . . . . . . .  	L NEAR	002B	CODERES
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+RPRINT . . . . . . . . . . . . .  	L NEAR	0142	CODERES	Global
+RPRINT1  . . . . . . . . . . . .  	L NEAR	0148	CODERES
+RPRINT2  . . . . . . . . . . . .  	L NEAR	0165	CODERES
+RPRINT3  . . . . . . . . . . . .  	L NEAR	016B	CODERES
+
+SAVHAND  . . . . . . . . . . . .  	L NEAR	0000	CODERES	External
+SAVMES . . . . . . . . . . . . .  	L NEAR	007B	CODERES
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+SINGLECOM  . . . . . . . . . . .  	V WORD 	0000	DATARES	External
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:42:54
+COMMAND Language modifiable Code Resident                   Symbols-12
+                                                             
+
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+SYM  . . . . . . . . . . . . . .  	Number	003E	
+
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+VSWITCH  . . . . . . . . . . . .  	Number	0010	
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WIDEPERLIN . . . . . . . . . . .  	Number	0005	
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+WSWITCH  . . . . . . . . . . . .  	Number	0001	
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+
+   1672 Source  Lines
+   1739 Total   Lines
+    613 Symbols
+
+  18744 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

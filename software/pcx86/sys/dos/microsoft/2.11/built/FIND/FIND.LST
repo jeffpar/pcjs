@@ -1,0 +1,1548 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-1
+                                                            
+
+                                      title   MSDOS V2.0  FIND 
+                                 
+                                ;----------------------------------------------
+				----------------------; 
+                                ; Revision History:                            
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ;       V1.1    8/23/82         M.A.Ulloa      
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ;       V1.2    9/22/82         M.A.Ulloa      
+				                      ; 
+                                ;                 Added the -c and -n options  
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ;               9/23/82         M.A.Ulloa      
+				                      ; 
+                                ;                 Added DOS version number cont
+				rol                   ; 
+                                ;                                              
+				                      ; 
+                                ;               10/07/82  Rev.2         M.A.Ull
+				oa                    ; 
+                                ;                 Changed quote for double quot
+				es, and added         ; 
+                                ;               file name printing             
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ;               10/20/82  Rev.3         M.A.Ull
+				oa                    ; 
+                                ;                 Modified IBM name to FIND, an
+				d changed the text    ; 
+                                ;               of some messages.              
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ;               10/25/82  Rev.4         M.A.Ull
+				oa                    ; 
+                                ;                 Changed name to FIND and all 
+				messages to the       ; 
+                                ;               IBM form.                      
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ;               10/27/82  Rev.5         M.A.Ull
+				oa                    ; 
+                                ;                 Made the correct exit on vers
+				ion check in case     ; 
+                                ;               of a 1.x DOS.                  
+				                      ; 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-2
+                                                            
+
+                                ;                                              
+				                      ; 
+                                ;               11/4/82 Rev. 5          A.R. Re
+				ynolds                ; 
+                                ;                  Messages moved to external m
+				odule                 ; 
+                                ;                                              
+				                      ; 
+                                ;               11/10/82  Rev. 6        M.A. Ul
+				loa                   ; 
+                                ;                 Corrected problem with line n
+				umbers, and a problem ; 
+                                ;               with seeking for 0 chars.      
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ;               03/30/83  Rev. 7        M.A. Ul
+				loa                   ; 
+                                ;                 Added patch area for bug fixi
+				ng.                   ; 
+                                ;                                              
+				                      ; 
+                                ;               04/14/83  Rev. 8        M.A. Ul
+				loa                   ; 
+                                ;                 Made changes for Kanji charac
+				ters. (uhg!)          ; 
+                                ;                                              
+				                      ; 
+                                ;----------------------------------------------
+				----------------------; 
+                                 
+ = 0000                         FALSE   equ     0 
+ = FFFF                         TRUE    equ     NOT FALSE 
+                                 
+ =                              KANJI   equ     FALSE                   ;set to
+				 true is kanji vers. 
+                                 
+                                ;----------------------------------------------
+				----------------------; 
+                                ;       FIND program following the standart UNI
+				X operation.          ; 
+                                ;                                              
+				                      ; 
+                                ; FORMAT:                                      
+				                      ; 
+                                ;       find {option} string {filename {filenam
+				e} {...}}             ; 
+                                ;                                              
+				                      ; 
+                                ; NOTES:                                       
+				                      ; 
+                                ;       1) String arguments HAVE to be enclosed
+				                      ; 
+                                ;       in double quotes. (Two double quotes if
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-3
+                                                            
+
+				 a                    ; 
+                                ;       doble quote is to be included). Only ON
+				E                     ; 
+                                ;       string argument is presently allowed.  
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ;       2) Options are available:              
+				                      ; 
+                                ;               v       All lines but those mat
+				ching are considered  ; 
+                                ;               c       Only print a count of m
+				atching lines         ; 
+                                ;               n       Each line is preceded b
+				y its relative        ; 
+                                ;                         line number in the fi
+				le.                   ; 
+                                ;                                              
+				                      ; 
+                                ;       - Options can be Upper or lower case.  
+				                      ; 
+                                ;       - Format: The switch character followed
+				 by an options        ; 
+                                ;       character. I.e.: In the IBM PC: /v     
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ;       3) The program returns:                
+				                      ; 
+                                ;               0 - OK, and some matches       
+				                      ; 
+                                ;               2 - Some Error                 
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ;       4) The maximum line size is determined 
+				by                    ; 
+                                ;       buffer size. Bigger lines will bomb the
+				 program.             ; 
+                                ;                                              
+				                      ; 
+                                ;       5) If no file name is given then it wil
+				l asssume             ; 
+                                ;       the input is comming from the Standart 
+				Input. NO             ; 
+                                ;       errors are reported when reading from S
+				tandart Input.        ; 
+                                ;----------------------------------------------
+				----------------------; 
+                                 
+ 0000                           code    segment public 
+                                assume  cs:code,ss:code,ds:nothing,es:nothing 
+                                 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-4
+                                                            
+
+ = 000D                         CR      equ     0dh                     ;A Carr
+				iage Return 
+ = 000A                         LF      equ     0ah                     ;A Line
+				 Feed 
+ = 0022                         quote_char equ  22h                     ;A doub
+				le quote character 
+                                 
+                                 
+ = 1000                         buffer_size equ 4096                    ;file b
+				uffer size 
+ = 0080                         st_buf_size equ 128                     ;string
+				 arg. buffer size 
+ = 0040                         fname_buf_size equ 64                   ;file n
+				ame buffer size 
+                                 
+                                 
+                                ;----- DOS EQUATES ----------------------------
+				----------------------; 
+ = 0000                         std_in  equ     0                       ;STD in
+				put handle 
+ = 0001                         std_out equ     1                       ;STD ou
+				tput handle 
+ = 0002                         std_err equ     2                       ;STD er
+				ror handle 
+ = 0021                         dos_ent equ     21h                     ;DOS en
+				try point 
+                                 
+ = 0009                         std_con_string_output equ 9 
+ = 0030                         get_version equ 48 
+ = 0037                         char_oper equ   55                      ;get co
+				nfiguration parameters 
+ = 003D                         open    equ     61                      ;DOS st
+				d open code 
+ = 003E                         close   equ     62                      ;DOS st
+				d close code 
+ = 003F                         read    equ     63                      ;DOS st
+				d read code 
+ = 0040                         write   equ     64                      ;DOS st
+				d write code 
+ = 0042                         lseek   equ     66                      ;DOS fi
+				le seek 
+ = 004C                         exit    equ     76                      ;DOS pr
+				ocess exit code 
+                                 
+                                 
+                                ;----- Misc  Data -----------------------------
+				------------------; 
+ 0000  2A 2A 2A 4D 41 55 6C     make    db      "***MAUlloa/Microsoft/V12***" 
+       6C 6F 61 2F 4D 69 63     
+       72 6F 73 6F 66 74 2F     
+       56 31 32 2A 2A 2A        
+ 001B  38                       rev     db      "8" 
+                                 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-5
+                                                            
+
+ 001C  3A 20                    colon   db      ": " 
+ 001E  5B                       n1_buf  db      "[" 
+ 001F  0008[                    n2_buf  db      8 dup(0)                ;buffer
+				 for number conversion 
+            00                  
+                         ]      
+                                
+                                 
+                                 
+                                 
+                                ;----- OPTION FLAGS ---------------------------
+				----------------------; 
+                                ; If a flag is set (0ffh) then the option has b
+				een selected, if 
+                                ;reset (0) then it has been not. All options ar
+				e reset initially. 
+                                ; NOTE: the order of this table has to remain c
+				onsistent with the 
+                                ;options dispatch code. If any changes are made
+				 they have to 
+                                ;correspond with the code. 
+                                 
+ 0027                           opt_tbl: 
+                                 
+ 0027  00                       v_flg   db      0 
+ 0028  00                       c_flg   db      0 
+ 0029  00                       n_flg   db      0 
+ 002A  00                       x_flg   db      0               ;not used 
+ 002B  00                       l_flg   db      0               ;not used 
+                                 
+                                 
+                                ;----- LINE COUNTERS --------------------------
+				----------------------; 
+ 002C  0000                     mtch_cntr dw    0                       ;matche
+				d lines counter 
+ 002E  0000                     line_cntr dw    0                       ;line c
+				ounter 
+                                 
+                                 
+                                ;----- MAIN ROUTINE ---------------------------
+				----------------------; 
+ 0030                           start: 
+                                 
+                                ;----- CHECK VERSION NUMBER -------------------
+				----------------------; 
+                                 
+ 0030  B4 30                            mov     ah,get_version 
+ 0032  CD 21                            int     21h 
+ 0034  3C 02                            cmp     al,2 
+ 0036  7D 0E                            jge     vers_ok 
+ 0038  0E                               push    cs 
+ 0039  1F                               pop     ds 
+ 003A  BA 0000 E                        mov     dx,offset bad_vers 
+ 003D  B4 09                            mov     ah,std_con_string_output 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-6
+                                                            
+
+ 003F  CD 21                            int     21h 
+ 0041  06                               push    es              ;bad vers, exit
+				 a la 1.x 
+ 0042  33 C0                            xor     ax,ax 
+ 0044  50                               push    ax 
+                                 
+ 0045                           badfart proc    far             ;(what a hack!!
+				) 
+ 0045  CB                               ret 
+                                badfart endp 
+                                 
+ 0046                           vers_ok: 
+                                 
+ 0046  0E                               push    cs                      ;load E
+				S to the right area, 
+ 0047  07                               pop     es                      ; for u
+				se with DI register 
+                                 
+                                assume  es:code 
+                                 
+                                ;----------------------------------------------
+				----------------------; 
+                                 
+ 0048  BE 0081                          mov     si,81h                  ;Start 
+				addrss. of commad line buf. 
+                                 
+ 004B  E8 0291 R                        call    kill_bl                 ;Get ri
+				d of blanks 
+ 004E  0B DB                            or      bx,bx                   ;A CR f
+				ound? 
+ 0050  74 10                            jz      find_opt                ;no, fi
+				rst find the options 
+ 0052                           args_missing: 
+ 0052  BA 0000 E                        mov     dx,offset errmsg1       ;empty 
+				command line, no args: error. 
+ 0055  2E: 8A 0E 0000 E                 mov     cl,cs:errlen1 
+ 005A  E8 0321 R                        call    prt_err 
+ 005D  B0 02                            mov     al,2                    ;error 
+				code for exit 
+ 005F  E9 028D R                        jmp     done 
+                                 
+                                 
+                                ;----- FIND THE OPTION IF ANY -----------------
+				----------------------; 
+ 0062                           find_opt: 
+ 0062  B4 37                            mov     ah,char_oper            ;get th
+				e dos switch char. 
+ 0064  B0 00                            mov     al,0 
+ 0066  CD 21                            int     dos_ent                 ;switch
+				 char in DL 
+ 0068  52                               push    dx 
+ 0069                           another_opt: 
+ 0069  AC                               lodsb                           ;get th
+				e first char of command line 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-7
+                                                            
+
+ 006A  3C 20                            cmp     al,' '                  ;a blan
+				k? 
+ 006C  74 52                            je      cont_scan 
+ 006E  3C 0D                            cmp     al,CR                   ;a Carr
+				iage Return 
+ 0070  74 E0                            je      args_missing 
+ 0072  5A                               pop     dx                      ;get sw
+				itch character 
+ 0073  3A C2                            cmp     al,dl                   ;is it 
+				the switch char? 
+ 0075  75 53                            jne     find_str                ;no, no
+				 options: get the string 
+ 0077  52                               push    dx                      ;save f
+				or another round 
+                                 
+ 0078  AC                               lodsb                           ;get th
+				e option character 
+ 0079  3C 20                            cmp     al,' '                  ;a blan
+				k? 
+ 007B  74 43                            je      cont_scan               ;yes, i
+				gnore and continue 
+ 007D  3C 0D                            cmp     al,CR                   ;a CR? 
+ 007F  74 D1                            je      args_missing            ;yes, e
+				rror... 
+ 0081  E8 0333 R                        call    make_caps               ;Capita
+				lize the character 
+ 0084  BB 0027 R                        mov     bx,offset opt_tbl       ;pointe
+				r to option flag table 
+                                 
+ 0087  3C 56                            cmp     al,'V'                  ;the v 
+				option? 
+ 0089  74 22                            je      opt_v 
+ 008B  3C 43                            cmp     al,'C'                  ;the c 
+				option? 
+ 008D  74 23                            je      opt_c 
+ 008F  3C 4E                            cmp     al,'N'                  ;the n 
+				option? 
+ 0091  74 24                            je      opt_n 
+                                 
+ 0093  2E: A2 0000 E                    mov     cs:errmsg5_opt,al       ;save t
+				he option 
+ 0097  BA 0000 E                        mov     dx,offset errmsg5       ;unknow
+				n option: error 
+ 009A  2E: 8A 0E 0000 E                 mov     cl,cs:errlen5 
+ 009F  E8 0321 R                        call    prt_err 
+ 00A2  BA 0000 E                        mov     dx,offset crlf          ;print 
+				a CRLF 
+ 00A5  B9 0002                          mov     cx,2 
+ 00A8  E8 0321 R                        call    prt_err 
+ 00AB  EB BC                            jmp     another_opt             ;proces
+				s next option 
+                                 
+ 00AD                           opt_v: 
+ 00AD  BF 0000                          mov     di,0 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-8
+                                                            
+
+ 00B0  EB 08                            jmp     short opt_dispatch 
+                                 
+ 00B2                           opt_c: 
+ 00B2  BF 0001                          mov     di,1 
+ 00B5  EB 03                            jmp     short opt_dispatch 
+                                 
+ 00B7                           opt_n: 
+ 00B7  BF 0002                          mov     di,2 
+                                 
+ 00BA                           opt_dispatch: 
+ 00BA  26: C6 01 FF                     mov     es:byte ptr[bx+di],0ffh ;set th
+				e corresponding flag 
+ 00BE  EB A9                            jmp     another_opt             ;proces
+				s the rest of the options 
+                                 
+ 00C0                           cont_scan: 
+ 00C0  4E                               dec     si                      ;adjust
+				 SI 
+ 00C1  E8 0291 R                        call    kill_bl                 ;get ri
+				d of blanks 
+ 00C4  0B DB                            or      bx,bx                   ;A CR f
+				ound? 
+ 00C6  74 A1                            jz      another_opt             ;no, te
+				st for other options 
+ 00C8  EB 88                            jmp     args_missing            ;yes, e
+				rror... 
+                                 
+                                 
+                                ;----- FIND STRING ARGUMENT -------------------
+				----------------------; 
+ 00CA                           find_str: 
+ 00CA  3C 22                            cmp     al,quote_char           ;string
+				 should start with a 
+ 00CC  75 0A                            jnz     bad_str_err             ; quote
+				 character, if not: error. 
+ 00CE  BF 0540 R                        mov     di,offset st_buffer     ;String
+				 argument buffer addrss. 
+ 00D1  33 C9                            xor     cx,cx                   ;Clear 
+				to keep string length. 
+                                 
+ 00D3                           move_str: 
+ 00D3  AC                               lodsb 
+ 00D4  3C 0D                            cmp     al,CR                   ;if a C
+				R is found in the string 
+ 00D6  75 10                            jnz     str_ok                  ; then 
+				it's a bad string 
+ 00D8                           bad_str_err: 
+ 00D8  BA 0000 E                        mov     dx,offset errmsg2       ;bad st
+				ring error message 
+ 00DB  2E: 8A 0E 0000 E                 mov     cl,cs:errlen2 
+ 00E0  E8 0321 R                        call    prt_err                 ;print 
+				the error. 
+ 00E3  B0 02                            mov     al,2 
+ 00E5  E9 028D R                        jmp     done 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-9
+                                                            
+
+                                 
+ 00E8                           str_ok: 
+ 00E8  3C 22                            cmp     al,quote_char           ;look f
+				or a quote character 
+ 00EA  75 14                            jnz     move_char               ;not an
+				 apost., move to buffer 
+ 00EC  AC                               lodsb                           ;an apo
+				st., check next char. 
+ 00ED  3C 22                            cmp     al,quote_char           ;anothe
+				r quote character? 
+ 00EF  74 0F                            je      move_char               ;yes, m
+				ove it to the buffer 
+ 00F1  4E                               dec     si                      ;no, ad
+				just the pointer 
+ 00F2  26: 89 0E 053E R                 mov     es:st_length,cx         ;store 
+				the string length 
+ 00F7  0B C9                            or      cx,cx                   ;Is the
+				 string empty? 
+ 00F9  75 09                            jnz     other_args              ;no: ge
+				t the rest of the args. 
+ 00FB  B0 01                            mov     al,1                    ;empty:
+				 no matches(!?) 
+ 00FD  E9 028D R                        jmp     done 
+ 0100                           move_char: 
+ 0100  AA                               stosb                           ;put in
+				 buffer 
+ 0101  41                               inc     cx                      ;increm
+				ent string length 
+ 0102  EB CF                            jmp     move_str 
+                                 
+                                 
+                                ;----- FIND THE FILE ARGUMENTS ----------------
+				----------------------; 
+ 0104                           other_args:                             ;Proces
+				s the rest of the command 
+                                                                        ; line 
+				arguments. 
+ 0104  E8 0291 R                        call    kill_bl                 ;get ri
+				d of leading blanks 
+ 0107  0B DB                            or      bx,bx                   ;At lea
+				st one argument necessary, 
+ 0109  74 08                            jz      further_args            ; if a 
+				CR not found: ok. 
+                                 
+                                ;----- USE STD IN FOR INPUT -------------------
+				----------------------; 
+ 010B  0E                               push    cs 
+ 010C  1F                               pop     ds 
+ 010D  B8 0000                          mov     ax,std_in               ;handle
+				 
+ 0110  EB 5B 90                         jmp     fill 
+                                 
+ 0113                           further_args: 
+ 0113  E8 02A1 R                        call    clr_cntrs               ;set al
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-10
+                                                            
+
+				l counters to zero 
+ 0116  BF 05C2 R                        mov     di,offset file_name_buf ;Set po
+				inter to the name buffer 
+ 0119  33 C9                            xor     cx,cx                   ;zero f
+				ile name length 
+ 011B                           move_fname: 
+ 011B  AC                               lodsb 
+ 011C  3C 20                            cmp     al,' '                  ;A blan
+				k: end of file name, 
+ 011E  74 08                            je      done_move 
+ 0120  3C 0D                            cmp     al,CR                   ;A CR: 
+				idem. 
+ 0122  74 04                            je      done_move 
+ 0124  AA                               stosb                           ;store 
+				in name buffer 
+ 0125  41                               inc     cx                      ;increm
+				ent file name length 
+ 0126  EB F3                            jmp     move_fname 
+ 0128                           done_move: 
+ 0128  4E                               dec     si                      ;Adjust
+				 pointer for next round. 
+ 0129  26: C6 05 00                     mov     es:byte ptr[di],00h     ;File n
+				ames are null terminated 
+ 012D  56                               push    si                      ;Save S
+				I to continue com. line scan. 
+ 012E  1E                               push    ds                      ;Save D
+				S register contents for 
+                                                                        ; later
+				 because it points to the 
+                                                                        ; rest 
+				of the arguments. 
+ 012F  26: 89 0E 05C0 R                 mov     es:file_name_len,cx     ;save t
+				he name length 
+                                 
+                                ;----- OPEN FILE FOR READING ------------------
+				----------------------; 
+ 0134  0E                               push    cs                      ;Load n
+				ew DS with CS 
+ 0135  1F                               pop     ds 
+ 0136  BA 05C2 R                        mov     dx,offset file_name_buf ;addrss
+				. of the file name 
+ 0139  B4 3D                            mov     ah,open 
+ 013B  B0 00                            mov     al,0                    ;file o
+				pen for reading 
+ 013D  CD 21                            int     dos_ent                 ;call t
+				he DOS 
+ 013F  73 03                            jnc     say_name                ;if no 
+				carry then no errors 
+ 0141  E9 0266 R                        jmp     open_error 
+                                 
+                                ;----- PRINT FILE NAME ------------------------
+				----------------------; 
+ 0144                           say_name: 
+ 0144  50                               push    ax                      ;save f
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-11
+                                                            
+
+				ile handle 
+ 0145  BA 0000 E                        mov     dx,offset heading 
+ 0148  2E: 8A 0E 0000 E                 mov     cl,cs:heading_len 
+ 014D  32 ED                            xor     ch,ch 
+ 014F  E8 02F0 R                        call    prout 
+                                 
+ 0152  BA 05C2 R                        mov     dx,offset file_name_buf 
+ 0155  8B 0E 05C0 R                     mov     cx,ds:file_name_len 
+ 0159  E8 02F0 R                        call    prout 
+                                 
+ 015C  80 3E 0028 R FF                  cmp     ds:c_flg,0ffh           ;count 
+				only flag set? 
+ 0161  74 09                            je      xx1 
+                                 
+ 0163  BA 0000 E                        mov     dx,offset crlf 
+ 0166  B9 0002                          mov     cx,2 
+ 0169  E8 02F0 R                        call    prout 
+                                 
+ 016C                           xx1: 
+ 016C  58                               pop     ax 
+                                 
+                                ;----- Fill Buffer for Matching ---------------
+				----------------------; 
+ 016D                           fill: 
+ 016D  8B D8                            mov     bx,ax                   ;retrie
+				ve handle 
+ 016F                           refill: 
+ 016F  BA 0603 R                        mov     dx,offset buffer        ;data b
+				uffer addrss. 
+ 0172  B9 1000                          mov     cx,buffer_size 
+ 0175  B4 3F                            mov     ah,read 
+ 0177  CD 21                            int     dos_ent 
+ 0179  73 03                            jnc     no_read_error           ;if car
+				ry then read error 
+ 017B  E9 0247 R                        jmp     read_error 
+ 017E                           no_read_error: 
+ 017E  0B C0                            or      ax,ax                   ;if ax=
+				0 then all done 
+ 0180  75 19                            jnz     go_match 
+ 0182  80 3E 0028 R FF                  cmp     ds:c_flg,0ffh           ;count 
+				only flag set? 
+ 0187  75 03                            jne     sj2 
+ 0189  E8 02AE R                        call    print_count 
+ 018C                           sj2: 
+ 018C  83 FB 00                         cmp     bx,std_in               ;Using 
+				STD IN? 
+ 018F  75 03                            jnz     regular 
+ 0191  E9 028B R                        jmp     foo                     ;if so:
+				 all done, exit 
+ 0194                           regular: 
+ 0194  B4 3E                            mov     ah,close                ;otherw
+				ise close the file 
+ 0196  CD 21                            int     dos_ent 
+ 0198  E9 027F R                        jmp     scan_rest               ;get an
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-12
+                                                            
+
+				other file 
+                                 
+                                ;----- MATCH ROUTINE --------------------------
+				----------------------; 
+                                ;Note: If input is being taken from a file the 
+				stack contains 
+                                ; (from top to bottom): 
+                                ;       - Pointer to the next command in the co
+				mmand line 
+                                ;       - Pointer to the program segment prefix
+				 (to be loaded into 
+                                ;         DS to access the command line. 
+                                ; if the imput is from the standart input then 
+				NONE of it will be 
+                                ; in the stack. 
+                                 
+ 019B                           go_match: 
+ 019B  53                               push    bx                      ;save t
+				he file handle 
+ 019C  BD 0603 R                        mov     bp,offset buffer        ;ptr to
+				 first line of file 
+ 019F  8B F8                            mov     di,ax                   ;dispal
+				cement from beg of buffer 
+                                 
+ 01A1  3D 0FFF                          cmp     ax,buffer_size-1        ;last l
+				ine of the file? 
+ 01A4  7F 10                            jg      no_last_line            ;if yes
+				, add a CRLF just in case 
+ 01A6  8B DD                            mov     bx,bp 
+ 01A8  80 79 FF 0A                      cmp     byte ptr[bx+di-1],LF    ;finish
+				ed with a LF? 
+ 01AC  74 08                            je      no_last_line            ;yes, i
+				t's an OK line. 
+ 01AE  C6 01 0D                         mov     byte ptr[bx+di],CR      ;put a 
+				CR at the end of the data 
+ 01B1  47                               inc     di 
+ 01B2  C6 01 0A                         mov     byte ptr[bx+di],LF      ;put a 
+				LF ... 
+ 01B5  47                               inc     di 
+                                 
+ 01B6                           no_last_line: 
+ 01B6  57                               push    di                      ;save t
+				he # of chars. in the buffer 
+ 01B7  55                               push    bp 
+ 01B8  8B 16 053E R                     mov     dx,ds:st_length         ;length
+				 of the string arg. 
+ 01BC  4A                               dec     dx                      ;adjust
+				 for later use 
+ 01BD  EB 03                            jmp     short try_again 
+                                 
+                                 
+ 01BF                           more_stuff_o: 
+ 01BF  EB 6F 90                         jmp     more_stuff 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-13
+                                                            
+
+                                 
+                                 
+                                ;----- SCAN LINES IN THE BUFFER FOR A MATCH ---
+				----------------------; 
+                                ;Note: at this point the stack contains (from t
+				op to bottom): 
+                                ;       - Stuff mentioned before 
+                                ;       - File Handle 
+                                ;       - Number of chars. left in the buffer f
+				rom the next line. 
+                                ;       - Addrs. of the next line in the buffer
+				. 
+                                ; 
+                                ; plus, DX has the adjusted length of the strin
+				g argument. 
+                                 
+ 01C2                           try_again: 
+ 01C2  FF 06 002E R                     inc     ds:line_cntr            ;increm
+				ent line counter 
+ 01C6  5D                               pop     bp                      ;addrs.
+				 of next line in the buffer 
+ 01C7  8B FD                            mov     di,bp                   ;points
+				 to beg. of a line 
+ 01C9  59                               pop     cx                      ;get # 
+				of chars left in the buffer 
+ 01CA  8B D9                            mov     bx,cx                   ;save i
+				n case a non-complete line 
+ 01CC  B0 0A                            mov     al,LF                   ;search
+				 for a Line Feed 
+ 01CE  E3 EF                            jcxz    more_stuff_o            ;no cha
+				rs left in buffer 
+ 01D0  F2/ AE                           repnz   scasb 
+ 01D2  75 EB                            jnz     more_stuff_o            ;no ful
+				l line left in buffer 
+                                 
+ 01D4  51                               push    cx                      ;save c
+				hars left in buffer 
+ 01D5  57                               push    di                      ;points
+				 to beg. of next line 
+ 01D6  8B CF                            mov     cx,di 
+ 01D8  2B CD                            sub     cx,bp                   ;length
+				 of the current line 
+ 01DA  8B D9                            mov     bx,cx                   ;save i
+				n case it has a match 
+ 01DC  49                               dec     cx 
+ 01DD  49                               dec     cx                      ;CRLF c
+				haracters discounted 
+ 01DE  E3 27                            jcxz    try_again_opt           ;if lin
+				e empty go to next line 
+ 01E0  8B FD                            mov     di,bp                   ;pointe
+				r to the beg. of current line 
+ 01E2                           another_char: 
+                                ; 
+                                ; On entry: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-14
+                                                            
+
+                                ;       BX      line length 
+                                ;       CX      adjusted line length 
+                                ;       DX      adjusted string argument length
+				 
+                                ;       DI      points to beg. of line 
+                                ; 
+                                 
+                                ELSE 
+                                 
+ 01E2  BE 0540 R                        mov     si,offset st_buffer     ;pointe
+				r to beg. of string argument 
+ 01E5  AC                               lodsb                           ;get fi
+				rst character of the str. arg. 
+ 01E6  F2/ AE                           repnz   scasb                   ;search
+				 for a match in current line 
+ 01E8  75 1D                            jnz     try_again_opt           ;no mat
+				ch, try the next line 
+ 01EA  3B CA                            cmp     cx,dx                   ;compar
+				e lengths, a full match is not 
+ 01EC  72 19                            jb      try_again_opt           ; possi
+				ble if CX < DX. 
+ 01EE  57                               push    di                      ;save a
+				ddrs. of next char. in the line 
+ 01EF  51                               push    cx                      ;save t
+				he # of chars. left in the line 
+ 01F0  8B CA                            mov     cx,dx                   ;get th
+				e adjusted string arg. length 
+ 01F2  E3 08                            jcxz    a_match                 ;if a s
+				ingle char string, then match! 
+ 01F4  F3/ A6                           repz    cmpsb                   ;compar
+				e string with line 
+ 01F6  74 04                            jz      a_match                 ;a matc
+				h found, hurrah! 
+ 01F8  59                               pop     cx                      ;no mat
+				ch, get # of chars remaining 
+                                                                        ; in th
+				e line. 
+ 01F9  5F                               pop     di                      ;positi
+				on of the next char. in the line 
+ 01FA  EB E6                            jmp     another_char 
+                                 
+                                 
+                                ;----- A MATCH: CHECK FOR THE v OPTION --------
+				----------------------; 
+ 01FC                           a_match: 
+ 01FC  58                               pop     ax                      ;adjust
+				 stack 
+ 01FD  58                               pop     ax 
+                                ENDIF 
+                                 
+ 01FE  80 3E 0027 R FF                  cmp     ds:v_flg,0ffh           ;is fla
+				g set? 
+ 0203  75 09                            jne     prt_line                ;no, pr
+				int the line 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-15
+                                                            
+
+ 0205  EB BB                            jmp     try_again 
+                                 
+                                ;----- NO MATCH: CHECK FOR THE v OPTION -------
+				----------------------; 
+ 0207                           try_again_opt: 
+ 0207  80 3E 0027 R FF                  cmp     ds:v_flg,0ffh           ;is fla
+				g set? 
+ 020C  75 B4                            jne     try_again               ;no got
+				o next line 
+                                 
+                                ;----- PRINT THE LINE WITH THE MATCH ----------
+				----------------------; 
+                                ;Note: at this point the stack contains (top to
+				 bottom) 
+                                ;       - Stuff mentioned before 
+                                ; 
+                                ; plus, BP points to begginig of the current li
+				ne, BX has the length 
+                                ;of the current line including the CRLF, and DX
+				 the adjusted length of 
+                                ;the string argument. 
+                                 
+ 020E                           prt_line: 
+ 020E  80 3E 0028 R FF                  cmp     ds:c_flg,0ffh           ;is cou
+				nt only flag set? 
+ 0213  75 06                            jne     no_c_flg 
+ 0215  FF 06 002C R                     inc     ds:mtch_cntr            ;yes, i
+				ncrement counter 
+ 0219  EB A7                            jmp     try_again 
+                                 
+ 021B                           no_c_flg: 
+ 021B  52                               push    dx                      ;save t
+				he adjusted string arg. length 
+ 021C  80 3E 0029 R FF                  cmp     ds:n_flg,0ffh           ;is lin
+				e number flag set? 
+ 0221  75 03                            jne     no_n_flg 
+ 0223  E8 02D7 R                        call    prt_lcntr 
+ 0226                           no_n_flg: 
+ 0226  8B D5                            mov     dx,bp 
+ 0228  8B CB                            mov     cx,bx 
+ 022A  E8 02F0 R                        call    prout 
+ 022D  5A                               pop     dx                      ;restor
+				e 
+ 022E  EB 92                            jmp     try_again 
+                                 
+                                ;----- READ MORE TEXT LINES INTO THE BUFFER ---
+				----------------------; 
+                                ; The scanning routines have detected that the 
+				buffer does not 
+                                ;contain a full line any more. More lines have 
+				to be read into the 
+                                ;buffer. But first perform a seek on the file i
+				n order to re-read 
+                                ;the non-complete line into the begining of the
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-16
+                                                            
+
+				 buffer. 
+                                ; Uppon entry BP contains points to the beginin
+				g of the non-complete 
+                                ;line, and BX has the number of characters left
+				 in the buffer. 
+                                ; The Stack contains (top to bottom): 
+                                ;       - Pointer to the next command in the co
+				mmand line 
+                                ;       - Pointer to the program segment prefix
+				 (to be loaded into 
+                                ;         DS to access the command line). 
+                                ;       - File handle. 
+                                 
+ 0230                           more_stuff: 
+ 0230  8B D3                            mov     dx,bx                   ;get ch
+				ars left in buffer 
+ 0232  5B                               pop     bx                      ;get th
+				e handle 
+ 0233  0B D2                            or      dx,dx                   ;are th
+				ere 0 left? 
+ 0235  74 0D                            jz      no_seek                 ;yes, d
+				o not seek 
+ 0237  F7 DA                            neg     dx                      ;form t
+				wo's complement 
+ 0239  B9 FFFF                          mov     cx,-1 
+ 023C  B0 01                            mov     al,1                    ;seek f
+				rom the current position 
+ 023E  B4 42                            mov     ah,lseek                ;seek o
+				n file 
+ 0240  CD 21                            int     dos_ent 
+ 0242  72 03                            jc      read_error 
+ 0244                           no_seek: 
+ 0244  E9 016F R                        jmp     refill                  ;no err
+				ors: refill the buffer 
+ 0247                           read_error: 
+ 0247  83 FB 00                         cmp     bx,std_in               ;Using 
+				STD IN? 
+ 024A  74 3F                            je      foo                     ;if so:
+				 all done, exit 
+ 024C  B4 3E                            mov     ah,close                ;close 
+				the file 
+ 024E  CD 21                            int     dos_ent 
+ 0250  BA 0000 E                        mov     dx,offset errmsg4_pre   ;read e
+				rror 
+ 0253  2E: 8A 0E 0000 E                 mov     cl,cs:errlen4_pre 
+ 0258  E8 0318 R                        call    prt_file_name           ;print 
+				the file name in error 
+ 025B  BA 0000 E                        mov     dx,offset errmsg4_post  ;read e
+				rror 
+ 025E  2E: 8A 0E 0000 E                 mov     cl,cs:errlen4_post 
+ 0263  EB 17 90                         jmp     r_error 
+                                 
+                                ;----- PRINT ERRORS ---------------------------
+				----------------------; 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-17
+                                                            
+
+ 0266                           open_error: 
+ 0266  BA 0000 E                        mov     dx,offset errmsg3_pre    ;error
+				 in open operation 
+ 0269  2E: 8A 0E 0000 E                 mov     cl,cs:errlen3_pre 
+ 026E  E8 0329 R                        call    prt_err_2               ;print 
+				error message 
+ 0271  E8 0318 R                        call    prt_file_name           ;print 
+				the file name in error 
+ 0274  BA 0000 E                        mov     dx,offset errmsg3_post  ;error 
+				in open operation 
+ 0277  2E: 8A 0E 0000 E                 mov     cl,cs:errlen3_post 
+ 027C                           r_error: 
+ 027C  E8 0329 R                        call    prt_err_2               ;print 
+				error message 
+                                 
+                                ;----- SCAN THE REST OF THE COMMAND LINE ------
+				----------------------; 
+ 027F                           scan_rest: 
+ 027F  1F                               pop     ds                      ;restor
+				e pointer to comm. line 
+ 0280  5E                               pop     si                      ;restor
+				e pointer to next comm. 
+ 0281  E8 0291 R                        call    kill_bl                 ;look f
+				or further args. 
+ 0284  0B DB                            or      bx,bx                   ;test f
+				or a CR 
+ 0286  75 03                            jnz     foo 
+ 0288  E9 0113 R                        jmp     further_args 
+ 028B                           foo: 
+ 028B  B0 00                            mov     al,0                    ;Proper
+				 code 
+ 028D                           done: 
+ 028D  B4 4C                            mov     ah,exit                 ;All do
+				ne, exit with proper code. 
+ 028F  CD 21                            int     dos_ent 
+                                 
+                                 
+                                ;----------------------------------------------
+				----------------------; 
+                                ;            Get rid of blanks in command line.
+				                      ; 
+                                ;    Advances the SI reg till the next non-blan
+				k character, if the   ; 
+                                ; character is a CR (0dh) then returns with BX 
+				non-zero, otherwise   ; 
+                                ; BX is zero.                                  
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ; entry:                                       
+				                      ; 
+                                ;       SI      points to the first character o
+				n the line to scan.   ; 
+                                ;                                              
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-18
+                                                            
+
+				                      ; 
+                                ; exit:                                        
+				                      ; 
+                                ;       SI      points to the first non-blank c
+				haracter found.       ; 
+                                ;       BX      contains 0D hex if the first no
+				n-blank found is      ; 
+                                ;                a Carriage Return, otherwise i
+				t is 0.               ; 
+                                ;                                              
+				                      ; 
+                                ; modifies:                                    
+				                      ; 
+                                ;       BX, SI, and AX                         
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ;----------------------------------------------
+				----------------------; 
+ 0291                           kill_bl: 
+ 0291  FC                               cld                             ;increm
+				ent 
+ 0292  33 DB                            xor     bx,bx                   ;zero b
+				x to start: no CR found 
+ 0294                           no_bl: 
+ 0294  AC                               lodsb                           ;get ri
+				d of blanks 
+ 0295  3C 20                            cmp     al,' ' 
+ 0297  74 FB                            je      no_bl 
+ 0299  3C 0D                            cmp     al,CR 
+ 029B  75 02                            jnz     no_cr 
+ 029D  8B D8                            mov     bx,ax                   ;make b
+				x non-zero (actually 0dh) 
+ 029F                           no_cr: 
+ 029F  4E                               dec     si                      ;adjust
+				 pointer 
+ 02A0  C3                               ret 
+                                 
+                                 
+                                ;----------------------------------------------
+				----------------------; 
+                                ;               Clear Counters                 
+				                      ; 
+                                ;----------------------------------------------
+				----------------------; 
+ 02A1                           clr_cntrs: 
+ 02A1  26: C6 06 002C R 00              mov     byte ptr es:mtch_cntr,0 
+ 02A7  26: C6 06 002E R 00              mov     byte ptr es:line_cntr,0 
+ 02AD  C3                               ret 
+                                 
+                                ;----------------------------------------------
+				----------------------; 
+                                ;               Print Count of Matched lines   
+				                      ; 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-19
+                                                            
+
+                                ;                                              
+				                      ; 
+                                ;               Modifies: AX,CX,DX and DI      
+				                      ; 
+                                ;----------------------------------------------
+				----------------------; 
+ 02AE                           print_count: 
+ 02AE  53                               push    bx                      ;save h
+				andle 
+ 02AF  83 FB 00                         cmp     bx,std_in               ;using 
+				std_in? 
+ 02B2  74 09                            jz      sj3                     ;if so 
+				do not print file name 
+                                 
+ 02B4  BA 001C R                        mov     dx,offset colon 
+ 02B7  B9 0002                          mov     cx,2 
+ 02BA  E8 02F0 R                        call    prout                   ;print 
+				colon 
+ 02BD                           sj3: 
+ 02BD  A1 002C R                        mov     ax,ds:mtch_cntr 
+ 02C0  BF 001F R                        mov     di,offset n2_buf        ;buffer
+				 for characters 
+ 02C3  E8 02F8 R                        call    bin2asc                 ;conver
+				t to ascii 
+ 02C6  BA 001F R                        mov     dx,offset n2_buf 
+ 02C9  E8 02F0 R                        call    prout                   ;print 
+				the number 
+ 02CC  BA 0000 E                        mov     dx,offset crlf 
+ 02CF  B9 0002                          mov     cx,2 
+ 02D2  E8 02F0 R                        call    prout                   ;print 
+				an end of line 
+ 02D5  5B                               pop     bx 
+ 02D6  C3                               ret 
+                                 
+                                 
+                                ;----------------------------------------------
+				----------------------; 
+                                ;               Print relative line number     
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ;               Modifies: AX,CX and DI         
+				                      ; 
+                                ;----------------------------------------------
+				----------------------; 
+ 02D7                           prt_lcntr: 
+ 02D7  53                               push    bx 
+ 02D8  52                               push    dx 
+ 02D9  A1 002E R                        mov     ax,ds:line_cntr 
+ 02DC  BF 001F R                        mov     di,offset n2_buf 
+ 02DF  E8 02F8 R                        call    bin2asc 
+ 02E2  C6 05 5D                         mov     byte ptr[di],"]" 
+ 02E5  41                               inc     cx 
+ 02E6  41                               inc     cx 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-20
+                                                            
+
+ 02E7  BA 001E R                        mov     dx,offset n1_buf 
+ 02EA  E8 02F0 R                        call    prout 
+ 02ED  5A                               pop     dx 
+ 02EE  5B                               pop     bx 
+ 02EF  C3                               ret 
+                                 
+                                ;----------------------------------------------
+				----------------------; 
+                                ;               Print string to STD_OUT        
+				                      ; 
+                                ;----------------------------------------------
+				----------------------; 
+ 02F0                           prout: 
+ 02F0  BB 0001                          mov     bx,std_out 
+ 02F3  B4 40                            mov     ah,write 
+ 02F5  CD 21                            int     dos_ent 
+ 02F7  C3                               ret 
+                                 
+                                 
+                                ;----------------------------------------------
+				----------------------; 
+                                ;       Binary to Ascii conversion routine     
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ; Entry:                                       
+				                      ; 
+                                ;       AX      Binary number                  
+				                      ; 
+                                ;       DI      Points to one past the last cha
+				r in the              ; 
+                                ;             result buffer.                   
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ; Exit:                                        
+				                      ; 
+                                ;       Result in the buffer MSD first         
+				                      ; 
+                                ;       CX      Digit count                    
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ; Modifies:                                    
+				                      ; 
+                                ;       AX,BX,CX,DX and DI                     
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ;----------------------------------------------
+				----------------------; 
+ 02F8                           bin2asc: 
+ 02F8  BB 000A                          mov     bx,0ah 
+ 02FB  33 C9                            xor     cx,cx 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-21
+                                                            
+
+ 02FD                           go_div: 
+ 02FD  41                               inc     cx 
+ 02FE  3B C3                            cmp     ax,bx 
+ 0300  72 0A                            jb      div_done 
+ 0302  33 D2                            xor     dx,dx 
+ 0304  F7 F3                            div     bx 
+ 0306  80 C2 30                         add     dl,'0'          ;convert to ASC
+				II 
+ 0309  52                               push    dx 
+ 030A  EB F1                            jmp     short go_div 
+                                 
+ 030C                           div_done: 
+ 030C  04 30                            add     al,'0' 
+ 030E  50                               push    ax 
+ 030F  8B D9                            mov     bx,cx 
+ 0311                           deposit: 
+ 0311  58                               pop     ax 
+ 0312  AA                               stosb 
+ 0313  E2 FC                            loop    deposit 
+ 0315  8B CB                            mov     cx,bx 
+ 0317  C3                               ret 
+                                 
+                                 
+                                ;----------------------------------------------
+				----------------------; 
+                                ;       Print the current file name            
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ; modifies:                                    
+				                      ; 
+                                ;       DX, CX, BX and AX                      
+				                      ; 
+                                ;----------------------------------------------
+				----------------------; 
+ 0318                           prt_file_name: 
+ 0318  BA 05C2 R                        mov     dx,offset file_name_buf ;print 
+				the file name 
+ 031B  8B 0E 05C0 R                     mov     cx,ds:file_name_len     ;retriv
+				e file name length 
+ 031F  EB 08                            jmp     short prt_err_2 
+                                 
+                                 
+                                ;----------------------------------------------
+				----------------------; 
+                                ;       Print an error message to the Standart 
+				error                 ; 
+                                ;                                              
+				                      ; 
+                                ; entry:                                       
+				                      ; 
+                                ;       DX      has the pointer to the message 
+				                      ; 
+                                ;       CX      has the length of the message  
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-22
+                                                            
+
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ; modifies:                                    
+				                      ; 
+                                ;        BX and AX                             
+				                      ; 
+                                ;----------------------------------------------
+				----------------------; 
+ 0321                           prt_err: 
+ 0321  1E                               push    ds                      ;Save t
+				he current DS 
+ 0322  0E                               push    cs                      ;Make D
+				S point to the right 
+ 0323  1F                               pop     ds                      ; place
+				, for DOS use. 
+ 0324  E8 0329 R                        call    prt_err_2 
+ 0327  1F                               pop     ds 
+ 0328  C3                               ret 
+                                 
+ 0329                           prt_err_2: 
+ 0329  32 ED                            xor     ch,ch 
+ 032B  BB 0002                          mov     bx,std_err 
+ 032E  B4 40                            mov     ah,write 
+ 0330  CD 21                            int     dos_ent                 ;write 
+				error message 
+ 0332  C3                               ret 
+                                 
+                                 
+                                ;----------------------------------------------
+				----------------------; 
+                                ;       CAPIALIZES THE CHARACTER IN AL         
+				                      ; 
+                                ;                                              
+				                      ; 
+                                ;       entry:                                 
+				                      ; 
+                                ;               AL      has the character to Ca
+				pitalize              ; 
+                                ;                                              
+				                      ; 
+                                ;       exit:                                  
+				                      ; 
+                                ;               AL      has the capitalized cha
+				racter                ; 
+                                ;                                              
+				                      ; 
+                                ;       modifies:                              
+				                      ; 
+                                ;               AL                             
+				                      ; 
+                                ;----------------------------------------------
+				----------------------; 
+ 0333                           make_caps: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-23
+                                                            
+
+ 0333  3C 61                            cmp     al,'a' 
+ 0335  72 06                            jb      no_cap 
+ 0337  3C 7A                            cmp     al,'z' 
+ 0339  7F 02                            jg      no_cap 
+ 033B  24 DF                            and     al,0dfh 
+ 033D                           no_cap: 
+ 033D  C3                               ret 
+                                 
+                                 
+                                 
+                                ENDIF 
+                                 
+                                 
+                                ;----- PATCH AREA -----------------------------
+				----------------------; 
+                                 
+ 033E  0100[                    patch_area      dw      100h dup(?) 
+            ????                
+                         ]      
+                                
+                                 
+                                 
+                                 
+                                ;----- BUFFER AREA ----------------------------
+				----------------------; 
+ 053E  0000                     st_length dw    0                       ;String
+				 argumnet length 
+ 0540  0080[                    st_buffer db    st_buf_size dup(?)      ;String
+				 argument buffer 
+            ??                  
+                         ]      
+                                
+                                 
+ 05C0  0000                     file_name_len dw 0                      ;File n
+				ame length 
+ 05C2  0041[                    file_name_buf db fname_buf_size+1 dup(?)  ;File
+				 name buffer,(allow for 
+            ??                  
+                         ]      
+                                
+                                                                        ; null 
+				at the end). 
+                                 
+ 0603  1001[                    buffer  db      buffer_size+1 dup(?)    ;file b
+				uffer, the last byte is 
+            ??                  
+                         ]      
+                                
+                                                                        ;a guar
+				d in case of forced insertion 
+                                                                        ;of a C
+				RLF pair. 
+                                 
+                                ;----- ERROR MESSAGES -------------------------
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Page     1-24
+                                                            
+
+				----------------------; 
+                                        EXTRN   bad_vers:byte,crlf:byte,errmsg1
+				:byte,errlen1:byte,errmsg2:byte 
+                                        EXTRN   errmsg3_pre:byte,errlen3_pre:by
+				te 
+                                        EXTRN   errmsg3_post:byte,errlen3_post:
+				byte 
+                                        EXTRN   errmsg4_pre:byte,errlen4_pre:by
+				te 
+                                        EXTRN   errmsg4_post:byte,errlen4_post:
+				byte 
+                                        EXTRN   heading:byte,heading_len:byte,e
+				rrlen2:byte 
+                                        EXTRN   errmsg5:byte,errmsg5_opt:byte,e
+				rrlen5:byte 
+ 1604                           code    ends 
+                                 
+                                 
+                                ;----- STACK AREA -----------------------------
+				----------------------; 
+ 0000                           stack   segment stack 
+                                 
+ 0000  0040[                            dw      64 dup(?,?) 
+            ????                
+            ????                
+                         ]      
+                                
+ = 0100                         stack_top equ   $ 
+                                 
+ 0100                           stack   ends 
+                                 
+                                        end     start 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Symbols-1
+                                                             
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+CODE . . . . . . . . . . . . . .  	1604	PARA	PUBLIC	
+STACK  . . . . . . . . . . . . .  	0100	PARA	STACK	
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ANOTHER_CHAR . . . . . . . . . .  	L NEAR	01E2	CODE
+ANOTHER_OPT  . . . . . . . . . .  	L NEAR	0069	CODE
+ARGS_MISSING . . . . . . . . . .  	L NEAR	0052	CODE
+A_MATCH  . . . . . . . . . . . .  	L NEAR	01FC	CODE
+
+BADFART  . . . . . . . . . . . .  	F PROC	0045	CODE	Length = 0001
+BAD_STR_ERR  . . . . . . . . . .  	L NEAR	00D8	CODE
+BAD_VERS . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+BIN2ASC  . . . . . . . . . . . .  	L NEAR	02F8	CODE
+BUFFER . . . . . . . . . . . . .  	L BYTE 	0603	CODE	Length = 1001
+BUFFER_SIZE  . . . . . . . . . .  	Number	1000	
+
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLR_CNTRS  . . . . . . . . . . .  	L NEAR	02A1	CODE
+COLON  . . . . . . . . . . . . .  	L BYTE 	001C	CODE
+CONT_SCAN  . . . . . . . . . . .  	L NEAR	00C0	CODE
+CR . . . . . . . . . . . . . . .  	Number	000D	
+CRLF . . . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+C_FLG  . . . . . . . . . . . . .  	L BYTE 	0028	CODE
+
+DEPOSIT  . . . . . . . . . . . .  	L NEAR	0311	CODE
+DIV_DONE . . . . . . . . . . . .  	L NEAR	030C	CODE
+DONE . . . . . . . . . . . . . .  	L NEAR	028D	CODE
+DONE_MOVE  . . . . . . . . . . .  	L NEAR	0128	CODE
+DOS_ENT  . . . . . . . . . . . .  	Number	0021	
+
+ERRLEN1  . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+ERRLEN2  . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+ERRLEN3_POST . . . . . . . . . .  	V BYTE 	0000	CODE	External
+ERRLEN3_PRE  . . . . . . . . . .  	V BYTE 	0000	CODE	External
+ERRLEN4_POST . . . . . . . . . .  	V BYTE 	0000	CODE	External
+ERRLEN4_PRE  . . . . . . . . . .  	V BYTE 	0000	CODE	External
+ERRLEN5  . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+ERRMSG1  . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+ERRMSG2  . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+ERRMSG3_POST . . . . . . . . . .  	V BYTE 	0000	CODE	External
+ERRMSG3_PRE  . . . . . . . . . .  	V BYTE 	0000	CODE	External
+ERRMSG4_POST . . . . . . . . . .  	V BYTE 	0000	CODE	External
+ERRMSG4_PRE  . . . . . . . . . .  	V BYTE 	0000	CODE	External
+ERRMSG5  . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+ERRMSG5_OPT  . . . . . . . . . .  	V BYTE 	0000	CODE	External
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Symbols-2
+                                                             
+
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FILE_NAME_BUF  . . . . . . . . .  	L BYTE 	05C2	CODE	Length = 0041
+FILE_NAME_LEN  . . . . . . . . .  	L WORD 	05C0	CODE
+FILL . . . . . . . . . . . . . .  	L NEAR	016D	CODE
+FIND_OPT . . . . . . . . . . . .  	L NEAR	0062	CODE
+FIND_STR . . . . . . . . . . . .  	L NEAR	00CA	CODE
+FNAME_BUF_SIZE . . . . . . . . .  	Number	0040	
+FOO  . . . . . . . . . . . . . .  	L NEAR	028B	CODE
+FURTHER_ARGS . . . . . . . . . .  	L NEAR	0113	CODE
+
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+GO_DIV . . . . . . . . . . . . .  	L NEAR	02FD	CODE
+GO_MATCH . . . . . . . . . . . .  	L NEAR	019B	CODE
+
+HEADING  . . . . . . . . . . . .  	V BYTE 	0000	CODE	External
+HEADING_LEN  . . . . . . . . . .  	V BYTE 	0000	CODE	External
+
+KANJI  . . . . . . . . . . . . .  	Alias	 FALSE		
+KILL_BL  . . . . . . . . . . . .  	L NEAR	0291	CODE
+
+LF . . . . . . . . . . . . . . .  	Number	000A	
+LINE_CNTR  . . . . . . . . . . .  	L WORD 	002E	CODE
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+L_FLG  . . . . . . . . . . . . .  	L BYTE 	002B	CODE
+
+MAKE . . . . . . . . . . . . . .  	L BYTE 	0000	CODE
+MAKE_CAPS  . . . . . . . . . . .  	L NEAR	0333	CODE
+MORE_STUFF . . . . . . . . . . .  	L NEAR	0230	CODE
+MORE_STUFF_O . . . . . . . . . .  	L NEAR	01BF	CODE
+MOVE_CHAR  . . . . . . . . . . .  	L NEAR	0100	CODE
+MOVE_FNAME . . . . . . . . . . .  	L NEAR	011B	CODE
+MOVE_STR . . . . . . . . . . . .  	L NEAR	00D3	CODE
+MTCH_CNTR  . . . . . . . . . . .  	L WORD 	002C	CODE
+
+N1_BUF . . . . . . . . . . . . .  	L BYTE 	001E	CODE
+N2_BUF . . . . . . . . . . . . .  	L BYTE 	001F	CODE	Length = 0008
+NO_BL  . . . . . . . . . . . . .  	L NEAR	0294	CODE
+NO_CAP . . . . . . . . . . . . .  	L NEAR	033D	CODE
+NO_CR  . . . . . . . . . . . . .  	L NEAR	029F	CODE
+NO_C_FLG . . . . . . . . . . . .  	L NEAR	021B	CODE
+NO_LAST_LINE . . . . . . . . . .  	L NEAR	01B6	CODE
+NO_N_FLG . . . . . . . . . . . .  	L NEAR	0226	CODE
+NO_READ_ERROR  . . . . . . . . .  	L NEAR	017E	CODE
+NO_SEEK  . . . . . . . . . . . .  	L NEAR	0244	CODE
+N_FLG  . . . . . . . . . . . . .  	L BYTE 	0029	CODE
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ERROR . . . . . . . . . . .  	L NEAR	0266	CODE
+OPT_C  . . . . . . . . . . . . .  	L NEAR	00B2	CODE
+OPT_DISPATCH . . . . . . . . . .  	L NEAR	00BA	CODE
+OPT_N  . . . . . . . . . . . . .  	L NEAR	00B7	CODE
+OPT_TBL  . . . . . . . . . . . .  	L NEAR	0027	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:21:45
+MSDOS V2.0  FIND                                            Symbols-3
+                                                             
+
+OPT_V  . . . . . . . . . . . . .  	L NEAR	00AD	CODE
+OTHER_ARGS . . . . . . . . . . .  	L NEAR	0104	CODE
+
+PATCH_AREA . . . . . . . . . . .  	L WORD 	033E	CODE	Length = 0100
+PRINT_COUNT  . . . . . . . . . .  	L NEAR	02AE	CODE
+PROUT  . . . . . . . . . . . . .  	L NEAR	02F0	CODE
+PRT_ERR  . . . . . . . . . . . .  	L NEAR	0321	CODE
+PRT_ERR_2  . . . . . . . . . . .  	L NEAR	0329	CODE
+PRT_FILE_NAME  . . . . . . . . .  	L NEAR	0318	CODE
+PRT_LCNTR  . . . . . . . . . . .  	L NEAR	02D7	CODE
+PRT_LINE . . . . . . . . . . . .  	L NEAR	020E	CODE
+
+QUOTE_CHAR . . . . . . . . . . .  	Number	0022	
+
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ERROR . . . . . . . . . . .  	L NEAR	0247	CODE
+REFILL . . . . . . . . . . . . .  	L NEAR	016F	CODE
+REGULAR  . . . . . . . . . . . .  	L NEAR	0194	CODE
+REV  . . . . . . . . . . . . . .  	L BYTE 	001B	CODE
+R_ERROR  . . . . . . . . . . . .  	L NEAR	027C	CODE
+
+SAY_NAME . . . . . . . . . . . .  	L NEAR	0144	CODE
+SCAN_REST  . . . . . . . . . . .  	L NEAR	027F	CODE
+SJ2  . . . . . . . . . . . . . .  	L NEAR	018C	CODE
+SJ3  . . . . . . . . . . . . . .  	L NEAR	02BD	CODE
+STACK_TOP  . . . . . . . . . . .  	NEAR 	0100	STACK
+START  . . . . . . . . . . . . .  	L NEAR	0030	CODE
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_ERR  . . . . . . . . . . . .  	Number	0002	
+STD_IN . . . . . . . . . . . . .  	Number	0000	
+STD_OUT  . . . . . . . . . . . .  	Number	0001	
+STR_OK . . . . . . . . . . . . .  	L NEAR	00E8	CODE
+ST_BUFFER  . . . . . . . . . . .  	L BYTE 	0540	CODE	Length = 0080
+ST_BUF_SIZE  . . . . . . . . . .  	Number	0080	
+ST_LENGTH  . . . . . . . . . . .  	L WORD 	053E	CODE
+
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+TRY_AGAIN  . . . . . . . . . . .  	L NEAR	01C2	CODE
+TRY_AGAIN_OPT  . . . . . . . . .  	L NEAR	0207	CODE
+
+VER  . . . . . . . . . . . . . .  	Text  		
+VERS_OK  . . . . . . . . . . . .  	L NEAR	0046	CODE
+V_FLG  . . . . . . . . . . . . .  	L BYTE 	0027	CODE
+
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+
+XX1  . . . . . . . . . . . . . .  	L NEAR	016C	CODE
+X_FLG  . . . . . . . . . . . . .  	L BYTE 	002A	CODE
+
+
+    931 Source  Lines
+    931 Total   Lines
+    148 Symbols
+
+  46076 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

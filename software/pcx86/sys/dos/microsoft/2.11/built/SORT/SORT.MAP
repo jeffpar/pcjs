@@ -1,0 +1,25 @@
+
+
+ Start  Stop   Length Name                   Class
+ 00000H 0021AH 0021BH CODE                   
+ 0021BH 00376H 0015CH CONST                  
+ 00380H 0045FH 000E0H CSTACK                 
+
+ Origin   Group
+ 0000:0   DG
+
+  Address         Publics by Name
+
+ 0000:021B       BADVER
+ 0000:0239       ERRMSG
+ 0000:0256       ERRMSG2
+ 0000:0277       TABLE
+
+  Address         Publics by Value
+
+ 0000:021B       BADVER
+ 0000:0239       ERRMSG
+ 0000:0256       ERRMSG2
+ 0000:0277       TABLE
+
+Program entry point at 0000:0003

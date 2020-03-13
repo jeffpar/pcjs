@@ -1,0 +1,1741 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-1
+                                                            
+
+                                TITLE   PART1 DEBUGGER COMMANDS 
+                                 
+                                ; Routines to perform debugger commands except 
+				ASSEMble and UASSEMble 
+                                 
+                                .list 
+                                 
+ 0000                           CODE    SEGMENT PUBLIC BYTE 'CODE' 
+ 0000                           CODE    ENDS 
+                                 
+ 0000                           CONST   SEGMENT PUBLIC BYTE 
+                                 
+                                        EXTRN   SYNERR:BYTE 
+                                 
+                                        EXTRN   DISPB:WORD,DSIZ:BYTE,DSSAVE:WOR
+				D 
+                                        endif 
+                                 
+ 0000                           CONST   ENDS 
+                                 
+ 0000                           DATA    SEGMENT PUBLIC BYTE 
+                                 
+                                        EXTRN   DEFLEN:WORD,BYTEBUF:BYTE,DEFDUM
+				P:BYTE 
+                                 
+ 0000                           DATA    ENDS 
+                                 
+                                DG      GROUP   CODE,CONST,DATA 
+                                 
+                                 
+ 0000                           CODE    SEGMENT PUBLIC BYTE 'CODE' 
+                                ASSUME  CS:DG,DS:DG,ES:DG,SS:DG 
+                                 
+                                 
+                                        PUBLIC  HEXCHK,GETHEX1,PRINT,DSRANGE,AD
+				DRESS,HEXIN,PERROR 
+                                        PUBLIC  GETHEX,GET_ADDRESS,GETEOL,GETHX
+				,PERR 
+                                        PUBLIC  PERR,MOVE,DUMP,ENTER,FILL,SEARC
+				H,DEFAULT 
+                                        endif 
+                                 
+                                        EXTRN   OUT:NEAR,CRLF:NEAR,OUTDI:NEAR,O
+				UTSI:NEAR,SCANP:NEAR 
+                                        EXTRN   SCANB:NEAR,BLANK:NEAR,TAB:NEAR,
+				PRINTMES:NEAR,COMMAND:NEAR 
+                                        EXTRN   HEX:NEAR,BACKUP:NEAR 
+                                 
+                                 
+ 0000                           DEBCOM1: 
+                                 
+                                ; RANGE - Looks for parameters defining an addr
+				ess range. 
+                                ; The first parameter is the starting address. 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-2
+                                                            
+
+				The second parameter 
+                                ; may specify the ending address, or it may be 
+				preceded by 
+                                ; "L" and specify a length (4 digits max), or i
+				t may be 
+                                ; omitted and a length of 128 bytes is assumed.
+				 Returns with 
+                                ; segment in AX, displacement in DX, and length
+				 in CX. 
+                                 
+ 0000                           DSRANGE: 
+ 0000  8B 2E 0000 E                     MOV     BP,[DSSAVE]             ; Set d
+				efault segment to DS 
+ 0004  C7 06 0000 E 0080                MOV     [DEFLEN],128            ; And d
+				efault length to 128 bytes 
+ 000A                           RANGE: 
+ 000A  E8 0237 R                        CALL    ADDRESS 
+ 000D  50                               PUSH    AX                      ; Save 
+				segment 
+ 000E  52                               PUSH    DX                      ; Save 
+				offset 
+ 000F  E8 0000 E                        CALL    SCANP                   ; Get t
+				o next parameter 
+ 0012  8A 04                            MOV     AL,[SI] 
+ 0014  3C 4C                            CMP     AL,"L"                  ; Lengt
+				h indicator? 
+ 0016  74 2B                            JE      GETLEN 
+ 0018  8B 16 0000 E                     MOV     DX,[DEFLEN]             ; Defau
+				lt length 
+ 001C  E8 01C4 R                        CALL    HEXIN                   ; Secon
+				d parameter present? 
+ 001F  72 15                            JC      GetDef                  ; If no
+				t, use default 
+ 0021  B9 0004                          MOV     CX,4 
+ 0024  E8 01B8 R                        CALL    GETHEX                  ; Get e
+				nding address (same segment) 
+ 0027  8B CA                            MOV     CX,DX                   ; Low 1
+				6 bits of ending addr. 
+ 0029  5A                               POP     DX                      ; Low 1
+				6 bits of starting addr. 
+ 002A  2B CA                            SUB     CX,DX                   ; Compu
+				te range 
+ 002C  73 03                            JAE     DSRNG2 
+ 002E  E9 0225 R                DSRNG1: JMP     PERROR                  ; Negat
+				ive range 
+ 0031  41                       DSRNG2: INC     CX                      ; Inclu
+				de last location 
+ 0032  E3 FA                            JCXZ    DSRNG1                  ; Wrap 
+				around error 
+ 0034  58                               POP     AX                      ; Resto
+				re segment 
+ 0035  C3                               RET 
+ 0036                           GetDef: 
+ 0036  59                               POP     CX                      ; get o
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-3
+                                                            
+
+				riginal offset 
+ 0037  51                               PUSH    CX                      ; save 
+				it 
+ 0038  F7 D9                            NEG     CX                      ; rest 
+				of segment 
+ 003A  74 0E                            JZ      RngRet                  ; use d
+				efault 
+ 003C  3B CA                            CMP     CX,DX                   ; more 
+				room in segment? 
+ 003E  73 0A                            JAE     RngRet                  ; yes, 
+				use default 
+ 0040  EB 0A 90                         JMP     RngRet1                 ; no, l
+				ength is in CX 
+                                 
+ 0043                           GETLEN: 
+ 0043  46                               INC     SI                      ; Skip 
+				over "L" to length 
+ 0044  B9 0004                          MOV     CX,4                    ; Lengt
+				h may have 4 digits 
+ 0047  E8 01B8 R                        CALL    GETHEX                  ; Get t
+				he range 
+ 004A                           RNGRET: 
+ 004A  8B CA                            MOV     CX,DX                   ; Lengt
+				h 
+ 004C                           RngRet1: 
+ 004C  5A                               POP     DX                      ; Offse
+				t 
+ 004D  8B C1                            MOV     AX,CX 
+ 004F  03 C2                            ADD     AX,DX 
+ 0051  73 05                            JNC     OKRET 
+ 0053  3D 0001                          CMP     AX,1 
+ 0056  73 D6                            JAE     DSRNG1                  ; Look 
+				for wrap error 
+ 0058                           OKRET: 
+ 0058  58                               POP     AX                      ; Segme
+				nt 
+ 0059  C3                               RET 
+                                 
+ 005A                           DEFAULT: 
+                                ; DI points to default address and CX has defau
+				lt length 
+ 005A  E8 0000 E                        CALL    SCANP 
+ 005D  74 0A                            JZ      USEDEF                  ; Use d
+				efault if no parameters 
+ 005F  89 0E 0000 E                     MOV     [DEFLEN],CX 
+ 0063  E8 000A R                        CALL    RANGE 
+ 0066  E9 021E R                        JMP     GETEOL 
+ 0069                           USEDEF: 
+ 0069  8B F7                            MOV     SI,DI 
+ 006B  AD                               LODSW                           ; Get d
+				efault displacement 
+ 006C  8B D0                            MOV     DX,AX 
+ 006E  AD                               LODSW                           ; Get d
+				efault segment 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-4
+                                                            
+
+ 006F  C3                               RET 
+                                 
+                                ; Dump an area of memory in both hex and ASCII 
+                                 
+ 0070                           DUMP: 
+ 0070  8B 2E 0000 E                     MOV     BP,[DSSAVE] 
+ 0074  8B 0E 0000 E                     MOV     CX,DISPB 
+ 0078  BF 0000 E                        MOV     DI,OFFSET DG:DEFDUMP 
+ 007B  E8 005A R                        CALL    DEFAULT                 ; Get r
+				ange if specified 
+ 007E  8E D8                            MOV     DS,AX                   ; Set s
+				egment 
+ 0080  8B F2                            MOV     SI,DX                   ; SI ha
+				s displacement in segment 
+                                 
+                                        IF  ZIBO 
+ 0082  56                               PUSH    SI                      ; save 
+				SI away 
+ 0083  81 E6 FFF0                       AND     SI,0FFF0h               ; conve
+				rt to para number 
+ 0087  E8 0000 E                        CALL    OutSI                   ; displ
+				ay location 
+ 008A  5E                               POP     SI                      ; get S
+				I back 
+ 008B  8B C6                            MOV     AX,SI                   ; move 
+				offset 
+ 008D  B4 03                            MOV     AH,3                    ; space
+				s per byte 
+ 008F  24 0F                            AND     AL,0Fh                  ; conve
+				rt to real offset 
+ 0091  F6 E4                            MUL     AH                      ; compu
+				te (AL+1)*3-1 
+ 0093  0A C0                            OR      AL,AL                   ; set f
+				lag 
+ 0095  74 0D                            JZ      InRow                   ; if xe
+				ro go on 
+ 0097  51                               PUSH    CX                      ; save 
+				count 
+ 0098  8B C8                            MOV     CX,AX                   ; move 
+				to convenient spot 
+ 009A  E8 0000 E                        CALL    Tab                     ; move 
+				over 
+ 009D  59                               POP     CX                      ; get b
+				ack count 
+ 009E  EB 04 90                         JMP     InRow                   ; displ
+				ay line 
+                                        ENDIF 
+                                 
+ 00A1                           ROW: 
+ 00A1  E8 0000 E                        CALL    OUTSI                   ; Print
+				 address at start of line 
+ 00A4                           InRow: 
+ 00A4  56                               PUSH    SI                      ; Save 
+				address for ASCII dump 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-5
+                                                            
+
+ 00A5  E8 0000 E                        CALL    BLANK 
+ 00A8                           BYTE0: 
+ 00A8  E8 0000 E                        CALL    BLANK                   ; Space
+				 between bytes 
+ 00AB                           BYTE1: 
+ 00AB  AC                               LODSB                           ; Get b
+				yte to dump 
+ 00AC  E8 0000 E                        CALL    HEX                     ; and d
+				isplay it 
+ 00AF  5A                               POP     DX                      ; DX ha
+				s start addr. for ASCII dump 
+ 00B0  49                               DEC     CX                      ; Drop 
+				loop count 
+ 00B1  74 1A                            JZ      ToAscii                 ; If th
+				rough do ASCII dump 
+ 00B3  8B C6                            MOV     AX,SI 
+ 00B5  2E: 84 06 0000 E                 TEST    AL,CS:(BYTE PTR DSIZ)   ; On 16
+				-byte boundary? 
+ 00BA  74 0C                            JZ      ENDROW 
+ 00BC  52                               PUSH    DX                      ; Didn'
+				t need ASCII addr. yet 
+ 00BD  A8 07                            TEST    AL,7                    ; On 8-
+				byte boundary? 
+ 00BF  75 E7                            JNZ     BYTE0 
+ 00C1  B0 2D                            MOV     AL,"-"                  ; Mark 
+				every 8 bytes 
+ 00C3  E8 0000 E                        CALL    OUT 
+ 00C6  EB E3                            JMP     SHORT BYTE1 
+ 00C8                           ENDROW: 
+ 00C8  E8 00E0 R                        CALL    ASCII                   ; Show 
+				it in ASCII 
+ 00CB  EB D4                            JMP     SHORT ROW               ; Loop 
+				until count is zero 
+ 00CD                           ToAscii: 
+ 00CD  8B C6                            MOV     AX,SI                   ; get o
+				ffset 
+ 00CF  24 0F                            AND     AL,0Fh                  ; real 
+				offset 
+ 00D1  74 0D                            JZ      ASCII                   ; no lo
+				op if already there 
+ 00D3  2C 10                            SUB     AL,10h                  ; remai
+				nder 
+ 00D5  F6 D8                            NEG     AL 
+ 00D7  B1 03                            MOV     CL,3 
+ 00D9  F6 E1                            MUL     CL 
+ 00DB  8B C8                            MOV     CX,AX                   ; numbe
+				r of chars to move 
+ 00DD  E8 0000 E                        CALL    Tab 
+ 00E0                           ASCII: 
+ 00E0  51                               PUSH    CX                      ; Save 
+				byte count 
+ 00E1  8B C6                            MOV     AX,SI                   ; Curre
+				nt dump address 
+ 00E3  8B F2                            MOV     SI,DX                   ; ASCII
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-6
+                                                            
+
+				 dump address 
+ 00E5  2B C2                            SUB     AX,DX                   ; AX=le
+				ngth of ASCII dump 
+                                        ELSE 
+ 00E7  8B CE                            MOV     CX,SI                   ; get s
+				tarting point 
+ 00E9  49                               DEC     CX 
+ 00EA  81 E1 000F                       AND     CX,0Fh 
+ 00EE  41                               INC     CX 
+ 00EF  81 E1 000F                       AND     CX,0Fh 
+ 00F3  83 C1 03                         ADD     CX,3                    ; we ha
+				ve the correct number to tab 
+ 00F6  50                               PUSH    AX                      ; save 
+				count 
+ 00F7  E8 0000 E                        CALL    TAB 
+ 00FA  59                               POP     CX                      ; get c
+				ount back 
+                                        ENDIF 
+ 00FB                           ASCDMP: 
+ 00FB  AC                               LODSB                           ; Get A
+				SCII byte to dump 
+ 00FC  24 7F                            AND     AL,7FH                  ; ASCII
+				 uses 7 bits 
+ 00FE  3C 7F                            CMP     AL,7FH                  ; Don't
+				 try to print RUBOUT 
+ 0100  74 04                            JZ      NOPRT 
+ 0102  3C 20                            CMP     AL," "                  ; Check
+				 for control characters 
+ 0104  73 02                            JNC     PRIN 
+ 0106                           NOPRT: 
+ 0106  B0 2E                            MOV     AL,"."                  ; If un
+				printable character 
+ 0108                           PRIN: 
+ 0108  E8 0000 E                        CALL    OUT                     ; Print
+				 ASCII character 
+ 010B  E2 EE                            LOOP    ASCDMP                  ; CX ti
+				mes 
+ 010D  59                               POP     CX                          ; R
+				estore overall dump length 
+ 010E  26: 89 36 0000 E                 MOV     ES:WORD PTR [DEFDUMP],SI 
+ 0113  26: 8C 1E 0002 E                 MOV     ES:WORD PTR [DEFDUMP+2],DS  ; S
+				ave last address as default 
+ 0118  E8 0000 E                        CALL    CRLF                        ; P
+				rint CR/LF and return 
+ 011B  C3                               RET 
+                                 
+                                 
+                                ; Block move one area of memory to another. Ove
+				rlapping moves 
+                                ; are performed correctly, i.e., so that a sour
+				ce byte is not 
+                                ; overwritten until after it has been moved. 
+                                 
+ 011C                           MOVE: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-7
+                                                            
+
+ 011C  E8 0000 R                        CALL    DSRANGE                 ; Get r
+				ange of source area 
+ 011F  51                               PUSH    CX                      ; Save 
+				length 
+ 0120  50                               PUSH    AX                      ; Save 
+				segment 
+ 0121  52                               PUSH    DX                      ; Save 
+				source displacement 
+ 0122  E8 0237 R                        CALL    ADDRESS                 ; Get d
+				estination address (same segment) 
+ 0125  E8 021E R                        CALL    GETEOL                  ; Check
+				 for errors 
+ 0128  5E                               POP     SI 
+ 0129  8B FA                            MOV     DI,DX                   ; Set d
+				est. displacement 
+ 012B  5B                               POP     BX                      ; Sourc
+				e segment 
+ 012C  8E DB                            MOV     DS,BX 
+ 012E  8E C0                            MOV     ES,AX                   ; Desti
+				nation segment 
+ 0130  59                               POP     CX                      ; Lengt
+				h 
+ 0131  3B FE                            CMP     DI,SI                   ; Check
+				 direction of move 
+ 0133  1B C3                            SBB     AX,BX                   ; Exten
+				d the CMP to 32 bits 
+ 0135  72 07                            JB      COPYLIST                ; Move 
+				forward into lower mem. 
+                                ; Otherwise, move backward. Figure end of sourc
+				e and destination 
+                                ; areas and flip direction flag. 
+ 0137  49                               DEC     CX 
+ 0138  03 F1                            ADD     SI,CX                   ; End o
+				f source area 
+ 013A  03 F9                            ADD     DI,CX                   ; End o
+				f destination area 
+ 013C  FD                               STD                             ; Rever
+				se direction 
+ 013D  41                               INC     CX 
+ 013E                           COPYLIST: 
+ 013E  A4                               MOVSB                           ; Do at
+				 least 1 - Range is 1-10000H not 0-FFFFH 
+ 013F  49                               DEC     CX 
+ 0140  F3/ A4                           REP     MOVSB                   ; Block
+				 move 
+ 0142  C3                       RET1:   RET 
+                                 
+                                ; Fill an area of memory with a list values. If
+				 the list 
+                                ; is bigger than the area, don't use the whole 
+				list. If the 
+                                ; list is smaller, repeat it as many times as n
+				ecessary. 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-8
+                                                            
+
+ 0143                           FILL: 
+ 0143  E8 0000 R                        CALL    DSRANGE                 ; Get r
+				ange to fill 
+ 0146  51                               PUSH    CX                      ; Save 
+				length 
+ 0147  50                               PUSH    AX                      ; Save 
+				segment number 
+ 0148  52                               PUSH    DX                      ; Save 
+				displacement 
+ 0149  E8 0210 R                        CALL    LIST                    ; Get l
+				ist of values to fill with 
+ 014C  5F                               POP     DI                      ; Displ
+				acement in segment 
+ 014D  07                               POP     ES                      ; Segme
+				nt 
+ 014E  59                               POP     CX                      ; Lengt
+				h 
+ 014F  3B D9                            CMP     BX,CX                   ; BX is
+				 length of fill list 
+ 0151  BE 0000 E                        MOV     SI,OFFSET DG:BYTEBUF    ; List 
+				is in byte buffer 
+ 0154  E3 02                            JCXZ    BIGRNG 
+ 0156  73 E6                            JAE     COPYLIST                ; If li
+				st is big, copy part of it 
+ 0158                           BIGRNG: 
+ 0158  2B CB                            SUB     CX,BX                   ; How m
+				uch bigger is area than list? 
+ 015A  87 CB                            XCHG    CX,BX                   ; CX=le
+				ngth of list 
+ 015C  57                               PUSH    DI                      ; Save 
+				starting addr. of area 
+ 015D  F3/ A4                           REP     MOVSB                   ; Move 
+				list into area 
+ 015F  5E                               POP     SI 
+                                ; The list has been copied into the beginning o
+				f the 
+                                ; specified area of memory. SI is the first add
+				ress 
+                                ; of that area, DI is the end of the copy of th
+				e list 
+                                ; plus one, which is where the list will begin 
+				to repeat. 
+                                ; All we need to do now is copy [SI] to [DI] un
+				til the 
+                                ; end of the memory area is reached. This will 
+				cause the 
+                                ; list to repeat as many times as necessary. 
+ 0160  8B CB                            MOV     CX,BX                   ; Lengt
+				h of area minus list 
+ 0162  06                               PUSH    ES                      ; Diffe
+				rent index register 
+ 0163  1F                               POP     DS                      ; requi
+				res different segment reg. 
+ 0164  EB D8                            JMP     SHORT COPYLIST          ; Do th
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-9
+                                                            
+
+				e block move 
+                                 
+                                ; Search a specified area of memory for given l
+				ist of bytes. 
+                                ; Print address of first byte of each match. 
+                                 
+ 0166                           SEARCH: 
+ 0166  E8 0000 R                        CALL    DSRANGE                 ; Get a
+				rea to be searched 
+ 0169  51                               PUSH    CX                      ; Save 
+				count 
+ 016A  50                               PUSH    AX                      ; Save 
+				segment number 
+ 016B  52                               PUSH    DX                      ; Save 
+				displacement 
+ 016C  E8 0210 R                        CALL    LIST                    ; Get s
+				earch list 
+ 016F  4B                               DEC     BX                      ; No. o
+				f bytes in list-1 
+ 0170  5F                               POP     DI                      ; Displ
+				acement within segment 
+ 0171  07                               POP     ES                      ; Segme
+				nt 
+ 0172  59                               POP     CX                      ; Lengt
+				h to be searched 
+ 0173  2B CB                            SUB     CX,BX                   ;  minu
+				s length of list 
+ 0175                           SCAN: 
+ 0175  BE 0000 E                        MOV     SI,OFFSET DG:BYTEBUF    ; List 
+				kept in byte buffer 
+ 0178  AC                               LODSB                           ; Bring
+				 first byte into AL 
+ 0179                           DOSCAN: 
+ 0179  AE                               SCASB                           ; Searc
+				h for first byte 
+ 017A  E0 FD                            LOOPNE  DOSCAN                  ; Do at
+				 least once by using LOOP 
+ 017C  75 C4                            JNZ     RET1                    ; Exit 
+				if not found 
+ 017E  53                               PUSH    BX                      ; Lengt
+				h of list minus 1 
+ 017F  87 D9                            XCHG    BX,CX 
+ 0181  57                               PUSH    DI                      ; Will 
+				resume search here 
+ 0182  F3/ A6                           REPE    CMPSB                   ; Compa
+				re rest of string 
+ 0184  8B CB                            MOV     CX,BX                   ; Area 
+				length back in CX 
+ 0186  5F                               POP     DI                      ; Next 
+				search location 
+ 0187  5B                               POP     BX                      ; Resto
+				re list length 
+ 0188  75 08                            JNZ     TEST                    ; Conti
+				nue search if no match 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-10
+                                                            
+
+ 018A  4F                               DEC     DI                      ; Match
+				 address 
+ 018B  E8 0000 E                        CALL    OUTDI                   ; Print
+				 it 
+ 018E  47                               INC     DI                      ; Resto
+				re search address 
+ 018F  E8 0000 E                        CALL    CRLF 
+ 0192                           TEST: 
+ 0192  E3 AE                            JCXZ    RET1 
+ 0194  EB DF                            JMP     SHORT SCAN              ; Look 
+				for next occurrence 
+                                 
+                                ; Get the next parameter, which must be a hex n
+				umber. 
+                                ; CX is maximum number of digits the number may
+				 have. 
+                                 
+ 0196                           GETHX: 
+ 0196  E8 0000 E                        CALL    SCANP 
+ 0199                           GETHX1: 
+ 0199  33 D2                            XOR     DX,DX                   ; Initi
+				alize the number 
+ 019B  E8 01C4 R                        CALL    HEXIN                   ; Get a
+				 hex digit 
+ 019E  72 23                            JC      HXERR                   ; Must 
+				be one valid digit 
+ 01A0  8A D0                            MOV     DL,AL                   ; First
+				 4 bits in position 
+ 01A2                           GETLP: 
+ 01A2  46                               INC     SI                      ; Next 
+				char in buffer 
+ 01A3  49                               DEC     CX                      ; Digit
+				 count 
+ 01A4  E8 01C4 R                        CALL    HEXIN                   ; Get a
+				nother hex digit? 
+ 01A7  72 19                            JC      RETHX                   ; All d
+				one if no more digits 
+ 01A9  F9                               STC 
+ 01AA  E3 17                            JCXZ    HXERR                   ; Too m
+				any digits? 
+ 01AC  D1 E2                            SHL     DX,1                    ; Multi
+				ply by 16 
+ 01AE  D1 E2                            SHL     DX,1 
+ 01B0  D1 E2                            SHL     DX,1 
+ 01B2  D1 E2                            SHL     DX,1 
+ 01B4  0A D0                            OR      DL,AL                   ; and c
+				ombine new digit 
+ 01B6  EB EA                            JMP     SHORT GETLP             ; Get m
+				ore digits 
+                                 
+ 01B8                           GETHEX: 
+ 01B8  E8 0196 R                        CALL    GETHX                   ; Scan 
+				to next parameter 
+ 01BB  EB 03                            JMP     SHORT GETHX2 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-11
+                                                            
+
+ 01BD                           GETHEX1: 
+ 01BD  E8 0199 R                        CALL    GETHX1 
+ 01C0  72 63                    GETHX2: JC      PERROR 
+ 01C2  F8                       RETHX:  CLC 
+ 01C3  C3                       HXERR:  RET 
+                                 
+                                 
+                                ; Check if next character in the input buffer i
+				s a hex digit 
+                                ; and convert it to binary if it is. Carry set 
+				if not. 
+                                 
+ 01C4                           HEXIN: 
+ 01C4  8A 04                            MOV     AL,[SI] 
+                                 
+                                ; Check if AL has a hex digit and convert it to
+				 binary if it 
+                                ; is. Carry set if not. 
+                                 
+ 01C6                           HEXCHK: 
+ 01C6  2C 30                            SUB     AL,"0"                  ; Kill 
+				ASCII numeric bias 
+ 01C8  72 10                            JC      RET2 
+ 01CA  3C 0A                            CMP     AL,10 
+ 01CC  F5                               CMC 
+ 01CD  73 0B                            JNC     RET2                    ; OK if
+				 0-9 
+ 01CF  24 5F                            AND     AL,5FH 
+ 01D1  2C 07                            SUB     AL,7                    ; Kill 
+				A-F bias 
+ 01D3  3C 0A                            CMP     AL,10 
+ 01D5  72 03                            JC      RET2 
+ 01D7  3C 10                            CMP     AL,16 
+ 01D9  F5                               CMC 
+ 01DA  C3                       RET2:   RET 
+                                 
+                                ; Process one parameter when a list of bytes is
+				 
+                                ; required. Carry set if parameter bad. Called 
+				by LIST. 
+                                 
+ 01DB                           LISTITEM: 
+ 01DB  E8 0000 E                        CALL    SCANP                   ; Scan 
+				to parameter 
+ 01DE  E8 01C4 R                        CALL    HEXIN                   ; Is it
+				 in hex? 
+ 01E1  72 0B                            JC      STRINGCHK               ; If no
+				t, could be a string 
+ 01E3  B9 0002                          MOV     CX,2                    ; Only 
+				2 hex digits for bytes 
+ 01E6  E8 01B8 R                        CALL    GETHEX                  ; Get t
+				he byte value 
+ 01E9  88 17                            MOV     [BX],DL                 ; Add t
+				o list 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-12
+                                                            
+
+ 01EB  43                               INC     BX 
+ 01EC  F8                       GRET:   CLC                             ; Param
+				eter was OK 
+ 01ED  C3                               RET 
+ 01EE                           STRINGCHK: 
+ 01EE  8A 04                            MOV     AL,[SI]                 ; Get f
+				irst character of param 
+ 01F0  3C 27                            CMP     AL,"'"                  ; Strin
+				g? 
+ 01F2  74 06                            JZ      STRING 
+ 01F4  3C 22                            CMP     AL,'"'                  ; Eithe
+				r quote is all right 
+ 01F6  74 02                            JZ      STRING 
+ 01F8  F9                               STC                             ; Not s
+				tring, not hex - bad 
+ 01F9  C3                               RET 
+ 01FA                           STRING: 
+ 01FA  8A E0                            MOV     AH,AL                   ; Save 
+				for closing quote 
+ 01FC  46                               INC     SI 
+ 01FD                           STRNGLP: 
+ 01FD  AC                               LODSB                           ; Next 
+				char of string 
+ 01FE  3C 0D                            CMP     AL,13                   ; Check
+				 for end of line 
+ 0200  74 22                            JZ      PERR                    ; Must 
+				find a close quote 
+ 0202  3A C4                            CMP     AL,AH                   ; Check
+				 for close quote 
+ 0204  75 05                            JNZ     STOSTRG                 ; Add n
+				ew character to list 
+ 0206  3A 24                            CMP     AH,[SI]                 ; Two q
+				uotes in a row? 
+ 0208  75 E2                            JNZ     GRET                    ; If no
+				t, we're done 
+ 020A  46                               INC     SI                      ; Yes -
+				 skip second one 
+ 020B                           STOSTRG: 
+ 020B  88 07                            MOV     [BX],AL                 ; Put n
+				ew char in list 
+ 020D  43                               INC     BX 
+ 020E  EB ED                            JMP     SHORT STRNGLP           ; Get m
+				ore characters 
+                                 
+                                ; Get a byte list for ENTER, FILL or SEARCH. Ac
+				cepts any number 
+                                ; of 2-digit hex values or character strings in
+				 either single 
+                                ; (') or double (") quotes. 
+                                 
+ 0210                           LIST: 
+ 0210  BB 0000 E                        MOV     BX,OFFSET DG:BYTEBUF    ; Put b
+				yte list in the byte buffer 
+ 0213                           LISTLP: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-13
+                                                            
+
+ 0213  E8 01DB R                        CALL    LISTITEM                ; Proce
+				ss a parameter 
+ 0216  73 FB                            JNC     LISTLP                  ; If OK
+				, try for more 
+ 0218  81 EB 0000 E                     SUB     BX,OFFSET DG:BYTEBUF    ; BX no
+				w has no. of bytes in list 
+ 021C  74 07                            JZ      PERROR                  ; List 
+				must not be empty 
+                                 
+                                ; Make sure there is nothing more on the line e
+				xcept for 
+                                ; blanks and carriage return. If there is, it i
+				s an 
+                                ; unrecognized parameter and an error. 
+                                 
+ 021E                           GETEOL: 
+ 021E  E8 0000 E                        CALL    SCANB                   ; Skip 
+				blanks 
+ 0221  75 02                            JNZ     PERROR                  ; Bette
+				r be a RETURN 
+ 0223  C3                       RET3:   RET 
+                                 
+                                ; Command error. SI has been incremented beyond
+				 the 
+                                ; command letter so it must decremented for the
+				 
+                                ; error pointer to work. 
+                                 
+ 0224                           PERR: 
+ 0224  4E                               DEC     SI 
+                                 
+                                ; Syntax error. SI points to character in the i
+				nput buffer 
+                                ; which caused error. By subtracting from start
+				 of buffer, 
+                                ; we will know how far to tab over to appear di
+				rectly below 
+                                ; it on the terminal. Then print "^ Error". 
+                                 
+ 0225                           PERROR: 
+ 0225  81 EE FFFF E                     SUB     SI,OFFSET DG:(BYTEBUF-1); How m
+				any char processed so far? 
+ 0229  8B CE                            MOV     CX,SI                   ; Param
+				eter for TAB in CX 
+ 022B  E8 0000 E                        CALL    TAB                     ; Direc
+				tly below bad char 
+ 022E  BE 0000 E                        MOV     SI,OFFSET DG:SYNERR     ; Error
+				 message 
+                                 
+                                ; Print error message and abort to command leve
+				l 
+                                 
+ 0231                           PRINT: 
+ 0231  E8 0000 E                        CALL    PRINTMES 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-14
+                                                            
+
+ 0234  E9 0000 E                        JMP     COMMAND 
+                                 
+                                ; Gets an address in Segment:Displacement forma
+				t. Segment may be omitted 
+                                ; and a default (kept in BP) will be used, or i
+				t may be a segment 
+                                ; register (DS, ES, SS, CS). Returns with segme
+				nt in AX, OFFSET in DX. 
+                                 
+ 0237                           ADDRESS: 
+ 0237  E8 023E R                        CALL    GET_ADDRESS 
+ 023A  72 E9                            JC      PERROR 
+ 023C  F9                       ADRERR: STC 
+ 023D  C3                               RET 
+                                 
+ 023E                           GET_ADDRESS: 
+ 023E  E8 0000 E                        CALL    SCANP 
+ 0241  8A 44 01                         MOV     AL,[SI+1] 
+ 0244  3C 53                            CMP     AL,"S" 
+ 0246  74 1C                            JZ      SEGREG 
+ 0248  B9 0004                          MOV     CX,4 
+ 024B  E8 0196 R                        CALL    GETHX 
+ 024E  72 EC                            JC      ADRERR 
+ 0250  8B C5                            MOV     AX,BP                   ; Get d
+				efault segment 
+ 0252  80 3C 3A                         CMP     BYTE PTR [SI],":" 
+ 0255  75 0B                            JNZ     GETRET 
+ 0257  52                               PUSH    DX 
+ 0258                           GETDISP: 
+ 0258  46                               INC     SI                      ; Skip 
+				over ":" 
+ 0259  B9 0004                          MOV     CX,4 
+ 025C  E8 0196 R                        CALL    GETHX 
+ 025F  58                               POP     AX 
+ 0260  72 DA                            JC      ADRERR 
+ 0262  F8                       GETRET: CLC 
+ 0263  C3                               RET 
+ 0264                           SEGREG: 
+ 0264  8A 04                            MOV     AL,[SI] 
+ 0266  BF 0281 R                        MOV     DI,OFFSET DG:SEGLET 
+ 0269  B9 0004                          MOV     CX,4 
+ 026C  F2/ AE                           REPNE   SCASB 
+ 026E  75 CC                            JNZ     ADRERR 
+ 0270  46                               INC     SI 
+ 0271  46                               INC     SI 
+ 0272  D1 E1                            SHL     CX,1 
+ 0274  8B D9                            MOV     BX,CX 
+ 0276  80 3C 3A                         CMP     BYTE PTR [SI],":" 
+ 0279  75 C1                            JNZ     ADRERR 
+ 027B  FF B7 0000 E                     PUSH    [BX+DSSAVE] 
+ 027F  EB D7                            JMP     SHORT GETDISP 
+                                 
+ 0281  43 53 45 44              SEGLET  DB      "CSED" 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-15
+                                                            
+
+                                ; Short form of ENTER command. A list of values
+				 from the 
+                                ; command line are put into memory without usin
+				g normal 
+                                ; ENTER mode. 
+                                 
+ 0285                           GETLIST: 
+ 0285  E8 0210 R                        CALL    LIST                    ; Get t
+				he bytes to enter 
+ 0288  5F                               POP     DI                      ; Displ
+				acement within segment 
+ 0289  07                               POP     ES                      ; Segme
+				nt to enter into 
+ 028A  BE 0000 E                        MOV     SI,OFFSET DG:BYTEBUF    ; List 
+				of bytes is in byte 2uffer 
+ 028D  8B CB                            MOV     CX,BX                   ; Count
+				 of bytes 
+ 028F  F3/ A4                           REP     MOVSB                   ; Enter
+				 that byte list 
+ 0291  C3                               RET 
+                                 
+                                ; Enter values into memory at a specified addre
+				ss. If the 
+                                ; line contains nothing but the address we go i
+				nto "enter 
+                                ; mode", where the address and its current valu
+				e are printed 
+                                ; and the user may change it if desired. To cha
+				nge, type in 
+                                ; new value in hex. Backspace works to correct 
+				errors. If 
+                                ; an illegal hex digit or too many digits are t
+				yped, the 
+                                ; bell is sounded but it is otherwise ignored. 
+				To go to the 
+                                ; next byte (with or without change), hit space
+				 bar. To 
+                                ; back   CLDto a previous address, type "-". On
+				 
+                                ; every 8-byte boundary a new line is started a
+				nd the address 
+                                ; is printed. To terminate command, type carria
+				ge return. 
+                                ;   Alternatively, the list of bytes to be ente
+				red may be 
+                                ; included on the original command line immedia
+				tely following 
+                                ; the address. This is in regular LIST format s
+				o any number 
+                                ; of hex values or strings in quotes may be ent
+				ered. 
+                                 
+ 0292                           ENTER: 
+ 0292  8B 2E 0000 E                     MOV     BP,[DSSAVE]             ; Set d
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-16
+                                                            
+
+				efault segment to DS 
+ 0296  E8 0237 R                        CALL    ADDRESS 
+ 0299  50                               PUSH    AX                      ; Save 
+				for later 
+ 029A  52                               PUSH    DX 
+ 029B  E8 0000 E                        CALL    SCANB                   ; Any m
+				ore parameters? 
+ 029E  75 E5                            JNZ     GETLIST                 ; If no
+				t end-of-line get list 
+ 02A0  5F                               POP     DI                      ; Displ
+				acement of ENTER 
+ 02A1  07                               POP     ES                      ; Segme
+				nt 
+ 02A2                           GETROW: 
+ 02A2  E8 0000 E                        CALL    OUTDI                   ; Print
+				 address of entry 
+ 02A5  E8 0000 E                        CALL    BLANK                   ; Leave
+				 a space 
+ 02A8  E8 0000 E                        CALL    BLANK 
+ 02AB                           GETBYTE: 
+ 02AB  26: 8A 05                        MOV     AL,ES:[DI]              ; Get c
+				urrent value 
+ 02AE  E8 0000 E                        CALL    HEX                     ; And d
+				isplay it 
+ 02B1                           PUTDOT: 
+ 02B1  B0 2E                            MOV     AL,"." 
+ 02B3  E8 0000 E                        CALL    OUT                     ; Promp
+				t for new value 
+ 02B6  B9 0002                          MOV     CX,2                    ; Max o
+				f 2 digits in new value 
+ 02B9  BA 0000                          MOV     DX,0                    ; Intia
+				l new value 
+ 02BC                           GETDIG: 
+ 02BC  E8 0339 R                        CALL    IN                      ; Get d
+				igit from user 
+ 02BF  8A E0                            MOV     AH,AL                   ; Save 
+ 02C1  E8 01C6 R                        CALL    HEXCHK                  ; Hex d
+				igit? 
+ 02C4  86 E0                            XCHG    AH,AL                   ; Need 
+				original for echo 
+ 02C6  72 09                            JC      NOHEX                   ; If no
+				t, try special command 
+ 02C8  8A F2                            MOV     DH,DL                   ; Rotat
+				e new value 
+ 02CA  8A D4                            MOV     DL,AH                   ; And i
+				nclude new digit 
+ 02CC  E2 EE                            LOOP    GETDIG                  ; At mo
+				st 2 digits 
+                                ; We have two digits, so all we will accept now
+				 is a command. 
+ 02CE                           DWAIT: 
+ 02CE  E8 0339 R                        CALL    IN                      ; Get c
+				ommand character 
+ 02D1                           NOHEX: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-17
+                                                            
+
+ 02D1  3C 08                            CMP     AL,8                    ; Backs
+				pace 
+ 02D3  74 21                            JZ      BS 
+ 02D5  3C 7F                            CMP     AL,7FH                  ; RUBOU
+				T 
+ 02D7  74 18                            JZ      RUB 
+ 02D9  3C 2D                            CMP     AL,"-"                  ; Back 
+				  CLDto previous address 
+ 02DB  74 4F                            JZ      PREV 
+ 02DD  3C 0D                            CMP     AL,13                   ; All d
+				one with command? 
+ 02DF  74 52                            JZ      EOL 
+ 02E1  3C 20                            CMP     AL," "                  ; Go to
+				 next address 
+ 02E3  74 33                            JZ      NEXT 
+ 02E5  B0 08                            MOV     AL,8 
+ 02E7  E8 0000 E                        CALL    OUT                     ; Back 
+				  CLDover illegal character 
+ 02EA  E8 0000 E                        CALL    BACKUP 
+ 02ED  E3 DF                            JCXZ    DWAIT 
+ 02EF  EB CB                            JMP     SHORT GETDIG 
+                                 
+ 02F1                           RUB: 
+ 02F1  B0 08                            MOV     AL,8 
+ 02F3  E8 0000 E                        CALL    OUT 
+ 02F6                           BS: 
+ 02F6  80 F9 02                         CMP     CL,2                    ; CX=2 
+				means nothing typed yet 
+ 02F9  74 B6                            JZ      PUTDOT                  ; Put b
+				ack the dot we backed     CLDover 
+ 02FB  FE C1                            INC     CL                      ; Accep
+				t one more character 
+ 02FD  8A D6                            MOV     DL,DH                   ; Rotat
+				e out last digit 
+ 02FF  8A F5                            MOV     DH,CH                   ; Zero 
+				this digit 
+ 0301  E8 0000 E                        CALL    BACKUP                  ; Physi
+				cal backspace 
+ 0304  EB B6                            JMP     SHORT GETDIG            ; Get m
+				ore digits 
+                                 
+                                ; If new value has been entered, convert it to 
+				binary and 
+                                ; put into memory. Always bump pointer to next 
+				location 
+                                 
+ 0306                           STORE: 
+ 0306  80 F9 02                         CMP     CL,2                    ; CX=2 
+				means nothing typed yet 
+ 0309  74 0B                            JZ      NOSTO                   ; So no
+				 new value to store 
+                                ; Rotate DH left 4 bits to combine with DL and 
+				make a byte value 
+ 030B  51                               PUSH    CX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-18
+                                                            
+
+ 030C  B1 04                            MOV     CL,4 
+ 030E  D2 E6                            SHL     DH,CL 
+ 0310  59                               POP     CX 
+ 0311  0A D6                            OR      DL,DH                   ; Hex i
+				s now converted to binary 
+ 0313  26: 88 15                        MOV     ES:[DI],DL              ; Store
+				 new value 
+ 0316                           NOSTO: 
+ 0316  47                               INC     DI                      ; Prepa
+				re for next location 
+ 0317  C3                               RET 
+ 0318                           NEXT: 
+ 0318  E8 0306 R                        CALL    STORE                   ; Enter
+				 new value 
+ 031B  41                               INC     CX                      ; Leave
+				 a space plus two for 
+ 031C  41                               INC     CX                      ;  each
+				 digit not entered 
+ 031D  E8 0000 E                        CALL    TAB 
+ 0320  8B C7                            MOV     AX,DI                   ; Next 
+				memory address 
+ 0322  24 07                            AND     AL,7                    ; Check
+				 for 8-byte boundary 
+ 0324  75 85                            JNZ     GETBYTE                 ; Take 
+				8 per line 
+ 0326                           NEWROW: 
+ 0326  E8 0000 E                        CALL    CRLF                    ; Termi
+				nate line 
+ 0329  E9 02A2 R                        JMP     GETROW                  ; Print
+				 address on new line 
+ 032C                           PREV: 
+ 032C  E8 0306 R                        CALL    STORE                   ; Enter
+				 the new value 
+                                ; DI has been bumped to next byte. Drop it 2 to
+				 go to previous addr 
+ 032F  4F                               DEC     DI 
+ 0330  4F                               DEC     DI 
+ 0331  EB F3                            JMP     SHORT NEWROW            ; Termi
+				nate line after backing   CLD 
+                                 
+ 0333                           EOL: 
+ 0333  E8 0306 R                        CALL    STORE                   ; Enter
+				 the new value 
+ 0336  E9 0000 E                        JMP     CRLF                    ; CR/LF
+				 and terminate 
+                                 
+                                ; Console input of single character 
+                                 
+                                        ELSE 
+                                 
+ 0339                           IN: 
+ 0339  B4 01                            MOV     AH,1 
+ 033B  CD 21                            INT     21H 
+ 033D  C3                               RET 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Page     1-19
+                                                            
+
+                                        ENDIF 
+                                 
+ 033E                           CODE    ENDS 
+                                        END     DEBCOM1 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Symbols-4
+                                                             
+
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DG . . . . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	033E	BYTE	PUBLIC	'CODE'
+  CONST  . . . . . . . . . . . .  	0000	BYTE	PUBLIC	
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDRESS  . . . . . . . . . . . .  	L NEAR	0237	CODE	Global
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Symbols-5
+                                                             
+
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ADRERR . . . . . . . . . . . . .  	L NEAR	023C	CODE
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASCDMP . . . . . . . . . . . . .  	L NEAR	00FB	CODE
+ASCII  . . . . . . . . . . . . .  	L NEAR	00E0	CODE
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BACKUP . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+BIGRNG . . . . . . . . . . . . .  	L NEAR	0158	CODE
+BLANK  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+BPLEN  . . . . . . . . . . . . .  	Number	0032	
+BPMAX  . . . . . . . . . . . . .  	Number	000A	
+BPREG  . . . . . . . . . . . . .  	Number	5042	
+BS . . . . . . . . . . . . . . .  	L NEAR	02F6	CODE
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+BUFLEN . . . . . . . . . . . . .  	Number	0050	
+BUFSIZ . . . . . . . . . . . . .  	Number	0200	
+BXREG  . . . . . . . . . . . . .  	Number	5842	
+BYTE0  . . . . . . . . . . . . .  	L NEAR	00A8	CODE
+BYTE1  . . . . . . . . . . . . .  	L NEAR	00AB	CODE
+BYTEBUF  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+COMMA  . . . . . . . . . . . . .  	Number	2C00	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Symbols-6
+                                                             
+
+COMMAND  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+COPYLIST . . . . . . . . . . . .  	L NEAR	013E	CODE
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CRLF . . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEBCOM1  . . . . . . . . . . . .  	L NEAR	0000	CODE
+DEFAULT  . . . . . . . . . . . .  	L NEAR	005A	CODE	Global
+DEFDUMP  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DEFLEN . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DIREG  . . . . . . . . . . . . .  	Number	4944	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Symbols-7
+                                                             
+
+DISPB  . . . . . . . . . . . . .  	V WORD 	0000	CONST	External
+DOSCAN . . . . . . . . . . . . .  	L NEAR	0179	CODE
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DSIZ . . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSRANGE  . . . . . . . . . . . .  	L NEAR	0000	CODE	Global
+DSRNG1 . . . . . . . . . . . . .  	L NEAR	002E	CODE
+DSRNG2 . . . . . . . . . . . . .  	L NEAR	0031	CODE
+DSSAVE . . . . . . . . . . . . .  	V WORD 	0000	CONST	External
+DUMP . . . . . . . . . . . . . .  	L NEAR	0070	CODE	Global
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+DWAIT  . . . . . . . . . . . . .  	L NEAR	02CE	CODE
+
+ENDROW . . . . . . . . . . . . .  	L NEAR	00C8	CODE
+ENTER  . . . . . . . . . . . . .  	L NEAR	0292	CODE	Global
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+EOL  . . . . . . . . . . . . . .  	L NEAR	0333	CODE
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXEFCB . . . . . . . . . . . . .  	Alias	 FCB		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Symbols-8
+                                                             
+
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB  . . . . . . . . . . . . . .  	Number	005C	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILL . . . . . . . . . . . . . .  	L NEAR	0143	CODE	Global
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+
+GETBYTE  . . . . . . . . . . . .  	L NEAR	02AB	CODE
+GETDEF . . . . . . . . . . . . .  	L NEAR	0036	CODE
+GETDIG . . . . . . . . . . . . .  	L NEAR	02BC	CODE
+GETDISP  . . . . . . . . . . . .  	L NEAR	0258	CODE
+GETEOL . . . . . . . . . . . . .  	L NEAR	021E	CODE	Global
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GETHEX . . . . . . . . . . . . .  	L NEAR	01B8	CODE	Global
+GETHEX1  . . . . . . . . . . . .  	L NEAR	01BD	CODE	Global
+GETHX  . . . . . . . . . . . . .  	L NEAR	0196	CODE	Global
+GETHX1 . . . . . . . . . . . . .  	L NEAR	0199	CODE
+GETHX2 . . . . . . . . . . . . .  	L NEAR	01C0	CODE
+GETLEN . . . . . . . . . . . . .  	L NEAR	0043	CODE
+GETLIST  . . . . . . . . . . . .  	L NEAR	0285	CODE
+GETLP  . . . . . . . . . . . . .  	L NEAR	01A2	CODE
+GETRET . . . . . . . . . . . . .  	L NEAR	0262	CODE
+GETROW . . . . . . . . . . . . .  	L NEAR	02A2	CODE
+GET_ADDRESS  . . . . . . . . . .  	L NEAR	023E	CODE	Global
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Symbols-9
+                                                             
+
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+GRET . . . . . . . . . . . . . .  	L NEAR	01EC	CODE
+
+HEX  . . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+HEXCHK . . . . . . . . . . . . .  	L NEAR	01C6	CODE	Global
+HEXIN  . . . . . . . . . . . . .  	L NEAR	01C4	CODE	Global
+HXERR  . . . . . . . . . . . . .  	L NEAR	01C3	CODE
+
+IBMJAPAN . . . . . . . . . . . .  	Alias	 FALSE		
+IBMVER . . . . . . . . . . . . .  	Alias	 TRUE		
+IN . . . . . . . . . . . . . . .  	L NEAR	0339	CODE
+INROW  . . . . . . . . . . . . .  	L NEAR	00A4	CODE
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LIST . . . . . . . . . . . . . .  	L NEAR	0210	CODE
+LISTITEM . . . . . . . . . . . .  	L NEAR	01DB	CODE
+LISTLP . . . . . . . . . . . . .  	L NEAR	0213	CODE
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Symbols-10
+                                                             
+
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MOVE . . . . . . . . . . . . . .  	L NEAR	011C	CODE	Global
+MSVER  . . . . . . . . . . . . .  	Alias	 FALSE		
+
+NEWROW . . . . . . . . . . . . .  	L NEAR	0326	CODE
+NEXT . . . . . . . . . . . . . .  	L NEAR	0318	CODE
+NOHEX  . . . . . . . . . . . . .  	L NEAR	02D1	CODE
+NOPRT  . . . . . . . . . . . . .  	L NEAR	0106	CODE
+NOSTO  . . . . . . . . . . . . .  	L NEAR	0316	CODE
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OKRET  . . . . . . . . . . . . .  	L NEAR	0058	CODE
+OPBUFLEN . . . . . . . . . . . .  	Number	0023	
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+OUT  . . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+OUTDI  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+OUTSI  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+PERR . . . . . . . . . . . . . .  	L NEAR	0224	CODE	Global
+PERROR . . . . . . . . . . . . .  	L NEAR	0225	CODE	Global
+PREV . . . . . . . . . . . . . .  	L NEAR	032C	CODE
+PRIN . . . . . . . . . . . . . .  	L NEAR	0108	CODE
+PRINT  . . . . . . . . . . . . .  	L NEAR	0231	CODE	Global
+PRINTMES . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+PROMPT . . . . . . . . . . . . .  	Number	002D	
+PUTDOT . . . . . . . . . . . . .  	L NEAR	02B1	CODE
+
+RANGE  . . . . . . . . . . . . .  	L NEAR	000A	CODE
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+REGTABLEN  . . . . . . . . . . .  	Number	000E	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Symbols-11
+                                                             
+
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RET1 . . . . . . . . . . . . . .  	L NEAR	0142	CODE
+RET2 . . . . . . . . . . . . . .  	L NEAR	01DA	CODE
+RET3 . . . . . . . . . . . . . .  	L NEAR	0223	CODE
+RETHX  . . . . . . . . . . . . .  	L NEAR	01C2	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RNGRET . . . . . . . . . . . . .  	L NEAR	004A	CODE
+RNGRET1  . . . . . . . . . . . .  	L NEAR	004C	CODE
+ROW  . . . . . . . . . . . . . .  	L NEAR	00A1	CODE
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+RUB  . . . . . . . . . . . . . .  	L NEAR	02F1	CODE
+
+SCAN . . . . . . . . . . . . . .  	L NEAR	0175	CODE
+SCANB  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+SCANP  . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+SEARCH . . . . . . . . . . . . .  	L NEAR	0166	CODE	Global
+SEGDIF . . . . . . . . . . . . .  	Number	0000	
+SEGLET . . . . . . . . . . . . .  	L BYTE 	0281	CODE
+SEGREG . . . . . . . . . . . . .  	L NEAR	0264	CODE
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETCNTC  . . . . . . . . . . . .  	Alias	 TRUE		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+SIREG  . . . . . . . . . . . . .  	Number	4953	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:05:06
+PART1 DEBUGGER COMMANDS                                     Symbols-12
+                                                             
+
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STORE  . . . . . . . . . . . . .  	L NEAR	0306	CODE
+STOSTRG  . . . . . . . . . . . .  	L NEAR	020B	CODE
+STRING . . . . . . . . . . . . .  	L NEAR	01FA	CODE
+STRINGCHK  . . . . . . . . . . .  	L NEAR	01EE	CODE
+STRNGLP  . . . . . . . . . . . .  	L NEAR	01FD	CODE
+SYNERR . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+SYSVER . . . . . . . . . . . . .  	Alias	 FALSE		
+
+TAB  . . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+TEST . . . . . . . . . . . . . .  	L NEAR	0192	CODE
+TOASCII  . . . . . . . . . . . .  	L NEAR	00CD	CODE
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USEDEF . . . . . . . . . . . . .  	L NEAR	0069	CODE
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+ZIBO . . . . . . . . . . . . . .  	Alias	 TRUE		
+
+
+   1994 Source  Lines
+   2057 Total   Lines
+    609 Symbols
+
+  19788 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

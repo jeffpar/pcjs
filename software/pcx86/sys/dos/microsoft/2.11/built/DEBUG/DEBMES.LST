@@ -1,0 +1,803 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Page     1-1
+                                                            
+
+                                TITLE   DEBUGger Messages 
+ = 0000                         FALSE   EQU     0 
+ = FFFF                         TRUE    EQU     NOT FALSE 
+                                 
+ =                              SYSVER  EQU     FALSE                   ;if tru
+				e, i/o direct to bios 
+                                                                        ; so DO
+				S can be debugged 
+ =                              IBMJAPVER   EQU FALSE                   ; true 
+				for their special parity stuff 
+                                 
+                                .list 
+                                 
+ = 0041                         FIRSTDRV EQU    "A" 
+                                 
+ 0000                           CODE    SEGMENT PUBLIC BYTE 'CODE' 
+ 0000                           CODE    ENDS 
+                                 
+ 0000                           CONST   SEGMENT PUBLIC BYTE 
+ 0000                           CONST   ENDS 
+                                 
+ 0000                           DATA    SEGMENT PUBLIC BYTE 
+                                        EXTRN   ParityFlag:BYTE 
+ 0000                           DATA    ENDS 
+                                 
+                                DG      GROUP   CODE,CONST,DATA 
+                                 
+                                 
+ 0000                           CODE    SEGMENT PUBLIC BYTE 'CODE' 
+                                ASSUME  CS:DG,DS:DG,ES:DG,SS:DG 
+                                 
+                                        EXTRN   RPRBUF:NEAR,RESTART:NEAR 
+                                        PUBLIC  DRVERR, TrapParity, ReleasePari
+				ty, NMIInt, NMIIntEnd 
+ 0000                           TrapParity: 
+                                        ENDIF 
+ 0000  C3                               RET 
+ 0001                           ReleaseParity: 
+                                        ENDIF 
+ 0001  C3                               RET 
+                                 
+ 0002                           NMIInt: 
+                                        ENDIF 
+ 0002                           NMIIntEnd: 
+                                 
+ 0002  BA 009A R                DRVERR: MOV     DX,OFFSET DG:DISK 
+ 0005  0A C0                            OR      AL,AL 
+ 0007  75 03                            JNZ     SAVDRV 
+ 0009  BA 009F R                        MOV     DX,OFFSET DG:WRTPRO 
+ 000C                           SAVDRV: 
+ 000C  0E                               PUSH    CS 
+ 000D  1F                               POP     DS 
+ 000E  0E                               PUSH    CS 
+ 000F  07                               POP     ES 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Page     1-2
+                                                            
+
+ 0010  80 06 00C2 R 41                  ADD     BYTE PTR DRVLET,FIRSTDRV 
+ 0015  BE 00C6 R                        MOV     SI,OFFSET DG:READM 
+ 0018  BF 00B4 R                        MOV     DI,OFFSET DG:ERRTYP 
+ 001B  80 3E 0000 E 40                  CMP     BYTE PTR RDFLG,WRITE 
+ 0020  75 03                            JNZ     MOVMES 
+ 0022  BE 00CA R                        MOV     SI,OFFSET DG:WRITM 
+ 0025                           MOVMES: 
+ 0025  A5                               MOVSW 
+ 0026  A5                               MOVSW 
+ 0027  E8 0000 E                        CALL    RPRBUF 
+ 002A  BA 00AD R                        MOV     DX,OFFSET DG:DSKERR 
+ 002D  E9 0000 E                        JMP     RESTART 
+ 0030                           CODEEND: 
+                                 
+ 0030                           CODE    ENDS 
+                                 
+                                 
+ 0000                           CONST   SEGMENT PUBLIC BYTE 
+                                 
+                                        PUBLIC  BADVER,ENDMES,CARRET,NAMBAD,NOT
+				FND,NOROOM 
+                                        PUBLIC  NOSPACE,DRVLET 
+                                        PUBLIC  ACCMES 
+                                        PUBLIC  TOOBIG,SYNERR,ERRMES,BACMES 
+                                        PUBLIC  EXEBAD,HEXERR,EXEWRT,HEXWRT,WRT
+				MES1,WRTMES2 
+                                        PUBLIC  EXECEMES, ParityMes 
+                                        EXTRN   RDFLG:BYTE 
+                                 
+                                        ENDIF 
+                                 
+ 0000  49 6E 63 6F 72 72 65     BADVER      DB      "Incorrect DOS version",13,
+				10,"$" 
+       63 74 20 44 4F 53 20     
+       76 65 72 73 69 6F 6E     
+       0D 0A 24                 
+ 0018  0D 0A 50 72 6F 67 72     ENDMES      DB      13,10,"Program terminated n
+				ormally" 
+       61 6D 20 74 65 72 6D     
+       69 6E 61 74 65 64 20     
+       6E 6F 72 6D 61 6C 6C     
+       79                       
+ 0035  0D 0A 24                 CARRET      DB      13,10,"$" 
+ 0038  49 6E 76 61 6C 69 64     NAMBAD      DB      "Invalid drive specificatio
+				n",13,10,"$" 
+       20 64 72 69 76 65 20     
+       73 70 65 63 69 66 69     
+       63 61 74 69 6F 6E 0D     
+       0A 24                    
+ 0056  46 69 6C 65 20 6E 6F     NOTFND      DB      "File not found",13,10,"$" 
+       74 20 66 6F 75 6E 64     
+       0D 0A 24                 
+ 0067  46 69 6C 65 20 63 72     NOROOM      DB      "File creation error",13,10
+				,"$" 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Page     1-3
+                                                            
+
+       65 61 74 69 6F 6E 20     
+       65 72 72 6F 72 0D 0A     
+       24                       
+ 007D  49 6E 73 75 66 66 69     NOSPACE     DB      "Insufficient space on disk
+				",13,10,"$" 
+       63 69 65 6E 74 20 73     
+       70 61 63 65 20 6F 6E     
+       20 64 69 73 6B 0D 0A     
+       24                       
+                                 
+                                 
+ 009A  44 69 73 6B 24           DISK        DB      "Disk$" 
+ 009F  57 72 69 74 65 20 70     WRTPRO      DB      "Write protect$" 
+       72 6F 74 65 63 74 24     
+                                
+ 00AD  20 65 72 72 6F 72 20     DSKERR      DB      " error " 
+                                
+ 00B4  72 65 61 64 69 6E 67     ERRTYP      DB      "reading drive " 
+       20 64 72 69 76 65 20     
+                                
+ 00C2  41 0D 0A 24              DRVLET      DB      "A",13,10,"$" 
+ 00C6  72 65 61 64              READM       DB      "read" 
+ 00CA  77 72 69 74              WRITM       DB      "writ" 
+                                 
+                                 
+ 00CE  49 6E 73 75 66 66 69     TOOBIG      DB      "Insufficient memory",13,10
+				,"$" 
+       63 69 65 6E 74 20 6D     
+       65 6D 6F 72 79 0D 0A     
+       24                       
+ 00E4  5E                       SYNERR      DB      '^' 
+ 00E5  20 45 72 72 6F 72 0D     ERRMES      DB      " Error",13,10+80H 
+       8A                       
+ 00ED  20 88                    BACMES      DB      32,8+80H 
+ 00EF                           EXEBAD      LABEL   BYTE 
+ 00EF  45 72 72 6F 72 20 69     HEXERR      DB      "Error in EXE or HEX file",
+				13,10,"$" 
+       6E 20 45 58 45 20 6F     
+       72 20 48 45 58 20 66     
+       69 6C 65 0D 0A 24        
+ 010A                           EXEWRT      LABEL   BYTE 
+ 010A  45 58 45 20 61 6E 64     HEXWRT      DB      "EXE and HEX files cannot b
+				e written",13,10,"$" 
+       20 48 45 58 20 66 69     
+       6C 65 73 20 63 61 6E     
+       6E 6F 74 20 62 65 20     
+       77 72 69 74 74 65 6E     
+       0D 0A 24                 
+ 0130  57 72 69 74 69 6E 67     WRTMES1     DB      "Writing $" 
+       20 24                    
+ 0139  20 62 79 74 65 73 0D     WRTMES2     DB      " bytes",13,10,"$" 
+       0A 24                    
+ 0142  45 58 45 43 20 66 61     EXECEMES    DB     "EXEC failure",13,10,"$" 
+       69 6C 75 72 65 0D 0A     
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Page     1-4
+                                                            
+
+       24                       
+ 0151  41 63 63 65 73 73 20     ACCMES      DB      "Access denied",13,10,"$" 
+       64 65 6E 69 65 64 0D     
+       0A 24                    
+ 0161  50 61 72 69 74 79 20     ParityMes   DB      "Parity error or nonexistan
+				t memory error detected",13,10,"$" 
+       65 72 72 6F 72 20 6F     
+       72 20 6E 6F 6E 65 78     
+       69 73 74 61 6E 74 20     
+       6D 65 6D 6F 72 79 20     
+       65 72 72 6F 72 20 64     
+       65 74 65 63 74 65 64     
+       0D 0A 24                 
+                                 
+ 0195                           CONSTEND: 
+                                 
+ 0195                           CONST   ENDS 
+                                        END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Symbols-4
+                                                             
+
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DG . . . . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	0030	BYTE	PUBLIC	'CODE'
+  CONST  . . . . . . . . . . . .  	0195	BYTE	PUBLIC	
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ACCMES . . . . . . . . . . . . .  	L BYTE 	0151	CONST	Global
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Symbols-5
+                                                             
+
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BACMES . . . . . . . . . . . . .  	L BYTE 	00ED	CONST	Global
+BADVER . . . . . . . . . . . . .  	L BYTE 	0000	CONST	Global
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+
+CARRET . . . . . . . . . . . . .  	L BYTE 	0035	CONST	Global
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+CODEEND  . . . . . . . . . . . .  	L NEAR	0030	CODE
+CONSTEND . . . . . . . . . . . .  	L NEAR	0195	CONST
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Symbols-6
+                                                             
+
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK . . . . . . . . . . . . . .  	L BYTE 	009A	CONST
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRVERR . . . . . . . . . . . . .  	L NEAR	0002	CODE	Global
+DRVLET . . . . . . . . . . . . .  	L BYTE 	00C2	CONST	Global
+DSKERR . . . . . . . . . . . . .  	L BYTE 	00AD	CONST
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENDMES . . . . . . . . . . . . .  	L BYTE 	0018	CONST	Global
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERRMES . . . . . . . . . . . . .  	L BYTE 	00E5	CONST	Global
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Symbols-7
+                                                             
+
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+ERRTYP . . . . . . . . . . . . .  	L BYTE 	00B4	CONST
+EXEBAD . . . . . . . . . . . . .  	L BYTE 	00EF	CONST	Global
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXECEMES . . . . . . . . . . . .  	L BYTE 	0142	CONST	Global
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXEWRT . . . . . . . . . . . . .  	L BYTE 	010A	CONST	Global
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Symbols-8
+                                                             
+
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FIRSTDRV . . . . . . . . . . . .  	Number	0041	
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+
+HEXERR . . . . . . . . . . . . .  	L BYTE 	00EF	CONST	Global
+HEXWRT . . . . . . . . . . . . .  	L BYTE 	010A	CONST	Global
+
+IBMJAPVER  . . . . . . . . . . .  	Alias	 FALSE		
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Symbols-9
+                                                             
+
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MOVMES . . . . . . . . . . . . .  	L NEAR	0025	CODE
+
+NAMBAD . . . . . . . . . . . . .  	L BYTE 	0038	CONST	Global
+NMIINT . . . . . . . . . . . . .  	L NEAR	0002	CODE	Global
+NMIINTEND  . . . . . . . . . . .  	L NEAR	0002	CODE	Global
+NOROOM . . . . . . . . . . . . .  	L BYTE 	0067	CONST	Global
+NOSPACE  . . . . . . . . . . . .  	L BYTE 	007D	CONST	Global
+NOTFND . . . . . . . . . . . . .  	L BYTE 	0056	CONST	Global
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+PARITYFLAG . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+PARITYMES  . . . . . . . . . . .  	L BYTE 	0161	CONST	Global
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+RDFLG  . . . . . . . . . . . . .  	V BYTE 	0000	CONST	External
+READ . . . . . . . . . . . . . .  	Number	003F	
+READM  . . . . . . . . . . . . .  	L BYTE 	00C6	CONST
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RELEASEPARITY  . . . . . . . . .  	L NEAR	0001	CODE	Global
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RESTART  . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Symbols-10
+                                                             
+
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRBUF . . . . . . . . . . . . .  	L NEAR	0000	CODE	External
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SAVDRV . . . . . . . . . . . . .  	L NEAR	000C	CODE
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+SYNERR . . . . . . . . . . . . .  	L BYTE 	00E4	CONST	Global
+SYSVER . . . . . . . . . . . . .  	Alias	 FALSE		
+
+TOOBIG . . . . . . . . . . . . .  	L BYTE 	00CE	CONST	Global
+TRAPPARITY . . . . . . . . . . .  	L NEAR	0000	CODE	Global
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:10:56
+DEBUGger Messages                                           Symbols-11
+                                                             
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+WRITM  . . . . . . . . . . . . .  	L BYTE 	00CA	CONST
+WRTMES1  . . . . . . . . . . . .  	L BYTE 	0130	CONST	Global
+WRTMES2  . . . . . . . . . . . .  	L BYTE 	0139	CONST	Global
+WRTPRO . . . . . . . . . . . . .  	L BYTE 	009F	CONST
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+
+   1440 Source  Lines
+   1502 Total   Lines
+    532 Symbols
+
+  22896 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

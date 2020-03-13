@@ -1470,7 +1470,7 @@
           "@media": [
             {
               "@title": "Planetfall",
-              "@diskette": "PLANET-READONLY.json"
+              "@diskette": "PLANETFALL-READONLY.json"
             }
           ]
         },
@@ -1618,7 +1618,11 @@
                 "@source": ""
               }
             ],
-            "@author": "Ken Arnold, Jon Lane, Michael Toy",
+            "@author": [
+              "Ken Arnold",
+              "Jon Lane",
+              "Michael Toy"
+            ],
             "@version": "1.49"
           }
         }
@@ -1684,7 +1688,12 @@
                 "@source": ""
               }
             ],
-            "@author": "Robert A. Koeneke, Jimmey W. Todd Jr., David J. Grabiner, James E. Wilson",
+            "@author": [
+              "Robert A. Koeneke",
+              "Jimmey W. Todd Jr.",
+              "David J. Grabiner",
+              "James E. Wilson"
+            ],
             "@version": "5.5"
           }
         }
@@ -2769,7 +2778,10 @@
                 "@type": "PC160K"
               }
             ],
-            "@author": "William F. Sharpe, Brent D. Weaver",
+            "@author": [
+              "William F. Sharpe",
+              "Brent D. Weaver"
+            ],
             "@publisher": "Wells Fargo Investment Advisors",
             "@version": "2.13"
           }
@@ -4199,7 +4211,7 @@
       "@title": "Miscellaneous",
       "@versions": {
         "pcjs": {
-          "@title": "PCjs Personal Disks",
+          "@title": "PCjs Software Archive",
           "@media": [
             {
               "@title": "JEFFPAR DISK001",
@@ -5496,6 +5508,7 @@
           },
           "1.1": {
             "@title": "MS OS/2 1.1",
+            "@inactive": true,
             "@media": [
               {
                 "@title": "MS OS/2 1.1 (Disk 1)",

@@ -925,6 +925,78 @@
             "@cover": ".jpg",
             "@source": "",
             "@tags": "adventure"
+          },
+          {
+            "@title": "MASM 5.00 Reference",
+            "@file": "MASM50-POCKETREF.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFkTtanp1C-Mq0Yug?e=BRbCsV",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "masm50"
+          },
+          {
+            "@title": "MASM 5.00 Programmer's Guide",
+            "@file": "MASM50-PROGGUIDE.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBnDrC9pXwVwxYw1A?e=OZkNow",
+            "@cover": ".jpg",
+            "@source": "http://www.os2museum.com/files/docs/os210sdk/masm-5.0-pg-1987.pdf",
+            "@tags": "masm50"
+          },
+          {
+            "@title": "MASM 5.00 Mixed-Language Programming Guide",
+            "@file": "MASM50-MLPROGGUIDE.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFtJNuM0Uh1XIG9zw?e=OH72cR",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "masm50"
+          },
+          {
+            "@title": "MASM 5.00 CodeView and Utilities Guide",
+            "@file": "MASM50-UTILGUIDE.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqIKJ6ua82VVg6_sbA?e=eibMfp",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "masm50"
+          },
+          {
+            "@title": "MASM 5.00 Box",
+            "@file": "MASM50-BOX.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFd2ImZBX2LOqqivw?e=fxpie0",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "masm50"
+          },
+          {
+            "@title": "MASM 5.00 Brochure",
+            "@file": "MASM50-BROCHURE.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFc87PWpzo9W45Huw?e=h5XatC",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "masm50"
+          },
+          {
+            "@title": "MASM 5.00 READ THIS FIRST",
+            "@file": "MASM50-READTHISFIRST.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFitllWejDc8P374g?e=z67BRs",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "masm50"
+          },
+          {
+            "@title": "MASM 5.10 Letters",
+            "@file": "MASM51-LETTERS.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFmfQPP91sz4S6MDQ?e=AkicZR",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "masm50"
+          },
+          {
+            "@title": "Microsoft QuickBASIC (1987)",
+            "@file": "Microsoft_QuickBASIC-1987.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvA_O6gyOmFPqAMhDw?e=GaqGs8",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "quickbasic"
           }
         ]
       }
@@ -932,23 +1004,142 @@
   },
   "papers": {
     "@title": "Papers",
-    "@instances": {
-      "pcjs": {
-        "@title": "PCjs Personal Documents",
-        "@documents": [
-          {
-            "@title": "dBASE III Debugging Notes",
-            "@file": "1984-09-16--DBASE_III_DEBUG.pdf",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "dBASE III Patching Procedure",
-            "@file": "1984-09-25--DBASE_III_PATCH.pdf",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          }
-        ]
+    "ias": {
+      "@title": "IAS",
+      "@instances": {
+        "ecp": {
+          "@title": "Electronic Computer Project (1946-1954)",
+          "@documents": [
+            {
+              "@title": "Preliminary Discussion of the Logical Design of an Electronic Computing Instrument (Pomerene)",
+              "@file": "1946-06-28--Preliminary Discussion of the Logical Design of an Electronic Computing Instrument (Pomerene).pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV7M0pbf40DJ4Dh-A?e=SAF3Ay",
+              "@cover": ".jpg",
+              "@source": "https://www.ias.edu/electronic-computer-project",
+              "@tags": "eci"
+            },
+            {
+              "@title": "First Progress Report",
+              "@file": "1947-01-01--First Progress Report.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV4ArnBifdbfjcL_w?e=lSPHvu",
+              "@cover": ".jpg",
+              "@source": "https://www.ias.edu/electronic-computer-project",
+              "@tags": "eci"
+            },
+            {
+              "@title": "Planning and Coding of Problems for an Electronic Computing Instrument Volume I-III",
+              "@file": "1947-04-01--Planning and Coding of Problems for an Electronic Computing Instrument Volume I-III.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grhb2dQou3dlDHUTuQ?e=eTHSr8",
+              "@cover": ".jpg",
+              "@source": "https://www.ias.edu/electronic-computer-project",
+              "@tags": "eci"
+            },
+            {
+              "@title": "Second Progress Report",
+              "@file": "1947-07-01--Second Progress Report.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grhZnqWtH6skeRPw8g?e=MdVxdJ",
+              "@cover": ".jpg",
+              "@source": "https://www.ias.edu/electronic-computer-project",
+              "@tags": "eci"
+            },
+            {
+              "@title": "Preliminary Discussion of the Logical Design of an Electronic Computing Instrument",
+              "@file": "1947-09-02--Preliminary Discussion of the Logical Design of an Electronic Computing Instrument (Scan).pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grVz9pjWlNhZTZkxNQ?e=vd7aKK",
+              "@cover": ".jpg",
+              "@source": "https://www.ias.edu/electronic-computer-project",
+              "@tags": "eci"
+            },
+            {
+              "@title": "Third Progress Report",
+              "@file": "1948-01-01--Third Progress Report.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV1t6ytR6dOdhNdMQ?e=gD0kix",
+              "@cover": ".jpg",
+              "@source": "https://www.ias.edu/electronic-computer-project",
+              "@tags": "eci"
+            },
+            {
+              "@title": "Planning and Coding of Problems for an Electronic Computing Instrument Volume II",
+              "@file": "1948-04-15--Planning and Coding of Problems for an Electronic Computing Instrument Volume II.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV9ydwIr_A5xZY0Gw?e=1hx356",
+              "@cover": ".jpg",
+              "@source": "https://www.ias.edu/electronic-computer-project",
+              "@tags": "eci"
+            },
+            {
+              "@title": "Fourth Progress Report",
+              "@file": "1948-07-01--Fourth Progress Report.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grdBu1ICZ8NpdblkZQ?e=VNQuLp",
+              "@cover": ".jpg",
+              "@source": "https://www.ias.edu/electronic-computer-project",
+              "@tags": "eci"
+            },
+            {
+              "@title": "Magnetic Drum Memory",
+              "@file": "1948-07-01--Magnetic Drum Memory.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grVyp1t3l0jFHdpSwQ?e=5UIXxR",
+              "@cover": ".jpg",
+              "@source": "https://www.ias.edu/electronic-computer-project",
+              "@tags": "eci"
+            },
+            {
+              "@title": "Planning and Coding of Problems for an Electronic Computing Instrument Volume III",
+              "@file": "1948-08-16--Planning and Coding of Problems for an Electronic Computing Instrument Volume III.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV8NpRPrC_f7Pqomw?e=lRuNdH",
+              "@cover": ".jpg",
+              "@source": "https://www.ias.edu/electronic-computer-project",
+              "@tags": "eci"
+            },
+            {
+              "@title": "Fifth Progress Report",
+              "@file": "1949-01--Fifth Progress Report.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV3blg-YSnk_iiC8g?e=qEGh4H",
+              "@cover": ".jpg",
+              "@source": "https://www.ias.edu/electronic-computer-project",
+              "@tags": "eci"
+            },
+            {
+              "@title": "Sixth Progress Report",
+              "@file": "1951-09--Sixth Progress Report.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grYB9MQXaD7G_V4hog?e=gonvvb",
+              "@cover": ".jpg",
+              "@source": "https://www.ias.edu/electronic-computer-project",
+              "@tags": "eci"
+            },
+            {
+              "@title": "Final Progress Report",
+              "@file": "1954-01--Final Progress Report.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grhtAsdmjpJBCaWyew?e=jf7BTU",
+              "@cover": ".jpg",
+              "@source": "https://www.ias.edu/electronic-computer-project",
+              "@tags": "eci"
+            }
+          ]
+        }
+      }
+    },
+    "pcjs": {
+      "@title": "PCjs",
+      "@instances": {
+        "programming": {
+          "@title": "Programming Notes",
+          "@documents": [
+            {
+              "@title": "dBASE III Debugging Notes",
+              "@file": "1984-09-16--DBASE_III_DEBUG.pdf",
+              "@cover": ".jpg",
+              "@source": "PCjs",
+              "@tags": "dbase3"
+            },
+            {
+              "@title": "dBASE III Patching Procedure",
+              "@file": "1984-09-25--DBASE_III_PATCH.pdf",
+              "@cover": ".jpg",
+              "@source": "PCjs",
+              "@tags": "dbase3"
+            }
+          ]
+        }
       }
     }
   },

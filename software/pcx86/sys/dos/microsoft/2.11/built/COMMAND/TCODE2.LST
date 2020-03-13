@@ -1,0 +1,1443 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Page     1-1
+                                                            
+
+                                TITLE   PART2 - COMMAND Transient routines. 
+                                 
+                             C          INCLUDE COMSW.ASM 
+                             C  ; Use the following booleans to set assembly fl
+				ags 
+ = 0000                      C  FALSE   EQU     0 
+ = FFFF                      C  TRUE    EQU     NOT FALSE 
+                             C   
+                             C  ENDIF 
+                             C   
+ =                           C  IBMVER  EQU     IBM  	; Switch to build IBM ver
+				sion of Command 
+ = FFFF                      C  MSVER   EQU     NOT IBM ; Switch to build MS-DO
+				S version of Command 
+                             C   
+ =                           C  HIGHMEM EQU     FALSE   ; Run resident part abo
+				ve transient (high memory) 
+ =                           C  KANJI   EQU     FALSE   ; Support for dual byte
+				 Microsoft KANJI standard 
+ =                           C  IBMJAPAN        EQU     FALSE   ;MUST BE TRUE (
+				along with IBM and KANJI) 
+                                 
+                                 
+                                .list 
+                                .cref 
+                                 
+                             C          INCLUDE COMEQU.ASM 
+                             C  ;************************************* 
+                             C  ; COMMAND EQUs which are not switch dependant 
+                             C   
+                             C  IFDEF   IBM 
+                             C          INCLUDE IFEQU.ASM 
+                             C  ;************************************* 
+                             C  ; COMMAND EQUs which are switch dependant 
+                             C   
+                             C  ENDIF 
+                             C   
+                             C  ENDIF 
+                             C   
+                             C   
+ = 003E                      C  SYM     EQU     ">" 
+                             C   
+ = 0017                      C  LINPERPAG       EQU     23 
+ = 0001                      C  NORMPERLIN      EQU     1 
+ = 0005                      C  WIDEPERLIN      EQU     5 
+ = 0080                      C  COMBUFLEN       EQU     128     ; Length of com
+				mmand buffer 
+                             C   
+ = 003A                      C  DRVCHAR         EQU     ":" 
+                             C   
+ = 005C                      C  FCB     EQU     5CH 
+                             C   
+                             C  VARSTRUC        STRUC 
+ 0000  ??                    C  ISDIR   DB      ? 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0001  ??                    C  SIZ     DB      ? 
+ 0002  ????                  C  TTAIL   DW      ? 
+ 0004  ??                    C  INFO    DB      ? 
+ 0005  0054[                 C  BUF     DB      DIRSTRLEN + 20 DUP (?) 
+            ??               C  
+                         ]   C  
+                             C  
+ 0059                        C  VARSTRUC        ENDS 
+                             C   
+ = 0001                      C  WSWITCH EQU     1               ; Wide display 
+				during DIR 
+ = 0002                      C  PSWITCH EQU     2               ; Pause (or Pag
+				e) mode during DIR 
+ = 0004                      C  ASWITCH EQU     4               ; ASCII mode du
+				ring COPY 
+ = 0008                      C  BSWITCH EQU     8               ; Binary mode d
+				uring COPY 
+ = 0010                      C  VSWITCH EQU     10H             ; Verify switch
+				 
+ = 8000                      C  GOTSWITCH EQU   8000H           ; Meta switch s
+				et if switch character encountered 
+                                 
+                                 
+ 0000                           CODERES SEGMENT PUBLIC 
+                                        EXTRN   LODCOM1:NEAR 
+ 0000                           CODERES ENDS 
+                                 
+ 0000                           DATARES SEGMENT PUBLIC 
+                                        EXTRN   PARENT:WORD,IO_SAVE:WORD,PERMCO
+				M:BYTE 
+                                        EXTRN   PIPEFLAG:BYTE,ENVIRSEG:WORD 
+                                        endif 
+ 0000                           DATARES ENDS 
+                                 
+ 0000                           TRANDATA        SEGMENT PUBLIC 
+                                 
+                                        EXTRN   PATH_TEXT:BYTE,PROMPT_TEXT:BYTE
+				 
+                                        EXTRN   BADDEV:BYTE,SYNTMES:BYTE,ENVERR
+				:BYTE 
+ 0000                           TRANDATA        ENDS 
+                                 
+ 0000                           TRANSPACE       SEGMENT PUBLIC 
+                                 
+                                        EXTRN   CURDRV:BYTE,DIRCHAR:BYTE,PWDBUF
+				:BYTE 
+                                        EXTRN   INTERNATVARS:BYTE,RESSEG:WORD,T
+				PA:WORD 
+                                 
+ 0000                           TRANSPACE       ENDS 
+                                 
+                                 
+ 0000                           TRANCODE        SEGMENT PUBLIC BYTE 
+                                ASSUME  CS:TRANGROUP,DS:NOTHING,ES:NOTHING,SS:N
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Page     1-3
+DEVICE TABLE AND SRH DEFINITION                             
+
+				OTHING 
+                                 
+                                        EXTRN   CERROR:NEAR,ZPRINT:NEAR 
+                                        EXTRN   CRLF2:NEAR,SCANOFF:NEAR,FREE_TP
+				A:NEAR,ALLOC_TPA:NEAR 
+                                        EXTRN   OUT:NEAR,DRVBAD:NEAR,SETPATH:NE
+				AR,PRINT:NEAR 
+                                        EXTRN   FCB_TO_ASCZ:NEAR 
+                                 
+                                        PUBLIC  PRINT_DRIVE,$EXIT,MOVE_NAME 
+                                        PUBLIC  UPCONV,ADD_PROMPT,CTTY,PRINT_DE
+				FAULT_DIRECTORY 
+                                        PUBLIC  ADD_NAME_TO_ENVIRONMENT,PWD,SCA
+				N_DOUBLE_NULL 
+                                        PUBLIC  FIND_NAME_IN_ENVIRONMENT,STORE_
+				CHAR 
+                                        PUBLIC  FIND_PATH,DELETE_PATH,FIND_PROM
+				PT 
+                                        PUBLIC  SCASB2 
+                                 
+                                        ENDIF 
+                                 
+                                BREAK   <Environment utilities> 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Page     1-4
+Environment utilities                                       
+
+                                ASSUME DS:TRANGROUP 
+                                 
+ 0000                           ADD_PROMPT: 
+ 0000  E8 0079 R                        CALL    DELETE_PROMPT                  
+				 ; DELETE ANY EXISTING PROMPT 
+ 0003  E8 010A R                        CALL    SCAN_DOUBLE_NULL 
+ 0006                           ADD_PROMPT2: 
+ 0006  56                               PUSH    SI 
+ 0007  E8 00FC R                        CALL    GETARG 
+ 000A  5E                               POP     SI 
+                                        retz                                   
+				 ; PRE SCAN FOR ARGUMENTS 
+ 000B  75 01                  3  jnz ??0002
+ 000D                         4 ??0003:
+ 000D  C3                     4  RET
+ 000E                         3  ??0002:
+ 000E  E8 00EB R                        CALL    MOVE_NAME                      
+				 ; MOVE IN NAME 
+ 0011  E8 00FC R                        CALL    GETARG 
+ 0014  EB 36                            JMP     SHORT ADD_NAME 
+                                ; 
+                                ; Input: DS:SI points to a CR terminated string
+				 
+                                ; Output: carry flag is set if no room 
+                                ;         otherwise name is added to environmen
+				t 
+                                ; 
+ 0016                           ADD_NAME_TO_ENVIRONMENT: 
+ 0016  E8 00FC R                        CALL    GETARG 
+ 0019  74 3B                            JZ      DISP_ENV 
+                                ; 
+                                ; check if line contains exactly one equals sig
+				n 
+                                ; 
+ 001B  33 DB                            XOR     BX,BX           ;= COUNT IS 0 
+ 001D  56                               PUSH    SI              ;SAVE POINTER T
+				O BEGINNING OF LINE 
+ 001E                           EQLP: 
+ 001E  AC                               LODSB                   ;GET A CHAR 
+ 001F  3C 0D                            CMP     AL,13           ;IF CR WE'RE AL
+				L DONE 
+ 0021  74 0F                            JZ      QUEQ 
+ 0023  3C 3D                            CMP     AL,"="          ;LOOK FOR = SIG
+				N 
+ 0025  75 F7                            JNZ     EQLP            ;NOT THERE, GET
+				 NEXT CHAR 
+ 0027  FE C3                            INC     BL              ;OTHERWISE INCR
+				EMENT EQ COUNT 
+ 0029  80 3C 0D                         CMP     BYTE PTR [SI],13        ;LOOK F
+				OR CR FOLLOWING = SIGN 
+ 002C  75 F0                            JNZ     EQLP 
+ 002E  FE C7                            INC     BH              ;SET BH=1 MEANS
+				 NO PARAMETERS 
+ 0030  EB EC                            JMP     EQLP            ;AND LOOK FOR M
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Page     1-5
+Environment utilities                                       
+
+				ORE 
+ 0032                           QUEQ: 
+ 0032  5E                               POP     SI              ;RESTORE BEGINN
+				ING OF LINE 
+ 0033  FE CB                            DEC     BL              ;ZERO FLAG MEAN
+				S ONLY ONE EQ 
+ 0035  74 06                            JZ      ONEQ            ;GOOD LINE 
+ 0037  BA 0000 E                        MOV     DX,OFFSET TRANGROUP:SYNTMES 
+ 003A  E9 0000 E                        JMP     CERROR 
+                                 
+ 003D                           ONEQ: 
+ 003D  53                               PUSH    BX 
+ 003E  E8 007C R                        CALL    DELETE_NAME_IN_ENVIRONMENT 
+ 0041  5B                               POP     BX 
+ 0042  FE CF                            DEC     BH 
+                                        retz 
+ 0044  74 C7                  2  ??0004: jz ret_l
+                                 
+ 0046  E8 010A R                        CALL    SCAN_DOUBLE_NULL 
+ 0049  E8 00EB R                        CALL    MOVE_NAME 
+ 004C                           ADD_NAME: 
+ 004C  AC                               LODSB 
+ 004D  3C 0D                            CMP     AL,13 
+                                        retz 
+ 004F  74 BC                  2  ??0006: jz ret_l
+ 0051  E8 013B R                        CALL    STORE_CHAR 
+ 0054  EB F6                            JMP     ADD_NAME 
+                                 
+ 0056                           DISP_ENV: 
+ 0056  8E 1E 0000 E                     MOV     DS,[RESSEG] 
+                                ASSUME  DS:RESGROUP 
+ 005A  8E 1E 0000 E                     MOV     DS,[ENVIRSEG] 
+                                ASSUME  DS:NOTHING 
+ 005E  33 F6                            XOR     SI,SI 
+ 0060                           PENVLP: 
+ 0060  80 3C 00                         CMP     BYTE PTR [SI],0 
+                                        retz 
+ 0063  74 A8                  2  ??0008: jz ret_l
+                                 
+ 0065  8B D6                            MOV     DX,SI 
+ 0067  E8 0000 E                        CALL    ZPRINT 
+ 006A  E8 0000 E                        CALL    CRLF2 
+ 006D                           PENVLP2: 
+ 006D  AC                               LODSB 
+ 006E  0A C0                            OR      AL,AL 
+ 0070  75 FB                            JNZ     PENVLP2 
+ 0072  EB EC                            JMP     PENVLP 
+                                 
+                                ASSUME  DS:TRANGROUP 
+ 0074                           DELETE_PATH: 
+ 0074  BE 0000 E                        MOV     SI,OFFSET TRANGROUP:PATH_TEXT 
+ 0077  EB 03                            JMP     SHORT DELETE_NAME_IN_environmen
+				t 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Page     1-6
+Environment utilities                                       
+
+ 0079                           DELETE_PROMPT: 
+ 0079  BE 0000 E                        MOV     SI,OFFSET TRANGROUP:PROMPT_TEXT
+				 
+                                 
+ 007C                           DELETE_NAME_IN_environment: 
+                                ; 
+                                ; Input: DS:SI points to a "=" terminated strin
+				g 
+                                ; Output: carry flag is set if name not found 
+                                ;         otherwise name is deleted 
+                                ; 
+ 007C  56                               PUSH    SI 
+ 007D  1E                               PUSH    DS 
+ 007E  E8 00A6 R                        CALL    FIND            ; ES:DI POINTS 
+				TO NAME 
+ 0081  72 10                            JC      DEL1 
+ 0083  8B F7                            MOV     SI,DI           ; SAVE IT 
+ 0085  E8 0123 R                        CALL    SCASB2          ; SCAN FOR THE 
+				NUL 
+ 0088  87 F7                            XCHG    SI,DI 
+ 008A  E8 017A R                        CALL    GETENVSIZ 
+ 008D  2B CE                            SUB     CX,SI 
+ 008F  06                               PUSH    ES 
+ 0090  1F                               POP     DS              ; ES:DI POINTS 
+				TO NAME, DS:SI POINTS TO NEXT NAME 
+ 0091  F3/ A4                           REP     MOVSB           ; DELETE THE NA
+				ME 
+ 0093                           DEL1: 
+ 0093  1F                               POP     DS 
+ 0094  5E                               POP     SI 
+                                        return 
+ 0095                         1 ??000A:
+ 0095  C3                     1  RET
+                                 
+ 0096                           FIND_PATH: 
+ 0096  BE 0000 E                        MOV     SI,OFFSET TRANGROUP:PATH_TEXT 
+ 0099  EB 03                            JMP     SHORT FIND_NAME_IN_environment 
+                                 
+ 009B                           FIND_PROMPT: 
+ 009B  BE 0000 E                        MOV     SI,OFFSET TRANGROUP:PROMPT_TEXT
+				 
+                                 
+ 009E                           FIND_NAME_IN_environment: 
+                                ; 
+                                ; Input: DS:SI points to a "=" terminated strin
+				g 
+                                ; Output: ES:DI points to the arguments in the 
+				environment 
+                                ;         zero is set if name not found 
+                                ;         carry flag is set if name not valid f
+				ormat 
+                                ; 
+ 009E  E8 00A6 R                        CALL    FIND                    ; FIND 
+				THE NAME 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Page     1-7
+Environment utilities                                       
+
+                                        retc                            ; CARRY
+				 MEANS NOT FOUND 
+ 00A1  72 F2                  2  ??000B: jc ret_l
+ 00A3  EB 7A 90                         JMP     SCASB1                  ; SCAN 
+				FOR = SIGN 
+                                ; 
+                                ; On return of FIND1, ES:DI points to beginning
+				 of name 
+                                ; 
+ 00A6                           FIND: 
+ 00A6  FC                               CLD 
+ 00A7  E8 00D7 R                        CALL    COUNT0                  ; CX = 
+				LENGTH OF NAME 
+ 00AA  8E 06 0000 E                     MOV     ES,[RESSEG] 
+                                ASSUME  ES:RESGROUP 
+ 00AE  26: 8E 06 0000 E                 MOV     ES,[ENVIRSEG] 
+                                ASSUME  ES:NOTHING 
+ 00B3  33 FF                            XOR     DI,DI 
+ 00B5                           FIND1: 
+ 00B5  51                               PUSH    CX 
+ 00B6  56                               PUSH    SI 
+ 00B7  57                               PUSH    DI 
+ 00B8                           FIND11: 
+ 00B8  AC                               LODSB 
+                                 
+                                        ENDIF 
+                                 
+ 00B9  E8 012B R                        CALL    UPCONV 
+ 00BC  47                               INC     DI 
+ 00BD  26: 3A 45 FF                     CMP     AL,ES:[DI-1] 
+ 00C1  75 02                            JNZ     FIND12 
+ 00C3  E2 F3                            LOOP    FIND11 
+ 00C5                           FIND12: 
+ 00C5  5F                               POP     DI 
+ 00C6  5E                               POP     SI 
+ 00C7  59                               POP     CX 
+                                        retz 
+ 00C8  74 CB                  2  ??000D: jz ret_l
+ 00CA  51                               PUSH    CX 
+ 00CB  E8 0123 R                        CALL    SCASB2                  ; SCAN 
+				FOR A NUL 
+ 00CE  59                               POP     CX 
+ 00CF  26: 80 3D 00                     CMP     BYTE PTR ES:[DI],0 
+ 00D3  75 E0                            JNZ     FIND1 
+ 00D5  F9                               STC                             ; INDIC
+				ATE NOT FOUND 
+                                        return 
+ 00D6                         1 ??000F:
+ 00D6  C3                     1  RET
+                                 
+ 00D7                           COUNT0: 
+ 00D7  1E                               PUSH    DS 
+ 00D8  07                               POP     ES 
+ 00D9  8B FE                            MOV     DI,SI 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Page     1-8
+Environment utilities                                       
+
+                                 
+ 00DB                           COUNT1: 
+ 00DB  57                               PUSH    DI                      ; COUNT
+				 NUMBER OF CHARS UNTIL "=" 
+ 00DC  E8 011F R                        CALL    SCASB1 
+ 00DF  EB 04                            JMP     SHORT COUNTX 
+ 00E1                           COUNT2: 
+ 00E1  57                               PUSH    DI                      ; COUNT
+				 NUMBER OF CHARS UNTIL NUL 
+ 00E2  E8 0123 R                        CALL    SCASB2 
+ 00E5                           COUNTX: 
+ 00E5  59                               POP     CX 
+ 00E6  2B F9                            SUB     DI,CX 
+ 00E8  87 F9                            XCHG    DI,CX 
+                                        return 
+ 00EA                         1 ??0010:
+ 00EA  C3                     1  RET
+                                 
+ 00EB                           MOVE_NAME: 
+ 00EB  80 3C 0D                         CMP     BYTE PTR DS:[SI],13 
+                                        retz 
+ 00EE  74 FA                  2  ??0011: jz ret_l
+ 00F0  AC                               LODSB 
+                                 
+                                        ENDIF 
+                                 
+ 00F1  E8 012B R                        CALL    UPCONV 
+ 00F4  E8 013B R                        CALL    STORE_CHAR 
+ 00F7  3C 3D                            CMP     AL,"=" 
+ 00F9  75 F0                            JNZ     MOVE_NAME 
+                                        return 
+ 00FB                         1 ??0013:
+ 00FB  C3                     1  RET
+                                 
+ 00FC                           GETARG: 
+ 00FC  BE 0080                          MOV     SI,80H 
+ 00FF  AC                               LODSB 
+ 0100  0A C0                            OR      AL,AL 
+                                        retz 
+ 0102  74 F7                  2  ??0014: jz ret_l
+ 0104  E8 0000 E                        CALL    SCANOFF 
+ 0107  3C 0D                            CMP     AL,13 
+                                        return 
+ 0109                         1 ??0016:
+ 0109  C3                     1  RET
+                                 
+ 010A                           SCAN_DOUBLE_NULL: 
+ 010A  8E 06 0000 E                     MOV     ES,[RESSEG] 
+                                ASSUME  ES:RESGROUP 
+ 010E  26: 8E 06 0000 E                 MOV     ES,[ENVIRSEG] 
+                                ASSUME  ES:NOTHING 
+ 0113  33 FF                            XOR     DI,DI 
+ 0115                           SDN1: 
+ 0115  E8 0123 R                        CALL    SCASB2 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Page     1-9
+Environment utilities                                       
+
+ 0118  26: 80 3D 00                     CMP     BYTE PTR ES:[DI],0 
+ 011C  75 F7                            JNZ     SDN1 
+                                        return 
+ 011E                         1 ??0017:
+ 011E  C3                     1  RET
+                                 
+ 011F                           SCASB1: 
+ 011F  B0 3D                            MOV     AL,"="                  ; SCAN 
+				FOR AN = 
+ 0121  EB 02                            JMP     SHORT SCASBX 
+ 0123                           SCASB2: 
+ 0123  32 C0                            XOR     AL,AL                   ; SCAN 
+				FOR A NUL 
+ 0125                           SCASBX: 
+ 0125  B9 0100                          MOV     CX,100H 
+ 0128  F2/ AE                           REPNZ   SCASB 
+                                        return 
+ 012A                         1 ??0018:
+ 012A  C3                     1  RET
+                                 
+                                        ENDIF 
+                                 
+ 012B                           UPCONV: 
+ 012B  3C 61                            CMP     AL,"a" 
+ 012D  72 06                            JB      RET22C 
+ 012F  3C 7A                            CMP     AL,"z" 
+ 0131  77 02                            JA      RET22C 
+ 0133  2C 20                            SUB     AL,20H          ; Lower-case ch
+				anged to upper-case 
+ 0135                           RET22C: 
+ 0135  2E: FF 1E 0012 E                 CALL    DWORD PTR CS:[INTERNATVARS.Map_
+				call] 
+                                        return 
+ 013A                         1 ??0019:
+ 013A  C3                     1  RET
+                                ; 
+                                ; STORE A CHAR IN environment, GROWING IT IF NE
+				CESSARY 
+                                ; 
+ 013B                           STORE_CHAR: 
+ 013B  51                               PUSH    CX 
+ 013C  53                               PUSH    BX 
+ 013D  E8 017A R                        CALL    GETENVSIZ 
+ 0140  8B D9                            MOV     BX,CX 
+ 0142  83 EB 02                         SUB     BX,2            ; SAVE ROOM FOR
+				 DOUBLE NULL 
+ 0145  3B FB                            CMP     DI,BX 
+ 0147  72 28                            JB      STORE1 
+                                 
+ 0149  50                               PUSH    AX 
+ 014A  51                               PUSH    CX 
+ 014B  53                               PUSH    BX              ; Save Size of 
+				environment 
+ 014C  E8 0000 E                        CALL    FREE_TPA 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Page     1-10
+Environment utilities                                       
+
+ 014F  5B                               POP     BX 
+ 0150  83 C3 02                         ADD     BX,2            ; Recover true 
+				environment size 
+ 0153  B1 04                            MOV     CL,4 
+ 0155  D3 EB                            SHR     BX,CL           ; Convert back 
+				to paragraphs 
+ 0157  43                               INC     BX              ; Try to grow e
+				nvironment by one para 
+ 0158  B4 4A                            MOV     AH,SETBLOCK 
+ 015A  CD 21                            INT     int_command 
+ 015C  9C                               PUSHF 
+ 015D  06                               PUSH    ES 
+ 015E  8E 06 0000 E                     MOV     ES,[RESSEG] 
+ 0162  E8 0000 E                        CALL    ALLOC_TPA 
+ 0165  07                               POP     ES 
+ 0166  9D                               POPF 
+ 0167  59                               POP     CX 
+ 0168  58                               POP     AX 
+ 0169  73 06                            JNC     STORE1 
+ 016B  BA 0000 E                        MOV     DX,OFFSET TRANGROUP:ENVERR 
+ 016E  E9 0000 E                        JMP     CERROR 
+ 0171                           STORE1: 
+ 0171  AA                               STOSB 
+ 0172  26: C7 05 0000                   MOV     WORD PTR ES:[DI],0            ;
+				 NULL IS AT END 
+ 0177  5B                               POP     BX 
+ 0178  59                               POP     CX 
+                                        return 
+ 0179                         1 ??001A:
+ 0179  C3                     1  RET
+                                 
+ 017A                           GETENVSIZ: 
+                                ;Get size of environment in bytes, rounded up t
+				o paragraph boundry 
+                                ;ES has environment segment 
+                                ;Size returned in CX, all other registers prese
+				rved 
+                                 
+ 017A  06                               PUSH    ES 
+ 017B  50                               PUSH    AX 
+ 017C  8C C0                            MOV     AX,ES 
+ 017E  48                               DEC     AX              ;Point at arena
+				 
+ 017F  8E C0                            MOV     ES,AX 
+ 0181  26: A1 0003                      MOV     AX,ES:[arena_size] 
+ 0185  B1 04                            MOV     CL,4 
+ 0187  D3 E0                            SHL     AX,CL           ;Convert to byt
+				es 
+ 0189  8B C8                            MOV     CX,AX 
+ 018B  58                               POP     AX 
+ 018C  07                               POP     ES 
+                                        return 
+ 018D                         1 ??001B:
+ 018D  C3                     1  RET
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Page     1-11
+Environment utilities                                       
+
+                                 
+ 018E                           PRINT_DRIVE: 
+ 018E  B4 19                            MOV     AH,GET_DEFAULT_DRIVE 
+ 0190  CD 21                            INT     int_command 
+ 0192  04 41                            ADD     AL,"A" 
+ 0194  E9 0000 E                        JMP     OUT 
+                                 
+                                ASSUME  DS:TRANGROUP,ES:TRANGROUP 
+ 0197                           PWD: 
+ 0197  E8 01A3 R                        CALL    PRINT_DIRECTORY 
+ 019A  E8 0000 E                        CALL    CRLF2 
+                                        return 
+ 019D                         1 ??001C:
+ 019D  C3                     1  RET
+                                 
+ 019E                           PRINT_DEFAULT_DIRECTORY: 
+ 019E  C6 06 005C 00                    MOV     BYTE PTR DS:[FCB],0 
+ 01A3                           PRINT_DIRECTORY: 
+ 01A3  8A 16 005C                       MOV     DL,DS:[FCB] 
+ 01A7  8A C2                            MOV     AL,DL 
+ 01A9  04 40                            ADD     AL,'@' 
+ 01AB  3C 40                            CMP     AL,'@' 
+ 01AD  75 06                            JNZ     GOTDRIVE 
+ 01AF  02 06 0000 E                     ADD     AL,[CURDRV] 
+ 01B3  FE C0                            INC     AL 
+ 01B5                           GOTDRIVE: 
+ 01B5  50                               PUSH    AX 
+ 01B6  BE 0003 E                        MOV     SI,OFFSET TRANGROUP:PWDBUF+3 
+ 01B9  B4 47                            MOV     AH,CURRENT_DIR 
+ 01BB  CD 21                            INT     int_command 
+ 01BD  73 05                            JNC     DPBISOK 
+ 01BF  0E                               PUSH    CS 
+ 01C0  1F                               POP     DS 
+ 01C1  E9 0000 E                        JMP     DRVBAD 
+ 01C4                           DPBISOK: 
+ 01C4  BF 0000 E                        MOV     DI,OFFSET TRANGROUP:PWDBUF 
+ 01C7  8B D7                            MOV     DX,DI 
+ 01C9  58                               POP     AX 
+ 01CA  B4 3A                            MOV     AH,DRVCHAR 
+ 01CC  AB                               STOSW 
+ 01CD  A0 0000 E                        MOV     AL,[DIRCHAR] 
+ 01D0  AA                               STOSB 
+ 01D1  E9 0000 E                        JMP     ZPRINT 
+                                 
+ 01D4                           $EXIT: 
+ 01D4  06                               PUSH    ES 
+ 01D5  8E 06 0000 E                     MOV     ES,[RESSEG] 
+                                ASSUME  ES:RESGROUP 
+ 01D9  26: A1 0000 E                    MOV     AX,[PARENT] 
+ 01DD  26: A3 0016                      MOV     WORD PTR ES:[PDB_Parent_PID],AX
+				 
+                                 
+                                ENDIF 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Page     1-12
+Environment utilities                                       
+
+ 01E1  07                               POP     ES 
+                                ASSUME  ES:TRANGROUP 
+ 01E2  8E 06 0000 E                     MOV     ES,[TPA] 
+ 01E6  B4 49                            MOV     AH,DEALLOC 
+ 01E8  CD 21                            INT     int_command                    
+				         ; Now running in "free" space 
+ 01EA  B8 4C00                          MOV     AX,(EXIT SHL 8) 
+ 01ED  CD 21                            INT     int_command 
+                                 
+ 01EF                           CTTY: 
+ 01EF  E8 0000 E                        CALL    SETPATH         ; Get spec 
+ 01F2  B8 3D02                          MOV     AX,(OPEN SHL 8) OR 2    ; Read 
+				and write 
+ 01F5  CD 21                            INT     int_command             ; Open 
+				new device 
+ 01F7  72 10                            JC      ISBADDEV 
+ 01F9  8B D8                            MOV     BX,AX 
+ 01FB  B8 4400                          MOV     AX,IOCTL SHL 8 
+ 01FE  CD 21                            INT     int_command 
+ 0200  F6 C2 80                         TEST    DL,80H 
+ 0203  75 0D                            JNZ     DEVISOK 
+ 0205  B4 3E                            MOV     AH,CLOSE       ; Close initial 
+				handle 
+ 0207  CD 21                            INT     int_command 
+ 0209                           ISBADDEV: 
+ 0209  BA 0000 E                        MOV     DX,OFFSET TRANGROUP:BADDEV 
+ 020C  E8 0000 E                        CALL    PRINT 
+ 020F  EB 29 90                         JMP     RESRET 
+                                 
+ 0212                           DEVISOK: 
+ 0212  32 F6                            XOR     DH,DH 
+ 0214  80 CA 03                         OR      DL,3            ; Make sure has
+				 CON attributes 
+ 0217  B8 4401                          MOV     AX,(IOCTL SHL 8) OR 1 
+ 021A  CD 21                            INT     int_command 
+ 021C  53                               PUSH    BX                      ; Save 
+				handle 
+ 021D  B9 0003                          MOV     CX,3 
+ 0220  33 DB                            XOR     BX,BX 
+ 0222                           ICLLOOP:                                ; Close
+				 basic handles 
+ 0222  B4 3E                            MOV     AH,CLOSE 
+ 0224  CD 21                            INT     int_command 
+ 0226  43                               INC     BX 
+ 0227  E2 F9                            LOOP    ICLLOOP 
+ 0229  5B                               POP     BX              ; Get handle 
+ 022A  B4 45                            MOV     AH,XDUP 
+ 022C  CD 21                            INT     int_command             ; Dup i
+				t to 0 
+ 022E  B4 45                            MOV     AH,XDUP 
+ 0230  CD 21                            INT     int_command             ; Dup t
+				o 1 
+ 0232  B4 45                            MOV     AH,XDUP 
+ 0234  CD 21                            INT     int_command             ; Dup t
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Page     1-13
+Environment utilities                                       
+
+				o 2 
+ 0236  B4 3E                            MOV     AH,CLOSE        ; Close initial
+				 handle 
+ 0238  CD 21                            INT     int_command 
+ 023A                           RESRET: 
+ 023A  8E 1E 0000 E                     MOV     DS,[RESSEG] 
+                                ASSUME  DS:RESGROUP 
+ 023E  1E                               PUSH    DS 
+ 023F  A1 0018                          MOV     AX,WORD PTR DS:[PDB_JFN_Table] 
+				          ; Get new 0 and 1 
+ 0242  A3 0000 E                        MOV     [IO_SAVE],AX 
+ 0245  B8 0000 E                        MOV     AX,OFFSET RESGROUP:LODCOM1 
+ 0248  50                               PUSH    AX 
+ 0249                           ZMMMM   PROC FAR 
+ 0249  CB                               RET                     ; Force header 
+				to be checked 
+                                ZMMMM   ENDP 
+                                 
+ 024A                           TRANCODE        ENDS 
+                                        END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+VARSTRUC . . . . . . . . . . . .  	0059	0005
+  ISDIR  . . . . . . . . . . . .  	0000
+  SIZ  . . . . . . . . . . . . .  	0001
+  TTAIL  . . . . . . . . . . . .  	0002
+  INFO . . . . . . . . . . . . .  	0004
+  BUF  . . . . . . . . . . . . .  	0005
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Symbols-5
+                                                             
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+EGROUP . . . . . . . . . . . . .  	GROUP
+  ZEXEC_CODE . . . . . . . . . .  	0000	PARA	PUBLIC	
+  ZEXEC_DATA . . . . . . . . . .  	0000	PARA	PUBLIC	
+RESGROUP . . . . . . . . . . . .  	GROUP
+  CODERES  . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  DATARES  . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  ENVIRONMENT  . . . . . . . . .  	0000	PARA	PUBLIC	
+  INIT . . . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  TAIL . . . . . . . . . . . . .  	0000	PARA	PUBLIC	
+TRANGROUP  . . . . . . . . . . .  	GROUP
+  TRANCODE . . . . . . . . . . .  	024A	BYTE	PUBLIC	
+  TRANDATA . . . . . . . . . . .  	0000	PARA	PUBLIC	
+  TRANSPACE  . . . . . . . . . .  	0000	PARA	PUBLIC	
+  TRANTAIL . . . . . . . . . . .  	0000	PARA	PUBLIC	
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ADD_NAME . . . . . . . . . . . .  	L NEAR	004C	TRANCODE
+ADD_NAME_TO_ENVIRONMENT  . . . .  	L NEAR	0016	TRANCODE	Global
+ADD_PROMPT . . . . . . . . . . .  	L NEAR	0000	TRANCODE	Global
+ADD_PROMPT2  . . . . . . . . . .  	L NEAR	0006	TRANCODE
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALLOC_TPA  . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ASWITCH  . . . . . . . . . . . .  	Number	0004	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Symbols-6
+                                                             
+
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BADDEV . . . . . . . . . . . . .  	V BYTE 	0000	TRANDATA	External
+BSWITCH  . . . . . . . . . . . .  	Number	0008	
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+
+CERROR . . . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+COMBUFLEN  . . . . . . . . . . .  	Number	0080	
+COUNT0 . . . . . . . . . . . . .  	L NEAR	00D7	TRANCODE
+COUNT1 . . . . . . . . . . . . .  	L NEAR	00DB	TRANCODE
+COUNT2 . . . . . . . . . . . . .  	L NEAR	00E1	TRANCODE
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+COUNTX . . . . . . . . . . . . .  	L NEAR	00E5	TRANCODE
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CRLF2  . . . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+CTTY . . . . . . . . . . . . . .  	L NEAR	01EF	TRANCODE	Global
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURDRV . . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEL1 . . . . . . . . . . . . . .  	L NEAR	0093	TRANCODE
+DELETE_NAME_IN_ENVIRONMENT . . .  	L NEAR	007C	TRANCODE
+DELETE_PATH  . . . . . . . . . .  	L NEAR	0074	TRANCODE	Global
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Symbols-7
+                                                             
+
+DELETE_PROMPT  . . . . . . . . .  	L NEAR	0079	TRANCODE
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVISOK  . . . . . . . . . . . .  	L NEAR	0212	TRANCODE
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRCHAR  . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DISP_ENV . . . . . . . . . . . .  	L NEAR	0056	TRANCODE
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBISOK  . . . . . . . . . . . .  	L NEAR	01C4	TRANCODE
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DRVBAD . . . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Symbols-8
+                                                             
+
+DRVCHAR  . . . . . . . . . . . .  	Number	003A	
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ENVERR . . . . . . . . . . . . .  	V BYTE 	0000	TRANDATA	External
+ENVIRSEG . . . . . . . . . . . .  	V WORD 	0000	DATARES	External
+EQLP . . . . . . . . . . . . . .  	L NEAR	001E	TRANCODE
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB  . . . . . . . . . . . . . .  	Number	005C	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Symbols-9
+                                                             
+
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FCB_TO_ASCZ  . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FIND . . . . . . . . . . . . . .  	L NEAR	00A6	TRANCODE
+FIND1  . . . . . . . . . . . . .  	L NEAR	00B5	TRANCODE
+FIND11 . . . . . . . . . . . . .  	L NEAR	00B8	TRANCODE
+FIND12 . . . . . . . . . . . . .  	L NEAR	00C5	TRANCODE
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NAME_IN_ENVIRONMENT . . . .  	L NEAR	009E	TRANCODE	Global
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FIND_PATH  . . . . . . . . . . .  	L NEAR	0096	TRANCODE	Global
+FIND_PROMPT  . . . . . . . . . .  	L NEAR	009B	TRANCODE	Global
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+FREE_TPA . . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+
+GETARG . . . . . . . . . . . . .  	L NEAR	00FC	TRANCODE
+GETENVSIZ  . . . . . . . . . . .  	L NEAR	017A	TRANCODE
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+GOTDRIVE . . . . . . . . . . . .  	L NEAR	01B5	TRANCODE
+GOTSWITCH  . . . . . . . . . . .  	Number	8000	
+
+HIGHMEM  . . . . . . . . . . . .  	Alias	 FALSE		
+
+IBM  . . . . . . . . . . . . . .  	Alias	 FALSE		
+IBMJAPAN . . . . . . . . . . . .  	Alias	 FALSE		
+IBMVER . . . . . . . . . . . . .  	Alias	 IBM		
+ICLLOOP  . . . . . . . . . . . .  	L NEAR	0222	TRANCODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Symbols-10
+                                                             
+
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNATVARS . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+IO_SAVE  . . . . . . . . . . . .  	V WORD 	0000	DATARES	External
+ISBADDEV . . . . . . . . . . . .  	L NEAR	0209	TRANCODE
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KANJI  . . . . . . . . . . . . .  	Alias	 FALSE		
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LINPERPAG  . . . . . . . . . . .  	Number	0017	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LODCOM1  . . . . . . . . . . . .  	L NEAR	0000	CODERES	External
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MOVE_NAME  . . . . . . . . . . .  	L NEAR	00EB	TRANCODE	Global
+MSVER  . . . . . . . . . . . . .  	Number	FFFF	
+
+NORMPERLIN . . . . . . . . . . .  	Number	0001	
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Symbols-11
+                                                             
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+ONEQ . . . . . . . . . . . . . .  	L NEAR	003D	TRANCODE
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+OUT  . . . . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+
+PARENT . . . . . . . . . . . . .  	V WORD 	0000	DATARES	External
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+PATH_TEXT  . . . . . . . . . . .  	V BYTE 	0000	TRANDATA	External
+PENVLP . . . . . . . . . . . . .  	L NEAR	0060	TRANCODE
+PENVLP2  . . . . . . . . . . . .  	L NEAR	006D	TRANCODE
+PERMCOM  . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+PIPEFLAG . . . . . . . . . . . .  	V BYTE 	0000	DATARES	External
+PRINT  . . . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+PRINT_DEFAULT_DIRECTORY  . . . .  	L NEAR	019E	TRANCODE	Global
+PRINT_DIRECTORY  . . . . . . . .  	L NEAR	01A3	TRANCODE
+PRINT_DRIVE  . . . . . . . . . .  	L NEAR	018E	TRANCODE	Global
+PROMPT_TEXT  . . . . . . . . . .  	V BYTE 	0000	TRANDATA	External
+PSWITCH  . . . . . . . . . . . .  	Number	0002	
+PWD  . . . . . . . . . . . . . .  	L NEAR	0197	TRANCODE	Global
+PWDBUF . . . . . . . . . . . . .  	V BYTE 	0000	TRANSPACE	External
+
+QUEQ . . . . . . . . . . . . . .  	L NEAR	0032	TRANCODE
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RESRET . . . . . . . . . . . . .  	L NEAR	023A	TRANCODE
+RESSEG . . . . . . . . . . . . .  	V WORD 	0000	TRANSPACE	External
+RET22C . . . . . . . . . . . . .  	L NEAR	0135	TRANCODE
+RET_C  . . . . . . . . . . . . .  	NEAR 	00A1	TRANCODE
+RET_L  . . . . . . . . . . . . .  	NEAR 	019D	TRANCODE
+RET_Z  . . . . . . . . . . . . .  	NEAR 	0102	TRANCODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Symbols-12
+                                                             
+
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SCANOFF  . . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+SCAN_DOUBLE_NULL . . . . . . . .  	L NEAR	010A	TRANCODE	Global
+SCASB1 . . . . . . . . . . . . .  	L NEAR	011F	TRANCODE
+SCASB2 . . . . . . . . . . . . .  	L NEAR	0123	TRANCODE	Global
+SCASBX . . . . . . . . . . . . .  	L NEAR	0125	TRANCODE
+SDN1 . . . . . . . . . . . . . .  	L NEAR	0115	TRANCODE
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SETPATH  . . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+STORE1 . . . . . . . . . . . . .  	L NEAR	0171	TRANCODE
+STORE_CHAR . . . . . . . . . . .  	L NEAR	013B	TRANCODE	Global
+SYM  . . . . . . . . . . . . . .  	Number	003E	
+SYNTMES  . . . . . . . . . . . .  	V BYTE 	0000	TRANDATA	External
+
+TPA  . . . . . . . . . . . . . .  	V WORD 	0000	TRANSPACE	External
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 14:47:34
+PART2 - COMMAND Transient routines.                         Symbols-13
+                                                             
+
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+UPCONV . . . . . . . . . . . . .  	L NEAR	012B	TRANCODE	Global
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+VSWITCH  . . . . . . . . . . . .  	Number	0010	
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WIDEPERLIN . . . . . . . . . . .  	Number	0005	
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+WSWITCH  . . . . . . . . . . . .  	Number	0001	
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+ZMMMM  . . . . . . . . . . . . .  	F PROC	0249	TRANCODE	Length = 0001
+ZPRINT . . . . . . . . . . . . .  	L NEAR	0000	TRANCODE	External
+
+$EXIT  . . . . . . . . . . . . .  	L NEAR	01D4	TRANCODE	Global
+??0002 . . . . . . . . . . . . .  	L NEAR	000E	TRANCODE
+??0003 . . . . . . . . . . . . .  	L NEAR	000D	TRANCODE
+??0004 . . . . . . . . . . . . .  	L NEAR	0044	TRANCODE
+??0006 . . . . . . . . . . . . .  	L NEAR	004F	TRANCODE
+??0008 . . . . . . . . . . . . .  	L NEAR	0063	TRANCODE
+??000A . . . . . . . . . . . . .  	L NEAR	0095	TRANCODE
+??000B . . . . . . . . . . . . .  	L NEAR	00A1	TRANCODE
+??000D . . . . . . . . . . . . .  	L NEAR	00C8	TRANCODE
+??000F . . . . . . . . . . . . .  	L NEAR	00D6	TRANCODE
+??0010 . . . . . . . . . . . . .  	L NEAR	00EA	TRANCODE
+??0011 . . . . . . . . . . . . .  	L NEAR	00EE	TRANCODE
+??0013 . . . . . . . . . . . . .  	L NEAR	00FB	TRANCODE
+??0014 . . . . . . . . . . . . .  	L NEAR	0102	TRANCODE
+??0016 . . . . . . . . . . . . .  	L NEAR	0109	TRANCODE
+??0017 . . . . . . . . . . . . .  	L NEAR	011E	TRANCODE
+??0018 . . . . . . . . . . . . .  	L NEAR	012A	TRANCODE
+??0019 . . . . . . . . . . . . .  	L NEAR	013A	TRANCODE
+??001A . . . . . . . . . . . . .  	L NEAR	0179	TRANCODE
+??001B . . . . . . . . . . . . .  	L NEAR	018D	TRANCODE
+??001C . . . . . . . . . . . . .  	L NEAR	019D	TRANCODE
+
+
+   1956 Source  Lines
+   2249 Total   Lines
+    669 Symbols
+
+  16854 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

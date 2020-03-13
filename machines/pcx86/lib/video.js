@@ -2448,7 +2448,6 @@ class VideoX86 extends Component {
          * screen "flicker".
          */
         this.colorScreen = parmsVideo['screenColor'] || "black";
-        this.opacityFlicker = (1 - (Web.getURLParm('flicker') || parmsVideo['flicker'] || 0)).toString();
         this.fOpacityReduced = false;
         this.fStyleCanvasFullScreen = false;
         if (canvas) {
@@ -2653,6 +2652,12 @@ class VideoX86 extends Component {
                 i += 2;
             }
         }
+
+        /*
+         * Moved this from the constructor (and changed Web.getURLParm() to cmp.etMachineParm()),
+         * so that the flicker setting can be easily overridden from the page, not just from the URL.
+         */
+        this.opacityFlicker = (1 - (cmp.getMachineParm('flicker', this.parmsVideo) || 0)).toString();
 
         /*
          * nCard will be undefined if no model was explicitly set (whereas this.nCard is ALWAYS defined).

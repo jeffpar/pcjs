@@ -247,8 +247,6 @@ which can be loaded in any IBM PC AT-compatible machine.
 - [ZORK12.UNP](https://diskettes.pcjs.org/pcx86/sw/misc/unprot/UNPROT-2/ZORK12.UNP)
 - [ZORK3.UNP](https://diskettes.pcjs.org/pcx86/sw/misc/unprot/UNPROT-2/ZORK3.UNP)
 
-### Directory Listings
-
 #### Directory of Unprotect Files (UNPROT 1 &amp; 2)
 
 	 Volume in drive A is UNPROT     

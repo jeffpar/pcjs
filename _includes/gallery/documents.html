@@ -43,7 +43,8 @@
         {%- assign doc_tags = doc['@tags'] | default: "" -%}
         {%- if doc_file and doc_tags contains tag -%}
           {%- assign doc_id = doc_file | replace: ".pdf","" | replace: ".png","" | downcase -%}
-          {%- assign doc_link = doc['@link'] | default: doc_file -%}
+          {%- capture doc_path -%}{{ path }}{{ doc_file }}{%- endcapture -%}
+          {%- assign doc_link = doc['@link'] | default: doc_path -%}
           {%- assign doc_title = doc['@title'] -%}
           {%- assign doc_cover = doc['@cover'] | default: "/documents/covers/default.jpg" -%}
           {%- if doc_cover == ".jpg" or doc_cover == ".png" -%}

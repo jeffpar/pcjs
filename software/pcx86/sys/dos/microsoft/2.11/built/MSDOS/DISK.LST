@@ -1,0 +1,2647 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-1
+                                                            
+
+                                ; 
+                                ; Disk routines for MSDOS 
+                                ; 
+                                 
+                             C  INCLUDE DOSSEG.ASM 
+                             C  ; 
+                             C  ; segment ordering for MSDOS 
+                             C  ; 
+                             C   
+ 0000                        C  CONSTANTS       SEGMENT BYTE PUBLIC 'CONST' 
+ 0000                        C  CONSTANTS       ENDS 
+                             C   
+ 0000                        C  DATA            SEGMENT BYTE PUBLIC 'DATA' 
+ 0000                        C  DATA            ENDS 
+                             C   
+ 0000                        C  CODE            SEGMENT BYTE PUBLIC 'CODE' 
+ 0000                        C  CODE            ENDS 
+                             C   
+ 0000                        C  LAST            SEGMENT BYTE PUBLIC 'LAST' 
+ 0000                        C  LAST            ENDS 
+                             C   
+                             C  DOSGROUP    GROUP   CODE,CONSTANTS,DATA,LAST 
+                                 
+                                 
+ 0000                           CODE    SEGMENT BYTE PUBLIC  'CODE' 
+                                        ASSUME  SS:DOSGROUP,CS:DOSGROUP 
+                                 
+                                .list 
+                                 
+                                TITLE   DISK - Disk utility routines 
+                                NAME    Disk 
+                                 
+                                        i_need  COUTDSAV,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  COUTSAV,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CINDSAV,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CINSAV,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CONSWAP,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  IDLEINT,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  THISFCB,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DMAADD,DWORD 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DEVCALL,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CALLSCNT,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CALLXAD,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CONTPOS,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  NEXTADD,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CONBUF,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  User_SS,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  User_SP,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DSKStack,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  InDOS,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  NumIO,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  CurDrv,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  ThisDrv,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  ClusFac,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  SecClusPos,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DirSec,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  ClusNum,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  NxtClusNum,WORD 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-3
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  ReadOp,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  DskErr,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  RecCnt,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  RecPos,4 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  Trans,BYTE 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  BytPos,4 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  SecPos,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  BytSecPos,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  BytCnt1,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  BytCnt2,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  SecCnt,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  ThisDPB,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  LastPos,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  ValSec,WORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                        i_need  GrowCnt,DWORD 
+ 0000                         1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                         1  DATA ENDS
+                                 
+                                SUBTTL LOAD -- MAIN READ ROUTINE AND DEVICE IN 
+				ROUTINES 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-4
+LOAD -- MAIN READ ROUTINE AND DEVICE IN ROUTINES            
+
+                                PAGE 
+                                ; * * * * Drivers for file input from devices *
+				 * * * 
+                                 
+                                        procedure   SWAPBACK,NEAR 
+ 0000                         1 SWAPBACK PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+ 0000  06                               PUSH    ES 
+ 0001  57                               PUSH    DI 
+ 0002  56                               PUSH    SI 
+ 0003  53                               PUSH    BX 
+ 0004  BB 0001                          MOV     BX,1 
+                                        invoke  get_sf_from_jfn 
+ 0007  E8 0000 E              1  CALL get_sf_from_jfn
+ 000A  83 C7 03                         ADD     DI,sf_fcb 
+ 000D  8A 1E 0000 E                     MOV     BL,BYTE PTR [COUTDSAV] 
+ 0011  C5 36 0000 E                     LDS     SI,[COUTSAV] 
+                                ASSUME  DS:NOTHING 
+ 0015  26: 89 75 19                     MOV     WORD PTR ES:[DI.fcb_FIRCLUS],SI
+				 
+ 0019  26: 8C 5D 1B                     MOV     WORD PTR ES:[DI.fcb_FIRCLUS+2],
+				DS 
+ 001D  26: 88 5D 18                     MOV     ES:[DI.fcb_DEVID],BL 
+ 0021  16                               PUSH    SS 
+ 0022  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 0023  33 DB                            XOR     BX,BX 
+                                        invoke  get_sf_from_jfn 
+ 0025  E8 0000 E              1  CALL get_sf_from_jfn
+ 0028  83 C7 03                         ADD     DI,sf_fcb 
+ 002B  8A 1E 0000 E                     MOV     BL,BYTE PTR [CINDSAV] 
+ 002F  C5 36 0000 E                     LDS     SI,[CINSAV] 
+                                ASSUME  DS:NOTHING 
+ 0033  26: 89 75 19                     MOV     WORD PTR ES:[DI.fcb_FIRCLUS],SI
+				 
+ 0037  26: 8C 5D 1B                     MOV     WORD PTR ES:[DI.fcb_FIRCLUS+2],
+				DS 
+ 003B  26: 88 5D 18                     MOV     ES:[DI.fcb_DEVID],BL 
+ 003F  16                               PUSH    SS 
+ 0040  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 0041  C6 06 0000 E 00                  MOV     BYTE PTR [CONSWAP],0 
+ 0046  C6 06 0000 E 01                  MOV     BYTE PTR [IDLEINT],1 
+ 004B                           SWAPRET: 
+ 004B  5B                               POP     BX 
+ 004C  5E                               POP     SI 
+ 004D  5F                               POP     DI 
+ 004E  07                               POP     ES 
+                                        return 
+ 004F                         1 ??0000:
+ 004F  C3                     1  RET
+                                SWAPBACK    ENDP 
+                                 
+                                        procedure   SWAPCON,NEAR 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-5
+LOAD -- MAIN READ ROUTINE AND DEVICE IN ROUTINES            
+
+ 0050                         1 SWAPCON PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+ 0050  06                               PUSH    ES 
+ 0051  57                               PUSH    DI 
+ 0052  56                               PUSH    SI 
+ 0053  53                               PUSH    BX 
+ 0054  C6 06 0000 E 01                  MOV     BYTE PTR [CONSWAP],1 
+ 0059  C6 06 0000 E 00                  MOV     BYTE PTR [IDLEINT],0 
+ 005E  33 DB                            XOR     BX,BX 
+                                        invoke  get_sf_from_jfn 
+ 0060  E8 0000 E              1  CALL get_sf_from_jfn
+ 0063  83 C7 03                         ADD     DI,sf_fcb 
+ 0066  26: 8A 5D 18                     MOV     BL,ES:[DI.fcb_DEVID] 
+ 006A  88 1E 0000 E                     MOV     BYTE PTR [CINDSAV],BL 
+ 006E  26: C5 75 19                     LDS     SI,DWORD PTR ES:[DI.fcb_FIRCLUS
+				] 
+                                ASSUME  DS:NOTHING 
+ 0072  36: 89 36 0000 E                 MOV     WORD PTR [CINSAV],SI 
+ 0077  36: 8C 1E 0002 E                 MOV     WORD PTR [CINSAV+2],DS 
+ 007C  36: C5 36 0000 E                 LDS     SI,[THISFCB] 
+ 0081  8A 5C 18                         MOV     BL,[SI.fcb_DEVID] 
+ 0084  C5 74 19                         LDS     SI,DWORD PTR [SI.fcb_FIRCLUS] 
+ 0087  26: 88 5D 18                     MOV     ES:[DI.fcb_DEVID],BL 
+ 008B  26: 89 75 19                     MOV     WORD PTR ES:[DI.fcb_FIRCLUS],SI
+				 
+ 008F  26: 8C 5D 1B                     MOV     WORD PTR ES:[DI.fcb_FIRCLUS+2],
+				DS 
+ 0093  16                               PUSH    SS 
+ 0094  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 0095  BB 0001                          MOV     BX,1 
+                                        invoke  get_sf_from_jfn 
+ 0098  E8 0000 E              1  CALL get_sf_from_jfn
+ 009B  83 C7 03                         ADD     DI,sf_fcb 
+ 009E  26: 8A 5D 18                     MOV     BL,ES:[DI.fcb_DEVID] 
+ 00A2  88 1E 0000 E                     MOV     BYTE PTR [COUTDSAV],BL 
+ 00A6  26: C5 75 19                     LDS     SI,DWORD PTR ES:[DI.fcb_FIRCLUS
+				] 
+                                ASSUME  DS:NOTHING 
+ 00AA  36: 89 36 0000 E                 MOV     WORD PTR [COUTSAV],SI 
+ 00AF  36: 8C 1E 0002 E                 MOV     WORD PTR [COUTSAV+2],DS 
+ 00B4  36: C5 36 0000 E                 LDS     SI,[THISFCB] 
+ 00B9  8A 5C 18                         MOV     BL,[SI.fcb_DEVID] 
+ 00BC  C5 74 19                         LDS     SI,DWORD PTR [SI.fcb_FIRCLUS] 
+ 00BF  26: 88 5D 18                     MOV     ES:[DI.fcb_DEVID],BL 
+ 00C3  26: 89 75 19                     MOV     WORD PTR ES:[DI.fcb_FIRCLUS],SI
+				 
+ 00C7  26: 8C 5D 1B                     MOV     WORD PTR ES:[DI.fcb_FIRCLUS+2],
+				DS 
+ 00CB  16                               PUSH    SS 
+ 00CC  1F                               POP     DS 
+ 00CD  E9 004B R                        JMP     SWAPRET 
+                                SWAPCON ENDP 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-6
+LOAD -- MAIN READ ROUTINE AND DEVICE IN ROUTINES            
+
+                                        procedure   LOAD,NEAR 
+ 00D0                         1 LOAD PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                ; 
+                                ; Inputs: 
+                                ;       DS:DI point to FCB 
+                                ;       DX:AX = Position in file to read 
+                                ;       CX = No. of records to read 
+                                ; Outputs: 
+                                ;       DX:AX = Position of last record read 
+                                ;       CX = No. of bytes read 
+                                ;       ES:DI point to FCB 
+                                ;       fcb_LSTCLUS, fcb_CLUSPOS fields in FCB 
+				set 
+                                 
+ 00D0  E8 03ED R                        call    SETUP 
+                                ASSUME  DS:DOSGROUP 
+ 00D3  0A DB                            OR      BL,BL           ; Check for nam
+				ed device I/O 
+ 00D5  78 04                            JS      READDEV 
+ 00D7  E8 0509 R                        call    DISKREAD 
+                                        return 
+ 00DA                         1 ??0001:
+ 00DA  C3                     1  RET
+                                 
+ 00DB                           READDEV: 
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+ 00DB  C4 3E 0000 E                     LES     DI,[DMAADD] 
+ 00DF  F6 C3 40                         TEST    BL,40H                  ; End o
+				f file? 
+ 00E2  74 07                            JZ      ENDRDDEVJ3 
+ 00E4  F6 C3 04                         TEST    BL,ISNULL               ; NUL d
+				evice? 
+ 00E7  74 39                            JZ      TESTRAW                 ; NO 
+ 00E9  32 C0                            XOR     AL,AL                   ; Indic
+				ate EOF 
+ 00EB  E9 0198 R                ENDRDDEVJ3: JMP ENDRDDEVJ2 
+                                 
+ 00EE                           DVRDRAW: 
+                                ASSUME  DS:DOSGROUP 
+ 00EE  06                               PUSH    ES 
+ 00EF  1F                               POP     DS 
+                                ASSUME  DS:NOTHING 
+ 00F0                           DVRDRAWR: 
+ 00F0  8B DF                            MOV     BX,DI                   ; DS:BX
+				 transfer addr 
+ 00F2  33 D2                            XOR     DX,DX                   ; Start
+				 at 0 
+ 00F4  33 C0                            XOR     AX,AX                   ; Media
+				 Byte, unit = 0 
+                                        invoke  SETREAD 
+ 00F6  E8 0000 E              1  CALL SETREAD
+ 00F9  36: C5 36 0000 E                 LDS     SI,[THISFCB] 
+                                        invoke  DEVIOCALL 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-7
+LOAD -- MAIN READ ROUTINE AND DEVICE IN ROUTINES            
+
+ 00FE  E8 0000 E              1  CALL DEVIOCALL
+ 0101  8B D7                            MOV     DX,DI                   ; DX is
+				 preserved by INT 24 
+ 0103  B4 86                            MOV     AH,86H                  ; Read 
+				error 
+ 0105  36: 8B 3E 0003 E                 MOV     DI,[DEVCALL.REQSTAT] 
+ 010A  F7 C7 8000                       TEST    DI,STERR 
+ 010E  74 09                            JZ      CRDROK                  ; No er
+				rors 
+                                        invoke  CHARHARD 
+ 0110  E8 0000 E              1  CALL CHARHARD
+ 0113  8B FA                            MOV     DI,DX 
+ 0115  3C 01                            CMP     AL,1 
+ 0117  74 D7                            JZ      DVRDRAWR                ; Retry
+				 
+ 0119                           CRDROK: 
+ 0119  8B FA                            MOV     DI,DX 
+ 011B  36: 03 3E 0000 E                 ADD     DI,[CALLSCNT]           ; Amoun
+				t transferred 
+ 0120  EB 76                            JMP     SHORT ENDRDDEVJ2 
+                                 
+ 0122                           TESTRAW: 
+ 0122  F6 C3 20                         TEST    BL,020H                 ; Raw m
+				ode? 
+ 0125  75 C7                            JNZ     DVRDRAW 
+ 0127  F6 C3 01                         TEST    BL,ISCIN                ; Is it
+				 console device? 
+ 012A  74 03                            JZ      NOTRDCON 
+ 012C  E9 01CE R                        JMP     READCON 
+ 012F                           NOTRDCON: 
+ 012F  8C C0                            MOV     AX,ES 
+ 0131  8E D8                            MOV     DS,AX 
+                                ASSUME  DS:NOTHING 
+ 0133  8B DF                            MOV     BX,DI 
+ 0135  33 D2                            XOR     DX,DX 
+ 0137  8B C2                            MOV     AX,DX 
+ 0139  51                               PUSH    CX 
+ 013A  B9 0001                          MOV     CX,1 
+                                        invoke  SETREAD 
+ 013D  E8 0000 E              1  CALL SETREAD
+ 0140  59                               POP     CX 
+ 0141  36: C5 36 0000 E                 LDS     SI,[THISFCB] 
+ 0146  C5 74 19                         LDS     SI,DWORD PTR [SI.fcb_FIRCLUS] 
+ 0149                           DVRDLP: 
+                                        invoke  DSKSTATCHK 
+ 0149  E8 0000 E              1  CALL DSKSTATCHK
+                                        invoke  DEVIOCALL2 
+ 014C  E8 0000 E              1  CALL DEVIOCALL2
+ 014F  57                               PUSH    DI 
+ 0150  B4 86                            MOV     AH,86H 
+ 0152  36: 8B 3E 0003 E                 MOV     DI,[DEVCALL.REQSTAT] 
+ 0157  F7 C7 8000                       TEST    DI,STERR 
+ 015B  74 13                            JZ      CRDOK 
+                                        invoke  CHARHARD 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-8
+LOAD -- MAIN READ ROUTINE AND DEVICE IN ROUTINES            
+
+ 015D  E8 0000 E              1  CALL CHARHARD
+ 0160  5F                               POP     DI 
+ 0161  36: C7 06 0000 E 0001            MOV     [CALLSCNT],1 
+ 0168  3C 01                            CMP     AL,1 
+ 016A  74 DD                            JZ      DVRDLP                  ;Retry 
+ 016C  32 C0                            XOR     AL,AL                   ;Pick s
+				ome random character 
+ 016E  EB 12                            JMP     SHORT DVRDIGN 
+ 0170                           CRDOK: 
+ 0170  5F                               POP     DI 
+ 0171  36: 83 3E 0000 E 01              CMP     [CALLSCNT],1 
+ 0177  75 1F                            JNZ     ENDRDDEVJ2 
+ 0179  1E                               PUSH    DS 
+ 017A  36: 8E 1E 0002 E                 MOV     DS,WORD PTR [CALLXAD+2] 
+ 017F  8A 05                            MOV     AL,BYTE PTR [DI] 
+ 0181  1F                               POP     DS 
+ 0182                           DVRDIGN: 
+ 0182  36: FF 06 0000 E                 INC     WORD PTR [CALLXAD] 
+ 0187  36: C7 06 0003 E 0000            MOV     [DEVCALL.REQSTAT],0 
+ 018E  47                               INC     DI 
+ 018F  3C 1A                            CMP     AL,1AH                  ; ^Z? 
+ 0191  74 04                            JZ      ENDRDDEVJ 
+ 0193  3C 0D                            CMP     AL,c_CR                 ; CR? 
+ 0195  E0 B2                            LOOPNZ  DVRDLP 
+ 0197                           ENDRDDEVJ: 
+ 0197  4F                               DEC     DI 
+ 0198                           ENDRDDEVJ2: 
+ 0198  EB 1F                            JMP     SHORT ENDRDDEV 
+                                 
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+ 019A                           TRANBUF: 
+ 019A  AC                               LODSB 
+ 019B  AA                               STOSB 
+ 019C  3C 0D                            CMP     AL,c_CR         ; Check for car
+				riage return 
+ 019E  75 03                            JNZ     NORMCH 
+ 01A0  C6 04 0A                         MOV     BYTE PTR [SI],c_LF 
+ 01A3                           NORMCH: 
+ 01A3  3C 0A                            CMP     AL,c_LF 
+ 01A5  E0 F3                            LOOPNZ  TRANBUF 
+ 01A7  75 07                            JNZ     ENDRDCON 
+ 01A9  33 F6                            XOR     SI,SI           ; Cause a new b
+				uffer to be read 
+                                        invoke  OUT             ; Transmit line
+				feed 
+ 01AB  E8 0000 E              1  CALL OUT
+ 01AE  0C 01                            OR      AL,1            ; Clear zero fl
+				ag--not end of file 
+ 01B0                           ENDRDCON: 
+ 01B0  16                               PUSH    SS 
+ 01B1  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 01B2  E8 0000 R                        CALL    SWAPBACK 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-9
+LOAD -- MAIN READ ROUTINE AND DEVICE IN ROUTINES            
+
+ 01B5  89 36 0000 E                     MOV     [CONTPOS],SI 
+ 01B9                           ENDRDDEV: 
+ 01B9  16                               PUSH    SS 
+ 01BA  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 01BB  89 3E 0000 E                     MOV     [NEXTADD],DI 
+ 01BF  75 09                            JNZ     SETFCBC         ; Zero set if C
+				trl-Z found in input 
+ 01C1  C4 3E 0000 E                     LES     DI,[THISFCB] 
+ 01C5  26: 80 65 18 BF                  AND     ES:BYTE PTR [DI.fcb_DEVID],0FFH
+				-40H ; Mark as no more data available 
+ 01CA                           SETFCBC: 
+ 01CA  E8 0607 R                        call    SETFCB 
+                                        return 
+ 01CD                         1 ??0002:
+ 01CD  C3                     1  RET
+                                 
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+ 01CE                           READCON: 
+                                ASSUME  DS:DOSGROUP 
+ 01CE  E8 0050 R                        CALL    SWAPCON 
+ 01D1  8B 36 0000 E                     MOV     SI,[CONTPOS] 
+ 01D5  0B F6                            OR      SI,SI 
+ 01D7  75 C1                            JNZ     TRANBUF 
+ 01D9  80 3E 0000 E 80                  CMP     BYTE PTR [CONBUF],128 
+ 01DE  74 06                            JZ      GETBUF 
+ 01E0  C7 06 0000 E FF80                MOV     WORD PTR [CONBUF],0FF80H       
+				 ; Set up 128-byte buffer with no template 
+ 01E6                           GETBUF: 
+ 01E6  51                               PUSH    CX 
+ 01E7  06                               PUSH    ES 
+ 01E8  57                               PUSH    DI 
+ 01E9  BA 0000 E                        MOV     DX,OFFSET DOSGROUP:CONBUF 
+                                        invoke  $STD_CON_STRING_INPUT          
+				 ; Get input buffer 
+ 01EC  E8 0000 E              1  CALL $STD_CON_STRING_INPUT
+ 01EF  5F                               POP     DI 
+ 01F0  07                               POP     ES 
+ 01F1  59                               POP     CX 
+ 01F2  BE 0002 E                        MOV     SI,2 + OFFSET DOSGROUP:CONBUF 
+ 01F5  80 3C 1A                         CMP     BYTE PTR [SI],1AH       ; Check
+				 for Ctrl-Z in first character 
+ 01F8  75 A0                            JNZ     TRANBUF 
+ 01FA  B0 1A                            MOV     AL,1AH 
+ 01FC  AA                               STOSB 
+ 01FD  4F                               DEC     DI 
+ 01FE  B0 0A                            MOV     AL,10 
+                                        invoke  OUT             ; Send linefeed
+				 
+ 0200  E8 0000 E              1  CALL OUT
+ 0203  33 F6                            XOR     SI,SI 
+ 0205  EB A9                            JMP     SHORT ENDRDCON 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-10
+LOAD -- MAIN READ ROUTINE AND DEVICE IN ROUTINES            
+
+                                LOAD    ENDP 
+                                 
+                                SUBTTL STORE -- MAIN WRITE ROUTINE AND DEVICE O
+				UT ROUTINES 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-11
+STORE -- MAIN WRITE ROUTINE AND DEVICE OUT ROUTINES         
+
+                                PAGE 
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                        procedure   STORE,NEAR 
+ 0207                         1 STORE PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:DI point to FCB 
+                                ;       DX:AX = Position in file of disk transf
+				er 
+                                ;       CX = Record count 
+                                ; Outputs: 
+                                ;       DX:AX = Position of last record written
+				 
+                                ;       CX = No. of records written 
+                                ;       ES:DI point to FCB 
+                                ;       fcb_LSTCLUS, fcb_CLUSPOS fields in FCB 
+				set 
+                                 
+ 0207  E8 03ED R                        call    SETUP 
+                                ASSUME  DS:DOSGROUP 
+ 020A  0A DB                            OR      BL,BL 
+ 020C  78 65                            JS      WRTDEV 
+                                        invoke  DATE16 
+ 020E  E8 0000 E              1  CALL DATE16
+ 0211  26: 89 45 14                     MOV     ES:[DI.fcb_FDATE],AX 
+ 0215  26: 89 55 16                     MOV     ES:[DI.fcb_FTIME],DX 
+ 0219  E8 0674 R                        call    DISKWRITE 
+                                        return 
+ 021C                         1 ??0003:
+ 021C  C3                     1  RET
+                                 
+ 021D                           WRITECON: 
+ 021D  1E                               PUSH    DS 
+ 021E  16                               PUSH    SS 
+ 021F  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 0220  E8 0050 R                        CALL    SWAPCON 
+ 0223  1F                               POP     DS 
+                                ASSUME  DS:NOTHING 
+ 0224  8B F3                            MOV     SI,BX 
+ 0226  51                               PUSH    CX 
+ 0227                           WRCONLP: 
+ 0227  AC                               LODSB 
+ 0228  3C 1A                            CMP     AL,1AH          ; ^Z? 
+ 022A  74 05                            JZ      CONEOF 
+                                        invoke  OUT 
+ 022C  E8 0000 E              1  CALL OUT
+ 022F  E2 F6                            LOOP    WRCONLP 
+ 0231                           CONEOF: 
+ 0231  58                               POP     AX                      ; Count
+				 
+ 0232  2B C1                            SUB     AX,CX                   ; Amoun
+				t actually written 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-12
+STORE -- MAIN WRITE ROUTINE AND DEVICE OUT ROUTINES         
+
+ 0234  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 0235  E8 0000 R                        CALL    SWAPBACK 
+ 0238  EB 29                            JMP     SHORT ENDWRDEV 
+                                 
+ 023A                           DVWRTRAW: 
+                                ASSUME  DS:NOTHING 
+ 023A  33 C0                            XOR     AX,AX                   ; Media
+				 Byte, unit = 0 
+                                        invoke  SETWRITE 
+ 023C  E8 0000 E              1  CALL SETWRITE
+ 023F  36: C5 36 0000 E                 LDS     SI,[THISFCB] 
+                                        invoke  DEVIOCALL 
+ 0244  E8 0000 E              1  CALL DEVIOCALL
+ 0247  8B D7                            MOV     DX,DI 
+ 0249  B4 87                            MOV     AH,87H 
+ 024B  36: 8B 3E 0003 E                 MOV     DI,[DEVCALL.REQSTAT] 
+ 0250  F7 C7 8000                       TEST    DI,STERR 
+ 0254  74 09                            JZ      CWRTROK 
+                                        invoke  CHARHARD 
+ 0256  E8 0000 E              1  CALL CHARHARD
+ 0259  8B DA                            MOV     BX,DX                   ; Recal
+				l transfer addr 
+ 025B  3C 01                            CMP     AL,1 
+ 025D  74 DB                            JZ      DVWRTRAW                ; Try a
+				gain 
+ 025F                           CWRTROK: 
+ 025F  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 0260  A1 0000 E                        MOV     AX,[CALLSCNT]           ; Get a
+				ctual number of bytes transferred 
+ 0263                           ENDWRDEV: 
+ 0263  C4 3E 0000 E                     LES     DI,[THISFCB] 
+ 0267  33 D2                            XOR     DX,DX 
+ 0269  26: F7 75 0E                     DIV     ES:[DI.fcb_RECSIZ] 
+ 026D  8B C8                            MOV     CX,AX                   ; Parti
+				al record is ignored 
+ 026F  E8 0663 R                        call    ADDREC 
+                                        return 
+ 0272                         1 ??0004:
+ 0272  C3                     1  RET
+                                 
+                                ASSUME  DS:DOSGROUP 
+ 0273                           WRTDEV: 
+ 0273  80 CB 40                         OR      BL,40H          ; Reset EOF for
+				 input 
+ 0276  33 C0                            XOR     AX,AX 
+ 0278  E3 E9                            JCXZ    ENDWRDEV        ; problem of cr
+				eating on a device. 
+ 027A  1E                               PUSH    DS 
+ 027B  8A C3                            MOV     AL,BL 
+ 027D  C5 1E 0000 E                     LDS     BX,[DMAADD] 
+                                ASSUME  DS:NOTHING 
+ 0281  8B FB                            MOV     DI,BX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-13
+STORE -- MAIN WRITE ROUTINE AND DEVICE OUT ROUTINES         
+
+ 0283  33 D2                            XOR     DX,DX                   ; Set s
+				tarting point 
+ 0285  A8 20                            TEST    AL,020H                 ; Raw? 
+ 0287  75 B1                            JNZ     DVWRTRAW 
+ 0289  A8 02                            TEST    AL,ISCOUT               ; Conso
+				le output device? 
+ 028B  75 90                            JNZ     WRITECON 
+ 028D  A8 04                            TEST    AL,ISNULL 
+ 028F  75 67                            JNZ     WRTNUL 
+ 0291  8B C2                            MOV     AX,DX 
+ 0293  80 3F 1A                         CMP     BYTE PTR [BX],1AH       ; ^Z? 
+ 0296  74 5A                            JZ      WRTCOOKDONE             ; Yes, 
+				transfer nothing 
+ 0298  51                               PUSH    CX 
+ 0299  B9 0001                          MOV     CX,1 
+                                        invoke  SETWRITE 
+ 029C  E8 0000 E              1  CALL SETWRITE
+ 029F  59                               POP     CX 
+ 02A0  36: C5 36 0000 E                 LDS     SI,[THISFCB] 
+ 02A5  C5 74 19                         LDS     SI,DWORD PTR [SI.fcb_FIRCLUS] 
+ 02A8                           DVWRTLP: 
+                                        invoke  DSKSTATCHK 
+ 02A8  E8 0000 E              1  CALL DSKSTATCHK
+                                        invoke  DEVIOCALL2 
+ 02AB  E8 0000 E              1  CALL DEVIOCALL2
+ 02AE  57                               PUSH    DI 
+ 02AF  B4 87                            MOV     AH,87H 
+ 02B1  36: 8B 3E 0003 E                 MOV     DI,[DEVCALL.REQSTAT] 
+ 02B6  F7 C7 8000                       TEST    DI,STERR 
+ 02BA  74 11                            JZ      CWROK 
+                                        invoke  CHARHARD 
+ 02BC  E8 0000 E              1  CALL CHARHARD
+ 02BF  5F                               POP     DI 
+ 02C0  36: C7 06 0000 E 0001            MOV     [CALLSCNT],1 
+ 02C7  3C 01                            CMP     AL,1 
+ 02C9  74 DD                            JZ      DVWRTLP 
+ 02CB  EB 09                            JMP     SHORT DVWRTIGN 
+ 02CD                           CWROK: 
+ 02CD  5F                               POP     DI 
+ 02CE  36: 83 3E 0000 E 00              CMP     [CALLSCNT],0 
+ 02D4  74 1C                            JZ      WRTCOOKDONE 
+ 02D6                           DVWRTIGN: 
+ 02D6  42                               INC     DX 
+ 02D7  36: FF 06 0000 E                 INC     WORD PTR [CALLXAD] 
+ 02DC  47                               INC     DI 
+ 02DD  1E                               PUSH    DS 
+ 02DE  36: 8E 1E 0002 E                 MOV     DS,WORD PTR [CALLXAD+2] 
+ 02E3  80 3D 1A                         CMP     BYTE PTR [DI],1AH       ; ^Z? 
+ 02E6  1F                               POP     DS 
+ 02E7  74 09                            JZ      WRTCOOKDONE 
+ 02E9  36: C7 06 0003 E 0000            MOV     [DEVCALL.REQSTAT],0 
+ 02F0  E2 B6                            LOOP    DVWRTLP 
+ 02F2                           WRTCOOKDONE: 
+ 02F2  8B C2                            MOV     AX,DX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-14
+STORE -- MAIN WRITE ROUTINE AND DEVICE OUT ROUTINES         
+
+ 02F4  1F                               POP     DS 
+ 02F5  E9 0263 R                        JMP     ENDWRDEV 
+                                 
+ 02F8                           WRTNUL: 
+ 02F8  8B D1                            MOV     DX,CX                   ;Entire
+				 transfer done 
+ 02FA  EB F6                            JMP     WRTCOOKDONE 
+                                 
+                                STORE   ENDP 
+                                 
+                                        procedure   get_io_fcb,near 
+ 02FC                         1 get_io_fcb PROC near
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                ; Convert JFN number in BX to FCB in DS:SI 
+ 02FC  16                               PUSH    SS 
+ 02FD  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 02FE  06                               PUSH    ES 
+ 02FF  57                               PUSH    DI 
+                                        invoke  get_sf_from_jfn 
+ 0300  E8 0000 E              1  CALL get_sf_from_jfn
+ 0303  72 07                            JC      RET44P 
+ 0305  8B F7                            MOV     SI,DI 
+ 0307  83 C6 03                         ADD     SI,sf_fcb 
+ 030A  06                               PUSH    ES 
+ 030B  1F                               POP     DS 
+                                ASSUME  DS:NOTHING 
+ 030C                           RET44P: 
+ 030C  5F                               POP     DI 
+ 030D  07                               POP     ES 
+                                        return 
+ 030E                         1 ??0005:
+ 030E  C3                     1  RET
+                                get_io_fcb  ENDP 
+                                 
+                                SUBTTL GETTHISDRV -- FIND CURRENT DRIVE 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-15
+GETTHISDRV -- FIND CURRENT DRIVE                            
+
+                                PAGE 
+                                ; Input:    AL has drive identifier (1=A, 0=def
+				ault) 
+                                ; Output:   AL has physical drive (0=A) 
+                                ; Carry set if invalid drive (and AL is garbage
+				 anyway) 
+                                        procedure   GetThisDrv,NEAR 
+ 030F                         1 GetThisDrv PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+ 030F  36: 38 06 0000 E                 CMP     BYTE PTR [NUMIO],AL 
+                                        retc 
+ 0314  72 F8                  2  ??0006: jc ret_l
+ 0316  FE C8                            DEC     AL 
+ 0318  79 04                            JNS     PHYDRV 
+ 031A  36: A0 0000 E                    MOV     AL,[CURDRV] 
+ 031E                           PHYDRV: 
+ 031E  36: A2 0000 E                    MOV     BYTE PTR [THISDRV],AL 
+                                        return 
+ 0322                         1 ??0008:
+ 0322  C3                     1  RET
+                                GetThisDrv  ENDP 
+                                 
+                                SUBTTL DIRREAD -- READ A DIRECTORY SECTOR 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-16
+DIRREAD -- READ A DIRECTORY SECTOR                          
+
+                                PAGE 
+                                        procedure   DirRead,NEAR 
+ 0323                         1 DirRead PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       AX = Directory block number (relative t
+				o first block of directory) 
+                                ;       ES:BP = Base of drive parameters 
+                                ;       [DIRSEC] = First sector of first cluste
+				r of directory 
+                                ;       [CLUSNUM] = Next cluster 
+                                ;       [CLUSFAC] = Sectors/Cluster 
+                                ; Function: 
+                                ;       Read the directory block into [CURBUF].
+				 
+                                ; Outputs: 
+                                ;       [NXTCLUSNUM] = Next cluster (after the 
+				one skipped to) 
+                                ;       [SECCLUSPOS] Set 
+                                ;       ES:BP unchanged [CURBUF] Points to Buff
+				er with dir sector 
+                                ; All other registers destroyed. 
+                                 
+ 0323  8A 0E 0000 E                     MOV     CL,[CLUSFAC] 
+ 0327  F6 F1                            DIV     CL              ; AL # clusters
+				 to skip, AH position in cluster 
+ 0329  88 26 0000 E                     MOV     [SECCLUSPOS],AH 
+ 032D  8A C8                            MOV     CL,AL 
+ 032F  32 ED                            XOR     CH,CH 
+ 0331  8B 16 0000 E                     MOV     DX,[DIRSEC] 
+ 0335  02 D4                            ADD     DL,AH 
+ 0337  80 D6 00                         ADC     DH,0 
+ 033A  8B 1E 0000 E                     MOV     BX,[CLUSNUM] 
+ 033E  89 1E 0000 E                     MOV     [NXTCLUSNUM],BX 
+ 0342  E3 18                            JCXZ    FIRSTCLUSTER 
+ 0344                           SKPCLLP: 
+                                        invoke  UNPACK 
+ 0344  E8 0000 E              1  CALL UNPACK
+ 0347  87 DF                            XCHG    BX,DI 
+ 0349  81 FB 0FF8                       CMP     BX,0FF8H 
+ 034D  73 02                            JAE     HAVESKIPPED 
+ 034F  E2 F3                            LOOP    SKPCLLP 
+ 0351                           HAVESKIPPED: 
+ 0351  89 1E 0000 E                     MOV     [NXTCLUSNUM],BX 
+ 0355  8B D7                            MOV     DX,DI 
+ 0357  8A DC                            MOV     BL,AH 
+                                        invoke  FIGREC 
+ 0359  E8 0000 E              1  CALL FIGREC
+                                        entry   FIRSTCLUSTER 
+ 035C                         1 FIRSTCLUSTER:
+ 035C  32 C0                            XOR     AL,AL           ; Indicate pre-
+				read 
+ 035E  B4 0F                            MOV     AH,DIRPRI 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-17
+DIRREAD -- READ A DIRECTORY SECTOR                          
+
+                                        invoke  GETBUFFR 
+ 0360  E8 0000 E              1  CALL GETBUFFR
+ 0363  C3                               ret 
+                                DirRead ENDP 
+                                 
+                                SUBTTL FATSECRD -- READ A FAT SECTOR 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-18
+FATSECRD -- READ A FAT SECTOR                               
+
+                                PAGE 
+                                        procedure   FATSecRd,NEAR 
+ 0364                         1 FATSecRd PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       Same as DREAD 
+                                ;       DS:BX = Transfer address 
+                                ;       CX = Number of sectors 
+                                ;       DX = Absolute record number 
+                                ;       ES:BP = Base of drive parameters 
+                                ; Function: 
+                                ;       Calls BIOS to perform FAT read. 
+                                ; Outputs: 
+                                ;       Same as DREAD 
+                                 
+ 0364  8B F9                            MOV     DI,CX 
+ 0366  26: 8A 4E 08                     MOV     CL,ES:[BP.dpb_FAT_count] 
+ 036A  26: 8A 46 0F                     MOV     AL,ES:[BP.dpb_FAT_size] 
+ 036E  32 E4                            XOR     AH,AH 
+ 0370  8A EC                            MOV     CH,AH 
+ 0372  52                               PUSH    DX 
+ 0373                           NXTFAT: 
+ 0373  51                               PUSH    CX 
+ 0374  50                               PUSH    AX 
+ 0375  8B CF                            MOV     CX,DI 
+ 0377  E8 039A R                        CALL    DSKREAD 
+ 037A  58                               POP     AX 
+ 037B  59                               POP     CX 
+ 037C  74 1A                            JZ      RET41P 
+ 037E  03 D0                            ADD     DX,AX 
+ 0380  E2 F1                            LOOP    NXTFAT 
+ 0382  5A                               POP     DX 
+ 0383  8B CF                            MOV     CX,DI 
+                                 
+                                ; NOTE FALL THROUGH 
+                                 
+                                SUBTTL DREAD -- DO A DISK READ 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-19
+DREAD -- DO A DISK READ                                     
+
+                                PAGE 
+                                        entry   DREAD 
+ 0385                         1 DREAD:
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:BX = Transfer address 
+                                ;       CX = Number of sectors 
+                                ;       DX = Absolute record number 
+                                ;       ES:BP = Base of drive parameters 
+                                ; Function: 
+                                ;       Calls BIOS to perform disk read. If BIO
+				S reports 
+                                ;       errors, will call HARDERR for further a
+				ction. 
+                                ; DS,ES:BP preserved. All other registers destr
+				oyed. 
+                                 
+ 0385  E8 039A R                        CALL    DSKREAD 
+                                        retz 
+ 0388  74 98                  2  ??0009: jz ret_l
+ 038A  36: C6 06 0000 E 00              MOV     BYTE PTR [READOP],0 
+                                        invoke  HARDERR 
+ 0390  E8 0000 E              1  CALL HARDERR
+ 0393  3C 01                            CMP     AL,1            ; Check for ret
+				ry 
+ 0395  74 EE                            JZ      DREAD 
+                                        return                  ; Ignore otherw
+				ise 
+ 0397                         1 ??000B:
+ 0397  C3                     1  RET
+ 0398  5A                       RET41P: POP     DX 
+                                        return 
+ 0399                         1 ??000C:
+ 0399  C3                     1  RET
+                                FATSecRd    ENDP 
+                                 
+                                SUBTTL DSKREAD -- PHYSICAL DISK READ 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-20
+DSKREAD -- PHYSICAL DISK READ                               
+
+                                PAGE 
+                                        procedure   DskRead,NEAR 
+ 039A                         1 DskRead PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:BX = Transfer addr 
+                                ;       CX = Number of sectors 
+                                ;       DX = Absolute record number 
+                                ;       ES:BP = Base of drive parameters 
+                                ; Function: 
+                                ;       Call BIOS to perform disk read 
+                                ; Outputs: 
+                                ;       DI = CX on entry 
+                                ;       CX = Number of sectors unsuccessfully t
+				ransfered 
+                                ;       AX = Status word as returned by BIOS (e
+				rror code in AL if error) 
+                                ;       Zero set if OK (from BIOS) 
+                                ;       Zero clear if error 
+                                ; SI Destroyed, others preserved 
+                                 
+ 039A  51                               PUSH    CX 
+ 039B  26: 8A 66 16                     MOV     AH,ES:[BP.dpb_media] 
+ 039F  26: 8A 46 01                     MOV     AL,ES:[BP.dpb_UNIT] 
+ 03A3  53                               PUSH    BX 
+ 03A4  06                               PUSH    ES 
+                                        invoke  SETREAD 
+ 03A5  E8 0000 E              1  CALL SETREAD
+ 03A8  EB 22 90                         JMP     DODSKOP 
+                                 
+                                SUBTTL DWRITE -- SEE ABOUT WRITING 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-21
+DWRITE -- SEE ABOUT WRITING                                 
+
+                                PAGE 
+                                        entry   DWRITE 
+ 03AB                         1 DWRITE:
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:BX = Transfer address 
+                                ;       CX = Number of sectors 
+                                ;       DX = Absolute record number 
+                                ;       ES:BP = Base of drive parameters 
+                                ; Function: 
+                                ;       Calls BIOS to perform disk write. If BI
+				OS reports 
+                                ;       errors, will call HARDERR for further a
+				ction. 
+                                ; BP preserved. All other registers destroyed. 
+                                 
+ 03AB  E8 03BE R                        CALL    DSKWRITE 
+                                        retz 
+ 03AE  74 E9                  2  ??000D: jz ret_l
+ 03B0  36: C6 06 0000 E 01              MOV     BYTE PTR [READOP],1 
+                                        invoke  HARDERR 
+ 03B6  E8 0000 E              1  CALL HARDERR
+ 03B9  3C 01                            CMP     AL,1            ; Check for ret
+				ry 
+ 03BB  74 EE                            JZ      DWRITE 
+                                        return 
+ 03BD                         1 ??000F:
+ 03BD  C3                     1  RET
+                                 
+                                SUBTTL DSKWRITE -- PHYSICAL DISK WRITE 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-22
+DSKWRITE -- PHYSICAL DISK WRITE                             
+
+                                PAGE 
+                                        entry   DSKWRITE 
+ 03BE                         1 DSKWRITE:
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:BX = Transfer addr 
+                                ;       CX = Number of sectors 
+                                ;       DX = Absolute record number 
+                                ;       ES:BP = Base of drive parameters 
+                                ; Function: 
+                                ;       Call BIOS to perform disk read 
+                                ; Outputs: 
+                                ;       DI = CX on entry 
+                                ;       CX = Number of sectors unsuccessfully t
+				ransfered 
+                                ;       AX = Status word as returned by BIOS (e
+				rror code in AL if error) 
+                                ;       Zero set if OK (from BIOS) 
+                                ;       Zero clear if error 
+                                ; SI Destroyed, others preserved 
+                                 
+ 03BE  51                               PUSH    CX 
+ 03BF  26: 8A 66 16                     MOV     AH,ES:[BP.dpb_media] 
+ 03C3  26: 8A 46 01                     MOV     AL,ES:[BP.dpb_UNIT] 
+ 03C7  53                               PUSH    BX 
+ 03C8  06                               PUSH    ES 
+                                        invoke  SETWRITE 
+ 03C9  E8 0000 E              1  CALL SETWRITE
+ 03CC                           DODSKOP: 
+ 03CC  8C D9                            MOV     CX,DS           ; Save DS 
+ 03CE  1F                               POP     DS              ; DS:BP points 
+				to DPB 
+ 03CF  1E                               PUSH    DS 
+ 03D0  3E: C5 76 12                     LDS     SI,DS:[BP.dpb_driver_addr] 
+                                        invoke  DEVIOCALL2 
+ 03D4  E8 0000 E              1  CALL DEVIOCALL2
+ 03D7  8E D9                            MOV     DS,CX           ; Restore DS 
+ 03D9  07                               POP     ES              ; Restore ES 
+ 03DA  5B                               POP     BX 
+ 03DB  36: 8B 0E 0000 E                 MOV     CX,[CALLSCNT]   ; Number of sec
+				tors transferred 
+ 03E0  5F                               POP     DI 
+ 03E1  2B CF                            SUB     CX,DI 
+ 03E3  F7 D9                            NEG     CX              ; Number of sec
+				tors not transferred 
+ 03E5  36: A1 0003 E                    MOV     AX,[DEVCALL.REQSTAT] 
+ 03E9  A9 8000                          TEST    AX,STERR 
+                                        return 
+ 03EC                         1 ??0010:
+ 03EC  C3                     1  RET
+                                DskRead ENDP 
+                                 
+                                SUBTTL SETUP -- SETUP A DISK READ OR WRITE FROM
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-23
+SETUP -- SETUP A DISK READ OR WRITE FROM USER               
+
+				 USER 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-24
+SETUP -- SETUP A DISK READ OR WRITE FROM USER               
+
+                                PAGE 
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                        procedure   SETUP,NEAR 
+ 03ED                         1 SETUP PROC NEAR
+                                ASSUME  DS:NOTHING,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       DS:DI point to FCB 
+                                ;       DX:AX = Record position in file of disk
+				 transfer 
+                                ;       CX = Record count 
+                                ; Outputs: 
+                                ;       DS = DOSGROUP 
+                                ;       BL = fcb_DEVID from FCB 
+                                ;       CX = No. of bytes to transfer  (0 = 64K
+				) 
+                                ;       [THISDPB] = Base of drive parameters 
+                                ;       [RECCNT] = Record count 
+                                ;       [RECPOS] = Record position in file 
+                                ;       ES:DI Points to FCB 
+                                ;       [THISFCB] = ES:DI 
+                                ;       [NEXTADD] = Displacement of disk transf
+				er within segment 
+                                ;       [SECPOS] = Position of first sector 
+                                ;       [BYTPOS] = Byte position in file 
+                                ;       [BYTSECPOS] = Byte position in first se
+				ctor 
+                                ;       [CLUSNUM] = First cluster 
+                                ;       [SECCLUSPOS] = Sector within first clus
+				ter 
+                                ;       [DSKERR] = 0 (no errors yet) 
+                                ;       [TRANS] = 0 (No transfers yet) 
+                                ;       [THISDRV] = Physical drive unit number 
+                                 
+ 03ED  50                               PUSH    AX 
+ 03EE  8A 05                            MOV     AL,[DI] 
+ 03F0  FE C8                            DEC     AL 
+ 03F2  36: A2 0000 E                    MOV     BYTE PTR [THISDRV],AL 
+ 03F6  8A 45 18                         MOV     AL,[DI.fcb_DEVID] 
+ 03F9  8B 75 0E                         MOV     SI,[DI.fcb_RECSIZ] 
+ 03FC  0B F6                            OR      SI,SI 
+ 03FE  75 06                            JNZ     HAVRECSIZ 
+ 0400  BE 0080                          MOV     SI,128 
+ 0403  89 75 0E                         MOV     [DI.fcb_RECSIZ],SI 
+ 0406                           HAVRECSIZ: 
+ 0406  36: 8C 1E 0002 E                 MOV     WORD PTR [THISFCB+2],DS 
+ 040B  16                               PUSH    SS 
+ 040C  1F                               POP     DS              ; Set DS to DOS
+				GROUP 
+                                ASSUME  DS:DOSGROUP 
+ 040D  89 3E 0000 E                     MOV     WORD PTR [THISFCB],DI 
+ 0411  0A C0                            OR      AL,AL           ; Is it a devic
+				e? 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-25
+SETUP -- SETUP A DISK READ OR WRITE FROM USER               
+
+ 0413  79 02                            JNS     NOTDEVICE 
+ 0415  32 C0                            XOR     AL,AL           ; Fake in drive
+				 0 so we can get BP 
+ 0417                           NOTDEVICE: 
+                                        invoke  GETBP 
+ 0417  E8 0000 E              1  CALL GETBP
+ 041A  58                               POP     AX 
+ 041B  73 09                            JNC     CheckRecLen 
+ 041D  33 C9                            XOR     CX,CX 
+ 041F  C6 06 0000 E 04                  MOV     BYTE PTR [DSKERR],4 
+ 0424  5B                               POP     BX 
+                                        return 
+ 0425                         1 ??0011:
+ 0425  C3                     1  RET
+                                 
+ 0426                           CheckRecLen: 
+ 0426  83 FE 40                         CMP     SI,64           ; Check if high
+				est byte of RECPOS is significant 
+ 0429  72 02                            JB      SMALREC 
+ 042B  32 F6                            XOR     DH,DH           ; Ignore MSB if
+				 record >= 64 bytes 
+ 042D                           SMALREC: 
+ 042D  89 0E 0000 E                     MOV     [RECCNT],CX 
+ 0431  A3 0000 E                        MOV     WORD PTR [RECPOS],AX 
+ 0434  89 16 0002 E                     MOV     WORD PTR [RECPOS+2],DX 
+ 0438  8B 1E 0000 E                     MOV     BX,WORD PTR [DMAADD] 
+ 043C  89 1E 0000 E                     MOV     [NEXTADD],BX 
+ 0440  C6 06 0000 E 00                  MOV     BYTE PTR [DSKERR],0 
+ 0445  C6 06 0000 E 00                  MOV     BYTE PTR [TRANS],0 
+ 044A  8B DA                            MOV     BX,DX 
+ 044C  F7 E6                            MUL     SI 
+ 044E  A3 0000 E                        MOV     WORD PTR [BYTPOS],AX 
+ 0451  52                               PUSH    DX 
+ 0452  8B C3                            MOV     AX,BX 
+ 0454  F7 E6                            MUL     SI 
+ 0456  5B                               POP     BX 
+ 0457  03 C3                            ADD     AX,BX 
+ 0459  83 D2 00                         ADC     DX,0            ; Ripple carry 
+ 045C  75 5E                            JNZ     EOFERR 
+ 045E  A3 0002 E                        MOV     WORD PTR [BYTPOS+2],AX 
+ 0461  8B D0                            MOV     DX,AX 
+ 0463  A1 0000 E                        MOV     AX,WORD PTR [BYTPOS] 
+ 0466  26: 8B 5E 02                     MOV     BX,ES:[BP.dpb_sector_size] 
+ 046A  3B D3                            CMP     DX,BX           ; See if divide
+				 will overflow 
+ 046C  73 4E                            JNC     EOFERR 
+ 046E  F7 F3                            DIV     BX 
+ 0470  A3 0000 E                        MOV     [SECPOS],AX 
+ 0473  89 16 0000 E                     MOV     [BYTSECPOS],DX 
+ 0477  8B D0                            MOV     DX,AX 
+ 0479  26: 22 46 04                     AND     AL,ES:[BP.dpb_cluster_mask] 
+ 047D  A2 0000 E                        MOV     [SECCLUSPOS],AL 
+ 0480  8B C1                            MOV     AX,CX           ; Record count 
+ 0482  26: 8A 4E 05                     MOV     CL,ES:[BP.dpb_cluster_shift] 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-26
+SETUP -- SETUP A DISK READ OR WRITE FROM USER               
+
+ 0486  D3 EA                            SHR     DX,CL 
+ 0488  89 16 0000 E                     MOV     [CLUSNUM],DX 
+ 048C  F7 E6                            MUL     SI              ; Multiply by b
+				ytes per record 
+ 048E  8B C8                            MOV     CX,AX 
+ 0490  03 06 0000 E                     ADD     AX,WORD PTR [DMAADD]     ; See 
+				if it will fit in one segment 
+ 0494  83 D2 00                         ADC     DX,0 
+ 0497  74 1A                            JZ      OK              ; Must be less 
+				than 64K 
+ 0499  A1 0000 E                        MOV     AX,WORD PTR [DMAADD] 
+ 049C  F7 D8                            NEG     AX              ; Amount of roo
+				m left in segment 
+ 049E  75 01                            JNZ     PARTSEG 
+ 04A0  48                               DEC     AX 
+ 04A1                           PARTSEG: 
+ 04A1  33 D2                            XOR     DX,DX 
+ 04A3  F7 F6                            DIV     SI              ; How many reco
+				rds will fit? 
+ 04A5  A3 0000 E                        MOV     [RECCNT],AX 
+ 04A8  F7 E6                            MUL     SI              ; Translate tha
+				t back into bytes 
+ 04AA  C6 06 0000 E 02                  MOV     BYTE PTR [DSKERR],2      ; Flag
+				 that trimming took place 
+ 04AF  8B C8                            MOV     CX,AX 
+ 04B1  E3 10                            JCXZ    NOROOM 
+ 04B3                           OK: 
+ 04B3  C4 3E 0000 E                     LES     DI,[THISFCB] 
+ 04B7  26: 8A 5D 18                     MOV     BL,ES:[DI.fcb_DEVID] 
+                                        return 
+ 04BB                         1 ??0012:
+ 04BB  C3                     1  RET
+                                 
+ 04BC                           EOFERR: 
+ 04BC  C6 06 0000 E 01                  MOV     BYTE PTR [DSKERR],1 
+ 04C1  33 C9                            XOR     CX,CX 
+ 04C3                           NOROOM: 
+ 04C3  C4 3E 0000 E                     LES     DI,[THISFCB] 
+ 04C7  5B                               POP     BX              ; Kill return a
+				ddress 
+                                        return 
+ 04C8                         1 ??0013:
+ 04C8  C3                     1  RET
+                                SETUP   ENDP 
+                                 
+                                SUBTTL BREAKDOWN -- CUT A USER READ OR WRITE IN
+				TO PIECES 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-27
+BREAKDOWN -- CUT A USER READ OR WRITE INTO PIECES           
+
+                                PAGE 
+                                        procedure   BREAKDOWN,near 
+ 04C9                         1 BREAKDOWN PROC near
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       CX = Length of disk transfer in bytes 
+                                ;       ES:BP = Base of drive parameters 
+                                ;       [BYTSECPOS] = Byte position witin first
+				 sector 
+                                ; Outputs: 
+                                ;       [BYTCNT1] = Bytes to transfer in first 
+				sector 
+                                ;       [SECCNT] = No. of whole sectors to tran
+				sfer 
+                                ;       [BYTCNT2] = Bytes to transfer in last s
+				ector 
+                                ; AX, BX, DX destroyed. No other registers affe
+				cted. 
+                                 
+ 04C9  A1 0000 E                        MOV     AX,[BYTSECPOS] 
+ 04CC  8B D9                            MOV     BX,CX 
+ 04CE  0B C0                            OR      AX,AX 
+ 04D0  74 0E                            JZ      SAVFIR          ; Partial first
+				 sector? 
+ 04D2  26: 2B 46 02                     SUB     AX,ES:[BP.dpb_sector_size] 
+ 04D6  F7 D8                            NEG     AX              ; Max number of
+				 bytes left in first sector 
+ 04D8  2B D8                            SUB     BX,AX           ; Subtract from
+				 total length 
+ 04DA  73 04                            JAE     SAVFIR 
+ 04DC  03 C3                            ADD     AX,BX           ; Don't use all
+				 of the rest of the sector 
+ 04DE  33 DB                            XOR     BX,BX           ; And no bytes 
+				are left 
+ 04E0                           SAVFIR: 
+ 04E0  A3 0000 E                        MOV     [BYTCNT1],AX 
+ 04E3  8B C3                            MOV     AX,BX 
+ 04E5  33 D2                            XOR     DX,DX 
+ 04E7  26: F7 76 02                     DIV     ES:[BP.dpb_sector_size]  ; How 
+				many whole sectors? 
+ 04EB  A3 0000 E                        MOV     [SECCNT],AX 
+ 04EE  89 16 0000 E                     MOV     [BYTCNT2],DX    ; Bytes remaini
+				ng for last sector 
+ 04F2  0B 16 0000 E                     OR      DX,[BYTCNT1] 
+                                        retnz                   ; NOT (BYTCNT1 
+				= BYTCNT2 = 0) 
+ 04F6  75 D0                  2  ??0014: jnz ret_l
+ 04F8  3D 0001                          CMP     AX,1 
+                                        retnz 
+ 04FB  75 CB                  2  ??0016: jnz ret_l
+ 04FD  26: 8B 46 02                     MOV     AX,ES:[BP.dpb_sector_size]     
+				  ; Buffer EXACT one sector I/O 
+ 0501  A3 0000 E                        MOV     [BYTCNT2],AX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-28
+BREAKDOWN -- CUT A USER READ OR WRITE INTO PIECES           
+
+ 0504  89 16 0000 E                     MOV     [SECCNT],DX             ; DX = 
+				0 
+                                        return 
+ 0508                         1 ??0018:
+ 0508  C3                     1  RET
+                                BreakDown   ENDP 
+                                 
+                                SUBTTL DISKREAD -- PERFORM USER DISK READ 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-29
+DISKREAD -- PERFORM USER DISK READ                          
+
+                                PAGE 
+                                        procedure   DISKREAD,NEAR 
+ 0509                         1 DISKREAD PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       Outputs of SETUP 
+                                ; Function: 
+                                ;       Perform disk read 
+                                ; Outputs: 
+                                ;       DX:AX = Position of last record read 
+                                ;       CX = No. of records read 
+                                ;       ES:DI point to FCB 
+                                ;       fcb_LSTCLUS, fcb_CLUSPOS fields in FCB 
+				set 
+                                 
+ 0509  26: 8B 45 10                     MOV     AX,ES:WORD PTR [DI.fcb_FILSIZ] 
+ 050D  26: 8B 5D 12                     MOV     BX,ES:WORD PTR [DI.fcb_FILSIZ+2
+				] 
+ 0511  2B 06 0000 E                     SUB     AX,WORD PTR [BYTPOS] 
+ 0515  1B 1E 0002 E                     SBB     BX,WORD PTR [BYTPOS+2] 
+ 0519  72 1E                            JB      RDERR 
+ 051B  75 0A                            JNZ     ENUF 
+ 051D  0B C0                            OR      AX,AX 
+ 051F  74 18                            JZ      RDERR 
+ 0521  3B C1                            CMP     AX,CX 
+ 0523  73 02                            JAE     ENUF 
+ 0525  8B C8                            MOV     CX,AX 
+ 0527                           ENUF: 
+ 0527  C4 2E 0000 E                     LES     BP,[THISDPB] 
+ 052B  E8 04C9 R                        CALL    BREAKDOWN 
+ 052E  8B 0E 0000 E                     MOV     CX,[CLUSNUM] 
+                                        invoke  FNDCLUS 
+ 0532  E8 0000 E              1  CALL FNDCLUS
+ 0535  0B C9                            OR      CX,CX 
+ 0537  74 09                            JZ      SHORT SKIPERR 
+ 0539                           RDERR: 
+ 0539  E9 06ED R                        JMP     WRTERR 
+ 053C  E9 05EF R                RDLASTJ:JMP     RDLAST 
+ 053F  E9 0607 R                SETFCBJ2: JMP   SETFCB 
+                                 
+ 0542                           SKIPERR: 
+                                 
+ 0542  89 16 0000 E                     MOV     [LASTPOS],DX 
+ 0546  89 1E 0000 E                     MOV     [CLUSNUM],BX 
+ 054A  83 3E 0000 E 00                  CMP     [BYTCNT1],0 
+ 054F  74 03                            JZ      RDMID 
+                                        invoke  BUFRD 
+ 0551  E8 0000 E              1  CALL BUFRD
+ 0554                           RDMID: 
+ 0554  83 3E 0000 E 00                  CMP     [SECCNT],0 
+ 0559  74 E1                            JZ      RDLASTJ 
+                                        invoke  NEXTSEC 
+ 055B  E8 0000 E              1  CALL NEXTSEC
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-30
+DISKREAD -- PERFORM USER DISK READ                          
+
+ 055E  72 DF                            JC      SETFCBJ2 
+ 0560  C6 06 0000 E 01                  MOV     BYTE PTR [TRANS],1      ; A tra
+				nsfer is taking place 
+ 0565                           ONSEC: 
+ 0565  8A 16 0000 E                     MOV     DL,[SECCLUSPOS] 
+ 0569  8B 0E 0000 E                     MOV     CX,[SECCNT] 
+ 056D  8B 1E 0000 E                     MOV     BX,[CLUSNUM] 
+ 0571                           RDLP: 
+                                        invoke  OPTIMIZE 
+ 0571  E8 0000 E              1  CALL OPTIMIZE
+ 0574  57                               PUSH    DI 
+ 0575  50                               PUSH    AX 
+ 0576  53                               PUSH    BX 
+ 0577  8E 1E 0002 E                     MOV     DS,WORD PTR [DMAADD+2] 
+                                ASSUME  DS:NOTHING 
+ 057B  52                               PUSH    DX 
+ 057C  51                               PUSH    CX 
+ 057D  E8 0385 R                        CALL    DREAD 
+ 0580  5B                               POP     BX 
+ 0581  5A                               POP     DX 
+ 0582  03 DA                            ADD     BX,DX           ; Upper bound o
+				f read 
+ 0584  26: 8A 46 00                     MOV     AL,ES:[BP.dpb_drive] 
+                                        invoke  SETVISIT 
+ 0588  E8 0000 E              1  CALL SETVISIT
+ 058B                           NXTBUF:                         ; Must see if o
+				ne of these sectors is buffered 
+ 058B  C6 45 07 01                      MOV     [DI.VISIT],1    ; Mark as visit
+				ed 
+ 058F  3A 45 04                         CMP     AL,[DI.BUFDRV] 
+ 0592  75 41                            JNZ     DONXTBUF        ; Not for this 
+				drive 
+ 0594  39 55 08                         CMP     [DI.BUFSECNO],DX 
+ 0597  72 3C                            JC      DONXTBUF        ; Below first s
+				ector 
+ 0599  39 5D 08                         CMP     [DI.BUFSECNO],BX 
+ 059C  73 37                            JNC     DONXTBUF        ; Above last se
+				ctor 
+ 059E  80 7D 05 00                      CMP     BYTE PTR [DI.BUFDIRTY],0 
+ 05A2  74 2E                            JZ      CLBUFF                  ; Buffe
+				r is clean, so OK 
+                                ; A sector has been read in when a dirty copy o
+				f it is in a buffer 
+                                ; The buffered sector must now be read into the
+				 right place 
+ 05A4  58                               POP     AX              ; Recall transf
+				er address 
+ 05A5  50                               PUSH    AX 
+ 05A6  57                               PUSH    DI              ; Save search e
+				nvironment 
+ 05A7  52                               PUSH    DX 
+ 05A8  2B 55 08                         SUB     DX,[DI.BUFSECNO]   ; How far in
+				to transfer? 
+ 05AB  F7 DA                            NEG     DX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-31
+DISKREAD -- PERFORM USER DISK READ                          
+
+ 05AD  8B F7                            MOV     SI,DI 
+ 05AF  8B F8                            MOV     DI,AX 
+ 05B1  8B C2                            MOV     AX,DX 
+ 05B3  26: 8B 4E 02                     MOV     CX,ES:[BP.dpb_sector_size] 
+ 05B7  F7 E1                            MUL     CX 
+ 05B9  03 F8                            ADD     DI,AX           ; Put the buffe
+				r here 
+ 05BB  83 C6 10                         ADD     SI,BUFINSIZ 
+ 05BE  D1 E9                            SHR     CX,1 
+ 05C0  06                               PUSH    ES 
+ 05C1  36: 8E 06 0002 E                 MOV     ES,WORD PTR [DMAADD+2] 
+ 05C6  F3/ A5                           REP     MOVSW 
+ 05C8  73 01                            JNC     EVENMOV 
+ 05CA  A4                               MOVSB 
+ 05CB                           EVENMOV: 
+ 05CB  07                               POP     ES 
+ 05CC  5A                               POP     DX 
+ 05CD  5F                               POP     DI 
+ 05CE  26: 8A 46 00                     MOV     AL,ES:[BP.dpb_drive] 
+ 05D2                           CLBUFF: 
+                                        invoke  SCANPLACE 
+ 05D2  E8 0000 E              1  CALL SCANPLACE
+ 05D5                           DONXTBUF: 
+                                        invoke  SKIPVISIT 
+ 05D5  E8 0000 E              1  CALL SKIPVISIT
+ 05D8  75 B1                            JNZ     NXTBUF 
+ 05DA  16                               PUSH    SS 
+ 05DB  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 05DC  59                               POP     CX 
+ 05DD  59                               POP     CX 
+ 05DE  5B                               POP     BX 
+ 05DF  E3 0E                            JCXZ    RDLAST 
+ 05E1  81 FB 0FF8                       CMP     BX,0FF8H 
+ 05E5  73 20                            JAE     SETFCB 
+ 05E7  B2 00                            MOV     DL,0 
+ 05E9  FF 06 0000 E                     INC     [LASTPOS]       ; We'll be usin
+				g next cluster 
+ 05ED  EB 82                            JMP     RDLP 
+                                 
+ 05EF                           RDLAST: 
+ 05EF  A1 0000 E                        MOV     AX,[BYTCNT2] 
+ 05F2  0B C0                            OR      AX,AX 
+ 05F4  74 11                            JZ      SETFCB 
+ 05F6  A3 0000 E                        MOV     [BYTCNT1],AX 
+                                        invoke  NEXTSEC 
+ 05F9  E8 0000 E              1  CALL NEXTSEC
+ 05FC  72 09                            JC      SETFCB 
+ 05FE  C7 06 0000 E 0000                MOV     [BYTSECPOS],0 
+                                        invoke  BUFRD 
+ 0604  E8 0000 E              1  CALL BUFRD
+                                 
+                                        entry   SETFCB 
+ 0607                         1 SETFCB:
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-32
+DISKREAD -- PERFORM USER DISK READ                          
+
+ 0607  C4 36 0000 E                     LES     SI,[THISFCB] 
+ 060B  A1 0000 E                        MOV     AX,[NEXTADD] 
+ 060E  8B F8                            MOV     DI,AX 
+ 0610  2B 06 0000 E                     SUB     AX,WORD PTR [DMAADD]     ; Numb
+				er of bytes transfered 
+ 0614  33 D2                            XOR     DX,DX 
+ 0616  26: 8B 4C 0E                     MOV     CX,ES:[SI.fcb_RECSIZ] 
+ 061A  F7 F1                            DIV     CX              ; Number of rec
+				ords 
+ 061C  3B 06 0000 E                     CMP     AX,[RECCNT]     ; Check if all 
+				records transferred 
+ 0620  74 22                            JZ      FULLREC 
+ 0622  C6 06 0000 E 01                  MOV     BYTE PTR [DSKERR],1 
+ 0627  0B D2                            OR      DX,DX 
+ 0629  74 19                            JZ      FULLREC         ; If remainder 
+				0, then full record transfered 
+ 062B  C6 06 0000 E 03                  MOV     BYTE PTR [DSKERR],3      ; Flag
+				 partial last record 
+ 0630  2B CA                            SUB     CX,DX           ; Bytes left in
+				 last record 
+ 0632  06                               PUSH    ES 
+ 0633  8E 06 0002 E                     MOV     ES,WORD PTR [DMAADD+2] 
+ 0637  93                               XCHG    AX,BX           ; Save the reco
+				rd count temporarily 
+ 0638  33 C0                            XOR     AX,AX           ; Fill with zer
+				os 
+ 063A  D1 E9                            SHR     CX,1 
+ 063C  73 01                            JNC     EVENFIL 
+ 063E  AA                               STOSB 
+ 063F                           EVENFIL: 
+ 063F  F3/ AB                           REP     STOSW 
+ 0641  93                               XCHG    AX,BX           ; Restore recor
+				d count to AX 
+ 0642  07                               POP     ES 
+ 0643  40                               INC     AX              ; Add last (par
+				tial) record to total 
+ 0644                           FULLREC: 
+ 0644  8B C8                            MOV     CX,AX 
+ 0646  8B FE                            MOV     DI,SI           ; ES:DI point t
+				o FCB 
+ 0648                           SETCLUS: 
+ 0648  26: F6 45 18 FF                  TEST    ES:[DI].fcb_DEVID,-1 
+ 064D  78 14                            JS      ADDREC                  ; don't
+				 set clisters if device 
+ 064F  A1 0000 E                        MOV     AX,[CLUSNUM] 
+ 0652  26: 81 65 1D F000                AND     ES:[DI.fcb_LSTCLUS],0F000h  ; f
+				cb_lstclus is packed with dir clus 
+ 0658  26: 09 45 1D                     OR      ES:[DI.fcb_LSTCLUS],AX      ; d
+				rop in the correct part of fcb_lstclus 
+ 065C  A1 0000 E                        MOV     AX,[LASTPOS] 
+ 065F  26: 89 45 1B                     MOV     ES:[DI.fcb_CLUSPOS],AX 
+                                        entry   AddRec 
+ 0663                         1 AddRec:
+ 0663  A1 0000 E                        MOV     AX,WORD PTR [RECPOS] 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-33
+DISKREAD -- PERFORM USER DISK READ                          
+
+ 0666  8B 16 0002 E                     MOV     DX,WORD PTR [RECPOS+2] 
+ 066A  E3 07                            JCXZ    RET28           ; If no records
+				 read, don't change position 
+ 066C  49                               DEC     CX 
+ 066D  03 C1                            ADD     AX,CX           ; Update curren
+				t record position 
+ 066F  83 D2 00                         ADC     DX,0 
+ 0672  41                               INC     CX 
+ 0673                           RET28:  return 
+ 0673                         1 ??0019:
+ 0673  C3                     1  RET
+                                DISKREAD    ENDP 
+                                 
+                                SUBTTL DISKWRITE -- PERFORM USER DISK WRITE 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-34
+DISKWRITE -- PERFORM USER DISK WRITE                        
+
+                                PAGE 
+                                        procedure   DISKWRITE,NEAR 
+ 0674                         1 DISKWRITE PROC NEAR
+                                ASSUME  DS:DOSGROUP,ES:NOTHING 
+                                 
+                                ; Inputs: 
+                                ;       Outputs of SETUP 
+                                ; Function: 
+                                ;       Perform disk write 
+                                ; Outputs: 
+                                ;       DX:AX = Position of last record written
+				 
+                                ;       CX = No. of records written 
+                                ;       ES:DI point to FCB 
+                                ;       fcb_LSTCLUS, fcb_CLUSPOS fields in FCB 
+				set 
+                                 
+ 0674  80 E3 3F                         AND     BL,3FH          ; Mark file as 
+				dirty 
+ 0677  26: 88 5D 18                     MOV     ES:[DI.fcb_DEVID],BL 
+ 067B  C4 2E 0000 E                     LES     BP,[THISDPB] 
+ 067F  E8 04C9 R                        CALL    BREAKDOWN 
+ 0682  A1 0000 E                        MOV     AX,WORD PTR [BYTPOS] 
+ 0685  8B 16 0002 E                     MOV     DX,WORD PTR [BYTPOS+2] 
+ 0689  E3 78                            JCXZ    WRTEOFJ 
+ 068B  03 C1                            ADD     AX,CX 
+ 068D  83 D2 00                         ADC     DX,0            ; AX:DX=last by
+				te accessed 
+ 0690  26: F7 76 02                     DIV     ES:[BP.dpb_sector_size]  ; AX=l
+				ast sector accessed 
+ 0694  8B D8                            MOV     BX,AX           ; Save last ful
+				l sector 
+ 0696  0B D2                            OR      DX,DX 
+ 0698  75 01                            JNZ     CALCLUS 
+ 069A  48                               DEC     AX              ; AX must be ze
+				ro base indexed 
+ 069B                           CALCLUS: 
+ 069B  26: 8A 4E 05                     MOV     CL,ES:[BP.dpb_cluster_shift] 
+ 069F  D3 E8                            SHR     AX,CL           ; Last cluster 
+				to be accessed 
+ 06A1  50                               PUSH    AX 
+ 06A2  52                               PUSH    DX              ; Save the size
+				 of the "tail" 
+ 06A3  06                               PUSH    ES 
+ 06A4  C4 3E 0000 E                     LES     DI,[THISFCB] 
+ 06A8  26: 8B 45 10                     MOV     AX,ES:WORD PTR [DI.fcb_FILSIZ] 
+ 06AC  26: 8B 55 12                     MOV     DX,ES:WORD PTR [DI.fcb_FILSIZ+2
+				] 
+ 06B0  07                               POP     ES 
+ 06B1  26: F7 76 02                     DIV     ES:[BP.dpb_sector_size] 
+ 06B5  8B C8                            MOV     CX,AX           ; Save last ful
+				l sector of current file 
+ 06B7  0B D2                            OR      DX,DX 
+ 06B9  74 01                            JZ      NORNDUP 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-35
+DISKWRITE -- PERFORM USER DISK WRITE                        
+
+ 06BB  40                               INC     AX              ; Round up if a
+				ny remainder 
+ 06BC                           NORNDUP: 
+ 06BC  A3 0000 E                        MOV     [VALSEC],AX     ; Number of sec
+				tors that have been written 
+ 06BF  33 C0                            XOR     AX,AX 
+ 06C1  A3 0000 E                        MOV     WORD PTR [GROWCNT],AX 
+ 06C4  A3 0002 E                        MOV     WORD PTR [GROWCNT+2],AX 
+ 06C7  58                               POP     AX 
+ 06C8  2B D9                            SUB     BX,CX           ; Number of ful
+				l sectors 
+ 06CA  72 47                            JB      NOGROW 
+ 06CC  74 38                            JZ      TESTTAIL 
+ 06CE  8B CA                            MOV     CX,DX 
+ 06D0  93                               XCHG    AX,BX 
+ 06D1  26: F7 66 02                     MUL     ES:[BP.dpb_sector_size]  ; Byte
+				s of full sector growth 
+ 06D5  2B C1                            SUB     AX,CX           ; Take off curr
+				ent "tail" 
+ 06D7  83 DA 00                         SBB     DX,0            ; 32-bit extens
+				ion 
+ 06DA  03 C3                            ADD     AX,BX           ; Add on new "t
+				ail" 
+ 06DC  83 D2 00                         ADC     DX,0            ; ripple tim's 
+				head off 
+ 06DF  EB 2B                            JMP     SHORT SETGRW 
+                                 
+ 06E1                           HAVSTART: 
+ 06E1  8B C8                            MOV     CX,AX 
+                                        invoke  SKPCLP 
+ 06E3  E8 0000 E              1  CALL SKPCLP
+ 06E6  E3 18                            JCXZ    DOWRTJ 
+                                        invoke  ALLOCATE 
+ 06E8  E8 0000 E              1  CALL ALLOCATE
+ 06EB  73 13                            JNC     DOWRTJ 
+ 06ED                           WRTERR: 
+ 06ED  33 C9                            XOR     CX,CX 
+ 06EF  C6 06 0000 E 01                  MOV     BYTE PTR [DSKERR],1 
+ 06F4  A1 0000 E                        MOV     AX,WORD PTR [RECPOS] 
+ 06F7  8B 16 0002 E                     MOV     DX,WORD PTR [RECPOS+2] 
+ 06FB  C4 3E 0000 E                     LES     DI,[THISFCB] 
+                                        return 
+ 06FF                         1 ??001A:
+ 06FF  C3                     1  RET
+                                 
+ 0700  EB 45 90                 DOWRTJ: JMP     DOWRT 
+                                 
+ 0703                           WRTEOFJ: 
+ 0703  E9 07F9 R                        JMP     WRTEOF 
+                                 
+ 0706                           TESTTAIL: 
+ 0706  2B C2                            SUB     AX,DX 
+ 0708  76 09                            JBE     NOGROW 
+ 070A  33 D2                            XOR     DX,DX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-36
+DISKWRITE -- PERFORM USER DISK WRITE                        
+
+ 070C                           SETGRW: 
+ 070C  A3 0000 E                        MOV     WORD PTR [GROWCNT],AX 
+ 070F  89 16 0002 E                     MOV     WORD PTR [GROWCNT+2],DX 
+ 0713                           NOGROW: 
+ 0713  58                               POP     AX 
+ 0714  8B 0E 0000 E                     MOV     CX,[CLUSNUM]    ; First cluster
+				 accessed 
+                                        invoke  FNDCLUS 
+ 0718  E8 0000 E              1  CALL FNDCLUS
+ 071B  89 1E 0000 E                     MOV     [CLUSNUM],BX 
+ 071F  89 16 0000 E                     MOV     [LASTPOS],DX 
+ 0723  2B C2                            SUB     AX,DX           ; Last cluster 
+				minus current cluster 
+ 0725  74 20                            JZ      DOWRT           ; If we have la
+				st clus, we must have first 
+ 0727  E3 B8                            JCXZ    HAVSTART        ; See if no mor
+				e data 
+ 0729  51                               PUSH    CX              ; No. of cluste
+				rs short of first 
+ 072A  8B C8                            MOV     CX,AX 
+                                        invoke  ALLOCATE 
+ 072C  E8 0000 E              1  CALL ALLOCATE
+ 072F  58                               POP     AX 
+ 0730  72 BB                            JC      WRTERR 
+ 0732  8B C8                            MOV     CX,AX 
+ 0734  8B 16 0000 E                     MOV     DX,[LASTPOS] 
+ 0738  42                               INC     DX 
+ 0739  49                               DEC     CX 
+ 073A  74 03                            JZ      NOSKIP 
+                                        invoke  SKPCLP 
+ 073C  E8 0000 E              1  CALL SKPCLP
+ 073F                           NOSKIP: 
+ 073F  89 1E 0000 E                     MOV     [CLUSNUM],BX 
+ 0743  89 16 0000 E                     MOV     [LASTPOS],DX 
+ 0747                           DOWRT: 
+ 0747  83 3E 0000 E 00                  CMP     [BYTCNT1],0 
+ 074C  74 07                            JZ      WRTMID 
+ 074E  8B 1E 0000 E                     MOV     BX,[CLUSNUM] 
+                                        invoke  BUFWRT 
+ 0752  E8 0000 E              1  CALL BUFWRT
+ 0755                           WRTMID: 
+ 0755  A1 0000 E                        MOV     AX,[SECCNT] 
+ 0758  0B C0                            OR      AX,AX 
+ 075A  74 65                            JZ      WRTLAST 
+ 075C  01 06 0000 E                     ADD     [SECPOS],AX 
+                                        invoke  NEXTSEC 
+ 0760  E8 0000 E              1  CALL NEXTSEC
+ 0763  C6 06 0000 E 01                  MOV     BYTE PTR [TRANS],1       ; A tr
+				ansfer is taking place 
+ 0768  8A 16 0000 E                     MOV     DL,[SECCLUSPOS] 
+ 076C  8B 1E 0000 E                     MOV     BX,[CLUSNUM] 
+ 0770  8B 0E 0000 E                     MOV     CX,[SECCNT] 
+ 0774                           WRTLP: 
+                                        invoke  OPTIMIZE 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-37
+DISKWRITE -- PERFORM USER DISK WRITE                        
+
+ 0774  E8 0000 E              1  CALL OPTIMIZE
+ 0777  57                               PUSH    DI 
+ 0778  50                               PUSH    AX 
+ 0779  52                               PUSH    DX 
+ 077A  53                               PUSH    BX 
+ 077B  26: 8A 46 00                     MOV     AL,ES:[BP.dpb_drive] 
+ 077F  8B D9                            MOV     BX,CX 
+ 0781  03 DA                            ADD     BX,DX           ; Upper bound o
+				f write 
+                                        invoke  SETVISIT 
+ 0783  E8 0000 E              1  CALL SETVISIT
+                                ASSUME  DS:NOTHING 
+ 0786                           NEXTBUFF:                       ; Search for bu
+				ffers 
+ 0786  C6 45 07 01                      MOV     [DI.VISIT],1    ; Mark as visit
+				ed 
+ 078A  3A 45 04                         CMP     AL,[DI.BUFDRV] 
+ 078D  75 12                            JNZ     DONEXTBUFF      ; Not for this 
+				drive 
+ 078F  39 55 08                         CMP     [DI.BUFSECNO],DX 
+ 0792  72 0D                            JC      DONEXTBUFF      ; Buffer is not
+				 in range of write 
+ 0794  39 5D 08                         CMP     [DI.BUFSECNO],BX 
+ 0797  73 08                            JNC     DONEXTBUFF      ; Buffer is not
+				 in range of write 
+ 0799  C7 45 04 00FF                    MOV     WORD PTR [DI.BUFDRV],00FFH    ;
+				 Free the buffer, it is being over written 
+                                        invoke  SCANPLACE 
+ 079E  E8 0000 E              1  CALL SCANPLACE
+ 07A1                           DONEXTBUFF: 
+                                        invoke  SKIPVISIT 
+ 07A1  E8 0000 E              1  CALL SKIPVISIT
+ 07A4  75 E0                            JNZ     NEXTBUFF 
+ 07A6  5B                               POP     BX 
+ 07A7  5A                               POP     DX 
+ 07A8  36: 8E 1E 0002 E                 MOV     DS,WORD PTR [DMAADD+2] 
+ 07AD  E8 03AB R                        CALL    DWRITE 
+ 07B0  59                               POP     CX 
+ 07B1  5B                               POP     BX 
+ 07B2  16                               PUSH    SS 
+ 07B3  1F                               POP     DS 
+                                ASSUME  DS:DOSGROUP 
+ 07B4  E3 0B                            JCXZ    WRTLAST 
+ 07B6  B2 00                            MOV     DL,0 
+ 07B8  FF 06 0000 E                     INC     [LASTPOS]       ; We'll be usin
+				g next cluster 
+ 07BC  EB B6                            JMP     SHORT WRTLP 
+                                 
+ 07BE  E9 06ED R                WRTERRJ: JMP     WRTERR 
+                                 
+ 07C1                           WRTLAST: 
+ 07C1  A1 0000 E                        MOV     AX,[BYTCNT2] 
+ 07C4  0B C0                            OR      AX,AX 
+ 07C6  74 0F                            JZ      FINWRT 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-38
+DISKWRITE -- PERFORM USER DISK WRITE                        
+
+ 07C8  A3 0000 E                        MOV     [BYTCNT1],AX 
+                                        invoke  NEXTSEC 
+ 07CB  E8 0000 E              1  CALL NEXTSEC
+ 07CE  C7 06 0000 E 0000                MOV     [BYTSECPOS],0 
+                                        invoke  BUFWRT 
+ 07D4  E8 0000 E              1  CALL BUFWRT
+ 07D7                           FINWRT: 
+ 07D7  C4 3E 0000 E                     LES     DI,[THISFCB] 
+ 07DB  A1 0000 E                        MOV     AX,WORD PTR [GROWCNT] 
+ 07DE  8B 0E 0002 E                     MOV     CX,WORD PTR [GROWCNT+2] 
+ 07E2  0B C0                            OR      AX,AX 
+ 07E4  75 04                            JNZ     UPDATE_size 
+ 07E6  0B C9                            OR      CX,CX 
+ 07E8  74 08                            JZ      SAMSIZ 
+ 07EA                           Update_size: 
+ 07EA  26: 01 45 10                     ADD     WORD PTR ES:[DI.fcb_FILSIZ],AX 
+ 07EE  26: 11 4D 12                     ADC     WORD PTR ES:[DI.fcb_FILSIZ+2],C
+				X 
+ 07F2                           SAMSIZ: 
+ 07F2  8B 0E 0000 E                     MOV     CX,[RECCNT] 
+ 07F6  E9 0648 R                        JMP     SETCLUS 
+                                 
+ 07F9                           WRTEOF: 
+ 07F9  8B C8                            MOV     CX,AX 
+ 07FB  0B CA                            OR      CX,DX 
+ 07FD  74 3B                            JZ      KILLFIL 
+ 07FF  2D 0001                          SUB     AX,1 
+ 0802  83 DA 00                         SBB     DX,0 
+ 0805  26: F7 76 02                     DIV     ES:[BP.dpb_sector_size] 
+ 0809  26: 8A 4E 05                     MOV     CL,ES:[BP.dpb_cluster_shift] 
+ 080D  D3 E8                            SHR     AX,CL 
+ 080F  8B C8                            MOV     CX,AX 
+                                        invoke  FNDCLUS 
+ 0811  E8 0000 E              1  CALL FNDCLUS
+ 0814  E3 1C                            JCXZ    RELFILE 
+                                        invoke  ALLOCATE 
+ 0816  E8 0000 E              1  CALL ALLOCATE
+ 0819  72 A3                            JC      WRTERRJ 
+ 081B                           UPDATE: 
+ 081B  C4 3E 0000 E                     LES     DI,[THISFCB] 
+ 081F  A1 0000 E                        MOV     AX,WORD PTR [BYTPOS] 
+ 0822  26: 89 45 10                     MOV     ES:WORD PTR [DI.fcb_FILSIZ],AX 
+ 0826  A1 0002 E                        MOV     AX,WORD PTR [BYTPOS+2] 
+ 0829  26: 89 45 12                     MOV     ES:WORD PTR [DI.fcb_FILSIZ+2],A
+				X 
+ 082D  33 C9                            XOR     CX,CX 
+ 082F  E9 0663 R                        JMP     ADDREC 
+                                 
+ 0832                           RELFILE: 
+ 0832  BA 0FFF                          MOV     DX,0FFFH 
+                                        invoke  RELBLKS 
+ 0835  E8 0000 E              1  CALL RELBLKS
+ 0838  EB E1                            JMP     SHORT UPDATE 
+                                 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Page     1-39
+DISKWRITE -- PERFORM USER DISK WRITE                        
+
+ 083A                           KILLFIL: 
+ 083A  33 DB                            XOR     BX,BX 
+ 083C  06                               PUSH    ES 
+ 083D  C4 3E 0000 E                     LES     DI,[THISFCB] 
+ 0841  26: 89 5D 1B                     MOV     ES:[DI.fcb_CLUSPOS],BX 
+ 0845  26: 87 5D 19                     XCHG    BX,ES:[DI.fcb_FIRCLUS] 
+ 0849  26: 81 65 1D F000                AND     ES:[DI.fcb_LSTCLUS],0F000H 
+ 084F  07                               POP     ES 
+ 0850  0B DB                            OR      BX,BX 
+ 0852  74 C7                            JZ      UPDATE 
+                                        invoke  RELEASE 
+ 0854  E8 0000 E              1  CALL RELEASE
+ 0857  EB C2                            JMP     SHORT UPDATE 
+                                DISKWRITE   ENDP 
+                                do_ext 
+                                 
+ 0859                           CODE    ENDS 
+                                    END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DOSGROUP . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	0859	BYTE	PUBLIC	'CODE'
+  CONSTANTS  . . . . . . . . . .  	0000	BYTE	PUBLIC	'CONST'
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Symbols-5
+                                                             
+
+  LAST . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'LAST'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDREC . . . . . . . . . . . . .  	L NEAR	0663	CODE	Global
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Number	0000	
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BREAKDOWN  . . . . . . . . . . .  	N PROC	04C9	CODE	Global	Length = 0040
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+BYTCNT1  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+BYTCNT2  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+BYTPOS . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+BYTSECPOS  . . . . . . . . . . .  	V WORD 	0000	DATA	External
+
+CALCLUS  . . . . . . . . . . . .  	L NEAR	069B	CODE
+CALLSCNT . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+CALLXAD  . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHECKRECLEN  . . . . . . . . . .  	L NEAR	0426	CODE
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Symbols-6
+                                                             
+
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CINDSAV  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+CINSAV . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+CLBUFF . . . . . . . . . . . . .  	L NEAR	05D2	CODE
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+CLUSFAC  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+CLUSNUM  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+CONBUF . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+CONEOF . . . . . . . . . . . . .  	L NEAR	0231	CODE
+CONSWAP  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+CONTPOS  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+COUTDSAV . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+COUTSAV  . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+CRDOK  . . . . . . . . . . . . .  	L NEAR	0170	CODE
+CRDROK . . . . . . . . . . . . .  	L NEAR	0119	CODE
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURDRV . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+CWROK  . . . . . . . . . . . . .  	L NEAR	02CD	CODE
+CWRTROK  . . . . . . . . . . . .  	L NEAR	025F	CODE
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVCALL  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Symbols-7
+                                                             
+
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRREAD  . . . . . . . . . . . .  	N PROC	0323	CODE	Global	Length = 0041
+DIRSEC . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISKREAD . . . . . . . . . . . .  	N PROC	0509	CODE	Global	Length = 016B
+DISKWRITE  . . . . . . . . . . .  	N PROC	0674	CODE	Global	Length = 01E5
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMAADD . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DODSKOP  . . . . . . . . . . . .  	L NEAR	03CC	CODE
+DONEXTBUFF . . . . . . . . . . .  	L NEAR	07A1	CODE
+DONXTBUF . . . . . . . . . . . .  	L NEAR	05D5	CODE
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DOWRT  . . . . . . . . . . . . .  	L NEAR	0747	CODE
+DOWRTJ . . . . . . . . . . . . .  	L NEAR	0700	CODE
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DREAD  . . . . . . . . . . . . .  	L NEAR	0385	CODE	Global
+DSKERR . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DSKREAD  . . . . . . . . . . . .  	N PROC	039A	CODE	Global	Length = 0053
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSKSTACK . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DSKWRITE . . . . . . . . . . . .  	L NEAR	03BE	CODE	Global
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Symbols-8
+                                                             
+
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+DVRDIGN  . . . . . . . . . . . .  	L NEAR	0182	CODE
+DVRDLP . . . . . . . . . . . . .  	L NEAR	0149	CODE
+DVRDRAW  . . . . . . . . . . . .  	L NEAR	00EE	CODE
+DVRDRAWR . . . . . . . . . . . .  	L NEAR	00F0	CODE
+DVWRTIGN . . . . . . . . . . . .  	L NEAR	02D6	CODE
+DVWRTLP  . . . . . . . . . . . .  	L NEAR	02A8	CODE
+DVWRTRAW . . . . . . . . . . . .  	L NEAR	023A	CODE
+DWRITE . . . . . . . . . . . . .  	L NEAR	03AB	CODE	Global
+
+ENDRDCON . . . . . . . . . . . .  	L NEAR	01B0	CODE
+ENDRDDEV . . . . . . . . . . . .  	L NEAR	01B9	CODE
+ENDRDDEVJ  . . . . . . . . . . .  	L NEAR	0197	CODE
+ENDRDDEVJ2 . . . . . . . . . . .  	L NEAR	0198	CODE
+ENDRDDEVJ3 . . . . . . . . . . .  	L NEAR	00EB	CODE
+ENDWRDEV . . . . . . . . . . . .  	L NEAR	0263	CODE
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ENUF . . . . . . . . . . . . . .  	L NEAR	0527	CODE
+EOFERR . . . . . . . . . . . . .  	L NEAR	04BC	CODE
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+EVENFIL  . . . . . . . . . . . .  	L NEAR	063F	CODE
+EVENMOV  . . . . . . . . . . . .  	L NEAR	05CB	CODE
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Symbols-9
+                                                             
+
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FATSECRD . . . . . . . . . . . .  	N PROC	0364	CODE	Global	Length = 0036
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FINWRT . . . . . . . . . . . . .  	L NEAR	07D7	CODE
+FIRSTCLUSTER . . . . . . . . . .  	L NEAR	035C	CODE	Global
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+FULLREC  . . . . . . . . . . . .  	L NEAR	0644	CODE
+
+GETBUF . . . . . . . . . . . . .  	L NEAR	01E6	CODE
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+GETTHISDRV . . . . . . . . . . .  	N PROC	030F	CODE	Global	Length = 0014
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_IO_FCB . . . . . . . . . . .  	N PROC	02FC	CODE	Global	Length = 0013
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+GROWCNT  . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Symbols-10
+                                                             
+
+HAVESKIPPED  . . . . . . . . . .  	L NEAR	0351	CODE
+HAVRECSIZ  . . . . . . . . . . .  	L NEAR	0406	CODE
+HAVSTART . . . . . . . . . . . .  	L NEAR	06E1	CODE
+
+IDLEINT  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+INDOS  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+KILLFIL  . . . . . . . . . . . .  	L NEAR	083A	CODE
+
+LASTPOS  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOAD . . . . . . . . . . . . . .  	N PROC	00D0	CODE	Global	Length = 0137
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+
+NEXTADD  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+NEXTBUFF . . . . . . . . . . . .  	L NEAR	0786	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Symbols-11
+                                                             
+
+NOGROW . . . . . . . . . . . . .  	L NEAR	0713	CODE
+NORMCH . . . . . . . . . . . . .  	L NEAR	01A3	CODE
+NORNDUP  . . . . . . . . . . . .  	L NEAR	06BC	CODE
+NOROOM . . . . . . . . . . . . .  	L NEAR	04C3	CODE
+NOSKIP . . . . . . . . . . . . .  	L NEAR	073F	CODE
+NOTDEVICE  . . . . . . . . . . .  	L NEAR	0417	CODE
+NOTRDCON . . . . . . . . . . . .  	L NEAR	012F	CODE
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+NUMIO  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+NXTBUF . . . . . . . . . . . . .  	L NEAR	058B	CODE
+NXTCLUSNUM . . . . . . . . . . .  	V WORD 	0000	DATA	External
+NXTFAT . . . . . . . . . . . . .  	L NEAR	0373	CODE
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OK . . . . . . . . . . . . . . .  	L NEAR	04B3	CODE
+ONSEC  . . . . . . . . . . . . .  	L NEAR	0565	CODE
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+PARTSEG  . . . . . . . . . . . .  	L NEAR	04A1	CODE
+PHYDRV . . . . . . . . . . . . .  	L NEAR	031E	CODE
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+RDERR  . . . . . . . . . . . . .  	L NEAR	0539	CODE
+RDLAST . . . . . . . . . . . . .  	L NEAR	05EF	CODE
+RDLASTJ  . . . . . . . . . . . .  	L NEAR	053C	CODE
+RDLP . . . . . . . . . . . . . .  	L NEAR	0571	CODE
+RDMID  . . . . . . . . . . . . .  	L NEAR	0554	CODE
+READ . . . . . . . . . . . . . .  	Number	003F	
+READCON  . . . . . . . . . . . .  	L NEAR	01CE	CODE
+READDEV  . . . . . . . . . . . .  	L NEAR	00DB	CODE
+READOP . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RECCNT . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+RECPOS . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+RELFILE  . . . . . . . . . . . .  	L NEAR	0832	CODE
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Symbols-12
+                                                             
+
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+RET28  . . . . . . . . . . . . .  	L NEAR	0673	CODE
+RET41P . . . . . . . . . . . . .  	L NEAR	0398	CODE
+RET44P . . . . . . . . . . . . .  	L NEAR	030C	CODE
+RET_C  . . . . . . . . . . . . .  	NEAR 	0314	CODE
+RET_L  . . . . . . . . . . . . .  	NEAR 	06FF	CODE
+RET_NZ . . . . . . . . . . . . .  	NEAR 	04FB	CODE
+RET_Z  . . . . . . . . . . . . .  	NEAR 	03AE	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SAMSIZ . . . . . . . . . . . . .  	L NEAR	07F2	CODE
+SAVFIR . . . . . . . . . . . . .  	L NEAR	04E0	CODE
+SECCLUSPOS . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+SECCNT . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+SECPOS . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETCLUS  . . . . . . . . . . . .  	L NEAR	0648	CODE
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SETFCB . . . . . . . . . . . . .  	L NEAR	0607	CODE	Global
+SETFCBC  . . . . . . . . . . . .  	L NEAR	01CA	CODE
+SETFCBJ2 . . . . . . . . . . . .  	L NEAR	053F	CODE
+SETGRW . . . . . . . . . . . . .  	L NEAR	070C	CODE
+SETUP  . . . . . . . . . . . . .  	N PROC	03ED	CODE	Global	Length = 00DC
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+SKIPERR  . . . . . . . . . . . .  	L NEAR	0542	CODE
+SKPCLLP  . . . . . . . . . . . .  	L NEAR	0344	CODE
+SMALREC  . . . . . . . . . . . .  	L NEAR	042D	CODE
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Symbols-13
+                                                             
+
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+STORE  . . . . . . . . . . . . .  	N PROC	0207	CODE	Global	Length = 00F5
+SWAPBACK . . . . . . . . . . . .  	N PROC	0000	CODE	Global	Length = 0050
+SWAPCON  . . . . . . . . . . . .  	N PROC	0050	CODE	Global	Length = 0080
+SWAPRET  . . . . . . . . . . . .  	L NEAR	004B	CODE
+
+TESTRAW  . . . . . . . . . . . .  	L NEAR	0122	CODE
+TESTTAIL . . . . . . . . . . . .  	L NEAR	0706	CODE
+THISDPB  . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+THISDRV  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+THISFCB  . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+TRANBUF  . . . . . . . . . . . .  	L NEAR	019A	CODE
+TRANS  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+UPDATE . . . . . . . . . . . . .  	L NEAR	081B	CODE
+UPDATE_SIZE  . . . . . . . . . .  	L NEAR	07EA	CODE
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+USER_SP  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+USER_SS  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+
+VALSEC . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+VER  . . . . . . . . . . . . . .  	Text  		
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRCONLP  . . . . . . . . . . . .  	L NEAR	0227	CODE
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITECON . . . . . . . . . . . .  	L NEAR	021D	CODE
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+WRTCOOKDONE  . . . . . . . . . .  	L NEAR	02F2	CODE
+WRTDEV . . . . . . . . . . . . .  	L NEAR	0273	CODE
+WRTEOF . . . . . . . . . . . . .  	L NEAR	07F9	CODE
+WRTEOFJ  . . . . . . . . . . . .  	L NEAR	0703	CODE
+WRTERR . . . . . . . . . . . . .  	L NEAR	06ED	CODE
+WRTERRJ  . . . . . . . . . . . .  	L NEAR	07BE	CODE
+WRTLAST  . . . . . . . . . . . .  	L NEAR	07C1	CODE
+WRTLP  . . . . . . . . . . . . .  	L NEAR	0774	CODE
+WRTMID . . . . . . . . . . . . .  	L NEAR	0755	CODE
+WRTNUL . . . . . . . . . . . . .  	L NEAR	02F8	CODE
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:34:19
+DISK - Disk utility routines                                Symbols-14
+                                                             
+
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+??0000 . . . . . . . . . . . . .  	L NEAR	004F	CODE
+??0001 . . . . . . . . . . . . .  	L NEAR	00DA	CODE
+??0002 . . . . . . . . . . . . .  	L NEAR	01CD	CODE
+??0003 . . . . . . . . . . . . .  	L NEAR	021C	CODE
+??0004 . . . . . . . . . . . . .  	L NEAR	0272	CODE
+??0005 . . . . . . . . . . . . .  	L NEAR	030E	CODE
+??0006 . . . . . . . . . . . . .  	L NEAR	0314	CODE
+??0008 . . . . . . . . . . . . .  	L NEAR	0322	CODE
+??0009 . . . . . . . . . . . . .  	L NEAR	0388	CODE
+??000B . . . . . . . . . . . . .  	L NEAR	0397	CODE
+??000C . . . . . . . . . . . . .  	L NEAR	0399	CODE
+??000D . . . . . . . . . . . . .  	L NEAR	03AE	CODE
+??000F . . . . . . . . . . . . .  	L NEAR	03BD	CODE
+??0010 . . . . . . . . . . . . .  	L NEAR	03EC	CODE
+??0011 . . . . . . . . . . . . .  	L NEAR	0425	CODE
+??0012 . . . . . . . . . . . . .  	L NEAR	04BB	CODE
+??0013 . . . . . . . . . . . . .  	L NEAR	04C8	CODE
+??0014 . . . . . . . . . . . . .  	L NEAR	04F6	CODE
+??0016 . . . . . . . . . . . . .  	L NEAR	04FB	CODE
+??0018 . . . . . . . . . . . . .  	L NEAR	0508	CODE
+??0019 . . . . . . . . . . . . .  	L NEAR	0673	CODE
+??001A . . . . . . . . . . . . .  	L NEAR	06FF	CODE
+
+
+   2646 Source  Lines
+   3856 Total   Lines
+    735 Symbols
+
+  15100 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

@@ -1,0 +1,59 @@
+
+
+Warning: no stack segment
+
+ Start  Stop   Length Name                   Class
+ 00000H 007F7H 007F8H CODE                   
+ 007F8H 009BEH 001C7H CONST                  
+ 009BFH 00A03H 00045H DATA                   
+
+ Origin   Group
+ 0000:0   DG
+
+  Address         Publics by Name
+
+ 0000:08EB       ASKMSG
+ 0000:0995       BADDRV
+ 0000:08D3       BADVER
+ 0000:01E0       CONVERT
+ 0000:08E8       CRLF
+ 0000:092E       DIRMSG
+ 0000:0978       DRVERR
+ 0000:0926       DRVLET
+ 0000:082E       DRVLET1
+ 0000:0783       DSKERR
+ 0000:0768       DSKRD
+ 0000:074D       DSKWRT
+ 0000:09FB       FILSIZ
+ 0000:0705       INT_23
+ 0000:09B0       OPNERR
+ 0000:01D8       PCRLF
+ 0000:01DB       PRINT
+ 0000:094B       RECMSG_POST
+ 0000:095F       RECMSG_PRE
+ 0000:07DD       REPORT
+
+  Address         Publics by Value
+
+ 0000:01D8       PCRLF
+ 0000:01DB       PRINT
+ 0000:01E0       CONVERT
+ 0000:0705       INT_23
+ 0000:074D       DSKWRT
+ 0000:0768       DSKRD
+ 0000:0783       DSKERR
+ 0000:07DD       REPORT
+ 0000:082E       DRVLET1
+ 0000:08D3       BADVER
+ 0000:08E8       CRLF
+ 0000:08EB       ASKMSG
+ 0000:0926       DRVLET
+ 0000:092E       DIRMSG
+ 0000:094B       RECMSG_POST
+ 0000:095F       RECMSG_PRE
+ 0000:0978       DRVERR
+ 0000:0995       BADDRV
+ 0000:09B0       OPNERR
+ 0000:09FB       FILSIZ
+
+Program entry point at 0000:0100

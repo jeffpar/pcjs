@@ -131,6 +131,7 @@
                             {%- capture harddisk_server -%}{{ release['@server'] | default: "https://harddisks.pcjs.org" }}{%- endcapture -%}
                             {%- capture software_url -%}{{ software_path1 }}{{ software_path2 }}{{ software_path3 }}{{ software_path4 }}{{ software_path5 }}{% if version[0] != "" %}/{{ version[0] }}{% endif %}{%- endcapture -%}
                             {%- capture software_id -%}{{ software_url | remove_first: "/" | replace: "/", "-" }}{%- endcapture -%}
+                            {%- assign software_parms = "" -%}
                             {%- if site.developer %}
                                     <!-- machine_url: {{ machine_url }} -->
                                     <!-- hardware_url: {{ hardware_url }} -->
@@ -154,8 +155,7 @@
                               {%- capture software_parms -%}{%- if hardware_url contains '?' -%}&{%- else -%}?{%- endif -%}software={{ software_url }}/{{ autoMount }}{{ autoDrive }}{{ autoState }}{%- endcapture -%}
                             {%- elsif alternate_url != "" -%}
                               {%- assign hardware_url = alternate_url -%}
-                              {%- assign software_parms = "" -%}
-                            {%- else -%}
+                            {%- elsif release['@inactive'] != true -%}
                               {%- capture software_parms -%}/software{{ software_url }}/{%- endcapture -%}
                               {%- if release['@tape'] -%}
                                 {%- capture software_parms -%}{{ software_parms }}?autoStart=true&autoMount=%7Bname:%22{{ software_title | replace: " ","%20" }}%22,path:%22/software{{ software_url }}/{{ release['@tape'] }}%22%7D{%- endcapture -%}

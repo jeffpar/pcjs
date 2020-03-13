@@ -1,0 +1,1782 @@
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-1
+                                                            
+
+                                ; 
+                                ; Standard system calls for MSDOS 
+                                ; 
+                                 
+                                .list 
+                                 
+                                TITLE   STDCALL - system calls for MSDOS 
+                                NAME    STDCALL 
+                                 
+                             C  INCLUDE SYSCALL.ASM 
+                             C  ; 
+                             C  ; system call entry points MSDOS 
+                             C  ; 
+                             C   
+                             C  INCLUDE DOSSEG.ASM 
+                             C  ; 
+                             C  ; segment ordering for MSDOS 
+                             C  ; 
+                             C   
+ 0000                        C  CONSTANTS       SEGMENT BYTE PUBLIC 'CONST' 
+ 0000                        C  CONSTANTS       ENDS 
+                             C   
+ 0000                        C  DATA            SEGMENT BYTE PUBLIC 'DATA' 
+ 0000                        C  DATA            ENDS 
+                             C   
+ 0000                        C  CODE            SEGMENT BYTE PUBLIC 'CODE' 
+ 0000                        C  CODE            ENDS 
+                             C   
+ 0000                        C  LAST            SEGMENT BYTE PUBLIC 'LAST' 
+ 0000                        C  LAST            ENDS 
+                             C   
+                             C  DOSGROUP    GROUP   CODE,CONSTANTS,DATA,LAST 
+                             C   
+                             C   
+ 0000                        C  CODE    SEGMENT BYTE PUBLIC  'CODE' 
+                             C          ASSUME  SS:DOSGROUP,CS:DOSGROUP 
+                             C   
+                             C  .list 
+                             C   
+                             C   
+                             C          i_need  YEAR,WORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  DAY,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  WeekDay,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  TimeBuf,6 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  BCLOCK,DWORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-2
+DEVICE TABLE AND SRH DEFINITION                             
+
+ 0000                        C1  DATA ENDS
+                             C          i_need  DskErr,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  Attrib,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  Name1,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  Name2,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  Name3,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  DelAll,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  ThisDPB,DWORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  CurBuf,DWORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  LastEnt,WORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  ThisDrv,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  DirStart,WORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  DevPt,DWORD 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  Creating,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  VolID,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C          i_need  FoundDel,BYTE 
+ 0000                        C1  DATA SEGMENT BYTE PUBLIC 'DATA'
+ 0000                        C1  DATA ENDS
+                             C   
+                             C  SUBTTL DATE AND TIME - SYSTEM CALLS 42,43,44,45
+				; S/G DATE,TIME 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-3
+DATE AND TIME - SYSTEM CALLS 42,43,44,45; S/G DATE,TIME     
+
+                             C  PAGE 
+                             C          procedure   $GET_DATE,NEAR   ;System ca
+				ll 42 
+ 0000                        C1 $GET_DATE PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       None 
+                             C  ; Function: 
+                             C  ;       Return current date 
+                             C  ; Returns: 
+                             C  ;       Date in CX:DX 
+                             C   
+ 0000  16                    C          PUSH    SS 
+ 0001  1F                    C          POP     DS 
+                             C  ASSUME  DS:DOSGROUP 
+                             C          invoke  READTIME        ;Check for roll
+				over to next day 
+ 0002  E8 0000 E             C1  CALL READTIME
+ 0005  A1 0000 E             C          MOV     AX,[YEAR] 
+ 0008  8B 1E 0000 E          C          MOV     BX,WORD PTR [DAY] 
+                             C          invoke  get_user_stack           ;Get p
+				ointer to user registers 
+ 000C  E8 0000 E             C1  CALL get_user_stack
+                             C  ASSUME  DS:NOTHING 
+ 000F  89 5C 06              C          MOV     [SI.user_DX],BX  ;DH=month, DL=
+				day 
+ 0012  05 07BC               C          ADD     AX,1980         ;Put bias back 
+ 0015  89 44 04              C          MOV     [SI.user_CX],AX  ;CX=year 
+ 0018  36: A0 0000 E         C          MOV     AL,BYTE PTR [WEEKDAY] 
+ 001C  C3                    C          RET 
+                             C  $GET_DATE ENDP 
+                             C   
+                             C          procedure   $SET_DATE,NEAR   ;System ca
+				ll 43 
+ 001D                        C1 $SET_DATE PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       CX:DX valid date 
+                             C  ; Function: 
+                             C  ;       Set current date 
+                             C  ; Returns: 
+                             C  ;       AL = -1 date bad, = 0 OK 
+                             C   
+ 001D  B0 FF                 C          MOV     AL,-1           ;Be ready to fl
+				ag error 
+ 001F  81 E9 07BC            C          SUB     CX,1980         ;Fix bias in ye
+				ar 
+ 0023  72 17                 C          JC      RET24           ;Error if not b
+				ig enough 
+ 0025  83 F9 77              C          CMP     CX,119          ;Year must be l
+				ess than 2100 
+ 0028  77 12                 C          JA      RET24 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-4
+DATE AND TIME - SYSTEM CALLS 42,43,44,45; S/G DATE,TIME     
+
+ 002A  0A F6                 C          OR      DH,DH 
+ 002C  74 0E                 C          JZ      RET24 
+ 002E  0A D2                 C          OR      DL,DL 
+ 0030  74 0A                 C          JZ      RET24           ;Error if eithe
+				r month or day is 0 
+ 0032  80 FE 0C              C          CMP     DH,12           ;Check against 
+				max. month 
+ 0035  77 05                 C          JA      RET24 
+ 0037  16                    C          PUSH    SS 
+ 0038  1F                    C          POP     DS 
+                             C  ASSUME  DS:DOSGROUP 
+                             C          invoke  DODATE 
+ 0039  E8 0000 E             C1  CALL DODATE
+ 003C  C3                    C  RET24:  RET 
+                             C  $SET_DATE ENDP 
+                             C   
+                             C          procedure   $GET_TIME,NEAR   ;System ca
+				ll 44 
+ 003D                        C1 $GET_TIME PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       None 
+                             C  ; Function: 
+                             C  ;       Get current time 
+                             C  ; Returns: 
+                             C  ;       Time in CX:DX 
+                             C   
+ 003D  16                    C          PUSH    SS 
+ 003E  1F                    C          POP     DS 
+                             C  ASSUME  DS:DOSGROUP 
+                             C          invoke  READTIME 
+ 003F  E8 0000 E             C1  CALL READTIME
+                             C          invoke  get_user_stack           ;Get p
+				ointer to user registers 
+ 0042  E8 0000 E             C1  CALL get_user_stack
+ 0045  89 54 06              C          MOV     [SI.user_DX],DX 
+ 0048  89 4C 04              C          MOV     [SI.user_CX],CX 
+ 004B  32 C0                 C          XOR     AL,AL 
+ 004D  C3                    C  RET26:  RET 
+                             C  $GET_TIME ENDP 
+                             C   
+                             C          procedure   $SET_TIME,NEAR   ;System ca
+				ll 45 
+ 004E                        C1 $SET_TIME PROC NEAR
+                             C  ;Time is in CX:DX in hours, minutes, seconds, 1
+				/100 sec. 
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       CX:DX = Time 
+                             C  ; Function: 
+                             C  ;       Set time 
+                             C  ; Returns: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-5
+DATE AND TIME - SYSTEM CALLS 42,43,44,45; S/G DATE,TIME     
+
+                             C  ;       AL = -1 time bad, = 0 OK 
+                             C   
+ 004E  B0 FF                 C          MOV     AL,-1           ;Flag in case o
+				f error 
+ 0050  80 FD 18              C          CMP     CH,24           ;Check hours 
+ 0053  73 F8                 C          JAE     RET26 
+ 0055  80 F9 3C              C          CMP     CL,60           ;Check minutes 
+ 0058  73 F3                 C          JAE     RET26 
+ 005A  80 FE 3C              C          CMP     DH,60           ;Check seconds 
+ 005D  73 EE                 C          JAE     RET26 
+ 005F  80 FA 64              C          CMP     DL,100          ;Check 1/100's 
+ 0062  73 E9                 C          JAE     RET26 
+ 0064  51                    C          PUSH    CX 
+ 0065  52                    C          PUSH    DX 
+ 0066  16                    C          PUSH    SS 
+ 0067  1F                    C          POP     DS 
+                             C  ASSUME  DS:DOSGROUP 
+ 0068  BB 0000 E             C          MOV     BX,OFFSET DOSGROUP:TIMEBUF 
+ 006B  B9 0006               C          MOV     CX,6 
+ 006E  33 D2                 C          XOR     DX,DX 
+ 0070  8B C2                 C          MOV     AX,DX 
+ 0072  53                    C          PUSH    BX 
+                             C          invoke  SETREAD 
+ 0073  E8 0000 E             C1  CALL SETREAD
+                             C  ASSUME  ES:DOSGROUP 
+ 0076  1E                    C          PUSH    DS 
+ 0077  C5 36 0000 E          C          LDS     SI,[BCLOCK] 
+                             C  ASSUME  DS:NOTHING 
+                             C          invoke  DEVIOCALL2      ;Get correct da
+				y count 
+ 007B  E8 0000 E             C1  CALL DEVIOCALL2
+ 007E  1F                    C          POP     DS 
+                             C  ASSUME  DS:DOSGROUP 
+ 007F  5B                    C          POP     BX 
+                             C          invoke  SETWRITE 
+ 0080  E8 0000 E             C1  CALL SETWRITE
+ 0083  8F 06 0004 E          C          POP     WORD PTR [TIMEBUF+4] 
+ 0087  8F 06 0002 E          C          POP     WORD PTR [TIMEBUF+2] 
+ 008B  C5 36 0000 E          C          LDS     SI,[BCLOCK] 
+                             C  ASSUME  DS:NOTHING 
+                             C          invoke  DEVIOCALL2      ;Set the time 
+ 008F  E8 0000 E             C1  CALL DEVIOCALL2
+ 0092  32 C0                 C          XOR     AL,AL 
+ 0094  C3                    C          RET 
+                             C  $SET_TIME ENDP 
+                             C   
+                             C  SUBTTL DISK R/W ROUTINES 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-6
+DISK R/W ROUTINES                                           
+
+                             C  PAGE 
+                             C          procedure   $FCB_SEQ_READ,NEAR   ; Syst
+				em call 20 
+ 0095                        C1 $FCB_SEQ_READ PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       DS:DX Points to openned FCB 
+                             C  ; Function: 
+                             C  ;       Read next record from file to disk tran
+				sfer address 
+                             C  ; Returns: 
+                             C  ;       AL = 1 EOF record is empty 
+                             C  ;       AL = 3 EOF record is partial zero fille
+				d 
+                             C  ;       AL = 2 No room at disk transfer address
+				 
+                             C  ;       AL = 0 All OK 
+                             C   
+                             C          invoke  GETREC 
+ 0095  E8 0000 E             C1  CALL GETREC
+                             C          invoke  LOAD 
+ 0098  E8 0000 E             C1  CALL LOAD
+ 009B  EB 06                 C          JMP     SHORT FINSEQ 
+                             C   
+                             C      entry   $FCB_SEQ_WRITE              ; Syste
+				m call 21 
+ 009D                        C1 $FCB_SEQ_WRITE:
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       DS:DX Points to openned FCB 
+                             C  ; Function: 
+                             C  ;       Write next record to file from disk tra
+				nsfer address 
+                             C  ; Returns: 
+                             C  ;       AL = 1 Disk full 
+                             C  ;       AL = 2 No room in disk transfer segment
+				 
+                             C  ;       AL = 0 All OK 
+                             C   
+                             C          invoke  GETREC 
+ 009D  E8 0000 E             C1  CALL GETREC
+                             C          invoke  STORE 
+ 00A0  E8 0000 E             C1  CALL STORE
+ 00A3                        C  FINSEQ: 
+ 00A3  E3 44                 C          JCXZ    SETNREX 
+ 00A5  05 0001               C          ADD     AX,1 
+ 00A8  83 D2 00              C          ADC     DX,0 
+ 00AB  EB 3C                 C          JMP     SHORT SETNREX 
+                             C   
+                             C      entry   $FCB_RANDOM_READ                ; S
+				ystem call 33 
+ 00AD                        C1 $FCB_RANDOM_READ:
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-7
+DISK R/W ROUTINES                                           
+
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       DS:DX Points to openned FCB 
+                             C  ; Function: 
+                             C  ;       Read record addressed by random record 
+				field from file to 
+                             C  ;         disk transfer address 
+                             C  ; Returns: 
+                             C  ;       AL = 1 EOF record is empty 
+                             C  ;       AL = 3 EOF record is partial zero fille
+				d 
+                             C  ;       AL = 2 No room at disk transfer address
+				 
+                             C  ;       AL = 0 All OK 
+                             C   
+                             C          invoke  GETRRPOS1 
+ 00AD  E8 0000 E             C1  CALL GETRRPOS1
+                             C          invoke  LOAD 
+ 00B0  E8 0000 E             C1  CALL LOAD
+ 00B3  EB 24                 C          JMP     SHORT FINRND 
+                             C   
+                             C      entry   $FCB_RANDOM_WRITE               ; S
+				ystem call 34 
+ 00B5                        C1 $FCB_RANDOM_WRITE:
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       DS:DX Points to openned FCB 
+                             C  ; Function: 
+                             C  ;       Write record addressed by random record
+				 field to file from 
+                             C  ;         disk transfer address 
+                             C  ; Returns: 
+                             C  ;       AL = 1 Disk full 
+                             C  ;       AL = 2 No room in disk transfer segment
+				 
+                             C  ;       AL = 0 All OK 
+                             C   
+                             C          invoke  GETRRPOS1 
+ 00B5  E8 0000 E             C1  CALL GETRRPOS1
+                             C          invoke  STORE 
+ 00B8  E8 0000 E             C1  CALL STORE
+ 00BB  EB 1C                 C          JMP     SHORT FINRND 
+                             C   
+                             C      entry   $FCB_RANDOM_READ_BLOCK          ; S
+				ystem call 39 
+ 00BD                        C1 $FCB_RANDOM_READ_BLOCK:
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       DS:DX Points to openned FCB 
+                             C  ;       CX = Record count 
+                             C  ; Function: 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-8
+DISK R/W ROUTINES                                           
+
+                             C  ;       Read CX records starting at random reco
+				rd field from file 
+                             C  ;         to disk transfer address 
+                             C  ; Returns: 
+                             C  ;       AL = 1 EOF record is empty 
+                             C  ;       AL = 3 EOF record is partial zero fille
+				d 
+                             C  ;       AL = 2 No room at disk transfer address
+				 
+                             C  ;       AL = 0 All OK 
+                             C  ;       CX = Actual number of records read 
+                             C   
+                             C          invoke  GETRRPOS 
+ 00BD  E8 0000 E             C1  CALL GETRRPOS
+                             C          invoke  LOAD 
+ 00C0  E8 0000 E             C1  CALL LOAD
+ 00C3  EB 06                 C          JMP     SHORT FINBLK 
+                             C   
+                             C      entry   $FCB_RANDOM_WRITE_BLOCK         ; S
+				ystem call 40 
+ 00C5                        C1 $FCB_RANDOM_WRITE_BLOCK:
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       DS:DX Points to openned FCB 
+                             C  ;       CX = Record count 
+                             C  ; Function: 
+                             C  ;       Write CX records starting at random rec
+				ord field to file 
+                             C  ;         from disk transfer address 
+                             C  ;       If CX = 0 File is set to length determi
+				ned from random record field 
+                             C  ; Returns: 
+                             C  ;       AL = 1 Disk full 
+                             C  ;       AL = 2 No room in disk transfer segment
+				 
+                             C  ;       AL = 0 All OK 
+                             C  ;       CX = Actual number of records written 
+                             C   
+                             C          invoke  GETRRPOS 
+ 00C5  E8 0000 E             C1  CALL GETRRPOS
+                             C          invoke  STORE 
+ 00C8  E8 0000 E             C1  CALL STORE
+ 00CB                        C  FINBLK: 
+                             C          invoke  get_user_stack 
+ 00CB  E8 0000 E             C1  CALL get_user_stack
+ 00CE  89 4C 04              C          MOV     [SI.user_CX],CX 
+                             C          entry   FINNOSAV 
+ 00D1                        C1 FINNOSAV:
+ 00D1  E3 06                 C          JCXZ    FINRND 
+ 00D3  05 0001               C          ADD     AX,1 
+ 00D6  83 D2 00              C          ADC     DX,0 
+ 00D9                        C  FINRND: 
+ 00D9  26: 89 45 21          C          MOV     WORD PTR ES:[DI.fcb_RR],AX 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-9
+DISK R/W ROUTINES                                           
+
+ 00DD  26: 88 55 23          C          MOV     ES:[DI.fcb_RR+2],DL 
+ 00E1  0A F6                 C          OR      DH,DH 
+ 00E3  74 04                 C          JZ      SETNREX 
+ 00E5  26: 88 75 24          C          MOV     ES:[DI.fcb_RR+3],DH ; Save 4 by
+				te of RECPOS only if significant 
+ 00E9                        C  SETNREX: 
+ 00E9  8B C8                 C          MOV     CX,AX 
+ 00EB  24 7F                 C          AND     AL,7FH 
+ 00ED  26: 88 45 20          C          MOV     ES:[DI.fcb_NR],AL 
+ 00F1  80 E1 80              C          AND     CL,80H 
+ 00F4  D1 E1                 C          SHL     CX,1 
+ 00F6  D1 D2                 C          RCL     DX,1 
+ 00F8  8A C5                 C          MOV     AL,CH 
+ 00FA  8A E2                 C          MOV     AH,DL 
+ 00FC  26: 89 45 0C          C          MOV     ES:[DI.fcb_EXTENT],AX 
+ 0100  36: A0 0000 E         C          MOV     AL,BYTE PTR [DSKERR] 
+ 0104                        C  RET4: 
+ 0104  C3                    C          RET 
+                             C  $FCB_SEQ_READ   ENDP 
+                             C   
+                             C  SUBTTL $FCB_DELETE -- SYSTEM CALL 19 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-10
+$FCB_DELETE -- SYSTEM CALL 19                               
+
+                             C  PAGE 
+                             C          procedure   $FCB_DELETE,NEAR   ; System
+				 call 19 
+ 0105                        C1 $FCB_DELETE PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       DS:DX point to unopened FCB 
+                             C  ; Function: 
+                             C  ;       Delete all matching entries 
+                             C  ; Returns: 
+                             C  ;       AL = -1 if no entries matched, otherwis
+				e 0 
+                             C   
+                             C          invoke  MOVNAME 
+ 0105  E8 0000 E             C1  CALL MOVNAME
+                             C  ASSUME  ES:DOSGROUP 
+ 0108  B0 FF                 C          MOV     AL,-1 
+ 010A  36: A2 0000 E         C          MOV     BYTE PTR [FoundDel],AL 
+ 010E  72 F4                 C          JC      RET4 
+ 0110  36: A0 0000 E         C          MOV     AL,BYTE PTR [ATTRIB] 
+ 0114  24 1F                 C          AND     AL,attr_hidden+attr_system+attr
+				_directory+attr_volume_id+attr_read_only 
+                             C                                          ; Look 
+				only at hidden bits 
+ 0116  3C 1F                 C          CMP     AL,attr_hidden+attr_system+attr
+				_directory+attr_volume_id+attr_read_only 
+                             C                                          ; All m
+				ust be set 
+ 0118  75 12                 C          JNZ     NOTALL 
+ 011A  B9 000B               C          MOV     CX,11 
+ 011D  B0 3F                 C          MOV     AL,"?" 
+ 011F  BF 0000 E             C          MOV     DI,OFFSET DOSGROUP:NAME1 
+ 0122  F3/ AE                C          REPE    SCASB                   ; See i
+				f name is *.* 
+ 0124  75 06                 C          JNZ     NOTALL 
+ 0126  36: C6 06 0000 E 00   C          MOV     BYTE PTR [DELALL],0           ;
+				 DEL *.* - flag deleting all 
+ 012C                        C  NOTALL: 
+                             C          invoke  FINDNAME 
+ 012C  E8 0000 E             C1  CALL FINDNAME
+                             C  ASSUME  DS:DOSGROUP 
+ 012F  B0 FF                 C          MOV     AL,-1 
+ 0131  72 D1                 C          JC      RET4 
+ 0133  0A E4                 C          OR      AH,AH           ; Check if devi
+				ce name 
+ 0135  78 CD                 C          JS      RET4            ; Can't delete 
+				I/O devices 
+ 0137                        C  DELFILE: 
+ 0137  C4 2E 0000 E          C          LES     BP,[THISDPB] 
+ 013B  8A 26 0000 E          C          MOV     AH,BYTE PTR [DELALL] 
+ 013F  1E                    C          PUSH    DS 
+ 0140  C5 3E 0000 E          C          LDS     DI,[CURBUF] 
+                             C  ASSUME  DS:NOTHING 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-11
+$FCB_DELETE -- SYSTEM CALL 19                               
+
+ 0144  36: F6 06 0000 E 01   C          TEST    [Attrib],attr_read_only ; are w
+				e deleting RO files too? 
+ 014A  75 09                 C          JNZ     DoDelete            ; yes 
+ 014C  F6 47 0B 01           C          TEST    DS:[BX.dir_attr],attr_read_only
+				 
+ 0150  74 03                 C          JZ      DoDelete            ; not read 
+				only 
+ 0152  1F                    C          POP     DS 
+ 0153  EB 1C                 C          JMP     SHORT DelNxt 
+ 0155                        C  DoDelete: 
+ 0155  36: C6 06 0000 E 00   C          MOV     BYTE PTR [FoundDel],0 
+ 015B  C6 45 05 01           C          MOV     [DI.BUFDIRTY],1 
+ 015F  88 27                 C          MOV     BYTE PTR [BX],AH 
+ 0161  8B 1C                 C          MOV     BX,[SI] 
+ 0163  1F                    C          POP     DS 
+                             C  ASSUME  DS:DOSGROUP 
+ 0164  0B DB                 C          OR      BX,BX 
+ 0166  74 09                 C          JZ      DELNXT 
+ 0168  26: 3B 5E 0D          C          CMP     BX,ES:[BP.dpb_max_cluster] 
+ 016C  77 03                 C          JA      DELNXT 
+                             C          invoke  RELEASE 
+ 016E  E8 0000 E             C1  CALL RELEASE
+ 0171                        C  DELNXT: 
+                             C          invoke  GETENTRY                       
+				 ; Registers need to be reset 
+ 0171  E8 0000 E             C1  CALL GETENTRY
+                             C          invoke  NEXTENT 
+ 0174  E8 0000 E             C1  CALL NEXTENT
+ 0177  73 BE                 C          JNC     DELFILE 
+ 0179  E8 02D6 R             C          CALL    FLUSHRET1 
+ 017C  A0 0000 E             C          MOV     AL,BYTE PTR [FoundDel] 
+ 017F  C3                    C          RET 
+                             C   
+                             C  $FCB_DELETE  ENDP 
+                             C   
+                             C  SUBTTL $FCB_RENAME -- SYSTEM CALL 23; RENAME FI
+				LES 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-12
+$FCB_RENAME -- SYSTEM CALL 23; RENAME FILES                 
+
+                             C  PAGE 
+ 0180  E9 020C R             C  ERRETJ: JMP     ERRET 
+                             C   
+                             C          procedure   $FCB_RENAME,NEAR   ; System
+				 call 23 
+ 0183                        C1 $FCB_RENAME PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       DS:DX point to a modified FCB (DS:DX+11
+				H points to destination 
+                             C  ;        name) 
+                             C  ; Function: 
+                             C  ;       Rename all matching entries to indicate
+				d name 
+                             C  ; Returns: 
+                             C  ;       AL = -1 if no entries matched, otherwis
+				e 0 
+                             C   
+                             C          invoke  MOVNAME 
+ 0183  E8 0000 E             C1  CALL MOVNAME
+                             C  ASSUME  ES:DOSGROUP 
+ 0186  72 F8                 C          JC      ERRETJ 
+ 0188  83 C6 05              C          ADD     SI,5 
+ 018B  BF 0000 E             C          MOV     DI,OFFSET DOSGROUP:NAME2 
+                             C          invoke  LODNAME 
+ 018E  E8 0000 E             C1  CALL LODNAME
+ 0191  72 ED                 C          JC      ERRETJ          ; Report error 
+				if second name invalid 
+                             C          invoke  FINDNAME 
+ 0193  E8 0000 E             C1  CALL FINDNAME
+                             C  ASSUME  DS:DOSGROUP 
+ 0196  72 E8                 C          JC      ERRETJ 
+ 0198  0A E4                 C          OR      AH,AH           ; Check if I/O 
+				device name 
+ 019A  78 E4                 C          JS      ERRETJ          ; If so, can't 
+				rename it 
+ 019C  BE 0000 E             C          MOV     SI,OFFSET DOSGROUP:NAME1 
+ 019F  BF 0000 E             C          MOV     DI,OFFSET DOSGROUP:NAME3 
+ 01A2  B9 000D               C          MOV     CX,13 
+ 01A5  F3/ A4                C          REP     MOVSB           ; Copy name to 
+				search for --include attribute byte 
+ 01A7                        C  RENFIL: 
+ 01A7  BF 0000 E             C          MOV     DI,OFFSET DOSGROUP:NAME1 
+ 01AA  BE 0000 E             C          MOV     SI,OFFSET DOSGROUP:NAME2 
+ 01AD  B9 000B               C          MOV     CX,11 
+ 01B0                        C  NEWNAM: 
+ 01B0  AC                    C          LODSB 
+ 01B1  3C 3F                 C          CMP     AL,"?" 
+ 01B3  75 08                 C          JNZ     NOCHG 
+ 01B5  1E                    C          PUSH    DS 
+ 01B6  8E 1E 0002 E          C          MOV     DS,WORD PTR [CURBUF+2] 
+ 01BA  8A 07                 C          MOV     AL,[BX] 
+ 01BC  1F                    C          POP     DS 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-13
+$FCB_RENAME -- SYSTEM CALL 23; RENAME FILES                 
+
+ 01BD                        C  NOCHG: 
+ 01BD  AA                    C          STOSB 
+ 01BE  43                    C          INC     BX 
+ 01BF  E2 EF                 C          LOOP    NEWNAM 
+ 01C1  47                    C          INC     DI 
+ 01C2  C6 05 16              C          MOV     BYTE PTR [DI],attr_all  ;Sets A
+				TTRIB 
+                             C                                  ; Stop duplicat
+				es with any attributes 
+                             C          invoke  DEVNAME         ; Check if givi
+				ng it a device name 
+ 01C5  E8 0000 E             C1  CALL DEVNAME
+ 01C8  73 3F                 C          JNC     RENERR 
+ 01CA  33 C0                 C          XOR     AX,AX 
+ 01CC  FF 36 0000 E          C          PUSH    [LASTENT] 
+                             C          invoke  FINDENTRY       ; See if new na
+				me already exists 
+ 01D0  E8 0000 E             C1  CALL FINDENTRY
+ 01D3  58                    C          POP     AX 
+ 01D4  73 33                 C          JNC     RENERR                  ; Error
+				 if found 
+ 01D6  C4 2E 0000 E          C          LES     BP,[THISDPB] 
+                             C          invoke  GETENT                  ; Re-re
+				ad matching entry 
+ 01DA  E8 0000 E             C1  CALL GETENT
+ 01DD  8B FB                 C          MOV     DI,BX           ; Leave BX,DX u
+				ntil call to NEXTENT 
+ 01DF  8E 06 0002 E          C          MOV     ES,WORD PTR [CURBUF+2] 
+ 01E3  BE 0000 E             C          MOV     SI,OFFSET DOSGROUP:NAME1 
+ 01E6  B9 000B               C          MOV     CX,11 
+ 01E9  F3/ A4                C          REP     MOVSB                   ; Repla
+				ce old name with new one 
+ 01EB  8B 3E 0000 E          C          MOV     DI,WORD PTR [CURBUF] 
+ 01EF  26: C6 45 05 01       C          MOV     ES:[DI.BUFDIRTY],1      ; Direc
+				tory changed 
+ 01F4  16                    C          PUSH    SS 
+ 01F5  07                    C          POP     ES 
+ 01F6  BE 0000 E             C          MOV     SI,OFFSET DOSGROUP:NAME3 
+ 01F9  BF 0000 E             C          MOV     DI,OFFSET DOSGROUP:NAME1 
+ 01FC  B9 000D               C          MOV     CX,13                   ; Inclu
+				de attribute byte 
+ 01FF  F3/ A4                C          REP     MOVSB                   ; Copy 
+				name back into search buffer 
+                             C          invoke  NEXTENT 
+ 0201  E8 0000 E             C1  CALL NEXTENT
+ 0204  73 A1                 C          JNC     RENFIL 
+ 0206  E9 02D6 R             C          JMP     FLUSHRET1 
+                             C   
+ 0209                        C  RENERR: 
+ 0209  E8 02D6 R             C          CALL    FLUSHRET1 
+ 020C                        C  ERRET: 
+ 020C  B0 FF                 C          MOV     AL,-1 
+ 020E  C3                    C          RET 
+                             C  $FCB_RENAME  ENDP 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-14
+$FCB_RENAME -- SYSTEM CALL 23; RENAME FILES                 
+
+                             C   
+                             C  SUBTTL $FCB_OPEN -- SYSTEM CALL 15; OPEN A FILE
+				 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-15
+$FCB_OPEN -- SYSTEM CALL 15; OPEN A FILE                    
+
+                             C  PAGE 
+                             C          procedure   $FCB_OPEN,NEAR   ; System c
+				all 15 
+ 020F                        C1 $FCB_OPEN PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       DS:DX point to an unopened FCB 
+                             C  ; Function: 
+                             C  ;       Open indicated file and fill in FCB 
+                             C  ; Returns: 
+                             C  ;       AL = -1 if no entries matched, otherwis
+				e 0 
+                             C  ; FOR INTERNAL USE 
+                             C  ;       [CURBUF+2]:SI and [CURBUF+2]:BX Preserv
+				ed 
+                             C   
+                             C          invoke  GETFILE 
+ 020F  E8 0000 E             C1  CALL GETFILE
+                             C  ASSUME  DS:DOSGROUP,ES:NOTHING 
+                             C   
+                             C      entry   DOOPEN 
+ 0212                        C1 DOOPEN:
+                             C   
+                             C  ; Enter here to perform $FCB_OPEN on file alrea
+				dy found 
+                             C  ; in directory. AH=device ID number, DS=CS, BX 
+				points to directory 
+                             C  ; entry in [CURBUF], SI points to First Cluster
+				 field, and 
+                             C  ; ES:DI point to the FCB to be opened. This ent
+				ry point 
+                             C  ; is used by $FCB_CREATE. 
+ 0212  72 F8                 C          JC      ERRET 
+ 0214  56                    C          PUSH    SI 
+ 0215  50                    C          PUSH    AX              ; Save I/O driv
+				er number 
+ 0216  32 C0                 C          XOR     AL,AL 
+ 0218  0A E4                 C          OR      AH,AH 
+ 021A  78 08                 C          JS      OPENDEV 
+ 021C  A0 0000 E             C          MOV     AL,[THISDRV] 
+ 021F  8E 1E 0002 E          C          MOV     DS,WORD PTR [CURBUF+2] 
+                             C  ASSUME  DS:NOTHING 
+ 0223  40                    C          INC     AX 
+ 0224                        C  OPENDEV: 
+ 0224  AA                    C          STOSB 
+ 0225  33 C0                 C          XOR     AX,AX 
+                             C  IF ZEROEXT 
+ 0227  83 C7 0B              C          ADD     DI,11 
+ 022A  AB                    C          STOSW                   ; Zero low byte
+				 of extent field if ZERPEXT only 
+                             C  ENDIF 
+ 022B  B0 80                 C          MOV     AL,128          ; Default recor
+				d size 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-16
+$FCB_OPEN -- SYSTEM CALL 15; OPEN A FILE                    
+
+ 022D  AB                    C          STOSW                   ; Set record si
+				ze 
+ 022E  AD                    C          LODSW                   ; Get starting 
+				cluster 
+ 022F  8B D0                 C          MOV     DX,AX           ; Save it for t
+				he moment 
+ 0231  A5                    C          MOVSW                   ; Transfer size
+				 to FCB 
+ 0232  A5                    C          MOVSW 
+ 0233  8B 44 F8              C          MOV     AX,[SI-8]       ; Get date 
+ 0236  AB                    C          STOSW                   ; Save date in 
+				FCB 
+ 0237  8B 44 F6              C          MOV     AX,[SI-10]      ; Get time 
+ 023A  AB                    C          STOSW                   ; Save it in FC
+				B 
+ 023B  58                    C          POP     AX              ; Restore I/O d
+				river number 
+ 023C  5E                    C          POP     SI 
+ 023D  8A C4                 C          MOV     AL,AH 
+ 023F  0C 40                 C          OR      AL,40H          ; Not dirty 
+ 0241  AA                    C          STOSB 
+ 0242  78 27                 C          JS      SAVDEVPT        ; If device, go
+				 save pointer to it 
+ 0244  8B C2                 C          MOV     AX,DX           ; Restore start
+				ing cluster 
+ 0246  AB                    C          STOSW                   ; first cluster
+				 
+ 0247  50                    C          PUSH    AX                      ; save 
+				cluster 
+ 0248  33 C0                 C          XOR     AX,AX 
+ 024A  AB                    C          STOSW                           ; clus 
+				pos 
+ 024B  58                    C          POP     AX                      ; last 
+				cluster 
+ 024C  AA                    C          STOSB 
+ 024D  8A C4                 C          MOV     AL,AH 
+ 024F  36: 8A 26 0000 E      C          MOV     AH,BYTE PTR [DIRSTART] 
+ 0254  51                    C          PUSH    CX 
+ 0255  B1 04                 C          MOV     CL,4 
+ 0257  D2 E4                 C          SHL     AH,CL 
+ 0259  0A C4                 C          OR      AL,AH 
+ 025B  AA                    C          STOSB 
+ 025C  36: A1 0000 E         C          MOV     AX,[DIRSTART] 
+ 0260  B1 04                 C          MOV     CL,4 
+ 0262  D3 E0                 C          SHL     AX,CL 
+ 0264  59                    C          POP     CX 
+ 0265  8A C4                 C          MOV     AL,AH 
+ 0267  AA                    C          STOSB 
+ 0268                        C  OPEN_RET: 
+ 0268  33 C0                 C          XOR     AX,AX 
+ 026A  C3                    C          RET 
+                             C   
+ 026B                        C  SAVDEVPT: 
+                             C  ASSUME  DS:DOSGROUP 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-17
+$FCB_OPEN -- SYSTEM CALL 15; OPEN A FILE                    
+
+ 026B  C5 06 0000 E          C          LDS     AX,[DEVPT] 
+                             C  ASSUME  DS:NOTHING 
+ 026F  AB                    C          STOSW 
+ 0270  26: 8C 1D             C          MOV     ES:[DI],DS 
+ 0273  EB F3                 C          JMP     SHORT OPEN_RET 
+                             C  $FCB_OPEN    ENDP 
+                             C   
+                             C  SUBTTL $FCB_CLOSE -- SYSTEM CALL 16; CLOSE FILE
+				 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-18
+$FCB_CLOSE -- SYSTEM CALL 16; CLOSE FILE                    
+
+                             C  PAGE 
+                             C          procedure   $FCB_CLOSE,NEAR   ; System 
+				call 16 
+ 0275                        C1 $FCB_CLOSE PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       DS:DX point to an opened FCB 
+                             C  ; Function: 
+                             C  ;       Close the indicated file 
+                             C  ; Returns: 
+                             C  ;       AL = -1 if disk has been changed, other
+				wise 0 
+                             C   
+ 0275  8B FA                 C          MOV     DI,DX 
+ 0277  80 3D FF              C          CMP     BYTE PTR [DI],-1        ; Check
+				 for extended FCB 
+ 027A  75 03                 C          JNZ     NORMFCB3 
+ 027C  83 C7 07              C          ADD     DI,7 
+ 027F                        C  NORMFCB3: 
+ 027F  F6 45 18 C0           C          TEST    [DI.fcb_DEVID],devid_file_clean
+				+devid_device 
+                             C                                          ; Allow
+				 only dirty files 
+ 0283  75 5C                 C          JNZ     OKRET1                  ; can't
+				 close I/O device or not written 
+                             C          invoke  MOVNAMENOSET 
+ 0285  E8 0000 E             C1  CALL MOVNAMENOSET
+ 0288  72 5A                 C          JC      BADCLOSE                ; Bad f
+				ile name 
+                             C          entry   FCB_CLOSE_INNER 
+ 028A                        C1 FCB_CLOSE_INNER:
+ 028A  52                    C          PUSH    DX 
+ 028B  1E                    C          PUSH    DS 
+ 028C  8B F2                 C          MOV     SI,DX 
+ 028E  8B 5C 1E              C          MOV     BX,[SI.fcb_LSTCLUS+1] 
+ 0291  B1 04                 C          MOV     CL,4 
+ 0293  D3 EB                 C          SHR     BX,CL 
+ 0295  53                    C          PUSH    BX 
+ 0296  16                    C          PUSH    SS 
+ 0297  1F                    C          POP     DS 
+                             C  ASSUME  DS:DOSGROUP 
+                             C          invoke  FATREAD 
+ 0298  E8 0000 E             C1  CALL FATREAD
+ 029B  5B                    C          POP     BX 
+                             C          invoke  SETDIRSRCH 
+ 029C  E8 0000 E             C1  CALL SETDIRSRCH
+                             C          invoke  FINDENTRY 
+ 029F  E8 0000 E             C1  CALL FINDENTRY
+ 02A2  07                    C          POP     ES 
+ 02A3  5F                    C          POP     DI 
+ 02A4  72 3E                 C          JC      BADCLOSE 
+ 02A6  C5 1E 0000 E          C          LDS     BX,[CURBUF] 
+                             C  ASSUME  DS:NOTHING 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-19
+$FCB_CLOSE -- SYSTEM CALL 16; CLOSE FILE                    
+
+                             C   
+                             C          ; note that SI points to dir_first... 
+                             C   
+ 02AA  80 4C F1 20           C          OR      BYTE PTR [SI-dir_first+dir_attr
+				],attr_archive 
+ 02AE  26: 8B 4D 19          C          MOV     CX,ES:[DI.fcb_FIRCLUS] 
+ 02B2  89 0C                 C          MOV     [SI-dir_first+dir_first],CX 
+ 02B4  26: 8B 55 10          C          MOV     DX,ES:WORD PTR [DI.fcb_FILSIZ] 
+ 02B8  89 54 02              C          MOV     [SI-dir_first+dir_size_l],DX 
+ 02BB  26: 8B 55 12          C          MOV     DX,ES:WORD PTR [DI.fcb_FILSIZ+2
+				] 
+ 02BF  89 54 04              C          MOV     [SI-dir_first+dir_size_h],DX 
+ 02C2  26: 8B 55 14          C          MOV     DX,ES:[DI.fcb_FDATE] 
+ 02C6  89 54 FE              C          MOV     [SI-dir_first+dir_date],DX 
+ 02C9  26: 8B 55 16          C          MOV     DX,ES:[DI.fcb_FTIME] 
+ 02CD  89 54 FC              C          MOV     [SI-dir_first+dir_time],DX 
+ 02D0  C6 47 05 01           C          MOV     [BX.BUFDIRTY],1 
+ 02D4  16                    C          PUSH    SS 
+ 02D5  1F                    C          POP     DS 
+                             C  ASSUME  DS:DOSGROUP 
+ 02D6                        C  FLUSHRET1: 
+ 02D6  C4 2E 0000 E          C          LES     BP,[THISDPB] 
+ 02DA  26: 8A 46 00          C          MOV     AL,ES:[BP.dpb_drive] 
+                             C          invoke  FLUSHBUF 
+ 02DE  E8 0000 E             C1  CALL FLUSHBUF
+ 02E1                        C  OKRET1: 
+ 02E1  32 C0                 C          XOR     AL,AL 
+ 02E3  C3                    C          RET 
+                             C   
+ 02E4                        C  BADCLOSE: 
+ 02E4  B0 FF                 C          MOV     AL,-1 
+ 02E6  C3                    C          RET 
+                             C  $FCB_CLOSE   ENDP 
+                             C   
+                             C  SUBTTL $FCB_CREATE -- SYSTEM CALL 22; MAKE AND 
+				OPEN A NEW FILE 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-20
+$FCB_CREATE -- SYSTEM CALL 22; MAKE AND OPEN A NEW FILE     
+
+                             C  PAGE 
+                             C          procedure   $FCB_CREATE,NEAR   ; System
+				 call 22 
+ 02E7                        C1 $FCB_CREATE PROC NEAR
+                             C  ASSUME  DS:NOTHING,ES:NOTHING 
+                             C   
+                             C  ; Inputs: 
+                             C  ;       DS:DX point to an unopened FCB 
+                             C  ; Function: 
+                             C  ;       If file does not exist, create it and o
+				pen it 
+                             C  ;       If file exists, free up its contents an
+				d open the file 
+                             C  ; Returns: 
+                             C  ;       AL = -1 if file cannot be created, othe
+				rwise 0 
+                             C   
+                             C          invoke  MOVNAME 
+ 02E7  E8 0000 E             C1  CALL MOVNAME
+                             C  ASSUME  ES:DOSGROUP 
+ 02EA  72 29                 C          JC      ERRET3 
+ 02EC  BF 0000 E             C          MOV     DI,OFFSET DOSGROUP:NAME1 
+ 02EF  B9 000B               C          MOV     CX,11 
+ 02F2  B0 3F                 C          MOV     AL,"?" 
+ 02F4  F2/ AE                C          REPNE   SCASB 
+ 02F6  74 1D                 C          JZ      ERRET3 
+ 02F8  36: C6 06 0000 E FF   C          MOV     BYTE PTR [CREATING],-1 
+ 02FE  52                    C          PUSH    DX 
+ 02FF  1E                    C          PUSH    DS 
+                             C          invoke  FINDNAME 
+ 0300  E8 0000 E             C1  CALL FINDNAME
+                             C  ASSUME  DS:DOSGROUP 
+ 0303                        C  NWENTY: 
+ 0303  C4 2E 0000 E          C          LES     BP,[THISDPB] 
+                             C  ASSUME  ES:NOTHING 
+ 0307  73 16                 C          JNC     EXISTENT 
+                             C          invoke  BUILDDIR 
+ 0309  E8 0000 E             C1  CALL BUILDDIR
+ 030C  72 05                 C          JC      ERRPOP 
+                             C          invoke  GETENT          ; Point at that
+				 free entry 
+ 030E  E8 0000 E             C1  CALL GETENT
+ 0311  EB 39                 C          JMP     SHORT FREESPOT 
+ 0313                        C  ERRPOP: 
+ 0313  1F                    C          POP     DS 
+ 0314  5A                    C          POP     DX 
+                             C  ASSUME  DS:NOTHING 
+ 0315                        C  ERRET3: 
+ 0315  EB CD                 C          JMP     SHORT BADCLOSE 
+                             C   
+                             C          entry   NEWENTRY 
+ 0317                        C1 NEWENTRY:
+ 0317  5A                    C          POP     DX      ; Return address 
+ 0318  07                    C          POP     ES      ; ES 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-21
+$FCB_CREATE -- SYSTEM CALL 22; MAKE AND OPEN A NEW FILE     
+
+ 0319  59                    C          POP     CX      ; DI 
+ 031A  52                    C          PUSH    DX 
+ 031B  51                    C          PUSH    CX 
+ 031C  06                    C          PUSH    ES 
+ 031D  EB E4                 C          JMP     NWENTY 
+                             C   
+ 031F                        C  EXISTENT: 
+                             C  ASSUME  DS:DOSGROUP 
+ 031F  75 F2                 C          JNZ     ERRPOP          ; Error if attr
+				ibutes don't match 
+ 0321  0A E4                 C          OR      AH,AH           ; Check if file
+				 is I/O device 
+ 0323  78 76                 C          JS      OPENJMP         ; If so, no act
+				ion 
+ 0325  1E                    C          PUSH    DS 
+ 0326  C5 3E 0000 E          C          LDS     DI,[CURBUF] 
+                             C  ASSUME  DS:NOTHING 
+ 032A  8B 0C                 C          MOV     CX,[SI]         ; Get pointer t
+				o clusters 
+ 032C  8B 75 08              C          MOV     SI,[DI.BUFSECNO] 
+ 032F  1F                    C          POP     DS 
+                             C  ASSUME  DS:DOSGROUP 
+ 0330  E3 1A                 C          JCXZ    FREESPOT 
+ 0332  26: 3B 4E 0D          C          CMP     CX,ES:[BP.dpb_max_cluster] 
+ 0336  77 14                 C          JA      FREESPOT 
+ 0338  2B DF                 C          SUB     BX,DI 
+ 033A  53                    C          PUSH    BX 
+ 033B  56                    C          PUSH    SI              ; Save sector n
+				umber 
+ 033C  8B D9                 C          MOV     BX,CX 
+                             C          invoke  RELEASE         ; Free any data
+				 already allocated 
+ 033E  E8 0000 E             C1  CALL RELEASE
+ 0341  5A                    C          POP     DX 
+ 0342  32 C0                 C          XOR     AL,AL 
+                             C          invoke  GETBUFFR 
+ 0344  E8 0000 E             C1  CALL GETBUFFR
+ 0347  5B                    C          POP     BX 
+ 0348  03 1E 0000 E          C          ADD     BX,WORD PTR [CURBUF] 
+ 034C                        C  FREESPOT: 
+ 034C  F6 06 0000 E 08       C          TEST    BYTE PTR [ATTRIB],attr_volume_i
+				d 
+ 0351  74 07                 C          JZ      NOTVOLID 
+ 0353  80 3E 0000 E 00       C          CMP     BYTE PTR [VOLID],0 
+ 0358  75 B9                 C          JNZ     ERRPOP          ; Can't create 
+				a second volume ID 
+ 035A                        C  NOTVOLID: 
+ 035A  8E 06 0002 E          C          MOV     ES,WORD PTR [CURBUF+2] 
+ 035E  8B FB                 C          MOV     DI,BX 
+ 0360  BE 0000 E             C          MOV     SI,OFFSET DOSGROUP:NAME1 
+ 0363  B9 0005               C          MOV     CX,5 
+ 0366  A4                    C          MOVSB 
+ 0367  F3/ A5                C          REP     MOVSW 
+ 0369  A0 0000 E             C          MOV     AL,[ATTRIB] 
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Page     1-22
+$FCB_CREATE -- SYSTEM CALL 22; MAKE AND OPEN A NEW FILE     
+
+ 036C  AA                    C          STOSB 
+ 036D  B1 05                 C          MOV     CL,5 
+ 036F  33 C0                 C          XOR     AX,AX 
+ 0371  F3/ AB                C          REP     STOSW 
+                             C          invoke  DATE16 
+ 0373  E8 0000 E             C1  CALL DATE16
+ 0376  92                    C          XCHG    AX,DX 
+ 0377  AB                    C          STOSW 
+ 0378  92                    C          XCHG    AX,DX 
+ 0379  AB                    C          STOSW 
+ 037A  33 C0                 C          XOR     AX,AX 
+ 037C  57                    C          PUSH    DI 
+ 037D  AB                    C          STOSW 
+ 037E  AB                    C          STOSW 
+ 037F  AB                    C          STOSW 
+ 0380  8B 36 0000 E          C          MOV     SI,WORD PTR [CURBUF] 
+ 0384  26: C6 44 05 01       C          MOV     ES:[SI.BUFDIRTY],1 
+ 0389  C4 2E 0000 E          C          LES     BP,[THISDPB] 
+ 038D  26: 8A 46 00          C          MOV     AL,ES:[BP.dpb_drive] 
+ 0391  50                    C          PUSH    AX 
+ 0392  53                    C          PUSH    BX 
+                             C          invoke  FLUSHBUF 
+ 0393  E8 0000 E             C1  CALL FLUSHBUF
+ 0396  5B                    C          POP     BX 
+ 0397  58                    C          POP     AX 
+ 0398  5E                    C          POP     SI 
+ 0399  8A E0                 C          MOV     AH,AL             ; Get I/O dri
+				ver number back 
+ 039B                        C  OPENJMP: 
+ 039B  F8                    C          CLC                     ; Clear carry s
+				o OPEN won't fail 
+ 039C  07                    C          POP     ES 
+ 039D  5F                    C          POP     DI 
+                             C  ASSUME  ES:NOTHING 
+ 039E  E9 0212 R             C          JMP     DOOPEN 
+                             C  $FCB_CREATE  ENDP 
+                             C   
+                             C  do_ext 
+                             C   
+ 03A1                        C  CODE    ENDS 
+                             C      END 
+
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Symbols-1
+                                                             
+
+Macros:
+
+		N a m e			Lines
+
+BREAK  . . . . . . . . . . . . .  	   2
+CONDRET  . . . . . . . . . . . .  	  19
+CONTEXT  . . . . . . . . . . . .  	   3
+DO_EXT . . . . . . . . . . . . .  	   0
+ENTRY  . . . . . . . . . . . . .  	   2
+ERROR  . . . . . . . . . . . . .  	   4
+INVOKE . . . . . . . . . . . . .  	   8
+I_AM . . . . . . . . . . . . . .  	  14
+I_NEED . . . . . . . . . . . . .  	  11
+JUMP . . . . . . . . . . . . . .  	  17
+LONG_ADDR  . . . . . . . . . . .  	   7
+MAKELAB  . . . . . . . . . . . .  	   4
+PROCEDURE  . . . . . . . . . . .  	   2
+RETC . . . . . . . . . . . . . .  	   1
+RETNC  . . . . . . . . . . . . .  	   1
+RETNZ  . . . . . . . . . . . . .  	   1
+RETURN . . . . . . . . . . . . .  	   5
+RETZ . . . . . . . . . . . . . .  	   1
+SHORT_ADDR . . . . . . . . . . .  	  12
+TRANSFER . . . . . . . . . . . .  	   8
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+ARENA  . . . . . . . . . . . . .  	0005	0003
+  ARENA_SIGNATURE  . . . . . . .  	0000
+  ARENA_OWNER  . . . . . . . . .  	0001
+  ARENA_SIZE . . . . . . . . . .  	0003
+BPBLOCK  . . . . . . . . . . . .  	000D	0008
+  BPSECSZ  . . . . . . . . . . .  	0000
+  BPCLUS . . . . . . . . . . . .  	0002
+  BPRES  . . . . . . . . . . . .  	0003
+  BPFTCNT  . . . . . . . . . . .  	0005
+  BPDRCNT  . . . . . . . . . . .  	0006
+  BPSCCNT  . . . . . . . . . . .  	0008
+  BPMEDIA  . . . . . . . . . . .  	000A
+  BPFTSEC  . . . . . . . . . . .  	000B
+BUFFINFO . . . . . . . . . . . .  	0010	0009
+  NEXTBUF  . . . . . . . . . . .  	0000
+  BUFDRV . . . . . . . . . . . .  	0004
+  BUFDIRTY . . . . . . . . . . .  	0005
+  BUFPRI . . . . . . . . . . . .  	0006
+  VISIT  . . . . . . . . . . . .  	0007
+  BUFSECNO . . . . . . . . . . .  	0008
+  BUFWRTCNT  . . . . . . . . . .  	000A
+  BUFWRTINC  . . . . . . . . . .  	000B
+  BUFDRVDP . . . . . . . . . . .  	000C
+DIR_ENTRY  . . . . . . . . . . .  	0020	0008
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Symbols-2
+                                                             
+
+  DIR_NAME . . . . . . . . . . .  	0000
+  DIR_ATTR . . . . . . . . . . .  	000B
+  DIR_PAD  . . . . . . . . . . .  	000C
+  DIR_TIME . . . . . . . . . . .  	0016
+  DIR_DATE . . . . . . . . . . .  	0018
+  DIR_FIRST  . . . . . . . . . .  	001A
+  DIR_SIZE_L . . . . . . . . . .  	001C
+  DIR_SIZE_H . . . . . . . . . .  	001E
+DPB  . . . . . . . . . . . . . .  	005E	0012
+  DPB_DRIVE  . . . . . . . . . .  	0000
+  DPB_UNIT . . . . . . . . . . .  	0001
+  DPB_SECTOR_SIZE  . . . . . . .  	0002
+  DPB_CLUSTER_MASK . . . . . . .  	0004
+  DPB_CLUSTER_SHIFT  . . . . . .  	0005
+  DPB_FIRST_FAT  . . . . . . . .  	0006
+  DPB_FAT_COUNT  . . . . . . . .  	0008
+  DPB_ROOT_ENTRIES . . . . . . .  	0009
+  DPB_FIRST_SECTOR . . . . . . .  	000B
+  DPB_MAX_CLUSTER  . . . . . . .  	000D
+  DPB_FAT_SIZE . . . . . . . . .  	000F
+  DPB_DIR_SECTOR . . . . . . . .  	0010
+  DPB_DRIVER_ADDR  . . . . . . .  	0012
+  DPB_MEDIA  . . . . . . . . . .  	0016
+  DPB_FIRST_ACCESS . . . . . . .  	0017
+  DPB_NEXT_DPB . . . . . . . . .  	0018
+  DPB_CURRENT_DIR  . . . . . . .  	001C
+  DPB_DIR_TEXT . . . . . . . . .  	001E
+EXEC0  . . . . . . . . . . . . .  	000E	0004
+  EXEC0_ENVIRON  . . . . . . . .  	0000
+  EXEC0_COM_LINE . . . . . . . .  	0002
+  EXEC0_5C_FCB . . . . . . . . .  	0006
+  EXEC0_6C_FCB . . . . . . . . .  	000A
+EXEC1  . . . . . . . . . . . . .  	0016	0008
+  EXEC1_ENVIRON  . . . . . . . .  	0000
+  EXEC1_COM_LINE . . . . . . . .  	0002
+  EXEC1_5C_FCB . . . . . . . . .  	0006
+  EXEC1_6C_FCB . . . . . . . . .  	000A
+  EXEC1_SP . . . . . . . . . . .  	000E
+  EXEC1_SS . . . . . . . . . . .  	0010
+  EXEC1_IP . . . . . . . . . . .  	0012
+  EXEC1_CS . . . . . . . . . . .  	0014
+EXEC3  . . . . . . . . . . . . .  	0004	0002
+  EXEC3_LOAD_ADDR  . . . . . . .  	0000
+  EXEC3_RELOC_FAC  . . . . . . .  	0002
+EXE_FILE . . . . . . . . . . . .  	0020	000F
+  EXE_SIGNATURE  . . . . . . . .  	0000
+  EXE_LEN_MOD_512  . . . . . . .  	0002
+  EXE_PAGES  . . . . . . . . . .  	0004
+  EXE_RLE_COUNT  . . . . . . . .  	0006
+  EXE_PAR_DIR  . . . . . . . . .  	0008
+  EXE_MIN_BSS  . . . . . . . . .  	000A
+  EXE_MAX_BSS  . . . . . . . . .  	000C
+  EXE_SS . . . . . . . . . . . .  	000E
+  EXE_SP . . . . . . . . . . . .  	0010
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Symbols-3
+                                                             
+
+  EXE_CHKSUM . . . . . . . . . .  	0012
+  EXE_IP . . . . . . . . . . . .  	0014
+  EXE_CS . . . . . . . . . . . .  	0016
+  EXE_RLE_TABLE  . . . . . . . .  	0018
+  EXE_IOV  . . . . . . . . . . .  	001A
+  EXE_SYM_TAB  . . . . . . . . .  	001C
+FIND_BUF . . . . . . . . . . . .  	002B	000C
+  FIND_BUF_SATTR . . . . . . . .  	0000
+  FIND_BUF_DRIVE . . . . . . . .  	0001
+  FIND_BUF_NAME  . . . . . . . .  	0002
+  FIND_BUF_LASTENT . . . . . . .  	000D
+  FIND_BUF_THISDPB . . . . . . .  	000F
+  FIND_BUF_DIRSTART  . . . . . .  	0013
+  FIND_BUF_ATTR  . . . . . . . .  	0015
+  FIND_BUF_TIME  . . . . . . . .  	0016
+  FIND_BUF_DATE  . . . . . . . .  	0018
+  FIND_BUF_SIZE_L  . . . . . . .  	001A
+  FIND_BUF_SIZE_H  . . . . . . .  	001C
+  FIND_BUF_PNAME . . . . . . . .  	001E
+INTERNAT_BLOCK . . . . . . . . .  	0018	0015
+  DATE_TIM_FORMAT  . . . . . . .  	0000
+  CURRENCY_SYM . . . . . . . . .  	0002
+  THOUS_SEP  . . . . . . . . . .  	0007
+  DECIMAL_SEP  . . . . . . . . .  	0009
+  DATE_SEP . . . . . . . . . . .  	000B
+  TIME_SEP . . . . . . . . . . .  	000D
+  BIT_FEILD  . . . . . . . . . .  	000F
+  CURRENCY_CENTS . . . . . . . .  	0010
+  TIME_24  . . . . . . . . . . .  	0011
+  MAP_CALL . . . . . . . . . . .  	0012
+  DATA_SEP . . . . . . . . . . .  	0016
+PROCESS_DATA_BLOCK . . . . . . .  	005B	000E
+  PDB_EXIT_CALL  . . . . . . . .  	0000
+  PDB_BLOCK_LEN  . . . . . . . .  	0002
+  PDB_CPM_CALL . . . . . . . . .  	0005
+  PDB_EXIT . . . . . . . . . . .  	000A
+  PDB_CTRL_C . . . . . . . . . .  	000E
+  PDB_FATAL_ABORT  . . . . . . .  	0012
+  PDB_PARENT_PID . . . . . . . .  	0016
+  PDB_JFN_TABLE  . . . . . . . .  	0018
+  PDB_ENVIRON  . . . . . . . . .  	002C
+  PDB_USER_STACK . . . . . . . .  	002E
+  PDB_PAD1 . . . . . . . . . . .  	0032
+  PDB_CALL_SYSTEM  . . . . . . .  	0050
+  PDB_PAD2 . . . . . . . . . . .  	0055
+SFT  . . . . . . . . . . . . . .  	0008	0003
+  SFT_LINK . . . . . . . . . . .  	0000
+  SFT_COUNT  . . . . . . . . . .  	0004
+  SFT_TABLE  . . . . . . . . . .  	0006
+SF_ENTRY . . . . . . . . . . . .  	0028	0004
+  SF_REF_COUNT . . . . . . . . .  	0000
+  SF_MODE  . . . . . . . . . . .  	0001
+  SF_ATTR  . . . . . . . . . . .  	0002
+  SF_FCB . . . . . . . . . . . .  	0003
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Symbols-4
+                                                             
+
+SRHEAD . . . . . . . . . . . . .  	000D	0005
+  REQLEN . . . . . . . . . . . .  	0000
+  REQUNIT  . . . . . . . . . . .  	0001
+  REQFUNC  . . . . . . . . . . .  	0002
+  REQSTAT  . . . . . . . . . . .  	0003
+SYMBOL_ENTRY . . . . . . . . . .  	0106	0004
+  SYM_VALUE  . . . . . . . . . .  	0000
+  SYM_TYPE . . . . . . . . . . .  	0004
+  SYM_LEN  . . . . . . . . . . .  	0006
+  SYM_NAME . . . . . . . . . . .  	0007
+SYSDEV . . . . . . . . . . . . .  	0012	0005
+  SDEVNEXT . . . . . . . . . . .  	0000
+  SDEVATT  . . . . . . . . . . .  	0004
+  SDEVSTRAT  . . . . . . . . . .  	0006
+  SDEVINT  . . . . . . . . . . .  	0008
+  SDEVNAME . . . . . . . . . . .  	000A
+SYS_FCB  . . . . . . . . . . . .  	0025	0010
+  FCB_DRIVE  . . . . . . . . . .  	0000
+  FCB_NAME . . . . . . . . . . .  	0001
+  FCB_EXT  . . . . . . . . . . .  	0009
+  FCB_EXTENT . . . . . . . . . .  	000C
+  FCB_RECSIZ . . . . . . . . . .  	000E
+  FCB_FILSIZ . . . . . . . . . .  	0010
+  FCB_DRVBP  . . . . . . . . . .  	0012
+  FCB_FDATE  . . . . . . . . . .  	0014
+  FCB_FTIME  . . . . . . . . . .  	0016
+  FCB_DEVID  . . . . . . . . . .  	0018
+  FCB_FIRCLUS  . . . . . . . . .  	0019
+  FCB_CLUSPOS  . . . . . . . . .  	001B
+  FCB_LSTCLUS  . . . . . . . . .  	001D
+  FCB_NR . . . . . . . . . . . .  	0020
+  FCB_RR . . . . . . . . . . . .  	0021
+USER_ENVIRON . . . . . . . . . .  	0018	000C
+  USER_AX  . . . . . . . . . . .  	0000
+  USER_BX  . . . . . . . . . . .  	0002
+  USER_CX  . . . . . . . . . . .  	0004
+  USER_DX  . . . . . . . . . . .  	0006
+  USER_SI  . . . . . . . . . . .  	0008
+  USER_DI  . . . . . . . . . . .  	000A
+  USER_BP  . . . . . . . . . . .  	000C
+  USER_DS  . . . . . . . . . . .  	000E
+  USER_ES  . . . . . . . . . . .  	0010
+  USER_IP  . . . . . . . . . . .  	0012
+  USER_CS  . . . . . . . . . . .  	0014
+  USER_F . . . . . . . . . . . .  	0016
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+DOSGROUP . . . . . . . . . . . .  	GROUP
+  CODE . . . . . . . . . . . . .  	03A1	BYTE	PUBLIC	'CODE'
+  CONSTANTS  . . . . . . . . . .  	0000	BYTE	PUBLIC	'CONST'
+  DATA . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'DATA'
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Symbols-5
+                                                             
+
+  LAST . . . . . . . . . . . . .  	0000	BYTE	PUBLIC	'LAST'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ABORT  . . . . . . . . . . . . .  	Number	0000	
+ADDR_INT_ABORT . . . . . . . . .  	Number	0080	
+ADDR_INT_COMMAND . . . . . . . .  	Number	0084	
+ADDR_INT_CTRL_C  . . . . . . . .  	Number	008C	
+ADDR_INT_DISK_READ . . . . . . .  	Number	0094	
+ADDR_INT_DISK_WRITE  . . . . . .  	Number	0098	
+ADDR_INT_FASTCON . . . . . . . .  	Number	00A4	
+ADDR_INT_FATAL_ABORT . . . . . .  	Number	0090	
+ADDR_INT_KEEP_PROCESS  . . . . .  	Number	009C	
+ADDR_INT_SPOOLER . . . . . . . .  	Number	00A0	
+ADDR_INT_TERMINATE . . . . . . .  	Number	0088	
+ALLOC  . . . . . . . . . . . . .  	Number	0048	
+ALLOCOPER  . . . . . . . . . . .  	Number	0058	
+ALLOC_ARENA_TRASHED  . . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+ALLOC_NOT_ENOUGH_MEMORY  . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+ALTVECT  . . . . . . . . . . . .  	Alias	 FALSE		
+ARENA_OWNER_SYSTEM . . . . . . .  	Number	0000	
+ARENA_SIGNATURE_END  . . . . . .  	Number	005A	
+ARENA_SIGNATURE_NORMAL . . . . .  	Number	004D	
+ASSIGNOPER . . . . . . . . . . .  	Number	005F	
+ATTRIB . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+ATTR_ALL . . . . . . . . . . . .  	Number	0016	
+ATTR_ARCHIVE . . . . . . . . . .  	Number	0020	
+ATTR_CHANGEABLE  . . . . . . . .  	Number	0027	
+ATTR_DIRECTORY . . . . . . . . .  	Number	0010	
+ATTR_HIDDEN  . . . . . . . . . .  	Number	0002	
+ATTR_IGNORE  . . . . . . . . . .  	Number	0021	
+ATTR_READ_ONLY . . . . . . . . .  	Number	0001	
+ATTR_SYSTEM  . . . . . . . . . .  	Number	0004	
+ATTR_VOLUME_ID . . . . . . . . .  	Number	0008	
+
+BADCLOSE . . . . . . . . . . . .  	L NEAR	02E4	CODE
+BCLOCK . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+BUFINSIZ . . . . . . . . . . . .  	Number	0010	
+
+CANCEL . . . . . . . . . . . . .  	Number	0018	
+CHAR_OPER  . . . . . . . . . . .  	Number	0037	
+CHDIR  . . . . . . . . . . . . .  	Number	003B	
+CHDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CHMOD  . . . . . . . . . . . . .  	Number	0043	
+CHMOD_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CHMOD_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CHMOD_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CLOSE  . . . . . . . . . . . . .  	Number	003E	
+CLOSE_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+CLOSE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+COUNTRY_NOT_FOUND  . . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+CREAT  . . . . . . . . . . . . .  	Number	003C	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Symbols-6
+                                                             
+
+CREATENEWFILE  . . . . . . . . .  	Number	005B	
+CREATETEMPFILE . . . . . . . . .  	Number	005A	
+CREATE_PROCESS_DATA_BLOCK  . . .  	Number	0026	
+CREATING . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+CREAT_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+CREAT_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+CREAT_TOO_MANY_OPEN_FILES  . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+CURBUF . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+CURDIR_INVALID_DRIVE . . . . . .  	Alias	 ERROR_INVALID_DRIVE		
+CURRENT_DIR  . . . . . . . . . .  	Number	0047	
+C_BS . . . . . . . . . . . . . .  	Number	0008	
+C_CR . . . . . . . . . . . . . .  	Number	000D	
+C_DEL  . . . . . . . . . . . . .  	Number	007F	
+C_ETB  . . . . . . . . . . . . .  	Number	0017	
+C_ETX  . . . . . . . . . . . . .  	Number	0003	
+C_HT . . . . . . . . . . . . . .  	Number	0009	
+C_LF . . . . . . . . . . . . . .  	Number	000A	
+C_NAK  . . . . . . . . . . . . .  	Number	0015	
+
+DAY  . . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DBPBHL . . . . . . . . . . . . .  	Number	0016	
+DEALLOC  . . . . . . . . . . . .  	Number	0049	
+DEALLOC_ARENA_TRASHED  . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+DEALLOC_INVALID_BLOCK  . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+DELALL . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DELFILE  . . . . . . . . . . . .  	L NEAR	0137	CODE
+DELNXT . . . . . . . . . . . . .  	L NEAR	0171	CODE
+DEVBPB . . . . . . . . . . . . .  	Number	0002	
+DEVID_BLOCK_DEV  . . . . . . . .  	Number	001F	
+DEVID_DEVICE . . . . . . . . . .  	Number	0080	
+DEVID_DEVICE_CLOCK . . . . . . .  	Number	0008	
+DEVID_DEVICE_CON_IN  . . . . . .  	Number	0001	
+DEVID_DEVICE_CON_OUT . . . . . .  	Number	0002	
+DEVID_DEVICE_EOF . . . . . . . .  	Number	0040	
+DEVID_DEVICE_NULL  . . . . . . .  	Number	0004	
+DEVID_DEVICE_RAW . . . . . . . .  	Number	0020	
+DEVID_DEVICE_SPECIAL . . . . . .  	Number	0010	
+DEVID_EOF  . . . . . . . . . . .  	Number	0040	
+DEVID_FILE_CLEAN . . . . . . . .  	Number	0040	
+DEVID_FILE_MASK_DRIVE  . . . . .  	Number	003F	
+DEVID_ISCIN  . . . . . . . . . .  	Number	0001	
+DEVID_ISCLK  . . . . . . . . . .  	Number	0008	
+DEVID_ISCOT  . . . . . . . . . .  	Number	0002	
+DEVID_ISDEV  . . . . . . . . . .  	Number	0080	
+DEVID_ISNUL  . . . . . . . . . .  	Number	0004	
+DEVID_RAW  . . . . . . . . . . .  	Number	0020	
+DEVID_SPECIAL  . . . . . . . . .  	Number	0010	
+DEVIFL . . . . . . . . . . . . .  	Number	0007	
+DEVINIT  . . . . . . . . . . . .  	Number	0000	
+DEVIOCTL . . . . . . . . . . . .  	Number	4000	
+DEVIST . . . . . . . . . . . . .  	Number	0006	
+DEVMDCH  . . . . . . . . . . . .  	Number	0001	
+DEVOFL . . . . . . . . . . . . .  	Number	000B	
+DEVOST . . . . . . . . . . . . .  	Number	000A	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Symbols-7
+                                                             
+
+DEVPT  . . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+DEVRD  . . . . . . . . . . . . .  	Number	0004	
+DEVRDIOCTL . . . . . . . . . . .  	Number	0003	
+DEVRDND  . . . . . . . . . . . .  	Number	0005	
+DEVTYP . . . . . . . . . . . . .  	Number	8000	
+DEVWRIOCTL . . . . . . . . . . .  	Number	000C	
+DEVWRT . . . . . . . . . . . . .  	Number	0008	
+DEVWRTV  . . . . . . . . . . . .  	Number	0009	
+DFLSHL . . . . . . . . . . . . .  	Number	000F	
+DINITHL  . . . . . . . . . . . .  	Number	001A	
+DIRPRI . . . . . . . . . . . . .  	Number	000F	
+DIRSTART . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+DIRSTRLEN  . . . . . . . . . . .  	Number	0040	
+DIR_SEARCH_FIRST . . . . . . . .  	Number	0011	
+DIR_SEARCH_NEXT  . . . . . . . .  	Number	0012	
+DISK_RESET . . . . . . . . . . .  	Number	000D	
+DMEDHL . . . . . . . . . . . . .  	Number	000F	
+DODELETE . . . . . . . . . . . .  	L NEAR	0155	CODE
+DOOPEN . . . . . . . . . . . . .  	L NEAR	0212	CODE	Global
+DOSVER . . . . . . . . . . . . .  	Number	00D3	
+DOS_MAJOR_VERSION  . . . . . . .  	Number	0002	
+DOS_MINOR_VERSION  . . . . . . .  	Number	000B	
+DPBSIZ . . . . . . . . . . . . .  	Number	005E	
+DRDNDHL  . . . . . . . . . . . .  	Number	000E	
+DRDWRHL  . . . . . . . . . . . .  	Number	0016	
+DSKERR . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+DSKSIZ . . . . . . . . . . . . .  	Number	000D	
+DSTATHL  . . . . . . . . . . . .  	Number	000D	
+DUP2_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_INVALID_HANDLE . . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+DUP_PDB  . . . . . . . . . . . .  	Number	0055	
+DUP_TOO_MANY_OPEN_FILES  . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+ENTRYPOINT . . . . . . . . . . .  	Number	00C0	
+ERRET  . . . . . . . . . . . . .  	L NEAR	020C	CODE
+ERRET3 . . . . . . . . . . . . .  	L NEAR	0315	CODE
+ERRETJ . . . . . . . . . . . . .  	L NEAR	0180	CODE
+ERROR_ACCESS_DENIED  . . . . . .  	Number	0005	
+ERROR_ARENA_TRASHED  . . . . . .  	Number	0007	
+ERROR_BAD_ENVIRONMENT  . . . . .  	Number	000A	
+ERROR_BAD_FORMAT . . . . . . . .  	Number	000B	
+ERROR_CURRENT_DIRECTORY  . . . .  	Number	0010	
+ERROR_FILE_NOT_FOUND . . . . . .  	Number	0002	
+ERROR_INVALID_ACCESS . . . . . .  	Number	000C	
+ERROR_INVALID_BLOCK  . . . . . .  	Number	0009	
+ERROR_INVALID_DATA . . . . . . .  	Number	000D	
+ERROR_INVALID_DRIVE  . . . . . .  	Number	000F	
+ERROR_INVALID_FUNCTION . . . . .  	Number	0001	
+ERROR_INVALID_HANDLE . . . . . .  	Number	0006	
+ERROR_NOT_ENOUGH_MEMORY  . . . .  	Number	0008	
+ERROR_NOT_SAME_DEVICE  . . . . .  	Number	0011	
+ERROR_NO_MORE_FILES  . . . . . .  	Number	0012	
+ERROR_PATH_NOT_FOUND . . . . . .  	Number	0003	
+ERROR_TOO_MANY_OPEN_FILES  . . .  	Number	0004	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Symbols-8
+                                                             
+
+ERRPOP . . . . . . . . . . . . .  	L NEAR	0313	CODE
+ESCCH  . . . . . . . . . . . . .  	Number	001B	
+EXEC . . . . . . . . . . . . . .  	Number	004B	
+EXEC_BAD_ENVIRONMENT . . . . . .  	Alias	 ERROR_BAD_ENVIRONMENT		
+EXEC_BAD_FORMAT  . . . . . . . .  	Alias	 ERROR_BAD_FORMAT		
+EXEC_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+EXEC_FUNC_NO_EXECUTE . . . . . .  	Number	0001	
+EXEC_FUNC_OVERLAY  . . . . . . .  	Number	0002	
+EXEC_INVALID_FUNCTION  . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+EXEC_NOT_ENOUGH_MEMORY . . . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+EXE_VALID_OLD_SIGNATURE  . . . .  	Number	4D5A	
+EXE_VALID_SIGNATURE  . . . . . .  	Number	5A4D	
+EXISTENT . . . . . . . . . . . .  	L NEAR	031F	CODE
+EXIT . . . . . . . . . . . . . .  	Number	004C	
+EXIT_ABORT . . . . . . . . . . .  	Number	0000	
+EXIT_CTRL_C  . . . . . . . . . .  	Number	0001	
+EXIT_HARD_ERROR  . . . . . . . .  	Number	0002	
+EXIT_KEEP_PROCESS  . . . . . . .  	Number	0003	
+EXIT_TERMINATE . . . . . . . . .  	Number	0000	
+
+FALSE  . . . . . . . . . . . . .  	Number	0000	
+FATPRI . . . . . . . . . . . . .  	Number	001E	
+FCB_CLOSE  . . . . . . . . . . .  	Number	0010	
+FCB_CLOSE_INNER  . . . . . . . .  	L NEAR	028A	CODE	Global
+FCB_CREATE . . . . . . . . . . .  	Number	0016	
+FCB_DELETE . . . . . . . . . . .  	Number	0013	
+FCB_OPEN . . . . . . . . . . . .  	Number	000F	
+FCB_RANDOM_READ  . . . . . . . .  	Number	0021	
+FCB_RANDOM_READ_BLOCK  . . . . .  	Number	0027	
+FCB_RANDOM_WRITE . . . . . . . .  	Number	0022	
+FCB_RANDOM_WRITE_BLOCK . . . . .  	Number	0028	
+FCB_RENAME . . . . . . . . . . .  	Number	0017	
+FCB_SEQ_READ . . . . . . . . . .  	Number	0014	
+FCB_SEQ_WRITE  . . . . . . . . .  	Number	0015	
+FILDIRENT  . . . . . . . . . . .  	Number	0010	
+FILETIMES_INVALID_FUNCTION . . .  	Alias	 ERROR_INVALID_FUNCTION		
+FILETIMES_INVALID_HANDLE . . . .  	Alias	 ERROR_INVALID_HANDLE		
+FILE_TIMES . . . . . . . . . . .  	Number	0057	
+FILPERPROC . . . . . . . . . . .  	Number	0014	
+FINBLK . . . . . . . . . . . . .  	L NEAR	00CB	CODE
+FINDFIRST_FILE_NOT_FOUND . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+FINDFIRST_NO_MORE_FILES  . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FINDNEXT_NO_MORE_FILES . . . . .  	Alias	 ERROR_NO_MORE_FILES		
+FIND_FIRST . . . . . . . . . . .  	Number	004E	
+FIND_NEXT  . . . . . . . . . . .  	Number	004F	
+FINNOSAV . . . . . . . . . . . .  	L NEAR	00D1	CODE	Global
+FINRND . . . . . . . . . . . . .  	L NEAR	00D9	CODE
+FINSEQ . . . . . . . . . . . . .  	L NEAR	00A3	CODE
+FLUSHRET1  . . . . . . . . . . .  	L NEAR	02D6	CODE
+FOUNDDEL . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+FREEPRI  . . . . . . . . . . . .  	Number	0000	
+FREESPOT . . . . . . . . . . . .  	L NEAR	034C	CODE
+
+GETEXTENDEDERROR . . . . . . . .  	Number	0059	
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Symbols-9
+                                                             
+
+GET_CURRENT_PDB  . . . . . . . .  	Number	0051	
+GET_DATE . . . . . . . . . . . .  	Number	002A	
+GET_DEFAULT_DPB  . . . . . . . .  	Number	001F	
+GET_DEFAULT_DRIVE  . . . . . . .  	Number	0019	
+GET_DMA  . . . . . . . . . . . .  	Number	002F	
+GET_DPB  . . . . . . . . . . . .  	Number	0032	
+GET_DRIVE_FREESPACE  . . . . . .  	Number	0036	
+GET_FCB_FILE_LENGTH  . . . . . .  	Number	0023	
+GET_FCB_POSITION . . . . . . . .  	Number	0024	
+GET_INDOS_FLAG . . . . . . . . .  	Number	0034	
+GET_INTERRUPT_VECTOR . . . . . .  	Number	0035	
+GET_IN_VARS  . . . . . . . . . .  	Number	0052	
+GET_TIME . . . . . . . . . . . .  	Number	002C	
+GET_VERIFY_ON_WRITE  . . . . . .  	Number	0054	
+GET_VERSION  . . . . . . . . . .  	Number	0030	
+
+HIGHMEM  . . . . . . . . . . . .  	Alias	 FALSE		
+
+IBM  . . . . . . . . . . . . . .  	Alias	 FALSE		
+INTBASE  . . . . . . . . . . . .  	Number	0080	
+INTERNATIONAL  . . . . . . . . .  	Number	0038	
+INTERNATIONAL_INVALID_FUNCTION .  	Alias	 ERROR_INVALID_FUNCTION		
+INTERNAT_BLOCK_MAX . . . . . . .  	Number	0020	
+INTTAB . . . . . . . . . . . . .  	Number	0020	
+INT_ABORT  . . . . . . . . . . .  	Alias	 INTTAB		
+INT_COMMAND  . . . . . . . . . .  	Number	0021	
+INT_CTRL_C . . . . . . . . . . .  	Number	0023	
+INT_DISK_READ  . . . . . . . . .  	Number	0025	
+INT_DISK_WRITE . . . . . . . . .  	Number	0026	
+INT_FASTCON  . . . . . . . . . .  	Number	0029	
+INT_FATAL_ABORT  . . . . . . . .  	Number	0024	
+INT_KEEP_PROCESS . . . . . . . .  	Number	0027	
+INT_SPOOLER  . . . . . . . . . .  	Number	0028	
+INT_TERMINATE  . . . . . . . . .  	Number	0022	
+IOCTL  . . . . . . . . . . . . .  	Number	0044	
+IOCTL_INVALID_DATA . . . . . . .  	Alias	 ERROR_INVALID_DATA		
+IOCTL_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+IOCTL_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+ISCIN  . . . . . . . . . . . . .  	Number	0001	
+ISCLOCK  . . . . . . . . . . . .  	Number	0008	
+ISCOUT . . . . . . . . . . . . .  	Number	0002	
+ISFATBYDEV . . . . . . . . . . .  	Number	2000	
+ISIBM  . . . . . . . . . . . . .  	Number	0010	
+ISNULL . . . . . . . . . . . . .  	Number	0004	
+
+KEEP_PROCESS . . . . . . . . . .  	Number	0031	
+
+LASTENT  . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+LBRPRI . . . . . . . . . . . . .  	Number	0002	
+LBWPRI . . . . . . . . . . . . .  	Number	0004	
+LOCKOPER . . . . . . . . . . . .  	Number	005C	
+LSEEK  . . . . . . . . . . . . .  	Number	0042	
+LSEEK_INVALID_FUNCTION . . . . .  	Alias	 ERROR_INVALID_FUNCTION		
+LSEEK_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Symbols-10
+                                                             
+
+
+MI_INT . . . . . . . . . . . . .  	Number	00CD	
+MI_LONG_CALL . . . . . . . . . .  	Number	009A	
+MI_LONG_JMP  . . . . . . . . . .  	Number	00EA	
+MI_LONG_RET  . . . . . . . . . .  	Number	00CB	
+MKDIR  . . . . . . . . . . . . .  	Number	0039	
+MKDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+MKDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+MSVER  . . . . . . . . . . . . .  	Alias	 TRUE		
+
+NAME1  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+NAME2  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+NAME3  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+NEWENTRY . . . . . . . . . . . .  	L NEAR	0317	CODE	Global
+NEWNAM . . . . . . . . . . . . .  	L NEAR	01B0	CODE
+NOCHG  . . . . . . . . . . . . .  	L NEAR	01BD	CODE
+NORMFCB3 . . . . . . . . . . . .  	L NEAR	027F	CODE
+NOTALL . . . . . . . . . . . . .  	L NEAR	012C	CODE
+NOTVOLID . . . . . . . . . . . .  	L NEAR	035A	CODE
+NO_ERROR_OCCURRED  . . . . . . .  	Text  0                                                              ?		
+NWENTY . . . . . . . . . . . . .  	L NEAR	0303	CODE
+
+OEM  . . . . . . . . . . . . . .  	Text  		
+OEM_C1 . . . . . . . . . . . . .  	Number	00F9	
+OEM_C2 . . . . . . . . . . . . .  	Number	00FA	
+OEM_C3 . . . . . . . . . . . . .  	Number	00FB	
+OEM_C4 . . . . . . . . . . . . .  	Number	00FC	
+OEM_C5 . . . . . . . . . . . . .  	Number	00FD	
+OEM_C6 . . . . . . . . . . . . .  	Number	00FE	
+OEM_C7 . . . . . . . . . . . . .  	Number	00FF	
+OKRET1 . . . . . . . . . . . . .  	L NEAR	02E1	CODE
+OPEN . . . . . . . . . . . . . .  	Number	003D	
+OPENDEV  . . . . . . . . . . . .  	L NEAR	0224	CODE
+OPENJMP  . . . . . . . . . . . .  	L NEAR	039B	CODE
+OPEN_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+OPEN_FILE_NOT_FOUND  . . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+OPEN_FOR_BOTH  . . . . . . . . .  	Number	0002	
+OPEN_FOR_READ  . . . . . . . . .  	Number	0000	
+OPEN_FOR_WRITE . . . . . . . . .  	Number	0001	
+OPEN_INVALID_ACCESS  . . . . . .  	Alias	 ERROR_INVALID_ACCESS		
+OPEN_RET . . . . . . . . . . . .  	L NEAR	0268	CODE
+OPEN_TOO_MANY_OPEN_FILES . . . .  	Alias	 ERROR_TOO_MANY_OPEN_FILES		
+
+PARSE_FILE_DESCRIPTOR  . . . . .  	Number	0029	
+
+RAW_CON_INPUT  . . . . . . . . .  	Number	0007	
+RAW_CON_IO . . . . . . . . . . .  	Number	0006	
+READ . . . . . . . . . . . . . .  	Number	003F	
+READ_ACCESS_DENIED . . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+READ_INVALID_HANDLE  . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+RENAME . . . . . . . . . . . . .  	Number	0056	
+RENAME_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RENAME_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+RENAME_NOT_SAME_DEVICE . . . . .  	Alias	 ERROR_NOT_SAME_DEVICE		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Symbols-11
+                                                             
+
+RENERR . . . . . . . . . . . . .  	L NEAR	0209	CODE
+RENFIL . . . . . . . . . . . . .  	L NEAR	01A7	CODE
+RET24  . . . . . . . . . . . . .  	L NEAR	003C	CODE
+RET26  . . . . . . . . . . . . .  	L NEAR	004D	CODE
+RET4 . . . . . . . . . . . . . .  	L NEAR	0104	CODE
+RMDIR  . . . . . . . . . . . . .  	Number	003A	
+RMDIR_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+RMDIR_CURRENT_DIRECTORY  . . . .  	Alias	 ERROR_CURRENT_DIRECTORY		
+RMDIR_PATH_NOT_FOUND . . . . . .  	Alias	 ERROR_PATH_NOT_FOUND		
+RPRI . . . . . . . . . . . . . .  	Number	0006	
+
+SAVDEVPT . . . . . . . . . . . .  	L NEAR	026B	CODE
+SERVERCALL . . . . . . . . . . .  	Number	005D	
+SETBLOCK . . . . . . . . . . . .  	Number	004A	
+SETBLOCK_ARENA_TRASHED . . . . .  	Alias	 ERROR_ARENA_TRASHED		
+SETBLOCK_INVALID_BLOCK . . . . .  	Alias	 ERROR_INVALID_BLOCK		
+SETBLOCK_INVALID_FUNCTION  . . .  	Alias	 ERROR_INVALID_FUNCTION		
+SETBLOCK_NOT_ENOUGH_MEMORY . . .  	Alias	 ERROR_NOT_ENOUGH_MEMORY		
+SETDPB . . . . . . . . . . . . .  	Number	0053	
+SETNREX  . . . . . . . . . . . .  	L NEAR	00E9	CODE
+SET_CTRL_C_TRAPPING  . . . . . .  	Number	0033	
+SET_CURRENT_PDB  . . . . . . . .  	Number	0050	
+SET_DATE . . . . . . . . . . . .  	Number	002B	
+SET_DEFAULT_DRIVE  . . . . . . .  	Number	000E	
+SET_DMA  . . . . . . . . . . . .  	Number	001A	
+SET_INTERRUPT_VECTOR . . . . . .  	Number	0025	
+SET_OEM_HANDLER  . . . . . . . .  	Number	00F8	
+SET_TIME . . . . . . . . . . . .  	Number	002D	
+SET_VERIFY_ON_WRITE  . . . . . .  	Number	002E	
+SF_DEFAULT_NUMBER  . . . . . . .  	Number	0005	
+STBUI  . . . . . . . . . . . . .  	Number	0200	
+STDAUX . . . . . . . . . . . . .  	Number	0003	
+STDERR . . . . . . . . . . . . .  	Number	0002	
+STDIN  . . . . . . . . . . . . .  	Number	0000	
+STDON  . . . . . . . . . . . . .  	Number	0100	
+STDOUT . . . . . . . . . . . . .  	Number	0001	
+STDPRN . . . . . . . . . . . . .  	Number	0004	
+STD_AUX_INPUT  . . . . . . . . .  	Number	0003	
+STD_AUX_OUTPUT . . . . . . . . .  	Number	0004	
+STD_CON_INPUT  . . . . . . . . .  	Number	0001	
+STD_CON_INPUT_FLUSH  . . . . . .  	Number	000C	
+STD_CON_INPUT_NO_ECHO  . . . . .  	Number	0008	
+STD_CON_INPUT_STATUS . . . . . .  	Number	000B	
+STD_CON_OUTPUT . . . . . . . . .  	Number	0002	
+STD_CON_STRING_INPUT . . . . . .  	Number	000A	
+STD_CON_STRING_OUTPUT  . . . . .  	Number	0009	
+STD_PRINTER_OUTPUT . . . . . . .  	Number	0005	
+STECODE  . . . . . . . . . . . .  	Number	00FF	
+STERR  . . . . . . . . . . . . .  	Number	8000	
+
+THISDPB  . . . . . . . . . . . .  	V DWORD	0000	DATA	External
+THISDRV  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+TIMEBUF  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+TOGLINS  . . . . . . . . . . . .  	Alias	 WANG		
+Microsoft (R) Macro Assembler  Version 4.00                 11/21/18 15:49:13
+STDCALL - system calls for MSDOS                            Symbols-12
+                                                             
+
+TOGLPRN  . . . . . . . . . . . .  	Alias	 FALSE		
+TRUE . . . . . . . . . . . . . .  	Number	FFFF	
+
+UNLINK . . . . . . . . . . . . .  	Number	0041	
+UNLINK_ACCESS_DENIED . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+UNLINK_FILE_NOT_FOUND  . . . . .  	Alias	 ERROR_FILE_NOT_FOUND		
+USERIDOPER . . . . . . . . . . .  	Number	005E	
+
+VER  . . . . . . . . . . . . . .  	Text  		
+VOLID  . . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+
+WAIT . . . . . . . . . . . . . .  	Number	004D	
+WANG . . . . . . . . . . . . . .  	Alias	 FALSE		
+WEEKDAY  . . . . . . . . . . . .  	V BYTE 	0000	DATA	External
+WPRI . . . . . . . . . . . . . .  	Number	0008	
+WRECODE  . . . . . . . . . . . .  	Number	0000	
+WRITE  . . . . . . . . . . . . .  	Number	0040	
+WRITE_ACCESS_DENIED  . . . . . .  	Alias	 ERROR_ACCESS_DENIED		
+WRITE_INVALID_HANDLE . . . . . .  	Alias	 ERROR_INVALID_HANDLE		
+
+XDUP . . . . . . . . . . . . . .  	Number	0045	
+XDUP2  . . . . . . . . . . . . .  	Number	0046	
+
+YEAR . . . . . . . . . . . . . .  	V WORD 	0000	DATA	External
+
+ZEROEXT  . . . . . . . . . . . .  	Alias	 TRUE		
+
+$FCB_CLOSE . . . . . . . . . . .  	N PROC	0275	CODE	Global	Length = 0072
+$FCB_CREATE  . . . . . . . . . .  	N PROC	02E7	CODE	Global	Length = 00BA
+$FCB_DELETE  . . . . . . . . . .  	N PROC	0105	CODE	Global	Length = 007B
+$FCB_OPEN  . . . . . . . . . . .  	N PROC	020F	CODE	Global	Length = 0066
+$FCB_RANDOM_READ . . . . . . . .  	L NEAR	00AD	CODE	Global
+$FCB_RANDOM_READ_BLOCK . . . . .  	L NEAR	00BD	CODE	Global
+$FCB_RANDOM_WRITE  . . . . . . .  	L NEAR	00B5	CODE	Global
+$FCB_RANDOM_WRITE_BLOCK  . . . .  	L NEAR	00C5	CODE	Global
+$FCB_RENAME  . . . . . . . . . .  	N PROC	0183	CODE	Global	Length = 008C
+$FCB_SEQ_READ  . . . . . . . . .  	N PROC	0095	CODE	Global	Length = 0070
+$FCB_SEQ_WRITE . . . . . . . . .  	L NEAR	009D	CODE	Global
+$GET_DATE  . . . . . . . . . . .  	N PROC	0000	CODE	Global	Length = 001D
+$GET_TIME  . . . . . . . . . . .  	N PROC	003D	CODE	Global	Length = 0011
+$SET_DATE  . . . . . . . . . . .  	N PROC	001D	CODE	Global	Length = 0020
+$SET_TIME  . . . . . . . . . . .  	N PROC	004E	CODE	Global	Length = 0047
+
+
+   2143 Source  Lines
+   2850 Total   Lines
+    642 Symbols
+
+  18092 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

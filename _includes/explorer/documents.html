@@ -15,7 +15,8 @@
                     {%- else -%}
                       {%- assign subcategories = category[1] %}
                       {%- capture docs_path2 -%}/{{ category[0] }}{%- endcapture %}
-                    <li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ category[1]['@title'] }}
+                      {%- capture docs_url -%}{{ docs_path1 }}{{ docs_path2 }}{%- endcapture %}
+                    <li id="{{ docs_url | remove_first: "/" | replace: "/", "-" }}" class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ category[1]['@title'] }}
                       <ul>
                     {%- endif -%}
                     {%- for subcategory in subcategories -%}
@@ -29,7 +30,8 @@
                         {%- continue -%}
                       {%- else -%}
                         {%- capture docs_path3 -%}/{{ subcategory[0] }}{%- endcapture %}
-                        <li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ subcategory[1]['@title'] }}
+                        {%- capture docs_url -%}{{ docs_path1 }}{{ docs_path2 }}{{ docs_path3 }}{%- endcapture %}
+                        <li id="{{ docs_url | remove_first: "/" | replace: "/", "-" }}" class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ subcategory[1]['@title'] }}
                           <ul>
                       {%- endif -%}
                       {%- for instance in subcategory[1] -%}

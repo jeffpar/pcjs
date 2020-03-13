@@ -17,7 +17,4 @@ machines:
     sound: false
 ---
 
-Wizardry I: Proving Grounds of the Mad Overlord (1984)
-------------------------------------------------------
-
 {% include machine.html id="ibm5150-wizardry1" %}
