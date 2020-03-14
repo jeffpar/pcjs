@@ -12,7 +12,7 @@ machines:
     config: /devices/pcx86/machine/5170/ega/1024kb/rev3/debugger/visual/machine.xml
 ---
 
-Most PCx86 machines on [{{ site.pcjs.domain }}](/) run with a compiled version of PCx86, which is produced
+Most PCx86 machines on [{{ site.domain }}](/) run with a compiled version of PCx86, which is produced
 by running the PCx86 JavaScript source code through Google's Closure Compiler, yielding a smaller (minified)
 version that loads and runs much faster than the original source code.
 

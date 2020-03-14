@@ -928,7 +928,81 @@
     "@title": "Manuals",
     "@instances": {
       "intel": {
-        "@title": "Intel"
+        "@title": "Intel",
+        "@documents": [
+          {
+            "@title": "iAPX 86,88 User's Manual (1981)",
+            "@link": "http://bitsavers.trailing-edge.com/pdf/intel/_dataBooks/1981_iAPX_86_88_Users_Manual.pdf",
+            "@file": "iAPX_86_88_Users_Manual--1981.pdf",
+            "@cover": "/documents/manuals/intel/8086/covers/iAPX_86_88_Users_Manual--1981.jpg",
+            "@source": "",
+            "@tags": "8086-manuals,intel-manuals"
+          },
+          {
+            "@title": "80286 LOADALL Instruction",
+            "@link": "/documents/manuals/intel/80286/loadall/",
+            "@file": "80286--LOADALL.pdf",
+            "@cover": "/documents/manuals/intel/80286/covers/80286--LOADALL.jpg",
+            "@source": "",
+            "@tags": "80286-errata"
+          },
+          {
+            "@title": "80286 ARPL and Overlength Instructions (Oct 15, 1984)",
+            "@link": "/documents/manuals/intel/80286/arpl/",
+            "@file": "80286--ARPL--1984-10-15.pdf",
+            "@cover": "/documents/manuals/intel/80286/covers/80286--ARPL--1984-10-15.jpg",
+            "@source": "",
+            "@tags": "80286-errata"
+          },
+          {
+            "@title": "80286 REP MOVS and REP INS Restartability (Oct 15, 1984)",
+            "@link": "/documents/manuals/intel/80286/rep_restart/",
+            "@file": "80286-B2-B3--REP--1984-10-15.pdf",
+            "@cover": "/documents/manuals/intel/80286/covers/80286-B2-B3--REP--1984-10-15.jpg",
+            "@source": "",
+            "@tags": "80286-errata"
+          },
+          {
+            "@title": "80286 B-2/B-3 Errata (Nov 21, 1984)",
+            "@link": "/documents/manuals/intel/80286/b2_b3_info/",
+            "@file": "80286-B2-B3--Errata--1984-11-21.pdf",
+            "@cover": "/documents/manuals/intel/80286/covers/80286-B2-B3--Errata--1984-11-21.jpg",
+            "@source": "",
+            "@tags": "80286-errata"
+          },
+          {
+            "@title": "80286/80287 Programmer Reference (1987)",
+            "@link": "/documents/manuals/intel/80286/progref/",
+            "@file": "80286_and_80287_Programmers_Reference_Manual_1987.pdf",
+            "@cover": "/documents/manuals/intel/80286/covers/80286_and_80287_Programmers_Reference_Manual_1987.jpg",
+            "@source": "PCjs",
+            "@tags": "80286-manuals,intel-manuals"
+          },
+          {
+            "@title": "iAPX 286 Hardware Reference (1983)",
+            "@link": "http://bitsavers.trailing-edge.com/pdf/intel/_dataBooks/1983_iAPX_286_Hardware_Reference.pdf",
+            "@file": "iAPX_286_Hardware_Reference--1983.pdf",
+            "@cover": "/documents/manuals/intel/80286/covers/iAPX_286_Hardware_Reference--1983.jpg",
+            "@source": "",
+            "@tags": "80286-manuals,intel-manuals"
+          },
+          {
+            "@title": "iAPX 286 OS Writer's Guide (1983)",
+            "@link": "http://bitsavers.trailing-edge.com/pdf/intel/_dataBooks/1983_iAPX_286_Operating_System_Writers_Guide.pdf",
+            "@file": "iAPX_286_Operating_System_Writers_Guide--1983.pdf",
+            "@cover": "/documents/manuals/intel/80286/covers/iAPX_286_Operating_System_Writers_Guide--1983.jpg",
+            "@source": "",
+            "@tags": "80286-manuals,intel-manuals"
+          },
+          {
+            "@title": "iAPX 286 Programmer Reference (1985)",
+            "@link": "http://bitsavers.trailing-edge.com/pdf/intel/_dataBooks/1985_iAPX_286_Programmers_Reference_Manual.pdf",
+            "@file": "iAPX_286_Programmers_Reference_Manual--1985.pdf",
+            "@cover": "/documents/manuals/intel/80286/covers/iAPX_286_Programmers_Reference_Manual--1985.jpg",
+            "@source": "",
+            "@tags": "80286-manuals,intel-manuals"
+          }
+        ]
       },
       "microsoft": {
         "@title": "Microsoft",

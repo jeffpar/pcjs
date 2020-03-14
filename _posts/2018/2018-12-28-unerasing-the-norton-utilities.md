@@ -87,7 +87,7 @@ It is also true that as of Version 1.15, the Norton Utilities had become a 14-ut
 single-sided (160Kb) diskettes, to ensure that even the earliest IBM PC owners, using only PC DOS 1.00, could read
 them.  More details about that version can be found in the [PC Tech Journal July/August 1983 article](#july-1983) below.
 
-NOTE: In that same [PC Tech Journal issue](/pubs/pc/magazines/pctj/PCTJ-1983-07/), Peter Norton is also a guest columnist;
+NOTE: In that same [PC Tech Journal issue](/documents/magazines/pctj/PCTJ-1983-07/), Peter Norton is also a guest columnist;
 see the article titled "Tinkering With DOS 2.00".  The article doesn't actually talk much about DOS 2.00, but instead
 provides some examples of how you can patch utilities in PC DOS 2.00 to customize their behavior.  What's noteworthy to me
 about the article is that he demonstrates the patching process without providing any insight into *how*
@@ -147,7 +147,7 @@ Selected Magazine Articles on The Norton Utilities
 
 ### July 1983
 
-In PC Tech Journal's premiere [July-August 1983 issue](/pubs/pc/magazines/pctj/PCTJ-1983-07/),
+In PC Tech Journal's premiere [July-August 1983 issue](/documents/magazines/pctj/PCTJ-1983-07/),
 the article "THE NORTON UTILITIES" appeared. It was written by Susan Glinert-Cole and has been
 reproduced below.
 

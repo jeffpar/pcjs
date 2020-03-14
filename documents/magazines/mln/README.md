@@ -3,6 +3,7 @@ layout: page
 title: Microsoft Languages Newsletter
 permalink: /documents/magazines/mln/
 redirect_from: /disks/pcx86/tools/microsoft/
+preview: covers/PCTJ-1986-01.jpg
 ---
 
 Below are all the "Microsoft Languages NewsLetters" that Microsoft published in

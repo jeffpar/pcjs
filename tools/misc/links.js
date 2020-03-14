@@ -185,6 +185,42 @@ function processFiles(sDir, fDebug, fFix)
                 printf("%s: preview image not found: %s\n", sFilePath, sFile);
             }
         }
+        /*
+         * Fix #5: look at all Markdown-style links and attempt to validate
+         */
+        let reLinks = /\[([^\]]*)\]\(([^)]*)\)/g;
+        while ((match = reLinks.exec(sText))) {
+            let sFile = match[2];
+            if (sFile[0] == '?' || sFile[0] == '#') continue;
+            if (sFile.indexOf("{{") == 0) {
+                sFile = sFile.replace(/\{\{ site\.software\.(diskettes|gamedisks|harddisks)\.server \}\}/, "../pcjs-$1");
+            }
+            else if (sFile.indexOf("http") == 0) {
+                sFile = sFile.replace(/https?:\/\/(diskettes|gamedisks|harddisks)\.pcjs\.org/, "../pcjs-$1").replace(/https?:\/\/(cds[0-9]+)\.pcjs\.org/, "../pcjs/disks-cds/$1");
+                if (sFile.indexOf("http") == 0) continue;
+            }
+            else {
+                let matchBlog = sFile.match(/^\/blog\/([0-9]+)\/([0-9]+)\/([0-9]+)\//);
+                if (matchBlog) {
+                    sFile = sFile.replace(matchBlog[0], "/_post/" + matchBlog[1] + "/" + matchBlog[1] + "-" + matchBlog[2] + "-" + matchBlog[3] + "-*");
+                    continue;   // TODO: For now, we're just going to assume that blog URLs are OK
+                }
+                if (sFile[0] == "/") {
+                    sFile = "." + sFile;
+                } else {
+                    sFile = "." + sFileDir + "/" + sFile;
+                }
+            }
+            let i = sFile.indexOf(' "');
+            if (i > 0) sFile = sFile.substr(0, i);
+            i = sFile.indexOf('?');
+            if (i > 0) sFile = sFile.substr(0, i);
+            i = sFile.indexOf('#');
+            if (i > 0) sFile = sFile.substr(0, i);
+            if (!fileExists(sFile)) {
+                printf("%s: link for '%s' not found: %s\n", sFilePath, match[1], sFile);
+            }
+        }
     }
 }
 

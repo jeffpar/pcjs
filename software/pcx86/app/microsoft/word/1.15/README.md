@@ -3,6 +3,7 @@ layout: page
 title: Microsoft Word 1.15 (for DOS)
 permalink: /software/pcx86/app/microsoft/word/1.15/
 redirect_from: /disks/pcx86/apps/microsoft/word/1.15/
+preview: screenshot.png
 machines:
   - id: ibm5160
     type: pcx86

@@ -7,8 +7,8 @@ permalink: /blog/2014/07/30/
 ---
 
 PCjs v1.14.0 now includes basic EGA support.  It emulates the EGA hardware well enough to pass the IBM EGA BIOS
-diagnostics and run [Windows 1.01](/devices/pcx86/machine/5160/ega/640kb/) in color.  Check out our
-[Windows 1.01 "Server Array"](/devices/pcx86/machine/5160/ega/640kb/array/) demo.
+diagnostics and run [Windows 1.01](/software/pcx86/sys/windows/1.01/) in color.  Check out our
+[Windows 1.01 "Server Array"](/software/pcx86/sys/windows/1.01/array/) demo.
 
 [<img src="/blog/images/win101-array-demo-small.jpg" alt='Windows 1.01 "Server Array" Demo'/>](/blog/images/win101-array-demo.jpg)
 
@@ -32,7 +32,7 @@ window, which the browser will then scale up or down, unless a specific overall 
 The second required XML element is a &lt;rom&gt; element to load the EGA ROM; eg:
 
 ```xml
-<rom id="romEGA" addr="0xc0000" size="0x4000" file="/devices/pcx86/video/ibm-ega.json" notify="videoEGA"/>
+<rom id="romEGA" addr="0xc0000" size="0x4000" file="/machines/pcx86/ibm/video/ega/IBM-EGA.json" notify="videoEGA"/>
 ```
 
 The *notify* attribute must match the *id* of the &lt;video&gt; element, so that the Video component can load
@@ -43,6 +43,3 @@ which essentially switches from the 8x14 font to the 8x8 font.
 The &lt;video&gt; element also supports a *switches* attribute to specify the type of monitor connected to the EGA;
 this attribute corresponds to the actual switch settings on the EGA card; our default *switches* setting is "0110",
 which selects an Enhanced Color Monitor, enabling the EGA's maximum resolution of 640x350.
-
-*[@jeffpar](https://jeffpar.com)*  
-*July 30, 2014*

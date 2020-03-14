@@ -24,3 +24,9 @@ with the disk.
 	MP80     DAT     6314   3-01-83  10:01a
 	MPBARE   COM     7424   2-28-83   6:45p
 	        8 File(s)    201728 bytes free
+
+### Advertisement from PC Magazine (Nov 1982)
+
+![Multiplan Advertisement (1 of 2)](MultiplanAd1of2_PC-Mag-1982-11.jpg)
+
+![Multiplan Advertisement (2 of 2)](MultiplanAd2of2_PC-Mag-1982-11.jpg)

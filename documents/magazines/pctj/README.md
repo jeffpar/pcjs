@@ -3,6 +3,7 @@ layout: page
 title: PC Tech Journal
 permalink: /documents/magazines/pctj/
 redirect_from: /pubs/pc/magazines/pctj/
+preview: covers/PCTJ-1983-07.jpg
 ---
 
 As of July 2019, this is no longer the *nearly complete* collection -- it is now **complete**, at least as far
