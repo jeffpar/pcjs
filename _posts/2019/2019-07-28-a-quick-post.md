@@ -45,6 +45,6 @@ The diskettes I picked up didn't come with any manuals, but I do have a copy of 
 from Microsoft Press (1987).  I'm thinking about mailing in a request for the "Companion Disk", too.  I'll let you know if
 Microsoft Press comes through.
 
-{% include gallery/documents.html title="Microsoft QuickBASIC" path="/documents/manuals/microsoft/" tag="quickbasic" width="200" height="260" %}
+{% include gallery/documents.html title="Microsoft QuickBASIC" path="/documents/books/programming/" tag="quickbasic" width="200" height="260" %}
 
-![Microsoft QuickBASIC Companion Disk Offer](/documents/manuals/microsoft/covers/Microsoft_QuickBASIC-1987-Offer.jpg)
+![Microsoft QuickBASIC Companion Disk Offer](/documents/books/programming/covers/Microsoft_QuickBASIC-1987-Offer.jpg)

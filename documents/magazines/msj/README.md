@@ -3,6 +3,7 @@ layout: page
 title: Microsoft Systems Journal
 permalink: /documents/magazines/msj/
 redirect_from: /pubs/pc/magazines/msj/
+preview: covers/MSJ-1986-10.jpg
 ---
 
 Microsoft used to provide a [1986-2000 Index](https://web.archive.org/web/20040711061240/http://www.microsoft.com/msj/backissues.aspx)

@@ -15,7 +15,7 @@ machines:
 
 Microsoft Windows 1.01, the first public version of Windows, was released on November 20, 1985.
 It is shown here running on an IBM PC XT (Model 5160) with an EGA Display.  You can also run Windows 1.01
-with a [Debugger](debugger/) or a [CGA Display](cga/). 
+with a [Debugger](debugger/) or a [CGA Display](cga/).  Or just for fun, on [four machines](array/) simultaneously.
 
 A demo of an earlier pre-release version, [Windows 1.0 ("Premiere Edition")](../1.00/), is also available.
 

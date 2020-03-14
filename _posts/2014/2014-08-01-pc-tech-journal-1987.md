@@ -7,9 +7,9 @@ permalink: /blog/2014/08/01/
 ---
 
 As part of an ongoing effort to make classic PC technical literature more accessible, I just finished
-scanning and posting the 12 issues of [PC Tech Journal](/pubs/pc/magazines/pctj/) from 1987.
+scanning and posting the 12 issues of [PC Tech Journal](/documents/magazines/pctj/) from 1987.
 
-![PC Tech Journal, Jan 1987](/pubs/pc/magazines/pctj/PCTJ-1987-01/cover.jpg "link:/pubs/pc/magazines/pctj/PCTJ-1987-01/:200:260")
+[![PC Tech Journal, Jan 1987](/documents/magazines/pctj/covers/PCTJ-1987-01.jpg)](/documents/magazines/pctj/#pctj-1987-01)
 
 Future PC Tech Journal postings will include:
 
@@ -24,9 +24,4 @@ apparently the last issue).
 For a nice overview and brief history of PC Tech Journal, check out the [OS/2 Museum](http://www.os2museum.com/wp/?p=2478). 
 
 In the meantime, if you have old PC Tech Journal issues that would fill any of the above holes, let me know.
-I'd be happy to buy them, scan them, and recycle them.
-
-Thanks.
-
-*[@jeffpar](https://jeffpar.com)*  
-*August 1, 2014*
+I'd be happy to buy them, scan them, and recycle them.  Thanks!

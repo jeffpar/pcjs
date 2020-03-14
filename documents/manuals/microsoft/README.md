@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft Manuals and Programming Guides
 permalink: /documents/manuals/microsoft/
+preview: covers/Adventure_Manual.jpg
 ---
 
 {% include gallery/documents.html title="Microsoft Adventure" tag="adventure" %}

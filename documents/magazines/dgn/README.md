@@ -3,6 +3,7 @@ layout: page
 title: "DosGetNews()"
 permalink: /documents/magazines/dgn/
 redirect_from: /pubs/pc/magazines/dgn/
+preview: covers/1988-07-27.jpg
 ---
 
 **DosGetNews()** was an internal Microsoft newsletter started in 1988 that helped keep all the

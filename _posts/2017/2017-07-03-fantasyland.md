@@ -18,8 +18,7 @@ machines:
 
 I recently added a demo of the [Logitech Modula-2/86 Compiler (1984)](/apps/pcx86/1984/modula2/),
 because I wanted to recreate the IBM PC test environment that John T. Cockerham had used in his October 1986
-[PC Tech Journal](/pubs/pc/magazines/pctj/) article
-"[Evaluating the EGA: The EGA Standard](/modules/shared/templates/pdf.html?url=/pubs/pc/magazines/pctj/PCTJ-1986-10/pages/PCTJ-1986-10%2053.pdf&page=53&total=228)".
+[PC Tech Journal](/documents/magazines/pctj/) article "[Evaluating the EGA: The EGA Standard](/documents/magazines/pctj/#pctj-1986-10)".
 
 I actually wanted to do that several years ago, when I first added EGA support to PCx86 (the PCjs emulation of the
 IBM PC), because Cockerham described two rigorous tests of EGA hardware compatibility that I would have liked to try:
@@ -50,22 +49,20 @@ continuously, independent of CPU speed and divorced from other program operation
 with fast smooth scrolling in both directions, test subtle timing dependencies between subunits of the EGA.
 
 Due to the "very selective" distribution of the program, **FantasyLand** has been impossible to locate.
-Even Cockerham seemed reluctant to tell us *too* much about the program.  My *guess* is that
-[Page 48](/modules/shared/templates/pdf.html?url=/pubs/pc/magazines/pctj/PCTJ-1986-10/pages/PCTJ-1986-10%2052.pdf&page=52&total=228)
+Even Cockerham seemed reluctant to tell us *too* much about the program.  My *guess* is that [Page 48](/documents/magazines/pctj/#pctj-1986-10)
 of the October 1986 issue displays a zoomed-in section of a **FantasyLand** screen, but it's unattributed, so who knows.
 If you come across a copy of **FantasyLand**, *please* let me know.
 
 So, given that **FantasyLand** seemed unattainable, I next turned my attention to Cockerham's own **EGATEST**.
 
-The [October 1986](/pubs/pc/magazines/pctj/PCTJ-1986-10/) issue contains the **EGATEST** program listing,
-starting on [Page 64](/modules/shared/templates/pdf.html?url=/pubs/pc/magazines/pctj/PCTJ-1986-10/pages/PCTJ-1986-10%2068.pdf&page=68&total=228),
-but who wants to type in all that code?  And while the issue -- like all our archived publications -- has been OCR'ed,
-there's always a significant number of errors in the Optical Character Recognition process.
+The [October 1986](/documents/magazines/pctj/PCTJ-1986-10/) issue contains the **EGATEST** program listing,
+starting on [Page 64](/documents/magazines/pctj/#pctj-1986-10), but who wants to type in all that code?
+And while the issue -- like all our archived publications -- has been OCR'ed, there's always a significant
+number of errors in the Optical Character Recognition process.
 
 Another option would have been to download the code from PC Tech Journal's own "PCTECHline" -- if we were doing this
 30 years ago.  Even back then, PCTECHline apparently wasn't the the most reliable service.  In fact, the very same
-issue of [PC Tech Journal (Page 14)](/modules/shared/templates/pdf.html?url=/pubs/pc/magazines/pctj/PCTJ-1986-10/pages/PCTJ-1986-10%2018.pdf&page=18&total=228)
-contains the following "Update/Apology":
+issue of [PC Tech Journal (Page 14)](/documents/magazines/pctj/#pctj-1986-10) contains the following "Update/Apology":
 
 > **PCTECHLINE UPDATE**
 

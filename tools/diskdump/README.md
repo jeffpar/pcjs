@@ -14,7 +14,7 @@ files/folders.
 
 For example, from the root directory of the project, you could run:
 
-	node modules/diskdump/bin/diskdump --path="apps/pcx86/1981/visicalc/README.md" --format=img --output=disk.img
+	node tools/diskdump/bin/diskdump --path="software/pcx86/app/other/visicalc/1981/README.md" --format=img --output=disk.img
 
 to produce a `disk.img` containing one file, "README.md", which you could then mount on your local operating
 system *or* inside a PCjs machine.
@@ -22,11 +22,11 @@ system *or* inside a PCjs machine.
 To make the disk image more useful, you might want to download a copy of [VisiCalc](http://www.bricklin.com/history/vcexecutable.htm)
 into that folder as well, so that you could then run:
 
-	node modules/diskdump/bin/diskdump --path="apps/pcx86/1981/visicalc/vc.com;README.md" --format=img --output=disk.img
+	node tools/diskdump/bin/diskdump --path="software/pcx86/app/other/visicalc/1981/vc.com;README.md" --format=img --output=disk.img
 
 to produce a `disk.img` containing both "VC.COM" and "README.md".  In fact, this is exactly how the
-[VisiCalc Disk](/apps/pcx86/1981/visicalc/VISICALC1981.json) stored in the [VisiCalc](/apps/pcx86/1981/visicalc/)
-folder was generated.
+[VisiCalc Disk]({{ site.software.diskettes.server }}/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
+stored in the [VisiCalc](/software/pcx86/app/other/visicalc/1981/) folder was generated.
 
 The equivalent web server API request would look like:
 

@@ -1544,178 +1544,144 @@
       }
     },
     "other": {
-      "@title": "Other (By Year)",
-      "1982": {
-        "@versions": {
-          "esuite": {
-            "@title": "Executive Suite (1982)",
-            "@media": [
-              {
-                "@diskette": "ESUITE-1982.json",
-                "@type": "PC360K",
-                "@source": ""
-              }
-            ],
-            "@author": "Armonk Corporation"
-          }
-        }
-      },
-      "1983": {
-        "@versions": {
-          "adventmath": {
-            "@title": "Adventures in Math (1983)",
-            "@media": [
-              {
-                "@title": "Adventures in Math 1.00",
-                "@diskette": "ADVENTMATH-100.json",
-                "@type": "PC160K",
-                "@source": ""
-              }
-            ],
-            "@author": "Scott A. Harris",
-            "@publisher": "IBM"
-          }
-        }
-      },
-      "1984": {
-        "@versions": {
-          "wizardry1": {
-            "@title": "Wizardry I (1984)",
-            "@media": [
-              {
-                "@title": "Wizardry I - Master Disk",
-                "@diskette": "WIZARDRY1-MASTER.json",
-                "@type": "PC320K",
-                "@source": ""
-              },
-              {
-                "@title": "Wizardry I - Scenario Disk",
-                "@diskette": "WIZARDRY1-SCENARIO.json",
-                "@type": "PC320K",
-                "@source": ""
-              }
-            ],
-            "@author": "Sir-Tech Software",
-            "@version": "1.0"
-          }
-        }
-      },
-      "1985": {
-        "@versions": {
-          "castle_adventure": {
-            "@title": "Castle Adventure (1985)",
-            "@media": [
-              {
-                "@diskette": "CASTLE-ADVENTURE-1985.json",
-                "@type": "PC160K",
-                "@source": ""
-              }
-            ],
-            "@author": "Kevin Bales"
-          },
-          "rogue": {
-            "@title": "Rogue (1985)",
-            "@media": [
-              {
-                "@diskette": "ROGUE-1985.json",
-                "@type": "PC160K",
-                "@source": ""
-              }
-            ],
-            "@author": [
-              "Ken Arnold",
-              "Jon Lane",
-              "Michael Toy"
-            ],
-            "@version": "1.49"
-          }
-        }
-      },
-      "1988": {
-        "@versions": {
-          "trump_castle": {
-            "@title": "Trump Castle (1988)",
-            "@media": [
-              {
-                "@title": "Trump Castle 1.20 (1988)",
-                "@diskette": "TRUMP-CASTLE-120.json",
-                "@type": "PC1200K",
-                "@source": ""
-              }
-            ],
-            "@version": "1.20"
-          }
-        }
-      },
-      "1990": {
-        "@versions": {
-          "oregon_trail": {
-            "@title": "The Oregon Trail (1990)",
-            "@media": [
-              {
-                "@title": "Oregon Trail 2.1 (1990)",
-                "@diskette": "OREGON_TRAIL-210.json",
-                "@type": "PC1200K",
-                "@source": ""
-              }
-            ],
-            "@author": "MECC",
-            "@version": "2.1"
-          }
-        }
-      },
-      "1991": {
-        "@versions": {
-          "lemmings": {
-            "@title": "Lemmings (1991)",
-            "@media": [
-              {
-                "@title": "Lemmings (1991)",
-                "@diskette": "LEMMINGS-1991.json",
-                "@type": "PC1200K",
-                "@source": ""
-              }
-            ],
-            "@author": "DMA Design",
-            "@publisher": "Psygnosis"
-          }
-        }
-      },
-      "1992": {
-        "@versions": {
-          "moria": {
-            "@title": "Moria (1992)",
-            "@media": [
-              {
-                "@diskette": "MORIA-1992.json",
-                "@type": "PC360K",
-                "@source": ""
-              }
-            ],
-            "@author": [
-              "Robert A. Koeneke",
-              "Jimmey W. Todd Jr.",
-              "David J. Grabiner",
-              "James E. Wilson"
-            ],
-            "@version": "5.5"
-          }
-        }
-      },
-      "2019": {
-        "@versions": {
-          "invaders": {
-            "@title": "Invaders Boot Sector (2019)",
-            "@bootable": true,
-            "@hardware": "/machines/pcx86/ibm/5150/vga/",
-            "@media": [
-              {
-                "@diskette": "INVADERS-BOOT.json",
-                "@type": "PC160K",
-                "@source": "https://github.com/nanochess/Invaders"
-              }
-            ]
-          }
+      "@title": "Other",
+      "@versions": {
+        "1982/esuite": {
+          "@title": "Executive Suite (1982)",
+          "@media": [
+            {
+              "@diskette": "ESUITE-1982.json",
+              "@type": "PC360K",
+              "@source": ""
+            }
+          ],
+          "@author": "Armonk Corporation"
+        },
+        "1983/adventmath": {
+          "@title": "Adventures in Math (1983)",
+          "@media": [
+            {
+              "@title": "Adventures in Math 1.00",
+              "@diskette": "ADVENTMATH-100.json",
+              "@type": "PC160K",
+              "@source": ""
+            }
+          ],
+          "@author": "Scott A. Harris",
+          "@publisher": "IBM"
+        },
+        "1984/wizardry1": {
+          "@title": "Wizardry I (1984)",
+          "@media": [
+            {
+              "@title": "Wizardry I - Master Disk",
+              "@diskette": "WIZARDRY1-MASTER.json",
+              "@type": "PC320K",
+              "@source": ""
+            },
+            {
+              "@title": "Wizardry I - Scenario Disk",
+              "@diskette": "WIZARDRY1-SCENARIO.json",
+              "@type": "PC320K",
+              "@source": ""
+            }
+          ],
+          "@author": "Sir-Tech Software",
+          "@version": "1.0"
+        },
+        "1985/castle_adventure": {
+          "@title": "Castle Adventure (1985)",
+          "@media": [
+            {
+              "@diskette": "CASTLE-ADVENTURE-1985.json",
+              "@type": "PC160K",
+              "@source": ""
+            }
+          ],
+          "@author": "Kevin Bales"
+        },
+        "1985/rogue": {
+          "@title": "Rogue (1985)",
+          "@media": [
+            {
+              "@diskette": "ROGUE-1985.json",
+              "@type": "PC160K",
+              "@source": ""
+            }
+          ],
+          "@author": [
+            "Ken Arnold",
+            "Jon Lane",
+            "Michael Toy"
+          ],
+          "@version": "1.49"
+        },
+        "1988/trump_castle": {
+          "@title": "Trump Castle (1988)",
+          "@media": [
+            {
+              "@title": "Trump Castle 1.20 (1988)",
+              "@diskette": "TRUMP-CASTLE-120.json",
+              "@type": "PC1200K",
+              "@source": ""
+            }
+          ],
+          "@version": "1.20"
+        },
+        "1990/oregon_trail": {
+          "@title": "The Oregon Trail (1990)",
+          "@media": [
+            {
+              "@title": "Oregon Trail 2.1 (1990)",
+              "@diskette": "OREGON_TRAIL-210.json",
+              "@type": "PC1200K",
+              "@source": ""
+            }
+          ],
+          "@author": "MECC",
+          "@version": "2.1"
+        },
+        "1991/lemmings": {
+          "@title": "Lemmings (1991)",
+          "@media": [
+            {
+              "@title": "Lemmings (1991)",
+              "@diskette": "LEMMINGS-1991.json",
+              "@type": "PC1200K",
+              "@source": ""
+            }
+          ],
+          "@author": "DMA Design",
+          "@publisher": "Psygnosis"
+        },
+        "1992/moria": {
+          "@title": "Moria (1992)",
+          "@media": [
+            {
+              "@diskette": "MORIA-1992.json",
+              "@type": "PC360K",
+              "@source": ""
+            }
+          ],
+          "@author": [
+            "Robert A. Koeneke",
+            "Jimmey W. Todd Jr.",
+            "David J. Grabiner",
+            "James E. Wilson"
+          ],
+          "@version": "5.5"
+        },
+        "2019/invaders": {
+          "@title": "Invaders Boot Sector (2019)",
+          "@bootable": true,
+          "@hardware": "/machines/pcx86/ibm/5150/vga/",
+          "@media": [
+            {
+              "@diskette": "INVADERS-BOOT.json",
+              "@type": "PC160K",
+              "@source": "https://github.com/nanochess/Invaders"
+            }
+          ]
         }
       }
     }
