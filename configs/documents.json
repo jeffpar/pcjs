@@ -927,6 +927,10 @@
   "manuals": {
     "@title": "Manuals",
     "@instances": {
+      "ibm": {
+        "@title": "IBM",
+        "@permalink": "/documents/manuals/ibm/"
+      },
       "intel": {
         "@title": "Intel",
         "@documents": [

@@ -2530,7 +2530,8 @@ class Web {
                  *      ["unrecognized disk path: test.img"]
                  */
                 if (sData.indexOf("0x") < 0 && sData.indexOf("0o") < 0 && sData.substr(0, 2) != '["') {
-                    data = JSON.parse(sData.replace(/([a-z]+):/gm, '"$1":').replace(/\/\/[^\n]*/gm, ""));
+                    if (sData.indexOf('"values"') < 0) sData = sData.replace(/([a-z]+):/gm, '"$1":').replace(/\/\/[^\n]*/gm, "");
+                    data = JSON.parse(sData);
                 } else {
                     data = eval("(" + sData + ")");
                 }

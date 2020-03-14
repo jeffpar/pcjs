@@ -11,6 +11,10 @@
   "dec": {
     "@title": "DEC",
     "@instances": {
+      "pdp11/1120/basic/debugger": {
+        "@title": "PDP-11/20 BASIC",
+        "@redirect_from": "/devices/pdp11/machine/1120/basic/debugger/"
+      },
       "vt100": {
         "@title": "VT100 Terminal",
         "@redirect_from": "/devices/pc8080/machine/vt100/new/"
@@ -18,11 +22,11 @@
     }
   },
   "pcx86": {
-    "@title": "IBM PC and Compatibles",
+    "@title": "IBM PC / Clones",
     "ibm": {
       "@title": "IBM PC",
       "4860": {
-        "@title": "PC Jr (Model 4860)",
+        "@title": "PCJr (Model 4860)",
         "@documents": [
           {
             "@title": "IBM 4860 Technical Reference (Nov 1983)",
@@ -247,6 +251,46 @@
             "@source": ""
           }
         ]
+      },
+      "video": {
+        "@title": "IBM Video Adapters",
+        "@documents": [
+          {
+            "@title": "IBM Monochrome Display and Printer Adapter",
+            "@file": "IBM-MDA.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFPxcuda7FDcNW7BA?e=kOj1AO",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM Color/Graphics Monitor Adapter",
+            "@file": "IBM-CGA.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFOOxc92qIsgXiyYw?e=MlkUfH",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM Enhanced Graphics Adapter",
+            "@file": "IBM_EGA_1984-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqETcfH-OJbF8XjjQA?e=9iPpJa",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM EGA Installation Instructions",
+            "@file": "IBM_EGA_Installation_Instructions_1984-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqESv2LrxGsMlNweRA?e=3ABlJl",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM VGA Technical Reference (Excerpt)",
+            "@file": "IBM_VGA_Technical_Reference-Excerpt.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFQgmvof3IQdrHQKQ?e=y8QOzc",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          }
+        ]
       }
     },
     "compaq": {
@@ -381,7 +425,7 @@
         ],
         "@redirect_from": ["/devices/c1p/machine/", "/docs/c1pjs/", "/docs/c1pjs/embed/"]
       },
-      "c1p-array": {
+      "c1p/array": {
         "@title": "Challenger 1P \"Array\"",
         "@redirect_from": "/devices/c1p/machine/8kb/array/",
         "machines": [
@@ -393,7 +437,7 @@
           {"id": "osi6", "config": "/configs/c1p/xml/c1p8k-small.xml"}
         ]
       },
-      "c1p-debugger": {
+      "c1p/debugger": {
         "@title": "Challenger 1P with Debugger",
         "@redirect_from": ["/devices/c1p/machine/", "/docs/c1pjs/", "/docs/c1pjs/embed/"]
       }

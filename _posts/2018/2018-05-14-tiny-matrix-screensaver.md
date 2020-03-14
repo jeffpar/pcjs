@@ -54,7 +54,7 @@ but it's still cute.
 
 Second, it's dependent on some register entry conditions that are true only for *very* specific versions of DOS.
 It expects the SI register to contain 0x100 and the Carry, Parity, Auxiliary Carry, Zero, and Sign flags
-to all be clear.  This [handy table](/blog/images/DOS_COM_Startup_Registers.pdf) of initial register values shows
+to all be clear.  This [handy table](/documents/misc/DOS_COM_Startup_Registers.pdf) of initial register values shows
 the pitfalls of such an assumption: for example, the program won't work on any version of DOS &lt; 2.00.  I've
 also tested it on PC DOS 3.00, where it fails because several of the arithmetic flags are *not* clear.
 It’s also not initializing the Direction flag, and if that flag happened to be set "down" instead of "up", the

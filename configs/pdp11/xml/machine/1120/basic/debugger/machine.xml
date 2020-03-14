@@ -4,7 +4,7 @@
 	<name pos="center">PDP-11/20: 16Kb, PDP-11 BASIC, Debugger</name>
 	<computer id="computer" busWidth="16"/>
 	<cpu id="cpu" model="1120" cycles="6666667"/>
-	<ram id="ram" addr="0x0000" size="0x4000" file="/apps/pdp11/tapes/basic/DEC-11-AJPB-PB.json"/>
+	<ram id="ram" addr="0x0000" size="0x4000" file="/software/dec/pdp11/tapes/basic/DEC-11-AJPB-PB.json"/>
 	<device id="default" type="default"/>
 	<serial id="dl11" adapter="0" binding="print" upperCase="true"/>
 	<panel ref="/configs/pdp11/xml/panel/test/debugger/terminal.xml"/>

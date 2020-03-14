@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<device id="pc11" type="pc11" baudReceive="9600" autoMount='{PTR:{path:"/apps/pdp11/boot/bootstrap/BOOTSTRAP-16KB.json"}}' pos="left" width="35%" padLeft="8px" padBottom="8px">
+<device id="pc11" type="pc11" baudReceive="9600" autoMount='{PTR:{path:"/software/dec/pdp11/boot/bootstrap/BOOTSTRAP-16KB.json"}}' pos="left" width="35%" padLeft="8px" padBottom="8px">
 	<name>Paper Tape Controls</name>
 	<control type="container">
 		<control type="list" binding="listTapes">
-			<tape id="tape00" name="Bootstrap Loader (16Kb)" path="/apps/pdp11/boot/bootstrap/BOOTSTRAP-16KB.json"/>
-			<tape id="tape01" name="Absolute Loader" path="/apps/pdp11/tapes/absloader/DEC-11-L2PC-PO.json"/>
-			<tape id="tape02" name="BASIC (Single User)" path="/apps/pdp11/tapes/basic/DEC-11-AJPB-PB.json"/>
-			<tape id="tape03" name="ED-11 SA=12430 RA=3746" path="/apps/pdp11/tapes/ed11/DEC-11-E1PA-PB.json"/>
-			<tape id="tape04" name="PAL-11A (4K) SA=1410 RA=1410" path="/apps/pdp11/tapes/pal11a/DEC-11-ASPA-PB.json"/>
-			<tape id="tape05" name="PAL-11A (8K) SA=1410 RA=1410" path="/apps/pdp11/tapes/pal11a/DEC-11-ASXA-PB.json"/>
-			<tape id="tape06" name="ODT-11" path="/apps/pdp11/tapes/odt11/DEC-11-O1PA-PA.json"/>
-			<tape id="tape07" name="ODT-11 SA=13060" path="/apps/pdp11/tapes/odt11/DEC-11-O1PA-PB.json"/>
-			<tape id="tape08" name="ODT-11X" path="/apps/pdp11/tapes/odt11x/DEC-11-O2PA-PA.json"/>
-			<tape id="tape09" name="ODT-11X SA=12220 RA=12220" path="/apps/pdp11/tapes/odt11x/DEC-11-O2PA-PB.json"/>
-			<tape id="tape10" name="IOX TAPE 1 OF 2" path="/apps/pdp11/tapes/iox/DEC-11-YIPA-PA1.json"/>
-			<tape id="tape11" name="IOX TAPE 2 OF 2" path="/apps/pdp11/tapes/iox/DEC-11-YIPA-PA2.json"/>
-			<tape id="tape12" name="IOX LA=15100" path="/apps/pdp11/tapes/iox/DEC-11-YIPA-PB.json"/>
-			<tape id="tape13" name="FPP-11 TAPE 1 OF 11" path="/apps/pdp11/tapes/fpp11/DEC-11-YQPB-PA1.json"/>
-			<tape id="tape14" name="FPP-11 TAPE 2 OF 11" path="/apps/pdp11/tapes/fpp11/DEC-11-YQPB-PA2.json"/>
-			<tape id="tape15" name="FPP-11 TAPE 3 OF 11" path="/apps/pdp11/tapes/fpp11/DEC-11-YQPB-PA3.json"/>
-			<tape id="tape16" name="FPP-11 TAPE 4 OF 11" path="/apps/pdp11/tapes/fpp11/DEC-11-YQPB-PA4.json"/>
-			<tape id="tape17" name="FPP-11 TAPE 5 OF 11" path="/apps/pdp11/tapes/fpp11/DEC-11-YQPB-PA5.json"/>
-			<tape id="tape18" name="FPP-11 TAPE 6 OF 11" path="/apps/pdp11/tapes/fpp11/DEC-11-YQPB-PA6.json"/>
-			<tape id="tape19" name="FPP-11 TAPE 7 OF 11" path="/apps/pdp11/tapes/fpp11/DEC-11-YQPB-PA7.json"/>
-			<tape id="tape20" name="FPP-11 TAPE 8 OF 11" path="/apps/pdp11/tapes/fpp11/DEC-11-YQPB-PA8.json"/>
-			<tape id="tape21" name="FPP-11 TAPE 9 OF 11" path="/apps/pdp11/tapes/fpp11/DEC-11-YQPB-PA9.json"/>
-			<tape id="tape22" name="FPP-11 TAPE 10 OF 11" path="/apps/pdp11/tapes/fpp11/DEC-11-YQPB-PA10.json"/>
-			<tape id="tape23" name="FPP-11 TAPE 11 OF 11" path="/apps/pdp11/tapes/fpp11/DEC-11-YQPB-PA11.json"/>
-			<tape id="tape24" name="DUMPTT SA=XX7440 RA=XX7440" path="/apps/pdp11/tapes/dumptt/DEC-11-Y1PA-PO.json"/>
-			<tape id="tape25" name="DUMPTT SA=XXXXXX RA=XXXXXX" path="/apps/pdp11/tapes/dumptt/DEC-11-Y1PA-PB.json"/>
-			<tape id="tape26" name="DUMPAB SA=XXXXXX RA=XXXXXX" path="/apps/pdp11/tapes/dumpab/DEC-11-Y2PA-PB.json"/>
-			<tape id="diags.tape01" name="MD-11 TEST 1 - BRANCH" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0AA-PB.json"/>
-			<tape id="diags.tape02" name="MD-11 TEST 2 - CON BRANCH" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0BA-PB.json"/>
-			<tape id="diags.tape03" name="MD-11 TEST 3 - UNARY" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0CA-PB.json"/>
-			<tape id="diags.tape04" name="MD-11 TEST 4 - UNARY + BINARY" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0DA-PB.json"/>
-			<tape id="diags.tape05" name="MD-11 TEST 5 - ROTATE SHIFT" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0EA-PB.json"/>
-			<tape id="diags.tape06" name="MD-11 TEST 6 - COMPARE" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0FA-PB.json"/>
-			<tape id="diags.tape07" name="MD-11 TEST 7 - COMPARE NOT" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0GA-PB.json"/>
-			<tape id="diags.tape08" name="MD-11 TEST 8 - MOVE" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0HA-PB.json"/>
-			<tape id="diags.tape09" name="MD-11 TEST 9 - BIS, BIC + BIT" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0IA-PB.json"/>
-			<tape id="diags.tape10" name="MD-11 TEST 10 - ADD" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0JA-PB.json"/>
-			<tape id="diags.tape11" name="MD-11 TEST 11 - SUBTRACT" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0KA-PB.json"/>
-			<tape id="diags.tape12" name="MD-11 TEST 12 - JUMP" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0LA-PB.json"/>
-			<tape id="diags.tape13" name="MD-11 TEST 13 - JSR, RTS, RTI" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0MA-PB.json"/>
-			<tape id="diags.tape14a" name="MD-11 TEST 14A - TRAP TEST" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0NA-PB.json"/>
-			<tape id="diags.tape14b" name="MD-11 TEST 14B - TRAP TEST" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0NB-PB.json"/>
-			<tape id="diags.tape14c" name="MD-11 TEST 14C - TRAP TEST" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0NC-PB.json"/>
-			<tape id="diags.tape15" name="MD-11 TEST 15 - CPU EXERCISER" path="/apps/pdp11/tapes/diags/MAINDEC-11-D0OA-PB.json"/>
-			<tape id="tray02.tape04" name="MD-11 11/70 CPU EXERCISER" path="/apps/pdp11/tapes/diags/MAINDEC-11-DEQKC-B1-PB.json"/>
+			<tape id="tape00" name="Bootstrap Loader (16Kb)" path="/software/dec/pdp11/boot/bootstrap/BOOTSTRAP-16KB.json"/>
+			<tape id="tape01" name="Absolute Loader" path="/software/dec/pdp11/tapes/absloader/DEC-11-L2PC-PO.json"/>
+			<tape id="tape02" name="BASIC (Single User)" path="/software/dec/pdp11/tapes/basic/DEC-11-AJPB-PB.json"/>
+			<tape id="tape03" name="ED-11 SA=12430 RA=3746" path="/software/dec/pdp11/tapes/ed11/DEC-11-E1PA-PB.json"/>
+			<tape id="tape04" name="PAL-11A (4K) SA=1410 RA=1410" path="/software/dec/pdp11/tapes/pal11a/DEC-11-ASPA-PB.json"/>
+			<tape id="tape05" name="PAL-11A (8K) SA=1410 RA=1410" path="/software/dec/pdp11/tapes/pal11a/DEC-11-ASXA-PB.json"/>
+			<tape id="tape06" name="ODT-11" path="/software/dec/pdp11/tapes/odt11/DEC-11-O1PA-PA.json"/>
+			<tape id="tape07" name="ODT-11 SA=13060" path="/software/dec/pdp11/tapes/odt11/DEC-11-O1PA-PB.json"/>
+			<tape id="tape08" name="ODT-11X" path="/software/dec/pdp11/tapes/odt11x/DEC-11-O2PA-PA.json"/>
+			<tape id="tape09" name="ODT-11X SA=12220 RA=12220" path="/software/dec/pdp11/tapes/odt11x/DEC-11-O2PA-PB.json"/>
+			<tape id="tape10" name="IOX TAPE 1 OF 2" path="/software/dec/pdp11/tapes/iox/DEC-11-YIPA-PA1.json"/>
+			<tape id="tape11" name="IOX TAPE 2 OF 2" path="/software/dec/pdp11/tapes/iox/DEC-11-YIPA-PA2.json"/>
+			<tape id="tape12" name="IOX LA=15100" path="/software/dec/pdp11/tapes/iox/DEC-11-YIPA-PB.json"/>
+			<tape id="tape13" name="FPP-11 TAPE 1 OF 11" path="/software/dec/pdp11/tapes/fpp11/DEC-11-YQPB-PA1.json"/>
+			<tape id="tape14" name="FPP-11 TAPE 2 OF 11" path="/software/dec/pdp11/tapes/fpp11/DEC-11-YQPB-PA2.json"/>
+			<tape id="tape15" name="FPP-11 TAPE 3 OF 11" path="/software/dec/pdp11/tapes/fpp11/DEC-11-YQPB-PA3.json"/>
+			<tape id="tape16" name="FPP-11 TAPE 4 OF 11" path="/software/dec/pdp11/tapes/fpp11/DEC-11-YQPB-PA4.json"/>
+			<tape id="tape17" name="FPP-11 TAPE 5 OF 11" path="/software/dec/pdp11/tapes/fpp11/DEC-11-YQPB-PA5.json"/>
+			<tape id="tape18" name="FPP-11 TAPE 6 OF 11" path="/software/dec/pdp11/tapes/fpp11/DEC-11-YQPB-PA6.json"/>
+			<tape id="tape19" name="FPP-11 TAPE 7 OF 11" path="/software/dec/pdp11/tapes/fpp11/DEC-11-YQPB-PA7.json"/>
+			<tape id="tape20" name="FPP-11 TAPE 8 OF 11" path="/software/dec/pdp11/tapes/fpp11/DEC-11-YQPB-PA8.json"/>
+			<tape id="tape21" name="FPP-11 TAPE 9 OF 11" path="/software/dec/pdp11/tapes/fpp11/DEC-11-YQPB-PA9.json"/>
+			<tape id="tape22" name="FPP-11 TAPE 10 OF 11" path="/software/dec/pdp11/tapes/fpp11/DEC-11-YQPB-PA10.json"/>
+			<tape id="tape23" name="FPP-11 TAPE 11 OF 11" path="/software/dec/pdp11/tapes/fpp11/DEC-11-YQPB-PA11.json"/>
+			<tape id="tape24" name="DUMPTT SA=XX7440 RA=XX7440" path="/software/dec/pdp11/tapes/dumptt/DEC-11-Y1PA-PO.json"/>
+			<tape id="tape25" name="DUMPTT SA=XXXXXX RA=XXXXXX" path="/software/dec/pdp11/tapes/dumptt/DEC-11-Y1PA-PB.json"/>
+			<tape id="tape26" name="DUMPAB SA=XXXXXX RA=XXXXXX" path="/software/dec/pdp11/tapes/dumpab/DEC-11-Y2PA-PB.json"/>
+			<tape id="diags.tape01" name="MD-11 TEST 1 - BRANCH" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0AA-PB.json"/>
+			<tape id="diags.tape02" name="MD-11 TEST 2 - CON BRANCH" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0BA-PB.json"/>
+			<tape id="diags.tape03" name="MD-11 TEST 3 - UNARY" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0CA-PB.json"/>
+			<tape id="diags.tape04" name="MD-11 TEST 4 - UNARY + BINARY" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0DA-PB.json"/>
+			<tape id="diags.tape05" name="MD-11 TEST 5 - ROTATE SHIFT" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0EA-PB.json"/>
+			<tape id="diags.tape06" name="MD-11 TEST 6 - COMPARE" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0FA-PB.json"/>
+			<tape id="diags.tape07" name="MD-11 TEST 7 - COMPARE NOT" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0GA-PB.json"/>
+			<tape id="diags.tape08" name="MD-11 TEST 8 - MOVE" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0HA-PB.json"/>
+			<tape id="diags.tape09" name="MD-11 TEST 9 - BIS, BIC + BIT" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0IA-PB.json"/>
+			<tape id="diags.tape10" name="MD-11 TEST 10 - ADD" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0JA-PB.json"/>
+			<tape id="diags.tape11" name="MD-11 TEST 11 - SUBTRACT" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0KA-PB.json"/>
+			<tape id="diags.tape12" name="MD-11 TEST 12 - JUMP" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0LA-PB.json"/>
+			<tape id="diags.tape13" name="MD-11 TEST 13 - JSR, RTS, RTI" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0MA-PB.json"/>
+			<tape id="diags.tape14a" name="MD-11 TEST 14A - TRAP TEST" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0NA-PB.json"/>
+			<tape id="diags.tape14b" name="MD-11 TEST 14B - TRAP TEST" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0NB-PB.json"/>
+			<tape id="diags.tape14c" name="MD-11 TEST 14C - TRAP TEST" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0NC-PB.json"/>
+			<tape id="diags.tape15" name="MD-11 TEST 15 - CPU EXERCISER" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0OA-PB.json"/>
+			<tape id="tray02.tape04" name="MD-11 11/70 CPU EXERCISER" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-DEQKC-B1-PB.json"/>
 		</control>
 		<control type="button" binding="loadTape">Load</control>
 		<control type="button" binding="readTape">Read</control>

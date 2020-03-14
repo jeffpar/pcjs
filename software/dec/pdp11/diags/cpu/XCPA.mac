@@ -1,0 +1,527 @@
+	.title AC-E664G-MC_CXCPAG0-Processor-test_Sep78
+;
+; original code OCRed from
+; http://www.bitsavers.org/pdf/dec/pdp11/xxdp/listings/AC-E664G-MC_CXCPAG0-Processor-test_Sep78.pdf
+;
+; Changed to run standalone without monitor
+; JH
+
+	.LIST	BIN
+	.ENABLE AMA		; relocatable addresses as absolute
+
+;**********************************************************************
+	.asect
+
+	SPSIZ=040		; stack size
+
+; is called on every error
+	.MACRO	HRDER$
+	HALT			; just halt on error
+	HALT			; force3 word size, like in original
+	HALT
+	.ENDM
+
+;MODNAM: .ASCII  /CPAG / ;MODULE NAME
+;**********************************************************************
+INIT:	START			;MODULE START ADDRE.
+SPOINT: MODSP			;MODULE STACK POINTER.
+PASCNT: 0			;PASS COUNTER.
+
+
+      .=220			; generate same addresses as in original
+
+
+
+START:
+	 MOV	SPOINT,SP	; load stack pointer
+
+
+;**********************************************************************
+;CHECK BRANCH INSTRUCTIONS
+RESTRT: CCC
+	BCS	CC0
+	BVS	CC0
+	BEQ	CC0
+	BMI	CC0
+	BLT	CC0
+	BLE	CC0
+	BLOS	CC0
+	BHI	CON1
+CC0:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+;CONTINUE
+CON1:	SEV			;CC'S=1010
+	SEN
+	BVC	CC2
+	BLT	CC2
+	BLE	CC2
+	BGE	CON3
+CC2:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+;CONTINUE
+CON3:	SEZ			;CC'S=1111
+	SEC
+	BNE	CC4
+	BGT	CC4
+	BHI	CC4
+	BLE	YT15:
+CC4:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+
+
+
+;CHECK UNARY WORD OPS USING ADDRESS MODES 3 AND 5
+YT15:	BR  1$
+	.WORD	0
+	.WORD	0
+1$:	MOV	PC,R3
+	SUB	#4,R3
+	CLR	(R3)
+	MOV	R3,R0
+	TST	-(R3)
+	MOV	R0,(R3)
+	MOV	R3,R4
+	CCC
+	TST	@(R3)+		;(R0)=000000,CC=0100
+	BEQ	2$
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+2$:	SEC
+	ROR	@-(R3)		;(R0)=100000,CC=0101
+	BCS	ROR5
+	BVC	ROR5
+	BMI	RD
+ROR5:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+RD:	CCC
+	ASR	@(R4)+		;(R0)=140000,CC=1010
+	BVC	ASR3
+	BMI	RD1
+ASR3:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+RD1:	CLN
+	ASL	@(R3)+		;(R0)=100000,CC=1001
+	BCC	ASL3
+	BVS	ASL3
+	BMI	RD2
+ASL3:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+RD2:	SCC
+	DEC	@-(R4)		;(R0)=077777,CC=0010
+	BCC	DEC5
+	BVC	DEC5
+	BEQ	DEC5
+	BPL	RD3
+DEC5:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+RD3:	NEG	@-(R3)		;(R0)=100001, C=1001
+	BCC	NEG5
+	BVS	NEG5
+	BMI	RD4
+NEG5:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+RD4:	SEV
+	COM	@(R4)+		;(R0)=077776, C=0001
+	BCC	COM3
+	BVC	RD5
+COM3:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+RD5:	INC	@(R3)+		;(R0)=077777, C=0001
+	BCC	INC3
+	BPL	RD6
+INC3:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+RD6:	ADC	@-(R4)		;(R0)=100000, C=1010
+	BCS	ADC5
+	BVC	ADC5
+	BMI	RD7
+ADC5:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+RD7:	CCC
+	ROL	@(R4)+		;(R0)=000000, C=0111
+	BCC	ROL3
+	BVC	ROL3
+	BEQ	RD8
+ROL3:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+RD8:	INC	@-(R3)		;(R0)=000001, C=0001
+	SBC	@-(R4)		;(R0)=000000, C=0100
+	BCS	SBC5
+	BEQ	RD9
+SBC5:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+;CHECK UNARY BYTE OPS USING ADDRESS MODES 3 AND 4
+RD9:	BR   1$ 		; RESERVE 3 WORDS
+	.WORD	0		;1 FOR EVEN BYTE ADDRESS
+	.WORD	0		;1 FOR ODD BYTE ADDRESS
+	.WORD	0		;AND 1 FOR DATA
+1$:	MOV	PC,R2
+	TST	-(R2)		;BACK R2 UP TO
+	TST	-(R2)		;DATA WORD
+	MOV	R2,R0		;R0 POINTS TO THE DATA WORD
+	CLR	(R0)		;PRESET DATA
+	TST	-(R2)		;BACK R2 UP TO
+	TST	-(R2)		;EVEN BYTE ADDRESS WORD
+	MOV	R0,(R2)+	;LOAD ADDRESS
+	INC	R0		;ODD BYTE ADDRESS
+	MOV	R0,(R2)+	;LOAD ODD BYTE ADDRESS
+	MOV	R2,R0		;RESET R0
+	MOV	R2,R5
+
+	COMB	@-(R2)		;(R0)=177400, CC=1001
+	BCC	COMB5
+	BMI	TE
+COMB5:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+TE:	TSTB	@-(R2)		;(R0)=177400, CC=0100
+	BEQ	1$
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+1$:	SEV
+	ASRB	@-(R5)		;(R0)=177400, CC=1001
+	BCC	ASRB5
+	BVS	ASRB5
+	BMI	TE1
+ASRB5:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+TE1:	INCB	@(R2)+		;(R0)=177401, CC=000
+	BCC	INCB3
+	BPL	TE2
+INCB3:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+TE2:	CLC
+	RORB	@-(R5)		;(R0)=177400, CC=0111
+	BCC	RORB5
+	BVC	RORB5
+	BNE	RORB5
+	BPL	TE3
+RORB5:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+TE3:	ASLB	@(R2)+		;(R0)=177000, CC=1001
+	BCC	ASLB3
+	BVS	ASLB3
+	BMI	TE4
+ASLB3:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+TE4:	ADCB	@-(R2)		;(R0)=177400, CC=1000
+	BCS	ADCB5
+	BMI	TE5:
+ADCB5:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+TE5:	SCC
+	ROLB	@(R5)+		;(R0)=177401, CC=0000
+	BLOS	ROLB3		;BRANCH IF C OR Z IS SET
+	BVS	ROLB3
+	BPL	TE6
+ROLB3:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+TE6:	SWAB	@-(R2)		;(R0)=000777, C=1000
+	BMI	1$
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+1$:	SEC
+	SBCB	@(R5)+		;(R0)=000377, CC=0100
+	BCS	SBCB3
+	BEQ	TE7
+SBCB3:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+TE7:	NEGB	@(R2)+		;(R0)=000001
+	DECB	@-(R2)		;(R0)=000000, CC=0101
+	BCC	DECB5
+	BEQ	B1
+DECB5:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+;CHECK BINARY WORD OPS USING ADDRESS MODES 3 & b5.
+B1:	BR	1$		; RESERVE SPACE FOR DATA AND ADDRESSES
+	.WORD	0		;CONTAINS ADDRESS OF SOURCE DATA
+	.WORD	0		;CONTAINS ADDRESS OF DEST DATA
+	.WORD	0		;CONTAINS SOURCE DATA
+	.WORD	0		;CONTAINS  DEST DATA
+1$:	MOV	PC,R1
+	MOV	R1,R0		;SET SCOPE PTR
+	CMP	-(R0),-(R0)	;ADJUST R0
+	MOV	R0,R5		;R5 POINTS TO DEST DATA
+	CMP	-(R5),-(R5)	;SUB 4	FROM R5
+	MOV	R0,(R5) 	;R5 POINTS TO ADDRESS OF DEST DATA
+	MOV	R5,R2
+	MOV	R0,R4		;R4 POINTS TO DEST DATA
+	TST	-(R0)
+	MOV	R0,R3		;R3 POINTS TO SOURCE DATA
+	MOV	R0,-(R2)	;R2 POINTS TO ADDRESS OF SOURCE DATA
+	CLR	(R3)		;PRESET SOURCE DATA
+	CLR	(R4)		;PRESET DEST DATA
+
+	SCC
+	CLZ
+	SUB	@(R2)+,@(R5)+	;(R3)=000000,(R4)=000000, CC=0100
+	BCS	SUB3
+	BVS	SUB3
+	BEQ H3
+SUB3:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+H3:	BIS	#100000,@-(R2)	;(R3)=100000
+	ADD	#1,@-(R5)	;(R4)=000001
+	SUB	@(R2)+,@(R5)+	;(R3)=100000,(R4)=10001, CC=1011
+	BCC	SUB3A
+	BVC	SUB3A
+	BMI	H4
+SUB3A:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+H4:	NEG	(R4)		;(R4)=077777
+	BIT	@-(R2),@-(R5)	;(R3)=100000,(R4)=077777
+	BEQ	1$
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+1$:	CMP	@(R2)+,@(R5)+
+	BVS	2$
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+2$:	COM	@-(R2)
+	CCC
+	ADD	@(R2)+,@-(R5)
+	BVC	ADD3
+	BMI	H41
+ADD3:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+H41:	SEC
+	BIC	@-(R2),@(R5)+	;(R3)=077777,(R4)=100000
+	BCC	BIC3
+	BMI	H5
+BIC3:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+H5:	COM	@-(R5)		;(R4)=077777
+	CMP	@(R2)+,@(R5)+	;(R3)=077777,(R4)=077777
+	BEQ	H6
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+	;CHECK BINARY BYTE OPS USING ADDRESS MODES 3 & 5
+H6:	BR	1$		;RESERVE SPACE FOR ADDRESSES & DATA
+	.WORD	0		;CONTAINS ADDRESS OF SOURCE DATA (EVEN BYTE)
+	.WORD	0		;CONTAINS ADDRESS OF SOURCE DATA (ODD BYTE)
+	.WORD	0		;CONTAINS ADDRESS OF DEST DATA (EVEN BYTE)
+	.WORD	0		;CONTAINS ADDRESS OF DEST DATA (ODD BYTE)
+	.WORD	0		;CONTAINS SOURCE DATA
+	.WORD	0		;CONTAINS DEST DATA
+1$:	MOV	PC,R0
+	CMP	-(R0),-(R0)	;R0=ADDRESS OF DEST DATA
+	MOV	R0,R3		;R3    "       "
+	MOV	R3,R5		;R3    "       "
+	TST	-(R3)		; SUB2 FROm R3
+	MOV	R0,-(R3)	;R3 POINTS TO ADDRESS OF DEST DATA
+	INC	(R3)		;ODD BYTE
+	MOV	R0,-(R3)	;EVEN BYTE
+	MOV	R3,R4
+	TST	-(R0)		;R0=ADDRESS OF SOURCE DATA
+	MOV	R0,-(R4)	;R4 POINTS TO ADDRESS OF SOURCE DATA
+	INC	(R4)		;ODD BYTE
+	MOV	R0,-(R4)	;EVEN BYTE
+
+	SEC			;SET CARRY
+	MOV	#177001,@(R4)+
+	MOVB	#200,@(R4)+	;SOURCE DATA=100001
+	MOVB	@-(R4),@(R3)+	;
+	MOVB	@-(R4),@(R3)+	;DEST DATA=000600
+	BCS	2$
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+2$:	CMP	#600,(R5)	;CHECK DEST DATA
+	BEQ	3$
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+3$:	CMP	-(R3),-(R3)	;POINT R4 BACK TO EVEN BYTE
+	BISB	@(R4)+,@(R3)+
+	BISB	@(R4)+,@(R3)+	;DEST DATA=100601
+	CMP	#100601,(R5)	;CHECK RESULT
+	BEQ	4$
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+4$:	BICB	@-(R4),@-(R3)
+	BICB	@-(R4),@-(R3)
+	BITB	@(R4)+,@(R3)+
+	BNE	BITB3
+	BITB	@-(R4),@(R3)+
+	BNE	H7
+BITB3:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+H7:	CMPB	@(R4)+,@-(R3)
+	BNE	CMPB3
+	CMPB	@(R4)+,@-(R3)
+	BEQ	JP1
+CMPB3:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+	;CHECK JUMP  INSTRUCTIONS
+JP1:	MOV	PC,R0
+	ADD	#12,R0		;SET ADDRESS FOR JUMP INST
+	SCC
+	JMP	(R0)
+2$:	BR	3$
+	CLN			;JMP INST JUMPS HERE
+	BR	2$
+
+3$:	BCC	JMP1
+	BVC	JMP1
+	BNE	JMP1
+	BPL	K2
+JMP1:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+K2:	CLR	R2		;SET INDICATOR
+	MOV	PC,R4		;SET UP JUMP REGISTER
+	MOV	R4,R0		;SET UP CHECK REGISTER
+	BR	1$
+	COM	R2		;COMPLEMENT INDICATOR
+	BR	2$
+1$:	CMP	(R4)+,(R4)+
+	TST	(R4)+		;R4=JMP ADDRESS
+	JMP	-(R4)		;USE R4 AS ADDRESS
+2$:	INC	R2		;CHECK INDICATOR
+	BNE	JMP4
+	CMP	(R0)+,(R0)+
+	CMP	R0,R4		;CHECK AUTO-DEC R4
+	BEQ	JSRTST
+JMP4:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+	;CHECK JSR INSTRUCTIONS
+JSRTST: MOV	#3$,R2		;FORM DEST ADRS
+	SCC			;PRESET CC'S
+	CLV
+	JSR	R5,(R2) 	;GO TO 3$ VIA R2
+1$:	TST	R2		;CHECK INDICATOR
+	BNE	JSR1		;R2 SHOULD=0
+	BR	EX
+2$:	RTS	R5		;RETURN FROM SUB ROUTINE
+3$:	BCC	JSR1		;CHECK THAT JSR DID NOT
+	BVS	JSR1
+	BNE	JSR1		;AFFECT CC'S
+	BPL	JSR1
+	CLR	R2		;CLEAR INDICATOR
+	MOV	#1$,R4		;GET RETURN ADDRESS
+	BR	2$
+JSR1:
+	;**************************************************************
+	HRDER$,BEGIN,NULL	;
+	;**************************************************************
+
+EX:
+;	 ENDIT$,BEGIN		 ;SIGNAL END OF ITERATION
+				;MONITOR SHALL TEst END OF PASS
+	HALT
+ST:	JMP	RESTRT
+
+
+; stack area has to be beyond 000400
+	.REPT	SPSIZ		;MODULE STACK STARTS HERE
+	.NLIST
+	.WORD 0
+	.LIST
+	.ENDR
+MODSP:				; module stack base
+
+
+	.END

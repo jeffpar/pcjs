@@ -1691,7 +1691,7 @@
     "borland": {
       "@title": "Borland",
       "pascal": {
-        "@title": "Borland Turbo Pascal",
+        "@title": "Turbo Pascal",
         "@versions": {
           "2.00": {
             "@title": "Borland Turbo Pascal 2.00",
@@ -1867,7 +1867,7 @@
         "@title": "APL",
         "@versions": {
           "1.00": {
-            "@title": "APL 1.00",
+            "@title": "IBM APL 1.00",
             "@media": [
               {
                 "@title": "IBM APL 1.00",
@@ -1881,7 +1881,7 @@
       "basic": {
         "@title": "BASIC",
         "compiler": {
-          "@title": "IBM BASIC Compiler",
+          "@title": "BASIC Compiler",
           "@versions": {
             "1.00": {
               "@title": "IBM BASIC Compiler 1.00",
@@ -1915,7 +1915,7 @@
         "@title": "Macro Assembler",
         "@versions": {
           "1.00": {
-            "@title": "Macro Assembler 1.00",
+            "@title": "IBM Macro Assembler 1.00",
             "@media": [
               {
                 "@title": "IBM Macro Assembler 1.00",
@@ -1925,7 +1925,7 @@
             ]
           },
           "2.00": {
-            "@title": "Macro Assembler 2.00",
+            "@title": "IBM Macro Assembler 2.00",
             "@media": [
               {
                 "@title": "IBM Macro Assembler 2.00",
@@ -1938,7 +1938,7 @@
         }
       },
       "pascal": {
-        "@title": "IBM Pascal Compiler",
+        "@title": "Pascal",
         "@versions": {
           "1.00": {
             "@title": "IBM Pascal Compiler 1.00",
