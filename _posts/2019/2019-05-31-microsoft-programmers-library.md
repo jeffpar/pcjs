@@ -17,7 +17,7 @@ Microsoft had released only a handful of products on CD-ROM at that point, the f
 
 From the November 29, 1988 issue of PC Magazine:
 
-> [Programmer's Library Added to Microsoft's List of CD-ROM Titles](/blog/documents/Early_Microsoft_CD-ROMs.pdf)
+> [Programmer's Library Added to Microsoft's List of CD-ROM Titles](/documents/magazines/pcm/ads/1988-11-29_Early_Microsoft_CD-ROMs.pdf)
 
 > The promise of CD-ROM is fast access to huge volumes of information. Microsoft has taken
 > another step toward the fulfillment of that promise with the release of *Microsoft Programmer's

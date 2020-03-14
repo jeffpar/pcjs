@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panel id="panel" width="100%" padding="8px">
+	<name>Control Panel</name>
+	<control type="container" class="pcjs-panel-group" width="100%" padBottom="8px">
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl" width="33%" pos="right">16</control>
+			<control type="container" class="pcjs-ledlbl" width="33%" pos="right">18</control>
+			<control type="container" class="pcjs-ledlbl" width="33%" pos="right">22</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="B16" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="B18" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="B22" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl" width="33%" pos="right">KRNL</control>
+			<control type="container" class="pcjs-ledlbl" width="33%" pos="right">SUPR</control>
+			<control type="container" class="pcjs-ledlbl" width="33%" pos="right">USER</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="KERNEL" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="SUPER" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="USER" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="6.2%" pos="right"></control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl0" width="100%" pos="right">ADDRESS</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A0" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A1" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A2" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl1" width="100%" pos="right" style="color:transparent">.</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A3" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A4" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A5" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl0" width="100%" pos="right" style="color:transparent">.</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A6" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A7" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A8" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl1" width="100%" pos="right" style="color:transparent">.</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A9" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A10" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A11" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl0" width="100%" pos="right" style="color:transparent">.</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A12" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A13" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A14" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl1" width="100%" pos="right" style="color:transparent">.</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A15" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A16" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A17" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl0" width="100%" pos="right" style="color:transparent">.</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A18" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A19" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="A20" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="3.1%" pos="right">
+			<control type="container" class="pcjs-ledlbl1" width="100%" pos="right" style="color:transparent">.</control>
+			<control type="container" class="pcjs-ledpad" width="100%" pos="right" style="clear:both;"><control type="rled" binding="A21" width="100%" container="center"/></control>
+		</control>
+	</control>
+	<control type="container" class="pcjs-panel-group" width="100%" padBottom="8px">
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl" width="33%" pos="right">LED1</control>
+			<control type="container" class="pcjs-ledlbl" width="33%" pos="right">LED2</control>
+			<control type="container" class="pcjs-ledlbl" width="33%" pos="right">LED3</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="LED1" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="LED2" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="LED3" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl" width="33%" pos="right">LED4</control>
+			<control type="container" class="pcjs-ledlbl" width="33%" pos="right">LED5</control>
+			<control type="container" class="pcjs-ledlbl" width="33%" pos="right">LED6</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="LED4" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="LED5" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="LED6" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="6.2%" pos="right"></control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl0" width="100%" pos="right">DATA</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D0" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D1" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D2" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl1" width="100%" pos="right" style="color:transparent">.</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D3" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D4" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D5" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl0" width="100%" pos="right" style="color:transparent">.</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D6" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D7" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D8" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl1" width="100%" pos="right" style="color:transparent">.</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D9" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D10" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D11" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-ledlbl0" width="100%" pos="right" style="color:transparent">.</control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D12" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D13" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-ledpad" width="33%" pos="right"><control type="rled" binding="D14" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="3.1%" pos="right">
+			<control type="container" class="pcjs-ledlbl1" width="100%" pos="right" style="color:transparent">.</control>
+			<control type="container" class="pcjs-ledpad" width="100%" pos="right" style="clear:both;"><control type="rled" binding="D15" width="100%" container="center"/></control>
+		</control>
+	</control>
+	<control type="container" class="pcjs-panel-group" width="100%" padBottom="8px">
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">START</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">STEP</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">ENABLE</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="START" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="STEP" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="ENABLE" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">CONT</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">DEP</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">EXAM</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="CONT" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="DEP" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="EXAM" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="6.2%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="50%" pos="right">LOAD</control>
+			<control type="container" class="pcjs-swlbl" width="50%" pos="right">TEST</control>
+			<control type="container" class="pcjs-swpad" width="50%" pos="right" style="clear:both;"><control type="switch" binding="LOAD" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="50%" pos="right"><control type="switch" binding="TEST" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">0</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">1</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">2</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S0" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S1" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S2" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">3</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">4</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">5</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S3" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S4" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S5" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">6</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">7</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">8</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S6" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S7" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S8" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">9</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">10</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">11</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S9" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S10" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S11" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">12</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">13</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">14</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S12" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S13" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S14" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">15</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">16</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">17</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S15" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S16" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S17" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">18</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">19</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">20</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S18" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S19" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S20" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="3.1%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="100%" pos="right">21</control>
+			<control type="container" class="pcjs-swpad" width="100%" pos="right" style="clear:both;"><control type="switch" binding="S21" width="100%" container="center"/></control>
+		</control>
+	</control>
+	<control type="container" class="pcjs-textarea" width="60%" padTop="8px" padBottom="8px">
+		<control type="textarea" binding="print" width="100%" height="400px" padRight="8px" pos="relative" style="resize:vertical;"/>
+	</control>
+	<control type="container" class="pcjs-registers" width="35%" padding="8px">
+		<control type="button" binding="run">Run</control>
+		<control type="button" binding="reset">Reset</control>
+		<control type="button" binding="setSpeed">Fast</control>
+		<control type="description" binding="speed" pos="default">Stopped</control>
+	</control>
+</panel>

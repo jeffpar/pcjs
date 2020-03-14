@@ -1,6 +1,6 @@
 ---
 layout: page
-title: IBM PC Model 5150 ROMs
+title: IBM PC (Model 5150) ROMs
 permalink: /machines/pcx86/ibm/5150/rom/
 redirect_from: /devices/pcx86/rom/5150/
 ---

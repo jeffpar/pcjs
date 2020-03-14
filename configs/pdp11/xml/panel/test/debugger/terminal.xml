@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panel id="panel" width="100%" padding="8px">
+	<name>Control Panel</name>
+	<control type="container" class="pcjs-textarea" width="60%" padBottom="8px">
+		<control type="textarea" binding="print" width="100%" height="340px" padRight="8px" pos="relative" style="resize:vertical;"/>
+		<control type="container" width="100%">
+			<control type="text" binding="debugInput" width="auto"/>
+			<control type="button" binding="debugEnter">Enter</control>
+			<control type="button" binding="clear">Clear</control>
+		</control>
+	</control>
+	<control type="container" class="pcjs-registers" width="35%" padLeft="8px">
+		<name>Registers</name>
+		<control type="register" label="R0" binding="R0" pos="left" width="60px" padRight="8px" padBottom="8px">000000</control>
+		<control type="register" label="R1" binding="R1" pos="left" width="60px" padRight="8px" padBottom="8px">000000</control>
+		<control type="register" label="R2" binding="R2" pos="left" width="60px" padRight="8px" padBottom="8px">000000</control>
+		<control type="register" label="R3" binding="R3" pos="left" width="60px" padRight="8px" padBottom="8px">000000</control>
+		<control type="register" label="R4" binding="R4" pos="left" width="60px" padRight="8px" padBottom="8px">000000</control>
+		<control type="register" label="R5" binding="R5" pos="left" width="60px" padRight="8px" padBottom="8px">000000</control>
+		<control type="register" label="SP" binding="R6" pos="left" width="60px" padRight="8px" padBottom="8px">000000</control>
+		<control type="register" label="PC" binding="R7" pos="left" width="60px" padRight="8px" padBottom="8px">000000</control>
+		<control type="register" label="PS" binding="PS" pos="left" width="60px" padRight="8px" padBottom="8px">000000</control>
+		<control type="container" pos="left">
+			<control type="flag" label="N" binding="NF" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="Z" binding="ZF" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="V" binding="VF" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="C" binding="CF" width="8px" padRight="4px" padBottom="8px">0</control>
+		</control>
+	</control>
+	<control type="container" class="pcjs-registers" width="35%" padLeft="8px" padBottom="8px">
+		<control type="button" binding="run">Run</control>
+		<control type="button" binding="step">Step</control>
+		<control type="button" binding="reset">Reset</control>
+		<control type="button" binding="setSpeed">Fast</control>
+		<control type="description" binding="speed" pos="default">Stopped</control>
+	</control>
+</panel>

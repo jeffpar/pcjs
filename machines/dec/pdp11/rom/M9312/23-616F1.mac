@@ -1,0 +1,259 @@
+	.title	M9312 11/60-70 Diagnostic/Console ROM
+
+	; This source code is an exact copy of the DEC M9312 23-616F1 console PROM.
+	;
+	; This console/diagnostic PROM is for 11/60-70 CPUs.
+	;
+	; Standard devices are 82S137, 74S573 or other compatible bipolar PROMs
+	; with a 1024x4 TriState 18pin DIP architecture.
+
+	.asect
+	.=165000
+
+base	=.
+
+START:	mov	r0,@#700		;
+	mov	r1,@#702		;
+	mov	r4,@#704		;
+	clr	@#706			;
+
+	.=base+20
+DIAG:	bis	#100000,@#177776	;
+	bit	#040000,@#177776	;
+	beq	L1			;
+	inc	@#706			;
+L1:	clr	@#177776		;
+	br	L2			;
+	halt				;
+
+L2:	clr	sp			;
+	bmi	L3			;
+	bvs	L3			;
+	bhi	L3			;
+	blt	L3			;
+	blos	L4			;
+L3:	halt				;
+
+L4:	dec	sp			;
+	bpl	L5			;
+	beq	L5			;
+	bge	L5			;
+	ble	L6			;
+L5:	halt				;
+
+L6:	ror	sp			;
+	bvc	L7			;
+	bcc	L7			;
+	bne	L8			;
+L7:	halt				;
+
+L8:	mov	#125252,sp		;
+	mov	sp,r0			;
+	mov	r0,r1			;
+	mov	r1,r2			;
+	mov	r2,r3			;
+	mov	r3,r4			;
+	mov	r4,r5			;
+	sub	r5,r1			;
+	blt	NODIAG			;
+	beq	L9			;
+
+	.=base+144
+NODIAG:	halt				;
+
+L9:	rol	r2			;
+	bcc	L10			;
+	blt	L11			;
+L10:	halt				;
+
+L11:	add	r2,r3			;
+	inc	r3			;
+	com	r3			;
+	add	r3,r1			;
+	bcs	L12			;
+	ble	L13			;
+L12:	halt				;
+
+L13:	ror	r4			;
+	bis	r4,r3			;
+	add	r5,r3			;
+	inc	r3			;
+	bcs	L14			;
+	dec	r1			;
+	blt	L15			;
+L14:	halt				;
+
+L15:	com	r0			;
+	blos	L16			;
+	halt				;
+
+L16:	bic	r0,r1			;
+	add	r1,r1			;
+	bgt	L17			;
+	ble	L18			;
+L17:	halt				;
+
+L18:	swab	r1			;
+	cmp	r1,#052125		;
+	bne	L19			;
+	bit	r4,r5			;
+	bgt	L19			;
+	com	r5			;
+	bne	L20			;
+L19:	halt				;
+
+L20:	movb	#177401,r0		;
+	bpl	L21			;
+L22:	halt				;
+
+L21:	sob	r0,L22			;
+	clr	r1			;
+L23:	inc	r1			;
+	sob	r0,L23			;
+	tst	r0			;
+	bne	L24			;
+	tst	r1			;
+	beq	L25			;
+L24:	halt				;
+
+L25:	mov	#776,sp			;
+	jsr	pc,L26			;
+N2:	halt				;
+
+L26:	cmp	#N2,(sp)		;
+	beq	L27			;
+	halt				;
+
+L27:	mov	#N3,(sp)		;
+	rts	pc			;
+	halt				;
+
+N3:	clr	-(sp)			;
+	mov	#N4,-(sp)		;
+	rti				;
+	halt				;
+
+N4:	jmp	@#N5			;
+	halt				;
+
+N5:	mov	#160000,r5		;
+	clr	@#6			;
+	mov	#N6,@#4			;
+N6:	mov	#776,sp			;
+	tst	-(r5)			;
+	mov	#N12,@#114		;
+	clr	@#116			;
+	mov	#177746,r3		;
+	mov	#14,(r3)		;
+	mov	#1000,r2		;
+	mov	r2,r0			;
+L28:	mov	r0,(r0)			;
+	tst	(r0)+			;
+	cmp	r0,r5			;
+	blos	L28			;
+	mov	r2,r0			;
+L30:	mov	(r0),r1			;
+	cmp	r0,r1			;
+	beq	L29			;
+	halt				;
+
+L29:	com	(r0)+			;
+	cmp	r0,r5			;
+	blos	L30			;
+L32:	mov	-(r0),r1		;
+	com	r1			;
+	cmp	r0,r1			;
+	beq	L31			;
+	halt				;
+
+L31:	cmp	r0,r2			;
+	bne	L32			;
+	clr	(sp)			;
+	mov	#125252,r4		;
+	mov	#30,(r3)		;
+	mov	#4000,r0		;
+L39:	mov	#1000,r2		;
+L36:	com	r4			;
+	mov	r4,(r0)			;
+	com	(r0)			;
+	com	(r0)			;
+	cmp	(r0),r4			;
+	beq	L33			;
+	halt				;
+
+L33:	ror	@#177752		;
+	bcs	L34			;
+	halt				;
+	br	L35			;
+
+L34:	comb	(sp)			;
+	bne	L36			;
+	br	L37			;
+
+	.=base+564
+RESTRT:	jmp	START			;
+
+L37:	tst	(r0)+			;
+	sob	r2,L36			;
+	mov	#44,(r3)		;
+	mov	#6000,r0		;
+	comb	1(sp)			;
+	bne	L39			;
+	mov	#1000,r2		;
+	mov	r2,r0			;
+L40:	mov	r0,(r0)			;
+	tst	(r0)+			;
+	cmp	r0,r5			;
+	blos	L40			;
+	mov	#3,r1			;
+	clr	(sp)			;
+	tst	@#706			;
+	bne	L41			;
+	mov	#30,(sp)		;
+L45:	mov	r2,r0			;
+L44:	com	(r0)			;
+	com	(r0)			;
+	cmp	r0,(r0)			;
+	beq	L42			;
+	halt				;
+
+L42:	tst	(r0)+			;
+	ror	@#177752		;
+	bcs	L43			;
+	halt				;
+	br	L35			;
+
+L43:	cmp	r0,r5			;
+	blos	L44			;
+L41:	mov	(sp),(r3)		;
+	clr	(sp)			;
+	sob	r1,L45			;
+	br	L46			;
+
+N12:	halt				;
+	br	L46			;
+
+L35:	mov	#14,(r3)		;
+L46:	mov	@#700,r0		;
+	mov	@#702,r1		;
+	mov	@#704,r4		;
+	jmp	2(r4)			;
+
+	mov	@#177570,r4		;
+	bic	#177000,r4		;
+	bis	#173000,r4		;
+	movb	@#177571,r0		;
+	asr	r0			;
+	clc				;
+	jmp	(r4)			;
+	halt				;
+
+	; ------------------------------------------------------------
+
+	.=base+774
+verson:	.ascii	"0B"			; version ID
+
+	.=base+776
+crc16:	.word	<025055>		; CRC-16 will go here
+
+	.end

@@ -400,12 +400,12 @@
       "./machines/lib/bus/rom.js",
       "./machines/lib/cpu/cpu.js",
       "./machines/lib/cpu/debugger.js",
-      "./machines/dec/pdp11/pdp11ops.js",
-      "./machines/dec/pdp11/pdp11.js",
-      "./machines/dec/pdp11/pdp11dbg.js",
-      "./machines/dec/pdp11/iopage.js",
-      "./machines/dec/pdp11/dl11.js",
-      "./machines/dec/pdp11/pc11.js",
+      "./machines/dec/pdp11/v2/pdp11ops.js",
+      "./machines/dec/pdp11/v2/pdp11.js",
+      "./machines/dec/pdp11/v2/pdp11dbg.js",
+      "./machines/dec/pdp11/v2/iopage.js",
+      "./machines/dec/pdp11/v2/dl11.js",
+      "./machines/dec/pdp11/v2/pc11.js",
       "./machines/lib/machine.js"
     ]
   },
