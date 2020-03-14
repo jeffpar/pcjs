@@ -39,13 +39,13 @@
       {%- assign docs_exist = true -%}
       {%- include gallery/begin.html -%}
       {%- for doc in docs -%}
-        {%- assign doc_file = doc['@file'] -%}
+        {%- assign doc_title = doc['@title'] -%}
         {%- assign doc_tags = doc['@tags'] | default: "" -%}
-        {%- if doc_file and doc_tags contains tag -%}
+        {%- if doc_title != "" and doc_tags contains tag -%}
+          {%- assign doc_file = doc['@file'] -%}
           {%- assign doc_id = doc_file | replace: ".pdf","" | replace: ".png","" | downcase -%}
           {%- capture doc_path -%}{{ path }}{{ doc_file }}{%- endcapture -%}
           {%- assign doc_link = doc['@link'] | default: doc_path -%}
-          {%- assign doc_title = doc['@title'] -%}
           {%- assign doc_cover = doc['@cover'] | default: "/documents/covers/default.jpg" -%}
           {%- if doc_cover == ".jpg" or doc_cover == ".png" -%}
             {%- capture doc_cover -%}{{ path }}covers/{{ doc_file | replace: ".pdf",doc_cover | replace: ".png",doc_cover }}{%- endcapture -%}

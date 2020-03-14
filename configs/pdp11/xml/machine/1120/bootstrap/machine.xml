@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/versions/pdpjs/1.75.7/machine.xsl"?>
+<machine id="test1120" type="pdp11" border="1" pos="center" background="default">
+	<name pos="center">PDP-11/20: 16Kb, Bootstrap Loader</name>
+	<computer id="computer" busWidth="16"/>
+	<cpu id="cpu" model="1120" cycles="6666667"/>
+	<ram id="ram" addr="0x0000" size="0x4000" file="/apps/pdp11/boot/bootstrap/BOOTSTRAP-16KB.json"/>
+	<device id="default" type="default"/>
+	<serial id="dl11" adapter="0" binding="print" upperCase="true"/>
+	<panel ref="/devices/pdp11/panel/test/terminal.xml"/>
+	<device ref="/devices/pdp11/pc11/default.xml"/>
+</machine>

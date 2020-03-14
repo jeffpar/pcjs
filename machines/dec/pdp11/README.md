@@ -1,19 +1,14 @@
 ---
-layout: default
+layout: page
 title: PDPjs Support for DEC PDP-11 Machines
 permalink: /machines/dec/pdp11/
 ---
 
-Overview
---------
-
 This PDPjs module for [PDP-11 Machines](/machines/dec/pdp11/machine/) was added to the PCjs Project in 2016.
 
-It was adapted from the [PDP-11/70 Emulator](http://skn.noip.me/pdp11/pdp11.html) written by Paul Nankervis,
-with permission.
+It was adapted from the [PDP-11/70 Emulator](http://skn.noip.me/pdp11/pdp11.html) written by Paul Nankervis, with permission.
 
-The module is currently comprised of the following components, as listed in
-[machines.json](https://github.com/jeffpar/pcjs/blob/master/_data/machines.json) (see the *pdp11.scripts* property):
+The module is currently comprised of the following components, as listed in [machines.json](/configs/machines.json) (see the *pdp11.scripts* property):
 
 * [bus.js](lib/bus.js)
 * [computer.js](lib/computer.js)
@@ -77,7 +72,7 @@ it encounters a file containing them.
 As a work-around, the bundled web server intercepts all requests for .js files and inserts line comments in front of
 every *import* and *export* statement, so that your web browser won't barf on them.  The statements are completely
 superfluous anyway, since the web server generates `<script>` tags for all the necessary scripts, in the order they are
-listed in [machines.json](https://github.com/jeffpar/pcjs/blob/master/_data/machines.json) (see the *pdp11.scripts* property).
+listed in [machines.json](/configs/machines.json) (see the *pdp11.scripts* property).
 
 This work-around assumes that all *export* statements appear AFTER the object they're exporting; e.g.:
 

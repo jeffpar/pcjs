@@ -1,0 +1,262 @@
+@CHARSET "UTF-8";
+
+*:not(input,textarea) {
+    -webkit-user-select: none;
+}
+.pcjs-embed {
+}
+.pcjs-embed:after {
+    clear:both;
+}
+.pcjs-machine {
+}
+.pcjs-name, .pcjs-menu {
+    clear: both;
+    font-weight: bold;
+    padding-bottom: 4px;
+}
+.pcjs-menu {
+    float: left;
+}
+.pcjs-canvas {
+    width: 100%;
+    height: auto;
+}
+.pcjs-container {
+    color: #000000;
+    position: relative;
+}
+.pcjs-label {
+    font-size: small;
+    line-height: 20px;
+    vertical-align: middle;
+    float: left;
+    font-family: Monaco, "Lucida Console", monospace;
+}
+.pcjs-controls textarea {
+    font-family: Monaco, "Lucida Console", monospace;
+    font-size: x-small;
+}
+.pcjs-fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+.pcjs-flag {
+    font-family: Monaco, "Lucida Console", monospace;
+    font-size: small;
+    text-align: center;
+    line-height: 20px;
+    vertical-align: middle;
+}
+.pcjs-progress {
+    height: 20px;
+    width: 200px;
+    margin-top: 8px;
+    border: 1px solid black;
+    position: relative;
+}
+.pcjs-progress-bar {
+    height: 20px;
+    width: 0;
+    background-color: gold;
+    position: absolute;
+    top: 0;
+}
+.pcjs-progress-text {
+    height: 20px;
+    width: 200px;
+    font-size: small;
+    line-height: 20px;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+}
+.pcjs-register {
+    font-family: Monaco, "Lucida Console", monospace;
+    font-size: small;
+    text-align: center;
+    line-height: 20px;
+    vertical-align: middle;
+    border: 1px solid black;
+}
+.pcjs-switches {
+    float: left;
+}
+.pcjs-bitBucket {
+    float: left;
+    width: 19px;
+    height: 38px;
+}
+.pcjs-bitCell {
+    float: left;
+    width: 19px;
+    height: 19px;
+    margin-right: -1px;
+    margin-bottom: -1px;
+    border: 1px solid black;
+    text-align: center;
+    line-height: 19px;
+}
+.pcjs-bitCellLeft {
+    border-left: 1px solid black;
+}
+.pcjs-bitLabel {
+    font-size: xx-small;
+    text-align: center;
+}
+.pcjs-description, .pcjs-status {
+    font-size: x-small;
+    line-height: 2.0em;
+}
+.pcjs-key {
+    border: 1px solid black;
+    font-size: x-small;
+    text-align: center;
+    position: absolute;
+    height: 34px;
+    line-height: 34px;
+    background-color: #ffffff;
+    overflow: hidden;
+}
+.pcjs-panel-group {
+    color: #ffffff;
+    background-color: #404040;
+}
+.pcjs-triplet {
+    padding: 1px;
+}
+.pcjs-ledlbl {
+    text-align: center;
+    font-size: 40%;
+    background-color: #000000;
+}
+.pcjs-ledlbl0 {
+    text-align: right;
+    font-size: 50%;
+    background-color: #8d4076;
+}
+.pcjs-ledlbl1 {
+    text-align: right;
+    font-size: 50%;
+    background-color: #d83662;
+}
+.pcjs-ledpad {
+    text-align: center;
+    font-size: x-small;
+    line-height: 32px;
+    background-color: #000000;
+    border-bottom-left-radius: 20%;
+    border-bottom-right-radius: 20%;
+}
+.pcjs-led {
+    float: left;
+    width: 8px;
+    height: 8px;
+    margin: 4px;
+    border: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #000000;
+}
+.pcjs-rled {
+    float: left;
+    width: 8px;
+    height: 8px;
+    margin: 4px;
+    border: 1px solid black;
+    border-radius: 50%;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #ff0000;
+    max-width: 50%;
+    max-height: 50%;
+}
+.pcjs-swlbl {
+    text-align: center;
+    font-size: 40%;
+    line-height: 16px;
+    background-color: #000000;
+    border-top-left-radius: 20%;
+    border-top-right-radius: 20%;
+}
+.pcjs-swpad {
+    height: 32px;
+    background-color: #000000;
+}
+.pcjs-switch {
+    height: 10px;
+    width: 28px;
+    margin-top: 0;
+    max-width: 90%;
+    background-color: #00ff00;
+}
+.pcjs-screen {
+    clear: both;
+    height: auto;
+    position: relative;
+    line-height: 0;
+}
+.pcjs-screen textarea {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    resize: none;
+    color: white;
+    font-family: Monaco, "Lucida Console", monospace;
+    font-size: small;
+    background: black;
+    opacity: 0;
+    line-height: 0;
+}
+.pcjs-reference {
+    float: left;
+    font-size: x-small;
+}
+.pcjs-reference a {
+    text-decoration: none;
+}
+.pcjs-copyright {
+    float: right;
+    font-size: x-small;
+}
+.pcjs-copyright a {
+    text-decoration: none;
+}
+@media screen and (max-width: 800px) {
+    .pcjs-textarea {
+        width: 96% !important;
+    }
+    .pcjs-registers {
+        width: 100% !important;
+        max-width: none !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    .pdp11-device {
+        width: 98% !important;
+        max-width: none !important;
+        margin-left: 8px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}
+@media screen and (min-width: 1024px) {
+    .machine-left {
+        max-width: 48%;
+        float: left;
+    }
+    .machine-right {
+        max-width: 48%;
+        float: left;
+        margin-left: 30px;
+    }
+    .machine-right + * {
+        clear: both;
+    }
+}

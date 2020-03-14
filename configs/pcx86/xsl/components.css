@@ -1,5 +1,8 @@
 @CHARSET "UTF-8";
 
+*:not(input,textarea) {
+  -webkit-user-select: none;
+}
 .pcjs-embed {
 }
 .pcjs-embed:after {
