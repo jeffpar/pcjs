@@ -1,7 +1,7 @@
 ---
 layout: page
 title: DEC VT100 Terminal with Debugger
-permalink: /machines/pcx80/vt100/debugger/
+permalink: /machines/dec/vt100/debugger/
 redirect_from: /devices/pc8080/machine/vt100/debugger/
 machines:
   - id: vt100
@@ -10,9 +10,9 @@ machines:
     config: /configs/pcx80/xml/machine/vt100/debugger/machine.xml
 ---
 
-The [PCx80](/machines/pcx80/) machine below is configured to simulate a [VT100 Terminal](/machines/pcx80/vt100/)
+The [PCx80](/machines/pcx80/) machine below is configured to simulate a [VT100 Terminal](/machines/dec/vt100/)
 with a Control Panel and Debugger.  When you press the **Run** button, it will start running the original
-[VT100 Firmware](/machines/pcx80/vt100/rom/) inside the [PCx80](/machines/pcx80/) CPU emulator.
+[VT100 Firmware](/machines/dec/vt100/rom/) inside the [PCx80](/machines/pcx80/) CPU emulator.
 
 Information about [VT100 Keys](#vt100-keys) and assorted [Hardware Notes](#vt100-memory-usage) are provided below,
 followed by some [VT100 Technical Manual](/pubs/dec/vt100/) excerpts regarding the [VT100 Initialization Process](#vt100-initialization-process).
@@ -89,15 +89,14 @@ and press **6** to toggle.
 - --1-: 8 Data Bits (ON)
 - ---1: 50Hz Power (OFF)
 
-VT100 Memory Usage
-------------------
+### VT100 Memory Usage
 
 As described in the [Technical Manual (July 1982)](http://bitsavers.informatik.uni-stuttgart.de/pdf/dec/terminal/vt100/EK-VT100-TM-003_VT100_Technical_Manual_Jul82.pdf),
 p. 4-15, 8Kb (0x2000) of ROM is located at 0x0000, and 3Kb (0x0C00) of RAM immediately follows it at 0x2000.  The ROM at
 0x0000 contains all the VT100's 8080 code.  The VT100 also contains a 2Kb character generator ROM, but that ROM is not
 addressable by the CPU; it is used directly by the Video Processor.
 
-See [DEC VT100 ROMs](/machines/pcx80/vt100/rom/) for more information about the ROMs.
+See [DEC VT100 ROMs](/machines/dec/vt100/rom/) for more information about the ROMs.
 
 [vt100romhax](http://vt100romhax.tumblr.com/post/90697428973/the-vt100-memory-map-and-8080-disassembly)
 (aka [phooky](https://github.com/phooky) aka Adam Mayer) further explains VT100 memory usage:
@@ -140,8 +139,7 @@ and the "Setup" area:
 	0x21ad             1    parity 
 	0x21ae             1    nvr checksum
 
-VT100 I/O Ports
----------------
+### VT100 I/O Ports
 
 From p. 4-17 of the Technical Manual:
 
@@ -163,10 +161,10 @@ From p. 4-17 of the Technical Manual:
 	42H     Flags buffer
 	82H     Keyboard UART data output
 
-The PC8080 ChipSet component deals with the ER1400's Non-Volatile RAM (NVR) ports, the Flags buffer, and the
+The PCx80 ChipSet component deals with the ER1400's Non-Volatile RAM (NVR) ports, the Flags buffer, and the
 DC011 and DC012 circuits, while the Keyboard component deals with the Keyboard UART.
 
-You might wonder why the PC8080 Video component doesn't manage the DC011 and DC012.  In fact, the above labels are misleading.
+You might wonder why the PCx80 Video component doesn't manage the DC011 and DC012.  In fact, the above labels are misleading.
 If you look at the Functional Diagram on p. 4-53 of the Technical Manual, you'll see that DC011 and DC012 are really
 peripheral components providing inputs to the Video Processor.  Moreover, they are not exclusive to the Video Processor.
 For example, the LBA7 output of the DC011 is also used to clock the NVR chip.
@@ -186,10 +184,9 @@ information about the Flags buffer (port 0x42):
 	1   L       ADVANCED VIDEO (is AVO present)
 	0   H       XMIT FLAG
 
-VT100 Video Processor
----------------------
+### VT100 Video Processor
 
-Normally, the PC8080 Video component allocates its own video buffer, based on the specified buffer address
+Normally, the PCx80 Video component allocates its own video buffer, based on the specified buffer address
 (*bufferAddr*) and other dimensions (eg, *bufferCols* and *bufferRows*), but the VT100 is a little unusual:
 it has a custom Video Processor that uses DMA to request character data from any region of RAM, one line at a time.
 It always defaults to address 0x2000 for the first line of character data, but each line terminates with 3 bytes
@@ -212,8 +209,7 @@ enabling support for the VT100's line data format; eg:
 <video id="video" screenWidth="1600" screenHeight="960" bufferAddr="0x2000" bufferRAM="true" bufferFormat="vt100" bufferCols="80" bufferRows="24"/>
 ```
 
-VT100 Screen and Character Dimensions
--------------------------------------
+### VT100 Screen and Character Dimensions
 
 Ordinarily, the VT100 screen displays 800 dots per horizontal scan, and a total of 240 horizontal scans, and by default,
 it uses a 10x10 character cell, for a total of 80 columns and 24 rows of characters.  However, in 132-column mode, it
@@ -229,8 +225,7 @@ measure 2.0mm x 3.35mm (in 132-column mode, they measure 1.3mm x 3.35mm), which 
 roughly 160mm x 80mm, implying a screen aspect ratio of 2.0.  However, after visually comparing the Technical Manual's SET-UP
 screenshots to our test screens, 1.67 appears to be closer to reality than 2.0.  I'll revisit this issue at a later date.  
 
-VT100 Initialization Process
-----------------------------
+### VT100 Initialization Process
 
 From "Power-Up and Self-Test", section 4.2.8, p. 4-19, of the VT100 Technical Manual (July 1982):
 
@@ -286,7 +281,7 @@ Some additional observations:
 set in the keyboard STATUS port (0x82), generating a "bell" (beep).  The NVR checksum test used to fail when we initialized all
 NVR words with the freshly-erased value of 0x3fff; now we initialize them with canned values (see ChipSet.VT100.INIT).
 
-### SET-UP Mode
+### VT100 SET-UP Mode
 
 From "PART 2: SET-UP MODE", p. 2-6, of the VT100 Technical Manual (July 1982):
 
@@ -300,8 +295,6 @@ features and store any new feature selections either temporarily, by leaving SET
 a Save operation. In either case, terminal operation reflects the new feature selection. If a recall operation is performed,
 or the terminal is reset, or terminal power is turned off, all temporary feature settings are replaced by features that have
 been stored on a fixed basis.
-
-> ### SET-UP Features
 
 > SET-UP mode provides two brief summaries of the current feature status. The first presentation - SET-UP A - displays
 the location of tab stops set and a visual ruler that numbers each character position on the line. The second presentation -
@@ -317,7 +310,6 @@ the main keyboard. The display looks like Figure 2-4. Figure 2-5 summarizes the 
 to quickly determine what features are enabled. For additional information on a feature refer to in Part 3, SET-UP Feature
 Definitions.
 
-Additional VT100 Resources
---------------------------
+### Additional VT100 Resources
 
-[VT100 Publications](/pubs/dec/vt100/)
+[DEC VT100](/machines/dec/vt100/)

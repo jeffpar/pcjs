@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Dual VT100 Terminals with Debuggers
-permalink: /machines/pcx80/vt100/dual/debugger/
+permalink: /machines/dec/vt100/dual/debugger/
 redirect_from: /devices/pc8080/machine/vt100/dual/debugger/
 machines:
   - id: vt100a

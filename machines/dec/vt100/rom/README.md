@@ -1,7 +1,7 @@
 ---
 layout: page
 title: DEC VT100 ROMs
-permalink: /machines/pcx80/vt100/rom/
+permalink: /machines/dec/vt100/rom/
 redirect_from: /devices/pc8080/rom/vt100/
 ---
 

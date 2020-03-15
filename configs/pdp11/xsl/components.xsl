@@ -24,14 +24,7 @@
 
 	<xsl:template name="componentScripts">
 		<xsl:param name="component"/>
-		<xsl:choose>
-			<xsl:when test="$APPNAME = 'PDPjs'">
-				<script src="/versions/pdpjs/{$APPVERSION}/{$component}.js"> </script>
-			</xsl:when>
-			<xsl:otherwise>
-				<script src="/machines/{$APPCLASS}/releases/{$APPVERSION}/{$component}.js"> </script>
-			</xsl:otherwise>
-		</xsl:choose>
+		<script src="/machines/{$APPCLASS}/releases/{$APPVERSION}/{$component}.js"> </script>
 	</xsl:template>
 
 	<xsl:template name="componentIncludes">

@@ -54,10 +54,9 @@ Eventually, I need to do some performance testing and determine whether the ES6 
 consumes fewer resources than the ES5 version.  If it does, then I should either bite the bullet and generate ES6 code,
 or generate both versions and use a loader that detects the browser's capabilities and loads the appropriate version.
 
-Caveats
--------
+### Caveats
 
-### *import* and *export*
+#### *import* and *export*
 
 With regard to *import* and *export* statements, the main reason I use them is to inform my development environment
 (WebStorm) about each file's dependencies, thereby preventing inspection warnings.  And ultimately, I plan to make PDPjs
@@ -82,3 +81,8 @@ and NOT as part of the object declaration; e.g.:
 
 	export default class ComputerPDP11 extends Component { ... }
 
+### Documents
+
+{% include gallery/documents.html title="PDP-11 Hardware" width="200" height="260" tag="hardware" %}
+
+{% include gallery/documents.html title="PDP-11 Diagnostics" width="280" height="200" tag="diagnostic" %}

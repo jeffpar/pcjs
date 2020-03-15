@@ -9617,7 +9617,7 @@ ROM.BINDING = {
 Defs.CLASSES["ROM"] = ROM;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/vt100/chips.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/vt100/v2/chips.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -10279,7 +10279,7 @@ VT100Chips.IOTABLE = {
 Defs.CLASSES["VT100Chips"] = VT100Chips;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/vt100/keyboard.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/vt100/v2/keyboard.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ model: number }} */
@@ -10834,7 +10834,7 @@ VT100Keyboard.IOTABLE = {
 Defs.CLASSES["VT100Keyboard"] = VT100Keyboard;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/vt100/serial.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/vt100/v2/serial.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -11412,7 +11412,7 @@ VT100Serial.IOTABLE = {
 Defs.CLASSES["VT100Serial"] = VT100Serial;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/vt100/video.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/vt100/v2/video.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */
