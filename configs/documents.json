@@ -1122,6 +1122,7 @@
       "@instances": {
         "ecp": {
           "@title": "Electronic Computer Project",
+          "@desc": "Institute for Advanced Study’s Electronic Computer Project (1946-1954)",
           "@documents": [
             {
               "@title": "Preliminary Discussion of the Logical Design of an Electronic Computing Instrument (Pomerene)",
@@ -1231,7 +1232,7 @@
         },
         "estelita": {
           "@title": "Tom Estelita",
-          "@desc": "Step-father and visionary",
+          "@desc": "Step-father, entrepreneur, visionary (1941-1988)",
           "@documents": [
             {
               "@title": "Educational Projects for a Digital Logic Laboratory",

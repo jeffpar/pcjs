@@ -70,4 +70,6 @@ keys.  The following keys have special meaning inside SET-UP Mode.
   - [vt100.net](http://www.vt100.net/docs/)
   - [Retrochallenge 2014](http://vt100romhax.tumblr.com/) by [Adam Mayer](https://github.com/phooky)
 
+## Documents
+
 {% include gallery/documents.html title="VT100 Manuals" width="200" height="260" %}
