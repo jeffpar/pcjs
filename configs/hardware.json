@@ -317,7 +317,61 @@
           "@title": "VT100 connected to IBM PC AT",
           "@redirect_from": "/devices/pcx86/machine/5170/ega/2048kb/rev3/vt100/"
         }
-      }
+      },
+      "@documents": [
+        {
+          "@title": "VT100 Technical Manual (Sep 1980)",
+          "@file": "EK-VT100-TM-002_VT100_Technical_Manual_Sep80.pdf",
+          "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5U8q29hbjyEHn4Dg?e=wrC7ga",
+          "@cover": ".jpg",
+          "@source": "http://www.vt100.net/docs/vt100-tm/ek-vt100-tm-002.pdf",
+          "@tags": ""
+        },
+        {
+          "@title": "VT100 Technical Manual (Jul 1982)",
+          "@file": "EK-VT100-TM-003_VT100_Technical_Manual_Jul82.pdf",
+          "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5X1XlYE16Lak_DUw?e=n2zpbT",
+          "@cover": ".jpg",
+          "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/EK-VT100-TM-003_VT100_Technical_Manual_Jul82.pdf",
+          "@tags": ""
+        },
+        {
+          "@title": "VT100 User Guide (Aug 1978)",
+          "@file": "EK-VT100-UG-001_VT100_User_Guide_Aug78.pdf",
+          "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5cwh5j_ZxFq0E5SQ?e=j2hEBh",
+          "@cover": ".jpg",
+          "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/EK-VT100-UG-001_VT100_User_Guide_Aug78.pdf",
+          "@tags": ""
+        },
+        {
+          "@title": "VT100 User Guide (Jan 1979)",
+          "@file": "EK-VT100-UG-002_VT100_User_Guide_Jan79.pdf",
+          "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5b0Zrk_lq6O7DuLA?e=S5iFqn",
+          "@cover": ".jpg",
+          "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/EK-VT100-UG-002_VT100_User_Guide_Jan79.pdf",
+          "@tags": ""
+        },
+        {
+          "@title": "Field Maintenance Guide (Mar 1980)",
+          "@file": "MP00633_VT100_Mar80.pdf",
+          "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5fOS06wOd2QECmEg?e=PmmwPX",
+          "@cover": ".jpg",
+          "@width": 280,
+          "@height": 200,
+          "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/MP00633_VT100_Mar80.pdf",
+          "@tags": ""
+        },
+        {
+          "@title": "Field Maintenance Guide (Feb 1982)",
+          "@file": "MP00633_VT100_Schematic_Feb82.pdf",
+          "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5YdXHBhh5cLBSAxg?e=Ecpv4o",
+          "@cover": ".jpg",
+          "@width": 280,
+          "@height": 200,
+          "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/MP00633_VT100_Schematic_Feb82.pdf",
+          "@tags": ""
+        }
+      ]
     }
   },
   "pcx80": {

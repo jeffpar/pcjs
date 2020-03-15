@@ -63,3 +63,5 @@ keys.  The following keys have special meaning inside SET-UP Mode.
 - [VT100 Screen and Character Dimensions](/machines/dec/vt100/debugger/#vt100-screen-and-character-dimensions)
 - [VT100 Initialization Process](/machines/dec/vt100/debugger/#vt100-initialization-process)
 - [VT100 SET-UP Mode](/machines/dec/vt100/debugger/#vt100-set-up-mode)
+
+{% include gallery/documents.html title="VT100 Manuals" width="200" height="260" %}
