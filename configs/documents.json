@@ -1093,11 +1093,35 @@
   },
   "papers": {
     "@title": "Papers",
-    "ias": {
-      "@title": "IAS",
+    "pcjs": {
+      "@title": "PCjs",
+      "@instances": {
+        "programming": {
+          "@title": "Programming Notes",
+          "@documents": [
+            {
+              "@title": "dBASE III Debugging Notes",
+              "@file": "1984-09-16--DBASE_III_DEBUG.pdf",
+              "@cover": ".jpg",
+              "@source": "PCjs",
+              "@tags": "dbase3"
+            },
+            {
+              "@title": "dBASE III Patching Procedure",
+              "@file": "1984-09-25--DBASE_III_PATCH.pdf",
+              "@cover": ".jpg",
+              "@source": "PCjs",
+              "@tags": "dbase3"
+            }
+          ]
+        }
+      }
+    },
+    "research": {
+      "@title": "Research",
       "@instances": {
         "ecp": {
-          "@title": "Electronic Computer Project (1946-1954)",
+          "@title": "Electronic Computer Project",
           "@documents": [
             {
               "@title": "Preliminary Discussion of the Logical Design of an Electronic Computing Instrument (Pomerene)",
@@ -1204,38 +1228,10 @@
               "@tags": "ecp"
             }
           ]
-        }
-      }
-    },
-    "pcjs": {
-      "@title": "PCjs",
-      "@instances": {
-        "programming": {
-          "@title": "Programming Notes",
-          "@documents": [
-            {
-              "@title": "dBASE III Debugging Notes",
-              "@file": "1984-09-16--DBASE_III_DEBUG.pdf",
-              "@cover": ".jpg",
-              "@source": "PCjs",
-              "@tags": "dbase3"
-            },
-            {
-              "@title": "dBASE III Patching Procedure",
-              "@file": "1984-09-25--DBASE_III_PATCH.pdf",
-              "@cover": ".jpg",
-              "@source": "PCjs",
-              "@tags": "dbase3"
-            }
-          ]
-        }
-      }
-    },
-    "research": {
-      "@title": "Research",
-      "@instances": {
+        },
         "estelita": {
           "@title": "Tom Estelita",
+          "@desc": "Step-father and visionary",
           "@documents": [
             {
               "@title": "Educational Projects for a Digital Logic Laboratory",

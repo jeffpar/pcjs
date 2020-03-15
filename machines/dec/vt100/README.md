@@ -28,40 +28,46 @@ Demos of [Dual VT100 Terminals](/machines/dec/vt100/dual/) and a [VT100 connecte
 
 Function keys are mapped as follows:
 
-- F1: PF1
-- F2: PF2
-- F3: PF3
-- F4: PF4
-- F6: BREAK
-- F7: LINE FEED
-- F8: NO SCROLL
-- F9: SET-UP
+  - F1: PF1
+  - F2: PF2
+  - F3: PF3
+  - F4: PF4
+  - F6: BREAK
+  - F7: LINE FEED
+  - F8: NO SCROLL
+  - F9: SET-UP
 
 From the SET-UP screen, you can press **4** to switch to LOCAL mode and verify local operation of most VT100
 keys.  The following keys have special meaning inside SET-UP Mode.
 
 ### SET-UP Mode Keys
 
-- 0: RESET
-- 2: SET/CLEAR TAB
-- 3: CLEAR ALL TABS
-- 4: ONLINE/LOCAL
-- 5: SET-UP A/B
-- 6: TOGGLE FEATURE
-- 7: TRANSMIT SPEED
-- 8: RECEIVE SPEED
-- 9: 80/132 COLUMNS
-- SHIFT-S: Save SET-UP Features
-- SHIFT-R: Restore SET-UP Features
+  - 0: RESET
+  - 2: SET/CLEAR TAB
+  - 3: CLEAR ALL TABS
+  - 4: ONLINE/LOCAL
+  - 5: SET-UP A/B
+  - 6: TOGGLE FEATURE
+  - 7: TRANSMIT SPEED
+  - 8: RECEIVE SPEED
+  - 9: 80/132 COLUMNS
+  - SHIFT-S: Save SET-UP Features
+  - SHIFT-R: Restore SET-UP Features
 
 ### Additional Information
 
-- [VT100 Firmware](/machines/dec/vt100/rom/)
-- [VT100 Memory Usage](/machines/dec/vt100/debugger/#vt100-memory-usage)
-- [VT100 I/O Ports](/machines/dec/vt100/debugger/#vt100-io-ports)
-- [VT100 Video Processor](/machines/dec/vt100/debugger/#vt100-video-processor)
-- [VT100 Screen and Character Dimensions](/machines/dec/vt100/debugger/#vt100-screen-and-character-dimensions)
-- [VT100 Initialization Process](/machines/dec/vt100/debugger/#vt100-initialization-process)
-- [VT100 SET-UP Mode](/machines/dec/vt100/debugger/#vt100-set-up-mode)
+  - [VT100 Firmware](/machines/dec/vt100/rom/)
+  - [VT100 Memory Usage](/machines/dec/vt100/debugger/#vt100-memory-usage)
+  - [VT100 I/O Ports](/machines/dec/vt100/debugger/#vt100-io-ports)
+  - [VT100 Video Processor](/machines/dec/vt100/debugger/#vt100-video-processor)
+  - [VT100 Screen and Character Dimensions](/machines/dec/vt100/debugger/#vt100-screen-and-character-dimensions)
+  - [VT100 Initialization Process](/machines/dec/vt100/debugger/#vt100-initialization-process)
+  - [VT100 SET-UP Mode](/machines/dec/vt100/debugger/#vt100-set-up-mode)
+
+### Additional Resources
+
+  - [Wikipedia](https://en.wikipedia.org/wiki/VT100)
+  - [vt100.net](http://www.vt100.net/docs/)
+  - [Retrochallenge 2014](http://vt100romhax.tumblr.com/) by [Adam Mayer](https://github.com/phooky)
 
 {% include gallery/documents.html title="VT100 Manuals" width="200" height="260" %}
