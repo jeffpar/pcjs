@@ -927,6 +927,10 @@
   "manuals": {
     "@title": "Manuals",
     "@instances": {
+      "dec": {
+        "@title": "DEC",
+        "@permalink": "/documents/manuals/dec/"
+      },
       "ibm": {
         "@title": "IBM",
         "@permalink": "/documents/manuals/ibm/"

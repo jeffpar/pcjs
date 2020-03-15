@@ -47,11 +47,13 @@
           {%- capture doc_path -%}{{ path }}{{ doc_file }}{%- endcapture -%}
           {%- assign doc_link = doc['@link'] | default: doc_path -%}
           {%- assign doc_cover = doc['@cover'] | default: "/documents/covers/default.jpg" -%}
+          {%- assign doc_width = doc['@width'] | default: cover_width -%}
+          {%- assign doc_height = doc['@height'] | default: cover_height -%}
           {%- if doc_cover == ".jpg" or doc_cover == ".png" -%}
             {%- capture doc_cover -%}{{ path }}covers/{{ doc_file | replace: ".pdf",doc_cover | replace: ".png",doc_cover }}{%- endcapture -%}
           {%- endif -%}
           {%- assign doc_source = doc['@source'] -%}
-          {%- include gallery/image.html id=doc_id image=doc_cover link=doc_link title=doc_title width=cover_width height=cover_height source=doc_source external=true -%}
+          {%- include gallery/image.html id=doc_id image=doc_cover link=doc_link title=doc_title width=doc_width height=doc_height source=doc_source external=true -%}
         {%- endif -%}
       {%- endfor -%}
       {%- include gallery/end.html -%}

@@ -352,7 +352,7 @@
   position: relative;
   line-height: 0; /* this is just an attempt to eliminate the side-effects of any whitespace between inner DIVs */
 }
-.pcjs-overlay {
+.pcjs-overlay, .pcjs-screen textarea {
   position: absolute;
   left: 0;
   top: 0;

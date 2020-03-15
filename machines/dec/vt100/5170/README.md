@@ -1,7 +1,7 @@
 ---
 layout: page
-title: VT100 Terminal connected to IBM PC AT
-permalink: /machines/pcx80/vt100/5170/
+title: DEC VT100 Terminal connected to IBM PC AT
+permalink: /machines/dec/vt100/5170/
 redirect_from: /devices/pcx86/machine/5170/ega/2048kb/rev3/vt100/
 machines:
   - id: ibm5170
@@ -14,9 +14,9 @@ machines:
     config: /configs/pcx80/xml/machine/vt100/machine.xml
 ---
 
-Demonstration of a VT100 Terminal connected to an IBM PC AT via COM2.
+Demonstration of a DEC VT100 Terminal connected to an IBM PC AT via COM2.  Also available with [Debuggers](debugger/).
 
-A [Dual Debugger Configuration](debugger/) is also available.
+Use the DOS command `CTTY COM2` to use the VT100 for console operations.  `CTTY CON` will return control to the PC.
 
 {% include machine.html id="vt100" %}
 

@@ -13,7 +13,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="initial-scale=1"/>
-		<meta name="description" content="Welcome to PCjs, home of the original IBM PC in a web browser. The PCjs Project offers a variety of computer emulators written in JavaScript, including PCx86 for x86-based machines (8088 through 80386), C1Pjs for the 6502-based Ohio Scientific Challenger 1P, PC8080 for 8080-based machines like Space Invaders and the DEC VT100 Terminal, PDPjs with support for PDP-10 and PDP-11 machines, and emulators of classic programmable calculators, like the TI-57.  PCjs also provides an archive of selected historical PC software, publications, and reference materials."/>
+		<meta name="description" content="Welcome to PCjs, home of the original IBM PC in a web browser. The PCjs Project offers a variety of computer emulators written in JavaScript, including PCx86 for x86-based machines (8088 through 80386), C1Pjs for the 6502-based Ohio Scientific Challenger 1P, PCx80 for 8080-based machines like Space Invaders and the DEC VT100 Terminal, PDPjs with support for PDP-10 and PDP-11 machines, and emulators of classic programmable calculators, like the TI-57.  PCjs also provides an archive of selected historical PC software, publications, and reference materials."/>
 		<meta name="apple-mobile-web-app-title" content="PCjs"/>
 		<meta property="og:image" content="/assets/img/logo-home.png"/>
 		<meta property="og:title" content="The Original IBM PC in a Web Browser"/>

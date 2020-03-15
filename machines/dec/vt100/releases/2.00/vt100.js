@@ -13,10 +13,10 @@
  https://www.pcjs.org/machines/lib/bus/ports.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/bus/ram.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/bus/rom.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/dec/vt100/chips.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/dec/vt100/keyboard.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/dec/vt100/serial.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/dec/vt100/video.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/dec/vt100/v2/chips.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/dec/vt100/v2/keyboard.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/dec/vt100/v2/serial.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/dec/vt100/v2/video.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/cpu/cpu.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/cpu/cpu8080.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/cpu/debugger.js (C) 2012-2020 Jeff Parsons

@@ -1,11 +1,9 @@
 ---
 layout: page
 title: PDP-11 M9312 ROMs
-permalink: /devices/pdp11/rom/M9312/
+permalink: /machines/dec/pdp11/rom/M9312
+redirect_from: /devices/pdp11/rom/M9312/
 ---
-
-PDP-11 M9312
-------------
 
 As this [PDP-11 website](http://www.pdp-11.nl/pdp11-34a/cpu/options/bootstrap-info.html) explains:
 
@@ -15,8 +13,7 @@ and five sockets to put ROMs in. One socket is used for a diagnostic ROM for the
 contains the console emulation routine and diagnostics for all other PDP-11s. The other four sockets accept ROMs that contain
 bootstrap programs.
 
-PDP-11 M9312 ROMs
------------------
+### PDP-11 M9312 ROMs
 
 An assortment of M9312 ROM images, source listings, etc, are available from Don North's [website](http://www.ak6dn.com/PDP-11/M9312/),
 some of which we have reproduced here.
@@ -39,6 +36,6 @@ DEC P/N [23-616F1](23-616F1.txt), "11/60,70 Diagnostic/Console", albeit with a f
 	165406  012737  165714  000114  mov #N12,@#114      ; 165714 changed to 000714
 
 The unmodified [23-616F1](23-616F1.txt) [ROM](23-616F1.json) is loaded at address 165000 (0xEA00) in this
-[PDP-11/70](/devices/pdp11/machine/1170/panel/debugger/), using the following configuration:
+[PDP-11/70](/machines/dec/pdp11/1170/panel/debugger/), using the following configuration:
 
-	<rom id="m9312" addr="0xEA00" size="0x200" file="/devices/pdp11/rom/M9312/23-616F1.json"/>
+	<rom id="m9312" addr="0xEA00" size="0x200" file="/machines/dec/pdp11/rom/M9312/23-616F1.json"/>
