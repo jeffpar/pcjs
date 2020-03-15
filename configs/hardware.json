@@ -11,13 +11,42 @@
   "dec": {
     "@title": "DEC",
     "@instances": {
-      "pdp11/1120/basic/debugger": {
-        "@title": "PDP-11/20 BASIC",
+      "pdp11/1120/basic": {
+        "@title": "PDP-11/20 with BASIC",
         "@redirect_from": "/devices/pdp11/machine/1120/basic/debugger/"
+      },
+      "pdp11/1120/bootstrap": {
+        "@title": "PDP-11/20 with Bootstrap Loader",
+        "@redirect_from": "/devices/pdp11/machine/1120/bootstrap/"
+      },
+      "pdp11/1120/monitor": {
+        "@title": "PDP-11/20 with Boot Monitor",
+        "@redirect_from": "/devices/pdp11/machine/1120/monitor/"
+      },
+      "pdp11/1120/panel": {
+        "@title": "PDP-11/20 with Front Panel",
+        "@redirect_from": "/devices/pdp11/machine/1120/panel/"
       },
       "vt100": {
         "@title": "VT100 Terminal",
         "@redirect_from": "/devices/pc8080/machine/vt100/new/"
+      }
+    }
+  },
+  "pcx80": {
+    "@title": "8080 Tests",
+    "@instances": {
+      "exercister": {
+        "@title": "8080 Exerciser",
+        "@redirect_from": "/devices/pc8080/machine/exerciser/"
+      },
+      "vt100": {
+        "@title": "VT100 Demos",
+        "@redirect_from": "/devices/pc8080/machine/vt100/"
+      },
+      "vt100/5170": {
+        "@title": "VT100 connected to IBM PC AT",
+        "@redirect_from": "/devices/pcx86/machine/5170/ega/2048kb/rev3/vt100/"
       }
     }
   },
@@ -387,7 +416,7 @@
     "@instances": {
       "life/color": {
         "@title": "Game of Life",
-        "@redirect_from": "/devices/leds/life/colors"
+        "@redirect_from": "/devices/leds/life/colorss"
       },
       "lite-brite": {
         "@title": "Lite-Brite",

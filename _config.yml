@@ -14,6 +14,7 @@ exclude:
   - gulpfile.js
   - README.md
   - "**/archive"
+  - "**/private"
   - /package*.json
   - /.history
   - /modules

@@ -26293,7 +26293,7 @@ function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 }
 
 /**
- * embedPC8080(idMachine, sXMLFile, sXSLFile, sParms, sClass)
+ * embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  *
  * @param {string} idMachine
  * @param {string} [sXMLFile]
@@ -26302,10 +26302,10 @@ function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sClass]
  * @return {boolean} true if successful, false if error
  */
-function embedPC8080(idMachine, sXMLFile, sXSLFile, sParms, sClass)
+function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PC8080", "pc8080", APPVERSION, idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PCx80", "pcx80", APPVERSION, idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**
@@ -26409,8 +26409,8 @@ if (APPNAME == "PCx86") {
     window['embedPC']     = embedPCx86;         // WARNING: embedPC() deprecated as of v1.23.0
     window['embedPCx86']  = embedPCx86;
 }
-if (APPNAME == "PC8080") {
-    window['embedPC8080'] = embedPC8080;
+if (APPNAME == "PCx80") {
+    window['embedPCx80'] = embedPCx80;
 }
 if (APPNAME == "PDPjs") {
     window['embedPDP10']  = embedPDP10;

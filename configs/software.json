@@ -1,4 +1,9 @@
 {
+  "pdp11": {
+    "@title": "DEC",
+    "@path": "/dec/pdp11/tapes",
+    "@type": "tapes"
+  },
   "pcx86": {
     "@title": "IBM PC",
     "@path": "/pcx86",

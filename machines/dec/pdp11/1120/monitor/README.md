@@ -1,19 +1,18 @@
 ---
 layout: page
-title: PDP-11/20 Boot Monitor 
-permalink: /devices/pdp11/machine/1120/monitor/
+title: DEC PDP-11/20 with Boot Monitor 
+permalink: /machines/dec/pdp11/1120/monitor/
+redirect_from: /devices/pdp11/machine/1120/monitor/
 machines:
   - id: test1120
     type: pdp11
+    config: /configs/pdp11/xml/machine/1120/monitor/machine.xml
 ---
 
-PDP-11/20 Boot Monitor
-----------------------
-
-The machine below pre-loads the [PDP-11 Boot Monitor](/apps/pdp11/boot/monitor/) into RAM:
+The machine below pre-loads the [PDP-11 Boot Monitor](/software/dec/pdp11/boot/monitor/) into RAM:
 
 ```xml
-<ram id="ram" addr="0x0000" size="0xE000" file="/apps/pdp11/boot/monitor/BOOTMON.json" load="0xC000" exec="0xC000"/>
+<ram id="ram" addr="0x0000" size="0xE000" file="/software/dec/pdp11/boot/monitor/BOOTMON.json" load="0xC000" exec="0xC000"/>
 ```
 
 {% include machine.html id="test1120" %}
