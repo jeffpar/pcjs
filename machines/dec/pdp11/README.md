@@ -81,7 +81,7 @@ and NOT as part of the object declaration; e.g.:
 
 	export default class ComputerPDP11 extends Component { ... }
 
-### Documents
+## Documents
 
 {% include gallery/documents.html title="PDP-11 Hardware" width="200" height="260" tag="hardware" %}
 

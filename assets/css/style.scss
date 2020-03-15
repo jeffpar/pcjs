@@ -446,8 +446,7 @@ div.pcjs-gallery-image a {
   font-size: small;
 }
 .pcjs-picture-frame {
-  margin: 8px;
-  text-align: center;
+  margin: 32px;
   vertical-align: top;
 }
 .pcjs-picture-image img {
@@ -458,6 +457,7 @@ div.pcjs-gallery-image a {
   float: right;
   font-size: x-small;
   font-style: italic;
+  padding-left: 32px;
 }
 .pcjs-picture-caption {
   font-size: x-small;
