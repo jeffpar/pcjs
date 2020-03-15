@@ -1,6 +1,6 @@
 ---
 layout: page
-title: DEC PDP-11/20 BASIC with Debugger
+title: DEC PDP-11/20 with BASIC and Debugger
 permalink: /machines/dec/pdp11/1120/basic/debugger/
 redirect_from: /devices/pdp11/machine/1120/basic/debugger/
 machines:
@@ -18,7 +18,7 @@ The machine below pre-loads the [DEC PDP-11 BASIC](/software/dec/pdp11/tapes/bas
 ```
 
 You can also manually load it into memory using the [Bootstrap Loader](/software/dec/pdp11/boot/bootstrap/).
-See the [DEC PDP-11/20 Bootstrap Loader with Debugger](/machines/pdp11/1120/bootstrap/debugger/) for details.
+See the [DEC PDP-11/20 with Bootstrap Loader and Debugger](/machines/pdp11/1120/bootstrap/debugger/) for details.
 
 There are also some [Debugging Notes](/software/dec/pdp11/tapes/basic/#debugging-notes) on the
 [DEC PDP-11 BASIC](/software/dec/pdp11/tapes/basic/) page, if you're inclined to do some debugging with the built-in

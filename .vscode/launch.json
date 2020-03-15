@@ -56,6 +56,13 @@
         "webRoot": "${workspaceFolder}"
       },
       {
+        "name": "DEC PDP-11/20 BASIC with Debugger (v2)",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:4000/machines/dec/pdp11/1120/basic/debugger/v2/",
+        "webRoot": "${workspaceFolder}"
+      },
+      {
         "name": "DEC PDP-11/20 Bootstrap Loader with Debugger",
         "type": "chrome",
         "request": "launch",
@@ -193,6 +200,13 @@
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/osi/c1p/array/",
+        "webRoot": "${workspaceFolder}"
+      },
+      {
+        "name": "8080 Exerciser Test Machine",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:4000/machines/pcx80/exerciser/",
         "webRoot": "${workspaceFolder}"
       },
       {

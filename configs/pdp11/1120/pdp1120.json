@@ -26,6 +26,9 @@
       "The PDP-11 has a single bus (UNIBUS) which accomodates RAM, ROM, and I/O, so the bus type must be 'dynamic'."
     ]
   },
+  "input": {
+    "class": "Input"
+  },
   "ram": {
     "class": "RAM",
     "addr": 0,
@@ -40,7 +43,7 @@
   "pc11": {
     "class": "PC11",
     "name": "PTR",
-    "library": "/media/pdp11/tapes.json",
+    "library": "/configs/pdp11/tapes.json",
     "autoLoad": "BASIC (Single User)"
   },
   "cpu": {

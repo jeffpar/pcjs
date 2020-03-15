@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panel id="panel" width="50%" pos="left" padding="8px">
+	<name>Control Panel</name>
+	<control type="container" class="pcjs-textarea" width="100%" padRight="8px">
+		<control type="textarea" binding="print" width="100%" height="252px" pos="relative" style="resize:vertical;"/>
+	</control>
+	<control type="container" class="pcjs-registers" width="100%" padLeft="8px">
+		<control type="register" label="A" binding="A" width="20px" padRight="8px" padBottom="8px">00</control>
+		<control type="register" label="BC" binding="BC" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="DE" binding="DE" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="HL" binding="HL" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="SP" binding="SP" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="PC" binding="PC" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="container" pos="left">
+			<control type="flag" label="I" binding="IF" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="S" binding="SF" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="Z" binding="ZF" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="A" binding="AF" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="P" binding="PF" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="C" binding="CF" width="8px" padRight="4px" padBottom="8px">0</control>
+		</control>
+		<control type="description" padLeft="16px" padBottom="8px">Speed:</control>
+		<control type="description" binding="speed" padLeft="4px" padBottom="8px">Stopped</control>
+	</control>
+	<control type="container" padLeft="8px" padBottom="8px">
+		<control type="button" binding="run">Run</control>
+		<control type="button" binding="step">Step</control>
+		<control type="button" binding="reset">Reset</control>
+		<control type="button" binding="setSpeed">Fast</control>
+		<control pos=""/>
+		<control type="text" binding="debugInput" width="100px"/>
+		<control type="button" binding="debugEnter">Enter</control>
+		<control type="button" binding="clear">Clear</control>
+	</control>
+</panel>

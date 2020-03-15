@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Space Invaders
+title: Space Invaders (1978)
 permalink: /machines/arcade/invaders/
 redirect_from: /devices/pc8080/machine/invaders/
 machines:

@@ -1,12 +1,13 @@
 ---
 layout: page
-title: DEC PDP-11/20 Bootstrap Loader with Debugger
+title: DEC PDP-11/20 with Bootstrap Loader and Debugger
 permalink: /machines/dec/pdp11/1120/bootstrap/debugger/
 redirect_from: /devices/pdp11/machine/1120/bootstrap/debugger/
 machines:
   - id: test1120
     type: pdp11
     debugger: true
+    config: /configs/pdp11/xml/machine/1120/bootstrap/debugger/machine.xml
     autoMount:
       PTR:
         path: /software/dec/pdp11/tapes/absloader/DEC-11-L2PC-PO.json
