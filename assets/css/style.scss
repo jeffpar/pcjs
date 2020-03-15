@@ -445,6 +445,23 @@ div.pcjs-gallery-image a {
 .pcjs-gallery-label {
   font-size: small;
 }
+.pcjs-picture-frame {
+  margin: 8px;
+  text-align: center;
+  vertical-align: top;
+}
+.pcjs-picture-image img {
+  margin: 0;
+  width: 100%;
+}
+.pcjs-picture-credit {
+  float: right;
+  font-size: x-small;
+  font-style: italic;
+}
+.pcjs-picture-caption {
+  font-size: x-small;
+}
 @media screen and (max-width: 800px) {
   .pcjs-registers {
     width: 100% !important;
