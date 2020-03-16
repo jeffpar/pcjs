@@ -21,7 +21,7 @@
         <h1><a href="{{ "/" | absolute_url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
         <p>{{ site.description | default: site.github.project_tagline }}</p>
         <ul class="menu">
-          <li><a href="#">About</a></li>
+          <li><a href="/about/">About</a></li>
           <li><a href="/blog/">Blog</a></li>
           <li><a href="{{ site.github.repository_url }}">Repository</a></li>
         </ul>
@@ -49,7 +49,7 @@
       </section>
       <footer>
         <div class="pcjs-explorer">
-          <h3>PCjs Explorer</h3>
+          <h2>PCjs Explorer</h2>
 {% include explorer/hardware.html -%}
 {% include explorer/software.html %}
 {% include explorer/documents.html -%}
