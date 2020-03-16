@@ -5,10 +5,6 @@ permalink: /machines/pcx86/
 redirect_from: /modules/pcx86/
 ---
 
-Available PCx86 machines include:
-
-[IBM PC](ibm/)
-
 ### PCx86 Implementation
 
 PCx86 is the emulation module powering all our IBM PCs and compatibles.
