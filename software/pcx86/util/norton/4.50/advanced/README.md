@@ -1,12 +1,9 @@
 ---
 layout: page
-title: Norton Utilities 4.50
-permalink: /software/pcx86/util/norton/4.50/
+title: Norton Utilities 4.50 (Advanced Edition)
+permalink: /software/pcx86/util/norton/4.50/advanced/
 redirect_from: /disks/pcx86/tools/other/norton/4.50/
 ---
-
-Norton Utilities 4.50 (Advanced Edition)
-----------------------------------------
 
 ### Directory of Norton Utilities 4.50 (Disk 1)
 

@@ -5,7 +5,7 @@ permalink: /software/pcx86/lang/microsoft/c/5.00/
 redirect_from: /disks/pcx86/tools/microsoft/c/5.00/
 ---
 
-Directory listings of the four 360Kb distribution diskettes are provided below.
+[Documentation](#documents) and directory listings of the four 360Kb distribution diskettes are provided below.
 
 NOTE: This appears to be an *incomplete* set.
 
@@ -179,3 +179,5 @@ NOTE: This appears to be an *incomplete* set.
 	Total files listed:
 	       14 file(s)     295633 bytes
 	                       61440 bytes free
+
+{% include gallery/documents.html width="200" height="260" %}

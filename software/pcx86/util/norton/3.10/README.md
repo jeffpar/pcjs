@@ -6,7 +6,7 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /devices/pcx86/machine/5160/cga/512kb/machine.xml
-    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/disks-demo/pcx86/drives/10mb/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/disks-demo/pcx86/dos/microsoft/2.00/MSDOS-SRC.json"}]'
+    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/harddisks/pcx86/sys/dos/ibm/2.00/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/harddisks/pcx86/sys/dos/microsoft/2.00/MSDOS-SRC.json"}]'
     autoMount:
       A:
         name: None

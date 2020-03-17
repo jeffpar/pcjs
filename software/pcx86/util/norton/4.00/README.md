@@ -7,7 +7,7 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /configs/pcx86/xml/machine/5160/cga/512kb/machine.xml
-    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/disks-demo/pcx86/drives/10mb/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/disks-demo/pcx86/dos/microsoft/2.00/MSDOS-SRC.json"}]'
+    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/harddisks/pcx86/sys/dos/ibm/2.00/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/harddisks/pcx86/sys/dos/microsoft/2.00/MSDOS-SRC.json"}]'
     autoMount:
       A:
         name: None
@@ -17,13 +17,10 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-Norton Utilities 4.00 (Standard Edition)
-----------------------------------------
-
 Two variations of Norton Utilities 4.00 (Standard Edition) are currently available:
 
 - [March 1, 1987](#directory-of-norton-utilities-400-1987-03-01-1) (from [WinWorld](https://winworldpc.com/product/norton-utilities/40))
-- [May 15, 1987](#directory-of-norton-utilities-400-1987-05-15-1) (from the [PCjs Personal Disk Collection](/disks/pcx86/personal/))
+- [May 15, 1987](#directory-of-norton-utilities-400-1987-05-15-1) (from the [PCjs Software Archive](/software/pcx86/sw/misc/pcjs/))
 
 Scans of the [May 15, 1987](#directory-of-norton-utilities-400-1987-05-15-1) diskettes are provided [below](#diskette-scans).
 

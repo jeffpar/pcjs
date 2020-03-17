@@ -21,6 +21,10 @@ let args = proclib.getArgs();
 
 let sRootDir = "../..";
 
+let remappings = {
+    "/tests/pcx86/testmon": "/software/pcx86/test/testmon"
+};
+
 /**
  * printf(format, ...args)
  *
@@ -193,6 +197,7 @@ function processFiles(sDir, fDebug, fFix)
             let sFile = match[2];
             if (sFile[0] == '?' || sFile[0] == '#') continue;
             if (sFile.indexOf("{{") == 0) {
+                if (sFile.indexOf("site.github.repository_url") >= 0) continue;
                 sFile = sFile.replace(/\{\{ site\.software\.(diskettes|gamedisks|harddisks)\.server \}\}/, "../pcjs-$1");
             }
             else if (sFile.indexOf("http") == 0) {

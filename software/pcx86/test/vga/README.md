@@ -41,8 +41,8 @@ Development of PCjs VGA support began June 2015, and not everything here runs pr
 
 ### VGA Black Book Test Machine
 
-The [Compaq DeskPro 386](/devices/pcx86/machine/compaq/deskpro386/vga/2048kb/) machine below loads the
-[VGA Black Book Binaries](#directory-of-vga-black-book-binaries) diskette from the PCjs [Disk Library](/disks/pcx86/)
+The Compaq DeskPro 386 machine below loads the
+[VGA Black Book Binaries](#directory-of-vga-black-book-binaries) diskette from the PCjs Disk Library
 into Drive B.  Click the **Run** button to start the machine.
 
 {% include machine.html id="deskpro386" %}
