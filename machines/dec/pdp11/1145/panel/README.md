@@ -1,6 +1,6 @@
 ---
 layout: page
-title: PDP-11/45 with 256Kb and Front Panel
+title: DEC PDP-11/45 with 256Kb and Front Panel
 permalink: /machines/dec/pdp11/1145/panel/
 redirect_from: /devices/pdp11/machine/1145/panel/
 machines:

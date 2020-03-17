@@ -6,7 +6,7 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /devices/pcx86/machine/5160/cga/512kb/machine.xml
-    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/disks-demo/pcx86/drives/10mb/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/disks-demo/pcx86/dos/microsoft/2.00/MSDOS-SRC.json"}]'
+    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/harddisks/pcx86/sys/dos/ibm/2.00/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/harddisks/pcx86/sys/dos/microsoft/2.00/MSDOS-SRC.json"}]'
     autoMount:
       A:
         name: None
@@ -107,6 +107,6 @@ All files on both sides of that diskette appear to be OK.  Directory listings of
 
 ### Diskette Scans
 
-![Norton Utilities 2.01 (1983-11-03-A)]({{ site.demo-disks.baseurl }}/pcx86/tools/other/norton/2.01/1983-11-03/NU201-1983-11-03-SIDEA.jpg)
+![Norton Utilities 2.01 (1983-11-03-A)]({{ site.software.diskettes.server }}/pcx86/util/norton/2.01/NU201-1983-11-03-SIDEA.jpg)
 
-![Norton Utilities 2.01 (1983-11-03-B)]({{ site.demo-disks.baseurl }}/pcx86/tools/other/norton/2.01/1983-11-03/NU201-1983-11-03-SIDEB.jpg)
+![Norton Utilities 2.01 (1983-11-03-B)]({{ site.software.diskettes.server }}/pcx86/util/norton/2.01/NU201-1983-11-03-SIDEA.jpg)

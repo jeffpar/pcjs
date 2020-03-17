@@ -7,7 +7,7 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /configs/pcx86/xml/machine/5160/cga/512kb/machine.xml
-    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/disks-demo/pcx86/drives/10mb/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/disks-demo/pcx86/dos/microsoft/2.00/MSDOS-SRC.json"}]'
+    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/harddisks/pcx86/sys/dos/ibm/2.00/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/harddisks/pcx86/sys/dos/microsoft/2.00/MSDOS-SRC.json"}]'
     autoMount:
       A:
         name: None
@@ -21,7 +21,7 @@ Norton Utilities 4.00 (Advanced Edition)
 ----------------------------------------
 
 [Norton Utilities 4.00 (Advanced Edition)](#directory-of-norton-utilities-400-advanced-1) is from the
-[PCjs Personal Disk Collection](/disks/pcx86/personal/).
+[PCjs Software Archive](/software/pcx86/sw/misc/pcjs/).
 
 Scans of the diskettes and packaging are provided [below](#diskette-scans).
 

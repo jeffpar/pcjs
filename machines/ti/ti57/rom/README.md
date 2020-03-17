@@ -168,18 +168,18 @@ which displays the first 10 16-bit groups of raw ROM data:
 The [Patent ROM (Big-endian)](ti57patbe.bin) that Sean created, to help verify the correctness of his
 [Original ROM (Big-endian)](ti57be.bin), was generated from ROM object code listings in the following patents:
 
-- [4,078,251](../patents/us4078251)
-- [4,079,459](../patents/us4079459)
-- [4,100,600](../patents/us4100600)
-- [4,107,781](../patents/us4107781)
+- [4,078,251](https://patents.google.com/patent/US4078251A/en)
+- [4,079,459](https://patents.google.com/patent/US4079459A/en)
+- [4,100,600](https://patents.google.com/patent/US4100600A/en)
+- [4,107,781](https://patents.google.com/patent/US4107781A/en)
 - [4,125,901](../patents/us4125901)
-- [4,164,037](../patents/us4164037)
+- [4,164,037](https://patents.google.com/patent/US4164037A/en)
 
 Note that TI-57 ROM listings were also provided in three other TI patents as well:
  
-- [4,125,867](../patents/us4125867) (see also: [ROM From U.S. Pat. No. 4,125,867](#rom-from-us-pat-no-4125867))
-- [4,146,928](../patents/us4146928)
-- [4,277,675](../patents/us4277675) (not very readable)
+- [4,125,867](https://patents.google.com/patent/US4125867A/en) (see also: [ROM From U.S. Pat. No. 4,125,867](#rom-from-us-pat-no-4125867))
+- [4,146,928](https://patents.google.com/patent/US4146928A/en)
+- [4,277,675](https://patents.google.com/patent/US4277675A/en) (not very readable)
 
 #### Patent ROM
  

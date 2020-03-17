@@ -1521,6 +1521,15 @@
               "@title": "Microsoft Adventure (Unmodified)",
               "@diskette": "ADVENTURE-1981-UNMODIFIED.json"
             }
+          ],
+          "@documents": [
+            {
+              "@title": "Microsoft Adventure Manual",
+              "@file": "Adventure_Manual.pdf",
+              "@link": "https://gamedisks.pcjs.org/pcx86/game/microsoft/adventure/Adventure_Manual.pdf",
+              "@cover": ".jpg",
+              "@source": ""
+            }
           ]
         },
         "flightsim/1982": {
@@ -2226,6 +2235,15 @@
                 "@diskette": "MSC500-DISK4-UTILITY2.json",
                 "@type": "PC360K"
               }
+            ],
+            "@documents": [
+              {
+                "@title": "MSC 5.0 User's Guide",
+                "@file": "MSC50-USERGUIDE-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB5iaYUjobUab38cg?e=wIMD34",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-ug-1987.pdf"
+              }
             ]
           },
           "5.10-OS2": {
@@ -2505,6 +2523,64 @@
                 "@title": "MS Macro Assembler 5.00 (Disk 2)",
                 "@diskette": "MASM500-DISK2.json",
                 "@type": "PC360K"
+              }
+            ],
+            "@documents": [
+              {
+                "@title": "MASM 5.00 Reference",
+                "@file": "MASM50-POCKETREF.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFkTtanp1C-Mq0Yug?e=BRbCsV",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              },
+              {
+                "@title": "MASM 5.00 Programmer's Guide",
+                "@file": "MASM50-PROGGUIDE.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBnDrC9pXwVwxYw1A?e=OZkNow",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/masm-5.0-pg-1987.pdf"
+              },
+              {
+                "@title": "MASM 5.00 Mixed-Language Programming Guide",
+                "@file": "MASM50-MLPROGGUIDE.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFtJNuM0Uh1XIG9zw?e=OH72cR",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              },
+              {
+                "@title": "MASM 5.00 CodeView and Utilities Guide",
+                "@file": "MASM50-UTILGUIDE.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqIKJ6ua82VVg6_sbA?e=eibMfp",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              },
+              {
+                "@title": "MASM 5.00 Box",
+                "@file": "MASM50-BOX.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFd2ImZBX2LOqqivw?e=fxpie0",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              },
+              {
+                "@title": "MASM 5.00 Brochure",
+                "@file": "MASM50-BROCHURE.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFc87PWpzo9W45Huw?e=h5XatC",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              },
+              {
+                "@title": "MASM 5.00 READ THIS FIRST",
+                "@file": "MASM50-READTHISFIRST.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFitllWejDc8P374g?e=z67BRs",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              },
+              {
+                "@title": "MASM 5.10 Letters",
+                "@file": "MASM51-LETTERS.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFmfQPP91sz4S6MDQ?e=AkicZR",
+                "@cover": ".jpg",
+                "@source": "PCjs"
               }
             ]
           },
@@ -7567,7 +7643,7 @@
             }
           ]
         },
-        "4.00-ADV": {
+        "4.00/advanced": {
           "@title": "Norton Utilities Advanced Edition 4.00",
           "@media": [
             {
@@ -7584,7 +7660,7 @@
             }
           ]
         },
-        "4.50-ADV": {
+        "4.50/advanced": {
           "@title": "Norton Utilities Advanced Edition 4.50",
           "@media": [
             {

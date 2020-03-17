@@ -31,6 +31,56 @@
           "@redirect_from": "/devices/pdp11/machine/1120/panel/"
         }
       },
+      "1145": {
+        "@title": "PDP-11/45",
+        "panel": {
+          "@title": "PDP-11/45 with 256Kb",
+          "@redirect_from": "/devices/pdp11/machine/1145/panel/"
+        },
+        "vt100": {
+          "@title": "PDP-11/45 with VT100",
+          "@redirect_from": "/devices/pdp11/machine/1145/vt100/"
+        }
+      },
+      "1170": {
+        "@title": "PDP-11/70",
+        "4mb": {
+          "@title": "PDP-11/70 with 4Mb",
+          "@redirect_from": "/devices/pdp11/machine/1170/4mb/"
+        },
+        "array": {
+          "@title": "PDP-11/70 \"Server Array\"",
+          "@redirect_from": "/devices/pdp11/machine/1170/array/"
+        },
+        "monitor": {
+          "@title": "PDP-11/70 with Boot Monitor",
+          "@redirect_from": "/devices/pdp11/machine/1170/monitor/"
+        },
+        "panel": {
+          "@title": "PDP-11/70 with 256Kb and Front Panel",
+          "@redirect_from": "/devices/pdp11/machine/1170/panel/"
+        },
+        "panel/debugger/cpuexer": {
+          "@title": "PDP-11/70 with CPU Exerciser",
+          "@redirect_from": "/devices/pdp11/machine/1170/panel/debugger/cpuexer/"
+        },
+        "panel/debugger/rsts": {
+          "@title": "PDP-11/70 with RSTS/E",
+          "@redirect_from": "/devices/pdp11/machine/1170/panel/debugger/rsts/"
+        },
+        "panel/debugger/rt11": {
+          "@title": "PDP-11/70 with RT-11",
+          "@redirect_from": "/devices/pdp11/machine/1170/panel/debugger/rt11/"
+        },
+        "panel/debugger/xxdp": {
+          "@title": "PDP-11/70 with XXDP+",
+          "@redirect_from": "/devices/pdp11/machine/1170/panel/debugger/xxdp/"
+        },
+        "vt100": {
+          "@title": "PDP-11/70 with VT100",
+          "@redirect_from": "/devices/pdp11/machine/1170/vt100/"
+        }
+      },
       "@documents": [
         {
           "@title": "PDP-11/20 Handbook (1969)",

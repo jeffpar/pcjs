@@ -6,7 +6,7 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /devices/pcx86/machine/5160/cga/512kb/machine.xml
-    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/disks-demo/pcx86/drives/10mb/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/disks-demo/pcx86/dos/microsoft/2.00/MSDOS-SRC.json"}]'
+    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/harddisks/pcx86/sys/dos/ibm/2.00/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/harddisks/pcx86/sys/dos/microsoft/2.00/MSDOS-SRC.json"}]'
     autoMount:
       A:
         name: None
@@ -17,7 +17,7 @@ machines:
 ---
 
 [Norton Utilities 3.00 (1984-12-07)](#directory-of-norton-utilities-300-1984-12-07) is from the
-[PCjs Personal Disk Collection](/disks/pcx86/personal/) and predates previously known copies of version 3.00.
+[PCjs Software Archive](/software/pcx86/sw/misc/pcjs/) and predates previously known copies of version 3.00.
 Scans of the diskette and accompanying note from Peter Norton are provided [below](#diskette-scans).
 Coincidentally, we acquired the diskette on December 7, 2018, exactly 34 years after the files were created.
 
@@ -140,6 +140,6 @@ so it seems the file names as they presently exist are correct.
 
 ### Diskette Scans
 
-![Norton Utilities 3.00 (1984-12-07)]({{ site.demo-disks.baseurl }}/pcx86/tools/other/norton/3.00/1984-12-07/NU300-1984-12-07.jpg)
+![Norton Utilities 3.00 (1984-12-07)]({{ site.software.diskettes.server }}/pcx86/util/norton/3.00/NU300-1984-12-07.jpg)
 
-![Norton Utilities 3.00 Note (1984-12-07)]({{ site.demo-disks.baseurl }}/pcx86/tools/other/norton/3.00/1984-12-07/NU300-1984-12-07-NOTE.jpg)
+![Norton Utilities 3.00 Note (1984-12-07)]({{ site.software.diskettes.server }}/pcx86/util/norton/3.00/NU300-1984-12-07-NOTE.jpg)
