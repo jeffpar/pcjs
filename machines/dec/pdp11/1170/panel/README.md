@@ -6,7 +6,7 @@ redirect_from: /devices/pdp11/machine/1170/panel/
 machines:
   - id: test1170
     type: pdp11
-    config: /configs/pdp11/xml/machine/1170/panel/machine.xml
+    config: /configs/pdp11/machine/1170/panel/machine.xml
 ---
 
 The machine below is a PDP-11/70 includes our stylized Front Panel and a "teletype" I/O window connected to the

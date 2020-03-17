@@ -7,20 +7,19 @@ machines:
   - id: test1170
     type: pdp11
     debugger: true
-    config: /devices/pdp11/machine/1170/vt100/debugger/machine.xml
+    config: /configs/pdp11/machine/1170/vt100/debugger/machine.xml
     connection: dl11->vt100.serialPort
   - id: vt100
-    type: pc8080
-    config: /devices/pc8080/machine/vt100/machine.xml
+    type: pcx80
+    config: /configs/pcx80/xml/machine/vt100/machine.xml
     connection: serialPort->test1170.dl11
-    sticky: top
 ---
 
 Introducing PDP-11 tutorials.  For more details, keep scrolling, and keep your eye on the VT100 below.
 
 {% include machine.html id="vt100" %}
 
-[PDPjs](/devices/pdp11/machine/) is able to run a variety of old DEC operating systems, such as RT-11 and RSTS/E,
+[PDPjs](/machines/dec/pdp11/) is able to run a variety of old DEC operating systems, such as RT-11 and RSTS/E,
 and while there are manuals available online, thanks to the efforts of those who operate and contribute to websites
 like [bitsavers.org](http://bitsavers.org), I suspect most people don't have a lot of interest or time to spend
 reading old manuals.
@@ -31,8 +30,8 @@ In an effort to remedy that situation, I'm adding some new features to PCjs.  Th
 
 	machines:
 	  - id: vt100
-	    type: pc8080
-	    config: /devices/pc8080/machine/vt100/machine.xml
+	    type: pcx80
+	    config: /configs/pcx80/xml/machine/vt100/machine.xml
 	    connection: serialPort->test1170.dl11
 	    sticky: top
 
@@ -64,6 +63,3 @@ Finally, in case you're wondering why there's another machine below, well, what 
 This PDP-11/70, of course.
 
 {% include machine.html id="test1170" %}
-
-*[@jeffpar](https://jeffpar.com)*  
-*Jan 3, 2017*

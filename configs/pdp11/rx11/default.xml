@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<device id="rx11" type="rx11" pos="left" width="35%" padLeft="8px" padBottom="8px">
+	<name>Disk Drive Controls</name>
+	<control type="container">
+		<control type="list" binding="listDrives"/>
+		<control type="list" binding="listDisks">
+			<disk id="disk01" name="RT-11 v3.0 (1 of 9)" path="/decdisks/pdp11/rx01/RX01-RT11-V03-1.json"/>
+			<disk id="disk01" name="RT-11 v3.0 (2 of 9)" path="/decdisks/pdp11/rx01/RX01-RT11-V03-2.json"/>
+			<disk id="disk01" name="RT-11 v3.0 (3 of 9)" path="/decdisks/pdp11/rx01/RX01-RT11-V03-3.json"/>
+			<disk id="disk01" name="RT-11 v3.0 (4 of 9)" path="/decdisks/pdp11/rx01/RX01-RT11-V03-4.json"/>
+			<disk id="disk01" name="RT-11 v3.0 (5 of 9)" path="/decdisks/pdp11/rx01/RX01-RT11-V03-5.json"/>
+			<disk id="disk01" name="RT-11 v3.0 (6 of 9)" path="/decdisks/pdp11/rx01/RX01-RT11-V03-6.json"/>
+			<disk id="disk01" name="RT-11 v3.0 (7 of 9)" path="/decdisks/pdp11/rx01/RX01-RT11-V03-7.json"/>
+			<disk id="disk01" name="RT-11 v3.0 (8 of 9)" path="/decdisks/pdp11/rx01/RX01-RT11-V03-8.json"/>
+			<disk id="disk01" name="RT-11 v3.0 (9 of 9)" path="/decdisks/pdp11/rx01/RX01-RT11-V03-9.json"/>
+		</control>
+		<control type="button" binding="loadDisk">Load</control>
+		<control type="button" binding="bootDisk">Boot</control>
+		<control type="description" binding="descDisk" padRight="8px"/>
+		<control type="file" binding="mountDisk"/>
+	</control>
+</device>

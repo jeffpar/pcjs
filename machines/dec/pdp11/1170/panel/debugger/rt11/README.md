@@ -7,13 +7,13 @@ machines:
   - id: test1170
     type: pdp11
     debugger: true
-    config: /configs/pdp11/xml/machine/1170/panel/debugger/machine.xml
+    config: /configs/pdp11/machine/1170/panel/debugger/machine.xml
     autoStart: true
     autoMount:
       RK0:
-        path: /disks-pdp11/dec/rk03/RK03-RT11-V40.json
+        path: /decdisks/pdp11/rk03/RK03-RT11-V40.json
       RL0:
-        path: /disks-pdp11/dec/rl02k/RL02K-XXDP.json
+        path: /decdisks/pdp11/rl02k/RL02K-XXDP.json
       PTR:
         path: /apps/pdp11/tapes/absloader/DEC-11-L2PC-PO.json
 ---

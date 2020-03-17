@@ -7,7 +7,7 @@ machines:
   - id: test1145
     type: pdp11
     class: machine-right
-    config: /configs/pdp11/xml/machine/1145/vt100/machine.xml
+    config: /configs/pdp11/machine/1145/vt100/machine.xml
     connection: dl11->vt100.serialPort
   - id: vt100
     type: pcx80
