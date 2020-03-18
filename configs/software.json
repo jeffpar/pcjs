@@ -1,18 +1,30 @@
 {
-  "pdp11": {
+  "dec": {
     "@title": "DEC",
-    "@path": "/dec/pdp11/tapes",
-    "@type": "tapes"
+    "@instances": {
+      "pdp10": {
+        "@title": "PDP-10",
+        "@path": "/dec/pdp10",
+        "@type": "software"
+      },
+      "pdp11": {
+        "@title": "PDP-11",
+        "@path": "/dec/pdp11",
+        "@type": "software"
+      }
+    }
   },
-  "pcx86": {
-    "@title": "IBM PC",
-    "@path": "/pcx86",
-    "@type": "diskettes",
-    "@diskette_drives": ["A", "B"]
-  },
-  "c1p": {
-    "@title": "Ohio Scientific",
-    "@path": "/osi/c1p",
-    "@type": "tapes"
+  "@instances": {
+    "pcx86": {
+      "@title": "IBM PC",
+      "@path": "/pcx86",
+      "@type": "software",
+      "@diskette_drives": ["A", "B"]
+    },
+    "c1p": {
+      "@title": "Ohio Scientific C1P",
+      "@path": "/osi/c1p",
+      "@type": "software"
+    }
   }
 }

@@ -8,7 +8,7 @@ machines:
     type: pdp11
     debugger: true
     class: machine-right
-    config: /configs/pdp11/xml/machine/1170/vt100/debugger/machine.xml
+    config: /configs/pdp11/machine/1170/vt100/debugger/machine.xml
     connection: dl11->vt100.serialPort
     resume: 1
   - id: vt100

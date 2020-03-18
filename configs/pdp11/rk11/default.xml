@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<device id="rk11" type="rk11" autoMountExample='{RK0:{path:"/decdisks/pdp11/rk03/RK03-XXDP.json"}}' pos="left" width="35%" padLeft="8px" padBottom="8px">
+	<control type="container">
+		<control type="list" binding="listDrives"/>
+		<control type="list" binding="listDisks">
+			<disk id="disk01" name="RT-11 v4.0" path="/decdisks/pdp11/rk03/RK03-RT11-V40.json"/>
+			<disk id="disk02" name="Unix v5" path="/decdisks/pdp11/rk03/RK03-UNIX-V5.json"/>
+			<disk id="disk03" name="Unix v5 (SimH)" path="/decdisks/pdp11/rk03/RK03-UNIX-V5-SIMH.json">
+				<link href="http://simh.trailing-edge.com/kits/uv5swre.zip">PDP-11 UNIX V5 with sources (under license provided by Caldera Corporation)</link>
+			</disk>
+			<disk id="disk04" name="XXDP+ Diagnostics" path="/decdisks/pdp11/rk03/RK03-XXDP.json"/>
+		</control>
+		<control type="button" binding="loadDisk">Load</control>
+		<control type="button" binding="bootDisk">Boot</control>
+		<control type="description" binding="descDisk" padRight="8px"/>
+		<control type="file" binding="mountDisk"/>
+	</control>
+</device>

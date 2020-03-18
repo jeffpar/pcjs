@@ -7,7 +7,7 @@ machines:
   - id: test1145
     type: pdp11
     debugger: true
-    config: /configs/pdp11/xml/machine/1145/panel/debugger/machine.xml
+    config: /configs/pdp11/machine/1145/panel/debugger/machine.xml
 ---
 
 {% include machine.html id="test1145" %}

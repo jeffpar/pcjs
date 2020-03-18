@@ -1,23 +1,21 @@
 ---
 layout: page
 title: DEC PDP-11 Paper Tape Diagnostics
-permalink: /apps/pdp11/tapes/diags/
+permalink: /software/dec/pdp11/tapes/diags/
+redirect_from: /apps/pdp11/tapes/diags/
 ---
-
-PDP-11 Paper Tape Diagnostics
------------------------------
 
 Thanks to the [iamvirtual.ca](http://iamvirtual.ca/collection/systems/mediadoc/mediadoc.html#papertape)
 website, we have been able to archive the PDP-11 diagnostics shown below.  The tapes have been added to the
-[Default PC11 Configuration](/devices/pdp11/pc11/), so that you can easily load them into any machine with a
-[PC11](/modules/pdp11/lib/pc11.js), such as this [PDP-11/20 with Front Panel and Debugger](/devices/pdp11/machine/1120/panel/debugger/).
+[Default PC11 Configuration](/configs/pdp11/pc11/), so that you can easily load them into any machine with a
+[PC11](/machines/dec/pdp11/lib/pc11.js), such as this [PDP-11/20 with Front Panel and Debugger](/machines/dec/pdp11/1120/panel/debugger/).
 
-As noted for other [DEC PDP-11 Tape Images](/apps/pdp11/tapes/), these "Absolute Format" tapes can be read directly
+As noted for other [DEC PDP-11 Tape Images](/software/dec/pdp11/tapes/), these "Absolute Format" tapes can be read directly
 into RAM using the machine's **Read** button instead of **Load**, allowing you to bypass the usual multi-step process of
-loading the [Bootstrap Loader](/apps/pdp11/boot/bootstrap/) in order to load the [Absolute Loader](/apps/pdp11/tapes/absloader/)
+loading the [Bootstrap Loader](/software/dec/pdp11/boot/bootstrap/) in order to load the [Absolute Loader](/software/dec/pdp11/tapes/absloader/)
 in order to load the desired tape.
 
-Additional (non-paper tape) diagnostics are available on the [XXDP+ Diagnostics](/disks/dec/rl02k/xxdp/) disk.
+Additional (non-paper tape) diagnostics are available on the [XXDP+ Diagnostics](/software/dec/pdp11/disks/rl02k/xxdp/) disk.
 
 [![MAINDEC-11-D0AA-PB (MAR/70): TEST 1 - BRANCH](MAINDEC-11-D0AA-PB.jpg)](#tests-1-12)
 [![MAINDEC-11-D0BA-PB (MAR/70): TEST 2 - CON BRANCH](MAINDEC-11-D0BA-PB.jpg)](#tests-1-12)
@@ -189,7 +187,7 @@ destination values.  So, in the above example, the value 1002 must be written to
 
 ### Test 15
 
-Before loading and running this test on the [PDP-11/20 with Front Panel and Debugger](/devices/pdp11/machine/1120/panel/debugger/),
+Before loading and running this test on the [PDP-11/20 with Front Panel and Debugger](/machines/dec/pdp11/1120/panel/debugger/),
 it's recommended that you also toggle SW-15, as described below, so that the test will HALT on any failure.
 
 Also, this test, like [Test 14](#test-14), fails on a PDP-11/45 or newer machine.  In this case, it's because DEC
@@ -255,7 +253,7 @@ From [bitsavers.org](http://bitsavers.trailing-edge.com/bits/DEC/pdp11/papertape
 MD-11 11/70 CPU EXERCISER
 -------------------------
 
-When started in a [PDP-11/70](/devices/pdp11/machine/1170/panel/debugger/cpuexer/) with no disk drives installed,
+When started in a [PDP-11/70](/machines/dec/pdp11/1170/panel/debugger/cpuexer/) with no disk drives installed,
 this diagnostic displays the following startup information ("EXERCISOR" is DEC's typo, not mine):
 
 	MAINDEC-11-DEQKC-B...PDP 11/70 CPU EXERCISOR
@@ -374,7 +372,7 @@ trap "BECAUSE TST IS A NON MODIFYING INST").  For this and other reasons, PDPjs 
 checkStackLimit() handlers based on the CPU model.
 
 UPDATE: Another (1980) version of the source code for this diagnostic has been located and archived
-with the rest of our [DEC PDP-11 Diagnostic Publications](/pubs/dec/pdp11/diags/):
+with the rest of our [DEC PDP-11 Diagnostic Publications](/documents/manuals/dec/#pdp-11-diagnostics):
 
 - [CEQKCE0 11/70 INSTRUCTION EXERCISER (May 1980)](https://1drv.ms/b/s!ArcO_mFRe1Z9gp47nXKy7moL1Rj5mA?e=QDDzO4) [[Original PDF](http://bitsavers.org/pdf/dec/pdp11/microfiche/ftp.j-hoppe.de/bw/gh/AH-7996E-MC__PDP11-70-74__11-70_INST_EXR__CEQKCE0__%28C%2975,80.pdf)]
 

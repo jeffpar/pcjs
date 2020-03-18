@@ -6,7 +6,7 @@ redirect_from: /devices/pdp11/machine/1120/basic/debugger/new/
 machines:
   - id: pdp1120
     type: pdp11v2
-    config: /configs/pdp11/1120/pdp1120.json
+    config: /configs/pdp11/machine/1120/basic/debugger/pdp1120.json
     layout: /_includes/pdp11/1120-debug.html
 ---
 

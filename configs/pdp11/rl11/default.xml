@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<device id="rl11" type="rl11" autoMountExample='{RL0:{path:"/decdisks/pdp11/rl02k/RL02K-XXDP.json"}}' pos="left" width="35%" padLeft="8px" padBottom="8px">
+	<control type="container">
+		<control type="list" binding="listDrives"/>
+		<control type="list" binding="listDisks">
+			<disk id="disk01" name="RSTS/E v7.0" path="/decdisks/pdp11/rl01k/RL01K-RSTS-V70.json"/>
+			<disk id="disk02" name="XXDP+ Diagnostics" path="/decdisks/pdp11/rl02k/RL02K-XXDP.json"/>
+		</control>
+		<control type="button" binding="loadDisk">Load</control>
+		<control type="button" binding="bootDisk">Boot</control>
+		<control type="description" binding="descDisk" padRight="8px"/>
+		<control type="file" binding="mountDisk"/>
+	</control>
+</device>

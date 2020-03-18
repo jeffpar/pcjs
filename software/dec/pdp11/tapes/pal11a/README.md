@@ -1,11 +1,9 @@
 ---
 layout: page
 title: PAL-11A Assembler (Paper Tape)
-permalink: /apps/pdp11/tapes/pal11a/
+permalink: /software/dec/pdp11/tapes/pal11a/
+redirect_from: /apps/pdp11/tapes/pal11a/
 ---
-
-PAL-11A Assembler (Paper Tape)
-------------------------------
 
 [![DEC-11-ASPA-PB](DEC-11-ASPA-PB.jpg)](DEC-11-ASPA-PB.json)
 

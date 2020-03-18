@@ -7,11 +7,11 @@ machines:
   - id: test1170
     type: pdp11
     debugger: true
-    config: /configs/pdp11/xml/machine/1170/panel/debugger/machine.xml
+    config: /configs/pdp11/machine/1170/panel/debugger/machine.xml
     autoStart: true
     autoMount:
       RL0:
-        path: /disks-pdp11/dec/rl02k/RL02K-XXDP.json
+        path: /decdisks/pdp11/rl02k/RL02K-XXDP.json
 machineScripts:
   runEKBAD0: |
     selectDrive RL11 RL0;

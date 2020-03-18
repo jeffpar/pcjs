@@ -1,11 +1,9 @@
 ---
 layout: page
 title: DUMPTT (Paper Tape)
-permalink: /apps/pdp11/tapes/dumptt/
+permalink: /software/dec/pdp11/tapes/dumptt/
+redirect_from: /apps/pdp11/tapes/dumptt/
 ---
-
-DUMPTT (Paper Tape)
--------------------
 
 [![DEC-11-Y1PA-PO](DEC-11-Y1PA-PO.jpg)](DEC-11-Y1PA-PO.json)
 

@@ -2360,7 +2360,7 @@ class Web {
         //     sURLRedirect = sURL.replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/").replace(/^\/disks-([a-z0-9]+)\//, "https://$1-disks.pcjs.org/");
         // }
 
-        let sURLRedirect = sURL.replace(/^\/(diskettes|gamedisks|harddisks)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+        let sURLRedirect = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
 
 
         let request = (window.XMLHttpRequest? new window.XMLHttpRequest() : new window.ActiveXObject("Microsoft.XMLHTTP"));
@@ -65514,6 +65514,7 @@ class FDC extends Component {
                     if (!media) continue;
                     for (let i = 0; i < media.length; i++) {
                         let item = media[i];
+                        if (!item['@diskette']) continue;
                         let name = item['@title'];
                         if (!name) {
                             name = release['@title'];

@@ -1,11 +1,9 @@
 ---
 layout: page
 title: FPP-11 (Paper Tape)
-permalink: /apps/pdp11/tapes/fpp11/
+permalink: /software/dec/pdp11/tapes/fpp11/
+redirect_from: /apps/pdp11/tapes/fpp11/
 ---
-
-FPP-11 (Paper Tape)
--------------------
 
 [![DEC-11-YQPB-PA1](DEC-11-YQPB-PA1.jpg)](DEC-11-YQPB-PA1.json)
 

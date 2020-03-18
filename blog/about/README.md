@@ -19,7 +19,7 @@ desktop and mobile devices.  Machines are created with simple XML files that def
 along with the features that each component should enable.  More details about PCjs machine definitions and
 component capabilities will be made available in the Documentation section.
 
-### Simulating the Challenger 1P
+### The Challenger 1P
 
 The first PCjs simulation was [C1Pjs](/machines/osi/c1p/), which emulates the
 Challenger 1P, a 6502-based microcomputer introduced by Ohio Scientific in 1978.
@@ -27,7 +27,7 @@ C1Pjs v1.0 was released in July 2012.  More information about the first release 
 [posted](http://osiweb.org/osiforum/viewtopic.php?f=3&t=103) on the
 [OSI Discussion Forum](http://osiweb.org/osiforum/index.php) at [osiweb.org](http://osiweb.org/).
 
-### Simulating the IBM PC
+### IBM PC and Compatibles
 
 The next PCjs simulation was [PCx86](/machines/pcx86/), which emulates the original IBM PC, IBM PC XT,
 and IBM PC AT, as well as compatible machines like the COMPAQ DeskPro 386.  PCx86 v1.0 was released in late 2012.
@@ -37,10 +37,8 @@ characters and graphics produced by the IBM Monochrome Display Adapter (MDA), Co
 Enhanced Graphics Adapter (EGA), and Video Graphics Array (VGA) video cards.
 
 Support for assorted motherboard and expansion bus components (eg, disk controllers, parallel and serial ports, etc)
-is available in any machine, along with a powerful built-in debugger and optional "Control Panel" that provides
-visual access and control of the simulated hardware.
-
-### Simulating All The Things
+is available in any appropriately configured machine, along with a powerful built-in debugger and optional "Control Panel"
+that provides visual access and control of the simulated hardware.
 
 Over time, the set of PCjs machines has slowly expanded to include [Minicomputers](/machines/dec/pdp11/),
 [Programmable Calculators](/machines/ti/ti57/), [LED Simulations](/machines/led/life/color/), [Terminals](/machines/dec/vt100/),
