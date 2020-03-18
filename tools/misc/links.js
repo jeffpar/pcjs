@@ -109,7 +109,7 @@ function parseDiskettes(library, propPath = "/pcx86")
  */
 function processFiles(sDir, fDebug, fFix)
 {
-    let sDiskettes = path.join(sDir, "/configs/pcx86/diskettes.json");
+    let sDiskettes = path.join(sDir, "/configs/pcx86/software.json");
     if (fileExists(sDiskettes)) {
         parseDiskettes(JSON.parse(fs.readFileSync(sDiskettes, {encoding: "utf8"})));
     }

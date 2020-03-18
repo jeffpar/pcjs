@@ -1,11 +1,9 @@
 ---
 layout: page
 title: IOX (Paper Tape)
-permalink: /apps/pdp11/tapes/iox/
+permalink: /software/dec/pdp11/tapes/iox/
+redirect_from: /apps/pdp11/tapes/iox/
 ---
-
-IOX (Paper Tape)
-----------------
 
 [![DEC-11-YIPA-PA1](DEC-11-YIPA-PA1.jpg)](DEC-11-YIPA-PA1.json)
 

@@ -19,13 +19,13 @@
     {%- if part == "magazines" -%}{%- unless include.title -%}{%- assign title = "Issues" -%}{%- endunless -%}{%- endif -%}
     {%- if data[part] -%}
       {%- assign data = data[part] %}
-      {%- if data['@type'] == "diskettes" -%}
-        {%- assign data = site.data.pcx86.diskettes -%}
-      {%- endif -%}
     {%- elsif data['@versions'] -%}
       {%- assign data = data['@versions'][part] -%}
     {%- else %}
       {%- assign data = data['@instances'][part] -%}
+      {%- if data['@type'] -%}
+        {%- assign data = site.data[part].software -%}
+      {%- endif -%}
     {%- endif -%}
     {%- unless data -%}{%- break -%}{%- endunless %}
     {%- assign docs = data[group] -%}

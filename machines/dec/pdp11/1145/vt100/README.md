@@ -6,12 +6,10 @@ redirect_from: /devices/pdp11/machine/1145/vt100/
 machines:
   - id: test1145
     type: pdp11
-    class: machine-right
     config: /configs/pdp11/machine/1145/vt100/machine.xml
     connection: dl11->vt100.serialPort
   - id: vt100
     type: pcx80
-    class: machine-left
     config: /configs/pcx80/xml/machine/vt100/machine.xml
     connection: serialPort->test1145.dl11
 ---

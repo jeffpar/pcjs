@@ -65514,6 +65514,7 @@ class FDC extends Component {
                     if (!media) continue;
                     for (let i = 0; i < media.length; i++) {
                         let item = media[i];
+                        if (!item['@diskette']) continue;
                         let name = item['@title'];
                         if (!name) {
                             name = release['@title'];

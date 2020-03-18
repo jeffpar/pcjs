@@ -1,11 +1,9 @@
 ---
 layout: page
 title: ODT-11 (Paper Tape)
-permalink: /apps/pdp11/tapes/odt11/
+permalink: /software/dec/pdp11/tapes/odt11/
+redirect_from: /apps/pdp11/tapes/odt11/
 ---
-
-ODT-11 (Paper Tape)
--------------------
 
 [![DEC-11-O1PA-PA](DEC-11-O1PA-PA.jpg)](DEC-11-O1PA-PA.json)
 

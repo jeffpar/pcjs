@@ -57,7 +57,7 @@
           "@redirect_from": "/devices/pdp11/machine/1170/monitor/"
         },
         "panel": {
-          "@title": "PDP-11/70 with 256Kb and Front Panel",
+          "@title": "PDP-11/70 with Front Panel",
           "@redirect_from": "/devices/pdp11/machine/1170/panel/"
         },
         "panel/debugger/cpuexer": {
@@ -434,7 +434,7 @@
     }
   },
   "pcx86": {
-    "@title": "IBM PC / Clones",
+    "@title": "IBM Compatibles",
     "ibm": {
       "@title": "IBM PC",
       "4860": {

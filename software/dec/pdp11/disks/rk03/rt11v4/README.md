@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "RK03 RT-11 v4.0 Disk"
+title: RK03 RT-11 v4.0 Disk
 permalink: /software/dec/pdp11/disks/rk03/rt11v4/
 redirect_from: /disks/dec/rk03/rt11v4/
 ---
@@ -107,3 +107,5 @@ The "DIR" command displays the following information:
 	BOOT  .MAC    23
 	 113 Files, 2784 Blocks
 	 1978 Free blocks
+
+{% include gallery/documents.html %}
