@@ -166,7 +166,7 @@
         "@title": "Microsoft Word",
         "@versions": {
           "1.15": {
-            "@title": "MS Word 1.15",
+            "@title": "Microsoft Word 1.15",
             "@media": [
               {
                 "@title": "MS Word 1.15 (Program)",
@@ -186,7 +186,7 @@
             ]
           },
           "3.00": {
-            "@title": "MS Word 3.00",
+            "@title": "Microsoft Word 3.00",
             "@media": [
               {
                 "@title": "MS Word 3.00 (Disk 1)",
@@ -221,7 +221,7 @@
             ]
           },
           "3.10": {
-            "@title": "MS Word 3.10",
+            "@title": "Microsoft Word 3.10",
             "@media": [
               {
                 "@title": "MS Word 3.10 (Disk 1)",
@@ -266,7 +266,7 @@
             ]
           },
           "5.00": {
-            "@title": "MS Word 5.00",
+            "@title": "Microsoft Word 5.00",
             "@media": [
               {
                 "@title": "MS Word 5.00 (Program 1)",
@@ -499,6 +499,7 @@
         "@title": "ThinkTank",
         "@versions": {
           "1987": {
+            "@title": "ThinkTank (1987)",
             "@media": [
               {
                 "@title": "ThinkTank (1987)",
@@ -516,6 +517,7 @@
         "@title": "VisiCalc",
         "@versions": {
           "1981": {
+            "@title": "VisiCalc (1981)",
             "@media": [
               {
                 "@title": "VisiCalc (1981)",
