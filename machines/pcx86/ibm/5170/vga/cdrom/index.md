@@ -1,11 +1,12 @@
 ---
 layout: page
-title: ATAPI CD-ROM Support (IBM PC AT)
-permalink: /configs/pcx86/xml/hdc/cdrom/
-redirect_from: /configs/pcx86/xml/hdc/cdrom/
+title: IBM PC AT (Model 5170) with VGA Display and ATAPI CD-ROM
+permalink: /machines/pcx86/ibm/5170/vga/cdrom/
+redirect_from: /disks/pcx86/drives/cdrom/
 machines:
-  - id: ibm5170
+  - id: ibm-5170-vga
     type: pcx86
+    config: /configs/pcx86/xml/machine/5170/vga/2048kb/cdrom/machine.xml
 ---
 
 The original IBM PC AT's fixed disk controller was originally referred to as an **AT Attachment**
@@ -23,4 +24,4 @@ disabled (to avoid conflicting with the PC AT's existing ATA controller) and the
 connected to controller's "secondary" interface.  And in fact, that is exactly how the machine below
 is configured.  It's also available with the [PCjs Debugger](debugger/).
 
-{% include machine.html id="ibm5170" %}
+{% include machine.html id="ibm-5170-vga" %}

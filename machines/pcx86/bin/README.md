@@ -1,11 +1,3 @@
----
-layout: page
-title: Running PCx86 From The Command-Line
-permalink: /machines/pcx86/bin/
-redirect_from:
-  - /modules/pcx86/bin/
----
-
 This directory contains the PCx86 Node command-line "wrapper" utility [pcx86.js](pcx86.js).
 
 When you run it, be sure to provide a valid machine JSON file; e.g.:

@@ -1,12 +1,3 @@
----
-layout: page
-title: DEC PDP-11 Machines
-permalink: /machines/dec/pdp11/
-redirect_from:
-  - /modules/pdp11/
-  - /devices/pdp11/machine/
----
-
 Support for [PDP-11 Machines](/machines/dec/pdp11/) was added to the PCjs Project in 2016.
 
 The PCjs PDP-11 emulator is currently comprised of the following components, as listed in [machines.json](/configs/machines.json) (see the *pdp11.scripts* property).

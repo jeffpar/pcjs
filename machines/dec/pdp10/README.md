@@ -1,12 +1,3 @@
----
-layout: page
-title: DEC PDP-10 Machines
-permalink: /machines/dec/pdp10/
-redirect_from:
-  - /modules/pdp10/
-  - /devices/pdp10/machine/
----
-
 Support for [PDP-10 Machines](/machines/dec/pdp10/) was added to the PCjs Project in 2017.
 
 The PCjs PDP-10 emulator is currently comprised of the following components, as listed in [machines.json](/configs/machines.json) (see the *pdp10.scripts* property):

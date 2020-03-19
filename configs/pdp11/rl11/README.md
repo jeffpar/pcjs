@@ -1,10 +1,3 @@
----
-layout: page
-title: RL11 Disk Controller
-permalink: /configs/pdp11/rl11/
-redirect_from: /devices/pdp11/rl11/
----
-
 The RL11 Disk Controller controls up to four RL01 or RL02 disk drives, which in turn read/write
 [RL01K](/software/dec/pdp11/disks/rl01k/) or [RL02K](/software/dec/pdp11/disks/rl02k/) disk cartridges, respectively.
 
