@@ -1,0 +1,493 @@
+/* VTAPE.TXT - KLH10 Virtual Tape Format
+*/
+/* $Id: vtape.txt,v 2.3 2001/11/10 21:24:21 klh Exp $
+*/
+/*  Copyright © 1994-1999, 2001 Kenneth L. Harrenstien
+**  All Rights Reserved
+**
+**  This file is part of the KLH10 Distribution.  Use, modification, and
+**  re-distribution is permitted subject to the terms in the file
+**  named "LICENSE", which contains the full text of the legal notices
+**  and should always accompany this Distribution.
+*/
+
+	One of the methods used by the KLH10 to emulate PDP-10
+magnetic tape devices is to provide support for "virtual tapes".
+These virtual tapes are in reality disk files on the native host
+system which have a specific format.  Because they are native disk
+files, it is far easier and faster to manipulate these virtual tape
+images (for reading, writing, copying, archival, and transport over
+networks) than would be the case for real physical tapes.
+
+The purpose of this description is to allow users to generate or
+maintain virtual tapes using their own tools in addition to the ones
+provided in the KLH10 distribution.  In most cases these tools can be
+nothing more than a text editor and a simple copy program such as Unix
+"dd".
+
+VIRTUAL TAPE FORMATS
+====================
+
+	Several virtual tape formats exist, developed more or less
+independently.  The KLH10 software can handle most of them and others
+could be added if necessary.  These formats are:
+
+      "RAW" - original KLH10 format
+      "TPS" - Wilson & Supnik format
+      "TPC" - DECUS/Shoppa format
+      "ITSDUMP" - special KLH10 format for ITS
+
+
+"RAW" VIRTUAL TAPE: Directory and Data files
+==================
+
+	Each RAW-format virtual tape consists of two native files, one
+for the actual tape data and the other to describe that data.  For
+example, a virtual tape with the name "kosh" would consist of these
+two files:
+
+	Virtual tape "kosh":
+		kosh      - Tape directory (text; defines structure of data)
+		kosh.tap  - Tape data (binary; one byte per tape frame)
+
+
+"RAW" DATA FILE FORMAT (.TAP)
+
+	The tape data file is simply a continuous sequence of 8-bit bytes
+corresponding to the logical stream of 8-bit tape data frames.  There is
+nothing in this file except tape data; there are no record boundaries or
+tapemarks.  Because this is a binary data file, all operations on this
+file must preserve the data exactly.
+
+
+"RAW" DIRECTORY FILE FORMAT (.TDR)
+
+	The tape directory is a text file that describes the contents of
+its associated tape data file; it defines how the tape is structured in
+terms of record boundaries, tapemarks, length, and internal format.  It
+can be used to describe anything about the tape in an easily readable
+and editable form.
+
+	The directory is formatted as a set of logical text lines.  Each
+line begins with a keyword, optionally followed by data.  Comments are
+introduced by a semi-colon character (';') and continue to the end of
+that physical line.  Blank lines are ignored.  Whitespace is also
+ignored except at the start of a line, where indentation may be used
+only when continuing a logical <filedesc> line over several physical
+lines.
+
+    Keywords:
+	TF-Format: <fmtword> [<filename>]
+				; Tape datafile format and optional filename
+	<#>: <filedesc>		; File/Record descriptors
+	<indentation> <filedesc>	; optional continuation of above
+	EOT:			; Physical End of Tape, remaining text ignored.
+
+    <fmtword> - REQUIRED.  Describes how the tape file data is stored on
+	disk.  Currently only one keyword is fully supported:
+		"raw" - 8-bit bytes, one per frame.
+
+    <filename> - DEPRECATED.  Optional name of tape data file, a feature
+	no longer used (ie ignored on input, not generated on output).
+	The tape data filename is either specified at mount time or
+	dynamically generated using ".tap" as an extension to the name of
+	the tape directory file.  This extension replaces ".tdr" if it
+	exists, otherwise ".tap" is simply appended.
+
+    <#> - location in data file of 1st record beginning next file.  For "raw"
+	format this corresponds to the logical frame # on tape as well, but
+	for other formats this may serve a realignment purpose.
+	The string "BOT" is considered equivalent to "0".
+
+    <filedesc> - a list of <recdesc> record descriptors composing the file,
+	separated by whitespace.  The list may be empty, as is normally
+	the case for two consecutive tapemarks that signal a logical EOT.
+
+    <recdesc> - A record descriptor, with the format
+		<len>[*<cnt>][E[<type>]]
+	where:
+	<len> - decimal record length, in frames (8-bit bytes)
+	<cnt> - # times this record length recurs.
+	E - indicates error when reading this record (or the last of a
+		series).  <type> is an optional # and specifies additional
+		information, if any, as to nature of the error.
+
+	The string "EOF" is a special <recdesc> that signals a tape mark.
+
+
+TAPE DIRECTORY EXAMPLE:
+
+	Here is an example of a tape directory file for a small dump:
+
+	; DUMPER saveset of PS:<SYSTEM>	; Human-readable comment
+	TF-Format: raw			; Required, and must be "raw"
+	0: 2590*8407 EOF		; First file
+	21774130: EOF			; Second file (empty == logical EOT)
+	EOT:				; Physical EOT
+
+Note that comments can exist, that the data file format is RAW, and
+that it starts at frame 0 with a 2590-byte record which is repeated
+8407 times, followed by an EOF tapemark, then another EOF tapemark.
+The emulator software generates the second EOF using a new line so
+that the tape location (21774130) can serve as a validity cross-check;
+this is a compromise between putting everything on a single line or
+putting each record on its own line, either of which is equally valid.
+
+"TPS" FILE FORMAT (.TAP, .TPS, .TPE)
+====================================
+
+	This is the format used by Bob Supnik's SIMH emulators.  It is
+almost the same as John Wilson's E11 format, which it was intended to
+resemble.
+
+A TPS file is assumed to consist of 8-bit bytes.
+
+Each record starts with a 4-byte header in little-endian order.
+The high bit of this 32-bit header is set to indicate an error of
+some kind (similar to the 'E' flag in a RAW-format control file) and
+the remaining 31 bits contain the record length N.
+
+This header is followed by N data bytes plus, if N is odd, a padding
+byte (of undefined value) at the end.  Following this is a copy of the
+4-byte record header.
+
+Tapemarks are represented by a single header with N=0.
+
+The reason for having the record length both before and after the
+record data is so tape motion in the reverse direction can be more
+easily simulated.
+
+The E11 (.TPE) format is identical except there are no padding bytes.
+
+
+"TPC" FILE FORMAT (.TPC)
+========================
+
+	This format is not as flexible as the others but was
+apparently quite commonly used for DECUS tape images, and Tim Shoppa
+has a "couple thousand" TPC images stashed away.
+
+A TPC file is assumed to consist of 8-bit bytes.
+
+Each record starts with a 2-byte header in little-endian order,
+containing 16 bits of record length N.
+
+This header is followed by N data bytes plus, if N is odd, a padding
+byte (of undefined value) at the end.  Unlike TPS format, there is no
+trailing header.
+
+Tapemarks are represented by a single header with N=0.
+
+Obviously it is difficult to use this format directly when reverse
+tape motion is desired; an internal representation must be built.
+
+
+TAPE GENERATION
+
+There are three principal ways to create virtual tapes:
+
+	(1) Using the emulator to write tapes.
+	(2) Copying from real PDP-10 tapes.
+	(3) Creating synthesized tapes "by hand".
+
+
+TAPE GENERATION [1]: Using the emulator
+=======================================
+
+	Method [1] is described in the documentation for the emulator
+proper; see the section "Using Virtual Tapes" in USAGE.TXT.
+
+
+TAPE GENERATION [2]: Copying a real tape
+========================================
+
+	This is likely to be the most common use of virtual tapes for a
+new installation.  This is also the only way to move data in and out of
+a virtual system if there is no network support.
+
+The simplest method for copying a real tape is to use the TAPEDD utility
+provided with the emulator, as follows:
+
+	<Mount the physical tape on a drive such as /dev/rmt0a>
+
+	% tapedd it=/dev/rmt0a otv=kosh
+
+This will copy the tape into a virtual tape named "kosh" with whatever
+extension is appropriate for the format.  Note that the TAPEDD
+arguments have a form similar to that of the standard Unix DD utility,
+but are not the same.  Invoking TAPEDD without arguments will cause it
+to list the possible options, most of which are never needed.
+
+If you want to copy a virtual tape back onto a physical tape, then
+the counterpart to the above command would be:
+
+	% tapedd itv=kosh ot=/dev/rmt0a
+
+If for some reason TAPEDD is not available or you want to build a virtual
+tape that isn't a direct copy of an existing physical tape, you will need
+to get your hands dirty with method [3].
+
+TAPEDD allows specifying the virtual tape format with a letter following
+the "v".  For example:
+
+	% tapedd it=/dev/rmt0a otvs=kosh
+
+will copy a tape into a TPS format file called "kosh.tps".
+
+
+TAPE GENERATION [3]: Creating a synthesized tape
+================================================
+
+	One of the primary reasons for implementing virtual tapes as a
+RAW-format pair of files (data and directory) was to simplify the
+process of creating and managing these tapes by hand in an extremely
+portable way, without using any special software tools.
+
+To generate the tape directory file, all you need is a text editor.
+
+To generate the tape data file, normally it suffices to use the Unix
+utility "dd" or equivalent device-to-device copying program.  You simply
+need to append every byte of tape data into a sequential binary file.
+
+For example, the tape data file corresponding to the sample tape
+directory above could have been read with a command like this:
+
+	% dd if=/dev/rmt0a of=kosh.tap bs=126b
+	0+8407 records in
+	0+8407 records out
+
+Note that to use this technique properly you must have some prior
+knowledge of the record sizes on the tape.  For one thing, the blocksize
+specified must be larger than the largest possible record size, to avoid
+record truncation (hence the bs=126b); but more importantly, without
+knowing the record size you don't know what to put in the tape directory
+(TDR) file.  In this case, we know that TOPS-20 DUMPER records are <518
+words * 5 bytes/word> = 2590 bytes and so the appropriate <recdesc> is
+2590*8407.  But if the records were of different lengths then DD
+provides no way for you to tell what these lengths were; this is one
+reason TAPEDD is easier.
+
+[Aside: TOPS-20 DUMPER could actually use a blocking factor of up to 15,
+so that records could be 15*518*5 = 38850 bytes long, but for virtual
+tapes the blocking is irrelevant and a factor of 1 always works for
+DUMPER.]
+
+To read multiple files from a tape using DD you must use a non-rewind
+device specification, such as "/dev/nrmt0a", and invoke DD once for
+each file.  Remember to insert "EOF"s at appropriate places in the
+descriptor file.
+
+Although there is an UNIX utility called READ20 that can extract
+native files from TOPS-20 DUMPER format tapes (real or virtual), there
+is currently none for the inverse operation.  In order to transport
+native files into the virtual system without a network, pretty much
+your only option is to synthesize a virtual tape where the contents
+are simple data files.
+
+WFCONV is a handy utility included with the emulator that will help
+prepare such files.  It acts as a conversion filter, copying the
+standard input to the standard output and converting the data from one
+PDP-10 tape format to another.  In order to fully understand why this is
+needed, you need to understand something about PDP-10 tape formats; for
+now, just note the following examples, and see the appendix for details.
+
+Example 1: transferring an ASCII text file:
+
+		# Make NL -> CRLF and convert into core-dump format
+	% wfconv -tc > temp.tap
+		# Find size of file
+	% ls -l temp.tap
+	-rw-rw-r--   1 klh      klh10      18641 Apr  1  1994 temp.tap
+		# Use size to compute number of 512-byte records
+		# 18641/512 = 36, plus leftover record of 209
+	% cat > temp
+	TF-Format: raw
+	0: 512*36 209 EOF EOF	; 36 records plus a short 37th
+	EOT:
+	^D
+	% 
+		;; Then in TOPS-20 after mounting the tape "temp":
+		;; Note default format is CORE-DUMP, default reclen is 512.
+	@copY (FROM) mta0: (TO) temp.txt
+	 MTA0: => TEMP.TXT.1 [OK]
+	@vd temp.txt
+	
+	   PS:<OPERATOR>
+	 TEMP.TXT.1;P777700         8 3729(36)   20-Apr-97 01:00:59 OPERATOR  
+	@
+
+
+Example 2: transferring a binary file of 8-bit bytes (no conversion needed):
+
+	% cp temp.dat temp.tap
+	% ls -l temp.tap			# Find size of file
+	-rw-rw-r--   1 klh      klh10      18641 Feb 13  1994 temp.tap
+	% cat > temp
+	TF-Format: raw
+	0: 2560*7 721 EOF EOF
+	EOT:
+	^D
+	% 
+		;; Then in TOPS-20 after mounting the tape "temp":
+	@set taPE rECORD-LENGTH (TO) 2560
+	@set taPE fORMAT (TO) iNDUSTRY-COMPATIBLE 
+	@copY (FROM) mta0: (TO) temp.dat,
+	@@byTE (SIZE) 8
+	@@
+	 MTA0: => TEMP.DAT.1 [OK]
+	@vd temp.dat
+	
+	   PS:<OPERATOR>
+	 TEMP.DAT.1;P777700        10 18641(8)   19-Apr-97 23:57:46 OPERATOR  
+	@
+
+
+Example 3: building a TOPS-20 installation tape
+
+	If you already have a TOPS-20 system, especially one with local
+modifications (which pretty much includes everyone), you may wish to
+build your own installation tape.  The following illustrates what the
+tape directory of the V7.0 TOPS-20 installation tape looks like.  Note
+it does not have an initial bootstrap on it since MTBOOT is assumed to
+be already loaded in the PDP-10 memory.
+
+	; Tape directory for V7.0 TOPS-20 installation tape
+	; Bytes: 22519060, Records: 8704, Files(EOF marks): 7
+	TF-Format: raw
+	0: 2560*597 EOF			; MONITR.EXE
+	1528320: 2560*125 EOF		; EXEC.EXE
+	1848320: 2560*8 EOF		; DLUSER.EXE
+	1868800: 1270 EOF		; DLUSER data
+	1870070: 2560*36 EOF		; DUMPER.EXE
+	1962230: 2590*7937 EOF		; DUMPER savesets for <SYSTEM>, etc.
+	22519060: EOF
+	EOT:
+
+All of these files must be in core-dump format.  You can generate the
+tape either by:
+	(1) creating it on a real TOPS system and then using it directly
+		or using TAPEDD to copy it into a virtual tape.
+	(2) copying the necessary files over, converting them into core-dump
+		format, and concatenating them to form a virtual tape.
+
+See "klt20.txt" for more details on how such an installation tape is
+actually used.
+
+
+Quick lesson in tape formats:
+
+	A PDP-10 word is 36 bits.  The 8-bit bytes ("frames" on 9-track
+drives) that are now universal for tape don't fit exactly into 36 bits,
+which opens a Pandora's Box of packing options.  The basic formats
+offered at one time or another on Digital systems are as follows:
+
+	WFCONV mode TOPS-20 name
+	----------- ------------------
+		 a  ANSI-ASCII
+		 c  CORE-DUMP
+		 h  HIGH-DENSITY
+		 i  INDUSTRY-COMPATIBLE
+		 s  SIXBIT
+
+Only CORE-DUMP and INDUSTRY-COMPATIBLE are universally supported; the
+others are features of older or newer formatters.  In general, the TOPS-20
+monitor expects CORE-DUMP format so that should be your normal choice.
+
+	Tape_Coredump (5 tape bytes per word)
+		B0  1  2  3  4  5  6  7
+		 8  9 10 11 12 13 14 15
+		16 17 18 19 20 21 22 23
+		24 25 26 27 28 29 30 31
+		 0  0  0  0 32 33 34 35
+
+	Tape_Indust (4 tape bytes per PARTIAL word)
+		B0  1  2  3  4  5  6  7
+		 8  9 10 11 12 13 14 15
+		16 17 18 19 20 21 22 23
+		24 25 26 27 28 29 30 31		; Bits 32-35 are unused!
+
+	Tape_Sixbit (6 tape bytes per word)
+		 0  0 B0  1  2  3  4  5
+		 0  0  6  7  8  9 10 11
+		 0  0 12 13 14 15 16 17
+		 0  0 18 19 20 21 22 23
+		 0  0 24 25 26 27 28 29
+		 0  0 30 31 32 33 34 35
+
+	Tape_Ascii (5 tape bytes per word)
+		 0 B0  1  2  3  4  5  6
+		 0  7  8  9 10 11 12 13
+		 0 14 15 16 17 18 19 20
+		 0 21 22 23 24 25 26 27
+		35 28 29 30 31 32 33 34
+
+	Tape_Hidens (9 tape bytes per 2 words)
+		B0  1  2  3  4  5  6  7
+		 8  9 10 11 12 13 14 15
+		16 17 18 19 20 21 22 23
+		24 25 26 27 28 29 30 31
+		32 33 34 35 B0  1  2  3
+		 4  5  6  7  8  9 10 11
+		12 13 14 15 16 17 18 19
+		20 21 22 23 24 25 26 27
+		28 29 30 31 32 33 34 35
+
+
+WFCONV operation notes
+======================
+
+Invoking WFCONV without arguments will print out a summary similar to
+the following:
+
+Usage: wfconv -io <infile >outfile\n\
+  where 'i' and 'o' are chars specifying the input and output formats:
+    c   - Core-dump  (std tape format, 4 8-bit, 1 4-bit bytes = 36 bits)
+    h   - High-density (FTP 36-bit image, 9 8-bit bytes = 72 bits)
+    a,7 - Ansi-Ascii (4 7-bit, 1 8-bit byte = 36 bits)
+    s,6 - Sixbit     (6 6-bit bytes = 36 bits)
+    u   - Unixified  (Alan Bawden format, various = 36 bits)
+    t   - Text-Newline (CRLF-NL conversion; 5 7-bit bytes = 35 bits ONLY)
+    d   - Debug (for output only)
+  Note: EOF on input always causes zero-padding up to a PDP-10 word boundary.
+
+Typical uses of WFCONV would be as follows:
+
+1. Examining a PDP-10 text file copied from a tape:
+
+	# Convert from core-dump to ansi-ascii (preserve CRs)
+	$ wfconv -ca < file.tap > file.asc
+    or:
+	# Convert from core-dump to text-newline (convert CRLFs to NLs)
+	$ wfconv -ct < file.tap > file.txt
+
+2. Preparing a text file for writing to tape:
+
+	# Convert from ansi-ascii to core-dump (preserve NLs)
+	$ wfconv -ac < file.asc > file.tap
+    or:
+	# Convert from text-newline to core-dump (convert NLs to CRLFs)
+	$ wfconv -tc < file.txt > file.tap
+
+3. Preparing a file for tape after transferring it from a real PDP-10
+   using FTP 36-bit Image mode:
+
+	# Convert from high-density (FTP Image) to core-dump
+	$ wfconv -hc < file.ftp > file.tap
+
+
+Note:
+
+    Due to the fact that PDP-10 words are used as the canonical input
+    conversion target (and output conversion source), input is always
+    effectively rounded up to a word boundary.
+
+    This can cause the addition of a few trailing zero bytes when converting
+    from Text-Newline or Ansi-ASCII format, so WFCONV is not a
+    general-purpose text-to-text conversion program.  For that, one can use:
+
+	# To insert CR (must use ^V or equiv to quote the ^M)
+	$ sed 's/$/\^M/' temp.nls > temp.crlfs
+
+	# To delete CR (must use ^V or equiv to quote the ^M)
+	$ sed 's/\^M$//' temp.crlfs > temp.nls
+

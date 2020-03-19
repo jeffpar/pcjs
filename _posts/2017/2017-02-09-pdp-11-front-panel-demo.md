@@ -8,7 +8,6 @@ machines:
     type: pdp11
     debugger: true
     config: /devices/pdp11/machine/1170/panel/debugger/machine-slim.xml
-    sticky: top
 ---
 
 As I mentioned in the "[PDP-11 Tutorials](/blog/2017/01/03/)" blog post, I've been working on

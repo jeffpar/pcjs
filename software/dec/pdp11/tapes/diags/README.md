@@ -402,3 +402,5 @@ version of the diagnostic, at PC 023360 rather than 023450, so I've annotated th
 
 In my case, the failure was caused by the XOR instruction.  When I fixed the PDP-11/20 issue uncovered by
 [Test 14](#test-14), I had neglected to update XOR, which has some unique operand decoding logic.
+
+{% include gallery/documents.html path="/machines/dec/pdp11/" width="280" height="200" tag="diagnostic" %}

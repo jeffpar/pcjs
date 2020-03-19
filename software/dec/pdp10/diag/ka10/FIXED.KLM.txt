@@ -1,0 +1,362 @@
+SUBTTL	*FIXED* FIXED CONTROL AND DISPATCH STORAGE, SEPT 18,1979
+
+	LOC	30000
+
+; **********************************************************************
+;PROGRAM STARTING ADDRESSES
+;THESE ADDRESSES CALL VARIOUS SPECIAL START ROUTINES AND OR OPTIONS
+;NORMAL START ADDRESS IS 30000 ALL OTHERS ARE SPECIAL. INVOKED BECAUSE
+;OF END OF PASS, POWER FAILURE, DDT START, RE-ENTERING(TYPICALLY USER
+;MODE), OR ANY NUMBER OF SPECIAL FEATURE TESTS.
+; **********************************************************************
+
+BEGIN:	JRST	@MODLNK		;STAND-ALONE START
+$START:	JRST	START		;MODE CHECK STARTING ADDRESS
+
+DIAGMN:	JRST	@LDLNK		;DIAGNOSTIC MONITOR START
+
+SYSEXR:	JRST	@LDLNK		;SYSTEM EXERCISER START
+
+SFSTRT:	JRST	SADR1		;SPECIAL FEATURE START
+
+PFSTRT:	JRST	SADR2		;POWER FAIL RESTART
+
+REENTR:	JRST	SADR3		;REENTER START(USUALLY USER MODE ONLY)
+
+SRTDDT:				;COMMONLY MISTAKEN NAME FOR "DDTSRT"
+DDTSRT:	JRST	@DDTLNK		;DDT START
+
+BEGIN1:	JRST	STARTA		;LOOP START(END OF PASS COMES HERE)
+SBINIT:	JRST	@SUBLNK		;PMGINT LINKAGE
+RETURN:	0			;RETURN ADDRESS STORAGE
+
+START1:	SADR7			;OPTIONAL STARTING ADR/INSTRUCTIONS
+START2:	SADR8			; "
+START3:	SADR9			; "
+START4:	SADR10			; "
+START5:	SADR11			; "
+; **********************************************************************
+;PROGRAM FIXED PARAMETER AREA
+; **********************************************************************
+
+PNTNAM:	PAREA3		;SIXBIT PROGRAM NAME
+PNTEXT:	PAREA4		;SIXBIT PROGRAM EXTENSION
+RANDBS:	PAREA1		;RANDOM BASE NUMBER
+SWTEXR:	PAREA2		;SYSTEM EXERCISER SWITCHES
+ITRCNT:	ITERAT		;PROGRAM ITERATIONS
+$PNAME:	PGMNAM		;POINTER TO PROGRAMS NAME
+$PVER:	MCNVER,,DECVER	;MCN & DEC VERSION LEVEL
+$MODVL:	MODDVL		;DEVICE CODE CHANGE LOWER LIMIT
+$MODVU:	MODDVU		;DEVICE CODE CHANGE UPPER LIMIT
+$EMODE:	IFNDEF EXCASB,<0> IFDEF EXCASB,<-1>	;EXEC ALLOWED
+$UMODE:	IFNDEF USRASB,<0> IFDEF USRASB,<-1>	;USER ALLOWED
+$DSKUP:	IFNDEF DSKUPD,<0> IFDEF DSKUPD,<-1>	;DISK UPDATE MODE
+$MMAP:	IFNDEF MEMMAP,<0> IFDEF MEMMAP,<-1>	;ALLOW MEMORY RTNS
+PAREA7:	PAREA5		;OPTIONAL PARAMETER
+PAREA8:	PAREA6		;OPTIONAL PARAMETER
+
+; **********************************************************************
+;PROGRAM VARIABLE PARAMETER AREA
+; **********************************************************************
+
+USER:	0		; 0 = EXEC, -1 = USER MODE FLAG
+KAIFLG:	0		;PROCESSOR TYPE, 0 = KA10, -1 = KI10
+KLFLG:	0		;PROCESSOR TYPE, 0 = KA/KI, -1 = KL10
+MONFLG:	-1		;DIAG MONITOR SPECIAL USER FLAG
+MONCTL:	0		;DIAG MON/SYS EXR FLAG
+MONTEN:	0		;-1= LOADED BY 10
+CLOCKF:	0		;CLOCK TICKED FLAG
+CONSW:	0		;CONSOLE SWITCH SETTINGS
+PASCNT:	0		;PROGRAM PASS COUNT
+RUNFLG:	0		;PROGRAM RUN FLAG
+TESTPC:	0		;SUBTEST PC
+ERRPC:	0		;ERROR PC
+ERRTLS:	0		;ERROR TOTALS
+TICKS:	0		;PROGRAM RUNNING TIME
+MARGIN:	0		;KI10 MARGIN WORD VALUE
+$ONETM:	0		;SUBROUTINE INITIALIZATION FLAG
+; **********************************************************************
+;SPECIAL PROGRAM DISPATCH ADDRESSES
+; **********************************************************************
+
+BEGEND:	ENDUUO		;END OF PASS
+$BEND1:	JRST	BEGIN1	;KEEP RUNNING PROGRAM
+$BEND2:	EOPUUO		;END OF PROGRAM - NO RETURN
+CNTLC:	SADR5		;CONTROL C XFER ADDRESS
+ALTMGO:	SADR6		;ALTMODE XFER ADDRESS
+CPOPJ1:			;SKIP RETURN
+UUOSKP:	AOS	(P)	;SKIP RETURN FROM UUO
+CPOPJ:			;NON-SKIP REGULAR RETURN
+UUOEXT:	RTN		;UUO RETURN
+UUORTN:	JFCL		;ADDITIONAL USERS UUO ROUTINE
+$UORTX:	JFCL		;ADDITIONAL UUO LINKAGE
+$UUOER:	JFCL		;INITED AS (JRST $UOERX)
+$ITRHL:	JFCL		;ADDITIONAL INTERRUPT LINKAGE
+$ITRX1:	JFCL		; "
+$USRHL:	JFCL		; "
+$RSRTX:	JFCL		;ADDITIONAL POWER FAIL LINKAGE
+$RSRTY:	JFCL		; "
+RESRT1:	JFCL		; INITED AS (JRST RESRTX)
+RESRT2:	JFCL		; "
+$PARER:	JFCL		;ADDITIONAL PARITY ERROR LINKAGE
+ERMORE:	JFCL		;ADDITIONAL ERROR HANDLER LINKAGE
+	HALT	.	;IMPROPER TRANSFER HALT
+
+$PSHER:	0		;INITED AS (JRST PSHERR)
+ITRCH1:	0		;PC & FLAGS OF CURRENT INTERRUPT
+	0		;INITED AS (JRST $ITRC1)
+
+; **********************************************************************
+;PROCESSOR CONTROL STORAGE
+; **********************************************************************
+
+$ACC0:	0		;INTERRUPT SAVED AC0
+$SVPI:	0		;INTERRUPT SAVED PI
+$SVAPR:	0		;INTERRUPT SAVED APR
+$SVPAG:	0		;INTERRUPT SAVED PAG (DATAI)
+$SPAG1:	0		;INTERRUPT SAVED PAG (CONI)
+
+$SVUUO:	0		;CURRENT USERS UUO
+$SVUPC:	0		;PC OF CURRENT USERS UUO
+
+REPTU:	0		;REPEAT UUO ITERATIONS
+SCOPE:	0		;ERROR HANDLER SCOPE LOOP FLAG
+%CORFLG:0		; " CORRECT FLAG
+%COREC:	0		; " CORRECT DATA
+%ACTFL:	0		; " ACTUAL FLAG
+%ACTUL:	0		; " ACTUAL DATA
+%DISCR:	0		; " DISCREPENCY DATA
+; **********************************************************************
+;UUO DISPATCH TABLE
+; **********************************************************************
+	XLIST
+IFNDEF	LUUO1,<LUUO1=$UUOER>
+IFNDEF	LUUO2,<LUUO2=$UUOER>
+IFNDEF	LUUO3,<LUUO3=$UUOER>
+IFNDEF	LUUO4,<LUUO4=$UUOER>
+IFNDEF	LUUO5,<LUUO5=$UUOER>
+IFNDEF	LUUO6,<LUUO6=$UUOER>
+IFNDEF	LUUO7,<LUUO7=$UUOER>
+IFNDEF	LUUO10,<LUUO10=$UUOER>
+IFNDEF	LUUO11,<LUUO11=$UUOER>
+IFNDEF	LUUO12,<LUUO12=$UUOER>
+IFNDEF	LUUO13,<LUUO13=$UUOER>
+IFNDEF	LUUO14,<LUUO14=$UUOER>
+IFNDEF	LUUO15,<LUUO15=$UUOER>
+IFNDEF	LUUO16,<LUUO16=$UUOER>
+IFNDEF	LUUO17,<LUUO17=$UUOER>
+IFNDEF	LUUO20,<LUUO20=$UUOER>
+IFNDEF	LUUO21,<LUUO21=$UUOER>
+IFNDEF	LUUO22,<LUUO22=$UUOER>
+IFNDEF	LUUO23,<LUUO23=$UUOER>
+IFNDEF	LUUO24,<LUUO24=$UUOER>
+IFNDEF	LUUO25,<LUUO25=$UUOER>
+IFNDEF	LUUO26,<LUUO26=$UUOER>
+IFNDEF	LUUO27,<LUUO27=$UUOER>
+IFNDEF	LUUO30,<LUUO30=$UUOER>
+IFNDEF	LUUO31,<LUUO31=$UUOER>
+IFNDEF	LUUO32,<LUUO32=$UUOER>
+IFNDEF	LUUO33,<LUUO33=$UUOER>
+	LIST
+UUODIS:	LUUO1,,$UUOER
+	LUUO3,,LUUO2
+	LUUO5,,LUUO4
+	LUUO7,,LUUO6
+	LUUO11,,LUUO10
+	LUUO13,,LUUO12
+	LUUO15,,LUUO14
+	LUUO17,,LUUO16
+	LUUO21,,LUUO20
+	LUUO23,,LUUO22
+	LUUO25,,LUUO24
+	LUUO27,,LUUO26
+	LUUO31,,LUUO30
+	LUUO33,,LUUO32
+
+; **********************************************************************
+;MEMORY MANAGMENT STORAGE
+; **********************************************************************
+
+DF22F:	0		;DF10 CONTROL FLAG, 0 = 18, -1 = 22 BIT
+MAPNEW:	0		;MEMORY MAPPING CONTROL FLAG, -1 = 4096K MAPPING
+MEMTOT:	0		;TOTAL MEMORY SIZE IN K (1024.)
+MEMLOW:	0		;LOWEST USABLE MEMORY
+MEMSIZ:	BLOCK ^D41	;MEMORY SEGMENT POINTER TABLE
+
+; **********************************************************************
+;PRINT CONTROL STORAGE
+; **********************************************************************
+
+PNTFLG:	0		;PRINT FLAG, -1 WHILE IN PRINT ROUTINE
+PNTENB:	0		;PRINT ENABLE
+PDISF:	0		;PRINT DISABLED FLAG
+PNTINH:	0		;INHIBIT PRINT INPUT CHECKS
+PNTSPC:	0		;PRINT SPACE CONTROL
+OPTIME:	0		;TYPE-IN WAIT TIME
+$TWCNT:	0		;TIME WAITED
+$DVOFF:	0		;LOGICAL DEVICE INITED FLAG
+TTYFIL:	0		;TTY EXEC FILLERS FLAG
+TTYSPD:	0		;TTY EXEC BAUD RATE
+$TTCHR:	0		;ACTUAL TYPED IN CHAR
+$CHRIN:	0		;UPPER CASED & PARITY STRIPPED CHAR
+$TYPNB:	0		;TYPED IN NUMBER
+$CRLF:	0		;FREE CR/LF FLAG
+$TABF:	0		;TAB CONVERSION FLAG
+$FFF:	0		;FORM FEED CONVERSION FLAG
+$VTF:	0		;VERTICAL TAB CONVERSION FLAG
+USRLFF:	0		;USER LF FILLERS
+USRCRF:	0		;USER CR FILLERS
+; **********************************************************************
+;THE FOLLOWING MISCELLANEOUS PRINT CHARACTERS ARE INCLUDED
+;TO FACILITATE PRINTING AND ARE CALLED AS FOLLOWS:
+;	MOVEI	NAME
+;	PNTA		;OR PNTAF
+; **********************************************************************
+
+CRLF:	ASCII/
+/
+CRLF2:	ASCII/
+
+/
+COMMA:	ASCII/,/
+PERIOD:	ASCII/./
+SPACE:	ASCII/ /
+TAB:	ASCII/	/
+MINUS:
+HYPEN:	ASCII/-/
+PLUS:	ASCII/+/
+AST:	ASCII/*/
+ATSIN:	ASCII/@/
+LFP:	ASCII/(/
+RTP:	ASCII/)/
+BELL:	BYTE (7) 007
+QUEST:	ASCII/?/
+SLASH:	ASCII!/!
+DOLLAR:	ASCII/$/
+RADIX:	^D10			;DECIMAL PRINT RADIX
+RADLSP:	40			;DECIMAL PRINT LEADING CHAR
+RADLSC:	^D10			;DECIMAL PRINT LEADING CHAR COUNT
+
+; **********************************************************************
+;USER MODE OUTPUT FILE INFORMATION
+; **********************************************************************
+
+$OBUF:	BLOCK	3		;LOGICAL FILE OUTPUT BUFFER HEADER
+$OUTNM:	SIXBIT	/PRINT/		;FILE NAME
+$OUTEX:	SIXBIT	/PNT/		;FILE NAME EXTENSION
+	BLOCK	2
+
+; **********************************************************************
+;DISK UPDATE MODE FILE INFORMATION
+; **********************************************************************
+
+$IBUF:	BLOCK	3
+$INNM:	SIXBIT	/PRINT/
+$INEXT:	SIXBIT	/PNT/
+	BLOCK	2
+; **********************************************************************
+;PUSHDOWN LIST CONTROL INFORMATION
+; **********************************************************************
+
+PLIST:	PLIST-PLISTE,,PLIST
+PLISTS:	BLOCK	200
+PLISTE:	0		;END OF PUSHDOWN LIST
+
+; **********************************************************************
+;POWER LINE CLOCK FREQUENCY FLAG
+; **********************************************************************
+
+CYCL60:	0	;0 = 60, -1 = 50 CYCLE
+
+; **********************************************************************
+;KL10 CACHE CONTROL FLAGS
+; **********************************************************************
+
+CSHFLG:	0	;ALLOW CACHE IF 0
+CSHMEM:	0	;CACHE MEMORY SEGMENTS IF 0
+
+; **********************************************************************
+;NUMBER INPUT DIGIT FLAG
+; **********************************************************************
+
+TTNBRF:	0	;-1 IF ANY DIGIT TYPED
+
+; **********************************************************************
+;KL10 & KI10 "INHPAG" SWITCH PAGING PREVENTION
+; **********************************************************************
+
+PVPAGI:	0	;IF NON-ZERO, OVERRIDE "INHPAG" SWITCH ACTION
+
+; **********************************************************************
+;ERROR REPORTING ROUTINE ADDITIONAL USERS CONTROL INSTRUCTIONS
+; **********************************************************************
+
+%ERHI1:	0	;IF NON-ZERO, XCT'D AT START OF %ERUUO
+%ERHI2:	0	;IF NON-ZERO, XCT'D AT END OF %ERUUO
+%ERHI3:	0	;IF NON-ZERO, XCT'D AFTER "PC" OF %ERUUO
+
+; **********************************************************************
+;SPECIAL USERS UUO INTERCEPT INSTRUCTION
+; **********************************************************************
+
+$$UUO:	0	;IF NON-ZERO, XCT'D AT START OF $UORTN
+; **********************************************************************
+;USER MODE MONITOR TYPE FLAG
+; **********************************************************************
+
+MONTYP:	0	;0 = TOPS10, -1 = TOPS20
+
+;*********************************************************************^
+;*KL10 PROCESSOR TYPE FLAG, 0=P0, 1=BBD NEW, 2=BBD OLD
+;*********************************************************************^
+
+KLTYP:	0
+
+; **********************************************************************
+;SPECIAL USERS MUUO INTERCEPT INSTRUCTION
+; **********************************************************************
+
+$$MUUO:	0	;IF NON-ZERO, XCT'D AT START OF MUUOER
+
+; **********************************************************************
+;SPECIAL USERS USER MODE OUTPUT ERROR INTERCEPT INSTUCTION
+; **********************************************************************
+
+$$OUTER:0	;IF NON-ZERO, XCT'D AT END OF USER MODE ERROR
+
+; **********************************************************************
+;"SWITCH" CALL USAGE CONTROL
+; **********************************************************************
+
+$$TOGGLE:0	;IF NON-ZERO, USE C(CONSW) FOR SWITCHES
+
+; **********************************************************************
+;SPECIAL USERS ALTMODE SWITCH CALL INTERCEPT INSTRUCTIONS
+; **********************************************************************
+
+$$TAX1:	0	;IF NON-ZERO, XCT'D AT START OF ALTMODE SWITCH CALL
+$$TAX2:	0	;IF NON-ZERO, XCT'D AT END OF ALTMODE SWITCH CALL
+
+; **********************************************************************
+;SM10 (KS-10) PROCESSOR TYPE FLAG
+; **********************************************************************
+
+SM10:	0	;IF -1 THIS IS A KS-10
+
+; **********************************************************************
+;RIGHT HALF SWITCHES PROMPT TABLE ADDRESS
+; **********************************************************************
+
+SWPTAB:	0	;0 = NO PROMPT, ADR = ADR OF SIXBIT PROMPT TABLE
+
+; **********************************************************************
+;SPECIAL FUTURE EXPANSION ROOM
+; **********************************************************************
+
+; **********************************************************************
+;END OF FIXED STORAGE
+; **********************************************************************
+
+	LOC	30577
+ENDFIX:	0		;END OF FIXED STORAGE
+

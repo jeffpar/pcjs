@@ -23,9 +23,9 @@ Additional ready-to-run configurations include:
   - [TI-57 with Debugger](rev0/)
   - [TI-57 with Revised ROM and Debugger](rev1/)
 
-{% include gallery/documents.html title="TI-57/EC-4000 Documentation" height="300" tag="manuals" %}
+{% include gallery/documents.html title="TI-57/EC-4000 Documentation" height="300" tag="manual" %}
 
-{% include gallery/documents.html title="TI-57/EC-4000 Programs" height="300" tag="programs" %}
+{% include gallery/documents.html title="TI-57/EC-4000 Programs" height="300" tag="program" %}
 
 Above, you'll find a few EC-4000 programs I wrote back in 1978-1979.  These are some of my earliest "computer programs,"
 written when I was in high school, so needless to say, they come with no guarantees.  Use at your own risk.

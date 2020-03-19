@@ -476,4 +476,4 @@ contains an identical `QB.EXE` and presumably a corresponding `BCOM20.LIB`.
 
 ---
 
-![MS QuickBASIC 2.00 (Disk 1)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/basic/QUICKBAS200-DISK1.png)
+![MS QuickBASIC 2.00 (Disk 1)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/basic/quickbasic/2.00/MS-QUICKBASIC-200-DISK1.jpg)

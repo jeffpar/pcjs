@@ -26,8 +26,8 @@ Here's what the **Bootstrap Loader** looks like:
 	 037774     000765
 	 037776     177550
 
-Using any [PDPjs](/machines/pdp11/) machine with the built-in Debugger, such as this
-[PDP-11/20 Boot Monitor](/machines/pdp11/1120/monitor/debugger/), the **Bootstrap Loader**
+Using any [PDPjs](/machines/dec/pdp11/) machine with the built-in Debugger, such as this
+[PDP-11/20 Boot Monitor](/machines/dec/pdp11/1120/monitor/debugger/), the **Bootstrap Loader**
 is easily entered with a single Debugger EDIT ("e") command:
 
 	e 037744 016701 000026 012702 000352 005211 105711 100376 116162 000002 037400 005267 177756 000765 177550
@@ -58,7 +58,7 @@ be automatically pre-loaded into any machine:
 
 	filedump --file=BOOTSTRAP-16KB.txt --format=octal --output=BOOTSTRAP-16KB.json
 
-For example, this [PDP-11/20 Bootstrap Loader Demo](/machines/pdp11/1120/bootstrap/debugger/) pre-loads
+For example, this [PDP-11/20 Bootstrap Loader Demo](/machines/dec/pdp11/1120/bootstrap/debugger/) pre-loads
 the **Bootstrap Loader** using the `<ram>` component's optional *file* attribute:
 
 	<ram id="ram" addr="0x0000" size="0x4000" file="/software/dec/pdp11/boot/bootstrap/BOOTSTRAP-16KB.json"/>

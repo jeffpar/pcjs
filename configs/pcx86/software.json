@@ -2035,109 +2035,164 @@
     "microsoft": {
       "@title": "Microsoft",
       "basic": {
-        "@title": "Microsoft BASIC",
-        "@versions": {
-          "": {
-            "@title": "MS BASIC ",
-            "@media": [
-              {
-                "@title": "MS BASIC Compiler 5.36",
-                "@diskette": "BASCOM536.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS QuickBASIC 1.00",
-                "@diskette": "QUICKBAS100.json",
-                "@photo": ".png",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS QuickBASIC 2.00 (Disk 1)",
-                "@diskette": "QUICKBAS200-DISK1.json",
-                "@photo": ".png",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS QuickBASIC 2.00 (Personal)",
-                "@diskette": "QUICKBAS200-JP.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS QuickBASIC 2.01 (Disk 1)",
-                "@diskette": "QUICKBAS201-DISK1.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS QuickBASIC 2.01 (Disk 2)",
-                "@diskette": "QUICKBAS201-DISK2.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS QuickBASIC 3.00 (Disk 1)",
-                "@diskette": "QUICKBAS300-DISK1.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS QuickBASIC 3.00 (Disk 2)",
-                "@diskette": "QUICKBAS300-DISK2.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS QuickBASIC 3.00 (Disk 3)",
-                "@diskette": "QUICKBAS300-DISK3.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS QuickBASIC 3.00 (Disk 4)",
-                "@diskette": "QUICKBAS300-DISK4.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS QuickBASIC 4.00 (Disk 1)",
-                "@diskette": "QUICKBAS400-DISK1.json",
-                "@type": "PC720K"
-              },
-              {
-                "@title": "MS QuickBASIC 4.00 (Disk 2)",
-                "@diskette": "QUICKBAS400-DISK2.json",
-                "@type": "PC720K"
-              },
-              {
-                "@title": "MS QuickBASIC 4.50 (Disk 1)",
-                "@diskette": "QUICKBAS450-DISK1.json",
-                "@type": "PC720K"
-              },
-              {
-                "@title": "MS QuickBASIC 4.50 (Disk 2)",
-                "@diskette": "QUICKBAS450-DISK2.json",
-                "@type": "PC720K"
-              },
-              {
-                "@title": "MS Visual Basic 1.00 (Disk 1)",
-                "@diskette": "VB100-DISK1.json",
-                "@type": "PC1200K"
-              },
-              {
-                "@title": "MS Visual Basic 1.00 (Disk 2)",
-                "@diskette": "VB100-DISK2.json",
-                "@type": "PC1200K"
-              },
-              {
-                "@title": "MS Visual Basic 1.00 (Disk 3)",
-                "@diskette": "VB100-DISK3.json",
-                "@type": "PC1200K"
-              },
-              {
-                "@title": "MS QBasic 1.10",
-                "@diskette": "QBASIC110.json",
-                "@type": "PC360K"
-              }
-            ]
+        "@title": "BASIC",
+        "compiler": {
+          "@title": "BASIC Compiler",
+          "@versions": {
+            "5.36": {
+              "@title": "MS BASIC Compiler 5.36",
+              "@media": [
+                {
+                  "@diskette": "BASCOM536.json",
+                  "@type": "PC360K"
+                }
+              ]
+            }
+          }
+        },
+        "qbasic": {
+          "@title": "QBasic",
+          "@versions": {
+            "1.10": {
+              "@title": "MS QBasic 1.10",
+              "@media": [
+                {
+                  "@diskette": "QBASIC110.json",
+                  "@type": "PC360K"
+                }
+              ]
+            }
+          }
+        },
+        "quickbasic": {
+          "@title": "QuickBASIC",
+          "@versions": {
+            "1.00": {
+              "@title": "MS QuickBASIC 1.00",
+              "@media": [
+                {
+                  "@diskette": "MS-QUICKBASIC-100.json",
+                  "@photo": ".jpg",
+                  "@type": "PC360K"
+                }
+              ]
+            },
+            "2.00": {
+              "@title": "MS QuickBASIC 2.00",
+              "@media": [
+                {
+                  "@title": "MS QuickBASIC 2.00 (Disk 1)",
+                  "@diskette": "MS-QUICKBASIC-200-DISK1.json",
+                  "@photo": ".jpg",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "MS QuickBASIC 2.00 (Personal)",
+                  "@diskette": "MS-QUICKBASIC-200-JP.json",
+                  "@type": "PC360K"
+                }
+              ]
+            },
+            "2.01": {
+              "@title": "MS QuickBASIC 2.01",
+              "@media": [
+                {
+                  "@title": "MS QuickBASIC 2.01 (Disk 1)",
+                  "@diskette": "MS-QUICKBASIC-201-DISK1.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "MS QuickBASIC 2.01 (Disk 2)",
+                  "@diskette": "MS-QUICKBASIC-201-DISK2.json",
+                  "@type": "PC360K"
+                }
+              ]
+            },
+            "3.00": {
+              "@title": "MS QuickBASIC 3.00",
+              "@media": [
+                {
+                  "@title": "MS QuickBASIC 3.00 (Disk 1)",
+                  "@diskette": "MS-QUICKBASIC-300-DISK1.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "MS QuickBASIC 3.00 (Disk 2)",
+                  "@diskette": "MS-QUICKBASIC-300-DISK2.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "MS QuickBASIC 3.00 (Disk 3)",
+                  "@diskette": "MS-QUICKBASIC-300-DISK3.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "MS QuickBASIC 3.00 (Disk 4)",
+                  "@diskette": "MS-QUICKBASIC-300-DISK4.json",
+                  "@type": "PC360K"
+                }
+              ]
+            },
+            "4.00": {
+              "@title": "MS QuickBASIC 4.00",
+              "@media": [
+                {
+                  "@title": "MS QuickBASIC 4.00 (Disk 1)",
+                  "@diskette": "MS-QUICKBASIC-400-DISK1.json",
+                  "@type": "PC720K"
+                },
+                {
+                  "@title": "MS QuickBASIC 4.00 (Disk 2)",
+                  "@diskette": "MS-QUICKBASIC-400-DISK2.json",
+                  "@type": "PC720K"
+                }
+              ]
+            },
+            "4.50": {
+              "@title": "MS QuickBASIC 4.50",
+              "@media": [
+                {
+                  "@title": "MS QuickBASIC 4.50 (Disk 1)",
+                  "@diskette": "MS-QUICKBASIC-450-DISK1.json",
+                  "@type": "PC720K"
+                },
+                {
+                  "@title": "MS QuickBASIC 4.50 (Disk 2)",
+                  "@diskette": "MS-QUICKBASIC-450-DISK2.json",
+                  "@type": "PC720K"
+                }
+              ]
+            }
+          }
+        },
+        "vb": {
+          "@title": "Visual Basic",
+          "@versions": {
+            "1.00": {
+              "@title": "MS Visual Basic 1.00",
+              "@media": [
+                {
+                  "@title": "MS Visual Basic 1.00 (Disk 1)",
+                  "@diskette": "VB100-DISK1.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "MS Visual Basic 1.00 (Disk 2)",
+                  "@diskette": "VB100-DISK2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "MS Visual Basic 1.00 (Disk 3)",
+                  "@diskette": "VB100-DISK3.json",
+                  "@type": "PC1200K"
+                }
+              ]
+            }
           }
         }
       },
       "c": {
-        "@title": "Microsoft C Compiler",
+        "@title": "C Compiler",
         "@versions": {
           "2.03": {
             "@title": "Microsoft C Compiler 2.03",
@@ -2684,7 +2739,7 @@
         }
       },
       "pascal": {
-        "@title": "Microsoft Pascal",
+        "@title": "Pascal",
         "compiler": {
           "@title": "MS Pascal",
           "@versions": {

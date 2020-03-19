@@ -1,7 +1,7 @@
 ---
 layout: page
 title: PDP-11 CPU Diagnostics
-permalink: /software/dec/pdp11/diags/cpu/
+permalink: /software/dec/pdp11/diag/cpu/
 redirect_from: /apps/pdp11/diags/cpu/
 ---
 

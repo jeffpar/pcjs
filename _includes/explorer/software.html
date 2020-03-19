@@ -46,7 +46,7 @@
                 {%- if family[0] == "@instances" -%}
                   {%- assign machines = family[1] -%}
                 {%- else %}
-                <li class="pcjs-explorer-platform pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ family[1]['@title'] | default: family[0] }}
+                <li class="pcjs-explorer-family pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ family[1]['@title'] | default: family[0] }}
                   <ul>
                   {%- assign machines = family[1]['@instances'] -%}
                 {%- endif -%}
@@ -74,7 +74,7 @@
                             <!-- software subcategory: {{ subcategory[0] }} -->
                         {%- endif -%}
                         {%- if subcategory[1]['@hidden'] -%}{%- continue -%}{%- endif -%}
-                        {%- if subcategory[0] == '@versions' -%}
+                        {%- if subcategory[0] == '@products' or subcategory[0] == '@versions' -%}
                           {%- assign vendors = subcategories %}
                           {%- capture software_path3 -%}{%- endcapture -%}
                         {%- elsif subcategory[0] contains '@' -%}
@@ -128,8 +128,10 @@
                               {%- endif -%}
                               {%- assign release = version[1] -%}
                               {%- if release['@title'] -%}
+                                {%- capture software_desc -%}{%- if release['@desc'] %} title="{{ release['@desc'] }}"{%- endif -%}{%- endcapture -%}
                                 {%- capture software_title %}{{ release['@title'] }}{% endcapture -%}
                               {%- else -%}
+                                {%- capture software_desc -%}{%- if product[1]['@desc'] %} title="{{ product[1]['@desc'] }}"{%- endif -%}{%- endcapture -%}
                                 {%- capture software_title %}{{ product[1]['@title'] }}{% if version[0] != "" %} {{ version[0] }}{% endif %}{% endcapture -%}
                               {%- endif -%}
                               {%- capture hardware_url -%}{{ release['@hardware'] }}{%- endcapture -%}
@@ -169,7 +171,7 @@
                                   {%- capture software_parms -%}{{ software_parms }}?autoStart=true&autoMount=%7Bname:%22{{ software_title | replace: " ","%20" }}%22,path:%22/software{{ software_url }}/{{ release['@tape'] }}%22%7D{%- endcapture -%}
                                 {%- endif -%}
                               {%- endif %}
-                                        <li id="{{ software_id }}" class="pcjs-explorer-version pcjs-explorer-item">
+                                        <li id="{{ software_id }}" class="pcjs-explorer-version pcjs-explorer-item"{{ software_desc }}>
                                           <a href="{{ hardware_url }}{{ software_parms }}">{{ software_title }}</a>
                                         </li>
                             {%- endfor -%}

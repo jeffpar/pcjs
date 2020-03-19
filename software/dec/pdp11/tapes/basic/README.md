@@ -277,3 +277,5 @@ is now known to be an *even* value) into a jump table index.
 The final instruction, `MOV @(SP)+,PC`, moves the address at the jump table index into PC, while also removing the TRAP
 instruction from the stack, leaving only the *previous PC* on the stack, so that when the TRAP handler is done, it can
 execute `RTS PC` to return to the caller.
+
+{% include gallery/documents.html path="/machines/dec/pdp11/" width="200" height="260" tag="basic" %}
