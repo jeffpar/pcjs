@@ -2848,17 +2848,17 @@
                 },
                 {
                   "@title": "MS QuickPascal 1.00 (720K Disk 1)",
-                  "@diskette": "QUICKPASCAL100-720K-DISK1-SETUP.json",
+                  "@diskette": "QUICKPASCAL-100-720K-DISK1-SETUP.json",
                   "@type": "PC720K"
                 },
                 {
                   "@title": "MS QuickPascal 1.00 (720K Disk 2)",
-                  "@diskette": "QUICKPASCAL100-720K-DISK2-ADVISOR.json",
+                  "@diskette": "QUICKPASCAL-100-720K-DISK2-ADVISOR.json",
                   "@type": "PC720K"
                 },
                 {
                   "@title": "MS QuickPascal 1.00 (720K Disk 3)",
-                  "@diskette": "QUICKPASCAL100-720K-DISK3-LIBRARIES.json",
+                  "@diskette": "QUICKPASCAL-100-720K-DISK3-LIBRARIES.json",
                   "@type": "PC720K"
                 }
               ]
