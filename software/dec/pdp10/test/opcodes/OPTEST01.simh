@@ -1,0 +1,62 @@
+dep 100 HRLI    1,111111
+dep 101 HRRI    1,444444
+dep 102 HLR     2,1
+dep 103 HRL     2,1
+dep 104 HRRE    3,1
+dep 105 HLLE    4,2
+dep 106 HLR     5,3
+dep 107 HRL     6,4
+dep 110 HRRES   0,5
+dep 111 HLLES   0,6
+dep 112 HRRI    0,10
+dep 113 BLT     0,17
+dep 114 HLRES   1,2
+dep 115 PUSH    5,11
+dep 116 POP     5,5
+dep 117 HRLZI   1,170600
+dep 120 LDB     2,1
+dep 121 ADD     0,0
+dep 122 JSP     1,123
+dep 123 ADD     0,0
+dep 124 JSP     1,125
+dep 125 JFCL    17,126
+dep 126 MUL     2,2
+ex -m 100-116
+dep pc 100
+step 11
+ex 0-17
+;
+echo Execute BLT 8 times (note the weird value that SIMH moves on the first iteration (ie, from AC 0 to AC 10)
+;
+step
+ex 0-17
+step
+ex 0-17
+step
+ex 0-17
+step
+ex 0-17
+step
+ex 0-17
+step
+ex 0-17
+step
+ex 0-17
+step
+ex 0-17
+;
+echo Execute HLRES 1,2
+;
+step 1
+ex 0-17
+;
+echo Execute PUSH 5,11
+;
+step 1
+ex 0-17
+;
+echo Execute POP 5,5
+;
+dep 5 1000000
+step 1
+ex 0-17

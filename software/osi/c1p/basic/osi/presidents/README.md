@@ -5,6 +5,6 @@ permalink: /software/osi/c1p/basic/osi/presidents/
 redirect_from: /apps/c1p/BASIC/OSI/presidents/
 ---
 
-{% highlight basic %}
+```basic
 {% include_relative PRESIDENTS.BAS %}
-{% endhighlight %}
+```

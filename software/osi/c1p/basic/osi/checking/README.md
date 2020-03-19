@@ -5,6 +5,6 @@ permalink: /software/osi/c1p/basic/osi/checking/
 redirect_from: /apps/c1p/BASIC/OSI/checking/
 ---
 
-{% highlight basic %}
+```basic
 {% include_relative CHECKING.BAS %}
-{% endhighlight %}
+```

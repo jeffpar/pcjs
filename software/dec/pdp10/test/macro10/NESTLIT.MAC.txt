@@ -1,0 +1,16 @@
+; From the MACRO-10 ASSEMBLER PROGRAMMER'S REFERENCE MANUAL (April 1978), p. 2-8:
+
+P=0
+T1=1
+T2=2
+
+GETCHR:	ILDB T2,T1		;Get a character
+	CAIN T2,0		;Is it a null?
+	JRST [MOVE T1,TXTPTR#	;Yes, retrieve pointer
+		ILDB T2,T1	;Get a new character
+		CAIN T2,"?"	;Is it a question mark?
+		JRST [MOVE T1,TXTPT1#	;Yes, get alternate pointer
+			ILDB T2,T1	;Get the message character
+			JRST GETHLP#]	;Go to help routine
+		POPJ P,]	;Not question mark, return
+	POPJ P,			;Not a null, return

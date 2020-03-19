@@ -5,6 +5,6 @@ permalink: /software/osi/c1p/basic/other/tankfortwo/
 redirect_from: /apps/c1p/BASIC/OSI/tankfortwo/
 ---
 
-{% highlight basic %}
+```basic
 {% include_relative TANKFORTWO.BAS %}
-{% endhighlight %}
+```

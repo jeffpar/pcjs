@@ -19,6 +19,8 @@
     {%- if part == "magazines" -%}{%- unless include.title -%}{%- assign title = "Issues" -%}{%- endunless -%}{%- endif -%}
     {%- if data[part] -%}
       {%- assign data = data[part] %}
+    {%- elsif data['@products'] -%}
+      {%- assign data = data['@products'][part] -%}
     {%- elsif data['@versions'] -%}
       {%- assign data = data['@versions'][part] -%}
     {%- else %}

@@ -5,6 +5,6 @@ permalink: /software/osi/c1p/basic/jeffpar/soforecast/
 redirect_from: /apps/c1p/BASIC/jeffpar/soforecast/
 ---
 
-{% highlight basic %}
+```basic
 {% include_relative SOFORECAST.BAS %}
-{% endhighlight %}
+```

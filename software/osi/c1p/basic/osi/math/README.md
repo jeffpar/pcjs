@@ -5,6 +5,6 @@ permalink: /software/osi/c1p/basic/osi/math/
 redirect_from: /apps/c1p/BASIC/OSI/math/
 ---
 
-{% highlight basic %}
+```basic
 {% include_relative MATH.BAS %}
-{% endhighlight %}
+```

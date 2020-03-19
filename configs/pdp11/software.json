@@ -5,16 +5,7 @@
       "@title": "RK03",
       "@versions": {
         "rt11v4": {
-          "@title": "RT-11 4.0",
-          "@documents": [
-            {
-              "@title": "RT-11 Installation and System Generation Guide (Mar 1980)",
-              "@file": "AA-H376A-TC_RT-11_V4.0_Installation_Manual_Mar81.pdf",
-              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4H3X0WfHlTGsvvLQ",
-              "@cover": ".jpg",
-              "@source": ""
-            }
-          ]
+          "@title": "RT-11 4.0"
         }
       }
     }

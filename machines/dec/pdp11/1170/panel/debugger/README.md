@@ -8,7 +8,6 @@ machines:
     type: pdp11
     debugger: true
     config: /configs/pdp11/machine/1170/panel/debugger/machine-slim.xml
-    sticky: top
 ---
 
 The machine below is a PDP-11/70 with a stripped-down interface that includes our stylized Front Panel and

@@ -1,0 +1,53 @@
+; From the MACRO-10 ASSEMBLER PROGRAMMER'S REFERENCE MANUAL (June 1972), p. 7-9:
+;
+;	Example 4 (Figure 7-4) shows nested macros which use IRPC.  The desired operation
+;	is to take an ASCII text string and store the characters four per word, left-justified,
+;	with the character count stored in the first nine bits of the first word.
+;
+;	The TEXT macro counts the string characters and invokes the CODE macro to store the
+;	characters four per word.  The CODE macro invokes a SHIFT macro which left-justifies the
+;	last word if it is not already left-justified.  The first part of the example shows the
+;	normal listing, then SALL is set to show what code the macros are generating.
+;
+; The original listing encoded two of the lines as follows:
+;
+;	IFN ZZ,<DEFINE SHIFT		;;REMAINDER LEFT
+;	 IFE ZZ&777B8,>			;;IF NOT LEFT JUSTIFIED
+;
+; The April 1978 MACRO-10 manual says that a macro body "must be enclosed in angle brackets",
+; so the DEFINE looks wrong, and the IFE contains only a closing angle bracket, which also seems
+; wrong.  Perhaps what's shown above is a side-effect of some MACRO-10 listing generation bug
+; and not an accurate reflection of the original code.  In any event, after making two small
+; modifications below, macro10.js is able to assemble the code fine.
+;
+; This example also begs the question: did MACRO-10 optimize tail recursion?  Because without
+; it, if the SHIFT macro required many iterations (for example, if "ZZ==ZZ_9" was replaced with
+; "ZZ==ZZ+9"), wouldn't MACRO-10 blow its stack?  I've noted this in macro10.js as well.
+;
+	TITLE	STORE TEXT CHARACTER BY CHARACTER
+	SUBTTL	%1 5-APR-72
+
+	DEFINE TEXT (C)<
+	N==0				;;INITIAL CONDITION
+	IRPC C,<N==N+1>			;;COUNT CHARACTERS
+	CODE (N,C)			;;CALL MACRO TO STORE TEXT
+	>				;END OF TEXT MACRO
+
+	DEFINE CODE (N,C)<
+	ZZ==N				;;INITIAL CONDITION
+	IRPC C,<
+	IFN ZZ&777B8,<
+		EXP ZZ			;;WORD FULL
+		ZZ==0>			;;START AGAIN WITH 0
+	ZZ==ZZ_9+"C">			;;END OF IRPC
+	IFN ZZ,<DEFINE SHIFT<		;;REMAINDER LEFT
+	 IFE ZZ&777B8,<			;;IF NOT LEFT JUSTIFIED
+	  ZZ==ZZ_9			;;MOVE LEFT 9 BITS
+	  SHIFT>			;;RECURSE
+	 >				;;END OF DEFINE
+	SHIFT				;;START MOVING LEFT
+	EXP ZZ>				;;END OF IFN ZZ
+	>				;END OF CODE MACRO
+
+	TEXT (ABCDEFGHIJKL)
+	END

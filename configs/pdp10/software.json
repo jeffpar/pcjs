@@ -1,0 +1,103 @@
+{
+  "diag": {
+    "@title": "Diagnostics",
+    "ka10": {
+      "@title": "KA10",
+      "@products": {
+        "dakaa": {
+          "@title": "DAKAA (Ins Diag #1)",
+          "@desc": "MAINDEC-10-DAKAA-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (1)"
+        },
+        "dakab": {
+          "@title": "DAKAB (Ins Diag #2)",
+          "@desc": "MAINDEC-10-DAKAB-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (2)"
+        },
+        "dakac": {
+          "@title": "DAKAC (Ins Diag #3)",
+          "@desc": "MAINDEC-10-DAKAC-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (3)"
+        },
+        "dakad": {
+          "@title": "DAKAD (Ins Diag #4)",
+          "@desc": "MAINDEC-10-DAKAD-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (4)"
+        },
+        "dakae": {
+          "@title": "DAKAE (Ins Diag #5)",
+          "@desc": "AH-6859C-DD: DAKAEC0 PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (5)"
+        },
+        "dakaf": {
+          "@title": "DAKAF (Ins Diag #6)",
+          "@desc": "MAINDEC-10-DAKAF-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (6)"
+        },
+        "dakag": {
+          "@title": "DAKAG (Ins Diag #7)",
+          "@desc": "MAINDEC-10-DAKAG-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (7)"
+        },
+        "dakah": {
+          "@title": "DAKAH (Ins Diag #8)",
+          "@desc": "MAINDEC-10-DAKAH-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (8)"
+        },
+        "dakai": {
+          "@title": "DAKAI (Ins Diag #9)",
+          "@desc": "MAINDEC-10-DAKAI-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (9)"
+        },
+        "dakaj": {
+          "@title": "DAKAJ (Ins Diag #10)",
+          "@desc": "MAINDEC-10-DAKAJ-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (10)"
+        },
+        "dakak": {
+          "@title": "DAKAK (Ins Diag #11)",
+          "@desc": "MAINDEC-10-DAKAK-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (11)"
+        },
+        "dakal": {
+          "@title": "DAKAL (Ins Diag #12)",
+          "@desc": "MAINDEC-10-DAKAL-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (12)"
+        },
+        "dakam": {
+          "@title": "DAKAM (Ins Diag #13)",
+          "@desc": "MAINDEC-10-DAKAM-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (13)"
+        },
+        "dakba": {
+          "@title": "DAKBA (Rel Test #1)",
+          "@desc": "MAINDEC-10-DAKBA-B-D: PDP-10 KA10 BASIC INSTRUCTION RELIABILITY TEST (1)"
+        }
+      }
+    }
+  },
+  "lang": {
+    "@title": "Languages",
+    "@products": {
+      "macro10": {
+        "@title": "MACRO-10",
+        "@documents": [
+          {
+            "@title": "MACRO-10 (Jun 1972)",
+            "@file": "Macro_Assembler_Reference_Manual-Jun72.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp1i3qATlvub3JxoDQ",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/dec/pdp10/TOPS10/1973_Assembly_Language_Handbook/02_1973AsmRef_macro.pdf",
+            "@tags": ""
+          },
+          {
+            "@title": "MACRO-10 (Apr 1972)",
+            "@file": "Macro_Assembler_Reference_Manual-Apr78.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp1hxEi9aXmTStmyhA",
+            "@cover": ".jpg",
+            "@source": "http://www.livingcomputers.org/Discover/Online-Systems/User-Documentation/Tops-10-v7-04/4_Macro_Assembler_Reference_Manual.aspx",
+            "@tags": ""
+          }
+        ]
+      }
+    }
+  },
+  "test": {
+    "@title": "Tests",
+    "@products": {
+      "macro10": {
+        "@title": "PDP-10 Mini-Assembler Tests"
+      },
+      "opcodes": {
+        "@title": "PDP-10 Opcode Tests"
+      }
+    }
+  }
+}

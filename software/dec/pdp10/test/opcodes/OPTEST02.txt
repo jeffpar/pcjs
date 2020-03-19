@@ -1,0 +1,11 @@
+A 100;
+JFCL    17,101;
+MOVEI   1,1;
+SUBI    1,1;
+JFCL    17,104;
+SUBI    1,1;
+MOVSI   1,400000;
+ADDI    1,1;
+SUBI    1,1;
+JFCL    17,111;
+SUBI    1,1;

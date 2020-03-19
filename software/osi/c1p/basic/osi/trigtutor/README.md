@@ -5,6 +5,6 @@ permalink: /software/osi/c1p/basic/osi/trigtutor/
 redirect_from: /apps/c1p/BASIC/OSI/trigtutor/
 ---
 
-{% highlight basic %}
+```basic
 {% include_relative TRIGTUTOR.BAS %}
-{% endhighlight %}
+```

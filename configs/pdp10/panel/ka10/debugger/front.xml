@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panel id="panel" width="100%" padding="8px">
+	<name>Control Panel</name>
+	<control type="container" class="pcjs-panel-group" width="100%" padBottom="8px">
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">STRT</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">STEP</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">E/H</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="START" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="STEP" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="ENABLE" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">CONT</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">DEP</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">EXAM</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="CONT" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="DEP" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="EXAM" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="6.2%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="50%" pos="right">LOAD</control>
+			<control type="container" class="pcjs-swlbl" width="50%" pos="right">TEST</control>
+			<control type="container" class="pcjs-swpad" width="50%" pos="right" style="clear:both;"><control type="switch" binding="LOAD" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="50%" pos="right"><control type="switch" binding="TEST" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">17</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">16</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">15</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S17" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S16" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S15" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">14</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">13</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">12</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S14" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S13" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S12" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">11</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">10</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">9</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S11" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S10" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S9" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">8</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">7</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">6</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S8" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S7" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S6" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">5</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">4</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">3</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S5" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S4" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S3" width="100%" container="center"/></control>
+		</control>
+		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">2</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">1</control>
+			<control type="container" class="pcjs-swlbl" width="33%" pos="right">0</control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S2" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S1" width="100%" container="center"/></control>
+			<control type="container" class="pcjs-swpad" width="33%" pos="right"><control type="switch" binding="S10" width="100%" container="center"/></control>
+		</control>
+	</control>
+	<control type="container" class="pcjs-textarea" width="100%" padBottom="8px">
+		<control type="textarea" binding="print" width="100%" height="340px" padRight="8px" pos="relative" style="resize:vertical;"/>
+		<control type="container" width="100%">
+			<control type="text" binding="debugInput" width="auto"/>
+			<control type="button" binding="debugEnter">Enter</control>
+			<control type="button" binding="clear">Clear</control>
+			<control type="button" binding="run">Run</control>
+		</control>
+	</control>
+</panel>

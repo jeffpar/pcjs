@@ -5,6 +5,6 @@ permalink: /software/osi/c1p/basic/jeffpar/othello/
 redirect_from: /apps/c1p/BASIC/jeffpar/othello/
 ---
 
-{% highlight basic %}
+```basic
 {% include_relative OTHELLO.BAS %}
-{% endhighlight %}
+```

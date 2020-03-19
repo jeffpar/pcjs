@@ -5,6 +5,6 @@ permalink: /software/osi/c1p/basic/jeffpar/tubelist/
 redirect_from: /apps/c1p/BASIC/jeffpar/tubelist/
 ---
 
-{% highlight basic %}
+```basic
 {% include_relative TUBELIST.BAS %}
-{% endhighlight %}
+```

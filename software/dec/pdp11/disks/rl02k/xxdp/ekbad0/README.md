@@ -9,7 +9,6 @@ machines:
     config: /configs/pdp11/machine/1170/panel/debugger/machine.xml
     debugger: true
     autoStart: true
-    sticky: top
 machineScripts:
   runEKBAD0: |
     selectDrive RL11 RL0;

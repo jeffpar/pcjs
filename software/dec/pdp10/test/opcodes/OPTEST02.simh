@@ -1,0 +1,12 @@
+dep 100 JFCL    17,101
+dep 101 MOVEI   1,1
+dep 102 SUBI    1,1
+dep 103 JFCL    17,104
+dep 104 SUBI    1,1
+dep 105 MOVSI   1,400000
+dep 106 ADDI    1,1
+dep 107 SUBI    1,1
+dep 110 JFCL    17,111
+dep 111 SUBI    1,1
+dep pc 100
+do t

@@ -5,6 +5,6 @@ permalink: /software/osi/c1p/basic/osi/starwars/
 redirect_from: /apps/c1p/BASIC/OSI/starwars/
 ---
 
-{% highlight basic %}
+```basic
 {% include_relative STARWARS.BAS %}
-{% endhighlight %}
+```

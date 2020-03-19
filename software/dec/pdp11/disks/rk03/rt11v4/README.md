@@ -108,4 +108,4 @@ The "DIR" command displays the following information:
 	 113 Files, 2784 Blocks
 	 1978 Free blocks
 
-{% include gallery/documents.html %}
+{% include gallery/documents.html path="/machines/dec/pdp11/" width="200" height="260" tag="rt11" %}
