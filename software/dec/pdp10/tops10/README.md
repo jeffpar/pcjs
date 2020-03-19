@@ -1,7 +1,7 @@
 ---
 layout: page
 title: DEC TOPS-10 for the PDP-10
-permalink: /software/dec/pdp10/macro10/
+permalink: /software/dec/pdp10/tops10/
 redirect_from: /apps/pdp10/tops10/
 ---
 

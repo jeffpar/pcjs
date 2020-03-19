@@ -17,7 +17,7 @@ The machine below pre-loads the [DEC PDP-11 BASIC](/software/dec/pdp11/tapes/bas
 ```
 
 You can also manually load it into memory using the [Bootstrap Loader](/software/dec/pdp11/boot/bootstrap/).
-See the [DEC PDP-11/20 with Bootstrap Loader](/machines/pdp11/1120/bootstrap/) for details.
+See the [DEC PDP-11/20 with Bootstrap Loader](/machines/dec/pdp11/1120/bootstrap/) for details.
 
 {% include machine.html id="test1120" %}
 

@@ -14,7 +14,7 @@ machines:
 The *PDP-10 KA10 Basic Instruction Diagnostic #13* (MAINDEC-10-DAKAM) test code has been extracted from
 [DAKAMM.MAC](DAKAMM.MAC.txt) [[original](http://pdp-10.trailing-edge.com/klad_sources/01/klad.sources/dakamm.mac.html)] and
 [DAKAMT.MAC](DAKAMT.MAC.txt) [[original](http://pdp-10.trailing-edge.com/klad_sources/01/klad.sources/dakamt.mac.html)]
-for use with the [PDP-10 Test Machine with Debugger](/machines/pdp10/ka10/test/debugger/) below.
+for use with the [PDP-10 Test Machine with Debugger](/machines/dec/pdp10/ka10/test/debugger/) below.
 
 This diagnostic "TESTS THE BYTE, BLOCK TRANSFER AND JFFO INSTRUCTIONS."
 
@@ -29,7 +29,7 @@ Information regarding this diagnostic includes:
 {% include machine.html id="testka10" %}
 
 The Debugger's assemble ("a") command can be used to test the new built-in
-[MACRO-10 Mini-Assembler](/machines/pdp10/lib/macro10.js), which supports a subset
+[MACRO-10 Mini-Assembler](/machines/dec/pdp10/lib/macro10.js), which supports a subset
 of the [MACRO-10](https://1drv.ms/b/s!ArcO_mFRe1Z9gp1mkis_mCVuT1x1pQ) assembly language.
 
 This command:

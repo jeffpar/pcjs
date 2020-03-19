@@ -7,7 +7,7 @@ redirect_from: /apps/pdp10/diags/ka10/
 
 PCjs has archived selected files from the "KLAD Diagnostic Sources" located at the
 [PDP-10 KLAD Diagnostics Sources](http://pdp-10.trailing-edge.com/klad_sources/index.html) and turned them into
-stand-alone PDP-10 diagnostics, using the new PCjs [MACRO-10 Mini-Assembler](/machines/pdp10/lib/macro10.js).
+stand-alone PDP-10 diagnostics, using the new PCjs [MACRO-10 Mini-Assembler](/machines/dec/pdp10/lib/macro10.js).
 
 Lists of supported [diagnostics](#list-of-ka10-diagnostics) and [reliability tests](#list-of-ka10-reliability-tests)
 are provided below, as well as some [notes](#notes-on-ka10-diagnostics) on assembling the diagnostics. 

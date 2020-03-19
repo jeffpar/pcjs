@@ -17,7 +17,7 @@ The PDP-10 machine below automatically loads and assembles [TEXT.MAC](TEXT.MAC.t
 first tests of the built-in PDPjs MACRO-10 Mini-Assembler.
 
 [TEXT.MAC](TEXT.MAC.txt) is a copy of the file listed on p. 7-9 of the
-[MACRO-10 Assembler Programmer's Reference Manual (June 1972)](/software/dec/pdp10/macro10/).  It's a simple test
+[MACRO-10 Assembler Programmer's Reference Manual (June 1972)](/software/dec/pdp10/lang/macro10/).  It's a simple test
 of nested macro definitions, recursion, expressions using shift operators and character constants,
 and pseudo-ops **IRPC**, **IFE**, **IFN**, and **EXP**.  It generates 4 words of data. 
 
