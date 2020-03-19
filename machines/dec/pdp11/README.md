@@ -2,13 +2,15 @@
 layout: page
 title: DEC PDP-11 Machines
 permalink: /machines/dec/pdp11/
+redirect_from:
+  - /modules/pdp11/
+  - /devices/pdp11/machine/
 ---
 
 Support for [PDP-11 Machines](/machines/dec/pdp11/) was added to the PCjs Project in 2016.
 
-The PCjs PDP-11 emulator was adapted from the [PDP-11/70 Emulator](http://skn.noip.me/pdp11/pdp11.html) written by Paul Nankervis, with permission.
-
-The module is currently comprised of the following components, as listed in [machines.json](/configs/machines.json) (see the *pdp11.scripts* property):
+The PCjs PDP-11 emulator is currently comprised of the following components, as listed in [machines.json](/configs/machines.json) (see the *pdp11.scripts* property).
+Portions were adapted from the [PDP-11/70 Emulator](http://skn.noip.me/pdp11/pdp11.html) written by Paul Nankervis, with permission.
 
 * [bus.js](lib/bus.js)
 * [computer.js](lib/computer.js)

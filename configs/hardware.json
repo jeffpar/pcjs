@@ -12,9 +12,12 @@
     "@title": "DEC",
     "pdp10": {
       "@title": "PDP-10",
-      "ka10/test": {
-        "@title": "PDP-10 KA10 Test",
-        "@redirect_from": "/devices/pdp10/machine/ka10/test/"
+      "ka10": {
+        "@title": "KA10",
+        "test": {
+          "@title": "PDP-10 KA10 Test",
+          "@redirect_from": "/devices/pdp10/machine/ka10/test/"
+        }
       }
     },
     "pdp11": {

@@ -3,7 +3,7 @@ layout: post
 title: A Quick Post
 date: 2019-07-28 10:00:00
 permalink: /blog/2019/07/28/
-preview: https://diskettes.pcjs.org/pcx86/lang/microsoft/basic/QUICKBAS100.png
+preview: https://diskettes.pcjs.org/pcx86/lang/microsoft/basic/quickbasic/1.00/MS-QUICKBASIC-100.jpg
 ---
 
 There have been a number of small additions to the website over the last month:

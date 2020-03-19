@@ -5,9 +5,6 @@ permalink: /software/dec/pdp11/tapes/absloader/
 redirect_from: /apps/pdp11/tapes/absloader/
 ---
 
-DEC PDP-11 Absolute Loader
---------------------------
-
 [![DEC-11-L2PC-PO](DEC-11-L2PC-PO.jpg)](DEC-11-L2PC-PO.json)
 
 The Absolute Loader is a special tape image that must be loaded in order to load *other* tapes
