@@ -2903,6 +2903,21 @@
             "@title": "MS OS/2 SDK 1.02",
             "@media": [
               {
+                "@title": "MS OS/2 SDK 1.02 (INSTALL)",
+                "@diskette": "MSOS2-SDK102-DISK01.json",
+                "@type": "PC1440K"
+              },
+              {
+                "@title": "MS OS/2 SDK 1.02 (PROGRAM)",
+                "@diskette": "MSOS2-SDK102-DISK02.json",
+                "@type": "PC1440K"
+              },
+              {
+                "@title": "MS OS/2 SDK 1.02 (SUPP)",
+                "@diskette": "MSOS2-SDK102-DISK03.json",
+                "@type": "PC1440K"
+              },
+              {
                 "@title": "MS OS/2 SDK 1.02 (TOOLKIT1)",
                 "@diskette": "MSOS2-SDK102-DISK04.json",
                 "@type": "PC720K"
