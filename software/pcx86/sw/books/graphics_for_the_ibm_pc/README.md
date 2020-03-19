@@ -52,7 +52,7 @@ From Page 46:
     
 {% include machine.html id="xt-cga-256k-1" %}
 
-```basic
+```vb
 {% include_relative 02-03.BAS %}
 ```
 
@@ -93,6 +93,6 @@ From Page 58:
 
 {% include machine.html id="xt-cga-256k-2" %}
 
-```basic
+```vb
 {% include_relative 04-01.BAS %}
 ```

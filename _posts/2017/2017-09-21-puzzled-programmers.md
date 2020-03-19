@@ -106,7 +106,7 @@ run();
 
 then I looked at the solutions in "Puzzled Programmers".  Here's the BASIC solution:
 
-```basic
+```vb
 5 REM BASIC Solution to Puzzle #5 in "Puzzled Programmers" (c) 1987
 10 DIM PWR(9)
 20 FOR I = 0 TO 9

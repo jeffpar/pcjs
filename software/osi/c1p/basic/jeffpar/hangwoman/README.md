@@ -10,6 +10,6 @@ machines:
 
 {% include machine.html id="c1p8k" %}
 
-```basic
+```vb
 {% include_relative HANGWOMAN.BAS %}
 ```
