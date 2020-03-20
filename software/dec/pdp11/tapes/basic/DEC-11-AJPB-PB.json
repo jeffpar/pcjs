@@ -2,10 +2,10 @@
   "id": "DEC-11-AJPB-PB",
   "date": "1970-11-05",
   "name": "BASIC (Single User)",
-  "path": "https://www.pcjs.org/apps/pdp11/tapes/basic/DEC-11-AJPB-PB.json",
+  "path": "https://www.pcjs.org/software/dec/pdp11/tapes/basic/DEC-11-AJPB-PB.json",
   "description": "PDP-11 BASIC V007A SA=16104 RA=0",
   "copyright": "COPYRIGHT 1970 BY DIGITAL EQUIPMENT CORPORATION",
-  "label": "https://www.pcjs.org/apps/pdp11/tapes/basic/DEC-11-AJPB-PB.jpg",
+  "label": "https://www.pcjs.org/software/dec/pdp11/tapes/basic/DEC-11-AJPB-PB.jpg",
   "width":8,
   "values":[
     0,0,0,0,0,0,0,0,0,0,1,0,8,0,34,0,

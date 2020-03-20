@@ -19,7 +19,7 @@ Other attached I/O devices include:
 - [RK11 Disk Controller](/devices/pdp11/rk11/)
 - [RL11 Disk Controller](/devices/pdp11/rl11/)
 
-Our [PDP-11 Boot Monitor](/apps/pdp11/boot/monitor/) is preloaded at address 140000, and the
-[M9312 ROM](/devices/pdp11/rom/M9312/) is installed at address 165000. 
+Our [PDP-11 Boot Monitor](/software/dec/pdp11/boot/monitor/) is preloaded at address 140000, and the
+[M9312 ROM](/machines/dec/pdp11/rom/M9312/) is installed at address 165000. 
 
 {% include machine.html id="test1170" %}

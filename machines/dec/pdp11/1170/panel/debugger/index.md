@@ -15,7 +15,7 @@ a "teletype" I/O window connected to the PDP-11/70's serial port.  The I/O windo
 PDPjs Debugger.
 
 To make it easier to interact with the Front Panel [Toggle-In Demos](#toggle-ins) below, we've kept this machine's UI
-simple, so there are no other I/O devices attached.  Paul Nankervis' [PDP-11 Boot Monitor](/apps/pdp11/boot/monitor/)
+simple, so there are no other I/O devices attached.  Paul Nankervis' [PDP-11 Boot Monitor](/software/dec/pdp11/boot/monitor/)
 is preloaded at address 140000, and the [M9312 ROM](/devices/pdp11/rom/M9312/) is installed at address 165000.
 
 For more full-featured PDP-11/70 machines that also include a Debugger, see:
