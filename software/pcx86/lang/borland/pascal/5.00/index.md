@@ -8,7 +8,7 @@ machines:
     type: pcx86
     state: /disks/pcx86/tools/microsoft/pascal/quickpascal/1.00/state.json
     config: /configs/pcx86/xml/machine/5170/ega/640kb/rev3/machine.xml
-    drives: '[{name:"10Mb Hard Disk",type:1,path:"/disks-demo/pcx86/drives/10mb/MSDOS320-C400.json"}]'
+    drives: '[{name:"10Mb Hard Disk",type:1,path:"/harddisks/pcx86/sys/dos/microsoft/3.20/MSDOS320-C400.json"}]'
     autoMount:
       A:
         name: None

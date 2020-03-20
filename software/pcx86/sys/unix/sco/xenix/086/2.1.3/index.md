@@ -8,7 +8,7 @@ machines:
     type: pcx86
     debugger: true
     config: /configs/pcx86/xml/machine/5160/cga/640kb/debugger/machine.xml
-    drives: '[{name:"XENIX 8086 (10Mb Hard Disk)",type:3,path:"/disks-demo/pcx86/drives/10mb/XENIX086.json"}]'
+    drives: '[{name:"XENIX 8086 (10Mb Hard Disk)",type:3,path:"/harddisks/pcx86/sys/unix/sco/xenix/086/2.1.3/XENIX086.json"}]'
     autoMount:
       A:
         name: None

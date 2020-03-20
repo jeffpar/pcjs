@@ -7,8 +7,8 @@ machines:
   - id: ibm5160-msdos320
     type: pcx86
     resume: 1
-    config: /devices/pcx86/machine/5160/ega/640kb/machine.xml
-    drives: '[{name:"10Mb Hard Disk",type:3,path:"/disks-demo/pcx86/drives/10mb/MSDOS320-C400.json"}]'
+    config: /configs/pcx86/xml/machine/5160/ega/640kb/machine.xml
+    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/sys/dos/microsoft/3.20/MSDOS320-C400.json"}]'
     autoMount:
       A:
         name: None
@@ -67,7 +67,7 @@ breakfast!
 Skipping ahead to the "Solutions" section, it turned out that the challenge was to actually find *all* four-digit
 numbers, not just *a* number.  Also, only numbers 1000 through 9999 are considered (no numbers with leading zeros).
 
-Just for fun, I created [my own solution](/tests/node/puzzled/puzzle5.js) in JavaScript first:
+Just for fun, I created my own solution in JavaScript first:
 
 ```javascript
 let p = new Array(10);
@@ -326,6 +326,3 @@ configuration below.
 Clearly, I still have some work to do if I want PCjs to faithfully simulate how *slow* these systems used to be. 
 
 {% include machine.html id="ibm5160-msdos320" %}
-
-*[@jeffpar](https://jeffpar.com)*  
-*Sep 21, 2017*
