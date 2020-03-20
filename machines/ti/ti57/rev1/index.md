@@ -1,6 +1,6 @@
 ---
 layout: page
-title: TI-57 with Revised ROM and Debugger
+title: TI-57 with Revised ROM and Diagnostics
 permalink: /machines/ti/ti57/rev1/
 redirect_from: /devices/ti57/machine/rev1/
 machines:
