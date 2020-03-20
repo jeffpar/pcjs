@@ -7,7 +7,7 @@ machines:
   - id: vt100
     type: pcx80
     debugger: true
-    config: /configs/pcx80/xml/machine/vt100/debugger/machine.xml
+    config: /configs/pcx80/machine/vt100/debugger/machine.xml
 ---
 
 The [PCx80](/machines/pcx80/) machine below is configured to simulate a [VT100 Terminal](/machines/dec/vt100/)

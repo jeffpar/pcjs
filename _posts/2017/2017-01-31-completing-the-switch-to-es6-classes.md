@@ -6,24 +6,25 @@ permalink: /blog/2017/01/31/
 ---
 
 As I [mentioned](/blog/2016/12/30/) last December, I had started converting PCjs machines to ECMAScript 2015, more
-conveniently known as ES6.  At the time, only one PCjs machine, [PDPjs](/modules/pdp11/), had been converted, which
-left the website in the unfortunate position of having duplicate shared modules: one set for ES5-based machines
-and another set for ES6.
+conveniently known as ES6.  At the time, only one PCjs machine, [PDPjs]({{ site.github.master }}/machines/dec/pdp11/),
+had been converted, which left the website in the unfortunate position of having duplicate shared modules: one set
+for ES5-based machines and another set for ES6.
 
 Well, I'm happy to report that today marks the completion of the ES6 conversion, and the return of a single set of
-[shared modules](/modules/shared/lib/).
+[shared modules]({{ site.github.master }}/machines/shared/lib/).
 
-Admittedly, I was dragging my feet a bit, because the largest and most complex machine emulator, [PCx86](/modules/pcx86/),
-was going to require a fair bit work, not to mention regression testing.  However, after converting three other
-PCjs machines ([PDP11](/modules/pdp11/), [PC8080](/modules/pc8080/), and [C1Pjs](/modules/c1pjs/)), I had become
+Admittedly, I was dragging my feet a bit, because the largest and most complex machine emulator,
+[PCx86]({{ site.github.master }}/machines/pcx86/), was going to require a fair bit work, not to mention regression testing.
+However, after converting three other PCjs machines ([PDP11]({{ site.github.master }}/machines/dec/pdp11/),
+[PCx80]({{ site.github.master }}/machines/pcx80/), and [C1Pjs]({{ site.github.master }}/machines/osi/c1p/)), I had become
 pretty proficient at the conversion, so I was able to bulldoze my way through all the PCx86 files in a few hours,
 and fixing all the Closure Compiler compilation errors only took another hour or so.
 
 It's hard to say whether the conversion was really worth the effort, since I'm still using the Closure Compiler to
-transpile the code back to ES5.  Also, since two of the emulators ([PCx86](/modules/pcx86/bin/) and [PDP11](/modules/pdp11/bin/))
-can also be launched from the Node command-line, I've adopted Node's *require()* convention for importing the other
-scripts as modules, which makes them difficult to load inside a web browser if you want to test or debug the uncompiled
-code.
+transpile the code back to ES5.  Also, since two of the emulators ([PCx86]({{ site.github.master }}/machines/pcx86/bin/)
+and [PDP11]({{ site.github.master }}/machines/dec/pdp11/bin/)) can also be launched from the Node command-line,
+I've adopted Node's *require()* convention for importing the other scripts as modules, which makes them difficult to load
+inside a web browser if you want to test or debug the uncompiled code.
 
 To resolve that, I updated the built-in Node web server to "magically" strip out all the Node-specific stuff before
 serving up the individual JavaScript files.  Eventually, I'll change the Node server's page template to use
@@ -65,6 +66,3 @@ extensive use of:
 - [Computed Properties](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#Computed_property_names)
 
 Those changes will come, but on a more piecemeal basis, as code is visited.
-
-*[@jeffpar](https://jeffpar.com)*  
-*Jan 31, 2017*

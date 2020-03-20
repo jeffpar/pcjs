@@ -11,7 +11,7 @@ machines:
   - id: vt100
     type: pcx80
     connection: serialPort->ibm5170.com2
-    config: /configs/pcx80/xml/machine/vt100/machine.xml
+    config: /configs/pcx80/machine/vt100/machine.xml
 ---
 
 Demonstration of a DEC VT100 Terminal connected to an IBM PC AT via COM2.  Also available with [Debuggers](debugger/).

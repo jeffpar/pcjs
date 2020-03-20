@@ -1,7 +1,7 @@
 ---
 layout: page
 title: DEC PDP-11 Paper Tape Diagnostics
-permalink: /software/dec/pdp11/tapes/diags/
+permalink: /software/dec/pdp11/tapes/diag/
 redirect_from: /apps/pdp11/tapes/diags/
 ---
 
@@ -17,23 +17,23 @@ in order to load the desired tape.
 
 Additional (non-paper tape) diagnostics are available on the [XXDP+ Diagnostics](/software/dec/pdp11/disks/rl02k/xxdp/) disk.
 
-[![MAINDEC-11-D0AA-PB (MAR/70): TEST 1 - BRANCH](MAINDEC-11-D0AA-PB.jpg)](#tests-1-12)
-[![MAINDEC-11-D0BA-PB (MAR/70): TEST 2 - CON BRANCH](MAINDEC-11-D0BA-PB.jpg)](#tests-1-12)
-[![MAINDEC-11-D0CA-PB (MAR/70): TEST 3 - UNARY](MAINDEC-11-D0CA-PB.jpg)](#tests-1-12)
-[![MAINDEC-11-D0DA-PB (MAR/70): TEST 4 - UNARY + BINARY](MAINDEC-11-D0DA-PB.jpg)](#tests-1-12)
-[![MAINDEC-11-D0EA-PB (MAR/70): TEST 5 - ROTATE SHIFT](MAINDEC-11-D0EA-PB.jpg)](#tests-1-12)
-[![MAINDEC-11-D0FA-PB (MAR/70): TEST 6 - COMPARE](MAINDEC-11-D0FA-PB.jpg)](#tests-1-12)
-[![MAINDEC-11-D0GA-PB (MAR/70): TEST 7 - COMPARE NOT](MAINDEC-11-D0GA-PB.jpg)](#tests-1-12)
-[![MAINDEC-11-D0HA-PB (MAR/70): TEST 8 - MOVE](MAINDEC-11-D0HA-PB.jpg)](#tests-1-12)
-[![MAINDEC-11-D0IA-PB (MAR/70): TEST 9 - BIS, BIC + BIT](MAINDEC-11-D0IA-PB.jpg)](#tests-1-12)
-[![MAINDEC-11-D0JA-PB (MAR/70): TEST 10 - ADD](MAINDEC-11-D0JA-PB.jpg)](#tests-1-12)
-[![MAINDEC-11-D0KA-PB (MAR/70): TEST 11 - SUBTRACT](MAINDEC-11-D0KA-PB.jpg)](#tests-1-12)
-[![MAINDEC-11-D0LA-PB (MAR/70): TEST 12 - JUMP](MAINDEC-11-D0LA-PB.jpg)](#tests-1-12)
-[![MAINDEC-11-D0MA-PB (FEB/70): TEST 13 - JSR, RTS, RTI](MAINDEC-11-D0MA-PB.jpg)](#test-13)
-[![MAINDEC-11-D0NA-PB (APR/70): TEST 14A - TRAP TEST](MAINDEC-11-D0NA-PB.jpg)](#test-14)
-[![MAINDEC-11-D0NB-PB (FEB/71): TEST 14B - TRAP TEST](MAINDEC-11-D0NB-PB.jpg)](#test-14)
-[![MAINDEC-11-D0NC-PB (FEB/72): TEST 14C - TRAP TEST](MAINDEC-11-D0NC-PB.jpg)](#test-14)
-[![MAINDEC-11-D0OA-PB (MAR/70): TEST 15 - CPU EXERCISER](MAINDEC-11-D0OA-PB.jpg)](#test-15)
+[![MAINDEC-11-D0AA-PB (MAR/70): TEST 1 - BRANCH](d0aa/MAINDEC-11-D0AA-PB.jpg)](#tests-1-12)
+[![MAINDEC-11-D0BA-PB (MAR/70): TEST 2 - CON BRANCH](d0ba/MAINDEC-11-D0BA-PB.jpg)](#tests-1-12)
+[![MAINDEC-11-D0CA-PB (MAR/70): TEST 3 - UNARY](d0ca/MAINDEC-11-D0CA-PB.jpg)](#tests-1-12)
+[![MAINDEC-11-D0DA-PB (MAR/70): TEST 4 - UNARY + BINARY](d0da/MAINDEC-11-D0DA-PB.jpg)](#tests-1-12)
+[![MAINDEC-11-D0EA-PB (MAR/70): TEST 5 - ROTATE SHIFT](d0ea/MAINDEC-11-D0EA-PB.jpg)](#tests-1-12)
+[![MAINDEC-11-D0FA-PB (MAR/70): TEST 6 - COMPARE](d0fa/MAINDEC-11-D0FA-PB.jpg)](#tests-1-12)
+[![MAINDEC-11-D0GA-PB (MAR/70): TEST 7 - COMPARE NOT](d0ga/MAINDEC-11-D0GA-PB.jpg)](#tests-1-12)
+[![MAINDEC-11-D0HA-PB (MAR/70): TEST 8 - MOVE](d0ha/MAINDEC-11-D0HA-PB.jpg)](#tests-1-12)
+[![MAINDEC-11-D0IA-PB (MAR/70): TEST 9 - BIS, BIC + BIT](d0ia/MAINDEC-11-D0IA-PB.jpg)](#tests-1-12)
+[![MAINDEC-11-D0JA-PB (MAR/70): TEST 10 - ADD](d0ja/MAINDEC-11-D0JA-PB.jpg)](#tests-1-12)
+[![MAINDEC-11-D0KA-PB (MAR/70): TEST 11 - SUBTRACT](d0ka/MAINDEC-11-D0KA-PB.jpg)](#tests-1-12)
+[![MAINDEC-11-D0LA-PB (MAR/70): TEST 12 - JUMP](d0la/MAINDEC-11-D0LA-PB.jpg)](#tests-1-12)
+[![MAINDEC-11-D0MA-PB (FEB/70): TEST 13 - JSR, RTS, RTI](d0ma/MAINDEC-11-D0MA-PB.jpg)](#test-13)
+[![MAINDEC-11-D0NA-PB (APR/70): TEST 14A - TRAP TEST](d0na/MAINDEC-11-D0NA-PB.jpg)](#test-14)
+[![MAINDEC-11-D0NB-PB (FEB/71): TEST 14B - TRAP TEST](d0nb/MAINDEC-11-D0NB-PB.jpg)](#test-14)
+[![MAINDEC-11-D0NC-PB (FEB/72): TEST 14C - TRAP TEST](d0nc/MAINDEC-11-D0NC-PB.jpg)](#test-14)
+[![MAINDEC-11-D0OA-PB (MAR/70): TEST 15 - CPU EXERCISER](d0oa/MAINDEC-11-D0OA-PB.jpg)](#test-15)
 
 Running Paper Tape Diagnostics
 ------------------------------
@@ -239,8 +239,7 @@ changed the behavior of the RTI instruction on newer models.
 	              will be typed). SETTING SW7 WILL CAUSE
 	              END OF PASS MESSAGE TO BE TYPED.
 
-Newer Paper Tape Software (mid-1970s)
--------------------------------------
+### Newer Paper Tape Software (mid-1970s)
 
 Thanks to the efforts of person(s) unknown, additional paper tape images have been uploaded to
 [bitsavers.org](http://bitsavers.trailing-edge.com/bits/DEC/pdp11/papertapeimages/).  It's not super organized,
@@ -250,8 +249,7 @@ From [bitsavers.org](http://bitsavers.trailing-edge.com/bits/DEC/pdp11/papertape
 
 * Tape 04: [MAINDEC-11-DEQKC-B1-PB 06/12/78; 11/70 cpu instruction exerciser; (c)1975,76](#md-11-1170-cpu-exerciser) [[1980 Listing](http://bitsavers.org/pdf/dec/pdp11/microfiche/ftp.j-hoppe.de/bw/gh/AH-7996E-MC__PDP11-70-74__11-70_INST_EXR__CEQKCE0__%28C%2975,80.pdf)]
 
-MD-11 11/70 CPU EXERCISER
--------------------------
+### MD-11 11/70 CPU EXERCISER
 
 When started in a [PDP-11/70](/machines/dec/pdp11/1170/panel/debugger/cpuexer/) with no disk drives installed,
 this diagnostic displays the following startup information ("EXERCISOR" is DEC's typo, not mine):

@@ -13,7 +13,7 @@ machines:
   - id: vt100
     type: pcx80
     class: machine-left
-    config: /configs/pcx80/xml/machine/vt100/machine.xml
+    config: /configs/pcx80/machine/vt100/machine.xml
     connection: serialPort->test1170.dl11
     resume: 1
 ---

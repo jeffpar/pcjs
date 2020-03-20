@@ -37,6 +37,6 @@
 	<serial id="serialPort" adapter="0" binding="print">
 		<control type="button" binding="test" value="HELLO WORLD!\n\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D" padLeft="8px" padBottom="8px">TEST RECEIVER</control>
 	</serial>
-	<panel ref="/configs/pcx80/xml/panel/wide.xml"/>
+	<panel ref="/configs/pcx80/panel/wide.xml"/>
 	<debugger id="debugger" messages="mem|port" commands="s 8086"/>
 </machine>

@@ -7,7 +7,7 @@ machines:
   - id: test1170
     type: pdp11
     debugger: true
-    config: /devices/pdp11/machine/1170/panel/debugger/machine.xml
+    config: /configs/pdp11/machine/1170/panel/debugger/machine.xml
 ---
 
 Greetings from an alternate reality where DEC's elegant PDP-11 architecture beat out Intel's gross 8086 architecture,
@@ -17,15 +17,15 @@ excellent backward compatibility.
 Unfortunately, you're stuck in your reality, so you have no idea what I'm talking about.  Basically, your ancestors voted
 for the cheapest solution rather than the best solution, and now you have to live with the consequences.
 
-The good news: [PDPjs](/devices/pdp11/machine/1170/panel/debugger/) makes it possible for you to go back in time, and for a moment at least,
+The good news: [PDPjs](/machines/dec/pdp11/1170/panel/debugger/) makes it possible for you to go back in time, and for a moment at least,
 and relive the PDP-11 experience.  It's still a somewhat primitive experience, but PDPjs is a work-in-progress, so hang in
 there.
 
 The latest release, v1.30.3, adds the following features:
 
-- Functional [Front Panels](/devices/pdp11/panel/1170/#front-panel-basics) (check out the demo below)
-- ROMs such as DEC's [M9312 ROMs](/devices/pdp11/rom/M9312/) can now be installed
-- Support for DEC's [RL11 Disk Controller](/devices/pdp11/rl11/) has been implemented
+- Functional [Front Panels](/configs/pdp11/panel/1170/#front-panel-basics) (check out the demo below)
+- ROMs such as DEC's [M9312 ROMs](/machines/dec/pdp11/rom/M9312/) can now be installed
+- Support for DEC's [RL11 Disk Controller](/configs/pdp11/rl11/) has been implemented
 
 To test RL11 support below, then select the "XXDP+ Diagnostics" disk from the "Disk Drive Controls",
 click **Load**, and wait for the message:
@@ -64,6 +64,3 @@ answered all my questions.
 I'm [@jeffpar](https://jeffpar.com) and I approve this blog post.
 
 {% include machine.html id="test1170" %}
-
-*[@jeffpar](https://jeffpar.com)*  
-*Nov 8, 2016*

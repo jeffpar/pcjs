@@ -5,9 +5,8 @@ date: 2017-02-28 22:00:00
 permalink: /blog/2017/02/28/
 ---
 
-Since I've more or less achieved all my goals for the PCjs [PDP-11 Emulator](/machines/dec/pdp11/),
-I've decided to turn my attention to an even older historically important DEC computer:
-the [PDP-10](https://en.wikipedia.org/wiki/PDP-10#Cancellation_and_influence).  
+Since I've more or less achieved all my goals for the PCjs [PDP-11 Emulator]({{ site.github.master }}/machines/dec/pdp11/),
+I've decided to turn my attention to an even older historically important DEC computer: the [PDP-10](https://en.wikipedia.org/wiki/PDP-10#Cancellation_and_influence).  
 
 Having never used a real DEC PDP-10, I've had a steep learning curve creating a [PDP-10 Emulator](/modules/pdp10/).
 So far, the only [PDP-10 Hardware Documentation](/pubs/dec/pdp10/) I've read (or rather, skimmed) is the

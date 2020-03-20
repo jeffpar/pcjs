@@ -6,7 +6,7 @@ permalink: /blog/2016/12/02/
 ---
 
 I'm still trying to flush out lingering bugs in PDPjs.  I'll give you an example, using the
-[PDP-11/70](/devices/pdp11/machine/1170/panel/debugger/) pictured below.
+[PDP-11/70](/machines/dec/pdp11/1170/panel/debugger/) pictured below.
 
 ![Image of PDP-11/70 with 256Kb, Front Panel and Debugger](/blog/images/pdp-1170-panel-debugger.png)
 

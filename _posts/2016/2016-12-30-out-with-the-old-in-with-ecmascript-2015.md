@@ -19,10 +19,10 @@ Of the four types of machines (and CPUs) that PCjs currently supports:
 
 - C1Pjs (6502)
 - PCx86 (8086 through 80386)
-- PC8080 (8080)
+- PCx80 (8080)
 - PDPjs (PDP-11)
 
-I decided to start by updating the code for the two newest machines: PDPjs and PC8080.
+I decided to start by updating the code for the two newest machines: PDPjs and PCx80.
 
 The single biggest change was the switch to ES6 classes.  Fortunately, since PCjs machines were already using a class-like
 object hierarchy for all their components, all I had to do was select each of my *constructor* functions in the WebStorm IDE
@@ -81,18 +81,18 @@ It's long been known that JavaScript engines have an easier time optimizing your
 apparently Google's Closure Compiler seized the ES6 opportunity to try to enforce that, by treating classes more like
 *structures* than *dictionaries*.  However, you can change that assumption by prefacing a class with the pseudo-[JSDoc](http://usejsdoc.org/)
 `@dict` or `@unrestricted` [annotations](https://github.com/google/closure-compiler/wiki/@struct-and-@dict-Annotations);
-the default is `@struct`.  Needless to say, when it came time to convert the next machine (PC8080) to classes, I prefaced
+the default is `@struct`.  Needless to say, when it came time to convert the next machine (PCx80) to classes, I prefaced
 all my classes with `@unrestricted`.
 
 One downside of switching to ES6 one machine at a time is that I had to temporarily fork the shared modules into
-separate ES5 and ES6 folders.  For example, one of the shared modules, [Component](/modules/shared/lib/component.js),
-is the base class underlying most other machine components; ES5 objects *subclass* [Component](/modules/shared/lib/component.js),
-whereas ES6 classes *extend* [Component](/modules/shared/lib/component.js).  Not all the shared modules needed to be forked,
+separate ES5 and ES6 folders.  For example, one of the shared modules, [Component](/machines/shared/lib/component.js),
+is the base class underlying most other machine components; ES5 objects *subclass* [Component](/machines/shared/lib/component.js),
+whereas ES6 classes *extend* [Component](/machines/shared/lib/component.js).  Not all the shared modules needed to be forked,
 but creating a new shared folder was the simplest solution.  Once all the machines have been converted to use ES6 classes,
 the new shared modules will become the default, and the old ones will fade away.
 
 A final challenge was deciding how each component should reference its dependencies.  For example, the PDP-11
-[Panel](/modules/pdp11/lib/panel.js) component originally included these lines at the top of the script:
+[Panel](/machines/dec/pdp11/lib/panel.js) component originally included these lines at the top of the script:
 
 ```javascript
 if (NODE) {
@@ -128,8 +128,8 @@ loading JavaScript, using *&lt;module&gt;* tags, and I'm not sure that's been fi
 
 Long story short, until this all gets sorted, I'm retaining the `require()` statements, since they make my development
 environment happy, and Node still understands them, but I'm no longer wrapping them with `if (NODE)` expressions.  Instead,
-I've modified the web server bundled with PCjs ([server.js](/server.js)) to automatically comment out all `import`, `export`,
-and `require()` statements from .js files, so that no matter what module syntax is being used, your browser won't see it.
+I've modified the web server bundled with PCjs to automatically comment out all `import`, `export`, and `require()`
+statements from .js files, so that no matter what module syntax is being used, your browser won't see it.
 Similarly, before the code is compiled by the Closure Compiler, all those statements are removed by the preprocessing
 step.
 
@@ -141,8 +141,8 @@ want to include a small pre-loader that checks your browser's capabilities and t
 appropriate.
 
 Last but not least, does the new ES6 code really work in Node, too?  Happily, it does.  To test, I wrote
-a small JavaScript shell app, [pdp11](/modules/pdp11/bin/pdp11), which reads a machine XML file (like
-[this one](/devices/pdp11/machine/1170/panel/debugger/machine.xml)), simulates the loading and initialization
+a small JavaScript shell app, [pdp11]({{ site.github.master }}/machines/dec/pdp11/bin/pdp11), which reads a machine XML file
+(like [this one](/configs/pdp11/machine/1170/panel/debugger/machine.xml)), simulates the loading and initialization
 process that a web browser would perform, and then connects *stdin* and *stdout* to the machine's serial port:
 
 Here's a sample run, from a macOS Terminal window:
@@ -234,6 +234,3 @@ Here's a sample run, from a macOS Terminal window:
 	
 	BOOT> 
 	BOOT> alt-x detected, exiting...
-
-*[@jeffpar](https://jeffpar.com)*  
-*Dec 30, 2016*

@@ -15,7 +15,7 @@ machines:
     debugger: true
     autoStart: true
     connection: serialPort->ibm5170.com2
-    config: /configs/pcx80/xml/machine/vt100/debugger/machine.xml
+    config: /configs/pcx80/machine/vt100/debugger/machine.xml
 ---
 
 Demonstration of a [DEC VT100 Terminal connected to IBM PC AT](../) connected via COM2, with Debuggers attached.

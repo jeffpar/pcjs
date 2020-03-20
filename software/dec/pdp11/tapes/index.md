@@ -22,7 +22,7 @@ using the machine's **Read** button, replacing all those steps with a single cli
 Paper Tape Diagnostics
 ----------------------
 
-We have archived an assortment of [DEC Paper Tape Diagnostics](diags/).
+We have archived an assortment of [DEC Paper Tape Diagnostics](diag/).
 
 Paper Tape Software (circa 1970)
 --------------------------------

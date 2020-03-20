@@ -9,14 +9,14 @@ machines:
     debugger: true
     autoStart: true
     messages: mem|port
-    config: /configs/pcx80/xml/machine/vt100/debugger/machine.xml
+    config: /configs/pcx80/machine/vt100/debugger/machine.xml
     connection: serialPort->vt100b.serialPort
   - id: vt100b
     type: pcx80
     debugger: true
     autoStart: true
     messages: mem|port
-    config: /configs/pcx80/xml/machine/vt100/debugger/machine.xml
+    config: /configs/pcx80/machine/vt100/debugger/machine.xml
     connection: serialPort->vt100a.serialPort
 ---
 

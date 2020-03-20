@@ -7,7 +7,7 @@ machines:
   - id: test1170
     type: pdp11
     debugger: true
-    config: /devices/pdp11/machine/1170/panel/debugger/machine-slim.xml
+    config: /configs/pdp11/machine/1170/panel/debugger/machine-slim.xml
 ---
 
 As I mentioned in the "[PDP-11 Tutorials](/blog/2017/01/03/)" blog post, I've been working on
@@ -22,7 +22,7 @@ fundamental level, explaining and demonstrating each switch in turn.  However, I
 elements that any tutorial or demo will need: allowing the user to walk through a step-by-step demonstration of some
 procedure.
 
-To illustrate, I've copied a multi-step procedure from the page on [Toggle-Ins](/devices/pdp11/machine/1170/panel/debugger/#toggle-ins)
+To illustrate, I've copied a multi-step procedure from the page on [Toggle-Ins](/machines/dec/pdp11/1170/panel/debugger/#toggle-ins)
 that shows how to use the PDP-11/70 Front Panel to verify that the Memory Management Unit (MMU) is operating properly.
 
 The procedure requires you to enter a small 3-instruction program at address 200 that will write a value (070707) to

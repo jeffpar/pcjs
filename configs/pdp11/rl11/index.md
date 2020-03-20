@@ -1,3 +1,10 @@
+---
+layout: page
+title: RL11 Disk Controller
+permalink: /configs/pdp11/rl11/
+redirect_from: /devices/pdp11/rl11/
+---
+
 The RL11 Disk Controller controls up to four RL01 or RL02 disk drives, which in turn read/write
 [RL01K](/software/dec/pdp11/disks/rl01k/) or [RL02K](/software/dec/pdp11/disks/rl02k/) disk cartridges, respectively.
 
@@ -46,7 +53,7 @@ used to control the device, such as choosing which disks should be "auto-mounted
 
 ### Loading the RL11 Bootstrap
 
-From the [RT-11 v4.0 Installation Manual (March 1981)](/pubs/dec/pdp11/rt11/), p. E-6:
+From the [RT-11 v4.0 Installation Manual (March 1981)](/documents/manuals/dec/#pdp-11-software), p. E-6:
 
 	Deposit the basic RL01/RL02 disk bootstrap loader in memory as follows:
 	

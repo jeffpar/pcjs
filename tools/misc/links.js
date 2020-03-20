@@ -116,6 +116,7 @@ function processFiles(sDir, fDebug, fFix)
     let asFiles = glob.sync(path.join(sDir, "**", "*.md"));
     for (let i = 0; i < asFiles.length; i++) {
         let sFilePath = asFiles[i];
+        if (sFilePath.indexOf("_posts") < 0 && sFilePath.indexOf("index.md") < 0) continue;
         let sFileName = path.basename(sFilePath);
         if (sFileName == "index.md") continue;
         if (sFilePath.indexOf(sDir) == 0) sFilePath = sFilePath.substr(sDir.length);
@@ -197,7 +198,7 @@ function processFiles(sDir, fDebug, fFix)
             let sFile = match[2];
             if (sFile[0] == '?' || sFile[0] == '#') continue;
             if (sFile.indexOf("{{") == 0) {
-                if (sFile.indexOf("site.github.repository_url") >= 0) continue;
+                if (sFile.indexOf("site.github") >= 0) continue;
                 sFile = sFile.replace(/\{\{ site\.software\.(diskettes|gamedisks|harddisks)\.server \}\}/, "../pcjs-$1");
             }
             else if (sFile.indexOf("http") == 0) {
@@ -222,6 +223,7 @@ function processFiles(sDir, fDebug, fFix)
             if (i > 0) sFile = sFile.substr(0, i);
             i = sFile.indexOf('#');
             if (i > 0) sFile = sFile.substr(0, i);
+            if (sFile.endsWith("/")) sFile += "index.md";
             if (!fileExists(sFile)) {
                 printf("%s: link for '%s' not found: %s\n", sFilePath, match[1], sFile);
             }

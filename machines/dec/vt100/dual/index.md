@@ -6,11 +6,11 @@ redirect_from: /devices/pc8080/machine/vt100/dual/
 machines:
   - id: vt100a
     type: pcx80
-    config: /configs/pcx80/xml/machine/vt100/machine.xml
+    config: /configs/pcx80/machine/vt100/machine.xml
     connection: serialPort->vt100b.serialPort
   - id: vt100b
     type: pcx80
-    config: /configs/pcx80/xml/machine/vt100/machine.xml
+    config: /configs/pcx80/machine/vt100/machine.xml
     connection: serialPort->vt100a.serialPort
 ---
 
