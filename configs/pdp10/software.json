@@ -5,59 +5,59 @@
       "@title": "KA10",
       "@products": {
         "dakaa": {
-          "@title": "DAKAA (Ins Diag #1)",
+          "@title": "DAKAA",
           "@desc": "MAINDEC-10-DAKAA-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (1)"
         },
         "dakab": {
-          "@title": "DAKAB (Ins Diag #2)",
+          "@title": "DAKAB",
           "@desc": "MAINDEC-10-DAKAB-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (2)"
         },
         "dakac": {
-          "@title": "DAKAC (Ins Diag #3)",
+          "@title": "DAKAC",
           "@desc": "MAINDEC-10-DAKAC-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (3)"
         },
         "dakad": {
-          "@title": "DAKAD (Ins Diag #4)",
+          "@title": "DAKAD",
           "@desc": "MAINDEC-10-DAKAD-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (4)"
         },
         "dakae": {
-          "@title": "DAKAE (Ins Diag #5)",
+          "@title": "DAKAE",
           "@desc": "AH-6859C-DD: DAKAEC0 PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (5)"
         },
         "dakaf": {
-          "@title": "DAKAF (Ins Diag #6)",
+          "@title": "DAKAF",
           "@desc": "MAINDEC-10-DAKAF-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (6)"
         },
         "dakag": {
-          "@title": "DAKAG (Ins Diag #7)",
+          "@title": "DAKAG",
           "@desc": "MAINDEC-10-DAKAG-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (7)"
         },
         "dakah": {
-          "@title": "DAKAH (Ins Diag #8)",
+          "@title": "DAKAH",
           "@desc": "MAINDEC-10-DAKAH-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (8)"
         },
         "dakai": {
-          "@title": "DAKAI (Ins Diag #9)",
+          "@title": "DAKAI",
           "@desc": "MAINDEC-10-DAKAI-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (9)"
         },
         "dakaj": {
-          "@title": "DAKAJ (Ins Diag #10)",
+          "@title": "DAKAJ",
           "@desc": "MAINDEC-10-DAKAJ-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (10)"
         },
         "dakak": {
-          "@title": "DAKAK (Ins Diag #11)",
+          "@title": "DAKAK",
           "@desc": "MAINDEC-10-DAKAK-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (11)"
         },
         "dakal": {
-          "@title": "DAKAL (Ins Diag #12)",
+          "@title": "DAKAL",
           "@desc": "MAINDEC-10-DAKAL-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (12)"
         },
         "dakam": {
-          "@title": "DAKAM (Ins Diag #13)",
+          "@title": "DAKAM",
           "@desc": "MAINDEC-10-DAKAM-B-D: PDP-10 KA10 BASIC INSTRUCTION DIAGNOSTIC (13)"
         },
         "dakba": {
-          "@title": "DAKBA (Rel Test #1)",
+          "@title": "DAKBA",
           "@desc": "MAINDEC-10-DAKBA-B-D: PDP-10 KA10 BASIC INSTRUCTION RELIABILITY TEST (1)"
         }
       }

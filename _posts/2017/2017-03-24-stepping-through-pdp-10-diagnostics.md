@@ -8,7 +8,7 @@ machines:
     type: pdp10
     config: /devices/pdp10/machine/ka10/test/debugger/machine.xml
     debugger: true
-    commands: a 30724 /apps/pdp10/diags/ka10/dakaa/DAKAA.MAC
+    commands: a 30724 /software/dec/pdp10/diags/ka10/dakaa/DAKAA.MAC
 ---
 
 Now that the PDPjs MACRO-10 Mini-Assembler is [limping along](/blog/2017/03/21/), it's time to start assembling some
@@ -20,7 +20,7 @@ the machine below.
 
 Here were the results of my first run attempt:
 
-	>> a 30724 /apps/pdp10/diags/ka10/dakaa/DAKAA.MAC
+	>> a 30724 /software/dec/pdp10/diags/ka10/dakaa/DAKAA.MAC
 	starting PCjs MACRO-10 Mini-Assembler...
 	loading DAKAA.MAC
 	CPU will not be auto-started (click Run to start)
@@ -70,7 +70,7 @@ the second (address) operand.  Once I generated the appropriate value (000000,77
 
 And I had several failures running [Diagnostic #4 (MAINDEC-10-DAKAD)](/apps/pdp10/diags/ka10/dakad/):
 
-	>> a 30724 /apps/pdp10/diags/ka10/dakad/DAKAD.MAC
+	>> a 30724 /software/dec/pdp10/diags/ka10/dakad/DAKAD.MAC
 	starting PCjs MACRO-10 Mini-Assembler...
 	loading DAKAD.MAC
 	1986 words loaded at 030724-034625

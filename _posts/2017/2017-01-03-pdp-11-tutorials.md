@@ -11,7 +11,7 @@ machines:
     connection: dl11->vt100.serialPort
   - id: vt100
     type: pcx80
-    config: /configs/pcx80/xml/machine/vt100/machine.xml
+    config: /configs/pcx80/machine/vt100/machine.xml
     connection: serialPort->test1170.dl11
 ---
 
@@ -19,10 +19,10 @@ Introducing PDP-11 tutorials.  For more details, keep scrolling, and keep your e
 
 {% include machine.html id="vt100" %}
 
-[PDPjs](/machines/dec/pdp11/) is able to run a variety of old DEC operating systems, such as RT-11 and RSTS/E,
-and while there are manuals available online, thanks to the efforts of those who operate and contribute to websites
-like [bitsavers.org](http://bitsavers.org), I suspect most people don't have a lot of interest or time to spend
-reading old manuals.
+[PDPjs]({{ site.github.master }}/machines/dec/pdp11/) is able to run a variety of old DEC operating systems,
+such as RT-11 and RSTS/E, and while there are manuals available online, thanks to the efforts of those who
+operate and contribute to websites like [bitsavers.org](http://bitsavers.org), I suspect most people don't
+have a lot of interest or time to spend reading old manuals.
 
 In an effort to remedy that situation, I'm adding some new features to PCjs.  The first feature is what I call
 "Sticky Machines", and it's really just a new feature of the PCjs website.  At the top of any PCjs webpage, in the
@@ -31,7 +31,7 @@ In an effort to remedy that situation, I'm adding some new features to PCjs.  Th
 	machines:
 	  - id: vt100
 	    type: pcx80
-	    config: /configs/pcx80/xml/machine/vt100/machine.xml
+	    config: /configs/pcx80/machine/vt100/machine.xml
 	    connection: serialPort->test1170.dl11
 	    sticky: top
 

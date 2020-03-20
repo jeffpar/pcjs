@@ -1,10 +1,3 @@
----
-layout: page
-title: PCx80 Machine Emulation
-permalink: /machines/pcx80/
-redirect_from: /modules/pc8080/
----
-
 PCx80 is our 8080-based machine emulation module.  The code is derived from [PCx86](/machines/pcx86/).
 
 See the list of available [PCx80 Machines](/machines/pcx80/configs/), which includes

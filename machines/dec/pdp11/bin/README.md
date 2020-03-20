@@ -1,9 +1,3 @@
----
-layout: default
-title: Running PDP11 From The Command-Line
-permalink: /machines/dec/pdp11/bin/
----
-
 This directory contains the PDP11 Node command-line "wrapper" utility [pdp11.js](pdp11.js).
 
 When you run it, be sure to provide a valid machine XML file; e.g.:

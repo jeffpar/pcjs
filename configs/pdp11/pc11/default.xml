@@ -30,24 +30,24 @@
 			<tape id="tape24" name="DUMPTT SA=XX7440 RA=XX7440" path="/software/dec/pdp11/tapes/dumptt/DEC-11-Y1PA-PO.json"/>
 			<tape id="tape25" name="DUMPTT SA=XXXXXX RA=XXXXXX" path="/software/dec/pdp11/tapes/dumptt/DEC-11-Y1PA-PB.json"/>
 			<tape id="tape26" name="DUMPAB SA=XXXXXX RA=XXXXXX" path="/software/dec/pdp11/tapes/dumpab/DEC-11-Y2PA-PB.json"/>
-			<tape id="diags.tape01" name="MD-11 TEST 1 - BRANCH" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0AA-PB.json"/>
-			<tape id="diags.tape02" name="MD-11 TEST 2 - CON BRANCH" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0BA-PB.json"/>
-			<tape id="diags.tape03" name="MD-11 TEST 3 - UNARY" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0CA-PB.json"/>
-			<tape id="diags.tape04" name="MD-11 TEST 4 - UNARY + BINARY" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0DA-PB.json"/>
-			<tape id="diags.tape05" name="MD-11 TEST 5 - ROTATE SHIFT" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0EA-PB.json"/>
-			<tape id="diags.tape06" name="MD-11 TEST 6 - COMPARE" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0FA-PB.json"/>
-			<tape id="diags.tape07" name="MD-11 TEST 7 - COMPARE NOT" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0GA-PB.json"/>
-			<tape id="diags.tape08" name="MD-11 TEST 8 - MOVE" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0HA-PB.json"/>
-			<tape id="diags.tape09" name="MD-11 TEST 9 - BIS, BIC + BIT" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0IA-PB.json"/>
-			<tape id="diags.tape10" name="MD-11 TEST 10 - ADD" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0JA-PB.json"/>
-			<tape id="diags.tape11" name="MD-11 TEST 11 - SUBTRACT" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0KA-PB.json"/>
-			<tape id="diags.tape12" name="MD-11 TEST 12 - JUMP" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0LA-PB.json"/>
-			<tape id="diags.tape13" name="MD-11 TEST 13 - JSR, RTS, RTI" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0MA-PB.json"/>
-			<tape id="diags.tape14a" name="MD-11 TEST 14A - TRAP TEST" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0NA-PB.json"/>
-			<tape id="diags.tape14b" name="MD-11 TEST 14B - TRAP TEST" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0NB-PB.json"/>
-			<tape id="diags.tape14c" name="MD-11 TEST 14C - TRAP TEST" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0NC-PB.json"/>
-			<tape id="diags.tape15" name="MD-11 TEST 15 - CPU EXERCISER" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0OA-PB.json"/>
-			<tape id="tray02.tape04" name="MD-11 11/70 CPU EXERCISER" path="/software/dec/pdp11/tapes/diags/MAINDEC-11-DEQKC-B1-PB.json"/>
+			<tape id="diags.tape01" name="MD-11 TEST 1 - BRANCH" path="/software/dec/pdp11/tapes/diag/d0aa/MAINDEC-11-D0AA-PB.json"/>
+			<tape id="diags.tape02" name="MD-11 TEST 2 - CON BRANCH" path="/software/dec/pdp11/tapes/diag/d0ba/MAINDEC-11-D0BA-PB.json"/>
+			<tape id="diags.tape03" name="MD-11 TEST 3 - UNARY" path="/software/dec/pdp11/tapes/diag/d0ca/MAINDEC-11-D0CA-PB.json"/>
+			<tape id="diags.tape04" name="MD-11 TEST 4 - UNARY + BINARY" path="/software/dec/pdp11/tapes/diag/d0da/MAINDEC-11-D0DA-PB.json"/>
+			<tape id="diags.tape05" name="MD-11 TEST 5 - ROTATE SHIFT" path="/software/dec/pdp11/tapes/diag/d0ea/MAINDEC-11-D0EA-PB.json"/>
+			<tape id="diags.tape06" name="MD-11 TEST 6 - COMPARE" path="/software/dec/pdp11/tapes/diag/d0fa/MAINDEC-11-D0FA-PB.json"/>
+			<tape id="diags.tape07" name="MD-11 TEST 7 - COMPARE NOT" path="/software/dec/pdp11/tapes/diag/d0ga/MAINDEC-11-D0GA-PB.json"/>
+			<tape id="diags.tape08" name="MD-11 TEST 8 - MOVE" path="/software/dec/pdp11/tapes/diag/d0ha/MAINDEC-11-D0HA-PB.json"/>
+			<tape id="diags.tape09" name="MD-11 TEST 9 - BIS, BIC + BIT" path="/software/dec/pdp11/tapes/diag/doia/MAINDEC-11-D0IA-PB.json"/>
+			<tape id="diags.tape10" name="MD-11 TEST 10 - ADD" path="/software/dec/pdp11/tapes/diag/d0ja/MAINDEC-11-D0JA-PB.json"/>
+			<tape id="diags.tape11" name="MD-11 TEST 11 - SUBTRACT" path="/software/dec/pdp11/tapes/diag/d0ka/MAINDEC-11-D0KA-PB.json"/>
+			<tape id="diags.tape12" name="MD-11 TEST 12 - JUMP" path="/software/dec/pdp11/tapes/diag/d0la/MAINDEC-11-D0LA-PB.json"/>
+			<tape id="diags.tape13" name="MD-11 TEST 13 - JSR, RTS, RTI" path="/software/dec/pdp11/tapes/diag/d0ma/MAINDEC-11-D0MA-PB.json"/>
+			<tape id="diags.tape14a" name="MD-11 TEST 14A - TRAP TEST" path="/software/dec/pdp11/tapes/diag/d0na/MAINDEC-11-D0NA-PB.json"/>
+			<tape id="diags.tape14b" name="MD-11 TEST 14B - TRAP TEST" path="/software/dec/pdp11/tapes/diag/d0nb/MAINDEC-11-D0NB-PB.json"/>
+			<tape id="diags.tape14c" name="MD-11 TEST 14C - TRAP TEST" path="/software/dec/pdp11/tapes/diag/d0nc/MAINDEC-11-D0NC-PB.json"/>
+			<tape id="diags.tape15" name="MD-11 TEST 15 - CPU EXERCISER" path="/software/dec/pdp11/tapes/diag/d0oa/MAINDEC-11-D0OA-PB.json"/>
+			<tape id="tray02.tape04" name="MD-11 11/70 CPU EXERCISER" path="/software/dec/pdp11/tapes/diag/deqkc/MAINDEC-11-DEQKC-B1-PB.json"/>
 		</control>
 		<control type="button" binding="loadTape">Load</control>
 		<control type="button" binding="readTape">Read</control>

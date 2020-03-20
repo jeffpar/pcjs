@@ -6,9 +6,9 @@ permalink: /blog/2017/03/21/
 machines:
   - id: testka10
     type: pdp10
-    config: /devices/pdp10/machine/ka10/test/debugger/machine.xml
+    config: /configs/pdp10/machine/ka10/test/debugger/machine.xml
     debugger: true
-    commands: a 30724 /apps/pdp10/diags/ka10/dakaa/DAKAA.MAC
+    commands: a 30724 /software/dec/pdp10/diag/ka10/dakaa/DAKAA.MAC
 ---
 
 A few weeks ago, I finished my first cut of the *core* PDP-10 instructions in PDPjs.  Most of my remaining work
@@ -22,12 +22,12 @@ falls into these categories:
 Floating-point is the biggest chunk of work, which I'm going to save for last, with the hope that most PDP-10 software
 didn't use floating-point.  However, if all PDP-10 systems included floating-point hardware (which I haven't been able to
 confirm yet), I may have no choice.  Floating-point emulation in JavaScript isn't hard -- PCjs already includes
-[8087 Coprocessor Emulation](/modules/pcx86/lib/fpux86.js) -- but getting all the details right is time-consuming.
+[8087 Coprocessor Emulation](/machines/pcx86/lib/fpux86.js) -- but getting all the details right is time-consuming.
 
 The PDP-10 has a lot of instructions, and I quickly had far more instructions than I was willing or able to write tests for.
 Besides, any tests I wrote would be based on the same potentially-flawed understandings that I had gleaned from DEC's
 [PDP-10 Hardware Documentation](/pubs/dec/pdp10/).  It was obvious that I needed to find a set of DEC PDP-10 diagnostics, much
-like the [DEC PDP-11 Paper Tape Diagnostics](/apps/pdp11/tapes/diags/) I had used to flush most of the early bugs out of my
+like the [DEC PDP-11 Paper Tape Diagnostics](/software/dec/pdp11/tapes/diag/) I had used to flush most of the early bugs out of my
 PDP-11 emulator.
 
 Unfortunately, this presented something of a chicken-and-egg problem, because the PDP-10 emulator is still too immature to
@@ -43,15 +43,15 @@ best.
 ### Introducing the MACRO-10 "Mini-Assembler"
 
 I decided that the shortest turn-around from *assembly* phase to *run* phase (aka *crash-and-burn* phase) would be to
-assemble the files in PDPjs itself.  So the PDPjs [MACRO-10 "Mini-Assembler"](/modules/pdp10/lib/macro10.js) was born.
+assemble the files in PDPjs itself.  So the PDPjs [MACRO-10 "Mini-Assembler"](/machines/dec/pdp10/lib/macro10.js) was born.
 Any machine that includes the PDPjs Debugger (like the machine below) now includes MACRO-10 support as well.
 
 {% include machine.html id="testka10" %}
 
 The above machine uses the Debugger's assemble ('a') command to assemble DEC's "DAKAA" diagnostic
-[KA10 Basic Instruction Diagnostic](/apps/pdp10/diags/ka10/dakaa/) and load the resulting code at address 30724:
+[KA10 Basic Instruction Diagnostic](/software/dec/pdp10/diags/ka10/dakaa/) and load the resulting code at address 30724:
 
-	a 30724 /apps/pdp10/diags/ka10/dakaa/DAKAA.MAC
+	a 30724 /software/dec/pdp10/diags/ka10/dakaa/DAKAA.MAC
 
 The Debugger invokes the MACRO-10 mini-assembler whenever the target address is followed by an argument ending with ".MAC".
 

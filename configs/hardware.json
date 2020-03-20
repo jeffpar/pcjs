@@ -12,9 +12,12 @@
     "@title": "DEC",
     "pdp10": {
       "@title": "PDP-10",
-      "ka10/test": {
-        "@title": "PDP-10 KA10 Test",
-        "@redirect_from": "/devices/pdp10/machine/ka10/test/"
+      "ka10": {
+        "@title": "KA10",
+        "test": {
+          "@title": "PDP-10 KA10 Test",
+          "@redirect_from": "/devices/pdp10/machine/ka10/test/"
+        }
       }
     },
     "pdp11": {
@@ -572,6 +575,10 @@
         "cga": {
           "@title": "Color Display",
           "redirect_from": "/devices/pcx86/machine/5170/cga/640kb/rev3/"
+        },
+        "vga/cdrom": {
+          "@title": "VGA Display with CD-ROM",
+          "redirect_from": "/disks/pcx86/drives/cdrom/"
         },
         "@documents": [
           {

@@ -139,7 +139,7 @@
                               {%- if category[0] != "game" -%}{%- assign diskette_default = "https://diskettes.pcjs.org" -%}{%- else -%}{%- assign diskette_default = "https://gamedisks.pcjs.org" -%}{%- endif -%}
                               {%- capture diskette_server -%}{{ release['@server'] | default: diskette_default }}{%- endcapture -%}
                               {%- capture harddisk_server -%}{{ release['@server'] | default: "https://harddisks.pcjs.org" }}{%- endcapture -%}
-                              {%- capture software_url -%}{{ software_path1 }}{{ software_path2 }}{{ software_path3 }}{{ software_path4 }}{{ software_path5 }}{% if version[0] != "" %}/{{ version[0] }}{% endif %}{%- endcapture -%}
+                              {%- capture software_url -%}{{ software_path1 }}{{ software_path2 }}{{ software_path3 }}{{ software_path4 }}{{ software_path5 }}{% if version[0] != "" and alternate_url == "" %}/{{ version[0] }}{% endif %}{%- endcapture -%}
                               {%- capture software_id -%}{{ software_url | remove_first: "/" | replace: "/", "-" }}{%- endcapture -%}
                               {%- assign software_parms = "" -%}
                               {%- if site.developer %}
