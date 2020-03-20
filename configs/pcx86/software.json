@@ -4732,6 +4732,15 @@
                 "@diskette": "PCDOS100.json",
                 "@type": "PC160K"
               }
+            ],
+            "@documents": [
+              {
+                "@title": "IBM PC Disk Operating System 1.00",
+                "@file": "IBM_PC_DOS_100_6172220_1982-01.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEi84GkvjPy-tDSwQ?e=xnTObo",
+                "@cover": ".jpg",
+                "@source": ""
+              }
             ]
           },
           "1.10": {

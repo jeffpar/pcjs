@@ -1,0 +1,9 @@
+3000 REM The IBM Personal Computer Music Scroll
+3010 REM Version 1.00 (C)Copyright IBM Corp 1981
+3020 REM Licensed Material - Program Property of IBM
+3030 DATA -2,"Sakura - Japanese Folk Melody "
+3040 DATA 49,8,49,8,51,12,0,4,49,8,49,8,51,12,0,4,49,8,51,8,52,8,51,8
+3050 DATA 49,8,51,4,49,4,45,16,44,8,40,8,44,8,45,8
+3060 DATA 44,8,44,4,40,4,39,16,49,8,49,8,51,12,0,4,49,8,49,8,51,12,0,4
+3070 DATA 40,8,44,8,45,8,49,8,51,4,49,4,45,8,44,16
+3080 DATA -1,-1

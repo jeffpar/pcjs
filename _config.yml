@@ -35,6 +35,7 @@ kramdown:
 
 plugins:
   - jekyll-feed
+  - jekyll-sitemap
   - jekyll-redirect-from
 
 software:

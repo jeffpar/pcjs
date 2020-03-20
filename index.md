@@ -13,3 +13,5 @@ When everything has been migrated, and the new PCjs Explorer is finished, this w
 
 Thanks,
 Jeff
+
+{%- include gallery/featured.html width="300" height="200" -%}

@@ -1,0 +1,24 @@
+{% capture title %}{{ include.title | default: "PCjs Highlights" }}{% endcapture %}
+{% capture featured_width %}{{ include.width | default: "400" }}{% endcapture %}
+{% capture featured_height %}{{ include.height | default: "300" }}{% endcapture %}
+{% assign tag = include.tag | default: "" %}
+<h2>{{ title }}</h2>
+{%- include gallery/begin.html -%}
+{% assign item_num = 0 %}
+{%- for item in site.data.featured -%}
+  {%- assign item_title = item['@title'] -%}
+  {%- assign item_tags = item['@tags'] | default: "" -%}
+  {%- if item_title != "" and item_tags contains tag -%}
+    {% assign item_num = item_num | plus:1 %}
+    {%- assign item_link = item['@permalink'] -%}
+    {%- assign item_id = item_link | remove_first: "/" | replace: "/", "-" | downcase -%}
+    {%- assign item_preview = item['@preview'] | default: "/documents/covers/default.jpg" -%}
+    {%- assign item_width = item['@width'] | default: featured_width -%}
+    {%- assign item_height = item['@height'] | default: featured_height -%}
+    {%- include gallery/image.html id=item_id image=item_preview link=item_link title=item_title width=item_width height=item_height -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- include gallery/end.html -%}
+{%- if item_num == 0 %}
+  <p>No Featured Items found under {{ title }}</p>
+{%- endif -%}

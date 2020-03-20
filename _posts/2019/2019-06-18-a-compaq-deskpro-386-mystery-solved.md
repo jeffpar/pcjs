@@ -49,7 +49,7 @@ Guide -- and in the process, solved the mystery of the DeskPro 386 ROM's princip
 - Randy Spurlock (**RWS**)
 - Darren Cepulis (**DJC**)
 
-[![COMPAQ DeskPro 386-25 Technical Reference Guide - Volume 1 - 1988-08 - Signatures](/pubs/pc/reference/compaq/deskpro386/COMPAQ_DeskPro_386-25_Technical_Reference_Guide-Vol1-1988-08-Signatures.png)](/pubs/pc/reference/compaq/deskpro386/)
+[![COMPAQ DeskPro 386-25 Technical Reference Guide - Volume 1 - 1988-08 - Signatures](/machines/pcx86/compaq/deskpro386/photos/COMPAQ_DeskPro_386-25_Technical_Reference_Guide-Vol1-1988-08-Signatures.png)](/machines/pcx86/compaq/deskpro386/)
 
 Of the 5 people whose initials are embedded in the original ROM, only **GLB** was unable to attend.
 
@@ -133,6 +133,3 @@ the initiative to organize it, and for giving me the chance to participate and s
 ### References
 
 "Open: How Compaq Ended IBM's PC Domination and Helped Invent Modern Computing", by Rod Canion (p. 98). BenBella Books, Inc.. Kindle Edition. 
-
-*[@jeffpar](https://jeffpar.com)*  
-*June 18, 2019*
