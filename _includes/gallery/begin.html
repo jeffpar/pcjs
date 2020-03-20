@@ -1,1 +1,2 @@
-<div style="text-align: center">
+{%- capture style -%}{%- if include.style == "center" %} style="text-align:center"{%- endif -%}{%- endcapture -%}
+<div{{ style }}>

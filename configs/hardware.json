@@ -895,8 +895,34 @@
   },
   "ti": {
     "@title": "Texas Instruments",
+    "ti42": {
+      "@title": "TI-42 Calculator",
+      "@instances": {
+        "": {
+          "@title": "TI-42",
+          "@redirect_from": ["/devices/ti42/", "/devices/ti42/machine"]
+        },
+        "diags": {
+          "@title": "TI-42 with Diagnostics",
+          "@redirect_from": "/devices/ti42/machine/diags/"
+        }
+      }
+    },
+    "ti55": {
+      "@title": "TI-55 Calculator",
+      "@instances": {
+        "": {
+          "@title": "TI-55",
+          "@redirect_from": ["/devices/ti55/", "/devices/ti55/machine"]
+        },
+        "diags": {
+          "@title": "TI-57 with Diagnostics",
+          "@redirect_from": "/devices/ti55/machine/diags/"
+        }
+      }
+    },
     "ti57": {
-      "@title": "TI-57 Programmable Calculator",
+      "@title": "TI-57 Calculator",
       "@instances": {
         "": {
           "@title": "TI-57",

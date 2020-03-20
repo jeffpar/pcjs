@@ -1,0 +1,406 @@
+<div id="{{ include.id }}" class="floatTI42">
+  <img id="imageTI42" src="/machines/ti/ti42/images/ti42.png" width="300" alt="TI-42 Programmable Calculator"/>
+  <div id="displayTI42"></div>
+  <div id="ind2ndTI42" class="indTI42">2nd</div>
+  <button id="powerTI42">Power</button>
+</div>
+<div class="diagsTI42">
+  <div>
+    <p>Diagnostics</p>
+    <textarea id="printTI42" cols="74" rows="16"></textarea>
+  </div>
+  <button id="resetTI42">Reset</button>
+  <button id="runTI42">Run</button>
+  <button id="stepTI42">Step</button>
+  <button id="clearTI42">Clear</button>
+  <span id="speedTI42">Stopped</span>
+  <p>ROM Activity</p>
+  <div id="romArrayTI42"></div>
+  <p id="romCellTI42">[No ROM address selected]</p>
+  <p>Operational Registers</p>
+  <div>
+  	<div class="regRow">
+  	  <span class="regLabel">A</span>
+  	  <span class="regDigit" id="regA-15">0</span>
+  	  <span class="regDigit" id="regA-14">0</span>
+  	  <span class="regDigit" id="regA-13">0</span>
+  	  <span class="regDigit" id="regA-12">0</span>
+  	  <span class="regDigit" id="regA-11">0</span>
+  	  <span class="regDigit" id="regA-10">0</span>
+  	  <span class="regDigit" id="regA-09">0</span>
+  	  <span class="regDigit" id="regA-08">0</span>
+  	  <span class="regDigit" id="regA-07">0</span>
+  	  <span class="regDigit" id="regA-06">0</span>
+  	  <span class="regDigit" id="regA-05">0</span>
+  	  <span class="regDigit" id="regA-04">0</span>
+  	  <span class="regDigit" id="regA-03">0</span>
+  	  <span class="regDigit" id="regA-02">0</span>
+  	  <span class="regDigit" id="regA-01">0</span>
+  	  <span class="regDigit" id="regA-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">B</span>
+  	  <span class="regDigit" id="regB-15">0</span>
+  	  <span class="regDigit" id="regB-14">0</span>
+  	  <span class="regDigit" id="regB-13">0</span>
+  	  <span class="regDigit" id="regB-12">0</span>
+  	  <span class="regDigit" id="regB-11">0</span>
+  	  <span class="regDigit" id="regB-10">0</span>
+  	  <span class="regDigit" id="regB-09">0</span>
+  	  <span class="regDigit" id="regB-08">0</span>
+  	  <span class="regDigit" id="regB-07">0</span>
+  	  <span class="regDigit" id="regB-06">0</span>
+  	  <span class="regDigit" id="regB-05">0</span>
+  	  <span class="regDigit" id="regB-04">0</span>
+  	  <span class="regDigit" id="regB-03">0</span>
+  	  <span class="regDigit" id="regB-02">0</span>
+  	  <span class="regDigit" id="regB-01">0</span>
+  	  <span class="regDigit" id="regB-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">C</span>
+  	  <span class="regDigit" id="regC-15">0</span>
+  	  <span class="regDigit" id="regC-14">0</span>
+  	  <span class="regDigit" id="regC-13">0</span>
+  	  <span class="regDigit" id="regC-12">0</span>
+  	  <span class="regDigit" id="regC-11">0</span>
+  	  <span class="regDigit" id="regC-10">0</span>
+  	  <span class="regDigit" id="regC-09">0</span>
+  	  <span class="regDigit" id="regC-08">0</span>
+  	  <span class="regDigit" id="regC-07">0</span>
+  	  <span class="regDigit" id="regC-06">0</span>
+  	  <span class="regDigit" id="regC-05">0</span>
+  	  <span class="regDigit" id="regC-04">0</span>
+  	  <span class="regDigit" id="regC-03">0</span>
+  	  <span class="regDigit" id="regC-02">0</span>
+  	  <span class="regDigit" id="regC-01">0</span>
+  	  <span class="regDigit" id="regC-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">D</span>
+  	  <span class="regDigit" id="regD-15">0</span>
+  	  <span class="regDigit" id="regD-14">0</span>
+  	  <span class="regDigit" id="regD-13">0</span>
+  	  <span class="regDigit" id="regD-12">0</span>
+  	  <span class="regDigit" id="regD-11">0</span>
+  	  <span class="regDigit" id="regD-10">0</span>
+  	  <span class="regDigit" id="regD-09">0</span>
+  	  <span class="regDigit" id="regD-08">0</span>
+  	  <span class="regDigit" id="regD-07">0</span>
+  	  <span class="regDigit" id="regD-06">0</span>
+  	  <span class="regDigit" id="regD-05">0</span>
+  	  <span class="regDigit" id="regD-04">0</span>
+  	  <span class="regDigit" id="regD-03">0</span>
+  	  <span class="regDigit" id="regD-02">0</span>
+  	  <span class="regDigit" id="regD-01">0</span>
+  	  <span class="regDigit" id="regD-00">0</span>
+  	</div>
+  </div>
+  <p>Storage Registers</p>
+  <div>
+  	<div class="regRow">
+  	  <span class="regLabel">X0</span>
+  	  <span class="regDigit" id="regX0-15">0</span>
+  	  <span class="regDigit" id="regX0-14">0</span>
+  	  <span class="regDigit" id="regX0-13">0</span>
+  	  <span class="regDigit" id="regX0-12">0</span>
+  	  <span class="regDigit" id="regX0-11">0</span>
+  	  <span class="regDigit" id="regX0-10">0</span>
+  	  <span class="regDigit" id="regX0-09">0</span>
+  	  <span class="regDigit" id="regX0-08">0</span>
+  	  <span class="regDigit" id="regX0-07">0</span>
+  	  <span class="regDigit" id="regX0-06">0</span>
+  	  <span class="regDigit" id="regX0-05">0</span>
+  	  <span class="regDigit" id="regX0-04">0</span>
+  	  <span class="regDigit" id="regX0-03">0</span>
+  	  <span class="regDigit" id="regX0-02">0</span>
+  	  <span class="regDigit" id="regX0-01">0</span>
+  	  <span class="regDigit" id="regX0-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">X1</span>
+  	  <span class="regDigit" id="regX1-15">0</span>
+  	  <span class="regDigit" id="regX1-14">0</span>
+  	  <span class="regDigit" id="regX1-13">0</span>
+  	  <span class="regDigit" id="regX1-12">0</span>
+  	  <span class="regDigit" id="regX1-11">0</span>
+  	  <span class="regDigit" id="regX1-10">0</span>
+  	  <span class="regDigit" id="regX1-09">0</span>
+  	  <span class="regDigit" id="regX1-08">0</span>
+  	  <span class="regDigit" id="regX1-07">0</span>
+  	  <span class="regDigit" id="regX1-06">0</span>
+  	  <span class="regDigit" id="regX1-05">0</span>
+  	  <span class="regDigit" id="regX1-04">0</span>
+  	  <span class="regDigit" id="regX1-03">0</span>
+  	  <span class="regDigit" id="regX1-02">0</span>
+  	  <span class="regDigit" id="regX1-01">0</span>
+  	  <span class="regDigit" id="regX1-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">X2</span>
+  	  <span class="regDigit" id="regX2-15">0</span>
+  	  <span class="regDigit" id="regX2-14">0</span>
+  	  <span class="regDigit" id="regX2-13">0</span>
+  	  <span class="regDigit" id="regX2-12">0</span>
+  	  <span class="regDigit" id="regX2-11">0</span>
+  	  <span class="regDigit" id="regX2-10">0</span>
+  	  <span class="regDigit" id="regX2-09">0</span>
+  	  <span class="regDigit" id="regX2-08">0</span>
+  	  <span class="regDigit" id="regX2-07">0</span>
+  	  <span class="regDigit" id="regX2-06">0</span>
+  	  <span class="regDigit" id="regX2-05">0</span>
+  	  <span class="regDigit" id="regX2-04">0</span>
+  	  <span class="regDigit" id="regX2-03">0</span>
+  	  <span class="regDigit" id="regX2-02">0</span>
+  	  <span class="regDigit" id="regX2-01">0</span>
+  	  <span class="regDigit" id="regX2-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">X3</span>
+  	  <span class="regDigit" id="regX3-15">0</span>
+  	  <span class="regDigit" id="regX3-14">0</span>
+  	  <span class="regDigit" id="regX3-13">0</span>
+  	  <span class="regDigit" id="regX3-12">0</span>
+  	  <span class="regDigit" id="regX3-11">0</span>
+  	  <span class="regDigit" id="regX3-10">0</span>
+  	  <span class="regDigit" id="regX3-09">0</span>
+  	  <span class="regDigit" id="regX3-08">0</span>
+  	  <span class="regDigit" id="regX3-07">0</span>
+  	  <span class="regDigit" id="regX3-06">0</span>
+  	  <span class="regDigit" id="regX3-05">0</span>
+  	  <span class="regDigit" id="regX3-04">0</span>
+  	  <span class="regDigit" id="regX3-03">0</span>
+  	  <span class="regDigit" id="regX3-02">0</span>
+  	  <span class="regDigit" id="regX3-01">0</span>
+  	  <span class="regDigit" id="regX3-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">X4</span>
+  	  <span class="regDigit" id="regX4-15">0</span>
+  	  <span class="regDigit" id="regX4-14">0</span>
+  	  <span class="regDigit" id="regX4-13">0</span>
+  	  <span class="regDigit" id="regX4-12">0</span>
+  	  <span class="regDigit" id="regX4-11">0</span>
+  	  <span class="regDigit" id="regX4-10">0</span>
+  	  <span class="regDigit" id="regX4-09">0</span>
+  	  <span class="regDigit" id="regX4-08">0</span>
+  	  <span class="regDigit" id="regX4-07">0</span>
+  	  <span class="regDigit" id="regX4-06">0</span>
+  	  <span class="regDigit" id="regX4-05">0</span>
+  	  <span class="regDigit" id="regX4-04">0</span>
+  	  <span class="regDigit" id="regX4-03">0</span>
+  	  <span class="regDigit" id="regX4-02">0</span>
+  	  <span class="regDigit" id="regX4-01">0</span>
+  	  <span class="regDigit" id="regX4-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">X5</span>
+  	  <span class="regDigit" id="regX5-15">0</span>
+  	  <span class="regDigit" id="regX5-14">0</span>
+  	  <span class="regDigit" id="regX5-13">0</span>
+  	  <span class="regDigit" id="regX5-12">0</span>
+  	  <span class="regDigit" id="regX5-11">0</span>
+  	  <span class="regDigit" id="regX5-10">0</span>
+  	  <span class="regDigit" id="regX5-09">0</span>
+  	  <span class="regDigit" id="regX5-08">0</span>
+  	  <span class="regDigit" id="regX5-07">0</span>
+  	  <span class="regDigit" id="regX5-06">0</span>
+  	  <span class="regDigit" id="regX5-05">0</span>
+  	  <span class="regDigit" id="regX5-04">0</span>
+  	  <span class="regDigit" id="regX5-03">0</span>
+  	  <span class="regDigit" id="regX5-02">0</span>
+  	  <span class="regDigit" id="regX5-01">0</span>
+  	  <span class="regDigit" id="regX5-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">X6</span>
+  	  <span class="regDigit" id="regX6-15">0</span>
+  	  <span class="regDigit" id="regX6-14">0</span>
+  	  <span class="regDigit" id="regX6-13">0</span>
+  	  <span class="regDigit" id="regX6-12">0</span>
+  	  <span class="regDigit" id="regX6-11">0</span>
+  	  <span class="regDigit" id="regX6-10">0</span>
+  	  <span class="regDigit" id="regX6-09">0</span>
+  	  <span class="regDigit" id="regX6-08">0</span>
+  	  <span class="regDigit" id="regX6-07">0</span>
+  	  <span class="regDigit" id="regX6-06">0</span>
+  	  <span class="regDigit" id="regX6-05">0</span>
+  	  <span class="regDigit" id="regX6-04">0</span>
+  	  <span class="regDigit" id="regX6-03">0</span>
+  	  <span class="regDigit" id="regX6-02">0</span>
+  	  <span class="regDigit" id="regX6-01">0</span>
+  	  <span class="regDigit" id="regX6-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">X7</span>
+  	  <span class="regDigit" id="regX7-15">0</span>
+  	  <span class="regDigit" id="regX7-14">0</span>
+  	  <span class="regDigit" id="regX7-13">0</span>
+  	  <span class="regDigit" id="regX7-12">0</span>
+  	  <span class="regDigit" id="regX7-11">0</span>
+  	  <span class="regDigit" id="regX7-10">0</span>
+  	  <span class="regDigit" id="regX7-09">0</span>
+  	  <span class="regDigit" id="regX7-08">0</span>
+  	  <span class="regDigit" id="regX7-07">0</span>
+  	  <span class="regDigit" id="regX7-06">0</span>
+  	  <span class="regDigit" id="regX7-05">0</span>
+  	  <span class="regDigit" id="regX7-04">0</span>
+  	  <span class="regDigit" id="regX7-03">0</span>
+  	  <span class="regDigit" id="regX7-02">0</span>
+  	  <span class="regDigit" id="regX7-01">0</span>
+  	  <span class="regDigit" id="regX7-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">Y0</span>
+  	  <span class="regDigit" id="regY0-15">0</span>
+  	  <span class="regDigit" id="regY0-14">0</span>
+  	  <span class="regDigit" id="regY0-13">0</span>
+  	  <span class="regDigit" id="regY0-12">0</span>
+  	  <span class="regDigit" id="regY0-11">0</span>
+  	  <span class="regDigit" id="regY0-10">0</span>
+  	  <span class="regDigit" id="regY0-09">0</span>
+  	  <span class="regDigit" id="regY0-08">0</span>
+  	  <span class="regDigit" id="regY0-07">0</span>
+  	  <span class="regDigit" id="regY0-06">0</span>
+  	  <span class="regDigit" id="regY0-05">0</span>
+  	  <span class="regDigit" id="regY0-04">0</span>
+  	  <span class="regDigit" id="regY0-03">0</span>
+  	  <span class="regDigit" id="regY0-02">0</span>
+  	  <span class="regDigit" id="regY0-01">0</span>
+  	  <span class="regDigit" id="regY0-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">Y1</span>
+  	  <span class="regDigit" id="regY1-15">0</span>
+  	  <span class="regDigit" id="regY1-14">0</span>
+  	  <span class="regDigit" id="regY1-13">0</span>
+  	  <span class="regDigit" id="regY1-12">0</span>
+  	  <span class="regDigit" id="regY1-11">0</span>
+  	  <span class="regDigit" id="regY1-10">0</span>
+  	  <span class="regDigit" id="regY1-09">0</span>
+  	  <span class="regDigit" id="regY1-08">0</span>
+  	  <span class="regDigit" id="regY1-07">0</span>
+  	  <span class="regDigit" id="regY1-06">0</span>
+  	  <span class="regDigit" id="regY1-05">0</span>
+  	  <span class="regDigit" id="regY1-04">0</span>
+  	  <span class="regDigit" id="regY1-03">0</span>
+  	  <span class="regDigit" id="regY1-02">0</span>
+  	  <span class="regDigit" id="regY1-01">0</span>
+  	  <span class="regDigit" id="regY1-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">Y2</span>
+  	  <span class="regDigit" id="regY2-15">0</span>
+  	  <span class="regDigit" id="regY2-14">0</span>
+  	  <span class="regDigit" id="regY2-13">0</span>
+  	  <span class="regDigit" id="regY2-12">0</span>
+  	  <span class="regDigit" id="regY2-11">0</span>
+  	  <span class="regDigit" id="regY2-10">0</span>
+  	  <span class="regDigit" id="regY2-09">0</span>
+  	  <span class="regDigit" id="regY2-08">0</span>
+  	  <span class="regDigit" id="regY2-07">0</span>
+  	  <span class="regDigit" id="regY2-06">0</span>
+  	  <span class="regDigit" id="regY2-05">0</span>
+  	  <span class="regDigit" id="regY2-04">0</span>
+  	  <span class="regDigit" id="regY2-03">0</span>
+  	  <span class="regDigit" id="regY2-02">0</span>
+  	  <span class="regDigit" id="regY2-01">0</span>
+  	  <span class="regDigit" id="regY2-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">Y3</span>
+  	  <span class="regDigit" id="regY3-15">0</span>
+  	  <span class="regDigit" id="regY3-14">0</span>
+  	  <span class="regDigit" id="regY3-13">0</span>
+  	  <span class="regDigit" id="regY3-12">0</span>
+  	  <span class="regDigit" id="regY3-11">0</span>
+  	  <span class="regDigit" id="regY3-10">0</span>
+  	  <span class="regDigit" id="regY3-09">0</span>
+  	  <span class="regDigit" id="regY3-08">0</span>
+  	  <span class="regDigit" id="regY3-07">0</span>
+  	  <span class="regDigit" id="regY3-06">0</span>
+  	  <span class="regDigit" id="regY3-05">0</span>
+  	  <span class="regDigit" id="regY3-04">0</span>
+  	  <span class="regDigit" id="regY3-03">0</span>
+  	  <span class="regDigit" id="regY3-02">0</span>
+  	  <span class="regDigit" id="regY3-01">0</span>
+  	  <span class="regDigit" id="regY3-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">Y4</span>
+  	  <span class="regDigit" id="regY4-15">0</span>
+  	  <span class="regDigit" id="regY4-14">0</span>
+  	  <span class="regDigit" id="regY4-13">0</span>
+  	  <span class="regDigit" id="regY4-12">0</span>
+  	  <span class="regDigit" id="regY4-11">0</span>
+  	  <span class="regDigit" id="regY4-10">0</span>
+  	  <span class="regDigit" id="regY4-09">0</span>
+  	  <span class="regDigit" id="regY4-08">0</span>
+  	  <span class="regDigit" id="regY4-07">0</span>
+  	  <span class="regDigit" id="regY4-06">0</span>
+  	  <span class="regDigit" id="regY4-05">0</span>
+  	  <span class="regDigit" id="regY4-04">0</span>
+  	  <span class="regDigit" id="regY4-03">0</span>
+  	  <span class="regDigit" id="regY4-02">0</span>
+  	  <span class="regDigit" id="regY4-01">0</span>
+  	  <span class="regDigit" id="regY4-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">Y5</span>
+  	  <span class="regDigit" id="regY5-15">0</span>
+  	  <span class="regDigit" id="regY5-14">0</span>
+  	  <span class="regDigit" id="regY5-13">0</span>
+  	  <span class="regDigit" id="regY5-12">0</span>
+  	  <span class="regDigit" id="regY5-11">0</span>
+  	  <span class="regDigit" id="regY5-10">0</span>
+  	  <span class="regDigit" id="regY5-09">0</span>
+  	  <span class="regDigit" id="regY5-08">0</span>
+  	  <span class="regDigit" id="regY5-07">0</span>
+  	  <span class="regDigit" id="regY5-06">0</span>
+  	  <span class="regDigit" id="regY5-05">0</span>
+  	  <span class="regDigit" id="regY5-04">0</span>
+  	  <span class="regDigit" id="regY5-03">0</span>
+  	  <span class="regDigit" id="regY5-02">0</span>
+  	  <span class="regDigit" id="regY5-01">0</span>
+  	  <span class="regDigit" id="regY5-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">Y6</span>
+  	  <span class="regDigit" id="regY6-15">0</span>
+  	  <span class="regDigit" id="regY6-14">0</span>
+  	  <span class="regDigit" id="regY6-13">0</span>
+  	  <span class="regDigit" id="regY6-12">0</span>
+  	  <span class="regDigit" id="regY6-11">0</span>
+  	  <span class="regDigit" id="regY6-10">0</span>
+  	  <span class="regDigit" id="regY6-09">0</span>
+  	  <span class="regDigit" id="regY6-08">0</span>
+  	  <span class="regDigit" id="regY6-07">0</span>
+  	  <span class="regDigit" id="regY6-06">0</span>
+  	  <span class="regDigit" id="regY6-05">0</span>
+  	  <span class="regDigit" id="regY6-04">0</span>
+  	  <span class="regDigit" id="regY6-03">0</span>
+  	  <span class="regDigit" id="regY6-02">0</span>
+  	  <span class="regDigit" id="regY6-01">0</span>
+  	  <span class="regDigit" id="regY6-00">0</span>
+  	</div>
+  	<div class="regRow">
+  	  <span class="regLabel">Y7</span>
+  	  <span class="regDigit" id="regY7-15">0</span>
+  	  <span class="regDigit" id="regY7-14">0</span>
+  	  <span class="regDigit" id="regY7-13">0</span>
+  	  <span class="regDigit" id="regY7-12">0</span>
+  	  <span class="regDigit" id="regY7-11">0</span>
+  	  <span class="regDigit" id="regY7-10">0</span>
+  	  <span class="regDigit" id="regY7-09">0</span>
+  	  <span class="regDigit" id="regY7-08">0</span>
+  	  <span class="regDigit" id="regY7-07">0</span>
+  	  <span class="regDigit" id="regY7-06">0</span>
+  	  <span class="regDigit" id="regY7-05">0</span>
+  	  <span class="regDigit" id="regY7-04">0</span>
+  	  <span class="regDigit" id="regY7-03">0</span>
+  	  <span class="regDigit" id="regY7-02">0</span>
+  	  <span class="regDigit" id="regY7-01">0</span>
+  	  <span class="regDigit" id="regY7-00">0</span>
+  	</div>
+  </div>
+</div>
