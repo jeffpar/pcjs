@@ -7,8 +7,8 @@ permalink: /blog/2015/06/05/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /devices/pcx86/machine/5170/ega/640kb/rev1/testmon/machine.xml
-    drives: '[{name:"10Mb Hard Disk",type:1,path:"/disks-demo/pcx86/drives/10mb/MSDOS320-C400.json"}]'
+    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev1/testmon/machine.xml
+    drives: '[{name:"10Mb Hard Disk",type:1,path:"/harddisks/pcx86/sys/dos/microsoft/3.20/MSDOS320-C400.json"}]'
     autoMount:
       A:
         name: None
@@ -16,7 +16,7 @@ machines:
         name: None
 ---
 
-I was playing with different video modes using an [IBM PC AT w/EGA](/devices/pcx86/machine/5170/ega/640kb/rev1/debugger/)
+I was playing with different video modes using an [IBM PC AT w/EGA](/configs/pcx86/xml/machine/5170/ega/640kb/rev1/machine.xml)
 and I discovered an odd problem.  NOTE: In the machine below, you can also switch control to the TestMonitor window using
 the "CTTY COM2" DOS command and then type the TestMonitor's "mode0e" command to replicate the SYMDEB sequence described below.
 
@@ -194,6 +194,3 @@ Register.
 
 To be continued....  because I've barely scratched the surface of all the side-effects of EGA/VGA odd/even addressing,
 and I hope to do some testing on real hardware in the near future.
-
-*[@jeffpar](https://jeffpar.com)*  
-*June 5, 2015*

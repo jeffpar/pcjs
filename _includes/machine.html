@@ -41,6 +41,11 @@
 {%- elsif machine -%}
   {%- unless machine.components -%}
     {%- assign machine = site.data[machine_type][machine_id] -%}
+    {%- unless machine -%}
+      {%- capture machine_errors %}{{ machine_errors }}
+<p class="machine-error">Missing machine configuration for {{ machine_id }}</p>
+      {%- endcapture -%}
+    {%- endunless -%}
   {%- endunless -%}
 {%- endif -%}
 {%- if machine -%}

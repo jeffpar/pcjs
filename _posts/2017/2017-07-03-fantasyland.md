@@ -6,9 +6,9 @@ permalink: /blog/2017/07/03/
 machines:
   - id: ibm5160-msdos320
     type: pcx86
-    state: /apps/pcx86/1984/modula2/state.json
-    config: /devices/pcx86/machine/5160/ega/256kb/debugger/machine.xml
-    drives: '[{name:"10Mb Hard Disk",type:3,path:"/disks-demo/pcx86/drives/10mb/MSDOS320-C400.json"}]'
+    state: /software/pcx86/lang/logitech/modula2/1.10/state.json
+    config: /configs/pcx86/xml/machine/5160/ega/256kb/debugger/machine.xml
+    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/sys/dos/microsoft/3.20/MSDOS320-C400.json"}]'
     autoMount:
       A:
         name: None
@@ -16,7 +16,7 @@ machines:
         name: None
 ---
 
-I recently added a demo of the [Logitech Modula-2/86 Compiler (1984)](/apps/pcx86/1984/modula2/),
+I recently added a demo of the [Logitech Modula-2/86 Compiler (1984)](/software/pcx86/lang/logitech/modula2/1.10/),
 because I wanted to recreate the IBM PC test environment that John T. Cockerham had used in his October 1986
 [PC Tech Journal](/documents/magazines/pctj/) article "[Evaluating the EGA: The EGA Standard](/documents/magazines/pctj/#pctj-1986-10)".
 
@@ -24,7 +24,7 @@ I actually wanted to do that several years ago, when I first added EGA support t
 IBM PC), because Cockerham described two rigorous tests of EGA hardware compatibility that I would have liked to try:
 
 - **FantasyLand**, an EGA demo written by IBM in 1984
-- [EGATEST](/disks/pcx86/shareware/pctj/#directory-of-pc-tech-journal-1986-10), a program written by Cockerham himself in Modula-2
+- [EGATEST](/software/pcx86/sw/magazines/pctj/#directory-of-pc-tech-journal-1986-10), a program written by Cockerham himself in Modula-2
 
 Cockerham describes **FantasyLand**:
 
@@ -88,20 +88,20 @@ and in that archive, a file named [PCTJ1086.ZIP](https://www.pcorner.com/list/MA
 contain all of Cockerham's **EGATEST** files.
 
 I've transferred the contents of that ZIP archive to a PCx86 diskette image named
-"[PC Tech Journal (1986-10)](/disks/pcx86/shareware/pctj/#directory-of-pc-tech-journal-1986-10)", which we can now
+"[PC Tech Journal (1986-10)](/software/pcx86/sw/magazines/pctj/#directory-of-pc-tech-journal-1986-10)", which we can now
 load into the machine below, and then run "EGAMAKE.BAT" to rebuild the entire program.
 
 ### Building EGATEST
 
 Unfortunately, as of this writing, while the **EGATEST** code *mostly* compiles, it encounters a few errors along the way
 that I've not resolved yet (like a missing `TimeDate` module).  And the closest version of the compiler I was able to find
-is [Logitech Modula-2/86 Compiler 1.10](/disks/pcx86/tools/logitech/modula2/1.10/).  Cockerham doesn't mention what version
+is [Logitech Modula-2/86 Compiler 1.10](/software/pcx86/lang/logitech/modula2/1.10/).  Cockerham doesn't mention what version
 of the compiler he used, but it may well have been a newer version (2.00?), since that article was published almost two
 years after version 1.10 was released.
 
 I'm also at a bit of a disadvantage with Modula-2 itself: I've never written anything in Modula-2, I've never used
 any Logitech compilers before now, and the closest documentation I've been able to locate is for
-[Logitech Modula-2/86 Compiler 1.00](/disks/pcx86/tools/logitech/modula2/1.00/) (the previous version).
+[Logitech Modula-2/86 Compiler 1.00](/software/pcx86/lang/logitech/modula2/1.00/) (the previous version).
 
 On the other hand, maybe I'm trying too hard, because Cockerham provided the final binary as well: **EGATEST.EXE**.
 
@@ -109,7 +109,7 @@ How well does it work?  I must confess, I don't know, because I'm too chicken to
 simulation, while good, is far from perfect, so before I dive into these tests, I want to make sure I have enough time
 set aside to debug and fix the inevitable problems.
 
-Anyway, the [Logitech Modula-2/86 Demo](/apps/pcx86/1984/modula2/) machine has been recreated below,
+Anyway, the [Logitech Modula-2/86 Demo](/software/pcx86/lang/logitech/modula2/1.10/) machine has been recreated below,
 along with the PCjs Debugger.  One nice thing about this configuration is that COM1 is connected to the Debugger's
 output window, so you can use the MS-DOS command:
 
@@ -474,6 +474,3 @@ exactly what I've done "below the fold".
 	C:\EGATEST>
 	C:\EGATEST>
 	C:\EGATEST>
-
-*[@jeffpar](https://jeffpar.com)*  
-*Jul 3, 2017*
