@@ -3,7 +3,7 @@ layout: page
 title: "VisiCalc (1981)"
 permalink: /software/pcx86/app/other/visicalc/1981/
 redirect_from: /apps/pcx86/1981/visicalc/
-preview: screenshot.png
+preview: images/screenshot.png
 machines:
   - id: ibm5150-visicalc
     type: pcx86
@@ -24,15 +24,15 @@ VisiCalc Reference
 
 [From the [website](http://www.bricklin.com/history/refcard1.htm) of Dan Bricklin, co-author of VisiCalc]
 
-![Reference Card 1-2](visicalc-refcard1-2.gif)
+![Reference Card 1-2](images/visicalc-refcard1-2.gif)
 
-![Reference Card 3-4](visicalc-refcard3-4.gif)
+![Reference Card 3-4](images/visicalc-refcard3-4.gif)
 
-![Reference Card 5-6](visicalc-refcard5-6.gif)
+![Reference Card 5-6](images/visicalc-refcard5-6.gif)
 
-![Reference Card 7-8](visicalc-refcard7-8.gif)
+![Reference Card 7-8](images/visicalc-refcard7-8.gif)
 
-![Reference Card 9-10](visicalc-refcard9-10.gif)
+![Reference Card 9-10](images/visicalc-refcard9-10.gif)
 
 VisiCalc History
 ----------------

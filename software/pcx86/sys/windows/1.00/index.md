@@ -3,6 +3,7 @@ layout: page
 title: Microsoft Windows 1.0 (&quot;Premiere Edition&quot;)
 permalink: /software/pcx86/sys/windows/1.00/
 redirect_from: /disks/pcx86/windows/1.00/
+preview: images/screenshot.png
 machines:
   - id: ibm5160-ega-win100
     type: pcx86
