@@ -34,10 +34,9 @@ Guide.  This "signature page", shown below, has since been added to the PDF abov
 
 ![COMPAQ DeskPro 386-25 Technical Reference Guide - Volume 1 - 1988-08 - Signatures](photos/COMPAQ_DeskPro_386-25_Technical_Reference_Guide-Vol1-1988-08-Signatures.png)
 
-COMPAQ DeskPro 386 Reference Highlights
----------------------------------------
+### COMPAQ DeskPro 386 Reference Highlights
 
-### Fixed Disk Drive Parameter Table Values
+#### Fixed Disk Drive Parameter Table Values
 
 The following table comes from pages 4-189 and 4-190 of the DeskPro 386/25 Technical Reference Guide (Volume I).
 
