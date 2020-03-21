@@ -3,7 +3,7 @@ layout: page
 title: IBM OS/2 1.0
 permalink: /software/pcx86/sys/os2/ibm/1.0/
 redirect_from: /disks/pcx86/os2/ibm/1.0/
-preview: screenshot.png
+preview: images/screenshot.png
 machines:
   - id: ibm5170
     type: pcx86

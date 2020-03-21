@@ -14,6 +14,7 @@
     {%- assign item_link = item['@permalink'] -%}
     {%- assign item_id = item_link | slugify -%}
     {%- assign item_preview = item['@preview'] | default: "/documents/covers/default.jpg" -%}
+    {%- if item_preview == ".jpg" or item_preview == ".png" -%}{%- capture item_preview -%}{{ item_link }}images/screenshot{{ item_preview }}{%- endcapture -%}{%- endif -%}
     {%- assign item_width = item['@width'] | default: featured_width -%}
     {%- assign item_height = item['@height'] | default: featured_height -%}
     {%- include gallery/image.html id=item_id image=item_preview link=item_link title=item_title width=item_width height=item_height maxwidth=include_maxwidth -%}

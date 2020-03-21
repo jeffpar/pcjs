@@ -1,9 +1,9 @@
 ---
 layout: page
-title: "DONKEY.BAS (1981)"
+title: "DONKEY.BAS from PC DOS 1.00 (1981)"
 permalink: /software/pcx86/sys/dos/ibm/1.00/basic/donkey/
 redirect_from: /apps/pcx86/1981/donkey/
-preview: screenshot.png
+preview: images/screenshot.png
 machines:
   - id: ibm5150-donkey
     type: pcx86

@@ -1,20 +1,38 @@
 [
   {
-    "@title": "IBM OS/2 1.0",
-    "@preview": "/software/pcx86/sys/os2/ibm/1.0/screenshot.png",
-    "@permalink": "/software/pcx86/sys/os2/ibm/1.0/",
+    "@title": "TI-57 Programmable Calculator (1978)",
+    "@permalink": "/machines/ti/ti57/",
+    "@preview": ".png",
     "@tags": "home"
   },
   {
-    "@title": "VisiCalc (1981)",
-    "@preview": "/software/pcx86/app/other/visicalc/1981/screenshot.png",
-    "@permalink": "/software/pcx86/app/other/visicalc/1981/",
+    "@title": "Space Invaders (1978)",
+    "@permalink": "/machines/arcade/invaders/",
+    "@preview": ".png",
     "@tags": "home"
   },
   {
     "@title": "DONKEY.BAS from PC DOS 1.00 (1981)",
-    "@preview": "/software/pcx86/sys/dos/ibm/1.00/basic/donkey/screenshot.png",
     "@permalink": "/software/pcx86/sys/dos/ibm/1.00/basic/donkey/",
+    "@preview": ".png",
+    "@tags": "home"
+  },
+  {
+    "@title": "VisiCalc (1981)",
+    "@permalink": "/software/pcx86/app/other/visicalc/1981/",
+    "@preview": ".png",
+    "@tags": "home"
+  },
+  {
+    "@title": "Microsoft Windows 1.0 (&quot;Premiere Edition&quot;)",
+    "@permalink": "/software/pcx86/sys/windows/1.00/",
+    "@preview": ".png",
+    "@tags": "home"
+  },
+  {
+    "@title": "IBM OS/2 1.0",
+    "@permalink": "/software/pcx86/sys/os2/ibm/1.0/",
+    "@preview": ".png",
     "@tags": "home"
   }
 ]

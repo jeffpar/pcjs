@@ -3,7 +3,7 @@ layout: page
 title: IBM Multiplan 1.00
 permalink: /software/pcx86/app/ibm/multiplan/1.00/
 redirect_from: /disks/pcx86/apps/ibm/multiplan/1.00/
-preview: screenshot.png
+preview: images/screenshot.png
 machines:
   - id: ibm5150
     type: pcx86
