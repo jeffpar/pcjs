@@ -832,7 +832,7 @@ class PC11 extends Component {
      * readPRS(addr)
      *
      * NOTE: We use the PRS RMASK to honor the "write-only" behavior of bit 0, the reader enable bit (RE), because
-     * DEC's tiny Bootstrap Loader (/apps/pdp11/boot/bootstrap/BOOTSTRAP-16KB.lst) repeatedly enables the reader using
+     * DEC's tiny Bootstrap Loader (/software/dec/pdp11/boot/bootstrap/BOOTSTRAP-16KB.lst) repeatedly enables the reader using
      * the INC instruction, which causes the PRS to be read, incremented, and written, so if bit 0 isn't always read
      * as zero, the INC instruction would clear RE instead of setting it.
      *

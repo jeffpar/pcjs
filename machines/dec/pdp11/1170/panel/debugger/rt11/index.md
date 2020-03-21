@@ -15,7 +15,7 @@ machines:
       RL0:
         path: /decdisks/pdp11/rl02k/RL02K-XXDP.json
       PTR:
-        path: /apps/pdp11/tapes/absloader/DEC-11-L2PC-PO.json
+        path: /software/dec/pdp11/tapes/absloader/DEC-11-L2PC-PO.json
 ---
 
 This machine is ready to boot [RT-11 v4.0](/disks/dec/rk03/rtl11v4/) ("BOOT RK0").

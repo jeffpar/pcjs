@@ -20,8 +20,8 @@ A PCjs emulation of the Texas Instruments TI-57 Programmable Calculator is shown
 
 Additional ready-to-run configurations include:
 
-  - [TI-57 with Debugger](rev0/)
-  - [TI-57 with Revised ROM and Debugger](rev1/)
+  - [TI-57 with Diagnostics](rev0/)
+  - [TI-57 with Revised ROM and Diagnostics](rev1/)
 
 {% include gallery/documents.html title="TI-57/EC-4000 Documentation" height="300" tag="manual" %}
 

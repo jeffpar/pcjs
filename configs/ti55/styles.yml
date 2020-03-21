@@ -1,0 +1,77 @@
+.fillTI55:
+  position: relative;
+  display: inline-block;
+.floatTI55:
+  position: relative;
+  display: inline-block;
+  float: left;
+  margin-right: 32px;
+_displayTI55:
+  position: absolute;
+  left: 15%;
+  top: 8%;
+  width: 70%;
+  height: 4%;
+.indTI55:
+  font-size: 11px;
+  font-family: Monaco,"Lucida Console",monospace;
+  color: red;
+_ind2nd:
+  position: absolute;
+  left: 15%;
+  top: 13%;
+  width: 7%;
+  height: 2%;
+  opacity: 0;
+_indINV:
+  position: absolute;
+  left: 23%;
+  top: 13%;
+  width: 7%;
+  height: 2%;
+  opacity: 0;
+_indDeg:
+  position: absolute;
+  left: 31%;
+  top: 13%;
+  width: 7%;
+  height: 2%;
+  opacity: 0;
+_indRad:
+  position: absolute;
+  left: 39%;
+  top: 13%;
+  width: 7%;
+  height: 2%;
+  opacity: 0;
+_indGrad:
+  position: absolute;
+  left: 47%;
+  top: 13%;
+  width: 7%;
+  height: 2%;
+  opacity: 0;
+_powerTI55:
+  position: absolute;
+  left: 69%;
+  top: 22%;
+  width: 16%;
+  height: 4%;
+  opacity: 0;
+.diagsTI55:
+  float: left;
+_printTI55:
+  font-family: Monaco,"Lucida Console",monospace;
+_romArrayTI55:
+  display: inline-block;
+  line-height: 0;
+  max-width: 512px;
+_romCellTI55:
+  font-family: Monaco,"Lucida Console",monospace;
+.regRow:
+  padding-left: 1em;
+  font-family: Monaco,"Lucida Console",monospace;
+.regLabel:
+  padding-left: 1em;
+.regDigit:
+  border: 1px solid;

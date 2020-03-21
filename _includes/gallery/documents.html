@@ -5,6 +5,7 @@
 {% capture cover_height %}{{ include.height | default: "" }}{% endcapture %}
 {% assign path = include.path | default: page.permalink %}
 {% assign path_parts = path | split: "/" %}
+{% assign include_style = include.style %}
 {% assign tag = include.tag | default: "" %}
 {%- assign docs_exist = false -%}
 {%- for part in path_parts -%}
@@ -39,7 +40,7 @@
   <h3 id="{{ group_id }}">{{ title }}</h3>
       {%- endif -%}
       {%- assign docs_exist = true -%}
-      {%- include gallery/begin.html -%}
+      {%- include gallery/begin.html style=include_style -%}
       {%- for doc in docs -%}
         {%- assign doc_title = doc['@title'] -%}
         {%- assign doc_tags = doc['@tags'] | default: "" -%}

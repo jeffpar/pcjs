@@ -18,7 +18,7 @@
 {%- if machine_config -%}
   {%- if machine_config contains ".xml" %}
 <div id="{{ machine_id }}" class="machine-placeholder">
-  <p>{{ machine_name }}</p>
+  <p>[{{ machine_name }} "{{ machine_id }}"]</p>
   <p class="machine-warning">Waiting for machine "{{machine_id }}" to load....</p>
 </div>
     {%- assign machine = nil -%}

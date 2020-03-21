@@ -1,13 +1,22 @@
 ---
 layout: page
 title: Texas Instruments TI-55
-redirect_from: /devices/ti55/
+permalink: /machines/ti/ti55/
+redirect_from:
+  - /devices/ti55/
+  - /devices/ti55/machine/
+machines:
+  - id: ti55
+    type: ti55
+    name: TI-55 Programmable Calculator
+    config: /configs/ti55/ti55.json
+    layout: /_includes/ti55/ti55-full.html
 ---
 
-Building on the PCjs [TI-57 Emulator](../ti57/), the following TI-55 Emulator configurations are now available:
+Building on the PCjs [TI-57 Emulator](../ti57/), the PCjs TI-55 Emulator is now available,
+with optional [Diagnostics](diags/).
 
-- [TI-55 with Original ROM](machine/)
-- [TI-55 with Original ROM and Diagnostics](machine/diags/)
+{% include machine.html id="ti55" %}
 
 Additional PCjs resources include:
 

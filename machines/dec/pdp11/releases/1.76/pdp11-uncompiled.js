@@ -20198,7 +20198,7 @@ class PC11 extends Component {
      * readPRS(addr)
      *
      * NOTE: We use the PRS RMASK to honor the "write-only" behavior of bit 0, the reader enable bit (RE), because
-     * DEC's tiny Bootstrap Loader (/apps/pdp11/boot/bootstrap/BOOTSTRAP-16KB.lst) repeatedly enables the reader using
+     * DEC's tiny Bootstrap Loader (/software/dec/pdp11/boot/bootstrap/BOOTSTRAP-16KB.lst) repeatedly enables the reader using
      * the INC instruction, which causes the PRS to be read, incremented, and written, so if bit 0 isn't always read
      * as zero, the INC instruction would clear RE instead of setting it.
      *
@@ -32263,14 +32263,14 @@ var cAsyncMachines = 0;
  * @param {string} sClass (an optional machine class name used to style the machine)
  * @param {boolean} fResolve is true to resolve any "ref" attributes
  * @param {function(string)} display
- * @param {function(string,Object)} done (string contains the unparsed XML string data, and Object contains a parsed XML object)
+ * @param {function(string,string,Object)} done (string contains the unparsed XML string data, and Object contains a parsed XML object)
  */
 function loadXML(sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass, fResolve, display, done)
 {
-    let doneLoadXML = function(sURLName, sXML, nErrorCode) {
+    let doneLoadXML = function(sURL, sXML, nErrorCode) {
         if (nErrorCode) {
             if (!sXML) sXML = "unable to load " + sXMLFile + " (" + nErrorCode + ")";
-            done(sXML, null);
+            done(sURL, sXML, null);
             return;
         }
         parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass, fResolve, display, done);
@@ -32295,13 +32295,13 @@ function loadXML(sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass, fReso
  * @param {string} sClass (an optional machine class name used to style the machine)
  * @param {boolean} fResolve is true to resolve any "ref" attributes; default is false
  * @param {function(string)} display
- * @param {function(string,Object)} done (string contains the unparsed XML string data, and Object contains a parsed XML object)
+ * @param {function(string,string,Object)} done (string contains the unparsed XML string data, and Object contains a parsed XML object)
  */
 function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass, fResolve, display, done)
 {
     let buildXML = function(sXML, sError) {
         if (sError) {
-            done(sError, null);
+            done(sXMLFile, sError, null);
             return;
         }
         if (idMachine) {
@@ -32423,22 +32423,22 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
         } else {
             sXML = "unrecognized XML: " + (sXML.length > 255? sXML.substr(0, 255) + "..." : sXML);
         }
-        done(sXML, xmlDoc);
+        done(sXMLFile, sXML, xmlDoc);
     };
     if (sXML) {
         if (PRIVATE) sXML = sXML.replace(/\/library.xml/, "/private/library.xml");
         if (fResolve) {
-            resolveXML(sXML, display, buildXML);
+            resolveXML(sXMLFile, sXML, display, buildXML);
             return;
         }
         buildXML(sXML, "");
         return;
     }
-    done("no data" + (sXMLFile? " for file: " + sXMLFile : ""), null);
+    done(sXMLFile, "no data", null);
 }
 
 /**
- * resolveXML(sXML, display, done)
+ * resolveXML(sURL, sXML, display, done)
  *
  * Replaces every tag with a "ref" attribute with the contents of the corresponding file.
  *
@@ -32446,11 +32446,12 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
  * to appear as the tag's first attribute, 2) requiring the "ref" attribute to be double-quoted,
  * and 3) requiring the "ref" tag to be self-closing.
  *
+ * @param {string} sURL
  * @param {string} sXML
  * @param {function(string)} display
- * @param {function(string,string)} done (the first string contains the resolved XML data, the second is for any error message)
+ * @param {function(string,string,string)} done (the first string contains the resolved XML data, the second is for any error message)
  */
-function resolveXML(sXML, display, done)
+function resolveXML(sURL, sXML, display, done)
 {
     let matchRef;
     let reRef = /<([a-z]+)\s+ref="(.*?)"(.*?)\/>/g;
@@ -32459,9 +32460,9 @@ function resolveXML(sXML, display, done)
 
         let sRefFile = matchRef[2];
 
-        let doneReadXML = function(sURLName, sXMLRef, nErrorCode) {
+        let doneReadXML = function(sURL, sXMLRef, nErrorCode) {
             if (nErrorCode || !sXMLRef) {
-                done(sXML, "unable to resolve XML reference: " + matchRef[0] + " (" + nErrorCode + ")");
+                done(sURL, sXML, "unable to resolve XML reference: " + matchRef[0] + " (" + nErrorCode + ")");
                 return;
             }
             /*
@@ -32496,7 +32497,7 @@ function resolveXML(sXML, display, done)
                         sXMLRef = sXMLRef.replace(aXMLRefTag[0], sXMLNewTag);
                     }
                 } else {
-                    done(sXML, "missing <" + matchRef[1] + "> in " + sRefFile);
+                    done(sURL, sXML, "missing <" + matchRef[1] + "> in " + sRefFile);
                     return;
                 }
             }
@@ -32513,14 +32514,14 @@ function resolveXML(sXML, display, done)
 
             sXML = sXML.replace(matchRef[0], sXMLRef);
 
-            resolveXML(sXML, display, done);
+            resolveXML(sURL, sXML, display, done);
         };
 
         display("Loading " + sRefFile + "...");
         Web.getResource(sRefFile, null, fAsync, doneReadXML);
         return;
     }
-    done(sXML, "");
+    done(sURL, sXML, "");
 }
 
 /**
@@ -32575,9 +32576,15 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
         return fSuccess;
     }
 
-    let displayError = function(sError) {
+    let displayError = function(sURL, sError) {
+        if (typeof sError == "string") {
+            if (sError.indexOf("<!DOCTYPE html>") >= 0) {
+                let match = sError.match(/<title>(?:PCjs: |)(.*?)<\/title>/);
+                if (match) sError = match[1];
+            }
+        }
         Component.log(sError);
-        displayMessage("Error: " + sError);
+        displayMessage("Error: " + sError + (sURL? " (" + sURL + ")" : ""));
         if (fSuccess) doneMachine();
         fSuccess = false;
     };
@@ -32642,9 +32649,9 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
                 }
             }
 
-            let processXML = function(sXML, xml) {
+            let processXML = function(sURL, sXML, xml) {
                 if (!xml) {
-                    displayError(sXML);
+                    displayError(sURL, sXML);
                     return;
                 }
 
@@ -32659,9 +32666,9 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
                     }
                 }
 
-                let transformXML = function(sXSL, xsl) {
+                let transformXML = function(sURL, sXSL, xsl) {
                     if (!xsl) {
-                        displayError(sXSL);
+                        displayError(sURL, sXSL);
                         return;
                     }
 
@@ -32698,7 +32705,7 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
                             eMachine.outerHTML = sFragment;
                             doneMachine();
                         } else {
-                            displayError("transformNodeToObject failed");
+                            displayError(sURL, "transformNodeToObject failed");
                         }
                     }
                     else if (document.implementation && document.implementation.createDocument) {
@@ -32711,7 +32718,7 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
                              *
                              *      let machine = eFragment.getElementById(idMachine);
                              *      if (!machine) {
-                             *          displayError("machine generation failed: " + idMachine);
+                             *          displayError(sURL, "machine generation failed: " + idMachine);
                              *      }
                              */
                             let element = eMachine.parentNode;
@@ -32762,10 +32769,10 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
                                  * files, nor is support for that likely to be added any time soon; it was a nice
                                  * feature of the Node web server, but it's not clear that it's worth doing for Jekyll.
                                  */
-                                displayError("invalid machine element: " + idMachine);
+                                displayError(sURL, "invalid machine element: " + idMachine);
                             }
                         } else {
-                            displayError("transformToFragment failed");
+                            displayError(sURL, "transformToFragment failed");
                         }
                     } else {
                         /*
@@ -32773,7 +32780,7 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
                          * not aware of any browsers don't support one or both of the above XSLT transformation
                          * methods, so treat this as a bug.
                          */
-                        displayError("unable to transform XML: unsupported browser");
+                        displayError(sURL, "unable to transform XML: unsupported browser");
                     }
                 };
                 /*
@@ -32788,10 +32795,10 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
                 parseXML(sXMLFile, "", idMachine, sAppName, sAppClass, sParms || "", sClass || "", false, displayMessage, processXML);
             }
         } else {
-            displayError("missing machine element: " + idMachine);
+            displayError(sXMLFile, "missing machine element: " + idMachine);
         }
     } catch(e) {
-        displayError(e.message);
+        displayError(sXMLFile, e.message);
     }
     return fSuccess;
 }

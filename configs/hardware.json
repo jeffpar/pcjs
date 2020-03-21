@@ -409,7 +409,7 @@
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5U8q29hbjyEHn4Dg?e=wrC7ga",
           "@cover": ".jpg",
           "@source": "http://www.vt100.net/docs/vt100-tm/ek-vt100-tm-002.pdf",
-          "@tags": ""
+          "@tags": "manual"
         },
         {
           "@title": "VT100 Technical Manual (Jul 1982)",
@@ -417,7 +417,7 @@
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5X1XlYE16Lak_DUw?e=n2zpbT",
           "@cover": ".jpg",
           "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/EK-VT100-TM-003_VT100_Technical_Manual_Jul82.pdf",
-          "@tags": ""
+          "@tags": "manual"
         },
         {
           "@title": "VT100 User Guide (Aug 1978)",
@@ -425,7 +425,7 @@
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5cwh5j_ZxFq0E5SQ?e=j2hEBh",
           "@cover": ".jpg",
           "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/EK-VT100-UG-001_VT100_User_Guide_Aug78.pdf",
-          "@tags": ""
+          "@tags": "manual"
         },
         {
           "@title": "VT100 User Guide (Jan 1979)",
@@ -433,7 +433,7 @@
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5b0Zrk_lq6O7DuLA?e=S5iFqn",
           "@cover": ".jpg",
           "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/EK-VT100-UG-002_VT100_User_Guide_Jan79.pdf",
-          "@tags": ""
+          "@tags": "manual"
         },
         {
           "@title": "Field Maintenance Guide (Mar 1980)",
@@ -443,7 +443,7 @@
           "@width": 280,
           "@height": 200,
           "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/MP00633_VT100_Mar80.pdf",
-          "@tags": ""
+          "@tags": "maintenance"
         },
         {
           "@title": "Field Maintenance Guide (Feb 1982)",
@@ -453,7 +453,7 @@
           "@width": 280,
           "@height": 200,
           "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/MP00633_VT100_Schematic_Feb82.pdf",
-          "@tags": ""
+          "@tags": "maintenance"
         }
       ]
     }
@@ -895,8 +895,34 @@
   },
   "ti": {
     "@title": "Texas Instruments",
+    "ti42": {
+      "@title": "TI-42 Calculator",
+      "@instances": {
+        "": {
+          "@title": "TI-42",
+          "@redirect_from": ["/devices/ti42/", "/devices/ti42/machine"]
+        },
+        "diags": {
+          "@title": "TI-42 with Diagnostics",
+          "@redirect_from": "/devices/ti42/machine/diags/"
+        }
+      }
+    },
+    "ti55": {
+      "@title": "TI-55 Calculator",
+      "@instances": {
+        "": {
+          "@title": "TI-55",
+          "@redirect_from": ["/devices/ti55/", "/devices/ti55/machine"]
+        },
+        "diags": {
+          "@title": "TI-57 with Diagnostics",
+          "@redirect_from": "/devices/ti55/machine/diags/"
+        }
+      }
+    },
     "ti57": {
-      "@title": "TI-57 Programmable Calculator",
+      "@title": "TI-57 Calculator",
       "@instances": {
         "": {
           "@title": "TI-57",
@@ -929,7 +955,7 @@
           ]
         },
         "rev0": {
-          "@title": "TI-57 with Debugger",
+          "@title": "TI-57 with Diagnostics",
           "@redirect_from": "/devices/ti57/machine/rev0/"
         },
         "rev1": {
