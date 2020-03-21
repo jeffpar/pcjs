@@ -45,13 +45,13 @@ more work to make them usable.
 
 ### Space Invaders Hardware Notes
 
-### Memory Map
+#### Memory Map
 
 	0000-1FFF  r   ROM code
 	2000-23FF  rw  RAM
 	2400-3FFF  rw  bitmapped screen (224x256)
 
-### I/O Map
+#### I/O Map
 
 	00         r
 	01         r   control inputs
