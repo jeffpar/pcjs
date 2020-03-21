@@ -12030,7 +12030,7 @@ Debugger.DECOP_PRECEDENCE = {
 // Defs.CLASSES["Debugger"] = Debugger;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/pdp11/v2/pdp11ops.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/libv2/pdp11ops.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -14560,7 +14560,7 @@ PDP11Ops.aOp8DXn_1140 = [
 ];
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/pdp11/v2/pdp11.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/libv2/pdp11.js (C) 2012-2020 Jeff Parsons
  */
 
 /*
@@ -18259,7 +18259,7 @@ PDP11.MASK_22BIT        = 0x3FFFFF;     // 017777777
 Defs.CLASSES["PDP11"] = PDP11;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/pdp11/v2/pdp11dbg.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/libv2/pdp11dbg.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -18831,7 +18831,7 @@ PDP11Dbg.OP1145 = [
 Defs.CLASSES["PDP11Dbg"] = PDP11Dbg;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/pdp11/v2/iopage.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/libv2/iopage.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -19014,7 +19014,7 @@ IOPage.IOTABLE = {
 Defs.CLASSES["IOPage"] = IOPage;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/pdp11/v2/dl11.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/libv2/dl11.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -19511,7 +19511,7 @@ DL11.IOTABLE = {
 Defs.CLASSES["DL11"] = DL11;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/pdp11/v2/pc11.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/libv2/pc11.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ name: string, autoLoad: (Media|string), baudReceive: number, baudTransmit: (number|undefined), library: (Array.<Media>|string), mediaLoaded: (Media|null) }} */

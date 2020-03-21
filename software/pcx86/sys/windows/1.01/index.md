@@ -3,7 +3,7 @@ layout: page
 title: Microsoft Windows 1.01
 permalink: /software/pcx86/sys/windows/1.01/
 redirect_from: /disks/pcx86/windows/1.01/
-preview: screenshot.png
+preview: images/screenshot.png
 machines:
   - id: ibm5160-ega-win101
     type: pcx86

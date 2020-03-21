@@ -15,7 +15,7 @@
     <img src="{{ include_image }}"{{ include_width }}{{ include_height }} alt="{{ include.title }}"/>
   {%- endif %}
   </div>
-  <span class="pcjs-gallery-label">{{ include.title }}</span>
+  <span class="pcjs-gallery-label">{{ include.title | replace: "(","<br/>(" }}</span>
   {%- if include.source contains "http" %}
   <br/><span class="pcjs-gallery-label">[<a href="{{ include.source }}">Source</a>]</span>
   {%- endif -%}

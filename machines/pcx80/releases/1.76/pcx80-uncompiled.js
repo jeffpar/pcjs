@@ -25763,9 +25763,9 @@ function loadXML(sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass, fReso
  */
 function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass, fResolve, display, done)
 {
-    let buildXML = function(sXML, sError) {
+    let buildXML = function(sURL, sXML, sError) {
         if (sError) {
-            done(sXMLFile, sError, null);
+            done(sURL, sError, null);
             return;
         }
         if (idMachine) {
@@ -25895,7 +25895,7 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
             resolveXML(sXMLFile, sXML, display, buildXML);
             return;
         }
-        buildXML(sXML, "");
+        buildXML(sXMLFile, sXML, "");
         return;
     }
     done(sXMLFile, "no data", null);

@@ -1,6 +1,6 @@
 ---
 layout: page
-
+title: TI-57 Programmable Calculator
 permalink: /machines/ti/ti57/
 redirect_from:
   - /devices/ti57/
