@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% if page.title %}PCjs: {{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
     {%- comment %}{% seo %}{% endcomment %}
-    <meta name="description" content="{{ site.description | rstrip }}">
+    <meta name="description" content="{{ site.tagline }} {{ site.description | default: site.github.project_tagline rstrip }}">
     {%- if page.iconTitle != nil %}
     <meta name="apple-mobile-web-app-title" content="{{ page.iconTitle }}">
     {%- else %}
