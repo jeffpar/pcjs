@@ -5,7 +5,7 @@
 {% capture cover_height %}{{ include.height | default: "" }}{% endcapture %}
 {% assign path = include.path | default: page.permalink %}
 {% assign path_parts = path | split: "/" %}
-{% assign include_style = include.style | default: "center" %}
+{% assign include_style = include.style %}
 {% assign tag = include.tag | default: "" %}
 {%- assign docs_exist = false -%}
 {%- for part in path_parts -%}
