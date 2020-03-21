@@ -160,7 +160,8 @@ would write "Fantasy Land II"!
 
 ### Fantasy Land Screenshots from PCjs
 
-![Fantasy Land Intro](fland-intro.png)
+![Fantasy Land Intro](images/fland-intro.png)
 
-![Fantasy Land Legend](fland-legend.png)
+![Fantasy Land Legend](images/fland-legend.png)
 
+![Fantasy Land Screenshot](images/screenshot.png)
