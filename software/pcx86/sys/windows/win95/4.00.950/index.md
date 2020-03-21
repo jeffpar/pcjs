@@ -5,7 +5,7 @@ permalink: /software/pcx86/sys/windows/win95/4.00.950/
 redirect_from:
   - /disks/pcx86/windows/win95/4.00.950/
   - /disks/pc/windows/win95/4.00.950/
-preview: screenshot.png
+preview: images/screenshot.png
 machines:
   - id: deskpro386
     type: pcx86

@@ -5,7 +5,7 @@ permalink: /software/pcx86/game/microsoft/adventure/
 redirect_from:
   - /disks/pcx86/games/microsoft/adventure/
   - /disks/pc/games/microsoft/adventure/
-preview: screenshot.png
+preview: images/screenshot.png
 machines:
   - id: ibm5150-adventure
     type: pcx86

@@ -232,8 +232,10 @@ insight into the active fonts and colors used by Fantasy Land and the EGA.
   <canvas id="ibm5160.videoEGA.font3" class="pcx86-video-diagnostic" width="1024" height="512" style="width:100%;background-color:black;"></canvas>
 </div>
 
-### Fantasy Land Screenshots from PCjs
+### Fantasy Land Images from PCjs
 
-![Fantasy Land Intro](/software/pcx86/demo/ibm/ega/fland-intro.png)
+![Fantasy Land Intro](/software/pcx86/demo/ibm/ega/images/fland-intro.png)
 
-![Fantasy Land Legend](/software/pcx86/demo/ibm/ega/fland-legend.png)
+![Fantasy Land Legend](/software/pcx86/demo/ibm/ega/images/fland-legend.png)
+
+![Fantasy Land Screenshot](/software/pcx86/demo/ibm/ega/images/screenshot.png)

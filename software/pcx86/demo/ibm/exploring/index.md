@@ -3,7 +3,7 @@ layout: page
 title: Exploring the IBM Personal Computer
 permalink: /software/pcx86/demo/ibm/exploring/
 redirect_from: /disks/pcx86/apps/ibm/exploring/5150/mda/
-preview: screenshot.png
+preview: images/screenshot.png
 ---
 
 There are four versions of this software, which you can explore by clicking the appropriate link on the left.

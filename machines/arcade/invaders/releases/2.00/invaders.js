@@ -13,8 +13,8 @@
  https://www.pcjs.org/machines/lib/bus/ports.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/bus/ram.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/bus/rom.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/arcade/invaders/ports.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/arcade/invaders/video.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/arcade/invaders/lib/ports.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/arcade/invaders/lib/video.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/cpu/cpu.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/cpu/cpu8080.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/cpu/debugger.js (C) 2012-2020 Jeff Parsons

@@ -175,7 +175,7 @@ This disk has now been added to the PCjs IBM PC Disk Library as "Adventures in M
 To run the game, I originally selected an [IBM PC (Model 5150, 64Kb) with Color Display](/machines/pcx86/ibm/5150/cga/),
 which boots PC DOS 2.00 by default.  However, in the course of starting the game, it crashed:
 
-![ADVENTMATH-CRASH](crash.png)
+![ADVENTMATH-CRASH](images/crash.png)
 
 It appeared to run fine with 256Kb of RAM, but these were IBM's "System Requirements" for the game:
  

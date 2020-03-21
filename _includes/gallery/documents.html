@@ -5,8 +5,8 @@
 {% capture cover_height %}{{ include.height | default: "" }}{% endcapture %}
 {% assign path = include.path | default: page.permalink %}
 {% assign path_parts = path | split: "/" %}
-{% assign include_style = include.style %}
-{% assign tag = include.tag | default: "" %}
+{% assign include_style = include.style | default: "center" %}
+{% assign include_tag = include.tag | default: "" %}
 {%- assign docs_exist = false -%}
 {%- for part in path_parts -%}
   {%- if part == "" -%}{% continue %}{%- endif -%}
@@ -44,7 +44,7 @@
       {%- for doc in docs -%}
         {%- assign doc_title = doc['@title'] -%}
         {%- assign doc_tags = doc['@tags'] | default: "" -%}
-        {%- if doc_title != "" and doc_tags contains tag -%}
+        {%- if doc_title != "" and doc_tags contains include_tag -%}
           {%- assign doc_file = doc['@file'] -%}
           {%- assign doc_id = doc_file | replace: ".pdf","" | replace: ".png","" | downcase -%}
           {%- capture doc_path -%}{{ path }}{{ doc_file }}{%- endcapture -%}

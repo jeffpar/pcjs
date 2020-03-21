@@ -14,4 +14,12 @@ When everything has been migrated, and the new PCjs Explorer is finished, this w
 Thanks,
 Jeff
 
+### PCjs Highlights
+
+A few hand-picked PCjs Machines are highlighted below, which feature hardware or software that we found engaging
+either at the time or years later.
+
+The [PCjs Explorer](#pcjs-explorer) offers many more hardware and software combinations to choose from, as well as a small
+collection of related documentation.
+
 {%- include gallery/featured.html width="200" height="128" -%}

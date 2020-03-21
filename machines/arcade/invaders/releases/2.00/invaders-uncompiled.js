@@ -9617,7 +9617,7 @@ ROM.BINDING = {
 Defs.CLASSES["ROM"] = ROM;
 
 /**
- * @copyright https://www.pcjs.org/machines/arcade/invaders/ports.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/arcade/invaders/lib/ports.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, switches: Object }} */
@@ -9990,7 +9990,7 @@ InvadersPorts.IOTABLE = {
 Defs.CLASSES["InvadersPorts"] = InvadersPorts;
 
 /**
- * @copyright https://www.pcjs.org/machines/arcade/invaders/video.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/arcade/invaders/lib/video.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ bufferWidth: number, bufferHeight: number, bufferRotate: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */

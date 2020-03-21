@@ -3,7 +3,7 @@ layout: page
 title: "Rogue (1985)"
 permalink: /software/pcx86/game/other/1985/rogue/
 redirect_from: /apps/pcx86/1985/rogue/
-preview: screenshot.png
+preview: images/screenshot.png
 machines:
   - id: ibm5160-rogue
     type: pcx86

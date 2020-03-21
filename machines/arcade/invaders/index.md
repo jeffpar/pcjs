@@ -22,12 +22,28 @@ Hard-coded key mappings include:
 - D: Move Right
 - L: Fire Missile
 
-The PCjs debugger, along with a few [Space Invaders Hardware Notes](#space-invaders-hardware-notes), are provided below.
+The PCjs debugger, along with a few [Notes](#space-invaders-emulation-notes), are provided below.
 
 {% include machine.html id="invaders" %}
 
-Space Invaders Hardware Notes
------------------------------
+### Space Invaders Emulation Notes
+
+For touch-screen devices like the iPhone and iPad, there are "touch regions" across the top of the virtual
+monitor that correspond to first three buttons:
+
+- Top Left: One Player
+- Top Right: Two Players
+- Top Center: Insert Coin
+
+and regions across the bottom that correspond to the last three buttons:
+
+- Left Side: Move Left and Move Right
+- Right Side: Fire
+
+This is purely experimental and may only work in portrait mode; landscape and full-screen modes will probably need
+more work to make them usable.
+
+### Space Invaders Hardware Notes
 
 ### Memory Map
 

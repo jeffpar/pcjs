@@ -3,7 +3,7 @@ layout: page
 title: Microsoft Windows/386 2.0x
 permalink: /software/pcx86/sys/windows/2.0x/
 redirect_from: /disks/pcx86/windows/2.0x/
-preview: screenshot.png
+preview: images/screenshot.png
 machines:
   - id: deskpro386
     type: pcx86
