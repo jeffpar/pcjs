@@ -43,6 +43,11 @@
           }
         }
       }
+      function pcjsExplorerView(element, event) {
+        event.preventDefault();
+        let target = document.getElementById("pcjs-hardware");
+        if (target) target.scrollIntoView({behavior:"smooth"});
+      }
       function pcjsExplorerInit() {
         pcjsExplorerExpand(window.location.pathname);
         pcjsExplorerExpand(pcjsGetURLVars()['software']);

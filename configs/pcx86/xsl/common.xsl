@@ -13,10 +13,12 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="initial-scale=1"/>
-		<meta name="description" content="Welcome to PCjs, home of the original IBM PC in a web browser. The PCjs Project offers a variety of computer emulators written in JavaScript, including PCx86 for x86-based machines (8088 through 80386), C1Pjs for the 6502-based Ohio Scientific Challenger 1P, PCx80 for 8080-based machines like Space Invaders and the DEC VT100 Terminal, PDPjs with support for PDP-10 and PDP-11 machines, and emulators of classic programmable calculators, like the TI-57.  PCjs also provides an archive of selected historical PC software, publications, and reference materials."/>
+		<meta name="description" content="Welcome to PCjs, home of the original IBM PC emulator for web browsers."/>
 		<meta name="apple-mobile-web-app-title" content="PCjs"/>
-		<meta property="og:image" content="/assets/img/logo-home.png"/>
-		<meta property="og:title" content="The Original IBM PC in a Web Browser"/>
+		<meta name="twitter:image" property="og:image" content="/assets/img/logo-home.png"/>
+		<meta name="twitter:title" property="og:title" content="PCjs Machines"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:site" content="@jeffpar"/>
 		<link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png"/>
 		<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png"/>
 		<link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png"/>
@@ -33,9 +35,9 @@
 			</div>
 			<div class="common-top-right">
 				<ul>
+					<li><a href="/about/">About</a></li>
 					<li><a href="/blog/">Blog</a></li>
-					<li><a href="/machines/">Machines</a></li>
-					<li><a href="#">About</a></li>
+					<li><a href="https://github.com/jeffpar/pcjs">Repository</a></li>
 				</ul>
 			</div>
 		</div>

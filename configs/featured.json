@@ -48,6 +48,12 @@
     "@tags": "home"
   },
   {
+    "@title": "COMPAQ Portable with Monochrome Graphics (1983)",
+    "@permalink": "/machines/pcx86/compaq/portable/vdu/",
+    "@preview": ".png",
+    "@tags": "home"
+  },
+  {
     "@title": "Zork I: The Great Underground Empire",
     "@permalink": "/software/pcx86/game/infocom/zork1/",
     "@preview": ".png",

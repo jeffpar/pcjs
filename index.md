@@ -34,7 +34,7 @@ To learn more, visit the [PCjs]({{ site.github.repository_url }}) open-source pr
 
 A few hand-picked PCjs Machines are highlighted below, featuring hardware or software that's historically interesting.
 
-The [PCjs Explorer](#pcjs-explorer) offers many more hardware and software combinations to choose from, as well as a small
-collection of related documentation.
+The <a href="#pcjs-explorer" onclick="pcjsExplorerView(this, event)">PCjs Explorer</a> offers many more hardware and software
+combinations to choose from, as well as a small collection of related documentation.
 
 {%- include gallery/featured.html width="200" height="128" -%}

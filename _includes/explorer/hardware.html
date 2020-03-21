@@ -1,5 +1,5 @@
           <ul class="pcjs-explorer-top">
-            <li class="pcjs-explorer-fixed">Hardware
+            <li id="pcjs-hardware" class="pcjs-explorer-fixed">Hardware
               <ul>
               {%- for machine in site.data.hardware %}
                 {%- capture machine_type -%}{{ machine[0] }}{%- endcapture -%}
