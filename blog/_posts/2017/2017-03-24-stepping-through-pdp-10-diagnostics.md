@@ -6,7 +6,7 @@ permalink: /blog/2017/03/24/
 machines:
   - id: testka10
     type: pdp10
-    config: /devices/pdp10/machine/ka10/test/debugger/machine.xml
+    config: /configs/pdp10/machine/ka10/test/debugger/machine.xml
     debugger: true
     commands: a 30724 /software/dec/pdp10/diags/ka10/dakaa/DAKAA.MAC
 ---
@@ -199,6 +199,3 @@ my MACRO-10 Mini-Assembler passed the reference to the Debugger's assembler func
 how to parse address expressions that use indirection and/or indexing, including expressions (eg, "E217A") that require a fix-up.
 Unfortunately, the Debugger failed to pass the fix-up information back to the MACRO-10 Mini-Assembler, because evaluation of the
 indexing expression was overwriting fix-up information, if any, from the preceding expression.
-
-*[@jeffpar](https://jeffpar.com)*  
-*Mar 24, 2017*

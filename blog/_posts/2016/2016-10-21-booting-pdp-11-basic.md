@@ -8,7 +8,7 @@ machines:
     type: pdp11
     debugger: true
     autoMount: ''
-    config: /devices/pdp11/machine/1120/basic/debugger/machine.xml
+    config: /configs/pdp11/machine/1120/basic/debugger/machine.xml
 ---
 
 PDPjs can now simulate a PDP-11/20.  It was one of the first PDP-11 models, and since it had no MMU,

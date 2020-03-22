@@ -33,7 +33,7 @@ of apps.  But many emulators don't bother with:
 - Rendering the original IBM PC fonts
 - Blinking the cursor
 - Emulating character attributes like *underline* and *blink*
-- Supporting [Dual Displays](/devices/pcx86/machine/5150/dual/64kb/)
+- Supporting [Dual Displays](/machines/pcx86/ibm/5150/dual/)
 
 And last, and maybe also least, **FLICKERING**.
 
@@ -70,7 +70,7 @@ they are, the better.
 It's also important for understanding the world in which PC users and programmers operated in the early 1980's, the
 challenges that programmers faced, and some of the interesting solutions they came up with.
 
-One of those interesting solutions was a program from 1986 called [FlickerFree](/disks/pcx86/tools/other/flickerfree/),
+One of those interesting solutions was a program from 1986 called [FlickerFree](/software/pcx86/util/flickerfree/),
 the purpose and value of which would be almost completely lost on someone today if they had never seen or used an original
 IBM PC with a CGA.
 
@@ -86,17 +86,14 @@ starts reading from the top of video memory after it reaches the bottom.  So all
 new lines at the top of the video memory again.  If IBM had thought of that trick 5 years earlier, back in 1981,
 think of all the years of shared flicker-grief that could have been avoided!
 
-Today, in honor of all that flickering, I'm pleased to announce that [PCx86](/devices/pcx86/machine/), one of the
-PCjs emulators I'm always trying to improve, now offers **FLICKERING** on all IBM PC Color Graphics configurations.
+Today, in honor of all that flickering, I'm pleased to announce that [PCx86]({{ site.github.master }}/machines/pcx86/),
+one of the PCjs emulators I'm always trying to improve, now offers **FLICKERING** on all IBM PC Color Graphics configurations.
 If you feel the need to override it, you can add *flicker=0* to the URL of your favorite machine; e.g.:
 
-> [www.pcjs.org/disks/pcx86/tools/other/flickerfree/?flicker=0](/disks/pcx86/tools/other/flickerfree/?flicker=0)
+> [www.pcjs.org/software/pcx86/util/flickerfree/?flicker=0](/software/pcx86/util/flickerfree/?flicker=0)
 
 In fact, you can set the *flicker* property to any value from 0 to 1; the default is 0.5.  This value is applied to
 the *opacity* property of the PCx86 &lt;canvas&gt; element, allowing you to mimic whatever degree of "phosphorescent
 persistence" you prefer. 
 
 You can thank me later.
-
-*[@jeffpar](https://jeffpar.com)*  
-*Jul 15, 2017*

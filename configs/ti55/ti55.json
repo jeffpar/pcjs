@@ -208,11 +208,11 @@
     "input": "buttons",
     "output": "display",
     "bindings": {
-      "2nd": "ind2nd",
-      "INV": "indINV",
-      "Deg": "indDeg",
-      "Rad": "indRad",
-      "Grad": "indGrad"
+      "2nd": "ind2ndTI55",
+      "INV": "indINVTI55",
+      "Deg": "indDegTI55",
+      "Rad": "indRadTI55",
+      "Grad": "indGradTI55"
     }
   }
 }
