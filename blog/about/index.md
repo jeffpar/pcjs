@@ -44,7 +44,7 @@ Over time, the set of PCjs machines has slowly expanded to include [Minicomputer
 [Programmable Calculators](/machines/ti/ti57/), [LED Simulations](/machines/led/life/color/), [Terminals](/machines/dec/vt100/),
 and [Arcade Games](/machines/arcade/invaders/).
 
-## License
+### License
 
 The [PCjs Project]({{ site.github.repository_url }}) is now an open-source project on [GitHub]({{ site.github.owner_url }}).
 All published portions are free for redistribution and/or modification under the terms of the [MIT License](/LICENSE.txt).
@@ -55,7 +55,7 @@ You are required to include the following links and copyright notice:
 
 in every copy or modified version of this work, and to display that notice on every web page or computer that it runs on.
 
-## More Information
+### More Information
 
 If you have questions or run into any problems, feel free to [tweet](https://twitter.com/jeffpar) or
 [email](mailto:Jeff@pcjs.org).

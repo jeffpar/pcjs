@@ -7,7 +7,7 @@ machines:
   - id: pcsig08
     type: pcx86
     resume: 1
-    config: /disks/pcx86/shareware/pcsig08/debugger/machine.xml
+    config: /configs/pcx86/xml/machine/5160/ega/512kb/pcsig08/debugger/machine.xml
     autoMount:
       A:
         name: PC DOS 1.00
@@ -66,10 +66,10 @@ six, still within the Tandon-rated minimum of five milliseconds.  The program al
 zero milliseconds, which is the Tandon minimum rating (IBM's conservative default setting is 25).
 
 Fortunately, we don't have to type the program in.  If you skim our archived copy of the
-[PC-SIG Library 8th Edition CD-ROM (April 1990)](/disks/pcx86/shareware/pcsig08/), you'll see `SPEEDUP.BAS`
-in the [Directory of PCSIG08: DISK0011](/disks/pcx86/shareware/pcsig08/#directory-of-pcsig08-disk0011).
+[PC-SIG Library 8th Edition CD-ROM (April 1990)](/software/pcx86/sw/misc/pcsig08/), you'll see `SPEEDUP.BAS`
+in the [Directory of PCSIG08: DISK0011](/software/pcx86/sw/misc/pcsig08/#directory-of-pcsig08-disk0011).
 
-So, fire up the [PC-SIG Machine (with Debugger)](/disks/pcx86/shareware/pcsig08/debugger/).  Or use the machine
+So, fire up the [PC-SIG Machine (with Debugger)](/software/pcx86/sw/misc/pcsig08/debugger/).  Or use the machine
 below, which has conveniently pre-loaded "PC DOS 1.00" in drive A and "PCSIG80: DISK0011" in drive B.
 
 At the DOS prompt, run `BASIC` and type `LOAD "B:SPEEDUP.BAS"`.
@@ -255,6 +255,3 @@ pointer is even or odd.  In fact, the same is true for any real-mode 16-bit acce
 or otherwise.  PCx86 will even execute real-mode instructions that wrap around a 64Kb boundary.
 
 PCx86 does it all (except when it doesn't)!
-
-*[@jeffpar](https://jeffpar.com)*  
-*Jul 21, 2017*

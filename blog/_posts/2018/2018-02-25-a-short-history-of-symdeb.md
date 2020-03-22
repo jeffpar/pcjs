@@ -6,7 +6,7 @@ permalink: /blog/2018/02/25/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /configs/pcx86/xml/machine/5170/ega/2048/rev3/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:1,path:"/harddisks/pcx86/sys/dos/microsoft/3.20/MSDOS320-C400.json"}]'
     autoMount:
       A:
@@ -16,7 +16,7 @@ machines:
 ---
 
 The first version of SYMDEB I used was probably Version 4.00, released with
-[Microsoft Macro Assembler 4.00](/disks/pcx86/tools/microsoft/masm/4.00/):
+[Microsoft Macro Assembler 4.00](/software/pcx86/lang/microsoft/masm/4.00/):
 
      Volume in drive A has no label
      Directory of  A:\
@@ -73,7 +73,7 @@ Output from SYMDEB Version 4.00:
     <type> : Byte, Word, Doubleword, Asciz, Shortreal, Longreal, Tenbytereal
 
 Earlier versions of SYMDEB existed, too.  For example, it was part of
-[Microsoft Macro Assembler 3.01](/disks/pcx86/tools/microsoft/masm/3.01/):
+[Microsoft Macro Assembler 3.01](/software/pcx86/lang/microsoft/masm/3.01/):
 
      Volume in drive A has no label
      Directory of  A:\
@@ -88,7 +88,7 @@ since only about four months separated them):
     Version 3.01
     (C)Copyright Microsoft Corp 1984, 1985
 
-And before that, SYMDEB Version 3.00 was bundled with [Microsoft Macro Assembler 3.00](/disks/pcx86/tools/microsoft/masm/3.00/),
+And before that, SYMDEB Version 3.00 was bundled with [Microsoft Macro Assembler 3.00](/software/pcx86/lang/microsoft/masm/3.00/),
 which was about six months older:
 
      Volume in drive A has no label
@@ -194,7 +194,7 @@ and included even more Windows-specific commands:
 	DQ - Displays [*] HQ - HTASK    CHANGEBITS WAKEBITS WAKEMASK
 
 Sadly, SYMDEB was dropped from Microsoft Macro Assembler releases after Version 4.00.  One possible explanation for its
-omission is that, by the time [Microsoft Macro Assembler 5.00](/disks/pcx86/tools/microsoft/masm/5.00/) was released,
+omission is that, by the time [Microsoft Macro Assembler 5.00](/software/pcx86/lang/microsoft/masm/5.00/) was released,
 80386 support was a requirement, and SYMDEB Version 4.00 didn't contain any 80386 support.
 
 The Windows versions of SYMDEB *did* add support for the 80386, starting with "Windows Version 2.00", so Microsoft
@@ -203,6 +203,3 @@ the Windows-specific functionality would need to be removed first, or perhaps th
 replacement.  Whatever the reason, it seems clear they didn't want to be bothered with SYMDEB anymore.
 
 RIP, SYMDEB.
-
-*[@jeffpar](https://jeffpar.com)*  
-*Feb 25, 2018*

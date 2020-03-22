@@ -17,10 +17,10 @@ machines:
     autoType: $date\r$time\rD:\r
 ---
 
-The [PCjs Disk Library](/disks/pcx86/) now includes a snapshot of the [MS-DOS 1.x/2.x Source Files](/disks/pcx86/dos/microsoft/2.00/)
+The PCjs Disk Library now includes a snapshot of the [MS-DOS 1.x/2.x Source Files](/software/pcx86/sys/dos/microsoft/2.00/)
 from Microsoft's [September 28, 2018 re-release](https://blogs.msdn.microsoft.com/commandline/2018/09/28/re-open-sourcing-ms-dos-1-25-and-2-0/)
 of MS-DOS source files on [GitHub](https://github.com/microsoft/ms-dos), along with a
-[pre-configured machine](/disks/pcx86/dos/microsoft/2.00/#ms-dos-source-build-machine) ready to build the MS-DOS 2.x sources.
+[pre-configured machine](/software/pcx86/sys/dos/microsoft/2.00/#ms-dos-source-build-machine) ready to build the MS-DOS 2.x sources.
 A similar machine is provided [below](/blog/2018/11/21/#ms-dos-source-build-machine).
 
 Attempting to build the sources raises several questions, including:
@@ -32,7 +32,7 @@ If you look at the pictures that the [Computer History Museum](http://www.comput
 [posted](http://www.computerhistory.org/atchm/microsoft-ms-dos-early-source-code/) when these files were first shared,
 you'd get the impression that one of those questions had already been answered: DOS 2.00, final distribution.
 
-![MS-DOS 2.00]({{ site.demo-disks.baseurl }}/pcx86/dos/microsoft/2.00/MSDOS200-DISKS.jpg)
+![MS-DOS 2.00]({{ site.software.diskettes.server }}/pcx86/sys/dos/microsoft/2.00/MSDOS200-DISKS.jpg)
 
 Not so fast.
 
@@ -46,7 +46,7 @@ OEM diskettes pictured above are primarily *binary* files, not source code.  The
 from a much later snapshot of source code, used to build MS-DOS 2.11, so at best, the collection should be referred to as
 "MS-DOS 2.x".
 
-To add to the confusion, some [WordStar 3.20](/disks/pcx86/apps/other/wordstar/3.20/) binary files were included in the
+To add to the confusion, some [WordStar 3.20](/software/pcx86/app/other/wordstar/3.20/) binary files were included in the
 `v20source` folder, completely unrelated to MS-DOS--and also completely useless, since the main executable, `WS.COM`, was not
 included.
 
@@ -57,9 +57,9 @@ And when was this snapshot made?  Was work on MS-DOS 2.11 substantially finished
 Why, for example, do the CHKDSK *sources* contain the string "Ver 2.30", while the CHKDSK *binary* distributed with the source
 code contains the string "Ver 2.10"?  Were these sources modified *after* work on 2.11 was complete?
 
-On the other hand, an inspection of CHKDSK.COM in the [COMPAQ MS-DOS 2.11](/disks/pcx86/dos/compaq/2.11/) distribution ALSO
+On the other hand, an inspection of CHKDSK.COM in the [COMPAQ MS-DOS 2.11](/software/pcx86/sys/dos/compaq/2.11/) distribution ALSO
 shows the string "Ver 2.30", and in fact, the CHKDSK.COM from COMPAQ MS-DOS 2.11 matches the
-[CHKDSK.COM](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/built/CHKDSK)
+[CHKDSK.COM]({{ site.github.master }}/software/pcx86/dos/microsoft/2.11/built/CHKDSK)
 built from the MS-DOS 2.x sources *perfectly*.
 
 Go figure.
@@ -202,6 +202,3 @@ folder.
 This machine is also available with the [PCjs Debugger](/disks/pcx86/dos/microsoft/2.00/debugger/).
 
 {% include machine.html id="ibm5160" %}
-
-*[@jeffpar](https://jeffpar.com)*  
-*Nov 21, 2018*

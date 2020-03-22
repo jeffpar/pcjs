@@ -2131,7 +2131,7 @@ class Web {
         //     sURLRedirect = sURL.replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/").replace(/^\/disks-([a-z0-9]+)\//, "https://$1-disks.pcjs.org/");
         // }
 
-        let sURLRedirect = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+        let sURLRedirect = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig8a-disks|pcsig8b-disks)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
 
 
         let request = (window.XMLHttpRequest? new window.XMLHttpRequest() : new window.ActiveXObject("Microsoft.XMLHTTP"));

@@ -16,35 +16,35 @@ _displayTI57:
   font-size: 11px;
   font-family: Monaco,"Lucida Console",monospace;
   color: red;
-_ind2nd:
+_ind2ndTI57:
   position: absolute;
   left: 17%;
   top: 11.5%;
   width: 7%;
   height: 2%;
   opacity: 0;
-_indINV:
+_indINVTI57:
   position: absolute;
   left: 25%;
   top: 11.5%;
   width: 7%;
   height: 2%;
   opacity: 0;
-_indDeg:
+_indDegTI57:
   position: absolute;
   left: 33%;
   top: 11.5%;
   width: 7%;
   height: 2%;
   opacity: 0;
-_indRad:
+_indRadTI57:
   position: absolute;
   left: 41%;
   top: 11.5%;
   width: 7%;
   height: 2%;
   opacity: 0;
-_indGrad:
+_indGradTI57:
   position: absolute;
   left: 49%;
   top: 11.5%;

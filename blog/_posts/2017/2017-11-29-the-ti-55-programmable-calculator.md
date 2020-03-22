@@ -7,131 +7,22 @@ machines:
   - id: ti55
     type: ti55
     name: TI-55 Programmable Calculator
-    config: /devices/ti55/machine/diags/ti55.json
-  - id: ti57
+    config: /configs/ti55/ti55.json
+    layout: /_includes/ti55/ti55-full.html
+  - id: ti57-rev0
     type: ti57
     name: TI-57 Programmable Calculator
-    config: /devices/ti57/machine/rev0/ti57.json
-styles:
-  _ti55:
-    position: relative;
-    display: inline-block;
-  _displayTI55:
-    position: absolute;
-    left: 15%;
-    top: 8%;
-    width: 70%;
-    height: 4%;
-  .indTI55:
-    font-size: 11px;
-    font-family: Monaco,"Lucida Console",monospace;
-    color: red;
-  _ind2ndTI55:
-    position: absolute;
-    left: 15%;
-    top: 13%;
-    width: 7%;
-    height: 2%;
-    opacity: 0;
-  _indINVTI55:
-    position: absolute;
-    left: 23%;
-    top: 13%;
-    width: 7%;
-    height: 2%;
-    opacity: 0;
-  _indDegTI55:
-    position: absolute;
-    left: 31%;
-    top: 13%;
-    width: 7%;
-    height: 2%;
-    opacity: 0;
-  _indRadTI55:
-    position: absolute;
-    left: 39%;
-    top: 13%;
-    width: 7%;
-    height: 2%;
-    opacity: 0;
-  _indGradTI55:
-    position: absolute;
-    left: 47%;
-    top: 13%;
-    width: 7%;
-    height: 2%;
-    opacity: 0;
-  _powerTI55:
-    position: absolute;
-    left: 69%;
-    top: 22%;
-    width: 16%;
-    height: 4%;
-    opacity: 0;
-  _ti57:
-    position: relative;
-    display: inline-block;
-  _displayTI57:
-    position: absolute;
-    left: 16%;
-    top: 7%;
-    width: 70%;
-    height: 4%;
-  .indTI57:
-    font-size: 11px;
-    font-family: Monaco,"Lucida Console",monospace;
-    color: red;
-  _ind2ndTI57:
-    position: absolute;
-    left: 17%;
-    top: 12%;
-    width: 7%;
-    height: 2%;
-    opacity: 0;
-  _indINVTI57:
-    position: absolute;
-    left: 25%;
-    top: 12%;
-    width: 7%;
-    height: 2%;
-    opacity: 0;
-  _indDegTI57:
-    position: absolute;
-    left: 33%;
-    top: 12%;
-    width: 7%;
-    height: 2%;
-    opacity: 0;
-  _indRadTI57:
-    position: absolute;
-    left: 41%;
-    top: 12%;
-    width: 7%;
-    height: 2%;
-    opacity: 0;
-  _indGradTI57:
-    position: absolute;
-    left: 49%;
-    top: 12%;
-    width: 7%;
-    height: 2%;
-    opacity: 0;
-  _powerTI57:
-    position: absolute;
-    left: 70%;
-    top: 20%;
-    width: 16%;
-    height: 5%;
-    opacity: 0;
+    config: /configs/ti57/ti57-rev0.json
+    layout: /_includes/ti57/ti57-full.html
 ---
 
 Building on the PCjs [TI-57 Programmable Calculator](/blog/2017/11/10/) emulator,
-I'm happy to report that PCjs can also emulate the [TI-55 Programmable Calculator](/devices/ti55/) now.
+I'm happy to report that PCjs can also emulate the [TI-55 Programmable Calculator](/machines/ti/ti55/) now.
 You can see both in operation [below](/blog/2017/11/29/#pcjs-ti-55-and-ti-57-emulators).
 
 Both calculators used the same basic chip.  In the TI-57, the chip was designated "TMC1501", and in the TI-55,
-it was "TMC1503", but both were [TMS-1500](/modules/devices/tms1500.js)-compatible.  The primary difference between
-the chips was the contents of their ROMs.  And I'm not sure the [TI-55 ROM](/devices/ti55/rom/) was available anywhere
+it was "TMC1503", but both were [TMS-1500](/machines/ti/lib/cpu1500.js)-compatible.  The primary difference between
+the chips was the contents of their ROMs.  And I'm not sure the [TI-55 ROM](/machines/ti/ti55/rom/) was available anywhere
 previously, until now, thanks to [Sean Riddle](http://seanriddle.com/tms1500.html).
 
 In theory, the TI-55 and TI-57 would have cost exactly the same to manufacture.  However, I haven't seen any
@@ -151,8 +42,8 @@ limited programmability.  Finally, Sean Riddle points out that since the TI-55 a
 the "[Calculator Forensics](http://www.rskey.org/~mwsebastian/miscprj/models.htm)" test, the ROMs may have even been
 developed by different teams at Texas Instruments.
 
-It may be worth undertaking a detailed comparison of the [TI-55 ROM](/devices/ti55/rom/) and
-[TI-57 ROM](/devices/ti57/rom/) at some point, because the TI-57 has fewer built-in functions, as evidenced by
+It may be worth undertaking a detailed comparison of the [TI-55 ROM](/machines/ti/ti55/rom/) and
+[TI-57 ROM](/machines/ti/ti57/rom/) at some point, because the TI-57 has fewer built-in functions, as evidenced by
 the smaller of number of "dual function" buttons, and yet the TI-57 ROM appears to be almost completely full.
 
 In fact, the TI-57 ROM apparently didn't even have room for this simple TI-55 feature, described on page 4 of the
@@ -170,33 +61,6 @@ NOTE: It's possible I don't have the TI-55 Emulator properly clocked yet, becaus
 
 ## PCjs TI-55 and TI-57 Emulators
 
-{% include machine.html id="ti55" config="json" %}
+{% include machine.html id="ti55" %}
 
-<div id="ti55">
-  <img id="imageTI55" src="/devices/ti55/images/TI-55.png" alt="TI-55 Calculator"/>
-  <div id="displayTI55"></div>
-  <div id="ind2ndTI55" class="indTI55">2nd</div>
-  <div id="indINVTI55" class="indTI55">INV</div>
-  <div id="indDegTI55" class="indTI55">Deg</div>
-  <div id="indRadTI55" class="indTI55">Rad</div>
-  <div id="indGradTI55" class="indTI55">Grad</div>
-  <button id="powerTI55">Power</button>
-</div>
-
-{% include machine.html id="ti57" config="json" %}
-
-<div id="ti57">
-  <img id="imageTI57" src="/devices/ti57/images/ti57.png" alt="TI-57 Calculator"/>
-  <div id="displayTI57"></div>
-  <div id="ind2ndTI57" class="indTI57">2nd</div>
-  <div id="indINVTI57" class="indTI57">INV</div>
-  <div id="indDegTI57" class="indTI57">Deg</div>
-  <div id="indRadTI57" class="indTI57">Rad</div>
-  <div id="indGradTI57" class="indTI57">Grad</div>
-  <button id="powerTI57">Power</button>
-</div>
-
----
-
-*[@jeffpar](https://jeffpar.com)*  
-*Nov 29, 2017*
+{% include machine.html id="ti57-rev0" %}
