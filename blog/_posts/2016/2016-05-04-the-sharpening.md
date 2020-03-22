@@ -8,16 +8,16 @@ permalink: /blog/2016/05/04/
 This was the week of The Sharpening.
 
 A while back, I updated most of the machines to use higher-resolution "screens".  For example, a typical
-[EGA video configuration](/devices/pcx86/video/ibm/ega/1984-09-13/128kb-autolockfs.xml) now specifies a *screenWidth*
-of 1280 and *screenHeight* of 700, dimensions which are exactly twice the standard EGA resolution.
+[EGA video configuration](/configs/pcx86/xml/video/ibm/ega/1984-09-13/ibm-ega-5154-128k-autolockfs.xml) now
+specifies a *screenWidth* of 1280 and *screenHeight* of 700, dimensions which are exactly twice the standard EGA resolution.
 
 That change had no effect on the machine's operation, but it did improve the machine's appearance, because
 most people are using much higher resolution monitors today, so by using a higher-resolution "screen" (canvas),
 less interpolation is happening when a machine's screen image is scaled up to fill your browser window.
 
 The amount of scaling *also* depends on whether the machine allows itself to be stretched to fill the browser window.
-For example, this [machine](/devices/pcx86/machine/5160/ega/640kb/array/machine.xml) (used by the
-[EGA Machine Array Demo](/devices/pcx86/machine/5160/ega/640kb/array/)) is limited to an overall *width* of 680 pixels,
+For example, this [machine](/configs/pcx86/xml/machine/5160/ega/640kb/array/machine.xml) (used by the
+[EGA Machine Array Demo](/software/pcx86/sys/windows/1.01/array/)) is limited to an overall *width* of 680 pixels,
 no matter how large you make your browser window:
 
 ```xml
@@ -46,27 +46,26 @@ All the browsers I've tested so far (Chrome, Firefox, and Safari) support a
 which eliminates much of the fuzziness that would occur when copying pixels from the lower-resolution *buffer* canvas
 to the higher-resolution *screen* canvas.
 
-So I've added a new [Video](/docs/pcx86/video/) property named *smoothing* that can be set to "true" or "false",
+So I've added a new [Video](/machines/pcx86/lib/video.js) property named *smoothing* that can be set to "true" or "false",
 and I've set it to "false" for most machines in the project.  If *smoothing* is not set, your browser continues to
 use its default interpolation method.
 
 {% include gallery/begin.html %}
-{% include gallery/image.html src="/blog/images/si1978-fuzzier.png" width="339" height="388" title="Space Invaders (Fuzzier)" link="/devices/pc8080/machine/invaders/?smoothing=true" %}
-{% include gallery/image.html src="/blog/images/si1978-sharper.png" width="339" height="388" title="Space Invaders (Sharper)" link="/devices/pc8080/machine/invaders/?smoothing=false" %}
+{% include gallery/image.html src="/blog/images/si1978-fuzzier.png" width="339" height="388" title="Space Invaders (Fuzzier)" link="/machines/arcade/invaders/?smoothing=true" %}
+{% include gallery/image.html src="/blog/images/si1978-sharper.png" width="339" height="388" title="Space Invaders (Sharper)" link="/machines/arcade/invaders/?smoothing=false" %}
 {% include gallery/end.html %}
 
 For some people, this might be a matter of taste, because less fuzziness necessarily means more pixelation (ie, you
 can see individual pixels more clearly), which becomes more noticeable when switching a machine **Full Screen**.
 So I've also added a URL *smoothing* parameter you can use to override a machine's default setting; eg:
 
-	https://www.pcjs.org/devices/pc8080/machine/invaders/?smoothing=true
+	https://www.pcjs.org/machines/arcade/invaders/?smoothing=true
 
-See for yourself, by clicking on each of the [Space Invaders](/devices/pc8080/machine/invaders/) images above and
+See for yourself, by clicking on each of the [Space Invaders](/machines/arcade/invaders/) images above and
 then clicking the **Full Screen** button; both images link to the same machine, but left one enables image smoothing,
 while the right one does not.
 
-Aspect Ratio
----
+### Aspect Ratio
 
 The *smoothing* property joins another recent [Video](/docs/pcx86/video/) property, *aspect*, that was added in a
 [release](https://github.com/jeffpar/pcjs/releases/tag/v1.21.5) last month.
@@ -88,10 +87,7 @@ be responsive to any browser resizing while still retaining that aspect ratio.
 
 ---
 
-That's all for now.  Work continues on the new [PC8080](/modules/pc8080/) emulator and the
-[Space Invaders](/devices/pc8080/machine/invaders/) test machine.  More on that later, when it's finished.
+That's all for now.  Work continues on the new [PCx80]({{ site.github.master }}/machines/pcx80/) emulator and the
+[Space Invaders](/machines/arcade/invaders/) machine.  More on that later, when it's finished.
 
 Until then, May the 4th be with you!
-
-*[@jeffpar](https://jeffpar.com)*  
-*May 4, 2016*

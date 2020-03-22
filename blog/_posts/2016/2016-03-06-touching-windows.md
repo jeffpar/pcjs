@@ -5,7 +5,7 @@ date: 2016-03-06 09:00:00
 permalink: /blog/2016/03/06/
 ---
 
-Yesterday, I fired up [Windows 3.1](/disks/pcx86/windows/3.10/) and played a complete game of
+Yesterday, I fired up [Windows 3.1](/software/pcx86/sys/windows/3.10/) and played a complete game of
 [Windows Solitaire](https://en.wikipedia.org/wiki/Microsoft_Solitaire) on my iPad.  It was a bit, um, touchy,
 but it worked.
 

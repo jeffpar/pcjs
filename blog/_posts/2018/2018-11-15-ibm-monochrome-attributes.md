@@ -7,7 +7,7 @@ preview: /blog/images/mda-attributes.png
 machines:
   - id: ibm5150
     type: pcx86
-    config: /devices/pcx86/machine/5150/mda/256kb/debugger/machine.xml
+    config: /configs/pcx86/xml/machine/5150/mda/256kb/debugger/machine.xml
     autoType: |
       $date
       $time

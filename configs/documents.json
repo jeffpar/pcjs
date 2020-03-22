@@ -394,14 +394,16 @@
             "@file": "PC-DISK-MAG-VOL1-NO1.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqYSeCoXKlzL6H11pA?e=v306gD",
             "@cover": ".jpg",
-            "@source": "PCjs"
+            "@source": "PCjs",
+            "@tags": "norton"
           },
           {
             "@title": "PC Disk Magazine Vol. 1 No. 2",
             "@file": "PC-DISK-MAG-VOL1-NO2.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqYRr0Q7wLXUGnj2Xg?e=0cdeTk",
             "@cover": ".jpg",
-            "@source": "PCjs"
+            "@source": "PCjs",
+            "@tags": "norton"
           },
           {
             "@title": "PC Disk Magazine Vol. 1 No. 3",

@@ -62,61 +62,91 @@
     "class": "LED",
     "type": "round",
     "color": "red",
-    "optional": true
+    "optional": true,
+    "bindings": {
+      "container": "ledOnlineVT100"
+    }
   },
   "ledLocal": {
     "class": "LED",
     "type": "round",
     "color": "red",
-    "optional": true
+    "optional": true,
+    "bindings": {
+      "container": "ledLocalVT100"
+    }
   },
   "ledLocked": {
     "class": "LED",
     "type": "round",
     "color": "red",
-    "optional": true
+    "optional": true,
+    "bindings": {
+      "container": "ledLockedVT100"
+    }
   },
   "led1": {
     "class": "LED",
     "type": "round",
     "color": "red",
-    "optional": true
+    "optional": true,
+    "bindings": {
+      "container": "led1VT100"
+    }
   },
   "led2": {
     "class": "LED",
     "type": "round",
     "color": "red",
-    "optional": true
+    "optional": true,
+    "bindings": {
+      "container": "led2VT100"
+    }
   },
   "led3": {
     "class": "LED",
     "type": "round",
     "color": "red",
-    "optional": true
+    "optional": true,
+    "bindings": {
+      "container": "led3VT100"
+    }
   },
   "led4": {
     "class": "LED",
     "type": "round",
     "color": "red",
-    "optional": true
+    "optional": true,
+    "bindings": {
+      "container": "led4VT100"
+    }
   },
   "ledCaps": {
     "class": "LED",
     "type": "square",
     "color": "green",
-    "optional": true
+    "optional": true,
+    "bindings": {
+      "container": "ledCapsVT100"
+    }
   },
   "ledDTR": {
     "class": "LED",
     "type": "round",
     "color": "red",
-    "optional": true
+    "optional": true,
+    "bindings": {
+      "container": "ledDTRVT100"
+    }
   },
   "ledRTS": {
     "class": "LED",
     "type": "round",
     "color": "red",
-    "optional": true
+    "optional": true,
+    "bindings": {
+      "container": "ledRTSVT100"
+    }
   },
   "ports": {
     "class": "Ports",
@@ -893,7 +923,20 @@
   "keyboard": {
     "class": "VT100Keyboard",
     "leds": ["ledLocal", "ledLocked", "led1", "led2", "led3", "led4"],
-    "bindings": ["keySetup", "keyLineFeed", "keyTab", "keyEsc", "keyBreak", "keyShiftLock", "keyCtrlLock", "keyCtrlC", "keyCapsLock"]
+    "_JSONDoc": [
+      "We used to use an Array of direct bindings, but since we want to support multiple machines on the same page, we can no longer do that."
+    ],
+    "bindings": {
+      "keySetup": "keySetupVT100",
+      "keyLineFeed": "keyLineFeedVT100",
+      "keyTab": "keyTabVT100",
+      "keyEsc": "keyEscVT100",
+      "keyBreak": "keyBreakVT100",
+      "keyShiftLock": "keyShiftLockVT100",
+      "keyCtrlLock": "keyCtrlLockVT100",
+      "keyCtrlC": "keyCtrlCVT100",
+      "keyCapsLock": "keyCapsLockVT100"
+    }
   },
   "serialPort": {
     "class": "VT100Serial"

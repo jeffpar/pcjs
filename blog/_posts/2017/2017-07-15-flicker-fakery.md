@@ -9,7 +9,7 @@ One of my long-standing pet peeves about PC emulators has been their obsession w
 try to squeeze every last drop of performance out of their instruction execution loop, on the assumption that
 everyone wants an 8088 that runs at, say, 500Mhz, as opposed to the stately 4.77Mhz of the original IBM PC.
 
-And sure, it might be nice if that [Lotus 1-2-3](/disks/pcx86/apps/lotus/123/1as/) spreadsheet recalculated instantly,
+And sure, it might be nice if that [Lotus 1-2-3](/software/pcx86/app/lotus/123/1aa/) spreadsheet recalculated instantly,
 instead of the several seconds that it originally took.  But most of the time, such a dramatic difference in speed is
 more aggravating than helpful.  In 1981, you could type `DIR` at a DOS prompt and skim the directory listing as it was
 being printed.  Do the same thing in a modern emulator, and the directory listing will display so fast that you'll have

@@ -132,14 +132,14 @@ function processFiles(sDir, fDebug, fFix)
         if (match) {
             let sPermaLink = match[1];
             let sCorrectLink = sFileDir + (sFileDir != "/"? "/" : "");
-            let matchBlog = sFilePath.match(/^\.?\/_posts\/(?:[0-9]*\/|)([0-9]+)-([0-9]+)-([0-9]+)-.*/);
+            let matchBlog = sFilePath.match(/^\.?\/blog\/_posts\/(?:[0-9]*\/|)([0-9]+)-([0-9]+)-([0-9]+)-.*/);
             if (matchBlog) {
                 sCorrectLink = "/blog/" + matchBlog[1] + "/" + matchBlog[2] + "/" + matchBlog[3] + "/";
             }
             if (sCorrectLink != "/" && sPermaLink != sCorrectLink) {
                 printf("%s: permalink (%s) does not match correct link (%s)\n", sFilePath, sPermaLink, sCorrectLink);
                 if (fFix) {
-                    sText = sText.substr(0, match.index) + "permalink: " + sPermaLink + sText.substr(match.index + match[0].length);
+                    sText = sText.substr(0, match.index) + "permalink: " + sCorrectLink + sText.substr(match.index + match[0].length);
                     fs.writeFileSync(asFiles[i], sText);
                 }
             }
@@ -191,14 +191,37 @@ function processFiles(sDir, fDebug, fFix)
             }
         }
         /*
-         * Fix #5: look at all Markdown-style links and attempt to validate
+         * Fix #5: validate optional config entries
+         */
+        match = sText.match(/^(\s+config:\s*)(.*)$/m);
+        if (match) {
+            let sFile = match[2];
+            if (sFile[0] == "/") {
+                sFile = "." + sFile;
+            } else {
+                sFile = "." + sFileDir + "/" + sFile;
+            }
+            if (!fileExists(sFile)) {
+                printf("%s: config not found: %s\n", sFilePath, sFile);
+                if (fFix) {
+                    let sCorrection = match[2].replace(/^\/devices\/pcx86\/machine/, "/configs/pcx86/xml/machine");
+                    if (sCorrection != match[2]) {
+                        printf("%s: replacing '%s' with '%s'\n", match[2], sCorrection);
+                        sText = sText.substr(0, match.index) + match[1] + sCorrection + sText.substr(match.index + match[0].length);
+                        fs.writeFileSync(asFiles[i], sText);
+                    }
+                }
+            }
+        }
+        /*
+         * Fix #6: look at all Markdown-style links and attempt to validate
          */
         let reLinks = /\[([^\]]*)\]\(([^)]*)\)/g;
         while ((match = reLinks.exec(sText))) {
             let sFile = match[2];
-            if (sFile[0] == '?' || sFile[0] == '#') continue;
+            if (sFile[0] == '?' || sFile[0] == '#' || sFile.indexOf("mailto:") >= 0) continue;
             if (sFile.indexOf("{{") == 0) {
-                if (sFile.indexOf("site.github") >= 0) continue;
+                if (sFile.indexOf("site.github") >= 0 || sFile.indexOf("site.url") >= 0) continue;
                 sFile = sFile.replace(/\{\{ site\.software\.(diskettes|gamedisks|harddisks)\.server \}\}/, "../pcjs-$1");
             }
             else if (sFile.indexOf("http") == 0) {
@@ -208,7 +231,7 @@ function processFiles(sDir, fDebug, fFix)
             else {
                 let matchBlog = sFile.match(/^\/blog\/([0-9]+)\/([0-9]+)\/([0-9]+)\//);
                 if (matchBlog) {
-                    sFile = sFile.replace(matchBlog[0], "/_post/" + matchBlog[1] + "/" + matchBlog[1] + "-" + matchBlog[2] + "-" + matchBlog[3] + "-*");
+                    sFile = sFile.replace(matchBlog[0], "/blog/_posts/" + matchBlog[1] + "/" + matchBlog[1] + "-" + matchBlog[2] + "-" + matchBlog[3] + "-*");
                     continue;   // TODO: For now, we're just going to assume that blog URLs are OK
                 }
                 if (sFile[0] == "/") {

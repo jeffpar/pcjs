@@ -87,7 +87,7 @@ It is also true that as of Version 1.15, the Norton Utilities had become a 14-ut
 single-sided (160Kb) diskettes, to ensure that even the earliest IBM PC owners, using only PC DOS 1.00, could read
 them.  More details about that version can be found in the [PC Tech Journal July/August 1983 article](#july-1983) below.
 
-NOTE: In that same [PC Tech Journal issue](/documents/magazines/pctj/PCTJ-1983-07/), Peter Norton is also a guest columnist;
+NOTE: In that same [PC Tech Journal issue](/documents/magazines/pctj/#PCTJ-1983-07), Peter Norton is also a guest columnist;
 see the article titled "Tinkering With DOS 2.00".  The article doesn't actually talk much about DOS 2.00, but instead
 provides some examples of how you can patch utilities in PC DOS 2.00 to customize their behavior.  What's noteworthy to me
 about the article is that he demonstrates the patching process without providing any insight into *how*
@@ -97,7 +97,7 @@ to gain exposure for himself and his products, that may create some disincentive
 into areas where they feel they have unique expertise or a competitive edge.  It also underscores the value
 of having a tight association between your name and your products.  But I digress.
 
-[The Norton Utilities Version 3.0](/disks/pcx86/tools/other/norton/3.00/), first released in late 1984 *and*
+[The Norton Utilities Version 3.0](/software/pcx86/util/norton/3.00/), first released in late 1984 *and*
 the oldest version we have been able to locate so far, expanded the list of utilities to 16:
 
 - BEEP
@@ -129,12 +129,12 @@ I would have liked to have wrapped up this post with some screenshots and exampl
 the original Norton Utilities to undelete files, browse disk sectors, etc, but as I've already lamented, the original utilities
 are nowhere to be found.
 
-You can, however, play with newer versions of [The Norton Utilities](/disks/pcx86/tools/other/norton/), including:
+You can, however, play with newer versions of The Norton Utilities, including:
 
-- [Version 3.00 (1984-1985)](/disks/pcx86/tools/other/norton/3.00/)
-- [Version 3.10 (1985-1986)](/disks/pcx86/tools/other/norton/3.10/)
-- [Version 4.00 Standard Edition (1987)](/disks/pcx86/tools/other/norton/4.00/)
-- [Version 4.00 Advanced Edition (1987)](/disks/pcx86/tools/other/norton/4.00/advanced/)
+- [Version 3.00 (1984-1985)](/software/pcx86/util/norton/3.00/)
+- [Version 3.10 (1985-1986)](/software/pcx86/util/norton/3.10/)
+- [Version 4.00 Standard Edition (1987)](/software/pcx86/util/norton/4.00/)
+- [Version 4.00 Advanced Edition (1987)](/software/pcx86/util/norton/4.00/advanced/)
 
 The 1984 release of Version 3.00, as well as the Version 4.00 Advanced Edition, are recent PCjs acquisitions, but
 I'm still on the lookout for older versions, so please [contact me](mailto:Jeff@pcjs.org) if you have anything that
@@ -147,7 +147,7 @@ Selected Magazine Articles on The Norton Utilities
 
 ### July 1983
 
-In PC Tech Journal's premiere [July-August 1983 issue](/documents/magazines/pctj/PCTJ-1983-07/),
+In PC Tech Journal's premiere [July-August 1983 issue](/documents/magazines/pctj/#PCTJ-1983-07),
 the article "THE NORTON UTILITIES" appeared. It was written by Susan Glinert-Cole and has been
 reproduced below.
 
@@ -546,4 +546,4 @@ And *The Norton Utilities, Version 4.0* shared PC Magazine's "Editor's Choice" a
 
 #### Version 3.00 Disk Scan
 
-[![Norton Utilities 3.00 (1984-12-07)]({{ site.demo-disks.baseurl }}/pcx86/tools/other/norton/3.00/1984-12-07/NU300-1984-12-07.jpg)](/disks/pcx86/tools/other/norton/3.00/)
+[![Norton Utilities 3.00 (1984-12-07)]({{ site.software.diskettes.server }}/pcx86/util/norton/3.00/NU300-1984-12-07.jpg)](/software/pcx86/util/norton/3.00/)

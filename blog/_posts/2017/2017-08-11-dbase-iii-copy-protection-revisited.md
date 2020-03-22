@@ -22,12 +22,12 @@ Perhaps my thinking was that, after all, it's just software, so how hard could i
 the challenge very seriously, because I also made a lot of notes.
 
 I recently found [those notes](/docs/personal/#dbase-iii-copy-protection), along with copies of the
-[dBASE III disks](/disks/pcx86/apps/other/dbase3/1.0/) used.  Unfortunately, all the disks contained was my *patched*
+[dBASE III disks](/software/pcx86/app/other/dbase3/1.0/) used.  Unfortunately, all the disks contained was my *patched*
 (unlocked) version of `DBASE.EXE`, and for the sake of a complete archive, I wanted the *unpatched* (locked) version as
 well.  Fortunately, my patching notes also show all the original bytes, so I reproduced the original file by reversing
 the patching process, using PCjs:
 
-	Loading /disks/pcx86/apps/other/dbase3/1.0/DBIII-100-UNLOCKED.json.......
+	Loading /software/pcx86/app/other/dbase3/1.0/DBIII-100-UNLOCKED.json.......
 	FDC: Mounted diskette "dBASE III 1.0 (Unlocked)" in drive A
 	
 	A>dir
@@ -92,7 +92,7 @@ the patching process, using PCjs:
 	CONFIG   SYS       22   6-26-84   5:37p
 	        6 File(s)     15360 bytes free
 	
-	saving diskette /disks/pcx86/apps/other/dbase3/1.0/DBIII-100-UNLOCKED.json...
+	saving diskette /software/pcx86/app/other/dbase3/1.0/DBIII-100-UNLOCKED.json...
 
 I haven't examined this patch again (yet), but I will admit that it seems rather lengthy.  Usually one strives for
 a very small, surgically precise patch that's more on the order of 3 or 4 bytes, but we have to remember that I wasn't

@@ -7,7 +7,7 @@ preview: /blog/images/compaq/COMPAQ-DOS110-Diskette.jpg
 machines:
   - id: compaq-portable-128kb
     type: pcx86
-    config: /devices/pcx86/machine/compaq/portable/vdu/128kb/machine.xml
+    config: /configs/pcx86/xml/machine/compaq/portable/vdu/128kb/machine.xml
     autoType: \r\r$20demo\r
 ---
 

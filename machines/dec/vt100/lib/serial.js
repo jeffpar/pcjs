@@ -171,6 +171,13 @@ class VT100Serial extends Device {
     {
         if (!this.cpu) {
             this.cpu = /** @type {CPU8080} */ (this.findDeviceByClass("CPU"));
+            /*
+             * This is as late as we can currently wait to make our first inter-machine connection attempt;
+             * even so, the target machine's initialization process may still be ongoing, so any connection
+             * may be not fully resolved until the target machine performs its own initConnection(), which will
+             * in turn invoke our initConnection() again.
+             */
+            this.initConnection(this.fNullModem);
         }
     }
 

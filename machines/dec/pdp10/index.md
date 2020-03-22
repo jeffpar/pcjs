@@ -7,4 +7,8 @@ redirect_from:
   - /modules/pdp10/
 ---
 
-{% include gallery/documents.html width="200" height="260" tag="hardware" %}
+{% include gallery/documents.html path="/machines/dec/pdp10/ka10/" title="KA10 Documentation" width="200" height="260" tag="hardware" %}
+
+{% include gallery/documents.html path="/machines/dec/pdp10/kl10/" title="KL10 Documentation" width="200" height="260" tag="hardware" %}
+
+{% include gallery/documents.html title="PDP-10 Software" width="200" height="260" tag="software" %}

@@ -3,7 +3,7 @@ layout: post
 title: The Realities of Fantasy Land
 date: 2018-04-23 10:00:00
 permalink: /blog/2018/04/23/
-preview: /software/pcx86/demo/ibm/ega/fland-legend.png
+preview: /software/pcx86/demo/ibm/ega/images/fland-legend.png
 machines:
   - id: ibm5160
     type: pcx86

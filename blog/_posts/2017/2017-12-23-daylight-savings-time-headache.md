@@ -6,7 +6,7 @@ permalink: /blog/2017/12/23/
 ---
 
 This past summer, I added a couple sets of Lotus 1-2-3 disk images to the PCjs archives
-([1-2-3 Release 1A](/disks/pcx86/apps/lotus/123/1a/) and [1-2-3 Release 1A*](/disks/pcx86/apps/lotus/123/1as/)), and I had
+([1-2-3 Release 1A](/disks/pcx86/apps/lotus/123/1a/) and [1-2-3 Release 1A*](/software/pcx86/app/lotus/123/1aa/)), and I had
 noticed with some amusement that Lotus had timestamped all their files with the local time of 1:23am.
 
 Fast-forward to this December, when I was updating the [disk manifest](/disks/pcx86/apps/lotus/123/1a/manifest.xml) for these

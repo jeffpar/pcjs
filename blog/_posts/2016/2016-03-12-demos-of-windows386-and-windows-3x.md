@@ -7,7 +7,7 @@ permalink: /blog/2016/03/12/
 
 I recently added some more demos to the PCjs Project, to showcase its ability to run old 80286-based and
 80386-based software, such as [Windows/386](/disks/pcx86/windows/2.0x/), [Windows 3.0](/disks/pcx86/windows/3.00/),
-[Windows 3.1](/disks/pcx86/windows/3.10/), and [Windows 95](/disks/pcx86/windows/win95/4.00.950/).
+[Windows 3.1](/software/pcx86/sys/windows/3.10/), and [Windows 95](/software/pcx86/sys/windows/win95/4.00.950/).
 
 {% include gallery/begin.html %}
 {% include gallery/image.html src="/disks/pcx86/windows/2.0x/thumbnail.jpg" width="200" height="120" title="COMPAQ DeskPro 386, Windows/386 2.01" link="/disks/pcx86/windows/2.0x/" %}

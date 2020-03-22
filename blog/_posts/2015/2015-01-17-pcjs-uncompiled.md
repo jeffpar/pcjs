@@ -9,7 +9,7 @@ machines:
     type: pcx86
     debugger: true
     uncompiled: true
-    config: /devices/pcx86/machine/5170/ega/1024kb/rev3/debugger/visual/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/1024kb/rev3/debugger/visual/machine.xml
 ---
 
 Most PCx86 machines on [{{ site.domain }}](/) run with a compiled version of PCx86, which is produced

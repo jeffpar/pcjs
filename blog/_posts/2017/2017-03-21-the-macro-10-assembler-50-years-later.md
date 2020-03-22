@@ -26,7 +26,7 @@ confirm yet), I may have no choice.  Floating-point emulation in JavaScript isn'
 
 The PDP-10 has a lot of instructions, and I quickly had far more instructions than I was willing or able to write tests for.
 Besides, any tests I wrote would be based on the same potentially-flawed understandings that I had gleaned from DEC's
-[PDP-10 Hardware Documentation](/pubs/dec/pdp10/).  It was obvious that I needed to find a set of DEC PDP-10 diagnostics, much
+[PDP-10 Hardware Documentation](/machines/dec/pdp10/).  It was obvious that I needed to find a set of DEC PDP-10 diagnostics, much
 like the [DEC PDP-11 Paper Tape Diagnostics](/software/dec/pdp11/tapes/diag/) I had used to flush most of the early bugs out of my
 PDP-11 emulator.
 
@@ -49,13 +49,13 @@ Any machine that includes the PDPjs Debugger (like the machine below) now includ
 {% include machine.html id="testka10" %}
 
 The above machine uses the Debugger's assemble ('a') command to assemble DEC's "DAKAA" diagnostic
-[KA10 Basic Instruction Diagnostic](/software/dec/pdp10/diags/ka10/dakaa/) and load the resulting code at address 30724:
+[KA10 Basic Instruction Diagnostic](/software/dec/pdp10/diag/ka10/dakaa/) and load the resulting code at address 30724:
 
-	a 30724 /software/dec/pdp10/diags/ka10/dakaa/DAKAA.MAC
+	a 30724 /software/dec/pdp10/diag/ka10/dakaa/DAKAA.MAC
 
 The Debugger invokes the MACRO-10 mini-assembler whenever the target address is followed by an argument ending with ".MAC".
 
-As previously described in the section on [PDPjs PDP-10 Opcode Tests](/apps/pdp10/tests/opcodes/), the Debugger already
+As previously described in the section on [PDPjs PDP-10 Opcode Tests](/software/dec/pdp10/test/opcodes/), the Debugger already
 allowed you to assemble instructions directly into memory (eg, `a 100 hrli 1,111111`).  This "immediate mode" feature is provided
 exclusively by the Debugger; MACRO-10 features are not available in that mode.
 
@@ -206,9 +206,9 @@ now, since I'm holding off on all floating-point support for as long as possible
 Much more work is needed to make the MACRO-10 "Mini-Assembler" a general-purpose assembler, but it's already proved itself
 useful in assembling the following tests:
 
-- [KA10 Basic Instruction Diagnostic #1](/apps/pdp10/diags/ka10/dakaa/)
-- [KA10 Basic Instruction Diagnostic #4](/apps/pdp10/diags/ka10/dakad/)
-- [Assorted MACRO-10 Mini-Assembler Tests](/apps/pdp10/tests/macro10/)
+- [KA10 Basic Instruction Diagnostic #1](/software/dec/pdp10/diag/ka10/dakaa/)
+- [KA10 Basic Instruction Diagnostic #4](/software/dec/pdp10/diag/ka10/dakad/)
+- [Assorted MACRO-10 Mini-Assembler Tests](/software/dec/pdp10/test/macro10/)
 
 However, there's "*assembling*" and then there's "*assembling correctly*".  One early problem I had to immediately
 address was the handling of literals.  I was originally collecting all the literal (square-bracketed) expressions, like the
@@ -273,8 +273,8 @@ defined *within* the literal, or to *any* forward reference?  In other words, wh
 the forward reference, or the label?
 
 In any case, our assembler doesn't care, and it's now able to assemble a simple
-[Nested Literal Test](/apps/pdp10/tests/macro10/#nested-literal-test) on the
-[MACRO-10 Mini-Assembler Tests](/apps/pdp10/tests/macro10/) page.
+[Nested Literal Test](/software/dec/pdp10/test/macro10/#nested-literal-test) on the
+[MACRO-10 Mini-Assembler Tests](/software/dec/pdp10/test/macro10/) page.
 
 So, things are improving, but it's still too early expect a lot from the MACRO-10 Mini-Assembler.  It currently supports
 only a handful of pseudo-ops, and all the code and data it generates is intended for absolute loading only; for now,

@@ -13,7 +13,7 @@ machines:
 
 Now that the PDPjs MACRO-10 Mini-Assembler is [limping along](/blog/2017/03/21/), it's time to start assembling some
 of DEC's PDP-10 "Basic Instruction" diagnostics and loading them into a test machine.  The first diagnostic I tried was
-[KA10 Basic Instruction Diagnostic #1 (MAINDEC-10-DAKAA)](/apps/pdp10/diags/ka10/dakaa/), which has been loaded into
+[KA10 Basic Instruction Diagnostic #1 (MAINDEC-10-DAKAA)](/software/dec/pdp10/diag/ka10/dakaa/), which has been loaded into
 the machine below.
 
 {% include machine.html id="testka10" %}
@@ -54,13 +54,13 @@ Here were the results of my first run attempt:
 	035057: 000000 000000  UUO     0,0              ;history=1
 
 Happily, this was a good outcome, because 035057 is the end of the test.  If you look at the diagnostic's
-[listing file](/apps/pdp10/diags/ka10/dakaa/DAKAA.LST.txt), this is what you would normally see at address 035057:
+[listing file](/software/dec/pdp10/diag/ka10/dakaa/DAKAA.LST.txt), this is what you would normally see at address 035057:
 
 	035057	254 00 0 00 030057 	ENDXX:	JRST	BEGEND		;LOOP PROGRAM
 
-I had similar success with [Diagnostic #2 (MAINDEC-10-DAKAB)](/apps/pdp10/diags/ka10/dakab/).
+I had similar success with [Diagnostic #2 (MAINDEC-10-DAKAB)](/software/dec/pdp10/diag/ka10/dakab/).
 
-Problems started to crop up in [Diagnostic #3 (MAINDEC-10-DAKAC)](/apps/pdp10/diags/ka10/dakac/):
+Problems started to crop up in [Diagnostic #3 (MAINDEC-10-DAKAC)](/software/dec/pdp10/diag/ka10/dakac/):
 
 	        CAME    [0,-1]          ;PASS TEST IF C(AC)=0,,-1
 
@@ -68,7 +68,7 @@ Based on the comment, it's clear what they really meant was either "[0,,-1]" or 
 desired result, which means that even when the assembler parses an mnemonic-less instruction like "0,-1", it must still truncate
 the second (address) operand.  Once I generated the appropriate value (000000,777777), the test passed.
 
-And I had several failures running [Diagnostic #4 (MAINDEC-10-DAKAD)](/apps/pdp10/diags/ka10/dakad/):
+And I had several failures running [Diagnostic #4 (MAINDEC-10-DAKAD)](/software/dec/pdp10/diag/ka10/dakad/):
 
 	>> a 30724 /software/dec/pdp10/diags/ka10/dakad/DAKAD.MAC
 	starting PCjs MACRO-10 Mini-Assembler...
@@ -104,7 +104,7 @@ And I had several failures running [Diagnostic #4 (MAINDEC-10-DAKAD)](/apps/pdp1
 In this case, both AC3 and memory location 34462 contained 400000000000, so the CAME ("Compare AC with Memory
 and Skip if Equal") instruction should have "skipped" the HALT, but it didn't.
 
-Thus was due to a bug in the [cpuops.js](/modules/pdp10/lib/cpuops.js) *CMP()* function:
+Thus was due to a bug in the [cpuops.js](/machines/dec/pdp10/lib/cpuops.js) *CMP()* function:
 
 ```javascript
 /**

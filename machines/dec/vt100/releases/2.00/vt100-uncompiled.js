@@ -9617,7 +9617,7 @@ ROM.BINDING = {
 Defs.CLASSES["ROM"] = ROM;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/vt100/v2/chips.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/vt100/lib/chips.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -10279,7 +10279,7 @@ VT100Chips.IOTABLE = {
 Defs.CLASSES["VT100Chips"] = VT100Chips;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/vt100/v2/keyboard.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/vt100/lib/keyboard.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ model: number }} */
@@ -10834,7 +10834,7 @@ VT100Keyboard.IOTABLE = {
 Defs.CLASSES["VT100Keyboard"] = VT100Keyboard;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/vt100/v2/serial.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/vt100/lib/serial.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -10999,6 +10999,13 @@ class VT100Serial extends Device {
     {
         if (!this.cpu) {
             this.cpu = /** @type {CPU8080} */ (this.findDeviceByClass("CPU"));
+            /*
+             * This is as late as we can currently wait to make our first inter-machine connection attempt;
+             * even so, the target machine's initialization process may still be ongoing, so any connection
+             * may be not fully resolved until the target machine performs its own initConnection(), which will
+             * in turn invoke our initConnection() again.
+             */
+            this.initConnection(this.fNullModem);
         }
     }
 
@@ -11412,7 +11419,7 @@ VT100Serial.IOTABLE = {
 Defs.CLASSES["VT100Serial"] = VT100Serial;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/vt100/v2/video.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/vt100/lib/video.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */
@@ -19963,7 +19970,19 @@ class Machine extends Device {
             this.deviceConfigs = JSON.parse(sConfig);
             let config = this.deviceConfigs[this.idMachine];
             if (!config) {
-                throw new Error("configuration missing machine ID");
+                /*
+                 * Pages that want to instantiate multiple machines using identical configs would normally
+                 * have to create unique config files for each machine, even though the only difference between
+                 * the configs would be the machine ID.  To reduce that redundancy, we'll try to identify the
+                 * Machine object within the config using the name of the config file itself, and if that
+                 * succeeds, then we'll duplicate the Machine object within the config using the actual ID.
+                 */
+                let id = this.getBaseName(this.sConfigFile, true);
+                config = this.deviceConfigs[id];
+                if (!config) {
+                    throw new Error("configuration missing machine ID");
+                }
+                this.deviceConfigs[this.idMachine] = config;
             }
             this.checkConfig(config, ['autoSave', 'autoStart']);
             this.fAutoSave = (this.config['autoSave'] !== false);

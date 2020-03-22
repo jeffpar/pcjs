@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/configs/pcx80/xsl/machine.xsl"?>
-<machine id="test8080" type="pcx80" border="1" pos="center" background="#FAEBD7">
+<machine id="test8080" type="pcx80" border="1" pos="center" background="default">
 	<name pos="center">8080 CPUTEST Machine</name>
 	<computer id="computer" busWidth="16"/>
 	<cpu id="cpu8080" model="8080" cycles="2000000"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/configs/pdp11/xsl/machine.xsl"?>
-<machine id="test1170" type="pdp11" border="1" pos="center" background="#FAEBD7">
+<machine id="test1170" type="pdp11" border="1" pos="center" background="default">
 	<name pos="center">PDP-11/70 with 256Kb, Front Panel and Debugger</name>
 	<computer id="computer" busWidth="22"/>
 	<cpu id="cpu" model="1170" cycles="6666667"/>
