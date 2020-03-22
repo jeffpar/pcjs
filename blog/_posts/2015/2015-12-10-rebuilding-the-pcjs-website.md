@@ -80,7 +80,7 @@ For example, the PCjs home page contains two machines, so this appears at the to
 	machines:
 	  - type: pcx86
 	    id: ibm5150
-	    config: /devices/pcx86/machine/5150/mda/64kb/machine.xml
+	    config: /configs/pcx86/xml/machine/5150/mda/64kb/machine.xml
 	  - type: c1p
 	    id: demoC1P
 	    config: /devices/c1p/machine/8kb/large/machine.xml

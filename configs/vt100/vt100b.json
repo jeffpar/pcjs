@@ -1,15 +1,15 @@
 {
-  "vt100": {
+  "vt100b": {
     "class": "Machine",
     "type": "Terminal",
     "name": "VT100",
     "version": 2.00,
     "autoSave": false,
     "bindings": {
-      "power": "powerVT100",
-      "reset": "resetVT100",
-      "clear": "clearVT100",
-      "print": "printVT100"
+      "power": "powerVT100b",
+      "reset": "resetVT100b",
+      "clear": "clearVT100b",
+      "print": "printVT100b"
     },
     "_JSONDoc": [
       "Configuration properties managed by the Machine device:",
@@ -28,9 +28,9 @@
     "class": "Time",
     "cyclesPerSecond": 2764800,
     "bindings": {
-      "run": "runVT100",
-      "speed": "speedVT100",
-      "step": "stepVT100"
+      "run": "runVT100b",
+      "speed": "speedVT100b",
+      "step": "stepVT100b"
     },
     "overrides": ["cyclesPerSecond"]
   },
@@ -64,7 +64,7 @@
     "color": "red",
     "optional": true,
     "bindings": {
-      "container": "ledOnlineVT100"
+      "container": "ledOnlineVT100b"
     }
   },
   "ledLocal": {
@@ -73,7 +73,7 @@
     "color": "red",
     "optional": true,
     "bindings": {
-      "container": "ledLocalVT100"
+      "container": "ledLocalVT100b"
     }
   },
   "ledLocked": {
@@ -82,7 +82,7 @@
     "color": "red",
     "optional": true,
     "bindings": {
-      "container": "ledLockedVT100"
+      "container": "ledLockedVT100b"
     }
   },
   "led1": {
@@ -91,7 +91,7 @@
     "color": "red",
     "optional": true,
     "bindings": {
-      "container": "led1VT100"
+      "container": "led1VT100b"
     }
   },
   "led2": {
@@ -100,7 +100,7 @@
     "color": "red",
     "optional": true,
     "bindings": {
-      "container": "led2VT100"
+      "container": "led2VT100b"
     }
   },
   "led3": {
@@ -109,7 +109,7 @@
     "color": "red",
     "optional": true,
     "bindings": {
-      "container": "led3VT100"
+      "container": "led3VT100b"
     }
   },
   "led4": {
@@ -118,7 +118,7 @@
     "color": "red",
     "optional": true,
     "bindings": {
-      "container": "led4VT100"
+      "container": "led4VT100b"
     }
   },
   "ledCaps": {
@@ -127,7 +127,7 @@
     "color": "green",
     "optional": true,
     "bindings": {
-      "container": "ledCapsVT100"
+      "container": "ledCapsVT100b"
     }
   },
   "ledDTR": {
@@ -136,7 +136,7 @@
     "color": "red",
     "optional": true,
     "bindings": {
-      "container": "ledDTRVT100"
+      "container": "ledDTRVT100b"
     }
   },
   "ledRTS": {
@@ -145,7 +145,7 @@
     "color": "red",
     "optional": true,
     "bindings": {
-      "container": "ledRTSVT100"
+      "container": "ledRTSVT100b"
     }
   },
   "ports": {
@@ -927,15 +927,15 @@
       "We used to use an Array of direct bindings, but since we want to support multiple machines on the same page, we can no longer do that."
     ],
     "bindings": {
-      "keySetup": "keySetupVT100",
-      "keyLineFeed": "keyLineFeedVT100",
-      "keyTab": "keyTabVT100",
-      "keyEsc": "keyEscVT100",
-      "keyBreak": "keyBreakVT100",
-      "keyShiftLock": "keyShiftLockVT100",
-      "keyCtrlLock": "keyCtrlLockVT100",
-      "keyCtrlC": "keyCtrlCVT100",
-      "keyCapsLock": "keyCapsLockVT100"
+      "keySetup": "keySetupVT100b",
+      "keyLineFeed": "keyLineFeedVT100b",
+      "keyTab": "keyTabVT100b",
+      "keyEsc": "keyEscVT100b",
+      "keyBreak": "keyBreakVT100b",
+      "keyShiftLock": "keyShiftLockVT100b",
+      "keyCtrlLock": "keyCtrlLockVT100b",
+      "keyCtrlC": "keyCtrlCVT100b",
+      "keyCapsLock": "keyCapsLockVT100b"
     }
   },
   "serialPort": {
@@ -955,10 +955,10 @@
     "cellHeight": 10,
     "interruptRate": 60,
     "bindings": {
-      "monitor": "monitorVT100",
-      "overlay": "overlayVT100",
-      "surface": "surfaceVT100",
-      "fullScreen": "zoomVT100"
+      "monitor": "monitorVT100b",
+      "overlay": "overlayVT100b",
+      "surface": "surfaceVT100b",
+      "fullScreen": "zoomVT100b"
     },
     "diagnostics": true,
     "touchType": true,

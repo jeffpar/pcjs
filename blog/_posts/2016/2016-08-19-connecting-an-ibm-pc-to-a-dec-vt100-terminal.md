@@ -7,7 +7,7 @@ machines:
   - id: ibm5170
     type: pcx86
     connection: com2->vt100.serialPort
-    config: /devices/pcx86/machine/5170/ega/2048kb/rev3/machine.xml
+    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
   - id: vt100
     type: pc8080
     connection: serialPort->ibm5170.com2

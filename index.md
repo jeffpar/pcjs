@@ -18,6 +18,14 @@ Jeff
 
 ---
 
+{% else %}
+
+### TODO
+
+  - Determine if [Invaders](/machines/arcade/invaders) still supports the *smoothing* option described in this [blog post](/blog/2016/05/04/)
+
+---
+
 {% endunless %}
 
 This is PCjs, home of **PCx86**, the original IBM PC emulator for your web browser.

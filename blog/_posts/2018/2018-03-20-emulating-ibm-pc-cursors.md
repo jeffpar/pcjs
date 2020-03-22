@@ -6,7 +6,7 @@ permalink: /blog/2018/03/20/
 machines:
   - id: ibm5160-msdos320
     type: pcx86
-    config: /devices/pcx86/machine/5160/ega/640kb/machine.xml
+    config: /configs/pcx86/xml/machine/5160/ega/640kb/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/sys/dos/microsoft/3.20/MSDOS320-C400.json"}]'
     autoMount:
       A:

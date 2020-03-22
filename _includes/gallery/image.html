@@ -2,24 +2,24 @@
 {%- capture include_width -%}{%- if include.width %} width="{{ include.width }}"{%- endif -%}{%- endcapture -%}
 {%- capture include_height -%}{%- if include.height %} height="{{ include.height }}"{%- endif -%}{%- endcapture -%}
 {%- capture include_style -%}{%- if include.maxwidth %} style="max-width:{{ include.maxwidth }}"{%- elsif include.width %} style="width:{{ include.width }}px"{%- endif -%}{%- endcapture %}
-<div class="pcjs-gallery-frame"{{ include_id }}{{ include_style }}>
+  <div class="pcjs-gallery-frame"{{ include_id }}{{ include_style }}>
 {%- capture include_image -%}{{ site.baseurl }}{{ include.image | default: include.src }}{%- endcapture -%}
 {%- if include_image %}
-	<div class="pcjs-gallery-image">
+    <div class="pcjs-gallery-image">
   {%- if include.link -%}
     {%- capture include_link %}href="{{ site.baseurl }}{{ include.link }}"{%- if include.external %} target="_blank"{%- endif -%}{%- endcapture %}
-    <a {{ include_link }}>
-      <img src="{{ include_image }}"{{ include_width }}{{ include_height }} alt="{{ include.title }}"/>
-    </a>
+      <a {{ include_link }}>
+        <img src="{{ include_image }}"{{ include_width }}{{ include_height }} alt="{{ include.title }}"/>
+      </a>
   {%- else %}
-    <img src="{{ include_image }}"{{ include_width }}{{ include_height }} alt="{{ include.title }}"/>
+      <img src="{{ include_image }}"{{ include_width }}{{ include_height }} alt="{{ include.title }}"/>
   {%- endif %}
-  </div>
-  <span class="pcjs-gallery-label">{{ include.title | replace: "(","<br/>(" }}</span>
+    </div>
+    <span class="pcjs-gallery-label">{{ include.title | replace: "(","<br/>(" }}</span>
   {%- if include.source contains "http" %}
-  <br/><span class="pcjs-gallery-label">[<a href="{{ include.source }}">Source</a>]</span>
+    <br/><span class="pcjs-gallery-label">[<a href="{{ include.source }}">Source</a>]</span>
   {%- endif -%}
 {%- else %}
-  <span class="pcjs-gallery-label"><a href="{{ site.baseurl }}{{ include.link }}">{{ include.title }}</a></span>
+    <span class="pcjs-gallery-label"><a href="{{ site.baseurl }}{{ include.link }}">{{ include.title }}</a></span>
 {%- endif %}
-</div>
+  </div>

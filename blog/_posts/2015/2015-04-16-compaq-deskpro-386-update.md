@@ -8,7 +8,7 @@ machines:
   - id: deskpro386
     type: pcx86
     debugger: true
-    config: /devices/pcx86/machine/compaq/deskpro386/ega/2048kb/debugger/machine.xml
+    config: /configs/pcx86/xml/machine/compaq/deskpro386/ega/2048kb/debugger/machine.xml
 ---
 
 PCx86 can now boot the [COMPAQ DeskPro 386/16 ROM BIOS](/machines/pcx86/compaq/deskpro386/rom/).

@@ -16,7 +16,7 @@
 	<xsl:variable name="APPVERSION">1.76</xsl:variable>
 	<xsl:variable name="CSSCLASS">pcjs</xsl:variable>
 	<xsl:variable name="SITEURL">https://www.pcjs.org</xsl:variable>
-	<xsl:variable name="BGNDCOLOR">#FAEBD7</xsl:variable>
+	<xsl:variable name="BGNDCOLOR">#fff8e7</xsl:variable>
 
 	<xsl:template name="componentStyles">
 		<link rel="stylesheet" type="text/css" href="/configs/{$APPCLASS}/xsl/components.css"/>

@@ -72,4 +72,6 @@ keys.  The following keys have special meaning inside SET-UP Mode.
 
 ## Documents
 
-{% include gallery/documents.html title="VT100 Manuals" width="200" height="260" %}
+{% include gallery/documents.html title="VT100 Manuals" width="200" height="260" tag="manual" %}
+
+{% include gallery/documents.html title="VT100 Maintenance" width="200" height="260" tag="maintenance" %}

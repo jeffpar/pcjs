@@ -11075,7 +11075,19 @@ class Machine extends Device {
             this.deviceConfigs = JSON.parse(sConfig);
             let config = this.deviceConfigs[this.idMachine];
             if (!config) {
-                throw new Error("configuration missing machine ID");
+                /*
+                 * Pages that want to instantiate multiple machines using identical configs would normally
+                 * have to create unique config files for each machine, even though the only difference between
+                 * the configs would be the machine ID.  To reduce that redundancy, we'll try to identify the
+                 * Machine object within the config using the name of the config file itself, and if that
+                 * succeeds, then we'll duplicate the Machine object within the config using the actual ID.
+                 */
+                let id = this.getBaseName(this.sConfigFile, true);
+                config = this.deviceConfigs[id];
+                if (!config) {
+                    throw new Error("configuration missing machine ID");
+                }
+                this.deviceConfigs[this.idMachine] = config;
             }
             this.checkConfig(config, ['autoSave', 'autoStart']);
             this.fAutoSave = (this.config['autoSave'] !== false);
