@@ -5,9 +5,9 @@ date: 2019-05-31 10:00:00
 permalink: /blog/2019/05/31/
 preview: https://cds002.pcjs.org/microsoft/tools/MSPL10/MSPL10.png
 machines:
-  - id: ibm5170
+  - id: ibm-5170-vga
     type: pcx86
-    config: /disks/pcx86/drives/cdrom/machine.xml
+    config: /configs/pcx86/xml/machine/5170/vga/2048kb/cdrom/machine.xml
     cdromDrives: '[{name:"CD",type:0,path:"/disks-cds/cds002/microsoft/tools/MSPL10/cdrom"}]'
 ---
 
@@ -74,7 +74,7 @@ Microsoft KnowledgeBase articles.  Those may not have been added until the 1.3 r
 
 ### Introducing PCjs CD-ROM Support
 
-Since CD-ROMs are more interesting if you can actually *use* them, I decided to add [CD-ROM support](/disks/pcx86/drives/cdrom/)
+Since CD-ROMs are more interesting if you can actually *use* them, I decided to add [CD-ROM support](/machines/pcx86/ibm/5170/vga/cdrom/)
 to PCjs.  To demonstrate, the IBM PC AT below has been configured with a secondary ATA controller that responds
 to ATAPI commands, allowing the use of a virtual ATAPI CD-ROM drive.
 
@@ -84,15 +84,12 @@ of disc (ISO) images that have been added to the online PCjs disk library.  Curr
 - Bookshelf for Windows (1991)
 - Programmer's Library 1.0 (1988)
 
-The machine is using the same hard disk image created for [Microsoft Windows 3.1](/disks/pcx86/windows/3.10/).
+The machine is using the same hard disk image created for [Microsoft Windows 3.1](/software/pcx86/sys/windows/3.10/).
 The disk's CONFIG.SYS was modified to load a real-mode ATAPI CD-ROM driver, and its AUTOEXEC.BAT loads
 the Microsoft CD-ROM Extensions (MSCDEX.EXE).
 
-{% include machine.html id="ibm5170" %}
+{% include machine.html id="ibm-5170-vga" %}
 
 ![Microsoft Programmer's Library 1.0 - Box Front](https://cds002.pcjs.org/microsoft/tools/MSPL10/MSPL10-Box-Front.png)
 
 ![Microsoft Programmer's Library 1.0 - Box Back](https://cds002.pcjs.org/microsoft/tools/MSPL10/MSPL10-Box-Back.png)
-
-*[@jeffpar](https://jeffpar.com)*  
-*May 31, 2019*

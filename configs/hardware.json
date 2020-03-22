@@ -17,8 +17,49 @@
         "test": {
           "@title": "PDP-10 KA10 Test",
           "@redirect_from": "/devices/pdp10/machine/ka10/test/"
+        },
+        "@documents": [
+          {
+            "@title": "PDP-10 System Reference Manual (May 1968)",
+            "@file": "DEC-10-HGAA-D_PDP-10_System_Reference_Manual_May1968.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp1fP3wKOXBGsZETkQ",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/dec/pdp10/KA10/DEC-10-HGAA-D_PDP-10_System_Reference_Manual_May1968.pdf",
+            "@tags": "hardware"
+          }
+        ]
+      },
+      "kl10": {
+        "@title": "KL10",
+        "@documents": [
+          {
+            "@title": "DECSYSTEM-10/DECSYSTEM-20 Processor Reference Manual (Jun 1982)",
+            "@file": "AA-H391A-TK_DECsystem-10_DECSYSTEM-20_Processor_Reference_Jun1982.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp1jncpU_jALLLkWbQ",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/dec/pdp10/TOPS10_softwareNotebooks/vol05/AA-H391A-TK_DECsystem-10_DECSYSTEM-20_Processor_Reference_Jun1982.pdf",
+            "@tags": "hardware"
+          }
+        ]
+      },
+      "@documents": [
+        {
+          "@title": "MACRO-10 Assembler Programmer's Reference Manual (Jun 1972)",
+          "@file": "Macro_Assembler_Reference_Manual-Jun72.pdf",
+          "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp1i3qATlvub3JxoDQ",
+          "@cover": ".jpg",
+          "@source": "http://bitsavers.org/pdf/dec/pdp10/TOPS10/1973_Assembly_Language_Handbook/02_1973AsmRef_macro.pdf",
+          "@tags": "software,macro10"
+        },
+        {
+          "@title": "MACRO-10 Assembler Programmer's Reference Manual (Apr 1978)",
+          "@file": "Macro_Assembler_Reference_Manual-Apr78.pdf",
+          "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp1hxEi9aXmTStmyhA",
+          "@cover": ".jpg",
+          "@source": "http://www.livingcomputers.org/Discover/Online-Systems/User-Documentation/Tops-10-v7-04/4_Macro_Assembler_Reference_Manual.aspx",
+          "@tags": "software,macro10"
         }
-      }
+      ]
     },
     "pdp11": {
       "@title": "PDP-11",

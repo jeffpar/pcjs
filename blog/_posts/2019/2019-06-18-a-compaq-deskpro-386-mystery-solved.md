@@ -29,7 +29,7 @@ machines pictured are COMPAQ SystemPros, it's probably from 1989 -- roughly 3 ye
 ![COMPAQ Employees](/blog/images/compaq/COMPAQ_Employees.png)
 
 As for the DeskPro 386, it appeared that some of the engineers had their initials "inscribed" inside the machine --
-specifically, inside the [DeskPro 386 ROM](/devices/pcx86/rom/compaq/deskpro386/#authors-of-the-compaq-deskpro-386-rom) --
+specifically, inside the [DeskPro 386 ROM](/machines/pcx86/compaq/deskpro386/rom/#authors-of-the-compaq-deskpro-386-rom) --
 but it was unclear who **CAB**, **GLB**, **RWS**, **DJC**, and **NPB** were.
 
 ### A COMPAQ Mini-Reunion

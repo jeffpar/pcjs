@@ -7,16 +7,16 @@ preview: /blog/images/dbase-iii-disk-image.png
 ---
 
 A third piece of original unmodified copy-protected software now runs on PCjs:
-[dBASE III 1.0](/disks/pcx86/apps/other/dbase3/1.0/).
+[dBASE III 1.0](/software/pcx86/app/other/dbase3/1.0/).
 
-Unlike [IBM Multiplan 1.00](/disks/pcx86/apps/ibm/multiplan/1.00/), whose copy-protection relied on a
-single out-of-sequence sector ID, and [Microsoft Word 1.15](/disks/pcx86/apps/microsoft/word/1.15/), which
+Unlike [IBM Multiplan 1.00](/software/pcx86/app/ibm/multiplan/1.00/), whose copy-protection relied on a
+single out-of-sequence sector ID, and [Microsoft Word 1.15](/software/pcx86/app/microsoft/word/1.15/), which
 used smaller-than-normal sectors (including one with an invalid checksum), dBASE III 1.0 was shipped on
 diskettes that were physically altered in a way that no floppy disk controller could duplicate.
 
 At least one other emulator has already [accomplished](https://forum.winworldpc.com/discussion/9472/software-spotlight-dbase-iii-r1-0)
-this feat.  And I had already [debugged](/pubs/docs/personal/1984-09-16--DBASE_III_DEBUG.pdf)
-and [defeated](/pubs/docs/personal/1984-09-25--DBASE_III_PATCH.pdf) dBASE III copy-protection
+this feat.  And I had already [debugged](/documents/papers/pcjs/programming/1984-09-16--DBASE_III_DEBUG.pdf)
+and [defeated](/documents/papers/pcjs/programming/1984-09-25--DBASE_III_PATCH.pdf) dBASE III copy-protection
 almost 35 years ago.
 
 However, something that's missing from both contemporary and modern reports is any real
@@ -66,7 +66,7 @@ last read, it expects to see new data *only* up to that point.
 For an emulator, duplicating such an error is fairly straightforward, and in PCjs, it's almost trivial.
 All I had to do was add a new *dataError* property to the damaged sector of the JSON-encoded disk image.  The
 value of this new property specifies the maximum number of bytes that can be written; any bytes written
-beyond that point are now ignored by the PCjs [Floppy Disk Controller](/modules/pcx86/lib/fdc.js).
+beyond that point are now ignored by the PCjs [Floppy Disk Controller](/machines/pcx86/lib/fdc.js).
 
 This mimics what happens with a real PROLok disk.  For example, some 200+ bytes may be successfully written
 to a damaged 512-byte sector, and those 200+ bytes will be returned on a subsequent read, but the rest of the bytes
@@ -86,7 +86,7 @@ existed, on original hardware, that goal becomes extremely challenging.
 In the case of software like dBASE III, our choices appear to be:
 
 - Rely on emulators like PCjs, in conjunction with "annotated disk images"
-- Use [patched binaries](/disks/pcx86/apps/other/dbase3/1.0/#dbase-iii-disk-information)
+- Use [patched binaries](/software/pcx86/app/other/dbase3/1.0/#dbase-iii-disk-information)
 - Find or build specialized hardware that can recreate specific disk anomalies
 
 It's also unclear how well the "annotated disk image" approach that PCjs uses could be automated.  For a PROLok-style
@@ -100,9 +100,7 @@ about a duplication process that involves writing modifications to the original 
 
 I didn't have to wrestle with that concern, however, because I no longer have an original diskette.  All I had was a
 KryoFlux dump, which doesn't tell you much about the physical condition of the diskette.  So I resorted to
-[debugging](/disks/pcx86/apps/other/dbase3/1.0/debugger/#debugging-notes) the software again (as I did [35 years ago](/docs/personal/)),
-watching the reads and writes, observing what PROLok's expectations were, inferring that one of the 512-byte sectors
-must have been physically damaged within +/-10 bytes of the 272nd byte, and then recording that in my annotated disk image.
-
-*[@jeffpar](https://jeffpar.com)*  
-*May 5, 2019*
+[debugging](/software/pcx86/app/other/dbase3/1.0/debugger/#debugging-notes) the software again (as I did
+[35 years ago](/documents/papers/pcjs/programming/)), watching the reads and writes, observing what PROLok's expectations
+were, inferring that one of the 512-byte sectors must have been physically damaged within +/-10 bytes of the 272nd byte,
+and then recording that in my annotated disk image.

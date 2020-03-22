@@ -11,13 +11,13 @@ but copy-protected disks are -- no surprise -- difficult to copy, and PCjs suppo
 disk images, where all the sectors are 512 bytes, all the sector IDs are consecutive, and so on.
 
 Previously, the only way PCjs could run copy-protected software was to use patched binaries that bypassed any
-copy-protection checks, so that's what I used in a few cases (e.g., [Lotus 1-2-3](/disks/pcx86/apps/lotus/123/1as/)).
+copy-protection checks, so that's what I used in a few cases (e.g., [Lotus 1-2-3](/software/pcx86/app/lotus/123/1aa/)).
 But last year, I acquired a [KryoFlux](https://www.kryoflux.com/) device, which reads (and writes) all kinds of
 diskettes, and -- in theory -- captures everything you need to know to reproduce a diskette.
 
 I've only used the KryoFlux software a few times, because most of the diskettes I've collected aren't
 copy-protected and can be perfectly reproduced with programs like [WinImage](http://www.winimage.com/download.htm).
-But I did use it last year to read a set of original copy-protected [IBM Multiplan 1.00](/disks/pcx86/apps/ibm/multiplan/1.00/)
+But I did use it last year to read a set of original copy-protected [IBM Multiplan 1.00](/software/pcx86/app/ibm/multiplan/1.00/)
 disks.  And by using another program called [HxC](https://hxc2001.com/), I was able to inspect KryoFlux's raw data
 from IBM's Multiplan Program disk and discover what was unusual about it:
 
@@ -27,7 +27,7 @@ The only apparent oddity was the last (8th) sector on track 11: normally, the 8t
 but instead it contained a sector ID of 61.
 
 Fortunately, PCjs uses JSON-encoded disk images, which makes it trivial to annotate sectors with additional information.
-As PCx86's [disk.js](/modules/pcx86/lib/disk.js) explains, every JSON disk image is an array of Cylinder objects, where each
+As PCx86's [disk.js](/machines/pcx86/lib/disk.js) explains, every JSON disk image is an array of Cylinder objects, where each
 Cylinder is an array of Track objects (one per head), and each Track is an array of Sector objects, each of which contains
 the following *minimum* set of properties:
 
@@ -46,7 +46,7 @@ I took a closer look with HxC:
 
 ![HxC Microsoft Word 1.15](/blog/images/word115-disk-image.png)
 
-I [discovered](/disks/pcx86/apps/microsoft/word/1.15/debugger/#copy-protection-information) that the last track on
+I [discovered](/software/pcx86/app/microsoft/word/1.15/debugger/#copy-protection-information) that the last track on
 the disk (track 39, side 1) contained 12 sectors instead of the 9 typically found on a 360Kb diskette, that the 5th sector
 contained a deliberate CRC error, and that the other 11 sectors were all 256 bytes in length, instead of the usual 512.
 
@@ -54,8 +54,8 @@ Here again, it was a simple matter to re-encode the PCjs disk image with 256-byt
 property in the 5th sector.  PCjs version 1.75.0 now checks that property, returning a simulated CRC error whenever it is
 set.
 
-So now PCjs can run both [Microsoft Word 1.15](/disks/pcx86/apps/microsoft/word/1.15/) and
-[IBM Multiplan 1.00](/disks/pcx86/apps/ibm/multiplan/1.00/) in all their original copy-protected glory.
+So now PCjs can run both [Microsoft Word 1.15](/software/pcx86/app/microsoft/word/1.15/) and
+[IBM Multiplan 1.00](/software/pcx86/app/ibm/multiplan/1.00/) in all their original copy-protected glory.
 
 ### The Night is Dark and Full of Errors
 
@@ -107,7 +107,7 @@ And WORD.COM contains the following messages:
     Trashing program disk.
 
 Those messages are fairly easy to trigger.  You just have to make WORD.COM think that a debugger is running.
-The [PCjs Debugger](/disks/pcx86/apps/microsoft/word/1.15/debugger/) won't trigger it, because that debugger
+The [PCjs Debugger](/software/pcx86/app/microsoft/word/1.15/debugger/) won't trigger it, because that debugger
 doesn't run inside the virtual machine, so it can't be detected.  But you can simulate the effect.
 
 First, set a write breakpoint on address 0000:0004:
@@ -134,6 +134,3 @@ Jeff Raikes reportedly blamed the message on an unnamed programmer who place the
 
 That sounds a little disingenous but not particularly surprising.  Corporations have long been masters at the art of
 deflecting blame and minimizing missteps.
-
-*[@jeffpar](https://jeffpar.com)*  
-*Apr 10, 2019*

@@ -26,7 +26,7 @@ fine in PCjs.  See the [47Mb Hard Drive](/disks/pcx86/drives/47mb/) page for add
 
 ### A New Old COMPAQ ROM
 
-As mentioned on the [COMPAQ DeskPro 386 ROMs](/devices/pcx86/rom/compaq/deskpro386/) page, I recently discovered that
+As mentioned on the [COMPAQ DeskPro 386 ROMs](/machines/pcx86/compaq/deskpro386/rom/) page, I recently discovered that
 I still had a copy of the 1986 `Rev F` ROM, which I had made on April 22, 1987, using one of the early DeskPro 386
 machines that Microsoft had purchased for the OS/2 development team.  The only downside of my `Rev F` ROM image is that
 it was dumped using the DOS `DEBUG` utility, since I didn't have ROM reader hardware in those days.  Fortunately, since
@@ -35,8 +35,8 @@ turns out, that entire address range is actually write-protected RAM (since, at 
 than ROM), where the first 32Kb contained a modified copy of the second.  For example, the first 32Kb contains some data
 structures that are updated by COMPAQ utilities such as `CEMM` to record "Built-in Memory" allocations.
 
-Sure enough, attempting to use the [first 32Kb](/devices/pcx86/rom/compaq/deskpro386/1986-09-04/1986-09-04-LO.json) as a DeskPro 386 ROM generated a
-"ROM Error", no doubt due to a checksum mismatch.  However, the [second 32Kb](/devices/pcx86/rom/compaq/deskpro386/1986-09-04/1986-09-04-HI.json) appeared
+Sure enough, attempting to use the [first 32Kb](/machines/pcx86/compaq/deskpro386/rom/1986-09-04/1986-09-04-LO.json) as a DeskPro 386 ROM generated a
+"ROM Error", no doubt due to a checksum mismatch.  However, the [second 32Kb](/machines/pcx86/compaq/deskpro386/rom/1986-09-04/1986-09-04-HI.json) appeared
 to work fine.  I can't guarantee that its contents are identical to the original `Rev F` ROM, because the ROM may
 have been self-modifying, but it works, and it's all we've got.  All our EGA-based COMPAQ machine configurations
 (eg, [COMPAQ DeskPro 386 (2Mb) with IBM EGA](/devices/pcx86/machine/compaq/deskpro386/ega/2048kb/)) have been
@@ -48,7 +48,7 @@ earliest (if not *the* earliest) ROMs commercially available for the DeskPro 386
 ### Old Windows on New Windows
 
 One of the problems with running old versions of Microsoft Windows, like [Windows 1.01](/disks/pcx86/windows/1.01/) or
-[Windows 95](/disks/pcx86/windows/win95/4.00.950/), inside a web browser on top of a modern version of Windows are
+[Windows 95](/software/pcx86/sys/windows/win95/4.00.950/), inside a web browser on top of a modern version of Windows are
 **key conflicts**.  For example:
 
 - Alt-F (to access the browser's File menu)
@@ -65,7 +65,7 @@ Alt-key combination that your browser or operating system consumes should be ign
 any combination that the browser or operating system ignores should still be passed through to the machine.
 
 At the same time, I made some changes to the PCjs [Keyboard](/modules/pcx86/lib/keyboard.js) and [Chipset](/modules/pcx86/lib/chipset.js)
-components to fix some long-standing problems with dropped keys and keyboard lock-ups when running [Windows 95](/disks/pcx86/windows/win95/4.00.950/).
+components to fix some long-standing problems with dropped keys and keyboard lock-ups when running [Windows 95](/software/pcx86/sys/windows/win95/4.00.950/).
 
 As of this writing, Windows 95 seems to run pretty well.  However, the machine used to run Windows 95, a
 [COMPAQ DeskPro 386](/devices/pcx86/machine/compaq/deskpro386/), does still have a few issues.  For example, if you

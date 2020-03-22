@@ -16,7 +16,7 @@ starting with the venerable IBM PC AT.  Early IBM PC-compatible CD-ROM drives wo
 controller boards, but I had no desire to emulate the hardware of old third-party controllers that probably
 also had very little existing documentation.  The advantage of starting with the IBM PC AT is that
 its hard disk controller was the basis for future ATA and ATAPI controllers, so adapting the AT's controller
-to support ATAPI commands was the simplest way to [connect a simulated CD-ROM drive to a PCjs machine](/disks/pcx86/drives/cdrom/).
+to support ATAPI commands was the simplest way to [connect a simulated CD-ROM drive to a PCjs machine](/machines/pcx86/ibm/5170/vga/cdrom/).
 
 ## Bookshelf for Windows (1991)
 
@@ -51,7 +51,7 @@ was successful.
 
 ![Bookshelf for Windows 1991 - Install Done](/blog/images/BSWIN31-InstallDone.png)
 
-You can give it a try yourself in this [IBM PC AT with ATAPI CD-ROM Support](/disks/pcx86/drives/cdrom/).
+You can give it a try yourself in this [IBM PC AT with ATAPI CD-ROM Support](/machines/pcx86/ibm/5170/vga/cdrom/).
 I did not preinstall **Bookshelf for Windows** in that machine, because I wouldn't want to deprive you
 of the authentic experience of installing buggy software from 1992 and choosing whichever "Fatal Error"
 work-around works best for you.
@@ -133,7 +133,7 @@ their snapshots to the Internet Archive.  So with a bit more work, it's possible
 download the patch for **Pandora's Box**, eliminate the copy protection, and preserve another fine piece of software
 for many puzzle-loving generations to come.
 
-NOTE: **Pandora's Box** does not run in any PCjs machines at this time.  The machine running [Windows 95](/disks/pcx86/windows/win95/4.00.950/)
+NOTE: **Pandora's Box** does not run in any PCjs machines at this time.  The machine running [Windows 95](/software/pcx86/sys/windows/win95/4.00.950/)
 is the best candidate, but PCjs ATAPI CD-ROM support isn't quite up to the job yet.
 
 *[@jeffpar](https://jeffpar.com)*  

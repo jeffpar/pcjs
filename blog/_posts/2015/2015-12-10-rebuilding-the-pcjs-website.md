@@ -104,7 +104,7 @@ Other settings that can currently be overridden include:
 + `messages`
 + `state`
 
-Additional overrides will be added as needed.  See the [Windows 95 Demo](/disks/pcx86/windows/win95/4.00.950/)
+Additional overrides will be added as needed.  See the [Windows 95 Demo](/software/pcx86/sys/windows/win95/4.00.950/)
 machine and its associated [Markdown file](https://raw.githubusercontent.com/jeffpar/pcjs/master/disks/pcx86/windows/win95/4.00.950/README.md)
 for more override examples, including how to set `autoMount` to *not* mount any diskettes. 
  

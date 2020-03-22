@@ -3,7 +3,7 @@ layout: post
 title: Retracing My Steps
 date: 2018-05-03 10:00:00
 permalink: /blog/2018/05/03/
-preview: /software/pcx86/demo/ibm/ega/screenshot.png
+preview: /software/pcx86/demo/ibm/ega/images/screenshot.png
 ---
 
 When I first created the PCjs x86 emulator, [PCx86](/devices/pcx86/machine/), it was a simple
