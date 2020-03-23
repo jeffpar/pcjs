@@ -30,7 +30,7 @@ from COMPAQ we are aware of are [1.11](../1.11/) and [1.12](../1.12/).
 
 To learn more about this double-sided 320Kb diskette, see the
 [Directory Listing](#directory-of-compaq-ms-dos-110-rev-b) and [Boot Sector](#compaq-ms-dos-110-boot-sector) below.
-We also have copies of the original [COMPAQ MS-DOS 1.10 Documentation](/pubs/pc/software/dos/COMPAQ110/).
+We also have copies of the original [COMPAQ MS-DOS 1.10 Documentation](#documents).
 
 {% include machine.html id="compaq-portable-128kb" %}
 
@@ -375,4 +375,4 @@ mounting it), mount the image as `/Volumes/Untitled`, and then copy the contents
 	open archive/COMPAQ-DOS110B.img
 	cp -pr /Volumes/Untitled Disk
 
-[Return to [COMPAQ MS-DOS Disks](/disks/pcx86/dos/compaq/)]
+{% include gallery/documents.html %}

@@ -6,14 +6,14 @@ redirect_from: /devices/pdp11/machine/1170/vt100/
 machines:
   - id: test1170
     type: pdp11
-    class: machine-right
     config: /configs/pdp11/machine/1170/vt100/machine.xml
     connection: dl11->vt100.serialPort
     resume: 1
   - id: vt100
-    type: pcx80
-    class: machine-left
-    config: /configs/pcx80/machine/vt100/machine.xml
+    type: vt100
+    name: DEC VT100
+    config: /configs/vt100/vt100.json
+    layout: /_includes/vt100/vt100.html
     connection: serialPort->test1170.dl11
     resume: 1
 ---

@@ -29,7 +29,7 @@ and partitions that extended beyond the first 32Mb of disk space.  These feature
 OS/2 1.1 as well.
 
 An older version of COMPAQ MS-DOS 3.31 can be found on the
-[COMPAQ Diagnostics 5.08](/disks/pcx86/diags/compaq/5.08/) diskette, a 360Kb disk image from the PCjs Archives that
+[COMPAQ Diagnostics 5.08](/software/pcx86/diag/compaq/5.08/) diskette, a 360Kb disk image from the PCjs Archives that
 contains hidden MS-DOS 3.31 files dated September 1987.  The disk displays a different boot message:
 
     The COMPAQ Personal Computer MS-DOS 
@@ -48,9 +48,8 @@ Later revisions of COMPAQ MS-DOS 3.31 were released as well.  We have archived t
 "[Rev. G](#compaq-ms-dos-331-rev-g)" disks obtained from [WinWorld](https://winworldpc.com/product/ms-dos/331)
 (see "Microsoft MS-DOS 3.31 [Compaq OEM Rev G] (3.5-720k)").  All the files on those disks are dated May 1990.
 
-The `FASTART` program on Disk 1 expects a "USER PROGRAMS" disk, which we have filed under
-[COMPAQ Diagnostics and Utilities](/disks/pcx86/diags/compaq/).  You could, for example, use the
-"[COMPAQ User Programs (1989)](/disks/pcx86/diags/compaq/utilities/1989/)" diskette, which was part of a later
+The `FASTART` program on Disk 1 expects a "USER PROGRAMS" disk.  For example, you could use the
+"[COMPAQ User Programs (1989)](/software/pcx86/diag/compaq/1989/)" diskette, which was part of a later
 COMPAQ MS-DOS 4.01 release, since COMPAQ states that the disk "supersedes earlier versions".
 
 [Directory Listings](#directory-of-compaq-ms-dos-331-disk-1) of the distribution diskettes are provided below.
@@ -59,7 +58,7 @@ COMPAQ MS-DOS 4.01 release, since COMPAQ states that the disk "supersedes earlie
 
 ### Directory of COMPAQ MS-DOS 3.31 (1987)
 
-This disk from the [PCjs Personal Disk Collection](/disks/pcx86/personal/) is, unfortunately, not an original
+This disk from the [PCjs Software Archive](/software/pcx86/sw/misc/pcjs/) is, unfortunately, not an original
 distribution disk, but it's included here because it's the only available copy of other COMPAQ MS-DOS 3.31 binaries
 released in 1987.
 
@@ -342,5 +341,3 @@ COMPAQ MS-DOS 3.31 (Rev. G)
     LCD      CPI     10752 05-08-90  12:00p
            43 file(s)     557609 bytes
                           150528 bytes free
-
-[Return to [COMPAQ MS-DOS Disks](/disks/pcx86/dos/compaq/)]

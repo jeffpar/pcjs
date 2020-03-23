@@ -116,5 +116,3 @@ The boot sector of the COMPAQ MS-DOS 1.11 disk image contains the following byte
 
 It is identical to the [COMPAQ MS-DOS 1.10 Boot Sector](../1.10/#compaq-ms-dos-110-boot-sector),
 so refer to that page for more information.
-
-[Return to [COMPAQ MS-DOS Disks](/disks/pcx86/dos/compaq/)]
