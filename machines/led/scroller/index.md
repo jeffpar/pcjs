@@ -1,7 +1,8 @@
 ---
 layout: page
-title: LED Scroller
-permalink: /devices/leds/scroller/
+title: Text Scroller
+permalink: /machines/led/scroller/
+redirect_from: /devices/leds/scroller/
 machines:
   - id: scrollLEDs
     type: led
@@ -27,7 +28,7 @@ This page demonstrates the ability of the LED device to create scrolling LED dis
 
 You can enter new messages in the Diagnostics window using the `s` command (eg, `s Hello World!`).
 
-{% include machine.html id="scrollLEDs" config="json" %}
+{% include machine.html id="scrollLEDs" %}
 
 <div id="scrollLEDs">
   <div id="displayScroll"></div>

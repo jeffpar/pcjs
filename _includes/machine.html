@@ -23,20 +23,26 @@
 </div>
     {%- assign machine = nil -%}
     {%- assign machine_does_not_exist = false -%}
+    {%- comment -%}Machines that use XML files have their layouts built at page load time, using XSL files, so we're done here.{%- endcomment -%}
   {%- elsif machine_layout -%}
     {%- include {{ machine_layout }}.html id=machine_id -%}
     {%- assign machine = nil -%}
     {%- assign machine_does_not_exist = false -%}
-  {%- else -%}
+    {%- comment -%}Machines that explicitly include an HTML layout file do not need any additional layout work performed below.{%- endcomment -%}
+  {%- elsif machine_config contains "/configs/" -%}
     {%- assign machine_data = site.data -%}
     {%- assign machine_paths = machine_config | replace: "/configs/", "" | replace: ".json", "" | split: "/" -%}
     {%- for machine_path in machine_paths -%}{%- assign machine_data = machine_data[machine_path] -%}{%- endfor -%}
     {%- assign machine = machine_data -%}
+    {%- comment -%}Any JSON configuration file in the /configs folder should be accessible through site.data, driving layout generation below.{%- endcomment -%}
     {%- unless machine %}
       {%- capture machine_errors %}{{ machine_errors }}
 <p class="machine-error">Missing machine configuration file: {{ machine_config }}</p>
       {%- endcapture -%}
     {%- endunless -%}
+  {%- else -%}
+    {%- assign machine = nil -%}
+    {%- comment -%}The assumption here is that the page has defined its own layout, styles, and config file, so there's nothing more we need do here.{%- endcomment -%}
   {%- endif -%}
 {%- elsif machine -%}
   {%- unless machine.components -%}
