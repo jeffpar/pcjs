@@ -3,16 +3,6 @@ layout: post
 title: A Short History of SYMDEB
 date: 2018-02-25 10:00:00
 permalink: /blog/2018/02/25/
-machines:
-  - id: ibm5170
-    type: pcx86
-    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
-    drives: '[{name:"10Mb Hard Disk",type:1,path:"/harddisks/pcx86/sys/dos/microsoft/3.20/MSDOS320-C400.json"}]'
-    autoMount:
-      A:
-        name: None
-      B:
-        name: None
 ---
 
 The first version of SYMDEB I used was probably Version 4.00, released with
