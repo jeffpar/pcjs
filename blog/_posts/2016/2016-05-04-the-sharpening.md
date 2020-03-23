@@ -87,7 +87,7 @@ be responsive to any browser resizing while still retaining that aspect ratio.
 
 ---
 
-That's all for now.  Work continues on the new [PCx80]({{ site.github.master }}/machines/pcx80/) emulator and the
+That's all for now.  Work continues on the new [PCx80]({{ site.github.pages }}/machines/pcx80/) emulator and the
 [Space Invaders](/machines/arcade/invaders/) machine.  More on that later, when it's finished.
 
 Until then, May the 4th be with you!

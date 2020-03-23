@@ -34,7 +34,7 @@ class RL11 extends DriveController {
      * of 256 bytes, for a total capacity of 5Mb (5,242,880 bytes).  See [RL01K Disk Images](/disks/dec/rl01k/).
      *
      * RL02K disks are single-platter cartridges with 512 tracks per side, 40 sectors per track, and a sector size
-     * of 256 bytes, for a total capacity of 10Mb (10,485,760 bytes).  See [RL02K Disk Images](/disks/dec/rl02k/).
+     * of 256 bytes, for a total capacity of 10Mb (10,485,760 bytes).  See [RL02K Disk Images](/software/dec/pdp11/disks/rl02k/).
      *
      * @param {Object} parms
      */

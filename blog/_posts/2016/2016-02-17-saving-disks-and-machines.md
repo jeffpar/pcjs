@@ -125,6 +125,3 @@ also quite possible that certain machine features or modifications may not be pr
 
 If you're having trouble with a particular browser or a particular machine, be sure to
 [let me know](mailto:Jeff@pcjs.org), and then try another browser and/or machine.
-
-*[@jeffpar](https://jeffpar.com)*  
-*February 17, 2016*

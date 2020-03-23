@@ -50,6 +50,3 @@ In both of these situations -- punishing me for using HTTP instead of HTTPS and 
 (whatever the hell those are) -- Google's heavy-handedness has become a growing and on-going irritation.
 
 What hoops will Google decide I must jump through tomorrow?
-
-*[@jeffpar](https://jeffpar.com)*  
-*Oct 19, 2017*

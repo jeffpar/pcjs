@@ -87,6 +87,3 @@ NOTE: To change the adapter's *blink* setting, you can either use PCjs Debugger 
 or *disable* (`o 3b8 9`) blinking, or you can use a BASIC command, such as:
 
     OUT &H3B8,&H29
-
-*[@jeffpar](https://jeffpar.com)*  
-*Nov 15, 2018*

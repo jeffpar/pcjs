@@ -22,7 +22,7 @@ machines:
 
 These disk images contain the first unearthed copy of Microsoft's "multitasking" version of MS-DOS
 since its *extremely* limited release around late 1985 or early 1986.  They were were discovered by the
-[PCjs Project](/docs/about/) in March 2013.  More information is available at
+[PCjs Project](/about/) in March 2013.  More information is available at
 [Wikipedia](http://en.wikipedia.org/wiki/Multi-tasking_MS-DOS_4.0),
 [OS/2 Museum](http://www.os2museum.com/wp/?p=1769), and
 [MSDN Blogs](http://blogs.msdn.com/b/larryosterman/archive/2004/03/22/94209.aspx).

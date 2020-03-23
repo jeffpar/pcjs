@@ -6,7 +6,7 @@ permalink: /blog/2018/05/03/
 preview: /software/pcx86/demo/ibm/ega/images/screenshot.png
 ---
 
-When I first created the PCjs x86 emulator, [PCx86]({{ site.github.master }}/machines/pcx86/), it was a simple
+When I first created the PCjs x86 emulator, [PCx86]({{ site.github.pages }}/machines/pcx86/), it was a simple
 implementation that focused primarily on four components:
 
 - Intel 8088 running at 4.77Mhz

@@ -9,7 +9,7 @@ This copy of the Microsoft OS/2 SDK (1.02) was obtained from the [WinWorld](http
 website.  Unfortunately, it's missing the **NETWORK** disk, so we've included an empty **NETWORK** disk
 that allows the SDK installation script to finish.
 
-This SDK was released in December 1987 along with [Microsoft OS/2 1.0](/disks/pcx86/os2/microsoft/1.0/).
+This SDK was released in December 1987 along with [Microsoft OS/2 1.0](/software/pcx86/sys/os2/microsoft/1.0/).
 We do not have any of the printed documentation that came with the SDK, such as the *Installation Guide*, but we do
 have the [Microsoft® Operating System/2 Programmer’s Toolkit](/pubs/pc/software/os2/microsoft/ptk10/) documentation
 from March 1988, thanks to the [OS/2 Museum](http://www.os2museum.com/wp/os2-history/os2-library/os2-1-x-programming/).
@@ -46,7 +46,7 @@ of machine you're using.  It's asking that question merely to determine whether 
 distribution diskettes.  These disks happen to be the 3.5-inch versions, so you must pretend you're using a PS/2.
 
 Also, this SDK may have only been tested with Microsoft's release of OS/2 1.0, because if you install it on
-[IBM OS/2 1.0](/disks/pcx86/os2/ibm/1.0/), the script will fail when it attempts to run LIBBUILD to build
+[IBM OS/2 1.0](/software/pcx86/sys/os2/ibm/1.0/), the script will fail when it attempts to run LIBBUILD to build
 all the C runtime libraries.  Apparently, this is because IBM OS/2 1.0 creates an OS2INIT.CMD with PATH set to:
 
 	C:\;C:\OS2;C:\OS2\INSTALL;
@@ -1265,7 +1265,7 @@ at Microsoft for many years.  It was renamed to the **Microsoft Editor** (M or M
 Environment (IDE) that came with Microsoft C 6.0.
 
 While we don't have the SDK documentation, we *have* unearthed a copy of the
-"[User's Guide to the Z Editor](/disks/pcx86/tools/microsoft/misc/Z.TXT)" by Mark Zbikowski, August 4, 1986,
+"[User's Guide to the Z Editor](/software/pcx86/util/microsoft/misc/Z.TXT)" by Mark Zbikowski, August 4, 1986,
 included below.
 
 

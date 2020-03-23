@@ -8,16 +8,16 @@ permalink: /blog/2018/04/02/
 Thanks to a friend and former co-worker, I was able to add a small collection of early Xenix distributions to the PCjs
 archives recently:
 
-- [IBM PC XENIX 1.0](/disks/pcx86/unix/ibm/xenix/1.0/)
-- [IBM PC XENIX 2.0](/disks/pcx86/unix/ibm/xenix/2.0/)
-- [SCO Xenix 286 v2.2.1e](/disks/pcx86/unix/sco/xenix/286/2.2.1e/)
-- [SCO Xenix 286 v2.2.3b](/disks/pcx86/unix/sco/xenix/286/2.2.3b/)
-- [SCO Xenix 286 v2.3.2d](/disks/pcx86/unix/sco/xenix/286/2.3.2d/)
-- [SCO Xenix 386 v2.2.3b](/disks/pcx86/unix/sco/xenix/386/2.2.3b/)
-- [SCO Xenix 386 v2.3.2f](/disks/pcx86/unix/sco/xenix/386/2.3.2f/)
-- [SCO Xenix 386 v2.3.4h](/disks/pcx86/unix/sco/xenix/386/2.3.4h/)
+- [IBM PC XENIX 1.0](/software/pcx86/sys/unix/ibm/xenix/1.0/)
+- [IBM PC XENIX 2.0](/software/pcx86/sys/unix/ibm/xenix/2.0/)
+- [SCO Xenix 286 v2.2.1e](/software/pcx86/sys/unix/sco/xenix/286/2.2.1e/)
+- [SCO Xenix 286 v2.2.3b](/software/pcx86/sys/unix/sco/xenix/286/2.2.3b/)
+- [SCO Xenix 286 v2.3.2d](/software/pcx86/sys/unix/sco/xenix/286/2.3.2d/)
+- [SCO Xenix 386 v2.2.3b](/software/pcx86/sys/unix/sco/xenix/386/2.2.3b/)
+- [SCO Xenix 386 v2.3.2f](/software/pcx86/sys/unix/sco/xenix/386/2.3.2f/)
+- [SCO Xenix 386 v2.3.4h](/software/pcx86/sys/unix/sco/xenix/386/2.3.4h/)
 
-Notably, [SCO Xenix 386 v2.2.3b](/disks/pcx86/unix/sco/xenix/386/2.2.3b/) is an original copy of what may be the oldest
+Notably, [SCO Xenix 386 v2.2.3b](/software/pcx86/sys/unix/sco/xenix/386/2.2.3b/) is an original copy of what may be the oldest
 surviving 386-based PC operating system.
 
 Previously, that honor went to (a reconstructed copy of) SCO Xenix 386 v2.2.3c, as explained in this series of
@@ -39,9 +39,6 @@ Also see this series of [SoylentNews](https://soylentnews.org/) posts:
 There were *older* releases of SCO Xenix 386 (2.2.1 and 2.2.2), and there may also be older non-SCO releases out there,
 but until they surface, this is all we have.
  
-[![IBM PC XENIX 1.0 Extensions Disk 1]({{ site.demo-disks.baseurl }}/pcx86/unix/ibm/xenix/1.0/IBM-XENIX-100-EXT1.jpg)](/disks/pcx86/unix/ibm/xenix/1.0/)
+[![IBM PC XENIX 1.0 Extensions Disk 1]({{ site.software.diskettes.server }}/pcx86/unix/ibm/xenix/1.0/IBM-XENIX-100-EXT1.jpg)](/software/pcx86/sys/unix/ibm/xenix/1.0/)
 
-[![IBM PC XENIX 2.0 Installation Disk]({{ site.demo-disks.baseurl }}/pcx86/unix/ibm/xenix/2.0/IBM-XENIX-200-INSTALL.jpg)](/disks/pcx86/unix/ibm/xenix/2.0/)
-
-*[@jeffpar](https://jeffpar.com)*  
-*Apr 2, 2018*
+[![IBM PC XENIX 2.0 Installation Disk]({{ site.software.diskettes.server }}/pcx86/unix/ibm/xenix/2.0/IBM-XENIX-200-INSTALL.jpg)](/software/pcx86/sys/unix/ibm/xenix/2.0/)

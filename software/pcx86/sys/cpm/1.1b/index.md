@@ -3,11 +3,11 @@ layout: page
 title: "CP/M-86 1.1B (Eagle Computer)"
 permalink: /software/pcx86/sys/cpm/1.1b/
 redirect_from: /disks/pcx86/cpm/1.1b/
-preview: screenshot.png
+preview: images/screenshot.png
 machines:
   - id: cpm-mda-256k
     type: pcx86
-    config: /configs/pcx86/ibm/5150/machine-mda.json
+    config: /configs/pcx86/xml/machine/5150/mda/256kb/machine.xml
     autoMount:
       A:
         name: Eagle CP/M-86 1.1B (Disk 1)

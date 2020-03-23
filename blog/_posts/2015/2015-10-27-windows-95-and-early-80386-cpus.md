@@ -213,6 +213,3 @@ PCjs stepping support is extremely limited at this point.  Here's a summary:
 In addition, on 80386 reset, we set the CPU revision number in DX to the appropriate value for the specified stepping.
 
 Support for additional 80286 and 80386 errata may be added over time, as interesting scenarios or test cases are discovered.
-
-*[@jeffpar](https://jeffpar.com)*  
-*October 27, 2015*

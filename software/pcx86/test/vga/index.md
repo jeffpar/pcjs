@@ -50,7 +50,7 @@ into Drive B.  Click the **Run** button to start the machine.
 ### Directory of VGA Black Book Sources
 
 This disk image contains the source code for selected [VGA Black Book Tests](#selected-vga-black-book-tests).
-It was built using [DiskDump](/tools/diskdump/) and the *--normalize* option, which automatically converts linefeeds
+It was built using [DiskDump]({{ site.github.pages }}/tools/diskdump/) and the *--normalize* option, which automatically converts linefeeds
 in known text files (including ASM files) into DOS-compatible CR/LF sequences.
 
 	 Volume in drive A is VGASRC     

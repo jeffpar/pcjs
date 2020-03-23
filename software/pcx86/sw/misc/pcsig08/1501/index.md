@@ -7,7 +7,6 @@ preview: /software/pcx86/sw/misc/pcsig12/CDROM.jpg
 machines:
   - id: pcsig08
     type: pcx86
-    config: /disks/pcx86/shareware/pcsig08/machine.xml
     resume: 1
     config: /configs/pcx86/xml/machine/5160/ega/512kb/pcsig08/machine.xml
 ---

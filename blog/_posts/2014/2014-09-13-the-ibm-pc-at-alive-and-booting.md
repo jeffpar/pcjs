@@ -6,8 +6,8 @@ category: Releases
 permalink: /blog/2014/09/13/
 ---
 
-My first IBM PC AT (Model 5170) [Test Configuration](/devices/pcx86/machine/5170/ega/640kb/rev1/debugger/) finally
-boots to a PC DOS prompt.  The configuration uses the original [IBM Model 5170 ROM BIOS](/devices/pcx86/rom/5170/),
+My first IBM PC AT (Model 5170) [Test Configuration](/configs/pcx86/xml/machine/5170/ega/640kb/rev1/debugger/machine.xml)
+finally boots to a PC DOS prompt.  The configuration uses the original [IBM Model 5170 ROM BIOS](/machines/pcx86/ibm/5170/rom/),
 dated January 10, 1984.
  
 Getting through the BIOS "POST" (Power-On Self Test) diagnostics was like running an obstacle course, with various
@@ -51,7 +51,7 @@ reconfigures itself according to the requirements of the processor and platform 
 
 ---
 
-There's still no support for [LOADALL](/pubs/pc/reference/intel/80286/loadall/) or triple-fault resets, nor for
+There's still no support for [LOADALL](/documents/manuals/intel/80286/loadall/) or triple-fault resets, nor for
 call gates or task gates, nor for conforming code segments or expand-down data segments.  80286-specific cycle
 counts haven't been incorporated yet, either.  The list of remaining 80286 features is long.
 
@@ -66,6 +66,3 @@ machine XML).  And diskette I/O seems a bit slow; I'm concerned that the BIOS is
 unnecessarily.  And even though the test machine is configured with 640Kb of RAM, the BIOS is reporting only 64Kb.
 
 Hmmmm.
- 
-*[@jeffpar](https://jeffpar.com)*  
-*September 13, 2014*

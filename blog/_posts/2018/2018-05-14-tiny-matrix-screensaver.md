@@ -91,6 +91,3 @@ but which requires that CH be zero on entry.  This version is slower, because it
 on the screen, instead of every other cell, but it has a similar effect, because every odd write is using the value
 from CX, which contains a zero attribute in CH (black on black), making the pseudo-random character value in CL
 irrelevant.
-
-*[@jeffpar](https://jeffpar.com)*  
-*May 14, 2018*

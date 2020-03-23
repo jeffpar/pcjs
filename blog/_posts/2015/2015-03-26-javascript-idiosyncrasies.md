@@ -205,6 +205,3 @@ Similarly, as soon as you perform any other bitwise operation on the number, eve
 ``` javascript
 n |= 0;                 // n is displayed as -2004318072 again
 ```
-
-*[@jeffpar](https://jeffpar.com)*  
-*March 26, 2015*

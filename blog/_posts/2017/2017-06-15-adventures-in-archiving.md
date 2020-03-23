@@ -82,6 +82,3 @@ of certain software packages.
 In addition, I would hope that anything the Internet Archive "archives" itself (ie, from original distribution media)
 is duplicated and preserved according to a *much* higher standard than any files, documents, etc, it has simply scraped
 from the Internet.
-
-*[@jeffpar](https://jeffpar.com)*  
-*Jun 15, 2017*

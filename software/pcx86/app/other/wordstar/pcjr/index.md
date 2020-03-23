@@ -21,7 +21,7 @@ are provided below.  The disk images were obtained from [WinWorld](https://winwo
 
 It's worth noting that, despite being called "WordStar for PCjr", this version of WordStar appears to work fine on non-PCjr
 configurations, including the one below, which also has twice the memory (256Kb) that the PCjr supported (128Kb).  We've
-taken care to boot [PC DOS 2.10](/disks/pcx86/dos/ibm/2.10/) for this demo, because it's possible that WordStar for PCjr has
+taken care to boot [PC DOS 2.10](/software/pcx86/sys/dos/ibm/2.10/) for this demo, because it's possible that WordStar for PCjr has
 some dependencies on that version of DOS (since the PCjr required PC DOS 2.10 or later).
 
 We have also included another variation of the WordStar for PCjr binary (`WS.EXE`) on

@@ -59,7 +59,7 @@ code contains the string "Ver 2.10"?  Were these sources modified *after* work o
 
 On the other hand, an inspection of CHKDSK.COM in the [COMPAQ MS-DOS 2.11](/software/pcx86/sys/dos/compaq/2.11/) distribution ALSO
 shows the string "Ver 2.30", and in fact, the CHKDSK.COM from COMPAQ MS-DOS 2.11 matches the
-[CHKDSK.COM]({{ site.github.master }}/software/pcx86/dos/microsoft/2.11/built/CHKDSK)
+[CHKDSK.COM]({{ site.github.pages }}/software/pcx86/dos/microsoft/2.11/built/CHKDSK)
 built from the MS-DOS 2.x sources *perfectly*.
 
 Go figure.
@@ -114,12 +114,12 @@ critical memory location is overwritten with 0xFFFF.  However, even after I patc
 
 MASM still didn't work; usually it would simply hang.  I also tried running MASM 1.10 on PC DOS 2.00, where MASM
 uses file handles instead of FCBs, but once again, no luck.  At that point, I decided to use my favorite version of
-MASM from that era, [MASM 4.00](/disks/pcx86/tools/microsoft/masm/4.00/), since it was more important to me to get
+MASM from that era, [MASM 4.00](/software/pcx86/lang/microsoft/masm/4.00/), since it was more important to me to get
 something built, and since MASM 4.00 included some other handy tools, like MAKE.
 
 ### Organizing and Building the Files
 
-As I explained on the [Microsoft MS-DOS 2.00](/disks/pcx86/dos/microsoft/2.00/) page, I decided to organize all
+As I explained on the [Microsoft MS-DOS 2.00](/software/pcx86/sys/dos/microsoft/2.00/) page, I decided to organize all
 the source files into folders that corresponded to their respective binaries, along with makefiles where appropriate
 (eg, [MSDOS.MAK](https://github.com/jeffpar/pcjs-demo-disks/blob/master/pcx86/dos/microsoft/2.11/src/MSDOS/MSDOS.MAK)).
 Also, in the [INC](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/INC) folder,
@@ -199,6 +199,6 @@ In addition, all the build products (**OBJ**, **EXE**, **COM**, **LST**, and **M
 [/pcx86/dos/microsoft/2.11/built](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/built)
 folder.
 
-This machine is also available with the [PCjs Debugger](/disks/pcx86/dos/microsoft/2.00/debugger/).
+This machine is also available with the [PCjs Debugger](/software/pcx86/sys/dos/microsoft/2.00/debugger/).
 
 {% include machine.html id="ibm5160" %}

@@ -6,7 +6,7 @@ category: HTML5
 permalink: /blog/2014/12/05/
 ---
 
-From the beginning of the [JavaScript Machines](/docs/about/) Project, I've always used an HTML5
+From the beginning of the [JavaScript Machines](/about/) Project, I've always used an HTML5
 [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) object for both machine output
 and input.  It's the obvious choice for output, because the Canvas provides a 2D drawing API that's
 essential both for drawing bitmappped graphics and for faithfully rendering individual characters
@@ -66,6 +66,3 @@ Safari's behavior should probably be considered a bug, as it's probably doing so
 like trying to account for an "invisible" blinking cursor.  Chrome certainly doesn't have this problem,
 so unless I was the only person in the world who used "contenteditable" Canvases, this is probably something
 Safari will want to fix.
-
-*[@jeffpar](https://jeffpar.com)*  
-*December 5, 2014*

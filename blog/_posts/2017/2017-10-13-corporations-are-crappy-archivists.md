@@ -126,6 +126,3 @@ Finally, a shout-out to [neozeed](https://virtuallyfun.superglobalmegacorp.com/2
 a clever brute-force way of extracting all the raw text from the Programmer's Library CD-ROM.  It was this raw text
 that I used to create my small KB archive.  The only downside of that method of extraction is that all "hyperlinking"
 information was lost.
-
-*[@jeffpar](https://jeffpar.com)*  
-*Oct 13, 2017*

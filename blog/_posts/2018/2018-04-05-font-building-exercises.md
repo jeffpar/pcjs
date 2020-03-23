@@ -127,6 +127,3 @@ to help them look less thin and anemic.  This automatic font-doubling feature (c
 overly-complicated virtual vs. physical screen size comparisons.
 
 Now *fDoubleFont* is hard-coded to *true*, and *imageSmoothingEnabled* is re-enabled just for text modes. 
-
-*[@jeffpar](https://jeffpar.com)*  
-*Apr 5, 2018*

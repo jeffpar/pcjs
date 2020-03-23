@@ -19,16 +19,16 @@ machines:
         path: /software/dec/pdp11/tapes/absloader/DEC-11-L2PC-PO.json
 ---
 
-This machine is ready to boot [RT-11 v4.0](/disks/dec/rk03/rtl11v4/) (`BOOT RK0`).
+This machine is ready to boot [RT-11 v4.0](/software/dec/pdp11/disks/rk03/rtl11v4/) (`BOOT RK0`).
 
-Alternatively, you can also boot [XXDP+ Diagnostics](/disks/dec/rl02k/xxdp/) (`BOOT RL0`) and run
+Alternatively, you can also boot [XXDP+ Diagnostics](/software/dec/pdp11/disks/rl02k/xxdp/) (`BOOT RL0`) and run
 diagnostics (e.g., `R EKBEE1`):
 
-- [EKBAD0: 11/70 CPU DIAGNOSTIC (PART 1)](/disks/dec/rl02k/xxdp/ekbad0/)
-- [EKBBF0: 11/70 CPU DIAGNOSTIC (PART 2)](/disks/dec/rl02k/xxdp/ekbbf0/)
-- [EKBEE1: 11/70 MEMORY MANAGEMENT DIAGNOSTIC](/disks/dec/rl02k/xxdp/ekbee1/)
+- [EKBAD0: 11/70 CPU DIAGNOSTIC (PART 1)](/software/dec/pdp11/disks/rl02k/xxdp/ekbad0/)
+- [EKBBF0: 11/70 CPU DIAGNOSTIC (PART 2)](/software/dec/pdp11/disks/rl02k/xxdp/ekbbf0/)
+- [EKBEE1: 11/70 MEMORY MANAGEMENT DIAGNOSTIC](/software/dec/pdp11/disks/rl02k/xxdp/ekbee1/)
 
-For more information about booting and running these diagnostics, see [XXDP+ Diagnostics](/disks/dec/rl02k/xxdp/).
+For more information about booting and running these diagnostics, see [XXDP+ Diagnostics](/software/dec/pdp11/disks/rl02k/xxdp/).
 
 {% include machine.html id="test1170" %}
 

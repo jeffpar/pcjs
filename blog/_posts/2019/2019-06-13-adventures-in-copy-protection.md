@@ -48,7 +48,7 @@ from `.pri` (PCE Raw Image) files; eg:
 
 The nice thing about a `.psi` file is that the format is fairly straightforward, and with the help of
 a little [documentation](https://github.com/jeffpar/pce/blob/master/doc/psi-format.txt), I was able to
-update my [DiskDump]({{ site.github.master }}/tools/diskdump/) utility to read `.psi` files directly
+update my [DiskDump]({{ site.github.pages }}/tools/diskdump/) utility to read `.psi` files directly
 and create JSON-encoded PCjs disk images that replicate the structure of the original diskettes.
 
 There are now *two* Microsoft Adventure disk images in the PCjs Disk Library:

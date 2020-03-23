@@ -69,7 +69,7 @@
     "autoMount": {
       "A": {
         "name": "PC DOS 1.00",
-        "path": "/software/pcx86/sys/dos/ibm/1.00/PCDOS100.json"
+        "path": "/software/pcx86/sys/dos/ibm/1.00/disks/PCDOS100.json"
       }
     }
   },

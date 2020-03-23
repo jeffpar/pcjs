@@ -5,7 +5,7 @@ permalink: /software/pcx86/sys/windows/2.11/
 redirect_from: /disks/pcx86/windows/2.11/
 ---
 
-Microsoft Windows 2.11, like [Windows 2.10](/disks/pcx86/windows/2.10/), was again released as two separate products:
+Microsoft Windows 2.11, like [Windows 2.10](/software/pcx86/sys/windows/2.10/), was again released as two separate products:
 
 * [Windows/286 2.11](#microsoft-windows286-211)
 * [Windows/386 2.11](#microsoft-windows386-211)

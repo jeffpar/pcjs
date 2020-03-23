@@ -17,6 +17,3 @@ information about the machine, in real-time, and operate more efficiently than p
 A preview of the layout is shown below.  There's not much to see yet, as this is very much a work-in-progress.
 
 {% include machine.html id="at-ega-1024k-rev3" %}
-
-*[@jeffpar](https://jeffpar.com)*  
-*January 28, 2015*

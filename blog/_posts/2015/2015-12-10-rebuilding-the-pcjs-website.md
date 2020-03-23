@@ -119,6 +119,3 @@ server (server.js), you should run "grunt clean" before starting either one, to 
 files.  Node may inadvertently reuse old "index.html" files, and Jekyll may inadvertently propagate them
 to its "_site" folder.  It's easy to tell when this happens, because you'll see the wrong color scheme: Node
 web server pages were designed to use *dark* colors, whereas Jekyll web server pages currently use *light* colors.
-
-*[@jeffpar](https://jeffpar.com)*  
-*December 10, 2015*

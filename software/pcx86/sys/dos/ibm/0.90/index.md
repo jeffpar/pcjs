@@ -113,6 +113,6 @@ the following boot sector bytes will differ:
 	00000000  eb 2f 14 00 00 00 60 00  20 37 2d 00 02 01 01 00  |./....`. 7-.....|
 	00000010  02 40 00 40 01 fe 01 00  08 00 01 00 00 00 00 00  |.@.@............|
 
-This is simply a side-effect of the [DiskDump](/modules/diskdump/) utility that's used to prepare disk images for the
+This is simply a side-effect of the [DiskDump]({{ site.github.pages }}/tools/diskdump/) utility that's used to prepare disk images for the
 PCjs website.  It automatically adds a BPB to the boot sector if the BPB is missing or incorrect, making it easier for
 modern operating systems to mount the disk image.

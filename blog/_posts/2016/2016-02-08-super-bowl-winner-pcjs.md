@@ -6,7 +6,7 @@ permalink: /blog/2016/02/08/
 ---
 
 The new release of PCjs (v1.20.8) is a fairly minor update, but it's an important one for **FOOTBALL** fans, resolving
-two annoying problems with the [OS/2 FOOTBALL Boot Disk](/disks/pcx86/os2/misc/football/87058/): mysterious hard-error popups
+two annoying problems with the [OS/2 FOOTBALL Boot Disk](/software/pcx86/sys/os2/misc/87058/): mysterious hard-error popups
 and blank screens.
 
 A hard-error popup would occur when FOOTBALL tried to initialize a non-existent PRN device.  To resolve that, PCjs
@@ -23,7 +23,7 @@ exposed a PCjs memory-management bug.  The upshot is that whenever the Video com
 buffer (which is *physical* memory), it must tell the CPU to flush any linear-to-physical mappings that may still refer
 to the old physical memory.
 
-With these changes, the [OS/2 FOOTBALL Boot Disk](/disks/pcx86/os2/misc/football/87058/) appears to be quite usable now.
+With these changes, the [OS/2 FOOTBALL Boot Disk](/software/pcx86/sys/os2/misc/87058/) appears to be quite usable now.
 Feel free to give it a few kicks!
 
 ---
@@ -52,6 +52,3 @@ first model 5150 and 5160 machines, respectively.  For more details, see [IBM PC
 
 I believe there was also a BASIC ROM version 1.20 released for IBM PCjr, but since PCjs does not yet emulate the PCjr,
 it has not been added to the project.
-
-*[@jeffpar](https://jeffpar.com)*  
-*February 8, 2016*

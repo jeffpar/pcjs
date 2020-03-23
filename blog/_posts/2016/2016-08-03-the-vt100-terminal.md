@@ -15,7 +15,7 @@ Summer has been filled with distractions, but I've finally begun making headway 
 [DEC VT100 Terminal](/machines/dec/vt100/) simulation.
 
 Unlike other VT100 emulators, this isn't simply an emulation of VT100 protocols.  It's a simulation of the VT100's
-8080 CPU, running the original [VT100 Firmware](/machines/dec/vt100/rom/) inside the [PCx80]({{ site.github.master }}/machines/pcx80/)
+8080 CPU, running the original [VT100 Firmware](/machines/dec/vt100/rom/) inside the [PCx80]({{ site.github.pages }}/machines/pcx80/)
 CPU emulator, along with other essential components that the CPU interacts with to control the display, keyboard, and
 serial port.
 

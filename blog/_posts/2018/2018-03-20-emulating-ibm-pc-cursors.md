@@ -170,7 +170,7 @@ genuine IBM EGA board, and I saw no effect on the cursor at all.
 
 ### Experimenting With Cursors
 
-A few PCjs machines have enabled [TestMonitor Support](/tests/pcx86/testmon/), which allows you to use
+A few PCjs machines have enabled [TestMonitor Support](/software/pcx86/test/testmon/), which allows you to use
 one of the machine's serial ports (usually COM2) to control and issue commands to the machine.
 
 Some of the video-specific TestMonitor commands include:
@@ -179,7 +179,7 @@ Some of the video-specific TestMonitor commands include:
 - `cursor 4 19` (programs a block cursor)
 - `cursor 4 20` (programs a single-line cursor, for reasons explained [above](#cursor-wrap-around))
 
-For more information, go to the [TestMonitor Support](/tests/pcx86/testmon/) page.
+For more information, go to the [TestMonitor Support](/software/pcx86/test/testmon/) page.
 
 ### PC Magazine CTYPE and STICK Utilities
 
@@ -194,6 +194,3 @@ featured a related article, "A Colorfast Screen and Stable Cursor", also by Jeff
 which you can find on the PCjs diskette labelled "PC Magazine (Vol. 06 No. 20)". 
 
 {% include machine.html id="ibm5160-msdos320" %}
-
-*[@jeffpar](https://jeffpar.com)*  
-*Mar 20, 2018*

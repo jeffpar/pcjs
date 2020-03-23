@@ -67,7 +67,7 @@ Directory listings of the diskettes are provided [below](#directory-of-ms-quickp
 	       24 file(s)     245286 bytes
 	                      105472 bytes free
 
-![MS QuickPascal 1.00 (360K Disk 1)]({{ site.demo-disks.baseurl }}/pcx86/tools/microsoft/pascal/quickpascal/1.00/360K/QUICKPASCAL-100-DISK1.jpg)
+![MS QuickPascal 1.00 (360K Disk 1)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/pascal/quickpascal/1.00//QUICKPASCAL-100-DISK1.jpg)
 
 ### Directory of MS QuickPascal 1.00 (360K Disk 2) ("Libraries")
 
@@ -94,7 +94,7 @@ Directory listings of the diskettes are provided [below](#directory-of-ms-quickp
 	       13 file(s)     317968 bytes
 	                       38912 bytes free
 
-![MS QuickPascal 1.00 (360K Disk 2)]({{ site.demo-disks.baseurl }}/pcx86/tools/microsoft/pascal/quickpascal/1.00/360K/QUICKPASCAL-100-DISK2.jpg)
+![MS QuickPascal 1.00 (360K Disk 2)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/pascal/quickpascal/1.00//QUICKPASCAL-100-DISK2.jpg)
 
 ### Directory of MS QuickPascal 1.00 (360K Disk 3) ("Program")
 
@@ -111,7 +111,7 @@ Directory listings of the diskettes are provided [below](#directory-of-ms-quickp
 	        3 file(s)     358449 bytes
 	                        2048 bytes free
 
-![MS QuickPascal 1.00 (360K Disk 3)]({{ site.demo-disks.baseurl }}/pcx86/tools/microsoft/pascal/quickpascal/1.00/360K/QUICKPASCAL-100-DISK3.jpg)
+![MS QuickPascal 1.00 (360K Disk 3)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/pascal/quickpascal/1.00//QUICKPASCAL-100-DISK3.jpg)
 
 ### Directory of MS QuickPascal 1.00 (360K Disk 4) ("Microsoft QuickPascal Express")
 
@@ -138,7 +138,7 @@ Directory listings of the diskettes are provided [below](#directory-of-ms-quickp
 	       13 file(s)     336607 bytes
 	                       19456 bytes free
 
-![MS QuickPascal 1.00 (360K Disk 4)]({{ site.demo-disks.baseurl }}/pcx86/tools/microsoft/pascal/quickpascal/1.00/360K/QUICKPASCAL-100-DISK4.jpg)
+![MS QuickPascal 1.00 (360K Disk 4)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/pascal/quickpascal/1.00//QUICKPASCAL-100-DISK4.jpg)
 
 ### Directory of MS QuickPascal 1.00 (360K Disk 5) ("Microsoft QuickPascal Advisor")
 
@@ -154,7 +154,7 @@ Directory listings of the diskettes are provided [below](#directory-of-ms-quickp
 	        2 file(s)     352341 bytes
 	                        9216 bytes free
 
-![MS QuickPascal 1.00 (360K Disk 5)]({{ site.demo-disks.baseurl }}/pcx86/tools/microsoft/pascal/quickpascal/1.00/360K/QUICKPASCAL-100-DISK5.jpg)
+![MS QuickPascal 1.00 (360K Disk 5)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/pascal/quickpascal/1.00//QUICKPASCAL-100-DISK5.jpg)
 
 ### Directory of MS QuickPascal 1.00 (720K Disk 1) ("Setup/Program/Utilities")
 

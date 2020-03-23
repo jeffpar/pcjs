@@ -5,7 +5,7 @@
  https://www.pcjs.org/machines/lib/webio.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/device.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/input.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/led/led.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/lib/led.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/time.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/bus/bus.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/bus/memory.js (C) 2012-2020 Jeff Parsons

@@ -14,7 +14,7 @@ machines:
 
 MS-DOS 4.00 was released in October 1988.
 
-See the [PC DOS 4.00 Feature Summary](/disks/pcx86/dos/ibm/4.00/#feature-summary) for more details.
+See the [PC DOS 4.00 Feature Summary](/software/pcx86/sys/dos/ibm/4.00/#feature-summary) for more details.
 
 [Directory Listings](#directory-of-ms-dos-400-disk-1) of the six 360Kb distribution diskettes are provided below.
 

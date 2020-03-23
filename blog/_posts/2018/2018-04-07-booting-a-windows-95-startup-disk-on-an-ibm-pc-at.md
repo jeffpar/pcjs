@@ -79,6 +79,3 @@ Because of the lack of feedback, I'm considering displaying a warning whenever a
 Hopefully, once an operating system has been successfully loaded, it will install its own invalid opcode handler,
 and any opcode that it doesn't recognize will be treated like any other unrecoverable error (such as division by zero)
 and terminate the current program, eliminating the need for PCjs to get involved.
-
-*[@jeffpar](https://jeffpar.com)*  
-*Apr 7, 2018*

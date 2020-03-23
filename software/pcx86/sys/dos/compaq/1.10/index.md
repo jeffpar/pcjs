@@ -314,25 +314,25 @@ And then we have the assorted strings and tables:
 	&7DF4  00 00 00 00 00 00 00 00-00 00 00 00
 
 In terms of raw code (90 instructions), it's shorter than both the
-[PC DOS 1.00 Boot Sector](/disks/pcx86/dos/ibm/1.00/debugger/#pc-dos-100-boot-sector) (99 instructions) and
-[PC DOS 1.10 Boot Sector](/disks/pcx86/dos/ibm/1.10/debugger/#pc-dos-110-boot-sector) (116 instructions),
+[PC DOS 1.00 Boot Sector](/software/pcx86/sys/dos/ibm/1.00/debugger/#pc-dos-100-boot-sector) (99 instructions) and
+[PC DOS 1.10 Boot Sector](/software/pcx86/sys/dos/ibm/1.10/debugger/#pc-dos-110-boot-sector) (116 instructions),
 because it uses tables to describe both the different disk formats *and* the discrete read operations,
 relieving the code from dealing with head and track size calculations.
 
-It's arguably an improvement over the [PC DOS 1.10 Boot Sector](/disks/pcx86/dos/ibm/1.10/debugger/#pc-dos-110-boot-sector),
+It's arguably an improvement over the [PC DOS 1.10 Boot Sector](/software/pcx86/sys/dos/ibm/1.10/debugger/#pc-dos-110-boot-sector),
 because it didn't need to be altered to support both 160Kb and 320Kb diskettes.  On the other hand, that flexibility
 also makes it slightly slower to boot, because it must read the first FAT sector to determine the diskette format.
 
 Finally, notice the letters `GAS` in the boot sector at offset 0x7D23.  Presumably, they're the initials of
 author, and somewhat less conspicuous and more modest than the `Robert O'Rear` signature in the
-[PC DOS 1.00 Boot Sector](/disks/pcx86/dos/ibm/1.00/debugger/#pc-dos-100-boot-sector).
+[PC DOS 1.00 Boot Sector](/software/pcx86/sys/dos/ibm/1.00/debugger/#pc-dos-100-boot-sector).
 
 ### Mounting the COMPAQ MS-DOS 1.10 Diskette
 
 Note that the disk cannot be mounted by a modern operating system (e.g., macOS), because it lacks a proper
 BPB at offset 0x000B.
 
-To resolve the mounting problem, one solution is to use the [DiskDump](/modules/diskdump/) utility's *--forceBPB*
+To resolve the mounting problem, one solution is to use the [DiskDump]({{ site.github.pages }}/tools/diskdump/) utility's *--forceBPB*
 option, which creates a mountable disk image by making the following boot sector modifications:
 
 	00000000  eb fe 90 50 43 4a 53 2e  4f 52 47 00 02 02 01 00  |...PCJS.ORG.....|
@@ -357,7 +357,7 @@ by pointing out that some (newer) ROMs will not boot from a disk if that signatu
 However, those ROMs check only *hard disk* boot sectors for the 0xAA55 signature, not diskettes, and hard disk support
 didn't exist until DOS version 2.0, when BPBs and the 0xAA55 boot sector signature were introduced.
 
-Here's how you can use [DiskDump](/modules/diskdump/) to a mountable disk.  Note that *two* DiskDump commands are
+Here's how you can use [DiskDump]({{ site.github.pages }}/tools/diskdump/) to a mountable disk.  Note that *two* DiskDump commands are
 required, because BPB modification only happens when converting an IMG file to a JSON file; the second DiskDump command
 converts the modified JSON back into an IMG file.
 

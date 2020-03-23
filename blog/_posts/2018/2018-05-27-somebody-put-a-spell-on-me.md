@@ -291,7 +291,7 @@ to demonstrate Microsoft's `SPELL.COM` use of "CALL 5".  It's configured as foll
 
 This establishes a breakpoint on the "CALL 5" entry point inside the application's Program Segment Prefix (PSP);
 the breakpoint dumps the previous 10 instructions and then halts.  The "uncompiled" version of PCx86 is being used
-so that [BackTrack]({{ site.github.master}}/machines/pcx86/#backtrack-support)&trade; information is available to the PCjs Debugger.
+so that [BackTrack]({{ site.github.pages }}/machines/pcx86/#backtrack-support)&trade; information is available to the PCjs Debugger.
 You can use the command `BC *` to clear all predefined breakpoints and allow the program to run normally.
 
 To start the machine, click "Run" or use the Debugger's `G` command.

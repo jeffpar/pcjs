@@ -11,7 +11,7 @@ found online, this copy *does* include installation files, so we have attempted 
 `PROGRAM` as they originally existed.  However, this means that before you can run `MP.COM` on the `PROGRAM` disk,
 you must run the installation program to properly "install" `MP.COM` for the machine currently being used.
 
-The `PROGRAM` disk also includes [Microsoft Mouse 5.00](/disks/pcx86/tools/microsoft/mouse/5.00/) driver files.
+The `PROGRAM` disk also includes [Microsoft Mouse 5.00](/software/pcx86/dev/mouse/microsoft/5.00/) driver files.
 They match the 5.00 distribution files, even though they have been time-stamped with the same date as the Multiplan
 files.
 

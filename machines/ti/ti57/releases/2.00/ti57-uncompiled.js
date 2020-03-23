@@ -5068,7 +5068,7 @@ Input.KEYCODEMOD = {
 Defs.CLASSES["Input"] = Input;
 
 /**
- * @copyright https://www.pcjs.org/machines/led/led.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/led.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), type: number, width: (number|undefined), height: (number|undefined), cols: (number|undefined), colsExtra: (number|undefined), rows: (number|undefined), rowsExtra: (number|undefined), color: (string|undefined), backgroundColor: (string|undefined), fixed: (boolean|undefined), hexagonal: (boolean|undefined), highlight: (boolean|undefined), persistent: (boolean|undefined) }} */

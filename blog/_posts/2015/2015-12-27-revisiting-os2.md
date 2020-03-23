@@ -39,8 +39,8 @@ into **Programmer's Workbench** (PWB), the text-mode Integrated Development Envi
 
 With the introduction of graphical IDEs, such as Visual BASIC in 1991, Visual C++ in 1993, and Visual Studio in 1995,
 this stand-alone, text-mode editor became obsolete, but in the 1980s, it was a valuable tool.  You can learn more
-about [SDKED](/disks/pcx86/tools/microsoft/os2/sdk/1.02/#using-sdked) on the
-[MS OS/2 SDK 1.02](/disks/pcx86/tools/microsoft/os2/sdk/1.02/) page.
+about [SDKED](/software/pcx86/sdk/os2/microsoft/1.02/#using-sdked) on the
+[MS OS/2 SDK 1.02](/software/pcx86/sdk/os2/microsoft/1.02/) page.
 
 Our [IBM OS/2 1.0](/software/pcx86/sys/os2/ibm/1.0/) demo machine (shown below) has the
 [MS OS/2 SDK 1.02](/software/pcx86/sdk/os2/microsoft/1.02/) pre-installed, so check out our copy of the

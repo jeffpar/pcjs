@@ -18,13 +18,13 @@ machines:
 
 I recently added a new PCjs [TestMonitor](/modules/pcx86/lib/testmon.js) component that is able to deliver user-defined
 commands to a PCjs machine via a serial port.  TestMonitor is built into PCx86, and there is also a
-[TestMonitor Utility](/tests/pcx86/testmon/testmon.js) that can issue commands to a *physical* machine, making it easy to
+[TestMonitor Utility](/software/pcx86/test/testmon/testmon.js) that can issue commands to a *physical* machine, making it easy to
 compare operations between simulated and actual hardware.
 
 More information on [Controlling Physical PCs](#controlling-physical-pcs) is available below.
 
 You can test it with the PCjs machine below, which has been configured with a [TestMonitor](/modules/pcx86/lib/testctl.js)
-window, as well as a hard disk with [MS-DOS 3.20](/disks/pcx86/dos/microsoft/3.20/) and [SYMDEB 4.00](/blog/2018/02/25/)
+window, as well as a hard disk with [MS-DOS 3.20](/software/pcx86/sys/dos/microsoft/3.20/) and [SYMDEB 4.00](/blog/2018/02/25/)
 pre-installed.  After the "CTTY COM2" DOS command is entered, all further DOS input/output is redirected to COM2, which is
 connected to the TestMonitor window.
 
@@ -39,7 +39,7 @@ mode to *dos* mode:
     mode: prompt
     mode: dos
 
-The set of "dos" commands currently defined in [tests.json](/tests/pcx86/testmon/tests.json) includes "symdeb".  Type that
+The set of "dos" commands currently defined in [tests.json](/software/pcx86/test/testmon/tests.json) includes "symdeb".  Type that
 command into the TestMonitor window and press enter:
 
     symdeb
@@ -48,7 +48,7 @@ Assuming TestMonitor successfully runs SYMDEB, it should detect the SYMDEB promp
 
     mode: symdeb
 
-At that point, you can type any of the "symdeb" commands defined by [tests.json](/tests/pcx86/testmon/tests.json).  For example,
+At that point, you can type any of the "symdeb" commands defined by [tests.json](/software/pcx86/test/testmon/tests.json).  For example,
 one of those commands is "reboot".  Typing "reboot" and pressing enter sends the following SYMDEB command sequence to the
 machine:
 
@@ -93,21 +93,21 @@ Here's the general procedure for controlling a *real* PC using a serial port con
 
 - Turn on your PC
 - Boot DOS 2.00 or later
-- Load the PCjs [INT14 TSR](/tests/pcx86/testmon/int14/INT14.ASM): "INT14"
+- Load the PCjs [INT14 TSR](/software/pcx86/test/testmon/int14/INT14.ASM): "INT14"
 - Run the DOS CTTY command: "CTTY COM2"
-- On your connected machine, run the PCjs [TestMonitor Utility](/tests/pcx86/testmon/testmon.js): "node testmon"
+- On your connected machine, run the PCjs [TestMonitor Utility](/software/pcx86/test/testmon/testmon.js): "node testmon"
 
 You should now be able to control the PC using the TestMonitor utility, in your choice of either "terminal mode" or
 "command mode".
 
-It's important to install the [INT14 TSR](/tests/pcx86/testmon/int14/) on the PC, because the INT 14h services
+It's important to install the [INT14 TSR](/software/pcx86/test/testmon/int14/) on the PC, because the INT 14h services
 that IBM created are incredibly lame and potentially broken: they only operate in "polled mode", making it very likely
 that incoming characters will be missed, and they do unusual things with the control lines.  For example, every time
 the ROM prepares to send a character, it enables both **DTR** and **RTS**.  Maybe in 1981, that was how people used
 **RTS**, but everything I've read says that **RTS** is intended to signal that the adapter is ready to *receive* data,
 not *send* data.
 
-To address the limitations of the ROM's INT 14h services, I wrote [INT14.ASM](/tests/pcx86/testmon/int14/INT14.ASM).
+To address the limitations of the ROM's INT 14h services, I wrote [INT14.ASM](/software/pcx86/test/testmon/int14/INT14.ASM).
 It's a Terminate-and-Stay-Resident (TSR) utility that scans the ROM BIOS Data Area for a COM port whose I/O address is
 0x2F8 (or 0x3F8 if the /1 option is specified).  If the port is found, then the utility installs replacement INT 14h
 services for that port.  Also, unless the /P option ("polled mode") is specified, the utility also installs a hardware
@@ -135,6 +135,3 @@ There are currently no `parity`, `databits`, or `stopbits` overrides, so you sho
 **MODE** command.
 
 {% include machine.html id="ibm5170" %}
-
-*[@jeffpar](https://jeffpar.com)*  
-*Mar 10, 2018*
