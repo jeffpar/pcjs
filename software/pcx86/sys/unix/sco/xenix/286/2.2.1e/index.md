@@ -22,7 +22,7 @@ When prompted, use the following serial number and activation key:
 	Serial number:  pcjs.org!
 	Activation key: tjmbrmbz
 
-We've also archived some [SCO Xenix 286 Installation and Emulation Notes](/disks/pcx86/unix/sco/xenix/286/2.1.3/#sco-xenix-286-installation-and-emulation-notes)
-on the [SCO Xenix 286 v2.1.3](/disks/pcx86/unix/sco/xenix/286/2.1.3/) page.
+We've also archived some [SCO Xenix 286 Installation and Emulation Notes](/software/pcx86/sys/unix/sco/xenix/286/2.1.3/#sco-xenix-286-installation-and-emulation-notes)
+on the [SCO Xenix 286 v2.1.3](/software/pcx86/sys/unix/sco/xenix/286/2.1.3/) page.
 
 {% include machine.html id="ibm5170" %}

@@ -18,12 +18,12 @@ When I first started working on PCjs, JavaScript features like
 available.  Over the next 8 or so years, things changed a lot, I learned a lot, and PCjs slowly grew to support more machines.
 
 Unfortunately, that growth resulted in a lot of duplicated code, along with some out-dated and kludgy code.  While
-I did try to factor out common chunks of logic into a set of [PCjs shared modules]({{ site.github.master }}/machines/shared/lib/) modules,
+I did try to factor out common chunks of logic into a set of [PCjs shared modules]({{ site.github.pages }}/machines/shared/lib/) modules,
 those efforts were limited, partly to save time, but also to minimize the risk of breaking old machines while creating new ones.
 Getting a new emulator up and running is time-consuming enough without constantly testing and fixing all the others.
 
 I decided to make a break with that code base a couple years ago, when I wrote a web-based emulation of the
-[TI-57 Calculator](/machines/ti/ti57/).  I created a new set of [Machine library modules]({{ site.github.master }}/machines/lib/) hierarchy,
+[TI-57 Calculator](/machines/ti/ti57/).  I created a new set of [Machine library modules]({{ site.github.pages }}/machines/lib/) hierarchy,
 including a new time management class to "clock" all the internal devices, which could be driven either by *setTimeout()*
 or *requestAnimationFrame()*, and I used simple JSON and HTML markup to define the machine configuration and layout,
 instead of the older XML-based PCjs configuration scheme, which had become increasingly clunky and difficult to maintain.

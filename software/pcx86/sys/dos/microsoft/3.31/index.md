@@ -13,13 +13,13 @@ machines:
 ---
 
 It's unclear where this [June 1989](#directory-of-ms-dos-331-144m-disk) release of MS-DOS 3.31 fits in the
-MS-DOS timeline, because it comes *after* [MS-DOS 4.00](/disks/pcx86/dos/microsoft/4.00/) (October 1988) and
-[MS-DOS 4.01](/disks/pcx86/dos/microsoft/4.01/) (April 1989).
-Note that [COMPAQ MS-DOS 3.31](/disks/pcx86/dos/compaq/3.31/) existed as early as September 1987, raising the
+MS-DOS timeline, because it comes *after* [MS-DOS 4.00](/software/pcx86/sys/dos/microsoft/4.00/) (October 1988) and
+[MS-DOS 4.01](/software/pcx86/sys/dos/microsoft/4.01/) (April 1989).
+Note that [COMPAQ MS-DOS 3.31](/software/pcx86/sys/dos/compaq/3.31/) existed as early as September 1987, raising the
 question of whether there were *earlier* releases of Microsoft MS-DOS 3.31 as well.
 
 Even though the majority of the files are dated June 1989, most of the copyright strings are unchanged from
-[MS-DOS 3.30](/disks/pcx86/dos/microsoft/3.30/):
+[MS-DOS 3.30](/software/pcx86/sys/dos/microsoft/3.30/):
 
     Microsoft(R) MS-DOS(R)  Version 3.31                                            
                  (C)Copyright Microsoft Corp 1981-1987                              

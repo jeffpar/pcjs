@@ -118,7 +118,6 @@ function processFiles(sDir, fDebug, fFix)
         let sFilePath = asFiles[i];
         if (sFilePath.indexOf("_posts") < 0 && sFilePath.indexOf("index.md") < 0) continue;
         let sFileName = path.basename(sFilePath);
-        if (sFileName == "index.md") continue;
         if (sFilePath.indexOf(sDir) == 0) sFilePath = sFilePath.substr(sDir.length);
         if (sFilePath[0] != "/") sFilePath = "/" + sFilePath;
         let sFileDir = path.dirname(sFilePath);
@@ -218,34 +217,38 @@ function processFiles(sDir, fDebug, fFix)
          */
         let reLinks = /\[([^\]]*)\]\(([^)]*)\)/g;
         while ((match = reLinks.exec(sText))) {
-            let sFile = match[2];
-            if (sFile[0] == '?' || sFile[0] == '#' || sFile.indexOf("mailto:") >= 0) continue;
-            if (sFile.indexOf("{{") == 0) {
-                if (sFile.indexOf("site.github") >= 0 || sFile.indexOf("site.url") >= 0) continue;
-                sFile = sFile.replace(/\{\{ site\.software\.(diskettes|gamedisks|harddisks)\.server \}\}/, "../pcjs-$1");
+            let sFile = null, sLink = match[2];
+            if (sLink[0] == '?' || sLink[0] == '#' || sLink.indexOf("mailto:") >= 0) continue;
+
+            let i = sLink.indexOf(' "');
+            if (i > 0) sLink = sLink.substr(0, i);
+            i = sLink.indexOf('?');
+            if (i > 0) sLink = sLink.substr(0, i);
+            i = sLink.indexOf('#');
+            if (i > 0) sLink = sLink.substr(0, i);
+
+            if (sLink.indexOf("{{") == 0) {
+                if (sLink.indexOf("site.github") >= 0 || sLink.indexOf("site.url") >= 0) continue;
+                sFile = sLink.replace(/\{\{ site\.software\.(diskettes|gamedisks|harddisks)\.server \}\}/, "../pcjs-$1");
             }
-            else if (sFile.indexOf("http") == 0) {
-                sFile = sFile.replace(/https?:\/\/(diskettes|gamedisks|harddisks)\.pcjs\.org/, "../pcjs-$1").replace(/https?:\/\/(cds[0-9]+)\.pcjs\.org/, "../pcjs/disks-cds/$1");
+            else if (sLink.indexOf("http") == 0) {
+                sFile = sLink.replace(/https?:\/\/(diskettes|gamedisks|harddisks)\.pcjs\.org/, "../pcjs-$1").replace(/https?:\/\/(cds[0-9]+)\.pcjs\.org/, "../pcjs/disks-cds/$1");
                 if (sFile.indexOf("http") == 0) continue;
             }
             else {
-                let matchBlog = sFile.match(/^\/blog\/([0-9]+)\/([0-9]+)\/([0-9]+)\//);
+                let matchBlog = sLink.match(/^\/blog\/([0-9]+)\/([0-9]+)\/([0-9]+)\//);
                 if (matchBlog) {
-                    sFile = sFile.replace(matchBlog[0], "/blog/_posts/" + matchBlog[1] + "/" + matchBlog[1] + "-" + matchBlog[2] + "-" + matchBlog[3] + "-*");
+                    sFile = sLink.replace(matchBlog[0], "/blog/_posts/" + matchBlog[1] + "/" + matchBlog[1] + "-" + matchBlog[2] + "-" + matchBlog[3] + "-*");
                     continue;   // TODO: For now, we're just going to assume that blog URLs are OK
                 }
-                if (sFile[0] == "/") {
-                    sFile = "." + sFile;
+                if (sLink.indexOf("/about") == 0) {
+                    sFile = "./blog" + sLink;
+                } else if (sLink[0] == "/") {
+                    sFile = "." + sLink;
                 } else {
-                    sFile = "." + sFileDir + "/" + sFile;
+                    sFile = "." + sFileDir + "/" + sLink;
                 }
             }
-            let i = sFile.indexOf(' "');
-            if (i > 0) sFile = sFile.substr(0, i);
-            i = sFile.indexOf('?');
-            if (i > 0) sFile = sFile.substr(0, i);
-            i = sFile.indexOf('#');
-            if (i > 0) sFile = sFile.substr(0, i);
             if (sFile.endsWith("/")) sFile += "index.md";
             if (!fileExists(sFile)) {
                 printf("%s: link for '%s' not found: %s\n", sFilePath, match[1], sFile);

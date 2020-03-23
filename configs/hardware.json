@@ -883,6 +883,10 @@
       "lite-brite": {
         "@title": "Lite-Brite",
         "@redirect_from": "/devices/leds/lite-brite/"
+      },
+      "scroller": {
+        "@title": "Scroller",
+        "@redirect_from": "/devices/leds/scroller/"
       }
     }
   },

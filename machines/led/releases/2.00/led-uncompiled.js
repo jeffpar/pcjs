@@ -6770,7 +6770,7 @@ Input.KEYCODEMOD = {
 Defs.CLASSES["Input"] = Input;
 
 /**
- * @copyright https://www.pcjs.org/machines/led/led.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/led.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), type: number, width: (number|undefined), height: (number|undefined), cols: (number|undefined), colsExtra: (number|undefined), rows: (number|undefined), rowsExtra: (number|undefined), color: (string|undefined), backgroundColor: (string|undefined), fixed: (boolean|undefined), hexagonal: (boolean|undefined), highlight: (boolean|undefined), persistent: (boolean|undefined) }} */
@@ -9059,7 +9059,7 @@ class CPU extends Device {
 // Defs.CLASSES["CPU"] = CPU;
 
 /**
- * @copyright https://www.pcjs.org/machines/led/ledctrl.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/ledctrl.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), wrap: (boolean|undefined), font: (string|undefined), rule: (string|undefined), pattern: (string|undefined), patterns: (Object|undefined), message: (string|undefined), toggleColor: (boolean|undefined), colors: (Object|undefined) }} */

@@ -135,6 +135,3 @@ for many puzzle-loving generations to come.
 
 NOTE: **Pandora's Box** does not run in any PCjs machines at this time.  The machine running [Windows 95](/software/pcx86/sys/windows/win95/4.00.950/)
 is the best candidate, but PCjs ATAPI CD-ROM support isn't quite up to the job yet.
-
-*[@jeffpar](https://jeffpar.com)*  
-*June 1, 2019*

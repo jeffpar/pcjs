@@ -211,6 +211,3 @@ For example, `dh 20 20` will display the 20 previously executed instructions:
 I could go on and on, and explain how the `r` and `rm` commands can be used to both dump and modify registers, or
 how to set read, write, and conditional breakpoints, how to evaluate complex expressions and either print or assign
 the result to a variable, and more, but I'm sure you'd much rather discover these things on your own.  :-)
-
-*[@jeffpar](https://jeffpar.com)*  
-*Dec 2, 2016*

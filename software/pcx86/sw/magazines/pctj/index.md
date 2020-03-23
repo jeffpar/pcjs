@@ -52,7 +52,7 @@ to recreate from multiple ZIP archives.  It includes this note from the magazine
 	Editor                                  Editorial Director
 
 We've gone through those ZIP archives, filtered out the duplicates, organized them chronologically, and then put
-their contents onto diskette images that you can easily "Load" and "Save" in any [PCjs Machine](/machines/pcx86/).
+their contents onto diskette images that you can easily "Load" and "Save" in any [PCjs Machine]({{ site.github.pages }}/machines/pcx86/).
 In fact, if you click on the name of any diskette in the headings below, a machine should automatically launch
 with that diskette loaded in drive B.
 

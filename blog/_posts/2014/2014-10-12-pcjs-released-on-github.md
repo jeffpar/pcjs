@@ -22,6 +22,3 @@ just limping along at the moment.
 
 Longer term, I'm looking forward to building some new tools, including an "IBM PC Configurator" that will take some
 of the pain out of building your own bootable PCjs machine configurations, and make them easier to share, embed, etc.
-
-*[@jeffpar](https://jeffpar.com)*  
-*October 12, 2014*

@@ -162,6 +162,3 @@ because of inconsistent results across browsers.
 |Chrome  | 17   | 18   | 91   |      |      |      | 32   |      |      |      |      | 93   | 18   | 17     | 37   | 40   | 39    | 48   |      | 110  | 13    |
 |Firefox | 17   | 18   | 224  |      |      |      | 32   |      |      |      |      | 224  | 18   | 17     | 37   | 40   | 39    | 96   |      | 110  | 13    |
 |Safari  | 17   | 18   | 91   |      |      |      | 32   |      |      |      |      | 93   | 18   | 17     | 37   | 40   | 39    | 96   |      | 110  | 13    |
-
-*[@jeffpar](https://jeffpar.com)*  
-*Feb 15, 2018*

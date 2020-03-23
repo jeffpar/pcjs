@@ -33,7 +33,7 @@ I had more grandiose plans, including a command-line prompt written in JavaScrip
 navigate the site exactly as you would an IBM PC hard drive from a "DOS prompt", and I may try something
 like that later, but don't hold your breath.
 
-I've tried to improve the organization of all the [Machine Configuration Files]({{ site.github.master }}/configs/)
+I've tried to improve the organization of all the [Machine Configuration Files]({{ site.github.pages }}/configs/)
 as well.  The variety of configurations was getting out of hand.  It's a bit tidier now, but there's still room for
 improvement.
 

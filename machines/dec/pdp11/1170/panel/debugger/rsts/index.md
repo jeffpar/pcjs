@@ -14,6 +14,6 @@ machines:
         path: /decdisks/pdp11/rl01k/RL01K-RSTS-V70.json
 ---
 
-This machine is ready to boot [RSTS/E v7.0](/disks/dec/rl01k/rstsv70/) ("BOOT RL0").
+This machine is ready to boot [RSTS/E v7.0](/software/dec/pdp11/disks/rl01k/rstsv70/) ("BOOT RL0").
 
 {% include machine.html id="test1170" %}

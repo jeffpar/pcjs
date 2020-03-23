@@ -31,7 +31,7 @@ the number 65536, the speed of the 8088 CPU, and real-world serial communication
 
 ### DOS 2.0 and the CTTY Command
 
-Long before I ever wanted to control a PC with a serial port, there was [PC DOS 2.00](/disks/pcx86/dos/ibm/2.00/)
+Long before I ever wanted to control a PC with a serial port, there was [PC DOS 2.00](/software/pcx86/sys/dos/ibm/2.00/)
 and the **CTTY** command, which allowed you to redirect all DOS screen and keyboard I/O to the serial port of your
 choice; e.g.:
 
@@ -72,7 +72,7 @@ To make serial I/O more reliable not only for my own control applications but al
 the sensible solution seemed to be: write an INT 14h TSR that replaces the ROM BIOS functions with compatible
 interrupt-driven functions.
 
-And so the PCjs [INT14.COM](/tests/pcx86/testmon/int14/) utility was born.
+And so the PCjs [INT14.COM](/software/pcx86/test/testmon/int14/) utility was born.
 
 The initial version of INT14.COM worked well inside my own PCx86 machines, but when I ran it on my *real* IBM PC AT,
 it never received any data.  It turned out that the interrupt handler wasn't being called.  I double and triple
@@ -142,10 +142,7 @@ Apparently, this use of the "OUT 2" signal was an IBM innovation which was never
 but third-party manufacturers zealously copied it, because even my third-party DTK serial adapter requires setting
 "OUT 2" to enable interrupts.
 
-The good news is that the PCjs [INT14.COM](/tests/pcx86/testmon/int14/INT14.TXT) utility appears to be working well
-now, and I've since added a few related utilities, including [DOWNLOAD.COM](/tests/pcx86/testmon/int14/DOWNLOAD.TXT),
+The good news is that the PCjs [INT14.COM](/software/pcx86/test/testmon/int14/INT14.TXT) utility appears to be working well
+now, and I've since added a few related utilities, including [DOWNLOAD.COM](/software/pcx86/test/testmon/int14/DOWNLOAD.TXT),
 which offers the rudimentary ability to "download" binary files onto my old IBM PC from my MacBook Pro via a 
 USB-to-serial adapter running at a blazing 9600 baud -- all thanks to this new set of interrupt-driven INT 14h services.
-
-*[@jeffpar](https://jeffpar.com)*  
-*Mar 16, 2018*

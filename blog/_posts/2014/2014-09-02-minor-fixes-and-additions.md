@@ -27,6 +27,3 @@ to manually initialize the machine(s).
 
 These two new functions are designed to assist in testing the starting up, shutting down and restarting of machines,
 by allowing scripts to control the overall process, without requiring use of the browser's back/forward/close controls.
-
-*[@jeffpar](https://jeffpar.com)*  
-*September 2, 2014*

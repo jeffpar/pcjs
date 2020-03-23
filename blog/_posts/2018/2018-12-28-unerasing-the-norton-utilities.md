@@ -541,9 +541,6 @@ And *The Norton Utilities, Version 4.0* shared PC Magazine's "Editor's Choice" a
 > Version 4.0, with *PC Tools* (at $39.95) instead. You'll pay less, get all the added abilities of the *Advanced Edition*,
 > and have its resident mode as a bonus.
 
-*[@jeffpar](https://jeffpar.com)*  
-*Dec 28, 2018*
-
 #### Version 3.00 Disk Scan
 
 [![Norton Utilities 3.00 (1984-12-07)]({{ site.software.diskettes.server }}/pcx86/util/norton/3.00/NU300-1984-12-07.jpg)](/software/pcx86/util/norton/3.00/)

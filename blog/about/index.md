@@ -29,10 +29,10 @@ C1Pjs v1.0 was released in July 2012.  More information about the first release 
 
 ### IBM PC and Compatibles
 
-The next PCjs simulation was [PCx86](/machines/pcx86/), which emulates the original IBM PC, IBM PC XT,
+The next PCjs simulation was [PCx86]({{ site.github.pages }}/machines/pcx86/), which emulates the original IBM PC, IBM PC XT,
 and IBM PC AT, as well as compatible machines like the COMPAQ DeskPro 386.  PCx86 v1.0 was released in late 2012.
 
-[PCx86](/machines/pcx86/) emulates the Intel 8088, 80186, 80286 and 80386 CPUs, and it faithfully renders
+[PCx86]({{ site.github.pages }}/machines/pcx86/) emulates the Intel 8088, 80186, 80286 and 80386 CPUs, and it faithfully renders
 characters and graphics produced by the IBM Monochrome Display Adapter (MDA), Color Graphics Adapter (CGA),
 Enhanced Graphics Adapter (EGA), and Video Graphics Array (VGA) video cards.
 

@@ -105,7 +105,7 @@ Up until now, PCx86 diskette drives were always double-sided, because single-sid
 after 1982, and who really wants *just* a single-sided drive anyway?  Well, you do, if you're someone who likes
 to examine original software operating under original hardware constraints.
 
-Look at [PC DOS 1.10](/disks/pcx86/dos/ibm/1.10/): the **FORMAT** utility was modified to automatically
+Look at [PC DOS 1.10](/software/pcx86/sys/dos/ibm/1.10/): the **FORMAT** utility was modified to automatically
 format all new diskettes with the new, higher capacity of 320K -- provided of course that the drive *truly* had
 two heads and the diskette was *truly* double-sided.  You had to specifiy **FORMAT /1** if you really wanted to
 use only one side of the diskette.
@@ -126,7 +126,7 @@ One final diskette configuration wrinkle I decided to include in the latest rele
 drives.  This makes it possible for a machine to have a preloaded diskette in drive A that's bypassed during the normal
 ROM BIOS boot process, allowing it boot from a hard drive instead.
 
-One example is the [Digital Research DR DOS 6.00](/disks/pcx86/dos/dresearch/6.00/) machine.  It's an IBM PC AT
+One example is the [Digital Research DR DOS 6.00](/software/pcx86/sys/dos/dresearch/6.00/) machine.  It's an IBM PC AT
 with "DR DOS 6.00 (1.2M Disk 1)" preloaded in drive A; however, because that drive's *boot* property has been set to
 *false*, the FDC component will automatically fail any attempt to read the first sector of the disk into memory location
 0x7C00.
@@ -136,8 +136,5 @@ specific reads into specific memory locations.  But PCjs prefers to use original
 achieved that level of sophistication.
 
 {% include machine.html id="ibm5150" %}
-
-*[@jeffpar](https://jeffpar.com)*  
-*Dec 4, 2018*
 
 [![User-To-User](/blog/images/pcmag-1982-12-user-to-user.jpg)](https://archive.org/details/PC-Mag-1982-12/page/n321)

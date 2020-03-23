@@ -15,7 +15,7 @@ machines:
 ---
 
 PC DOS 4.01 was released in August 1988.  This maintenance release is only about one month older than
-[PC DOS 4.00](/disks/pcx86/dos/ibm/4.00/).  Contrast this with [MS-DOS 4.01](/disks/pcx86/dos/microsoft/4.01/),
+[PC DOS 4.00](/software/pcx86/sys/dos/ibm/4.00/).  Contrast this with [MS-DOS 4.01](/software/pcx86/sys/dos/microsoft/4.01/),
 which was released in April 1989.
 
 [Directory Listings](#directory-of-pc-dos-401-disk-1) of the two 720Kb distribution diskettes are provided below.

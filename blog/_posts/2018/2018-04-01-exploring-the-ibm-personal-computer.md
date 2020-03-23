@@ -6,9 +6,9 @@ permalink: /blog/2018/04/01/
 ---
 
 A rather ~~ghastly~~ quaint piece of early IBM PC software was a program called
-[Exploring The IBM Personal Computer](/disks/pcx86/apps/ibm/exploring/).  Created by Digital Learning Systems, Inc.
+[Exploring The IBM Personal Computer](/software/pcx86/demo/ibm/exploring).  Created by Digital Learning Systems, Inc.
 and marketed by IBM, it was designed to walk you through the "ins and outs" of your shiny new IBM PC, and it came in
-two flavors: [Monochrome](/disks/pcx86/apps/ibm/exploring/5150/mda/) and [Color](/disks/pcx86/apps/ibm/exploring/5150/cga/).
+two flavors: Monochrome and Color.
 
 ![Exploring the IBM PC (Intro](/blog/images/exploring-the-ibm-pc-intro.jpg)
 
@@ -21,8 +21,8 @@ rendered.
 
 ![Exploring the IBM PC (Keyboard)](/blog/images/exploring-the-ibm-pc-keyboard.gif)
 
-Amazingly, this software was even updated for the [IBM PC AT](/disks/pcx86/apps/ibm/exploring/5170/) -- not once but
-[twice](/disks/pcx86/apps/ibm/exploring/5170/2.00/)!  On the bright side though, the second version did eliminate the "music".
+Amazingly, this software was even updated for the IBM PC AT -- not once but twice!  On the bright side though,
+the second version did eliminate the "music".
 
 Unfortunately, when I first ran this program on PCjs, the introductory screen wasn't fully erased, leaving most of
 the block characters around the border of the screen.
@@ -52,11 +52,8 @@ So I changed the block size to 4K for *all* machines, irrespective of bus width.
 could still attempt to load states with an older (larger) block size, so I also had to add code to "fix up" blocks whenever
 a non-4K block was detected.
 
-The good news is that, after dealing with all these ripple effects, [Exploring The IBM Personal Computer](/disks/pcx86/apps/ibm/exploring/)
+The good news is that, after dealing with all these ripple effects, [Exploring The IBM Personal Computer](/software/pcx86/demo/ibm/exploring/)
 now runs as intended.  Well, except for the awful sound it makes, which I'll be looking into at a later date.
 
 For now, turn your volume down (and appreciate the fact that you *can* turn your volume down, because the speaker on
 an IBM PC had no such feature), and enjoy exploring the IBM Personal Computer.
-
-*[@jeffpar](https://jeffpar.com)*  
-*Apr 1, 2018*

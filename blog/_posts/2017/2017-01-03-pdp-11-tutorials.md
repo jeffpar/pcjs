@@ -19,7 +19,7 @@ Introducing PDP-11 tutorials.  For more details, keep scrolling, and keep your e
 
 {% include machine.html id="vt100" %}
 
-[PDPjs]({{ site.github.master }}/machines/dec/pdp11/) is able to run a variety of old DEC operating systems,
+[PDPjs]({{ site.github.pages }}/machines/dec/pdp11/) is able to run a variety of old DEC operating systems,
 such as RT-11 and RSTS/E, and while there are manuals available online, thanks to the efforts of those who
 operate and contribute to websites like [bitsavers.org](http://bitsavers.org), I suspect most people don't
 have a lot of interest or time to spend reading old manuals.

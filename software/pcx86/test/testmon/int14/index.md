@@ -14,22 +14,22 @@ Note that a serial adapter with address 0x2F8 is normally named "COM2", but not 
 adapter in the PC, then DOS will name it "COM1" even if it's using the traditional COM2 address.
 
 [INT14.COM](INT14.COM) and [INT14.TXT](INT14.TXT) were built with
-[Microsoft Macro Assembler 4.00](/disks/pcx86/tools/microsoft/masm/4.00/) using the following commands:
+[Microsoft Macro Assembler 4.00](/software/pcx86/lang/microsoft/masm/4.00/) using the following commands:
 
     masm int14,,int14.txt;
     link int14;
     exe2bin int14.exe int14.com
 
 INT14.COM is intended to be run on an actual IBM PC/XT/AT, so that the PCjs
-[TestMonitor Utility](/tests/pcx86/testmon/testmon.js) can be used to control the PC from the command-line.
+[TestMonitor Utility](/software/pcx86/test/testmon/testmon.js) can be used to control the PC from the command-line.
 
 Here's the procedure:
 
 - Turn on your PC
 - Boot DOS 2.00 or later
-- Load the PCjs [INT14 TSR](/tests/pcx86/testmon/int14/INT14.ASM): "INT14"
+- Load the PCjs [INT14 TSR](/software/pcx86/test/testmon/int14/INT14.ASM): "INT14"
 - Run the DOS CTTY command: "CTTY COM2" 
-- On your connected machine, run the PCjs [TestMonitor Utility](/tests/pcx86/testmon/testmon.js): "node testmon"
+- On your connected machine, run the PCjs [TestMonitor Utility](/software/pcx86/test/testmon/testmon.js): "node testmon"
 
 You should now be able to control the PC using the TestMonitor utility, in your choice of either "terminal mode" or
 "command mode".
@@ -52,7 +52,7 @@ testmon.js uses the same default speed of 2400 baud, which you can explicitly se
 There are currently no `parity`, `databits`, or `stopbits` overrides, so you should always use "N,8,1" with the DOS
 **MODE** command.
 
-To create a disk image containing the INT14 source code, run the following [DiskDump](/modules/diskdump/lib/) command
+To create a disk image containing the INT14 source code, run the following [DiskDump]({{ site.github.pages }}/tools/diskdump/lib/) command
 in the [testmon](../) directory:
 
     diskdump --path="int14/INT14.ASM;DOWNLOAD.ASM;FAKECTTY.ASM;MK.BAT" --format=img --output=INT14.img --normalize --overwrite

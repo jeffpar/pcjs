@@ -86,7 +86,7 @@ starts reading from the top of video memory after it reaches the bottom.  So all
 new lines at the top of the video memory again.  If IBM had thought of that trick 5 years earlier, back in 1981,
 think of all the years of shared flicker-grief that could have been avoided!
 
-Today, in honor of all that flickering, I'm pleased to announce that [PCx86]({{ site.github.master }}/machines/pcx86/),
+Today, in honor of all that flickering, I'm pleased to announce that [PCx86]({{ site.github.pages }}/machines/pcx86/),
 one of the PCjs emulators I'm always trying to improve, now offers **FLICKERING** on all IBM PC Color Graphics configurations.
 If you feel the need to override it, you can add *flicker=0* to the URL of your favorite machine; e.g.:
 

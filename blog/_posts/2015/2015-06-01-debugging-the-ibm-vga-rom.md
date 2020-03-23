@@ -135,8 +135,5 @@ modes commonly used on the IBM VGA.  Here's that table:
 	 ATC[0x12]: PLANES          0x0F 0x0F 0x0F 0x0F 0x03 0x03 0x01 0x0F 0x0F 0x0F 0x0F 0x0F
 	 ATC[0x13]: HPAN            0x08 0x08 0x08 0x08 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
 
-In addition, I've created a [VGA Tests](/tests/pcx86/vga/) directory to hold VGA test and sample code that PCjs can 
+In addition, I've created a [VGA Tests](/software/pcx86/test/vga/) directory to hold VGA test and sample code that PCjs can 
 now successfully run (for the most part).  See that directory for more details.
-
-*[@jeffpar](https://jeffpar.com)*  
-*June 1, 2015 (Updated July 9, 2015)*

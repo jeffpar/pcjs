@@ -18,7 +18,7 @@ The MS-DOS 3.20 disks in the PCjs collection are the only known non-OEM copies o
 available online.  All other known MS-DOS 3.20 disk images are OEM releases (eg, HP, Zenith, Data General,
 Seiko Epson, etc.) and can be found on sites like [WinWorld](https://winworldpc.com/product/ms-dos/320).
 
-See the [PC DOS 3.20 Feature Summary](/disks/pcx86/dos/ibm/3.20/#feature-summary) for more details.
+See the [PC DOS 3.20 Feature Summary](/software/pcx86/sys/dos/ibm/3.20/#feature-summary) for more details.
 
 [Directory Listings](#directory-listings) of the four 360Kb distribution diskettes are provided below.
 
@@ -121,10 +121,9 @@ MSDOS.SYS and COMMAND.COM.
 	PROGREF2 DOC   305536   3-14-86   9:44a
 	        1 File(s)     56320 bytes free
 
-Surprisingly Bad Bug in MS-DOS 3.20
------------------------------------
+### Surprisingly Bad Bug in MS-DOS 3.20
 
-If you attempt to boot MS-DOS 3.20 on an [IBM PC Model 5150](/devices/pcx86/machine/5150/cga/384kb/debugger/)
+If you attempt to boot MS-DOS 3.20 on an [IBM PC Model 5150](/configs/pcx86/xml/machine/5150/cga/384kb/debugger/machine.xml)
 (with either an MDA or CGA video card), the machine will appear to crash after printing the first character.
 
 When MS-DOS 3.20 prints characters to the screen, it uses this code:
@@ -167,13 +166,12 @@ upgraded video cards, such as an EGA, which provided their own Video BIOS.  This
 but that release apparently wasn't made available until almost a year later (MS-DOS 3.21 files are timestamped
 `5-01-87`).
 
-MS-DOS 3.20 Photos
-------------------
+### MS-DOS 3.20 Photos
 
 Here's what one of the MS-DOS 3.20 diskettes looked like.
 
-> [![MS-DOS 3.20 Programmer's Reference](MSDOS320-DISK3-PROGREF1-thumb.jpg)]({{ site.software.diskettes.server }}/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK3-PROGREF1.jpg)
+> ![MS-DOS 3.20 Programmer's Reference]({{ site.software.diskettes.server }}/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK3-PROGREF1.jpg)
 
 And the box, courtesy of [www.oldcomputermuseum.com](http://www.oldcomputermuseum.com/os/msdos_3.2.html).
 
-> ![MS-DOS 3.20 Box](MSDOS320-BOX.jpg)
+> ![MS-DOS 3.20 Box]({{ site.software.diskettes.server }}/pcx86/sys/dos/microsoft/3.20/MSDOS320-BOX.jpg)

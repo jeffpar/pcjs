@@ -22,7 +22,7 @@ old COMPAQ MS-DOS [SETUP Disk](/software/pcx86/sys/dos/compaq/3.31/#directory-of
 *also* reports version 3.31.  That makes at *least* three revisions of a single version of COMPAQ MS-DOS.
 
 The good news is that large (&gt;32Mb) partition support in [COMPAQ MS-DOS 3.31](/software/pcx86/sys/dos/compaq/3.31/) works
-fine in PCjs.  See the [47Mb Hard Drive](/disks/pcx86/drives/47mb/) page for additional information.
+fine in PCjs.  See the [47Mb Hard Drive](/configs/pcx86/xml/hdc/47mb/) page for additional information.
 
 ### A New Old COMPAQ ROM
 
@@ -47,7 +47,7 @@ earliest (if not *the* earliest) ROMs commercially available for the DeskPro 386
 
 ### Old Windows on New Windows
 
-One of the problems with running old versions of Microsoft Windows, like [Windows 1.01](/disks/pcx86/windows/1.01/) or
+One of the problems with running old versions of Microsoft Windows, like [Windows 1.01](/software/pcx86/sys/windows/1.01/) or
 [Windows 95](/software/pcx86/sys/windows/win95/4.00.950/), inside a web browser on top of a modern version of Windows are
 **key conflicts**.  For example:
 
@@ -77,6 +77,3 @@ in any machine that "captures" your mouse, including any machine that supports "
 remap the `tilde` key to the `esc`  key.  This is because most (all?) web browsers intercept `esc` as a way of returning
 control of your mouse and/or screen.  So if you're running software *inside* a PCjs machine that uses the `esc` key,
 press the `tilde` key instead.
-
-*[@jeffpar](https://jeffpar.com)*  
-*Jan 27, 2018*

@@ -101,6 +101,3 @@ very familiar with either the IBM PC or the 8088 instruction set at this point -
 And who knows, maybe Vault Corporation (the company that Ashton-Tate used to provide the copy-protection logic for
 dBASE III) wrote such sophisticated code that it was impossible to defeat so simply.  However, experience suggests
 that's unlikely. 
-
-*[@jeffpar](https://jeffpar.com)*  
-*Aug 11, 2017*

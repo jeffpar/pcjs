@@ -1,4 +1,4 @@
-PCx80 is our 8080-based machine emulation module.  The code is derived from [PCx86](/machines/pcx86/).
+PCx80 is our 8080-based machine emulation module.  The code is derived from [PCx86]({{ site.github.pages }}/machines/pcx86/).
 
 See the list of available [PCx80 Machines](/machines/pcx80/configs/), which includes
 [Space Invaders (1978)](/machines/arcade/invaders/) and the [DEC VT100 Terminal](/machines/dec/vt100/).

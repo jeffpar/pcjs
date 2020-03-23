@@ -6,6 +6,7 @@ redirect_from: /disks/pcx86/cpm/1.00/
 machines:
   - id: cpm-mda-256k
     type: pcx86
+    config: /configs/pcx86/xml/machine/5150/mda/256kb/machine.xml
 ---
 
 This is the first IBM version of CP/M-86, produced by Digital Research Inc. in 1982.
@@ -18,8 +19,6 @@ On startup, it reports:
     CP/M-86 for the IBM Personal Computer.
     Version 1.0
     Copyright 1982, Digital Research Inc.                                                 
-
-The machine below is also available with a [Debugger](debugger/).
 
 {% include machine.html id="cpm-mda-256k" %}
 

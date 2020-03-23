@@ -82,14 +82,11 @@ and LTE Lite series.  But I think I need to stick to my original plan and draw a
 
 As best I can tell, COMPAQ preferred to print its company name in all-caps, so that's my practice as well.
 
-However, it seems that sometime between the release of [COMPAQ MS-DOS 3.10](/disks/pcx86/dos/compaq/3.10/) and
-[COMPAQ MS-DOS 3.31](/disks/pcx86/dos/compaq/3.31/), there may have been a shift in policy.  Both products still
+However, it seems that sometime between the release of [COMPAQ MS-DOS 3.10](/software/pcx86/sys/dos/compaq/3.10/) and
+[COMPAQ MS-DOS 3.31](/software/pcx86/sys/dos/compaq/3.31/), there may have been a shift in policy.  Both products still
 called themselves `The COMPAQ Personal Computer MS-DOS`, but in 3.31, the copyright string changed to
 `Compaq Computer Corp.`
 
 Their all-caps practice also extended to product names (eg, `COMPAQ DESKPRO`), at least in their marketing literature.
 Contemporary news stories, however, tended to lower-case the product name (eg, `COMPAQ Deskpro`).  I've decided to
 split the difference and use mixed-case where it seems appropriate (eg, `COMPAQ DeskPro`).
-
-*[@jeffpar](https://jeffpar.com)*  
-*February 24, 2016*

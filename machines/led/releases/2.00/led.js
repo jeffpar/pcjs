@@ -8,10 +8,10 @@
  https://www.pcjs.org/machines/lib/bus/memory.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/bus/rom.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/input.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/led/led.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/lib/led.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/time.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/cpu/cpu.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/led/ledctrl.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/lib/ledctrl.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/machine.js (C) 2012-2020 Jeff Parsons
 */
 var u;function aa(a){var b=0;return function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}}}function x(a){if(!(a instanceof Array)){var b="undefined"!=typeof Symbol&&Symbol.iterator&&a[Symbol.iterator];a=b?b.call(a):{next:aa(a)};for(var c=[];!(b=a.next()).done;)c.push(b.value);a=c}return a}var ba="function"==typeof Object.create?Object.create:function(a){function b(){}b.prototype=a;return new b},ca;

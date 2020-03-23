@@ -5,7 +5,7 @@ date: 2017-08-28 10:00:00
 permalink: /blog/2017/08/28/
 ---
 
-While trying to bring the PCjs [Microsoft Mouse Driver](/disks/pcx86/tools/microsoft/mouse/) collection up-to-date,
+While trying to bring the PCjs [Microsoft Mouse Driver](/software/pcx86/dev/mouse/microsoft/) collection up-to-date,
 at least through the 1980's, a number of versions have proven hard to find: 
 
 - Microsoft Mouse v1.x
@@ -13,7 +13,7 @@ at least through the 1980's, a number of versions have proven hard to find:
 - Microsoft Mouse v3.x
 - Microsoft Mouse v5.x
 
-However, I was able to locate [Microsoft Mouse v5.0](/disks/pcx86/tools/microsoft/mouse/5.00/) disk images in my own
+However, I was able to locate [Microsoft Mouse v5.0](/software/pcx86/dev/mouse/microsoft/5.00/) disk images in my own
 collection, so we can cross that one off the list now.
 
 Another dimension of the driver matrix is the type of mouse hardware:
@@ -290,6 +290,3 @@ snapshot of mouse driver revision history that I recently unearthed.  Enjoy!
 	;         by recognizing mode 25h in set_masks and treating similar to
 	;         Vga640x480.
 	;------------------------------------------------------------------------------
-
-*[@jeffpar](https://jeffpar.com)*  
-*Aug 28, 2017*

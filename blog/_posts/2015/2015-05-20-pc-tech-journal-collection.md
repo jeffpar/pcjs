@@ -20,6 +20,3 @@ numerically, puts it squarely between the December 1986 and January 1987 issues.
 [<img src="/documents/magazines/pctj/PCTJ-1983-07/cover.jpg" width="200" height="260" alt="PC Tech Journal, July-August 1983"/>](/documents/magazines/pctj/)
 
 Happy reading!
-
-*[@jeffpar](https://jeffpar.com)*  
-*May 20, 2015*

@@ -78,6 +78,3 @@ expect: 0x80000001 (the internal representation is more like 0xFFFFF80000001).  
 [MDN Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toString)
 explain, for a negative number, toString() returns the positive representation of the number, preceded by a - sign,
 *not* the "two's complement" of the number.
- 
-*[@jeffpar](https://jeffpar.com)*  
-*October 26, 2014 (Updated September 8, 2015)* 

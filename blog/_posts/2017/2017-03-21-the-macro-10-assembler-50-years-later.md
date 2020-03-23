@@ -284,6 +284,3 @@ other unrecognized or unsupported opcode or pseudo-op, will simply generate an e
 If that sounds like a joke, it's not.  This, however, is:
 
 > A man walks into a bar, asks the bartender for a fixup, and the bartender responds, "Absolutely!"
-
-*[@jeffpar](https://jeffpar.com)*  
-*Mar 21, 2017*

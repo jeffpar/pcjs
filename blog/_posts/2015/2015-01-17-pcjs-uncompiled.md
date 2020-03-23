@@ -45,6 +45,3 @@ Here's what a typical Markdown file would look like:
 In fact, that's what we've done in the Markdown file you are reading right now. 
 
 {% include machine.html id="at-ega-1024k-rev3" %}
-
-*[@jeffpar](https://jeffpar.com)*  
-*January 17, 2015 (Updated December 10, 2015 to reflect the new `uncompiled` property)*

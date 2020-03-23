@@ -148,6 +148,3 @@ code in action.  When the machine is operating in real-mode, you can use the "rp
 the registers, including the current base and limit values loaded into the segment registers.
 
 {% include machine.html id="deskpro386" %}
-
-*[@jeffpar](https://jeffpar.com)*  
-*April 16-19, 2015*

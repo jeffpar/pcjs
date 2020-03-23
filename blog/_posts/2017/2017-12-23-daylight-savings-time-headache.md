@@ -6,11 +6,11 @@ permalink: /blog/2017/12/23/
 ---
 
 This past summer, I added a couple sets of Lotus 1-2-3 disk images to the PCjs archives
-([1-2-3 Release 1A](/disks/pcx86/apps/lotus/123/1a/) and [1-2-3 Release 1A*](/software/pcx86/app/lotus/123/1aa/)), and I had
+([1-2-3 Release 1A](/software/pcx86/app/lotus/123/1a/) and [1-2-3 Release 1A*](/software/pcx86/app/lotus/123/1aa/)), and I had
 noticed with some amusement that Lotus had timestamped all their files with the local time of 1:23am.
 
-Fast-forward to this December, when I was updating the [disk manifest](/disks/pcx86/apps/lotus/123/1a/manifest.xml) for these
-Lotus 1-2-3 disks with my [DiskDump utility](/modules/diskdump/), and I noticed that all the file times were *now* being
+Fast-forward to this December, when I was updating the directory listings for these Lotus 1-2-3 disks with my
+[DiskDump utility]({{ site.github.pages }}/tools/diskdump/), and I noticed that all the file times were *now* being
 recorded as 2:23am.
 
 I should explain that Diskdump doesn't crack the contents of each disk image itself: it leaves the details of the FAT file
@@ -97,6 +97,3 @@ for the files to pass through a few hands, on computers with different time zone
 may change in subtle, unexpected ways.
 
 It's an archivist's nightmare.  Well, OK, maybe nightmare is a bit extreme, but certainly an archivist's headache.
-
-*[@jeffpar](https://jeffpar.com)*  
-*Dec 23, 2017*

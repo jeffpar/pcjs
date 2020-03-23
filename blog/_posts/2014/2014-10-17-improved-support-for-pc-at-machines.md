@@ -6,16 +6,16 @@ category: Releases
 permalink: /blog/2014/10/17/
 ---
 
-The [8Mhz IBM PC AT](/devices/pcx86/machine/5170/ega/1024kb/rev3/debugger/) machine configuration now boots in
-[PCjs v1.15.5](https://github.com/jeffpar/pcjs/releases/tag/v1.15.5), which includes the following fixes:
+The [8Mhz IBM PC AT](/configs/pcx86/xml/machine/5170/ega/1024kb/rev3/debugger/machine.xml) machine configuration
+now boots in [PCjs v1.15.5](https://github.com/jeffpar/pcjs/releases/tag/v1.15.5), which includes the following fixes:
 
 + The BIOS expects memory refresh to occur roughly every 16us, which I've resolved by tying the state
-  of the refresh bit in port 0x61 to bit 6 of the CPU cycle count (see *in8042RWReg()* in [chipset.js](/modules/pcx86/lib/chipset.js));
+  of the refresh bit in port 0x61 to bit 6 of the CPU cycle count (see *in8042RWReg()* in [chipset.js](/machines/pcx86/lib/chipset.js));
   the original AT BIOS was satisfied with a refresh bit that merely alternated, whereas the new AT BIOS
   is much more particular about the rate at which that bit changes, since many hard-coded delay-loops have
   now been replaced with code that waits for a specific number of refresh cycles.
 + The 8042 Keyboard Controller emulation needed a few more tweaks, mainly with respect to what happens
-  when the keyboard's "clock" line is toggled (see *set8042CmdData()* in [chipset.js](/modules/pcx86/lib/chipset.js)).
+  when the keyboard's "clock" line is toggled (see *set8042CmdData()* in [chipset.js](/machines/pcx86/lib/chipset.js)).
 + The Floppy Drive Controller needed to add support for the "READ ID" command, in order for the BIOS
   "double-stepping" test to work (double-stepping is required on an 80-track drive when attempting to read
   a 40-track diskette).
@@ -28,7 +28,7 @@ The [8Mhz IBM PC AT](/devices/pcx86/machine/5170/ega/1024kb/rev3/debugger/) mach
   to run SETUP after installing a second hard drive.  So, when the CMOS reports only one hard drive installed,
   the BIOS probes for a second hard drive anyway, and it does so by simply writing the drive number to the ATC's
   "DRVHD" register and then immediately reading the "STATUS" register, without issuing any intervening command.
-  It was an easy fix to *outATCDrvHd()* in [hdc.js](/modules/pcx86/lib/hdc.js), but I was surprised
+  It was an easy fix to *outATCDrvHd()* in [hdc.js](/machines/pcx86/lib/hdc.js), but I was surprised
   to discover that the ATC had this behavior, and now I'm wondering if there are any other I/O operations
   that must immediately update the "STATUS" register.
 
@@ -49,6 +49,3 @@ off to the server every time you make a request.  **localStorage** is nothing mo
 *not* automatically sent anywhere.  Granted, a JavaScript application could abuse it and send it out just like a
 cookie, but PCjs does *not* do that; the only exception is when PCjs detects a problem, and even then, you must
 first agree to submit your machine's state as part of the bug report.
-
-*[@jeffpar](https://jeffpar.com)*  
-*October 17, 2014*

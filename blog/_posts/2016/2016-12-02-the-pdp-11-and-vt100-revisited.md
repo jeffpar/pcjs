@@ -6,8 +6,8 @@ permalink: /blog/2016/12/02/
 ---
 
 I recently did some more work on the PCjs [VT100 Terminal](/machines/dec/vt100/) emulation, making
-it work a bit better with other PCjs machines -- specifically, [PDP-11]({{ site.github.master }}/machines/dec/pdp11/)
-and [IBM PC]({{ site.github.master }}/machine/pcx86/) machines.
+it work a bit better with other PCjs machines -- specifically, [PDP-11]({{ site.github.pages }}/machines/dec/pdp11/)
+and [IBM PC]({{ site.github.pages }}/machine/pcx86/) machines.
 
 As I explained back in [August 2016](/blog/2016/08/03/), the PCjs VT100 emulation isn't just another VT100 emulator,
 but a simulation of the original VT100 terminal.  One of the goals is to provide users with a more authentic

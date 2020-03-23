@@ -23,8 +23,8 @@ begin connecting PCs to terminals.
 Below you'll find an 80286-based [IBM PC AT](/configs/pcx86/xml/machine/5170/ega/2048kb/rev3/) connected to an 8080-based
 [VT100 Terminal](/machines/dec/vt100/) via the PC's **COM2** serial port.
 
-At this point, the connection is *very* thin.  The [PCx86]({{ site.github.master }}/machines/pcx86/) [SerialPort](/machines/pcx86/lib/serial.js)
-and [PCx80]({{ site.github.master }}/machines/pcx80/) [SerialPort](/machines/pcx80/lib/serial.js) each export exactly two methods:
+At this point, the connection is *very* thin.  The [PCx86]({{ site.github.pages }}/machines/pcx86/) [SerialPort](/machines/pcx86/lib/serial.js)
+and [PCx80]({{ site.github.pages }}/machines/pcx80/) [SerialPort](/machines/pcx80/lib/serial.js) each export exactly two methods:
 
 - *initConnection()*
 - *receiveData()*
