@@ -540,19 +540,25 @@ class Device extends WebIO {
     }
 }
 
+if (window) {
+    if (!window['PCjs']) window['PCjs'] = {};
+    if (!window['PCjs']['Machines']) window['PCjs']['Machines'] = {};
+    if (!window['PCjs']['Components']) window['PCjs']['Components'] = [];
+}
+
 /**
  * Machines is a global object whose properties are machine IDs and whose values are arrays of Devices.
  *
  * @type {Object}
  */
-Device.Machines = {};
+Device.Machines = window? window['PCjs']['Machines'] : {};
 
 /**
  * Components is maintained for backward-compatibility with older PCjs machines, to facilitate machine connections.
  *
  * @type {Array}
  */
-Device.Components = [];
+Device.Components = window? window['PCjs']['Components'] : [];
 
 /*
  * List of additional message groups, extending the base set defined in lib/webio.js.
@@ -611,11 +617,5 @@ WebIO.MESSAGE_NAMES["mouse"]    = MESSAGE.MOUSE;
 WebIO.MESSAGE_NAMES["touch"]    = MESSAGE.TOUCH;
 WebIO.MESSAGE_NAMES["warn"]     = MESSAGE.WARN;
 WebIO.MESSAGE_NAMES["halt"]     = MESSAGE.HALT;
-
-if (window) {
-    if (!window['PCjs']) window['PCjs'] = {};
-    if (!window['PCjs']['Machines']) window['PCjs']['Machines'] = Device.Machines;
-    if (!window['PCjs']['Components']) window['PCjs']['Components'] = Device.Components;
-}
 
 Defs.CLASSES["Device"] = Device;

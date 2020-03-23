@@ -6,23 +6,25 @@ permalink: /blog/2016/08/19/
 machines:
   - id: ibm5170
     type: pcx86
-    connection: com2->vt100.serialPort
     config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
+    connection: com2->vt100.serialPort
   - id: vt100
-    type: pc8080
+    type: vt100
+    name: DEC VT100
+    config: /configs/vt100/vt100.json
+    layout: /_includes/vt100/vt100.html
     connection: serialPort->ibm5170.com2
-    config: /devices/pc8080/machine/vt100/machine.xml
 ---
 
-Now that you've had a chance to play with a standalone [VT100 Terminal](/devices/pc8080/machine/vt100/), not to mention
-[Dual VT100 Terminals](/devices/pc8080/machine/vt100/dual/), it's time to take [PCjs Machines](/) to the next level, and
+Now that you've had a chance to play with a standalone [VT100 Terminal](/machines/dec/vt100/), not to mention
+[Dual VT100 Terminals](/machines/dec/vt100/dual/), it's time to take [PCjs Machines](/) to the next level, and
 begin connecting PCs to terminals.
 
-Below you'll find an 80286-based [IBM PC AT](/devices/pcx86/machine/5170/ega/2048kb/rev3/) connected to an 8080-based
-[VT100 Terminal](/devices/pc8080/machine/vt100/) via the PC's **COM2** serial port.
+Below you'll find an 80286-based [IBM PC AT](/configs/pcx86/xml/machine/5170/ega/2048kb/rev3/) connected to an 8080-based
+[VT100 Terminal](/machines/dec/vt100/) via the PC's **COM2** serial port.
 
-At this point, the connection is *very* thin.  The [PCx86](/modules/pcx86/) [SerialPort](/modules/pcx86/lib/serial.js)
-and [PC8080](/modules/pc8080/) [SerialPort](/modules/pc8080/lib/serial.js) each export exactly two methods:
+At this point, the connection is *very* thin.  The [PCx86]({{ site.github.master }}/machines/pcx86/) [SerialPort](/machines/pcx86/lib/serial.js)
+and [PCx80]({{ site.github.master }}/machines/pcx80/) [SerialPort](/machines/pcx80/lib/serial.js) each export exactly two methods:
 
 - *initConnection()*
 - *receiveData()*
@@ -53,14 +55,16 @@ I've also made it incredibly easy to put machines like this on any PCjs web page
 was add the following Front Matter to the top of the Markdown file:
 
 	machines:
-	  - id: ibm5170
-	    type: pcx86
-	    connection: com2->vt100.serialPort
-	    config: /devices/pcx86/machine/5170/ega/2048kb/rev3/machine.xml
-	  - id: vt100
-	    type: pc8080
-	    connection: serialPort->ibm5170.com2
-	    config: /devices/pc8080/machine/vt100/machine.xml
+      - id: ibm5170
+        type: pcx86
+        config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
+        connection: com2->vt100.serialPort
+      - id: vt100
+        type: vt100
+        name: DEC VT100
+        config: /configs/vt100/vt100.json
+        layout: /_includes/vt100/vt100.html
+        connection: serialPort->ibm5170.com2
 
 and then embed the machines in the post, each with a single line:
 
@@ -69,17 +73,12 @@ and then embed the machines in the post, each with a single line:
 	{% include machine.html id="vt100" %}
 {% endraw %}
 
-For people rolling their own web pages, [the basics](/docs/pcx86/) haven't changed, and adding a serial connection merely
-requires adding a *connection* property (eg, `connection:"com2->vt100.serialPort"`) to the *parms* parameter passed to the
-*embedPCx86()* interface.  A similar property (eg, `connection:"serialPort->ibm5170.com2"`) must also be added to the *parms*
-passed to *embedPC8080()*.
+For people rolling their own web pages, adding a serial connection simply requires adding a *connection* property
+(eg, `connection:"com2->vt100.serialPort"`) to the *parms* parameter passed to the *embedPCx86()* interface.  A similar
+property (eg, `connection:"serialPort->ibm5170.com2"`) must also be added to the *parms* passed to *embedPCx80()*.
 
-For the more adventurous, a [Dual Debugger Configuration](/devices/pcx86/machine/5170/ega/2048kb/rev3/debugger/vt100/)
-is also available.
+For the more adventurous, a [Dual Debugger Configuration](/machines/dec/vt100/5170/debugger/) is also available.
 
 {% include machine.html id="ibm5170" %}
 
 {% include machine.html id="vt100" %}
-
-*[@jeffpar](https://jeffpar.com)*  
-*Aug 19, 2016*

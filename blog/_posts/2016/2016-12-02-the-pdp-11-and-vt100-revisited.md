@@ -5,7 +5,7 @@ date: 2016-12-03 01:00:00
 permalink: /blog/2016/12/02/
 ---
 
-I recently did some more work on the PCjs [VT100 Terminal](/devices/pc8080/machine/vt100/) emulation, making
+I recently did some more work on the PCjs [VT100 Terminal](/machines/dec/vt100/) emulation, making
 it work a bit better with other PCjs machines -- specifically, [PDP-11]({{ site.github.master }}/machines/dec/pdp11/)
 and [IBM PC]({{ site.github.master }}/machine/pcx86/) machines.
 
@@ -17,18 +17,18 @@ One of the latest improvements was a simple layout change, so that if you stretc
 enough, you can have your PDP-11 Front Panel and VT100 Terminal side-by-side.  It's like having Certs with Retsyn:
 TWO PCjs machines on ONE screen!
 
-[![Image of PDP-11/70 with VT100 Terminal](/blog/images/pdp-1170-vt100-side-by-side.png)](/devices/pdp11/machine/1170/vt100/)
+[![Image of PDP-11/70 with VT100 Terminal](/blog/images/pdp-1170-vt100-side-by-side.png)](/machines/dec/pdp11/1170/vt100/)
 
 There were also a few important changes under the hood:
 
-- All PCjs machines with a SerialPort component (ie, PCx86, PC8080, and PDPjs) now support RS-232 flow control
+- All PCjs machines with a SerialPort component (ie, PCx86, PCx80, and PDPjs) now support RS-232 flow control
 notifications, and changes to a port's DTR or RTS lines are communicated to the SerialPort on the other end using
 standard RS-232 DB-25 pin assignments (since every machine's internal SerialPort states are different).
 - Both the VT100 and PDP-11 terminal window support ALT-ENTER and ALT-DELETE as aliases for LINEFEED and BACKSPACE,
 since the VT100 keyboard has both RETURN and LINEFEED, as well as BACKSPACE and DELETE, and sometimes you need to use
 both (of course, you can always type CTRL-J or CTRL-H for LINEFEED or BACKSPACE, but I thought these ALT combinations
 would seem less strange to modern users).
-- The VT100 CAPS-LOCK state is now displayed alongside the standard VT100 LEDs, and PC8080 (the PCjs machine driving
+- The VT100 CAPS-LOCK state is now displayed alongside the standard VT100 LEDs, and PCx80 (the PCjs machine driving
 the VT100 simulation) makes a valiant effort to keep it in sync with your own keyboard's CAPS-LOCK state. 
 
 One more comment about BACKSPACE and DELETE: in the post-PDP-11, post-VT100 world of the IBM PC, BACKSPACE has come
@@ -42,7 +42,7 @@ With all that mind, I've tried to make the best of a bad situation, by treating 
 VT100's DELETE key, and treating the ALT-BACKSPACE combination as the VT100's BACKSPACE key.
 
 Finally, while we're on the subject of keys, it's worth making a note of the following
-[VT100 Terminal Key Assignments](/devices/pc8080/machine/vt100/debugger/#vt100-keys):
+[VT100 Terminal Key Assignments](/machines/dec/vt100/debugger/#vt100-keys):
 
 ### VT100 Keys
 
@@ -73,6 +73,3 @@ keys.  The following keys have special meaning inside SET-UP Mode.
 - 9: 80/132 COLUMNS
 - SHIFT-S: Save SET-UP Features
 - SHIFT-R: Restore SET-UP Features
-
-*[@jeffpar](https://jeffpar.com)*  
-*Dec 3, 2016*
