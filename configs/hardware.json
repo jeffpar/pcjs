@@ -885,7 +885,7 @@
         "@redirect_from": "/devices/leds/lite-brite/"
       },
       "scroller": {
-        "@title": "Scroller",
+        "@title": "Text Scroller",
         "@redirect_from": "/devices/leds/scroller/"
       }
     }

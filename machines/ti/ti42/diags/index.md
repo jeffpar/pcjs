@@ -6,6 +6,7 @@ redirect_from: /devices/ti42/machine/diags/
 machines:
   - id: ti42
     type: ti42
+    uncompiled: true
     name: TI-42 Programmable Calculator
     config: /configs/ti42/ti42.json
     layout: /_includes/ti42/ti42-diag.html

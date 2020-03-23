@@ -6,6 +6,7 @@ redirect_from: /devices/ti57/machine/rev0/
 machines:
   - id: ti57-rev0
     type: ti57
+    uncompiled: true
     name: TI-57 Programmable Calculator
     config: /configs/ti57/ti57-rev0.json
     layout: /_includes/ti57/ti57-diag.html

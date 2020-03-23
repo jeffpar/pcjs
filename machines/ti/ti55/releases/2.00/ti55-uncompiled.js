@@ -9164,16 +9164,38 @@ class Reg64 extends Device {
     }
 
     /**
-     * move(regSrc, range)
+     * move(regSrc, range, base)
+     *
+     * This function has been updated to perform the same "BCD Corrector" logic as add(), per these observations from Claus Buchholz:
+     *
+     *      "From patent 4,125,867 it sounds like all register transfers go through the ALU, and the "BCD corrector" is part of the ALU.
+     *      This quote from column 26 line 25 implies it:
+     *
+     *          In addition during a store operation the output from one register is applied to the arithmetic unit 40,
+     *          the output from the other being inhibited by the STORE signal; thus, the adder does not alter the number being
+     *          inputted and outputs the data word back to the other register, thereby storing the contents of one register in both registers.
+     *
+     *      That quote doesn't mention BCD correction, but other text does. I'm not entirely sure that applies to digit shifts as well
+     *      but I wouldn't doubt it."
+     *
+     * TODO: Determine if shl() and shr() should be updated similarly, and whether this function should update fCOND like add() does
+     * (in which case, move() could simply be replaced with a call to add() using an internal zero-constant register).
      *
      * @this {Reg64}
      * @param {Reg64} regSrc
      * @param {Array.<number>} range
+     * @param {number} base
      */
-    move(regSrc, range)
+    move(regSrc, range, base)
     {
+        let carry = 0;
         for (let i = range[0], j = range[1]; i <= j; i++) {
-            this.digits[i] = regSrc.digits[i];
+            this.digits[i] = regSrc.digits[i] + carry;
+            carry = 0;
+            if (this.digits[i] >= base) {
+                this.digits[i] -= base;
+                carry = 1;
+            }
         }
         regSrc.updateR5(range);
     }
@@ -9749,6 +9771,7 @@ class CPU1500 extends CPU {
             l = (opcode & CPU1500.IW_MF.L_MASK) >> CPU1500.IW_MF.L_SHIFT;
             n = (opcode & CPU1500.IW_MF.N_MASK);
             iOp = (n? CPU1500.OP.SUB : CPU1500.OP.ADD);
+            base = (opcode >= CPU1500.IW_MF.D14? 16 : this.base);
 
             switch(k) {
             case 0:
@@ -9787,14 +9810,12 @@ class CPU1500 extends CPU {
                     this.regA.xchg(regSrc, range);
                 } else {
 
-                    this.regsO[j].move(regSrc, range);
+                    this.regsO[j].move(regSrc, range, base);
                 }
                 return true;
             }
 
             if (!regResult) break;
-
-            base = (opcode >= CPU1500.IW_MF.D14? 16 : this.base);
 
             switch(iOp) {
             case CPU1500.OP.ADD:
