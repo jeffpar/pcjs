@@ -7,21 +7,21 @@ permalink: /blog/2018/01/27/
 
 A few more interesting disks were recently added to the PCjs Archives, including:
 
-- [WordStar v3.20](/disks/pcx86/apps/other/wordstar/3.20/) for DOS (courtesy of the [OS/2 Museum](http://www.os2museum.com/))
-- [WordStar for PCjr](/disks/pcx86/apps/other/wordstar/pcjr/) (courtesy of a former MicroPro employee and [WinWorld](https://winworldpc.com/product/wordstar/for-pcjr))
-- Previously unavailable versions of [QEMM-386](/disks/pcx86/tools/other/qemm386/), including [4.10](/disks/pcx86/tools/other/qemm386/4.10/), [4.23](/disks/pcx86/tools/other/qemm386/4.23), [5.13](/disks/pcx86/tools/other/qemm386/5.13/), and [6.02](/disks/pcx86/tools/other/qemm386/6.20/) (courtesy of eBay) 
-- Software from [Undocumented DOS (2nd Edition)](/pubs/pc/programming/Undocumented_DOS/) and [Unauthorized Windows 95](/pubs/pc/programming/Unauthorized_Windows_95) (courtesy of Andrew Schulman)
+- [WordStar v3.20](/software/pcx86/app/other/wordstar/3.20/) for DOS (courtesy of the [OS/2 Museum](http://www.os2museum.com/))
+- [WordStar for PCjr](/software/pcx86/app/other/wordstar/pcjr/) (courtesy of a former MicroPro employee and [WinWorld](https://winworldpc.com/product/wordstar/for-pcjr))
+- Previously unavailable versions of QEMM-386, including [4.10](/software/pcx86/env/quarterdeck/qemm386/4.10/), [4.23](/software/pcx86/env/quarterdeck/qemm386/4.23/), [5.13](/software/pcx86/env/quarterdeck/qemm386/5.13/), and [6.02](/software/pcx86/env/quarterdeck/qemm386/6.02/) (courtesy of eBay) 
+- Software from [Undocumented DOS (2nd Edition)](/software/pcx86/sw/books/undocumented_dos/) and [Unauthorized Windows 95](/software/pcx86/sw/books/unauthorized_windows_95) (courtesy of Andrew Schulman)
 
-I also took a closer look at the [COMPAQ MS-DOS 3.31](/disks/pcx86/dos/compaq/3.31/) disks, in order to test its
+I also took a closer look at the [COMPAQ MS-DOS 3.31](/software/pcx86/sys/dos/compaq/3.31/) disks, in order to test its
 support for DOS partitions greater than 32Mb, and discovered some disquieting things about them.
 
 First, the disks (courtesy of [WinWorld](https://winworldpc.com/product/ms-dos/331)) are a mixture of disks from
 late 1988 and mid 1989, one of which actually has COMPAQ MS-DOS 4.01 binaries on it.  Second, it seems that COMPAQ
 released multiple "revisions" of MS-DOS 3.31, because WinWorld also has "Rev. G" from 1990.  And I happened to have an
-old COMPAQ MS-DOS [SETUP Disk](/disks/pcx86/dos/compaq/3.31/#directory-of-compaq-ms-dos-331-setup-505) from 1987 that
+old COMPAQ MS-DOS [SETUP Disk](/software/pcx86/sys/dos/compaq/3.31/#directory-of-compaq-ms-dos-331-setup-505) from 1987 that
 *also* reports version 3.31.  That makes at *least* three revisions of a single version of COMPAQ MS-DOS.
 
-The good news is that large (&gt;32Mb) partition support in [COMPAQ MS-DOS 3.31](/disks/pcx86/dos/compaq/3.31/) works
+The good news is that large (&gt;32Mb) partition support in [COMPAQ MS-DOS 3.31](/software/pcx86/sys/dos/compaq/3.31/) works
 fine in PCjs.  See the [47Mb Hard Drive](/disks/pcx86/drives/47mb/) page for additional information.
 
 ### A New Old COMPAQ ROM

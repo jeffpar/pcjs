@@ -9,9 +9,11 @@ machines:
     connection: com2->vt100.serialPort
     config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
   - id: vt100
-    type: pcx80
+    type: vt100
+    name: DEC VT100
+    config: /configs/vt100/vt100.json
+    layout: /_includes/vt100/vt100.html
     connection: serialPort->ibm5170.com2
-    config: /configs/pcx80/machine/vt100/machine.xml
 ---
 
 Demonstration of a DEC VT100 Terminal connected to an IBM PC AT via COM2.  Also available with [Debuggers](debugger/).

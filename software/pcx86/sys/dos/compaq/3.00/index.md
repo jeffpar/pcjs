@@ -112,5 +112,3 @@ Thanks (again) to the [OS/2 Museum](http://www.os2museum.com/) for sharing these
 	Total files listed:
 	       21 file(s)     253058 bytes
 	                       98304 bytes free
-
-[Return to [COMPAQ MS-DOS Disks](/disks/pcx86/dos/compaq/)]

@@ -273,7 +273,7 @@ I later adapted to help resolve an issue with OS/2 compatibility testing.
 
 ### Break The SPELL
 
-So, for your debugging pleasure, I've set up an [IBM PC (Model 5160)](/devices/pcx86/machine/5160/ega/640kb/debugger/)
+So, for your debugging pleasure, I've set up an IBM PC (Model 5160)
 to demonstrate Microsoft's `SPELL.COM` use of "CALL 5".  It's configured as follows:
 
     id: ibm5160
@@ -291,7 +291,7 @@ to demonstrate Microsoft's `SPELL.COM` use of "CALL 5".  It's configured as foll
 
 This establishes a breakpoint on the "CALL 5" entry point inside the application's Program Segment Prefix (PSP);
 the breakpoint dumps the previous 10 instructions and then halts.  The "uncompiled" version of PCx86 is being used
-so that [BackTrack](/modules/pcx86/#backtrack-support)&trade; information is available to the PCjs Debugger.
+so that [BackTrack]({{ site.github.master}}/machines/pcx86/#backtrack-support)&trade; information is available to the PCjs Debugger.
 You can use the command `BC *` to clear all predefined breakpoints and allow the program to run normally.
 
 To start the machine, click "Run" or use the Debugger's `G` command.
@@ -303,6 +303,3 @@ And if all this seems like much ado about nothing, well, then put your feet up f
 U.S. Billboard R&B chart in 1965.  That way, your time here won't be *completely* wasted.
 
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ua2k52n_Bvw?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
- 
-*[@jeffpar](https://jeffpar.com)*  
-*May 27, 2018*

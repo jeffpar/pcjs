@@ -6,7 +6,7 @@ permalink: /blog/2018/05/03/
 preview: /software/pcx86/demo/ibm/ega/images/screenshot.png
 ---
 
-When I first created the PCjs x86 emulator, [PCx86](/devices/pcx86/machine/), it was a simple
+When I first created the PCjs x86 emulator, [PCx86]({{ site.github.master }}/machines/pcx86/), it was a simple
 implementation that focused primarily on four components:
 
 - Intel 8088 running at 4.77Mhz
@@ -17,7 +17,7 @@ implementation that focused primarily on four components:
 There was no support for a serial port, parallel port, mouse, hard disk, numeric coprocessor, EGA or VGA, or
 newer x86 processors like the 80286 and 80386.  All those things came later.
 
-Of those first four components, the most complicated was the [Video](/modules/pcx86/lib/video.js) component, and
+Of those first four components, the most complicated was the [Video](/machines/pcx86/lib/video.js) component, and
 what added to the complexity was my desire to faithfully emulate (as best I could with my limited JavaScript experience)
 all the major features of the MDA and CGA video cards, including:
 
@@ -77,9 +77,9 @@ experience, but most emulators don't care about that, so for them, a solution li
 Unfortunately, over time, cheap solutions start breaking down, and as PCjs video support expanded from
 the lowly MDA and CGA cards to the much more powerful EGA and VGA cards, the work-arounds were getting uglier.
 
-For example, one of [Michael Abrash's VGA "Black Book" Tests](/tests/pcx86/vga/):
+For example, one of [Michael Abrash's VGA "Black Book" Tests](/software/pcx86/test/vga/):
 
-- [L23-1.ASM: Animates four balls bouncing around a playfield by using page flipping and panning](/tests/pcx86/vga/src/L23-1.ASM)
+- [L23-1.ASM: Animates four balls bouncing around a playfield by using page flipping and panning](/software/pcx86/test/vga/src/L23-1.ASM)
 
 relied on a couple of critical features of the EGA:
 
@@ -90,11 +90,11 @@ However, if we're just toggling the retrace bits "willy-nilly", then we're not r
 importantly, we're not helping ourselves know when we should honor (or not honor) the contents of registers like the
 CRT Controller Start Address.
 
-As a result, images initially produced by [L23-1.ASM](/tests/pcx86/vga/src/L23-1.ASM) would "jerk" horribly, until I
-put some work-arounds in place.
+As a result, images initially produced by [L23-1.ASM](/software/pcx86/test/vga/src/L23-1.ASM) would "jerk" horribly,
+until I put some work-arounds in place.
 
 That was a few years ago.  Fast-forward to my recent efforts to run [Fantasy Land](/blog/2018/04/23/), which performed
-pixel-panning much like [L23-1.ASM](/tests/pcx86/vga/src/L23-1.ASM), but in text mode rather than graphics mode, and
+pixel-panning much like [L23-1.ASM](/software/pcx86/test/vga/src/L23-1.ASM), but in text mode rather than graphics mode, and
 also required:
 
 - Programmable fonts
@@ -122,12 +122,9 @@ screen updates seem to be taking an unusually large percentage of the retrace pe
 happens, but I've seen it happen on mobile devices and on pages where multiple machines are running side-by-side.
 
 And I've made some improvements to the Video cell cache, to help minimize the number of pixels or character cells
-that must be redrawn.  Programmable fonts and the way in which [Fantasy Land](/disks/pcx86/apps/ibm/fland/) rapidly
+that must be redrawn.  Programmable fonts and the way in which [Fantasy Land](/software/pcx86/demo/ibm/ega/) rapidly
 toggles the active font required an additional "FontDiff" cache, so that we could quickly determine which on-screen
 characters needed to be redrawn after a font change.
 
 [Fantasy Land](/blog/2017/07/03/) wasn't a particularly well-known program, but it definitely has its place among
 historically significant PC software, and thanks to it, PCjs video emulation is now better for it.
-
-*[@jeffpar](https://jeffpar.com)*  
-*May 3, 2018*

@@ -4427,6 +4427,29 @@
                 "@photo": ".jpg",
                 "@type": "PC320K"
               }
+            ],
+            "@documents": [
+              {
+                "@title": "COMPAQ MS-DOS Reference Guide (Dec 1982)",
+                "@file": "COMPAQ_MS-DOS_Reference_Guide_1982-12.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEYeGrszUBthjRnkg",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              },
+              {
+                "@title": "COMPAQ BASIC Reference Guide (Dec 1982)",
+                "@file": "COMPAQ_BASIC_Reference_Guide_1982-12.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEZTO1wyEcsBJ1Njg",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              },
+              {
+                "@title": "COMPAQ Operations Guide (Nov 1982)",
+                "@file": "COMPAQ_Operations_Guide_1982-11.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEafO5tOghjO67McQ",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              }
             ]
           },
           "1.11": {
@@ -4456,6 +4479,29 @@
                 "@title": "COMPAQ MS-DOS 2.11",
                 "@diskette": "COMPAQ-DOS211.json",
                 "@type": "PC360K"
+              }
+            ],
+            "@documents": [
+              {
+                "@title": "COMPAQ MS-DOS Version 2 Reference Guide (Oct 1984)",
+                "@file": "COMPAQ_MS-DOS_Version_2_Reference_Guide_1984-10.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEdqkIuA2P-Pu5H3Q",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              },
+              {
+                "@title": "COMPAQ BASIC Version 2 Reference Guide (Oct 1984)",
+                "@file": "COMPAQ_BASIC_Version_2_Reference_Guide_1984-10.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEf6q02GrNLZPiW9A",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              },
+              {
+                "@title": "COMPAQ Operations Guide (Oct 1984)",
+                "@file": "COMPAQ_Operations_Guide_1984-10.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEh-kj32tUiZmeiug",
+                "@cover": ".jpg",
+                "@source": "PCjs"
               }
             ]
           },
