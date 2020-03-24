@@ -13,7 +13,7 @@
 const fs = require("fs");
 const pdf = require("pdf-parse");
 
-let dataBuffer = fs.readFileSync("tmp/What's_In_Print_1984-BW.pdf");
+let dataBuffer = fs.readFileSync("tmp/What's_In_Print_1984.pdf");
 
 function render_page(pageData) {
     //check documents https://mozilla.github.io/pdf.js/
