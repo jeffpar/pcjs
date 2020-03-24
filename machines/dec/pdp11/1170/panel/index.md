@@ -14,10 +14,10 @@ PDP-11/70's serial port.  If you want a Debugger, see our collection of similar 
 
 Other attached I/O devices include:
 
-- [PC11 Paper Tape Reader](/devices/pdp11/pc11/)
-- [RX11 Disk Controller](/devices/pdp11/rx11/)
-- [RK11 Disk Controller](/devices/pdp11/rk11/)
-- [RL11 Disk Controller](/devices/pdp11/rl11/)
+- [PC11 Paper Tape Reader](/configs/pdp11/pc11/)
+- [RX11 Disk Controller](/configs/pdp11/rx11/)
+- [RK11 Disk Controller](/configs/pdp11/rk11/)
+- [RL11 Disk Controller](/configs/pdp11/rl11/)
 
 Our [PDP-11 Boot Monitor](/software/dec/pdp11/boot/monitor/) is preloaded at address 140000, and the
 [M9312 ROM](/machines/dec/pdp11/rom/M9312/) is installed at address 165000. 

@@ -35,6 +35,16 @@
         "console": "internalConsole"
       },
       {
+        "name": "Node: pdftest.js",
+        "type": "node",
+        "request": "launch",
+        "program": "${workspaceFolder}/tools/misc/pdftest.js",
+        "args": [".", "--debug"],
+        "cwd": "${workspaceFolder}",
+        "stopOnEntry": false,
+        "console": "internalConsole"
+      },
+      {
         "name": "Site: PCjs Machines",
         "type": "chrome",
         "request": "launch",
