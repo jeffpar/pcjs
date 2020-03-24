@@ -122,6 +122,7 @@
                                       <ul>
                             {%- endif -%}
 
+                            {%- assign previous_urls = "" -%}
                             {%- for version in versions -%}
                               {%- if site.developer %}
                                         <!-- software version: {{ version[0] }} -->
@@ -140,6 +141,8 @@
                               {%- capture diskette_server -%}{{ release['@server'] | default: diskette_default }}{%- endcapture -%}
                               {%- capture harddisk_server -%}{{ release['@server'] | default: "https://harddisks.pcjs.org" }}{%- endcapture -%}
                               {%- capture software_url -%}{{ software_path1 }}{{ software_path2 }}{{ software_path3 }}{{ software_path4 }}{{ software_path5 }}{% if version[0] != "" and alternate_url == "" %}/{{ version[0] }}{% endif %}{%- endcapture -%}
+                              {%- if previous_urls contains software_url -%}{%- capture software_url -%}{{ software_url }}/{{ version[0] }}{%- endcapture -%}{%- endif -%}
+                              {%- capture previous_urls -%}{{ previous_urls }}|{{ software_url }}{%- endcapture -%}
                               {%- capture software_id -%}{{ software_url | remove_first: "/" | replace: "/", "-" }}{%- endcapture -%}
                               {%- assign software_parms = "" -%}
                               {%- if site.developer %}

@@ -5,6 +5,7 @@
 .sass-cache
 archive
 private
+tmp
 /_site
 /node_modules
 /.vscode/settings.json

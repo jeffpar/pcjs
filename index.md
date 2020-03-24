@@ -23,8 +23,7 @@ Jeff
 ### TODO
 
   - Machines like [DEC PDP-11/70 with VT100 Terminal](/machines/dec/pdp11/1170/vt100/) used to use special CSS classes (`machine-right` and `machine-left`) to arrange the machines side-by-side; think about alternatives.
-  - Retest pages with VT100 connections (eg, [DEC VT100 Terminal connected to IBM PC AT](/machines/dec/vt100/5170/), [DEC PDP-11/70 with VT100 Terminal](/machines/dec/pdp11/1170/vt100/), and [Connecting an IBM PC to a DEC VT100 Terminal](/blog/2016/08/19/)).
-  - Verify that all references to `site.github.master` are working (eg, [Retracing My Steps](/blog/2018/05/03/)).
+  - Retest all VT100 connection demos (eg, [DEC VT100 Terminal connected to IBM PC AT](/machines/dec/vt100/5170/), [DEC PDP-11/70 with VT100 Terminal](/machines/dec/pdp11/1170/vt100/), and [Connecting an IBM PC to a DEC VT100 Terminal](/blog/2016/08/19/)).
 
 ---
 

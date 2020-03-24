@@ -7,6 +7,7 @@ exclude:
   - Gemfile.lock
   - gulpfile.js
   - README.md
+  - tmp
   - "**/archive"
   - "**/private"
   - /package*.json

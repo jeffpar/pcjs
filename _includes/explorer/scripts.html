@@ -49,7 +49,7 @@
         if (target) target.scrollIntoView({behavior:"smooth"});
       }
       function pcjsExplorerInit() {
-        pcjsExplorerExpand(window.location.pathname);
+        pcjsExplorerExpand(window.location.pathname + window.location.hash.substr(1));
         pcjsExplorerExpand(pcjsGetURLVars()['software']);
       }
       pcjsExplorerInit();
