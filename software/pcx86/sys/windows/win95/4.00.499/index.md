@@ -9,9 +9,6 @@ machines:
     config: /configs/pcx86/xml/machine/compaq/deskpro386/vga/4096kb/machine.xml
 ---
 
-Microsoft Windows 95: Build 499
--------------------------------
-
 The PCjs Project was first to unearth this pre-release version of Windows 95 since its *extremely* limited
 test release back in June 1995.  It was one of the last (if not *the* last) test versions produced before
 [Windows 95](/software/pcx86/sys/windows/win95/4.00.950/) was released to manufacturing on July 14, 1995 and went on sale

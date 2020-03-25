@@ -795,7 +795,7 @@
     "cdrom": {
       "@title": "CD-ROM",
       "@versions": {
-        "": {
+        "dos": {
           "@title": "CD-ROM DOS Drivers",
           "@media": [
             {
@@ -813,9 +813,9 @@
       }
     },
     "mouse": {
-      "@title": "Microsoft",
+      "@title": "Mouse",
       "microsoft": {
-        "@title": "MS Mouse",
+        "@title": "Microsoft Mouse",
         "@versions": {
           "2.00": {
             "@title": "MS Mouse 2.00",
@@ -903,12 +903,12 @@
       }
     },
     "rom": {
-      "@title": "IBM",
+      "@title": "ROM",
       "ibm": {
-        "@title": "IBM ROM BIOS Source Code",
+        "@title": "IBM PC ROMs",
         "@versions": {
           "": {
-            "@title": "IBM ROM BIOS Source Code ",
+            "@title": "IBM ROM BIOS Sources",
             "@media": [
               {
                 "@title": "IBM PC BIOS Sources (V1)",
@@ -957,6 +957,21 @@
               }
             ]
           }
+        }
+      }
+    },
+    "serial": {
+      "@title": "Serial",
+      "@versions": {
+        "wincomm/1985": {
+          "@title": "Windows COMM Driver (1985)",
+          "@media": [
+            {
+              "@title": "WINCOMM",
+              "@diskette": "WINCOMM.json",
+              "@type": "PC360K"
+            }
+          ]
         }
       }
     }
@@ -7344,175 +7359,155 @@
             }
           ]
         },
-        "win95": {
+        "win95/4.00.499": {
           "@title": "Windows 95 (Build 499)",
-          "@versions": {
-            "4.00.499": {
-              "@title": "Windows 95 (Build 499)",
-              "@media": [
-                {
-                  "@title": "Windows 95 (Build 499 Disk 01)",
-                  "@diskette": "WIN95-DISK01.json",
-                  "@type": "PC1440K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 02)",
-                  "@diskette": "WIN95-DISK02.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 03)",
-                  "@diskette": "WIN95-DISK03.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 04)",
-                  "@diskette": "WIN95-DISK04.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 05)",
-                  "@diskette": "WIN95-DISK05.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 06)",
-                  "@diskette": "WIN95-DISK06.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 07)",
-                  "@diskette": "WIN95-DISK07.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 08)",
-                  "@diskette": "WIN95-DISK08.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 09)",
-                  "@diskette": "WIN95-DISK09.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 10)",
-                  "@diskette": "WIN95-DISK10.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 11)",
-                  "@diskette": "WIN95-DISK11.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 12)",
-                  "@diskette": "WIN95-DISK12.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 13)",
-                  "@diskette": "WIN95-DISK13.json",
-                  "@type": "PC1680K"
-                }
-              ]
+          "@media": [
+            {
+              "@title": "Windows 95 (Build 499 Disk 01)",
+              "@diskette": "WIN95-DISK01.json",
+              "@type": "PC1440K"
             },
-            "4.00.950": {
-              "@title": "Windows 95 (RTM) 4.00.950",
-              "@media": [
-                {
-                  "@title": "Windows 95 (RTM Boot)",
-                  "@diskette": "WIN95-BOOT.json",
-                  "@type": "PC1440K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 01)",
-                  "@diskette": "WIN95-DISK01.json",
-                  "@type": "PC1440K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 02)",
-                  "@diskette": "WIN95-DISK02.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 03)",
-                  "@diskette": "WIN95-DISK03.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 04)",
-                  "@diskette": "WIN95-DISK04.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 05)",
-                  "@diskette": "WIN95-DISK05.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 06)",
-                  "@diskette": "WIN95-DISK06.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 07)",
-                  "@diskette": "WIN95-DISK07.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 08)",
-                  "@diskette": "WIN95-DISK08.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 09)",
-                  "@diskette": "WIN95-DISK09.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 10)",
-                  "@diskette": "WIN95-DISK10.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 11)",
-                  "@diskette": "WIN95-DISK11.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 12)",
-                  "@diskette": "WIN95-DISK12.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 13)",
-                  "@diskette": "WIN95-DISK13.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Startup Disk)",
-                  "@diskette": "WIN95-STARTUP.json",
-                  "@type": "PC1440K"
-                }
-              ]
+            {
+              "@title": "Windows 95 (Build 499 Disk 02)",
+              "@diskette": "WIN95-DISK02.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 03)",
+              "@diskette": "WIN95-DISK03.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 04)",
+              "@diskette": "WIN95-DISK04.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 05)",
+              "@diskette": "WIN95-DISK05.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 06)",
+              "@diskette": "WIN95-DISK06.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 07)",
+              "@diskette": "WIN95-DISK07.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 08)",
+              "@diskette": "WIN95-DISK08.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 09)",
+              "@diskette": "WIN95-DISK09.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 10)",
+              "@diskette": "WIN95-DISK10.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 11)",
+              "@diskette": "WIN95-DISK11.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 12)",
+              "@diskette": "WIN95-DISK12.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 13)",
+              "@diskette": "WIN95-DISK13.json",
+              "@type": "PC1680K"
             }
-          }
+          ]
         },
-        "wincomm": {
-          "@title": "Windows COMM Driver (Source)",
-          "@versions": {
-            "1.00": {
-              "@title": "Windows COMM Driver (Source)",
-              "@media": [
-                {
-                  "@title": "WINCOMM",
-                  "@diskette": "WINCOMM.json",
-                  "@type": "PC360K"
-                }
-              ]
+        "win95/4.00.950": {
+          "@title": "Windows 95 (RTM) 4.00.950",
+          "@media": [
+            {
+              "@title": "Windows 95 (RTM Boot)",
+              "@diskette": "WIN95-BOOT.json",
+              "@type": "PC1440K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 01)",
+              "@diskette": "WIN95-DISK01.json",
+              "@type": "PC1440K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 02)",
+              "@diskette": "WIN95-DISK02.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 03)",
+              "@diskette": "WIN95-DISK03.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 04)",
+              "@diskette": "WIN95-DISK04.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 05)",
+              "@diskette": "WIN95-DISK05.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 06)",
+              "@diskette": "WIN95-DISK06.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 07)",
+              "@diskette": "WIN95-DISK07.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 08)",
+              "@diskette": "WIN95-DISK08.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 09)",
+              "@diskette": "WIN95-DISK09.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 10)",
+              "@diskette": "WIN95-DISK10.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 11)",
+              "@diskette": "WIN95-DISK11.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 12)",
+              "@diskette": "WIN95-DISK12.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 13)",
+              "@diskette": "WIN95-DISK13.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Startup Disk)",
+              "@diskette": "WIN95-STARTUP.json",
+              "@type": "PC1440K"
             }
-          }
+          ]
         }
       }
     }
