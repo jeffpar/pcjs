@@ -17,6 +17,8 @@ const stdio = new StdIO();
 const proclib = require("../../machines/shared/lib/proclib");
 const args = proclib.getArgs();
 
+let fDebug = args.argv['debug'];
+
 let sSubcategory = "";
 let dataBuffer = fs.readFileSync("tmp/What's_In_Print_1984.pdf");
 
@@ -60,17 +62,20 @@ function renderPage(pageData)
     let yHeadings = -1, yHeadingVariation = -1, yRows = [];
     let xTitle = -1, xAuthor = -1, xMagazine = -1, xDate = -1;
 
-    let checkHeading = function(item) {
+    let checkHeading = function(item, col) {
+        let x = item.transform[4];
+        let y = item.transform[5];
         if (yHeadings < 0) {
-            yHeadings = item.transform[5];
+            yHeadings = y;
         } else {
-            let yVariation = Math.abs(yHeadings - item.transform[5]);
+            let yVariation = Math.abs(yHeadings - y);
             if (yHeadingVariation < yVariation) {
                 yHeadingVariation = yVariation;
             }
         }
         headings++;
-        return item.transform[4];
+        if (fDebug) printf("found %s \"%s\" at (%d,%d)\n", colNames[col-1], getString(item), x, y);
+        return x;
     };
 
     let getString = function(item) {
@@ -90,17 +95,19 @@ function renderPage(pageData)
             row = rows[i];
             if (y <= row[0] + 2 && y >= row[0] - 2) {
                 if (row[col] != undefined) {
-                    sError = sprintf("duplicate %s found at (%d,%d): %s", colNames[col-1], x, y, item.str);
+                    sError = sprintf("duplicate %s found at (%d,%d): \"%s\"", colNames[col-1], x, y, str);
+                    if (fDebug) printf("error: %s\n", sError);
+                    return;
                 }
-                row[col] = str;
                 break;
             }
         }
         if (i == rows.length) {
             row = [y];
-            row[col] = str;
             rows.push(row);
         }
+        if (fDebug) sprintf("added %s found at (%d,%d): \"%s\"", colNames[col-1], x, y, str);
+        row[col] = str;
     };
 
     let addSub = function(item) {
@@ -111,7 +118,8 @@ function renderPage(pageData)
         for (i = 0; i < subs.length; i++) {
             sub = subs[i];
             if (y <= sub[0] + 2 && y >= sub[0] - 2) {
-                sError = sprintf("duplicate subcategory found at (%d,%d): %s", x, y, item.str);
+                sError = sprintf("duplicate subcategory found at (%d,%d): \"%s\"", x, y, str);
+                if (fDebug) printf("error: %s\n", sError);
                 break;
             }
         }
@@ -119,6 +127,7 @@ function renderPage(pageData)
             sub = [y];
             sub[1] = str;
             subs.push(sub);
+            if (fDebug) printf("added subcategory from (%d,%d): \"%s\"\n", x, y, str);
         }
     };
 
@@ -164,28 +173,30 @@ function renderPage(pageData)
     }
 
     return pageData.getTextContent(render_options).then(function(textContent) {
-        if (pageData.pageNumber != 10) return "";
+        if (pageData.pageNumber != args.argv['page']) return "";
         for (let i = 0; i < textContent.items.length; i++) {
             let item = textContent.items[i];
             if (headings < 5) {
+                let str = getString(item);
                 if (i == 0) {
-                    sCategory = item.str;
+                    sCategory = str;
                     headings++;
                 }
-                else if (item.str == "Title") {
-                    xTitle = checkHeading(item);
+                else if (str == "Title") {
+                    xTitle = checkHeading(item, 1);
                 }
-                else if (item.str == "Author") {
-                    xAuthor = checkHeading(item);
+                else if (str == "Author") {
+                    xAuthor = checkHeading(item, 2);
                 }
-                else if (item.str.indexOf("Ma") == 0) {
-                    xMagazine = checkHeading(item);
+                else if (str.indexOf("Ma") == 0) {
+                    xMagazine = checkHeading(item, 3);
                 }
-                else if (item.str == "Date") {
-                    xDate = checkHeading(item);
+                else if (str == "Date") {
+                    xDate = checkHeading(item, 4);
                 }
                 else {
                     sError = "unable to find all headings";
+                    if (fDebug) printf("%s\n", sError);
                     break;
                 }
                 continue;
@@ -216,6 +227,8 @@ function renderPage(pageData)
         return csv;
     });
 }
+
+printf("--page = %d\n", args.argv['page']);
 
 let options = {
     pagerender: renderPage

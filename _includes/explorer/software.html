@@ -117,7 +117,7 @@
                               {%- continue -%}
                             {%- else -%}
                               {%- assign versions = product[1]['@versions'] %}
-                              {%- capture software_path5 %}/{{ product[0] }}{% endcapture -%}
+                              {%- capture software_path5 %}/{{ product[0] }}{% endcapture %}
                                     <li class="pcjs-explorer-product pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ product[1]['@title'] | default: product[0] }}
                                       <ul>
                             {%- endif -%}

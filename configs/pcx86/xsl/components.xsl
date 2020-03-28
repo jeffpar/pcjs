@@ -1481,6 +1481,23 @@
 		<pre>&lt;machine<xsl:call-template name="displayAttr"/>&gt;<xsl:apply-templates mode="display"/>&lt;/machine&gt;</pre>
 	</xsl:template>
 
+	<xsl:template match="intro">
+	</xsl:template>
+
+	<xsl:template match="outro">
+	</xsl:template>
+
+	<xsl:template match="intro" mode="intro">
+    <p><xsl:apply-templates/></p>
+	</xsl:template>
+
+	<xsl:template name="displayIntro">
+		<xsl:apply-templates mode="intro"/>
+	</xsl:template>
+
+	<xsl:template name="displayOutro">
+	</xsl:template>
+
 	<xsl:template match="*" mode="display"><xsl:call-template name="displayXML"><xsl:with-param name="tag"><xsl:value-of select="name(.)"/></xsl:with-param></xsl:call-template></xsl:template>
 
 </xsl:stylesheet>

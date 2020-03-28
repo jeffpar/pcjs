@@ -39,6 +39,6 @@ Also see this series of [SoylentNews](https://soylentnews.org/) posts:
 There were *older* releases of SCO Xenix 386 (2.2.1 and 2.2.2), and there may also be older non-SCO releases out there,
 but until they surface, this is all we have.
  
-[![IBM PC XENIX 1.0 Extensions Disk 1]({{ site.software.diskettes.server }}/pcx86/unix/ibm/xenix/1.0/IBM-XENIX-100-EXT1.jpg)](/software/pcx86/sys/unix/ibm/xenix/1.0/)
+[![IBM PC XENIX 1.0 Extensions Disk 1]({{ site.software.diskettes.server }}/pcx86/sys/unix/ibm/xenix/1.0/IBM-XENIX-100-EXT1.jpg)](/software/pcx86/sys/unix/ibm/xenix/1.0/)
 
-[![IBM PC XENIX 2.0 Installation Disk]({{ site.software.diskettes.server }}/pcx86/unix/ibm/xenix/2.0/IBM-XENIX-200-INSTALL.jpg)](/software/pcx86/sys/unix/ibm/xenix/2.0/)
+[![IBM PC XENIX 2.0 Installation Disk]({{ site.software.diskettes.server }}/pcx86/sys/unix/ibm/xenix/2.0/IBM-XENIX-200-INSTALL.jpg)](/software/pcx86/sys/unix/ibm/xenix/2.0/)

@@ -2,6 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
 <machine id="deskpro386" type="pcx86" border="1" pos="center" background="default">
 	<name pos="center">COMPAQ DeskPro 386, 2Mb RAM, COMPAQ VGA, 47Mb Hard Disk (Unformatted)</name>
+	<intro>This is a COMPAQ DeskPro 386.</intro>
 	<computer id="deskpro386-vga-2048k" name="COMPAQ DeskPro 386" buswidth="32"/>
 	<cpu id="cpu386" model="80386"/>
 	<ram id="ramLow" addr="0x00000" test="true" size="0xa0000" comment="ROM BIOS memory test has NOT been disabled"/>
@@ -18,4 +19,5 @@
 	<serial id="com1" adapter="1"/>
 	<serial id="com2" adapter="2" binding="print"/>
 	<mouse serial="com1"/>
+	<outro>Thanks for stopping by.</outro>
 </machine>

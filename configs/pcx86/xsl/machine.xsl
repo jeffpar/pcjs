@@ -34,6 +34,7 @@
 				<div class="common">
 					<xsl:call-template name="commonTop"/>
 					<div class="common-middle">
+ 					  <xsl:call-template name="displayIntro"/>
 						<div id="{@id}" class="machine {$machineType} {$machineClass}">
 							<xsl:call-template name="component">
 								<xsl:with-param name="machine" select="@id"/>
@@ -44,6 +45,7 @@
 						</div>
 					</div>
 					<xsl:call-template name="displayMachine"/>
+				  <xsl:call-template name="displayOutro"/>
 					<xsl:call-template name="commonBottom"/>
 				</div>
 				<xsl:call-template name="componentScripts">

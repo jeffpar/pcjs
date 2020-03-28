@@ -1,11 +1,8 @@
 ---
 layout: page
-title: Microsoft Windows 3.11
+title: Microsoft Windows 3.11 (aka Windows for Workgroups)
 permalink: /software/pcx86/sys/windows/3.11/
 redirect_from: /disks/pcx86/windows/3.11/
----
-
-Microsoft Windows 3.11 (aka Windows For Workgroups)
 ---
 
 Directory listings of the eight 1.44Mb distribution diskettes are provided below.

@@ -500,7 +500,7 @@
     }
   },
   "pcx80": {
-    "@title": "8080 Devices",
+    "@title": "PCx80 Machines",
     "@instances": {
       "exerciser": {
         "@title": "8080 Exerciser",
@@ -509,7 +509,7 @@
     }
   },
   "pcx86": {
-    "@title": "IBM Compatibles",
+    "@title": "PCx86 Machines",
     "ibm": {
       "@title": "IBM PC",
       "4860": {

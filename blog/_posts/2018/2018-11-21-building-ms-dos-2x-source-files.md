@@ -25,8 +25,8 @@ A similar machine is provided [below](/blog/2018/11/21/#ms-dos-source-build-mach
 
 Attempting to build the sources raises several questions, including:
 
-- What version of MASM was used to build them?
-- Are they a work-in-progress or a final distribution?
+  - What version of MASM was used to build them?
+  - Are they a work-in-progress or a final distribution?
 
 If you look at the pictures that the [Computer History Museum](http://www.computerhistory.org/) originally
 [posted](http://www.computerhistory.org/atchm/microsoft-ms-dos-early-source-code/) when these files were first shared,
@@ -126,23 +126,23 @@ Also, in the [INC](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/
 `DOSMAC_v211.ASM` was copied to `DOSMAC.ASM`, and `DOSSYM_v211.ASM` was copied to `DOSSYM.ASM`, since the rest of the sources
 are for MS-DOS 2.11 as well.
 
-- [CHKDSK](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/CHKDSK)
-- [COMMAND](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/COMMAND)
-- [DEBUG](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/DEBUG)
-- [DISKCOPY](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/DISKCOPY)
-- [EDLIN](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/EDLIN)
-- [EXE2BIN](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/EXE2BIN)
-- [FC](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/FC)
-- [FIND](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/FIND)
-- [FORMAT](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/FORMAT)
-- [INC](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/INC)
-- [IO](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/IO)
-- [MORE](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/MORE)
-- [MSDOS](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/MSDOS)
-- [PRINT](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/PRINT)
-- [RECOVER](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/RECOVER)
-- [SORT](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/SORT)
-- [SYS](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/SYS)
+  - [CHKDSK](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/CHKDSK)
+  - [COMMAND](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/COMMAND)
+  - [DEBUG](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/DEBUG)
+  - [DISKCOPY](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/DISKCOPY)
+  - [EDLIN](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/EDLIN)
+  - [EXE2BIN](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/EXE2BIN)
+  - [FC](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/FC)
+  - [FIND](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/FIND)
+  - [FORMAT](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/FORMAT)
+  - [INC](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/INC)
+  - [IO](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/IO)
+  - [MORE](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/MORE)
+  - [MSDOS](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/MSDOS)
+  - [PRINT](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/PRINT)
+  - [RECOVER](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/RECOVER)
+  - [SORT](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/SORT)
+  - [SYS](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/SYS)
 
 Then the [MSDOS](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/src/MSDOS)
 folder was supplemented with reconstructed
@@ -198,7 +198,5 @@ In addition, all the build products (**OBJ**, **EXE**, **COM**, **LST**, and **M
 `MK ALL` command have already been saved in the [pcjs-disks](https://github.com/jeffpar/pcjs-demo-disks) repository, in the
 [/pcx86/dos/microsoft/2.11/built](https://github.com/jeffpar/pcjs-demo-disks/tree/master/pcx86/dos/microsoft/2.11/built)
 folder.
-
-This machine is also available with the [PCjs Debugger](/software/pcx86/sys/dos/microsoft/2.00/debugger/).
 
 {% include machine.html id="ibm5160" %}

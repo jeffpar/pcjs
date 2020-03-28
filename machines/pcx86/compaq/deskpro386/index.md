@@ -2,7 +2,27 @@
 layout: page
 title: COMPAQ DeskPro 386
 permalink: /machines/pcx86/compaq/deskpro386/
+redirect_from: /devices/pcx86/machine/compaq/deskpro386/
 ---
+
+All our CGA and EGA configurations use the `Rev F` [COMPAQ DeskPro 386 ROM](/machines/pcx86/compaq/deskpro386/rom/),
+dated September 4, 1986.  It is currently the oldest available DeskPro 386 ROM.  The VGA did not exist until 1987,
+so it makes sense to use the CGA and EGA with the older ROM.
+
+All the VGA configurations use the `Rev J.4` [COMPAQ DeskPro 386 ROM](/machines/pcx86/compaq/deskpro386/rom/), dated
+January 28, 1988.
+
+All these machine configurations also include an unformatted "Type 5" [47Mb Hard Disk](/configs/pcx86/xml/hdc/47mb/).  To
+create a single 47Mb partition, you must use [COMPAQ MS-DOS 3.31](/software/pcx86/sys/dos/compaq/3.31/) or newer; older versions
+of DOS could create partitions only up to 32Mb, and all partitions had to reside within the first 32Mb of disk space.
+
+  - [COMPAQ DeskPro 386 with 640Kb and IBM CGA](/configs/pcx86/xml/machine/compaq/deskpro386/cga/640kb/machine.xml) ([Debugger](/configs/pcx86/xml/machine/compaq/deskpro386/cga/640kb/debugger/machine.xml))
+  - [COMPAQ DeskPro 386 with 2Mb RAM and IBM EGA](/configs/pcx86/xml/machine/compaq/deskpro386/ega/2048kb/machine.xml) ([Debugger](/configs/pcx86/xml/machine/compaq/deskpro386/ega/2048kb/debugger/machine.xml))
+  - [COMPAQ DeskPro 386 with 4Mb RAM and IBM EGA](/configs/pcx86/xml/machine/compaq/deskpro386/ega/4096kb/machine.xml) ([Debugger](/configs/pcx86/xml/machine/compaq/deskpro386/ega/4096kb/debugger/machine.xml))
+  - [COMPAQ DeskPro 386 with 2Mb RAM and COMPAQ VGA (Debugger)](/configs/pcx86/xml/machine/compaq/deskpro386/other/2048kb/debugger/machine.xml), ([Visualizer](/configs/pcx86/xml/machine/compaq/deskpro386/other/2048kb/debugger/visual/machine.xml))
+  - [COMPAQ DeskPro 386 with 2Mb RAM and IBM VGA](/configs/pcx86/xml/machine/compaq/deskpro386/vga/2048kb/machine.xml) ([Debugger](/configs/pcx86/xml/machine/compaq/deskpro386/vga/2048kb/debugger/machine.xml), [Visualizer](/configs/pcx86/xml/machine/compaq/deskpro386/vga/2048kb/debugger/visual/machine.xml))
+  - [COMPAQ DeskPro 386 with 4Mb RAM and IBM VGA](/configs/pcx86/xml/machine/compaq/deskpro386/vga/4096kb/machine.xml) ([Debugger](/configs/pcx86/xml/machine/compaq/deskpro386/vga/4096kb/debugger/machine.xml), [Visualizer](/configs/pcx86/xml/machine/compaq/deskpro386/vga/2048kb/debugger/visual/machine.xml))
+  - [COMPAQ DeskPro 386 with 4Mb RAM and IBM VGA running Windows 95](/software/pcx86/sys/windows/win95/4.00.950/) ([Debugger](/software/pcx86/sys/windows/win95/4.00.950/debugger/))
 
 {% include gallery/documents.html width="200" height="200" %}
 
