@@ -216,9 +216,6 @@
 			<xsl:value-of select="$APPCLASS"/><xsl:text>-</xsl:text><xsl:value-of select="$component"/><xsl:text> </xsl:text><xsl:value-of select="$APPCLASS"/><xsl:text>-component</xsl:text>
 		</xsl:variable>
 		<div id="{$id}" class="{$componentClass}" style="{$width}{$height}{$pos}{$left}{$top}{$padding}" data-value="{$machineParms}">
-			<xsl:if test="$component = 'machine'">
-				<xsl:apply-templates select="name" mode="machine"/>
-			</xsl:if>
 			<xsl:if test="$component != 'machine'">
 				<xsl:apply-templates select="name" mode="component"/>
 			</xsl:if>
@@ -263,6 +260,18 @@
 		</div>
 	</xsl:template>
 
+	<xsl:template match="name" mode="doc">
+		<h3><xsl:apply-templates mode="doc"/></h3>
+	</xsl:template>
+
+	<xsl:template match="em" mode="doc">
+		<em><xsl:apply-templates mode="doc"/></em>
+	</xsl:template>
+
+	<xsl:template match="strong" mode="doc">
+		<strong><xsl:apply-templates mode="doc"/></strong>
+	</xsl:template>
+
 	<xsl:template match="name" mode="machine">
 		<xsl:variable name="pos">
 			<xsl:choose>
@@ -270,7 +279,7 @@
 				<xsl:otherwise/>
 			</xsl:choose>
 		</xsl:variable>
-		<!-- <h3 style="{$pos}"><xsl:apply-templates/></h3> -->
+		<h3 style="{$pos}"><xsl:apply-templates/></h3>
 	</xsl:template>
 
 	<xsl:template match="name" mode="component">
@@ -1487,15 +1496,17 @@
 	<xsl:template match="outro">
 	</xsl:template>
 
-	<xsl:template match="intro" mode="intro">
-    <p><xsl:apply-templates/></p>
+	<xsl:template match="intro|outro" mode="doc">
+		<p><xsl:apply-templates mode="doc"/></p>
 	</xsl:template>
 
 	<xsl:template name="displayIntro">
-		<xsl:apply-templates mode="intro"/>
+		<xsl:apply-templates select="name" mode="doc"/>
+		<xsl:apply-templates select="intro" mode="doc"/>
 	</xsl:template>
 
 	<xsl:template name="displayOutro">
+		<xsl:apply-templates select="outro" mode="doc"/>
 	</xsl:template>
 
 	<xsl:template match="*" mode="display"><xsl:call-template name="displayXML"><xsl:with-param name="tag"><xsl:value-of select="name(.)"/></xsl:with-param></xsl:call-template></xsl:template>

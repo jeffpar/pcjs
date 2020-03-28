@@ -14,7 +14,7 @@
   PCjs website © 2012-2020 by Jeff Parsons (@jeffpar)
   ASCII art from http://patorjk.com/software/taag/#p=testall&f=Graffiti&t=PCjs
 {% endcomment %}
-  {%- include default/head.html %}
+{% include default/head.html %}
   <body>
     <div class="wrapper">
       <header>
@@ -50,16 +50,16 @@
       <footer>
         <div class="pcjs-explorer">
           <h2 id="pcjs-explorer">PCjs Explorer</h2>
-{% include explorer/hardware.html -%}
+{% include explorer/hardware.html %}
 {% include explorer/software.html %}
-{% include explorer/documents.html -%}
+{% include explorer/documents.html %}
         </div>
         <p><a href="{{ site.url }}">{{ site.domain }}</a> © 2012-{{ site.time | date: '%Y' }} by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a><br/>
         <a href="{{ site.github.repository_url }}">PCjs</a> is released under <a href="{{ absolute_url }}/LICENSE.txt">MIT License</a></p>
       </footer>
     </div>
-    {%- include default/analytics.html %}
-    {%- include explorer/init.html -%}
-    {%- include machine/scripts.html -%}
+{% include default/analytics.html %}
+{% include explorer/init.html %}
+{% include machine/scripts.html %}
   </body>
 </html>
