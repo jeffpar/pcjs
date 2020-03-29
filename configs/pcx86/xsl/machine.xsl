@@ -51,7 +51,7 @@
 				<xsl:call-template name="componentScripts">
 					<xsl:with-param name="component">
 						<xsl:choose>
-							<xsl:when test="debugger"><xsl:value-of select="$machineType"/></xsl:when>
+							<xsl:when test="@uncompiled = 'true'"><xsl:value-of select="$machineType"/>-uncompiled</xsl:when>
 							<xsl:otherwise><xsl:value-of select="$machineType"/></xsl:otherwise>
 						</xsl:choose>
 					</xsl:with-param>

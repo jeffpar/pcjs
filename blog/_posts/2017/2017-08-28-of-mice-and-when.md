@@ -5,7 +5,7 @@ date: 2017-08-28 10:00:00
 permalink: /blog/2017/08/28/
 ---
 
-While trying to bring the PCjs [Microsoft Mouse Driver](/software/pcx86/dev/mouse/microsoft/) collection up-to-date,
+While trying to bring the PCjs Microsoft Mouse Driver collection up-to-date,
 at least through the 1980's, a number of versions have proven hard to find: 
 
 - Microsoft Mouse v1.x

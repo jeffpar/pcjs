@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
-<machine id="deskpro386" type="pcx86" border="1" pos="center" background="default">
+<machine id="deskpro386" type="pcx86" uncompiled="true" border="1" pos="center" background="default">
 	<name pos="center">COMPAQ DeskPro 386, 2Mb RAM, COMPAQ VGA, 47Mb Hard Disk (Unformatted)</name>
 	<intro>This "Visualizer" configuration is running the "uncompiled" version of PCx86, so that
 	BackTrack information is available to the PCjs Debugger.  As a result, the machine runs much slower.

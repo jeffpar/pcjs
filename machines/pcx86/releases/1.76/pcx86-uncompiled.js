@@ -83569,7 +83569,7 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
         Component.alertUser(sAlert);
         return;
     }
-    Component.alertUser("Missing XML/XSL resources");
+    Component.alertUser("This feature is not currently available for machines created directly from XML files.");
 }
 
 /**

@@ -227,9 +227,13 @@ function processFiles(sDir, fDebug, fFix)
             i = sLink.indexOf('#');
             if (i > 0) sLink = sLink.substr(0, i);
 
+            let sTargetFile = "index.md";
             if (sLink.indexOf("{{") == 0) {
                 if (sLink.indexOf("site.github") >= 0 || sLink.indexOf("site.url") >= 0) continue;
-                sFile = sLink.replace(/\{\{ site\.software\.(diskettes|gamedisks|harddisks)\.server \}\}/, "../pcjs-$1");
+                sFile = sLink.replace(/\{\{\s*site\.github\.pages\s*\}\}/, "..");
+                sFile = sFile.replace(/\{\{\s*site\.software\.(diskettes|gamedisks|harddisks)\.server\s*\}\}/, "../pcjs-$1");
+                sFile = sFile.replace(/\{\{\s*site\.archive\.(ms|kb)\.server\s*\}\}/, "../$1archive");
+                sTargetFile = "README.md";
             }
             else if (sLink.indexOf("http") == 0) {
                 sFile = sLink.replace(/https?:\/\/(diskettes|gamedisks|harddisks)\.pcjs\.org/, "../pcjs-$1").replace(/https?:\/\/(cds[0-9]+)\.pcjs\.org/, "../pcjs/disks-cds/$1");
@@ -249,7 +253,7 @@ function processFiles(sDir, fDebug, fFix)
                     sFile = "." + sFileDir + "/" + sLink;
                 }
             }
-            if (sFile.endsWith("/")) sFile += "index.md";
+            if (sFile.endsWith("/")) sFile += sTargetFile;
             if (!fileExists(sFile)) {
                 printf("%s: link for '%s' not found: %s\n", sFilePath, match[1], sFile);
             }

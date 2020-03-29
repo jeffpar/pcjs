@@ -107,7 +107,7 @@ As my [TI-57 ROM](/machines/ti/ti57/rom/) page explains, I found 4 bits that dif
 Sean, and then decided to go with this new transcribed ROM as the basis for my own emulator.
 
 What you see below is the current state of the PCjs TI-57 emulator.  Just today, I finished "wiring" up the
-[LED](/machines/led/led.js) and [Keyboard](/machines/lib/input.js) devices to the
+[LED](/machines/lib/led.js) and [Keyboard](/machines/lib/input.js) devices to the
 [TMS-1500 Chip](/machines/ti/lib/cpu1500.js) device, and so far, basic arithmetic operations look good.  I've not
 exercised it much beyond that, because I'm not ready to go down more debugging rabbit holes just yet.  But if it does
 crash, there's a handy "Diagnostics" window attached to it that should display useful information about what went wrong,
@@ -115,11 +115,11 @@ and it even includes a "mini-debugger".
 
 With the PCjs [TI-57](/machines/ti/ti57/) emulator, I also decided to take a fresh approach.  Instead of using
 the same old ES5-based [PCjs shared modules](/machines/shared/lib), the TI-57 emulator is built with a new set of
-ES6-based [Machine library modules](/machines/lib/), including:
+ES6-based [Machine library modules]({{ site.github.pages }}/machines/lib/), including:
 
 * [Device](/machines/lib/device.js)
 * [Input](/machines/lib/input.js)
-* [LED](/machines/led/led.js)
+* [LED](/machines/lib/led.js)
 * [ROM](/machines/lib/bus/rom.js)
 * [Time](/machines/lib/time.js)
 * [Machine](/machines/lib/machine.js)

@@ -67,8 +67,8 @@ while the right one does not.
 
 ### Aspect Ratio
 
-The *smoothing* property joins another recent [Video](/docs/pcx86/video/) property, *aspect*, that was added in a
-[release](https://github.com/jeffpar/pcjs/releases/tag/v1.21.5) last month.
+The *smoothing* property joins another recent [Video](/machines/pcx86/lib/video.js) property, *aspect*, that was
+added in a [release](https://github.com/jeffpar/pcjs/releases/tag/v1.21.5) last month.
 
 To recap, aspect ratio is display width divided by display height, but the choice of aspect ratio is complicated by
 the fact that none of the early IBM video card/monitor combinations (with the exception of the VGA) displayed square

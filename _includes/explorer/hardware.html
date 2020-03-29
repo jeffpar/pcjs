@@ -16,7 +16,7 @@
                     {%- elsif category[0] == "@documents" -%}
                       {%- assign documents = category[1] %}
                       {%- capture documents_link -%}{{ hardware_path1 }}/{%- endcapture %}
-{% include explorer/doclinks.html docs=documents link=documents_link -%}
+                    {% include explorer/doclinks.html docs=documents link=documents_link -%}
                       {%- continue -%}
                     {%- elsif category[0] contains '@' -%}
                       {%- continue -%}
@@ -35,7 +35,7 @@
                       {%- elsif subcategory[0] == "@documents" -%}
                         {%- assign documents = subcategory[1] %}
                         {%- capture documents_link -%}{{ hardware_path1 }}{{ hardware_path2 }}/{%- endcapture %}
-{% include explorer/doclinks.html docs=documents link=documents_link -%}
+                        {% include explorer/doclinks.html docs=documents link=documents_link -%}
                         {%- continue -%}
                       {%- elsif subcategory[0] contains '@' -%}
                         {%- continue -%}
@@ -51,7 +51,7 @@
                         {%- if instance[0] == "@documents" -%}
                           {%- assign documents = instance[1] %}
                           {%- capture documents_link -%}{{ hardware_path1 }}{{ hardware_path2 }}{{ hardware_path3 }}/{%- endcapture %}
-{% include explorer/doclinks.html docs=documents link=documents_link -%}
+                            {% include explorer/doclinks.html docs=documents link=documents_link -%}
                           {%- continue -%}
                         {%- endif -%}
                         {%- if instance[0] contains '@' -%}{%- continue -%}{%- endif -%}
@@ -60,7 +60,7 @@
                         {%- capture hardware_url -%}{{ hardware_path1 }}{{ hardware_path2 }}{{ hardware_path3 }}{{ hardware_path4 }}{%- endcapture %}
                         {%- capture hardware_id -%}{{ hardware_url | remove_first: "/machines" | remove_first: "/" | replace: "/", "-" }}{%- endcapture -%}
                         {%- capture hardware_link -%}{% if instance[1]['@permalink'] %}{{ instance[1]['@permalink'] }}{% else %}{{ hardware_url }}/{% endif %}{%- endcapture %}
-                            <li id="{{ hardware_id }}" class="pcjs-explorer-item"><a href="{{ hardware_link }}">{{ instance[1]['@title'] }}</a></li>
+                            <li id="{{ hardware_id }}" class="pcjs-explorer-item" onclick="pcjsExplorerClick(this, event)"><a href="{{ hardware_link }}">{{ instance[1]['@title'] }}</a></li>
                       {%- endfor -%}
                       {%- if subcategory[0] != "@instances" and subcategory[0] != "@documents" %}
                           </ul>

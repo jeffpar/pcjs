@@ -1,27 +1,26 @@
 ---
 layout: post
-title: Connecting an IBM PC to a DEC VT100 Terminal
+title: Connecting a DEC VT100 Terminal to an IBM PC AT
 date: 2016-08-19 10:00:00
 permalink: /blog/2016/08/19/
 machines:
-  - id: ibm5170
-    type: pcx86
-    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
-    connection: com2->vt100.serialPort
   - id: vt100
     type: vt100
     name: DEC VT100
     config: /configs/vt100/vt100.json
     layout: /_includes/vt100/vt100.html
     connection: serialPort->ibm5170.com2
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
+    connection: com2->vt100.serialPort
 ---
 
 Now that you've had a chance to play with a standalone [VT100 Terminal](/machines/dec/vt100/), not to mention
 [Dual VT100 Terminals](/machines/dec/vt100/dual/), it's time to take [PCjs Machines](/) to the next level, and
 begin connecting PCs to terminals.
 
-Below you'll find an 80286-based [IBM PC AT](/configs/pcx86/xml/machine/5170/ega/2048kb/rev3/) connected to an 8080-based
-[VT100 Terminal](/machines/dec/vt100/) via the PC's **COM2** serial port.
+Below you'll find a [DEC VT100 Terminal connected to IBM PC AT](/machines/dec/vt100/5170/) via the PC's **COM2** serial port.
 
 At this point, the connection is *very* thin.  The [PCx86]({{ site.github.pages }}/machines/pcx86/) [SerialPort](/machines/pcx86/lib/serial.js)
 and [PCx80]({{ site.github.pages }}/machines/pcx80/) [SerialPort](/machines/pcx80/lib/serial.js) each export exactly two methods:
@@ -79,6 +78,6 @@ property (eg, `connection:"serialPort->ibm5170.com2"`) must also be added to the
 
 For the more adventurous, a [Dual Debugger Configuration](/machines/dec/vt100/5170/debugger/) is also available.
 
-{% include machine.html id="ibm5170" %}
-
 {% include machine.html id="vt100" %}
+
+{% include machine.html id="ibm5170" %}

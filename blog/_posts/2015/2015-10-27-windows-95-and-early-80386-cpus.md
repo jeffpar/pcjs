@@ -158,7 +158,7 @@ a 16-bit Windows component that manages the Windows 95 installation process:
 	#05C7:6A05 665F            POP      EDI
 	#05C7:6A07 C3              RET
 
-Ths above code checks for B1 stepping [Errata #7](/pubs/pc/reference/intel/80386/#b1-errata): "Wrong Register Size for
+Ths above code checks for B1 stepping [Errata #7](/documents/manuals/intel/80386/#b1-errata): "Wrong Register Size for
 String Instructions in Mixed 16/32-bit Addressing Systems."  It returns AX == 0 if the STOSB instruction updated EDI
 correctly (0xFFFFFFFF) or AX == 1 if EDI is incorrect (0x0000FFFF).
 
@@ -206,7 +206,7 @@ installed, it *will* start up on a B1 stepping.
 PCjs stepping support is extremely limited at this point.  Here's a summary:
 
 1. 80386 steppings A0-B0 provide *limited* support for the short-lived XBTS and IBTS instructions
-2. 80386 steppings A0-B1 enable [Errata #7](/pubs/pc/reference/intel/80386/#b1-errata) for STOSB (as tested by Windows 95; see above)
+2. 80386 steppings A0-B1 enable [Errata #7](/documents/manuals/intel/80386/#b1-errata) for STOSB (as tested by Windows 95; see above)
 3. 80386 stepping B1 enables 32-bit multiplication errors (as tested by Windows 95; see above)
 4. 80386 stepping B2 includes all supported B1 errata, but without 32-bit multiplication errors
 

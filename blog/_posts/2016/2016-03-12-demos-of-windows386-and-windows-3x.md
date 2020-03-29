@@ -6,7 +6,7 @@ permalink: /blog/2016/03/12/
 ---
 
 I recently added some more demos to the PCjs Project, to showcase its ability to run old 80286-based and
-80386-based software, such as [Windows/386](/software/pcx86/sys.windows/2.0x/), [Windows 3.0](/software/pcx86/sys/windows/3.00/),
+80386-based software, such as [Windows/386](/software/pcx86/sys/windows/2.0x/), [Windows 3.0](/software/pcx86/sys/windows/3.00/),
 [Windows 3.1](/software/pcx86/sys/windows/3.10/), and [Windows 95](/software/pcx86/sys/windows/win95/4.00.950/).
 
 {% include gallery/begin.html %}

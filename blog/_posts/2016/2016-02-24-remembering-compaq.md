@@ -50,12 +50,12 @@ all we have are the memories.
 ### Speaking of Memories
 
 In particular, Read-Only Memories: we have precious few of those, too.  I finally obtained
-a [ROM Dump](/devices/pcx86/rom/compaq/portable/) from COMPAQ's first machine, the COMPAQ Portable, but I had to buy
-a system board on eBay to get it.  Considering all the effort (and money) that COMPAQ invested in writing that code,
+a [ROM Dump](/machines/pcx86/compaq/portable/rom/) from COMPAQ's first machine, the COMPAQ Portable, but I had to
+buy a system board on eBay to get it.  Considering all the effort (and money) that COMPAQ invested in writing that code,
 it's a bit depressing that these things haven't been properly preserved and memorialized.
 
 Looking ahead to the day when PCjs will be able to simulate the original COMPAQ Portable, I thought it would be a good
-idea to create my own roughly chronological list of [COMPAQ Machines](/devices/pcx86/machine/compaq/) from the 1980s,
+idea to create my own roughly chronological list of [COMPAQ Machines](/machines/pcx86/compaq/) from the 1980s,
 since they are all machines I would like to see PCjs eventually support:
 
  - COMPAQ Portable
@@ -64,7 +64,7 @@ since they are all machines I would like to see PCjs eventually support:
  - COMPAQ DeskPro 286
  - COMPAQ Portable 286
  - COMPAQ Portable II
- - [COMPAQ DeskPro 386](/devices/pcx86/machine/compaq/deskpro386/)
+ - [COMPAQ DeskPro 386](/machines/pcx86/compaq/deskpro386/)
  - COMPAQ Portable III
  - COMPAQ DeskPro 386/20
  - COMPAQ Portable 386

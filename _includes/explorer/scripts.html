@@ -13,7 +13,7 @@
         if (element.classList.contains("pcjs-explorer-open")) {
           element.classList.add("pcjs-explorer-closed");
           element.classList.remove("pcjs-explorer-open");
-        } else {
+        } else if (element.classList.contains("pcjs-explorer-closed")) {
           element.classList.add("pcjs-explorer-open");
           element.classList.remove("pcjs-explorer-closed");
         }
