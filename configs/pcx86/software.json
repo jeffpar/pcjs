@@ -531,6 +531,10 @@
       "wordstar": {
         "@title": "WordStar",
         "@versions": {
+          "": {
+            "@title": "Overview",
+            "@redirect_from": "/disks/pcx86/apps/other/wordstar/"
+          },
           "3.20": {
             "@title": "WordStar 3.20",
             "@media": [
@@ -795,7 +799,7 @@
     "cdrom": {
       "@title": "CD-ROM",
       "@versions": {
-        "": {
+        "dos": {
           "@title": "CD-ROM DOS Drivers",
           "@media": [
             {
@@ -813,9 +817,9 @@
       }
     },
     "mouse": {
-      "@title": "Microsoft",
+      "@title": "Mouse",
       "microsoft": {
-        "@title": "MS Mouse",
+        "@title": "Microsoft Mouse",
         "@versions": {
           "2.00": {
             "@title": "MS Mouse 2.00",
@@ -903,12 +907,12 @@
       }
     },
     "rom": {
-      "@title": "IBM",
+      "@title": "ROM",
       "ibm": {
-        "@title": "IBM ROM BIOS Source Code",
+        "@title": "IBM PC ROMs",
         "@versions": {
-          "": {
-            "@title": "IBM ROM BIOS Source Code ",
+          "5150": {
+            "@title": "IBM PC BIOS Sources",
             "@media": [
               {
                 "@title": "IBM PC BIOS Sources (V1)",
@@ -924,7 +928,12 @@
                 "@title": "IBM PC BIOS Sources (V3)",
                 "@diskette": "IBM-BIOS-SRC-5150V3.json",
                 "@type": "PC320K"
-              },
+              }
+            ]
+          },
+          "5160": {
+            "@title": "IBM PC XT BIOS Sources",
+            "@media": [
               {
                 "@title": "IBM PC XT BIOS Sources (V1)",
                 "@diskette": "IBM-BIOS-SRC-5160V1.json",
@@ -939,7 +948,12 @@
                 "@title": "IBM PC XT BIOS Sources (V3)",
                 "@diskette": "IBM-BIOS-SRC-5160V3.json",
                 "@type": "PC360K"
-              },
+              }
+            ]
+          },
+          "5170": {
+            "@title": "IBM PC AT BIOS Sources",
+            "@media": [
               {
                 "@title": "IBM PC AT BIOS Sources (V1)",
                 "@diskette": "IBM-BIOS-SRC-5170V1.json",
@@ -957,6 +971,21 @@
               }
             ]
           }
+        }
+      }
+    },
+    "windows": {
+      "@title": "Windows DDKs",
+      "@versions": {
+        "wincomm/1985": {
+          "@title": "Windows COMM Driver (1985)",
+          "@media": [
+            {
+              "@title": "WINCOMM",
+              "@diskette": "WINCOMM.json",
+              "@type": "PC360K"
+            }
+          ]
         }
       }
     }
@@ -2977,6 +3006,127 @@
                 "@diskette": "MSOS2-SDK102-DISK15.json",
                 "@type": "PC360K"
               }
+            ],
+            "@documents": [
+              {
+                "@title": "MS OS/2 Programmer's Guide (1987 PRE)",
+                "@file": "MSOS2-1X-PROG-GUIDE-PRE-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heByLK4yD3LMUrUZeg?e=ZDS8vx",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/prog-guide-pre-1987.pdf"
+              },
+              {
+                "@title": "MS OS/2 Programmer's Reference (1987 PRE)",
+                "@file": "MSOS2-1X-PROG-REF-PRE-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBkzN9GkH4pGKLGUQ?e=fnCCp0",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/prog-ref-pre-1987.pdf"
+              },
+              {
+                "@title": "MS OS/2 Programmer's Reference (1987 UPD)",
+                "@file": "MSOS2-1X-PROG-REF-UPD-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB4uBFyjS8qbAlE4Q?e=1FeQKt",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/prog-ref-upd-1987.pdf"
+              },
+              {
+                "@title": "MS OS/2 SDK Utilities (1987 PRE)",
+                "@file": "MSOS2-1X-SDK-UTILS-PRE-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBxzQFYAMgKkv0mAw?e=3DlK1z",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/codeview-tools-pre-1987.pdf"
+              },
+              {
+                "@title": "MS OS/2 SDK Utilities (1987 PRE UPD)",
+                "@file": "MSOS2-1X-SDK-UTILS-PRE-UPD-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB84U7oa6yvxEPDtA?e=0cdxuL",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/sdk-utils-pre-upd-1987.pdf"
+              },
+              {
+                "@title": "MS OS/2 SDK Utilities (1987)",
+                "@file": "MSOS2-1X-SDK-UTILS-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBoqwgG7GICG1lOhQ?e=OTpGqS",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/codeview-tools-1987.pdf"
+              },
+              {
+                "@title": "MS OS/2 SDK Utilities (1987 UPD)",
+                "@file": "MSOS2-1X-SDK-UTILS-UPD-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBq44aXH4eNRAsPng?e=HDoNzh",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/sdk-utils-upd-1987.pdf"
+              },
+              {
+                "@title": "MS OS/2 SDK Utilities (1988 UPD)",
+                "@file": "MSOS2-1X-SDK-UTILS-UPD-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBq44aXH4eNRAsPng?e=HDoNzh",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/sdk-utils-upd-1988.pdf"
+              },
+              {
+                "@title": "MS OS/2 SDK Editor (1987 PRE)",
+                "@file": "MSOS2-1X-SDKED-PRE-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBrl3fCpQI7o_CQwg?e=xHCqkn",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/sdked-pre-1987.pdf"
+              },
+              {
+                "@title": "MS OS/2 SDK Editor (1987)",
+                "@file": "MSOS2-1X-SDKED-1987.pdf",
+                "@link": "",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/sdked-1987.pdf"
+              },
+              {
+                "@title": "MS OS/2 Toolkit Welcome (1988)",
+                "@file": "MSOS2-1X-TOOLKIT-WELCOME-1988.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBhiFg-xpbBxixJ5g?e=hSG6kG",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210ptk/os2-1.0-ptk-welcome-1988.pdf"
+              },
+              {
+                "@title": "MS OS/2 Toolkit Tools (1988)",
+                "@file": "MSOS2-1X-TOOLKIT-TOOLS-1988.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBc72s8FJGmaDswYA?e=Jdf7O6",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210ptk/os2-1.0-ptk-tools-1988.pdf"
+              },
+              {
+                "@title": "MS OS/2 Toolkit Learning Guide (1988)",
+                "@file": "MSOS2-1X-TOOLKIT-LGUIDE-1988.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBbjwpQwUBA27h4Yg?e=TuJ18b",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210ptk/os2-1.0-ptk-lguide-1988.pdf"
+              },
+              {
+                "@title": "MS OS/2 Toolkit Reference (1988)",
+                "@file": "MSOS2-1X-TOOLKIT-PRGREF-1988.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBdhrbD40X4SFWKAw?e=UB7mdb",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210ptk/os2-1.0-ptk-prgref-1988.pdf"
+              },
+              {
+                "@title": "MS OS/2 Device Drivers Guide (1987 PRE)",
+                "@file": "MSOS2-1X-DDK-GUIDE-PRE-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB_E2rigeNegTPjAw?e=c3S8RL",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/os2-1.0-ddk-pre-1987.pdf"
+              },
+              {
+                "@title": "MS OS/2 Device Drivers Guide (1987)",
+                "@file": "MSOS2-1X-DDK-GUIDE-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBed0ezBU5eN2z2jg?e=6lqfrD",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/os2-1.0-ddk-guide-1987.pdf"
+              },
+              {
+                "@title": "MS OS/2 Device Drivers Guide (1987 UPD)",
+                "@file": "MSOS2-1X-DDK-GUIDE-UPD-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBmG1h1dzstiTa0GA?e=KUf0UQ",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/os2-1.0-ddk-upd-1987.pdf"
+              }
             ]
           }
         }
@@ -3343,867 +3493,867 @@
             }
           ]
         },
-        "pcmag": {
+        "pcm": {
           "@title": "PC Magazine Diskettes",
           "@media": [
             {
               "@title": "PC Magazine (Vol. 06 No. 08)",
-              "@diskette": "VOL06N08.json",
+              "@diskette": "PCMAG-VOL06N08.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 09)",
-              "@diskette": "VOL06N09.json",
+              "@diskette": "PCMAG-VOL06N09.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 10)",
-              "@diskette": "VOL06N10.json",
+              "@diskette": "PCMAG-VOL06N10.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 11)",
-              "@diskette": "VOL06N11.json",
+              "@diskette": "PCMAG-VOL06N11.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 12)",
-              "@diskette": "VOL06N12.json",
+              "@diskette": "PCMAG-VOL06N12.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 13)",
-              "@diskette": "VOL06N13.json",
+              "@diskette": "PCMAG-VOL06N13.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 14)",
-              "@diskette": "VOL06N14.json",
+              "@diskette": "PCMAG-VOL06N14.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 15)",
-              "@diskette": "VOL06N15.json",
+              "@diskette": "PCMAG-VOL06N15.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 16)",
-              "@diskette": "VOL06N16.json",
+              "@diskette": "PCMAG-VOL06N16.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 17)",
-              "@diskette": "VOL06N17.json",
+              "@diskette": "PCMAG-VOL06N17.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 18)",
-              "@diskette": "VOL06N18.json",
+              "@diskette": "PCMAG-VOL06N18.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 19)",
-              "@diskette": "VOL06N19.json",
+              "@diskette": "PCMAG-VOL06N19.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 20)",
-              "@diskette": "VOL06N20.json",
+              "@diskette": "PCMAG-VOL06N20.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 21)",
-              "@diskette": "VOL06N21.json",
+              "@diskette": "PCMAG-VOL06N21.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 22)",
-              "@diskette": "VOL06N22.json",
+              "@diskette": "PCMAG-VOL06N22.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 01)",
-              "@diskette": "VOL07N01.json",
+              "@diskette": "PCMAG-VOL07N01.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 02)",
-              "@diskette": "VOL07N02.json",
+              "@diskette": "PCMAG-VOL07N02.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 03)",
-              "@diskette": "VOL07N03.json",
+              "@diskette": "PCMAG-VOL07N03.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 05)",
-              "@diskette": "VOL07N05.json",
+              "@diskette": "PCMAG-VOL07N05.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 06)",
-              "@diskette": "VOL07N06.json",
+              "@diskette": "PCMAG-VOL07N06.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 07)",
-              "@diskette": "VOL07N07.json",
+              "@diskette": "PCMAG-VOL07N07.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 08)",
-              "@diskette": "VOL07N08.json",
+              "@diskette": "PCMAG-VOL07N08.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 09)",
-              "@diskette": "VOL07N09.json",
+              "@diskette": "PCMAG-VOL07N09.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 10)",
-              "@diskette": "VOL07N10.json",
+              "@diskette": "PCMAG-VOL07N10.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 12)",
-              "@diskette": "VOL07N12.json",
+              "@diskette": "PCMAG-VOL07N12.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 13)",
-              "@diskette": "VOL07N13.json",
+              "@diskette": "PCMAG-VOL07N13.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 14)",
-              "@diskette": "VOL07N14.json",
+              "@diskette": "PCMAG-VOL07N14.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 15)",
-              "@diskette": "VOL07N15.json",
+              "@diskette": "PCMAG-VOL07N15.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 16)",
-              "@diskette": "VOL07N16.json",
+              "@diskette": "PCMAG-VOL07N16.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 17)",
-              "@diskette": "VOL07N17.json",
+              "@diskette": "PCMAG-VOL07N17.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 18)",
-              "@diskette": "VOL07N18.json",
+              "@diskette": "PCMAG-VOL07N18.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 19)",
-              "@diskette": "VOL07N19.json",
+              "@diskette": "PCMAG-VOL07N19.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 20)",
-              "@diskette": "VOL07N20.json",
+              "@diskette": "PCMAG-VOL07N20.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 21)",
-              "@diskette": "VOL07N21.json",
+              "@diskette": "PCMAG-VOL07N21.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 22)",
-              "@diskette": "VOL07N22.json",
+              "@diskette": "PCMAG-VOL07N22.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 01)",
-              "@diskette": "VOL08N01.json",
+              "@diskette": "PCMAG-VOL08N01.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 02)",
-              "@diskette": "VOL08N02.json",
+              "@diskette": "PCMAG-VOL08N02.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 03)",
-              "@diskette": "VOL08N03.json",
+              "@diskette": "PCMAG-VOL08N03.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 04)",
-              "@diskette": "VOL08N04.json",
+              "@diskette": "PCMAG-VOL08N04.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 05)",
-              "@diskette": "VOL08N05.json",
+              "@diskette": "PCMAG-VOL08N05.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 06)",
-              "@diskette": "VOL08N06.json",
+              "@diskette": "PCMAG-VOL08N06.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 07)",
-              "@diskette": "VOL08N07.json",
+              "@diskette": "PCMAG-VOL08N07.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 08)",
-              "@diskette": "VOL08N08.json",
+              "@diskette": "PCMAG-VOL08N08.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 09)",
-              "@diskette": "VOL08N09.json",
+              "@diskette": "PCMAG-VOL08N09.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 10)",
-              "@diskette": "VOL08N10.json",
+              "@diskette": "PCMAG-VOL08N10.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 11)",
-              "@diskette": "VOL08N11.json",
+              "@diskette": "PCMAG-VOL08N11.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 12)",
-              "@diskette": "VOL08N12.json",
+              "@diskette": "PCMAG-VOL08N12.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 13)",
-              "@diskette": "VOL08N13.json",
+              "@diskette": "PCMAG-VOL08N13.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 14)",
-              "@diskette": "VOL08N14.json",
+              "@diskette": "PCMAG-VOL08N14.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 15)",
-              "@diskette": "VOL08N15.json",
+              "@diskette": "PCMAG-VOL08N15.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 16)",
-              "@diskette": "VOL08N16.json",
+              "@diskette": "PCMAG-VOL08N16.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 17)",
-              "@diskette": "VOL08N17.json",
+              "@diskette": "PCMAG-VOL08N17.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 18)",
-              "@diskette": "VOL08N18.json",
+              "@diskette": "PCMAG-VOL08N18.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 19)",
-              "@diskette": "VOL08N19.json",
+              "@diskette": "PCMAG-VOL08N19.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 20)",
-              "@diskette": "VOL08N20.json",
+              "@diskette": "PCMAG-VOL08N20.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 21)",
-              "@diskette": "VOL08N21.json",
+              "@diskette": "PCMAG-VOL08N21.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 22)",
-              "@diskette": "VOL08N22.json",
+              "@diskette": "PCMAG-VOL08N22.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 01)",
-              "@diskette": "VOL09N01.json",
+              "@diskette": "PCMAG-VOL09N01.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 02)",
-              "@diskette": "VOL09N02.json",
+              "@diskette": "PCMAG-VOL09N02.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 03)",
-              "@diskette": "VOL09N03.json",
+              "@diskette": "PCMAG-VOL09N03.json",
               "@type": "PC1200K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 04)",
-              "@diskette": "VOL09N04.json",
+              "@diskette": "PCMAG-VOL09N04.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 05)",
-              "@diskette": "VOL09N05.json",
+              "@diskette": "PCMAG-VOL09N05.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 06)",
-              "@diskette": "VOL09N06.json",
+              "@diskette": "PCMAG-VOL09N06.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 07)",
-              "@diskette": "VOL09N07.json",
+              "@diskette": "PCMAG-VOL09N07.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 08)",
-              "@diskette": "VOL09N08.json",
+              "@diskette": "PCMAG-VOL09N08.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 09)",
-              "@diskette": "VOL09N09.json",
+              "@diskette": "PCMAG-VOL09N09.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 10)",
-              "@diskette": "VOL09N10.json",
+              "@diskette": "PCMAG-VOL09N10.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 11)",
-              "@diskette": "VOL09N11.json",
+              "@diskette": "PCMAG-VOL09N11.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 12)",
-              "@diskette": "VOL09N12.json",
+              "@diskette": "PCMAG-VOL09N12.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 13)",
-              "@diskette": "VOL09N13.json",
+              "@diskette": "PCMAG-VOL09N13.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 14)",
-              "@diskette": "VOL09N14.json",
+              "@diskette": "PCMAG-VOL09N14.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 15)",
-              "@diskette": "VOL09N15.json",
+              "@diskette": "PCMAG-VOL09N15.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 16)",
-              "@diskette": "VOL09N16.json",
+              "@diskette": "PCMAG-VOL09N16.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 17)",
-              "@diskette": "VOL09N17.json",
+              "@diskette": "PCMAG-VOL09N17.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 19)",
-              "@diskette": "VOL09N19.json",
+              "@diskette": "PCMAG-VOL09N19.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 20)",
-              "@diskette": "VOL09N20.json",
+              "@diskette": "PCMAG-VOL09N20.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 21)",
-              "@diskette": "VOL09N21.json",
+              "@diskette": "PCMAG-VOL09N21.json",
               "@type": "PC1200K"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 22)",
-              "@diskette": "VOL09N22.json",
+              "@diskette": "PCMAG-VOL09N22.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 01)",
-              "@diskette": "VOL10N01.json",
+              "@diskette": "PCMAG-VOL10N01.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 02)",
-              "@diskette": "VOL10N02.json",
+              "@diskette": "PCMAG-VOL10N02.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 03)",
-              "@diskette": "VOL10N03.json",
+              "@diskette": "PCMAG-VOL10N03.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 04)",
-              "@diskette": "VOL10N04.json",
+              "@diskette": "PCMAG-VOL10N04.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 05)",
-              "@diskette": "VOL10N05.json",
+              "@diskette": "PCMAG-VOL10N05.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 06)",
-              "@diskette": "VOL10N06.json",
+              "@diskette": "PCMAG-VOL10N06.json",
               "@type": "PC1200K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 07)",
-              "@diskette": "VOL10N07.json",
+              "@diskette": "PCMAG-VOL10N07.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 08)",
-              "@diskette": "VOL10N08.json",
+              "@diskette": "PCMAG-VOL10N08.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 09)",
-              "@diskette": "VOL10N09.json",
+              "@diskette": "PCMAG-VOL10N09.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 10)",
-              "@diskette": "VOL10N10.json",
+              "@diskette": "PCMAG-VOL10N10.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 11)",
-              "@diskette": "VOL10N11.json",
+              "@diskette": "PCMAG-VOL10N11.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 12)",
-              "@diskette": "VOL10N12.json",
+              "@diskette": "PCMAG-VOL10N12.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 13)",
-              "@diskette": "VOL10N13.json",
+              "@diskette": "PCMAG-VOL10N13.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 14)",
-              "@diskette": "VOL10N14.json",
+              "@diskette": "PCMAG-VOL10N14.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 15)",
-              "@diskette": "VOL10N15.json",
+              "@diskette": "PCMAG-VOL10N15.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 16)",
-              "@diskette": "VOL10N16.json",
+              "@diskette": "PCMAG-VOL10N16.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 17)",
-              "@diskette": "VOL10N17.json",
+              "@diskette": "PCMAG-VOL10N17.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 18)",
-              "@diskette": "VOL10N18.json",
+              "@diskette": "PCMAG-VOL10N18.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 19)",
-              "@diskette": "VOL10N19.json",
+              "@diskette": "PCMAG-VOL10N19.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 20)",
-              "@diskette": "VOL10N20.json",
+              "@diskette": "PCMAG-VOL10N20.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 21)",
-              "@diskette": "VOL10N21.json",
+              "@diskette": "PCMAG-VOL10N21.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 22)",
-              "@diskette": "VOL10N22.json",
+              "@diskette": "PCMAG-VOL10N22.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 01)",
-              "@diskette": "VOL11N01.json",
+              "@diskette": "PCMAG-VOL11N01.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 02)",
-              "@diskette": "VOL11N02.json",
+              "@diskette": "PCMAG-VOL11N02.json",
               "@type": "PC1200K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 03)",
-              "@diskette": "VOL11N03.json",
+              "@diskette": "PCMAG-VOL11N03.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 04)",
-              "@diskette": "VOL11N04.json",
+              "@diskette": "PCMAG-VOL11N04.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 05)",
-              "@diskette": "VOL11N05.json",
+              "@diskette": "PCMAG-VOL11N05.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 06)",
-              "@diskette": "VOL11N06.json",
+              "@diskette": "PCMAG-VOL11N06.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 07)",
-              "@diskette": "VOL11N07.json",
+              "@diskette": "PCMAG-VOL11N07.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 08)",
-              "@diskette": "VOL11N08.json",
+              "@diskette": "PCMAG-VOL11N08.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 09)",
-              "@diskette": "VOL11N09.json",
+              "@diskette": "PCMAG-VOL11N09.json",
               "@type": "PC1200K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 10)",
-              "@diskette": "VOL11N10.json",
+              "@diskette": "PCMAG-VOL11N10.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 11)",
-              "@diskette": "VOL11N11.json",
+              "@diskette": "PCMAG-VOL11N11.json",
               "@type": "PC1200K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 12)",
-              "@diskette": "VOL11N12.json",
+              "@diskette": "PCMAG-VOL11N12.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 13)",
-              "@diskette": "VOL11N13.json",
+              "@diskette": "PCMAG-VOL11N13.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 14)",
-              "@diskette": "VOL11N14.json",
+              "@diskette": "PCMAG-VOL11N14.json",
               "@type": "PC1200K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 15)",
-              "@diskette": "VOL11N15.json",
+              "@diskette": "PCMAG-VOL11N15.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 16)",
-              "@diskette": "VOL11N16.json",
+              "@diskette": "PCMAG-VOL11N16.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 17)",
-              "@diskette": "VOL11N17.json",
+              "@diskette": "PCMAG-VOL11N17.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 18)",
-              "@diskette": "VOL11N18.json",
+              "@diskette": "PCMAG-VOL11N18.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 19)",
-              "@diskette": "VOL11N19.json",
+              "@diskette": "PCMAG-VOL11N19.json",
               "@type": "PC1200K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 20)",
-              "@diskette": "VOL11N20.json",
+              "@diskette": "PCMAG-VOL11N20.json",
               "@type": "PC1200K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 21)",
-              "@diskette": "VOL11N21.json",
+              "@diskette": "PCMAG-VOL11N21.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 22)",
-              "@diskette": "VOL11N22.json",
+              "@diskette": "PCMAG-VOL11N22.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 01)",
-              "@diskette": "VOL12N01.json",
+              "@diskette": "PCMAG-VOL12N01.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 02)",
-              "@diskette": "VOL12N02.json",
+              "@diskette": "PCMAG-VOL12N02.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 03)",
-              "@diskette": "VOL12N03.json",
+              "@diskette": "PCMAG-VOL12N03.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 04)",
-              "@diskette": "VOL12N04.json",
+              "@diskette": "PCMAG-VOL12N04.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 05)",
-              "@diskette": "VOL12N05.json",
+              "@diskette": "PCMAG-VOL12N05.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 06)",
-              "@diskette": "VOL12N06.json",
+              "@diskette": "PCMAG-VOL12N06.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 07)",
-              "@diskette": "VOL12N07.json",
+              "@diskette": "PCMAG-VOL12N07.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 08)",
-              "@diskette": "VOL12N08.json",
+              "@diskette": "PCMAG-VOL12N08.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 09)",
-              "@diskette": "VOL12N09.json",
+              "@diskette": "PCMAG-VOL12N09.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 10)",
-              "@diskette": "VOL12N10.json",
+              "@diskette": "PCMAG-VOL12N10.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 11)",
-              "@diskette": "VOL12N11.json",
+              "@diskette": "PCMAG-VOL12N11.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 12)",
-              "@diskette": "VOL12N12.json",
+              "@diskette": "PCMAG-VOL12N12.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 13)",
-              "@diskette": "VOL12N13.json",
+              "@diskette": "PCMAG-VOL12N13.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 14)",
-              "@diskette": "VOL12N14.json",
+              "@diskette": "PCMAG-VOL12N14.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 15)",
-              "@diskette": "VOL12N15.json",
+              "@diskette": "PCMAG-VOL12N15.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 16)",
-              "@diskette": "VOL12N16.json",
+              "@diskette": "PCMAG-VOL12N16.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 17)",
-              "@diskette": "VOL12N17.json",
+              "@diskette": "PCMAG-VOL12N17.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 18)",
-              "@diskette": "VOL12N18.json",
+              "@diskette": "PCMAG-VOL12N18.json",
               "@type": "PC1440K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 19)",
-              "@diskette": "VOL12N19.json",
+              "@diskette": "PCMAG-VOL12N19.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 20)",
-              "@diskette": "VOL12N20.json",
+              "@diskette": "PCMAG-VOL12N20.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 21)",
-              "@diskette": "VOL12N21.json",
+              "@diskette": "PCMAG-VOL12N21.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 22)",
-              "@diskette": "VOL12N22.json",
+              "@diskette": "PCMAG-VOL12N22.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 01)",
-              "@diskette": "VOL13N01.json",
+              "@diskette": "PCMAG-VOL13N01.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 02)",
-              "@diskette": "VOL13N02.json",
+              "@diskette": "PCMAG-VOL13N02.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 03)",
-              "@diskette": "VOL13N03.json",
+              "@diskette": "PCMAG-VOL13N03.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 04)",
-              "@diskette": "VOL13N04.json",
+              "@diskette": "PCMAG-VOL13N04.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 05)",
-              "@diskette": "VOL13N05.json",
+              "@diskette": "PCMAG-VOL13N05.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 06)",
-              "@diskette": "VOL13N06.json",
+              "@diskette": "PCMAG-VOL13N06.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 07)",
-              "@diskette": "VOL13N07.json",
+              "@diskette": "PCMAG-VOL13N07.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 08)",
-              "@diskette": "VOL13N08.json",
+              "@diskette": "PCMAG-VOL13N08.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 09)",
-              "@diskette": "VOL13N09.json",
+              "@diskette": "PCMAG-VOL13N09.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 10)",
-              "@diskette": "VOL13N10.json",
+              "@diskette": "PCMAG-VOL13N10.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 11)",
-              "@diskette": "VOL13N11.json",
+              "@diskette": "PCMAG-VOL13N11.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 12)",
-              "@diskette": "VOL13N12.json",
+              "@diskette": "PCMAG-VOL13N12.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 13)",
-              "@diskette": "VOL13N13.json",
+              "@diskette": "PCMAG-VOL13N13.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 14)",
-              "@diskette": "VOL13N14.json",
+              "@diskette": "PCMAG-VOL13N14.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 15)",
-              "@diskette": "VOL13N15.json",
+              "@diskette": "PCMAG-VOL13N15.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 16)",
-              "@diskette": "VOL13N16.json",
+              "@diskette": "PCMAG-VOL13N16.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 17)",
-              "@diskette": "VOL13N17.json",
+              "@diskette": "PCMAG-VOL13N17.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 18)",
-              "@diskette": "VOL13N18.json",
+              "@diskette": "PCMAG-VOL13N18.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 19)",
-              "@diskette": "VOL13N19.json",
+              "@diskette": "PCMAG-VOL13N19.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 20)",
-              "@diskette": "VOL13N20.json",
+              "@diskette": "PCMAG-VOL13N20.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 21)",
-              "@diskette": "VOL13N21.json",
+              "@diskette": "PCMAG-VOL13N21.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 22)",
-              "@diskette": "VOL13N22.json",
+              "@diskette": "PCMAG-VOL13N22.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 14 No. 01)",
-              "@diskette": "VOL14N01.json",
+              "@diskette": "PCMAG-VOL14N01.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 14 No. 02)",
-              "@diskette": "VOL14N02.json",
+              "@diskette": "PCMAG-VOL14N02.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 14 No. 03)",
-              "@diskette": "VOL14N03.json",
+              "@diskette": "PCMAG-VOL14N03.json",
               "@type": "PC320K"
             },
             {
               "@title": "PC Magazine (Vol. 14 No. 04)",
-              "@diskette": "VOL14N04.json",
+              "@diskette": "PCMAG-VOL14N04.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 14 No. 05)",
-              "@diskette": "VOL14N05.json",
+              "@diskette": "PCMAG-VOL14N05.json",
               "@type": "PC160K"
             },
             {
               "@title": "PC Magazine (Vol. 14 No. 06)",
-              "@diskette": "VOL14N06.json",
+              "@diskette": "PCMAG-VOL14N06.json",
               "@type": "PC160K"
             },
             {
@@ -4729,13 +4879,13 @@
                 "@type": "PC360K"
               },
               {
-                "@title": "DR DOS 6.00 (1.2M Disk 1)",
-                "@diskette": "DRDOS600-DISK1.json",
+                "@title": "DR DOS 6.00 (1.2M StartUp)",
+                "@diskette": "DRDOS600-STARTUP.json",
                 "@type": "PC1200K"
               },
               {
-                "@title": "DR DOS 6.00 (1.2M Disk 2)",
-                "@diskette": "DRDOS600-DISK2.json",
+                "@title": "DR DOS 6.00 (1.2M ViewMAX)",
+                "@diskette": "DRDOS600-VIEWMAX.json",
                 "@type": "PC1200K"
               },
               {
@@ -5490,7 +5640,7 @@
     "os2": {
       "@title": "OS/2",
       "ibm": {
-        "@title": "IBM OS/2 1.0",
+        "@title": "IBM OS/2",
         "@versions": {
           "1.0": {
             "@title": "IBM OS/2 1.0",
@@ -5660,7 +5810,7 @@
         }
       },
       "microsoft": {
-        "@title": "MS OS/2 1.0",
+        "@title": "MS OS/2",
         "@versions": {
           "1.0": {
             "@title": "MS OS/2 1.0",
@@ -5914,7 +6064,7 @@
     "unix": {
       "@title": "UNIX",
       "ibm": {
-        "@title": "Interactive Systems Corporation",
+        "@title": "IBM",
         "pcix": {
           "@title": "PC/IX",
           "@versions": {
@@ -6254,487 +6404,484 @@
         }
       },
       "sco": {
-        "@title": "",
-        "xenix": {
-          "286": {
-            "@title": "Xenix 286",
-            "@versions": {
-              "2.1.3": {
-                "@title": "Xenix 286 2.1.3",
-                "@media": [
-                  {
-                    "@title": "SCO Xenix 286 2.1.3 (N1-BOOT)",
-                    "@diskette": "N1-BOOT.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.1.3 (N2)",
-                    "@diskette": "N2.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.1.3 (N3)",
-                    "@diskette": "N3.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.1.3 (N4)",
-                    "@diskette": "N4.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.1.3 (N5)",
-                    "@diskette": "N5.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.1.3 (B1)",
-                    "@diskette": "B1.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.1.3 (B2)",
-                    "@diskette": "B2.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.1.3 (B3)",
-                    "@diskette": "B3.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.1.3 (X1)",
-                    "@diskette": "X1.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.1.3 (X2)",
-                    "@diskette": "X2.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.1.3 (X3)",
-                    "@diskette": "X3.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.1.3 (X4)",
-                    "@diskette": "X4.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.1.3 (X5)",
-                    "@diskette": "X5.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.1.3 (X6)",
-                    "@diskette": "X6.json",
-                    "@type": "PC360K"
-                  }
-                ]
-              },
-              "2.2.1e": {
-                "@title": "Xenix 286 2.2.1e",
-                "@media": [
-                  {
-                    "@title": "SCO Xenix 286 2.2.1e (N1-BOOT)",
-                    "@diskette": "N1-BOOT.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.1e (N2)",
-                    "@diskette": "N2.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.1e (B1)",
-                    "@diskette": "B1.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.1e (X1)",
-                    "@diskette": "X1.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.1e (X2)",
-                    "@diskette": "X2.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.1e (X3)",
-                    "@diskette": "X3.json",
-                    "@type": "PC1200K"
-                  }
-                ]
-              },
-              "2.2.3b": {
-                "@title": "Xenix 286 2.2.3b",
-                "@media": [
-                  {
-                    "@title": "SCO Xenix 286 2.2.3b (N1-BOOT)",
-                    "@diskette": "N1-BOOT.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.3b (N2)",
-                    "@diskette": "N2.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.3b (B1)",
-                    "@diskette": "B1.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.3b (D1)",
-                    "@diskette": "D1.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.3b (D2)",
-                    "@diskette": "D2.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.3b (D3)",
-                    "@diskette": "D3.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.3b (D4)",
-                    "@diskette": "D4.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.3b (X1)",
-                    "@diskette": "X1.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.3b (X2)",
-                    "@diskette": "X2.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.3b (X3)",
-                    "@diskette": "X3.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.3b (GAMES)",
-                    "@diskette": "GAMES.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.3b (GSS-CGI2)",
-                    "@diskette": "GSS-CGI2.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.2.3b (GSS-CGI3)",
-                    "@diskette": "GSS-CGI3.json",
-                    "@type": "PC1200K"
-                  }
-                ]
-              },
-              "2.3.2d": {
-                "@title": "Xenix 286 2.3.2d",
-                "@media": [
-                  {
-                    "@title": "SCO Xenix 286 2.3.2d (N1-BOOT)",
-                    "@diskette": "N1-BOOT.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.3.2d (N2)",
-                    "@diskette": "N2.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.3.2d (N3)",
-                    "@diskette": "N3.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.3.2d (B1)",
-                    "@diskette": "B1.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.3.2d (B2)",
-                    "@diskette": "B2.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.3.2d (X1)",
-                    "@diskette": "X1.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.3.2d (X2)",
-                    "@diskette": "X2.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.3.2d (X3)",
-                    "@diskette": "X3.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.3.2d (X4)",
-                    "@diskette": "X4.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 286 2.3.2d (GAMES)",
-                    "@diskette": "GAMES.json",
-                    "@type": "PC1200K"
-                  }
-                ]
-              }
+        "@title": "SCO",
+        "xenix/086": {
+          "@title": "Xenix 8086",
+          "@versions": {
+            "2.1.3": {
+              "@title": "Xenix 8086 2.1.3",
+              "@media": [
+                {
+                  "@title": "SCO Xenix 8086 (N1-BOOT)",
+                  "@diskette": "N1-BOOT.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (N2)",
+                  "@diskette": "N2.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (N3)",
+                  "@diskette": "N3.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (N4)",
+                  "@diskette": "N4.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (N5)",
+                  "@diskette": "N5.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (N6)",
+                  "@diskette": "N6.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (B1)",
+                  "@diskette": "B1.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (B2)",
+                  "@diskette": "B2.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (B3)",
+                  "@diskette": "B3.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (X1)",
+                  "@diskette": "X1.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (X2)",
+                  "@diskette": "X2.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (X3)",
+                  "@diskette": "X3.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (X4)",
+                  "@diskette": "X4.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (X5)",
+                  "@diskette": "X5.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (X6)",
+                  "@diskette": "X6.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 8086 (GAMES)",
+                  "@diskette": "GAMES.json",
+                  "@type": "PC360K"
+                }
+              ]
             }
-          },
-          "386": {
-            "@title": "Xenix 386",
-            "@versions": {
-              "2.2.3b": {
-                "@title": "Xenix 386 2.2.3b",
-                "@media": [
-                  {
-                    "@title": "SCO Xenix 386 2.2.3b (N1-BOOT)",
-                    "@diskette": "N1-BOOT.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.2.3b (N2)",
-                    "@diskette": "N2.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.2.3b (N3)",
-                    "@diskette": "N3.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.2.3b (B1)",
-                    "@diskette": "B1.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.2.3b (X1)",
-                    "@diskette": "X1.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.2.3b (X2)",
-                    "@diskette": "X2.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.2.3b (X3)",
-                    "@diskette": "X3.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.2.3b (GAMES)",
-                    "@diskette": "GAMES.json",
-                    "@type": "PC1200K"
-                  }
-                ]
-              },
-              "2.3.2f": {
-                "@title": "Xenix 386 2.3.2f",
-                "@media": [
-                  {
-                    "@title": "SCO Xenix 386 2.3.2f (N1-BOOT)",
-                    "@diskette": "N1-BOOT.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.2f (N2)",
-                    "@diskette": "N2.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.2f (N3)",
-                    "@diskette": "N3.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.2f (B1)",
-                    "@diskette": "B1.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.2f (B2)",
-                    "@diskette": "B2.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.2f (X1)",
-                    "@diskette": "X1.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.2f (X2)",
-                    "@diskette": "X2.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.2f (X3)",
-                    "@diskette": "X3.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.2f (X4)",
-                    "@diskette": "X4.json",
-                    "@type": "PC1200K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.2f (GAMES)",
-                    "@diskette": "GAMES.json",
-                    "@type": "PC1200K"
-                  }
-                ]
-              },
-              "2.3.4h": {
-                "@title": "Xenix 386 2.3.4h",
-                "@media": [
-                  {
-                    "@title": "SCO Xenix 386 2.3.4h (N1-BOOT)",
-                    "@diskette": "N1-BOOT.json",
-                    "@type": "PC1440K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.4h (N2)",
-                    "@diskette": "N2.json",
-                    "@type": "PC1440K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.4h (B1)",
-                    "@diskette": "B1.json",
-                    "@type": "PC1440K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.4h (X1)",
-                    "@diskette": "X1.json",
-                    "@type": "PC1440K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.4h (X2)",
-                    "@diskette": "X2.json",
-                    "@type": "PC1440K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.4h (X3)",
-                    "@diskette": "X3.json",
-                    "@type": "PC1440K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.4h (X4)",
-                    "@diskette": "X4.json",
-                    "@type": "PC1440K"
-                  },
-                  {
-                    "@title": "SCO Xenix 386 2.3.4h (GAMES)",
-                    "@diskette": "GAMES.json",
-                    "@type": "PC1440K"
-                  }
-                ]
-              }
+          }
+        },
+        "xenix/286": {
+          "@title": "Xenix 286",
+          "@versions": {
+            "2.1.3": {
+              "@title": "Xenix 286 2.1.3",
+              "@media": [
+                {
+                  "@title": "SCO Xenix 286 2.1.3 (N1-BOOT)",
+                  "@diskette": "N1-BOOT.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.1.3 (N2)",
+                  "@diskette": "N2.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.1.3 (N3)",
+                  "@diskette": "N3.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.1.3 (N4)",
+                  "@diskette": "N4.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.1.3 (N5)",
+                  "@diskette": "N5.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.1.3 (B1)",
+                  "@diskette": "B1.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.1.3 (B2)",
+                  "@diskette": "B2.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.1.3 (B3)",
+                  "@diskette": "B3.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.1.3 (X1)",
+                  "@diskette": "X1.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.1.3 (X2)",
+                  "@diskette": "X2.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.1.3 (X3)",
+                  "@diskette": "X3.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.1.3 (X4)",
+                  "@diskette": "X4.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.1.3 (X5)",
+                  "@diskette": "X5.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.1.3 (X6)",
+                  "@diskette": "X6.json",
+                  "@type": "PC360K"
+                }
+              ]
+            },
+            "2.2.1e": {
+              "@title": "Xenix 286 2.2.1e",
+              "@media": [
+                {
+                  "@title": "SCO Xenix 286 2.2.1e (N1-BOOT)",
+                  "@diskette": "N1-BOOT.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.1e (N2)",
+                  "@diskette": "N2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.1e (B1)",
+                  "@diskette": "B1.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.1e (X1)",
+                  "@diskette": "X1.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.1e (X2)",
+                  "@diskette": "X2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.1e (X3)",
+                  "@diskette": "X3.json",
+                  "@type": "PC1200K"
+                }
+              ]
+            },
+            "2.2.3b": {
+              "@title": "Xenix 286 2.2.3b",
+              "@media": [
+                {
+                  "@title": "SCO Xenix 286 2.2.3b (N1-BOOT)",
+                  "@diskette": "N1-BOOT.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.3b (N2)",
+                  "@diskette": "N2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.3b (B1)",
+                  "@diskette": "B1.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.3b (D1)",
+                  "@diskette": "D1.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.3b (D2)",
+                  "@diskette": "D2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.3b (D3)",
+                  "@diskette": "D3.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.3b (D4)",
+                  "@diskette": "D4.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.3b (X1)",
+                  "@diskette": "X1.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.3b (X2)",
+                  "@diskette": "X2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.3b (X3)",
+                  "@diskette": "X3.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.3b (GAMES)",
+                  "@diskette": "GAMES.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.3b (GSS-CGI2)",
+                  "@diskette": "GSS-CGI2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.2.3b (GSS-CGI3)",
+                  "@diskette": "GSS-CGI3.json",
+                  "@type": "PC1200K"
+                }
+              ]
+            },
+            "2.3.2d": {
+              "@title": "Xenix 286 2.3.2d",
+              "@media": [
+                {
+                  "@title": "SCO Xenix 286 2.3.2d (N1-BOOT)",
+                  "@diskette": "N1-BOOT.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.3.2d (N2)",
+                  "@diskette": "N2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.3.2d (N3)",
+                  "@diskette": "N3.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.3.2d (B1)",
+                  "@diskette": "B1.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.3.2d (B2)",
+                  "@diskette": "B2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.3.2d (X1)",
+                  "@diskette": "X1.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.3.2d (X2)",
+                  "@diskette": "X2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.3.2d (X3)",
+                  "@diskette": "X3.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.3.2d (X4)",
+                  "@diskette": "X4.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 286 2.3.2d (GAMES)",
+                  "@diskette": "GAMES.json",
+                  "@type": "PC1200K"
+                }
+              ]
             }
-          },
-          "@title": "SCO",
-          "086": {
-            "@title": "Xenix 8086",
-            "@versions": {
-              "2.1.3": {
-                "@title": "Xenix 8086 2.1.3",
-                "@media": [
-                  {
-                    "@title": "SCO Xenix 8086 (N1-BOOT)",
-                    "@diskette": "N1-BOOT.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (N2)",
-                    "@diskette": "N2.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (N3)",
-                    "@diskette": "N3.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (N4)",
-                    "@diskette": "N4.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (N5)",
-                    "@diskette": "N5.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (N6)",
-                    "@diskette": "N6.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (B1)",
-                    "@diskette": "B1.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (B2)",
-                    "@diskette": "B2.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (B3)",
-                    "@diskette": "B3.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (X1)",
-                    "@diskette": "X1.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (X2)",
-                    "@diskette": "X2.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (X3)",
-                    "@diskette": "X3.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (X4)",
-                    "@diskette": "X4.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (X5)",
-                    "@diskette": "X5.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (X6)",
-                    "@diskette": "X6.json",
-                    "@type": "PC360K"
-                  },
-                  {
-                    "@title": "SCO Xenix 8086 (GAMES)",
-                    "@diskette": "GAMES.json",
-                    "@type": "PC360K"
-                  }
-                ]
-              }
+          }
+        },
+        "xenix/386": {
+          "@title": "Xenix 386",
+          "@versions": {
+            "2.2.3b": {
+              "@title": "Xenix 386 2.2.3b",
+              "@media": [
+                {
+                  "@title": "SCO Xenix 386 2.2.3b (N1-BOOT)",
+                  "@diskette": "N1-BOOT.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.2.3b (N2)",
+                  "@diskette": "N2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.2.3b (N3)",
+                  "@diskette": "N3.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.2.3b (B1)",
+                  "@diskette": "B1.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.2.3b (X1)",
+                  "@diskette": "X1.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.2.3b (X2)",
+                  "@diskette": "X2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.2.3b (X3)",
+                  "@diskette": "X3.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.2.3b (GAMES)",
+                  "@diskette": "GAMES.json",
+                  "@type": "PC1200K"
+                }
+              ]
+            },
+            "2.3.2f": {
+              "@title": "Xenix 386 2.3.2f",
+              "@media": [
+                {
+                  "@title": "SCO Xenix 386 2.3.2f (N1-BOOT)",
+                  "@diskette": "N1-BOOT.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.2f (N2)",
+                  "@diskette": "N2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.2f (N3)",
+                  "@diskette": "N3.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.2f (B1)",
+                  "@diskette": "B1.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.2f (B2)",
+                  "@diskette": "B2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.2f (X1)",
+                  "@diskette": "X1.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.2f (X2)",
+                  "@diskette": "X2.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.2f (X3)",
+                  "@diskette": "X3.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.2f (X4)",
+                  "@diskette": "X4.json",
+                  "@type": "PC1200K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.2f (GAMES)",
+                  "@diskette": "GAMES.json",
+                  "@type": "PC1200K"
+                }
+              ]
+            },
+            "2.3.4h": {
+              "@title": "Xenix 386 2.3.4h",
+              "@media": [
+                {
+                  "@title": "SCO Xenix 386 2.3.4h (N1-BOOT)",
+                  "@diskette": "N1-BOOT.json",
+                  "@type": "PC1440K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.4h (N2)",
+                  "@diskette": "N2.json",
+                  "@type": "PC1440K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.4h (B1)",
+                  "@diskette": "B1.json",
+                  "@type": "PC1440K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.4h (X1)",
+                  "@diskette": "X1.json",
+                  "@type": "PC1440K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.4h (X2)",
+                  "@diskette": "X2.json",
+                  "@type": "PC1440K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.4h (X3)",
+                  "@diskette": "X3.json",
+                  "@type": "PC1440K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.4h (X4)",
+                  "@diskette": "X4.json",
+                  "@type": "PC1440K"
+                },
+                {
+                  "@title": "SCO Xenix 386 2.3.4h (GAMES)",
+                  "@diskette": "GAMES.json",
+                  "@type": "PC1440K"
+                }
+              ]
             }
           }
         }
@@ -7344,175 +7491,155 @@
             }
           ]
         },
-        "win95": {
+        "win95/4.00.499": {
           "@title": "Windows 95 (Build 499)",
-          "@versions": {
-            "4.00.499": {
-              "@title": "Windows 95 (Build 499)",
-              "@media": [
-                {
-                  "@title": "Windows 95 (Build 499 Disk 01)",
-                  "@diskette": "WIN95-DISK01.json",
-                  "@type": "PC1440K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 02)",
-                  "@diskette": "WIN95-DISK02.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 03)",
-                  "@diskette": "WIN95-DISK03.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 04)",
-                  "@diskette": "WIN95-DISK04.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 05)",
-                  "@diskette": "WIN95-DISK05.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 06)",
-                  "@diskette": "WIN95-DISK06.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 07)",
-                  "@diskette": "WIN95-DISK07.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 08)",
-                  "@diskette": "WIN95-DISK08.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 09)",
-                  "@diskette": "WIN95-DISK09.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 10)",
-                  "@diskette": "WIN95-DISK10.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 11)",
-                  "@diskette": "WIN95-DISK11.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 12)",
-                  "@diskette": "WIN95-DISK12.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Build 499 Disk 13)",
-                  "@diskette": "WIN95-DISK13.json",
-                  "@type": "PC1680K"
-                }
-              ]
+          "@media": [
+            {
+              "@title": "Windows 95 (Build 499 Disk 01)",
+              "@diskette": "WIN95-DISK01.json",
+              "@type": "PC1440K"
             },
-            "4.00.950": {
-              "@title": "Windows 95 (RTM) 4.00.950",
-              "@media": [
-                {
-                  "@title": "Windows 95 (RTM Boot)",
-                  "@diskette": "WIN95-BOOT.json",
-                  "@type": "PC1440K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 01)",
-                  "@diskette": "WIN95-DISK01.json",
-                  "@type": "PC1440K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 02)",
-                  "@diskette": "WIN95-DISK02.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 03)",
-                  "@diskette": "WIN95-DISK03.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 04)",
-                  "@diskette": "WIN95-DISK04.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 05)",
-                  "@diskette": "WIN95-DISK05.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 06)",
-                  "@diskette": "WIN95-DISK06.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 07)",
-                  "@diskette": "WIN95-DISK07.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 08)",
-                  "@diskette": "WIN95-DISK08.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 09)",
-                  "@diskette": "WIN95-DISK09.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 10)",
-                  "@diskette": "WIN95-DISK10.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 11)",
-                  "@diskette": "WIN95-DISK11.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 12)",
-                  "@diskette": "WIN95-DISK12.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (RTM Disk 13)",
-                  "@diskette": "WIN95-DISK13.json",
-                  "@type": "PC1680K"
-                },
-                {
-                  "@title": "Windows 95 (Startup Disk)",
-                  "@diskette": "WIN95-STARTUP.json",
-                  "@type": "PC1440K"
-                }
-              ]
+            {
+              "@title": "Windows 95 (Build 499 Disk 02)",
+              "@diskette": "WIN95-DISK02.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 03)",
+              "@diskette": "WIN95-DISK03.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 04)",
+              "@diskette": "WIN95-DISK04.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 05)",
+              "@diskette": "WIN95-DISK05.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 06)",
+              "@diskette": "WIN95-DISK06.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 07)",
+              "@diskette": "WIN95-DISK07.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 08)",
+              "@diskette": "WIN95-DISK08.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 09)",
+              "@diskette": "WIN95-DISK09.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 10)",
+              "@diskette": "WIN95-DISK10.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 11)",
+              "@diskette": "WIN95-DISK11.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 12)",
+              "@diskette": "WIN95-DISK12.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Build 499 Disk 13)",
+              "@diskette": "WIN95-DISK13.json",
+              "@type": "PC1680K"
             }
-          }
+          ]
         },
-        "wincomm": {
-          "@title": "Windows COMM Driver (Source)",
-          "@versions": {
-            "1.00": {
-              "@title": "Windows COMM Driver (Source)",
-              "@media": [
-                {
-                  "@title": "WINCOMM",
-                  "@diskette": "WINCOMM.json",
-                  "@type": "PC360K"
-                }
-              ]
+        "win95/4.00.950": {
+          "@title": "Windows 95 (RTM) 4.00.950",
+          "@media": [
+            {
+              "@title": "Windows 95 (RTM Boot)",
+              "@diskette": "WIN95-BOOT.json",
+              "@type": "PC1440K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 01)",
+              "@diskette": "WIN95-DISK01.json",
+              "@type": "PC1440K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 02)",
+              "@diskette": "WIN95-DISK02.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 03)",
+              "@diskette": "WIN95-DISK03.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 04)",
+              "@diskette": "WIN95-DISK04.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 05)",
+              "@diskette": "WIN95-DISK05.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 06)",
+              "@diskette": "WIN95-DISK06.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 07)",
+              "@diskette": "WIN95-DISK07.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 08)",
+              "@diskette": "WIN95-DISK08.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 09)",
+              "@diskette": "WIN95-DISK09.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 10)",
+              "@diskette": "WIN95-DISK10.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 11)",
+              "@diskette": "WIN95-DISK11.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 12)",
+              "@diskette": "WIN95-DISK12.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (RTM Disk 13)",
+              "@diskette": "WIN95-DISK13.json",
+              "@type": "PC1680K"
+            },
+            {
+              "@title": "Windows 95 (Startup Disk)",
+              "@diskette": "WIN95-STARTUP.json",
+              "@type": "PC1440K"
             }
-          }
+          ]
         }
       }
     }
@@ -7648,10 +7775,10 @@
     "ibm": {
       "@title": "IBM",
       "debug": {
-        "@title": "IBM Professional Debug Facility",
+        "@title": "IBM Professional Debug",
         "@versions": {
           "1.00": {
-            "@title": "IBM Professional Debug Facility 1.00",
+            "@title": "IBM Professional Debug 1.00",
             "@media": [
               {
                 "@title": "IBM Professional Debug Facility 1.00",
@@ -7774,7 +7901,7 @@
           ]
         },
         "4.00/advanced": {
-          "@title": "Norton Utilities Advanced Edition 4.00",
+          "@title": "Norton Utilities Advanced 4.00",
           "@media": [
             {
               "@title": "Norton Utilities 4.00 (Advanced Disk 1)",
@@ -7791,7 +7918,7 @@
           ]
         },
         "4.50/advanced": {
-          "@title": "Norton Utilities Advanced Edition 4.50",
+          "@title": "Norton Utilities Advanced 4.50",
           "@media": [
             {
               "@title": "Norton Utilities 4.50 (Advanced Disk 1)",

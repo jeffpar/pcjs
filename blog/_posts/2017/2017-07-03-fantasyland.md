@@ -55,10 +55,9 @@ If you come across a copy of **FantasyLand**, *please* let me know.
 
 So, given that **FantasyLand** seemed unattainable, I next turned my attention to Cockerham's own **EGATEST**.
 
-The [October 1986](/documents/magazines/pctj/PCTJ-1986-10/) issue contains the **EGATEST** program listing,
-starting on [Page 64](/documents/magazines/pctj/#pctj-1986-10), but who wants to type in all that code?
-And while the issue -- like all our archived publications -- has been OCR'ed, there's always a significant
-number of errors in the Optical Character Recognition process.
+The [October 1986](/documents/magazines/pctj/#PCTJ-1986-10) issue contains the **EGATEST** program listing,
+starting on Page 64, but who wants to type in all that code?  And while the issue -- like all our archived publications -- has
+been OCR'ed, there's always a significant number of errors in the Optical Character Recognition process.
 
 Another option would have been to download the code from PC Tech Journal's own "PCTECHline" -- if we were doing this
 30 years ago.  Even back then, PCTECHline apparently wasn't the the most reliable service.  In fact, the very same

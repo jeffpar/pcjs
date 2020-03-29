@@ -28,8 +28,8 @@ Part of the problem is that these pre-1.0 builds still contain a few bugs.  Also
 [OS/2 FOOTBALL Boot Disk](/software/pcx86/sys/os2/misc/87058/) from February 1987 was developed and
 tested exclusively on Compaq DeskPro 386 machines from late 1986, so it has some uncommon 80386 dependencies:
 
-* The [80386 LOADALL](/pubs/pc/reference/intel/80386/loadall/) instruction
-* 32-bit segment register writes must modify only 16 bits of memory
+  - The [80386 LOADALL](/documents/manuals/intel/80386/loadall/) instruction
+  - 32-bit segment register writes must modify only 16 bits of memory
 
 **FOOTBALL** also had some specific video hardware requirements: CGA or EGA.  Note that the VGA, which is what most
 emulators use by default these days, did not exist in 1986.  The VGA was introduced in April 1987, when IBM

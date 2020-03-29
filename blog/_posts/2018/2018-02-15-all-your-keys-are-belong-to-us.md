@@ -120,8 +120,7 @@ For users who only have a mouse or trackpad, you can still type any of those mul
 any of the `Ctrl`, `Alt`, or `Shift` modifier keys; they will remain "locked" in the down position while you click other keys.
 To "unlock" them, simply click them once more.
 
-Check out the new and improved soft keyboard support in the machine below, or in any of the other
-[PCx86 Machines](/devices/pcx86/machine/).
+Check out the new and improved soft keyboard support in the machine below, or in any of the other PCx86 Machines.
 
 {% include machine.html id="ibm5150" %}
 

@@ -21,7 +21,7 @@ could only be used in PC, XT, and AT-compatible systems.  I'll refer to it here 
 The VGA ROM used here is assumed to have come from an original IBM VGA.  It's unknown if IBM ever made any
 revisions to the VGA ROM.  With the introduction of the PS/2 family and the VGA, IBM decided to no longer publish
 the source code for its ROMs, so I've created some assemblable source code from the IBM VGA ROM
-[here](/devices/pcx86/video/ibm/vga/).
+[here](/machines/pcx86/ibm/video/vga/).
 
 I've finally started debugging a machine configuration that uses the IBM VGA ROM.  Since the VGA and the 80386 are
 contemporaries, I'm using an [80386 machine configuration](/configs/pcx86/xml/machine/compaq/deskpro386/vga/2048kb/debugger/machine.xml).

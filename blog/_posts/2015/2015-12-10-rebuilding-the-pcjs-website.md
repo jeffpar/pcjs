@@ -35,7 +35,7 @@ contained some special logic that made it easy to embed PCjs machines on a page.
 Thanks to GitHub Pages, all of that now happens ahead of time: whenever I update the PCjs "gh-pages" branch on GitHub,
 Jekyll automatically runs through the entire site and rebuilds a complete set of web pages.
 
-The Node web server would automatically embed PCjs machines on web pages by looking for special Markdown links, such as;
+The Node web server would automatically embed PCjs machines on web pages by looking for special Markdown links, such as:
 
 	[Embedded IBM PC](machine.xml "PCjs:ibm5150")
 
@@ -74,16 +74,13 @@ You may also use `config` to specify a machine XML configuration file if not usi
 a JSON-encoded machine state file if the machine requires a predefined state; and `uncompiled` may be set to *true*
 to force a machine to use uncompiled sources, overriding the value of `site.pcjs.compiled` in **_config.yml**.
 
-For example, the PCjs home page contains two machines, so this appears at the top of the
-[Markdown file](https://raw.githubusercontent.com/jeffpar/pcjs/master/index.md):
+For example, this [IBM PC](/machines/pcx86/ibm/5150/mda/) contains the following at the top of the
+[page]({{ site.github.pages }}/machines/pcx86/ibm/5150/mda/):
 
-	machines:
-	  - type: pcx86
-	    id: ibm5150
-	    config: /configs/pcx86/xml/machine/5150/mda/64kb/machine.xml
-	  - type: c1p
-	    id: demoC1P
-	    config: /devices/c1p/machine/8kb/large/machine.xml
+    machines:
+      - id: ibm-5150-mda
+        type: pcx86
+        config: /configs/pcx86/ibm/5150/machine-mda.json
 
 If necessary, you can also override some of the settings in a machine XML file.  Here's an example of overriding the
 FDC `autoMount` setting, making it easy to reuse the same machine XML file with different boot disks:
@@ -95,7 +92,7 @@ FDC `autoMount` setting, making it easy to reuse the same machine XML file with 
 	    autoMount:
 	      A:
 	        name: OS/2 FOOTBALL (v7.68.17)
-	    config: /devices/pcx86/machine/compaq/deskpro386/ega/4096kb/debugger/machine.xml
+	    config: /configs/pcx86/xml/machine/compaq/deskpro386/ega/4096kb/debugger/machine.xml
 
 Other settings that can currently be overridden include:
 
@@ -105,7 +102,7 @@ Other settings that can currently be overridden include:
 + `state`
 
 Additional overrides will be added as needed.  See the [Windows 95 Demo](/software/pcx86/sys/windows/win95/4.00.950/)
-machine and its associated [Markdown file](https://raw.githubusercontent.com/jeffpar/pcjs/master/disks/pcx86/windows/win95/4.00.950/README.md)
+machine and its associated [Markdown file]({{ site.github.pages }}/software/pcx86/sys/windows/win95/4.00.950/index.md)
 for more override examples, including how to set `autoMount` to *not* mount any diskettes. 
  
 I will continue to include a Node web server with the PCjs Project, but it's now intended for development

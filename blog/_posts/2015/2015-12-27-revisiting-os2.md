@@ -25,9 +25,9 @@ below, by booting from the "IBM OS/2 1.0 (1.44M Install)" diskette in drive A an
 drive C.
 
 Next, I installed the [MS OS/2 SDK 1.02](/software/pcx86/sdk/os2/microsoft/1.02/).  This SDK was released
-in December 1987 along with [Microsoft OS/2 1.0](/software/pcx86/sys/os2/microsoft/1.0/).  I don't have any of the
+in December 1987 along with [Microsoft OS/2 1.0](/software/pcx86/sys/os2/microsoft/1.0/).  I don't have all of the
 printed documentation that came with the SDK, such as the *Installation Guide*, but I do have the
-[Microsoft® Operating System/2 Programmer’s Toolkit](/pubs/pc/software/os2/microsoft/ptk10/) documentation
+[Microsoft® Operating System/2 Programmer’s Toolkit](/software/pcx86/sdk/os2/microsoft/1.02/#documents) documentation
 from March 1988, thanks to the [OS/2 Museum](http://www.os2museum.com/wp/os2-history/os2-library/os2-1-x-programming/).
 
 Aside from **Microsoft Macro Assembler 5.00A** (MASM) and **Microsoft C Compiler 5.10 (Beta)** (CL), the SDK
@@ -43,7 +43,7 @@ about [SDKED](/software/pcx86/sdk/os2/microsoft/1.02/#using-sdked) on the
 [MS OS/2 SDK 1.02](/software/pcx86/sdk/os2/microsoft/1.02/) page.
 
 Our [IBM OS/2 1.0](/software/pcx86/sys/os2/ibm/1.0/) demo machine (shown below) has the
-[MS OS/2 SDK 1.02](/software/pcx86/sdk/os2/microsoft/1.02/) pre-installed, so check out our copy of the
-[Microsoft® Operating System/2 Programmer’s Toolkit](/pubs/pc/software/os2/microsoft/ptk10/) and then write some code!
+[MS OS/2 SDK 1.02](/software/pcx86/sdk/os2/microsoft/1.02/) pre-installed, so check out the
+[Documentation](/software/pcx86/sdk/os2/microsoft/1.02/#documents) and then write some code!
 
 {% include machine.html id="ibm5170" %}

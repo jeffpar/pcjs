@@ -53,3 +53,9 @@ software:
     server: https://gamedisks.pcjs.org
   harddisks:
     server: https://harddisks.pcjs.org
+
+archive:
+  ms:
+    server: https://msarchive.pcjs.org
+  kb:
+    server: https://jeffpar.github.io/kbarchive/

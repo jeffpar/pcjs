@@ -39,8 +39,8 @@ Sure enough, attempting to use the [first 32Kb](/machines/pcx86/compaq/deskpro38
 "ROM Error", no doubt due to a checksum mismatch.  However, the [second 32Kb](/machines/pcx86/compaq/deskpro386/rom/1986-09-04/1986-09-04-HI.json) appeared
 to work fine.  I can't guarantee that its contents are identical to the original `Rev F` ROM, because the ROM may
 have been self-modifying, but it works, and it's all we've got.  All our EGA-based COMPAQ machine configurations
-(eg, [COMPAQ DeskPro 386 (2Mb) with IBM EGA](/devices/pcx86/machine/compaq/deskpro386/ega/2048kb/)) have been
-updated to use that ROM.
+(eg, [COMPAQ DeskPro 386 (2Mb) with IBM EGA](/configs/pcx86/xml/machine/compaq/deskpro386/ega/2048kb/machine.xml))
+have been updated to use that ROM.
 
 My collection of COMPAQ DeskPro 386 ROMs still has several holes, but I'm very happy to have finally found one of the
 earliest (if not *the* earliest) ROMs commercially available for the DeskPro 386 series of COMPAQ computers.
@@ -64,11 +64,11 @@ PCx86 (1.50.3) does at least try to minimize the likelihood of the Alt key getti
 Alt-key combination that your browser or operating system consumes should be ignored by the machine, and conversely,
 any combination that the browser or operating system ignores should still be passed through to the machine.
 
-At the same time, I made some changes to the PCjs [Keyboard](/modules/pcx86/lib/keyboard.js) and [Chipset](/modules/pcx86/lib/chipset.js)
+At the same time, I made some changes to the PCjs [Keyboard](/machines/pcx86/lib/keyboard.js) and [Chipset](/machines/pcx86/lib/chipset.js)
 components to fix some long-standing problems with dropped keys and keyboard lock-ups when running [Windows 95](/software/pcx86/sys/windows/win95/4.00.950/).
 
 As of this writing, Windows 95 seems to run pretty well.  However, the machine used to run Windows 95, a
-[COMPAQ DeskPro 386](/devices/pcx86/machine/compaq/deskpro386/), does still have a few issues.  For example, if you
+[COMPAQ DeskPro 386](/machines/pcx86/compaq/deskpro386/), does still have a few issues.  For example, if you
 reboot the machine, it's likely that the COMPAQ ROM will be corrupt.  I'm guessing this is a side-effect of how COMPAQ
 copies its ROM to write-protected RAM, but I've not looked into the problem yet.
 

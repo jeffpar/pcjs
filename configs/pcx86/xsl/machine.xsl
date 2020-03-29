@@ -34,6 +34,7 @@
 				<div class="common">
 					<xsl:call-template name="commonTop"/>
 					<div class="common-middle">
+						<xsl:call-template name="displayIntro"/>
 						<div id="{@id}" class="machine {$machineType} {$machineClass}">
 							<xsl:call-template name="component">
 								<xsl:with-param name="machine" select="@id"/>
@@ -42,6 +43,7 @@
 								<xsl:with-param name="parms"><xsl:if test="@parms">,<xsl:value-of select="@parms"/></xsl:if></xsl:with-param>
 							</xsl:call-template>
 						</div>
+						<xsl:call-template name="displayOutro"/>
 					</div>
 					<xsl:call-template name="displayMachine"/>
 					<xsl:call-template name="commonBottom"/>
@@ -49,7 +51,7 @@
 				<xsl:call-template name="componentScripts">
 					<xsl:with-param name="component">
 						<xsl:choose>
-							<xsl:when test="debugger"><xsl:value-of select="$machineType"/></xsl:when>
+							<xsl:when test="@uncompiled = 'true'"><xsl:value-of select="$machineType"/>-uncompiled</xsl:when>
 							<xsl:otherwise><xsl:value-of select="$machineType"/></xsl:otherwise>
 						</xsl:choose>
 					</xsl:with-param>

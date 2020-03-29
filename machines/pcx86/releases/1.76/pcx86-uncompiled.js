@@ -83385,9 +83385,9 @@ function savePC(idMachine, sPCJSFile, callback)
         let sParms = cmp.saveMachineParms();
         if (!sPCJSFile) {
             if (DEBUG) {
-                sPCJSFile = "/versions/pcx86/" + (XMLVERSION || APPVERSION) + "/pcx86-uncompiled.js"
+                sPCJSFile = "/machines/pcx86/releases/" + (XMLVERSION || APPVERSION) + "/pcx86-uncompiled.js"
             } else {
-                sPCJSFile = "/versions/pcx86/" + (XMLVERSION || APPVERSION) + "/pcx86" + (dbg? "-dbg" : "") + ".js";
+                sPCJSFile = "/machines/pcx86/releases/" + (XMLVERSION || APPVERSION) + "/pcx86" + (dbg? "-dbg" : "") + ".js";
             }
         }
         if (callback && callback({ state: sState, parms: sParms })) return true;
@@ -83463,7 +83463,7 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
      *
      * NOTE: There may also be a source map comment appended to the script, which we now ignore; eg:
      *
-     *      //# sourceMappingURL=/versions/pcx86/1.36.1/pcx86.map
+     *      //# sourceMappingURL=/machines/pcx86/releases/1.76/pcx86.js.map
      *
      * Immediately inside that wrapping, we want to embed all the specified machine's resources, using:
      *
@@ -83569,7 +83569,7 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
         Component.alertUser(sAlert);
         return;
     }
-    Component.alertUser("Missing XML/XSL resources");
+    Component.alertUser("This feature is not currently available for machines created directly from XML files.");
 }
 
 /**

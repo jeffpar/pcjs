@@ -16,14 +16,14 @@ machines:
     autoType: CTTY COM2\r
 ---
 
-I recently added a new PCjs [TestMonitor](/modules/pcx86/lib/testmon.js) component that is able to deliver user-defined
+I recently added a new PCjs [TestMonitor](/machines/pcx86/lib/testmon.js) component that is able to deliver user-defined
 commands to a PCjs machine via a serial port.  TestMonitor is built into PCx86, and there is also a
 [TestMonitor Utility](/software/pcx86/test/testmon/testmon.js) that can issue commands to a *physical* machine, making it easy to
 compare operations between simulated and actual hardware.
 
 More information on [Controlling Physical PCs](#controlling-physical-pcs) is available below.
 
-You can test it with the PCjs machine below, which has been configured with a [TestMonitor](/modules/pcx86/lib/testctl.js)
+You can test it with the PCjs machine below, which has been configured with a [TestMonitor](/machines/pcx86/lib/testctl.js)
 window, as well as a hard disk with [MS-DOS 3.20](/software/pcx86/sys/dos/microsoft/3.20/) and [SYMDEB 4.00](/blog/2018/02/25/)
 pre-installed.  After the "CTTY COM2" DOS command is entered, all further DOS input/output is redirected to COM2, which is
 connected to the TestMonitor window.
@@ -86,16 +86,15 @@ adding command verification checks, to determine whether a command was performed
 result(s), and Phase Three will involve creating a series of low-level tests, exercising CPU features on both real
 and simulated hardware in parallel and verifying that both sets of results match.
 
-Controlling Physical PCs
-------------------------
+### Controlling Physical PCs
 
 Here's the general procedure for controlling a *real* PC using a serial port connection:
 
-- Turn on your PC
-- Boot DOS 2.00 or later
-- Load the PCjs [INT14 TSR](/software/pcx86/test/testmon/int14/INT14.ASM): "INT14"
-- Run the DOS CTTY command: "CTTY COM2"
-- On your connected machine, run the PCjs [TestMonitor Utility](/software/pcx86/test/testmon/testmon.js): "node testmon"
+  - Turn on your PC
+  - Boot DOS 2.00 or later
+  - Load the PCjs [INT14 TSR](/software/pcx86/test/testmon/int14/INT14.ASM): "INT14"
+  - Run the DOS CTTY command: "CTTY COM2"
+  - On your connected machine, run the PCjs [TestMonitor Utility](/software/pcx86/test/testmon/testmon.js): "node testmon"
 
 You should now be able to control the PC using the TestMonitor utility, in your choice of either "terminal mode" or
 "command mode".

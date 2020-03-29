@@ -10,8 +10,7 @@ PCx86 (v1.20.9) now offers new, *much* easier ways to save disks and machines, t
 With one click, PCx86 can now generate a single download containing everything you need to embed any of our
 IBM PC demos on your own web page.
 
-Saving Disks
----
+### Saving Disks
 
 Floppy disk images can now be saved to your desktop computer by simply clicking the **Save** button next
 to the floppy disk controls.  Select the drive first, and then whatever diskette is shown as being "loaded"
@@ -44,8 +43,7 @@ in your Downloads folder, so the OS X Terminal command `chmod -w PCDOS200-DISK1.
 with default names like "Unknown" or "download".  PCx86 will still try to let you know what the original filename was,
 so that you can rename it appropriately.
 
-Saving Machines
----
+### Saving Machines
 
 Saving the entire state of any existing IBM PC machine is also much simpler now, using the new **Save Machine** link.
 You can choose to save a machine in its initial state, or make changes to any of the machine's disks and then save it.
@@ -90,8 +88,7 @@ Some notes:
  extension could cause your web browser to block the download.
  
  * For browsers that don't support named downloads, PCx86 will attempt to open a new window/tab instead.  Make sure
- you copy the *entire* contents of that window into a file named to **pcx86.js** (or **pcx86-dbg.js** if the machine is
- using the built-in PCx86 debugger).
+ you copy the *entire* contents of that window into a file named to **pcx86.js**.
  
  * Your browser may also impose size limitations on the download.  If nothing happens, the machine data may be too
  large for your browser; try a different browser (eg, Firefox or Safari) or a different machine.
@@ -115,9 +112,9 @@ Some notes:
 	<script type="text/javascript">embedPC("ibm5150","machine.xml","components.xsl","{state:null}");</script>
 	```
 
-While the [PCx86 Documentation](/docs/pcx86/) explains how to create a *new* machine, by writing your own machine
-XML file and manually copying all the other pieces, the new **Save Machine** feature is the best way to save
-any *existing* IBM PC and embed it on any other website.
+While you can create your own [PCx86]({{ site.github.pages }}/machines/pcx86/) machine by writing your own XML
+file and manually copying all the other pieces, the new **Save Machine** feature is the best way to save an *existing*
+IBM PC and embed it on another website.
 
 **WARNING**: While this feature is still "hot of the press," there will probably be some kinks to work out.  Every
 browser seems to have its own idiosyncrasies in terms of what can be downloaded and/or how large it can be.  It's

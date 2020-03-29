@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
-<machine id="deskpro386" type="pcx86" border="1" pos="center" background="default">
+<machine id="deskpro386" type="pcx86" uncompiled="true" border="1" pos="center" background="default">
 	<name pos="center">COMPAQ DeskPro 386, 2Mb RAM, COMPAQ VGA, 47Mb Hard Disk (Unformatted)</name>
+	<intro>This "Visualizer" configuration is running the "uncompiled" version of PCx86, so that
+	BackTrack information is available to the PCjs Debugger.  As a result, the machine runs much slower.
+	To reduce DEBUG or BACKTRACK overhead, you can add <em>debug=false</em> or <em>backtrack=false</em>
+	to an uncompiled machine's URL.</intro>
+	<intro>Since DEBUG support is automatically enabled in uncompiled code, you get automatic instruction history buffering
+	(up to 100,000 instructions), which can then be dumped with the PCjs Debugger's "dh" command.  Instruction history is
+	supported in the compiled version as well, but only up to 1,000 instructions and only if one or more breakpoints are set.</intro>
 	<computer id="deskpro386-vga-2048k" name="COMPAQ DeskPro 386" buswidth="32"/>
 	<cpu id="cpu386" model="80386"/>
 	<ram id="ramLow" addr="0x00000" test="true" size="0xa0000" comment="ROM BIOS memory test has NOT been disabled"/>

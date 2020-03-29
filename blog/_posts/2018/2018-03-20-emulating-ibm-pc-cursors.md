@@ -21,9 +21,9 @@ Since I'm finally in possession of a working
 IBM Monochrome Display, IBM Color Display, *and* IBM Enhanced Color Display,
 along with the requisite video cards -- specifically:
 
-- [IBM Monochrome Display Adapter (MDA)](/devices/pcx86/video/ibm/mda/)
-- [IBM Color Graphics Adapter (CGA)](/devices/pcx86/video/ibm/cga/)
-- [IBM Enhanced Graphics Adapter (EGA)](/devices/pcx86/video/ibm/ega/)
+- [IBM Monochrome Display Adapter (MDA)](/machines/pcx86/ibm/video/mda/)
+- [IBM Color Graphics Adapter (CGA)](/machines/pcx86/ibm/video/cga/)
+- [IBM Enhanced Graphics Adapter (EGA)](/machines/pcx86/ibm/video/ega/)
 
 I decided it was time to start digging into some of their idiosyncrasies.
 And there are a fair number of them.  These are little quirks that emulators often don't bother with.

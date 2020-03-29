@@ -39,7 +39,7 @@ archiving and emulating old software.
 
 Hosting the software on the PCjs website was more tedious than I'd expected, but that wasn't due to technical issues.
 The biggest challenge was isolating and recreating the original distribution software.  You can find all the gory
-details on the page I created for "[Adventures in Math](/apps/pcx86/1983/adventmath/)".
+details on the page I created for "[Adventures in Math](/software/pcx86/game/other/1983/adventmath/)".
 
 In short, although the software is archived inside multiple ZIP archives at the [Internet Archive](https://archive.org/),
 none of them appeared to contain an unmodified distribution copy of the original software.  And discovering that the

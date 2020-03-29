@@ -148,7 +148,7 @@ string or "iThing" if it's a number (or possibly "nThings" if it represents a to
 if it's a counter of Things).  If a string or numeric variable has a very short-term use, I'll probably just name
 it "s" or "i".
 
-As I mention [below](./#quotation-marks), I still tend to distinguish single characters from strings too,
+As I mention [below](#quotation-marks), I still tend to distinguish single characters from strings too,
 which means I may sometimes prefix character variables with "ch" and character counters with "cch".
 
 Of course, variable name prefixes like "s" and "n" are irrelevant if you've already given your variables meaningful

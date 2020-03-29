@@ -10,13 +10,15 @@ website.  Unfortunately, it's missing the **NETWORK** disk, so we've included an
 that allows the SDK installation script to finish.
 
 This SDK was released in December 1987 along with [Microsoft OS/2 1.0](/software/pcx86/sys/os2/microsoft/1.0/).
-We do not have any of the printed documentation that came with the SDK, such as the *Installation Guide*, but we do
+We don't have all of the printed documentation that came with the SDK, such as the *Installation Guide*, but we do
 have the [Microsoft® Operating System/2 Programmer’s Toolkit](/pubs/pc/software/os2/microsoft/ptk10/) documentation
 from March 1988, thanks to the [OS/2 Museum](http://www.os2museum.com/wp/os2-history/os2-library/os2-1-x-programming/).
 
+{% include gallery/documents.html %}
+
 Other documentation is available for selected OS/2 SDK tools:
 
-* [SDKED (SDK Editor)](#using-sdked)
+  - [SDKED (SDK Editor)](#using-sdked)
 
 ### Installation
 

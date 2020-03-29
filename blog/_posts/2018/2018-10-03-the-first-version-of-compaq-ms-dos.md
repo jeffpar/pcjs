@@ -15,7 +15,7 @@ A few weeks ago, I found a pristine set of all three manuals that COMPAQ shipped
 along with an original COMPAQ MS-DOS 1.10 diskette.  They are all "first editions".  The Operations Guide is dated
 November 1982 and the rest are dated December 1982. 
 
-[![COMPAQ MS-DOS 1.10 Manuals](/blog/images/compaq/COMPAQ-DOS110-Manuals.jpg)](/pubs/pc/software/dos/compaq/1.10/)
+[![COMPAQ MS-DOS 1.10 Manuals](/blog/images/compaq/COMPAQ-DOS110-Manuals.jpg)](/software/pcx86/sys/dos/compaq/1.10/#documents)
 
 These manuals are unlike any other COMPAQ manuals I've seen before.  As the June 1983 issue of
 [PC Magazine](https://books.google.com/books?id=14Kfbrc6cbAC&lpg=PA188&dq=pc%20magazine%20Compaq%20DOS%201.10&pg=PA186#v=onepage&q&f=false)
@@ -71,14 +71,14 @@ article goes on to describe:
     IBM in its PC-XT diagnostics program).
 
 However, more work is required before we can see that in action in a PCjs machine, because I have not yet tried
-the original [COMPAQ Portable ROM](/machines/pcx86/compaq/portable/rom/bios/) or added support for the COMPAQ VDU monochrome
+the original [COMPAQ Portable ROM](/machines/pcx86/compaq/portable/rom/) or added support for the COMPAQ VDU monochrome
 graphics adapter, which combined capabilities of both IBM's MDA and CGA adapters.  I hope to add PCjs support
 for COMPAQ's ROM and VDU in the near future.
 
 ### October 6, 2018 Update
 
 I recently added a [COMPAQ Portable](/machines/pcx86/compaq/portable/vdu/) machine configuration
-with built-in PCjs debugger.  It's using the oldest original COMPAQ ROM BIOS we have ([Rev B](/machines/pcx86/compaq/portable/rom/bios/))
+with built-in PCjs debugger.  It's using the oldest original COMPAQ ROM BIOS we have ([Rev B](/machines/pcx86/compaq/portable/rom/))
 along with COMPAQ MS-DOS 1.10.  And limited support for COMPAQ's video (VDU) board is now available, including monochrome graphics.
 Enjoy COMPAQ's "laser" demonstration below.
 

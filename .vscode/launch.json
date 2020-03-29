@@ -35,11 +35,11 @@
         "console": "internalConsole"
       },
       {
-        "name": "Node: pdftest.js",
+        "name": "Node: pdparse.js",
         "type": "node",
         "request": "launch",
-        "program": "${workspaceFolder}/tools/misc/pdftest.js",
-        "args": [".", "--debug"],
+        "program": "${workspaceFolder}/tools/misc/pdfparse.js",
+        "args": [".", "--page=11", "--debug"],
         "cwd": "${workspaceFolder}",
         "stopOnEntry": false,
         "console": "internalConsole"

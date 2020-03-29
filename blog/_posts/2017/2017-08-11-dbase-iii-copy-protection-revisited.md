@@ -21,7 +21,7 @@ I have no recollection of how feasible I thought this challenge was, but I'm sur
 Perhaps my thinking was that, after all, it's just software, so how hard could it be.  In any case, I apparently took
 the challenge very seriously, because I also made a lot of notes.
 
-I recently found [those notes](/docs/personal/#dbase-iii-copy-protection), along with copies of the
+I recently found [those notes](/documents/papers/pcjs/programming/#dbase-iii-copy-protection), along with copies of the
 [dBASE III disks](/software/pcx86/app/other/dbase3/1.0/) used.  Unfortunately, all the disks contained was my *patched*
 (unlocked) version of `DBASE.EXE`, and for the sake of a complete archive, I wanted the *unpatched* (locked) version as
 well.  Fortunately, my patching notes also show all the original bytes, so I reproduced the original file by reversing

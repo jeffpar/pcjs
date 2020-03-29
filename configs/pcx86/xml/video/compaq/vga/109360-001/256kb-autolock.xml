@@ -9,5 +9,5 @@
 			<control type="button" binding="fullScreen" padLeft="8px">Full Screen</control>
 		</control>
 	</menu>
-	<rom id="romVGA" addr="0xc0000" size="0x8000" file="/configs/pcx86/xml/video/compaq/vga/109360-001/1987-10-27.json" notify="videoVGA"/>
+	<rom id="romVGA" addr="0xc0000" size="0x8000" file="/machines/pcx86/compaq/video/vga/109360-001/COMPAQ-VGA-1987-10-27.json" notify="videoVGA"/>
 </video>

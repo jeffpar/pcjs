@@ -500,7 +500,7 @@
     }
   },
   "pcx80": {
-    "@title": "8080 Devices",
+    "@title": "PCx80 Machines",
     "@instances": {
       "exerciser": {
         "@title": "8080 Exerciser",
@@ -509,7 +509,7 @@
     }
   },
   "pcx86": {
-    "@title": "IBM Compatibles",
+    "@title": "PCx86 Machines",
     "ibm": {
       "@title": "IBM PC",
       "4860": {
@@ -804,6 +804,9 @@
       },
       "deskpro286": {
         "@title": "DeskPro 286",
+        "": {
+          "@title": "Machines"
+        },
         "@documents": [
           {
             "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, May 1987)"
@@ -847,6 +850,10 @@
       },
       "deskpro386": {
         "@title": "DeskPro 386",
+        "": {
+          "@title": "Machines",
+          "@redirect_from": "/devices/pcx86/machine/compaq/deskpro386/"
+        },
         "@documents": [
           {
             "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume I, Sep 1986)",
