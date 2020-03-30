@@ -10,8 +10,8 @@ machines:
     config: /configs/pcx80/machine/exerciser/machine.xml
 ---
 
-This is a test of [PCx80](/machines/pcx80/), a new 8080-based machine emulator recently added to the
-PCjs Project.
+This is a test of [PCx80]({{ site.github.pages }}/machines/pcx80/), a new 8080-based machine emulator recently
+added to the PCjs Project.
 
 The test machine below loads a copy of the
 [8080 Exerciser](https://web.archive.org/web/20151006085348/http://www.idb.me.uk/sunhillow/8080.html)

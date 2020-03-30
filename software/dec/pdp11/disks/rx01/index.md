@@ -11,4 +11,4 @@ for a total capacity of 250Kb (256,256 bytes).  They are used in RX01 disk drive
 
 Below is a summary of RX01 diskette images archived here.
 
-* [RT-11 v3.0](/software/dec/pdp11/rx01/rt11v3/) [[Source](http://www.headcrashers.org/comp/rx01/)]
+* [RT-11 v3.0](/software/dec/pdp11/disks/rx01/rt11v3/) [[Source](http://www.headcrashers.org/comp/rx01/)]

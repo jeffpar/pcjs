@@ -5,7 +5,7 @@ permalink: /software/pcx86/sys/windows/3.10/
 redirect_from:
   - /disks/pcx86/windows/3.10/
   - /disks/pc/windows/3.10/
-preview: screenshot.png
+preview: images/screenshot.png
 machines:
   - id: ibm5170
     type: pcx86

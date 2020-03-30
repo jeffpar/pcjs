@@ -19,7 +19,7 @@ machines:
         path: /software/dec/pdp11/tapes/absloader/DEC-11-L2PC-PO.json
 ---
 
-This machine is ready to boot [RT-11 v4.0](/software/dec/pdp11/disks/rk03/rtl11v4/) (`BOOT RK0`).
+This machine is ready to boot [RT-11 v4.0](/software/dec/pdp11/disks/rk03/rt11v4/) (`BOOT RK0`).
 
 Alternatively, you can also boot [XXDP+ Diagnostics](/software/dec/pdp11/disks/rl02k/xxdp/) (`BOOT RL0`) and run
 diagnostics (e.g., `R EKBEE1`):

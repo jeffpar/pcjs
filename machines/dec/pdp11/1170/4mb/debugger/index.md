@@ -1,7 +1,7 @@
 ---
 layout: page
 title: DEC PDP-11/70 with 4Mb, Front Panel, and Debugger
-permalink: /machines/dec/pdp11/1170/4mb/debugger
+permalink: /machines/dec/pdp11/1170/4mb/debugger/
 redirect_from: /devices/pdp11/machine/1170/4mb/debugger/
 machines:
   - id: test1170

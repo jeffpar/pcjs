@@ -208,10 +208,10 @@ Here's the OCR'ed object code [dump](ti57pat901.txt) from [4,125,901](../patents
 
 #### ROM From U.S. Pat. No. 4,164,037
  
-Here's the OCR'ed object code [dump](ti57pat037.txt) from [4,164,037](../patents/us4164037/), also for comparison purposes.
+Here's the OCR'ed object code [dump](ti57pat037.txt) from [4,164,037](https://patents.google.com/patent/US4164037A/en), also for comparison purposes.
 
 NOTE: The patent listing was actually missing data on one of the lines; comparing the listing to [4,125,901](../patents/us4125901)
-made it fairly clear that a value in the middle of the row (`0E07`) was omitted.  The listing in [4,146,928](.../patents/us4146928)
+made it fairly clear that a value in the middle of the row (`0E07`) was omitted.  The listing in [4,146,928](https://patents.google.com/patent/US4146928A/en)
 is even worse, with four lines that are missing data.
 
 #### ROM From U.S. Pat. No. 4,125,867

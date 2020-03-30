@@ -8,7 +8,7 @@ redirect_from: /disks/pcx86/tools/dresearch/pascal/3.11/
 Digital Research Pascal/MT+ 3.11
 --------------------------------
 
-[Documentation](/pubs/pc/software/tools/dresearch/pascal) is also available.
+[Documentation](#documents) is also available.
 
 ### Directory of DR Pascal/MT+ 3.11 (Disk 1)
 
@@ -87,3 +87,5 @@ Digital Research Pascal/MT+ 3.11
             9 File(s)      7680 bytes free
 
 ![DR Pascal/MT+ 3.11 (Disk 1)]({{ site.software.diskettes.server }}/pcx86/lang/dresearch/pascal/3.11/PASCALMT311-DISK1.jpg)
+
+{% include gallery/documents.html width="200" height="260" %}

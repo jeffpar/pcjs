@@ -5,7 +5,7 @@ permalink: /software/dec/pdp11/disks/rl02k/xxdp/ekbee1/
 redirect_from: /disks/dec/rl02k/xxdp/ekbee1/
 ---
 
-From the [PDP-11 Diagnostic Handbook (1988)](https://1drv.ms/b/s!ArcO_mFRe1Z9gp4d3zhflWyJp07i9g), p. 1-10:
+From the [PDP-11 Diagnostic Handbook (1988)](/documents/manuals/dec/#pdp11_diagnostichandbook_1988), p. 1-10:
 
 	11/70 MEMORY MANAGEMENT TEST
 	
@@ -40,7 +40,7 @@ From the [PDP-11 Diagnostic Handbook (1988)](https://1drv.ms/b/s!ArcO_mFRe1Z9gp4
 	    ...
 
 The closest we have to a source code listing of the EKBEE1 diagnostic comes from some
-[scanned microfiche](https://1drv.ms/b/s!ArcO_mFRe1Z9gp5Sc2Uv0TMEj2GOHQ)
+[scanned microfiche](/documents/manuals/dec/#ac-7975e-mc_cekbee0_1170_mem_mgmt_may80)
 on [bitsavers.org](http://bitsavers.org/pdf/dec/pdp11/microfiche/ftp.j-hoppe.de/bw/gh/) for:
 
 	PRODUCT CODE: AC-7975E-MC
@@ -66,4 +66,4 @@ the PDF (p. 199 of the source code listing):
 As noted in the *mapVirtualToPhysical()* function in [cpustate.js](/machines/dec/pdp11/lib/cpustate.js), this test
 begins at PC 076060, which is exactly 0100 bytes lower than the address shown in the source code listing (076160).
 
-This diagnostic should run in any [PDP-11/70](/machines/dec/pdp11/machine/1170/) ([Demo](/machines/dec/pdp11/1170/panel/debugger/xxdp/)).
+You can run the diagnostic in one of our [PDP-11/70](/machines/dec/pdp11/1170/panel/debugger/xxdp/) configurations.

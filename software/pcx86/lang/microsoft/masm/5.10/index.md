@@ -7,11 +7,9 @@ redirect_from:
   - /disks/pc/tools/microsoft/masm/5.10/
 ---
 
-Directory listings of the five distribution diskettes (plus an update disk issued by Microsoft in March 1990)
-are provided below.
+Directory listings of the five distribution diskettes (plus an update disk issued by Microsoft in March 1990) are provided below.
 
-We don't have any documents from this release, but we do have
-[Microsoft Macro Assembler 5.0 Documentation](/pubs/pc/software/tools/microsoft/masm/5.00/).
+We don't have any documents from this release, but you can browse [README.DOC](#contents-of-readmedoc) and the [Microsoft Macro Assembler 5.0 Documentation](/software/pcx86/lang/microsoft/masm/5.00/#documents).
 
 ### Directory of MS Macro Assembler 5.10 (Disk 1)
 
@@ -206,7 +204,9 @@ We don't have any documents from this release, but we do have
 	        6 file(s)     239336 bytes
 	                      120832 bytes free
 
-### Contents of README.DOC from the **MS Macro Assembler 5.10A (Update)** Diskette
+### Contents of README.DOC
+
+From the **MS Macro Assembler 5.10A (Update)** Diskette:
 
 	Dear Macro Assembler Customer,
 	

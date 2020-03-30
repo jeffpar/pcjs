@@ -9,8 +9,8 @@ redirect_from: /apps/pdp11/boot/monitor/
 written by Paul Nankervis.
 
 [BOOTMON.mac](BOOTMON.mac) was cross-assembled with [MACRO11](https://github.com/j-hoppe/MACRO11) to produce
-[BOOTMON.txt](BOOTMON.txt), which was then processed by [FileDump](/tools/filedump/) to produce [BOOTMON.json](BOOTMON.json),
-which is preloaded in a number of our PDP-11 test machines.  To see it in action, try the
+[BOOTMON.txt](BOOTMON.txt), which was then processed by [FileDump]({{ site.github.pages }}/tools/filedump/) to produce
+[BOOTMON.json](BOOTMON.json), which is preloaded in a number of our PDP-11 test machines.  To see it in action, try the
 [PDP-11/70 Boot Monitor with Debugger](/machines/dec/pdp11/1170/monitor/debugger/).
 
 The **BOOTMON.mac** source code is shown below.

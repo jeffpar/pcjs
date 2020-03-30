@@ -53,7 +53,7 @@ earliest (if not *the* earliest) ROMs commercially available for this line of CO
 	M.1  109592-004  109591-004
 	N.1  109592-005  109591-005  32Kb  1989-04-14	
 
-[1988-01-28.json](1988-01-28/1988-01-28.json) was created with the following [FileDump](/tools/filedump/) command:
+[1988-01-28.json](1988-01-28/1988-01-28.json) was created with the following [FileDump]({{ site.github.pages }}/tools/filedump/) command:
 
 	cd 1988-01-28
 	filedump --file=109592-001.hex --merge=109591-001.hex --output=1988-01-28.json
@@ -106,7 +106,7 @@ The `-o0x8000` argument is required to "org" the file at the proper starting add
 are optional; they simply establish a few sync points within the ROM image that save a little cleanup effort, by
 preventing disassembly in the middle of instructions.
 
-Next, the PCjs [TextOut](/tools/textout/) command, with the *--nasm* option, prepares the code for reassembly:
+Next, the PCjs [TextOut]({{ site.github.pages }}/tools/textout/) command, with the *--nasm* option, prepares the code for reassembly:
 
 	node /tools/textout/bin/textout --file=1988-01-28.asm --nasm > temp.asm
 	mv temp.asm 1988-01-28.asm

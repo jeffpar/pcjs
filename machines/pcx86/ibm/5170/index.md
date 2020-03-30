@@ -93,7 +93,7 @@ determines the type of drive; the value corresponds to the maximum supported dis
 + 1440
 
 However, for the 3.5-inch diskette capacities (720 and 1440) to work properly, the machine should also use a
-["Rev 3"](/devices/pcx86/rom/5170/#ibm-pc-at-rom-bios-rev-3) IBM PC AT ROM BIOS and boot with DOS 3.20 or later.
+["Rev 3"](/machines/pcx86/ibm/5170/rom/#ibm-pc-at-rom-bios-rev-3) IBM PC AT ROM BIOS and boot with DOS 3.20 or later.
 
 Like the **Display Switch**, there is no UI for this or any other CMOS setting, so once the machine has been created,
 it cannot be changed by the user.

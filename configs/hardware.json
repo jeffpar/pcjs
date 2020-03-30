@@ -499,17 +499,8 @@
       ]
     }
   },
-  "pcx80": {
-    "@title": "PCx80 Machines",
-    "@instances": {
-      "exerciser": {
-        "@title": "8080 Exerciser",
-        "@redirect_from": "/devices/pc8080/machine/exerciser/"
-      }
-    }
-  },
   "pcx86": {
-    "@title": "PCx86 Machines",
+    "@title": "IBM x86",
     "ibm": {
       "@title": "IBM PC",
       "4860": {
@@ -877,6 +868,15 @@
             "@source": "PCjs"
           }
         ]
+      }
+    }
+  },
+  "pcx80": {
+    "@title": "Intel 8080",
+    "@instances": {
+      "exerciser": {
+        "@title": "8080 Exerciser",
+        "@redirect_from": "/devices/pc8080/machine/exerciser/"
       }
     }
   },

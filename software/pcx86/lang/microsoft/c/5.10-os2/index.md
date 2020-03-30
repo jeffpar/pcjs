@@ -9,10 +9,8 @@ NOTE: These disks are referred to internally as version **5.10-OS/2**, because M
 C compiler in two different packages: this 14-disk set with files for both DOS and OS/2, and a smaller 11-disk
 set containing only files for DOS.  For the latter, see [Microsoft C Compiler 5.10 for DOS](../5.10/).
 
-Directory listings of the twelve 360Kb and two 1.2Mb distribution diskettes, and a copy of the
-[PACKING.LST](#packinglst), are provided below.
-
-We also have [Microsoft C Compiler 5.1 Documentation Updates](/pubs/pc/software/tools/microsoft/c/5.10/).
+Directory listings of the twelve 360Kb and two 1.2Mb distribution diskettes, a copy of the [PACKING.LST](#packinglst),
+and some [Documentation](#documents) are provided below.
 
 ### Directory of MS C 5.10-OS/2 (SETUP)
 
@@ -972,3 +970,5 @@ We also have [Microsoft C Compiler 5.1 Documentation Updates](/pubs/pc/software/
 	
 	EXAMPLE\SNAP.C          Protected-mode screen capture demonstration program
 	EXAMPLE\MAKESNAP.CMD    Batch file for building SNAP demonstration program
+
+{% include gallery/documents.html width="200" height="260" %}

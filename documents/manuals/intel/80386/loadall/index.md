@@ -1,7 +1,8 @@
 ---
 layout: page
 title: "Intel 80386 LOADALL Instruction"
-permalink: /pubs/pc/reference/intel/80386/loadall/
+permalink: /documents/manuals/intel/80386/loadall/
+redirect_from: /pubs/pc/reference/intel/80386/loadall/
 ---
 
 Intel 80386 LOADALL Instruction
@@ -14,7 +15,7 @@ Intel 80386 LOADALL Instruction
 ### 1. 386 LOADALL Instruction
 
 The 80386 implements a LOADALL instruction capable of loading all visible machine state from an area in memory.
-The function of this instruction is the same as the [80286 LOADALL](/pubs/pc/reference/intel/80286/loadall/)
+The function of this instruction is the same as the [80286 LOADALL](/documents/manuals/intel/80286/loadall/)
 instruction [RASH]. Due to the architecture, and implementation of the 386, the format of the memory area
 used by the two processors is different. Conversion between these formats is possible, requiring an algorithm
 to 'map' between the two formats, and compensate for the architectural differences.

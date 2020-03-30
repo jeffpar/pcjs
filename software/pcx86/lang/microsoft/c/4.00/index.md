@@ -5,9 +5,7 @@ permalink: /software/pcx86/lang/microsoft/c/4.00/
 redirect_from: /disks/pcx86/tools/microsoft/c/4.00/
 ---
 
-Directory listings of the eight 360Kb distribution diskettes are provided below.
-
-[Microsoft C Compiler 4.0 Documentation](/pubs/pc/software/tools/microsoft/c/4.00/) is also available.
+[Documentation](#documents) and directory listings of the eight 360Kb distribution diskettes are provided below.
 
 ### Directory of MS C 4.00 (Disk 1)
 
@@ -218,3 +216,5 @@ Directory listings of the eight 360Kb distribution diskettes are provided below.
 	CHELLO   DEF      311   7-18-86   4:00a
 	LHELLO   DEF      262   7-18-86   4:00a
 		   19 File(s)     11264 bytes free
+
+{% include gallery/documents.html width="200" height="260" %}

@@ -17,15 +17,62 @@ machines:
 ---
 
 PC DOS 1.10 was released in May 1982 on one single-sided (160Kb) diskette.
-A [Feature Summary](#feature-summary), along with the disk's [Directory Listing](#directory-of-pc-dos-110),
-is provided below.  Also see IBM's
-"[Read This First](#read-this-first)" from the [PC DOS 1.10 Manual](/pubs/pc/software/dos/ibm/1.10/)
-for important information about changes from [PC DOS 1.00](../1.00/).
 
-You can also dig into the [PC DOS 1.10 Boot Sector](debugger/#pc-dos-110-boot-sector) using the
-[PCjs Debugger](debugger/).
+[Directory Listing](#directory-of-pc-dos-110), [Documentation](#documents), and [Feature Summary](#feature-summary)
+are provided below.  Also see IBM's "[Read This First](#read-this-first)" from the [PC DOS 1.10 Manual](#documents) for
+important information about changes from [PC DOS 1.00](../1.00/).
+
+You can also dig into the [PC DOS 1.10 Boot Sector](debugger/#pc-dos-110-boot-sector) using the [PCjs Debugger](debugger/).
 
 {% include machine.html id="ibm5150-pcdos110" %}
+
+### Directory of PC DOS 1.10
+
+	IBMBIO    COM        1920  05-07-82
+	IBMDOS    COM        6400  05-07-82
+	COMMAND   COM        4959  05-07-82
+	FORMAT    COM        3816  05-07-82
+	CHKDSK    COM        1720  05-07-82
+	SYS       COM         605  05-07-82
+	DISKCOPY  COM        2008  05-07-82
+	DISKCOMP  COM        1640  05-07-82
+	COMP      COM        1649  05-07-82
+	EXE2BIN   EXE        1280  05-07-82
+	MODE      COM        2509  05-07-82
+	EDLIN     COM        2392  05-07-82
+	DEBUG     COM        5999  05-07-82
+	LINK      EXE       41856  05-07-82
+	BASIC     COM       11392  05-07-82
+	BASICA    COM       16768  05-07-82
+	ART       BAS        1920  05-07-82
+	SAMPLES   BAS        2432  05-07-82
+	MORTGAGE  BAS        6272  05-07-82
+	COLORBAR  BAS        1536  05-07-82
+	CALENDAR  BAS        3840  05-07-82
+	MUSIC     BAS        8704  05-07-82
+	DONKEY    BAS        3584  05-07-82
+	CIRCLE    BAS        1664  05-07-82
+	PIECHART  BAS        2304  05-07-82
+	SPACE     BAS        1920  05-07-82
+	BALL      BAS        2048  05-07-82
+	COMM      BAS        4352  05-07-82
+	        28 File(s)
+
+CHKDSK reports:
+
+	      160256 bytes total disk space
+	        8704 bytes in 2 hidden files
+	      144384 bytes in 26 user files 
+	        7168 bytes available on disk
+
+In case you're wondering why 1920 + 6400 does not equal the "8704 bytes in 2 hidden files" reported by CHKDSK,
+that's because all CHKDSK byte totals are cluster-granular.  On a 160Kb diskette, 1 cluster equals 1 sector or 512
+bytes.
+
+CHKDSK considers the size of IBMBIO.COM to be 2048 bytes (1920 rounded up to the nearest 512 multiple), and the
+size of IBMDOS.COM is 6656, so the total number of bytes consumed by those two files is 8704.
+
+{% include gallery/documents.html %}
 
 ### Feature Summary
 
@@ -218,51 +265,3 @@ to gain a more detailed understanding of the new and
 enhanced functions. If you are not a former user, then
 read the book anyway; it will help you get started more
 quickly.
-
-### Directory of PC DOS 1.10
-
-	IBMBIO    COM        1920  05-07-82
-	IBMDOS    COM        6400  05-07-82
-	COMMAND   COM        4959  05-07-82
-	FORMAT    COM        3816  05-07-82
-	CHKDSK    COM        1720  05-07-82
-	SYS       COM         605  05-07-82
-	DISKCOPY  COM        2008  05-07-82
-	DISKCOMP  COM        1640  05-07-82
-	COMP      COM        1649  05-07-82
-	EXE2BIN   EXE        1280  05-07-82
-	MODE      COM        2509  05-07-82
-	EDLIN     COM        2392  05-07-82
-	DEBUG     COM        5999  05-07-82
-	LINK      EXE       41856  05-07-82
-	BASIC     COM       11392  05-07-82
-	BASICA    COM       16768  05-07-82
-	ART       BAS        1920  05-07-82
-	SAMPLES   BAS        2432  05-07-82
-	MORTGAGE  BAS        6272  05-07-82
-	COLORBAR  BAS        1536  05-07-82
-	CALENDAR  BAS        3840  05-07-82
-	MUSIC     BAS        8704  05-07-82
-	DONKEY    BAS        3584  05-07-82
-	CIRCLE    BAS        1664  05-07-82
-	PIECHART  BAS        2304  05-07-82
-	SPACE     BAS        1920  05-07-82
-	BALL      BAS        2048  05-07-82
-	COMM      BAS        4352  05-07-82
-	        28 File(s)
-
-CHKDSK reports:
-
-	      160256 bytes total disk space
-	        8704 bytes in 2 hidden files
-	      144384 bytes in 26 user files 
-	        7168 bytes available on disk
-
-In case you're wondering why 1920 + 6400 does not equal the "8704 bytes in 2 hidden files" reported by CHKDSK,
-that's because all CHKDSK byte totals are cluster-granular.  On a 160Kb diskette, 1 cluster equals 1 sector or 512
-bytes.
-
-CHKDSK considers the size of IBMBIO.COM to be 2048 bytes (1920 rounded up to the nearest 512 multiple), and the
-size of IBMDOS.COM is 6656, so the total number of bytes consumed by those two files is 8704.
-
-See [PC DOS 1.10 Documentation](/pubs/pc/software/dos/ibm/1.10/) for more information.

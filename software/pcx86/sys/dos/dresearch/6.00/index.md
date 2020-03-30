@@ -616,9 +616,9 @@ machines:
 
 ---
 
-![DR DOS 6.00 Disk 1]({{ site.software.diskettes.server }}/pcx86/dos/dresearch/6.00/DRDOS-600-STARTUP.jpg)
+![DR DOS 6.00 Disk 1]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-STARTUP.jpg)
 
-![DR DOS 6.00 Disk 2]({{ site.software.diskettes.server }}/pcx86/dos/dresearch/6.00/DRDOS-600-VIEWMAX.jpg)
+![DR DOS 6.00 Disk 2]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-VIEWMAX.jpg)
 
 ![DR DOS 6.00 1991 Update Disk 1]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-UPDATE-1991-12-DISK1.jpg)
 

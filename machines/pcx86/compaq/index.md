@@ -46,7 +46,7 @@ The rest of this page provides brief highlights (and PCjs resources where availa
 
 ### COMPAQ Portable
 
-PCjs now has [ROM Dumps](/devices/pcx86/rom/compaq/portable/) (Rev B and Rev C).
+PCjs now has [ROM Dumps](/machines/pcx86/compaq/portable/rom/) (Rev B and Rev C).
 
 Reviewed in Byte Magazine, Jan 1983.  Reprinted [here](http://blog.modernmechanix.com/byte-reviews-the-compaq-first-pc-clone/).
 
@@ -122,15 +122,15 @@ Also see [Wikipedia](https://en.wikipedia.org/wiki/Compaq_Portable_II).
 
 Released in late 1986.
 
-PCjs has detailed information about the [DeskPro 386 ROMs](/devices/pcx86/rom/compaq/deskpro386/) and system boards,
-along with a number of [DeskPro 386 Machine Configurations](/devices/pcx86/machine/compaq/deskpro386/).
+PCjs has detailed information about the [DeskPro 386 ROMs](/machines/pcx86/compaq/deskpro386/rom/) and system boards,
+along with a number of [DeskPro 386 Machine Configurations](/machines/pcx86/compaq/deskpro386/).
 
-PCjs also has some hard-to-find [COMPAQ Reference Manuals](/pubs/pc/reference/compaq/), such as the
-[COMPAQ DeskPro 386/25 Technical Reference Guide (Volume I)](/pubs/pc/reference/compaq/deskpro386/).
+PCjs also has some hard-to-find COMPAQ Reference Manuals, such as the
+[COMPAQ DeskPro 386/25 Technical Reference Guide (Volume I)](/machines/pcx86/compaq/deskpro386/#documents).
 
 ### COMPAQ Portable III
 
-The PCjs Project now has a [ROM Dump](/devices/pcx86/rom/compaq/portable3/) (REV K, 1987-01-29).
+The PCjs Project now has a [ROM Dump](/machines/pcx86/compaq/portable3/rom/) (REV K, 1987-01-29).
 
 Reportedly intended to be an 80386-based machine, the Portable III was first released in 1987 as a 12Mhz
 80286-based system.

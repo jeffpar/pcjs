@@ -16,7 +16,7 @@ PDPjs Debugger.
 
 To make it easier to interact with the Front Panel [Toggle-In Demos](#toggle-ins) below, we've kept this machine's UI
 simple, so there are no other I/O devices attached.  Paul Nankervis' [PDP-11 Boot Monitor](/software/dec/pdp11/boot/monitor/)
-is preloaded at address 140000, and the [M9312 ROM](/devices/pdp11/rom/M9312/) is installed at address 165000.
+is preloaded at address 140000, and the [M9312 ROM](/machines/dec/pdp11/rom/M9312/) is installed at address 165000.
 
 For more full-featured PDP-11/70 machines that also include a Debugger, see:
 
@@ -27,12 +27,11 @@ For more full-featured PDP-11/70 machines that also include a Debugger, see:
 
 {% include machine.html id="test1170" %}
 
-Toggle-Ins
-----------
+### Toggle-Ins
 
 As DEC notes in the [PDP-11/70 Maintenance Service Guide](https://1drv.ms/b/s!ArcO_mFRe1Z9gp5EUrgOBIlXswxuQg?e=fmoskM),
 Chapter 4: "There are several useful toggle-ins that are probably not very well known."  Excerpts are provided below.  If you're
-not sure how to "toggle in" code using a Front Panel, check out [Front Panel Basics](/devices/pdp11/panel/1170/#front-panel-basics).
+not sure how to "toggle in" code using a Front Panel, check out [Front Panel Basics](/configs/pdp11/panel/1170/#front-panel-basics).
 
 However, since the above machine also includes the PDPjs Debugger, you'll find that it's much easier to use the
 Debugger commands described below to load and execute these "toggle-ins". 
