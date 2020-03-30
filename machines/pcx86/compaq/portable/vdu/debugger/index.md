@@ -116,8 +116,7 @@ a monochrome card was installed.  Or something like that.
 Next, I'll work on figuring out the keyboard error, and then I'll take a look at how the COMPAQ BIOS detects and
 initializes the video hardware.
 
-Keyboard Error
---------------
+### Keyboard Error
 
 Setting a write breakpoint on video memory (`bw b800:0`) eventually led me to following code:
 
@@ -344,10 +343,9 @@ component's *msTransmit* value up from 15ms to 25ms.
 
 So that's what I did, and happily, it seems to have cured the 301 keyboard error.
 
-Revisiting the COMPAQ VDU
--------------------------
+### Revisiting the COMPAQ VDU
 
-For a baseline, I first looked at all [IBM 5150 MDA](/devices/pcx86/machine/5150/mda/64kb/debugger/) I/O performed by
+For a baseline, I first looked at all [IBM 5150 MDA](/machines/pcx86/ibm/5150/mda/debugger/) I/O performed by
 the IBM ROM:
 
     videoMDA.outPort(0x03D8,MODE,0x00) at F000:E0C3

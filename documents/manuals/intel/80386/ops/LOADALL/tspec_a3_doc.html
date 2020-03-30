@@ -1,0 +1,1276 @@
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML//EN">
+<!-- saved from url=(0058)http://www.rcollins.org/articles/loadall/tspec_a3_doc.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+<meta name="Author" content="Robert R. Collins">
+<meta name="GENERATOR" content="Microsoft FrontPage 2.0">
+<title>The LOADALL Instruction</title>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+
+
+<table border="0" cellpadding="0" cellspacing="0" width="800"><tbody><tr><td>
+<h1 align="center"><font color="#0000FF">The <i>LOADALL</i>
+Instruction</font></h1>
+
+<h1 align="center"><font color="#0000FF">by</font></h1>
+
+<h1 align="center"><font color="#0000FF">Robert Collins</font></h1>
+
+<hr>
+
+<p>Of the few undocumented instructions in the 80286 and 80386
+microprocessors, the <i>LOADALL </i>instruction is the most
+widely known. Nevertheless, very few people understand how to use
+it. Using <i>LOADALL </i>is not as simp)e as merely knowing the <i>LOADALL
+</i>opcode and its format, because knowing how to use <i>LOADALL </i>requires
+a knowledge of many aspects of the CPUs' behavior that are not
+documented in their respective data sheets.</p>
+
+<p>The 286 <i>LOADALL </i>is widely known because a 15-page lntel
+confidential document describing its use was given to many
+developers. 286 <i>LOADALL </i>is so commonly used in production
+code that DOS 3.3 (and above) and OS/2 have provisions for using <i>LOADALL
+</i>built in them. Every 386 and 486 BIOS emulates 286 <i>LOADALL
+</i>and even Microsoft CODEVIEW recognizes the 286 <i>LOADALL </i>opcode
+and disassembles it.</p>
+
+<p>On the other hand, the 386 <i>LOADALL </i>is not widely known,
+and very few developers even know it exists. In this article, I
+will explain how to use both the 286 and 386 <i>LOADALL </i>instructions
+and present source code to demonstrate the various aspects of CPU
+behavior that become apparent, or can be proven, when using <i>LOADALL.</i></p>
+<!-- Begin Master Table --><div align="center"><center>
+
+<table border="0" cellpadding="8" cellspacing="0">
+    <tbody><tr>
+        <td valign="top" width="60%">Intel originally included <i>LOADALL
+        </i>in the CPU mask for testing purposes and In Circuit
+        Emulator (ICE) support. As its name implies, <i>LOADALL </i>loads
+        all of the CPU registers, including the
+        "hidden" software-invisible registers. At the
+        completion of a <i>LOADALL </i>instruction, the entire
+        CPU state is defined according to the <i>LOADALL </i>data
+        table. <i>LOADALL </i>loads all of the software-visible
+        registers such as <i>AX, </i>and all of the
+        software-invisible registers such as the <a href="http://www.rcollins.org/articles/loadall/tspec_a3_doc.html#SB1" name="SB1Ptr">segment descriptor caches</a>.<p>By
+        manipulating the descriptor cache base registers, you can
+        access the entire address space without switching to
+        protected mode. In other words, by using <i>LOADALL, </i>you
+        can access memory above 1Mb from real mode. Since the
+        alternative method for the 286 (switching to protected
+        mode, accessing the desired memory, then resetting the
+        CPU - the only way to get the 286 back to real mode) has
+        a significant performance penalty, <i>LOADALL </i>is most
+        significant to 286 programmers. <i>LOADALL </i>provides
+        them with a new capability that is not available by any
+        other means.</p>
+        <p><font color="#FF0000" size="5"><b><i>LOADALL </i></b><b>Details</b></font></p>
+        <p><i>LOADALL </i>is closely coupled with the CPU
+        hardware. Both the 286 and 386 have different internal
+        hardware and Intel implemented <i>LOADALL </i>using
+        different opcodes on the 286 and 386. 80286 <i>LOADALL </i>(opcode
+        0F05) produces an invalid opcode exception when executed
+        on the 386, and 80386 <i>LOADALL </i>(opcode 0F07)
+        produces an invalid opcode exception when executed on the
+        286.</p>
+        <p><i>LOADALL </i>loads all CPU registers (including <i>MSW,
+        GDTR, CSBASE, ESACCESS) </i>from a memory image. You can
+        execute <i>LOADALL </i>in real or protected mode, but
+        only at privilege level 0 (CPL=0). If you execute <i>LOADALL
+        </i>at any other privilege level, the CPU generates an
+        exception.</p>
+        <p>By directly loading the descriptor cache registers
+        with <i>LOADALL, </i>a program has explicit control over
+        the base address, segment limit, and access rights
+        associated with each memory segment. Normally, the CPU
+        loads these values each time it loads a segment register,
+        but <i>LOADALL </i>allows you to load these hidden
+        registers independently of their segment register
+        counterparts.</p>
+        <p>In real mode, <i>LOADALL </i>makes it possible to
+        access a memory segment that is not associated with any
+        segment register. Likewise in protected mode, you can
+        access memory that has no descriptor table entry.</p>
+        <p><i>LOADALL </i>performs no protection checks against
+        any of the loaded register values. When you execute it at
+        <i>CPL 0, LOADALL </i>can generate no exceptions. The
+        segment access rights and limit portions may be values
+        that would otherwise be illegal in the context of real
+        mode or protected mode, but <i>LOADALL </i>willingly
+        loads these values with no checks. Once loaded, however,
+        the CPU performs full access checks when accessing a
+        segment. For example, you can load a segment whose access
+        is marked "not present." Normally, this
+        condition would generate exception 11, "segment not
+        present", but <i>LOADALL </i>does not generate
+        exception 11. Instead, any attempt to access this segment
+        will generate exception 13.</p>
+        <p><i>LOADALL </i>does not check coherency between the
+        software-visible segment registers and the
+        software-invisible segment descriptor cache registers.
+        Any segment descriptor base register may point to any
+        area in the CPU address space, while the software-visible
+        segment register may contain any other arbitrary value.
+        The CPU makes all memory references according to the
+        descriptor cache registers, not the software-visible
+        segment registers. All subsequent segment register loads
+        will reload the descriptor cache register. Beware of
+        using values in CS that do not perfectly match a code
+        segment descriptor table entry, or a real mode code
+        segment - an interrupt return <i>(IRET) </i>may either
+        cause an exception or execution to resume at an
+        unexpected location. Likewise, pushing and subsequently
+        popping any segment register will force the descriptor
+        cache register to reload according to the CPU's
+        conventional protocol, thereby inhibiting any further
+        real mode extended memory references.</p>
+        <p><font color="#FF0000" size="5"><b>80286 </b><b><i>LOADALL</i></b></font></p>
+        <p>You encode the 80286 <i>LOADALL </i>as a two-byte
+        opcode, 0F05h. <i>LOADALL </i>reads its table from a
+        fixed memory location at 800h (80:0 in real-mode
+        addressing). <i>LOADALL </i>performs 51 bus cycles <i>(WORD
+        </i>cycles), and takes 195 clocks with no wait states. <a href="http://www.rcollins.org/articles/loadall/tspec_a3_doc.html#Tbl1">Table 1</a> shows the format you must
+        prepare at location 800h before executing the 286 <i>LOADALL
+        </i>instruction. All CPU register entries in the <i>LOADALL
+        </i>table conform to the standard Intel format, where the
+        least significant byte is at the lowest memory address. <a href="http://www.rcollins.org/articles/loadall/tspec_a3_doc.html#Tbl2a">Table 2</a> shows the 286 format of the
+        descriptor cache entries.</p>
+        <p><br>
+        </p>
+        <p><!-- Begin "Table 1" in column 1 of Master Table --> </p>
+        <div align="center"><center><table border="0" cellpadding="12" cellspacing="0">
+            <caption align="top"><a name="Tbl1"></a><strong>
+            Table 1 -- 80286 </strong><strong><i>LOADALL</i></strong><strong>
+            Table</strong></caption>
+            <tbody><tr>
+                <th valign="bottom">Physical Address</th>
+                <th valign="bottom">Description</th>
+                <th valign="bottom">Data Size</th>
+                <th valign="bottom">Data Value</th>
+            </tr>
+            <tr>
+                <td valign="top"><p align="center">[800] <br>
+                [802]<br>
+                [804]<br>
+                [806]<br>
+                [808]<br>
+                [80A]<br>
+                [80C]<br>
+                [80E]<br>
+                [810]<br>
+                [812]<br>
+                [814]<br>
+                [816]<br>
+                [818]<br>
+                [81A]<br>
+                [81C]<br>
+                [81E]<br>
+                [820]<br>
+                [822]<br>
+                [824]<br>
+                [826]<br>
+                [828]<br>
+                [82A]<br>
+                [82C]<br>
+                [82E]<br>
+                [830]<br>
+                [832]<br>
+                [834]<br>
+                [836]<br>
+                [83C]<br>
+                [842]<br>
+                [848]<br>
+                [84E]<br>
+                [854]<br>
+                [85A]<br>
+                [860]<br>
+                [866] </p>
+                </td>
+                <td valign="top">None<br>
+                None<br>
+                MSW<br>
+                None<br>
+                None<br>
+                None<br>
+                None<br>
+                None<br>
+                None<br>
+                None<br>
+                None<br>
+                TR_REG<br>
+                FLAGS<br>
+                IP<br>
+                LDT_REG<br>
+                DS_REG<br>
+                SS_REG<br>
+                CS_REG<br>
+                ES_REG<br>
+                DI<br>
+                SI<br>
+                BP<br>
+                SP<br>
+                BX<br>
+                DX<br>
+                CX<br>
+                AX<br>
+                ES_DESC<br>
+                CS_DESC<br>
+                SS_DESC<br>
+                DS_DESC<br>
+                GDT_DESC<br>
+                LDT_DESC<br>
+                IDT_DESC<br>
+                TSS_DESC<br>
+                ENT&nbsp;OF&nbsp;TABLE</td>
+                <td align="center" valign="top">DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DW<br>
+                DESC_CACHE286<br>
+                DESC_CACHE286<br>
+                DESC_CACHE286<br>
+                DESC_CACHE286<br>
+                DESC_CACHE286<br>
+                DESC_CACHE286<br>
+                DESC_CACHE286<br>
+                DESC_CACHE286<br>
+                </td>
+                <td align="center" valign="top">0<br>
+                0<br>
+                0<br>
+                ?<br>
+                0<br>
+                0<br>
+                0<br>
+                0<br>
+                0<br>
+                0<br>
+                0<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4"><pre><font size="4">DESC_CACHE286 STRUC
+    Addr_A15_A00 DW ?
+    Addr_A23_A16 DB ?
+    Access DB ?
+    Limit DW ?
+ENDS</font></pre>
+                </td>
+            </tr>
+        </tbody></table>
+        </center></div><p><!-- End "Table 1" within column 1 of Master Table --> Intel recommends some guidelines for
+        proper execution following <i>LOADALL. </i>The stack
+        segment should be a read/write data segment; the code
+        segment can be execute on1y (access=95h), read/execute
+        (access=9bh), or read/write/execute (access=93h). Proper
+        protected mode operation also requires that the DPL of <i>CS
+        </i>and DPL of <i>SS </i>be equal. These attributes
+        determine the CPL of the processor. Also, the DPL fields
+        of <i>ES </i>and <i>DS </i>should be equal to 3 to
+        prevent <i>RETF </i>or <i>IRET </i>instructions from
+        zeroing these registers. </p>
+        <p>The code in <a href="http://www.rcollins.org/ftp/source/286load/286load.asm">listing 1</a>
+        demonstrates how to exp1ore the various operating modes
+        with 286 <i>LOADALL </i>and how to access extended memory
+        while in real mode. The <i>LOADALL </i>test performs
+        various functions that would be impossible to duplicate
+        without using <i>LOADALL.</i></p>
+        <p><font color="#FF0000" size="5"><b>80386 </b><b><i>LOADALL</i></b></font></p>
+        <p>The 386 LOADALL is encoded as a two-byte opcode
+        (0F07). Unlike the 286 LOADALL, this LOADALL instruction
+        reads its data from a table pointed to by ES:EDI. Segment
+        overrides are allowed, but apparently ignored. The 386
+        LOADALL performs 51 bus cycles (DWORD cycles) and takes
+        122 clocks with no wait states. Table 3 shows the 386
+        LOADALL format. However, <a href="http://www.rcollins.org/articles/loadall/tspec_a3_doc.html#Tbl3">Table 3</a> does
+        not show that prior to reading the LOADALL table, LOADALL
+        reads 10 DWORDs exactly 100h bytes beyond the beginning
+        of the table (ES:EDI+100h). This data is not used to load
+        any of the registers LOADALL does not load (CR2, CR3,
+        DRO-DR3, TR6, TR7), or the Numeric Processor eXtension
+        (NPX). At this time, the purpose of reading this data and
+        its destination is a mystery. Figure 1 shows an ICE trace
+        showing all the bus cycles associated with LOADALL's
+        execution.</p>
+        <p>As with the 286 LOADALL, all CPU register entries in
+        the LOADALL table are in the standard Intel format where
+        the least significant byte is at the lowest memory
+        address. The 386 descriptor cache entries have the format
+        shown in <a href="http://www.rcollins.org/articles/loadall/tspec_a3_doc.html#Tbl4">Table 4</a>.</p>
+        <p><a href="http://www.rcollins.org/ftp/source/386load/386load.asm">Listing
+        2</a> shows how to test 386 LOADALL. This test is more
+        comprehensive than the 286 LOADALL test because of the
+        expanded capabilities of the 386 microprocessor. This
+        test puts the CPU into various states that are illegal
+        and are impossible to duplicate through any other
+        software means.</p>
+        <p><font color="#FF0000" size="5"><b><i>LOADALL </i></b><b>Emulation</b></font></p>
+        <p>Due to the large number of systems programs that use
+        286 <i>LOADALL, </i>all 386 and 486 BIOS's must emu1ate
+        the 286 <i>LOADALL </i>instruction (opcode 0<i>F05). </i>On
+        the 386 and 486, the 286 <i>LOADALL </i>instruction
+        generates an invalid opcode exception. The BIOS traps
+        this exception and does its best to emulate the
+        functionality of the <i>LOADALL </i>instruction, but
+        perfect emulation is impossible without using <i>LOADALL </i>itself.
+        Using 386 <i>LOADALL </i>to emulate 286 <i>LOADALL </i>can
+        be done, but has its risks. First of all, the 486 does
+        not have a <i>LOADALL </i>instruction. Second, Intel has
+        threatened to remove <i>LOADALL </i>from the 386 mask.</p>
+        <p>Perfect emulation is possible on the 386 by using 386 <i>LOADALL
+        </i>to emulate 286 <i>LOADALL. </i><a href="http://www.rcollins.org/ftp/source/emuload/emuload.asm">Listing 3</a>
+        shows a TSR program that uses 386 <i>LOADALL </i>to
+        emulate 286 <i>LOADALL. </i>The program first tests that
+        you are a 386 before insta1ling itself. By using this
+        emu1ation program, you can guarantee perfect 286 <i>LOADALL
+        </i>emulation.</p>
+        <p><font color="#FF0000" size="5"><b>Conclusion</b></font></p>
+        <p><i>LOADALL </i>is a very powerful instruction, but the
+        features that make it so powerful also make it risky. For
+        example, <i>LOADALL </i>can put the processor in states
+        that are otherwise impossible to duplicate through any
+        other software means. Using <i>LOADALL </i>requires a
+        thorough understanding of how the CPU processes register
+        loads, the ramifications of those register loads, and
+        careful planning. The illegally induced processor states
+        can easily cause system crashes if not properly planned
+        for. The best way to avoid system crashes is to avoid
+        using <i>LOADALL </i>unless you are totally confident in
+        your understanding of the CPU and in your programming
+        skills.</p>
+        <p>The 286 <i>LOADALL </i>is described in a 15-page
+        Intel-confidential document The document describes in
+        detail how to use the instruction, and also describes
+        many of its possible uses. <i>LOADALL </i>can be used to
+        access extended memory while in real mode, and to emulate
+        real mode while in protected mode. Programs such as
+        RAMDRIVE, ABOVEDISC, and OS/2 use <i>LOADALL. </i>DOS 3.3
+        has provisions for using <i>LOADALL </i>by leaving a
+        102-byte 'hole' at 80:0. If you are a systems programmer
+        and have a need to know this information, Intel will
+        provide it, along with source code to emulate 286 <i>LOADALL
+        </i>on the 386 (without using 386 <i>LOADALL).</i></p>
+        <p>Unlike the 286 <i>LOADALL, </i>the 386 <i>LOADALL </i>is
+        still an Intel top secret. l do not know of any document
+        that describes its use, format, or acknowledges its
+        existence. Very few people at Intel wil1 acknowledge that
+        <i>LOADALL </i>even exists in the 80386 mask. The
+        official Intel line is that, due to U.S. Military
+        pressure, <i>LOADALL </i>was removed from the 80386 mask
+        over a year ago. However, running the program in
+        Listing-2 demonstrates that <i>LOADALL </i>is alive,
+        well, and still available on the latest stepping of the
+	80386.</p>
+<hr>
+
+<p align="left">View source code for 286 LOADALL:<br>
+<a href="http://www.rcollins.org/ftp/source/286load/286load.asm">ftp://ftp.x86.org/source/286load/286load.asm<br>
+</a><a href="http://www.rcollins.org/ftp/source/286load/loadfns.286">ftp://ftp.x86.org/source/286load/loadfns.286<br>
+</a><a href="http://www.rcollins.org/ftp/source/286load/macros.286">ftp://ftp.x86.org/source/286load/macros.286<br>
+</a><a href="http://www.rcollins.org/ftp/source/include/cpu_type.asm">ftp://ftp.x86.org/source/include/cpu_type.asm</a></p>
+
+<p align="left">View source code for 386 LOADALL:<br>
+<a href="http://www.rcollins.org/ftp/source/386load/386load.asm">ftp://ftp.x86.org/source/386load/386load.asm<br>
+</a><a href="http://www.rcollins.org/ftp/source/386load/loadfns.386">ftp://ftp.x86.org/source/386load/loadfns.386<br>
+</a><a href="http://www.rcollins.org/ftp/source/386load/macros.386">ftp://ftp.x86.org/source/386load/macros.386<br>
+</a><a href="http://www.rcollins.org/ftp/source/include/cpu_type.asm">ftp://ftp.x86.org/source/include/cpu_type.asm</a></p>
+
+<p align="left">View source code for EMULOAD (286 LOADALL
+emulation using 386 LOADALL):<br>
+<a href="http://www.rcollins.org/ftp/source/emuload/emuload.asm">ftp://ftp.x86.org/source/emuload/emuload.asm<br>
+</a><a href="http://www.rcollins.org/ftp/source/include/cpu_type.asm">ftp://ftp.x86.org/source/include/cpu_type.asm</a></p>
+
+<p align="left">Download entire source code archive for 286LOAD,
+386LOAD, and EMULOAD:<br>
+<a href="http://www.rcollins.org/ftp/dloads/LOADALL.ZIP">ftp://ftp.x86.org/dloads/LOADALL.ZIP</a></p>
+
+        </td>
+<!-- End column 1 in Master Table --><!-- Begin Column 2 in Master Table -->	    <td valign="top" width="40%">
+<!-- Begin Sidebar 1 -->
+<!--#exec cmd="/usr/www/users/rcollins/cgi-bin/include.cgi -i/usr/www/users/rcollins/articles/loadall/tspec_a3_sb1.html" -->
+<!-- End Sidebar 1 --> <hr>
+<!-- Begin "Table 2(a)" -->        <p></p>
+        <div align="center"><center><table border="1" cellpadding="2" cellspacing="0" width="100%">
+            <caption align="top"><a name="Tbl2a"></a><strong>
+            Table 2 (a) -- 80286 Descriptor Cache Entry Formats </strong></caption>
+            <tbody><tr>
+                <td align="center"><font size="4"><b>Offset</b></font>
+                </td>
+                <td><font size="4"><b>Description</b></font></td>
+            </tr>
+            <tr>
+                <td align="center">0-2</td>
+                <td>24-bit physical address of the segment in
+                memory. These bytes are stored in standard Intel
+                format with the least significant byte at the
+                lowest memory address.</td>
+            </tr>
+            <tr>
+                <td align="center">3</td>
+                <td>Access rights. The format of this byte is the
+                same as that in the descriptor table. This access
+                byte is loaded in the descriptor cache register
+                regardless of its validity. Therefore the
+                "present" bit in the access rights
+                field becomes a "descriptor valid" bit.
+                When this bit is cleared, the descriptor is
+                considered invalid, and any memory reference
+                using this descriptor generates exception 13,
+                with error code 0. The Descriptor Privilege Level
+                (DPL) of the SS and CS descriptor caches
+                determines the Current Privilege Level (CPL). The
+                CS descriptor cache may be loaded as a read/write
+                data segment.</td>
+            </tr>
+            <tr>
+                <td align="center">4-5</td>
+                <td>Segment limit. The standard 16-bit segment
+                limit stored in standard Intel format.</td>
+            </tr>
+        </tbody></table>
+        </center></div><p><!-- End "Table 2(a)" --> <br>
+        <br>
+<!-- Begin "Table 2(b)" -->        </p>
+        <div align="center"><center><table border="1" cellpadding="2" cellspacing="0" width="100%">
+            <caption align="top"><a name="Tbl2b"></a><strong>
+            Table 2 (b) -- 80286 GDT and IDT Descriptor Cache
+            Entry Formats</strong></caption>
+            <tbody><tr>
+                <td align="center"><font size="4"><b>Offset</b></font></td>
+                <td><font size="4"><b>Description</b></font></td>
+            </tr>
+            <tr>
+                <td align="center">0-2</td>
+                <td>24-bit physical address of the segment in
+                memory.</td>
+            </tr>
+            <tr>
+                <td align="center">3</td>
+                <td>Should be 0.</td>
+            </tr>
+            <tr>
+                <td align="center">4-5</td>
+                <td>Segment limit.</td>
+            </tr>
+        </tbody></table>
+	</center></div><p><!-- End "Table 2(b)" --> </p><hr>
+<!-- Begin "Table 3" -->        <p></p>
+        <div align="center"><center><table border="0" cellpadding="8" cellspacing="0">
+            <caption align="top"><a name="Tbl3"></a><strong>
+            Table 3 -- 80386 </strong><strong><b><i>LOADALL</i></b></strong><strong>
+            Table </strong></caption>
+            <tbody><tr>
+                <th valign="bottom">Offset</th>
+                <th valign="bottom">Description</th>
+                <th valign="bottom">Data Size</th>
+                <th valign="bottom">Data Value</th>
+            </tr>
+            <tr>
+                <td valign="top"><p align="center">[00] <br>
+                [04]<br>
+                [08]<br>
+                [0C]<br>
+                [10]<br>
+                [14]<br>
+                [18]<br>
+                [1C]<br>
+                [20]<br>
+                [24]<br>
+                [28]<br>
+                [2C]<br>
+                [30]<br>
+                [34]<br>
+                [38]<br>
+                [3C]<br>
+                [40]<br>
+                [44]<br>
+                [48]<br>
+                [4C]<br>
+                [50]<br>
+                [54]<br>
+                [60]<br>
+                [6C]<br>
+                [78]<br>
+                [84]<br>
+                [90]<br>
+                [9C]<br>
+                [A8]<br>
+                [B4]<br>
+                [C0]<br>
+                [CC] </p>
+                </td>
+                <td valign="top">CR0<br>
+                EFLAGS<br>
+                EIP<br>
+                EDI<br>
+                ESI<br>
+                EBP<br>
+                ESP<br>
+                EBX<br>
+                EDX<br>
+                ECX<br>
+                EAX<br>
+                DR6<br>
+                DR7<br>
+                TR_REG<br>
+                LDT_REG<br>
+                GS_REG<br>
+                FS_REG<br>
+                DS_REG<br>
+                SS_REG<br>
+                CS_REG<br>
+                ES_REG<br>
+                TSS_DESC<br>
+                IDT_DESC<br>
+                GDT_DESC<br>
+                LDT_DESC<br>
+                GS_DESC<br>
+                FS_DESC<br>
+                DS_DESC<br>
+                SS_DESC<br>
+                CS_DESC<br>
+                ES_DESC<br>
+                LENGTH&nbsp;OF&nbsp;TABLE</td>
+                <td align="center" valign="top">DD<br>
+                DD<br>
+                DD<br>
+                DD<br>
+                DD<br>
+                DD<br>
+                DD<br>
+                DD<br>
+                DD<br>
+                DD<br>
+                DD<br>
+                DD<br>
+                DD<br>
+                REG_STRUC<br>
+                REG_STRUC<br>
+                REG_STRUC<br>
+                REG_STRUC<br>
+                REG_STRUC<br>
+                REG_STRUC<br>
+                REG_STRUC<br>
+                REG_STRUC<br>
+                DESC_CACHE<br>
+                DESC_CACHE<br>
+                DESC_CACHE<br>
+                DESC_CACHE<br>
+                DESC_CACHE<br>
+                DESC_CACHE<br>
+                DESC_CACHE<br>
+                DESC_CACHE<br>
+                DESC_CACHE<br>
+                DESC_CACHE<br>
+                </td>
+                <td align="center" valign="top">?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                ?<br>
+                &lt;?&gt;<br>
+                &lt;?&gt;<br>
+                &lt;?&gt;<br>
+                &lt;?&gt;<br>
+                &lt;?&gt;<br>
+                &lt;?&gt;<br>
+                &lt;?&gt;<br>
+                &lt;?&gt;<br>
+                &lt;?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                &lt;?,?,?&gt;<br>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" colspan="2"><pre><font size="4">REG_STRUC STRUC
+    REG_VAL    DW     ?
+               DW     0
+ENDS</font></pre>
+                </td>
+                <td colspan="2"><pre><font size="4">DESC_CACHE STRUC
+              DB     0
+     _Type    DB     ?
+              DB     0
+              DB     0
+     _Addr    DD     ?
+    _Limit    DD     ?
+ENDS</font></pre>
+                </td>
+            </tr>
+        </tbody></table>
+	</center></div><p><!-- End "Table 3" --> </p><hr>
+<!-- Begin "Table 4(a)" -->        <p></p>
+        <div align="center"><center><table border="1" cellpadding="3" cellspacing="0" width="100%">
+            <caption align="top"><a name="Tbl4"></a><strong>
+            Table 4 (a) -- 80386 Descriptor Cache Entries </strong></caption>
+            <tbody><tr>
+                <td align="center"><font size="4"><b>Offset</b></font>
+                </td>
+                <td><font size="4"><b>Description</b></font></td>
+            </tr>
+            <tr>
+                <td align="center">0-3 </td>
+                <td>Access rights. The access rights dword
+                consumes 11 bits of this 32-bit field. See <a href="http://www.rcollins.org/articles/loadall/tspec_a3_doc.html#Fig2b" name="F2Ptr">figure 2</a> for a
+                complete description of this field.</td>
+            </tr>
+            <tr>
+                <td align="center">4-7 </td>
+                <td>32-bit base address of the segment in
+                memory..</td>
+            </tr>
+            <tr>
+                <td align="center">8-11 </td>
+                <td>32-bit base address of the segment in memory.</td>
+            </tr>
+        </tbody></table>
+        </center></div><p><!-- End "Table 4(a)" --> <br>
+        <br>
+<!-- Begin "Table 4(b)" -->        </p>
+        <div align="center"><center><table border="1" cellpadding="3" cellspacing="0" width="100%">
+            <caption align="top"><strong>Table 4 (b) -- 80386 GDT
+            and IDT Descriptor Cache Entry Formats </strong></caption>
+            <tbody><tr>
+                <td align="center"><font size="4"><b>Offset</b></font>
+                </td>
+                <td><font size="4"><b>Description</b></font></td>
+            </tr>
+            <tr>
+                <td align="center">0-3 </td>
+                <td>Should be 0.</td>
+            </tr>
+            <tr>
+                <td align="center">4-7 </td>
+                <td>32-bit base address of GDTR or IDTR.</td>
+            </tr>
+            <tr>
+                <td align="center">8-11 </td>
+                <td>32-bit limit of GDTR or IDTR.</td>
+            </tr>
+        </tbody></table>
+	</center></div><p><!-- End "Table 4(b)" --> </p>
+
+	<hr>
+
+<!-- Begin "Figure 1" -->
+<div align="center"><center>
+
+<table border="0" cellpadding="3" cellspacing="0">
+    <caption align="top"><strong>Figure 1 -- In-Circuit-Emulator
+    Trace of 80386 </strong><em><strong>LOADALL</strong></em><strong>
+    Instruction</strong></caption>
+    <tbody><tr>
+        <td valign="top"><font size="2"><strong>Frame</strong></font></td>
+        <td valign="top" colspan="3"><font size="2">The FRAME
+        number is like a clock count for the CPU. At every CPU
+        clock, the ICE takes a picture. When a valid cycle
+        occurs, the ICE records its occurance. Therefore, it is
+        possible to determine how many CPU clocks a sequence of
+        instructions takes to execute by reading this
+        information.</font></td>
+    </tr>
+    <tr>
+        <td valign="top"><font size="2"><strong>Type</strong></font></td>
+        <td valign="top" colspan="3"><font size="2">Cycle type.
+        Shown here are F=Fetch, R=Read, and X=eXecute.</font></td>
+    </tr>
+    <tr>
+        <td valign="top"><font size="2"><strong>Address</strong></font></td>
+        <td valign="top" colspan="3"><font size="2">The 32-bit
+        physical address asserted on the CPU address bus during
+        each cycle.</font></td>
+    </tr>
+    <tr>
+        <td valign="top"><font size="2"><strong>Data</strong></font></td>
+        <td colspan="3"><font size="2">The data asserted on the
+        CPU data bus during each cycle.</font></td>
+    </tr>
+    <tr>
+        <td><font size="2"><strong>BE3#<br>
+        BE2#<br>
+        BE1#<br>
+        BE0#</strong></font></td>
+        <td colspan="3"><font size="2">Byte enable pins on the
+        CPU. These pins determine which bytes of the 32-bits of
+        data are valid. These pins are active low, so 8-bits of
+        data are valid for each '0.'</font></td>
+    </tr>
+    <tr>
+        <td><font size="2"><strong>W/R#</strong></font></td>
+        <td><font size="2">Write/Read.</font></td>
+        <td><font size="2">Write = 1</font></td>
+        <td><font size="2">Read = 0</font></td>
+    </tr>
+    <tr>
+        <td><font size="2"><strong>D/C#</strong></font></td>
+        <td><font size="2">Data/Code.</font></td>
+        <td><font size="2">Data = 1</font></td>
+        <td><font size="2">Code = 0</font></td>
+    </tr>
+    <tr>
+        <td><font size="2"><strong>M/IO#</strong></font></td>
+        <td><font size="2">Memory/IO</font></td>
+        <td><font size="2">Memory = 1</font></td>
+        <td><font size="2">IO = 0</font></td>
+    </tr>
+</tbody></table>
+<table border="0" cellpadding="5" cellspacing="0">
+    <tbody><tr>
+        <td align="center" valign="bottom"><pre><font size="2"><tt>Frame
+Dec</tt></font><font face="Courier New"> </font></pre>
+        </td>
+        <td align="center" valign="bottom"><pre><font size="2" face="Courier New">Type</font><font face="Courier New"> </font></pre>
+        </td>
+        <td align="center" valign="bottom"><pre><font size="2" face="Courier New">Address 
+(Hex)</font><font face="Courier New"> </font></pre>
+        </td>
+        <td align="center" valign="bottom"><pre><font size="2" face="Courier New">Data
+(Hex)</font><font face="Courier New"> </font></pre>
+        </td>
+        <td align="center" valign="bottom"><pre><font size="2" face="Courier New">BBBB
+EEEE
+3210
+####</font><font face="Courier New"> </font></pre>
+        </td>
+        <td align="center" valign="bottom"><pre><font size="2">WDM
+///
+RCI
+  O
+###</font></pre>
+        </td>
+        <td valign="bottom"><pre><font size="2">Comments</font></pre>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" valign="top"><pre><font size="2"><tt>5
+8
+011
+013
+015
+017
+019
+021
+023
+025
+027
+029
+031
+033
+035
+037
+039
+041
+043
+045
+047
+049
+051
+053
+055
+057
+059
+061
+063
+065
+067
+069
+071
+073
+075
+077
+079
+081
+083
+085
+087
+089
+091
+093
+095
+097
+099
+101
+103
+105
+107
+109
+111
+113
+115
+117
+119
+121
+123
+125
+127
+129
+131</tt></font></pre>
+        </td>
+        <td align="center" valign="top"><pre><font size="2">F
+X
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R
+R</font></pre>
+        </td>
+        <td align="center" valign="top"><pre><font size="2">0000DE40
+executed
+0000D8F0
+0000D8F4
+0000D8F8
+0000D8FC
+0000D900
+0000D904
+0000D908
+0000D90C
+0000D910
+0000D914
+0000D7F0
+0000D7F4
+0000D7F8
+0000D7FC
+0000D800
+0000D804
+0000D808
+0000D80C
+0000D810
+0000D814
+0000D818
+0000D81C
+0000D820
+0000D824
+0000D828
+0000D82C
+0000D830
+0000D834
+0000D838
+0000D83C
+0000D840
+0000D844
+0000D848
+0000D84C
+0000D850
+0000D854
+0000D858
+0000D85C
+0000D860
+0000D864
+0000D868
+0000D86C
+0000D870
+0000D874
+0000D878
+0000D87C
+0000D880
+0000D884
+0000D888
+0000D88C
+0000D890
+0000D894
+0000D898
+0000D89C
+0000D8A0
+0000D8A4
+0000D8A8
+0000D8AC
+0000D8B0
+0000D8B4
+0000D8B8</font></pre>
+        </td>
+        <td align="center" valign="top"><pre><font size="2">B490070F
+2bytes
+01010101
+02020202
+03030303
+04040404
+05050505
+06060606
+07070707
+08080808
+09090909
+0A0A0A0A
+7FFFFFE0
+00000002
+00000133
+66666666
+77777777
+55555555
+88888888
+22222222
+44444444
+33333333
+11111111
+FFFF0FF0
+0000D402
+xxxx0000
+xxxx0000
+xxxx5555
+xxxx4444
+xxxx2222
+xxxx6666
+xxxx1111
+xxxx3333
+00008900
+00070000
+00000800
+00000000
+00000000
+000003FF
+00000000
+00000000
+00000000
+00008200
+00090000
+00000088
+00008300
+00050000
+0000FFFF
+00009300
+00040000
+0000FFFF
+00009300
+00020000
+0000FFFF
+00009300
+00060000
+0000FFFF
+00009B00
+0000DD30
+0000FFFF
+00009300
+00030000
+00FFFFFF</font></pre>
+        </td>
+        <td align="center" valign="top"><pre><font size="2">0000
+at
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+1100
+1100
+1100
+1100
+1100
+1100
+1100
+1100
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000</font></pre>
+        </td>
+        <td align="center" valign="top"><pre><font size="2">001
+DE40L
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011
+011</font></pre>
+        </td>
+        <td valign="top"><pre><font size="2">LOADALLfetched
+LOADALLbeginsexecution
+\</font><font size="2" face="Courier New">
+ \
+  \   The10"mystery"
+   \  reads,exactly
+    \ 100hbytesbeyond
+    / thebeginningof
+   /  theLOADALLtable.
+  /
+ /
+/
+CR0
+EFLAGS
+EIP
+EDI
+ESI
+EBP
+ESP
+EBX
+EDX
+ECX
+EAX
+DR6
+DR7
+TRRegister
+LDTRegister
+GSRegister
+FSRegister
+DSRegister
+SSRegister
+CSRegister
+ESRegister
+TSSDescriptorCache
+
+
+IDTDescriptorCache
+
+
+GDTDescriptorCache
+
+
+LDTDescriptorCache
+
+
+GSDescriptorCache
+
+
+FSDescriptorCache
+
+
+DSDescriptorCache
+
+
+SSDescriptorCache
+
+
+CSDescriptorCache
+
+
+ESDescriptorCache
+
+</font></pre>
+        </td>
+    </tr>
+</tbody></table>
+</center></div>
+
+<!-- End "Figure 1" -->
+        </td>
+    </tr>
+</tbody></table>
+</center></div>
+
+
+<hr>
+
+<p align="left"><a href="http://www.rcollins.org/articles/articles.html#LOADALLPtr">Back to
+Books and Articles home page</a></p>
+<!--#exec cmd="/usr/www/users/rcollins/cgi-bin/StdDisclaimer.cgi" -->
+</td></tr></tbody></table>
+
+
+</body></html>

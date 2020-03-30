@@ -1,9 +1,9 @@
 ---
 layout: page
 title: COMPAQ Portable Computer ROMs
-permalink: /machines/pcx86/compaq/portable/rom/bios/
+permalink: /machines/pcx86/compaq/portable/rom/
 redirect_from: /devices/pcx86/machine/compaq/
-preview: COMPAQ_Portable_System_Board.jpg
+preview: bios/COMPAQ_Portable_System_Board.jpg
 ---
 
 The oldest COMPAQ Portable Computer ROM BIOS we originally had was an 8Kb [Rev C ROM](bios/100666-001-REVC.json) from a

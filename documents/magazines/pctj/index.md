@@ -14,7 +14,7 @@ I may still be missing some *special* issues, similar to the [1987 PC Tech Journ
 it's hard to say, since I don't have a complete publication schedule.
 
 I've also created links to all the [Microsoft Languages NewsLetters](/documents/magazines/mln/) that were published
-in PC Tech Journal, as well as an assortment of [PC Tech Journal Disks](/software/pcx86/sw/pctj/) containing
+in PC Tech Journal, as well as an assortment of [PC Tech Journal Disks](/software/pcx86/sw/magazines/pctj/) containing
 published source code listings and more.
 
 {% include gallery/documents.html %}

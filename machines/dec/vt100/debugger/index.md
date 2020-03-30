@@ -10,15 +10,16 @@ machines:
     config: /configs/pcx80/machine/vt100/debugger/machine.xml
 ---
 
-The [PCx80](/machines/pcx80/) machine below is configured to simulate a [VT100 Terminal](/machines/dec/vt100/)
+The [PCx80]({{ site.github.pages }}/machines/pcx80/) machine below is configured to simulate a [VT100 Terminal](/machines/dec/vt100/)
 with a Control Panel and Debugger.  When you press the **Run** button, it will start running the original
-[VT100 Firmware](/machines/dec/vt100/rom/) inside the [PCx80](/machines/pcx80/) CPU emulator.
+[VT100 Firmware](/machines/dec/vt100/rom/) inside the [PCx80]({{ site.github.pages }}/machines/pcx80/) CPU emulator.
 
 Information about [VT100 Keys](#vt100-keys) and assorted [Hardware Notes](#vt100-memory-usage) are provided below,
-followed by some [VT100 Technical Manual](/pubs/dec/vt100/) excerpts regarding the [VT100 Initialization Process](#vt100-initialization-process).
+followed by some [VT100 Technical Manual](/machines/dec/vt100/#documents) excerpts regarding the
+[VT100 Initialization Process](#vt100-initialization-process).
 
 [Non-Debugger Configuration](../) is available, along with demos of [Dual VT100 Terminals](../dual/) and an
-[IBM PC AT connected to a VT100](/machines/pcx86/ibm/5170/ega/vt100/).
+[IBM PC AT connected to a VT100](../5170/).
 
 {% include machine.html id="vt100" %}
 

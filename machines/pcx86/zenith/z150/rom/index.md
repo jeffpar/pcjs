@@ -10,7 +10,7 @@ obtained from the [Vintage Computer Federation](http://www.vcfed.org/forum/showt
 forum.
 
 The dump was produced by concatenating the two 16Kb ROM images to produce a single 32Kb ROM image and then running
-[FileDump](/tools/filedump/):
+[FileDump]({{ site.github.pages }}/tools/filedump/):
 
 	cat archive/444-260-18.BIN archive/444-229-18.BIN >archive/BIOS-Z150-1988.rom
 	filedump --file=archive/BIOS-Z150-1988.rom --output=BIOS-Z150-1988.json --comments --format=bytes

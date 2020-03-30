@@ -18,7 +18,7 @@ binary:
 
 	node ../../ti57/rom/be2le.js tmc1502be.bin tmc1502le.bin
 
-along with the corresponding [JSON Data](tmc1503le.json) that the PCjs [TI-55 Emulator](../) uses:
+along with the corresponding [JSON Data](../../ti55/rom/tmc1503le.json) that the PCjs [TI-55 Emulator](../../ti55/) uses:
 
 	node ../../ti57/rom/bin2json.js tmc1502le.bin > tmc1502le.json
 

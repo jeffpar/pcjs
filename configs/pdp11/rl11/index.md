@@ -16,7 +16,7 @@ RL02K disks are single-platter cartridges with 512 tracks per side, 40 sectors p
 
 Machines containing the [RL11 Component](/machines/dec/pdp11/lib/pc11.js) include:
 
-- [PDP-11/70 with Front Panel](/machines/dec/pdp11/machine/1170/panel/) (with [Debugger](/machines/dec/pdp11/1170/panel/debugger/))
+- [PDP-11/70 with Front Panel](/machines/dec/pdp11/1170/panel/) (with [Debugger](/machines/dec/pdp11/1170/panel/debugger/))
 - [PDP-11/70 with VT100 Terminal](/machines/dec/pdp11/1170/vt100/) (with [Debugger](/machines/dec/pdp11/1170/vt100/debugger/))
 
 PCjs has archived a selection of [RL01K](/software/dec/pdp11/disks/rl01k/) and [RL02K](/software/dec/pdp11/disks/rl02k/) disk images

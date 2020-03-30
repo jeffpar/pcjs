@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "RK03 XXDP+ Diagnostics Disk"
-permalink: /software/dec/pdp11/disks/rk03/xxdp
+permalink: /software/dec/pdp11/disks/rk03/xxdp/
 redirect_from: /disks/dec/rk03/xxdp/
 ---
 
@@ -36,12 +36,12 @@ NOTE: Any RK11 disk drive (RK0-RK7) can be used.  RK0 was selected for demonstra
 
 ### Help
 
-Unfortunately, this version of XXDP+ is not as complete as the [RL02K XXDP+ Diagnostics Disk](/software/dec/pdp11/rl02k/xxdp/),
+Unfortunately, this version of XXDP+ is not as complete as the [RL02K XXDP+ Diagnostics Disk](/software/dec/pdp11/disks/rl02k/xxdp/),
 and there is no HELP information:
 
 	? NOT FOUND: HELP  .TXT
 
-Refer to [Help](/software/dec/pdp11/rl02k/xxdp/#help) from the RL02K version.
+Refer to [Help](/software/dec/pdp11/disks/rl02k/xxdp/#help) from the RL02K version.
 
 ### Directory
 

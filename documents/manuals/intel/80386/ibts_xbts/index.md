@@ -1,10 +1,8 @@
 ---
 layout: page
 title: "Obsolete 80386 Instructions: IBTS and XBTS"
-permalink: /pubs/pc/reference/intel/80386/ibts_xbts/
----
-
-Obsolete 80386 Instructions
+permalink: /documents/manuals/intel/80386/ibts_xbts/
+redirect_from: /pubs/pc/reference/intel/80386/ibts_xbts/
 ---
 
 Here's more information on the 80386 opcodes (IBTS and XBTS) that were removed from the 80386 as of the B1 stepping.

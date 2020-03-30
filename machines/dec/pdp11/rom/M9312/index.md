@@ -1,7 +1,7 @@
 ---
 layout: page
 title: PDP-11 M9312 ROMs
-permalink: /machines/dec/pdp11/rom/M9312
+permalink: /machines/dec/pdp11/rom/M9312/
 redirect_from: /devices/pdp11/rom/M9312/
 ---
 

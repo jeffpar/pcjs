@@ -10,6 +10,6 @@ machines:
     config: /configs/pdp11/machine/1170/panel/debugger/cpuexer/machine.xml
 ---
 
-This machine runs the [11/70 CPU Instruction Exerciser](/software/dec/pdp11/tapes/diags/#md-11-1170-cpu-exerciser): MAINDEC-11-DEQKC-B1-PB.
+This machine runs the [11/70 CPU Instruction Exerciser](/software/dec/pdp11/tapes/diag/#md-11-1170-cpu-exerciser): MAINDEC-11-DEQKC-B1-PB.
 
 {% include machine.html id="test1170" %}
