@@ -9,10 +9,8 @@ NOTE: Microsoft released the 5.1 C compiler in two different packages: this 11-d
 only files for DOS, and a larger 14-disk set with files for both DOS and OS/2.  For the latter, see
 [Microsoft C Compiler 5.1 for DOS and OS/2](../5.10-os2/).
 
-Directory listings of the eleven 360Kb distribution diskettes, and a copy of the [PACKING.LST](#packinglst),
-are provided below.
-
-We also have [Microsoft C Compiler 5.1 Documentation Updates](/pubs/pc/software/tools/microsoft/c/5.10/).
+Directory listings of the eleven 360Kb distribution diskettes, a copy of the [PACKING.LST](#packinglst),
+and some [Documentation](#documents) are provided below.
 
 ### Directory of MS C 5.10 (SETUP)
 
@@ -673,3 +671,5 @@ We also have [Microsoft C Compiler 5.1 Documentation Updates](/pubs/pc/software/
 	SAMPLE\S12.@@@          "
 	SAMPLE\S13.@@@          "
 	SAMPLE\S14.@@@          "
+
+{% include gallery/documents.html width="200" height="260" %}

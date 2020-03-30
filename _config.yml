@@ -19,6 +19,7 @@ exclude:
   - Gemfile.lock
   - gulpfile.js
   - README.md
+  - "*.log"
   - tmp
   - "**/archive"
   - "**/private"

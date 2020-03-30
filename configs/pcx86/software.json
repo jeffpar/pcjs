@@ -1313,6 +1313,15 @@
                 "@photo": ".jpg",
                 "@type": "PC360K"
               }
+            ],
+            "@documents": [
+              {
+                "@title": "DESQview 1.02 (AST Edition)",
+                "@file": "DESQVIEW-102-AST.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqF0lnH5iJKNMTatvA?e=QD3Sxl",
+                "@cover": ".jpg",
+                "@source": "OS/2 Museum"
+              }
             ]
           }
         }
@@ -1896,6 +1905,29 @@
                 "@diskette": "PASCALMT311-DISK4.json",
                 "@type": "PC160K"
               }
+            ],
+            "@documents": [
+              {
+                "@title": "Pascal/MT+ Notices",
+                "@file": "PASCALMT-311-NOTICES.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFwfKz6L5KLLFOXnA?e=AZ6rJu",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              },
+              {
+                "@title": "Pascal/MT+ Programmer's Guide",
+                "@file": "PASCALMT-311-PROGRAMMERS-GUIDE.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFzf2rfPk25Wvnkbg?e=YaU25Z",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              },
+              {
+                "@title": "Pascal/MT+ Reference Manual",
+                "@file": "PASCALMT-311-REFERENCE-MANUAL.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFywvuwHRIOLy9fgA?e=6JWrqA",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              }
             ]
           }
         }
@@ -2296,6 +2328,43 @@
                 "@diskette": "MSC-048014-400-DISK8-DEVKIT.json",
                 "@type": "PC360K"
               }
+            ],
+            "@documents": [
+              {
+                "@title": "About Leaflet",
+                "@file": "MSC400-1986-ABOUT.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFP5vwCuIxIAxJoRQ?e=4n7LG8",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/msc40/ms-c-4.0-about-1986.pdf"
+              },
+              {
+                "@title": "C Compiler User's Guide",
+                "@file": "MSC400-1986-UGUIDE.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFWpIc8MH4i6ZF_rQ?e=sI7bfC",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/msc40/ms-c-4.0-uguide-1986.pdf"
+              },
+              {
+                "@title": "CodeView Debugger",
+                "@file": "MSC400-1986-CODEVIEW.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFR869lAzrhBEyvqA?e=R8GTis",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/msc40/ms-c-4.0-codeview-1986.pdf"
+              },
+              {
+                "@title": "C Language Reference",
+                "@file": "MSC400-1986-CLR.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFQQtXhdBT9dmTdWg?e=ApXnCC",
+                "@cover": ".jpg",
+                "@source": ""
+              },
+              {
+                "@title": "Run-Time Library Reference",
+                "@file": "MSC400-1986-RTLREF.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFTv-HXbZG3BMdQMQ?e=DbCWgk",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/msc40/ms-c-4.0-rtlref-1986.pdf"
+              }
             ]
           },
           "5.00": {
@@ -2324,16 +2393,127 @@
             ],
             "@documents": [
               {
-                "@title": "MSC 5.0 User's Guide",
+                "@title": "MS C 5.0 User's Guide (1987 PRE)",
+                "@file": "MSC50-USERGUIDE-PRE-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBfaLiJ-xzV75I_qw?e=QohYIb",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-ug-pre-1987.pdf"
+              },
+              {
+                "@title": "MS C 5.0 User's Guide (1987 PRE UPD)",
+                "@file": "MSC50-UG-LR-PRE-UPD-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB0GJAPrVz_cZ7CAA?e=n2c3hG",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-ug-lr-pre-upd-1987.pdf"
+              },
+              {
+                "@title": "MS C 5.0 User's Guide (1987)",
                 "@file": "MSC50-USERGUIDE-1987.pdf",
                 "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB5iaYUjobUab38cg?e=wIMD34",
                 "@cover": ".jpg",
                 "@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-ug-1987.pdf"
+              },
+              {
+                "@title": "MS C 5.0 Language Reference (1987 PRE)",
+                "@file": "MSC50-LANGREF-PRE-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB1ZSfSgAzKkJE44w?e=DXAADz",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-lr-pre-1987.pdf"
+              },
+              {
+                "@title": "MS C 5.0 Run-Time Library Reference (1987 PRE)",
+                "@file": "MSC50-RTL-PRE-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBgLW-dwbFUOrnmvg?e=CkwBGO",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-rtl-pre-1987.pdf"
+              },
+              {
+                "@title": "MS C 5.0 Run-Time Library Reference (1987 PRE UPD)",
+                "@file": "MSC50-RTL-PRE-UPD-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBvuqj2ATEdvqx9IQ?e=krdcbO",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-rtl-pre-upd-1987.pdf"
+              },
+              {
+                "@title": "MS C 5.0 Run-Time Library Reference for OS/2 (1987 UPD)",
+                "@file": "MSC50-RTL-OS2-UPD-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBz9FKds8vVT21KEw?e=yTBRjV",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-rtl-os2-upd-1987.pdf"
+              }
+            ]
+          },
+          "5.10": {
+            "@title": "Microsoft C Compiler 5.10",
+            "@media": [
+              {
+                "@title": "MS C 5.10 (SETUP)",
+                "@diskette": "MSC510-01521-SETUP.json",
+                "@type": "PC360K"
+              },
+              {
+                "@title": "MS C 5.10 (COMPILER1)",
+                "@diskette": "MSC510-01522-COMPILER1.json",
+                "@type": "PC360K"
+              },
+              {
+                "@title": "MS C 5.10 (COMPILER2)",
+                "@diskette": "MSC510-01523-COMPILER2.json",
+                "@type": "PC360K"
+              },
+              {
+                "@title": "MS C 5.10 (UTILITY1)",
+                "@diskette": "MSC510-01524-UTILITIES1.json",
+                "@type": "PC360K"
+              },
+              {
+                "@title": "MS C 5.10 (UTILITY2)",
+                "@diskette": "MSC510-01525-UTILITIES2.json",
+                "@type": "PC360K"
+              },
+              {
+                "@title": "MS C 5.10 (INCLUDE)",
+                "@diskette": "MSC510-01526-INCLUDE.json",
+                "@type": "PC360K"
+              },
+              {
+                "@title": "MS C 5.10 (LIBSM)",
+                "@diskette": "MSC510-01527-LIBSM.json",
+                "@type": "PC360K"
+              },
+              {
+                "@title": "MS C 5.10 (LIBLC)",
+                "@diskette": "MSC510-01528-LIBLC.json",
+                "@type": "PC360K"
+              },
+              {
+                "@title": "MS C 5.10 (LIBFP)",
+                "@diskette": "MSC510-01529-LIBFP.json",
+                "@type": "PC360K"
+              },
+              {
+                "@title": "MS C 5.10 (CODEVIEW)",
+                "@diskette": "MSC510-01532-CODEVIEW.json",
+                "@type": "PC360K"
+              },
+              {
+                "@title": "MS C 5.10 (QUICKC)",
+                "@diskette": "MSC510-01534-QUICKC.json",
+                "@type": "PC360K"
+              }
+            ],
+            "@documents": [
+              {
+                "@title": "MS C 5.1 Update for MS OS/2 and MS-DOS (1988)",
+                "@file": "MSC51-UPDATE-1988.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBuypY9jGc9RdsSRg?e=0QxeVw",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.1-update-1988.pdf"
               }
             ]
           },
           "5.10-OS2": {
-            "@title": "Microsoft C Compiler 5.10-OS2",
+            "@title": "Microsoft C Compiler for OS/2 5.10",
             "@media": [
               {
                 "@title": "MS C 5.10-OS/2 (SETUP)",
@@ -2405,65 +2585,14 @@
                 "@diskette": "MSC510-DISK14-CVOS2.json",
                 "@type": "PC1200K"
               }
-            ]
-          },
-          "5.10": {
-            "@title": "Microsoft C Compiler 5.10",
-            "@media": [
+            ],
+            "@documents": [
               {
-                "@title": "MS C 5.10 (SETUP)",
-                "@diskette": "MSC510-01521-SETUP.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS C 5.10 (COMPILER1)",
-                "@diskette": "MSC510-01522-COMPILER1.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS C 5.10 (COMPILER2)",
-                "@diskette": "MSC510-01523-COMPILER2.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS C 5.10 (UTILITY1)",
-                "@diskette": "MSC510-01524-UTILITIES1.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS C 5.10 (UTILITY2)",
-                "@diskette": "MSC510-01525-UTILITIES2.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS C 5.10 (INCLUDE)",
-                "@diskette": "MSC510-01526-INCLUDE.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS C 5.10 (LIBSM)",
-                "@diskette": "MSC510-01527-LIBSM.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS C 5.10 (LIBLC)",
-                "@diskette": "MSC510-01528-LIBLC.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS C 5.10 (LIBFP)",
-                "@diskette": "MSC510-01529-LIBFP.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS C 5.10 (CODEVIEW)",
-                "@diskette": "MSC510-01532-CODEVIEW.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "MS C 5.10 (QUICKC)",
-                "@diskette": "MSC510-01534-QUICKC.json",
-                "@type": "PC360K"
+                "@title": "MS C 5.1 Update for MS OS/2 and MS-DOS (1988)",
+                "@file": "MSC51-UPDATE-1988.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBuypY9jGc9RdsSRg?e=0QxeVw",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.1-update-1988.pdf"
               }
             ]
           }
@@ -3030,6 +3159,13 @@
                 "@source": "http://www.os2museum.com/files/docs/os210sdk/prog-ref-upd-1987.pdf"
               },
               {
+                "@title": "Mixed-Language Programming Guide (1987)",
+                "@file": "MSOS2-1X-MIXED-LANG-1987.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB-zQ8KvVCz72fa5A?e=ghjkZ9",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-rtl-os2-upd-1987.pdf"
+              },
+              {
                 "@title": "MS OS/2 SDK Utilities (1987 PRE)",
                 "@file": "MSOS2-1X-SDK-UTILS-PRE-1987.pdf",
                 "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBxzQFYAMgKkv0mAw?e=3DlK1z",
@@ -3074,9 +3210,16 @@
               {
                 "@title": "MS OS/2 SDK Editor (1987)",
                 "@file": "MSOS2-1X-SDKED-1987.pdf",
-                "@link": "",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBhiFg-xpbBxixJ5g?e=S2x5pU",
                 "@cover": ".jpg",
                 "@source": "http://www.os2museum.com/files/docs/os210sdk/sdked-1987.pdf"
+              },
+              {
+                "@title": "MS OS/2 SDK Editor User's Guide (1988)",
+                "@file": "MSOS2-1X-MSED-UGUIDE-1988.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBwZpUd3NsdaT-o0A?e=cUh5tH",
+                "@cover": ".jpg",
+                "@source": "http://www.os2museum.com/files/docs/os210sdk/msed-ug-1988.pdf"
               },
               {
                 "@title": "MS OS/2 Toolkit Welcome (1988)",
@@ -4948,6 +5091,22 @@
               {
                 "@diskette": "PCDOS110.json",
                 "@type": "PC160K"
+              }
+            ],
+            "@documents": [
+              {
+                "@title": "IBM PC Disk Operating System 1.10",
+                "@file": "IBM_PC_DOS_110_1982-05.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEj1CyrhetlatOblw?e=Typ1Pm",
+                "@cover": ".jpg",
+                "@source": "PCjs"
+              },
+              {
+                "@title": "IBM Personal Computer BASIC 1.10",
+                "@file": "IBM_PC_BASIC_110_1982-05.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEkirObzIHz6seCgw?e=g83PKw",
+                "@cover": ".jpg",
+                "@source": "PCjs"
               }
             ]
           },

@@ -16,7 +16,7 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-Diskette and [Manual](/pubs/pc/software/tools/other/desqview/) are courtesy of the [OS/2 Museum](http://os2museum.com).
+Diskette and [Manual](#documents) are courtesy of the [OS/2 Museum](http://os2museum.com).
 
 A directory listing of the 360Kb diskette is provided [below](#directory-of-desqview-102).
 
@@ -82,3 +82,5 @@ A directory listing of the 360Kb diskette is provided [below](#directory-of-desq
 	                       12288 bytes free
 
 ![DESQview 1.02]({{ site.software.diskettes.server }}/pcx86/env/quarterdeck/desqview/1.02/DESQVIEW-102.jpg)
+
+{% include gallery/documents.html width="200" height="260" %}

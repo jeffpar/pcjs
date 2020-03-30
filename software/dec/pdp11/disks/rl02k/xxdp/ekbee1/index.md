@@ -5,7 +5,7 @@ permalink: /software/dec/pdp11/disks/rl02k/xxdp/ekbee1/
 redirect_from: /disks/dec/rl02k/xxdp/ekbee1/
 ---
 
-From the [PDP-11 Diagnostic Handbook (1988)](https://1drv.ms/b/s!ArcO_mFRe1Z9gp4d3zhflWyJp07i9g), p. 1-10:
+From the [PDP-11 Diagnostic Handbook (1988)](/documents/manuals/dec/#pdp-11-diagnostics), p. 1-10:
 
 	11/70 MEMORY MANAGEMENT TEST
 	
@@ -40,7 +40,7 @@ From the [PDP-11 Diagnostic Handbook (1988)](https://1drv.ms/b/s!ArcO_mFRe1Z9gp4
 	    ...
 
 The closest we have to a source code listing of the EKBEE1 diagnostic comes from some
-[scanned microfiche](https://1drv.ms/b/s!ArcO_mFRe1Z9gp5Sc2Uv0TMEj2GOHQ)
+[scanned microfiche](/documents/manuals/dec/#pdp-11-diagnostics)
 on [bitsavers.org](http://bitsavers.org/pdf/dec/pdp11/microfiche/ftp.j-hoppe.de/bw/gh/) for:
 
 	PRODUCT CODE: AC-7975E-MC

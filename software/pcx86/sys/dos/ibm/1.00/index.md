@@ -20,7 +20,9 @@ PC DOS 1.00 was completed in August 1981 and announced at an IBM press conferenc
 when IBM introduced the original IBM PC (Model 5150).  It was released on one single-sided (160Kb) diskette,
 and included 23 [BASIC Programs](basic/).
 
-The disk's [Directory Listing](#directory-of-pc-dos-100) is provided below.
+[Directory Listing](#directory-of-pc-dos-100), [Documentation](#documents), and [Feature Summary](#feature-summary)
+are provided below.
+
 You can also dig into the [PC DOS 1.00 Boot Sector](debugger/#pc-dos-100-boot-sector) using the [PCjs Debugger](debugger/).
 
 {% include machine.html id="ibm5150-pcdos100" %}
@@ -74,7 +76,11 @@ CHKDSK reports:
 	      160256 bytes total disk space
 	        6144 bytes remain available
 
-### Additional Information From [PC DOS Retro](https://sites.google.com/site/pcdosretro/doshist)
+{% include gallery/documents.html %}
+
+### Feature Summary
+
+Courtesy of [PC DOS Retro](https://sites.google.com/site/pcdosretro/doshist):
 
   - distributed on 1 160KB floppy disk
   - initial release (equivalent to 86-DOS 1.14)
@@ -167,5 +173,3 @@ CHKDSK reports:
 Notes:
 
   - Directory entries for system files IBMBIO.COM, IBMDOS.COM, and BADTRACK are not listed, even if present.
-
-{% include gallery/documents.html %}

@@ -149,7 +149,7 @@ of the original distribution disks.
 
 The PCjs **Release 1A\*** System disk does not include any copy-protection features.  Instead, the disk contains a
 patched copy of `123.EXE` which bypasses the usual copy-protection tests.  The patch is described in the "unprotect"
-document [LOTUS.TXT](https://diskettes.pcjs.org/pcx86/sw/unprot/UNPROT-1/LOTUS.TXT):
+document [LOTUS.TXT]({{ site.software.diskettes.server }}/pcx86/sw/misc/unprot/UNPROT-1/LOTUS.TXT):
 
 	There is another version of Lotus 123 also called Release 1A
 	but with a different copy-protection technique. It can be
