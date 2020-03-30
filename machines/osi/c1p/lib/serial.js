@@ -99,13 +99,18 @@ class C1PSerialPort extends Component {
     {
         if (this.kbd && this.fDemo) {
             if (this.sInput[0] == '.') {
+                this.fDemo = false;
                 this.startLoad();
             } else {
                 this.kbd.injectKeys(" C\n\n", 1000);     // override the default injection delay (currently 300ms)
-                setTimeout(function(serial) { return function() {serial.startLoad();}; }(this), 5000);
+                setTimeout(function(serial) {
+                    return function() {
+                        serial.fDemo = false;
+                        serial.startLoad();
+                    };
+                }(this), 5000);
             }
         }
-        this.fDemo = false;
     }
 
     /**
@@ -315,7 +320,7 @@ class C1PSerialPort extends Component {
 
         if (this.cmp && this.kbd && this.cpu.isRunning()) {
             this.println("auto-loading " + sFileName);
-            this.startLoad(true);
+            if (!this.fDemo) this.startLoad(true);
         }
         else {
             this.println(sFileName + " ready to load");
