@@ -7,23 +7,23 @@ machines:
   - id: ibm5160-ega-win101-1
     type: pcx86
     config: /configs/pcx86/xml/machine/5160/ega/640kb/array/machine.xml
-    state: /harddisks/pcx86/sys/windows/1.01/PCDOS200-WIN101-EGA-STATE.json
-    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/sys/windows/1.01/PCDOS200-WIN101-EGA-DISK.json"}]'
+    state: /software/pcx86/sys/windows/1.01/state.json
+    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/PCDOS200-WIN101-EGA.json"}]'
   - id: ibm5160-ega-win101-2
     type: pcx86
     config: /configs/pcx86/xml/machine/5160/ega/640kb/array/machine.xml
-    state: /harddisks/pcx86/sys/windows/1.01/PCDOS200-WIN101-EGA-STATE.json
-    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/sys/windows/1.01/PCDOS200-WIN101-EGA-DISK.json"}]'
+    state: /software/pcx86/sys/windows/1.01/state.json
+    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/PCDOS200-WIN101-EGA.json"}]'
   - id: ibm5160-ega-win101-3
     type: pcx86
     config: /configs/pcx86/xml/machine/5160/ega/640kb/array/machine.xml
-    state: /harddisks/pcx86/sys/windows/1.01/PCDOS200-WIN101-EGA-STATE.json
-    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/sys/windows/1.01/PCDOS200-WIN101-EGA-DISK.json"}]'
+    state: /software/pcx86/sys/windows/1.01/state.json
+    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/PCDOS200-WIN101-EGA.json"}]'
   - id: ibm5160-ega-win101-4
     type: pcx86
     config: /configs/pcx86/xml/machine/5160/ega/640kb/array/machine.xml
-    state: /harddisks/pcx86/sys/windows/1.01/PCDOS200-WIN101-EGA-STATE.json
-    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/sys/windows/1.01/PCDOS200-WIN101-EGA-DISK.json"}]'
+    state: /software/pcx86/sys/windows/1.01/state.json
+    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/PCDOS200-WIN101-EGA.json"}]'
 ---
 
 The simulations below are identical PC XT configurations, each with a clock speed of 4.77Mhz, 640Kb of RAM,

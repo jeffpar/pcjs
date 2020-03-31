@@ -8,7 +8,7 @@ machines:
     type: pcx86
     debugger: true
     config: /configs/pcx86/xml/machine/5160/ega/640kb/debugger/machine.xml
-    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/sys/dos/microsoft/3.20/MSDOS320-C400.json"}]'
+    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'
     autoMount:
       A:
         name: None

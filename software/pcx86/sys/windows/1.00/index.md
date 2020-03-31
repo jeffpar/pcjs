@@ -7,9 +7,9 @@ preview: images/screenshot.png
 machines:
   - id: ibm5160-ega-win100
     type: pcx86
-    state: /harddisks/pcx86/sys/windows/1.00/PCDOS310-WIN100-EGA-STATE.json
+    state: /software/pcx86/sys/windows/1.00/state.json
     config: /configs/pcx86/xml/machine/5160/ega/640kb/machine.xml
-    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/sys/windows/1.00/PCDOS310-WIN100-EGA-DISK.json"}]'
+    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/PCDOS310-WIN100-EGA.json"}]'
     autoMount:
       A:
         name: PC DOS 3.10 (Disk 1)

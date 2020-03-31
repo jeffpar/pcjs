@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hdc id="hdcXT" type="XT" drives='[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/sys/dos/microsoft/3.20/MSDOS320-C400.json"}]'/>
+<hdc id="hdcXT" type="XT" drives='[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'/>

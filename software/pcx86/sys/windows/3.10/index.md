@@ -10,7 +10,7 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /configs/pcx86/xml/machine/5170/vga/2048kb/machine.xml
-    drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/sys/windows/3.10/PCDOS330-WIN310-VGA.json"}]'
+    drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json"}]'
     autoMount:
       A:
         name: None
