@@ -763,9 +763,9 @@
     "att": {
       "@title": "AT&T",
       "6300": {
-        "@title": "AT&T Personal Computer 6300",
+        "@title": "AT&T 6300",
         "cga": {
-          "@title": "AT&T 6300 with Color Display",
+          "@title": "Color Display",
           "@redirect_from": "/devices/pcx86/machine/att/6300/cga/640kb/"
         },
         "@documents": [
@@ -812,14 +812,14 @@
       "mpc1600": {
         "@title": "CDP MPC 1600",
         "cga": {
-          "@title": "CDP MPC 1600 with Color Display",
+          "@title": "Color Display",
           "@redirect_from": "/devices/pcx86/machine/cdp/mpc1600/cga/640kb/"
         },
         "@documents": [
           {
             "@title": "Columbia Data Products MP Operations Guide (1983)",
             "@file": "Columbia_Data_Products_MPC_1600-Operations_Guide.pdf",
-            "@link": "",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMScGXgEVN-4-XyfA?e=2iQVlh",
             "@cover": ".jpg",
             "@source": "http://www.minuszerodegrees.net/manuals/Columbia%20Data%20Products/Columbia%20Data%20Products%20MPC%201600%20-%20Operations%20Guide.pdf"
           }
@@ -926,35 +926,35 @@
       "z150": {
         "@title": "Zenith Z-150",
         "cga": {
-          "@title": "Zenith Z-150 with Color Display",
+          "@title": "Color Display",
           "@redirect_from": "/devices/pcx86/machine/zenith/z150/cga/640kb/"
         },
         "@documents": [
           {
             "@title": "Programmer's Reference Manual (Z-100 Series)",
             "@file": "Z-100_Programmers_Reference_Manual-OCR.pdf",
-            "@link": "",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMO1vgXSvBjIOkc3Q?e=qgpTCc",
             "@cover": ".jpg",
             "@source": "http://planemo.org/retro/downloads/z100/manuals/Z-100%20Programmers%20Reference%20Manual-OCR.pdf"
           },
           {
             "@title": "Z-150 User's Guide",
             "@file": "Zenith_Z-150_PC_Users_and_Operations_Manual_Guide.pdf",
-            "@link": "",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMPDkwuMejqkVxIlw?e=VsZFfo",
             "@cover": ".jpg",
             "@source": "http://bitsavers.org/pdf/zenith/z150/Zenith_Z-150_PC_Users_and_Operations_Manual_Guide.pdf"
           },
           {
             "@title": "Z-150 Service Manuals",
             "@file": "Zenith_Z-150_PC_Service_Manuals.pdf",
-            "@link": "",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMRQSy0MqaRkMLS1g?e=7jb8nH",
             "@cover": ".jpg",
             "@source": "http://www.minuszerodegrees.net/manuals/Zenith%20Data%20Systems/Zenith%20Z-150%20PC%20-%20Service%20Manual.pdf"
           },
           {
             "@title": "Z-150 Brochure",
             "@file": "ZDS-Z150.pdf",
-            "@link": "",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMTIvsHMytwFM_6wg?e=rpMsYK",
             "@cover": ".jpg",
             "@source": "https://computerarchive.org/files/comp/ad/zenith/ZDS-Z150.pdf"
           }
