@@ -14,11 +14,12 @@ machines:
     type: pcx86
     connection: com2->vt100.serialPort
     config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
+    autoType: $date\n$time\nCTTY COM2\n
 ---
 
 Demonstration of a DEC VT100 Terminal connected to an IBM PC AT via COM2.  Also available with [Debuggers](debugger/).
 
-Use the DOS command `CTTY COM2` to use the VT100 for console operations.  `CTTY CON` will return control to the PC.
+The DOS command `CTTY COM2` uses the VT100 for console operations.  `CTTY CON` will return control to the PC.
 
 {% include machine.html id="vt100" %}
 

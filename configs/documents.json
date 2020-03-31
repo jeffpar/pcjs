@@ -6,6 +6,15 @@
         "@title": "Programming",
         "@documents": [
           {
+            "@title": "Graphics for the IBM PC (1984)",
+            "@file": "Graphics_for_the_IBM_PC.pdf",
+            "@link": "/software/pcx86/sw/books/graphics_for_the_ibm_pc/",
+            "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBjvPCIs98PvKf1UA?e=FxSYne",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "graphics"
+          },
+          {
             "@title": "Microsoft QuickBASIC (1987)",
             "@file": "Microsoft_QuickBASIC-1987.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvA_O6gyOmFPqAMhDw?e=GaqGs8",
@@ -14,13 +23,12 @@
             "@tags": "quickbasic"
           },
           {
-            "@title": "Graphics for the IBM PC (1984)",
-            "@file": "Graphics_for_the_IBM_PC.pdf",
-            "@link": "/software/pcx86/sw/books/graphics_for_the_ibm_pc/",
-            "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBjvPCIs98PvKf1UA?e=FxSYne",
-            "@cover": ".jpg",
+            "@title": "The MS-DOS Ecyclopedia (1988)",
+            "@file": "",
+            "@link": "/documents/books/programming/msdos/encyclopedia/",
+            "@cover": "covers/The_MS-DOS_Encyclopedia.jpg",
             "@source": "PCjs",
-            "@tags": "graphics"
+            "@tags": "msdos"
           }
         ]
       }

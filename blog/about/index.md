@@ -4,6 +4,7 @@ title: About PCjs
 menu_title: About
 menu_order: 1
 permalink: /about/
+redirect_from: /docs/about/
 ---
 
 The [PCjs Project]({{ site.github.repository_url }}) is a collection of computer simulations written in
