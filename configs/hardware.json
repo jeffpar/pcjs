@@ -492,9 +492,170 @@
     }
   },
   "pcx86": {
-    "@title": "IBM x86",
+    "@title": "IBM PC",
+    "att": {
+      "@title": "AT&T",
+      "6300": {
+        "@title": "AT&T 6300",
+        "cga": {
+          "@title": "Color Display",
+          "@redirect_from": "/devices/pcx86/machine/att/6300/cga/640kb/"
+        },
+        "@documents": [
+          {
+            "@title": "AT&T 6300 GWBASIC Programmer's Guide (1985)",
+            "@file": "ATT_PC_6300_Programmers_Guide_GWBASIC_1985.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFLW1snGb1Z-lrMhw?e=j71u9Z",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/999-802-000IS_Programmers_Guide_PC6300_GWBASIC_by_Microsoft_1985.pdf"
+          },
+          {
+            "@title": "AT&T 6300 PLUS ROM-BIOS Listing (1986)",
+            "@file": "ATT_PC_6300_Plus_ROM-BIOS_Listing_1986.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFInlKWgh8AL81igA?e=M654eo",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/ATT_Personal_Computer_6300_Plus_-_ROM-BIOS_Listing_-_Rel_2.05_Issue_1_-_1986.pdf"
+          },
+          {
+            "@title": "AT&T 6300 System Programmer's Guide (1985)",
+            "@file": "ATT_PC_6300_System_Programmers_Guide_1985.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFNtVfFVzNzMvJhpw?e=hM1Yg2",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/999-802-200IS_System_Programmers_Guide_PC6300_1985.pdf"
+          },
+          {
+            "@title": "AT&T 6300 Service Manual",
+            "@file": "ATT_PC_6300_Service_Manual.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFMs31Uchp2WucCxw?e=Jj2rR2",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/ATT_PC_6300_Service_Manual.pdf"
+          },
+          {
+            "@title": "AT&T 6300 User's Guide",
+            "@file": "ATT_PC_6300_Users_Guide.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFJ8XlR3Snxd9EnBQ?e=qixCcK",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/ATT_PC_6300_Users_Guide.pdf"
+          }
+        ]
+      }
+    },
+    "cdp": {
+      "@title": "CDP",
+      "mpc1600": {
+        "@title": "CDP MPC 1600",
+        "cga": {
+          "@title": "Color Display",
+          "@redirect_from": "/devices/pcx86/machine/cdp/mpc1600/cga/640kb/"
+        },
+        "@documents": [
+          {
+            "@title": "Columbia Data Products MP Operations Guide (1983)",
+            "@file": "Columbia_Data_Products_MPC_1600-Operations_Guide.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMScGXgEVN-4-XyfA?e=2iQVlh",
+            "@cover": ".jpg",
+            "@source": "http://www.minuszerodegrees.net/manuals/Columbia%20Data%20Products/Columbia%20Data%20Products%20MPC%201600%20-%20Operations%20Guide.pdf"
+          }
+        ]
+      }
+    },
+    "compaq": {
+      "@title": "COMPAQ",
+      "portable": {
+        "@title": "Portable",
+        "vdu": {
+          "@title": "Monochrome Graphics",
+          "@redirect_from": "/devices/pcx86/machine/compaq/portable/vdu/128kb/"
+        },
+        "@documents": [
+          {
+            "@title": "COMPAQ Portable Operations Guide (Nov 1982)",
+            "@file": "COMPAQ_Operations_Guide_1982-11.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEafO5tOghjO67McQ?e=QsXzCl",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          }
+        ]
+      },
+      "deskpro286": {
+        "@title": "DeskPro 286",
+        "": {
+          "@title": "Machines"
+        },
+        "@documents": [
+          {
+            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, May 1987)"
+          },
+          {
+            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, May 1987)",
+            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol2_1987-05.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq463rsLHiJe9AY7FQ?e=Xxtt3j",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, Dec 1987)",
+            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol1_1987-12.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvAnh2ZAxwmv7UMrSw?e=nQPirJ",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, Dec 1987)",
+            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol2_1987-12.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvAok6a1GZWGWEvr-g?e=EToJaL",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ DeskPro 286 Operations Guide (Feb 1987)",
+            "@file": "COMPAQ_DeskPro_286_Operations_Guide_1987-02.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq1_tSCFGeiC6Yghpw?e=wI7uEo",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ DeskPro 286 Operations Guide - READ THIS FIRST (Sep 1987)",
+            "@file": "COMPAQ_DeskPro_286_Operations_Guide_READ_THIS_FIRST_1987-09.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq4Cb6j-SlhNicPrCg?e=cGbEsS",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          }
+        ]
+      },
+      "deskpro386": {
+        "@title": "DeskPro 386",
+        "": {
+          "@title": "Machines",
+          "@redirect_from": "/devices/pcx86/machine/compaq/deskpro386/"
+        },
+        "@documents": [
+          {
+            "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume I, Sep 1986)",
+            "@file": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol1_1986-09.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-kRDehAMRp7BDfn0A?e=MNNw9w",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume II, Sep 1986)",
+            "@file": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol2_1986-09.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-kS9Xp8xd_kHMKCqg?e=fWqJ0F",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ DeskPro 386/25 Technical Reference Guide (Volume I, Aug 1988)",
+            "@file": "COMPAQ_DeskPro_386-25_Technical_Reference_Guide_Vol1_1988-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq5BThwmEpfyp0EBdA?e=53SAyY",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          }
+        ]
+      }
+    },
     "ibm": {
-      "@title": "IBM PC",
+      "@title": "IBM",
       "4860": {
         "@title": "PCJr (Model 4860)",
         "@documents": [
@@ -754,167 +915,6 @@
             "@title": "IBM VGA Technical Reference (Excerpt)",
             "@file": "IBM_VGA_Technical_Reference-Excerpt.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFQgmvof3IQdrHQKQ?e=y8QOzc",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          }
-        ]
-      }
-    },
-    "att": {
-      "@title": "AT&T",
-      "6300": {
-        "@title": "AT&T 6300",
-        "cga": {
-          "@title": "Color Display",
-          "@redirect_from": "/devices/pcx86/machine/att/6300/cga/640kb/"
-        },
-        "@documents": [
-          {
-            "@title": "AT&T 6300 GWBASIC Programmer's Guide (1985)",
-            "@file": "ATT_PC_6300_Programmers_Guide_GWBASIC_1985.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFLW1snGb1Z-lrMhw?e=j71u9Z",
-            "@cover": ".jpg",
-            "@source": "http://bitsavers.org/pdf/att/6300/999-802-000IS_Programmers_Guide_PC6300_GWBASIC_by_Microsoft_1985.pdf"
-          },
-          {
-            "@title": "AT&T 6300 PLUS ROM-BIOS Listing (1986)",
-            "@file": "ATT_PC_6300_Plus_ROM-BIOS_Listing_1986.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFInlKWgh8AL81igA?e=M654eo",
-            "@cover": ".jpg",
-            "@source": "http://bitsavers.org/pdf/att/6300/ATT_Personal_Computer_6300_Plus_-_ROM-BIOS_Listing_-_Rel_2.05_Issue_1_-_1986.pdf"
-          },
-          {
-            "@title": "AT&T 6300 System Programmer's Guide (1985)",
-            "@file": "ATT_PC_6300_System_Programmers_Guide_1985.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFNtVfFVzNzMvJhpw?e=hM1Yg2",
-            "@cover": ".jpg",
-            "@source": "http://bitsavers.org/pdf/att/6300/999-802-200IS_System_Programmers_Guide_PC6300_1985.pdf"
-          },
-          {
-            "@title": "AT&T 6300 Service Manual",
-            "@file": "ATT_PC_6300_Service_Manual.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFMs31Uchp2WucCxw?e=Jj2rR2",
-            "@cover": ".jpg",
-            "@source": "http://bitsavers.org/pdf/att/6300/ATT_PC_6300_Service_Manual.pdf"
-          },
-          {
-            "@title": "AT&T 6300 User's Guide",
-            "@file": "ATT_PC_6300_Users_Guide.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFJ8XlR3Snxd9EnBQ?e=qixCcK",
-            "@cover": ".jpg",
-            "@source": "http://bitsavers.org/pdf/att/6300/ATT_PC_6300_Users_Guide.pdf"
-          }
-        ]
-      }
-    },
-    "cdp": {
-      "@title": "Columbia Data Products",
-      "mpc1600": {
-        "@title": "CDP MPC 1600",
-        "cga": {
-          "@title": "Color Display",
-          "@redirect_from": "/devices/pcx86/machine/cdp/mpc1600/cga/640kb/"
-        },
-        "@documents": [
-          {
-            "@title": "Columbia Data Products MP Operations Guide (1983)",
-            "@file": "Columbia_Data_Products_MPC_1600-Operations_Guide.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMScGXgEVN-4-XyfA?e=2iQVlh",
-            "@cover": ".jpg",
-            "@source": "http://www.minuszerodegrees.net/manuals/Columbia%20Data%20Products/Columbia%20Data%20Products%20MPC%201600%20-%20Operations%20Guide.pdf"
-          }
-        ]
-      }
-    },
-    "compaq": {
-      "@title": "COMPAQ",
-      "portable": {
-        "@title": "Portable",
-        "vdu": {
-          "@title": "Monochrome Graphics",
-          "@redirect_from": "/devices/pcx86/machine/compaq/portable/vdu/128kb/"
-        },
-        "@documents": [
-          {
-            "@title": "COMPAQ Portable Operations Guide (Nov 1982)",
-            "@file": "COMPAQ_Operations_Guide_1982-11.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEafO5tOghjO67McQ?e=QsXzCl",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          }
-        ]
-      },
-      "deskpro286": {
-        "@title": "DeskPro 286",
-        "": {
-          "@title": "Machines"
-        },
-        "@documents": [
-          {
-            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, May 1987)"
-          },
-          {
-            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, May 1987)",
-            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol2_1987-05.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq463rsLHiJe9AY7FQ?e=Xxtt3j",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, Dec 1987)",
-            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol1_1987-12.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvAnh2ZAxwmv7UMrSw?e=nQPirJ",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, Dec 1987)",
-            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol2_1987-12.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvAok6a1GZWGWEvr-g?e=EToJaL",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "COMPAQ DeskPro 286 Operations Guide (Feb 1987)",
-            "@file": "COMPAQ_DeskPro_286_Operations_Guide_1987-02.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq1_tSCFGeiC6Yghpw?e=wI7uEo",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "COMPAQ DeskPro 286 Operations Guide - READ THIS FIRST (Sep 1987)",
-            "@file": "COMPAQ_DeskPro_286_Operations_Guide_READ_THIS_FIRST_1987-09.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq4Cb6j-SlhNicPrCg?e=cGbEsS",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          }
-        ]
-      },
-      "deskpro386": {
-        "@title": "DeskPro 386",
-        "": {
-          "@title": "Machines",
-          "@redirect_from": "/devices/pcx86/machine/compaq/deskpro386/"
-        },
-        "@documents": [
-          {
-            "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume I, Sep 1986)",
-            "@file": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol1_1986-09.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-kRDehAMRp7BDfn0A?e=MNNw9w",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume II, Sep 1986)",
-            "@file": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol2_1986-09.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-kS9Xp8xd_kHMKCqg?e=fWqJ0F",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "COMPAQ DeskPro 386/25 Technical Reference Guide (Volume I, Aug 1988)",
-            "@file": "COMPAQ_DeskPro_386-25_Technical_Reference_Guide_Vol1_1988-08.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq5BThwmEpfyp0EBdA?e=53SAyY",
             "@cover": ".jpg",
             "@source": "PCjs"
           }
