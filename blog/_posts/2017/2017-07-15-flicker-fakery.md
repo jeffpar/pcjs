@@ -70,7 +70,7 @@ they are, the better.
 It's also important for understanding the world in which PC users and programmers operated in the early 1980's, the
 challenges that programmers faced, and some of the interesting solutions they came up with.
 
-One of those interesting solutions was a program from 1986 called [FlickerFree](/software/pcx86/util/flickerfree/),
+One of those interesting solutions was a program from 1986 called [FlickerFree](/software/pcx86/util/other/flickerfree/1.0/),
 the purpose and value of which would be almost completely lost on someone today if they had never seen or used an original
 IBM PC with a CGA.
 
@@ -90,7 +90,7 @@ Today, in honor of all that flickering, I'm pleased to announce that [PCx86]({{ 
 one of the PCjs emulators I'm always trying to improve, now offers **FLICKERING** on all IBM PC Color Graphics configurations.
 If you feel the need to override it, you can add *flicker=0* to the URL of your favorite machine; e.g.:
 
-> [www.pcjs.org/software/pcx86/util/flickerfree/?flicker=0](/software/pcx86/util/flickerfree/?flicker=0)
+> [www.pcjs.org/software/pcx86/util/flickerfree/1.0/?flicker=0](/software/pcx86/util/other/flickerfree/1.0/?flicker=0)
 
 In fact, you can set the *flicker* property to any value from 0 to 1; the default is 0.5.  This value is applied to
 the *opacity* property of the PCx86 &lt;canvas&gt; element, allowing you to mimic whatever degree of "phosphorescent

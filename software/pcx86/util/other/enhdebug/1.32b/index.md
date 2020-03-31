@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Enhanced DEBUG for PC DOS and MS-DOS
-permalink: /software/pcx86/util/enhdebug/
+permalink: /software/pcx86/util/other/enhdebug/1.32b/
 redirect_from: /disks/pcx86/tools/other/enhdebug/
 machines:
   - id: ibm5160-pcdos200

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Enhanced DEBUG for PC DOS and MS-DOS (with PCjs Debugger)
-permalink: /software/pcx86/util/enhdebug/debugger/
+permalink: /software/pcx86/util/other/enhdebug/1.32b/debugger/
 redirect_from: /disks/pcx86/tools/other/enhdebug/debugger/
 machines:
   - id: ibm5160-pcdos200

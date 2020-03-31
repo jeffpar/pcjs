@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Central Point PC Tools Deluxe 4.30
-permalink: /software/pcx86/util/pctools/4.30/
+permalink: /software/pcx86/util/other/pctools/4.30/
 redirect_from: /disks/pcx86/tools/other/pctools/4.30/
 ---
 

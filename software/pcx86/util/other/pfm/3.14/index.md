@@ -1,7 +1,7 @@
 ---
 layout: page
 title: PFM (Paul's File Manager)
-permalink: /software/pcx86/util/pfm/
+permalink: /software/pcx86/util/other/pfm/3.14/
 redirect_from: /disks/pcx86/tools/other/pfm/
 machines:
   - id: ibm5160-pcdos200
@@ -15,9 +15,6 @@ machines:
         name: PFM (Paul&apos;s File Manager) 3.14
     autoType: $date\r$time\r$10B:\rDIR\r
 ---
-
-PFM (Paul's File Manager)
--------------------------
 
 On June 19, 2018, while meeting with a number of former COMPAQ engineers in Houston, one of them (Norm) brought an
 old COMPAQ Portable LTE/486, which contained a copy of an internally developed -- and fondly remembered -- program
