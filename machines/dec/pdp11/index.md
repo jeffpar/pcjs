@@ -7,4 +7,8 @@ redirect_from:
   - /modules/pdp11/
 ---
 
-{% include gallery/documents.html width="200" height="260" tag="hardware" %}
+{% include gallery/documents.html title="PDP-11 Hardware" width="200" height="260" tag="hardware" %}
+
+{% include gallery/documents.html title="PDP-11 Diagnostics" width="200" height="260" tag="diagnostic" %}
+
+{% include gallery/documents.html title="PDP-11 Software" width="200" height="260" tag="software" %}

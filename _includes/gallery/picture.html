@@ -1,20 +1,20 @@
-{%- capture include_width -%}{%- if include.width %} width="{{ include.width }}"{%- endif -%}{%- endcapture -%}
-{%- capture include_height -%}{%- if include.height %} height="{{ include.height }}"{%- endif -%}{%- endcapture %}
+{%- capture picture_width -%}{%- if include.width %} width="{{ include.width }}"{%- endif -%}{%- endcapture -%}
+{%- capture picture_height -%}{%- if include.height %} height="{{ include.height }}"{%- endif -%}{%- endcapture %}
 <div class="pcjs-picture-frame">
-{%- capture include_image -%}{{ site.baseurl }}{{ include.image | default: include.src }}{%- endcapture %}
+{%- capture picture_image -%}{{ site.baseurl }}{{ include.image | default: include.src }}{%- endcapture %}
 	<div class="pcjs-picture-image">
 {%- if include.link -%}
-  {%- capture include_link -%}href="{{ site.baseurl }}{{ include.link }}"{%- if include.external %} target="_blank"{%- endif -%}{%- endcapture %}
-    <a {{ include_link }}>
-      <img src="{{ include_image }}"{{ include_width }}{{ include_height }} alt="{{ include.caption }}"/>
+  {%- capture picture_link -%}href="{{ site.baseurl }}{{ include.link }}"{%- if include.external %} target="_blank"{%- endif -%}{%- endcapture %}
+    <a {{ picture_link }}>
+      <img src="{{ picture_image }}"{{ picture_width }}{{ picture_height }} alt="{{ include.caption }}"/>
     </a>
 {%- else %}
-    <img src="{{ include_image }}"{{ include_width }}{{ include_height }} alt="{{ include.caption }}"/>
+    <img src="{{ picture_image }}"{{ picture_width }}{{ picture_height }} alt="{{ include.caption }}"/>
 {%- endif -%}
 {%- if include.credit %}
     <div class="pcjs-picture-credit">{{ include.credit }}</div>
 {%- endif %}
   </div>
-{%- capture include_caption -%}{{ include.caption }}{%- if include.source contains "http" %} [<a href="{{ include.source }}">Source</a>]{%- endif -%}{%- endcapture -%}
-  <div class="pcjs-picture-caption">{{ include_caption }}</div>
+{%- capture picture_caption -%}{{ include.caption }}{%- if include.source contains "http" %} [<a href="{{ include.source }}">Source</a>]{%- endif -%}{%- endcapture -%}
+  <div class="pcjs-picture-caption">{{ picture_caption }}</div>
 </div>
