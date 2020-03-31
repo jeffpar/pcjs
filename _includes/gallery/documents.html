@@ -5,11 +5,13 @@
 {% capture cover_height %}{{ include.height | default: "" }}{% endcapture %}
 {% assign path = include.path | default: page.permalink %}
 {% assign path_parts = path | split: "/" %}
-{% assign include_style = include.style | default: "center" %}
-{% assign include_tag = include.tag | default: "" %}
+{% assign doc_style = include.style | default: "center" %}
+{% assign doc_tag = include.tag | default: "" %}
 {%- assign docs_exist = false -%}
+{%- assign cur_path = "" -%}
 {%- for part in path_parts -%}
   {%- if part == "" -%}{% continue %}{%- endif -%}
+  {%- capture cur_path -%}{{ cur_path }}/{{ part }}{%- endcapture -%}
   {%- if part == "machines" -%}
     {%- assign data = site.data.hardware -%}
   {%- elsif part == "software" -%}
@@ -40,20 +42,20 @@
   <h3 id="{{ group_id }}">{{ title }}</h3>
       {%- endif -%}
       {%- assign docs_exist = true -%}
-      {%- include gallery/begin.html style=include_style -%}
+      {%- include gallery/begin.html style=doc_style -%}
       {%- for doc in docs -%}
         {%- assign doc_title = doc['@title'] -%}
         {%- assign doc_tags = doc['@tags'] | default: "" -%}
-        {%- if doc_title and doc_title != "" and doc_tags contains include_tag -%}
+        {%- if doc_title and doc_title != "" and doc_tags contains doc_tag -%}
           {%- assign doc_file = doc['@file'] -%}
           {%- assign doc_id = doc_file | replace: ".pdf","" | replace: ".png","" | default: doc_title | slugify -%}
-          {%- capture doc_path -%}{{ path }}{{ doc_file }}{%- endcapture -%}
+          {%- capture doc_path -%}{{ cur_path }}/{{ doc_file }}{%- endcapture -%}
           {%- assign doc_link = doc['@link'] | default: doc_path -%}
           {%- assign doc_cover = doc['@cover'] | default: "/documents/covers/default.jpg" -%}
           {%- assign doc_width = doc['@width'] | default: cover_width -%}
           {%- assign doc_height = doc['@height'] | default: cover_height -%}
           {%- if doc_cover == ".jpg" or doc_cover == ".png" -%}
-            {%- capture doc_cover -%}{{ path }}covers/{{ doc_file | replace: ".pdf",doc_cover | replace: ".png",doc_cover }}{%- endcapture -%}
+            {%- capture doc_cover -%}{{ cur_path }}/covers/{{ doc_file | replace: ".pdf",doc_cover | replace: ".png",doc_cover }}{%- endcapture -%}
           {%- endif -%}
           {%- assign doc_source = doc['@source'] -%}
           {%- include gallery/image.html id=doc_id image=doc_cover link=doc_link title=doc_title width=doc_width height=doc_height source=doc_source external=true -%}
