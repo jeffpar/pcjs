@@ -416,14 +416,6 @@
           "@cover": ".jpg",
           "@source": "",
           "@tags": "software,rt11"
-        },
-        {
-          "@title": "",
-          "@file": ".pdf",
-          "@link": "",
-          "@cover": ".jpg",
-          "@source": "",
-          "@tags": ""
         }
       ]
     },
@@ -724,13 +716,6 @@
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lJBRb36NH-gIM2kw?e=F4361P",
             "@cover": ".jpg",
             "@source": "PCjs"
-          },
-          {
-            "@title": "",
-            "@file": ".pdf",
-            "@link": "",
-            "@cover": ".jpg",
-            "@source": ""
           }
         ]
       },
@@ -771,6 +756,72 @@
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFQgmvof3IQdrHQKQ?e=y8QOzc",
             "@cover": ".jpg",
             "@source": "PCjs"
+          }
+        ]
+      }
+    },
+    "att": {
+      "@title": "AT&T",
+      "6300": {
+        "@title": "AT&T Personal Computer 6300",
+        "cga": {
+          "@title": "AT&T 6300 with Color Display",
+          "@redirect_from": "/devices/pcx86/machine/att/6300/cga/640kb/"
+        },
+        "@documents": [
+          {
+            "@title": "AT&T 6300 GWBASIC Programmer's Guide (1985)",
+            "@file": "ATT_PC_6300_Programmers_Guide_GWBASIC_1985.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFLW1snGb1Z-lrMhw?e=j71u9Z",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/999-802-000IS_Programmers_Guide_PC6300_GWBASIC_by_Microsoft_1985.pdf"
+          },
+          {
+            "@title": "AT&T 6300 PLUS ROM-BIOS Listing (1986)",
+            "@file": "ATT_PC_6300_Plus_ROM-BIOS_Listing_1986.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFInlKWgh8AL81igA?e=M654eo",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/ATT_Personal_Computer_6300_Plus_-_ROM-BIOS_Listing_-_Rel_2.05_Issue_1_-_1986.pdf"
+          },
+          {
+            "@title": "AT&T 6300 System Programmer's Guide (1985)",
+            "@file": "ATT_PC_6300_System_Programmers_Guide_1985.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFNtVfFVzNzMvJhpw?e=hM1Yg2",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/999-802-200IS_System_Programmers_Guide_PC6300_1985.pdf"
+          },
+          {
+            "@title": "AT&T 6300 Service Manual",
+            "@file": "ATT_PC_6300_Service_Manual.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFMs31Uchp2WucCxw?e=Jj2rR2",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/ATT_PC_6300_Service_Manual.pdf"
+          },
+          {
+            "@title": "AT&T 6300 User's Guide",
+            "@file": "ATT_PC_6300_Users_Guide.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFJ8XlR3Snxd9EnBQ?e=qixCcK",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/ATT_PC_6300_Users_Guide.pdf"
+          }
+        ]
+      }
+    },
+    "cdp": {
+      "@title": "Columbia Data Products",
+      "mpc1600": {
+        "@title": "CDP MPC 1600",
+        "cga": {
+          "@title": "CDP MPC 1600 with Color Display",
+          "@redirect_from": "/devices/pcx86/machine/cdp/mpc1600/cga/640kb/"
+        },
+        "@documents": [
+          {
+            "@title": "Columbia Data Products MP Operations Guide (1983)",
+            "@file": "Columbia_Data_Products_MPC_1600-Operations_Guide.pdf",
+            "@link": "",
+            "@cover": ".jpg",
+            "@source": "http://www.minuszerodegrees.net/manuals/Columbia%20Data%20Products/Columbia%20Data%20Products%20MPC%201600%20-%20Operations%20Guide.pdf"
           }
         ]
       }
@@ -866,6 +917,46 @@
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq5BThwmEpfyp0EBdA?e=53SAyY",
             "@cover": ".jpg",
             "@source": "PCjs"
+          }
+        ]
+      }
+    },
+    "zenith": {
+      "@title": "Zenith",
+      "z150": {
+        "@title": "Zenith Z-150",
+        "cga": {
+          "@title": "Zenith Z-150 with Color Display",
+          "@redirect_from": "/devices/pcx86/machine/zenith/z150/cga/640kb/"
+        },
+        "@documents": [
+          {
+            "@title": "Programmer's Reference Manual (Z-100 Series)",
+            "@file": "Z-100_Programmers_Reference_Manual-OCR.pdf",
+            "@link": "",
+            "@cover": ".jpg",
+            "@source": "http://planemo.org/retro/downloads/z100/manuals/Z-100%20Programmers%20Reference%20Manual-OCR.pdf"
+          },
+          {
+            "@title": "Z-150 User's Guide",
+            "@file": "Zenith_Z-150_PC_Users_and_Operations_Manual_Guide.pdf",
+            "@link": "",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/zenith/z150/Zenith_Z-150_PC_Users_and_Operations_Manual_Guide.pdf"
+          },
+          {
+            "@title": "Z-150 Service Manuals",
+            "@file": "Zenith_Z-150_PC_Service_Manuals.pdf",
+            "@link": "",
+            "@cover": ".jpg",
+            "@source": "http://www.minuszerodegrees.net/manuals/Zenith%20Data%20Systems/Zenith%20Z-150%20PC%20-%20Service%20Manual.pdf"
+          },
+          {
+            "@title": "Z-150 Brochure",
+            "@file": "ZDS-Z150.pdf",
+            "@link": "",
+            "@cover": ".jpg",
+            "@source": "https://computerarchive.org/files/comp/ad/zenith/ZDS-Z150.pdf"
           }
         ]
       }

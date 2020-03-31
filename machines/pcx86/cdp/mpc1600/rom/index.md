@@ -6,7 +6,7 @@ redirect_from: /devices/pcx86/rom/cdp/mpc1600/
 ---
 
 [BIOS-434.json](BIOS-434.json) is a JSON-encoded dump of the ROM images (MPC4.34_U45.BIN, MPC4.34_U46.BIN, and
-MPC4.34_U47.BIN) obtained from the [www.minuszerodegrees.net](http://www.minuszerodegrees.net/rom/rom.htm) website.  
+MPC4.34_U47.BIN) obtained from [www.minuszerodegrees.net](http://www.minuszerodegrees.net/rom/rom.htm).  
 
 The dump was produced by concatenating the three 4Kb ROM images to produce a single 12Kb ROM image and then running
 [FileDump]({{ site.github.pages }}/tools/filedump/):
