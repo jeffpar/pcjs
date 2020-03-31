@@ -8,7 +8,7 @@ machines:
   - id: ibm5170-win300
     type: pcx86
     config: /configs/pcx86/xml/machine/5170/ega/1024kb/rev3/machine.xml
-    drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/sys/windows/3.00/PCDOS320-WIN300-EGA.json"}]'
+    drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/PCDOS320-WIN300-EGA.json"}]'
     autoMount:
       A:
         name: None

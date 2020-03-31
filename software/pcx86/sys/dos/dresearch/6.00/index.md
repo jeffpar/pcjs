@@ -7,7 +7,7 @@ machines:
   - id: ibm5170-drdos600
     type: pcx86
     config: /configs/pcx86/xml/machine/5170/ega/1024kb/rev1/machine.xml
-    drives: '[{name:"DR DOS 6.00 (20Mb)",type:2,path:"/harddisks/pcx86/sys/dos/dresearch/6.00/DRDOS600.json"}]'
+    drives: '[{name:"DR DOS 6.00 (20Mb)",type:2,path:"/harddisks/pcx86/20mb/DRDOS600.json"}]'
     floppyDrives: '[{boot:false}]'
     autoMount:
       A:

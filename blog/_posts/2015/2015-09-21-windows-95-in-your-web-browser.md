@@ -9,7 +9,7 @@ machines:
     type: pcx86
     state: /software/pcx86/sys/windows/win95/4.00.950/state.json
     config: /configs/pcx86/xml/machine/compaq/deskpro386/vga/4096kb/machine.xml
-    drives: '[{name:"68Mb Hard Disk",type:4,path:"/harddisks/pcx86/sys/windows/win95/WIN95.json"}]'
+    drives: '[{name:"68Mb Hard Disk",type:4,path:"/harddisks/pcx86/68mb/WIN95.json"}]'
     autoMount:
       A:
         name: None

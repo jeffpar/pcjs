@@ -9,7 +9,7 @@ machines:
     type: pcx86
     state: state.json
     config: /configs/pcx86/xml/machine/compaq/deskpro386/vga/2048kb/machine.xml
-    drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/sys/windows/2.01/COMPAQ310-WIN386201-VGA.json"}]'
+    drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/COMPAQ310-WIN386201-VGA.json"}]'
     autoMount:
       A:
         name: None
