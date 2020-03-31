@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Central Point PC Tools 1.03
-permalink: /software/pcx86/util/pctools/1.03/
+permalink: /software/pcx86/util/other/pctools/1.03/
 redirect_from: /disks/pcx86/tools/other/pctools/1.03/
 ---
 

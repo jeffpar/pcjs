@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "OBJASM: An Object Module Disassembler"
-permalink: /software/pcx86/util/objasm/
+permalink: /software/pcx86/util/other/objasm/2.0/
 redirect_from: /disks/pcx86/tools/other/objasm/
 machines:
   - id: ibm5160

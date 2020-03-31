@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Realia Spacemaker 1.06
-permalink: /software/pcx86/util/spacemaker/1.06/
+permalink: /software/pcx86/util/other/spacemaker/1.06/
 redirect_from: /disks/pcx86/tools/other/spacemaker/1.06/
 ---
 

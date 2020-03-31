@@ -1,7 +1,7 @@
 ---
 layout: page
 title: UNP 4.11
-permalink: /software/pcx86/util/unp/4.11/
+permalink: /software/pcx86/util/other/unp/4.11/
 redirect_from: /disks/pcx86/tools/other/unp/4.11/
 ---
 

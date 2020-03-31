@@ -7901,39 +7901,9 @@
         }
       }
     },
-    "enhdebug": {
-      "@title": "Enhanced DEBUG",
-      "@versions": {
-        "1.32b": {
-          "@title": "Enhanced DEBUG 1.32b",
-          "@media": [
-            {
-              "@title": "Enhanced DEBUG 1.32b",
-              "@diskette": "ENHDEBUG.json",
-              "@type": "PC360K"
-            }
-          ]
-        }
-      }
-    },
-    "flickerfree": {
-      "@title": "FlickerFree",
-      "@versions": {
-        "1.0": {
-          "@title": "FlickerFree 1.0",
-          "@media": [
-            {
-              "@title": "FlickerFree 1.0",
-              "@diskette": "FLICKERFREE.json",
-              "@type": "PC180K"
-            }
-          ]
-        }
-      }
-    },
     "ibm": {
       "@title": "IBM",
-      "debug": {
+      "prodebug": {
         "@title": "IBM Professional Debug",
         "@versions": {
           "1.00": {
@@ -8178,98 +8148,131 @@
         }
       }
     },
-    "objasm": {
-      "@title": "OBJASM",
-      "@versions": {
-        "2.0": {
-          "@title": "OBJASM 2.0",
-          "@media": [
-            {
-              "@title": "OBJASM 2.0 (Bin)",
-              "@diskette": "OBJASM-BIN.json",
-              "@type": "PC320K"
-            },
-            {
-              "@title": "OBJASM 2.0 (Src)",
-              "@diskette": "OBJASM-SRC.json",
-              "@type": "PC320K"
-            }
-          ]
+    "other": {
+      "@title": "Other",
+      "enhdebug": {
+        "@title": "Enhanced DEBUG",
+        "@versions": {
+          "1.32b": {
+            "@title": "Enhanced DEBUG 1.32b",
+            "@media": [
+              {
+                "@title": "Enhanced DEBUG 1.32b",
+                "@diskette": "ENHDEBUG.json",
+                "@type": "PC360K"
+              }
+            ]
+          }
         }
-      }
-    },
-    "pctools": {
-      "@title": "PC Tools",
-      "@versions": {
-        "1.03": {
-          "@title": "PC Tools 1.03",
-          "@media": [
-            {
-              "@title": "Central Point PC Tools 1.03",
-              "@diskette": "PCTOOLS103.json",
-              "@type": "PC360K"
-            }
-          ]
-        },
-        "4.30": {
-          "@title": "PC Tools 4.30",
-          "@media": [
-            {
-              "@title": "Central Point PC Tools 4.30",
-              "@diskette": "PCTOOLS430.json",
-              "@type": "PC360K"
-            }
-          ]
+      },
+      "flickerfree": {
+        "@title": "FlickerFree",
+        "@versions": {
+          "1.0": {
+            "@title": "FlickerFree 1.0",
+            "@media": [
+              {
+                "@title": "FlickerFree 1.0",
+                "@diskette": "FLICKERFREE.json",
+                "@type": "PC180K"
+              }
+            ]
+          }
         }
-      }
-    },
-    "pfm": {
-      "@title": "PFM (Paul's File Manager)",
-      "@versions": {
-        "3.14": {
-          "@title": "PFM (Paul's File Manager) 3.14",
-          "@media": [
-            {
-              "@title": "PFM (Paul's File Manager) 3.14",
-              "@diskette": "COMPAQ-PFM.json",
-              "@type": "PC320K"
-            }
-          ]
+      },
+      "objasm": {
+        "@title": "OBJASM",
+        "@versions": {
+          "2.0": {
+            "@title": "OBJASM 2.0",
+            "@media": [
+              {
+                "@title": "OBJASM 2.0 (Bin)",
+                "@diskette": "OBJASM-BIN.json",
+                "@type": "PC320K"
+              },
+              {
+                "@title": "OBJASM 2.0 (Src)",
+                "@diskette": "OBJASM-SRC.json",
+                "@type": "PC320K"
+              }
+            ]
+          }
         }
-      }
-    },
-    "spacemaker": {
-      "@title": "Spacemaker",
-      "@versions": {
-        "1.06": {
-          "@title": "Spacemaker 1.06",
-          "@media": [
-            {
-              "@title": "Realia Spacemaker 1.06",
-              "@diskette": "SM106.json",
-              "@type": "PC160K"
-            }
-          ]
+      },
+      "pctools": {
+        "@title": "PC Tools",
+        "@versions": {
+          "1.03": {
+            "@title": "PC Tools 1.03",
+            "@media": [
+              {
+                "@title": "Central Point PC Tools 1.03",
+                "@diskette": "PCTOOLS103.json",
+                "@type": "PC360K"
+              }
+            ]
+          },
+          "4.30": {
+            "@title": "PC Tools 4.30",
+            "@media": [
+              {
+                "@title": "Central Point PC Tools 4.30",
+                "@diskette": "PCTOOLS430.json",
+                "@type": "PC360K"
+              }
+            ]
+          }
         }
-      }
-    },
-    "unp": {
-      "@title": "UNP",
-      "@versions": {
-        "4.11": {
-          "@title": "UNP 4.11",
-          "@media": [
-            {
-              "@title": "UNP (Executable Unpacker) 4.11",
-              "@diskette": "UNP411.json",
-              "@type": "PC160K"
-            },
-            {
-              "@title": "UNP (Executable Unpacker) Source",
-              "@diskette": "UNP411-SRC.json",
-              "@type": "PC1200K"
-            }
-          ]
+      },
+      "pfm": {
+        "@title": "PFM (Paul's File Manager)",
+        "@versions": {
+          "3.14": {
+            "@title": "PFM 3.14",
+            "@media": [
+              {
+                "@title": "PFM (Paul's File Manager) 3.14",
+                "@diskette": "COMPAQ-PFM.json",
+                "@type": "PC320K"
+              }
+            ]
+          }
+        }
+      },
+      "spacemaker": {
+        "@title": "Spacemaker",
+        "@versions": {
+          "1.06": {
+            "@title": "Spacemaker 1.06",
+            "@media": [
+              {
+                "@title": "Realia Spacemaker 1.06",
+                "@diskette": "SM106.json",
+                "@type": "PC160K"
+              }
+            ]
+          }
+        }
+      },
+      "unp": {
+        "@title": "UNP",
+        "@versions": {
+          "4.11": {
+            "@title": "UNP 4.11",
+            "@media": [
+              {
+                "@title": "UNP (Executable Unpacker) 4.11",
+                "@diskette": "UNP411.json",
+                "@type": "PC160K"
+              },
+              {
+                "@title": "UNP (Executable Unpacker) Source",
+                "@diskette": "UNP411-SRC.json",
+                "@type": "PC1200K"
+              }
+            ]
+          }
         }
       }
     }

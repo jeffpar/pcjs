@@ -1,7 +1,7 @@
 ---
 layout: page
 title: FlickerFree 1.0
-permalink: /software/pcx86/util/flickerfree/
+permalink: /software/pcx86/util/other/flickerfree/1.0/
 redirect_from: /disks/pcx86/tools/other/flickerfree/
 machines:
   - id: ibm5150
