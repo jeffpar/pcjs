@@ -15,4 +15,4 @@ This machine is also available with the [PCjs Debugger](/configs/pcx86/xml/machi
 
 ---
 
-"The quality goes in before the name goes on."
+And remember: "The quality goes in before the name goes on."
