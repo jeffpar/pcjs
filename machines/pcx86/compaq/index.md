@@ -7,27 +7,27 @@ redirect_from: /devices/pcx86/machine/compaq/
 
 PCjs currently supports the following COMPAQ machines:
 
-* [COMPAQ Portable](portable/)
-* [COMPAQ DeskPro 386](deskpro386/)
+  - [COMPAQ Portable](portable/vdu/)
+  - [COMPAQ DeskPro 386](deskpro386/)
 
 Here is a roughly chronological list of COMPAQ machines from the 1980s, which PCjs hopes to eventually support:
 
-- [COMPAQ Portable](#compaq-portable)
-- [COMPAQ Plus](#compaq-plus)
-- [COMPAQ DeskPro](#compaq-deskpro)
-- [COMPAQ DeskPro 286](#compaq-deskpro-286)
-- [COMPAQ Portable 286](#compaq-portable-286)
-- [COMPAQ Portable II](#compaq-portable-ii)
-- [COMPAQ DeskPro 386](#compaq-deskpro-386)
-- [COMPAQ Portable III](#compaq-portable-iii)
-- COMPAQ DeskPro 386/20
-- [COMPAQ Portable 386](#compaq-portable-386)
-- COMPAQ DeskPro 386/25
-- COMPAQ DeskPro 386s
-- [COMPAQ DeskPro 386/20e](#compaq-38620e)
-- [COMPAQ SLT Series](#compaq-slt-series) (SLT/286)
-- COMPAQ DeskPro 386/33
-- [COMPAQ LTE Series](#compaq-lte-series) (LTE and LTE/286)
+  - [COMPAQ Portable](#compaq-portable)
+  - [COMPAQ Plus](#compaq-plus)
+  - [COMPAQ DeskPro](#compaq-deskpro)
+  - [COMPAQ DeskPro 286](#compaq-deskpro-286)
+  - [COMPAQ Portable 286](#compaq-portable-286)
+  - [COMPAQ Portable II](#compaq-portable-ii)
+  - [COMPAQ DeskPro 386](#compaq-deskpro-386)
+  - [COMPAQ Portable III](#compaq-portable-iii)
+  - COMPAQ DeskPro 386/20
+  - [COMPAQ Portable 386](#compaq-portable-386)
+  - COMPAQ DeskPro 386/25
+  - COMPAQ DeskPro 386s
+  - [COMPAQ DeskPro 386/20e](#compaq-38620e)
+  - [COMPAQ SLT Series](#compaq-slt-series) (SLT/286)
+  - COMPAQ DeskPro 386/33
+  - [COMPAQ LTE Series](#compaq-lte-series) (LTE and LTE/286)
 
 ### Regarding The COMPAQ Name
 
