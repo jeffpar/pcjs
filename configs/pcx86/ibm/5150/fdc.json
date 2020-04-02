@@ -2,7 +2,7 @@
   "id": "fdcNEC",
   "class": "fdc",
   "autoMount": {
-    "A": {"name": "PC DOS 1.00 (Disk 1)"}
+    "A": {"name": "PC DOS 1.00"}
   },
   "diskettes": "/configs/pcx86/software.json",
   "style": {

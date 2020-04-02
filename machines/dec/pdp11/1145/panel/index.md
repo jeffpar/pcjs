@@ -15,4 +15,4 @@ This machine is also available with our built-in [Debugger](debugger/).
 
 Other interesting things to know about this machine:
 
-* It includes an [M9312 ROM](/machines/dec/pdp11/rom/M9312) at address 165000.  The exact ROM is [23-616F1](/machines/dec/pdp11/rom/M9312/23-616F1.txt).
+  - It includes an [M9312 ROM](/machines/dec/pdp11/rom/M9312) at address 165000.  The exact ROM is [23-616F1](/machines/dec/pdp11/rom/M9312/23-616F1.txt).

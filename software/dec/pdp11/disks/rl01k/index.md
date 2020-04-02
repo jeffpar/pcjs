@@ -11,4 +11,4 @@ with an [RL11 Disk Controller](/configs/pdp11/rl11/).
 
 Below is a summary of RL01K disk images archived here.
 
-* [RSTS/E v7.0](rstsv70/) [[Source](http://skn.noip.me/pdp11/): RL2.DSK]
+  - [RSTS/E v7.0](rstsv70/) [[Source](http://skn.noip.me/pdp11/): RL2.DSK]

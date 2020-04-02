@@ -27,8 +27,8 @@ works only with standard disk formats.
 Related
 -------
 
-* [Zork I: The Great Underground Empire](../zork1/)
-* [Zork II: The Wizard of Frobozz](../zork2/)
+  - [Zork I: The Great Underground Empire](../zork1/)
+  - [Zork II: The Wizard of Frobozz](../zork2/)
 
 References
 ----------

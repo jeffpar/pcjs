@@ -9,7 +9,7 @@ A few more interesting disks were recently added to the PCjs Archives, including
 
 - [WordStar v3.20](/software/pcx86/app/other/wordstar/3.20/) for DOS (courtesy of the [OS/2 Museum](http://www.os2museum.com/))
 - [WordStar for PCjr](/software/pcx86/app/other/wordstar/pcjr/) (courtesy of a former MicroPro employee and [WinWorld](https://winworldpc.com/product/wordstar/for-pcjr))
-- Previously unavailable versions of QEMM-386, including [4.10](/software/pcx86/env/quarterdeck/qemm386/4.10/), [4.23](/software/pcx86/env/quarterdeck/qemm386/4.23/), [5.13](/software/pcx86/env/quarterdeck/qemm386/5.13/), and [6.02](/software/pcx86/env/quarterdeck/qemm386/6.02/) (courtesy of eBay) 
+- Previously unavailable versions of QEMM-386, including [4.10](/software/pcx86/sys/ext/quarterdeck/qemm386/4.10/), [4.23](/software/pcx86/sys/ext/quarterdeck/qemm386/4.23/), [5.13](/software/pcx86/sys/ext/quarterdeck/qemm386/5.13/), and [6.02](/software/pcx86/sys/ext/quarterdeck/qemm386/6.02/) (courtesy of eBay) 
 - Software from [Undocumented DOS (2nd Edition)](/software/pcx86/sw/books/undocumented_dos/) and [Unauthorized Windows 95](/software/pcx86/sw/books/unauthorized_windows_95) (courtesy of Andrew Schulman)
 
 I also took a closer look at the [COMPAQ MS-DOS 3.31](/software/pcx86/sys/dos/compaq/3.31/) disks, in order to test its

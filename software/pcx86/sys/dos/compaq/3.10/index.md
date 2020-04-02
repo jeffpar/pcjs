@@ -18,8 +18,8 @@ machines:
 
 This directory contains two different releases of COMPAQ MS-DOS 3.10:
 
-* [COMPAQ MS-DOS 3.10 (dated 10-31-86)](#compaq-ms-dos-310-10-31-86)
-* [COMPAQ MS-DOS 3.10 (dated 12-17-85)](#compaq-ms-dos-310-12-17-85)
+  - [COMPAQ MS-DOS 3.10 (dated 10-31-86)](#compaq-ms-dos-310-10-31-86)
+  - [COMPAQ MS-DOS 3.10 (dated 12-17-85)](#compaq-ms-dos-310-12-17-85)
 
 However, the older release is not a distribution copy.  It is provided for historical interest only.
 
@@ -181,8 +181,8 @@ standpoint, there was no difference between these releases.
 
 Also of interest, this disk contains two COMPAQ ENHDISK drivers:
 
-* ENHDISK.OLD (dated 12-17-85)
-* ENHDISK.SYS (dated 08-14-86)
+  - ENHDISK.OLD (dated 12-17-85)
+  - ENHDISK.SYS (dated 08-14-86)
 
 However, even though the drivers are different, they both display the same message when loaded:
 

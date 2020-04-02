@@ -1,10 +1,10 @@
-{% capture title %}{{ include.title | default: "" }}{% endcapture %}
-{% capture featured_width %}{{ include.width | default: "" }}{% endcapture %}
-{% capture featured_height %}{{ include.height | default: "" }}{% endcapture %}
+{% assign title = include.title | default: "" %}
+{% assign featured_width = include.width | default: "" %}
+{% assign featured_height = include.height | default: "" %}
 {% assign include_maxwidth = include.maxwidth %}
 {% assign include_style = include.style | default: "center" %}
 {% assign include_tag = include.tag | default: "" %}
-{% if title != "" %} <h2>{{ title }}</h2>{% endif %}
+{% if title != "" %} <h3>{{ title }}</h3>{% endif %}
 {%- include gallery/begin.html style=include_style -%}
 {% assign item_num = 0 %}
 {%- for item in site.data.featured -%}

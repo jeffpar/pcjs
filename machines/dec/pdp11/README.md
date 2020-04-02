@@ -3,41 +3,41 @@ Support for [PDP-11 Machines](/machines/dec/pdp11/) was added to the PCjs Projec
 The PCjs PDP-11 emulator is currently comprised of the following components, as listed in [machines.json](/configs/machines.json) (see the *pdp11.scripts* property).
 Portions were adapted from the [PDP-11/70 Emulator](http://skn.noip.me/pdp11/pdp11.html) written by Paul Nankervis, with permission.
 
-* [bus.js](lib/bus.js)
-* [computer.js](lib/computer.js)
-* [cpu.js](lib/cpu.js)
-* [cpuops.js](lib/cpuops.js)
-* [cpustate.js](lib/cpustate.js)
-* [debugger.js](lib/debugger.js)
-* [defines.js](lib/defines.js)
-* [device.js](lib/device.js)
-* [disk.js](lib/disk.js)
-* [drive.js](lib/drive.js)
-* [keyboard.js](lib/keyboard.js)
-* [memory.js](lib/memory.js)
-* [messages.js](lib/messages.js)
-* [panel.js](lib/panel.js)
-* [pc11.js](lib/pc11.js)
-* [ram.js](lib/ram.js)
-* [rk11.js](lib/rk11.js)
-* [rl11.js](lib/rl11.js)
-* [rx11.js](lib/rx11.js)
-* [rom.js](lib/rom.js)
-* [serial.js](lib/serial.js)
+  - [bus.js](lib/bus.js)
+  - [computer.js](lib/computer.js)
+  - [cpu.js](lib/cpu.js)
+  - [cpuops.js](lib/cpuops.js)
+  - [cpustate.js](lib/cpustate.js)
+  - [debugger.js](lib/debugger.js)
+  - [defines.js](lib/defines.js)
+  - [device.js](lib/device.js)
+  - [disk.js](lib/disk.js)
+  - [drive.js](lib/drive.js)
+  - [keyboard.js](lib/keyboard.js)
+  - [memory.js](lib/memory.js)
+  - [messages.js](lib/messages.js)
+  - [panel.js](lib/panel.js)
+  - [pc11.js](lib/pc11.js)
+  - [ram.js](lib/ram.js)
+  - [rk11.js](lib/rk11.js)
+  - [rl11.js](lib/rl11.js)
+  - [rx11.js](lib/rx11.js)
+  - [rom.js](lib/rom.js)
+  - [serial.js](lib/serial.js)
 
 Since this module was written in 2016, it seemed appropriate to start adopting some of the more useful features of
 [ECMAScript](http://www.ecma-international.org/ecma-262/6.0/index.html) 2015 (aka ES6), including:
 
-* Classes
-* *const* and *let*
-* Computed Properties
-* Default Parameters
-* Octal and Binary Constants
-* Template Literals
+  - Classes
+  - *const* and *let*
+  - Computed Properties
+  - Default Parameters
+  - Octal and Binary Constants
+  - Template Literals
 	- String Interpolation (i.e., ${*expr*})
-* New Built-in Methods
+  - New Built-in Methods
 	- String.repeat()
-* *import* and *export*
+  - *import* and *export*
 
 However, I've still configured the Closure Compiler to "transpile" to ECMAScript 5 (aka ES5), because some people
 may still be using older browsers that don't support ES6 -- or at least the subset of ES6 features I'm currently

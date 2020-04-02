@@ -59,8 +59,8 @@ The boot sector of the PC DOS 1.00 disk image contains the following bytes:
 
 A number of people have already delved into the guts of the PC DOS 1.00 boot sector, including:
 
-* [Reverse-Engineering DOS 1.0 – Part 1: The Boot Sector (May 7, 2009 by Michael Steil)](http://www.pagetable.com/?p=165)
-* [The Boot Sector of IBM® Personal Computer™ DOS Version 1.00 (August 2, 2005 by Daniel B. Sedory)](http://thestarman.pcministry.com/DOS/ibm100/Boot.htm)
+  - [Reverse-Engineering DOS 1.0 – Part 1: The Boot Sector (May 7, 2009 by Michael Steil)](http://www.pagetable.com/?p=165)
+  - [The Boot Sector of IBM® Personal Computer™ DOS Version 1.00 (August 2, 2005 by Daniel B. Sedory)](http://thestarman.pcministry.com/DOS/ibm100/Boot.htm)
 
 Let's start with Michael Steil's well-written reverse-engineered source code (designed for **NASM**, not **ASM** or **MASM**),
 because it includes lots of commentary, allowing the boot sector to more or less speak for itself:

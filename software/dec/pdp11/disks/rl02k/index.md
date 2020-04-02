@@ -11,4 +11,4 @@ with an [RL11 Disk Controller](/configs/pdp11/rl11/).
 
 Below is a summary of RL02K disk images archived here.
 
-* [XXDP+ Diagnostics](xxdp/) [[Source](http://skn.noip.me/pdp11/): RL3.DSK]
+  - [XXDP+ Diagnostics](xxdp/) [[Source](http://skn.noip.me/pdp11/): RL3.DSK]

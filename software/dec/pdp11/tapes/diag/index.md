@@ -247,7 +247,7 @@ so for now, I'm just going to pick out selected tapes and archive them here.
 
 From [bitsavers.org](http://bitsavers.trailing-edge.com/bits/DEC/pdp11/papertapeimages/20040101/), Tray 02:
 
-* Tape 04: [MAINDEC-11-DEQKC-B1-PB 06/12/78; 11/70 cpu instruction exerciser; (c)1975,76](#md-11-1170-cpu-exerciser) [[1980 Listing](http://bitsavers.org/pdf/dec/pdp11/microfiche/ftp.j-hoppe.de/bw/gh/AH-7996E-MC__PDP11-70-74__11-70_INST_EXR__CEQKCE0__%28C%2975,80.pdf)]
+  - Tape 04: [MAINDEC-11-DEQKC-B1-PB 06/12/78; 11/70 cpu instruction exerciser; (c)1975,76](#md-11-1170-cpu-exerciser) [[1980 Listing](http://bitsavers.org/pdf/dec/pdp11/microfiche/ftp.j-hoppe.de/bw/gh/AH-7996E-MC__PDP11-70-74__11-70_INST_EXR__CEQKCE0__%28C%2975,80.pdf)]
 
 ### MD-11 11/70 CPU EXERCISER
 

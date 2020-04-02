@@ -161,26 +161,26 @@ the 286. By setting the appropriate bits in the memory area, the processor will 
 after LOADALL. For example, a LOADALL could be performed to a page protected VM86 task by setting the following
 conditions in the memory image:
 
-* PE and PG bits set to 1
-* VM bit set in the extended flags register
-* 8086 style segment register values into the memory image
-* Descriptor bases to (Segment Reg SHL 4)
-* Access rights (Present, ByteGranular, etc.)
-* LIMIT set to 0000FFFFH.
+  - PE and PG bits set to 1
+  - VM bit set in the extended flags register
+  - 8086 style segment register values into the memory image
+  - Descriptor bases to (Segment Reg SHL 4)
+  - Access rights (Present, ByteGranular, etc.)
+  - LIMIT set to 0000FFFFH.
 
 As another example, RESET can be emulated with LOADALL, by loading the processor's initial values into the memory
 image as follows:
 
-* All registers=0
-* GS,FS,DS,ES,SS=0
-* CS=F000,EIP=FFF0,CS-Base=FFFF0000
-* GS,FS,DS,ES,SS-Base=0
-* GS,FS,DS,ES,SS-AR=Present
-* GS,FS,DS,ES,SS-Limit=FFFF
-* CR0=0
-* All other control registers=0
-* Debug Registers=0
-* EFLAGS=0
+  - All registers=0
+  - GS,FS,DS,ES,SS=0
+  - CS=F000,EIP=FFF0,CS-Base=FFFF0000
+  - GS,FS,DS,ES,SS-Base=0
+  - GS,FS,DS,ES,SS-AR=Present
+  - GS,FS,DS,ES,SS-Limit=FFFF
+  - CR0=0
+  - All other control registers=0
+  - Debug Registers=0
+  - EFLAGS=0
 
 After the LOADALL instruction, the processor state will be identical to reset, could be set to run at a CPL <> 0
 while in real mode. Combinations such as these are possible, but may have unexpected results. Placing the processor
@@ -209,9 +209,9 @@ DOUBLE. For this reason, the memory dump area should always be DWORD aligned.
 
 Each descriptor entry consists of 3 pieces:
 
-* AR
-* Base
-* Limit
+  - AR
+  - Base
+  - Limit
 
 The AR part has the same format as the second dword of a segment descriptor except that only the AR byte (bits 8-15)
 and the G and B/D bits (bits 23 and 22) are used. All other bits in the AR field are ignored. The Base and Limit parts

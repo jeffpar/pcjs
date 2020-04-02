@@ -117,12 +117,12 @@ With the PCjs [TI-57](/machines/ti/ti57/) emulator, I also decided to take a fre
 the same old ES5-based [PCjs shared modules](/machines/shared/lib), the TI-57 emulator is built with a new set of
 ES6-based [Machine library modules]({{ site.github.pages }}/machines/lib/), including:
 
-* [Device](/machines/lib/device.js)
-* [Input](/machines/lib/input.js)
-* [LED](/machines/lib/led.js)
-* [ROM](/machines/lib/bus/rom.js)
-* [Time](/machines/lib/time.js)
-* [Machine](/machines/lib/machine.js)
+  - [Device](/machines/lib/device.js)
+  - [Input](/machines/lib/input.js)
+  - [LED](/machines/lib/led.js)
+  - [ROM](/machines/lib/bus/rom.js)
+  - [Time](/machines/lib/time.js)
+  - [Machine](/machines/lib/machine.js)
 
 Since I'm not currently "compiling/transpiling" any of that code to ES5 (as I've done with every other PCjs machine
 to date), you have to be running a modern web browser.  I'll probably add an ES5 fall-back mechanism eventually, but

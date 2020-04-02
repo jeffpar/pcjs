@@ -5,23 +5,23 @@ permalink: /documents/manuals/intel/80386/
 redirect_from: /pubs/pc/reference/intel/80386/
 ---
 
-* [80386 Errata](#80386-errata)
-* [80386 Steppings](#80386-steppings)
-* [80386 Undocumented Instructions](#80386-undocumented-instructions)
+  - [80386 Errata](#80386-errata)
+  - [80386 Steppings](#80386-steppings)
+  - [80386 Undocumented Instructions](#80386-undocumented-instructions)
     * [LOADALL](loadall/)
     * [IBTS](ibts_xbts/), [XBTS](ibts_xbts/)
 
 ### 80386 Errata
 
-* [A0 Stepping](#a0-stepping)
-* [A1 Stepping](#a1-stepping)
-* [A2 Stepping](#a2-stepping)
-* [B0 Stepping](#b0-stepping)
-* [B1 Stepping](#b1-stepping)
-* [C0 Stepping](#c0-stepping)
-* [D0 Stepping](#d0-stepping)
-* [D1 Stepping](#d1-stepping)
-* [D2 Stepping](#d2-stepping)
+  - [A0 Stepping](#a0-stepping)
+  - [A1 Stepping](#a1-stepping)
+  - [A2 Stepping](#a2-stepping)
+  - [B0 Stepping](#b0-stepping)
+  - [B1 Stepping](#b1-stepping)
+  - [C0 Stepping](#c0-stepping)
+  - [D0 Stepping](#d0-stepping)
+  - [D1 Stepping](#d1-stepping)
+  - [D2 Stepping](#d2-stepping)
 
 ### 80386 Steppings
 
@@ -817,5 +817,5 @@ Revision identifier: 0x08 (same as the D1 stepping).
 
 ### 80386 Undocumented Instructions
 
-* [LOADALL](loadall/)
-* [IBTS and XBTS](ibts_xbts/)
+  - [LOADALL](loadall/)
+  - [IBTS and XBTS](ibts_xbts/)

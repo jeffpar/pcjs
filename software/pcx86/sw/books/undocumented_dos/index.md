@@ -7,17 +7,17 @@ redirect_from: /pubs/pc/programming/Undocumented_DOS/
 
 by Schulman, Michels, Kyle, Paterson, Maxey, Brown
 	
-* [READ.ME](#read-me-1st-edition)
-* [Directory of Undocumented DOS (Disk 1)](#directory-of-undocumented-dos-disk-1)
-* [Directory of Undocumented DOS (Disk 2)](#directory-of-undocumented-dos-disk-2)
-* [Errata (1st Edition)](#errata-1st-edition)
+  - [READ.ME](#read-me-1st-edition)
+  - [Directory of Undocumented DOS (Disk 1)](#directory-of-undocumented-dos-disk-1)
+  - [Directory of Undocumented DOS (Disk 2)](#directory-of-undocumented-dos-disk-2)
+  - [Errata (1st Edition)](#errata-1st-edition)
 
 **Undocumented DOS (2nd Edition)**
 by Schulman, Brown, Maxey, Michels, Kyle
 
-* [Directory of Undocumented DOS, 2nd Ed. (BIN)](#directory-of-undocumented-dos-2nd-ed-bin)
-* [Directory of Undocumented DOS, 2nd Ed. (SRC)](#directory-of-undocumented-dos-2nd-ed-src)
-* [Errata (2nd Edition)](#errata-2nd-edition)
+  - [Directory of Undocumented DOS, 2nd Ed. (BIN)](#directory-of-undocumented-dos-2nd-ed-bin)
+  - [Directory of Undocumented DOS, 2nd Ed. (SRC)](#directory-of-undocumented-dos-2nd-ed-src)
+  - [Errata (2nd Edition)](#errata-2nd-edition)
 
 ### READ.ME (1st Edition)
 

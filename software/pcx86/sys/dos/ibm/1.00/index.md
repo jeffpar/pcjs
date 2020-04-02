@@ -2,7 +2,9 @@
 layout: page
 title: IBM PC DOS 1.00
 permalink: /software/pcx86/sys/dos/ibm/1.00/
-redirect_from: /disks/pcx86/dos/ibm/1.00/
+redirect_from:
+  - /disks/pcx86/dos/ibm/1.00/
+  - /disks/pcx86/dos/ibm/
 machines:
   - id: ibm5150-pcdos100
     type: pcx86

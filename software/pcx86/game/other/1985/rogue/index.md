@@ -465,5 +465,5 @@ ROGUE.DOC
 References
 ----------
 
-* [The roguelike archive](https://britzl.github.io/roguearchive/)
-* [Moby Games: Rogue (DOS)](http://www.mobygames.com/game/dos/rogue)
+  - [The roguelike archive](https://britzl.github.io/roguearchive/)
+  - [Moby Games: Rogue (DOS)](http://www.mobygames.com/game/dos/rogue)

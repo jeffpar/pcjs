@@ -15,4 +15,4 @@ PCjs support for PCx86 machines includes:
   - [IBM Personal Computer](/machines/pcx86/ibm/5150/), [PC XT](/machines/pcx86/ibm/5160/), and [PC AT](/machines/pcx86/ibm/5170/)
   - [Zenith Z-150](/machines/pcx86/zenith/z150/cga/)
 
-{%- include gallery/featured.html title="Featured PCx86 Machines" width="200" height="128" tag="pcx86" -%}
+{%- include gallery/featured.html title="Featured PCx86 Software" width="200" height="128" tag="pcx86" -%}

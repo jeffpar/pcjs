@@ -93,48 +93,48 @@
     "@title": "Microsoft Windows 1.0 (&quot;Premiere Edition&quot;)",
     "@permalink": "/software/pcx86/sys/windows/1.00/",
     "@preview": ".png",
-    "@tags": "home,pcx86"
+    "@tags": "home,pcx86,windows"
   },
   {
     "@title": "Microsoft Windows 1.1 on CGA (1985)",
     "@permalink": "/software/pcx86/sys/windows/1.01/cga/",
     "@preview": ".png",
-    "@tags": "home,pcx86"
+    "@tags": "home,pcx86,windows"
   },
   {
     "@title": "Microsoft Windows 1.1 on EGA (1985)",
     "@permalink": "/software/pcx86/sys/windows/1.01/",
     "@preview": ".png",
-    "@tags": "home,pcx86"
+    "@tags": "home,pcx86,windows"
   },
   {
     "@title": "IBM OS/2 1.0 (1987)",
     "@permalink": "/software/pcx86/sys/os2/ibm/1.0/",
     "@preview": ".png",
-    "@tags": "home,pcx86"
+    "@tags": "home,pcx86,os2"
   },
   {
     "@title": "Microsoft Windows/386 2.0 (1987)",
     "@permalink": "/software/pcx86/sys/windows/2.0x/",
     "@preview": ".png",
-    "@tags": "home,pcx86"
+    "@tags": "home,pcx86,windows"
   },
   {
     "@title": "Microsoft Windows 3.0 (1990)",
     "@permalink": "/software/pcx86/sys/windows/3.00/",
     "@preview": ".png",
-    "@tags": "home,pcx86"
+    "@tags": "home,pcx86,windows"
   },
   {
     "@title": "Microsoft Windows 3.1 (1992)",
     "@permalink": "/software/pcx86/sys/windows/3.10/",
     "@preview": ".png",
-    "@tags": "home,pcx86"
+    "@tags": "home,pcx86,windows"
   },
   {
     "@title": "Microsoft Windows 95 (1995)",
     "@permalink": "/software/pcx86/sys/windows/win95/4.00.950/",
     "@preview": ".png",
-    "@tags": "home,pcx86"
+    "@tags": "home,pcx86,windows"
   }
 ]
