@@ -110,6 +110,7 @@
                             {%- if site.developer %}
                                     <!-- software product: {{ product[0] }} -->
                             {%- endif -%}
+                            {%- if product[1]['@hidden'] -%}{%- continue -%}{%- endif -%}
                             {%- if product[0] == '@products' or product[0] == '@versions' -%}
                               {%- assign versions = product[1] -%}
                               {%- capture software_path5 %}{% endcapture -%}
@@ -127,6 +128,7 @@
                                         <!-- software version: {{ version[0] }} -->
                               {%- endif -%}
                               {%- assign release = version[1] -%}
+                              {%- if release['@hidden'] -%}{%- continue -%}{%- endif -%}
                               {%- if release['@title'] -%}
                                 {%- capture software_desc -%}{%- if release['@desc'] %} title="{{ release['@desc'] }}"{%- endif -%}{%- endcapture -%}
                                 {%- capture software_title %}{{ release['@title'] }}{% endcapture -%}

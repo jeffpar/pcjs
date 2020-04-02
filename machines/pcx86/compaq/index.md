@@ -2,7 +2,9 @@
 layout: page
 title: COMPAQ Machines
 permalink: /machines/pcx86/compaq/
-redirect_from: /devices/pcx86/machine/compaq/
+redirect_from:
+  - /devices/pcx86/machine/compaq/
+  - /pubs/pc/reference/compaq/
 ---
 
 PCjs currently supports the following COMPAQ machines:

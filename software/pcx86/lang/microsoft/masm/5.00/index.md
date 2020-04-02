@@ -2,7 +2,9 @@
 layout: page
 title: Microsoft Macro Assembler 5.00
 permalink: /software/pcx86/lang/microsoft/masm/5.00/
-redirect_from: /disks/pcx86/tools/microsoft/masm/5.00/
+redirect_from:
+  - /disks/pcx86/tools/microsoft/masm/5.00/
+  - /pubs/pc/software/tools/microsoft/masm/5.00/
 ---
 
 [Documentation](#documents) and directory listings of the two 360Kb distribution diskettes are provided below.

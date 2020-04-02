@@ -680,31 +680,26 @@
                 "@type": "PC360K"
               }
             ]
-          }
-        },
-        "pcjr": {
-          "@title": "WordStar for PCjr",
-          "@versions": {
-            "1.00": {
-              "@title": "WordStar for PCjr 1.00",
-              "@media": [
-                {
-                  "@title": "WordStar for PCjr (Disk 1)",
-                  "@diskette": "WSPCJR100-DISK1.json",
-                  "@type": "PC360K"
-                },
-                {
-                  "@title": "WordStar for PCjr (Disk 2)",
-                  "@diskette": "WSPCJR100-DISK2.json",
-                  "@type": "PC360K"
-                },
-                {
-                  "@title": "WordStar for PCjr (Disk 3)",
-                  "@diskette": "WSPCJR100-DISK3.json",
-                  "@type": "PC360K"
-                }
-              ]
-            }
+          },
+          "pcjr": {
+            "@title": "WordStar for PCjr",
+            "@media": [
+              {
+                "@title": "WordStar for PCjr (Disk 1)",
+                "@diskette": "WSPCJR100-DISK1.json",
+                "@type": "PC360K"
+              },
+              {
+                "@title": "WordStar for PCjr (Disk 2)",
+                "@diskette": "WSPCJR100-DISK2.json",
+                "@type": "PC360K"
+              },
+              {
+                "@title": "WordStar for PCjr (Disk 3)",
+                "@diskette": "WSPCJR100-DISK3.json",
+                "@type": "PC360K"
+              }
+            ]
           }
         }
       }
@@ -798,6 +793,7 @@
     "@title": "Devices",
     "cdrom": {
       "@title": "CD-ROM",
+      "@hidden": true,
       "@versions": {
         "dos": {
           "@title": "CD-ROM DOS Drivers",
@@ -976,6 +972,7 @@
     },
     "windows": {
       "@title": "Windows",
+      "@hidden": true,
       "@versions": {
         "wincomm/1985": {
           "@title": "Windows COMM Driver (1985)",
@@ -997,6 +994,7 @@
       "@versions": {
         "5.02": {
           "@title": "COMPAQ Diagnostics 5.02",
+          "@hidden": true,
           "@media": [
             {
               "@title": "COMPAQ Diagnostics 5.02",
@@ -1345,6 +1343,7 @@
         },
         "flightsim/1982": {
           "@title": "Flight Simulator (1982)",
+          "@hidden": true,
           "@media": [
             {
               "@diskette": "FLIGHTSIM-1982.json",
@@ -2370,6 +2369,7 @@
         },
         "qcwin": {
           "@title": "Microsoft QuickC for Windows",
+          "@hidden": true,
           "@versions": {
             "1.00": {
               "@title": "Microsoft QuickC for Windows 1.00",
@@ -3196,6 +3196,7 @@
         },
         "2.03": {
           "@title": "Windows SDK 2.03",
+          "@hidden": true,
           "@media": [
             {
               "@title": "Windows SDK 2.03 (1200K Disk 1)",
@@ -3216,6 +3217,7 @@
         },
         "3.00": {
           "@title": "Windows SDK 3.00",
+          "@hidden": true,
           "@media": [
             {
               "@title": "Windows SDK 3.00 (720K Disk 01)",
@@ -5669,6 +5671,7 @@
         "@title": "Microsoft",
         "dosmgr": {
           "@title": "MS-DOS Manager",
+          "@hidden": true,
           "@versions": {
             "1.00": {
               "@title": "MS-DOS Manager 1.00",
@@ -6041,7 +6044,7 @@
           },
           "1.1": {
             "@title": "MS OS/2 1.1",
-            "@inactive": true,
+            "@hidden": true,
             "@media": [
               {
                 "@title": "MS OS/2 1.1 (Disk 1)",
@@ -6097,6 +6100,7 @@
           },
           "1.2": {
             "@title": "MS OS/2 1.21",
+            "@hidden": true,
             "@media": [
               {
                 "@title": "MS OS/2 1.21 (Disk 1)",
@@ -6147,6 +6151,7 @@
           },
           "1.3": {
             "@title": "MS OS/2 1.3",
+            "@hidden": true,
             "@media": [
               {
                 "@title": "MS OS/2 1.3 (Disk 1)",
@@ -8078,7 +8083,7 @@
           ]
         },
         "4.00/advanced": {
-          "@title": "Norton Utilities Advanced 4.00",
+          "@title": "Norton Utilities 4.00 (Advanced)",
           "@media": [
             {
               "@title": "Norton Utilities 4.00 (Advanced Disk 1)",
@@ -8095,7 +8100,7 @@
           ]
         },
         "4.50/advanced": {
-          "@title": "Norton Utilities Advanced 4.50",
+          "@title": "Norton Utilities 4.50 (Advanced)",
           "@media": [
             {
               "@title": "Norton Utilities 4.50 (Advanced Disk 1)",

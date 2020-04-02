@@ -1,8 +1,8 @@
 ---
 layout: page
-title: Microsoft BASIC Compiler
-permalink: /software/pcx86/lang/microsoft/basic/compiler/
-redirect_from: /disks/pcx86/tools/microsoft/basic/compiler/
+title: Microsoft QBASIC
+permalink: /software/pcx86/lang/microsoft/basic/qbasic/1.10/
+redirect_from: /disks/pcx86/tools/microsoft/basic/qbasic/1.10/
 ---
 
 The only version of the Microsoft BASIC Compiler we have added to the project so far is

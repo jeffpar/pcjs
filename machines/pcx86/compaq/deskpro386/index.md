@@ -2,7 +2,9 @@
 layout: page
 title: COMPAQ DeskPro 386
 permalink: /machines/pcx86/compaq/deskpro386/
-redirect_from: /devices/pcx86/machine/compaq/deskpro386/
+redirect_from:
+  - /devices/pcx86/machine/compaq/deskpro386/
+  - /pubs/pc/reference/compaq/deskpro386/
 ---
 
 All our CGA and EGA configurations use the `Rev F` [COMPAQ DeskPro 386 ROM](/machines/pcx86/compaq/deskpro386/rom/),

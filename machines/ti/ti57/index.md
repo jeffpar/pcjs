@@ -4,6 +4,7 @@ title: TI-57 Programmable Calculator
 permalink: /machines/ti/ti57/
 redirect_from:
   - /devices/ti57/
+  - /devices/ti57/docs/
   - /devices/ti57/machine/
   - /machines/ti/ti57/docs/
 machines:
