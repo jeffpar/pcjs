@@ -17,9 +17,6 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-Norton Utilities 4.00 (Advanced Edition)
-----------------------------------------
-
 [Norton Utilities 4.00 (Advanced Edition)](#directory-of-norton-utilities-400-advanced-1) is from the
 [PCjs Software Archive](/software/pcx86/sw/misc/pcjs/).
 

@@ -2,7 +2,8 @@
 layout: page
 title: Planetfall
 permalink: /software/pcx86/game/infocom/planetfall/
-redirect_from: /disks/pcx86/games/infocom/planetfall/
+redirect_from:
+  - /disks/pcx86/games/infocom/planet/
 machines:
   - id: ibm5150-planetfall
     type: pcx86
