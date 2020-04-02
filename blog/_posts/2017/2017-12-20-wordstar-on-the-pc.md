@@ -14,7 +14,7 @@ machines:
         name: WordStar 3.24
     autoType: $date\r$time\rB:\rWS\r
   - id: scrollLEDs
-    type: leds
+    type: led
     name: LED Scroller
     config: /devices/leds/scroller/ATT4425.json
 styles:

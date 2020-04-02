@@ -143,7 +143,7 @@ gracious enough to sign my copy of the COMPAQ DeskPro 386 Technical Reference:
 - Randy Spurlock (**RWS**)
 - Darren Cepulis (**DJC**)
 
-[![COMPAQ DeskPro 386-25 Technical Reference Guide - Volume 1 - 1988-08 - Signatures](/machines/pcx86/compaq/deskpro386/photos/COMPAQ_DeskPro_386-25_Technical_Reference_Guide-Vol1-1988-08-Signatures.png)](/documents/manuals/compaq/deskpro386/)
+[![COMPAQ DeskPro 386-25 Technical Reference Guide - Volume 1 - 1988-08 - Signatures](/machines/pcx86/compaq/deskpro386/photos/COMPAQ_DeskPro_386-25_Technical_Reference_Guide-Vol1-1988-08-Signatures.png)](/machines/pcx86/compaq/deskpro386/)
 
 Of the 5 people whose initials are embedded in the original DeskPro 386 ROM, only **GLB** was unable to attend.
 

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: IBM PC Keyboard Devices
-permalink: /configs/pcx86/ibm/keyboard
+permalink: /configs/pcx86/ibm/keyboard/
 redirect_from:
   - /devices/pcx86/keyboard/
   - /devices/pcx86/keyboard/8042_INTERN.TXT  
