@@ -7,7 +7,7 @@ redirect_from: /disks/pcx86/drives/47mb/
 
 This folder contains the following 47Mb (PC AT Type 5) fixed disk configurations:
  
-* [Unformatted 47Mb Disk](unformatted-at5.xml)
+  - [Unformatted 47Mb Disk](unformatted-at5.xml)
 
 Note that in order to use an unformatted fixed disk with DOS, it must first be partitioned using `FDISK`
 and then formatted using `FORMAT`.  Moreover, you should use DOS 3.30 or newer if you want to make full use
@@ -168,5 +168,5 @@ space.
 
 Machines using the [Unformatted Disk](unformatted-at5.xml) include:
 
-* [IBM PC AT (Model 5170) with Enhanced Color Display](/configs/pcx86/xml/machine/5170/ega/640kb/rev1/enhanced/machine.xml)
-* [COMPAQ DeskPro 386](/configs//pcx86/xml/machine/compaq/deskpro386/ega/2048kb/machine.xml)
+  - [IBM PC AT (Model 5170) with Enhanced Color Display](/configs/pcx86/xml/machine/5170/ega/640kb/rev1/enhanced/machine.xml)
+  - [COMPAQ DeskPro 386](/configs//pcx86/xml/machine/compaq/deskpro386/ega/2048kb/machine.xml)

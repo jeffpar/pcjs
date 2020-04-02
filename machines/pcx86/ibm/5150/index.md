@@ -2,6 +2,7 @@
 layout: page
 title: IBM PC (Model 5150)
 permalink: /machines/pcx86/ibm/5150/
+redirect_from: /devices/pcx86/machine/5150/
 ---
 
 Our IBM PC (Model 5150) configurations include:

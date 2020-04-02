@@ -7,12 +7,12 @@ redirect_from: /pubs/pc/reference/intel/80186/
 
 ### 80186 Errata
 
-* TBD
+  - TBD
 
 ### 80186 Undocumented Instructions
 
-* TBD
+  - TBD
 
 ### Assorted Publications
 
-* TBD
+  - TBD

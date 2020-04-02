@@ -15,9 +15,9 @@ been found with `USER.EXE` dated either `05-22-86` *or* `08-24-86`.  The latter 
 
 These PCjs disk images are from our private collection.  Differences include: 
 
-* `USER.EXE` below is dated `05-22-86` (in [Windows 1.03b](../1.03b/), it is dated `08-24-86`)
-* `MOUSE.DRV` below is dated `07-02-86` (in [Windows 1.03b](../1.03b/), it is dated `08-21-86`)
-* The PROGRAM disk below contains an assortment of DEMO applications ([Windows 1.03b](../1.03b/) does not) 
+  - `USER.EXE` below is dated `05-22-86` (in [Windows 1.03b](../1.03b/), it is dated `08-24-86`)
+  - `MOUSE.DRV` below is dated `07-02-86` (in [Windows 1.03b](../1.03b/), it is dated `08-21-86`)
+  - The PROGRAM disk below contains an assortment of DEMO applications ([Windows 1.03b](../1.03b/) does not) 
 
 ### Directory of Windows 1.03 (SETUP)
 

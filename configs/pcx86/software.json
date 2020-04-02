@@ -975,7 +975,7 @@
       }
     },
     "windows": {
-      "@title": "Windows DDKs",
+      "@title": "Windows",
       "@versions": {
         "wincomm/1985": {
           "@title": "Windows COMM Driver (1985)",
@@ -1228,235 +1228,6 @@
             "@type": "PC1440K"
           }
         ]
-      }
-    }
-  },
-  "env": {
-    "@title": "Environments",
-    "ibm": {
-      "@title": "IBM",
-      "topview": {
-        "@title": "TopView",
-        "@versions": {
-          "1.00": {
-            "@title": "TopView 1.00",
-            "@media": [
-              {
-                "@title": "IBM TopView 1.00 (Program)",
-                "@diskette": "TOPVIEW100-PROGRAM.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "IBM TopView 1.00 (Tutorial)",
-                "@diskette": "TOPVIEW100-TUTORIAL.json",
-                "@type": "PC360K"
-              }
-            ]
-          },
-          "1.01": {
-            "@title": "TopView 1.01",
-            "@media": [
-              {
-                "@title": "IBM TopView 1.01 (Program)",
-                "@diskette": "TOPVIEW101-PROGRAM.json",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "IBM TopView 1.01 (Tutorial)",
-                "@diskette": "TOPVIEW101-TUTORIAL.json",
-                "@type": "PC360K"
-              }
-            ]
-          },
-          "1.10": {
-            "@title": "TopView 1.10",
-            "@media": [
-              {
-                "@title": "IBM TopView 1.10",
-                "@diskette": "TOPVIEW110.json",
-                "@type": "PC360K"
-              }
-            ]
-          }
-        }
-      }
-    },
-    "microsoft": {
-      "@title": "Microsoft",
-      "dosmgr": {
-        "@title": "MS-DOS Manager",
-        "@versions": {
-          "1.00": {
-            "@title": "MS-DOS Manager 1.00",
-            "@media": [
-              {
-                "@title": "MS-DOS Manager 1.00",
-                "@diskette": "MSDOSMGR100.json",
-                "@type": "PC360K"
-              }
-            ]
-          }
-        }
-      }
-    },
-    "quarterdeck": {
-      "@title": "Quarterdeck",
-      "desqview": {
-        "@title": "DESQview",
-        "@versions": {
-          "1.02": {
-            "@title": "DESQview 1.02",
-            "@media": [
-              {
-                "@title": "DESQview 1.02",
-                "@diskette": "DESQVIEW-102.json",
-                "@photo": ".jpg",
-                "@type": "PC360K"
-              }
-            ],
-            "@documents": [
-              {
-                "@title": "DESQview 1.02 (AST Edition)",
-                "@file": "DESQVIEW-102-AST.pdf",
-                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqF0lnH5iJKNMTatvA?e=QD3Sxl",
-                "@cover": ".jpg",
-                "@source": "OS/2 Museum"
-              }
-            ]
-          }
-        }
-      },
-      "qemm386": {
-        "@title": "QEMM-386",
-        "@versions": {
-          "4.10": {
-            "@title": "QEMM-386 4.10",
-            "@media": [
-              {
-                "@title": "QEMM-386 4.10",
-                "@diskette": "QEMM386-410.json",
-                "@photo": ".jpg",
-                "@type": "PC360K"
-              }
-            ]
-          },
-          "4.23": {
-            "@title": "QEMM-386 4.23",
-            "@media": [
-              {
-                "@title": "QEMM-386 4.23",
-                "@diskette": "QEMM386-423.json",
-                "@photo": ".jpg",
-                "@type": "PC360K"
-              }
-            ]
-          },
-          "5.13": {
-            "@title": "QEMM-386 5.13",
-            "@media": [
-              {
-                "@title": "QEMM-386 5.13",
-                "@diskette": "QEMM386-513.json",
-                "@type": "PC720K"
-              }
-            ]
-          },
-          "6.02": {
-            "@title": "QEMM-386 6.02",
-            "@media": [
-              {
-                "@title": "QEMM-386 6.02",
-                "@diskette": "QEMM386-602.json",
-                "@photo": ".jpg",
-                "@type": "PC360K"
-              }
-            ]
-          }
-        }
-      }
-    },
-    "softlogic": {
-      "@title": "SoftLogic",
-      "carousel": {
-        "@title": "Software Carousel",
-        "@versions": {
-          "2.0.3": {
-            "@title": "Software Carousel 2.0.3",
-            "@media": [
-              {
-                "@title": "Software Carousel 2.0.3",
-                "@diskette": "SOFTWARE-CAROUSEL.json",
-                "@photo": ".jpg",
-                "@type": "PC360K"
-              }
-            ]
-          }
-        }
-      },
-      "doubledos": {
-        "@title": "DoubleDOS",
-        "@versions": {
-          "2.1f": {
-            "@title": "DoubleDOS 2.1F",
-            "@media": [
-              {
-                "@title": "DoubleDOS 2.1F",
-                "@diskette": "DOUBLEDOS-21F.json",
-                "@type": "PC160K"
-              }
-            ]
-          },
-          "2.1v": {
-            "@title": "DoubleDOS 2.1V",
-            "@media": [
-              {
-                "@title": "DoubleDOS 2.1V (Disk 1)",
-                "@diskette": "DOUBLEDOS-21V-DISK1.json",
-                "@photo": ".jpg",
-                "@type": "PC360K"
-              },
-              {
-                "@title": "DoubleDOS 2.1V (Disk 2)",
-                "@diskette": "DOUBLEDOS-21V-DISK2.json",
-                "@type": "PC360K"
-              }
-            ]
-          }
-        }
-      },
-      "optimizer": {
-        "@title": "Disk Optimizer",
-        "@versions": {
-          "2.0.3": {
-            "@title": "Disk Optimizer 2.0.3",
-            "@media": [
-              {
-                "@title": "Disk Optimizer 2.0.3",
-                "@diskette": "DISK-OPTIMIZER.json",
-                "@photo": ".jpg",
-                "@type": "PC360K"
-              }
-            ]
-          }
-        }
-      }
-    },
-    "other": {
-      "@title": "Other",
-      "omniview": {
-        "@title": "Omniview 386",
-        "@versions": {
-          "4.30": {
-            "@title": "Omniview 386 4.30",
-            "@media": [
-              {
-                "@title": "Omniview 386 4.30",
-                "@diskette": "OMNIVIEW386-430.json",
-                "@type": "PC720K"
-              }
-            ]
-          }
-        }
       }
     }
   },
@@ -3513,14 +3284,33 @@
               "@diskette": "DOS-INTERN.json",
               "@type": "PC1200K"
             }
+          ],
+          "@documents": [
+            {
+              "@title": "DOS Internals (1994)",
+              "@file": "dos_internals/",
+              "@link": "",
+              "@cover": "",
+              "@source": ""
+            }
           ]
         },
         "graphics_for_the_ibm_pc": {
           "@title": "Graphics for the IBM PC",
-          "@permalink": "/documents/books/programming/graphics_for_the_ibm_pc/",
           "@media": [
             {
               "@diskette": "BASIC-GRAPHICS.json"
+            }
+          ],
+          "@documents": [
+            {
+              "@title": "Graphics for the IBM PC (1984)",
+              "@file": "Graphics_for_the_IBM_PC.pdf",
+              "@link": "/software/pcx86/sw/books/graphics_for_the_ibm_pc/",
+              "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBjvPCIs98PvKf1UA?e=gEOQUS",
+              "@cover": ".jpg",
+              "@source": "PCjs",
+              "tags": "graphics"
             }
           ]
         },
@@ -3536,6 +3326,16 @@
               "@title": "Unauthorized Windows 95 (SRC)",
               "@diskette": "UNAUTH-W95S.json",
               "@type": "PC1200K"
+            }
+          ],
+          "@documents": [
+            {
+              "@title": "Unauthorized Windows 95 (1995)",
+              "@file": "Unauthorized_Windows_95.pdf",
+              "@link": "/software/pcx86/sw/books/unauthorized_windows_95/",
+              "@cover": ".jpg",
+              "@source": "",
+              "tags": "windows"
             }
           ]
         },
@@ -3562,6 +3362,16 @@
               "@diskette": "UNDOC-DOS-2ED-SRC.json",
               "@type": "PC1200K"
             }
+          ],
+          "@documents": [
+            {
+              "@title": "Undocumented DOS (2nd Edition)",
+              "@file": "Undocumented_DOS--Second_Edition.pdf",
+              "@link": "/software/pcx86/sw/books/undocumented_dos/",
+              "@cover": ".jpg",
+              "@source": "",
+              "tags": "dos"
+            }
           ]
         },
         "undocumented_pc": {
@@ -3571,6 +3381,15 @@
               "@title": "Undocumented PC",
               "@diskette": "UNDOC-PC.json",
               "@type": "PC1200K"
+            }
+          ],
+          "@documents": [
+            {
+              "@title": "The Undocumented PC (2nd Edition)",
+              "@file": "The_Undocumented_PC--Second_Edition.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqB2ir5cexJmwbxuTA?e=ucWAij",
+              "@cover": ".jpg",
+              "@source": "PCjs"
             }
           ]
         },
@@ -4673,7 +4492,7 @@
             }
           ]
         },
-        "1.1B": {
+        "1.1b": {
           "@title": "CP/M-86 1.1B",
           "@media": [
             {
@@ -5792,6 +5611,235 @@
                 "@type": "PC1440K"
               }
             ]
+          }
+        }
+      }
+    },
+    "ext": {
+      "@title": "Extensions",
+      "ibm": {
+        "@title": "IBM",
+        "topview": {
+          "@title": "TopView",
+          "@versions": {
+            "1.00": {
+              "@title": "TopView 1.00",
+              "@media": [
+                {
+                  "@title": "IBM TopView 1.00 (Program)",
+                  "@diskette": "TOPVIEW100-PROGRAM.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "IBM TopView 1.00 (Tutorial)",
+                  "@diskette": "TOPVIEW100-TUTORIAL.json",
+                  "@type": "PC360K"
+                }
+              ]
+            },
+            "1.01": {
+              "@title": "TopView 1.01",
+              "@media": [
+                {
+                  "@title": "IBM TopView 1.01 (Program)",
+                  "@diskette": "TOPVIEW101-PROGRAM.json",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "IBM TopView 1.01 (Tutorial)",
+                  "@diskette": "TOPVIEW101-TUTORIAL.json",
+                  "@type": "PC360K"
+                }
+              ]
+            },
+            "1.10": {
+              "@title": "TopView 1.10",
+              "@media": [
+                {
+                  "@title": "IBM TopView 1.10",
+                  "@diskette": "TOPVIEW110.json",
+                  "@type": "PC360K"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "microsoft": {
+        "@title": "Microsoft",
+        "dosmgr": {
+          "@title": "MS-DOS Manager",
+          "@versions": {
+            "1.00": {
+              "@title": "MS-DOS Manager 1.00",
+              "@media": [
+                {
+                  "@title": "MS-DOS Manager 1.00",
+                  "@diskette": "MSDOSMGR100.json",
+                  "@type": "PC360K"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "quarterdeck": {
+        "@title": "Quarterdeck",
+        "desqview": {
+          "@title": "DESQview",
+          "@versions": {
+            "1.02": {
+              "@title": "DESQview 1.02",
+              "@media": [
+                {
+                  "@title": "DESQview 1.02",
+                  "@diskette": "DESQVIEW-102.json",
+                  "@photo": ".jpg",
+                  "@type": "PC360K"
+                }
+              ],
+              "@documents": [
+                {
+                  "@title": "DESQview 1.02 (AST Edition)",
+                  "@file": "DESQVIEW-102-AST.pdf",
+                  "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqF0lnH5iJKNMTatvA?e=QD3Sxl",
+                  "@cover": ".jpg",
+                  "@source": "OS/2 Museum"
+                }
+              ]
+            }
+          }
+        },
+        "qemm386": {
+          "@title": "QEMM-386",
+          "@versions": {
+            "4.10": {
+              "@title": "QEMM-386 4.10",
+              "@media": [
+                {
+                  "@title": "QEMM-386 4.10",
+                  "@diskette": "QEMM386-410.json",
+                  "@photo": ".jpg",
+                  "@type": "PC360K"
+                }
+              ]
+            },
+            "4.23": {
+              "@title": "QEMM-386 4.23",
+              "@media": [
+                {
+                  "@title": "QEMM-386 4.23",
+                  "@diskette": "QEMM386-423.json",
+                  "@photo": ".jpg",
+                  "@type": "PC360K"
+                }
+              ]
+            },
+            "5.13": {
+              "@title": "QEMM-386 5.13",
+              "@media": [
+                {
+                  "@title": "QEMM-386 5.13",
+                  "@diskette": "QEMM386-513.json",
+                  "@type": "PC720K"
+                }
+              ]
+            },
+            "6.02": {
+              "@title": "QEMM-386 6.02",
+              "@media": [
+                {
+                  "@title": "QEMM-386 6.02",
+                  "@diskette": "QEMM386-602.json",
+                  "@photo": ".jpg",
+                  "@type": "PC360K"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "softlogic": {
+        "@title": "SoftLogic",
+        "carousel": {
+          "@title": "Software Carousel",
+          "@versions": {
+            "2.0.3": {
+              "@title": "Software Carousel 2.0.3",
+              "@media": [
+                {
+                  "@title": "Software Carousel 2.0.3",
+                  "@diskette": "SOFTWARE-CAROUSEL.json",
+                  "@photo": ".jpg",
+                  "@type": "PC360K"
+                }
+              ]
+            }
+          }
+        },
+        "doubledos": {
+          "@title": "DoubleDOS",
+          "@versions": {
+            "2.1f": {
+              "@title": "DoubleDOS 2.1F",
+              "@media": [
+                {
+                  "@title": "DoubleDOS 2.1F",
+                  "@diskette": "DOUBLEDOS-21F.json",
+                  "@type": "PC160K"
+                }
+              ]
+            },
+            "2.1v": {
+              "@title": "DoubleDOS 2.1V",
+              "@media": [
+                {
+                  "@title": "DoubleDOS 2.1V (Disk 1)",
+                  "@diskette": "DOUBLEDOS-21V-DISK1.json",
+                  "@photo": ".jpg",
+                  "@type": "PC360K"
+                },
+                {
+                  "@title": "DoubleDOS 2.1V (Disk 2)",
+                  "@diskette": "DOUBLEDOS-21V-DISK2.json",
+                  "@type": "PC360K"
+                }
+              ]
+            }
+          }
+        },
+        "optimizer": {
+          "@title": "Disk Optimizer",
+          "@versions": {
+            "2.0.3": {
+              "@title": "Disk Optimizer 2.0.3",
+              "@media": [
+                {
+                  "@title": "Disk Optimizer 2.0.3",
+                  "@diskette": "DISK-OPTIMIZER.json",
+                  "@photo": ".jpg",
+                  "@type": "PC360K"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "other": {
+        "@title": "Other",
+        "omniview": {
+          "@title": "Omniview 386",
+          "@versions": {
+            "4.30": {
+              "@title": "Omniview 386 4.30",
+              "@media": [
+                {
+                  "@title": "Omniview 386 4.30",
+                  "@diskette": "OMNIVIEW386-430.json",
+                  "@type": "PC720K"
+                }
+              ]
+            }
           }
         }
       }

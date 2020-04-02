@@ -8,10 +8,10 @@ redirect_from: /devices/dec/rom/
 This directory describes a variety of ROMs for DEC equipment, originally made available by Pete Turnbull at
 [http://www.dunnington.u-net.com/public/DECROMs/](https://web.archive.org/web/20140723115846/http://www.dunnington.u-net.com/public/DECROMs/).
 
-* [README](#readme)
-* [INDEX](#index)
-* [ROMLIST](#romlist)
-* [WANTED](#wanted)
+  - [README](#readme)
+  - [INDEX](#index)
+  - [ROMLIST](#romlist)
+  - [WANTED](#wanted)
 
 ### README
 

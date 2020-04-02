@@ -2,6 +2,7 @@
 layout: page
 title: IBM Manuals
 permalink: /documents/manuals/ibm/
+redirect_from: /pubs/pc/reference/ibm/
 ---
 
 {% include gallery/documents.html path="/machines/pcx86/ibm/4860/" title="IBM PCjr (Model 4860) Manuals" width="200" height="280" %}

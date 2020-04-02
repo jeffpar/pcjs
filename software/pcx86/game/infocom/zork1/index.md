@@ -4,6 +4,7 @@ title: "Zork I: The Great Underground Empire"
 permalink: /software/pcx86/game/infocom/zork1/
 redirect_from:
   - /disks/pcx86/games/infocom/zork1/
+  - /disks/pcx86/games/infocom/
   - /disks/pc/games/infocom/zork1/
 preview: images/screenshot.png
 machines:
@@ -27,8 +28,8 @@ works only with standard disk formats.
 Related
 -------
 
-* [Zork II: The Wizard of Frobozz](../zork2/)
-* [Zork III: The Dungeon Master](../zork3/)
+  - [Zork II: The Wizard of Frobozz](../zork2/)
+  - [Zork III: The Dungeon Master](../zork3/)
 
 References
 ----------

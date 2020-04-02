@@ -245,9 +245,7 @@ function processFiles(sDir, fDebug, fFix)
                     sFile = sLink.replace(matchBlog[0], "/blog/_posts/" + matchBlog[1] + "/" + matchBlog[1] + "-" + matchBlog[2] + "-" + matchBlog[3] + "-*");
                     continue;   // TODO: For now, we're just going to assume that blog URLs are OK
                 }
-                if (sLink.indexOf("/about") == 0) {
-                    sFile = "./blog" + sLink;
-                } else if (sLink[0] == "/") {
+                if (sLink[0] == "/") {
                     sFile = "." + sLink;
                 } else {
                     sFile = "." + sFileDir + "/" + sLink;

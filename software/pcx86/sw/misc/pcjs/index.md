@@ -20,16 +20,16 @@ archived by [@jeffpar](https://jeffpar.com) that may or may not be of historical
 
 Some disks from this collection have already been archived elsewhere, including:
 
-* [COMPAQ Diagnostics 5.08](/software/pcx86/diag/compaq/5.08/)
-* [COMPAQ DeskPro 386 (1986)](/software/pcx86/diag/compaq/1986/)
-* [COMPAQ MS-DOS 3.10 (12-17-85)](/software/pcx86/sys/dos/compaq/3.10/#compaq-ms-dos-310-12-17-85)
-* [COMPAQ MS-DOS 3.31 (1987)](/software/pcx86/sys/dos/compaq/3.31/#directory-of-compaq-ms-dos-331-1987)
-* [DoubleDOS 2.1F](/software/pcx86/env/softlogic/doubledos/2.1f/)
-* [Multitasking MS-DOS 4.00](/software/pcx86/sys/dos/microsoft/4.0M/)
-* [The Norton Utilities 3.00 (1984-12-07)](/software/pcx86/util/norton/3.00/)
-* [The Norton Utilities 4.00 (Standard Edition)](/software/pcx86/util/norton/4.00/)
-* [The Norton Utilities 4.00 (Advanced Edition)](/software/pcx86/util/norton/4.00/advanced/)
-* [Early OS/2 Prototypes](/software/pcx86/sys/os2/misc/) (eg, CP-DOS and FOOTBALL)
+  - [COMPAQ Diagnostics 5.08](/software/pcx86/diag/compaq/5.08/)
+  - [COMPAQ DeskPro 386 (1986)](/software/pcx86/diag/compaq/1986/)
+  - [COMPAQ MS-DOS 3.10 (12-17-85)](/software/pcx86/sys/dos/compaq/3.10/#compaq-ms-dos-310-12-17-85)
+  - [COMPAQ MS-DOS 3.31 (1987)](/software/pcx86/sys/dos/compaq/3.31/#directory-of-compaq-ms-dos-331-1987)
+  - [DoubleDOS 2.1F](/software/pcx86/sys/ext/softlogic/doubledos/2.1f/)
+  - [Multitasking MS-DOS 4.00](/software/pcx86/sys/dos/microsoft/4.0M/)
+  - [The Norton Utilities 3.00 (1984-12-07)](/software/pcx86/util/norton/3.00/)
+  - [The Norton Utilities 4.00 (Standard Edition)](/software/pcx86/util/norton/4.00/)
+  - [The Norton Utilities 4.00 (Advanced Edition)](/software/pcx86/util/norton/4.00/advanced/)
+  - [Early OS/2 Prototypes](/software/pcx86/sys/os2/misc/) (eg, CP-DOS and FOOTBALL)
 
 Any other disks you see [below](#directory-listings) are primarily ones that don't neatly fit into another PCjs category,
 usually either because the disks contain a variety of unrelated files and/or unique content.

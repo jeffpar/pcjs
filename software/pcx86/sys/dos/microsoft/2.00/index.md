@@ -20,8 +20,8 @@ machines:
 There was no MS-DOS 2.00 product *per se*.  Instead, there were OEM releases of MS-DOS based on version 2.00,
 including:
 
-* [COMPAQ MS-DOS 2.11](/software/pcx86/sys/dos/compaq/2.11/)
-* [COMPAQ MS-DOS 2.12](/software/pcx86/sys/dos/compaq/2.12/)
+  - [COMPAQ MS-DOS 2.11](/software/pcx86/sys/dos/compaq/2.11/)
+  - [COMPAQ MS-DOS 2.12](/software/pcx86/sys/dos/compaq/2.12/)
 
 ### MS-DOS 2.00 Source Code
 

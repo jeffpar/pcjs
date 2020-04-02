@@ -44,6 +44,10 @@ a:hover, a:focus {
   text-decoration: underline;
 }
 
+a:visited {
+  color: rgb(38, 185, 141);
+}
+
 a small {
   font-size: 11px;
   color: #777;

@@ -9,8 +9,8 @@ by Andrew Schulman
 
 Directory listings of disks containing software that accompanied *Unauthorized Windows 95* are provided below.
 
-* [Directory of Unauthorized Windows 95 (BIN)](#directory-of-unauthorized-windows-95-bin)
-* [Directory of Unauthorized Windows 95 (SRC)](#directory-of-unauthorized-windows-95-src)
+  - [Directory of Unauthorized Windows 95 (BIN)](#directory-of-unauthorized-windows-95-bin)
+  - [Directory of Unauthorized Windows 95 (SRC)](#directory-of-unauthorized-windows-95-src)
 
 ### Directory of Unauthorized Windows 95 (BIN)
 

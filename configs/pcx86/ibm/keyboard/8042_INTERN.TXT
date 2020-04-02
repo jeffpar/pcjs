@@ -1,0 +1,783 @@
+                   8042 INTERN
+                   ===========
+An attempt to reveal the internal operation of the IBM PC AT 8042 keyboard controller based the disassembly of 2KB ROM from 1983. This is of historical interest. 
+
+                 A. Tarpai 2010
+            A little 8-bit nostalgia :)
+ (Questions & comments are welcome to tarpai76 at gmail)
+         This file has been downloaded from
+    http://www.halicery.com/8042/8042_INTERN.TXT
+
+  
+***  TOC  
+     ===  
+   
+     PART I 
+     -
+     All the information I could collect on the 8042
+     
+     PART II 
+     - 
+     ROM Disassembly
+     
+     PART III
+     - 
+     An UPI 41/42 disassembler 
+     
+
+*** 
+          
+     
+                     PART I 
+     
+About the 8042
+==============
+
+       +----------------+
+       |                |
+       |   IBM PC/AT    | 
+       |    ("Host")    |       <- scan codes
+       |            +----+                        +-------------------------+
+       |       0x60 |8042|  <--- DATA ----------> |     AT  KEYBOARD        |
+       |       0x64 |KBC |  <--- CLOCK ---------> |       84-key            |
+       |            |    |                        +-------------------------+
+       |            +----+      kbd commands ->
+       |                |      
+       |                |       
+       |                |       
+       +----------------+       
+ 
+IBM used an 8042 slave UPI microcomputer in the AT in 1984 as the keyboard controller. The AT keyboard was an improvement to the previous keyboard of the IBM PC and XT: it not only had 1 extra key (84 keys), but it could also receive commands from the host. Thus the connection became bi-directional and the interface much more complex. They chose to program up an 8042 for the job and solder it onto the new AT motherboard. Today all Super I/O chips sitting on the LPC bus is emulating the functions of the 8042 for the PC when turned on. 
+
+I was always very interested in the keyboard - as I'm currently typing it - and in the low-level keyboard hardware programming. Using a pre-programmed microcontroller (as it would be called today) is a quite advanced and cool feature I think (the PC and XT had only a simple serial-to-parallel converter IC to interface the keyboard). 
+
+The 'programming interface' for the AT- and PS/2-like keyboard and mouse controllers, just as the whole IBM PC is well-documented - except the program, the firmware, that drives the 8042 to function as a keyboard controller (KBC). The only thing I knew was that IBM, Award and Phoenix all wrote firmware for the 8042 and derivates used in the AT and PS/2 line of computers. The code itself was never found. 
+
+Then someone talented has dumped the 2K program ROM of a 8042-like KBC in the AT. This is a 2KB binary file and I had no idea what's inside! But peeked in with a hex editor and it looked very exciting: IBM 1983. OK, so what are these microcomputers anyway and how they work? I found these always very confusing when programming ibm-style keyboards, mice and controllers: the status register and the command byte? both has status bits... where are they exactly? When sending commands? to the KBC, to the KBD (and to the mouse)? This is the base of the whole exciting quest, that hopefully adds a bit and clears up some of the mist how these controllers really operate. 
+
+How this was done
+==================
+
+  From the MESS project: "the 1503033 AT i8042 keyboard controller was dumped by Kevin Horton", "Keyboard Controller is effectively dumped (it is almost certainly the same as on the AT, has same P/N but is on a preprogrammed eprom-based i8642 instead of a mask rom i8042)" - isn't it 8742??
+
+  1. get 1503033.bin  
+  2. study Intel UPI-41/42 USER'S MANUAL 
+  3. wrote a (dumb) 41/42 disassembler
+  4. comment it.. with some love of 8-bit-nostalgia :))
+
+
+TODO
+====
+
+  1. there are still some white spots in the code (eg. the ROM checksum?)
+  2. and I certainly made mistakes.. feel free to contribute! 
+  3. a PS/2-style firmware dump would be GREAT!
+
+
+*******************************************************************************  
+  
+The 8042 in general
+===================
+
+  The 8042 was a slave UPI from Intel used for controlling hardware peripherials (it became famous for being used as the KBC of the AT and later for kbd/mouse of the PS/2). 
+
+  The 8042 faces 2 sides: the Host system (eg. AT ISA bus) and the I/O lines to the peripherials. There is a microcomputer 'in the middle' with its own little 8-bit CPU, 2KB program memory in the ROM it executes, and some 128 bytes RAM: 
+   
+
+                    +-------------------+
+              ----> |R               P27| --
+              ----> |W      8042     P26| --
+              ----> |A0     ====     P25| --
+                    |                P24| --
+                    |                P23| --
+                    |                P22| --      I/O lines    
+                    |                P21| --
+                    |       C P U    P20| --
+    Host            |       R O M       | 
+    system          |D7     R A M    P17| --
+    R/W             |D6              P16| --
+                    |D5              P15| --
+             <----> |D4              P14| --
+                    |D3              P13| --
+                    |D2              P12| --
+                    |D1              P11| --
+                    |D0              P10| --
+                    |                   | 
+                    |                 T0| --
+                    |                 T1| --
+                    +-------------------+ 
+                                            
+                   
+History of the 8042
+===================
+  
+  February, 1978.. a preliminary description from iNTEL of the 8041/8741 UPI 8-bit microcomputer:  
+  - Pin Compatible ROM (8041) and UV-erasable EPROM (8741) versions
+  - 1K words of program memory, 64 words data memory on-chip
+  - CPU, ROM, RAM, I/O, Timer and Clock in a Single Package
+  - clocked at 6 MHz
+  This was the same year as the MCS-48 (8048) products. 
+  
+  The later 8042/8742 model had doubled the memory and clock frequency: 
+  - 2KB ROM, 128 byte RAM
+  - 12 MHz
+  
+  8242. Pre-programmed versions for the keyboard and keyboard/mouse controller, firmware from IBM, Award and Phoenix for the AT and PS/2. 
+  
+  8742. EPROM (UV-erasable ROM) version of the 8042. 
+     
+  
+  
+8042 architecture 
+=================
+     
+  I/O lines
+  ---------
+  - 2x8 input and output lines, open-collector
+  - pins in, out, in/out
+  - open collector with high imp internal pull-up
+  - 2 Test input pins, T0 and T1 (can be tested by machine instructions: JT0, JNT0, JT1, JNT1)
+  
+  
+  Host interface 
+  --------------
+  - 8-bit data bus
+  - 3 physical registers
+  - 2 DATA BUS BUFFER registers (DBBIN and DBBOUT)
+  - 1 status register (STATUS)
+  - R, W, A0 input to chose register and R/W
+  - the 8042 never initiates bus cycles (='slave') only answers them
+
+  
+  How the DATA BUS BUFFER registers work?
+  ---------------------------------------
+
+  The name is very descriptive actually: data bus buffers. They buffer between the external- and the internal 8-bit data buses in both (R/W) directions:
+  
+
+              +------------------------------------------------------------+
+              |          R=1   +----------+                          8042  |
+              |        <-----  |  STATUS  | <----->-+ MOV STS,A      ====  |
+       R ---> |         A0=1   +----------+         | MOV A,STS            |
+       W ---> |                                     |                      |
+      A0 ---> |      R=1   +---------------+     (OUT DBB,A)               |
+              |   +----<-- |    DBB OUT    | <------+                      |
+              |   | A0=0   +---------------+        |                      |
+    D0-7 <--> | <->                                 '<-----> Accumulator   | 
+              |   |        +---------------+        |                      |
+              |   +------> |    DBB IN     | -->----+                      |
+              |     W=1    +---------------+      (IN A,DBB)               |
+              |                                                            |
+              |                                                            |
+              +------------------------------------------------------------+
+
+                                            
+        DBBIN             
+        - Host write sets IBF in STATUS
+        - 8042 read clears IBF in STATUS
+                          
+        DBBOUT            
+        - 8042 write sets OBF in STATUS
+        - Host read clears OBF in STATUS
+        (OBF can also be routed to output P24 to interrupt Host)
+        
+        In the STATUS register these bits are controlled by the 8042 hardware automatically (the remaining bits are for software use and don't-care for the 8042):  
+        
+        +-----------------------+
+        | | | | |A0 |   |IBF|OBF|  
+        +-----------------------+
+        
+        They reflect the data bus buffer registers' status and the A0 input pin. The Host can read out the content of this register any time by setting A0 and make a read from the 8042. 
+       
+  
+  8-bit CPU
+  ---------
+  - 2K program ROM
+  - 128 byte RAM
+  - 2 banks of 8 registers
+  - Accumulator for ALU (add, or, and, xor..) 
+  - 8 words stack
+  - 3-bit stack pointer SP
+  - PSW and flags
+  - 10-bit Prg Cnt
+  - Timer and IBF interrupts
+  - port (P1 and P2) instructions 
+  - TEST pin instr
+  - inc/dec registers
+  - jmp abs and conditional
+  - instructions can wait for data from the Host
+  - or some signal change on the input pins
+  - subroutines
+  - nice instruction set 
+  - faces the ISA Host 
+
+  
+Open collector
+==============
+
+  Took me a while to understand.. but there is a very important principle: 
+  
+  - if the line is not controlled by anybody, it's HIGH
+  - if anybody pulls the line LOW, it stays low. 
+  
+     
+                    5V
+                     |              Line pulled low..
+                     |            
+           0 ->------+
+                     |
+                     +---> '0'         ..read as '0'
+                     |
+   
+      
+                    5V
+                     |    
+                     |            
+           1 ->--    +              'Disconnected'..
+                     |
+                     +---> '1'         ..read as '1'
+                     |
+
+                                          
+                    5V
+                     |    
+                     |            
+           1 ->--    +-----<---      When disconnected, others drive the bus..
+                     |
+            0/1 <----+                  ..and level can be read as input
+                     |
+    
+  
+The 8042 in the AT
+==================
+  
+  To understand and comment the disassembly these were *must* to know how the 8042 was soldered on the AT mobo: the 8042 is in a HARDWIRED configuration and the firmware is programmed accordingly. This means the code controls certain lines and I had to know the schematics to understand. 
+    
+  The main function of the keyboard controller (KBC) is to handle the bi-directional data flow between the computer and the keyboard (KBD). It appeared on the IBM PC/AT motherboard as a 8042-variant in 1984: 
+  
+       +----------------+
+       |                |
+       |   IBM PC/AT    | 
+       |                |       <- scan codes
+       |            +----+                        +-------------------------+
+       |            |8042|  <--- DATA ----------> |     AT  KEYBOARD        |
+       |       0x60 |KBC |  <--- CLOCK ---------> |       84-key            |
+       |       0x64 |    |                        +-------------------------+
+       |            +----+       kb commands ->
+       |                |      
+       |                |       
+       |                |       
+       +----------------+       
+                              
+   Data flows in both directions (half-duplex) on 2-wires, CLK and DATA, using a 5 pin DIN plug: 
+   
+          ____ ____  
+         /    -    \  
+        |           | 
+        | 1       3 | 
+        |  4     5  | 
+         \    2    /  
+           -------    
+
+
+AT schematics of 8042: The Host interface
+-----------------------------------------
+
+  The AT provides the chip select signal when the CPU reads/writes I/O-space 0x60 or 0x64. Bit 2 of the address line is connected to the A0 input of the 8042, so the 4 legal combinations from the Host side are:
+    
+                >> AT <<      R  W  A0     >> 8042 <<      
+               """"""""""     |  |  |     """"""""""""       
+                                     
+               read 0x60      1  0  0      <-----  DBBOUT
+                
+               read 0x64      1  0  1      <-----  STATUS
+                                                    
+               write 0x60     0  1  0      ---+                 +--> KBD CMD
+                                              |--> DBBIN + F1 --|
+               write 0x64     0  1  1      ---+                 +--> KBC CMD
+             
+  
+  - when Host makes a read cycle the 8042 places the contents of the DBBOUT or STATUS onto the external data bus based on the state of A0
+  - when Host makes a write cycle, the 8042 places the data into the DBBIN register and sets bit3 of the STATUS register based on the state of A0 (this is the reason for "before writing to 0x60 or 0x64 check if IBF=0 in the STATUS register"). Note that it is the 8042's program that will interpret the contents of the DBBIN register (data byte with write address of 0x60 or a so called command byte written to 0x64). 
+                 
+The AT-style STATUS register (read 0x64)
+----------------------------------------
+    
+                  +---------------+
+       0x64  <--  |    STATUS     |  <---->
+                  +---------------+
+                  
+                  7  Parity error 
+                  6  Receive timeout
+                  5  Transmit timeout
+                  4  INH (copy of P17 input, the keyboard switch, when a byte sent to Host)
+                  
+                  3  F1 (hw, A0 input)
+                  2  F0 
+                  1  IBF (hw)
+                  0  OBF (hw)                  
+                 
+    There are 3 hardware status bits: OBF, IBF and F1, which are set/cleared by the 8042 hardware during operation.
+    
+    F0 ('SYS'): This firmware never touches it. Host can write it by setting bit2 in the Command Byte. 
+    
+    The upper 4 bits (and F0) are software status bits and can mean anything.. (that's the reason they differ in AT- or PS/2-mode programmed 8042). These bits can be set in software by executing 8042 machine instructions: 
+    
+      "MOV STS,A" 
+        writes the upper nibble, bits 4-7 of the STATUS register 
+        
+      "CLR F0" and "CPL F0"
+        clears and complements the F0 bit 
+        
+      "CLR F1" and "CPL F1"
+        clears and complements the F1 bit 
+    
+  
+AT schematics of 8042: The I/O interface
+----------------------------------------
+
+  I drew only the pins that has meaning in the code:  
+
+
+     +----------------+
+     |             P27| ------> DATA
+     |     8042    P26| ------> _CLK
+     |     ====    P25| ------> 
+     |             P24| ------> OBF (IRQ1)
+     |             P23| ------> _IBF (NC)
+     |             P22| ------>
+     |             P21| ------> 
+     |             P20| ------>
+     |                |  
+     |             P17| <-----  KEY INHIBIT SWITCH
+     |             P16| <----- 
+     |             P15| <-----  
+     |             P14| <----- 
+     |             P13| <-----  
+     |             P12| <----- 
+     |             P11| <-----  
+     |             P10| <----- 
+     |                | 
+     |              T0| <----- CLK
+     |              T1| <----- DATA
+     +----------------+  
+
+
+  Because of the hardwired configuration of the pins this is very important to know when reading the code. There are 2 8-bit I/O ports on the 8042, any pins can be input, output, or both(!) - cool and flexible by the way. In the AT P1 is set for input on reset, P2 is for output: 
+ 
+  P27 -> Keyboard Data
+  P26 -> inverted(!) -> Keyboard Clock 
+  P25 -> (not connected) _IBF routing for host interrupts: inverted, we interrupt host when DBBIN had been emptied by 8042
+  P24 -> OBF routing for host interrupts: we interrupt host when DBBOUT had been written by 8042
+
+    (The rest of the pins left free and was used for various things in the AT, don't care for the 8042, like A20-line and Reset-line). 
+  
+  P17 <- keyboard switch (I've seen this in my life=): it's really a KEY in a keyhole, kbd INHIBITED when the key is not in and locked (=0). 
+  
+    (The rest of the input lines are don't care for the 8042)
+    
+    
+AT schematics of 8042: Keyboard CLOCK and DATA
+----------------------------------------------   
+    
+  When I first read the disassembly it was very confusing and didn't make any sense, setting/clearing CLK and DATA.. then I saw this: an AT-compatible implementation (VT82C42) of the 8042, which cleared it up. 
+  
+  C L O C K   I S   I N V E R T E D ! (DATA is not, and don't ask me why, and the whole code is written for this schematics - caused me days of headache.. eg. "ANL P2,#$BF" pulls output P26 low, which will set the CLK HIGH): 
+
+  
+    +----------------------------+
+    |                            |
+    |                    |\      | 
+    |                    | \     |
+    +--> T0       P26 ---|  0----+------   Keyboard CLOCK
+                         | /      
+                         |/         
+                         
+   
+                         |\       
+                         | \      
+    +--> T1       P27 ---|  -----+------   Keyboard DATA
+    |                    | /     |
+    |                    |/      |  
+    |                            |  
+    +----------------------------+
+ 
+    
+  The following CLK schematics is actually from a PS/2-style datasheet (8242BB), but it's interesting. Note the inverter on the output pin! 
+
+                 5V
+                  |
+                  § 10K
+                  |
+          |\      |
+          | \     |
+  P26 ----|  0----+
+          | /     |
+	      |/      +---<---->--- KBD
+	              |
+   T0 <-----------+
+	              |
+	              = 47pF
+	              |
+                 GND
+
+
+
+H  _____ idle = input that can be tested by reading the level back
+        \
+L        \_____  pulled down: written, read as low for sure
+
+                                      
+****************************************************************************************************************     
+
+The disassembler was written by me and is totally free of use, full source code included. 
+
+
+About the code
+==============
+
+This code is from an AT-style 8042 controller so it's keyboard controller only. It was written by IBM in 1983: this keyboard controller firmware was already done in 1983 for the AT to be released in 1984. 
+
+It implements the keyboard serial protocol by direct programming of 2 lines (CLK and DATA are pulled-up open-collector lines), for both the bi-directional AT- and the previous uni-directional PC/XT-keyboard. 
+
+It really does what is well documented in reference manuals.. (but it's still interesting how - at least for me :) ). 
+
+It's amazing how much code fits into 2KB! 8-bit really rulez!
+
+Obvious that the code was originally not written in assembly (many redundant jumps, register saves sometimes as a product of some kind of compiler - as I don't know too much about that)
+
+
+
+*******************************************************************
+
+THe disassembly in details
+==========================
+
+  All the details I could figure out are in the source code, here is the big picture only.
+   
+
+The 8042 internals
+==================
+
+Reset
+=====
+After reset the 8042 fetches the first instruction from program ROM at $0000. In my file here is a 0x04: JMP! That was promising so I wrote a disassembler to learn the instruction set.. 
+
+- dis i
+- P1=ff
+- P2=cf
+- waits for AA command from Host - and nothing else  
+- then does the self-test
+- enter the main poll loop
+
+
+The Main Poll Loop
+==================
+
+When 'nothing' is happening, the 8042 runs in a crazy loop and waiting for things happen from the 2 sides:
+
+  host writes, IBF set    <------+
+  KBD pulls down the CLK line  --+
+
+This is the main loop (note, that 8042 polls IBF and doesn't use interrupts). 
+
+I. Host writes to input buffer (DBBIN - INput Data Bus Buffer)
+
+  The IBF bit in the STATUS register is set. 8042 disables KBD by pulling CLK low. Checks, if write was 0x60 or 0x64 (by examining the F1 bit in the STATUS register).
+  - if Host has written data to 0x60, it will send it to the KBD, read the reply, and puts it into DBBOUT
+  - if Host has written data to 0x64, that is a 'Controller Command' and the 8042 will execute the appropriate program code
+  Then loops again. 
+
+II. KBD pulls down the CLK line
+
+  Probably, because the user has pressed or released a key and the KBD wants the send the 'scan code' (see another chapter on scan codes). Transmission happens on the Keyboard Data line guided by the Keyboard Clock line: this is the "AT-keyboard protocol" - see there. 
+  
+Sending and receiving data from the kbd
+=======================================
+
+See the 2-wire protocol in details.  
+It can not only time out, but the AT serial protocol transfers with parity bit. When parity error occurs, the 8042 will try 1 more time (variable @21). 
+
+  
+General timeout
+===============
+
+The 8042 implements a safety timeout function during each transfer. It uses the on-chip Timer and the Timer Interrupt for this function. The implementation is actually brilliant!! This is where assembly comes handy, C cannot do this. 
+
+The idea is the following. In a subroutine (eg. 'Read byte from KBD') the 8042 has to wait for a pin to change state and there is a danger for an infinite loop. So first, it starts the Timer. If the 8042 has been waiting too long, the Timer will overflow and cause an interrupt. At this point the stack looks like this:
+
+  |      |  Timer Interrupt Stack 
+  |      |
+  | INT  |  
+  | CALL |   
+  +------+
+  
+First the return address for the subroutine was pushed by the original caller, then the interrupt occured. The Timer interrupt then does only one thing: "it returns to the original caller placing A=2 as a Timeout error code in A", by manipulating the stack: decrements the 3-bit stack pointer before executing its RETR. For the caller it looks like as if the subroutine simply returned with a 'timeout error' code!! We're in 1983.. :) 
+
+This construct is used by many functions, and the caller can decide what to do when a subroutine returns with A=2. 
+
+
+Earlier (IBM PC and XT) keyboard support
+========================================
+
+After days of confusion I've finally figured out what bit 5 of the Command Byte means! The IBM PC keyboard protocol mode!! So.. Did you know that the first AT-style 8042 keyboard controllers did support the old IBM PC and PC/XT keyboards? Well, I didn't.. :)
+
+In this 'mode' all lines are driven by the keyboard and data flows only from the keyboard (uni-directional). The code at $041C does: 
+
+1. IDLE is when CLK is HIGH and DATA is LOW. 
+2. kbd pulls down CLK to start transmitting 
+3. makes a long startbit (that's why wait CLK hig.. then low.. then high again) to read first bit
+4. data bit is valid on DATA line on CLK RISING EDGE
+5. NO PARITY bit
+
+
+XLAT
+====
+
+The other compatibility feature that can be confusing with the PC-keyboard compatibility. I hope the following will clear it up (see http:...) 
+
+The hardware part of the IBM PC keyboard was simple and straightforward: 83-keys with 83 scan codes (make codes, msb set for break codes), read from 0x60 after IRQ1. It was the PC ROM BIOS that made many confusions by implementing Special codes, functions, etc..) 
+
+XLAT is used to pretend for programs, which directly read the scan code from 0x60, that the 84-key AT keyboard is an 83-key PC/XT-keyboard: 
+  - AT-kbd sends 0x1C when 'A' is pressed, while the XT-kbd sends 0x1E
+  - AT-kbd sends 0xF0 0x1C when 'A' is released, while the XT-kbd sends 0x9E. 
+
+The 8042 firmware is capable of this translation. 
+
+Why is this?? 
+
+Legacy programs that read scan codes from 0x60 has relied on that 'A' is 0x1E. The 8042 could further provide this illusion even when an AT-keyboard was attached to the computer. That's it. 
+
+What about both XT-keyboard and XLAT??
+======================================
+
+Now.. we have 4 cases: XT and XLAT. The 8042 firmware cares about XLAT only in AT-mode. This means 3 cases:
+
+	XT=0 XLAT=0 => AT-KBD is attached, set-2 program reads 0x60
+	XT=0 XLAT=1 => AT-KBD is attached, set-1 program reads 0x60 (compatibility)
+	XT=1        => XT-KBD is attached, set-1 program reads 0x60 
+	
+	(There is no 'REVERSE XLAT' function, when set-2 with XT-KBD)
+
+    
+The AT keyboard protocol
+========================
+  (Code at $03AE)
+  
+  This is important, the whole keyboard protocol is programmed by 8042 code. Main features of the protocol, when the KBD is sending data to the 8042 KBC: 
+    - KBD starts transmission by pulling CLK low
+    - CLK is driven by the KBD
+    - DATA is valid on falling edges of CLK 
+    - CLK is INVERTED and connected to the T0 test-input pin of the 8042
+    - DATA on T1.
+      
+   _____
+  C
+   _____
+  D
+  
+    In the Idle state both lines are high, passively pulled up (see the open-collector 'bus protocol'). The 8042 runs in a crazy circle and constantly monitors the CLK line. When it falls.. that is a sign, so (probably) the KBD wants to send a scan code ('probably' means the 8042, before start reading in bits, will make sure that CLK is stable low). 
+    
+   __
+  C  \__
+   _____
+  D
+  
+    CLK pulled low by KBD (the protocol also talks about the 'start bit' on the DATA line, which is 0 when this CLK falls happen, but this 8042 code doesn't seem to care about it(?)).  
+  
+   __       _
+  C  \___ _/ \__
+   __        ^
+  D  \___ ~~~0    
+  
+    The first data bit (bit 0, LSB) will be valid on the next falling edge of CLK. 8042 simply waits for this to happen.. (loop: JT0 loop). Then reads the level of T1 (^ here) and right rotates into accumulator register, A. Here we have the first bit! (~ represents unknown state of DATA, 0 is 'bit 0', high or low depending on the data byte to send). 
+  
+   __       _       _    
+  C  \___ _/ \__  _/ \__ 
+   __        ^       ^  
+  D  \___ ~~~0    ~~~1  
+    
+    The next bit is the same: 8042 waits for the next falling edge, then reads in DATA. 
+      
+      _      _      _      _      _      _      _   
+  C _/ \__ _/ \__ _/ \__ _/ \__ _/ \__ _/ \__ _/ \__
+       ^      ^      ^      ^      ^      ^      ^ 
+  D ~~~1   ~~~2   ~~~3   ~~~4   ~~~5   ~~~6   ~~~7 
+  
+    It happens 8 times for all the data bits to arrive. 
+    
+       _      _   
+  C  _/ \__ _/ \__
+        ^      ^ 
+  D  ~~~7   ~~~P 
+  
+    After the last data bit the AT-keyboard will send the PARITY bit, in the same way as the 8 data bits (as a 9th bit), using 'odd-parity' (odd parity is a method to append a bit to the data, so the overall number of 1-s will be an odd number). 
+  
+       _      _      _
+  C  _/ \__ _/ \__ _/
+        ^      ___ ___   
+  D  ~~~P   ~~/    
+  
+    After the parity bit another bit, called a '1' stop-bit is written by the KBD. After that the KBD pulls up ('releases') both lines, which returns to the high Idle state. 
+  
+    
+  Compare timing of the AT and PC/XT keyboard protocol - both supported by this firmware
+  --------------------------------------------------------------------------------------
+  Here is the whole cycle when the KBD is sending data to the 8042. There are a few time constrains, and many things can go wrong during transfer. The code is dealing with all these, see the details. 
+  
+  AT
+  ==
+           ___        _      _      _      _      _      _      _      _      _      _     __   
+          C   \____ _/ \__ _/ \__ _/ \__ _/ \__ _/ \__ _/ \__ _/ \__ _/ \__ _/ \__ _/ \__ /  C  
+    IDLE   __  ^       ^      ^      ^      ^      ^      ^      ^      ^      ^      ^__ ___  IDLE
+          D  \___   ~~~0   ~~~1   ~~~2   ~~~3   ~~~4   ~~~5   ~~~6   ~~~7   ~~~P   __/       D  
+
+    AT short version:
+           ___        _                _      _      _    __
+          C   \____ _/ \__           _/ \__ _/ \__ _/ \__/  C
+    IDLE   __  ^        ^      ...       ^      ^      ^____  IDLE
+          D  \___    ~~~0             ~~~7   ~~~P   __/     D
+          
+          
+    - IDLE is when both CLK and DATA is high
+    - CLK falls..
+    - 11 falling edges - 11 bits 
+    - start bit (=0) .. 8 data bits .. Parity bit .. stop bit (=1)
+    
+                                                                                                               
+  PC/XT
+  =====
+           __         _      _      _      _      _      _      _      _      _      ___
+          C  \_____ _/ \__ _/ \__ _/ \__ _/ \__ _/ \__ _/ \__ _/ \__ _/ \__ _/ \__ _/   C
+    IDLE       ____  ^      ^      ^      ^      ^      ^      ^      ^      ^      ^      IDLE
+          D___/            ~0     ~1     ~2     ~3     ~4     ~5     ~6     ~7     \____D
+                    
+    PC/XT short version: 
+           __        _      _               _      ___
+          C  \____ _/ \__ _/ \__          _/ \__ _/   C
+    IDLE       ___  ^      ^       ...     ^      ^      IDLE
+          D___/           ~0              ~7     \____D
+       
+          
+    - IDLE is when CLK is high and DATA is pulled low
+    - CLK falls
+    - 10 rising edges - 10 bits
+    - start bit (=1) .. 8 data bits .. stop bit (=0)
+    
+
+    
+    
+Host Commands of this 8042 firmware
+===================================    
+    
+	
+	Bit 0 and 1 of the Command Byte @20
+	-----------------------------------
+	= enable/disable keyboard IRQ. 
+	
+	Background:
+	
+	When the 8042 writes a byte into DBBOUT, the OBF bit in the STATUS register gets set by the hardware. This is the normal operation, but the Host has to periodically read, poll, the OBF bit in the STATUS register to check whether a byte has been written by the 8042. 
+	
+	Using the "EN FLAGS" instruction (and when a '1' has been previously written to P24) the 8042 will also set the P24 output pin. If this pin is connected to the IRQ-system of the Host, it will cause an IRQ. 	
+	
+	This firmware executes the "EN FLAGS" instruction after RESET. Better cited: "This instruction allocates two I/O lines on PORT 2 (P24 and P25). P24 is the Output Buffer Full interrupt request line to the host system. P25 is the Input Buffer empty interrupt request line. These interrupt outputs reflect the internal status of the OBF flag and the IBF inverted flag " - in the STATUS register. "Note, these outputs may be inhibited by writing a '0' to these pins. Reenabling interrupts is done by writing a '1' to these port pins." UPI-41AH/42AH manual. 
+	
+	So.. the 8042 can route the OBF bit of the STATUS register to one of the output pins (P24), causing an interrupt request (IRQ) to the Host system when connected. Routing OBF is the proper configuration for an interrupt-driven system, like the AT. 
+	
+	Note, that _IBF-routing is handled similarly to OBF and this 8042 firmware handles them together (bit 1 of the Command Byte will be written to P25), because they are not separable: "EN FLAGS" will allocate P24 and P25 together. In the AT bit 1 is specified as Reserved, because pin P25 is not connected, not used (seems like it was fine to poll IBF when the Host is writing to 0x60/0x64 and not use interrupts for that). 
+	
+	The 8042 firmware uses the Command Byte bit 0 to write P24, thus enabling/disabling OBF-routing to P24, thus enabling/disabling IRQ1, Keyboard Interrupt, in the AT system. 
+
+	STATUS bits
+	===========
+	This register is a hardware register. 
+	The lower nibble part is used for maintaining the Data Bus Buffer (DBB) registers' status and the A0-line by the hardware. 
+    The upper nibble part can be set by software and are therefore firmware-dependent (8042 uses "MOV STS,A" to write data into the STATUS register). 
+    The host reads this register on 0x64. 
+    In the AT-firmware the bits are defined as:	
+	
+	             +----------------  ----------------+ 
+	    0x64 <-- |PER|RTO|TTO|INH|  |A0 |   |IBF|OBF| <----> 8042
+	             +----------------  ----------------+ 
+                          
+             7  Parity error 
+             6  Receive timeout
+             5  Transmit timeout
+             4  INH (copy of P17 input, the keyboard switch, updated when a byte sent to Host)
+             
+             3  F1 (hw, A0 input)
+             2  F0 
+             1  IBF (hw)
+             0  OBF (hw)                  
+    .
+    
+    
+	
+	Writing the Command Byte @20
+	============================
+	The Command Byte is _not_ a register for the Host: just one of the 128 memory bytes at address 0x20 in the 8042's RAM. It is special when the Host issues a RAM write command to address 0x20 (by writing 0x60/0x40 to 0x64, then the value to 0x60). The 8042 firmware monitors the bits and performs different tasks, *in this order*:  
+	
+	1. save @20
+	
+	2. write the new @20
+	
+	3. Examine bit 0: OBF (set/clr P24 to en/dis IRQ1 for the Host)
+	
+	4. bit 1: _IBF (same, but N/C on AT)
+	
+	5. bit 2: SYS (don't care for 8042, set/clr F0 in STATUS)
+		
+	6. bit 3: OVR (nop): scan code received from KBD will be passed to Host if (P17 || OVR)
+	
+	7. bit 4: _EN (=1 disable kbd interface)
+	          Setting _EN: the 8042 pulls down the CLK line immediately, disabling serial communication with the KBD. 
+	          Clearing _EN (Host enables the keyboard interface from the disabled state): nothing happens here, only set the flag @2E=1 for Main, bc of the next bit will leave the AT-KBD DISABLED(!) 
+	          
+	8. bit 5: set AT/XT-keyboard protocol (NB. this gets examimned after _EN)
+	          =0 Set AT-KBD protocol: DATA=1 CLK=0 (pull CLK low, DISABLE AT-KBD), go to Main and Main will enable if flag @2E is set
+	          =1 Set XT-KBD protocol: DATA=0 CLK=1 (pull DATA low, this is IDLE-state of XT-KBD), go to Main 
+	
+	9. bit 6: XLAT (nop)
+	10. bit 7: (nop) 
+	
+
+	
+	KBD EN variations
+	=================
+	
+	           CMD _EN                   CLK/DATA
+
+	  RESET     1                         0/1 (P2=#$CF at $0045)
+	  CMDAA     1                         0/1 (P2=#$CF at $0700)
+	  CMD60/AT  0                         0/1 (disabled & @2E=1)
+	  CMD60/XT  0                         1/0 (idle)
+	  CMDAE     0                         N/A
+	  CMDAD     1                         N/A
+	  CMD (write P2 directly)
+
+	  
+	  
+	  
+                     ****
+                     
+                    PART II 
+                      - 
+                 ROM Disassembly
+               
+      see http://www.halicery.com/8042/8042_1503033.TXT
+               
+               
+                     ****   
+                  
+                   PART III
+                      - 
+            A UPI 41/42 disassembler 
+
+     http://www.halicery.com/8042/dasm42.c
+   
+  (and a simple win32 console front-end, main.c)
+.
+
+
+.

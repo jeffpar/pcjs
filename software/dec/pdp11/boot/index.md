@@ -7,8 +7,8 @@ redirect_from: /apps/pdp11/boot/
 
 The project contains the following PDP-11 boot code:
 
-* [PDP-11 Boot Monitor](monitor/)
-* [DEC PDP-11 Bootstrap Loader](bootstrap/)
+  - [PDP-11 Boot Monitor](monitor/)
+  - [DEC PDP-11 Bootstrap Loader](bootstrap/)
 
 Boot code can be pre-loaded into any machine by including a `<ram>` component in the machine XML configuration file
 with the *file* attribute set to the filename of the image, along with optional *load* and *exec* addresses; eg:

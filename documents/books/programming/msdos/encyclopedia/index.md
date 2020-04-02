@@ -9,32 +9,32 @@ redirect_from:
 
 ### Links
 
-* [Contents](#contents)
-* [Foreword](foreword/) by Bill Gates
-* [Preface](preface/) by Ray Duncan
-* [Introduction](introduction/)
-* [Section I: The Development of MS-DOS](section1/)
-* [Section II: Programming in the MS-DOS Environment](section2/)
-* [Section III: User Commands](section3/)
-* [Section IV: Programming Utilities](section4/)
-* [Section V: System Calls](section5/)
-* [Appendix A: MS-DOS Version 3.3](appendix-a/)
-* [Appendix B: Critical Error Codes](appendix-b/)
-* [Appendix C: Extended Error Codes](appendix-c/)
-* [Appendix D: ASCII and IBM Extended ASCII Character Sets](appendix-d/)
-* [Appendix E: EBCDIC Character Set](appendix-e/)
-* [Appendix F: ANSI.SYS Key and Extended Key Codes](appendix-f/)
-* [Appendix G: File Control Block (FCB) Structure](appendix-g/)
-* [Appendix H: Program Segment Prefix (PSP) Structure](appendix-h/)
-* [Appendix I: 8086/8088/80286/80386 Instruction Sets](appendix-i/)
-* [Appendix J: Common MS-DOS Filename Extensions](appendix-j/)
-* [Appendix K: Segmented (New) .EXE File Header Format](appendix-k/)
-* [Appendix L: Intel Hexadecimal Object File Format](appendix-l/)
-* [Appendix M: 8086/8088 Software Compatibility Issues](appendix-m/)
-* [Appendix N: An Object Module Dump Utility](appendix-n/)
-* [Appendix O: IBM PC BIOS Calls](appendix-o/)
-* [Figures](figures/)
-* [Indexes](indexes/)
+  - [Contents](#contents)
+  - [Foreword](foreword/) by Bill Gates
+  - [Preface](preface/) by Ray Duncan
+  - [Introduction](introduction/)
+  - [Section I: The Development of MS-DOS](section1/)
+  - [Section II: Programming in the MS-DOS Environment](section2/)
+  - [Section III: User Commands](section3/)
+  - [Section IV: Programming Utilities](section4/)
+  - [Section V: System Calls](section5/)
+  - [Appendix A: MS-DOS Version 3.3](appendix-a/)
+  - [Appendix B: Critical Error Codes](appendix-b/)
+  - [Appendix C: Extended Error Codes](appendix-c/)
+  - [Appendix D: ASCII and IBM Extended ASCII Character Sets](appendix-d/)
+  - [Appendix E: EBCDIC Character Set](appendix-e/)
+  - [Appendix F: ANSI.SYS Key and Extended Key Codes](appendix-f/)
+  - [Appendix G: File Control Block (FCB) Structure](appendix-g/)
+  - [Appendix H: Program Segment Prefix (PSP) Structure](appendix-h/)
+  - [Appendix I: 8086/8088/80286/80386 Instruction Sets](appendix-i/)
+  - [Appendix J: Common MS-DOS Filename Extensions](appendix-j/)
+  - [Appendix K: Segmented (New) .EXE File Header Format](appendix-k/)
+  - [Appendix L: Intel Hexadecimal Object File Format](appendix-l/)
+  - [Appendix M: 8086/8088 Software Compatibility Issues](appendix-m/)
+  - [Appendix N: An Object Module Dump Utility](appendix-n/)
+  - [Appendix O: IBM PC BIOS Calls](appendix-o/)
+  - [Figures](figures/)
+  - [Indexes](indexes/)
 
 ### Contents
 

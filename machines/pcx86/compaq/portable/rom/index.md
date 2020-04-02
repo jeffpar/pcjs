@@ -2,7 +2,9 @@
 layout: page
 title: COMPAQ Portable Computer ROMs
 permalink: /machines/pcx86/compaq/portable/rom/
-redirect_from: /devices/pcx86/machine/compaq/
+redirect_from:
+  - /devices/pcx86/rom/compaq/portable/
+  - /devices/pcx86/machine/compaq/
 preview: bios/COMPAQ_Portable_System_Board.jpg
 ---
 

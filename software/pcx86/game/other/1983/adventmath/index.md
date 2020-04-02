@@ -211,5 +211,5 @@ demo is configured that way, but that's purely a matter of convenience -- and be
 References
 ----------
 
-* [MobyGames](http://www.mobygames.com/game/dos/adventures-in-math)
-* [Internet Archive](https://archive.org/details/msdos_Adventures_in_Math_1983)
+  - [MobyGames](http://www.mobygames.com/game/dos/adventures-in-math)
+  - [Internet Archive](https://archive.org/details/msdos_Adventures_in_Math_1983)

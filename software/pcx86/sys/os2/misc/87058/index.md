@@ -119,8 +119,8 @@ If you don't see the above output, including final `Symbols linked (IBMDOSD)` me
 Otherwise, the version banner should appear on the machine's screen.  After any CONFIG.SYS messages, SHELL.EXE should
 display:
 
-* Start A Protect Mode Program
-* Start A Real Mode Program
+  - Start A Protect Mode Program
+  - Start A Real Mode Program
 
 The first option will start CMD.EXE, and the second option will start COMMAND.COM.  To return to the SHELL, press the
 `Sys Req` key.  Since modern keyboards don't have that key, you will need to click the `Keyboard` button to display the

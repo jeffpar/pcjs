@@ -24,8 +24,8 @@ works only with standard disk formats.
 Related
 -------
 
-* [Zork I: The Great Underground Empire](../zork1/)
-* [Zork III: The Dungeon Master](../zork3/)
+  - [Zork I: The Great Underground Empire](../zork1/)
+  - [Zork III: The Dungeon Master](../zork3/)
 
 References
 ----------

@@ -47,9 +47,9 @@ And, since this may be my last blog post of the year, here's a little scrolling 
 The [LED Scroller](/machines/led/scroller/) is built with a new set of [PCjs Devices]({{ site.github.pages }}/machines/) used in PCjs machines,
 such as:
 
-* Texas Instruments [TI-42](/machines/ti/ti42/), [TI-55](/machines/ti/ti55/), and [TI-57](/machines/ti/ti57/) Programmable Calculators
-* [John Conway's](http://www.conwaylife.com/wiki/John_Horton_Conway) "[Game of Life](http://www.conwaylife.com/wiki/Conway%27s_Game_of_Life)" Cellular Automaton built as an [LED Simulation](/machines/led/life/color/)
-* [Hasbro's](https://en.wikipedia.org/wiki/Hasbro) "[Lite-Brite](https://en.wikipedia.org/wiki/Lite-Brite)" reimagined as an animated [LED Simulation](/machines/led/lite-brite/)
+  - Texas Instruments [TI-42](/machines/ti/ti42/), [TI-55](/machines/ti/ti55/), and [TI-57](/machines/ti/ti57/) Programmable Calculators
+  - [John Conway's](http://www.conwaylife.com/wiki/John_Horton_Conway) "[Game of Life](http://www.conwaylife.com/wiki/Conway%27s_Game_of_Life)" Cellular Automaton built as an [LED Simulation](/machines/led/life/color/)
+  - [Hasbro's](https://en.wikipedia.org/wiki/Hasbro) "[Lite-Brite](https://en.wikipedia.org/wiki/Lite-Brite)" reimagined as an animated [LED Simulation](/machines/led/lite-brite/)
 
 The [LED Device](/machines/lib/led.js), in conjunction with the [LED Controller](/machines/lib/ledctrl.js), provides
 a variety of LED types, layouts, and features, including built-in support for the 7-segment LED digits used in all the

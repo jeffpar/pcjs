@@ -6,16 +6,8 @@
         "@title": "Programming",
         "@documents": [
           {
-            "@title": "Graphics for the IBM PC (1984)",
-            "@file": "Graphics_for_the_IBM_PC.pdf",
-            "@link": "/software/pcx86/sw/books/graphics_for_the_ibm_pc/",
-            "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBjvPCIs98PvKf1UA?e=FxSYne",
-            "@cover": ".jpg",
-            "@source": "PCjs",
-            "@tags": "graphics"
-          },
-          {
             "@title": "Microsoft QuickBASIC (1987)",
+            "@author": "Douglas Hergert",
             "@file": "Microsoft_QuickBASIC-1987.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvA_O6gyOmFPqAMhDw?e=GaqGs8",
             "@cover": ".jpg",
@@ -24,9 +16,73 @@
           },
           {
             "@title": "The MS-DOS Ecyclopedia (1988)",
-            "@file": "",
+            "@author": "Ray Duncan",
+            "@file": "The_MS-DOS_Encyclopedia.pdf",
             "@link": "/documents/books/programming/msdos/encyclopedia/",
-            "@cover": "covers/The_MS-DOS_Encyclopedia.jpg",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "msdos"
+          },
+          {
+            "@title": "PC Magazine Programmer’s Technical Reference: The Processor and Coprocessor",
+            "@author": "Robert L. Hummel",
+            "@file": "PC_Magazine_Programmers_Technical_Reference.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBmvhei-z1oAma67Q?e=o78PLZ",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "x86"
+          },
+          {
+            "@title": "Programmer’s Guide to the EGA, VGA, and Super VGA Cards (3rd Edition)",
+            "@author": "Richard F. Ferraro",
+            "@file": "Programmers_Guide_to_the_EGA_VGA_and_Super_VGA_Cards.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBtP4xjq0RlWgs8zQ?e=KOtgmQ",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "video"
+          },
+          {
+            "@title": "Programming the 8086 and 8088",
+            "@author": "James W. Coffron",
+            "@file": "Programming_the_8086_and_8088.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBlkWuMx38i-e-gTQ?e=eBrRKx",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "x86"
+          },
+          {
+            "@title": "Programming the 80386",
+            "@author": "John H. Crawford and Patrick P. Gelsinger",
+            "@file": "Programming_The_80386.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBn20ZNpaVBpNx7MA?e=zdZkND",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "x86"
+          },
+          {
+            "@title": "The 8086 Book",
+            "@author": "Russell Rector and George Alexy",
+            "@file": "The_8086_Book.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBp7iGjoHzNtD3hIg?e=tYxd3v",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "x86"
+          },
+          {
+            "@title": "The Undocumented PC (2nd Edition)",
+            "@author": "Frank van Gilluwe",
+            "@file": "The_Undocumented_PC--Second_Edition.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqB2ir5cexJmwbxuTA?e=A3siuY",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "ibmpc"
+          },
+          {
+            "@title": "The Zen of Assembly Language",
+            "@author": "Michael Abrash",
+            "@file": "The_Zen_of_Assembly_Language.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBqukL44g6Fo5RuZA?e=QI3Zv5",
+            "@cover": "",
             "@source": "PCjs",
             "@tags": "msdos"
           }

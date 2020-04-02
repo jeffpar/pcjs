@@ -10,8 +10,10 @@ machines:
     config: /configs/pdp11/machine/1170/vt100/debugger/machine.xml
     connection: dl11->vt100.serialPort
   - id: vt100
-    type: pc8080
-    config: /configs/pcx80/machine/vt100/machine.xml
+    type: vt100
+    name: DEC VT100
+    config: /configs/vt100/vt100.json
+    layout: /_includes/vt100/vt100.html
     connection: serialPort->test1170.dl11
 ---
 

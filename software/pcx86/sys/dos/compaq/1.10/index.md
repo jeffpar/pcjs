@@ -2,7 +2,9 @@
 layout: page
 title: COMPAQ MS-DOS 1.10
 permalink: /software/pcx86/sys/dos/compaq/1.10/
-redirect_from: /disks/pcx86/dos/compaq/1.10/
+redirect_from:
+  - /disks/pcx86/dos/compaq/1.10/
+  - /disks/pcx86/dos/compaq/
 machines:
   - id: compaq-portable-128kb
     type: pcx86

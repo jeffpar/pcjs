@@ -19,12 +19,12 @@ The IBM PC AT came in a variety of its own "sub-models" over a three-year period
 
 Models 68 and 99 were [introduced](#ibm-pc-at-5170-models-68-and-99-announcement) in August 1984:
 
-* Model 68
+  - Model 68
 	- Type 1 motherboard
 	- 6 MHz CPU
 	- 256Kb RAM
 	- [Rev 1 BIOS](/machines/pcx86/ibm/5170/rom/#ibm-pc-at-rom-bios-rev-1) dated "01/10/84"
-* Model 99
+  - Model 99
 	- All of the above
 	- 256Kb additional RAM (total of 512Kb)
 	- 20Mb Hard Drive
@@ -34,7 +34,7 @@ Models 68 and 99 were [introduced](#ibm-pc-at-5170-models-68-and-99-announcement
 
 Model 239 was introduced in October 1985:
 
-* Model 239
+  - Model 239
 	- Type 2 motherboard
 	- 6 MHz CPU
 	- 512Kb RAM
@@ -46,14 +46,14 @@ Model 239 was introduced in October 1985:
 
 Models 319 and 339 were introduced in April 1986:
 
-* Model 319
+  - Model 319
 	- Type 3 motherboard
 	- 8 MHz CPU
 	- 512Kb RAM
 	- 30MB hard drive
 	- 1 Serial/Parallel Adapter 
 	- [Rev 3 BIOS](/machines/pcx86/ibm/5170/rom/#ibm-pc-at-rom-bios-rev-3) dated "11/15/85"
-* Model 339
+  - Model 339
 	- All of the above
 	- Enhanced 101-key keyboard
 

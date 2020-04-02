@@ -2,6 +2,7 @@
 layout: page
 title: IBM PC XT (Model 5160)
 permalink: /machines/pcx86/ibm/5160/
+redirect_from: /devices/pcx86/machine/5160/
 ---
 
 Our IBM PC XT (Model 5160) configurations include:

@@ -19,8 +19,8 @@ machines:
 
 Microsoft Windows/386 2.0 existed as the following "point releases":
 
-* [Windows/386 2.01](#microsoft-windows386-201)
-* [Windows/386 2.03](#microsoft-windows386-203)
+  - [Windows/386 2.01](#microsoft-windows386-201)
+  - [Windows/386 2.03](#microsoft-windows386-203)
 
 Microsoft Windows/386 2.01
 --------------------------

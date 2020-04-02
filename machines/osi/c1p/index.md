@@ -52,10 +52,10 @@ idiosyncrasies and television-related limitations.
 
 #### Starting the Simulator
 
-* Press the **RUN** or **BREAK** button to start the C1Pjs Simulator.
-* Press **C** to select a COLD START.
-* At the MEMORY SIZE prompt, press **Return** to use all available memory.
-* At the TERMINAL WIDTH prompt, press **Return** to select the default screen width.
+  - Press the **RUN** or **BREAK** button to start the C1Pjs Simulator.
+  - Press **C** to select a COLD START.
+  - At the MEMORY SIZE prompt, press **Return** to use all available memory.
+  - At the TERMINAL WIDTH prompt, press **Return** to select the default screen width.
 
 Wait for the BASIC "OK" prompt before using the **Load File** button;
 this will allow the Simulator to automatically "LOAD" and "RUN" the selected program.
@@ -136,14 +136,14 @@ the &lt;canvas&gt; tag until IE9.
 
 C1Pjs is built from the following components, as listed in [machines.json](/configs/machines.json) (see the *c1p.scripts* property):
 
-* [defines.js](lib/defines.js)
-* [panel.js](lib/panel.js)
-* [cpu.js](lib/cpu.js)
-* [rom.js](lib/rom.js)
-* [ram.js](lib/ram.js)
-* [keyboard.js](lib/keyboard.js)
-* [video.js](lib/video.js)
-* [serial.js](lib/serial.js)
-* [disk.js](lib/disk.js)
-* [debugger.js](lib/debugger.js)
-* [computer.js](lib/computer.js)
+  - [defines.js](lib/defines.js)
+  - [panel.js](lib/panel.js)
+  - [cpu.js](lib/cpu.js)
+  - [rom.js](lib/rom.js)
+  - [ram.js](lib/ram.js)
+  - [keyboard.js](lib/keyboard.js)
+  - [video.js](lib/video.js)
+  - [serial.js](lib/serial.js)
+  - [disk.js](lib/disk.js)
+  - [debugger.js](lib/debugger.js)
+  - [computer.js](lib/computer.js)
