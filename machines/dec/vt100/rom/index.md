@@ -112,7 +112,7 @@ you'll see the effect of the VT100's Dot Stretcher.  Here's how DEC illustrates 
 	 8  . . . . . . . . . . . 1 1 . . . . . . .
 	 9  . . . . . . . . . . . 1 1 . . . . . . .
 
-The [PC8080 Video](/machines/pcx80/lib/video.js) *createFontVariation()* function takes both the "dot replication" and "dot stretching"
+The [PCx80 Video](/machines/pcx80/lib/video.js) *createFontVariation()* function takes both the "dot replication" and "dot stretching"
 features into account (along with underlining and reverse video parameters) when converting the character generator ROM data into fonts.   
 
 ### Disassembling the 8080 Firmware
@@ -132,7 +132,7 @@ original VT100.bin; after adding the correct number of `nop` instructions to the
 
 The other advantage of reassembling the code is that the resulting [VT100.txt](VT100.txt) makes it easy to export comments
 and other symbolic information to [VT100.map](VT100.map), which can then be included in the [VT100.json](VT100.json) ROM dump
-and passed on to the PC8080 Debugger.  Here are the rebuild steps:
+and passed on to the PCx80 Debugger.  Here are the rebuild steps:
 
 	asm8080 -lVT100.txt VT100.asm
 	grep -E "[0-9]+ [0-9A-D]+.*;;" VT100.txt | sed -E "s/ *[0-9]+ ([0-9A-F]+).*;(;.*)/     \1   .   \2/" > VT100.map
