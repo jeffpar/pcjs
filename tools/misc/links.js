@@ -252,7 +252,7 @@ function processFiles(sDir, fDebug, fFix)
                 }
             }
             if (sFile.endsWith("/")) sFile += sTargetFile;
-            if (!fileExists(sFile)) {
+            if (!fileExists(sFile) && !fileExists(sFile.replace("/index.md", ".md"))) {
                 printf("%s: link for '%s' not found: %s\n", sFilePath, match[1], sFile);
             }
         }

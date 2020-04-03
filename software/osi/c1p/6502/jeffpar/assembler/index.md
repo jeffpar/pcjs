@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Challenger 1P 6502 Assembler/Disassembler
+title: OSI Challenger 1P 6502 Assembler/Disassembler
 permalink: /software/osi/c1p/6502/jeffpar/assembler/
 redirect_from: /apps/c1p/6502/jeffpar/assembler/
 machines:

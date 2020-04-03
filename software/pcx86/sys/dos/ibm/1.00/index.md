@@ -20,7 +20,7 @@ machines:
 
 PC DOS 1.00 was completed in August 1981 and announced at an IBM press conference on August 12, 1981,
 when IBM introduced the original IBM PC (Model 5150).  It was released on one single-sided (160Kb) diskette,
-and included 23 [BASIC Programs](basic/).
+and included 23 [BASIC Programs](/software/pcx86/app/ibm/basic/1.00/).
 
 [Directory Listing](#directory-of-pc-dos-100), [Documentation](#documents), and [Feature Summary](#feature-summary)
 are provided below.

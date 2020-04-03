@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Challenger 1P Machine-Language (6502) Tests
+title: OSI Challenger 1P Machine-Language (6502) Tests
 permalink: /software/osi/c1p/6502/tests/
 ---
 

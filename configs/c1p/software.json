@@ -2,7 +2,7 @@
   "basic": {
     "@title": "BASIC Programs",
     "osi": {
-      "@title": "OSI Programs",
+      "@title": "OSI BASIC Programs",
       "@products": {
         "math": {
           "@title": "BASIC MATH",
@@ -41,8 +41,23 @@
         }
       }
     },
+    "other": {
+      "@title": "Other BASIC Programs",
+      "@products": {
+        "seawolfe": {
+          "@title": "SEAWOLFE",
+          "@tape": "SEAWOLFE.BAS",
+          "@type": "ASCII"
+        },
+        "tankfortwo": {
+          "@title": "TANK FOR TWO",
+          "@tape": "TANKFORTWO.BAS",
+          "@type": "ASCII"
+        }
+      }
+    },
     "jeffpar": {
-      "@title": "Jeff's Programs",
+      "@title": "Jeff's Old BASIC Programs",
       "@products": {
         "checkers": {
           "@title": "CHECKERS",
@@ -75,21 +90,6 @@
           "@type": "ASCII"
         }
       }
-    },
-    "other": {
-      "@title": "Other Programs",
-      "@products": {
-        "seawolfe": {
-          "@title": "SEAWOLFE",
-          "@tape": "SEAWOLFE.BAS",
-          "@type": "ASCII"
-        },
-        "tankfortwo": {
-          "@title": "TANK FOR TWO",
-          "@tape": "TANKFORTWO.BAS",
-          "@type": "ASCII"
-        }
-      }
     }
   },
   "6502": {
@@ -99,18 +99,18 @@
       "@products": {
         "bcd": {
           "@title": "BCD Tests",
-          "@tape": "BCD.ASM",
-          "@type": "ASCII"
+          "@test": "BCD.json",
+          "@type": "BINARY"
         },
         "vflag": {
           "@title": "Overflow Tests",
-          "@tape": "VFLAG.ASM",
-          "@type": "ASCII"
+          "@test": "VFLAG.json",
+          "@type": "BINARY"
         }
       }
     },
     "jeffpar": {
-      "@title": "Jeff's 6502 Programs",
+      "@title": "Jeff's Old 6502 Programs",
       "@products": {
         "assembler": {
           "@title": "6502 Assembler (8K)",

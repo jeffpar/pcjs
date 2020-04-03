@@ -23,6 +23,7 @@
         <ul class="menu">
           <li><a href="/about/">About</a></li>
           <li><a href="/blog/">Blog</a></li>
+          <li class="optional">{% include explorer/link.html title="Explorer" %}</li>
           <li><a href="{{ site.github.repository_url }}">Repository</a></li>
         </ul>
         {%- if site.logo %}

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Challenger 1P Machine-Language Applications
+title: OSI Challenger 1P Machine-Language Applications
 permalink: /software/osi/c1p/6502/
 redirect_from: /apps/c1p/6502/
 ---

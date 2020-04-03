@@ -1,7 +1,7 @@
 ---
 layout: page
-title: IBM PC DOS 1.00 BASIC Programs
-permalink: /software/pcx86/sys/dos/ibm/1.00/basic/
+title: BASIC Programs for IBM PC DOS 1.00
+permalink: /software/pcx86/app/ibm/basic/1.00/
 redirect_from: /apps/pcx86/1981/basic/
 machines:
   - id: ibm5150
@@ -16,8 +16,8 @@ machines:
     autoType: $date\r
 ---
 
-Using the PCx86 machine below, you can load any of the BASIC programs distributed with PC DOS 1.00, including
-featured BASIC program [DONKEY.BAS](donkey/).
+Using the PCx86 machine below, you can load any of the BASIC programs distributed with [PC DOS 1.00](/software/pcx86/sys/dos/ibm/1.00/),
+including featured BASIC program [DONKEY.BAS](donkey/).
 
 The procedure is simple.  For example, to capture [MUSIC.BAS](#musicbas):
 
@@ -46,7 +46,7 @@ NOTE: To save a BASIC program as an *ASCII* file, save it with the `A` option; e
 
 [[Download](ART.BAS)]
 
-```basic
+```bas
 {% include_relative ART.BAS %}
 ```
 
@@ -54,7 +54,7 @@ NOTE: To save a BASIC program as an *ASCII* file, save it with the `A` option; e
 
 [[Download](BALL.BAS)]
 
-```basic
+```bas
 {% include_relative BALL.BAS %}
 ```
 
@@ -62,7 +62,7 @@ NOTE: To save a BASIC program as an *ASCII* file, save it with the `A` option; e
 
 [[Download](CALENDAR.BAS)]
 
-```basic
+```bas
 {% include_relative CALENDAR.BAS %}
 ```
 
@@ -70,7 +70,7 @@ NOTE: To save a BASIC program as an *ASCII* file, save it with the `A` option; e
 
 [[Download](CIRCLE.BAS)]
 
-```basic
+```bas
 {% include_relative CIRCLE.BAS %}
 ```
 
@@ -78,7 +78,7 @@ NOTE: To save a BASIC program as an *ASCII* file, save it with the `A` option; e
 
 [[Download](COMM.BAS)]
 
-```basic
+```bas
 {% include_relative COMM.BAS %}
 ```
 
@@ -86,7 +86,7 @@ NOTE: To save a BASIC program as an *ASCII* file, save it with the `A` option; e
 
 [[Download](DONKEY.BAS)]
 
-```basic
+```bas
 {% include_relative DONKEY.BAS %}
 ```
 
@@ -94,7 +94,7 @@ NOTE: To save a BASIC program as an *ASCII* file, save it with the `A` option; e
 
 [[Download](MORTGAGE.BAS)]
 
-```basic
+```bas
 {% include_relative MORTGAGE.BAS %}
 ```
 
@@ -102,7 +102,7 @@ NOTE: To save a BASIC program as an *ASCII* file, save it with the `A` option; e
 
 [[Download](MUSIC.BAS)]
 
-```basic
+```bas
 {% include_relative MUSIC.BAS %}
 ```
 
@@ -110,7 +110,7 @@ NOTE: To save a BASIC program as an *ASCII* file, save it with the `A` option; e
 
 [[Download](PIECHART.BAS)]
 
-```basic
+```bas
 {% include_relative PIECHART.BAS %}
 ```
 
@@ -118,7 +118,7 @@ NOTE: To save a BASIC program as an *ASCII* file, save it with the `A` option; e
 
 [[Download](SAMPLES.BAS)]
 
-```basic
+```bas
 {% include_relative SAMPLES.BAS %}
 ```
 
@@ -126,7 +126,7 @@ NOTE: To save a BASIC program as an *ASCII* file, save it with the `A` option; e
 
 [[Download](SPACE.BAS)]
 
-```basic
+```bas
 {% include_relative SPACE.BAS %}
 ```
 
@@ -141,7 +141,7 @@ by [MUSIC.BAS](#musicbas) using the *CHAIN* command.
 
 [[Download](BLUE.BAS)]
 
-```basic
+```bas
 {% include_relative BLUE.BAS %}
 ```
 
@@ -149,7 +149,7 @@ by [MUSIC.BAS](#musicbas) using the *CHAIN* command.
 
 [[Download](BUG.BAS)]
 
-```basic
+```bas
 {% include_relative BUG.BAS %}
 ```
 
@@ -157,7 +157,7 @@ by [MUSIC.BAS](#musicbas) using the *CHAIN* command.
 
 [[Download](DANDY.BAS)]
 
-```basic
+```bas
 {% include_relative DANDY.BAS %}
 ```
 
@@ -165,7 +165,7 @@ by [MUSIC.BAS](#musicbas) using the *CHAIN* command.
 
 [[Download](FORTY.BAS)]
 
-```basic
+```bas
 {% include_relative FORTY.BAS %}
 ```
 
@@ -173,7 +173,7 @@ by [MUSIC.BAS](#musicbas) using the *CHAIN* command.
 
 [[Download](HAT.BAS)]
 
-```basic
+```bas
 {% include_relative HAT.BAS %}
 ```
 
@@ -181,7 +181,7 @@ by [MUSIC.BAS](#musicbas) using the *CHAIN* command.
 
 [[Download](HUMOR.BAS)]
 
-```basic
+```bas
 {% include_relative HUMOR.BAS %}
 ```
 
@@ -189,7 +189,7 @@ by [MUSIC.BAS](#musicbas) using the *CHAIN* command.
 
 [[Download](MARCH.BAS)]
 
-```basic
+```bas
 {% include_relative MARCH.BAS %}
 ```
 
@@ -197,7 +197,7 @@ by [MUSIC.BAS](#musicbas) using the *CHAIN* command.
 
 [[Download](POP.BAS)]
 
-```basic
+```bas
 {% include_relative POP.BAS %}
 ```
 
@@ -205,7 +205,7 @@ by [MUSIC.BAS](#musicbas) using the *CHAIN* command.
 
 [[Download](SAKURA.BAS)]
 
-```basic
+```bas
 {% include_relative SAKURA.BAS %}
 ```
 
@@ -213,7 +213,7 @@ by [MUSIC.BAS](#musicbas) using the *CHAIN* command.
 
 [[Download](SCALES.BAS)]
 
-```basic
+```bas
 {% include_relative SCALES.BAS %}
 ```
 
@@ -221,6 +221,6 @@ by [MUSIC.BAS](#musicbas) using the *CHAIN* command.
 
 [[Download](STARS.BAS)]
 
-```basic
+```bas
 {% include_relative STARS.BAS %}
 ```

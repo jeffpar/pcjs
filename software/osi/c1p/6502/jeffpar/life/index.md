@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Challenger 1P 6502 Game of Life
+title: OSI Challenger 1P 6502 Game of Life
 permalink: /software/osi/c1p/6502/jeffpar/life/
 redirect_from: /apps/c1p/6502/jeffpar/life/
 machines:
