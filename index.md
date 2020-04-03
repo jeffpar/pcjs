@@ -22,14 +22,12 @@ redirect_from:
 
 This is PCjs, home of **PCx86**, the original IBM PC emulator for your web browser.
 
-One of our goals is to recreate the complete IBM PC experience in JavaScript, using original ROMs, CPUs running
-at their original speeds, and early IBM video cards and monitors, including the classic green monochrome MDA monitor
-and the venerable "flickery" CGA monitor.
+We use JavaScript to recreate the IBM PC experience, using original ROMs, CPUs running at their original speeds,
+and early IBM video cards and monitors, including the classic green monochrome MDA monitor and the venerable "flickery" CGA monitor.
 
 Over time, PCjs emulations have slowly expanded to include selected [PC Compatibles](/machines/pcx86/compaq/deskpro386/),
 as well as non-PC hardware such as [Minicomputers](/machines/dec/pdp11/), [Programmable Calculators](/machines/ti/ti57/),
-[Terminals](/machines/dec/vt100/), [Arcade Games](/machines/arcade/invaders/), and [LED Simulations](/machines/led/life/color/).
-
+[Terminals](/machines/dec/vt100/), and [Arcade Games](/machines/arcade/invaders/).
 To learn more, visit the [PCjs]({{ site.github.repository_url }}) open-source project on [GitHub]({{ site.github.owner_url }}).
 
 ### PCjs Highlights
