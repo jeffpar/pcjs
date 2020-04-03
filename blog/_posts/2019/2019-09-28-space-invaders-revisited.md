@@ -28,7 +28,7 @@ including a new time management class to "clock" all the internal devices, which
 or *requestAnimationFrame()*, and I used simple JSON and HTML markup to define the machine configuration and layout,
 instead of the older XML-based PCjs configuration scheme, which had become increasingly clunky and difficult to maintain.
 
-## A New 8080 Emulator and Debugger
+### A New 8080 Emulator and Debugger
 
 A few months ago, I decided to continue the evolution of those new classes, starting with a fairly simple machine
 that I had previously emulated: the 8080-based arcade machine Space Invaders.
@@ -62,7 +62,7 @@ management for setting read and write breakpoints on any valid memory or I/O add
 be enabled and dumped with the built-in dump ("d") command, and all the debugger's commands can be accessed from any
 browser debug console window via a global *window.command()* function.
 
-## Time to Kill
+### Time to Kill
 
 Now, as much as I love Space Invaders -- it was the first arcade game I became addicted to back in 1979 -- the goal here
 wasn't really to make yet another clone of Space Invaders.  I just wanted to make it easier to build more web-based emulators,

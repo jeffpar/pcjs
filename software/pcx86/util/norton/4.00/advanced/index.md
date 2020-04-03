@@ -20,7 +20,7 @@ machines:
 [Norton Utilities 4.00 (Advanced Edition)](#directory-of-norton-utilities-400-advanced-1) is from the
 [PCjs Software Archive](/software/pcx86/sw/misc/pcjs/).
 
-Scans of the diskettes and packaging are provided [below](#diskette-scans).
+Photos of the diskettes and packaging are provided [below](#diskette-photos).
 
 We also have copies of [Version 4.00 (Standard Edition)](../) from both March 1, 1987 and May 15, 1987.
 
@@ -74,7 +74,7 @@ We also have copies of [Version 4.00 (Standard Edition)](../) from both March 1,
     _FILE_0  DBD    48712   3-01-87   4:00p
             6 File(s)    123904 bytes free
 
-### Diskette Scans
+### Diskette Photos
 
 ![Norton Utilities 4.00 (Advanced #1)]({{ site.software.diskettes.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK1.jpg)
 

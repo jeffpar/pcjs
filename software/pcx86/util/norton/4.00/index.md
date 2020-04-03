@@ -22,7 +22,7 @@ Two variations of Norton Utilities 4.00 (Standard Edition) are currently availab
 - [March 1, 1987](#directory-of-norton-utilities-400-1987-03-01-1) (from [WinWorld](https://winworldpc.com/product/norton-utilities/40))
 - [May 15, 1987](#directory-of-norton-utilities-400-1987-05-15-1) (from the [PCjs Software Archive](/software/pcx86/sw/misc/pcjs/))
 
-Scans of the [May 15, 1987](#directory-of-norton-utilities-400-1987-05-15-1) diskettes are provided [below](#diskette-scans).
+Scans of the [May 15, 1987](#directory-of-norton-utilities-400-1987-05-15-1) diskettes are provided [below](#diskette-photos).
 
 We also have a copy of [Version 4.00 (Advanced Edition)](advanced/), which contains a Speed Disk utility and an "unformat" feature.
 
@@ -124,7 +124,7 @@ We also have a copy of [Version 4.00 (Advanced Edition)](advanced/), which conta
 	        6 file(s)     218837 bytes
 	                      141312 bytes free
 
-### Diskette Scans
+### Diskette Photos
 
 ![Norton Utilities 4.00 (1987-05-15 #1)]({{ site.software.diskettes.server }}/pcx86/util/norton/4.00/NU400-1987-05-15-DISK1.jpg)
 

@@ -105,7 +105,7 @@ All files on both sides of that diskette appear to be OK.  Directory listings of
 	        9 file(s)     140655 bytes
 	                       17920 bytes free
 
-### Diskette Scans
+### Diskette Photos
 
 ![Norton Utilities 2.01 (1983-11-03-A)]({{ site.software.diskettes.server }}/pcx86/util/norton/2.01/NU201-1983-11-03-SIDEA.jpg)
 
