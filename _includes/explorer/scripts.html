@@ -43,7 +43,8 @@
           }
         }
       }
-      function pcjsExplorerExpandAll(fExpand) {
+      function pcjsExplorerExpandAll(element, event, fExpand) {
+        if (event) event.preventDefault();
         let elements = document.querySelectorAll(fExpand? ".pcjs-explorer-closed" : ".pcjs-explorer-open");
         elements.forEach((element) => {pcjsExplorerClick(element);});
       }
