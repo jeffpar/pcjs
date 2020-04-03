@@ -16,8 +16,7 @@
  *          respect to the individual files (under /machines).  The target version comes from
  *          configs/machines.json:shared.version.
  *
- *          It does this by running the `concat`, `compile`, `copy`, and `disks` tasks for all machines,
- *          in that order.
+ *          It does this by running the `concat`, `compile`, and `copy` tasks for all machines, in that order.
  *
  *      concat (eg: `gulp concat` or `gulp concat/{machine}`)
  *
@@ -40,12 +39,6 @@
  *
  *          Copies any other individual resources files listed in machines.json (other than scripts) to the
  *          machine's current version folder.
- *
- *      disks (eg: `gulp disks-demo`, `gulp disks-private`)
- *
- *          Updates inlined disk manifests (eg, /disks/pcx86/library.xml) from the submodule manifests
- *          (eg, /disks-demo/pcx86/library.xml), which are actually "manifests of manifests" and therefore
- *          inherently slower to load.
  *
  *      version
  *
@@ -113,7 +106,7 @@ if (pkg.homepage) {
 }
 
 var aMachines = Object.keys(machines);
-var aConcatTasks = [], aCompileTasks = [], aCopyTasks = [];
+var aConcatTasks = [], aCompileTasks = [];
 
 aMachines.forEach(function(machineID) {
     if (machineID[0] == '_' || machineID == "shared") return;
@@ -265,22 +258,6 @@ aMachines.forEach(function(machineID) {
         }
         return stream;
     });
-
-    if (machineVersion < "2" && machineFiles.length) {
-        let taskCopy = "copy/" + machineID;
-        aCopyTasks.push(taskCopy);
-        gulp.task(taskCopy, function() {
-            return gulp.src(machineFiles)
-                .pipe(gulpNewer(machineReleaseDir))
-                .pipe(gulpReplace(/(<xsl:variable name="APPCLASS">)[^<]*(<\/xsl:variable>)/g, '$1' + machineFolder + '$2'))
-                .pipe(gulpReplace(/(<xsl:variable name="APPNAME">)[^<]*(<\/xsl:variable>)/g, '$1' + machineName + '$2'))
-                .pipe(gulpReplace(/(<xsl:variable name="APPVERSION">)[^<]*(<\/xsl:variable>)/g, "$1" + machineVersion + "$2"))
-                .pipe(gulpReplace(/"[^"]*\/?(common.css|common.xsl|components.css|components.xsl|document.css|document.xsl)"/g, '"' + machineReleaseDir.substr(1) + '/$1"'))
-                .pipe(gulpReplace(/[ \t]*\/\*[^*][\s\S]*?\*\//g, ""))
-                .pipe(gulpReplace(/[ \t]*<!--[^@]*?-->[ \t]*\n?/g, ""))
-                .pipe(gulp.dest(machineReleaseDir));
-        });
-    }
 });
 
 gulp.task("concat", gulp.parallel(...aConcatTasks));
@@ -294,95 +271,10 @@ gulp.task("compile/machines", gulp.parallel(
     "compile/ti57",
     "compile/vt100"
 ));
-gulp.task("copy", gulp.series(...aCopyTasks));
-
-let matchRef = function(match, sIndent, sFile) {
-    /*
-     * This function mimics what components.xsl normally does for disk manifests referenced by the FDC
-     * machine component.  Compare it to the following template in components.xsl:
-     *
-     *      <xsl:template match="manifest[not(@ref)]" mode="component">
-     *
-     * This code is not perfect (it doesn't process <link> elements, for example), but for machines
-     * that use library.xml, having them use an inlined library.xml instead speeds up loading significantly.
-     *
-     * Granted, after the first machine has fetched all the individual manifest files, your browser should
-     * do a reasonably good job using cached copies for all subsequent machines, but even then, there's
-     * still a noticeable delay.
-     */
-    let sDisks = match;
-    let sFilePath = path.join('.', sFile);
-    try {
-        let sManifest = /** @type {string} */ (fs.readFileSync(sFilePath, {encoding: 'utf8'}));
-        if (sManifest) {
-            sDisks = "";
-            let sPrefix = "", sDefaultName = "Unknown";
-            let matchTitle = sManifest.match(/<title(?: prefix="(.*?)"|)[^>]*>(.*?)<\/title>/);
-            if (matchTitle) {
-                sPrefix = matchTitle[1];
-                sDefaultName = matchTitle[2];
-                let matchVersion = sManifest.match(/<version.*?>(.*?)<\/version>/);
-                if ( matchVersion) sDefaultName += ' ' +  matchVersion[1];
-            }
-            let reDisk, matchDisk;
-            reDisk = /<disk.*? href="([^"]*)".*?\/>/g;
-            while ((matchDisk = reDisk.exec(sManifest))) {
-                if (sDisks) sDisks += "\n";
-                let urlDisk = matchDisk[1];
-                if (urlDisk.indexOf("http") != 0 && !fs.existsSync(path.join('.', urlDisk))) {
-                    console.log("warning: disk image '" + urlDisk + "' may not exist");
-                }
-                sDisks += sIndent + "<disk path=\"" + urlDisk + "\">" + sDefaultName + "</disk>";
-            }
-            reDisk = /<disk.*? href="([^"]*)".*?>([\S\s]*?)<\/disk>/g;
-            while ((matchDisk = reDisk.exec(sManifest))) {
-                if (sDisks) sDisks += "\n";
-                let matchName = matchDisk[2].match(/<name.*?>(.*?)<\/name>/);
-                let sName = matchName? ((sPrefix? sPrefix + ": " : "") + matchName[1]) : sDefaultName;
-                let urlDisk = matchDisk[1];
-                if (urlDisk.indexOf("http") != 0 && !fs.existsSync(path.join('.', urlDisk))) {
-                    console.log("warning: disk image '" + urlDisk + "' may not exist");
-                }
-                sDisks += sIndent + "<disk path=\"" + urlDisk + "\">" + sName + "</disk>";
-            }
-            return sDisks;
-        }
-    } catch(err) {
-        console.log(err.message);
-    }
-    return sDisks;
-};
-
-gulp.task("disks-demo", function() {
-    let replaceRefs = gulpReplace(/([ \t]+)<manifest.*? ref="(.*?)".*?\/>/g, matchRef);
-    return gulp.src([
-            "disks-demo/pcx86/library.xml",
-            "disks-demo/pcx86/samples.xml",
-            "disks-demo/pcx86/shareware/pcsig08/library.xml",
-        ], {base: "disks-demo/pcx86/"})
-        .pipe(replaceRefs)
-        .pipe(gulp.dest("disks/pcx86/")
-    );
-});
-
-gulp.task("disks-private", function() {
-    let replaceRefs = gulpReplace(/([ \t]+)<manifest.*? ref="(.*?)".*?\/>/g, matchRef);
-    return gulp.src([
-            "disks-private/pcx86/**/library.xml",
-            "disks-private/pcx86/**/manifest.xml",
-            "disks-private/pcx86/**/machine.xml",
-            "disks-private/pcx86/**/README.md"
-        ], {base: "disks-private/pcx86/"})
-        .pipe(replaceRefs)
-        .pipe(gulp.dest("disks/pcx86/private/")
-    );
-});
-
-gulp.task("disks", gulp.parallel("disks-demo", "disks-private"));
 
 gulp.task("version", function() {
     let baseDir = "./";
-    return gulp.src(["apps/**/*.xml", "devices/**/*.xml", "disks/**/*.xml", "disks-demo/**/*.xml", "disks-game/**/*.xml", "disks-private/**/*.xml", "pubs/**/*.xml"], {base: baseDir})
+    return gulp.src(["configs/**/*.xml"], {base: baseDir})
         .pipe(gulpReplace(/href="\/machines\/([^/]*)\/releases\/[0-9.]*\/(machine|manifest|outline)\.xsl"/g, 'href="/machines/$1/releases/' + machines.shared.version + '/$2.xsl"'))
         .pipe(gulp.dest(baseDir));
 });

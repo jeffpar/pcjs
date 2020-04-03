@@ -410,7 +410,7 @@
     ]
   },
   "shared": {
-    "version": "1.76",
+    "version": "2.00",
     "externs": [
       "./machines/shared/lib/externs.js"
     ],

@@ -1,5 +1,6 @@
 ---
 layout: page
+heading: Welcome to PCjs
 permalink: /
 redirect_from:
   - /devices/

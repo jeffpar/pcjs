@@ -1,4 +1,49 @@
 {
+  "empty": {
+    "@hidden": true,
+    "@title": "Empty Diskettes",
+    "@versions": {
+      "": {
+        "@media": [
+          {
+            "@title": "Empty Diskette (160K)",
+            "@diskette": "EMPTY-160K.json",
+            "@type": "PC160K"
+          },
+          {
+            "@title": "Empty Diskette (320K)",
+            "@diskette": "EMPTY-320K.json",
+            "@type": "PC320K"
+          },
+          {
+            "@title": "Empty Diskette (180K)",
+            "@diskette": "EMPTY-180K.json",
+            "@type": "PC180K"
+          },
+          {
+            "@title": "Empty Diskette (360K)",
+            "@diskette": "EMPTY-360K.json",
+            "@type": "PC360K"
+          },
+          {
+            "@title": "Empty Diskette (720K)",
+            "@diskette": "EMPTY-720K.json",
+            "@type": "PC720K"
+          },
+          {
+            "@title": "Empty Diskette (1.2M)",
+            "@diskette": "EMPTY-1200K.json",
+            "@type": "PC1200K"
+          },
+          {
+            "@title": "Empty Diskette (1.44M)",
+            "@diskette": "EMPTY-1440K.json",
+            "@type": "PC1440K"
+          }
+        ]
+      }
+    }
+  },
   "app": {
     "@title": "Applications",
     "ibm": {
@@ -1192,51 +1237,6 @@
             ]
           }
         }
-      }
-    }
-  },
-  "empty": {
-    "@hidden": true,
-    "@title": "Empty Diskettes",
-    "@versions": {
-      "": {
-        "@media": [
-          {
-            "@title": "Empty Diskette (160K)",
-            "@diskette": "EMPTY-160K.json",
-            "@type": "PC160K"
-          },
-          {
-            "@title": "Empty Diskette (320K)",
-            "@diskette": "EMPTY-320K.json",
-            "@type": "PC320K"
-          },
-          {
-            "@title": "Empty Diskette (180K)",
-            "@diskette": "EMPTY-180K.json",
-            "@type": "PC180K"
-          },
-          {
-            "@title": "Empty Diskette (360K)",
-            "@diskette": "EMPTY-360K.json",
-            "@type": "PC360K"
-          },
-          {
-            "@title": "Empty Diskette (720K)",
-            "@diskette": "EMPTY-720K.json",
-            "@type": "PC720K"
-          },
-          {
-            "@title": "Empty Diskette (1.2M)",
-            "@diskette": "EMPTY-1200K.json",
-            "@type": "PC1200K"
-          },
-          {
-            "@title": "Empty Diskette (1.44M)",
-            "@diskette": "EMPTY-1440K.json",
-            "@type": "PC1440K"
-          }
-        ]
       }
     }
   },
