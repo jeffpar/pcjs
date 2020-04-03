@@ -13,7 +13,7 @@
 	<xsl:variable name="MACHINETYPE">pc</xsl:variable>
 	<xsl:variable name="APPCLASS">pcx86</xsl:variable>
 	<xsl:variable name="APPNAME">PCx86</xsl:variable>
-	<xsl:variable name="APPVERSION">1.76</xsl:variable>
+	<xsl:variable name="APPVERSION">2.00</xsl:variable>
 	<xsl:variable name="CSSCLASS">pcjs</xsl:variable>
 	<xsl:variable name="SITEURL">https://www.pcjs.org</xsl:variable>
 	<xsl:variable name="BGNDCOLOR">#fff8e7</xsl:variable>
