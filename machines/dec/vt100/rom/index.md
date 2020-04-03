@@ -2,7 +2,9 @@
 layout: page
 title: DEC VT100 ROMs
 permalink: /machines/dec/vt100/rom/
-redirect_from: /devices/pc8080/rom/vt100/
+redirect_from:
+  - /devices/pc8080/rom/vt100/
+  - /devices/pc8080/rom/
 ---
 
 ### 8080 Firmware (8Kb)

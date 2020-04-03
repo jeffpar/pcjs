@@ -2,7 +2,12 @@
 layout: page
 title: Space Invaders (1978)
 permalink: /machines/arcade/invaders/
-redirect_from: /devices/pc8080/machine/invaders/
+redirect_from:
+  - /devices/pc8080/machine/invaders/
+  - /devices/pc8080/machine/invaders/debugger/
+  - /devices/pc8080/machine/invaders/new/
+  - /devices/pc8080/machine/
+  - /devices/pc8080/
 machines:
   - id: invaders
     type: invaders
