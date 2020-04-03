@@ -199,8 +199,8 @@ class SerialPortPDP11 extends Component {
                 var keyCode = event.keyCode;
                 /*
                  * Perform the same remapping of BACKSPACE and DELETE that our VT100 emulation performs,
-                 * for PCjs-wide consistency; see the KEYMAP table in /modules/pc8080/lib/keyboard.js for
-                 * the rationale.  Ditto for ALT-DELETE; see onKeyDown() in /modules/pc8080/lib/keyboard.js
+                 * for PCjs-wide consistency; see the KEYMAP table in /machines/pcx80/lib/keyboard.js for
+                 * the rationale.  Ditto for ALT-DELETE; see onKeyDown() in /machines/pcx80/lib/keyboard.js
                  * for details.
                  *
                  * NOTE: keyDown (and keyUp) events supply us with KEYCODE values, which are NOT the same as
@@ -238,7 +238,7 @@ class SerialPortPDP11 extends Component {
                     var bASCII = event.which || event.keyCode;
                     /*
                      * Perform the same remapping of ALT-ENTER (to LINE-FEED) that our VT100 emulation performs,
-                     * for PCjs-wide consistency; see onKeyDown() in /modules/pc8080/lib/keyboard.js for details.
+                     * for PCjs-wide consistency; see onKeyDown() in /machines/pcx80/lib/keyboard.js for details.
                      */
                     if (event.altKey) {
                         if (bASCII == Keys.ASCII.CTRL_M) {
@@ -538,7 +538,7 @@ class SerialPortPDP11 extends Component {
      * receiveData(data)
      *
      * This replaces the old sendRBR() function, which expected an Array of bytes.  We still support that,
-     * but in order to support connections with other SerialPort components (ie, the PC8080 SerialPort), we
+     * but in order to support connections with other SerialPort components (ie, the PCx80 SerialPort), we
      * have added support for numbers and strings as well.
      *
      * @this {SerialPortPDP11}

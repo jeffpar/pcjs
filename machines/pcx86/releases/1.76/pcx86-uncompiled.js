@@ -51874,7 +51874,7 @@ class VideoX86 extends Component {
              * We now save every binding that comes in, so that if there are bindings for "caps-lock' and the like,
              * we can forward them to the Keyboard.  TODO: Perhaps we should limit this to sHTMLType == "led", and collect
              * them in a separate object (eg, ledBindings), so that initBus() can safely enumerate JUST the LEDs.  This
-             * is what we do in PC8080.  Be aware that's there's also sHTMLType == "rled" now, too.
+             * is what we do in PCx80.  Be aware that's there's also sHTMLType == "rled" now, too.
              */
             this.bindings[sBinding] = control;
 
@@ -58773,7 +58773,7 @@ class SerialPort extends Component {
      * receiveData(data)
      *
      * This replaces the old sendRBR() function, which expected an Array of bytes.  We still support that,
-     * but in order to support connections with other SerialPort components (ie, the PC8080 SerialPort), we
+     * but in order to support connections with other SerialPort components (ie, the PCx80 SerialPort), we
      * have added support for numbers and strings as well.  If no data is specified at all, then all we do
      * is "clock" any remaining data into the receiver.
      *

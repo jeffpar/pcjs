@@ -19,10 +19,10 @@ The test machine below loads a copy of the
 calls so that you can see its progress in the Control Panel window.  This is a "headless" test machine
 (no keyboard or display), so that's all you get.
 
-The good news: PC8080 passes all the 8080 Exerciser tests.  And it doesn't do it by using all sorts of weird
+The good news: PCx80 passes all the 8080 Exerciser tests.  And it doesn't do it by using all sorts of weird
 "flags tables" that most other 8080 emulators seem to fall back on.
 
-Like all the other CPU emulations in the PCjs Project, PC8080 never "calculates" the flags unless/until they are
+Like all the other CPU emulations in the PCjs Project, PCx80 never "calculates" the flags unless/until they are
 actually required, which considerably speeds up all arithmetic operations.
 
 Of particular note are the 8080's subtract, compare, and decrement operations, which actually perform addition,

@@ -572,7 +572,7 @@ class SerialPort extends Component {
      * receiveData(data)
      *
      * This replaces the old sendRBR() function, which expected an Array of bytes.  We still support that,
-     * but in order to support connections with other SerialPort components (ie, the PC8080 SerialPort), we
+     * but in order to support connections with other SerialPort components (ie, the PCx80 SerialPort), we
      * have added support for numbers and strings as well.  If no data is specified at all, then all we do
      * is "clock" any remaining data into the receiver.
      *

@@ -147,7 +147,7 @@ class VT100Chips extends Device {
         *      stored in the ROM allow the terminal to work.
         *
         * but I think what they meant to say is that default settings are stored in the RAM copy of NVR.  So then
-        * I went into SET-UP, pressed SHIFT-S to save those settings back to NVR, and then used the PC8080 debugger
+        * I went into SET-UP, pressed SHIFT-S to save those settings back to NVR, and then used the PCx80 debugger
         * "d nvr" command to dump the NVR contents.  The results are below.
         *
         * The first dump actually contains only two modifications to the factory defaults: enabling ONLINE instead

@@ -2782,7 +2782,7 @@ class VideoX86 extends Component {
              * We now save every binding that comes in, so that if there are bindings for "caps-lock' and the like,
              * we can forward them to the Keyboard.  TODO: Perhaps we should limit this to sHTMLType == "led", and collect
              * them in a separate object (eg, ledBindings), so that initBus() can safely enumerate JUST the LEDs.  This
-             * is what we do in PC8080.  Be aware that's there's also sHTMLType == "rled" now, too.
+             * is what we do in PCx80.  Be aware that's there's also sHTMLType == "rled" now, too.
              */
             this.bindings[sBinding] = control;
 

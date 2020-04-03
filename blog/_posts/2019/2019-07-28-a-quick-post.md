@@ -29,7 +29,7 @@ And if you want to paste a block of text as-is that also ends with "$", end it w
 
 Consider this a "beta" release of Copy/Paste support, because the feature is new, hasn't been tested a lot, and could
 probably benefit from some user feedback.  If there are no issues, I'll look into adding the support to other machines
-(e.g., PC8080, PDPjs, TI-57, etc), too.
+(e.g., PCx80, PDPjs, TI-57, etc), too.
 
 I've also been working on weaning PCjs off of Amazon Web Services.  I was using S3 cloud storage for many of the
 documents I've scanned over the years, but since I was also paying for OneDrive, it seemed silly to pay extra for AWS,
