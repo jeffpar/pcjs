@@ -77,9 +77,9 @@ experience, but most emulators don't care about that, so for them, a solution li
 Unfortunately, over time, cheap solutions start breaking down, and as PCjs video support expanded from
 the lowly MDA and CGA cards to the much more powerful EGA and VGA cards, the work-arounds were getting uglier.
 
-For example, one of [Michael Abrash's VGA "Black Book" Tests](/software/pcx86/test/vga/):
+For example, one of [Michael Abrash's VGA "Black Book" Tests](/software/pcx86/test/vga/blackbook/):
 
-- [L23-1.ASM: Animates four balls bouncing around a playfield by using page flipping and panning](/software/pcx86/test/vga/src/L23-1.ASM)
+- [L23-1.ASM: Animates four balls bouncing around a playfield by using page flipping and panning](/software/pcx86/test/vga/blackbook/L23-1/)
 
 relied on a couple of critical features of the EGA:
 
@@ -90,11 +90,11 @@ However, if we're just toggling the retrace bits "willy-nilly", then we're not r
 importantly, we're not helping ourselves know when we should honor (or not honor) the contents of registers like the
 CRT Controller Start Address.
 
-As a result, images initially produced by [L23-1.ASM](/software/pcx86/test/vga/src/L23-1.ASM) would "jerk" horribly,
+As a result, images initially produced by [L23-1.ASM](/software/pcx86/test/vga/blackbook/L23-1/) would "jerk" horribly,
 until I put some work-arounds in place.
 
 That was a few years ago.  Fast-forward to my recent efforts to run [Fantasy Land](/blog/2018/04/23/), which performed
-pixel-panning much like [L23-1.ASM](/software/pcx86/test/vga/src/L23-1.ASM), but in text mode rather than graphics mode, and
+pixel-panning much like [L23-1.ASM](/software/pcx86/test/vga/blackbook/L23-1/), but in text mode rather than graphics mode, and
 also required:
 
 - Programmable fonts

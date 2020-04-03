@@ -25,7 +25,7 @@
   },
   {
     "@title": "DONKEY.BAS from PC DOS 1.00 (1981)",
-    "@permalink": "/software/pcx86/sys/dos/ibm/1.00/basic/donkey/",
+    "@permalink": "/software/pcx86/app/ibm/basic/1.00/donkey/",
     "@preview": ".png",
     "@tags": "home,pcx86"
   },
@@ -36,16 +36,28 @@
     "@tags": "home,pcx86"
   },
   {
+    "@title": "Multiplan 1.0 (1982)",
+    "@permalink": "/software/pcx86/app/ibm/multiplan/1.00/",
+    "@preview": ".png",
+    "@tags": "home,pcx86"
+  },
+  {
     "@title": "Executive Suite (1982)",
     "@permalink": "/software/pcx86/game/other/1982/esuite/",
     "@preview": ".png",
-    "@tags": "home"
+    "@tags": "home,pcx86"
   },
   {
     "@title": "PDP-11/70 with RT-11 4.0 (1982)",
     "@permalink": "/machines/dec/pdp11/1170/panel/debugger/rt11/",
     "@preview": ".png",
     "@tags": "home"
+  },
+  {
+    "@title": "CP/M-86 (1983)",
+    "@permalink": "/software/pcx86/sys/cpm/1.1b/",
+    "@preview": ".png",
+    "@tags": "home,pcx86"
   },
   {
     "@title": "COMPAQ Portable with Monochrome Graphics (1983)",
@@ -112,6 +124,12 @@
     "@permalink": "/software/pcx86/sys/os2/ibm/1.0/",
     "@preview": ".png",
     "@tags": "home,pcx86,os2"
+  },
+  {
+    "@title": "VGA Black Book Tests (by Michael Abrash)",
+    "@permalink": "/software/pcx86/test/vga/blackbook/",
+    "@preview": "/software/pcx86/test/vga/blackbook/L23-1/images/thumbnail.png",
+    "@tags": "home,pcx86,vga"
   },
   {
     "@title": "Microsoft Windows/386 2.0 (1987)",
