@@ -59,7 +59,7 @@ it's just another feature that didn't (and presumably couldn't) make it into the
 NOTE: It's possible I don't have the TI-55 Emulator properly clocked yet, because you have to wait approximately
 3 minutes and 40 seconds before the "traveling decimal point" appears.
 
-## PCjs TI-55 and TI-57 Emulators
+### PCjs TI-55 and TI-57 Emulators
 
 {% include machine.html id="ti55" %}
 

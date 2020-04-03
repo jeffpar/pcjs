@@ -119,7 +119,7 @@ the oldest version we have been able to locate so far, expanded the list of util
 
 The `UNERASE` feature was still there, but it was now part of the `NORTON` program (aka `NU` if you ran `SHORT.BAT`
 to shorten all the filenames), effectively stamping his signature feature with his own name.  The importance of brand
-recognition was not lost on Peter Norton, as evidenced not only by the "selfie" on his [diskette sleeves](#version-300-disk-scan)
+recognition was not lost on Peter Norton, as evidenced not only by the "selfie" on his [diskette sleeves](#diskette-photos)
 but also most of his print ads, book covers, etc.
 
 Some all-new utilities included `VOLABEL` (since volume labels hadn't existed prior to DOS 2.0), `WIPEDISK` and `WIPEFILE`,
@@ -142,10 +142,9 @@ predates version 3.
 
 In the meantime, we'll end this blog post with some old magazine articles.
 
-Selected Magazine Articles on The Norton Utilities
---------------------------------------------------
+### Selected Magazine Articles on The Norton Utilities
 
-### July 1983
+#### July 1983
 
 In PC Tech Journal's premiere [July-August 1983 issue](/documents/magazines/pctj/#PCTJ-1983-07),
 the article "THE NORTON UTILITIES" appeared. It was written by Susan Glinert-Cole and has been
@@ -414,7 +413,7 @@ he writes:
 > I solved the label problem by writing a label program that can add, change, or delete volume labels in any format of disk.
 (I added the label command to my utilities set.)
 
-### September 1983
+#### September 1983
 
 In the September 1983 issue, PC Magazine unveiled a new column, "The Norton Chronicles", described as:
 
@@ -449,7 +448,7 @@ and understand. In addition, Pascal includes features, such as enumerated data t
 too complex to explain here), that greatly assist the writing of reliable programs. It is for these reasons that I consider
 Pascal to be, in general, the best programming language to use.
 
-### February 1986
+#### February 1986
 
 PC Magazine's February 11, 1986 article "Norton Utilities: Still the Best?" by Winn L. Rosch had this
 to say about Norton Utilities 3.10:
@@ -475,12 +474,12 @@ And the author summarized:
 > Improved ease of use in Version 3.10, especially file recovery, Norton remains the class act in a now crowded
 > field of DOS utilities.
 
-### August 1987
+#### August 1987
 
 PC Magazine's August 1987 article "Back From The Brink: File Recovery Software" by Winn L. Rosch had this
 to say about Norton Utilities 4.0:
 
-#### The Norton Utilities, Version 4.0 and The Norton Utilities Advanced Edition
+##### The Norton Utilities, Version 4.0 and The Norton Utilities Advanced Edition
 
 > *The Norton Utilities* is the program that started it all: the first successful enhancements for DOS.
 > The star attraction of the Peter Norton Computing package was (and remains) its miracle-working unerase
@@ -541,6 +540,6 @@ And *The Norton Utilities, Version 4.0* shared PC Magazine's "Editor's Choice" a
 > Version 4.0, with *PC Tools* (at $39.95) instead. You'll pay less, get all the added abilities of the *Advanced Edition*,
 > and have its resident mode as a bonus.
 
-#### Version 3.00 Disk Scan
+### Diskette Photos
 
 [![Norton Utilities 3.00 (1984-12-07)]({{ site.software.diskettes.server }}/pcx86/util/norton/3.00/NU300-1984-12-07.jpg)](/software/pcx86/util/norton/3.00/)

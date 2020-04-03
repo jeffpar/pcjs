@@ -18,7 +18,7 @@ also had very little existing documentation.  The advantage of starting with the
 its hard disk controller was the basis for future ATA and ATAPI controllers, so adapting the AT's controller
 to support ATAPI commands was the simplest way to [connect a simulated CD-ROM drive to a PCjs machine](/machines/pcx86/ibm/5170/vga/cdrom/).
 
-## Bookshelf for Windows (1991)
+### Bookshelf for Windows (1991)
 
 Once I had CD-ROM support limping along, I decided to try **Bookshelf for Windows** on Windows 3.1.
 
@@ -56,7 +56,7 @@ I did not preinstall **Bookshelf for Windows** in that machine, because I wouldn
 of the authentic experience of installing buggy software from 1992 and choosing whichever "Fatal Error"
 work-around works best for you.
 
-## Pandora's Box (1999)
+### Pandora's Box (1999)
 
 In other recent, coincidental, and entirely unrelated news, a friend was trying to create a preservation
 copy of a 20-year-old Microsoft CD-ROM entertainment title called **Pandora's Box**.
@@ -98,7 +98,7 @@ made a conventional patch too difficult to perform, is unclear.  If the latter, 
 main executable to PANDORA.ICD and calling the SafeDisc loader PANDORA.EXE.  It appears that Microsoft's
 "patch" simply replaced the SafeDisc loader with an updated and unencrypted PANDORA.EXE.
 
-## The Art of Software Preservation
+### The Art of Software Preservation
 
 **Pandora's Box** illustrates more than just the obvious principle that "copy-protected software is hard to
 copy", to which I've already [alluded](/blog/2019/05/05/#the-software-preservation-quandry).
