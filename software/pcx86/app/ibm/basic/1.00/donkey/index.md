@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "DONKEY.BAS from PC DOS 1.00 (1981)"
-permalink: /software/pcx86/sys/dos/ibm/1.00/basic/donkey/
+permalink: /software/pcx86/app/ibm/basic/1.00/donkey/
 redirect_from: /apps/pcx86/1981/donkey/
 preview: images/screenshot.png
 machines:
@@ -27,5 +27,5 @@ This particular machine has been configured to automatically save all your chang
 of your browser's local storage), so you can close the browser in the middle of a game of DONKEY, and
 the next time you load this page, your progress (and the donkey) should be perfectly restored.
 
-Browse all the [BASIC Programs](/software/pcx86/sys/dos/ibm/1.00/basic/) included with
+Browse all the [BASIC Programs](/software/pcx86/app/ibm/basic/1.00/) included with
 [PC DOS 1.00](/software/pcx86/sys/dos/ibm/1.00/).

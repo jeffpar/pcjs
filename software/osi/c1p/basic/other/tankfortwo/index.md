@@ -10,6 +10,6 @@ machines:
 
 {% include machine.html id="c1p8k" %}
 
-```vb
+```bas
 {% include_relative TANKFORTWO.BAS %}
 ```

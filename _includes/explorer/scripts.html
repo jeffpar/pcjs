@@ -1,7 +1,6 @@
     <script>
       function pcjsGetURLVars() {
-        let vars = {};
-        let parts = window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        let vars = {}, parts = window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
           vars[key] = value;
         });
         return vars;
@@ -10,6 +9,7 @@
         element.href += window.location.search;
       }
       function pcjsExplorerClick(element, event) {
+        if (event) event.stopPropagation();
         if (element.classList.contains("pcjs-explorer-open")) {
           element.classList.add("pcjs-explorer-closed");
           element.classList.remove("pcjs-explorer-open");
@@ -17,7 +17,6 @@
           element.classList.add("pcjs-explorer-open");
           element.classList.remove("pcjs-explorer-closed");
         }
-        if (event) event.stopPropagation();
       }
       function pcjsExplorerExpand(path) {
         if (path) {
@@ -50,8 +49,8 @@
       }
       function pcjsExplorerSurprise() {
         let elements = document.querySelectorAll(".pcjs-explorer-item");
-        let element = elements[Math.random() * elements.length | 0];
-        window.location.href = element.children[0].pathname;
+        let element = elements && elements[Math.random() * elements.length | 0];
+        if (element && element.children) window.location.href = element.children[0].pathname;
       }
       function pcjsExplorerView(element, event) {
         event.preventDefault();

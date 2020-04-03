@@ -122,6 +122,10 @@ ul.menu li {
   list-style: none;
 }
 
+ul.menu li.optional {
+  display: none;
+}
+
 ul.menu li:after {
     content: " | ";
 }
@@ -237,6 +241,10 @@ footer {
 
   header img {
     display: none;
+  }
+
+  ul.menu li.optional {
+    display: initial;
   }
 
   div.wrapper {

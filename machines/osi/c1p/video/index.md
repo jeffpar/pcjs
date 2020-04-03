@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Challenger 1P Video Resources
+title: OSI Challenger 1P Video Resources
 permalink: /machines/osi/c1p/video/
 ---
 

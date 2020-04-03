@@ -24,6 +24,17 @@
           }
         }
       },
+      "basic": {
+        "@title": "BASIC",
+        "@versions": {
+          "1.00": {
+            "@title": "BASIC Programs for PC DOS 1.00"
+          },
+          "1.00/donkey": {
+            "@title": "DONKEY.BAS from PC DOS 1.00 (1981)"
+          }
+        }
+      },
       "multiplan": {
         "@title": "Multiplan",
         "@versions": {
@@ -1522,7 +1533,7 @@
               }
             ]
           },
-          "3.00B": {
+          "3.00b": {
             "@title": "Borland Turbo Pascal 3.00B",
             "@media": [
               {
@@ -1532,7 +1543,7 @@
               }
             ]
           },
-          "3.01A": {
+          "3.01a": {
             "@title": "Borland Turbo Pascal 3.01A",
             "@media": [
               {
@@ -1543,7 +1554,7 @@
               }
             ]
           },
-          "3.02A": {
+          "3.02a": {
             "@title": "Borland Turbo Pascal 3.02A",
             "@media": [
               {
@@ -7901,7 +7912,7 @@
       "sidekick": {
         "@title": "Sidekick",
         "@versions": {
-          "1.11C": {
+          "1.11c": {
             "@title": "Sidekick 1.11C",
             "@media": [
               {
@@ -7926,7 +7937,7 @@
       "skplus": {
         "@title": "SideKick Plus",
         "@versions": {
-          "1.00A": {
+          "1.00a": {
             "@title": "SideKick Plus 1.00A",
             "@media": [
               {

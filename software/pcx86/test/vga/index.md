@@ -27,7 +27,7 @@ The main reasons for my [fork](https://github.com/jeffpar/abrash-black-book) are
 images display properly on GitHub, and to extract and add assorted source code listings as I need them.  Since that
 project's [/src](https://github.com/jeffpar/abrash-black-book/tree/master/src) folder contains just the book's text,
 I've added a [/code](https://github.com/jeffpar/abrash-black-book/tree/master/code) folder for the source code listings.
-The name of each source code file matches the name displayed in the text (eg, [L23-1.ASM](src/L23-1.ASM) is Listing 23.1
+The name of each source code file matches the name displayed in the text (eg, [L23-1.ASM](src/L23-1/) is Listing 23.1
 from [Chapter 23](https://github.com/jeffpar/abrash-black-book/blob/master/src/chapter-23.md)).
 
 I assume something similar was done on the CD-ROM that accompanied the Black Book, but since I don't have the original
@@ -163,7 +163,7 @@ create the PCjs [VGA Black Book Binaries](#directory-of-vga-black-book-binaries)
 
 #### [Chapter 23: Bones and Sinew](https://github.com/jeffpar/abrash-black-book/blob/master/src/chapter-23.md)
 
-  - [L23-1.ASM: Animates four balls bouncing around a playfield by using page flipping and panning](src/L23-1.ASM)
+  - [L23-1.ASM: Animates four balls bouncing around a playfield by using page flipping and panning](src/L23-1/)
 
 ![L32-1](images/L23-1.png)
 
