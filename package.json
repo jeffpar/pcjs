@@ -1,6 +1,6 @@
 {
   "name": "pcjs",
-  "version": "1.76.0",
+  "version": "2.00.0",
   "year": 2020,
   "description": "PCjs",
   "license": "MIT",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/jeffpar/pcjs.git"
+    "url": "git://github.com/jeffpar/pcjs.org.git"
   },
   "keywords": [
     "pcjs",
@@ -24,7 +24,7 @@
   ],
   "author": "Jeff Parsons <Jeff@pcjs.org>",
   "bugs": {
-    "url": "https://github.com/jeffpar/pcjs/issues"
+    "url": "https://github.com/jeffpar/pcjs.org/issues"
   },
   "homepage": "https://www.pcjs.org/",
   "dependencies": {

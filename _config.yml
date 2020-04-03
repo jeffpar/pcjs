@@ -1,6 +1,5 @@
 title: PCjs Machines
-welcome: Welcome to PCjs
-domain: pcjs.dev
+domain: pcjs.org
 tagline: Home of the original IBM PC emulator for web browsers.
 description: >
   The PCjs Project offers a variety of machine emulations written in JavaScript, including PCx86 for x86-based
@@ -34,7 +33,7 @@ exclude:
 github:
   owner_name: "jeffpar"
   owner_url: https://github.com/jeffpar
-  repository_url: https://github.com/jeffpar/pcjs
+  repository_url: https://github.com/jeffpar/pcjs.org
   pages: https://github.com/jeffpar/pcjs/tree/gh_pages
 
 kramdown:
