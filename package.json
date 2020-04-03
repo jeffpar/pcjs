@@ -39,7 +39,7 @@
     "gulp-newer": "^1.4.0",
     "gulp-replace": "^1.0.0",
     "gulp-sourcemaps": "^2.6.5",
-    "mkdirp": "^1.0.3",
+    "mkdirp": "^1.0.4",
     "path": "^0.12.7",
     "pdf-parse": "^1.1.1",
     "replace": "^1.1.5",
