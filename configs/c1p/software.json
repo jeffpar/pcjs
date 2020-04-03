@@ -57,7 +57,7 @@
       }
     },
     "jeffpar": {
-      "@title": "Jeff's Old BASIC Programs",
+      "@title": "Jeff's BASIC Programs",
       "@products": {
         "checkers": {
           "@title": "CHECKERS",
@@ -110,7 +110,7 @@
       }
     },
     "jeffpar": {
-      "@title": "Jeff's Old 6502 Programs",
+      "@title": "Jeff's 6502 Programs",
       "@products": {
         "assembler": {
           "@title": "6502 Assembler (8K)",

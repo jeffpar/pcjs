@@ -22,7 +22,7 @@
       "@diskette_drives": ["A", "B"]
     },
     "c1p": {
-      "@title": "OSI C1P",
+      "@title": "OSI Challenger 1P",
       "@path": "/osi/c1p",
       "@type": "software"
     }
