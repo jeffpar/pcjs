@@ -41,7 +41,6 @@ The 8080 Exerciser source code has also been "forked" on [GitHub](https://github
 
 {% include machine.html id="test8080" %}
 
-8080 Online Resources
----------------------
+### 8080 Online Resources
 
 [8080 Opcode Map](http://pastraiser.com/cpu/i8080/i8080_opcodes.html)
