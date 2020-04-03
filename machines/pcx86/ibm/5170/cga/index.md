@@ -10,3 +10,5 @@ machines:
 ---
 
 {% include machine.html id="ibm-5170-cga" %}
+
+{% include gallery/documents.html width="200" height="280" %}

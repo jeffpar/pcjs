@@ -16,3 +16,5 @@ machines:
 {% include machine.html id="ibm-5150-vga" %}
 
 This machine is also available with the <a href="debugger/" onclick="pcjsOnClick(this)">PCjs Debugger</a>.
+
+{% include gallery/documents.html width="200" height="280" %}

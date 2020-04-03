@@ -1,6 +1,6 @@
 ---
 layout: page
-title: PDP-11/20 BASIC with Debugger (v2)
+title: DEC PDP-11/20 BASIC with Debugger (v2)
 permalink: /machines/dec/pdp11/1120/basic/debugger/v2/
 redirect_from: /devices/pdp11/machine/1120/basic/debugger/new/
 machines:

@@ -25,3 +25,5 @@ connected to controller's "secondary" interface.  And in fact, that is exactly h
 is configured.  It's also available with the [PCjs Debugger](debugger/).
 
 {% include machine.html id="ibm-5170-vga" %}
+
+{% include gallery/documents.html width="200" height="280" %}

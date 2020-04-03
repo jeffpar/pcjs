@@ -17,7 +17,7 @@
           element.classList.add("pcjs-explorer-open");
           element.classList.remove("pcjs-explorer-closed");
         }
-        event.stopPropagation();
+        if (event) event.stopPropagation();
       }
       function pcjsExplorerExpand(path) {
         if (path) {
@@ -43,10 +43,23 @@
           }
         }
       }
+      function pcjsExplorerExpandAll(fExpand) {
+        let elements = document.querySelectorAll(fExpand? ".pcjs-explorer-closed" : ".pcjs-explorer-open");
+        elements.forEach((element) => {pcjsExplorerClick(element);});
+      }
+      function pcjsExplorerSurprise() {
+        let elements = document.querySelectorAll(".pcjs-explorer-item");
+        let element = elements[Math.random() * elements.length | 0];
+        window.location.href = element.children[0].pathname;
+      }
       function pcjsExplorerView(element, event) {
         event.preventDefault();
-        let target = document.getElementById("pcjs-hardware");
-        if (target) target.scrollIntoView({behavior:"smooth"});
+        let target = document.getElementById("pcjs-explorer-menu");
+        if (target) {
+          let yOffset = -48;
+          let y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({top: y, behavior: 'smooth'});
+        }
       }
       function pcjsExplorerInit() {
         pcjsExplorerExpand(window.location.pathname + window.location.hash.substr(1));

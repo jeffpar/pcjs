@@ -2,7 +2,9 @@
 layout: page
 title: Programming Books
 permalink: /documents/books/programming/
-redirect_from: /pubs/pc/programming/
+redirect_from:
+  - /pubs/pc/programming/
+  - /docs/
 preview: covers/Graphics_for_the_IBM_PC.jpg
 ---
 

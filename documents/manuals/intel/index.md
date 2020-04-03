@@ -5,7 +5,7 @@ permalink: /documents/manuals/intel/
 redirect_from: /pubs/pc/reference/intel/
 ---
 
-{% include gallery/documents.html title="Intel Manuals" tag="intel-manuals" width="200" height="260" %}
+{% include gallery/documents.html tag="intel-manuals" width="200" height="260" %}
 
 ### Additional Intel CPU Information
 

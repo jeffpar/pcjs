@@ -1,6 +1,6 @@
 ---
 layout: page
-title: PDP-11/70 Control Panels
+title: DEC PDP-11/70 Control Panels
 permalink: /configs/pdp11/panel/1170/
 redirect_from: /devices/pdp11/panel/1170/
 ---

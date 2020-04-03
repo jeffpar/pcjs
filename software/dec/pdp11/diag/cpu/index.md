@@ -1,6 +1,6 @@
 ---
 layout: page
-title: PDP-11 CPU Diagnostics
+title: DEC PDP-11 CPU Diagnostics
 permalink: /software/dec/pdp11/diag/cpu/
 redirect_from: /apps/pdp11/diags/cpu/
 ---

@@ -16,9 +16,6 @@ machines:
         name: Zork III
 ---
 
-Zork III: The Dungeon Master
-----------------------------
-
 {% include machine.html id="ibm5150-zork3" %}
 
 NOTE: The PCjs "Save" feature will not create a usable copy of a copy-protected diskette.  That feature

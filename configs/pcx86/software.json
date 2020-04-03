@@ -5013,7 +5013,7 @@
               },
               {
                 "@title": "PC DOS 3.20 (720K)",
-                "@diskette": "PCDOS320-DISK1-720K.json",
+                "@diskette": "PCDOS320-720K-DISK1.json",
                 "@type": "PC720K"
               }
             ]
@@ -5033,7 +5033,7 @@
               },
               {
                 "@title": "PC DOS 3.30 (720K)",
-                "@diskette": "PCDOS330-DISK1-720K.json",
+                "@diskette": "PCDOS330-720K-DISK1.json",
                 "@type": "PC720K"
               },
               {
@@ -5098,17 +5098,17 @@
             "@media": [
               {
                 "@title": "PC DOS 5.00 (Disk 1)",
-                "@diskette": "PCDOS500-DISK1-720K.json",
+                "@diskette": "PCDOS500-720K-DISK1.json",
                 "@type": "PC720K"
               },
               {
                 "@title": "PC DOS 5.00 (Disk 2)",
-                "@diskette": "PCDOS500-DISK2-720K.json",
+                "@diskette": "PCDOS500-720K-DISK2.json",
                 "@type": "PC720K"
               },
               {
                 "@title": "PC DOS 5.00 (Disk 3)",
-                "@diskette": "PCDOS500-DISK3-720K.json",
+                "@diskette": "PCDOS500-720K-DISK3.json",
                 "@type": "PC720K"
               }
             ]
@@ -5138,22 +5138,22 @@
             "@media": [
               {
                 "@title": "PC DOS 6.10 (Disk 1)",
-                "@diskette": "PCDOS610-DISK1-1440K.json",
+                "@diskette": "PCDOS610-1440K-DISK1.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "PC DOS 6.10 (Disk 2)",
-                "@diskette": "PCDOS610-DISK2-1440K.json",
+                "@diskette": "PCDOS610-1440K-DISK2.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "PC DOS 6.10 (Disk 3)",
-                "@diskette": "PCDOS610-DISK3-1440K.json",
+                "@diskette": "PCDOS610-1440K-DISK3.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "PC DOS 6.10 (Disk 4)",
-                "@diskette": "PCDOS610-DISK4-1440K.json",
+                "@diskette": "PCDOS610-1440K-DISK4.json",
                 "@type": "PC1440K"
               }
             ]
@@ -5163,27 +5163,27 @@
             "@media": [
               {
                 "@title": "PC DOS 6.30 (Disk 1)",
-                "@diskette": "PCDOS630-DISK1-1440K.json",
+                "@diskette": "PCDOS630-1440K-DISK1.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "PC DOS 6.30 (Disk 2)",
-                "@diskette": "PCDOS630-DISK2-1440K.json",
+                "@diskette": "PCDOS630-1440K-DISK2.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "PC DOS 6.30 (Disk 3)",
-                "@diskette": "PCDOS630-DISK3-1440K.json",
+                "@diskette": "PCDOS630-1440K-DISK3.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "PC DOS 6.30 (Disk 4)",
-                "@diskette": "PCDOS630-DISK4-1440K.json",
+                "@diskette": "PCDOS630-1440K-DISK4.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "PC DOS 6.30 (Disk 5)",
-                "@diskette": "PCDOS630-DISK5-1440K.json",
+                "@diskette": "PCDOS630-1440K-DISK5.json",
                 "@type": "PC1440K"
               }
             ]
@@ -5369,47 +5369,47 @@
             "@media": [
               {
                 "@title": "MS-DOS 4.01 (360K Disk 1)",
-                "@diskette": "MSDOS401-DISK1-360K.json",
+                "@diskette": "MSDOS401-360K-DISK1.json",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 4.01 (360K Disk 2)",
-                "@diskette": "MSDOS401-DISK2-360K.json",
+                "@diskette": "MSDOS401-360K-DISK2.json",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 4.01 (360K Disk 3)",
-                "@diskette": "MSDOS401-DISK3-360K.json",
+                "@diskette": "MSDOS401-360K-DISK3.json",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 4.01 (360K Disk 4)",
-                "@diskette": "MSDOS401-DISK4-360K.json",
+                "@diskette": "MSDOS401-360K-DISK4.json",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 4.01 (360K Disk 5)",
-                "@diskette": "MSDOS401-DISK5-360K.json",
+                "@diskette": "MSDOS401-360K-DISK5.json",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 4.01 (360K Disk 6)",
-                "@diskette": "MSDOS401-DISK6-360K.json",
+                "@diskette": "MSDOS401-360K-DISK6.json",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 4.01 (720K Disk 1)",
-                "@diskette": "MSDOS401-DISK1-720K.json",
+                "@diskette": "MSDOS401-720K-DISK1.json",
                 "@type": "PC720K"
               },
               {
                 "@title": "MS-DOS 4.01 (720K Disk 2)",
-                "@diskette": "MSDOS401-DISK2-720K.json",
+                "@diskette": "MSDOS401-720K-DISK2.json",
                 "@type": "PC720K"
               },
               {
                 "@title": "MS-DOS 4.01 (720K Disk 3)",
-                "@diskette": "MSDOS401-DISK3-720K.json",
+                "@diskette": "MSDOS401-720K-DISK3.json",
                 "@type": "PC720K"
               }
             ]
@@ -5434,42 +5434,42 @@
             "@media": [
               {
                 "@title": "MS-DOS 5.00 (360K Disk 1)",
-                "@diskette": "MSDOS500-DISK1-360K.json",
+                "@diskette": "MSDOS500-360K-DISK1.json",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 5.00 (360K Disk 2)",
-                "@diskette": "MSDOS500-DISK2-360K.json",
+                "@diskette": "MSDOS500-360K-DISK2.json",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 5.00 (360K Disk 3)",
-                "@diskette": "MSDOS500-DISK3-360K.json",
+                "@diskette": "MSDOS500-360K-DISK3.json",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 5.00 (360K Disk 4)",
-                "@diskette": "MSDOS500-DISK4-360K.json",
+                "@diskette": "MSDOS500-360K-DISK4.json",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 5.00 (360K Disk 5)",
-                "@diskette": "MSDOS500-DISK5-360K.json",
+                "@diskette": "MSDOS500-360K-DISK5.json",
                 "@type": "PC360K"
               },
               {
                 "@title": "MS-DOS 5.00 (720K Disk 1)",
-                "@diskette": "MSDOS500-DISK1-720K.json",
+                "@diskette": "MSDOS500-720K-DISK1.json",
                 "@type": "PC720K"
               },
               {
                 "@title": "MS-DOS 5.00 (720K Disk 2)",
-                "@diskette": "MSDOS500-DISK2-720K.json",
+                "@diskette": "MSDOS500-720K-DISK2.json",
                 "@type": "PC720K"
               },
               {
                 "@title": "MS-DOS 5.00 (720K Disk 3)",
-                "@diskette": "MSDOS500-DISK3-720K.json",
+                "@diskette": "MSDOS500-720K-DISK3.json",
                 "@type": "PC720K"
               }
             ]
@@ -5479,37 +5479,37 @@
             "@media": [
               {
                 "@title": "MS-DOS 6.00 (1.2M Disk 1)",
-                "@diskette": "MSDOS600-DISK1-1200K.json",
+                "@diskette": "MSDOS600-1200K-DISK1.json",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.00 (1.2M Disk 2)",
-                "@diskette": "MSDOS600-DISK2-1200K.json",
+                "@diskette": "MSDOS600-1200K-DISK2.json",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.00 (1.2M Disk 3)",
-                "@diskette": "MSDOS600-DISK3-1200K.json",
+                "@diskette": "MSDOS600-1200K-DISK3.json",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.00 (1.2M Disk 4)",
-                "@diskette": "MSDOS600-DISK4-1200K.json",
+                "@diskette": "MSDOS600-1200K-DISK4.json",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.00 (1.44M Disk 1)",
-                "@diskette": "MSDOS600-DISK1-1440K.json",
+                "@diskette": "MSDOS600-1440K-DISK1.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.00 (1.44M Disk 2)",
-                "@diskette": "MSDOS600-DISK2-1440K.json",
+                "@diskette": "MSDOS600-1440K-DISK2.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.00 (1.44M Disk 3)",
-                "@diskette": "MSDOS600-DISK3-1440K.json",
+                "@diskette": "MSDOS600-1440K-DISK3.json",
                 "@type": "PC1440K"
               }
             ]
@@ -5519,47 +5519,47 @@
             "@media": [
               {
                 "@title": "MS-DOS 6.20 (1.2M Disk 1)",
-                "@diskette": "MSDOS620-DISK1-1200K.json",
+                "@diskette": "MSDOS620-1200K-DISK1.json",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.2M Disk 2)",
-                "@diskette": "MSDOS620-DISK2-1200K.json",
+                "@diskette": "MSDOS620-1200K-DISK2.json",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.2M Disk 3)",
-                "@diskette": "MSDOS620-DISK3-1200K.json",
+                "@diskette": "MSDOS620-1200K-DISK3.json",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.2M Disk 4)",
-                "@diskette": "MSDOS620-DISK4-1200K.json",
+                "@diskette": "MSDOS620-1200K-DISK4.json",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.2M Supp)",
-                "@diskette": "MSDOS620-SUPPDISK-1200K.json",
+                "@diskette": "MSDOS620-1200K-SUPPDISK.json",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.44M Disk 1)",
-                "@diskette": "MSDOS620-DISK1-1440K.json",
+                "@diskette": "MSDOS620-1440K-DISK1.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.44M Disk 2)",
-                "@diskette": "MSDOS620-DISK2-1440K.json",
+                "@diskette": "MSDOS620-1440K-DISK2.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.44M Disk 3)",
-                "@diskette": "MSDOS620-DISK3-1440K.json",
+                "@diskette": "MSDOS620-1440K-DISK3.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.20 (1.44M Supp)",
-                "@diskette": "MSDOS620-SUPPDISK-1440K.json",
+                "@diskette": "MSDOS620-1440K-SUPPDISK.json",
                 "@type": "PC1440K"
               }
             ]
@@ -5574,42 +5574,42 @@
               },
               {
                 "@title": "MS-DOS 6.22 (1.2M Disk 1)",
-                "@diskette": "MSDOS622-DISK1-1200K.json",
+                "@diskette": "MSDOS622-1200K-DISK1.json",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.2M Disk 2)",
-                "@diskette": "MSDOS622-DISK2-1200K.json",
+                "@diskette": "MSDOS622-1200K-DISK2.json",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.2M Disk 3)",
-                "@diskette": "MSDOS622-DISK3-1200K.json",
+                "@diskette": "MSDOS622-1200K-DISK3.json",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.2M Disk 4)",
-                "@diskette": "MSDOS622-DISK4-1200K.json",
+                "@diskette": "MSDOS622-1200K-DISK4.json",
                 "@type": "PC1200K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.44M Disk 1)",
-                "@diskette": "MSDOS622-DISK1-1440K.json",
+                "@diskette": "MSDOS622-1440K-DISK1.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.44M Disk 2)",
-                "@diskette": "MSDOS622-DISK2-1440K.json",
+                "@diskette": "MSDOS622-1440K-DISK2.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.44M Disk 3)",
-                "@diskette": "MSDOS622-DISK3-1440K.json",
+                "@diskette": "MSDOS622-1440K-DISK3.json",
                 "@type": "PC1440K"
               },
               {
                 "@title": "MS-DOS 6.22 (1.44M Supp)",
-                "@diskette": "MSDOS622-SUPPDISK-1440K.json",
+                "@diskette": "MSDOS622-1440K-SUPPDISK.json",
                 "@type": "PC1440K"
               }
             ]
@@ -7558,62 +7558,62 @@
           "@media": [
             {
               "@title": "Windows 3.00 (Disk 1)",
-              "@diskette": "WIN300-DISK1-1200K.json",
+              "@diskette": "WIN300-1200K-DISK1.json",
               "@type": "PC1200K"
             },
             {
               "@title": "Windows 3.00 (Disk 2)",
-              "@diskette": "WIN300-DISK2-1200K.json",
+              "@diskette": "WIN300-1200K-DISK2.json",
               "@type": "PC1200K"
             },
             {
               "@title": "Windows 3.00 (Disk 3)",
-              "@diskette": "WIN300-DISK3-1200K.json",
+              "@diskette": "WIN300-1200K-DISK3.json",
               "@type": "PC1200K"
             },
             {
               "@title": "Windows 3.00 (Disk 4)",
-              "@diskette": "WIN300-DISK4-1200K.json",
+              "@diskette": "WIN300-1200K-DISK4.json",
               "@type": "PC1200K"
             },
             {
               "@title": "Windows 3.00 (Disk 5)",
-              "@diskette": "WIN300-DISK5-1200K.json",
+              "@diskette": "WIN300-1200K-DISK5.json",
               "@type": "PC1200K"
             },
             {
               "@title": "Windows 3.00 (720K Disk 1)",
-              "@diskette": "WIN300-DISK1-720K.json",
+              "@diskette": "WIN300-720K-DISK1.json",
               "@type": "PC720K"
             },
             {
               "@title": "Windows 3.00 (720K Disk 2)",
-              "@diskette": "WIN300-DISK2-720K.json",
+              "@diskette": "WIN300-720K-DISK2.json",
               "@type": "PC720K"
             },
             {
               "@title": "Windows 3.00 (720K Disk 3)",
-              "@diskette": "WIN300-DISK3-720K.json",
+              "@diskette": "WIN300-720K-DISK3.json",
               "@type": "PC720K"
             },
             {
               "@title": "Windows 3.00 (720K Disk 4)",
-              "@diskette": "WIN300-DISK4-720K.json",
+              "@diskette": "WIN300-720K-DISK4.json",
               "@type": "PC720K"
             },
             {
               "@title": "Windows 3.00 (720K Disk 5)",
-              "@diskette": "WIN300-DISK5-720K.json",
+              "@diskette": "WIN300-720K-DISK5.json",
               "@type": "PC720K"
             },
             {
               "@title": "Windows 3.00 (720K Disk 6)",
-              "@diskette": "WIN300-DISK6-720K.json",
+              "@diskette": "WIN300-720K-DISK6.json",
               "@type": "PC720K"
             },
             {
               "@title": "Windows 3.00 (720K Disk 7)",
-              "@diskette": "WIN300-DISK7-720K.json",
+              "@diskette": "WIN300-720K-DISK7.json",
               "@type": "PC720K"
             }
           ]
