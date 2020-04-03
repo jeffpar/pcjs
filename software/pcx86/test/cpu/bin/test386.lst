@@ -3,26 +3,6 @@
      3                                  ;   Copyright © 2012-2018 Jeff Parsons <Jeff@pcjs.org>
      4                                  ;
      5                                  ;   This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
-     6                                  ;
-     7                                  ;   PCjs is free software: you can redistribute it and/or modify it under the terms of the
-     8                                  ;   GNU General Public License as published by the Free Software Foundation, either version 3
-     9                                  ;   of the License, or (at your option) any later version.
-    10                                  ;
-    11                                  ;   PCjs is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
-    12                                  ;   even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    13                                  ;   GNU General Public License for more details.
-    14                                  ;
-    15                                  ;   You should have received a copy of the GNU General Public License along with PCjs.  If not,
-    16                                  ;   see <http://www.gnu.org/licenses/gpl.html>.
-    17                                  ;
-    18                                  ;   You are required to include the above copyright notice in every source code file of every
-    19                                  ;   copy or modified version of this work, and to display that copyright notice on every screen
-    20                                  ;   that loads or runs any version of this software (see Computer.sCopyright).
-    21                                  ;
-    22                                  ;   Some PCjs files also attempt to load external resource files, such as character-image files,
-    23                                  ;   ROM files, and disk image files. Those external resource files are not considered part of the
-    24                                  ;   PCjs program for purposes of the GNU General Public License, and the author does not claim
-    25                                  ;   any copyright as to their contents.
     26                                  ;
     27                                  ;   Overview
     28                                  ;   --------

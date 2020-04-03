@@ -8,8 +8,8 @@
   "author": "Jeff Parsons <Jeff@pcjs.org>",
   "licenses": [
     {
-      "type": "GPLv3",
-      "url": "http://www.gnu.org/licenses/gpl.html"
+      "type": "MIT",
+      "url": "https://www.pcjs.org/LICENSE.txt"
     }
   ],
   "bin": {

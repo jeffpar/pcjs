@@ -164,7 +164,7 @@ After fixing that, I verified with the PDPjs Debugger that the memory sizing cod
 
 	PDPjs v1.30.1
 	Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>
-	License: GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+	License: MIT <https://www.pcjs.org/LICENSE.txt>
 	Portions adapted from the PDP-11/70 Emulator v1.4 by Paul Nankervis <paulnank@hotmail.com>
 	bus: 00016Kb RAM at 000000
 	bus: 00008Kb H/W at 160000

@@ -1,2 +1,5 @@
-{% capture document_id -%}{{ include.link | append: "@" | remove_first: "/machines" | remove_first: "/" | replace: "/", "-" | replace: "-@", "" }}-documents{%- endcapture %}
-<li id="{{ document_id }}" class="pcjs-explorer-item" onclick="pcjsExplorerClick(this, event)"><a href="{{ include.link }}#documents">Documents</a></li>
+{%- comment -%}
+
+{%- endcomment -%}
+{% capture document_id -%}{{ include.link | append: "@" | remove_first: "/machines" | remove_first: "/" | replace: "/", "-" | replace: "-@", "" }}{%- endcapture %}
+<li id="{{ document_id }}" class="pcjs-explorer-item" onclick="pcjsExplorerClick(this, event)"><a href="{{ include.link }}">Documentation</a></li>

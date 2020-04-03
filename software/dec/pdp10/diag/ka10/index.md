@@ -1,6 +1,6 @@
 ---
 layout: page
-title: PDP-10 KA10 Diagnostics
+title: DEC PDP-10 KA10 Diagnostics
 permalink: /software/dec/pdp10/diag/ka10/
 redirect_from: /apps/pdp10/diags/ka10/
 ---

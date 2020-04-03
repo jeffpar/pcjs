@@ -72,7 +72,7 @@ bytes.
 CHKDSK considers the size of IBMBIO.COM to be 2048 bytes (1920 rounded up to the nearest 512 multiple), and the
 size of IBMDOS.COM is 6656, so the total number of bytes consumed by those two files is 8704.
 
-{% include gallery/documents.html %}
+{% include gallery/documents.html width="200" height="280" %}
 
 ### Feature Summary
 

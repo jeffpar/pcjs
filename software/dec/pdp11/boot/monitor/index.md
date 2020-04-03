@@ -1,6 +1,6 @@
 ---
 layout: page
-title: PDP-11 Boot Monitor
+title: DEC PDP-11 Boot Monitor
 permalink: /software/dec/pdp11/boot/monitor/
 redirect_from: /apps/pdp11/boot/monitor/
 ---

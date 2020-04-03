@@ -48,12 +48,7 @@
         {{ content }}
       </section>
       <footer>
-        <div class="pcjs-explorer">
-          <h2 id="pcjs-explorer">PCjs Explorer</h2>
-{% include explorer/hardware.html %}
-{% include explorer/software.html %}
-{% include explorer/documents.html %}
-        </div>
+{% include explorer/menu.html %}
         <p><a href="{{ site.url }}">{{ site.domain }}</a> © 2012-{{ site.time | date: '%Y' }} by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a><br/>
         <a href="{{ site.github.repository_url }}">PCjs</a> is released under <a href="{{ absolute_url }}/LICENSE.txt">MIT License</a></p>
       </footer>

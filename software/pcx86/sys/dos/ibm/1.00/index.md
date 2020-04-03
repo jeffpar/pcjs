@@ -78,7 +78,7 @@ CHKDSK reports:
 	      160256 bytes total disk space
 	        6144 bytes remain available
 
-{% include gallery/documents.html %}
+{% include gallery/documents.html width="200" height="280" %}
 
 ### Feature Summary
 

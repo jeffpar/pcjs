@@ -7,6 +7,6 @@ redirect_from:
   - /disks/pcx86/
 ---
 
-Use the PCjs Explorer to browse the collection of PCx86 software.
+Use the {% include explorer/link.html %} to browse the collection of PCx86 software.
 
 {%- include gallery/featured.html title="Featured PCx86 Software" width="200" height="128" tag="pcx86" -%}

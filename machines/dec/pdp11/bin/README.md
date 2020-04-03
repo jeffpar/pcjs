@@ -20,7 +20,7 @@ which should then produce the following output:
     Bus: Added 8Kb H/W at 17760000
     PDPjs v1.60.3
     Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>
-    License: GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+    License: MIT <https://www.pcjs.org/LICENSE.txt>
     Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>
     Bus: Added 256Kb RAM at 000000
     Computer object created: test1170.computer

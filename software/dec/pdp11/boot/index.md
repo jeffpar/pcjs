@@ -1,13 +1,13 @@
 ---
 layout: page
-title: PDP-11 Boot Software
+title: DEC PDP-11 Boot Software
 permalink: /software/dec/pdp11/boot/
 redirect_from: /apps/pdp11/boot/
 ---
 
-The project contains the following PDP-11 boot code:
+The project contains the following DEC PDP-11 boot code:
 
-  - [PDP-11 Boot Monitor](monitor/)
+  - [DEC PDP-11 Boot Monitor](monitor/)
   - [DEC PDP-11 Bootstrap Loader](bootstrap/)
 
 Boot code can be pre-loaded into any machine by including a `<ram>` component in the machine XML configuration file

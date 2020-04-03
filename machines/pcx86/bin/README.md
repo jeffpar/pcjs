@@ -18,7 +18,7 @@ which should then produce the following output:
 	warning: Component type 'Panel' not found
 	PCx86 v1.x.x
 	Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>
-	License: GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+	License: MIT <https://www.pcjs.org/LICENSE.txt>
 	warning: Machine component type 'HDC' not found
 	warning: Machine component type 'Mouse' not found
 	ibm5150.pc-mda-64k object created

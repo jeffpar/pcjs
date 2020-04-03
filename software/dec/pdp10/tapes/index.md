@@ -1,6 +1,6 @@
 ---
 layout: page
-title: PDP-10 Software Tapes
+title: DEC PDP-10 Software Tapes
 permalink: /software/dec/pdp10/tapes/
 redirect_from: /apps/pdp10/tapes/
 ---

@@ -14,3 +14,5 @@ machines:
 This machine is also available with the [PCjs Debugger](/configs/pcx86/xml/machine/att/6300/cga/640kb/debugger/machine.xml).
 
 NOTE: The [AT&T 6300 ROM BIOS](/machines/pcx86/att/6300/rom/) is apparently identical to the [Olivetti M24 ROM BIOS](/machines/pcx86/olivetti/m24/rom/).
+
+{% include gallery/documents.html width="200" height="260" %}

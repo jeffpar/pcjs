@@ -397,17 +397,24 @@
 .pcjs-explorer {
   margin: 0 0 20px;
 }
+.pcjs-explorer .menu {
+}
 .pcjs-explorer-top {
   padding-inline-start: 0 !important;
 }
 .pcjs-explorer-fixed {
 }
-.pcjs-explorer ul {
+.pcjs-explorer-top, .pcjs-explorer-top ul {
   list-style: none;
   padding-inline-start: 8px;
   font-weight: bold;
   margin: 0;
   user-select: none;
+}
+.pcjs-explorer-item {
+  font-weight: normal;
+}
+.pcjs-explorer-open ul {
 }
 .pcjs-explorer-closed ul {
   display: none;

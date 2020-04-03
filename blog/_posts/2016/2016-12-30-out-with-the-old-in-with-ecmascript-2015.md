@@ -162,7 +162,7 @@ Here's a sample run, from a macOS Terminal window:
 	bus: 8Kb H/W at 17760000
 	PDPjs v1.x.x
 	Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>
-	License: GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+	License: MIT <https://www.pcjs.org/LICENSE.txt>
 	Portions adapted from the PDP-11/70 Emulator v1.4 by Paul Nankervis <paulnank@hotmail.com>
 	bus: 256Kb RAM at 000000
 	Net.getResource("https://pdp11-disks.pcjs.org/dec/rk03/RK03-XXDP.json"): unimplemented
