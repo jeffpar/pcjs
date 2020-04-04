@@ -15,27 +15,7 @@
         "console": "internalConsole"
       },
       {
-        "name": "Node: diskettes.js",
-        "type": "node",
-        "request": "launch",
-        "program": "${workspaceFolder}/tools/misc/diskettes.js",
-        "args": ["~/Sites/pcjs/disks-demo/pcx86", "--output=diskettes.json"],
-        "cwd": "${workspaceFolder}/tools/misc",
-        "stopOnEntry": false,
-        "console": "internalConsole"
-      },
-      {
-        "name": "Node: links.js",
-        "type": "node",
-        "request": "launch",
-        "program": "${workspaceFolder}/tools/misc/links.js",
-        "args": [".", "--debug"],
-        "cwd": "${workspaceFolder}",
-        "stopOnEntry": false,
-        "console": "internalConsole"
-      },
-      {
-        "name": "Node: pdparse.js",
+        "name": "Node: pdfparse.js",
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/tools/misc/pdfparse.js",

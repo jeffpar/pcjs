@@ -724,7 +724,7 @@
           "@redirect_from": "/devices/pcx86/machine/5160/cga/256kb/"
         },
         "ega": {
-          "@title": "Enhanced Color Display",
+          "@title": "Enhanced Display",
           "@redirect_from": "/devices/pcx86/machine/5160/ega/640kb/"
         },
         "mda": {

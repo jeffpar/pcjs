@@ -1,17 +1,26 @@
 # PCjs Machines
 
 Welcome to PCjs, home of [PCx86](/machines/pcx86/), the original IBM PC simulation that runs in your web browser.  It is
-one of several JavaScript Machines in the [PCjs Project](https://github.com/jeffpar/pcjs.org).
+one of several JavaScript Machines in the [PCjs Project](https://github.com/jeffpar/pcjs.org), an eclectic collection of
+device emulations that span:
+
+  - [6502-based Microcomputers](/machines/osi/)
+  - [8080-based Microcomputers](/machines/pcx80/)
+  - [Arcade Machines](/machines/arcade/)
+  - [DEC Minicomputers and Terminals](/machines/dec/)
+  - [IBM PC and PC Compatibles](/machines/pcx86/)
+  - [Texas Instruments Programmable Calculators](/machines/ti/)
+  - [LED Simulations](/machines/led/)
+
+along with a small collection of software used for archival/demonstration purposes only.
 
 ### Using PCjs locally with Jekyll
 
 PCjs is now setup to use [Jekyll](http://jekyllrb.com) and the Ruby WEBrick web server.  This is how the project
-is currently set up at [pcjs.org](https://www.pcjs.org).
+is currently set up at [pcjs.org](https://www.pcjs.org), using [GitHub Pages](https://pages.github.com).
 
 This isn't going to be a Jekyll "How To" guide, because that would unnecessarily repeat all the information available
-at [GitHub Pages](https://pages.github.com).  But we'll summarize the basic steps:
-
-To install Jekyll for use with PCjs:
+at GitHub, but we'll summarize the basic steps:
 
  1. Install Ruby (on OS X, it should already be installed)
  2. Install Bundler (on OS X, run `sudo gem install bundler`)
@@ -29,10 +38,6 @@ The *--host* option makes it possible to access the web server from other device
 for example, you may want to run PCjs on your iPhone, iPad, or other wireless device.  And by adding **_developer.yml**,
 you can override the Jekyll configuration defaults in **_config.yml**.
 
-GitHub Pages says you can run `jekyll serve` instead of `bundle exec jekyll serve`, but with the addition of
-more gems to **Gemfile** (eg, "jekyll-sitemap"), running `jekyll serve` may trigger dependency errors on some systems.
-`bundle exec jekyll serve` should always work.
-
 Last but not least, run `bundle update` periodically to keep Jekyll up-to-date.
 
 ### Building PCjs
@@ -42,8 +47,8 @@ That's because both the compiled and uncompiled versions of the PCjs emulation m
 making deployment to a web server easier.
 
 However, in order to build and test PCjs modifications, you'll want to use [Gulp](https://gulpjs.com/) and the
-Gulp tasks defined by [gulpfile.js](gulpfile.js).  If you already ran `npm install --production` as described above,
-then you should re-run it *without* the `--production` option:
+Gulp tasks defined by [gulpfile.js](gulpfile.js).  Assuming you already [Node and NPM](https://nodejs.org/) installed,
+run:
 
 	npm install
 
@@ -54,18 +59,10 @@ it's recommended you install it globally with *-g*; OS X users may also need to 
 
 	npm install gulp-cli -g
 
-Now you can run `gulp` anywhere within the PCjs project to build an updated version.  If no command-line arguments
+Now you can run `gulp` anywhere within the PCjs project to build updated emulator releases.  If no command-line arguments
 are specified, `gulp` runs the "default" task defined by the project's [gulpfile.js](gulpfile.js); that task runs
 Google's [Closure Compiler](https://developers.google.com/closure/compiler/) if any of the target files (eg, pcx86.js
 in the [releases](/machines/pcx86/releases/) directory) are out-of date.
-
-### Using the JavaScript-based Closure Compiler
-
-The latest [gulpfile.js](gulpfile.js) now compiles all PCjs machine modules using
-Google's [JavaScript-based Closure Compiler](https://github.com/google/closure-compiler-js).
-
-Running `gulp` should build a complete set of "compiled" machine scripts in the appropriate `releases` directory.
-Individual machines can be compiled as well (eg, `gulp compile/pcx86`).
 
 ### License
 

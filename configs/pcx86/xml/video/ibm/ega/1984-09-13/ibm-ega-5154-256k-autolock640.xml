@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <video id="videoEGA" model="ega" memory="0x40000" screenWidth="640" screenHeight="350" autoLock="true" pos="center" padding="8px">
 	<menu>
-		<title>Enhanced Color Display</title>
+		<title>Enhanced Display</title>
 		<control type="container" pos="right">
 			<control type="led" label="Caps" binding="caps-lock" padLeft="8px"/>
 			<control type="led" label="Num" binding="num-lock" padLeft="8px"/>

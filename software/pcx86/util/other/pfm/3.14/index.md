@@ -16,10 +16,10 @@ machines:
     autoType: $date\r$time\r$10B:\rDIR\r
 ---
 
-On June 19, 2018, while meeting with a number of former COMPAQ engineers in Houston, one of them (Norm) brought an
-old COMPAQ Portable LTE/486, which contained a copy of an internally developed -- and fondly remembered -- program
-called `PFM`, aka "Paul's File Manager".  With the help of a few other engineers (Jeff and Ted), we were
-able to copy it to a 3.5-inch diskette, which I've archived at PCjs.
+On June 19, 2018, during an informal [COMPAQ reunion](/blog/2019/06/18/) of former COMPAQ engineers in Houston, one of them
+(Norm) brought an old COMPAQ Portable LTE/486, which contained a copy of an internally developed -- and fondly remembered --
+program called `PFM`, aka "Paul's File Manager".  With the help of a few other engineers (Jeff and Ted), we were able to copy
+it to a 3.5-inch diskette, which I've archived at PCjs.
 
 In October 2018, I contacted the author, Paul Culley, who provided a brief history of PFM:
 

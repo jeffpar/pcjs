@@ -35,4 +35,4 @@ because it could dynamically construct web pages on the fly much faster than Jek
 having to first "compile" them with the Closure Compiler.  But ultimately I decided it was better to just have one build system to maintain.
 
 I also considered rolling the new repo structure into the original PCjs repo, and I may still do that, but for now, I've decided to keep things
-simple and use a new repository: pcjs.org.
+simple and use a new repository: [pcjs.org]({{ site.github.repository_url }}).
