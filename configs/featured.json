@@ -135,24 +135,24 @@
     "@title": "Microsoft Windows/386 2.0 (1987)",
     "@permalink": "/software/pcx86/sys/windows/2.0x/",
     "@preview": ".png",
-    "@tags": "home,pcx86,windows"
+    "@tags": "home,pcx86,windows,win2x-win95"
   },
   {
     "@title": "Microsoft Windows 3.0 (1990)",
     "@permalink": "/software/pcx86/sys/windows/3.00/",
     "@preview": ".png",
-    "@tags": "home,pcx86,windows"
+    "@tags": "home,pcx86,windows,win2x-win95"
   },
   {
     "@title": "Microsoft Windows 3.1 (1992)",
     "@permalink": "/software/pcx86/sys/windows/3.10/",
     "@preview": ".png",
-    "@tags": "home,pcx86,windows"
+    "@tags": "home,pcx86,windows,win2x-win95"
   },
   {
     "@title": "Microsoft Windows 95 (1995)",
     "@permalink": "/software/pcx86/sys/windows/win95/4.00.950/",
     "@preview": ".png",
-    "@tags": "home,pcx86,windows"
+    "@tags": "home,pcx86,windows,win2x-win95"
   }
 ]
