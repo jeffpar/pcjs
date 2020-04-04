@@ -15,10 +15,18 @@
             "@tags": "quickbasic"
           },
           {
+            "@title": "Microsoft Programmer's Library (1.3)",
+            "@file": "MSTOOLS-CD005-MSPL10.pdf",
+            "@link": "/documents/books/programming/mspl13/",
+            "@cover": ".png",
+            "@source": "PCjs",
+            "@tags": "msdos"
+          },
+          {
             "@title": "The MS-DOS Ecyclopedia (1988)",
             "@author": "Ray Duncan",
             "@file": "The_MS-DOS_Encyclopedia.pdf",
-            "@link": "/documents/books/programming/msdos/encyclopedia/",
+            "@link": "/documents/books/programming/mspl13/msdos/encyclopedia/",
             "@cover": ".jpg",
             "@source": "PCjs",
             "@tags": "msdos"
