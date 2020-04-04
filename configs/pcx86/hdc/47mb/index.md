@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 47Mb Hard Drive (Fixed Disk) Images
+title: IBM PC 47Mb Hard Drives (Fixed Disks)
 permalink: /configs/pcx86/hdc/47mb/
 redirect_from: /disks/pcx86/drives/47mb/
 ---
@@ -168,5 +168,5 @@ space.
 
 Machines using the [Unformatted Disk](unformatted-at5.xml) include:
 
-  - [IBM PC AT (Model 5170) with Enhanced Color Display](/configs/pcx86/machine/ibm/5170/ega/640kb/rev1/enhanced/machine.xml)
   - [COMPAQ DeskPro 386](/configs/pcx86/machine/compaq/deskpro386/ega/2048kb/machine.xml)
+  - [IBM PC AT (Model 5170) with Enhanced Color Display](/configs/pcx86/machine/ibm/5170/ega/640kb/rev1/enhanced/machine.xml)
