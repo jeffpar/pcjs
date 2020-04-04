@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
+<machine id="deskpro386" type="pcx86" uncompiled="true" border="1" pos="center" background="default">
+	<name pos="center">COMPAQ DeskPro 386, 2Mb RAM, COMPAQ VGA, 47Mb Hard Disk (Unformatted)</name>
+	<intro>This "Visualizer" configuration is running the "uncompiled" version of PCx86, so that
+	BackTrack information is available to the PCjs Debugger.  As a result, the machine runs much slower.
+	To reduce DEBUG or BACKTRACK overhead, you can add <em>debug=false</em> or <em>backtrack=false</em>
+	to an uncompiled machine's URL.</intro>
+	<intro>Since DEBUG support is automatically enabled in uncompiled code, you get automatic instruction history buffering
+	(up to 100,000 instructions), which can then be dumped with the PCjs Debugger's "dh" command.  Instruction history is
+	supported in the compiled version as well, but only up to 1,000 instructions and only if one or more breakpoints are set.</intro>
+	<computer id="deskpro386-vga-2048k" name="COMPAQ DeskPro 386" buswidth="32"/>
+	<cpu id="cpu386" model="80386"/>
+	<ram id="ramLow" addr="0x00000" test="true" size="0xa0000" comment="ROM BIOS memory test has NOT been disabled"/>
+	<ram id="ramCPQ" addr="0xfa0000" size="0x60000" comment="COMPAQ memory at 0xFA0000"/>
+	<ram id="ramExt" addr="0x100000" size="0x100000" comment="Extended memory at 0x100000"/>
+	<rom id="romBIOS" addr="0xf8000" size="0x8000" alias="[0xf0000,0xffff0000,0xffff8000]" file="/machines/pcx86/compaq/deskpro386/rom/1988-01-28/1988-01-28.json"/>
+	<video ref="/configs/pcx86/video/compaq/vga/109360-001/256kb-autolock.xml"/>
+	<fdc ref="/configs/pcx86/fdc/library.xml" autoMount='{A: {name: "COMPAQ MS-DOS 3.31 (Disk 2)"}, B: {name: "COMPAQ MS-DOS 3.31 (Disk 3)"}}'/>
+	<keyboard ref="/configs/pcx86/keyboard/us84-softkeys.xml"/>
+	<debugger id="debugger" messages="fault|port" commands=""/>
+	<panel ref="/configs/pcx86/panel/visual.xml"/>
+	<hdc ref="/configs/pcx86/hdc/47mb/unformatted-at5.xml"/>
+	<chipset id="chipset" model="deskpro386" floppies="[1200,1200]"/>
+	<serial id="com1" adapter="1"/>
+	<serial id="com2" adapter="2" binding="print"/>
+	<mouse serial="com1"/>
+</machine>

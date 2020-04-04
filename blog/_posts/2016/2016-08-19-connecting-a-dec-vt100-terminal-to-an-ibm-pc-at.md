@@ -12,7 +12,7 @@ machines:
     connection: serialPort->ibm5170.com2
   - id: ibm5170
     type: pcx86
-    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
+    config: /configs/pcx86/machine/ibm/5170/ega/2048kb/rev3/machine.xml
     connection: com2->vt100.serialPort
 ---
 
@@ -56,7 +56,7 @@ was add the following Front Matter to the top of the Markdown file:
 	machines:
       - id: ibm5170
         type: pcx86
-        config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
+        config: /configs/pcx86/machine/ibm/5170/ega/2048kb/rev3/machine.xml
         connection: com2->vt100.serialPort
       - id: vt100
         type: vt100

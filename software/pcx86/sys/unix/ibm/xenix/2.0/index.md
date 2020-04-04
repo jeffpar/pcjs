@@ -7,7 +7,7 @@ machines:
   - id: ibm5170
     type: pcx86
     debugger: true
-    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev1/debugger/machine.xml
+    config: /configs/pcx86/machine/ibm/5170/ega/640kb/rev1/debugger/machine.xml
     autoMount:
       A:
         name: IBM XENIX 2.0 (INSTALL)

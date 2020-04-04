@@ -8,7 +8,7 @@ machines:
   - id: at-ega-1024k-rev3
     type: pcx86
     debugger: true
-    config: /configs/pcx86/xml/machine/5170/ega/1024kb/rev3/debugger/visual/machine.xml
+    config: /configs/pcx86/machine/ibm/5170/ega/1024kb/rev3/debugger/visual/machine.xml
 ---
 
 A new PCx86 Control Panel is under development, featuring a new "Display Panel" that will provide a variety of

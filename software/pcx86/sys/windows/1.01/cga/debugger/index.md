@@ -9,7 +9,7 @@ machines:
     debugger: true
     resume: 1
     state: /software/pcx86/sys/windows/1.01/cga/state.json
-    config: /configs/pcx86/xml/machine/5160/cga/256kb/debugger/machine.xml
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/debugger/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/PCDOS200-WIN101-CGA.json"}]'
 ---
 

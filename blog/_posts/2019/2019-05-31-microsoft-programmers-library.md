@@ -7,7 +7,7 @@ preview: https://cds002.pcjs.org/microsoft/tools/MSPL10/MSPL10.png
 machines:
   - id: ibm-5170-vga
     type: pcx86
-    config: /configs/pcx86/xml/machine/5170/vga/2048kb/cdrom/machine.xml
+    config: /configs/pcx86/machine/ibm/5170/vga/2048kb/cdrom/machine.xml
     cdromDrives: '[{name:"CD",type:0,path:"/disks-cds/cds002/microsoft/tools/MSPL10/cdrom"}]'
 ---
 

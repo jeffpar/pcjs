@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/games/other/1990/oregon_trail/
 machines:
   - id: ibm5170-oregon21
     type: pcx86
-    config: /configs/pcx86/xml/machine/5170/vga/2048kb/machine.xml
+    config: /configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml
     autoMount:
       A:
         name: PC DOS 3.30 (Disk 1)

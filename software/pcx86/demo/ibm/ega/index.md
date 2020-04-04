@@ -7,7 +7,7 @@ preview: images/fland-legend.png
 machines:
   - id: ibm5160
     type: pcx86
-    config: /configs/pcx86/xml/machine/5160/ega/256kb/color/machine.xml
+    config: /configs/pcx86/machine/ibm/5160/ega/256kb/color/machine.xml
     autoMount:
       A:
         name: IBM EGA Fantasy Land Demo

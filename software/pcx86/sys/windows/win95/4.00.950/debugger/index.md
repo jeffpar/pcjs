@@ -8,7 +8,7 @@ machines:
     type: pcx86
     debugger: true
     state: /software/pcx86/sys/windows/win95/4.00.950/state.json
-    config: /configs/pcx86/xml/machine/compaq/deskpro386/vga/4096kb/debugger/machine.xml
+    config: /configs/pcx86/machine/compaq/deskpro386/vga/4096kb/debugger/machine.xml
     drives: '[{name:"68Mb Hard Disk",type:4,path:"/harddisks/pcx86/68mb/WIN95.json"}]'
     autoMount:
       A:

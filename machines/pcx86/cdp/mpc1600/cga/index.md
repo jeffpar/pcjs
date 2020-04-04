@@ -6,11 +6,11 @@ redirect_from: /devices/pcx86/machine/cdp/mpc1600/cga/640kb/
 machines:
   - id: mpc1600
     type: pcx86
-    config: /configs/pcx86/xml/machine/cdp/mpc1600/cga/640kb/machine.xml
+    config: /configs/pcx86/machine/cdp/mpc1600/cga/640kb/machine.xml
 ---
 
 {% include machine.html id="mpc1600" %}
 
-This machine is also available with the [PCjs Debugger](/configs/pcx86/xml/machine/cdp/mpc1600/cga/640kb/debugger/machine.xml).
+This machine is also available with the [PCjs Debugger](/configs/pcx86/machine/cdp/mpc1600/cga/640kb/debugger/machine.xml).
 
 {% include gallery/documents.html %}

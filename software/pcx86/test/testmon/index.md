@@ -6,7 +6,7 @@ redirect_from: /tests/pcx86/testmon/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev1/debugger/machine.xml
+    config: /configs/pcx86/machine/ibm/5170/ega/640kb/rev1/debugger/machine.xml
 ---
 
 A few PCjs machines, such as the one below, have enabled [TestMonitor](/machines/pcx86/lib/testmon.js) support,

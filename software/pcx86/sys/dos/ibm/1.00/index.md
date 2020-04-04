@@ -8,7 +8,7 @@ redirect_from:
 machines:
   - id: ibm5150-pcdos100
     type: pcx86
-    config: /configs/pcx86/xml/machine/5150/mda/64kb/machine.xml
+    config: /configs/pcx86/machine/ibm/5150/mda/64kb/machine.xml
     resume: 1
     autoMount:
       A:

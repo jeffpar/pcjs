@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/windows/win95/4.00.499/
 machines:
   - id: deskpro386
     type: pcx86
-    config: /configs/pcx86/xml/machine/compaq/deskpro386/vga/4096kb/machine.xml
+    config: /configs/pcx86/machine/compaq/deskpro386/vga/4096kb/machine.xml
 ---
 
 The PCjs Project was first to unearth this pre-release version of Windows 95 since its *extremely* limited

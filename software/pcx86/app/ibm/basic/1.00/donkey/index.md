@@ -8,7 +8,7 @@ machines:
   - id: ibm5150-donkey
     type: pcx86
     resume: 1
-    config: /configs/pcx86/ibm/5150/machine-cga.json
+    config: /configs/pcx86/machine/ibm/5150/machine-cga.json
     state: state.json
     autoMount:
       A:

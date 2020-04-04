@@ -9,12 +9,7 @@ I recently added some more demos to the PCjs Project, to showcase its ability to
 80386-based software, such as [Windows/386](/software/pcx86/sys/windows/2.0x/), [Windows 3.0](/software/pcx86/sys/windows/3.00/),
 [Windows 3.1](/software/pcx86/sys/windows/3.10/), and [Windows 95](/software/pcx86/sys/windows/win95/4.00.950/).
 
-{% include gallery/begin.html %}
-{% include gallery/image.html src="/software/pcx86/sys/windows/2.0x/images/thumbnail.jpg" width="200" height="120" title="COMPAQ DeskPro 386, Windows/386 2.01" link="/software/pcx86/sys/windows/2.0x/" %}
-{% include gallery/image.html src="/software/pcx86/sys/windows/3.00/images/thumbnail.jpg" width="200" height="120" title="IBM PC AT w/EGA, Windows 3.00" link="/software/pcx86/sys/windows/3.00/" %}
-{% include gallery/image.html src="/software/pcx86/sys/windows/3.10/images/thumbnail.jpg" width="200" height="120" title="IBM PC AT w/VGA, Windows 3.10" link="/software/pcx86/sys/windows/3.10/" %}
-{% include gallery/image.html src="/software/pcx86/sys/windows/win95/4.00.950/images/thumbnail.jpg" width="200" height="120" title="COMPAQ DeskPro 386, Windows 95" link="/software/pcx86/sys/windows/win95/4.00.950/" %}
-{% include gallery/end.html %}
+{% include gallery/featured.html tag="win2x-win95" %}
 
 As the [OS/2 Museum](http://www.os2museum.com/wp/windows386-2-01/) points out, [Windows/386 2.01](/software/pcx86/sys/windows/2.0x/)
 was the first Microsoft product to specifically target the 80386.  However, not only was it *not* a 32-bit operating

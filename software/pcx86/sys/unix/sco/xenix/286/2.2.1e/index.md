@@ -7,7 +7,7 @@ machines:
   - id: ibm5170
     type: pcx86
     debugger: true
-    config: /configs/pcx86/xml/machine/5170/ega/1024kb/rev1/debugger/machine.xml
+    config: /configs/pcx86/machine/ibm/5170/ega/1024kb/rev1/debugger/machine.xml
     autoMount:
       A:
         name: SCO Xenix 286 2.2.1e (N1-BOOT)

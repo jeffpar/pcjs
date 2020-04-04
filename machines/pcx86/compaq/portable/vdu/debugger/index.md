@@ -7,14 +7,14 @@ machines:
   - id: compaq-portable-vdu
     type: pcx86
     debugger: true
-    config: /configs/pcx86/xml/machine/compaq/portable/vdu/128kb/debugger/machine.xml
+    config: /configs/pcx86/machine/compaq/portable/vdu/128kb/debugger/machine.xml
 ---
 
 {% include machine.html id="compaq-portable-vdu" %}
 
 ### Debugging Notes
 
-I originally created the [XML File](/configs/pcx86/xml/machine/compaq/portable/vdu/128kb/debugger/machine.xml)
+I originally created the [XML File](/configs/pcx86/machine/compaq/portable/vdu/128kb/debugger/machine.xml)
 for this machine by copying an IBM PC configuration with a monochrome display adapter and motherboard SW1 settings
 `01000001`.  Note that the SW1 monitor switches, SW1[5] and SW1[6], are both off (`0`), indicating a monochrome monitor.
 

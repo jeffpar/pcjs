@@ -5,7 +5,7 @@ permalink: /machines/pcx86/ibm/5150/vga/
 machines:
   - id: ibm-5150-vga
     type: pcx86
-    config: /configs/pcx86/ibm/5150/machine-vga.json
+    config: /configs/pcx86/machine/ibm/5150/machine-vga.json
     autoMount:
         A:
             name: Invaders Boot Sector

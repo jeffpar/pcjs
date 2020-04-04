@@ -6,7 +6,7 @@ redirect_from: /devices/pcx86/machine/5150/cga/64kb/debugger/
 machines:
   - id: ibm-5150-cga
     type: pcx86
-    config: /configs/pcx86/ibm/5150/machine-cga-debugger.json
+    config: /configs/pcx86/machine/ibm/5150/machine-cga-debugger.json
     autoMount:
         A:
             name: PC DOS 2.00 (Disk 1)

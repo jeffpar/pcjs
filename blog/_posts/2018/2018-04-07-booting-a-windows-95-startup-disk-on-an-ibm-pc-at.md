@@ -25,7 +25,7 @@ Even OS/2 1.0, released in 1987, supported `MODE CO80,43`, from both the OS/2 *a
 Anyway, when I attempted to boot a machine with the "Windows 95 (Startup Disk)" in drive A:, nothing happened.  No DOS
 prompt, no error message, just a hung machine.
 
-A quick peek with a [machine using the PCjs debugger](/configs/pcx86/xml/machine/5170/ega/640kb/rev1/debugger/machine.xml)
+A quick peek with a [machine using the PCjs debugger](/configs/pcx86/machine/ibm/5170/ega/640kb/rev1/debugger/machine.xml)
 revealed the reason.  The disk's boot sector executes this instruction:
 
     AX=0013 BX=0700 CX=0001 DX=0000 SP=7BE2 BP=7C00 SI=00E0 DI=0700 

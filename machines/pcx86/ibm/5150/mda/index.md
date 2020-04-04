@@ -6,7 +6,7 @@ redirect_from: /devices/pcx86/machine/5150/mda/64kb/
 machines:
   - id: ibm-5150-mda
     type: pcx86
-    config: /configs/pcx86/ibm/5150/machine-mda.json
+    config: /configs/pcx86/machine/ibm/5150/machine-mda.json
 ---
 
 {% include machine.html id="ibm-5150-mda" %}

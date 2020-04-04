@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/ibm/apl/1.00/
 machines:
   - id: ibm5160
     type: pcx86
-    config: /configs/pcx86/xml/machine/5160/cga/512kb/machine.xml
+    config: /configs/pcx86/machine/ibm/5160/cga/512kb/machine.xml
     autoMount:
       B:
         name: "IBM APL 1.00"

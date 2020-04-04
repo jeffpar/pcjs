@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/norton/2.00/
 machines:
   - id: ibm5160
     type: pcx86
-    config: /configs/pcx86/xml/machine/5160/cga/512kb/machine.xml
+    config: /configs/pcx86/machine/ibm/5160/cga/512kb/machine.xml
     drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/harddisks/pcx86/10mb/PCDOS200-C400.json"},{name:"MS-DOS 1.x/2.x Source (10Mb)",type:3,path:"/harddisks/pcx86/10mb/MSDOS-SRC.json"}]'
     autoMount:
       A:

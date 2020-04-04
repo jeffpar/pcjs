@@ -8,10 +8,10 @@ machines:
   - id: deskpro386
     type: pcx86
     debugger: true
-    config: /configs/pcx86/xml/machine/compaq/deskpro386/ega/2048kb/debugger/machine.xml
+    config: /configs/pcx86/machine/compaq/deskpro386/ega/2048kb/debugger/machine.xml
 ---
 
-PCx86 can now boot the [COMPAQ DeskPro 386/16 ROM BIOS](/configs/pcx86/xml/machine/compaq/deskpro386/ega/2048kb/debugger/machine.xml).
+PCx86 can now boot the [COMPAQ DeskPro 386/16 ROM BIOS](/configs/pcx86/machine/compaq/deskpro386/ega/2048kb/debugger/machine.xml).
 
 There's still a problem with the Hard Drive Controller, which I haven't looked into yet,
 but booting from a floppy works.
@@ -142,7 +142,7 @@ to match that of the 1st megabyte whenever A20 is disabled.  I could probably ge
 only the first 64Kb of the 2nd megabyte, but until I'm actually able to run some tests on a real
 DeskPro 386, I'm going to assume COMPAQ's A20 implementation affected the entire 2nd megabyte.
 
-Here's my [COMPAQ DeskPro 386/16](/configs/pcx86/xml/machine/compaq/deskpro386/ega/2048kb/debugger/machine.xml)
+Here's my [COMPAQ DeskPro 386/16](/configs/pcx86/machine/compaq/deskpro386/ega/2048kb/debugger/machine.xml)
 test configuration.  Set a breakpoint at F000:F498 ("bp f000:f498") in the Debugger panel to see the above
 code in action.  When the machine is operating in real-mode, you can use the "rp" command to dump all
 the registers, including the current base and limit values loaded into the segment registers.

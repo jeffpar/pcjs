@@ -8,7 +8,7 @@ machines:
     type: pcx86
     debugger: true
     messages: warn
-    config: /configs/pcx86/xml/machine/compaq/deskpro386/ega/4096kb/debugger/machine.xml
+    config: /configs/pcx86/machine/compaq/deskpro386/ega/4096kb/debugger/machine.xml
     autoMount:
       A:
         name: OS/2 FOOTBALL (v7.68.17)

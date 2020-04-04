@@ -1,0 +1,76 @@
+{
+  "@title": "IBM PC XT (Model 5160) with Color Display",
+  "defaults": {
+    "ram": "256K",
+    "fpu": "None",
+    "fdc": "2 diskette drives",
+    "parallel": "LPT1",
+    "serial": "COM1,COM2",
+    "mouse": "COM2"
+  },
+  "components": [
+    {
+      "id": "pcCGA",
+      "class": "computer"
+    },
+    {
+      "config": "/configs/pcx86/machine/ibm/5160/rom-basic-110.json"
+    },
+    {
+      "config": "/configs/pcx86/machine/ibm/5160/rom-bios-rev1.json"
+    },
+    {
+      "config": "/configs/pcx86/machine/ibm/5160/rom-hdc.json"
+    },
+    {
+      "config": "/configs/pcx86/machine/ibm/5150/video-cga.json"
+    },
+    {
+      "config": "/configs/pcx86/machine/ibm/5160/fdc.json"
+    },
+    {
+      "config": "/configs/pcx86/machine/ibm/5160/hdc.json"
+    },
+    {
+      "config": "/configs/pcx86/machine/ibm/5160/ram.json"
+    },
+    {
+      "config": "/configs/pcx86/machine/ibm/5150/cpu.json"
+    },
+    {
+      "config": "/configs/pcx86/machine/ibm/5150/keyboard.json"
+    },
+    {
+      "id": "chipset",
+      "class": "chipset",
+      "model": 5160,
+      "scaleTimers": false,
+      "sw1": "01001001",
+      "@note": "The above switch settings indicate '256K, No FPU, Color Monitor, 2 Floppy Drives'.",
+      "sound": true,
+      "floppies": "",
+      "monitor": "",
+      "dateRTC": ""
+    },
+    {
+      "id": "lpt1",
+      "class": "parallel",
+      "adapter": 2
+    },
+    {
+      "id": "com1",
+      "class": "serial",
+      "adapter": 1
+    },
+    {
+      "id": "com2",
+      "class": "serial",
+      "adapter": 2
+    },
+    {
+      "id": "mouse",
+      "class": "mouse",
+      "serial": "com2"
+    }
+  ]
+}

@@ -13,7 +13,7 @@ machines:
   - id: ibm5170
     type: pcx86
     connection: com2->vt100.serialPort
-    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/machine.xml
+    config: /configs/pcx86/machine/ibm/5170/ega/2048kb/rev3/machine.xml
     autoType: $date\n$time\nCTTY COM2\n
 ---
 
