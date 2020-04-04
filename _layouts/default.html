@@ -18,7 +18,7 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1><a href="{{ "/" | absolute_url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
+        <h1 id="pcjs-machines"><a href="{{ "/" | absolute_url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
         <p>{{ site.tagline }}</p>
         <ul class="menu">
           <li><a href="/about/">About</a></li>
@@ -50,7 +50,7 @@
       </section>
       <footer>
 {% include explorer/menu.html %}
-        <p><a href="{{ site.url }}">{{ site.domain }}</a> © 2012-{{ site.time | date: '%Y' }} by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a><br/>
+        <p><a href="#pcjs-machines"></a> © 2012-{{ site.time | date: '%Y' }} by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a><br/>
         <a href="{{ site.github.repository_url }}">PCjs</a> is released under <a href="{{ absolute_url }}/LICENSE.txt">MIT License</a></p>
       </footer>
     </div>
