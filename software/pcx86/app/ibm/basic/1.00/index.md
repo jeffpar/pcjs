@@ -1,6 +1,6 @@
 ---
 layout: page
-title: BASIC Programs for IBM PC DOS 1.00
+title: BASIC Programs for PC DOS 1.00
 permalink: /software/pcx86/app/ibm/basic/1.00/
 redirect_from: /apps/pcx86/1981/basic/
 machines:
