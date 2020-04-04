@@ -4,9 +4,9 @@ Welcome to PCjs, home of [PCx86](/machines/pcx86/), the original IBM PC simulati
 one of several JavaScript Machines in the [PCjs Project](https://github.com/jeffpar/pcjs.org), an eclectic collection of
 device emulations that span:
 
-  - [6502-based Microcomputers](/machines/osi/)
+  - [6502-based Microcomputers](/machines/osi/c1p/)
   - [8080-based Microcomputers](/machines/pcx80/)
-  - [Arcade Machines](/machines/arcade/)
+  - [Arcade Machines](/machines/arcade/invaders/)
   - [DEC Minicomputers and Terminals](/machines/dec/)
   - [IBM PC and PC Compatibles](/machines/pcx86/)
   - [Texas Instruments Programmable Calculators](/machines/ti/)
@@ -14,13 +14,11 @@ device emulations that span:
 
 along with a small collection of software used for archival/demonstration purposes only.
 
-### Using PCjs locally with Jekyll
+### Running PCjs
 
-PCjs is now setup to use [Jekyll](http://jekyllrb.com) and the Ruby WEBrick web server.  This is how the project
-is currently set up at [pcjs.org](https://www.pcjs.org), using [GitHub Pages](https://pages.github.com).
+PCjs now uses [Jekyll](http://jekyllrb.com), so that [pcjs.org](https://www.pcjs.org) can use [GitHub Pages](https://pages.github.com).
 
-This isn't going to be a Jekyll "How To" guide, because that would unnecessarily repeat all the information available
-at GitHub, but we'll summarize the basic steps:
+Here are the basic steps to install Jekyll locally and run your own PCjs web server:
 
  1. Install Ruby (on OS X, it should already be installed)
  2. Install Bundler (on OS X, run `sudo gem install bundler`)
