@@ -2,6 +2,8 @@
 
 ### Changed on 2020-04-04
 
+Reorganized the XML config files, like so:
+
   - Moved /configs/pcx86/xml/ folders to /configs/pcx86/:
       - chipset
       - fdc
@@ -24,3 +26,5 @@
       - index.md
       - us83-mobile.json
       - us83.json
+
+Also added a catch-all page for information about supported IBM PC XT/AT hard drive types: /configs/pcx86/hdc/

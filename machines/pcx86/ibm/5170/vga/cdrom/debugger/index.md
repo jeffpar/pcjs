@@ -1,6 +1,6 @@
 ---
 layout: page
-title: IBM PC AT (Model 5170) with VGA Display, ATAPI CD-ROM, and Debugger
+title: IBM PC AT with ATAPI CD-ROM and Debugger
 permalink: /machines/pcx86/ibm/5170/vga/cdrom/debugger/
 redirect_from: /disks/pcx86/drives/cdrom/debugger/
 machines:
