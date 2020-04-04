@@ -7,7 +7,7 @@ machines:
   - id: ibm5160
     type: pcx86
     debugger: true
-    config: /configs/pcx86/xml/machine/5160/cga/512kb/debugger/machine.xml
+    config: /configs/pcx86/machine/ibm/5160/cga/512kb/debugger/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)

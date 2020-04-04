@@ -6,7 +6,7 @@ permalink: /blog/2018/02/15/
 machines:
   - id: ibm5150
     type: pcx86
-    config: /configs/pcx86/xml/machine/5150/mda/64kb/machine.xml
+    config: /configs/pcx86/machine/ibm/5150/mda/64kb/machine.xml
 ---
 
 There are a number of "key" challenges to emulating *all* the keys on IBM PC and PC AT keyboards, due to

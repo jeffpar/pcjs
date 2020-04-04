@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/omniview/4.30/
 machines:
   - id: compaq386
     type: pcx86
-    config: /configs/pcx86/xml/machine/compaq/deskpro386/vga/4096kb/machine.xml
+    config: /configs/pcx86/machine/compaq/deskpro386/vga/4096kb/machine.xml
     autoMount:
       A:
         name: PC DOS 3.30 (720K)

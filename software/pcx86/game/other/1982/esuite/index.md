@@ -7,7 +7,7 @@ preview: images/screenshot.png
 machines:
   - id: ibm5160-esuite
     type: pcx86
-    config: /configs/pcx86/xml/machine/5160/mda/256kb/fake188/machine.xml
+    config: /configs/pcx86/machine/ibm/5160/mda/256kb/fake188/machine.xml
     state: state.json
 ---
 

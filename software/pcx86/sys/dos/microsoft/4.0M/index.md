@@ -12,7 +12,7 @@ machines:
   - id: ibm5160
     type: pcx86
     debugger: true
-    config: /configs/pcx86/xml/machine/5160/cga/640kb/debugger/machine.xml
+    config: /configs/pcx86/machine/ibm/5160/cga/640kb/debugger/machine.xml
     autoMount:
       A:
         name: MS-DOS 4.0M (Disk 1)

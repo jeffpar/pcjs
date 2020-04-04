@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/microsoft/word/3.00/
 machines:
   - id: ibm5160
     type: pcx86
-    config: /configs/pcx86/xml/machine/5160/ega/640kb/machine.xml
+    config: /configs/pcx86/machine/ibm/5160/ega/640kb/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)

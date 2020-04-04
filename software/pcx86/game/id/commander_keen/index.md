@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/games/id/commander_keen/
 machines:
   - id: keenMachine
     type: pcx86
-    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev1/enhanced/machine.xml
+    config: /configs/pcx86/machine/ibm/5170/ega/640kb/rev1/enhanced/machine.xml
     autoMount:
       A:
         name: "PC DOS 3.30 (Disk 1)"

@@ -10,7 +10,7 @@ machines:
     resume: 1
     debugger: true
     autoStart: true
-    config: /configs/pcx86/xml/machine/5160/ega/512kb/pcsig08/debugger/machine.xml
+    config: /configs/pcx86/machine/ibm/5160/ega/512kb/pcsig08/debugger/machine.xml
 ---
 
 The machine below has access to all 2,121 diskette images from the

@@ -6,7 +6,7 @@ redirect_from: /devices/pcx86/machine/5150/dual/64kb/
 machines:
   - id: ibm-5150-dual
     type: pcx86
-    config: /configs/pcx86/ibm/5150/machine-dual.json
+    config: /configs/pcx86/machine/ibm/5150/machine-dual.json
 ---
 
 {% include machine.html id="ibm-5150-dual" %}

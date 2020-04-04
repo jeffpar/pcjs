@@ -9,7 +9,7 @@ machines:
     debugger: true
     autoStart: true
     connection: com2->vt100.serialPort
-    config: /configs/pcx86/xml/machine/5170/ega/2048kb/rev3/debugger/vt100/machine.xml
+    config: /configs/pcx86/machine/ibm/5170/ega/2048kb/rev3/debugger/vt100/machine.xml
   - id: vt100
     type: pcx80
     debugger: true

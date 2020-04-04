@@ -6,12 +6,12 @@ redirect_from: /devices/pcx86/machine/zenith/z150/cga/640kb/
 machines:
   - id: z150
     type: pcx86
-    config: /configs/pcx86/xml/machine/zenith/z150/cga/640kb/machine.xml
+    config: /configs/pcx86/machine/zenith/z150/cga/640kb/machine.xml
 ---
 
 {% include machine.html id="z150" %}
 
-This machine is also available with the [PCjs Debugger](/configs/pcx86/xml/machine/zenith/z150/cga/640kb/debugger/machine.xml).
+This machine is also available with the [PCjs Debugger](/configs/pcx86/machine/zenith/z150/cga/640kb/debugger/machine.xml).
 
 {% include gallery/documents.html width="200" height="280" %}
 

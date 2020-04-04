@@ -7,7 +7,7 @@ machines:
   - id: ibm5170-msdos320
     type: pcx86
     debugger: true
-    config: /configs/pcx86/xml/machine/5170/ega/640kb/rev3/debugger/machine.xml
+    config: /configs/pcx86/machine/ibm/5170/ega/640kb/rev3/debugger/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:1,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'
     autoMount:
       A:

@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/2.10/
 machines:
   - id: ibm5160-pcdos210
     type: pcx86
-    config: /configs/pcx86/xml/machine/5160/cga/256kb/machine.xml
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     resume: 1
     autoMount:
       A:
