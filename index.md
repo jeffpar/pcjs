@@ -20,9 +20,7 @@ redirect_from:
 
 {% endif %}
 
-This is PCjs, home of **PCx86**, the original IBM PC emulator for your web browser.
-
-We use JavaScript to recreate the IBM PC experience, using original ROMs, CPUs running at their original speeds,
+PCjs uses JavaScript to recreate the IBM PC experience, using original ROMs, CPUs running at their original speeds,
 and early IBM video cards and monitors, including the classic green monochrome MDA monitor and the venerable "flickery" CGA monitor.
 
 Over time, PCjs emulations have expanded to include selected [PC Compatibles](/machines/pcx86/compaq/deskpro386/) and more
@@ -33,9 +31,7 @@ To learn more, visit the [PCjs]({{ site.github.repository_url }}) open-source pr
 ### PCjs Highlights
 
 A few hand-picked PCjs Machines are highlighted below, featuring hardware and/or software that may be considered historically
-interesting or unusual.
-
-The {% include explorer/link.html %} offers many more hardware and software
-combinations to choose from, as well as a small collection of related documentation.
+interesting or unusual.  You can browse more hardware and software combinations, and a small collection of related documentation,
+using the {% include explorer/link.html %}.
 
 {%- include gallery/featured.html width="200" height="128" -%}
