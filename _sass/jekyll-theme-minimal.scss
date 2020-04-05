@@ -318,3 +318,33 @@ footer {
     color: #444;
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #252525;
+    color: #eaeaea;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    color: #eaeaea;
+  }
+  a {
+    color: #63c0f5;
+  }
+  a:visited {
+    color: rgb(45, 212, 162);
+  }
+  code.highlighter-rouge {
+    background-color: #252525;
+    color: #ffcc00;
+  }
+  code, pre, .highlight {
+    background-color: #000;
+    color: rgb(2, 158, 2);
+  }
+  textarea {
+    background-color: #000;
+    color: rgb(2, 158, 2);
+    border-radius: 5px;
+    border: 1px solid #e5e5e5;
+  }
+}
