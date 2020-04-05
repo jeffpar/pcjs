@@ -61,7 +61,7 @@
                       <ul>
                     {%- for category in categories -%}
                       {%- if site.developer %}
-                      <!-- software category: {{ category[0] }} (hidden: {{ category[1]['@hidden'] }})-->
+                        <!-- category: {{ category[0] }} -->
                       {%- endif -%}
                       {%- if category[0] contains '@' -%}{%- continue -%}{%- endif -%}
                       {%- if category[1]['@hidden'] -%}{%- continue -%}{%- endif -%}
@@ -71,7 +71,7 @@
                           <ul>
                       {%- for subcategory in subcategories -%}
                         {%- if site.developer %}
-                            <!-- software subcategory: {{ subcategory[0] }} -->
+                            <!-- subcategory: {{ subcategory[0] }} -->
                         {%- endif -%}
                         {%- if subcategory[1]['@hidden'] -%}{%- continue -%}{%- endif -%}
                         {%- if subcategory[0] == '@products' or subcategory[0] == '@versions' -%}
@@ -88,7 +88,7 @@
 
                         {%- for vendor in vendors -%}
                           {%- if site.developer %}
-                                <!-- software vendor: {{ vendor[0] }} -->
+                                <!-- vendor: {{ vendor[0] }} -->
                           {%- endif -%}
                           {%- if vendor[1]['@hidden'] -%}{%- continue -%}{%- endif -%}
                           {%- if vendor[0] == '@products' or vendor[0] == '@versions' -%}
@@ -108,7 +108,7 @@
 
                           {%- for product in products -%}
                             {%- if site.developer %}
-                                    <!-- software product: {{ product[0] }} -->
+                                    <!-- product: {{ product[0] }} -->
                             {%- endif -%}
                             {%- if product[1]['@hidden'] -%}{%- continue -%}{%- endif -%}
                             {%- if product[0] == '@products' or product[0] == '@versions' -%}
@@ -125,7 +125,7 @@
 
                             {%- for version in versions -%}
                               {%- if site.developer %}
-                                        <!-- software version: {{ version[0] }} -->
+                                        <!-- version: {{ version[0] }} -->
                               {%- endif -%}
                               {%- assign release = version[1] -%}
                               {%- if release['@hidden'] -%}{%- continue -%}{%- endif -%}

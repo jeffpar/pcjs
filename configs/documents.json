@@ -17,7 +17,7 @@
           {
             "@title": "Microsoft Programmer's Library (1.3)",
             "@file": "MSTOOLS-CD005-MSPL10.pdf",
-            "@link": "/documents/books/programming/mspl13/",
+            "@link": "/documents/books/mspl13/",
             "@cover": ".png",
             "@source": "PCjs",
             "@tags": "msdos"
@@ -95,6 +95,37 @@
             "@tags": "msdos"
           }
         ]
+      },
+      "mspl13": {
+        "@title": "Microsoft Programmer's Library",
+        "@permalink": "/documents/books/mspl13/",
+        "basic": {
+          "@title": "BASIC References",
+          "b7lang": {
+            "@title": "MS BASIC 7.1 Language Reference"
+          },
+          "b7prog": {
+            "@title": "MS BASIC 7.1 Programming Guide"
+          },
+          "b7start": {
+            "@title": "MS BASIC 7.1 Getting Started"
+          },
+          "kbase_b": {
+            "@title": "MS BASIC KnowledgeBase"
+          },
+          "qblang": {
+            "@title": "MS QuickBASIC 4.5 Language Reference"
+          },
+          "qblearn": {
+            "@title": "Learning to Use MS QuickBASIC 4.5"
+          },
+          "qbprog": {
+            "@title": "MS QuickBASIC 4.5 Programming in BASIC"
+          },
+          "qbtools": {
+            "@title": "MS QuickPBASIC Programmer's Toolbox"
+          }
+        }
       }
     }
   },
