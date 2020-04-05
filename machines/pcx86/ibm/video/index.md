@@ -1,6 +1,6 @@
 ---
 layout: page
-title: IBM Video Adapters
+title: IBM PC Video Adapters
 permalink: /machines/pcx86/ibm/video/
 ---
 

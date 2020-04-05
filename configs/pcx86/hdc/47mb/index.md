@@ -1,30 +1,28 @@
 ---
 layout: page
-title: IBM PC 47Mb Hard Drives (Fixed Disks)
+title: PC 47Mb Hard Drives
 permalink: /configs/pcx86/hdc/47mb/
 redirect_from: /disks/pcx86/drives/47mb/
 ---
 
-This folder contains the following 47Mb (PC AT Type 5) fixed disk configurations:
- 
-  - [Unformatted 47Mb Disk](unformatted-at5.xml)
-
-Note that in order to use an unformatted fixed disk with DOS, it must first be partitioned using `FDISK`
-and then formatted using `FORMAT`.  Moreover, you should use DOS 3.30 or newer if you want to make full use
-of the disk; DOS 3.30 was still limited to 32Mb partitions, but it was the first version that allowed you
-to create both "Primary" and "Extended" DOS partitions.
-
-It should be safe to use Type 5 drives in both IBM PC AT and COMPAQ DeskPro machines, because the drive
-parameters are identical in both types of machines:
+PCjs includes unformatted 47Mb Type 5 drives in selected IBM PC AT and COMPAQ DeskPro machines,
+because the drive parameters are identical in both types of machines:
 
     940 cylinders
     6 heads
     17 sectors/track
 
-yielding a capacity of 49,090,560 bytes (940 * 6 * 17 * 512), or approximately 47Mb
-(since PCjs considers 1 megabyte to be 1,048,576 bytes).
+yielding a capacity of 49,090,560 bytes (940 * 6 * 17 * 512), or approximately 46.82Mb (since PCjs considers 1 megabyte to be 1,048,576 bytes).
 
-See the [COMPAQ DeskPro 386 Fixed Disk Drive Parameter Table Values](/machines/pcx86/compaq/deskpro386/#fixed-disk-drive-parameter-table-values) for more information.
+For example:
+
+  - [COMPAQ DeskPro 386](/configs/pcx86/machine/compaq/deskpro386/ega/2048kb/machine.xml)
+  - [IBM PC AT (Model 5170) with Enhanced Color Display](/configs/pcx86/machine/ibm/5170/ega/640kb/rev1/enhanced/machine.xml)
+
+Note that in order to use an unformatted fixed disk with DOS, it must first be partitioned using `FDISK`
+and then formatted using `FORMAT`.  Moreover, you should use DOS 3.30 or newer if you want to make full use
+of the disk; DOS 3.30 was still limited to 32Mb partitions, but it was the first version that allowed you
+to create both "Primary" and "Extended" DOS partitions.
 
 However, when you install [COMPAQ MS-DOS 3.31](/software/pcx86/sys/dos/compaq/3.31/) using their `FASTART` utility,
 it will report "Format complete" after formatting 939 cylinders (0-938), presumably reserving the final cylinder
@@ -164,9 +162,3 @@ clusters with no unusable fractional cluster.
 Thus, actual free space is 23885 * 2048, or 48,916,480 bytes, which is exactly what DOS reports as the available
 space.
 
----
-
-Machines using the [Unformatted Disk](unformatted-at5.xml) include:
-
-  - [COMPAQ DeskPro 386](/configs/pcx86/machine/compaq/deskpro386/ega/2048kb/machine.xml)
-  - [IBM PC AT (Model 5170) with Enhanced Color Display](/configs/pcx86/machine/ibm/5170/ega/640kb/rev1/enhanced/machine.xml)

@@ -788,20 +788,6 @@
             "@source": ""
           },
           {
-            "@title": "IBM 5170 Fixed Disk and Diskette Drive Adapter, August 1984",
-            "@file": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1984-08.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqENe6VOosR1hAu0Qg?e=rn4aJb",
-            "@cover": ".jpg",
-            "@source": ""
-          },
-          {
-            "@title": "IBM 5170 Fixed Disk and Diskette Drive Adapter, August 1986",
-            "@file": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1986-08.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEON8qBHJZmbQ5fGw?e=6iAC5s",
-            "@cover": ".jpg",
-            "@source": ""
-          },
-          {
             "@title": "IBM 5170 Double-Sided Diskette Drive",
             "@file": "IBM_5170_Double-Sided_Diskette_Drive.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lFyUh1iagIHOfKaw?e=6AFXdb",
@@ -812,13 +798,6 @@
             "@title": "IBM 5170 High-Capacity Diskette Drive",
             "@file": "IBM_5170_High-Capacity_Diskette_Drive.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lIr9Grzhroy7j0FA?e=Xzh9jl",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "IBM 5170 20MB Fixed Disk Drive",
-            "@file": "IBM_5170_20MB_Fixed_Disk_Drive.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lHGhPhb9qr8O7ilA?e=82OOXR",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
@@ -873,8 +852,34 @@
           }
         ]
       },
+      "hdc": {
+        "@title": "PC Hard Drives",
+        "@documents": [
+          {
+            "@title": "IBM 5170 Fixed Disk and Diskette Drive Adapter, August 1984",
+            "@file": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1984-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqENe6VOosR1hAu0Qg?e=rn4aJb",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM 5170 Fixed Disk and Diskette Drive Adapter, August 1986",
+            "@file": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1986-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEON8qBHJZmbQ5fGw?e=6iAC5s",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM 5170 20MB Fixed Disk Drive",
+            "@file": "IBM_5170_20MB_Fixed_Disk_Drive.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lHGhPhb9qr8O7ilA?e=82OOXR",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          }
+        ]
+      },
       "video": {
-        "@title": "IBM Video Adapters",
+        "@title": "PC Video Adapters",
         "@documents": [
           {
             "@title": "IBM Monochrome Display and Printer Adapter",
