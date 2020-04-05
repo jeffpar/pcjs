@@ -50,7 +50,7 @@ Generally, our PC AT machines use four common sizes, which correspond to the fol
 Note that PC XT drive type 3 and PC AT drive type 1 have identical [10Mb](10mb/) disk geometry, which is why you'll find
 both PC XT and PC AT machines here using the same 10Mb disk image.
 
-Similarly, PC AT drive type 5 and COMPAQ DeskPro 386 drive types 1, 2 and 5 have identical disk geometry, so those machines
+Similarly, PC AT drive types 1, 2, and 5 match the drive types defined by the COMPAQ DeskPro 386, so those machines
 can use the same 10Mb, 20Mb, and [47Mb](47mb/) disk images.
 
 ### COMPAQ DeskPro 386 Drive Types
