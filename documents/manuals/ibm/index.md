@@ -14,3 +14,5 @@ redirect_from: /pubs/pc/reference/ibm/
 {% include gallery/documents.html path="/machines/pcx86/ibm/5170/" title="IBM PC AT (Model 5170) Manuals" width="200" height="280" %}
 
 {% include gallery/documents.html path="/machines/pcx86/ibm/video/" title="IBM PC Video Adapter Manuals" width="200" height="280" %}
+
+{% include gallery/documents.html path="/machines/pcx86/ibm/hdc/" title="IBM PC Hard Drive (Fixed Disk) Manuals" width="200" height="280" %}
