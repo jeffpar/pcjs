@@ -2,7 +2,9 @@
 layout: page
 title: Microsoft Windows 1.01
 permalink: /software/pcx86/sys/windows/1.01/
-redirect_from: /disks/pcx86/windows/1.01/
+redirect_from:
+  - /disks/pcx86/windows/1.01/
+  - /disks/pc/windows/1.01/
 preview: images/screenshot.png
 machines:
   - id: ibm5160-ega-win101
@@ -19,12 +21,9 @@ with a [Debugger](debugger/) or a [CGA Display](cga/).  Or just for fun, on [fou
 
 A demo of an earlier pre-release version, [Windows 1.0 ("Premiere Edition")](../1.00/), is also available.
 
-[Directory Listings](#directory-listings) of the five 360Kb distribution diskettes are provided below.
+[Directory Listings](#directory-of-windows-101-setup) of the five 360Kb distribution diskettes are provided below.
 
 {% include machine.html id="ibm5160-ega-win101" %}
-
-Directory Listings
-------------------
 
 ### Directory of Windows 1.01 (SETUP)
 
