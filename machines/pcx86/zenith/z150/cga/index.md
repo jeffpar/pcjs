@@ -15,6 +15,6 @@ machines:
 
 This machine is also available with the [PCjs Debugger](/configs/pcx86/machine/zenith/z150/cga/640kb/debugger/machine.xml).
 
-{% include gallery/documents.html width="200" height="280" %}
-
 And remember: "The quality goes in before the name goes on."
+
+{% include gallery/documents.html width="200" height="280" %}
