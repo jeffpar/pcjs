@@ -5,9 +5,6 @@ permalink: /software/pcx86/sys/unix/microport/system-v/2.3/
 redirect_from: /disks/pcx86/unix/microport/system-v/2.3/
 ---
 
-Microport's AT&amp;T UNIX System V-AT 2.3
------------------------------------------
-
 ### Debugging Notes
 
 The boot sector contains the following code:
