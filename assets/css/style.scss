@@ -471,6 +471,11 @@ div.pcjs-gallery-image a {
 .pcjs-picture-caption {
   font-size: x-small;
 }
+@media screen and (max-width: 1500px) {
+  .pcjs-panel {
+    width: 100%;
+  }
+}
 @media screen and (max-width: 800px) {
   .pcjs-registers {
     width: 100% !important;
