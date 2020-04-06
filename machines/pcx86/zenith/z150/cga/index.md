@@ -2,7 +2,9 @@
 layout: page
 title: Zenith Z-150 with Color Display
 permalink: /machines/pcx86/zenith/z150/cga/
-redirect_from: /devices/pcx86/machine/zenith/z150/cga/640kb/
+redirect_from:
+  - /devices/pcx86/machine/zenith/z150/cga/640kb/
+  - /devices/pcx86/machine/zenith/z150/
 machines:
   - id: z150
     type: pcx86

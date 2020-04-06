@@ -11,9 +11,6 @@ and the disk contents described in PACKING.LST, we were able to recreate the nin
 was missing from the archive was the contents of the PATCH32 directory on Disk 9, which we were able to retrieve from the
 PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DOS and OS/2](/software/pcx86/lang/microsoft/c/5.10-os2/).
 
-Directory Listings
-------------------
-
 ### Directory of MS Pascal 4.00 (Disk 1)
 
 	 Volume in drive A is DISK1
