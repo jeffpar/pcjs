@@ -12,9 +12,6 @@ machines:
         name: MS-DOS 5.00 (360K Disk 1)
 ---
 
-Microsoft MS-DOS 5.00 (360K Disks)
-----------------------------------
-
 [Directory Listings](#directory-of-ms-dos-500-360k-disk-1) of the five 360Kb distribution diskettes are provided below.
 
 {% include machine.html id="ibm5170-msdos500" %}

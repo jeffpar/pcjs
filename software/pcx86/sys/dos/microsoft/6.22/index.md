@@ -12,9 +12,6 @@ machines:
         name: MS-DOS 6.22 (1.2M Disk 1)
 ---
 
-Microsoft MS-DOS 6.22 (1.2M Disks)
-----------------------------------
-
 [Directory Listings](#directory-of-ms-dos-622-12m-disk-1) of the four 1.2M distribution diskettes are provided below.
 
 {% include machine.html id="ibm5170-msdos622" %}
