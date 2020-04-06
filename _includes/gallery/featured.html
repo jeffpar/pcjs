@@ -13,7 +13,7 @@
   {%- if item_title != "" and item_tags contains include_tag -%}
     {% assign item_num = item_num | plus:1 %}
     {%- assign item_link = item['@permalink'] -%}
-    {%- assign item_id = item_link | slugify -%}
+    {%- assign item_id = item_link | slugify | prepend: "featured-" -%}
     {%- assign item_preview = item['@preview'] | default: "/documents/covers/default.jpg" -%}
     {%- if item_preview == ".jpg" or item_preview == ".png" -%}{%- capture item_preview -%}{{ item_link }}{%- if featured_width == "200" -%}images/thumbnail{%- else -%}images/screenshot{%- endif -%}{{ item_preview }}{%- endcapture -%}{%- endif -%}
     {%- assign item_width = item['@width'] | default: featured_width -%}

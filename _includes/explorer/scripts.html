@@ -21,7 +21,7 @@
       function pcjsExplorerExpand(path) {
         if (path) {
           let element;
-          let id = path.substr(1).replace(/\//g, '-').replace(/^(documents|machines|software)-/, '').replace(/-$/, '');
+          let id = path.substr(1).replace(/\//g, '-').replace(/-$/, '');
           do {
             element = document.getElementById(id);
             if (element) break;
@@ -30,15 +30,15 @@
             id = idNew;
           } while (true);
           if (element) {
-            let parent;
-            element.classList.add("pcjs-explorer-selected");
-            while ((parent = element.parentElement)) {
-              if (parent.classList.contains("pcjs-explorer-closed")) {
-                parent.classList.add("pcjs-explorer-open");
-                parent.classList.remove("pcjs-explorer-closed");
+            do {
+              if (element.classList.contains("pcjs-explorer-item")) {
+                element.classList.add("pcjs-explorer-selected");
+              } else if (element.classList.contains("pcjs-explorer-closed")) {
+                element.classList.add("pcjs-explorer-open");
+                element.classList.remove("pcjs-explorer-closed");
               }
-              element = parent;
-            }
+              element = element.parentElement;
+            } while (element);
           }
         }
       }
