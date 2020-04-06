@@ -16,8 +16,6 @@ machines:
         name: Microsoft Adventure (Unmodified)
 ---
 
-[Documentation](#documents) can be found below.
-
 UPDATE: There are now two "Microsoft Adventure" disk images in the PCjs Disk Library.  The latest one is called
 "Microsoft Adventure (Unmodified)", which recreates the original copy-protected diskette.  See the PCjs blog post
 "[Adventures in Copy Protection](/blog/2019/06/13/)" for more information.
