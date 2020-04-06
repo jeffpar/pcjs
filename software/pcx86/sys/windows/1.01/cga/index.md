@@ -28,5 +28,4 @@ This PC XT configuration also includes a 10Mb hard disk with Windows 1.01 pre-in
 NOTE: The Windows 1.01 mouse pointer can be controlled with your mouse, but only when your mouse is
 within the "CGA Display" window. This is a restriction imposed by your web browser, not PCjs.
 
-For more control over this machine, try the [Control Panel](debugger/) configuration, which features the built-in
-PCjs Debugger.
+For more control over this machine, try the configuration with the built-in [PCjs Debugger](debugger/).

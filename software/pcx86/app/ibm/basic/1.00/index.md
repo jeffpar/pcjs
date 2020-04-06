@@ -28,7 +28,7 @@ The procedure is simple.  For example, to capture [MUSIC.BAS](#musicbas):
 The `LIST` command is used to list all or part of a program on the screen, by including either a single line number
 (e.g., `LIST 940`), a range of line numbers (e.g., `LIST 940-960`), or no numbers at all.  And if you want the listing
 sent to a different output device, you must append a comma and the name of the device, in quotes.  Since this machine
-has been configured with one serial port (COM1) bound to the text window inside the machine's Control Panel,
+has been configured with one serial port (COM1) bound to the text window inside the machine's Debugger,
 specifying "COM1" redirects the program listing to that window.  One parallel port has been added to the machine and
 bound to the same window as well, so you can also use "LPT1".
 

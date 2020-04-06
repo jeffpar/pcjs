@@ -10,8 +10,8 @@ machines:
     config: /configs/pcx80/machine/vt100/debugger/machine.xml
 ---
 
-The [PCx80]({{ site.github.pages }}/machines/pcx80/) machine below is configured to simulate a [VT100 Terminal](/machines/dec/vt100/)
-with a Control Panel and Debugger.  When you press the **Run** button, it will start running the original
+The [PCx80]({{ site.github.pages }}/machines/pcx80/) machine below is configured to simulate a
+[VT100 Terminal](/machines/dec/vt100/) with PCjs Debugger.  When you press the **Run** button, it will start running the original
 [VT100 Firmware](/machines/dec/vt100/rom/) inside the [PCx80]({{ site.github.pages }}/machines/pcx80/) CPU emulator.
 
 Information about [VT100 Keys](#vt100-keys) and assorted [Hardware Notes](#vt100-memory-usage) are provided below,

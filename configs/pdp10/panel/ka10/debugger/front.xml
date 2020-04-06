@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <panel id="panel" width="100%" padding="8px">
-	<name>Control Panel</name>
+	<name>PCjs Debugger</name>
 	<control type="container" class="pcjs-panel-group" width="100%" padBottom="8px">
 		<control type="container" class="pcjs-triplet" width="9.3%" pos="right">
 			<control type="container" class="pcjs-swlbl" width="33%" pos="right">STRT</control>

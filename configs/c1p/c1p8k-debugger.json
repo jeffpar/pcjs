@@ -133,7 +133,7 @@
     {
       "id": "panel",
       "class": "panel",
-      "title": "Control Panel",
+      "title": "PCjs Debugger",
       "style": {
         "width": "auto",
         "max-width": "100%",

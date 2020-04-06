@@ -1,13 +1,13 @@
 ---
 layout: page
-title: DEC PDP-11/70 Control Panels
+title: DEC PDP-11/70 Panels
 permalink: /configs/pdp11/panel/1170/
 redirect_from: /devices/pdp11/panel/1170/
 ---
 
-The following Control Panel configurations are available:
+The following Panel configurations are available:
 
-  - [PDP-11/70 Front Panel](front.xml) (with [Debugger](debugger/front.xml))
+  - [PDP-11/70 Front Panel](front.xml) (with [PCjs Debugger](debugger/front.xml))
 
 Use this [PDP-11/70](/machines/dec/pdp11/1170/panel/debugger/) to see the [PDP-11/70 Front Panel](debugger/front.xml) in action.
 
