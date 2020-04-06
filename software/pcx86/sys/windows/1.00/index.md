@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Microsoft Windows 1.0 (&quot;Premiere Edition&quot;)
+title: "Microsoft Windows 1.0: Premiere Edition"
 permalink: /software/pcx86/sys/windows/1.00/
 redirect_from: /disks/pcx86/windows/1.00/
 preview: images/screenshot.png

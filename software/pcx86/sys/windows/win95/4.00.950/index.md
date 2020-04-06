@@ -4,6 +4,7 @@ title: "Microsoft Windows 95: First Retail Release"
 permalink: /software/pcx86/sys/windows/win95/4.00.950/
 redirect_from:
   - /disks/pcx86/windows/win95/4.00.950/
+  - /disks/pcx86/windows/win95/
   - /disks/pc/windows/win95/4.00.950/
 preview: images/screenshot.png
 machines:

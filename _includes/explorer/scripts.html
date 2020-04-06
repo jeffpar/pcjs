@@ -18,9 +18,10 @@
           element.classList.remove("pcjs-explorer-closed");
         }
       }
-      function pcjsExplorerExpand(path) {
+      function pcjsExplorerExpand(path, prefix) {
         if (path) {
           let element;
+          if (prefix) path = prefix + path;
           let id = path.substr(1).replace(/\//g, '-').replace(/-$/, '');
           do {
             element = document.getElementById(id);
@@ -63,6 +64,6 @@
       }
       function pcjsExplorerInit() {
         pcjsExplorerExpand(window.location.pathname + window.location.hash.substr(1));
-        pcjsExplorerExpand(pcjsGetURLVars()['software']);
+        pcjsExplorerExpand(pcjsGetURLVars()['software'], "/software");
       }
     </script>
