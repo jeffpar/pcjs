@@ -1,8 +1,43 @@
 {
   "basic": {
     "@title": "BASIC Programs",
+    "jeffpar": {
+      "@title": "From Jeff",
+      "@products": {
+        "checkers": {
+          "@title": "CHECKERS",
+          "@tape": "CHECKERS.BAS",
+          "@type": "ASCII"
+        },
+        "hangwoman": {
+          "@title": "HANGWOMAN",
+          "@tape": "HANGWOMAN.BAS",
+          "@type": "ASCII"
+        },
+        "life": {
+          "@title": "LIFE",
+          "@tape": "LIFE.BAS",
+          "@type": "ASCII"
+        },
+        "othello": {
+          "@title": "OTHELLO",
+          "@tape": "OTHELLO.BAS",
+          "@type": "ASCII"
+        },
+        "soforecast": {
+          "@title": "SOFORECAST",
+          "@tape": "SOFORECAST.BAS",
+          "@type": "ASCII"
+        },
+        "tubelist": {
+          "@title": "TUBELIST",
+          "@tape": "TUBELIST.BAS",
+          "@type": "ASCII"
+        }
+      }
+    },
     "osi": {
-      "@title": "OSI",
+      "@title": "From OSI",
       "@products": {
         "math": {
           "@title": "BASIC MATH",
@@ -42,90 +77,74 @@
       }
     },
     "other": {
-      "@title": "Other",
+      "@title": "From Others",
       "@products": {
-        "seawolfe": {
+        "osiweb/seawolfe": {
           "@title": "SEAWOLFE",
           "@tape": "SEAWOLFE.BAS",
-          "@type": "ASCII"
+          "@type": "ASCII",
+          "@source": "http://www.osiweb.org/programs/basic/"
         },
-        "tankfortwo": {
+        "osiweb/spacewar": {
+          "@title": "SPACEWAR",
+          "@tape": "SPACEWAR.BAS",
+          "@type": "ASCII",
+          "@source": "http://www.osiweb.org/programs/basic/"
+        },
+        "osiweb/startrek": {
+          "@title": "STAR TREK",
+          "@tape": "STARTREK.BAS",
+          "@type": "ASCII",
+          "@source": "http://www.osiweb.org/programs/basic/"
+        },
+        "osiweb/tankfortwo": {
           "@title": "TANK FOR TWO",
           "@tape": "TANKFORTWO.BAS",
-          "@type": "ASCII"
-        }
-      }
-    },
-    "jeffpar": {
-      "@title": "Jeff's",
-      "@products": {
-        "checkers": {
-          "@title": "CHECKERS",
-          "@tape": "CHECKERS.BAS",
-          "@type": "ASCII"
-        },
-        "hangwoman": {
-          "@title": "HANGWOMAN",
-          "@tape": "HANGWOMAN.BAS",
-          "@type": "ASCII"
-        },
-        "life": {
-          "@title": "LIFE",
-          "@tape": "LIFE.BAS",
-          "@type": "ASCII"
-        },
-        "othello": {
-          "@title": "OTHELLO",
-          "@tape": "OTHELLO.BAS",
-          "@type": "ASCII"
-        },
-        "soforecast": {
-          "@title": "SOFORECAST",
-          "@tape": "SOFORECAST.BAS",
-          "@type": "ASCII"
-        },
-        "tubelist": {
-          "@title": "TUBELIST",
-          "@tape": "TUBELIST.BAS",
-          "@type": "ASCII"
+          "@type": "ASCII",
+          "@source": "http://www.osiweb.org/programs/basic/"
         }
       }
     }
   },
   "6502": {
     "@title": "6502 Programs",
-    "tests": {
-      "@title": "6502 Tests",
-      "@products": {
-        "bcd": {
-          "@title": "BCD Tests",
-          "@test": "BCD.json",
-          "@type": "BINARY"
-        },
-        "vflag": {
-          "@title": "Overflow Tests",
-          "@test": "VFLAG.json",
-          "@type": "BINARY"
-        }
-      }
-    },
     "jeffpar": {
-      "@title": "Jeff's",
+      "@title": "From Jeff",
       "@products": {
         "assembler": {
           "@title": "6502 Assembler (8K)",
           "@tape": "ASSEMBLER-8K.json",
-          "@type": "BINARY"
+          "@type": "BINARY",
+          "@source": "PCjs"
         },
         "basicext": {
           "@title": "BASIC Extensions",
           "@tape": "BASICEXT.json",
-          "@type": "BINARY"
+          "@type": "BINARY",
+          "@source": "PCjs"
         },
         "life": {
           "@title": "LIFE",
           "@tape": "LIFE.json",
-          "@type": "BINARY"
+          "@type": "BINARY",
+          "@source": "PCjs"
+        }
+      }
+    },
+    "tests": {
+      "@title": "Processor Tests",
+      "@products": {
+        "bcd": {
+          "@title": "BCD Tests",
+          "@test": "BCD.json",
+          "@type": "BINARY",
+          "@source": "http://www.6502.org/tutorials/decimal_mode.html"
+        },
+        "vflag": {
+          "@title": "Overflow Tests",
+          "@test": "VFLAG.json",
+          "@type": "BINARY",
+          "@source": "http://www.6502.org/tutorials/vflag.html"
         }
       }
     }
