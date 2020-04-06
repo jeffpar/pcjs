@@ -69,7 +69,7 @@ Some of the components *can* be reordered or even omitted (eg, [debugger.js](lib
 [embed.js](../shared/lib/embed.js)), but you should observe the following:
 
   - [component.js](../shared/lib/component.js) must be listed before any component that extends **Component**
-  - [panel.js](lib/panel.js) should be loaded early to initialize the Control Panel (if any) as soon as possible
+  - [panel.js](lib/panel.js) should be loaded early to initialize the Debugger controls (if any) as soon as possible
   - [computer.js](lib/computer.js) should be the last device component, as it supervises and notifies all the other device components
 
 To minimize ordering requirements, the init() handlers and constructors of all components should avoid

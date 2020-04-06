@@ -95,7 +95,7 @@ presumably this feature was added to prevent the display of passwords or other s
 If the Simulator is not responding to any keys, try clicking on the black display area to restore focus;
 if all else fails, press **BREAK** and then **W** for a WARM START.
 
-#### Using The Control Panel
+#### Using The Emulator Controls
 
 Press the **Run** button to start the Simulator; it will change to **Halt** while running.
 

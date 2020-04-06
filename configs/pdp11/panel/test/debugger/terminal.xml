@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <panel id="panel" width="100%" padding="8px">
-	<name>Control Panel</name>
+	<name>PCjs Debugger</name>
 	<control type="container" class="pcjs-textarea" width="60%" padBottom="8px">
 		<control type="textarea" binding="print" width="100%" height="340px" padRight="8px" pos="relative" style="resize:vertical;"/>
 		<control type="container" width="100%">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <panel id="panel" left="528px" top="8px" width="362px">
-	<name>Control Panel</name>
+	<name>PCjs Debugger</name>
 	<control type="textarea" binding="print" width="240px" height="280px"/>
 	<control type="text" binding="debugInput" width="240px" pos=""/>
 	<control type="button" binding="debugEnter" top="290px" left="256px">Enter</control>

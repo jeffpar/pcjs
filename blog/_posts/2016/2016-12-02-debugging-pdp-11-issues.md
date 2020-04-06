@@ -12,13 +12,13 @@ I'm still trying to flush out lingering bugs in PDPjs.  I'll give you an example
 
 After loading the "MD-11 11/70 CPU EXERCISER" paper tape image directly into memory using the **Read** button
 (*not* **Load**), and then loading the "RT-11 v4.0" disk image into drive RK0, and then finally issuing a few
-preliminary Debugger commands:
+preliminary PCjs Debugger commands:
 
 	m rk11 on; bp 005254
 
 we're ready to "let 'er rip," either by using the Debugger `g` command or clicking the **Run** button.
 
-You'll see a variety of disk-related messages from the RK11 component in the Control Panel window, which serves
+You'll see a variety of disk-related messages from the RK11 component in the PChs Debugger window, which serves
 both as the Debugger's output window and as the 11/70's terminal window.  The output begins with:
 
 	running

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <panel id="panel" width="100%" padding="8px">
-	<name>Control Panel</name>
+	<name>PCjs Debugger</name>
 	<control type="container" width="100%" height="auto">
 		<control type="canvas" binding="vpanel" pos="relative" width="2048" height="1024" style="color:white; background-color:green;"/>
 	</control>

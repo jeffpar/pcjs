@@ -38,7 +38,7 @@ characters and graphics produced by the IBM Monochrome Display Adapter (MDA), Co
 Enhanced Graphics Adapter (EGA), and Video Graphics Array (VGA) video cards.
 
 Support for assorted motherboard and expansion bus components (eg, disk controllers, parallel and serial ports, etc)
-is available in any appropriately configured machine, along with a powerful built-in debugger and optional "Control Panel"
+is available in any appropriately configured machine, along with the powerful built-in PCjs Debugger
 that provides visual access and control of the simulated hardware.
 
 Over time, the set of PCjs machines has slowly expanded to include [Minicomputers](/machines/dec/pdp11/),

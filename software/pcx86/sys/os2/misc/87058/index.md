@@ -51,7 +51,7 @@ Click the "Run" button on the [COMPAQ DeskPro 386](/machines/pcx86/compaq/deskpr
 the machine and begin the boot process.
 
 The OS/2 kernel debugger is built into the FOOTBALL kernel and automatically connects to COM2, which is captured by the
-PCjs Control Panel output window:
+PCjs Debugger output window:
 
 	bx=001d, cx=f905, dx=0700, cs=1770, ds=1b10
 	NoHighMem=0000
