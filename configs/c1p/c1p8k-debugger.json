@@ -128,25 +128,7 @@
       ]
     },
     {
-      "id": "serialPort",
-      "class": "serial",
-      "demo": false,
-      "controls": [
-        {
-          "id": "listSerial",
-          "type": "list"
-        },
-        {
-          "id": "loadSerial",
-          "type": "button",
-          "label": "Load"
-        },
-        {
-          "id": "mountSerial",
-          "type": "file",
-          "label": "Mount"
-        }
-      ]
+      "config": "/configs/c1p/serial.json"
     },
     {
       "id": "panel",

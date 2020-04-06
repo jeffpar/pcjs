@@ -175,36 +175,7 @@
       ]
     },
     {
-      "id": "serialPort",
-      "class": "serial",
-      "demo": false,
-      "controls": [
-        {
-          "id": "listSerial",
-          "type": "list",
-          "options": {
-            "/software/osi/c1p/basic/osi/math/MATH.BAS": "BASIC MATH",
-            "/software/osi/c1p/basic/osi/checking/CHECKING.BAS": "CHECKING",
-            "/software/osi/c1p/basic/osi/counter/COUNTER.BAS": "COUNTER",
-            "/software/osi/c1p/basic/osi/poker/POKER.BAS": "POKER",
-            "/software/osi/c1p/basic/osi/presidents/PRESIDENTS.BAS": "PRESIDENTS",
-            "/software/osi/c1p/basic/osi/starwars/STARWARS.BAS": "STAR WARS",
-            "/software/osi/c1p/basic/osi/trigtutor/TRIGTUTOR.BAS": "TRIG TUTOR",
-            "/software/osi/c1p/basic/other/seawolfe/SEAWOLFE.BAS": "SEAWOLFE",
-            "/software/osi/c1p/basic/other/tankfortwo/TANKFORTWO.BAS": "TANK FOR TWO"
-          }
-        },
-        {
-          "id": "loadSerial",
-          "type": "button",
-          "label": "Load"
-        },
-        {
-          "id": "mountSerial",
-          "type": "file",
-          "label": "Mount"
-        }
-      ]
+      "config": "/configs/c1p/serial.json"
     }
   ]
 }

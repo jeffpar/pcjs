@@ -1,0 +1,45 @@
+{
+  "id": "serialPort",
+  "class": "serial",
+  "demo": false,
+  "controls": [
+    {
+      "id": "listSerial",
+      "type": "list",
+      "options": {
+        "/software/osi/c1p/basic/osi/math/MATH.BAS": "BASIC MATH",
+        "/software/osi/c1p/basic/osi/checking/CHECKING.BAS": "CHECKING",
+        "/software/osi/c1p/basic/osi/counter/COUNTER.BAS": "COUNTER",
+        "/software/osi/c1p/basic/osi/poker/POKER.BAS": "POKER",
+        "/software/osi/c1p/basic/osi/presidents/PRESIDENTS.BAS": "PRESIDENTS",
+        "/software/osi/c1p/basic/osi/starwars/STARWARS.BAS": "STAR WARS",
+        "/software/osi/c1p/basic/osi/trigtutor/TRIGTUTOR.BAS": "TRIG TUTOR",
+        "/software/osi/c1p/basic/other/seawolfe/SEAWOLFE.BAS": "SEAWOLFE",
+        "/software/osi/c1p/basic/other/tankfortwo/TANKFORTWO.BAS": "TANK FOR TWO",
+        "/software/osi/c1p/basic/other/osiweb/SPACEWAR.BAS": "SPACEWAR",
+        "/software/osi/c1p/basic/jeffpar/checkers/CHECKERS.BAS": "CHECKERS (JP)",
+        "/software/osi/c1p/basic/jeffpar/hangwoman/HANGWOMAN.BAS": "HANGWOMAN (JP)",
+        "/software/osi/c1p/basic/jeffpar/life/LIFE.BAS": "LIFE (JP)",
+        "/software/osi/c1p/basic/jeffpar/othello/OTHELLO.BAS": "OTHELLO (JP)",
+        "/software/osi/c1p/basic/jeffpar/soforecast/SOFORECAST.BAS": "SOFORECAST (JP)",
+        "/software/osi/c1p/basic/jeffpar/tubelist/TUBELIST.BAS": "TUBELIST (JP)",
+        "/software/osi/c1p/6502/jeffpar/assembler/ASSEMBLER-4K.json": "6502 4K Assembler (JP)",
+        "/software/osi/c1p/6502/jeffpar/assembler/ASSEMBLER-8K.json": "6502 8K Assembler (JP)",
+        "/software/osi/c1p/6502/jeffpar/basicext/BASICEXT.json": "6502 BASIC Extensions (JP)",
+        "/software/osi/c1p/6502/jeffpar/life/LIFE.json": "6502 Game of Life (JP)",
+        "/software/osi/c1p/6502/tests/bcd/bcd.json": "6502 BCD Tests",
+        "/software/osi/c1p/6502/tests/vflag/vflag.json": "6502 VFLAG Tests"
+      }
+    },
+    {
+      "id": "loadSerial",
+      "type": "button",
+      "label": "Load"
+    },
+    {
+      "id": "mountSerial",
+      "type": "file",
+      "label": "Mount"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   "basic": {
     "@title": "BASIC Programs",
     "osi": {
-      "@title": "OSI BASIC Programs",
+      "@title": "OSI",
       "@products": {
         "math": {
           "@title": "BASIC MATH",
@@ -42,7 +42,7 @@
       }
     },
     "other": {
-      "@title": "Other BASIC Programs",
+      "@title": "Other",
       "@products": {
         "seawolfe": {
           "@title": "SEAWOLFE",
@@ -57,7 +57,7 @@
       }
     },
     "jeffpar": {
-      "@title": "Jeff's BASIC Programs",
+      "@title": "Jeff's",
       "@products": {
         "checkers": {
           "@title": "CHECKERS",
@@ -110,7 +110,7 @@
       }
     },
     "jeffpar": {
-      "@title": "Jeff's 6502 Programs",
+      "@title": "Jeff's",
       "@products": {
         "assembler": {
           "@title": "6502 Assembler (8K)",
