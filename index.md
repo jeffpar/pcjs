@@ -28,10 +28,4 @@ classic machines, such as [Minicomputers](/machines/dec/pdp11/), [Programmable C
 and [Arcade Games](/machines/arcade/invaders/).
 To learn more, visit the [PCjs]({{ site.github.repository_url }}) open-source project on [GitHub]({{ site.github.owner_url }}).
 
-### PCjs Highlights
-
-A few hand-picked PCjs Machines are highlighted below, featuring hardware and/or software that may be considered historically
-interesting or unusual.  You can browse more hardware and software combinations, and a small collection of related documentation,
-using the {% include explorer/link.html %}.
-
-{%- include gallery/featured.html width="200" height="128" -%}
+{% include highlights.html %}
