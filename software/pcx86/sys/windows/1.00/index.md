@@ -21,12 +21,9 @@ Windows 1.0 was not a public release.  Microsoft released these disks (dubbed th
 vendors, analysts, and members of the press in Summer 1985 to obtain feedback on the product.  [Windows 1.01](../1.01/)
 was the first public release.
 
-[Directory Listings](#directory-listings) of the four 360Kb distribution diskettes are provided below.
+[Directory Listings](#directory-of-windows-100-setup) of the four 360Kb distribution diskettes are provided below.
 
 {% include machine.html id="ibm5160-ega-win100" %}
-
-Directory Listings
-------------------
 
 ### Directory of Windows 1.00 (SETUP)
 
