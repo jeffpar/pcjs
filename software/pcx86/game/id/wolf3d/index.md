@@ -58,6 +58,6 @@ This is a shareware version (1.4) of Wolfenstein 3D.  Directory listings and scr
     ORDER    FRM     5714   4-21-98   1:24p
            14 File(s)   9076736 bytes free
     
-![Wolfenstein 3D 1.4 Intro Screenshot](screenshot1.jpg)
+![Wolfenstein 3D 1.4 Intro Screenshot](images/screenshot1.jpg)
     
-![Wolfenstein 3D 1.4 Closing Screenshot](screenshot2.jpg)
+![Wolfenstein 3D 1.4 Closing Screenshot](images/screenshot2.jpg)

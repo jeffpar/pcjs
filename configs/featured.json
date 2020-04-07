@@ -21,13 +21,13 @@
     "@title": "Microsoft Adventure (1981)",
     "@permalink": "/software/pcx86/game/microsoft/adventure/",
     "@preview": ".png",
-    "@tags": "home,pcx86"
+    "@tags": "home,pcx86,game"
   },
   {
     "@title": "DONKEY.BAS from PC DOS 1.00 (1981)",
     "@permalink": "/software/pcx86/app/ibm/basic/1.00/donkey/",
     "@preview": ".png",
-    "@tags": "home,pcx86"
+    "@tags": "home,pcx86,game"
   },
   {
     "@title": "VisiCalc (1981)",
@@ -45,7 +45,7 @@
     "@title": "Executive Suite (1982)",
     "@permalink": "/software/pcx86/game/other/1982/esuite/",
     "@preview": ".png",
-    "@tags": "home,pcx86"
+    "@tags": "home,pcx86,game"
   },
   {
     "@title": "PDP-11/70 with RT-11 4.0 (1982)",
@@ -69,7 +69,7 @@
     "@title": "Zork I: The Great Underground Empire",
     "@permalink": "/software/pcx86/game/infocom/zork1/",
     "@preview": ".png",
-    "@tags": "home,pcx86"
+    "@tags": "home,pcx86,game"
   },
   {
     "@title": "Exploring the IBM Personal Computer (1983)",
@@ -99,7 +99,7 @@
     "@title": "Rogue (1985)",
     "@permalink": "/software/pcx86/game/other/1985/rogue/",
     "@preview": ".png",
-    "@tags": "home,pcx86"
+    "@tags": "home,pcx86,game"
   },
   {
     "@title": "Microsoft Windows 1.0 (&quot;Premiere Edition&quot;)",
@@ -142,6 +142,18 @@
     "@permalink": "/software/pcx86/sys/windows/3.00/",
     "@preview": ".png",
     "@tags": "home,pcx86,windows,win2x-win95"
+  },
+  {
+    "@title": "Commander Keen (1991)",
+    "@permalink": "/software/pcx86/game/id/commander_keen/",
+    "@preview": ".png",
+    "@tags": "home,pcx86,game"
+  },
+  {
+    "@title": "Wolfenstein 3D (1992)",
+    "@permalink": "/software/pcx86/game/id/wolf3d/",
+    "@preview": ".png",
+    "@tags": "home,pcx86,game"
   },
   {
     "@title": "Microsoft Windows 3.1 (1992)",
