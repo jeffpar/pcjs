@@ -9,7 +9,7 @@ machines:
     type: c1p
 ---
 
-## [SOFORECAST.BAS](#listing})
+## [SOFORECAST.BAS](#listing)
 
 {% include machine.html id="c1p8k" %}
 

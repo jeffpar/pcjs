@@ -9,7 +9,7 @@ machines:
     type: c1p
 ---
 
-## [CHECKERS.BAS](#listing})
+## [CHECKERS.BAS](#listing)
 
 {% include machine.html id="c1p8k" %}
 
