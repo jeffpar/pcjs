@@ -5,6 +5,7 @@ permalink: /machines/ti/ti55/
 redirect_from:
   - /devices/ti55/
   - /devices/ti55/machine/
+preview: images/ti55.png
 machines:
   - id: ti55
     type: ti55

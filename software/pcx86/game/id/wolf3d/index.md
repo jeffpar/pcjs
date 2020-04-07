@@ -3,6 +3,7 @@ layout: page
 title: "id Software: Wolfenstein 3D"
 permalink: /software/pcx86/game/id/wolf3d/
 redirect_from: /disks/pcx86/games/id/wolf3d/
+preview: images/screenshot1.jpg
 machines:
   - id: deskpro386
     type: pcx86

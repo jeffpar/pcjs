@@ -9,6 +9,7 @@ redirect_from:
 old_redirect_from:
   - /c1p/
   - /c1pjs/
+preview: images/screenshot.png
 machines:
   - id: c1p8k
     type: c1p
