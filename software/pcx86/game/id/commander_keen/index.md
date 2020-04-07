@@ -19,9 +19,44 @@ machines:
 Beginning in 1990, a series of "Commander Keen" games were created by id Software.  Shareware version 1.1 of the first game,
 "Invasion of the Vorticons Episode One: Marooned on Mars", was released in 1991 through Apogee Software, Ltd.
 
-Directory listings are provided below.
+[Help](#help) and [directory listings](#directory-of-commander-keen-episode-one) are provided below.
 
 {% include machine.html id="keenMachine" %}
+
+### Help
+
+Excerpt from the game's "Help!" screen:
+
+    You can move Commander Keen with the joystick or keyboard.
+
+    When you first start Keen, you will be in keyboard mode.
+    Let's look at the keys you need to know to play the game.
+
+    Arrows          Move Keen around
+    Ctrl            Jump
+    Alt             Use Pogo/Stop Pogo (if you have one)
+    Ctrl and Alt    Fire raygun (if it has charges)
+
+    You can redefine these keys by pressing F3.
+
+    OTHER IMPORTANT KEYS
+
+    Spacebar        Status screen
+    F1              Help!
+    F2              Sound on/off
+    F3              Keyboard mode
+    F4              Joystick mode
+    F5              Save Game
+    Esc             Quit
+
+    When you are on the Mars map, you may be blocked by a city,
+    shrine, or other obstacle.  You must enter the city (press Ctrl
+    or button 1) and finish it before proceeding.
+
+    When you enter a city, you can get things by simply running into them.
+
+    If you cannot pass through a door, there may be a "keycard" that the
+    door requires.  This keycard will be the same color as the door.
 
 ### Directory of Commander Keen: Episode One
 
