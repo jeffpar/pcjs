@@ -9,7 +9,7 @@ machines:
     type: c1p
 ---
 
-## [OTHELLO.BAS](#listing})
+## [OTHELLO.BAS](#listing)
 
 {% include machine.html id="c1p8k" %}
 

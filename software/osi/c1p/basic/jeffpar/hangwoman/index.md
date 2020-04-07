@@ -9,7 +9,7 @@ machines:
     type: c1p
 ---
 
-## [HANGWOMAN.BAS](#listing})
+## [HANGWOMAN.BAS](#listing)
 
 {% include machine.html id="c1p8k" %}
 
