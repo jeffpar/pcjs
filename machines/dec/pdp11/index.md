@@ -1,9 +1,8 @@
 ---
 layout: page
-title: DEC PDP-11 Machines
+title: DEC PDP-11
 permalink: /machines/dec/pdp11/
 redirect_from:
-  - /devices/pdp11/machine/1170/
   - /devices/pdp11/machine/
   - /modules/pdp11/
 ---

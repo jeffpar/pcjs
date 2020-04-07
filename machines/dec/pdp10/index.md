@@ -1,6 +1,6 @@
 ---
 layout: page
-title: DEC PDP-10 Machines
+title: DEC PDP-10
 permalink: /machines/dec/pdp10/
 redirect_from:
   - /devices/pdp10/machine/
