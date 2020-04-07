@@ -8,6 +8,7 @@ redirect_from:
   - /devices/ti57/machine/
   - /devices/ti57/machine/webapp/
   - /machines/ti/ti57/docs/
+preview: images/ti57.png
 machines:
   - id: ti57-rev0
     type: ti57

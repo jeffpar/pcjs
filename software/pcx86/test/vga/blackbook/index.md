@@ -3,6 +3,7 @@ layout: page
 title: Michael Abrash's VGA "Black Book" Tests
 permalink: /software/pcx86/test/vga/blackbook/
 redirect_from: /tests/pcx86/vga/
+preview: images/L33-1.png
 machines:
   - id: deskpro386
     type: pcx86

@@ -5,6 +5,7 @@ permalink: /machines/ti/ti42/
 redirect_from:
   - /devices/ti42/
   - /devices/ti42/machine/
+preview: images/ti42.png
 machines:
   - id: ti42
     type: ti42

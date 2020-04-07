@@ -3,6 +3,7 @@ layout: page
 title: "id Software: Commander Keen"
 permalink: /software/pcx86/game/id/commander_keen/
 redirect_from: /disks/pcx86/games/id/commander_keen/
+preview: images/screenshot.png
 machines:
   - id: keenMachine
     type: pcx86
