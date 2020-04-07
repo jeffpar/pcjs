@@ -2,7 +2,9 @@
 layout: page
 title: OS/2 Prototype Disks
 permalink: /software/pcx86/sys/os2/misc/
-redirect_from: /disks/pcx86/os2/misc/cpdos/
+redirect_from:
+  - /disks/pcx86/os2/misc/cpdos/
+  - /disks/pcx86/os2/misc/
 ---
 
 #### OS/2 CP-DOS Boot Disk (v7.68)

@@ -2,7 +2,9 @@
 layout: page
 title: Microsoft Multiplan 1.06
 permalink: /software/pcx86/app/microsoft/multiplan/1.06/
-redirect_from: /disks/pcx86/apps/microsoft/multiplan/1.06/
+redirect_from:
+  - /disks/pcx86/apps/microsoft/multiplan/1.06/
+  - /disks/pcx86/apps/microsoft/multiplan/
 ---
 
 NOTE: The Microsoft Multiplan 1.06 disk below is *not* an original distribution disk.  It was obtained from

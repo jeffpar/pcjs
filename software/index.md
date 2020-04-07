@@ -7,6 +7,6 @@ redirect_from:
   - /disks/
 ---
 
-Use the {% include explorer/link.html %} to browse the collection of PCjs Software.
+Use the {% include explorer/link.html %} to browse the entire collection of PCjs Software.
 
 {%- include gallery/featured.html title="Featured Software" width="200" height="128" -%}

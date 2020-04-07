@@ -4,6 +4,7 @@ title: PCx86 Machines
 permalink: /machines/pcx86/
 redirect_from:
   - /devices/pcx86/machine/
+  - /devices/pcx86/rom/
   - /docs/pcx86/
 ---
 

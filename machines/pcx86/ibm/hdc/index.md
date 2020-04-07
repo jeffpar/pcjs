@@ -2,7 +2,7 @@
 layout: page
 title: IBM PC Hard Drives (Fixed Disks)
 permalink: /machines/pcx86/ibm/hdc/
-redirect_from: /devices/pcx86/machine/5160/
+redirect_from: /disks/pcx86/drives/
 ---
 
 See the [PC Hard Drive Types](/configs/pcx86/hdc/) supported by PCjs.

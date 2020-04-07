@@ -8,7 +8,7 @@ redirect_from: /devices/pcx86/video/compaq/vga/
 This is the COMPAQ Video Graphics Controller Board, one of the earliest VGA boards COMPAQ released
 for its DeskPro 386 line.
 
-[<img src="https://www.pcjs.org/devices/pcx86/video/compaq/vga/109360-001/Compaq_VGA_109360-001-640.jpg" alt="COMPAQ VGA Board"/>](https://www.pcjs.org/devices/pcx86/video/compaq/vga/109360-001/Compaq_VGA_109360-001.jpg)
+[<img src="/machines/pcx86/compaq/video/vga/109360-001/Compaq_VGA_109360-001-640.jpg" alt="COMPAQ VGA Board"/>](/machines/pcx86/compaq/video/vga/109360-001/Compaq_VGA_109360-001.jpg)
 
 It was featured in the February 16, 1988 of PC Magazine (p.188).  At that time, it retailed for $599, and it was described
 as "the sharpest, fastest IBM-standard video board you can slide into your PC."  The article goes on to say:

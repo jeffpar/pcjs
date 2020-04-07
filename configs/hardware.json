@@ -130,6 +130,9 @@
         "vt100": {
           "@title": "PDP-11/70 with VT100",
           "@redirect_from": "/devices/pdp11/machine/1170/vt100/"
+        },
+        "": {
+          "@title": "Documentation"
         }
       },
       "@documents": [
