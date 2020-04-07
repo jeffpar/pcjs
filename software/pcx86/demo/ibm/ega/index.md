@@ -2,7 +2,9 @@
 layout: page
 title: Fantasy Land EGA Demo and Utilities
 permalink: /software/pcx86/demo/ibm/ega/
-redirect_from: /disks/pcx86/apps/ibm/fland/
+redirect_from:
+  - /disks/pcx86/apps/ibm/fland/
+  - /disks/pcx86/diags/ibm/ega/
 preview: images/fland-legend.png
 machines:
   - id: ibm5160
@@ -23,6 +25,8 @@ This IBM EGA demo was first discussed in the "[FantasyLand](/blog/2017/07/03/)" 
 A detailed [description](#description-of-fantasy-land) of the software, along with
 [configuration details](#configuration-details), [directory listing](#directory-of-ibm-ega-fantasy-land-demo),
 and [screenshots](#fantasy-land-screenshots-from-pcjs), are provided below.
+
+A configuration with the [PCjs Debugger](debugger/) and **Diagnostic Font Bank Displays** is available as well.
 
 Watch Fantasy Land run through its automated tour in the machine below.  Wait for the introductory screen to
 display "PRESS ANY KEY TO CONTINUE", press a key, and then the tour will begin.
