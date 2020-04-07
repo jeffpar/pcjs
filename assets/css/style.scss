@@ -477,6 +477,9 @@ div.pcjs-gallery-image a {
   }
 }
 @media screen and (max-width: 800px) {
+  .pcjs-textarea {
+    width: 100% !important;
+  }
   .pcjs-registers {
     width: 100% !important;
     max-width: none !important;
