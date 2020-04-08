@@ -6,22 +6,6 @@ redirect_from:
   - /devices/
 ---
 
-{% if site.developer %}
-
-### TODO
-
-  - Check redirects for the [top links](/assets/tests/links/)
-  - Turn the TI patents into a gallery: https://www.pcjs.org/devices/ti57/patents/
-  - Machines like [DEC PDP-11/70 with VT100 Terminal](/machines/dec/pdp11/1170/vt100/) used to use special CSS classes (`machine-right` and `machine-left`) to arrange the machines side-by-side; think about alternatives.
-  - Retest all VT100 connection demos (eg, [DEC VT100 Terminal connected to IBM PC AT](/machines/dec/vt100/5170/), [DEC PDP-11/70 with VT100 Terminal](/machines/dec/pdp11/1170/vt100/), and [Connecting an IBM PC to a DEC VT100 Terminal](/blog/2016/08/19/)).
-  - Finish moving all /archive folders from the old repo to the new
-  - Add a page for Invaders Boot Sector (2019)
-  - Someone may have linked to text files like /apps/pdp10/diags/ka10/dakam/DAKAM.LST.txt; not sure we can provide redirects for those....
-
----
-
-{% endif %}
-
 PCjs uses JavaScript to recreate the IBM PC experience, using original ROMs, CPUs running at their original speeds,
 and early IBM video cards and monitors, including the classic green monochrome MDA monitor and the venerable "flickery" CGA monitor.
 

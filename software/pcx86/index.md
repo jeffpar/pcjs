@@ -5,6 +5,7 @@ permalink: /software/pcx86/
 redirect_from:
   - /disks/pcx86/dos/
   - /disks/pcx86/
+  - /apps/pcx86/
 ---
 
 Use the {% include explorer/link.html %} to browse the collection of PC software for IBM PCs and compatibles.
