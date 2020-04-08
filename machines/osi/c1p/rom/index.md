@@ -2,6 +2,7 @@
 layout: page
 title: OSI Challenger 1P ROMs
 permalink: /machines/osi/c1p/rom/
+redirect_from: /devices/c1p/rom/
 ---
 
 The following ROMs are available:
