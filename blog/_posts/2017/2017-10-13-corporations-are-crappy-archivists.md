@@ -88,7 +88,7 @@ theorized that the reason Q46369 had disappeared was because it was flagged (inc
 and Microsoft may have decided to expunge everything OS/2-related at some point.
 
 It wasn't until I tried some old Microsoft Programmer's Library CD-ROMs, circa 1991, that I finally had success.
-Using the "[Microsoft Programmer's Library 1.3]({{ site.archive.ms.server }}/mspl13/)" CD-ROM and searching within
+Using the "[Microsoft Programmer's Library 1.3](/documents/books/mspl13/)" CD-ROM and searching within
 the "MS KnowledgeBase - C" section of the "C References" library did the trick.
 
 ![Screenshot of Microsoft Programmer's Library 1.3: Q12230](/blog/images/mspl13-q12230.jpg)
@@ -113,11 +113,11 @@ what the "shelf life" of this information should be.  It's certainly their right
 be encouraged.
 
 In an effort to unlock this data from an ancient CD-ROM that few people still have, let alone know what it contains,
-I've taken all the articles from the "MS KnowledgeBase - C" section and created a small [KB Article Archive]({{ site.archive.ms.server }}/kb/).
+I've taken all the articles from the "MS KnowledgeBase - C" section and created a small [KB Article Archive](/documents/books/mspl13/kb/).
 We can now finally provide links to both of the KB articles referenced above:
 
-- [Q12230: IRQ Settings and Mouse Installation]({{ site.archive.ms.server }}/kb/Q12230/)
-- [Q46369: InPort/Bus Mouse Comparison and Overview]({{ site.archive.ms.server }}/kb/Q46369/)
+- [Q12230: IRQ Settings and Mouse Installation]({{ site.archive.kb.server }}/kb/012/Q12230/)
+- [Q46369: InPort/Bus Mouse Comparison and Overview]({{ site.archive.kb.server }}/kb/046/Q46369/)
 
 so that anyone else looking for KB articles from that era might have an easier time, but more importantly, so that
 the information is *preserved* in a meaningful and useful way.
