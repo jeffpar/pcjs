@@ -2,7 +2,9 @@
 layout: page
 title: Microsoft BASIC Compiler 5.36
 permalink: /software/pcx86/lang/microsoft/basic/compiler/5.36/
-redirect_from: /disks/pcx86/tools/microsoft/basic/compiler/5.36/
+redirect_from:
+  - /disks/pcx86/tools/microsoft/basic/compiler/5.36/
+  - /disks/pcx86/tools/microsoft/basic/compiler/
 ---
 
 The only version of the Microsoft BASIC Compiler we have added to the project so far is
