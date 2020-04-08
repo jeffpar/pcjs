@@ -169,6 +169,19 @@
   "magazines": {
     "@title": "Magazines",
     "@instances": {
+      "byte": {
+        "@title": "BYTE",
+        "@redirect_from": "/pubs/pc/magazines/byte/",
+        "@documents": [
+          {
+            "@title": "BYTE, November 1975",
+            "@file": "BYTE-1975-11.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9vy11Mk-GTd5g54Ob?e=VwrFh9",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          }
+        ]
+      },
       "dgn": {
         "@title": "DosGetNews()",
         "@redirect_from": "/pubs/pc/magazines/dgn/",

@@ -1,0 +1,1933 @@
+     1                                  ;
+     2                                  ;   trace.nasm
+     3                                  ;   Copyright © 2012-2015 Jeff Parsons <Jeff@pcjs.org>
+     4                                  ;
+     5                                  ;   This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
+     6                                  ;
+     7                                  ;
+     8                                  ;   PCjs is free software: you can redistribute it and/or modify it under the terms of the
+     9                                  ;   GNU General Public License as published by the Free Software Foundation, either version 3
+    10                                  ;   of the License, or (at your option) any later version.
+    11                                  ;
+    12                                  ;   PCjs is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+    13                                  ;   even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    14                                  ;   GNU General Public License for more details.
+    15                                  ;
+    16                                  ;   You should have received a copy of the GNU General Public License along with PCjs.  If not,
+    17                                  ;   see <http://www.gnu.org/licenses/gpl.html>.
+    18                                  ;
+    19                                  ;   You are required to include the above copyright notice in every source code file of every
+    20                                  ;   copy or modified version of this work, and to display that copyright notice on every screen
+    21                                  ;   that loads or runs any version of this software (see Computer.sCopyright).
+    22                                  ;
+    23                                  ;   Some PCjs files also attempt to load external resource files, such as character-image files,
+    24                                  ;   ROM files, and disk image files. Those external resource files are not considered part of the
+    25                                  ;   PCjs program for purposes of the GNU General Public License, and the author does not claim
+    26                                  ;   any copyright as to their contents.
+    27                                  ;
+    28                                  ;   Overview
+    29                                  ;   --------
+    30                                  ;   Takes an instruction log, as recorded by the Debugger's traceLog() function, and
+    31                                  ;   "plays" the instructions back on another machine DOS-compatible 8086 machine, verifying that:
+    32                                  ;
+    33                                  ;	1) results match the recorded results
+    34                                  ;	2) any "modified" flags match the recorded flags
+    35                                  ;	3) any "unmodified" flags remain unmodified
+    36                                  ;
+    37                                  ;   The format of an instruction log entry is a series of lines (ASCII characters terminated by an LF),
+    38                                  ;   where each line looks like:
+    39                                  ;
+    40                                  ;	F000:EEFF SHL(0480,0002,F006) 1200,F006
+    41                                  ;
+    42                                  ;   ie, address, space, instruction, parenthesis, dst operand, comma, src operand, comma,
+    43                                  ;   input flags, parenthesis, space, result, comma, and output flags.
+    44                                  ;
+    45                                  ;   WARNING: For the shift and rotate tests to pass on a real x86 CPU, we either have to distinguish
+    46                                  ;   between single-bit shifts and multi-bit shifts (because the latter leaves PS_OF in an "undefined"
+    47                                  ;   state), or we have to ignore PS_OF altogether.  For now, I'm specifying PS_ALL_BUT_OF for those
+    48                                  ;   instructions, even though we'll be missing OVERFLOW validation for all single-bit shifts and rotates.
+    49                                  ;
+    50                                  	CPU 8086
+    51                                  ;
+    52                                  ;   Bit masks for all the arithmetic flags we care about
+    53                                  ;
+    54                                  PS_NONE equ	0x0000
+    55                                  PS_CF	equ	0x0001		; bit 0: Carry flag
+    56                                  PS_PF	equ	0x0004		; bit 2: Parity flag
+    57                                  PS_AF	equ	0x0010		; bit 4: Auxiliary Carry flag (aka Arithmetic flag)
+    58                                  PS_ZF	equ	0x0040		; bit 6: Zero flag
+    59                                  PS_SF	equ	0x0080		; bit 7: Sign flag
+    60                                  PS_OF	equ	0x0800		; bit 11: Overflow flag
+    61                                  PS_ALL		equ	PS_CF | PS_PF | PS_AF | PS_ZF | PS_SF | PS_OF
+    62                                  PS_ALL_BUT_AF	equ	PS_CF | PS_PF	      | PS_ZF | PS_SF | PS_OF
+    63                                  PS_ALL_BUT_OF	equ	PS_CF | PS_PF | PS_AF | PS_ZF | PS_SF
+    64
+    65                                  %macro	openF	1
+    66                                  	section .data
+    67                                  %%name: db	%1,0
+    68                                  	section .text
+    69                                  	mov	dx,%%name
+    70                                  	mov	ax,0x3D00
+    71                                  	int	0x21
+    72                                  %endmacro
+    73
+    74                                  %macro	readF	3
+    75                                  	%ifnidni %1,bx
+    76                                  	mov	bx,%1
+    77                                  	%endif
+    78                                  	%ifnidni %2,dx
+    79                                  	mov	dx,%2
+    80                                  	%endif
+    81                                  	%ifnidni %3,cx
+    82                                  	mov	cx,%3
+    83                                  	%endif
+    84                                  	mov	ah,0x3F
+    85                                  	int	0x21
+    86                                  %endmacro
+    87
+    88                                  %macro	print	1
+    89                                  	%ifidni %1,line
+    90                                  	push	ax
+    91                                  	push	cx
+    92                                  	push	dx
+    93                                  	push	si
+    94                                  	mov	dx,si
+    95                                  	dec	cx
+    96                                  	add	si,cx
+    97                                  	mov	byte [si],'$'
+    98                                  	mov	ah,0x09
+    99                                  	int	0x21
+   100                                  	mov	dx,strCRLF
+   101                                  	mov	ah,0x09
+   102                                  	int	0x21
+   103                                  	pop	si
+   104                                  	pop	dx
+   105                                  	pop	cx
+   106                                  	pop	ax
+   107                                  	%else
+   108                                  	%ifstr %1
+   109                                  	section .data
+   110                                  %%str:	db	%1,'$'
+   111                                  	section .text
+   112                                  	push	dx
+   113                                  	mov	dx,%%str
+   114                                  	%elifnidni %1,dx
+   115                                  	push	dx
+   116                                  	mov	dx,%1
+   117                                  	%endif
+   118                                  	push	ax
+   119                                  	mov	ah,0x09
+   120                                  	int	0x21
+   121                                  	pop	ax
+   122                                  	%ifnidni %1,dx
+   123                                  	pop	dx
+   124                                  	%endif
+   125                                  	%endif
+   126                                  %endmacro
+   127
+   128                                  %macro	exit	0-2
+   129                                  	%ifstr %1
+   130                                  	section .data
+   131                                  %%msg:	db	%1,'$'
+   132                                  	section .text
+   133                                  	%ifidni %2,oncarry
+   134                                  	jnc	%%ok
+   135                                  	%endif
+   136                                  	mov	dx,%%msg
+   137                                  	mov	ah,0x09
+   138                                  	int	0x21
+   139                                  	%endif
+   140                                  	int	0x20
+   141                                  %%ok:
+   142                                  %endmacro
+   143
+   144                                  %macro	break	0
+   145                                  ;
+   146                                  ;   "int3" generates the 1-byte breakpoint instruction; "int 3" generates a 2-byte software interrupt
+   147                                  ;
+   148                                  	int3
+   149                                  %endmacro
+   150
+   151                                  	org	0x100
+   152                                  	section .text
+   153
+   154                                  	openF	"TRACE.TXT"
+   155                              <1>  section .data
+   156 00000000 54524143452E545854- <1> %%name: db %1,0
+   157 00000009 00                  <1>
+   158                              <1>  section .text
+   159 00000000 BA[0000]            <1>  mov dx,%%name
+   160 00000003 B8003D              <1>  mov ax,0x3D00
+   161 00000006 CD21                <1>  int 0x21
+   162                                  	exit	"unable to open file",oncarry
+   163                              <1>  %ifstr %1
+   164                              <1>  section .data
+   165 0000000A 756E61626C6520746F- <1> %%msg: db %1,'$'
+   166 00000013 206F70656E2066696C- <1>
+   167 0000001C 6524                <1>
+   168                              <1>  section .text
+   169                              <1>  %ifidni %2,oncarry
+   170 00000008 7309                <1>  jnc %%ok
+   171                              <1>  %endif
+   172 0000000A BA[0A00]            <1>  mov dx,%%msg
+   173 0000000D B409                <1>  mov ah,0x09
+   174 0000000F CD21                <1>  int 0x21
+   175                              <1>  %endif
+   176 00000011 CD20                <1>  int 0x20
+   177                              <1> %%ok:
+   178
+   179 00000013 BF[2B00]                	mov	di,file_buffer
+   180                                  	readF	ax,di,file_buffer_len
+   181                              <1>  %ifnidni %1,bx
+   182 00000016 89C3                <1>  mov bx,%1
+   183                              <1>  %endif
+   184                              <1>  %ifnidni %2,dx
+   185 00000018 89FA                <1>  mov dx,%2
+   186                              <1>  %endif
+   187                              <1>  %ifnidni %3,cx
+   188 0000001A B90010              <1>  mov cx,%3
+   189                              <1>  %endif
+   190 0000001D B43F                <1>  mov ah,0x3F
+   191 0000001F CD21                <1>  int 0x21
+   192
+   193                                  m1:	exit	"unable to read file",oncarry
+   194                              <1> m1:
+   195                              <1>  %ifstr %1
+   196                              <1>  section .data
+   197 0000001E 756E61626C6520746F- <1> %%msg: db %1,'$'
+   198 00000027 20726561642066696C- <1>
+   199 00000030 6524                <1>
+   200                              <1>  section .text
+   201                              <1>  %ifidni %2,oncarry
+   202 00000021 7309                <1>  jnc %%ok
+   203                              <1>  %endif
+   204 00000023 BA[1E00]            <1>  mov dx,%%msg
+   205 00000026 B409                <1>  mov ah,0x09
+   206 00000028 CD21                <1>  int 0x21
+   207                              <1>  %endif
+   208 0000002A CD20                <1>  int 0x20
+   209                              <1> %%ok:
+   210
+   211 0000002C 85C0                    	test	ax,ax		; AX contains how many bytes were actually read
+   212 0000002E 7509                    	jnz	m2
+   213                                  	exit	"processing complete"
+   214                              <1>  %ifstr %1
+   215                              <1>  section .data
+   216 00000032 70726F63657373696E- <1> %%msg: db %1,'$'
+   217 0000003B 6720636F6D706C6574- <1>
+   218 00000044 6524                <1>
+   219                              <1>  section .text
+   220                              <1>  %ifidni %2,oncarry
+   221                              <1>  jnc %%ok
+   222                              <1>  %endif
+   223 00000030 BA[3200]            <1>  mov dx,%%msg
+   224 00000033 B409                <1>  mov ah,0x09
+   225 00000035 CD21                <1>  int 0x21
+   226                              <1>  %endif
+   227 00000037 CD20                <1>  int 0x20
+   228                              <1> %%ok:
+   229
+   230 00000039 FC                      m2:	cld
+   231 0000003A BE[2B00]                	mov	si,file_buffer
+   232 0000003D 01C7                    	add	di,ax
+   233                                  ;
+   234                                  ;   At this point, DS:SI is the current line pointer, and DI is the end-of-buffer
+   235                                  ;   position.  getLine() will update CX to the length of the current line (including
+   236                                  ;   the terminating LF).
+   237                                  ;
+   238 0000003F E8D303                  m3:	call	getLine
+   239 00000042 7312                    	jnc	m4
+   240                                  ;
+   241                                  ;   Oops, carry is set, so we're missing part or all of the next line.  Move the
+   242                                  ;   partial line to the top of the file buffer and then fill the rest of the buffer.
+   243                                  ;
+   244 00000044 BF[2B00]                	mov	di,file_buffer
+   245 00000047 F3A4                    	rep	movsb
+   246 00000049 B9[2B10]                	mov	cx,file_buffer_end
+   247 0000004C 29F9                    	sub	cx,di
+   248                                  	readF	bx,di,cx
+   249                              <1>  %ifnidni %1,bx
+   250                              <1>  mov bx,%1
+   251                              <1>  %endif
+   252                              <1>  %ifnidni %2,dx
+   253 0000004E 89FA                <1>  mov dx,%2
+   254                              <1>  %endif
+   255                              <1>  %ifnidni %3,cx
+   256                              <1>  mov cx,%3
+   257                              <1>  %endif
+   258 00000050 B43F                <1>  mov ah,0x3F
+   259 00000052 CD21                <1>  int 0x21
+   260 00000054 EBCB                    	jmp	m1
+   261                                  ;
+   262                                  ;   OK, we now have a complete line at DS:SI, guaranteed to end with an LF, with a
+   263                                  ;   length of CX (although CX will soon be overwritten by calls to getHex).
+   264                                  ;
+   265                                  m4:
+   266                                  ;	print	line
+   267
+   268 00000056 B420                    	mov	ah,' '
+   269 00000058 E8CD03                  	call	skipTo
+   270                                  m4err:	exit	"missing space",oncarry
+   271                              <1> m4err:
+   272                              <1>  %ifstr %1
+   273                              <1>  section .data
+   274 00000046 6D697373696E672073- <1> %%msg: db %1,'$'
+   275 0000004F 7061636524          <1>
+   276                              <1>  section .text
+   277                              <1>  %ifidni %2,oncarry
+   278 0000005B 7309                <1>  jnc %%ok
+   279                              <1>  %endif
+   280 0000005D BA[4600]            <1>  mov dx,%%msg
+   281 00000060 B409                <1>  mov ah,0x09
+   282 00000062 CD21                <1>  int 0x21
+   283                              <1>  %endif
+   284 00000064 CD20                <1>  int 0x20
+   285                              <1> %%ok:
+   286 00000066 46                      	inc	si
+   287 00000067 57                      	push	di
+   288 00000068 BF[0000]                	mov	di,ins_name
+   289 0000006B AC                      m5:	lodsb
+   290 0000006C 3C28                    	cmp	al,'('
+   291 0000006E 7403                    	je	m6
+   292 00000070 AA                      	stosb
+   293 00000071 EBF8                    	jmp	m5
+   294 00000073 B024                    m6:	mov	al,'$'
+   295 00000075 AA                      	stosb
+   296 00000076 5F                      	pop	di
+   297
+   298                                  	print	ins_name
+   299                              <1>  %ifidni %1,line
+   300                              <1>  push ax
+   301                              <1>  push cx
+   302                              <1>  push dx
+   303                              <1>  push si
+   304                              <1>  mov dx,si
+   305                              <1>  dec cx
+   306                              <1>  add si,cx
+   307                              <1>  mov byte [si],'$'
+   308                              <1>  mov ah,0x09
+   309                              <1>  int 0x21
+   310                              <1>  mov dx,strCRLF
+   311                              <1>  mov ah,0x09
+   312                              <1>  int 0x21
+   313                              <1>  pop si
+   314                              <1>  pop dx
+   315                              <1>  pop cx
+   316                              <1>  pop ax
+   317                              <1>  %else
+   318                              <1>  %ifstr %1
+   319                              <1>  section .data
+   320                              <1> %%str: db %1,'$'
+   321                              <1>  section .text
+   322                              <1>  push dx
+   323                              <1>  mov dx,%%str
+   324                              <1>  %elifnidni %1,dx
+   325 00000077 52                  <1>  push dx
+   326 00000078 BA[0000]            <1>  mov dx,%1
+   327                              <1>  %endif
+   328 0000007B 50                  <1>  push ax
+   329 0000007C B409                <1>  mov ah,0x09
+   330 0000007E CD21                <1>  int 0x21
+   331 00000080 58                  <1>  pop ax
+   332                              <1>  %ifnidni %1,dx
+   333 00000081 5A                  <1>  pop dx
+   334                              <1>  %endif
+   335                              <1>  %endif
+   336                                  	print	strColon
+   337                              <1>  %ifidni %1,line
+   338                              <1>  push ax
+   339                              <1>  push cx
+   340                              <1>  push dx
+   341                              <1>  push si
+   342                              <1>  mov dx,si
+   343                              <1>  dec cx
+   344                              <1>  add si,cx
+   345                              <1>  mov byte [si],'$'
+   346                              <1>  mov ah,0x09
+   347                              <1>  int 0x21
+   348                              <1>  mov dx,strCRLF
+   349                              <1>  mov ah,0x09
+   350                              <1>  int 0x21
+   351                              <1>  pop si
+   352                              <1>  pop dx
+   353                              <1>  pop cx
+   354                              <1>  pop ax
+   355                              <1>  %else
+   356                              <1>  %ifstr %1
+   357                              <1>  section .data
+   358                              <1> %%str: db %1,'$'
+   359                              <1>  section .text
+   360                              <1>  push dx
+   361                              <1>  mov dx,%%str
+   362                              <1>  %elifnidni %1,dx
+   363 00000082 52                  <1>  push dx
+   364 00000083 BA[1F01]            <1>  mov dx,%1
+   365                              <1>  %endif
+   366 00000086 50                  <1>  push ax
+   367 00000087 B409                <1>  mov ah,0x09
+   368 00000089 CD21                <1>  int 0x21
+   369 0000008B 58                  <1>  pop ax
+   370                              <1>  %ifnidni %1,dx
+   371 0000008C 5A                  <1>  pop dx
+   372                              <1>  %endif
+   373                              <1>  %endif
+   374
+   375 0000008D E80C03                  	call	getHex
+   376 00000090 A3[0A00]                	mov	[dst_operand],ax
+   377 00000093 8916[0C00]              	mov	[dst_operand+2],dx
+   378 00000097 890E[0E00]              	mov	[dst_size],cx
+   379 0000009B E83503                  	call	printHex
+   380                                  	print	strComma
+   381                              <1>  %ifidni %1,line
+   382                              <1>  push ax
+   383                              <1>  push cx
+   384                              <1>  push dx
+   385                              <1>  push si
+   386                              <1>  mov dx,si
+   387                              <1>  dec cx
+   388                              <1>  add si,cx
+   389                              <1>  mov byte [si],'$'
+   390                              <1>  mov ah,0x09
+   391                              <1>  int 0x21
+   392                              <1>  mov dx,strCRLF
+   393                              <1>  mov ah,0x09
+   394                              <1>  int 0x21
+   395                              <1>  pop si
+   396                              <1>  pop dx
+   397                              <1>  pop cx
+   398                              <1>  pop ax
+   399                              <1>  %else
+   400                              <1>  %ifstr %1
+   401                              <1>  section .data
+   402                              <1> %%str: db %1,'$'
+   403                              <1>  section .text
+   404                              <1>  push dx
+   405                              <1>  mov dx,%%str
+   406                              <1>  %elifnidni %1,dx
+   407 0000009E 52                  <1>  push dx
+   408 0000009F BA[2301]            <1>  mov dx,%1
+   409                              <1>  %endif
+   410 000000A2 50                  <1>  push ax
+   411 000000A3 B409                <1>  mov ah,0x09
+   412 000000A5 CD21                <1>  int 0x21
+   413 000000A7 58                  <1>  pop ax
+   414                              <1>  %ifnidni %1,dx
+   415 000000A8 5A                  <1>  pop dx
+   416                              <1>  %endif
+   417                              <1>  %endif
+   418
+   419 000000A9 46                      	inc	si
+   420 000000AA E8EF02                  	call	getHex
+   421 000000AD A3[1000]                	mov	[src_operand],ax
+   422 000000B0 8916[1200]              	mov	[src_operand+2],dx
+   423 000000B4 890E[1400]              	mov	[src_size],cx
+   424 000000B8 E81803                  	call	printHex
+   425
+   426 000000BB 46                      	inc	si
+   427 000000BC E8DD02                  	call	getHex
+   428 000000BF 25D508                  	and	ax,PS_ALL
+   429 000000C2 A3[1600]                	mov	[operand_flags],ax
+   430 000000C5 E30E                    	jcxz	m6b
+   431                                  	print	strComma
+   432                              <1>  %ifidni %1,line
+   433                              <1>  push ax
+   434                              <1>  push cx
+   435                              <1>  push dx
+   436                              <1>  push si
+   437                              <1>  mov dx,si
+   438                              <1>  dec cx
+   439                              <1>  add si,cx
+   440                              <1>  mov byte [si],'$'
+   441                              <1>  mov ah,0x09
+   442                              <1>  int 0x21
+   443                              <1>  mov dx,strCRLF
+   444                              <1>  mov ah,0x09
+   445                              <1>  int 0x21
+   446                              <1>  pop si
+   447                              <1>  pop dx
+   448                              <1>  pop cx
+   449                              <1>  pop ax
+   450                              <1>  %else
+   451                              <1>  %ifstr %1
+   452                              <1>  section .data
+   453                              <1> %%str: db %1,'$'
+   454                              <1>  section .text
+   455                              <1>  push dx
+   456                              <1>  mov dx,%%str
+   457                              <1>  %elifnidni %1,dx
+   458 000000C7 52                  <1>  push dx
+   459 000000C8 BA[2301]            <1>  mov dx,%1
+   460                              <1>  %endif
+   461 000000CB 50                  <1>  push ax
+   462 000000CC B409                <1>  mov ah,0x09
+   463 000000CE CD21                <1>  int 0x21
+   464 000000D0 58                  <1>  pop ax
+   465                              <1>  %ifnidni %1,dx
+   466 000000D1 5A                  <1>  pop dx
+   467                              <1>  %endif
+   468                              <1>  %endif
+   469 000000D2 E8FE02                  	call	printHex
+   470
+   471 000000D5 B420                    m6b:	mov	ah,' '
+   472 000000D7 E84E03                  	call	skipTo
+   473 000000DA 7303E97CFF              	jc	m4err
+   474 000000DF 46                      	inc	si
+   475 000000E0 E8B902                  	call	getHex
+   476 000000E3 A3[1A00]                	mov	[result_operand],ax
+   477 000000E6 8916[1C00]              	mov	[result_operand+2],dx
+   478 000000EA 890E[1E00]              	mov	[result_size],cx
+   479                                  	print	strEquals
+   480                              <1>  %ifidni %1,line
+   481                              <1>  push ax
+   482                              <1>  push cx
+   483                              <1>  push dx
+   484                              <1>  push si
+   485                              <1>  mov dx,si
+   486                              <1>  dec cx
+   487                              <1>  add si,cx
+   488                              <1>  mov byte [si],'$'
+   489                              <1>  mov ah,0x09
+   490                              <1>  int 0x21
+   491                              <1>  mov dx,strCRLF
+   492                              <1>  mov ah,0x09
+   493                              <1>  int 0x21
+   494                              <1>  pop si
+   495                              <1>  pop dx
+   496                              <1>  pop cx
+   497                              <1>  pop ax
+   498                              <1>  %else
+   499                              <1>  %ifstr %1
+   500                              <1>  section .data
+   501                              <1> %%str: db %1,'$'
+   502                              <1>  section .text
+   503                              <1>  push dx
+   504                              <1>  mov dx,%%str
+   505                              <1>  %elifnidni %1,dx
+   506 000000EE 52                  <1>  push dx
+   507 000000EF BA[2101]            <1>  mov dx,%1
+   508                              <1>  %endif
+   509 000000F2 50                  <1>  push ax
+   510 000000F3 B409                <1>  mov ah,0x09
+   511 000000F5 CD21                <1>  int 0x21
+   512 000000F7 58                  <1>  pop ax
+   513                              <1>  %ifnidni %1,dx
+   514 000000F8 5A                  <1>  pop dx
+   515                              <1>  %endif
+   516                              <1>  %endif
+   517 000000F9 E8D702                  	call	printHex
+   518                                  	print	strComma
+   519                              <1>  %ifidni %1,line
+   520                              <1>  push ax
+   521                              <1>  push cx
+   522                              <1>  push dx
+   523                              <1>  push si
+   524                              <1>  mov dx,si
+   525                              <1>  dec cx
+   526                              <1>  add si,cx
+   527                              <1>  mov byte [si],'$'
+   528                              <1>  mov ah,0x09
+   529                              <1>  int 0x21
+   530                              <1>  mov dx,strCRLF
+   531                              <1>  mov ah,0x09
+   532                              <1>  int 0x21
+   533                              <1>  pop si
+   534                              <1>  pop dx
+   535                              <1>  pop cx
+   536                              <1>  pop ax
+   537                              <1>  %else
+   538                              <1>  %ifstr %1
+   539                              <1>  section .data
+   540                              <1> %%str: db %1,'$'
+   541                              <1>  section .text
+   542                              <1>  push dx
+   543                              <1>  mov dx,%%str
+   544                              <1>  %elifnidni %1,dx
+   545 000000FC 52                  <1>  push dx
+   546 000000FD BA[2301]            <1>  mov dx,%1
+   547                              <1>  %endif
+   548 00000100 50                  <1>  push ax
+   549 00000101 B409                <1>  mov ah,0x09
+   550 00000103 CD21                <1>  int 0x21
+   551 00000105 58                  <1>  pop ax
+   552                              <1>  %ifnidni %1,dx
+   553 00000106 5A                  <1>  pop dx
+   554                              <1>  %endif
+   555                              <1>  %endif
+   556
+   557 00000107 46                      	inc	si
+   558 00000108 E89102                  	call	getHex
+   559 0000010B 25D508                  	and	ax,PS_ALL
+   560 0000010E A3[2000]                	mov	[result_flags],ax
+   561 00000111 E8BF02                  	call	printHex
+   562                                  	print	strCRLF
+   563                              <1>  %ifidni %1,line
+   564                              <1>  push ax
+   565                              <1>  push cx
+   566                              <1>  push dx
+   567                              <1>  push si
+   568                              <1>  mov dx,si
+   569                              <1>  dec cx
+   570                              <1>  add si,cx
+   571                              <1>  mov byte [si],'$'
+   572                              <1>  mov ah,0x09
+   573                              <1>  int 0x21
+   574                              <1>  mov dx,strCRLF
+   575                              <1>  mov ah,0x09
+   576                              <1>  int 0x21
+   577                              <1>  pop si
+   578                              <1>  pop dx
+   579                              <1>  pop cx
+   580                              <1>  pop ax
+   581                              <1>  %else
+   582                              <1>  %ifstr %1
+   583                              <1>  section .data
+   584                              <1> %%str: db %1,'$'
+   585                              <1>  section .text
+   586                              <1>  push dx
+   587                              <1>  mov dx,%%str
+   588                              <1>  %elifnidni %1,dx
+   589 00000114 52                  <1>  push dx
+   590 00000115 BA[1C01]            <1>  mov dx,%1
+   591                              <1>  %endif
+   592 00000118 50                  <1>  push ax
+   593 00000119 B409                <1>  mov ah,0x09
+   594 0000011B CD21                <1>  int 0x21
+   595 0000011D 58                  <1>  pop ax
+   596                              <1>  %ifnidni %1,dx
+   597 0000011E 5A                  <1>  pop dx
+   598                              <1>  %endif
+   599                              <1>  %endif
+   600                                  ;
+   601                                  ;   Now that we know operand sizes, it's time to look up the instruction function
+   602                                  ;
+   603 0000011F 56                      	push	si
+   604 00000120 BE[AD00]                	mov	si,ins_table
+   605 00000123 57                      	push	di
+   606 00000124 BF[0000]                m7a:	mov	di,ins_name
+   607 00000127 AC                      m7b:	lodsb
+   608 00000128 84C0                    	test	al,al
+   609 0000012A 742E                    	jz	m8
+   610 0000012C 268A25                  	mov	ah,[es:di]
+   611 0000012F 47                      	inc	di
+   612 00000130 38E0                    	cmp	al,ah
+   613 00000132 74F3                    	je	m7b
+   614 00000134 AC                      m7c:	lodsb
+   615 00000135 84C0                    	test	al,al
+   616 00000137 75FB                    	jnz	m7c
+   617 00000139 81C60800                	add	si,8		; after then name, each ins_table entry is 4 words long
+   618 0000013D 803C00                  	cmp	byte [si],0
+   619 00000140 75E2                    	jne	m7a
+   620                                  	print	"missing function: "
+   621                              <1>  %ifidni %1,line
+   622                              <1>  push ax
+   623                              <1>  push cx
+   624                              <1>  push dx
+   625                              <1>  push si
+   626                              <1>  mov dx,si
+   627                              <1>  dec cx
+   628                              <1>  add si,cx
+   629                              <1>  mov byte [si],'$'
+   630                              <1>  mov ah,0x09
+   631                              <1>  int 0x21
+   632                              <1>  mov dx,strCRLF
+   633                              <1>  mov ah,0x09
+   634                              <1>  int 0x21
+   635                              <1>  pop si
+   636                              <1>  pop dx
+   637                              <1>  pop cx
+   638                              <1>  pop ax
+   639                              <1>  %else
+   640                              <1>  %ifstr %1
+   641                              <1>  section .data
+   642 00000054 6D697373696E672066- <1> %%str: db %1,'$'
+   643 0000005D 756E6374696F6E3A20- <1>
+   644 00000066 24                  <1>
+   645                              <1>  section .text
+   646 00000142 52                  <1>  push dx
+   647 00000143 BA[5400]            <1>  mov dx,%%str
+   648                              <1>  %elifnidni %1,dx
+   649                              <1>  push dx
+   650                              <1>  mov dx,%1
+   651                              <1>  %endif
+   652 00000146 50                  <1>  push ax
+   653 00000147 B409                <1>  mov ah,0x09
+   654 00000149 CD21                <1>  int 0x21
+   655 0000014B 58                  <1>  pop ax
+   656                              <1>  %ifnidni %1,dx
+   657 0000014C 5A                  <1>  pop dx
+   658                              <1>  %endif
+   659                              <1>  %endif
+   660                                  	print	ins_name
+   661                              <1>  %ifidni %1,line
+   662                              <1>  push ax
+   663                              <1>  push cx
+   664                              <1>  push dx
+   665                              <1>  push si
+   666                              <1>  mov dx,si
+   667                              <1>  dec cx
+   668                              <1>  add si,cx
+   669                              <1>  mov byte [si],'$'
+   670                              <1>  mov ah,0x09
+   671                              <1>  int 0x21
+   672                              <1>  mov dx,strCRLF
+   673                              <1>  mov ah,0x09
+   674                              <1>  int 0x21
+   675                              <1>  pop si
+   676                              <1>  pop dx
+   677                              <1>  pop cx
+   678                              <1>  pop ax
+   679                              <1>  %else
+   680                              <1>  %ifstr %1
+   681                              <1>  section .data
+   682                              <1> %%str: db %1,'$'
+   683                              <1>  section .text
+   684                              <1>  push dx
+   685                              <1>  mov dx,%%str
+   686                              <1>  %elifnidni %1,dx
+   687 0000014D 52                  <1>  push dx
+   688 0000014E BA[0000]            <1>  mov dx,%1
+   689                              <1>  %endif
+   690 00000151 50                  <1>  push ax
+   691 00000152 B409                <1>  mov ah,0x09
+   692 00000154 CD21                <1>  int 0x21
+   693 00000156 58                  <1>  pop ax
+   694                              <1>  %ifnidni %1,dx
+   695 00000157 5A                  <1>  pop dx
+   696                              <1>  %endif
+   697                              <1>  %endif
+   698                                  	exit
+   699                              <1>  %ifstr %1
+   700                              <1>  section .data
+   701                              <1> %%msg: db %1,'$'
+   702                              <1>  section .text
+   703                              <1>  %ifidni %2,oncarry
+   704                              <1>  jnc %%ok
+   705                              <1>  %endif
+   706                              <1>  mov dx,%%msg
+   707                              <1>  mov ah,0x09
+   708                              <1>  int 0x21
+   709                              <1>  %endif
+   710 00000158 CD20                <1>  int 0x20
+   711                              <1> %%ok:
+   712
+   713 0000015A 8B04                    m8:	mov	ax,[si]
+   714 0000015C 8B0E[1E00]              	mov	cx,[result_size]
+   715 00000160 BA[C501]                	mov	dx,compare8
+   716 00000163 80F904                  	cmp	cl,4
+   717 00000166 7211                    	jb	m8a
+   718 00000168 8B4402                  	mov	ax,[si+2]
+   719 0000016B BA[0902]                	mov	dx,compare16
+   720 0000016E 80F908                  	cmp	cl,8
+   721 00000171 7206                    	jb	m8a
+   722 00000173 8B4404                  	mov	ax,[si+4]
+   723 00000176 BA[4C02]                	mov	dx,compare32
+   724 00000179 85C0                    m8a:	test	ax,ax
+   725 0000017B 751C                    	jnz	m8b
+   726                                  	print	"missing "
+   727                              <1>  %ifidni %1,line
+   728                              <1>  push ax
+   729                              <1>  push cx
+   730                              <1>  push dx
+   731                              <1>  push si
+   732                              <1>  mov dx,si
+   733                              <1>  dec cx
+   734                              <1>  add si,cx
+   735                              <1>  mov byte [si],'$'
+   736                              <1>  mov ah,0x09
+   737                              <1>  int 0x21
+   738                              <1>  mov dx,strCRLF
+   739                              <1>  mov ah,0x09
+   740                              <1>  int 0x21
+   741                              <1>  pop si
+   742                              <1>  pop dx
+   743                              <1>  pop cx
+   744                              <1>  pop ax
+   745                              <1>  %else
+   746                              <1>  %ifstr %1
+   747                              <1>  section .data
+   748 00000067 6D697373696E672024  <1> %%str: db %1,'$'
+   749                              <1>  section .text
+   750 0000017D 52                  <1>  push dx
+   751 0000017E BA[6700]            <1>  mov dx,%%str
+   752                              <1>  %elifnidni %1,dx
+   753                              <1>  push dx
+   754                              <1>  mov dx,%1
+   755                              <1>  %endif
+   756 00000181 50                  <1>  push ax
+   757 00000182 B409                <1>  mov ah,0x09
+   758 00000184 CD21                <1>  int 0x21
+   759 00000186 58                  <1>  pop ax
+   760                              <1>  %ifnidni %1,dx
+   761 00000187 5A                  <1>  pop dx
+   762                              <1>  %endif
+   763                              <1>  %endif
+   764                                  	print	ins_name
+   765                              <1>  %ifidni %1,line
+   766                              <1>  push ax
+   767                              <1>  push cx
+   768                              <1>  push dx
+   769                              <1>  push si
+   770                              <1>  mov dx,si
+   771                              <1>  dec cx
+   772                              <1>  add si,cx
+   773                              <1>  mov byte [si],'$'
+   774                              <1>  mov ah,0x09
+   775                              <1>  int 0x21
+   776                              <1>  mov dx,strCRLF
+   777                              <1>  mov ah,0x09
+   778                              <1>  int 0x21
+   779                              <1>  pop si
+   780                              <1>  pop dx
+   781                              <1>  pop cx
+   782                              <1>  pop ax
+   783                              <1>  %else
+   784                              <1>  %ifstr %1
+   785                              <1>  section .data
+   786                              <1> %%str: db %1,'$'
+   787                              <1>  section .text
+   788                              <1>  push dx
+   789                              <1>  mov dx,%%str
+   790                              <1>  %elifnidni %1,dx
+   791 00000188 52                  <1>  push dx
+   792 00000189 BA[0000]            <1>  mov dx,%1
+   793                              <1>  %endif
+   794 0000018C 50                  <1>  push ax
+   795 0000018D B409                <1>  mov ah,0x09
+   796 0000018F CD21                <1>  int 0x21
+   797 00000191 58                  <1>  pop ax
+   798                              <1>  %ifnidni %1,dx
+   799 00000192 5A                  <1>  pop dx
+   800                              <1>  %endif
+   801                              <1>  %endif
+   802 00000193 91                      	xchg	ax,cx
+   803 00000194 E83C02                  	call	printHex
+   804                                  	exit
+   805                              <1>  %ifstr %1
+   806                              <1>  section .data
+   807                              <1> %%msg: db %1,'$'
+   808                              <1>  section .text
+   809                              <1>  %ifidni %2,oncarry
+   810                              <1>  jnc %%ok
+   811                              <1>  %endif
+   812                              <1>  mov dx,%%msg
+   813                              <1>  mov ah,0x09
+   814                              <1>  int 0x21
+   815                              <1>  %endif
+   816 00000197 CD20                <1>  int 0x20
+   817                              <1> %%ok:
+   818 00000199 A3[0600]                m8b:	mov	[ins_function],ax
+   819 0000019C 8916[0800]              	mov	[ins_compare],dx
+   820 000001A0 8B4406                  	mov	ax,[si+6]
+   821 000001A3 A3[1800]                	mov	[relevant_flags],ax
+   822                                  ;
+   823                                  ;   Let's call the instruction function now, loading the PS_ALL flags with the same values
+   824                                  ;   that the emulator recorded (operand_flags).
+   825                                  ;
+   826 000001A6 9C                      	pushf
+   827 000001A7 59                      	pop	cx		; CX == current flags
+   828 000001A8 B8D508                  	mov	ax,PS_ALL
+   829 000001AB F7D0                    	not	ax
+   830 000001AD 21C1                    	and	cx,ax		; CX == current flags, with PS_ALL flags cleared
+   831 000001AF 0B0E[1600]              	or	cx,[operand_flags]
+   832 000001B3 51                      	push	cx		; CX == current flags, with PS_ALL flags from operand_flags included
+   833 000001B4 9D                      	popf
+   834 000001B5 FF16[0600]              	call	[ins_function]
+   835 000001B9 9C                      	pushf
+   836 000001BA 59                      	pop	cx
+   837 000001BB FF16[0800]              	call	[ins_compare]
+   838                                  ;
+   839                                  ;   If we're still here, the instruction passed, so restore the line pointer and move to the next line
+   840                                  ;
+   841 000001BF 5F                      	pop	di
+   842 000001C0 5E                      	pop	si
+   843                                  ;
+   844                                  ;   When we finished reading the current line, DS:SI should have been left pointing at the terminating LF;
+   845                                  ;   however, if we used "print" to display it, that LF would have replaced with a '$'.  In any case, we don't
+   846                                  ;   really need to call skipTo, if we know we're at the end of the current line.
+   847                                  ;
+   848                                  ;	mov	ah,0x0A
+   849                                  ;	call	skipTo
+   850 000001C1 46                      	inc	si		; step over the LF (or '$', in case we printed the line before processing it)
+   851 000001C2 E97AFE                  	jmp	m3
+   852
+   853                                  compare8:
+   854 000001C5 8A26[1A00]              	mov	ah,[result_operand]
+   855 000001C9 38E0                    	cmp	al,ah
+   856 000001CB 7503                    	jne	c8err
+   857 000001CD E9C600                  	jmp	compareFlags
+   858                                  c8err:	print	"byte mismatch:"
+   859                              <1> c8err:
+   860                              <1>  %ifidni %1,line
+   861                              <1>  push ax
+   862                              <1>  push cx
+   863                              <1>  push dx
+   864                              <1>  push si
+   865                              <1>  mov dx,si
+   866                              <1>  dec cx
+   867                              <1>  add si,cx
+   868                              <1>  mov byte [si],'$'
+   869                              <1>  mov ah,0x09
+   870                              <1>  int 0x21
+   871                              <1>  mov dx,strCRLF
+   872                              <1>  mov ah,0x09
+   873                              <1>  int 0x21
+   874                              <1>  pop si
+   875                              <1>  pop dx
+   876                              <1>  pop cx
+   877                              <1>  pop ax
+   878                              <1>  %else
+   879                              <1>  %ifstr %1
+   880                              <1>  section .data
+   881 00000070 62797465206D69736D- <1> %%str: db %1,'$'
+   882 00000079 617463683A24        <1>
+   883                              <1>  section .text
+   884 000001D0 52                  <1>  push dx
+   885 000001D1 BA[7000]            <1>  mov dx,%%str
+   886                              <1>  %elifnidni %1,dx
+   887                              <1>  push dx
+   888                              <1>  mov dx,%1
+   889                              <1>  %endif
+   890 000001D4 50                  <1>  push ax
+   891 000001D5 B409                <1>  mov ah,0x09
+   892 000001D7 CD21                <1>  int 0x21
+   893 000001D9 58                  <1>  pop ax
+   894                              <1>  %ifnidni %1,dx
+   895 000001DA 5A                  <1>  pop dx
+   896                              <1>  %endif
+   897                              <1>  %endif
+   898                                  	print	strActual
+   899                              <1>  %ifidni %1,line
+   900                              <1>  push ax
+   901                              <1>  push cx
+   902                              <1>  push dx
+   903                              <1>  push si
+   904                              <1>  mov dx,si
+   905                              <1>  dec cx
+   906                              <1>  add si,cx
+   907                              <1>  mov byte [si],'$'
+   908                              <1>  mov ah,0x09
+   909                              <1>  int 0x21
+   910                              <1>  mov dx,strCRLF
+   911                              <1>  mov ah,0x09
+   912                              <1>  int 0x21
+   913                              <1>  pop si
+   914                              <1>  pop dx
+   915                              <1>  pop cx
+   916                              <1>  pop ax
+   917                              <1>  %else
+   918                              <1>  %ifstr %1
+   919                              <1>  section .data
+   920                              <1> %%str: db %1,'$'
+   921                              <1>  section .text
+   922                              <1>  push dx
+   923                              <1>  mov dx,%%str
+   924                              <1>  %elifnidni %1,dx
+   925 000001DB 52                  <1>  push dx
+   926 000001DC BA[2501]            <1>  mov dx,%1
+   927                              <1>  %endif
+   928 000001DF 50                  <1>  push ax
+   929 000001E0 B409                <1>  mov ah,0x09
+   930 000001E2 CD21                <1>  int 0x21
+   931 000001E4 58                  <1>  pop ax
+   932                              <1>  %ifnidni %1,dx
+   933 000001E5 5A                  <1>  pop dx
+   934                              <1>  %endif
+   935                              <1>  %endif
+   936 000001E6 B90200                  	mov	cx,2
+   937 000001E9 E8E701                  	call	printHex
+   938                                  	print	strRecorded
+   939                              <1>  %ifidni %1,line
+   940                              <1>  push ax
+   941                              <1>  push cx
+   942                              <1>  push dx
+   943                              <1>  push si
+   944                              <1>  mov dx,si
+   945                              <1>  dec cx
+   946                              <1>  add si,cx
+   947                              <1>  mov byte [si],'$'
+   948                              <1>  mov ah,0x09
+   949                              <1>  int 0x21
+   950                              <1>  mov dx,strCRLF
+   951                              <1>  mov ah,0x09
+   952                              <1>  int 0x21
+   953                              <1>  pop si
+   954                              <1>  pop dx
+   955                              <1>  pop cx
+   956                              <1>  pop ax
+   957                              <1>  %else
+   958                              <1>  %ifstr %1
+   959                              <1>  section .data
+   960                              <1> %%str: db %1,'$'
+   961                              <1>  section .text
+   962                              <1>  push dx
+   963                              <1>  mov dx,%%str
+   964                              <1>  %elifnidni %1,dx
+   965 000001EC 52                  <1>  push dx
+   966 000001ED BA[2E01]            <1>  mov dx,%1
+   967                              <1>  %endif
+   968 000001F0 50                  <1>  push ax
+   969 000001F1 B409                <1>  mov ah,0x09
+   970 000001F3 CD21                <1>  int 0x21
+   971 000001F5 58                  <1>  pop ax
+   972                              <1>  %ifnidni %1,dx
+   973 000001F6 5A                  <1>  pop dx
+   974                              <1>  %endif
+   975                              <1>  %endif
+   976 000001F7 88E0                    	mov	al,ah
+   977 000001F9 E8D701                  	call	printHex
+   978                                  	print	strCRLF
+   979                              <1>  %ifidni %1,line
+   980                              <1>  push ax
+   981                              <1>  push cx
+   982                              <1>  push dx
+   983                              <1>  push si
+   984                              <1>  mov dx,si
+   985                              <1>  dec cx
+   986                              <1>  add si,cx
+   987                              <1>  mov byte [si],'$'
+   988                              <1>  mov ah,0x09
+   989                              <1>  int 0x21
+   990                              <1>  mov dx,strCRLF
+   991                              <1>  mov ah,0x09
+   992                              <1>  int 0x21
+   993                              <1>  pop si
+   994                              <1>  pop dx
+   995                              <1>  pop cx
+   996                              <1>  pop ax
+   997                              <1>  %else
+   998                              <1>  %ifstr %1
+   999                              <1>  section .data
+  1000                              <1> %%str: db %1,'$'
+  1001                              <1>  section .text
+  1002                              <1>  push dx
+  1003                              <1>  mov dx,%%str
+  1004                              <1>  %elifnidni %1,dx
+  1005 000001FC 52                  <1>  push dx
+  1006 000001FD BA[1C01]            <1>  mov dx,%1
+  1007                              <1>  %endif
+  1008 00000200 50                  <1>  push ax
+  1009 00000201 B409                <1>  mov ah,0x09
+  1010 00000203 CD21                <1>  int 0x21
+  1011 00000205 58                  <1>  pop ax
+  1012                              <1>  %ifnidni %1,dx
+  1013 00000206 5A                  <1>  pop dx
+  1014                              <1>  %endif
+  1015                              <1>  %endif
+  1016                                  	exit
+  1017                              <1>  %ifstr %1
+  1018                              <1>  section .data
+  1019                              <1> %%msg: db %1,'$'
+  1020                              <1>  section .text
+  1021                              <1>  %ifidni %2,oncarry
+  1022                              <1>  jnc %%ok
+  1023                              <1>  %endif
+  1024                              <1>  mov dx,%%msg
+  1025                              <1>  mov ah,0x09
+  1026                              <1>  int 0x21
+  1027                              <1>  %endif
+  1028 00000207 CD20                <1>  int 0x20
+  1029                              <1> %%ok:
+  1030
+  1031                                  compare16:
+  1032 00000209 8B16[1A00]              	mov	dx,[result_operand]
+  1033 0000020D 39D0                    	cmp	ax,dx
+  1034 0000020F 7503                    	jne	c16err
+  1035 00000211 E98200                  	jmp	compareFlags
+  1036                                  c16err: print	"word mismatch:"
+  1037                              <1> c16err:
+  1038                              <1>  %ifidni %1,line
+  1039                              <1>  push ax
+  1040                              <1>  push cx
+  1041                              <1>  push dx
+  1042                              <1>  push si
+  1043                              <1>  mov dx,si
+  1044                              <1>  dec cx
+  1045                              <1>  add si,cx
+  1046                              <1>  mov byte [si],'$'
+  1047                              <1>  mov ah,0x09
+  1048                              <1>  int 0x21
+  1049                              <1>  mov dx,strCRLF
+  1050                              <1>  mov ah,0x09
+  1051                              <1>  int 0x21
+  1052                              <1>  pop si
+  1053                              <1>  pop dx
+  1054                              <1>  pop cx
+  1055                              <1>  pop ax
+  1056                              <1>  %else
+  1057                              <1>  %ifstr %1
+  1058                              <1>  section .data
+  1059 0000007F 776F7264206D69736D- <1> %%str: db %1,'$'
+  1060 00000088 617463683A24        <1>
+  1061                              <1>  section .text
+  1062 00000214 52                  <1>  push dx
+  1063 00000215 BA[7F00]            <1>  mov dx,%%str
+  1064                              <1>  %elifnidni %1,dx
+  1065                              <1>  push dx
+  1066                              <1>  mov dx,%1
+  1067                              <1>  %endif
+  1068 00000218 50                  <1>  push ax
+  1069 00000219 B409                <1>  mov ah,0x09
+  1070 0000021B CD21                <1>  int 0x21
+  1071 0000021D 58                  <1>  pop ax
+  1072                              <1>  %ifnidni %1,dx
+  1073 0000021E 5A                  <1>  pop dx
+  1074                              <1>  %endif
+  1075                              <1>  %endif
+  1076                                  	print	strActual
+  1077                              <1>  %ifidni %1,line
+  1078                              <1>  push ax
+  1079                              <1>  push cx
+  1080                              <1>  push dx
+  1081                              <1>  push si
+  1082                              <1>  mov dx,si
+  1083                              <1>  dec cx
+  1084                              <1>  add si,cx
+  1085                              <1>  mov byte [si],'$'
+  1086                              <1>  mov ah,0x09
+  1087                              <1>  int 0x21
+  1088                              <1>  mov dx,strCRLF
+  1089                              <1>  mov ah,0x09
+  1090                              <1>  int 0x21
+  1091                              <1>  pop si
+  1092                              <1>  pop dx
+  1093                              <1>  pop cx
+  1094                              <1>  pop ax
+  1095                              <1>  %else
+  1096                              <1>  %ifstr %1
+  1097                              <1>  section .data
+  1098                              <1> %%str: db %1,'$'
+  1099                              <1>  section .text
+  1100                              <1>  push dx
+  1101                              <1>  mov dx,%%str
+  1102                              <1>  %elifnidni %1,dx
+  1103 0000021F 52                  <1>  push dx
+  1104 00000220 BA[2501]            <1>  mov dx,%1
+  1105                              <1>  %endif
+  1106 00000223 50                  <1>  push ax
+  1107 00000224 B409                <1>  mov ah,0x09
+  1108 00000226 CD21                <1>  int 0x21
+  1109 00000228 58                  <1>  pop ax
+  1110                              <1>  %ifnidni %1,dx
+  1111 00000229 5A                  <1>  pop dx
+  1112                              <1>  %endif
+  1113                              <1>  %endif
+  1114 0000022A B90400                  	mov	cx,4
+  1115 0000022D E8A301                  	call	printHex
+  1116                                  	print	strRecorded
+  1117                              <1>  %ifidni %1,line
+  1118                              <1>  push ax
+  1119                              <1>  push cx
+  1120                              <1>  push dx
+  1121                              <1>  push si
+  1122                              <1>  mov dx,si
+  1123                              <1>  dec cx
+  1124                              <1>  add si,cx
+  1125                              <1>  mov byte [si],'$'
+  1126                              <1>  mov ah,0x09
+  1127                              <1>  int 0x21
+  1128                              <1>  mov dx,strCRLF
+  1129                              <1>  mov ah,0x09
+  1130                              <1>  int 0x21
+  1131                              <1>  pop si
+  1132                              <1>  pop dx
+  1133                              <1>  pop cx
+  1134                              <1>  pop ax
+  1135                              <1>  %else
+  1136                              <1>  %ifstr %1
+  1137                              <1>  section .data
+  1138                              <1> %%str: db %1,'$'
+  1139                              <1>  section .text
+  1140                              <1>  push dx
+  1141                              <1>  mov dx,%%str
+  1142                              <1>  %elifnidni %1,dx
+  1143 00000230 52                  <1>  push dx
+  1144 00000231 BA[2E01]            <1>  mov dx,%1
+  1145                              <1>  %endif
+  1146 00000234 50                  <1>  push ax
+  1147 00000235 B409                <1>  mov ah,0x09
+  1148 00000237 CD21                <1>  int 0x21
+  1149 00000239 58                  <1>  pop ax
+  1150                              <1>  %ifnidni %1,dx
+  1151 0000023A 5A                  <1>  pop dx
+  1152                              <1>  %endif
+  1153                              <1>  %endif
+  1154 0000023B 92                      	xchg	ax,dx
+  1155 0000023C E89401                  	call	printHex
+  1156                                  	print	strCRLF
+  1157                              <1>  %ifidni %1,line
+  1158                              <1>  push ax
+  1159                              <1>  push cx
+  1160                              <1>  push dx
+  1161                              <1>  push si
+  1162                              <1>  mov dx,si
+  1163                              <1>  dec cx
+  1164                              <1>  add si,cx
+  1165                              <1>  mov byte [si],'$'
+  1166                              <1>  mov ah,0x09
+  1167                              <1>  int 0x21
+  1168                              <1>  mov dx,strCRLF
+  1169                              <1>  mov ah,0x09
+  1170                              <1>  int 0x21
+  1171                              <1>  pop si
+  1172                              <1>  pop dx
+  1173                              <1>  pop cx
+  1174                              <1>  pop ax
+  1175                              <1>  %else
+  1176                              <1>  %ifstr %1
+  1177                              <1>  section .data
+  1178                              <1> %%str: db %1,'$'
+  1179                              <1>  section .text
+  1180                              <1>  push dx
+  1181                              <1>  mov dx,%%str
+  1182                              <1>  %elifnidni %1,dx
+  1183 0000023F 52                  <1>  push dx
+  1184 00000240 BA[1C01]            <1>  mov dx,%1
+  1185                              <1>  %endif
+  1186 00000243 50                  <1>  push ax
+  1187 00000244 B409                <1>  mov ah,0x09
+  1188 00000246 CD21                <1>  int 0x21
+  1189 00000248 58                  <1>  pop ax
+  1190                              <1>  %ifnidni %1,dx
+  1191 00000249 5A                  <1>  pop dx
+  1192                              <1>  %endif
+  1193                              <1>  %endif
+  1194                                  	exit
+  1195                              <1>  %ifstr %1
+  1196                              <1>  section .data
+  1197                              <1> %%msg: db %1,'$'
+  1198                              <1>  section .text
+  1199                              <1>  %ifidni %2,oncarry
+  1200                              <1>  jnc %%ok
+  1201                              <1>  %endif
+  1202                              <1>  mov dx,%%msg
+  1203                              <1>  mov ah,0x09
+  1204                              <1>  int 0x21
+  1205                              <1>  %endif
+  1206 0000024A CD20                <1>  int 0x20
+  1207                              <1> %%ok:
+  1208
+  1209                                  compare32:
+  1210 0000024C 3B06[1A00]              	cmp	ax,[result_operand]
+  1211 00000250 7506                    	jne	c32err
+  1212 00000252 3B16[1C00]              	cmp	dx,[result_operand+2]
+  1213 00000256 743E                    	je	compareFlags
+  1214                                  c32err: print	"dword mismatch:"
+  1215                              <1> c32err:
+  1216                              <1>  %ifidni %1,line
+  1217                              <1>  push ax
+  1218                              <1>  push cx
+  1219                              <1>  push dx
+  1220                              <1>  push si
+  1221                              <1>  mov dx,si
+  1222                              <1>  dec cx
+  1223                              <1>  add si,cx
+  1224                              <1>  mov byte [si],'$'
+  1225                              <1>  mov ah,0x09
+  1226                              <1>  int 0x21
+  1227                              <1>  mov dx,strCRLF
+  1228                              <1>  mov ah,0x09
+  1229                              <1>  int 0x21
+  1230                              <1>  pop si
+  1231                              <1>  pop dx
+  1232                              <1>  pop cx
+  1233                              <1>  pop ax
+  1234                              <1>  %else
+  1235                              <1>  %ifstr %1
+  1236                              <1>  section .data
+  1237 0000008E 64776F7264206D6973- <1> %%str: db %1,'$'
+  1238 00000097 6D617463683A24      <1>
+  1239                              <1>  section .text
+  1240 00000258 52                  <1>  push dx
+  1241 00000259 BA[8E00]            <1>  mov dx,%%str
+  1242                              <1>  %elifnidni %1,dx
+  1243                              <1>  push dx
+  1244                              <1>  mov dx,%1
+  1245                              <1>  %endif
+  1246 0000025C 50                  <1>  push ax
+  1247 0000025D B409                <1>  mov ah,0x09
+  1248 0000025F CD21                <1>  int 0x21
+  1249 00000261 58                  <1>  pop ax
+  1250                              <1>  %ifnidni %1,dx
+  1251 00000262 5A                  <1>  pop dx
+  1252                              <1>  %endif
+  1253                              <1>  %endif
+  1254                                  	print	strActual
+  1255                              <1>  %ifidni %1,line
+  1256                              <1>  push ax
+  1257                              <1>  push cx
+  1258                              <1>  push dx
+  1259                              <1>  push si
+  1260                              <1>  mov dx,si
+  1261                              <1>  dec cx
+  1262                              <1>  add si,cx
+  1263                              <1>  mov byte [si],'$'
+  1264                              <1>  mov ah,0x09
+  1265                              <1>  int 0x21
+  1266                              <1>  mov dx,strCRLF
+  1267                              <1>  mov ah,0x09
+  1268                              <1>  int 0x21
+  1269                              <1>  pop si
+  1270                              <1>  pop dx
+  1271                              <1>  pop cx
+  1272                              <1>  pop ax
+  1273                              <1>  %else
+  1274                              <1>  %ifstr %1
+  1275                              <1>  section .data
+  1276                              <1> %%str: db %1,'$'
+  1277                              <1>  section .text
+  1278                              <1>  push dx
+  1279                              <1>  mov dx,%%str
+  1280                              <1>  %elifnidni %1,dx
+  1281 00000263 52                  <1>  push dx
+  1282 00000264 BA[2501]            <1>  mov dx,%1
+  1283                              <1>  %endif
+  1284 00000267 50                  <1>  push ax
+  1285 00000268 B409                <1>  mov ah,0x09
+  1286 0000026A CD21                <1>  int 0x21
+  1287 0000026C 58                  <1>  pop ax
+  1288                              <1>  %ifnidni %1,dx
+  1289 0000026D 5A                  <1>  pop dx
+  1290                              <1>  %endif
+  1291                              <1>  %endif
+  1292 0000026E B90800                  	mov	cx,8
+  1293 00000271 E85F01                  	call	printHex
+  1294                                  	print	strRecorded
+  1295                              <1>  %ifidni %1,line
+  1296                              <1>  push ax
+  1297                              <1>  push cx
+  1298                              <1>  push dx
+  1299                              <1>  push si
+  1300                              <1>  mov dx,si
+  1301                              <1>  dec cx
+  1302                              <1>  add si,cx
+  1303                              <1>  mov byte [si],'$'
+  1304                              <1>  mov ah,0x09
+  1305                              <1>  int 0x21
+  1306                              <1>  mov dx,strCRLF
+  1307                              <1>  mov ah,0x09
+  1308                              <1>  int 0x21
+  1309                              <1>  pop si
+  1310                              <1>  pop dx
+  1311                              <1>  pop cx
+  1312                              <1>  pop ax
+  1313                              <1>  %else
+  1314                              <1>  %ifstr %1
+  1315                              <1>  section .data
+  1316                              <1> %%str: db %1,'$'
+  1317                              <1>  section .text
+  1318                              <1>  push dx
+  1319                              <1>  mov dx,%%str
+  1320                              <1>  %elifnidni %1,dx
+  1321 00000274 52                  <1>  push dx
+  1322 00000275 BA[2E01]            <1>  mov dx,%1
+  1323                              <1>  %endif
+  1324 00000278 50                  <1>  push ax
+  1325 00000279 B409                <1>  mov ah,0x09
+  1326 0000027B CD21                <1>  int 0x21
+  1327 0000027D 58                  <1>  pop ax
+  1328                              <1>  %ifnidni %1,dx
+  1329 0000027E 5A                  <1>  pop dx
+  1330                              <1>  %endif
+  1331                              <1>  %endif
+  1332 0000027F A1[1A00]                	mov	ax,[result_operand]
+  1333 00000282 8B16[1C00]              	mov	dx,[result_operand+2]
+  1334 00000286 E84A01                  	call	printHex
+  1335                                  	print	strCRLF
+  1336                              <1>  %ifidni %1,line
+  1337                              <1>  push ax
+  1338                              <1>  push cx
+  1339                              <1>  push dx
+  1340                              <1>  push si
+  1341                              <1>  mov dx,si
+  1342                              <1>  dec cx
+  1343                              <1>  add si,cx
+  1344                              <1>  mov byte [si],'$'
+  1345                              <1>  mov ah,0x09
+  1346                              <1>  int 0x21
+  1347                              <1>  mov dx,strCRLF
+  1348                              <1>  mov ah,0x09
+  1349                              <1>  int 0x21
+  1350                              <1>  pop si
+  1351                              <1>  pop dx
+  1352                              <1>  pop cx
+  1353                              <1>  pop ax
+  1354                              <1>  %else
+  1355                              <1>  %ifstr %1
+  1356                              <1>  section .data
+  1357                              <1> %%str: db %1,'$'
+  1358                              <1>  section .text
+  1359                              <1>  push dx
+  1360                              <1>  mov dx,%%str
+  1361                              <1>  %elifnidni %1,dx
+  1362 00000289 52                  <1>  push dx
+  1363 0000028A BA[1C01]            <1>  mov dx,%1
+  1364                              <1>  %endif
+  1365 0000028D 50                  <1>  push ax
+  1366 0000028E B409                <1>  mov ah,0x09
+  1367 00000290 CD21                <1>  int 0x21
+  1368 00000292 58                  <1>  pop ax
+  1369                              <1>  %ifnidni %1,dx
+  1370 00000293 5A                  <1>  pop dx
+  1371                              <1>  %endif
+  1372                              <1>  %endif
+  1373                                  	exit
+  1374                              <1>  %ifstr %1
+  1375                              <1>  section .data
+  1376                              <1> %%msg: db %1,'$'
+  1377                              <1>  section .text
+  1378                              <1>  %ifidni %2,oncarry
+  1379                              <1>  jnc %%ok
+  1380                              <1>  %endif
+  1381                              <1>  mov dx,%%msg
+  1382                              <1>  mov ah,0x09
+  1383                              <1>  int 0x21
+  1384                              <1>  %endif
+  1385 00000294 CD20                <1>  int 0x20
+  1386                              <1> %%ok:
+  1387
+  1388                                  compareFlags:
+  1389 00000296 8B16[2000]              	mov	dx,[result_flags]
+  1390 0000029A 230E[1800]              	and	cx,[relevant_flags]
+  1391 0000029E 2316[1800]              	and	dx,[relevant_flags]
+  1392 000002A2 39D1                    	cmp	cx,dx
+  1393 000002A4 7439                    	je	cfret
+  1394                                  	print	"flag mismatch:"
+  1395                              <1>  %ifidni %1,line
+  1396                              <1>  push ax
+  1397                              <1>  push cx
+  1398                              <1>  push dx
+  1399                              <1>  push si
+  1400                              <1>  mov dx,si
+  1401                              <1>  dec cx
+  1402                              <1>  add si,cx
+  1403                              <1>  mov byte [si],'$'
+  1404                              <1>  mov ah,0x09
+  1405                              <1>  int 0x21
+  1406                              <1>  mov dx,strCRLF
+  1407                              <1>  mov ah,0x09
+  1408                              <1>  int 0x21
+  1409                              <1>  pop si
+  1410                              <1>  pop dx
+  1411                              <1>  pop cx
+  1412                              <1>  pop ax
+  1413                              <1>  %else
+  1414                              <1>  %ifstr %1
+  1415                              <1>  section .data
+  1416 0000009E 666C6167206D69736D- <1> %%str: db %1,'$'
+  1417 000000A7 617463683A24        <1>
+  1418                              <1>  section .text
+  1419 000002A6 52                  <1>  push dx
+  1420 000002A7 BA[9E00]            <1>  mov dx,%%str
+  1421                              <1>  %elifnidni %1,dx
+  1422                              <1>  push dx
+  1423                              <1>  mov dx,%1
+  1424                              <1>  %endif
+  1425 000002AA 50                  <1>  push ax
+  1426 000002AB B409                <1>  mov ah,0x09
+  1427 000002AD CD21                <1>  int 0x21
+  1428 000002AF 58                  <1>  pop ax
+  1429                              <1>  %ifnidni %1,dx
+  1430 000002B0 5A                  <1>  pop dx
+  1431                              <1>  %endif
+  1432                              <1>  %endif
+  1433                                  	print	strActual
+  1434                              <1>  %ifidni %1,line
+  1435                              <1>  push ax
+  1436                              <1>  push cx
+  1437                              <1>  push dx
+  1438                              <1>  push si
+  1439                              <1>  mov dx,si
+  1440                              <1>  dec cx
+  1441                              <1>  add si,cx
+  1442                              <1>  mov byte [si],'$'
+  1443                              <1>  mov ah,0x09
+  1444                              <1>  int 0x21
+  1445                              <1>  mov dx,strCRLF
+  1446                              <1>  mov ah,0x09
+  1447                              <1>  int 0x21
+  1448                              <1>  pop si
+  1449                              <1>  pop dx
+  1450                              <1>  pop cx
+  1451                              <1>  pop ax
+  1452                              <1>  %else
+  1453                              <1>  %ifstr %1
+  1454                              <1>  section .data
+  1455                              <1> %%str: db %1,'$'
+  1456                              <1>  section .text
+  1457                              <1>  push dx
+  1458                              <1>  mov dx,%%str
+  1459                              <1>  %elifnidni %1,dx
+  1460 000002B1 52                  <1>  push dx
+  1461 000002B2 BA[2501]            <1>  mov dx,%1
+  1462                              <1>  %endif
+  1463 000002B5 50                  <1>  push ax
+  1464 000002B6 B409                <1>  mov ah,0x09
+  1465 000002B8 CD21                <1>  int 0x21
+  1466 000002BA 58                  <1>  pop ax
+  1467                              <1>  %ifnidni %1,dx
+  1468 000002BB 5A                  <1>  pop dx
+  1469                              <1>  %endif
+  1470                              <1>  %endif
+  1471 000002BC 91                      	xchg	ax,cx
+  1472 000002BD B90400                  	mov	cx,4
+  1473 000002C0 E81001                  	call	printHex
+  1474                                  	print	strRecorded
+  1475                              <1>  %ifidni %1,line
+  1476                              <1>  push ax
+  1477                              <1>  push cx
+  1478                              <1>  push dx
+  1479                              <1>  push si
+  1480                              <1>  mov dx,si
+  1481                              <1>  dec cx
+  1482                              <1>  add si,cx
+  1483                              <1>  mov byte [si],'$'
+  1484                              <1>  mov ah,0x09
+  1485                              <1>  int 0x21
+  1486                              <1>  mov dx,strCRLF
+  1487                              <1>  mov ah,0x09
+  1488                              <1>  int 0x21
+  1489                              <1>  pop si
+  1490                              <1>  pop dx
+  1491                              <1>  pop cx
+  1492                              <1>  pop ax
+  1493                              <1>  %else
+  1494                              <1>  %ifstr %1
+  1495                              <1>  section .data
+  1496                              <1> %%str: db %1,'$'
+  1497                              <1>  section .text
+  1498                              <1>  push dx
+  1499                              <1>  mov dx,%%str
+  1500                              <1>  %elifnidni %1,dx
+  1501 000002C3 52                  <1>  push dx
+  1502 000002C4 BA[2E01]            <1>  mov dx,%1
+  1503                              <1>  %endif
+  1504 000002C7 50                  <1>  push ax
+  1505 000002C8 B409                <1>  mov ah,0x09
+  1506 000002CA CD21                <1>  int 0x21
+  1507 000002CC 58                  <1>  pop ax
+  1508                              <1>  %ifnidni %1,dx
+  1509 000002CD 5A                  <1>  pop dx
+  1510                              <1>  %endif
+  1511                              <1>  %endif
+  1512 000002CE 92                      	xchg	ax,dx
+  1513 000002CF E80101                  	call	printHex
+  1514                                  	print	strCRLF
+  1515                              <1>  %ifidni %1,line
+  1516                              <1>  push ax
+  1517                              <1>  push cx
+  1518                              <1>  push dx
+  1519                              <1>  push si
+  1520                              <1>  mov dx,si
+  1521                              <1>  dec cx
+  1522                              <1>  add si,cx
+  1523                              <1>  mov byte [si],'$'
+  1524                              <1>  mov ah,0x09
+  1525                              <1>  int 0x21
+  1526                              <1>  mov dx,strCRLF
+  1527                              <1>  mov ah,0x09
+  1528                              <1>  int 0x21
+  1529                              <1>  pop si
+  1530                              <1>  pop dx
+  1531                              <1>  pop cx
+  1532                              <1>  pop ax
+  1533                              <1>  %else
+  1534                              <1>  %ifstr %1
+  1535                              <1>  section .data
+  1536                              <1> %%str: db %1,'$'
+  1537                              <1>  section .text
+  1538                              <1>  push dx
+  1539                              <1>  mov dx,%%str
+  1540                              <1>  %elifnidni %1,dx
+  1541 000002D2 52                  <1>  push dx
+  1542 000002D3 BA[1C01]            <1>  mov dx,%1
+  1543                              <1>  %endif
+  1544 000002D6 50                  <1>  push ax
+  1545 000002D7 B409                <1>  mov ah,0x09
+  1546 000002D9 CD21                <1>  int 0x21
+  1547 000002DB 58                  <1>  pop ax
+  1548                              <1>  %ifnidni %1,dx
+  1549 000002DC 5A                  <1>  pop dx
+  1550                              <1>  %endif
+  1551                              <1>  %endif
+  1552                                  	exit
+  1553                              <1>  %ifstr %1
+  1554                              <1>  section .data
+  1555                              <1> %%msg: db %1,'$'
+  1556                              <1>  section .text
+  1557                              <1>  %ifidni %2,oncarry
+  1558                              <1>  jnc %%ok
+  1559                              <1>  %endif
+  1560                              <1>  mov dx,%%msg
+  1561                              <1>  mov ah,0x09
+  1562                              <1>  int 0x21
+  1563                              <1>  %endif
+  1564 000002DD CD20                <1>  int 0x20
+  1565                              <1> %%ok:
+  1566 000002DF C3                      cfret:	ret
+  1567
+  1568                                  testROL8:
+  1569 000002E0 A0[0A00]                	mov	al,[dst_operand]
+  1570 000002E3 8A0E[1000]              	mov	cl,[src_operand]
+  1571 000002E7 D2C0                    	rol	al,cl
+  1572 000002E9 C3                      	ret
+  1573
+  1574                                  testROL16:
+  1575 000002EA A1[0A00]                	mov	ax,[dst_operand]
+  1576 000002ED 8A0E[1000]              	mov	cl,[src_operand]
+  1577 000002F1 D3C0                    	rol	ax,cl
+  1578 000002F3 C3                      	ret
+  1579
+  1580                                  testROR8:
+  1581 000002F4 A0[0A00]                	mov	al,[dst_operand]
+  1582 000002F7 8A0E[1000]              	mov	cl,[src_operand]
+  1583 000002FB D2C8                    	ror	al,cl
+  1584 000002FD C3                      	ret
+  1585
+  1586                                  testROR16:
+  1587 000002FE A1[0A00]                	mov	ax,[dst_operand]
+  1588 00000301 8A0E[1000]              	mov	cl,[src_operand]
+  1589 00000305 D3C8                    	ror	ax,cl
+  1590 00000307 C3                      	ret
+  1591
+  1592                                  testRCL8:
+  1593 00000308 A0[0A00]                	mov	al,[dst_operand]
+  1594 0000030B 8A0E[1000]              	mov	cl,[src_operand]
+  1595 0000030F D2D0                    	rcl	al,cl
+  1596 00000311 C3                      	ret
+  1597
+  1598                                  testRCL16:
+  1599 00000312 A1[0A00]                	mov	ax,[dst_operand]
+  1600 00000315 8A0E[1000]              	mov	cl,[src_operand]
+  1601 00000319 D3D0                    	rcl	ax,cl
+  1602 0000031B C3                      	ret
+  1603
+  1604                                  testRCR8:
+  1605 0000031C A0[0A00]                	mov	al,[dst_operand]
+  1606 0000031F 8A0E[1000]              	mov	cl,[src_operand]
+  1607 00000323 D2D8                    	rcr	al,cl
+  1608 00000325 C3                      	ret
+  1609
+  1610                                  testRCR16:
+  1611 00000326 A1[0A00]                	mov	ax,[dst_operand]
+  1612 00000329 8A0E[1000]              	mov	cl,[src_operand]
+  1613 0000032D D3D8                    	rcr	ax,cl
+  1614 0000032F C3                      	ret
+  1615
+  1616                                  testSHL8:
+  1617 00000330 A0[0A00]                	mov	al,[dst_operand]
+  1618 00000333 8A0E[1000]              	mov	cl,[src_operand]
+  1619 00000337 D2E0                    	shl	al,cl
+  1620 00000339 C3                      	ret
+  1621
+  1622                                  testSHL16:
+  1623 0000033A A1[0A00]                	mov	ax,[dst_operand]
+  1624 0000033D 8A0E[1000]              	mov	cl,[src_operand]
+  1625 00000341 D3E0                    	shl	ax,cl
+  1626 00000343 C3                      	ret
+  1627
+  1628                                  testMUL16:
+  1629 00000344 A0[0A00]                	mov	al,[dst_operand]
+  1630 00000347 8A0E[1000]              	mov	cl,[src_operand]
+  1631 0000034B F6E1                    	mul	cl
+  1632 0000034D C3                      	ret
+  1633
+  1634                                  testMUL32:
+  1635 0000034E A1[0A00]                	mov	ax,[dst_operand]
+  1636 00000351 8B0E[1000]              	mov	cx,[src_operand]
+  1637 00000355 F7E1                    	mul	cx
+  1638 00000357 C3                      	ret
+  1639
+  1640                                  testIMUL16:
+  1641 00000358 A0[0A00]                	mov	al,[dst_operand]
+  1642 0000035B 8A0E[1000]              	mov	cl,[src_operand]
+  1643 0000035F F6E9                    	imul	cl
+  1644 00000361 C3                      	ret
+  1645
+  1646                                  testIMUL32:
+  1647 00000362 A1[0A00]                	mov	ax,[dst_operand]
+  1648 00000365 8B0E[1000]              	mov	cx,[src_operand]
+  1649 00000369 F7E9                    	imul	cx
+  1650 0000036B C3                      	ret
+  1651
+  1652                                  testDIV16:
+  1653 0000036C A1[0A00]                	mov	ax,[dst_operand]
+  1654 0000036F 8A0E[1000]              	mov	cl,[src_operand]
+  1655 00000373 F6F1                    	div	cl
+  1656 00000375 C3                      	ret
+  1657
+  1658                                  testDIV32:
+  1659 00000376 A1[0A00]                	mov	ax,[dst_operand]
+  1660 00000379 8B16[0C00]              	mov	dx,[dst_operand+2]
+  1661 0000037D 8B0E[1000]              	mov	cx,[src_operand]
+  1662 00000381 F7F1                    	div	cx
+  1663 00000383 C3                      	ret
+  1664
+  1665                                  testIDIV16:
+  1666 00000384 A1[0A00]                	mov	ax,[dst_operand]
+  1667 00000387 8A0E[1000]              	mov	cl,[src_operand]
+  1668 0000038B F6F9                    	idiv	cl
+  1669 0000038D C3                      	ret
+  1670
+  1671                                  testIDIV32:
+  1672 0000038E A1[0A00]                	mov	ax,[dst_operand]
+  1673 00000391 8B16[0C00]              	mov	dx,[dst_operand+2]
+  1674 00000395 8B0E[1000]              	mov	cx,[src_operand]
+  1675 00000399 F7F9                    	idiv	cx
+  1676 0000039B C3                      	ret
+  1677
+  1678                                  ;
+  1679                                  ;   getHex: get value of hex string
+  1680                                  ;
+  1681                                  ;   Inputs
+  1682                                  ;	DS:SI -> hex string
+  1683                                  ;
+  1684                                  ;   Outputs
+  1685                                  ;	CX == number of characters
+  1686                                  ;	DX:AX == corresponding value
+  1687                                  ;	DS:SI -> next non-hex character
+  1688                                  ;
+  1689                                  ;   Uses
+  1690                                  ;	AX, CX, DX, SI, Flags
+  1691                                  ;
+  1692                                  ;   Notes
+  1693                                  ;	Supports upper-case alpha chars only, with no prefixes (eg, "0x") or suffixes (eg, "h");
+  1694                                  ;	if there are more than 8 hex characters, the value will represent only the last 8 characters.
+  1695                                  ;
+  1696                                  getHex:
+  1697 0000039C 53                      	push	bx
+  1698 0000039D 29DB                    	sub	bx,bx		; BX holds the low 16 bits
+  1699 0000039F 29D2                    	sub	dx,dx		; DX holds the high 16 bits
+  1700 000003A1 29C9                    	sub	cx,cx		; CX holds the character count
+  1701 000003A3 AC                      gh1:	lodsb
+  1702 000003A4 3C30                    	cmp	al,'0'
+  1703 000003A6 7227                    	jb	gh9
+  1704 000003A8 3C39                    	cmp	al,'9'
+  1705 000003AA 7717                    	ja	gh3
+  1706 000003AC 2C30                    	sub	al,'0'
+  1707 000003AE D1E3                    gh2:	shl	bx,1
+  1708 000003B0 D1D2                    	rcl	dx,1
+  1709 000003B2 D1E3                    	shl	bx,1
+  1710 000003B4 D1D2                    	rcl	dx,1
+  1711 000003B6 D1E3                    	shl	bx,1
+  1712 000003B8 D1D2                    	rcl	dx,1
+  1713 000003BA D1E3                    	shl	bx,1
+  1714 000003BC D1D2                    	rcl	dx,1
+  1715 000003BE 08C3                    	or	bl,al
+  1716 000003C0 41                      	inc	cx
+  1717 000003C1 EBE0                    	jmp	gh1
+  1718 000003C3 3C41                    gh3:	cmp	al,'A'
+  1719 000003C5 7208                    	jb	gh9
+  1720 000003C7 3C46                    	cmp	al,'F'
+  1721 000003C9 7704                    	ja	gh9
+  1722 000003CB 2C37                    	sub	al,'A'-10
+  1723 000003CD EBDF                    	jmp	gh2
+  1724 000003CF 4E                      gh9:	dec	si
+  1725 000003D0 93                      	xchg	ax,bx		; DX:AX now holds the final 32-bit result
+  1726 000003D1 5B                      	pop	bx
+  1727 000003D2 C3                      	ret
+  1728
+  1729                                  ;
+  1730                                  ;   printHex: print value in hex
+  1731                                  ;
+  1732                                  ;   Inputs
+  1733                                  ;	DX:AX == value
+  1734                                  ;	CX == # of characters
+  1735                                  ;
+  1736                                  ;   Outputs
+  1737                                  ;	None
+  1738                                  ;
+  1739                                  ;   Uses
+  1740                                  ;	Flags
+  1741                                  ;
+  1742                                  printHex:
+  1743 000003D3 50                      	push	ax
+  1744 000003D4 53                      	push	bx
+  1745 000003D5 51                      	push	cx
+  1746 000003D6 52                      	push	dx
+  1747 000003D7 57                      	push	di
+  1748 000003D8 89C3                    	mov	bx,ax		; DX:BX now holds the value to print
+  1749 000003DA BF[2A00]                	mov	di,hex_buffer_end - 1
+  1750 000003DD B024                    	mov	al,'$'
+  1751 000003DF FD                      	std
+  1752 000003E0 AA                      	stosb
+  1753 000003E1 E320                    ph1:	jcxz	ph3
+  1754 000003E3 88D8                    	mov	al,bl
+  1755 000003E5 240F                    	and	al,0x0F
+  1756 000003E7 0430                    	add	al,'0'
+  1757 000003E9 3C39                    	cmp	al,'9'
+  1758 000003EB 7602                    	jbe	ph2
+  1759 000003ED 0407                    	add	al,'A'-'0'-10
+  1760 000003EF AA                      ph2:	stosb
+  1761 000003F0 49                      	dec	cx
+  1762 000003F1 D1EA                    	shr	dx,1
+  1763 000003F3 D1DB                    	rcr	bx,1
+  1764 000003F5 D1EA                    	shr	dx,1
+  1765 000003F7 D1DB                    	rcr	bx,1
+  1766 000003F9 D1EA                    	shr	dx,1
+  1767 000003FB D1DB                    	rcr	bx,1
+  1768 000003FD D1EA                    	shr	dx,1
+  1769 000003FF D1DB                    	rcr	bx,1
+  1770 00000401 EBDE                    	jmp	ph1
+  1771 00000403 FC                      ph3:	cld
+  1772 00000404 47                      	inc	di
+  1773                                  	print	di
+  1774                              <1>  %ifidni %1,line
+  1775                              <1>  push ax
+  1776                              <1>  push cx
+  1777                              <1>  push dx
+  1778                              <1>  push si
+  1779                              <1>  mov dx,si
+  1780                              <1>  dec cx
+  1781                              <1>  add si,cx
+  1782                              <1>  mov byte [si],'$'
+  1783                              <1>  mov ah,0x09
+  1784                              <1>  int 0x21
+  1785                              <1>  mov dx,strCRLF
+  1786                              <1>  mov ah,0x09
+  1787                              <1>  int 0x21
+  1788                              <1>  pop si
+  1789                              <1>  pop dx
+  1790                              <1>  pop cx
+  1791                              <1>  pop ax
+  1792                              <1>  %else
+  1793                              <1>  %ifstr %1
+  1794                              <1>  section .data
+  1795                              <1> %%str: db %1,'$'
+  1796                              <1>  section .text
+  1797                              <1>  push dx
+  1798                              <1>  mov dx,%%str
+  1799                              <1>  %elifnidni %1,dx
+  1800 00000405 52                  <1>  push dx
+  1801 00000406 89FA                <1>  mov dx,%1
+  1802                              <1>  %endif
+  1803 00000408 50                  <1>  push ax
+  1804 00000409 B409                <1>  mov ah,0x09
+  1805 0000040B CD21                <1>  int 0x21
+  1806 0000040D 58                  <1>  pop ax
+  1807                              <1>  %ifnidni %1,dx
+  1808 0000040E 5A                  <1>  pop dx
+  1809                              <1>  %endif
+  1810                              <1>  %endif
+  1811 0000040F 5F                      	pop	di
+  1812 00000410 5A                      	pop	dx
+  1813 00000411 59                      	pop	cx
+  1814 00000412 5B                      	pop	bx
+  1815 00000413 58                      	pop	ax
+  1816 00000414 C3                      	ret
+  1817
+  1818                                  ;
+  1819                                  ;   getLine: find the length of the current line
+  1820                                  ;
+  1821                                  ;   Inputs
+  1822                                  ;	DS:SI -> start of line
+  1823                                  ;	DS:DI -> first byte past end of line buffer
+  1824                                  ;
+  1825                                  ;   Outputs
+  1826                                  ;	CX == length of line, including the terminating LF (or partial length)
+  1827                                  ;	Carry clear if line complete, carry set if line incomplete (SI reached DI)
+  1828                                  ;
+  1829                                  ;   Uses
+  1830                                  ;	AL, CX, Flags
+  1831                                  ;
+  1832                                  getLine:
+  1833 00000415 56                      	push	si
+  1834 00000416 29C9                    	sub	cx,cx
+  1835 00000418 39FE                    gl1:	cmp	si,di
+  1836 0000041A 7204                    	jb	gl2
+  1837 0000041C F9                      	stc
+  1838 0000041D E90600                  	jmp	gl9
+  1839 00000420 AC                      gl2:	lodsb
+  1840 00000421 41                      	inc	cx
+  1841 00000422 3C0A                    	cmp	al,0x0A
+  1842 00000424 75F2                    	jne	gl1
+  1843 00000426 5E                      gl9:	pop	si
+  1844 00000427 C3                      	ret
+  1845
+  1846                                  ;
+  1847                                  ;   skipTo: skip to the character in AH
+  1848                                  ;
+  1849                                  ;   Inputs
+  1850                                  ;	AH == specified character
+  1851                                  ;	DS:SI -> LF-terminated line
+  1852                                  ;
+  1853                                  ;   Outputs
+  1854                                  ;	DS:SI -> specified character if carry clear, or LF if carry set
+  1855                                  ;
+  1856                                  ;   Uses
+  1857                                  ;	AL, SI, Flags
+  1858                                  ;
+  1859                                  skipTo:
+  1860 00000428 AC                      	lodsb
+  1861 00000429 38E0                    	cmp	al,ah
+  1862 0000042B 7405                    	je	st9
+  1863 0000042D 3C0A                    	cmp	al,0x0A
+  1864 0000042F 75F7                    	jne	skipTo
+  1865 00000431 F9                      	stc
+  1866 00000432 4E                      st9:	dec	si
+  1867 00000433 C3                      	ret
+  1868
+  1869                                  ;
+  1870                                  ;   The following is "const" (read-only) data...
+  1871                                  ;
+  1872                                  	section .data
+  1873 000000AD 524F4C00                ins_table	db	"ROL",0
+  1874 000000B1 [E002][EA02]0000D5-     		dw	testROL8, testROL16, 0, PS_ALL_BUT_OF
+  1875 000000B8 00
+  1876 000000B9 524F5200                		db	"ROR",0
+  1877 000000BD [F402][FE02]0000D5-     		dw	testROR8, testROR16, 0, PS_ALL_BUT_OF
+  1878 000000C4 00
+  1879 000000C5 52434C00                		db	"RCL",0
+  1880 000000C9 [0803][1203]0000D5-     		dw	testRCL8, testRCL16, 0, PS_ALL_BUT_OF
+  1881 000000D0 00
+  1882 000000D1 52435200                		db	"RCR",0
+  1883 000000D5 [1C03][2603]0000D5-     		dw	testRCR8, testRCR16, 0, PS_ALL_BUT_OF
+  1884 000000DC 00
+  1885 000000DD 53484C00                		db	"SHL",0
+  1886 000000E1 [3003][3A03]0000C5-     		dw	testSHL8, testSHL16, 0, PS_ALL_BUT_AF
+  1887 000000E8 08
+  1888 000000E9 4D554C00                		db	"MUL",0
+  1889 000000ED 0000[4403][4E03]01-     		dw	0, testMUL16, testMUL32, PS_CF | PS_OF
+  1890 000000F4 08
+  1891 000000F5 494D554C00              		db	"IMUL",0
+  1892 000000FA 0000[5803][6203]01-     		dw	0, testIMUL16, testIMUL32, PS_CF | PS_OF
+  1893 00000101 08
+  1894 00000102 44495600                		db	"DIV",0
+  1895 00000106 0000[6C03][7603]00-     		dw	0, testDIV16, testDIV32, PS_NONE
+  1896 0000010D 00
+  1897 0000010E 494D554C00              		db	"IMUL",0
+  1898 00000113 0000[8403][8E03]00-     		dw	0, testIDIV16, testIDIV32, PS_NONE
+  1899 0000011A 00
+  1900 0000011B 00                      		db	0		; end of instruction table
+  1901
+  1902 0000011C 0D0A24                  strCRLF		db	0x0D,0x0A,'$'
+  1903 0000011F 3A24                    strColon	db	":$"
+  1904 00000121 3D24                    strEquals	db	"=$"
+  1905 00000123 2C24                    strComma	db	",$"
+  1906 00000125 2061637475616C3D24      strActual	db	" actual=$"
+  1907 0000012E 207265636F72646564-     strRecorded	db	" recorded=$"
+  1908 00000137 3D24
+  1909
+  1910                                  ;
+  1911                                  ;   We end with all the unitialized data (ie, data that doesn't need to be stored in the binary)
+  1912                                  ;
+  1913                                  	section .bss
+  1914 00000000 <res 00000006>          ins_name	resb	6
+  1915 00000006 <res 00000002>          ins_function	resw	1
+  1916 00000008 <res 00000002>          ins_compare	resw	1
+  1917 0000000A <res 00000004>          dst_operand	resw	2
+  1918 0000000E <res 00000002>          dst_size	resw	1
+  1919 00000010 <res 00000004>          src_operand	resw	2
+  1920 00000014 <res 00000002>          src_size	resw	1
+  1921 00000016 <res 00000002>          operand_flags	resw	1
+  1922 00000018 <res 00000002>          relevant_flags	resw	1
+  1923 0000001A <res 00000004>          result_operand	resw	2
+  1924 0000001E <res 00000002>          result_size	resw	1
+  1925 00000020 <res 00000002>          result_flags	resw	1
+  1926
+  1927 00000022 <res 00000009>          hex_buffer	resb	9
+  1928                                  hex_buffer_end	equ	$
+  1929                                  hex_buffer_len	equ	hex_buffer_end - hex_buffer
+  1930
+  1931 0000002B <res 00001000>          file_buffer	resb	0x1000
+  1932                                  file_buffer_end equ	$
+  1933                                  file_buffer_len equ	file_buffer_end - file_buffer

@@ -1,0 +1,121 @@
+     1                                  	cpu	8086
+     2                                  
+     3                                  	org	100h
+     4                                  	section .text
+     5                                  
+     6 00000000 EB45                    begin:	jmp	main
+     7                                  ;
+     8                                  ; First, a subroutine to display a character in AL, preserving all registers.
+     9                                  ; After the JMP is code to write the character to the screen, followed by code to
+    10                                  ; write it to COM1; patch the JMP with NOPs to use the latter.
+    11                                  ;
+    12 00000002 EB0B                    chrout:	jmp	tocom
+    13 00000004 50                      toscr:	push	ax
+    14 00000005 53                      	push	bx
+    15 00000006 B40E                    	mov	ah,0Eh
+    16 00000008 B700                    	mov	bh,0
+    17 0000000A CD10                    	int	10h
+    18 0000000C 5B                      	pop	bx
+    19 0000000D 58                      	pop	ax
+    20 0000000E C3                      	ret
+    21 0000000F 50                      tocom:	push	ax
+    22 00000010 52                      	push	dx
+    23 00000011 BA0000                  	mov	dx,0
+    24 00000014 B401                    	mov	ah,1
+    25 00000016 CD14                    	int	14h
+    26 00000018 5A                      	pop	dx
+    27 00000019 58                      	pop	ax
+    28 0000001A C3                      	ret
+    29                                  ;
+    30                                  ; Display CR/LF.
+    31                                  ;
+    32 0000001B B00D                    crlf:	mov	al,0Dh
+    33 0000001D E8E2FF                  	call	chrout
+    34 00000020 B00A                    	mov	al,0Ah
+    35 00000022 E8DDFF                  	call	chrout
+    36 00000025 C3                      	ret
+    37                                  ;
+    38                                  ; A subroutine to display the byte in AL as a 2-digit hex value, preserving all registers.
+    39                                  ;
+    40 00000026 50                      hexout:	push	ax
+    41 00000027 D0E8                    	shr	al,1
+    42 00000029 D0E8                    	shr	al,1
+    43 0000002B D0E8                    	shr	al,1
+    44 0000002D D0E8                    	shr	al,1
+    45 0000002F E80900                  	call	hex1
+    46 00000032 58                      	pop	ax
+    47 00000033 50                      	push	ax
+    48 00000034 240F                    	and	al,0fh
+    49 00000036 E80200                  	call	hex1
+    50 00000039 58                      	pop	ax
+    51 0000003A C3                      	ret
+    52 0000003B 0430                    hex1:	add	al,30h
+    53 0000003D 3C39                    	cmp	al,39h
+    54 0000003F 7602                    	jbe	hex2
+    55 00000041 0407                    	add	al,41h-3Ah
+    56 00000043 E8BCFF                  hex2:	call	chrout
+    57 00000046 C3                      	ret
+    58                                  ;
+    59                                  ; Read each track on the disk and dump its sectors.
+    60                                  ;
+    61 00000047 BA0000                  main:	mov	dx,0		; DX == COM port
+    62 0000004A B8E300                  	mov	ax,00E3h	; AH == init function, AL == 9600 baud (111), no parity (00), 1 stop bit (0), 8 data bits (11)
+    63 0000004D CD14                    	int	14h		; initialize port
+    64 0000004F B500                    	mov	ch,0		; CH == cylinder
+    65 00000051 B600                    	mov	dh,0		; DH == head
+    66 00000053 B101                    trck:	mov	cl,1		; CL == sector
+    67 00000055 B201                    	mov	dl,1		; DL == drive
+    68 00000057 BB0002                  	mov	bx,200h		; ES:BX -> track buffer (ES should already be set properly)
+    69 0000005A BE0600                  	mov	si,6		; SI == retry count
+    70 0000005D B80802                  read:	mov	ax,0208h	; AH == read function, AL == # of sectors (sectors/track)
+    71 00000060 CD13                    	int	13h		; read sectors
+    72 00000062 B408                    	mov	ah,8		; AH == number of sectors read (assumed)
+    73                                  ;	xchg	al,ah		; AH == number of sectors read (if successful; ROM doesn't seem to honor this)
+    74 00000064 7305                    	jnc	dump		; success
+    75 00000066 4E                      	dec	si		; decrement retry count
+    76 00000067 75F4                    	jnz	read		; try again
+    77 00000069 EB4B                    	jmp	next		; out of retries, give up and move on
+    78                                  ;
+    79                                  ; Dump each sector in the track, prefacing each with its C:H:S value.
+    80                                  ;
+    81 0000006B 88E8                    dump:	mov	al,ch
+    82 0000006D E8B6FF                  	call	hexout
+    83 00000070 B03A                    	mov	al,':'
+    84 00000072 E88DFF                  	call	chrout
+    85 00000075 88F0                    	mov	al,dh
+    86 00000077 E8ACFF                  	call	hexout
+    87 0000007A B03A                    	mov	al,':'
+    88 0000007C E883FF                  	call	chrout
+    89 0000007F 88C8                    	mov	al,cl
+    90 00000081 E8A2FF                  	call	hexout
+    91                                  ;	mov	al,':'
+    92                                  ;	call	chrout
+    93                                  ;	mov	al,ah
+    94                                  ;	call	hexout
+    95 00000084 E894FF                  	call	crlf		; C:H:S line complete
+    96 00000087 51                      	push	cx
+    97 00000088 52                      	push	dx
+    98 00000089 BA2000                  	mov	dx,200h/16	; DL == number of lines, DH == checksum (initially zero)
+    99 0000008C B91000                  sloop:	mov	cx,16		; number of bytes per line
+   100 0000008F 268A07                  lloop:	mov	al,[es:bx]
+   101 00000092 00C6                    	add	dh,al
+   102 00000094 43                      	inc	bx
+   103 00000095 E88EFF                  	call	hexout
+   104 00000098 B020                    	mov	al,' '
+   105 0000009A E865FF                  	call	chrout
+   106 0000009D E2F0                    	loop	lloop
+   107 0000009F E879FF                  	call	crlf
+   108 000000A2 FECA                    	dec	dl
+   109 000000A4 75E6                    	jnz	sloop
+   110 000000A6 88F0                    	mov	al,dh
+   111 000000A8 E87BFF                  	call	hexout
+   112 000000AB E86DFF                  	call	crlf
+   113 000000AE 5A                      	pop	dx
+   114 000000AF 59                      	pop	cx
+   115 000000B0 FEC1                    	inc	cl
+   116 000000B2 FECC                    	dec	ah
+   117 000000B4 7FB5                    	jg	dump
+   118 000000B6 FEC5                    next:	inc	ch
+   119 000000B8 80FD28                  	cmp	ch,40
+   120 000000BB 7296                    	jb	trck
+   121 000000BD CD20                    	int	20h		; all done, exit to DOS
