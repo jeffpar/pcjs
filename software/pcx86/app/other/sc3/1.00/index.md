@@ -15,9 +15,6 @@ machines:
     autoType: $date\r$time\rb:\rsc3\r
 ---
 
-Sorcim SuperCalc3 v1.00
------------------------
-
 {% include machine.html id="ibm5160-sc3" %}
 
 ### Directory of SuperCalc3 v1.00 Setup Disk
