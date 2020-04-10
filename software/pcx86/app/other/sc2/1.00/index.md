@@ -15,9 +15,6 @@ machines:
     autoType: $date\r$time\rb:\rsc2\r
 ---
 
-Sorcim SuperCalc2 v1.00
------------------------
-
 {% include machine.html id="ibm5150-sc2" %}
 
 ### Directory of SuperCalc2 v1.00

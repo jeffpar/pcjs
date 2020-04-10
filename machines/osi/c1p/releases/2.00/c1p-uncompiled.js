@@ -10397,9 +10397,13 @@ class C1PSerialPort extends Component {
         super("C1PSerialPort", parmsSerial);
 
         this.flags.powered = false;
+
         this.fDemo = parmsSerial['demo'];
         this.sDemo = "10 PRINT \"HELLO OSI #" + this.getMachineNum() + "\"\n";
+
+        this.autoLoad = C1PSerialPort.AUTOLOAD_NONE;
         this.autoMount = Web.getURLParm('autoMount') || parmsSerial['autoMount'];
+
         if (typeof this.autoMount == "string") {
             try {
                 this.autoMount = /** @type {Object} */ (eval("(" + this.autoMount + ")"));
@@ -10408,14 +10412,15 @@ class C1PSerialPort extends Component {
                 this.autoMount = null;
             }
         }
+
         var path = this.autoMount && this.autoMount['path'];
-        this.autoMount = null;
         if (path) {
             var serial = this;
             this.fDemo = true;
             Web.getResource(path, null, true, function(sURL, sResponse, nErrorCode) {
                 serial.loadFile(sURL, sResponse, nErrorCode);
                 serial.sDemo = sResponse;
+                serial.autoMount = null;
                 /*
                  * setBuffer() calls setReady() only if autoMount has been cleared; similarly, we must call setReady()
                  * only if setBuffer() has already been called.
@@ -10424,6 +10429,61 @@ class C1PSerialPort extends Component {
             });
         }
         this.reset(true);
+    }
+
+    /**
+     * @this {C1PSerialPort}
+     * @param {string} sFileName
+     * @param {string} sFileData (null if getResource() encountered an error)
+     * @param {number} nResponse from server
+     */
+    loadFile(sFileName, sFileData, nResponse)
+    {
+        if (!sFileData) {
+            this.println("Error loading file \"" + sFileName + "\" (" + nResponse + ")");
+            return;
+        }
+
+        this.iInput = 0;
+        this.sInput = sFileData;
+        this.fConvertLF = true;
+
+        /*
+         * The following code adds support for loading "65V" files encoded as JSON, which is a cleaner
+         * way to store and deliver those files when they contain binary (non-ASCII) data.
+         *
+         * For example, my 6502 ASSEMBLER/DISASSEMBLER program starts with a conventional "65V" loading
+         * sequence, which loads and launches a small program loader that loads the rest of the program
+         * using a raw (1-to-1) binary format instead of the usual (3-to-1) HEX format used by "65V" files.
+         *
+         * The "rawness" of the binary format also necessitates disabling fConvertLF.
+         */
+        if (sFileName.indexOf(".json") > 0) {
+            try {
+                /*
+                 * The most likely source of any exception will be here: parsing the JSON-encoded data.
+                 */
+                var s = "";
+                var data = eval("(" + sFileData + ")");
+                var ab = data['bytes'];
+                for (var i = 0; i < ab.length; i++) {
+                    s += String.fromCharCode(ab[i]);
+                }
+                this.sInput = s;
+                this.fConvertLF = false;
+            } catch (e) {
+                this.println("Error processing file \"" + sFileName + "\": " + e.message);
+                return;
+            }
+        }
+
+        if (this.cmp && this.kbd && this.cpu.isRunning()) {
+            this.println("auto-loading " + sFileName);
+            if (!this.fDemo) this.startLoad(true);
+        }
+        else {
+            this.println(sFileName + " ready to load");
+        }
     }
 
     /**
@@ -10624,62 +10684,6 @@ class C1PSerialPort extends Component {
                 if (fReset) this.cmp.reset(true);
                 this.kbd.injectKeys("ML");
             }
-        }
-    }
-
-    /**
-     * @this {C1PSerialPort}
-     * @param {string} sFileName
-     * @param {string} sFileData (null if getResource() encountered an error)
-     * @param {number} nResponse from server
-     */
-    loadFile(sFileName, sFileData, nResponse)
-    {
-        if (!sFileData) {
-            this.println("Error loading file \"" + sFileName + "\" (" + nResponse + ")");
-            return;
-        }
-
-        this.iInput = 0;
-        this.sInput = sFileData;
-        this.fConvertLF = true;
-        this.autoLoad = C1PSerialPort.AUTOLOAD_NONE;
-
-        /*
-         * The following code adds support for loading "65V" files encoded as JSON, which is a cleaner
-         * way to store and deliver those files when they contain binary (non-ASCII) data.
-         *
-         * For example, my 6502 ASSEMBLER/DISASSEMBLER program starts with a conventional "65V" loading
-         * sequence, which loads and launches a small program loader that loads the rest of the program
-         * using a raw (1-to-1) binary format instead of the usual (3-to-1) HEX format used by "65V" files.
-         *
-         * The "rawness" of the binary format also necessitates disabling fConvertLF.
-         */
-        if (Str.endsWith(sFileName, ".json")) {
-            try {
-                /*
-                 * The most likely source of any exception will be here: parsing the JSON-encoded data.
-                 */
-                var s = "";
-                var data = eval("(" + sFileData + ")");
-                var ab = data['bytes'];
-                for (var i = 0; i < ab.length; i++) {
-                    s += String.fromCharCode(ab[i]);
-                }
-                this.sInput = s;
-                this.fConvertLF = false;
-            } catch (e) {
-                this.println("Error processing file \"" + sFileName + "\": " + e.message);
-                return;
-            }
-        }
-
-        if (this.cmp && this.kbd && this.cpu.isRunning()) {
-            this.println("auto-loading " + sFileName);
-            if (!this.fDemo) this.startLoad(true);
-        }
-        else {
-            this.println(sFileName + " ready to load");
         }
     }
 

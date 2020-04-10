@@ -51,7 +51,7 @@
       function pcjsExplorerSurprise() {
         let elements = document.querySelectorAll(".pcjs-explorer-item");
         let element = elements && elements[Math.random() * elements.length | 0];
-        if (element && element.children) window.location.href = element.children[0].pathname;
+        if (element && element.children) window.location.href = element.children[0].href;
       }
       function pcjsExplorerView(element, event) {
         event.preventDefault();
