@@ -7977,23 +7977,28 @@ class VideoX86 extends Component {
              * which is not the initial keyboard state that the Keyboard component expects, so hopefully turning off
              * these "auto" attributes will help.
              *
-             * TODO: Determine if there's any reason we shouldn't set all these attributes (and perhaps others, such as
-             * "autocomplete") for ALL browsers.  Unfortunately, in my limited testing, none of them seem to have any effect
-             * on the way Chrome/webkit converts "compose" key sequences (eg, "Alt-E") into dead keys (keyCode 229).
+             * NOTE: We now set these attributes for ALL browsers, not just "iOS", in large part because the new
+             * iPadOS agent string no longer contains any "iOS" identifiers (this degree of fakery is somewhat annoying).
+             * Perhaps we should set other attributes as well, such as "autocomplete", but that remains to be seen.
+             *
+             * Unfortunately, in my limited testing, none of these seemed to have any effect on the way Chrome/webkit
+             * converts "compose" key sequences (eg, "Alt-E") into dead keys (keyCode 229).
              */
-            if (Web.isUserAgent("iOS")) {
-                textarea.setAttribute("autocapitalize", "off");
-                textarea.setAttribute("autocorrect", "off");
-                /*
-                 * One of the problems on iOS devices is that after a soft-key control is clicked, we need to give
-                 * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS may
-                 * also "zoom" the page rather jarringly.  While it's a simple matter to completely disable zooming,
-                 * by fiddling with the page's viewport, that prevents the user from intentionally zooming.  A bit of
-                 * Googling reveals that another way to prevent those jarring unintentional zooms is to simply set the
-                 * font-size of the text control to 16px.  So that's what we do.
-                 */
-                textarea.style.fontSize = "16px";
-            }
+            textarea.setAttribute("autocapitalize", "off");
+            textarea.setAttribute("autocorrect", "off");
+
+            /*
+             * Another problem on iOS devices was that after a soft-key control was clicked, we needed to give
+             * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS could
+             * also "zoom" the page rather jarringly.  While it was a simple matter to completely disable zooming,
+             * by fiddling with the page's viewport, that prevented the user from intentionally zooming.  A bit of
+             * Googling reveals that another way to prevent those jarring unintentional zooms was to simply set
+             * the font-size of the text control to 16px.  So that's what we do.
+             *
+             * NOTE: Not sure if this is still necessary, but changing the code (and then doing a bunch of testing)
+             * doesn't sound very appealing right now.
+             */
+            textarea.style.fontSize = "16px";
 
             /*
              * See if there are any "diagnostic" elements we should pass along, too.
