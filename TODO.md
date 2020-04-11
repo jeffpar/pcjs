@@ -18,7 +18,8 @@
 
 {% raw %}
 
-    The good news is that ... you can actually generate random numbers in Liquid through a simple trick: making use of both the liquid's date filters & modulo filter.
+    The good news is that ... you can actually generate random numbers in Liquid
+    through a simple trick: making use of both the liquid's date filters & modulo filter.
     
     Follow these steps:
 

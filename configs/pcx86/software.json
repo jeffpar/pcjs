@@ -1242,7 +1242,7 @@
   },
   "game": {
     "@title": "Games",
-    "@server": "https://gamedisks.pcjs.org",
+    "@server": "/gamedisks",
     "id": {
       "@title": "Id Software",
       "@versions": {
@@ -1399,6 +1399,23 @@
           ],
           "@author": "Scott A. Harris",
           "@publisher": "IBM"
+        },
+        "1984/kings_quest1": {
+          "@title": "King's Quest (1984)",
+          "@media": [
+            {
+              "@title": "King's Quest (Disk 1)",
+              "@diskette": "KINGS_QUEST1-DISK1.json",
+              "@type": "PC360K",
+              "@source": "archive.org"
+            },
+            {
+              "@title": "King's Quest (Disk 2)",
+              "@diskette": "KINGS_QUEST1-DISK2.json",
+              "@type": "PC360K",
+              "@source": "archive.org"
+            }
+          ]
         },
         "1984/wizardry1": {
           "@title": "Wizardry I (1984)",

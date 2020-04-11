@@ -32,6 +32,13 @@
         "webRoot": "${workspaceFolder}"
       },
       {
+        "name": "8080 Exerciser Test Machine",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:4000/machines/pcx80/exerciser/",
+        "webRoot": "${workspaceFolder}"
+      },
+      {
         "name": "COMPAQ Portable with Monochrome Graphics",
         "type": "chrome",
         "request": "launch",
@@ -200,13 +207,6 @@
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "8080 Exerciser Test Machine",
-        "type": "chrome",
-        "request": "launch",
-        "url": "http://localhost:4000/machines/pcx80/exerciser/",
-        "webRoot": "${workspaceFolder}"
-      },
-      {
         "name": "TI-57 Programmable Calculator",
         "type": "chrome",
         "request": "launch",
@@ -225,6 +225,13 @@
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/ti/ti57/rev1/",
+        "webRoot": "${workspaceFolder}"
+      },
+      {
+        "name": "King's Quest (1984)",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:4000/software/pcx86/game/other/1984/kings_quest1/",
         "webRoot": "${workspaceFolder}"
       }
     ]

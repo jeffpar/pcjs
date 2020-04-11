@@ -1645,6 +1645,7 @@ class FDC extends Component {
                     if (control.text == sName) return control.value;
                 }
             }
+            this.notice("Unable to find diskette \"" + sName + "\"");
         }
         return "";
     }
