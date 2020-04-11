@@ -5,6 +5,7 @@
     "A": {"name": "PC DOS 1.00"}
   },
   "diskettes": "/configs/pcx86/software.json",
+  "server": "/diskettes",
   "style": {
     "float": "left",
     "padding-right": "8px",

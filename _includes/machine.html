@@ -117,10 +117,10 @@
       {%- if component.autoMount -%}
         {%- capture component_autoMount -%}{%- for drive in component.autoMount -%}{{ drive[0] }}:{%- if drive[1].name -%}{name:&quot;{{ drive[1].name }}&quot;}{%- else -%}{path:&quot;{{ drive[1].path }}&quot;}{%- endif -%},{%- endfor -%}@{%- endcapture -%}
       {%- endif -%}
-      {%- capture component_config -%}{ {{ default_config }},autoMount:'{ {{ component_autoMount | replace: ",@", "" }} }',diskettes:'{{ component.diskettes }}' }{%- endcapture -%}
+      {%- capture component_config -%}{ {{ default_config }},autoMount:'{ {{ component_autoMount | replace: ",@", "" }} }',diskettes:'{{ component.diskettes }}',server:'{{ component.server }}' }{%- endcapture -%}
     {%- elsif component.class == "hdc" -%}
       {%- capture component_drives -%}{%- for drive in component.drives -%}{ name:&quot;{{ drive.name }}&quot;,type:{{ drive.type | default: "3" }},path:&quot;{{ drive.path }}&quot; },{%- endfor -%}@{%- endcapture -%}
-      {%- capture component_config -%}{ {{ default_config }},drives:'[{{ component_drives | replace: ",@", "" }}]',type:'{{ component.type | default: "XT" }}' }{%- endcapture -%}
+      {%- capture component_config -%}{ {{ default_config }},drives:'[{{ component_drives | replace: ",@", "" }}]',type:'{{ component.type | default: "XT" }}',server:'{{ component.server }}' }{%- endcapture -%}
     {%- elsif component.class == "keyboard" -%}
       {%- capture component_config -%}{ {{ default_config }},model:'{{ component.model }}' }{%- endcapture -%}
     {%- elsif component.class == "mouse" -%}

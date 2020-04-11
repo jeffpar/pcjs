@@ -6,6 +6,7 @@
     "B": {"name": "PC DOS 2.00 (Disk 2)"}
   },
   "diskettes": "/configs/pcx86/software.json",
+  "server": "/diskettes",
   "style": {
     "float": "left",
     "padding-right": "8px",
