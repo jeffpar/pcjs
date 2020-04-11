@@ -27,9 +27,12 @@ exclude:
   - "**/private"
   - /package*.json
   - /.history
-  - /modules
+  - /diskettes
+  - /gamedisks
+  - /harddisks
   - /node_modules
-  - /software/pcx86/sys/dos/microsoft/2.11
+  - /software/pcx86/sys/dos/microsoft/1.25/src
+  - /software/pcx86/sys/dos/microsoft/2.11/src
 
 github:
   owner_name: "jeffpar"
@@ -62,4 +65,4 @@ archive:
   ms:
     server: https://msarchive.pcjs.org
   kb:
-    server: https://jeffpar.github.io/kbarchive/
+    server: https://jeffpar.github.io/kbarchive

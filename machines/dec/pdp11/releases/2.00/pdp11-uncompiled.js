@@ -2341,26 +2341,9 @@ class Web {
             return response;
         }
 
-        // let sURLRedirect = sURL;
-        // if (Web.getHost() == "pcjs:8088" || typeof module !== "undefined") {
-        //     /*
-        //      * The larger resources that I've put on archive.pcjs.org are assumed to also be available locally
-        //      * whenever the hostname is "pcjs" (or NODE is true); otherwise, use "localhost" when debugging locally.
-        //      *
-        //      * NOTE: http://archive.pcjs.org is currently redirected to https://s3-us-west-2.amazonaws.com/archive.pcjs.org
-        //      */
-        //     sURLRedirect = sURL.replace(/^(http:\/\/archive\.pcjs\.org\/|https:\/\/[a-z0-9-]+\.amazonaws\.com\/archive\.pcjs\.org\/)([^/]*)\/(.*?)\/([^/]*)$/, "/$2-demo/$3/archive/$4");
-        //     sURLRedirect = sURLRedirect.replace(/^https:\/\/([a-z0-9]+)-disks\.pcjs\.org\/(.*)$/, "/disks-$1/$2").replace(/^https:\/\/(cds[0-9]+)\.pcjs\.org\/(.*)$/, "/disks-cds/$1/$2");
-        // }
-        // else {
-        //     /*
-        //      * TODO: Perhaps it's time for our code in netlib.js to finally add support for HTTPS; for now
-        //      * though, it's just as well that the NODE environment assumes all resources are available locally.
-        //      */
-        //     sURLRedirect = sURL.replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/").replace(/^\/disks-([a-z0-9]+)\//, "https://$1-disks.pcjs.org/");
-        // }
-
-        let sURLRedirect = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig8a-disks|pcsig8b-disks)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+        if (Web.getHostName() != "localhost" && Web.getHostName() != "pcjs") {
+            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig8a-disks|pcsig8b-disks)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+        }
 
 
         let request = (window.XMLHttpRequest? new window.XMLHttpRequest() : new window.ActiveXObject("Microsoft.XMLHTTP"));
@@ -2398,20 +2381,20 @@ class Web {
             try {
                 resource = fArrayBuffer? request.response : request.responseText;
             } catch(err) {
-                if (MAXDEBUG) Web.log("xmlHTTPRequest(" + sURLRedirect + ") exception: " + err.message);
+                if (MAXDEBUG) Web.log("xmlHTTPRequest(" + sURL + ") exception: " + err.message);
             }
             /*
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
-                if (MAXDEBUG) Web.log("xmlHTTPRequest(" + sURLRedirect + "): returned " + resource.length + " bytes");
+                if (MAXDEBUG) Web.log("xmlHTTPRequest(" + sURL + "): returned " + resource.length + " bytes");
             }
             else {
                 nErrorCode = request.status || -1;
-                Web.log("xmlHTTPRequest(" + sURLRedirect + "): error code " + nErrorCode);
+                Web.log("xmlHTTPRequest(" + sURL + "): error code " + nErrorCode);
                 if (!request.status && !Web.fAdBlockerWarning) {
-                    let match = sURLRedirect.match(/(^https?:\/\/[^/]+)(.*)/);
+                    let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
                         Web.fAdBlockerWarning = true;
                         Component.alertUser("PCjs was unable to perform a cross-origin resource request to '" + match[1] + "'.\n\nIf you're running an ad blocker, try adding '" + Web.getHostOrigin() + "' to your whitelist (or find a smarter ad blocker).");
@@ -2437,13 +2420,13 @@ class Web {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-            if (MAXDEBUG) Web.log("Web.getResource(POST " + sURLRedirect + "): " + sPost.length + " bytes");
-            request.open("POST", sURLRedirect, fAsync);
+            if (MAXDEBUG) Web.log("Web.getResource(POST " + sURL + "): " + sPost.length + " bytes");
+            request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-            if (MAXDEBUG) Web.log("Web.getResource(GET " + sURLRedirect + ")");
-            request.open("GET", sURLRedirect, fAsync);
+            if (MAXDEBUG) Web.log("Web.getResource(GET " + sURL + ")");
+            request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
                     fArrayBuffer = true;
@@ -32339,7 +32322,7 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
              * Until/unless that changes, components.xsl cannot be simplified as much as I might have hoped.
              */
             if (typeof resources == 'object') sURL = null;      // turn off URL inclusion if we have embedded resources
-            sParms = sParms.replace(/\$/g, "$$$$");
+            sParms = sParms.replace(/\$/g, "$$$$").replace(/'/g, "&apos;");
             if (sClass) {
                 /*
                  * If there's no hard-coded "class" attribute in the machine tag, then we can set one in the final

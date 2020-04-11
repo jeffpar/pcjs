@@ -138,7 +138,7 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
              * Until/unless that changes, components.xsl cannot be simplified as much as I might have hoped.
              */
             if (typeof resources == 'object') sURL = null;      // turn off URL inclusion if we have embedded resources
-            sParms = sParms.replace(/\$/g, "$$$$");
+            sParms = sParms.replace(/\$/g, "$$$$").replace(/'/g, "&apos;");
             if (sClass) {
                 /*
                  * If there's no hard-coded "class" attribute in the machine tag, then we can set one in the final
@@ -438,14 +438,7 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
                  * Third-party sites that don't use the PCjs server will ALWAYS want to specify a fully-qualified
                  * path to the XSL file, unless they choose to mirror our folder structure.
                  */
-                let sAppFolder = sAppClass;
-                if (DEBUG || !sVersion) {
-                    if (sAppClass != "c1pjs") sAppFolder = "shared";
-                    sXSLFile = "/modules/" + sAppFolder + "/templates/components.xsl";
-                } else {
-                    if (sAppClass.substr(0, 3) == "pdp") sAppFolder = "pdpjs";
-                    sXSLFile = "/versions/" + sAppFolder + "/" + sVersion + "/components.xsl";
-                }
+                sXSLFile = "/configs/" + sAppClass + "/xsl/components.xsl";
             }
 
             let processXML = function(sURL, sXML, xml) {

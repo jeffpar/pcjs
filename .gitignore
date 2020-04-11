@@ -6,6 +6,9 @@
 archive
 private
 tmp
+/diskettes
+/gamedisks
+/harddisks
 /_site
 /node_modules
 /.vscode/settings.json
