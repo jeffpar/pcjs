@@ -25,7 +25,7 @@ fixed, we'll remove the PCjs Debugger from the page and update this notice.
 
 ### Copy-Protection
 
-This version of King's Quest (from [archive.org](https://archive.org/details/kingsquestipcbooter)) seemed like a good candidate
+This version of King's Quest (from [archive.org](https://archive.org/details/kingsquestipcbooter)) seemed like a good copy-protection candidate
 to examine, because it came with a complete set of Kryoflux files (along with an IMG file) for each of the game's two 360K diskettes.
 
 The Kryoflux RAW files included 84 tracks of data for each diskette, even though these were 40-track diskettes, so I moved all the odd-numbered
