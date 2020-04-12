@@ -17,14 +17,15 @@ This version of King's Quest is also known as the "PC Booter" edition, because y
 which in turn starts the game.  And it is sometimes called "King's Quest I", but when it hit store shelves in 1984, it was simply called
 "King's Quest".
 
-NOTE: The PCjs disk image preserves the [Copy-Protection](#copy-protection) that the game used, and PCx86 successfully runs the game's
-copy-protection test.  However, as you can see, there is a display issue we need to resolve before the game will be playable.  Stay tuned.
+NOTE: The PCjs disk image preserves the [Copy-Protection](#copy-protection) that the game used, and PCx86 successfully passes the game's
+copy-protection test.  However, as you can see, there is a display issue we need to resolve before the game will be playable.  Once that's
+fixed, we'll remove the PCjs Debugger from the page and update this notice.
 
 {% include machine.html id="ibm-5160-cga" %}
 
 ### Copy-Protection
 
-This version of King's Quest (downloaded from [archive.org](https://archive.org/details/kingsquestipcbooter)) seemed like a good candidate
+This version of King's Quest (from [archive.org](https://archive.org/details/kingsquestipcbooter)) seemed like a good candidate
 to examine, because it came with a complete set of Kryoflux files (along with an IMG file) for each of the game's two 360K diskettes.
 
 The Kryoflux RAW files included 84 tracks of data for each diskette, even though these were 40-track diskettes, so I moved all the odd-numbered
@@ -104,9 +105,8 @@ That last read occurs when the game executes this code:
 
 which requests sector ID 0 from track 38.  But, as noted above, there *nine* sectors on that track with a sector ID of 0.
 And originally, PCx86's simplistic seek() logic would always return the *first* sector with a matching ID on the desired track.
-However, as the [Nerdly Pleasures](http://nerdlypleasures.blogspot.com/2015/11/ibm-pc-floppy-disks-deeper-look-at-disk.html) blog
-pointed out, this copy-protection scheme relies on the controller returning whichever sector happened to be next, and depending
-on timing, that will *not* always be the first such sector on the track.
+However, as the **Nerdly Pleasures** blog pointed out, this copy-protection scheme relies on the controller returning whichever
+sector happened to be next, and depending on timing, that will *not* always be the first such sector on the track.
 
 I resolved this problem by having the FDC drive object maintain a cached reference to the last sector read (or written) on that drive,
 which is then passed to the Disk component's seek() function.  If the previous sector matches the next *candidate* sector, then
@@ -119,3 +119,6 @@ That appears to have resolved the copy-protection issue.  The next hurdle is now
 
   - [Kryoflux Forum](https://forum.kryoflux.com/viewtopic.php?t=765)
   - [Vintage Computer Forum](http://www.vcfed.org/forum/archive/index.php/t-40843.html)
+  - [Nerdly Pleasures](http://nerdlypleasures.blogspot.com/2015/11/ibm-pc-floppy-disks-deeper-look-at-disk.html)
+
+![King's Quest Artwork]({{ site.software.gamedisks.server }}/pcx86/game/other/1984/kings_quest1/KINGS_QUEST1.jpg)
