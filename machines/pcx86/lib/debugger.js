@@ -3301,11 +3301,9 @@ class DebuggerX86 extends DbgLib {
 
         if (aBreak != this.aBreakExec) {
             let addr = this.getAddr(dbgAddr);
-            if (addr === X86.ADDR_INVALID) {
+            if (addr === X86.ADDR_INVALID || !this.cpu.addMemBreak(addr, aBreak == this.aBreakWrite, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL)) {
                 this.println("invalid address: " + this.toHexAddr(dbgAddr));
                 fSuccess = false;
-            } else {
-                this.cpu.addMemBreak(addr, aBreak == this.aBreakWrite, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL);
             }
         }
 

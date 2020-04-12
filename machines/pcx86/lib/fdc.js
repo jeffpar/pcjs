@@ -942,6 +942,7 @@ class FDC extends Component {
          */
         drive.iByte = data[i++];                // location of the next byte to be accessed in the current sector
         drive.sector = null;
+        drive.sectorPrev = null;                // used to remember the last sector read (or written)
 
         /*
          * We no longer reinitialize drive.disk, in order to retain previously mounted diskette across resets;
@@ -2879,11 +2880,12 @@ class FDC extends Component {
                 /*
                  * Locate the next sector, and then try reading again.
                  */
-                drive.sector = drive.disk.seek(drive.bCylinder, drive.bHead, drive.bSector);
+                drive.sector = drive.disk.seek(drive.bCylinder, drive.bHead, drive.bSector, drive.sectorPrev);
                 if (!drive.sector) {
                     drive.resCode = FDC.REG_DATA.RES.NO_DATA | FDC.REG_DATA.RES.INCOMPLETE;
                     break;
                 }
+                drive.sectorPrev = drive.sector;
                 if (drive.sector['dataError']) {
                     drive.resCode = FDC.REG_DATA.RES.CRC_ERROR | FDC.REG_DATA.RES.INCOMPLETE;
                 }
@@ -2935,7 +2937,7 @@ class FDC extends Component {
             /*
              * Locate the next sector, and then try writing again.
              */
-            drive.sector = drive.disk.seek(drive.bCylinder, drive.bHead, drive.bSector);
+            drive.sector = drive.disk.seek(drive.bCylinder, drive.bHead, drive.bSector, drive.sectorPrev);
             if (!drive.sector) {
                 /*
                  * TODO: Determine whether this should be FDC.REG_DATA.RES.CRC_ERROR or FDC.REG_DATA.RES.DATA_FIELD
@@ -2944,6 +2946,7 @@ class FDC extends Component {
                 b = -1;
                 break;
             }
+            drive.sectorPrev = drive.sector;
             drive.iByte = 0;
             /*
              * We "pre-advance" bSector et al now, instead of waiting to advance it right before the seek().

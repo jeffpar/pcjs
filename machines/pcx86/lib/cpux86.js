@@ -250,19 +250,24 @@ class CPUx86 extends CPULib {
      * @param {number} addr
      * @param {boolean} fWrite is true for a memory write breakpoint, false for a memory read breakpoint
      * @param {boolean} [fPhysical] (true for physical breakpoint, false for linear)
+     * @return {boolean}
      */
     addMemBreak(addr, fWrite, fPhysical)
     {
         if (DEBUGGER) {
             let iBlock = addr >>> this.nBlockShift;
             let aBlocks = (fPhysical? this.aBusBlocks : this.aMemBlocks);
-            aBlocks[iBlock].addBreakpoint(addr & this.nBlockLimit, fWrite);
-            /*
-             * When a physical memory breakpoint is added, a fresh setPhysBlock() call is REQUIRED for any
-             * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
-             */
-            if (fPhysical) this.flushPageBlocks();
+            if (aBlocks[iBlock]) {
+                aBlocks[iBlock].addBreakpoint(addr & this.nBlockLimit, fWrite);
+                /*
+                * When a physical memory breakpoint is added, a fresh setPhysBlock() call is REQUIRED for any
+                * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
+                */
+                if (fPhysical) this.flushPageBlocks();
+                return true;
+            }
         }
+        return false;
     }
 
     /**

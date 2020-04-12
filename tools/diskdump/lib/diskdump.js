@@ -3422,6 +3422,9 @@ DiskDump.prototype.convertPSItoJSON = function()
     let CHUNK_PSI = 0x50534920;
     let CHUNK_END = 0x454e4420;
     let CHUNK_SECT = 0x53454354;
+    let CHUNK_OFFS = 0x4f464653;
+    let CHUNK_IBMM = 0x49424d4d;    // "IBMM": IBM MFM sector header
+    let CHUNK_TEXT = 0x54455854;
     let CHUNK_DATA = 0x44415441;
     let getCRC = function(bufData, start, end) {
 		let crc = 0;
@@ -3457,9 +3460,12 @@ DiskDump.prototype.convertPSItoJSON = function()
     }
     let fileFormat = chunkData.readUInt16BE(0);
     let sectorFormat = chunkData.readUInt16BE(2);
-    // DiskDump.logConsole(str.sprintf("file format: 0x%04x\nsector format: 0x%02x 0x%02x", fileFormat, sectorFormat >> 8, sectorFormat & 0xff));
+
+    DiskDump.logConsole(str.sprintf("file format: 0x%04x\nsector format: 0x%02x 0x%02x", fileFormat, sectorFormat >> 8, sectorFormat & 0xff));
+
+    let cylinder, head, sectorID, size, flags, pattern, sector, sectorIndex;
+
     while (chunkOffset < chunkEnd) {
-        let cylinder, head, sectorID, size, flags, pattern, sector, sectorIndex;
         getNextChunk();
         switch(chunkID) {
         case CHUNK_SECT:
@@ -3471,7 +3477,7 @@ DiskDump.prototype.convertPSItoJSON = function()
             pattern = chunkData.readUInt8(7);
             sector = {'cylinder': cylinder, 'head': head, 'sector': sectorID, 'length': size};
             sectorIndex = 0;
-            // DiskDump.logConsole(str.sprintf("SECT: %d:%d:%d %d bytes, flags 0x%x, pattern 0x%02x", cylinder, head, sectorID, size, flags, pattern));
+            if (fDebug) DiskDump.logConsole(str.sprintf("SECT: %d:%d:%d %d bytes, flags 0x%x, pattern 0x%02x", cylinder, head, sectorID, size, flags, pattern));
             while (data.length < cylinder + 1) {
                 data.push([]);
             }
@@ -3490,7 +3496,12 @@ DiskDump.prototype.convertPSItoJSON = function()
             }
             break;
         case CHUNK_DATA:
-            // DiskDump.logConsole(str.sprintf("DATA: %d bytes", chunkData.length));
+            if (fDebug) DiskDump.logConsole(str.sprintf("DATA: %d bytes", chunkData.length));
+            if (!sector) {
+                DiskDump.logConsole("No sector defined, aborting");
+                chunkID = 0;
+                break;
+            }
             sector['data'] = new Array(size >> 2);
             for (let off = 0; off < chunkData.length; off += 4) {
                 if (sectorIndex >= sector['data'].length) {
@@ -3501,6 +3512,15 @@ DiskDump.prototype.convertPSItoJSON = function()
             if (sectorIndex < sector['data'].length) {
                 DiskDump.logConsole(str.sprintf("warning: sector data stops at offset %d instead of %d", sectorIndex * 4, sector['data'].length));
             }
+            break;
+        case CHUNK_IBMM:
+            if (fDebug) DiskDump.logConsole(str.sprintf("IBMM: at 0x%x", chunkOffset));
+            break;
+        case CHUNK_OFFS:
+            if (fDebug) DiskDump.logConsole(str.sprintf("OFFS: at 0x%x", chunkOffset));
+            break;
+        case CHUNK_TEXT:
+            if (fDebug) DiskDump.logConsole(str.sprintf("TEXT: at 0x%x", chunkOffset));
             break;
         case CHUNK_END:
             chunkID = 0;

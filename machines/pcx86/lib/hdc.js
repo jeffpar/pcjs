@@ -2415,7 +2415,7 @@ class HDC extends Component {
         if (done) {
             let hdc = this;
             if (drive.disk) {
-                drive.disk.seek(drive.wCylinder, drive.bHead, drive.bSector + drive.bSectorBias, false, function onReadDataSeek(sector, fAsync) {
+                drive.disk.seek(drive.wCylinder, drive.bHead, drive.bSector + drive.bSectorBias, null, false, function onReadDataSeek(sector, fAsync) {
                     if ((drive.sector = sector)) {
                         obj = sector;
                         off = drive.iByte = 0;
@@ -2484,7 +2484,7 @@ class HDC extends Component {
              * but it seems preferable to keep the image format consistent and controller-independent.
              */
             if (drive.disk) {
-                drive.disk.seek(drive.wCylinder, drive.bHead, drive.bSector + drive.bSectorBias, true, function onWriteDataSeek(sector, fAsync) {
+                drive.disk.seek(drive.wCylinder, drive.bHead, drive.bSector + drive.bSectorBias, null, true, function onWriteDataSeek(sector, fAsync) {
                     drive.sector = sector;
                 });
             }

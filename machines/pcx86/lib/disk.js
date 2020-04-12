@@ -1560,7 +1560,7 @@ class Disk extends Component {
                  *
                  * We KNOW this is an uninitialized sector, because we're about to initialize it.
                  */
-                let sector = this.seek(iCylinder, iHead, iSector, true);
+                let sector = this.seek(iCylinder, iHead, iSector, null, true);
                 if (!sector) {
                     if (DEBUG && this.messageEnabled()) {
                         this.printMessage("doneReadRemoteSectors(): seek(CHS=" + iCylinder + ':' + iHead + ':' + iSector + ") failed");
@@ -1822,7 +1822,7 @@ class Disk extends Component {
     }
 
     /**
-     * seek(iCylinder, iHead, iSector, fWrite, done)
+     * seek(iCylinder, iHead, iSector, sectorPrev, fWrite, done)
      *
      * TODO: There's some dodgy code in seek() that allows floppy images to be dynamically
      * reconfigured with more heads and/or sectors/track, and it does so by peeking at more drive
@@ -1837,11 +1837,12 @@ class Disk extends Component {
      * @param {number} iCylinder
      * @param {number} iHead
      * @param {number} iSector
+     * @param {Sector|null} [sectorPrev]
      * @param {boolean} [fWrite]
      * @param {function(Sector,boolean)} [done]
      * @return {Sector|null} is the requested sector, or null if not found (or not available yet)
      */
-    seek(iCylinder, iHead, iSector, fWrite, done)
+    seek(iCylinder, iHead, iSector, sectorPrev, fWrite, done)
     {
         let sector = null;
         let drive = this.drive;
@@ -1875,11 +1876,29 @@ class Disk extends Component {
             if (track) {
                 for (i = 0; i < track.length; i++) {
                     if (track[i] && track[i]['sector'] == iSector) {
+                        sector = track[i];
+                        /*
+                         * When confronted with a series of sectors with the same sector ID (as found, for example, on
+                         * the 1984 King's Quest copy-protected diskette), we're supposed to advance to another sector in
+                         * the series.  So if the current sector matches the previous sector, we'll peek at the next sector
+                         * (if any), and if it has the same sector ID, then we'll choose that sector instead.
+                         */
+                        if (sectorPrev && sectorPrev == sector) {
+                            let j = i + 1, sectorNext;
+                            while (true) {
+                                if (j >= track.length) j = 0;
+                                sectorNext = track[j];
+                                if (sectorNext == sector) break;
+                                if (sectorNext['sector'] == iSector) {
+                                    sector = sectorNext;
+                                    break;
+                                }
+                            }
+                        }
                         /*
                          * If the sector's pattern is null, then this sector's true contents have not yet
                          * been fetched from the server.
                          */
-                        sector = track[i];
                         if (sector['pattern'] === null) {
                             if (fWrite) {
                                 /*
