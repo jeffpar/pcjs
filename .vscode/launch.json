@@ -15,6 +15,16 @@
         "console": "internalConsole"
       },
       {
+        "name": "Node: diskdump.js",
+        "type": "node",
+        "request": "launch",
+        "program": "${workspaceFolder}/tools/diskdump/bin/diskdump",
+        "args": ["--disk=disk1.psi", "--format=json", "--output=disk1.json","--overwrite"],
+        "cwd": "${workspaceFolder}/gamedisks/pcx86/game/other/1984/kings_quest1/archive",
+        "stopOnEntry": false,
+        "console": "internalConsole"
+      },
+      {
         "name": "Node: pdfparse.js",
         "type": "node",
         "request": "launch",

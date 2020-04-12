@@ -14335,19 +14335,24 @@ class CPUx86 extends CPULib {
      * @param {number} addr
      * @param {boolean} fWrite is true for a memory write breakpoint, false for a memory read breakpoint
      * @param {boolean} [fPhysical] (true for physical breakpoint, false for linear)
+     * @return {boolean}
      */
     addMemBreak(addr, fWrite, fPhysical)
     {
         if (DEBUGGER) {
             let iBlock = addr >>> this.nBlockShift;
             let aBlocks = (fPhysical? this.aBusBlocks : this.aMemBlocks);
-            aBlocks[iBlock].addBreakpoint(addr & this.nBlockLimit, fWrite);
-            /*
-             * When a physical memory breakpoint is added, a fresh setPhysBlock() call is REQUIRED for any
-             * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
-             */
-            if (fPhysical) this.flushPageBlocks();
+            if (aBlocks[iBlock]) {
+                aBlocks[iBlock].addBreakpoint(addr & this.nBlockLimit, fWrite);
+                /*
+                * When a physical memory breakpoint is added, a fresh setPhysBlock() call is REQUIRED for any
+                * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
+                */
+                if (fPhysical) this.flushPageBlocks();
+                return true;
+            }
         }
+        return false;
     }
 
     /**
@@ -62592,7 +62597,7 @@ class Disk extends Component {
                  *
                  * We KNOW this is an uninitialized sector, because we're about to initialize it.
                  */
-                let sector = this.seek(iCylinder, iHead, iSector, true);
+                let sector = this.seek(iCylinder, iHead, iSector, null, true);
                 if (!sector) {
                     if (DEBUG && this.messageEnabled()) {
                         this.printMessage("doneReadRemoteSectors(): seek(CHS=" + iCylinder + ':' + iHead + ':' + iSector + ") failed");
@@ -62854,7 +62859,7 @@ class Disk extends Component {
     }
 
     /**
-     * seek(iCylinder, iHead, iSector, fWrite, done)
+     * seek(iCylinder, iHead, iSector, sectorPrev, fWrite, done)
      *
      * TODO: There's some dodgy code in seek() that allows floppy images to be dynamically
      * reconfigured with more heads and/or sectors/track, and it does so by peeking at more drive
@@ -62869,11 +62874,12 @@ class Disk extends Component {
      * @param {number} iCylinder
      * @param {number} iHead
      * @param {number} iSector
+     * @param {Sector|null} [sectorPrev]
      * @param {boolean} [fWrite]
      * @param {function(Sector,boolean)} [done]
      * @return {Sector|null} is the requested sector, or null if not found (or not available yet)
      */
-    seek(iCylinder, iHead, iSector, fWrite, done)
+    seek(iCylinder, iHead, iSector, sectorPrev, fWrite, done)
     {
         let sector = null;
         let drive = this.drive;
@@ -62907,11 +62913,30 @@ class Disk extends Component {
             if (track) {
                 for (i = 0; i < track.length; i++) {
                     if (track[i] && track[i]['sector'] == iSector) {
+                        sector = track[i];
+                        /*
+                         * When confronted with a series of sectors with the same sector ID (as found, for example, on
+                         * the 1984 King's Quest copy-protected diskette), we're supposed to advance to another sector in
+                         * the series.  So if the current sector matches the previous sector, we'll peek at the next sector
+                         * (if any), and if it has the same sector ID, then we'll choose that sector instead.
+                         */
+                        if (sectorPrev && sectorPrev == sector) {
+                            let j = i, sectorNext;
+                            while (true) {
+                                if (++j >= track.length) j = 0;
+                                sectorNext = track[j];
+                                if (sectorNext == sector) break;
+                                if (sectorNext['sector'] == iSector) {
+                                    sector = sectorNext;
+                                    i = j;
+                                    break;
+                                }
+                            }
+                        }
                         /*
                          * If the sector's pattern is null, then this sector's true contents have not yet
                          * been fetched from the server.
                          */
-                        sector = track[i];
                         if (sector['pattern'] === null) {
                             if (fWrite) {
                                 /*
@@ -64864,6 +64889,7 @@ class FDC extends Component {
          */
         drive.iByte = data[i++];                // location of the next byte to be accessed in the current sector
         drive.sector = null;
+        drive.sectorPrev = null;                // used to remember the last sector read (or written)
 
         /*
          * We no longer reinitialize drive.disk, in order to retain previously mounted diskette across resets;
@@ -66801,11 +66827,12 @@ class FDC extends Component {
                 /*
                  * Locate the next sector, and then try reading again.
                  */
-                drive.sector = drive.disk.seek(drive.bCylinder, drive.bHead, drive.bSector);
+                drive.sector = drive.disk.seek(drive.bCylinder, drive.bHead, drive.bSector, drive.sectorPrev);
                 if (!drive.sector) {
                     drive.resCode = FDC.REG_DATA.RES.NO_DATA | FDC.REG_DATA.RES.INCOMPLETE;
                     break;
                 }
+                drive.sectorPrev = drive.sector;
                 if (drive.sector['dataError']) {
                     drive.resCode = FDC.REG_DATA.RES.CRC_ERROR | FDC.REG_DATA.RES.INCOMPLETE;
                 }
@@ -66857,7 +66884,7 @@ class FDC extends Component {
             /*
              * Locate the next sector, and then try writing again.
              */
-            drive.sector = drive.disk.seek(drive.bCylinder, drive.bHead, drive.bSector);
+            drive.sector = drive.disk.seek(drive.bCylinder, drive.bHead, drive.bSector, drive.sectorPrev);
             if (!drive.sector) {
                 /*
                  * TODO: Determine whether this should be FDC.REG_DATA.RES.CRC_ERROR or FDC.REG_DATA.RES.DATA_FIELD
@@ -66866,6 +66893,7 @@ class FDC extends Component {
                 b = -1;
                 break;
             }
+            drive.sectorPrev = drive.sector;
             drive.iByte = 0;
             /*
              * We "pre-advance" bSector et al now, instead of waiting to advance it right before the seek().
@@ -69571,7 +69599,7 @@ class HDC extends Component {
         if (done) {
             let hdc = this;
             if (drive.disk) {
-                drive.disk.seek(drive.wCylinder, drive.bHead, drive.bSector + drive.bSectorBias, false, function onReadDataSeek(sector, fAsync) {
+                drive.disk.seek(drive.wCylinder, drive.bHead, drive.bSector + drive.bSectorBias, null, false, function onReadDataSeek(sector, fAsync) {
                     if ((drive.sector = sector)) {
                         obj = sector;
                         off = drive.iByte = 0;
@@ -69640,7 +69668,7 @@ class HDC extends Component {
              * but it seems preferable to keep the image format consistent and controller-independent.
              */
             if (drive.disk) {
-                drive.disk.seek(drive.wCylinder, drive.bHead, drive.bSector + drive.bSectorBias, true, function onWriteDataSeek(sector, fAsync) {
+                drive.disk.seek(drive.wCylinder, drive.bHead, drive.bSector + drive.bSectorBias, null, true, function onWriteDataSeek(sector, fAsync) {
                     drive.sector = sector;
                 });
             }
@@ -75683,11 +75711,9 @@ class DebuggerX86 extends DbgLib {
 
         if (aBreak != this.aBreakExec) {
             let addr = this.getAddr(dbgAddr);
-            if (addr === X86.ADDR_INVALID) {
+            if (addr === X86.ADDR_INVALID || !this.cpu.addMemBreak(addr, aBreak == this.aBreakWrite, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL)) {
                 this.println("invalid address: " + this.toHexAddr(dbgAddr));
                 fSuccess = false;
-            } else {
-                this.cpu.addMemBreak(addr, aBreak == this.aBreakWrite, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL);
             }
         }
 
