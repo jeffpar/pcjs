@@ -4,6 +4,8 @@ title: IBM PC AT (Model 5170)
 permalink: /machines/pcx86/ibm/5170/
 redirect_from:
   - /devices/pcx86/machine/5170/
+  - /devices/pcx86/machine/5170/mda/640kb/rev3/debugger/
+  - /devices/pcx86/machine/5170/mda/640kb/rev3/
   - /pubs/pc/reference/ibm/5170/techref/
 ---
 

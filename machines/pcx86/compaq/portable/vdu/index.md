@@ -2,7 +2,9 @@
 layout: page
 title: COMPAQ Portable with Monochrome Graphics
 permalink: /machines/pcx86/compaq/portable/vdu/
-redirect_from: /devices/pcx86/machine/compaq/portable/vdu/128kb/
+redirect_from:
+  - /devices/pcx86/machine/compaq/portable/vdu/128kb/
+  - /devices/pcx86/machine/compaq/portable/vdu/
 preview: images/screenshot.png
 machines:
   - id: compaq-portable-vdu
