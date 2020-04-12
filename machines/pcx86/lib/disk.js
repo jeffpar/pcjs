@@ -1884,13 +1884,14 @@ class Disk extends Component {
                          * (if any), and if it has the same sector ID, then we'll choose that sector instead.
                          */
                         if (sectorPrev && sectorPrev == sector) {
-                            let j = i + 1, sectorNext;
+                            let j = i, sectorNext;
                             while (true) {
-                                if (j >= track.length) j = 0;
+                                if (++j >= track.length) j = 0;
                                 sectorNext = track[j];
                                 if (sectorNext == sector) break;
                                 if (sectorNext['sector'] == iSector) {
                                     sector = sectorNext;
+                                    i = j;
                                     break;
                                 }
                             }
