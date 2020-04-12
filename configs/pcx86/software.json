@@ -1243,6 +1243,23 @@
   "game": {
     "@title": "Games",
     "@server": "/gamedisks",
+    "ibm": {
+      "@title": "IBM",
+      "@versions": {
+        "101mazes": {
+          "@title": "101 Monochrome Mazes (1983)",
+          "@bootable": true,
+          "@hardware": "/machines/pcx86/ibm/5150/mda/",
+          "@media": [
+            {
+              "@title": "101 Monochrome Mazes (1983)",
+              "@diskette": "101-MONOCHROME-MAZES.json",
+              "@type": "PC160K"
+            }
+          ]
+        }
+      }
+    },
     "id": {
       "@title": "Id Software",
       "@versions": {
