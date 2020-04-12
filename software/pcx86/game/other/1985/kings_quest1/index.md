@@ -14,10 +14,10 @@ machines:
 ---
 
 According to [Nerdly Pleasures](http://nerdlypleasures.blogspot.com/2017/04/the-evolution-of-kings-quest.html), the 1985 releases of
-King's Quest were for the Tandy 1000 and IBM PCjr.
+King's Quest were for the Tandy 1000 and IBM PCjr.  These releases were also known as "PC Booter" editions, because you use Disk 1 as a
+boot disk to start the machine, which in turn starts the game.
 
-These releases were also known as "PC Booter" editions, because you use Disk 1 as a boot disk to start the machine, which in turn starts
-the game.  The PCjs disk images preserve the [Copy-Protection](#copy-protection) that the game used, and PCx86 successfully passes the game's
+The PCjs disk images preserve the [Copy-Protection](#copy-protection) that the game used, and PCx86 successfully passes the game's
 copy-protection test.
 
 However, since PCx86 does not yet support the graphics hardware in those machines, you cannot currently play those releases here.  Once that

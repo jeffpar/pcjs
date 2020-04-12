@@ -238,10 +238,10 @@
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "King's Quest (1984)",
+        "name": "King's Quest (1985)",
         "type": "chrome",
         "request": "launch",
-        "url": "http://localhost:4000/software/pcx86/game/other/1984/kings_quest1/",
+        "url": "http://localhost:4000/software/pcx86/game/other/1985/kings_quest1/",
         "webRoot": "${workspaceFolder}"
       }
     ]
