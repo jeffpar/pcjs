@@ -38,7 +38,7 @@ They were identical, up until offset 0x55800 (350208).  If we divide that by 460
 we get 76, which corresponds to track 38 on side 0.  And when I examined the tracks visually in the HxC Floppy Emulator, using "Disk view mode",
 I could see that track 38 contained 10 256-byte sectors; in addition, the first sector ID was 1, whereas all the other 9 sector IDs were 0.
 
-![King's Quest 1985 Kryoflux Screenshot]({{ site.software.gamedisks.server }}/pcx86/game/other/1985/kings_quest1/KINGS-QUEST1-1985-09-04-DISK1-Kryoflux.jpg)
+![King's Quest 1985 Kryoflux Screenshot]({{ site.software.gamedisks.server }}/pcx86/game/other/1985/kings_quest1/KINGS_QUEST1-1985-09-04-DISK1-Kryoflux.jpg)
 
 Next, just as I did for [Microsoft Adventure](/blog/2019/06/13/), I wanted to create a PSI ("PCE Sector Image") representation of the disk,
 since I already have some tools that understand PSI files.

@@ -1430,13 +1430,42 @@
               "@title": "King's Quest (1985-09-04 #1)",
               "@diskette": "KINGS_QUEST1-1985-09-04-DISK1.json",
               "@type": "PC360K",
-              "@source": "archive.org"
+              "@source": "https://archive.org/details/kingsquestipcbooter"
             },
             {
               "@title": "King's Quest (1985-09-04 #2)",
               "@diskette": "KINGS_QUEST1-1985-09-04-DISK2.json",
               "@type": "PC360K",
-              "@source": "archive.org"
+              "@source": "https://archive.org/details/kingsquestipcbooter"
+            }
+          ]
+        },
+        "1987/kings_quest1": {
+          "@title": "King's Quest (1987)",
+          "@media": [
+            {
+              "@title": "King's Quest (1987-05-05 #1)",
+              "@diskette": "KINGS_QUEST1-1987-05-05-DISK1.json",
+              "@type": "PC360K",
+              "@source": "https://archive.org/details/kingsquestipc"
+            },
+            {
+              "@title": "King's Quest (1987-05-05 #2)",
+              "@diskette": "KINGS_QUEST1-1987-05-05-DISK2.json",
+              "@type": "PC360K",
+              "@source": "https://archive.org/details/kingsquestipc"
+            },
+            {
+              "@title": "King's Quest (1987-12-01 #1)",
+              "@diskette": "KINGS_QUEST1-1987-12-01-DISK1.json",
+              "@type": "PC360K",
+              "@source": "http://www.r-09.net/stuff/index.php?dir=Floppy"
+            },
+            {
+              "@title": "King's Quest (1987-12-01 #2)",
+              "@diskette": "KINGS_QUEST1-1987-12-01-DISK2.json",
+              "@type": "PC360K",
+              "@source": "http://www.r-09.net/stuff/index.php?dir=Floppy"
             }
           ]
         },
