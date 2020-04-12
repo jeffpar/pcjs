@@ -1,69 +1,83 @@
-    <script>
-      function pcjsGetURLVars() {
-        let vars = {}, parts = window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-          vars[key] = value;
-        });
-        return vars;
-      }
-      function pcjsOnClick(element, event) {
-        element.href += window.location.search;
-      }
-      function pcjsExplorerClick(element, event) {
-        if (event) event.stopPropagation();
-        if (element.classList.contains("pcjs-explorer-open")) {
-          element.classList.add("pcjs-explorer-closed");
-          element.classList.remove("pcjs-explorer-open");
-        } else if (element.classList.contains("pcjs-explorer-closed")) {
-          element.classList.add("pcjs-explorer-open");
-          element.classList.remove("pcjs-explorer-closed");
-        }
-      }
-      function pcjsExplorerExpand(path, prefix) {
-        if (path) {
-          let element;
-          if (prefix) path = prefix + path;
-          let id = path.substr(1).replace(/\//g, '-').replace(/-$/, '');
-          do {
-            element = document.getElementById(id);
-            if (element) break;
-            let idNew = id.replace(/-[^-]+$/, '');
-            if (idNew == id) break;
-            id = idNew;
-          } while (true);
-          if (element) {
-            do {
-              if (element.classList.contains("pcjs-explorer-item")) {
-                element.classList.add("pcjs-explorer-selected");
-              } else if (element.classList.contains("pcjs-explorer-closed")) {
-                element.classList.add("pcjs-explorer-open");
-                element.classList.remove("pcjs-explorer-closed");
-              }
-              element = element.parentElement;
-            } while (element);
+        <script>
+          function pcjsGetURLVars() {
+            let vars = {}, parts = window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+              vars[key] = value;
+            });
+            return vars;
           }
-        }
-      }
-      function pcjsExplorerExpandAll(element, event, fExpand) {
-        if (event) event.preventDefault();
-        let elements = document.querySelectorAll(fExpand? ".pcjs-explorer-closed" : ".pcjs-explorer-open");
-        elements.forEach((element) => {pcjsExplorerClick(element);});
-      }
-      function pcjsExplorerSurprise() {
-        let elements = document.querySelectorAll(".pcjs-explorer-item");
-        let element = elements && elements[Math.random() * elements.length | 0];
-        if (element && element.children) window.location.href = element.children[0].href;
-      }
-      function pcjsExplorerView(element, event) {
-        event.preventDefault();
-        let target = document.getElementById("pcjs-explorer-menu");
-        if (target) {
-          let yOffset = -48;
-          let y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({top: y, behavior: 'smooth'});
-        }
-      }
-      function pcjsExplorerInit() {
-        pcjsExplorerExpand(window.location.pathname + window.location.hash.substr(1));
-        pcjsExplorerExpand(pcjsGetURLVars()['software'], "/software");
-      }
-    </script>
+          function pcjsOnClick(element, event) {
+            element.href += window.location.search;
+          }
+          function pcjsExplorerClick(element, event) {
+            if (event) event.stopPropagation();
+            if (element.classList.contains("pcjs-explorer-open")) {
+              element.classList.add("pcjs-explorer-closed");
+              element.classList.remove("pcjs-explorer-open");
+            } else if (element.classList.contains("pcjs-explorer-closed")) {
+              element.classList.add("pcjs-explorer-open");
+              element.classList.remove("pcjs-explorer-closed");
+            }
+          }
+          function pcjsExplorerExpand(path, altpath, prefix) {
+            if (!path && altpath) {
+              path = altpath.replace(/^\/[^/]*\/([^/]*)\/.*$/, "/$1/");
+            }
+            if (path) {
+              let element;
+              if (prefix) path = prefix + path;
+              let id = path.substr(1).replace(/\//g, '-').replace(/-$/, '');
+              do {
+                element = document.getElementById(id);
+                if (element) break;
+                let idNew = id.replace(/-[^-]+$/, '');
+                if (idNew == id) break;
+                id = idNew;
+              } while (true);
+              if (element) {
+                do {
+                  if (element.classList.contains("pcjs-explorer-item")) {
+                    element.classList.add("pcjs-explorer-selected");
+                  } else if (element.classList.contains("pcjs-explorer-closed")) {
+                    element.classList.add("pcjs-explorer-open");
+                    element.classList.remove("pcjs-explorer-closed");
+                  }
+                  element = element.parentElement;
+                } while (element);
+              }
+            }
+          }
+          function pcjsExplorerExpandAll(element, event, fExpand) {
+            if (event) event.preventDefault();
+            let elements = document.querySelectorAll(fExpand? ".pcjs-explorer-closed" : ".pcjs-explorer-open");
+            elements.forEach((element) => {pcjsExplorerClick(element);});
+          }
+          function pcjsExplorerSurprise() {
+            let elements = document.querySelectorAll(".pcjs-explorer-item");
+            let element = elements && elements[Math.random() * elements.length | 0];
+            if (element && element.children) window.location.href = element.children[0].href;
+          }
+          function pcjsExplorerView(element, event) {
+            event.preventDefault();
+            let target = document.getElementById("pcjs-explorer-menu");
+            if (target) {
+              let yOffset = -48;
+              let y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+              window.scrollTo({top: y, behavior: 'smooth'});
+            }
+          }
+          function pcjsExplorerInit() {
+            pcjsExplorerExpand(window.location.pathname + window.location.hash.substr(1));
+            pcjsExplorerExpand(pcjsGetURLVars()['software'], window.location.pathname, "/software");
+          }
+          pcjsExplorerInit();
+        </script>
+{%- if site.google_analytics %}
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+          ga('create', '{{ site.google_analytics }}', 'auto');
+          ga('send', 'pageview');
+        </script>
+{%- endif %}

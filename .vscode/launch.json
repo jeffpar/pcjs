@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
       {
         "name": "Node: gulp.js",
         "type": "node",
@@ -235,6 +236,13 @@
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/ti/ti57/rev1/",
+        "webRoot": "${workspaceFolder}"
+      },
+      {
+        "name": "101 Monochrome Mazes (1983)",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/?software=/pcx86/game/ibm/101mazes/&autoMount=%7BA:%7Bname:%22101%20Monochrome%20Mazes%20(1983)%22,path:%22/gamedisks/pcx86/game/ibm/101mazes/101-MONOCHROME-MAZES.json%22%7D%7D",
         "webRoot": "${workspaceFolder}"
       },
       {
