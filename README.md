@@ -22,19 +22,18 @@ Here are the basic steps to install Jekyll locally and run your own PCjs web ser
 
  1. Install Ruby (on OS X, it should already be installed)
  2. Install Bundler (on OS X, run `sudo gem install bundler`)
- 4. Create a **Gemfile** containing `gem 'github-pages'` (this is already checked in)
- 5. Run `bundle install` (GitHub Pages alternatively suggests: `bundle exec jekyll build --safe`)
- 6. Run `bundle exec jekyll serve` to start the web server
+ 3. Run `bundle install`
+ 4. Run `bundle exec jekyll serve` to start the web server
 
 Now open a web browser and go to `http://localhost:4000/`.  You're done!
 
-Some useful Jekyll server options include:
+Some useful server options include:
 
-	bundle exec jekyll serve --host=0.0.0.0 --config _config.yml,_developer.yml
+	bundle exec jekyll serve --host=0.0.0.0 --port #
 
 The *--host* option makes it possible to access the web server from other devices on your local network;
-for example, you may want to run PCjs on your iPhone, iPad, or other wireless device.  And by adding **_developer.yml**,
-you can override the Jekyll configuration defaults in **_config.yml**.
+for example, you may want to run PCjs on your iPhone, iPad, or other wireless device.  And --port allows you
+to override the port number (e.g., `--port 80` if you simply want to use `http://localhost/`).
 
 Last but not least, run `bundle update` periodically to keep Jekyll up-to-date.
 
