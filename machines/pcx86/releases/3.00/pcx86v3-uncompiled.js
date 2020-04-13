@@ -53,7 +53,7 @@ var MAXDEBUG = false;
  *
  * @define {string}
  */
-var VERSION = "2.00";
+var VERSION = "3.00";
 
 /*
  * The following globals CANNOT be overridden.
@@ -3500,7 +3500,7 @@ class Device extends WebIO {
     {
         if (typeof format == "number" && this.isMessageOn(format)) {
             /*
-             * The following will execute at most once, because findDeviceByClass() returns either a Device or null,
+             * The following call will execute at most once, because findDeviceByClass() returns either a Device or null,
              * neither of which is undefined.
              */
             if (this.dbg === undefined) {
@@ -6183,6 +6183,470 @@ LED.SYMBOL_SEGMENTS = {
 Defs.CLASSES["LED"] = LED;
 
 /**
+ * @copyright https://www.pcjs.org/machines/lib/monitor.js (C) 2012-2020 Jeff Parsons
+ */
+
+/** @typedef {{ monitorWidth: number, monitorHeight: number }} */
+var MonitorConfig;
+
+/**
+ * @class {Monitor}
+ * @unrestricted
+ * @property {MonitorConfig} config
+ */
+class Monitor extends Device {
+    /**
+     * Monitor(idMachine, idDevice, config)
+     *
+     * The Monitor component manages the container representing the machine's display device.  The most
+     * important config properties include:
+     *
+     *      monitorWidth: width of the monitor canvas, in pixels
+     *      monitorHeight: height of the monitor canvas, in pixels
+     *      monitorColor: background color of the monitor canvas (default is black)
+     *      monitorRotate: the amount of counter-clockwise monitor rotation required (eg, -90 or 270)
+     *      aspectRatio (eg, 1.33)
+     *
+     * NOTE: I originally wanted to call this the Screen device, but alas, the browser world has co-opted that
+     * name, so I had to settle for Monitor instead (I had also considered Display, but that seemed too generic).
+     *
+     * Monitor is probably a better choice anyway, because that allows us to clearly differentiate between the
+     * "host display" (which involves the browser's page, document, window, or screen, depending on the context)
+     * and the "guest display", which I now try to consistently refer to as the Monitor.
+     *
+     * There are still terms of art that can muddy the waters; for example, many video devices support the concept
+     * of "off-screen memory", and sure, I could call that "off-monitor memory", but let's not get carried away.
+     *
+     * @this {Monitor}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {ROMConfig} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        super(idMachine, idDevice, config);
+
+        let sProp, sEvent;
+        let monitor = this;
+
+        this.touchType = this.config['touchType'];
+        this.diagnostics = this.config['diagnostics'];
+
+        this.cxMonitor = this.config['monitorWidth'] || 640;
+        this.cyMonitor = this.config['monitorHeight'] || 480;
+
+        this.monitor = this.bindings[Monitor.BINDING.MONITOR];
+        if (this.monitor) {
+            /*
+             * Making sure the monitor had a "tabindex" attribute seemed like a nice way of ensuring we
+             * had a single focusable surface that we could pass to our Input device, but that would be too
+             * simple.  Safari once again bites us in the butt, just like it did when we tried to add the
+             * "contenteditable" attribute to the canvas: painting slows to a crawl.
+             *
+             *      this.monitor.setAttribute("tabindex", "0");
+             */
+        } else {
+            throw new Error("unable to find binding: " + Monitor.BINDING.MONITOR);
+        }
+        this.container = this.findBinding(Monitor.BINDING.CONTAINER) || this.monitor;
+
+        /*
+         * Create the Monitor canvas if we weren't given a predefined canvas; we'll assume that an existing
+         * canvas is already contained within the monitor.
+         */
+        let canvas = this.bindings[Monitor.BINDING.SURFACE];
+        if (!canvas) {
+            canvas = document.createElement("canvas");
+            let id = this.getBindingID(Monitor.BINDING.SURFACE);
+            if (id) {
+                this.bindings[id] = canvas;
+                canvas.setAttribute("id", id);
+            }
+            canvas.setAttribute("class", "pcjs-surface");
+            canvas.setAttribute("width", this.config['monitorWidth']);
+            canvas.setAttribute("height", this.config['monitorHeight']);
+            canvas.style.backgroundColor = this.config['monitorColor'] || "black";
+            this.monitor.appendChild(canvas);
+        }
+        this.canvasMonitor = canvas;
+
+        /*
+         * The "contenteditable" attribute on a canvas is a simple way of creating a display surface that can
+         * also receive focus and generate input events.  Unfortunately, in Safari, that attribute NOTICEABLY
+         * slows down canvas operations whenever it has focus.  All you have to do is click away from the canvas,
+         * and drawing speeds up, then click back on the canvas, and drawing slows down.  So we now rely on a
+         * "transparent textarea" solution (see below).
+         *
+         *      canvas.setAttribute("contenteditable", "true");
+         */
+
+        let context = canvas.getContext("2d");
+        this.contextMonitor = context;
+
+        /*
+         * HACK: A canvas style of "auto" provides for excellent responsive canvas scaling in EVERY browser
+         * except IE9/IE10, so I recalculate the appropriate CSS height every time the parent div is resized;
+         * IE11 works without this hack, so we take advantage of the fact that IE11 doesn't identify as "MSIE".
+         *
+         * The other reason it's good to keep this particular hack limited to IE9/IE10 is that most other
+         * browsers don't actually support an 'onresize' handler on anything but the window object.
+         */
+        if (this.isUserAgent("MSIE")) {
+            this.monitor.onresize = function(parentElement, childElement, cx, cy) {
+                return function onResizeScreen() {
+                    childElement.style.height = (((parentElement.clientWidth * cy) / cx) | 0) + "px";
+                };
+            }(this.monitor, canvas, this.config['monitorWidth'], this.config['monitorHeight']);
+            this.monitor.onresize();
+        }
+
+        /*
+         * The following is a related hack that allows the user to force the monitor to use a particular aspect
+         * ratio if an 'aspect' attribute or URL parameter is set.  Initially, it's just for testing purposes
+         * until we figure out a better UI.  And note that we use our onPageEvent() helper function to make sure
+         * we don't trample any other 'onresize' handler(s) attached to the window object.
+         */
+        let aspect = +(this.config['aspect'] || this.getURLParms()['aspect']);
+
+        /*
+         * No 'aspect' parameter yields NaN, which is falsey, and anything else must satisfy my arbitrary
+         * constraints of 0.3 <= aspect <= 3.33, to prevent any useless (or worse, browser-blowing) results.
+         */
+        if (aspect && aspect >= 0.3 && aspect <= 3.33) {
+            this.onPageEvent('onresize', function(parentElement, childElement, aspectRatio) {
+                return function onResizeWindow() {
+                    /*
+                     * Since aspectRatio is the target width/height, we have:
+                     *
+                     *      parentElement.clientWidth / childElement.style.height = aspectRatio
+                     *
+                     * which means that:
+                     *
+                     *      childElement.style.height = parentElement.clientWidth / aspectRatio
+                     *
+                     * so for example, if aspectRatio is 16:9, or 1.78, and clientWidth = 640,
+                     * then the calculated height should approximately 360.
+                     */
+                    childElement.style.height = ((parentElement.clientWidth / aspectRatio)|0) + "px";
+                };
+            }(this.monitor, canvas, aspect));
+            window['onresize']();
+        }
+
+        /*
+         * Here's the gross code to handle full-screen support across all supported browsers.  Most of the crud is
+         * now buried inside findProperty(), which checks for all the browser prefix variations (eg, "moz", "webkit")
+         * and deals with certain property name variations, like 'Fullscreen' (new) vs 'FullScreen' (old).
+         */
+        this.machine.isFullScreen = false;
+        this.fullScreen = this.fullScreenStyle = false;
+        let button = this.bindings[Monitor.BINDING.FULLSCREEN];
+        if (button) {
+            sProp = this.findProperty(this.container, 'requestFullscreen');
+            if (sProp) {
+                this.container.doFullScreen = this.container[sProp];
+                this.fullScreen = true;
+                this.fullScreenStyle = document.fullscreenEnabled || this.isUserAgent("Edge/");
+                sEvent = this.findProperty(document, 'on', 'fullscreenchange');
+                if (sEvent) {
+                    let sFullScreen = this.findProperty(document, 'fullscreenElement');
+                    document.addEventListener(sEvent, function onFullScreenChange() {
+                        monitor.onFullScreen(document[sFullScreen] != null);
+                    }, false);
+                }
+                sEvent = this.findProperty(document, 'on', 'fullscreenerror');
+                if (sEvent) {
+                    document.addEventListener(sEvent, function onFullScreenError() {
+                        monitor.onFullScreen();
+                    }, false);
+                }
+            } else {
+                this.printf("Full-screen API not available\n");
+                button.parentNode.removeChild(/** @type {Node} */ (button));
+            }
+        }
+
+        /*
+         * The 'touchType' config property can be set to true for machines that require a full keyboard.  If set,
+         * we create a transparent textarea "overlay" on top of the canvas and provide it to the Input device
+         * via addSurface(), making it easy for the user to activate the on-screen keyboard for touch-type devices.
+         *
+         * The parent div must have a style of "position:relative", so that we can position the textarea using
+         * "position:absolute" with "top" and "left" coordinates of zero.  And we don't want the textarea to be
+         * visible, but we must use "opacity:0" instead of "visibility:hidden", because the latter seems to
+         * prevent the element from receiving events.
+         *
+         * All these styling requirements are resolved by using CSS class "pcjs-surface" for the parent div and
+         * CSS class "pcjs-overlay" for the textarea.
+         *
+         * Having the textarea can serve other useful purposes as well, such as providing a place for us to echo
+         * diagnostic messages, and it solves the Safari performance problem I observed (see above).  Unfortunately,
+         * it creates new challenges, too.  For example, textareas can cause certain key combinations, like "Alt-E",
+         * to be withheld as part of the browser's support for multi-key character composition.  So I may have to
+         * alter which element on the page gets focus depending on the platform or other factors.
+         *
+         * Why do we ALSO create an overlay if fullScreen support is requested ONLY on non-iOS devices?  Because
+         * we generally always need a surface for capturing keyboard events on desktop devices, whereas you're
+         * supposed to use 'touchType' if you really need keyboard events on iOS devices (ie, we don't want the
+         * iPhone or iPad soft keyboard popping up unnecessarily).
+         */
+        let textarea;
+        if (this.touchType || this.diagnostics || this.fullScreen && !this.isUserAgent("iOS")) {
+            textarea = document.createElement("textarea");
+            let id = this.getBindingID(Monitor.BINDING.OVERLAY);
+            if (id) {
+                this.bindings[id] = textarea;
+                textarea.setAttribute("id", id);
+            }
+            textarea.setAttribute("class", "pcjs-overlay");
+            /*
+            * The soft keyboard on an iOS device tends to pop up with the SHIFT key depressed, which is not the
+            * initial keyboard state we prefer, so hopefully turning off these "auto" attributes will help.
+            */
+            if (this.isUserAgent("iOS")) {
+                this.disableAuto(textarea);
+                /*
+                * One of the problems on iOS devices is that after a soft-key control is clicked, we need to give
+                * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS may
+                * also "zoom" the page rather jarringly.  While it's a simple matter to completely disable zooming,
+                * by fiddling with the page's viewport, that prevents the user from intentionally zooming.  A bit of
+                * Googling reveals that another way to prevent those jarring unintentional zooms is to simply set the
+                * font-size of the text control to 16px.  So that's what we do.
+                */
+                textarea.style.fontSize = "16px";
+            }
+            this.monitor.appendChild(textarea);
+        }
+
+        /*
+         * If there's an Input device, make sure it is associated with our default input surface.
+         */
+        this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
+        if (this.input) {
+            this.input.addSurface(textarea || this.monitor, this.findBinding(this.config['focusBinding'], true));
+        }
+
+        /*
+         * These variables are here in case we want/need to add support for borders later...
+         */
+        this.xMonitorOffset = this.yMonitorOffset = 0;
+        this.cxMonitorOffset = this.cxMonitor;
+        this.cyMonitorOffset = this.cyMonitor;
+
+        /*
+         * Support for disabling (or, less commonly, enabling) image smoothing, which all browsers
+         * seem to support now (well, OK, I still have to test the latest MS Edge browser), despite
+         * it still being labelled "experimental technology".  Let's hope the browsers standardize
+         * on this.  I see other options emerging, like the CSS property "image-rendering: pixelated"
+         * that's apparently been added to Chrome.  Sigh.
+         */
+        let fSmoothing = this.config['smoothing'];
+        let sSmoothing = this.getURLParms()['smoothing'];
+        if (sSmoothing) fSmoothing = (sSmoothing == "true");
+        this.fSmoothing = fSmoothing;
+        this.sSmoothing = this.findProperty(context, 'imageSmoothingEnabled');
+
+        this.rotateMonitor = this.config['monitorRotate'];
+        if (this.rotateMonitor) {
+            this.rotateMonitor = this.rotateMonitor % 360;
+            if (this.rotateMonitor > 0) this.rotateMonitor -= 360;
+            /*
+             * TODO: Consider also disallowing any rotateMonitor value if bufferRotate was already set; setting
+             * both is most likely a mistake, but who knows, maybe someone wants to use both for 180-degree rotation?
+             */
+            if (this.rotateMonitor != -90) {
+                this.printf("unsupported monitor rotation: %d\n", this.rotateMonitor);
+                this.rotateMonitor = 0;
+            } else {
+                context.translate(0, this.cyMonitor);
+                context.rotate((this.rotateMonitor * Math.PI)/180);
+                context.scale(this.cyMonitor/this.cxMonitor, this.cxMonitor/this.cyMonitor);
+            }
+        }
+    }
+
+    /**
+     * addBinding(binding, element)
+     *
+     * @this {Monitor}
+     * @param {string} binding
+     * @param {Element} element
+     */
+    addBinding(binding, element)
+    {
+        let monitor = this;
+
+        switch(binding) {
+        case Monitor.BINDING.FULLSCREEN:
+            element.onclick = function onClickFullScreen() {
+                /*
+                 * I've encountered situations in Safari on iPadOS where full-screen mode was cancelled without
+                 * notification via onFullScreen() (eg, diagnostic printf() calls that used to inadvertently change
+                 * focus), so we'd mistakenly think we were still full-screen.
+                 *
+                 * print() attempts to avoid focus changes on "iOS" devices now, but the following sanity check
+                 * still seems worthwhile.
+                 */
+                monitor.machine.isFullScreen = (window.outerHeight - window.innerHeight <= 1);
+                if (!monitor.machine.isFullScreen) {
+                    monitor.doFullScreen();
+                } else {
+                    if (DEBUG) monitor.printf(MESSAGE.MONITOR, "onClickFullScreen(): already full-screen?\n");
+                }
+            };
+            break;
+        }
+        super.addBinding(binding, element);
+    }
+
+    /**
+     * blankMonitor()
+     *
+     * @this {Monitor}
+     */
+    blankMonitor()
+    {
+        if (this.contextMonitor) {
+            this.contextMonitor.fillStyle = "black";
+            this.contextMonitor.fillRect(0, 0, this.canvasMonitor.width, this.canvasMonitor.height);
+        }
+    }
+
+    /**
+     * doFullScreen()
+     *
+     * @this {Monitor}
+     * @returns {boolean} true if request successful, false if not (eg, failed OR not supported)
+     */
+    doFullScreen()
+    {
+        let fSuccess = false;
+        if (DEBUG) this.printf(MESSAGE.MONITOR, "doFullScreen()\n");
+        if (this.container && this.container.doFullScreen) {
+            /*
+             * Styling the container with a width of "100%" and a height of "auto" works great when the aspect ratio
+             * of our virtual monitor is at least roughly equivalent to the physical screen's aspect ratio, but now that
+             * we support virtual VGA monitors with an aspect ratio of 1.33, that's very much out of step with modern
+             * wide-screen monitors, which usually have an aspect ratio of 1.6 or greater.
+             *
+             * And unfortunately, none of the browsers I've tested appear to make any attempt to scale our container to
+             * the physical screen's dimensions, so the bottom of our monitor gets clipped.  To prevent that, I reduce
+             * the width from 100% to whatever percentage will accommodate the entire height of the virtual monitor.
+             *
+             * NOTE: Mozilla recommends both a width and a height of "100%", but all my tests suggest that using "auto"
+             * for height works equally well, so I'm sticking with it, because "auto" is also consistent with how I've
+             * implemented a responsive canvas when the browser window is being resized.
+             */
+            let sWidth = "100%";
+            let sHeight = "auto";
+            if (screen && screen.width && screen.height) {
+                let aspectPhys = screen.width / screen.height;
+                let aspectVirt = this.cxMonitor / this.cyMonitor;
+                if (aspectPhys > aspectVirt) {
+                    sWidth = Math.round(aspectVirt / aspectPhys * 100) + '%';
+                }
+                // TODO: We may need to someday consider the case of a physical screen with an aspect ratio < 1.0....
+            }
+            if (!this.fullScreenStyle) {
+                this.container.style.width = sWidth;
+                this.container.style.height = sHeight;
+            } else {
+                /*
+                 * Sadly, the above code doesn't work for Firefox (nor for Chrome, as of Chrome 75 or so), because as
+                 * http://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Using_full_screen_mode explains:
+                 *
+                 *      'It's worth noting a key difference here between the Gecko and WebKit implementations at this time:
+                 *      Gecko automatically adds CSS rules to the element to stretch it to fill the screen: "width: 100%; height: 100%".
+                 *
+                 * Which would be OK if Gecko did that BEFORE we're called, but apparently it does that AFTER, effectively
+                 * overwriting our careful calculations.  So we style the inner element (canvasMonitor) instead, which
+                 * requires even more work to ensure that the canvas is properly centered.  FYI, this solution is consistent
+                 * with Mozilla's recommendation for working around their automatic CSS rules:
+                 *
+                 *      '[I]f you're trying to emulate WebKit's behavior on Gecko, you need to place the element you want
+                 *      to present inside another element, which you'll make fullscreen instead, and use CSS rules to adjust
+                 *      the inner element to match the appearance you want.'
+                 */
+                this.canvasMonitor.style.width = sWidth;
+                this.canvasMonitor.style.height = sHeight;
+                this.canvasMonitor.style.display = "block";
+                this.canvasMonitor.style.margin = "auto";
+            }
+            this.prevBackgroundColor = this.container.style.backgroundColor;
+            this.container.style.backgroundColor = "black";
+            this.container.doFullScreen();
+            if (this.input) this.input.setAltFocus(true);
+            fSuccess = true;
+        }
+        return fSuccess;
+    }
+
+    /**
+     * onFullScreen(fFullScreen)
+     *
+     * @this {Monitor}
+     * @param {boolean} [fFullScreen] (undefined if there was a full-screen error)
+     */
+    onFullScreen(fFullScreen)
+    {
+        this.machine.isFullScreen = true;
+        if (!fFullScreen) {
+            if (this.container) {
+                if (!this.fullScreenStyle) {
+                    this.container.style.width = this.container.style.height = "";
+                } else {
+                    this.canvasMonitor.style.width = this.canvasMonitor.style.height = "";
+                }
+                if (this.prevBackgroundColor) this.container.style.backgroundColor = this.prevBackgroundColor;
+            }
+            this.machine.isFullScreen = false;
+        }
+        if (this.input && !fFullScreen) this.input.setAltFocus(false);
+        if (DEBUG) this.printf(MESSAGE.MONITOR, "onFullScreen(%b)\n", fFullScreen);
+    }
+
+    /**
+     * onPower(on)
+     *
+     * Called by the Machine device to provide notification of a power event.
+     *
+     * @this {Monitor}
+     * @param {boolean} on (true to power on, false to power off)
+     */
+    onPower(on)
+    {
+        if (on) {
+            this.initCache();
+            this.updateScreen();
+        } else {
+            this.blankMonitor();
+        }
+    }
+
+    /**
+     * onReset()
+     *
+     * Called by the Machine device to provide notification of a reset event.
+     *
+     * @this {Monitor}
+     */
+    onReset()
+    {
+        this.blankMonitor();
+    }
+}
+
+Monitor.BINDING = {
+    CONTAINER:  "container",
+    SURFACE:    "surface",
+    MONITOR:    "monitor",
+    OVERLAY:    "overlay",
+    FULLSCREEN: "fullScreen",
+};
+
+Defs.CLASSES["Monitor"] = Monitor;
+
+/**
  * @copyright https://www.pcjs.org/machines/lib/time.js (C) 2012-2020 Jeff Parsons
  */
 
@@ -8685,203 +9149,6 @@ Memory.TYPE = {
 Defs.CLASSES["Memory"] = Memory;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/ports.js (C) 2012-2020 Jeff Parsons
- */
-
-/** @typedef {{ addr: (number|undefined), size: number }} */
-var PortsConfig;
-
-/**
- * @class {Ports}
- * @unrestricted
- * @property {PortsConfig} config
- * @property {number} addr
- * @property {number} size
- * @property {number} type
- * @property {Array.<function(number)>} aInData
- * @property {Array.<function(number,number)>} aOutData
- * @property {Array.<function(number,boolean)>} aInPair
- * @property {Array.<function(number,number)>} aOutPair
- */
-class Ports extends Memory {
-    /**
-     * Ports(idMachine, idDevice, config)
-     *
-     * @this {Ports}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {PortsConfig} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-        this.aInData = [];
-        this.aOutData = [];
-        this.aInPair = [];
-        this.aOutPair = [];
-        /*
-         * Some machines instantiate a Ports device through their configuration, which must include an 'addr';
-         * it's also possible that a device may dynamically allocate a Ports device and add it to the Bus itself
-         * (eg, the PDP11 IOPage).
-         */
-        if (this.config['addr'] != undefined) {
-            this.bus.addBlocks(this.config['addr'], this.config['size'], Memory.TYPE.NONE, this);
-        }
-    }
-
-    /**
-     * addIOHandlers(device, portLo, portHi, inData, outData, inPair, outPair)
-     *
-     * @this {Ports}
-     * @param {Device} device
-     * @param {number} portLo
-     * @param {number} portHi
-     * @param {function(number)|null} [inData]
-     * @param {function(number,number)|null} [outData]
-     * @param {function(number,boolean)|null} [inPair]
-     * @param {function(number,number)|null} [outPair]
-     */
-    addIOHandlers(device, portLo, portHi, inData, outData, inPair, outPair)
-    {
-        let port, success;
-        for (port = portLo; port <= portHi; port++) {
-            success = false;
-            if (inData) {
-                if (this.aInData[port]) break;
-                this.aInData[port] = inData.bind(device);
-            }
-            if (outData) {
-                if (this.aOutData[port]) break;
-                this.aOutData[port] = outData.bind(device);
-            }
-            if (inPair) {
-                if (this.aInPair[port]) break;
-                this.aInPair[port] = inPair.bind(device);
-            }
-            if (outPair) {
-                if (this.aOutPair[port]) break;
-                this.aOutPair[port] = outPair.bind(device);
-            }
-            success = true;
-        }
-        if (!success) {
-            throw new Error(this.sprintf("handler for port %#0x already exists", port));
-        }
-    }
-
-    /**
-     * addIOTable(device, table, portBase)
-     *
-     * @this {Ports}
-     * @param {Device} device
-     * @param {Object} table
-     * @param {number} [portBase]
-     */
-    addIOTable(device, table, portBase = 0)
-    {
-        for (let port in table) {
-            let handlers = table[port];
-            this.addIOHandlers(device, +port + portBase, +port + portBase, handlers[0], handlers[1], handlers[2], handlers[3]);
-        }
-    }
-
-    /**
-     * readNone(offset)
-     *
-     * This overrides the default readNone() function, which is the default handler for all I/O ports.
-     *
-     * @this {Ports}
-     * @param {number} offset
-     * @returns {number}
-     */
-    readNone(offset)
-    {
-        let func, port = this.addr + offset, value, read;
-        if ((func = this.aInData[port])) {
-            value = func(port);
-            read = true;
-        }
-        else if ((func = this.aInPair[port])) {
-            if (!(port & 0x1)) {
-                value = func(port) & this.dataLimit;
-                read = true;
-            } else {
-                value = func(port & ~0x1) >> this.dataWidth;
-                read = true;
-            }
-        }
-        else if (port & 0x1) {
-            port &= ~0x1;
-            if ((func = this.aInPair[port])) {
-                value = func(port) >> this.dataWidth;
-                read = true;
-            }
-            else if ((func = this.aInData[port])) {
-                value = func(port);
-                read = true;
-            }
-        }
-        if (!read) {
-            this.bus.fault(port, 0);
-            this.printf(MESSAGE.PORTS + MESSAGE.MISC, "readNone(%#04x): unknown port\n", port);
-            value = super.readNone(offset);
-        }
-        return value;
-    }
-
-    /**
-     * writeNone(offset, value)
-     *
-     * This overrides the default writeNone() function, which is the default handler for all I/O ports.
-     *
-     * @this {Ports}
-     * @param {number} offset
-     * @param {number} value
-     */
-    writeNone(offset, value)
-    {
-        let func, port = this.addr + offset, written;
-        if ((func = this.aOutData[port])) {
-            func(port, value);
-            written = true;
-        }
-        else if ((func = this.aOutPair[port])) {
-            /*
-             * If an outPair() handler exists, call the inPair() handler first to get the original data
-             * (with preWrite set to true) and call outPair() with the new data inserted into the original data.
-             */
-            let data = this.aInPair[port]? this.aInPair[port](port, true) : 0;
-            if (!(port & 0x1)) {
-                func(port, (data & ~this.dataLimit) | value);
-                written = true;
-            } else {
-                func(port, (data & this.dataLimit) | (value << this.dataWidth));
-                written = true;
-            }
-        }
-        else if (port & 0x1) {
-            port &= ~0x1;
-            if ((func = this.aOutPair[port])) {
-                let data = this.aInPair[port]? this.aInPair[port](port, true) : 0;
-                func(port, (data & this.dataLimit) | (value << this.dataWidth));
-                written = true;
-            }
-            else if ((func = this.aOutData[port])) {
-                func(port, value);
-                written = true;
-            }
-        }
-        if (!written) {
-            this.bus.fault(port, 1);
-            this.printf(MESSAGE.PORTS + MESSAGE.MISC, "writeNone(%#04x,%#04x): unknown port\n", port, value);
-            super.writeNone(offset, value);
-        }
-    }
-}
-
-Defs.CLASSES["Ports"] = Ports;
-
-/**
  * @copyright https://www.pcjs.org/machines/lib/bus/ram.js (C) 2012-2020 Jeff Parsons
  */
 
@@ -9153,6 +9420,171 @@ ROM.BINDING = {
 Defs.CLASSES["ROM"] = ROM;
 
 /**
+ * @copyright https://www.pcjs.org/machines/pcx86/libv3/video.js (C) 2012-2020 Jeff Parsons
+ */
+
+/** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */
+var PCx86VideoConfig;
+
+/**
+ * @class {PCx86Video}
+ * @unrestricted
+ * @property {PCx86VideoConfig} config
+ */
+class PCx86Video extends Monitor {
+    /**
+     * PCx86Video(idMachine, idDevice, config)
+     *
+     * The PCx86Video component can be configured with the following config properties:
+     *
+     *      bufferWidth: the width of a single frame buffer row, in pixels (eg, 256)
+     *      bufferHeight: the number of frame buffer rows (eg, 224)
+     *      bufferAddr: the starting address of the frame buffer (eg, 0x2400)
+     *      bufferRAM: true to use existing RAM (default is false)
+     *      bufferBits: the number of bits per column (default is 1)
+     *      bufferLeft: the bit position of the left-most pixel in a byte (default is 0; CGA uses 7)
+     *      bufferRotate: the amount of counter-clockwise buffer rotation required (eg, -90 or 270)
+     *      interruptRate: normally the same as (or some multiple of) refreshRate (eg, 120)
+     *      refreshRate: how many times updateMonitor() should be performed per second (eg, 60)
+     *
+     * We record all the above values now, but we defer creation of the frame buffer until initBuffers()
+     * is called.  At that point, we will also compute the extent of the frame buffer, determine the
+     * appropriate "cell" size (ie, the number of pixels that updateMonitor() will fetch and process at once),
+     * and then allocate our cell cache.
+     *
+     * @this {PCx86Video}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {ROMConfig} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        super(idMachine, idDevice, config);
+
+        let video = this
+        this.addrBuffer = this.config['bufferAddr'];
+
+        this.nColsBuffer = this.config['bufferWidth'];
+        this.nRowsBuffer = this.config['bufferHeight'];
+
+        this.cxCell = this.config['cellWidth'] || 1;
+        this.cyCell = this.config['cellHeight'] || 1;
+
+        this.rateInterrupt = this.config['interruptRate'];
+        this.rateRefresh = this.config['refreshRate'] || 60;
+
+        this.cxMonitorCell = (this.cxMonitor / this.nColsBuffer)|0;
+        this.cyMonitorCell = (this.cyMonitor / this.nRowsBuffer)|0;
+
+        this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['bus']));
+        // this.initBuffers();
+
+        this.cpu = /** @type {CPUx86} */ (this.findDeviceByClass("CPU"));
+        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
+        this.timerUpdateNext = this.time.addTimer(this.idDevice, this.updateMonitor.bind(this));
+        this.time.addUpdate(this);
+
+        this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
+        this.nUpdates = 0;
+    }
+
+    /**
+     * onUpdate(fTransition)
+     *
+     * This is our obligatory update() function, which every device with visual components should have.
+     *
+     * For the video device, our sole function is making sure the screen display is up-to-date.  However, calling
+     * updateScreen() is a bad idea if the machine is running, because we already have a timer to take care of
+     * that.  But we can also be called when the machine is NOT running (eg, the Debugger may be stepping through
+     * some code, or editing the frame buffer directly, or something else).  Since we have no way of knowing, we
+     * must force an update.
+     *
+     * @this {PCx86Video}
+     * @param {boolean} [fTransition]
+     */
+    onUpdate(fTransition)
+    {
+        if (!this.time.isRunning()) this.updateScreen();
+    }
+
+    /**
+     * getRefreshTime()
+     *
+     * @this {PCx86Video}
+     * @returns {number} (number of milliseconds per refresh)
+     */
+    getRefreshTime()
+    {
+        return 1000 / Math.max(this.rateRefresh, this.rateInterrupt);
+    }
+
+    /**
+     * initCache(nCells)
+     *
+     * Initializes the contents of our internal cell cache.
+     *
+     * @this {PCx86Video}
+     * @param {number} [nCells]
+     */
+    initCache(nCells)
+    {
+        this.fCacheValid = false;
+        if (nCells) {
+            this.nCacheCells = nCells;
+            if (this.aCacheCells === undefined || this.aCacheCells.length != this.nCacheCells) {
+                this.aCacheCells = new Array(this.nCacheCells);
+            }
+        }
+    }
+
+    /**
+     * updateMonitor(fForced)
+     *
+     * Forced updates are generally internal updates triggered by an I/O operation or other state change,
+     * while non-forced updates are periodic "refresh" updates.
+     *
+     * @this {PCx86Video}
+     * @param {boolean} [fForced]
+     */
+    updateMonitor(fForced)
+    {
+        let fUpdate = true;
+        if (!fForced) {
+            /*
+             * Since this is not a forced update, if our cell cache is valid AND we allocated our own buffer AND the buffer
+             * is clean, then there's nothing to do.
+             */
+            if (fUpdate && this.fCacheValid && this.sizeBuffer) {
+                if (this.busMemory.cleanBlocks(this.addrBuffer, this.sizeBuffer)) {
+                    fUpdate = false;
+                }
+            }
+            this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
+            this.nUpdates++;
+            if (!fUpdate) return;
+        }
+        this.updateScreen();
+    }
+
+    /**
+     * updateScreen()
+     *
+     * Propagates the video buffer to the cell cache and updates the screen with any changes on the monitor.
+     *
+     * For every cell in the video buffer, compare it to the cell stored in the cell cache, render if it differs,
+     * and then update the cell cache to match.  Since initCache() sets every cell in the cell cache to an
+     * invalid value, we're assured that the next call to updateScreen() will redraw the entire (visible) video buffer.
+     *
+     * @this {PCx86Video}
+     */
+    updateScreen()
+    {
+    }
+}
+
+Defs.CLASSES["PCx86Video"] = PCx86Video;
+
+/**
  * @copyright https://www.pcjs.org/machines/lib/cpu/cpu.js (C) 2012-2020 Jeff Parsons
  */
 
@@ -9299,6 +9731,903 @@ class CPU extends Device {
 }
 
 // Defs.CLASSES["CPU"] = CPU;
+
+/**
+ * @copyright https://www.pcjs.org/machines/pcx86/libv3/cpux86.js (C) 2012-2020 Jeff Parsons
+ */
+
+/**
+ * CPUx86
+ *
+ * @class {CPUx86}
+ * @unrestricted
+ */
+class CPUx86 extends CPU {
+    /**
+     * CPUx86(idMachine, idDevice, config)
+     *
+     * Defines the basic elements of the x86 CPU.
+     *
+     * @this {CPUx86}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {Config} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        super(idMachine, idDevice, config);
+    }
+}
+
+/*
+ * CPU model numbers (supported)
+ */
+CPUx86.MODEL_8086 =      8086;
+CPUx86.MODEL_8088 =      8088;
+CPUx86.MODEL_80186 =     80186;
+CPUx86.MODEL_80188 =     80188;
+CPUx86.MODEL_80286 =     80286;
+CPUx86.MODEL_80386 =     80386;
+
+/*
+ * 80386 CPU stepping identifiers (supported)
+ */
+CPUx86.STEPPING_80386_A0 =  (80386+0xA0);       // we have very little information about this stepping...
+CPUx86.STEPPING_80386_A1 =  (80386+0xA1);       // we know much more about the A1 stepping (see /blog/2015/02/23/README.md)
+CPUx86.STEPPING_80386_B0 =  (80386+0xB0);       // for now, the only B0 difference in PCx86 is support for XBTS and IBTS
+CPUx86.STEPPING_80386_B1 =  (80386+0xB1);       // our implementation of the B1 stepping also includes the infamous 32-bit multiplication bug
+CPUx86.STEPPING_80386_B2 =  (80386+0xB2);       // this is an imaginary stepping that simply means "B1 without the 32-bit multiplication bug" (ie, a B1 with the "double sigma" stamp)
+CPUx86.STEPPING_80386_C0 =  (80386+0xC0);       // this presumably fixed lots of B1 issues, but it seems to have been quickly superseded by the D0
+CPUx86.STEPPING_80386_D0 =  (80386+0xD0);       // we don't have any detailed information (eg, errata) for these later steppings
+CPUx86.STEPPING_80386_D1 =  (80386+0xD1);
+CPUx86.STEPPING_80386_D2 =  (80386+0xD2);
+
+/*
+ * This constant is used to mark points in the code where the physical address being returned
+ * is invalid and should not be used.
+ *
+ * This value is also used to indicate non-existent EA address calculations, which are usually
+ * detected with "regEA === ADDR_INVALID" and "regEAWrite === ADDR_INVALID" tests.  Which means
+ * that, technically, we should not use any signed 32-bit value, such as -1 (0xffffffff), since
+ * that could also be a valid address on a 32-bit CPU.  So we also leave open the possibility of
+ * using a non-numeric value such undefined or null, which is why all ADDR_INVALID tests should
+ * use strict equality operators.
+ *
+ * WARNING: Like many of the properties defined here, ADDR_INVALID is a common constant, which the
+ * Closure Compiler will happily inline (with or without @const annotations; in fact, I've yet to
+ * see a @const annotation EVER improve automatic inlining).  However, if you don't make ABSOLUTELY
+ * certain that this file is included BEFORE the first reference to any of these properties, that
+ * automatic inlining will no longer occur.
+ */
+CPUx86.ADDR_INVALID =  -1;
+
+/*
+ * Processor Exception Interrupts
+ *
+ * Of the following exceptions, all are designed to be restartable, except for 0x08 and 0x09 (and 0x0D
+ * after an attempt to write to a read-only segment).
+ *
+ * Error codes are pushed onto the stack for 0x08 (always 0) and 0x0A through 0x0E.
+ *
+ * Priority: Instruction exception, TRAP, NMI, Processor Extension Segment Overrun, and finally INTR.
+ *
+ * All exceptions can also occur in real-mode, except where noted.  A GP_FAULT in real-mode can be triggered
+ * by "any memory reference instruction that attempts to reference [a] 16-bit word at offset 0xFFFF".
+ *
+ * Interrupts beyond 0x10 (up through 0x1F) are reserved for future exceptions.
+ *
+ * Implementation Detail: For any opcode we know must generate a UD_FAULT interrupt, we invoke opInvalid(),
+ * NOT opUndefined().  UD_FAULT is for INVALID opcodes, Intel's choice of term "undefined" notwithstanding.
+ *
+ * We reserve the term "undefined" for opcodes that require more investigation, and we invoke opUndefined()
+ * ONLY until an opcode's behavior has finally been defined, at which point it becomes either valid or invalid.
+ * The term "illegal" seems completely superfluous; we don't need a third way of describing invalid opcodes.
+ *
+ * The term "undocumented" should be limited to operations that are valid but Intel simply never documented.
+ */
+CPUx86.EXCEPTION = {
+    DE_EXC:     0x00,   // Divide Error Exception                   (#DE: fault, no error code)
+    DB_EXC:     0x01,   // Debug (aka Single Step Trap) Exception   (#DB: fault or trap)
+    NMI:        0x02,   // Non-Maskable Interrupt
+    BP_TRAP:    0x03,   // Breakpoint Exception                     (#BP: trap)
+    OF_TRAP:    0x04,   // INTO Overflow Exception                  (#OF: trap)
+    BR_FAULT:   0x05,   // BOUND Error Exception                    (#BR: fault, no error code)
+    UD_FAULT:   0x06,   // Invalid (aka Undefined/Illegal) Opcode   (#UD: fault, no error code)
+    NM_FAULT:   0x07,   // No Math Unit Available; see ESC or WAIT  (#NM: fault, no error code)
+    DF_FAULT:   0x08,   // Double Fault; see LIDT                   (#DF: fault, with error code)
+    MP_FAULT:   0x09,   // Math Unit Protection Fault; see ESC      (#MP: fault, no error code)
+    TS_FAULT:   0x0A,   // Invalid Task State Segment Fault         (#TS: fault, with error code; protected-mode only)
+    NP_FAULT:   0x0B,   // Not Present Fault                        (#NP: fault, with error code; protected-mode only)
+    SS_FAULT:   0x0C,   // Stack Fault                              (#SS: fault, with error code; protected-mode only)
+    GP_FAULT:   0x0D,   // General Protection Fault                 (#GP: fault, with error code)
+    PF_FAULT:   0x0E,   // Page Fault                               (#PF: fault, with error code)
+    MF_FAULT:   0x10    // Math Fault; see ESC or WAIT              (#MF: fault, no error code)
+};
+
+/*
+ * Processor Status flag definitions (stored in regPS)
+ */
+CPUx86.PS = {
+    CF:     0x0001,     // bit 0: Carry flag
+    BIT1:   0x0002,     // bit 1: reserved, always set
+    PF:     0x0004,     // bit 2: Parity flag
+    BIT3:   0x0008,     // bit 3: reserved, always clear
+    AF:     0x0010,     // bit 4: Auxiliary Carry flag (aka Arithmetic flag)
+    BIT5:   0x0020,     // bit 5: reserved, always clear
+    ZF:     0x0040,     // bit 6: Zero flag
+    SF:     0x0080,     // bit 7: Sign flag
+    TF:     0x0100,     // bit 8: Trap flag
+    IF:     0x0200,     // bit 9: Interrupt flag
+    DF:     0x0400,     // bit 10: Direction flag
+    OF:     0x0800,     // bit 11: Overflow flag
+    IOPL: {
+     MASK:  0x3000,     // bits 12-13: I/O Privilege Level (always set on 8086/80186; clear on 80286 reset)
+     SHIFT: 12
+    },
+    NT:     0x4000,     // bit 14: Nested Task flag (always set on 8086/80186; clear on 80286 reset)
+    BIT15:  0x8000,     // bit 15: reserved (always set on 8086/80186; clear otherwise)
+    RF:    0x10000,     // bit 16: Resume Flag (temporarily disables debug exceptions; 80386 only)
+    VM:    0x20000      // bit 17: Virtual 8086 Mode (80386 only)
+};
+
+CPUx86.CR0 = {
+    /*
+     * Machine Status Word (MSW) bit definitions
+     */
+    MSW: {
+        PE:     0x0001, // protected-mode enabled
+        MP:     0x0002, // monitor processor extension (ie, coprocessor)
+        EM:     0x0004, // emulate processor extension
+        TS:     0x0008, // task switch indicator
+        ON:     0xFFF0, // on the 80286, these bits are always on (TODO: Verify)
+        MASK:   0xFFFF  // these are the only (MSW) bits that the 80286 can access (within CR0)
+    },
+    ET: 0x00000010,     // coprocessor type (80287 or 80387); always 1 on post-80386 CPUs
+    ON: 0x7FFFFFE0,     // CR0 bits that are always on
+    PG: 0x80000000|0,   // 0: paging disabled
+};
+
+CPUx86.DR7 = {          // Debug Control Register
+    L0:     0x00000001,
+    G0:     0x00000002,
+    L1:     0x00000004,
+    G1:     0x00000008,
+    L2:     0x00000010,
+    G2:     0x00000020,
+    L3:     0x00000040,
+    G3:     0x00000080,
+    ENABLE: 0x000000FF,
+    LE:     0x00000100,
+    GE:     0x00000200,
+    RW0:    0x00030000, // 00: exec-only  01: write-only  10: undefined  11: read/write-only
+    LEN0:   0x000C0000, // 00: one-byte,  01: two-byte,   10: undefined  11: four-byte
+    RW1:    0x00300000, // 00: exec-only  01: write-only  10: undefined  11: read/write-only
+    LEN1:   0x00C00000, // 00: one-byte,  01: two-byte,   10: undefined  11: four-byte
+    RW2:    0x03000000, // 00: exec-only  01: write-only  10: undefined  11: read/write-only
+    LEN2:   0x0C000000, // 00: one-byte,  01: two-byte,   10: undefined  11: four-byte
+    RW3:    0x30000000, // 00: exec-only  01: write-only  10: undefined  11: read/write-only
+    LEN3:   0xC0000000|0// 00: one-byte,  01: two-byte,   10: undefined  11: four-byte
+};
+
+CPUx86.DR6 = {          // Debug Status Register
+    B0:     0x00000001,
+    B1:     0x00000002,
+    B2:     0x00000004,
+    B3:     0x00000008,
+    BD:     0x00002000, // set if the next instruction will read or write one of the eight debug registers and ICE-386 is also using them
+    BS:     0x00004000, // set if the debug handler is entered due to the TF (trap flag) bit set in the EFLAGS register
+    BT:     0x00008000  // set before entering the DEBUG handler if a task switch has occurred and the T-bit of the new TSS is set
+};
+
+CPUx86.SEL = {
+    RPL:    0x0003,     // requested privilege level (0-3)
+    LDT:    0x0004,     // table indicator (0: GDT, 1: LDT)
+    MASK:   0xFFF8      // table offset
+};
+
+CPUx86.DESC = {         // Descriptor Table Entry
+    LIMIT: {            // LIMIT bits 0-15 (or OFFSET if this is an INTERRUPT or TRAP gate)
+        OFFSET:     0x0
+    },
+    BASE: {             // BASE bits 0-15 (or SELECTOR if this is a TASK, INTERRUPT or TRAP gate)
+        OFFSET:     0x2
+    },
+    ACC: {              // bit definitions for the access word (offset 0x4)
+        OFFSET:     0x4,
+        BASE1623:                       0x00FF,     // (not used if this a TASK, INTERRUPT or TRAP gate; bits 0-5 are parm count for CALL gates)
+        TYPE: {
+            OFFSET: 0x5,
+            MASK:                       0x1F00,
+            SEG:                        0x1000,
+            NONSEG:                     0x0F00,
+            /*
+             * The following bits apply only when SEG is set
+             */
+            CODE:                       0x0800,     // set for CODE, clear for DATA
+            ACCESSED:                   0x0100,     // set if accessed, clear if not accessed
+            READABLE:                   0x0200,     // CODE: set if readable, clear if exec-only
+            WRITABLE:                   0x0200,     // DATA: set if writable, clear if read-only
+            CONFORMING:                 0x0400,     // CODE: set if conforming, clear if not
+            EXPDOWN:                    0x0400,     // DATA: set if expand-down, clear if not
+            /*
+             * Assorted bits that apply only within NONSEG values
+             */
+            TSS_BUSY:                   0x0200,
+            NONSEG_386:                 0x0800,     // 80386 and up
+            /*
+             * The following are all the possible (valid) types (well, except for the variations
+             * of DATA and CODE where the ACCESSED bit (0x0100) may also be set)
+             */
+            TSS286:                     0x0100,
+            LDT:                        0x0200,
+            TSS286_BUSY:                0x0300,
+            GATE_CALL:                  0x0400,
+            GATE_TASK:                  0x0500,
+            GATE286_INT:                0x0600,
+            GATE286_TRAP:               0x0700,
+            TSS386:                     0x0900,     // 80386 and up
+            TSS386_BUSY:                0x0B00,     // 80386 and up
+            GATE386_CALL:               0x0C00,     // 80386 and up
+            GATE386_INT:                0x0E00,     // 80386 and up
+            GATE386_TRAP:               0x0F00,     // 80386 and up
+            CODE_OR_DATA:               0x1E00,
+            DATA_READONLY:              0x1000,
+            DATA_WRITABLE:              0x1200,
+            DATA_EXPDOWN:               0x1400,
+            DATA_EXPDOWN_WRITABLE:      0x1600,
+            CODE_EXECONLY:              0x1800,
+            CODE_READABLE:              0x1A00,
+            CODE_CONFORMING:            0x1C00,
+            CODE_CONFORMING_READABLE:   0x1E00
+        },
+        DPL: {
+            MASK:                       0x6000,
+            SHIFT:                      13
+        },
+        PRESENT:                        0x8000,
+        INVALID:    0   // use CPUx86.DESC.ACC.INVALID for invalid ACC values
+    },
+    EXT: {              // descriptor extension word (reserved on the 80286; "must be zero")
+        OFFSET:     0x6,
+        LIMIT1619:                      0x000F,
+        AVAIL:                          0x0010,     // NOTE: set in various descriptors in OS/2
+        /*
+         * The BIG bit is known as the D bit for code segments; when set, all addresses and operands
+         * in that code segment are assumed to be 32-bit.
+         *
+         * The BIG bit is known as the B bit for data segments; when set, it indicates: 1) all pushes,
+         * pops, calls and returns use ESP instead of SP, and 2) the upper bound of an expand-down segment
+         * is 0xffffffff instead of 0xffff.
+         */
+        BIG:                            0x0040,     // clear if default operand/address size is 16-bit, set if 32-bit
+        LIMITPAGES:                     0x0080,     // clear if limit granularity is bytes, set if limit granularity is 4Kb pages
+        BASE2431:                       0xFF00
+    },
+    INVALID: 0          // use CPUx86.DESC.INVALID for invalid DESC values
+};
+
+CPUx86.LADDR = {                // linear address
+    PDE: {              // index of page directory entry
+        MASK:   0xFFC00000|0,
+        SHIFT:  20      // (addr & DIR.MASK) >>> DIR.SHIFT yields a page directory offset (ie, index * 4)
+    },
+    PTE: {              // index of page table entry
+        MASK:   0x003FF000,
+        SHIFT:  10      // (addr & PAGE.MASK) >>> PAGE.SHIFT yields a page table offset (ie, index * 4)
+    },
+    OFFSET:     0x00000FFF
+};
+
+CPUx86.PTE = {
+    FRAME:      0xFFFFF000|0,
+    DIRTY:      0x00000040,         // page has been modified
+    ACCESSED:   0x00000020,         // page has been accessed
+    USER:       0x00000004,         // set for user level (CPL 3), clear for supervisor level (CPL 0-2)
+    READWRITE:  0x00000002,         // set for read/write, clear for read-only (affects CPL 3 only)
+    PRESENT:    0x00000001          // set for present page, clear for not-present page
+};
+
+CPUx86.TSS286 = {
+    PREV_TSS:   0x00,
+    CPL0_SP:    0x02,   // start of values altered by task switches
+    CPL0_SS:    0x04,
+    CPL1_SP:    0x06,
+    CPL1_SS:    0x08,
+    CPL2_SP:    0x0A,
+    CPL2_SS:    0x0C,
+    TASK_IP:    0x0E,
+    TASK_PS:    0x10,
+    TASK_AX:    0x12,
+    TASK_CX:    0x14,
+    TASK_DX:    0x16,
+    TASK_BX:    0x18,
+    TASK_SP:    0x1A,
+    TASK_BP:    0x1C,
+    TASK_SI:    0x1E,
+    TASK_DI:    0x20,
+    TASK_ES:    0x22,
+    TASK_CS:    0x24,
+    TASK_SS:    0x26,
+    TASK_DS:    0x28,   // end of values altered by task switches
+    TASK_LDT:   0x2A
+};
+
+CPUx86.TSS386 = {
+    PREV_TSS:   0x00,
+    CPL0_ESP:   0x04,   // start of values altered by task switches
+    CPL0_SS:    0x08,
+    CPL1_ESP:   0x0c,
+    CPL1_SS:    0x10,
+    CPL2_ESP:   0x14,
+    CPL2_SS:    0x18,
+    TASK_CR3:   0x1C,   // (not in TSS286)
+    TASK_EIP:   0x20,
+    TASK_PS:    0x24,
+    TASK_EAX:   0x28,
+    TASK_ECX:   0x2C,
+    TASK_EDX:   0x30,
+    TASK_EBX:   0x34,
+    TASK_ESP:   0x38,
+    TASK_EBP:   0x3C,
+    TASK_ESI:   0x40,
+    TASK_EDI:   0x44,
+    TASK_ES:    0x48,
+    TASK_CS:    0x4C,
+    TASK_SS:    0x50,
+    TASK_DS:    0x54,
+    TASK_FS:    0x58,   // (not in TSS286)
+    TASK_GS:    0x5C,   // (not in TSS286) end of values altered by task switches
+    TASK_LDT:   0x60,
+    TASK_IOPM:  0x64    // (not in TSS286)
+};
+
+CPUx86.ERRCODE = {
+    EXT:        0x0001,
+    IDT:        0x0002,
+    LDT:        0x0004,
+    SELMASK:    0xFFFC
+};
+
+CPUx86.RESULT = {
+    /*
+     * Flags were originally computed using 16-bit result registers:
+     *
+     *      CF: resultZeroCarry & resultSize (ie, 0x100 or 0x10000)
+     *      PF: resultParitySign & 0xff
+     *      AF: (resultParitySign ^ resultAuxOverflow) & 0x0010
+     *      ZF: resultZeroCarry & (resultSize - 1)
+     *      SF: resultParitySign & (resultSize >> 1)
+     *      OF: (resultParitySign ^ resultAuxOverflow ^ (resultParitySign >> 1)) & (resultSize >> 1)
+     *
+     * I386 support requires that we now rely on 32-bit result registers:
+     *
+     *      resultDst, resultSrc, resultArith, resultLogic and resultType
+     *
+     * and flags are now computed as follows:
+     *
+     *      CF: ((resultDst ^ ((resultDst ^ resultSrc) & (resultSrc ^ resultArith))) & resultType)
+     *      PF: (resultLogic & 0xff)
+     *      AF: ((resultArith ^ (resultDst ^ resultSrc)) & 0x0010)
+     *      ZF: (resultLogic & ((resultType - 1) | resultType))
+     *      SF: (resultLogic & resultType)
+     *      OF: (((resultDst ^ resultArith) & (resultSrc ^ resultArith)) & resultType)
+     *
+     * where resultType contains both a size, which must be one of BYTE (0x80), WORD (0x8000),
+     * or DWORD (0x80000000), along with bits for each of the arithmetic and/or logical flags that
+     * are currently "cached" in the result registers (eg, CPUx86.RESULT.CF for carry, CPUx86.RESULT.OF
+     * for overflow, etc).
+     *
+     * WARNING: Do not confuse these RESULT flag definitions with the PS flag definitions.  RESULT
+     * flags are used only as "cached" flag indicators, packed into bits 0-5 of resultType; they do
+     * not match the actual flag bit definitions within the Processor Status (PS) register.
+     *
+     * Arithmetic operations should call:
+     *
+     *      setArithResult(dst, src, value, type)
+     * eg:
+     *      setArithResult(dst, src, dst+src, CPUx86.RESULT.BYTE | CPUx86.RESULT.ALL)
+     *
+     * and logical operations should call:
+     *
+     *      setLogicResult(value, type [, carry [, overflow]])
+     *
+     * Since most logical operations clear both CF and OF, most calls to setLogicResult() can omit the
+     * last two optional parameters.
+     *
+     * The type parameter of these methods indicates both the size of the result (BYTE, WORD or DWORD)
+     * and which of the flags should now be considered "cached" by the result registers.  If the previous
+     * resultType specifies any flags not present in the new type parameter, then those flags are
+     * calculated and written to the appropriate regPS bit(s) *before* the result registers are updated.
+     *
+     * Arithmetic operations are assumed to represent an "added" result; if a "subtracted" result is
+     * provided instead (eg, from CMP, DEC, SUB, etc), then setArithResult() must include a 5th parameter
+     * (fSubtract); eg:
+     *
+     *      setArithResult(dst, src, dst-src, CPUx86.RESULT.BYTE | CPUx86.RESULT.ALL, true)
+     *
+     * TODO: Consider separating setArithResult() into two functions: setAddResult() and setSubResult().
+     */
+    BYTE:       0x80,       // result is byte value
+    WORD:       0x8000,     // result is word value
+    DWORD:      0x80000000|0,
+    TYPE:       0x80008080|0,
+    CF:         0x01,       // carry flag is cached
+    PF:         0x02,       // parity flag is cached
+    AF:         0x04,       // aux carry flag is cached
+    ZF:         0x08,       // zero flag is cached
+    SF:         0x10,       // sign flag is cached
+    OF:         0x20,       // overflow flag is cached
+    ALL:        0x3F,       // all result flags are cached
+    LOGIC:      0x1A,       // all logical flags are cached; see setLogicResult()
+    NOTCF:      0x3E        // all result flags EXCEPT carry are cached
+};
+
+/*
+ * Bit values for opFlags, which are all reset to zero prior to each instruction
+ */
+CPUx86.OPFLAG = {
+    NOREAD:     0x0001,     // disable memory reads for the remainder of the current instruction
+    NOWRITE:    0x0002,     // disable memory writes for the remainder of the current instruction
+    NOINTR:     0x0004,     // a segreg has been set, or a prefix, or an STI (delay INTR acknowledgement)
+    WRAP:       0x0008,     // a segment wrap-around has occurred (relevant to 8086/8088 only)
+    SEG:        0x0010,     // segment override
+    LOCK:       0x0020,     // lock prefix
+    REPZ:       0x0040,     // repeat while Z (NOTE: this value MUST match PS.ZF; see opCMPSb/opCMPSw/opSCASb/opSCASw)
+    REPNZ:      0x0080,     // repeat while NZ
+    REPEAT:     0x0100,     // an instruction is being repeated (ie, some iteration AFTER the first)
+    PUSHSP:     0x0200,     // the SP register is potentially being referenced by a PUSH SP opcode, adjustment may be required
+    DATASIZE:   0x0400,     // data size override
+    ADDRSIZE:   0x0800,     // address size override
+    FAULT:      0x1000,     // a fault occurred during the current instruction
+    DBEXC:      0x2000,     // a DB_EXC exception occurred during the current instruction
+    REPSEG:     0x4000      // an instruction is being repeated with a segment prefix (used for 8086/8088 "feature" simulation)
+};
+
+/*
+ * Bit values for intFlags
+ */
+CPUx86.INTFLAG = {
+    NONE:       0x00,
+    INTR:       0x01,       // h/w interrupt requested
+    TRAP:       0x02,       // trap (INT 0x01) requested
+    HALT:       0x04,       // halt (HLT) requested
+    DMA:        0x08,       // async DMA operation in progress
+    DEBUGGER:   0x10        // debugger checks enabled
+};
+
+/*
+ * Common opcodes (and/or any opcodes we need to refer to explicitly)
+ */
+CPUx86.OPCODE = {
+    ES:         0x26,       // opES()
+    CS:         0x2E,       // opCS()
+    SS:         0x36,       // opSS()
+    DS:         0x3E,       // opDS()
+    PUSHSP:     0x54,       // opPUSHSP()
+    PUSHA:      0x60,       // opPUSHA()    (80186 and up)
+    POPA:       0x61,       // opPOPA()     (80186 and up)
+    BOUND:      0x62,       // opBOUND()    (80186 and up)
+    ARPL:       0x63,       // opARPL()     (80286 and up)
+    FS:         0x64,       // opFS()       (80386 and up)
+    GS:         0x65,       // opGS()       (80386 and up)
+    OS:         0x66,       // opOS()       (80386 and up)
+    AS:         0x67,       // opAS()       (80386 and up)
+    PUSHN:      0x68,       // opPUSHn()    (80186 and up)
+    IMULN:      0x69,       // opIMULn()    (80186 and up)
+    PUSH8:      0x6A,       // opPUSH8()    (80186 and up)
+    IMUL8:      0x6B,       // opIMUL8()    (80186 and up)
+    INSB:       0x6C,       // opINSb()     (80186 and up)
+    INSW:       0x6D,       // opINSw()     (80186 and up)
+    OUTSB:      0x6E,       // opOUTSb()    (80186 and up)
+    OUTSW:      0x6F,       // opOUTSw()    (80186 and up)
+    ENTER:      0xC8,       // opENTER()    (80186 and up)
+    LEAVE:      0xC9,       // opLEAVE()    (80186 and up)
+    CALLF:      0x9A,       // opCALLF()
+    MOVSB:      0xA4,       // opMOVSb()
+    MOVSW:      0xA5,       // opMOVSw()
+    CMPSB:      0xA6,       // opCMPSb()
+    CMPSW:      0xA7,       // opCMPSw()
+    STOSB:      0xAA,       // opSTOSb()
+    STOSW:      0xAB,       // opSTOSw()
+    LODSB:      0xAC,       // opLODSb()
+    LODSW:      0xAD,       // opLODSw()
+    SCASB:      0xAE,       // opSCASb()
+    SCASW:      0xAF,       // opSCASw()
+    INT3:       0xCC,       // opINT3()
+    INTN:       0xCD,       // opINTn()
+    INTO:       0xCE,       // opINTO()
+    IRET:       0xCF,       // opIRET()
+    ESC0:       0xD8,       // opESC0()
+    ESC1:       0xD9,       // opESC1()
+    ESC2:       0xDA,       // opESC2()
+    ESC3:       0xDB,       // opESC3()
+    ESC4:       0xDC,       // opESC4()
+    ESC5:       0xDD,       // opESC5()
+    ESC6:       0xDE,       // opESC6()
+    ESC7:       0xDF,       // opESC7()
+    LOOPNZ:     0xE0,       // opLOOPNZ()
+    LOOPZ:      0xE1,       // opLOOPZ()
+    LOOP:       0xE2,       // opLOOP()
+    CALL:       0xE8,       // opCALL()
+    JMP:        0xE9,       // opJMP()      (2-byte displacement)
+    JMPF:       0xEA,       // opJMPF()
+    JMPS:       0xEB,       // opJMPs()     (1-byte displacement)
+    LOCK:       0xF0,       // opLOCK()
+    INT1:       0xF1,       // opINT1()
+    REPNZ:      0xF2,       // opREPNZ()
+    REPZ:       0xF3,       // opREPZ()
+    GRP4W:      0xFF,
+    CALLW:      0x10FF,     // GRP4W: fnCALLw()
+    CALLFDW:    0x18FF,     // GRP4W: fnCALLFdw()
+    CALLMASK:   0x38FF,     // mask 2-byte GRP4W opcodes with this before comparing to CALLW or CALLFDW
+    UD2:        0x0B0F      // UD2 (invalid opcode "guaranteed" to generate UD_FAULT on all post-8086 processors)
+};
+
+/*
+ * Floating Point Unit (FPU), aka Numeric Data Processor (NDP), aka Numeric Processor Extension (NPX), aka Coprocessor definitions
+ */
+CPUx86.FPU = {
+    MODEL_8087:     8087,
+    MODEL_80287:    80287,
+    MODEL_80287XL:  80387,  // internally, the 80287XL was an 80387SX, so generally, we treat this as MODEL_80387
+    MODEL_80387:    80387,
+    CONTROL: {              // FPU Control Word
+        IM:     0x0001,     // bit 0: Invalid Operation Mask
+        DM:     0x0002,     // bit 1: Denormalized Operand Mask
+        ZM:     0x0004,     // bit 2: Zero Divide Mask
+        OM:     0x0008,     // bit 3: Overflow Mask
+        UM:     0x0010,     // bit 4: Underflow Mask
+        PM:     0x0020,     // bit 5: Precision Mask
+        EXC:    0x003F,     // all of the above exceptions
+        IEM:    0x0080,     // bit 7: Interrupt Enable Mask (0 enables interrupts, 1 masks them; 8087 only)
+        PC:     0x0300,     // bits 8-9: Precision Control
+        RC: {               // bits 10-11: Rounding Control
+          NEAR: 0x0000,
+          DOWN: 0x0400,
+          UP:   0x0800,
+          CHOP: 0x0C00,
+          MASK: 0x0C00
+        },
+        IC:     0x1000,     // bit 12: Infinity Control (0 for Projective, 1 for Affine)
+        UNUSED: 0xE040,     // bits 6,13-15: unused
+        INIT:   0x03BF      // CPUx86.FPU.CONTROL.IM | CPUx86.FPU.CONTROL.DM | CPUx86.FPU.CONTROL.ZM | CPUx86.FPU.CONTROL.OM | CPUx86.FPU.CONTROL.UM | CPUx86.FPU.CONTROL.PM | CPUx86.FPU.CONTROL.IEM | CPUx86.FPU.CONTROL.PC
+    },
+    STATUS: {               // FPU Status Word
+        IE:     0x0001,     // bit 0: Invalid Operation
+        DE:     0x0002,     // bit 1: Denormalized Operand
+        ZE:     0x0004,     // bit 2: Zero Divide
+        OE:     0x0008,     // bit 3: Overflow
+        UE:     0x0010,     // bit 4: Underflow
+        PE:     0x0020,     // bit 5: Precision
+        SF:     0x0040,     // bit 6: Stack Fault (80387 and later; triggers an Invalid Operation exception)
+        EXC:    0x007F,     // all of the above exceptions
+        ES:     0x0080,     // bit 7: Error/Exception Status/Summary (Interrupt Request on 8087)
+        C0:     0x0100,     // bit 8: Condition Code 0
+        C1:     0x0200,     // bit 9: Condition Code 1
+        C2:     0x0400,     // bit 10: Condition Code 2
+        ST:     0x3800,     // bits 11-13: Stack Top
+        ST_SHIFT: 11,
+        C3:     0x4000,     // bit 14: Condition Code 3
+        CC:     0x4700,     // all condition code bits
+        BUSY:   0x8000      // bit 15: Busy
+    },
+    TAGS: {
+        VALID:  0x0,
+        ZERO:   0x1,
+        SPECIAL:0x2,
+        EMPTY:  0x3,
+        MASK:   0x3
+    }
+    /*
+        C3 C2 C1 C0     Condition Code (CC) values following an Examine
+        0  0  0  0      Valid, positive unnormalized (+Unnormal)
+        0  0  0  1      Invalid, positive, exponent=0 (+NaN)
+        0  0  1  0      Valid, negative, unnormalized (-Unnormal)
+        0  0  1  1      Invalid, negative, exponent=0 (-NaN)
+        0  1  0  0      Valid, positive, normalized (+Normal)
+        0  1  0  1      Infinity, positive (+Infinity)
+        0  1  1  0      Valid, negative, normalized (-Normal)
+        0  1  1  1      Infinity, negative (-Infinity)
+        1  0  0  0      Zero, positive (+0)
+        1  0  0  1      Empty
+        1  0  1  0      Zero, negative (-0)
+        1  0  1  1      Empty
+        1  1  0  0      Invalid, positive, exponent=0 (+Denormal)
+        1  1  0  1      Empty
+        1  1  1  0      Invalid, negative, exponent=0 (-Denormal)
+        1  1  1  1      Empty
+                        Condition Code (CC) values following an FCOM or FTST
+        0  0  ?  0      ST > source operand (FCOM); ST > 0 (FTST)
+        0  0  ?  1      ST < source operand (FCOM); ST < 0 (FTST)
+        1  0  ?  0      ST = source operand (FCOM); ST = 0 (FTST)
+        1  1  ?  1      ST is not comparable
+                        Condition Code (CC) values following a Remainder
+        Q1 0  Q0 Q2     Complete reduction (he three low bits of the quotient stored in C0, C3, and C1)
+        ?  1  ?  ?      Incomplete reduction
+     */
+};
+
+CPUx86.CYCLES_8088 = {
+    nWordCyclePenalty:          4,      // NOTE: accurate for the 8088/80188 only (on the 8086/80186, it applies to odd addresses only)
+    nEACyclesBase:              5,      // base or index only (BX, BP, SI or DI)
+    nEACyclesDisp:              6,      // displacement only
+    nEACyclesBaseIndex:         7,      // base + index (BP+DI and BX+SI)
+    nEACyclesBaseIndexExtra:    8,      // base + index (BP+SI and BX+DI require an extra cycle)
+    nEACyclesBaseDisp:          9,      // base or index + displacement
+    nEACyclesBaseIndexDisp:     11,     // base + index + displacement (BP+DI+n and BX+SI+n)
+    nEACyclesBaseIndexDispExtra:12,     // base + index + displacement (BP+SI+n and BX+DI+n require an extra cycle)
+    nOpCyclesAAA:               4,      // AAA, AAS, DAA, DAS, TEST acc,imm
+    nOpCyclesAAD:               60,
+    nOpCyclesAAM:               83,
+    nOpCyclesArithRR:           3,      // ADC, ADD, AND, OR, SBB, SUB, XOR and CMP reg,reg cycle time
+    nOpCyclesArithRM:           9,      // ADC, ADD, AND, OR, SBB, SUB, and XOR reg,mem (and CMP mem,reg) cycle time
+    nOpCyclesArithMR:           16,     // ADC, ADD, AND, OR, SBB, SUB, and XOR mem,reg cycle time
+    nOpCyclesArithMID:          1,      // ADC, ADD, AND, OR, SBB, SUB, XOR and CMP mem,imm cycle delta
+    nOpCyclesCall:              19,
+    nOpCyclesCallF:             28,
+    nOpCyclesCallWR:            16,
+    nOpCyclesCallWM:            21,
+    nOpCyclesCallDM:            37,
+    nOpCyclesCLI:               2,
+    nOpCyclesCompareRM:         9,      // CMP reg,mem cycle time (same as nOpCyclesArithRM on an 8086 but not on a 80286)
+    nOpCyclesCWD:               5,
+    nOpCyclesBound:             33,     // N/A if 8086/8088, 33-35 if 80186/80188 (TODO: Determine what the range means for an 80186/80188)
+    nOpCyclesInP:               10,
+    nOpCyclesInDX:              8,
+    nOpCyclesIncR:              3,      // INC reg, DEC reg
+    nOpCyclesIncM:              15,     // INC mem, DEC mem
+    nOpCyclesInt:               51,
+    nOpCyclesInt3D:             1,
+    nOpCyclesIntOD:             2,
+    nOpCyclesIntOFall:          4,
+    nOpCyclesIRet:              32,
+    nOpCyclesJmp:               15,
+    nOpCyclesJmpF:              15,
+    nOpCyclesJmpC:              16,
+    nOpCyclesJmpCFall:          4,
+    nOpCyclesJmpWR:             11,
+    nOpCyclesJmpWM:             18,
+    nOpCyclesJmpDM:             24,
+    nOpCyclesLAHF:              4,      // LAHF, SAHF, MOV reg,imm
+    nOpCyclesLEA:               2,
+    nOpCyclesLS:                16,     // LDS, LES
+    nOpCyclesLoop:              17,     // LOOP, LOOPNZ
+    nOpCyclesLoopZ:             18,     // LOOPZ, JCXZ
+    nOpCyclesLoopNZ:            19,     // LOOPNZ
+    nOpCyclesLoopFall:          5,      // LOOP
+    nOpCyclesLoopZFall:         6,      // LOOPZ, JCXZ
+    nOpCyclesMovRR:             2,
+    nOpCyclesMovRM:             8,
+    nOpCyclesMovMR:             9,
+    nOpCyclesMovRI:             10,
+    nOpCyclesMovMI:             10,
+    nOpCyclesMovAM:             10,
+    nOpCyclesMovMA:             10,
+    nOpCyclesDivBR:             80,     // range of 80-90
+    nOpCyclesDivWR:             124,    // range of 144-162 (lowered to produce a Norton SI performance index of 1.0)
+    nOpCyclesDivBM:             86,     // range of 86-96
+    nOpCyclesDivWM:             134,    // range of 154-172 (lowered to produce a Norton SI performance index of 1.0)
+    nOpCyclesIDivBR:            101,    // range of 101-112
+    nOpCyclesIDivWR:            145,    // range of 165-184 (lowered to produce a Norton SI performance index of 1.0)
+    nOpCyclesIDivBM:            107,    // range of 107-118
+    nOpCyclesIDivWM:            151,    // range of 171-190 (lowered to produce a Norton SI performance index of 1.0)
+    nOpCyclesMulBR:             70,     // range of 70-77
+    nOpCyclesMulWR:             93,     // range of 113-118 (lowered to produce a Norton SI performance index of 1.0)
+    nOpCyclesMulBM:             76,     // range of 76-83
+    nOpCyclesMulWM:             104,    // range of 124-139 (lowered to produce a Norton SI performance index of 1.0)
+    nOpCyclesIMulBR:            80,     // range of 80-98
+    nOpCyclesIMulWR:            108,    // range of 128-154 (lowered to produce a Norton SI performance index of 1.0)
+    nOpCyclesIMulBM:            86,     // range of 86-104
+    nOpCyclesIMulWM:            114,    // range of 134-160 (lowered to produce a Norton SI performance index of 1.0)
+    nOpCyclesNegR:              3,      // NEG reg, NOT reg
+    nOpCyclesNegM:              16,     // NEG mem, NOT mem
+    nOpCyclesOutP:              10,
+    nOpCyclesOutDX:             8,
+    nOpCyclesPopAll:            51,     // N/A if 8086/8088, 51 if 80186, 83 if 80188 (TODO: Verify)
+    nOpCyclesPopReg:            8,
+    nOpCyclesPopMem:            17,
+    nOpCyclesPushAll:           36,     // N/A if 8086/8088, 36 if 80186, 68 if 80188 (TODO: Verify)
+    nOpCyclesPushReg:           11,     // NOTE: "The 8086 Book" claims this is 10, but it's an outlier....
+    nOpCyclesPushMem:           16,
+    nOpCyclesPushSeg:           10,
+    nOpCyclesPrefix:            2,
+    nOpCyclesCmpS:              18,
+    nOpCyclesCmpSr0:            9-2,    // reduced by nOpCyclesPrefix
+    nOpCyclesCmpSrn:            17-2,   // reduced by nOpCyclesPrefix
+    nOpCyclesLodS:              12,
+    nOpCyclesLodSr0:            9-2,    // reduced by nOpCyclesPrefix
+    nOpCyclesLodSrn:            13-2,   // reduced by nOpCyclesPrefix
+    nOpCyclesMovS:              18,
+    nOpCyclesMovSr0:            9-2,    // reduced by nOpCyclesPrefix
+    nOpCyclesMovSrn:            17-2,   // reduced by nOpCyclesPrefix
+    nOpCyclesScaS:              15,
+    nOpCyclesScaSr0:            9-2,    // reduced by nOpCyclesPrefix
+    nOpCyclesScaSrn:            15-2,   // reduced by nOpCyclesPrefix
+    nOpCyclesStoS:              11,
+    nOpCyclesStoSr0:            9-2,    // reduced by nOpCyclesPrefix
+    nOpCyclesStoSrn:            10-2,   // reduced by nOpCyclesPrefix
+    nOpCyclesRet:               8,
+    nOpCyclesRetn:              12,
+    nOpCyclesRetF:              18,
+    nOpCyclesRetFn:             17,
+    nOpCyclesShift1M:           15,     // ROL/ROR/RCL/RCR/SHL/SHR/SAR reg,1
+    nOpCyclesShiftCR:           8,      // ROL/ROR/RCL/RCR/SHL/SHR/SAR reg,CL
+    nOpCyclesShiftCM:           20,     // ROL/ROR/RCL/RCR/SHL/SHR/SAR mem,CL
+    nOpCyclesShiftCS:           2,      // this is the left-shift value used to convert the count to the cycle cost
+    nOpCyclesTestRR:            3,
+    nOpCyclesTestRM:            9,
+    nOpCyclesTestRI:            5,
+    nOpCyclesTestMI:            11,
+    nOpCyclesXchgRR:            4,
+    nOpCyclesXchgRM:            17,
+    nOpCyclesXLAT:              11
+};
+
+CPUx86.CYCLES_80286 = {
+    nWordCyclePenalty:          0,
+    nEACyclesBase:              0,
+    nEACyclesDisp:              0,
+    nEACyclesBaseIndex:         0,
+    nEACyclesBaseIndexExtra:    0,
+    nEACyclesBaseDisp:          0,
+    nEACyclesBaseIndexDisp:     1,
+    nEACyclesBaseIndexDispExtra:1,
+    nOpCyclesAAA:               3,
+    nOpCyclesAAD:               14,
+    nOpCyclesAAM:               16,
+    nOpCyclesArithRR:           2,
+    nOpCyclesArithRM:           7,
+    nOpCyclesArithMR:           7,
+    nOpCyclesArithMID:          0,
+    nOpCyclesCall:              7,      // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesCallF:             13,     // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesCallWR:            7,      // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesCallWM:            11,     // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesCallDM:            16,     // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesCLI:               3,
+    nOpCyclesCompareRM:         6,
+    nOpCyclesCWD:               2,
+    nOpCyclesBound:             13,
+    nOpCyclesInP:               5,
+    nOpCyclesInDX:              5,
+    nOpCyclesIncR:              2,
+    nOpCyclesIncM:              7,
+    nOpCyclesInt:               23,     // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesInt3D:             0,
+    nOpCyclesIntOD:             1,
+    nOpCyclesIntOFall:          3,
+    nOpCyclesIRet:              17,     // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesJmp:               7,      // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesJmpF:              11,     // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesJmpC:              7,      // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesJmpCFall:          3,
+    nOpCyclesJmpWR:             7,      // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesJmpWM:             11,     // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesJmpDM:             15,     // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesLAHF:              2,
+    nOpCyclesLEA:               3,
+    nOpCyclesLS:                7,
+    nOpCyclesLoop:              8,      // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesLoopZ:             8,      // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesLoopNZ:            8,      // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesLoopFall:          4,
+    nOpCyclesLoopZFall:         4,
+    nOpCyclesMovRR:             2,      // this is actually the same as the 8086...
+    nOpCyclesMovRM:             3,
+    nOpCyclesMovMR:             5,
+    nOpCyclesMovRI:             2,
+    nOpCyclesMovMI:             3,
+    nOpCyclesMovAM:             5,      // this is actually slower than the MOD/RM form of MOV AX,mem (see nOpCyclesMovRM)
+    nOpCyclesMovMA:             3,
+    nOpCyclesDivBR:             14,
+    nOpCyclesDivWR:             22,
+    nOpCyclesDivBM:             17,
+    nOpCyclesDivWM:             25,
+    nOpCyclesIDivBR:            17,
+    nOpCyclesIDivWR:            25,
+    nOpCyclesIDivBM:            20,
+    nOpCyclesIDivWM:            28,
+    nOpCyclesMulBR:             13,
+    nOpCyclesMulWR:             21,
+    nOpCyclesMulBM:             16,
+    nOpCyclesMulWM:             24,
+    nOpCyclesIMulBR:            13,
+    nOpCyclesIMulWR:            21,
+    nOpCyclesIMulBM:            16,
+    nOpCyclesIMulWM:            24,
+    nOpCyclesNegR:              2,
+    nOpCyclesNegM:              7,
+    nOpCyclesOutP:              5,
+    nOpCyclesOutDX:             5,
+    nOpCyclesPopAll:            19,
+    nOpCyclesPopReg:            5,
+    nOpCyclesPopMem:            5,
+    nOpCyclesPushAll:           17,
+    nOpCyclesPushReg:           3,
+    nOpCyclesPushMem:           5,
+    nOpCyclesPushSeg:           3,
+    nOpCyclesPrefix:            0,
+    nOpCyclesCmpS:              8,
+    nOpCyclesCmpSr0:            5,
+    nOpCyclesCmpSrn:            9,
+    nOpCyclesLodS:              5,
+    nOpCyclesLodSr0:            5,
+    nOpCyclesLodSrn:            4,
+    nOpCyclesMovS:              5,
+    nOpCyclesMovSr0:            5,
+    nOpCyclesMovSrn:            4,
+    nOpCyclesScaS:              7,
+    nOpCyclesScaSr0:            5,
+    nOpCyclesScaSrn:            8,
+    nOpCyclesStoS:              3,
+    nOpCyclesStoSr0:            4,
+    nOpCyclesStoSrn:            3,
+    nOpCyclesRet:               11,     // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesRetn:              11,     // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesRetF:              15,     // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesRetFn:             15,     // on the 80286, this ALSO includes the number of bytes in the target instruction
+    nOpCyclesShift1M:           7,
+    nOpCyclesShiftCR:           5,
+    nOpCyclesShiftCM:           8,
+    nOpCyclesShiftCS:           0,
+    nOpCyclesTestRR:            2,
+    nOpCyclesTestRM:            6,
+    nOpCyclesTestRI:            3,
+    nOpCyclesTestMI:            6,
+    nOpCyclesXchgRR:            3,
+    nOpCyclesXchgRM:            5,
+    nOpCyclesXLAT:              5
+};
+
+/*
+ * TODO: All 80386 cycle counts are based on 80286 counts until I have time to hand-generate an 80386-specific table;
+ * the values below are used by selected 32-bit opcode handlers only.
+ */
+CPUx86.CYCLES_80386 = {
+    nEACyclesBase:              0,
+    nEACyclesDisp:              0,
+    nEACyclesBaseIndex:         0,
+    nEACyclesBaseIndexExtra:    0,
+    nEACyclesBaseDisp:          0,
+    nEACyclesBaseIndexDisp:     1,
+    nEACyclesBaseIndexDispExtra:1
+};
+
+/*
+ * These PS flags are always stored directly in regPS for the 8086/8088, hence the
+ * "direct" designation; other processors must adjust these bits accordingly.  The final
+ * adjusted value is stored in PS_DIRECT (ie, 80286 and up also include PS.IOPL.MASK and
+ * PS.NT in PS_DIRECT).
+ */
+CPUx86.PS_DIRECT_8086 = (CPUx86.PS.TF | CPUx86.PS.IF | CPUx86.PS.DF);
+
+/*
+ * These are the default "always set" PS bits for the 8086/8088; other processors must
+ * adjust these bits accordingly.  The final adjusted value is stored in PS_SET.
+ */
+CPUx86.PS_SET_8086 = (CPUx86.PS.BIT1 | CPUx86.PS.IOPL.MASK | CPUx86.PS.NT | CPUx86.PS.BIT15);
+
+/*
+ * These PS arithmetic and logical flags may be "cached" across several result registers;
+ * whether or not they're currently cached depends on the RESULT bits in resultType.
+ */
+CPUx86.PS_CACHED = (CPUx86.PS.CF | CPUx86.PS.PF | CPUx86.PS.AF | CPUx86.PS.ZF | CPUx86.PS.SF | CPUx86.PS.OF);
+
+/*
+ * PS_SAHF is a subset of the arithmetic flags, and refers only to those flags that the
+ * SAHF and LAHF "8080 legacy" opcodes affect.
+ */
+CPUx86.PS_SAHF = (CPUx86.PS.CF | CPUx86.PS.PF | CPUx86.PS.AF | CPUx86.PS.ZF | CPUx86.PS.SF);
+
+/*
+ * Before we zero opFlags, we first see if any of the following PREFIX bits were set.  If any were set,
+ * they are OR'ed into opPrefixes; otherwise, opPrefixes is zeroed as well.  This gives prefix-conscious
+ * instructions like LODS, MOVS, STOS, CMPS, etc, a way of determining which prefixes, if any, immediately
+ * preceded them.
+ */
+CPUx86.OPFLAG_PREFIXES = (CPUx86.OPFLAG.SEG | CPUx86.OPFLAG.LOCK | CPUx86.OPFLAG.REPZ | CPUx86.OPFLAG.REPNZ | CPUx86.OPFLAG.DATASIZE | CPUx86.OPFLAG.ADDRSIZE);
+
+Defs.CLASSES["CPUx86"] = CPUx86;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/cpu/debugger.js (C) 2012-2020 Jeff Parsons
@@ -12030,8338 +13359,6 @@ Debugger.DECOP_PRECEDENCE = {
 // Defs.CLASSES["Debugger"] = Debugger;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/pdp11/libv2/pdp11ops.js (C) 2012-2020 Jeff Parsons
- */
-
-/**
- * @class {PDP11Ops}
- * @unrestricted
- */
-class PDP11Ops extends CPU {
-    /**
-     * PDP11Ops(idMachine, idDevice, config)
-     *
-     * Decoding starts near the bottom of this file, in op1120() and op1140().  Obviously, there are
-     * MANY more PDP-11 models than the 11/20 and 11/40, but for the broad model categories that PDPjs
-     * supports (ie, MODEL_1120, MODEL_1140, MODEL_1145, and MODEL_1170), the biggest differences are
-     * between MODEL_1120 and MODEL_1140, so decoding is divided into those two categories, and all
-     * other differences are handled inside the opcode handlers.
-     *
-     * The basic decoding approach is to dispatch on the top 4 bits of the opcode, and if further
-     * decoding is required, the dispatched function will dispatch on the next 4 bits, and so on
-     * (although some of the intermediate levels dispatch only on 2 bits, which could also be handled
-     * with a switch statement).
-     *
-     * Eventually, every opcode should end up either in an opXXX() function or opUndefined().  For
-     * opcodes that perform a simple read or write operation, the entire operation is handled by
-     * the opXXX() function.  For opcodes that perform a more extensive read/modify/write operation
-     * (also known as an update operation), those opXXX() functions usually rely on a corresponding
-     * fnXXX() helper function.
-     *
-     * For example, opADD() passes the helper function fnADD() to the appropriate update method.  This
-     * allows the update method to perform the entire read/modify/write operation, because the modify
-     * step is performed internally, via the fnXXX() helper function.
-     *
-     * For the handful of instructions in the 1140 tables that actually exist only on the 11/45 and
-     * 11/70 (ie, MFPD, MTPD, and SPL), those opcode handlers perform their own model checks.  That's
-     * simpler than creating additional tables, and seems fine for instructions that are not commonly
-     * executed.
-     *
-     * @this {PDP11Ops}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {Config} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-    }
-
-    /**
-     * fnADD(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src
-     * @param {number} dst
-     * @returns {number} (dst + src)
-     */
-    static fnADD(src, dst)
-    {
-        let result = dst + src;
-        this.updateAddFlags(result, src, dst);
-        return result & 0xffff;
-    }
-
-    /**
-     * fnADDB(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src
-     * @param {number} dst
-     * @returns {number} (dst + src)
-     */
-    static fnADDB(src, dst)
-    {
-        let result = dst + src;
-        this.updateAddFlags(result << 8, src << 8, dst << 8);
-        return result & 0xff;
-    }
-
-    /**
-     * fnASL(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ignored)
-     * @param {number} dst
-     * @returns {number} (dst << 1)
-     */
-    static fnASL(src, dst)
-    {
-        let result = dst << 1;
-        this.updateShiftFlags(result);
-        return result & 0xffff;
-    }
-
-    /**
-     * fnASLB(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ignored)
-     * @param {number} dst
-     * @returns {number} (dst << 1)
-     */
-    static fnASLB(src, dst)
-    {
-        let result = dst << 1;
-        this.updateShiftFlags(result << 8);
-        return result & 0xff;
-    }
-
-    /**
-     * fnASR(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ignored)
-     * @param {number} dst
-     * @returns {number} (dst >> 1)
-     */
-    static fnASR(src, dst)
-    {
-        let result = (dst & 0x8000) | (dst >> 1) | (dst << 16);
-        this.updateShiftFlags(result);
-        return result & 0xffff;
-    }
-
-    /**
-     * fnASRB(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ignored)
-     * @param {number} dst
-     * @returns {number} (dst >> 1)
-     */
-    static fnASRB(src, dst)
-    {
-        let result = (dst & 0x80) | (dst >> 1) | (dst << 8);
-        this.updateShiftFlags(result << 8);
-        return result & 0xff;
-    }
-
-    /**
-     * fnBIC(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src
-     * @param {number} dst
-     * @returns {number} (~src & dst)
-     */
-    static fnBIC(src, dst)
-    {
-        let result = dst & ~src;
-        this.updateNZVFlags(result);
-        return result;
-    }
-
-    /**
-     * fnBICB(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src
-     * @param {number} dst
-     * @returns {number} (~src & dst)
-     */
-    static fnBICB(src, dst)
-    {
-        let result = dst & ~src;
-        this.updateNZVFlags(result << 8);
-        return result;
-    }
-
-    /**
-     * fnBIS(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src
-     * @param {number} dst
-     * @returns {number} (dst | src)
-     */
-    static fnBIS(src, dst)
-    {
-        let result = dst | src;
-        this.updateNZVFlags(result);
-        return result;
-    }
-
-    /**
-     * fnBISB(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src
-     * @param {number} dst
-     * @returns {number} (dst | src)
-     */
-    static fnBISB(src, dst)
-    {
-        let result = dst | src;
-        this.updateNZVFlags(result << 8);
-        return result;
-    }
-
-    /**
-     * fnCOM(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ignored)
-     * @param {number} dst
-     * @returns {number} (~dst)
-     */
-    static fnCOM(src, dst)
-    {
-        let result = ~dst | 0x10000;
-        this.updateAllFlags(result);
-        return result & 0xffff;
-    }
-
-    /**
-     * fnCOMB(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ignored)
-     * @param {number} dst
-     * @returns {number} (~dst)
-     */
-    static fnCOMB(src, dst)
-    {
-        let result = ~dst | 0x100;
-        this.updateAllFlags(result << 8);
-        return result & 0xff;
-    }
-
-    /**
-     * fnDEC(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ie, 1)
-     * @param {number} dst
-     * @returns {number} (dst - src)
-     */
-    static fnDEC(src, dst)
-    {
-        let result = dst - src;
-        this.updateDecFlags(result, dst);
-        return result & 0xffff;
-    }
-
-    /**
-     * fnDECB(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ie, 1)
-     * @param {number} dst
-     * @returns {number} (dst - src)
-     */
-    static fnDECB(src, dst)
-    {
-        let result = dst - src;
-        this.updateDecFlags(result << 8, dst << 8);
-        return result & 0xff;
-    }
-
-    /**
-     * fnINC(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ie, 1)
-     * @param {number} dst
-     * @returns {number} (dst + src)
-     */
-    static fnINC(src, dst)
-    {
-        let result = dst + src;
-        this.updateIncFlags(result, dst);
-        return result & 0xffff;
-    }
-
-    /**
-     * fnINCB(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ie, 1)
-     * @param {number} dst
-     * @returns {number} (dst + src)
-     */
-    static fnINCB(src, dst)
-    {
-        let result = dst + src;
-        this.updateIncFlags(result << 8, dst << 8);
-        return result & 0xff;
-    }
-
-    /**
-     * fnNEG(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ignored)
-     * @param {number} dst
-     * @returns {number} (-dst)
-     */
-    static fnNEG(src, dst)
-    {
-        let result = -dst;
-        /*
-        * If the sign bit of both dst and result are set, the original value must have been 0x8000, triggering overflow.
-        */
-        this.updateAllFlags(result, result & dst & 0x8000);
-        return result & 0xffff;
-    }
-
-    /**
-     * fnNEGB(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ignored)
-     * @param {number} dst
-     * @returns {number} (-dst)
-     */
-    static fnNEGB(src, dst)
-    {
-        let result = -dst;
-        /*
-        * If the sign bit of both dst and result are set, the original value must have been 0x80, which triggers overflow.
-        */
-        this.updateAllFlags(result << 8, (result & dst & 0x80) << 8);
-        return result & 0xff;
-    }
-
-    /**
-     * fnROL(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ignored)
-     * @param {number} dst
-     * @returns {number} (dst >> 1)
-     */
-    static fnROL(src, dst)
-    {
-        let result = (dst << 1) | ((this.flagC >> 16) & 1);
-        this.updateShiftFlags(result);
-        return result & 0xffff;
-    }
-
-    /**
-     * fnROLB(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ignored)
-     * @param {number} dst
-     * @returns {number} (dst >> 1)
-     */
-    static fnROLB(src, dst)
-    {
-        let result = (dst << 1) | ((this.flagC >> 16) & 1);
-        this.updateShiftFlags(result << 8);
-        return result & 0xff;
-    }
-
-    /**
-     * fnROR(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ignored)
-     * @param {number} dst
-     * @returns {number} (dst >> 1)
-     */
-    static fnROR(src, dst)
-    {
-        let result = (((this.flagC & 0x10000) | dst) >> 1) | (dst << 16);
-        this.updateShiftFlags(result);
-        return result & 0xffff;
-    }
-
-    /**
-     * fnRORB(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ignored)
-     * @param {number} dst
-     * @returns {number} (dst >> 1)
-     */
-    static fnRORB(src, dst)
-    {
-        let result = ((((this.flagC & 0x10000) >> 8) | dst) >> 1) | (dst << 8);
-        this.updateShiftFlags(result << 8);
-        return result & 0xff;
-    }
-
-    /**
-     * fnSUB(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src
-     * @param {number} dst
-     * @returns {number} (dst - src)
-     */
-    static fnSUB(src, dst)
-    {
-        let result = dst - src;
-        this.updateSubFlags(result, src, dst);
-        return result & 0xffff;
-    }
-
-    /**
-     * fnSUBB(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src
-     * @param {number} dst
-     * @returns {number} (dst - src)
-     */
-    static fnSUBB(src, dst)
-    {
-        let result = dst - src;
-        this.updateSubFlags(result << 8, src << 8, dst << 8);
-        return result & 0xff;
-    }
-
-    /**
-     * fnSWAB(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src (ignored)
-     * @param {number} dst
-     * @returns {number} (dst with bytes swapped)
-     */
-    static fnSWAB(src, dst)
-    {
-        let result = (dst << 8) | (dst >> 8);
-        /*
-        * N and Z are based on the low byte of the result, which is the same as the high byte of dst.
-        */
-        this.updateNZVCFlags(dst & 0xff00);
-        return result & 0xffff;
-    }
-
-    /**
-     * fnXOR(src, dst)
-     *
-     * @this {PDP11Ops}
-     * @param {number} src
-     * @param {number} dst
-     * @returns {number} (dst ^ src)
-     */
-    static fnXOR(src, dst)
-    {
-        let result = dst ^ src;
-        this.updateNZVFlags(result);
-        return result & 0xffff;
-    }
-
-    /**
-     * opADC(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opADC(opcode)
-    {
-        this.updateDstWord(opcode, this.getCF()? 1 : 0, PDP11Ops.fnADD);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opADCB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opADCB(opcode)
-    {
-        this.updateDstByte(opcode, this.getCF()? 1 : 0, PDP11Ops.fnADDB);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opADD(opcode)
-     *
-     * From the PDP-11/20 Processor HandBook (1971), p. 61:
-     *
-     *     Add src,dst (06SSDD)
-     *
-     *     Operation:
-     *          (dst) = (src) + (dst)
-     *
-     *     Condition Codes:
-     *          N: set if result < 0; cleared otherwise
-     *          Z: set if result = 0; cleared otherwise
-     *          V: set if there was arithmetic overflow as a result of the operation, that is both operands
-     *             were of the same sign and the result was of the opposite sign; cleared otherwise
-     *          C: set if there was a carry from the most significant bit of the result; cleared otherwise
-     *
-     *     Description:
-     *          Adds the source operand to the destination operand and stores the result at the destination address.
-     *          The original contents of the destination are lost. The contents of the source are not affected.
-     *          Two's complement addition is performed.
-     *
-     *     Examples:
-     *          Add to register:            ADD 20,R0
-     *          Add to memory:              ADD R1,XXX
-     *          Add register to register:   ADD R1,R2
-     *          Add memory to memory:       ADD @#17750,XXX
-     *
-     *          XXX is a programmer-defined mnemonic for a memory location.
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opADD(opcode)
-    {
-        this.updateDstWord(opcode, this.readSrcWord(opcode), PDP11Ops.fnADD);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 2) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opASH(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opASH(opcode)
-    {
-        let src = this.readDstWord(opcode);
-        let reg = (opcode >> 6) & 7;
-        let result = this.regsGen[reg];
-        if (result & 0x8000) result |= 0xffff0000;
-        this.flagC = this.flagV = 0;
-        src &= 0x3F;
-        if (src & 0x20) {
-            src = 64 - src;         // shift right
-            if (src > 16) src = 16;
-            this.flagC = result << (17 - src);
-            result = result >> src;
-        } else if (src) {
-            if (src > 16) {         // shift left
-                this.flagV = result;
-                result = 0;
-            } else {
-                result = result << src;
-                this.flagC = result;
-                let dst = (result >> 15) & 0xffff;  // check successive sign bits
-                if (dst && dst !== 0xffff) this.flagV = 0x8000;
-            }
-        }
-        this.regsGen[reg] = result & 0xffff;
-        this.flagN = this.flagZ = result;
-        this.nCyclesRemain -= (this.dstMode? (5 + 1) : (6 + 1)) + src;
-    }
-
-    /**
-     * opASHC(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opASHC(opcode)
-    {
-        let src = this.readDstWord(opcode);
-        let reg = (opcode >> 6) & 7;
-        let dst = (this.regsGen[reg] << 16) | this.regsGen[reg | 1];
-        let result;
-        this.flagC = this.flagV = 0;
-        src &= 0x3F;
-        if (src & 0x20) {
-            src = 64 - src;         // shift right
-            if (src > 32) src = 32;
-            result = dst >> (src - 1);
-            this.flagC = result << 16;
-            result >>= 1;
-            if (dst & 0x80000000) result |= 0xffffffff << (32 - src);
-        } else {
-            if (src) {              // shift left
-                result = dst << (src - 1);
-                this.flagC = result >> 15;
-                result <<= 1;
-                if (src > 32) src = 32;
-                dst = dst >> (32 - src);
-                if (dst) {
-                    dst |= (0xffffffff << src) & 0xffffffff;
-                    if (dst !== 0xffffffff) this.flagV = 0x8000;
-                }
-            } else {
-                result = dst;
-            }
-        }
-        this.regsGen[reg] = (result >> 16) & 0xffff;
-        this.regsGen[reg | 1] = result & 0xffff;
-        this.flagN = result >> 16;
-        this.flagZ = result >> 16 | result;
-        this.nCyclesRemain -= (this.dstMode? (5 + 1) : (6 + 1)) + src;
-    }
-
-    /**
-     * opASL(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opASL(opcode)
-    {
-        this.updateDstWord(opcode, 0, PDP11Ops.fnASL);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opASLB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opASLB(opcode)
-    {
-        this.updateDstByte(opcode, 0, PDP11Ops.fnASLB);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opASR(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opASR(opcode)
-    {
-        this.updateDstWord(opcode, 0, PDP11Ops.fnASR);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opASRB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opASRB(opcode)
-    {
-        this.updateDstByte(opcode, 0, PDP11Ops.fnASRB);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) + (this.dstAddr & 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opBCC(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBCC(opcode)
-    {
-        this.branch(opcode, !this.getCF());
-    }
-
-    /**
-     * opBCS(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBCS(opcode)
-    {
-        this.branch(opcode, this.getCF());
-    }
-
-    /**
-     * opBIC(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBIC(opcode)
-    {
-        this.updateDstWord(opcode, this.readSrcWord(opcode), PDP11Ops.fnBIC);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 2) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opBICB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBICB(opcode)
-    {
-        this.updateDstByte(opcode, this.readSrcByte(opcode), PDP11Ops.fnBICB);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 2) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opBIS(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBIS(opcode)
-    {
-        this.updateDstWord(opcode, this.readSrcWord(opcode), PDP11Ops.fnBIS);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 2) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opBISB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBISB(opcode)
-    {
-        this.updateDstByte(opcode, this.readSrcByte(opcode), PDP11Ops.fnBISB);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 2) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opBIT(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBIT(opcode)
-    {
-        let src = this.readSrcWord(opcode);
-        let dst = this.readDstWord(opcode);
-        this.updateNZVFlags((src < 0? this.regsGen[-src-1] : src) & dst);
-        this.nCyclesRemain -= (this.dstMode? (3 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 1) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opBITB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBITB(opcode)
-    {
-        let src = this.readSrcByte(opcode);
-        let dst = this.readDstByte(opcode);
-        this.updateNZVFlags(((src < 0? (this.regsGen[-src-1] & 0xff) : src) & dst) << 8);
-        this.nCyclesRemain -= (this.dstMode? (3 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 1) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opBEQ(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBEQ(opcode)
-    {
-        this.branch(opcode, this.getZF());
-    }
-
-    /**
-     * opBGE(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBGE(opcode)
-    {
-        this.branch(opcode, !this.getNF() == !this.getVF());
-    }
-
-    /**
-     * opBGT(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBGT(opcode)
-    {
-        this.branch(opcode, !this.getZF() && (!this.getNF() == !this.getVF()));
-    }
-
-    /**
-     * opBHI(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBHI(opcode)
-    {
-        this.branch(opcode, !this.getCF() && !this.getZF());
-    }
-
-    /**
-     * opBLE(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBLE(opcode)
-    {
-        this.branch(opcode, this.getZF() || (!this.getNF() != !this.getVF()));
-    }
-
-    /**
-     * opBLOS(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBLOS(opcode)
-    {
-        this.branch(opcode, this.getCF() || this.getZF());
-    }
-
-    /**
-     * opBLT(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBLT(opcode)
-    {
-        this.branch(opcode, !this.getNF() != !this.getVF());
-    }
-
-    /**
-     * opBMI(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBMI(opcode)
-    {
-        this.branch(opcode, this.getNF());
-    }
-
-    /**
-     * opBNE(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBNE(opcode)
-    {
-        this.branch(opcode, !this.getZF());
-    }
-
-    /**
-     * opBPL(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBPL(opcode)
-    {
-        this.branch(opcode, !this.getNF());
-    }
-
-    /**
-     * opBPT(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBPT(opcode)
-    {
-        this.trap(PDP11.TRAP.BPT, 0, PDP11.REASON.OPCODE);
-    }
-
-    /**
-     * opBR(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBR(opcode)
-    {
-        this.branch(opcode, true);
-    }
-
-    /**
-     * opBVC(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBVC(opcode)
-    {
-        this.branch(opcode, !this.getVF());
-    }
-
-    /**
-     * opBVS(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opBVS(opcode)
-    {
-        this.branch(opcode, this.getVF());
-    }
-
-    /**
-     * opCLR(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opCLR(opcode)
-    {
-        this.writeDstWord(opcode, 0, this.updateAllFlags);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opCLRB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opCLRB(opcode)
-    {
-        this.writeDstByte(opcode, 0, PDP11.WRITE.BYTE, this.updateAllFlags);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opCLC(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opCLC(opcode)
-    {
-        this.clearCF();
-        this.nCyclesRemain -= (4 + 1);
-    }
-
-    /**
-     * opCLN(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opCLN(opcode)
-    {
-        this.clearNF();
-        this.nCyclesRemain -= (4 + 1);
-    }
-
-    /**
-     * opCLV(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opCLV(opcode)
-    {
-        this.clearVF();
-        this.nCyclesRemain -= (4 + 1);
-    }
-
-    /**
-     * opCLZ(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opCLZ(opcode)
-    {
-        this.clearZF();
-        this.nCyclesRemain -= (4 + 1);
-    }
-
-    /**
-     * opCLx(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opCLx(opcode)
-    {
-        if (opcode & 0x1) this.clearCF();
-        if (opcode & 0x2) this.clearVF();
-        if (opcode & 0x4) this.clearZF();
-        if (opcode & 0x8) this.clearNF();
-        /*
-        * TODO: Review whether this class of undocumented instructions really has a constant cycle time.
-        */
-        this.nCyclesRemain -= (4 + 1);
-    }
-
-    /**
-     * opCMP(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opCMP(opcode)
-    {
-        let src = this.readSrcWord(opcode);
-        let dst = this.readDstWord(opcode);
-        let result = (src = (src < 0? this.regsGen[-src-1] : src)) - dst;
-        /*
-        * NOTE: CMP calculates (src - dst) rather than (dst - src), so src and dst updateSubFlags() parms must be reversed.
-        */
-        this.updateSubFlags(result, dst, src);
-        this.nCyclesRemain -= (this.dstMode? (3 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 1) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opCMPB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opCMPB(opcode)
-    {
-        let src = this.readSrcByte(opcode);
-        let dst = this.readDstByte(opcode);
-        let result = (src = (src < 0? (this.regsGen[-src-1] & 0xff): src) << 8) - (dst <<= 8);
-        /*
-        * NOTE: CMP calculates (src - dst) rather than (dst - src), so src and dst updateSubFlags() parms must be reversed.
-        */
-        this.updateSubFlags(result, dst, src);
-        this.nCyclesRemain -= (this.dstMode? (3 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 1) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opCOM(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opCOM(opcode)
-    {
-        this.updateDstWord(opcode, 0, PDP11Ops.fnCOM);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opCOMB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opCOMB(opcode)
-    {
-        this.updateDstByte(opcode, 0, PDP11Ops.fnCOMB);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opDEC(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opDEC(opcode)
-    {
-        this.updateDstWord(opcode, 1, PDP11Ops.fnDEC);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opDECB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opDECB(opcode)
-    {
-        this.updateDstByte(opcode, 1, PDP11Ops.fnDECB);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opDIV(opcode)
-     *
-     * The instruction "DIV SRC,Rn" determines SRC using the DSTMODE portion of the opcode and Rn using
-     * the SRCMODE portion; Rn can only be a register (and it should be an EVEN-numbered register, lest you
-     * get unexpected results).  The dividend (DST) is then calculated as:
-     *
-     *      DST = (regs[Rn] << 16) | (regs[Rn|1])
-     *
-     * DST is divided by SRC, and the quotient is stored in regs[Rn] and the remainder in regs[Rn|1].
-     *
-     * For example:
-     *
-     *      DIV     R4,R0
-     *
-     * where R4 = 006400 and R0,R1 = 000000,015000 will result in R0,R1 = 000002,000000.
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opDIV(opcode)
-    {
-        /*
-        * TODO: Review and determine if flag updates can be encapsulated in an updateDivFlags() function.
-        */
-       let src = this.readDstWord(opcode);
-        if (!src) {
-            this.flagN = 0;         // NZVC
-            this.flagZ = 0;
-            this.flagV = 0x8000;
-            this.flagC = 0x10000;   // divide by zero
-            this.nCyclesRemain -= (6 + 1);
-        } else {
-            let reg = (opcode >> 6) & 7;
-            let dst = (this.regsGen[reg] << 16) | this.regsGen[reg | 1];
-            this.flagC = this.flagV = 0;
-            if (src & 0x8000) src |= ~0xffff;
-            let result = ~~(dst / src);
-            if (result >= -32768 && result <= 32767) {
-                this.regsGen[reg] = result & 0xffff;
-                this.regsGen[reg | 1] = (dst - (result * src)) & 0xffff;
-                this.flagZ = (result >> 16) | result;
-                this.flagN = result >> 16;
-            } else {
-                this.flagV = 0x8000;                                // overflow - following are indeterminate
-                this.flagZ = (result >> 15) | result;               // dodgy
-                this.flagN = dst >> 16;                             // just as dodgy
-                if (src === -1 && this.regsGen[reg] === 0xfffe) {
-                    this.regsGen[reg] = this.regsGen[reg | 1] = 1;  // etc
-                }
-            }
-            this.nCyclesRemain -= (52 + 1);                           // 52 is the average of the shortest and longest times
-        }
-    }
-
-    /**
-     * opEMT(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opEMT(opcode)
-    {
-        this.trap(PDP11.TRAP.EMT, 0, PDP11.REASON.OPCODE);
-        this.nCyclesRemain -= (22 + 3 - 5);
-    }
-
-    /**
-     * opHALT(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opHALT(opcode)
-    {
-        if (this.regPSW & PDP11.PSW.CMODE) {
-            this.regErr |= PDP11.CPUERR.BADHALT;
-            this.trap(PDP11.TRAP.BUS, 0, PDP11.REASON.HALT);
-        } else {
-            if (this.panel) {
-                /*
-                * The PDP-11/20 Handbook (1971) says that HALT does the following:
-                *
-                *      Causes the processor operation to cease. The console is given control of the bus.
-                *      The console data lights display the contents of RO; the console address lights display
-                *      the address after the halt instruction. Transfers on the UNIBUS are terminated immediately.
-                *      The PC points to the next instruction to be executed. Pressing the continue key on the
-                *      console causes processor operation to resume. No INIT signal is given.
-                *
-                * However, the PDP-11/70 Handbook (1979) suggests some slight differences:
-                *
-                *      Causes the processor operation to cease. The console is given control of the processor.
-                *      The data lights display the contents of the PC (which is the address of the HALT instruction
-                *      plus 2). Transfers on the UNIBUS are terminated immediately. Pressing the continue key on
-                *      the console causes processor operation to resume.
-                *
-                * Given that the 11/70 doesn't saying anything about displaying R0 on a HALT, and also given that
-                * the 11/70 CPU EXERCISER diagnostic writes a value to the Console Switch/Display Register immediately
-                * before HALT'ing, I'm going to assume that updating the data display with R0 is unique to the 11/20.
-                *
-                * Also, I'm a little suspicious of the 11/70 comment that the "data lights display the contents of
-                * the PC," since previous models display the PC on the ADDRESS lights, not the DATA lights.  And as
-                * I already explained, doing anything to the data lights at this point would undo what the 11/70
-                * diagnostics do.
-                */
-                if (this.model == PDP11.MODEL_1120) {
-                    this.panel.setData(this.regsGen[0], true);
-                }
-            }
-            if (!this.dbg) {
-                /*
-                * This will leave the PC exactly where it's supposed to be: at the address of the HALT + 2.
-                */
-                this.time.stop();
-            } else {
-                /*
-                * When the Debugger is present, this call will rewind PC by 2 so that the HALT instruction is
-                * displayed, making it clear why the processor stopped; the user could also use the "dh" command
-                * to dump the Debugger's instruction history buffer to see why it stopped, assuming the history
-                * buffer is enabled, but that's more work.
-                *
-                * Because rewinding is not normal CPU behavior, attempting to Run again (or use the Debugger's
-                * "g" command) would cause an immediate HALT again -- except that checkInstruction() checks for that
-                * precise condition, so if the CPU starts on a HALT, checkInstruction() will skip over it.
-                */
-                this.dbg.stopCPU("halt");
-            }
-        }
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * opINC(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opINC(opcode)
-    {
-        this.updateDstWord(opcode, 1, PDP11Ops.fnINC);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opINCB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opINCB(opcode)
-    {
-        this.updateDstByte(opcode, 1, PDP11Ops.fnINCB);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opIOT(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opIOT(opcode)
-    {
-        this.trap(PDP11.TRAP.IOT, 0, PDP11.REASON.OPCODE);
-        this.nCyclesRemain -= (22 + 3 - 5);
-    }
-
-    /**
-     * opJMP(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opJMP(opcode)
-    {
-        /*
-         * Since JMP and JSR opcodes have their own unique timings for the various dst modes,
-         * we snapshot nCyclesRemain before decoding the mode and use that to update nCyclesRemain.
-         */
-        this.nCyclesSnapped = this.nCyclesRemain;
-        this.setPC(this.readDstAddr(opcode));
-        this.nCyclesRemain = this.nCyclesSnapped - PDP11Ops.JMP_CYCLES[this.dstMode];
-    }
-
-    /**
-     * opJSR(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opJSR(opcode)
-    {
-        /*
-         * Since JMP and JSR opcodes have their own unique timings for the various dst modes,
-         * we snapshot nCyclesRemain before decoding the mode and use that to update nCyclesRemain.
-         */
-        this.nCyclesSnapped = this.nCyclesRemain;
-        let addr = this.readDstAddr(opcode);
-        /*
-         * As per the WARNING in readSrcWord(), reading the SRC register AFTER decoding the DST operand
-         * is entirely appropriate.
-         */
-        let reg = (opcode >> PDP11.SRCMODE.SHIFT) & PDP11.OPREG.MASK;
-        this.pushWord(this.regsGen[reg]);
-        this.regsGen[reg] = this.getPC();
-        this.setPC(addr);
-        this.nCyclesRemain = this.nCyclesSnapped - PDP11Ops.JSR_CYCLES[this.dstMode];
-    }
-
-    /**
-     * opMARK(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opMARK(opcode)
-    {
-        let addr = (this.getPC() + ((opcode & 0x3F) << 1)) & 0xffff;
-        let src = this.readWord(addr | this.addrDSpace);
-        this.setPC(this.regsGen[5]);
-        this.setSP(addr + 2);
-        this.regsGen[5] = src;
-        this.nCyclesRemain -= (6 + 2);
-    }
-
-    /**
-     * opMFPD(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opMFPD(opcode)
-    {
-        let data = this.readWordFromPrevSpace(opcode, PDP11.ACCESS.DSPACE);
-        this.updateNZVFlags(data);
-        this.pushWord(data);
-        this.nCyclesRemain -= (10 + 1);
-    }
-
-    /**
-     * opMFPI(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opMFPI(opcode)
-    {
-        let data = this.readWordFromPrevSpace(opcode, PDP11.ACCESS.ISPACE);
-        this.updateNZVFlags(data);
-        this.pushWord(data);
-        this.nCyclesRemain -= (10 + 1);
-    }
-
-    /**
-     * opMFPS(opcode)
-     *
-     *      1067XX  MFPS - Move Byte From PSW
-     *
-     *      The 8-bit contents of the PS are moved to the effective destination.  If destination is mode 0,
-     *      PS bit 7 is sign extended through the upper byte of the register.  The destination operand is treated
-     *      as a byte address.  11/34A only.
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opMFPS(opcode)
-    {
-        PDP11Ops.opUndefined.call(this, opcode);
-    }
-
-    /**
-     * opMFPT(opcode)
-     *
-     *      000007  MFPT - Move From Processor Type
-     *
-     *      Loads R0 with a value indicating the processor type.
-     *
-     *      R0  Hardware
-     *       1  PDP-11/44
-     *       3  PDP-11/24 (should be 2)
-     *       3  PDP-11/23
-     *       4  SBC-11/21
-     *       5  All J11 chips including 11/73, 11/83, 11/93
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opMFPT(opcode)
-    {
-        PDP11Ops.opUndefined.call(this, opcode);
-    }
-
-    /**
-     * opMOV(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opMOV(opcode)
-    {
-        /*
-         * Since MOV opcodes have their own unique timings for the various dst modes,
-         * we snapshot nCyclesRemain after decoding the src mode and use that to update nCyclesRemain.
-         */
-        let data = this.readSrcWord(opcode);
-        this.nCyclesSnapped = this.nCyclesRemain;
-        this.writeDstWord(opcode, data, this.updateNZVFlags);
-        this.nCyclesRemain = this.nCyclesSnapped - PDP11Ops.MOV_CYCLES[(this.srcMode? 8 : 0) + this.dstMode] + (this.dstReg == 7 && !this.dstMode? 2 : 0);
-    }
-
-    /**
-     * opMOVB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opMOVB(opcode)
-    {
-        let data = this.readSrcByte(opcode);
-        this.writeDstByte(opcode, data, PDP11.WRITE.SBYTE, this.updateNZVFlags);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 2) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opMTPD(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opMTPD(opcode)
-    {
-        /*
-         * Since MTPD and MTPI opcodes have their own unique timings for the various dst modes,
-         * we snapshot nCyclesRemain before decoding the mode and use that to update nCyclesRemain.
-         */
-        let data = this.popWord();
-        this.nCyclesSnapped = this.nCyclesRemain;
-        this.updateNZVFlags(data);
-        this.writeWordToPrevSpace(opcode, PDP11.ACCESS.DSPACE, data);
-        this.nCyclesRemain = this.nCyclesSnapped - PDP11Ops.MTP_CYCLES[this.dstMode];
-    }
-
-    /**
-     * opMTPI(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opMTPI(opcode)
-    {
-        /*
-         * Since MTPD and MTPI opcodes have their own unique timings for the various dst modes,
-         * we snapshot nCyclesRemain before decoding the mode and use that to update nCyclesRemain.
-         */
-        let data = this.popWord();
-        this.nCyclesSnapped = this.nCyclesRemain;
-        this.updateNZVFlags(data);
-        this.writeWordToPrevSpace(opcode, PDP11.ACCESS.ISPACE, data);
-        this.nCyclesRemain = this.nCyclesSnapped - PDP11Ops.MTP_CYCLES[this.dstMode];
-    }
-
-    /**
-     * opMTPS(opcode)
-     *
-     *      1064XX  MTPS - Move Byte To PSW
-     *
-     *      The 8 bits of the effective operand replace the current contents of the PS <0:7>.  The source operand
-     *      address is treated as a byte address.  Note that PS bit 4 cannot be set with this instruction.  The
-     *      src operand remains unchanged.  11/34A only.
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opMTPS(opcode)
-    {
-        PDP11Ops.opUndefined.call(this, opcode);
-    }
-
-    /**
-     * opMUL(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opMUL(opcode)
-    {
-        let src = this.readDstWord(opcode);
-        let reg = (opcode >> 6) & 7;
-        let dst = this.regsGen[reg];
-        let result = ((src << 16) >> 16) * ((dst << 16) >> 16);
-        this.regsGen[reg] = (result >> 16) & 0xffff;
-        this.regsGen[reg | 1] = result & 0xffff;
-        this.updateMulFlags(result|0);
-        this.nCyclesRemain -= (22 + 1);
-    }
-
-    /**
-     * opNEG(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opNEG(opcode)
-    {
-        this.updateDstWord(opcode, 0, PDP11Ops.fnNEG);
-        this.nCyclesRemain -= (this.dstMode? (10 + 1) : (5 + 1));
-    }
-
-    /**
-     * opNEGB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opNEGB(opcode)
-    {
-        this.updateDstByte(opcode, 0, PDP11Ops.fnNEGB);
-        this.nCyclesRemain -= (this.dstMode? (10 + 1) : (5 + 1));
-    }
-
-    /**
-     * opNOP(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opNOP(opcode)
-    {
-        this.nCyclesRemain -= (4 + 1);        // TODO: Review (this is just a guess based on CLC)
-    }
-
-    /**
-     * opRESET(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opRESET(opcode)
-    {
-        if (!(this.regPSW & PDP11.PSW.CMODE)) {
-            this.resetCPU();
-
-            if (this.panel) {
-                /*
-                * The PDP-11/70 XXDP test "EKBBF0" reports the following, with PANEL messages on ("m panel on"):
-                *
-                *      CNSW.writeWord(177570,000101) @033502
-                *      CNSW.readWord(177570): 000000 @032114
-                *      LOOK AT THE CONSOLE LIGHTS
-                *      THE DATA LIGHTS SHOULD READ 166667
-                *      THE ADDRESS LIGHTS SHOULD READ  CNSW.readWord(177570): 000000 @032150
-                *      032236
-                *      CHANGE SWITCH 7 TO CONTINUE
-                *      CNSW.readWord(177570): 000000 @032236
-                *      stopped (31518011 instructions, 358048873 cycles, 58644 ms, 6105465 hz)
-                *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
-                *      SP=001074 PC=032236 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
-                *      032236: 032737 000200 177570   BIT   #200,@#177570
-                *      >> tr
-                *      CNSW.readWord(177570): 000000 @032236 (cpu halted)
-                *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
-                *      SP=001074 PC=032244 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
-                *      032244: 001773                 BEQ   032234                 ;cycles=0
-                *      >> tr
-                *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
-                *      SP=001074 PC=032234 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
-                *      032234: 000005                 RESET                        ;cycles=5
-                *
-                * It's a little hard to see why the DATA lights should read 166667, since the PANEL messages indicate
-                * that the last CNSW.writeWord(177570) was for 000101, not 166667.  So I'm guessing that the RESET
-                * instruction is supposed to propagate R0 to the console's DISPLAY register.
-                *
-                * This is similar to what we do for the HALT instruction (but only if this.model == PDP11.MODEL_1120).
-                * These Console features do not seem to be very well documented, assuming they exist.
-                *
-                * UPDATE: This behavior appears to be confirmed by remarks in the PDP-11/20 Processor Handbook (1971),
-                * p. 141:
-                *
-                *      HALT - displays processor register R0 when bus control is transferred to console during a HALT
-                *      instruction.
-                *
-                *      RESET - displays register R0 for during [duration?] of RESET (70 msec).
-                *
-                * I haven't found similar remarks in the PDP-11/70 Processor Handbooks, so I'm not sure if that's an
-                * oversight or if 11/70 panels are slightly different in this regard.  It's also not clear what they meant
-                * by "for duration of RESET".  Is something supposed to happen to the DATA lights after the RESET is done?
-                */
-                this.panel.setData(this.regsGen[0], true);
-            }
-        }
-        this.nCyclesRemain -= 667;            // TODO: Review (but it's definitely a big number)
-    }
-
-    /**
-     * opROL(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opROL(opcode)
-    {
-        this.updateDstWord(opcode, 0, PDP11Ops.fnROL);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opROLB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opROLB(opcode)
-    {
-        this.updateDstByte(opcode, 0, PDP11Ops.fnROLB);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opROR(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opROR(opcode)
-    {
-        this.updateDstWord(opcode, 0, PDP11Ops.fnROR);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opRORB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opRORB(opcode)
-    {
-        this.updateDstByte(opcode, 0, PDP11Ops.fnRORB);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) + (this.dstAddr & 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opRTI(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opRTI(opcode)
-    {
-        this.trapReturn();
-        /*
-        * Unlike RTT, RTI permits an immediate trace, which we resolve by propagating PSW.TF to OPFLAG.TRAP_TF
-        * (which, as written below, requires that both flags have the same bit value; see defines.js).
-        *
-        * NOTE: This RTI trace behavior is NEW for machines that have both RTI and RTT.  Early models didn't have RTT,
-        * so the old RTI behaved exactly like the new RTT.  Which is why the 11/20 jump table below calls opRTT() instead
-        * of opRTI() for RTI.
-        */
-        this.opFlags |= (this.regPSW & PDP11.PSW.TF);
-        this.nCyclesRemain -= (10 + 3);
-    }
-
-    /**
-     * opRTS(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opRTS(opcode)
-    {
-        if (opcode & 0x08) {
-            PDP11Ops.opUndefined.call(this, opcode);
-            return;
-        }
-        let src = this.popWord();
-        let reg = opcode & PDP11.OPREG.MASK;
-        /*
-        * When the popular "RTS PC" form is used, we might as well eliminate the useless setting of PC...
-        */
-        if (reg == PDP11.REG.PC) {
-            this.setPC(src);
-        } else {
-            this.setPC(this.regsGen[reg]);
-            this.regsGen[reg] = src;
-        }
-        this.nCyclesRemain -= (7 + 2);
-    }
-
-    /**
-     * opRTT(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opRTT(opcode)
-    {
-        this.trapReturn();
-        this.nCyclesRemain -= (10 + 3);
-    }
-
-    /**
-     * opSBC(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opSBC(opcode)
-    {
-        this.updateDstWord(opcode, this.getCF()? 1 : 0, PDP11Ops.fnSUB);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opSBCB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opSBCB(opcode)
-    {
-        this.updateDstByte(opcode, this.getCF()? 1 : 0, PDP11Ops.fnSUBB);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opSEC(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opSEC(opcode)
-    {
-        this.setCF();
-        this.nCyclesRemain -= (4 + 1);
-    }
-
-    /**
-     * opSEN(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opSEN(opcode)
-    {
-        this.setNF();
-        this.nCyclesRemain -= (4 + 1);
-    }
-
-    /**
-     * opSEV(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opSEV(opcode)
-    {
-        this.setVF();
-        this.nCyclesRemain -= (4 + 1);
-    }
-
-    /**
-     * opSEZ(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opSEZ(opcode)
-    {
-        this.setZF();
-        this.nCyclesRemain -= (4 + 1);
-    }
-
-    /**
-     * opSEx(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opSEx(opcode)
-    {
-        if (opcode & 0x1) this.setCF();
-        if (opcode & 0x2) this.setVF();
-        if (opcode & 0x4) this.setZF();
-        if (opcode & 0x8) this.setNF();
-        /*
-        * TODO: Review whether this class of undocumented instructions really has a constant cycle time.
-        */
-        this.nCyclesRemain -= (4 + 1);
-    }
-
-    /**
-     * opSOB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode (077Rnn)
-     */
-    static opSOB(opcode)
-    {
-        let reg = (opcode & PDP11.SRCMODE.REG) >> PDP11.SRCMODE.SHIFT;
-        if ((this.regsGen[reg] = ((this.regsGen[reg] - 1) & 0xffff))) {
-            this.setPC(this.getPC() - ((opcode & PDP11.DSTMODE.MASK) << 1));
-            this.nCyclesRemain += 1;          // unlike normal branches, taking this branch is actually 1 cycle faster
-        }
-        this.nCyclesRemain -= (5 + 1);
-    }
-
-    /**
-     * opSPL(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opSPL(opcode)
-    {
-        if (!(opcode & 0x08) || this.model < PDP11.MODEL_1145) {
-            PDP11Ops.opUndefined.call(this, opcode);
-            return;
-        }
-        if (!(this.regPSW & PDP11.PSW.CMODE)) {
-            this.regPSW = (this.regPSW & ~PDP11.PSW.PRI) | ((opcode & 0x7) << PDP11.PSW.SHIFT.PRI);
-            this.opFlags |= PDP11.OPFLAG.IRQ_DELAY;
-            this.opFlags &= ~PDP11.OPFLAG.IRQ;
-        }
-        this.nCyclesRemain -= (4 + 1);
-    }
-
-    /**
-     * opSUB(opcode)
-     *
-     * From the PDP-11/20 Processor HandBook (1971), p. 62:
-     *
-     *     Subtract src,dst (16SSDD)
-     *
-     *     Operation:
-     *          (dst) = (dst) - (src) [in detail, (dst) + ~(src) + 1 (dst)]
-     *
-     *     Condition Codes:
-     *          N: set if result < 0; cleared otherwise
-     *          Z: set if result = 0; cleared otherwise
-     *          V: set if there was arithmetic overflow as a result of the operation, that is if operands were of
-     *             opposite signs and the sign of the source was the same as the sign of the result; cleared otherwise
-     *          C: cleared if there was a carry from the most significant bit of the result; set otherwise
-     *
-     *     Description:
-     *          Subtracts the source operand from the destination operand and leaves the result at the destination address.
-     *          The orignial [sic] contents of the destination are lost. The contents of the source are not affected.
-     *          In double-precision arithmetic the C-bit, when set, indicates a "borrow".
-     *
-     *     Example:
-     *                  SUB R1,R2
-     *
-     *              BEFORE          AFTER
-     *          (R1) = 011111   (R2) = 012345
-     *          (R1) = 011111   (R2) = 001234
-     *
-     *              NZVC            NZVC
-     *              1111            0001
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opSUB(opcode)
-    {
-        this.updateDstWord(opcode, this.readSrcWord(opcode), PDP11Ops.fnSUB);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 2) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opSWAB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opSWAB(opcode)
-    {
-        this.updateDstWord(opcode, 0, PDP11Ops.fnSWAB);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opSXT(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opSXT(opcode)
-    {
-        this.writeDstWord(opcode, this.getNF()? 0xffff : 0, this.updateNZVFlags);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opTRAP(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opTRAP(opcode)
-    {
-        this.trap(PDP11.TRAP.TRAP, 0, PDP11.REASON.OPCODE);
-    }
-
-    /**
-     * opTST(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opTST(opcode)
-    {
-        let result = this.readDstWord(opcode);
-
-        this.updateAllFlags(result);
-        this.nCyclesRemain -= (this.dstMode? (3 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opTSTB(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opTSTB(opcode)
-    {
-        let result = this.readDstByte(opcode);
-
-        this.updateAllFlags(result << 8);
-        this.nCyclesRemain -= (this.dstMode? (3 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opWAIT(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opWAIT(opcode)
-    {
-        /*
-        * The original PDP-11 emulation code would actually stop emulating instructions now, relying on assorted
-        * setTimeout() callbacks, setInterval() callbacks, device XHR (XMLHttpRequest) callbacks, etc, to eventually
-        * call interrupt(), which would then transition the CPU out of its "wait" state and kickstart emulate() again.
-        *
-        * That approach isn't compatible with PCjs emulators, which prefer to rely on the simulated CPU clock to
-        * drive all simulated device updates.  This means components should call the CPU's setTimer() function, which
-        * invokes the provided callback when the number of CPU cycles that correspond to the requested number of
-        * milliseconds have elapsed.  This also gives us the ability to scale device response times as needed if the
-        * user decides to crank up CPU speed, and to freeze them along with the CPU whenever the user halts the machine.
-        *
-        * However, the PCjs approach requires the CPU to continue running.  One simple solution to this dilemma:
-        *
-        *      1) opWAIT() sets a new opFlags bit (OPFLAG.WAIT)
-        *      2) Rewind the PC back to the WAIT instruction
-        *      3) Whenever stepCPU() detects OPFLAG.WAIT, call checkInterrupts()
-        *      4) If checkInterrupts() detects an interrupt, advance PC past the WAIT and then dispatch the interrupt
-        *
-        * Technically, the PC is already exactly where it's supposed to be, so why are we wasting time with steps
-        * 2 and 4?  It's largely for the Debugger's sake, so that as long as execution is "blocked" by a WAIT, that's
-        * what you'll see in the Debugger.  I could make those steps conditioned on the presence of the Debugger,
-        * but I feel it's better to keep all code paths the same.
-        *
-        * NOTE: It's almost always a bad idea to add more checks to the inner stepCPU() loop, because every additional
-        * check can have a measurable (negative) impact on performance.  Which is why it's important to use opFlags bits
-        * whenever possible, since we can test for multiple (up to 32) exceptional conditions with a single check.
-        *
-        * We also used to update the machine's display(s) whenever transitioning to the WAIT state.  However, that
-        * caused this instruction to generate enormous overhead, and it's no longer necessary, since we now rely on
-        * a timer (the PDP-11's own KW11 60Hz Line Clock timer, to be precise) to generate periodic display updates.
-        *
-        *      if (!(this.opFlags & PDP11.OPFLAG.WAIT) && this.cmp) this.cmp.updateDisplays();
-        *
-        * Finally, it's been noted several places online that the WAIT instruction puts the contents of R0 into the
-        * Front Panel's "DATA PATH" (and possibly even directly into the "DISPLAY REGISTER", making the DATASEL switch
-        * setting irrelevant).  I can't find any supporting DEC documentation regarding this, but for now, we'll go
-        * with popular lore and propagate R0 to the panel's "active" data register.
-        */
-        if (this.panel) {
-            this.panel.setAddr(this.regsGen[7], true);
-            this.panel.setData(this.regsGen[0], true);
-        }
-        this.opFlags |= PDP11.OPFLAG.WAIT;
-        this.advancePC(-2);
-        this.nCyclesRemain -= 3;
-    }
-
-    /**
-     * opXOR(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opXOR(opcode)
-    {
-        let reg = (opcode >> PDP11.SRCMODE.SHIFT) & PDP11.OPREG.MASK;
-        this.updateDstWord(opcode, this.regsGen[reg + this.offRegSrc], PDP11Ops.fnXOR);
-        this.nCyclesRemain -= (this.dstMode? (8 + 1) : (2 + 1) + (this.dstReg == 7? 2 : 0));
-    }
-
-    /**
-     * opUndefined(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static opUndefined(opcode)
-    {
-        if (this.dbg) {
-            this.dbg.stopCPU("undefined opcode: %n\n", opcode);
-        }
-        this.trap(PDP11.TRAP.RESERVED, 0, PDP11.REASON.OPCODE);
-    }
-
-    /**
-     * op1120(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op1120(opcode)
-    {
-        PDP11Ops.aOpXnnn_1120[opcode >> 12].call(this, opcode);
-    }
-
-    /**
-     * op0Xnn_1120(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op0Xnn_1120(opcode)
-    {
-        PDP11Ops.aOp0Xnn_1120[(opcode >> 8) & 0xf].call(this, opcode);
-    }
-
-    /**
-     * op0AXn_1120(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op0AXn_1120(opcode)
-    {
-        PDP11Ops.aOp0AXn_1120[(opcode >> 6) & 0x3].call(this, opcode);
-    }
-
-    /**
-     * op0BXn_1120(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op0BXn_1120(opcode)
-    {
-        PDP11Ops.aOp0BXn_1120[(opcode >> 6) & 0x3].call(this, opcode);
-    }
-
-    /**
-     * op0CXn_1120(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op0CXn_1120(opcode)
-    {
-        PDP11Ops.aOp0CXn_1120[(opcode >> 6) & 0x3].call(this, opcode);
-    }
-
-    /**
-     * op00Xn_1120(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op00Xn_1120(opcode)
-    {
-        PDP11Ops.aOp00Xn_1120[(opcode >> 4) & 0xf].call(this, opcode);
-    }
-
-    /**
-     * op00AX_1120(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op00AX_1120(opcode)
-    {
-        PDP11Ops.aOp00AX_1120[opcode & 0xf].call(this, opcode);
-    }
-
-    /**
-     * op00BX_1120(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op00BX_1120(opcode)
-    {
-        PDP11Ops.aOp00BX_1120[opcode & 0xf].call(this, opcode);
-    }
-
-    /**
-     * op000X_1120(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op000X_1120(opcode)
-    {
-        PDP11Ops.aOp000X_1120[opcode & 0xf].call(this, opcode);
-    }
-
-    /**
-     * op8Xnn_1120(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op8Xnn_1120(opcode)
-    {
-        PDP11Ops.aOp8Xnn_1120[(opcode >> 8) & 0xf].call(this, opcode);
-    }
-
-    /**
-     * op8AXn_1120(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op8AXn_1120(opcode)
-    {
-        PDP11Ops.aOp8AXn_1120[(opcode >> 6) & 0x3].call(this, opcode);
-    }
-
-    /**
-     * op8BXn_1120(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op8BXn_1120(opcode)
-    {
-        PDP11Ops.aOp8BXn_1120[(opcode >> 6) & 0x3].call(this, opcode);
-    }
-
-    /**
-     * op8CXn_1120(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op8CXn_1120(opcode)
-    {
-        PDP11Ops.aOp8CXn_1120[(opcode >> 6) & 0x3].call(this, opcode);
-    }
-
-    /**
-     * op1140(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op1140(opcode)
-    {
-        PDP11Ops.aOpXnnn_1140[opcode >> 12].call(this, opcode);
-    }
-
-    /**
-     * op0Xnn_1140(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op0Xnn_1140(opcode)
-    {
-        PDP11Ops.aOp0Xnn_1140[(opcode >> 8) & 0xf].call(this, opcode);
-    }
-
-    /**
-     * op0DXn_1140(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op0DXn_1140(opcode)
-    {
-        PDP11Ops.aOp0DXn_1140[(opcode >> 6) & 0x3].call(this, opcode);
-    }
-
-    /**
-     * op00Xn_1140(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op00Xn_1140(opcode)
-    {
-        PDP11Ops.aOp00Xn_1140[(opcode >> 4) & 0xf].call(this, opcode);
-    }
-
-    /**
-     * op000X_1140(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op000X_1140(opcode)
-    {
-        PDP11Ops.aOp000X_1140[opcode & 0xf].call(this, opcode);
-    }
-
-    /**
-     * op7Xnn_1140(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op7Xnn_1140(opcode)
-    {
-        PDP11Ops.aOp7Xnn_1140[(opcode >> 8) & 0xf].call(this, opcode);
-    }
-
-    /**
-     * op8Xnn_1140(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op8Xnn_1140(opcode)
-    {
-        PDP11Ops.aOp8Xnn_1140[(opcode >> 8) & 0xf].call(this, opcode);
-    }
-
-    /**
-     * op8DXn_1140(opcode)
-     *
-     * @this {PDP11Ops}
-     * @param {number} opcode
-     */
-    static op8DXn_1140(opcode)
-    {
-        if (this.model < PDP11.MODEL_1145) {
-            PDP11Ops.opUndefined.call(this, opcode);
-            return;
-        }
-        PDP11Ops.aOp8DXn_1140[(opcode >> 6) & 0x3].call(this, opcode);
-    }
-}
-
-PDP11Ops.JMP_CYCLES = [
-    0, 6 + 1, 6 + 1, 8 + 2, 6 + 1, 9 + 2, 7 + 2, 10 + 3
-];
-
-PDP11Ops.JSR_CYCLES = [
-    0, 13 + 1, 13 + 1, 15 + 2, 13 + 1, 16 + 2, 14 + 2, 17 + 3
-];
-
-PDP11Ops.MOV_CYCLES = [
-    2 + 1, 8 + 1, 8 + 1, 11 + 2, 9 + 1, 12 + 2, 10 + 2, 13 + 3,
-    3 + 1, 8 + 1, 8 + 1, 11 + 2, 9 + 1, 12 + 2, 11 + 2, 14 + 3
-];
-
-PDP11Ops.MTP_CYCLES = [
-    6 + 1, 11 + 2, 11 + 2, 14 + 3, 12 + 2, 15 + 3, 14 + 3, 17 + 4
-];
-
-PDP11Ops.aOpXnnn_1120 = [
-    PDP11Ops.op0Xnn_1120,       // 0x0nnn
-    PDP11Ops.opMOV,             // 0x1nnn   01SSDD          11/20+  2.3
-    PDP11Ops.opCMP,             // 0x2nnn   02SSDD          11/20+  2.3*
-    PDP11Ops.opBIT,             // 0x3nnn   03SSDD          11/20+  2.9*
-    PDP11Ops.opBIC,             // 0x4nnn   04SSDD          11/20+  2.9
-    PDP11Ops.opBIS,             // 0x5nnn   05SSDD          11/20+  2.3
-    PDP11Ops.opADD,             // 0x6nnn   06SSDD          11/20+  2.3
-    PDP11Ops.opUndefined,       // 0x7nnn
-    PDP11Ops.op8Xnn_1120,       // 0x8nnn
-    PDP11Ops.opMOVB,            // 0x9nnn   11SSDD          11/20+  2.3
-    PDP11Ops.opCMPB,            // 0xAnnn   12SSDD          11/20+  2.3
-    PDP11Ops.opBITB,            // 0xBnnn   13SSDD          11/20+  2.9
-    PDP11Ops.opBICB,            // 0xCnnn   14SSDD          11/20+  2.9
-    PDP11Ops.opBISB,            // 0xDnnn   15SSDD          11/20+  2.3
-    PDP11Ops.opSUB,             // 0xEnnn   16SSDD          11/20+  2.3
-    PDP11Ops.opUndefined        // 0xFnnn
-];
-
-PDP11Ops.aOp0Xnn_1120 = [
-    PDP11Ops.op00Xn_1120,       // 0x00nn
-    PDP11Ops.opBR,              // 0x01nn   0004XX          11/20+  2.6
-    PDP11Ops.opBNE,             // 0x02nn   0010XX          11/20+  2.6**
-    PDP11Ops.opBEQ,             // 0x03nn   0014XX          11/20+  2.6**
-    PDP11Ops.opBGE,             // 0x04nn   0020XX          11/20+  2.6**
-    PDP11Ops.opBLT,             // 0x05nn   0024XX          11/20+  2.6**
-    PDP11Ops.opBGT,             // 0x06nn   0030XX          11/20+  2.6**
-    PDP11Ops.opBLE,             // 0x07nn   0034XX          11/20+  2.6**
-    PDP11Ops.opJSR,             // 0x08nn   004RDD          11/20+  4.4
-    PDP11Ops.opJSR,             // 0x09nn   004RDD          11/20+  4.4
-    PDP11Ops.op0AXn_1120,       // 0x0Ann
-    PDP11Ops.op0BXn_1120,       // 0x0Bnn
-    PDP11Ops.op0CXn_1120,       // 0x0Cnn
-    PDP11Ops.opUndefined,       // 0x0Dnn
-    PDP11Ops.opUndefined,       // 0x0Enn
-    PDP11Ops.opUndefined        // 0x0Fnn
-];
-
-PDP11Ops.aOp0AXn_1120 = [
-    PDP11Ops.opCLR,             // 0x0A0n   0050DD          11/20+  2.3
-    PDP11Ops.opCOM,             // 0x0A4n   0051DD          11/20+  2.3
-    PDP11Ops.opINC,             // 0x0A8n   0052DD          11/20+  2.3
-    PDP11Ops.opDEC              // 0x0ACn   0053DD          11/20+  2.3
-];
-
-PDP11Ops.aOp0BXn_1120 = [
-    PDP11Ops.opNEG,             // 0x0B0n   0054DD          11/20+  2.3
-    PDP11Ops.opADC,             // 0x0B4n   0055DD          11/20+  2.3
-    PDP11Ops.opSBC,             // 0x0B8n   0056DD          11/20+  2.3
-    PDP11Ops.opTST              // 0x0BCn   0057DD          11/20+  2.3*
-];
-
-PDP11Ops.aOp0CXn_1120 = [
-    PDP11Ops.opROR,             // 0x0C0n   0060DD          11/20+  2.3*
-    PDP11Ops.opROL,             // 0x0C4n   0061DD          11/20+  2.3*
-    PDP11Ops.opASR,             // 0x0C8n   0062DD          11/20+  2.3*
-    PDP11Ops.opASL              // 0x0CCn   0063DD          11/20+  2.3*
-];
-
-PDP11Ops.aOp00Xn_1120 = [
-    PDP11Ops.op000X_1120,       // 0x000n   000000-000017
-    PDP11Ops.opUndefined,       // 0x001n   000020-000037
-    PDP11Ops.opUndefined,       // 0x002n   000040-000057
-    PDP11Ops.opUndefined,       // 0x003n   000060-000077
-    PDP11Ops.opJMP,             // 0x004n   0001DD          11/20+  1.2
-    PDP11Ops.opJMP,             // 0x005n   0001DD          11/20+  1.2
-    PDP11Ops.opJMP,             // 0x006n   0001DD          11/20+  1.2
-    PDP11Ops.opJMP,             // 0x007n   0001DD          11/20+  1.2
-    PDP11Ops.opRTS,             // 0x008n   00020R          11/20+  3.5 (opRTS() will also confirm that bit 3 is clear)
-    PDP11Ops.opUndefined,       // 0x009n   00023N
-    PDP11Ops.op00AX_1120,       // 0x00An   000240-000257
-    PDP11Ops.op00BX_1120,       // 0x00Bn   000260-000277
-    PDP11Ops.opSWAB,            // 0x00Cn   0003DD          11/20+  2.3
-    PDP11Ops.opSWAB,            // 0x00Dn   0003DD          11/20+  2.3
-    PDP11Ops.opSWAB,            // 0x00En   0003DD          11/20+  2.3
-    PDP11Ops.opSWAB             // 0x00Fn   0003DD          11/20+  2.3
-];
-
-PDP11Ops.aOp000X_1120 = [
-    PDP11Ops.opHALT,            // 0x0000   000000          11/20+  1.8
-    PDP11Ops.opWAIT,            // 0x0001   000001          11/20+  1.8
-    PDP11Ops.opRTT,             // 0x0002   000002          11/20+  4.8 (this is really RTI, but on the 11/20, it behaves like RTT)
-    PDP11Ops.opBPT,             // 0x0003
-    PDP11Ops.opIOT,             // 0x0004   000004          11/20+  9.3
-    PDP11Ops.opRESET,           // 0x0005   000005          11/20+  20ms
-    PDP11Ops.opUndefined,       // 0x0006
-    PDP11Ops.opUndefined,       // 0x0007
-    PDP11Ops.opUndefined,       // 0x0008
-    PDP11Ops.opUndefined,       // 0x0009
-    PDP11Ops.opUndefined,       // 0x000A
-    PDP11Ops.opUndefined,       // 0x000B
-    PDP11Ops.opUndefined,       // 0x000C
-    PDP11Ops.opUndefined,       // 0x000D
-    PDP11Ops.opUndefined,       // 0x000E
-    PDP11Ops.opUndefined        // 0x000F
-];
-
-PDP11Ops.aOp00AX_1120 = [
-    PDP11Ops.opNOP,             // 0x00A0   000240          11/20+  1.5
-    PDP11Ops.opCLC,             // 0x00A1   000241          11/20+  1.5
-    PDP11Ops.opCLV,             // 0x00A2   000242          11/20+  1.5
-    PDP11Ops.opCLx,             // 0x00A3   000243          11/20+  1.5
-    PDP11Ops.opCLZ,             // 0x00A4   000244          11/20+  1.5
-    PDP11Ops.opCLx,             // 0x00A5   000245          11/20+  1.5
-    PDP11Ops.opCLx,             // 0x00A6   000246          11/20+  1.5
-    PDP11Ops.opCLx,             // 0x00A7   000247          11/20+  1.5
-    PDP11Ops.opCLN,             // 0x00A8   000250          11/20+  1.5
-    PDP11Ops.opCLx,             // 0x00A9   000251          11/20+  1.5
-    PDP11Ops.opCLx,             // 0x00AA   000252          11/20+  1.5
-    PDP11Ops.opCLx,             // 0x00AB   000253          11/20+  1.5
-    PDP11Ops.opCLx,             // 0x00AC   000254          11/20+  1.5
-    PDP11Ops.opCLx,             // 0x00AD   000255          11/20+  1.5
-    PDP11Ops.opCLx,             // 0x00AE   000256          11/20+  1.5
-    PDP11Ops.opCLx              // 0x00AF   000257          11/20+  1.5
-];
-
-PDP11Ops.aOp00BX_1120 = [
-    PDP11Ops.opNOP,             // 0x00B0   000260          11/20+  1.5
-    PDP11Ops.opSEC,             // 0x00B1   000261          11/20+  1.5
-    PDP11Ops.opSEV,             // 0x00B2   000262          11/20+  1.5
-    PDP11Ops.opSEx,             // 0x00B3   000263          11/20+  1.5
-    PDP11Ops.opSEZ,             // 0x00B4   000264          11/20+  1.5
-    PDP11Ops.opSEx,             // 0x00B5   000265          11/20+  1.5
-    PDP11Ops.opSEx,             // 0x00B6   000266          11/20+  1.5
-    PDP11Ops.opSEx,             // 0x00B7   000267          11/20+  1.5
-    PDP11Ops.opSEN,             // 0x00B8   000270          11/20+  1.5
-    PDP11Ops.opSEx,             // 0x00B9   000271          11/20+  1.5
-    PDP11Ops.opSEx,             // 0x00BA   000272          11/20+  1.5
-    PDP11Ops.opSEx,             // 0x00BB   000273          11/20+  1.5
-    PDP11Ops.opSEx,             // 0x00BC   000274          11/20+  1.5
-    PDP11Ops.opSEx,             // 0x00BD   000275          11/20+  1.5
-    PDP11Ops.opSEx,             // 0x00BE   000276          11/20+  1.5
-    PDP11Ops.opSEx              // 0x00BF   000277          11/20+  1.5
-];
-
-PDP11Ops.aOp8Xnn_1120 = [
-    PDP11Ops.opBPL,             // 0x80nn   1000XX          11/20+  2.6**
-    PDP11Ops.opBMI,             // 0x81nn   1004XX          11/20+  2.6**
-    PDP11Ops.opBHI,             // 0x82nn   1010XX          11/20+  2.6**
-    PDP11Ops.opBLOS,            // 0x83nn   1014XX          11/20+  2.6**
-    PDP11Ops.opBVC,             // 0x84nn   1020XX          11/20+  2.6**
-    PDP11Ops.opBVS,             // 0x85nn   1024XX          11/20+  2.6**
-    PDP11Ops.opBCC,             // 0x86nn   1030XX          11/20+  2.6**
-    PDP11Ops.opBCS,             // 0x87nn   1034XX          11/20+  2.6**
-    PDP11Ops.opEMT,             // 0x88nn   104000-104377   11/20+  9.3
-    PDP11Ops.opTRAP,            // 0x89nn   104400-104777   11/20+  9.3
-    PDP11Ops.op8AXn_1120,       // 0x8Ann
-    PDP11Ops.op8BXn_1120,       // 0x8Bnn
-    PDP11Ops.op8CXn_1120,       // 0x8Cnn
-    PDP11Ops.opUndefined,       // 0x8Dnn
-    PDP11Ops.opUndefined,       // 0x8Enn
-    PDP11Ops.opUndefined        // 0x8Fnn
-];
-
-PDP11Ops.aOp8AXn_1120 = [
-    PDP11Ops.opCLRB,            // 0x8A0n   1050DD          11/20+  2.3
-    PDP11Ops.opCOMB,            // 0x8A4n   1051DD          11/20+  2.3
-    PDP11Ops.opINCB,            // 0x8A8n   1052DD          11/20+  2.3
-    PDP11Ops.opDECB             // 0x8ACn   1053DD          11/20+  2.3
-];
-
-PDP11Ops.aOp8BXn_1120 = [
-    PDP11Ops.opNEGB,            // 0x8B0n   1054DD          11/20+  2.3
-    PDP11Ops.opADCB,            // 0x8B4n   1055DD          11/20+  2.3
-    PDP11Ops.opSBCB,            // 0x8B8n   1056DD          11/20+  2.3
-    PDP11Ops.opTSTB             // 0x8BCn   1057DD          11/20+  2.3*
-];
-
-PDP11Ops.aOp8CXn_1120 = [
-    PDP11Ops.opRORB,            // 0x8C0n   1060DD          11/20+  2.3*
-    PDP11Ops.opROLB,            // 0x8C4n   1061DD          11/20+  2.3*
-    PDP11Ops.opASRB,            // 0x8C8n   1062DD          11/20+  2.3*
-    PDP11Ops.opASLB             // 0x8CCn   1063DD          11/20+  2.3*
-];
-
-PDP11Ops.aOpXnnn_1140 = [
-    PDP11Ops.op0Xnn_1140,       // 0x0nnn
-    PDP11Ops.opMOV,             // 0x1nnn   01SSDD          11/20+  2.3
-    PDP11Ops.opCMP,             // 0x2nnn   02SSDD          11/20+  2.3*
-    PDP11Ops.opBIT,             // 0x3nnn   03SSDD          11/20+  2.9*
-    PDP11Ops.opBIC,             // 0x4nnn   04SSDD          11/20+  2.9
-    PDP11Ops.opBIS,             // 0x5nnn   05SSDD          11/20+  2.3
-    PDP11Ops.opADD,             // 0x6nnn   06SSDD          11/20+  2.3
-    PDP11Ops.op7Xnn_1140,       // 0x7nnn
-    PDP11Ops.op8Xnn_1140,       // 0x8nnn
-    PDP11Ops.opMOVB,            // 0x9nnn   11SSDD          11/20+  2.3
-    PDP11Ops.opCMPB,            // 0xAnnn   12SSDD          11/20+  2.3
-    PDP11Ops.opBITB,            // 0xBnnn   13SSDD          11/20+  2.9
-    PDP11Ops.opBICB,            // 0xCnnn   14SSDD          11/20+  2.9
-    PDP11Ops.opBISB,            // 0xDnnn   15SSDD          11/20+  2.3
-    PDP11Ops.opSUB,             // 0xEnnn   16SSDD          11/20+  2.3
-    PDP11Ops.opUndefined        // 0xFnnn
-];
-
-PDP11Ops.aOp0Xnn_1140 = [
-    PDP11Ops.op00Xn_1140,       // 0x00nn
-    PDP11Ops.opBR,              // 0x01nn   0004XX          11/20+  2.6
-    PDP11Ops.opBNE,             // 0x02nn   0010XX          11/20+  2.6**
-    PDP11Ops.opBEQ,             // 0x03nn   0014XX          11/20+  2.6**
-    PDP11Ops.opBGE,             // 0x04nn   0020XX          11/20+  2.6**
-    PDP11Ops.opBLT,             // 0x05nn   0024XX          11/20+  2.6**
-    PDP11Ops.opBGT,             // 0x06nn   0030XX          11/20+  2.6**
-    PDP11Ops.opBLE,             // 0x07nn   0034XX          11/20+  2.6**
-    PDP11Ops.opJSR,             // 0x08nn   004RDD          11/20+  4.4
-    PDP11Ops.opJSR,             // 0x09nn   004RDD          11/20+  4.4
-    PDP11Ops.op0AXn_1120,       // 0x0Ann
-    PDP11Ops.op0BXn_1120,       // 0x0Bnn
-    PDP11Ops.op0CXn_1120,       // 0x0Cnn
-    PDP11Ops.op0DXn_1140,       // 0x0Dnn
-    PDP11Ops.opUndefined,       // 0x0Enn
-    PDP11Ops.opUndefined        // 0x0Fnn
-];
-
-PDP11Ops.aOp0DXn_1140 = [
-    PDP11Ops.opMARK,            // 0x0D0n                   11/40+          LEIS
-    PDP11Ops.opMFPI,            // 0x0D4n                   11/40+
-    PDP11Ops.opMTPI,            // 0x0D8n                   11/40+
-    PDP11Ops.opSXT              // 0x0DCn                   11/40+          LEIS
-];
-
-PDP11Ops.aOp00Xn_1140 = [
-    PDP11Ops.op000X_1140,       // 0x000n   000000-000017
-    PDP11Ops.opUndefined,       // 0x001n   000020-000037
-    PDP11Ops.opUndefined,       // 0x002n   000040-000057
-    PDP11Ops.opUndefined,       // 0x003n   000060-000077
-    PDP11Ops.opJMP,             // 0x004n   0001DD          11/20+  1.2
-    PDP11Ops.opJMP,             // 0x005n   0001DD          11/20+  1.2
-    PDP11Ops.opJMP,             // 0x006n   0001DD          11/20+  1.2
-    PDP11Ops.opJMP,             // 0x007n   0001DD          11/20+  1.2
-    PDP11Ops.opRTS,             // 0x008n   00020R          11/20+  3.5 (opRTS() will also confirm that bit 3 is clear)
-    PDP11Ops.opSPL,             // 0x009n   00023N          11/45+      (opSPL() will also confirm that bit 3 is set)
-    PDP11Ops.op00AX_1120,       // 0x00An   000240-000257
-    PDP11Ops.op00BX_1120,       // 0x00Bn   000260-000277
-    PDP11Ops.opSWAB,            // 0x00Cn   0003DD          11/20+  2.3
-    PDP11Ops.opSWAB,            // 0x00Dn   0003DD          11/20+  2.3
-    PDP11Ops.opSWAB,            // 0x00En   0003DD          11/20+  2.3
-    PDP11Ops.opSWAB             // 0x00Fn   0003DD          11/20+  2.3
-];
-
-PDP11Ops.aOp000X_1140 = [
-    PDP11Ops.opHALT,            // 0x0000   000000          11/20+  1.8
-    PDP11Ops.opWAIT,            // 0x0001   000001          11/20+  1.8
-    PDP11Ops.opRTI,             // 0x0002   000002          11/20+  4.8
-    PDP11Ops.opBPT,             // 0x0003   000003
-    PDP11Ops.opIOT,             // 0x0004   000004          11/20+  9.3
-    PDP11Ops.opRESET,           // 0x0005   000005          11/20+  20ms
-    PDP11Ops.opRTT,             // 0x0006   000006          11/40+          LEIS
-    PDP11Ops.opMFPT,            // 0x0007   000007          11/44+
-    PDP11Ops.opUndefined,       // 0x0008
-    PDP11Ops.opUndefined,       // 0x0009
-    PDP11Ops.opUndefined,       // 0x000A
-    PDP11Ops.opUndefined,       // 0x000B
-    PDP11Ops.opUndefined,       // 0x000C
-    PDP11Ops.opUndefined,       // 0x000D
-    PDP11Ops.opUndefined,       // 0x000E
-    PDP11Ops.opUndefined        // 0x000F
-];
-
-PDP11Ops.aOp7Xnn_1140 = [
-    PDP11Ops.opMUL,             // 0x70nn                   11/40+          EIS
-    PDP11Ops.opMUL,             // 0x71nn                   11/40+          EIS
-    PDP11Ops.opDIV,             // 0x72nn                   11/40+          EIS
-    PDP11Ops.opDIV,             // 0x73nn                   11/40+          EIS
-    PDP11Ops.opASH,             // 0x74nn                   11/40+          EIS
-    PDP11Ops.opASH,             // 0x75nn                   11/40+          EIS
-    PDP11Ops.opASHC,            // 0x76nn                   11/40+          EIS
-    PDP11Ops.opASHC,            // 0x77nn                   11/40+          EIS
-    PDP11Ops.opXOR,             // 0x78nn                   11/40+          LEIS
-    PDP11Ops.opXOR,             // 0x79nn                   11/40+          LEIS
-    PDP11Ops.opUndefined,       // 0x7Ann
-    PDP11Ops.opUndefined,       // 0x7Bnn
-    PDP11Ops.opUndefined,       // 0x7Cnn
-    PDP11Ops.opUndefined,       // 0x7Dnn
-    PDP11Ops.opSOB,             // 0x7Enn                   11/40+          LEIS
-    PDP11Ops.opSOB              // 0x7Fnn                   11/40+          LEIS
-];
-
-PDP11Ops.aOp8Xnn_1140 = [
-    PDP11Ops.opBPL,             // 0x80nn   1000XX          11/20+  2.6**
-    PDP11Ops.opBMI,             // 0x81nn   1004XX          11/20+  2.6**
-    PDP11Ops.opBHI,             // 0x82nn   1010XX          11/20+  2.6**
-    PDP11Ops.opBLOS,            // 0x83nn   1014XX          11/20+  2.6**
-    PDP11Ops.opBVC,             // 0x84nn   1020XX          11/20+  2.6**
-    PDP11Ops.opBVS,             // 0x85nn   1024XX          11/20+  2.6**
-    PDP11Ops.opBCC,             // 0x86nn   1030XX          11/20+  2.6**
-    PDP11Ops.opBCS,             // 0x87nn   1034XX          11/20+  2.6**
-    PDP11Ops.opEMT,             // 0x88nn   104000-104377   11/20+  9.3
-    PDP11Ops.opTRAP,            // 0x89nn   104400-104777   11/20+  9.3
-    PDP11Ops.op8AXn_1120,       // 0x8Ann   1050XX
-    PDP11Ops.op8BXn_1120,       // 0x8Bnn   1054XX
-    PDP11Ops.op8CXn_1120,       // 0x8Cnn   1060XX
-    PDP11Ops.op8DXn_1140,       // 0x8Dnn   106400-106777
-    PDP11Ops.opUndefined,       // 0x8Enn   1070XX
-    PDP11Ops.opUndefined        // 0x8Fnn   1074XX
-];
-
-PDP11Ops.aOp8DXn_1140 = [
-    PDP11Ops.opMTPS,            // 0x8D0n   1064XX          11/34A only
-    PDP11Ops.opMFPD,            // 0x8D4n   1065XX          11/45+
-    PDP11Ops.opMTPD,            // 0x8D8n   1066XX          11/45+
-    PDP11Ops.opMFPS             // 0x8DCn   1067XX          11/34A only
-];
-
-/**
- * @copyright https://www.pcjs.org/machines/dec/pdp11/libv2/pdp11.js (C) 2012-2020 Jeff Parsons
- */
-
-/*
- * Overview of Device Interrupt Support
- *
- * Originally, the CPU maintained a queue of requested interrupts.  Entries in this queue recorded a device's
- * priority, vector, and delay (ie, a number of instructions to execute before dispatching the interrupt).  This
- * queue would constantly grow and shrink as requests were issued and dispatched, and as long as there was something
- * in the queue, the CPU was constantly examining it.
- *
- * Now we are trying something more efficient.  First, for devices that require delays (like the SerialPort's receiver
- * and transmitter buffer registers, which are supposed to "clock" the data in and out at a specific baud rate), the
- * CPU offers timer services that will "fire" a callback after a specified delay, which are much more efficient than
- * requiring the CPU to dive into an interrupt queue and decrement delay counts on every instruction.
- *
- * Second, devices that generate interrupts will allocate an IRQ object during initialization; we will no longer
- * be creating and destroying interrupt event objects and inserting/deleting them in a constantly changing queue.
- * Each IRQ contains properties that never change (eg, the vector and priority), along with a "next" pointer that's
- * only used when the IRQ is active.
- *
- * When a device decides it's time to interrupt (either at the end of some I/O operation or when a timer has fired),
- * it will simply set the IRQ, which basically means that the IRQ will be linked onto a list of active IRQs, in
- * priority order, so that when the CPU is ready to acknowledge interrupts, it need only check the top of the active
- * IRQ list.
- */
-
-/** @typedef {{ vector: number, priority: number, message: number, next: (IRQ|null) }} */
-var IRQ;
-
-/**
- * Emulation of the PDP-11 CPU
- *
- * @class {PDP11}
- * @unrestricted
- * @property {Bus} bus
- * @property {Input} input
- */
-class PDP11 extends PDP11Ops {
-    /**
-     * PDP11(idMachine, idDevice, config)
-     *
-     * The PDP11 class supports the following config properties:
-     *
-     *      model: a number (eg, 1170) that should match one of the PDP11.MODEL_* values
-     *      addrReset: reset address (default is 0)
-     *
-     * After looking over the timings of PDP-11/70 instructions, nearly all of them appear
-     * to be multiples of 150ns.  So that's what we'll consider a cycle.  How many 150ns are
-     * in one second?  Approximately 6666667.  So by way of comparison to other PCjs machines,
-     * that makes the PDP-11 (or at least the PDP-11/70) look like a 6.67Mhz machine.
-     *
-     * I've started with the PDP-11/70, since that's what Paul Nankervis started with.  When
-     * I go back and add support for earlier PDP-11 models (primarily by neutering functions
-     * that didn't exist), I will no doubt have to tweak some instruction cycle counts, too.
-     *
-     * Examples of operations that take 1 extra cycle (150ns): single and double operand byte
-     * instructions with an odd address (except MOV/MTPI/MTPD/JMP/JRS), ADD/SUB/BIC/BIS/MOVB/CMP/BIT
-     * instructions with src of R1-R7 and dst of R6-R7, RORB/ASRB with an odd address, and each
-     * shift of ASH/ASHC.  As you can see, the rules are not simple.
-     *
-     * We're not simulating cache hardware, but our timings should be optimistic and assume 100%
-     * cache hits; for cache hits, each read cycle is 300ns.  As for write cycles, they are always
-     * 750ns.  My initial take on DEC's timings is that they are including the write time as part
-     * of the total EF (execute/fetch) time.  So, for instructions that write to memory, it looks
-     * like we'll normally need to add 5 cycles (750/150) to the instruction's base time, but
-     * we'll need to keep an eye out for exceptions.
-     *
-     * @this {PDP11}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {Config} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-
-        this.model = +this.config['model'] || PDP11.MODEL_1170;
-        this.addrReset = +this.config['addrReset'] || 0;
-
-        /*
-         * Get access to the Bus device and create an IOPage block for it.  We assume that the bus
-         * has been defined with an 8K blockSize and an 8-bit dataWidth, because our buses are defined
-         * in terms of their MINIMUM data size, not their maximum.  All read/write operations must be
-         * some multiple of that minimum (usually 1, 2, or 4), hence the readData()/writeData(),
-         * readPair()/writePair(), and readQuad()/writeQuad() bus interfaces.
-         */
-        this.bus = /** @type {Bus} */ (this.findDeviceByClass("Bus"));
-        this.bus.setFaultHandler(this.fault.bind(this));
-        this.blockIOPage = /** @type {IOPage} */ (this.findDeviceByClass("IOPage"));
-        this.panel = /** @type {Device} */ (this.findDeviceByClass("Panel", false));
-
-        /*
-         * We also need some IOPage bookkeeping variables, such as the current IOPage address
-         * and the previous block (if any) at that address.
-         */
-        this.addrIOPage = 0;
-        this.blockIOPagePrev = null;
-
-        /*
-         * Get access to the Input device, so we can call setFocus() as needed.
-         */
-        this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
-
-        /*
-         * Initialize processor operation to match the requested model.
-         *
-         * offRegSrc is a bias added to the register index calculated in readSrcWord() and readSrcByte(),
-         * and by default has no effect on the register index, UNLESS this is a PDP-11/20, in which case the
-         * bias is changed to 8 and we return one of the negative values you see above.  Those negative values
-         * act as signals to writeDstWord() and writeDstByte(), effectively delaying evaluation of the register
-         * until then.
-         */
-        this.offRegSrc = 0;
-        this.maskRegSrcByte = 0xff;
-
-        if (this.model <= PDP11.MODEL_1120) {
-            this.opDecode = PDP11.op1120.bind(this);
-            this.checkStackLimit = this.checkStackLimit1120;
-            this.offRegSrc = 8;
-            this.maskRegSrcByte = -1;
-            this.pswUsed = ~(PDP11.PSW.UNUSED | PDP11.PSW.REGSET | PDP11.PSW.PMODE | PDP11.PSW.CMODE) & 0xffff;
-            this.pswRegSet = 0;
-        } else {
-            this.opDecode = PDP11.op1140.bind(this);
-            this.checkStackLimit = this.checkStackLimit1140;
-            /*
-             * The alternate register set (REGSET) doesn't exist on the 11/20 or 11/40; it's available on the 11/45 and 11/70.
-             * Ditto for separate I/D spaces, SUPER mode, and the instructions MFPD, MTPD, and SPL.
-             */
-            this.pswUsed = ~(PDP11.PSW.UNUSED | (this.model <= PDP11.MODEL_1140? PDP11.PSW.REGSET : 0)) & 0xffff;
-            this.pswRegSet = (this.model > PDP11.MODEL_1140? PDP11.PSW.REGSET : 0);
-        }
-
-        this.nDisableTraps = 0;
-        this.trapVector = this.trapReason = 0;
-
-        /** @type {IRQ|null} */
-        this.irqNext = null;            // the head of the active IRQ list, in priority order
-
-        /** @type {Array.<IRQ>} */
-        this.aIRQs = [];                // list of all IRQs, active or not (to be used for auto-configuration)
-
-        this.srcMode = this.srcReg = 0;
-        this.dstMode = this.dstReg = this.dstAddr = 0;
-        this.nReadBreaks = this.nWriteBreaks = 0;
-
-        /*
-         * We can now initialize the CPU.
-         */
-        this.initCPU();
-    }
-
-    /**
-     * execute(nCycles)
-     *
-     * Called from startClock() to execute a series of instructions.
-     *
-     * Executes the specified "burst" of instructions.  This code exists outside of the startClock() function
-     * to ensure that its try/catch exception handler doesn't interfere with the optimization of this tight loop.
-     *
-     * @this {PDP11}
-     * @param {number} nCycles
-     */
-    execute(nCycles)
-    {
-    }
-
-    /**
-     * initCPU()
-     *
-     * Initializes the CPU's state.
-     *
-     * @this {PDP11}
-     */
-    initCPU()
-    {
-        /*
-         * TODO: Verify the initial state of all PDP-11 flags and registers (are they well-documented?)
-         */
-        let f = 0xffff;
-        this.flagC = 0x10000;       // PSW C bit
-        this.flagV  = 0x8000;       // PSW V bit
-        this.flagZ  = f;            // PSW Z bit        (TODO: Why do we clear instead of set Z, like other flags?)
-        this.flagN  = 0x8000;       // PSW N bit
-        this.regPSW = 0x000f;       // PSW other bits   (TODO: What's the point of setting the flag bits here, too?)
-
-        this.regsGen = [            // General R0-R7
-            0, 0, 0, 0, 0, 0, 0, this.addrReset, -1, -2, -3, -4, -5, -6, -7, -8
-        ];
-        this.regsAlt = [            // Alternate R0-R5
-            0, 0, 0, 0, 0, 0
-        ];
-        this.regsAltStack = [       // Alternate R6 stack pointers (KERNEL, SUPER, UNUSED, USER)
-            0, 0, 0, 0
-        ];
-        this.regsPAR = [            // memory management PAR registers by mode
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],   // KERNEL (8 KIPAR regs followed by 8 KDPAR regs)
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],   // SUPER  (8 SIPDR regs followed by 8 SDPDR regs)
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],   // mode 2 (not used)
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]    // USER   (8 UIPDR regs followed by 8 UDPDR regs)
-        ];
-        this.regsPDR = [            // memory management PDR registers by mode
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],   // KERNEL (8 KIPDR regs followed by 8 KDPDR regs)
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],   // SUPER  (8 SIPDR regs followed by 8 SDPDR regs)
-            [f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],   // mode 2 (not used)
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]    // USER   (8 UIPDR regs followed by 8 UDPDR regs)
-        ];
-        this.regsUNIMap = [         // 32 UNIBUS map registers
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-        ];
-        this.regsControl = [        // various control registers (177740-177756) we don't really care about
-            0, 0, 0, 0, 0, 0, 0, 0
-        ];
-
-        this.pswMode = 0;           // current memory management mode (see PDP11.MODE.KERNEL | SUPER | UNUSED | USER)
-        this.pswTrap = -1;
-        this.regMBR = 0;
-
-        /*
-         * opFlags contains various conditions that stepCPU() needs to be aware of.
-         */
-        this.opFlags = 0;
-
-        /*
-         * srcMode and srcReg are set by SRCMODE decodes, and dstMode and dstReg are set for DSTMODE decodes,
-         * indicating to the opcode handlers the mode(s) and register(s) used as part of the current opcode, so
-         * that they can calculate the correct number of cycles.  dstAddr is set for byte operations that also
-         * need to know the effective address for their cycle calculation.
-         */
-        this.srcMode = this.srcReg = 0;
-        this.dstMode = this.dstReg = this.dstAddr = 0;
-
-        this.initMMU();
-
-        for (let i = 0; i <= 7; i++) {
-            this.defineRegister("R"+i, () => this.regsGen[i], (value) => this.regsGen[i] = value & 0xffff);
-        }
-        this.defineRegisterAlias("R6", "SP");
-        this.defineRegisterAlias("R7", Debugger.REGISTER.PC);
-        this.defineRegister("CF", () => (this.getCF()? 1 : 0), (value) => {value? this.setCF() : this.clearCF()});
-        this.defineRegister("NF", () => (this.getNF()? 1 : 0), (value) => {value? this.setNF() : this.clearNF()});
-        this.defineRegister("VF", () => (this.getVF()? 1 : 0), (value) => {value? this.setVF() : this.clearVF()});
-        this.defineRegister("ZF", () => (this.getZF()? 1 : 0), (value) => {value? this.setZF() : this.clearZF()});
-        this.defineRegister("PS", () => this.getPSW(), (value) => this.setPSW(value));
-        this.defineRegister("PI", () => this.getPIR(), (value) => this.setPIR(value));
-        this.defineRegister("ER", () => this.regErr);
-        this.defineRegister("SL", () => this.getSLR(), (value) => this.setSLR(value));
-        this.defineRegister("M0", () => this.getMMR0(), (value) => this.setMMR0(value));
-        this.defineRegister("M1", () => this.getMMR1());
-        this.defineRegister("M2", () => this.getMMR2());
-        this.defineRegister("M3", () => this.getMMR3(), (value) => this.setMMR3(value));
-        // if (this.panel) {
-        //     this.defineRegister("AR", () => this.panel.getAR(), (value) => this.panel.setAR(value));
-        //     this.defineRegister("DR", () => this.panel.getDR(), (value) => this.panel.setDR(value));
-        //     this.defineRegister("SR", () => this.panel.getSR(), (value) => this.panel.setSR(value));
-        // }
-    }
-
-    /**
-     * initMMU()
-     *
-     * Reset all registers required as part of a RESET instruction.
-     *
-     * TODO: Do we ever need to automatically clear regErr, or is it cleared manually?
-     *
-     * @this {PDP11}
-     */
-    initMMU()
-    {
-        this.regMMR0 = 0;           // 177572
-        this.regMMR1 = 0;           // 177574
-        this.regMMR2 = 0;           // 177576
-        this.regMMR3 = 0;           // 172516
-        this.regErr = 0;            // 177766
-        this.regPIR = 0;            // 177772
-        this.regSLR = 0xff;         // 177774
-        this.mmuEnable = 0;         // MMU enabled for PDP11.ACCESS.READ or PDP11.ACCESS.WRITE
-        this.mmuLastMode = 0;
-        this.mmuLastPage = 0;
-        this.mmuMask = 0x3ffff;
-        this.mapMMR3 = [4,2,0,1];   // map from mode to MMR3 I/D bit
-
-        /*
-         * This is queried and displayed by the Panel when it's not displaying its own ADDRESS register
-         * (which takes precedence when, for example, you've manually halted the CPU and are independently
-         * examining the contents of other addresses).
-         *
-         * We initialize it to whatever the current PC is, because according to @paulnank's pdp11.js: "Reset
-         * displays next instruction address" and initMMU() is called on a RESET.
-         */
-        this.addrLast = this.regsGen[7];
-
-        /*
-         * This stores the PC in the lower 16 bits, and any auto-incs or auto-decs from the last opcode in the
-         * upper 16 bits;  the lower 16 bits are used to update MMR2, and the upper 16 bits are used to update MMR1.
-         * The upper bits are automatically zeroed at the start of every operation when the PC is copied to opLast.
-         */
-        this.opLast = 0;
-        this.resetIRQs();
-        this.setMemoryAccess();
-        this.addrInvalid = this.bus.getMemoryLimit(Memory.TYPE.READWRITE);
-    }
-
-    /**
-     * onUpdate(fTransition)
-     *
-     * Enumerate all bindings and update their values.
-     *
-     * Called by Time's update() function whenever 1) its YIELDS_PER_UPDATE threshold is reached
-     * (default is twice per second), 2) a step() operation has just finished (ie, the device is being
-     * single-stepped), and 3) a start() or stop() transition has occurred.
-     *
-     * @this {PDP11}
-     * @param {boolean} [fTransition]
-     */
-    onUpdate(fTransition)
-    {
-        // TODO: Decide what bindings we want to support, and update them as appropriate.
-    }
-
-    /**
-     * getMMR0()
-     *
-     * NOTE: It's OK to bypass this function if you're only interested in bits that always stored directly in MMR0.
-     *
-     * 15 | 14 | 13 | 12 | 11 | 10 | 9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 MMR0
-     * nonr leng read trap unus unus ena mnt cmp  -mode- i/d  --page--   enable
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    getMMR0()
-    {
-        let data = this.regMMR0;
-        if (!(data & PDP11.MMR0.ABORT)) {
-            data = (data & ~(PDP11.MMR0.UNUSED | PDP11.MMR0.PAGE | PDP11.MMR0.MODE)) | (this.mmuLastMode << 5) | (this.mmuLastPage << 1);
-        }
-        return data;
-    }
-
-    /**
-     * setMMR0()
-     *
-     * @this {PDP11}
-     * @param {number} newMMR0
-     */
-    setMMR0(newMMR0)
-    {
-        newMMR0 &= ~PDP11.MMR0.UNUSED;
-
-        if (this.regMMR0 != newMMR0) {
-            if (newMMR0 & PDP11.MMR0.ABORT) {
-                /*
-                 * If updates to MMR0[1-7], MMR1, and MMR2 are being shut off (ie, MMR0.ABORT bits are transitioning
-                 * from clear to set), then do one final sync with their real-time counterparts in opLast.
-                 */
-                if (!(this.regMMR0 & PDP11.MMR0.ABORT)) {
-                    this.regMMR1 = (this.opLast >> 16) & 0xffff;
-                    this.regMMR2 = this.opLast & 0xffff;
-                }
-            }
-            /*
-             * NOTE: We are not protecting the read-only state of the COMPLETED bit here; that's handled by writeMMR0().
-             */
-            this.regMMR0 = newMMR0;
-            this.mmuLastMode = (newMMR0 & PDP11.MMR0.MODE) >> PDP11.MMR0.SHIFT.MODE;
-            this.mmuLastPage = (newMMR0 & PDP11.MMR0.PAGE) >> PDP11.MMR0.SHIFT.PAGE;
-            let mmuEnable = 0;
-            if (newMMR0 & (PDP11.MMR0.ENABLED | PDP11.MMR0.MAINT)) {
-                mmuEnable = PDP11.ACCESS.WRITE;
-                if (newMMR0 & PDP11.MMR0.ENABLED) mmuEnable |= PDP11.ACCESS.READ;
-            }
-            if (this.mmuEnable != mmuEnable) {
-                this.mmuEnable = mmuEnable;
-                this.setMemoryAccess();
-            }
-        }
-    }
-
-    /**
-     * getMMR1()
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    getMMR1()
-    {
-        /*
-         * If updates to MMR1 have not been shut off (ie, MMR0.ABORT bits are clear), then we are allowed
-         * to sync MMR1 with its real-time counterpart in opLast.
-         *
-         * UPDATE: Apparently, I was mistaken that this register would only be updated when the MMR0 ENABLED
-         * bit was set.
-         *
-         *      if ((this.regMMR0 & (PDP11.MMR0.ABORT | PDP11.MMR0.ENABLED)) == PDP11.MMR0.ENABLED)
-         */
-        if (!(this.regMMR0 & PDP11.MMR0.ABORT)) {
-            this.regMMR1 = (this.opLast >> 16) & 0xffff;
-        }
-        let result = this.regMMR1;
-        if (result & 0xff00) {
-            result = ((result << 8) | (result >> 8)) & 0xffff;
-        }
-        return result;
-    }
-
-    /**
-     * getMMR2()
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    getMMR2()
-    {
-        /*
-         * If updates to MMR2 have not been shut off (ie, MMR0.ABORT bits are clear), then we are allowed
-         * to sync MMR2 with its real-time counterpart in opLast.
-         *
-         * UPDATE: Apparently, I was mistaken that this register would only be updated when the MMR0 ENABLED
-         * bit was set.
-         *
-         *      if ((this.regMMR0 & (PDP11.MMR0.ABORT | PDP11.MMR0.ENABLED)) == PDP11.MMR0.ENABLED)
-         */
-        if (!(this.regMMR0 & PDP11.MMR0.ABORT)) {
-            this.regMMR2 = this.opLast & 0xffff;
-        }
-        return this.regMMR2;
-    }
-
-    /**
-     * getMMR3()
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    getMMR3()
-    {
-        return this.regMMR3;
-    }
-
-    /**
-     * setMMR3()
-     *
-     * @this {PDP11}
-     * @param {number} newMMR3
-     */
-    setMMR3(newMMR3)
-    {
-        /*
-         * Don't allow non-11/70 models to use 22-bit addressing or the UNIBUS map.
-         */
-        if (this.model < PDP11.MODEL_1170) {
-            newMMR3 &= ~(PDP11.MMR3.MMU_22BIT | PDP11.MMR3.UNIBUS_MAP);
-        }
-        if (this.regMMR3 != newMMR3) {
-            this.regMMR3 = newMMR3;
-            this.mmuMask = (newMMR3 & PDP11.MMR3.MMU_22BIT)? PDP11.MASK_22BIT : PDP11.MASK_18BIT;
-            this.setMemoryAccess();
-        }
-    }
-
-    /**
-     * setReset(addr, fStart, bUnit, addrStack)
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     * @param {boolean} [fStart] (true if a "startable" image was just loaded, false if not)
-     * @param {number} [bUnit] (boot unit #)
-     * @param {number} [addrStack]
-     */
-    setReset(addr, fStart, bUnit, addrStack)
-    {
-        this.addrReset = addr;
-
-        this.setPC(addr);
-        this.setPSW(0);
-        this.resetCPU();
-
-        if (fStart) {
-            this.regsGen[0] = bUnit || 0;
-            for (let i = 1; i <= 5; i++) this.regsGen[i] = 0;
-            this.regsGen[6] = addrStack || 0o2000;
-            // if (!this.flags.powered) {
-            //     this.flags.autoStart = true;
-            // }
-            // else if (!this.flags.running) {
-            //     this.startCPU();
-            // }
-        }
-        else {
-            // if (this.dbg && this.flags.powered) {
-            //     /*
-            //      * TODO: Review the decision to always stop the CPU if the Debugger is loaded.  Note that
-            //      * when stopCPU() stops a running CPU, the Debugger gets notified, so no need to notify it again.
-            //      *
-            //      * TODO: There are more serious problems to deal with if another component is slamming a new PC down
-            //      * the CPU's throat (presumably while also dropping some new code into RAM) while the CPU is running;
-            //      * we should probably force a complete reset, but for now, it's up to the user to hit the reset button
-            //      * themselves.
-            //      */
-            //     if (!this.stopCPU() && !this.cmp.flags.reset) {
-            //         this.dbg.updateStatus();
-            //         this.cmp.updateDisplays(-1);
-            //     }
-            // }
-            // else if (fStart === false) {
-            //     this.stopCPU();
-            // }
-        }
-        // if (!this.isRunning() && this.panel) this.panel.stop();
-    }
-
-    /**
-     * getMMUState()
-     *
-     * Returns bit 0 set if 22-bit, bit 1 set if 18-bit, or bit 2 set if 16-bit; used by the Panel component.
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    getMMUState()
-    {
-        return this.mmuEnable? ((this.regMMR3 & PDP11.MMR3.MMU_22BIT)? 1 : 2) : 4;
-    }
-
-    /**
-     * resetCPU()
-     *
-     * @this {PDP11}
-     */
-    resetCPU()
-    {
-        // TODO: Make sure all devices get reset notifications, and the IOPage address is reset.
-        this.initMMU();
-    }
-
-    /**
-     * setMemoryAccess()
-     *
-     * Define handlers and DSPACE setting appropriate for the current MMU mode, in order to eliminate
-     * unnecessary calls to mapVirtualToPhysical().
-     *
-     * @this {PDP11}
-     */
-    setMemoryAccess()
-    {
-        if (this.blockIOPagePrev) {
-            this.bus.setBlock(this.addrIOPage, this.blockIOPagePrev);
-        }
-        if (!this.mmuEnable) {
-            this.addrDSpace = 0;
-            this.addrIOPage = PDP11.IOPAGE_16BIT;
-            this.getAddr = this.getPhysicalAddrByMode;
-            this.readWord = this.readWordFromPhysical;
-            this.writeWord = this.writeWordToPhysical;
-        } else {
-            this.addrDSpace = PDP11.ACCESS.DSPACE;
-            this.addrIOPage = (this.regMMR3 & PDP11.MMR3.MMU_22BIT)? PDP11.IOPAGE_22BIT : PDP11.IOPAGE_18BIT;
-            this.getAddr = this.getVirtualAddrByMode;
-            this.readWord = this.nReadBreaks? this.readWordFromVirtualChecked : this.readWordFromVirtual;
-            this.writeWord = this.nWriteBreaks? this.writeWordToVirtualChecked : this.writeWordToVirtual;
-        }
-        this.blockIOPagePrev = this.bus.setBlock(this.addrIOPage, this.blockIOPage);
-    }
-
-    /**
-     * loadState(stateCPU)
-     *
-     * If any saved values don't match (possibly overridden), abandon the given state and return false.
-     *
-     * @this {PDP11}
-     * @param {Array} stateCPU
-     * @returns {boolean}
-     */
-    loadState(stateCPU)
-    {
-        if (!stateCPU || !stateCPU.length) {
-            this.println("invalid saved state");
-            return false;
-        }
-        let idDevice = stateCPU.shift();
-        let version = stateCPU.shift();
-        if (idDevice != this.idDevice || (version|0) !== (+VERSION|0)) {
-            this.printf("CPU state mismatch (%s %3.2f)\n", idDevice, version);
-            return false;
-        }
-        try {
-            this.regsGen = stateCPU.shift();
-            this.regsAlt = stateCPU.shift();
-            this.regsAltStack = stateCPU.shift();
-            this.regsPAR = stateCPU.shift();
-            this.regsPDR = stateCPU.shift();
-            this.regsUNIMap = stateCPU.shift();
-            this.regsControl = stateCPU.shift();
-            this.regErr = stateCPU.shift();
-            this.regMBR = stateCPU.shift();
-            this.regPIR = stateCPU.shift();
-            this.regSLR = stateCPU.shift();
-            this.mmuLastMode = stateCPU.shift();
-            this.mmuLastPage = stateCPU.shift();
-            this.addrLast = stateCPU.shift();
-            this.opFlags = stateCPU.shift();
-            this.opLast = stateCPU.shift();
-            this.pswTrap = stateCPU.shift();
-            this.trapReason = stateCPU.shift();
-            this.trapVector = stateCPU.shift();
-            this.addrReset = stateCPU.shift();
-            this.setPSW(stateCPU.shift());
-            this.setMMR0(stateCPU.shift());
-            this.regMMR1 = stateCPU.shift();
-            this.regMMR2 = stateCPU.shift();
-            this.setMMR3(stateCPU.shift());
-            this.restoreIRQs(stateCPU.shift());
-            // this.restoreTimers(stateCPU.shift());
-        } catch(err) {
-            this.println("CPU state error: " + err.message);
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * saveState(stateCPU)
-     *
-     * @this {PDP11}
-     * @param {Array} stateCPU
-     */
-    saveState(stateCPU)
-    {
-        stateCPU.push(this.idDevice);
-        stateCPU.push(+VERSION);
-        stateCPU.push(this.regsGen);
-        stateCPU.push(this.regsAlt);
-        stateCPU.push(this.regsAltStack);
-        stateCPU.push(this.regsPAR);
-        stateCPU.push(this.regsPDR);
-        stateCPU.push(this.regsUNIMap);
-        stateCPU.push(this.regsControl);
-        stateCPU.push(this.regErr);
-        stateCPU.push(this.regMBR);
-        stateCPU.push(this.regPIR);
-        stateCPU.push(this.regSLR);
-        stateCPU.push(this.mmuLastMode);
-        stateCPU.push(this.mmuLastPage);
-        stateCPU.push(this.addrLast);
-        stateCPU.push(this.opFlags);
-        stateCPU.push(this.opLast);
-        stateCPU.push(this.pswTrap);
-        stateCPU.push(this.trapReason);
-        stateCPU.push(this.trapVector);
-        stateCPU.push(this.addrReset);
-        stateCPU.push(this.getPSW());
-        stateCPU.push(this.getMMR0());
-        stateCPU.push(this.getMMR1());
-        stateCPU.push(this.getMMR2());
-        stateCPU.push(this.getMMR3());
-        stateCPU.push(this.saveIRQs());
-        // stateCPU.push(this.saveTimers());
-    }
-
-    /**
-     * clearCF()
-     *
-     * @this {PDP11}
-     */
-    clearCF()
-    {
-        this.flagC = 0;
-    }
-
-    /**
-     * getCF()
-     *
-     * @this {PDP11}
-     * @returns {number} 0 or PDP11.PSW.CF
-     */
-    getCF()
-    {
-        return (this.flagC & 0x10000)? PDP11.PSW.CF: 0;
-    }
-
-    /**
-     * setCF()
-     *
-     * @this {PDP11}
-     */
-    setCF()
-    {
-        this.flagC = 0x10000;
-    }
-
-    /**
-     * clearVF()
-     *
-     * @this {PDP11}
-     */
-    clearVF()
-    {
-        this.flagV = 0;
-    }
-
-    /**
-     * getVF()
-     *
-     * @this {PDP11}
-     * @returns {number} 0 or PDP11.PSW.VF
-     */
-    getVF()
-    {
-        return (this.flagV & 0x8000)? PDP11.PSW.VF: 0;
-    }
-
-    /**
-     * setVF()
-     *
-     * @this {PDP11}
-     */
-    setVF()
-    {
-        this.flagV = 0x8000;
-    }
-
-    /**
-     * clearZF()
-     *
-     * @this {PDP11}
-     */
-    clearZF()
-    {
-        this.flagZ = 1;
-    }
-
-    /**
-     * getZF()
-     *
-     * @this {PDP11}
-     * @returns {number} 0 or PDP11.PSW.ZF
-     */
-    getZF()
-    {
-        return (this.flagZ & 0xffff)? 0 : PDP11.PSW.ZF;
-    }
-
-    /**
-     * setZF()
-     *
-     * @this {PDP11}
-     */
-    setZF()
-    {
-        this.flagZ = 0;
-    }
-
-    /**
-     * clearNF()
-     *
-     * @this {PDP11}
-     */
-    clearNF()
-    {
-        this.flagN = 0;
-    }
-
-    /**
-     * getNF()
-     *
-     * @this {PDP11}
-     * @returns {number} 0 or PDP11.PSW.NF
-     */
-    getNF()
-    {
-        return (this.flagN & 0x8000)? PDP11.PSW.NF : 0;
-    }
-
-    /**
-     * setNF()
-     *
-     * @this {PDP11}
-     */
-    setNF()
-    {
-        this.flagN = 0x8000;
-    }
-
-    /**
-     * getOpcode()
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    getOpcode()
-    {
-        let pc = this.opLast = this.regsGen[PDP11.REG.PC];
-        /*
-         * If PC is unaligned, a BUS trap will be generated, and because it will generate an
-         * exception, the next line (the equivalent of advancePC(2)) will not be executed, ensuring that
-         * original unaligned PC will be pushed onto the stack by trap().
-         */
-        let opcode = this.readWord(pc);
-        this.regsGen[PDP11.REG.PC] = (pc + 2) & 0xffff;
-        return opcode;
-    }
-
-    /**
-     * advancePC(off)
-     *
-     * NOTE: This function is nothing more than a convenience, and we fully expect it to be inlined at runtime.
-     *
-     * @this {PDP11}
-     * @param {number} off
-     * @returns {number} (original PC)
-     */
-    advancePC(off)
-    {
-        let pc = this.regsGen[PDP11.REG.PC];
-        this.regsGen[PDP11.REG.PC] = (pc + off) & 0xffff;
-        return pc;
-    }
-
-    /**
-     * branch(opcode)
-     *
-     * @this {PDP11}
-     * @param {number} opcode
-     * @param {boolean|number} condition
-     */
-    branch(opcode, condition)
-    {
-        if (condition) {
-            let off = ((opcode << 24) >> 23);
-            if (DEBUG && this.dbg && off == -2) {
-                this.dbg.stopCPU("branch to self");
-            }
-            this.setPC(this.getPC() + off);
-            this.nStepCycles -= 2;
-        }
-        this.nStepCycles -= (2 + 1);
-    }
-
-    /**
-     * getPC()
-     *
-     * NOTE: This function is nothing more than a convenience, and we fully expect it to be inlined at runtime.
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    getPC()
-    {
-        return this.regsGen[PDP11.REG.PC];
-    }
-
-    /**
-     * getLastAddr()
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    getLastAddr()
-    {
-        return this.addrLast;
-    }
-
-    /**
-     * getLastPC()
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    getLastPC()
-    {
-        return this.opLast & 0xffff;
-    }
-
-    /**
-     * setPC()
-     *
-     * NOTE: Unlike other PCjs emulators, such as PCx86, where all PC updates MUST go through the setPC()
-     * function, this function is nothing more than a convenience, because in the PDP-11, the PC can be loaded
-     * like any other general register.  We fully expect this function to be inlined at runtime.
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     */
-    setPC(addr)
-    {
-        this.regsGen[PDP11.REG.PC] = addr & 0xffff;
-    }
-
-    /**
-     * getSP()
-     *
-     * NOTE: This function is nothing more than a convenience, and we fully expect it to be inlined at runtime.
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    getSP()
-    {
-        return this.regsGen[PDP11.REG.SP];
-    }
-
-    /**
-     * setSP()
-     *
-     * NOTE: Unlike other PCjs emulators, such as PCx86, where all SP updates MUST go through the setSP()
-     * function, this function is nothing more than a convenience, because in the PDP-11, the PC can be loaded
-     * like any other general register.  We fully expect this function to be inlined at runtime.
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     */
-    setSP(addr)
-    {
-        this.regsGen[PDP11.REG.SP] = addr & 0xffff;
-    }
-
-    /**
-     * addIRQ(vector, priority, message)
-     *
-     * @this {PDP11}
-     * @param {number} vector (-1 for floating vector)
-     * @param {number} priority
-     * @param {number} [message]
-     * @returns {IRQ}
-     */
-    addIRQ(vector, priority, message)
-    {
-        let irq = {vector: vector, priority: priority, message: message || 0, name: PDP11.VECTORS[vector], next: null};
-        this.aIRQs.push(irq);
-        return irq;
-    }
-
-    /**
-     * insertIRQ(irq)
-     *
-     * @this {PDP11}
-     * @param {IRQ} irq
-     */
-    insertIRQ(irq)
-    {
-        if (irq != this.irqNext) {
-            let irqPrev = this.irqNext;
-            if (!irqPrev || irqPrev.priority <= irq.priority) {
-                irq.next = irqPrev;
-                this.irqNext = irq;
-            } else {
-                do {
-                    let irqNext = irqPrev.next;
-                    if (!irqNext || irqNext.priority <= irq.priority) {
-                        irq.next = irqNext;
-                        irqPrev.next = irq;
-                        break;
-                    }
-                    irqPrev = irqNext;
-                } while (irqPrev);
-            }
-        }
-        /*
-         * See the writeXCSR() function for an explanation of why signalling an IRQ hardware interrupt
-         * should be done using IRQ_DELAY rather than setting IRQ directly.
-         */
-        this.opFlags |= PDP11.OPFLAG.IRQ_DELAY;
-    }
-
-    /**
-     * removeIRQ(irq)
-     *
-     * @this {PDP11}
-     * @param {IRQ} irq
-     */
-    removeIRQ(irq)
-    {
-        let irqPrev = this.irqNext;
-        if (irqPrev == irq) {
-            this.irqNext = irq.next;
-        } else {
-            while (irqPrev) {
-                let irqNext = irqPrev.next;
-                if (irqNext == irq) {
-                    irqPrev.next = irqNext.next;
-                    break;
-                }
-                irqPrev = irqNext;
-            }
-        }
-        /*
-         * We could also set irq.next to null now, but strictly speaking, that shouldn't be necessary.
-         *
-         * Last but not least, if there's still an IRQ on the active IRQ list, we need to make sure IRQ_DELAY
-         * is still set.
-         */
-        if (this.irqNext) {
-            this.opFlags |= PDP11.OPFLAG.IRQ_DELAY;
-        }
-    }
-
-    /**
-     * setIRQ(irq)
-     *
-     * @this {PDP11}
-     * @param {IRQ|null} irq
-     */
-    setIRQ(irq)
-    {
-        if (irq) {
-            this.insertIRQ(irq);
-            this.printf(MESSAGE.INT + irq.message, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority + ")");
-        }
-    }
-
-    /**
-     * clearIRQ(irq)
-     *
-     * @this {PDP11}
-     * @param {IRQ|null} irq
-     */
-    clearIRQ(irq)
-    {
-        if (irq) {
-            this.removeIRQ(irq);
-            this.printf(MESSAGE.INT + irq.message, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority + ")");
-        }
-    }
-
-    /**
-     * findIRQ(vector)
-     *
-     * @this {PDP11}
-     * @param {number} vector
-     * @returns {IRQ|null}
-     */
-    findIRQ(vector)
-    {
-        for (let i = 0; i < this.aIRQs.length; i++) {
-            let irq = this.aIRQs[i];
-            if (irq.vector === vector) return irq;
-        }
-        return null;
-    }
-
-    /**
-     * checkIRQs(priority)
-     *
-     * @this {PDP11}
-     * @param {number} priority
-     * @returns {IRQ|null}
-     */
-    checkIRQs(priority)
-    {
-        return (this.irqNext && this.irqNext.priority > priority)? this.irqNext : null;
-    }
-
-    /**
-     * resetIRQs(priority)
-     *
-     * @this {PDP11}
-     */
-    resetIRQs()
-    {
-        this.irqNext = null;
-    }
-
-    /**
-     * saveIRQs()
-     *
-     * @this {PDP11}
-     * @returns {Array.<number>}
-     */
-    saveIRQs()
-    {
-        let aIRQVectors = [];
-        let irq = this.irqNext;
-        while (irq) {
-            aIRQVectors.push(irq.vector);
-            irq = irq.next;
-        }
-        return aIRQVectors;
-    }
-
-    /**
-     * restoreIRQs(aIRQVectors)
-     *
-     * @this {PDP11}
-     * @param {Array.<number>} aIRQVectors
-     */
-    restoreIRQs(aIRQVectors)
-    {
-        for (let i = aIRQVectors.length - 1; i >= 0; i--) {
-            let irq = this.findIRQ(aIRQVectors[i]);
-
-            if (irq) {
-                irq.next = this.irqNext;
-                this.irqNext = irq;
-            }
-        }
-    }
-
-    /**
-     * checkInterrupts()
-     *
-     * @this {PDP11}
-     * @returns {boolean} true if an interrupt was dispatched, false if not
-     */
-    checkInterrupts()
-    {
-        let fInterrupt = false;
-
-        if (this.opFlags & PDP11.OPFLAG.IRQ) {
-
-            let vector = PDP11.TRAP.PIRQ;
-            let priority = (this.regPIR & PDP11.PSW.PRI) >> PDP11.PSW.SHIFT.PRI;
-
-            let irq = this.checkIRQs(priority);
-            if (irq) {
-                vector = irq.vector;
-                priority = irq.priority;
-            }
-
-            if (this.dispatchInterrupt(vector, priority)) {
-                if (irq) this.removeIRQ(irq);
-                fInterrupt = true;
-            }
-
-            if (!this.irqNext && !this.regPIR) {
-                this.opFlags &= ~PDP11.OPFLAG.IRQ;
-            }
-        }
-        else if (this.opFlags & PDP11.OPFLAG.IRQ_DELAY) {
-            /*
-             * We know that IRQ (bit 2) is clear, so since IRQ_DELAY (bit 0) is set, incrementing opFlags
-             * will eventually transform IRQ_DELAY into IRQ, without affecting any other (higher) bits.
-             */
-            this.opFlags++;
-        }
-        return fInterrupt;
-    }
-
-    /**
-     * dispatchInterrupt(vector, priority)
-     *
-     * TODO: The process of dispatching an interrupt MUST cost some cycles; either trap() needs to assess
-     * that cost, or we do.
-     *
-     * @this {PDP11}
-     * @param {number} vector
-     * @param {number} priority
-     * @returns {boolean} (true if dispatched, false if not)
-     */
-    dispatchInterrupt(vector, priority)
-    {
-        let priorityCPU = (this.regPSW & PDP11.PSW.PRI) >> PDP11.PSW.SHIFT.PRI;
-        if (priority > priorityCPU) {
-            if (this.opFlags & PDP11.OPFLAG.WAIT) {
-                this.advancePC(2);
-                this.opFlags &= ~PDP11.OPFLAG.WAIT;
-            }
-            this.trap(vector, 0, PDP11.REASON.INTERRUPT);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * checkTraps()
-     *
-     * NOTE: The following code processes these "deferred" traps in priority order.  Unfortunately, that
-     * order seems to have changed since the 11/20.  For reference, here's the priority list for the 11/20:
-     *
-     *      1. Bus Errors
-     *      2. Instruction Traps
-     *      3. Trace Trap
-     *      4. Stack Overflow Trap
-     *      5. Power Failure Trap
-     *
-     * and for the 11/70:
-     *
-     *      1. HALT (Instruction, Switch, or Command)
-     *      2. MMU Faults
-     *      3. Parity Errors
-     *      4. Bus Errors (including stack overflow traps?)
-     *      5. Floating Point Traps
-     *      6. TRAP Instruction
-     *      7. TRACE Trap
-     *      8. OVFL Trap
-     *      9. Power Fail Trap
-     *     10. Console Bus Request (Front Panel Operation)
-     *     11. PIR 7, BR 7, PIR 6, BR 6, PIR 5, BR 5, PIR 4, BR 4, PIR 3, BR 3, PIR 2, PIR 1
-     *     12. WAIT Loop
-     *
-     * TODO: Determine 1) if the 11/20 Handbook was wrong, or 2) if the 11/70 really has different priorities.
-     *
-     * Also, as the PDP-11/20 Handbook (1971), p.100, notes:
-     *
-     *      If a bus error is caused by the trap process handling instruction traps, trace traps, stack overflow
-     *      traps, or a previous bus error, the processor is halted.
-     *
-     *      If a stack overflow is caused by the trap process in handling bus errors, instruction traps, or trace traps,
-     *      the process is completed and then the stack overflow trap is sprung.
-     *
-     * TODO: Based on the above notes, we should probably be halting the CPU when a bus error occurs during a trap.
-     *
-     * @this {PDP11}
-     * @returns {boolean} (true if dispatched, false if not)
-     */
-    checkTraps()
-    {
-        if (this.opFlags & PDP11.OPFLAG.TRAP_MMU) {
-            this.trap(PDP11.TRAP.MMU, PDP11.OPFLAG.TRAP_MMU, PDP11.REASON.FAULT);
-            return true;
-        }
-        if (this.opFlags & PDP11.OPFLAG.TRAP_SP) {
-            this.trap(PDP11.TRAP.BUS, PDP11.OPFLAG.TRAP_SP, PDP11.REASON.YELLOW);
-            return true;
-        }
-        if (this.opFlags & PDP11.OPFLAG.TRAP_TF) {
-            this.trap(PDP11.TRAP.BPT, PDP11.OPFLAG.TRAP_TF, PDP11.REASON.TRACE);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * isWaiting()
-     *
-     * @this {PDP11}
-     * @returns {boolean} (true if OPFLAG.WAIT is set, false otherwise)
-     */
-    isWaiting()
-    {
-        return !!(this.opFlags & PDP11.OPFLAG.WAIT);
-    }
-
-    /**
-     * getPSW()
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    getPSW()
-    {
-        let mask = PDP11.PSW.CMODE | PDP11.PSW.PMODE | PDP11.PSW.REGSET | PDP11.PSW.PRI | PDP11.PSW.TF;
-        return this.regPSW = (this.regPSW & mask) | this.getNF() | this.getZF() | this.getVF() | this.getCF();
-    }
-
-    /**
-     * setPSW(newPSW)
-     *
-     * This updates the CPU Processor Status Word.  The PSW should generally be written through
-     * this routine so that changes can be tracked properly, for example the correct register set,
-     * the current memory management mode, etc.  An exception is SPL which writes the priority directly.
-     * Note that that N, Z, V, and C flags are actually stored separately for performance reasons.
-     *
-     * PSW    15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
-     *        CMODE PMODE RS -------- PRIORITY  T  N  Z  V  C
-     *
-     * @this {PDP11}
-     * @param {number} newPSW
-     */
-    setPSW(newPSW)
-    {
-        newPSW &= this.pswUsed;
-        this.flagN = newPSW << 12;
-        this.flagZ = (~newPSW) & 4;
-        this.flagV = newPSW << 14;
-        this.flagC = newPSW << 16;
-        if ((newPSW ^ this.regPSW) & this.pswRegSet) {
-            /*
-             * Swap register sets
-             */
-            for (let i = this.regsAlt.length; --i >= 0;) {
-                let tmp = this.regsGen[i];
-                this.regsGen[i] = this.regsAlt[i];
-                this.regsAlt[i] = tmp;
-            }
-        }
-        this.pswMode = (newPSW >> PDP11.PSW.SHIFT.CMODE) & PDP11.MODE.MASK;
-        let oldMode = (this.regPSW >> PDP11.PSW.SHIFT.CMODE) & PDP11.MODE.MASK;
-        if (this.pswMode != oldMode) {
-            /*
-             * Swap stack pointers
-             */
-            this.regsAltStack[oldMode] = this.regsGen[6];
-            this.regsGen[6] = this.regsAltStack[this.pswMode];
-        }
-        this.regPSW = newPSW;
-
-        /*
-         * Trigger a call to checkInterrupts(), just in case.  If there's an active IRQ, then setting
-         * OPFLAG.IRQ is a no-brainer, but even if not, we set IRQ_DELAY in case the priority was lowered
-         * enough to permit a programmed interrupt (via regPIR).
-         */
-        this.opFlags &= ~PDP11.OPFLAG.IRQ;
-        this.opFlags |= (this.irqNext? PDP11.OPFLAG.IRQ : PDP11.OPFLAG.IRQ_DELAY);
-    }
-
-    /**
-     * getSLR()
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    getSLR()
-    {
-        return this.regSLR & 0xff00;
-    }
-
-    /**
-     * setSLR(newSL)
-     *
-     * @this {PDP11}
-     * @param {number} newSLR
-     */
-    setSLR(newSLR)
-    {
-        this.regSLR = newSLR | 0xff;
-    }
-
-    /**
-     * getPIR()
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    getPIR()
-    {
-        return this.regPIR;
-    }
-
-    /**
-     * setPIR(newPIR)
-     *
-     * @this {PDP11}
-     * @param {number} newPIR
-     */
-    setPIR(newPIR)
-    {
-        newPIR &= PDP11.PIR.BITS;
-        if (newPIR) {
-            let bits = newPIR >> PDP11.PIR.SHIFT.BITS;
-            do {
-                newPIR += PDP11.PIR.PIA_INC;
-            } while ((bits >>= 1));
-            this.opFlags |= PDP11.OPFLAG.IRQ_DELAY;
-        }
-        this.regPIR = newPIR;
-    }
-
-    /**
-     * updateNZVFlags(result)
-     *
-     * NOTE: Only N and Z are updated based on the result; V is zeroed, C is unchanged.
-     *
-     * @this {PDP11}
-     * @param {number} result
-     */
-    updateNZVFlags(result)
-    {
-        this.flagN = this.flagZ = result;
-        this.flagV = 0;
-    }
-
-    /**
-     * updateNZVCFlags(result)
-     *
-     * NOTE: Only N and Z are updated based on the result; both V and C are simply zeroed.
-     *
-     * @this {PDP11}
-     * @param {number} result
-     */
-    updateNZVCFlags(result)
-    {
-        this.flagN = this.flagZ = result;
-        this.flagV = this.flagC = 0;
-    }
-
-    /**
-     * updateAllFlags(result, overflow)
-     *
-     * NOTE: The V flag is simply zeroed, unless a specific value is provided (eg, by NEG).
-     *
-     * @this {PDP11}
-     * @param {number} result
-     * @param {number} [overflow]
-     */
-    updateAllFlags(result, overflow)
-    {
-        this.flagN = this.flagZ = this.flagC = result;
-        this.flagV = overflow || 0;
-    }
-
-    /**
-     * updateAddFlags(result, src, dst)
-     *
-     * @this {PDP11}
-     * @param {number} result (dst + src)
-     * @param {number} src
-     * @param {number} dst
-     */
-    updateAddFlags(result, src, dst)
-    {
-        this.flagN = this.flagZ = this.flagC = result;
-        this.flagV = (src ^ result) & (dst ^ result);
-    }
-
-    /**
-     * updateDecFlags(result, dst)
-     *
-     * NOTE: We could have used updateSubFlags() if not for the fact that the C flag must be preserved.
-     *
-     * @this {PDP11}
-     * @param {number} result (dst - src, where src is an implied 1)
-     * @param {number} dst
-     */
-    updateDecFlags(result, dst)
-    {
-        this.flagN = this.flagZ = result;
-        /*
-         * Because src is always 1 (with a zero sign bit), it can be optimized out of this calculation.
-         */
-        this.flagV = (/* src ^ */ dst) & (dst ^ result);
-    }
-
-    /**
-     * updateIncFlags(result, dst)
-     *
-     * NOTE: We could have used updateAddFlags() if not for the fact that the C flag must be preserved.
-     *
-     * @this {PDP11}
-     * @param {number} result (dst + src, where src is an implied 1)
-     * @param {number} dst
-     */
-    updateIncFlags(result, dst)
-    {
-        this.flagN = this.flagZ = result;
-        /*
-         * Because src is always 1 (with a zero sign bit), it can be optimized out of this calculation.
-         */
-        this.flagV = (/* src ^ */ result) & (dst ^ result);
-    }
-
-    /**
-     * updateMulFlags(result)
-     *
-     * @this {PDP11}
-     * @param {number} result
-     */
-    updateMulFlags(result)
-    {
-        this.flagN = result >> 16;
-        this.flagZ = this.flagN | result;
-        this.flagV = 0;
-        this.flagC = (result < -32768 || result > 32767)? 0x10000 : 0;
-    }
-
-    /**
-     * updateShiftFlags(result)
-     *
-     * @this {PDP11}
-     * @param {number} result
-     */
-    updateShiftFlags(result)
-    {
-        this.flagN = this.flagZ = this.flagC = result;
-        this.flagV = this.flagN ^ (this.flagC >> 1);
-    }
-
-    /**
-     * updateSubFlags(result, src, dst)
-     *
-     * NOTE: CMP operations calculate (src - dst) rather than (dst - src), so when they call updateSubFlags(),
-     * they must reverse the order of the src and dst parameters.
-     *
-     * @this {PDP11}
-     * @param {number} result (dst - src)
-     * @param {number} src
-     * @param {number} dst
-     */
-    updateSubFlags(result, src, dst)
-    {
-        this.flagN = this.flagZ = this.flagC = result;
-        this.flagV = (src ^ dst) & (dst ^ result);
-    }
-
-    /**
-     * fault(addr, reason)
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     * @param {number} [reason]
-     */
-    fault(addr, reason)
-    {
-        if (reason <= 3) this.cpu.regErr |= PDP11.CPUERR.TIMEOUT;
-        this.trap(PDP11.TRAP.BUS, 0, addr);
-    }
-
-    /**
-     * trap(vector, flag, reason)
-     *
-     * trap() handles all the trap/abort functions.  It reads the trap vector from kernel
-     * D space, changes mode to reflect the new PSW and PC, and then pushes the old PSW and
-     * PC onto the new mode stack.
-     *
-     * @this {PDP11}
-     * @param {number} vector
-     * @param {number} flag
-     * @param {number} [reason] (for diagnostic purposes only)
-     */
-    trap(vector, flag, reason)
-    {
-        this.printf(MESSAGE.TRAP, "trap to vector %o (%o: %s)\n", vector, reason, reason < 0? PDP11.REASONS[-reason] : "BUS ERROR");
-
-        if (this.nDisableTraps) return;
-
-        if (this.pswTrap < 0) {
-            this.pswTrap = this.getPSW();
-        } else if (!this.pswMode) {
-            reason = PDP11.REASON.RED;      // double-fault (nested trap) forces a RED condition
-        }
-
-        if (reason == PDP11.REASON.RED) {
-            if (this.opFlags & PDP11.OPFLAG.TRAP_RED) {
-                reason = PDP11.REASON.PANIC;
-            }
-            this.opFlags |= PDP11.OPFLAG.TRAP_RED;
-            /*
-             * The next two lines used to be deferred until after the setPSW() below, but
-             * I'm not seeing any dependencies on these registers, so I'm consolidating the code.
-             */
-            this.regErr |= PDP11.CPUERR.RED;
-            this.regsGen[6] = vector = 4;
-        }
-
-        if (reason != PDP11.REASON.PANIC) {
-            /*
-             * NOTE: Pre-setting the auto-dec values for MMR1 to 0xF6F6 is a work-around for an "EKBEE1"
-             * diagnostic (PC 056710), which tests what happens when a misaligned read triggers a BUS trap,
-             * and that trap then triggers an MMU trap during the first pushWord() below.
-             *
-             * One would think it would be fine to zero those bits by setting opLast to vector alone,
-             * and then letting each of the pushWord() calls below shift their own 0xF6 auto-dec value into
-             * opLast.  When the first pushWord() triggers an MMU trap, we obviously won't get to the second
-             * pushWord(), yet the diagnostic expects TWO auto-decs to be recorded.  I'm puzzled why the
-             * hardware apparently indicates TWO auto-decs, if SP wasn't actually decremented twice, but who
-             * am I to judge.
-             */
-            this.opLast = vector | 0xf6f60000;
-
-            /*
-             * Read from kernel D space
-             */
-            this.pswMode = 0;
-            let newPC = this.readWord(vector | this.addrDSpace);
-            let newPSW = this.readWord(((vector + 2) & 0xffff) | this.addrDSpace);
-
-            /*
-             * Set new PSW with previous mode
-             */
-            this.setPSW((newPSW & ~PDP11.PSW.PMODE) | ((this.pswTrap >> 2) & PDP11.PSW.PMODE));
-
-            this.pushWord(this.pswTrap);
-            this.pushWord(this.regsGen[7]);
-            this.setPC(newPC);
-        }
-
-        /*
-         * TODO: Determine the appropriate number of cycles for traps; all I've done for now is move the
-         * cycle charge from opTrap() to here, and reduced the amount the other opcode handlers that call
-         * trap() charge by a corresponding amount (5).
-         */
-        this.nStepCycles -= (4 + 1);
-
-        /*
-         * DEC's "TRAP TEST" (MAINDEC-11-D0NA-PB) triggers a RESERVED trap with an invalid opcode and the
-         * stack deliberately set too low, and expects the stack overflow trap to be "sprung" immediately
-         * afterward, so we only want to "lose interest" in the TRAP flag(s) that were set on entry, not ALL
-         * of them.
-         *
-         *      this.opFlags &= ~PDP11.OPFLAG.TRAP_MASK;    // lose interest in traps after an abort
-         *
-         * Well, OK, we're also supposed to "lose interest" in the TF flag, too; otherwise, DEC tests fail.
-         *
-         * Finally, setPSW() likes to always set IRQ, to force a check of hardware interrupts prior to
-         * the next instruction, just in case the PSW priority was lowered.  However, there are "TRAP TEST"
-         * tests like this one:
-         *
-         *      005640: 012706 007700          MOV   #7700,SP
-         *      005644: 012767 000340 172124   MOV   #340,177776
-         *      005652: 012767 000100 171704   MOV   #100,177564
-         *      005660: 012767 005712 172146   MOV   #5712,000034   ; set TRAP vector (its PSW is already zero)
-         *      005666: 012767 005714 172170   MOV   #5714,000064   ; set hardware interrupt vector (its PSW is already zero)
-         *      005674: 012767 005716 172116   MOV   #5716,000020   ; set IOT vector
-         *      005702: 012767 000340 172112   MOV   #340,000022    ; set IOT PSW
-         *      005710: 104400                 TRAP  000
-         *      005712: 000004                 IOT
-         *      005714: 000000                 HALT
-         *
-         * where, after "TRAP 000" has executed, a hardware interrupt will be acknowledged, and instead of
-         * executing the IOT, we'll execute the HALT and fail the test.  We avoid that by relying on the same
-         * trick that the SPL instruction uses: setting IRQ_DELAY instead of IRQ, which effectively delays
-         * IRQ detection for one instruction, which is just long enough to allow the diagnostic to pass.
-         */
-        this.opFlags &= ~(flag | PDP11.OPFLAG.TRAP_TF | PDP11.OPFLAG.IRQ_MASK);
-        this.opFlags |= PDP11.OPFLAG.IRQ_DELAY | PDP11.OPFLAG.TRAP_LAST;
-
-        this.pswTrap = -1;                                  // reset flag that we have a trap within a trap
-
-        /*
-         * These next properties (in conjunction with setting PDP11.OPFLAG.TRAP_LAST) are purely an aid for the Debugger;
-         * see getTrapStatus().
-         */
-        this.trapReason = reason;
-        this.trapVector = vector;
-
-        if (reason == PDP11.REASON.PANIC) {
-            this.time.stop();
-        }
-        if (reason >= PDP11.REASON.RED) throw vector;
-    }
-
-    /**
-     * trapReturn()
-     *
-     * @this {PDP11}
-     */
-    trapReturn()
-    {
-        /*
-         * This code used to defer updating regsGen[6] (SP) until after BOTH words had been popped, which seems
-         * safer, but if we're going to do pushes in trap(), then I see no reason to avoid doing pops in trapReturn().
-         */
-        let addr = this.popWord();
-        let newPSW = this.popWord();
-        if (this.regPSW & PDP11.PSW.CMODE) {
-            /*
-             * Keep SPL and allow lower only for modes and register set.
-             *
-             * TODO: Review, because it seems a bit odd to only CLEAR the PRI bits in the new PSW, and then to OR in
-             * CMODE, PMODE, and REGSET bits from the current PSW.
-             */
-            newPSW = (newPSW & ~PDP11.PSW.PRI) | (this.regPSW & (PDP11.PSW.PRI | PDP11.PSW.REGSET | PDP11.PSW.PMODE | PDP11.PSW.CMODE));
-        }
-        this.setPC(addr);
-        this.setPSW(newPSW);
-        this.opFlags &= ~PDP11.OPFLAG.TRAP_TF;
-    }
-
-    /**
-     * getTrapStatus()
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    getTrapStatus()
-    {
-        return (this.opFlags & PDP11.OPFLAG.TRAP_LAST)? (this.trapVector | this.trapReason << 8) : 0;
-    }
-
-    /**
-     * mapUnibus(addr)
-     *
-     * Used to convert 18-bit addresses to 22-bit addresses.  Since mapUnibus() only looks at the low 18 bits of addr,
-     * there's no need to mask addr first.  Note that if bits 13-17 are all set, then the 18-bit address points to the
-     * top 8Kb of its 256Kb range, and mapUnibus() will return addr unchanged, since it should already be pointing to
-     * the top 8Kb of the 4Mb 22-bit range.
-     *
-     * Also, when bits 18-21 of addr are ALL set (which callers check using addr >= BusPDP11.UNIBUS_22BIT aka 0x3C0000),
-     * then we have a 22-bit address pointing to the top 256Kb range, so if the UNIBUS relocation map is enabled, we again
-     * pass the lower 18 bits of that address through the map.
-     *
-     * From the PDP-11/70 Handbook:
-     *
-     *      On the 11/44 and 11/70, there are a total of 31 mapping registers for address relocation.  Each register is
-     *      composed of a double 16-bit PDP-11 word (in consecutive locations) that holds the 22-bit base address.  These
-     *      registers have UNIBUS addresses in the range 770200 to 770372.
-     *
-     *      If the UNIBUS map relocation is not enabled, an incoming 18-bit UNIBUS address has 4 leading zeroes added for
-     *      referencing a 22-bit physical address. The lower 18 bits are the same. No relocation is performed.
-     *
-     *      If UNIBUS map relocation is enabled, the five high order bits of the UNIBUS address are used to select one of the
-     *      31 mapping registers.  The low-order 13 bits of the incoming address are used as an offset from the base address
-     *      contained in the 22-bit mapping register.  To form the physical address, the 13 low-order bits of the UNIBUS
-     *      address are added to 22 bits of the selected mapping register to produce the 22-bit physical address.  The lowest
-     *      order bit of all mapping registers is always a zero, since relocation is always on word boundaries.
-     *
-     * Sadly, because these mappings occur at a word-granular level, we can't implement the mappings by simply shuffling
-     * the underlying block around in the Bus component; it would be much more efficient if we could.  That's how we move
-     * the IOPage in response to addressing changes.
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     * @returns {number}
-     */
-    mapUnibus(addr)
-    {
-        let idx = (addr >> 13) & 0x1F;
-        if (idx < 31) {
-            if (this.regMMR3 & PDP11.MMR3.UNIBUS_MAP) {
-                /*
-                 * The UNIBUS map relocation is enabled
-                 */
-                addr = (this.regsUNIMap[idx] + (addr & 0x1FFF)) & PDP11.MASK_22BIT;
-                /*
-                 * TODO: Review this assertion.
-                 *
-                 *
-                 */
-            } else {
-                /*
-                 * Since UNIBUS map relocation is NOT enabled, then as explained above:
-                 *
-                 *      If the UNIBUS map relocation is not enabled, an incoming 18-bit UNIBUS address has 4 leading zeroes added for
-                 *      referencing a 22-bit physical address. The lower 18 bits are the same. No relocation is performed.
-                 */
-                addr &= ~PDP11.UNIBUS_22BIT;
-            }
-        }
-        return addr;
-    }
-
-    /**
-     * getAddrInfo(addr, fPhysical)
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     * @param {boolean} [fPhysical]
-     * @returns {Array}
-     */
-    getAddrInfo(addr, fPhysical)
-    {
-        let a = [];
-        let addrPhysical;
-
-        if (fPhysical) {
-            addrPhysical = this.mapUnibus(addr);
-            let idx = (addr >> 13) & 0x1F;
-            a.push(addrPhysical);
-            a.push(idx);
-            if (this.regMMR3 & PDP11.MMR3.UNIBUS_MAP) {
-                a.push(this.regsUNIMap[idx]);
-                a.push(addr & 0x1FFF);
-            }
-        }
-        else if (!this.mmuEnable) {
-            addrPhysical = addr & 0xffff;
-            if (addrPhysical >= PDP11.IOPAGE_16BIT) addrPhysical |= this.addrIOPage;
-            a.push(addrPhysical);
-        }
-        else {
-            let mode = this.pswMode << 1;
-            let page = addr >> 13;
-            if (page > 7) mode |= 1;
-            if (!(this.regMMR3 & this.mapMMR3[this.pswMode])) page &= 7;
-            let pdr = this.regsPDR[this.pswMode][page];
-            let off = addr & 0x1fff;
-            let paf = (this.regsPAR[this.pswMode][page] << 6);
-            addrPhysical = (paf + off) & this.mmuMask;
-            if (addrPhysical >= PDP11.UNIBUS_22BIT) addrPhysical = this.mapUnibus(addrPhysical);
-            a.push(addrPhysical);   // a[0]
-            a.push(off);            // a[1]
-            a.push(mode);           // a[2] (0=KI, 1=KD, 2=SI, 3=SD, 4=??, 5=??, 6=UI, 7=UD)
-            a.push(page & 7);       // a[3]
-            a.push(paf);            // a[4]
-            a.push(this.mmuMask);   // a[5]
-        }
-        return a;
-    }
-
-    /**
-     * mapVirtualToPhysical(addrVirtual, access)
-     *
-     * mapVirtualToPhysical() does memory management.  It converts a 17-bit I/D virtual address to a
-     * 22-bit physical address.  A real PDP 11/70 memory management unit can be enabled separately for
-     * read and write for diagnostic purposes.  This is handled here by having an enable mask (mmuEnable)
-     * which is tested against the operation access mask (access).  If there is no match, then the virtual
-     * address is simply mapped as a 16 bit physical address with the upper page going to the IO address
-     * space.  Significant access mask values used are PDP11.ACCESS.READ and PDP11.ACCESS.WRITE.
-     *
-     * When doing mapping, pswMode is used to decide what address space is to be used (0 = kernel,
-     * 1 = supervisor, 2 = illegal, 3 = user).  Normally, pswMode is set by the setPSW() function, but
-     * there are exceptions for instructions which move data between address spaces (MFPD, MFPI, MTPD,
-     * and MTPI) and trap().  These will modify pswMode outside of setPSW() and then restore it again if
-     * all worked.  If however something happens to cause a trap then no restore is done as setPSW()
-     * will have been invoked as part of the trap, which will resynchronize pswMode.
-     *
-     * A PDP-11/70 is different from other PDP-11s in that the highest 18 bit space (017000000 & above)
-     * maps directly to UNIBUS space - including low memory. This doesn't appear to be particularly useful
-     * as it restricts maximum system memory - although it does appear to allow software testing of the
-     * UNIBUS map.  This feature also appears to confuse some OSes which test consecutive memory locations
-     * to find maximum memory -- and on a full memory system find themselves accessing low memory again at
-     * high addresses.
-     *
-     * Construction of a Physical Address
-     * ----------------------------------
-     *
-     *      Virtual Addr (VA)                                  12 11 10  9  8  7  6  5  4  3  2  1  0
-     *    + Page Addr Field (PAF)   15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
-     *                              -----------------------------------------------------------------
-     *    = Physical Addr (PA)      21 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
-     *
-     * The Page Address Field (PAF) comes from a Page Address Register (PAR) that is selected by Virtual
-     * Address (VA) bits 15-13.  You can see from the above alignments that the VA contributes to the low
-     * 13 bits, providing an 8Kb range.
-     *
-     * VA bits 0-5 pass directly through to the PA; those are also called the DIB (Displacement in Block) bits.
-     * VA bits 6-12 are added to the low 7 bits of the PAF and are also called the BN (Block Number) bits.
-     *
-     * You can also think of the entire PAF as a block number, where each block is 64 bytes.  This is consistent
-     * with the LSIZE register at 177760, which is supposed to contain the block number of the last 64-byte block
-     * of memory installed.
-     *
-     * Note that if a PAR is initialized to zero, successively adding 0200 (0x80) to the PAR will advance the
-     * base physical address to the next 8Kb page.
-     *
-     * @this {PDP11}
-     * @param {number} addrVirtual
-     * @param {number} access
-     * @returns {number}
-     */
-    mapVirtualToPhysical(addrVirtual, access)
-    {
-        let page, pdr, addr;
-
-        /*
-         * This can happen when the MAINT bit of MMR0 is set but not the ENABLED bit.
-         */
-        if (!(access & this.mmuEnable)) {
-            addr = addrVirtual & 0xffff;
-            if (addr >= PDP11.IOPAGE_16BIT) addr |= this.addrIOPage;
-            return addr;
-        }
-
-        page = addrVirtual >> 13;
-        if (!(this.regMMR3 & this.mapMMR3[this.pswMode])) page &= 7;
-        pdr = this.regsPDR[this.pswMode][page];
-        addr = ((this.regsPAR[this.pswMode][page] << 6) + (addrVirtual & 0x1fff)) & this.mmuMask;
-
-        if (addr >= PDP11.UNIBUS_22BIT) addr = this.mapUnibus(addr);
-
-        if (this.nDisableTraps) return addr;
-
-        /*
-         * TEST #122 ("KT BEND") in the "EKBEE1" diagnostic (PC 076060) triggers a NOMEMORY error using
-         * this instruction:
-         *
-         *      076170: 005037 140100          CLR   @#140100
-         *
-         * It also triggers an ODDADDR error using this instruction:
-         *
-         *      076356: 005037 140001          CLR   @#140001
-         *
-         * @paulnank: So it turns out that the memory management unit that does odd address and non-existent
-         * memory trapping: who knew? :-)  I thought these would have been handled at access time.
-         *
-         * @jeffpar: We're assuming, at least, that the MMU does its "NEXM" (NOMEMORY) non-existent memory test
-         * very simplistically, by range-checking the address against something like the memory SIZE registers,
-         * because otherwise the MMU would have to wait for a bus time-out: something so prohibitively expensive
-         * that the MMU could not afford to do it.  I rely on addrInvalid, which is derived from the same Bus
-         * getMemoryLimit() service that the SIZE registers (177760--177762) use to derive their value.
-         */
-        if (addr >= this.addrInvalid && addr < this.addrIOPage) {
-            this.regErr |= PDP11.CPUERR.NOMEMORY;
-            this.trap(PDP11.TRAP.BUS, 0, addr);
-        }
-        else if ((addr & 0x1) && !(access & PDP11.ACCESS.BYTE)) {
-            this.regErr |= PDP11.CPUERR.ODDADDR;
-            this.trap(PDP11.TRAP.BUS, 0, addr);
-        }
-
-        let newMMR0 = 0;
-        switch (pdr & PDP11.PDR.ACF.MASK) {
-
-        case PDP11.PDR.ACF.RO1:     // 0x1: read-only, abort on write attempt, memory management trap on read (11/70 only)
-            newMMR0 = PDP11.MMR0.TRAP_MMU;
-            /* falls through */
-
-        case PDP11.PDR.ACF.RO:      // 0x2: read-only, abort on write attempt
-            pdr |= PDP11.PDR.ACCESSED;
-            if (access & PDP11.ACCESS.WRITE) {
-                newMMR0 = PDP11.MMR0.ABORT_RO;
-            }
-            break;
-
-        case PDP11.PDR.ACF.RW1:     // 0x4: read/write, memory management trap upon completion of a read or write
-            newMMR0 = PDP11.MMR0.TRAP_MMU;
-            /* falls through */
-
-        case PDP11.PDR.ACF.RW2:     // 0x5: read/write, memory management trap upon completion of a write (11/70 only)
-            if (access & PDP11.ACCESS.WRITE) {
-                newMMR0 = PDP11.MMR0.TRAP_MMU;
-            }
-            /* falls through */
-
-        case PDP11.PDR.ACF.RW:      // 0x6: read/write, no system trap/abort action
-            pdr |= ((access & PDP11.ACCESS.WRITE) ? (PDP11.PDR.ACCESSED | PDP11.PDR.MODIFIED) : PDP11.PDR.ACCESSED);
-            break;
-
-        default:                    // 0x0 (non-resident, abort all accesses) or 0x3 or 0x7 (unused, abort all accesses)
-            newMMR0 = PDP11.MMR0.ABORT_NR;
-            break;
-        }
-
-        if ((pdr & (PDP11.PDR.PLF | PDP11.PDR.ED)) != PDP11.PDR.PLF) {      // skip checking most common case (hopefully)
-            /*
-             * The Page Descriptor Register (PDR) Page Length Field (PLF) is a 7-bit block number, where a block
-             * is 64 bytes.  Since the bit 0 of the block number is located at bit 8 of the PDR, we shift the PDR
-             * right 2 bits and then clear the bottom 6 bits by masking it with 0x1FC0.
-             */
-            if (pdr & PDP11.PDR.ED) {
-                if (pdr & PDP11.PDR.PLF) {
-                    if ((addrVirtual & 0x1FC0) < ((pdr >> 2) & 0x1FC0)) {
-                        newMMR0 |= PDP11.MMR0.ABORT_PL;
-                    }
-                }
-            } else {
-                if ((addrVirtual & 0x1FC0) > ((pdr >> 2) & 0x1FC0)) {
-                    newMMR0 |= PDP11.MMR0.ABORT_PL;
-                }
-            }
-        }
-
-        /*
-         * Aborts and traps: log FIRST trap and MOST RECENT abort
-         */
-        this.regsPDR[this.pswMode][page] = pdr;
-        if (addr != ((PDP11.IOPAGE_22BIT | PDP11.UNIBUS.MMR0) & this.mmuMask) || this.pswMode) {
-            this.mmuLastMode = this.pswMode;
-            this.mmuLastPage = page;
-        }
-
-        if (newMMR0) {
-            if (newMMR0 & PDP11.MMR0.ABORT) {
-                if (this.pswTrap >= 0) {
-                    newMMR0 |= PDP11.MMR0.COMPLETED;
-                }
-                if (!(this.regMMR0 & PDP11.MMR0.ABORT)) {
-                    newMMR0 |= (this.regMMR0 & PDP11.MMR0.TRAP_MMU) | (this.mmuLastMode << 5) | (this.mmuLastPage << 1);
-
-                    this.setMMR0((this.regMMR0 & ~PDP11.MMR0.UPDATE) | (newMMR0 & PDP11.MMR0.UPDATE));
-                }
-                /*
-                 * NOTE: In unusual circumstances, if regMMR0 already indicated an ABORT condition above,
-                 * we run the risk of infinitely looping; eg, we call trap(), which calls mapVirtualToPhysical()
-                 * on the trap vector, which faults again, etc.
-                 *
-                 * TODO: Determine what a real PDP-11 does in that situation; in our case, trap() deals with it
-                 * by checking an internal OPFLAG (TRAP_RED) and turning the next trap into a PANIC, triggering an
-                 * immediate HALT.
-                 */
-                this.trap(PDP11.TRAP.MMU, PDP11.OPFLAG.TRAP_MMU, PDP11.REASON.ABORT);
-            }
-            if (!(this.regMMR0 & (PDP11.MMR0.ABORT | PDP11.MMR0.TRAP_MMU))) {
-                /*
-                 * TODO: Review the code below, because the address range seems over-inclusive.
-                 */
-                if (addr < ((PDP11.IOPAGE_22BIT | PDP11.UNIBUS.SIPDR0) & this.mmuMask) ||
-                    addr > ((PDP11.IOPAGE_22BIT | PDP11.UNIBUS.UDPAR7 | 0x1) & this.mmuMask)) {
-                    this.regMMR0 |= PDP11.MMR0.TRAP_MMU;
-                    if (this.regMMR0 & PDP11.MMR0.MMU_TRAPS) this.opFlags |= PDP11.OPFLAG.TRAP_MMU;
-                }
-            }
-        }
-        return addr;
-    }
-
-    /**
-     * popWord()
-     *
-     * @this {PDP11}
-     * @returns {number}
-     */
-    popWord()
-    {
-        let result = this.readWord(this.regsGen[6] | this.addrDSpace);
-        this.regsGen[6] = (this.regsGen[6] + 2) & 0xffff;
-        return result;
-    }
-
-    /**
-     * pushWord(data)
-     *
-     * @this {PDP11}
-     * @param {number} data
-     */
-    pushWord(data)
-    {
-        let addrVirtual = (this.regsGen[6] - 2) & 0xffff;
-        this.regsGen[6] = addrVirtual;              // BSD needs SP updated before any fault :-(
-        this.opLast = (this.opLast & 0xffff) | ((this.opLast & ~0xffff) << 8) | (0x00f6 << 16);
-        if (!(this.opFlags & PDP11.OPFLAG.TRAP_RED)) this.checkStackLimit(PDP11.ACCESS.WRITE_WORD, -2, addrVirtual);
-        this.writeWord(addrVirtual, data);
-    }
-
-    /**
-     * getAddrByMode(mode, reg, access)
-     *
-     * getAddrByMode() maps a six bit operand to a 17 bit I/D virtual address space.
-     *
-     * Instruction operands are six bits in length - three bits for the mode and three
-     * for the register. The 17th I/D bit in the resulting virtual address represents
-     * whether the reference is to Instruction space or Data space - which depends on
-     * combination of the mode and whether the register is the Program Counter (R7).
-     *
-     * The eight modes are:-
-     *      0   R           no valid virtual address
-     *      1   (R)         operand from I/D depending if R = 7
-     *      2   (R)+        operand from I/D depending if R = 7
-     *      3   @(R)+       address from I/D depending if R = 7 and operand from D space
-     *      4   -(R)        operand from I/D depending if R = 7
-     *      5   @-(R)       address from I/D depending if R = 7 and operand from D space
-     *      6   x(R)        x from I space but operand from D space
-     *      7   @x(R)       x from I space but address and operand from D space
-     *
-     * Also need to keep MMR1 updated as this stores which registers have been
-     * incremented and decremented so that the OS can reset and restart an instruction
-     * if a page fault occurs.
-     *
-     * Stack Overflow Traps
-     * --------------------
-     * On the PDP-11/20, stack overflow traps occur when an address below 400 is referenced
-     * by SP in either mode 4 (auto-decrement) or 5 (auto-decrement deferred).  The instruction
-     * is allowed to complete before the trap is issued.  NOTE: This information comes
-     * directly from the PDP-11/20 Handbook (1971), but the 11/20 diagnostics apparently only
-     * test mode 4, not mode 5, because when I later removed stack limit checks for mode 5 on
-     * the 11/70, none of the 11/20 tests complained.
-     *
-     * TODO: Find some independent confirmation as to whether ANY PDP-11 models check for
-     * stack overflow on mode 5 (auto-decrement deferred); if they do, then further tweaks to
-     * checkStackLimit functions may be required.
-     *
-     * On the PDP-11/70, the stack limit register (177774) allows a variable boundary for the
-     * kernel stack.
-     *
-     * @this {PDP11}
-     * @param {number} mode
-     * @param {number} reg
-     * @param {number} access
-     * @returns {number}
-     */
-    getAddrByMode(mode, reg, access)
-    {
-        let addrVirtual, step;
-        let addrDSpace = (access & PDP11.ACCESS.VIRT)? 0 : this.addrDSpace;
-
-        /*
-         * Modes that need to auto-increment or auto-decrement will break, in order to perform
-         * the update; others will return an address immediately.
-         */
-        switch (mode) {
-        /*
-         * Mode 0: Registers don't have a virtual address, so trap.
-         *
-         * NOTE: Most instruction code paths never call getAddrByMode() when the mode is zero;
-         * JMP and JSR instructions are exceptions, but that's OK, because those are documented as
-         * ILLEGAL instructions which produce a BUS trap (as opposed to UNDEFINED instructions
-         * that cause a RESERVED trap).
-         */
-        case 0:
-            this.trap(PDP11.TRAP.BUS, 0, PDP11.REASON.ILLEGAL);
-            return 0;
-
-        /*
-         * Mode 1: (R)
-         */
-        case 1:
-            if (reg == 6) this.checkStackLimit(access, 0, this.regsGen[6]);
-            this.nStepCycles -= (2 + 1);
-            return (reg == 7? this.regsGen[reg] : (this.regsGen[reg] | addrDSpace));
-
-        /*
-         * Mode 2: (R)+
-         */
-        case 2:
-            step = 2;
-            addrVirtual = this.regsGen[reg];
-            if (reg == 6) this.checkStackLimit(access, step, addrVirtual);
-            if (reg != 7) {
-                addrVirtual |= addrDSpace;
-                if (reg < 6 && (access & PDP11.ACCESS.BYTE)) step = 1;
-            }
-            this.nStepCycles -= (2 + 1);
-            break;
-
-        /*
-         * Mode 3: @(R)+
-         */
-        case 3:
-            step = 2;
-            addrVirtual = this.regsGen[reg];
-            if (reg != 7) addrVirtual |= addrDSpace;
-            addrVirtual = this.readWord(addrVirtual);
-            addrVirtual |= addrDSpace;
-            this.nStepCycles -= (5 + 2);
-            break;
-
-        /*
-         * Mode 4: -(R)
-         */
-        case 4:
-            step = -2;
-            if (reg < 6 && (access & PDP11.ACCESS.BYTE)) step = -1;
-            addrVirtual = (this.regsGen[reg] + step) & 0xffff;
-            if (reg == 6) this.checkStackLimit(access, step, addrVirtual);
-            if (reg != 7) addrVirtual |= addrDSpace;
-            this.nStepCycles -= (3 + 1);
-            break;
-
-        /*
-         * Mode 5: @-(R)
-         */
-        case 5:
-            step = -2;
-            addrVirtual = (this.regsGen[reg] - 2) & 0xffff;
-            if (reg != 7) addrVirtual |= addrDSpace;
-            addrVirtual = this.readWord(addrVirtual) | addrDSpace;
-            this.nStepCycles -= (6 + 2);
-            break;
-
-        /*
-         * Mode 6: d(R)
-         */
-        case 6:
-            addrVirtual = this.readWord(this.advancePC(2));
-            addrVirtual = (addrVirtual + this.regsGen[reg]) & 0xffff;
-            if (reg == 6) this.checkStackLimit(access, 0, addrVirtual);
-            this.nStepCycles -= (4 + 2);
-            return addrVirtual | addrDSpace;
-
-        /*
-         * Mode 7: @d(R)
-         */
-        case 7:
-            addrVirtual = this.readWord(this.advancePC(2));
-            addrVirtual = (addrVirtual + this.regsGen[reg]) & 0xffff;
-            addrVirtual = this.readWord(addrVirtual | this.addrDSpace);
-            this.nStepCycles -= (7 + 3);
-            return addrVirtual | addrDSpace;
-        }
-
-        this.regsGen[reg] = (this.regsGen[reg] + step) & 0xffff;
-        this.opLast = (this.opLast & 0xffff) | ((this.opLast & ~0xffff) << 8) | ((((step << 3) & 0xf8) | reg) << 16);
-
-        return addrVirtual;
-    }
-
-    /**
-     * checkStackLimit1120(access, step, addr)
-     *
-     * @this {PDP11}
-     * @param {number} access
-     * @param {number} step
-     * @param {number} addr
-     */
-    checkStackLimit1120(access, step, addr)
-    {
-        /*
-         * NOTE: DEC's "TRAP TEST" (MAINDEC-11-D0NA-PB) expects "TST -(SP)" to trap when SP is 150,
-         * so we ignore the access parameter.  Also, strangely, it does NOT expect this instruction
-         * to trap:
-         *
-         *      R0=006302 R1=000000 R2=000000 R3=000000 R4=000000 R5=000776
-         *      SP=000000 PC=006346 PS=000344 IR=000000 SL=000377 T0 N0 Z1 V0 C0
-         *      006346: 112667 171426          MOVB  (SP)+,000000
-         *
-         * so if the step parameter is positive, we let it go.
-         */
-        if (!this.pswMode && step <= 0 && addr <= this.regSLR) {
-            /*
-             * On older machines (eg, the PDP-11/20), there is no "YELLOW" and "RED" distinction, and the
-             * instruction is always allowed to complete, so the trap must always be issued in this fashion.
-             */
-            this.opFlags |= PDP11.OPFLAG.TRAP_SP;
-        }
-    }
-
-    /**
-     * checkStackLimit1140(access, step, addr)
-     *
-     * @this {PDP11}
-     * @param {number} access
-     * @param {number} step
-     * @param {number} addr
-     */
-    checkStackLimit1140(access, step, addr)
-    {
-        if (!this.pswMode) {
-            /*
-             * NOTE: The 11/70 CPU Instruction Exerciser does NOT expect reads to trigger a stack overflow,
-             * so we check the access parameter.
-             *
-             * Moreover, TEST 40 of diagnostic EKBBF0 executes this instruction:
-             *
-             *      R0=177777 R1=032435 R2=152110 R3=000024 R4=153352 R5=001164
-             *      SP=177776 PC=020632 PS=000350 IR=000000 SL=000377 T0 N1 Z0 V0 C0
-             *      020632: 005016                 CLR   @SP                    ;cycles=7
-             *
-             * expecting a RED stack overflow trap.  Yes, using *any* addresses in the IOPage for the stack isn't
-             * a good idea, but who said it was illegal?  For now, we're going to restrict overflows to the highest
-             * address tested by the diagnostic (0xFFFE, aka the PSW), by making that address negative.
-             */
-            if (addr >= 0xFFFE) addr |= ~0xFFFF;
-            if ((access & PDP11.ACCESS.WRITE) && addr <= this.regSLR) {
-                /*
-                 * regSLR can never fall below 0xFF, so this subtraction can never go negative, so this comparison
-                 * is always safe.
-                 */
-                if (addr <= this.regSLR - 32) {
-                    this.trap(PDP11.TRAP.BUS, 0, PDP11.REASON.RED);
-                } else {
-                    this.regErr |= PDP11.CPUERR.YELLOW;
-                    this.opFlags |= PDP11.OPFLAG.TRAP_SP;
-                }
-            }
-        }
-    }
-
-    /**
-     * readByteSafe(addr)
-     *
-     * This interface is expressly for the Debugger, to access virtual memory without faulting.
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     * @returns {number}
-     */
-    readByteSafe(addr)
-    {
-        this.nDisableTraps++;
-        let b = this.bus.readData(this.mapVirtualToPhysical(addr, PDP11.ACCESS.READ_BYTE));
-        this.nDisableTraps--;
-        return b;
-    }
-
-    /**
-     * readWordSafe(addr)
-     *
-     * This interface is expressly for the Debugger, to access virtual memory without faulting.
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     * @returns {number}
-     */
-    readWordSafe(addr)
-    {
-        this.nDisableTraps++;
-        let w = this.bus.readPair(this.mapVirtualToPhysical(addr, PDP11.ACCESS.READ_WORD));
-        this.nDisableTraps--;
-        return w;
-    }
-
-    /**
-     * writeByteSafe(addr, data)
-     *
-     * This interface is expressly for the Debugger, to access virtual memory without faulting.
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     * @param {number} data
-     */
-    writeByteSafe(addr, data)
-    {
-        this.nDisableTraps++;
-        this.bus.writeData(this.mapVirtualToPhysical(addr, PDP11.ACCESS.WRITE_BYTE), data);
-        this.nDisableTraps--;
-    }
-
-    /**
-     * writeWordSafe(addr, data)
-     *
-     * This interface is expressly for the Debugger, to access virtual memory without faulting.
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     * @param {number} data
-     */
-    writeWordSafe(addr, data)
-    {
-        this.nDisableTraps++;
-        this.bus.writePair(this.mapVirtualToPhysical(addr, PDP11.ACCESS.WRITE_WORD), data);
-        this.nDisableTraps--;
-    }
-
-    /**
-     * addMemBreak(addr, fWrite)
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     * @param {boolean} fWrite is true for a memory write breakpoint, false for a memory read breakpoint
-     */
-    addMemBreak(addr, fWrite)
-    {
-        let nBreaks = fWrite? this.nWriteBreaks++ : this.nReadBreaks++;
-
-        if (!nBreaks) this.setMemoryAccess();
-    }
-
-    /**
-     * removeMemBreak(addr, fWrite)
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     * @param {boolean} fWrite is true for a memory write breakpoint, false for a memory read breakpoint
-     */
-    removeMemBreak(addr, fWrite)
-    {
-        let nBreaks = fWrite? --this.nWriteBreaks : --this.nReadBreaks;
-
-        if (!nBreaks) this.setMemoryAccess();
-    }
-
-    /**
-     * getPhysicalAddrByMode(mode, reg, access)
-     *
-     * This is a handler set up by setMemoryAccess().  All calls should go through getAddr().
-     *
-     * @this {PDP11}
-     * @param {number} mode
-     * @param {number} reg
-     * @param {number} access
-     * @returns {number}
-     */
-    getPhysicalAddrByMode(mode, reg, access)
-    {
-        return this.getAddrByMode(mode, reg, access);
-    }
-
-    /**
-     * getVirtualAddrByMode(mode, reg, access)
-     *
-     * This is a handler set up by setMemoryAccess().  All calls should go through getAddr().
-     *
-     * @this {PDP11}
-     * @param {number} mode
-     * @param {number} reg
-     * @param {number} access
-     * @returns {number}
-     */
-    getVirtualAddrByMode(mode, reg, access)
-    {
-        return this.mapVirtualToPhysical(this.getAddrByMode(mode, reg, access), access);
-    }
-
-    /**
-     * readWordFromPhysical(addr)
-     *
-     * This is a handler set up by setMemoryAccess().  All calls should go through readWord().
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     * @returns {number}
-     */
-    readWordFromPhysical(addr)
-    {
-        return this.bus.readPair(this.addrLast = addr);
-    }
-
-    /**
-     * readWordFromVirtual(addrVirtual)
-     *
-     * This is a handler set up by setMemoryAccess().  All calls should go through readWord().
-     *
-     * @this {PDP11}
-     * @param {number} addrVirtual (input address is 17 bit (I&D))
-     * @returns {number}
-     */
-    readWordFromVirtual(addrVirtual)
-    {
-        return this.bus.readPair(this.addrLast = this.mapVirtualToPhysical(addrVirtual, PDP11.ACCESS.READ_WORD));
-    }
-
-    /**
-     * readWordFromVirtualChecked(addrVirtual)
-     *
-     * This is a handler set up by setMemoryAccess().  All calls should go through readWord().
-     *
-     * @this {PDP11}
-     * @param {number} addrVirtual (input address is 17 bit (I&D))
-     * @returns {number}
-     */
-    readWordFromVirtualChecked(addrVirtual)
-    {
-        if (this.dbg) {
-            this.dbg.checkVirtualRead(addrVirtual, 2);
-        }
-        return this.readWordFromVirtual(addrVirtual);
-    }
-
-    /**
-     * writeWordToPhysical(addr, data)
-     *
-     * This is a handler set up by setMemoryAccess().  All calls should go through writeWord().
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     * @param {number} data
-     */
-    writeWordToPhysical(addr, data)
-    {
-        this.bus.writePair(this.addrLast = addr, data);
-    }
-
-    /**
-     * writeWordToVirtual(addrVirtual, data)
-     *
-     * This is a handler set up by setMemoryAccess().  All calls should go through writeWord().
-     *
-     * @this {PDP11}
-     * @param {number} addrVirtual (input address is 17 bit (I&D))
-     * @param {number} data
-     */
-    writeWordToVirtual(addrVirtual, data)
-    {
-        this.bus.writePair(this.addrLast = this.mapVirtualToPhysical(addrVirtual, PDP11.ACCESS.WRITE_WORD), data);
-    }
-
-    /**
-     * writeWordToVirtualChecked(addrVirtual, data)
-     *
-     * This is a handler set up by setMemoryAccess().  All calls should go through writeWord().
-     *
-     * @this {PDP11}
-     * @param {number} addrVirtual (input address is 17 bit (I&D))
-     * @param {number} data
-     */
-    writeWordToVirtualChecked(addrVirtual, data)
-    {
-        if (this.dbg) {
-            this.dbg.checkVirtualWrite(addrVirtual, 2);
-        }
-        this.writeWordToVirtual(addrVirtual, data);
-    }
-
-    /**
-     * readWordFromPrevSpace(opcode, access)
-     *
-     * @this {PDP11}
-     * @param {number} opcode
-     * @param {number} access (really just PDP11.ACCESS.DSPACE or PDP11.ACCESS.ISPACE)
-     * @returns {number}
-     */
-    readWordFromPrevSpace(opcode, access)
-    {
-        let data;
-        let reg = this.dstReg = opcode & PDP11.OPREG.MASK;
-        let mode = this.dstMode = (opcode & PDP11.OPMODE.MASK) >> PDP11.OPMODE.SHIFT;
-        if (!mode) {
-            if (reg != 6 || ((this.regPSW >> 2) & PDP11.PSW.PMODE) === (this.regPSW & PDP11.PSW.PMODE)) {
-                data = this.regsGen[reg];
-            } else {
-                data = this.regsAltStack[(this.regPSW >> 12) & 3];
-            }
-        } else {
-            let addr = this.getAddrByMode(mode, reg, PDP11.ACCESS.READ_WORD);
-            if (!(access & PDP11.ACCESS.DSPACE)) {
-                if ((this.regPSW & 0xf000) !== 0xf000) addr &= 0xffff;
-            }
-            this.pswMode = (this.regPSW >> 12) & 3;
-            data = this.readWord(addr | (access & this.addrDSpace));
-            this.pswMode = (this.regPSW >> 14) & 3;
-        }
-        return data;
-    }
-
-    /**
-     * writeWordToPrevSpace(opcode, access, data)
-     *
-     * @this {PDP11}
-     * @param {number} opcode
-     * @param {number} access (really just PDP11.ACCESS.DSPACE or PDP11.ACCESS.ISPACE)
-     * @param {number} data
-     */
-    writeWordToPrevSpace(opcode, access, data)
-    {
-        this.opLast = (this.opLast & 0xffff) | (0x0016 << 16);
-        let reg = this.dstReg = opcode & PDP11.OPREG.MASK;
-        let mode = this.dstMode = (opcode & PDP11.OPMODE.MASK) >> PDP11.OPMODE.SHIFT;
-        if (!mode) {
-            if (reg != 6 || ((this.regPSW >> 2) & PDP11.PSW.PMODE) === (this.regPSW & PDP11.PSW.PMODE)) {
-                this.regsGen[reg] = data;
-            } else {
-                this.regsAltStack[(this.regPSW >> 12) & 3] = data;
-            }
-        } else {
-            let addr = this.getAddrByMode(mode, reg, PDP11.ACCESS.WRITE_WORD);
-            if (!(access & PDP11.ACCESS.DSPACE)) addr &= 0xffff;
-            /*
-             * TODO: Consider replacing the following code with writeWord(), by adding optional pswMode
-             * parameters for each of the discrete mapVirtualToPhysical() and writePair() operations, because
-             * as it stands, this is the only remaining call to mapVirtualToPhysical() outside of our
-             * setMemoryAccess() handlers.
-             */
-            this.pswMode = (this.regPSW >> 12) & 3;
-            addr = this.mapVirtualToPhysical(addr | (access & PDP11.ACCESS.DSPACE), PDP11.ACCESS.WRITE);
-            this.pswMode = (this.regPSW >> 14) & 3;
-            this.bus.writePair(addr, data);
-        }
-    }
-
-    /**
-     * readSrcByte(opcode)
-     *
-     * WARNING: If the SRC operand is a register, offRegSrc ensures we return a negative register number
-     * rather than the register value, because on the PDP-11/20, the final value of the register must be
-     * resolved AFTER the DST operand has been decoded and any pre-decrement or post-increment operations
-     * affecting the SRC register have been completed.  See readSrcWord() for more details.
-     *
-     * @this {PDP11}
-     * @param {number} opcode
-     * @returns {number}
-     */
-    readSrcByte(opcode)
-    {
-        let result;
-        opcode >>= PDP11.SRCMODE.SHIFT;
-        let reg = this.srcReg = opcode & PDP11.OPREG.MASK;
-        let mode = this.srcMode = (opcode & PDP11.OPMODE.MASK) >> PDP11.OPMODE.SHIFT;
-        if (!mode) {
-            result = this.regsGen[reg + this.offRegSrc] & this.maskRegSrcByte;
-        } else {
-            result = this.bus.readData(this.getAddr(mode, reg, PDP11.ACCESS.READ_BYTE));
-        }
-        return result;
-    }
-
-    /**
-     * readSrcWord(opcode)
-     *
-     * WARNING: If the SRC operand is a register, offRegSrc ensures we return a negative register number
-     * rather than the register value, because on the PDP-11/20, the final value of the register must be
-     * resolved AFTER the DST operand has been decoded and any pre-decrement or post-increment operations
-     * affecting the SRC register have been completed.
-     *
-     * Here's an example from DEC's "TRAP TEST" (MAINDEC-11-D0NA-PB):
-     *
-     *      007200: 012700 006340          MOV   #6340,R0
-     *      007204: 010020                 MOV   R0,(R0)+
-     *      007206: 026727 177126 006342   CMP   006340,#6342
-     *      007214: 001401                 BEQ   007220
-     *      007216: 000000                 HALT
-     *
-     * If this function returned the value of R0 for the SRC operand of "MOV R0,(R0)+", then the operation
-     * would write 6340 to the destination, rather than 6342.
-     *
-     * Most callers don't need to worry about this, because if they pass the result from readSrcWord() directly
-     * to writeDstWord() or updateDstWord(), those functions will take care of converting any negative register
-     * number back into the current register value.  The exceptions are opcodes that don't modify the DST operand
-     * (BIT, BITB, CMP, and CMPB); those opcode handlers must deal with negative register numbers themselves.
-     *
-     * @this {PDP11}
-     * @param {number} opcode
-     * @returns {number}
-     */
-    readSrcWord(opcode)
-    {
-        let result;
-        opcode >>= PDP11.SRCMODE.SHIFT;
-        let reg = this.srcReg = opcode & PDP11.OPREG.MASK;
-        let mode = this.srcMode = (opcode & PDP11.OPMODE.MASK) >> PDP11.OPMODE.SHIFT;
-        if (!mode) {
-            result = this.regsGen[reg + this.offRegSrc];
-        } else {
-            result = this.bus.readPair(this.getAddr(mode, reg, PDP11.ACCESS.READ_WORD));
-        }
-        return result;
-    }
-
-    /**
-     * readDstAddr(opcode)
-     *
-     * @this {PDP11}
-     * @param {number} opcode
-     * @returns {number}
-     */
-    readDstAddr(opcode)
-    {
-        let reg = this.dstReg = opcode & PDP11.OPREG.MASK;
-        let mode = this.dstMode = (opcode & PDP11.OPMODE.MASK) >> PDP11.OPMODE.SHIFT;
-        return this.getAddrByMode(mode, reg, PDP11.ACCESS.VIRT);
-    }
-
-    /**
-     * readDstByte(opcode)
-     *
-     * @this {PDP11}
-     * @param {number} opcode
-     * @returns {number}
-     */
-    readDstByte(opcode)
-    {
-        let result;
-        let reg = this.dstReg = opcode & PDP11.OPREG.MASK;
-        let mode = this.dstMode = (opcode & PDP11.OPMODE.MASK) >> PDP11.OPMODE.SHIFT;
-        if (!mode) {
-            result = this.regsGen[reg] & 0xff;
-        } else {
-            result = this.bus.readData(this.getAddr(mode, reg, PDP11.ACCESS.READ_BYTE));
-        }
-        return result;
-    }
-
-    /**
-     * readDstWord(opcode)
-     *
-     * @this {PDP11}
-     * @param {number} opcode
-     * @returns {number}
-     */
-    readDstWord(opcode)
-    {
-        let result;
-        let reg = this.dstReg = opcode & PDP11.OPREG.MASK;
-        let mode = this.dstMode = (opcode & PDP11.OPMODE.MASK) >> PDP11.OPMODE.SHIFT;
-        if (!mode) {
-            result = this.regsGen[reg];
-        } else {
-            result = this.bus.readPair(this.getAddr(mode, reg, PDP11.ACCESS.READ_WORD));
-        }
-        return result;
-    }
-
-    /**
-     * updateDstByte(opcode, data, fnOp)
-     *
-     * Used whenever the DST operand (as described by opcode) needs to be read before writing.
-     *
-     * @this {PDP11}
-     * @param {number} opcode
-     * @param {number} data
-     * @param {function(number,number)} fnOp
-     */
-    updateDstByte(opcode, data, fnOp)
-    {
-        let reg = this.dstReg = opcode & PDP11.OPREG.MASK;
-        let mode = this.dstMode = (opcode & PDP11.OPMODE.MASK) >> PDP11.OPMODE.SHIFT;
-        if (!mode) {
-            let dst = this.regsGen[reg];
-            data = (data < 0? (this.regsGen[-data-1] & 0xff) : data);
-            this.regsGen[reg] = (dst & 0xff00) | fnOp.call(this, data, dst & 0xff);
-        } else {
-            let addr = this.dstAddr = this.getAddr(mode, reg, PDP11.ACCESS.UPDATE_BYTE);
-            data = (data < 0? (this.regsGen[-data-1] & 0xff) : data);
-            this.bus.writeData(addr, fnOp.call(this, data, this.bus.readData(addr)));
-            if (addr & 1) this.nStepCycles--;
-        }
-    }
-
-    /**
-     * updateDstWord(opcode, data, fnOp)
-     *
-     * Used whenever the DST operand (as described by opcode) needs to be read before writing.
-     *
-     * @this {PDP11}
-     * @param {number} opcode
-     * @param {number} data
-     * @param {function(number,number)} fnOp
-     */
-    updateDstWord(opcode, data, fnOp)
-    {
-        let reg = this.dstReg = opcode & PDP11.OPREG.MASK;
-        let mode = this.dstMode = (opcode & PDP11.OPMODE.MASK) >> PDP11.OPMODE.SHIFT;
-
-
-
-        if (!mode) {
-            this.regsGen[reg] = fnOp.call(this, data < 0? this.regsGen[-data-1] : data, this.regsGen[reg]);
-        } else {
-            let addr = this.getAddr(mode, reg, PDP11.ACCESS.UPDATE_WORD);
-            this.bus.writePair(addr, fnOp.call(this, data < 0? this.regsGen[-data-1] : data, this.bus.readPair(addr)));
-        }
-    }
-
-    /**
-     * writeDstByte(opcode, data, writeFlags, fnFlags)
-     *
-     * Used whenever the DST operand (as described by opcode) does NOT need to be read before writing.
-     *
-     * @this {PDP11}
-     * @param {number} opcode
-     * @param {number} data
-     * @param {number} writeFlags (WRITE.BYTE aka 0xff, or WRITE.SBYTE aka 0xffff)
-     * @param {function(number)} fnFlags
-     */
-    writeDstByte(opcode, data, writeFlags, fnFlags)
-    {
-
-        let reg = this.dstReg = opcode & PDP11.OPREG.MASK;
-        let mode = this.dstMode = (opcode & PDP11.OPMODE.MASK) >> PDP11.OPMODE.SHIFT;
-        if (!mode) {
-            if (!data) {
-                /*
-                 * Potentially worthless optimization (but it looks good on "paper").
-                 */
-                this.regsGen[reg] &= ~writeFlags;
-            } else {
-                /*
-                 * Potentially worthwhile optimization: skipping the sign-extending data shifts
-                 * if writeFlags is WRITE.BYTE (but that requires an extra test and separate code paths).
-                 */
-                data = (data < 0? (this.regsGen[-data-1] & 0xff): data);
-                this.regsGen[reg] = (this.regsGen[reg] & ~writeFlags) | (((data << 24) >> 24) & writeFlags);
-            }
-            fnFlags.call(this, data << 8);
-        } else {
-            let addr = this.getAddr(mode, reg, PDP11.ACCESS.WRITE_BYTE);
-            fnFlags.call(this, (data = data < 0? (this.regsGen[-data-1] & 0xff) : data) << 8);
-            this.bus.writeData(addr, data);
-            if (addr & 1) this.nStepCycles--;
-        }
-    }
-
-    /**
-     * writeDstWord(opcode, data, fnFlags)
-     *
-     * Used whenever the DST operand (as described by opcode) does NOT need to be read before writing.
-     *
-     * @this {PDP11}
-     * @param {number} opcode
-     * @param {number} data
-     * @param {function(number)} fnFlags
-     */
-    writeDstWord(opcode, data, fnFlags)
-    {
-        let reg = this.dstReg = opcode & PDP11.OPREG.MASK;
-        let mode = this.dstMode = (opcode & PDP11.OPMODE.MASK) >> PDP11.OPMODE.SHIFT;
-
-
-
-        if (!mode) {
-            this.regsGen[reg] = (data = data < 0? this.regsGen[-data-1] : data);
-            fnFlags.call(this, data);
-        } else {
-            let addr = this.getAddr(mode, reg, PDP11.ACCESS.WRITE_WORD);
-            fnFlags.call(this, (data = data < 0? this.regsGen[-data-1] : data));
-            this.bus.writePair(addr, data);
-        }
-    }
-
-    /**
-     * toInstruction(addr, opcode)
-     *
-     * Returns a string representation of the specified instruction.
-     *
-     * @this {PDP11}
-     * @param {number} addr
-     * @param {number|undefined} [opcode]
-     * @returns {string}
-     */
-    toInstruction(addr, opcode)
-    {
-        return this.dbg && this.dbg.dumpInstruction(addr, 1) || "";
-    }
-
-    /**
-     * toString()
-     *
-     * Returns a string representation of the current CPU state.
-     *
-     * @this {PDP11}
-     * @returns {string}
-     */
-    toString()
-    {
-        let s = "";
-        if (this.dbg) {
-            let regs = [
-                "R0", "R1", "R2", "R3", "R4", "R5", "",
-                "SP", "PC", "PS", "PI", "SL", "NF", "ZF", "VF", "CF", "",
-                "M0", "M1", "M2", "M3", "ER", "",
-                "SR", "AR", "DR"
-            ];
-            for (let i = 0; i < regs.length; i++) {
-                let reg = regs[i];
-                if (!reg) {
-                    s += '\n';
-                    continue;
-                }
-                let bits = 16;
-                if (reg[1] == 'F') bits = 1;
-                let value = this.getRegister(reg);
-                /*
-                 * We must call the Debugger's sprintf() instead of our own in order to use its custom formatters (eg, %n).
-                 */
-                if (value != undefined) s += this.dbg.sprintf("%s=%*n ", reg, bits, value);
-            }
-        }
-        return s;
-    }
-}
-
-MESSAGE.DL11            = 0x000100000000;
-MESSAGE.PC11            = 0x000200000000;
-
-WebIO.MESSAGE_NAMES["dl11"]     = MESSAGE.DL11;
-WebIO.MESSAGE_NAMES["pc11"]     = MESSAGE.PC11;
-
-/*
- * CPU model numbers (supported)
- *
- * The 11/20 includes the 11/10, which is not identified separately because there was
- * nothing functionally different about it.
- *
- * The 11/40 added the MODE bits to the PSW (but only KERNEL=00 and USER=11) and 18-bit
- * addressing via an MMU; there was still only one register set.
- *
- * The 11/45 added REGSET bit to the PSW (to support a second register set), SUPER=01
- * mode to the existing KERNEL=00 and USER=11 modes, separate I/D spaces, and other MMU
- * extensions (eg, MMR1 and MMR3).
- *
- * The 11/70 added 22-bit addressing and corresponding extensions to the MMU.
- */
-PDP11.MODEL_1120 = 1120;
-PDP11.MODEL_1140 = 1140;
-PDP11.MODEL_1145 = 1145;
-PDP11.MODEL_1170 = 1170;
-
-/*
- * This constant is used to mark points in the code where the physical address being returned
- * is invalid and should not be used.
- *
- * In a 32-bit CPU, -1 (ie, 0xffffffff) could actually be a valid address, so consider changing
- * ADDR_INVALID to NaN or null (which is also why all ADDR_INVALID tests should use strict equality
- * operators).
- *
- * The main reason I'm NOT using NaN or null now is my concern that, by mixing non-numbers
- * (specifically, values outside the range of signed 32-bit integers), performance may suffer.
- *
- * WARNING: Like many of the properties defined here, ADDR_INVALID is a common constant, which the
- * Closure Compiler will happily inline (with or without @const annotations; in fact, I've yet to
- * see a @const annotation EVER improve automatic inlining).  However, if you don't make ABSOLUTELY
- * certain that this file is included BEFORE the first reference to any of these properties, that
- * automatic inlining will no longer occur.
- */
-PDP11.ADDR_INVALID = -1;
-
-/*
- * Processor modes
- */
-PDP11.MODE = {
-    KERNEL:     0x0,            // 11/40 and higher
-    SUPER:      0x1,            // 11/45 and higher
-    UNUSED:     0x2,
-    USER:       0x3,            // 11/40 and higher
-    MASK:       0x3
-};
-
-/*
- * Processor Status Word (stored in regPSW) at 177776
- */
-PDP11.PSW = {
-    CF:         0x0001,         // bit  0     (000001)  Carry Flag
-    VF:         0x0002,         // bit  1     (000002)  Overflow Flag (aka OF on Intel processors)
-    ZF:         0x0004,         // bit  2     (000004)  Zero Flag
-    NF:         0x0008,         // bit  3     (000010)  Negative Flag (aka SF -- Sign Flag -- on Intel processors)
-    TF:         0x0010,         // bit  4     (000020)  Trap Flag
-    PRI:        0x00E0,         // bits 5-7   (000340)  Priority
-    UNUSED:     0x0700,         // bits 8-10  (003400)  UNUSED
-    /*
-     * The REGSET bit (and the alternate register set stored in regsAlt) came into existence
-     * with the 11/45; (ie, they were not present on the 11/10, 11/20, or 11/40).
-     */
-    REGSET:     0x0800,         // bit  11    (004000)  Register Set
-    /*
-     * The MODE bits came into existence with the 11/40 (eg, not present on the 11/10 or 11/20).
-     */
-    PMODE:      0x3000,         // bits 12-13 (030000)  Prev Mode (see PDP11.MODE)
-    CMODE:      0xC000,         // bits 14-15 (140000)  Curr Mode (see PDP11.MODE)
-    SHIFT: {
-        CF:     0,
-        VF:     1,
-        ZF:     2,
-        NF:     3,
-        TF:     4,
-        PRI:    5,
-        PMODE:  12,
-        CMODE:  14
-    }
-};
-
-/*
- * Program Interrupt Register (stored in regPIR) at 177772
- *
- * The PIA bits at 5-7 are designed to align with PRI bits 5-7 in the PSW.
- */
-PDP11.PIR = {
-    BITS:       0xFE00,         // bits 9-15 correspond to interrupt requests 1-7
-    PIA:        0x00EE,         // the PIA bits contain two copies of the corresponding interrupt request priority
-    PIA_INC:    0x0022,         // both sets of PIA bits can be incremented with this constant
-    SHIFT: {
-        BITS:   9
-    }
-};
-
-/*
- * PDP-11 trap vectors
- */
-PDP11.TRAP = {
-    UNDEFINED:  0x00,           // 000  (reserved)
-    BUS:        0x04,           // 004  unaligned address, non-existent memory, illegal instruction, etc
-    RESERVED:   0x08,           // 010  reserved instructions
-    BPT:        0x0C,           // 014  BPT: breakpoint trap (trace)
-    IOT:        0x10,           // 020  IOT: input/output trap
-    PF:         0x14,           // 024  power fail
-    EMT:        0x18,           // 030  EMT: emulator trap
-    TRAP:       0x1C,           // 034  TRAP instruction
-    PIRQ:       0xA0,           // 240  PIRQ: program interrupt request
-    MMU:        0xA8            // 250  MMU: aborts and traps
-};
-
-/*
- * PDP-11 trap reasons; the reason may also be a non-negative address indicating a BUS memory error
- * (unaligned address or non-existent memory).  Any reason >= RED (which includes BUS memory errors) generate
- * immediate (thrown) traps, as they are considered ABORTs; the rest generate synchronous traps.
- */
-PDP11.REASON = {
-    PANIC:      -1,             // immediate halt (internal error)
-    ABORT:      -2,             // immediate MMU fault
-    ILLEGAL:    -3,             // immediate invalid opcode (BUS)
-    RED:        -4,             // immediate stack overflow fault (BUS)
-    YELLOW:     -5,             // deferred stack overflow fault (BUS)
-    FAULT:      -6,             // deferred MMU fault
-    TRACE:      -7,             // deferred TF fault (BPT)
-    HALT:       -8,             // illegal HALT (BUS)
-    OPCODE:     -9,             // opcode-generated trap (eg, BPT, EMT, IOT, TRAP, or RESERVED opcode)
-    INTERRUPT:  -10,            // device-generated trap (vector is device-specific)
-};
-
-PDP11.REASONS = [
-    "UNKNOWN",
-    "PANIC",
-    "ABORT",
-    "ILLEGAL",
-    "RED",
-    "YELLOW",
-    "FAULT",
-    "TRACE",
-    "HALT",
-    "OPCODE",
-    "INTERRUPT"
-];
-
-/*
- * Assorted common opcodes
- */
-PDP11.OPCODE = {
-    HALT:       0x0000,
-    WAIT:       0x0001,
-    BPT:        0x0003,
-    IOT:        0x0004,
-    JSR_OP:     0x0800,
-    JSR_MASK:   0xFE00,
-    SOB_OP:     0x7E00,
-    SOB_MASK:   0xFE00,
-    EMT_OP:     0x8800,
-    EMT_MASK:   0xFF00,
-    TRAP_OP:    0x8900,
-    TRAP_MASK:  0xFF00,
-    INVALID:    0xFFFF          // far from the only invalid opcode, just a KNOWN invalid opcode
-};
-
-/*
- * Internal operation state flags
- */
-PDP11.OPFLAG = {
-    IRQ_DELAY:  0x0001,         // incremented until it becomes IRQ (set by SPL and traps)
-    IRQ:        0x0002,         // time to call checkInterrupts()
-    IRQ_MASK:   0x0003,
-    DEBUGGER:   0x0004,         // set if the Debugger wants to perform checks
-    WAIT:       0x0008,         // WAIT operation in progress
-    PRESERVE:   0x000F,         // OPFLAG bits to preserve prior to the next instruction
-    TRAP_TF:    0x0010,         // aka PDP11.PSW.TF (WARNING: do not change this bit, or you will likely break opRTI())
-    TRAP_SP:    0x0020,         // set for a deferred BUS trap (due to a "yellow" stack overflow condition)
-    TRAP_MMU:   0x0040,
-    TRAP_MASK:  0x0070,
-    TRAP_LAST:  0x0080,         // set if last operation was a trap (see trapLast for the vector, and trapReason for the reason)
-    TRAP_RED:   0x0100,         // set whenever a RED trap occurs, used to catch double RED traps (time to PANIC)
-};
-
-/*
- * Opcode reg (opcode bits 2-0)
- */
-PDP11.OPREG = {
-    MASK:       0x07
-};
-
-    /*
-     * Opcode modes (opcode bits 5-3)
-     */
-PDP11.OPMODE = {
-    REG:        0x00,           // REGISTER                 (register is operand)
-    REGD:       0x08,           // REGISTER DEFERRED        (register is address of operand)
-    POSTINC:    0x10,           // AUTO-INCREMENT           (register is address of operand, register incremented)
-    POSTINCD:   0x18,           // AUTO-INCREMENT DEFERRED  (register is address of address of operand, register incremented)
-    PREDEC:     0x20,           // AUTO-DECREMENT           (register decremented, register is address of operand)
-    PREDECD:    0x28,           // AUTO-DECREMENT DEFERRED  (register decremented, register is address of address of operand)
-    INDEX:      0x30,           // INDEX                    (register + next word is address of operand)
-    INDEXD:     0x38,           // INDEX DEFERRED           (register + next word is address of address of operand)
-    MASK:       0x38,
-    SHIFT:      3
-};
-
-PDP11.DSTMODE = {
-    REG:        0x0007,
-    MODE:       0x0038,
-    MASK:       0x003F,
-    SHIFT:      0
-};
-
-PDP11.SRCMODE = {
-    REG:        0x01C0,
-    MODE:       0x0E00,
-    MASK:       0x0FC0,
-    SHIFT:      6
-};
-
-PDP11.REG = {
-    SP:         6,
-    PC:         7,
-};
-
-/*
- * Internal memory access flags
- */
-PDP11.ACCESS = {
-    WORD:       0x00,
-    BYTE:       0x01,
-    READ:       0x02,
-    WRITE:      0x04,
-    UPDATE:     0x06,
-    VIRT:       0x08,           // getVirtualByMode() leaves bit 17 clear if this is set (otherwise the caller would have to clear it again)
-    ISPACE:     0x00000,
-    DSPACE:     0x10000         // getVirtualByMode() sets bit 17 in any 16-bit virtual address that refers to D space (as opposed to I space)
-};
-
-/*
- * Internal flags passed to writeDstByte()
- *
- * The BYTE and SBYTE values have been chosen so that they can be used directly as masks.
- */
-PDP11.WRITE = {
-    BYTE:       0xff,           // write byte normally
-    SBYTE:      0xffff          // sign-extend byte to word
-};
-
-PDP11.CPUERR = {                // 177766
-    RED:        0x0004,         // 000004 red zone stack limit
-    YELLOW:     0x0008,         // 000010 yellow zone stack limit
-    TIMEOUT:    0x0010,         // 000020 UNIBUS timeout error
-    NOMEMORY:   0x0020,         // 000040 non-existent memory error
-    ODDADDR:    0x0040,         // 000100 odd word address error (as in non-even, not strange)
-    BADHALT:    0x0080          // 000200 HALT attempted in USER or SUPER modes
-};
-
-PDP11.MMR0 = {                  // 177572
-    ENABLED:    0x0001,         // 000001 address relocation enabled
-    PAGE_NUM:   0x000E,         // 000016 page number of last fault
-    PAGE_D:     0x0010,         // 000020 last fault occurred in D space (11/45 and 11/70)
-    PAGE:       0x001E,         // 000176 (all of the PAGE bits)
-    MODE:       0x0060,         // 000140 processor mode as of last fault
-    COMPLETED:  0x0080,         // 000200 last instruction completed (R/O) (11/70)
-    MAINT:      0x0100,         // 000400 only destination mode references will be relocated
-    MMU_TRAPS:  0x0200,         // 001000 enable MMU traps (11/70)
-    UNUSED:     0x0C00,         // 006000
-    TRAP_MMU:   0x1000,         // 010000 trap: MMU (11/70)
-    ABORT_RO:   0x2000,         // 020000 abort: read-only
-    ABORT_PL:   0x4000,         // 040000 abort: page length
-    ABORT_NR:   0x8000,         // 100000 abort: non-resident
-    ABORT:      0xE000,         // 160000 (all of the ABORT bits)
-    UPDATE:     0xF0FE,         // Includes all of: ABORT, TRAP, COMPLETED, MODE, and PAGE bits
-    SHIFT: {
-        PAGE:   1,
-        MODE:   5
-    }
-};
-
-PDP11.MMR1 = {                  // 177574: general purpose auto-inc/auto-dec register (11/45 and 11/70)
-    REG1_NUM:   0x0007,         //
-    REG1_DELTA: 0x00F8,         //
-    REG2_NUM:   0x0700,         //
-    REG2_DELTA: 0xF800          //
-};
-
-PDP11.MMR2 = {                  // 177576: virtual program counter register
-};
-
-PDP11.MMR3 = {                  // 172516: mapping register (11/45 and 11/70)
-    USER_D:     0x0001,         // (000001)
-    SUPER_D:    0x0002,         // (000002)
-    KERNEL_D:   0x0004,         // (000004)
-    MMU_22BIT:  0x0010,         // (000020)
-    UNIBUS_MAP: 0x0020          // (000040) UNIBUS map relocation enabled
-};
-
-PDP11.PDR = {
-    ACF: {
-        NR:     0x0,            // non-resident, abort all accesses
-        RO1:    0x1,            // read-only, abort on write attempt, memory management trap on read (11/70)
-        RO:     0x2,            // read-only, abort on write attempt
-        U1:     0x3,            // unused, abort all accesses--reserved for future use
-        RW1:    0x4,            // read/write, memory management trap upon completion of a read or write
-        RW2:    0x5,            // read/write, memory management trap upon completion of a write (11/70)
-        RW:     0x6,            // read/write, no system trap/abort action
-        U2:     0x7,            // unused, abort all accesses--reserved for future use
-        MASK:   0x7
-    },
-    ED:         0x0008,         // expansion direction (if set, the page expands downward from block number 127)
-    UNUSED:     0x0030,
-    MODIFIED:   0x0040,         // page has been written (bit cleared when either PDR or PAR is written)
-    ACCESSED:   0x0080,         // page has been accessed (bit cleared when either PDR or PAR is written) (11/70)
-    PLF:        0x7F00,         // page length field
-    BC:         0x8000          // bypass cache (11/44 only)
-};
-
-/*
- * Assorted special (UNIBUS) addresses
- *
- * Within the PDP-11/45's 18-bit address space, of the 0x40000 possible addresses (256Kb), the top 0x2000
- * (8Kb) is called the IOPage and is reserved for CPU and I/O registers.  The IOPage spans 0x3E000-0x3FFFF.
- *
- * Within the PDP-11/70's 22-bit address space, of the 0x400000 possible addresses (4Mb), the top 0x20000
- * (256Kb) is mapped to the UNIBUS (not physical memory), and as before, the top 0x2000 (8Kb) of that is
- * mapped to the IOPage.
- *
- * To map 18-bit UNIBUS addresses to 22-bit physical addresses, the 11/70 uses a UNIBUS relocation map.
- * It consists of 31 double-word registers that each hold a 22-bit base address.  When UNIBUS relocation
- * is enabled, the top 5 bits of an address select one of the 31 mapping registers, and the bottom 13 bits
- * are then added to the contents of the selected mapping register.
- *
- * ES6 ALERT: By using octal constants, I'm finally dipping my toe into ES6 (aka ECMAScript 2015) waters.
- * You'll even see a few binary constants below, too.  If you're loading this raw source code into your browser,
- * then by now (2016) you're almost certainly using an ES6-aware browser.  Production sites should be using code
- * compiled by Google's Closure Compiler, which we configure to produce code that's backward-compatible with ES5
- * (for example, all binary, octal, and hex constants are converted to decimal values).
- *
- * For more details: https://github.com/google/closure-compiler/wiki/ECMAScript6
- */
-PDP11.UNIBUS = {                // 16-bit     18-bit      22-bit    Description
-    UNIMAP:     0o170200,       //                                  UNIBUS Mapping Registers (0-31) 64 words (ends at 0o170372)
-    SIPDR0:     0o172200,       //                                  Supervisor I Page Descriptor Register 0
-    SIPDR1:     0o172202,       //                                  Supervisor I Page Descriptor Register 1
-    SIPDR2:     0o172204,       //                                  Supervisor I Page Descriptor Register 2
-    SIPDR3:     0o172206,       //                                  Supervisor I Page Descriptor Register 3
-    SIPDR4:     0o172210,       //                                  Supervisor I Page Descriptor Register 4
-    SIPDR5:     0o172212,       //                                  Supervisor I Page Descriptor Register 5
-    SIPDR6:     0o172214,       //                                  Supervisor I Page Descriptor Register 6
-    SIPDR7:     0o172216,       //                                  Supervisor I Page Descriptor Register 7
-    SDPDR0:     0o172220,       //                                  Supervisor D Page Descriptor Register 0
-    SDPDR1:     0o172222,       //                                  Supervisor D Page Descriptor Register 1
-    SDPDR2:     0o172224,       //                                  Supervisor D Page Descriptor Register 2
-    SDPDR3:     0o172226,       //                                  Supervisor D Page Descriptor Register 3
-    SDPDR4:     0o172230,       //                                  Supervisor D Page Descriptor Register 4
-    SDPDR5:     0o172232,       //                                  Supervisor D Page Descriptor Register 5
-    SDPDR6:     0o172234,       //                                  Supervisor D Page Descriptor Register 6
-    SDPDR7:     0o172236,       //                                  Supervisor D Page Descriptor Register 7
-    SIPAR0:     0o172240,       //                                  Supervisor I Page Address Register 0
-    SIPAR1:     0o172242,       //                                  Supervisor I Page Address Register 1
-    SIPAR2:     0o172244,       //                                  Supervisor I Page Address Register 2
-    SIPAR3:     0o172246,       //                                  Supervisor I Page Address Register 3
-    SIPAR4:     0o172250,       //                                  Supervisor I Page Address Register 4
-    SIPAR5:     0o172252,       //                                  Supervisor I Page Address Register 5
-    SIPAR6:     0o172254,       //                                  Supervisor I Page Address Register 6
-    SIPAR7:     0o172256,       //                                  Supervisor I Page Address Register 7
-    SDPAR0:     0o172260,       //                                  Supervisor D Page Address Register 0
-    SDPAR1:     0o172262,       //                                  Supervisor D Page Address Register 1
-    SDPAR2:     0o172264,       //                                  Supervisor D Page Address Register 2
-    SDPAR3:     0o172266,       //                                  Supervisor D Page Address Register 3
-    SDPAR4:     0o172270,       //                                  Supervisor D Page Address Register 4
-    SDPAR5:     0o172272,       //                                  Supervisor D Page Address Register 5
-    SDPAR6:     0o172274,       //                                  Supervisor D Page Address Register 6
-    SDPAR7:     0o172276,       //                                  Supervisor D Page Address Register 7
-    KIPDR0:     0o172300,       //                                  Kernel I Page Descriptor Register 0
-    KIPDR1:     0o172302,       //                                  Kernel I Page Descriptor Register 1
-    KIPDR2:     0o172304,       //                                  Kernel I Page Descriptor Register 2
-    KIPDR3:     0o172306,       //                                  Kernel I Page Descriptor Register 3
-    KIPDR4:     0o172310,       //                                  Kernel I Page Descriptor Register 4
-    KIPDR5:     0o172312,       //                                  Kernel I Page Descriptor Register 5
-    KIPDR6:     0o172314,       //                                  Kernel I Page Descriptor Register 6
-    KIPDR7:     0o172316,       //                                  Kernel I Page Descriptor Register 7
-    KDPDR0:     0o172320,       //                                  Kernel D Page Descriptor Register 0
-    KDPDR1:     0o172322,       //                                  Kernel D Page Descriptor Register 1
-    KDPDR2:     0o172324,       //                                  Kernel D Page Descriptor Register 2
-    KDPDR3:     0o172326,       //                                  Kernel D Page Descriptor Register 3
-    KDPDR4:     0o172330,       //                                  Kernel D Page Descriptor Register 4
-    KDPDR5:     0o172332,       //                                  Kernel D Page Descriptor Register 5
-    KDPDR6:     0o172334,       //                                  Kernel D Page Descriptor Register 6
-    KDPDR7:     0o172336,       //                                  Kernel D Page Descriptor Register 7
-    KIPAR0:     0o172340,       //                                  Kernel I Page Address Register 0
-    KIPAR1:     0o172342,       //                                  Kernel I Page Address Register 1
-    KIPAR2:     0o172344,       //                                  Kernel I Page Address Register 2
-    KIPAR3:     0o172346,       //                                  Kernel I Page Address Register 3
-    KIPAR4:     0o172350,       //                                  Kernel I Page Address Register 4
-    KIPAR5:     0o172352,       //                                  Kernel I Page Address Register 5
-    KIPAR6:     0o172354,       //                                  Kernel I Page Address Register 6
-    KIPAR7:     0o172356,       //                                  Kernel I Page Address Register 7
-    KDPAR0:     0o172360,       //                                  Kernel D Page Address Register 0
-    KDPAR1:     0o172362,       //                                  Kernel D Page Address Register 1
-    KDPAR2:     0o172364,       //                                  Kernel D Page Address Register 2
-    KDPAR3:     0o172366,       //                                  Kernel D Page Address Register 3
-    KDPAR4:     0o172370,       //                                  Kernel D Page Address Register 4
-    KDPAR5:     0o172372,       //                                  Kernel D Page Address Register 5
-    KDPAR6:     0o172374,       //                                  Kernel D Page Address Register 6
-    KDPAR7:     0o172376,       //                                  Kernel D Page Address Register 7
-    MMR3:       0o172516,       // 772516   17772516
-    RLCS:       0o174400,       //                                  RL11 Control Status Register
-    RLBA:       0o174402,       //                                  RL11 Bus Address Register
-    RLDA:       0o174404,       //                                  RL11 Disk Address Register
-    RLMP:       0o174406,       //                                  RL11 Multi-Purpose Register
-    RLBE:       0o174410,       //                                  RL11 Bus (Address) Extension Register (RLV12 controller only)
-    DL11:       0o176500,       //                                  DL11 Additional Register Range (ends at 0o176676)
-    RXCS:       0o177170,       //                                  RX11 Command and Status Register
-    RXDB:       0o177172,       //                                  RX11 Data Buffer Register
-    RKDS:       0o177400,       //                                  RK11 Drive Status Register
-    RKER:       0o177402,       //                                  RK11 Error Register
-    RKCS:       0o177404,       //                                  RK11 Control Status Register
-    RKWC:       0o177406,       //                                  RK11 Word Count Register
-    RKBA:       0o177410,       //                                  RK11 Bus Address Register
-    RKDA:       0o177412,       //                                  RK11 Disk Address Register
-    RKUN:       0o177414,       //                                  RK11 UNUSED (just to make it clear we didn't forget something)
-    RKDB:       0o177416,       //                                  RK11 Data Buffer Register
-    LKS:        0o177546,       //                                  KW11-L Clock Status
-    PRS:        0o177550,       //                                  PC11 (and PR11) Reader Status Register
-    PRB:        0o177552,       //                                  PC11 (and PR11) Reader Buffer Register
-    PPS:        0o177554,       //                                  PC11 Punch Status Register
-    PPB:        0o177556,       //                                  PC11 Punch Buffer Register
-    RCSR:       0o177560,       //                                  DL11 Receiver Status Register
-    RBUF:       0o177562,       //                                  DL11 Receiver Data Buffer Register
-    XCSR:       0o177564,       //                                  DL11 Transmitter Status Register
-    XBUF:       0o177566,       //                                  DL11 Transmitter Data Buffer Register
-    CNSW:       0o177570,       //                                  Console (Front Panel) Switch/Display Register
-    MMR0:       0o177572,       // 777572   17777572
-    MMR1:       0o177574,       // 777574   17777574
-    MMR2:       0o177576,       // 777576   17777576
-    UIPDR0:     0o177600,       //                                  User I Page Descriptor Register 0
-    UIPDR1:     0o177602,       //                                  User I Page Descriptor Register 1
-    UIPDR2:     0o177604,       //                                  User I Page Descriptor Register 2
-    UIPDR3:     0o177606,       //                                  User I Page Descriptor Register 3
-    UIPDR4:     0o177610,       //                                  User I Page Descriptor Register 4
-    UIPDR5:     0o177612,       //                                  User I Page Descriptor Register 5
-    UIPDR6:     0o177614,       //                                  User I Page Descriptor Register 6
-    UIPDR7:     0o177616,       //                                  User I Page Descriptor Register 7
-    UDPDR0:     0o177620,       //                                  User D Page Descriptor Register 0
-    UDPDR1:     0o177622,       //                                  User D Page Descriptor Register 1
-    UDPDR2:     0o177624,       //                                  User D Page Descriptor Register 2
-    UDPDR3:     0o177626,       //                                  User D Page Descriptor Register 3
-    UDPDR4:     0o177630,       //                                  User D Page Descriptor Register 4
-    UDPDR5:     0o177632,       //                                  User D Page Descriptor Register 5
-    UDPDR6:     0o177634,       //                                  User D Page Descriptor Register 6
-    UDPDR7:     0o177636,       //                                  User D Page Descriptor Register 7
-    UIPAR0:     0o177640,       //                                  User I Page Address Register 0
-    UIPAR1:     0o177642,       //                                  User I Page Address Register 1
-    UIPAR2:     0o177644,       //                                  User I Page Address Register 2
-    UIPAR3:     0o177646,       //                                  User I Page Address Register 3
-    UIPAR4:     0o177650,       //                                  User I Page Address Register 4
-    UIPAR5:     0o177652,       //                                  User I Page Address Register 5
-    UIPAR6:     0o177654,       //                                  User I Page Address Register 6
-    UIPAR7:     0o177656,       //                                  User I Page Address Register 7
-    UDPAR0:     0o177660,       //                                  User D Page Address Register 0
-    UDPAR1:     0o177662,       //                                  User D Page Address Register 1
-    UDPAR2:     0o177664,       //                                  User D Page Address Register 2
-    UDPAR3:     0o177666,       //                                  User D Page Address Register 3
-    UDPAR4:     0o177670,       //                                  User D Page Address Register 4
-    UDPAR5:     0o177672,       //                                  User D Page Address Register 5
-    UDPAR6:     0o177674,       //                                  User D Page Address Register 6
-    UDPAR7:     0o177676,       //                                  User D Page Address Register 7
-    R0SET0:     0o177700,       //
-    R1SET0:     0o177701,       //
-    R2SET0:     0o177702,       //
-    R3SET0:     0o177703,       //
-    R4SET0:     0o177704,       //
-    R5SET0:     0o177705,       //
-    R6KERNEL:   0o177706,       //
-    R7KERNEL:   0o177707,       //
-    R0SET1:     0o177710,       //
-    R1SET1:     0o177711,       //
-    R2SET1:     0o177712,       //
-    R3SET1:     0o177713,       //
-    R4SET1:     0o177714,       //
-    R5SET1:     0o177715,       //
-    R6SUPER:    0o177716,       //
-    R6USER:     0o177717,       //
-    /*
-     * This next group of registers is largely ignored; all accesses are routed to regsControl[],
-     * and therefore are managed as a block of 8 "CTRL" registers.
-     */
-    CTRL:       0o177740,
-    LAERR:      0o177740,       //                                  Low Address Error                           (11/70 only)
-    HAERR:      0o177742,       //                                  High Address Error                          (11/70 only)
-    MEMERR:     0o177744,       //                                  Memory System Error                         (11/70 only)
-    CACHEC:     0o177746,       //                                  Cache Control                               (11/70 only)
-    MAINT:      0o177750,       //                                  Maintenance                                 (11/70 only)
-    HITMISS:    0o177752,       //                                  Hit/Miss                                    (11/70 only)
-    UNDEF1:     0o177754,       //
-    UNDEF2:     0o177756,       //
-    LSIZE:      0o177760,       //                                  Lower Size Register (last 64-byte block #)  (11/70 only)
-    HSIZE:      0o177762,       //                                  Upper Size Register (always zero)           (11/70 only)
-    SYSID:      0o177764,       //                                  System ID Register                          (11/70 only)
-    CPUERR:     0o177766,       //                                  CPU error                                   (11/70 only)
-    MB:         0o177770,       //                                  Microprogram break                          (11/70 only)
-    PIR:        0o177772,       //                                  Program Interrupt Request
-    SL:         0o177774,       //                                  Stack Limit Register
-    PSW:        0o177776        // 777776   17777776    0x3FFFFE    Processor Status Word
-};
-
-PDP11.DL11 = {                  // Serial Line Interface (program compatible with the KL11 for control of console teleprinters)
-    PRI:        4,
-    RVEC:       0o060,
-    XVEC:       0o064,
-    RCSR: {                     // 177560: DL11 Receiver Status Register
-        RE:     0x0001,         // Reader Enable (W/O)
-        DTR:    0x0002,         // Data Terminal Ready (R/W)
-        RTS:    0x0004,         // Request To Send (R/W)
-        STD:    0x0008,         // Secondary Transmitted Data (R/W)
-        DIE:    0x0020,         // Dataset Interrupt Enable (R/W)
-        RIE:    0x0040,         // Receiver Interrupt Enable (R/W)
-        RD:     0x0080,         // Receiver Done (R/O)
-        SRD:    0x0400,         // Secondary Received Data (R/O)
-        RA:     0x0800,         // Receiver Active (R/O)
-        CD:     0x1000,         // Carrier Detect (R/O)
-        CTS:    0x2000,         // Clear To Send (R/O)
-        RI:     0x4000,         // Ring Indicator (R/O)
-        DSC:    0x8000,         // Dataset Status Change (R/O)
-        RMASK:  0xFFFE,         // bits readable (TODO: All I know for sure is that bit 0 is NOT readable; see readRCSR())
-        WMASK:  0x006F,         // bits writable
-        RS232:  0x0006,         // bits affecting RS-232 status updates
-        BAUD:   9600
-    },
-    RBUF: {                     // 177562: DL11 Receiver Data Buffer Register
-        DATA:   0x00ff,         // Received Data (R/O)
-        PARITY: 0x1000,         // Received Data Parity (R/O)
-        FE:     0x2000,         // Framing Error (R/O)
-        OE:     0x4000,         // Overrun Error (R/O)
-        ERROR:  0x8000          // Error (R/O)
-    },
-    XCSR: {                     // 177564: DL11 Transmitter Status Register
-        BREAK:  0x0001,         // BREAK (R/W)
-        MAINT:  0x0004,         // Maintenance (R/W)
-        TIE:    0x0040,         // Transmitter Interrupt Enable (R/W)
-        READY:  0x0080,         // Transmitter Ready (R/O)
-        RMASK:  0x00C5,
-        WMASK:  0x0045,
-        BAUD:   9600
-    },
-    XBUF: {                     // 177566: DL11 Transmitter Data Buffer Register
-        DATA:   0x00FF          // Transmitted Data (W/O) (TODO: Determine why pdp11.js effectively defined this as 0x7F)
-    }
-};
-
-PDP11.KW11 = {                  // KW11-L Line Time Clock (60Hz; well, OK, or 50Hz, if you're in the UK, I suppose...)
-    PRI:        6,
-    VEC:        0o100,
-    DELAY:      0,
-    LKS: {                      // 177546: KW11-L Clock Status
-        IE:     0x0040,         // Interrupt Enable
-        MON:    0x0080,         // Monitor
-        MASK:   0x00C0          // these are the only bits that can read or written
-    }
-};
-
-PDP11.PC11 = {                  // High Speed Reader & Punch (PR11 is a Reader-only unit)
-    PRI:        4,              // NOTE: reader has precedence over punch
-    RVEC:       0o070,          // reader vector
-    PVEC:       0o074,          // punch vector
-    PRS: {                      // 177550: PC11 (and PR11) Reader Status Register
-        RE:     0x0001,         // (000001) Reader Enable (W/O)
-        IE:     0x0040,         // (000100) Reader Interrupt Enable (allows the DONE and ERROR bits to trigger an interrupt)
-        DONE:   0x0080,         // (000200) Done (R/O)
-        BUSY:   0x0800,         // (004000) Busy (R/O)
-        ERROR:  0x8000,         // (100000) Error (R/O)
-        CLEAR:  0x08C0,         // (004300) bits cleared on INIT
-        RMASK:  0xFFFE,         // (177776) bits readable (TODO: All I know for sure is that bit 0 is NOT readable; see readPRS())
-        WMASK:  0x0041,         // (000101) bits writable
-        BAUD:   3600
-    },
-    PRB: {                      // 177552: PC11 (and PR11) Reader Buffer Register
-        MASK:   0x00FF          // Data
-    },
-    PPS: {                      // 177554: PC11 Punch Status Register
-        IE:     0x0040,         // Interrupt Enable
-        RDY:    0x0080,         // Ready
-        ERROR:  0x8000,         // Error (eg, no tape in punch, or punch has no power)
-        WMASK:  0x0040,         // bits writable
-        BAUD:   600
-    },
-    PPB: {                      // 177556: PC11 Punch Buffer Register
-        MASK:   0x00FF          // Data
-    }
-};
-
-PDP11.RK11 = {                  // RK11 Disk Controller
-    PRI:        5,
-    VEC:        0o220,
-    DRIVES:     8,              // maximum of 8 drives
-    RKDS: {                     // 177400: Drive Status Register
-        SC:     0x000F,         // (000017) Sector Counter
-        SCESA:  0x0010,         // (000020) Sector Counter Equals Sector Address
-        WPS:    0x0020,         // (000040) Write Protected Status (set if write-protected)
-        RRDY:   0x0040,         // (000100) Read/Write/Seek Ready
-        DRDY:   0x0080,         // (000200) Drive Ready
-        SOK:    0x0100,         // (000400) Sector Counter OK
-        SIN:    0x0200,         // (001000) Seek Incomplete
-        DRU:    0x0400,         // (002000) Drive Unsafe
-        RK05:   0x0800,         // (004000) RK05 is the selected disk drive (always set)
-        DPL:    0x1000,         // (010000) Drive Power Low
-        ID:     0xE000,         // (160000) Drive ID (logical drive number of an interrupting drive)
-        SHIFT: {
-            ID:     13
-        }
-    },
-    RKER: {                     // 177402: Error Register
-        WCE:    0x0001,         // Write Check Error
-        CSE:    0x0002,         // Checksum Error
-        SE:     0x0003,         // Soft Error bits (cleared at the start of a new function)
-        UNUSED: 0x001C,         // unused (returns zero)
-        NXS:    0x0020,         // Non-Existent Sector
-        NXC:    0x0040,         // Non-Existent Cylinder
-        NXD:    0x0080,         // Non-Existent Disk
-        TE:     0x0100,         // Timing Error
-        DLT:    0x0200,         // Date Late
-        NXM:    0x0400,         // Non-Existent Memory
-        PGE:    0x0800,         // Programming Error
-        SKE:    0x1000,         // Seek Error
-        WLO:    0x2000,         // Write Lock-Out Violation
-        OVR:    0x4000,         // Overrun
-        DRE:    0x8000,         // Drive Error
-        HE:     0x7FE0          // Hard Error bits (cleared only by Bus RESET or RK11 CRESET function)
-    },
-    RKCS: {                     // 177404: Control Status Register
-        GO:     0x0001,         // (000001) Go (W/O)
-        FUNC:   0x000E,         // (000016) Function Code (F2,F1,F0) (R/W)
-        MEX:    0x0030,         // (000060) Memory Extension (R/W)
-        IE:     0x0040,         // (000100) Interrupt Enable (R/W)
-        CRDY:   0x0080,         // (000200) Controller Ready (R/O)
-        SSE:    0x0100,         // (000400) Stop on Soft Error (R/W)
-        EXB:    0x0200,         // (001000) Extra Bit (R/W)
-        FMT:    0x0400,         // (002000) Format (R/W)
-        IBA:    0x0800,         // (004000) Inhibit RKBA Increment (R/W)
-        SCP:    0x2000,         // (020000) Search Complete (R/O)
-        HE:     0x4000,         // (040000) Hard Error (R/O)
-        ERR:    0x8000,         // (100000) Composite Error (R/O) (set when any RKER bit is set)
-        UNUSED: 0x1200,         // (011000) unused
-        RMASK:  0xEFFE,         // (167776) bits readable
-        WMASK:  0x0F7F,         // (007577) bits writable
-        SHIFT: {
-            FUNC:   1,
-            MEX:    4
-        }
-    },
-    RKDA: {                     // 177412: Disk Address Register
-        SA:     0x000F,         // (000017) Sector Address
-        HS:     0x0010,         // (000020) Head Select (aka SUR: clear for upper disk head, set for lower)
-        CA:     0x1FE0,         // (017740) Cylinder Address (aka CYL ADDR)
-        DS:     0xE000,         // (160000) Drive Select (aka DR SEL)
-        SHIFT: {
-            HS:     4,
-            CA:     5,
-            DS:     13
-        }
-    },
-    FUNC: {
-        CRESET: 0b0000,         // (00) Controller Reset
-        WRITE:  0b0010,         // (02) Write
-        READ:   0b0100,         // (04) Read
-        WCHK:   0b0110,         // (06) Write Check
-        SEEK:   0b1000,         // (10) Seek
-        RCHK:   0b1010,         // (12) Read Check
-        DRESET: 0b1100,         // (14) Drive Reset
-        WLOCK:  0b1110          // (16) Write Lock
-    }
-};
-
-PDP11.RL11 = {                  // RL11 Disk Controller
-    PRI:        5,
-    VEC:        0o160,
-    DRIVES:     4,              // maximum of 4 drives
-    PREFIX:     "DY",
-    RLCS: {                     // 174400: Control Status Register
-        DRDY:   0x0001,         // (000001) Drive Ready (R/O)
-        FUNC:   0x000E,         // (000016) Function Code (F2,F1,F0) (R/W)
-        BAE:    0x0030,         // (000060) Bus Address Extension bits (BA17,BA16) (R/W)
-        IE:     0x0040,         // (000100) Interrupt Enable (R/W)
-        CRDY:   0x0080,         // (000200) Controller Ready (R/W)
-        DS:     0x0300,         // (001400) Drive Select (DS1,DS0) (R/W)
-        ERRC:   0x3C00,         // (036000) Error Code (R/O)
-        DE:     0x4000,         // (040000) Drive Error (R/O)
-        ERR:    0x8000,         // (100000) Composite Error (R/O)
-        CLEAR:  0x3F7E,         // (037576) bits cleared on INIT (bits 1-6 and 8-13 are cleared)
-        SET:    0x0080,         // (000200) bits set on INIT (bit 7 is set)
-        RMASK:  0xFFFF,         // (177777) no write-only bits
-        WMASK:  0x03FE,         // (001776) bits writable
-        SHIFT: {
-            FUNC:   1,
-            BAE:    4,
-            DS:     8
-        }
-    },
-    RLBA: {                     // 174402: Bus Address Register
-        WMASK:  0xFFFE          // bit 0 is effectively not writable (always zero)
-    },
-    /*
-     * This register has 3 formats: one for Seek, another for Read/Write, and a third for Get Status
-     */
-    RLDA: {                     // 174404: Disk Address Register
-        SEEK_CMD:   0x0001,     // Seek: bit 0 must be set, bits 1 and 3 must be clear
-        SEEK_DIR:   0x0004,     // Direction (clear to move heads away from spindle (lower cylinder), set to move to higher cylinder)
-        SEEK_HS:    0x0010,     // Head Select (clear to select upper head, set to select lower head)
-        SEEK_CAD:   0xFF80,     // Cylinder Address Difference
-        RW_SA:      0x003F,     // Sector Address
-        RW_HS:      0x0040,     // Head Select
-        RW_CA:      0xFF80,     // Cylinder Address (RL01 has 256 cylinders, RL02 has 512)
-        GS_CMD:     0x0003,     // Get Status: bit 0 must be set, bit 1 set, and bits 2 and 4-7 clear (bits 8-15 unused)
-        GS_RST:     0x0008,     // Reset (when set, clears error register before sending status word to controller)
-        SHIFT: {
-            RW_HS:  6,
-            RW_CA:  7
-        }
-    },
-    /*
-     * This register has 3 formats: one for Read Header, another for Read/Write, and a third for Get Status
-     */
-    RLMP: {                     // 177406: Multi-Purpose Register
-        GS_ST: {                // Major State Code (of the drive)
-            LOADC:  0x0,        // Load Cartridge
-            SPINUP: 0x1,        // Spin-Up
-            BRUSHC: 0x2,        // Brush Cycle
-            LOADH:  0x3,        // Load Heads
-            SEEK:   0x4,        // Seek
-            LOCKON: 0x5,        // Lock On
-            UNLOADH:0x6,        // Unload Heads
-            SPINDN: 0x7         // Spin-Down
-        },
-        GS_BH:      0x0008,     // Brushes Home
-        GS_HO:      0x0010,     // Heads Out
-        GS_CO:      0x0020,     // Cover Open (or dust cover is not in place)
-        GS_HS:      0x0040,     // Head Selected (0 for upper head, 1 for lower head)
-        GS_DT:      0x0080,     // Drive Type (0 for RL01, 1 for RL02)
-        GS_DSE:     0x0100,     // Drive Select Error
-        GS_VC:      0x0200,     // Volume Check (Set during transition from a head load state to a head-on-track state; cleared by execution of a Get Status command with Bit 3 asserted)
-        GS_WGE:     0x0400,     // Write Gate Error
-        GS_SPE:     0x0800,     // Spin Error
-        GS_SKTO:    0x1000,     // Seek Time-Out
-        GS_WL:      0x2000,     // Write Lock
-        GS_CHE:     0x4000,     // Current Head Error
-        GS_WDE:     0x8000      // Write Data Error
-    },
-    RLBE: {                     // 174410: Bus (Address) Extension Register
-        MASK:   0x003F          // bits 5-0 correspond to bus address bits 21-16
-    },
-    ERRC: {                     // NOTE: These error codes are pre-shifted to read/write directly from/to RLCS.ERRC
-        OPI:    0x0400,         // Operation Incomplete
-        DCRC:   0x0800,         // Read Data CRC
-        WCE:    0x0800,         // Write Check Error
-        HCRC:   0x0C00,         // Header CRC
-        DLT:    0x1000,         // Data Late
-        HNF:    0x1400,         // Header Not Found
-        NXM:    0x2000,         // Non-Existent Memory
-        MPE:    0x2400          // Memory Parity Error (RLV12 only)
-    },
-    FUNC: {                     // NOTE: These function codes are pre-shifted to read/write directly from/to RLCS.FUNC
-        NOP:    0b0000,         // (00) No-Op
-        WCHK:   0b0010,         // (02) Write Check
-        STATUS: 0b0100,         // (04) Get Status
-        SEEK:   0b0110,         // (06) Seek
-        RHDR:   0b1000,         // (10) Read Header
-        WDATA:  0b1010,         // (12) Write Data
-        RDATA:  0b1100,         // (14) Read Data
-        RDNC:   0b1110          // (16) Read Data without Header Check
-    }
-};
-
-PDP11.RX11 = {                  // RX11 Disk Controller
-    PRI:        5,
-    VEC:        0o264,
-    DRIVES:     2,              // maximum of 2 drives
-    PREFIX:     "DX",
-    RXCS: {                     // 177170: Command and Status Register
-        GO:     0x0001,         // (000001) Go (W/O)
-        FUNC:   0x000E,         // (000016) Function Code (F2,F1,F0) (W/O)
-        UNIT:   0x0010,         // (000020) Unit Select (W/O)
-        DONE:   0x0020,         // (000040) Done (R/O)
-        IE:     0x0040,         // (000100) Interrupt Enable (R/W, cleared on INIT)
-        TR:     0x0080,         // (000200) Transfer Request (R/O)
-        INIT:   0x4000,         // (040000) RX11 Initialize (W/O)
-        ERR:    0x8000,         // (100000) Error (R/O, cleared on INIT or command)
-        UNUSED: 0x3F00,         // (037400) unused
-        RMASK:  0x80E0,         // (100340) bits readable
-        WMASK:  0x405F          // (040137) bits writable
-    },
-    RXDB: {                     // 177172: Data Buffer Register
-    },
-    RXTA: {
-        MASK:   0x007F
-    },
-    RXSA: {
-        MASK:   0x001F
-    },
-    RXES: {
-        /*
-         * The DRDY bit is only valid when retrieved via a Read Status function or at completion of Initialize when it indicates
-         * status of drive O.  It is asserted if the unit currently selected exists, is properly supplied with power, has a diskette
-         * installed correctly, has its door closed, and has a diskette up to speed.
-         *
-         * If the Error bit was set in the RXCS but Error bits are not set in the RXES, then specific error conditions can be accessed via
-         * a Read Error Register function.
-         */
-        CRC:    0x0001,         // CRC error (RXES is moved to the RXDB, and Error and Done are asserted)
-        PARITY: 0x0002,         // parity error (RXES is moved to the RXDB, and Error and Done are asserted)
-        ID:     0x0004,         // Initialize Done (following a programmable or UNIBUS initialization, or a power failure)
-        DEL:    0x0040,         // Deleted Data Detected
-        DRDY:   0x0080          // Drive Ready
-    },
-    FUNC: {                     // NOTE: These function codes are pre-shifted to read/write directly from/to RXCS.FUNC
-        FILL:   0b0000,         // Fill Buffer
-        EMPTY:  0b0010,         // Empty Buffer
-        WRITE:  0b0100,         // Write Sector
-        READ:   0b0110,         // Read Sector
-        UNUSED: 0b1000,         // UNUSED
-        RDSTAT: 0b1010,         // Read Status
-        WRDEL:  0b1100,         // Write Deleted Data Sector
-        RDERR:  0b1110          // Read Error Register
-    },
-    ERROR: {
-        HOME0:      0o0010,     // Drive 0 failed to see home on Initialize
-        HOME1:      0o0020,     // Drive 1 failed to see home on Initialize
-        BAD_HOME:   0o0030,     // Found home when stepping out 10 tracks for INIT
-        NO_TRACK:   0o0040,     // Tried to access a track greater than 77
-        FOUND_HOME: 0o0050,     // Home was found before desired track was reached
-        SELF_DIAG:  0o0060,     // Self-diagnostic error
-        NO_SECTOR:  0o0070,     // Desired sector could not be found after looking at 52 headers (2 revolutions)
-        NO_SEP:     0o0110,     // More than 40us and no SEP clock seen
-        NO_PREAM:   0o0120,     // A preamble could not be found
-        NO_IOMARK:  0o0130,     // Preamble found but no I/O mark found within allowable time span
-        CRC_HEADER: 0o0140,     // CRC error on what we thought was a header
-        BAD_TRACK:  0o0150,     // The header track address of a good header does not compare with the desired track
-        NO_ID:      0o0160,     // Too many tries for an IDAM (identifies header)
-        NO_DATA:    0o0170,     // Data AM not found in allotted time
-        CRC_DATA:   0o0200,     // CRC error on reading the sector from the disk (No code appears in the ERREG).
-        BAD_PARITY: 0o0210      // All parity errors
-    }
-};
-
-PDP11.VECTORS = {
-    0o060:  "DL11R",
-    0o064:  "DL11X",
-    0o070:  "PC11R",
-    0o074:  "PC11X",
-    0o100:  "KW11",
-    0o160:  "RL11",
-    0o220:  "RK11",
-    0o264:  "RX11"
-};
-
-PDP11.RX11.RX01 = [
-    "DX",
-    77,  1, 26, 128,            // disk geometry (CHSN: cylinders, heads, sectors/track, and bytes/sector)
-    1,   0,  0, 128,            // boot code location (cylinder, head, sector index (NOT sector number), and number of bytes)
-    0                           // default drive status
-];
-
-PDP11.RK11.RK05 = [
-    "RK",
-    203, 2, 12, 512,            // disk geometry (CHSN: cylinders, heads, sectors/track, and bytes/sector)
-    0,   0,  0, 512,            // boot code location (cylinder, head, sector index (NOT sector number), and number of bytes)
-    PDP11.RK11.RKDS.RK05 | PDP11.RK11.RKDS.SOK | PDP11.RK11.RKDS.RRDY
-];
-
-PDP11.RL11.RL02K = [
-    "RL",
-    512, 2, 40, 256,            // disk geometry (CHSN: cylinders, heads, sectors/track, and bytes/sector)
-    0,   0,  0, 256,            // boot code location (cylinder, head, sector index (NOT sector number), and number of bytes)
-    PDP11.RL11.RLMP.GS_ST.LOCKON | PDP11.RL11.RLMP.GS_BH | PDP11.RL11.RLMP.GS_HO
-];
-
-PDP11.ACCESS.READ_WORD   = PDP11.ACCESS.WORD | PDP11.ACCESS.READ;       // formerly READ_MODE (2)
-PDP11.ACCESS.READ_BYTE   = PDP11.ACCESS.BYTE | PDP11.ACCESS.READ;       // formerly READ_MODE (2) | BYTE_MODE (1)
-PDP11.ACCESS.WRITE_WORD  = PDP11.ACCESS.WORD | PDP11.ACCESS.WRITE;      // formerly WRITE_MODE (4)
-PDP11.ACCESS.WRITE_BYTE  = PDP11.ACCESS.BYTE | PDP11.ACCESS.WRITE;      // formerly WRITE_MODE (4) | BYTE_MODE (1)
-PDP11.ACCESS.UPDATE_WORD = PDP11.ACCESS.WORD | PDP11.ACCESS.UPDATE;     // formerly MODIFY_WORD (2 | 4)
-PDP11.ACCESS.UPDATE_BYTE = PDP11.ACCESS.BYTE | PDP11.ACCESS.UPDATE;     // formerly MODIFY_BYTE (1 | 2 | 4)
-
-/*
- * PSW arithmetic flags are NOT stored directly into the PSW register; they are maintained across separate flag registers.
- */
-PDP11.PSW.FLAGS         = (PDP11.PSW.NF | PDP11.PSW.ZF | PDP11.PSW.VF | PDP11.PSW.CF);
-
-PDP11.IOPAGE_16BIT      = 0x00E000;     // 000160000                    // eg, PDP-11/20
-PDP11.IOPAGE_18BIT      = 0x03E000;     // 000760000                    // eg, PDP-11/45
-PDP11.IOPAGE_22BIT      = 0x3FE000;     // 017760000                    // eg, PDP-11/70
-PDP11.IOPAGE_LENGTH     = 0x002000;                                     // ie, 8Kb
-PDP11.IOPAGE_MASK       = PDP11.IOPAGE_LENGTH - 1;
-
-PDP11.MASK_18BIT        = 0x03FFFF;     // 000777777
-
-PDP11.UNIBUS_22BIT      = 0x3C0000;     // 017000000
-PDP11.MASK_22BIT        = 0x3FFFFF;     // 017777777
-
-Defs.CLASSES["PDP11"] = PDP11;
-
-/**
- * @copyright https://www.pcjs.org/machines/dec/pdp11/libv2/pdp11dbg.js (C) 2012-2020 Jeff Parsons
- */
-
-/**
- * Debugger for PDP-11 CPUs
- *
- * @class {PDP11Dbg}
- * @unrestricted
- */
-class PDP11Dbg extends Debugger {
-    /**
-     * PDP11Dbg(idMachine, idDevice, config)
-     *
-     * @this {PDP11Dbg}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {Config} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-        this.opTable = PDP11Dbg.OPTABLE;
-        this.aOpReserved = [];
-        if (this.cpu.model < PDP11.MODEL_1140) {
-            this.aOpReserved = this.aOpReserved.concat(PDP11Dbg.OP1140);
-        }
-        if (this.cpu.model < PDP11.MODEL_1145) {
-            this.aOpReserved = this.aOpReserved.concat(PDP11Dbg.OP1145);
-        }
-        this.maxOpcodeLength = 6;
-    }
-
-    /**
-     * unassemble(address, opcodes, annotation)
-     *
-     * Overrides Debugger's default unassemble() function with one that understands PDP-11 instructions.
-     *
-     * @this {PDP11Dbg}
-     * @param {Address} address (advanced by the number of processed opcodes)
-     * @param {Array.<number>} opcodes (each processed opcode is shifted out, reducing the size of the array)
-     * @param {string} [annotation] (optional string to append to the final result)
-     * @returns {string}
-     */
-    unassemble(address, opcodes, annotation)
-    {
-        let sAddr = this.dumpAddress(address), sWords = "";
-        let sLabel = this.getSymbolName(address, Debugger.SYMBOL.LABEL);
-        let sComment = this.getSymbolName(address, Debugger.SYMBOL.COMMENT);
-
-        /**
-         * toBaseWord(word)
-         *
-         * @param {number} word
-         * @returns {string}
-         */
-        let toBaseWord = (word) => this.toBase(word, 0, 16, "");
-
-        /**
-         * getNextWord()
-         *
-         * @returns {number}
-         */
-        let getNextWord = () => {
-            let word = opcodes.shift() | (opcodes.shift() << 8);
-            sWords += toBaseWord(word) + ' ';
-            this.addAddress(address, 2);
-            return word;
-        };
-
-        /**
-         * getOperand(opcode, type)
-         *
-         * If getOperand() returns an Array rather than a string, then the first element is the original
-         * operand, and the second element is a comment containing additional information (eg, the target)
-         * of the operand.
-         *
-         * @param {number} opcode
-         * @param {number} type
-         * @returns {string|Array.<string>}
-         */
-        let getOperand = (opcode, type) => {
-            /*
-             * Take care of OP_OTHER opcodes first; then all we'll have to worry about
-             * next are OP_SRC or OP_DST opcodes.
-             */
-            let sOperand = "", disp, addr;
-            let typeOther = type & PDP11Dbg.OP_OTHER;
-            if (typeOther == PDP11Dbg.OP_BRANCH) {
-                disp = ((opcode & 0xff) << 24) >> 23;
-                addr = (address.off + disp) & 0xffff;
-                sOperand = toBaseWord(addr);
-            }
-            else if (typeOther == PDP11Dbg.OP_DSTOFF) {
-                disp = (opcode & 0x3f) << 1;
-                addr = (address.off - disp) & 0xffff;
-                sOperand = toBaseWord(addr);
-            }
-            else if (typeOther == PDP11Dbg.OP_DSTNUM3) {
-                disp = (opcode & 0x07);
-                sOperand = this.toBase(disp, 0, 3, "");
-            }
-            else if (typeOther == PDP11Dbg.OP_DSTNUM6) {
-                disp = (opcode & 0x3f);
-                sOperand = this.toBase(disp, 0, 6, "");
-            }
-            else if (typeOther == PDP11Dbg.OP_DSTNUM8) {
-                disp = (opcode & 0xff);
-                sOperand = this.toBase(disp, 0, 8, "");
-            }
-            else {
-                /*
-                 * Isolate all OP_SRC or OP_DST bits from opcode in the mode variable.
-                 */
-                let mode = opcode & type;
-
-                /*
-                 * Convert OP_SRC bits into OP_DST bits, since they use the same format.
-                 */
-                if (type & PDP11Dbg.OP_SRC) {
-                    mode >>= 6;
-                    type >>= 6;
-                }
-                if (type & PDP11Dbg.OP_DST) {
-                    let wIndex;
-                    let sTarget = null;
-                    let reg = mode & PDP11Dbg.OP_DSTREG;
-                    /*
-                     * Note that opcodes that specify only REG bits in the type mask (ie, no MOD bits)
-                     * will automatically default to OPMODE_REG below.
-                     */
-                    switch((mode & PDP11Dbg.OP_DSTMODE)) {
-
-                    case PDP11.OPMODE.REG:                  // 0x0: REGISTER
-                        sOperand = getRegName(reg);
-                        break;
-
-                    case PDP11.OPMODE.REGD:                 // 0x1: REGISTER DEFERRED
-                        sOperand = '@' + getRegName(reg);
-                        sTarget = getTarget(this.cpu.regsGen[reg]);
-                        break;
-
-                    case PDP11.OPMODE.POSTINC:              // 0x2: POST-INCREMENT
-                        if (reg < 7) {
-                            sOperand = '(' + getRegName(reg) + ")+";
-                        } else {
-                            /*
-                             * When using R7 (aka PC), POST-INCREMENT is known as IMMEDIATE
-                             */
-                            wIndex = getNextWord();
-                            sOperand = '#' + toBaseWord(wIndex);
-                        }
-                        break;
-
-                    case PDP11.OPMODE.POSTINCD:             // 0x3: POST-INCREMENT DEFERRED
-                        if (reg < 7) {
-                            sOperand = "@(" + getRegName(reg) + ")+";
-                        } else {
-                            /*
-                             * When using R7 (aka PC), POST-INCREMENT DEFERRED is known as ABSOLUTE
-                             */
-                            wIndex = getNextWord();
-                            sOperand = "@#" + toBaseWord(wIndex);
-                            sTarget = getTarget(wIndex);
-                        }
-                        break;
-
-                    case PDP11.OPMODE.PREDEC:               // 0x4: PRE-DECREMENT
-                        sOperand = "-(" + getRegName(reg) + ")";
-                        break;
-
-                    case PDP11.OPMODE.PREDECD:              // 0x5: PRE-DECREMENT DEFERRED
-                        sOperand = "@-(" + getRegName(reg) + ")";
-                        break;
-
-                    case PDP11.OPMODE.INDEX:                // 0x6: INDEX
-                        wIndex = getNextWord();
-                        sOperand = toBaseWord(wIndex) + '(' + getRegName(reg) + ')';
-                        if (reg == 7) {
-                            /*
-                             * When using R7 (aka PC), INDEX is known as RELATIVE.  However, instead of displaying
-                             * such an instruction like this:
-                             *
-                             *  016156: 010167 001300          MOV   R1,1300(PC)            ; @017462
-                             *
-                             * with the effective address display to the far right, let's display it like this instead:
-                             *
-                             *  016156: 010167 001300          MOV   R1,017462
-                             *
-                             * because you can still clearly see PC-relative offset (eg, 001300) as part of the disassembly.
-                             *
-                             *      sOperand = [sOperand, toBaseWord((wIndex + address.off) & 0xffff)];
-                             */
-                            sOperand = toBaseWord(wIndex = (wIndex + address.off) & 0xffff);
-                            sTarget = getTarget(wIndex);
-                        }
-                        break;
-
-                    case PDP11.OPMODE.INDEXD:               // 0x7: INDEX DEFERRED
-                        wIndex = getNextWord();
-                        sOperand = '@' + toBaseWord(wIndex) + '(' + getRegName(reg) + ')';
-                        if (reg == 7) {
-                            /*
-                             * When using R7 (aka PC), INDEX DEFERRED is known as RELATIVE DEFERRED.  And for the same
-                             * reasons articulated above, we now display the effective address inline.
-                             *
-                             *      sOperand = [sOperand, toBaseWord((wIndex + address.off) & 0xffff)];
-                             */
-                            sOperand = '@' + toBaseWord(wIndex = (wIndex + address.off) & 0xffff);
-                            sTarget = getTarget(this.cpu.readWordSafe(wIndex));
-                        }
-                        break;
-
-                    default:
-
-                        break;
-                    }
-
-                    if (sTarget) sOperand = [sOperand, sTarget];
-                }
-                else {
-
-                }
-            }
-            return sOperand;
-        };
-
-        /**
-         * getRegName(iReg)
-         *
-         * @param {number} iReg (normally 0-7)
-         * @returns {string}
-         */
-        let getRegName = (iReg) => PDP11Dbg.REGNAMES[iReg] || "?";
-
-        /**
-         * getTarget(addr)
-         *
-         * @param {number} addr
-         * @returns {string|null}
-         */
-        let getTarget = (addr) => {
-            let a = this.cpu.getAddrInfo(addr);
-            let addrPhysical = a[0];
-            // if (addrPhysical >= this.cpu.addrIOPage && addrPhysical < this.bus.addrIOPage) {
-            //     addrPhysical = (addrPhysical - this.cpu.addrIOPage) + this.bus.addrIOPage;
-            // }
-            return null; // TODO: this.bus.getAddrInfo(addrPhysical);
-        };
-
-        let opcode = getNextWord();
-        let opDesc, opNames = PDP11Dbg.OPNAMES;
-
-        for (let mask in this.opTable) {
-            let opMasks = this.opTable[mask];
-            opDesc = opMasks[opcode & mask];
-            if (opDesc) break;
-        }
-
-        if (!opDesc) opDesc = PDP11Dbg.OPNONE;
-
-        let opNum = opDesc[0];
-        if (this.aOpReserved.indexOf(opNum) >= 0) {
-            opDesc = PDP11Dbg.OPNONE;
-            opNum = opDesc[0];
-        }
-
-        let sOpcode = opNames[opNum];
-        let sOperands = "", sTarget = "";
-        let cOperands = opDesc.length - 1;
-        if (!opNum && !cOperands) sOperands = toBaseWord(opcode);
-
-        for (let iOperand = 1; iOperand <= cOperands; iOperand++) {
-
-            let type = opDesc[iOperand];
-            if (type == undefined) continue;
-
-            let sOperand = getOperand(opcode, type);
-
-            if (!sOperand || !sOperand.length) {
-                sOperands = "INVALID";
-                break;
-            }
-
-            /*
-             * If getOperand() returns an Array rather than a string, then the first element is the original
-             * operand, and the second element contains additional information (eg, the target) of the operand.
-             */
-            if (typeof sOperand != "string") {
-                sTarget = sOperand[1];
-                sOperand = sOperand[0];
-            }
-
-            if (sOperands.length > 0) sOperands += ',';
-            sOperands += (sOperand || "???");
-        }
-
-        let result = this.sprintf("%s %-21s %-7s %s", sAddr, sWords, sOpcode, sOperands);
-        if (!annotation) {
-            if (sComment) annotation = sComment;
-        } else {
-            if (sComment) annotation += " " + sComment;
-        }
-        if (annotation) result = this.sprintf("%-32s; %s", result, annotation);
-        if (sLabel) result = sLabel + ":\n" + result;
-        return result + "\n";
-    }
-}
-
-/*
- * CPU opcode IDs
- *
- * Not listed: BLO (same as BCS) and BHIS (same as BCC).
- */
-PDP11Dbg.OPS = {
-    NONE:   0,      ADC:    1,      ADCB:   2,      ADD:    3,      ASL:    4,      ASLB:   5,      ASR:    6,      ASRB:   7,
-    BCC:    8,      BCS:    9,      BEQ:    10,     BGE:    11,     BGT:    12,     BHI:    13,     BIC:    14,     BICB:   15,
-    BIS:    16,     BISB:   17,     BIT:    18,     BITB:   19,     BLE:    20,     BLOS:   21,     BLT:    22,     BMI:    23,
-    BNE:    24,     BPL:    25,     BPT:    26,     BR:     27,     BVC:    28,     BVS:    29,     CCC:    30,     CLC:    31,
-    CLCN:   32,     CLCV:   33,     CLCVN:  34,     CLCVZ:  35,     CLCZ:   36,     CLCZN:  37,     CLN:    38,     CLR:    39,
-    CLRB:   40,     CLV:    41,     CLVN:   42,     CLVZ:   43,     CLVZN:  44,     CLZ:    45,     CLZN:   46,     CMP:    47,
-    CMPB:   48,     COM:    49,     COMB:   50,     DEC:    51,     DECB:   52,     INC:    53,     INCB:   54,     HALT:   55,
-    JMP:    56,     JSR:    57,     MARK:   58,     MFPD:   59,     MFPI:   60,     MFPS:   61,     MOV:    62,     MOVB:   63,
-    MTPD:   64,     MTPI:   65,     MTPS:   66,     NEG:    67,     NEGB:   68,     NOP:    69,     RESET:  70,     ROL:    71,
-    ROLB:   72,     ROR:    73,     RORB:   74,     RTI:    75,     RTS:    76,     SBC:    77,     SBCB:   78,     SCC:    79,
-    SEC:    80,     SECN:   81,     SECV:   82,     SECVN:  83,     SECVZ:  84,     SECZ:   85,     SECZN:  86,     SEN:    87,
-    SEV:    88,     SEVN:   89,     SEVZ:   90,     SEVZN:  91,     SEZ:    92,     SEZN:   93,     SUB:    94,     SWAB:   95,
-    SXT:    96,     TST:    97,     TSTB:   98,     WAIT:   99,     MUL:    100,    DIV:    101,    ASH:    102,    ASHC:   103,
-    XOR:    104,    SOB:    105,    EMT:    106,    TRAP:   107,    SPL:    108,    IOT:    109,    RTT:    110,    MFPT:   111
-};
-/*
- * CPU opcode names, indexed by CPU opcode ordinal (above)
- */
-PDP11Dbg.OPNAMES = [
-    ".WORD",        "ADC",          "ADCB",         "ADD",          "ASL",          "ASLB",         "ASR",          "ASRB",
-    "BCC",          "BCS",          "BEQ",          "BGE",          "BGT",          "BHI",          "BIC",          "BICB",
-    "BIS",          "BISB",         "BIT",          "BITB",         "BLE",          "BLOS",         "BLT",          "BMI",
-    "BNE",          "BPL",          "BPT",          "BR",           "BVC",          "BVS",          "CCC",          "CLC",
-    "CLCN",         "CLCV",         "CLCVN",        "CLCVZ",        "CLCZ",         "CLCZN",        "CLN",          "CLR",
-    "CLRB",         "CLV",          "CLVN",         "CLVZ",         "CLVZN",        "CLZ",          "CLZN",         "CMP",
-    "CMPB",         "COM",          "COMB",         "DEC",          "DECB",         "INC",          "INCB",         "HALT",
-    "JMP",          "JSR",          "MARK",         "MFPD",         "MFPI",         "MFPS",         "MOV",          "MOVB",
-    "MTPD",         "MTPI",         "MTPS",         "NEG",          "NEGB",         "NOP",          "RESET",        "ROL",
-    "ROLB",         "ROR",          "RORB",         "RTI",          "RTS",          "SBC",          "SBCB",         "SCC",
-    "SEC",          "SECN",         "SECV",         "SECVN",        "SECVZ",        "SECZ",         "SECZN",        "SEN",
-    "SEV",          "SEVN",         "SEVZ",         "SEVZN",        "SEZ",          "SEZN",         "SUB",          "SWAB",
-    "SXT",          "TST",          "TSTB",         "WAIT",         "MUL",          "DIV",          "ASH",          "ASHC",
-    "XOR",          "SOB",          "EMT",          "TRAP",         "SPL",          "IOT",          "RTT",          "MFPT"
-];
-/*
- * Register numbers 0-7 are reserved for cpu.regsGen, 8-15 are reserved for cpu.regsAlt, and 16-19 for cpu.regsAltStack.
- */
-PDP11Dbg.REG_PS        = 20;
-PDP11Dbg.REG_PI        = 21;
-PDP11Dbg.REG_ER        = 22;
-PDP11Dbg.REG_SL        = 23;
-PDP11Dbg.REG_M0        = 24;
-PDP11Dbg.REG_M1        = 25;
-PDP11Dbg.REG_M2        = 26;
-PDP11Dbg.REG_M3        = 27;
-PDP11Dbg.REG_AR        = 28;           // ADDRESS register; see Panel's getAR() and setAR()
-PDP11Dbg.REG_DR        = 29;           // DISPLAY/DATA register; see Panel's getDR() and setDR()
-PDP11Dbg.REG_SR        = 30;           // SWITCH register; see Panel's getSR() and setSR()
-PDP11Dbg.REGS = {
-    "SP":   6,
-    "PC":   7,
-    "PS":   PDP11Dbg.REG_PS,
-    "PI":   PDP11Dbg.REG_PI,
-    "ER":   PDP11Dbg.REG_ER,
-    "SL":   PDP11Dbg.REG_SL,
-    "M0":   PDP11Dbg.REG_M0,
-    "M1":   PDP11Dbg.REG_M1,
-    "M2":   PDP11Dbg.REG_M2,
-    "M3":   PDP11Dbg.REG_M3,
-    "AR":   PDP11Dbg.REG_AR,
-    "DR":   PDP11Dbg.REG_DR,
-    "SR":   PDP11Dbg.REG_SR
-};
-PDP11Dbg.REGNAMES = [
-    "R0", "R1", "R2", "R3", "R4", "R5", "SP", "PC",
-    "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7",
-    "S0", "S1", "S2", "S3",
-    "PS", "PI", "ER", "SL", "M0", "M1", "M2", "M3",
-    "AR", "DR", "SR"
-];
-PDP11Dbg.MODES = ["KI","KD","SI","SD","??","??","UI","UD"];
-/*
- * Operand type masks; anything that's not covered by OP_SRC or OP_DST must be a OP_OTHER value.
- */
-PDP11Dbg.OP_DSTREG   = PDP11.OPREG.MASK;
-PDP11Dbg.OP_DSTMODE  = PDP11.OPMODE.MASK;
-PDP11Dbg.OP_DST      = (PDP11Dbg.OP_DSTMODE | PDP11Dbg.OP_DSTREG);
-PDP11Dbg.OP_SRCREG   = PDP11.OPREG.MASK << 6;
-PDP11Dbg.OP_SRCMODE  = PDP11.OPMODE.MASK << 6;
-PDP11Dbg.OP_SRC      = (PDP11Dbg.OP_SRCMODE | PDP11Dbg.OP_SRCREG);
-PDP11Dbg.OP_BRANCH   = 0x1000;
-PDP11Dbg.OP_DSTOFF   = 0x2000;
-PDP11Dbg.OP_DSTNUM3  = 0x3000;       // DST 3-bit number (ie, just the DSTREG field)
-PDP11Dbg.OP_DSTNUM6  = 0x6000;       // DST 6-bit number (ie, both the DSTREG and DSTMODE fields)
-PDP11Dbg.OP_DSTNUM8  = 0x8000;       // DST 8-bit number
-PDP11Dbg.OP_OTHER    = 0xF000;
-/*
- * The OPTABLE contains opcode masks, and each mask refers to table of possible values, and each
- * value refers to an array that contains:
- *
- *      [0]: {number} of the opcode name (see OP.*)
- *      [1]: {number} containing the first operand type bit(s), if any
- *      [2]: {number} containing the second operand type bit(s), if any
- *
- * Note that, by convention, opcodes that require two operands list the SRC operand first and DST operand
- * second (ie, the OPPOSITE of the Intel convention).
- *
- * Also note that, for some of the newer PDP-11 opcodes (eg, MUL, DIV, ASH, ASHC), the location of the
- * opcode's SRC and DST bits are reversed.  This is why, for example, you'll see the MUL instruction defined
- * below as having OP_DST for the first operand and OP_SRCREG for the second operand.  This does NOT mean
- * that the opcode's destination operand is being listed first, but rather that the bits describing the source
- * operand are in the opcode's OP_DST field.
- */
-PDP11Dbg.OPTABLE = {
-    0xF000: {
-        0x1000: [PDP11Dbg.OPS.MOV,     PDP11Dbg.OP_SRC,         PDP11Dbg.OP_DST],        // 01SSDD
-        0x2000: [PDP11Dbg.OPS.CMP,     PDP11Dbg.OP_SRC,         PDP11Dbg.OP_DST],        // 02SSDD
-        0x3000: [PDP11Dbg.OPS.BIT,     PDP11Dbg.OP_SRC,         PDP11Dbg.OP_DST],        // 03SSDD
-        0x4000: [PDP11Dbg.OPS.BIC,     PDP11Dbg.OP_SRC,         PDP11Dbg.OP_DST],        // 04SSDD
-        0x5000: [PDP11Dbg.OPS.BIS,     PDP11Dbg.OP_SRC,         PDP11Dbg.OP_DST],        // 05SSDD
-        0x6000: [PDP11Dbg.OPS.ADD,     PDP11Dbg.OP_SRC,         PDP11Dbg.OP_DST],        // 06SSDD
-        0x9000: [PDP11Dbg.OPS.MOVB,    PDP11Dbg.OP_SRC,         PDP11Dbg.OP_DST],        // 11SSDD
-        0xA000: [PDP11Dbg.OPS.CMPB,    PDP11Dbg.OP_SRC,         PDP11Dbg.OP_DST],        // 12SSDD
-        0xB000: [PDP11Dbg.OPS.BITB,    PDP11Dbg.OP_SRC,         PDP11Dbg.OP_DST],        // 13SSDD
-        0xC000: [PDP11Dbg.OPS.BICB,    PDP11Dbg.OP_SRC,         PDP11Dbg.OP_DST],        // 14SSDD
-        0xD000: [PDP11Dbg.OPS.BISB,    PDP11Dbg.OP_SRC,         PDP11Dbg.OP_DST],        // 15SSDD
-        0xE000: [PDP11Dbg.OPS.SUB,     PDP11Dbg.OP_SRC,         PDP11Dbg.OP_DST]         // 16SSDD
-    },
-    0xFE00: {
-        0x0800: [PDP11Dbg.OPS.JSR,     PDP11Dbg.OP_SRCREG,      PDP11Dbg.OP_DST],        // 004RDD
-        0x7000: [PDP11Dbg.OPS.MUL,     PDP11Dbg.OP_DST,         PDP11Dbg.OP_SRCREG],     // 070RSS
-        0x7200: [PDP11Dbg.OPS.DIV,     PDP11Dbg.OP_DST,         PDP11Dbg.OP_SRCREG],     // 071RSS
-        0x7400: [PDP11Dbg.OPS.ASH,     PDP11Dbg.OP_DST,         PDP11Dbg.OP_SRCREG],     // 072RSS
-        0x7600: [PDP11Dbg.OPS.ASHC,    PDP11Dbg.OP_DST,         PDP11Dbg.OP_SRCREG],     // 073RSS
-        0x7800: [PDP11Dbg.OPS.XOR,     PDP11Dbg.OP_SRCREG,      PDP11Dbg.OP_DST],        // 074RDD
-        0x7E00: [PDP11Dbg.OPS.SOB,     PDP11Dbg.OP_SRCREG,      PDP11Dbg.OP_DSTOFF]      // 077Rnn
-    },
-    0xFF00: {
-        0x0100: [PDP11Dbg.OPS.BR,      PDP11Dbg.OP_BRANCH],
-        0x0200: [PDP11Dbg.OPS.BNE,     PDP11Dbg.OP_BRANCH],
-        0x0300: [PDP11Dbg.OPS.BEQ,     PDP11Dbg.OP_BRANCH],
-        0x0400: [PDP11Dbg.OPS.BGE,     PDP11Dbg.OP_BRANCH],
-        0x0500: [PDP11Dbg.OPS.BLT,     PDP11Dbg.OP_BRANCH],
-        0x0600: [PDP11Dbg.OPS.BGT,     PDP11Dbg.OP_BRANCH],
-        0x0700: [PDP11Dbg.OPS.BLE,     PDP11Dbg.OP_BRANCH],
-        0x8000: [PDP11Dbg.OPS.BPL,     PDP11Dbg.OP_BRANCH],
-        0x8100: [PDP11Dbg.OPS.BMI,     PDP11Dbg.OP_BRANCH],
-        0x8200: [PDP11Dbg.OPS.BHI,     PDP11Dbg.OP_BRANCH],
-        0x8300: [PDP11Dbg.OPS.BLOS,    PDP11Dbg.OP_BRANCH],
-        0x8400: [PDP11Dbg.OPS.BVC,     PDP11Dbg.OP_BRANCH],
-        0x8500: [PDP11Dbg.OPS.BVS,     PDP11Dbg.OP_BRANCH],
-        0x8600: [PDP11Dbg.OPS.BCC,     PDP11Dbg.OP_BRANCH],
-        0x8700: [PDP11Dbg.OPS.BCS,     PDP11Dbg.OP_BRANCH],
-        0x8800: [PDP11Dbg.OPS.EMT,     PDP11Dbg.OP_DSTNUM8],      // 104000..104377
-        0x8900: [PDP11Dbg.OPS.TRAP,    PDP11Dbg.OP_DSTNUM8]       // 104400..104777
-    },
-    0xFFC0: {
-        0x0040: [PDP11Dbg.OPS.JMP,     PDP11Dbg.OP_DST],          // 0001DD
-        0x00C0: [PDP11Dbg.OPS.SWAB,    PDP11Dbg.OP_DST],          // 0003DD
-        0x0A00: [PDP11Dbg.OPS.CLR,     PDP11Dbg.OP_DST],          // 0050DD
-        0x0A40: [PDP11Dbg.OPS.COM,     PDP11Dbg.OP_DST],          // 0051DD
-        0x0A80: [PDP11Dbg.OPS.INC,     PDP11Dbg.OP_DST],          // 0052DD
-        0x0AC0: [PDP11Dbg.OPS.DEC,     PDP11Dbg.OP_DST],          // 0053DD
-        0x0B00: [PDP11Dbg.OPS.NEG,     PDP11Dbg.OP_DST],          // 0054DD
-        0x0B40: [PDP11Dbg.OPS.ADC,     PDP11Dbg.OP_DST],          // 0055DD
-        0x0B80: [PDP11Dbg.OPS.SBC,     PDP11Dbg.OP_DST],          // 0056DD
-        0x0BC0: [PDP11Dbg.OPS.TST,     PDP11Dbg.OP_DST],          // 0057DD
-        0x0C00: [PDP11Dbg.OPS.ROR,     PDP11Dbg.OP_DST],          // 0060DD
-        0x0C40: [PDP11Dbg.OPS.ROL,     PDP11Dbg.OP_DST],          // 0061DD
-        0x0C80: [PDP11Dbg.OPS.ASR,     PDP11Dbg.OP_DST],          // 0062DD
-        0x0CC0: [PDP11Dbg.OPS.ASL,     PDP11Dbg.OP_DST],          // 0063DD
-        0x0D00: [PDP11Dbg.OPS.MARK,    PDP11Dbg.OP_DSTNUM6],      // 0064nn
-        0x0D40: [PDP11Dbg.OPS.MFPI,    PDP11Dbg.OP_DST],          // 0065SS
-        0x0D80: [PDP11Dbg.OPS.MTPI,    PDP11Dbg.OP_DST],          // 0066DD
-        0x0DC0: [PDP11Dbg.OPS.SXT,     PDP11Dbg.OP_DST],          // 0067DD
-        0x8A00: [PDP11Dbg.OPS.CLRB,    PDP11Dbg.OP_DST],          // 1050DD
-        0x8A40: [PDP11Dbg.OPS.COMB,    PDP11Dbg.OP_DST],          // 1051DD
-        0x8A80: [PDP11Dbg.OPS.INCB,    PDP11Dbg.OP_DST],          // 1052DD
-        0x8AC0: [PDP11Dbg.OPS.DECB,    PDP11Dbg.OP_DST],          // 1053DD
-        0x8B00: [PDP11Dbg.OPS.NEGB,    PDP11Dbg.OP_DST],          // 1054DD
-        0x8B40: [PDP11Dbg.OPS.ADCB,    PDP11Dbg.OP_DST],          // 1055DD
-        0x8B80: [PDP11Dbg.OPS.SBCB,    PDP11Dbg.OP_DST],          // 1056DD
-        0x8BC0: [PDP11Dbg.OPS.TSTB,    PDP11Dbg.OP_DST],          // 1057DD
-        0x8C00: [PDP11Dbg.OPS.RORB,    PDP11Dbg.OP_DST],          // 1060DD
-        0x8C40: [PDP11Dbg.OPS.ROLB,    PDP11Dbg.OP_DST],          // 1061DD
-        0x8C80: [PDP11Dbg.OPS.ASRB,    PDP11Dbg.OP_DST],          // 1062DD
-        0x8CC0: [PDP11Dbg.OPS.ASLB,    PDP11Dbg.OP_DST],          // 1063DD
-        0x8D00: [PDP11Dbg.OPS.MTPS,    PDP11Dbg.OP_DST],          // 1064SS (only on LSI-11)
-        0x8D40: [PDP11Dbg.OPS.MFPD,    PDP11Dbg.OP_DST],          // 1065DD (same as MFPI if no separate instruction/data spaces)
-        0x8D80: [PDP11Dbg.OPS.MTPD,    PDP11Dbg.OP_DST],          // 1066DD (same as MTPI if no separate instruction/data spaces)
-        0x8DC0: [PDP11Dbg.OPS.MFPS,    PDP11Dbg.OP_DST]           // 1067SS (only on LSI-11)
-    },
-    0xFFF8: {
-        0x0080: [PDP11Dbg.OPS.RTS,     PDP11Dbg.OP_DSTREG],       // 00020R
-        0x0098: [PDP11Dbg.OPS.SPL,     PDP11Dbg.OP_DSTNUM3]       // 00023N
-    },
-    0xFFFF: {
-        0x0000: [PDP11Dbg.OPS.HALT],                                   // 000000
-        0x0001: [PDP11Dbg.OPS.WAIT],                                   // 000001
-        0x0002: [PDP11Dbg.OPS.RTI],                                    // 000002
-        0x0003: [PDP11Dbg.OPS.BPT],                                    // 000003
-        0x0004: [PDP11Dbg.OPS.IOT],                                    // 000004
-        0x0005: [PDP11Dbg.OPS.RESET],                                  // 000005
-        0x0006: [PDP11Dbg.OPS.RTT],                                    // 000006
-        0x0007: [PDP11Dbg.OPS.MFPT],                                   // 000007 (only on PDP-11/44 & KB11-EM?)
-        0x00A0: [PDP11Dbg.OPS.NOP],
-        0x00A1: [PDP11Dbg.OPS.CLC],
-        0x00A2: [PDP11Dbg.OPS.CLV],
-        0x00A3: [PDP11Dbg.OPS.CLCV],
-        0x00A4: [PDP11Dbg.OPS.CLZ],
-        0x00A5: [PDP11Dbg.OPS.CLCZ],
-        0x00A6: [PDP11Dbg.OPS.CLVZ],
-        0x00A7: [PDP11Dbg.OPS.CLCVZ],
-        0x00A8: [PDP11Dbg.OPS.CLN],
-        0x00A9: [PDP11Dbg.OPS.CLCN],
-        0x00AA: [PDP11Dbg.OPS.CLVN],
-        0x00AB: [PDP11Dbg.OPS.CLCVN],
-        0x00AC: [PDP11Dbg.OPS.CLZN],
-        0x00AD: [PDP11Dbg.OPS.CLCZN],
-        0x00AE: [PDP11Dbg.OPS.CLVZN],
-        0x00AF: [PDP11Dbg.OPS.CCC],                                    // aka CLCVZN
-        0x00B0: [PDP11Dbg.OPS.NOP],
-        0x00B1: [PDP11Dbg.OPS.SEC],
-        0x00B2: [PDP11Dbg.OPS.SEV],
-        0x00B3: [PDP11Dbg.OPS.SECV],
-        0x00B4: [PDP11Dbg.OPS.SEZ],
-        0x00B5: [PDP11Dbg.OPS.SECZ],
-        0x00B6: [PDP11Dbg.OPS.SEVZ],
-        0x00B7: [PDP11Dbg.OPS.SECVZ],
-        0x00B8: [PDP11Dbg.OPS.SEN],
-        0x00B9: [PDP11Dbg.OPS.SECN],
-        0x00BA: [PDP11Dbg.OPS.SEVN],
-        0x00BB: [PDP11Dbg.OPS.SECVN],
-        0x00BC: [PDP11Dbg.OPS.SEZN],
-        0x00BD: [PDP11Dbg.OPS.SECZN],
-        0x00BE: [PDP11Dbg.OPS.SEVZN],
-        0x00BF: [PDP11Dbg.OPS.SCC]                                     // aka SECVZN
-    }
-};
-PDP11Dbg.OPNONE = [PDP11Dbg.OPS.NONE];
-/*
- * Table of opcodes added to the 11/40 and newer
- */
-PDP11Dbg.OP1140 = [
-    PDP11Dbg.OPS.MARK,
-    PDP11Dbg.OPS.MFPI,
-    PDP11Dbg.OPS.MTPI,
-    PDP11Dbg.OPS.SXT,
-    PDP11Dbg.OPS.RTT,
-    PDP11Dbg.OPS.MUL,
-    PDP11Dbg.OPS.DIV,
-    PDP11Dbg.OPS.ASH,
-    PDP11Dbg.OPS.ASHC,
-    PDP11Dbg.OPS.XOR,
-    PDP11Dbg.OPS.SOB
-];
-/*
- * Table of opcodes added to the 11/45 and newer
- */
-PDP11Dbg.OP1145 = [
-    PDP11Dbg.OPS.SPL,
-    PDP11Dbg.OPS.MFPD,
-    PDP11Dbg.OPS.MTPD
-];
-
-Defs.CLASSES["PDP11Dbg"] = PDP11Dbg;
-
-/**
- * @copyright https://www.pcjs.org/machines/dec/pdp11/libv2/iopage.js (C) 2012-2020 Jeff Parsons
- */
-
-/**
- * @class {IOPage}
- * @unrestricted
- */
-class IOPage extends Ports {
-    /**
-     * IOPage(idMachine, idDevice, config)
-     *
-     * @this {IOPage}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {PortsConfig} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-        for (let port in IOPage.IOTABLE) {
-            let handlers = IOPage.IOTABLE[port];
-            port = +port;
-            let inData = handlers[0];
-            let outData = handlers[1];
-            let inPair = handlers[2];
-            let outPair = handlers[3];
-            /*
-             * When handlers are being registered for these BYTE-granular UNIBUS addresses,
-             * we must install fallback handlers for all BYTE accesses.
-             */
-            if (port >= PDP11.UNIBUS.R0SET0 && port <= PDP11.UNIBUS.R6USER) {
-                if (!inData && inPair) {
-                    inData = function(readPair) {
-                        return function(port) {
-                            return readPair(port) & 0xff;
-                        }
-                    }(inPair);
-                }
-                if (!outData && outPair) {
-                    outData = function(writePair) {
-                        return function(port, value) {
-                            return writePair(port, value);
-                        }
-                    }(outPair);
-                }
-            }
-            this.addIOHandlers(this, port, port, inData, outData, inPair, outPair);
-        }
-        this.onReset();
-    }
-
-    /**
-     * onPower()
-     *
-     * Called by the Machine device to provide notification of a power event.
-     *
-     * @this {IOPage}
-     */
-    onPower()
-    {
-        if (this.cpu === undefined) {
-            this.cpu = /** @type {CPU} */ (this.findDeviceByClass("Debugger"));
-        }
-    }
-
-    /**
-     * loadState(state)
-     *
-     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
-     *
-     * @this {IOPage}
-     * @param {Array|undefined} state
-     * @returns {boolean}
-     */
-    loadState(state)
-    {
-        if (state) {
-            let idDevice = state.shift();
-            if (this.idDevice == idDevice) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * saveState(state)
-     *
-     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
-     *
-     * @this {IOPage}
-     * @param {Array} state
-     */
-    saveState(state)
-    {
-        state.push(this.idDevice);
-    }
-
-    /**
-     * readUNIMAP(port)
-     *
-     * NOTE: The UNIBUS map ("UNIMAP") is 32 registers spread across 64 words, so we first calculate the word index.
-     *
-     * @this {IOPage}
-     * @param {number} port (eg, PDP11.UNIBUS.UNIMAP)
-     * @returns {number}
-     */
-    readUNIMAP(port)
-    {
-        let word = (port >> 1) & 0x3f, reg = word >> 1;
-        let value = this.cpu.regsUNIMap[reg];
-        return (word & 1)? (value >> 16) : (value & 0xffff);
-    }
-
-    /**
-     * writeUNIMAP(port, value)
-     *
-     * NOTE: The UNIBUS map ("UNIMAP") is 32 registers spread across 64 words, so we first calculate the word index.
-     *
-     * @this {IOPage}
-     * @param {number} port (eg, PDP11.UNIBUS.UNIMAP)
-     * @param {number} value
-     */
-    writeUNIMAP(port, value)
-    {
-        let word = (port >> 1) & 0x3f, reg = word >> 1;
-        if (word & 1) {
-            this.cpu.regsUNIMap[reg] = (this.cpu.regsUNIMap[reg] & 0xffff) | ((value & 0x003f) << 16);
-        } else {
-            this.cpu.regsUNIMap[reg] = (this.cpu.regsUNIMap[reg] & ~0xffff) | (value & 0xfffe);
-        }
-    }
-}
-
-IOPage.IOTABLE = {
-    [PDP11.UNIBUS.UNIMAP]:  /* 170200 */    [null, null, IOPage.prototype.readUNIMAP,  IOPage.prototype.writeUNIMAP,  "UNIMAP",   64, PDP11.MODEL_1170],
- // [PDP11.UNIBUS.SIPDR0]:  /* 172200 */    [null, null, IOPage.prototype.readSIPDR,   IOPage.prototype.writeSIPDR,   "SIPDR",    8,  PDP11.MODEL_1145, MESSAGE.MMU],
- // [PDP11.UNIBUS.SDPDR0]:  /* 172220 */    [null, null, IOPage.prototype.readSDPDR,   IOPage.prototype.writeSDPDR,   "SDPDR",    8,  PDP11.MODEL_1145, MESSAGE.MMU],
- // [PDP11.UNIBUS.SIPAR0]:  /* 172240 */    [null, null, IOPage.prototype.readSIPAR,   IOPage.prototype.writeSIPAR,   "SIPAR",    8,  PDP11.MODEL_1145, MESSAGE.MMU],
- // [PDP11.UNIBUS.SDPAR0]:  /* 172260 */    [null, null, IOPage.prototype.readSDPAR,   IOPage.prototype.writeSDPAR,   "SDPAR",    8,  PDP11.MODEL_1145, MESSAGE.MMU],
- // [PDP11.UNIBUS.KIPDR0]:  /* 172300 */    [null, null, IOPage.prototype.readKIPDR,   IOPage.prototype.writeKIPDR,   "KIPDR",    8,  PDP11.MODEL_1140, MESSAGE.MMU],
- // [PDP11.UNIBUS.KDPDR0]:  /* 172320 */    [null, null, IOPage.prototype.readKDPDR,   IOPage.prototype.writeKDPDR,   "KDPDR",    8,  PDP11.MODEL_1145, MESSAGE.MMU],
- // [PDP11.UNIBUS.KIPAR0]:  /* 172340 */    [null, null, IOPage.prototype.readKIPAR,   IOPage.prototype.writeKIPAR,   "KIPAR",    8,  PDP11.MODEL_1140, MESSAGE.MMU],
- // [PDP11.UNIBUS.KDPAR0]:  /* 172360 */    [null, null, IOPage.prototype.readKDPAR,   IOPage.prototype.writeKDPAR,   "KDPAR",    8,  PDP11.MODEL_1145, MESSAGE.MMU],
- // [PDP11.UNIBUS.MMR3]:    /* 172516 */    [null, null, IOPage.prototype.readMMR3,    IOPage.prototype.writeMMR3,    "MMR3",     1,  PDP11.MODEL_1145, MESSAGE.MMU],
- // [PDP11.UNIBUS.LKS]:     /* 177546 */    [null, null, IOPage.prototype.readLKS,     IOPage.prototype.writeLKS,     "LKS"],
- // [PDP11.UNIBUS.MMR0]:    /* 177572 */    [null, null, IOPage.prototype.readMMR0,    IOPage.prototype.writeMMR0,    "MMR0",     1,  PDP11.MODEL_1140, MESSAGE.MMU],
- // [PDP11.UNIBUS.MMR1]:    /* 177574 */    [null, null, IOPage.prototype.readMMR1,    IOPage.prototype.writeIgnored, "MMR1",     1,  PDP11.MODEL_1145, MESSAGE.MMU],
- // [PDP11.UNIBUS.MMR2]:    /* 177576 */    [null, null, IOPage.prototype.readMMR2,    IOPage.prototype.writeIgnored, "MMR2",     1,  PDP11.MODEL_1140, MESSAGE.MMU],
- // [PDP11.UNIBUS.UIPDR0]:  /* 177600 */    [null, null, IOPage.prototype.readUIPDR,   IOPage.prototype.writeUIPDR,   "UIPDR",    8,  PDP11.MODEL_1140, MESSAGE.MMU],
- // [PDP11.UNIBUS.UDPDR0]:  /* 177620 */    [null, null, IOPage.prototype.readUDPDR,   IOPage.prototype.writeUDPDR,   "UDPDR",    8,  PDP11.MODEL_1145, MESSAGE.MMU],
- // [PDP11.UNIBUS.UIPAR0]:  /* 177640 */    [null, null, IOPage.prototype.readUIPAR,   IOPage.prototype.writeUIPAR,   "UIPAR",    8,  PDP11.MODEL_1140, MESSAGE.MMU],
- // [PDP11.UNIBUS.UDPAR0]:  /* 177660 */    [null, null, IOPage.prototype.readUDPAR,   IOPage.prototype.writeUDPAR,   "UDPAR",    8,  PDP11.MODEL_1145, MESSAGE.MMU],
- // [PDP11.UNIBUS.R0SET0]:  /* 177700 */    [null, null, IOPage.prototype.readRSET0,   IOPage.prototype.writeRSET0,   "R0SET0"],
- // [PDP11.UNIBUS.R1SET0]:  /* 177701 */    [null, null, IOPage.prototype.readRSET0,   IOPage.prototype.writeRSET0,   "R1SET0"],
- // [PDP11.UNIBUS.R2SET0]:  /* 177702 */    [null, null, IOPage.prototype.readRSET0,   IOPage.prototype.writeRSET0,   "R2SET0"],
- // [PDP11.UNIBUS.R3SET0]:  /* 177703 */    [null, null, IOPage.prototype.readRSET0,   IOPage.prototype.writeRSET0,   "R3SET0"],
- // [PDP11.UNIBUS.R4SET0]:  /* 177704 */    [null, null, IOPage.prototype.readRSET0,   IOPage.prototype.writeRSET0,   "R4SET0"],
- // [PDP11.UNIBUS.R5SET0]:  /* 177705 */    [null, null, IOPage.prototype.readRSET0,   IOPage.prototype.writeRSET0,   "R5SET0"],
- // [PDP11.UNIBUS.R6KERNEL]:/* 177706 */    [null, null, IOPage.prototype.readR6KERNEL,IOPage.prototype.writeR6KERNEL,"R6KERNEL"],
- // [PDP11.UNIBUS.R7KERNEL]:/* 177707 */    [null, null, IOPage.prototype.readR7KERNEL,IOPage.prototype.writeR7KERNEL,"R7KERNEL"],
- // [PDP11.UNIBUS.R0SET1]:  /* 177710 */    [null, null, IOPage.prototype.readRSET1,   IOPage.prototype.writeRSET1,   "R0SET1",   1,  PDP11.MODEL_1145],
- // [PDP11.UNIBUS.R1SET1]:  /* 177711 */    [null, null, IOPage.prototype.readRSET1,   IOPage.prototype.writeRSET1,   "R1SET1",   1,  PDP11.MODEL_1145],
- // [PDP11.UNIBUS.R2SET1]:  /* 177712 */    [null, null, IOPage.prototype.readRSET1,   IOPage.prototype.writeRSET1,   "R2SET1",   1,  PDP11.MODEL_1145],
- // [PDP11.UNIBUS.R3SET1]:  /* 177713 */    [null, null, IOPage.prototype.readRSET1,   IOPage.prototype.writeRSET1,   "R3SET1",   1,  PDP11.MODEL_1145],
- // [PDP11.UNIBUS.R4SET1]:  /* 177714 */    [null, null, IOPage.prototype.readRSET1,   IOPage.prototype.writeRSET1,   "R4SET1",   1,  PDP11.MODEL_1145],
- // [PDP11.UNIBUS.R5SET1]:  /* 177715 */    [null, null, IOPage.prototype.readRSET1,   IOPage.prototype.writeRSET1,   "R5SET1",   1,  PDP11.MODEL_1145],
- // [PDP11.UNIBUS.R6SUPER]: /* 177716 */    [null, null, IOPage.prototype.readR6SUPER, IOPage.prototype.writeR6SUPER, "R6SUPER",  1,  PDP11.MODEL_1145],
- // [PDP11.UNIBUS.R6USER]:  /* 177717 */    [null, null, IOPage.prototype.readR6USER,  IOPage.prototype.writeR6USER,  "R6USER",   1,  PDP11.MODEL_1145],
- // [PDP11.UNIBUS.CTRL]:    /* 177740 */    [null, null, IOPage.prototype.readCTRL,    IOPage.prototype.writeCTRL,    "CTRL",     8,  PDP11.MODEL_1170],
- // [PDP11.UNIBUS.LSIZE]:   /* 177760 */    [null, null, IOPage.prototype.readSIZE,    IOPage.prototype.writeSIZE,    "LSIZE",    1,  PDP11.MODEL_1170],
- // [PDP11.UNIBUS.HSIZE]:   /* 177762 */    [null, null, IOPage.prototype.readSIZE,    IOPage.prototype.writeSIZE,    "HSIZE",    1,  PDP11.MODEL_1170],
- // [PDP11.UNIBUS.SYSID]:   /* 177764 */    [null, null, IOPage.prototype.readSYSID,   IOPage.prototype.writeSYSID,   "SYSID",    1,  PDP11.MODEL_1170],
- // [PDP11.UNIBUS.CPUERR]:  /* 177766 */    [null, null, IOPage.prototype.readCPUERR,  IOPage.prototype.writeCPUERR,  "ERR",      1,  PDP11.MODEL_1170],
- // [PDP11.UNIBUS.MB]:      /* 177770 */    [null, null, IOPage.prototype.readMBR,     IOPage.prototype.writeMBR,     "MBR",      1,  PDP11.MODEL_1170],
- // [PDP11.UNIBUS.PIR]:     /* 177772 */    [null, null, IOPage.prototype.readPIR,     IOPage.prototype.writePIR,     "PIR"],
- // [PDP11.UNIBUS.SL]:      /* 177774 */    [null, null, IOPage.prototype.readSLR,     IOPage.prototype.writeSLR,     "SLR"],
- // [PDP11.UNIBUS.PSW]:     /* 177776 */    [null, null, IOPage.prototype.readPSW,     IOPage.prototype.writePSW,     "PSW"]
-};
-
-Defs.CLASSES["IOPage"] = IOPage;
-
-/**
- * @copyright https://www.pcjs.org/machines/dec/pdp11/libv2/dl11.js (C) 2012-2020 Jeff Parsons
- */
-
-/**
- * @class {DL11}
- * @unrestricted
- */
-class DL11 extends Device {
-    /**
-     * DL11(idMachine, idDevice, config)
-     *
-     * @this {DL11}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {Config} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-
-        this.nBaudReceive = +this.config['baudReceive'] || PDP11.DL11.RCSR.BAUD;
-        this.nBaudTransmit = +this.config['baudTransmit'] || PDP11.DL11.XCSR.BAUD;
-
-        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
-        this.timerReceiveNext = this.time.addTimer(this.idDevice + ".receive", this.receiveData.bind(this));
-        this.timerTransmitNext = this.time.addTimer(this.idDevice + ".transmit", this.transmitData.bind(this));
-
-        this.ports = /** @type {Ports} */ (this.findDeviceByClass("IOPage"));
-        this.ports.addIOTable(this, DL11.IOTABLE);
-
-        /*
-         * No connection until initConnection() is called.
-         */
-        this.sDataReceived = "";
-        this.connection = this.sendData = this.updateStatus = null;
-
-        /*
-         * Export all functions required by initConnection().
-         */
-        this['exports'] = {
-            'connect': this.initConnection,
-            'receiveData': this.receiveData,
-            'receiveStatus': this.receiveStatus,
-            'setConnection': this.setConnection
-        };
-
-        this.onReset();
-    }
-
-    /**
-     * initConnection(fNullModem)
-     *
-     * If a machine 'connection' parameter exists of the form "{sourcePort}->{targetMachine}.{targetPort}",
-     * and "{sourcePort}" matches our idDevice, then look for a component with id "{targetMachine}.{targetPort}".
-     *
-     * If the target component is found, then verify that it has exported functions with the following names:
-     *
-     *      receiveData(data): called when we have data to transmit; aliased internally to sendData(data)
-     *      receiveStatus(pins): called when our control signals have changed; aliased internally to updateStatus(pins)
-     *
-     * For now, we're not going to worry about communication in the other direction, because when the target component
-     * performs its own initConnection(), it will find our receiveData() and receiveStatus() functions, at which point
-     * communication in both directions should be established, and the circle of life complete.
-     *
-     * For added robustness, if the target machine initializes much more slowly than we do, and our connection attempt
-     * fails, that's OK, because when it finally initializes, its initConnection() will call our initConnection();
-     * if we've already initialized, no harm done.
-     *
-     * @this {DL11}
-     * @param {boolean} [fNullModem] (caller's null-modem setting, to ensure our settings are in agreement)
-     */
-    initConnection(fNullModem)
-    {
-        if (!this.connection) {
-            let sConnection = this.getMachineConfig("connection");
-            if (sConnection) {
-                let asParts = sConnection.split('->');
-                if (asParts.length == 2) {
-                    let sSourceID = asParts[0].trim();
-                    if (sSourceID != this.idDevice) return;     // this connection string is intended for another instance
-                    let sTargetID = asParts[1].trim();
-                    this.connection = this.findDevice(sTargetID);
-                    if (this.connection) {
-                        let exports = this.connection['exports'];
-                        if (exports) {
-                            let fnConnect = /** @function */ (exports['connect']);
-                            if (fnConnect) fnConnect.call(this.connection, this.fNullModem);
-                            this.sendData = exports['receiveData'];
-                            if (this.sendData) {
-                                this.fNullModem = fNullModem;
-                                this.updateStatus = exports['receiveStatus'];
-                                this.printf("Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
-                                return;
-                            }
-                        }
-                    }
-                }
-                this.printf("Unable to establish connection: %s\n", sConnection);
-            }
-        }
-    }
-
-    /**
-     * loadState(state)
-     *
-     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
-     *
-     * @this {DL11}
-     * @param {Array} state
-     * @returns {boolean}
-     */
-    loadState(state)
-    {
-        let idDevice = state.shift();
-        if (this.idDevice == idDevice) {
-            this.regRBUF    = state.shift();
-            this.regRCSR    = state.shift();
-            this.regXCSR    = state.shift();
-            this.abReceive  = state.shift();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * saveState(state)
-     *
-     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
-     *
-     * @this {DL11}
-     * @param {Array} state
-     */
-    saveState(state)
-    {
-        state.push(this.idDevice);
-        state.push(this.regRBUF);
-        state.push(this.regRCSR);
-        state.push(this.regXCSR);
-        state.push(this.abReceive);
-    }
-
-    /**
-     * onPower(on)
-     *
-     * Called by the Machine device to provide notification of a power event.
-     *
-     * @this {DL11}
-     * @param {boolean} on (true to power on, false to power off)
-     */
-    onPower(on)
-    {
-        if (!this.cpu) {
-            this.cpu = /** @type {PDP11} */ (this.findDeviceByClass("CPU"));
-            this.irqReceiver = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.RVEC, PDP11.DL11.PRI, MESSAGE.SERIAL);
-            this.irqTransmitter = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.XVEC, PDP11.DL11.PRI, MESSAGE.SERIAL);
-        }
-    }
-
-    /**
-     * onReset()
-     *
-     * Called by the Machine device to provide notification of a reset event.
-     *
-     * @this {DL11}
-     */
-    onReset()
-    {
-        this.regRBUF = 0;
-        this.regRCSR = PDP11.DL11.RCSR.CTS;
-        this.regXCSR = PDP11.DL11.XCSR.READY;
-        this.abReceive = [];
-    }
-
-    /**
-     * getBaudTimeout(nBaud)
-     *
-     * Based on the selected baud rate (nBaud), convert that rate into a millisecond delay.
-     *
-     * @this {DL11}
-     * @param {number} nBaud
-     * @returns {number} (number of milliseconds per byte)
-     */
-    getBaudTimeout(nBaud)
-    {
-        /*
-         * TODO: Do a better job computing this, based on actual numbers of start, stop and parity bits,
-         * instead of hard-coding the total number of bits per byte to 10.
-         */
-        let nBytesPerSecond = Math.round(nBaud / 10);
-        return 1000 / nBytesPerSecond;
-    }
-
-    /**
-     * receiveByte(b)
-     *
-     * @this {DL11}
-     * @param {number} b
-     * @returns {boolean}
-     */
-    receiveByte(b)
-    {
-        this.printf(MESSAGE.SERIAL, "receiveByte(%#04x)\n", b);
-        if (!this.fAutoStop) {
-            this.regRBUF = b;
-            if (!(this.regRCSR & PDP11.DL11.RCSR.RD)) {
-                this.regRCSR |= PDP11.DL11.RCSR.RD;
-            } else {
-                this.regRBUF |= PDP11.DL11.RBUF.OE | PDP11.DL11.RBUF.ERROR;
-            }
-            if (this.regRCSR & PDP11.DL11.RCSR.RIE) {
-                this.cpu.setIRQ(this.irqReceiver);
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * receiveData(data)
-     *
-     * Helper for clocking received data at the expected RECV_RATE.
-     *
-     * When we're cramming test data down the terminal's throat, that data will typically be in the form
-     * of a string.  When we're called by another component, data will typically be a number (ie, byte).  If no
-     * data is specified at all, then all we do is "clock" any remaining data into the receiver.
-     *
-     * @this {DL11}
-     * @param {number|string|undefined} [data]
-     * @returns {boolean} true if received, false if not
-     */
-    receiveData(data)
-    {
-        if (data != null) {
-            if (typeof data != "number") {
-                this.sDataReceived = data;
-            } else {
-                this.sDataReceived += String.fromCharCode(data);
-            }
-        }
-        if (this.sDataReceived) {
-            if (this.receiveByte(this.sDataReceived.charCodeAt(0))) {
-                this.sDataReceived = this.sDataReceived.substr(1);
-            }
-            if (this.sDataReceived) {
-                this.time.setTimer(this.timerReceiveNext, this.getBaudTimeout(this.nBaudReceive));
-            }
-        }
-        return true;                // for now, return true regardless, since we're buffering everything anyway
-    }
-
-    /**
-     * receiveStatus(pins)
-     *
-     * @this {DL11}
-     * @param {number} pins
-     */
-    receiveStatus(pins)
-    {
-        let oldRCSR = this.regRCSR;
-        this.regRCSR &= ~(PDP11.DL11.RCSR.CTS | PDP11.DL11.RCSR.CD);
-        if (pins & RS232.CTS.MASK) {
-            this.regRCSR |= PDP11.DL11.RCSR.CTS;
-        }
-        if (pins & RS232.CD.MASK) {
-            this.regRCSR |= PDP11.DL11.RCSR.CD;
-        }
-        if (oldRCSR != this.regRCSR) {
-            this.regRCSR |= PDP11.DL11.RCSR.DSC;
-            if (this.regRCSR & PDP11.DL11.RCSR.DIE) {
-                this.cpu.setIRQ(this.irqReceiver);
-            }
-        }
-    }
-
-    /**
-     * setConnection(device, func)
-     *
-     * @this {DL11}
-     * @param {Device|null} device
-     * @param {function(number)} func
-     * @returns {boolean}
-     */
-    setConnection(device, func)
-    {
-        if (!this.connection) {
-            this.connection = device;
-            this.sendData = func;
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * transmitByte(b)
-     *
-     * @this {DL11}
-     * @param {number} b
-     * @returns {boolean} true if transmitted, false if not
-     */
-    transmitByte(b)
-    {
-        let fTransmitted = false;
-        this.printf(MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
-        if (this.fAutoXOFF) {
-            if (b == 0x13) {        // XOFF
-                this.fAutoStop = true;
-                return false;
-            }
-            if (b == 0x11) {        // XON
-                this.fAutoStop = false;
-                return false;
-            }
-        }
-        if (this.sendData && this.sendData.call(this.connection, b)) {
-            fTransmitted = true;
-        }
-        /*
-         * NOTE: When debugging issues involving the SerialPort, such as debugging code between a pair of
-         * transmitted bytes, you can pass 0 instead of getBaudTimeout() to setTimer() to minimize the amount
-         * of time spent waiting for XCSR.READY to be set again.
-         */
-        this.cpu.setTimer(this.timerTransmitNext, this.getBaudTimeout(this.nBaudTransmit));
-        return fTransmitted;
-    }
-
-    /**
-     * transmitData(sData)
-     *
-     * Helper for clocking transmitted data at the expected XMIT_RATE.
-     *
-     * When timerTransmitNext fires, we have honored the programmed XMIT_RATE period, so we can
-     * set XMIT_READY (and XMIT_EMPTY), which signals the firmware that another byte can be transmitted.
-     *
-     * The sData parameter is not used when we're called via the timer; it's an optional parameter used by
-     * the Keyboard component to deliver data pasted via the clipboard, and is currently only useful when
-     * the DL11 is connected to another machine.  TODO: Define a separate interface for that feature.
-     *
-     * @this {DL11}
-     * @param {string} [sData]
-     * @returns {boolean} true if successful, false if not
-     */
-    transmitData(sData)
-    {
-        let success = true;
-        this.regXCSR |= PDP11.DL11.XCSR.READY;
-        if (this.regXCSR & PDP11.DL11.XCSR.TIE) {
-            this.cpu.setIRQ(this.irqTransmitter);
-        }
-        if (sData) {
-            success = this.sendData? this.sendData.call(this.connection, sData) : false;
-        }
-        return success;
-    }
-
-    /**
-     * readRCSR(addr)
-     *
-     * @this {DL11}
-     * @param {number} addr (eg, PDP11.UNIBUS.RCSR or 177560)
-     * @returns {number}
-     */
-    readRCSR(addr)
-    {
-        let data = this.regRCSR & PDP11.DL11.RCSR.RMASK;
-        this.regRCSR &= ~PDP11.DL11.RCSR.DSC;
-        return data;
-    }
-
-    /**
-     * writeRCSR(data, addr)
-     *
-     * @this {DL11}
-     * @param {number} data
-     * @param {number} addr (eg, PDP11.UNIBUS.RCSR or 177560)
-     */
-    writeRCSR(data, addr)
-    {
-        let delta = (data ^ this.regRCSR);
-        this.regRCSR = (this.regRCSR & ~PDP11.DL11.RCSR.WMASK) | (data & PDP11.DL11.RCSR.WMASK);
-        /*
-         * Whenever DTR or RTS changes, we also want to notify any connected machine, via updateStatus().
-         */
-        if (this.updateStatus) {
-            if (delta & PDP11.DL11.RCSR.RS232) {
-                let pins = 0;
-                if (this.fNullModem) {
-                    pins |= (data & PDP11.DL11.RCSR.RTS)? RS232.CTS.MASK : 0;
-                    pins |= (data & PDP11.DL11.RCSR.DTR)? (RS232.DSR.MASK | RS232.CD.MASK): 0;
-                } else {
-                    pins |= (data & PDP11.DL11.RCSR.RTS)? RS232.RTS.MASK : 0;
-                    pins |= (data & PDP11.DL11.RCSR.DTR)? RS232.DTR.MASK : 0;
-                }
-                this.updateStatus.call(this.connection, pins);
-            }
-        }
-    }
-
-    /**
-     * readRBUF(addr)
-     *
-     * @this {DL11}
-     * @param {number} addr (eg, PDP11.UNIBUS.RBUF or 177562)
-     * @returns {number}
-     */
-    readRBUF(addr)
-    {
-        this.regRCSR &= ~PDP11.DL11.RCSR.RD;
-        return this.regRBUF;
-    }
-
-    /**
-     * writeRBUF(data, addr)
-     *
-     * @this {DL11}
-     * @param {number} data
-     * @param {number} addr (eg, PDP11.UNIBUS.RBUF or 177562)
-     */
-    writeRBUF(data, addr)
-    {
-    }
-
-    /**
-     * readXCSR(addr)
-     *
-     * @this {DL11}
-     * @param {number} addr (eg, PDP11.UNIBUS.XCSR or 177564)
-     * @returns {number}
-     */
-    readXCSR(addr)
-    {
-        return this.regXCSR;
-    }
-
-    /**
-     * writeXCSR(data, addr)
-     *
-     * @this {DL11}
-     * @param {number} data
-     * @param {number} addr (eg, PDP11.UNIBUS.XCSR or 177564)
-     */
-    writeXCSR(data, addr)
-    {
-        /*
-         * If the device is READY, and TIE is being set, then request a hardware interrupt.
-         *
-         * Conversely, if TIE is being cleared, remove the request; this resolves a problem within
-         * MAINDEC TEST 15, where the Transmitter Interrupt Enable (TIE) bit is cleared, set, and cleared
-         * in rapid succession, with the expectation that NO interrupt will be generated.  Note that
-         * this fix also requires a complementary change in setIRQ(), to request hardware interrupts with
-         * IRQ_DELAY rather than IRQ.
-         */
-        if (this.regXCSR & PDP11.DL11.XCSR.READY) {
-            if (data & PDP11.DL11.XCSR.TIE) {
-                this.cpu.setIRQ(this.irqTransmitter);
-            } else {
-                this.cpu.clearIRQ(this.irqTransmitter);
-            }
-        }
-        this.regXCSR = (this.regXCSR & ~PDP11.DL11.XCSR.WMASK) | (data & PDP11.DL11.XCSR.WMASK);
-    }
-
-    /**
-     * readXBUF(addr)
-     *
-     * @this {DL11}
-     * @param {number} addr (eg, PDP11.UNIBUS.XBUF or 177566)
-     * @returns {number}
-     */
-    readXBUF(addr)
-    {
-        return 0;
-    }
-
-    /**
-     * writeXBUF(data, addr)
-     *
-     * @this {DL11}
-     * @param {number} data
-     * @param {number} addr (eg, PDP11.UNIBUS.XBUF or 177566)
-     */
-    writeXBUF(data, addr)
-    {
-        this.transmitByte(data & PDP11.DL11.XBUF.DATA);
-        this.regXCSR &= ~PDP11.DL11.XCSR.READY;
-    }
-}
-
-DL11.IOTABLE = {
-    [PDP11.UNIBUS.RCSR]:    /* 177560 */    [null, null, DL11.prototype.readRCSR,   DL11.prototype.writeRCSR,   "RCSR"],
-    [PDP11.UNIBUS.RBUF]:    /* 177562 */    [null, null, DL11.prototype.readRBUF,   DL11.prototype.writeRBUF,   "RBUF"],
-    [PDP11.UNIBUS.XCSR]:    /* 177564 */    [null, null, DL11.prototype.readXCSR,   DL11.prototype.writeXCSR,   "XCSR"],
-    [PDP11.UNIBUS.XBUF]:    /* 177566 */    [null, null, DL11.prototype.readXBUF,   DL11.prototype.writeXBUF,   "XBUF"]
-};
-
-Defs.CLASSES["DL11"] = DL11;
-
-/**
- * @copyright https://www.pcjs.org/machines/dec/pdp11/libv2/pc11.js (C) 2012-2020 Jeff Parsons
- */
-
-/** @typedef {{ name: string, autoLoad: (Media|string), baudReceive: number, baudTransmit: (number|undefined), library: (Array.<Media>|string), mediaLoaded: (Media|null) }} */
-var PC11Config;
-
-/**
- * @class {PC11}
- * @unrestricted
- */
-class PC11 extends Device {
-    /**
-     * PC11(idMachine, idDevice, config)
-     *
-     * @this {PC11}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {Config} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-
-        this.name = this.config['name'] || "PTR";
-        this.autoLoad = this.getMachineConfig('autoLoad') || "";
-        this.baudReceive = +this.config['baudReceive'] || PDP11.PC11.PRS.BAUD;
-        this.library = this.config['library'] || [];
-        this.mediaLoaded = null;
-        /*
-         * Support for local tape images is currently limited to desktop browsers with FileReader support;
-         * when this flag is set, setBinding() allows local tape bindings and informs initBus() to update the
-         * LIST_TAPES binding accordingly.
-         */
-        this.fLocalTapes = (window && 'FileReader' in window);
-
-        this.bus = /** @type {Bus} */ (this.findDeviceByClass("Bus"));
-        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
-        this.timerReader = this.time.addTimer(this.idDevice + ".reader", this.advanceReader.bind(this));
-        this.input = /** @type {Input} */ (this.findDeviceByClass("Input"));
-
-        this.fLoading = false;
-        this.irqReader = null;
-
-        this.regPRS = 0;                        // PRS register
-        this.regPRB = 0;                        // PRB register
-        this.regPPS = PDP11.PC11.PPS.ERROR;     // PPS register (TODO: Stop signaling error once punch is implemented)
-        this.regPPB = 0;                        // PPB register
-        this.iTapeData = 0;                     // buffer index
-        this.aTapeData = [];                    // buffer for the PRB register
-        this.sSource = PC11.SOURCE.NONE;
-        this.nTarget = PC11.TARGET.NONE;
-        this.nLastPercent = -1;                 // ensure the first displayProgress() displays something
-
-        this.ports = /** @type {Ports} */ (this.findDeviceByClass("IOPage"));
-        this.ports.addIOTable(this, PC11.IOTABLE);
-
-        if (!this.getMedia(this.library, this.parseLibrary.bind(this))) {
-            this.setReady(false);
-        }
-    }
-
-    /**
-     * addBinding(binding, element)
-     *
-     * v1 machines relied on setBinding(sHTMLType, sBinding, control, sValue); v2 machines use an addBinding() override.
-
-     * @this {PC11}
-     * @param {string} binding
-     * @param {Element} element
-     */
-    addBinding(binding, element)
-    {
-        let pc11 = this;
-        let elementInput;
-        let nTarget = PC11.TARGET.NONE;
-
-        switch (binding) {
-        /*
-         * "readTape" operation must do pretty much everything that the "loadTape" does, but whereas the load
-         * operation records the bytes in aTapeData, the read operation stuffs them directly into the machine's memory;
-         * the former sets nTarget to TARGET.READER, while the latter sets it to TARGET.MEMORY.
-         */
-        case "readTape":
-            nTarget = PC11.TARGET.MEMORY;
-            /* falls through */
-
-        case "loadTape":
-            if (!nTarget) nTarget = PC11.TARGET.READER;
-            element.onclick = function onClickReadTape(event) {
-                let elementTapes = pc11.bindings[PC11.BINDING.LIST_TAPES];
-                if (elementTapes) {
-                    let media = pc11.library[elementTapes.selectedIndex];
-                    if (media) pc11.loadMedia(media, nTarget);
-                }
-            };
-            break;
-
-        case "mountTape":
-            elementInput = /** @type {Object} */ (element);
-            if (!this.fLocalTapes) {
-                this.printf("Local tape support not available\n");
-                /*
-                 * We could also simply hide the element; eg:
-                 *
-                 *      elementInput.style.display = "none";
-                 *
-                 * but removing the element altogether seems better.
-                 */
-                elementInput.parentNode.removeChild(/** @type {Node} */ (elementInput));
-                break;
-            }
-
-            /*
-             * Enable "Mount" button only if a file is actually selected
-             */
-            elementInput.addEventListener('change', function() {
-                let fieldset = elementInput.children[0];
-                let files = fieldset.children[0].files;
-                let submit = fieldset.children[1];
-                submit.disabled = !files.length;
-            });
-
-            elementInput.onsubmit = function(event) {
-                let file = event.currentTarget[1].files[0];
-                if (file) {
-                    /*
-                     * TODO: Provide a way to mount tapes into MEMORY as well as READER.
-                     */
-                    pc11.loadMedia({"name": this.getBaseName(file.name, true), "path": file.name}, PC11.TARGET.READER, file);
-                }
-                /*
-                 * Prevent reloading of web page after form submission
-                 */
-                return false;
-            };
-            break;
-
-        default:
-            super.addBinding(binding, element);
-            break;
-        }
-    }
-
-    /**
-     * onSelect(event)
-     *
-     * @this {PC11}
-     * @param {Event} event
-     */
-    onSelect(event)
-    {
-        let elementDesc = this.bindings[PC11.BINDING.DESC_TAPE];
-        let elementSelect = this.bindings[PC11.BINDING.LIST_TAPES];
-        let elementOption = elementSelect.options[elementSelect.selectedIndex];
-        if (elementDesc && elementOption) {
-            let dataValue = {};
-            let sValue = elementOption.getAttribute("data-value");
-            if (sValue) {
-                try {
-                    dataValue = eval("(" + sValue + ")");
-                } catch (err) {
-                    this.printf("PC11 option error: %s", err.message);
-                }
-            }
-            let sHTML = dataValue['desc'];
-            if (sHTML === undefined) sHTML = "";
-            let sHRef = dataValue['href'];
-            if (sHRef !== undefined) sHTML = "<a href=\"" + sHRef + "\" target=\"_blank\">" + sHTML + "</a>";
-            elementDesc.innerHTML = sHTML;
-        }
-    }
-
-    /**
-     * loadState(state)
-     *
-     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
-     *
-     * @this {DL11}
-     * @param {Array} state
-     * @returns {boolean}
-     */
-    loadState(state)
-    {
-        let idDevice = state.shift();
-        if (this.idDevice == idDevice) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * saveState(state)
-     *
-     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
-     *
-     * @this {DL11}
-     * @param {Array} state
-     */
-    saveState(state)
-    {
-        state.push(this.idDevice);
-    }
-
-    /**
-     * onPower(on)
-     *
-     * Called by the Machine device to provide notification of a power event.
-     *
-     * @this {DL11}
-     * @param {boolean} on (true to power on, false to power off)
-     */
-    onPower(on)
-    {
-        if (!this.cpu) {
-            this.cpu = /** @type {PDP11} */ (this.findDeviceByClass("CPU"));
-            this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, MESSAGE.PC11);
-        }
-    }
-
-    /**
-     * onReset()
-     *
-     * Called by the Machine device to provide notification of a reset event.
-     *
-     * TODO: Consider making our reset() handler ALSO restore the original loaded tape, in much the same
-     * way the RAM component now restores the original predefined memory or tape image after resetting the RAM.
-     *
-     * @this {PC11}
-     */
-    onReset()
-    {
-        this.regPRS &= ~PDP11.PC11.PRS.CLEAR;
-        this.regPRB = 0;
-    }
-
-    /**
-     * loadMedia(media, nTarget, file)
-     *
-     * @this {PC11}
-     * @param {Media} media
-     * @param {number} nTarget
-     * @param {File} [file] is set if there's an associated File object
-     * @returns {boolean} true if load completed (successfully or not), false if queued
-     */
-    loadMedia(media, nTarget, file)
-    {
-        let name = media['name'];
-        let path = media['path'];
-
-        this.printf(MESSAGE.PC11, 'load("%s","%s")\n', name, path);
-
-        if (!path) {
-            this.unloadMedia(false);
-            return true;
-        }
-
-        if (path == PC11.SOURCE.LOCAL) {
-            this.alert('Use "Choose File" and "Mount" to select and load a local tape.');
-            return true;
-        }
-
-        /*
-         * If the special PC11.SOURCE.REMOTE path is selected, then we want to prompt the user for a URL.
-         * Oh, and make sure we pass an empty string as the 2nd parameter to prompt(), so that IE won't display
-         * "undefined" -- because after all, undefined and "undefined" are EXACTLY the same thing, right?
-         *
-         * TODO: This is literally all I've done to support remote tape images. There's probably more
-         * I should do, like dynamically updating LIST_TAPES to include new entries, and adding new entries
-         * to the save/restore data.
-         */
-        if (path == PC11.SOURCE.REMOTE) {
-            path = window.prompt("Enter the URL of a remote tape image.", "") || "";
-            if (!path) return false;
-            name = this.getBaseName(path);
-            this.printf('Attempting to load %s as "%s"', path, name);
-            this.sSource = PC11.SOURCE.REMOTE;
-        }
-        else {
-            this.sSource = path;
-        }
-
-        this.nTarget = nTarget;
-
-        if (file) {
-            let pc11 = this;
-            let reader = new FileReader();
-            reader.onload = function doneRead() {
-                pc11.finishMedia(media, reader.result);
-            };
-            reader.readAsArrayBuffer(file);
-            return false;
-        }
-
-        if (!media['values'] && !this.getMedia(media['path'], this.parseMedia.bind(this))) {
-            return false;
-        }
-
-        this.parseMedia(media);
-        return true;
-    }
-
-    /**
-     * finishMedia(media, buffer)
-     *
-     * @this {PC11}
-     * @param {Media} media
-     * @param {?} buffer (we KNOW this is an ArrayBuffer, but we can't seem to convince the Closure Compiler)
-     */
-    finishMedia(media, buffer)
-    {
-        if (buffer) {
-            media['values'] = new Uint8Array(buffer, 0, buffer.byteLength);
-            this.parseMedia(media);
-            this.sSource = PC11.SOURCE.LOCAL;
-        }
-        this.fLoading = false;
-        this.displayTape();
-    }
-
-    /**
-     * displayTape()
-     *
-     * @this {PC11}
-     */
-    displayTape()
-    {
-        if (this.mediaLoaded) {
-            let listTapes = this.bindings[PC11.BINDING.LIST_TAPES];
-            if (listTapes && listTapes.options) {
-                let i;
-                for (i = 0; i < listTapes.options.length; i++) {
-                    if (listTapes.options[i].value == this.mediaLoaded['path']) {
-                        if (listTapes.selectedIndex != i) {
-                            listTapes.selectedIndex = i;
-                        }
-                        break;
-                    }
-                }
-                if (i == listTapes.options.length) listTapes.selectedIndex = 0;
-            }
-        }
-    }
-
-    /**
-     * displayProgress(nPercent)
-     *
-     * @this {PC11}
-     * @param {number} nPercent
-     */
-    displayProgress(nPercent)
-    {
-        nPercent |= 0;
-        if (nPercent !== this.nLastPercent) {
-            let element = this.bindings[PC11.BINDING.READ_PROGRESS];
-            if (element) {
-                let aElements = element.getElementsByClassName(PC11.CSSCLASS.PROGRESS_BAR);
-                let progressBar = aElements && aElements[0];
-                if (progressBar && progressBar.style) {
-                    progressBar.style.width = nPercent + "%";
-                }
-            }
-            this.nLastPercent = nPercent;
-        }
-    }
-
-    /**
-     * parseLibrary(media)
-     *
-     * @this {PC11}
-     * @param {*} media
-     */
-    parseLibrary(media)
-    {
-        this.library = /** @type {Array.<Media>} */ (media || []);
-        this.input.bindSelect(this, PC11.BINDING.LIST_TAPES, this.library, this.onSelect.bind(this));
-
-        this.input.addSelect(this, PC11.BINDING.LIST_TAPES, "None", PC11.SOURCE.NONE, true);
-        if (this.fLocalTapes) this.input.addSelect(this, PC11.BINDING.LIST_TAPES, "Local Tape", PC11.SOURCE.LOCAL);
-        this.input.addSelect(this, PC11.BINDING.LIST_TAPES, "Remote Tape", PC11.SOURCE.REMOTE);
-        this.setReady(true);
-
-        /*
-         * Now that the media library, if any, is loaded, look up the autoLoad media, if any.
-         */
-        let i = -1;
-        if (this.autoLoad) {
-            if (typeof this.autoLoad == "string") {
-                for (i = 0; i < this.library.length; i++) {
-                    let item = this.library[i];
-                    if (typeof item == "object" && item['name'] == this.autoLoad) {
-                        this.autoLoad = item;
-                        break;
-                    }
-                }
-                if (i == this.library.length) {
-                    this.alert("Unable to find %s media: %s", this.idDevice, this.autoLoad);
-                    this.autoLoad = "";
-                }
-            }
-        }
-        if (this.autoLoad) {
-            /*
-             * TODO: Provide a way to autoLoad tapes into MEMORY as well as READER.
-             */
-            if (!this.loadMedia(/** @type {Media} */ (this.autoLoad), PC11.TARGET.READER)) {
-                this.setReady(false);
-            }
-        } else {
-            /*
-             * This likely happened because there was no autoLoad setting (or it was overridden with an empty value),
-             * so just make sure the current selection is set to "None".
-             */
-            this.displayTape();
-        }
-    }
-
-    /**
-     * parseMedia(media)
-     *
-     * @this {PC11}
-     * @param {*} media
-     */
-    parseMedia(media)
-    {
-        let name = media['name'];
-        let aBytes = media['values'];
-        let addrLoad = media['addrLoad'];
-        let addrExec = media['addrExec'];
-
-        this.mediaLoaded = media;
-        this.setReady(true);
-
-        if (this.nTarget == PC11.TARGET.MEMORY) {
-            /*
-             * Use parseTape() service to do our dirty work.  If the load succeeds, then depending on whether there
-             * was also exec address, either the CPU will be stopped or the PC wil be reset.
-             *
-             * NOTE: Some tapes are not in the Absolute Loader format, so if the JSON-encoded tape resource file
-             * we downloaded didn't ALSO include a load address, the load will fail.
-             *
-             * For example, the "Absolute Loader" tape is NOT itself in the Absolute Loader format.  You just have
-             * to know that in order to load that tape, you must first load the appropriate "Bootstrap Loader" (which
-             * DOES include its own hard-coded load address), load the "Absolute Loader" tape, and then run the
-             * "Bootstrap Loader".
-             */
-            if (!this.parseTape(aBytes, addrLoad, addrExec, null, false)) {
-                /*
-                 * This doesn't seem to serve any purpose, other than to be annoying, because perhaps you accidentally
-                 * clicked "Read" instead of "Load"....
-                 *
-                 *      this.mediaLoaded = null;
-                 *      this.sSource = PC11.SOURCE.NONE;
-                 *      this.nTarget = PC11.TARGET.NONE;
-                 */
-                this.alert('No valid memory address for tape "%s"', name);
-                return;
-            }
-            this.printf('Read tape "%s"', name);
-            return;
-        }
-
-        this.iTapeData = 0;
-        this.aTapeData = aBytes;
-        this.regPRS &= ~PDP11.PC11.PRS.ERROR;
-
-        this.printf('Loaded tape "%s" (%d bytes)', name, aBytes.length);
-        this.displayProgress(0);
-    }
-
-    /**
-     * parseTape(aBytes, addrLoad, addrExec, addrInit, fStart)
-     *
-     * If the array contains a PAPER tape image in the "Absolute Format," load it as specified
-     * by the format; otherwise, load it as-is using the address(es) supplied.
-     *
-     * @this {PC11}
-     * @param {Array|Uint8Array} aBytes
-     * @param {number|null} [addrLoad]
-     * @param {number|null} [addrExec] (this CAN override any starting address INSIDE the image)
-     * @param {number|null} [addrInit]
-     * @param {boolean} [fStart]
-     * @returns {boolean} (true if loaded, false if not)
-     */
-    parseTape(aBytes, addrLoad, addrExec, addrInit, fStart)
-    {
-        let fStop = false;
-        let fLoaded = false;
-        /*
-         * Data on tapes in the "Absolute Format" is organized into blocks; each block begins with
-         * a 6-byte header:
-         *
-         *      2-byte signature (0x0001)
-         *      2-byte block length (N + 6, because it includes the 6-byte header)
-         *      2-byte load address
-         *
-         * followed by N data bytes.  If N is zero, then the 2-byte load address is the exec address,
-         * unless the address is odd (usually 1).  DEC's Absolute Loader jumps to the exec address
-         * in former case, halts in the latter.
-         *
-         * All values are stored "little endian" (low byte followed by high byte), just like the
-         * PDP-11's memory architecture.
-         *
-         * After the data bytes, there is a single checksum byte.  The 8-bit sum of all the bytes in
-         * the block (including the header bytes and checksum byte) should be zero.
-         *
-         * ANOMALIES: Tape files don't always begin with a signature word, so I allow any number of
-         * leading zeros before the first signature.  Tape files don't always end cleanly either, so as
-         * soon as I see an invalid signature, I break out of the loop without signalling an error, as
-         * long as at least ONE block was successfully processed.  In fact, it's possible that as
-         * soon as a block with ZERO data bytes is encountered, processing is supposed to stop, but
-         * I haven't examined enough tapes (or the Absolute Loader code) to know for sure.
-         */
-        if (addrLoad == null) {
-            let off = 0, fError = false;
-            while (off < aBytes.length - 1) {
-                let w = (aBytes[off] & 0xff) | ((aBytes[off+1] & 0xff) << 8);
-                if (!w) {           // ignore pairs of leading zeros
-                    off += 2;
-                    continue;
-                }
-                if (!(w & 0xff)) {  // as well as single bytes of zero
-                    off++;
-                    continue;
-                }
-                let offBlock = off;
-                if (w != 0x0001) {
-                    this.printf(MESSAGE.PC11, "invalid signature (%#06x) at offset %#06x\n", w, offBlock);
-                    break;
-                }
-                if (off + 6 >= aBytes.length) {
-                    this.printf(MESSAGE.PC11, "invalid block at offset %#06x\n", offBlock);
-                    break;
-                }
-                off += 2;
-                let checksum = w;
-                let len = (aBytes[off++] & 0xff) | ((aBytes[off++] & 0xff) << 8);
-                let addr = (aBytes[off++] & 0xff) | ((aBytes[off++] & 0xff) << 8);
-                checksum += (len & 0xff) + (len >> 8) + (addr & 0xff) + (addr >> 8);
-                let offData = off, cbData = len -= 6;
-                while (len > 0 && off < aBytes.length) {
-                    checksum += aBytes[off++] & 0xff;
-                    len--;
-                }
-                if (len != 0 || off >= aBytes.length) {
-                    this.printf(MESSAGE.PC11, "insufficient data for block at offset %#06x\n", offBlock);
-                    break;
-                }
-                checksum += aBytes[off++] & 0xff;
-                if (checksum & 0xff) {
-                    this.printf(MESSAGE.PC11, "invalid checksum (%#04x) for block at offset %#06x\n", checksum, offBlock);
-                    break;
-                }
-                if (!cbData) {
-                    if (addr & 0x1) {
-                        fStop = true;
-                    } else {
-                        if (addrExec == null) addrExec = addr;
-                    }
-                    if (addrExec != null) this.printf(MESSAGE.PC11, "starting address: %#06x\n", addrExec);
-                } else {
-                    this.printf(MESSAGE.PC11, "loading %#06x bytes at %#06x-%#06x\n", cbData, addr, addr + cbData);
-                    while (cbData--) {
-                        this.bus.writeDirect(addr++, aBytes[offData++] & 0xff);
-                    }
-                }
-                fLoaded = true;
-            }
-        }
-        if (!fLoaded) {
-            if (addrLoad == null) addrLoad = addrInit;
-            if (addrLoad != null) {
-                for (let i = 0; i < aBytes.length; i++) {
-                    this.bus.writeDirect(addrLoad + i, aBytes[i]);
-                }
-                fLoaded = true;
-            }
-        }
-        if (fLoaded) {
-            /*
-             * Set the start address to whatever the caller provided, or failing that, whatever start
-             * address was specified inside the image.
-             *
-             * For example, the diagnostic "MAINDEC-11-D0AA-PB" doesn't include a start address inside the
-             * image, but we know that the directions for that diagnostic say to "Start and Restart at 200",
-             * so we have manually inserted an "exec":128 in the JSON containing the image.
-             */
-            if (addrExec == null || fStop) {
-                this.time.stop();
-                fStart = false;
-            }
-            if (addrExec != null) {
-                this.cpu.setReset(addrExec, fStart);
-            }
-        }
-        return fLoaded;
-    }
-
-    /**
-     * unloadMedia(fLoading)
-     *
-     * @this {PC11}
-     * @param {boolean} [fLoading]
-     */
-    unloadMedia(fLoading)
-    {
-        if (this.mediaLoaded || fLoading === false) {
-            this.mediaLoaded = null;
-            /*
-             * Avoid any unnecessary hysteresis regarding the display if this unload is merely a prelude to another load.
-             */
-            if (!fLoading) {
-                if (this.nTarget) this.printf(this.nTarget == PC11.TARGET.READER? "tape detached" : "tape unloaded");
-                this.sSource = PC11.SOURCE.NONE;
-                this.nTarget = PC11.TARGET.NONE;
-                this.displayTape();
-            }
-        }
-    }
-
-    /**
-     * getBaudTimeout(nBaud)
-     *
-     * Based on the selected baud rate (nBaud), convert that rate into a millisecond delay.
-     *
-     * @this {PC11}
-     * @param {number} nBaud
-     * @returns {number} (number of milliseconds per byte)
-     */
-    getBaudTimeout(nBaud)
-    {
-        /*
-         * TODO: Do a better job computing this, based on actual numbers of start, stop and parity bits,
-         * instead of hard-coding the total number of bits per byte to 10.
-         */
-        let nBytesPerSecond = Math.round(nBaud / 10);
-        return 1000 / nBytesPerSecond;
-    }
-
-    /**
-     * advanceReader()
-     *
-     * If the reader is enabled (RE is set) and there is no exceptional condition (ie, ERROR is set),
-     * and if the buffer register is empty (DONE is clear), then if we have more data in our internal buffer,
-     * store it in the buffer register, and optionally trigger an interrupt if device interrupts are enabled.
-     *
-     * @this {PC11}
-     */
-    advanceReader()
-    {
-        if ((this.regPRS & (PDP11.PC11.PRS.RE | PDP11.PC11.PRS.ERROR)) == PDP11.PC11.PRS.RE) {
-            if (!(this.regPRS & PDP11.PC11.PRS.DONE)) {
-                if (this.iTapeData < this.aTapeData.length) {
-                    /*
-                     * Here, as elsewhere (eg, the DL11 component), even if I trusted all incoming data
-                     * to be byte values (which I don't), there's also the risk that it could be signed data
-                     * (eg, -128 to 127, instead of 0 to 255).  Both risks are good reasons to always mask
-                     * the data assigned to PRB with 0xff.
-                     */
-                    this.regPRB = this.aTapeData[this.iTapeData] & 0xff;
-                    this.printf(MESSAGE.PC11, "%s.advanceReader(%d): %#02x\n", this.idDevice, this.iTapeData, this.regPRB);
-                    this.iTapeData++;
-                    this.displayProgress(this.iTapeData / this.aTapeData.length * 100);
-                }
-                else {
-                    this.regPRS |= PDP11.PC11.PRS.ERROR;
-                }
-                this.regPRS |= PDP11.PC11.PRS.DONE;
-                this.regPRS &= ~PDP11.PC11.PRS.BUSY;
-                if (this.regPRS & PDP11.PC11.PRS.IE) {
-                    this.cpu.setIRQ(this.irqReader);
-                }
-            }
-        }
-    }
-
-    /**
-     * readPRS(addr)
-     *
-     * NOTE: We use the PRS RMASK to honor the "write-only" behavior of bit 0, the reader enable bit (RE), because
-     * DEC's tiny Bootstrap Loader (/software/dec/pdp11/boot/bootstrap/BOOTSTRAP-16KB.lst) repeatedly enables the reader using
-     * the INC instruction, which causes the PRS to be read, incremented, and written, so if bit 0 isn't always read
-     * as zero, the INC instruction would clear RE instead of setting it.
-     *
-     * @this {PC11}
-     * @param {number} addr (eg, PDP11.UNIBUS.PRS or 177550)
-     * @returns {number}
-     */
-    readPRS(addr)
-    {
-        return this.regPRS & PDP11.PC11.PRS.RMASK;     // RMASK honors the "write-only" nature of the RE bit by returning zero on reads
-    }
-
-    /**
-     * writePRS(data, addr)
-     *
-     * @this {PC11}
-     * @param {number} data
-     * @param {number} addr (eg, PDP11.UNIBUS.PRS or 177550)
-     */
-    writePRS(data, addr)
-    {
-        if (data & PDP11.PC11.PRS.RE) {
-            /*
-             * From the 1976 Peripherals Handbook, p. 4-378:
-             *
-             *      Set [RE] to allow the Reader to fetch one character. The setting of this bit clears Done,
-             *      sets Busy, and clears the Reader Buffer (PRB). Operation of this bit is disabled if Error = 1;
-             *      attempting to set it when Error = 1 will cause an immediate interrupt if Interrupt Enable = 1.
-             */
-            if (this.regPRS & PDP11.PC11.PRS.ERROR) {
-                data &= ~PDP11.PC11.PRS.RE;
-                if (this.regPRS & PDP11.PC11.PRS.IE) {
-                    this.cpu.setIRQ(this.irqReader);
-                }
-            } else {
-                this.regPRS &= ~PDP11.PC11.PRS.DONE;
-                this.regPRS |= PDP11.PC11.PRS.BUSY;
-                this.regPRB = 0;
-                /*
-                 * The PC11, by virtue of its "high speed", is supposed to deliver characters at 300 CPS, so
-                 * that's the rate we'll choose as well (ie, 1000ms / 300).  As an aside, the original "low speed"
-                 * version of the reader ran at 10 CPS.
-                 */
-                this.time.setTimer(this.timerReader, this.getBaudTimeout(this.baudReceive));
-            }
-        }
-        this.regPRS = (this.regPRS & ~PDP11.PC11.PRS.WMASK) | (data & PDP11.PC11.PRS.WMASK);
-    }
-
-    /**
-     * readPRB(addr)
-     *
-     * @this {PC11}
-     * @param {number} addr (eg, PDP11.UNIBUS.PRB or 177552)
-     * @returns {number}
-     */
-    readPRB(addr)
-    {
-        /*
-         * I'm guessing that the DONE and BUSY bits always remain more-or-less inverses of each other.  They definitely
-         * start out that way when writePRS() sets the reader enable (RE) bit, and so that's how we treat them elsewhere, too.
-         */
-        this.regPRS &= ~PDP11.PC11.PRS.DONE;
-        this.regPRS |= PDP11.PC11.PRS.BUSY;
-        return this.regPRB;
-    }
-
-    /**
-     * writePRB(data, addr)
-     *
-     * @this {PC11}
-     * @param {number} data
-     * @param {number} addr (eg, PDP11.UNIBUS.PRB or 177552)
-     */
-    writePRB(data, addr)
-    {
-    }
-
-    /**
-     * readPPS(addr)
-     *
-     * @this {PC11}
-     * @param {number} addr (eg, PDP11.UNIBUS.PPS or 177554)
-     * @returns {number}
-     */
-    readPPS(addr)
-    {
-        return this.regPPS;
-    }
-
-    /**
-     * writePPS(data, addr)
-     *
-     * NOTE: This was originally added ONLY because when RT-11 v4.0 copies from device "PC:" (the paper tape reader),
-     * it executes the following code:
-     *
-     *      016010: 005037 177550          CLR   @#177550               ;history=2 PRS
-     *      016014: 005037 177554          CLR   @#177554               ;history=1
-     *
-     * and as you can see, without this PPS handler, a TRAP to 4 would normally occur.  I guess since we claim to be
-     * a PC11, that makes sense.  But what about PDP-11 machines with only a PR11 (ie, a reader-only unit)?
-     *
-     * @this {PC11}
-     * @param {number} data
-     * @param {number} addr (eg, PDP11.UNIBUS.PPS or 177554)
-     */
-    writePPS(data, addr)
-    {
-        this.regPPS = (this.regPPS & ~PDP11.PC11.PPS.WMASK) | (data & PDP11.PC11.PPS.WMASK);
-    }
-
-    /**
-     * readPPB(addr)
-     *
-     * @this {PC11}
-     * @param {number} addr (eg, PDP11.UNIBUS.PPB or 177556)
-     * @returns {number}
-     */
-    readPPB(addr)
-    {
-        return this.regPPB;
-    }
-
-    /**
-     * writePPB(data, addr)
-     *
-     * @this {PC11}
-     * @param {number} data
-     * @param {number} addr (eg, PDP11.UNIBUS.PPB or 177556)
-     */
-    writePPB(data, addr)
-    {
-        this.regPPB = (data & PDP11.PC11.PPB.MASK);
-    }
-}
-
-/*
- * There's nothing super special about these values, except that NONE should be falsey and the others should not.
- */
-PC11.SOURCE = {
-    NONE:   "",
-    LOCAL:  "?",
-    REMOTE: "??"
-};
-
-PC11.TARGET = {
-    NONE:   0,
-    READER: 1,
-    MEMORY: 2
-};
-
-PC11.BINDING = {
-    LIST_TAPES:     "listTapes",
-    DESC_TAPE:      "descTape",
-    READ_PROGRESS:  "readProgress"
-};
-
-PC11.CSSCLASS = {
-    PROGRESS_BAR:   "progressBar"
-};
-
-PC11.IOTABLE = {
-    [PDP11.UNIBUS.PRS]:     /* 177550 */    [null, null, PC11.prototype.readPRS,    PC11.prototype.writePRS,    "PRS"],
-    [PDP11.UNIBUS.PRB]:     /* 177552 */    [null, null, PC11.prototype.readPRB,    PC11.prototype.writePRB,    "PRB"],
-    [PDP11.UNIBUS.PPS]:     /* 177554 */    [null, null, PC11.prototype.readPPS,    PC11.prototype.writePPS,    "PPS"],
-    [PDP11.UNIBUS.PPB]:     /* 177556 */    [null, null, PC11.prototype.readPPB,    PC11.prototype.writePPB,    "PPB"]
-};
-
-Defs.CLASSES["PC11"] = PC11;
-
-/**
  * @copyright https://www.pcjs.org/machines/lib/machine.js (C) 2012-2020 Jeff Parsons
  */
 
@@ -20779,7 +13776,7 @@ window[FACTORY] = function createMachine(idMachine, sConfig, sParms) {
  * If we're NOT running a compiled release (ie, FACTORY wasn't overriden from "Machine" to something else),
  * then create hard-coded aliases for all known factories; only DEBUG servers should be running uncompiled code.
  *
- * Why is the PDP11 factory called 'PDP11V2' instead of simply 'PDP11'?  Because the CPU class for PDP11 machines
+ * Why is the PDP11 factory called 'PDP11v3' instead of simply 'PDP11'?  Because the CPU class for PDP11 machines
  * is already called PDP11, and we can't have both a class and a global function with the same name.  Besides,
  * these factory functions are creating entire "machines", not just "processors", so it makes sense for the names
  * to reflect that.
@@ -20790,7 +13787,8 @@ window[FACTORY] = function createMachine(idMachine, sConfig, sParms) {
 if (FACTORY == "Machine") {
     window['Invaders']  = window[FACTORY];
     window['LEDs']      = window[FACTORY];
-    window['PDP11V2']   = window[FACTORY];
+    window['PCx86v3']   = window[FACTORY];
+    window['PDP11v3']   = window[FACTORY];
     window['TMS1500']   = window[FACTORY];
     window['VT100']     = window[FACTORY];
 }
