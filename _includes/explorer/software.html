@@ -43,14 +43,31 @@
             <li id="pcjs-software" class="pcjs-explorer-fixed">Software
               <ul>
               {%- for family in site.data.software -%}
-                {%- if family[0] == "@instances" -%}
-                  {%- assign machines = family[1] -%}
-                {%- else %}
+                {%- if site.developer %}
+                <!-- family: {{ family[0] }} -->
+                {%- endif -%}
+                {%- if family[1]['@instances'] %}
                 <li class="pcjs-explorer-family pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ family[1]['@title'] | default: family[0] }}
                   <ul>
                   {%- assign machines = family[1]['@instances'] -%}
+                  {%- if machines[0]['@title'] -%}
+                    {%- for instance in machines %}
+                    <li id="{{ instance['@permalink'] | slugify }}" class="pcjs-explorer-version pcjs-explorer-item">
+                      <a href="{{ instance['@permalink'] }}">{{ instance['@title'] }}</a>
+                    </li>
+                    {%- endfor %}
+                  </ul>
+                </li>
+                    {%- continue -%}
+                  {%- endif -%}
+                {%- else -%}
+                  {%- assign machines = family[1] -%}
                 {%- endif -%}
                 {%- for machine in machines -%}
+                  {%- if site.developer %}
+                    <!-- machine: {{ machine[0] }} -->
+                    <!-- machine_data: {{ machine[1] }} -->
+                  {%- endif -%}
                   {%- capture machine_type -%}{{ machine[0] }}{%- endcapture -%}
                   {%- capture software_type -%}{{ machine[1]['@type'] }}{%- endcapture -%}
                   {%- capture software_path1 -%}{{ machine[1]['@path'] }}{%- endcapture -%}
@@ -151,6 +168,7 @@
                                         <!-- software_id: {{ software_id }} -->
                               {%- endif -%}
                               {%- assign autoMount = "" -%}{%- assign autoDrive = "" -%}{%- assign autoState = "" -%}
+                              {%- capture autoType -%}{%- if release['@autoType'] -%}&autoType={{ release['@autoType'] | replace: "\","%5C" }}{%- endif -%}{%- endcapture -%}
                               {%- if hardware_url != "" -%}{%- comment -%} or page.permalink contains machine_url {%- endcomment -%}
                                 {%- if release['@autoMount'] -%}
                                   {%- capture autoMount -%}{% assign disk_num = 0 %}{% for drive in release['@autoMount'] %}{% assign disk_num = disk_num | plus:1 %}{{ drive[0] }}:%7Bname:%22{% if drive[1]['@title'] %}{{ drive[1]['@title'] }}{% else %}{{ software_title }}{% if release['@title'] == nil and release['@media'].size > 1 %} (Disk {{ disk_num }}){% endif %}{% endif %}%22,path:%22{{ diskette_server }}{{ software_url }}/{{ drive[1]['@diskette'] }}%22%7D,{% endfor %}@{%- endcapture -%}
@@ -164,7 +182,7 @@
                                 {%- endif -%}
                                 {%- if autoDrive != "" -%}{%- capture autoDrive -%}&drives=[{{ autoDrive | replace: ",@", "" | replace: " ","%20" }}]{%- endcapture -%}{%- endif -%}
                                 {%- if autoMount != "" -%}{%- capture autoMount -%}&autoMount=%7B{{ autoMount | replace: ",@", "" | replace: " ","%20" }}%7D{%- endcapture -%}{%- endif -%}
-                                {%- capture software_parms -%}{%- if hardware_url contains '?' -%}&{%- else -%}?{%- endif -%}software={{ software_url }}/{{ autoMount }}{{ autoDrive }}{{ autoState }}{%- endcapture -%}
+                                {%- capture software_parms -%}{%- if hardware_url contains '?' -%}&{%- else -%}?{%- endif -%}software={{ software_url }}/{{ autoMount }}{{ autoDrive }}{{ autoState }}{{ autoType }}{%- endcapture -%}
                               {%- elsif alternate_url != "" -%}
                                 {%- if alternate_url != "#" -%}
                                   {%- assign hardware_url = alternate_url -%}
@@ -205,10 +223,10 @@
                       </ul>
                     </li>
                   {%- endfor -%}
-                {%- unless family[0] == '@instances' %}
+                {%- if family[1]['@instances'] %}
                   </ul>
                 </li>
-                {%- endunless -%}
+                {%- endif -%}
               {%- endfor %}
               </ul>
             </li>

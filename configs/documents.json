@@ -1138,30 +1138,6 @@
   },
   "papers": {
     "@title": "Papers",
-    "pcjs": {
-      "@title": "PCjs",
-      "@instances": {
-        "programming": {
-          "@title": "Programming Notes",
-          "@documents": [
-            {
-              "@title": "dBASE III Debugging Notes",
-              "@file": "1984-09-16--DBASE_III_DEBUG.pdf",
-              "@cover": ".jpg",
-              "@source": "PCjs",
-              "@tags": "dbase3"
-            },
-            {
-              "@title": "dBASE III Patching Procedure",
-              "@file": "1984-09-25--DBASE_III_PATCH.pdf",
-              "@cover": ".jpg",
-              "@source": "PCjs",
-              "@tags": "dbase3"
-            }
-          ]
-        }
-      }
-    },
     "research": {
       "@title": "Research",
       "@instances": {
@@ -1584,6 +1560,34 @@
             "@link": "/machines/led/lite-brite/?backgroundImage=/documents/photos/lite-brite/covers/The_Wizard_of_Light.png&pattern=",
             "@cover": ".png",
             "@source": ""
+          }
+        ]
+      }
+    }
+  },
+  "pcjs": {
+    "@title": "PCjs",
+    "@instances": {
+      "": {
+        "@title": "PCjs Documents",
+        "@permalink": "/documents/pcjs/"
+      },
+      "programming": {
+        "@title": "Programming Notes",
+        "@documents": [
+          {
+            "@title": "dBASE III Debugging Notes",
+            "@file": "1984-09-16--DBASE_III_DEBUG.pdf",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "dbase3"
+          },
+          {
+            "@title": "dBASE III Patching Procedure",
+            "@file": "1984-09-25--DBASE_III_PATCH.pdf",
+            "@cover": ".jpg",
+            "@source": "PCjs",
+            "@tags": "dbase3"
           }
         ]
       }

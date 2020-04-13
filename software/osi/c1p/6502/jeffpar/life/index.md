@@ -8,4 +8,6 @@ machines:
     type: c1p
 ---
 
+By Jeff Parsons
+
 {% include machine.html id="c1p8k" %}

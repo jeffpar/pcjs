@@ -1,43 +1,8 @@
 {
   "basic": {
     "@title": "BASIC Programs",
-    "jeffpar": {
-      "@title": "From Jeff",
-      "@products": {
-        "checkers": {
-          "@title": "CHECKERS",
-          "@tape": "CHECKERS.BAS",
-          "@type": "ASCII"
-        },
-        "hangwoman": {
-          "@title": "HANGWOMAN",
-          "@tape": "HANGWOMAN.BAS",
-          "@type": "ASCII"
-        },
-        "life": {
-          "@title": "LIFE",
-          "@tape": "LIFE.BAS",
-          "@type": "ASCII"
-        },
-        "othello": {
-          "@title": "OTHELLO",
-          "@tape": "OTHELLO.BAS",
-          "@type": "ASCII"
-        },
-        "soforecast": {
-          "@title": "SOFORECAST",
-          "@tape": "SOFORECAST.BAS",
-          "@type": "ASCII"
-        },
-        "tubelist": {
-          "@title": "TUBELIST",
-          "@tape": "TUBELIST.BAS",
-          "@type": "ASCII"
-        }
-      }
-    },
     "osi": {
-      "@title": "From OSI",
+      "@title": "OSI",
       "@products": {
         "math": {
           "@title": "BASIC MATH",
@@ -77,7 +42,7 @@
       }
     },
     "other": {
-      "@title": "From Others",
+      "@title": "Other",
       "@products": {
         "osiweb/seawolfe": {
           "@title": "SEAWOLFE",
@@ -104,12 +69,47 @@
           "@source": "http://www.osiweb.org/programs/basic/"
         }
       }
+    },
+    "jeffpar": {
+      "@title": "PCjs",
+      "@products": {
+        "checkers": {
+          "@title": "CHECKERS",
+          "@tape": "CHECKERS.BAS",
+          "@type": "ASCII"
+        },
+        "hangwoman": {
+          "@title": "HANGWOMAN",
+          "@tape": "HANGWOMAN.BAS",
+          "@type": "ASCII"
+        },
+        "life": {
+          "@title": "LIFE",
+          "@tape": "LIFE.BAS",
+          "@type": "ASCII"
+        },
+        "othello": {
+          "@title": "OTHELLO",
+          "@tape": "OTHELLO.BAS",
+          "@type": "ASCII"
+        },
+        "soforecast": {
+          "@title": "SOFORECAST",
+          "@tape": "SOFORECAST.BAS",
+          "@type": "ASCII"
+        },
+        "tubelist": {
+          "@title": "TUBELIST",
+          "@tape": "TUBELIST.BAS",
+          "@type": "ASCII"
+        }
+      }
     }
   },
   "6502": {
     "@title": "6502 Programs",
     "jeffpar": {
-      "@title": "From Jeff",
+      "@title": "PCjs",
       "@products": {
         "assembler": {
           "@title": "6502 Assembler (8K)",

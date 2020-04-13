@@ -8,15 +8,15 @@ machines:
     type: c1p
 ---
 
+By Jeff Parsons
+
 NOTE: I suspect the dump of the tape containing this machine-language program is either damaged or incomplete, which is unfortunate,
 because these were a nice set of [Enhancements and Patches](#handwritten-notes-on-osi-basic-enhancements) that I had created around 1980-1981
 for the Microsoft BASIC Interpreter that came with the OSI Challenger 1P.  Hopefully I'll find time to dig into this again and figure what
-the problem is. -JP
+the problem is.
 
 {% include machine.html id="c1p8k" %}
 
 ### Handwritten Notes on OSI BASIC Enhancements
-
-By Jeff Parsons
 
 {% include embed.html src="https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2194615&authkey=AFxwcIRAEP3PbX8&em=2" %}

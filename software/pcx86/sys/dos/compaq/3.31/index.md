@@ -58,7 +58,7 @@ COMPAQ MS-DOS 4.01 release, since COMPAQ states that the disk "supersedes earlie
 
 ### Directory of COMPAQ MS-DOS 3.31 (1987)
 
-This disk from the [PCjs Software Archive](/software/pcx86/sw/misc/pcjs/) is, unfortunately, not an original
+This disk from the [PCjs Software Archive](/software/pcjs/) is, unfortunately, not an original
 distribution disk, but it's included here because it's the only available copy of other COMPAQ MS-DOS 3.31 binaries
 released in 1987.
 

@@ -14,17 +14,28 @@
       }
     }
   },
-  "@instances": {
+  "ibm": {
     "pcx86": {
       "@title": "IBM PC",
       "@path": "/pcx86",
       "@type": "software",
       "@diskette_drives": ["A", "B"]
-    },
+    }
+  },
+  "osi": {
     "c1p": {
-      "@title": "OSI Challenger 1P",
+      "@title": "OSI C1P",
       "@path": "/osi/c1p",
       "@type": "software"
     }
+  },
+  "pcjs": {
+    "@title": "PCjs",
+    "@instances": [
+      {
+        "@title": "PCjs Software",
+        "@permalink": "/software/pcjs/"
+      }
+    ]
   }
 }

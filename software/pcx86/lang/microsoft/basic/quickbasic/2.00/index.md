@@ -20,7 +20,7 @@ The [MS QuickBASIC 2.00 (Disk 1)](#directory-of-ms-quickbasic-200-disk-1) was ac
 to be an original distribution disk; unfortunately, Disk 2 was not included.
 
 The [MS QuickBASIC 2.00 (Personal)](#directory-of-ms-quickbasic-200-personal) disk is from our collection of
-[PCjs Personal Disks](/software/pcx86/sw/misc/pcjs/) and is not an original distribution disk; however, it
+[PCjs Personal Disks](/software/pcjs/) and is not an original distribution disk; however, it
 contains an identical `QB.EXE` and presumably a corresponding `BCOM20.LIB`.
 
 {% include machine.html id="ibm5160-msdos320" %}

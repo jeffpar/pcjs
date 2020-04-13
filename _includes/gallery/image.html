@@ -1,6 +1,6 @@
 {%- capture image_id -%}{%- if include.id %} id="{{ include.id }}"{%- endif -%}{%- endcapture -%}
-{%- capture image_width -%}{%- if include.width %} width="{{ include.width }}"{%- endif -%}{%- endcapture -%}
-{%- capture image_height -%}{%- if include.height %} height="{{ include.height }}"{%- endif -%}{%- endcapture -%}
+{%- capture image_width -%}{%- if include.width and include.width != "" %} width="{{ include.width }}"{%- endif -%}{%- endcapture -%}
+{%- capture image_height -%}{%- if include.height and include.height != "" %} height="{{ include.height }}"{%- endif -%}{%- endcapture -%}
 {%- capture image_style -%}{%- if include.maxwidth %} style="max-width:{{ include.maxwidth }}"{%- elsif include.width %} style="width:{{ include.width }}px"{%- endif -%}{%- endcapture %}
   <div class="pcjs-gallery-frame"{{ image_id }}{{ image_style }}>
 {%- capture image_src -%}{{ site.baseurl }}{{ include.image | default: include.src }}{%- endcapture -%}

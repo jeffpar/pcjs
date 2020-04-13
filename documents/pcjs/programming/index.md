@@ -1,11 +1,11 @@
 ---
 layout: page
 title: PCjs Programming Notes
-permalink: /documents/papers/pcjs/programming/
+permalink: /documents/pcjs/programming/
 preview: covers/1984-09-16--DBASE_III_DEBUG.jpg
 ---
 
-We kick off the [PCjs Document Archive](/documents/papers/pcjs/) with a couple of documents [@jeffpar](https://jeffpar.com)
+We kick off the [PCjs Document Archive](/documents/pcjs/) with a couple of documents [@jeffpar](https://jeffpar.com)
 created in 1984, detailing his early adventures in PC debugging: disassembling and disabling [dBASE III Copy-Protection](#dbase-iii-copy-protection).
 
 {% include gallery/documents.html title="dBASE III Copy-Protection" tag="dbase3" %}
