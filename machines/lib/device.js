@@ -482,7 +482,7 @@ class Device extends WebIO {
     {
         if (typeof format == "number" && this.isMessageOn(format)) {
             /*
-             * The following will execute at most once, because findDeviceByClass() returns either a Device or null,
+             * The following call will execute at most once, because findDeviceByClass() returns either a Device or null,
              * neither of which is undefined.
              */
             if (this.dbg === undefined) {

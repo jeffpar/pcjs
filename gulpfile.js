@@ -30,10 +30,15 @@
  *          For example, `gulp compile/pcx86` will recompile the current version of pcx86-uncompiled.js
  *          if it's out of date.
  *
- *      compile/machines
+ *      compile/v2
  *
- *          This special task compiles all the newer machines that use Device classes; you can also compile
- *          them individually, just like any other machine (eg, `gulp compile/ti57`).
+ *          This special task compiles all machines that use the new (v2) Device classes; you can also
+ *          compile them individually, just like any other machine (eg, `gulp compile/ti57`).
+ *
+ *      compile/v3
+ *
+ *          This special task compiles all new work-in-progress (v3) machines; you can also compile them individually,
+ *          just like any other machine (eg, `gulp compile/pcx86v3`).
  *
  *      copy (eg: `gulp copy` or `gulp copy/{machine}`)
  *
@@ -206,6 +211,7 @@ aMachines.forEach(function(machineID) {
                 return stream
                     .pipe(gulpHeader('/**\n * @copyright ' + file.path.replace(/.*\/(modules|machines)\/(.*)/, "https://www.pcjs.org/$1/$2") + ' (C) 2012-' + pkg.year + ' Jeff Parsons\n */\n\n'))
                     .pipe(gulpReplace(/APPVERSION = "0.00"/g, 'APPVERSION = "' + machineVersion + '"'))
+                    .pipe(gulpReplace(/(var\s+VERSION\s*=\s*)"[0-9.]*"/g, '$1"' + machineVersion + '"'))
                     .pipe(gulpReplace(/(^|\n)[ \t]*(['"])use strict\2;?/g, ""))
                     .pipe(gulpReplace(/^(import|export)[ \t]+[^\n]*\n/gm, ""))
                     .pipe(gulpReplace(/^[ \t]*var\s+\S+\s*=\s*require\((['"]).*?\1\)[^;]*;/gm, ""))
@@ -262,14 +268,19 @@ aMachines.forEach(function(machineID) {
 
 gulp.task("concat", gulp.parallel(...aConcatTasks));
 gulp.task("compile", gulp.parallel(...aCompileTasks));
-gulp.task("compile/machines", gulp.parallel(
+gulp.task("compile/v2", gulp.parallel(
     "compile/invaders",
     "compile/led",
-    "compile/pdp11v2",
+    "compile/pcx86v3",
+    "compile/pdp11v3",
     "compile/ti42",
     "compile/ti55",
     "compile/ti57",
     "compile/vt100"
+));
+gulp.task("compile/v3", gulp.parallel(
+    "compile/pcx86v3",
+    "compile/pdp11v3"
 ));
 
 gulp.task("version", function() {

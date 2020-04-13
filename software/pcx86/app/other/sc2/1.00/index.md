@@ -11,7 +11,7 @@ machines:
       A:
         name: PC DOS 2.00 (Disk 1)
       B:
-        name: SuperCalc2 1.0
+        name: SuperCalc2 1.00
     autoType: $date\r$time\rb:\rsc2\r
 ---
 

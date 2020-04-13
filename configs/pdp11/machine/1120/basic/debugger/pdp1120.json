@@ -43,7 +43,7 @@
   "pc11": {
     "class": "PC11",
     "name": "PTR",
-    "library": "/configs/pdp11/tapes.json",
+    "library": "/configs/pdp11/software.json",
     "autoLoad": "BASIC (Single User)"
   },
   "cpu": {

@@ -24,7 +24,7 @@ var DumpAPI = require("../../../machines/shared/lib/dumpapi");
  * Formats
  * -------
  *
- * Using the PCjs 2.0 ROM files as an example, the new "v2" FileDump format should look like this:
+ * Using the PCjs 2.0 ROM files as an example, the new "v3" FileDump format should look like this:
  *
  *  {
  *    "addr": 0,

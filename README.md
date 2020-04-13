@@ -22,7 +22,7 @@ The [old PCjs repository](https://github.com/jeffpar/pcjs) included a [Node](htt
 but that's no longer maintained.
 
 However, if you want to run PCjs locally, on your own computer, it's still fairly easy.  Here's a summary of the
-[basic steps](https://help.github.com/en/enterprise/2.14/user/articles/setting-up-your-github-pages-site-locally-with-jekyll)
+[basic steps](https://help.github.com/en/github/working-with-github-pages/testing-your-github-pages-site-locally-with-jekyll)
 to install Jekyll locally and run your own PCjs web server:
 
  1. Clone this repository onto your computer
