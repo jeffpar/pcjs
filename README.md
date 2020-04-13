@@ -16,14 +16,20 @@ along with a small collection of software used for archival/demonstration purpos
 
 ### Running PCjs
 
-PCjs now uses [Jekyll](http://jekyllrb.com), so that [pcjs.org](https://www.pcjs.org) can use [GitHub Pages](https://pages.github.com).
+PCjs is always ready to run at [pcjs.org](https://www.pcjs.org), thanks to [GitHub](https://github.com/),
+since we updated the project to use [Jekyll](http://jekyllrb.com) and [GitHub Pages](https://pages.github.com).
+The [old PCjs repository](https://github.com/jeffpar/pcjs) included a [Node](https://nodejs.org/)-based web server,
+but that's no longer maintained.
 
-Here are the basic steps to install Jekyll locally and run your own PCjs web server:
+However, if you want to run PCjs locally, on your own computer, it's still fairly easy.  Here's a summary of the
+[basic steps](https://help.github.com/en/enterprise/2.14/user/articles/setting-up-your-github-pages-site-locally-with-jekyll)
+to install Jekyll locally and run your own PCjs web server:
 
- 1. Install Ruby (on OS X, it should already be installed)
- 2. Install Bundler (on OS X, run `sudo gem install bundler`)
- 3. Run `bundle install`
- 4. Run `bundle exec jekyll serve` to start the web server
+ 1. Clone this repository onto your computer
+ 2. Install Ruby (on OS X, it should already be installed)
+ 3. Install Bundler (on OS X, run `sudo gem install bundler`)
+ 4. In the root of this repository, run `bundle install`
+ 5. Run `bundle exec jekyll serve` to start the web server
 
 Now open a web browser and go to `http://localhost:4000/`.  You're done!
 
