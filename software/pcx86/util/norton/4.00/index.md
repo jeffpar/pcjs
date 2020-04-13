@@ -20,7 +20,7 @@ machines:
 Two variations of Norton Utilities 4.00 (Standard Edition) are currently available:
 
 - [March 1, 1987](#directory-of-norton-utilities-400-1987-03-01-1) (from [WinWorld](https://winworldpc.com/product/norton-utilities/40))
-- [May 15, 1987](#directory-of-norton-utilities-400-1987-05-15-1) (from the [PCjs Software Archive](/software/pcx86/sw/misc/pcjs/))
+- [May 15, 1987](#directory-of-norton-utilities-400-1987-05-15-1) (from the [PCjs Software Archive](/software/pcjs/))
 
 Scans of the [May 15, 1987](#directory-of-norton-utilities-400-1987-05-15-1) diskettes are provided [below](#diskette-photos).
 

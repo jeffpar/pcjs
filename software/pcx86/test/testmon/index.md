@@ -1,6 +1,6 @@
 ---
 layout: page
-title: PCx86 TestMonitor Support
+title: PCx86 TestMonitor
 permalink: /software/pcx86/test/testmon/
 redirect_from: /tests/pcx86/testmon/
 machines:

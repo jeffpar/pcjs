@@ -17,7 +17,7 @@ machines:
 ---
 
 [Norton Utilities 3.00 (1984-12-07)](#directory-of-norton-utilities-300-1984-12-07) is from the
-[PCjs Software Archive](/software/pcx86/sw/misc/pcjs/) and predates previously known copies of version 3.00.
+[PCjs Software Archive](/software/pcjs/) and predates previously known copies of version 3.00.
 Scans of the diskette and accompanying note from Peter Norton are provided [below](#diskette-photos).
 Coincidentally, we acquired the diskette on December 7, 2018, exactly 34 years after the files were created.
 

@@ -7,6 +7,8 @@ redirect_from:
   - /disks/pcx86/os2/misc/
 ---
 
+This collection of historical OS/2 diskettes is from the [PCjs Software Archive](/software/pcjs/).
+
 #### OS/2 CP-DOS Boot Disk (v7.68)
 
 The [OS/2 CP-DOS Boot Disk (v7.68)](86295/) contained a pre-1.0 version of OS/2 built on

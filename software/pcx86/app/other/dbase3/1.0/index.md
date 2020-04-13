@@ -31,7 +31,7 @@ Two of the PCjs disks shown below:
 
 are from our private collection and should be exact copies of the original dBASE III 1.0 distribution disks, with the
 exception of `DBASE.EXE`, which was patched to eliminate copy-protection checks.  Details of that patch are available
-in the [PCjs Document Archive](/documents/papers/pcjs/programming/#dbase-iii-copy-protection),
+in the [PCjs Document Archive](/documents/pcjs/programming/#dbase-iii-copy-protection),
 along with this [blog post](/blog/2017/08/11/).
 
 Also, for completeness, the original `DBASE.EXE` has been recreated by "unpatching" it and saving it on the

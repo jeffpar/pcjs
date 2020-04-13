@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Michael Abrash's VGA "Black Book" Tests
+title: VGA "Black Book" Tests
 permalink: /software/pcx86/test/vga/blackbook/
 redirect_from: /tests/pcx86/vga/
 preview: images/L33-1.png
@@ -16,9 +16,9 @@ machines:
         name: VGA Black Book Binaries
 ---
 
-To aid the development of PCjs VGA support, selected [VGA Black Book Tests](#selected-vga-black-book-tests) from
-[Michael Abrash's Graphics Programming Black Book](https://github.com/jeffpar/abrash-black-book) have been added
-to the project, which you can run in the [VGA Black Book Test Machine](#vga-black-book-test-machine) below.
+To aid the development of PCjs VGA support, selected [VGA "Black Book" Tests](#selected-vga-black-book-tests) from
+Michael Abrash's [Graphics Programming Black Book](https://github.com/jeffpar/abrash-black-book) have been added
+to the project, which you can run in the [VGA "Black Book" Test Machine](#vga-black-book-test-machine) below.
 
 Abrash's book is available on many sites, but I'm partial to the Markdown version that [James Gregory](https://github.com/jagregory)
 has made available on GitHub, because (a) it's a brilliant way to render and share the text, and (b) it apparently has
@@ -40,17 +40,17 @@ Development of PCjs VGA support began June 2015, and not everything here runs pr
 - [L29-4](src/L29-4.ASM) doesn't actually blank the screen (then again, other emulators don't bother blanking it, either)
 - [L30-1](src/L30-1.ASM) and [L30-2](src/L30-2.ASM) require split-screen support
 
-### VGA Black Book Test Machine
+### VGA "Black Book" Test Machine
 
 The Compaq DeskPro 386 machine below loads the
-[VGA Black Book Binaries](#directory-of-vga-black-book-binaries) diskette from the PCjs Disk Library
+[VGA "Black Book" Binaries](#directory-of-vga-black-book-binaries) diskette from the PCjs Disk Library
 into Drive B.  Click the **Run** button to start the machine.
 
 {% include machine.html id="deskpro386" %}
 
-### Directory of VGA Black Book Sources
+### Directory of VGA "Black Book" Sources
 
-This disk image contains the source code for selected [VGA Black Book Tests](#selected-vga-black-book-tests).
+This disk image contains the source code for selected [VGA "Black Book" Tests](#selected-vga-black-book-tests).
 It was built using [DiskDump]({{ site.github.pages }}/tools/diskdump/) and the *--normalize* option, which automatically converts linefeeds
 in known text files (including ASM files) into DOS-compatible CR/LF sequences.
 
@@ -112,9 +112,9 @@ in known text files (including ASM files) into DOS-compatible CR/LF sequences.
 	       48 file(s)     234641 bytes
 	                       64512 bytes free
 
-### Directory of VGA Black Book Binaries
+### Directory of VGA "Black Book" Binaries
 
-This disk image contains executables built from selected [VGA Black Book Tests](#selected-vga-black-book-tests).
+This disk image contains executables built from selected [VGA "Black Book" Tests](#selected-vga-black-book-tests).
 
 	 Volume in drive A is VGABIN     
 
@@ -156,11 +156,11 @@ This disk image contains executables built from selected [VGA Black Book Tests](
 	       30 file(s)      77986 bytes
 	                       73728 bytes free
 
-### Selected VGA Black Book Tests
+### Selected VGA "Black Book" Tests
 
-The VGA Black Book tests taken from
+The VGA "Black Book" tests taken from
 [Michael Abrash's Graphics Programming Black Book](https://github.com/jeffpar/abrash-black-book) to
-create the PCjs [VGA Black Book Binaries](#directory-of-vga-black-book-binaries) are listed below.
+create the PCjs [VGA "Black Book" Binaries](#directory-of-vga-black-book-binaries) are listed below.
 
 #### [Chapter 23: Bones and Sinew](https://github.com/jeffpar/abrash-black-book/blob/master/src/chapter-23.md)
 

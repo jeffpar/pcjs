@@ -2895,6 +2895,21 @@
       }
     }
   },
+  "pcjs": {
+    "@title": "PCjs Archives",
+    "@hidden": true,
+    "@versions": {
+      "jeffpar": {
+        "@media": [
+          {
+            "@title": "JEFFPAR DISK001",
+            "@diskette": "JEFFPAR-DISK001.json",
+            "@type": "PC360K"
+          }
+        ]
+      }
+    }
+  },
   "sdk": {
     "@title": "SDKs",
     "os2": {
@@ -4516,16 +4531,6 @@
     "misc": {
       "@title": "Miscellaneous",
       "@versions": {
-        "pcjs": {
-          "@title": "PCjs Software Archive",
-          "@media": [
-            {
-              "@title": "JEFFPAR DISK001",
-              "@diskette": "JEFFPAR-DISK001.json",
-              "@type": "PC360K"
-            }
-          ]
-        },
         "pcsig08": {
           "@title": "PC-SIG Library 8th Edition"
         },
@@ -5692,7 +5697,7 @@
       }
     },
     "ext": {
-      "@title": "Extensions",
+      "@title": "Extenders",
       "ibm": {
         "@title": "IBM",
         "topview": {
@@ -5745,10 +5750,11 @@
         "@title": "Microsoft",
         "dosmgr": {
           "@title": "MS-DOS Manager",
-          "@hidden": true,
           "@versions": {
             "1.00": {
               "@title": "MS-DOS Manager 1.00",
+              "@hardware": "/machines/pcx86/ibm/5170/cga/",
+              "@autoType": "\\r\\rB:\\rMANAGER\\r",
               "@media": [
                 {
                   "@title": "MS-DOS Manager 1.00",
@@ -7943,7 +7949,7 @@
         ]
       },
       "testmon": {
-        "@title": "PCx86 INT14 Utilities",
+        "@title": "PCx86 TestMonitor",
         "@media": [
           {
             "@diskette": "INT14.json",

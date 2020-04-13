@@ -15,8 +15,8 @@ used smaller-than-normal sectors (including one with an invalid checksum), dBASE
 diskettes that were physically altered in a way that no floppy disk controller could duplicate.
 
 At least one other emulator has already [accomplished](https://forum.winworldpc.com/discussion/9472/software-spotlight-dbase-iii-r1-0)
-this feat.  And I had already [debugged](/documents/papers/pcjs/programming/1984-09-16--DBASE_III_DEBUG.pdf)
-and [defeated](/documents/papers/pcjs/programming/1984-09-25--DBASE_III_PATCH.pdf) dBASE III copy-protection
+this feat.  And I had already [debugged](/documents/pcjs/programming/1984-09-16--DBASE_III_DEBUG.pdf)
+and [defeated](/documents/pcjs/programming/1984-09-25--DBASE_III_PATCH.pdf) dBASE III copy-protection
 almost 35 years ago.
 
 However, something that's missing from both contemporary and modern reports is any real
@@ -101,6 +101,6 @@ about a duplication process that involves writing modifications to the original 
 I didn't have to wrestle with that concern, however, because I no longer have an original diskette.  All I had was a
 KryoFlux dump, which doesn't tell you much about the physical condition of the diskette.  So I resorted to
 [debugging](/software/pcx86/app/other/dbase3/1.0/debugger/#debugging-notes) the software again (as I did
-[35 years ago](/documents/papers/pcjs/programming/)), watching the reads and writes, observing what PROLok's expectations
+[35 years ago](/documents/pcjs/programming/)), watching the reads and writes, observing what PROLok's expectations
 were, inferring that one of the 512-byte sectors must have been physically damaged within +/-10 bytes of the 272nd byte,
 and then recording that in my annotated disk image.

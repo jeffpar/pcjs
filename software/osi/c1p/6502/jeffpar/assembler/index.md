@@ -8,9 +8,9 @@ machines:
     type: c1p
 ---
 
-{% include machine.html id="c1p8k" %}
-
 By Jeff Parsons
+
+{% include machine.html id="c1p8k" %}
 
 The "source code" listing below from June 19, 1980 is for the first piece of software I sold, right around the
 time I graduated from high school.  I had had my Ohio Scientific Challenger 1P for maybe a year when I decided
