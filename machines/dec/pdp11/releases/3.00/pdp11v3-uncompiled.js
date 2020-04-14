@@ -7209,7 +7209,7 @@ Time.BINDING = {
 Defs.CLASSES["Time"] = Time;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/bus.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/bus.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ type: string, addrWidth: number, dataWidth: number, blockSize: (number|undefined), littleEndian: (boolean|undefined) }} */
@@ -7922,7 +7922,7 @@ Bus.TYPE = {
 Defs.CLASSES["Bus"] = Bus;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/memory.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/memory.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), size: number, type: (number|undefined), littleEndian: (boolean|undefined), values: (Array.<number>|string|undefined) }} */
@@ -8685,7 +8685,7 @@ Memory.TYPE = {
 Defs.CLASSES["Memory"] = Memory;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/ports.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/ports.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), size: number }} */
@@ -8882,7 +8882,7 @@ class Ports extends Memory {
 Defs.CLASSES["Ports"] = Ports;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/ram.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/ram.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, type: (number|undefined) }} */
@@ -8927,7 +8927,7 @@ class RAM extends Memory {
 Defs.CLASSES["RAM"] = RAM;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/rom.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/rom.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, values: Array.<number>, file: string, reference: string, chipID: string, revision: (number|undefined), colorROM: (string|undefined), backgroundColorROM: (string|undefined) }} */
@@ -9153,7 +9153,7 @@ ROM.BINDING = {
 Defs.CLASSES["ROM"] = ROM;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/cpu/cpu.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/cpu.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -9301,7 +9301,7 @@ class CPU extends Device {
 // Defs.CLASSES["CPU"] = CPU;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/cpu/debugger.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/debugger.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ defaultRadix: (number|undefined) }} */

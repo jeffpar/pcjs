@@ -7673,7 +7673,7 @@ Time.BINDING = {
 Defs.CLASSES["Time"] = Time;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/bus.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/bus.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ type: string, addrWidth: number, dataWidth: number, blockSize: (number|undefined), littleEndian: (boolean|undefined) }} */
@@ -8386,7 +8386,7 @@ Bus.TYPE = {
 Defs.CLASSES["Bus"] = Bus;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/memory.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/memory.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), size: number, type: (number|undefined), littleEndian: (boolean|undefined), values: (Array.<number>|string|undefined) }} */
@@ -9149,7 +9149,7 @@ Memory.TYPE = {
 Defs.CLASSES["Memory"] = Memory;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/ports.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/ports.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), size: number }} */
@@ -9346,7 +9346,7 @@ class Ports extends Memory {
 Defs.CLASSES["Ports"] = Ports;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/ram.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/ram.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, type: (number|undefined) }} */
@@ -9391,7 +9391,7 @@ class RAM extends Memory {
 Defs.CLASSES["RAM"] = RAM;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/rom.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/rom.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, values: Array.<number>, file: string, reference: string, chipID: string, revision: (number|undefined), colorROM: (string|undefined), backgroundColorROM: (string|undefined) }} */
@@ -9617,2611 +9617,7 @@ ROM.BINDING = {
 Defs.CLASSES["ROM"] = ROM;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/vt100/lib/chips.js (C) 2012-2020 Jeff Parsons
- */
-
-/**
- * @class {VT100Chips}
- * @unrestricted
- */
-class VT100Chips extends Device {
-    /**
-     * VT100Chips(idMachine, idDevice, config)
-     *
-     * @this {VT100Chips}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {Config} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
-        this.ports = /** @type {Ports} */ (this.findDeviceByClass("Ports"));
-        this.ports.addIOTable(this, VT100Chips.IOTABLE);
-        this.onReset();
-    }
-
-    /**
-     * loadState(state)
-     *
-     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
-     *
-     * @this {VT100Chips}
-     * @param {Array} state
-     * @returns {boolean}
-     */
-    loadState(state)
-    {
-        let idDevice = state.shift();
-        if (this.idDevice == idDevice) {
-            this.bBrightness    = state.shift();
-            this.bFlags         = state.shift();
-            this.bDC011Cols     = state.shift();
-            this.bDC011Rate     = state.shift();
-            this.bDC012Scroll   = state.shift();
-            this.bDC012Blink    = state.shift();
-            this.bDC012Reverse  = state.shift();
-            this.bDC012Attr     = state.shift();
-            this.dNVRAddr       = state.shift(); // 20-bit address
-            this.wNVRData       = state.shift(); // 14-bit word
-            this.bNVRLatch      = state.shift(); // 1 byte
-            this.bNVROut        = state.shift(); // 1 bit
-            this.aNVRWords      = state.shift(); // 100 14-bit words
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * saveState(state)
-     *
-     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
-     *
-     * @this {VT100Chips}
-     * @param {Array} state
-     */
-    saveState(state)
-    {
-        state.push(this.idDevice);
-        state.push(this.bBrightness);
-        state.push(this.bFlags);
-        state.push(this.bDC011Cols);
-        state.push(this.bDC011Rate);
-        state.push(this.bDC012Scroll);
-        state.push(this.bDC012Blink);
-        state.push(this.bDC012Reverse);
-        state.push(this.bDC012Attr);
-        state.push(this.dNVRAddr);
-        state.push(this.wNVRData);
-        state.push(this.bNVRLatch);
-        state.push(this.bNVROut);
-        state.push(this.aNVRWords);
-    }
-
-    /**
-     * onPower(on)
-     *
-     * Called by the Machine device to provide notification of a power event.
-     *
-     * @this {VT100Chips}
-     * @param {boolean} on (true to power on, false to power off)
-     */
-    onPower(on)
-    {
-        if (this.kbd === undefined) {
-            this.kbd = /** @type {VT100Keyboard} */ (this.findDeviceByClass("VT100Keyboard"));
-        }
-        if (this.serial === undefined) {
-            this.serial = /** @type {VT100Serial} */ (this.findDeviceByClass("VT100Serial"));
-        }
-        if (this.video === undefined) {
-            this.video = /** @type {VT100Video} */ (this.findDeviceByClass("VT100Video"));
-        }
-        /*
-         * This is also a good time to get access to the Debugger, if any, and add our dump extensions.
-         */
-        if (this.dbg === undefined) {
-            this.dbg = /** @type {Debugger} */ (this.findDeviceByClass("Debugger", false));
-            if (this.dbg) this.dbg.addDumper(this, "nvr", "dump non-volatile ram", this.dumpNVR);
-        }
-    }
-
-    /**
-     * onReset()
-     *
-     * Called by the Machine device to provide notification of a reset event.
-     *
-     * @this {VT100Chips}
-     */
-    onReset()
-    {
-        this.bBrightness    = VT100Chips.BRIGHTNESS.INIT;
-        this.bFlags         = VT100Chips.FLAGS.NO_AVO | VT100Chips.FLAGS.NO_GFX;
-        this.bDC011Cols     = VT100Chips.DC011.INITCOLS;
-        this.bDC011Rate     = VT100Chips.DC011.INITRATE;
-        this.bDC012Scroll   = VT100Chips.DC012.INITSCROLL;
-        this.bDC012Blink    = VT100Chips.DC012.INITBLINK;
-        this.bDC012Reverse  = VT100Chips.DC012.INITREVERSE;
-        this.bDC012Attr     = VT100Chips.DC012.INITATTR;
-        this.dNVRAddr       = 0;
-        this.wNVRData       = 0;
-        this.bNVRLatch      = 0;
-        this.bNVROut        = 0;
-       /*
-        * The following array contains the data we use to initialize all (100) words of NVR (Non-Volatile RAM).
-        *
-        * I used to initialize every word to 0x3ff, as if the NVR had been freshly erased, but that causes the
-        * firmware to (attempt to) beep and then display an error code (2).  As the DEC Technical Manual says:
-        *
-        *      If the NVR fails, the bell sounds several times to inform the operator, and then default settings
-        *      stored in the ROM allow the terminal to work.
-        *
-        * but I think what they meant to say is that default settings are stored in the RAM copy of NVR.  So then
-        * I went into SET-UP, pressed SHIFT-S to save those settings back to NVR, and then used the PCx80 debugger
-        * "d nvr" command to dump the NVR contents.  The results are below.
-        *
-        * The first dump actually contains only two modifications to the factory defaults: enabling ONLINE instead
-        * of LOCAL operation, and turning ANSI support ON.  The second dump is unmodified (the TRUE factory defaults).
-        *
-        * By making selective changes, you can discern where the bits for certain features are stored.  For example,
-        * smooth-scrolling is apparently controlled by bit 7 of the word at offset 0x2B (and is ON by default in
-        * the factory settings).  And it's likely that the word at offset 0x32 (ie, the last word that's not zero)
-        * is the NVR checksum.
-        *
-        * The TRUE factory defaults are here for reference:
-        *
-        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
-        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
-        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
-        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E00,
-        *   0x2E08, 0x2E8E, 0x2E20, 0x2ED0, 0x2E50, 0x2E00, 0x2E20, 0x2E00, 0x2EE0, 0x2EE0,
-        *   0x2E69, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
-        */
-        this.aNVRWords = [
-            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
-            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
-            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
-            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E00,
-            0x2E08, 0x2E8E, 0x2E00, 0x2ED0, 0x2E70, 0x2E00, 0x2E20, 0x2E00, 0x2EE0, 0x2EE0,
-            0x2E7D, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
-        ];
-    }
-
-    /**
-     * getLBA(iBit)
-     *
-     * Returns the state of the requested (simulated) LBA bit.
-     *
-     * NOTE: This is currently only used to obtain LBA7, which we approximate with the slightly faster approach
-     * of masking bit 6 of the CPU cycle count (see the DC011 discussion above).  This will result in a shorter LBA7
-     * period than if we divided the cycle count by 88, but a shorter LBA7 period is probably helpful in terms of
-     * overall performance.
-     *
-     * @this {VT100Chips}
-     * @param {number} iBit
-     * @returns {number}
-     */
-    getLBA(iBit)
-    {
-        return (this.time.getCycles() & (1 << (iBit - 1))) << 1;
-    }
-
-    /**
-     * getNVRAddr()
-     *
-     * @this {VT100Chips}
-     * @returns {number}
-     */
-    getNVRAddr()
-    {
-        let i;
-        let tens = 0, ones = 0;
-        let addr = ~this.dNVRAddr;
-        for (i = 0; i < 10; i++) {
-            if (addr & 0x1) tens = 9-i;
-            addr >>= 1;
-        }
-        for (i = 0; i < 10; i++) {
-            if (addr & 0x1) ones = 9-i;
-            addr >>= 1;
-        }
-        addr = tens*10 + ones;
-
-        return addr;
-    }
-
-    /**
-     * doNVRCommand()
-     *
-     * @this {VT100Chips}
-     */
-    doNVRCommand()
-    {
-        let addr, data;
-        let bit = this.bNVRLatch & 0x1;
-        let bCmd = (this.bNVRLatch >> 1) & 0x7;
-
-        switch(bCmd) {
-        case VT100Chips.NVR.CMD.STANDBY:
-            break;
-
-        case VT100Chips.NVR.CMD.ACCEPT_ADDR:
-            this.dNVRAddr = (this.dNVRAddr << 1) | bit;
-            break;
-
-        case VT100Chips.NVR.CMD.ERASE:
-            addr = this.getNVRAddr();
-            this.aNVRWords[addr] = VT100Chips.NVR.WORDMASK;
-            this.printf(MESSAGE.CHIPS, "doNVRCommand(): erase data at addr %#06x\n", addr);
-            break;
-
-        case VT100Chips.NVR.CMD.ACCEPT_DATA:
-            this.wNVRData = (this.wNVRData << 1) | bit;
-            break;
-
-        case VT100Chips.NVR.CMD.WRITE:
-            addr = this.getNVRAddr();
-            data = this.wNVRData & VT100Chips.NVR.WORDMASK;
-            this.aNVRWords[addr] = data;
-            this.printf(MESSAGE.CHIPS, "doNVRCommand(): write data %#06x to addr %#06x\n", data, addr);
-            break;
-
-        case VT100Chips.NVR.CMD.READ:
-            addr = this.getNVRAddr();
-            data = this.aNVRWords[addr];
-            /*
-             * If we don't explicitly initialize aNVRWords[], pretend any uninitialized words contains WORDMASK.
-             */
-            if (data == null) data = VT100Chips.NVR.WORDMASK;
-            this.wNVRData = data;
-            this.printf(MESSAGE.CHIPS, "doNVRCommand(): read data %#06x from addr %#06x\n", data, addr);
-            break;
-
-        case VT100Chips.NVR.CMD.SHIFT_OUT:
-            this.wNVRData <<= 1;
-            /*
-             * Since WORDMASK is 0x3fff, this will mask the shifted data with 0x4000, which is the bit we want to isolate.
-             */
-            this.bNVROut = this.wNVRData & (VT100Chips.NVR.WORDMASK + 1);
-            break;
-
-        default:
-            this.printf(MESSAGE.CHIPS, "doNVRCommand(): unrecognized command %#04x\n", bCmd);
-            break;
-        }
-    }
-
-    /**
-     * inFlags(port)
-     *
-     * @this {VT100Chips}
-     * @param {number} port (0x42)
-     * @returns {number} simulated port value
-     */
-    inFlags(port)
-    {
-        let value = this.bFlags;
-
-        /*
-         * The NVR_CLK bit is driven by LBA7 (ie, bit 7 from Line Buffer Address generation); see the DC011 discussion above.
-         */
-        value &= ~VT100Chips.FLAGS.NVR_CLK;
-        if (this.getLBA(7)) {
-            value |= VT100Chips.FLAGS.NVR_CLK;
-            if (value != this.bFlags) {
-                this.doNVRCommand();
-            }
-        }
-
-        value &= ~VT100Chips.FLAGS.NVR_DATA;
-        if (this.bNVROut) {
-            value |= VT100Chips.FLAGS.NVR_DATA;
-        }
-
-        value &= ~VT100Chips.FLAGS.KBD_XMIT;
-        if (this.kbd && this.kbd.isTransmitterReady()) {
-            value |= VT100Chips.FLAGS.KBD_XMIT;
-        }
-
-        value &= ~VT100Chips.FLAGS.UART_XMIT;
-        if (this.serial && this.serial.isTransmitterReady()) {
-            value |= VT100Chips.FLAGS.UART_XMIT;
-        }
-
-        this.bFlags = value;
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "inFlags(%#04x): %#04x\n", port, value);
-        return value;
-    }
-
-    /**
-     * outBrightness(port, value)
-     *
-     * @this {VT100Chips}
-     * @param {number} port (0x42)
-     * @param {number} value
-     */
-    outBrightness(port, value)
-    {
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outBrightness(%#04x): %#04x\n", port, value);
-        this.bBrightness = value;
-    }
-
-    /**
-     * outNVRLatch(port, value)
-     *
-     * @this {VT100Chips}
-     * @param {number} port (0x62)
-     * @param {number} value
-     */
-    outNVRLatch(port, value)
-    {
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outNVRLatch(%#04x): %#04x\n", port, value);
-        this.bNVRLatch = value;
-    }
-
-    /**
-     * outDC012(port, value)
-     *
-     * TODO: Consider whether we should disable any interrupts (eg, vertical retrace) until
-     * this port is initialized at runtime.
-     *
-     * @this {VT100Chips}
-     * @param {number} port (0xA2)
-     * @param {number} value
-     */
-    outDC012(port, value)
-    {
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outDC012(%#04x): %#04x\n", port, value);
-        let bOpt = value & 0x3;
-        let bCmd = (value >> 2) & 0x3;
-        switch(bCmd) {
-        case 0x0:
-            this.bDC012Scroll = (this.bDC012Scroll & ~0x3) | bOpt;
-            break;
-        case 0x1:
-            this.bDC012Scroll = (this.bDC012Scroll & ~0xC) | (bOpt << 2);
-            if (this.video) this.video.updateScrollOffset(this.bDC012Scroll);
-            break;
-        case 0x2:
-            switch(bOpt) {
-            case 0x0:
-                this.bDC012Blink = ~this.bDC012Blink;
-                break;
-            case 0x1:
-                // TODO: Clear vertical frequency interrupt?
-                break;
-            case 0x2:
-            case 0x3:
-                this.bDC012Reverse = 0x3 - bOpt;
-                break;
-            }
-            break;
-        case 0x3:
-            this.bDC012Attr = bOpt;
-            break;
-        }
-    }
-
-    /**
-     * outDC011(port, value)
-     *
-     * @this {VT100Chips}
-     * @param {number} port (0xC2)
-     * @param {number} value
-     */
-    outDC011(port, value)
-    {
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outNDC011(%#04x): %#04x\n", port, value);
-        if (value & VT100Chips.DC011.RATE60) {
-            value &= VT100Chips.DC011.RATE50;
-            if (this.bDC011Rate != value) {
-                this.bDC011Rate = value;
-                if (this.video) {
-                    this.video.updateRate(this.bDC011Rate == VT100Chips.DC011.RATE50? 50 : 60);
-                }
-            }
-        } else {
-            value &= VT100Chips.DC011.COLS132;
-            if (this.bDC011Cols != value) {
-                this.bDC011Cols = value;
-                if (this.video) {
-                    let nCols = (this.bDC011Cols == VT100Chips.DC011.COLS132? 132 : 80);
-                    let nRows = (nCols > 80 && (this.bFlags & VT100Chips.FLAGS.NO_AVO)? 14 : 24);
-                    this.video.updateDimensions(nCols, nRows);
-                }
-            }
-        }
-    }
-
-    /**
-     * dumpNVR(values)
-     *
-     * @this {VT100Chips}
-     * @param {Array.<number>} values (the Debugger passes along any values on the command-line, but we don't use them)
-     */
-    dumpNVR(values)
-    {
-        let sDump = "";
-        for (let iWord = 1; iWord <= this.aNVRWords.length; iWord++) {
-            sDump += this.sprintf("%04x%c", this.aNVRWords[iWord-1], (iWord % 10)? ' ' : '\n');
-        }
-        return sDump;
-    }
-}
-
-/*
- * One of the many chips in the VT100 is an 8224, which operates at 24.8832MHz.  That frequency is divided by 9
- * to yield a 361.69ns clock period for the 8080 CPU, which means (in theory) that the CPU is running at 2.76Mhz,
- * so the machine should be configured with "cyclesPerSecond" set to 2764800.
- *
- * WARNING: The choice of clock speed has an effect on other simulated VT100 circuits; see the DC011 Timing Chip
- * discussion below, along with the getLBA() function.
- *
- * For reference, here is a list of all the VT100 I/O ports, from /devices/pc8080/machine/vt100/debugger/README.md,
- * which in turn comes from p. 4-17 of the VT100 Technical Manual (July 1982):
- *
- *      READ OR WRITE
- *      00H     PUSART data bus
- *      01H     PUSART command port
- *
- *      WRITE ONLY (Decoded with I/O WR L)
- *      02H     Baud rate generator
- *      42H     Brightness D/A latch
- *      62H     NVR latch
- *      82H     Keyboard UART data input [used to update the Keyboard Status Byte -JP]
- *      A2H     Video processor DC012
- *      C2H     Video processor DC011
- *      E2H     Graphics port
- *
- *      READ ONLY (Decoded with I/O RD L)
- *      22H     Modem buffer
- *      42H     Flags buffer
- *      82H     Keyboard UART data output
- */
-VT100Chips.FLAGS = {
-    PORT:       0x42,           // read-only
-    UART_XMIT:  0x01,           // PUSART transmit buffer empty if SET
-    NO_AVO:     0x02,           // AVO present if CLEAR
-    NO_GFX:     0x04,           // VT125 graphics board present if CLEAR
-    OPTION:     0x08,           // OPTION present if SET
-    NO_EVEN:    0x10,           // EVEN FIELD active if CLEAR
-    NVR_DATA:   0x20,           // NVR DATA if SET
-    NVR_CLK:    0x40,           // NVR CLOCK if SET
-    KBD_XMIT:   0x80            // KBD transmit buffer empty if SET
-};
-
-VT100Chips.BRIGHTNESS = {
-    PORT:       0x42,           // write-only
-    INIT:       0x00            // for lack of a better guess
-};
-
-/*
- * Reading port 0x82 returns a key address from the VT100 keyboard's UART data output.
- *
- * Every time a keyboard scan is initiated (by setting the START bit of the status byte),
- * our internal address index (iKeyNext) is set to zero, and an interrupt is generated for
- * each entry in the aKeysActive array, along with a final interrupt for KEYLAST.
- */
-VT100Chips.ADDRESS = {
-    PORT:       0x82,
-    INIT:       0x7F
-};
-
-/*
- * Writing port 0x82 updates the VT100's keyboard status byte via the keyboard's UART data input.
- */
-VT100Chips.STATUS = {
-    PORT:       0x82,               // write-only
-    LED4:       0x01,
-    LED3:       0x02,
-    LED2:       0x04,
-    LED1:       0x08,
-    LOCKED:     0x10,
-    LOCAL:      0x20,
-    LEDS:       0x3F,               // all LEDs
-    START:      0x40,               // set to initiate a scan
-    /*
-     * From p. 4-38 of the VT100 Technical Manual (July 1982):
-     *
-     *      A bit (CLICK) in the keyboard status word controls the bell....  When a single status word contains
-     *      the bell bit, flip-flop E3 toggles and turns on E1, generating a click. If the bell bit is set for
-     *      many words in succession, the UART latch holds the data output constant..., allowing the circuit to
-     *      produce an 800 hertz tone. Bell is generated by setting the bell bit for 0.25 seconds.  Each cycle of
-     *      the tone is at a reduced amplitude compared with the single keyclick....  The overall effect of the
-     *      tone burst on the ear is that of a beep.
-     */
-    CLICK:      0x80,
-    INIT:       0x00
-};
-
-/*
- * DC011 is referred to as a Timing Chip.
- *
- * As p. 4-55 (105) of the VT100 Technical Manual (July 1982) explains:
- *
- *      The DCO11 is a custom designed bipolar circuit that provides most of the timing signals required by the
- *      video processor. Internal counters divide the output of a 24.0734 MHz oscillator (located elsewhere on the
- *      terminal controller module) into the lower frequencies that define dot, character, scan, and frame timing.
- *      The counters are programmable through various input pins to control the number of characters per line,
- *      the frequency at which the screen is refreshed, and whether the display is interlaced or noninterlaced.
- *      These parameters can be controlled through SET-UP mode or by the host.
- *
- *          Table 4-6-1: Video Mode Selection (Write Address 0xC2)
- *
- *          D5  D4      Configuration
- *          --  --      -------------
- *          0   0       80-column mode, interlaced
- *          0   1       132-column mode, interlaced
- *          1   0       60Hz, non-interlaced
- *          1   1       50Hz, non-interlaced
- *
- * On p. 4-56, the DC011 Block Diagram shows 8 outputs labeled LBA0 through LBA7.  From p. 4-61:
- *
- *      Several of the LBAs are used as general purpose clocks in the VT100. LBA3 and LBA4 are used to generate
- *      timing for the keyboard. These signals satisfy the keyboard's requirement of two square-waves, one twice the
- *      frequency of the other, even though every 16th transition is delayed (the second stage of the horizontal
- *      counter divides by 17, not 16). LBA7 is used by the nonvolatile RAM.
- *
- * And on p. 4-62, timings are provided for the LBA0 through LBA7; in particular:
- *
- *      LBA6:   16.82353us (when LBA6 is low, for a period of 33.64706us)
- *      LBA7:   31.77778us (when LBA7 is high, for a period of 63.55556us)
- *
- * If we assume that the CPU cycle count increments once every 361.69ns, it will increment roughly 88 times every
- * time LBA7 toggles.  So we can divide the CPU cycle count by 88 and set LBA to the low bit of that truncated
- * result.  An even faster (but less accurate) solution would be to mask bit 6 of the CPU cycle count, which will
- * doesn't change until the count has been incremented 64 times.  See getLBA() for the chosen implementation.
- */
-VT100Chips.DC011 = {            // generates Line Buffer Addresses (LBAs) for the Video Processor
-    PORT:       0xC2,           // write-only
-    COLS80:     0x00,
-    COLS132:    0x10,
-    RATE60:     0x20,
-    RATE50:     0x30,
-    INITCOLS:   0x00,           // ie, COLS80
-    INITRATE:   0x20            // ie, RATE60
-};
-
-/*
- * DC012 is referred to as a Control Chip.
- *
- * As p. 4-67 (117) of the VT100 Technical Manual (July 1982) explains:
- *
- *      The DCO12 performs three main functions.
- *
- *       1. Scan count generation. This involves two counters, a multiplexer to switch between the counters,
- *          double-height logic, scroll and line attribute latches, and various logic controlling switching between
- *          the two counters. This is the biggest part of the chip. It includes all scrolling, double-height logic,
- *          and feeds into the underline and hold request circuits.
- *
- *       2. Generation of HOLD REQUEST. This uses information from the scan counters and the scrolling logic to
- *          decide when to generate HOLD REQUEST.
- *
- *       3. Video modifications: dot stretching, blanking, addition of attributes to video outputs, and multiple
- *          intensity levels.
- *
- *      The input decoder accepts a 4-bit command from the microprocessor when VID WR 2 L is asserted. Table 4-6-2
- *      lists the commands.
- *
- *      D3 D2 D1 D0     Function
- *      -- -- -- --     --------
- *      0  0  0  0      Load low order scroll latch = 00
- *      0  0  0  1      Load low order scroll latch = 01
- *      0  0  1  0      Load low order scroll latch = 10
- *      0  0  1  1      Load low order scroll latch = 11
- *
- *      0  1  0  0      Load high order scroll latch = 00
- *      0  1  0  1      Load high order scroll latch = 01
- *      0  1  1  0      Load high order scroll latch = 10
- *      0  1  1  1      Load high order scroll latch = 11 (not used)
- *
- *      1  0  0  0      Toggle blink flip-flop
- *      1  0  0  1      Clear vertical frequency interrupt
- *
- *      1  0  1  0      Set reverse field on
- *      1  0  1  1      Set reverse field off
- *
- *      1  1  0  0      Set basic attribute to underline*
- *      1  1  0  1      Set basic attribute to reverse video*
- *      1  1  1  0      Reserved for future specification*
- *      1  1  1  1      Reserved for future specification*
- *
- *      *These functions also clear blink flip-flop.
- */
-VT100Chips.DC012 = {            // generates scan counts for the Video Processor
-    PORT:       0xA2,           // write-only
-    SCROLL_LO:  0x00,
-    INITSCROLL: 0x00,
-    INITBLINK:  0x00,
-    INITREVERSE:0x00,
-    INITATTR:   0x00
-};
-
-/*
- * ER1400 Non-Volatile RAM (NVR) Chip Definitions
- */
-VT100Chips.NVR = {
-    LATCH: {
-        PORT:   0x62            // write-only
-    },
-    CMD: {
-        ACCEPT_DATA:    0x0,
-        ACCEPT_ADDR:    0x1,
-        SHIFT_OUT:      0x2,
-        WRITE:          0x4,
-        ERASE:          0x5,
-        READ:           0x6,
-        STANDBY:        0x7
-    },
-    WORDMASK:   0x3fff          // NVR words are 14-bit
-    /*
-     * The Technical Manual, p. 4-18, also notes that "Early VT100s can disable the receiver interrupt by
-     * programming D4 in the NVR latch. However, this is never used by the VT100."
-     */
-};
-
-VT100Chips.IOTABLE = {
-    0x42: [VT100Chips.prototype.inFlags, VT100Chips.prototype.outBrightness],
-    0x62: [null, VT100Chips.prototype.outNVRLatch],
-    0xA2: [null, VT100Chips.prototype.outDC012],
-    0xC2: [null, VT100Chips.prototype.outDC011]
-};
-
-Defs.CLASSES["VT100Chips"] = VT100Chips;
-
-/**
- * @copyright https://www.pcjs.org/machines/dec/vt100/lib/keyboard.js (C) 2012-2020 Jeff Parsons
- */
-
-/** @typedef {{ model: number }} */
-var VT100KeyboardConfig;
-
-/**
- * @class {VT100Keyboard}
- * @unrestricted
- * @property {VT100KeyboardConfig} config
- */
-class VT100Keyboard extends Device {
-    /**
-     * VT100Keyboard(idMachine, idDevice, config)
-     *
-     * @this {VT100Keyboard}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {VT100KeyboardConfig} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-
-        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
-        this.ports = /** @type {Ports} */ (this.findDeviceByClass("Ports"));
-        this.ports.addIOTable(this, VT100Keyboard.IOTABLE);
-
-        /*
-         * Whereas VT100Keyboard.LEDS maps bits to LED ID, this.leds maps bits to the actual LED devices.
-         */
-        this.leds = {};
-        for (let bit in VT100Keyboard.LEDS) {
-            this.leds[bit] = /** @type {LED} */ (this.findDevice(VT100Keyboard.LEDS[bit], false));
-        }
-
-        this.input = /** @type {Input} */ (this.findDeviceByClass("Input"));
-        this.input.addKeyMap(this, VT100Keyboard.KEYMAP, VT100Keyboard.CLICKMAP);
-
-        this.ledCaps = this.findDevice("ledCaps");
-        if (this.ledCaps) {
-            this.input.addListener(Input.TYPE.KEYCODE, WebIO.KEYCODE.CAPS_LOCK, this.onCapsLock.bind(this));
-        }
-        this.onReset();
-    }
-
-    /**
-     * loadState(state)
-     *
-     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
-     *
-     * @this {VT100Keyboard}
-     * @param {Array} state
-     * @returns {boolean}
-     */
-    loadState(state)
-    {
-        let idDevice = state.shift();
-        if (this.idDevice == idDevice) {
-            this.bStatus = state.shift();
-            this.bAddress = state.shift();
-            this.fUARTBusy = state.shift();
-            this.nUARTSnap = state.shift();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * saveState(state)
-     *
-     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
-     *
-     * @this {VT100Keyboard}
-     * @param {Array} state
-     */
-    saveState(state)
-    {
-        state.push(this.idDevice);
-        state.push(this.bStatus);
-        state.push(this.bAddress);
-        state.push(this.fUARTBusy);
-        state.push(this.nUARTSnap);
-    }
-
-    /**
-     * onCapsLock(id, on)
-     *
-     * @this {VT100Keyboard}
-     * @param {number} id
-     * @param {boolean} on
-     */
-    onCapsLock(id, on)
-    {
-        this.ledCaps.setLEDState(0, 0, on? LED.STATE.ON : LED.STATE.OFF);
-    }
-
-    /**
-     * onPower(on)
-     *
-     * Called by the Machine device to provide notification of a power event.
-     *
-     * @this {VT100Keyboard}
-     * @param {boolean} on
-     */
-    onPower(on)
-    {
-        if (!this.cpu) {
-            this.cpu = /** @type {CPU8080} */ (this.findDeviceByClass("CPU"));
-        }
-        this.updateLEDs(on? this.bStatus : undefined);
-    }
-
-    /**
-     * onReset()
-     *
-     * Called by the Machine device to provide notification of a reset event.
-     *
-     * @this {VT100Keyboard}
-     */
-    onReset()
-    {
-        this.bStatus = VT100Keyboard.STATUS.INIT;
-        this.bAddress = VT100Keyboard.ADDRESS.INIT;
-        this.fUARTBusy = false;
-        this.nUARTSnap = 0;
-        this.iKeyNext = -1;
-        this.updateLEDs();
-    }
-
-    /**
-     * isTransmitterReady()
-     *
-     * Called whenever the VT100 Chips device needs the VT100Keyboard UART transmitter status.
-     *
-     * From p. 4-32 of the VT100 Technical Manual (July 1982):
-     *
-     *      The operating clock for the keyboard interface comes from an address line in the video processor (LBA4).
-     *      This signal has an average period of 7.945 microseconds. Each data byte is transmitted with one start bit
-     *      and one stop bit, and each bit lasts 16 clock periods. The total time for each data byte is 160 times 7.945
-     *      or 1.27 milliseconds. Each time the Transmit Buffer Empty flag on the terminal's UART gets set (when the
-     *      current byte is being transmitted), the microprocessor loads another byte into the transmit buffer. In this
-     *      way, the stream of status bytes to the keyboard is continuous.
-     *
-     * We used to always return true (after all, what's wrong with an infinitely fast UART?), but unfortunately,
-     * the VT100 firmware relies on the UART's slow transmission speed to drive cursor blink rate.  We have several
-     * options:
-     *
-     *      1) Snapshot the CPU cycle count each time a byte is transmitted (see outVT100UARTStatus()) and then every
-     *      time this is polled, see if the cycle count has exceeded the snapshot value by the necessary threshold;
-     *      if we assume 361.69ns per CPU cycle, there are 22 CPU cycles for every 1 LBA4 cycle, and since transmission
-     *      time is supposed to last for 160 LBA4 cycles, the threshold is 22*160 CPU cycles, or 3520 cycles.
-     *
-     *      2) Set a CPU timer using the new setTimer() interface, which can be passed the number of milliseconds to
-     *      wait before firing (in this case, roughly 1.27ms).
-     *
-     *      3) Call the Chips device getLBA(4) function for the state of the simulated LBA4, and count 160 LBA4
-     *      transitions; however, that would be the worst solution, because there's no guarantee that the firmware's
-     *      UART polling will occur regularly and/or frequently enough for us to catch every LBA4 transition.
-     *
-     * I'm going with solution #1 because it's less overhead.
-     *
-     * @this {VT100Keyboard}
-     * @returns {boolean} (true if ready, false if not)
-     */
-    isTransmitterReady()
-    {
-        if (this.fUARTBusy) {
-            if (this.time.getCycles() >= this.nUARTSnap) {
-                this.fUARTBusy = false;
-            }
-        }
-        return !this.fUARTBusy;
-    }
-
-    /**
-     * inUARTAddress(port)
-     *
-     * We take our cue from iKeyNext.  If it's -1 (default), we simply return the last value latched
-     * in bAddress.  Otherwise, we call getActiveKey() to request the next mapped key value, latch it,
-     * and increment iKeyNext.  Failing that, we latch ADDRESS.KEYLAST and reset iKeyNext to -1.
-     *
-     * @this {VT100Keyboard}
-     * @param {number} port (0x82)
-     * @returns {number} simulated port value
-     */
-    inUARTAddress(port)
-    {
-        let value = this.bAddress;
-        if (this.iKeyNext >= 0) {
-            let value = this.input.getActiveKey(this.iKeyNext);
-            if (value >= 0) {
-                this.iKeyNext++;
-                if (value & 0x80) {
-                    /*
-                     * TODO: This code is supposed to be accompanied by a SHIFT key; make sure that it is.
-                     */
-                    value &= 0x7F;
-                }
-            } else {
-                this.iKeyNext = -1;
-                value = VT100Keyboard.ADDRESS.KEYLAST;
-            }
-            this.bAddress = value;
-            this.cpu.requestINTR(1);
-        }
-        this.printf(MESSAGE.KBD + MESSAGE.PORTS, "inUARTAddress(%#04x): %#04x\n", port, value);
-        return value;
-    }
-
-    /**
-     * outUARTStatus(port, value)
-     *
-     * @this {VT100Keyboard}
-     * @param {number} port (0x82)
-     * @param {number} value
-     */
-    outUARTStatus(port, value)
-    {
-        this.printf(MESSAGE.KBD + MESSAGE.PORTS, "outUARTStatus(%#04x): %#04x\n", port, value);
-        this.updateLEDs(value, this.bStatus);
-        this.bStatus = value;
-        this.fUARTBusy = true;
-        /*
-         * Set nUARTSnap to the number of cycles required before clearing fUARTBusy; see isTransmitterReady().
-         *
-         * NOTE: getCyclesPerMS(1.2731488) should work out to 3520 cycles for a CPU clocked at 361.69ns per cycle,
-         * which is roughly 2.76Mhz.  We could just hard-code 3520 instead of calling getCyclesPerMS(), but this helps
-         * maintain a reasonable blink rate for the cursor even when the user cranks up the CPU speed.
-         */
-        this.nUARTSnap = this.time.getCycles() + this.time.getCyclesPerMS(1.2731488);
-        if (value & VT100Keyboard.STATUS.START) {
-            this.iKeyNext = 0;
-            this.cpu.requestINTR(1);
-        }
-    }
-
-    /**
-     * updateLEDs(value, previous)
-     *
-     * @this {VT100Keyboard}
-     * @param {number} [value] (if not provided, all LEDS are turned off)
-     * @param {number} [previous] (if not provided, all LEDs are updated)
-     */
-    updateLEDs(value, previous)
-    {
-        for (let id in this.leds) {
-            let led = this.leds[id];
-            if (!led) continue;
-            let bit = +id, on, changed = 1, redraw = 1;
-            if (value != undefined) {
-                if (!(bit & (bit - 1))) {       // if a single bit is set, this will be zero
-                    on = value & bit;           // and "on" will be true if that single bit is set
-                } else {
-                    bit = ~bit & 0xff;          // otherwise, we assume that a single bit is clear
-                    on = !(value & bit);        // so "on" will be true if that same single bit is clear
-                }
-                if (previous != undefined) {
-                    changed = (value ^ previous) & bit;
-                    redraw = 0;
-                }
-            }
-            if (changed) {                      // call setLEDState() only if the bit changed
-                led.setLEDState(0, 0, on? LED.STATE.ON : LED.STATE.OFF);
-                if (redraw) led.drawBuffer();
-            }
-        }
-    }
-}
-
-/*
- * Reading port 0x82 returns a key address from the VT100 keyboard's UART data output.
- *
- * Every time a keyboard scan is initiated (by setting the START bit of the status byte),
- * our internal address index (iKeyNext) is set to zero, and an interrupt is generated for
- * each entry in the aKeysActive array, along with a final interrupt for KEYLAST.
- */
-VT100Keyboard.ADDRESS = {
-    PORT:       0x82,
-    INIT:       0x7F,
-    KEYLAST:    0x7F                // special end-of-scan key address (all valid key addresses are < KEYLAST)
-};
-
-/*
- * Writing port 0x82 updates the VT100's keyboard status byte via the keyboard's UART data input.
- */
-VT100Keyboard.STATUS = {
-    PORT:       0x82,               // write-only
-    LED4:       0x01,
-    LED3:       0x02,
-    LED2:       0x04,
-    LED1:       0x08,
-    LOCKED:     0x10,
-    LOCAL:      0x20,
-    LEDS:       0x3F,               // all LEDs
-    START:      0x40,               // set to initiate a scan
-    /*
-     * From p. 4-38 of the VT100 Technical Manual (July 1982):
-     *
-     *      A bit (CLICK) in the keyboard status word controls the bell....  When a single status word contains
-     *      the bell bit, flip-flop E3 toggles and turns on E1, generating a click. If the bell bit is set for
-     *      many words in succession, the UART latch holds the data output constant..., allowing the circuit to
-     *      produce an 800 hertz tone. Bell is generated by setting the bell bit for 0.25 seconds.  Each cycle of
-     *      the tone is at a reduced amplitude compared with the single keyclick....  The overall effect of the
-     *      tone burst on the ear is that of a beep.
-     */
-    CLICK:      0x80,
-    INIT:       0x00
-};
-
-/*
- * Definitions of all VT100 keys (7-bit values representing key positions on the VT100).  We call these
- * VT100 key values KEYNUMs, to avoid confusion with browser KEYCODEs.  They are be used in a subsequent
- * KEYMAP table.
- */
-VT100Keyboard.KEYNUM = {
-    DEL:        0x03,
-    P:          0x05,
-    O:          0x06,
-    Y:          0x07,
-    T:          0x08,
-    W:          0x09,
-    Q:          0x0A,
-    RIGHT:      0x10,
-    RBRACK:     0x14,
-    LBRACK:     0x15,
-    I:          0x16,
-    U:          0x17,
-    R:          0x18,
-    E:          0x19,
-    ONE:        0x1A,
-    LEFT:       0x20,
-    DOWN:       0x22,
-    BREAK:      0x23,   // aka BREAK
-    BQUOTE:     0x24,
-    DASH:       0x25,
-    NINE:       0x26,
-    SEVEN:      0x27,
-    FOUR:       0x28,
-    THREE:      0x29,
-    ESC:        0x2A,
-    UP:         0x30,
-    F3:         0x31,   // aka PF3
-    F1:         0x32,   // aka PF1
-    BS:         0x33,
-    EQUALS:     0x34,
-    ZERO:       0x35,
-    EIGHT:      0x36,
-    SIX:        0x37,
-    FIVE:       0x38,
-    TWO:        0x39,
-    TAB:        0x3A,
-    NUM_7:      0x40,
-    F4:         0x41,   // aka PF4
-    F2:         0x42,   // aka PF2
-    NUM_0:      0x43,
-    LF:         0x44,   // aka LINE-FEED
-    BSLASH:     0x45,
-    L:          0x46,
-    K:          0x47,
-    G:          0x48,
-    F:          0x49,
-    A:          0x4A,
-    NUM_8:      0x50,
-    NUM_CR:     0x51,
-    NUM_2:      0x52,
-    NUM_1:      0x53,
-    QUOTE:      0x55,
-    SEMI:       0x56,
-    J:          0x57,
-    H:          0x58,
-    D:          0x59,
-    S:          0x5A,
-    NUM_DEL:    0x60,   // aka KEYPAD PERIOD
-    NUM_COMMA:  0x61,   // aka KEYPAD COMMA
-    NUM_5:      0x62,
-    NUM_4:      0x63,
-    CR:         0x64,   // TODO: Figure out why the Technical Manual lists CR at both 0x04 and 0x64
-    PERIOD:     0x65,
-    COMMA:      0x66,
-    N:          0x67,
-    B:          0x68,
-    X:          0x69,
-    NO_SCROLL:  0x6A,   // aka NO-SCROLL
-    NUM_9:      0x70,
-    NUM_3:      0x71,
-    NUM_6:      0x72,
-    NUM_SUB:    0x73,   // aka KEYPAD MINUS
-    SLASH:      0x75,
-    M:          0x76,
-    SPACE:      0x77,
-    V:          0x78,
-    C:          0x79,
-    Z:          0x7A,
-    SETUP:      0x7B,   // aka SET-UP
-    CTRL:       0x7C,
-    SHIFT:      0x7D,   // either shift key (doesn't matter)
-    CAPS_LOCK:  0x7E
-};
-
-/*
- * Virtual KEYCODE definitions.
- *
- * A virtual keyCode is one that is (hopefully) outside the range of all browser keyCodes.  Each refers
- * to a key (or key combination) that has no analog on a modern keyboard and/or that we want to associate
- * with an on-screen control.
- *
- * A good example is the VT100 SET-UP key, which has no counterpart on a modern keyboard.
- */
-VT100Keyboard.KEYCODE = {
-    SETUP:      WebIO.KEYCODE.VIRTUAL + 1,
-    LF:         WebIO.KEYCODE.VIRTUAL + 2,
-    BREAK:      WebIO.KEYCODE.VIRTUAL + 3,
-    CTRL_C:     WebIO.KEYCODE.VIRTUAL + 4
-};
-
-/*
- * KEYMAP maps a browser keyCode (or virtual keyCode) to a VT100 KEYNUM.
- *
- * NOTE: The VT100 keyboard has both BACKSPACE and DELETE keys, whereas modern keyboards generally only
- * have DELETE.  And sadly, when you press DELETE, your modern keyboard and/or modern browser is reporting
- * it as keyCode 8: the code for BACKSPACE, aka CTRL-H.  You have to press a modified DELETE key to get
- * the actual DELETE keyCode of 127.
- *
- * We resolve this below by mapping KEYCODE.BS (8) to VT100 KEYNUM.DEL (0x03) and KEYCODE.DEL (127)
- * to VT100 KEYNUM.BS (0x33).  So, DELETE is BACKSPACE and BACKSPACE is DELETE.  Fortunately, this
- * confusion is all internal, because your physical key is (or should be) labeled DELETE, so the fact that
- * the browser is converting it to BACKSPACE and that we're converting BACKSPACE back into DELETE is
- * something most people don't need to worry their heads about.
- */
-VT100Keyboard.KEYMAP = {
-    [WebIO.KEYCODE.BS]:             VT100Keyboard.KEYNUM.DEL,
-    [WebIO.KEYCODE.P]:              VT100Keyboard.KEYNUM.P,
-    [WebIO.KEYCODE.O]:              VT100Keyboard.KEYNUM.O,
-    [WebIO.KEYCODE.Y]:              VT100Keyboard.KEYNUM.Y,
-    [WebIO.KEYCODE.T]:              VT100Keyboard.KEYNUM.T,
-    [WebIO.KEYCODE.W]:              VT100Keyboard.KEYNUM.W,
-    [WebIO.KEYCODE.Q]:              VT100Keyboard.KEYNUM.Q,
-    [WebIO.KEYCODE.RIGHT]:          VT100Keyboard.KEYNUM.RIGHT,
-    [WebIO.KEYCODE.RBRACK]:         VT100Keyboard.KEYNUM.RBRACK,
-    [WebIO.KEYCODE.LBRACK]:         VT100Keyboard.KEYNUM.LBRACK,
-    [WebIO.KEYCODE.I]:              VT100Keyboard.KEYNUM.I,
-    [WebIO.KEYCODE.U]:              VT100Keyboard.KEYNUM.U,
-    [WebIO.KEYCODE.R]:              VT100Keyboard.KEYNUM.R,
-    [WebIO.KEYCODE.E]:              VT100Keyboard.KEYNUM.E,
-    [WebIO.KEYCODE.ONE]:            VT100Keyboard.KEYNUM.ONE,
-    [WebIO.KEYCODE.LEFT]:           VT100Keyboard.KEYNUM.LEFT,
-    [WebIO.KEYCODE.DOWN]:           VT100Keyboard.KEYNUM.DOWN,
-    [WebIO.KEYCODE.F6]:             VT100Keyboard.KEYNUM.BREAK,         // no natural mapping
-    [VT100Keyboard.KEYCODE.BREAK]:  VT100Keyboard.KEYNUM.BREAK,         // NOTE: virtual keyCode mapping
-    [WebIO.KEYCODE.BQUOTE]:         VT100Keyboard.KEYNUM.BQUOTE,
-    [WebIO.KEYCODE.DASH]:           VT100Keyboard.KEYNUM.DASH,
-    [WebIO.KEYCODE.NINE]:           VT100Keyboard.KEYNUM.NINE,
-    [WebIO.KEYCODE.SEVEN]:          VT100Keyboard.KEYNUM.SEVEN,
-    [WebIO.KEYCODE.FOUR]:           VT100Keyboard.KEYNUM.FOUR,
-    [WebIO.KEYCODE.THREE]:          VT100Keyboard.KEYNUM.THREE,
-    [WebIO.KEYCODE.ESC]:            VT100Keyboard.KEYNUM.ESC,
-    [WebIO.KEYCODE.UP]:             VT100Keyboard.KEYNUM.UP,
-    [WebIO.KEYCODE.F3]:             VT100Keyboard.KEYNUM.F3,
-    [WebIO.KEYCODE.F1]:             VT100Keyboard.KEYNUM.F1,
-    [WebIO.KEYCODE.DEL]:            VT100Keyboard.KEYNUM.BS,
-    [WebIO.KEYCODE.EQUALS]:         VT100Keyboard.KEYNUM.EQUALS,
-    [WebIO.KEYCODE.ZERO]:           VT100Keyboard.KEYNUM.ZERO,
-    [WebIO.KEYCODE.EIGHT]:          VT100Keyboard.KEYNUM.EIGHT,
-    [WebIO.KEYCODE.SIX]:            VT100Keyboard.KEYNUM.SIX,
-    [WebIO.KEYCODE.FIVE]:           VT100Keyboard.KEYNUM.FIVE,
-    [WebIO.KEYCODE.TWO]:            VT100Keyboard.KEYNUM.TWO,
-    [WebIO.KEYCODE.TAB]:            VT100Keyboard.KEYNUM.TAB,
-    [WebIO.KEYCODE.NUM_7]:          VT100Keyboard.KEYNUM.NUM_7,
-    [WebIO.KEYCODE.F4]:             VT100Keyboard.KEYNUM.F4,
-    [WebIO.KEYCODE.F2]:             VT100Keyboard.KEYNUM.F2,
-    [WebIO.KEYCODE.NUM_0]:          VT100Keyboard.KEYNUM.NUM_0,
-    [WebIO.KEYCODE.F7]:             VT100Keyboard.KEYNUM.LF,            // no natural mapping
-    [VT100Keyboard.KEYCODE.LF]:     VT100Keyboard.KEYNUM.LF,            // NOTE: virtual keyCode mapping
-    [WebIO.KEYCODE.BSLASH]:         VT100Keyboard.KEYNUM.BSLASH,
-    [WebIO.KEYCODE.L]:              VT100Keyboard.KEYNUM.L,
-    [WebIO.KEYCODE.K]:              VT100Keyboard.KEYNUM.K,
-    [WebIO.KEYCODE.G]:              VT100Keyboard.KEYNUM.G,
-    [WebIO.KEYCODE.F]:              VT100Keyboard.KEYNUM.F,
-    [WebIO.KEYCODE.A]:              VT100Keyboard.KEYNUM.A,
-    [WebIO.KEYCODE.NUM_8]:          VT100Keyboard.KEYNUM.NUM_8,
-    [WebIO.KEYCODE.CR]:             VT100Keyboard.KEYNUM.NUM_CR,
-    [WebIO.KEYCODE.NUM_2]:          VT100Keyboard.KEYNUM.NUM_2,
-    [WebIO.KEYCODE.NUM_1]:          VT100Keyboard.KEYNUM.NUM_1,
-    [WebIO.KEYCODE.QUOTE]:          VT100Keyboard.KEYNUM.QUOTE,
-    [WebIO.KEYCODE.SEMI]:           VT100Keyboard.KEYNUM.SEMI,
-    [WebIO.KEYCODE.J]:              VT100Keyboard.KEYNUM.J,
-    [WebIO.KEYCODE.H]:              VT100Keyboard.KEYNUM.H,
-    [WebIO.KEYCODE.D]:              VT100Keyboard.KEYNUM.D,
-    [WebIO.KEYCODE.S]:              VT100Keyboard.KEYNUM.S,
-    [WebIO.KEYCODE.NUM_DEL]:        VT100Keyboard.KEYNUM.NUM_DEL,
-    [WebIO.KEYCODE.F5]:             VT100Keyboard.KEYNUM.NUM_COMMA,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
-    [WebIO.KEYCODE.NUM_5]:          VT100Keyboard.KEYNUM.NUM_5,
-    [WebIO.KEYCODE.NUM_4]:          VT100Keyboard.KEYNUM.NUM_4,
-    [WebIO.KEYCODE.CR]:             VT100Keyboard.KEYNUM.CR,
-    [WebIO.KEYCODE.PERIOD]:         VT100Keyboard.KEYNUM.PERIOD,
-    [WebIO.KEYCODE.COMMA]:          VT100Keyboard.KEYNUM.COMMA,
-    [WebIO.KEYCODE.N]:              VT100Keyboard.KEYNUM.N,
-    [WebIO.KEYCODE.B]:              VT100Keyboard.KEYNUM.B,
-    [WebIO.KEYCODE.X]:              VT100Keyboard.KEYNUM.X,
-    [WebIO.KEYCODE.F8]:             VT100Keyboard.KEYNUM.NO_SCROLL,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
-    [WebIO.KEYCODE.NUM_9]:          VT100Keyboard.KEYNUM.NUM_9,
-    [WebIO.KEYCODE.NUM_3]:          VT100Keyboard.KEYNUM.NUM_3,
-    [WebIO.KEYCODE.NUM_6]:          VT100Keyboard.KEYNUM.NUM_6,
-    [WebIO.KEYCODE.NUM_SUB]:        VT100Keyboard.KEYNUM.NUM_SUB,
-    [WebIO.KEYCODE.SLASH]:          VT100Keyboard.KEYNUM.SLASH,
-    [WebIO.KEYCODE.M]:              VT100Keyboard.KEYNUM.M,
-    [WebIO.KEYCODE.SPACE]:          VT100Keyboard.KEYNUM.SPACE,
-    [WebIO.KEYCODE.V]:              VT100Keyboard.KEYNUM.V,
-    [WebIO.KEYCODE.C]:              VT100Keyboard.KEYNUM.C,
-    [WebIO.KEYCODE.Z]:              VT100Keyboard.KEYNUM.Z,
-    [WebIO.KEYCODE.F9]:             VT100Keyboard.KEYNUM.SETUP,         // no natural mapping
-    [VT100Keyboard.KEYCODE.SETUP]:  VT100Keyboard.KEYNUM.SETUP,         // NOTE: virtual keyCode mapping
-    [WebIO.KEYCODE.CTRL]:           VT100Keyboard.KEYNUM.CTRL,
-    [WebIO.KEYCODE.SHIFT]:          VT100Keyboard.KEYNUM.SHIFT,
-    [WebIO.KEYCODE.CAPS_LOCK]:      VT100Keyboard.KEYNUM.CAPS_LOCK,
-    /*
-     * Mappings can also be to an array of multiple keyNum combinations, such as:
-     */
-    [VT100Keyboard.KEYCODE.CTRL_C]: [VT100Keyboard.KEYNUM.CTRL, VT100Keyboard.KEYNUM.C]
-};
-
-/*
- * CLICKMAP maps a binding ID to any of: browser (WebIO) keyCode, virtual (VT100Keyboard) keyCode, or array of keyCode modifier plus keyCode.
- */
-VT100Keyboard.CLICKMAP = {
-    "keySetup":                     VT100Keyboard.KEYCODE.SETUP,        // NOTE: virtual keyCode mapping
-    "keyLineFeed":                  VT100Keyboard.KEYCODE.LF,           // NOTE: virtual keyCode mapping
-    "keyTab":                       WebIO.KEYCODE.TAB,
-    "keyEsc":                       WebIO.KEYCODE.ESC,
-    "keyBreak":                     VT100Keyboard.KEYCODE.BREAK,        // NOTE: virtual keyCode mapping
-    "keyCtrl":                      WebIO.KEYCODE.CTRL,
-    "keyCtrlC":                     VT100Keyboard.KEYCODE.CTRL_C,       // NOTE: virtual keyCode mapping
-    "keyCtrlLock":                  [WebIO.KEYCODE.LOCK, WebIO.KEYCODE.CTRL],
-    "keyShiftLock":                 [WebIO.KEYCODE.LOCK, WebIO.KEYCODE.SHIFT],
-    "keyCapsLock":                  WebIO.KEYCODE.CAPS_LOCK
-};
-
-VT100Keyboard.LEDS = {
-    [VT100Keyboard.STATUS.LED4]:            "led4",
-    [VT100Keyboard.STATUS.LED3]:            "led3",
-    [VT100Keyboard.STATUS.LED2]:            "led2",
-    [VT100Keyboard.STATUS.LED1]:            "led1",
-    [VT100Keyboard.STATUS.LOCKED]:          "ledLocked",
-    [VT100Keyboard.STATUS.LOCAL]:           "ledLocal",
-    [~VT100Keyboard.STATUS.LOCAL & 0xff]:   "ledOnline"                 // NOTE: ledOnline is the inverse of ledLocal; updateLEDs() understands inverted masks
-};
-
-VT100Keyboard.IOTABLE = {
-    0x82:   [VT100Keyboard.prototype.inUARTAddress, VT100Keyboard.prototype.outUARTStatus]
-};
-
-Defs.CLASSES["VT100Keyboard"] = VT100Keyboard;
-
-/**
- * @copyright https://www.pcjs.org/machines/dec/vt100/lib/serial.js (C) 2012-2020 Jeff Parsons
- */
-
-/**
- * @class {VT100Serial}
- * @unrestricted
- */
-class VT100Serial extends Device {
-    /**
-     * VT100Serial(idMachine, idDevice, config)
-     *
-     * @this {VT100Serial}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {Config} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-
-        this.nIRQ = this.config['irq'] || 2;
-        this.portBase = this.config['portBase'] || 0;
-
-        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
-        this.ports = /** @type {Ports} */ (this.findDeviceByClass("Ports"));
-        this.ports.addIOTable(this, VT100Serial.IOTABLE, this.portBase);
-
-        /*
-         * Whereas VT100Serial.LEDS maps bits to LED ID, this.leds maps bits to the actual LED devices.
-         */
-        this.leds = {};
-        for (let bit in VT100Serial.LEDS) {
-            this.leds[bit] = /** @type {LED} */ (this.findDevice(VT100Serial.LEDS[bit], false));
-        }
-
-        this.timerReceiveNext = this.time.addTimer(this.idDevice + ".receive", this.receiveData.bind(this));
-        this.timerTransmitNext = this.time.addTimer(this.idDevice + ".transmit", this.transmitData.bind(this));
-
-        /*
-         * No connection until initConnection() is called.
-         */
-        this.sDataReceived = "";
-        this.connection = this.sendData = this.updateStatus = null;
-
-        /*
-         * Export all functions required by initConnection().
-         */
-        this['exports'] = {
-            'connect': this.initConnection,
-            'receiveData': this.receiveData,
-            'receiveStatus': this.receiveStatus
-        };
-        this.onReset();
-    }
-
-    /**
-     * initConnection(fNullModem)
-     *
-     * If a machine 'connection' parameter exists of the form "{sourcePort}->{targetMachine}.{targetPort}",
-     * and "{sourcePort}" matches our idDevice, then look for a component with id "{targetMachine}.{targetPort}".
-     *
-     * If the target component is found, then verify that it has exported functions with the following names:
-     *
-     *      receiveData(data): called when we have data to transmit; aliased internally to sendData(data)
-     *      receiveStatus(pins): called when our control signals have changed; aliased internally to updateStatus(pins)
-     *
-     * For now, we're not going to worry about communication in the other direction, because when the target component
-     * performs its own initConnection(), it will find our receiveData() and receiveStatus() functions, at which point
-     * communication in both directions should be established, and the circle of life complete.
-     *
-     * For added robustness, if the target machine initializes much more slowly than we do, and our connection attempt
-     * fails, that's OK, because when it finally initializes, its initConnection() will call our initConnection();
-     * if we've already initialized, no harm done.
-     *
-     * @this {VT100Serial}
-     * @param {boolean} [fNullModem] (caller's null-modem setting, to ensure our settings are in agreement)
-     */
-    initConnection(fNullModem)
-    {
-        if (!this.connection) {
-            let sConnection = this.getMachineConfig("connection");
-            if (sConnection) {
-                let asParts = sConnection.split('->');
-                if (asParts.length == 2) {
-                    let sSourceID = asParts[0].trim();
-                    if (sSourceID != this.idDevice) return;     // this connection string is intended for another instance
-                    let sTargetID = asParts[1].trim();
-                    this.connection = this.findDevice(sTargetID);
-                    if (this.connection) {
-                        let exports = this.connection['exports'];
-                        if (exports) {
-                            let fnConnect = /** @function */ (exports['connect']);
-                            if (fnConnect) fnConnect.call(this.connection, this.fNullModem);
-                            this.sendData = exports['receiveData'];
-                            if (this.sendData) {
-                                this.fNullModem = fNullModem;
-                                this.updateStatus = exports['receiveStatus'];
-                                this.printf("Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
-                                return;
-                            }
-                        }
-                    }
-                }
-                this.printf("Unable to establish connection: %s\n", sConnection);
-            }
-        }
-    }
-
-    /**
-     * loadState(state)
-     *
-     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
-     *
-     * @this {VT100Serial}
-     * @param {Array} state
-     * @returns {boolean}
-     */
-    loadState(state)
-    {
-        let idDevice = state.shift();
-        if (this.idDevice == idDevice) {
-            this.fReady     = state.shift();
-            this.bDataIn    = state.shift();
-            this.bDataOut   = state.shift();
-            this.bStatus    = state.shift();
-            this.bMode      = state.shift();
-            this.bCommand   = state.shift();
-            this.bBaudRates = state.shift();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * saveState(state)
-     *
-     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
-     *
-     * @this {VT100Serial}
-     * @param {Array} state
-     */
-    saveState(state)
-    {
-        state.push(this.idDevice);
-        state.push(this.fReady);
-        state.push(this.bDataIn);
-        state.push(this.bDataOut);
-        state.push(this.bStatus);
-        state.push(this.bMode);
-        state.push(this.bCommand);
-        state.push(this.bBaudRates);
-    }
-
-    /**
-     * onPower(on)
-     *
-     * Called by the Machine device to provide notification of a power event.
-     *
-     * @this {VT100Serial}
-     * @param {boolean} on (true to power on, false to power off)
-     */
-    onPower(on)
-    {
-        if (!this.cpu) {
-            this.cpu = /** @type {CPU8080} */ (this.findDeviceByClass("CPU"));
-            /*
-             * This is as late as we can currently wait to make our first inter-machine connection attempt;
-             * even so, the target machine's initialization process may still be ongoing, so any connection
-             * may be not fully resolved until the target machine performs its own initConnection(), which will
-             * in turn invoke our initConnection() again.
-             */
-            this.initConnection(this.fNullModem);
-        }
-    }
-
-    /**
-     * onReset()
-     *
-     * Called by the Machine device to provide notification of a reset event.
-     *
-     * @this {VT100Serial}
-     */
-    onReset()
-    {
-        this.fReady = false;
-        this.bDataIn = 0;
-        this.bDataOut = 0;
-        this.bStatus = VT100Serial.UART8251.STATUS.INIT;
-        this.bMode = VT100Serial.UART8251.MODE.INIT;
-        this.bCommand = VT100Serial.UART8251.COMMAND.INIT;
-        this.bBaudRates = VT100Serial.UART8251.BAUDRATES.INIT;
-        this.updateLEDs();
-    }
-
-    /**
-     * getBaudTimeout(maskRate)
-     *
-     * @this {VT100Serial}
-     * @param {number} maskRate (either VT100Serial.UART8251.BAUDRATES.RECV_RATE or VT100Serial.UART8251.BAUDRATES.XMIT_RATE)
-     * @returns {number} (number of milliseconds per byte)
-     */
-    getBaudTimeout(maskRate)
-    {
-        let indexRate = (this.bBaudRates & maskRate);
-        if (!(maskRate & 0xf)) indexRate >>= 4;
-        let nBaud = VT100Serial.UART8251.BAUDTABLE[indexRate];
-        let nBits = ((this.bMode & VT100Serial.UART8251.MODE.DATA_BITS) >> 2) + 6;   // includes an extra +1 for start bit
-        if (this.bMode & VT100Serial.UART8251.MODE.PARITY_ENABLE) nBits++;
-        nBits += ((((this.bMode & VT100Serial.UART8251.MODE.STOP_BITS) >> 6) + 1) >> 1);
-        let nBytesPerSecond = nBaud / nBits;
-        return (1000 / nBytesPerSecond)|0;
-    }
-
-    /**
-     * isTransmitterReady()
-     *
-     * Called when someone needs the UART's transmitter status.
-     *
-     * @this {VT100Serial}
-     * @returns {boolean} (true if ready, false if not)
-     */
-    isTransmitterReady()
-    {
-        return !!(this.bStatus & VT100Serial.UART8251.STATUS.XMIT_READY);
-    }
-
-    /**
-     * receiveByte(b)
-     *
-     * @this {VT100Serial}
-     * @param {number} b
-     * @returns {boolean}
-     */
-    receiveByte(b)
-    {
-        this.printf(MESSAGE.SERIAL, "receiveByte(%#04x): status=%#04x\n", b, this.bStatus);
-        if (!this.fAutoStop && !(this.bStatus & VT100Serial.UART8251.STATUS.RECV_FULL)) {
-            if (this.cpu) {
-                this.bDataIn = b;
-                this.bStatus |= VT100Serial.UART8251.STATUS.RECV_FULL;
-                this.cpu.requestINTR(this.nIRQ);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * receiveData(data)
-     *
-     * Helper for clocking received data at the expected RECV_RATE.
-     *
-     * When we're cramming test data down the terminal's throat, that data will typically be in the form
-     * of a string.  When we're called by another component, data will typically be a number (ie, byte).  If no
-     * data is specified at all, then all we do is "clock" any remaining data into the receiver.
-     *
-     * @this {VT100Serial}
-     * @param {number|string|undefined} [data]
-     * @returns {boolean} true if received, false if not
-     */
-    receiveData(data)
-    {
-        if (data != null) {
-            if (typeof data != "number") {
-                this.sDataReceived = data;
-            } else {
-                this.sDataReceived += String.fromCharCode(data);
-            }
-        }
-        if (this.sDataReceived) {
-            if (this.receiveByte(this.sDataReceived.charCodeAt(0))) {
-                this.sDataReceived = this.sDataReceived.substr(1);
-            }
-            if (this.sDataReceived) {
-                this.time.setTimer(this.timerReceiveNext, this.getBaudTimeout(VT100Serial.UART8251.BAUDRATES.RECV_RATE));
-            }
-        }
-        return true;                // for now, return true regardless, since we're buffering everything anyway
-    }
-
-    /**
-     * receiveStatus(pins)
-     *
-     * NOTE: Prior to the addition of this interface, the DSR bit was initialized set and remained set for the life
-     * of the machine.  It is entirely appropriate that this is the only way the bit can be changed, because it represents
-     * an external control signal.
-     *
-     * @this {VT100Serial}
-     * @param {number} pins
-     */
-    receiveStatus(pins)
-    {
-        this.bStatus &= ~VT100Serial.UART8251.STATUS.DSR;
-        if (pins & RS232.DSR.MASK) this.bStatus |= VT100Serial.UART8251.STATUS.DSR;
-    }
-
-    /**
-     * transmitByte(b)
-     *
-     * @this {VT100Serial}
-     * @param {number} b
-     * @returns {boolean} true if transmitted, false if not
-     */
-    transmitByte(b)
-    {
-        let fTransmitted = false;
-        this.printf(MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
-        if (this.fAutoXOFF) {
-            if (b == 0x13) {        // XOFF
-                this.fAutoStop = true;
-                return false;
-            }
-            if (b == 0x11) {        // XON
-                this.fAutoStop = false;
-                return false;
-            }
-        }
-        if (this.sendData && this.sendData.call(this.connection, b)) {
-            fTransmitted = true;
-        }
-        return fTransmitted;
-    }
-
-    /**
-     * transmitData(sData)
-     *
-     * Helper for clocking transmitted data at the expected XMIT_RATE.
-     *
-     * When timerTransmitNext fires, we have honored the programmed XMIT_RATE period, so we can
-     * set XMIT_READY (and XMIT_EMPTY), which signals the firmware that another byte can be transmitted.
-     *
-     * The sData parameter is not used when we're called via the timer; it's an optional parameter used by
-     * the Keyboard component to deliver data pasted via the clipboard, and is currently only useful when
-     * the VT100Serial is connected to another machine.  TODO: Define a separate interface for that feature.
-     *
-     * @this {VT100Serial}
-     * @param {string} [sData]
-     * @returns {boolean} true if successful, false if not
-     */
-    transmitData(sData)
-    {
-        this.bStatus |= (VT100Serial.UART8251.STATUS.XMIT_READY | VT100Serial.UART8251.STATUS.XMIT_EMPTY);
-        if (sData) {
-            return this.sendData? this.sendData.call(this.connection, sData) : false;
-        }
-        return true;
-    }
-
-    /**
-     * inData(port)
-     *
-     * @this {VT100Serial}
-     * @param {number} port (0x0)
-     * @returns {number} simulated port value
-     */
-    inData(port)
-    {
-        let value = this.bDataIn;
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "inData(%#04x): %#04x\n", port, value);
-        this.bStatus &= ~VT100Serial.UART8251.STATUS.RECV_FULL;
-        return value;
-    }
-
-    /**
-     * inStatus(port)
-     *
-     * @this {VT100Serial}
-     * @param {number} port (0x1)
-     * @returns {number} simulated port value
-     */
-    inStatus(port)
-    {
-        let value = this.bStatus;
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "inStatus(%#04x): %#04x\n", port, value);
-        return value;
-    }
-
-    /**
-     * outData(port, bOut)
-     *
-     * @this {VT100Serial}
-     * @param {number} port (0x0)
-     * @param {number} value
-     */
-    outData(port, value)
-    {
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outData(%#04x): %#04x\n", port, value);
-        this.bDataOut = value;
-        this.bStatus &= ~(VT100Serial.UART8251.STATUS.XMIT_READY | VT100Serial.UART8251.STATUS.XMIT_EMPTY);
-        /*
-         * If we're transmitting to a virtual device that has no measurable delay, this code may clear XMIT_READY
-         * too quickly:
-         *
-         *      if (this.transmitByte(bOut)) {
-         *          this.bStatus |= (VT100Serial.UART8251.STATUS.XMIT_READY | VT100Serial.UART8251.STATUS.XMIT_EMPTY);
-         *      }
-         *
-         * A better solution is to arm a timer based on the XMIT_RATE baud rate, and clear the above bits when that
-         * timer fires.  Consequently, we no longer care what transmitByte() reports.
-         */
-        this.transmitByte(value);
-        this.time.setTimer(this.timerTransmitNext, this.getBaudTimeout(VT100Serial.UART8251.BAUDRATES.XMIT_RATE));
-    }
-
-    /**
-     * outControl(port, value)
-     *
-     * Writes to the CONTROL port (0x1) are either MODE or COMMAND bytes.  If the device has just
-     * been powered or reset, it is in a "not ready" state and is waiting for a MODE byte.  Once it
-     * has received that initial byte, the device is marked "ready", and all further bytes are
-     * interpreted as COMMAND bytes (until/unless a COMMAND byte with the INTERNAL_RESET bit is set).
-     *
-     * @this {VT100Serial}
-     * @param {number} port (0x1)
-     * @param {number} value
-     */
-    outControl(port, value)
-    {
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outControl(%#04x): %#04x\n", port, value);
-        if (!this.fReady) {
-            this.bMode = value;
-            this.fReady = true;
-        } else {
-            /*
-             * Whenever DTR or RTS changes, we also want to notify any connected machine, via updateStatus().
-             */
-            if (this.updateStatus) {
-                let delta = (value ^ this.bCommand);
-                if (delta & (VT100Serial.UART8251.COMMAND.RTS | VT100Serial.UART8251.COMMAND.DTR)) {
-                    let pins = 0;
-                    if (this.fNullModem) {
-                        pins |= (value & VT100Serial.UART8251.COMMAND.RTS)? RS232.CTS.MASK : 0;
-                        pins |= (value & VT100Serial.UART8251.COMMAND.DTR)? (RS232.DSR.MASK | RS232.CD.MASK): 0;
-                    } else {
-                        pins |= (value & VT100Serial.UART8251.COMMAND.RTS)? RS232.RTS.MASK : 0;
-                        pins |= (value & VT100Serial.UART8251.COMMAND.DTR)? RS232.DTR.MASK : 0;
-                    }
-                    this.updateStatus.call(this.connection, pins);
-                }
-            }
-            this.updateLEDs(value, this.bCommand);
-            this.bCommand = value;
-            if (this.bCommand & VT100Serial.UART8251.COMMAND.INTERNAL_RESET) {
-                this.fReady = false;
-            }
-        }
-    }
-
-    /**
-     * outBaudRates(port, value)
-     *
-     * @this {VT100Serial}
-     * @param {number} port (0x2)
-     * @param {number} value
-     */
-    outBaudRates(port, value)
-    {
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outBaudRates(%#04x): %#04x\n", port, value);
-        this.bBaudRates = value;
-    }
-
-    /**
-     * updateLEDs(value, previous)
-     *
-     * @this {VT100Serial}
-     * @param {number} [value] (if not provided, all LEDS are turned off)
-     * @param {number} [previous] (if not provided, all LEDs are updated)
-     */
-    updateLEDs(value, previous)
-    {
-        for (let id in this.leds) {
-            let led = this.leds[id];
-            if (!led) continue;
-            let bit = +id, on, changed = 1, redraw = 1;
-            if (value != undefined) {
-                if (!(bit & (bit - 1))) {       // if a single bit is set, this will be zero
-                    on = value & bit;           // and "on" will be true if that single bit is set
-                } else {
-                    bit = ~bit & 0xff;          // otherwise, we assume that a single bit is clear
-                    on = !(value & bit);        // so "on" will be true if that same single bit is clear
-                }
-                if (previous != undefined) {
-                    changed = (value ^ previous) & bit;
-                    redraw = 0;
-                }
-            }
-            if (changed) {                      // call setLEDState() only if the bit changed
-                led.setLEDState(0, 0, on? LED.STATE.ON : LED.STATE.OFF);
-                if (redraw) led.drawBuffer();
-            }
-        }
-    }
-}
-
-VT100Serial.UART8251 = {
-    /*
-     * Format of MODE byte written to CONTROL port 0x1
-     */
-    MODE: {
-        BAUD_FACTOR:    0x03,       // 00=SYNC, 01=1x, 10=16x, 11=64x
-        DATA_BITS:      0x0C,       // 00=5, 01=6, 10=7, 11=8
-        PARITY_ENABLE:  0x10,
-        EVEN_PARITY:    0x20,
-        STOP_BITS:      0xC0,       // 00=invalid, 01=1, 10=1.5, 11=2
-        INIT:           0x8E        // 16x baud rate, 8 data bits, no parity, 1.5 stop bits
-    },
-    /*
-     * Format of COMMAND byte written to CONTROL port 0x1
-     */
-    COMMAND: {
-        XMIT_ENABLE:    0x01,
-        DTR:            0x02,       // Data Terminal Ready
-        RECV_ENABLE:    0x04,
-        SEND_BREAK:     0x08,
-        ERROR_RESET:    0x10,
-        RTS:            0x20,       // Request To Send
-        INTERNAL_RESET: 0x40,
-        HUNT_MODE:      0x80,
-        INIT:           0x27        // XMIT_ENABLE | DTR | RECV_ENABLE | RTS
-    },
-    /*
-     * Format of STATUS byte read from CONTROL port 0x1
-     */
-    STATUS: {
-        XMIT_READY:     0x01,
-        RECV_FULL:      0x02,
-        XMIT_EMPTY:     0x04,
-        PARITY_ERROR:   0x08,
-        OVERRUN_ERROR:  0x10,
-        FRAMING_ERROR:  0x20,
-        BREAK_DETECT:   0x40,
-        DSR:            0x80,       // Data Set Ready
-        INIT:           0x85        // XMIT_READY | XMIT_EMPTY | DSR
-    },
-    /*
-     * Format of BAUDRATES byte written to port 0x2
-     *
-     * Each nibble is an index (0x0-0xF) into a set of internal CPU clock divisors that yield the
-     * following baud rates:
-     *
-     *      Index   Divisor     Baud Rate
-     *      -----   -------     ---------
-     *      0x0      3456       50
-     *      0x1      2304       75
-     *      0x2      1571       110
-     *      0x3      1285       134.5
-     *      0x4      1152       150
-     *      0x5      864        200
-     *      0x6      576        300
-     *      0x7      288        600
-     *      0x8      144        1200
-     *      0x9      96         1800
-     *      0xA      86         2000
-     *      0xB      72         2400
-     *      0xC      48         3600
-     *      0xD      36         4800
-     *      0xE      18         9600    (default)
-     *      0xF      9          19200
-     *
-     * NOTE: This is a VT100-specific port and baud rate table.
-     */
-    BAUDRATES: {
-        RECV_RATE:      0x0F,
-        XMIT_RATE:      0xF0,
-        INIT:           0xEE    // default to 9600 (0xE) for both XMIT and RECV
-    },
-    BAUDTABLE: [
-        50, 75, 110, 134.5, 150, 200, 300, 600, 1200, 1800, 2000, 2400, 3600, 4800, 9600, 19200
-    ]
-};
-
-VT100Serial.LEDS = {
-    [VT100Serial.UART8251.COMMAND.DTR]:  "ledDTR",
-    [VT100Serial.UART8251.COMMAND.RTS]:  "ledRTS"
-};
-
-VT100Serial.IOTABLE = {
-    0x0: [VT100Serial.prototype.inData, VT100Serial.prototype.outData],
-    0x1: [VT100Serial.prototype.inStatus, VT100Serial.prototype.outControl],
-    0x2: [null, VT100Serial.prototype.outBaudRates]
-};
-
-Defs.CLASSES["VT100Serial"] = VT100Serial;
-
-/**
- * @copyright https://www.pcjs.org/machines/dec/vt100/lib/video.js (C) 2012-2020 Jeff Parsons
- */
-
-/** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */
-var VT100VideoConfig;
-
-/**
- * @class {VT100Video}
- * @unrestricted
- * @property {VT100VideoConfig} config
- */
-class VT100Video extends Monitor {
-    /**
-     * VT100Video(idMachine, idDevice, config)
-     *
-     * The VT100Video component can be configured with the following config properties:
-     *
-     *      bufferWidth: the width of a single frame buffer row, in pixels (eg, 256)
-     *      bufferHeight: the number of frame buffer rows (eg, 224)
-     *      bufferAddr: the starting address of the frame buffer (eg, 0x2400)
-     *      bufferRAM: true to use existing RAM (default is false)
-     *      bufferBits: the number of bits per column (default is 1)
-     *      bufferLeft: the bit position of the left-most pixel in a byte (default is 0; CGA uses 7)
-     *      interruptRate: normally the same as (or some multiple of) refreshRate (eg, 120)
-     *      refreshRate: how many times updateMonitor() should be performed per second (eg, 60)
-     *
-     *  In addition, if a text-only display is being emulated, define the following properties:
-     *
-     *      fontROM: URL of font ROM
-     *      fontColor: default is white
-     *      cellWidth: number (eg, 10 for VT100)
-     *      cellHeight: number (eg, 10 for VT100)
-     *
-     * We record all the above values now, but we defer creation of the frame buffer until initBuffers()
-     * is called.  At that point, we will also compute the extent of the frame buffer, determine the
-     * appropriate "cell" size (ie, the number of pixels that updateMonitor() will fetch and process at once),
-     * and then allocate our cell cache.
-     *
-     * Why interruptRate in addition to refreshRate?  A higher interrupt rate is required for Space Invaders,
-     * because even though the CRT refreshes at 60Hz, the CRT controller interrupts the CPU *twice* per
-     * refresh (once after the top half of the image has been redrawn, and again after the bottom half has
-     * been redrawn), so we need an interrupt rate of 120Hz.  We pass the higher rate on to the CPU, so that
-     * it will call updateMonitor() more frequently, but we still limit our monitor updates to every *other* call.
-     *
-     * @this {VT100Video}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {ROMConfig} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-        /*
-         * Setting the device's "messages" property eliminates the need for printf() calls to include this value;
-         * any printf() that omits a MESSAGE parameter will use this value by default.
-         */
-        this.messages = MESSAGE.VIDEO;
-
-        this.addrBuffer = this.config['bufferAddr'];
-        this.fUseRAM = this.config['bufferRAM'];
-
-        this.nColsBuffer = this.config['bufferWidth'];
-        this.nRowsBuffer = this.config['bufferHeight'];
-
-        this.cxCellDefault = this.cxCell = this.config['cellWidth'] || 1;
-        this.cyCellDefault = this.cyCell = this.config['cellHeight'] || 1;
-
-        this.abFontData = null;
-        this.fDotStretcher = false;
-
-        this.nBitsPerPixel = this.config['bufferBits'] || 1;
-        this.iBitFirstPixel = this.config['bufferLeft'] || 0;
-
-        this.rateInterrupt = this.config['interruptRate'];
-        this.rateRefresh = this.config['refreshRate'] || 60;
-
-        this.cxMonitorCell = (this.cxMonitor / this.nColsBuffer)|0;
-        this.cyMonitorCell = (this.cyMonitor / this.nRowsBuffer)|0;
-
-        /*
-         * Now that we've finished using nRowsBuffer to help define the monitor size, we add one more
-         * row for text modes, to account for the VT100's scroll line buffer (used for smooth scrolling).
-         */
-        if (this.cyCell > 1) {
-            this.nRowsBuffer++;
-            this.bScrollOffset = 0;
-            this.fSkipSingleCellUpdate = false;
-        }
-
-        this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['bus']));
-        this.initBuffers();
-
-        this.abFontData = this.config['fontROM'];
-        this.createFonts();
-
-        this.cpu = /** @type {CPU8080} */ (this.findDeviceByClass("CPU"));
-        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
-        this.timerUpdateNext = this.time.addTimer(this.idDevice, this.updateMonitor.bind(this));
-        this.time.addUpdate(this);
-
-        this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
-        this.nUpdates = 0;
-    }
-
-    /**
-     * onUpdate(fTransition)
-     *
-     * This is our obligatory update() function, which every device with visual components should have.
-     *
-     * For the video device, our sole function is making sure the screen display is up-to-date.  However, calling
-     * updateScreen() is a bad idea if the machine is running, because we already have a timer to take care of
-     * that.  But we can also be called when the machine is NOT running (eg, the Debugger may be stepping through
-     * some code, or editing the frame buffer directly, or something else).  Since we have no way of knowing, we
-     * simply force an update.
-     *
-     * @this {VT100Video}
-     * @param {boolean} [fTransition]
-     */
-    onUpdate(fTransition)
-    {
-        if (!this.time.isRunning()) this.updateScreen();
-    }
-
-    /**
-     * initBuffers()
-     *
-     * @this {VT100Video}
-     * @returns {boolean}
-     */
-    initBuffers()
-    {
-        /*
-         * Allocate off-screen buffers now
-         */
-        this.cxBuffer = this.nColsBuffer * this.cxCell;
-        this.cyBuffer = this.nRowsBuffer * this.cyCell;
-
-        let cxBuffer = this.cxBuffer;
-        let cyBuffer = this.cyBuffer;
-
-        this.sizeBuffer = 0;
-        if (!this.fUseRAM) {
-            this.sizeBuffer = ((this.cxBuffer * this.nBitsPerPixel) >> 3) * this.cyBuffer;
-            if (!this.busMemory.addBlocks(this.addrBuffer, this.sizeBuffer, Memory.TYPE.READWRITE)) {
-                return false;
-            }
-        }
-
-        /*
-         * Since we will read video data from the bus at its default width, get that width now;
-         * that width will also determine the size of a cell.
-         */
-        this.cellWidth = this.busMemory.dataWidth;
-
-        /*
-         * We add an extra column per row to store the visible line length at the start of every row.
-         */
-        this.initCache((this.nColsBuffer + 1) * this.nRowsBuffer);
-
-        this.canvasBuffer = document.createElement("canvas");
-        this.canvasBuffer.width = cxBuffer;
-        this.canvasBuffer.height = cyBuffer;
-        this.contextBuffer = this.canvasBuffer.getContext("2d");
-
-        this.aFonts = {};
-        this.initColors();
-
-        /*
-         * Beyond fonts, VT100 support requires that we maintain a number of additional properties:
-         *
-         *      rateMonitor: must be either 50 or 60 (defaults to 60); we don't emulate the monitor refresh rate,
-         *      but we do need to keep track of which rate has been selected, because that affects the number of
-         *      "fill lines" present at the top of the VT100's frame buffer: 2 lines for 60Hz, 5 lines for 50Hz.
-         *
-         *      The VT100 July 1982 Technical Manual, p. 4-89, shows the following sample frame buffer layout:
-         *
-         *                  00  01  02  03  04  05  06  07  08  09  0A  0B  0C  0D  0E  0F
-         *                  --------------------------------------------------------------
-         *          0x2000: 7F  70  03  7F  F2  D0  7F  70  06  7F  70  0C  7F  70  0F  7F
-         *          0x2010: 70  03  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..
-         *          ...
-         *          0x22D0: 'D' 'A' 'T' 'A' ' ' 'F' 'O' 'R' ' ' 'F' 'I' 'R' 'S' 'T' ' ' 'L'
-         *          0x22E0: 'I' 'N' 'E' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '
-         *          ...
-         *          0x2320: 7F  F3  23  'D' 'A' 'T' 'A' ' ' 'F' 'O' 'R' ' ' 'S' 'E' 'C' 'O'
-         *          0x2330: 'N' 'D' ' ' 'L' 'I' 'N' 'E' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '
-         *          ...
-         *          0x2BE0: ' ' ' ' 'E' 'N' 'D' ' ' 'O' 'F' ' ' 'L' 'A' 'S' 'T' ' ' 'L' 'I'
-         *          0x2BF0: 'N' 'E' 7F  70  06  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..
-         *          0x2C00: [AVO SCREEN RAM, IF ANY, BEGINS HERE]
-         *
-         *      ERRATA: The manual claims that if you change the byte at 0x2002 from 03 to 09, the number of "fill
-         *      lines" will change from 2 to 5 (for 50Hz operation), but it shows 06 instead of 0C at location 0x200B;
-         *      if you follow the links, it's pretty clear that byte has to be 0C to yield 5 "fill lines".  Since the
-         *      address following the terminator at 0x2006 points to itself, it never makes sense for that terminator
-         *      to be used EXCEPT at the end of the frame buffer.
-         *
-         *      As an alternative to tracking the monitor refresh rate, we could hard-code some knowledge about how
-         *      the VT100's 8080 code uses memory, and simply ignore lines below address 0x22D0.  But the VT100 Video
-         *      Processor makes no such assumption, and it would also break our test code in createFonts(), which
-         *      builds a contiguous image of test data starting at the default frame buffer address (0x2000).
-         */
-        this.rateMonitor = 60;
-
-        /*
-         * The default character-selectable attribute (reverse video vs. underline) is controlled by fUnderline.
-         */
-        this.fUnderline = false;
-        this.abLineBuffer = new Array(this.nColsBuffer);
-
-        /*
-         * Our 'smoothing' parameter defaults to null (which we treat the same as undefined), which means that
-         * image smoothing will be selectively enabled (ie, true for text modes, false for graphics modes); otherwise,
-         * we'll set image smoothing to whatever value was provided for ALL modes -- assuming the browser supports it.
-         */
-        if (this.sSmoothing) {
-            this.contextMonitor[this.sSmoothing] = (this.fSmoothing == null? false : this.fSmoothing);
-        }
-        return true;
-    }
-
-    /**
-     * createFonts()
-     *
-     * @this {VT100Video}
-     * @returns {boolean}
-     */
-    createFonts()
-    {
-        /*
-         * We retain abFontData in case we have to rebuild the fonts (eg, when we switch from 80 to 132 columns)
-         */
-        if (this.abFontData) {
-            this.fDotStretcher = true;
-            this.aFonts[VT100Video.VT100.FONT.NORML] = [
-                this.createFontVariation(this.cxCell, this.cyCell),
-                this.createFontVariation(this.cxCell, this.cyCell, this.fUnderline)
-            ];
-            this.aFonts[VT100Video.VT100.FONT.DWIDE] = [
-                this.createFontVariation(this.cxCell*2, this.cyCell),
-                this.createFontVariation(this.cxCell*2, this.cyCell, this.fUnderline)
-            ];
-            this.aFonts[VT100Video.VT100.FONT.DHIGH] = this.aFonts[VT100Video.VT100.FONT.DHIGH_BOT] = [
-                this.createFontVariation(this.cxCell*2, this.cyCell*2),
-                this.createFontVariation(this.cxCell*2, this.cyCell*2, this.fUnderline)
-            ];
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * createFontVariation(cxCell, cyCell, fUnderline)
-     *
-     * This creates a 16x16 character grid for the requested font variation.  Variations include:
-     *
-     *      1) no variation (cell size is this.cxCell x this.cyCell)
-     *      2) double-wide characters (cell size is this.cxCell*2 x this.cyCell)
-     *      3) double-high double-wide characters (cell size is this.cxCell*2 x this.cyCell*2)
-     *      4) any of the above with either reverse video or underline enabled (default is neither)
-     *
-     * @this {VT100Video}
-     * @param {number} cxCell is the target width of each character in the grid
-     * @param {number} cyCell is the target height of each character in the grid
-     * @param {boolean} [fUnderline] (null for unmodified font, false for reverse video, true for underline)
-     * @returns {Object}
-     */
-    createFontVariation(cxCell, cyCell, fUnderline)
-    {
-        this.printf("createFontVariation(cxCell=%d, cyCell=%d, fUnderline=%b\n", cxCell, cyCell, fUnderline);
-
-        /*
-         * On a VT100, cxCell,cyCell is initially 10,10, but may change to 9,10 for 132-column mode.
-         */
-
-
-
-        /*
-         * Create a font canvas that is both 16 times the target character width and the target character height,
-         * ensuring that it will accommodate 16x16 characters (for a maximum of 256).  Note that the VT100 font ROM
-         * defines only 128 characters, so that canvas will contain only 16x8 entries.
-         */
-        let nFontBytesPerChar = this.cxCellDefault <= 8? 8 : 16;
-        let nFontByteOffset = nFontBytesPerChar > 8? 15 : 0;
-        let nChars = this.abFontData.length / nFontBytesPerChar;
-
-        /*
-         * The absence of a boolean for fUnderline means that both fReverse and fUnderline are "falsey".  The presence
-         * of a boolean means that fReverse will be true OR fUnderline will be true, but NOT both.
-         */
-        let fReverse = (fUnderline === false);
-
-        let font = {cxCell: cxCell, cyCell: cyCell};
-        font.canvas = document.createElement("canvas");
-        font.canvas.width = cxCell * 16;
-        font.canvas.height = cyCell * (nChars / 16);
-        font.context = font.canvas.getContext("2d");
-
-        let imageChar = font.context.createImageData(cxCell, cyCell);
-
-        for (let iChar = 0; iChar < nChars; iChar++) {
-            for (let y = 0, yDst = y; y < this.cyCell; y++) {
-                let offFontData = iChar * nFontBytesPerChar + ((nFontByteOffset + y) & (nFontBytesPerChar - 1));
-                let bits = (fUnderline && y == 8? 0xff : this.abFontData[offFontData]);
-                for (let nRows = 0; nRows < (cyCell / this.cyCell); nRows++) {
-                    let bitPrev = 0;
-                    for (let x = 0, xDst = x; x < this.cxCell; x++) {
-                        /*
-                         * While x goes from 0 to cxCell-1, obviously we will run out of bits after x is 7;
-                         * since the final bit must be replicated all the way to the right edge of the cell
-                         * (so that line-drawing characters seamlessly connect), we ensure that the effective
-                         * shift count remains stuck at 7 once it reaches 7.
-                         */
-                        let bitReal = bits & (0x80 >> (x > 7? 7 : x));
-                        let bit = (this.fDotStretcher && !bitReal && bitPrev)? bitPrev : bitReal;
-                        for (let nCols = 0; nCols < (cxCell / this.cxCell); nCols++) {
-                            if (fReverse) bit = !bit;
-                            this.setPixel(imageChar, xDst, yDst, bit? 1 : 0);
-                            xDst++;
-                        }
-                        bitPrev = bitReal;
-                    }
-                    yDst++;
-                }
-            }
-            /*
-             * (iChar >> 4) performs the integer equivalent of Math.floor(iChar / 16), and (iChar & 0xf) is the equivalent of (iChar % 16).
-             */
-            font.context.putImageData(imageChar, (iChar & 0xf) * cxCell, (iChar >> 4) * cyCell);
-        }
-        return font;
-    }
-
-    /**
-     * updateDimensions(nCols, nRows)
-     *
-     * Called from the Chip component whenever the monitor dimensions have been dynamically altered.
-     *
-     * @this {VT100Video}
-     * @param {number} nCols (should be either 80 or 132; 80 is the default)
-     * @param {number} nRows (should be either 24 or 14; 24 is the default)
-     */
-    updateDimensions(nCols, nRows)
-    {
-        this.printf("updateDimensions(%d,%d)\n", nCols, nRows);
-        this.nColsBuffer = nCols;
-        /*
-         * Even when the number of effective rows is 14 (or 15 counting the scroll line buffer), we want
-         * to leave the number of rows at 24 (or 25 counting the scroll line buffer), because the VT100 doesn't
-         * actually change character height (only character width).
-         *
-         *      this.nRowsBuffer = nRows+1; // +1 for scroll line buffer
-         */
-        this.cxCell = this.cxCellDefault;
-        if (nCols > 80) this.cxCell--;      // VT100 font cells are 9x10 instead of 10x10 in 132-column mode
-        if (this.initBuffers()) {
-            this.createFonts();
-        }
-    }
-
-    /**
-     * updateRate(nRate)
-     *
-     * Called from the Chip component whenever the monitor refresh rate has been dynamically altered.
-     *
-     * @this {VT100Video}
-     * @param {number} nRate (should be either 50 or 60; 60 is the default)
-     */
-    updateRate(nRate)
-    {
-        this.printf("updateRate(%d)\n", nRate);
-        this.rateMonitor = nRate;
-    }
-
-    /**
-     * updateScrollOffset(bScroll)
-     *
-     * Called from the Chip component whenever the monitor scroll offset has been dynamically altered.
-     *
-     * @this {VT100Video}
-     * @param {number} bScroll
-     */
-    updateScrollOffset(bScroll)
-    {
-        this.printf("updateScrollOffset(%d)\n", bScroll);
-        if (this.bScrollOffset !== bScroll) {
-            this.bScrollOffset = bScroll;
-            /*
-             * WARNING: If we immediately redraw the monitor on the first wrap of the scroll offset back to zero,
-             * we end up "slamming" the monitor's contents back down again, because it seems that the frame buffer
-             * contents haven't actually been scrolled yet.  So we redraw now ONLY if bScroll is non-zero, lest
-             * we ruin the smooth-scroll effect.
-             *
-             * And this change, while necessary, is not sufficient, because another intervening updateMonitor()
-             * call could still occur before the frame buffer contents are actually scrolled; and ordinarily, if the
-             * buffer hasn't changed, updateMonitor() would do nothing, but alas, if the cursor happens to get toggled
-             * in the interim, updateMonitor() will want to update exactly ONE cell.
-             *
-             * So we deal with that by setting the fSkipSingleCellUpdate flag.  Now of course, there's no guarantee
-             * that the next update of only ONE cell will always be a cursor update, but even if it isn't, skipping
-             * that update doesn't seem like a huge cause for concern.
-             */
-            if (bScroll) {
-                this.updateMonitor(true);
-            } else {
-                this.fSkipSingleCellUpdate = true;
-            }
-        }
-    }
-
-    /**
-     * getRefreshTime()
-     *
-     * @this {VT100Video}
-     * @returns {number} (number of milliseconds per refresh)
-     */
-    getRefreshTime()
-    {
-        return 1000 / Math.max(this.rateRefresh, this.rateInterrupt);
-    }
-
-    /**
-     * initCache(nCells)
-     *
-     * Initializes the contents of our internal cell cache.
-     *
-     * @this {VT100Video}
-     * @param {number} [nCells]
-     */
-    initCache(nCells)
-    {
-        this.fCacheValid = false;
-        if (nCells) {
-            this.nCacheCells = nCells;
-            if (this.aCacheCells === undefined || this.aCacheCells.length != this.nCacheCells) {
-                this.aCacheCells = new Array(this.nCacheCells);
-            }
-        }
-        /*
-         * Because the VT100 frame buffer can be located anywhere in RAM (above 0x2000), we must defer this
-         * test code until the powerUp() notification handler is called, when all RAM has (hopefully) been allocated.
-         *
-         * NOTE: The following test image was useful for early testing, but a *real* VT100 doesn't display a test image,
-         * so this code is no longer enabled by default.  Remove MAXDEBUG if you want to see it again.
-         */
-        if (MAXDEBUG && !this.test) {
-            /*
-             * Build a test iamge in the VT100 frame buffer; we'll mimic the "SET-UP A" image, since it uses
-             * all the font variations.  The process involves iterating over 0-based row numbers -2 (or -5 if 50Hz
-             * operation is selected) through 24, checking aLineData for a matching row number, and converting the
-             * corresponding string(s) to appropriate byte values.  Negative row numbers correspond to "fill lines"
-             * and do not require a row entry.  If multiple strings are present for a given row, we invert the
-             * default character attribute for subsequent strings.  An empty array ends the image build process.
-             */
-            let aLineData = {
-                 0: [VT100Video.VT100.FONT.DHIGH, 'SET-UP A'],
-                 2: [VT100Video.VT100.FONT.DWIDE, 'TO EXIT PRESS "SET-UP"'],
-                22: [VT100Video.VT100.FONT.NORML, '        T       T       T       T       T       T       T       T       T'],
-                23: [VT100Video.VT100.FONT.NORML, '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890'],
-                24: []
-            };
-            let addr = this.addrBuffer;
-            let addrNext = -1, font = -1;
-            let b, nFill = (this.rateMonitor == 60? 2 : 5);
-            for (let iRow = -nFill; iRow < this.nRowsBuffer; iRow++) {
-                let lineData = aLineData[iRow];
-                if (addrNext >= 0) {
-                    let fBreak = false;
-                    addrNext = addr + 2;
-                    if (!lineData) {
-                        if (font == VT100Video.VT100.FONT.DHIGH) {
-                            lineData = aLineData[iRow-1];
-                            font = VT100Video.VT100.FONT.DHIGH_BOT;
-                        }
-                    }
-                    else {
-                        if (lineData.length) {
-                            font = lineData[0];
-                        } else {
-                            addrNext = addr - 1;
-                            fBreak = true;
-                        }
-                    }
-                    b = (font & VT100Video.VT100.LINEATTR.FONTMASK) | ((addrNext >> 8) & VT100Video.VT100.LINEATTR.ADDRMASK) | VT100Video.VT100.LINEATTR.ADDRBIAS;
-                    this.busMemory.writeData(addr++, b);
-                    this.busMemory.writeData(addr++, addrNext & 0xff);
-                    if (fBreak) break;
-                }
-                if (lineData) {
-                    let attr = 0;
-                    for (let j = 1; j < lineData.length; j++) {
-                        let s = lineData[j];
-                        for (let k = 0; k < s.length; k++) {
-                            this.busMemory.writeData(addr++, s.charCodeAt(k) | attr);
-                        }
-                        attr ^= 0x80;
-                    }
-                }
-                this.busMemory.writeData(addr++, VT100Video.VT100.LINETERM);
-                addrNext = addr;
-            }
-            this.test = true;
-        }
-    }
-
-    /**
-     * initColors()
-     *
-     * @this {VT100Video}
-     */
-    initColors()
-    {
-        let rgbBlack  = [0x00, 0x00, 0x00, 0xff];
-        let rgbWhite  = [0xff, 0xff, 0xff, 0xff];
-        this.nColors = (1 << this.nBitsPerPixel);
-        this.aRGB = new Array(this.nColors);
-        this.aRGB[0] = rgbBlack;
-        this.aRGB[1] = rgbWhite;
-    }
-
-    /**
-     * setPixel(image, x, y, bPixel)
-     *
-     * @this {VT100Video}
-     * @param {Object} image
-     * @param {number} x
-     * @param {number} y
-     * @param {number} bPixel (ie, an index into aRGB)
-     */
-    setPixel(image, x, y, bPixel)
-    {
-        let index = (x + y * image.width);
-        let rgb = this.aRGB[bPixel];
-        index *= rgb.length;
-        image.data[index] = rgb[0];
-        image.data[index+1] = rgb[1];
-        image.data[index+2] = rgb[2];
-        image.data[index+3] = rgb[3];
-    }
-
-    /**
-     * updateChar(idFont, col, row, data, context)
-     *
-     * Updates a particular character cell (row,col) in the associated window.
-     *
-     * @this {VT100Video}
-     * @param {number} idFont
-     * @param {number} col
-     * @param {number} row
-     * @param {number} data
-     * @param {Object} [context]
-     */
-    updateChar(idFont, col, row, data, context)
-    {
-        let bChar = data & 0x7f;
-        let font = this.aFonts[idFont][(data & 0x80)? 1 : 0];
-        if (!font) return;
-
-        let xSrc = (bChar & 0xf) * font.cxCell;
-        let ySrc = (bChar >> 4) * font.cyCell;
-
-        let xDst, yDst, cxDst, cyDst;
-
-        let cxSrc = font.cxCell;
-        let cySrc = font.cyCell;
-
-        if (context) {
-            xDst = col * this.cxCell;
-            yDst = row * this.cyCell;
-            cxDst = this.cxCell;
-            cyDst = this.cyCell;
-        } else {
-            xDst = col * this.cxMonitorCell;
-            yDst = row * this.cyMonitorCell;
-            cxDst = this.cxMonitorCell;
-            cyDst = this.cyMonitorCell;
-        }
-
-        /*
-         * If font.cxCell > this.cxCell, then we assume the caller wants to draw a double-wide character,
-         * so we will double xDst and cxDst.
-         */
-        if (font.cxCell > this.cxCell) {
-            xDst *= 2;
-            cxDst *= 2;
-
-        }
-
-        /*
-         * If font.cyCell > this.cyCell, then we rely on idFont to indicate whether the top half or bottom half
-         * of the character should be drawn.
-         */
-        if (font.cyCell > this.cyCell) {
-            if (idFont == VT100Video.VT100.FONT.DHIGH_BOT) ySrc += this.cyCell;
-            cySrc = this.cyCell;
-
-        }
-
-        if (context) {
-            context.drawImage(font.canvas, xSrc, ySrc, cxSrc, cySrc, xDst, yDst, cxDst, cyDst);
-        } else {
-            xDst += this.xMonitorOffset;
-            yDst += this.yMonitorOffset;
-            this.contextMonitor.drawImage(font.canvas, xSrc, ySrc, cxSrc, cySrc, xDst, yDst, cxDst, cyDst);
-        }
-    }
-
-    /**
-     * updateMonitor(fForced)
-     *
-     * Forced updates are generally internal updates triggered by an I/O operation or other state change,
-     * while non-forced updates are periodic "refresh" updates.
-     *
-     * @this {VT100Video}
-     * @param {boolean} [fForced]
-     */
-    updateMonitor(fForced)
-    {
-        let fUpdate = true;
-        if (!fForced) {
-            if (this.rateInterrupt) {
-                this.cpu.requestINTR(4);
-            }
-            /*
-             * Since this is not a forced update, if our cell cache is valid AND we allocated our own buffer AND the buffer
-             * is clean, then there's nothing to do.
-             */
-            if (fUpdate && this.fCacheValid && this.sizeBuffer) {
-                if (this.busMemory.cleanBlocks(this.addrBuffer, this.sizeBuffer)) {
-                    fUpdate = false;
-                }
-            }
-            this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
-            this.nUpdates++;
-        }
-        if (!fUpdate) {
-            return;
-        }
-        this.updateScreen(fForced);
-    }
-
-    /**
-     * updateScreen(f)
-     *
-     * Propagates the video buffer to the cell cache and updates the screen with any changes on the monitor.
-     *
-     * For every cell in the video buffer, compare it to the cell stored in the cell cache, render if it differs,
-     * and then update the cell cache to match.  Since initCache() sets every cell in the cell cache to an
-     * invalid value, we're assured that the next call to updateScreen() will redraw the entire (visible) video buffer.
-     *
-     * @this {VT100Video}
-     * @param {boolean} [fForced]
-     */
-    updateScreen(fForced)
-    {
-        let nRows = 0;
-        let font, fontNext = -1;
-        let nFill = (this.rateMonitor == 60? 2 : 5);
-        let iCell = 0, cUpdated = 0, iCellUpdated = -1;
-
-        let addrNext = this.addrBuffer;
-
-
-        while (nRows < this.nRowsBuffer) {
-            /*
-             * Populate the line buffer
-             */
-            let nCols = 0;
-            let addr = addrNext;
-            let nColsVisible = this.nColsBuffer;
-            font = fontNext;
-            if (font != VT100Video.VT100.FONT.NORML) nColsVisible >>= 1;
-            while (true) {
-                let data = this.busMemory.readData(addr++);
-                if ((data & VT100Video.VT100.LINETERM) == VT100Video.VT100.LINETERM) {
-                    let b = this.busMemory.readData(addr++);
-                    fontNext = b & VT100Video.VT100.LINEATTR.FONTMASK;
-                    addrNext = ((b & VT100Video.VT100.LINEATTR.ADDRMASK) << 8) | this.busMemory.readData(addr);
-                    addrNext += (b & VT100Video.VT100.LINEATTR.ADDRBIAS)? VT100Video.VT100.ADDRBIAS_LO : VT100Video.VT100.ADDRBIAS_HI;
-                    break;
-                }
-                if (nCols < nColsVisible) {
-                    this.abLineBuffer[nCols++] = data;
-                } else {
-                    break;                          // ideally, we would wait for a LINETERM byte, but it's not safe to loop without limit
-                }
-            }
-
-            /*
-             * Skip the first few "fill lines"
-             */
-            if (nFill) {
-                nFill--;
-                continue;
-            }
-
-            /*
-             * Pad the line buffer as needed
-             */
-            while (nCols < this.abLineBuffer.length) {
-                this.abLineBuffer[nCols++] = 0;     // character code 0 is a empty font character
-            }
-
-            /*
-             * Display the line buffer; ordinarily, the font number would be valid after processing the "fill lines",
-             * but if the buffer isn't initialized yet, those lines might be missing, so the font number might not be set.
-             */
-            if (font >= 0) {
-                /*
-                 * Cell cache logic is complicated by the fact that a line may be single-width one frame and double-width
-                 * the next.  So we store the visible line length at the start of each row in the cache, which must match if
-                 * the cache can be considered valid for the current line.
-                 */
-                let fLineCacheValid = this.fCacheValid && (this.aCacheCells[iCell] == nColsVisible);
-                this.aCacheCells[iCell++] = nColsVisible;
-                for (let iCol = 0; iCol < nCols; iCol++) {
-                    let data = this.abLineBuffer[iCol];
-                    if (!fLineCacheValid || data !== this.aCacheCells[iCell]) {
-                        this.aCacheCells[iCellUpdated = iCell] = data;
-                        this.updateChar(font, iCol, nRows, data, this.contextBuffer);
-                        cUpdated++;
-                    }
-                    iCell++;
-                }
-            }
-            nRows++;
-        }
-        this.fCacheValid = true;
-
-
-
-        if (!fForced && this.fSkipSingleCellUpdate && cUpdated == 1) {
-            /*
-             * We're going to blow off this update, since it comes on the heels of a smooth-scroll that *may*
-             * not be completely finished yet, and at the same time, we're going to zap the only updated cell
-             * cache entry, to guarantee that it's redrawn on the next update.
-             */
-
-            /*
-             * TODO: If I change the RECV rate to 19200 and enable smooth scrolling, I sometimes see a spurious
-             * "H" on the bottom line after a long series of "HELLO WORLD!\r\n" tests.  Dumping video memory shows
-             * "HELLO WORLD!" on 23 lines and an "H" on the 24th line, so it's really there.  But strangely, if
-             * I then press SET-UP two times, the restored monitor does NOT have the spurious "H".  So somehow the
-             * firmware knows what should and shouldn't be on-screen.
-             *
-             * Possible VT100 firmware bug?  I'm not sure.  Anyway, this DEBUG-only code is here to help trap
-             * that scenario, until I figure it out.
-             */
-            if (DEBUG && (this.aCacheCells[iCellUpdated] & 0x7f) == 0x48) {
-                this.printf("spurious 'H' character at offset %d\n", iCellUpdated);
-            }
-            this.aCacheCells[iCellUpdated] = -1;
-            cUpdated = 0;
-        }
-        this.fSkipSingleCellUpdate = false;
-
-        if ((cUpdated || fForced) && this.contextBuffer) {
-            /*
-             * We must subtract cyCell from cyBuffer to avoid displaying the extra "scroll line" that we normally
-             * buffer, in support of smooth scrolling.  Speaking of which, we must also add bScrollOffset to ySrc
-             * (well, ySrc is always relative to zero, so no add is actually required).
-             */
-            this.contextMonitor.drawImage(
-                this.canvasBuffer,
-                0,                                  // xSrc
-                this.bScrollOffset,                 // ySrc
-                this.cxBuffer,                      // cxSrc
-                this.cyBuffer - this.cyCell,        // cySrc
-                this.xMonitorOffset,                // xDst
-                this.yMonitorOffset,                // yDst
-                this.cxMonitorOffset,               // cxDst
-                this.cyMonitorOffset                // cyDst
-            );
-        }
-    }
-}
-
-VT100Video.VT100 = {
-    /*
-     * The following font IDs are nothing more than all the possible LINEATTR values masked with FONTMASK;
-     * also, note that double-high implies double-wide; the VT100 doesn't support a double-high single-wide font.
-     */
-    FONT: {
-        NORML:      0x60,       // normal font (eg, 10x10)
-        DWIDE:      0x40,       // double-wide, single-high font (eg, 20x10)
-        DHIGH:      0x20,       // technically, this means display only the TOP half of the double-high font (eg, 20x20)
-        DHIGH_BOT:  0x00        // technically, this means display only the BOTTOM half of the double-high font (eg, 20x20)
-    },
-    LINETERM:       0x7F,
-    LINEATTR: {
-        ADDRMASK:   0x0F,
-        ADDRBIAS:   0x10,       // 0x10 == ADDRBIAS_LO, 0x00 = ADDRBIAS_HI
-        FONTMASK:   0x60,
-        SCROLL:     0x80
-    },
-    ADDRBIAS_LO:    0x2000,
-    ADDRBIAS_HI:    0x4000
-};
-
-Defs.CLASSES["VT100Video"] = VT100Video;
-
-/**
- * @copyright https://www.pcjs.org/machines/lib/cpu/cpu.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/cpu.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -12369,7 +9765,2736 @@ class CPU extends Device {
 // Defs.CLASSES["CPU"] = CPU;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/cpu/cpu8080.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/debugger.js (C) 2012-2020 Jeff Parsons
+ */
+
+/** @typedef {{ defaultRadix: (number|undefined) }} */
+var DebuggerConfig;
+
+/** @typedef {{ off: number, seg: number, type: number, disabled: (boolean|undefined) }} */
+var Address;
+
+/** @typedef {{ address: Address, type: number, name: string }} */
+var SymbolObj;
+
+ /** @typedef {{ device: Device, name: string, desc: string, func: function() }} */
+var Dumper;
+
+/**
+ * Debugger Services
+ *
+ * @class {Debugger}
+ * @unrestricted
+ * @property {Array.<Array.<Address>>} aaBreakAddress
+ */
+class Debugger extends Device {
+    /**
+     * Debugger(idMachine, idDevice, config)
+     *
+     * @this {Debugger}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {DebuggerConfig} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        config['class'] = "Debugger";
+        super(idMachine, idDevice, config);
+
+        /*
+         * Default radix (base).  This is used by our own functions (eg, parseExpression()),
+         * but not by those we inherited (eg, parseInt()), which still use base 10 by default;
+         * however, you can always coerce values to any base in any of those functions with
+         * a prefix (eg, "0x" for hex) or suffix (eg, "." for decimal).
+         */
+        this.nDefaultRadix = this.config['defaultRadix'] || 16;
+
+        /*
+         * Default endian (0 = little, 1 = big).
+         */
+        this.nDefaultEndian = 0;                // TODO: Use it or lose it
+
+        /*
+         * Default maximum instruction (opcode) length, overridden by the CPU-specific debugger.
+         */
+        this.maxOpcodeLength = 1;
+
+        /*
+         * Default parsing parameters, subexpression and address delimiters.
+         */
+        this.nASCIIBits = 8;                    // change to 7 for MACRO-10 compatibility
+        this.achGroup = ['(',')'];
+        this.achAddress = ['[',']'];
+
+        /*
+         * Add a new format type ('a') that understands Address objects, where width represents
+         * the size of the address in bits, and uses the Debugger's default radix.
+         *
+         * TODO: Consider adding a 'bits' property to the Address object (or a Bus property so that
+         * the appropriate addrWidth can be identified), in order to avoid the extra sprintf() width
+         * parameter, allowing the use of "%a" instead of "%*a".
+         *
+         * TODO: Determine if it's worth getting rid of the separate dumpAddress() function.
+         */
+        this.addFormatType('a',
+            /**
+             * @param {string} type
+             * @param {string} flags
+             * @param {number} width
+             * @param {number} precision
+             * @param {Address} address
+             * @returns {string}
+             */
+            (type, flags, width, precision, address) => this.toBase(address.off, this.nDefaultRadix, width)
+        );
+
+        /*
+         * Add a new format type ('n') for numbers, where width represents the size of the value in bits,
+         * and uses the Debugger's default radix.
+         */
+        this.addFormatType('n',
+            /**
+             * @param {string} type
+             * @param {string} flags
+             * @param {number} width
+             * @param {number} precision
+             * @param {number} value
+             * @returns {string}
+             */
+            (type, flags, width, precision, value) => this.toBase(value, this.nDefaultRadix, width, flags.indexOf('#') < 0? "" : undefined)
+        );
+
+        /*
+         * This controls how we stop the CPU on a break condition.  If fExceptionOnBreak is true, we'll
+         * throw an exception, which the CPU will catch and halt; however, the downside of that approach
+         * is that, in some cases, it may leave the CPU in an inconsistent state.  It's generally safer to
+         * leave fExceptionOnBreak false, which will simply stop the clock, allowing the current instruction
+         * to finish executing.
+         */
+        this.fExceptionOnBreak = false;
+
+        /*
+         * If greater than zero, decremented on every instruction until it hits zero, then CPU is stoppped.
+         */
+        this.counterBreak = 0;
+
+        /*
+         * If set to MESSAGE.ALL, then we break on all messages.  It can be set to a subset of message bits,
+         * but there is currently no UI for that.
+         */
+        this.messagesBreak = MESSAGE.NONE;
+
+        /*
+         * variables is an object with properties that grow as setVariable() assigns more variables;
+         * each property corresponds to one variable, where the property name is the variable name (ie,
+         * a string beginning with a non-digit, followed by zero or more symbol characters and/or digits)
+         * and the property value is the variable's numeric value.
+         *
+         * Note that parseValue() parses variables before numbers, so any variable that looks like a
+         * unprefixed hex value (eg, "a5" as opposed to "0xa5") will trump the numeric value.  Unprefixed
+         * hex values are a convenience of parseValue(), which always calls parseInt() with a default
+         * base of 16; however, that default be overridden with a variety of explicit prefixes or suffixes
+         * (eg, a leading "0o" to indicate octal, a trailing period to indicate decimal, etc.)
+         *
+         * See parseInt() for more details about supported numbers.
+         */
+        this.variables = {};
+
+        /*
+         * Arrays of Symbol objects, one sorted by name and the other sorted by value; see addSymbols().
+         */
+        this.symbolsByName = [];
+        this.symbolsByValue = [];
+
+        /*
+         * Get access to the CPU, so that in part so we can connect to all its registers; the Debugger has
+         * no registers of its own, so we simply replace our registers with the CPU's.
+         */
+        this.cpu = /** @type {CPU} */ (this.findDeviceByClass("CPU"));
+        this.registers = this.cpu.connectDebugger(this);
+
+        /*
+         * Get access to the Input device, so that we can switch focus whenever we start the machine.
+         */
+        this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
+
+        /*
+         * Get access to the Bus devices, so we have access to the I/O and memory address spaces.
+         * To minimize configuration redundancy, we rely on the CPU's configuration to get the Bus device IDs.
+         */
+        let idBus = this.cpu.config['busMemory'] || this.config['busMemory'];
+        if (idBus) {
+            this.busMemory = /** @type {Bus} */ (this.findDevice(idBus));
+            idBus = this.cpu.config['busIO'] || this.config['busIO'];
+            if (idBus) {
+                this.busIO = /** @type {Bus} */ (this.findDevice(idBus, false));
+            }
+            if (!this.busIO) this.busIO = this.busMemory;
+        } else {
+            this.busMemory = this.busIO = /** @type {Bus} */ (this.findDeviceByClass('Bus'));
+        }
+
+        this.nDefaultBits = this.busMemory.addrWidth;
+        this.addrMask = (Math.pow(2, this.nDefaultBits) - 1)|0;
+
+        /*
+         * Since we want to be able to clear/disable/enable/list break addresses by index number, we maintain
+         * an array (aBreakIndexes) that maps index numbers to address array entries.  The mapping values are
+         * a combination of BREAKTYPE (high byte) and break address entry (low byte).
+         */
+        this.cBreaks = 0;
+        this.cBreakIgnore = 0;  // incremented and decremented around internal reads and writes
+        this.aaBreakAddress = [];
+        for (let type in Debugger.BREAKTYPE) {
+            this.aaBreakAddress[Debugger.BREAKTYPE[type]] = [];
+        }
+        this.aBreakBuses = [];
+        this.aBreakBuses[Debugger.BREAKTYPE.READ] = this.busMemory;
+        this.aBreakBuses[Debugger.BREAKTYPE.WRITE] = this.busMemory;
+        this.aBreakBuses[Debugger.BREAKTYPE.INPUT] = this.busIO;
+        this.aBreakBuses[Debugger.BREAKTYPE.OUTPUT] = this.busIO;
+        this.aBreakChecks = [];
+        this.aBreakChecks[Debugger.BREAKTYPE.READ] = this.checkRead.bind(this);
+        this.aBreakChecks[Debugger.BREAKTYPE.WRITE] = this.checkWrite.bind(this)
+        this.aBreakChecks[Debugger.BREAKTYPE.INPUT] = this.checkInput.bind(this)
+        this.aBreakChecks[Debugger.BREAKTYPE.OUTPUT] = this.checkOutput.bind(this)
+        this.aBreakIndexes = [];
+        this.fStepQuietly = undefined;          // when stepping, this informs onUpdate() how "quiet" to be
+        this.tempBreak = null;                  // temporary auto-cleared break address managed by setTemp() and clearTemp()
+        this.cInstructions = 0;                 // instruction counter (updated only if history is enabled)
+
+        /*
+         * Get access to the Time device, so we can stop and start time as needed.
+         */
+        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
+        this.time.addUpdate(this);
+        this.cTransitions = 0;
+
+        /*
+         * Initialize additional properties required for our onCommand() handler, including
+         * support for dump extensions (which we use ourselves to implement the "d state" command).
+         */
+        this.aDumpers = [];                     // array of dump extensions (aka "Dumpers")
+        this.sDumpPrev = "";                    // remembers the previous "dump" command invoked
+        this.addDumper(this, "state", "dump machine state", this.dumpState);
+
+        this.addressCode = this.newAddress();
+        this.addressData = this.newAddress();
+        this.historyForced = false;
+        this.historyNext = 0;
+        this.historyBuffer = [];
+        this.addHandler(Device.HANDLER.COMMAND, this.onCommand.bind(this));
+
+        let commands = /** @type {string} */ (this.getMachineConfig("commands"));
+        if (commands) this.parseCommands(commands);
+    }
+
+    /**
+     * addDumper(device, name, desc, func)
+     *
+     * @this {Debugger}
+     * @param {Device} device
+     * @param {string} name
+     * @param {string} desc
+     * @param {function(Array.<number>)} func
+     */
+    addDumper(device, name, desc, func)
+    {
+        this.aDumpers.push({device, name, desc, func});
+    }
+
+    /**
+     * checkDumper(option, values)
+     *
+     * @this {Debugger}
+     * @param {string} option
+     * @param {Array.<number>} values
+     * @returns {string|undefined}
+     */
+    checkDumper(option, values)
+    {
+        let result;
+        for (let i = 0; i < this.aDumpers.length; i++) {
+            let dumper = this.aDumpers[i];
+            if (dumper.name == option) {
+                result = dumper.func.call(dumper.device, values);
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * addSymbol(address, type, name)
+     *
+     * @this {Debugger}
+     * @param {Address} address
+     * @param {number} type (see Debugger.SYMBOL_TYPE values)
+     * @param {string} name
+     */
+    addSymbol(address, type, name)
+    {
+        let symbol = {address, type, name};
+        this.binaryInsert(this.symbolsByName, symbol, this.compareSymbolNames);
+        this.binaryInsert(this.symbolsByValue, symbol, this.compareSymbolValues);
+    }
+
+    /**
+     * addSymbols(aSymbols)
+     *
+     * This currently supports only symbol arrays, which consist of [address,type,name] triplets; eg:
+     *
+     *      "0320","=","HF_PORT",
+     *      "0000:0034","4","HDISK_INT",
+     *      "0040:0042","1","CMD_BLOCK",
+     *      "0003","@","DISK_SETUP",
+     *      "0000:004C","4","ORG_VECTOR",
+     *      "0028",";","GET DISKETTE VECTOR"
+     *
+     * There are two basic symbol operations: findSymbolByValue(), which takes an address and finds the symbol,
+     * if any, at that address, and findSymbolByName(), which takes a string and attempts to match it to an address.
+     *
+     * @this {Debugger}
+     * @param {Array|undefined} aSymbols
+     */
+    addSymbols(aSymbols)
+    {
+        if (aSymbols && aSymbols.length) {
+            for (let iSymbol = 0; iSymbol < aSymbols.length-2; iSymbol += 3) {
+                let address = this.parseAddress(aSymbols[iSymbol]);
+                if (!address) continue;     // ignore symbols with bad addresses
+                let type = Debugger.SYMBOL_TYPES[aSymbols[iSymbol+1]];
+
+                if (!type) continue;        // ignore symbols with unrecognized types
+                let name = aSymbols[iSymbol+2];
+                this.addSymbol(address, type, name);
+            }
+        }
+    }
+
+    /**
+     * binaryInsert(a, v, fnCompare)
+     *
+     * If element v already exists in array a, the array is unchanged (we don't allow duplicates); otherwise, the
+     * element is inserted into the array at the appropriate index.
+     *
+     * @this {Debugger}
+     * @param {Array} a is an array
+     * @param {Object} v is the value to insert
+     * @param {function(SymbolObj,SymbolObj):number} [fnCompare]
+     */
+    binaryInsert(a, v, fnCompare)
+    {
+        let index = this.binarySearch(a, v, fnCompare);
+        if (index < 0) {
+            a.splice(-(index + 1), 0, v);
+        }
+    }
+
+    /**
+     * binarySearch(a, v, fnCompare)
+     *
+     * @this {Debugger}
+     * @param {Array} a is an array
+     * @param {Object} v
+     * @param {function(SymbolObj,SymbolObj):number} [fnCompare]
+     * @returns {number} the index of matching entry if non-negative, otherwise the index of the insertion point
+     */
+    binarySearch(a, v, fnCompare)
+    {
+        let left = 0;
+        let right = a.length;
+        let found = 0;
+        if (fnCompare === undefined) {
+            fnCompare = function(a, b) { return a > b? 1 : a < b? -1 : 0; };
+        }
+        while (left < right) {
+            let middle = (left + right) >> 1;
+            let compareResult;
+            compareResult = fnCompare(v, a[middle]);
+            if (compareResult > 0) {
+                left = middle + 1;
+            } else {
+                right = middle;
+                found = !compareResult;
+            }
+        }
+        return found? left : ~left;
+    }
+
+    /**
+     * compareSymbolNames(symbol1, symbol2)
+     *
+     * @this {Debugger}
+     * @param {SymbolObj} symbol1
+     * @param {SymbolObj} symbol2
+     * @returns {number}
+     */
+    compareSymbolNames(symbol1, symbol2)
+    {
+        return symbol1.name > symbol2.name? 1 : symbol1.name < symbol2.name? -1 : 0;
+    }
+
+    /**
+     * compareSymbolValues(symbol1, symbol2)
+     *
+     * @this {Debugger}
+     * @param {SymbolObj} symbol1
+     * @param {SymbolObj} symbol2
+     * @returns {number}
+     */
+    compareSymbolValues(symbol1, symbol2)
+    {
+        return symbol1.address.off > symbol2.address.off? 1 : symbol1.address.off < symbol2.address.off? -1 : 0;
+    }
+
+    /**
+     * findSymbolByName(name)
+     *
+     * Search symbolsByName for name and return the corresponding symbol (undefined if not found).
+     *
+     * @this {Debugger}
+     * @param {string} name
+     * @returns {number} the index of matching entry if non-negative, otherwise the index of the insertion point
+     */
+    findSymbolByName(name)
+    {
+        let symbol = {address: null, type: 0, name};
+        return this.binarySearch(this.symbolsByName, symbol, this.compareSymbolNames);
+    }
+
+    /**
+     * findSymbolByValue(address)
+     *
+     * Search symbolsByValue for address and return the corresponding symbol (undefined if not found).
+     *
+     * @this {Debugger}
+     * @param {Address} address
+     * @returns {number} the index of matching entry if non-negative, otherwise the index of the insertion point
+     */
+    findSymbolByValue(address)
+    {
+        let symbol = {address, type: 0, name: undefined};
+        return this.binarySearch(this.symbolsByValue, symbol, this.compareSymbolValues);
+    }
+
+    /**
+     * getSymbol(name)
+     *
+     * @this {Debugger}
+     * @param {string} name
+     * @returns {number|undefined}
+     */
+    getSymbol(name)
+    {
+        let value;
+        let i = this.findSymbolByName(name);
+        if (i >= 0) {
+            let symbol = this.symbolsByName[i];
+            value = symbol.address.off;
+        }
+        return value;
+    }
+
+    /**
+     * getSymbolName(address, type)
+     *
+     * @this {Debugger}
+     * @param {Address} address
+     * @param {number} [type]
+     * @returns {string|undefined}
+     */
+    getSymbolName(address, type)
+    {
+        let name;
+        let i = this.findSymbolByValue(address);
+        if (i >= 0) {
+            let symbol = this.symbolsByValue[i];
+            if (!type || symbol.type == type) {
+                name = symbol.name;
+            }
+        }
+        return name;
+    }
+
+    /**
+     * delVariable(name)
+     *
+     * @this {Debugger}
+     * @param {string} name
+     */
+    delVariable(name)
+    {
+        delete this.variables[name];
+    }
+
+    /**
+     * getVariable(name)
+     *
+     * @this {Debugger}
+     * @param {string} name
+     * @returns {number|undefined}
+     */
+    getVariable(name)
+    {
+        if (this.variables[name]) {
+            return this.variables[name].value;
+        }
+        name = name.substr(0, 6);
+        return this.variables[name] && this.variables[name].value;
+    }
+
+    /**
+     * getVariableFixup(name)
+     *
+     * @this {Debugger}
+     * @param {string} name
+     * @returns {string|undefined}
+     */
+    getVariableFixup(name)
+    {
+        return this.variables[name] && this.variables[name].sUndefined;
+    }
+
+    /**
+     * isVariable(name)
+     *
+     * @this {Debugger}
+     * @param {string} name
+     * @returns {boolean}
+     */
+    isVariable(name)
+    {
+        return this.variables[name] !== undefined;
+    }
+
+    /**
+     * resetVariables()
+     *
+     * @this {Debugger}
+     * @returns {Object}
+     */
+    resetVariables()
+    {
+        let a = this.variables;
+        this.variables = {};
+        return a;
+    }
+
+    /**
+     * restoreVariables(a)
+     *
+     * @this {Debugger}
+     * @param {Object} a (from previous resetVariables() call)
+     */
+    restoreVariables(a)
+    {
+        this.variables = a;
+    }
+
+    /**
+     * setVariable(name, value, sUndefined)
+     *
+     * @this {Debugger}
+     * @param {string} name
+     * @param {number} value
+     * @param {string|undefined} [sUndefined]
+     */
+    setVariable(name, value, sUndefined)
+    {
+        this.variables[name] = {value, sUndefined};
+    }
+
+    /**
+     * addAddress(address, offset, bus)
+     *
+     * All this function currently supports are physical (Bus) addresses, but that will change.
+     *
+     * @this {Debugger}
+     * @param {Address} address
+     * @param {number} offset
+     * @param {Bus} [bus] (default is busMemory)
+     * @returns {Address}
+     */
+    addAddress(address, offset, bus = this.busMemory)
+    {
+        address.off = (address.off + offset) & bus.addrLimit;
+        return address;
+    }
+
+    /**
+     * makeAddress(address)
+     *
+     * All this function currently supports are physical (Bus) addresses, but that will change.
+     *
+     * @this {Debugger}
+     * @param {Address|number} address
+     * @returns {Address}
+     */
+    makeAddress(address)
+    {
+        return typeof address == "number"? this.newAddress(address) : address;
+    }
+
+    /**
+     * newAddress(address)
+     *
+     * All this function currently supports are physical (Bus) addresses, but that will change.
+     *
+     * @this {Debugger}
+     * @param {Address|number} [address]
+     * @returns {Address}
+     */
+    newAddress(address = 0)
+    {
+        let seg = -1, type = Debugger.ADDRESS.PHYSICAL;
+        if (typeof address == "number") return {off: address, seg, type};
+        return {off: address.off, seg: address.seg, type: address.type};
+    }
+
+    /**
+     * parseAddress(sAddress, aUndefined)
+     *
+     * @this {Debugger}
+     * @param {string} sAddress
+     * @param {Array} [aUndefined]
+     * @returns {Address|undefined|null} (undefined if no address supplied, null if a parsing error occurred)
+     */
+    parseAddress(sAddress, aUndefined)
+    {
+        let address;
+        if (sAddress) {
+            address = this.newAddress();
+            let iAddr = 0;
+            let ch = sAddress.charAt(iAddr);
+
+            switch(ch) {
+            case '&':
+                iAddr++;
+                break;
+            case '#':
+                iAddr++;
+                address.type = Debugger.ADDRESS.PROTECTED;
+                break;
+            case '%':
+                iAddr++;
+                ch = sAddress.charAt(iAddr);
+                if (ch == '%') {
+                    iAddr++;
+                } else {
+                    address.type = Debugger.ADDRESS.VIRTUAL;
+                }
+                break;
+            }
+
+            let iColon = sAddress.indexOf(':', iAddr);
+            if (iColon >= 0) {
+                let seg = this.parseExpression(sAddress.substring(iAddr, iColon), aUndefined);
+                if (seg == undefined) {
+                    address = null;
+                } else {
+                    address.seg = seg;
+                    iAddr = iColon + 1;
+                }
+            }
+            if (address) {
+                let off = this.parseExpression(sAddress.substring(iAddr), aUndefined);
+                if (off == undefined) {
+                    address = null;
+                } else {
+                    address.off = off & this.addrMask;
+                }
+            }
+        }
+        return address;
+    }
+
+    /**
+     * readAddress(address, advance, bus)
+     *
+     * All this function currently supports are physical (Bus) addresses, but that will change.
+     *
+     * @this {Debugger}
+     * @param {Address} address
+     * @param {number} [advance] (amount to advance address after read, if any)
+     * @param {Bus} [bus] (default is busMemory)
+     * @returns {number|undefined}
+     */
+    readAddress(address, advance, bus = this.busMemory)
+    {
+        this.cBreakIgnore++;
+        let value = bus.readDirect(address.off);
+        if (advance) this.addAddress(address, advance, bus);
+        this.cBreakIgnore--;
+        return value;
+    }
+
+    /**
+     * writeAddress(address, value, bus)
+     *
+     * All this function currently supports are physical (Bus) addresses, but that will change.
+     *
+     * @this {Debugger}
+     * @param {Address} address
+     * @param {number} value
+     * @param {Bus} [bus] (default is busMemory)
+     */
+    writeAddress(address, value, bus = this.busMemory)
+    {
+        this.cBreakIgnore++;
+        bus.writeDirect(address.off, value);
+        this.cBreakIgnore--;
+    }
+
+    /**
+     * setAddress(address, addr)
+     *
+     * All this function currently supports are physical (Bus) addresses, but that will change.
+     *
+     * @this {Debugger}
+     * @param {Address} address
+     * @param {number} addr
+     */
+    setAddress(address, addr)
+    {
+        address.off = addr;
+    }
+
+    /**
+     * evalAND(dst, src)
+     *
+     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.AND().
+     *
+     * Performs the bitwise "and" (AND) of two operands > 32 bits.
+     *
+     * @this {Debugger}
+     * @param {number} dst
+     * @param {number} src
+     * @returns {number} (dst & src)
+     */
+    evalAND(dst, src)
+    {
+        /*
+         * We AND the low 32 bits separately from the higher bits, and then combine them with addition.
+         * Since all bits above 32 will be zero, and since 0 AND 0 is 0, no special masking for the higher
+         * bits is required.
+         *
+         * WARNING: When using JavaScript's 32-bit operators with values that could set bit 31 and produce a
+         * negative value, it's critical to perform a final right-shift of 0, ensuring that the final result is
+         * positive.
+         */
+        if (this.nDefaultBits <= 32) {
+            return dst & src;
+        }
+        /*
+         * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
+         */
+        dst = this.truncate(dst, 0, true);
+        src = this.truncate(src, 0, true);
+        return ((((dst / NumIO.TWO_POW32)|0) & ((src / NumIO.TWO_POW32)|0)) * NumIO.TWO_POW32) + ((dst & src) >>> 0);
+    }
+
+    /**
+     * evalMUL(dst, src)
+     *
+     * I could have adapted the code from /modules/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
+     * write this base method and let the PDP-10 Debugger override it with a call to the *actual* doMUL() method.
+     *
+     * @this {Debugger}
+     * @param {number} dst
+     * @param {number} src
+     * @returns {number} (dst * src)
+     */
+    evalMUL(dst, src)
+    {
+        return dst * src;
+    }
+
+    /**
+     * evalIOR(dst, src)
+     *
+     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.IOR().
+     *
+     * Performs the logical "inclusive-or" (OR) of two operands > 32 bits.
+     *
+     * @this {Debugger}
+     * @param {number} dst
+     * @param {number} src
+     * @returns {number} (dst | src)
+     */
+    evalIOR(dst, src)
+    {
+        /*
+         * We OR the low 32 bits separately from the higher bits, and then combine them with addition.
+         * Since all bits above 32 will be zero, and since 0 OR 0 is 0, no special masking for the higher
+         * bits is required.
+         *
+         * WARNING: When using JavaScript's 32-bit operators with values that could set bit 31 and produce a
+         * negative value, it's critical to perform a final right-shift of 0, ensuring that the final result is
+         * positive.
+         */
+        if (this.nDefaultBits <= 32) {
+            return dst | src;
+        }
+        /*
+         * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
+         */
+        dst = this.truncate(dst, 0, true);
+        src = this.truncate(src, 0, true);
+        return ((((dst / NumIO.TWO_POW32)|0) | ((src / NumIO.TWO_POW32)|0)) * NumIO.TWO_POW32) + ((dst | src) >>> 0);
+    }
+
+    /**
+     * evalXOR(dst, src)
+     *
+     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.XOR().
+     *
+     * Performs the logical "exclusive-or" (XOR) of two operands > 32 bits.
+     *
+     * @this {Debugger}
+     * @param {number} dst
+     * @param {number} src
+     * @returns {number} (dst ^ src)
+     */
+    evalXOR(dst, src)
+    {
+        /*
+         * We XOR the low 32 bits separately from the higher bits, and then combine them with addition.
+         * Since all bits above 32 will be zero, and since 0 XOR 0 is 0, no special masking for the higher
+         * bits is required.
+         *
+         * WARNING: When using JavaScript's 32-bit operators with values that could set bit 31 and produce a
+         * negative value, it's critical to perform a final right-shift of 0, ensuring that the final result is
+         * positive.
+         */
+        if (this.nDefaultBits <= 32) {
+            return dst ^ src;
+        }
+        /*
+         * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
+         */
+        dst = this.truncate(dst, 0, true);
+        src = this.truncate(src, 0, true);
+        return ((((dst / NumIO.TWO_POW32)|0) ^ ((src / NumIO.TWO_POW32)|0)) * NumIO.TWO_POW32) + ((dst ^ src) >>> 0);
+    }
+
+    /**
+     * evalOps(aVals, aOps, cOps)
+     *
+     * Some of our clients want a specific number of bits of integer precision.  If that precision is
+     * greater than 32, some of the operations below will fail; for example, JavaScript bitwise operators
+     * always truncate the result to 32 bits, so beware when using shift operations.  Similarly, it would
+     * be wrong to always "|0" the final result, which is why we rely on truncate() now.
+     *
+     * Note that JavaScript integer precision is limited to 52 bits.  For example, in Node, if you set a
+     * variable to 0x80000001:
+     *
+     *      foo=0x80000001|0
+     *
+     * then calculate foo*foo and display the result in binary using "(foo*foo).toString(2)":
+     *
+     *      '11111111111111111111111111111100000000000000000000000000000000'
+     *
+     * which is slightly incorrect because it has overflowed JavaScript's floating-point precision.
+     *
+     * 0x80000001 in decimal is -2147483647, so the product is 4611686014132420609, which is 0x3FFFFFFF00000001.
+     *
+     * @this {Debugger}
+     * @param {Array.<number>} aVals
+     * @param {Array.<string>} aOps
+     * @param {number} [cOps] (default is -1 for all)
+     * @returns {boolean} true if successful, false if error
+     */
+    evalOps(aVals, aOps, cOps = -1)
+    {
+        while (cOps-- && aOps.length) {
+            let chOp = aOps.pop();
+            if (aVals.length < 2) return false;
+            let valNew;
+            let val2 = aVals.pop();
+            let val1 = aVals.pop();
+            switch(chOp) {
+            case '*':
+                valNew = this.evalMUL(val1, val2);
+                break;
+            case '/':
+                if (!val2) return false;
+                valNew = Math.trunc(val1 / val2);
+                break;
+            case '^/':
+                if (!val2) return false;
+                valNew = val1 % val2;
+                break;
+            case '+':
+                valNew = val1 + val2;
+                break;
+            case '-':
+                valNew = val1 - val2;
+                break;
+            case '<<':
+                valNew = val1 << val2;
+                break;
+            case '>>':
+                valNew = val1 >> val2;
+                break;
+            case '>>>':
+                valNew = val1 >>> val2;
+                break;
+            case '<':
+                valNew = (val1 < val2? 1 : 0);
+                break;
+            case '<=':
+                valNew = (val1 <= val2? 1 : 0);
+                break;
+            case '>':
+                valNew = (val1 > val2? 1 : 0);
+                break;
+            case '>=':
+                valNew = (val1 >= val2? 1 : 0);
+                break;
+            case '==':
+                valNew = (val1 == val2? 1 : 0);
+                break;
+            case '!=':
+                valNew = (val1 != val2? 1 : 0);
+                break;
+            case '&':
+                valNew = this.evalAND(val1, val2);
+                break;
+            case '!':           // alias for MACRO-10 to perform a bitwise inclusive-or (OR)
+            case '|':
+                valNew = this.evalIOR(val1, val2);
+                break;
+            case '^!':          // since MACRO-10 uses '^' for base overrides, '^!' is used for bitwise exclusive-or (XOR)
+                valNew = this.evalXOR(val1, val2);
+                break;
+            case '&&':
+                valNew = (val1 && val2? 1 : 0);
+                break;
+            case '||':
+                valNew = (val1 || val2? 1 : 0);
+                break;
+            case ',,':
+                valNew = this.truncate(val1, 18, true) * Math.pow(2, 18) + this.truncate(val2, 18, true);
+                break;
+            case '_':
+            case '^_':
+                valNew = val1;
+                /*
+                 * While we always try to avoid assuming any particular number of bits of precision, the 'B' shift
+                 * operator (which we've converted to '^_') is unique to the MACRO-10 environment, which imposes the
+                 * following restrictions on the shift count.
+                 */
+                if (chOp == '^_') val2 = 35 - (val2 & 0xff);
+                if (val2) {
+                    /*
+                     * Since binary shifting is a logical (not arithmetic) operation, and since shifting by division only
+                     * works properly with positive numbers, we call truncate() to produce an unsigned value.
+                     */
+                    valNew = this.truncate(valNew, 0, true);
+                    if (val2 > 0) {
+                        valNew *= Math.pow(2, val2);
+                    } else {
+                        valNew = Math.trunc(valNew / Math.pow(2, -val2));
+                    }
+                }
+                break;
+            default:
+                return false;
+            }
+            aVals.push(this.truncate(valNew));
+        }
+        return true;
+    }
+
+    /**
+     * parseArray(asValues, iValue, iLimit, nBase, aUndefined)
+     *
+     * parseExpression() takes a complete expression and divides it into array elements, where even elements
+     * are values (which may be empty if two or more operators appear consecutively) and odd elements are operators.
+     *
+     * For example, if the original expression was "2*{3+{4/2}}", parseExpression() would call parseArray() with:
+     *
+     *      0   1   2   3   4   5   6   7   8   9  10  11  12  13  14
+     *      -   -   -   -   -   -   -   -   -   -  --  --  --  --  --
+     *      2   *       {   3   +       {   4   /   2   }       }
+     *
+     * This function takes care of recursively processing grouped expressions, by processing subsets of the array,
+     * as well as handling certain base overrides (eg, temporarily switching to base-10 for binary shift suffixes).
+     *
+     * @this {Debugger}
+     * @param {Array.<string>} asValues
+     * @param {number} iValue
+     * @param {number} iLimit
+     * @param {number} nBase
+     * @param {Array} [aUndefined]
+     * @returns {number|undefined}
+     */
+    parseArray(asValues, iValue, iLimit, nBase, aUndefined)
+    {
+        let value;
+        let sValue, sOp;
+        let fError = false;
+        let unary = 0;
+        let aVals = [], aOps = [];
+
+        let nBasePrev = this.nDefaultRadix;
+        this.nDefaultRadix = nBase;
+
+        while (iValue < iLimit) {
+            let v;
+            sValue = asValues[iValue++].trim();
+            sOp = (iValue < iLimit? asValues[iValue++] : "");
+
+            if (sValue) {
+                v = this.parseValue(sValue, undefined, aUndefined, unary);
+            } else {
+                if (sOp == '{') {
+                    let cOpen = 1;
+                    let iStart = iValue;
+                    while (iValue < iLimit) {
+                        sValue = asValues[iValue++].trim();
+                        sOp = (iValue < asValues.length? asValues[iValue++] : "");
+                        if (sOp == '{') {
+                            cOpen++;
+                        } else if (sOp == '}') {
+                            if (!--cOpen) break;
+                        }
+                    }
+                    v = this.parseArray(asValues, iStart, iValue-1, this.nDefaultRadix, aUndefined);
+                    if (v != null && unary) {
+                        v = this.parseUnary(v, unary);
+                    }
+                    sValue = (iValue < iLimit? asValues[iValue++].trim() : "");
+                    sOp = (iValue < iLimit? asValues[iValue++] : "");
+                }
+                else {
+                    /*
+                     * When parseExpression() calls us, it has collapsed all runs of whitespace into single spaces,
+                     * and although it allows single spaces to divide the elements of the expression, a space is neither
+                     * a unary nor binary operator.  It's essentially a no-op.  If we encounter it here, then it followed
+                     * another operator and is easily ignored (although perhaps it should still trigger a reset of nBase
+                     * and unary -- TBD).
+                     */
+                    if (sOp == ' ') {
+                        continue;
+                    }
+                    if (sOp == '^B') {
+                        this.nDefaultRadix = 2;
+                        continue;
+                    }
+                    if (sOp == '^O') {
+                        this.nDefaultRadix = 8;
+                        continue;
+                    }
+                    if (sOp == '^D') {
+                        this.nDefaultRadix = 10;
+                        continue;
+                    }
+                    if (!(unary & (0xC0000000|0))) {
+                        if (sOp == '+') {
+                            continue;
+                        }
+                        if (sOp == '-') {
+                            unary = (unary << 2) | 1;
+                            continue;
+                        }
+                        if (sOp == '~' || sOp == '^-') {
+                            unary = (unary << 2) | 2;
+                            continue;
+                        }
+                        if (sOp == '^L') {
+                            unary = (unary << 2) | 3;
+                            continue;
+                        }
+                    }
+                    fError = true;
+                    break;
+                }
+            }
+
+            if (v === undefined) {
+                if (aUndefined) {
+                    aUndefined.push(sValue);
+                    v = 0;
+                } else {
+                    fError = true;
+                    // aUndefined = [];
+                    break;
+                }
+            }
+
+            aVals.push(this.truncate(v));
+
+            /*
+             * When parseExpression() calls us, it has collapsed all runs of whitespace into single spaces,
+             * and although it allows single spaces to divide the elements of the expression, a space is neither
+             * a unary nor binary operator.  It's essentially a no-op.  If we encounter it here, then it followed
+             * a value, and since we don't want to misinterpret the next operator as a unary operator, we look
+             * ahead and grab the next operator if it's not preceded by a value.
+             */
+            if (sOp == ' ') {
+                if (iValue < asValues.length - 1 && !asValues[iValue]) {
+                    iValue++;
+                    sOp = asValues[iValue++]
+                } else {
+                    fError = true;
+                    break;
+                }
+            }
+
+            if (!sOp) break;
+
+            let aBinOp = (this.achGroup[0] == '<'? Debugger.DECOP_PRECEDENCE : Debugger.BINOP_PRECEDENCE);
+            if (!aBinOp[sOp]) {
+                fError = true;
+                break;
+            }
+            if (aOps.length && aBinOp[sOp] <= aBinOp[aOps[aOps.length - 1]]) {
+                this.evalOps(aVals, aOps, 1);
+            }
+            aOps.push(sOp);
+
+            /*
+             * The MACRO-10 binary shifting operator assumes a base-10 shift count, regardless of the current
+             * base, so we must override the current base to ensure the count is parsed correctly.
+             */
+            this.nDefaultRadix = (sOp == '^_')? 10 : nBase;
+            unary = 0;
+        }
+
+        if (fError || !this.evalOps(aVals, aOps) || aVals.length != 1) {
+            fError = true;
+        }
+
+        if (!fError) {
+            value = aVals.pop();
+
+        } else if (!aUndefined) {
+            this.printf("parse error (%s)\n", (sValue || sOp));
+        }
+
+        this.nDefaultRadix = nBasePrev;
+        return value;
+    }
+
+    /**
+     * parseASCII(expr, chDelim, nBits)
+     *
+     * @this {Debugger}
+     * @param {string} expr
+     * @param {string} chDelim
+     * @param {number} nBits (number of bits to store for each ASCII character)
+     * @returns {string|undefined}
+     */
+    parseASCII(expr, chDelim, nBits)
+    {
+        let i;
+        let cchMax = (this.nDefaultBits / nBits)|0;
+        while ((i = expr.indexOf(chDelim)) >= 0) {
+            let v = 0;
+            let j = i + 1;
+            let cch = cchMax;
+            while (j < expr.length) {
+                let ch = expr[j++];
+                if (ch == chDelim) {
+                    cch = -1;
+                    break;
+                }
+                if (!cch) break;
+                cch--;
+                let c = ch.charCodeAt(0);
+                if (nBits == 6) {
+                    c -= 0x20;
+                }
+                c &= ((1 << nBits) - 1);
+                v = this.truncate(v * Math.pow(2, nBits) + c, nBits * cchMax, true);
+            }
+            if (cch >= 0) {
+                this.printf("parse error (%c%s%c)\n", chDelim, expr, chDelim);
+                return undefined;
+            } else {
+                expr = expr.substr(0, i) + this.toBase(v) + expr.substr(j);
+            }
+        }
+        return expr;
+    }
+
+    /**
+     * parseExpression(expr, aUndefined)
+     *
+     * A quick-and-dirty expression parser.  It takes an expression like:
+     *
+     *      EDX+EDX*4+12345678
+     *
+     * and builds a value stack in aVals and a "binop" (binary operator) stack in aOps:
+     *
+     *      aVals       aOps
+     *      -----       ----
+     *      EDX         +
+     *      EDX         *
+     *      4           +
+     *      ...
+     *
+     * We pop 1 "binop" from aOps and 2 values from aVals whenever a "binop" of lower priority than its
+     * predecessor is encountered, evaluate, and push the result back onto aVals.  Only selected unary
+     * operators are supported (eg, negate and complement); no ternary operators like '?:' are supported.
+     *
+     * aUndefined can be used to pass an array that collects any undefined variables that parseExpression()
+     * encounters; the value of an undefined variable is zero.  This mode was added for components that need
+     * to support expressions containing "fixups" (ie, values that must be determined later).
+     *
+     * @this {Debugger}
+     * @param {string|undefined} expr
+     * @param {Array} [aUndefined] (collects any undefined variables)
+     * @returns {number|undefined} numeric value, or undefined if expr contains any undefined or invalid values
+     */
+    parseExpression(expr, aUndefined)
+    {
+        let value;
+        if (expr) {
+            /*
+             * The default delimiting characters for grouped expressions are braces; they can be changed by altering
+             * achGroup, but when that happens, instead of changing our regular expressions and operator tables,
+             * we simply replace all achGroup characters with braces in the given expression.
+             *
+             * Why not use parentheses for grouped expressions?  Because some debuggers use parseReference() to perform
+             * parenthetical value replacements in message strings, and they don't want parentheses taking on a different
+             * meaning.  And for some machines, like the PDP-10, the convention is to use parentheses for other things,
+             * like indexed addressing, and to use angle brackets for grouped expressions.
+             */
+            if (this.achGroup[0] != '{') {
+                expr = expr.split(this.achGroup[0]).join('{').split(this.achGroup[1]).join('}');
+            }
+
+            /*
+             * Quoted ASCII characters can have a numeric value, too, which must be converted now, to avoid any
+             * conflicts with the operators below.
+             *
+             * NOTE: MACRO-10 packs up to 5 7-bit ASCII codes from a double-quoted value, and up to 6 6-bit ASCII
+             * (SIXBIT) codes from a sinqle-quoted value.
+             */
+            expr = this.parseASCII(expr, '"', this.nASCIIBits);
+            if (!expr) return value;
+            expr = this.parseASCII(expr, "'", 6);
+            if (!expr) return value;
+
+            /*
+             * All browsers (including, I believe, IE9 and up) support the following idiosyncrasy of a RegExp split():
+             * when the RegExp uses a capturing pattern, the resulting array will include entries for all the pattern
+             * matches along with the non-matches.  This effectively means that, in the set of expressions that we
+             * support, all even entries in asValues will contain "values" and all odd entries will contain "operators".
+             *
+             * Although I started listing the operators in the RegExp in "precedential" order, that's not important;
+             * what IS important is listing operators that contain shorter operators first.  For example, bitwise
+             * shift operators must be listed BEFORE the logical less-than or greater-than operators.  The aBinOp tables
+             * (BINOP_PRECEDENCE and DECOP_PRECEDENCE) are what determine precedence, not the RegExp.
+             *
+             * Also, to better accommodate MACRO-10 syntax, I've replaced the single '^' for XOR with '^!', and I've
+             * added '!' as an alias for '|' (bitwise inclusive-or), '^-' as an alias for '~' (one's complement operator),
+             * and '_' as a shift operator (+/- values specify a left/right shift, and the count is not limited to 32).
+             *
+             * And to avoid conflicts with MACRO-10 syntax, I've replaced the original mod operator ('%') with '^/'.
+             *
+             * The MACRO-10 binary shifting suffix ('B') is a bit more problematic, since a capital B can also appear
+             * inside symbols, or inside hex values.  So if the default base is NOT 16, then I pre-scan for that suffix
+             * and replace all non-symbolic occurrences with an internal shift operator ('^_').
+             *
+             * Note that parseInt(), which parseValue() relies on, supports both the MACRO-10 base prefix overrides
+             * and the binary shifting suffix ('B'), but since that suffix can also be a bracketed expression, we have to
+             * support it here as well.
+             *
+             * MACRO-10 supports only a subset of all the PCjs operators; for example, MACRO-10 doesn't support any of
+             * the boolean logical/compare operators.  But unless we run into conflicts, I prefer sticking with this
+             * common set of operators.
+             *
+             * All whitespace in the expression is collapsed to single spaces, and space has been added to the list
+             * of "operators", but its sole function is as a separator, not as an operator.  parseArray() will ignore
+             * single spaces as long as they are preceded and/or followed by a "real" operator.  It would be dangerous
+             * to remove spaces entirely, because if an operator-less expression like "A B" was passed in, we would want
+             * that to generate an error; if we converted it to "AB", evaluation might inadvertently succeed.
+             */
+            let regExp = /({|}|\|\||&&|\||\^!|\^B|\^O|\^D|\^L|\^-|~|\^_|_|&|!=|!|==|>=|>>>|>>|>|<=|<<|<|-|\+|\^\/|\/|\*|,,| )/;
+            if (this.nDefaultRadix != 16) {
+                expr = expr.replace(/(^|[^A-Z0-9$%.])([0-9]+)B/, "$1$2^_").replace(/\s+/g, ' ');
+            }
+            let asValues = expr.split(regExp);
+            value = this.parseArray(asValues, 0, asValues.length, this.nDefaultRadix, aUndefined);
+        }
+        return value;
+    }
+
+    /**
+     * parseUnary(value, unary)
+     *
+     * unary is actually a small "stack" of unary operations encoded in successive pairs of bits.
+     * As parseExpression() encounters each unary operator, unary is shifted left 2 bits, and the
+     * new unary operator is encoded in bits 0 and 1 (0b00 is none, 0b01 is negate, 0b10 is complement,
+     * and 0b11 is reserved).  Here, we process the bits in reverse order (hence the stack-like nature),
+     * ensuring that we process the unary operators associated with this value right-to-left.
+     *
+     * Since bitwise operators see only 32 bits, more than 16 unary operators cannot be supported
+     * using this method.  We'll let parseExpression() worry about that; if it ever happens in practice,
+     * then we'll have to switch to a more "expensive" approach (eg, an actual array of unary operators).
+     *
+     * @this {Debugger}
+     * @param {number} value
+     * @param {number} unary
+     * @returns {number}
+     */
+    parseUnary(value, unary)
+    {
+        while (unary) {
+            let bit;
+            switch(unary & 0o3) {
+            case 1:
+                value = -this.truncate(value);
+                break;
+            case 2:
+                value = this.evalXOR(value, -1);        // this is easier than adding an evalNOT()...
+                break;
+            case 3:
+                bit = 35;                               // simple left-to-right zero-bit-counting loop...
+                while (bit >= 0 && !this.evalAND(value, Math.pow(2, bit))) bit--;
+                value = 35 - bit;
+                break;
+            }
+            unary >>>= 2;
+        }
+        return value;
+    }
+
+    /**
+     * parseValue(sValue, sName, aUndefined, unary)
+     *
+     * @this {Debugger}
+     * @param {string} [sValue]
+     * @param {string} [sName] is the name of the value, if any
+     * @param {Array} [aUndefined]
+     * @param {number} [unary] (0 for none, 1 for negate, 2 for complement, 3 for leading zeros)
+     * @returns {number|undefined} numeric value, or undefined if sValue is either undefined or invalid
+     */
+    parseValue(sValue, sName, aUndefined, unary = 0)
+    {
+        let value;
+        if (sValue != undefined) {
+            value = this.getRegister(sValue.toUpperCase());
+            if (value == undefined) {
+                value = this.getSymbol(sValue);
+                if (value == undefined) {
+                    value = this.getVariable(sValue);
+                    if (value == undefined) {
+                        /*
+                         * A feature of MACRO-10 is that any single-digit number is automatically interpreted as base-10.
+                         */
+                        value = this.parseInt(sValue, sValue.length > 1 || this.nDefaultRadix > 10? this.nDefaultRadix : 10);
+                    } else {
+                        let sUndefined = this.getVariableFixup(sValue);
+                        if (sUndefined) {
+                            if (aUndefined) {
+                                aUndefined.push(sUndefined);
+                            } else {
+                                let valueUndefined = this.parseExpression(sUndefined, aUndefined);
+                                if (valueUndefined !== undefined) {
+                                    value += valueUndefined;
+                                } else {
+                                    if (MAXDEBUG) this.printf("undefined %s: %s (%s)\n", (sName || "value"), sValue, sUndefined);
+                                    value = undefined;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (value != undefined) {
+                value = this.truncate(this.parseUnary(value, unary));
+            } else {
+                if (MAXDEBUG) this.printf("invalid %s: %s\n", (sName || "value"), sValue);
+            }
+        } else {
+            if (MAXDEBUG) this.printf("missing %s\n", (sName || "value"));
+        }
+        return value;
+    }
+
+    /**
+     * truncate(v, nBits, fUnsigned)
+     *
+     * @this {Debugger}
+     * @param {number} v
+     * @param {number} [nBits]
+     * @param {boolean} [fUnsigned]
+     * @returns {number}
+     */
+    truncate(v, nBits, fUnsigned)
+    {
+        let limit, vNew = v;
+        nBits = nBits || this.nDefaultBits;
+
+        if (fUnsigned) {
+            if (nBits == 32) {
+                vNew = v >>> 0;
+            }
+            else if (nBits < 32) {
+                vNew = v & ((1 << nBits) - 1);
+            }
+            else {
+                limit = Math.pow(2, nBits);
+                if (v < 0 || v >= limit) {
+                    vNew = v % limit;
+                    if (vNew < 0) vNew += limit;
+                }
+            }
+        }
+        else {
+            if (nBits <= 32) {
+                vNew = (v << (32 - nBits)) >> (32 - nBits);
+            }
+            else {
+                limit = Math.pow(2, nBits - 1);
+                if (v >= limit) {
+                    vNew = (v % limit);
+                    if (((v / limit)|0) & 1) vNew -= limit;
+                } else if (v < -limit) {
+                    vNew = (v % limit);
+                    if ((((-v - 1) / limit) | 0) & 1) {
+                        if (vNew) vNew += limit;
+                    }
+                    else {
+                        if (!vNew) vNew -= limit;
+                    }
+                }
+            }
+        }
+        if (v != vNew) {
+            if (MAXDEBUG) this.printf("warning: value %d truncated to %d\n", v, vNew);
+            v = vNew;
+        }
+        return v;
+    }
+
+    /**
+     * addBreakAddress(address, aBreakAddress)
+     *
+     * @this {Debugger}
+     * @param {Address} address
+     * @param {Array} aBreakAddress
+     * @returns {number} (>= 0 if added, < 0 if not)
+     */
+    addBreakAddress(address, aBreakAddress)
+    {
+        let entry = this.findBreakEntry(address, aBreakAddress);
+        if (entry >= 0) {
+            entry = -(entry + 1);
+        } else {
+            for (entry = 0; entry < aBreakAddress.length; entry++) {
+                if (aBreakAddress[entry] == undefined) break;
+            }
+            aBreakAddress[entry] = address;
+        }
+        return entry;
+    }
+
+    /**
+     * addBreakIndex(type, entry)
+     *
+     * @this {Debugger}
+     * @param {number} type
+     * @param {number} entry
+     * @returns {number} (new index)
+     */
+    addBreakIndex(type, entry)
+    {
+        let index;
+        for (index = 0; index < this.aBreakIndexes.length; index++) {
+            if (this.aBreakIndexes[index] == undefined) break;
+        }
+        this.aBreakIndexes[index] = (type << 8) | entry;
+        return index;
+    }
+
+    /**
+     * clearBreak(index)
+     *
+     * @this {Debugger}
+     * @param {number} index
+     * @returns {string}
+     */
+    clearBreak(index)
+    {
+        if (index < -1) {
+            return this.enumBreak(this.clearBreak);
+        }
+        let isEmpty = function(aBreaks) {
+            for (let i = 0; i < aBreaks.length; i++) {
+                if (aBreaks[i] != undefined) return false;
+            }
+            return true;
+        };
+        let result = "";
+        if (index >= 0) {
+            let mapping = this.aBreakIndexes[index];
+            if (mapping != undefined) {
+                let type = mapping >> 8;
+                let entry = mapping & 0xff;
+                let bus = this.aBreakBuses[type];
+                if (!bus) {
+                    result = "invalid bus";
+                } else {
+                    let success;
+                    let aBreakAddress = this.aaBreakAddress[type];
+                    let address = aBreakAddress[entry];
+
+                    if (!(type & 1)) {
+                        success = bus.untrapRead(address.off, this.aBreakChecks[type]);
+                    } else {
+                        success = bus.untrapWrite(address.off, this.aBreakChecks[type]);
+                    }
+                    if (success) {
+                        aBreakAddress[entry] = undefined;
+                        this.aBreakIndexes[index] = undefined;
+                        if (isEmpty(aBreakAddress)) {
+                            aBreakAddress.length = 0;
+                            if (isEmpty(this.aBreakIndexes)) {
+                                this.aBreakIndexes.length = 0;
+                            }
+                        }
+                        result = this.sprintf("%2d: %s %*a cleared\n", index, Debugger.BREAKCMD[type], bus.addrWidth, address);
+                        if (!--this.cBreaks) {
+                            if (!this.historyForced) result += this.enableHistory(false);
+                        }
+
+                    } else {
+                        result = this.sprintf("invalid break address: %*a\n", bus.addrWidth, address);
+                    }
+                }
+            } else {
+                result = this.sprintf("invalid break index: %d\n", index);
+            }
+        } else {
+            result = "missing break index\n";
+        }
+        return result;
+    }
+
+    /**
+     * clearTemp(addr)
+     *
+     * Clears the current temporary break address if it matches the specified physical address.
+     *
+     * @this {Debugger}
+     * @param {number} [addr]
+     */
+    clearTemp(addr)
+    {
+        if (this.tempBreak) {                   // if there's a previous temp break address
+            if (addr == undefined || this.tempBreak.off == addr) {
+                let index = this.findBreak(this.tempBreak);
+                if (index >= 0) {               // and it wasn't already cleared via other means
+                    this.clearBreak(index);     // then clear it now
+                }
+                this.tempBreak = null;
+            }
+        }
+    }
+
+    /**
+     * enableBreak(index, enable)
+     *
+     * @this {Debugger}
+     * @param {number} index
+     * @param {boolean} [enable]
+     * @returns {string}
+     */
+    enableBreak(index, enable = false)
+    {
+        if (index < -1) {
+            return this.enumBreak(this.enableBreak, enable);
+        }
+        let result = "";
+        if (index >= 0) {
+            let mapping = this.aBreakIndexes[index];
+            if (mapping != undefined) {
+                let success = true;
+                let type = mapping >> 8;
+                let entry = mapping & 0xff;
+                let aBreakAddress = this.aaBreakAddress[type];
+                let address = aBreakAddress[entry];
+                if (address != undefined) {
+                    let action = enable? "enabled" : "disabled";
+                    let bus = this.aBreakBuses[type];
+                    if (!address.disabled == !enable) {
+                        address.disabled = !enable;
+                        result = this.sprintf("%2d: %s %*a %s\n", index, Debugger.BREAKCMD[type], bus.addrWidth, address, action);
+                    } else {
+                        result = this.sprintf("%2d: %s %*a already %s\n", index, Debugger.BREAKCMD[type], bus.addrWidth, address, action);
+                    }
+                } else {
+                    result = this.sprintf("no break address at index: %d\n", index);
+
+                }
+            } else {
+                result = this.sprintf("invalid break index: %d\n", index);
+            }
+        } else {
+            result = "missing break index\n";
+        }
+        return result;
+    }
+
+    /**
+     * enumBreak(func, option)
+     *
+     * @param {function(number,(boolean|undefined))} func
+     * @param {boolean} [option]
+     * @returns {string}
+     */
+    enumBreak(func, option)
+    {
+        let result = "";
+        for (let index = 0; index < this.aBreakIndexes.length; index++) {
+            if (this.aBreakIndexes[index] == undefined) continue;
+            result += func.call(this, index, option);
+        }
+        if (!result) result = "no break addresses found";
+        return result;
+    }
+
+    /**
+     * findBreak(address, type)
+     *
+     * @this {Debugger}
+     * @param {Address} address
+     * @param {number} [type] (default is BREAKTYPE.READ)
+     * @returns {number} (index of break address, -1 if not found)
+     */
+    findBreak(address, type = Debugger.BREAKTYPE.READ)
+    {
+        let index = -1;
+        let entry = this.findBreakEntry(address, this.aaBreakAddress[type]);
+        if (entry >= 0) {
+            for (let i = 0; i < this.aBreakIndexes.length; i++) {
+                let mapping = this.aBreakIndexes[i];
+                if (mapping != undefined && type == (mapping >> 8) && entry == (mapping & 0xff)) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+        return index;
+    }
+
+    /**
+     * findBreakAddr(addr, type)
+     *
+     * @this {Debugger}
+     * @param {number} addr
+     * @param {number} [type] (default is BREAKTYPE.READ)
+     * @returns {Address|undefined} (matching break Address, undefined if not found)
+     */
+    findBreakAddr(addr, type = Debugger.BREAKTYPE.READ)
+    {
+        let aBreakAddress = this.aaBreakAddress[type];
+        for (let i = 0; i < aBreakAddress.length; i++) {
+            let address = aBreakAddress[i];
+            if (address.off == addr) return address;
+        }
+        return undefined;
+    }
+
+    /**
+     * findBreakEntry(address, aBreakAddress)
+     *
+     * @this {Debugger}
+     * @param {Address} address
+     * @param {Array} aBreakAddress
+     * @returns {number} (matching break Address entry, -1 if not found)
+     */
+    findBreakEntry(address, aBreakAddress)
+    {
+        for (let i = 0; i < aBreakAddress.length; i++) {
+            if (aBreakAddress[i].off == address.off) return i;
+        }
+        return -1;
+    }
+
+    /**
+     * listBreak(fCommands)
+     *
+     * @this {Debugger}
+     * @param {boolean} [fCommands] (true to generate a list of break commands for saveState())
+     * @returns {string}
+     */
+    listBreak(fCommands = false)
+    {
+        let result = "";
+        for (let index = 0; index < this.aBreakIndexes.length; index++) {
+            let mapping = this.aBreakIndexes[index];
+            if (mapping == undefined) continue;
+            let type = mapping >> 8;
+            let entry = mapping & 0xff;
+            let address = this.aaBreakAddress[type][entry];
+            let bus = this.aBreakBuses[type];
+            let command = this.sprintf("%s %*a", Debugger.BREAKCMD[type], bus.addrWidth, address);
+            if (fCommands) {
+                if (result) result += ';';
+                result += command;
+                if (address.disabled) result += ";bd " + index;
+            } else {
+                result += this.sprintf("%2d: %s %s\n", index, command, address.disabled? "disabled" : "enabled");
+            }
+        }
+        if (!result) {
+            if (!fCommands) result = "no break addresses found\n";
+        }
+        return result;
+    }
+
+    /**
+     * setBreak(address, type)
+     *
+     * @this {Debugger}
+     * @param {Address} [address]
+     * @param {number} [type] (default is BREAKTYPE.READ)
+     * @returns {string}
+     */
+    setBreak(address, type = Debugger.BREAKTYPE.READ)
+    {
+        let result = "";
+        if (address) {
+            let success;
+            let bus = this.aBreakBuses[type];
+            if (!bus) {
+                result = "invalid bus";
+            } else {
+                let entry = this.addBreakAddress(address, this.aaBreakAddress[type]);
+                if (entry >= 0) {
+                    if (!(type & 1)) {
+                        success = bus.trapRead(address.off, this.aBreakChecks[type]);
+                    } else {
+                        success = bus.trapWrite(address.off, this.aBreakChecks[type]);
+                    }
+                    if (success) {
+                        let index = this.addBreakIndex(type, entry);
+                        result = this.sprintf("%2d: %s %*a set\n", index, Debugger.BREAKCMD[type], bus.addrWidth, address);
+                        if (!this.cBreaks++) {
+                            if (!this.historyBuffer.length) result += this.enableHistory(true);
+                        }
+                    } else {
+                        result = this.sprintf("invalid break address: %*a\n", bus.addrWidth, address);
+                        this.aaBreakAddress[type][entry] = undefined;
+                    }
+                } else {
+                    result = this.sprintf("%s %*a already set\n", Debugger.BREAKCMD[type], bus.addrWidth, address);
+                }
+            }
+        } else {
+            result = "missing break address\n";
+        }
+        return result;
+    }
+
+    /**
+     * setBreakCounter(n)
+     *
+     * Set number of instructions to execute before breaking.
+     *
+     * @this {Debugger}
+     * @param {number} n (-1 if no number was supplied, so just display current counter)
+     * @returns {string}
+     */
+    setBreakCounter(n)
+    {
+        let result = "";
+        if (n >= 0) this.counterBreak = n;
+        result += "instruction break count: " + (this.counterBreak > 0? this.counterBreak : "disabled") + "\n";
+        if (n > 0) {
+            /*
+             * It doesn't hurt to always call enableHistory(), but avoiding the call minimizes unnecessary messages.
+             */
+            if (!this.historyBuffer.length) result += this.enableHistory(true);
+            this.historyForced = true;
+        }
+        return result;
+    }
+
+    /**
+     * setBreakMessage(option)
+     *
+     * Set message(s) to break on when we are notified of being printed.
+     *
+     * @this {Debugger}
+     * @param {string} option
+     * @returns {string}
+     */
+    setBreakMessage(option)
+    {
+        let result;
+        if (option) {
+            let on = this.parseBoolean(option);
+            if (on != undefined) {
+                this.messagesBreak = on? MESSAGE.ALL : MESSAGE.NONE;
+            } else {
+                result = this.sprintf("unrecognized message option: %s\n", option);
+            }
+        }
+        if (!result) {
+            result = this.sprintf("break on message: %b\n", !!this.messagesBreak);
+        }
+        return result;
+    }
+
+    /**
+     * setTemp(address)
+     *
+     * @this {Debugger}
+     * @param {Address} address
+     */
+    setTemp(address)
+    {
+        this.tempBreak = address;
+    }
+
+    /**
+     * checkInput(base, offset, value)
+     *
+     * @this {Debugger}
+     * @param {number|undefined} base
+     * @param {number} offset
+     * @param {number} value
+     */
+    checkInput(base, offset, value)
+    {
+        if (this.cBreakIgnore) return;
+        if (base == undefined) {
+            this.stopCPU("break on unknown input %#0x: %#0x", offset, value);
+        } else {
+            let addr = base + offset;
+            let address = this.findBreakAddr(addr, Debugger.BREAKTYPE.INPUT);
+            if (address && !address.disabled) {
+                this.stopCPU("break on input %*a: %#0x", this.busIO.addrWidth, address, value);
+            }
+        }
+    }
+
+    /**
+     * checkOutput(base, offset, value)
+     *
+     * @this {Debugger}
+     * @param {number|undefined} base
+     * @param {number} offset
+     * @param {number} value
+     */
+    checkOutput(base, offset, value)
+    {
+        if (this.cBreakIgnore) return;
+        if (base == undefined) {
+            this.stopCPU("break on unknown output %#0x: %#0x", offset, value);
+        } else {
+            let addr = base + offset;
+            let address = this.findBreakAddr(addr, Debugger.BREAKTYPE.OUTPUT);
+            if (address && !address.disabled) {
+                this.stopCPU("break on output %*a: %#0x", this.busIO.addrWidth, address, value);
+            }
+        }
+    }
+
+    /**
+     * checkRead(base, offset, value)
+     *
+     * If historyBuffer has been allocated, then we need to record all instruction fetches, which we
+     * distinguish as reads where the physical address matches cpu.regPCLast.
+     *
+     * TODO: Additional logic will be required for machines where the logical PC differs from the physical
+     * address (eg, machines with segmentation or paging enabled), but that's an issue for another day.
+     *
+     * @this {Debugger}
+     * @param {number|undefined} base
+     * @param {number} offset
+     * @param {number} value
+     */
+    checkRead(base, offset, value)
+    {
+        if (this.cBreakIgnore) return;
+        if (base == undefined) {
+            this.stopCPU("break on unknown read %#0x: %#0x", offset, value);
+        } else {
+            let addr = base + offset;
+            if (this.historyBuffer.length) {
+                if (addr == this.cpu.regPCLast) {
+                    this.cInstructions++;
+                    if (this.counterBreak > 0) {
+                        if (!--this.counterBreak) {
+                            this.stopCPU("break on instruction count");
+                        }
+                    }
+                    this.historyBuffer[this.historyNext++] = addr;
+                    if (this.historyNext == this.historyBuffer.length) this.historyNext = 0;
+                }
+            }
+            let address = this.findBreakAddr(addr, Debugger.BREAKTYPE.READ);
+            if (address && !address.disabled) {
+                this.stopCPU("break on read %*a: %#0x", this.busMemory.addrWidth, address, value);
+                this.clearTemp(addr);
+            }
+        }
+    }
+
+    /**
+     * checkWrite(base, offset, value)
+     *
+     * @this {Debugger}
+     * @param {number|undefined} base
+     * @param {number} offset
+     * @param {number} value
+     */
+    checkWrite(base, offset, value)
+    {
+        if (this.cBreakIgnore) return;
+        if (base == undefined) {
+            this.stopCPU("break on unknown write %#0x: %#0x", offset, value);
+        } else {
+            let addr = base + offset;
+            let address = this.findBreakAddr(addr, Debugger.BREAKTYPE.WRITE);
+            if (address && !address.disabled) {
+                this.stopCPU("break on write %*a: %#0x", this.busMemory.addrWidth, address, value);
+            }
+        }
+    }
+
+    /**
+     * checkVirtualRead(addrVirtual, length)
+     *
+     * @this {Debugger}
+     * @param {number} addrVirtual
+     * @param {number} length
+     */
+    checkVirtualRead(addrVirtual, length)
+    {
+    }
+
+    /**
+     * checkVirtualWrite(addrVirtual, length)
+     *
+     * @this {Debugger}
+     * @param {number} addrVirtual
+     * @param {number} length
+     */
+    checkVirtualWrite(addrVirtual, length)
+    {
+    }
+
+    /**
+     * stopCPU(message, ...args)
+     *
+     * @this {Debugger}
+     * @param {string} message
+     * @param {...} [args]
+     */
+    stopCPU(message, args)
+    {
+        message = this.sprintf(message, ...args);
+        if (this.time.isRunning() && this.fExceptionOnBreak) {
+            /*
+             * We don't print the message in this case, because the CPU's exception handler already
+             * does that; it has to be prepared for any kind of exception, not just those that we throw.
+             */
+            throw new Error(message);
+        }
+        this.println(message);
+        this.time.stop();
+    }
+
+    /**
+     * dumpAddress(address, bus)
+     *
+     * All this function currently supports are physical (Bus) addresses, but that will change.
+     *
+     * @this {Debugger}
+     * @param {Address} address
+     * @param {Bus} [bus] (default is busMemory)
+     * @returns {string}
+     */
+    dumpAddress(address, bus = this.busMemory)
+    {
+        return this.toBase(address.off, this.nDefaultRadix, bus.addrWidth, "");
+    }
+
+    /**
+     * dumpHistory(index)
+     *
+     * The index parameter is interpreted as the number of instructions to rewind; if you also
+     * specify a length, then that limits the number of instructions to display from the index point.
+     *
+     * @this {Debugger}
+     * @param {number} index
+     * @param {number} [length]
+     * @returns {string}
+     */
+    dumpHistory(index, length = 10)
+    {
+        let result = "";
+        if (this.historyBuffer.length) {
+            let address, opcodes = [];
+            if (length > this.historyBuffer.length) {
+                length = this.historyBuffer.length;
+            }
+            if (index < 0) index = length;
+            let i = this.historyNext - index;
+            if (i < 0) i += this.historyBuffer.length;
+            while (i >= 0 && i < this.historyBuffer.length && length > 0) {
+                let addr = this.historyBuffer[i++];
+                if (addr == undefined) break;
+                if (i == this.historyBuffer.length) i = 0;
+                if (address) {
+                    address.off = addr;
+                } else {
+                    address = this.newAddress(addr);
+                }
+                for (let j = 0; j < this.maxOpcodeLength; j++) {
+                    opcodes[j] = this.readAddress(address, 1);
+                }
+                this.addAddress(address, -opcodes.length);
+                result += this.unassemble(address, opcodes, this.sprintf("[%6d]", index--));
+                length--;
+            }
+        }
+        return result || "no history";
+    }
+
+    /**
+     * dumpInstruction(address, length)
+     *
+     * @this {Debugger}
+     * @param {Address|number} address
+     * @param {number} length
+     * @returns {string}
+     */
+    dumpInstruction(address, length)
+    {
+        let opcodes = [], result = "";
+        address = this.makeAddress(address);
+        while (length--) {
+            this.addAddress(address, opcodes.length);
+            while (opcodes.length < this.maxOpcodeLength) {
+                opcodes.push(this.readAddress(address, 1));
+            }
+            this.addAddress(address, -opcodes.length);
+            result += this.unassemble(address, opcodes);
+        }
+        return result;
+    }
+
+    /**
+     * dumpMemory(address, bits, length, format, ioBus)
+     *
+     * @this {Debugger}
+     * @param {Address} [address] (default is addressData; advanced by the length of the dump)
+     * @param {number} [bits] (default size is the memory bus data width; e.g., 8 bits)
+     * @param {number} [length] (default length of dump is 128 values)
+     * @param {string} [format] (formatting options; only 'y' for binary output is currently supported)
+     * @param {boolean} [useIO] (true for busIO; default is busMemory)
+     * @returns {string}
+     */
+    dumpMemory(address, bits, length, format, useIO)
+    {
+        let result = "";
+        let bus = useIO? this.busIO : this.busMemory;
+        if (!bits) bits = bus.dataWidth;
+        let size = bits >> 3;
+        if (!length) length = 128;
+        let fASCII = false, cchBinary = 0;
+        let cLines = ((length + 15) >> 4) || 1;
+        let cbLine = (size == 4? 16 : this.nDefaultRadix);
+        if (format == 'y') {
+            cbLine = size;
+            cLines = length;
+            cchBinary = size * 8;
+        }
+        if (!address) address = this.addressData;
+        while (cLines-- && length > 0) {
+            let data = 0, iByte = 0, i;
+            let sData = "", sChars = "";
+            let sAddress = this.dumpAddress(address, bus);
+            for (i = cbLine; i > 0 && length > 0; i--) {
+                let b = this.readAddress(address, 1, bus);
+                data |= (b << (iByte++ << 3));
+                if (iByte == size) {
+                    sData += this.toBase(data, 0, bits, "");
+                    sData += (size == 1? (i == 9? '-' : ' ') : " ");
+                    if (cchBinary) sChars += this.toBase(data, 2, bits, "");
+                    data = iByte = 0;
+                }
+                if (!cchBinary) sChars += (b >= 32 && b < 127? String.fromCharCode(b) : (fASCII? '' : '.'));
+                length--;
+            }
+            if (result) result += '\n';
+            if (fASCII) {
+                result += sChars;
+            } else {
+                result += sAddress + "  " + sData + " " + sChars;
+            }
+        }
+        this.addressData = address;
+        return result;
+    }
+
+    /**
+     * dumpState()
+     *
+     * Simulate what the Machine class does to obtain the current state of the entire machine.
+     *
+     * @this {Debugger}
+     * @returns {string}
+     */
+    dumpState()
+    {
+        let state = [];
+        this.enumDevices(function enumDevice(device) {
+            if (device.onSave) device.onSave(state);
+            return true;
+        });
+        return JSON.stringify(state, null, 2);
+    }
+
+    /**
+     * editMemory(address, values, useIO)
+     *
+     * @this {Debugger}
+     * @param {Address|undefined} address
+     * @param {Array.<number>} values
+     * @param {boolean} [useIO] (true for busIO; default is busMemory)
+     * @returns {string}
+     */
+    editMemory(address, values, useIO)
+    {
+        let count = 0, result = "";
+        let bus = useIO? this.busIO : this.busMemory;
+        for (let i = 0; address != undefined && i < values.length; i++) {
+            let prev = this.readAddress(address, 0, bus);
+            if (prev == undefined) break;
+            this.writeAddress(address, values[i], bus);
+            result += this.sprintf("%*a: %#*n changed to %#*n\n", this.busMemory.addrWidth, address, this.busMemory.dataWidth, prev, this.busMemory.dataWidth, values[i]);
+            this.addAddress(address, 1, bus);
+            count++;
+        }
+        if (!count) result += this.sprintf("%d locations updated\n", count);
+        this.time.update();
+        return result;
+    }
+
+    /**
+     * enableHistory(enable)
+     *
+     * History refers to instruction execution history, which means we want to trap every read where
+     * the requested address is the first byte of an instruction.  So if history is being enabled, we
+     * preallocate an array to record every such physical address.
+     *
+     * The upside to this approach is that no special hooks are required inside the CPU, since we are
+     * simply leveraging the Bus' ability to use different read handlers for all ROM and RAM blocks.
+     *
+     * @this {Debugger}
+     * @param {boolean} [enable] (if undefined, then we simply return the current history status)
+     * @returns {string}
+     */
+    enableHistory(enable)
+    {
+        let result = "";
+        if (enable != undefined) {
+            if (enable == !this.historyBuffer.length) {
+                let cBlocks = 0;
+                cBlocks += this.busMemory.enumBlocks(Memory.TYPE.READABLE, (block) => {
+                    if (enable) {
+                        this.busMemory.trapRead(block.addr, this.aBreakChecks[Debugger.BREAKTYPE.READ]);
+                    } else {
+                        this.busMemory.untrapRead(block.addr, this.aBreakChecks[Debugger.BREAKTYPE.READ]);
+                    }
+                });
+                if (cBlocks) {
+                    if (enable) {
+                        this.historyNext = 0;
+                        this.historyBuffer = new Array(Debugger.HISTORY_LIMIT);
+                    } else {
+                        this.historyBuffer = [];
+                    }
+                }
+            }
+        }
+        result += this.sprintf("instruction history %s\n", this.historyBuffer.length? "enabled" : "disabled");
+        return result;
+    }
+
+    /**
+     * loadState(state)
+     *
+     * @this {Debugger}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    loadState(state)
+    {
+        let idDevice = state.shift();
+        if (this.idDevice == idDevice) {
+            this.parseCommands(state.shift());
+            this.machine.messages = state.shift();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * notifyMessage(messages)
+     *
+     * Provides the Debugger with a notification whenever a message is being printed, along with the messages bits;
+     * if any of those bits are set in messagesBreak, we break (ie, we stop the CPU).
+     *
+     * @this {Debugger}
+     * @param {number} messages
+     */
+    notifyMessage(messages)
+    {
+        if (this.testBits(this.messagesBreak, messages)) {
+            this.stopCPU("break on message");
+            return;
+        }
+        /*
+         * This is an effort to help keep the browser responsive when lots of messages are being generated.
+         */
+        this.time.yield();
+    }
+
+    /**
+     * onCommand(aTokens)
+     *
+     * Processes basic debugger commands.
+     *
+     * @this {Debugger}
+     * @param {Array.<string>} aTokens ([0] contains the entire command line; [1] and up contain tokens from the command)
+     * @returns {string|undefined}
+     */
+    onCommand(aTokens)
+    {
+        let cmd = aTokens[1], option = aTokens[2], values = [], aUndefined = [];
+        let expr, name, index, address, bits, length, enable, useIO = false, result = "";
+
+        this.fStepQuietly = undefined;
+
+        if (option == '*') {
+            index = -2;
+        } else {
+            index = this.parseInt(option);
+            if (index == undefined) index = -1;
+            address = this.parseAddress(option, aUndefined);
+            if (address === null) return undefined;
+        }
+
+        length = 0;
+        if (aTokens[3]) {
+            length = this.parseInt(aTokens[3].substr(aTokens[3][0] == 'l'? 1 : 0)) || 8;
+        }
+        for (let i = 3; i < aTokens.length; i++) values.push(this.parseInt(aTokens[i], 16));
+
+        if (cmd == 'd') {
+            let dump = this.checkDumper(option, values);
+            if (dump != undefined) return dump;
+            cmd = this.sDumpPrev || cmd;
+        }
+
+        /*
+         * We refrain from reporting potentially undefined symbols until after we've checked for dump extensions.
+         */
+        if (cmd[0] != 's' && aUndefined.length) {
+            return "unrecognized symbol(s): " + aUndefined;
+        }
+
+        switch(cmd[0]) {
+        case 'b':
+            if (cmd[1] == 'c') {
+                result = this.clearBreak(index);
+            } else if (cmd[1] == 'd') {
+                result = this.enableBreak(index);
+            } else if (cmd[1] == 'e') {
+                result = this.enableBreak(index, true);
+            } else if (cmd[1] == 'i') {
+                result = this.setBreak(address, Debugger.BREAKTYPE.INPUT);
+            } else if (cmd[1] == 'l') {
+                result = this.listBreak();
+            } else if (cmd[1] == 'm') {
+                result = this.setBreakMessage(option);
+            } else if (cmd[1] == 'n') {
+                result = this.setBreakCounter(index);
+            } else if (cmd[1] == 'o') {
+                result = this.setBreak(address, Debugger.BREAKTYPE.OUTPUT);
+            } else if (cmd[1] == 'r') {
+                result = this.setBreak(address, Debugger.BREAKTYPE.READ);
+            } else if (cmd[1] == 'w') {
+                result = this.setBreak(address, Debugger.BREAKTYPE.WRITE);
+            } else if (cmd[1] == '?') {
+                result = "break commands:\n";
+                Debugger.BREAK_COMMANDS.forEach((cmd) => {result += cmd + '\n';});
+                break;
+            } else if (cmd[1]) {
+                result = undefined;
+            }
+            break;
+
+        case 'd':
+            this.sDumpPrev = cmd;
+            if (cmd[1] == 'b' || !cmd[1]) {
+                bits = 8;
+            } else if (cmd[1] == 'w') {
+                bits = 16;
+            } else if (cmd[1] == 'd') {
+                bits = 32;
+            } else if (cmd[1] == 'i') {
+                if (!this.busIO) {
+                    result = "invalid bus";
+                    break;
+                }
+                bits = this.busIO.dataWidth;
+                length = length || 1;
+                useIO = true;
+            } else if (cmd[1] == 'h') {
+                this.sDumpPrev = "";
+                result = this.dumpHistory(index, length);
+                break;
+            } else if (cmd[1] == '?') {
+                this.sDumpPrev = "";
+                result = "dump commands:\n";
+                Debugger.DUMP_COMMANDS.forEach((cmd) => {result += cmd + '\n';});
+                if (this.aDumpers.length) {
+                    result += "dump extensions:\n";
+                    for (let i = 0; i < this.aDumpers.length; i++) {
+                        let dumper = this.aDumpers[i];
+                        result += this.sprintf("d   %-12s%s\n", dumper.name, dumper.desc);
+                    }
+                }
+                break;
+            } else {
+                this.sDumpPrev = "";
+                result = undefined;
+                break;
+            }
+            result = this.dumpMemory(address, bits, length, cmd[2], useIO);
+            break;
+
+        case 'e':
+            if (cmd[1] == 'o') {
+                if (!this.busIO) {
+                    result = "invalid bus";
+                    break;
+                }
+                useIO = true;
+            } else if (cmd[1]) {
+                result = undefined;
+                break;
+            }
+            result = this.editMemory(address, values, useIO);
+            break;
+
+        case 'g':
+            if (this.time.start()) {
+                if (address != undefined) {
+                    this.clearTemp();
+                    result = this.setBreak(address);
+                    if (result.indexOf(':') != 2) break;
+                    this.setTemp(address);
+                    result = "";
+                }
+                break;
+            }
+            result = "already started\n";
+            break;
+
+        case 'h':
+            if (!this.time.stop()) result = "already stopped\n";
+            break;
+
+        case 'p':
+            aTokens.shift();
+            aTokens.shift();
+            expr = aTokens.join(' ');
+            result += this.sprintf("%s = %s\n", expr, this.toBase(this.parseExpression(expr)));
+            break;
+
+        case 'r':
+            name = cmd.substr(1).toUpperCase();
+            if (name) {
+                if (this.cpu.getRegister(name) == undefined) {
+                    result += this.sprintf("unrecognized register: %s\n", name);
+                    break;
+                }
+                if (address != undefined) this.cpu.setRegister(name, address.off);
+            }
+            this.setAddress(this.addressCode, this.cpu.regPC);
+            result += this.cpu.toString();
+            break;
+
+        case 's':
+            enable = this.parseBoolean(option);
+            if (cmd[1] == 'h') {
+                /*
+                 * Don't let the user turn off history if any breaks (which may depend on history) are still set.
+                 */
+                if (this.cBreaks || this.counterBreak > 0) {
+                    enable = undefined;     // this ensures enableHistory() will simply return the status, not change it.
+                }
+                result = this.enableHistory(enable);
+                if (enable != undefined) this.historyForced = enable;
+            } else if (cmd[1] == 'p') {
+                if (index > 0) {
+                    this.time.setSpeed(index);
+                    result = "target speed:  " + this.time.getSpeedTarget();
+                } else {
+                    result = "current speed: " + this.time.getSpeedCurrent();
+                }
+            } else if (cmd[1] == 's' && this.styles) {
+                index = this.styles.indexOf(option);
+                if (index >= 0) this.style = this.styles[index];
+                result = "style: " + this.style;
+            } else if (cmd[1] == '?') {
+                result = "set commands:\n";
+                Debugger.SET_COMMANDS.forEach((cmd) => {result += cmd + '\n';});
+                break;
+            } else {
+                result = undefined;
+            }
+            break;
+
+        case 't':
+            length = this.parseInt(option, 10) || 1;
+            this.fStepQuietly = true;
+            if (cmd[1]) {
+                if (cmd[1] != 'r') {
+                    result = undefined;
+                    break;
+                }
+                this.fStepQuietly = false;
+            }
+            this.time.onStep(length);
+            break;
+
+        case 'u':
+            if (cmd[1]) {
+                result = undefined;
+                break;
+            }
+            if (!length) length = 8;
+            if (!address) address = this.addressCode;
+            result += this.dumpInstruction(address, length);
+            this.addressCode = address;
+            break;
+
+        case '?':
+            result = "debugger commands:\n";
+            Debugger.COMMANDS.forEach((cmd) => {result += cmd + '\n';});
+            break;
+
+        default:
+            result = undefined;
+            break;
+        }
+
+        if (result == undefined && aTokens[0]) {
+            result = "unrecognized command '" + aTokens[0] + "' (try '?')\n";
+        }
+
+        return result;
+    }
+
+    /**
+     * onLoad(state)
+     *
+     * Automatically called by the Machine device if the machine's 'autoSave' property is true.
+     *
+     * @this {Debugger}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    onLoad(state)
+    {
+        if (state) {
+            let stateDbg = state[0];
+            if (this.loadState(stateDbg)) {
+                state.shift();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * onSave(state)
+     *
+     * Automatically called by the Machine device before all other devices have been powered down (eg, during
+     * a page unload event).
+     *
+     * @this {Debugger}
+     * @param {Array} state
+     */
+    onSave(state)
+    {
+        let stateDbg = [];
+        this.saveState(stateDbg);
+        state.push(stateDbg);
+        this.cTransitions = 0;
+    }
+
+    /**
+     * onUpdate(fTransition)
+     *
+     * @this {Debugger}
+     * @param {boolean} [fTransition]
+     */
+    onUpdate(fTransition)
+    {
+        if (fTransition) {
+            if (this.time.isRunning()) {
+                this.restoreFocus();
+            } else {
+                if (this.fStepQuietly) {
+                    this.print(this.dumpInstruction(this.cpu.regPC, 1));
+                } else {
+                    if (this.cInstructions) {
+                        this.cpu.println(this.cInstructions + " instructions executed");
+                        this.cInstructions = 0;
+                    }
+                    this.cpu.print(this.cpu.toString());
+                    if (this.fStepQuietly == undefined) this.setFocus();
+                }
+            }
+            this.cTransitions++;
+        }
+    }
+
+    /**
+     * saveState(stateDbg)
+     *
+     * @this {Debugger}
+     * @param {Array} stateDbg
+     */
+    saveState(stateDbg)
+    {
+        stateDbg.push(this.idDevice);
+        stateDbg.push(this.listBreak(true));
+        stateDbg.push(this.machine.messages);
+    }
+
+    /**
+     * restoreFocus()
+     *
+     * We don't want to "rip" focus from the user if this is the first transition (ie, the page containing
+     * the machine has just finished loading); we use a transition count as a simple way of achieving that.
+     *
+     * @this {Debugger}
+     */
+    restoreFocus()
+    {
+        if (this.cTransitions && this.input) this.input.setFocus();
+    }
+
+    /**
+     * setFocus()
+     *
+     * @this {Debugger}
+     */
+    setFocus()
+    {
+        if (this.cTransitions) {
+            let element = this.findBinding(WebIO.BINDING.PRINT, true);
+            if (element) element.focus();
+        }
+    }
+
+    /**
+     * unassemble(address, opcodes, annotation)
+     *
+     * Returns a string representation of the selected instruction.  Since all processor-specific code
+     * should be in the overriding function, all we can do here is display the address and an opcode.
+     *
+     * @this {Debugger}
+     * @param {Address} address (advanced by the number of processed opcodes)
+     * @param {Array.<number>} opcodes (each processed opcode is shifted out, reducing the size of the array)
+     * @param {string} [annotation] (optional string to append to the final result)
+     * @returns {string}
+     */
+    unassemble(address, opcodes, annotation)
+    {
+        let getNextOp = () => {
+            let op = opcodes.shift();
+            this.addAddress(address, 1);
+            return op;
+        };
+        let sAddress = this.dumpAddress(address);
+        return this.sprintf("%s %02x       unsupported       ; %s\n", sAddress, getNextOp(), annotation || "");
+    }
+}
+
+Debugger.COMMANDS = [
+    "b?\t\tbreak commands",
+    "d?\t\tdump commands",
+    "e[o] [addr] ...\tedit memory/ports",
+    "g    [addr]\trun (to addr)",
+    "h\t\thalt",
+    "p    [expr]\tparse expression",
+    "r?   [value]\tdisplay/set registers",
+    "s?\t\tset commands",
+    "t[r] [n]\tstep (n instructions)",
+    "u    [addr] [n]\tunassemble (at addr)"
+];
+
+Debugger.BREAK_COMMANDS = [
+    "bc [n|*]\tclear break address",
+    "bd [n|*]\tdisable break address",
+    "be [n|*]\tenable break address",
+    "bl [n]\t\tlist break addresses",
+    "bi [addr]\tbreak on input",
+    "bo [addr]\tbreak on output",
+    "br [addr]\tbreak on read",
+    "bw [addr]\tbreak on write",
+    "bm [on|off]\tbreak on message",
+    "bn [count]\tbreak on instruction count"
+];
+
+Debugger.DUMP_COMMANDS = [
+    "db  [addr]\tdump bytes (8 bits)",
+    "dw  [addr]\tdump words (16 bits)",
+    "dd  [addr]\tdump dwords (32 bits)",
+    "di  [addr]\tdump input ports",
+    "d*y [addr]\tdump values in binary",
+    "dh  [n] [l]\tdump instruction history buffer",
+    "ds\t\tdump machine state"
+];
+
+Debugger.SET_COMMANDS = [
+    "sh [on|off]\tset instruction history",
+    "sp [n]\t\tset speed multiplier",
+    "ss\t\tset debugger style"
+];
+
+Debugger.ADDRESS = {
+    VIRTUAL:    0x01,           // if seg is -1, this indicates if the address is physical (clear) or virtual (set)
+    PHYSICAL:   0x00,
+    PROTECTED:  0x02,           // if seg is NOT -1, this indicates if the address is real (clear) or protected (set)
+    REAL:       0x00
+};
+
+/*
+ * The required characteristics of these assigned values are as follows: all even values must be read
+ * operations and all odd values must be write operations; all busMemory operations must come before all
+ * busIO operations; and INPUT must be the first busIO operation.
+ */
+Debugger.BREAKTYPE = {
+    READ:       0,
+    WRITE:      1,
+    INPUT:      2,
+    OUTPUT:     3
+};
+
+Debugger.BREAKCMD = {
+    [Debugger.BREAKTYPE.READ]:     "br",
+    [Debugger.BREAKTYPE.WRITE]:    "bw",
+    [Debugger.BREAKTYPE.INPUT]:    "bi",
+    [Debugger.BREAKTYPE.OUTPUT]:   "bo"
+};
+
+/*
+ * Predefined "virtual registers" that we expect the CPU to support.
+ */
+Debugger.REGISTER = {
+    PC:         "PC"            // the CPU's program counter
+};
+
+Debugger.SYMBOL = {
+    BYTE:       1,
+    PAIR:       2,
+    QUAD:       4,
+    LABEL:      5,
+    COMMENT:    6,
+    VALUE:      7
+};
+
+Debugger.SYMBOL_TYPES = {
+    "=":        Debugger.SYMBOL.VALUE,
+    "1":        Debugger.SYMBOL.BYTE,
+    "2":        Debugger.SYMBOL.PAIR,
+    "4":        Debugger.SYMBOL.QUAD,
+    "@":        Debugger.SYMBOL.LABEL,
+    ";":        Debugger.SYMBOL.COMMENT
+};
+
+Debugger.HISTORY_LIMIT = 100000;
+
+/*
+ * These are our operator precedence tables.  Operators toward the bottom (with higher values) have
+ * higher precedence.  BINOP_PRECEDENCE was our original table; we had to add DECOP_PRECEDENCE because
+ * the precedence of operators in DEC's MACRO-10 expressions differ.  Having separate tables also allows
+ * us to remove operators that shouldn't be supported, but unless some operator creates a problem,
+ * I prefer to keep as much commonality between the tables as possible.
+ *
+ * Missing from these tables are the (limited) set of unary operators we support (negate and complement),
+ * since this is only a BINARY operator precedence, not a general-purpose precedence table.  Assume that
+ * all unary operators take precedence over all binary operators.
+ */
+Debugger.BINOP_PRECEDENCE = {
+    '||':   5,      // logical OR
+    '&&':   6,      // logical AND
+    '!':    7,      // bitwise OR (conflicts with logical NOT, but we never supported that)
+    '|':    7,      // bitwise OR
+    '^!':   8,      // bitwise XOR (added by MACRO-10 sometime between the 1972 and 1978 versions)
+    '&':    9,      // bitwise AND
+    '!=':   10,     // inequality
+    '==':   10,     // equality
+    '>=':   11,     // greater than or equal to
+    '>':    11,     // greater than
+    '<=':   11,     // less than or equal to
+    '<':    11,     // less than
+    '>>>':  12,     // unsigned bitwise right shift
+    '>>':   12,     // bitwise right shift
+    '<<':   12,     // bitwise left shift
+    '-':    13,     // subtraction
+    '+':    13,     // addition
+    '^/':   14,     // remainder
+    '/':    14,     // division
+    '*':    14,     // multiplication
+    '_':    19,     // MACRO-10 shift operator
+    '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
+    '{':    20,     // open grouped expression (converted from achGroup[0])
+    '}':    20      // close grouped expression (converted from achGroup[1])
+};
+
+Debugger.DECOP_PRECEDENCE = {
+    ',,':   1,      // high-word,,low-word
+    '||':   5,      // logical OR
+    '&&':   6,      // logical AND
+    '!=':   10,     // inequality
+    '==':   10,     // equality
+    '>=':   11,     // greater than or equal to
+    '>':    11,     // greater than
+    '<=':   11,     // less than or equal to
+    '<':    11,     // less than
+    '>>>':  12,     // unsigned bitwise right shift
+    '>>':   12,     // bitwise right shift
+    '<<':   12,     // bitwise left shift
+    '-':    13,     // subtraction
+    '+':    13,     // addition
+    '^/':   14,     // remainder
+    '/':    14,     // division
+    '*':    14,     // multiplication
+    '!':    15,     // bitwise OR (conflicts with logical NOT, but we never supported that)
+    '|':    15,     // bitwise OR
+    '^!':   15,     // bitwise XOR (added by MACRO-10 sometime between the 1972 and 1978 versions)
+    '&':    15,     // bitwise AND
+    '_':    19,     // MACRO-10 shift operator
+    '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
+    '{':    20,     // open grouped expression (converted from achGroup[0])
+    '}':    20      // close grouped expression (converted from achGroup[1])
+};
+
+// Defs.CLASSES["Debugger"] = Debugger;
+
+/**
+ * @copyright https://www.pcjs.org/machines/pcx80/libv2/cpux80.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -16381,2736 +16506,7 @@ CPU8080.OPCODE = {
 Defs.CLASSES["CPU8080"] = CPU8080;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/cpu/debugger.js (C) 2012-2020 Jeff Parsons
- */
-
-/** @typedef {{ defaultRadix: (number|undefined) }} */
-var DebuggerConfig;
-
-/** @typedef {{ off: number, seg: number, type: number, disabled: (boolean|undefined) }} */
-var Address;
-
-/** @typedef {{ address: Address, type: number, name: string }} */
-var SymbolObj;
-
- /** @typedef {{ device: Device, name: string, desc: string, func: function() }} */
-var Dumper;
-
-/**
- * Debugger Services
- *
- * @class {Debugger}
- * @unrestricted
- * @property {Array.<Array.<Address>>} aaBreakAddress
- */
-class Debugger extends Device {
-    /**
-     * Debugger(idMachine, idDevice, config)
-     *
-     * @this {Debugger}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {DebuggerConfig} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        config['class'] = "Debugger";
-        super(idMachine, idDevice, config);
-
-        /*
-         * Default radix (base).  This is used by our own functions (eg, parseExpression()),
-         * but not by those we inherited (eg, parseInt()), which still use base 10 by default;
-         * however, you can always coerce values to any base in any of those functions with
-         * a prefix (eg, "0x" for hex) or suffix (eg, "." for decimal).
-         */
-        this.nDefaultRadix = this.config['defaultRadix'] || 16;
-
-        /*
-         * Default endian (0 = little, 1 = big).
-         */
-        this.nDefaultEndian = 0;                // TODO: Use it or lose it
-
-        /*
-         * Default maximum instruction (opcode) length, overridden by the CPU-specific debugger.
-         */
-        this.maxOpcodeLength = 1;
-
-        /*
-         * Default parsing parameters, subexpression and address delimiters.
-         */
-        this.nASCIIBits = 8;                    // change to 7 for MACRO-10 compatibility
-        this.achGroup = ['(',')'];
-        this.achAddress = ['[',']'];
-
-        /*
-         * Add a new format type ('a') that understands Address objects, where width represents
-         * the size of the address in bits, and uses the Debugger's default radix.
-         *
-         * TODO: Consider adding a 'bits' property to the Address object (or a Bus property so that
-         * the appropriate addrWidth can be identified), in order to avoid the extra sprintf() width
-         * parameter, allowing the use of "%a" instead of "%*a".
-         *
-         * TODO: Determine if it's worth getting rid of the separate dumpAddress() function.
-         */
-        this.addFormatType('a',
-            /**
-             * @param {string} type
-             * @param {string} flags
-             * @param {number} width
-             * @param {number} precision
-             * @param {Address} address
-             * @returns {string}
-             */
-            (type, flags, width, precision, address) => this.toBase(address.off, this.nDefaultRadix, width)
-        );
-
-        /*
-         * Add a new format type ('n') for numbers, where width represents the size of the value in bits,
-         * and uses the Debugger's default radix.
-         */
-        this.addFormatType('n',
-            /**
-             * @param {string} type
-             * @param {string} flags
-             * @param {number} width
-             * @param {number} precision
-             * @param {number} value
-             * @returns {string}
-             */
-            (type, flags, width, precision, value) => this.toBase(value, this.nDefaultRadix, width, flags.indexOf('#') < 0? "" : undefined)
-        );
-
-        /*
-         * This controls how we stop the CPU on a break condition.  If fExceptionOnBreak is true, we'll
-         * throw an exception, which the CPU will catch and halt; however, the downside of that approach
-         * is that, in some cases, it may leave the CPU in an inconsistent state.  It's generally safer to
-         * leave fExceptionOnBreak false, which will simply stop the clock, allowing the current instruction
-         * to finish executing.
-         */
-        this.fExceptionOnBreak = false;
-
-        /*
-         * If greater than zero, decremented on every instruction until it hits zero, then CPU is stoppped.
-         */
-        this.counterBreak = 0;
-
-        /*
-         * If set to MESSAGE.ALL, then we break on all messages.  It can be set to a subset of message bits,
-         * but there is currently no UI for that.
-         */
-        this.messagesBreak = MESSAGE.NONE;
-
-        /*
-         * variables is an object with properties that grow as setVariable() assigns more variables;
-         * each property corresponds to one variable, where the property name is the variable name (ie,
-         * a string beginning with a non-digit, followed by zero or more symbol characters and/or digits)
-         * and the property value is the variable's numeric value.
-         *
-         * Note that parseValue() parses variables before numbers, so any variable that looks like a
-         * unprefixed hex value (eg, "a5" as opposed to "0xa5") will trump the numeric value.  Unprefixed
-         * hex values are a convenience of parseValue(), which always calls parseInt() with a default
-         * base of 16; however, that default be overridden with a variety of explicit prefixes or suffixes
-         * (eg, a leading "0o" to indicate octal, a trailing period to indicate decimal, etc.)
-         *
-         * See parseInt() for more details about supported numbers.
-         */
-        this.variables = {};
-
-        /*
-         * Arrays of Symbol objects, one sorted by name and the other sorted by value; see addSymbols().
-         */
-        this.symbolsByName = [];
-        this.symbolsByValue = [];
-
-        /*
-         * Get access to the CPU, so that in part so we can connect to all its registers; the Debugger has
-         * no registers of its own, so we simply replace our registers with the CPU's.
-         */
-        this.cpu = /** @type {CPU} */ (this.findDeviceByClass("CPU"));
-        this.registers = this.cpu.connectDebugger(this);
-
-        /*
-         * Get access to the Input device, so that we can switch focus whenever we start the machine.
-         */
-        this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
-
-        /*
-         * Get access to the Bus devices, so we have access to the I/O and memory address spaces.
-         * To minimize configuration redundancy, we rely on the CPU's configuration to get the Bus device IDs.
-         */
-        let idBus = this.cpu.config['busMemory'] || this.config['busMemory'];
-        if (idBus) {
-            this.busMemory = /** @type {Bus} */ (this.findDevice(idBus));
-            idBus = this.cpu.config['busIO'] || this.config['busIO'];
-            if (idBus) {
-                this.busIO = /** @type {Bus} */ (this.findDevice(idBus, false));
-            }
-            if (!this.busIO) this.busIO = this.busMemory;
-        } else {
-            this.busMemory = this.busIO = /** @type {Bus} */ (this.findDeviceByClass('Bus'));
-        }
-
-        this.nDefaultBits = this.busMemory.addrWidth;
-        this.addrMask = (Math.pow(2, this.nDefaultBits) - 1)|0;
-
-        /*
-         * Since we want to be able to clear/disable/enable/list break addresses by index number, we maintain
-         * an array (aBreakIndexes) that maps index numbers to address array entries.  The mapping values are
-         * a combination of BREAKTYPE (high byte) and break address entry (low byte).
-         */
-        this.cBreaks = 0;
-        this.cBreakIgnore = 0;  // incremented and decremented around internal reads and writes
-        this.aaBreakAddress = [];
-        for (let type in Debugger.BREAKTYPE) {
-            this.aaBreakAddress[Debugger.BREAKTYPE[type]] = [];
-        }
-        this.aBreakBuses = [];
-        this.aBreakBuses[Debugger.BREAKTYPE.READ] = this.busMemory;
-        this.aBreakBuses[Debugger.BREAKTYPE.WRITE] = this.busMemory;
-        this.aBreakBuses[Debugger.BREAKTYPE.INPUT] = this.busIO;
-        this.aBreakBuses[Debugger.BREAKTYPE.OUTPUT] = this.busIO;
-        this.aBreakChecks = [];
-        this.aBreakChecks[Debugger.BREAKTYPE.READ] = this.checkRead.bind(this);
-        this.aBreakChecks[Debugger.BREAKTYPE.WRITE] = this.checkWrite.bind(this)
-        this.aBreakChecks[Debugger.BREAKTYPE.INPUT] = this.checkInput.bind(this)
-        this.aBreakChecks[Debugger.BREAKTYPE.OUTPUT] = this.checkOutput.bind(this)
-        this.aBreakIndexes = [];
-        this.fStepQuietly = undefined;          // when stepping, this informs onUpdate() how "quiet" to be
-        this.tempBreak = null;                  // temporary auto-cleared break address managed by setTemp() and clearTemp()
-        this.cInstructions = 0;                 // instruction counter (updated only if history is enabled)
-
-        /*
-         * Get access to the Time device, so we can stop and start time as needed.
-         */
-        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
-        this.time.addUpdate(this);
-        this.cTransitions = 0;
-
-        /*
-         * Initialize additional properties required for our onCommand() handler, including
-         * support for dump extensions (which we use ourselves to implement the "d state" command).
-         */
-        this.aDumpers = [];                     // array of dump extensions (aka "Dumpers")
-        this.sDumpPrev = "";                    // remembers the previous "dump" command invoked
-        this.addDumper(this, "state", "dump machine state", this.dumpState);
-
-        this.addressCode = this.newAddress();
-        this.addressData = this.newAddress();
-        this.historyForced = false;
-        this.historyNext = 0;
-        this.historyBuffer = [];
-        this.addHandler(Device.HANDLER.COMMAND, this.onCommand.bind(this));
-
-        let commands = /** @type {string} */ (this.getMachineConfig("commands"));
-        if (commands) this.parseCommands(commands);
-    }
-
-    /**
-     * addDumper(device, name, desc, func)
-     *
-     * @this {Debugger}
-     * @param {Device} device
-     * @param {string} name
-     * @param {string} desc
-     * @param {function(Array.<number>)} func
-     */
-    addDumper(device, name, desc, func)
-    {
-        this.aDumpers.push({device, name, desc, func});
-    }
-
-    /**
-     * checkDumper(option, values)
-     *
-     * @this {Debugger}
-     * @param {string} option
-     * @param {Array.<number>} values
-     * @returns {string|undefined}
-     */
-    checkDumper(option, values)
-    {
-        let result;
-        for (let i = 0; i < this.aDumpers.length; i++) {
-            let dumper = this.aDumpers[i];
-            if (dumper.name == option) {
-                result = dumper.func.call(dumper.device, values);
-                break;
-            }
-        }
-        return result;
-    }
-
-    /**
-     * addSymbol(address, type, name)
-     *
-     * @this {Debugger}
-     * @param {Address} address
-     * @param {number} type (see Debugger.SYMBOL_TYPE values)
-     * @param {string} name
-     */
-    addSymbol(address, type, name)
-    {
-        let symbol = {address, type, name};
-        this.binaryInsert(this.symbolsByName, symbol, this.compareSymbolNames);
-        this.binaryInsert(this.symbolsByValue, symbol, this.compareSymbolValues);
-    }
-
-    /**
-     * addSymbols(aSymbols)
-     *
-     * This currently supports only symbol arrays, which consist of [address,type,name] triplets; eg:
-     *
-     *      "0320","=","HF_PORT",
-     *      "0000:0034","4","HDISK_INT",
-     *      "0040:0042","1","CMD_BLOCK",
-     *      "0003","@","DISK_SETUP",
-     *      "0000:004C","4","ORG_VECTOR",
-     *      "0028",";","GET DISKETTE VECTOR"
-     *
-     * There are two basic symbol operations: findSymbolByValue(), which takes an address and finds the symbol,
-     * if any, at that address, and findSymbolByName(), which takes a string and attempts to match it to an address.
-     *
-     * @this {Debugger}
-     * @param {Array|undefined} aSymbols
-     */
-    addSymbols(aSymbols)
-    {
-        if (aSymbols && aSymbols.length) {
-            for (let iSymbol = 0; iSymbol < aSymbols.length-2; iSymbol += 3) {
-                let address = this.parseAddress(aSymbols[iSymbol]);
-                if (!address) continue;     // ignore symbols with bad addresses
-                let type = Debugger.SYMBOL_TYPES[aSymbols[iSymbol+1]];
-
-                if (!type) continue;        // ignore symbols with unrecognized types
-                let name = aSymbols[iSymbol+2];
-                this.addSymbol(address, type, name);
-            }
-        }
-    }
-
-    /**
-     * binaryInsert(a, v, fnCompare)
-     *
-     * If element v already exists in array a, the array is unchanged (we don't allow duplicates); otherwise, the
-     * element is inserted into the array at the appropriate index.
-     *
-     * @this {Debugger}
-     * @param {Array} a is an array
-     * @param {Object} v is the value to insert
-     * @param {function(SymbolObj,SymbolObj):number} [fnCompare]
-     */
-    binaryInsert(a, v, fnCompare)
-    {
-        let index = this.binarySearch(a, v, fnCompare);
-        if (index < 0) {
-            a.splice(-(index + 1), 0, v);
-        }
-    }
-
-    /**
-     * binarySearch(a, v, fnCompare)
-     *
-     * @this {Debugger}
-     * @param {Array} a is an array
-     * @param {Object} v
-     * @param {function(SymbolObj,SymbolObj):number} [fnCompare]
-     * @returns {number} the index of matching entry if non-negative, otherwise the index of the insertion point
-     */
-    binarySearch(a, v, fnCompare)
-    {
-        let left = 0;
-        let right = a.length;
-        let found = 0;
-        if (fnCompare === undefined) {
-            fnCompare = function(a, b) { return a > b? 1 : a < b? -1 : 0; };
-        }
-        while (left < right) {
-            let middle = (left + right) >> 1;
-            let compareResult;
-            compareResult = fnCompare(v, a[middle]);
-            if (compareResult > 0) {
-                left = middle + 1;
-            } else {
-                right = middle;
-                found = !compareResult;
-            }
-        }
-        return found? left : ~left;
-    }
-
-    /**
-     * compareSymbolNames(symbol1, symbol2)
-     *
-     * @this {Debugger}
-     * @param {SymbolObj} symbol1
-     * @param {SymbolObj} symbol2
-     * @returns {number}
-     */
-    compareSymbolNames(symbol1, symbol2)
-    {
-        return symbol1.name > symbol2.name? 1 : symbol1.name < symbol2.name? -1 : 0;
-    }
-
-    /**
-     * compareSymbolValues(symbol1, symbol2)
-     *
-     * @this {Debugger}
-     * @param {SymbolObj} symbol1
-     * @param {SymbolObj} symbol2
-     * @returns {number}
-     */
-    compareSymbolValues(symbol1, symbol2)
-    {
-        return symbol1.address.off > symbol2.address.off? 1 : symbol1.address.off < symbol2.address.off? -1 : 0;
-    }
-
-    /**
-     * findSymbolByName(name)
-     *
-     * Search symbolsByName for name and return the corresponding symbol (undefined if not found).
-     *
-     * @this {Debugger}
-     * @param {string} name
-     * @returns {number} the index of matching entry if non-negative, otherwise the index of the insertion point
-     */
-    findSymbolByName(name)
-    {
-        let symbol = {address: null, type: 0, name};
-        return this.binarySearch(this.symbolsByName, symbol, this.compareSymbolNames);
-    }
-
-    /**
-     * findSymbolByValue(address)
-     *
-     * Search symbolsByValue for address and return the corresponding symbol (undefined if not found).
-     *
-     * @this {Debugger}
-     * @param {Address} address
-     * @returns {number} the index of matching entry if non-negative, otherwise the index of the insertion point
-     */
-    findSymbolByValue(address)
-    {
-        let symbol = {address, type: 0, name: undefined};
-        return this.binarySearch(this.symbolsByValue, symbol, this.compareSymbolValues);
-    }
-
-    /**
-     * getSymbol(name)
-     *
-     * @this {Debugger}
-     * @param {string} name
-     * @returns {number|undefined}
-     */
-    getSymbol(name)
-    {
-        let value;
-        let i = this.findSymbolByName(name);
-        if (i >= 0) {
-            let symbol = this.symbolsByName[i];
-            value = symbol.address.off;
-        }
-        return value;
-    }
-
-    /**
-     * getSymbolName(address, type)
-     *
-     * @this {Debugger}
-     * @param {Address} address
-     * @param {number} [type]
-     * @returns {string|undefined}
-     */
-    getSymbolName(address, type)
-    {
-        let name;
-        let i = this.findSymbolByValue(address);
-        if (i >= 0) {
-            let symbol = this.symbolsByValue[i];
-            if (!type || symbol.type == type) {
-                name = symbol.name;
-            }
-        }
-        return name;
-    }
-
-    /**
-     * delVariable(name)
-     *
-     * @this {Debugger}
-     * @param {string} name
-     */
-    delVariable(name)
-    {
-        delete this.variables[name];
-    }
-
-    /**
-     * getVariable(name)
-     *
-     * @this {Debugger}
-     * @param {string} name
-     * @returns {number|undefined}
-     */
-    getVariable(name)
-    {
-        if (this.variables[name]) {
-            return this.variables[name].value;
-        }
-        name = name.substr(0, 6);
-        return this.variables[name] && this.variables[name].value;
-    }
-
-    /**
-     * getVariableFixup(name)
-     *
-     * @this {Debugger}
-     * @param {string} name
-     * @returns {string|undefined}
-     */
-    getVariableFixup(name)
-    {
-        return this.variables[name] && this.variables[name].sUndefined;
-    }
-
-    /**
-     * isVariable(name)
-     *
-     * @this {Debugger}
-     * @param {string} name
-     * @returns {boolean}
-     */
-    isVariable(name)
-    {
-        return this.variables[name] !== undefined;
-    }
-
-    /**
-     * resetVariables()
-     *
-     * @this {Debugger}
-     * @returns {Object}
-     */
-    resetVariables()
-    {
-        let a = this.variables;
-        this.variables = {};
-        return a;
-    }
-
-    /**
-     * restoreVariables(a)
-     *
-     * @this {Debugger}
-     * @param {Object} a (from previous resetVariables() call)
-     */
-    restoreVariables(a)
-    {
-        this.variables = a;
-    }
-
-    /**
-     * setVariable(name, value, sUndefined)
-     *
-     * @this {Debugger}
-     * @param {string} name
-     * @param {number} value
-     * @param {string|undefined} [sUndefined]
-     */
-    setVariable(name, value, sUndefined)
-    {
-        this.variables[name] = {value, sUndefined};
-    }
-
-    /**
-     * addAddress(address, offset, bus)
-     *
-     * All this function currently supports are physical (Bus) addresses, but that will change.
-     *
-     * @this {Debugger}
-     * @param {Address} address
-     * @param {number} offset
-     * @param {Bus} [bus] (default is busMemory)
-     * @returns {Address}
-     */
-    addAddress(address, offset, bus = this.busMemory)
-    {
-        address.off = (address.off + offset) & bus.addrLimit;
-        return address;
-    }
-
-    /**
-     * makeAddress(address)
-     *
-     * All this function currently supports are physical (Bus) addresses, but that will change.
-     *
-     * @this {Debugger}
-     * @param {Address|number} address
-     * @returns {Address}
-     */
-    makeAddress(address)
-    {
-        return typeof address == "number"? this.newAddress(address) : address;
-    }
-
-    /**
-     * newAddress(address)
-     *
-     * All this function currently supports are physical (Bus) addresses, but that will change.
-     *
-     * @this {Debugger}
-     * @param {Address|number} [address]
-     * @returns {Address}
-     */
-    newAddress(address = 0)
-    {
-        let seg = -1, type = Debugger.ADDRESS.PHYSICAL;
-        if (typeof address == "number") return {off: address, seg, type};
-        return {off: address.off, seg: address.seg, type: address.type};
-    }
-
-    /**
-     * parseAddress(sAddress, aUndefined)
-     *
-     * @this {Debugger}
-     * @param {string} sAddress
-     * @param {Array} [aUndefined]
-     * @returns {Address|undefined|null} (undefined if no address supplied, null if a parsing error occurred)
-     */
-    parseAddress(sAddress, aUndefined)
-    {
-        let address;
-        if (sAddress) {
-            address = this.newAddress();
-            let iAddr = 0;
-            let ch = sAddress.charAt(iAddr);
-
-            switch(ch) {
-            case '&':
-                iAddr++;
-                break;
-            case '#':
-                iAddr++;
-                address.type = Debugger.ADDRESS.PROTECTED;
-                break;
-            case '%':
-                iAddr++;
-                ch = sAddress.charAt(iAddr);
-                if (ch == '%') {
-                    iAddr++;
-                } else {
-                    address.type = Debugger.ADDRESS.VIRTUAL;
-                }
-                break;
-            }
-
-            let iColon = sAddress.indexOf(':', iAddr);
-            if (iColon >= 0) {
-                let seg = this.parseExpression(sAddress.substring(iAddr, iColon), aUndefined);
-                if (seg == undefined) {
-                    address = null;
-                } else {
-                    address.seg = seg;
-                    iAddr = iColon + 1;
-                }
-            }
-            if (address) {
-                let off = this.parseExpression(sAddress.substring(iAddr), aUndefined);
-                if (off == undefined) {
-                    address = null;
-                } else {
-                    address.off = off & this.addrMask;
-                }
-            }
-        }
-        return address;
-    }
-
-    /**
-     * readAddress(address, advance, bus)
-     *
-     * All this function currently supports are physical (Bus) addresses, but that will change.
-     *
-     * @this {Debugger}
-     * @param {Address} address
-     * @param {number} [advance] (amount to advance address after read, if any)
-     * @param {Bus} [bus] (default is busMemory)
-     * @returns {number|undefined}
-     */
-    readAddress(address, advance, bus = this.busMemory)
-    {
-        this.cBreakIgnore++;
-        let value = bus.readDirect(address.off);
-        if (advance) this.addAddress(address, advance, bus);
-        this.cBreakIgnore--;
-        return value;
-    }
-
-    /**
-     * writeAddress(address, value, bus)
-     *
-     * All this function currently supports are physical (Bus) addresses, but that will change.
-     *
-     * @this {Debugger}
-     * @param {Address} address
-     * @param {number} value
-     * @param {Bus} [bus] (default is busMemory)
-     */
-    writeAddress(address, value, bus = this.busMemory)
-    {
-        this.cBreakIgnore++;
-        bus.writeDirect(address.off, value);
-        this.cBreakIgnore--;
-    }
-
-    /**
-     * setAddress(address, addr)
-     *
-     * All this function currently supports are physical (Bus) addresses, but that will change.
-     *
-     * @this {Debugger}
-     * @param {Address} address
-     * @param {number} addr
-     */
-    setAddress(address, addr)
-    {
-        address.off = addr;
-    }
-
-    /**
-     * evalAND(dst, src)
-     *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.AND().
-     *
-     * Performs the bitwise "and" (AND) of two operands > 32 bits.
-     *
-     * @this {Debugger}
-     * @param {number} dst
-     * @param {number} src
-     * @returns {number} (dst & src)
-     */
-    evalAND(dst, src)
-    {
-        /*
-         * We AND the low 32 bits separately from the higher bits, and then combine them with addition.
-         * Since all bits above 32 will be zero, and since 0 AND 0 is 0, no special masking for the higher
-         * bits is required.
-         *
-         * WARNING: When using JavaScript's 32-bit operators with values that could set bit 31 and produce a
-         * negative value, it's critical to perform a final right-shift of 0, ensuring that the final result is
-         * positive.
-         */
-        if (this.nDefaultBits <= 32) {
-            return dst & src;
-        }
-        /*
-         * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
-         */
-        dst = this.truncate(dst, 0, true);
-        src = this.truncate(src, 0, true);
-        return ((((dst / NumIO.TWO_POW32)|0) & ((src / NumIO.TWO_POW32)|0)) * NumIO.TWO_POW32) + ((dst & src) >>> 0);
-    }
-
-    /**
-     * evalMUL(dst, src)
-     *
-     * I could have adapted the code from /modules/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
-     * write this base method and let the PDP-10 Debugger override it with a call to the *actual* doMUL() method.
-     *
-     * @this {Debugger}
-     * @param {number} dst
-     * @param {number} src
-     * @returns {number} (dst * src)
-     */
-    evalMUL(dst, src)
-    {
-        return dst * src;
-    }
-
-    /**
-     * evalIOR(dst, src)
-     *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.IOR().
-     *
-     * Performs the logical "inclusive-or" (OR) of two operands > 32 bits.
-     *
-     * @this {Debugger}
-     * @param {number} dst
-     * @param {number} src
-     * @returns {number} (dst | src)
-     */
-    evalIOR(dst, src)
-    {
-        /*
-         * We OR the low 32 bits separately from the higher bits, and then combine them with addition.
-         * Since all bits above 32 will be zero, and since 0 OR 0 is 0, no special masking for the higher
-         * bits is required.
-         *
-         * WARNING: When using JavaScript's 32-bit operators with values that could set bit 31 and produce a
-         * negative value, it's critical to perform a final right-shift of 0, ensuring that the final result is
-         * positive.
-         */
-        if (this.nDefaultBits <= 32) {
-            return dst | src;
-        }
-        /*
-         * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
-         */
-        dst = this.truncate(dst, 0, true);
-        src = this.truncate(src, 0, true);
-        return ((((dst / NumIO.TWO_POW32)|0) | ((src / NumIO.TWO_POW32)|0)) * NumIO.TWO_POW32) + ((dst | src) >>> 0);
-    }
-
-    /**
-     * evalXOR(dst, src)
-     *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.XOR().
-     *
-     * Performs the logical "exclusive-or" (XOR) of two operands > 32 bits.
-     *
-     * @this {Debugger}
-     * @param {number} dst
-     * @param {number} src
-     * @returns {number} (dst ^ src)
-     */
-    evalXOR(dst, src)
-    {
-        /*
-         * We XOR the low 32 bits separately from the higher bits, and then combine them with addition.
-         * Since all bits above 32 will be zero, and since 0 XOR 0 is 0, no special masking for the higher
-         * bits is required.
-         *
-         * WARNING: When using JavaScript's 32-bit operators with values that could set bit 31 and produce a
-         * negative value, it's critical to perform a final right-shift of 0, ensuring that the final result is
-         * positive.
-         */
-        if (this.nDefaultBits <= 32) {
-            return dst ^ src;
-        }
-        /*
-         * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
-         */
-        dst = this.truncate(dst, 0, true);
-        src = this.truncate(src, 0, true);
-        return ((((dst / NumIO.TWO_POW32)|0) ^ ((src / NumIO.TWO_POW32)|0)) * NumIO.TWO_POW32) + ((dst ^ src) >>> 0);
-    }
-
-    /**
-     * evalOps(aVals, aOps, cOps)
-     *
-     * Some of our clients want a specific number of bits of integer precision.  If that precision is
-     * greater than 32, some of the operations below will fail; for example, JavaScript bitwise operators
-     * always truncate the result to 32 bits, so beware when using shift operations.  Similarly, it would
-     * be wrong to always "|0" the final result, which is why we rely on truncate() now.
-     *
-     * Note that JavaScript integer precision is limited to 52 bits.  For example, in Node, if you set a
-     * variable to 0x80000001:
-     *
-     *      foo=0x80000001|0
-     *
-     * then calculate foo*foo and display the result in binary using "(foo*foo).toString(2)":
-     *
-     *      '11111111111111111111111111111100000000000000000000000000000000'
-     *
-     * which is slightly incorrect because it has overflowed JavaScript's floating-point precision.
-     *
-     * 0x80000001 in decimal is -2147483647, so the product is 4611686014132420609, which is 0x3FFFFFFF00000001.
-     *
-     * @this {Debugger}
-     * @param {Array.<number>} aVals
-     * @param {Array.<string>} aOps
-     * @param {number} [cOps] (default is -1 for all)
-     * @returns {boolean} true if successful, false if error
-     */
-    evalOps(aVals, aOps, cOps = -1)
-    {
-        while (cOps-- && aOps.length) {
-            let chOp = aOps.pop();
-            if (aVals.length < 2) return false;
-            let valNew;
-            let val2 = aVals.pop();
-            let val1 = aVals.pop();
-            switch(chOp) {
-            case '*':
-                valNew = this.evalMUL(val1, val2);
-                break;
-            case '/':
-                if (!val2) return false;
-                valNew = Math.trunc(val1 / val2);
-                break;
-            case '^/':
-                if (!val2) return false;
-                valNew = val1 % val2;
-                break;
-            case '+':
-                valNew = val1 + val2;
-                break;
-            case '-':
-                valNew = val1 - val2;
-                break;
-            case '<<':
-                valNew = val1 << val2;
-                break;
-            case '>>':
-                valNew = val1 >> val2;
-                break;
-            case '>>>':
-                valNew = val1 >>> val2;
-                break;
-            case '<':
-                valNew = (val1 < val2? 1 : 0);
-                break;
-            case '<=':
-                valNew = (val1 <= val2? 1 : 0);
-                break;
-            case '>':
-                valNew = (val1 > val2? 1 : 0);
-                break;
-            case '>=':
-                valNew = (val1 >= val2? 1 : 0);
-                break;
-            case '==':
-                valNew = (val1 == val2? 1 : 0);
-                break;
-            case '!=':
-                valNew = (val1 != val2? 1 : 0);
-                break;
-            case '&':
-                valNew = this.evalAND(val1, val2);
-                break;
-            case '!':           // alias for MACRO-10 to perform a bitwise inclusive-or (OR)
-            case '|':
-                valNew = this.evalIOR(val1, val2);
-                break;
-            case '^!':          // since MACRO-10 uses '^' for base overrides, '^!' is used for bitwise exclusive-or (XOR)
-                valNew = this.evalXOR(val1, val2);
-                break;
-            case '&&':
-                valNew = (val1 && val2? 1 : 0);
-                break;
-            case '||':
-                valNew = (val1 || val2? 1 : 0);
-                break;
-            case ',,':
-                valNew = this.truncate(val1, 18, true) * Math.pow(2, 18) + this.truncate(val2, 18, true);
-                break;
-            case '_':
-            case '^_':
-                valNew = val1;
-                /*
-                 * While we always try to avoid assuming any particular number of bits of precision, the 'B' shift
-                 * operator (which we've converted to '^_') is unique to the MACRO-10 environment, which imposes the
-                 * following restrictions on the shift count.
-                 */
-                if (chOp == '^_') val2 = 35 - (val2 & 0xff);
-                if (val2) {
-                    /*
-                     * Since binary shifting is a logical (not arithmetic) operation, and since shifting by division only
-                     * works properly with positive numbers, we call truncate() to produce an unsigned value.
-                     */
-                    valNew = this.truncate(valNew, 0, true);
-                    if (val2 > 0) {
-                        valNew *= Math.pow(2, val2);
-                    } else {
-                        valNew = Math.trunc(valNew / Math.pow(2, -val2));
-                    }
-                }
-                break;
-            default:
-                return false;
-            }
-            aVals.push(this.truncate(valNew));
-        }
-        return true;
-    }
-
-    /**
-     * parseArray(asValues, iValue, iLimit, nBase, aUndefined)
-     *
-     * parseExpression() takes a complete expression and divides it into array elements, where even elements
-     * are values (which may be empty if two or more operators appear consecutively) and odd elements are operators.
-     *
-     * For example, if the original expression was "2*{3+{4/2}}", parseExpression() would call parseArray() with:
-     *
-     *      0   1   2   3   4   5   6   7   8   9  10  11  12  13  14
-     *      -   -   -   -   -   -   -   -   -   -  --  --  --  --  --
-     *      2   *       {   3   +       {   4   /   2   }       }
-     *
-     * This function takes care of recursively processing grouped expressions, by processing subsets of the array,
-     * as well as handling certain base overrides (eg, temporarily switching to base-10 for binary shift suffixes).
-     *
-     * @this {Debugger}
-     * @param {Array.<string>} asValues
-     * @param {number} iValue
-     * @param {number} iLimit
-     * @param {number} nBase
-     * @param {Array} [aUndefined]
-     * @returns {number|undefined}
-     */
-    parseArray(asValues, iValue, iLimit, nBase, aUndefined)
-    {
-        let value;
-        let sValue, sOp;
-        let fError = false;
-        let unary = 0;
-        let aVals = [], aOps = [];
-
-        let nBasePrev = this.nDefaultRadix;
-        this.nDefaultRadix = nBase;
-
-        while (iValue < iLimit) {
-            let v;
-            sValue = asValues[iValue++].trim();
-            sOp = (iValue < iLimit? asValues[iValue++] : "");
-
-            if (sValue) {
-                v = this.parseValue(sValue, undefined, aUndefined, unary);
-            } else {
-                if (sOp == '{') {
-                    let cOpen = 1;
-                    let iStart = iValue;
-                    while (iValue < iLimit) {
-                        sValue = asValues[iValue++].trim();
-                        sOp = (iValue < asValues.length? asValues[iValue++] : "");
-                        if (sOp == '{') {
-                            cOpen++;
-                        } else if (sOp == '}') {
-                            if (!--cOpen) break;
-                        }
-                    }
-                    v = this.parseArray(asValues, iStart, iValue-1, this.nDefaultRadix, aUndefined);
-                    if (v != null && unary) {
-                        v = this.parseUnary(v, unary);
-                    }
-                    sValue = (iValue < iLimit? asValues[iValue++].trim() : "");
-                    sOp = (iValue < iLimit? asValues[iValue++] : "");
-                }
-                else {
-                    /*
-                     * When parseExpression() calls us, it has collapsed all runs of whitespace into single spaces,
-                     * and although it allows single spaces to divide the elements of the expression, a space is neither
-                     * a unary nor binary operator.  It's essentially a no-op.  If we encounter it here, then it followed
-                     * another operator and is easily ignored (although perhaps it should still trigger a reset of nBase
-                     * and unary -- TBD).
-                     */
-                    if (sOp == ' ') {
-                        continue;
-                    }
-                    if (sOp == '^B') {
-                        this.nDefaultRadix = 2;
-                        continue;
-                    }
-                    if (sOp == '^O') {
-                        this.nDefaultRadix = 8;
-                        continue;
-                    }
-                    if (sOp == '^D') {
-                        this.nDefaultRadix = 10;
-                        continue;
-                    }
-                    if (!(unary & (0xC0000000|0))) {
-                        if (sOp == '+') {
-                            continue;
-                        }
-                        if (sOp == '-') {
-                            unary = (unary << 2) | 1;
-                            continue;
-                        }
-                        if (sOp == '~' || sOp == '^-') {
-                            unary = (unary << 2) | 2;
-                            continue;
-                        }
-                        if (sOp == '^L') {
-                            unary = (unary << 2) | 3;
-                            continue;
-                        }
-                    }
-                    fError = true;
-                    break;
-                }
-            }
-
-            if (v === undefined) {
-                if (aUndefined) {
-                    aUndefined.push(sValue);
-                    v = 0;
-                } else {
-                    fError = true;
-                    // aUndefined = [];
-                    break;
-                }
-            }
-
-            aVals.push(this.truncate(v));
-
-            /*
-             * When parseExpression() calls us, it has collapsed all runs of whitespace into single spaces,
-             * and although it allows single spaces to divide the elements of the expression, a space is neither
-             * a unary nor binary operator.  It's essentially a no-op.  If we encounter it here, then it followed
-             * a value, and since we don't want to misinterpret the next operator as a unary operator, we look
-             * ahead and grab the next operator if it's not preceded by a value.
-             */
-            if (sOp == ' ') {
-                if (iValue < asValues.length - 1 && !asValues[iValue]) {
-                    iValue++;
-                    sOp = asValues[iValue++]
-                } else {
-                    fError = true;
-                    break;
-                }
-            }
-
-            if (!sOp) break;
-
-            let aBinOp = (this.achGroup[0] == '<'? Debugger.DECOP_PRECEDENCE : Debugger.BINOP_PRECEDENCE);
-            if (!aBinOp[sOp]) {
-                fError = true;
-                break;
-            }
-            if (aOps.length && aBinOp[sOp] <= aBinOp[aOps[aOps.length - 1]]) {
-                this.evalOps(aVals, aOps, 1);
-            }
-            aOps.push(sOp);
-
-            /*
-             * The MACRO-10 binary shifting operator assumes a base-10 shift count, regardless of the current
-             * base, so we must override the current base to ensure the count is parsed correctly.
-             */
-            this.nDefaultRadix = (sOp == '^_')? 10 : nBase;
-            unary = 0;
-        }
-
-        if (fError || !this.evalOps(aVals, aOps) || aVals.length != 1) {
-            fError = true;
-        }
-
-        if (!fError) {
-            value = aVals.pop();
-
-        } else if (!aUndefined) {
-            this.printf("parse error (%s)\n", (sValue || sOp));
-        }
-
-        this.nDefaultRadix = nBasePrev;
-        return value;
-    }
-
-    /**
-     * parseASCII(expr, chDelim, nBits)
-     *
-     * @this {Debugger}
-     * @param {string} expr
-     * @param {string} chDelim
-     * @param {number} nBits (number of bits to store for each ASCII character)
-     * @returns {string|undefined}
-     */
-    parseASCII(expr, chDelim, nBits)
-    {
-        let i;
-        let cchMax = (this.nDefaultBits / nBits)|0;
-        while ((i = expr.indexOf(chDelim)) >= 0) {
-            let v = 0;
-            let j = i + 1;
-            let cch = cchMax;
-            while (j < expr.length) {
-                let ch = expr[j++];
-                if (ch == chDelim) {
-                    cch = -1;
-                    break;
-                }
-                if (!cch) break;
-                cch--;
-                let c = ch.charCodeAt(0);
-                if (nBits == 6) {
-                    c -= 0x20;
-                }
-                c &= ((1 << nBits) - 1);
-                v = this.truncate(v * Math.pow(2, nBits) + c, nBits * cchMax, true);
-            }
-            if (cch >= 0) {
-                this.printf("parse error (%c%s%c)\n", chDelim, expr, chDelim);
-                return undefined;
-            } else {
-                expr = expr.substr(0, i) + this.toBase(v) + expr.substr(j);
-            }
-        }
-        return expr;
-    }
-
-    /**
-     * parseExpression(expr, aUndefined)
-     *
-     * A quick-and-dirty expression parser.  It takes an expression like:
-     *
-     *      EDX+EDX*4+12345678
-     *
-     * and builds a value stack in aVals and a "binop" (binary operator) stack in aOps:
-     *
-     *      aVals       aOps
-     *      -----       ----
-     *      EDX         +
-     *      EDX         *
-     *      4           +
-     *      ...
-     *
-     * We pop 1 "binop" from aOps and 2 values from aVals whenever a "binop" of lower priority than its
-     * predecessor is encountered, evaluate, and push the result back onto aVals.  Only selected unary
-     * operators are supported (eg, negate and complement); no ternary operators like '?:' are supported.
-     *
-     * aUndefined can be used to pass an array that collects any undefined variables that parseExpression()
-     * encounters; the value of an undefined variable is zero.  This mode was added for components that need
-     * to support expressions containing "fixups" (ie, values that must be determined later).
-     *
-     * @this {Debugger}
-     * @param {string|undefined} expr
-     * @param {Array} [aUndefined] (collects any undefined variables)
-     * @returns {number|undefined} numeric value, or undefined if expr contains any undefined or invalid values
-     */
-    parseExpression(expr, aUndefined)
-    {
-        let value;
-        if (expr) {
-            /*
-             * The default delimiting characters for grouped expressions are braces; they can be changed by altering
-             * achGroup, but when that happens, instead of changing our regular expressions and operator tables,
-             * we simply replace all achGroup characters with braces in the given expression.
-             *
-             * Why not use parentheses for grouped expressions?  Because some debuggers use parseReference() to perform
-             * parenthetical value replacements in message strings, and they don't want parentheses taking on a different
-             * meaning.  And for some machines, like the PDP-10, the convention is to use parentheses for other things,
-             * like indexed addressing, and to use angle brackets for grouped expressions.
-             */
-            if (this.achGroup[0] != '{') {
-                expr = expr.split(this.achGroup[0]).join('{').split(this.achGroup[1]).join('}');
-            }
-
-            /*
-             * Quoted ASCII characters can have a numeric value, too, which must be converted now, to avoid any
-             * conflicts with the operators below.
-             *
-             * NOTE: MACRO-10 packs up to 5 7-bit ASCII codes from a double-quoted value, and up to 6 6-bit ASCII
-             * (SIXBIT) codes from a sinqle-quoted value.
-             */
-            expr = this.parseASCII(expr, '"', this.nASCIIBits);
-            if (!expr) return value;
-            expr = this.parseASCII(expr, "'", 6);
-            if (!expr) return value;
-
-            /*
-             * All browsers (including, I believe, IE9 and up) support the following idiosyncrasy of a RegExp split():
-             * when the RegExp uses a capturing pattern, the resulting array will include entries for all the pattern
-             * matches along with the non-matches.  This effectively means that, in the set of expressions that we
-             * support, all even entries in asValues will contain "values" and all odd entries will contain "operators".
-             *
-             * Although I started listing the operators in the RegExp in "precedential" order, that's not important;
-             * what IS important is listing operators that contain shorter operators first.  For example, bitwise
-             * shift operators must be listed BEFORE the logical less-than or greater-than operators.  The aBinOp tables
-             * (BINOP_PRECEDENCE and DECOP_PRECEDENCE) are what determine precedence, not the RegExp.
-             *
-             * Also, to better accommodate MACRO-10 syntax, I've replaced the single '^' for XOR with '^!', and I've
-             * added '!' as an alias for '|' (bitwise inclusive-or), '^-' as an alias for '~' (one's complement operator),
-             * and '_' as a shift operator (+/- values specify a left/right shift, and the count is not limited to 32).
-             *
-             * And to avoid conflicts with MACRO-10 syntax, I've replaced the original mod operator ('%') with '^/'.
-             *
-             * The MACRO-10 binary shifting suffix ('B') is a bit more problematic, since a capital B can also appear
-             * inside symbols, or inside hex values.  So if the default base is NOT 16, then I pre-scan for that suffix
-             * and replace all non-symbolic occurrences with an internal shift operator ('^_').
-             *
-             * Note that parseInt(), which parseValue() relies on, supports both the MACRO-10 base prefix overrides
-             * and the binary shifting suffix ('B'), but since that suffix can also be a bracketed expression, we have to
-             * support it here as well.
-             *
-             * MACRO-10 supports only a subset of all the PCjs operators; for example, MACRO-10 doesn't support any of
-             * the boolean logical/compare operators.  But unless we run into conflicts, I prefer sticking with this
-             * common set of operators.
-             *
-             * All whitespace in the expression is collapsed to single spaces, and space has been added to the list
-             * of "operators", but its sole function is as a separator, not as an operator.  parseArray() will ignore
-             * single spaces as long as they are preceded and/or followed by a "real" operator.  It would be dangerous
-             * to remove spaces entirely, because if an operator-less expression like "A B" was passed in, we would want
-             * that to generate an error; if we converted it to "AB", evaluation might inadvertently succeed.
-             */
-            let regExp = /({|}|\|\||&&|\||\^!|\^B|\^O|\^D|\^L|\^-|~|\^_|_|&|!=|!|==|>=|>>>|>>|>|<=|<<|<|-|\+|\^\/|\/|\*|,,| )/;
-            if (this.nDefaultRadix != 16) {
-                expr = expr.replace(/(^|[^A-Z0-9$%.])([0-9]+)B/, "$1$2^_").replace(/\s+/g, ' ');
-            }
-            let asValues = expr.split(regExp);
-            value = this.parseArray(asValues, 0, asValues.length, this.nDefaultRadix, aUndefined);
-        }
-        return value;
-    }
-
-    /**
-     * parseUnary(value, unary)
-     *
-     * unary is actually a small "stack" of unary operations encoded in successive pairs of bits.
-     * As parseExpression() encounters each unary operator, unary is shifted left 2 bits, and the
-     * new unary operator is encoded in bits 0 and 1 (0b00 is none, 0b01 is negate, 0b10 is complement,
-     * and 0b11 is reserved).  Here, we process the bits in reverse order (hence the stack-like nature),
-     * ensuring that we process the unary operators associated with this value right-to-left.
-     *
-     * Since bitwise operators see only 32 bits, more than 16 unary operators cannot be supported
-     * using this method.  We'll let parseExpression() worry about that; if it ever happens in practice,
-     * then we'll have to switch to a more "expensive" approach (eg, an actual array of unary operators).
-     *
-     * @this {Debugger}
-     * @param {number} value
-     * @param {number} unary
-     * @returns {number}
-     */
-    parseUnary(value, unary)
-    {
-        while (unary) {
-            let bit;
-            switch(unary & 0o3) {
-            case 1:
-                value = -this.truncate(value);
-                break;
-            case 2:
-                value = this.evalXOR(value, -1);        // this is easier than adding an evalNOT()...
-                break;
-            case 3:
-                bit = 35;                               // simple left-to-right zero-bit-counting loop...
-                while (bit >= 0 && !this.evalAND(value, Math.pow(2, bit))) bit--;
-                value = 35 - bit;
-                break;
-            }
-            unary >>>= 2;
-        }
-        return value;
-    }
-
-    /**
-     * parseValue(sValue, sName, aUndefined, unary)
-     *
-     * @this {Debugger}
-     * @param {string} [sValue]
-     * @param {string} [sName] is the name of the value, if any
-     * @param {Array} [aUndefined]
-     * @param {number} [unary] (0 for none, 1 for negate, 2 for complement, 3 for leading zeros)
-     * @returns {number|undefined} numeric value, or undefined if sValue is either undefined or invalid
-     */
-    parseValue(sValue, sName, aUndefined, unary = 0)
-    {
-        let value;
-        if (sValue != undefined) {
-            value = this.getRegister(sValue.toUpperCase());
-            if (value == undefined) {
-                value = this.getSymbol(sValue);
-                if (value == undefined) {
-                    value = this.getVariable(sValue);
-                    if (value == undefined) {
-                        /*
-                         * A feature of MACRO-10 is that any single-digit number is automatically interpreted as base-10.
-                         */
-                        value = this.parseInt(sValue, sValue.length > 1 || this.nDefaultRadix > 10? this.nDefaultRadix : 10);
-                    } else {
-                        let sUndefined = this.getVariableFixup(sValue);
-                        if (sUndefined) {
-                            if (aUndefined) {
-                                aUndefined.push(sUndefined);
-                            } else {
-                                let valueUndefined = this.parseExpression(sUndefined, aUndefined);
-                                if (valueUndefined !== undefined) {
-                                    value += valueUndefined;
-                                } else {
-                                    if (MAXDEBUG) this.printf("undefined %s: %s (%s)\n", (sName || "value"), sValue, sUndefined);
-                                    value = undefined;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (value != undefined) {
-                value = this.truncate(this.parseUnary(value, unary));
-            } else {
-                if (MAXDEBUG) this.printf("invalid %s: %s\n", (sName || "value"), sValue);
-            }
-        } else {
-            if (MAXDEBUG) this.printf("missing %s\n", (sName || "value"));
-        }
-        return value;
-    }
-
-    /**
-     * truncate(v, nBits, fUnsigned)
-     *
-     * @this {Debugger}
-     * @param {number} v
-     * @param {number} [nBits]
-     * @param {boolean} [fUnsigned]
-     * @returns {number}
-     */
-    truncate(v, nBits, fUnsigned)
-    {
-        let limit, vNew = v;
-        nBits = nBits || this.nDefaultBits;
-
-        if (fUnsigned) {
-            if (nBits == 32) {
-                vNew = v >>> 0;
-            }
-            else if (nBits < 32) {
-                vNew = v & ((1 << nBits) - 1);
-            }
-            else {
-                limit = Math.pow(2, nBits);
-                if (v < 0 || v >= limit) {
-                    vNew = v % limit;
-                    if (vNew < 0) vNew += limit;
-                }
-            }
-        }
-        else {
-            if (nBits <= 32) {
-                vNew = (v << (32 - nBits)) >> (32 - nBits);
-            }
-            else {
-                limit = Math.pow(2, nBits - 1);
-                if (v >= limit) {
-                    vNew = (v % limit);
-                    if (((v / limit)|0) & 1) vNew -= limit;
-                } else if (v < -limit) {
-                    vNew = (v % limit);
-                    if ((((-v - 1) / limit) | 0) & 1) {
-                        if (vNew) vNew += limit;
-                    }
-                    else {
-                        if (!vNew) vNew -= limit;
-                    }
-                }
-            }
-        }
-        if (v != vNew) {
-            if (MAXDEBUG) this.printf("warning: value %d truncated to %d\n", v, vNew);
-            v = vNew;
-        }
-        return v;
-    }
-
-    /**
-     * addBreakAddress(address, aBreakAddress)
-     *
-     * @this {Debugger}
-     * @param {Address} address
-     * @param {Array} aBreakAddress
-     * @returns {number} (>= 0 if added, < 0 if not)
-     */
-    addBreakAddress(address, aBreakAddress)
-    {
-        let entry = this.findBreakEntry(address, aBreakAddress);
-        if (entry >= 0) {
-            entry = -(entry + 1);
-        } else {
-            for (entry = 0; entry < aBreakAddress.length; entry++) {
-                if (aBreakAddress[entry] == undefined) break;
-            }
-            aBreakAddress[entry] = address;
-        }
-        return entry;
-    }
-
-    /**
-     * addBreakIndex(type, entry)
-     *
-     * @this {Debugger}
-     * @param {number} type
-     * @param {number} entry
-     * @returns {number} (new index)
-     */
-    addBreakIndex(type, entry)
-    {
-        let index;
-        for (index = 0; index < this.aBreakIndexes.length; index++) {
-            if (this.aBreakIndexes[index] == undefined) break;
-        }
-        this.aBreakIndexes[index] = (type << 8) | entry;
-        return index;
-    }
-
-    /**
-     * clearBreak(index)
-     *
-     * @this {Debugger}
-     * @param {number} index
-     * @returns {string}
-     */
-    clearBreak(index)
-    {
-        if (index < -1) {
-            return this.enumBreak(this.clearBreak);
-        }
-        let isEmpty = function(aBreaks) {
-            for (let i = 0; i < aBreaks.length; i++) {
-                if (aBreaks[i] != undefined) return false;
-            }
-            return true;
-        };
-        let result = "";
-        if (index >= 0) {
-            let mapping = this.aBreakIndexes[index];
-            if (mapping != undefined) {
-                let type = mapping >> 8;
-                let entry = mapping & 0xff;
-                let bus = this.aBreakBuses[type];
-                if (!bus) {
-                    result = "invalid bus";
-                } else {
-                    let success;
-                    let aBreakAddress = this.aaBreakAddress[type];
-                    let address = aBreakAddress[entry];
-
-                    if (!(type & 1)) {
-                        success = bus.untrapRead(address.off, this.aBreakChecks[type]);
-                    } else {
-                        success = bus.untrapWrite(address.off, this.aBreakChecks[type]);
-                    }
-                    if (success) {
-                        aBreakAddress[entry] = undefined;
-                        this.aBreakIndexes[index] = undefined;
-                        if (isEmpty(aBreakAddress)) {
-                            aBreakAddress.length = 0;
-                            if (isEmpty(this.aBreakIndexes)) {
-                                this.aBreakIndexes.length = 0;
-                            }
-                        }
-                        result = this.sprintf("%2d: %s %*a cleared\n", index, Debugger.BREAKCMD[type], bus.addrWidth, address);
-                        if (!--this.cBreaks) {
-                            if (!this.historyForced) result += this.enableHistory(false);
-                        }
-
-                    } else {
-                        result = this.sprintf("invalid break address: %*a\n", bus.addrWidth, address);
-                    }
-                }
-            } else {
-                result = this.sprintf("invalid break index: %d\n", index);
-            }
-        } else {
-            result = "missing break index\n";
-        }
-        return result;
-    }
-
-    /**
-     * clearTemp(addr)
-     *
-     * Clears the current temporary break address if it matches the specified physical address.
-     *
-     * @this {Debugger}
-     * @param {number} [addr]
-     */
-    clearTemp(addr)
-    {
-        if (this.tempBreak) {                   // if there's a previous temp break address
-            if (addr == undefined || this.tempBreak.off == addr) {
-                let index = this.findBreak(this.tempBreak);
-                if (index >= 0) {               // and it wasn't already cleared via other means
-                    this.clearBreak(index);     // then clear it now
-                }
-                this.tempBreak = null;
-            }
-        }
-    }
-
-    /**
-     * enableBreak(index, enable)
-     *
-     * @this {Debugger}
-     * @param {number} index
-     * @param {boolean} [enable]
-     * @returns {string}
-     */
-    enableBreak(index, enable = false)
-    {
-        if (index < -1) {
-            return this.enumBreak(this.enableBreak, enable);
-        }
-        let result = "";
-        if (index >= 0) {
-            let mapping = this.aBreakIndexes[index];
-            if (mapping != undefined) {
-                let success = true;
-                let type = mapping >> 8;
-                let entry = mapping & 0xff;
-                let aBreakAddress = this.aaBreakAddress[type];
-                let address = aBreakAddress[entry];
-                if (address != undefined) {
-                    let action = enable? "enabled" : "disabled";
-                    let bus = this.aBreakBuses[type];
-                    if (!address.disabled == !enable) {
-                        address.disabled = !enable;
-                        result = this.sprintf("%2d: %s %*a %s\n", index, Debugger.BREAKCMD[type], bus.addrWidth, address, action);
-                    } else {
-                        result = this.sprintf("%2d: %s %*a already %s\n", index, Debugger.BREAKCMD[type], bus.addrWidth, address, action);
-                    }
-                } else {
-                    result = this.sprintf("no break address at index: %d\n", index);
-
-                }
-            } else {
-                result = this.sprintf("invalid break index: %d\n", index);
-            }
-        } else {
-            result = "missing break index\n";
-        }
-        return result;
-    }
-
-    /**
-     * enumBreak(func, option)
-     *
-     * @param {function(number,(boolean|undefined))} func
-     * @param {boolean} [option]
-     * @returns {string}
-     */
-    enumBreak(func, option)
-    {
-        let result = "";
-        for (let index = 0; index < this.aBreakIndexes.length; index++) {
-            if (this.aBreakIndexes[index] == undefined) continue;
-            result += func.call(this, index, option);
-        }
-        if (!result) result = "no break addresses found";
-        return result;
-    }
-
-    /**
-     * findBreak(address, type)
-     *
-     * @this {Debugger}
-     * @param {Address} address
-     * @param {number} [type] (default is BREAKTYPE.READ)
-     * @returns {number} (index of break address, -1 if not found)
-     */
-    findBreak(address, type = Debugger.BREAKTYPE.READ)
-    {
-        let index = -1;
-        let entry = this.findBreakEntry(address, this.aaBreakAddress[type]);
-        if (entry >= 0) {
-            for (let i = 0; i < this.aBreakIndexes.length; i++) {
-                let mapping = this.aBreakIndexes[i];
-                if (mapping != undefined && type == (mapping >> 8) && entry == (mapping & 0xff)) {
-                    index = i;
-                    break;
-                }
-            }
-        }
-        return index;
-    }
-
-    /**
-     * findBreakAddr(addr, type)
-     *
-     * @this {Debugger}
-     * @param {number} addr
-     * @param {number} [type] (default is BREAKTYPE.READ)
-     * @returns {Address|undefined} (matching break Address, undefined if not found)
-     */
-    findBreakAddr(addr, type = Debugger.BREAKTYPE.READ)
-    {
-        let aBreakAddress = this.aaBreakAddress[type];
-        for (let i = 0; i < aBreakAddress.length; i++) {
-            let address = aBreakAddress[i];
-            if (address.off == addr) return address;
-        }
-        return undefined;
-    }
-
-    /**
-     * findBreakEntry(address, aBreakAddress)
-     *
-     * @this {Debugger}
-     * @param {Address} address
-     * @param {Array} aBreakAddress
-     * @returns {number} (matching break Address entry, -1 if not found)
-     */
-    findBreakEntry(address, aBreakAddress)
-    {
-        for (let i = 0; i < aBreakAddress.length; i++) {
-            if (aBreakAddress[i].off == address.off) return i;
-        }
-        return -1;
-    }
-
-    /**
-     * listBreak(fCommands)
-     *
-     * @this {Debugger}
-     * @param {boolean} [fCommands] (true to generate a list of break commands for saveState())
-     * @returns {string}
-     */
-    listBreak(fCommands = false)
-    {
-        let result = "";
-        for (let index = 0; index < this.aBreakIndexes.length; index++) {
-            let mapping = this.aBreakIndexes[index];
-            if (mapping == undefined) continue;
-            let type = mapping >> 8;
-            let entry = mapping & 0xff;
-            let address = this.aaBreakAddress[type][entry];
-            let bus = this.aBreakBuses[type];
-            let command = this.sprintf("%s %*a", Debugger.BREAKCMD[type], bus.addrWidth, address);
-            if (fCommands) {
-                if (result) result += ';';
-                result += command;
-                if (address.disabled) result += ";bd " + index;
-            } else {
-                result += this.sprintf("%2d: %s %s\n", index, command, address.disabled? "disabled" : "enabled");
-            }
-        }
-        if (!result) {
-            if (!fCommands) result = "no break addresses found\n";
-        }
-        return result;
-    }
-
-    /**
-     * setBreak(address, type)
-     *
-     * @this {Debugger}
-     * @param {Address} [address]
-     * @param {number} [type] (default is BREAKTYPE.READ)
-     * @returns {string}
-     */
-    setBreak(address, type = Debugger.BREAKTYPE.READ)
-    {
-        let result = "";
-        if (address) {
-            let success;
-            let bus = this.aBreakBuses[type];
-            if (!bus) {
-                result = "invalid bus";
-            } else {
-                let entry = this.addBreakAddress(address, this.aaBreakAddress[type]);
-                if (entry >= 0) {
-                    if (!(type & 1)) {
-                        success = bus.trapRead(address.off, this.aBreakChecks[type]);
-                    } else {
-                        success = bus.trapWrite(address.off, this.aBreakChecks[type]);
-                    }
-                    if (success) {
-                        let index = this.addBreakIndex(type, entry);
-                        result = this.sprintf("%2d: %s %*a set\n", index, Debugger.BREAKCMD[type], bus.addrWidth, address);
-                        if (!this.cBreaks++) {
-                            if (!this.historyBuffer.length) result += this.enableHistory(true);
-                        }
-                    } else {
-                        result = this.sprintf("invalid break address: %*a\n", bus.addrWidth, address);
-                        this.aaBreakAddress[type][entry] = undefined;
-                    }
-                } else {
-                    result = this.sprintf("%s %*a already set\n", Debugger.BREAKCMD[type], bus.addrWidth, address);
-                }
-            }
-        } else {
-            result = "missing break address\n";
-        }
-        return result;
-    }
-
-    /**
-     * setBreakCounter(n)
-     *
-     * Set number of instructions to execute before breaking.
-     *
-     * @this {Debugger}
-     * @param {number} n (-1 if no number was supplied, so just display current counter)
-     * @returns {string}
-     */
-    setBreakCounter(n)
-    {
-        let result = "";
-        if (n >= 0) this.counterBreak = n;
-        result += "instruction break count: " + (this.counterBreak > 0? this.counterBreak : "disabled") + "\n";
-        if (n > 0) {
-            /*
-             * It doesn't hurt to always call enableHistory(), but avoiding the call minimizes unnecessary messages.
-             */
-            if (!this.historyBuffer.length) result += this.enableHistory(true);
-            this.historyForced = true;
-        }
-        return result;
-    }
-
-    /**
-     * setBreakMessage(option)
-     *
-     * Set message(s) to break on when we are notified of being printed.
-     *
-     * @this {Debugger}
-     * @param {string} option
-     * @returns {string}
-     */
-    setBreakMessage(option)
-    {
-        let result;
-        if (option) {
-            let on = this.parseBoolean(option);
-            if (on != undefined) {
-                this.messagesBreak = on? MESSAGE.ALL : MESSAGE.NONE;
-            } else {
-                result = this.sprintf("unrecognized message option: %s\n", option);
-            }
-        }
-        if (!result) {
-            result = this.sprintf("break on message: %b\n", !!this.messagesBreak);
-        }
-        return result;
-    }
-
-    /**
-     * setTemp(address)
-     *
-     * @this {Debugger}
-     * @param {Address} address
-     */
-    setTemp(address)
-    {
-        this.tempBreak = address;
-    }
-
-    /**
-     * checkInput(base, offset, value)
-     *
-     * @this {Debugger}
-     * @param {number|undefined} base
-     * @param {number} offset
-     * @param {number} value
-     */
-    checkInput(base, offset, value)
-    {
-        if (this.cBreakIgnore) return;
-        if (base == undefined) {
-            this.stopCPU("break on unknown input %#0x: %#0x", offset, value);
-        } else {
-            let addr = base + offset;
-            let address = this.findBreakAddr(addr, Debugger.BREAKTYPE.INPUT);
-            if (address && !address.disabled) {
-                this.stopCPU("break on input %*a: %#0x", this.busIO.addrWidth, address, value);
-            }
-        }
-    }
-
-    /**
-     * checkOutput(base, offset, value)
-     *
-     * @this {Debugger}
-     * @param {number|undefined} base
-     * @param {number} offset
-     * @param {number} value
-     */
-    checkOutput(base, offset, value)
-    {
-        if (this.cBreakIgnore) return;
-        if (base == undefined) {
-            this.stopCPU("break on unknown output %#0x: %#0x", offset, value);
-        } else {
-            let addr = base + offset;
-            let address = this.findBreakAddr(addr, Debugger.BREAKTYPE.OUTPUT);
-            if (address && !address.disabled) {
-                this.stopCPU("break on output %*a: %#0x", this.busIO.addrWidth, address, value);
-            }
-        }
-    }
-
-    /**
-     * checkRead(base, offset, value)
-     *
-     * If historyBuffer has been allocated, then we need to record all instruction fetches, which we
-     * distinguish as reads where the physical address matches cpu.regPCLast.
-     *
-     * TODO: Additional logic will be required for machines where the logical PC differs from the physical
-     * address (eg, machines with segmentation or paging enabled), but that's an issue for another day.
-     *
-     * @this {Debugger}
-     * @param {number|undefined} base
-     * @param {number} offset
-     * @param {number} value
-     */
-    checkRead(base, offset, value)
-    {
-        if (this.cBreakIgnore) return;
-        if (base == undefined) {
-            this.stopCPU("break on unknown read %#0x: %#0x", offset, value);
-        } else {
-            let addr = base + offset;
-            if (this.historyBuffer.length) {
-                if (addr == this.cpu.regPCLast) {
-                    this.cInstructions++;
-                    if (this.counterBreak > 0) {
-                        if (!--this.counterBreak) {
-                            this.stopCPU("break on instruction count");
-                        }
-                    }
-                    this.historyBuffer[this.historyNext++] = addr;
-                    if (this.historyNext == this.historyBuffer.length) this.historyNext = 0;
-                }
-            }
-            let address = this.findBreakAddr(addr, Debugger.BREAKTYPE.READ);
-            if (address && !address.disabled) {
-                this.stopCPU("break on read %*a: %#0x", this.busMemory.addrWidth, address, value);
-                this.clearTemp(addr);
-            }
-        }
-    }
-
-    /**
-     * checkWrite(base, offset, value)
-     *
-     * @this {Debugger}
-     * @param {number|undefined} base
-     * @param {number} offset
-     * @param {number} value
-     */
-    checkWrite(base, offset, value)
-    {
-        if (this.cBreakIgnore) return;
-        if (base == undefined) {
-            this.stopCPU("break on unknown write %#0x: %#0x", offset, value);
-        } else {
-            let addr = base + offset;
-            let address = this.findBreakAddr(addr, Debugger.BREAKTYPE.WRITE);
-            if (address && !address.disabled) {
-                this.stopCPU("break on write %*a: %#0x", this.busMemory.addrWidth, address, value);
-            }
-        }
-    }
-
-    /**
-     * checkVirtualRead(addrVirtual, length)
-     *
-     * @this {Debugger}
-     * @param {number} addrVirtual
-     * @param {number} length
-     */
-    checkVirtualRead(addrVirtual, length)
-    {
-    }
-
-    /**
-     * checkVirtualWrite(addrVirtual, length)
-     *
-     * @this {Debugger}
-     * @param {number} addrVirtual
-     * @param {number} length
-     */
-    checkVirtualWrite(addrVirtual, length)
-    {
-    }
-
-    /**
-     * stopCPU(message, ...args)
-     *
-     * @this {Debugger}
-     * @param {string} message
-     * @param {...} [args]
-     */
-    stopCPU(message, args)
-    {
-        message = this.sprintf(message, ...args);
-        if (this.time.isRunning() && this.fExceptionOnBreak) {
-            /*
-             * We don't print the message in this case, because the CPU's exception handler already
-             * does that; it has to be prepared for any kind of exception, not just those that we throw.
-             */
-            throw new Error(message);
-        }
-        this.println(message);
-        this.time.stop();
-    }
-
-    /**
-     * dumpAddress(address, bus)
-     *
-     * All this function currently supports are physical (Bus) addresses, but that will change.
-     *
-     * @this {Debugger}
-     * @param {Address} address
-     * @param {Bus} [bus] (default is busMemory)
-     * @returns {string}
-     */
-    dumpAddress(address, bus = this.busMemory)
-    {
-        return this.toBase(address.off, this.nDefaultRadix, bus.addrWidth, "");
-    }
-
-    /**
-     * dumpHistory(index)
-     *
-     * The index parameter is interpreted as the number of instructions to rewind; if you also
-     * specify a length, then that limits the number of instructions to display from the index point.
-     *
-     * @this {Debugger}
-     * @param {number} index
-     * @param {number} [length]
-     * @returns {string}
-     */
-    dumpHistory(index, length = 10)
-    {
-        let result = "";
-        if (this.historyBuffer.length) {
-            let address, opcodes = [];
-            if (length > this.historyBuffer.length) {
-                length = this.historyBuffer.length;
-            }
-            if (index < 0) index = length;
-            let i = this.historyNext - index;
-            if (i < 0) i += this.historyBuffer.length;
-            while (i >= 0 && i < this.historyBuffer.length && length > 0) {
-                let addr = this.historyBuffer[i++];
-                if (addr == undefined) break;
-                if (i == this.historyBuffer.length) i = 0;
-                if (address) {
-                    address.off = addr;
-                } else {
-                    address = this.newAddress(addr);
-                }
-                for (let j = 0; j < this.maxOpcodeLength; j++) {
-                    opcodes[j] = this.readAddress(address, 1);
-                }
-                this.addAddress(address, -opcodes.length);
-                result += this.unassemble(address, opcodes, this.sprintf("[%6d]", index--));
-                length--;
-            }
-        }
-        return result || "no history";
-    }
-
-    /**
-     * dumpInstruction(address, length)
-     *
-     * @this {Debugger}
-     * @param {Address|number} address
-     * @param {number} length
-     * @returns {string}
-     */
-    dumpInstruction(address, length)
-    {
-        let opcodes = [], result = "";
-        address = this.makeAddress(address);
-        while (length--) {
-            this.addAddress(address, opcodes.length);
-            while (opcodes.length < this.maxOpcodeLength) {
-                opcodes.push(this.readAddress(address, 1));
-            }
-            this.addAddress(address, -opcodes.length);
-            result += this.unassemble(address, opcodes);
-        }
-        return result;
-    }
-
-    /**
-     * dumpMemory(address, bits, length, format, ioBus)
-     *
-     * @this {Debugger}
-     * @param {Address} [address] (default is addressData; advanced by the length of the dump)
-     * @param {number} [bits] (default size is the memory bus data width; e.g., 8 bits)
-     * @param {number} [length] (default length of dump is 128 values)
-     * @param {string} [format] (formatting options; only 'y' for binary output is currently supported)
-     * @param {boolean} [useIO] (true for busIO; default is busMemory)
-     * @returns {string}
-     */
-    dumpMemory(address, bits, length, format, useIO)
-    {
-        let result = "";
-        let bus = useIO? this.busIO : this.busMemory;
-        if (!bits) bits = bus.dataWidth;
-        let size = bits >> 3;
-        if (!length) length = 128;
-        let fASCII = false, cchBinary = 0;
-        let cLines = ((length + 15) >> 4) || 1;
-        let cbLine = (size == 4? 16 : this.nDefaultRadix);
-        if (format == 'y') {
-            cbLine = size;
-            cLines = length;
-            cchBinary = size * 8;
-        }
-        if (!address) address = this.addressData;
-        while (cLines-- && length > 0) {
-            let data = 0, iByte = 0, i;
-            let sData = "", sChars = "";
-            let sAddress = this.dumpAddress(address, bus);
-            for (i = cbLine; i > 0 && length > 0; i--) {
-                let b = this.readAddress(address, 1, bus);
-                data |= (b << (iByte++ << 3));
-                if (iByte == size) {
-                    sData += this.toBase(data, 0, bits, "");
-                    sData += (size == 1? (i == 9? '-' : ' ') : " ");
-                    if (cchBinary) sChars += this.toBase(data, 2, bits, "");
-                    data = iByte = 0;
-                }
-                if (!cchBinary) sChars += (b >= 32 && b < 127? String.fromCharCode(b) : (fASCII? '' : '.'));
-                length--;
-            }
-            if (result) result += '\n';
-            if (fASCII) {
-                result += sChars;
-            } else {
-                result += sAddress + "  " + sData + " " + sChars;
-            }
-        }
-        this.addressData = address;
-        return result;
-    }
-
-    /**
-     * dumpState()
-     *
-     * Simulate what the Machine class does to obtain the current state of the entire machine.
-     *
-     * @this {Debugger}
-     * @returns {string}
-     */
-    dumpState()
-    {
-        let state = [];
-        this.enumDevices(function enumDevice(device) {
-            if (device.onSave) device.onSave(state);
-            return true;
-        });
-        return JSON.stringify(state, null, 2);
-    }
-
-    /**
-     * editMemory(address, values, useIO)
-     *
-     * @this {Debugger}
-     * @param {Address|undefined} address
-     * @param {Array.<number>} values
-     * @param {boolean} [useIO] (true for busIO; default is busMemory)
-     * @returns {string}
-     */
-    editMemory(address, values, useIO)
-    {
-        let count = 0, result = "";
-        let bus = useIO? this.busIO : this.busMemory;
-        for (let i = 0; address != undefined && i < values.length; i++) {
-            let prev = this.readAddress(address, 0, bus);
-            if (prev == undefined) break;
-            this.writeAddress(address, values[i], bus);
-            result += this.sprintf("%*a: %#*n changed to %#*n\n", this.busMemory.addrWidth, address, this.busMemory.dataWidth, prev, this.busMemory.dataWidth, values[i]);
-            this.addAddress(address, 1, bus);
-            count++;
-        }
-        if (!count) result += this.sprintf("%d locations updated\n", count);
-        this.time.update();
-        return result;
-    }
-
-    /**
-     * enableHistory(enable)
-     *
-     * History refers to instruction execution history, which means we want to trap every read where
-     * the requested address is the first byte of an instruction.  So if history is being enabled, we
-     * preallocate an array to record every such physical address.
-     *
-     * The upside to this approach is that no special hooks are required inside the CPU, since we are
-     * simply leveraging the Bus' ability to use different read handlers for all ROM and RAM blocks.
-     *
-     * @this {Debugger}
-     * @param {boolean} [enable] (if undefined, then we simply return the current history status)
-     * @returns {string}
-     */
-    enableHistory(enable)
-    {
-        let result = "";
-        if (enable != undefined) {
-            if (enable == !this.historyBuffer.length) {
-                let cBlocks = 0;
-                cBlocks += this.busMemory.enumBlocks(Memory.TYPE.READABLE, (block) => {
-                    if (enable) {
-                        this.busMemory.trapRead(block.addr, this.aBreakChecks[Debugger.BREAKTYPE.READ]);
-                    } else {
-                        this.busMemory.untrapRead(block.addr, this.aBreakChecks[Debugger.BREAKTYPE.READ]);
-                    }
-                });
-                if (cBlocks) {
-                    if (enable) {
-                        this.historyNext = 0;
-                        this.historyBuffer = new Array(Debugger.HISTORY_LIMIT);
-                    } else {
-                        this.historyBuffer = [];
-                    }
-                }
-            }
-        }
-        result += this.sprintf("instruction history %s\n", this.historyBuffer.length? "enabled" : "disabled");
-        return result;
-    }
-
-    /**
-     * loadState(state)
-     *
-     * @this {Debugger}
-     * @param {Array} state
-     * @returns {boolean}
-     */
-    loadState(state)
-    {
-        let idDevice = state.shift();
-        if (this.idDevice == idDevice) {
-            this.parseCommands(state.shift());
-            this.machine.messages = state.shift();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * notifyMessage(messages)
-     *
-     * Provides the Debugger with a notification whenever a message is being printed, along with the messages bits;
-     * if any of those bits are set in messagesBreak, we break (ie, we stop the CPU).
-     *
-     * @this {Debugger}
-     * @param {number} messages
-     */
-    notifyMessage(messages)
-    {
-        if (this.testBits(this.messagesBreak, messages)) {
-            this.stopCPU("break on message");
-            return;
-        }
-        /*
-         * This is an effort to help keep the browser responsive when lots of messages are being generated.
-         */
-        this.time.yield();
-    }
-
-    /**
-     * onCommand(aTokens)
-     *
-     * Processes basic debugger commands.
-     *
-     * @this {Debugger}
-     * @param {Array.<string>} aTokens ([0] contains the entire command line; [1] and up contain tokens from the command)
-     * @returns {string|undefined}
-     */
-    onCommand(aTokens)
-    {
-        let cmd = aTokens[1], option = aTokens[2], values = [], aUndefined = [];
-        let expr, name, index, address, bits, length, enable, useIO = false, result = "";
-
-        this.fStepQuietly = undefined;
-
-        if (option == '*') {
-            index = -2;
-        } else {
-            index = this.parseInt(option);
-            if (index == undefined) index = -1;
-            address = this.parseAddress(option, aUndefined);
-            if (address === null) return undefined;
-        }
-
-        length = 0;
-        if (aTokens[3]) {
-            length = this.parseInt(aTokens[3].substr(aTokens[3][0] == 'l'? 1 : 0)) || 8;
-        }
-        for (let i = 3; i < aTokens.length; i++) values.push(this.parseInt(aTokens[i], 16));
-
-        if (cmd == 'd') {
-            let dump = this.checkDumper(option, values);
-            if (dump != undefined) return dump;
-            cmd = this.sDumpPrev || cmd;
-        }
-
-        /*
-         * We refrain from reporting potentially undefined symbols until after we've checked for dump extensions.
-         */
-        if (cmd[0] != 's' && aUndefined.length) {
-            return "unrecognized symbol(s): " + aUndefined;
-        }
-
-        switch(cmd[0]) {
-        case 'b':
-            if (cmd[1] == 'c') {
-                result = this.clearBreak(index);
-            } else if (cmd[1] == 'd') {
-                result = this.enableBreak(index);
-            } else if (cmd[1] == 'e') {
-                result = this.enableBreak(index, true);
-            } else if (cmd[1] == 'i') {
-                result = this.setBreak(address, Debugger.BREAKTYPE.INPUT);
-            } else if (cmd[1] == 'l') {
-                result = this.listBreak();
-            } else if (cmd[1] == 'm') {
-                result = this.setBreakMessage(option);
-            } else if (cmd[1] == 'n') {
-                result = this.setBreakCounter(index);
-            } else if (cmd[1] == 'o') {
-                result = this.setBreak(address, Debugger.BREAKTYPE.OUTPUT);
-            } else if (cmd[1] == 'r') {
-                result = this.setBreak(address, Debugger.BREAKTYPE.READ);
-            } else if (cmd[1] == 'w') {
-                result = this.setBreak(address, Debugger.BREAKTYPE.WRITE);
-            } else if (cmd[1] == '?') {
-                result = "break commands:\n";
-                Debugger.BREAK_COMMANDS.forEach((cmd) => {result += cmd + '\n';});
-                break;
-            } else if (cmd[1]) {
-                result = undefined;
-            }
-            break;
-
-        case 'd':
-            this.sDumpPrev = cmd;
-            if (cmd[1] == 'b' || !cmd[1]) {
-                bits = 8;
-            } else if (cmd[1] == 'w') {
-                bits = 16;
-            } else if (cmd[1] == 'd') {
-                bits = 32;
-            } else if (cmd[1] == 'i') {
-                if (!this.busIO) {
-                    result = "invalid bus";
-                    break;
-                }
-                bits = this.busIO.dataWidth;
-                length = length || 1;
-                useIO = true;
-            } else if (cmd[1] == 'h') {
-                this.sDumpPrev = "";
-                result = this.dumpHistory(index, length);
-                break;
-            } else if (cmd[1] == '?') {
-                this.sDumpPrev = "";
-                result = "dump commands:\n";
-                Debugger.DUMP_COMMANDS.forEach((cmd) => {result += cmd + '\n';});
-                if (this.aDumpers.length) {
-                    result += "dump extensions:\n";
-                    for (let i = 0; i < this.aDumpers.length; i++) {
-                        let dumper = this.aDumpers[i];
-                        result += this.sprintf("d   %-12s%s\n", dumper.name, dumper.desc);
-                    }
-                }
-                break;
-            } else {
-                this.sDumpPrev = "";
-                result = undefined;
-                break;
-            }
-            result = this.dumpMemory(address, bits, length, cmd[2], useIO);
-            break;
-
-        case 'e':
-            if (cmd[1] == 'o') {
-                if (!this.busIO) {
-                    result = "invalid bus";
-                    break;
-                }
-                useIO = true;
-            } else if (cmd[1]) {
-                result = undefined;
-                break;
-            }
-            result = this.editMemory(address, values, useIO);
-            break;
-
-        case 'g':
-            if (this.time.start()) {
-                if (address != undefined) {
-                    this.clearTemp();
-                    result = this.setBreak(address);
-                    if (result.indexOf(':') != 2) break;
-                    this.setTemp(address);
-                    result = "";
-                }
-                break;
-            }
-            result = "already started\n";
-            break;
-
-        case 'h':
-            if (!this.time.stop()) result = "already stopped\n";
-            break;
-
-        case 'p':
-            aTokens.shift();
-            aTokens.shift();
-            expr = aTokens.join(' ');
-            result += this.sprintf("%s = %s\n", expr, this.toBase(this.parseExpression(expr)));
-            break;
-
-        case 'r':
-            name = cmd.substr(1).toUpperCase();
-            if (name) {
-                if (this.cpu.getRegister(name) == undefined) {
-                    result += this.sprintf("unrecognized register: %s\n", name);
-                    break;
-                }
-                if (address != undefined) this.cpu.setRegister(name, address.off);
-            }
-            this.setAddress(this.addressCode, this.cpu.regPC);
-            result += this.cpu.toString();
-            break;
-
-        case 's':
-            enable = this.parseBoolean(option);
-            if (cmd[1] == 'h') {
-                /*
-                 * Don't let the user turn off history if any breaks (which may depend on history) are still set.
-                 */
-                if (this.cBreaks || this.counterBreak > 0) {
-                    enable = undefined;     // this ensures enableHistory() will simply return the status, not change it.
-                }
-                result = this.enableHistory(enable);
-                if (enable != undefined) this.historyForced = enable;
-            } else if (cmd[1] == 'p') {
-                if (index > 0) {
-                    this.time.setSpeed(index);
-                    result = "target speed:  " + this.time.getSpeedTarget();
-                } else {
-                    result = "current speed: " + this.time.getSpeedCurrent();
-                }
-            } else if (cmd[1] == 's' && this.styles) {
-                index = this.styles.indexOf(option);
-                if (index >= 0) this.style = this.styles[index];
-                result = "style: " + this.style;
-            } else if (cmd[1] == '?') {
-                result = "set commands:\n";
-                Debugger.SET_COMMANDS.forEach((cmd) => {result += cmd + '\n';});
-                break;
-            } else {
-                result = undefined;
-            }
-            break;
-
-        case 't':
-            length = this.parseInt(option, 10) || 1;
-            this.fStepQuietly = true;
-            if (cmd[1]) {
-                if (cmd[1] != 'r') {
-                    result = undefined;
-                    break;
-                }
-                this.fStepQuietly = false;
-            }
-            this.time.onStep(length);
-            break;
-
-        case 'u':
-            if (cmd[1]) {
-                result = undefined;
-                break;
-            }
-            if (!length) length = 8;
-            if (!address) address = this.addressCode;
-            result += this.dumpInstruction(address, length);
-            this.addressCode = address;
-            break;
-
-        case '?':
-            result = "debugger commands:\n";
-            Debugger.COMMANDS.forEach((cmd) => {result += cmd + '\n';});
-            break;
-
-        default:
-            result = undefined;
-            break;
-        }
-
-        if (result == undefined && aTokens[0]) {
-            result = "unrecognized command '" + aTokens[0] + "' (try '?')\n";
-        }
-
-        return result;
-    }
-
-    /**
-     * onLoad(state)
-     *
-     * Automatically called by the Machine device if the machine's 'autoSave' property is true.
-     *
-     * @this {Debugger}
-     * @param {Array} state
-     * @returns {boolean}
-     */
-    onLoad(state)
-    {
-        if (state) {
-            let stateDbg = state[0];
-            if (this.loadState(stateDbg)) {
-                state.shift();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * onSave(state)
-     *
-     * Automatically called by the Machine device before all other devices have been powered down (eg, during
-     * a page unload event).
-     *
-     * @this {Debugger}
-     * @param {Array} state
-     */
-    onSave(state)
-    {
-        let stateDbg = [];
-        this.saveState(stateDbg);
-        state.push(stateDbg);
-        this.cTransitions = 0;
-    }
-
-    /**
-     * onUpdate(fTransition)
-     *
-     * @this {Debugger}
-     * @param {boolean} [fTransition]
-     */
-    onUpdate(fTransition)
-    {
-        if (fTransition) {
-            if (this.time.isRunning()) {
-                this.restoreFocus();
-            } else {
-                if (this.fStepQuietly) {
-                    this.print(this.dumpInstruction(this.cpu.regPC, 1));
-                } else {
-                    if (this.cInstructions) {
-                        this.cpu.println(this.cInstructions + " instructions executed");
-                        this.cInstructions = 0;
-                    }
-                    this.cpu.print(this.cpu.toString());
-                    if (this.fStepQuietly == undefined) this.setFocus();
-                }
-            }
-            this.cTransitions++;
-        }
-    }
-
-    /**
-     * saveState(stateDbg)
-     *
-     * @this {Debugger}
-     * @param {Array} stateDbg
-     */
-    saveState(stateDbg)
-    {
-        stateDbg.push(this.idDevice);
-        stateDbg.push(this.listBreak(true));
-        stateDbg.push(this.machine.messages);
-    }
-
-    /**
-     * restoreFocus()
-     *
-     * We don't want to "rip" focus from the user if this is the first transition (ie, the page containing
-     * the machine has just finished loading); we use a transition count as a simple way of achieving that.
-     *
-     * @this {Debugger}
-     */
-    restoreFocus()
-    {
-        if (this.cTransitions && this.input) this.input.setFocus();
-    }
-
-    /**
-     * setFocus()
-     *
-     * @this {Debugger}
-     */
-    setFocus()
-    {
-        if (this.cTransitions) {
-            let element = this.findBinding(WebIO.BINDING.PRINT, true);
-            if (element) element.focus();
-        }
-    }
-
-    /**
-     * unassemble(address, opcodes, annotation)
-     *
-     * Returns a string representation of the selected instruction.  Since all processor-specific code
-     * should be in the overriding function, all we can do here is display the address and an opcode.
-     *
-     * @this {Debugger}
-     * @param {Address} address (advanced by the number of processed opcodes)
-     * @param {Array.<number>} opcodes (each processed opcode is shifted out, reducing the size of the array)
-     * @param {string} [annotation] (optional string to append to the final result)
-     * @returns {string}
-     */
-    unassemble(address, opcodes, annotation)
-    {
-        let getNextOp = () => {
-            let op = opcodes.shift();
-            this.addAddress(address, 1);
-            return op;
-        };
-        let sAddress = this.dumpAddress(address);
-        return this.sprintf("%s %02x       unsupported       ; %s\n", sAddress, getNextOp(), annotation || "");
-    }
-}
-
-Debugger.COMMANDS = [
-    "b?\t\tbreak commands",
-    "d?\t\tdump commands",
-    "e[o] [addr] ...\tedit memory/ports",
-    "g    [addr]\trun (to addr)",
-    "h\t\thalt",
-    "p    [expr]\tparse expression",
-    "r?   [value]\tdisplay/set registers",
-    "s?\t\tset commands",
-    "t[r] [n]\tstep (n instructions)",
-    "u    [addr] [n]\tunassemble (at addr)"
-];
-
-Debugger.BREAK_COMMANDS = [
-    "bc [n|*]\tclear break address",
-    "bd [n|*]\tdisable break address",
-    "be [n|*]\tenable break address",
-    "bl [n]\t\tlist break addresses",
-    "bi [addr]\tbreak on input",
-    "bo [addr]\tbreak on output",
-    "br [addr]\tbreak on read",
-    "bw [addr]\tbreak on write",
-    "bm [on|off]\tbreak on message",
-    "bn [count]\tbreak on instruction count"
-];
-
-Debugger.DUMP_COMMANDS = [
-    "db  [addr]\tdump bytes (8 bits)",
-    "dw  [addr]\tdump words (16 bits)",
-    "dd  [addr]\tdump dwords (32 bits)",
-    "di  [addr]\tdump input ports",
-    "d*y [addr]\tdump values in binary",
-    "dh  [n] [l]\tdump instruction history buffer",
-    "ds\t\tdump machine state"
-];
-
-Debugger.SET_COMMANDS = [
-    "sh [on|off]\tset instruction history",
-    "sp [n]\t\tset speed multiplier",
-    "ss\t\tset debugger style"
-];
-
-Debugger.ADDRESS = {
-    VIRTUAL:    0x01,           // if seg is -1, this indicates if the address is physical (clear) or virtual (set)
-    PHYSICAL:   0x00,
-    PROTECTED:  0x02,           // if seg is NOT -1, this indicates if the address is real (clear) or protected (set)
-    REAL:       0x00
-};
-
-/*
- * The required characteristics of these assigned values are as follows: all even values must be read
- * operations and all odd values must be write operations; all busMemory operations must come before all
- * busIO operations; and INPUT must be the first busIO operation.
- */
-Debugger.BREAKTYPE = {
-    READ:       0,
-    WRITE:      1,
-    INPUT:      2,
-    OUTPUT:     3
-};
-
-Debugger.BREAKCMD = {
-    [Debugger.BREAKTYPE.READ]:     "br",
-    [Debugger.BREAKTYPE.WRITE]:    "bw",
-    [Debugger.BREAKTYPE.INPUT]:    "bi",
-    [Debugger.BREAKTYPE.OUTPUT]:   "bo"
-};
-
-/*
- * Predefined "virtual registers" that we expect the CPU to support.
- */
-Debugger.REGISTER = {
-    PC:         "PC"            // the CPU's program counter
-};
-
-Debugger.SYMBOL = {
-    BYTE:       1,
-    PAIR:       2,
-    QUAD:       4,
-    LABEL:      5,
-    COMMENT:    6,
-    VALUE:      7
-};
-
-Debugger.SYMBOL_TYPES = {
-    "=":        Debugger.SYMBOL.VALUE,
-    "1":        Debugger.SYMBOL.BYTE,
-    "2":        Debugger.SYMBOL.PAIR,
-    "4":        Debugger.SYMBOL.QUAD,
-    "@":        Debugger.SYMBOL.LABEL,
-    ";":        Debugger.SYMBOL.COMMENT
-};
-
-Debugger.HISTORY_LIMIT = 100000;
-
-/*
- * These are our operator precedence tables.  Operators toward the bottom (with higher values) have
- * higher precedence.  BINOP_PRECEDENCE was our original table; we had to add DECOP_PRECEDENCE because
- * the precedence of operators in DEC's MACRO-10 expressions differ.  Having separate tables also allows
- * us to remove operators that shouldn't be supported, but unless some operator creates a problem,
- * I prefer to keep as much commonality between the tables as possible.
- *
- * Missing from these tables are the (limited) set of unary operators we support (negate and complement),
- * since this is only a BINARY operator precedence, not a general-purpose precedence table.  Assume that
- * all unary operators take precedence over all binary operators.
- */
-Debugger.BINOP_PRECEDENCE = {
-    '||':   5,      // logical OR
-    '&&':   6,      // logical AND
-    '!':    7,      // bitwise OR (conflicts with logical NOT, but we never supported that)
-    '|':    7,      // bitwise OR
-    '^!':   8,      // bitwise XOR (added by MACRO-10 sometime between the 1972 and 1978 versions)
-    '&':    9,      // bitwise AND
-    '!=':   10,     // inequality
-    '==':   10,     // equality
-    '>=':   11,     // greater than or equal to
-    '>':    11,     // greater than
-    '<=':   11,     // less than or equal to
-    '<':    11,     // less than
-    '>>>':  12,     // unsigned bitwise right shift
-    '>>':   12,     // bitwise right shift
-    '<<':   12,     // bitwise left shift
-    '-':    13,     // subtraction
-    '+':    13,     // addition
-    '^/':   14,     // remainder
-    '/':    14,     // division
-    '*':    14,     // multiplication
-    '_':    19,     // MACRO-10 shift operator
-    '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
-    '{':    20,     // open grouped expression (converted from achGroup[0])
-    '}':    20      // close grouped expression (converted from achGroup[1])
-};
-
-Debugger.DECOP_PRECEDENCE = {
-    ',,':   1,      // high-word,,low-word
-    '||':   5,      // logical OR
-    '&&':   6,      // logical AND
-    '!=':   10,     // inequality
-    '==':   10,     // equality
-    '>=':   11,     // greater than or equal to
-    '>':    11,     // greater than
-    '<=':   11,     // less than or equal to
-    '<':    11,     // less than
-    '>>>':  12,     // unsigned bitwise right shift
-    '>>':   12,     // bitwise right shift
-    '<<':   12,     // bitwise left shift
-    '-':    13,     // subtraction
-    '+':    13,     // addition
-    '^/':   14,     // remainder
-    '/':    14,     // division
-    '*':    14,     // multiplication
-    '!':    15,     // bitwise OR (conflicts with logical NOT, but we never supported that)
-    '|':    15,     // bitwise OR
-    '^!':   15,     // bitwise XOR (added by MACRO-10 sometime between the 1972 and 1978 versions)
-    '&':    15,     // bitwise AND
-    '_':    19,     // MACRO-10 shift operator
-    '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
-    '{':    20,     // open grouped expression (converted from achGroup[0])
-    '}':    20      // close grouped expression (converted from achGroup[1])
-};
-
-// Defs.CLASSES["Debugger"] = Debugger;
-
-/**
- * @copyright https://www.pcjs.org/machines/lib/cpu/dbg8080.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/libv2/dbgx80.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -19697,6 +17093,2610 @@ Dbg8080.aaOpDescs = [
 ];
 
 Defs.CLASSES["Dbg8080"] = Dbg8080;
+
+/**
+ * @copyright https://www.pcjs.org/machines/dec/vt100/lib/chips.js (C) 2012-2020 Jeff Parsons
+ */
+
+/**
+ * @class {VT100Chips}
+ * @unrestricted
+ */
+class VT100Chips extends Device {
+    /**
+     * VT100Chips(idMachine, idDevice, config)
+     *
+     * @this {VT100Chips}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {Config} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        super(idMachine, idDevice, config);
+        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
+        this.ports = /** @type {Ports} */ (this.findDeviceByClass("Ports"));
+        this.ports.addIOTable(this, VT100Chips.IOTABLE);
+        this.onReset();
+    }
+
+    /**
+     * loadState(state)
+     *
+     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
+     *
+     * @this {VT100Chips}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    loadState(state)
+    {
+        let idDevice = state.shift();
+        if (this.idDevice == idDevice) {
+            this.bBrightness    = state.shift();
+            this.bFlags         = state.shift();
+            this.bDC011Cols     = state.shift();
+            this.bDC011Rate     = state.shift();
+            this.bDC012Scroll   = state.shift();
+            this.bDC012Blink    = state.shift();
+            this.bDC012Reverse  = state.shift();
+            this.bDC012Attr     = state.shift();
+            this.dNVRAddr       = state.shift(); // 20-bit address
+            this.wNVRData       = state.shift(); // 14-bit word
+            this.bNVRLatch      = state.shift(); // 1 byte
+            this.bNVROut        = state.shift(); // 1 bit
+            this.aNVRWords      = state.shift(); // 100 14-bit words
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * saveState(state)
+     *
+     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
+     *
+     * @this {VT100Chips}
+     * @param {Array} state
+     */
+    saveState(state)
+    {
+        state.push(this.idDevice);
+        state.push(this.bBrightness);
+        state.push(this.bFlags);
+        state.push(this.bDC011Cols);
+        state.push(this.bDC011Rate);
+        state.push(this.bDC012Scroll);
+        state.push(this.bDC012Blink);
+        state.push(this.bDC012Reverse);
+        state.push(this.bDC012Attr);
+        state.push(this.dNVRAddr);
+        state.push(this.wNVRData);
+        state.push(this.bNVRLatch);
+        state.push(this.bNVROut);
+        state.push(this.aNVRWords);
+    }
+
+    /**
+     * onPower(on)
+     *
+     * Called by the Machine device to provide notification of a power event.
+     *
+     * @this {VT100Chips}
+     * @param {boolean} on (true to power on, false to power off)
+     */
+    onPower(on)
+    {
+        if (this.kbd === undefined) {
+            this.kbd = /** @type {VT100Keyboard} */ (this.findDeviceByClass("VT100Keyboard"));
+        }
+        if (this.serial === undefined) {
+            this.serial = /** @type {VT100Serial} */ (this.findDeviceByClass("VT100Serial"));
+        }
+        if (this.video === undefined) {
+            this.video = /** @type {VT100Video} */ (this.findDeviceByClass("VT100Video"));
+        }
+        /*
+         * This is also a good time to get access to the Debugger, if any, and add our dump extensions.
+         */
+        if (this.dbg === undefined) {
+            this.dbg = /** @type {Debugger} */ (this.findDeviceByClass("Debugger", false));
+            if (this.dbg) this.dbg.addDumper(this, "nvr", "dump non-volatile ram", this.dumpNVR);
+        }
+    }
+
+    /**
+     * onReset()
+     *
+     * Called by the Machine device to provide notification of a reset event.
+     *
+     * @this {VT100Chips}
+     */
+    onReset()
+    {
+        this.bBrightness    = VT100Chips.BRIGHTNESS.INIT;
+        this.bFlags         = VT100Chips.FLAGS.NO_AVO | VT100Chips.FLAGS.NO_GFX;
+        this.bDC011Cols     = VT100Chips.DC011.INITCOLS;
+        this.bDC011Rate     = VT100Chips.DC011.INITRATE;
+        this.bDC012Scroll   = VT100Chips.DC012.INITSCROLL;
+        this.bDC012Blink    = VT100Chips.DC012.INITBLINK;
+        this.bDC012Reverse  = VT100Chips.DC012.INITREVERSE;
+        this.bDC012Attr     = VT100Chips.DC012.INITATTR;
+        this.dNVRAddr       = 0;
+        this.wNVRData       = 0;
+        this.bNVRLatch      = 0;
+        this.bNVROut        = 0;
+       /*
+        * The following array contains the data we use to initialize all (100) words of NVR (Non-Volatile RAM).
+        *
+        * I used to initialize every word to 0x3ff, as if the NVR had been freshly erased, but that causes the
+        * firmware to (attempt to) beep and then display an error code (2).  As the DEC Technical Manual says:
+        *
+        *      If the NVR fails, the bell sounds several times to inform the operator, and then default settings
+        *      stored in the ROM allow the terminal to work.
+        *
+        * but I think what they meant to say is that default settings are stored in the RAM copy of NVR.  So then
+        * I went into SET-UP, pressed SHIFT-S to save those settings back to NVR, and then used the PCx80 debugger
+        * "d nvr" command to dump the NVR contents.  The results are below.
+        *
+        * The first dump actually contains only two modifications to the factory defaults: enabling ONLINE instead
+        * of LOCAL operation, and turning ANSI support ON.  The second dump is unmodified (the TRUE factory defaults).
+        *
+        * By making selective changes, you can discern where the bits for certain features are stored.  For example,
+        * smooth-scrolling is apparently controlled by bit 7 of the word at offset 0x2B (and is ON by default in
+        * the factory settings).  And it's likely that the word at offset 0x32 (ie, the last word that's not zero)
+        * is the NVR checksum.
+        *
+        * The TRUE factory defaults are here for reference:
+        *
+        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
+        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
+        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
+        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E00,
+        *   0x2E08, 0x2E8E, 0x2E20, 0x2ED0, 0x2E50, 0x2E00, 0x2E20, 0x2E00, 0x2EE0, 0x2EE0,
+        *   0x2E69, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
+        */
+        this.aNVRWords = [
+            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
+            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
+            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
+            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E00,
+            0x2E08, 0x2E8E, 0x2E00, 0x2ED0, 0x2E70, 0x2E00, 0x2E20, 0x2E00, 0x2EE0, 0x2EE0,
+            0x2E7D, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
+        ];
+    }
+
+    /**
+     * getLBA(iBit)
+     *
+     * Returns the state of the requested (simulated) LBA bit.
+     *
+     * NOTE: This is currently only used to obtain LBA7, which we approximate with the slightly faster approach
+     * of masking bit 6 of the CPU cycle count (see the DC011 discussion above).  This will result in a shorter LBA7
+     * period than if we divided the cycle count by 88, but a shorter LBA7 period is probably helpful in terms of
+     * overall performance.
+     *
+     * @this {VT100Chips}
+     * @param {number} iBit
+     * @returns {number}
+     */
+    getLBA(iBit)
+    {
+        return (this.time.getCycles() & (1 << (iBit - 1))) << 1;
+    }
+
+    /**
+     * getNVRAddr()
+     *
+     * @this {VT100Chips}
+     * @returns {number}
+     */
+    getNVRAddr()
+    {
+        let i;
+        let tens = 0, ones = 0;
+        let addr = ~this.dNVRAddr;
+        for (i = 0; i < 10; i++) {
+            if (addr & 0x1) tens = 9-i;
+            addr >>= 1;
+        }
+        for (i = 0; i < 10; i++) {
+            if (addr & 0x1) ones = 9-i;
+            addr >>= 1;
+        }
+        addr = tens*10 + ones;
+
+        return addr;
+    }
+
+    /**
+     * doNVRCommand()
+     *
+     * @this {VT100Chips}
+     */
+    doNVRCommand()
+    {
+        let addr, data;
+        let bit = this.bNVRLatch & 0x1;
+        let bCmd = (this.bNVRLatch >> 1) & 0x7;
+
+        switch(bCmd) {
+        case VT100Chips.NVR.CMD.STANDBY:
+            break;
+
+        case VT100Chips.NVR.CMD.ACCEPT_ADDR:
+            this.dNVRAddr = (this.dNVRAddr << 1) | bit;
+            break;
+
+        case VT100Chips.NVR.CMD.ERASE:
+            addr = this.getNVRAddr();
+            this.aNVRWords[addr] = VT100Chips.NVR.WORDMASK;
+            this.printf(MESSAGE.CHIPS, "doNVRCommand(): erase data at addr %#06x\n", addr);
+            break;
+
+        case VT100Chips.NVR.CMD.ACCEPT_DATA:
+            this.wNVRData = (this.wNVRData << 1) | bit;
+            break;
+
+        case VT100Chips.NVR.CMD.WRITE:
+            addr = this.getNVRAddr();
+            data = this.wNVRData & VT100Chips.NVR.WORDMASK;
+            this.aNVRWords[addr] = data;
+            this.printf(MESSAGE.CHIPS, "doNVRCommand(): write data %#06x to addr %#06x\n", data, addr);
+            break;
+
+        case VT100Chips.NVR.CMD.READ:
+            addr = this.getNVRAddr();
+            data = this.aNVRWords[addr];
+            /*
+             * If we don't explicitly initialize aNVRWords[], pretend any uninitialized words contains WORDMASK.
+             */
+            if (data == null) data = VT100Chips.NVR.WORDMASK;
+            this.wNVRData = data;
+            this.printf(MESSAGE.CHIPS, "doNVRCommand(): read data %#06x from addr %#06x\n", data, addr);
+            break;
+
+        case VT100Chips.NVR.CMD.SHIFT_OUT:
+            this.wNVRData <<= 1;
+            /*
+             * Since WORDMASK is 0x3fff, this will mask the shifted data with 0x4000, which is the bit we want to isolate.
+             */
+            this.bNVROut = this.wNVRData & (VT100Chips.NVR.WORDMASK + 1);
+            break;
+
+        default:
+            this.printf(MESSAGE.CHIPS, "doNVRCommand(): unrecognized command %#04x\n", bCmd);
+            break;
+        }
+    }
+
+    /**
+     * inFlags(port)
+     *
+     * @this {VT100Chips}
+     * @param {number} port (0x42)
+     * @returns {number} simulated port value
+     */
+    inFlags(port)
+    {
+        let value = this.bFlags;
+
+        /*
+         * The NVR_CLK bit is driven by LBA7 (ie, bit 7 from Line Buffer Address generation); see the DC011 discussion above.
+         */
+        value &= ~VT100Chips.FLAGS.NVR_CLK;
+        if (this.getLBA(7)) {
+            value |= VT100Chips.FLAGS.NVR_CLK;
+            if (value != this.bFlags) {
+                this.doNVRCommand();
+            }
+        }
+
+        value &= ~VT100Chips.FLAGS.NVR_DATA;
+        if (this.bNVROut) {
+            value |= VT100Chips.FLAGS.NVR_DATA;
+        }
+
+        value &= ~VT100Chips.FLAGS.KBD_XMIT;
+        if (this.kbd && this.kbd.isTransmitterReady()) {
+            value |= VT100Chips.FLAGS.KBD_XMIT;
+        }
+
+        value &= ~VT100Chips.FLAGS.UART_XMIT;
+        if (this.serial && this.serial.isTransmitterReady()) {
+            value |= VT100Chips.FLAGS.UART_XMIT;
+        }
+
+        this.bFlags = value;
+        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "inFlags(%#04x): %#04x\n", port, value);
+        return value;
+    }
+
+    /**
+     * outBrightness(port, value)
+     *
+     * @this {VT100Chips}
+     * @param {number} port (0x42)
+     * @param {number} value
+     */
+    outBrightness(port, value)
+    {
+        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outBrightness(%#04x): %#04x\n", port, value);
+        this.bBrightness = value;
+    }
+
+    /**
+     * outNVRLatch(port, value)
+     *
+     * @this {VT100Chips}
+     * @param {number} port (0x62)
+     * @param {number} value
+     */
+    outNVRLatch(port, value)
+    {
+        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outNVRLatch(%#04x): %#04x\n", port, value);
+        this.bNVRLatch = value;
+    }
+
+    /**
+     * outDC012(port, value)
+     *
+     * TODO: Consider whether we should disable any interrupts (eg, vertical retrace) until
+     * this port is initialized at runtime.
+     *
+     * @this {VT100Chips}
+     * @param {number} port (0xA2)
+     * @param {number} value
+     */
+    outDC012(port, value)
+    {
+        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outDC012(%#04x): %#04x\n", port, value);
+        let bOpt = value & 0x3;
+        let bCmd = (value >> 2) & 0x3;
+        switch(bCmd) {
+        case 0x0:
+            this.bDC012Scroll = (this.bDC012Scroll & ~0x3) | bOpt;
+            break;
+        case 0x1:
+            this.bDC012Scroll = (this.bDC012Scroll & ~0xC) | (bOpt << 2);
+            if (this.video) this.video.updateScrollOffset(this.bDC012Scroll);
+            break;
+        case 0x2:
+            switch(bOpt) {
+            case 0x0:
+                this.bDC012Blink = ~this.bDC012Blink;
+                break;
+            case 0x1:
+                // TODO: Clear vertical frequency interrupt?
+                break;
+            case 0x2:
+            case 0x3:
+                this.bDC012Reverse = 0x3 - bOpt;
+                break;
+            }
+            break;
+        case 0x3:
+            this.bDC012Attr = bOpt;
+            break;
+        }
+    }
+
+    /**
+     * outDC011(port, value)
+     *
+     * @this {VT100Chips}
+     * @param {number} port (0xC2)
+     * @param {number} value
+     */
+    outDC011(port, value)
+    {
+        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outNDC011(%#04x): %#04x\n", port, value);
+        if (value & VT100Chips.DC011.RATE60) {
+            value &= VT100Chips.DC011.RATE50;
+            if (this.bDC011Rate != value) {
+                this.bDC011Rate = value;
+                if (this.video) {
+                    this.video.updateRate(this.bDC011Rate == VT100Chips.DC011.RATE50? 50 : 60);
+                }
+            }
+        } else {
+            value &= VT100Chips.DC011.COLS132;
+            if (this.bDC011Cols != value) {
+                this.bDC011Cols = value;
+                if (this.video) {
+                    let nCols = (this.bDC011Cols == VT100Chips.DC011.COLS132? 132 : 80);
+                    let nRows = (nCols > 80 && (this.bFlags & VT100Chips.FLAGS.NO_AVO)? 14 : 24);
+                    this.video.updateDimensions(nCols, nRows);
+                }
+            }
+        }
+    }
+
+    /**
+     * dumpNVR(values)
+     *
+     * @this {VT100Chips}
+     * @param {Array.<number>} values (the Debugger passes along any values on the command-line, but we don't use them)
+     */
+    dumpNVR(values)
+    {
+        let sDump = "";
+        for (let iWord = 1; iWord <= this.aNVRWords.length; iWord++) {
+            sDump += this.sprintf("%04x%c", this.aNVRWords[iWord-1], (iWord % 10)? ' ' : '\n');
+        }
+        return sDump;
+    }
+}
+
+/*
+ * One of the many chips in the VT100 is an 8224, which operates at 24.8832MHz.  That frequency is divided by 9
+ * to yield a 361.69ns clock period for the 8080 CPU, which means (in theory) that the CPU is running at 2.76Mhz,
+ * so the machine should be configured with "cyclesPerSecond" set to 2764800.
+ *
+ * WARNING: The choice of clock speed has an effect on other simulated VT100 circuits; see the DC011 Timing Chip
+ * discussion below, along with the getLBA() function.
+ *
+ * For reference, here is a list of all the VT100 I/O ports, from /devices/pc8080/machine/vt100/debugger/README.md,
+ * which in turn comes from p. 4-17 of the VT100 Technical Manual (July 1982):
+ *
+ *      READ OR WRITE
+ *      00H     PUSART data bus
+ *      01H     PUSART command port
+ *
+ *      WRITE ONLY (Decoded with I/O WR L)
+ *      02H     Baud rate generator
+ *      42H     Brightness D/A latch
+ *      62H     NVR latch
+ *      82H     Keyboard UART data input [used to update the Keyboard Status Byte -JP]
+ *      A2H     Video processor DC012
+ *      C2H     Video processor DC011
+ *      E2H     Graphics port
+ *
+ *      READ ONLY (Decoded with I/O RD L)
+ *      22H     Modem buffer
+ *      42H     Flags buffer
+ *      82H     Keyboard UART data output
+ */
+VT100Chips.FLAGS = {
+    PORT:       0x42,           // read-only
+    UART_XMIT:  0x01,           // PUSART transmit buffer empty if SET
+    NO_AVO:     0x02,           // AVO present if CLEAR
+    NO_GFX:     0x04,           // VT125 graphics board present if CLEAR
+    OPTION:     0x08,           // OPTION present if SET
+    NO_EVEN:    0x10,           // EVEN FIELD active if CLEAR
+    NVR_DATA:   0x20,           // NVR DATA if SET
+    NVR_CLK:    0x40,           // NVR CLOCK if SET
+    KBD_XMIT:   0x80            // KBD transmit buffer empty if SET
+};
+
+VT100Chips.BRIGHTNESS = {
+    PORT:       0x42,           // write-only
+    INIT:       0x00            // for lack of a better guess
+};
+
+/*
+ * Reading port 0x82 returns a key address from the VT100 keyboard's UART data output.
+ *
+ * Every time a keyboard scan is initiated (by setting the START bit of the status byte),
+ * our internal address index (iKeyNext) is set to zero, and an interrupt is generated for
+ * each entry in the aKeysActive array, along with a final interrupt for KEYLAST.
+ */
+VT100Chips.ADDRESS = {
+    PORT:       0x82,
+    INIT:       0x7F
+};
+
+/*
+ * Writing port 0x82 updates the VT100's keyboard status byte via the keyboard's UART data input.
+ */
+VT100Chips.STATUS = {
+    PORT:       0x82,               // write-only
+    LED4:       0x01,
+    LED3:       0x02,
+    LED2:       0x04,
+    LED1:       0x08,
+    LOCKED:     0x10,
+    LOCAL:      0x20,
+    LEDS:       0x3F,               // all LEDs
+    START:      0x40,               // set to initiate a scan
+    /*
+     * From p. 4-38 of the VT100 Technical Manual (July 1982):
+     *
+     *      A bit (CLICK) in the keyboard status word controls the bell....  When a single status word contains
+     *      the bell bit, flip-flop E3 toggles and turns on E1, generating a click. If the bell bit is set for
+     *      many words in succession, the UART latch holds the data output constant..., allowing the circuit to
+     *      produce an 800 hertz tone. Bell is generated by setting the bell bit for 0.25 seconds.  Each cycle of
+     *      the tone is at a reduced amplitude compared with the single keyclick....  The overall effect of the
+     *      tone burst on the ear is that of a beep.
+     */
+    CLICK:      0x80,
+    INIT:       0x00
+};
+
+/*
+ * DC011 is referred to as a Timing Chip.
+ *
+ * As p. 4-55 (105) of the VT100 Technical Manual (July 1982) explains:
+ *
+ *      The DCO11 is a custom designed bipolar circuit that provides most of the timing signals required by the
+ *      video processor. Internal counters divide the output of a 24.0734 MHz oscillator (located elsewhere on the
+ *      terminal controller module) into the lower frequencies that define dot, character, scan, and frame timing.
+ *      The counters are programmable through various input pins to control the number of characters per line,
+ *      the frequency at which the screen is refreshed, and whether the display is interlaced or noninterlaced.
+ *      These parameters can be controlled through SET-UP mode or by the host.
+ *
+ *          Table 4-6-1: Video Mode Selection (Write Address 0xC2)
+ *
+ *          D5  D4      Configuration
+ *          --  --      -------------
+ *          0   0       80-column mode, interlaced
+ *          0   1       132-column mode, interlaced
+ *          1   0       60Hz, non-interlaced
+ *          1   1       50Hz, non-interlaced
+ *
+ * On p. 4-56, the DC011 Block Diagram shows 8 outputs labeled LBA0 through LBA7.  From p. 4-61:
+ *
+ *      Several of the LBAs are used as general purpose clocks in the VT100. LBA3 and LBA4 are used to generate
+ *      timing for the keyboard. These signals satisfy the keyboard's requirement of two square-waves, one twice the
+ *      frequency of the other, even though every 16th transition is delayed (the second stage of the horizontal
+ *      counter divides by 17, not 16). LBA7 is used by the nonvolatile RAM.
+ *
+ * And on p. 4-62, timings are provided for the LBA0 through LBA7; in particular:
+ *
+ *      LBA6:   16.82353us (when LBA6 is low, for a period of 33.64706us)
+ *      LBA7:   31.77778us (when LBA7 is high, for a period of 63.55556us)
+ *
+ * If we assume that the CPU cycle count increments once every 361.69ns, it will increment roughly 88 times every
+ * time LBA7 toggles.  So we can divide the CPU cycle count by 88 and set LBA to the low bit of that truncated
+ * result.  An even faster (but less accurate) solution would be to mask bit 6 of the CPU cycle count, which will
+ * doesn't change until the count has been incremented 64 times.  See getLBA() for the chosen implementation.
+ */
+VT100Chips.DC011 = {            // generates Line Buffer Addresses (LBAs) for the Video Processor
+    PORT:       0xC2,           // write-only
+    COLS80:     0x00,
+    COLS132:    0x10,
+    RATE60:     0x20,
+    RATE50:     0x30,
+    INITCOLS:   0x00,           // ie, COLS80
+    INITRATE:   0x20            // ie, RATE60
+};
+
+/*
+ * DC012 is referred to as a Control Chip.
+ *
+ * As p. 4-67 (117) of the VT100 Technical Manual (July 1982) explains:
+ *
+ *      The DCO12 performs three main functions.
+ *
+ *       1. Scan count generation. This involves two counters, a multiplexer to switch between the counters,
+ *          double-height logic, scroll and line attribute latches, and various logic controlling switching between
+ *          the two counters. This is the biggest part of the chip. It includes all scrolling, double-height logic,
+ *          and feeds into the underline and hold request circuits.
+ *
+ *       2. Generation of HOLD REQUEST. This uses information from the scan counters and the scrolling logic to
+ *          decide when to generate HOLD REQUEST.
+ *
+ *       3. Video modifications: dot stretching, blanking, addition of attributes to video outputs, and multiple
+ *          intensity levels.
+ *
+ *      The input decoder accepts a 4-bit command from the microprocessor when VID WR 2 L is asserted. Table 4-6-2
+ *      lists the commands.
+ *
+ *      D3 D2 D1 D0     Function
+ *      -- -- -- --     --------
+ *      0  0  0  0      Load low order scroll latch = 00
+ *      0  0  0  1      Load low order scroll latch = 01
+ *      0  0  1  0      Load low order scroll latch = 10
+ *      0  0  1  1      Load low order scroll latch = 11
+ *
+ *      0  1  0  0      Load high order scroll latch = 00
+ *      0  1  0  1      Load high order scroll latch = 01
+ *      0  1  1  0      Load high order scroll latch = 10
+ *      0  1  1  1      Load high order scroll latch = 11 (not used)
+ *
+ *      1  0  0  0      Toggle blink flip-flop
+ *      1  0  0  1      Clear vertical frequency interrupt
+ *
+ *      1  0  1  0      Set reverse field on
+ *      1  0  1  1      Set reverse field off
+ *
+ *      1  1  0  0      Set basic attribute to underline*
+ *      1  1  0  1      Set basic attribute to reverse video*
+ *      1  1  1  0      Reserved for future specification*
+ *      1  1  1  1      Reserved for future specification*
+ *
+ *      *These functions also clear blink flip-flop.
+ */
+VT100Chips.DC012 = {            // generates scan counts for the Video Processor
+    PORT:       0xA2,           // write-only
+    SCROLL_LO:  0x00,
+    INITSCROLL: 0x00,
+    INITBLINK:  0x00,
+    INITREVERSE:0x00,
+    INITATTR:   0x00
+};
+
+/*
+ * ER1400 Non-Volatile RAM (NVR) Chip Definitions
+ */
+VT100Chips.NVR = {
+    LATCH: {
+        PORT:   0x62            // write-only
+    },
+    CMD: {
+        ACCEPT_DATA:    0x0,
+        ACCEPT_ADDR:    0x1,
+        SHIFT_OUT:      0x2,
+        WRITE:          0x4,
+        ERASE:          0x5,
+        READ:           0x6,
+        STANDBY:        0x7
+    },
+    WORDMASK:   0x3fff          // NVR words are 14-bit
+    /*
+     * The Technical Manual, p. 4-18, also notes that "Early VT100s can disable the receiver interrupt by
+     * programming D4 in the NVR latch. However, this is never used by the VT100."
+     */
+};
+
+VT100Chips.IOTABLE = {
+    0x42: [VT100Chips.prototype.inFlags, VT100Chips.prototype.outBrightness],
+    0x62: [null, VT100Chips.prototype.outNVRLatch],
+    0xA2: [null, VT100Chips.prototype.outDC012],
+    0xC2: [null, VT100Chips.prototype.outDC011]
+};
+
+Defs.CLASSES["VT100Chips"] = VT100Chips;
+
+/**
+ * @copyright https://www.pcjs.org/machines/dec/vt100/lib/keyboard.js (C) 2012-2020 Jeff Parsons
+ */
+
+/** @typedef {{ model: number }} */
+var VT100KeyboardConfig;
+
+/**
+ * @class {VT100Keyboard}
+ * @unrestricted
+ * @property {VT100KeyboardConfig} config
+ */
+class VT100Keyboard extends Device {
+    /**
+     * VT100Keyboard(idMachine, idDevice, config)
+     *
+     * @this {VT100Keyboard}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {VT100KeyboardConfig} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        super(idMachine, idDevice, config);
+
+        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
+        this.ports = /** @type {Ports} */ (this.findDeviceByClass("Ports"));
+        this.ports.addIOTable(this, VT100Keyboard.IOTABLE);
+
+        /*
+         * Whereas VT100Keyboard.LEDS maps bits to LED ID, this.leds maps bits to the actual LED devices.
+         */
+        this.leds = {};
+        for (let bit in VT100Keyboard.LEDS) {
+            this.leds[bit] = /** @type {LED} */ (this.findDevice(VT100Keyboard.LEDS[bit], false));
+        }
+
+        this.input = /** @type {Input} */ (this.findDeviceByClass("Input"));
+        this.input.addKeyMap(this, VT100Keyboard.KEYMAP, VT100Keyboard.CLICKMAP);
+
+        this.ledCaps = this.findDevice("ledCaps");
+        if (this.ledCaps) {
+            this.input.addListener(Input.TYPE.KEYCODE, WebIO.KEYCODE.CAPS_LOCK, this.onCapsLock.bind(this));
+        }
+        this.onReset();
+    }
+
+    /**
+     * loadState(state)
+     *
+     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
+     *
+     * @this {VT100Keyboard}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    loadState(state)
+    {
+        let idDevice = state.shift();
+        if (this.idDevice == idDevice) {
+            this.bStatus = state.shift();
+            this.bAddress = state.shift();
+            this.fUARTBusy = state.shift();
+            this.nUARTSnap = state.shift();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * saveState(state)
+     *
+     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
+     *
+     * @this {VT100Keyboard}
+     * @param {Array} state
+     */
+    saveState(state)
+    {
+        state.push(this.idDevice);
+        state.push(this.bStatus);
+        state.push(this.bAddress);
+        state.push(this.fUARTBusy);
+        state.push(this.nUARTSnap);
+    }
+
+    /**
+     * onCapsLock(id, on)
+     *
+     * @this {VT100Keyboard}
+     * @param {number} id
+     * @param {boolean} on
+     */
+    onCapsLock(id, on)
+    {
+        this.ledCaps.setLEDState(0, 0, on? LED.STATE.ON : LED.STATE.OFF);
+    }
+
+    /**
+     * onPower(on)
+     *
+     * Called by the Machine device to provide notification of a power event.
+     *
+     * @this {VT100Keyboard}
+     * @param {boolean} on
+     */
+    onPower(on)
+    {
+        if (!this.cpu) {
+            this.cpu = /** @type {CPU8080} */ (this.findDeviceByClass("CPU"));
+        }
+        this.updateLEDs(on? this.bStatus : undefined);
+    }
+
+    /**
+     * onReset()
+     *
+     * Called by the Machine device to provide notification of a reset event.
+     *
+     * @this {VT100Keyboard}
+     */
+    onReset()
+    {
+        this.bStatus = VT100Keyboard.STATUS.INIT;
+        this.bAddress = VT100Keyboard.ADDRESS.INIT;
+        this.fUARTBusy = false;
+        this.nUARTSnap = 0;
+        this.iKeyNext = -1;
+        this.updateLEDs();
+    }
+
+    /**
+     * isTransmitterReady()
+     *
+     * Called whenever the VT100 Chips device needs the VT100Keyboard UART transmitter status.
+     *
+     * From p. 4-32 of the VT100 Technical Manual (July 1982):
+     *
+     *      The operating clock for the keyboard interface comes from an address line in the video processor (LBA4).
+     *      This signal has an average period of 7.945 microseconds. Each data byte is transmitted with one start bit
+     *      and one stop bit, and each bit lasts 16 clock periods. The total time for each data byte is 160 times 7.945
+     *      or 1.27 milliseconds. Each time the Transmit Buffer Empty flag on the terminal's UART gets set (when the
+     *      current byte is being transmitted), the microprocessor loads another byte into the transmit buffer. In this
+     *      way, the stream of status bytes to the keyboard is continuous.
+     *
+     * We used to always return true (after all, what's wrong with an infinitely fast UART?), but unfortunately,
+     * the VT100 firmware relies on the UART's slow transmission speed to drive cursor blink rate.  We have several
+     * options:
+     *
+     *      1) Snapshot the CPU cycle count each time a byte is transmitted (see outVT100UARTStatus()) and then every
+     *      time this is polled, see if the cycle count has exceeded the snapshot value by the necessary threshold;
+     *      if we assume 361.69ns per CPU cycle, there are 22 CPU cycles for every 1 LBA4 cycle, and since transmission
+     *      time is supposed to last for 160 LBA4 cycles, the threshold is 22*160 CPU cycles, or 3520 cycles.
+     *
+     *      2) Set a CPU timer using the new setTimer() interface, which can be passed the number of milliseconds to
+     *      wait before firing (in this case, roughly 1.27ms).
+     *
+     *      3) Call the Chips device getLBA(4) function for the state of the simulated LBA4, and count 160 LBA4
+     *      transitions; however, that would be the worst solution, because there's no guarantee that the firmware's
+     *      UART polling will occur regularly and/or frequently enough for us to catch every LBA4 transition.
+     *
+     * I'm going with solution #1 because it's less overhead.
+     *
+     * @this {VT100Keyboard}
+     * @returns {boolean} (true if ready, false if not)
+     */
+    isTransmitterReady()
+    {
+        if (this.fUARTBusy) {
+            if (this.time.getCycles() >= this.nUARTSnap) {
+                this.fUARTBusy = false;
+            }
+        }
+        return !this.fUARTBusy;
+    }
+
+    /**
+     * inUARTAddress(port)
+     *
+     * We take our cue from iKeyNext.  If it's -1 (default), we simply return the last value latched
+     * in bAddress.  Otherwise, we call getActiveKey() to request the next mapped key value, latch it,
+     * and increment iKeyNext.  Failing that, we latch ADDRESS.KEYLAST and reset iKeyNext to -1.
+     *
+     * @this {VT100Keyboard}
+     * @param {number} port (0x82)
+     * @returns {number} simulated port value
+     */
+    inUARTAddress(port)
+    {
+        let value = this.bAddress;
+        if (this.iKeyNext >= 0) {
+            let value = this.input.getActiveKey(this.iKeyNext);
+            if (value >= 0) {
+                this.iKeyNext++;
+                if (value & 0x80) {
+                    /*
+                     * TODO: This code is supposed to be accompanied by a SHIFT key; make sure that it is.
+                     */
+                    value &= 0x7F;
+                }
+            } else {
+                this.iKeyNext = -1;
+                value = VT100Keyboard.ADDRESS.KEYLAST;
+            }
+            this.bAddress = value;
+            this.cpu.requestINTR(1);
+        }
+        this.printf(MESSAGE.KBD + MESSAGE.PORTS, "inUARTAddress(%#04x): %#04x\n", port, value);
+        return value;
+    }
+
+    /**
+     * outUARTStatus(port, value)
+     *
+     * @this {VT100Keyboard}
+     * @param {number} port (0x82)
+     * @param {number} value
+     */
+    outUARTStatus(port, value)
+    {
+        this.printf(MESSAGE.KBD + MESSAGE.PORTS, "outUARTStatus(%#04x): %#04x\n", port, value);
+        this.updateLEDs(value, this.bStatus);
+        this.bStatus = value;
+        this.fUARTBusy = true;
+        /*
+         * Set nUARTSnap to the number of cycles required before clearing fUARTBusy; see isTransmitterReady().
+         *
+         * NOTE: getCyclesPerMS(1.2731488) should work out to 3520 cycles for a CPU clocked at 361.69ns per cycle,
+         * which is roughly 2.76Mhz.  We could just hard-code 3520 instead of calling getCyclesPerMS(), but this helps
+         * maintain a reasonable blink rate for the cursor even when the user cranks up the CPU speed.
+         */
+        this.nUARTSnap = this.time.getCycles() + this.time.getCyclesPerMS(1.2731488);
+        if (value & VT100Keyboard.STATUS.START) {
+            this.iKeyNext = 0;
+            this.cpu.requestINTR(1);
+        }
+    }
+
+    /**
+     * updateLEDs(value, previous)
+     *
+     * @this {VT100Keyboard}
+     * @param {number} [value] (if not provided, all LEDS are turned off)
+     * @param {number} [previous] (if not provided, all LEDs are updated)
+     */
+    updateLEDs(value, previous)
+    {
+        for (let id in this.leds) {
+            let led = this.leds[id];
+            if (!led) continue;
+            let bit = +id, on, changed = 1, redraw = 1;
+            if (value != undefined) {
+                if (!(bit & (bit - 1))) {       // if a single bit is set, this will be zero
+                    on = value & bit;           // and "on" will be true if that single bit is set
+                } else {
+                    bit = ~bit & 0xff;          // otherwise, we assume that a single bit is clear
+                    on = !(value & bit);        // so "on" will be true if that same single bit is clear
+                }
+                if (previous != undefined) {
+                    changed = (value ^ previous) & bit;
+                    redraw = 0;
+                }
+            }
+            if (changed) {                      // call setLEDState() only if the bit changed
+                led.setLEDState(0, 0, on? LED.STATE.ON : LED.STATE.OFF);
+                if (redraw) led.drawBuffer();
+            }
+        }
+    }
+}
+
+/*
+ * Reading port 0x82 returns a key address from the VT100 keyboard's UART data output.
+ *
+ * Every time a keyboard scan is initiated (by setting the START bit of the status byte),
+ * our internal address index (iKeyNext) is set to zero, and an interrupt is generated for
+ * each entry in the aKeysActive array, along with a final interrupt for KEYLAST.
+ */
+VT100Keyboard.ADDRESS = {
+    PORT:       0x82,
+    INIT:       0x7F,
+    KEYLAST:    0x7F                // special end-of-scan key address (all valid key addresses are < KEYLAST)
+};
+
+/*
+ * Writing port 0x82 updates the VT100's keyboard status byte via the keyboard's UART data input.
+ */
+VT100Keyboard.STATUS = {
+    PORT:       0x82,               // write-only
+    LED4:       0x01,
+    LED3:       0x02,
+    LED2:       0x04,
+    LED1:       0x08,
+    LOCKED:     0x10,
+    LOCAL:      0x20,
+    LEDS:       0x3F,               // all LEDs
+    START:      0x40,               // set to initiate a scan
+    /*
+     * From p. 4-38 of the VT100 Technical Manual (July 1982):
+     *
+     *      A bit (CLICK) in the keyboard status word controls the bell....  When a single status word contains
+     *      the bell bit, flip-flop E3 toggles and turns on E1, generating a click. If the bell bit is set for
+     *      many words in succession, the UART latch holds the data output constant..., allowing the circuit to
+     *      produce an 800 hertz tone. Bell is generated by setting the bell bit for 0.25 seconds.  Each cycle of
+     *      the tone is at a reduced amplitude compared with the single keyclick....  The overall effect of the
+     *      tone burst on the ear is that of a beep.
+     */
+    CLICK:      0x80,
+    INIT:       0x00
+};
+
+/*
+ * Definitions of all VT100 keys (7-bit values representing key positions on the VT100).  We call these
+ * VT100 key values KEYNUMs, to avoid confusion with browser KEYCODEs.  They are be used in a subsequent
+ * KEYMAP table.
+ */
+VT100Keyboard.KEYNUM = {
+    DEL:        0x03,
+    P:          0x05,
+    O:          0x06,
+    Y:          0x07,
+    T:          0x08,
+    W:          0x09,
+    Q:          0x0A,
+    RIGHT:      0x10,
+    RBRACK:     0x14,
+    LBRACK:     0x15,
+    I:          0x16,
+    U:          0x17,
+    R:          0x18,
+    E:          0x19,
+    ONE:        0x1A,
+    LEFT:       0x20,
+    DOWN:       0x22,
+    BREAK:      0x23,   // aka BREAK
+    BQUOTE:     0x24,
+    DASH:       0x25,
+    NINE:       0x26,
+    SEVEN:      0x27,
+    FOUR:       0x28,
+    THREE:      0x29,
+    ESC:        0x2A,
+    UP:         0x30,
+    F3:         0x31,   // aka PF3
+    F1:         0x32,   // aka PF1
+    BS:         0x33,
+    EQUALS:     0x34,
+    ZERO:       0x35,
+    EIGHT:      0x36,
+    SIX:        0x37,
+    FIVE:       0x38,
+    TWO:        0x39,
+    TAB:        0x3A,
+    NUM_7:      0x40,
+    F4:         0x41,   // aka PF4
+    F2:         0x42,   // aka PF2
+    NUM_0:      0x43,
+    LF:         0x44,   // aka LINE-FEED
+    BSLASH:     0x45,
+    L:          0x46,
+    K:          0x47,
+    G:          0x48,
+    F:          0x49,
+    A:          0x4A,
+    NUM_8:      0x50,
+    NUM_CR:     0x51,
+    NUM_2:      0x52,
+    NUM_1:      0x53,
+    QUOTE:      0x55,
+    SEMI:       0x56,
+    J:          0x57,
+    H:          0x58,
+    D:          0x59,
+    S:          0x5A,
+    NUM_DEL:    0x60,   // aka KEYPAD PERIOD
+    NUM_COMMA:  0x61,   // aka KEYPAD COMMA
+    NUM_5:      0x62,
+    NUM_4:      0x63,
+    CR:         0x64,   // TODO: Figure out why the Technical Manual lists CR at both 0x04 and 0x64
+    PERIOD:     0x65,
+    COMMA:      0x66,
+    N:          0x67,
+    B:          0x68,
+    X:          0x69,
+    NO_SCROLL:  0x6A,   // aka NO-SCROLL
+    NUM_9:      0x70,
+    NUM_3:      0x71,
+    NUM_6:      0x72,
+    NUM_SUB:    0x73,   // aka KEYPAD MINUS
+    SLASH:      0x75,
+    M:          0x76,
+    SPACE:      0x77,
+    V:          0x78,
+    C:          0x79,
+    Z:          0x7A,
+    SETUP:      0x7B,   // aka SET-UP
+    CTRL:       0x7C,
+    SHIFT:      0x7D,   // either shift key (doesn't matter)
+    CAPS_LOCK:  0x7E
+};
+
+/*
+ * Virtual KEYCODE definitions.
+ *
+ * A virtual keyCode is one that is (hopefully) outside the range of all browser keyCodes.  Each refers
+ * to a key (or key combination) that has no analog on a modern keyboard and/or that we want to associate
+ * with an on-screen control.
+ *
+ * A good example is the VT100 SET-UP key, which has no counterpart on a modern keyboard.
+ */
+VT100Keyboard.KEYCODE = {
+    SETUP:      WebIO.KEYCODE.VIRTUAL + 1,
+    LF:         WebIO.KEYCODE.VIRTUAL + 2,
+    BREAK:      WebIO.KEYCODE.VIRTUAL + 3,
+    CTRL_C:     WebIO.KEYCODE.VIRTUAL + 4
+};
+
+/*
+ * KEYMAP maps a browser keyCode (or virtual keyCode) to a VT100 KEYNUM.
+ *
+ * NOTE: The VT100 keyboard has both BACKSPACE and DELETE keys, whereas modern keyboards generally only
+ * have DELETE.  And sadly, when you press DELETE, your modern keyboard and/or modern browser is reporting
+ * it as keyCode 8: the code for BACKSPACE, aka CTRL-H.  You have to press a modified DELETE key to get
+ * the actual DELETE keyCode of 127.
+ *
+ * We resolve this below by mapping KEYCODE.BS (8) to VT100 KEYNUM.DEL (0x03) and KEYCODE.DEL (127)
+ * to VT100 KEYNUM.BS (0x33).  So, DELETE is BACKSPACE and BACKSPACE is DELETE.  Fortunately, this
+ * confusion is all internal, because your physical key is (or should be) labeled DELETE, so the fact that
+ * the browser is converting it to BACKSPACE and that we're converting BACKSPACE back into DELETE is
+ * something most people don't need to worry their heads about.
+ */
+VT100Keyboard.KEYMAP = {
+    [WebIO.KEYCODE.BS]:             VT100Keyboard.KEYNUM.DEL,
+    [WebIO.KEYCODE.P]:              VT100Keyboard.KEYNUM.P,
+    [WebIO.KEYCODE.O]:              VT100Keyboard.KEYNUM.O,
+    [WebIO.KEYCODE.Y]:              VT100Keyboard.KEYNUM.Y,
+    [WebIO.KEYCODE.T]:              VT100Keyboard.KEYNUM.T,
+    [WebIO.KEYCODE.W]:              VT100Keyboard.KEYNUM.W,
+    [WebIO.KEYCODE.Q]:              VT100Keyboard.KEYNUM.Q,
+    [WebIO.KEYCODE.RIGHT]:          VT100Keyboard.KEYNUM.RIGHT,
+    [WebIO.KEYCODE.RBRACK]:         VT100Keyboard.KEYNUM.RBRACK,
+    [WebIO.KEYCODE.LBRACK]:         VT100Keyboard.KEYNUM.LBRACK,
+    [WebIO.KEYCODE.I]:              VT100Keyboard.KEYNUM.I,
+    [WebIO.KEYCODE.U]:              VT100Keyboard.KEYNUM.U,
+    [WebIO.KEYCODE.R]:              VT100Keyboard.KEYNUM.R,
+    [WebIO.KEYCODE.E]:              VT100Keyboard.KEYNUM.E,
+    [WebIO.KEYCODE.ONE]:            VT100Keyboard.KEYNUM.ONE,
+    [WebIO.KEYCODE.LEFT]:           VT100Keyboard.KEYNUM.LEFT,
+    [WebIO.KEYCODE.DOWN]:           VT100Keyboard.KEYNUM.DOWN,
+    [WebIO.KEYCODE.F6]:             VT100Keyboard.KEYNUM.BREAK,         // no natural mapping
+    [VT100Keyboard.KEYCODE.BREAK]:  VT100Keyboard.KEYNUM.BREAK,         // NOTE: virtual keyCode mapping
+    [WebIO.KEYCODE.BQUOTE]:         VT100Keyboard.KEYNUM.BQUOTE,
+    [WebIO.KEYCODE.DASH]:           VT100Keyboard.KEYNUM.DASH,
+    [WebIO.KEYCODE.NINE]:           VT100Keyboard.KEYNUM.NINE,
+    [WebIO.KEYCODE.SEVEN]:          VT100Keyboard.KEYNUM.SEVEN,
+    [WebIO.KEYCODE.FOUR]:           VT100Keyboard.KEYNUM.FOUR,
+    [WebIO.KEYCODE.THREE]:          VT100Keyboard.KEYNUM.THREE,
+    [WebIO.KEYCODE.ESC]:            VT100Keyboard.KEYNUM.ESC,
+    [WebIO.KEYCODE.UP]:             VT100Keyboard.KEYNUM.UP,
+    [WebIO.KEYCODE.F3]:             VT100Keyboard.KEYNUM.F3,
+    [WebIO.KEYCODE.F1]:             VT100Keyboard.KEYNUM.F1,
+    [WebIO.KEYCODE.DEL]:            VT100Keyboard.KEYNUM.BS,
+    [WebIO.KEYCODE.EQUALS]:         VT100Keyboard.KEYNUM.EQUALS,
+    [WebIO.KEYCODE.ZERO]:           VT100Keyboard.KEYNUM.ZERO,
+    [WebIO.KEYCODE.EIGHT]:          VT100Keyboard.KEYNUM.EIGHT,
+    [WebIO.KEYCODE.SIX]:            VT100Keyboard.KEYNUM.SIX,
+    [WebIO.KEYCODE.FIVE]:           VT100Keyboard.KEYNUM.FIVE,
+    [WebIO.KEYCODE.TWO]:            VT100Keyboard.KEYNUM.TWO,
+    [WebIO.KEYCODE.TAB]:            VT100Keyboard.KEYNUM.TAB,
+    [WebIO.KEYCODE.NUM_7]:          VT100Keyboard.KEYNUM.NUM_7,
+    [WebIO.KEYCODE.F4]:             VT100Keyboard.KEYNUM.F4,
+    [WebIO.KEYCODE.F2]:             VT100Keyboard.KEYNUM.F2,
+    [WebIO.KEYCODE.NUM_0]:          VT100Keyboard.KEYNUM.NUM_0,
+    [WebIO.KEYCODE.F7]:             VT100Keyboard.KEYNUM.LF,            // no natural mapping
+    [VT100Keyboard.KEYCODE.LF]:     VT100Keyboard.KEYNUM.LF,            // NOTE: virtual keyCode mapping
+    [WebIO.KEYCODE.BSLASH]:         VT100Keyboard.KEYNUM.BSLASH,
+    [WebIO.KEYCODE.L]:              VT100Keyboard.KEYNUM.L,
+    [WebIO.KEYCODE.K]:              VT100Keyboard.KEYNUM.K,
+    [WebIO.KEYCODE.G]:              VT100Keyboard.KEYNUM.G,
+    [WebIO.KEYCODE.F]:              VT100Keyboard.KEYNUM.F,
+    [WebIO.KEYCODE.A]:              VT100Keyboard.KEYNUM.A,
+    [WebIO.KEYCODE.NUM_8]:          VT100Keyboard.KEYNUM.NUM_8,
+    [WebIO.KEYCODE.CR]:             VT100Keyboard.KEYNUM.NUM_CR,
+    [WebIO.KEYCODE.NUM_2]:          VT100Keyboard.KEYNUM.NUM_2,
+    [WebIO.KEYCODE.NUM_1]:          VT100Keyboard.KEYNUM.NUM_1,
+    [WebIO.KEYCODE.QUOTE]:          VT100Keyboard.KEYNUM.QUOTE,
+    [WebIO.KEYCODE.SEMI]:           VT100Keyboard.KEYNUM.SEMI,
+    [WebIO.KEYCODE.J]:              VT100Keyboard.KEYNUM.J,
+    [WebIO.KEYCODE.H]:              VT100Keyboard.KEYNUM.H,
+    [WebIO.KEYCODE.D]:              VT100Keyboard.KEYNUM.D,
+    [WebIO.KEYCODE.S]:              VT100Keyboard.KEYNUM.S,
+    [WebIO.KEYCODE.NUM_DEL]:        VT100Keyboard.KEYNUM.NUM_DEL,
+    [WebIO.KEYCODE.F5]:             VT100Keyboard.KEYNUM.NUM_COMMA,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
+    [WebIO.KEYCODE.NUM_5]:          VT100Keyboard.KEYNUM.NUM_5,
+    [WebIO.KEYCODE.NUM_4]:          VT100Keyboard.KEYNUM.NUM_4,
+    [WebIO.KEYCODE.CR]:             VT100Keyboard.KEYNUM.CR,
+    [WebIO.KEYCODE.PERIOD]:         VT100Keyboard.KEYNUM.PERIOD,
+    [WebIO.KEYCODE.COMMA]:          VT100Keyboard.KEYNUM.COMMA,
+    [WebIO.KEYCODE.N]:              VT100Keyboard.KEYNUM.N,
+    [WebIO.KEYCODE.B]:              VT100Keyboard.KEYNUM.B,
+    [WebIO.KEYCODE.X]:              VT100Keyboard.KEYNUM.X,
+    [WebIO.KEYCODE.F8]:             VT100Keyboard.KEYNUM.NO_SCROLL,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
+    [WebIO.KEYCODE.NUM_9]:          VT100Keyboard.KEYNUM.NUM_9,
+    [WebIO.KEYCODE.NUM_3]:          VT100Keyboard.KEYNUM.NUM_3,
+    [WebIO.KEYCODE.NUM_6]:          VT100Keyboard.KEYNUM.NUM_6,
+    [WebIO.KEYCODE.NUM_SUB]:        VT100Keyboard.KEYNUM.NUM_SUB,
+    [WebIO.KEYCODE.SLASH]:          VT100Keyboard.KEYNUM.SLASH,
+    [WebIO.KEYCODE.M]:              VT100Keyboard.KEYNUM.M,
+    [WebIO.KEYCODE.SPACE]:          VT100Keyboard.KEYNUM.SPACE,
+    [WebIO.KEYCODE.V]:              VT100Keyboard.KEYNUM.V,
+    [WebIO.KEYCODE.C]:              VT100Keyboard.KEYNUM.C,
+    [WebIO.KEYCODE.Z]:              VT100Keyboard.KEYNUM.Z,
+    [WebIO.KEYCODE.F9]:             VT100Keyboard.KEYNUM.SETUP,         // no natural mapping
+    [VT100Keyboard.KEYCODE.SETUP]:  VT100Keyboard.KEYNUM.SETUP,         // NOTE: virtual keyCode mapping
+    [WebIO.KEYCODE.CTRL]:           VT100Keyboard.KEYNUM.CTRL,
+    [WebIO.KEYCODE.SHIFT]:          VT100Keyboard.KEYNUM.SHIFT,
+    [WebIO.KEYCODE.CAPS_LOCK]:      VT100Keyboard.KEYNUM.CAPS_LOCK,
+    /*
+     * Mappings can also be to an array of multiple keyNum combinations, such as:
+     */
+    [VT100Keyboard.KEYCODE.CTRL_C]: [VT100Keyboard.KEYNUM.CTRL, VT100Keyboard.KEYNUM.C]
+};
+
+/*
+ * CLICKMAP maps a binding ID to any of: browser (WebIO) keyCode, virtual (VT100Keyboard) keyCode, or array of keyCode modifier plus keyCode.
+ */
+VT100Keyboard.CLICKMAP = {
+    "keySetup":                     VT100Keyboard.KEYCODE.SETUP,        // NOTE: virtual keyCode mapping
+    "keyLineFeed":                  VT100Keyboard.KEYCODE.LF,           // NOTE: virtual keyCode mapping
+    "keyTab":                       WebIO.KEYCODE.TAB,
+    "keyEsc":                       WebIO.KEYCODE.ESC,
+    "keyBreak":                     VT100Keyboard.KEYCODE.BREAK,        // NOTE: virtual keyCode mapping
+    "keyCtrl":                      WebIO.KEYCODE.CTRL,
+    "keyCtrlC":                     VT100Keyboard.KEYCODE.CTRL_C,       // NOTE: virtual keyCode mapping
+    "keyCtrlLock":                  [WebIO.KEYCODE.LOCK, WebIO.KEYCODE.CTRL],
+    "keyShiftLock":                 [WebIO.KEYCODE.LOCK, WebIO.KEYCODE.SHIFT],
+    "keyCapsLock":                  WebIO.KEYCODE.CAPS_LOCK
+};
+
+VT100Keyboard.LEDS = {
+    [VT100Keyboard.STATUS.LED4]:            "led4",
+    [VT100Keyboard.STATUS.LED3]:            "led3",
+    [VT100Keyboard.STATUS.LED2]:            "led2",
+    [VT100Keyboard.STATUS.LED1]:            "led1",
+    [VT100Keyboard.STATUS.LOCKED]:          "ledLocked",
+    [VT100Keyboard.STATUS.LOCAL]:           "ledLocal",
+    [~VT100Keyboard.STATUS.LOCAL & 0xff]:   "ledOnline"                 // NOTE: ledOnline is the inverse of ledLocal; updateLEDs() understands inverted masks
+};
+
+VT100Keyboard.IOTABLE = {
+    0x82:   [VT100Keyboard.prototype.inUARTAddress, VT100Keyboard.prototype.outUARTStatus]
+};
+
+Defs.CLASSES["VT100Keyboard"] = VT100Keyboard;
+
+/**
+ * @copyright https://www.pcjs.org/machines/dec/vt100/lib/serial.js (C) 2012-2020 Jeff Parsons
+ */
+
+/**
+ * @class {VT100Serial}
+ * @unrestricted
+ */
+class VT100Serial extends Device {
+    /**
+     * VT100Serial(idMachine, idDevice, config)
+     *
+     * @this {VT100Serial}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {Config} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        super(idMachine, idDevice, config);
+
+        this.nIRQ = this.config['irq'] || 2;
+        this.portBase = this.config['portBase'] || 0;
+
+        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
+        this.ports = /** @type {Ports} */ (this.findDeviceByClass("Ports"));
+        this.ports.addIOTable(this, VT100Serial.IOTABLE, this.portBase);
+
+        /*
+         * Whereas VT100Serial.LEDS maps bits to LED ID, this.leds maps bits to the actual LED devices.
+         */
+        this.leds = {};
+        for (let bit in VT100Serial.LEDS) {
+            this.leds[bit] = /** @type {LED} */ (this.findDevice(VT100Serial.LEDS[bit], false));
+        }
+
+        this.timerReceiveNext = this.time.addTimer(this.idDevice + ".receive", this.receiveData.bind(this));
+        this.timerTransmitNext = this.time.addTimer(this.idDevice + ".transmit", this.transmitData.bind(this));
+
+        /*
+         * No connection until initConnection() is called.
+         */
+        this.sDataReceived = "";
+        this.connection = this.sendData = this.updateStatus = null;
+
+        /*
+         * Export all functions required by initConnection().
+         */
+        this['exports'] = {
+            'connect': this.initConnection,
+            'receiveData': this.receiveData,
+            'receiveStatus': this.receiveStatus
+        };
+        this.onReset();
+    }
+
+    /**
+     * initConnection(fNullModem)
+     *
+     * If a machine 'connection' parameter exists of the form "{sourcePort}->{targetMachine}.{targetPort}",
+     * and "{sourcePort}" matches our idDevice, then look for a component with id "{targetMachine}.{targetPort}".
+     *
+     * If the target component is found, then verify that it has exported functions with the following names:
+     *
+     *      receiveData(data): called when we have data to transmit; aliased internally to sendData(data)
+     *      receiveStatus(pins): called when our control signals have changed; aliased internally to updateStatus(pins)
+     *
+     * For now, we're not going to worry about communication in the other direction, because when the target component
+     * performs its own initConnection(), it will find our receiveData() and receiveStatus() functions, at which point
+     * communication in both directions should be established, and the circle of life complete.
+     *
+     * For added robustness, if the target machine initializes much more slowly than we do, and our connection attempt
+     * fails, that's OK, because when it finally initializes, its initConnection() will call our initConnection();
+     * if we've already initialized, no harm done.
+     *
+     * @this {VT100Serial}
+     * @param {boolean} [fNullModem] (caller's null-modem setting, to ensure our settings are in agreement)
+     */
+    initConnection(fNullModem)
+    {
+        if (!this.connection) {
+            let sConnection = this.getMachineConfig("connection");
+            if (sConnection) {
+                let asParts = sConnection.split('->');
+                if (asParts.length == 2) {
+                    let sSourceID = asParts[0].trim();
+                    if (sSourceID != this.idDevice) return;     // this connection string is intended for another instance
+                    let sTargetID = asParts[1].trim();
+                    this.connection = this.findDevice(sTargetID);
+                    if (this.connection) {
+                        let exports = this.connection['exports'];
+                        if (exports) {
+                            let fnConnect = /** @function */ (exports['connect']);
+                            if (fnConnect) fnConnect.call(this.connection, this.fNullModem);
+                            this.sendData = exports['receiveData'];
+                            if (this.sendData) {
+                                this.fNullModem = fNullModem;
+                                this.updateStatus = exports['receiveStatus'];
+                                this.printf("Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
+                                return;
+                            }
+                        }
+                    }
+                }
+                this.printf("Unable to establish connection: %s\n", sConnection);
+            }
+        }
+    }
+
+    /**
+     * loadState(state)
+     *
+     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
+     *
+     * @this {VT100Serial}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    loadState(state)
+    {
+        let idDevice = state.shift();
+        if (this.idDevice == idDevice) {
+            this.fReady     = state.shift();
+            this.bDataIn    = state.shift();
+            this.bDataOut   = state.shift();
+            this.bStatus    = state.shift();
+            this.bMode      = state.shift();
+            this.bCommand   = state.shift();
+            this.bBaudRates = state.shift();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * saveState(state)
+     *
+     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
+     *
+     * @this {VT100Serial}
+     * @param {Array} state
+     */
+    saveState(state)
+    {
+        state.push(this.idDevice);
+        state.push(this.fReady);
+        state.push(this.bDataIn);
+        state.push(this.bDataOut);
+        state.push(this.bStatus);
+        state.push(this.bMode);
+        state.push(this.bCommand);
+        state.push(this.bBaudRates);
+    }
+
+    /**
+     * onPower(on)
+     *
+     * Called by the Machine device to provide notification of a power event.
+     *
+     * @this {VT100Serial}
+     * @param {boolean} on (true to power on, false to power off)
+     */
+    onPower(on)
+    {
+        if (!this.cpu) {
+            this.cpu = /** @type {CPU8080} */ (this.findDeviceByClass("CPU"));
+            /*
+             * This is as late as we can currently wait to make our first inter-machine connection attempt;
+             * even so, the target machine's initialization process may still be ongoing, so any connection
+             * may be not fully resolved until the target machine performs its own initConnection(), which will
+             * in turn invoke our initConnection() again.
+             */
+            this.initConnection(this.fNullModem);
+        }
+    }
+
+    /**
+     * onReset()
+     *
+     * Called by the Machine device to provide notification of a reset event.
+     *
+     * @this {VT100Serial}
+     */
+    onReset()
+    {
+        this.fReady = false;
+        this.bDataIn = 0;
+        this.bDataOut = 0;
+        this.bStatus = VT100Serial.UART8251.STATUS.INIT;
+        this.bMode = VT100Serial.UART8251.MODE.INIT;
+        this.bCommand = VT100Serial.UART8251.COMMAND.INIT;
+        this.bBaudRates = VT100Serial.UART8251.BAUDRATES.INIT;
+        this.updateLEDs();
+    }
+
+    /**
+     * getBaudTimeout(maskRate)
+     *
+     * @this {VT100Serial}
+     * @param {number} maskRate (either VT100Serial.UART8251.BAUDRATES.RECV_RATE or VT100Serial.UART8251.BAUDRATES.XMIT_RATE)
+     * @returns {number} (number of milliseconds per byte)
+     */
+    getBaudTimeout(maskRate)
+    {
+        let indexRate = (this.bBaudRates & maskRate);
+        if (!(maskRate & 0xf)) indexRate >>= 4;
+        let nBaud = VT100Serial.UART8251.BAUDTABLE[indexRate];
+        let nBits = ((this.bMode & VT100Serial.UART8251.MODE.DATA_BITS) >> 2) + 6;   // includes an extra +1 for start bit
+        if (this.bMode & VT100Serial.UART8251.MODE.PARITY_ENABLE) nBits++;
+        nBits += ((((this.bMode & VT100Serial.UART8251.MODE.STOP_BITS) >> 6) + 1) >> 1);
+        let nBytesPerSecond = nBaud / nBits;
+        return (1000 / nBytesPerSecond)|0;
+    }
+
+    /**
+     * isTransmitterReady()
+     *
+     * Called when someone needs the UART's transmitter status.
+     *
+     * @this {VT100Serial}
+     * @returns {boolean} (true if ready, false if not)
+     */
+    isTransmitterReady()
+    {
+        return !!(this.bStatus & VT100Serial.UART8251.STATUS.XMIT_READY);
+    }
+
+    /**
+     * receiveByte(b)
+     *
+     * @this {VT100Serial}
+     * @param {number} b
+     * @returns {boolean}
+     */
+    receiveByte(b)
+    {
+        this.printf(MESSAGE.SERIAL, "receiveByte(%#04x): status=%#04x\n", b, this.bStatus);
+        if (!this.fAutoStop && !(this.bStatus & VT100Serial.UART8251.STATUS.RECV_FULL)) {
+            if (this.cpu) {
+                this.bDataIn = b;
+                this.bStatus |= VT100Serial.UART8251.STATUS.RECV_FULL;
+                this.cpu.requestINTR(this.nIRQ);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * receiveData(data)
+     *
+     * Helper for clocking received data at the expected RECV_RATE.
+     *
+     * When we're cramming test data down the terminal's throat, that data will typically be in the form
+     * of a string.  When we're called by another component, data will typically be a number (ie, byte).  If no
+     * data is specified at all, then all we do is "clock" any remaining data into the receiver.
+     *
+     * @this {VT100Serial}
+     * @param {number|string|undefined} [data]
+     * @returns {boolean} true if received, false if not
+     */
+    receiveData(data)
+    {
+        if (data != null) {
+            if (typeof data != "number") {
+                this.sDataReceived = data;
+            } else {
+                this.sDataReceived += String.fromCharCode(data);
+            }
+        }
+        if (this.sDataReceived) {
+            if (this.receiveByte(this.sDataReceived.charCodeAt(0))) {
+                this.sDataReceived = this.sDataReceived.substr(1);
+            }
+            if (this.sDataReceived) {
+                this.time.setTimer(this.timerReceiveNext, this.getBaudTimeout(VT100Serial.UART8251.BAUDRATES.RECV_RATE));
+            }
+        }
+        return true;                // for now, return true regardless, since we're buffering everything anyway
+    }
+
+    /**
+     * receiveStatus(pins)
+     *
+     * NOTE: Prior to the addition of this interface, the DSR bit was initialized set and remained set for the life
+     * of the machine.  It is entirely appropriate that this is the only way the bit can be changed, because it represents
+     * an external control signal.
+     *
+     * @this {VT100Serial}
+     * @param {number} pins
+     */
+    receiveStatus(pins)
+    {
+        this.bStatus &= ~VT100Serial.UART8251.STATUS.DSR;
+        if (pins & RS232.DSR.MASK) this.bStatus |= VT100Serial.UART8251.STATUS.DSR;
+    }
+
+    /**
+     * transmitByte(b)
+     *
+     * @this {VT100Serial}
+     * @param {number} b
+     * @returns {boolean} true if transmitted, false if not
+     */
+    transmitByte(b)
+    {
+        let fTransmitted = false;
+        this.printf(MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
+        if (this.fAutoXOFF) {
+            if (b == 0x13) {        // XOFF
+                this.fAutoStop = true;
+                return false;
+            }
+            if (b == 0x11) {        // XON
+                this.fAutoStop = false;
+                return false;
+            }
+        }
+        if (this.sendData && this.sendData.call(this.connection, b)) {
+            fTransmitted = true;
+        }
+        return fTransmitted;
+    }
+
+    /**
+     * transmitData(sData)
+     *
+     * Helper for clocking transmitted data at the expected XMIT_RATE.
+     *
+     * When timerTransmitNext fires, we have honored the programmed XMIT_RATE period, so we can
+     * set XMIT_READY (and XMIT_EMPTY), which signals the firmware that another byte can be transmitted.
+     *
+     * The sData parameter is not used when we're called via the timer; it's an optional parameter used by
+     * the Keyboard component to deliver data pasted via the clipboard, and is currently only useful when
+     * the VT100Serial is connected to another machine.  TODO: Define a separate interface for that feature.
+     *
+     * @this {VT100Serial}
+     * @param {string} [sData]
+     * @returns {boolean} true if successful, false if not
+     */
+    transmitData(sData)
+    {
+        this.bStatus |= (VT100Serial.UART8251.STATUS.XMIT_READY | VT100Serial.UART8251.STATUS.XMIT_EMPTY);
+        if (sData) {
+            return this.sendData? this.sendData.call(this.connection, sData) : false;
+        }
+        return true;
+    }
+
+    /**
+     * inData(port)
+     *
+     * @this {VT100Serial}
+     * @param {number} port (0x0)
+     * @returns {number} simulated port value
+     */
+    inData(port)
+    {
+        let value = this.bDataIn;
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "inData(%#04x): %#04x\n", port, value);
+        this.bStatus &= ~VT100Serial.UART8251.STATUS.RECV_FULL;
+        return value;
+    }
+
+    /**
+     * inStatus(port)
+     *
+     * @this {VT100Serial}
+     * @param {number} port (0x1)
+     * @returns {number} simulated port value
+     */
+    inStatus(port)
+    {
+        let value = this.bStatus;
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "inStatus(%#04x): %#04x\n", port, value);
+        return value;
+    }
+
+    /**
+     * outData(port, bOut)
+     *
+     * @this {VT100Serial}
+     * @param {number} port (0x0)
+     * @param {number} value
+     */
+    outData(port, value)
+    {
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outData(%#04x): %#04x\n", port, value);
+        this.bDataOut = value;
+        this.bStatus &= ~(VT100Serial.UART8251.STATUS.XMIT_READY | VT100Serial.UART8251.STATUS.XMIT_EMPTY);
+        /*
+         * If we're transmitting to a virtual device that has no measurable delay, this code may clear XMIT_READY
+         * too quickly:
+         *
+         *      if (this.transmitByte(bOut)) {
+         *          this.bStatus |= (VT100Serial.UART8251.STATUS.XMIT_READY | VT100Serial.UART8251.STATUS.XMIT_EMPTY);
+         *      }
+         *
+         * A better solution is to arm a timer based on the XMIT_RATE baud rate, and clear the above bits when that
+         * timer fires.  Consequently, we no longer care what transmitByte() reports.
+         */
+        this.transmitByte(value);
+        this.time.setTimer(this.timerTransmitNext, this.getBaudTimeout(VT100Serial.UART8251.BAUDRATES.XMIT_RATE));
+    }
+
+    /**
+     * outControl(port, value)
+     *
+     * Writes to the CONTROL port (0x1) are either MODE or COMMAND bytes.  If the device has just
+     * been powered or reset, it is in a "not ready" state and is waiting for a MODE byte.  Once it
+     * has received that initial byte, the device is marked "ready", and all further bytes are
+     * interpreted as COMMAND bytes (until/unless a COMMAND byte with the INTERNAL_RESET bit is set).
+     *
+     * @this {VT100Serial}
+     * @param {number} port (0x1)
+     * @param {number} value
+     */
+    outControl(port, value)
+    {
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outControl(%#04x): %#04x\n", port, value);
+        if (!this.fReady) {
+            this.bMode = value;
+            this.fReady = true;
+        } else {
+            /*
+             * Whenever DTR or RTS changes, we also want to notify any connected machine, via updateStatus().
+             */
+            if (this.updateStatus) {
+                let delta = (value ^ this.bCommand);
+                if (delta & (VT100Serial.UART8251.COMMAND.RTS | VT100Serial.UART8251.COMMAND.DTR)) {
+                    let pins = 0;
+                    if (this.fNullModem) {
+                        pins |= (value & VT100Serial.UART8251.COMMAND.RTS)? RS232.CTS.MASK : 0;
+                        pins |= (value & VT100Serial.UART8251.COMMAND.DTR)? (RS232.DSR.MASK | RS232.CD.MASK): 0;
+                    } else {
+                        pins |= (value & VT100Serial.UART8251.COMMAND.RTS)? RS232.RTS.MASK : 0;
+                        pins |= (value & VT100Serial.UART8251.COMMAND.DTR)? RS232.DTR.MASK : 0;
+                    }
+                    this.updateStatus.call(this.connection, pins);
+                }
+            }
+            this.updateLEDs(value, this.bCommand);
+            this.bCommand = value;
+            if (this.bCommand & VT100Serial.UART8251.COMMAND.INTERNAL_RESET) {
+                this.fReady = false;
+            }
+        }
+    }
+
+    /**
+     * outBaudRates(port, value)
+     *
+     * @this {VT100Serial}
+     * @param {number} port (0x2)
+     * @param {number} value
+     */
+    outBaudRates(port, value)
+    {
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outBaudRates(%#04x): %#04x\n", port, value);
+        this.bBaudRates = value;
+    }
+
+    /**
+     * updateLEDs(value, previous)
+     *
+     * @this {VT100Serial}
+     * @param {number} [value] (if not provided, all LEDS are turned off)
+     * @param {number} [previous] (if not provided, all LEDs are updated)
+     */
+    updateLEDs(value, previous)
+    {
+        for (let id in this.leds) {
+            let led = this.leds[id];
+            if (!led) continue;
+            let bit = +id, on, changed = 1, redraw = 1;
+            if (value != undefined) {
+                if (!(bit & (bit - 1))) {       // if a single bit is set, this will be zero
+                    on = value & bit;           // and "on" will be true if that single bit is set
+                } else {
+                    bit = ~bit & 0xff;          // otherwise, we assume that a single bit is clear
+                    on = !(value & bit);        // so "on" will be true if that same single bit is clear
+                }
+                if (previous != undefined) {
+                    changed = (value ^ previous) & bit;
+                    redraw = 0;
+                }
+            }
+            if (changed) {                      // call setLEDState() only if the bit changed
+                led.setLEDState(0, 0, on? LED.STATE.ON : LED.STATE.OFF);
+                if (redraw) led.drawBuffer();
+            }
+        }
+    }
+}
+
+VT100Serial.UART8251 = {
+    /*
+     * Format of MODE byte written to CONTROL port 0x1
+     */
+    MODE: {
+        BAUD_FACTOR:    0x03,       // 00=SYNC, 01=1x, 10=16x, 11=64x
+        DATA_BITS:      0x0C,       // 00=5, 01=6, 10=7, 11=8
+        PARITY_ENABLE:  0x10,
+        EVEN_PARITY:    0x20,
+        STOP_BITS:      0xC0,       // 00=invalid, 01=1, 10=1.5, 11=2
+        INIT:           0x8E        // 16x baud rate, 8 data bits, no parity, 1.5 stop bits
+    },
+    /*
+     * Format of COMMAND byte written to CONTROL port 0x1
+     */
+    COMMAND: {
+        XMIT_ENABLE:    0x01,
+        DTR:            0x02,       // Data Terminal Ready
+        RECV_ENABLE:    0x04,
+        SEND_BREAK:     0x08,
+        ERROR_RESET:    0x10,
+        RTS:            0x20,       // Request To Send
+        INTERNAL_RESET: 0x40,
+        HUNT_MODE:      0x80,
+        INIT:           0x27        // XMIT_ENABLE | DTR | RECV_ENABLE | RTS
+    },
+    /*
+     * Format of STATUS byte read from CONTROL port 0x1
+     */
+    STATUS: {
+        XMIT_READY:     0x01,
+        RECV_FULL:      0x02,
+        XMIT_EMPTY:     0x04,
+        PARITY_ERROR:   0x08,
+        OVERRUN_ERROR:  0x10,
+        FRAMING_ERROR:  0x20,
+        BREAK_DETECT:   0x40,
+        DSR:            0x80,       // Data Set Ready
+        INIT:           0x85        // XMIT_READY | XMIT_EMPTY | DSR
+    },
+    /*
+     * Format of BAUDRATES byte written to port 0x2
+     *
+     * Each nibble is an index (0x0-0xF) into a set of internal CPU clock divisors that yield the
+     * following baud rates:
+     *
+     *      Index   Divisor     Baud Rate
+     *      -----   -------     ---------
+     *      0x0      3456       50
+     *      0x1      2304       75
+     *      0x2      1571       110
+     *      0x3      1285       134.5
+     *      0x4      1152       150
+     *      0x5      864        200
+     *      0x6      576        300
+     *      0x7      288        600
+     *      0x8      144        1200
+     *      0x9      96         1800
+     *      0xA      86         2000
+     *      0xB      72         2400
+     *      0xC      48         3600
+     *      0xD      36         4800
+     *      0xE      18         9600    (default)
+     *      0xF      9          19200
+     *
+     * NOTE: This is a VT100-specific port and baud rate table.
+     */
+    BAUDRATES: {
+        RECV_RATE:      0x0F,
+        XMIT_RATE:      0xF0,
+        INIT:           0xEE    // default to 9600 (0xE) for both XMIT and RECV
+    },
+    BAUDTABLE: [
+        50, 75, 110, 134.5, 150, 200, 300, 600, 1200, 1800, 2000, 2400, 3600, 4800, 9600, 19200
+    ]
+};
+
+VT100Serial.LEDS = {
+    [VT100Serial.UART8251.COMMAND.DTR]:  "ledDTR",
+    [VT100Serial.UART8251.COMMAND.RTS]:  "ledRTS"
+};
+
+VT100Serial.IOTABLE = {
+    0x0: [VT100Serial.prototype.inData, VT100Serial.prototype.outData],
+    0x1: [VT100Serial.prototype.inStatus, VT100Serial.prototype.outControl],
+    0x2: [null, VT100Serial.prototype.outBaudRates]
+};
+
+Defs.CLASSES["VT100Serial"] = VT100Serial;
+
+/**
+ * @copyright https://www.pcjs.org/machines/dec/vt100/lib/video.js (C) 2012-2020 Jeff Parsons
+ */
+
+/** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */
+var VT100VideoConfig;
+
+/**
+ * @class {VT100Video}
+ * @unrestricted
+ * @property {VT100VideoConfig} config
+ */
+class VT100Video extends Monitor {
+    /**
+     * VT100Video(idMachine, idDevice, config)
+     *
+     * The VT100Video component can be configured with the following config properties:
+     *
+     *      bufferWidth: the width of a single frame buffer row, in pixels (eg, 256)
+     *      bufferHeight: the number of frame buffer rows (eg, 224)
+     *      bufferAddr: the starting address of the frame buffer (eg, 0x2400)
+     *      bufferRAM: true to use existing RAM (default is false)
+     *      bufferBits: the number of bits per column (default is 1)
+     *      bufferLeft: the bit position of the left-most pixel in a byte (default is 0; CGA uses 7)
+     *      interruptRate: normally the same as (or some multiple of) refreshRate (eg, 120)
+     *      refreshRate: how many times updateMonitor() should be performed per second (eg, 60)
+     *
+     *  In addition, if a text-only display is being emulated, define the following properties:
+     *
+     *      fontROM: URL of font ROM
+     *      fontColor: default is white
+     *      cellWidth: number (eg, 10 for VT100)
+     *      cellHeight: number (eg, 10 for VT100)
+     *
+     * We record all the above values now, but we defer creation of the frame buffer until initBuffers()
+     * is called.  At that point, we will also compute the extent of the frame buffer, determine the
+     * appropriate "cell" size (ie, the number of pixels that updateMonitor() will fetch and process at once),
+     * and then allocate our cell cache.
+     *
+     * Why interruptRate in addition to refreshRate?  A higher interrupt rate is required for Space Invaders,
+     * because even though the CRT refreshes at 60Hz, the CRT controller interrupts the CPU *twice* per
+     * refresh (once after the top half of the image has been redrawn, and again after the bottom half has
+     * been redrawn), so we need an interrupt rate of 120Hz.  We pass the higher rate on to the CPU, so that
+     * it will call updateMonitor() more frequently, but we still limit our monitor updates to every *other* call.
+     *
+     * @this {VT100Video}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {ROMConfig} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        super(idMachine, idDevice, config);
+        /*
+         * Setting the device's "messages" property eliminates the need for printf() calls to include this value;
+         * any printf() that omits a MESSAGE parameter will use this value by default.
+         */
+        this.messages = MESSAGE.VIDEO;
+
+        this.addrBuffer = this.config['bufferAddr'];
+        this.fUseRAM = this.config['bufferRAM'];
+
+        this.nColsBuffer = this.config['bufferWidth'];
+        this.nRowsBuffer = this.config['bufferHeight'];
+
+        this.cxCellDefault = this.cxCell = this.config['cellWidth'] || 1;
+        this.cyCellDefault = this.cyCell = this.config['cellHeight'] || 1;
+
+        this.abFontData = null;
+        this.fDotStretcher = false;
+
+        this.nBitsPerPixel = this.config['bufferBits'] || 1;
+        this.iBitFirstPixel = this.config['bufferLeft'] || 0;
+
+        this.rateInterrupt = this.config['interruptRate'];
+        this.rateRefresh = this.config['refreshRate'] || 60;
+
+        this.cxMonitorCell = (this.cxMonitor / this.nColsBuffer)|0;
+        this.cyMonitorCell = (this.cyMonitor / this.nRowsBuffer)|0;
+
+        /*
+         * Now that we've finished using nRowsBuffer to help define the monitor size, we add one more
+         * row for text modes, to account for the VT100's scroll line buffer (used for smooth scrolling).
+         */
+        if (this.cyCell > 1) {
+            this.nRowsBuffer++;
+            this.bScrollOffset = 0;
+            this.fSkipSingleCellUpdate = false;
+        }
+
+        this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['bus']));
+        this.initBuffers();
+
+        this.abFontData = this.config['fontROM'];
+        this.createFonts();
+
+        this.cpu = /** @type {CPU8080} */ (this.findDeviceByClass("CPU"));
+        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
+        this.timerUpdateNext = this.time.addTimer(this.idDevice, this.updateMonitor.bind(this));
+        this.time.addUpdate(this);
+
+        this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
+        this.nUpdates = 0;
+    }
+
+    /**
+     * onUpdate(fTransition)
+     *
+     * This is our obligatory update() function, which every device with visual components should have.
+     *
+     * For the video device, our sole function is making sure the screen display is up-to-date.  However, calling
+     * updateScreen() is a bad idea if the machine is running, because we already have a timer to take care of
+     * that.  But we can also be called when the machine is NOT running (eg, the Debugger may be stepping through
+     * some code, or editing the frame buffer directly, or something else).  Since we have no way of knowing, we
+     * simply force an update.
+     *
+     * @this {VT100Video}
+     * @param {boolean} [fTransition]
+     */
+    onUpdate(fTransition)
+    {
+        if (!this.time.isRunning()) this.updateScreen();
+    }
+
+    /**
+     * initBuffers()
+     *
+     * @this {VT100Video}
+     * @returns {boolean}
+     */
+    initBuffers()
+    {
+        /*
+         * Allocate off-screen buffers now
+         */
+        this.cxBuffer = this.nColsBuffer * this.cxCell;
+        this.cyBuffer = this.nRowsBuffer * this.cyCell;
+
+        let cxBuffer = this.cxBuffer;
+        let cyBuffer = this.cyBuffer;
+
+        this.sizeBuffer = 0;
+        if (!this.fUseRAM) {
+            this.sizeBuffer = ((this.cxBuffer * this.nBitsPerPixel) >> 3) * this.cyBuffer;
+            if (!this.busMemory.addBlocks(this.addrBuffer, this.sizeBuffer, Memory.TYPE.READWRITE)) {
+                return false;
+            }
+        }
+
+        /*
+         * Since we will read video data from the bus at its default width, get that width now;
+         * that width will also determine the size of a cell.
+         */
+        this.cellWidth = this.busMemory.dataWidth;
+
+        /*
+         * We add an extra column per row to store the visible line length at the start of every row.
+         */
+        this.initCache((this.nColsBuffer + 1) * this.nRowsBuffer);
+
+        this.canvasBuffer = document.createElement("canvas");
+        this.canvasBuffer.width = cxBuffer;
+        this.canvasBuffer.height = cyBuffer;
+        this.contextBuffer = this.canvasBuffer.getContext("2d");
+
+        this.aFonts = {};
+        this.initColors();
+
+        /*
+         * Beyond fonts, VT100 support requires that we maintain a number of additional properties:
+         *
+         *      rateMonitor: must be either 50 or 60 (defaults to 60); we don't emulate the monitor refresh rate,
+         *      but we do need to keep track of which rate has been selected, because that affects the number of
+         *      "fill lines" present at the top of the VT100's frame buffer: 2 lines for 60Hz, 5 lines for 50Hz.
+         *
+         *      The VT100 July 1982 Technical Manual, p. 4-89, shows the following sample frame buffer layout:
+         *
+         *                  00  01  02  03  04  05  06  07  08  09  0A  0B  0C  0D  0E  0F
+         *                  --------------------------------------------------------------
+         *          0x2000: 7F  70  03  7F  F2  D0  7F  70  06  7F  70  0C  7F  70  0F  7F
+         *          0x2010: 70  03  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..
+         *          ...
+         *          0x22D0: 'D' 'A' 'T' 'A' ' ' 'F' 'O' 'R' ' ' 'F' 'I' 'R' 'S' 'T' ' ' 'L'
+         *          0x22E0: 'I' 'N' 'E' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '
+         *          ...
+         *          0x2320: 7F  F3  23  'D' 'A' 'T' 'A' ' ' 'F' 'O' 'R' ' ' 'S' 'E' 'C' 'O'
+         *          0x2330: 'N' 'D' ' ' 'L' 'I' 'N' 'E' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '
+         *          ...
+         *          0x2BE0: ' ' ' ' 'E' 'N' 'D' ' ' 'O' 'F' ' ' 'L' 'A' 'S' 'T' ' ' 'L' 'I'
+         *          0x2BF0: 'N' 'E' 7F  70  06  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..
+         *          0x2C00: [AVO SCREEN RAM, IF ANY, BEGINS HERE]
+         *
+         *      ERRATA: The manual claims that if you change the byte at 0x2002 from 03 to 09, the number of "fill
+         *      lines" will change from 2 to 5 (for 50Hz operation), but it shows 06 instead of 0C at location 0x200B;
+         *      if you follow the links, it's pretty clear that byte has to be 0C to yield 5 "fill lines".  Since the
+         *      address following the terminator at 0x2006 points to itself, it never makes sense for that terminator
+         *      to be used EXCEPT at the end of the frame buffer.
+         *
+         *      As an alternative to tracking the monitor refresh rate, we could hard-code some knowledge about how
+         *      the VT100's 8080 code uses memory, and simply ignore lines below address 0x22D0.  But the VT100 Video
+         *      Processor makes no such assumption, and it would also break our test code in createFonts(), which
+         *      builds a contiguous image of test data starting at the default frame buffer address (0x2000).
+         */
+        this.rateMonitor = 60;
+
+        /*
+         * The default character-selectable attribute (reverse video vs. underline) is controlled by fUnderline.
+         */
+        this.fUnderline = false;
+        this.abLineBuffer = new Array(this.nColsBuffer);
+
+        /*
+         * Our 'smoothing' parameter defaults to null (which we treat the same as undefined), which means that
+         * image smoothing will be selectively enabled (ie, true for text modes, false for graphics modes); otherwise,
+         * we'll set image smoothing to whatever value was provided for ALL modes -- assuming the browser supports it.
+         */
+        if (this.sSmoothing) {
+            this.contextMonitor[this.sSmoothing] = (this.fSmoothing == null? false : this.fSmoothing);
+        }
+        return true;
+    }
+
+    /**
+     * createFonts()
+     *
+     * @this {VT100Video}
+     * @returns {boolean}
+     */
+    createFonts()
+    {
+        /*
+         * We retain abFontData in case we have to rebuild the fonts (eg, when we switch from 80 to 132 columns)
+         */
+        if (this.abFontData) {
+            this.fDotStretcher = true;
+            this.aFonts[VT100Video.VT100.FONT.NORML] = [
+                this.createFontVariation(this.cxCell, this.cyCell),
+                this.createFontVariation(this.cxCell, this.cyCell, this.fUnderline)
+            ];
+            this.aFonts[VT100Video.VT100.FONT.DWIDE] = [
+                this.createFontVariation(this.cxCell*2, this.cyCell),
+                this.createFontVariation(this.cxCell*2, this.cyCell, this.fUnderline)
+            ];
+            this.aFonts[VT100Video.VT100.FONT.DHIGH] = this.aFonts[VT100Video.VT100.FONT.DHIGH_BOT] = [
+                this.createFontVariation(this.cxCell*2, this.cyCell*2),
+                this.createFontVariation(this.cxCell*2, this.cyCell*2, this.fUnderline)
+            ];
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * createFontVariation(cxCell, cyCell, fUnderline)
+     *
+     * This creates a 16x16 character grid for the requested font variation.  Variations include:
+     *
+     *      1) no variation (cell size is this.cxCell x this.cyCell)
+     *      2) double-wide characters (cell size is this.cxCell*2 x this.cyCell)
+     *      3) double-high double-wide characters (cell size is this.cxCell*2 x this.cyCell*2)
+     *      4) any of the above with either reverse video or underline enabled (default is neither)
+     *
+     * @this {VT100Video}
+     * @param {number} cxCell is the target width of each character in the grid
+     * @param {number} cyCell is the target height of each character in the grid
+     * @param {boolean} [fUnderline] (null for unmodified font, false for reverse video, true for underline)
+     * @returns {Object}
+     */
+    createFontVariation(cxCell, cyCell, fUnderline)
+    {
+        this.printf("createFontVariation(cxCell=%d, cyCell=%d, fUnderline=%b\n", cxCell, cyCell, fUnderline);
+
+        /*
+         * On a VT100, cxCell,cyCell is initially 10,10, but may change to 9,10 for 132-column mode.
+         */
+
+
+
+        /*
+         * Create a font canvas that is both 16 times the target character width and the target character height,
+         * ensuring that it will accommodate 16x16 characters (for a maximum of 256).  Note that the VT100 font ROM
+         * defines only 128 characters, so that canvas will contain only 16x8 entries.
+         */
+        let nFontBytesPerChar = this.cxCellDefault <= 8? 8 : 16;
+        let nFontByteOffset = nFontBytesPerChar > 8? 15 : 0;
+        let nChars = this.abFontData.length / nFontBytesPerChar;
+
+        /*
+         * The absence of a boolean for fUnderline means that both fReverse and fUnderline are "falsey".  The presence
+         * of a boolean means that fReverse will be true OR fUnderline will be true, but NOT both.
+         */
+        let fReverse = (fUnderline === false);
+
+        let font = {cxCell: cxCell, cyCell: cyCell};
+        font.canvas = document.createElement("canvas");
+        font.canvas.width = cxCell * 16;
+        font.canvas.height = cyCell * (nChars / 16);
+        font.context = font.canvas.getContext("2d");
+
+        let imageChar = font.context.createImageData(cxCell, cyCell);
+
+        for (let iChar = 0; iChar < nChars; iChar++) {
+            for (let y = 0, yDst = y; y < this.cyCell; y++) {
+                let offFontData = iChar * nFontBytesPerChar + ((nFontByteOffset + y) & (nFontBytesPerChar - 1));
+                let bits = (fUnderline && y == 8? 0xff : this.abFontData[offFontData]);
+                for (let nRows = 0; nRows < (cyCell / this.cyCell); nRows++) {
+                    let bitPrev = 0;
+                    for (let x = 0, xDst = x; x < this.cxCell; x++) {
+                        /*
+                         * While x goes from 0 to cxCell-1, obviously we will run out of bits after x is 7;
+                         * since the final bit must be replicated all the way to the right edge of the cell
+                         * (so that line-drawing characters seamlessly connect), we ensure that the effective
+                         * shift count remains stuck at 7 once it reaches 7.
+                         */
+                        let bitReal = bits & (0x80 >> (x > 7? 7 : x));
+                        let bit = (this.fDotStretcher && !bitReal && bitPrev)? bitPrev : bitReal;
+                        for (let nCols = 0; nCols < (cxCell / this.cxCell); nCols++) {
+                            if (fReverse) bit = !bit;
+                            this.setPixel(imageChar, xDst, yDst, bit? 1 : 0);
+                            xDst++;
+                        }
+                        bitPrev = bitReal;
+                    }
+                    yDst++;
+                }
+            }
+            /*
+             * (iChar >> 4) performs the integer equivalent of Math.floor(iChar / 16), and (iChar & 0xf) is the equivalent of (iChar % 16).
+             */
+            font.context.putImageData(imageChar, (iChar & 0xf) * cxCell, (iChar >> 4) * cyCell);
+        }
+        return font;
+    }
+
+    /**
+     * updateDimensions(nCols, nRows)
+     *
+     * Called from the Chip component whenever the monitor dimensions have been dynamically altered.
+     *
+     * @this {VT100Video}
+     * @param {number} nCols (should be either 80 or 132; 80 is the default)
+     * @param {number} nRows (should be either 24 or 14; 24 is the default)
+     */
+    updateDimensions(nCols, nRows)
+    {
+        this.printf("updateDimensions(%d,%d)\n", nCols, nRows);
+        this.nColsBuffer = nCols;
+        /*
+         * Even when the number of effective rows is 14 (or 15 counting the scroll line buffer), we want
+         * to leave the number of rows at 24 (or 25 counting the scroll line buffer), because the VT100 doesn't
+         * actually change character height (only character width).
+         *
+         *      this.nRowsBuffer = nRows+1; // +1 for scroll line buffer
+         */
+        this.cxCell = this.cxCellDefault;
+        if (nCols > 80) this.cxCell--;      // VT100 font cells are 9x10 instead of 10x10 in 132-column mode
+        if (this.initBuffers()) {
+            this.createFonts();
+        }
+    }
+
+    /**
+     * updateRate(nRate)
+     *
+     * Called from the Chip component whenever the monitor refresh rate has been dynamically altered.
+     *
+     * @this {VT100Video}
+     * @param {number} nRate (should be either 50 or 60; 60 is the default)
+     */
+    updateRate(nRate)
+    {
+        this.printf("updateRate(%d)\n", nRate);
+        this.rateMonitor = nRate;
+    }
+
+    /**
+     * updateScrollOffset(bScroll)
+     *
+     * Called from the Chip component whenever the monitor scroll offset has been dynamically altered.
+     *
+     * @this {VT100Video}
+     * @param {number} bScroll
+     */
+    updateScrollOffset(bScroll)
+    {
+        this.printf("updateScrollOffset(%d)\n", bScroll);
+        if (this.bScrollOffset !== bScroll) {
+            this.bScrollOffset = bScroll;
+            /*
+             * WARNING: If we immediately redraw the monitor on the first wrap of the scroll offset back to zero,
+             * we end up "slamming" the monitor's contents back down again, because it seems that the frame buffer
+             * contents haven't actually been scrolled yet.  So we redraw now ONLY if bScroll is non-zero, lest
+             * we ruin the smooth-scroll effect.
+             *
+             * And this change, while necessary, is not sufficient, because another intervening updateMonitor()
+             * call could still occur before the frame buffer contents are actually scrolled; and ordinarily, if the
+             * buffer hasn't changed, updateMonitor() would do nothing, but alas, if the cursor happens to get toggled
+             * in the interim, updateMonitor() will want to update exactly ONE cell.
+             *
+             * So we deal with that by setting the fSkipSingleCellUpdate flag.  Now of course, there's no guarantee
+             * that the next update of only ONE cell will always be a cursor update, but even if it isn't, skipping
+             * that update doesn't seem like a huge cause for concern.
+             */
+            if (bScroll) {
+                this.updateMonitor(true);
+            } else {
+                this.fSkipSingleCellUpdate = true;
+            }
+        }
+    }
+
+    /**
+     * getRefreshTime()
+     *
+     * @this {VT100Video}
+     * @returns {number} (number of milliseconds per refresh)
+     */
+    getRefreshTime()
+    {
+        return 1000 / Math.max(this.rateRefresh, this.rateInterrupt);
+    }
+
+    /**
+     * initCache(nCells)
+     *
+     * Initializes the contents of our internal cell cache.
+     *
+     * @this {VT100Video}
+     * @param {number} [nCells]
+     */
+    initCache(nCells)
+    {
+        this.fCacheValid = false;
+        if (nCells) {
+            this.nCacheCells = nCells;
+            if (this.aCacheCells === undefined || this.aCacheCells.length != this.nCacheCells) {
+                this.aCacheCells = new Array(this.nCacheCells);
+            }
+        }
+        /*
+         * Because the VT100 frame buffer can be located anywhere in RAM (above 0x2000), we must defer this
+         * test code until the powerUp() notification handler is called, when all RAM has (hopefully) been allocated.
+         *
+         * NOTE: The following test image was useful for early testing, but a *real* VT100 doesn't display a test image,
+         * so this code is no longer enabled by default.  Remove MAXDEBUG if you want to see it again.
+         */
+        if (MAXDEBUG && !this.test) {
+            /*
+             * Build a test iamge in the VT100 frame buffer; we'll mimic the "SET-UP A" image, since it uses
+             * all the font variations.  The process involves iterating over 0-based row numbers -2 (or -5 if 50Hz
+             * operation is selected) through 24, checking aLineData for a matching row number, and converting the
+             * corresponding string(s) to appropriate byte values.  Negative row numbers correspond to "fill lines"
+             * and do not require a row entry.  If multiple strings are present for a given row, we invert the
+             * default character attribute for subsequent strings.  An empty array ends the image build process.
+             */
+            let aLineData = {
+                 0: [VT100Video.VT100.FONT.DHIGH, 'SET-UP A'],
+                 2: [VT100Video.VT100.FONT.DWIDE, 'TO EXIT PRESS "SET-UP"'],
+                22: [VT100Video.VT100.FONT.NORML, '        T       T       T       T       T       T       T       T       T'],
+                23: [VT100Video.VT100.FONT.NORML, '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890'],
+                24: []
+            };
+            let addr = this.addrBuffer;
+            let addrNext = -1, font = -1;
+            let b, nFill = (this.rateMonitor == 60? 2 : 5);
+            for (let iRow = -nFill; iRow < this.nRowsBuffer; iRow++) {
+                let lineData = aLineData[iRow];
+                if (addrNext >= 0) {
+                    let fBreak = false;
+                    addrNext = addr + 2;
+                    if (!lineData) {
+                        if (font == VT100Video.VT100.FONT.DHIGH) {
+                            lineData = aLineData[iRow-1];
+                            font = VT100Video.VT100.FONT.DHIGH_BOT;
+                        }
+                    }
+                    else {
+                        if (lineData.length) {
+                            font = lineData[0];
+                        } else {
+                            addrNext = addr - 1;
+                            fBreak = true;
+                        }
+                    }
+                    b = (font & VT100Video.VT100.LINEATTR.FONTMASK) | ((addrNext >> 8) & VT100Video.VT100.LINEATTR.ADDRMASK) | VT100Video.VT100.LINEATTR.ADDRBIAS;
+                    this.busMemory.writeData(addr++, b);
+                    this.busMemory.writeData(addr++, addrNext & 0xff);
+                    if (fBreak) break;
+                }
+                if (lineData) {
+                    let attr = 0;
+                    for (let j = 1; j < lineData.length; j++) {
+                        let s = lineData[j];
+                        for (let k = 0; k < s.length; k++) {
+                            this.busMemory.writeData(addr++, s.charCodeAt(k) | attr);
+                        }
+                        attr ^= 0x80;
+                    }
+                }
+                this.busMemory.writeData(addr++, VT100Video.VT100.LINETERM);
+                addrNext = addr;
+            }
+            this.test = true;
+        }
+    }
+
+    /**
+     * initColors()
+     *
+     * @this {VT100Video}
+     */
+    initColors()
+    {
+        let rgbBlack  = [0x00, 0x00, 0x00, 0xff];
+        let rgbWhite  = [0xff, 0xff, 0xff, 0xff];
+        this.nColors = (1 << this.nBitsPerPixel);
+        this.aRGB = new Array(this.nColors);
+        this.aRGB[0] = rgbBlack;
+        this.aRGB[1] = rgbWhite;
+    }
+
+    /**
+     * setPixel(image, x, y, bPixel)
+     *
+     * @this {VT100Video}
+     * @param {Object} image
+     * @param {number} x
+     * @param {number} y
+     * @param {number} bPixel (ie, an index into aRGB)
+     */
+    setPixel(image, x, y, bPixel)
+    {
+        let index = (x + y * image.width);
+        let rgb = this.aRGB[bPixel];
+        index *= rgb.length;
+        image.data[index] = rgb[0];
+        image.data[index+1] = rgb[1];
+        image.data[index+2] = rgb[2];
+        image.data[index+3] = rgb[3];
+    }
+
+    /**
+     * updateChar(idFont, col, row, data, context)
+     *
+     * Updates a particular character cell (row,col) in the associated window.
+     *
+     * @this {VT100Video}
+     * @param {number} idFont
+     * @param {number} col
+     * @param {number} row
+     * @param {number} data
+     * @param {Object} [context]
+     */
+    updateChar(idFont, col, row, data, context)
+    {
+        let bChar = data & 0x7f;
+        let font = this.aFonts[idFont][(data & 0x80)? 1 : 0];
+        if (!font) return;
+
+        let xSrc = (bChar & 0xf) * font.cxCell;
+        let ySrc = (bChar >> 4) * font.cyCell;
+
+        let xDst, yDst, cxDst, cyDst;
+
+        let cxSrc = font.cxCell;
+        let cySrc = font.cyCell;
+
+        if (context) {
+            xDst = col * this.cxCell;
+            yDst = row * this.cyCell;
+            cxDst = this.cxCell;
+            cyDst = this.cyCell;
+        } else {
+            xDst = col * this.cxMonitorCell;
+            yDst = row * this.cyMonitorCell;
+            cxDst = this.cxMonitorCell;
+            cyDst = this.cyMonitorCell;
+        }
+
+        /*
+         * If font.cxCell > this.cxCell, then we assume the caller wants to draw a double-wide character,
+         * so we will double xDst and cxDst.
+         */
+        if (font.cxCell > this.cxCell) {
+            xDst *= 2;
+            cxDst *= 2;
+
+        }
+
+        /*
+         * If font.cyCell > this.cyCell, then we rely on idFont to indicate whether the top half or bottom half
+         * of the character should be drawn.
+         */
+        if (font.cyCell > this.cyCell) {
+            if (idFont == VT100Video.VT100.FONT.DHIGH_BOT) ySrc += this.cyCell;
+            cySrc = this.cyCell;
+
+        }
+
+        if (context) {
+            context.drawImage(font.canvas, xSrc, ySrc, cxSrc, cySrc, xDst, yDst, cxDst, cyDst);
+        } else {
+            xDst += this.xMonitorOffset;
+            yDst += this.yMonitorOffset;
+            this.contextMonitor.drawImage(font.canvas, xSrc, ySrc, cxSrc, cySrc, xDst, yDst, cxDst, cyDst);
+        }
+    }
+
+    /**
+     * updateMonitor(fForced)
+     *
+     * Forced updates are generally internal updates triggered by an I/O operation or other state change,
+     * while non-forced updates are periodic "refresh" updates.
+     *
+     * @this {VT100Video}
+     * @param {boolean} [fForced]
+     */
+    updateMonitor(fForced)
+    {
+        let fUpdate = true;
+        if (!fForced) {
+            if (this.rateInterrupt) {
+                this.cpu.requestINTR(4);
+            }
+            /*
+             * Since this is not a forced update, if our cell cache is valid AND we allocated our own buffer AND the buffer
+             * is clean, then there's nothing to do.
+             */
+            if (fUpdate && this.fCacheValid && this.sizeBuffer) {
+                if (this.busMemory.cleanBlocks(this.addrBuffer, this.sizeBuffer)) {
+                    fUpdate = false;
+                }
+            }
+            this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
+            this.nUpdates++;
+        }
+        if (!fUpdate) {
+            return;
+        }
+        this.updateScreen(fForced);
+    }
+
+    /**
+     * updateScreen(f)
+     *
+     * Propagates the video buffer to the cell cache and updates the screen with any changes on the monitor.
+     *
+     * For every cell in the video buffer, compare it to the cell stored in the cell cache, render if it differs,
+     * and then update the cell cache to match.  Since initCache() sets every cell in the cell cache to an
+     * invalid value, we're assured that the next call to updateScreen() will redraw the entire (visible) video buffer.
+     *
+     * @this {VT100Video}
+     * @param {boolean} [fForced]
+     */
+    updateScreen(fForced)
+    {
+        let nRows = 0;
+        let font, fontNext = -1;
+        let nFill = (this.rateMonitor == 60? 2 : 5);
+        let iCell = 0, cUpdated = 0, iCellUpdated = -1;
+
+        let addrNext = this.addrBuffer;
+
+
+        while (nRows < this.nRowsBuffer) {
+            /*
+             * Populate the line buffer
+             */
+            let nCols = 0;
+            let addr = addrNext;
+            let nColsVisible = this.nColsBuffer;
+            font = fontNext;
+            if (font != VT100Video.VT100.FONT.NORML) nColsVisible >>= 1;
+            while (true) {
+                let data = this.busMemory.readData(addr++);
+                if ((data & VT100Video.VT100.LINETERM) == VT100Video.VT100.LINETERM) {
+                    let b = this.busMemory.readData(addr++);
+                    fontNext = b & VT100Video.VT100.LINEATTR.FONTMASK;
+                    addrNext = ((b & VT100Video.VT100.LINEATTR.ADDRMASK) << 8) | this.busMemory.readData(addr);
+                    addrNext += (b & VT100Video.VT100.LINEATTR.ADDRBIAS)? VT100Video.VT100.ADDRBIAS_LO : VT100Video.VT100.ADDRBIAS_HI;
+                    break;
+                }
+                if (nCols < nColsVisible) {
+                    this.abLineBuffer[nCols++] = data;
+                } else {
+                    break;                          // ideally, we would wait for a LINETERM byte, but it's not safe to loop without limit
+                }
+            }
+
+            /*
+             * Skip the first few "fill lines"
+             */
+            if (nFill) {
+                nFill--;
+                continue;
+            }
+
+            /*
+             * Pad the line buffer as needed
+             */
+            while (nCols < this.abLineBuffer.length) {
+                this.abLineBuffer[nCols++] = 0;     // character code 0 is a empty font character
+            }
+
+            /*
+             * Display the line buffer; ordinarily, the font number would be valid after processing the "fill lines",
+             * but if the buffer isn't initialized yet, those lines might be missing, so the font number might not be set.
+             */
+            if (font >= 0) {
+                /*
+                 * Cell cache logic is complicated by the fact that a line may be single-width one frame and double-width
+                 * the next.  So we store the visible line length at the start of each row in the cache, which must match if
+                 * the cache can be considered valid for the current line.
+                 */
+                let fLineCacheValid = this.fCacheValid && (this.aCacheCells[iCell] == nColsVisible);
+                this.aCacheCells[iCell++] = nColsVisible;
+                for (let iCol = 0; iCol < nCols; iCol++) {
+                    let data = this.abLineBuffer[iCol];
+                    if (!fLineCacheValid || data !== this.aCacheCells[iCell]) {
+                        this.aCacheCells[iCellUpdated = iCell] = data;
+                        this.updateChar(font, iCol, nRows, data, this.contextBuffer);
+                        cUpdated++;
+                    }
+                    iCell++;
+                }
+            }
+            nRows++;
+        }
+        this.fCacheValid = true;
+
+
+
+        if (!fForced && this.fSkipSingleCellUpdate && cUpdated == 1) {
+            /*
+             * We're going to blow off this update, since it comes on the heels of a smooth-scroll that *may*
+             * not be completely finished yet, and at the same time, we're going to zap the only updated cell
+             * cache entry, to guarantee that it's redrawn on the next update.
+             */
+
+            /*
+             * TODO: If I change the RECV rate to 19200 and enable smooth scrolling, I sometimes see a spurious
+             * "H" on the bottom line after a long series of "HELLO WORLD!\r\n" tests.  Dumping video memory shows
+             * "HELLO WORLD!" on 23 lines and an "H" on the 24th line, so it's really there.  But strangely, if
+             * I then press SET-UP two times, the restored monitor does NOT have the spurious "H".  So somehow the
+             * firmware knows what should and shouldn't be on-screen.
+             *
+             * Possible VT100 firmware bug?  I'm not sure.  Anyway, this DEBUG-only code is here to help trap
+             * that scenario, until I figure it out.
+             */
+            if (DEBUG && (this.aCacheCells[iCellUpdated] & 0x7f) == 0x48) {
+                this.printf("spurious 'H' character at offset %d\n", iCellUpdated);
+            }
+            this.aCacheCells[iCellUpdated] = -1;
+            cUpdated = 0;
+        }
+        this.fSkipSingleCellUpdate = false;
+
+        if ((cUpdated || fForced) && this.contextBuffer) {
+            /*
+             * We must subtract cyCell from cyBuffer to avoid displaying the extra "scroll line" that we normally
+             * buffer, in support of smooth scrolling.  Speaking of which, we must also add bScrollOffset to ySrc
+             * (well, ySrc is always relative to zero, so no add is actually required).
+             */
+            this.contextMonitor.drawImage(
+                this.canvasBuffer,
+                0,                                  // xSrc
+                this.bScrollOffset,                 // ySrc
+                this.cxBuffer,                      // cxSrc
+                this.cyBuffer - this.cyCell,        // cySrc
+                this.xMonitorOffset,                // xDst
+                this.yMonitorOffset,                // yDst
+                this.cxMonitorOffset,               // cxDst
+                this.cyMonitorOffset                // cyDst
+            );
+        }
+    }
+}
+
+VT100Video.VT100 = {
+    /*
+     * The following font IDs are nothing more than all the possible LINEATTR values masked with FONTMASK;
+     * also, note that double-high implies double-wide; the VT100 doesn't support a double-high single-wide font.
+     */
+    FONT: {
+        NORML:      0x60,       // normal font (eg, 10x10)
+        DWIDE:      0x40,       // double-wide, single-high font (eg, 20x10)
+        DHIGH:      0x20,       // technically, this means display only the TOP half of the double-high font (eg, 20x20)
+        DHIGH_BOT:  0x00        // technically, this means display only the BOTTOM half of the double-high font (eg, 20x20)
+    },
+    LINETERM:       0x7F,
+    LINEATTR: {
+        ADDRMASK:   0x0F,
+        ADDRBIAS:   0x10,       // 0x10 == ADDRBIAS_LO, 0x00 = ADDRBIAS_HI
+        FONTMASK:   0x60,
+        SCROLL:     0x80
+    },
+    ADDRBIAS_LO:    0x2000,
+    ADDRBIAS_HI:    0x4000
+};
+
+Defs.CLASSES["VT100Video"] = VT100Video;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/machine.js (C) 2012-2020 Jeff Parsons
