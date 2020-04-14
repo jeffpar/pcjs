@@ -2,11 +2,9 @@ title: PCjs Machines
 domain: pcjs.org
 tagline: Home of the original IBM PC emulator for browsers.
 description: >
-  The PCjs Project offers a variety of machine emulations written in JavaScript, including PCx86 for x86-based
-  machines (through the 80386), C1Pjs for the 6502-based Ohio Scientific Challenger 1P, PCx80 for 8080-based
-  machines like Space Invaders and the DEC VT100 Terminal, PDPjs with support for PDP-10 and PDP-11 machines, and
-  emulators of classic programmable calculators, like the TI-57.  PCjs also maintains an archive of selected historical
-  software, documentation, and reference materials.
+  PCjs offers a variety of online machine emulators written in JavaScript.  Run DOS, Windows, OS/2 and other vintage PC
+  applications in a web browser, even if you're using an iPhone or iPad.  An assortment of microcomputers, minicomputers, terminals,
+  programmable calculators, and arcade machines are available, along with archival copies of historical software and documentation.
 author: Jeff Parsons
 logo: /assets/img/logo-home.png
 data_dir: configs
