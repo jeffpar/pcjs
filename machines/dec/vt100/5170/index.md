@@ -14,7 +14,7 @@ machines:
     type: pcx86
     connection: com2->vt100.serialPort
     config: /configs/pcx86/machine/ibm/5170/ega/2048kb/rev3/machine.xml
-    autoType: $date\n$time\nCTTY COM2\n
+    autoType: \r\rCTTY COM2\r
 ---
 
 Demonstration of a DEC VT100 Terminal connected to an IBM PC AT via COM2.  Also available with [Debuggers](debugger/).
