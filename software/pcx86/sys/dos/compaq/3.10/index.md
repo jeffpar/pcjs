@@ -2,7 +2,9 @@
 layout: page
 title: COMPAQ MS-DOS 3.10
 permalink: /software/pcx86/sys/dos/compaq/3.10/
-redirect_from: /disks/pcx86/dos/compaq/3.10/
+redirect_from:
+  - /disks/pcx86/dos/compaq/3.10/
+  - /disks/pc/dos/compaq/
 machines:
   - id: deskpro386
     type: pcx86
@@ -24,7 +26,7 @@ This directory contains two different releases of COMPAQ MS-DOS 3.10:
 However, the older release is not a distribution copy.  It is provided for historical interest only.
 
 All COMPAQ Supplemental User Programs, as well as diagnostics and setup utilities, are now filed under
-COMPAQ Diagnostics and User Programs.  The earliest known version of `CEMM` can be found on the
+`COMPAQ Diagnostics`.  The earliest known version of `CEMM` can be found on the
 [COMPAQ DeskPro 386 (1986)](/software/pcx86/diag/compaq/1986/) diskette.
 
 {% include machine.html id="deskpro386" %}
