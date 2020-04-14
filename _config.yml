@@ -2,9 +2,9 @@ title: PCjs Machines
 domain: pcjs.org
 tagline: Home of the original IBM PC emulator for browsers.
 description: >
-  PCjs offers a variety of online machine emulators written in JavaScript.  Run DOS, Windows, OS/2 and other vintage PC
-  applications in a web browser, even if you're using an iPhone or iPad.  An assortment of microcomputers, minicomputers, terminals,
-  programmable calculators, and arcade machines are available, along with archival copies of historical software and documentation.
+  PCjs offers a variety of online machine emulators written in JavaScript. Run DOS, Windows, OS/2 and other vintage PC
+  applications in a web browser on your desktop computer, iPhone, or iPad. An assortment of microcomputers, minicomputers, terminals,
+  programmable calculators, and arcade machines are available, along with an archive of historical software and documentation.
 author: Jeff Parsons
 logo: /assets/img/logo-home.png
 data_dir: configs
