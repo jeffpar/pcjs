@@ -34,17 +34,17 @@ A few months ago, I decided to continue the evolution of those new classes, star
 that I had previously emulated: the 8080-based arcade machine Space Invaders.
 
 First, since I always like to start with an operational debugger, I took the most useful features common to
-all the PCjs debuggers and packed them into a new [Debugger](/machines/lib/cpu/debugger.js) base class, which provides
-most of the commands that the new [8080 Debugger](/machines/lib/cpu/dbg8080.js) needs.
+all the PCjs debuggers and packed them into a new [Debugger](/machines/lib/debugger.js) base class, which provides
+most of the commands that the new [8080 Debugger](/machines/pcx80/libv2/dbgx80.js) needs.
 
 Then I separated management of the browser display elements into a new [Monitor](/machines/lib/monitor.js)
 base class, so that the Space Invaders [Video](/machines/arcade/invaders/lib/video.js) device could focus on the graphics
 hardware.  And the handful of machine I/O ports are implemented by a [Ports](/machines/arcade/invaders/lib/ports.js)
-device that extends a standard [Ports](/machines/lib/bus/ports.js) class, which plugs into the new [Bus](/machines/lib/bus/bus.js)
+device that extends a standard [Ports](/machines/lib/ports.js) class, which plugs into the new [Bus](/machines/lib/bus.js)
 class, which implements as many buses as a machine needs (eg, memory and I/O).
 
 And of course, beating at the heart of every machine is the CPU, and for Space Invaders, the
-[8080 CPU](/machines/lib/cpu/cpu8080.js) was a straight-forward port of the [original](/machines/pcx80/lib/cpuops.js)
+[8080 CPU](/machines/pcx80/libv2/cpux80.js) was a straight-forward port of the [original](/machines/pcx80/lib/cpuops.js)
 PCjs emulation.
 
 One significant change in this new architecture is that every internal device is an instance of the [Device](/machines/lib/device.js)

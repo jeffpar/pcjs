@@ -94,7 +94,7 @@ more work to make them usable.
 	                bit 0    invader movement 1
 	06          w  watchdog timer clear
 
-Note that, unlike other emulators, PCjs machines have a [Bus](/machines/lib/bus/bus.js) architecture,
+Note that, unlike other emulators, PCjs machines have a [Bus](/machines/lib/bus.js) architecture,
 allowing components to "plug in" different kinds of memory or memory-mapped devices at different addresses,
 and to register specific functions for specific I/O ports.	
 
