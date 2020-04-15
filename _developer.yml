@@ -7,10 +7,6 @@ url: "http://localhost:4000"
 # because the uncompiled scripts use shared classes that can only be instantiated once on a page (unless
 # they're compiled and/or wrapped inside a function).
 #
-# There's also an "unbundled: true" setting, but that currently doesn't work at all, because our scripts
-# are designed to also run under Node, so they must be "bundled" (and all *require* statements stripped)
-# to run in a browser.
-#
 pcjs:
   uncompiled: true
   debug: false

@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Monitor } from "../../../lib/device.js";
 
 /**
  * @typedef {MonitorConfig} InvadersVideoConfig
@@ -25,7 +25,7 @@
  * @unrestricted
  * @property {InvadersVideoConfig} config
  */
-class InvadersVideo extends Monitor {
+export class InvadersVideo extends Monitor {
     /**
      * InvadersVideo(idMachine, idDevice, config)
      *
@@ -435,4 +435,4 @@ InvadersVideo.COLORS = {
     OVERLAY_TOTAL:  2
 };
 
-Defs.CLASSES["InvadersVideo"] = InvadersVideo;
+InvadersVideo.CLASSES["InvadersVideo"] = InvadersVideo;

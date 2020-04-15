@@ -10,13 +10,13 @@
  * <paulnank@hotmail.com> at <http://skn.noip.me/pdp11/pdp11.html> with permission.
  */
 
-"use strict";
+import { CPU } from "../../../lib/cpu.js";
 
 /**
  * @class {PDP11Ops}
  * @unrestricted
  */
-class PDP11Ops extends CPU {
+export class PDP11Ops extends CPU {
     /**
      * PDP11Ops(idMachine, idDevice, config)
      *

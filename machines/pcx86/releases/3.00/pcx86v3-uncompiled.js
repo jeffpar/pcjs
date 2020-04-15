@@ -4,22 +4,20 @@
  * @copyright https://www.pcjs.org/machines/lib/defs.js (C) 2012-2020 Jeff Parsons
  */
 
-/* eslint-disable no-var */
-
 /**
  * COMMAND is the default name of the global command handler we will define, to provide
  * the same convenient access to all the WebIO COMMAND handlers that the Debugger enjoys.
  *
  * @define {string}
  */
-var COMMAND = "command";
+const COMMAND = "command";
 
 /**
  * COMPILED is false by default; overridden with true in the Closure Compiler release.
  *
  * @define {boolean}
  */
-var COMPILED = false;
+const COMPILED = false;
 
 /**
  * DEBUG is true by default, enabling assertions and other runtime checks; overridden with false
@@ -29,7 +27,7 @@ var COMPILED = false;
  *
  * @define {boolean}
  */
-var DEBUG = true;
+const DEBUG = true;
 
 /**
  * FACTORY is "Machine" by default; overridden with the machine's "factory" string in machines.json
@@ -37,7 +35,7 @@ var DEBUG = true;
  *
  * @define {string}
  */
-var FACTORY = "Machine";
+const FACTORY = "Machine";
 
 /**
  * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
@@ -45,7 +43,7 @@ var FACTORY = "Machine";
  *
  * @define {boolean}
  */
-var MAXDEBUG = false;
+const MAXDEBUG = false;
 
 /**
  * VERSION is the current PCjs Project release number, updated somewhat arbitrarily and usually only after
@@ -53,7 +51,29 @@ var MAXDEBUG = false;
  *
  * @define {string}
  */
-var VERSION = "3.00";
+const VERSION = "2.00";
+
+/**
+ * @class {Defs}
+ * @unrestricted
+ */
+class Defs {
+    /**
+     * Defs()
+     *
+     * @this {Defs}
+     */
+    constructor()
+    {
+    }
+}
+
+Defs.COMMAND  = COMMAND;
+Defs.COMPILED = COMPILED;
+Defs.DEBUG    = DEBUG;
+Defs.FACTORY  = FACTORY;
+Defs.MAXDEBUG = MAXDEBUG;
+Defs.VERSION  = VERSION;
 
 /*
  * The following globals CANNOT be overridden.
@@ -61,7 +81,7 @@ var VERSION = "3.00";
  * LITTLE_ENDIAN is true if the browser's ArrayBuffer storage is little-endian.  If LITTLE_ENDIAN matches
  * the endian-ness of a machine being emulated, then that machine can use ArrayBuffers for Memory buffers as-is.
  */
-var LITTLE_ENDIAN = function() {
+Defs.LITTLE_ENDIAN = function() {
     let buffer = new ArrayBuffer(2);
     new DataView(buffer).setUint16(0, 256, true);
     return new Uint16Array(buffer)[0] === 256;
@@ -74,7 +94,7 @@ var LITTLE_ENDIAN = function() {
  *
  * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
  */
-var MESSAGE = {
+Defs.MESSAGE = {
     ALL:        0xffffffffffff,
     NONE:       0x000000000000,
     DEFAULT:    0x000000000000,
@@ -99,7 +119,7 @@ var MESSAGE = {
  *
  * TODO: Move these definitions to a more appropriate shared file at some point.
  */
-var RS232 = {
+Defs.RS232 = {
     RTS: {
         PIN:  4,
         MASK: 0x00000010
@@ -126,29 +146,12 @@ var RS232 = {
     }
 };
 
-/**
- * @class {Defs}
- * @unrestricted
- */
-class Defs {
-    /**
-     * Defs()
-     *
-     * @this {Defs}
-     */
-    constructor()
-    {
-    }
-}
-
 Defs.CLASSES = {};
 Defs.CLASSES["Defs"] = Defs;
-
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/numio.js (C) 2012-2020 Jeff Parsons
  */
-
 
 /**
  * @class {NumIO}
@@ -746,13 +749,11 @@ class NumIO extends Defs {
  */
 NumIO.TWO_POW32 = Math.pow(2, 32);
 
-Defs.CLASSES["NumIO"] = NumIO;
-
+NumIO.CLASSES["NumIO"] = NumIO;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/stdio.js (C) 2012-2020 Jeff Parsons
  */
-
 
 /** @typedef {Function} */
 var Formatter;
@@ -1389,8 +1390,7 @@ StdIO.HexUpperCase = "0123456789ABCDEF";
 StdIO.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 StdIO.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-Defs.CLASSES["StdIO"] = StdIO;
-
+StdIO.CLASSES["StdIO"] = StdIO;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/webio.js (C) 2012-2020 Jeff Parsons
@@ -2387,7 +2387,7 @@ class WebIO extends StdIO {
                             result += this.sprintf("%8s: %b\n", token, this.isMessageOn(message));
                         }
                     }
-                    if (this.isMessageOn(MESSAGE.BUFFER)) {
+                    if (this.isMessageOn(WebIO.MESSAGE.BUFFER)) {
                         result += "all messages will be buffered until buffer is turned off\n";
                     }
                     if (!result) result = "no messages\n";
@@ -2458,7 +2458,7 @@ class WebIO extends StdIO {
     print(s, fBuffer)
     {
         if (fBuffer == undefined) {
-            fBuffer = this.isMessageOn(MESSAGE.BUFFER);
+            fBuffer = this.isMessageOn(WebIO.MESSAGE.BUFFER);
         }
         if (!fBuffer) {
             let element = this.findBinding(WebIO.BINDING.PRINT, true);
@@ -2580,7 +2580,7 @@ class WebIO extends StdIO {
         if (on) {
             this.machine.messages = this.setBits(this.machine.messages, messages);
         } else {
-            flush = (this.testBits(this.machine.messages, MESSAGE.BUFFER) && this.testBits(messages, MESSAGE.BUFFER));
+            flush = (this.testBits(this.machine.messages, WebIO.MESSAGE.BUFFER) && this.testBits(messages, WebIO.MESSAGE.BUFFER));
             this.machine.messages = this.clearBits(this.machine.messages, messages);
         }
         if (flush) this.flush();
@@ -2610,8 +2610,8 @@ WebIO.MESSAGE_COMMANDS = [
  * NOTE: The first name is automatically omitted from global "on" and "off" operations.
  */
 WebIO.MESSAGE_NAMES = {
-    "all":      MESSAGE.ALL,
-    "buffer":   MESSAGE.BUFFER
+    "all":      WebIO.MESSAGE.ALL,
+    "buffer":   WebIO.MESSAGE.BUFFER
 };
 
 WebIO.HANDLER = {
@@ -3026,7 +3026,7 @@ WebIO.LocalStorage = {
     Test:       "PCjs.localStorage"
 };
 
-Defs.CLASSES["WebIO"] = WebIO;
+WebIO.CLASSES["WebIO"] = WebIO;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/device.js (C) 2012-2020 Jeff Parsons
@@ -3216,7 +3216,7 @@ class Device extends WebIO {
      */
     checkVersion(config = {})
     {
-        this.version = +VERSION;
+        this.version = +Device.VERSION;
         if (this.version) {
             let sVersion = "", version;
             if (this.idMachine != this.idDevice) {
@@ -3509,7 +3509,7 @@ class Device extends WebIO {
             if (this.dbg) {
                 this.dbg.notifyMessage(format);
             }
-            if (this.machine.messages & MESSAGE.ADDR) {
+            if (this.machine.messages & Device.MESSAGE.ADDR) {
                 /*
                  * Same rules as above apply here.  Hopefully no message-based printf() calls will arrive with MESSAGE.ADDR
                  * set *before* the CPU device has been initialized.
@@ -3583,60 +3583,60 @@ Device.Components = window? window['PCjs']['Components'] : [];
  *
  * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
  */
-MESSAGE.ADDR            = 0x000000000001;       // this is a special bit (bit 0) used to append address info to messages
-MESSAGE.BUS             = 0x000000000002;
-MESSAGE.FAULT           = 0x000000000004;
-MESSAGE.MEMORY          = 0x000000000008;
-MESSAGE.PORTS           = 0x000000000010;
-MESSAGE.CHIPS           = 0x000000000020;
-MESSAGE.KBD             = 0x000000000040;
-MESSAGE.SERIAL          = 0x000000000080;
-MESSAGE.MISC            = 0x000000000100;
-MESSAGE.CPU             = 0x000000000200;
-MESSAGE.MMU             = 0x000000000400;
-MESSAGE.INT             = 0x000000000800;
-MESSAGE.TRAP            = 0x000000001000;
-MESSAGE.VIDEO           = 0x000000002000;       // used with video hardware messages (see video.js)
-MESSAGE.MONITOR         = 0x000000004000;       // used with video monitor messages (see monitor.js)
-MESSAGE.SCREEN          = 0x000000008000;       // used with screen-related messages (also monitor.js)
-MESSAGE.TIME            = 0x000000010000;
-MESSAGE.TIMER           = 0x000000020000;
-MESSAGE.EVENT           = 0x000000040000;
-MESSAGE.INPUT           = 0x000000080000;
-MESSAGE.KEY             = 0x000000100000;
-MESSAGE.MOUSE           = 0x000000200000;
-MESSAGE.TOUCH           = 0x000000400000;
-MESSAGE.WARN            = 0x000000800000;
-MESSAGE.HALT            = 0x000001000000;
-MESSAGE.CUSTOM          = 0x000100000000;       // all custom device messages must start here
+Device.MESSAGE.ADDR             = 0x000000000001;       // this is a special bit (bit 0) used to append address info to messages
+Device.MESSAGE.BUS              = 0x000000000002;
+Device.MESSAGE.FAULT            = 0x000000000004;
+Device.MESSAGE.MEMORY           = 0x000000000008;
+Device.MESSAGE.PORTS            = 0x000000000010;
+Device.MESSAGE.CHIPS            = 0x000000000020;
+Device.MESSAGE.KBD              = 0x000000000040;
+Device.MESSAGE.SERIAL           = 0x000000000080;
+Device.MESSAGE.MISC             = 0x000000000100;
+Device.MESSAGE.CPU              = 0x000000000200;
+Device.MESSAGE.MMU              = 0x000000000400;
+Device.MESSAGE.INT              = 0x000000000800;
+Device.MESSAGE.TRAP             = 0x000000001000;
+Device.MESSAGE.VIDEO            = 0x000000002000;       // used with video hardware messages (see video.js)
+Device.MESSAGE.MONITOR          = 0x000000004000;       // used with video monitor messages (see monitor.js)
+Device.MESSAGE.SCREEN           = 0x000000008000;       // used with screen-related messages (also monitor.js)
+Device.MESSAGE.TIME             = 0x000000010000;
+Device.MESSAGE.TIMER            = 0x000000020000;
+Device.MESSAGE.EVENT            = 0x000000040000;
+Device.MESSAGE.INPUT            = 0x000000080000;
+Device.MESSAGE.KEY              = 0x000000100000;
+Device.MESSAGE.MOUSE            = 0x000000200000;
+Device.MESSAGE.TOUCH            = 0x000000400000;
+Device.MESSAGE.WARN             = 0x000000800000;
+Device.MESSAGE.HALT             = 0x000001000000;
+Device.MESSAGE.CUSTOM           = 0x000100000000;       // all custom device messages must start here
 
-WebIO.MESSAGE_NAMES["addr"]     = MESSAGE.ADDR;
-WebIO.MESSAGE_NAMES["bus"]      = MESSAGE.BUS;
-WebIO.MESSAGE_NAMES["fault"]    = MESSAGE.FAULT;
-WebIO.MESSAGE_NAMES["memory"]   = MESSAGE.MEMORY;
-WebIO.MESSAGE_NAMES["ports"]    = MESSAGE.PORTS;
-WebIO.MESSAGE_NAMES["chips"]    = MESSAGE.CHIPS;
-WebIO.MESSAGE_NAMES["kbd"]      = MESSAGE.KBD;
-WebIO.MESSAGE_NAMES["serial"]   = MESSAGE.SERIAL;
-WebIO.MESSAGE_NAMES["misc"]     = MESSAGE.MISC;
-WebIO.MESSAGE_NAMES["cpu"]      = MESSAGE.CPU;
-WebIO.MESSAGE_NAMES["mmu"]      = MESSAGE.MMU;
-WebIO.MESSAGE_NAMES["int"]      = MESSAGE.INT;
-WebIO.MESSAGE_NAMES["trap"]     = MESSAGE.TRAP;
-WebIO.MESSAGE_NAMES["video"]    = MESSAGE.VIDEO;
-WebIO.MESSAGE_NAMES["monitor"]  = MESSAGE.MONITOR;
-WebIO.MESSAGE_NAMES["screen"]   = MESSAGE.SCREEN;
-WebIO.MESSAGE_NAMES["time"]     = MESSAGE.TIME;
-WebIO.MESSAGE_NAMES["timer"]    = MESSAGE.TIMER;
-WebIO.MESSAGE_NAMES["event"]    = MESSAGE.EVENT;
-WebIO.MESSAGE_NAMES["input"]    = MESSAGE.INPUT;
-WebIO.MESSAGE_NAMES["key"]      = MESSAGE.KEY;
-WebIO.MESSAGE_NAMES["mouse"]    = MESSAGE.MOUSE;
-WebIO.MESSAGE_NAMES["touch"]    = MESSAGE.TOUCH;
-WebIO.MESSAGE_NAMES["warn"]     = MESSAGE.WARN;
-WebIO.MESSAGE_NAMES["halt"]     = MESSAGE.HALT;
+Device.MESSAGE_NAMES["addr"]    = Device.MESSAGE.ADDR;
+Device.MESSAGE_NAMES["bus"]     = Device.MESSAGE.BUS;
+Device.MESSAGE_NAMES["fault"]   = Device.MESSAGE.FAULT;
+Device.MESSAGE_NAMES["memory"]  = Device.MESSAGE.MEMORY;
+Device.MESSAGE_NAMES["ports"]   = Device.MESSAGE.PORTS;
+Device.MESSAGE_NAMES["chips"]   = Device.MESSAGE.CHIPS;
+Device.MESSAGE_NAMES["kbd"]     = Device.MESSAGE.KBD;
+Device.MESSAGE_NAMES["serial"]  = Device.MESSAGE.SERIAL;
+Device.MESSAGE_NAMES["misc"]    = Device.MESSAGE.MISC;
+Device.MESSAGE_NAMES["cpu"]     = Device.MESSAGE.CPU;
+Device.MESSAGE_NAMES["mmu"]     = Device.MESSAGE.MMU;
+Device.MESSAGE_NAMES["int"]     = Device.MESSAGE.INT;
+Device.MESSAGE_NAMES["trap"]    = Device.MESSAGE.TRAP;
+Device.MESSAGE_NAMES["video"]   = Device.MESSAGE.VIDEO;
+Device.MESSAGE_NAMES["monitor"] = Device.MESSAGE.MONITOR;
+Device.MESSAGE_NAMES["screen"]  = Device.MESSAGE.SCREEN;
+Device.MESSAGE_NAMES["time"]    = Device.MESSAGE.TIME;
+Device.MESSAGE_NAMES["timer"]   = Device.MESSAGE.TIMER;
+Device.MESSAGE_NAMES["event"]   = Device.MESSAGE.EVENT;
+Device.MESSAGE_NAMES["input"]   = Device.MESSAGE.INPUT;
+Device.MESSAGE_NAMES["key"]     = Device.MESSAGE.KEY;
+Device.MESSAGE_NAMES["mouse"]   = Device.MESSAGE.MOUSE;
+Device.MESSAGE_NAMES["touch"]   = Device.MESSAGE.TOUCH;
+Device.MESSAGE_NAMES["warn"]    = Device.MESSAGE.WARN;
+Device.MESSAGE_NAMES["halt"]    = Device.MESSAGE.HALT;
 
-Defs.CLASSES["Device"] = Device;
+Device.CLASSES["Device"] = Device;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/input.js (C) 2012-2020 Jeff Parsons
@@ -3718,7 +3718,7 @@ class Input extends Device {
     {
         super(idMachine, idDevice, config);
 
-        this.messages = MESSAGE.INPUT;
+        this.messages = Device.MESSAGE.INPUT;
         this.onInput = this.onHover = null;
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.machine = /** @type {Machine} */ (this.findDeviceByClass("Machine"));
@@ -3947,7 +3947,7 @@ class Input extends Device {
                                  */
                                 keyCode = clickBinding[0];
 
-                                if (keyCode == WebIO.KEYCODE.LOCK) {
+                                if (keyCode == Input.KEYCODE.LOCK) {
                                     /*
                                      * In the case of KEYCODE.LOCK, the next entry is the actual keyCode, and we look
                                      * to the element's "data-value" attribute for whether clicking the element should
@@ -4283,7 +4283,7 @@ class Input extends Device {
          */
         let printEvent = function(type, code, used) {
             let activeElement = document.activeElement;
-            input.printf(MESSAGE.KEY + MESSAGE.EVENT, "%s.onKey%s(%d): %5.2f (%s)\n", activeElement.id || activeElement.nodeName, type, code, (Date.now() / 1000) % 60, used != undefined? (used? "used" : "unused") : "ignored");
+            input.printf(Device.MESSAGE.KEY + Device.MESSAGE.EVENT, "%s.onKey%s(%d): %5.2f (%s)\n", activeElement.id || activeElement.nodeName, type, code, (Date.now() / 1000) % 60, used != undefined? (used? "used" : "unused") : "ignored");
         };
 
         element.addEventListener(
@@ -4338,13 +4338,13 @@ class Input extends Device {
             element.addEventListener(
                 'blur',
                 function onBlur(event) {
-                    input.printf(MESSAGE.KEY + MESSAGE.EVENT, "onBlur(%s)\n", event.target.id || event.target.nodeName);
+                    input.printf(Device.MESSAGE.KEY + Device.MESSAGE.EVENT, "onBlur(%s)\n", event.target.id || event.target.nodeName);
                 }
             );
             element.addEventListener(
                 'focus',
                 function onFocus(event) {
-                    input.printf(MESSAGE.KEY + MESSAGE.EVENT, "onFocus(%s)\n", event.target.id || event.target.nodeName);
+                    input.printf(Device.MESSAGE.KEY + Device.MESSAGE.EVENT, "onFocus(%s)\n", event.target.id || event.target.nodeName);
                 }
             );
         }
@@ -4538,7 +4538,7 @@ class Input extends Device {
             this.aActiveKeys.push({
                 keyNum, msDown, autoRelease
             });
-            this.printf(MESSAGE.KEY + MESSAGE.INPUT, "addActiveKey(keyNum=%d,autoRelease=%b)\n", keyNum, autoRelease);
+            this.printf(Device.MESSAGE.KEY + Device.MESSAGE.INPUT, "addActiveKey(keyNum=%d,autoRelease=%b)\n", keyNum, autoRelease);
         } else {
             this.aActiveKeys[i].msDown = msDown;
             this.aActiveKeys[i].autoRelease = autoRelease;
@@ -4587,10 +4587,10 @@ class Input extends Device {
                 this.checkAutoRelease();
                 return;
             }
-            this.printf(MESSAGE.KEY + MESSAGE.INPUT, "removeActiveKey(keyNum=%d,duration=%dms,autoRelease=%b)\n", keyNum, msDuration, activeKey.autoRelease);
+            this.printf(Device.MESSAGE.KEY + Device.MESSAGE.INPUT, "removeActiveKey(keyNum=%d,duration=%dms,autoRelease=%b)\n", keyNum, msDuration, activeKey.autoRelease);
             this.aActiveKeys.splice(i, 1);
         } else {
-            this.printf(MESSAGE.KEY + MESSAGE.INPUT, "removeActiveKey(keyNum=%d): up without down?\n", keyNum);
+            this.printf(Device.MESSAGE.KEY + Device.MESSAGE.INPUT, "removeActiveKey(keyNum=%d): up without down?\n", keyNum);
         }
     }
 
@@ -4608,10 +4608,10 @@ class Input extends Device {
     {
         let keyCode, keyName;
         if (down != undefined) {
-            keyCode = WebIO.FF_KEYCODE[code] || code;       // fix any Firefox-specific keyCodes
-            keyName = WebIO.KEYNAME[code];
+            keyCode = Input.FF_KEYCODE[code] || code;       // fix any Firefox-specific keyCodes
+            keyName = Input.KEYNAME[code];
             let keyMod = Input.KEYCODEMOD[keyCode];
-            let fRight = (event && event.location == WebIO.LOCATION.RIGHT);
+            let fRight = (event && event.location == Input.LOCATION.RIGHT);
             if ((keyMod & Input.KEYMOD.LEFT) && fRight) {
                 keyMod >>= 1;
             }
@@ -4640,16 +4640,16 @@ class Input extends Device {
              * a lower-case letter arrives and "on" whenever an upper-case letter arrives when neither
              * any SHIFT nor CAPS-LOCK key appears to be depressed.
              */
-            if (code >= WebIO.CHARCODE.A && code <= WebIO.CHARCODE.Z) {
+            if (code >= Input.CHARCODE.A && code <= Input.CHARCODE.Z) {
                 if (!(this.keyMods & (Input.KEYMOD.SHIFTS | Input.KEYMOD.CAPS_LOCK))) {
                     this.keyMods |= Input.KEYMOD.CAPS_LOCK;
-                    this.checkKeyListeners(WebIO.KEYCODE.CAPS_LOCK, true);
+                    this.checkKeyListeners(Input.KEYCODE.CAPS_LOCK, true);
                 }
             }
-            else if (code >= WebIO.CHARCODE.a && code <= WebIO.CHARCODE.z) {
+            else if (code >= Input.CHARCODE.a && code <= Input.CHARCODE.z) {
                 if (this.keyMods & Input.KEYMOD.CAPS_LOCK) {
                     this.keyMods &= ~Input.KEYMOD.CAPS_LOCK;
-                    this.checkKeyListeners(WebIO.KEYCODE.CAPS_LOCK, false);
+                    this.checkKeyListeners(Input.KEYCODE.CAPS_LOCK, false);
                 }
             }
         }
@@ -4969,7 +4969,7 @@ class Input extends Device {
          */
         let focusElement = this.altFocus? this.altFocusElement : this.focusElement;
         if (focusElement && this.machine.isReady()) {
-            this.printf(MESSAGE.INPUT, 'setFocus("%s")\n', focusElement.id || focusElement.nodeName);
+            this.printf(Device.MESSAGE.INPUT, 'setFocus("%s")\n', focusElement.id || focusElement.nodeName);
             focusElement.focus();
             focusElement.scrollIntoView();      // one would have thought focus() would do this, but apparently not....
         }
@@ -5056,16 +5056,16 @@ Input.KEYMOD = {
 };
 
 Input.KEYCODEMOD = {
-    [WebIO.KEYCODE.SHIFT]:          Input.KEYMOD.SHIFT,
-    [WebIO.KEYCODE.CTRL]:           Input.KEYMOD.CTRL,
-    [WebIO.KEYCODE.ALT]:            Input.KEYMOD.ALT,
-    [WebIO.KEYCODE.CMD]:            Input.KEYMOD.CMD,
-    [WebIO.KEYCODE.CAPS_LOCK]:      Input.KEYMOD.CAPS_LOCK,
-    [WebIO.KEYCODE.NUM_LOCK]:       Input.KEYMOD.NUM_LOCK,
-    [WebIO.KEYCODE.SCROLL_LOCK]:    Input.KEYMOD.SCROLL_LOCK
+    [Input.KEYCODE.SHIFT]:          Input.KEYMOD.SHIFT,
+    [Input.KEYCODE.CTRL]:           Input.KEYMOD.CTRL,
+    [Input.KEYCODE.ALT]:            Input.KEYMOD.ALT,
+    [Input.KEYCODE.CMD]:            Input.KEYMOD.CMD,
+    [Input.KEYCODE.CAPS_LOCK]:      Input.KEYMOD.CAPS_LOCK,
+    [Input.KEYCODE.NUM_LOCK]:       Input.KEYMOD.NUM_LOCK,
+    [Input.KEYCODE.SCROLL_LOCK]:    Input.KEYMOD.SCROLL_LOCK
 };
 
-Defs.CLASSES["Input"] = Input;
+Input.CLASSES["Input"] = Input;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/led.js (C) 2012-2020 Jeff Parsons
@@ -6180,7 +6180,7 @@ LED.SYMBOL_SEGMENTS = {
     '.':        ['P']
 };
 
-Defs.CLASSES["LED"] = LED;
+LED.CLASSES["LED"] = LED;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/monitor.js (C) 2012-2020 Jeff Parsons
@@ -6491,7 +6491,7 @@ class Monitor extends Device {
                 if (!monitor.machine.isFullScreen) {
                     monitor.doFullScreen();
                 } else {
-                    if (DEBUG) monitor.printf(MESSAGE.MONITOR, "onClickFullScreen(): already full-screen?\n");
+                    if (DEBUG) monitor.printf(Device.MESSAGE.MONITOR, "onClickFullScreen(): already full-screen?\n");
                 }
             };
             break;
@@ -6521,7 +6521,7 @@ class Monitor extends Device {
     doFullScreen()
     {
         let fSuccess = false;
-        if (DEBUG) this.printf(MESSAGE.MONITOR, "doFullScreen()\n");
+        if (DEBUG) this.printf(Device.MESSAGE.MONITOR, "doFullScreen()\n");
         if (this.container && this.container.doFullScreen) {
             /*
              * Styling the container with a width of "100%" and a height of "auto" works great when the aspect ratio
@@ -6602,7 +6602,7 @@ class Monitor extends Device {
             this.machine.isFullScreen = false;
         }
         if (this.input && !fFullScreen) this.input.setAltFocus(false);
-        if (DEBUG) this.printf(MESSAGE.MONITOR, "onFullScreen(%b)\n", fFullScreen);
+        if (DEBUG) this.printf(Device.MESSAGE.MONITOR, "onFullScreen(%b)\n", fFullScreen);
     }
 
     /**
@@ -6644,7 +6644,7 @@ Monitor.BINDING = {
     FULLSCREEN: "fullScreen",
 };
 
-Defs.CLASSES["Monitor"] = Monitor;
+Monitor.CLASSES["Monitor"] = Monitor;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/time.js (C) 2012-2020 Jeff Parsons
@@ -6903,7 +6903,7 @@ class Time extends Device {
         let nCyclesPerSecond = mhz * 1000000;
         if (nCycles && msElapsed) {
             mhz = (nCycles / (msElapsed * 10)) / 100;
-            this.printf(MESSAGE.TIME, "calcSpeed(%d cycles, %5.3fms): %5.3fMhz\n", nCycles, msElapsed, mhz);
+            this.printf(Device.MESSAGE.TIME, "calcSpeed(%d cycles, %5.3fms): %5.3fMhz\n", nCycles, msElapsed, mhz);
             if (msFrame > this.msFrameDefault) {
                 if (this.nTargetMultiplier > 1) {
                     /*
@@ -6913,7 +6913,7 @@ class Time extends Device {
                      * reach 90% of our original target and revert back to the base multiplier.
                      */
                     this.nTargetMultiplier >>= 1;
-                    this.printf(MESSAGE.WARN, "warning: frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
+                    this.printf(Device.MESSAGE.WARN, "warning: frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
                 }
                 /*
                  * If we (potentially) took too long on this last run, we pass that time back as an adjustment,
@@ -6937,7 +6937,7 @@ class Time extends Device {
          */
         let nDivisor = this.nCurrentMultiplier / this.nTargetMultiplier;
         this.nCyclesDepositPerFrame = (nCyclesPerSecond / nDivisor / this.nFramesPerSecond) + 0.00000001;
-        this.printf(MESSAGE.TIME, "nCyclesDepositPerFrame(%5.3f) = nCyclesPerSecond(%d) / nDivisor(%5.3f) / nFramesPerSecond(%d)\n", this.nCyclesDepositPerFrame, nCyclesPerSecond, nDivisor, this.nFramesPerSecond);
+        this.printf(Device.MESSAGE.TIME, "nCyclesDepositPerFrame(%5.3f) = nCyclesPerSecond(%d) / nDivisor(%5.3f) / nFramesPerSecond(%d)\n", this.nCyclesDepositPerFrame, nCyclesPerSecond, nDivisor, this.nFramesPerSecond);
         return msAdjust;
     }
 
@@ -7071,7 +7071,7 @@ class Time extends Device {
                 nCycles = (this.nCyclesDeposited += this.nCyclesDepositPerFrame);
             }
             if (nCycles < 0) {
-                this.printf(MESSAGE.WARN, "warning: cycle count dropped below zero: %f\n", nCycles);
+                this.printf(Device.MESSAGE.WARN, "warning: cycle count dropped below zero: %f\n", nCycles);
                 nCycles = this.nCyclesDeposited = 0;
             }
             nCycles |= 0;
@@ -7118,7 +7118,7 @@ class Time extends Device {
      */
     getSpeedCurrent()
     {
-        this.printf(MESSAGE.TIME, "getSpeedCurrent(%5.3fhz)\n", this.mhzCurrent * 1000000);
+        this.printf(Device.MESSAGE.TIME, "getSpeedCurrent(%5.3fhz)\n", this.mhzCurrent * 1000000);
         return (this.fRunning && this.mhzCurrent)? this.getSpeed(this.mhzCurrent) : "Stopped";
     }
 
@@ -7395,7 +7395,7 @@ class Time extends Device {
             let msDeltaRun = msStartThisRun - this.msStartThisRun - this.msFrameDefault;
             if (msDeltaRun > this.msFrameDefault) {
                 this.msStartRun += msDeltaRun;
-                this.printf(MESSAGE.WARN, "warning: browser throttling detected, compensating by %5.3fms\n", msDeltaRun);
+                this.printf(Device.MESSAGE.WARN, "warning: browser throttling detected, compensating by %5.3fms\n", msDeltaRun);
             }
         }
         this.msStartThisRun = msStartThisRun;
@@ -7670,7 +7670,7 @@ Time.BINDING = {
     THROTTLE:   "throttle"
 };
 
-Defs.CLASSES["Time"] = Time;
+Time.CLASSES["Time"] = Time;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/bus.js (C) 2012-2020 Jeff Parsons
@@ -7936,7 +7936,7 @@ class Bus extends Device {
              * We must call the Debugger's printf() instead of our own in order to use its custom formatters (eg, %n).
              */
             if (this.dbg) {
-                this.dbg.printf(MESSAGE.FAULT, "bus fault (%d) at %n\n", reason, addr);
+                this.dbg.printf(Device.MESSAGE.FAULT, "bus fault (%d) at %n\n", reason, addr);
             }
             if (this.faultHandler) {
                 this.faultHandler(addr, reason);
@@ -8383,7 +8383,7 @@ Bus.TYPE = {
     DYNAMIC:    1
 };
 
-Defs.CLASSES["Bus"] = Bus;
+Bus.CLASSES["Bus"] = Bus;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/memory.js (C) 2012-2020 Jeff Parsons
@@ -8462,7 +8462,7 @@ class Memory extends Device {
             writePair = this.writeValuePairDirty;
             if (this.dataWidth == 8 && this.getMachineConfig('ArrayBuffer') !== false) {
                 this.fUseArrayBuffer = true;
-                readPair = this.littleEndian == LITTLE_ENDIAN? this.readValuePair16 : this.readValuePair16SE;
+                readPair = this.littleEndian == Memory.LITTLE_ENDIAN? this.readValuePair16 : this.readValuePair16SE;
             }
         }
 
@@ -8955,7 +8955,7 @@ class Memory extends Device {
                 }
             }
         } else {
-            if (this.littleEndian == LITTLE_ENDIAN) {
+            if (this.littleEndian == Memory.LITTLE_ENDIAN) {
                 this.writeValuePair16(offset, value);
                 if (!this.nWriteTraps) {
                     this.writePair = this.writeValuePair16;
@@ -9146,7 +9146,7 @@ Memory.TYPE = {
     WRITABLE:           0x0C
 };
 
-Defs.CLASSES["Memory"] = Memory;
+Memory.CLASSES["Memory"] = Memory;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/ram.js (C) 2012-2020 Jeff Parsons
@@ -9191,7 +9191,7 @@ class RAM extends Memory {
     }
 }
 
-Defs.CLASSES["RAM"] = RAM;
+RAM.CLASSES["RAM"] = RAM;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/rom.js (C) 2012-2020 Jeff Parsons
@@ -9417,7 +9417,7 @@ ROM.BINDING = {
     CELLDESC:   "cellDesc"
 };
 
-Defs.CLASSES["ROM"] = ROM;
+ROM.CLASSES["ROM"] = ROM;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/cpu.js (C) 2012-2020 Jeff Parsons
@@ -9565,7 +9565,7 @@ class CPU extends Device {
     }
 }
 
-// Defs.CLASSES["CPU"] = CPU;
+// CPU.CLASSES["CPU"] = CPU;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/debugger.js (C) 2012-2020 Jeff Parsons
@@ -9685,7 +9685,7 @@ class Debugger extends Device {
          * If set to MESSAGE.ALL, then we break on all messages.  It can be set to a subset of message bits,
          * but there is currently no UI for that.
          */
-        this.messagesBreak = MESSAGE.NONE;
+        this.messagesBreak = Device.MESSAGE.NONE;
 
         /*
          * variables is an object with properties that grow as setVariable() assigns more variables;
@@ -11336,7 +11336,7 @@ class Debugger extends Device {
         if (option) {
             let on = this.parseBoolean(option);
             if (on != undefined) {
-                this.messagesBreak = on? MESSAGE.ALL : MESSAGE.NONE;
+                this.messagesBreak = on? Device.MESSAGE.ALL : Device.MESSAGE.NONE;
             } else {
                 result = this.sprintf("unrecognized message option: %s\n", option);
             }
@@ -12294,7 +12294,7 @@ Debugger.DECOP_PRECEDENCE = {
     '}':    20      // close grouped expression (converted from achGroup[1])
 };
 
-// Defs.CLASSES["Debugger"] = Debugger;
+// Debugger.CLASSES["Debugger"] = Debugger;
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/libv3/cpux86.js (C) 2012-2020 Jeff Parsons
@@ -13191,7 +13191,86 @@ CPUx86.PS_SAHF = (CPUx86.PS.CF | CPUx86.PS.PF | CPUx86.PS.AF | CPUx86.PS.ZF | CP
  */
 CPUx86.OPFLAG_PREFIXES = (CPUx86.OPFLAG.SEG | CPUx86.OPFLAG.LOCK | CPUx86.OPFLAG.REPZ | CPUx86.OPFLAG.REPNZ | CPUx86.OPFLAG.DATASIZE | CPUx86.OPFLAG.ADDRSIZE);
 
-Defs.CLASSES["CPUx86"] = CPUx86;
+CPUx86.CLASSES["CPUx86"] = CPUx86;
+
+/**
+ * @copyright https://www.pcjs.org/machines/pcx86/libv3/dbgx86.js (C) 2012-2020 Jeff Parsons
+ */
+
+/**
+ * Debugger for the x86 CPU
+ *
+ * @class {Dbgx86}
+ * @unrestricted
+ */
+class Dbgx86 extends Debugger {
+    /**
+     * Dbgx86(idMachine, idDevice, config)
+     *
+     * @this {Dbgx86}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {Config} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        super(idMachine, idDevice, config);
+    }
+
+    /**
+     * unassemble(address, opcodes, annotation)
+     *
+     * Overrides Debugger's default unassemble() function with one that understands x86 instructions.
+     *
+     * @this {Dbgx86}
+     * @param {Address} address (advanced by the number of processed opcodes)
+     * @param {Array.<number>} opcodes (each processed opcode is shifted out, reducing the size of the array)
+     * @param {string} [annotation] (optional string to append to the final result)
+     * @returns {string}
+     */
+    unassemble(address, opcodes, annotation)
+    {
+        let sAddr = this.dumpAddress(address), sBytes = "";
+        let sLabel = this.getSymbolName(address, Debugger.SYMBOL.LABEL);
+        let sComment = this.getSymbolName(address, Debugger.SYMBOL.COMMENT);
+
+        /**
+         * getNextByte()
+         *
+         * @returns {number}
+         */
+        let getNextByte = () => {
+            let byte = opcodes.shift();
+            sBytes += this.toBase(byte, 16, 8, "");
+            this.addAddress(address, 1);
+            return byte;
+        };
+
+        /**
+         * getNextWord()
+         *
+         * @returns {number}
+         */
+        let getNextWord = () => getNextByte() | (getNextByte() << 8);
+
+        let opcode = getNextByte();
+
+        let sOperands = "";
+        let sOpcode = this.sprintf("%#02x", opcode);
+
+        let result = this.sprintf("%s %-7s %-7s %s", sAddr, sBytes, sOpcode, sOperands);
+        if (!annotation) {
+            if (sComment) annotation = sComment;
+        } else {
+            if (sComment) annotation += " " + sComment;
+        }
+        if (annotation) result = this.sprintf("%-32s; %s", result, annotation);
+        if (sLabel) result = sLabel + ":\n" + result;
+        return result + "\n";
+    }
+}
+
+Dbgx86.CLASSES["Dbgx86"] = Dbgx86;
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/libv3/video.js (C) 2012-2020 Jeff Parsons
@@ -13356,7 +13435,7 @@ class PCx86Video extends Monitor {
     }
 }
 
-Defs.CLASSES["PCx86Video"] = PCx86Video;
+PCx86Video.CLASSES["PCx86Video"] = PCx86Video;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/machine.js (C) 2012-2020 Jeff Parsons
@@ -13482,7 +13561,7 @@ class Machine extends Device {
          * One alternative is to hard-code any MESSAGE groups here, to ensure that the relevant messages
          * from all device constructors get displayed.
          */
-        this.messages = DEBUG? MESSAGE.WARN : MESSAGE.DEFAULT;
+        this.messages = Device.DEBUG? Device.MESSAGE.WARN : Device.MESSAGE.DEFAULT;
 
         sConfig = sConfig.trim();
         if (sConfig[0] == '{') {
@@ -13764,9 +13843,9 @@ Machine.COPYRIGHT = "Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>";
  * but not all machines will have such a control, and sometimes that control will be inaccessible (eg, if
  * the browser is currently debugging the machine).
  */
-window[FACTORY] = function createMachine(idMachine, sConfig, sParms) {
+window[Machine.FACTORY] = function createMachine(idMachine, sConfig, sParms) {
     let machine = new Machine(idMachine, sConfig, sParms);
-    window[COMMAND] = function(commands) {
+    window[Machine.COMMAND] = function(commands) {
         return machine.parseCommands(commands);
     };
     return machine;
@@ -13784,13 +13863,13 @@ window[FACTORY] = function createMachine(idMachine, sConfig, sParms) {
  * And yes, by the same logic, one might think that 'TMS1500' should really be called 'TI57', except that the
  * TMS1500 factory can produce any of the TI-42, TI-55, or TI-57.  Naming is hard.
  */
-if (FACTORY == "Machine") {
-    window['Invaders']  = window[FACTORY];
-    window['LEDs']      = window[FACTORY];
-    window['PCx86v3']   = window[FACTORY];
-    window['PDP11v3']   = window[FACTORY];
-    window['TMS1500']   = window[FACTORY];
-    window['VT100']     = window[FACTORY];
+if (Machine.FACTORY == "Machine") {
+    window['Invaders']  = window[Machine.FACTORY];
+    window['LEDs']      = window[Machine.FACTORY];
+    window['PCx86v3']   = window[Machine.FACTORY];
+    window['PDP11v3']   = window[Machine.FACTORY];
+    window['TMS1500']   = window[Machine.FACTORY];
+    window['VT100']     = window[Machine.FACTORY];
 }
 
-Defs.CLASSES["Machine"] = Machine;
+Machine.CLASSES["Machine"] = Machine;

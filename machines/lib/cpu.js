@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "./device.js";
 
 /**
  * @class {CPU}
@@ -19,7 +19,7 @@
  * @property {number} regPC
  * @property {number} regPCLast
  */
-class CPU extends Device {
+export class CPU extends Device {
     /**
      * CPU(idMachine, idDevice, config)
      *
@@ -151,4 +151,4 @@ class CPU extends Device {
     }
 }
 
-// Defs.CLASSES["CPU"] = CPU;
+// CPU.CLASSES["CPU"] = CPU;

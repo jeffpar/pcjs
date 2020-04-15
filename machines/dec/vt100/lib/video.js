@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Monitor } from "../../../lib/monitor.js";
 
 /**
  * @typedef {MonitorConfig} VT100VideoConfig
@@ -24,7 +24,7 @@
  * @unrestricted
  * @property {VT100VideoConfig} config
  */
-class VT100Video extends Monitor {
+export class VT100Video extends Monitor {
     /**
      * VT100Video(idMachine, idDevice, config)
      *
@@ -69,7 +69,7 @@ class VT100Video extends Monitor {
          * Setting the device's "messages" property eliminates the need for printf() calls to include this value;
          * any printf() that omits a MESSAGE parameter will use this value by default.
          */
-        this.messages = MESSAGE.VIDEO;
+        this.messages = VT100Video.MESSAGE.VIDEO;
 
         this.addrBuffer = this.config['bufferAddr'];
         this.fUseRAM = this.config['bufferRAM'];
@@ -812,4 +812,4 @@ VT100Video.VT100 = {
     ADDRBIAS_HI:    0x4000
 };
 
-Defs.CLASSES["VT100Video"] = VT100Video;
+VT100Video.CLASSES["VT100Video"] = VT100Video;

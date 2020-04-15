@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "../../../lib/device.js";
 
 /**
  * @typedef {Config} VT100KeyboardConfig
@@ -19,7 +19,7 @@
  * @unrestricted
  * @property {VT100KeyboardConfig} config
  */
-class VT100Keyboard extends Device {
+export class VT100Keyboard extends Device {
     /**
      * VT100Keyboard(idMachine, idDevice, config)
      *
@@ -214,7 +214,7 @@ class VT100Keyboard extends Device {
             this.bAddress = value;
             this.cpu.requestINTR(1);
         }
-        this.printf(MESSAGE.KBD + MESSAGE.PORTS, "inUARTAddress(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.KBD + Device.MESSAGE.PORTS, "inUARTAddress(%#04x): %#04x\n", port, value);
         return value;
     }
 
@@ -227,7 +227,7 @@ class VT100Keyboard extends Device {
      */
     outUARTStatus(port, value)
     {
-        this.printf(MESSAGE.KBD + MESSAGE.PORTS, "outUARTStatus(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.KBD + Device.MESSAGE.PORTS, "outUARTStatus(%#04x): %#04x\n", port, value);
         this.updateLEDs(value, this.bStatus);
         this.bStatus = value;
         this.fUARTBusy = true;
@@ -560,4 +560,4 @@ VT100Keyboard.IOTABLE = {
     0x82:   [VT100Keyboard.prototype.inUARTAddress, VT100Keyboard.prototype.outUARTStatus]
 };
 
-Defs.CLASSES["VT100Keyboard"] = VT100Keyboard;
+VT100Keyboard.CLASSES["VT100Keyboard"] = VT100Keyboard;

@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Debugger } from "../../../lib/debugger.js";
 
 /**
  * Debugger for PDP-11 CPUs
@@ -15,7 +15,7 @@
  * @class {PDP11Dbg}
  * @unrestricted
  */
-class PDP11Dbg extends Debugger {
+export class PDP11Dbg extends Debugger {
     /**
      * PDP11Dbg(idMachine, idDevice, config)
      *
@@ -575,4 +575,4 @@ PDP11Dbg.OP1145 = [
     PDP11Dbg.OPS.MTPD
 ];
 
-Defs.CLASSES["PDP11Dbg"] = PDP11Dbg;
+PDP11Dbg.CLASSES["PDP11Dbg"] = PDP11Dbg;

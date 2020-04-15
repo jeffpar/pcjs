@@ -7,7 +7,10 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "../../../lib/device.js";
+
+Device.MESSAGE.PC11             = 0x000200000000;
+Device.MESSAGE_NAMES["pc11"]    = Device.MESSAGE.PC11;
 
 /**
  * The PC11 component has the following configuration properties:
@@ -40,7 +43,7 @@
  * @class {PC11}
  * @unrestricted
  */
-class PC11 extends Device {
+export class PC11 extends Device {
     /**
      * PC11(idMachine, idDevice, config)
      *
@@ -207,7 +210,7 @@ class PC11 extends Device {
      *
      * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
      *
-     * @this {DL11}
+     * @this {PC11}
      * @param {Array} state
      * @returns {boolean}
      */
@@ -225,7 +228,7 @@ class PC11 extends Device {
      *
      * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
      *
-     * @this {DL11}
+     * @this {PC11}
      * @param {Array} state
      */
     saveState(state)
@@ -238,14 +241,14 @@ class PC11 extends Device {
      *
      * Called by the Machine device to provide notification of a power event.
      *
-     * @this {DL11}
+     * @this {PC11}
      * @param {boolean} on (true to power on, false to power off)
      */
     onPower(on)
     {
         if (!this.cpu) {
             this.cpu = /** @type {PDP11} */ (this.findDeviceByClass("CPU"));
-            this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, MESSAGE.PC11);
+            this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, Device.MESSAGE.PC11);
         }
     }
 
@@ -279,7 +282,7 @@ class PC11 extends Device {
         let name = media['name'];
         let path = media['path'];
 
-        this.printf(MESSAGE.PC11, 'load("%s","%s")\n', name, path);
+        this.printf(Device.MESSAGE.PC11, 'load("%s","%s")\n', name, path);
 
         if (!path) {
             this.unloadMedia(false);
@@ -556,11 +559,11 @@ class PC11 extends Device {
                 }
                 let offBlock = off;
                 if (w != 0x0001) {
-                    this.printf(MESSAGE.PC11, "invalid signature (%#06x) at offset %#06x\n", w, offBlock);
+                    this.printf(Device.MESSAGE.PC11, "invalid signature (%#06x) at offset %#06x\n", w, offBlock);
                     break;
                 }
                 if (off + 6 >= aBytes.length) {
-                    this.printf(MESSAGE.PC11, "invalid block at offset %#06x\n", offBlock);
+                    this.printf(Device.MESSAGE.PC11, "invalid block at offset %#06x\n", offBlock);
                     break;
                 }
                 off += 2;
@@ -574,12 +577,12 @@ class PC11 extends Device {
                     len--;
                 }
                 if (len != 0 || off >= aBytes.length) {
-                    this.printf(MESSAGE.PC11, "insufficient data for block at offset %#06x\n", offBlock);
+                    this.printf(Device.MESSAGE.PC11, "insufficient data for block at offset %#06x\n", offBlock);
                     break;
                 }
                 checksum += aBytes[off++] & 0xff;
                 if (checksum & 0xff) {
-                    this.printf(MESSAGE.PC11, "invalid checksum (%#04x) for block at offset %#06x\n", checksum, offBlock);
+                    this.printf(Device.MESSAGE.PC11, "invalid checksum (%#04x) for block at offset %#06x\n", checksum, offBlock);
                     break;
                 }
                 if (!cbData) {
@@ -588,9 +591,9 @@ class PC11 extends Device {
                     } else {
                         if (addrExec == null) addrExec = addr;
                     }
-                    if (addrExec != null) this.printf(MESSAGE.PC11, "starting address: %#06x\n", addrExec);
+                    if (addrExec != null) this.printf(Device.MESSAGE.PC11, "starting address: %#06x\n", addrExec);
                 } else {
-                    this.printf(MESSAGE.PC11, "loading %#06x bytes at %#06x-%#06x\n", cbData, addr, addr + cbData);
+                    this.printf(Device.MESSAGE.PC11, "loading %#06x bytes at %#06x-%#06x\n", cbData, addr, addr + cbData);
                     while (cbData--) {
                         this.bus.writeDirect(addr++, aBytes[offData++] & 0xff);
                     }
@@ -689,7 +692,7 @@ class PC11 extends Device {
                      * the data assigned to PRB with 0xff.
                      */
                     this.regPRB = this.aTapeData[this.iTapeData] & 0xff;
-                    this.printf(MESSAGE.PC11, "%s.advanceReader(%d): %#02x\n", this.idDevice, this.iTapeData, this.regPRB);
+                    this.printf(Device.MESSAGE.PC11, "%s.advanceReader(%d): %#02x\n", this.idDevice, this.iTapeData, this.regPRB);
                     this.iTapeData++;
                     this.displayProgress(this.iTapeData / this.aTapeData.length * 100);
                 }
@@ -878,4 +881,4 @@ PC11.IOTABLE = {
     [PDP11.UNIBUS.PPB]:     /* 177556 */    [null, null, PC11.prototype.readPPB,    PC11.prototype.writePPB,    "PPB"]
 };
 
-Defs.CLASSES["PC11"] = PC11;
+PC11.CLASSES["PC11"] = PC11;

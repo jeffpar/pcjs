@@ -10,7 +10,8 @@ The following machine properties are supported in the 'machines' Front Matter of
     'config' (default: machine.xml)
     'template' (default: machine.xsl)
     'debug' (default: false; true enables asserts and is much slower)
-    'uncompiled' (default: false; true is useful for debugging but slower)
+    'unbundled' (default: false; true to include unbundled source files)
+    'uncompiled' (default: false; true to include the bundled but uncompiled sources)
     'parms' (stringified object that collects additional machine properties listed below)
 
 Note that if you want BACKTRACK support enabled in a machine, 'uncompiled' must be true, because that isn't
@@ -176,11 +177,11 @@ template doesn't add them to the Computer component anymore, since we started su
     {%- capture machine_connection -%},connection:"{{ machine.connection }}"{%- endcapture -%}
   {%- endif -%}
   {%- capture machine_parms -%}{{ site.left_brace }}{{ machine_autoMount }}{{ machine_autoScript }}{{ machine_autoStart }}{{ machine_autoType }}{{ machine_cdroms }}{{ machine_floppies }}{{ machine_drives }}{{ machine_resume }}{{ machine_sound }}{{ machine_state }}{{ machine_flicker }}{{ machine_sizeRAM }}{{ machine_testRAM }}{{ machine_commands }}{{ machine_messages }}{{ machine_connection }}{{ site.right_brace }}{%- endcapture -%}
-  {%- if site.pcjs.uncompiled -%}
-    {%- if site.pcjs.unbundled -%}
+  {%- if site.pcjs.uncompiled or machine.uncompiled or machine.unbundled -%}
+    {%- if machine.unbundled -%}
       {%- for script in machine_data.scripts -%}
         {%- capture page_script %}
-    <script src="{{ site.baseurl }}/{{ script }}"></script>
+    <script type="module" src="{{ site.baseurl }}/{{ script | replace: './','' }}"></script>
         {%- endcapture -%}
         {%- unless page_scripts contains page_script -%}
           {{ page_script }}
@@ -210,11 +211,13 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- endif -%}
   {%- if machine_embed contains "embed" %}
     <script>{{ machine_embed }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});</script>
+  {%- elsif machine.unbundled %}
+    <script type="module">{{ machine_embed }}('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
   {%- else %}
     <script>{{ machine_embed }}('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
-  {%- endif %}
+{%- endif %}
   {%- if machine.sticky == "top" %}
     <script src="{{ site.baseurl }}/machines/shared/lib/sticky.js"></script>
     <script>addStickyMachine('{{ machine_id }}');</script>
   {%- endif -%}
-  {%- endfor %}
+{%- endfor %}

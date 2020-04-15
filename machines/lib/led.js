@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "./device.js";
 
 /**
  * @typedef {Config} LEDConfig
@@ -91,7 +91,7 @@
  * @property {boolean} fBufferModified
  * @property {boolean} fBufferTickled
  */
-class LED extends Device {
+export class LED extends Device {
     /**
      * LED(idMachine, idDevice, config)
      *
@@ -1136,4 +1136,4 @@ LED.SYMBOL_SEGMENTS = {
     '.':        ['P']
 };
 
-Defs.CLASSES["LED"] = LED;
+LED.CLASSES["LED"] = LED;

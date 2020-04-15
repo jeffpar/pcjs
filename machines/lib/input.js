@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "./device.js";
 
 /**
  * @typedef {Config} InputConfig
@@ -90,7 +90,7 @@
  * @property {Array.<ActiveKey>} aActiveKeys
  * @property {number} keyMods
  */
-class Input extends Device {
+export class Input extends Device {
     /**
      * Input(idMachine, idDevice, config)
      *
@@ -131,7 +131,7 @@ class Input extends Device {
     {
         super(idMachine, idDevice, config);
 
-        this.messages = MESSAGE.INPUT;
+        this.messages = Device.MESSAGE.INPUT;
         this.onInput = this.onHover = null;
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.machine = /** @type {Machine} */ (this.findDeviceByClass("Machine"));
@@ -359,8 +359,8 @@ class Input extends Device {
                                  * is an Array where the first entry is a keyCode modifier; specifically, KEYCODE.LOCK.
                                  */
                                 keyCode = clickBinding[0];
-                                input.assert(keyCode == WebIO.KEYCODE.LOCK);
-                                if (keyCode == WebIO.KEYCODE.LOCK) {
+                                input.assert(keyCode == Input.KEYCODE.LOCK);
+                                if (keyCode == Input.KEYCODE.LOCK) {
                                     /*
                                      * In the case of KEYCODE.LOCK, the next entry is the actual keyCode, and we look
                                      * to the element's "data-value" attribute for whether clicking the element should
@@ -696,7 +696,7 @@ class Input extends Device {
          */
         let printEvent = function(type, code, used) {
             let activeElement = document.activeElement;
-            input.printf(MESSAGE.KEY + MESSAGE.EVENT, "%s.onKey%s(%d): %5.2f (%s)\n", activeElement.id || activeElement.nodeName, type, code, (Date.now() / 1000) % 60, used != undefined? (used? "used" : "unused") : "ignored");
+            input.printf(Device.MESSAGE.KEY + Device.MESSAGE.EVENT, "%s.onKey%s(%d): %5.2f (%s)\n", activeElement.id || activeElement.nodeName, type, code, (Date.now() / 1000) % 60, used != undefined? (used? "used" : "unused") : "ignored");
         };
 
         element.addEventListener(
@@ -751,13 +751,13 @@ class Input extends Device {
             element.addEventListener(
                 'blur',
                 function onBlur(event) {
-                    input.printf(MESSAGE.KEY + MESSAGE.EVENT, "onBlur(%s)\n", event.target.id || event.target.nodeName);
+                    input.printf(Device.MESSAGE.KEY + Device.MESSAGE.EVENT, "onBlur(%s)\n", event.target.id || event.target.nodeName);
                 }
             );
             element.addEventListener(
                 'focus',
                 function onFocus(event) {
-                    input.printf(MESSAGE.KEY + MESSAGE.EVENT, "onFocus(%s)\n", event.target.id || event.target.nodeName);
+                    input.printf(Device.MESSAGE.KEY + Device.MESSAGE.EVENT, "onFocus(%s)\n", event.target.id || event.target.nodeName);
                 }
             );
         }
@@ -951,7 +951,7 @@ class Input extends Device {
             this.aActiveKeys.push({
                 keyNum, msDown, autoRelease
             });
-            this.printf(MESSAGE.KEY + MESSAGE.INPUT, "addActiveKey(keyNum=%d,autoRelease=%b)\n", keyNum, autoRelease);
+            this.printf(Device.MESSAGE.KEY + Device.MESSAGE.INPUT, "addActiveKey(keyNum=%d,autoRelease=%b)\n", keyNum, autoRelease);
         } else {
             this.aActiveKeys[i].msDown = msDown;
             this.aActiveKeys[i].autoRelease = autoRelease;
@@ -1000,10 +1000,10 @@ class Input extends Device {
                 this.checkAutoRelease();
                 return;
             }
-            this.printf(MESSAGE.KEY + MESSAGE.INPUT, "removeActiveKey(keyNum=%d,duration=%dms,autoRelease=%b)\n", keyNum, msDuration, activeKey.autoRelease);
+            this.printf(Device.MESSAGE.KEY + Device.MESSAGE.INPUT, "removeActiveKey(keyNum=%d,duration=%dms,autoRelease=%b)\n", keyNum, msDuration, activeKey.autoRelease);
             this.aActiveKeys.splice(i, 1);
         } else {
-            this.printf(MESSAGE.KEY + MESSAGE.INPUT, "removeActiveKey(keyNum=%d): up without down?\n", keyNum);
+            this.printf(Device.MESSAGE.KEY + Device.MESSAGE.INPUT, "removeActiveKey(keyNum=%d): up without down?\n", keyNum);
         }
     }
 
@@ -1021,10 +1021,10 @@ class Input extends Device {
     {
         let keyCode, keyName;
         if (down != undefined) {
-            keyCode = WebIO.FF_KEYCODE[code] || code;       // fix any Firefox-specific keyCodes
-            keyName = WebIO.KEYNAME[code];
+            keyCode = Input.FF_KEYCODE[code] || code;       // fix any Firefox-specific keyCodes
+            keyName = Input.KEYNAME[code];
             let keyMod = Input.KEYCODEMOD[keyCode];
-            let fRight = (event && event.location == WebIO.LOCATION.RIGHT);
+            let fRight = (event && event.location == Input.LOCATION.RIGHT);
             if ((keyMod & Input.KEYMOD.LEFT) && fRight) {
                 keyMod >>= 1;
             }
@@ -1053,16 +1053,16 @@ class Input extends Device {
              * a lower-case letter arrives and "on" whenever an upper-case letter arrives when neither
              * any SHIFT nor CAPS-LOCK key appears to be depressed.
              */
-            if (code >= WebIO.CHARCODE.A && code <= WebIO.CHARCODE.Z) {
+            if (code >= Input.CHARCODE.A && code <= Input.CHARCODE.Z) {
                 if (!(this.keyMods & (Input.KEYMOD.SHIFTS | Input.KEYMOD.CAPS_LOCK))) {
                     this.keyMods |= Input.KEYMOD.CAPS_LOCK;
-                    this.checkKeyListeners(WebIO.KEYCODE.CAPS_LOCK, true);
+                    this.checkKeyListeners(Input.KEYCODE.CAPS_LOCK, true);
                 }
             }
-            else if (code >= WebIO.CHARCODE.a && code <= WebIO.CHARCODE.z) {
+            else if (code >= Input.CHARCODE.a && code <= Input.CHARCODE.z) {
                 if (this.keyMods & Input.KEYMOD.CAPS_LOCK) {
                     this.keyMods &= ~Input.KEYMOD.CAPS_LOCK;
-                    this.checkKeyListeners(WebIO.KEYCODE.CAPS_LOCK, false);
+                    this.checkKeyListeners(Input.KEYCODE.CAPS_LOCK, false);
                 }
             }
         }
@@ -1382,7 +1382,7 @@ class Input extends Device {
          */
         let focusElement = this.altFocus? this.altFocusElement : this.focusElement;
         if (focusElement && this.machine.isReady()) {
-            this.printf(MESSAGE.INPUT, 'setFocus("%s")\n', focusElement.id || focusElement.nodeName);
+            this.printf(Device.MESSAGE.INPUT, 'setFocus("%s")\n', focusElement.id || focusElement.nodeName);
             focusElement.focus();
             focusElement.scrollIntoView();      // one would have thought focus() would do this, but apparently not....
         }
@@ -1469,13 +1469,13 @@ Input.KEYMOD = {
 };
 
 Input.KEYCODEMOD = {
-    [WebIO.KEYCODE.SHIFT]:          Input.KEYMOD.SHIFT,
-    [WebIO.KEYCODE.CTRL]:           Input.KEYMOD.CTRL,
-    [WebIO.KEYCODE.ALT]:            Input.KEYMOD.ALT,
-    [WebIO.KEYCODE.CMD]:            Input.KEYMOD.CMD,
-    [WebIO.KEYCODE.CAPS_LOCK]:      Input.KEYMOD.CAPS_LOCK,
-    [WebIO.KEYCODE.NUM_LOCK]:       Input.KEYMOD.NUM_LOCK,
-    [WebIO.KEYCODE.SCROLL_LOCK]:    Input.KEYMOD.SCROLL_LOCK
+    [Input.KEYCODE.SHIFT]:          Input.KEYMOD.SHIFT,
+    [Input.KEYCODE.CTRL]:           Input.KEYMOD.CTRL,
+    [Input.KEYCODE.ALT]:            Input.KEYMOD.ALT,
+    [Input.KEYCODE.CMD]:            Input.KEYMOD.CMD,
+    [Input.KEYCODE.CAPS_LOCK]:      Input.KEYMOD.CAPS_LOCK,
+    [Input.KEYCODE.NUM_LOCK]:       Input.KEYMOD.NUM_LOCK,
+    [Input.KEYCODE.SCROLL_LOCK]:    Input.KEYMOD.SCROLL_LOCK
 };
 
-Defs.CLASSES["Input"] = Input;
+Input.CLASSES["Input"] = Input;

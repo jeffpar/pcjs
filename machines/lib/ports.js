@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "./device.js";
 
 /**
  * @typedef {Config} PortsConfig
@@ -27,7 +27,7 @@
  * @property {Array.<function(number,boolean)>} aInPair
  * @property {Array.<function(number,number)>} aOutPair
  */
-class Ports extends Memory {
+export class Ports extends Memory {
     /**
      * Ports(idMachine, idDevice, config)
      *
@@ -147,7 +147,7 @@ class Ports extends Memory {
         }
         if (!read) {
             this.bus.fault(port, 0);
-            this.printf(MESSAGE.PORTS + MESSAGE.MISC, "readNone(%#04x): unknown port\n", port);
+            this.printf(Memory.MESSAGE.PORTS + Memory.MESSAGE.MISC, "readNone(%#04x): unknown port\n", port);
             value = super.readNone(offset);
         }
         return value;
@@ -197,10 +197,10 @@ class Ports extends Memory {
         }
         if (!written) {
             this.bus.fault(port, 1);
-            this.printf(MESSAGE.PORTS + MESSAGE.MISC, "writeNone(%#04x,%#04x): unknown port\n", port, value);
+            this.printf(Memory.MESSAGE.PORTS + Memory.MESSAGE.MISC, "writeNone(%#04x,%#04x): unknown port\n", port, value);
             super.writeNone(offset, value);
         }
     }
 }
 
-Defs.CLASSES["Ports"] = Ports;
+Ports.CLASSES["Ports"] = Ports;

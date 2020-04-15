@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Memory } from "./memory.js";
 
 /**
  * @typedef {Config} ROMConfig
@@ -27,7 +27,7 @@
  * @unrestricted
  * @property {ROMConfig} config
  */
-class ROM extends Memory {
+export class ROM extends Memory {
     /**
      * ROM(idMachine, idDevice, config)
      *
@@ -239,4 +239,4 @@ ROM.BINDING = {
     CELLDESC:   "cellDesc"
 };
 
-Defs.CLASSES["ROM"] = ROM;
+ROM.CLASSES["ROM"] = ROM;

@@ -10,13 +10,16 @@
  * <paulnank@hotmail.com> at <http://skn.noip.me/pdp11/pdp11.html> with permission.
  */
 
-"use strict";
+import { Device } from "../../../lib/device.js";
+
+Device.MESSAGE.DL11             = 0x000100000000;
+Device.MESSAGE_NAMES["dl11"]    = Device.MESSAGE.DL11;
 
 /**
  * @class {DL11}
  * @unrestricted
  */
-class DL11 extends Device {
+export class DL11 extends Device {
     /**
      * DL11(idMachine, idDevice, config)
      *
@@ -162,8 +165,8 @@ class DL11 extends Device {
     {
         if (!this.cpu) {
             this.cpu = /** @type {PDP11} */ (this.findDeviceByClass("CPU"));
-            this.irqReceiver = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.RVEC, PDP11.DL11.PRI, MESSAGE.SERIAL);
-            this.irqTransmitter = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.XVEC, PDP11.DL11.PRI, MESSAGE.SERIAL);
+            this.irqReceiver = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.RVEC, PDP11.DL11.PRI, DL11.MESSAGE.SERIAL);
+            this.irqTransmitter = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.XVEC, PDP11.DL11.PRI, DL11.MESSAGE.SERIAL);
         }
     }
 
@@ -210,7 +213,7 @@ class DL11 extends Device {
      */
     receiveByte(b)
     {
-        this.printf(MESSAGE.SERIAL, "receiveByte(%#04x)\n", b);
+        this.printf(DL11.MESSAGE.SERIAL, "receiveByte(%#04x)\n", b);
         if (!this.fAutoStop) {
             this.regRBUF = b;
             if (!(this.regRCSR & PDP11.DL11.RCSR.RD)) {
@@ -269,10 +272,10 @@ class DL11 extends Device {
     {
         let oldRCSR = this.regRCSR;
         this.regRCSR &= ~(PDP11.DL11.RCSR.CTS | PDP11.DL11.RCSR.CD);
-        if (pins & RS232.CTS.MASK) {
+        if (pins & DL11.RS232.CTS.MASK) {
             this.regRCSR |= PDP11.DL11.RCSR.CTS;
         }
-        if (pins & RS232.CD.MASK) {
+        if (pins & DL11.RS232.CD.MASK) {
             this.regRCSR |= PDP11.DL11.RCSR.CD;
         }
         if (oldRCSR != this.regRCSR) {
@@ -311,7 +314,7 @@ class DL11 extends Device {
     transmitByte(b)
     {
         let fTransmitted = false;
-        this.printf(MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
+        this.printf(DL11.MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
         if (this.fAutoXOFF) {
             if (b == 0x13) {        // XOFF
                 this.fAutoStop = true;
@@ -395,11 +398,11 @@ class DL11 extends Device {
             if (delta & PDP11.DL11.RCSR.RS232) {
                 let pins = 0;
                 if (this.fNullModem) {
-                    pins |= (data & PDP11.DL11.RCSR.RTS)? RS232.CTS.MASK : 0;
-                    pins |= (data & PDP11.DL11.RCSR.DTR)? (RS232.DSR.MASK | RS232.CD.MASK): 0;
+                    pins |= (data & PDP11.DL11.RCSR.RTS)? DL11.RS232.CTS.MASK : 0;
+                    pins |= (data & PDP11.DL11.RCSR.DTR)? (DL11.RS232.DSR.MASK | DL11.RS232.CD.MASK): 0;
                 } else {
-                    pins |= (data & PDP11.DL11.RCSR.RTS)? RS232.RTS.MASK : 0;
-                    pins |= (data & PDP11.DL11.RCSR.DTR)? RS232.DTR.MASK : 0;
+                    pins |= (data & PDP11.DL11.RCSR.RTS)? DL11.RS232.RTS.MASK : 0;
+                    pins |= (data & PDP11.DL11.RCSR.DTR)? DL11.RS232.DTR.MASK : 0;
                 }
                 this.updateStatus.call(this.connection, pins);
             }
@@ -503,4 +506,4 @@ DL11.IOTABLE = {
     [PDP11.UNIBUS.XBUF]:    /* 177566 */    [null, null, DL11.prototype.readXBUF,   DL11.prototype.writeXBUF,   "XBUF"]
 };
 
-Defs.CLASSES["DL11"] = DL11;
+DL11.CLASSES["DL11"] = DL11;

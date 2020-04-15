@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "./device.js";
 
 /**
  * DebuggerConfig properties
@@ -58,7 +58,7 @@
  * @unrestricted
  * @property {Array.<Array.<Address>>} aaBreakAddress
  */
-class Debugger extends Device {
+export class Debugger extends Device {
     /**
      * Debugger(idMachine, idDevice, config)
      *
@@ -153,7 +153,7 @@ class Debugger extends Device {
          * If set to MESSAGE.ALL, then we break on all messages.  It can be set to a subset of message bits,
          * but there is currently no UI for that.
          */
-        this.messagesBreak = MESSAGE.NONE;
+        this.messagesBreak = Device.MESSAGE.NONE;
 
         /*
          * variables is an object with properties that grow as setVariable() assigns more variables;
@@ -1804,7 +1804,7 @@ class Debugger extends Device {
         if (option) {
             let on = this.parseBoolean(option);
             if (on != undefined) {
-                this.messagesBreak = on? MESSAGE.ALL : MESSAGE.NONE;
+                this.messagesBreak = on? Device.MESSAGE.ALL : Device.MESSAGE.NONE;
             } else {
                 result = this.sprintf("unrecognized message option: %s\n", option);
             }
@@ -2762,4 +2762,4 @@ Debugger.DECOP_PRECEDENCE = {
     '}':    20      // close grouped expression (converted from achGroup[1])
 };
 
-// Defs.CLASSES["Debugger"] = Debugger;
+// Debugger.CLASSES["Debugger"] = Debugger;

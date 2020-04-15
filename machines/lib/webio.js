@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { StdIO } from "./stdio.js";
 
 /**
  * Media libraries generally consist of an array of Media objects.
@@ -34,7 +34,7 @@
  * @property {number} messages
  * @property {WebIO} machine
  */
-class WebIO extends StdIO {
+export class WebIO extends StdIO {
     /**
      * WebIO(isMachine)
      *
@@ -1012,7 +1012,7 @@ class WebIO extends StdIO {
                             result += this.sprintf("%8s: %b\n", token, this.isMessageOn(message));
                         }
                     }
-                    if (this.isMessageOn(MESSAGE.BUFFER)) {
+                    if (this.isMessageOn(WebIO.MESSAGE.BUFFER)) {
                         result += "all messages will be buffered until buffer is turned off\n";
                     }
                     if (!result) result = "no messages\n";
@@ -1083,7 +1083,7 @@ class WebIO extends StdIO {
     print(s, fBuffer)
     {
         if (fBuffer == undefined) {
-            fBuffer = this.isMessageOn(MESSAGE.BUFFER);
+            fBuffer = this.isMessageOn(WebIO.MESSAGE.BUFFER);
         }
         if (!fBuffer) {
             let element = this.findBinding(WebIO.BINDING.PRINT, true);
@@ -1205,7 +1205,7 @@ class WebIO extends StdIO {
         if (on) {
             this.machine.messages = this.setBits(this.machine.messages, messages);
         } else {
-            flush = (this.testBits(this.machine.messages, MESSAGE.BUFFER) && this.testBits(messages, MESSAGE.BUFFER));
+            flush = (this.testBits(this.machine.messages, WebIO.MESSAGE.BUFFER) && this.testBits(messages, WebIO.MESSAGE.BUFFER));
             this.machine.messages = this.clearBits(this.machine.messages, messages);
         }
         if (flush) this.flush();
@@ -1235,8 +1235,8 @@ WebIO.MESSAGE_COMMANDS = [
  * NOTE: The first name is automatically omitted from global "on" and "off" operations.
  */
 WebIO.MESSAGE_NAMES = {
-    "all":      MESSAGE.ALL,
-    "buffer":   MESSAGE.BUFFER
+    "all":      WebIO.MESSAGE.ALL,
+    "buffer":   WebIO.MESSAGE.BUFFER
 };
 
 WebIO.HANDLER = {
@@ -1651,4 +1651,4 @@ WebIO.LocalStorage = {
     Test:       "PCjs.localStorage"
 };
 
-Defs.CLASSES["WebIO"] = WebIO;
+WebIO.CLASSES["WebIO"] = WebIO;

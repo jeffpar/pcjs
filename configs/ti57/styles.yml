@@ -1,6 +1,7 @@
 .fillTI57:
   position: relative;
-  display: inline-block;
+  width: 75%;
+  margin: auto;
 .floatTI57:
   position: relative;
   display: inline-block;

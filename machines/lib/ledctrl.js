@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { CPU } from "./cpu.js";
 
 /**
  * @typedef {Config} LEDCtrlConfig
@@ -49,7 +49,7 @@
  * @property {string} colorSelected (set by updateColorSelection())
  * @property {Array.<string>} colors
  */
-class LEDCtrl extends CPU {
+export class LEDCtrl extends CPU {
     /**
      * LEDCtrl(idMachine, idDevice, config)
      *
@@ -1764,4 +1764,4 @@ LEDCtrl.FONTS = {
     }
 };
 
-Defs.CLASSES["LEDCtrl"] = LEDCtrl;
+LEDCtrl.CLASSES["LEDCtrl"] = LEDCtrl;

@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "./device.js";
 
 /**
  * @class {Machine}
@@ -17,7 +17,7 @@
  * @property {boolean} fConfigLoaded
  * @property {boolean} fPageLoaded
  */
-class Machine extends Device {
+export class Machine extends Device {
     /**
      * Machine(idMachine, sConfig, sParms)
      *
@@ -129,7 +129,7 @@ class Machine extends Device {
          * One alternative is to hard-code any MESSAGE groups here, to ensure that the relevant messages
          * from all device constructors get displayed.
          */
-        this.messages = DEBUG? MESSAGE.WARN : MESSAGE.DEFAULT;
+        this.messages = Device.DEBUG? Device.MESSAGE.WARN : Device.MESSAGE.DEFAULT;
 
         sConfig = sConfig.trim();
         if (sConfig[0] == '{') {
@@ -411,9 +411,9 @@ Machine.COPYRIGHT = "Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>";
  * but not all machines will have such a control, and sometimes that control will be inaccessible (eg, if
  * the browser is currently debugging the machine).
  */
-window[FACTORY] = function createMachine(idMachine, sConfig, sParms) {
+window[Machine.FACTORY] = function createMachine(idMachine, sConfig, sParms) {
     let machine = new Machine(idMachine, sConfig, sParms);
-    window[COMMAND] = function(commands) {
+    window[Machine.COMMAND] = function(commands) {
         return machine.parseCommands(commands);
     };
     return machine;
@@ -431,13 +431,13 @@ window[FACTORY] = function createMachine(idMachine, sConfig, sParms) {
  * And yes, by the same logic, one might think that 'TMS1500' should really be called 'TI57', except that the
  * TMS1500 factory can produce any of the TI-42, TI-55, or TI-57.  Naming is hard.
  */
-if (FACTORY == "Machine") {
-    window['Invaders']  = window[FACTORY];
-    window['LEDs']      = window[FACTORY];
-    window['PCx86v3']   = window[FACTORY];
-    window['PDP11v3']   = window[FACTORY];
-    window['TMS1500']   = window[FACTORY];
-    window['VT100']     = window[FACTORY];
+if (Machine.FACTORY == "Machine") {
+    window['Invaders']  = window[Machine.FACTORY];
+    window['LEDs']      = window[Machine.FACTORY];
+    window['PCx86v3']   = window[Machine.FACTORY];
+    window['PDP11v3']   = window[Machine.FACTORY];
+    window['TMS1500']   = window[Machine.FACTORY];
+    window['VT100']     = window[Machine.FACTORY];
 }
 
-Defs.CLASSES["Machine"] = Machine;
+Machine.CLASSES["Machine"] = Machine;

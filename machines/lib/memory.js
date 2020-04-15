@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "./device.js";
 
 /**
  * @typedef {Config} MemoryConfig
@@ -44,7 +44,7 @@
  * @property {function((number|undefined),number,number)|null} readTrap
  * @property {function((number|undefined),number,number)|null} writeTrap
  */
-class Memory extends Device {
+export class Memory extends Device {
     /**
      * Memory(idMachine, idDevice, config)
      *
@@ -88,7 +88,7 @@ class Memory extends Device {
             writePair = this.writeValuePairDirty;
             if (this.dataWidth == 8 && this.getMachineConfig('ArrayBuffer') !== false) {
                 this.fUseArrayBuffer = true;
-                readPair = this.littleEndian == LITTLE_ENDIAN? this.readValuePair16 : this.readValuePair16SE;
+                readPair = this.littleEndian == Memory.LITTLE_ENDIAN? this.readValuePair16 : this.readValuePair16SE;
             }
         }
 
@@ -581,7 +581,7 @@ class Memory extends Device {
                 }
             }
         } else {
-            if (this.littleEndian == LITTLE_ENDIAN) {
+            if (this.littleEndian == Memory.LITTLE_ENDIAN) {
                 this.writeValuePair16(offset, value);
                 if (!this.nWriteTraps) {
                     this.writePair = this.writeValuePair16;
@@ -772,4 +772,4 @@ Memory.TYPE = {
     WRITABLE:           0x0C
 };
 
-Defs.CLASSES["Memory"] = Memory;
+Memory.CLASSES["Memory"] = Memory;

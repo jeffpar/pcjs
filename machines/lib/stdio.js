@@ -7,12 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
-
-if (typeof module !== "undefined") {
-    var Defs = require("../../machines/lib/defs");      // eslint-disable-line no-var
-    var NumIO = require("../../machines/lib/numio");    // eslint-disable-line no-var
-}
+import { NumIO } from "./numio.js";
 
 /**
  * Define the Formatter function type for addFormatType().
@@ -31,7 +26,7 @@ if (typeof module !== "undefined") {
  * @unrestricted
  * @property {Object.<string,(Formatter|null)>}>} formatters
  */
-class StdIO extends NumIO {
+export class StdIO extends NumIO {
     /**
      * StdIO()
      *
@@ -658,6 +653,4 @@ StdIO.HexUpperCase = "0123456789ABCDEF";
 StdIO.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 StdIO.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-Defs.CLASSES["StdIO"] = StdIO;
-
-if (typeof module !== "undefined") module.exports = StdIO;
+StdIO.CLASSES["StdIO"] = StdIO;

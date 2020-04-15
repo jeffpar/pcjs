@@ -84,6 +84,18 @@
     "@tags": "home,pcx86"
   },
   {
+    "@title": "Lotus 1-2-3 (1983)",
+    "@permalink": "/software/pcx86/app/lotus/123/1a/",
+    "@preview": ".png",
+    "@tags": "home,pcx86"
+  },
+  {
+    "@title": "Norton Utilities 2.0 (1983)",
+    "@permalink": "/software/pcx86/util/norton/2.00/",
+    "@preview": ".png",
+    "@tags": "home,pcx86"
+  },
+  {
     "@title": "Fantasy Land EGA Demo (1984)",
     "@permalink": "/software/pcx86/demo/ibm/ega/",
     "@preview": ".png",
