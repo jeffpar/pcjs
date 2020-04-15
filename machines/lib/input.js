@@ -379,7 +379,7 @@ export class Input extends Device {
                             input.setFocus();
                         });
                     } else {
-                        if (DEBUG) input.printf("click map element '%s' not found\n", binding);
+                        if (Input.DEBUG) input.printf("click map element '%s' not found\n", binding);
                     }
                 }
             }
@@ -747,7 +747,7 @@ export class Input extends Device {
          * The following onBlur() and onFocus() handlers are currently just for debugging purposes, but
          * PCx86 experience suggests that we may also eventually need them for future pointer-locking support.
          */
-        if (DEBUG) {
+        if (Input.DEBUG) {
             element.addEventListener(
                 'blur',
                 function onBlur(event) {

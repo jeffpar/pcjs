@@ -7,6 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import { Bus }    from "./bus.js";
 import { Device } from "./device.js";
 
 /**

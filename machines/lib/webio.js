@@ -170,7 +170,7 @@ export class WebIO extends StdIO {
                 this.addBinding(binding, element);
                 continue;
             }
-            if (MAXDEBUG && !fDirectBindings && id != this.idDevice) {
+            if (WebIO.MAXDEBUG && !fDirectBindings && id != this.idDevice) {
                 this.printf("unable to find element '%s' for device '%s'\n", id, this.idDevice);
             }
         }
@@ -253,7 +253,7 @@ export class WebIO extends StdIO {
      */
     assert(f, format, ...args)
     {
-        if (DEBUG) {
+        if (WebIO.DEBUG) {
             if (!f) {
                 throw new Error(format? this.sprintf(format, ...args) : "assertion failure");
             }
@@ -1097,7 +1097,7 @@ export class WebIO extends StdIO {
                     /*
                      * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
                      */
-                    if (!DEBUG && element.value.length > 8192) {
+                    if (!WebIO.DEBUG && element.value.length > 8192) {
                         element.value = element.value.substr(element.value.length - 4096);
                     }
                     element.scrollTop = element.scrollHeight;

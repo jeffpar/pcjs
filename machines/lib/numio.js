@@ -46,10 +46,6 @@ export class NumIO extends Defs {
      *
      * @this {NumIO}
      */
-    constructor()
-    {
-        super();
-    }
 
     /**
      * isInt(s, base)

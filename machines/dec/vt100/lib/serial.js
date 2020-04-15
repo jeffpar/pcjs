@@ -8,6 +8,7 @@
  */
 
 import { Device } from "../../../lib/device.js";
+import { LED }    from "../../../lib/led.js";
 
 /**
  * @class {VT100Serial}

@@ -69,10 +69,10 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- else -%}
     {%- capture machine_version -%}{{ site.data.machines.shared.version }}{%- endcapture -%}
   {%- endif -%}
-  {%- capture machine_embed -%}{{ machine_data.factory }}{%- endcapture -%}
+  {%- capture machine_factory -%}{{ machine_data.factory }}{%- endcapture -%}
   {%- assign machine_config = "" -%}
   {%- assign machine_template = "" -%}
-  {%- unless machine.components or machine.config contains ".json" and machine_embed contains "embed" -%}
+  {%- unless machine.components or machine.config contains ".json" and machine_factory contains "embed" -%}
     {%- unless machine.config -%}
       {%- assign machine_config = "machine.xml" -%}
     {%- else -%}
@@ -209,12 +209,14 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- if machine_config contains ".xml" and machine_template == "" -%}
     {%- capture machine_template -%}{{ site.baseurl }}/configs/{{ machine_type }}/xsl/components.xsl{%- endcapture -%}
   {%- endif -%}
-  {%- if machine_embed contains "embed" %}
-    <script>{{ machine_embed }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});</script>
+  {%- if machine_factory contains "embed" %}
+    <script>{{ machine_factory }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});</script>
   {%- elsif machine.unbundled %}
-    <script type="module">{{ machine_embed }}('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
+    <script type="module">NewMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
+  {%- elsif site.pcjs.uncompiled or machine.uncompiled %}
+    <script>NewMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
   {%- else %}
-    <script>{{ machine_embed }}('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
+    <script>{{ machine_factory }}('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
 {%- endif %}
   {%- if machine.sticky == "top" %}
     <script src="{{ site.baseurl }}/machines/shared/lib/sticky.js"></script>

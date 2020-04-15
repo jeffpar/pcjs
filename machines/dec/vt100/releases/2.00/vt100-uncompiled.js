@@ -30,12 +30,12 @@ const COMPILED = false;
 const DEBUG = true;
 
 /**
- * FACTORY is "Machine" by default; overridden with the machine's "factory" string in machines.json
+ * FACTORY is "PCjs" by default; overridden with the machine's "factory" string in machines.json
  * to ensure unique factories.
  *
  * @define {string}
  */
-const FACTORY = "Machine";
+const FACTORY = "NewMachine";
 
 /**
  * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
@@ -55,18 +55,8 @@ const VERSION = "2.00";
 
 /**
  * @class {Defs}
- * @unrestricted
  */
-class Defs {
-    /**
-     * Defs()
-     *
-     * @this {Defs}
-     */
-    constructor()
-    {
-    }
-}
+class Defs {}
 
 Defs.COMMAND  = COMMAND;
 Defs.COMPILED = COMPILED;
@@ -190,10 +180,6 @@ class NumIO extends Defs {
      *
      * @this {NumIO}
      */
-    constructor()
-    {
-        super();
-    }
 
     /**
      * isInt(s, base)
@@ -756,7 +742,7 @@ NumIO.CLASSES["NumIO"] = NumIO;
  */
 
 /** @typedef {Function} */
-var Formatter;
+let Formatter;
 
 /**
  * @class {StdIO}
@@ -1397,10 +1383,10 @@ StdIO.CLASSES["StdIO"] = StdIO;
  */
 
 /** @typedef {{ name: string, path: string }} */
-var Media;
+let Media;
 
 /** @typedef {{ class: (string|undefined), bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined) }} */
-var Config;
+let Config;
 
 /**
  * @class {WebIO}
@@ -1545,7 +1531,7 @@ class WebIO extends StdIO {
                 this.addBinding(binding, element);
                 continue;
             }
-            if (MAXDEBUG && !fDirectBindings && id != this.idDevice) {
+            if (WebIO.MAXDEBUG && !fDirectBindings && id != this.idDevice) {
                 this.printf("unable to find element '%s' for device '%s'\n", id, this.idDevice);
             }
         }
@@ -1628,7 +1614,7 @@ class WebIO extends StdIO {
      */
     assert(f, format, ...args)
     {
-        if (DEBUG) {
+        if (WebIO.DEBUG) {
             if (!f) {
                 throw new Error(format? this.sprintf(format, ...args) : "assertion failure");
             }
@@ -2472,7 +2458,7 @@ class WebIO extends StdIO {
                     /*
                      * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
                      */
-                    if (!DEBUG && element.value.length > 8192) {
+                    if (!WebIO.DEBUG && element.value.length > 8192) {
                         element.value = element.value.substr(element.value.length - 4096);
                     }
                     element.scrollTop = element.scrollHeight;
@@ -3033,7 +3019,7 @@ WebIO.CLASSES["WebIO"] = WebIO;
  */
 
 /** @typedef {{ get: function(), set: (function(number)|null) }} */
-var Register;
+let Register;
 
 /**
  * In addition to basic Device services, such as:
@@ -3643,19 +3629,19 @@ Device.CLASSES["Device"] = Device;
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), location: Array.<number>, map: (Array.<Array.<number>>|Object|undefined), drag: (boolean|undefined), scroll: (boolean|undefined), hexagonal: (boolean|undefined), releaseDelay: (number|undefined) }} */
-var InputConfig;
+let InputConfig;
 
  /** @typedef {{ keyNum: number, msDown: number, autoRelease: boolean }} */
-var ActiveKey;
+let ActiveKey;
 
  /** @typedef {{ id: (string|number), func: function(string,boolean) }} */
-var KeyListener;
+let KeyListener;
 
  /** @typedef {{ id: string, cxGrid: number, cyGrid: number, xGrid: number, yGrid: number, func: function(boolean) }} */
-var SurfaceListener;
+let SurfaceListener;
 
  /** @typedef {{ xInput: number, yInput: number, cxInput: number, cyInput: number, hGap: number, vGap: number, cxSurface: number, cySurface: number, xPower: number, yPower: number, cxPower: number, cyPower: number, nRows: number, nCols: number, cxButton: number, cyButton: number, cxGap: number, cyGap: number, xStart: number, yStart: number }} */
-var SurfaceState;
+let SurfaceState;
 
 /**
  * @class {Input}
@@ -3966,7 +3952,7 @@ class Input extends Device {
                             input.setFocus();
                         });
                     } else {
-                        if (DEBUG) input.printf("click map element '%s' not found\n", binding);
+                        if (Input.DEBUG) input.printf("click map element '%s' not found\n", binding);
                     }
                 }
             }
@@ -4334,7 +4320,7 @@ class Input extends Device {
          * The following onBlur() and onFocus() handlers are currently just for debugging purposes, but
          * PCx86 experience suggests that we may also eventually need them for future pointer-locking support.
          */
-        if (DEBUG) {
+        if (Input.DEBUG) {
             element.addEventListener(
                 'blur',
                 function onBlur(event) {
@@ -5072,7 +5058,7 @@ Input.CLASSES["Input"] = Input;
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), type: number, width: (number|undefined), height: (number|undefined), cols: (number|undefined), colsExtra: (number|undefined), rows: (number|undefined), rowsExtra: (number|undefined), color: (string|undefined), backgroundColor: (string|undefined), fixed: (boolean|undefined), hexagonal: (boolean|undefined), highlight: (boolean|undefined), persistent: (boolean|undefined) }} */
-var LEDConfig;
+let LEDConfig;
 
 /**
  * The ultimate goal is to provide support for a variety of LED types, such as:
@@ -5778,7 +5764,7 @@ class LED extends Device {
     getRGBColor(color, colorDefault)
     {
         color = color || colorDefault;
-        return color && WebIO.COLORS[color] || color;
+        return color && Device.COLORS[color] || color;
     }
 
     /**
@@ -5824,7 +5810,7 @@ class LED extends Device {
     {
         if (color) {
             let rgb = [];
-            color = WebIO.COLORS[color] || color;
+            color = Device.COLORS[color] || color;
             if (this.parseRGBValues(color, rgb)) {
                 color = "rgba(";
                 let i;
@@ -6187,7 +6173,7 @@ LED.CLASSES["LED"] = LED;
  */
 
 /** @typedef {{ monitorWidth: number, monitorHeight: number }} */
-var MonitorConfig;
+let MonitorConfig;
 
 /**
  * @class {Monitor}
@@ -6491,7 +6477,7 @@ class Monitor extends Device {
                 if (!monitor.machine.isFullScreen) {
                     monitor.doFullScreen();
                 } else {
-                    if (DEBUG) monitor.printf(Device.MESSAGE.MONITOR, "onClickFullScreen(): already full-screen?\n");
+                    if (Monitor.DEBUG) monitor.printf(Device.MESSAGE.MONITOR, "onClickFullScreen(): already full-screen?\n");
                 }
             };
             break;
@@ -6521,7 +6507,7 @@ class Monitor extends Device {
     doFullScreen()
     {
         let fSuccess = false;
-        if (DEBUG) this.printf(Device.MESSAGE.MONITOR, "doFullScreen()\n");
+        if (Monitor.DEBUG) this.printf(Device.MESSAGE.MONITOR, "doFullScreen()\n");
         if (this.container && this.container.doFullScreen) {
             /*
              * Styling the container with a width of "100%" and a height of "auto" works great when the aspect ratio
@@ -6602,7 +6588,7 @@ class Monitor extends Device {
             this.machine.isFullScreen = false;
         }
         if (this.input && !fFullScreen) this.input.setAltFocus(false);
-        if (DEBUG) this.printf(Device.MESSAGE.MONITOR, "onFullScreen(%b)\n", fFullScreen);
+        if (Monitor.DEBUG) this.printf(Device.MESSAGE.MONITOR, "onFullScreen(%b)\n", fFullScreen);
     }
 
     /**
@@ -6651,10 +6637,10 @@ Monitor.CLASSES["Monitor"] = Monitor;
  */
 
 /** @typedef {{ id: string, callBack: function(), msAuto: number, nCyclesLeft: number }} */
-var Timer;
+let Timer;
 
 /** @typedef {{ cyclesMinimum: (number|undefined), cyclesMaximum: (number|undefined), cyclesPerSecond: (number|undefined), updatesPerSecond: (number|undefined), timeLock: (boolean|undefined) }} */
-var TimeConfig;
+let TimeConfig;
 
 /**
  * @class {Time}
@@ -7677,7 +7663,7 @@ Time.CLASSES["Time"] = Time;
  */
 
 /** @typedef {{ type: string, addrWidth: number, dataWidth: number, blockSize: (number|undefined), littleEndian: (boolean|undefined) }} */
-var BusConfig;
+let BusConfig;
 
 /**
  * @class {Bus}
@@ -8390,7 +8376,7 @@ Bus.CLASSES["Bus"] = Bus;
  */
 
 /** @typedef {{ addr: (number|undefined), size: number, type: (number|undefined), littleEndian: (boolean|undefined), values: (Array.<number>|string|undefined) }} */
-var MemoryConfig;
+let MemoryConfig;
 
 /**
  * @class {Memory}
@@ -9153,7 +9139,7 @@ Memory.CLASSES["Memory"] = Memory;
  */
 
 /** @typedef {{ addr: (number|undefined), size: number }} */
-var PortsConfig;
+let PortsConfig;
 
 /**
  * @class {Ports}
@@ -9350,7 +9336,7 @@ Ports.CLASSES["Ports"] = Ports;
  */
 
 /** @typedef {{ addr: number, size: number, type: (number|undefined) }} */
-var RAMConfig;
+let RAMConfig;
 
 /**
  * @class {RAM}
@@ -9395,7 +9381,7 @@ RAM.CLASSES["RAM"] = RAM;
  */
 
 /** @typedef {{ addr: number, size: number, values: Array.<number>, file: string, reference: string, chipID: string, revision: (number|undefined), colorROM: (string|undefined), backgroundColorROM: (string|undefined) }} */
-var ROMConfig;
+let ROMConfig;
 
 /**
  * @class {ROM}
@@ -9446,7 +9432,7 @@ class ROM extends Memory {
          * one, by virtue of using Math.ceil() instead of Math.floor() for the columns calculation.
          */
         this.cpu = this.dbg = undefined;
-        if (Defs.CLASSES["LED"] && this.bindings[ROM.BINDING.ARRAY]) {
+        if (ROM.CLASSES["LED"] && this.bindings[ROM.BINDING.ARRAY]) {
             let rom = this;
             let addrLines = Math.log2(this.values.length) / 2;
             this.cols = Math.pow(2, Math.ceil(addrLines));
@@ -9769,16 +9755,16 @@ class CPU extends Device {
  */
 
 /** @typedef {{ defaultRadix: (number|undefined) }} */
-var DebuggerConfig;
+let DebuggerConfig;
 
 /** @typedef {{ off: number, seg: number, type: number, disabled: (boolean|undefined) }} */
-var Address;
+let Address;
 
 /** @typedef {{ address: Address, type: number, name: string }} */
-var SymbolObj;
+let SymbolObj;
 
  /** @typedef {{ device: Device, name: string, desc: string, func: function() }} */
-var Dumper;
+let Dumper;
 
 /**
  * Debugger Services
@@ -9983,7 +9969,7 @@ class Debugger extends Device {
         this.historyForced = false;
         this.historyNext = 0;
         this.historyBuffer = [];
-        this.addHandler(Device.HANDLER.COMMAND, this.onCommand.bind(this));
+        this.addHandler(Debugger.HANDLER.COMMAND, this.onCommand.bind(this));
 
         let commands = /** @type {string} */ (this.getMachineConfig("commands"));
         if (commands) this.parseCommands(commands);
@@ -10491,7 +10477,7 @@ class Debugger extends Device {
          */
         dst = this.truncate(dst, 0, true);
         src = this.truncate(src, 0, true);
-        return ((((dst / NumIO.TWO_POW32)|0) & ((src / NumIO.TWO_POW32)|0)) * NumIO.TWO_POW32) + ((dst & src) >>> 0);
+        return ((((dst / Debugger.TWO_POW32)|0) & ((src / Debugger.TWO_POW32)|0)) * Debugger.TWO_POW32) + ((dst & src) >>> 0);
     }
 
     /**
@@ -10541,7 +10527,7 @@ class Debugger extends Device {
          */
         dst = this.truncate(dst, 0, true);
         src = this.truncate(src, 0, true);
-        return ((((dst / NumIO.TWO_POW32)|0) | ((src / NumIO.TWO_POW32)|0)) * NumIO.TWO_POW32) + ((dst | src) >>> 0);
+        return ((((dst / Debugger.TWO_POW32)|0) | ((src / Debugger.TWO_POW32)|0)) * Debugger.TWO_POW32) + ((dst | src) >>> 0);
     }
 
     /**
@@ -10575,7 +10561,7 @@ class Debugger extends Device {
          */
         dst = this.truncate(dst, 0, true);
         src = this.truncate(src, 0, true);
-        return ((((dst / NumIO.TWO_POW32)|0) ^ ((src / NumIO.TWO_POW32)|0)) * NumIO.TWO_POW32) + ((dst ^ src) >>> 0);
+        return ((((dst / Debugger.TWO_POW32)|0) ^ ((src / Debugger.TWO_POW32)|0)) * Debugger.TWO_POW32) + ((dst ^ src) >>> 0);
     }
 
     /**
@@ -11098,7 +11084,7 @@ class Debugger extends Device {
                                 if (valueUndefined !== undefined) {
                                     value += valueUndefined;
                                 } else {
-                                    if (MAXDEBUG) this.printf("undefined %s: %s (%s)\n", (sName || "value"), sValue, sUndefined);
+                                    if (Debugger.MAXDEBUG) this.printf("undefined %s: %s (%s)\n", (sName || "value"), sValue, sUndefined);
                                     value = undefined;
                                 }
                             }
@@ -11109,10 +11095,10 @@ class Debugger extends Device {
             if (value != undefined) {
                 value = this.truncate(this.parseUnary(value, unary));
             } else {
-                if (MAXDEBUG) this.printf("invalid %s: %s\n", (sName || "value"), sValue);
+                if (Debugger.MAXDEBUG) this.printf("invalid %s: %s\n", (sName || "value"), sValue);
             }
         } else {
-            if (MAXDEBUG) this.printf("missing %s\n", (sName || "value"));
+            if (Debugger.MAXDEBUG) this.printf("missing %s\n", (sName || "value"));
         }
         return value;
     }
@@ -11167,7 +11153,7 @@ class Debugger extends Device {
             }
         }
         if (v != vNew) {
-            if (MAXDEBUG) this.printf("warning: value %d truncated to %d\n", v, vNew);
+            if (Debugger.MAXDEBUG) this.printf("warning: value %d truncated to %d\n", v, vNew);
             v = vNew;
         }
         return v;
@@ -12301,7 +12287,7 @@ class Debugger extends Device {
     setFocus()
     {
         if (this.cTransitions) {
-            let element = this.findBinding(WebIO.BINDING.PRINT, true);
+            let element = this.findBinding(Debugger.BINDING.PRINT, true);
             if (element) element.focus();
         }
     }
@@ -12680,7 +12666,7 @@ class CPUx80 extends CPU {
         }
         let idDevice = stateCPU.shift();
         let version = stateCPU.shift();
-        if (idDevice != this.idDevice || (version|0) !== (+VERSION|0)) {
+        if (idDevice != this.idDevice || (version|0) !== (+CPUx80.VERSION|0)) {
             this.printf("CPU state mismatch (%s %3.2f)\n", idDevice, version);
             return false;
         }
@@ -12712,7 +12698,7 @@ class CPUx80 extends CPU {
     saveState(stateCPU)
     {
         stateCPU.push(this.idDevice);
-        stateCPU.push(+VERSION);
+        stateCPU.push(+CPUx80.VERSION);
         stateCPU.push(this.regA);
         stateCPU.push(this.regB);
         stateCPU.push(this.regC);
@@ -16503,7 +16489,7 @@ CPUx80.OPCODE = {
     // to be continued....
 };
 
-Defs.CLASSES["CPUx80"] = CPUx80;
+CPUx80.CLASSES["CPUx80"] = CPUx80;
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx80/libv2/dbgx80.js (C) 2012-2020 Jeff Parsons
@@ -17092,7 +17078,7 @@ Dbgx80.aaOpDescs = [
 /* 0xFF */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT]
 ];
 
-Defs.CLASSES["Dbgx80"] = Dbgx80;
+Dbgx80.CLASSES["Dbgx80"] = Dbgx80;
 
 /**
  * @copyright https://www.pcjs.org/machines/dec/vt100/lib/chips.js (C) 2012-2020 Jeff Parsons
@@ -17761,7 +17747,7 @@ VT100Chips.CLASSES["VT100Chips"] = VT100Chips;
  */
 
 /** @typedef {{ model: number }} */
-var VT100KeyboardConfig;
+let VT100KeyboardConfig;
 
 /**
  * @class {VT100Keyboard}
@@ -17798,7 +17784,7 @@ class VT100Keyboard extends Device {
 
         this.ledCaps = this.findDevice("ledCaps");
         if (this.ledCaps) {
-            this.input.addListener(Input.TYPE.KEYCODE, WebIO.KEYCODE.CAPS_LOCK, this.onCapsLock.bind(this));
+            this.input.addListener(Input.TYPE.KEYCODE, Device.KEYCODE.CAPS_LOCK, this.onCapsLock.bind(this));
         }
         this.onReset();
     }
@@ -18167,10 +18153,10 @@ VT100Keyboard.KEYNUM = {
  * A good example is the VT100 SET-UP key, which has no counterpart on a modern keyboard.
  */
 VT100Keyboard.KEYCODE = {
-    SETUP:      WebIO.KEYCODE.VIRTUAL + 1,
-    LF:         WebIO.KEYCODE.VIRTUAL + 2,
-    BREAK:      WebIO.KEYCODE.VIRTUAL + 3,
-    CTRL_C:     WebIO.KEYCODE.VIRTUAL + 4
+    SETUP:      Device.KEYCODE.VIRTUAL + 1,
+    LF:         Device.KEYCODE.VIRTUAL + 2,
+    BREAK:      Device.KEYCODE.VIRTUAL + 3,
+    CTRL_C:     Device.KEYCODE.VIRTUAL + 4
 };
 
 /*
@@ -18188,91 +18174,91 @@ VT100Keyboard.KEYCODE = {
  * something most people don't need to worry their heads about.
  */
 VT100Keyboard.KEYMAP = {
-    [WebIO.KEYCODE.BS]:             VT100Keyboard.KEYNUM.DEL,
-    [WebIO.KEYCODE.P]:              VT100Keyboard.KEYNUM.P,
-    [WebIO.KEYCODE.O]:              VT100Keyboard.KEYNUM.O,
-    [WebIO.KEYCODE.Y]:              VT100Keyboard.KEYNUM.Y,
-    [WebIO.KEYCODE.T]:              VT100Keyboard.KEYNUM.T,
-    [WebIO.KEYCODE.W]:              VT100Keyboard.KEYNUM.W,
-    [WebIO.KEYCODE.Q]:              VT100Keyboard.KEYNUM.Q,
-    [WebIO.KEYCODE.RIGHT]:          VT100Keyboard.KEYNUM.RIGHT,
-    [WebIO.KEYCODE.RBRACK]:         VT100Keyboard.KEYNUM.RBRACK,
-    [WebIO.KEYCODE.LBRACK]:         VT100Keyboard.KEYNUM.LBRACK,
-    [WebIO.KEYCODE.I]:              VT100Keyboard.KEYNUM.I,
-    [WebIO.KEYCODE.U]:              VT100Keyboard.KEYNUM.U,
-    [WebIO.KEYCODE.R]:              VT100Keyboard.KEYNUM.R,
-    [WebIO.KEYCODE.E]:              VT100Keyboard.KEYNUM.E,
-    [WebIO.KEYCODE.ONE]:            VT100Keyboard.KEYNUM.ONE,
-    [WebIO.KEYCODE.LEFT]:           VT100Keyboard.KEYNUM.LEFT,
-    [WebIO.KEYCODE.DOWN]:           VT100Keyboard.KEYNUM.DOWN,
-    [WebIO.KEYCODE.F6]:             VT100Keyboard.KEYNUM.BREAK,         // no natural mapping
+    [Device.KEYCODE.BS]:            VT100Keyboard.KEYNUM.DEL,
+    [Device.KEYCODE.P]:             VT100Keyboard.KEYNUM.P,
+    [Device.KEYCODE.O]:             VT100Keyboard.KEYNUM.O,
+    [Device.KEYCODE.Y]:             VT100Keyboard.KEYNUM.Y,
+    [Device.KEYCODE.T]:             VT100Keyboard.KEYNUM.T,
+    [Device.KEYCODE.W]:             VT100Keyboard.KEYNUM.W,
+    [Device.KEYCODE.Q]:             VT100Keyboard.KEYNUM.Q,
+    [Device.KEYCODE.RIGHT]:         VT100Keyboard.KEYNUM.RIGHT,
+    [Device.KEYCODE.RBRACK]:        VT100Keyboard.KEYNUM.RBRACK,
+    [Device.KEYCODE.LBRACK]:        VT100Keyboard.KEYNUM.LBRACK,
+    [Device.KEYCODE.I]:             VT100Keyboard.KEYNUM.I,
+    [Device.KEYCODE.U]:             VT100Keyboard.KEYNUM.U,
+    [Device.KEYCODE.R]:             VT100Keyboard.KEYNUM.R,
+    [Device.KEYCODE.E]:             VT100Keyboard.KEYNUM.E,
+    [Device.KEYCODE.ONE]:           VT100Keyboard.KEYNUM.ONE,
+    [Device.KEYCODE.LEFT]:          VT100Keyboard.KEYNUM.LEFT,
+    [Device.KEYCODE.DOWN]:          VT100Keyboard.KEYNUM.DOWN,
+    [Device.KEYCODE.F6]:            VT100Keyboard.KEYNUM.BREAK,         // no natural mapping
     [VT100Keyboard.KEYCODE.BREAK]:  VT100Keyboard.KEYNUM.BREAK,         // NOTE: virtual keyCode mapping
-    [WebIO.KEYCODE.BQUOTE]:         VT100Keyboard.KEYNUM.BQUOTE,
-    [WebIO.KEYCODE.DASH]:           VT100Keyboard.KEYNUM.DASH,
-    [WebIO.KEYCODE.NINE]:           VT100Keyboard.KEYNUM.NINE,
-    [WebIO.KEYCODE.SEVEN]:          VT100Keyboard.KEYNUM.SEVEN,
-    [WebIO.KEYCODE.FOUR]:           VT100Keyboard.KEYNUM.FOUR,
-    [WebIO.KEYCODE.THREE]:          VT100Keyboard.KEYNUM.THREE,
-    [WebIO.KEYCODE.ESC]:            VT100Keyboard.KEYNUM.ESC,
-    [WebIO.KEYCODE.UP]:             VT100Keyboard.KEYNUM.UP,
-    [WebIO.KEYCODE.F3]:             VT100Keyboard.KEYNUM.F3,
-    [WebIO.KEYCODE.F1]:             VT100Keyboard.KEYNUM.F1,
-    [WebIO.KEYCODE.DEL]:            VT100Keyboard.KEYNUM.BS,
-    [WebIO.KEYCODE.EQUALS]:         VT100Keyboard.KEYNUM.EQUALS,
-    [WebIO.KEYCODE.ZERO]:           VT100Keyboard.KEYNUM.ZERO,
-    [WebIO.KEYCODE.EIGHT]:          VT100Keyboard.KEYNUM.EIGHT,
-    [WebIO.KEYCODE.SIX]:            VT100Keyboard.KEYNUM.SIX,
-    [WebIO.KEYCODE.FIVE]:           VT100Keyboard.KEYNUM.FIVE,
-    [WebIO.KEYCODE.TWO]:            VT100Keyboard.KEYNUM.TWO,
-    [WebIO.KEYCODE.TAB]:            VT100Keyboard.KEYNUM.TAB,
-    [WebIO.KEYCODE.NUM_7]:          VT100Keyboard.KEYNUM.NUM_7,
-    [WebIO.KEYCODE.F4]:             VT100Keyboard.KEYNUM.F4,
-    [WebIO.KEYCODE.F2]:             VT100Keyboard.KEYNUM.F2,
-    [WebIO.KEYCODE.NUM_0]:          VT100Keyboard.KEYNUM.NUM_0,
-    [WebIO.KEYCODE.F7]:             VT100Keyboard.KEYNUM.LF,            // no natural mapping
+    [Device.KEYCODE.BQUOTE]:        VT100Keyboard.KEYNUM.BQUOTE,
+    [Device.KEYCODE.DASH]:          VT100Keyboard.KEYNUM.DASH,
+    [Device.KEYCODE.NINE]:          VT100Keyboard.KEYNUM.NINE,
+    [Device.KEYCODE.SEVEN]:         VT100Keyboard.KEYNUM.SEVEN,
+    [Device.KEYCODE.FOUR]:          VT100Keyboard.KEYNUM.FOUR,
+    [Device.KEYCODE.THREE]:         VT100Keyboard.KEYNUM.THREE,
+    [Device.KEYCODE.ESC]:           VT100Keyboard.KEYNUM.ESC,
+    [Device.KEYCODE.UP]:            VT100Keyboard.KEYNUM.UP,
+    [Device.KEYCODE.F3]:            VT100Keyboard.KEYNUM.F3,
+    [Device.KEYCODE.F1]:            VT100Keyboard.KEYNUM.F1,
+    [Device.KEYCODE.DEL]:           VT100Keyboard.KEYNUM.BS,
+    [Device.KEYCODE.EQUALS]:        VT100Keyboard.KEYNUM.EQUALS,
+    [Device.KEYCODE.ZERO]:          VT100Keyboard.KEYNUM.ZERO,
+    [Device.KEYCODE.EIGHT]:         VT100Keyboard.KEYNUM.EIGHT,
+    [Device.KEYCODE.SIX]:           VT100Keyboard.KEYNUM.SIX,
+    [Device.KEYCODE.FIVE]:          VT100Keyboard.KEYNUM.FIVE,
+    [Device.KEYCODE.TWO]:           VT100Keyboard.KEYNUM.TWO,
+    [Device.KEYCODE.TAB]:           VT100Keyboard.KEYNUM.TAB,
+    [Device.KEYCODE.NUM_7]:         VT100Keyboard.KEYNUM.NUM_7,
+    [Device.KEYCODE.F4]:            VT100Keyboard.KEYNUM.F4,
+    [Device.KEYCODE.F2]:            VT100Keyboard.KEYNUM.F2,
+    [Device.KEYCODE.NUM_0]:         VT100Keyboard.KEYNUM.NUM_0,
+    [Device.KEYCODE.F7]:            VT100Keyboard.KEYNUM.LF,            // no natural mapping
     [VT100Keyboard.KEYCODE.LF]:     VT100Keyboard.KEYNUM.LF,            // NOTE: virtual keyCode mapping
-    [WebIO.KEYCODE.BSLASH]:         VT100Keyboard.KEYNUM.BSLASH,
-    [WebIO.KEYCODE.L]:              VT100Keyboard.KEYNUM.L,
-    [WebIO.KEYCODE.K]:              VT100Keyboard.KEYNUM.K,
-    [WebIO.KEYCODE.G]:              VT100Keyboard.KEYNUM.G,
-    [WebIO.KEYCODE.F]:              VT100Keyboard.KEYNUM.F,
-    [WebIO.KEYCODE.A]:              VT100Keyboard.KEYNUM.A,
-    [WebIO.KEYCODE.NUM_8]:          VT100Keyboard.KEYNUM.NUM_8,
-    [WebIO.KEYCODE.CR]:             VT100Keyboard.KEYNUM.NUM_CR,
-    [WebIO.KEYCODE.NUM_2]:          VT100Keyboard.KEYNUM.NUM_2,
-    [WebIO.KEYCODE.NUM_1]:          VT100Keyboard.KEYNUM.NUM_1,
-    [WebIO.KEYCODE.QUOTE]:          VT100Keyboard.KEYNUM.QUOTE,
-    [WebIO.KEYCODE.SEMI]:           VT100Keyboard.KEYNUM.SEMI,
-    [WebIO.KEYCODE.J]:              VT100Keyboard.KEYNUM.J,
-    [WebIO.KEYCODE.H]:              VT100Keyboard.KEYNUM.H,
-    [WebIO.KEYCODE.D]:              VT100Keyboard.KEYNUM.D,
-    [WebIO.KEYCODE.S]:              VT100Keyboard.KEYNUM.S,
-    [WebIO.KEYCODE.NUM_DEL]:        VT100Keyboard.KEYNUM.NUM_DEL,
-    [WebIO.KEYCODE.F5]:             VT100Keyboard.KEYNUM.NUM_COMMA,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
-    [WebIO.KEYCODE.NUM_5]:          VT100Keyboard.KEYNUM.NUM_5,
-    [WebIO.KEYCODE.NUM_4]:          VT100Keyboard.KEYNUM.NUM_4,
-    [WebIO.KEYCODE.CR]:             VT100Keyboard.KEYNUM.CR,
-    [WebIO.KEYCODE.PERIOD]:         VT100Keyboard.KEYNUM.PERIOD,
-    [WebIO.KEYCODE.COMMA]:          VT100Keyboard.KEYNUM.COMMA,
-    [WebIO.KEYCODE.N]:              VT100Keyboard.KEYNUM.N,
-    [WebIO.KEYCODE.B]:              VT100Keyboard.KEYNUM.B,
-    [WebIO.KEYCODE.X]:              VT100Keyboard.KEYNUM.X,
-    [WebIO.KEYCODE.F8]:             VT100Keyboard.KEYNUM.NO_SCROLL,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
-    [WebIO.KEYCODE.NUM_9]:          VT100Keyboard.KEYNUM.NUM_9,
-    [WebIO.KEYCODE.NUM_3]:          VT100Keyboard.KEYNUM.NUM_3,
-    [WebIO.KEYCODE.NUM_6]:          VT100Keyboard.KEYNUM.NUM_6,
-    [WebIO.KEYCODE.NUM_SUB]:        VT100Keyboard.KEYNUM.NUM_SUB,
-    [WebIO.KEYCODE.SLASH]:          VT100Keyboard.KEYNUM.SLASH,
-    [WebIO.KEYCODE.M]:              VT100Keyboard.KEYNUM.M,
-    [WebIO.KEYCODE.SPACE]:          VT100Keyboard.KEYNUM.SPACE,
-    [WebIO.KEYCODE.V]:              VT100Keyboard.KEYNUM.V,
-    [WebIO.KEYCODE.C]:              VT100Keyboard.KEYNUM.C,
-    [WebIO.KEYCODE.Z]:              VT100Keyboard.KEYNUM.Z,
-    [WebIO.KEYCODE.F9]:             VT100Keyboard.KEYNUM.SETUP,         // no natural mapping
+    [Device.KEYCODE.BSLASH]:        VT100Keyboard.KEYNUM.BSLASH,
+    [Device.KEYCODE.L]:             VT100Keyboard.KEYNUM.L,
+    [Device.KEYCODE.K]:             VT100Keyboard.KEYNUM.K,
+    [Device.KEYCODE.G]:             VT100Keyboard.KEYNUM.G,
+    [Device.KEYCODE.F]:             VT100Keyboard.KEYNUM.F,
+    [Device.KEYCODE.A]:             VT100Keyboard.KEYNUM.A,
+    [Device.KEYCODE.NUM_8]:         VT100Keyboard.KEYNUM.NUM_8,
+    [Device.KEYCODE.CR]:            VT100Keyboard.KEYNUM.NUM_CR,
+    [Device.KEYCODE.NUM_2]:         VT100Keyboard.KEYNUM.NUM_2,
+    [Device.KEYCODE.NUM_1]:         VT100Keyboard.KEYNUM.NUM_1,
+    [Device.KEYCODE.QUOTE]:         VT100Keyboard.KEYNUM.QUOTE,
+    [Device.KEYCODE.SEMI]:          VT100Keyboard.KEYNUM.SEMI,
+    [Device.KEYCODE.J]:             VT100Keyboard.KEYNUM.J,
+    [Device.KEYCODE.H]:             VT100Keyboard.KEYNUM.H,
+    [Device.KEYCODE.D]:             VT100Keyboard.KEYNUM.D,
+    [Device.KEYCODE.S]:             VT100Keyboard.KEYNUM.S,
+    [Device.KEYCODE.NUM_DEL]:       VT100Keyboard.KEYNUM.NUM_DEL,
+    [Device.KEYCODE.F5]:            VT100Keyboard.KEYNUM.NUM_COMMA,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
+    [Device.KEYCODE.NUM_5]:         VT100Keyboard.KEYNUM.NUM_5,
+    [Device.KEYCODE.NUM_4]:         VT100Keyboard.KEYNUM.NUM_4,
+    [Device.KEYCODE.CR]:            VT100Keyboard.KEYNUM.CR,
+    [Device.KEYCODE.PERIOD]:        VT100Keyboard.KEYNUM.PERIOD,
+    [Device.KEYCODE.COMMA]:         VT100Keyboard.KEYNUM.COMMA,
+    [Device.KEYCODE.N]:             VT100Keyboard.KEYNUM.N,
+    [Device.KEYCODE.B]:             VT100Keyboard.KEYNUM.B,
+    [Device.KEYCODE.X]:             VT100Keyboard.KEYNUM.X,
+    [Device.KEYCODE.F8]:            VT100Keyboard.KEYNUM.NO_SCROLL,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
+    [Device.KEYCODE.NUM_9]:         VT100Keyboard.KEYNUM.NUM_9,
+    [Device.KEYCODE.NUM_3]:         VT100Keyboard.KEYNUM.NUM_3,
+    [Device.KEYCODE.NUM_6]:         VT100Keyboard.KEYNUM.NUM_6,
+    [Device.KEYCODE.NUM_SUB]:       VT100Keyboard.KEYNUM.NUM_SUB,
+    [Device.KEYCODE.SLASH]:         VT100Keyboard.KEYNUM.SLASH,
+    [Device.KEYCODE.M]:             VT100Keyboard.KEYNUM.M,
+    [Device.KEYCODE.SPACE]:         VT100Keyboard.KEYNUM.SPACE,
+    [Device.KEYCODE.V]:             VT100Keyboard.KEYNUM.V,
+    [Device.KEYCODE.C]:             VT100Keyboard.KEYNUM.C,
+    [Device.KEYCODE.Z]:             VT100Keyboard.KEYNUM.Z,
+    [Device.KEYCODE.F9]:            VT100Keyboard.KEYNUM.SETUP,         // no natural mapping
     [VT100Keyboard.KEYCODE.SETUP]:  VT100Keyboard.KEYNUM.SETUP,         // NOTE: virtual keyCode mapping
-    [WebIO.KEYCODE.CTRL]:           VT100Keyboard.KEYNUM.CTRL,
-    [WebIO.KEYCODE.SHIFT]:          VT100Keyboard.KEYNUM.SHIFT,
-    [WebIO.KEYCODE.CAPS_LOCK]:      VT100Keyboard.KEYNUM.CAPS_LOCK,
+    [Device.KEYCODE.CTRL]:          VT100Keyboard.KEYNUM.CTRL,
+    [Device.KEYCODE.SHIFT]:         VT100Keyboard.KEYNUM.SHIFT,
+    [Device.KEYCODE.CAPS_LOCK]:     VT100Keyboard.KEYNUM.CAPS_LOCK,
     /*
      * Mappings can also be to an array of multiple keyNum combinations, such as:
      */
@@ -18285,14 +18271,14 @@ VT100Keyboard.KEYMAP = {
 VT100Keyboard.CLICKMAP = {
     "keySetup":                     VT100Keyboard.KEYCODE.SETUP,        // NOTE: virtual keyCode mapping
     "keyLineFeed":                  VT100Keyboard.KEYCODE.LF,           // NOTE: virtual keyCode mapping
-    "keyTab":                       WebIO.KEYCODE.TAB,
-    "keyEsc":                       WebIO.KEYCODE.ESC,
+    "keyTab":                       Device.KEYCODE.TAB,
+    "keyEsc":                       Device.KEYCODE.ESC,
     "keyBreak":                     VT100Keyboard.KEYCODE.BREAK,        // NOTE: virtual keyCode mapping
-    "keyCtrl":                      WebIO.KEYCODE.CTRL,
+    "keyCtrl":                      Device.KEYCODE.CTRL,
     "keyCtrlC":                     VT100Keyboard.KEYCODE.CTRL_C,       // NOTE: virtual keyCode mapping
-    "keyCtrlLock":                  [WebIO.KEYCODE.LOCK, WebIO.KEYCODE.CTRL],
-    "keyShiftLock":                 [WebIO.KEYCODE.LOCK, WebIO.KEYCODE.SHIFT],
-    "keyCapsLock":                  WebIO.KEYCODE.CAPS_LOCK
+    "keyCtrlLock":                 [Device.KEYCODE.LOCK, Device.KEYCODE.CTRL],
+    "keyShiftLock":                [Device.KEYCODE.LOCK, Device.KEYCODE.SHIFT],
+    "keyCapsLock":                  Device.KEYCODE.CAPS_LOCK
 };
 
 VT100Keyboard.LEDS = {
@@ -18901,7 +18887,7 @@ VT100Serial.CLASSES["VT100Serial"] = VT100Serial;
  */
 
 /** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */
-var VT100VideoConfig;
+let VT100VideoConfig;
 
 /**
  * @class {VT100Video}
@@ -19342,7 +19328,7 @@ class VT100Video extends Monitor {
          * NOTE: The following test image was useful for early testing, but a *real* VT100 doesn't display a test image,
          * so this code is no longer enabled by default.  Remove MAXDEBUG if you want to see it again.
          */
-        if (MAXDEBUG && !this.test) {
+        if (VT100Video.MAXDEBUG && !this.test) {
             /*
              * Build a test iamge in the VT100 frame buffer; we'll mimic the "SET-UP A" image, since it uses
              * all the font variations.  The process involves iterating over 0-based row numbers -2 (or -5 if 50Hz
@@ -19645,7 +19631,7 @@ class VT100Video extends Monitor {
              * Possible VT100 firmware bug?  I'm not sure.  Anyway, this DEBUG-only code is here to help trap
              * that scenario, until I figure it out.
              */
-            if (DEBUG && (this.aCacheCells[iCellUpdated] & 0x7f) == 0x48) {
+            if (VT100Video.DEBUG && (this.aCacheCells[iCellUpdated] & 0x7f) == 0x48) {
                 this.printf("spurious 'H' character at offset %d\n", iCellUpdated);
             }
             this.aCacheCells[iCellUpdated] = -1;
@@ -19909,15 +19895,15 @@ class Machine extends Device {
                 let config = this.deviceConfigs[idDevice];
                 try {
                     sClass = config['class'];
-                    if (!Defs.CLASSES[sClass]) {
+                    if (!Machine.CLASSES[sClass]) {
                         this.printf('unrecognized %s device "%s"\n', sClass, idDevice);
                     }
                     else if (sClass == "Machine") {
-                        this.printf("PCjs %s v%3.2f\n%s\n", config['name'], +VERSION, Machine.COPYRIGHT);
+                        this.printf("PCjs %s v%3.2f\n%s\n", config['name'], +Machine.VERSION, Machine.COPYRIGHT);
                         if (this.sConfigFile) this.printf("Configuration: %s\n", this.sConfigFile);
                     } else {
-                        let device = new Defs.CLASSES[sClass](this.idMachine, idDevice, config);
-                        if (MAXDEBUG) this.printf('%s device "%s"\n', sClass, idDevice);
+                        let device = new Machine.CLASSES[sClass](this.idMachine, idDevice, config);
+                        if (Machine.MAXDEBUG) this.printf('%s device "%s"\n', sClass, idDevice);
                     }
                 }
                 catch (err) {
@@ -20111,26 +20097,5 @@ window[Machine.FACTORY] = function createMachine(idMachine, sConfig, sParms) {
     };
     return machine;
 };
-
-/*
- * If we're NOT running a compiled release (ie, FACTORY wasn't overriden from "Machine" to something else),
- * then create hard-coded aliases for all known factories; only DEBUG servers should be running uncompiled code.
- *
- * Why is the PDP11 factory called 'PDP11v3' instead of simply 'PDP11'?  Because the CPU class for PDP11 machines
- * is already called PDP11, and we can't have both a class and a global function with the same name.  Besides,
- * these factory functions are creating entire "machines", not just "processors", so it makes sense for the names
- * to reflect that.
- *
- * And yes, by the same logic, one might think that 'TMS1500' should really be called 'TI57', except that the
- * TMS1500 factory can produce any of the TI-42, TI-55, or TI-57.  Naming is hard.
- */
-if (Machine.FACTORY == "Machine") {
-    window['Invaders']  = window[Machine.FACTORY];
-    window['LEDs']      = window[Machine.FACTORY];
-    window['PCx86v3']   = window[Machine.FACTORY];
-    window['PDP11v3']   = window[Machine.FACTORY];
-    window['TMS1500']   = window[Machine.FACTORY];
-    window['VT100']     = window[Machine.FACTORY];
-}
 
 Machine.CLASSES["Machine"] = Machine;

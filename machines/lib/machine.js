@@ -216,15 +216,15 @@ export class Machine extends Device {
                 let config = this.deviceConfigs[idDevice];
                 try {
                     sClass = config['class'];
-                    if (!Defs.CLASSES[sClass]) {
+                    if (!Machine.CLASSES[sClass]) {
                         this.printf('unrecognized %s device "%s"\n', sClass, idDevice);
                     }
                     else if (sClass == "Machine") {
-                        this.printf("PCjs %s v%3.2f\n%s\n", config['name'], +VERSION, Machine.COPYRIGHT);
+                        this.printf("PCjs %s v%3.2f\n%s\n", config['name'], +Machine.VERSION, Machine.COPYRIGHT);
                         if (this.sConfigFile) this.printf("Configuration: %s\n", this.sConfigFile);
                     } else {
-                        let device = new Defs.CLASSES[sClass](this.idMachine, idDevice, config);
-                        if (MAXDEBUG) this.printf('%s device "%s"\n', sClass, idDevice);
+                        let device = new Machine.CLASSES[sClass](this.idMachine, idDevice, config);
+                        if (Machine.MAXDEBUG) this.printf('%s device "%s"\n', sClass, idDevice);
                     }
                 }
                 catch (err) {
@@ -418,26 +418,5 @@ window[Machine.FACTORY] = function createMachine(idMachine, sConfig, sParms) {
     };
     return machine;
 };
-
-/*
- * If we're NOT running a compiled release (ie, FACTORY wasn't overriden from "Machine" to something else),
- * then create hard-coded aliases for all known factories; only DEBUG servers should be running uncompiled code.
- *
- * Why is the PDP11 factory called 'PDP11v3' instead of simply 'PDP11'?  Because the CPU class for PDP11 machines
- * is already called PDP11, and we can't have both a class and a global function with the same name.  Besides,
- * these factory functions are creating entire "machines", not just "processors", so it makes sense for the names
- * to reflect that.
- *
- * And yes, by the same logic, one might think that 'TMS1500' should really be called 'TI57', except that the
- * TMS1500 factory can produce any of the TI-42, TI-55, or TI-57.  Naming is hard.
- */
-if (Machine.FACTORY == "Machine") {
-    window['Invaders']  = window[Machine.FACTORY];
-    window['LEDs']      = window[Machine.FACTORY];
-    window['PCx86v3']   = window[Machine.FACTORY];
-    window['PDP11v3']   = window[Machine.FACTORY];
-    window['TMS1500']   = window[Machine.FACTORY];
-    window['VT100']     = window[Machine.FACTORY];
-}
 
 Machine.CLASSES["Machine"] = Machine;

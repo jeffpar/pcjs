@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Device } from "./device.js";
+import { Memory } from "./memory.js";
 
 /**
  * @typedef {Config} PortsConfig

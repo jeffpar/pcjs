@@ -1,0 +1,31 @@
+{
+  "globals": {
+    "APPNAME": true,
+    "APPVERSION": true,
+    "BACKTRACK": true,
+    "BYTEARRAYS": true,
+    "BUGS_8086": true,
+    "COPYRIGHT": true,
+    "CSSCLASS": true,
+    "DEBUGGER": true,
+    "DESKPRO386": true,
+    "I386": true,
+    "LICENSE": true,
+    "PAGEBLOCKS": true,
+    "PCx86": true,
+    "PREFETCH": true,
+    "PRIVATE": true,
+    "RS232": true,
+    "SITEURL": true,
+    "SYMBOLS": true,
+    "TYPEDARRAYS": true,
+    "XMLVERSION": true,
+    "resources": true
+  },
+  "rules": {
+    "no-useless-constructor": "off",
+    "no-confusing-arrow": "off",
+    "no-empty": "off",
+    "no-var": 0
+  }
+}

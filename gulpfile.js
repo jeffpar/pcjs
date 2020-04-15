@@ -232,7 +232,7 @@ aMachines.forEach(function(machineID) {
                         } else {
                             sType += "{ " + sProps + " }";
                         }
-                        sType += "} */\nvar " + type + ";";
+                        sType += "} */\nlet " + type + ";";
                         return sType;
                     }))
                     .pipe(gulpReplace(/[ \t]*(if *\(DEBUG\) *|)[A-Za-z_][A-Za-z0-9_.]*\.assert\([^\n]*\);[^\n]*/g, ""))

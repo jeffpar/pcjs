@@ -14,7 +14,7 @@ _displayTI55:
   width: 70%;
   height: 4%;
 .indTI55:
-  font-size: 11px;
+  font-size: 10px;
   font-family: Monaco,"Lucida Console",monospace;
   color: red;
 _ind2ndTI55:

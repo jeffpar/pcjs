@@ -30,12 +30,12 @@ const COMPILED = false;
 const DEBUG = true;
 
 /**
- * FACTORY is "Machine" by default; overridden with the machine's "factory" string in machines.json
+ * FACTORY is "PCjs" by default; overridden with the machine's "factory" string in machines.json
  * to ensure unique factories.
  *
  * @define {string}
  */
-const FACTORY = "Machine";
+const FACTORY = "NewMachine";
 
 /**
  * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
@@ -55,18 +55,8 @@ const VERSION = "2.00";
 
 /**
  * @class {Defs}
- * @unrestricted
  */
-class Defs {
-    /**
-     * Defs()
-     *
-     * @this {Defs}
-     */
-    constructor()
-    {
-    }
-}
+class Defs {}
 
 Defs.COMMAND  = COMMAND;
 Defs.COMPILED = COMPILED;
@@ -190,10 +180,6 @@ class NumIO extends Defs {
      *
      * @this {NumIO}
      */
-    constructor()
-    {
-        super();
-    }
 
     /**
      * isInt(s, base)
@@ -756,7 +742,7 @@ NumIO.CLASSES["NumIO"] = NumIO;
  */
 
 /** @typedef {Function} */
-var Formatter;
+let Formatter;
 
 /**
  * @class {StdIO}
@@ -1397,10 +1383,10 @@ StdIO.CLASSES["StdIO"] = StdIO;
  */
 
 /** @typedef {{ name: string, path: string }} */
-var Media;
+let Media;
 
 /** @typedef {{ class: (string|undefined), bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined) }} */
-var Config;
+let Config;
 
 /**
  * @class {WebIO}
@@ -1545,7 +1531,7 @@ class WebIO extends StdIO {
                 this.addBinding(binding, element);
                 continue;
             }
-            if (MAXDEBUG && !fDirectBindings && id != this.idDevice) {
+            if (WebIO.MAXDEBUG && !fDirectBindings && id != this.idDevice) {
                 this.printf("unable to find element '%s' for device '%s'\n", id, this.idDevice);
             }
         }
@@ -1628,7 +1614,7 @@ class WebIO extends StdIO {
      */
     assert(f, format, ...args)
     {
-        if (DEBUG) {
+        if (WebIO.DEBUG) {
             if (!f) {
                 throw new Error(format? this.sprintf(format, ...args) : "assertion failure");
             }
@@ -2472,7 +2458,7 @@ class WebIO extends StdIO {
                     /*
                      * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
                      */
-                    if (!DEBUG && element.value.length > 8192) {
+                    if (!WebIO.DEBUG && element.value.length > 8192) {
                         element.value = element.value.substr(element.value.length - 4096);
                     }
                     element.scrollTop = element.scrollHeight;
@@ -3033,7 +3019,7 @@ WebIO.CLASSES["WebIO"] = WebIO;
  */
 
 /** @typedef {{ get: function(), set: (function(number)|null) }} */
-var Register;
+let Register;
 
 /**
  * In addition to basic Device services, such as:
@@ -3643,7 +3629,7 @@ Device.CLASSES["Device"] = Device;
  */
 
 /** @typedef {{ type: string, addrWidth: number, dataWidth: number, blockSize: (number|undefined), littleEndian: (boolean|undefined) }} */
-var BusConfig;
+let BusConfig;
 
 /**
  * @class {Bus}
@@ -4356,7 +4342,7 @@ Bus.CLASSES["Bus"] = Bus;
  */
 
 /** @typedef {{ addr: (number|undefined), size: number, type: (number|undefined), littleEndian: (boolean|undefined), values: (Array.<number>|string|undefined) }} */
-var MemoryConfig;
+let MemoryConfig;
 
 /**
  * @class {Memory}
@@ -5119,7 +5105,7 @@ Memory.CLASSES["Memory"] = Memory;
  */
 
 /** @typedef {{ addr: number, size: number, values: Array.<number>, file: string, reference: string, chipID: string, revision: (number|undefined), colorROM: (string|undefined), backgroundColorROM: (string|undefined) }} */
-var ROMConfig;
+let ROMConfig;
 
 /**
  * @class {ROM}
@@ -5170,7 +5156,7 @@ class ROM extends Memory {
          * one, by virtue of using Math.ceil() instead of Math.floor() for the columns calculation.
          */
         this.cpu = this.dbg = undefined;
-        if (Defs.CLASSES["LED"] && this.bindings[ROM.BINDING.ARRAY]) {
+        if (ROM.CLASSES["LED"] && this.bindings[ROM.BINDING.ARRAY]) {
             let rom = this;
             let addrLines = Math.log2(this.values.length) / 2;
             this.cols = Math.pow(2, Math.ceil(addrLines));
@@ -5345,19 +5331,19 @@ ROM.CLASSES["ROM"] = ROM;
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), location: Array.<number>, map: (Array.<Array.<number>>|Object|undefined), drag: (boolean|undefined), scroll: (boolean|undefined), hexagonal: (boolean|undefined), releaseDelay: (number|undefined) }} */
-var InputConfig;
+let InputConfig;
 
  /** @typedef {{ keyNum: number, msDown: number, autoRelease: boolean }} */
-var ActiveKey;
+let ActiveKey;
 
  /** @typedef {{ id: (string|number), func: function(string,boolean) }} */
-var KeyListener;
+let KeyListener;
 
  /** @typedef {{ id: string, cxGrid: number, cyGrid: number, xGrid: number, yGrid: number, func: function(boolean) }} */
-var SurfaceListener;
+let SurfaceListener;
 
  /** @typedef {{ xInput: number, yInput: number, cxInput: number, cyInput: number, hGap: number, vGap: number, cxSurface: number, cySurface: number, xPower: number, yPower: number, cxPower: number, cyPower: number, nRows: number, nCols: number, cxButton: number, cyButton: number, cxGap: number, cyGap: number, xStart: number, yStart: number }} */
-var SurfaceState;
+let SurfaceState;
 
 /**
  * @class {Input}
@@ -5668,7 +5654,7 @@ class Input extends Device {
                             input.setFocus();
                         });
                     } else {
-                        if (DEBUG) input.printf("click map element '%s' not found\n", binding);
+                        if (Input.DEBUG) input.printf("click map element '%s' not found\n", binding);
                     }
                 }
             }
@@ -6036,7 +6022,7 @@ class Input extends Device {
          * The following onBlur() and onFocus() handlers are currently just for debugging purposes, but
          * PCx86 experience suggests that we may also eventually need them for future pointer-locking support.
          */
-        if (DEBUG) {
+        if (Input.DEBUG) {
             element.addEventListener(
                 'blur',
                 function onBlur(event) {
@@ -6774,7 +6760,7 @@ Input.CLASSES["Input"] = Input;
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), type: number, width: (number|undefined), height: (number|undefined), cols: (number|undefined), colsExtra: (number|undefined), rows: (number|undefined), rowsExtra: (number|undefined), color: (string|undefined), backgroundColor: (string|undefined), fixed: (boolean|undefined), hexagonal: (boolean|undefined), highlight: (boolean|undefined), persistent: (boolean|undefined) }} */
-var LEDConfig;
+let LEDConfig;
 
 /**
  * The ultimate goal is to provide support for a variety of LED types, such as:
@@ -7480,7 +7466,7 @@ class LED extends Device {
     getRGBColor(color, colorDefault)
     {
         color = color || colorDefault;
-        return color && WebIO.COLORS[color] || color;
+        return color && Device.COLORS[color] || color;
     }
 
     /**
@@ -7526,7 +7512,7 @@ class LED extends Device {
     {
         if (color) {
             let rgb = [];
-            color = WebIO.COLORS[color] || color;
+            color = Device.COLORS[color] || color;
             if (this.parseRGBValues(color, rgb)) {
                 color = "rgba(";
                 let i;
@@ -7889,10 +7875,10 @@ LED.CLASSES["LED"] = LED;
  */
 
 /** @typedef {{ id: string, callBack: function(), msAuto: number, nCyclesLeft: number }} */
-var Timer;
+let Timer;
 
 /** @typedef {{ cyclesMinimum: (number|undefined), cyclesMaximum: (number|undefined), cyclesPerSecond: (number|undefined), updatesPerSecond: (number|undefined), timeLock: (boolean|undefined) }} */
-var TimeConfig;
+let TimeConfig;
 
 /**
  * @class {Time}
@@ -9063,10 +9049,10 @@ class CPU extends Device {
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), wrap: (boolean|undefined), font: (string|undefined), rule: (string|undefined), pattern: (string|undefined), patterns: (Object|undefined), message: (string|undefined), toggleColor: (boolean|undefined), colors: (Object|undefined) }} */
-var LEDCtrlConfig;
+let LEDCtrlConfig;
 
  /** @typedef {Object} */
-var Debugger;
+let Debugger;
 
 /**
  * LED Controller
@@ -9163,7 +9149,7 @@ class LEDCtrl extends CPU {
             /*
              * Establish an onCommand() handler.
              */
-            this.addHandler(WebIO.HANDLER.COMMAND, this.onCommand.bind(this));
+            this.addHandler(LED.HANDLER.COMMAND, this.onCommand.bind(this));
         }
     }
 
@@ -9903,7 +9889,7 @@ class LEDCtrl extends CPU {
             return false;
         }
         let version = stateCPU.shift();
-        if ((version|0) !== (+VERSION|0)) {
+        if ((version|0) !== (+LED.VERSION|0)) {
             this.printf("Saved state version mismatch: %3.2f\n", version);
             return false;
         }
@@ -10386,7 +10372,7 @@ class LEDCtrl extends CPU {
     {
         let stateCPU = [];
         let stateLEDs = [];
-        stateCPU.push(+VERSION);
+        stateCPU.push(+LED.VERSION);
         stateCPU.push(this.sMessage);
         stateCPU.push(this.iMessageNext);
         stateCPU.push(this.sMessageCmd);
@@ -11014,15 +11000,15 @@ class Machine extends Device {
                 let config = this.deviceConfigs[idDevice];
                 try {
                     sClass = config['class'];
-                    if (!Defs.CLASSES[sClass]) {
+                    if (!Machine.CLASSES[sClass]) {
                         this.printf('unrecognized %s device "%s"\n', sClass, idDevice);
                     }
                     else if (sClass == "Machine") {
-                        this.printf("PCjs %s v%3.2f\n%s\n", config['name'], +VERSION, Machine.COPYRIGHT);
+                        this.printf("PCjs %s v%3.2f\n%s\n", config['name'], +Machine.VERSION, Machine.COPYRIGHT);
                         if (this.sConfigFile) this.printf("Configuration: %s\n", this.sConfigFile);
                     } else {
-                        let device = new Defs.CLASSES[sClass](this.idMachine, idDevice, config);
-                        if (MAXDEBUG) this.printf('%s device "%s"\n', sClass, idDevice);
+                        let device = new Machine.CLASSES[sClass](this.idMachine, idDevice, config);
+                        if (Machine.MAXDEBUG) this.printf('%s device "%s"\n', sClass, idDevice);
                     }
                 }
                 catch (err) {
@@ -11216,26 +11202,5 @@ window[Machine.FACTORY] = function createMachine(idMachine, sConfig, sParms) {
     };
     return machine;
 };
-
-/*
- * If we're NOT running a compiled release (ie, FACTORY wasn't overriden from "Machine" to something else),
- * then create hard-coded aliases for all known factories; only DEBUG servers should be running uncompiled code.
- *
- * Why is the PDP11 factory called 'PDP11v3' instead of simply 'PDP11'?  Because the CPU class for PDP11 machines
- * is already called PDP11, and we can't have both a class and a global function with the same name.  Besides,
- * these factory functions are creating entire "machines", not just "processors", so it makes sense for the names
- * to reflect that.
- *
- * And yes, by the same logic, one might think that 'TMS1500' should really be called 'TI57', except that the
- * TMS1500 factory can produce any of the TI-42, TI-55, or TI-57.  Naming is hard.
- */
-if (Machine.FACTORY == "Machine") {
-    window['Invaders']  = window[Machine.FACTORY];
-    window['LEDs']      = window[Machine.FACTORY];
-    window['PCx86v3']   = window[Machine.FACTORY];
-    window['PDP11v3']   = window[Machine.FACTORY];
-    window['TMS1500']   = window[Machine.FACTORY];
-    window['VT100']     = window[Machine.FACTORY];
-}
 
 Machine.CLASSES["Machine"] = Machine;

@@ -7,7 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { CPU }      from "../../lib/cpu.js";
+import { Debugger } from "../../lib/debugger.js";
 
 /**
  * Emulation of the 8080 CPU
@@ -18,7 +19,7 @@
  * @property {Bus} busMemory
  * @property {Input} input
  */
-class CPUx80 extends CPU {
+export class CPUx80 extends CPU {
     /**
      * CPUx80(idMachine, idDevice, config)
      *
@@ -192,7 +193,7 @@ class CPUx80 extends CPU {
         }
         let idDevice = stateCPU.shift();
         let version = stateCPU.shift();
-        if (idDevice != this.idDevice || (version|0) !== (+VERSION|0)) {
+        if (idDevice != this.idDevice || (version|0) !== (+CPUx80.VERSION|0)) {
             this.printf("CPU state mismatch (%s %3.2f)\n", idDevice, version);
             return false;
         }
@@ -224,7 +225,7 @@ class CPUx80 extends CPU {
     saveState(stateCPU)
     {
         stateCPU.push(this.idDevice);
-        stateCPU.push(+VERSION);
+        stateCPU.push(+CPUx80.VERSION);
         stateCPU.push(this.regA);
         stateCPU.push(this.regB);
         stateCPU.push(this.regC);
@@ -4015,4 +4016,4 @@ CPUx80.OPCODE = {
     // to be continued....
 };
 
-Defs.CLASSES["CPUx80"] = CPUx80;
+CPUx80.CLASSES["CPUx80"] = CPUx80;

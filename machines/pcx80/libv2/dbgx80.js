@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Debugger } from "../../lib/debugger.js";
 
 /**
  * Debugger for the 8080 CPU
@@ -15,7 +15,7 @@
  * @class {Dbgx80}
  * @unrestricted
  */
-class Dbgx80 extends Debugger {
+export class Dbgx80 extends Debugger {
     /**
      * Dbgx80(idMachine, idDevice, config)
      *
@@ -592,4 +592,4 @@ Dbgx80.aaOpDescs = [
 /* 0xFF */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT]
 ];
 
-Defs.CLASSES["Dbgx80"] = Dbgx80;
+Dbgx80.CLASSES["Dbgx80"] = Dbgx80;

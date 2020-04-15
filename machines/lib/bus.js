@@ -8,6 +8,7 @@
  */
 
 import { Device } from "./device.js";
+import { Memory } from "./memory.js";
 
 /**
  * @typedef {Config} BusConfig

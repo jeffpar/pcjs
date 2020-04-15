@@ -317,7 +317,7 @@ export class Monitor extends Device {
                 if (!monitor.machine.isFullScreen) {
                     monitor.doFullScreen();
                 } else {
-                    if (DEBUG) monitor.printf(Device.MESSAGE.MONITOR, "onClickFullScreen(): already full-screen?\n");
+                    if (Monitor.DEBUG) monitor.printf(Device.MESSAGE.MONITOR, "onClickFullScreen(): already full-screen?\n");
                 }
             };
             break;
@@ -347,7 +347,7 @@ export class Monitor extends Device {
     doFullScreen()
     {
         let fSuccess = false;
-        if (DEBUG) this.printf(Device.MESSAGE.MONITOR, "doFullScreen()\n");
+        if (Monitor.DEBUG) this.printf(Device.MESSAGE.MONITOR, "doFullScreen()\n");
         if (this.container && this.container.doFullScreen) {
             /*
              * Styling the container with a width of "100%" and a height of "auto" works great when the aspect ratio
@@ -428,7 +428,7 @@ export class Monitor extends Device {
             this.machine.isFullScreen = false;
         }
         if (this.input && !fFullScreen) this.input.setAltFocus(false);
-        if (DEBUG) this.printf(Device.MESSAGE.MONITOR, "onFullScreen(%b)\n", fFullScreen);
+        if (Monitor.DEBUG) this.printf(Device.MESSAGE.MONITOR, "onFullScreen(%b)\n", fFullScreen);
     }
 
     /**

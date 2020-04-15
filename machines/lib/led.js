@@ -734,7 +734,7 @@ export class LED extends Device {
     getRGBColor(color, colorDefault)
     {
         color = color || colorDefault;
-        return color && WebIO.COLORS[color] || color;
+        return color && Device.COLORS[color] || color;
     }
 
     /**
@@ -780,7 +780,7 @@ export class LED extends Device {
     {
         if (color) {
             let rgb = [];
-            color = WebIO.COLORS[color] || color;
+            color = Device.COLORS[color] || color;
             if (this.parseRGBValues(color, rgb)) {
                 color = "rgba(";
                 let i;

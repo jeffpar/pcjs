@@ -7,6 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import { Memory }  from "../../../lib/memory.js";
 import { Monitor } from "../../../lib/monitor.js";
 
 /**
@@ -458,7 +459,7 @@ export class VT100Video extends Monitor {
          * NOTE: The following test image was useful for early testing, but a *real* VT100 doesn't display a test image,
          * so this code is no longer enabled by default.  Remove MAXDEBUG if you want to see it again.
          */
-        if (MAXDEBUG && !this.test) {
+        if (VT100Video.MAXDEBUG && !this.test) {
             /*
              * Build a test iamge in the VT100 frame buffer; we'll mimic the "SET-UP A" image, since it uses
              * all the font variations.  The process involves iterating over 0-based row numbers -2 (or -5 if 50Hz
@@ -761,7 +762,7 @@ export class VT100Video extends Monitor {
              * Possible VT100 firmware bug?  I'm not sure.  Anyway, this DEBUG-only code is here to help trap
              * that scenario, until I figure it out.
              */
-            if (DEBUG && (this.aCacheCells[iCellUpdated] & 0x7f) == 0x48) {
+            if (VT100Video.DEBUG && (this.aCacheCells[iCellUpdated] & 0x7f) == 0x48) {
                 this.printf("spurious 'H' character at offset %d\n", iCellUpdated);
             }
             this.aCacheCells[iCellUpdated] = -1;
