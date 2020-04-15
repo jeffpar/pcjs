@@ -1,7 +1,7 @@
 {
   "id": "videoEGA",
   "class": "video",
-  "title": "EGA (128K) with Enhanced Color Display",
+  "title": "EGA (128K) with Enhanced Display",
   "model": "ega",
   "memory": "0x20000",
   "switches": "0110",

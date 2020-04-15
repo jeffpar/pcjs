@@ -17,40 +17,20 @@
       "id": "debugger",
       "class": "debugger"
     },
-    {
-      "config": "/configs/pcx86/machine/ibm/5160/rom-basic-110.json"
-    },
-    {
-      "config": "/configs/pcx86/machine/ibm/5160/rom-bios-rev1.json"
-    },
-    {
-      "config": "/configs/pcx86/machine/ibm/5160/rom-ega.json"
-    },
-    {
-      "config": "/configs/pcx86/machine/ibm/5160/rom-hdc.json"
-    },
-    {
-      "config": "/configs/pcx86/machine/ibm/5160/video-ega-5154-128k.json"
-    },
-    {
-      "config": "/configs/pcx86/machine/ibm/5160/fdc.json"
-    },
-    {
-      "config": "/configs/pcx86/machine/ibm/5160/hdc.json"
-    },
+    "/configs/pcx86/machine/ibm/5160/rom-basic-110.json",
+    "/configs/pcx86/machine/ibm/5160/rom-bios-rev1.json",
+    "/configs/pcx86/machine/ibm/5160/rom-ega.json",
+    "/configs/pcx86/machine/ibm/5160/rom-hdc.json",
+    "/configs/pcx86/machine/ibm/5160/video-ega-5154-128k.json",
+    "/configs/pcx86/machine/ibm/5160/fdc.json",
+    "/configs/pcx86/machine/ibm/5160/hdc.json",
     {
       "config": "/configs/pcx86/machine/ibm/5160/ram.json",
       "test": "false"
     },
-    {
-      "config": "/configs/pcx86/machine/ibm/5150/cpu.json"
-    },
-    {
-      "config": "/configs/pcx86/machine/ibm/5150/keyboard.json"
-    },
-    {
-      "config": "/configs/pcx86/machine/ibm/5150/panel.json"
-    },
+    "/configs/pcx86/machine/ibm/5150/cpu.json",
+    "/configs/pcx86/machine/ibm/5150/keyboard.json",
+    "/configs/pcx86/machine/ibm/5150/panel.json",
     {
       "config": "/configs/pcx86/machine/ibm/5160/chipset.json",
       "sw1": "01001101"
