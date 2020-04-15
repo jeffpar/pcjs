@@ -120,7 +120,7 @@ ES6-based [Machine library modules]({{ site.github.pages }}/machines/lib/), incl
   - [Device](/machines/lib/device.js)
   - [Input](/machines/lib/input.js)
   - [LED](/machines/lib/led.js)
-  - [ROM](/machines/lib/bus/rom.js)
+  - [ROM](/machines/lib/rom.js)
   - [Time](/machines/lib/time.js)
   - [Machine](/machines/lib/machine.js)
 

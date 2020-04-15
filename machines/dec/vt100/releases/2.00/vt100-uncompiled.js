@@ -7673,7 +7673,7 @@ Time.BINDING = {
 Defs.CLASSES["Time"] = Time;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/bus.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/bus.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ type: string, addrWidth: number, dataWidth: number, blockSize: (number|undefined), littleEndian: (boolean|undefined) }} */
@@ -8386,7 +8386,7 @@ Bus.TYPE = {
 Defs.CLASSES["Bus"] = Bus;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/memory.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/memory.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), size: number, type: (number|undefined), littleEndian: (boolean|undefined), values: (Array.<number>|string|undefined) }} */
@@ -9149,7 +9149,7 @@ Memory.TYPE = {
 Defs.CLASSES["Memory"] = Memory;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/ports.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/ports.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), size: number }} */
@@ -9346,7 +9346,7 @@ class Ports extends Memory {
 Defs.CLASSES["Ports"] = Ports;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/ram.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/ram.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, type: (number|undefined) }} */
@@ -9391,7 +9391,7 @@ class RAM extends Memory {
 Defs.CLASSES["RAM"] = RAM;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus/rom.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/rom.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, values: Array.<number>, file: string, reference: string, chipID: string, revision: (number|undefined), colorROM: (string|undefined), backgroundColorROM: (string|undefined) }} */
@@ -9617,2611 +9617,7 @@ ROM.BINDING = {
 Defs.CLASSES["ROM"] = ROM;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/vt100/lib/chips.js (C) 2012-2020 Jeff Parsons
- */
-
-/**
- * @class {VT100Chips}
- * @unrestricted
- */
-class VT100Chips extends Device {
-    /**
-     * VT100Chips(idMachine, idDevice, config)
-     *
-     * @this {VT100Chips}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {Config} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
-        this.ports = /** @type {Ports} */ (this.findDeviceByClass("Ports"));
-        this.ports.addIOTable(this, VT100Chips.IOTABLE);
-        this.onReset();
-    }
-
-    /**
-     * loadState(state)
-     *
-     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
-     *
-     * @this {VT100Chips}
-     * @param {Array} state
-     * @returns {boolean}
-     */
-    loadState(state)
-    {
-        let idDevice = state.shift();
-        if (this.idDevice == idDevice) {
-            this.bBrightness    = state.shift();
-            this.bFlags         = state.shift();
-            this.bDC011Cols     = state.shift();
-            this.bDC011Rate     = state.shift();
-            this.bDC012Scroll   = state.shift();
-            this.bDC012Blink    = state.shift();
-            this.bDC012Reverse  = state.shift();
-            this.bDC012Attr     = state.shift();
-            this.dNVRAddr       = state.shift(); // 20-bit address
-            this.wNVRData       = state.shift(); // 14-bit word
-            this.bNVRLatch      = state.shift(); // 1 byte
-            this.bNVROut        = state.shift(); // 1 bit
-            this.aNVRWords      = state.shift(); // 100 14-bit words
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * saveState(state)
-     *
-     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
-     *
-     * @this {VT100Chips}
-     * @param {Array} state
-     */
-    saveState(state)
-    {
-        state.push(this.idDevice);
-        state.push(this.bBrightness);
-        state.push(this.bFlags);
-        state.push(this.bDC011Cols);
-        state.push(this.bDC011Rate);
-        state.push(this.bDC012Scroll);
-        state.push(this.bDC012Blink);
-        state.push(this.bDC012Reverse);
-        state.push(this.bDC012Attr);
-        state.push(this.dNVRAddr);
-        state.push(this.wNVRData);
-        state.push(this.bNVRLatch);
-        state.push(this.bNVROut);
-        state.push(this.aNVRWords);
-    }
-
-    /**
-     * onPower(on)
-     *
-     * Called by the Machine device to provide notification of a power event.
-     *
-     * @this {VT100Chips}
-     * @param {boolean} on (true to power on, false to power off)
-     */
-    onPower(on)
-    {
-        if (this.kbd === undefined) {
-            this.kbd = /** @type {VT100Keyboard} */ (this.findDeviceByClass("VT100Keyboard"));
-        }
-        if (this.serial === undefined) {
-            this.serial = /** @type {VT100Serial} */ (this.findDeviceByClass("VT100Serial"));
-        }
-        if (this.video === undefined) {
-            this.video = /** @type {VT100Video} */ (this.findDeviceByClass("VT100Video"));
-        }
-        /*
-         * This is also a good time to get access to the Debugger, if any, and add our dump extensions.
-         */
-        if (this.dbg === undefined) {
-            this.dbg = /** @type {Debugger} */ (this.findDeviceByClass("Debugger", false));
-            if (this.dbg) this.dbg.addDumper(this, "nvr", "dump non-volatile ram", this.dumpNVR);
-        }
-    }
-
-    /**
-     * onReset()
-     *
-     * Called by the Machine device to provide notification of a reset event.
-     *
-     * @this {VT100Chips}
-     */
-    onReset()
-    {
-        this.bBrightness    = VT100Chips.BRIGHTNESS.INIT;
-        this.bFlags         = VT100Chips.FLAGS.NO_AVO | VT100Chips.FLAGS.NO_GFX;
-        this.bDC011Cols     = VT100Chips.DC011.INITCOLS;
-        this.bDC011Rate     = VT100Chips.DC011.INITRATE;
-        this.bDC012Scroll   = VT100Chips.DC012.INITSCROLL;
-        this.bDC012Blink    = VT100Chips.DC012.INITBLINK;
-        this.bDC012Reverse  = VT100Chips.DC012.INITREVERSE;
-        this.bDC012Attr     = VT100Chips.DC012.INITATTR;
-        this.dNVRAddr       = 0;
-        this.wNVRData       = 0;
-        this.bNVRLatch      = 0;
-        this.bNVROut        = 0;
-       /*
-        * The following array contains the data we use to initialize all (100) words of NVR (Non-Volatile RAM).
-        *
-        * I used to initialize every word to 0x3ff, as if the NVR had been freshly erased, but that causes the
-        * firmware to (attempt to) beep and then display an error code (2).  As the DEC Technical Manual says:
-        *
-        *      If the NVR fails, the bell sounds several times to inform the operator, and then default settings
-        *      stored in the ROM allow the terminal to work.
-        *
-        * but I think what they meant to say is that default settings are stored in the RAM copy of NVR.  So then
-        * I went into SET-UP, pressed SHIFT-S to save those settings back to NVR, and then used the PCx80 debugger
-        * "d nvr" command to dump the NVR contents.  The results are below.
-        *
-        * The first dump actually contains only two modifications to the factory defaults: enabling ONLINE instead
-        * of LOCAL operation, and turning ANSI support ON.  The second dump is unmodified (the TRUE factory defaults).
-        *
-        * By making selective changes, you can discern where the bits for certain features are stored.  For example,
-        * smooth-scrolling is apparently controlled by bit 7 of the word at offset 0x2B (and is ON by default in
-        * the factory settings).  And it's likely that the word at offset 0x32 (ie, the last word that's not zero)
-        * is the NVR checksum.
-        *
-        * The TRUE factory defaults are here for reference:
-        *
-        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
-        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
-        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
-        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E00,
-        *   0x2E08, 0x2E8E, 0x2E20, 0x2ED0, 0x2E50, 0x2E00, 0x2E20, 0x2E00, 0x2EE0, 0x2EE0,
-        *   0x2E69, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
-        */
-        this.aNVRWords = [
-            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
-            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
-            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
-            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E00,
-            0x2E08, 0x2E8E, 0x2E00, 0x2ED0, 0x2E70, 0x2E00, 0x2E20, 0x2E00, 0x2EE0, 0x2EE0,
-            0x2E7D, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
-        ];
-    }
-
-    /**
-     * getLBA(iBit)
-     *
-     * Returns the state of the requested (simulated) LBA bit.
-     *
-     * NOTE: This is currently only used to obtain LBA7, which we approximate with the slightly faster approach
-     * of masking bit 6 of the CPU cycle count (see the DC011 discussion above).  This will result in a shorter LBA7
-     * period than if we divided the cycle count by 88, but a shorter LBA7 period is probably helpful in terms of
-     * overall performance.
-     *
-     * @this {VT100Chips}
-     * @param {number} iBit
-     * @returns {number}
-     */
-    getLBA(iBit)
-    {
-        return (this.time.getCycles() & (1 << (iBit - 1))) << 1;
-    }
-
-    /**
-     * getNVRAddr()
-     *
-     * @this {VT100Chips}
-     * @returns {number}
-     */
-    getNVRAddr()
-    {
-        let i;
-        let tens = 0, ones = 0;
-        let addr = ~this.dNVRAddr;
-        for (i = 0; i < 10; i++) {
-            if (addr & 0x1) tens = 9-i;
-            addr >>= 1;
-        }
-        for (i = 0; i < 10; i++) {
-            if (addr & 0x1) ones = 9-i;
-            addr >>= 1;
-        }
-        addr = tens*10 + ones;
-
-        return addr;
-    }
-
-    /**
-     * doNVRCommand()
-     *
-     * @this {VT100Chips}
-     */
-    doNVRCommand()
-    {
-        let addr, data;
-        let bit = this.bNVRLatch & 0x1;
-        let bCmd = (this.bNVRLatch >> 1) & 0x7;
-
-        switch(bCmd) {
-        case VT100Chips.NVR.CMD.STANDBY:
-            break;
-
-        case VT100Chips.NVR.CMD.ACCEPT_ADDR:
-            this.dNVRAddr = (this.dNVRAddr << 1) | bit;
-            break;
-
-        case VT100Chips.NVR.CMD.ERASE:
-            addr = this.getNVRAddr();
-            this.aNVRWords[addr] = VT100Chips.NVR.WORDMASK;
-            this.printf(MESSAGE.CHIPS, "doNVRCommand(): erase data at addr %#06x\n", addr);
-            break;
-
-        case VT100Chips.NVR.CMD.ACCEPT_DATA:
-            this.wNVRData = (this.wNVRData << 1) | bit;
-            break;
-
-        case VT100Chips.NVR.CMD.WRITE:
-            addr = this.getNVRAddr();
-            data = this.wNVRData & VT100Chips.NVR.WORDMASK;
-            this.aNVRWords[addr] = data;
-            this.printf(MESSAGE.CHIPS, "doNVRCommand(): write data %#06x to addr %#06x\n", data, addr);
-            break;
-
-        case VT100Chips.NVR.CMD.READ:
-            addr = this.getNVRAddr();
-            data = this.aNVRWords[addr];
-            /*
-             * If we don't explicitly initialize aNVRWords[], pretend any uninitialized words contains WORDMASK.
-             */
-            if (data == null) data = VT100Chips.NVR.WORDMASK;
-            this.wNVRData = data;
-            this.printf(MESSAGE.CHIPS, "doNVRCommand(): read data %#06x from addr %#06x\n", data, addr);
-            break;
-
-        case VT100Chips.NVR.CMD.SHIFT_OUT:
-            this.wNVRData <<= 1;
-            /*
-             * Since WORDMASK is 0x3fff, this will mask the shifted data with 0x4000, which is the bit we want to isolate.
-             */
-            this.bNVROut = this.wNVRData & (VT100Chips.NVR.WORDMASK + 1);
-            break;
-
-        default:
-            this.printf(MESSAGE.CHIPS, "doNVRCommand(): unrecognized command %#04x\n", bCmd);
-            break;
-        }
-    }
-
-    /**
-     * inFlags(port)
-     *
-     * @this {VT100Chips}
-     * @param {number} port (0x42)
-     * @returns {number} simulated port value
-     */
-    inFlags(port)
-    {
-        let value = this.bFlags;
-
-        /*
-         * The NVR_CLK bit is driven by LBA7 (ie, bit 7 from Line Buffer Address generation); see the DC011 discussion above.
-         */
-        value &= ~VT100Chips.FLAGS.NVR_CLK;
-        if (this.getLBA(7)) {
-            value |= VT100Chips.FLAGS.NVR_CLK;
-            if (value != this.bFlags) {
-                this.doNVRCommand();
-            }
-        }
-
-        value &= ~VT100Chips.FLAGS.NVR_DATA;
-        if (this.bNVROut) {
-            value |= VT100Chips.FLAGS.NVR_DATA;
-        }
-
-        value &= ~VT100Chips.FLAGS.KBD_XMIT;
-        if (this.kbd && this.kbd.isTransmitterReady()) {
-            value |= VT100Chips.FLAGS.KBD_XMIT;
-        }
-
-        value &= ~VT100Chips.FLAGS.UART_XMIT;
-        if (this.serial && this.serial.isTransmitterReady()) {
-            value |= VT100Chips.FLAGS.UART_XMIT;
-        }
-
-        this.bFlags = value;
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "inFlags(%#04x): %#04x\n", port, value);
-        return value;
-    }
-
-    /**
-     * outBrightness(port, value)
-     *
-     * @this {VT100Chips}
-     * @param {number} port (0x42)
-     * @param {number} value
-     */
-    outBrightness(port, value)
-    {
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outBrightness(%#04x): %#04x\n", port, value);
-        this.bBrightness = value;
-    }
-
-    /**
-     * outNVRLatch(port, value)
-     *
-     * @this {VT100Chips}
-     * @param {number} port (0x62)
-     * @param {number} value
-     */
-    outNVRLatch(port, value)
-    {
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outNVRLatch(%#04x): %#04x\n", port, value);
-        this.bNVRLatch = value;
-    }
-
-    /**
-     * outDC012(port, value)
-     *
-     * TODO: Consider whether we should disable any interrupts (eg, vertical retrace) until
-     * this port is initialized at runtime.
-     *
-     * @this {VT100Chips}
-     * @param {number} port (0xA2)
-     * @param {number} value
-     */
-    outDC012(port, value)
-    {
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outDC012(%#04x): %#04x\n", port, value);
-        let bOpt = value & 0x3;
-        let bCmd = (value >> 2) & 0x3;
-        switch(bCmd) {
-        case 0x0:
-            this.bDC012Scroll = (this.bDC012Scroll & ~0x3) | bOpt;
-            break;
-        case 0x1:
-            this.bDC012Scroll = (this.bDC012Scroll & ~0xC) | (bOpt << 2);
-            if (this.video) this.video.updateScrollOffset(this.bDC012Scroll);
-            break;
-        case 0x2:
-            switch(bOpt) {
-            case 0x0:
-                this.bDC012Blink = ~this.bDC012Blink;
-                break;
-            case 0x1:
-                // TODO: Clear vertical frequency interrupt?
-                break;
-            case 0x2:
-            case 0x3:
-                this.bDC012Reverse = 0x3 - bOpt;
-                break;
-            }
-            break;
-        case 0x3:
-            this.bDC012Attr = bOpt;
-            break;
-        }
-    }
-
-    /**
-     * outDC011(port, value)
-     *
-     * @this {VT100Chips}
-     * @param {number} port (0xC2)
-     * @param {number} value
-     */
-    outDC011(port, value)
-    {
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outNDC011(%#04x): %#04x\n", port, value);
-        if (value & VT100Chips.DC011.RATE60) {
-            value &= VT100Chips.DC011.RATE50;
-            if (this.bDC011Rate != value) {
-                this.bDC011Rate = value;
-                if (this.video) {
-                    this.video.updateRate(this.bDC011Rate == VT100Chips.DC011.RATE50? 50 : 60);
-                }
-            }
-        } else {
-            value &= VT100Chips.DC011.COLS132;
-            if (this.bDC011Cols != value) {
-                this.bDC011Cols = value;
-                if (this.video) {
-                    let nCols = (this.bDC011Cols == VT100Chips.DC011.COLS132? 132 : 80);
-                    let nRows = (nCols > 80 && (this.bFlags & VT100Chips.FLAGS.NO_AVO)? 14 : 24);
-                    this.video.updateDimensions(nCols, nRows);
-                }
-            }
-        }
-    }
-
-    /**
-     * dumpNVR(values)
-     *
-     * @this {VT100Chips}
-     * @param {Array.<number>} values (the Debugger passes along any values on the command-line, but we don't use them)
-     */
-    dumpNVR(values)
-    {
-        let sDump = "";
-        for (let iWord = 1; iWord <= this.aNVRWords.length; iWord++) {
-            sDump += this.sprintf("%04x%c", this.aNVRWords[iWord-1], (iWord % 10)? ' ' : '\n');
-        }
-        return sDump;
-    }
-}
-
-/*
- * One of the many chips in the VT100 is an 8224, which operates at 24.8832MHz.  That frequency is divided by 9
- * to yield a 361.69ns clock period for the 8080 CPU, which means (in theory) that the CPU is running at 2.76Mhz,
- * so the machine should be configured with "cyclesPerSecond" set to 2764800.
- *
- * WARNING: The choice of clock speed has an effect on other simulated VT100 circuits; see the DC011 Timing Chip
- * discussion below, along with the getLBA() function.
- *
- * For reference, here is a list of all the VT100 I/O ports, from /devices/pc8080/machine/vt100/debugger/README.md,
- * which in turn comes from p. 4-17 of the VT100 Technical Manual (July 1982):
- *
- *      READ OR WRITE
- *      00H     PUSART data bus
- *      01H     PUSART command port
- *
- *      WRITE ONLY (Decoded with I/O WR L)
- *      02H     Baud rate generator
- *      42H     Brightness D/A latch
- *      62H     NVR latch
- *      82H     Keyboard UART data input [used to update the Keyboard Status Byte -JP]
- *      A2H     Video processor DC012
- *      C2H     Video processor DC011
- *      E2H     Graphics port
- *
- *      READ ONLY (Decoded with I/O RD L)
- *      22H     Modem buffer
- *      42H     Flags buffer
- *      82H     Keyboard UART data output
- */
-VT100Chips.FLAGS = {
-    PORT:       0x42,           // read-only
-    UART_XMIT:  0x01,           // PUSART transmit buffer empty if SET
-    NO_AVO:     0x02,           // AVO present if CLEAR
-    NO_GFX:     0x04,           // VT125 graphics board present if CLEAR
-    OPTION:     0x08,           // OPTION present if SET
-    NO_EVEN:    0x10,           // EVEN FIELD active if CLEAR
-    NVR_DATA:   0x20,           // NVR DATA if SET
-    NVR_CLK:    0x40,           // NVR CLOCK if SET
-    KBD_XMIT:   0x80            // KBD transmit buffer empty if SET
-};
-
-VT100Chips.BRIGHTNESS = {
-    PORT:       0x42,           // write-only
-    INIT:       0x00            // for lack of a better guess
-};
-
-/*
- * Reading port 0x82 returns a key address from the VT100 keyboard's UART data output.
- *
- * Every time a keyboard scan is initiated (by setting the START bit of the status byte),
- * our internal address index (iKeyNext) is set to zero, and an interrupt is generated for
- * each entry in the aKeysActive array, along with a final interrupt for KEYLAST.
- */
-VT100Chips.ADDRESS = {
-    PORT:       0x82,
-    INIT:       0x7F
-};
-
-/*
- * Writing port 0x82 updates the VT100's keyboard status byte via the keyboard's UART data input.
- */
-VT100Chips.STATUS = {
-    PORT:       0x82,               // write-only
-    LED4:       0x01,
-    LED3:       0x02,
-    LED2:       0x04,
-    LED1:       0x08,
-    LOCKED:     0x10,
-    LOCAL:      0x20,
-    LEDS:       0x3F,               // all LEDs
-    START:      0x40,               // set to initiate a scan
-    /*
-     * From p. 4-38 of the VT100 Technical Manual (July 1982):
-     *
-     *      A bit (CLICK) in the keyboard status word controls the bell....  When a single status word contains
-     *      the bell bit, flip-flop E3 toggles and turns on E1, generating a click. If the bell bit is set for
-     *      many words in succession, the UART latch holds the data output constant..., allowing the circuit to
-     *      produce an 800 hertz tone. Bell is generated by setting the bell bit for 0.25 seconds.  Each cycle of
-     *      the tone is at a reduced amplitude compared with the single keyclick....  The overall effect of the
-     *      tone burst on the ear is that of a beep.
-     */
-    CLICK:      0x80,
-    INIT:       0x00
-};
-
-/*
- * DC011 is referred to as a Timing Chip.
- *
- * As p. 4-55 (105) of the VT100 Technical Manual (July 1982) explains:
- *
- *      The DCO11 is a custom designed bipolar circuit that provides most of the timing signals required by the
- *      video processor. Internal counters divide the output of a 24.0734 MHz oscillator (located elsewhere on the
- *      terminal controller module) into the lower frequencies that define dot, character, scan, and frame timing.
- *      The counters are programmable through various input pins to control the number of characters per line,
- *      the frequency at which the screen is refreshed, and whether the display is interlaced or noninterlaced.
- *      These parameters can be controlled through SET-UP mode or by the host.
- *
- *          Table 4-6-1: Video Mode Selection (Write Address 0xC2)
- *
- *          D5  D4      Configuration
- *          --  --      -------------
- *          0   0       80-column mode, interlaced
- *          0   1       132-column mode, interlaced
- *          1   0       60Hz, non-interlaced
- *          1   1       50Hz, non-interlaced
- *
- * On p. 4-56, the DC011 Block Diagram shows 8 outputs labeled LBA0 through LBA7.  From p. 4-61:
- *
- *      Several of the LBAs are used as general purpose clocks in the VT100. LBA3 and LBA4 are used to generate
- *      timing for the keyboard. These signals satisfy the keyboard's requirement of two square-waves, one twice the
- *      frequency of the other, even though every 16th transition is delayed (the second stage of the horizontal
- *      counter divides by 17, not 16). LBA7 is used by the nonvolatile RAM.
- *
- * And on p. 4-62, timings are provided for the LBA0 through LBA7; in particular:
- *
- *      LBA6:   16.82353us (when LBA6 is low, for a period of 33.64706us)
- *      LBA7:   31.77778us (when LBA7 is high, for a period of 63.55556us)
- *
- * If we assume that the CPU cycle count increments once every 361.69ns, it will increment roughly 88 times every
- * time LBA7 toggles.  So we can divide the CPU cycle count by 88 and set LBA to the low bit of that truncated
- * result.  An even faster (but less accurate) solution would be to mask bit 6 of the CPU cycle count, which will
- * doesn't change until the count has been incremented 64 times.  See getLBA() for the chosen implementation.
- */
-VT100Chips.DC011 = {            // generates Line Buffer Addresses (LBAs) for the Video Processor
-    PORT:       0xC2,           // write-only
-    COLS80:     0x00,
-    COLS132:    0x10,
-    RATE60:     0x20,
-    RATE50:     0x30,
-    INITCOLS:   0x00,           // ie, COLS80
-    INITRATE:   0x20            // ie, RATE60
-};
-
-/*
- * DC012 is referred to as a Control Chip.
- *
- * As p. 4-67 (117) of the VT100 Technical Manual (July 1982) explains:
- *
- *      The DCO12 performs three main functions.
- *
- *       1. Scan count generation. This involves two counters, a multiplexer to switch between the counters,
- *          double-height logic, scroll and line attribute latches, and various logic controlling switching between
- *          the two counters. This is the biggest part of the chip. It includes all scrolling, double-height logic,
- *          and feeds into the underline and hold request circuits.
- *
- *       2. Generation of HOLD REQUEST. This uses information from the scan counters and the scrolling logic to
- *          decide when to generate HOLD REQUEST.
- *
- *       3. Video modifications: dot stretching, blanking, addition of attributes to video outputs, and multiple
- *          intensity levels.
- *
- *      The input decoder accepts a 4-bit command from the microprocessor when VID WR 2 L is asserted. Table 4-6-2
- *      lists the commands.
- *
- *      D3 D2 D1 D0     Function
- *      -- -- -- --     --------
- *      0  0  0  0      Load low order scroll latch = 00
- *      0  0  0  1      Load low order scroll latch = 01
- *      0  0  1  0      Load low order scroll latch = 10
- *      0  0  1  1      Load low order scroll latch = 11
- *
- *      0  1  0  0      Load high order scroll latch = 00
- *      0  1  0  1      Load high order scroll latch = 01
- *      0  1  1  0      Load high order scroll latch = 10
- *      0  1  1  1      Load high order scroll latch = 11 (not used)
- *
- *      1  0  0  0      Toggle blink flip-flop
- *      1  0  0  1      Clear vertical frequency interrupt
- *
- *      1  0  1  0      Set reverse field on
- *      1  0  1  1      Set reverse field off
- *
- *      1  1  0  0      Set basic attribute to underline*
- *      1  1  0  1      Set basic attribute to reverse video*
- *      1  1  1  0      Reserved for future specification*
- *      1  1  1  1      Reserved for future specification*
- *
- *      *These functions also clear blink flip-flop.
- */
-VT100Chips.DC012 = {            // generates scan counts for the Video Processor
-    PORT:       0xA2,           // write-only
-    SCROLL_LO:  0x00,
-    INITSCROLL: 0x00,
-    INITBLINK:  0x00,
-    INITREVERSE:0x00,
-    INITATTR:   0x00
-};
-
-/*
- * ER1400 Non-Volatile RAM (NVR) Chip Definitions
- */
-VT100Chips.NVR = {
-    LATCH: {
-        PORT:   0x62            // write-only
-    },
-    CMD: {
-        ACCEPT_DATA:    0x0,
-        ACCEPT_ADDR:    0x1,
-        SHIFT_OUT:      0x2,
-        WRITE:          0x4,
-        ERASE:          0x5,
-        READ:           0x6,
-        STANDBY:        0x7
-    },
-    WORDMASK:   0x3fff          // NVR words are 14-bit
-    /*
-     * The Technical Manual, p. 4-18, also notes that "Early VT100s can disable the receiver interrupt by
-     * programming D4 in the NVR latch. However, this is never used by the VT100."
-     */
-};
-
-VT100Chips.IOTABLE = {
-    0x42: [VT100Chips.prototype.inFlags, VT100Chips.prototype.outBrightness],
-    0x62: [null, VT100Chips.prototype.outNVRLatch],
-    0xA2: [null, VT100Chips.prototype.outDC012],
-    0xC2: [null, VT100Chips.prototype.outDC011]
-};
-
-Defs.CLASSES["VT100Chips"] = VT100Chips;
-
-/**
- * @copyright https://www.pcjs.org/machines/dec/vt100/lib/keyboard.js (C) 2012-2020 Jeff Parsons
- */
-
-/** @typedef {{ model: number }} */
-var VT100KeyboardConfig;
-
-/**
- * @class {VT100Keyboard}
- * @unrestricted
- * @property {VT100KeyboardConfig} config
- */
-class VT100Keyboard extends Device {
-    /**
-     * VT100Keyboard(idMachine, idDevice, config)
-     *
-     * @this {VT100Keyboard}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {VT100KeyboardConfig} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-
-        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
-        this.ports = /** @type {Ports} */ (this.findDeviceByClass("Ports"));
-        this.ports.addIOTable(this, VT100Keyboard.IOTABLE);
-
-        /*
-         * Whereas VT100Keyboard.LEDS maps bits to LED ID, this.leds maps bits to the actual LED devices.
-         */
-        this.leds = {};
-        for (let bit in VT100Keyboard.LEDS) {
-            this.leds[bit] = /** @type {LED} */ (this.findDevice(VT100Keyboard.LEDS[bit], false));
-        }
-
-        this.input = /** @type {Input} */ (this.findDeviceByClass("Input"));
-        this.input.addKeyMap(this, VT100Keyboard.KEYMAP, VT100Keyboard.CLICKMAP);
-
-        this.ledCaps = this.findDevice("ledCaps");
-        if (this.ledCaps) {
-            this.input.addListener(Input.TYPE.KEYCODE, WebIO.KEYCODE.CAPS_LOCK, this.onCapsLock.bind(this));
-        }
-        this.onReset();
-    }
-
-    /**
-     * loadState(state)
-     *
-     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
-     *
-     * @this {VT100Keyboard}
-     * @param {Array} state
-     * @returns {boolean}
-     */
-    loadState(state)
-    {
-        let idDevice = state.shift();
-        if (this.idDevice == idDevice) {
-            this.bStatus = state.shift();
-            this.bAddress = state.shift();
-            this.fUARTBusy = state.shift();
-            this.nUARTSnap = state.shift();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * saveState(state)
-     *
-     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
-     *
-     * @this {VT100Keyboard}
-     * @param {Array} state
-     */
-    saveState(state)
-    {
-        state.push(this.idDevice);
-        state.push(this.bStatus);
-        state.push(this.bAddress);
-        state.push(this.fUARTBusy);
-        state.push(this.nUARTSnap);
-    }
-
-    /**
-     * onCapsLock(id, on)
-     *
-     * @this {VT100Keyboard}
-     * @param {number} id
-     * @param {boolean} on
-     */
-    onCapsLock(id, on)
-    {
-        this.ledCaps.setLEDState(0, 0, on? LED.STATE.ON : LED.STATE.OFF);
-    }
-
-    /**
-     * onPower(on)
-     *
-     * Called by the Machine device to provide notification of a power event.
-     *
-     * @this {VT100Keyboard}
-     * @param {boolean} on
-     */
-    onPower(on)
-    {
-        if (!this.cpu) {
-            this.cpu = /** @type {CPU8080} */ (this.findDeviceByClass("CPU"));
-        }
-        this.updateLEDs(on? this.bStatus : undefined);
-    }
-
-    /**
-     * onReset()
-     *
-     * Called by the Machine device to provide notification of a reset event.
-     *
-     * @this {VT100Keyboard}
-     */
-    onReset()
-    {
-        this.bStatus = VT100Keyboard.STATUS.INIT;
-        this.bAddress = VT100Keyboard.ADDRESS.INIT;
-        this.fUARTBusy = false;
-        this.nUARTSnap = 0;
-        this.iKeyNext = -1;
-        this.updateLEDs();
-    }
-
-    /**
-     * isTransmitterReady()
-     *
-     * Called whenever the VT100 Chips device needs the VT100Keyboard UART transmitter status.
-     *
-     * From p. 4-32 of the VT100 Technical Manual (July 1982):
-     *
-     *      The operating clock for the keyboard interface comes from an address line in the video processor (LBA4).
-     *      This signal has an average period of 7.945 microseconds. Each data byte is transmitted with one start bit
-     *      and one stop bit, and each bit lasts 16 clock periods. The total time for each data byte is 160 times 7.945
-     *      or 1.27 milliseconds. Each time the Transmit Buffer Empty flag on the terminal's UART gets set (when the
-     *      current byte is being transmitted), the microprocessor loads another byte into the transmit buffer. In this
-     *      way, the stream of status bytes to the keyboard is continuous.
-     *
-     * We used to always return true (after all, what's wrong with an infinitely fast UART?), but unfortunately,
-     * the VT100 firmware relies on the UART's slow transmission speed to drive cursor blink rate.  We have several
-     * options:
-     *
-     *      1) Snapshot the CPU cycle count each time a byte is transmitted (see outVT100UARTStatus()) and then every
-     *      time this is polled, see if the cycle count has exceeded the snapshot value by the necessary threshold;
-     *      if we assume 361.69ns per CPU cycle, there are 22 CPU cycles for every 1 LBA4 cycle, and since transmission
-     *      time is supposed to last for 160 LBA4 cycles, the threshold is 22*160 CPU cycles, or 3520 cycles.
-     *
-     *      2) Set a CPU timer using the new setTimer() interface, which can be passed the number of milliseconds to
-     *      wait before firing (in this case, roughly 1.27ms).
-     *
-     *      3) Call the Chips device getLBA(4) function for the state of the simulated LBA4, and count 160 LBA4
-     *      transitions; however, that would be the worst solution, because there's no guarantee that the firmware's
-     *      UART polling will occur regularly and/or frequently enough for us to catch every LBA4 transition.
-     *
-     * I'm going with solution #1 because it's less overhead.
-     *
-     * @this {VT100Keyboard}
-     * @returns {boolean} (true if ready, false if not)
-     */
-    isTransmitterReady()
-    {
-        if (this.fUARTBusy) {
-            if (this.time.getCycles() >= this.nUARTSnap) {
-                this.fUARTBusy = false;
-            }
-        }
-        return !this.fUARTBusy;
-    }
-
-    /**
-     * inUARTAddress(port)
-     *
-     * We take our cue from iKeyNext.  If it's -1 (default), we simply return the last value latched
-     * in bAddress.  Otherwise, we call getActiveKey() to request the next mapped key value, latch it,
-     * and increment iKeyNext.  Failing that, we latch ADDRESS.KEYLAST and reset iKeyNext to -1.
-     *
-     * @this {VT100Keyboard}
-     * @param {number} port (0x82)
-     * @returns {number} simulated port value
-     */
-    inUARTAddress(port)
-    {
-        let value = this.bAddress;
-        if (this.iKeyNext >= 0) {
-            let value = this.input.getActiveKey(this.iKeyNext);
-            if (value >= 0) {
-                this.iKeyNext++;
-                if (value & 0x80) {
-                    /*
-                     * TODO: This code is supposed to be accompanied by a SHIFT key; make sure that it is.
-                     */
-                    value &= 0x7F;
-                }
-            } else {
-                this.iKeyNext = -1;
-                value = VT100Keyboard.ADDRESS.KEYLAST;
-            }
-            this.bAddress = value;
-            this.cpu.requestINTR(1);
-        }
-        this.printf(MESSAGE.KBD + MESSAGE.PORTS, "inUARTAddress(%#04x): %#04x\n", port, value);
-        return value;
-    }
-
-    /**
-     * outUARTStatus(port, value)
-     *
-     * @this {VT100Keyboard}
-     * @param {number} port (0x82)
-     * @param {number} value
-     */
-    outUARTStatus(port, value)
-    {
-        this.printf(MESSAGE.KBD + MESSAGE.PORTS, "outUARTStatus(%#04x): %#04x\n", port, value);
-        this.updateLEDs(value, this.bStatus);
-        this.bStatus = value;
-        this.fUARTBusy = true;
-        /*
-         * Set nUARTSnap to the number of cycles required before clearing fUARTBusy; see isTransmitterReady().
-         *
-         * NOTE: getCyclesPerMS(1.2731488) should work out to 3520 cycles for a CPU clocked at 361.69ns per cycle,
-         * which is roughly 2.76Mhz.  We could just hard-code 3520 instead of calling getCyclesPerMS(), but this helps
-         * maintain a reasonable blink rate for the cursor even when the user cranks up the CPU speed.
-         */
-        this.nUARTSnap = this.time.getCycles() + this.time.getCyclesPerMS(1.2731488);
-        if (value & VT100Keyboard.STATUS.START) {
-            this.iKeyNext = 0;
-            this.cpu.requestINTR(1);
-        }
-    }
-
-    /**
-     * updateLEDs(value, previous)
-     *
-     * @this {VT100Keyboard}
-     * @param {number} [value] (if not provided, all LEDS are turned off)
-     * @param {number} [previous] (if not provided, all LEDs are updated)
-     */
-    updateLEDs(value, previous)
-    {
-        for (let id in this.leds) {
-            let led = this.leds[id];
-            if (!led) continue;
-            let bit = +id, on, changed = 1, redraw = 1;
-            if (value != undefined) {
-                if (!(bit & (bit - 1))) {       // if a single bit is set, this will be zero
-                    on = value & bit;           // and "on" will be true if that single bit is set
-                } else {
-                    bit = ~bit & 0xff;          // otherwise, we assume that a single bit is clear
-                    on = !(value & bit);        // so "on" will be true if that same single bit is clear
-                }
-                if (previous != undefined) {
-                    changed = (value ^ previous) & bit;
-                    redraw = 0;
-                }
-            }
-            if (changed) {                      // call setLEDState() only if the bit changed
-                led.setLEDState(0, 0, on? LED.STATE.ON : LED.STATE.OFF);
-                if (redraw) led.drawBuffer();
-            }
-        }
-    }
-}
-
-/*
- * Reading port 0x82 returns a key address from the VT100 keyboard's UART data output.
- *
- * Every time a keyboard scan is initiated (by setting the START bit of the status byte),
- * our internal address index (iKeyNext) is set to zero, and an interrupt is generated for
- * each entry in the aKeysActive array, along with a final interrupt for KEYLAST.
- */
-VT100Keyboard.ADDRESS = {
-    PORT:       0x82,
-    INIT:       0x7F,
-    KEYLAST:    0x7F                // special end-of-scan key address (all valid key addresses are < KEYLAST)
-};
-
-/*
- * Writing port 0x82 updates the VT100's keyboard status byte via the keyboard's UART data input.
- */
-VT100Keyboard.STATUS = {
-    PORT:       0x82,               // write-only
-    LED4:       0x01,
-    LED3:       0x02,
-    LED2:       0x04,
-    LED1:       0x08,
-    LOCKED:     0x10,
-    LOCAL:      0x20,
-    LEDS:       0x3F,               // all LEDs
-    START:      0x40,               // set to initiate a scan
-    /*
-     * From p. 4-38 of the VT100 Technical Manual (July 1982):
-     *
-     *      A bit (CLICK) in the keyboard status word controls the bell....  When a single status word contains
-     *      the bell bit, flip-flop E3 toggles and turns on E1, generating a click. If the bell bit is set for
-     *      many words in succession, the UART latch holds the data output constant..., allowing the circuit to
-     *      produce an 800 hertz tone. Bell is generated by setting the bell bit for 0.25 seconds.  Each cycle of
-     *      the tone is at a reduced amplitude compared with the single keyclick....  The overall effect of the
-     *      tone burst on the ear is that of a beep.
-     */
-    CLICK:      0x80,
-    INIT:       0x00
-};
-
-/*
- * Definitions of all VT100 keys (7-bit values representing key positions on the VT100).  We call these
- * VT100 key values KEYNUMs, to avoid confusion with browser KEYCODEs.  They are be used in a subsequent
- * KEYMAP table.
- */
-VT100Keyboard.KEYNUM = {
-    DEL:        0x03,
-    P:          0x05,
-    O:          0x06,
-    Y:          0x07,
-    T:          0x08,
-    W:          0x09,
-    Q:          0x0A,
-    RIGHT:      0x10,
-    RBRACK:     0x14,
-    LBRACK:     0x15,
-    I:          0x16,
-    U:          0x17,
-    R:          0x18,
-    E:          0x19,
-    ONE:        0x1A,
-    LEFT:       0x20,
-    DOWN:       0x22,
-    BREAK:      0x23,   // aka BREAK
-    BQUOTE:     0x24,
-    DASH:       0x25,
-    NINE:       0x26,
-    SEVEN:      0x27,
-    FOUR:       0x28,
-    THREE:      0x29,
-    ESC:        0x2A,
-    UP:         0x30,
-    F3:         0x31,   // aka PF3
-    F1:         0x32,   // aka PF1
-    BS:         0x33,
-    EQUALS:     0x34,
-    ZERO:       0x35,
-    EIGHT:      0x36,
-    SIX:        0x37,
-    FIVE:       0x38,
-    TWO:        0x39,
-    TAB:        0x3A,
-    NUM_7:      0x40,
-    F4:         0x41,   // aka PF4
-    F2:         0x42,   // aka PF2
-    NUM_0:      0x43,
-    LF:         0x44,   // aka LINE-FEED
-    BSLASH:     0x45,
-    L:          0x46,
-    K:          0x47,
-    G:          0x48,
-    F:          0x49,
-    A:          0x4A,
-    NUM_8:      0x50,
-    NUM_CR:     0x51,
-    NUM_2:      0x52,
-    NUM_1:      0x53,
-    QUOTE:      0x55,
-    SEMI:       0x56,
-    J:          0x57,
-    H:          0x58,
-    D:          0x59,
-    S:          0x5A,
-    NUM_DEL:    0x60,   // aka KEYPAD PERIOD
-    NUM_COMMA:  0x61,   // aka KEYPAD COMMA
-    NUM_5:      0x62,
-    NUM_4:      0x63,
-    CR:         0x64,   // TODO: Figure out why the Technical Manual lists CR at both 0x04 and 0x64
-    PERIOD:     0x65,
-    COMMA:      0x66,
-    N:          0x67,
-    B:          0x68,
-    X:          0x69,
-    NO_SCROLL:  0x6A,   // aka NO-SCROLL
-    NUM_9:      0x70,
-    NUM_3:      0x71,
-    NUM_6:      0x72,
-    NUM_SUB:    0x73,   // aka KEYPAD MINUS
-    SLASH:      0x75,
-    M:          0x76,
-    SPACE:      0x77,
-    V:          0x78,
-    C:          0x79,
-    Z:          0x7A,
-    SETUP:      0x7B,   // aka SET-UP
-    CTRL:       0x7C,
-    SHIFT:      0x7D,   // either shift key (doesn't matter)
-    CAPS_LOCK:  0x7E
-};
-
-/*
- * Virtual KEYCODE definitions.
- *
- * A virtual keyCode is one that is (hopefully) outside the range of all browser keyCodes.  Each refers
- * to a key (or key combination) that has no analog on a modern keyboard and/or that we want to associate
- * with an on-screen control.
- *
- * A good example is the VT100 SET-UP key, which has no counterpart on a modern keyboard.
- */
-VT100Keyboard.KEYCODE = {
-    SETUP:      WebIO.KEYCODE.VIRTUAL + 1,
-    LF:         WebIO.KEYCODE.VIRTUAL + 2,
-    BREAK:      WebIO.KEYCODE.VIRTUAL + 3,
-    CTRL_C:     WebIO.KEYCODE.VIRTUAL + 4
-};
-
-/*
- * KEYMAP maps a browser keyCode (or virtual keyCode) to a VT100 KEYNUM.
- *
- * NOTE: The VT100 keyboard has both BACKSPACE and DELETE keys, whereas modern keyboards generally only
- * have DELETE.  And sadly, when you press DELETE, your modern keyboard and/or modern browser is reporting
- * it as keyCode 8: the code for BACKSPACE, aka CTRL-H.  You have to press a modified DELETE key to get
- * the actual DELETE keyCode of 127.
- *
- * We resolve this below by mapping KEYCODE.BS (8) to VT100 KEYNUM.DEL (0x03) and KEYCODE.DEL (127)
- * to VT100 KEYNUM.BS (0x33).  So, DELETE is BACKSPACE and BACKSPACE is DELETE.  Fortunately, this
- * confusion is all internal, because your physical key is (or should be) labeled DELETE, so the fact that
- * the browser is converting it to BACKSPACE and that we're converting BACKSPACE back into DELETE is
- * something most people don't need to worry their heads about.
- */
-VT100Keyboard.KEYMAP = {
-    [WebIO.KEYCODE.BS]:             VT100Keyboard.KEYNUM.DEL,
-    [WebIO.KEYCODE.P]:              VT100Keyboard.KEYNUM.P,
-    [WebIO.KEYCODE.O]:              VT100Keyboard.KEYNUM.O,
-    [WebIO.KEYCODE.Y]:              VT100Keyboard.KEYNUM.Y,
-    [WebIO.KEYCODE.T]:              VT100Keyboard.KEYNUM.T,
-    [WebIO.KEYCODE.W]:              VT100Keyboard.KEYNUM.W,
-    [WebIO.KEYCODE.Q]:              VT100Keyboard.KEYNUM.Q,
-    [WebIO.KEYCODE.RIGHT]:          VT100Keyboard.KEYNUM.RIGHT,
-    [WebIO.KEYCODE.RBRACK]:         VT100Keyboard.KEYNUM.RBRACK,
-    [WebIO.KEYCODE.LBRACK]:         VT100Keyboard.KEYNUM.LBRACK,
-    [WebIO.KEYCODE.I]:              VT100Keyboard.KEYNUM.I,
-    [WebIO.KEYCODE.U]:              VT100Keyboard.KEYNUM.U,
-    [WebIO.KEYCODE.R]:              VT100Keyboard.KEYNUM.R,
-    [WebIO.KEYCODE.E]:              VT100Keyboard.KEYNUM.E,
-    [WebIO.KEYCODE.ONE]:            VT100Keyboard.KEYNUM.ONE,
-    [WebIO.KEYCODE.LEFT]:           VT100Keyboard.KEYNUM.LEFT,
-    [WebIO.KEYCODE.DOWN]:           VT100Keyboard.KEYNUM.DOWN,
-    [WebIO.KEYCODE.F6]:             VT100Keyboard.KEYNUM.BREAK,         // no natural mapping
-    [VT100Keyboard.KEYCODE.BREAK]:  VT100Keyboard.KEYNUM.BREAK,         // NOTE: virtual keyCode mapping
-    [WebIO.KEYCODE.BQUOTE]:         VT100Keyboard.KEYNUM.BQUOTE,
-    [WebIO.KEYCODE.DASH]:           VT100Keyboard.KEYNUM.DASH,
-    [WebIO.KEYCODE.NINE]:           VT100Keyboard.KEYNUM.NINE,
-    [WebIO.KEYCODE.SEVEN]:          VT100Keyboard.KEYNUM.SEVEN,
-    [WebIO.KEYCODE.FOUR]:           VT100Keyboard.KEYNUM.FOUR,
-    [WebIO.KEYCODE.THREE]:          VT100Keyboard.KEYNUM.THREE,
-    [WebIO.KEYCODE.ESC]:            VT100Keyboard.KEYNUM.ESC,
-    [WebIO.KEYCODE.UP]:             VT100Keyboard.KEYNUM.UP,
-    [WebIO.KEYCODE.F3]:             VT100Keyboard.KEYNUM.F3,
-    [WebIO.KEYCODE.F1]:             VT100Keyboard.KEYNUM.F1,
-    [WebIO.KEYCODE.DEL]:            VT100Keyboard.KEYNUM.BS,
-    [WebIO.KEYCODE.EQUALS]:         VT100Keyboard.KEYNUM.EQUALS,
-    [WebIO.KEYCODE.ZERO]:           VT100Keyboard.KEYNUM.ZERO,
-    [WebIO.KEYCODE.EIGHT]:          VT100Keyboard.KEYNUM.EIGHT,
-    [WebIO.KEYCODE.SIX]:            VT100Keyboard.KEYNUM.SIX,
-    [WebIO.KEYCODE.FIVE]:           VT100Keyboard.KEYNUM.FIVE,
-    [WebIO.KEYCODE.TWO]:            VT100Keyboard.KEYNUM.TWO,
-    [WebIO.KEYCODE.TAB]:            VT100Keyboard.KEYNUM.TAB,
-    [WebIO.KEYCODE.NUM_7]:          VT100Keyboard.KEYNUM.NUM_7,
-    [WebIO.KEYCODE.F4]:             VT100Keyboard.KEYNUM.F4,
-    [WebIO.KEYCODE.F2]:             VT100Keyboard.KEYNUM.F2,
-    [WebIO.KEYCODE.NUM_0]:          VT100Keyboard.KEYNUM.NUM_0,
-    [WebIO.KEYCODE.F7]:             VT100Keyboard.KEYNUM.LF,            // no natural mapping
-    [VT100Keyboard.KEYCODE.LF]:     VT100Keyboard.KEYNUM.LF,            // NOTE: virtual keyCode mapping
-    [WebIO.KEYCODE.BSLASH]:         VT100Keyboard.KEYNUM.BSLASH,
-    [WebIO.KEYCODE.L]:              VT100Keyboard.KEYNUM.L,
-    [WebIO.KEYCODE.K]:              VT100Keyboard.KEYNUM.K,
-    [WebIO.KEYCODE.G]:              VT100Keyboard.KEYNUM.G,
-    [WebIO.KEYCODE.F]:              VT100Keyboard.KEYNUM.F,
-    [WebIO.KEYCODE.A]:              VT100Keyboard.KEYNUM.A,
-    [WebIO.KEYCODE.NUM_8]:          VT100Keyboard.KEYNUM.NUM_8,
-    [WebIO.KEYCODE.CR]:             VT100Keyboard.KEYNUM.NUM_CR,
-    [WebIO.KEYCODE.NUM_2]:          VT100Keyboard.KEYNUM.NUM_2,
-    [WebIO.KEYCODE.NUM_1]:          VT100Keyboard.KEYNUM.NUM_1,
-    [WebIO.KEYCODE.QUOTE]:          VT100Keyboard.KEYNUM.QUOTE,
-    [WebIO.KEYCODE.SEMI]:           VT100Keyboard.KEYNUM.SEMI,
-    [WebIO.KEYCODE.J]:              VT100Keyboard.KEYNUM.J,
-    [WebIO.KEYCODE.H]:              VT100Keyboard.KEYNUM.H,
-    [WebIO.KEYCODE.D]:              VT100Keyboard.KEYNUM.D,
-    [WebIO.KEYCODE.S]:              VT100Keyboard.KEYNUM.S,
-    [WebIO.KEYCODE.NUM_DEL]:        VT100Keyboard.KEYNUM.NUM_DEL,
-    [WebIO.KEYCODE.F5]:             VT100Keyboard.KEYNUM.NUM_COMMA,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
-    [WebIO.KEYCODE.NUM_5]:          VT100Keyboard.KEYNUM.NUM_5,
-    [WebIO.KEYCODE.NUM_4]:          VT100Keyboard.KEYNUM.NUM_4,
-    [WebIO.KEYCODE.CR]:             VT100Keyboard.KEYNUM.CR,
-    [WebIO.KEYCODE.PERIOD]:         VT100Keyboard.KEYNUM.PERIOD,
-    [WebIO.KEYCODE.COMMA]:          VT100Keyboard.KEYNUM.COMMA,
-    [WebIO.KEYCODE.N]:              VT100Keyboard.KEYNUM.N,
-    [WebIO.KEYCODE.B]:              VT100Keyboard.KEYNUM.B,
-    [WebIO.KEYCODE.X]:              VT100Keyboard.KEYNUM.X,
-    [WebIO.KEYCODE.F8]:             VT100Keyboard.KEYNUM.NO_SCROLL,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
-    [WebIO.KEYCODE.NUM_9]:          VT100Keyboard.KEYNUM.NUM_9,
-    [WebIO.KEYCODE.NUM_3]:          VT100Keyboard.KEYNUM.NUM_3,
-    [WebIO.KEYCODE.NUM_6]:          VT100Keyboard.KEYNUM.NUM_6,
-    [WebIO.KEYCODE.NUM_SUB]:        VT100Keyboard.KEYNUM.NUM_SUB,
-    [WebIO.KEYCODE.SLASH]:          VT100Keyboard.KEYNUM.SLASH,
-    [WebIO.KEYCODE.M]:              VT100Keyboard.KEYNUM.M,
-    [WebIO.KEYCODE.SPACE]:          VT100Keyboard.KEYNUM.SPACE,
-    [WebIO.KEYCODE.V]:              VT100Keyboard.KEYNUM.V,
-    [WebIO.KEYCODE.C]:              VT100Keyboard.KEYNUM.C,
-    [WebIO.KEYCODE.Z]:              VT100Keyboard.KEYNUM.Z,
-    [WebIO.KEYCODE.F9]:             VT100Keyboard.KEYNUM.SETUP,         // no natural mapping
-    [VT100Keyboard.KEYCODE.SETUP]:  VT100Keyboard.KEYNUM.SETUP,         // NOTE: virtual keyCode mapping
-    [WebIO.KEYCODE.CTRL]:           VT100Keyboard.KEYNUM.CTRL,
-    [WebIO.KEYCODE.SHIFT]:          VT100Keyboard.KEYNUM.SHIFT,
-    [WebIO.KEYCODE.CAPS_LOCK]:      VT100Keyboard.KEYNUM.CAPS_LOCK,
-    /*
-     * Mappings can also be to an array of multiple keyNum combinations, such as:
-     */
-    [VT100Keyboard.KEYCODE.CTRL_C]: [VT100Keyboard.KEYNUM.CTRL, VT100Keyboard.KEYNUM.C]
-};
-
-/*
- * CLICKMAP maps a binding ID to any of: browser (WebIO) keyCode, virtual (VT100Keyboard) keyCode, or array of keyCode modifier plus keyCode.
- */
-VT100Keyboard.CLICKMAP = {
-    "keySetup":                     VT100Keyboard.KEYCODE.SETUP,        // NOTE: virtual keyCode mapping
-    "keyLineFeed":                  VT100Keyboard.KEYCODE.LF,           // NOTE: virtual keyCode mapping
-    "keyTab":                       WebIO.KEYCODE.TAB,
-    "keyEsc":                       WebIO.KEYCODE.ESC,
-    "keyBreak":                     VT100Keyboard.KEYCODE.BREAK,        // NOTE: virtual keyCode mapping
-    "keyCtrl":                      WebIO.KEYCODE.CTRL,
-    "keyCtrlC":                     VT100Keyboard.KEYCODE.CTRL_C,       // NOTE: virtual keyCode mapping
-    "keyCtrlLock":                  [WebIO.KEYCODE.LOCK, WebIO.KEYCODE.CTRL],
-    "keyShiftLock":                 [WebIO.KEYCODE.LOCK, WebIO.KEYCODE.SHIFT],
-    "keyCapsLock":                  WebIO.KEYCODE.CAPS_LOCK
-};
-
-VT100Keyboard.LEDS = {
-    [VT100Keyboard.STATUS.LED4]:            "led4",
-    [VT100Keyboard.STATUS.LED3]:            "led3",
-    [VT100Keyboard.STATUS.LED2]:            "led2",
-    [VT100Keyboard.STATUS.LED1]:            "led1",
-    [VT100Keyboard.STATUS.LOCKED]:          "ledLocked",
-    [VT100Keyboard.STATUS.LOCAL]:           "ledLocal",
-    [~VT100Keyboard.STATUS.LOCAL & 0xff]:   "ledOnline"                 // NOTE: ledOnline is the inverse of ledLocal; updateLEDs() understands inverted masks
-};
-
-VT100Keyboard.IOTABLE = {
-    0x82:   [VT100Keyboard.prototype.inUARTAddress, VT100Keyboard.prototype.outUARTStatus]
-};
-
-Defs.CLASSES["VT100Keyboard"] = VT100Keyboard;
-
-/**
- * @copyright https://www.pcjs.org/machines/dec/vt100/lib/serial.js (C) 2012-2020 Jeff Parsons
- */
-
-/**
- * @class {VT100Serial}
- * @unrestricted
- */
-class VT100Serial extends Device {
-    /**
-     * VT100Serial(idMachine, idDevice, config)
-     *
-     * @this {VT100Serial}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {Config} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-
-        this.nIRQ = this.config['irq'] || 2;
-        this.portBase = this.config['portBase'] || 0;
-
-        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
-        this.ports = /** @type {Ports} */ (this.findDeviceByClass("Ports"));
-        this.ports.addIOTable(this, VT100Serial.IOTABLE, this.portBase);
-
-        /*
-         * Whereas VT100Serial.LEDS maps bits to LED ID, this.leds maps bits to the actual LED devices.
-         */
-        this.leds = {};
-        for (let bit in VT100Serial.LEDS) {
-            this.leds[bit] = /** @type {LED} */ (this.findDevice(VT100Serial.LEDS[bit], false));
-        }
-
-        this.timerReceiveNext = this.time.addTimer(this.idDevice + ".receive", this.receiveData.bind(this));
-        this.timerTransmitNext = this.time.addTimer(this.idDevice + ".transmit", this.transmitData.bind(this));
-
-        /*
-         * No connection until initConnection() is called.
-         */
-        this.sDataReceived = "";
-        this.connection = this.sendData = this.updateStatus = null;
-
-        /*
-         * Export all functions required by initConnection().
-         */
-        this['exports'] = {
-            'connect': this.initConnection,
-            'receiveData': this.receiveData,
-            'receiveStatus': this.receiveStatus
-        };
-        this.onReset();
-    }
-
-    /**
-     * initConnection(fNullModem)
-     *
-     * If a machine 'connection' parameter exists of the form "{sourcePort}->{targetMachine}.{targetPort}",
-     * and "{sourcePort}" matches our idDevice, then look for a component with id "{targetMachine}.{targetPort}".
-     *
-     * If the target component is found, then verify that it has exported functions with the following names:
-     *
-     *      receiveData(data): called when we have data to transmit; aliased internally to sendData(data)
-     *      receiveStatus(pins): called when our control signals have changed; aliased internally to updateStatus(pins)
-     *
-     * For now, we're not going to worry about communication in the other direction, because when the target component
-     * performs its own initConnection(), it will find our receiveData() and receiveStatus() functions, at which point
-     * communication in both directions should be established, and the circle of life complete.
-     *
-     * For added robustness, if the target machine initializes much more slowly than we do, and our connection attempt
-     * fails, that's OK, because when it finally initializes, its initConnection() will call our initConnection();
-     * if we've already initialized, no harm done.
-     *
-     * @this {VT100Serial}
-     * @param {boolean} [fNullModem] (caller's null-modem setting, to ensure our settings are in agreement)
-     */
-    initConnection(fNullModem)
-    {
-        if (!this.connection) {
-            let sConnection = this.getMachineConfig("connection");
-            if (sConnection) {
-                let asParts = sConnection.split('->');
-                if (asParts.length == 2) {
-                    let sSourceID = asParts[0].trim();
-                    if (sSourceID != this.idDevice) return;     // this connection string is intended for another instance
-                    let sTargetID = asParts[1].trim();
-                    this.connection = this.findDevice(sTargetID);
-                    if (this.connection) {
-                        let exports = this.connection['exports'];
-                        if (exports) {
-                            let fnConnect = /** @function */ (exports['connect']);
-                            if (fnConnect) fnConnect.call(this.connection, this.fNullModem);
-                            this.sendData = exports['receiveData'];
-                            if (this.sendData) {
-                                this.fNullModem = fNullModem;
-                                this.updateStatus = exports['receiveStatus'];
-                                this.printf("Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
-                                return;
-                            }
-                        }
-                    }
-                }
-                this.printf("Unable to establish connection: %s\n", sConnection);
-            }
-        }
-    }
-
-    /**
-     * loadState(state)
-     *
-     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
-     *
-     * @this {VT100Serial}
-     * @param {Array} state
-     * @returns {boolean}
-     */
-    loadState(state)
-    {
-        let idDevice = state.shift();
-        if (this.idDevice == idDevice) {
-            this.fReady     = state.shift();
-            this.bDataIn    = state.shift();
-            this.bDataOut   = state.shift();
-            this.bStatus    = state.shift();
-            this.bMode      = state.shift();
-            this.bCommand   = state.shift();
-            this.bBaudRates = state.shift();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * saveState(state)
-     *
-     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
-     *
-     * @this {VT100Serial}
-     * @param {Array} state
-     */
-    saveState(state)
-    {
-        state.push(this.idDevice);
-        state.push(this.fReady);
-        state.push(this.bDataIn);
-        state.push(this.bDataOut);
-        state.push(this.bStatus);
-        state.push(this.bMode);
-        state.push(this.bCommand);
-        state.push(this.bBaudRates);
-    }
-
-    /**
-     * onPower(on)
-     *
-     * Called by the Machine device to provide notification of a power event.
-     *
-     * @this {VT100Serial}
-     * @param {boolean} on (true to power on, false to power off)
-     */
-    onPower(on)
-    {
-        if (!this.cpu) {
-            this.cpu = /** @type {CPU8080} */ (this.findDeviceByClass("CPU"));
-            /*
-             * This is as late as we can currently wait to make our first inter-machine connection attempt;
-             * even so, the target machine's initialization process may still be ongoing, so any connection
-             * may be not fully resolved until the target machine performs its own initConnection(), which will
-             * in turn invoke our initConnection() again.
-             */
-            this.initConnection(this.fNullModem);
-        }
-    }
-
-    /**
-     * onReset()
-     *
-     * Called by the Machine device to provide notification of a reset event.
-     *
-     * @this {VT100Serial}
-     */
-    onReset()
-    {
-        this.fReady = false;
-        this.bDataIn = 0;
-        this.bDataOut = 0;
-        this.bStatus = VT100Serial.UART8251.STATUS.INIT;
-        this.bMode = VT100Serial.UART8251.MODE.INIT;
-        this.bCommand = VT100Serial.UART8251.COMMAND.INIT;
-        this.bBaudRates = VT100Serial.UART8251.BAUDRATES.INIT;
-        this.updateLEDs();
-    }
-
-    /**
-     * getBaudTimeout(maskRate)
-     *
-     * @this {VT100Serial}
-     * @param {number} maskRate (either VT100Serial.UART8251.BAUDRATES.RECV_RATE or VT100Serial.UART8251.BAUDRATES.XMIT_RATE)
-     * @returns {number} (number of milliseconds per byte)
-     */
-    getBaudTimeout(maskRate)
-    {
-        let indexRate = (this.bBaudRates & maskRate);
-        if (!(maskRate & 0xf)) indexRate >>= 4;
-        let nBaud = VT100Serial.UART8251.BAUDTABLE[indexRate];
-        let nBits = ((this.bMode & VT100Serial.UART8251.MODE.DATA_BITS) >> 2) + 6;   // includes an extra +1 for start bit
-        if (this.bMode & VT100Serial.UART8251.MODE.PARITY_ENABLE) nBits++;
-        nBits += ((((this.bMode & VT100Serial.UART8251.MODE.STOP_BITS) >> 6) + 1) >> 1);
-        let nBytesPerSecond = nBaud / nBits;
-        return (1000 / nBytesPerSecond)|0;
-    }
-
-    /**
-     * isTransmitterReady()
-     *
-     * Called when someone needs the UART's transmitter status.
-     *
-     * @this {VT100Serial}
-     * @returns {boolean} (true if ready, false if not)
-     */
-    isTransmitterReady()
-    {
-        return !!(this.bStatus & VT100Serial.UART8251.STATUS.XMIT_READY);
-    }
-
-    /**
-     * receiveByte(b)
-     *
-     * @this {VT100Serial}
-     * @param {number} b
-     * @returns {boolean}
-     */
-    receiveByte(b)
-    {
-        this.printf(MESSAGE.SERIAL, "receiveByte(%#04x): status=%#04x\n", b, this.bStatus);
-        if (!this.fAutoStop && !(this.bStatus & VT100Serial.UART8251.STATUS.RECV_FULL)) {
-            if (this.cpu) {
-                this.bDataIn = b;
-                this.bStatus |= VT100Serial.UART8251.STATUS.RECV_FULL;
-                this.cpu.requestINTR(this.nIRQ);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * receiveData(data)
-     *
-     * Helper for clocking received data at the expected RECV_RATE.
-     *
-     * When we're cramming test data down the terminal's throat, that data will typically be in the form
-     * of a string.  When we're called by another component, data will typically be a number (ie, byte).  If no
-     * data is specified at all, then all we do is "clock" any remaining data into the receiver.
-     *
-     * @this {VT100Serial}
-     * @param {number|string|undefined} [data]
-     * @returns {boolean} true if received, false if not
-     */
-    receiveData(data)
-    {
-        if (data != null) {
-            if (typeof data != "number") {
-                this.sDataReceived = data;
-            } else {
-                this.sDataReceived += String.fromCharCode(data);
-            }
-        }
-        if (this.sDataReceived) {
-            if (this.receiveByte(this.sDataReceived.charCodeAt(0))) {
-                this.sDataReceived = this.sDataReceived.substr(1);
-            }
-            if (this.sDataReceived) {
-                this.time.setTimer(this.timerReceiveNext, this.getBaudTimeout(VT100Serial.UART8251.BAUDRATES.RECV_RATE));
-            }
-        }
-        return true;                // for now, return true regardless, since we're buffering everything anyway
-    }
-
-    /**
-     * receiveStatus(pins)
-     *
-     * NOTE: Prior to the addition of this interface, the DSR bit was initialized set and remained set for the life
-     * of the machine.  It is entirely appropriate that this is the only way the bit can be changed, because it represents
-     * an external control signal.
-     *
-     * @this {VT100Serial}
-     * @param {number} pins
-     */
-    receiveStatus(pins)
-    {
-        this.bStatus &= ~VT100Serial.UART8251.STATUS.DSR;
-        if (pins & RS232.DSR.MASK) this.bStatus |= VT100Serial.UART8251.STATUS.DSR;
-    }
-
-    /**
-     * transmitByte(b)
-     *
-     * @this {VT100Serial}
-     * @param {number} b
-     * @returns {boolean} true if transmitted, false if not
-     */
-    transmitByte(b)
-    {
-        let fTransmitted = false;
-        this.printf(MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
-        if (this.fAutoXOFF) {
-            if (b == 0x13) {        // XOFF
-                this.fAutoStop = true;
-                return false;
-            }
-            if (b == 0x11) {        // XON
-                this.fAutoStop = false;
-                return false;
-            }
-        }
-        if (this.sendData && this.sendData.call(this.connection, b)) {
-            fTransmitted = true;
-        }
-        return fTransmitted;
-    }
-
-    /**
-     * transmitData(sData)
-     *
-     * Helper for clocking transmitted data at the expected XMIT_RATE.
-     *
-     * When timerTransmitNext fires, we have honored the programmed XMIT_RATE period, so we can
-     * set XMIT_READY (and XMIT_EMPTY), which signals the firmware that another byte can be transmitted.
-     *
-     * The sData parameter is not used when we're called via the timer; it's an optional parameter used by
-     * the Keyboard component to deliver data pasted via the clipboard, and is currently only useful when
-     * the VT100Serial is connected to another machine.  TODO: Define a separate interface for that feature.
-     *
-     * @this {VT100Serial}
-     * @param {string} [sData]
-     * @returns {boolean} true if successful, false if not
-     */
-    transmitData(sData)
-    {
-        this.bStatus |= (VT100Serial.UART8251.STATUS.XMIT_READY | VT100Serial.UART8251.STATUS.XMIT_EMPTY);
-        if (sData) {
-            return this.sendData? this.sendData.call(this.connection, sData) : false;
-        }
-        return true;
-    }
-
-    /**
-     * inData(port)
-     *
-     * @this {VT100Serial}
-     * @param {number} port (0x0)
-     * @returns {number} simulated port value
-     */
-    inData(port)
-    {
-        let value = this.bDataIn;
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "inData(%#04x): %#04x\n", port, value);
-        this.bStatus &= ~VT100Serial.UART8251.STATUS.RECV_FULL;
-        return value;
-    }
-
-    /**
-     * inStatus(port)
-     *
-     * @this {VT100Serial}
-     * @param {number} port (0x1)
-     * @returns {number} simulated port value
-     */
-    inStatus(port)
-    {
-        let value = this.bStatus;
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "inStatus(%#04x): %#04x\n", port, value);
-        return value;
-    }
-
-    /**
-     * outData(port, bOut)
-     *
-     * @this {VT100Serial}
-     * @param {number} port (0x0)
-     * @param {number} value
-     */
-    outData(port, value)
-    {
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outData(%#04x): %#04x\n", port, value);
-        this.bDataOut = value;
-        this.bStatus &= ~(VT100Serial.UART8251.STATUS.XMIT_READY | VT100Serial.UART8251.STATUS.XMIT_EMPTY);
-        /*
-         * If we're transmitting to a virtual device that has no measurable delay, this code may clear XMIT_READY
-         * too quickly:
-         *
-         *      if (this.transmitByte(bOut)) {
-         *          this.bStatus |= (VT100Serial.UART8251.STATUS.XMIT_READY | VT100Serial.UART8251.STATUS.XMIT_EMPTY);
-         *      }
-         *
-         * A better solution is to arm a timer based on the XMIT_RATE baud rate, and clear the above bits when that
-         * timer fires.  Consequently, we no longer care what transmitByte() reports.
-         */
-        this.transmitByte(value);
-        this.time.setTimer(this.timerTransmitNext, this.getBaudTimeout(VT100Serial.UART8251.BAUDRATES.XMIT_RATE));
-    }
-
-    /**
-     * outControl(port, value)
-     *
-     * Writes to the CONTROL port (0x1) are either MODE or COMMAND bytes.  If the device has just
-     * been powered or reset, it is in a "not ready" state and is waiting for a MODE byte.  Once it
-     * has received that initial byte, the device is marked "ready", and all further bytes are
-     * interpreted as COMMAND bytes (until/unless a COMMAND byte with the INTERNAL_RESET bit is set).
-     *
-     * @this {VT100Serial}
-     * @param {number} port (0x1)
-     * @param {number} value
-     */
-    outControl(port, value)
-    {
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outControl(%#04x): %#04x\n", port, value);
-        if (!this.fReady) {
-            this.bMode = value;
-            this.fReady = true;
-        } else {
-            /*
-             * Whenever DTR or RTS changes, we also want to notify any connected machine, via updateStatus().
-             */
-            if (this.updateStatus) {
-                let delta = (value ^ this.bCommand);
-                if (delta & (VT100Serial.UART8251.COMMAND.RTS | VT100Serial.UART8251.COMMAND.DTR)) {
-                    let pins = 0;
-                    if (this.fNullModem) {
-                        pins |= (value & VT100Serial.UART8251.COMMAND.RTS)? RS232.CTS.MASK : 0;
-                        pins |= (value & VT100Serial.UART8251.COMMAND.DTR)? (RS232.DSR.MASK | RS232.CD.MASK): 0;
-                    } else {
-                        pins |= (value & VT100Serial.UART8251.COMMAND.RTS)? RS232.RTS.MASK : 0;
-                        pins |= (value & VT100Serial.UART8251.COMMAND.DTR)? RS232.DTR.MASK : 0;
-                    }
-                    this.updateStatus.call(this.connection, pins);
-                }
-            }
-            this.updateLEDs(value, this.bCommand);
-            this.bCommand = value;
-            if (this.bCommand & VT100Serial.UART8251.COMMAND.INTERNAL_RESET) {
-                this.fReady = false;
-            }
-        }
-    }
-
-    /**
-     * outBaudRates(port, value)
-     *
-     * @this {VT100Serial}
-     * @param {number} port (0x2)
-     * @param {number} value
-     */
-    outBaudRates(port, value)
-    {
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outBaudRates(%#04x): %#04x\n", port, value);
-        this.bBaudRates = value;
-    }
-
-    /**
-     * updateLEDs(value, previous)
-     *
-     * @this {VT100Serial}
-     * @param {number} [value] (if not provided, all LEDS are turned off)
-     * @param {number} [previous] (if not provided, all LEDs are updated)
-     */
-    updateLEDs(value, previous)
-    {
-        for (let id in this.leds) {
-            let led = this.leds[id];
-            if (!led) continue;
-            let bit = +id, on, changed = 1, redraw = 1;
-            if (value != undefined) {
-                if (!(bit & (bit - 1))) {       // if a single bit is set, this will be zero
-                    on = value & bit;           // and "on" will be true if that single bit is set
-                } else {
-                    bit = ~bit & 0xff;          // otherwise, we assume that a single bit is clear
-                    on = !(value & bit);        // so "on" will be true if that same single bit is clear
-                }
-                if (previous != undefined) {
-                    changed = (value ^ previous) & bit;
-                    redraw = 0;
-                }
-            }
-            if (changed) {                      // call setLEDState() only if the bit changed
-                led.setLEDState(0, 0, on? LED.STATE.ON : LED.STATE.OFF);
-                if (redraw) led.drawBuffer();
-            }
-        }
-    }
-}
-
-VT100Serial.UART8251 = {
-    /*
-     * Format of MODE byte written to CONTROL port 0x1
-     */
-    MODE: {
-        BAUD_FACTOR:    0x03,       // 00=SYNC, 01=1x, 10=16x, 11=64x
-        DATA_BITS:      0x0C,       // 00=5, 01=6, 10=7, 11=8
-        PARITY_ENABLE:  0x10,
-        EVEN_PARITY:    0x20,
-        STOP_BITS:      0xC0,       // 00=invalid, 01=1, 10=1.5, 11=2
-        INIT:           0x8E        // 16x baud rate, 8 data bits, no parity, 1.5 stop bits
-    },
-    /*
-     * Format of COMMAND byte written to CONTROL port 0x1
-     */
-    COMMAND: {
-        XMIT_ENABLE:    0x01,
-        DTR:            0x02,       // Data Terminal Ready
-        RECV_ENABLE:    0x04,
-        SEND_BREAK:     0x08,
-        ERROR_RESET:    0x10,
-        RTS:            0x20,       // Request To Send
-        INTERNAL_RESET: 0x40,
-        HUNT_MODE:      0x80,
-        INIT:           0x27        // XMIT_ENABLE | DTR | RECV_ENABLE | RTS
-    },
-    /*
-     * Format of STATUS byte read from CONTROL port 0x1
-     */
-    STATUS: {
-        XMIT_READY:     0x01,
-        RECV_FULL:      0x02,
-        XMIT_EMPTY:     0x04,
-        PARITY_ERROR:   0x08,
-        OVERRUN_ERROR:  0x10,
-        FRAMING_ERROR:  0x20,
-        BREAK_DETECT:   0x40,
-        DSR:            0x80,       // Data Set Ready
-        INIT:           0x85        // XMIT_READY | XMIT_EMPTY | DSR
-    },
-    /*
-     * Format of BAUDRATES byte written to port 0x2
-     *
-     * Each nibble is an index (0x0-0xF) into a set of internal CPU clock divisors that yield the
-     * following baud rates:
-     *
-     *      Index   Divisor     Baud Rate
-     *      -----   -------     ---------
-     *      0x0      3456       50
-     *      0x1      2304       75
-     *      0x2      1571       110
-     *      0x3      1285       134.5
-     *      0x4      1152       150
-     *      0x5      864        200
-     *      0x6      576        300
-     *      0x7      288        600
-     *      0x8      144        1200
-     *      0x9      96         1800
-     *      0xA      86         2000
-     *      0xB      72         2400
-     *      0xC      48         3600
-     *      0xD      36         4800
-     *      0xE      18         9600    (default)
-     *      0xF      9          19200
-     *
-     * NOTE: This is a VT100-specific port and baud rate table.
-     */
-    BAUDRATES: {
-        RECV_RATE:      0x0F,
-        XMIT_RATE:      0xF0,
-        INIT:           0xEE    // default to 9600 (0xE) for both XMIT and RECV
-    },
-    BAUDTABLE: [
-        50, 75, 110, 134.5, 150, 200, 300, 600, 1200, 1800, 2000, 2400, 3600, 4800, 9600, 19200
-    ]
-};
-
-VT100Serial.LEDS = {
-    [VT100Serial.UART8251.COMMAND.DTR]:  "ledDTR",
-    [VT100Serial.UART8251.COMMAND.RTS]:  "ledRTS"
-};
-
-VT100Serial.IOTABLE = {
-    0x0: [VT100Serial.prototype.inData, VT100Serial.prototype.outData],
-    0x1: [VT100Serial.prototype.inStatus, VT100Serial.prototype.outControl],
-    0x2: [null, VT100Serial.prototype.outBaudRates]
-};
-
-Defs.CLASSES["VT100Serial"] = VT100Serial;
-
-/**
- * @copyright https://www.pcjs.org/machines/dec/vt100/lib/video.js (C) 2012-2020 Jeff Parsons
- */
-
-/** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */
-var VT100VideoConfig;
-
-/**
- * @class {VT100Video}
- * @unrestricted
- * @property {VT100VideoConfig} config
- */
-class VT100Video extends Monitor {
-    /**
-     * VT100Video(idMachine, idDevice, config)
-     *
-     * The VT100Video component can be configured with the following config properties:
-     *
-     *      bufferWidth: the width of a single frame buffer row, in pixels (eg, 256)
-     *      bufferHeight: the number of frame buffer rows (eg, 224)
-     *      bufferAddr: the starting address of the frame buffer (eg, 0x2400)
-     *      bufferRAM: true to use existing RAM (default is false)
-     *      bufferBits: the number of bits per column (default is 1)
-     *      bufferLeft: the bit position of the left-most pixel in a byte (default is 0; CGA uses 7)
-     *      interruptRate: normally the same as (or some multiple of) refreshRate (eg, 120)
-     *      refreshRate: how many times updateMonitor() should be performed per second (eg, 60)
-     *
-     *  In addition, if a text-only display is being emulated, define the following properties:
-     *
-     *      fontROM: URL of font ROM
-     *      fontColor: default is white
-     *      cellWidth: number (eg, 10 for VT100)
-     *      cellHeight: number (eg, 10 for VT100)
-     *
-     * We record all the above values now, but we defer creation of the frame buffer until initBuffers()
-     * is called.  At that point, we will also compute the extent of the frame buffer, determine the
-     * appropriate "cell" size (ie, the number of pixels that updateMonitor() will fetch and process at once),
-     * and then allocate our cell cache.
-     *
-     * Why interruptRate in addition to refreshRate?  A higher interrupt rate is required for Space Invaders,
-     * because even though the CRT refreshes at 60Hz, the CRT controller interrupts the CPU *twice* per
-     * refresh (once after the top half of the image has been redrawn, and again after the bottom half has
-     * been redrawn), so we need an interrupt rate of 120Hz.  We pass the higher rate on to the CPU, so that
-     * it will call updateMonitor() more frequently, but we still limit our monitor updates to every *other* call.
-     *
-     * @this {VT100Video}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {ROMConfig} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-        /*
-         * Setting the device's "messages" property eliminates the need for printf() calls to include this value;
-         * any printf() that omits a MESSAGE parameter will use this value by default.
-         */
-        this.messages = MESSAGE.VIDEO;
-
-        this.addrBuffer = this.config['bufferAddr'];
-        this.fUseRAM = this.config['bufferRAM'];
-
-        this.nColsBuffer = this.config['bufferWidth'];
-        this.nRowsBuffer = this.config['bufferHeight'];
-
-        this.cxCellDefault = this.cxCell = this.config['cellWidth'] || 1;
-        this.cyCellDefault = this.cyCell = this.config['cellHeight'] || 1;
-
-        this.abFontData = null;
-        this.fDotStretcher = false;
-
-        this.nBitsPerPixel = this.config['bufferBits'] || 1;
-        this.iBitFirstPixel = this.config['bufferLeft'] || 0;
-
-        this.rateInterrupt = this.config['interruptRate'];
-        this.rateRefresh = this.config['refreshRate'] || 60;
-
-        this.cxMonitorCell = (this.cxMonitor / this.nColsBuffer)|0;
-        this.cyMonitorCell = (this.cyMonitor / this.nRowsBuffer)|0;
-
-        /*
-         * Now that we've finished using nRowsBuffer to help define the monitor size, we add one more
-         * row for text modes, to account for the VT100's scroll line buffer (used for smooth scrolling).
-         */
-        if (this.cyCell > 1) {
-            this.nRowsBuffer++;
-            this.bScrollOffset = 0;
-            this.fSkipSingleCellUpdate = false;
-        }
-
-        this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['bus']));
-        this.initBuffers();
-
-        this.abFontData = this.config['fontROM'];
-        this.createFonts();
-
-        this.cpu = /** @type {CPU8080} */ (this.findDeviceByClass("CPU"));
-        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
-        this.timerUpdateNext = this.time.addTimer(this.idDevice, this.updateMonitor.bind(this));
-        this.time.addUpdate(this);
-
-        this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
-        this.nUpdates = 0;
-    }
-
-    /**
-     * onUpdate(fTransition)
-     *
-     * This is our obligatory update() function, which every device with visual components should have.
-     *
-     * For the video device, our sole function is making sure the screen display is up-to-date.  However, calling
-     * updateScreen() is a bad idea if the machine is running, because we already have a timer to take care of
-     * that.  But we can also be called when the machine is NOT running (eg, the Debugger may be stepping through
-     * some code, or editing the frame buffer directly, or something else).  Since we have no way of knowing, we
-     * simply force an update.
-     *
-     * @this {VT100Video}
-     * @param {boolean} [fTransition]
-     */
-    onUpdate(fTransition)
-    {
-        if (!this.time.isRunning()) this.updateScreen();
-    }
-
-    /**
-     * initBuffers()
-     *
-     * @this {VT100Video}
-     * @returns {boolean}
-     */
-    initBuffers()
-    {
-        /*
-         * Allocate off-screen buffers now
-         */
-        this.cxBuffer = this.nColsBuffer * this.cxCell;
-        this.cyBuffer = this.nRowsBuffer * this.cyCell;
-
-        let cxBuffer = this.cxBuffer;
-        let cyBuffer = this.cyBuffer;
-
-        this.sizeBuffer = 0;
-        if (!this.fUseRAM) {
-            this.sizeBuffer = ((this.cxBuffer * this.nBitsPerPixel) >> 3) * this.cyBuffer;
-            if (!this.busMemory.addBlocks(this.addrBuffer, this.sizeBuffer, Memory.TYPE.READWRITE)) {
-                return false;
-            }
-        }
-
-        /*
-         * Since we will read video data from the bus at its default width, get that width now;
-         * that width will also determine the size of a cell.
-         */
-        this.cellWidth = this.busMemory.dataWidth;
-
-        /*
-         * We add an extra column per row to store the visible line length at the start of every row.
-         */
-        this.initCache((this.nColsBuffer + 1) * this.nRowsBuffer);
-
-        this.canvasBuffer = document.createElement("canvas");
-        this.canvasBuffer.width = cxBuffer;
-        this.canvasBuffer.height = cyBuffer;
-        this.contextBuffer = this.canvasBuffer.getContext("2d");
-
-        this.aFonts = {};
-        this.initColors();
-
-        /*
-         * Beyond fonts, VT100 support requires that we maintain a number of additional properties:
-         *
-         *      rateMonitor: must be either 50 or 60 (defaults to 60); we don't emulate the monitor refresh rate,
-         *      but we do need to keep track of which rate has been selected, because that affects the number of
-         *      "fill lines" present at the top of the VT100's frame buffer: 2 lines for 60Hz, 5 lines for 50Hz.
-         *
-         *      The VT100 July 1982 Technical Manual, p. 4-89, shows the following sample frame buffer layout:
-         *
-         *                  00  01  02  03  04  05  06  07  08  09  0A  0B  0C  0D  0E  0F
-         *                  --------------------------------------------------------------
-         *          0x2000: 7F  70  03  7F  F2  D0  7F  70  06  7F  70  0C  7F  70  0F  7F
-         *          0x2010: 70  03  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..
-         *          ...
-         *          0x22D0: 'D' 'A' 'T' 'A' ' ' 'F' 'O' 'R' ' ' 'F' 'I' 'R' 'S' 'T' ' ' 'L'
-         *          0x22E0: 'I' 'N' 'E' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '
-         *          ...
-         *          0x2320: 7F  F3  23  'D' 'A' 'T' 'A' ' ' 'F' 'O' 'R' ' ' 'S' 'E' 'C' 'O'
-         *          0x2330: 'N' 'D' ' ' 'L' 'I' 'N' 'E' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '
-         *          ...
-         *          0x2BE0: ' ' ' ' 'E' 'N' 'D' ' ' 'O' 'F' ' ' 'L' 'A' 'S' 'T' ' ' 'L' 'I'
-         *          0x2BF0: 'N' 'E' 7F  70  06  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..
-         *          0x2C00: [AVO SCREEN RAM, IF ANY, BEGINS HERE]
-         *
-         *      ERRATA: The manual claims that if you change the byte at 0x2002 from 03 to 09, the number of "fill
-         *      lines" will change from 2 to 5 (for 50Hz operation), but it shows 06 instead of 0C at location 0x200B;
-         *      if you follow the links, it's pretty clear that byte has to be 0C to yield 5 "fill lines".  Since the
-         *      address following the terminator at 0x2006 points to itself, it never makes sense for that terminator
-         *      to be used EXCEPT at the end of the frame buffer.
-         *
-         *      As an alternative to tracking the monitor refresh rate, we could hard-code some knowledge about how
-         *      the VT100's 8080 code uses memory, and simply ignore lines below address 0x22D0.  But the VT100 Video
-         *      Processor makes no such assumption, and it would also break our test code in createFonts(), which
-         *      builds a contiguous image of test data starting at the default frame buffer address (0x2000).
-         */
-        this.rateMonitor = 60;
-
-        /*
-         * The default character-selectable attribute (reverse video vs. underline) is controlled by fUnderline.
-         */
-        this.fUnderline = false;
-        this.abLineBuffer = new Array(this.nColsBuffer);
-
-        /*
-         * Our 'smoothing' parameter defaults to null (which we treat the same as undefined), which means that
-         * image smoothing will be selectively enabled (ie, true for text modes, false for graphics modes); otherwise,
-         * we'll set image smoothing to whatever value was provided for ALL modes -- assuming the browser supports it.
-         */
-        if (this.sSmoothing) {
-            this.contextMonitor[this.sSmoothing] = (this.fSmoothing == null? false : this.fSmoothing);
-        }
-        return true;
-    }
-
-    /**
-     * createFonts()
-     *
-     * @this {VT100Video}
-     * @returns {boolean}
-     */
-    createFonts()
-    {
-        /*
-         * We retain abFontData in case we have to rebuild the fonts (eg, when we switch from 80 to 132 columns)
-         */
-        if (this.abFontData) {
-            this.fDotStretcher = true;
-            this.aFonts[VT100Video.VT100.FONT.NORML] = [
-                this.createFontVariation(this.cxCell, this.cyCell),
-                this.createFontVariation(this.cxCell, this.cyCell, this.fUnderline)
-            ];
-            this.aFonts[VT100Video.VT100.FONT.DWIDE] = [
-                this.createFontVariation(this.cxCell*2, this.cyCell),
-                this.createFontVariation(this.cxCell*2, this.cyCell, this.fUnderline)
-            ];
-            this.aFonts[VT100Video.VT100.FONT.DHIGH] = this.aFonts[VT100Video.VT100.FONT.DHIGH_BOT] = [
-                this.createFontVariation(this.cxCell*2, this.cyCell*2),
-                this.createFontVariation(this.cxCell*2, this.cyCell*2, this.fUnderline)
-            ];
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * createFontVariation(cxCell, cyCell, fUnderline)
-     *
-     * This creates a 16x16 character grid for the requested font variation.  Variations include:
-     *
-     *      1) no variation (cell size is this.cxCell x this.cyCell)
-     *      2) double-wide characters (cell size is this.cxCell*2 x this.cyCell)
-     *      3) double-high double-wide characters (cell size is this.cxCell*2 x this.cyCell*2)
-     *      4) any of the above with either reverse video or underline enabled (default is neither)
-     *
-     * @this {VT100Video}
-     * @param {number} cxCell is the target width of each character in the grid
-     * @param {number} cyCell is the target height of each character in the grid
-     * @param {boolean} [fUnderline] (null for unmodified font, false for reverse video, true for underline)
-     * @returns {Object}
-     */
-    createFontVariation(cxCell, cyCell, fUnderline)
-    {
-        this.printf("createFontVariation(cxCell=%d, cyCell=%d, fUnderline=%b\n", cxCell, cyCell, fUnderline);
-
-        /*
-         * On a VT100, cxCell,cyCell is initially 10,10, but may change to 9,10 for 132-column mode.
-         */
-
-
-
-        /*
-         * Create a font canvas that is both 16 times the target character width and the target character height,
-         * ensuring that it will accommodate 16x16 characters (for a maximum of 256).  Note that the VT100 font ROM
-         * defines only 128 characters, so that canvas will contain only 16x8 entries.
-         */
-        let nFontBytesPerChar = this.cxCellDefault <= 8? 8 : 16;
-        let nFontByteOffset = nFontBytesPerChar > 8? 15 : 0;
-        let nChars = this.abFontData.length / nFontBytesPerChar;
-
-        /*
-         * The absence of a boolean for fUnderline means that both fReverse and fUnderline are "falsey".  The presence
-         * of a boolean means that fReverse will be true OR fUnderline will be true, but NOT both.
-         */
-        let fReverse = (fUnderline === false);
-
-        let font = {cxCell: cxCell, cyCell: cyCell};
-        font.canvas = document.createElement("canvas");
-        font.canvas.width = cxCell * 16;
-        font.canvas.height = cyCell * (nChars / 16);
-        font.context = font.canvas.getContext("2d");
-
-        let imageChar = font.context.createImageData(cxCell, cyCell);
-
-        for (let iChar = 0; iChar < nChars; iChar++) {
-            for (let y = 0, yDst = y; y < this.cyCell; y++) {
-                let offFontData = iChar * nFontBytesPerChar + ((nFontByteOffset + y) & (nFontBytesPerChar - 1));
-                let bits = (fUnderline && y == 8? 0xff : this.abFontData[offFontData]);
-                for (let nRows = 0; nRows < (cyCell / this.cyCell); nRows++) {
-                    let bitPrev = 0;
-                    for (let x = 0, xDst = x; x < this.cxCell; x++) {
-                        /*
-                         * While x goes from 0 to cxCell-1, obviously we will run out of bits after x is 7;
-                         * since the final bit must be replicated all the way to the right edge of the cell
-                         * (so that line-drawing characters seamlessly connect), we ensure that the effective
-                         * shift count remains stuck at 7 once it reaches 7.
-                         */
-                        let bitReal = bits & (0x80 >> (x > 7? 7 : x));
-                        let bit = (this.fDotStretcher && !bitReal && bitPrev)? bitPrev : bitReal;
-                        for (let nCols = 0; nCols < (cxCell / this.cxCell); nCols++) {
-                            if (fReverse) bit = !bit;
-                            this.setPixel(imageChar, xDst, yDst, bit? 1 : 0);
-                            xDst++;
-                        }
-                        bitPrev = bitReal;
-                    }
-                    yDst++;
-                }
-            }
-            /*
-             * (iChar >> 4) performs the integer equivalent of Math.floor(iChar / 16), and (iChar & 0xf) is the equivalent of (iChar % 16).
-             */
-            font.context.putImageData(imageChar, (iChar & 0xf) * cxCell, (iChar >> 4) * cyCell);
-        }
-        return font;
-    }
-
-    /**
-     * updateDimensions(nCols, nRows)
-     *
-     * Called from the Chip component whenever the monitor dimensions have been dynamically altered.
-     *
-     * @this {VT100Video}
-     * @param {number} nCols (should be either 80 or 132; 80 is the default)
-     * @param {number} nRows (should be either 24 or 14; 24 is the default)
-     */
-    updateDimensions(nCols, nRows)
-    {
-        this.printf("updateDimensions(%d,%d)\n", nCols, nRows);
-        this.nColsBuffer = nCols;
-        /*
-         * Even when the number of effective rows is 14 (or 15 counting the scroll line buffer), we want
-         * to leave the number of rows at 24 (or 25 counting the scroll line buffer), because the VT100 doesn't
-         * actually change character height (only character width).
-         *
-         *      this.nRowsBuffer = nRows+1; // +1 for scroll line buffer
-         */
-        this.cxCell = this.cxCellDefault;
-        if (nCols > 80) this.cxCell--;      // VT100 font cells are 9x10 instead of 10x10 in 132-column mode
-        if (this.initBuffers()) {
-            this.createFonts();
-        }
-    }
-
-    /**
-     * updateRate(nRate)
-     *
-     * Called from the Chip component whenever the monitor refresh rate has been dynamically altered.
-     *
-     * @this {VT100Video}
-     * @param {number} nRate (should be either 50 or 60; 60 is the default)
-     */
-    updateRate(nRate)
-    {
-        this.printf("updateRate(%d)\n", nRate);
-        this.rateMonitor = nRate;
-    }
-
-    /**
-     * updateScrollOffset(bScroll)
-     *
-     * Called from the Chip component whenever the monitor scroll offset has been dynamically altered.
-     *
-     * @this {VT100Video}
-     * @param {number} bScroll
-     */
-    updateScrollOffset(bScroll)
-    {
-        this.printf("updateScrollOffset(%d)\n", bScroll);
-        if (this.bScrollOffset !== bScroll) {
-            this.bScrollOffset = bScroll;
-            /*
-             * WARNING: If we immediately redraw the monitor on the first wrap of the scroll offset back to zero,
-             * we end up "slamming" the monitor's contents back down again, because it seems that the frame buffer
-             * contents haven't actually been scrolled yet.  So we redraw now ONLY if bScroll is non-zero, lest
-             * we ruin the smooth-scroll effect.
-             *
-             * And this change, while necessary, is not sufficient, because another intervening updateMonitor()
-             * call could still occur before the frame buffer contents are actually scrolled; and ordinarily, if the
-             * buffer hasn't changed, updateMonitor() would do nothing, but alas, if the cursor happens to get toggled
-             * in the interim, updateMonitor() will want to update exactly ONE cell.
-             *
-             * So we deal with that by setting the fSkipSingleCellUpdate flag.  Now of course, there's no guarantee
-             * that the next update of only ONE cell will always be a cursor update, but even if it isn't, skipping
-             * that update doesn't seem like a huge cause for concern.
-             */
-            if (bScroll) {
-                this.updateMonitor(true);
-            } else {
-                this.fSkipSingleCellUpdate = true;
-            }
-        }
-    }
-
-    /**
-     * getRefreshTime()
-     *
-     * @this {VT100Video}
-     * @returns {number} (number of milliseconds per refresh)
-     */
-    getRefreshTime()
-    {
-        return 1000 / Math.max(this.rateRefresh, this.rateInterrupt);
-    }
-
-    /**
-     * initCache(nCells)
-     *
-     * Initializes the contents of our internal cell cache.
-     *
-     * @this {VT100Video}
-     * @param {number} [nCells]
-     */
-    initCache(nCells)
-    {
-        this.fCacheValid = false;
-        if (nCells) {
-            this.nCacheCells = nCells;
-            if (this.aCacheCells === undefined || this.aCacheCells.length != this.nCacheCells) {
-                this.aCacheCells = new Array(this.nCacheCells);
-            }
-        }
-        /*
-         * Because the VT100 frame buffer can be located anywhere in RAM (above 0x2000), we must defer this
-         * test code until the powerUp() notification handler is called, when all RAM has (hopefully) been allocated.
-         *
-         * NOTE: The following test image was useful for early testing, but a *real* VT100 doesn't display a test image,
-         * so this code is no longer enabled by default.  Remove MAXDEBUG if you want to see it again.
-         */
-        if (MAXDEBUG && !this.test) {
-            /*
-             * Build a test iamge in the VT100 frame buffer; we'll mimic the "SET-UP A" image, since it uses
-             * all the font variations.  The process involves iterating over 0-based row numbers -2 (or -5 if 50Hz
-             * operation is selected) through 24, checking aLineData for a matching row number, and converting the
-             * corresponding string(s) to appropriate byte values.  Negative row numbers correspond to "fill lines"
-             * and do not require a row entry.  If multiple strings are present for a given row, we invert the
-             * default character attribute for subsequent strings.  An empty array ends the image build process.
-             */
-            let aLineData = {
-                 0: [VT100Video.VT100.FONT.DHIGH, 'SET-UP A'],
-                 2: [VT100Video.VT100.FONT.DWIDE, 'TO EXIT PRESS "SET-UP"'],
-                22: [VT100Video.VT100.FONT.NORML, '        T       T       T       T       T       T       T       T       T'],
-                23: [VT100Video.VT100.FONT.NORML, '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890'],
-                24: []
-            };
-            let addr = this.addrBuffer;
-            let addrNext = -1, font = -1;
-            let b, nFill = (this.rateMonitor == 60? 2 : 5);
-            for (let iRow = -nFill; iRow < this.nRowsBuffer; iRow++) {
-                let lineData = aLineData[iRow];
-                if (addrNext >= 0) {
-                    let fBreak = false;
-                    addrNext = addr + 2;
-                    if (!lineData) {
-                        if (font == VT100Video.VT100.FONT.DHIGH) {
-                            lineData = aLineData[iRow-1];
-                            font = VT100Video.VT100.FONT.DHIGH_BOT;
-                        }
-                    }
-                    else {
-                        if (lineData.length) {
-                            font = lineData[0];
-                        } else {
-                            addrNext = addr - 1;
-                            fBreak = true;
-                        }
-                    }
-                    b = (font & VT100Video.VT100.LINEATTR.FONTMASK) | ((addrNext >> 8) & VT100Video.VT100.LINEATTR.ADDRMASK) | VT100Video.VT100.LINEATTR.ADDRBIAS;
-                    this.busMemory.writeData(addr++, b);
-                    this.busMemory.writeData(addr++, addrNext & 0xff);
-                    if (fBreak) break;
-                }
-                if (lineData) {
-                    let attr = 0;
-                    for (let j = 1; j < lineData.length; j++) {
-                        let s = lineData[j];
-                        for (let k = 0; k < s.length; k++) {
-                            this.busMemory.writeData(addr++, s.charCodeAt(k) | attr);
-                        }
-                        attr ^= 0x80;
-                    }
-                }
-                this.busMemory.writeData(addr++, VT100Video.VT100.LINETERM);
-                addrNext = addr;
-            }
-            this.test = true;
-        }
-    }
-
-    /**
-     * initColors()
-     *
-     * @this {VT100Video}
-     */
-    initColors()
-    {
-        let rgbBlack  = [0x00, 0x00, 0x00, 0xff];
-        let rgbWhite  = [0xff, 0xff, 0xff, 0xff];
-        this.nColors = (1 << this.nBitsPerPixel);
-        this.aRGB = new Array(this.nColors);
-        this.aRGB[0] = rgbBlack;
-        this.aRGB[1] = rgbWhite;
-    }
-
-    /**
-     * setPixel(image, x, y, bPixel)
-     *
-     * @this {VT100Video}
-     * @param {Object} image
-     * @param {number} x
-     * @param {number} y
-     * @param {number} bPixel (ie, an index into aRGB)
-     */
-    setPixel(image, x, y, bPixel)
-    {
-        let index = (x + y * image.width);
-        let rgb = this.aRGB[bPixel];
-        index *= rgb.length;
-        image.data[index] = rgb[0];
-        image.data[index+1] = rgb[1];
-        image.data[index+2] = rgb[2];
-        image.data[index+3] = rgb[3];
-    }
-
-    /**
-     * updateChar(idFont, col, row, data, context)
-     *
-     * Updates a particular character cell (row,col) in the associated window.
-     *
-     * @this {VT100Video}
-     * @param {number} idFont
-     * @param {number} col
-     * @param {number} row
-     * @param {number} data
-     * @param {Object} [context]
-     */
-    updateChar(idFont, col, row, data, context)
-    {
-        let bChar = data & 0x7f;
-        let font = this.aFonts[idFont][(data & 0x80)? 1 : 0];
-        if (!font) return;
-
-        let xSrc = (bChar & 0xf) * font.cxCell;
-        let ySrc = (bChar >> 4) * font.cyCell;
-
-        let xDst, yDst, cxDst, cyDst;
-
-        let cxSrc = font.cxCell;
-        let cySrc = font.cyCell;
-
-        if (context) {
-            xDst = col * this.cxCell;
-            yDst = row * this.cyCell;
-            cxDst = this.cxCell;
-            cyDst = this.cyCell;
-        } else {
-            xDst = col * this.cxMonitorCell;
-            yDst = row * this.cyMonitorCell;
-            cxDst = this.cxMonitorCell;
-            cyDst = this.cyMonitorCell;
-        }
-
-        /*
-         * If font.cxCell > this.cxCell, then we assume the caller wants to draw a double-wide character,
-         * so we will double xDst and cxDst.
-         */
-        if (font.cxCell > this.cxCell) {
-            xDst *= 2;
-            cxDst *= 2;
-
-        }
-
-        /*
-         * If font.cyCell > this.cyCell, then we rely on idFont to indicate whether the top half or bottom half
-         * of the character should be drawn.
-         */
-        if (font.cyCell > this.cyCell) {
-            if (idFont == VT100Video.VT100.FONT.DHIGH_BOT) ySrc += this.cyCell;
-            cySrc = this.cyCell;
-
-        }
-
-        if (context) {
-            context.drawImage(font.canvas, xSrc, ySrc, cxSrc, cySrc, xDst, yDst, cxDst, cyDst);
-        } else {
-            xDst += this.xMonitorOffset;
-            yDst += this.yMonitorOffset;
-            this.contextMonitor.drawImage(font.canvas, xSrc, ySrc, cxSrc, cySrc, xDst, yDst, cxDst, cyDst);
-        }
-    }
-
-    /**
-     * updateMonitor(fForced)
-     *
-     * Forced updates are generally internal updates triggered by an I/O operation or other state change,
-     * while non-forced updates are periodic "refresh" updates.
-     *
-     * @this {VT100Video}
-     * @param {boolean} [fForced]
-     */
-    updateMonitor(fForced)
-    {
-        let fUpdate = true;
-        if (!fForced) {
-            if (this.rateInterrupt) {
-                this.cpu.requestINTR(4);
-            }
-            /*
-             * Since this is not a forced update, if our cell cache is valid AND we allocated our own buffer AND the buffer
-             * is clean, then there's nothing to do.
-             */
-            if (fUpdate && this.fCacheValid && this.sizeBuffer) {
-                if (this.busMemory.cleanBlocks(this.addrBuffer, this.sizeBuffer)) {
-                    fUpdate = false;
-                }
-            }
-            this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
-            this.nUpdates++;
-        }
-        if (!fUpdate) {
-            return;
-        }
-        this.updateScreen(fForced);
-    }
-
-    /**
-     * updateScreen(f)
-     *
-     * Propagates the video buffer to the cell cache and updates the screen with any changes on the monitor.
-     *
-     * For every cell in the video buffer, compare it to the cell stored in the cell cache, render if it differs,
-     * and then update the cell cache to match.  Since initCache() sets every cell in the cell cache to an
-     * invalid value, we're assured that the next call to updateScreen() will redraw the entire (visible) video buffer.
-     *
-     * @this {VT100Video}
-     * @param {boolean} [fForced]
-     */
-    updateScreen(fForced)
-    {
-        let nRows = 0;
-        let font, fontNext = -1;
-        let nFill = (this.rateMonitor == 60? 2 : 5);
-        let iCell = 0, cUpdated = 0, iCellUpdated = -1;
-
-        let addrNext = this.addrBuffer;
-
-
-        while (nRows < this.nRowsBuffer) {
-            /*
-             * Populate the line buffer
-             */
-            let nCols = 0;
-            let addr = addrNext;
-            let nColsVisible = this.nColsBuffer;
-            font = fontNext;
-            if (font != VT100Video.VT100.FONT.NORML) nColsVisible >>= 1;
-            while (true) {
-                let data = this.busMemory.readData(addr++);
-                if ((data & VT100Video.VT100.LINETERM) == VT100Video.VT100.LINETERM) {
-                    let b = this.busMemory.readData(addr++);
-                    fontNext = b & VT100Video.VT100.LINEATTR.FONTMASK;
-                    addrNext = ((b & VT100Video.VT100.LINEATTR.ADDRMASK) << 8) | this.busMemory.readData(addr);
-                    addrNext += (b & VT100Video.VT100.LINEATTR.ADDRBIAS)? VT100Video.VT100.ADDRBIAS_LO : VT100Video.VT100.ADDRBIAS_HI;
-                    break;
-                }
-                if (nCols < nColsVisible) {
-                    this.abLineBuffer[nCols++] = data;
-                } else {
-                    break;                          // ideally, we would wait for a LINETERM byte, but it's not safe to loop without limit
-                }
-            }
-
-            /*
-             * Skip the first few "fill lines"
-             */
-            if (nFill) {
-                nFill--;
-                continue;
-            }
-
-            /*
-             * Pad the line buffer as needed
-             */
-            while (nCols < this.abLineBuffer.length) {
-                this.abLineBuffer[nCols++] = 0;     // character code 0 is a empty font character
-            }
-
-            /*
-             * Display the line buffer; ordinarily, the font number would be valid after processing the "fill lines",
-             * but if the buffer isn't initialized yet, those lines might be missing, so the font number might not be set.
-             */
-            if (font >= 0) {
-                /*
-                 * Cell cache logic is complicated by the fact that a line may be single-width one frame and double-width
-                 * the next.  So we store the visible line length at the start of each row in the cache, which must match if
-                 * the cache can be considered valid for the current line.
-                 */
-                let fLineCacheValid = this.fCacheValid && (this.aCacheCells[iCell] == nColsVisible);
-                this.aCacheCells[iCell++] = nColsVisible;
-                for (let iCol = 0; iCol < nCols; iCol++) {
-                    let data = this.abLineBuffer[iCol];
-                    if (!fLineCacheValid || data !== this.aCacheCells[iCell]) {
-                        this.aCacheCells[iCellUpdated = iCell] = data;
-                        this.updateChar(font, iCol, nRows, data, this.contextBuffer);
-                        cUpdated++;
-                    }
-                    iCell++;
-                }
-            }
-            nRows++;
-        }
-        this.fCacheValid = true;
-
-
-
-        if (!fForced && this.fSkipSingleCellUpdate && cUpdated == 1) {
-            /*
-             * We're going to blow off this update, since it comes on the heels of a smooth-scroll that *may*
-             * not be completely finished yet, and at the same time, we're going to zap the only updated cell
-             * cache entry, to guarantee that it's redrawn on the next update.
-             */
-
-            /*
-             * TODO: If I change the RECV rate to 19200 and enable smooth scrolling, I sometimes see a spurious
-             * "H" on the bottom line after a long series of "HELLO WORLD!\r\n" tests.  Dumping video memory shows
-             * "HELLO WORLD!" on 23 lines and an "H" on the 24th line, so it's really there.  But strangely, if
-             * I then press SET-UP two times, the restored monitor does NOT have the spurious "H".  So somehow the
-             * firmware knows what should and shouldn't be on-screen.
-             *
-             * Possible VT100 firmware bug?  I'm not sure.  Anyway, this DEBUG-only code is here to help trap
-             * that scenario, until I figure it out.
-             */
-            if (DEBUG && (this.aCacheCells[iCellUpdated] & 0x7f) == 0x48) {
-                this.printf("spurious 'H' character at offset %d\n", iCellUpdated);
-            }
-            this.aCacheCells[iCellUpdated] = -1;
-            cUpdated = 0;
-        }
-        this.fSkipSingleCellUpdate = false;
-
-        if ((cUpdated || fForced) && this.contextBuffer) {
-            /*
-             * We must subtract cyCell from cyBuffer to avoid displaying the extra "scroll line" that we normally
-             * buffer, in support of smooth scrolling.  Speaking of which, we must also add bScrollOffset to ySrc
-             * (well, ySrc is always relative to zero, so no add is actually required).
-             */
-            this.contextMonitor.drawImage(
-                this.canvasBuffer,
-                0,                                  // xSrc
-                this.bScrollOffset,                 // ySrc
-                this.cxBuffer,                      // cxSrc
-                this.cyBuffer - this.cyCell,        // cySrc
-                this.xMonitorOffset,                // xDst
-                this.yMonitorOffset,                // yDst
-                this.cxMonitorOffset,               // cxDst
-                this.cyMonitorOffset                // cyDst
-            );
-        }
-    }
-}
-
-VT100Video.VT100 = {
-    /*
-     * The following font IDs are nothing more than all the possible LINEATTR values masked with FONTMASK;
-     * also, note that double-high implies double-wide; the VT100 doesn't support a double-high single-wide font.
-     */
-    FONT: {
-        NORML:      0x60,       // normal font (eg, 10x10)
-        DWIDE:      0x40,       // double-wide, single-high font (eg, 20x10)
-        DHIGH:      0x20,       // technically, this means display only the TOP half of the double-high font (eg, 20x20)
-        DHIGH_BOT:  0x00        // technically, this means display only the BOTTOM half of the double-high font (eg, 20x20)
-    },
-    LINETERM:       0x7F,
-    LINEATTR: {
-        ADDRMASK:   0x0F,
-        ADDRBIAS:   0x10,       // 0x10 == ADDRBIAS_LO, 0x00 = ADDRBIAS_HI
-        FONTMASK:   0x60,
-        SCROLL:     0x80
-    },
-    ADDRBIAS_LO:    0x2000,
-    ADDRBIAS_HI:    0x4000
-};
-
-Defs.CLASSES["VT100Video"] = VT100Video;
-
-/**
- * @copyright https://www.pcjs.org/machines/lib/cpu/cpu.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/cpu.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -12369,4019 +9765,7 @@ class CPU extends Device {
 // Defs.CLASSES["CPU"] = CPU;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/cpu/cpu8080.js (C) 2012-2020 Jeff Parsons
- */
-
-/**
- * Emulation of the 8080 CPU
- *
- * @class {CPU8080}
- * @unrestricted
- * @property {Bus} busIO
- * @property {Bus} busMemory
- * @property {Input} input
- */
-class CPU8080 extends CPU {
-    /**
-     * CPU8080(idMachine, idDevice, config)
-     *
-     * @this {CPU8080}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {Config} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-
-        /*
-         * Initialize the CPU.
-         */
-        this.initCPU();
-
-        /*
-         * Get access to the Bus devices, so we have access to the I/O and memory address spaces.
-         */
-        this.busIO = /** @type {Bus} */ (this.findDevice(this.config['busIO']));
-        this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['busMemory']));
-
-        /*
-         * Get access to the Input device, so we can call setFocus() as needed.
-         */
-        this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
-    }
-
-    /**
-     * execute(nCycles)
-     *
-     * Called from startClock() to execute a series of instructions.
-     *
-     * Executes the specified "burst" of instructions.  This code exists outside of the startClock() function
-     * to ensure that its try/catch exception handler doesn't interfere with the optimization of this tight loop.
-     *
-     * @this {CPU8080}
-     * @param {number} nCycles
-     */
-    execute(nCycles)
-    {
-        /*
-         * If checkINTR() returns false, INTFLAG.HALT must be set, so no instructions should be executed.
-         */
-        if (!this.checkINTR()) return;
-        while (this.nCyclesRemain > 0) {
-            this.regPCLast = this.regPC;
-            this.aOps[this.getPCByte()].call(this);
-        }
-    }
-
-    /**
-     * initCPU()
-     *
-     * Initializes the CPU's state.
-     *
-     * @this {CPU8080}
-     */
-    initCPU()
-    {
-        this.resetRegs()
-
-        this.defineRegister("A", () => this.regA, (value) => this.regA = value & 0xff);
-        this.defineRegister("B", () => this.regB, (value) => this.regB = value & 0xff);
-        this.defineRegister("C", () => this.regC, (value) => this.regC = value & 0xff);
-        this.defineRegister("D", () => this.regD, (value) => this.regD = value & 0xff);
-        this.defineRegister("E", () => this.regE, (value) => this.regE = value & 0xff);
-        this.defineRegister("H", () => this.regH, (value) => this.regH = value & 0xff);
-        this.defineRegister("L", () => this.regL, (value) => this.regL = value & 0xff);
-        this.defineRegister("CF", () => (this.getCF()? 1 : 0), (value) => {value? this.setCF() : this.clearCF()});
-        this.defineRegister("PF", () => (this.getPF()? 1 : 0), (value) => {value? this.setPF() : this.clearPF()});
-        this.defineRegister("AF", () => (this.getAF()? 1 : 0), (value) => {value? this.setAF() : this.clearAF()});
-        this.defineRegister("ZF", () => (this.getZF()? 1 : 0), (value) => {value? this.setZF() : this.clearZF()});
-        this.defineRegister("SF", () => (this.getSF()? 1 : 0), (value) => {value? this.setSF() : this.clearSF()});
-        this.defineRegister("IF", () => (this.getIF()? 1 : 0), (value) => {value? this.setIF() : this.clearIF()});
-        this.defineRegister("BC", this.getBC, this.setBC);
-        this.defineRegister("DE", this.getDE, this.setDE);
-        this.defineRegister("HL", this.getHL, this.setHL);
-        this.defineRegister(Debugger.REGISTER.PC, this.getPC, this.setPC);
-
-        /*
-         * This 256-entry array of opcode functions is at the heart of the CPU engine.
-         *
-         * It might be worth trying a switch() statement instead, to see how the performance compares,
-         * but I suspect that would vary quite a bit across JavaScript engines; for now, I'm putting my
-         * money on array lookup.
-         */
-        this.aOps = [
-            /* 0x00-0x03 */ this.opNOP,   this.opLXIB,  this.opSTAXB, this.opINXB,
-            /* 0x04-0x07 */ this.opINRB,  this.opDCRB,  this.opMVIB,  this.opRLC,
-            /* 0x08-0x0B */ this.opNOP,   this.opDADB,  this.opLDAXB, this.opDCXB,
-            /* 0x0C-0x0F */ this.opINRC,  this.opDCRC,  this.opMVIC,  this.opRRC,
-            /* 0x10-0x13 */ this.opNOP,   this.opLXID,  this.opSTAXD, this.opINXD,
-            /* 0x14-0x17 */ this.opINRD,  this.opDCRD,  this.opMVID,  this.opRAL,
-            /* 0x18-0x1B */ this.opNOP,   this.opDADD,  this.opLDAXD, this.opDCXD,
-            /* 0x1C-0x1F */ this.opINRE,  this.opDCRE,  this.opMVIE,  this.opRAR,
-            /* 0x20-0x23 */ this.opNOP,   this.opLXIH,  this.opSHLD,  this.opINXH,
-            /* 0x24-0x27 */ this.opINRH,  this.opDCRH,  this.opMVIH,  this.opDAA,
-            /* 0x28-0x2B */ this.opNOP,   this.opDADH,  this.opLHLD,  this.opDCXH,
-            /* 0x2C-0x2F */ this.opINRL,  this.opDCRL,  this.opMVIL,  this.opCMA,
-            /* 0x30-0x33 */ this.opNOP,   this.opLXISP, this.opSTA,   this.opINXSP,
-            /* 0x34-0x37 */ this.opINRM,  this.opDCRM,  this.opMVIM,  this.opSTC,
-            /* 0x38-0x3B */ this.opNOP,   this.opDADSP, this.opLDA,   this.opDCXSP,
-            /* 0x3C-0x3F */ this.opINRA,  this.opDCRA,  this.opMVIA,  this.opCMC,
-            /* 0x40-0x43 */ this.opMOVBB, this.opMOVBC, this.opMOVBD, this.opMOVBE,
-            /* 0x44-0x47 */ this.opMOVBH, this.opMOVBL, this.opMOVBM, this.opMOVBA,
-            /* 0x48-0x4B */ this.opMOVCB, this.opMOVCC, this.opMOVCD, this.opMOVCE,
-            /* 0x4C-0x4F */ this.opMOVCH, this.opMOVCL, this.opMOVCM, this.opMOVCA,
-            /* 0x50-0x53 */ this.opMOVDB, this.opMOVDC, this.opMOVDD, this.opMOVDE,
-            /* 0x54-0x57 */ this.opMOVDH, this.opMOVDL, this.opMOVDM, this.opMOVDA,
-            /* 0x58-0x5B */ this.opMOVEB, this.opMOVEC, this.opMOVED, this.opMOVEE,
-            /* 0x5C-0x5F */ this.opMOVEH, this.opMOVEL, this.opMOVEM, this.opMOVEA,
-            /* 0x60-0x63 */ this.opMOVHB, this.opMOVHC, this.opMOVHD, this.opMOVHE,
-            /* 0x64-0x67 */ this.opMOVHH, this.opMOVHL, this.opMOVHM, this.opMOVHA,
-            /* 0x68-0x6B */ this.opMOVLB, this.opMOVLC, this.opMOVLD, this.opMOVLE,
-            /* 0x6C-0x6F */ this.opMOVLH, this.opMOVLL, this.opMOVLM, this.opMOVLA,
-            /* 0x70-0x73 */ this.opMOVMB, this.opMOVMC, this.opMOVMD, this.opMOVME,
-            /* 0x74-0x77 */ this.opMOVMH, this.opMOVML, this.opHLT,   this.opMOVMA,
-            /* 0x78-0x7B */ this.opMOVAB, this.opMOVAC, this.opMOVAD, this.opMOVAE,
-            /* 0x7C-0x7F */ this.opMOVAH, this.opMOVAL, this.opMOVAM, this.opMOVAA,
-            /* 0x80-0x83 */ this.opADDB,  this.opADDC,  this.opADDD,  this.opADDE,
-            /* 0x84-0x87 */ this.opADDH,  this.opADDL,  this.opADDM,  this.opADDA,
-            /* 0x88-0x8B */ this.opADCB,  this.opADCC,  this.opADCD,  this.opADCE,
-            /* 0x8C-0x8F */ this.opADCH,  this.opADCL,  this.opADCM,  this.opADCA,
-            /* 0x90-0x93 */ this.opSUBB,  this.opSUBC,  this.opSUBD,  this.opSUBE,
-            /* 0x94-0x97 */ this.opSUBH,  this.opSUBL,  this.opSUBM,  this.opSUBA,
-            /* 0x98-0x9B */ this.opSBBB,  this.opSBBC,  this.opSBBD,  this.opSBBE,
-            /* 0x9C-0x9F */ this.opSBBH,  this.opSBBL,  this.opSBBM,  this.opSBBA,
-            /* 0xA0-0xA3 */ this.opANAB,  this.opANAC,  this.opANAD,  this.opANAE,
-            /* 0xA4-0xA7 */ this.opANAH,  this.opANAL,  this.opANAM,  this.opANAA,
-            /* 0xA8-0xAB */ this.opXRAB,  this.opXRAC,  this.opXRAD,  this.opXRAE,
-            /* 0xAC-0xAF */ this.opXRAH,  this.opXRAL,  this.opXRAM,  this.opXRAA,
-            /* 0xB0-0xB3 */ this.opORAB,  this.opORAC,  this.opORAD,  this.opORAE,
-            /* 0xB4-0xB7 */ this.opORAH,  this.opORAL,  this.opORAM,  this.opORAA,
-            /* 0xB8-0xBB */ this.opCMPB,  this.opCMPC,  this.opCMPD,  this.opCMPE,
-            /* 0xBC-0xBF */ this.opCMPH,  this.opCMPL,  this.opCMPM,  this.opCMPA,
-            /* 0xC0-0xC3 */ this.opRNZ,   this.opPOPB,  this.opJNZ,   this.opJMP,
-            /* 0xC4-0xC7 */ this.opCNZ,   this.opPUSHB, this.opADI,   this.opRST0,
-            /* 0xC8-0xCB */ this.opRZ,    this.opRET,   this.opJZ,    this.opJMP,
-            /* 0xCC-0xCF */ this.opCZ,    this.opCALL,  this.opACI,   this.opRST1,
-            /* 0xD0-0xD3 */ this.opRNC,   this.opPOPD,  this.opJNC,   this.opOUT,
-            /* 0xD4-0xD7 */ this.opCNC,   this.opPUSHD, this.opSUI,   this.opRST2,
-            /* 0xD8-0xDB */ this.opRC,    this.opRET,   this.opJC,    this.opIN,
-            /* 0xDC-0xDF */ this.opCC,    this.opCALL,  this.opSBI,   this.opRST3,
-            /* 0xE0-0xE3 */ this.opRPO,   this.opPOPH,  this.opJPO,   this.opXTHL,
-            /* 0xE4-0xE7 */ this.opCPO,   this.opPUSHH, this.opANI,   this.opRST4,
-            /* 0xE8-0xEB */ this.opRPE,   this.opPCHL,  this.opJPE,   this.opXCHG,
-            /* 0xEC-0xEF */ this.opCPE,   this.opCALL,  this.opXRI,   this.opRST5,
-            /* 0xF0-0xF3 */ this.opRP,    this.opPOPSW, this.opJP,    this.opDI,
-            /* 0xF4-0xF7 */ this.opCP,    this.opPUPSW, this.opORI,   this.opRST6,
-            /* 0xF8-0xFB */ this.opRM,    this.opSPHL,  this.opJM,    this.opEI,
-            /* 0xFC-0xFF */ this.opCM,    this.opCALL,  this.opCPI,   this.opRST7
-        ];
-    }
-
-    /**
-     * loadState(stateCPU)
-     *
-     * If any saved values don't match (possibly overridden), abandon the given state and return false.
-     *
-     * @this {CPU8080}
-     * @param {Array} stateCPU
-     * @returns {boolean}
-     */
-    loadState(stateCPU)
-    {
-        if (!stateCPU || !stateCPU.length) {
-            this.println("invalid saved state");
-            return false;
-        }
-        let idDevice = stateCPU.shift();
-        let version = stateCPU.shift();
-        if (idDevice != this.idDevice || (version|0) !== (+VERSION|0)) {
-            this.printf("CPU state mismatch (%s %3.2f)\n", idDevice, version);
-            return false;
-        }
-        try {
-            this.regA = stateCPU.shift();
-            this.regB = stateCPU.shift();
-            this.regC = stateCPU.shift();
-            this.regD = stateCPU.shift();
-            this.regE = stateCPU.shift();
-            this.regH = stateCPU.shift();
-            this.regL = stateCPU.shift();
-            this.setPC(stateCPU.shift());
-            this.setSP(stateCPU.shift());
-            this.setPS(stateCPU.shift());
-            this.intFlags = stateCPU.shift();
-        } catch(err) {
-            this.println("CPU state error: " + err.message);
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * saveState(stateCPU)
-     *
-     * @this {CPU8080}
-     * @param {Array} stateCPU
-     */
-    saveState(stateCPU)
-    {
-        stateCPU.push(this.idDevice);
-        stateCPU.push(+VERSION);
-        stateCPU.push(this.regA);
-        stateCPU.push(this.regB);
-        stateCPU.push(this.regC);
-        stateCPU.push(this.regD);
-        stateCPU.push(this.regE);
-        stateCPU.push(this.regH);
-        stateCPU.push(this.regL);
-        stateCPU.push(this.getPC());
-        stateCPU.push(this.getSP());
-        stateCPU.push(this.getPS());
-        stateCPU.push(this.intFlags);
-    }
-
-
-    /**
-     * onLoad(state)
-     *
-     * Automatically called by the Machine device if the machine's 'autoSave' property is true.
-     *
-     * @this {CPU8080}
-     * @param {Array} state
-     * @returns {boolean}
-     */
-    onLoad(state)
-    {
-        if (state) {
-            let stateCPU = state[0];
-            if (this.loadState(stateCPU)) {
-                state.shift();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * onPower(on)
-     *
-     * Called by the Machine device to provide notification of a power event.
-     *
-     * @this {CPU8080}
-     * @param {boolean} on (true to power on, false to power off)
-     */
-    onPower(on)
-    {
-        if (on) {
-            this.time.start();
-            if (this.input) this.input.setFocus();
-        } else {
-            this.time.stop();
-        }
-    }
-
-    /**
-     * onReset()
-     *
-     * Called by the Machine device to provide notification of a reset event.
-     *
-     * @this {CPU8080}
-     */
-    onReset()
-    {
-        this.println("reset");
-        this.resetRegs();
-        if (!this.time.isRunning()) this.print(this.toString());
-    }
-
-    /**
-     * onSave(state)
-     *
-     * Automatically called by the Machine device before all other devices have been powered down (eg, during
-     * a page unload event).
-     *
-     * @this {CPU8080}
-     * @param {Array} state
-     */
-    onSave(state)
-    {
-        let stateCPU = [];
-        this.saveState(stateCPU);
-        state.push(stateCPU);
-    }
-
-    /**
-     * onUpdate(fTransition)
-     *
-     * Enumerate all bindings and update their values.
-     *
-     * Called by Time's update() function whenever 1) its YIELDS_PER_UPDATE threshold is reached
-     * (default is twice per second), 2) a step() operation has just finished (ie, the device is being
-     * single-stepped), and 3) a start() or stop() transition has occurred.
-     *
-     * @this {CPU8080}
-     * @param {boolean} [fTransition]
-     */
-    onUpdate(fTransition)
-    {
-        // TODO: Decide what bindings we want to support, and update them as appropriate.
-    }
-
-    /**
-     * op=0x00 (NOP)
-     *
-     * @this {CPU8080}
-     */
-    opNOP()
-    {
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x01 (LXI B,d16)
-     *
-     * @this {CPU8080}
-     */
-    opLXIB()
-    {
-        this.setBC(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x02 (STAX B)
-     *
-     * @this {CPU8080}
-     */
-    opSTAXB()
-    {
-        this.setByte(this.getBC(), this.regA);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x03 (INX B)
-     *
-     * @this {CPU8080}
-     */
-    opINXB()
-    {
-        this.setBC(this.getBC() + 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x04 (INR B)
-     *
-     * @this {CPU8080}
-     */
-    opINRB()
-    {
-        this.regB = this.incByte(this.regB);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x05 (DCR B)
-     *
-     * @this {CPU8080}
-     */
-    opDCRB()
-    {
-        this.regB = this.decByte(this.regB);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x06 (MVI B,d8)
-     *
-     * @this {CPU8080}
-     */
-    opMVIB()
-    {
-        this.regB = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x07 (RLC)
-     *
-     * @this {CPU8080}
-     */
-    opRLC()
-    {
-        let carry = this.regA << 1;
-        this.regA = (carry & 0xff) | (carry >> 8);
-        this.updateCF(carry & 0x100);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x09 (DAD B)
-     *
-     * @this {CPU8080}
-     */
-    opDADB()
-    {
-        let w;
-        this.setHL(w = this.getHL() + this.getBC());
-        this.updateCF((w >> 8) & 0x100);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x0A (LDAX B)
-     *
-     * @this {CPU8080}
-     */
-    opLDAXB()
-    {
-        this.regA = this.getByte(this.getBC());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x0B (DCX B)
-     *
-     * @this {CPU8080}
-     */
-    opDCXB()
-    {
-        this.setBC(this.getBC() - 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x0C (INR C)
-     *
-     * @this {CPU8080}
-     */
-    opINRC()
-    {
-        this.regC = this.incByte(this.regC);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x0D (DCR C)
-     *
-     * @this {CPU8080}
-     */
-    opDCRC()
-    {
-        this.regC = this.decByte(this.regC);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x0E (MVI C,d8)
-     *
-     * @this {CPU8080}
-     */
-    opMVIC()
-    {
-        this.regC = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x0F (RRC)
-     *
-     * @this {CPU8080}
-     */
-    opRRC()
-    {
-        let carry = (this.regA << 8) & 0x100;
-        this.regA = (carry | this.regA) >> 1;
-        this.updateCF(carry);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x11 (LXI D,d16)
-     *
-     * @this {CPU8080}
-     */
-    opLXID()
-    {
-        this.setDE(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x12 (STAX D)
-     *
-     * @this {CPU8080}
-     */
-    opSTAXD()
-    {
-        this.setByte(this.getDE(), this.regA);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x13 (INX D)
-     *
-     * @this {CPU8080}
-     */
-    opINXD()
-    {
-        this.setDE(this.getDE() + 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x14 (INR D)
-     *
-     * @this {CPU8080}
-     */
-    opINRD()
-    {
-        this.regD = this.incByte(this.regD);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x15 (DCR D)
-     *
-     * @this {CPU8080}
-     */
-    opDCRD()
-    {
-        this.regD = this.decByte(this.regD);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x16 (MVI D,d8)
-     *
-     * @this {CPU8080}
-     */
-    opMVID()
-    {
-        this.regD = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x17 (RAL)
-     *
-     * @this {CPU8080}
-     */
-    opRAL()
-    {
-        let carry = this.regA << 1;
-        this.regA = (carry & 0xff) | this.getCF();
-        this.updateCF(carry & 0x100);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x19 (DAD D)
-     *
-     * @this {CPU8080}
-     */
-    opDADD()
-    {
-        let w;
-        this.setHL(w = this.getHL() + this.getDE());
-        this.updateCF((w >> 8) & 0x100);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x1A (LDAX D)
-     *
-     * @this {CPU8080}
-     */
-    opLDAXD()
-    {
-        this.regA = this.getByte(this.getDE());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x1B (DCX D)
-     *
-     * @this {CPU8080}
-     */
-    opDCXD()
-    {
-        this.setDE(this.getDE() - 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x1C (INR E)
-     *
-     * @this {CPU8080}
-     */
-    opINRE()
-    {
-        this.regE = this.incByte(this.regE);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x1D (DCR E)
-     *
-     * @this {CPU8080}
-     */
-    opDCRE()
-    {
-        this.regE = this.decByte(this.regE);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x1E (MVI E,d8)
-     *
-     * @this {CPU8080}
-     */
-    opMVIE()
-    {
-        this.regE = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x1F (RAR)
-     *
-     * @this {CPU8080}
-     */
-    opRAR()
-    {
-        let carry = (this.regA << 8);
-        this.regA = ((this.getCF() << 8) | this.regA) >> 1;
-        this.updateCF(carry & 0x100);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x21 (LXI H,d16)
-     *
-     * @this {CPU8080}
-     */
-    opLXIH()
-    {
-        this.setHL(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x22 (SHLD a16)
-     *
-     * @this {CPU8080}
-     */
-    opSHLD()
-    {
-        this.setWord(this.getPCWord(), this.getHL());
-        this.nCyclesRemain -= 16;
-    }
-
-    /**
-     * op=0x23 (INX H)
-     *
-     * @this {CPU8080}
-     */
-    opINXH()
-    {
-        this.setHL(this.getHL() + 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x24 (INR H)
-     *
-     * @this {CPU8080}
-     */
-    opINRH()
-    {
-        this.regH = this.incByte(this.regH);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x25 (DCR H)
-     *
-     * @this {CPU8080}
-     */
-    opDCRH()
-    {
-        this.regH = this.decByte(this.regH);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x26 (MVI H,d8)
-     *
-     * @this {CPU8080}
-     */
-    opMVIH()
-    {
-        this.regH = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x27 (DAA)
-     *
-     * @this {CPU8080}
-     */
-    opDAA()
-    {
-        let src = 0;
-        let CF = this.getCF();
-        let AF = this.getAF();
-        if (AF || (this.regA & 0x0F) > 9) {
-            src |= 0x06;
-        }
-        if (CF || this.regA >= 0x9A) {
-            src |= 0x60;
-            CF = CPU8080.PS.CF;
-        }
-        this.regA = this.addByte(src);
-        this.updateCF(CF? 0x100 : 0);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x29 (DAD H)
-     *
-     * @this {CPU8080}
-     */
-    opDADH()
-    {
-        let w;
-        this.setHL(w = this.getHL() + this.getHL());
-        this.updateCF((w >> 8) & 0x100);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x2A (LHLD a16)
-     *
-     * @this {CPU8080}
-     */
-    opLHLD()
-    {
-        this.setHL(this.getWord(this.getPCWord()));
-        this.nCyclesRemain -= 16;
-    }
-
-    /**
-     * op=0x2B (DCX H)
-     *
-     * @this {CPU8080}
-     */
-    opDCXH()
-    {
-        this.setHL(this.getHL() - 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x2C (INR L)
-     *
-     * @this {CPU8080}
-     */
-    opINRL()
-    {
-        this.regL = this.incByte(this.regL);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x2D (DCR L)
-     *
-     * @this {CPU8080}
-     */
-    opDCRL()
-    {
-        this.regL = this.decByte(this.regL);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x2E (MVI L,d8)
-     *
-     * @this {CPU8080}
-     */
-    opMVIL()
-    {
-        this.regL = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x2F (CMA)
-     *
-     * @this {CPU8080}
-     */
-    opCMA()
-    {
-        this.regA = ~this.regA & 0xff;
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x31 (LXI SP,d16)
-     *
-     * @this {CPU8080}
-     */
-    opLXISP()
-    {
-        this.setSP(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x32 (STA a16)
-     *
-     * @this {CPU8080}
-     */
-    opSTA()
-    {
-        this.setByte(this.getPCWord(), this.regA);
-        this.nCyclesRemain -= 13;
-    }
-
-    /**
-     * op=0x33 (INX SP)
-     *
-     * @this {CPU8080}
-     */
-    opINXSP()
-    {
-        this.setSP(this.getSP() + 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x34 (INR M)
-     *
-     * @this {CPU8080}
-     */
-    opINRM()
-    {
-        let addr = this.getHL();
-        this.setByte(addr, this.incByte(this.getByte(addr)));
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x35 (DCR M)
-     *
-     * @this {CPU8080}
-     */
-    opDCRM()
-    {
-        let addr = this.getHL();
-        this.setByte(addr, this.decByte(this.getByte(addr)));
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x36 (MVI M,d8)
-     *
-     * @this {CPU8080}
-     */
-    opMVIM()
-    {
-        this.setByte(this.getHL(), this.getPCByte());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x37 (STC)
-     *
-     * @this {CPU8080}
-     */
-    opSTC()
-    {
-        this.setCF();
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x39 (DAD SP)
-     *
-     * @this {CPU8080}
-     */
-    opDADSP()
-    {
-        let w;
-        this.setHL(w = this.getHL() + this.getSP());
-        this.updateCF((w >> 8) & 0x100);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x3A (LDA a16)
-     *
-     * @this {CPU8080}
-     */
-    opLDA()
-    {
-        this.regA = this.getByte(this.getPCWord());
-        this.nCyclesRemain -= 13;
-    }
-
-    /**
-     * op=0x3B (DCX SP)
-     *
-     * @this {CPU8080}
-     */
-    opDCXSP()
-    {
-        this.setSP(this.getSP() - 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x3C (INR A)
-     *
-     * @this {CPU8080}
-     */
-    opINRA()
-    {
-        this.regA = this.incByte(this.regA);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x3D (DCR A)
-     *
-     * @this {CPU8080}
-     */
-    opDCRA()
-    {
-        this.regA = this.decByte(this.regA);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x3E (MVI A,d8)
-     *
-     * @this {CPU8080}
-     */
-    opMVIA()
-    {
-        this.regA = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x3F (CMC)
-     *
-     * @this {CPU8080}
-     */
-    opCMC()
-    {
-        this.updateCF(this.getCF()? 0 : 0x100);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x40 (MOV B,B)
-     *
-     * @this {CPU8080}
-     */
-    opMOVBB()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x41 (MOV B,C)
-     *
-     * @this {CPU8080}
-     */
-    opMOVBC()
-    {
-        this.regB = this.regC;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x42 (MOV B,D)
-     *
-     * @this {CPU8080}
-     */
-    opMOVBD()
-    {
-        this.regB = this.regD;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x43 (MOV B,E)
-     *
-     * @this {CPU8080}
-     */
-    opMOVBE()
-    {
-        this.regB = this.regE;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x44 (MOV B,H)
-     *
-     * @this {CPU8080}
-     */
-    opMOVBH()
-    {
-        this.regB = this.regH;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x45 (MOV B,L)
-     *
-     * @this {CPU8080}
-     */
-    opMOVBL()
-    {
-        this.regB = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x46 (MOV B,M)
-     *
-     * @this {CPU8080}
-     */
-    opMOVBM()
-    {
-        this.regB = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x47 (MOV B,A)
-     *
-     * @this {CPU8080}
-     */
-    opMOVBA()
-    {
-        this.regB = this.regA;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x48 (MOV C,B)
-     *
-     * @this {CPU8080}
-     */
-    opMOVCB()
-    {
-        this.regC = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x49 (MOV C,C)
-     *
-     * @this {CPU8080}
-     */
-    opMOVCC()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4A (MOV C,D)
-     *
-     * @this {CPU8080}
-     */
-    opMOVCD()
-    {
-        this.regC = this.regD;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4B (MOV C,E)
-     *
-     * @this {CPU8080}
-     */
-    opMOVCE()
-    {
-        this.regC = this.regE;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4C (MOV C,H)
-     *
-     * @this {CPU8080}
-     */
-    opMOVCH()
-    {
-        this.regC = this.regH;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4D (MOV C,L)
-     *
-     * @this {CPU8080}
-     */
-    opMOVCL()
-    {
-        this.regC = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4E (MOV C,M)
-     *
-     * @this {CPU8080}
-     */
-    opMOVCM()
-    {
-        this.regC = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x4F (MOV C,A)
-     *
-     * @this {CPU8080}
-     */
-    opMOVCA()
-    {
-        this.regC = this.regA;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x50 (MOV D,B)
-     *
-     * @this {CPU8080}
-     */
-    opMOVDB()
-    {
-        this.regD = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x51 (MOV D,C)
-     *
-     * @this {CPU8080}
-     */
-    opMOVDC()
-    {
-        this.regD = this.regC;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x52 (MOV D,D)
-     *
-     * @this {CPU8080}
-     */
-    opMOVDD()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x53 (MOV D,E)
-     *
-     * @this {CPU8080}
-     */
-    opMOVDE()
-    {
-        this.regD = this.regE;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x54 (MOV D,H)
-     *
-     * @this {CPU8080}
-     */
-    opMOVDH()
-    {
-        this.regD = this.regH;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x55 (MOV D,L)
-     *
-     * @this {CPU8080}
-     */
-    opMOVDL()
-    {
-        this.regD = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x56 (MOV D,M)
-     *
-     * @this {CPU8080}
-     */
-    opMOVDM()
-    {
-        this.regD = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x57 (MOV D,A)
-     *
-     * @this {CPU8080}
-     */
-    opMOVDA()
-    {
-        this.regD = this.regA;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x58 (MOV E,B)
-     *
-     * @this {CPU8080}
-     */
-    opMOVEB()
-    {
-        this.regE = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x59 (MOV E,C)
-     *
-     * @this {CPU8080}
-     */
-    opMOVEC()
-    {
-        this.regE = this.regC;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x5A (MOV E,D)
-     *
-     * @this {CPU8080}
-     */
-    opMOVED()
-    {
-        this.regE = this.regD;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x5B (MOV E,E)
-     *
-     * @this {CPU8080}
-     */
-    opMOVEE()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x5C (MOV E,H)
-     *
-     * @this {CPU8080}
-     */
-    opMOVEH()
-    {
-        this.regE = this.regH;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x5D (MOV E,L)
-     *
-     * @this {CPU8080}
-     */
-    opMOVEL()
-    {
-        this.regE = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x5E (MOV E,M)
-     *
-     * @this {CPU8080}
-     */
-    opMOVEM()
-    {
-        this.regE = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x5F (MOV E,A)
-     *
-     * @this {CPU8080}
-     */
-    opMOVEA()
-    {
-        this.regE = this.regA;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x60 (MOV H,B)
-     *
-     * @this {CPU8080}
-     */
-    opMOVHB()
-    {
-        this.regH = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x61 (MOV H,C)
-     *
-     * @this {CPU8080}
-     */
-    opMOVHC()
-    {
-        this.regH = this.regC;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x62 (MOV H,D)
-     *
-     * @this {CPU8080}
-     */
-    opMOVHD()
-    {
-        this.regH = this.regD;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x63 (MOV H,E)
-     *
-     * @this {CPU8080}
-     */
-    opMOVHE()
-    {
-        this.regH = this.regE;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x64 (MOV H,H)
-     *
-     * @this {CPU8080}
-     */
-    opMOVHH()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x65 (MOV H,L)
-     *
-     * @this {CPU8080}
-     */
-    opMOVHL()
-    {
-        this.regH = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x66 (MOV H,M)
-     *
-     * @this {CPU8080}
-     */
-    opMOVHM()
-    {
-        this.regH = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x67 (MOV H,A)
-     *
-     * @this {CPU8080}
-     */
-    opMOVHA()
-    {
-        this.regH = this.regA;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x68 (MOV L,B)
-     *
-     * @this {CPU8080}
-     */
-    opMOVLB()
-    {
-        this.regL = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x69 (MOV L,C)
-     *
-     * @this {CPU8080}
-     */
-    opMOVLC()
-    {
-        this.regL = this.regC;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x6A (MOV L,D)
-     *
-     * @this {CPU8080}
-     */
-    opMOVLD()
-    {
-        this.regL = this.regD;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x6B (MOV L,E)
-     *
-     * @this {CPU8080}
-     */
-    opMOVLE()
-    {
-        this.regL = this.regE;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x6C (MOV L,H)
-     *
-     * @this {CPU8080}
-     */
-    opMOVLH()
-    {
-        this.regL = this.regH;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x6D (MOV L,L)
-     *
-     * @this {CPU8080}
-     */
-    opMOVLL()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x6E (MOV L,M)
-     *
-     * @this {CPU8080}
-     */
-    opMOVLM()
-    {
-        this.regL = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x6F (MOV L,A)
-     *
-     * @this {CPU8080}
-     */
-    opMOVLA()
-    {
-        this.regL = this.regA;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x70 (MOV M,B)
-     *
-     * @this {CPU8080}
-     */
-    opMOVMB()
-    {
-        this.setByte(this.getHL(), this.regB);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x71 (MOV M,C)
-     *
-     * @this {CPU8080}
-     */
-    opMOVMC()
-    {
-        this.setByte(this.getHL(), this.regC);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x72 (MOV M,D)
-     *
-     * @this {CPU8080}
-     */
-    opMOVMD()
-    {
-        this.setByte(this.getHL(), this.regD);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x73 (MOV M,E)
-     *
-     * @this {CPU8080}
-     */
-    opMOVME()
-    {
-        this.setByte(this.getHL(), this.regE);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x74 (MOV M,H)
-     *
-     * @this {CPU8080}
-     */
-    opMOVMH()
-    {
-        this.setByte(this.getHL(), this.regH);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x75 (MOV M,L)
-     *
-     * @this {CPU8080}
-     */
-    opMOVML()
-    {
-        this.setByte(this.getHL(), this.regL);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x76 (HLT)
-     *
-     * @this {CPU8080}
-     */
-    opHLT()
-    {
-        this.nCyclesRemain -= 7;
-        /*
-         * The CPU is never REALLY halted by a HLT instruction; instead, we call requestHALT(), which
-         * which sets INTFLAG.HALT and then ends the current burst; the CPU should not execute any
-         * more instructions until checkINTR() indicates that a hardware interrupt has been requested.
-         */
-        this.requestHALT();
-        /*
-         * If interrupts have been disabled, then the machine is dead in the water (there is no NMI
-         * NMI generation mechanism for this CPU), so let's stop the CPU; similarly, if the HALT message
-         * category is enabled, then the Debugger must want us to stop the CPU.
-         */
-        if (!this.getIF() || this.isMessageOn(MESSAGE.HALT)) {
-            let addr = this.getPC() - 1;
-            this.setPC(addr);           // this is purely for the Debugger's benefit, to show the HLT
-            this.time.stop();
-        }
-    }
-
-    /**
-     * op=0x77 (MOV M,A)
-     *
-     * @this {CPU8080}
-     */
-    opMOVMA()
-    {
-        this.setByte(this.getHL(), this.regA);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x78 (MOV A,B)
-     *
-     * @this {CPU8080}
-     */
-    opMOVAB()
-    {
-        this.regA = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x79 (MOV A,C)
-     *
-     * @this {CPU8080}
-     */
-    opMOVAC()
-    {
-        this.regA = this.regC;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7A (MOV A,D)
-     *
-     * @this {CPU8080}
-     */
-    opMOVAD()
-    {
-        this.regA = this.regD;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7B (MOV A,E)
-     *
-     * @this {CPU8080}
-     */
-    opMOVAE()
-    {
-        this.regA = this.regE;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7C (MOV A,H)
-     *
-     * @this {CPU8080}
-     */
-    opMOVAH()
-    {
-        this.regA = this.regH;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7D (MOV A,L)
-     *
-     * @this {CPU8080}
-     */
-    opMOVAL()
-    {
-        this.regA = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7E (MOV A,M)
-     *
-     * @this {CPU8080}
-     */
-    opMOVAM()
-    {
-        this.regA = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x7F (MOV A,A)
-     *
-     * @this {CPU8080}
-     */
-    opMOVAA()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x80 (ADD B)
-     *
-     * @this {CPU8080}
-     */
-    opADDB()
-    {
-        this.regA = this.addByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x81 (ADD C)
-     *
-     * @this {CPU8080}
-     */
-    opADDC()
-    {
-        this.regA = this.addByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x82 (ADD D)
-     *
-     * @this {CPU8080}
-     */
-    opADDD()
-    {
-        this.regA = this.addByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x83 (ADD E)
-     *
-     * @this {CPU8080}
-     */
-    opADDE()
-    {
-        this.regA = this.addByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x84 (ADD H)
-     *
-     * @this {CPU8080}
-     */
-    opADDH()
-    {
-        this.regA = this.addByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x85 (ADD L)
-     *
-     * @this {CPU8080}
-     */
-    opADDL()
-    {
-        this.regA = this.addByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x86 (ADD M)
-     *
-     * @this {CPU8080}
-     */
-    opADDM()
-    {
-        this.regA = this.addByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x87 (ADD A)
-     *
-     * @this {CPU8080}
-     */
-    opADDA()
-    {
-        this.regA = this.addByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x88 (ADC B)
-     *
-     * @this {CPU8080}
-     */
-    opADCB()
-    {
-        this.regA = this.addByteCarry(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x89 (ADC C)
-     *
-     * @this {CPU8080}
-     */
-    opADCC()
-    {
-        this.regA = this.addByteCarry(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8A (ADC D)
-     *
-     * @this {CPU8080}
-     */
-    opADCD()
-    {
-        this.regA = this.addByteCarry(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8B (ADC E)
-     *
-     * @this {CPU8080}
-     */
-    opADCE()
-    {
-        this.regA = this.addByteCarry(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8C (ADC H)
-     *
-     * @this {CPU8080}
-     */
-    opADCH()
-    {
-        this.regA = this.addByteCarry(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8D (ADC L)
-     *
-     * @this {CPU8080}
-     */
-    opADCL()
-    {
-        this.regA = this.addByteCarry(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8E (ADC M)
-     *
-     * @this {CPU8080}
-     */
-    opADCM()
-    {
-        this.regA = this.addByteCarry(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x8F (ADC A)
-     *
-     * @this {CPU8080}
-     */
-    opADCA()
-    {
-        this.regA = this.addByteCarry(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x90 (SUB B)
-     *
-     * @this {CPU8080}
-     */
-    opSUBB()
-    {
-        this.regA = this.subByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x91 (SUB C)
-     *
-     * @this {CPU8080}
-     */
-    opSUBC()
-    {
-        this.regA = this.subByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x92 (SUB D)
-     *
-     * @this {CPU8080}
-     */
-    opSUBD()
-    {
-        this.regA = this.subByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x93 (SUB E)
-     *
-     * @this {CPU8080}
-     */
-    opSUBE()
-    {
-        this.regA = this.subByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x94 (SUB H)
-     *
-     * @this {CPU8080}
-     */
-    opSUBH()
-    {
-        this.regA = this.subByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x95 (SUB L)
-     *
-     * @this {CPU8080}
-     */
-    opSUBL()
-    {
-        this.regA = this.subByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x96 (SUB M)
-     *
-     * @this {CPU8080}
-     */
-    opSUBM()
-    {
-        this.regA = this.subByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x97 (SUB A)
-     *
-     * @this {CPU8080}
-     */
-    opSUBA()
-    {
-        this.regA = this.subByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x98 (SBB B)
-     *
-     * @this {CPU8080}
-     */
-    opSBBB()
-    {
-        this.regA = this.subByteBorrow(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x99 (SBB C)
-     *
-     * @this {CPU8080}
-     */
-    opSBBC()
-    {
-        this.regA = this.subByteBorrow(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9A (SBB D)
-     *
-     * @this {CPU8080}
-     */
-    opSBBD()
-    {
-        this.regA = this.subByteBorrow(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9B (SBB E)
-     *
-     * @this {CPU8080}
-     */
-    opSBBE()
-    {
-        this.regA = this.subByteBorrow(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9C (SBB H)
-     *
-     * @this {CPU8080}
-     */
-    opSBBH()
-    {
-        this.regA = this.subByteBorrow(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9D (SBB L)
-     *
-     * @this {CPU8080}
-     */
-    opSBBL()
-    {
-        this.regA = this.subByteBorrow(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9E (SBB M)
-     *
-     * @this {CPU8080}
-     */
-    opSBBM()
-    {
-        this.regA = this.subByteBorrow(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x9F (SBB A)
-     *
-     * @this {CPU8080}
-     */
-    opSBBA()
-    {
-        this.regA = this.subByteBorrow(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA0 (ANA B)
-     *
-     * @this {CPU8080}
-     */
-    opANAB()
-    {
-        this.regA = this.andByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA1 (ANA C)
-     *
-     * @this {CPU8080}
-     */
-    opANAC()
-    {
-        this.regA = this.andByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA2 (ANA D)
-     *
-     * @this {CPU8080}
-     */
-    opANAD()
-    {
-        this.regA = this.andByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA3 (ANA E)
-     *
-     * @this {CPU8080}
-     */
-    opANAE()
-    {
-        this.regA = this.andByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA4 (ANA H)
-     *
-     * @this {CPU8080}
-     */
-    opANAH()
-    {
-        this.regA = this.andByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA5 (ANA L)
-     *
-     * @this {CPU8080}
-     */
-    opANAL()
-    {
-        this.regA = this.andByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA6 (ANA M)
-     *
-     * @this {CPU8080}
-     */
-    opANAM()
-    {
-        this.regA = this.andByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xA7 (ANA A)
-     *
-     * @this {CPU8080}
-     */
-    opANAA()
-    {
-        this.regA = this.andByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA8 (XRA B)
-     *
-     * @this {CPU8080}
-     */
-    opXRAB()
-    {
-        this.regA = this.xorByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA9 (XRA C)
-     *
-     * @this {CPU8080}
-     */
-    opXRAC()
-    {
-        this.regA = this.xorByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAA (XRA D)
-     *
-     * @this {CPU8080}
-     */
-    opXRAD()
-    {
-        this.regA = this.xorByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAB (XRA E)
-     *
-     * @this {CPU8080}
-     */
-    opXRAE()
-    {
-        this.regA = this.xorByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAC (XRA H)
-     *
-     * @this {CPU8080}
-     */
-    opXRAH()
-    {
-        this.regA = this.xorByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAD (XRA L)
-     *
-     * @this {CPU8080}
-     */
-    opXRAL()
-    {
-        this.regA = this.xorByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAE (XRA M)
-     *
-     * @this {CPU8080}
-     */
-    opXRAM()
-    {
-        this.regA = this.xorByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xAF (XRA A)
-     *
-     * @this {CPU8080}
-     */
-    opXRAA()
-    {
-        this.regA = this.xorByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB0 (ORA B)
-     *
-     * @this {CPU8080}
-     */
-    opORAB()
-    {
-        this.regA = this.orByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB1 (ORA C)
-     *
-     * @this {CPU8080}
-     */
-    opORAC()
-    {
-        this.regA = this.orByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB2 (ORA D)
-     *
-     * @this {CPU8080}
-     */
-    opORAD()
-    {
-        this.regA = this.orByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB3 (ORA E)
-     *
-     * @this {CPU8080}
-     */
-    opORAE()
-    {
-        this.regA = this.orByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB4 (ORA H)
-     *
-     * @this {CPU8080}
-     */
-    opORAH()
-    {
-        this.regA = this.orByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB5 (ORA L)
-     *
-     * @this {CPU8080}
-     */
-    opORAL()
-    {
-        this.regA = this.orByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB6 (ORA M)
-     *
-     * @this {CPU8080}
-     */
-    opORAM()
-    {
-        this.regA = this.orByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xB7 (ORA A)
-     *
-     * @this {CPU8080}
-     */
-    opORAA()
-    {
-        this.regA = this.orByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB8 (CMP B)
-     *
-     * @this {CPU8080}
-     */
-    opCMPB()
-    {
-        this.subByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB9 (CMP C)
-     *
-     * @this {CPU8080}
-     */
-    opCMPC()
-    {
-        this.subByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBA (CMP D)
-     *
-     * @this {CPU8080}
-     */
-    opCMPD()
-    {
-        this.subByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBB (CMP E)
-     *
-     * @this {CPU8080}
-     */
-    opCMPE()
-    {
-        this.subByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBC (CMP H)
-     *
-     * @this {CPU8080}
-     */
-    opCMPH()
-    {
-        this.subByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBD (CMP L)
-     *
-     * @this {CPU8080}
-     */
-    opCMPL()
-    {
-        this.subByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBE (CMP M)
-     *
-     * @this {CPU8080}
-     */
-    opCMPM()
-    {
-        this.subByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xBF (CMP A)
-     *
-     * @this {CPU8080}
-     */
-    opCMPA()
-    {
-        this.subByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xC0 (RNZ)
-     *
-     * @this {CPU8080}
-     */
-    opRNZ()
-    {
-        if (!this.getZF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xC1 (POP B)
-     *
-     * @this {CPU8080}
-     */
-    opPOPB()
-    {
-        this.setBC(this.popWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xC2 (JNZ a16)
-     *
-     * @this {CPU8080}
-     */
-    opJNZ()
-    {
-        let w = this.getPCWord();
-        if (!this.getZF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xC3 (JMP a16)
-     *
-     * @this {CPU8080}
-     */
-    opJMP()
-    {
-        this.setPC(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xC4 (CNZ a16)
-     *
-     * @this {CPU8080}
-     */
-    opCNZ()
-    {
-        let w = this.getPCWord();
-        if (!this.getZF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xC5 (PUSH B)
-     *
-     * @this {CPU8080}
-     */
-    opPUSHB()
-    {
-        this.pushWord(this.getBC());
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xC6 (ADI d8)
-     *
-     * @this {CPU8080}
-     */
-    opADI()
-    {
-        this.regA = this.addByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xC7 (RST 0)
-     *
-     * @this {CPU8080}
-     */
-    opRST0()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xC8 (RZ)
-     *
-     * @this {CPU8080}
-     */
-    opRZ()
-    {
-        if (this.getZF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xC9 (RET)
-     *
-     * @this {CPU8080}
-     */
-    opRET()
-    {
-        this.setPC(this.popWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xCA (JZ a16)
-     *
-     * @this {CPU8080}
-     */
-    opJZ()
-    {
-        let w = this.getPCWord();
-        if (this.getZF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xCC (CZ a16)
-     *
-     * @this {CPU8080}
-     */
-    opCZ()
-    {
-        let w = this.getPCWord();
-        if (this.getZF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xCD (CALL a16)
-     *
-     * @this {CPU8080}
-     */
-    opCALL()
-    {
-        let w = this.getPCWord();
-        this.pushWord(this.getPC());
-        this.setPC(w);
-        this.nCyclesRemain -= 17;
-    }
-
-    /**
-     * op=0xCE (ACI d8)
-     *
-     * @this {CPU8080}
-     */
-    opACI()
-    {
-        this.regA = this.addByteCarry(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xCF (RST 1)
-     *
-     * @this {CPU8080}
-     */
-    opRST1()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x08);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xD0 (RNC)
-     *
-     * @this {CPU8080}
-     */
-    opRNC()
-    {
-        if (!this.getCF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xD1 (POP D)
-     *
-     * @this {CPU8080}
-     */
-    opPOPD()
-    {
-        this.setDE(this.popWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xD2 (JNC a16)
-     *
-     * @this {CPU8080}
-     */
-    opJNC()
-    {
-        let w = this.getPCWord();
-        if (!this.getCF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xD3 (OUT d8)
-     *
-     * @this {CPU8080}
-     */
-    opOUT()
-    {
-        let port = this.getPCByte();
-        this.busIO.writeData(port, this.regA);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xD4 (CNC a16)
-     *
-     * @this {CPU8080}
-     */
-    opCNC()
-    {
-        let w = this.getPCWord();
-        if (!this.getCF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xD5 (PUSH D)
-     *
-     * @this {CPU8080}
-     */
-    opPUSHD()
-    {
-        this.pushWord(this.getDE());
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xD6 (SUI d8)
-     *
-     * @this {CPU8080}
-     */
-    opSUI()
-    {
-        this.regA = this.subByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xD7 (RST 2)
-     *
-     * @this {CPU8080}
-     */
-    opRST2()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x10);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xD8 (RC)
-     *
-     * @this {CPU8080}
-     */
-    opRC()
-    {
-        if (this.getCF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xDA (JC a16)
-     *
-     * @this {CPU8080}
-     */
-    opJC()
-    {
-        let w = this.getPCWord();
-        if (this.getCF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xDB (IN d8)
-     *
-     * @this {CPU8080}
-     */
-    opIN()
-    {
-        let port = this.getPCByte();
-        this.regA = this.busIO.readData(port) & 0xff;
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xDC (CC a16)
-     *
-     * @this {CPU8080}
-     */
-    opCC()
-    {
-        let w = this.getPCWord();
-        if (this.getCF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xDE (SBI d8)
-     *
-     * @this {CPU8080}
-     */
-    opSBI()
-    {
-        this.regA = this.subByteBorrow(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xDF (RST 3)
-     *
-     * @this {CPU8080}
-     */
-    opRST3()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x18);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xE0 (RPO)
-     *
-     * @this {CPU8080}
-     */
-    opRPO()
-    {
-        if (!this.getPF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xE1 (POP H)
-     *
-     * @this {CPU8080}
-     */
-    opPOPH()
-    {
-        this.setHL(this.popWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xE2 (JPO a16)
-     *
-     * @this {CPU8080}
-     */
-    opJPO()
-    {
-        let w = this.getPCWord();
-        if (!this.getPF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xE3 (XTHL)
-     *
-     * @this {CPU8080}
-     */
-    opXTHL()
-    {
-        let w = this.popWord();
-        this.pushWord(this.getHL());
-        this.setHL(w);
-        this.nCyclesRemain -= 18;
-    }
-
-    /**
-     * op=0xE4 (CPO a16)
-     *
-     * @this {CPU8080}
-     */
-    opCPO()
-    {
-        let w = this.getPCWord();
-        if (!this.getPF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xE5 (PUSH H)
-     *
-     * @this {CPU8080}
-     */
-    opPUSHH()
-    {
-        this.pushWord(this.getHL());
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xE6 (ANI d8)
-     *
-     * @this {CPU8080}
-     */
-    opANI()
-    {
-        this.regA = this.andByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xE7 (RST 4)
-     *
-     * @this {CPU8080}
-     */
-    opRST4()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x20);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xE8 (RPE)
-     *
-     * @this {CPU8080}
-     */
-    opRPE()
-    {
-        if (this.getPF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xE9 (PCHL)
-     *
-     * @this {CPU8080}
-     */
-    opPCHL()
-    {
-        this.setPC(this.getHL());
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xEA (JPE a16)
-     *
-     * @this {CPU8080}
-     */
-    opJPE()
-    {
-        let w = this.getPCWord();
-        if (this.getPF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xEB (XCHG)
-     *
-     * @this {CPU8080}
-     */
-    opXCHG()
-    {
-        let w = this.getHL();
-        this.setHL(this.getDE());
-        this.setDE(w);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xEC (CPE a16)
-     *
-     * @this {CPU8080}
-     */
-    opCPE()
-    {
-        let w = this.getPCWord();
-        if (this.getPF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xEE (XRI d8)
-     *
-     * @this {CPU8080}
-     */
-    opXRI()
-    {
-        this.regA = this.xorByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xEF (RST 5)
-     *
-     * @this {CPU8080}
-     */
-    opRST5()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x28);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xF0 (RP)
-     *
-     * @this {CPU8080}
-     */
-    opRP()
-    {
-        if (!this.getSF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xF1 (POP PSW)
-     *
-     * @this {CPU8080}
-     */
-    opPOPSW()
-    {
-        this.setPSW(this.popWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xF2 (JP a16)
-     *
-     * @this {CPU8080}
-     */
-    opJP()
-    {
-        let w = this.getPCWord();
-        if (!this.getSF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xF3 (DI)
-     *
-     * @this {CPU8080}
-     */
-    opDI()
-    {
-        this.clearIF();
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xF4 (CP a16)
-     *
-     * @this {CPU8080}
-     */
-    opCP()
-    {
-        let w = this.getPCWord();
-        if (!this.getSF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xF5 (PUSH PSW)
-     *
-     * @this {CPU8080}
-     */
-    opPUPSW()
-    {
-        this.pushWord(this.getPSW());
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xF6 (ORI d8)
-     *
-     * @this {CPU8080}
-     */
-    opORI()
-    {
-        this.regA = this.orByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xF7 (RST 6)
-     *
-     * @this {CPU8080}
-     */
-    opRST6()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x30);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xF8 (RM)
-     *
-     * @this {CPU8080}
-     */
-    opRM()
-    {
-        if (this.getSF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xF9 (SPHL)
-     *
-     * @this {CPU8080}
-     */
-    opSPHL()
-    {
-        this.setSP(this.getHL());
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xFA (JM a16)
-     *
-     * @this {CPU8080}
-     */
-    opJM()
-    {
-        let w = this.getPCWord();
-        if (this.getSF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xFB (EI)
-     *
-     * @this {CPU8080}
-     */
-    opEI()
-    {
-        this.setIF();
-        this.nCyclesRemain -= 4;
-        this.checkINTR();
-    }
-
-    /**
-     * op=0xFC (CM a16)
-     *
-     * @this {CPU8080}
-     */
-    opCM()
-    {
-        let w = this.getPCWord();
-        if (this.getSF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xFE (CPI d8)
-     *
-     * @this {CPU8080}
-     */
-    opCPI()
-    {
-        this.subByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xFF (RST 7)
-     *
-     * @this {CPU8080}
-     */
-    opRST7()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x38);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * resetRegs()
-     *
-     * @this {CPU8080}
-     */
-    resetRegs()
-    {
-        this.regA = 0;
-        this.regB = 0;
-        this.regC = 0;
-        this.regD = 0;
-        this.regE = 0;
-        this.regH = 0;
-        this.regL = 0;
-        this.setSP(0);
-        this.setPC(this.addrReset);
-
-        /*
-         * regPCLast is an internal register that simply snapshots the PC at the start of every instruction;
-         * this is useful not only for CPUs that need to support instruction restartability, but also for
-         * diagnostic/debugging purposes.
-         */
-        this.regPCLast = this.regPC;
-
-        /*
-         * This resets the Processor Status flags (regPS), along with all the internal "result registers".
-         */
-        this.setPS(0);
-
-        /*
-         * intFlags contains some internal states we use to indicate whether a hardware interrupt (INTFLAG.INTR) or
-         * Trap software interrupt (INTR.TRAP) has been requested, as well as when we're in a "HLT" state (INTFLAG.HALT)
-         * that requires us to wait for a hardware interrupt (INTFLAG.INTR) before continuing execution.
-         */
-        this.intFlags = CPU8080.INTFLAG.NONE;
-    }
-
-    /**
-     * setReset(addr)
-     *
-     * @this {CPU8080}
-     * @param {number} addr
-     */
-    setReset(addr)
-    {
-        this.addrReset = addr;
-        this.setPC(addr);
-    }
-
-    /**
-     * getBC()
-     *
-     * @this {CPU8080}
-     * @returns {number}
-     */
-    getBC()
-    {
-        return (this.regB << 8) | this.regC;
-    }
-
-    /**
-     * setBC(w)
-     *
-     * @this {CPU8080}
-     * @param {number} w
-     */
-    setBC(w)
-    {
-        this.regB = (w >> 8) & 0xff;
-        this.regC = w & 0xff;
-    }
-
-    /**
-     * getDE()
-     *
-     * @this {CPU8080}
-     * @returns {number}
-     */
-    getDE()
-    {
-        return (this.regD << 8) | this.regE;
-    }
-
-    /**
-     * setDE(w)
-     *
-     * @this {CPU8080}
-     * @param {number} w
-     */
-    setDE(w)
-    {
-        this.regD = (w >> 8) & 0xff;
-        this.regE = w & 0xff;
-    }
-
-    /**
-     * getHL()
-     *
-     * @this {CPU8080}
-     * @returns {number}
-     */
-    getHL()
-    {
-        return (this.regH << 8) | this.regL;
-    }
-
-    /**
-     * setHL(w)
-     *
-     * @this {CPU8080}
-     * @param {number} w
-     */
-    setHL(w)
-    {
-        this.regH = (w >> 8) & 0xff;
-        this.regL = w & 0xff;
-    }
-
-    /**
-     * getSP()
-     *
-     * @this {CPU8080}
-     * @returns {number}
-     */
-    getSP()
-    {
-        return this.regSP;
-    }
-
-    /**
-     * setSP(off)
-     *
-     * @this {CPU8080}
-     * @param {number} off
-     */
-    setSP(off)
-    {
-        this.regSP = off & 0xffff;
-    }
-
-    /**
-     * getPC()
-     *
-     * @this {CPU8080}
-     * @returns {number}
-     */
-    getPC()
-    {
-        return this.regPC;
-    }
-
-    /**
-     * offPC()
-     *
-     * @this {CPU8080}
-     * @param {number} off
-     * @returns {number}
-     */
-    offPC(off)
-    {
-        return (this.regPC + off) & 0xffff;
-    }
-
-    /**
-     * setPC(off)
-     *
-     * @this {CPU8080}
-     * @param {number} off
-     */
-    setPC(off)
-    {
-        this.regPC = off & 0xffff;
-    }
-
-    /**
-     * clearCF()
-     *
-     * @this {CPU8080}
-     */
-    clearCF()
-    {
-        this.resultZeroCarry &= 0xff;
-    }
-
-    /**
-     * getCF()
-     *
-     * @this {CPU8080}
-     * @returns {number} 0 or 1 (CPU8080.PS.CF)
-     */
-    getCF()
-    {
-        return (this.resultZeroCarry & 0x100)? CPU8080.PS.CF : 0;
-    }
-
-    /**
-     * setCF()
-     *
-     * @this {CPU8080}
-     */
-    setCF()
-    {
-        this.resultZeroCarry |= 0x100;
-    }
-
-    /**
-     * updateCF(CF)
-     *
-     * @this {CPU8080}
-     * @param {number} CF (0x000 or 0x100)
-     */
-    updateCF(CF)
-    {
-        this.resultZeroCarry = (this.resultZeroCarry & 0xff) | CF;
-    }
-
-    /**
-     * clearPF()
-     *
-     * @this {CPU8080}
-     */
-    clearPF()
-    {
-        if (this.getPF()) this.resultParitySign ^= 0x1;
-    }
-
-    /**
-     * getPF()
-     *
-     * @this {CPU8080}
-     * @returns {number} 0 or CPU8080.PS.PF
-     */
-    getPF()
-    {
-        return (CPU8080.PARITY[this.resultParitySign & 0xff])? CPU8080.PS.PF : 0;
-    }
-
-    /**
-     * setPF()
-     *
-     * @this {CPU8080}
-     */
-    setPF()
-    {
-        if (!this.getPF()) this.resultParitySign ^= 0x1;
-    }
-
-    /**
-     * clearAF()
-     *
-     * @this {CPU8080}
-     */
-    clearAF()
-    {
-        this.resultAuxOverflow = (this.resultParitySign & 0x10) | (this.resultAuxOverflow & ~0x10);
-    }
-
-    /**
-     * getAF()
-     *
-     * @this {CPU8080}
-     * @returns {number} 0 or CPU8080.PS.AF
-     */
-    getAF()
-    {
-        return ((this.resultParitySign ^ this.resultAuxOverflow) & 0x10)? CPU8080.PS.AF : 0;
-    }
-
-    /**
-     * setAF()
-     *
-     * @this {CPU8080}
-     */
-    setAF()
-    {
-        this.resultAuxOverflow = (~this.resultParitySign & 0x10) | (this.resultAuxOverflow & ~0x10);
-    }
-
-    /**
-     * clearZF()
-     *
-     * @this {CPU8080}
-     */
-    clearZF()
-    {
-        this.resultZeroCarry |= 0xff;
-    }
-
-    /**
-     * getZF()
-     *
-     * @this {CPU8080}
-     * @returns {number} 0 or CPU8080.PS.ZF
-     */
-    getZF()
-    {
-        return (this.resultZeroCarry & 0xff)? 0 : CPU8080.PS.ZF;
-    }
-
-    /**
-     * setZF()
-     *
-     * @this {CPU8080}
-     */
-    setZF()
-    {
-        this.resultZeroCarry &= ~0xff;
-    }
-
-    /**
-     * clearSF()
-     *
-     * @this {CPU8080}
-     */
-    clearSF()
-    {
-        if (this.getSF()) this.resultParitySign ^= 0xc0;
-    }
-
-    /**
-     * getSF()
-     *
-     * @this {CPU8080}
-     * @returns {number} 0 or CPU8080.PS.SF
-     */
-    getSF()
-    {
-        return (this.resultParitySign & 0x80)? CPU8080.PS.SF : 0;
-    }
-
-    /**
-     * setSF()
-     *
-     * @this {CPU8080}
-     */
-    setSF()
-    {
-        if (!this.getSF()) this.resultParitySign ^= 0xc0;
-    }
-
-    /**
-     * clearIF()
-     *
-     * @this {CPU8080}
-     */
-    clearIF()
-    {
-        this.regPS &= ~CPU8080.PS.IF;
-    }
-
-    /**
-     * getIF()
-     *
-     * @this {CPU8080}
-     * @returns {number} 0 or CPU8080.PS.IF
-     */
-    getIF()
-    {
-        return (this.regPS & CPU8080.PS.IF);
-    }
-
-    /**
-     * setIF()
-     *
-     * @this {CPU8080}
-     */
-    setIF()
-    {
-        this.regPS |= CPU8080.PS.IF;
-    }
-
-    /**
-     * getPS()
-     *
-     * @this {CPU8080}
-     * @returns {number}
-     */
-    getPS()
-    {
-        return (this.regPS & ~CPU8080.PS.RESULT) | (this.getSF() | this.getZF() | this.getAF() | this.getPF() | this.getCF());
-    }
-
-    /**
-     * setPS(regPS)
-     *
-     * @this {CPU8080}
-     * @param {number} regPS
-     */
-    setPS(regPS)
-    {
-        this.resultZeroCarry = this.resultParitySign = this.resultAuxOverflow = 0;
-        if (regPS & CPU8080.PS.CF) this.resultZeroCarry |= 0x100;
-        if (!(regPS & CPU8080.PS.PF)) this.resultParitySign |= 0x01;
-        if (regPS & CPU8080.PS.AF) this.resultAuxOverflow |= 0x10;
-        if (!(regPS & CPU8080.PS.ZF)) this.resultZeroCarry |= 0xff;
-        if (regPS & CPU8080.PS.SF) this.resultParitySign ^= 0xc0;
-        this.regPS = (this.regPS & ~(CPU8080.PS.RESULT | CPU8080.PS.INTERNAL)) | (regPS & CPU8080.PS.INTERNAL) | CPU8080.PS.SET;
-
-    }
-
-    /**
-     * getPSW()
-     *
-     * @this {CPU8080}
-     * @returns {number}
-     */
-    getPSW()
-    {
-        return (this.getPS() & CPU8080.PS.MASK) | (this.regA << 8);
-    }
-
-    /**
-     * setPSW(w)
-     *
-     * @this {CPU8080}
-     * @param {number} w
-     */
-    setPSW(w)
-    {
-        this.setPS((w & CPU8080.PS.MASK) | (this.regPS & ~CPU8080.PS.MASK));
-        this.regA = w >> 8;
-    }
-
-    /**
-     * addByte(src)
-     *
-     * @this {CPU8080}
-     * @param {number} src
-     * @returns {number} regA + src
-     */
-    addByte(src)
-    {
-        this.resultAuxOverflow = this.regA ^ src;
-        return this.resultParitySign = (this.resultZeroCarry = this.regA + src) & 0xff;
-    }
-
-    /**
-     * addByteCarry(src)
-     *
-     * @this {CPU8080}
-     * @param {number} src
-     * @returns {number} regA + src + carry
-     */
-    addByteCarry(src)
-    {
-        this.resultAuxOverflow = this.regA ^ src;
-        return this.resultParitySign = (this.resultZeroCarry = this.regA + src + ((this.resultZeroCarry & 0x100)? 1 : 0)) & 0xff;
-    }
-
-    /**
-     * andByte(src)
-     *
-     * Ordinarily, one would expect the Auxiliary Carry flag (AF) to be clear after this operation,
-     * but apparently the 8080 will set AF if bit 3 in either operand is set.
-     *
-     * @this {CPU8080}
-     * @param {number} src
-     * @returns {number} regA & src
-     */
-    andByte(src)
-    {
-        this.resultZeroCarry = this.resultParitySign = this.resultAuxOverflow = this.regA & src;
-        if ((this.regA | src) & 0x8) this.resultAuxOverflow ^= 0x10;        // set AF by inverting bit 4 in resultAuxOverflow
-        return this.resultZeroCarry;
-    }
-
-    /**
-     * decByte(b)
-     *
-     * We perform this operation using 8-bit two's complement arithmetic, by negating and then adding
-     * the implied src of 1.  This appears to mimic how the 8080 manages the Auxiliary Carry flag (AF).
-     *
-     * @this {CPU8080}
-     * @param {number} b
-     * @returns {number}
-     */
-    decByte(b)
-    {
-        this.resultAuxOverflow = b ^ 0xff;
-        b = this.resultParitySign = (b + 0xff) & 0xff;
-        this.resultZeroCarry = (this.resultZeroCarry & ~0xff) | b;
-        return b;
-    }
-
-    /**
-     * incByte(b)
-     *
-     * @this {CPU8080}
-     * @param {number} b
-     * @returns {number}
-     */
-    incByte(b)
-    {
-        this.resultAuxOverflow = b;
-        b = this.resultParitySign = (b + 1) & 0xff;
-        this.resultZeroCarry = (this.resultZeroCarry & ~0xff) | b;
-        return b;
-    }
-
-    /**
-     * orByte(src)
-     *
-     * @this {CPU8080}
-     * @param {number} src
-     * @returns {number} regA | src
-     */
-    orByte(src)
-    {
-        return this.resultParitySign = this.resultZeroCarry = this.resultAuxOverflow = this.regA | src;
-    }
-
-    /**
-     * subByte(src)
-     *
-     * We perform this operation using 8-bit two's complement arithmetic, by inverting src, adding
-     * src + 1, and then inverting the resulting carry (resultZeroCarry ^ 0x100).  This appears to mimic
-     * how the 8080 manages the Auxiliary Carry flag (AF).
-     *
-     * This function is also used as a cmpByte() function; compare instructions simply ignore the
-     * return value.
-     *
-     * Example: A=66, SUI $10
-     *
-     * If we created the two's complement of 0x10 by negating it, there would just be one addition:
-     *
-     *      0110 0110   (0x66)
-     *    + 1111 0000   (0xF0)  (ie, -0x10)
-     *      ---------
-     *    1 0101 0110   (0x56)
-     *
-     * But in order to mimic the 8080's AF flag, we must perform the two's complement of src in two steps,
-     * inverting it before the add, and then incrementing after the add; eg:
-     *
-     *      0110 0110   (0x66)
-     *    + 1110 1111   (0xEF)  (ie, ~0x10)
-     *      ---------
-     *    1 0101 0101   (0x55)
-     *    + 0000 0001   (0x01)
-     *      ---------
-     *    1 0101 0110   (0x56)
-     *
-     * @this {CPU8080}
-     * @param {number} src
-     * @returns {number} regA - src
-     */
-    subByte(src)
-    {
-        src ^= 0xff;
-        this.resultAuxOverflow = this.regA ^ src;
-        return this.resultParitySign = (this.resultZeroCarry = (this.regA + src + 1) ^ 0x100) & 0xff;
-    }
-
-    /**
-     * subByteBorrow(src)
-     *
-     * We perform this operation using 8-bit two's complement arithmetic, using logic similar to subByte(),
-     * but changing the final increment to a conditional increment, because if the Carry flag (CF) is set, then
-     * we don't need to perform the increment at all.
-     *
-     * This mimics the behavior of subByte() when the Carry flag (CF) is clear, and hopefully also mimics how the
-     * 8080 manages the Auxiliary Carry flag (AF) when the Carry flag (CF) is set.
-     *
-     * @this {CPU8080}
-     * @param {number} src
-     * @returns {number} regA - src - carry
-     */
-    subByteBorrow(src)
-    {
-        src ^= 0xff;
-        this.resultAuxOverflow = this.regA ^ src;
-        return this.resultParitySign = (this.resultZeroCarry = (this.regA + src + ((this.resultZeroCarry & 0x100)? 0 : 1)) ^ 0x100) & 0xff;
-    }
-
-    /**
-     * xorByte(src)
-     *
-     * @this {CPU8080}
-     * @param {number} src
-     * @returns {number} regA ^ src
-     */
-    xorByte(src)
-    {
-        return this.resultParitySign = this.resultZeroCarry = this.resultAuxOverflow = this.regA ^ src;
-    }
-
-    /**
-     * getByte(addr)
-     *
-     * @this {CPU8080}
-     * @param {number} addr is a linear address
-     * @returns {number} byte (8-bit) value at that address
-     */
-    getByte(addr)
-    {
-        return this.busMemory.readData(addr)|0;
-    }
-
-    /**
-     * getWord(addr)
-     *
-     * @this {CPU8080}
-     * @param {number} addr is a linear address
-     * @returns {number} word (16-bit) value at that address
-     */
-    getWord(addr)
-    {
-        return this.busMemory.readPair(addr);
-    }
-
-    /**
-     * setByte(addr, b)
-     *
-     * @this {CPU8080}
-     * @param {number} addr is a linear address
-     * @param {number} b is the byte (8-bit) value to write (which we truncate to 8 bits to be safe)
-     */
-    setByte(addr, b)
-    {
-        this.busMemory.writeData(addr, b & 0xff);
-    }
-
-    /**
-     * setWord(addr, w)
-     *
-     * @this {CPU8080}
-     * @param {number} addr is a linear address
-     * @param {number} w is the word (16-bit) value to write (which we truncate to 16 bits to be safe)
-     */
-    setWord(addr, w)
-    {
-        this.busMemory.writePair(addr, w & 0xffff);
-    }
-
-    /**
-     * getPCByte()
-     *
-     * @this {CPU8080}
-     * @returns {number} byte at the current PC; PC advanced by 1
-     */
-    getPCByte()
-    {
-        let b = this.getByte(this.regPC);
-        this.setPC(this.regPC + 1);
-        return b;
-    }
-
-    /**
-     * getPCWord()
-     *
-     * @this {CPU8080}
-     * @returns {number} word at the current PC; PC advanced by 2
-     */
-    getPCWord()
-    {
-        let w = this.getWord(this.regPC);
-        this.setPC(this.regPC + 2);
-        return w;
-    }
-
-    /**
-     * popWord()
-     *
-     * @this {CPU8080}
-     * @returns {number} word popped from the current SP; SP increased by 2
-     */
-    popWord()
-    {
-        let w = this.getWord(this.regSP);
-        this.setSP(this.regSP + 2);
-        return w;
-    }
-
-    /**
-     * pushWord(w)
-     *
-     * @this {CPU8080}
-     * @param {number} w is the word (16-bit) value to push at current SP; SP decreased by 2
-     */
-    pushWord(w)
-    {
-        this.setSP(this.regSP - 2);
-        this.setWord(this.regSP, w);
-    }
-
-    /**
-     * checkINTR()
-     *
-     * @this {CPU8080}
-     * @returns {boolean} true if execution may proceed, false if not
-     */
-    checkINTR()
-    {
-        /*
-         * If the Debugger is single-stepping, isRunning() will be false, which we take advantage
-         * of here to avoid processing interrupts.  The Debugger will have to issue a "g" command
-         * to resume normal interrupt processing.
-         */
-        if (this.time.isRunning()) {
-            if ((this.intFlags & CPU8080.INTFLAG.INTR) && this.getIF()) {
-                let nLevel;
-                for (nLevel = 0; nLevel < 8; nLevel++) {
-                    if (this.intFlags & (1 << nLevel)) break;
-                }
-                this.clearINTR(nLevel);
-                this.clearIF();
-                this.intFlags &= ~CPU8080.INTFLAG.HALT;
-                this.aOps[CPU8080.OPCODE.RST0 | (nLevel << 3)].call(this);
-            }
-        }
-        if (this.intFlags & CPU8080.INTFLAG.HALT) {
-            /*
-             * As discussed in opHLT(), the CPU is never REALLY halted by a HLT instruction; instead, opHLT()
-             * calls requestHALT(), which sets INTFLAG.HALT and then ends the current burst; the CPU should not
-             * execute any more instructions until checkINTR() indicates a hardware interrupt has been requested.
-             */
-            this.time.endBurst();
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * clearINTR(nLevel)
-     *
-     * Clear the corresponding interrupt level.
-     *
-     * nLevel can either be a valid interrupt level (0-7), or undefined to clear all pending interrupts
-     * (eg, in the event of a system-wide reset).
-     *
-     * @this {CPU8080}
-     * @param {number} [nLevel] (0-7, or undefined for all)
-     */
-    clearINTR(nLevel = -1)
-    {
-        let bitsClear = nLevel < 0? 0xff : (1 << nLevel);
-        this.intFlags &= ~bitsClear;
-    }
-
-    /**
-     * requestHALT()
-     *
-     * @this {CPU8080}
-     */
-    requestHALT()
-    {
-        this.intFlags |= CPU8080.INTFLAG.HALT;
-        this.time.endBurst();
-    }
-
-    /**
-     * requestINTR(nLevel)
-     *
-     * Request the corresponding interrupt level.
-     *
-     * Each interrupt level (0-7) has its own intFlags bit (0-7).  If the Interrupt Flag (IF) is also
-     * set, then we know that checkINTR() will want to issue the interrupt, so we end the current burst.
-     *
-     * @this {CPU8080}
-     * @param {number} nLevel (0-7)
-     */
-    requestINTR(nLevel)
-    {
-        this.intFlags |= (1 << nLevel);
-        if (this.getIF()) {
-            this.time.endBurst();
-        }
-    }
-
-    /**
-     * toInstruction(addr, opcode)
-     *
-     * Returns a string representation of the specified instruction.
-     *
-     * @this {CPU8080}
-     * @param {number} addr
-     * @param {number|undefined} [opcode]
-     * @returns {string}
-     */
-    toInstruction(addr, opcode)
-    {
-        return this.dbg && this.dbg.dumpInstruction(addr, 1) || "";
-    }
-
-    /**
-     * toString()
-     *
-     * Returns a string representation of the current CPU state.
-     *
-     * @this {CPU8080}
-     * @returns {string}
-     */
-    toString()
-    {
-        return this.sprintf("A=%02X BC=%04X DE=%04X HL=%04X SP=%04X I%d S%d Z%d A%d P%d C%d\n%s", this.regA, this.getBC(), this.getDE(), this.getHL(), this.getSP(), this.getIF()?1:0, this.getSF()?1:0, this.getZF()?1:0, this.getAF()?1:0, this.getPF()?1:0, this.getCF()?1:0, this.toInstruction(this.regPC));
-    }
-}
-
-/*
- * CPU model numbers (supported); future supported models could include the Z80.
- */
-CPU8080.MODEL_8080 = 8080;
-
-/*
- * This constant is used to mark points in the code where the physical address being returned
- * is invalid and should not be used.
- */
-CPU8080.ADDR_INVALID = undefined;
-
-/*
- * Processor Status flag definitions (stored in regPS)
- */
-CPU8080.PS = {
-    CF:     0x0001,     // bit 0: Carry Flag
-    BIT1:   0x0002,     // bit 1: reserved, always set
-    PF:     0x0004,     // bit 2: Parity Flag
-    BIT3:   0x0008,     // bit 3: reserved, always clear
-    AF:     0x0010,     // bit 4: Auxiliary Carry Flag
-    BIT5:   0x0020,     // bit 5: reserved, always clear
-    ZF:     0x0040,     // bit 6: Zero Flag
-    SF:     0x0080,     // bit 7: Sign Flag
-    ALL:    0x00D5,     // all "arithmetic" flags (CF, PF, AF, ZF, SF)
-    MASK:   0x00FF,     //
-    IF:     0x0200      // bit 9: Interrupt Flag (set if interrupts enabled; Intel calls this the INTE bit)
-};
-
-/*
- * These are the internal PS bits (outside of PS.MASK) that getPS() and setPS() can get and set,
- * but which cannot be seen with any of the documented instructions.
- */
-CPU8080.PS.INTERNAL = CPU8080.PS.IF;
-
-/*
- * PS "arithmetic" flags are NOT stored in regPS; they are maintained across separate result registers,
- * hence the RESULT designation.
- */
-CPU8080.PS.RESULT   = CPU8080.PS.CF | CPU8080.PS.PF | CPU8080.PS.AF | CPU8080.PS.ZF | CPU8080.PS.SF;
-
-/*
- * These are the "always set" PS bits for the 8080.
- */
-CPU8080.PS.SET      = CPU8080.PS.BIT1;
-
-CPU8080.PARITY = [          // 256-byte array with a 1 wherever the number of set bits of the array index is EVEN
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1
-];
-
-/*
- * Interrupt-related flags (stored in intFlags)
- */
-CPU8080.INTFLAG = {
-    NONE:   0x0000,
-    INTR:   0x00ff,     // mask for 8 bits, representing interrupt levels 0-7
-    HALT:   0x0100      // halt requested; see opHLT()
-};
-
-/*
- * Opcode definitions
- */
-CPU8080.OPCODE = {
-    HLT:    0x76,       // Halt
-    ACI:    0xCE,       // Add with Carry Immediate (affects PS.ALL)
-    CALL:   0xCD,       // Call
-    RST0:   0xC7
-    // to be continued....
-};
-
-Defs.CLASSES["CPU8080"] = CPU8080;
-
-/**
- * @copyright https://www.pcjs.org/machines/lib/cpu/debugger.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/lib/debugger.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ defaultRadix: (number|undefined) }} */
@@ -19110,20 +12494,23 @@ Debugger.DECOP_PRECEDENCE = {
 // Defs.CLASSES["Debugger"] = Debugger;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/cpu/dbg8080.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/libv2/cpux80.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
- * Debugger for the 8080 CPU
+ * Emulation of the 8080 CPU
  *
- * @class {Dbg8080}
+ * @class {CPUx80}
  * @unrestricted
+ * @property {Bus} busIO
+ * @property {Bus} busMemory
+ * @property {Input} input
  */
-class Dbg8080 extends Debugger {
+class CPUx80 extends CPU {
     /**
-     * Dbg8080(idMachine, idDevice, config)
+     * CPUx80(idMachine, idDevice, config)
      *
-     * @this {Dbg8080}
+     * @this {CPUx80}
      * @param {string} idMachine
      * @param {string} idDevice
      * @param {Config} [config]
@@ -19131,8 +12518,4017 @@ class Dbg8080 extends Debugger {
     constructor(idMachine, idDevice, config)
     {
         super(idMachine, idDevice, config);
-        this.styles = [Dbg8080.STYLE_8080, Dbg8080.STYLE_8086];
-        this.style = Dbg8080.STYLE_8086;
+
+        /*
+         * Initialize the CPU.
+         */
+        this.initCPU();
+
+        /*
+         * Get access to the Bus devices, so we have access to the I/O and memory address spaces.
+         */
+        this.busIO = /** @type {Bus} */ (this.findDevice(this.config['busIO']));
+        this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['busMemory']));
+
+        /*
+         * Get access to the Input device, so we can call setFocus() as needed.
+         */
+        this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
+    }
+
+    /**
+     * execute(nCycles)
+     *
+     * Called from startClock() to execute a series of instructions.
+     *
+     * Executes the specified "burst" of instructions.  This code exists outside of the startClock() function
+     * to ensure that its try/catch exception handler doesn't interfere with the optimization of this tight loop.
+     *
+     * @this {CPUx80}
+     * @param {number} nCycles
+     */
+    execute(nCycles)
+    {
+        /*
+         * If checkINTR() returns false, INTFLAG.HALT must be set, so no instructions should be executed.
+         */
+        if (!this.checkINTR()) return;
+        while (this.nCyclesRemain > 0) {
+            this.regPCLast = this.regPC;
+            this.aOps[this.getPCByte()].call(this);
+        }
+    }
+
+    /**
+     * initCPU()
+     *
+     * Initializes the CPU's state.
+     *
+     * @this {CPUx80}
+     */
+    initCPU()
+    {
+        this.resetRegs()
+
+        this.defineRegister("A", () => this.regA, (value) => this.regA = value & 0xff);
+        this.defineRegister("B", () => this.regB, (value) => this.regB = value & 0xff);
+        this.defineRegister("C", () => this.regC, (value) => this.regC = value & 0xff);
+        this.defineRegister("D", () => this.regD, (value) => this.regD = value & 0xff);
+        this.defineRegister("E", () => this.regE, (value) => this.regE = value & 0xff);
+        this.defineRegister("H", () => this.regH, (value) => this.regH = value & 0xff);
+        this.defineRegister("L", () => this.regL, (value) => this.regL = value & 0xff);
+        this.defineRegister("CF", () => (this.getCF()? 1 : 0), (value) => {value? this.setCF() : this.clearCF()});
+        this.defineRegister("PF", () => (this.getPF()? 1 : 0), (value) => {value? this.setPF() : this.clearPF()});
+        this.defineRegister("AF", () => (this.getAF()? 1 : 0), (value) => {value? this.setAF() : this.clearAF()});
+        this.defineRegister("ZF", () => (this.getZF()? 1 : 0), (value) => {value? this.setZF() : this.clearZF()});
+        this.defineRegister("SF", () => (this.getSF()? 1 : 0), (value) => {value? this.setSF() : this.clearSF()});
+        this.defineRegister("IF", () => (this.getIF()? 1 : 0), (value) => {value? this.setIF() : this.clearIF()});
+        this.defineRegister("BC", this.getBC, this.setBC);
+        this.defineRegister("DE", this.getDE, this.setDE);
+        this.defineRegister("HL", this.getHL, this.setHL);
+        this.defineRegister(Debugger.REGISTER.PC, this.getPC, this.setPC);
+
+        /*
+         * This 256-entry array of opcode functions is at the heart of the CPU engine.
+         *
+         * It might be worth trying a switch() statement instead, to see how the performance compares,
+         * but I suspect that would vary quite a bit across JavaScript engines; for now, I'm putting my
+         * money on array lookup.
+         */
+        this.aOps = [
+            /* 0x00-0x03 */ this.opNOP,   this.opLXIB,  this.opSTAXB, this.opINXB,
+            /* 0x04-0x07 */ this.opINRB,  this.opDCRB,  this.opMVIB,  this.opRLC,
+            /* 0x08-0x0B */ this.opNOP,   this.opDADB,  this.opLDAXB, this.opDCXB,
+            /* 0x0C-0x0F */ this.opINRC,  this.opDCRC,  this.opMVIC,  this.opRRC,
+            /* 0x10-0x13 */ this.opNOP,   this.opLXID,  this.opSTAXD, this.opINXD,
+            /* 0x14-0x17 */ this.opINRD,  this.opDCRD,  this.opMVID,  this.opRAL,
+            /* 0x18-0x1B */ this.opNOP,   this.opDADD,  this.opLDAXD, this.opDCXD,
+            /* 0x1C-0x1F */ this.opINRE,  this.opDCRE,  this.opMVIE,  this.opRAR,
+            /* 0x20-0x23 */ this.opNOP,   this.opLXIH,  this.opSHLD,  this.opINXH,
+            /* 0x24-0x27 */ this.opINRH,  this.opDCRH,  this.opMVIH,  this.opDAA,
+            /* 0x28-0x2B */ this.opNOP,   this.opDADH,  this.opLHLD,  this.opDCXH,
+            /* 0x2C-0x2F */ this.opINRL,  this.opDCRL,  this.opMVIL,  this.opCMA,
+            /* 0x30-0x33 */ this.opNOP,   this.opLXISP, this.opSTA,   this.opINXSP,
+            /* 0x34-0x37 */ this.opINRM,  this.opDCRM,  this.opMVIM,  this.opSTC,
+            /* 0x38-0x3B */ this.opNOP,   this.opDADSP, this.opLDA,   this.opDCXSP,
+            /* 0x3C-0x3F */ this.opINRA,  this.opDCRA,  this.opMVIA,  this.opCMC,
+            /* 0x40-0x43 */ this.opMOVBB, this.opMOVBC, this.opMOVBD, this.opMOVBE,
+            /* 0x44-0x47 */ this.opMOVBH, this.opMOVBL, this.opMOVBM, this.opMOVBA,
+            /* 0x48-0x4B */ this.opMOVCB, this.opMOVCC, this.opMOVCD, this.opMOVCE,
+            /* 0x4C-0x4F */ this.opMOVCH, this.opMOVCL, this.opMOVCM, this.opMOVCA,
+            /* 0x50-0x53 */ this.opMOVDB, this.opMOVDC, this.opMOVDD, this.opMOVDE,
+            /* 0x54-0x57 */ this.opMOVDH, this.opMOVDL, this.opMOVDM, this.opMOVDA,
+            /* 0x58-0x5B */ this.opMOVEB, this.opMOVEC, this.opMOVED, this.opMOVEE,
+            /* 0x5C-0x5F */ this.opMOVEH, this.opMOVEL, this.opMOVEM, this.opMOVEA,
+            /* 0x60-0x63 */ this.opMOVHB, this.opMOVHC, this.opMOVHD, this.opMOVHE,
+            /* 0x64-0x67 */ this.opMOVHH, this.opMOVHL, this.opMOVHM, this.opMOVHA,
+            /* 0x68-0x6B */ this.opMOVLB, this.opMOVLC, this.opMOVLD, this.opMOVLE,
+            /* 0x6C-0x6F */ this.opMOVLH, this.opMOVLL, this.opMOVLM, this.opMOVLA,
+            /* 0x70-0x73 */ this.opMOVMB, this.opMOVMC, this.opMOVMD, this.opMOVME,
+            /* 0x74-0x77 */ this.opMOVMH, this.opMOVML, this.opHLT,   this.opMOVMA,
+            /* 0x78-0x7B */ this.opMOVAB, this.opMOVAC, this.opMOVAD, this.opMOVAE,
+            /* 0x7C-0x7F */ this.opMOVAH, this.opMOVAL, this.opMOVAM, this.opMOVAA,
+            /* 0x80-0x83 */ this.opADDB,  this.opADDC,  this.opADDD,  this.opADDE,
+            /* 0x84-0x87 */ this.opADDH,  this.opADDL,  this.opADDM,  this.opADDA,
+            /* 0x88-0x8B */ this.opADCB,  this.opADCC,  this.opADCD,  this.opADCE,
+            /* 0x8C-0x8F */ this.opADCH,  this.opADCL,  this.opADCM,  this.opADCA,
+            /* 0x90-0x93 */ this.opSUBB,  this.opSUBC,  this.opSUBD,  this.opSUBE,
+            /* 0x94-0x97 */ this.opSUBH,  this.opSUBL,  this.opSUBM,  this.opSUBA,
+            /* 0x98-0x9B */ this.opSBBB,  this.opSBBC,  this.opSBBD,  this.opSBBE,
+            /* 0x9C-0x9F */ this.opSBBH,  this.opSBBL,  this.opSBBM,  this.opSBBA,
+            /* 0xA0-0xA3 */ this.opANAB,  this.opANAC,  this.opANAD,  this.opANAE,
+            /* 0xA4-0xA7 */ this.opANAH,  this.opANAL,  this.opANAM,  this.opANAA,
+            /* 0xA8-0xAB */ this.opXRAB,  this.opXRAC,  this.opXRAD,  this.opXRAE,
+            /* 0xAC-0xAF */ this.opXRAH,  this.opXRAL,  this.opXRAM,  this.opXRAA,
+            /* 0xB0-0xB3 */ this.opORAB,  this.opORAC,  this.opORAD,  this.opORAE,
+            /* 0xB4-0xB7 */ this.opORAH,  this.opORAL,  this.opORAM,  this.opORAA,
+            /* 0xB8-0xBB */ this.opCMPB,  this.opCMPC,  this.opCMPD,  this.opCMPE,
+            /* 0xBC-0xBF */ this.opCMPH,  this.opCMPL,  this.opCMPM,  this.opCMPA,
+            /* 0xC0-0xC3 */ this.opRNZ,   this.opPOPB,  this.opJNZ,   this.opJMP,
+            /* 0xC4-0xC7 */ this.opCNZ,   this.opPUSHB, this.opADI,   this.opRST0,
+            /* 0xC8-0xCB */ this.opRZ,    this.opRET,   this.opJZ,    this.opJMP,
+            /* 0xCC-0xCF */ this.opCZ,    this.opCALL,  this.opACI,   this.opRST1,
+            /* 0xD0-0xD3 */ this.opRNC,   this.opPOPD,  this.opJNC,   this.opOUT,
+            /* 0xD4-0xD7 */ this.opCNC,   this.opPUSHD, this.opSUI,   this.opRST2,
+            /* 0xD8-0xDB */ this.opRC,    this.opRET,   this.opJC,    this.opIN,
+            /* 0xDC-0xDF */ this.opCC,    this.opCALL,  this.opSBI,   this.opRST3,
+            /* 0xE0-0xE3 */ this.opRPO,   this.opPOPH,  this.opJPO,   this.opXTHL,
+            /* 0xE4-0xE7 */ this.opCPO,   this.opPUSHH, this.opANI,   this.opRST4,
+            /* 0xE8-0xEB */ this.opRPE,   this.opPCHL,  this.opJPE,   this.opXCHG,
+            /* 0xEC-0xEF */ this.opCPE,   this.opCALL,  this.opXRI,   this.opRST5,
+            /* 0xF0-0xF3 */ this.opRP,    this.opPOPSW, this.opJP,    this.opDI,
+            /* 0xF4-0xF7 */ this.opCP,    this.opPUPSW, this.opORI,   this.opRST6,
+            /* 0xF8-0xFB */ this.opRM,    this.opSPHL,  this.opJM,    this.opEI,
+            /* 0xFC-0xFF */ this.opCM,    this.opCALL,  this.opCPI,   this.opRST7
+        ];
+    }
+
+    /**
+     * loadState(stateCPU)
+     *
+     * If any saved values don't match (possibly overridden), abandon the given state and return false.
+     *
+     * @this {CPUx80}
+     * @param {Array} stateCPU
+     * @returns {boolean}
+     */
+    loadState(stateCPU)
+    {
+        if (!stateCPU || !stateCPU.length) {
+            this.println("invalid saved state");
+            return false;
+        }
+        let idDevice = stateCPU.shift();
+        let version = stateCPU.shift();
+        if (idDevice != this.idDevice || (version|0) !== (+VERSION|0)) {
+            this.printf("CPU state mismatch (%s %3.2f)\n", idDevice, version);
+            return false;
+        }
+        try {
+            this.regA = stateCPU.shift();
+            this.regB = stateCPU.shift();
+            this.regC = stateCPU.shift();
+            this.regD = stateCPU.shift();
+            this.regE = stateCPU.shift();
+            this.regH = stateCPU.shift();
+            this.regL = stateCPU.shift();
+            this.setPC(stateCPU.shift());
+            this.setSP(stateCPU.shift());
+            this.setPS(stateCPU.shift());
+            this.intFlags = stateCPU.shift();
+        } catch(err) {
+            this.println("CPU state error: " + err.message);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * saveState(stateCPU)
+     *
+     * @this {CPUx80}
+     * @param {Array} stateCPU
+     */
+    saveState(stateCPU)
+    {
+        stateCPU.push(this.idDevice);
+        stateCPU.push(+VERSION);
+        stateCPU.push(this.regA);
+        stateCPU.push(this.regB);
+        stateCPU.push(this.regC);
+        stateCPU.push(this.regD);
+        stateCPU.push(this.regE);
+        stateCPU.push(this.regH);
+        stateCPU.push(this.regL);
+        stateCPU.push(this.getPC());
+        stateCPU.push(this.getSP());
+        stateCPU.push(this.getPS());
+        stateCPU.push(this.intFlags);
+    }
+
+
+    /**
+     * onLoad(state)
+     *
+     * Automatically called by the Machine device if the machine's 'autoSave' property is true.
+     *
+     * @this {CPUx80}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    onLoad(state)
+    {
+        if (state) {
+            let stateCPU = state[0];
+            if (this.loadState(stateCPU)) {
+                state.shift();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * onPower(on)
+     *
+     * Called by the Machine device to provide notification of a power event.
+     *
+     * @this {CPUx80}
+     * @param {boolean} on (true to power on, false to power off)
+     */
+    onPower(on)
+    {
+        if (on) {
+            this.time.start();
+            if (this.input) this.input.setFocus();
+        } else {
+            this.time.stop();
+        }
+    }
+
+    /**
+     * onReset()
+     *
+     * Called by the Machine device to provide notification of a reset event.
+     *
+     * @this {CPUx80}
+     */
+    onReset()
+    {
+        this.println("reset");
+        this.resetRegs();
+        if (!this.time.isRunning()) this.print(this.toString());
+    }
+
+    /**
+     * onSave(state)
+     *
+     * Automatically called by the Machine device before all other devices have been powered down (eg, during
+     * a page unload event).
+     *
+     * @this {CPUx80}
+     * @param {Array} state
+     */
+    onSave(state)
+    {
+        let stateCPU = [];
+        this.saveState(stateCPU);
+        state.push(stateCPU);
+    }
+
+    /**
+     * onUpdate(fTransition)
+     *
+     * Enumerate all bindings and update their values.
+     *
+     * Called by Time's update() function whenever 1) its YIELDS_PER_UPDATE threshold is reached
+     * (default is twice per second), 2) a step() operation has just finished (ie, the device is being
+     * single-stepped), and 3) a start() or stop() transition has occurred.
+     *
+     * @this {CPUx80}
+     * @param {boolean} [fTransition]
+     */
+    onUpdate(fTransition)
+    {
+        // TODO: Decide what bindings we want to support, and update them as appropriate.
+    }
+
+    /**
+     * op=0x00 (NOP)
+     *
+     * @this {CPUx80}
+     */
+    opNOP()
+    {
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x01 (LXI B,d16)
+     *
+     * @this {CPUx80}
+     */
+    opLXIB()
+    {
+        this.setBC(this.getPCWord());
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0x02 (STAX B)
+     *
+     * @this {CPUx80}
+     */
+    opSTAXB()
+    {
+        this.setByte(this.getBC(), this.regA);
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x03 (INX B)
+     *
+     * @this {CPUx80}
+     */
+    opINXB()
+    {
+        this.setBC(this.getBC() + 1);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x04 (INR B)
+     *
+     * @this {CPUx80}
+     */
+    opINRB()
+    {
+        this.regB = this.incByte(this.regB);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x05 (DCR B)
+     *
+     * @this {CPUx80}
+     */
+    opDCRB()
+    {
+        this.regB = this.decByte(this.regB);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x06 (MVI B,d8)
+     *
+     * @this {CPUx80}
+     */
+    opMVIB()
+    {
+        this.regB = this.getPCByte();
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x07 (RLC)
+     *
+     * @this {CPUx80}
+     */
+    opRLC()
+    {
+        let carry = this.regA << 1;
+        this.regA = (carry & 0xff) | (carry >> 8);
+        this.updateCF(carry & 0x100);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x09 (DAD B)
+     *
+     * @this {CPUx80}
+     */
+    opDADB()
+    {
+        let w;
+        this.setHL(w = this.getHL() + this.getBC());
+        this.updateCF((w >> 8) & 0x100);
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0x0A (LDAX B)
+     *
+     * @this {CPUx80}
+     */
+    opLDAXB()
+    {
+        this.regA = this.getByte(this.getBC());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x0B (DCX B)
+     *
+     * @this {CPUx80}
+     */
+    opDCXB()
+    {
+        this.setBC(this.getBC() - 1);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x0C (INR C)
+     *
+     * @this {CPUx80}
+     */
+    opINRC()
+    {
+        this.regC = this.incByte(this.regC);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x0D (DCR C)
+     *
+     * @this {CPUx80}
+     */
+    opDCRC()
+    {
+        this.regC = this.decByte(this.regC);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x0E (MVI C,d8)
+     *
+     * @this {CPUx80}
+     */
+    opMVIC()
+    {
+        this.regC = this.getPCByte();
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x0F (RRC)
+     *
+     * @this {CPUx80}
+     */
+    opRRC()
+    {
+        let carry = (this.regA << 8) & 0x100;
+        this.regA = (carry | this.regA) >> 1;
+        this.updateCF(carry);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x11 (LXI D,d16)
+     *
+     * @this {CPUx80}
+     */
+    opLXID()
+    {
+        this.setDE(this.getPCWord());
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0x12 (STAX D)
+     *
+     * @this {CPUx80}
+     */
+    opSTAXD()
+    {
+        this.setByte(this.getDE(), this.regA);
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x13 (INX D)
+     *
+     * @this {CPUx80}
+     */
+    opINXD()
+    {
+        this.setDE(this.getDE() + 1);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x14 (INR D)
+     *
+     * @this {CPUx80}
+     */
+    opINRD()
+    {
+        this.regD = this.incByte(this.regD);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x15 (DCR D)
+     *
+     * @this {CPUx80}
+     */
+    opDCRD()
+    {
+        this.regD = this.decByte(this.regD);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x16 (MVI D,d8)
+     *
+     * @this {CPUx80}
+     */
+    opMVID()
+    {
+        this.regD = this.getPCByte();
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x17 (RAL)
+     *
+     * @this {CPUx80}
+     */
+    opRAL()
+    {
+        let carry = this.regA << 1;
+        this.regA = (carry & 0xff) | this.getCF();
+        this.updateCF(carry & 0x100);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x19 (DAD D)
+     *
+     * @this {CPUx80}
+     */
+    opDADD()
+    {
+        let w;
+        this.setHL(w = this.getHL() + this.getDE());
+        this.updateCF((w >> 8) & 0x100);
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0x1A (LDAX D)
+     *
+     * @this {CPUx80}
+     */
+    opLDAXD()
+    {
+        this.regA = this.getByte(this.getDE());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x1B (DCX D)
+     *
+     * @this {CPUx80}
+     */
+    opDCXD()
+    {
+        this.setDE(this.getDE() - 1);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x1C (INR E)
+     *
+     * @this {CPUx80}
+     */
+    opINRE()
+    {
+        this.regE = this.incByte(this.regE);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x1D (DCR E)
+     *
+     * @this {CPUx80}
+     */
+    opDCRE()
+    {
+        this.regE = this.decByte(this.regE);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x1E (MVI E,d8)
+     *
+     * @this {CPUx80}
+     */
+    opMVIE()
+    {
+        this.regE = this.getPCByte();
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x1F (RAR)
+     *
+     * @this {CPUx80}
+     */
+    opRAR()
+    {
+        let carry = (this.regA << 8);
+        this.regA = ((this.getCF() << 8) | this.regA) >> 1;
+        this.updateCF(carry & 0x100);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x21 (LXI H,d16)
+     *
+     * @this {CPUx80}
+     */
+    opLXIH()
+    {
+        this.setHL(this.getPCWord());
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0x22 (SHLD a16)
+     *
+     * @this {CPUx80}
+     */
+    opSHLD()
+    {
+        this.setWord(this.getPCWord(), this.getHL());
+        this.nCyclesRemain -= 16;
+    }
+
+    /**
+     * op=0x23 (INX H)
+     *
+     * @this {CPUx80}
+     */
+    opINXH()
+    {
+        this.setHL(this.getHL() + 1);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x24 (INR H)
+     *
+     * @this {CPUx80}
+     */
+    opINRH()
+    {
+        this.regH = this.incByte(this.regH);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x25 (DCR H)
+     *
+     * @this {CPUx80}
+     */
+    opDCRH()
+    {
+        this.regH = this.decByte(this.regH);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x26 (MVI H,d8)
+     *
+     * @this {CPUx80}
+     */
+    opMVIH()
+    {
+        this.regH = this.getPCByte();
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x27 (DAA)
+     *
+     * @this {CPUx80}
+     */
+    opDAA()
+    {
+        let src = 0;
+        let CF = this.getCF();
+        let AF = this.getAF();
+        if (AF || (this.regA & 0x0F) > 9) {
+            src |= 0x06;
+        }
+        if (CF || this.regA >= 0x9A) {
+            src |= 0x60;
+            CF = CPUx80.PS.CF;
+        }
+        this.regA = this.addByte(src);
+        this.updateCF(CF? 0x100 : 0);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x29 (DAD H)
+     *
+     * @this {CPUx80}
+     */
+    opDADH()
+    {
+        let w;
+        this.setHL(w = this.getHL() + this.getHL());
+        this.updateCF((w >> 8) & 0x100);
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0x2A (LHLD a16)
+     *
+     * @this {CPUx80}
+     */
+    opLHLD()
+    {
+        this.setHL(this.getWord(this.getPCWord()));
+        this.nCyclesRemain -= 16;
+    }
+
+    /**
+     * op=0x2B (DCX H)
+     *
+     * @this {CPUx80}
+     */
+    opDCXH()
+    {
+        this.setHL(this.getHL() - 1);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x2C (INR L)
+     *
+     * @this {CPUx80}
+     */
+    opINRL()
+    {
+        this.regL = this.incByte(this.regL);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x2D (DCR L)
+     *
+     * @this {CPUx80}
+     */
+    opDCRL()
+    {
+        this.regL = this.decByte(this.regL);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x2E (MVI L,d8)
+     *
+     * @this {CPUx80}
+     */
+    opMVIL()
+    {
+        this.regL = this.getPCByte();
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x2F (CMA)
+     *
+     * @this {CPUx80}
+     */
+    opCMA()
+    {
+        this.regA = ~this.regA & 0xff;
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x31 (LXI SP,d16)
+     *
+     * @this {CPUx80}
+     */
+    opLXISP()
+    {
+        this.setSP(this.getPCWord());
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0x32 (STA a16)
+     *
+     * @this {CPUx80}
+     */
+    opSTA()
+    {
+        this.setByte(this.getPCWord(), this.regA);
+        this.nCyclesRemain -= 13;
+    }
+
+    /**
+     * op=0x33 (INX SP)
+     *
+     * @this {CPUx80}
+     */
+    opINXSP()
+    {
+        this.setSP(this.getSP() + 1);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x34 (INR M)
+     *
+     * @this {CPUx80}
+     */
+    opINRM()
+    {
+        let addr = this.getHL();
+        this.setByte(addr, this.incByte(this.getByte(addr)));
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0x35 (DCR M)
+     *
+     * @this {CPUx80}
+     */
+    opDCRM()
+    {
+        let addr = this.getHL();
+        this.setByte(addr, this.decByte(this.getByte(addr)));
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0x36 (MVI M,d8)
+     *
+     * @this {CPUx80}
+     */
+    opMVIM()
+    {
+        this.setByte(this.getHL(), this.getPCByte());
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0x37 (STC)
+     *
+     * @this {CPUx80}
+     */
+    opSTC()
+    {
+        this.setCF();
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x39 (DAD SP)
+     *
+     * @this {CPUx80}
+     */
+    opDADSP()
+    {
+        let w;
+        this.setHL(w = this.getHL() + this.getSP());
+        this.updateCF((w >> 8) & 0x100);
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0x3A (LDA a16)
+     *
+     * @this {CPUx80}
+     */
+    opLDA()
+    {
+        this.regA = this.getByte(this.getPCWord());
+        this.nCyclesRemain -= 13;
+    }
+
+    /**
+     * op=0x3B (DCX SP)
+     *
+     * @this {CPUx80}
+     */
+    opDCXSP()
+    {
+        this.setSP(this.getSP() - 1);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x3C (INR A)
+     *
+     * @this {CPUx80}
+     */
+    opINRA()
+    {
+        this.regA = this.incByte(this.regA);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x3D (DCR A)
+     *
+     * @this {CPUx80}
+     */
+    opDCRA()
+    {
+        this.regA = this.decByte(this.regA);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x3E (MVI A,d8)
+     *
+     * @this {CPUx80}
+     */
+    opMVIA()
+    {
+        this.regA = this.getPCByte();
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x3F (CMC)
+     *
+     * @this {CPUx80}
+     */
+    opCMC()
+    {
+        this.updateCF(this.getCF()? 0 : 0x100);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x40 (MOV B,B)
+     *
+     * @this {CPUx80}
+     */
+    opMOVBB()
+    {
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x41 (MOV B,C)
+     *
+     * @this {CPUx80}
+     */
+    opMOVBC()
+    {
+        this.regB = this.regC;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x42 (MOV B,D)
+     *
+     * @this {CPUx80}
+     */
+    opMOVBD()
+    {
+        this.regB = this.regD;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x43 (MOV B,E)
+     *
+     * @this {CPUx80}
+     */
+    opMOVBE()
+    {
+        this.regB = this.regE;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x44 (MOV B,H)
+     *
+     * @this {CPUx80}
+     */
+    opMOVBH()
+    {
+        this.regB = this.regH;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x45 (MOV B,L)
+     *
+     * @this {CPUx80}
+     */
+    opMOVBL()
+    {
+        this.regB = this.regL;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x46 (MOV B,M)
+     *
+     * @this {CPUx80}
+     */
+    opMOVBM()
+    {
+        this.regB = this.getByte(this.getHL());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x47 (MOV B,A)
+     *
+     * @this {CPUx80}
+     */
+    opMOVBA()
+    {
+        this.regB = this.regA;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x48 (MOV C,B)
+     *
+     * @this {CPUx80}
+     */
+    opMOVCB()
+    {
+        this.regC = this.regB;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x49 (MOV C,C)
+     *
+     * @this {CPUx80}
+     */
+    opMOVCC()
+    {
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x4A (MOV C,D)
+     *
+     * @this {CPUx80}
+     */
+    opMOVCD()
+    {
+        this.regC = this.regD;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x4B (MOV C,E)
+     *
+     * @this {CPUx80}
+     */
+    opMOVCE()
+    {
+        this.regC = this.regE;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x4C (MOV C,H)
+     *
+     * @this {CPUx80}
+     */
+    opMOVCH()
+    {
+        this.regC = this.regH;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x4D (MOV C,L)
+     *
+     * @this {CPUx80}
+     */
+    opMOVCL()
+    {
+        this.regC = this.regL;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x4E (MOV C,M)
+     *
+     * @this {CPUx80}
+     */
+    opMOVCM()
+    {
+        this.regC = this.getByte(this.getHL());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x4F (MOV C,A)
+     *
+     * @this {CPUx80}
+     */
+    opMOVCA()
+    {
+        this.regC = this.regA;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x50 (MOV D,B)
+     *
+     * @this {CPUx80}
+     */
+    opMOVDB()
+    {
+        this.regD = this.regB;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x51 (MOV D,C)
+     *
+     * @this {CPUx80}
+     */
+    opMOVDC()
+    {
+        this.regD = this.regC;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x52 (MOV D,D)
+     *
+     * @this {CPUx80}
+     */
+    opMOVDD()
+    {
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x53 (MOV D,E)
+     *
+     * @this {CPUx80}
+     */
+    opMOVDE()
+    {
+        this.regD = this.regE;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x54 (MOV D,H)
+     *
+     * @this {CPUx80}
+     */
+    opMOVDH()
+    {
+        this.regD = this.regH;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x55 (MOV D,L)
+     *
+     * @this {CPUx80}
+     */
+    opMOVDL()
+    {
+        this.regD = this.regL;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x56 (MOV D,M)
+     *
+     * @this {CPUx80}
+     */
+    opMOVDM()
+    {
+        this.regD = this.getByte(this.getHL());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x57 (MOV D,A)
+     *
+     * @this {CPUx80}
+     */
+    opMOVDA()
+    {
+        this.regD = this.regA;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x58 (MOV E,B)
+     *
+     * @this {CPUx80}
+     */
+    opMOVEB()
+    {
+        this.regE = this.regB;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x59 (MOV E,C)
+     *
+     * @this {CPUx80}
+     */
+    opMOVEC()
+    {
+        this.regE = this.regC;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x5A (MOV E,D)
+     *
+     * @this {CPUx80}
+     */
+    opMOVED()
+    {
+        this.regE = this.regD;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x5B (MOV E,E)
+     *
+     * @this {CPUx80}
+     */
+    opMOVEE()
+    {
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x5C (MOV E,H)
+     *
+     * @this {CPUx80}
+     */
+    opMOVEH()
+    {
+        this.regE = this.regH;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x5D (MOV E,L)
+     *
+     * @this {CPUx80}
+     */
+    opMOVEL()
+    {
+        this.regE = this.regL;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x5E (MOV E,M)
+     *
+     * @this {CPUx80}
+     */
+    opMOVEM()
+    {
+        this.regE = this.getByte(this.getHL());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x5F (MOV E,A)
+     *
+     * @this {CPUx80}
+     */
+    opMOVEA()
+    {
+        this.regE = this.regA;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x60 (MOV H,B)
+     *
+     * @this {CPUx80}
+     */
+    opMOVHB()
+    {
+        this.regH = this.regB;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x61 (MOV H,C)
+     *
+     * @this {CPUx80}
+     */
+    opMOVHC()
+    {
+        this.regH = this.regC;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x62 (MOV H,D)
+     *
+     * @this {CPUx80}
+     */
+    opMOVHD()
+    {
+        this.regH = this.regD;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x63 (MOV H,E)
+     *
+     * @this {CPUx80}
+     */
+    opMOVHE()
+    {
+        this.regH = this.regE;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x64 (MOV H,H)
+     *
+     * @this {CPUx80}
+     */
+    opMOVHH()
+    {
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x65 (MOV H,L)
+     *
+     * @this {CPUx80}
+     */
+    opMOVHL()
+    {
+        this.regH = this.regL;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x66 (MOV H,M)
+     *
+     * @this {CPUx80}
+     */
+    opMOVHM()
+    {
+        this.regH = this.getByte(this.getHL());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x67 (MOV H,A)
+     *
+     * @this {CPUx80}
+     */
+    opMOVHA()
+    {
+        this.regH = this.regA;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x68 (MOV L,B)
+     *
+     * @this {CPUx80}
+     */
+    opMOVLB()
+    {
+        this.regL = this.regB;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x69 (MOV L,C)
+     *
+     * @this {CPUx80}
+     */
+    opMOVLC()
+    {
+        this.regL = this.regC;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x6A (MOV L,D)
+     *
+     * @this {CPUx80}
+     */
+    opMOVLD()
+    {
+        this.regL = this.regD;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x6B (MOV L,E)
+     *
+     * @this {CPUx80}
+     */
+    opMOVLE()
+    {
+        this.regL = this.regE;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x6C (MOV L,H)
+     *
+     * @this {CPUx80}
+     */
+    opMOVLH()
+    {
+        this.regL = this.regH;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x6D (MOV L,L)
+     *
+     * @this {CPUx80}
+     */
+    opMOVLL()
+    {
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x6E (MOV L,M)
+     *
+     * @this {CPUx80}
+     */
+    opMOVLM()
+    {
+        this.regL = this.getByte(this.getHL());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x6F (MOV L,A)
+     *
+     * @this {CPUx80}
+     */
+    opMOVLA()
+    {
+        this.regL = this.regA;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x70 (MOV M,B)
+     *
+     * @this {CPUx80}
+     */
+    opMOVMB()
+    {
+        this.setByte(this.getHL(), this.regB);
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x71 (MOV M,C)
+     *
+     * @this {CPUx80}
+     */
+    opMOVMC()
+    {
+        this.setByte(this.getHL(), this.regC);
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x72 (MOV M,D)
+     *
+     * @this {CPUx80}
+     */
+    opMOVMD()
+    {
+        this.setByte(this.getHL(), this.regD);
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x73 (MOV M,E)
+     *
+     * @this {CPUx80}
+     */
+    opMOVME()
+    {
+        this.setByte(this.getHL(), this.regE);
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x74 (MOV M,H)
+     *
+     * @this {CPUx80}
+     */
+    opMOVMH()
+    {
+        this.setByte(this.getHL(), this.regH);
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x75 (MOV M,L)
+     *
+     * @this {CPUx80}
+     */
+    opMOVML()
+    {
+        this.setByte(this.getHL(), this.regL);
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x76 (HLT)
+     *
+     * @this {CPUx80}
+     */
+    opHLT()
+    {
+        this.nCyclesRemain -= 7;
+        /*
+         * The CPU is never REALLY halted by a HLT instruction; instead, we call requestHALT(), which
+         * which sets INTFLAG.HALT and then ends the current burst; the CPU should not execute any
+         * more instructions until checkINTR() indicates that a hardware interrupt has been requested.
+         */
+        this.requestHALT();
+        /*
+         * If interrupts have been disabled, then the machine is dead in the water (there is no NMI
+         * NMI generation mechanism for this CPU), so let's stop the CPU; similarly, if the HALT message
+         * category is enabled, then the Debugger must want us to stop the CPU.
+         */
+        if (!this.getIF() || this.isMessageOn(MESSAGE.HALT)) {
+            let addr = this.getPC() - 1;
+            this.setPC(addr);           // this is purely for the Debugger's benefit, to show the HLT
+            this.time.stop();
+        }
+    }
+
+    /**
+     * op=0x77 (MOV M,A)
+     *
+     * @this {CPUx80}
+     */
+    opMOVMA()
+    {
+        this.setByte(this.getHL(), this.regA);
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x78 (MOV A,B)
+     *
+     * @this {CPUx80}
+     */
+    opMOVAB()
+    {
+        this.regA = this.regB;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x79 (MOV A,C)
+     *
+     * @this {CPUx80}
+     */
+    opMOVAC()
+    {
+        this.regA = this.regC;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x7A (MOV A,D)
+     *
+     * @this {CPUx80}
+     */
+    opMOVAD()
+    {
+        this.regA = this.regD;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x7B (MOV A,E)
+     *
+     * @this {CPUx80}
+     */
+    opMOVAE()
+    {
+        this.regA = this.regE;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x7C (MOV A,H)
+     *
+     * @this {CPUx80}
+     */
+    opMOVAH()
+    {
+        this.regA = this.regH;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x7D (MOV A,L)
+     *
+     * @this {CPUx80}
+     */
+    opMOVAL()
+    {
+        this.regA = this.regL;
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x7E (MOV A,M)
+     *
+     * @this {CPUx80}
+     */
+    opMOVAM()
+    {
+        this.regA = this.getByte(this.getHL());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x7F (MOV A,A)
+     *
+     * @this {CPUx80}
+     */
+    opMOVAA()
+    {
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0x80 (ADD B)
+     *
+     * @this {CPUx80}
+     */
+    opADDB()
+    {
+        this.regA = this.addByte(this.regB);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x81 (ADD C)
+     *
+     * @this {CPUx80}
+     */
+    opADDC()
+    {
+        this.regA = this.addByte(this.regC);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x82 (ADD D)
+     *
+     * @this {CPUx80}
+     */
+    opADDD()
+    {
+        this.regA = this.addByte(this.regD);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x83 (ADD E)
+     *
+     * @this {CPUx80}
+     */
+    opADDE()
+    {
+        this.regA = this.addByte(this.regE);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x84 (ADD H)
+     *
+     * @this {CPUx80}
+     */
+    opADDH()
+    {
+        this.regA = this.addByte(this.regH);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x85 (ADD L)
+     *
+     * @this {CPUx80}
+     */
+    opADDL()
+    {
+        this.regA = this.addByte(this.regL);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x86 (ADD M)
+     *
+     * @this {CPUx80}
+     */
+    opADDM()
+    {
+        this.regA = this.addByte(this.getByte(this.getHL()));
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x87 (ADD A)
+     *
+     * @this {CPUx80}
+     */
+    opADDA()
+    {
+        this.regA = this.addByte(this.regA);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x88 (ADC B)
+     *
+     * @this {CPUx80}
+     */
+    opADCB()
+    {
+        this.regA = this.addByteCarry(this.regB);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x89 (ADC C)
+     *
+     * @this {CPUx80}
+     */
+    opADCC()
+    {
+        this.regA = this.addByteCarry(this.regC);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x8A (ADC D)
+     *
+     * @this {CPUx80}
+     */
+    opADCD()
+    {
+        this.regA = this.addByteCarry(this.regD);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x8B (ADC E)
+     *
+     * @this {CPUx80}
+     */
+    opADCE()
+    {
+        this.regA = this.addByteCarry(this.regE);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x8C (ADC H)
+     *
+     * @this {CPUx80}
+     */
+    opADCH()
+    {
+        this.regA = this.addByteCarry(this.regH);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x8D (ADC L)
+     *
+     * @this {CPUx80}
+     */
+    opADCL()
+    {
+        this.regA = this.addByteCarry(this.regL);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x8E (ADC M)
+     *
+     * @this {CPUx80}
+     */
+    opADCM()
+    {
+        this.regA = this.addByteCarry(this.getByte(this.getHL()));
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x8F (ADC A)
+     *
+     * @this {CPUx80}
+     */
+    opADCA()
+    {
+        this.regA = this.addByteCarry(this.regA);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x90 (SUB B)
+     *
+     * @this {CPUx80}
+     */
+    opSUBB()
+    {
+        this.regA = this.subByte(this.regB);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x91 (SUB C)
+     *
+     * @this {CPUx80}
+     */
+    opSUBC()
+    {
+        this.regA = this.subByte(this.regC);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x92 (SUB D)
+     *
+     * @this {CPUx80}
+     */
+    opSUBD()
+    {
+        this.regA = this.subByte(this.regD);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x93 (SUB E)
+     *
+     * @this {CPUx80}
+     */
+    opSUBE()
+    {
+        this.regA = this.subByte(this.regE);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x94 (SUB H)
+     *
+     * @this {CPUx80}
+     */
+    opSUBH()
+    {
+        this.regA = this.subByte(this.regH);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x95 (SUB L)
+     *
+     * @this {CPUx80}
+     */
+    opSUBL()
+    {
+        this.regA = this.subByte(this.regL);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x96 (SUB M)
+     *
+     * @this {CPUx80}
+     */
+    opSUBM()
+    {
+        this.regA = this.subByte(this.getByte(this.getHL()));
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x97 (SUB A)
+     *
+     * @this {CPUx80}
+     */
+    opSUBA()
+    {
+        this.regA = this.subByte(this.regA);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x98 (SBB B)
+     *
+     * @this {CPUx80}
+     */
+    opSBBB()
+    {
+        this.regA = this.subByteBorrow(this.regB);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x99 (SBB C)
+     *
+     * @this {CPUx80}
+     */
+    opSBBC()
+    {
+        this.regA = this.subByteBorrow(this.regC);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x9A (SBB D)
+     *
+     * @this {CPUx80}
+     */
+    opSBBD()
+    {
+        this.regA = this.subByteBorrow(this.regD);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x9B (SBB E)
+     *
+     * @this {CPUx80}
+     */
+    opSBBE()
+    {
+        this.regA = this.subByteBorrow(this.regE);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x9C (SBB H)
+     *
+     * @this {CPUx80}
+     */
+    opSBBH()
+    {
+        this.regA = this.subByteBorrow(this.regH);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x9D (SBB L)
+     *
+     * @this {CPUx80}
+     */
+    opSBBL()
+    {
+        this.regA = this.subByteBorrow(this.regL);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0x9E (SBB M)
+     *
+     * @this {CPUx80}
+     */
+    opSBBM()
+    {
+        this.regA = this.subByteBorrow(this.getByte(this.getHL()));
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0x9F (SBB A)
+     *
+     * @this {CPUx80}
+     */
+    opSBBA()
+    {
+        this.regA = this.subByteBorrow(this.regA);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xA0 (ANA B)
+     *
+     * @this {CPUx80}
+     */
+    opANAB()
+    {
+        this.regA = this.andByte(this.regB);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xA1 (ANA C)
+     *
+     * @this {CPUx80}
+     */
+    opANAC()
+    {
+        this.regA = this.andByte(this.regC);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xA2 (ANA D)
+     *
+     * @this {CPUx80}
+     */
+    opANAD()
+    {
+        this.regA = this.andByte(this.regD);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xA3 (ANA E)
+     *
+     * @this {CPUx80}
+     */
+    opANAE()
+    {
+        this.regA = this.andByte(this.regE);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xA4 (ANA H)
+     *
+     * @this {CPUx80}
+     */
+    opANAH()
+    {
+        this.regA = this.andByte(this.regH);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xA5 (ANA L)
+     *
+     * @this {CPUx80}
+     */
+    opANAL()
+    {
+        this.regA = this.andByte(this.regL);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xA6 (ANA M)
+     *
+     * @this {CPUx80}
+     */
+    opANAM()
+    {
+        this.regA = this.andByte(this.getByte(this.getHL()));
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0xA7 (ANA A)
+     *
+     * @this {CPUx80}
+     */
+    opANAA()
+    {
+        this.regA = this.andByte(this.regA);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xA8 (XRA B)
+     *
+     * @this {CPUx80}
+     */
+    opXRAB()
+    {
+        this.regA = this.xorByte(this.regB);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xA9 (XRA C)
+     *
+     * @this {CPUx80}
+     */
+    opXRAC()
+    {
+        this.regA = this.xorByte(this.regC);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xAA (XRA D)
+     *
+     * @this {CPUx80}
+     */
+    opXRAD()
+    {
+        this.regA = this.xorByte(this.regD);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xAB (XRA E)
+     *
+     * @this {CPUx80}
+     */
+    opXRAE()
+    {
+        this.regA = this.xorByte(this.regE);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xAC (XRA H)
+     *
+     * @this {CPUx80}
+     */
+    opXRAH()
+    {
+        this.regA = this.xorByte(this.regH);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xAD (XRA L)
+     *
+     * @this {CPUx80}
+     */
+    opXRAL()
+    {
+        this.regA = this.xorByte(this.regL);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xAE (XRA M)
+     *
+     * @this {CPUx80}
+     */
+    opXRAM()
+    {
+        this.regA = this.xorByte(this.getByte(this.getHL()));
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0xAF (XRA A)
+     *
+     * @this {CPUx80}
+     */
+    opXRAA()
+    {
+        this.regA = this.xorByte(this.regA);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xB0 (ORA B)
+     *
+     * @this {CPUx80}
+     */
+    opORAB()
+    {
+        this.regA = this.orByte(this.regB);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xB1 (ORA C)
+     *
+     * @this {CPUx80}
+     */
+    opORAC()
+    {
+        this.regA = this.orByte(this.regC);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xB2 (ORA D)
+     *
+     * @this {CPUx80}
+     */
+    opORAD()
+    {
+        this.regA = this.orByte(this.regD);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xB3 (ORA E)
+     *
+     * @this {CPUx80}
+     */
+    opORAE()
+    {
+        this.regA = this.orByte(this.regE);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xB4 (ORA H)
+     *
+     * @this {CPUx80}
+     */
+    opORAH()
+    {
+        this.regA = this.orByte(this.regH);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xB5 (ORA L)
+     *
+     * @this {CPUx80}
+     */
+    opORAL()
+    {
+        this.regA = this.orByte(this.regL);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xB6 (ORA M)
+     *
+     * @this {CPUx80}
+     */
+    opORAM()
+    {
+        this.regA = this.orByte(this.getByte(this.getHL()));
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0xB7 (ORA A)
+     *
+     * @this {CPUx80}
+     */
+    opORAA()
+    {
+        this.regA = this.orByte(this.regA);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xB8 (CMP B)
+     *
+     * @this {CPUx80}
+     */
+    opCMPB()
+    {
+        this.subByte(this.regB);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xB9 (CMP C)
+     *
+     * @this {CPUx80}
+     */
+    opCMPC()
+    {
+        this.subByte(this.regC);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xBA (CMP D)
+     *
+     * @this {CPUx80}
+     */
+    opCMPD()
+    {
+        this.subByte(this.regD);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xBB (CMP E)
+     *
+     * @this {CPUx80}
+     */
+    opCMPE()
+    {
+        this.subByte(this.regE);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xBC (CMP H)
+     *
+     * @this {CPUx80}
+     */
+    opCMPH()
+    {
+        this.subByte(this.regH);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xBD (CMP L)
+     *
+     * @this {CPUx80}
+     */
+    opCMPL()
+    {
+        this.subByte(this.regL);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xBE (CMP M)
+     *
+     * @this {CPUx80}
+     */
+    opCMPM()
+    {
+        this.subByte(this.getByte(this.getHL()));
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0xBF (CMP A)
+     *
+     * @this {CPUx80}
+     */
+    opCMPA()
+    {
+        this.subByte(this.regA);
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xC0 (RNZ)
+     *
+     * @this {CPUx80}
+     */
+    opRNZ()
+    {
+        if (!this.getZF()) {
+            this.setPC(this.popWord());
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0xC1 (POP B)
+     *
+     * @this {CPUx80}
+     */
+    opPOPB()
+    {
+        this.setBC(this.popWord());
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xC2 (JNZ a16)
+     *
+     * @this {CPUx80}
+     */
+    opJNZ()
+    {
+        let w = this.getPCWord();
+        if (!this.getZF()) this.setPC(w);
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xC3 (JMP a16)
+     *
+     * @this {CPUx80}
+     */
+    opJMP()
+    {
+        this.setPC(this.getPCWord());
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xC4 (CNZ a16)
+     *
+     * @this {CPUx80}
+     */
+    opCNZ()
+    {
+        let w = this.getPCWord();
+        if (!this.getZF()) {
+            this.pushWord(this.getPC());
+            this.setPC(w);
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xC5 (PUSH B)
+     *
+     * @this {CPUx80}
+     */
+    opPUSHB()
+    {
+        this.pushWord(this.getBC());
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xC6 (ADI d8)
+     *
+     * @this {CPUx80}
+     */
+    opADI()
+    {
+        this.regA = this.addByte(this.getPCByte());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0xC7 (RST 0)
+     *
+     * @this {CPUx80}
+     */
+    opRST0()
+    {
+        this.pushWord(this.getPC());
+        this.setPC(0);
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xC8 (RZ)
+     *
+     * @this {CPUx80}
+     */
+    opRZ()
+    {
+        if (this.getZF()) {
+            this.setPC(this.popWord());
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0xC9 (RET)
+     *
+     * @this {CPUx80}
+     */
+    opRET()
+    {
+        this.setPC(this.popWord());
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xCA (JZ a16)
+     *
+     * @this {CPUx80}
+     */
+    opJZ()
+    {
+        let w = this.getPCWord();
+        if (this.getZF()) this.setPC(w);
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xCC (CZ a16)
+     *
+     * @this {CPUx80}
+     */
+    opCZ()
+    {
+        let w = this.getPCWord();
+        if (this.getZF()) {
+            this.pushWord(this.getPC());
+            this.setPC(w);
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xCD (CALL a16)
+     *
+     * @this {CPUx80}
+     */
+    opCALL()
+    {
+        let w = this.getPCWord();
+        this.pushWord(this.getPC());
+        this.setPC(w);
+        this.nCyclesRemain -= 17;
+    }
+
+    /**
+     * op=0xCE (ACI d8)
+     *
+     * @this {CPUx80}
+     */
+    opACI()
+    {
+        this.regA = this.addByteCarry(this.getPCByte());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0xCF (RST 1)
+     *
+     * @this {CPUx80}
+     */
+    opRST1()
+    {
+        this.pushWord(this.getPC());
+        this.setPC(0x08);
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xD0 (RNC)
+     *
+     * @this {CPUx80}
+     */
+    opRNC()
+    {
+        if (!this.getCF()) {
+            this.setPC(this.popWord());
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0xD1 (POP D)
+     *
+     * @this {CPUx80}
+     */
+    opPOPD()
+    {
+        this.setDE(this.popWord());
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xD2 (JNC a16)
+     *
+     * @this {CPUx80}
+     */
+    opJNC()
+    {
+        let w = this.getPCWord();
+        if (!this.getCF()) this.setPC(w);
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xD3 (OUT d8)
+     *
+     * @this {CPUx80}
+     */
+    opOUT()
+    {
+        let port = this.getPCByte();
+        this.busIO.writeData(port, this.regA);
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xD4 (CNC a16)
+     *
+     * @this {CPUx80}
+     */
+    opCNC()
+    {
+        let w = this.getPCWord();
+        if (!this.getCF()) {
+            this.pushWord(this.getPC());
+            this.setPC(w);
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xD5 (PUSH D)
+     *
+     * @this {CPUx80}
+     */
+    opPUSHD()
+    {
+        this.pushWord(this.getDE());
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xD6 (SUI d8)
+     *
+     * @this {CPUx80}
+     */
+    opSUI()
+    {
+        this.regA = this.subByte(this.getPCByte());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0xD7 (RST 2)
+     *
+     * @this {CPUx80}
+     */
+    opRST2()
+    {
+        this.pushWord(this.getPC());
+        this.setPC(0x10);
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xD8 (RC)
+     *
+     * @this {CPUx80}
+     */
+    opRC()
+    {
+        if (this.getCF()) {
+            this.setPC(this.popWord());
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0xDA (JC a16)
+     *
+     * @this {CPUx80}
+     */
+    opJC()
+    {
+        let w = this.getPCWord();
+        if (this.getCF()) this.setPC(w);
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xDB (IN d8)
+     *
+     * @this {CPUx80}
+     */
+    opIN()
+    {
+        let port = this.getPCByte();
+        this.regA = this.busIO.readData(port) & 0xff;
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xDC (CC a16)
+     *
+     * @this {CPUx80}
+     */
+    opCC()
+    {
+        let w = this.getPCWord();
+        if (this.getCF()) {
+            this.pushWord(this.getPC());
+            this.setPC(w);
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xDE (SBI d8)
+     *
+     * @this {CPUx80}
+     */
+    opSBI()
+    {
+        this.regA = this.subByteBorrow(this.getPCByte());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0xDF (RST 3)
+     *
+     * @this {CPUx80}
+     */
+    opRST3()
+    {
+        this.pushWord(this.getPC());
+        this.setPC(0x18);
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xE0 (RPO)
+     *
+     * @this {CPUx80}
+     */
+    opRPO()
+    {
+        if (!this.getPF()) {
+            this.setPC(this.popWord());
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0xE1 (POP H)
+     *
+     * @this {CPUx80}
+     */
+    opPOPH()
+    {
+        this.setHL(this.popWord());
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xE2 (JPO a16)
+     *
+     * @this {CPUx80}
+     */
+    opJPO()
+    {
+        let w = this.getPCWord();
+        if (!this.getPF()) this.setPC(w);
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xE3 (XTHL)
+     *
+     * @this {CPUx80}
+     */
+    opXTHL()
+    {
+        let w = this.popWord();
+        this.pushWord(this.getHL());
+        this.setHL(w);
+        this.nCyclesRemain -= 18;
+    }
+
+    /**
+     * op=0xE4 (CPO a16)
+     *
+     * @this {CPUx80}
+     */
+    opCPO()
+    {
+        let w = this.getPCWord();
+        if (!this.getPF()) {
+            this.pushWord(this.getPC());
+            this.setPC(w);
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xE5 (PUSH H)
+     *
+     * @this {CPUx80}
+     */
+    opPUSHH()
+    {
+        this.pushWord(this.getHL());
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xE6 (ANI d8)
+     *
+     * @this {CPUx80}
+     */
+    opANI()
+    {
+        this.regA = this.andByte(this.getPCByte());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0xE7 (RST 4)
+     *
+     * @this {CPUx80}
+     */
+    opRST4()
+    {
+        this.pushWord(this.getPC());
+        this.setPC(0x20);
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xE8 (RPE)
+     *
+     * @this {CPUx80}
+     */
+    opRPE()
+    {
+        if (this.getPF()) {
+            this.setPC(this.popWord());
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0xE9 (PCHL)
+     *
+     * @this {CPUx80}
+     */
+    opPCHL()
+    {
+        this.setPC(this.getHL());
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0xEA (JPE a16)
+     *
+     * @this {CPUx80}
+     */
+    opJPE()
+    {
+        let w = this.getPCWord();
+        if (this.getPF()) this.setPC(w);
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xEB (XCHG)
+     *
+     * @this {CPUx80}
+     */
+    opXCHG()
+    {
+        let w = this.getHL();
+        this.setHL(this.getDE());
+        this.setDE(w);
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0xEC (CPE a16)
+     *
+     * @this {CPUx80}
+     */
+    opCPE()
+    {
+        let w = this.getPCWord();
+        if (this.getPF()) {
+            this.pushWord(this.getPC());
+            this.setPC(w);
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xEE (XRI d8)
+     *
+     * @this {CPUx80}
+     */
+    opXRI()
+    {
+        this.regA = this.xorByte(this.getPCByte());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0xEF (RST 5)
+     *
+     * @this {CPUx80}
+     */
+    opRST5()
+    {
+        this.pushWord(this.getPC());
+        this.setPC(0x28);
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xF0 (RP)
+     *
+     * @this {CPUx80}
+     */
+    opRP()
+    {
+        if (!this.getSF()) {
+            this.setPC(this.popWord());
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0xF1 (POP PSW)
+     *
+     * @this {CPUx80}
+     */
+    opPOPSW()
+    {
+        this.setPSW(this.popWord());
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xF2 (JP a16)
+     *
+     * @this {CPUx80}
+     */
+    opJP()
+    {
+        let w = this.getPCWord();
+        if (!this.getSF()) this.setPC(w);
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xF3 (DI)
+     *
+     * @this {CPUx80}
+     */
+    opDI()
+    {
+        this.clearIF();
+        this.nCyclesRemain -= 4;
+    }
+
+    /**
+     * op=0xF4 (CP a16)
+     *
+     * @this {CPUx80}
+     */
+    opCP()
+    {
+        let w = this.getPCWord();
+        if (!this.getSF()) {
+            this.pushWord(this.getPC());
+            this.setPC(w);
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xF5 (PUSH PSW)
+     *
+     * @this {CPUx80}
+     */
+    opPUPSW()
+    {
+        this.pushWord(this.getPSW());
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xF6 (ORI d8)
+     *
+     * @this {CPUx80}
+     */
+    opORI()
+    {
+        this.regA = this.orByte(this.getPCByte());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0xF7 (RST 6)
+     *
+     * @this {CPUx80}
+     */
+    opRST6()
+    {
+        this.pushWord(this.getPC());
+        this.setPC(0x30);
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xF8 (RM)
+     *
+     * @this {CPUx80}
+     */
+    opRM()
+    {
+        if (this.getSF()) {
+            this.setPC(this.popWord());
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0xF9 (SPHL)
+     *
+     * @this {CPUx80}
+     */
+    opSPHL()
+    {
+        this.setSP(this.getHL());
+        this.nCyclesRemain -= 5;
+    }
+
+    /**
+     * op=0xFA (JM a16)
+     *
+     * @this {CPUx80}
+     */
+    opJM()
+    {
+        let w = this.getPCWord();
+        if (this.getSF()) this.setPC(w);
+        this.nCyclesRemain -= 10;
+    }
+
+    /**
+     * op=0xFB (EI)
+     *
+     * @this {CPUx80}
+     */
+    opEI()
+    {
+        this.setIF();
+        this.nCyclesRemain -= 4;
+        this.checkINTR();
+    }
+
+    /**
+     * op=0xFC (CM a16)
+     *
+     * @this {CPUx80}
+     */
+    opCM()
+    {
+        let w = this.getPCWord();
+        if (this.getSF()) {
+            this.pushWord(this.getPC());
+            this.setPC(w);
+            this.nCyclesRemain -= 6;
+        }
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * op=0xFE (CPI d8)
+     *
+     * @this {CPUx80}
+     */
+    opCPI()
+    {
+        this.subByte(this.getPCByte());
+        this.nCyclesRemain -= 7;
+    }
+
+    /**
+     * op=0xFF (RST 7)
+     *
+     * @this {CPUx80}
+     */
+    opRST7()
+    {
+        this.pushWord(this.getPC());
+        this.setPC(0x38);
+        this.nCyclesRemain -= 11;
+    }
+
+    /**
+     * resetRegs()
+     *
+     * @this {CPUx80}
+     */
+    resetRegs()
+    {
+        this.regA = 0;
+        this.regB = 0;
+        this.regC = 0;
+        this.regD = 0;
+        this.regE = 0;
+        this.regH = 0;
+        this.regL = 0;
+        this.setSP(0);
+        this.setPC(this.addrReset);
+
+        /*
+         * regPCLast is an internal register that simply snapshots the PC at the start of every instruction;
+         * this is useful not only for CPUs that need to support instruction restartability, but also for
+         * diagnostic/debugging purposes.
+         */
+        this.regPCLast = this.regPC;
+
+        /*
+         * This resets the Processor Status flags (regPS), along with all the internal "result registers".
+         */
+        this.setPS(0);
+
+        /*
+         * intFlags contains some internal states we use to indicate whether a hardware interrupt (INTFLAG.INTR) or
+         * Trap software interrupt (INTR.TRAP) has been requested, as well as when we're in a "HLT" state (INTFLAG.HALT)
+         * that requires us to wait for a hardware interrupt (INTFLAG.INTR) before continuing execution.
+         */
+        this.intFlags = CPUx80.INTFLAG.NONE;
+    }
+
+    /**
+     * setReset(addr)
+     *
+     * @this {CPUx80}
+     * @param {number} addr
+     */
+    setReset(addr)
+    {
+        this.addrReset = addr;
+        this.setPC(addr);
+    }
+
+    /**
+     * getBC()
+     *
+     * @this {CPUx80}
+     * @returns {number}
+     */
+    getBC()
+    {
+        return (this.regB << 8) | this.regC;
+    }
+
+    /**
+     * setBC(w)
+     *
+     * @this {CPUx80}
+     * @param {number} w
+     */
+    setBC(w)
+    {
+        this.regB = (w >> 8) & 0xff;
+        this.regC = w & 0xff;
+    }
+
+    /**
+     * getDE()
+     *
+     * @this {CPUx80}
+     * @returns {number}
+     */
+    getDE()
+    {
+        return (this.regD << 8) | this.regE;
+    }
+
+    /**
+     * setDE(w)
+     *
+     * @this {CPUx80}
+     * @param {number} w
+     */
+    setDE(w)
+    {
+        this.regD = (w >> 8) & 0xff;
+        this.regE = w & 0xff;
+    }
+
+    /**
+     * getHL()
+     *
+     * @this {CPUx80}
+     * @returns {number}
+     */
+    getHL()
+    {
+        return (this.regH << 8) | this.regL;
+    }
+
+    /**
+     * setHL(w)
+     *
+     * @this {CPUx80}
+     * @param {number} w
+     */
+    setHL(w)
+    {
+        this.regH = (w >> 8) & 0xff;
+        this.regL = w & 0xff;
+    }
+
+    /**
+     * getSP()
+     *
+     * @this {CPUx80}
+     * @returns {number}
+     */
+    getSP()
+    {
+        return this.regSP;
+    }
+
+    /**
+     * setSP(off)
+     *
+     * @this {CPUx80}
+     * @param {number} off
+     */
+    setSP(off)
+    {
+        this.regSP = off & 0xffff;
+    }
+
+    /**
+     * getPC()
+     *
+     * @this {CPUx80}
+     * @returns {number}
+     */
+    getPC()
+    {
+        return this.regPC;
+    }
+
+    /**
+     * offPC()
+     *
+     * @this {CPUx80}
+     * @param {number} off
+     * @returns {number}
+     */
+    offPC(off)
+    {
+        return (this.regPC + off) & 0xffff;
+    }
+
+    /**
+     * setPC(off)
+     *
+     * @this {CPUx80}
+     * @param {number} off
+     */
+    setPC(off)
+    {
+        this.regPC = off & 0xffff;
+    }
+
+    /**
+     * clearCF()
+     *
+     * @this {CPUx80}
+     */
+    clearCF()
+    {
+        this.resultZeroCarry &= 0xff;
+    }
+
+    /**
+     * getCF()
+     *
+     * @this {CPUx80}
+     * @returns {number} 0 or 1 (CPUx80.PS.CF)
+     */
+    getCF()
+    {
+        return (this.resultZeroCarry & 0x100)? CPUx80.PS.CF : 0;
+    }
+
+    /**
+     * setCF()
+     *
+     * @this {CPUx80}
+     */
+    setCF()
+    {
+        this.resultZeroCarry |= 0x100;
+    }
+
+    /**
+     * updateCF(CF)
+     *
+     * @this {CPUx80}
+     * @param {number} CF (0x000 or 0x100)
+     */
+    updateCF(CF)
+    {
+        this.resultZeroCarry = (this.resultZeroCarry & 0xff) | CF;
+    }
+
+    /**
+     * clearPF()
+     *
+     * @this {CPUx80}
+     */
+    clearPF()
+    {
+        if (this.getPF()) this.resultParitySign ^= 0x1;
+    }
+
+    /**
+     * getPF()
+     *
+     * @this {CPUx80}
+     * @returns {number} 0 or CPUx80.PS.PF
+     */
+    getPF()
+    {
+        return (CPUx80.PARITY[this.resultParitySign & 0xff])? CPUx80.PS.PF : 0;
+    }
+
+    /**
+     * setPF()
+     *
+     * @this {CPUx80}
+     */
+    setPF()
+    {
+        if (!this.getPF()) this.resultParitySign ^= 0x1;
+    }
+
+    /**
+     * clearAF()
+     *
+     * @this {CPUx80}
+     */
+    clearAF()
+    {
+        this.resultAuxOverflow = (this.resultParitySign & 0x10) | (this.resultAuxOverflow & ~0x10);
+    }
+
+    /**
+     * getAF()
+     *
+     * @this {CPUx80}
+     * @returns {number} 0 or CPUx80.PS.AF
+     */
+    getAF()
+    {
+        return ((this.resultParitySign ^ this.resultAuxOverflow) & 0x10)? CPUx80.PS.AF : 0;
+    }
+
+    /**
+     * setAF()
+     *
+     * @this {CPUx80}
+     */
+    setAF()
+    {
+        this.resultAuxOverflow = (~this.resultParitySign & 0x10) | (this.resultAuxOverflow & ~0x10);
+    }
+
+    /**
+     * clearZF()
+     *
+     * @this {CPUx80}
+     */
+    clearZF()
+    {
+        this.resultZeroCarry |= 0xff;
+    }
+
+    /**
+     * getZF()
+     *
+     * @this {CPUx80}
+     * @returns {number} 0 or CPUx80.PS.ZF
+     */
+    getZF()
+    {
+        return (this.resultZeroCarry & 0xff)? 0 : CPUx80.PS.ZF;
+    }
+
+    /**
+     * setZF()
+     *
+     * @this {CPUx80}
+     */
+    setZF()
+    {
+        this.resultZeroCarry &= ~0xff;
+    }
+
+    /**
+     * clearSF()
+     *
+     * @this {CPUx80}
+     */
+    clearSF()
+    {
+        if (this.getSF()) this.resultParitySign ^= 0xc0;
+    }
+
+    /**
+     * getSF()
+     *
+     * @this {CPUx80}
+     * @returns {number} 0 or CPUx80.PS.SF
+     */
+    getSF()
+    {
+        return (this.resultParitySign & 0x80)? CPUx80.PS.SF : 0;
+    }
+
+    /**
+     * setSF()
+     *
+     * @this {CPUx80}
+     */
+    setSF()
+    {
+        if (!this.getSF()) this.resultParitySign ^= 0xc0;
+    }
+
+    /**
+     * clearIF()
+     *
+     * @this {CPUx80}
+     */
+    clearIF()
+    {
+        this.regPS &= ~CPUx80.PS.IF;
+    }
+
+    /**
+     * getIF()
+     *
+     * @this {CPUx80}
+     * @returns {number} 0 or CPUx80.PS.IF
+     */
+    getIF()
+    {
+        return (this.regPS & CPUx80.PS.IF);
+    }
+
+    /**
+     * setIF()
+     *
+     * @this {CPUx80}
+     */
+    setIF()
+    {
+        this.regPS |= CPUx80.PS.IF;
+    }
+
+    /**
+     * getPS()
+     *
+     * @this {CPUx80}
+     * @returns {number}
+     */
+    getPS()
+    {
+        return (this.regPS & ~CPUx80.PS.RESULT) | (this.getSF() | this.getZF() | this.getAF() | this.getPF() | this.getCF());
+    }
+
+    /**
+     * setPS(regPS)
+     *
+     * @this {CPUx80}
+     * @param {number} regPS
+     */
+    setPS(regPS)
+    {
+        this.resultZeroCarry = this.resultParitySign = this.resultAuxOverflow = 0;
+        if (regPS & CPUx80.PS.CF) this.resultZeroCarry |= 0x100;
+        if (!(regPS & CPUx80.PS.PF)) this.resultParitySign |= 0x01;
+        if (regPS & CPUx80.PS.AF) this.resultAuxOverflow |= 0x10;
+        if (!(regPS & CPUx80.PS.ZF)) this.resultZeroCarry |= 0xff;
+        if (regPS & CPUx80.PS.SF) this.resultParitySign ^= 0xc0;
+        this.regPS = (this.regPS & ~(CPUx80.PS.RESULT | CPUx80.PS.INTERNAL)) | (regPS & CPUx80.PS.INTERNAL) | CPUx80.PS.SET;
+
+    }
+
+    /**
+     * getPSW()
+     *
+     * @this {CPUx80}
+     * @returns {number}
+     */
+    getPSW()
+    {
+        return (this.getPS() & CPUx80.PS.MASK) | (this.regA << 8);
+    }
+
+    /**
+     * setPSW(w)
+     *
+     * @this {CPUx80}
+     * @param {number} w
+     */
+    setPSW(w)
+    {
+        this.setPS((w & CPUx80.PS.MASK) | (this.regPS & ~CPUx80.PS.MASK));
+        this.regA = w >> 8;
+    }
+
+    /**
+     * addByte(src)
+     *
+     * @this {CPUx80}
+     * @param {number} src
+     * @returns {number} regA + src
+     */
+    addByte(src)
+    {
+        this.resultAuxOverflow = this.regA ^ src;
+        return this.resultParitySign = (this.resultZeroCarry = this.regA + src) & 0xff;
+    }
+
+    /**
+     * addByteCarry(src)
+     *
+     * @this {CPUx80}
+     * @param {number} src
+     * @returns {number} regA + src + carry
+     */
+    addByteCarry(src)
+    {
+        this.resultAuxOverflow = this.regA ^ src;
+        return this.resultParitySign = (this.resultZeroCarry = this.regA + src + ((this.resultZeroCarry & 0x100)? 1 : 0)) & 0xff;
+    }
+
+    /**
+     * andByte(src)
+     *
+     * Ordinarily, one would expect the Auxiliary Carry flag (AF) to be clear after this operation,
+     * but apparently the 8080 will set AF if bit 3 in either operand is set.
+     *
+     * @this {CPUx80}
+     * @param {number} src
+     * @returns {number} regA & src
+     */
+    andByte(src)
+    {
+        this.resultZeroCarry = this.resultParitySign = this.resultAuxOverflow = this.regA & src;
+        if ((this.regA | src) & 0x8) this.resultAuxOverflow ^= 0x10;        // set AF by inverting bit 4 in resultAuxOverflow
+        return this.resultZeroCarry;
+    }
+
+    /**
+     * decByte(b)
+     *
+     * We perform this operation using 8-bit two's complement arithmetic, by negating and then adding
+     * the implied src of 1.  This appears to mimic how the 8080 manages the Auxiliary Carry flag (AF).
+     *
+     * @this {CPUx80}
+     * @param {number} b
+     * @returns {number}
+     */
+    decByte(b)
+    {
+        this.resultAuxOverflow = b ^ 0xff;
+        b = this.resultParitySign = (b + 0xff) & 0xff;
+        this.resultZeroCarry = (this.resultZeroCarry & ~0xff) | b;
+        return b;
+    }
+
+    /**
+     * incByte(b)
+     *
+     * @this {CPUx80}
+     * @param {number} b
+     * @returns {number}
+     */
+    incByte(b)
+    {
+        this.resultAuxOverflow = b;
+        b = this.resultParitySign = (b + 1) & 0xff;
+        this.resultZeroCarry = (this.resultZeroCarry & ~0xff) | b;
+        return b;
+    }
+
+    /**
+     * orByte(src)
+     *
+     * @this {CPUx80}
+     * @param {number} src
+     * @returns {number} regA | src
+     */
+    orByte(src)
+    {
+        return this.resultParitySign = this.resultZeroCarry = this.resultAuxOverflow = this.regA | src;
+    }
+
+    /**
+     * subByte(src)
+     *
+     * We perform this operation using 8-bit two's complement arithmetic, by inverting src, adding
+     * src + 1, and then inverting the resulting carry (resultZeroCarry ^ 0x100).  This appears to mimic
+     * how the 8080 manages the Auxiliary Carry flag (AF).
+     *
+     * This function is also used as a cmpByte() function; compare instructions simply ignore the
+     * return value.
+     *
+     * Example: A=66, SUI $10
+     *
+     * If we created the two's complement of 0x10 by negating it, there would just be one addition:
+     *
+     *      0110 0110   (0x66)
+     *    + 1111 0000   (0xF0)  (ie, -0x10)
+     *      ---------
+     *    1 0101 0110   (0x56)
+     *
+     * But in order to mimic the 8080's AF flag, we must perform the two's complement of src in two steps,
+     * inverting it before the add, and then incrementing after the add; eg:
+     *
+     *      0110 0110   (0x66)
+     *    + 1110 1111   (0xEF)  (ie, ~0x10)
+     *      ---------
+     *    1 0101 0101   (0x55)
+     *    + 0000 0001   (0x01)
+     *      ---------
+     *    1 0101 0110   (0x56)
+     *
+     * @this {CPUx80}
+     * @param {number} src
+     * @returns {number} regA - src
+     */
+    subByte(src)
+    {
+        src ^= 0xff;
+        this.resultAuxOverflow = this.regA ^ src;
+        return this.resultParitySign = (this.resultZeroCarry = (this.regA + src + 1) ^ 0x100) & 0xff;
+    }
+
+    /**
+     * subByteBorrow(src)
+     *
+     * We perform this operation using 8-bit two's complement arithmetic, using logic similar to subByte(),
+     * but changing the final increment to a conditional increment, because if the Carry flag (CF) is set, then
+     * we don't need to perform the increment at all.
+     *
+     * This mimics the behavior of subByte() when the Carry flag (CF) is clear, and hopefully also mimics how the
+     * 8080 manages the Auxiliary Carry flag (AF) when the Carry flag (CF) is set.
+     *
+     * @this {CPUx80}
+     * @param {number} src
+     * @returns {number} regA - src - carry
+     */
+    subByteBorrow(src)
+    {
+        src ^= 0xff;
+        this.resultAuxOverflow = this.regA ^ src;
+        return this.resultParitySign = (this.resultZeroCarry = (this.regA + src + ((this.resultZeroCarry & 0x100)? 0 : 1)) ^ 0x100) & 0xff;
+    }
+
+    /**
+     * xorByte(src)
+     *
+     * @this {CPUx80}
+     * @param {number} src
+     * @returns {number} regA ^ src
+     */
+    xorByte(src)
+    {
+        return this.resultParitySign = this.resultZeroCarry = this.resultAuxOverflow = this.regA ^ src;
+    }
+
+    /**
+     * getByte(addr)
+     *
+     * @this {CPUx80}
+     * @param {number} addr is a linear address
+     * @returns {number} byte (8-bit) value at that address
+     */
+    getByte(addr)
+    {
+        return this.busMemory.readData(addr)|0;
+    }
+
+    /**
+     * getWord(addr)
+     *
+     * @this {CPUx80}
+     * @param {number} addr is a linear address
+     * @returns {number} word (16-bit) value at that address
+     */
+    getWord(addr)
+    {
+        return this.busMemory.readPair(addr);
+    }
+
+    /**
+     * setByte(addr, b)
+     *
+     * @this {CPUx80}
+     * @param {number} addr is a linear address
+     * @param {number} b is the byte (8-bit) value to write (which we truncate to 8 bits to be safe)
+     */
+    setByte(addr, b)
+    {
+        this.busMemory.writeData(addr, b & 0xff);
+    }
+
+    /**
+     * setWord(addr, w)
+     *
+     * @this {CPUx80}
+     * @param {number} addr is a linear address
+     * @param {number} w is the word (16-bit) value to write (which we truncate to 16 bits to be safe)
+     */
+    setWord(addr, w)
+    {
+        this.busMemory.writePair(addr, w & 0xffff);
+    }
+
+    /**
+     * getPCByte()
+     *
+     * @this {CPUx80}
+     * @returns {number} byte at the current PC; PC advanced by 1
+     */
+    getPCByte()
+    {
+        let b = this.getByte(this.regPC);
+        this.setPC(this.regPC + 1);
+        return b;
+    }
+
+    /**
+     * getPCWord()
+     *
+     * @this {CPUx80}
+     * @returns {number} word at the current PC; PC advanced by 2
+     */
+    getPCWord()
+    {
+        let w = this.getWord(this.regPC);
+        this.setPC(this.regPC + 2);
+        return w;
+    }
+
+    /**
+     * popWord()
+     *
+     * @this {CPUx80}
+     * @returns {number} word popped from the current SP; SP increased by 2
+     */
+    popWord()
+    {
+        let w = this.getWord(this.regSP);
+        this.setSP(this.regSP + 2);
+        return w;
+    }
+
+    /**
+     * pushWord(w)
+     *
+     * @this {CPUx80}
+     * @param {number} w is the word (16-bit) value to push at current SP; SP decreased by 2
+     */
+    pushWord(w)
+    {
+        this.setSP(this.regSP - 2);
+        this.setWord(this.regSP, w);
+    }
+
+    /**
+     * checkINTR()
+     *
+     * @this {CPUx80}
+     * @returns {boolean} true if execution may proceed, false if not
+     */
+    checkINTR()
+    {
+        /*
+         * If the Debugger is single-stepping, isRunning() will be false, which we take advantage
+         * of here to avoid processing interrupts.  The Debugger will have to issue a "g" command
+         * to resume normal interrupt processing.
+         */
+        if (this.time.isRunning()) {
+            if ((this.intFlags & CPUx80.INTFLAG.INTR) && this.getIF()) {
+                let nLevel;
+                for (nLevel = 0; nLevel < 8; nLevel++) {
+                    if (this.intFlags & (1 << nLevel)) break;
+                }
+                this.clearINTR(nLevel);
+                this.clearIF();
+                this.intFlags &= ~CPUx80.INTFLAG.HALT;
+                this.aOps[CPUx80.OPCODE.RST0 | (nLevel << 3)].call(this);
+            }
+        }
+        if (this.intFlags & CPUx80.INTFLAG.HALT) {
+            /*
+             * As discussed in opHLT(), the CPU is never REALLY halted by a HLT instruction; instead, opHLT()
+             * calls requestHALT(), which sets INTFLAG.HALT and then ends the current burst; the CPU should not
+             * execute any more instructions until checkINTR() indicates a hardware interrupt has been requested.
+             */
+            this.time.endBurst();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * clearINTR(nLevel)
+     *
+     * Clear the corresponding interrupt level.
+     *
+     * nLevel can either be a valid interrupt level (0-7), or undefined to clear all pending interrupts
+     * (eg, in the event of a system-wide reset).
+     *
+     * @this {CPUx80}
+     * @param {number} [nLevel] (0-7, or undefined for all)
+     */
+    clearINTR(nLevel = -1)
+    {
+        let bitsClear = nLevel < 0? 0xff : (1 << nLevel);
+        this.intFlags &= ~bitsClear;
+    }
+
+    /**
+     * requestHALT()
+     *
+     * @this {CPUx80}
+     */
+    requestHALT()
+    {
+        this.intFlags |= CPUx80.INTFLAG.HALT;
+        this.time.endBurst();
+    }
+
+    /**
+     * requestINTR(nLevel)
+     *
+     * Request the corresponding interrupt level.
+     *
+     * Each interrupt level (0-7) has its own intFlags bit (0-7).  If the Interrupt Flag (IF) is also
+     * set, then we know that checkINTR() will want to issue the interrupt, so we end the current burst.
+     *
+     * @this {CPUx80}
+     * @param {number} nLevel (0-7)
+     */
+    requestINTR(nLevel)
+    {
+        this.intFlags |= (1 << nLevel);
+        if (this.getIF()) {
+            this.time.endBurst();
+        }
+    }
+
+    /**
+     * toInstruction(addr, opcode)
+     *
+     * Returns a string representation of the specified instruction.
+     *
+     * @this {CPUx80}
+     * @param {number} addr
+     * @param {number|undefined} [opcode]
+     * @returns {string}
+     */
+    toInstruction(addr, opcode)
+    {
+        return this.dbg && this.dbg.dumpInstruction(addr, 1) || "";
+    }
+
+    /**
+     * toString()
+     *
+     * Returns a string representation of the current CPU state.
+     *
+     * @this {CPUx80}
+     * @returns {string}
+     */
+    toString()
+    {
+        return this.sprintf("A=%02X BC=%04X DE=%04X HL=%04X SP=%04X I%d S%d Z%d A%d P%d C%d\n%s", this.regA, this.getBC(), this.getDE(), this.getHL(), this.getSP(), this.getIF()?1:0, this.getSF()?1:0, this.getZF()?1:0, this.getAF()?1:0, this.getPF()?1:0, this.getCF()?1:0, this.toInstruction(this.regPC));
+    }
+}
+
+/*
+ * CPU model numbers (supported); future supported models could include the Z80.
+ */
+CPUx80.MODEL_8080 = 8080;
+
+/*
+ * This constant is used to mark points in the code where the physical address being returned
+ * is invalid and should not be used.
+ */
+CPUx80.ADDR_INVALID = undefined;
+
+/*
+ * Processor Status flag definitions (stored in regPS)
+ */
+CPUx80.PS = {
+    CF:     0x0001,     // bit 0: Carry Flag
+    BIT1:   0x0002,     // bit 1: reserved, always set
+    PF:     0x0004,     // bit 2: Parity Flag
+    BIT3:   0x0008,     // bit 3: reserved, always clear
+    AF:     0x0010,     // bit 4: Auxiliary Carry Flag
+    BIT5:   0x0020,     // bit 5: reserved, always clear
+    ZF:     0x0040,     // bit 6: Zero Flag
+    SF:     0x0080,     // bit 7: Sign Flag
+    ALL:    0x00D5,     // all "arithmetic" flags (CF, PF, AF, ZF, SF)
+    MASK:   0x00FF,     //
+    IF:     0x0200      // bit 9: Interrupt Flag (set if interrupts enabled; Intel calls this the INTE bit)
+};
+
+/*
+ * These are the internal PS bits (outside of PS.MASK) that getPS() and setPS() can get and set,
+ * but which cannot be seen with any of the documented instructions.
+ */
+CPUx80.PS.INTERNAL = CPUx80.PS.IF;
+
+/*
+ * PS "arithmetic" flags are NOT stored in regPS; they are maintained across separate result registers,
+ * hence the RESULT designation.
+ */
+CPUx80.PS.RESULT   = CPUx80.PS.CF | CPUx80.PS.PF | CPUx80.PS.AF | CPUx80.PS.ZF | CPUx80.PS.SF;
+
+/*
+ * These are the "always set" PS bits for the 8080.
+ */
+CPUx80.PS.SET      = CPUx80.PS.BIT1;
+
+CPUx80.PARITY = [          // 256-byte array with a 1 wherever the number of set bits of the array index is EVEN
+    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
+    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
+    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
+    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
+    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
+    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
+    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
+    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
+    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
+    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
+    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
+    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
+    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
+    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
+    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
+    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1
+];
+
+/*
+ * Interrupt-related flags (stored in intFlags)
+ */
+CPUx80.INTFLAG = {
+    NONE:   0x0000,
+    INTR:   0x00ff,     // mask for 8 bits, representing interrupt levels 0-7
+    HALT:   0x0100      // halt requested; see opHLT()
+};
+
+/*
+ * Opcode definitions
+ */
+CPUx80.OPCODE = {
+    HLT:    0x76,       // Halt
+    ACI:    0xCE,       // Add with Carry Immediate (affects PS.ALL)
+    CALL:   0xCD,       // Call
+    RST0:   0xC7
+    // to be continued....
+};
+
+Defs.CLASSES["CPUx80"] = CPUx80;
+
+/**
+ * @copyright https://www.pcjs.org/machines/pcx80/libv2/dbgx80.js (C) 2012-2020 Jeff Parsons
+ */
+
+/**
+ * Debugger for the 8080 CPU
+ *
+ * @class {Dbgx80}
+ * @unrestricted
+ */
+class Dbgx80 extends Debugger {
+    /**
+     * Dbgx80(idMachine, idDevice, config)
+     *
+     * @this {Dbgx80}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {Config} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        super(idMachine, idDevice, config);
+        this.styles = [Dbgx80.STYLE_8080, Dbgx80.STYLE_8086];
+        this.style = Dbgx80.STYLE_8086;
         this.maxOpcodeLength = 3;
     }
 
@@ -19141,7 +16537,7 @@ class Dbg8080 extends Debugger {
      *
      * Overrides Debugger's default unassemble() function with one that understands 8080 instructions.
      *
-     * @this {Dbg8080}
+     * @this {Dbgx80}
      * @param {Address} address (advanced by the number of processed opcodes)
      * @param {Array.<number>} opcodes (each processed opcode is shifted out, reducing the size of the array)
      * @param {string} [annotation] (optional string to append to the final result)
@@ -19180,24 +16576,24 @@ class Dbg8080 extends Debugger {
          */
         let getImmOperand = (type) => {
             let sOperand = ' ';
-            let typeSize = type & Dbg8080.TYPE_SIZE;
+            let typeSize = type & Dbgx80.TYPE_SIZE;
             switch (typeSize) {
-            case Dbg8080.TYPE_BYTE:
+            case Dbgx80.TYPE_BYTE:
                 sOperand = this.toBase(getNextByte(), 16, 8, "");
                 break;
-            case Dbg8080.TYPE_SBYTE:
+            case Dbgx80.TYPE_SBYTE:
                 sOperand = this.toBase((getNextWord() << 24) >> 24, 16, 16, "");
                 break;
-            case Dbg8080.TYPE_WORD:
+            case Dbgx80.TYPE_WORD:
                 sOperand = this.toBase(getNextWord(), 16, 16, "");
                 break;
             default:
                 return "imm(" + this.toBase(type, 16, 16, "") + ')';
             }
-            if (this.style == Dbg8080.STYLE_8086 && (type & Dbg8080.TYPE_MEM)) {
+            if (this.style == Dbgx80.STYLE_8086 && (type & Dbgx80.TYPE_MEM)) {
                 sOperand = '[' + sOperand + ']';
-            } else if (!(type & Dbg8080.TYPE_REG)) {
-                sOperand = (this.style == Dbg8080.STYLE_8080? '$' : "0x") + sOperand;
+            } else if (!(type & Dbgx80.TYPE_REG)) {
+                sOperand = (this.style == Dbgx80.STYLE_8080? '$' : "0x") + sOperand;
             }
             return sOperand;
         };
@@ -19215,9 +16611,9 @@ class Dbg8080 extends Debugger {
              * mnemonics; specifically, "[HL]" instead of "M".  This is also more in keeping with how getImmOperand()
              * displays memory references (ie, by enclosing them in brackets).
              */
-            let sOperand = Dbg8080.REGS[iReg];
-            if (this.style == Dbg8080.STYLE_8086 && (type & Dbg8080.TYPE_MEM)) {
-                if (iReg == Dbg8080.REG_M) {
+            let sOperand = Dbgx80.REGS[iReg];
+            if (this.style == Dbgx80.STYLE_8086 && (type & Dbgx80.TYPE_MEM)) {
+                if (iReg == Dbgx80.REG_M) {
                     sOperand = "HL";
                 }
                 sOperand = '[' + sOperand + ']';
@@ -19227,14 +16623,14 @@ class Dbg8080 extends Debugger {
 
         let opcode = getNextByte();
 
-        let asOpcodes = this.style != Dbg8080.STYLE_8086? Dbg8080.INS_NAMES : Dbg8080.INS_NAMES_8086;
-        let aOpDesc = Dbg8080.aaOpDescs[opcode];
+        let asOpcodes = this.style != Dbgx80.STYLE_8086? Dbgx80.INS_NAMES : Dbgx80.INS_NAMES_8086;
+        let aOpDesc = Dbgx80.aaOpDescs[opcode];
         let opNum = aOpDesc[0];
 
         let sOperands = "";
         let sOpcode = asOpcodes[opNum];
         let cOperands = aOpDesc.length - 1;
-        let typeSizeDefault = Dbg8080.TYPE_NONE, type;
+        let typeSizeDefault = Dbgx80.TYPE_NONE, type;
 
         for (let iOperand = 1; iOperand <= cOperands; iOperand++) {
 
@@ -19242,30 +16638,30 @@ class Dbg8080 extends Debugger {
 
             type = aOpDesc[iOperand];
             if (type === undefined) continue;
-            if ((type & Dbg8080.TYPE_OPT) && this.style == Dbg8080.STYLE_8080) continue;
+            if ((type & Dbgx80.TYPE_OPT) && this.style == Dbgx80.STYLE_8080) continue;
 
-            let typeMode = type & Dbg8080.TYPE_MODE;
+            let typeMode = type & Dbgx80.TYPE_MODE;
             if (!typeMode) continue;
 
-            let typeSize = type & Dbg8080.TYPE_SIZE;
+            let typeSize = type & Dbgx80.TYPE_SIZE;
             if (!typeSize) {
                 type |= typeSizeDefault;
             } else {
                 typeSizeDefault = typeSize;
             }
 
-            let typeOther = type & Dbg8080.TYPE_OTHER;
+            let typeOther = type & Dbgx80.TYPE_OTHER;
             if (!typeOther) {
-                type |= (iOperand == 1? Dbg8080.TYPE_OUT : Dbg8080.TYPE_IN);
+                type |= (iOperand == 1? Dbgx80.TYPE_OUT : Dbgx80.TYPE_IN);
             }
 
-            if (typeMode & Dbg8080.TYPE_IMM) {
+            if (typeMode & Dbgx80.TYPE_IMM) {
                 sOperand = getImmOperand(type);
             }
-            else if (typeMode & Dbg8080.TYPE_REG) {
-                sOperand = getRegOperand((type & Dbg8080.TYPE_IREG) >> 8, type);
+            else if (typeMode & Dbgx80.TYPE_REG) {
+                sOperand = getRegOperand((type & Dbgx80.TYPE_IREG) >> 8, type);
             }
-            else if (typeMode & Dbg8080.TYPE_INT) {
+            else if (typeMode & Dbgx80.TYPE_INT) {
                 sOperand = ((opcode >> 3) & 0x7).toString();
             }
 
@@ -19277,7 +16673,7 @@ class Dbg8080 extends Debugger {
             sOperands += (sOperand || "???");
         }
 
-        let result = this.sprintf("%s %-7s%s %-7s %s", sAddr, sBytes, (type & Dbg8080.TYPE_UNDOC)? '*' : ' ', sOpcode, sOperands);
+        let result = this.sprintf("%s %-7s%s %-7s %s", sAddr, sBytes, (type & Dbgx80.TYPE_UNDOC)? '*' : ' ', sOpcode, sOperands);
         if (!annotation) {
             if (sComment) annotation = sComment;
         } else {
@@ -19289,13 +16685,13 @@ class Dbg8080 extends Debugger {
     }
 }
 
-Dbg8080.STYLE_8080 = "8080";
-Dbg8080.STYLE_8086 = "8086";
+Dbgx80.STYLE_8080 = "8080";
+Dbgx80.STYLE_8086 = "8086";
 
 /*
  * CPU instruction ordinals
  */
-Dbg8080.INS = {
+Dbgx80.INS = {
     NONE:   0,  ACI:    1,  ADC:    2,  ADD:    3,  ADI:    4,  ANA:    5,  ANI:    6,  CALL:   7,
     CC:     8,  CM:     9,  CNC:   10,  CNZ:   11,  CP:    12,  CPE:   13,  CPO:   14,  CZ:    15,
     CMA:   16,  CMC:   17,  CMP:   18,  CPI:   19,  DAA:   20,  DAD:   21,  DCR:   22,  DCX:   23,
@@ -19314,7 +16710,7 @@ Dbg8080.INS = {
  * If you change the default style, using the "s" command (eg, "s 8086"), then the 8086 table
  * will be used instead.  TODO: Add a "s z80" command for Z80-style mnemonics.
  */
-Dbg8080.INS_NAMES = [
+Dbgx80.INS_NAMES = [
     "NONE",     "ACI",      "ADC",      "ADD",      "ADI",      "ANA",      "ANI",      "CALL",
     "CC",       "CM",       "CNC",      "CNZ",      "CP",       "CPE",      "CPO",      "CZ",
     "CMA",      "CMC",      "CMP",      "CPI",      "DAA",      "DAD",      "DCR",      "DCX",
@@ -19327,7 +16723,7 @@ Dbg8080.INS_NAMES = [
     "STC",      "SUB",      "SUI",      "XCHG",     "XRA",      "XRI",      "XTHL"
 ];
 
-Dbg8080.INS_NAMES_8086 = [
+Dbgx80.INS_NAMES_8086 = [
     "NONE",     "ADC",      "ADC",      "ADD",      "ADD",      "AND",      "AND",      "CALL",
     "CALLC",    "CALLS",    "CALLNC",   "CALLNZ",   "CALLNS",   "CALLP",    "CALLNP",   "CALLZ",
     "NOT",      "CMC",      "CMP",      "CMP",      "DAA",      "ADD",      "DEC",      "DEC",
@@ -19340,83 +16736,83 @@ Dbg8080.INS_NAMES_8086 = [
     "STC",      "SUB",      "SUB",      "XCHG",     "XOR",      "XOR",      "XCHG"
 ];
 
-Dbg8080.REG_B      = 0x00;
-Dbg8080.REG_C      = 0x01;
-Dbg8080.REG_D      = 0x02;
-Dbg8080.REG_E      = 0x03;
-Dbg8080.REG_H      = 0x04;
-Dbg8080.REG_L      = 0x05;
-Dbg8080.REG_M      = 0x06;
-Dbg8080.REG_A      = 0x07;
-Dbg8080.REG_BC     = 0x08;
-Dbg8080.REG_DE     = 0x09;
-Dbg8080.REG_HL     = 0x0A;
-Dbg8080.REG_SP     = 0x0B;
-Dbg8080.REG_PC     = 0x0C;
-Dbg8080.REG_PS     = 0x0D;
-Dbg8080.REG_PSW    = 0x0E;      // aka AF if Z80-style mnemonics
+Dbgx80.REG_B      = 0x00;
+Dbgx80.REG_C      = 0x01;
+Dbgx80.REG_D      = 0x02;
+Dbgx80.REG_E      = 0x03;
+Dbgx80.REG_H      = 0x04;
+Dbgx80.REG_L      = 0x05;
+Dbgx80.REG_M      = 0x06;
+Dbgx80.REG_A      = 0x07;
+Dbgx80.REG_BC     = 0x08;
+Dbgx80.REG_DE     = 0x09;
+Dbgx80.REG_HL     = 0x0A;
+Dbgx80.REG_SP     = 0x0B;
+Dbgx80.REG_PC     = 0x0C;
+Dbgx80.REG_PS     = 0x0D;
+Dbgx80.REG_PSW    = 0x0E;      // aka AF if Z80-style mnemonics
 
 /*
  * NOTE: "PS" is the complete processor status, which includes bits like the Interrupt flag (IF),
  * which is NOT the same as "PSW", which is the low 8 bits of "PS" combined with "A" in the high byte.
  */
-Dbg8080.REGS = [
+Dbgx80.REGS = [
     "B", "C", "D", "E", "H", "L", "M", "A", "BC", "DE", "HL", "SP", "PC", "PS", "PSW"
 ];
 
 /*
  * Operand type descriptor masks and definitions
  */
-Dbg8080.TYPE_SIZE  = 0x000F;    // size field
-Dbg8080.TYPE_MODE  = 0x00F0;    // mode field
-Dbg8080.TYPE_IREG  = 0x0F00;    // implied register field
-Dbg8080.TYPE_OTHER = 0xF000;    // "other" field
+Dbgx80.TYPE_SIZE  = 0x000F;    // size field
+Dbgx80.TYPE_MODE  = 0x00F0;    // mode field
+Dbgx80.TYPE_IREG  = 0x0F00;    // implied register field
+Dbgx80.TYPE_OTHER = 0xF000;    // "other" field
 
 /*
  * TYPE_SIZE values
  */
-Dbg8080.TYPE_NONE  = 0x0000;    // (all other TYPE fields ignored)
-Dbg8080.TYPE_BYTE  = 0x0001;    // byte, regardless of operand size
-Dbg8080.TYPE_SBYTE = 0x0002;    // byte sign-extended to word
-Dbg8080.TYPE_WORD  = 0x0003;    // word (16-bit value)
+Dbgx80.TYPE_NONE  = 0x0000;    // (all other TYPE fields ignored)
+Dbgx80.TYPE_BYTE  = 0x0001;    // byte, regardless of operand size
+Dbgx80.TYPE_SBYTE = 0x0002;    // byte sign-extended to word
+Dbgx80.TYPE_WORD  = 0x0003;    // word (16-bit value)
 
 /*
  * TYPE_MODE values
  */
-Dbg8080.TYPE_REG   = 0x0010;    // register
-Dbg8080.TYPE_IMM   = 0x0020;    // immediate data
-Dbg8080.TYPE_ADDR  = 0x0033;    // immediate (word) address
-Dbg8080.TYPE_MEM   = 0x0040;    // memory reference
-Dbg8080.TYPE_INT   = 0x0080;    // interrupt level encoded in instruction (bits 3-5)
+Dbgx80.TYPE_REG   = 0x0010;    // register
+Dbgx80.TYPE_IMM   = 0x0020;    // immediate data
+Dbgx80.TYPE_ADDR  = 0x0033;    // immediate (word) address
+Dbgx80.TYPE_MEM   = 0x0040;    // memory reference
+Dbgx80.TYPE_INT   = 0x0080;    // interrupt level encoded in instruction (bits 3-5)
 
 /*
  * TYPE_IREG values, based on the REG_* constants.
  *
  * Note that TYPE_M isn't really a register, just an alternative form of TYPE_HL | TYPE_MEM.
  */
-Dbg8080.TYPE_A     = (Dbg8080.REG_A  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE);
-Dbg8080.TYPE_B     = (Dbg8080.REG_B  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE);
-Dbg8080.TYPE_C     = (Dbg8080.REG_C  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE);
-Dbg8080.TYPE_D     = (Dbg8080.REG_D  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE);
-Dbg8080.TYPE_E     = (Dbg8080.REG_E  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE);
-Dbg8080.TYPE_H     = (Dbg8080.REG_H  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE);
-Dbg8080.TYPE_L     = (Dbg8080.REG_L  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE);
-Dbg8080.TYPE_M     = (Dbg8080.REG_M  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE | Dbg8080.TYPE_MEM);
-Dbg8080.TYPE_BC    = (Dbg8080.REG_BC << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_WORD);
-Dbg8080.TYPE_DE    = (Dbg8080.REG_DE << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_WORD);
-Dbg8080.TYPE_HL    = (Dbg8080.REG_HL << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_WORD);
-Dbg8080.TYPE_SP    = (Dbg8080.REG_SP << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_WORD);
-Dbg8080.TYPE_PC    = (Dbg8080.REG_PC << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_WORD);
-Dbg8080.TYPE_PSW   = (Dbg8080.REG_PSW<< 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_WORD);
+Dbgx80.TYPE_A     = (Dbgx80.REG_A  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE);
+Dbgx80.TYPE_B     = (Dbgx80.REG_B  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE);
+Dbgx80.TYPE_C     = (Dbgx80.REG_C  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE);
+Dbgx80.TYPE_D     = (Dbgx80.REG_D  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE);
+Dbgx80.TYPE_E     = (Dbgx80.REG_E  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE);
+Dbgx80.TYPE_H     = (Dbgx80.REG_H  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE);
+Dbgx80.TYPE_L     = (Dbgx80.REG_L  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE);
+Dbgx80.TYPE_M     = (Dbgx80.REG_M  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE | Dbgx80.TYPE_MEM);
+Dbgx80.TYPE_BC    = (Dbgx80.REG_BC << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
+Dbgx80.TYPE_DE    = (Dbgx80.REG_DE << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
+Dbgx80.TYPE_HL    = (Dbgx80.REG_HL << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
+Dbgx80.TYPE_SP    = (Dbgx80.REG_SP << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
+Dbgx80.TYPE_PC    = (Dbgx80.REG_PC << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
+Dbgx80.TYPE_PSW   = (Dbgx80.REG_PSW<< 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
 
 /*
  * TYPE_OTHER bit definitions
  */
-Dbg8080.TYPE_IN    = 0x1000;    // operand is input
-Dbg8080.TYPE_OUT   = 0x2000;    // operand is output
-Dbg8080.TYPE_BOTH  = (Dbg8080.TYPE_IN | Dbg8080.TYPE_OUT);
-Dbg8080.TYPE_OPT   = 0x4000;    // optional operand (ie, normally omitted in 8080 assembly language)
-Dbg8080.TYPE_UNDOC = 0x8000;    // opcode is an undocumented alternative encoding
+Dbgx80.TYPE_IN    = 0x1000;    // operand is input
+Dbgx80.TYPE_OUT   = 0x2000;    // operand is output
+Dbgx80.TYPE_BOTH  = (Dbgx80.TYPE_IN | Dbgx80.TYPE_OUT);
+Dbgx80.TYPE_OPT   = 0x4000;    // optional operand (ie, normally omitted in 8080 assembly language)
+Dbgx80.TYPE_UNDOC = 0x8000;    // opcode is an undocumented alternative encoding
 
 /*
  * The aaOpDescs array is indexed by opcode, and each element is a sub-array (aOpDesc) that describes
@@ -19437,266 +16833,2870 @@ Dbg8080.TYPE_UNDOC = 0x8000;    // opcode is an undocumented alternative encodin
  *      2) If no TYPE_OTHER bits are specified for the second (source) operand, TYPE_IN is assumed;
  *      3) If no size is specified for the second operand, the size is assumed to match the first operand.
  */
-Dbg8080.aaOpDescs = [
-/* 0x00 */  [Dbg8080.INS.NOP],
-/* 0x01 */  [Dbg8080.INS.LXI,   Dbg8080.TYPE_BC,    Dbg8080.TYPE_IMM],
-/* 0x02 */  [Dbg8080.INS.STAX,  Dbg8080.TYPE_BC   | Dbg8080.TYPE_MEM, Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT],
-/* 0x03 */  [Dbg8080.INS.INX,   Dbg8080.TYPE_BC],
-/* 0x04 */  [Dbg8080.INS.INR,   Dbg8080.TYPE_B],
-/* 0x05 */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_B],
-/* 0x06 */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_B,     Dbg8080.TYPE_IMM],
-/* 0x07 */  [Dbg8080.INS.RLC],
-/* 0x08 */  [Dbg8080.INS.NOP,   Dbg8080.TYPE_UNDOC],
-/* 0x09 */  [Dbg8080.INS.DAD,   Dbg8080.TYPE_HL   | Dbg8080.TYPE_OPT, Dbg8080.TYPE_BC],
-/* 0x0A */  [Dbg8080.INS.LDAX,  Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_BC   | Dbg8080.TYPE_MEM],
-/* 0x0B */  [Dbg8080.INS.DCX,   Dbg8080.TYPE_BC],
-/* 0x0C */  [Dbg8080.INS.INR,   Dbg8080.TYPE_C],
-/* 0x0D */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_C],
-/* 0x0E */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_C,     Dbg8080.TYPE_IMM],
-/* 0x0F */  [Dbg8080.INS.RRC],
-/* 0x10 */  [Dbg8080.INS.NOP,   Dbg8080.TYPE_UNDOC],
-/* 0x11 */  [Dbg8080.INS.LXI,   Dbg8080.TYPE_DE,    Dbg8080.TYPE_IMM],
-/* 0x12 */  [Dbg8080.INS.STAX,  Dbg8080.TYPE_DE   | Dbg8080.TYPE_MEM, Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT],
-/* 0x13 */  [Dbg8080.INS.INX,   Dbg8080.TYPE_DE],
-/* 0x14 */  [Dbg8080.INS.INR,   Dbg8080.TYPE_D],
-/* 0x15 */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_D],
-/* 0x16 */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_D,     Dbg8080.TYPE_IMM],
-/* 0x17 */  [Dbg8080.INS.RAL],
-/* 0x18 */  [Dbg8080.INS.NOP,   Dbg8080.TYPE_UNDOC],
-/* 0x19 */  [Dbg8080.INS.DAD,   Dbg8080.TYPE_HL   | Dbg8080.TYPE_OPT, Dbg8080.TYPE_DE],
-/* 0x1A */  [Dbg8080.INS.LDAX,  Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_DE   | Dbg8080.TYPE_MEM],
-/* 0x1B */  [Dbg8080.INS.DCX,   Dbg8080.TYPE_DE],
-/* 0x1C */  [Dbg8080.INS.INR,   Dbg8080.TYPE_E],
-/* 0x1D */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_E],
-/* 0x1E */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_E,     Dbg8080.TYPE_IMM],
-/* 0x1F */  [Dbg8080.INS.RAR],
-/* 0x20 */  [Dbg8080.INS.NOP,   Dbg8080.TYPE_UNDOC],
-/* 0x21 */  [Dbg8080.INS.LXI,   Dbg8080.TYPE_HL,    Dbg8080.TYPE_IMM],
-/* 0x22 */  [Dbg8080.INS.SHLD,  Dbg8080.TYPE_ADDR | Dbg8080.TYPE_MEM, Dbg8080.TYPE_HL   | Dbg8080.TYPE_OPT],
-/* 0x23 */  [Dbg8080.INS.INX,   Dbg8080.TYPE_HL],
-/* 0x24 */  [Dbg8080.INS.INR,   Dbg8080.TYPE_H],
-/* 0x25 */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_H],
-/* 0x26 */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_H,     Dbg8080.TYPE_IMM],
-/* 0x27 */  [Dbg8080.INS.DAA],
-/* 0x28 */  [Dbg8080.INS.NOP,   Dbg8080.TYPE_UNDOC],
-/* 0x29 */  [Dbg8080.INS.DAD,   Dbg8080.TYPE_HL   | Dbg8080.TYPE_OPT, Dbg8080.TYPE_HL],
-/* 0x2A */  [Dbg8080.INS.LHLD,  Dbg8080.TYPE_HL   | Dbg8080.TYPE_OPT, Dbg8080.TYPE_ADDR | Dbg8080.TYPE_MEM],
-/* 0x2B */  [Dbg8080.INS.DCX,   Dbg8080.TYPE_HL],
-/* 0x2C */  [Dbg8080.INS.INR,   Dbg8080.TYPE_L],
-/* 0x2D */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_L],
-/* 0x2E */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_L,     Dbg8080.TYPE_IMM],
-/* 0x2F */  [Dbg8080.INS.CMA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT],
-/* 0x30 */  [Dbg8080.INS.NOP,   Dbg8080.TYPE_UNDOC],
-/* 0x31 */  [Dbg8080.INS.LXI,   Dbg8080.TYPE_SP,    Dbg8080.TYPE_IMM],
-/* 0x32 */  [Dbg8080.INS.STA,   Dbg8080.TYPE_ADDR | Dbg8080.TYPE_MEM, Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT],
-/* 0x33 */  [Dbg8080.INS.INX,   Dbg8080.TYPE_SP],
-/* 0x34 */  [Dbg8080.INS.INR,   Dbg8080.TYPE_M],
-/* 0x35 */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_M],
-/* 0x36 */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_M,     Dbg8080.TYPE_IMM],
-/* 0x37 */  [Dbg8080.INS.STC],
-/* 0x38 */  [Dbg8080.INS.NOP,   Dbg8080.TYPE_UNDOC],
-/* 0x39 */  [Dbg8080.INS.DAD,   Dbg8080.TYPE_HL   | Dbg8080.TYPE_OPT, Dbg8080.TYPE_SP],
-/* 0x3A */  [Dbg8080.INS.LDA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_ADDR | Dbg8080.TYPE_MEM],
-/* 0x3B */  [Dbg8080.INS.DCX,   Dbg8080.TYPE_SP],
-/* 0x3C */  [Dbg8080.INS.INR,   Dbg8080.TYPE_A],
-/* 0x3D */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_A],
-/* 0x3E */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_A,     Dbg8080.TYPE_IMM],
-/* 0x3F */  [Dbg8080.INS.CMC],
-/* 0x40 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_B],
-/* 0x41 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_C],
-/* 0x42 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_D],
-/* 0x43 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_E],
-/* 0x44 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_H],
-/* 0x45 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_L],
-/* 0x46 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_M],
-/* 0x47 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_A],
-/* 0x48 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_B],
-/* 0x49 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_C],
-/* 0x4A */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_D],
-/* 0x4B */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_E],
-/* 0x4C */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_H],
-/* 0x4D */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_L],
-/* 0x4E */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_M],
-/* 0x4F */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_A],
-/* 0x50 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_B],
-/* 0x51 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_C],
-/* 0x52 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_D],
-/* 0x53 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_E],
-/* 0x54 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_H],
-/* 0x55 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_L],
-/* 0x56 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_M],
-/* 0x57 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_A],
-/* 0x58 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_B],
-/* 0x59 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_C],
-/* 0x5A */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_D],
-/* 0x5B */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_E],
-/* 0x5C */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_H],
-/* 0x5D */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_L],
-/* 0x5E */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_M],
-/* 0x5F */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_A],
-/* 0x60 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_B],
-/* 0x61 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_C],
-/* 0x62 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_D],
-/* 0x63 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_E],
-/* 0x64 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_H],
-/* 0x65 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_L],
-/* 0x66 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_M],
-/* 0x67 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_A],
-/* 0x68 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_B],
-/* 0x69 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_C],
-/* 0x6A */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_D],
-/* 0x6B */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_E],
-/* 0x6C */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_H],
-/* 0x6D */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_L],
-/* 0x6E */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_M],
-/* 0x6F */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_A],
-/* 0x70 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_M,     Dbg8080.TYPE_B],
-/* 0x71 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_M,     Dbg8080.TYPE_C],
-/* 0x72 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_M,     Dbg8080.TYPE_D],
-/* 0x73 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_M,     Dbg8080.TYPE_E],
-/* 0x74 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_M,     Dbg8080.TYPE_H],
-/* 0x75 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_M,     Dbg8080.TYPE_L],
-/* 0x76 */  [Dbg8080.INS.HLT],
-/* 0x77 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_M,     Dbg8080.TYPE_A],
-/* 0x78 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_B],
-/* 0x79 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_C],
-/* 0x7A */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_D],
-/* 0x7B */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_E],
-/* 0x7C */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_H],
-/* 0x7D */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_L],
-/* 0x7E */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_M],
-/* 0x7F */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_A],
-/* 0x80 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0x81 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0x82 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0x83 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0x84 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0x85 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0x86 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0x87 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0x88 */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0x89 */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0x8A */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0x8B */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0x8C */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0x8D */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0x8E */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0x8F */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0x90 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0x91 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0x92 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0x93 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0x94 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0x95 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0x96 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0x97 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0x98 */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0x99 */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0x9A */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0x9B */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0x9C */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0x9D */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0x9E */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0x9F */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0xA0 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0xA1 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0xA2 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0xA3 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0xA4 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0xA5 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0xA6 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0xA7 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0xA8 */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0xA9 */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0xAA */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0xAB */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0xAC */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0xAD */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0xAE */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0xAF */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0xB0 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0xB1 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0xB2 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0xB3 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0xB4 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0xB5 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0xB6 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0xB7 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0xB8 */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0xB9 */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0xBA */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0xBB */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0xBC */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0xBD */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0xBE */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0xBF */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0xC0 */  [Dbg8080.INS.RNZ],
-/* 0xC1 */  [Dbg8080.INS.POP,   Dbg8080.TYPE_BC],
-/* 0xC2 */  [Dbg8080.INS.JNZ,   Dbg8080.TYPE_ADDR],
-/* 0xC3 */  [Dbg8080.INS.JMP,   Dbg8080.TYPE_ADDR],
-/* 0xC4 */  [Dbg8080.INS.CNZ,   Dbg8080.TYPE_ADDR],
-/* 0xC5 */  [Dbg8080.INS.PUSH,  Dbg8080.TYPE_BC],
-/* 0xC6 */  [Dbg8080.INS.ADI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xC7 */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT],
-/* 0xC8 */  [Dbg8080.INS.RZ],
-/* 0xC9 */  [Dbg8080.INS.RET],
-/* 0xCA */  [Dbg8080.INS.JZ,    Dbg8080.TYPE_ADDR],
-/* 0xCB */  [Dbg8080.INS.JMP,   Dbg8080.TYPE_ADDR | Dbg8080.TYPE_UNDOC],
-/* 0xCC */  [Dbg8080.INS.CZ,    Dbg8080.TYPE_ADDR],
-/* 0xCD */  [Dbg8080.INS.CALL,  Dbg8080.TYPE_ADDR],
-/* 0xCE */  [Dbg8080.INS.ACI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xCF */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT],
-/* 0xD0 */  [Dbg8080.INS.RNC],
-/* 0xD1 */  [Dbg8080.INS.POP,   Dbg8080.TYPE_DE],
-/* 0xD2 */  [Dbg8080.INS.JNC,   Dbg8080.TYPE_ADDR],
-/* 0xD3 */  [Dbg8080.INS.OUT,   Dbg8080.TYPE_IMM  | Dbg8080.TYPE_BYTE,Dbg8080.TYPE_A   | Dbg8080.TYPE_OPT],
-/* 0xD4 */  [Dbg8080.INS.CNC,   Dbg8080.TYPE_ADDR],
-/* 0xD5 */  [Dbg8080.INS.PUSH,  Dbg8080.TYPE_DE],
-/* 0xD6 */  [Dbg8080.INS.SUI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xD7 */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT],
-/* 0xD8 */  [Dbg8080.INS.RC],
-/* 0xD9 */  [Dbg8080.INS.RET,   Dbg8080.TYPE_UNDOC],
-/* 0xDA */  [Dbg8080.INS.JC,    Dbg8080.TYPE_ADDR],
-/* 0xDB */  [Dbg8080.INS.IN,    Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xDC */  [Dbg8080.INS.CC,    Dbg8080.TYPE_ADDR],
-/* 0xDD */  [Dbg8080.INS.CALL,  Dbg8080.TYPE_ADDR | Dbg8080.TYPE_UNDOC],
-/* 0xDE */  [Dbg8080.INS.SBI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xDF */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT],
-/* 0xE0 */  [Dbg8080.INS.RPO],
-/* 0xE1 */  [Dbg8080.INS.POP,   Dbg8080.TYPE_HL],
-/* 0xE2 */  [Dbg8080.INS.JPO,   Dbg8080.TYPE_ADDR],
-/* 0xE3 */  [Dbg8080.INS.XTHL,  Dbg8080.TYPE_SP   | Dbg8080.TYPE_MEM| Dbg8080.TYPE_OPT,  Dbg8080.TYPE_HL | Dbg8080.TYPE_OPT],
-/* 0xE4 */  [Dbg8080.INS.CPO,   Dbg8080.TYPE_ADDR],
-/* 0xE5 */  [Dbg8080.INS.PUSH,  Dbg8080.TYPE_HL],
-/* 0xE6 */  [Dbg8080.INS.ANI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xE7 */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT],
-/* 0xE8 */  [Dbg8080.INS.RPE],
-/* 0xE9 */  [Dbg8080.INS.PCHL,  Dbg8080.TYPE_HL],
-/* 0xEA */  [Dbg8080.INS.JPE,   Dbg8080.TYPE_ADDR],
-/* 0xEB */  [Dbg8080.INS.XCHG,  Dbg8080.TYPE_HL   | Dbg8080.TYPE_OPT, Dbg8080.TYPE_DE  | Dbg8080.TYPE_OPT],
-/* 0xEC */  [Dbg8080.INS.CPE,   Dbg8080.TYPE_ADDR],
-/* 0xED */  [Dbg8080.INS.CALL,  Dbg8080.TYPE_ADDR | Dbg8080.TYPE_UNDOC],
-/* 0xEE */  [Dbg8080.INS.XRI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xEF */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT],
-/* 0xF0 */  [Dbg8080.INS.RP],
-/* 0xF1 */  [Dbg8080.INS.POP,   Dbg8080.TYPE_PSW],
-/* 0xF2 */  [Dbg8080.INS.JP,    Dbg8080.TYPE_ADDR],
-/* 0xF3 */  [Dbg8080.INS.DI],
-/* 0xF4 */  [Dbg8080.INS.CP,    Dbg8080.TYPE_ADDR],
-/* 0xF5 */  [Dbg8080.INS.PUSH,  Dbg8080.TYPE_PSW],
-/* 0xF6 */  [Dbg8080.INS.ORI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xF7 */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT],
-/* 0xF8 */  [Dbg8080.INS.RM],
-/* 0xF9 */  [Dbg8080.INS.SPHL,  Dbg8080.TYPE_SP   | Dbg8080.TYPE_OPT, Dbg8080.TYPE_HL  | Dbg8080.TYPE_OPT],
-/* 0xFA */  [Dbg8080.INS.JM,    Dbg8080.TYPE_ADDR],
-/* 0xFB */  [Dbg8080.INS.EI],
-/* 0xFC */  [Dbg8080.INS.CM,    Dbg8080.TYPE_ADDR],
-/* 0xFD */  [Dbg8080.INS.CALL,  Dbg8080.TYPE_ADDR | Dbg8080.TYPE_UNDOC],
-/* 0xFE */  [Dbg8080.INS.CPI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xFF */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT]
+Dbgx80.aaOpDescs = [
+/* 0x00 */  [Dbgx80.INS.NOP],
+/* 0x01 */  [Dbgx80.INS.LXI,   Dbgx80.TYPE_BC,    Dbgx80.TYPE_IMM],
+/* 0x02 */  [Dbgx80.INS.STAX,  Dbgx80.TYPE_BC   | Dbgx80.TYPE_MEM, Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT],
+/* 0x03 */  [Dbgx80.INS.INX,   Dbgx80.TYPE_BC],
+/* 0x04 */  [Dbgx80.INS.INR,   Dbgx80.TYPE_B],
+/* 0x05 */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_B],
+/* 0x06 */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_B,     Dbgx80.TYPE_IMM],
+/* 0x07 */  [Dbgx80.INS.RLC],
+/* 0x08 */  [Dbgx80.INS.NOP,   Dbgx80.TYPE_UNDOC],
+/* 0x09 */  [Dbgx80.INS.DAD,   Dbgx80.TYPE_HL   | Dbgx80.TYPE_OPT, Dbgx80.TYPE_BC],
+/* 0x0A */  [Dbgx80.INS.LDAX,  Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_BC   | Dbgx80.TYPE_MEM],
+/* 0x0B */  [Dbgx80.INS.DCX,   Dbgx80.TYPE_BC],
+/* 0x0C */  [Dbgx80.INS.INR,   Dbgx80.TYPE_C],
+/* 0x0D */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_C],
+/* 0x0E */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_C,     Dbgx80.TYPE_IMM],
+/* 0x0F */  [Dbgx80.INS.RRC],
+/* 0x10 */  [Dbgx80.INS.NOP,   Dbgx80.TYPE_UNDOC],
+/* 0x11 */  [Dbgx80.INS.LXI,   Dbgx80.TYPE_DE,    Dbgx80.TYPE_IMM],
+/* 0x12 */  [Dbgx80.INS.STAX,  Dbgx80.TYPE_DE   | Dbgx80.TYPE_MEM, Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT],
+/* 0x13 */  [Dbgx80.INS.INX,   Dbgx80.TYPE_DE],
+/* 0x14 */  [Dbgx80.INS.INR,   Dbgx80.TYPE_D],
+/* 0x15 */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_D],
+/* 0x16 */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_D,     Dbgx80.TYPE_IMM],
+/* 0x17 */  [Dbgx80.INS.RAL],
+/* 0x18 */  [Dbgx80.INS.NOP,   Dbgx80.TYPE_UNDOC],
+/* 0x19 */  [Dbgx80.INS.DAD,   Dbgx80.TYPE_HL   | Dbgx80.TYPE_OPT, Dbgx80.TYPE_DE],
+/* 0x1A */  [Dbgx80.INS.LDAX,  Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_DE   | Dbgx80.TYPE_MEM],
+/* 0x1B */  [Dbgx80.INS.DCX,   Dbgx80.TYPE_DE],
+/* 0x1C */  [Dbgx80.INS.INR,   Dbgx80.TYPE_E],
+/* 0x1D */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_E],
+/* 0x1E */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_E,     Dbgx80.TYPE_IMM],
+/* 0x1F */  [Dbgx80.INS.RAR],
+/* 0x20 */  [Dbgx80.INS.NOP,   Dbgx80.TYPE_UNDOC],
+/* 0x21 */  [Dbgx80.INS.LXI,   Dbgx80.TYPE_HL,    Dbgx80.TYPE_IMM],
+/* 0x22 */  [Dbgx80.INS.SHLD,  Dbgx80.TYPE_ADDR | Dbgx80.TYPE_MEM, Dbgx80.TYPE_HL   | Dbgx80.TYPE_OPT],
+/* 0x23 */  [Dbgx80.INS.INX,   Dbgx80.TYPE_HL],
+/* 0x24 */  [Dbgx80.INS.INR,   Dbgx80.TYPE_H],
+/* 0x25 */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_H],
+/* 0x26 */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_H,     Dbgx80.TYPE_IMM],
+/* 0x27 */  [Dbgx80.INS.DAA],
+/* 0x28 */  [Dbgx80.INS.NOP,   Dbgx80.TYPE_UNDOC],
+/* 0x29 */  [Dbgx80.INS.DAD,   Dbgx80.TYPE_HL   | Dbgx80.TYPE_OPT, Dbgx80.TYPE_HL],
+/* 0x2A */  [Dbgx80.INS.LHLD,  Dbgx80.TYPE_HL   | Dbgx80.TYPE_OPT, Dbgx80.TYPE_ADDR | Dbgx80.TYPE_MEM],
+/* 0x2B */  [Dbgx80.INS.DCX,   Dbgx80.TYPE_HL],
+/* 0x2C */  [Dbgx80.INS.INR,   Dbgx80.TYPE_L],
+/* 0x2D */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_L],
+/* 0x2E */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_L,     Dbgx80.TYPE_IMM],
+/* 0x2F */  [Dbgx80.INS.CMA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT],
+/* 0x30 */  [Dbgx80.INS.NOP,   Dbgx80.TYPE_UNDOC],
+/* 0x31 */  [Dbgx80.INS.LXI,   Dbgx80.TYPE_SP,    Dbgx80.TYPE_IMM],
+/* 0x32 */  [Dbgx80.INS.STA,   Dbgx80.TYPE_ADDR | Dbgx80.TYPE_MEM, Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT],
+/* 0x33 */  [Dbgx80.INS.INX,   Dbgx80.TYPE_SP],
+/* 0x34 */  [Dbgx80.INS.INR,   Dbgx80.TYPE_M],
+/* 0x35 */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_M],
+/* 0x36 */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_M,     Dbgx80.TYPE_IMM],
+/* 0x37 */  [Dbgx80.INS.STC],
+/* 0x38 */  [Dbgx80.INS.NOP,   Dbgx80.TYPE_UNDOC],
+/* 0x39 */  [Dbgx80.INS.DAD,   Dbgx80.TYPE_HL   | Dbgx80.TYPE_OPT, Dbgx80.TYPE_SP],
+/* 0x3A */  [Dbgx80.INS.LDA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_ADDR | Dbgx80.TYPE_MEM],
+/* 0x3B */  [Dbgx80.INS.DCX,   Dbgx80.TYPE_SP],
+/* 0x3C */  [Dbgx80.INS.INR,   Dbgx80.TYPE_A],
+/* 0x3D */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_A],
+/* 0x3E */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_A,     Dbgx80.TYPE_IMM],
+/* 0x3F */  [Dbgx80.INS.CMC],
+/* 0x40 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_B],
+/* 0x41 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_C],
+/* 0x42 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_D],
+/* 0x43 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_E],
+/* 0x44 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_H],
+/* 0x45 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_L],
+/* 0x46 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_M],
+/* 0x47 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_A],
+/* 0x48 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_B],
+/* 0x49 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_C],
+/* 0x4A */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_D],
+/* 0x4B */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_E],
+/* 0x4C */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_H],
+/* 0x4D */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_L],
+/* 0x4E */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_M],
+/* 0x4F */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_A],
+/* 0x50 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_B],
+/* 0x51 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_C],
+/* 0x52 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_D],
+/* 0x53 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_E],
+/* 0x54 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_H],
+/* 0x55 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_L],
+/* 0x56 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_M],
+/* 0x57 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_A],
+/* 0x58 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_B],
+/* 0x59 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_C],
+/* 0x5A */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_D],
+/* 0x5B */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_E],
+/* 0x5C */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_H],
+/* 0x5D */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_L],
+/* 0x5E */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_M],
+/* 0x5F */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_A],
+/* 0x60 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_B],
+/* 0x61 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_C],
+/* 0x62 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_D],
+/* 0x63 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_E],
+/* 0x64 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_H],
+/* 0x65 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_L],
+/* 0x66 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_M],
+/* 0x67 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_A],
+/* 0x68 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_B],
+/* 0x69 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_C],
+/* 0x6A */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_D],
+/* 0x6B */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_E],
+/* 0x6C */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_H],
+/* 0x6D */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_L],
+/* 0x6E */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_M],
+/* 0x6F */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_A],
+/* 0x70 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_M,     Dbgx80.TYPE_B],
+/* 0x71 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_M,     Dbgx80.TYPE_C],
+/* 0x72 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_M,     Dbgx80.TYPE_D],
+/* 0x73 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_M,     Dbgx80.TYPE_E],
+/* 0x74 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_M,     Dbgx80.TYPE_H],
+/* 0x75 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_M,     Dbgx80.TYPE_L],
+/* 0x76 */  [Dbgx80.INS.HLT],
+/* 0x77 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_M,     Dbgx80.TYPE_A],
+/* 0x78 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_B],
+/* 0x79 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_C],
+/* 0x7A */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_D],
+/* 0x7B */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_E],
+/* 0x7C */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_H],
+/* 0x7D */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_L],
+/* 0x7E */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_M],
+/* 0x7F */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_A],
+/* 0x80 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0x81 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0x82 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0x83 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0x84 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0x85 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0x86 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0x87 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0x88 */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0x89 */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0x8A */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0x8B */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0x8C */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0x8D */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0x8E */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0x8F */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0x90 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0x91 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0x92 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0x93 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0x94 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0x95 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0x96 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0x97 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0x98 */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0x99 */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0x9A */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0x9B */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0x9C */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0x9D */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0x9E */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0x9F */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0xA0 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0xA1 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0xA2 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0xA3 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0xA4 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0xA5 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0xA6 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0xA7 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0xA8 */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0xA9 */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0xAA */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0xAB */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0xAC */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0xAD */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0xAE */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0xAF */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0xB0 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0xB1 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0xB2 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0xB3 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0xB4 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0xB5 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0xB6 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0xB7 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0xB8 */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0xB9 */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0xBA */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0xBB */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0xBC */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0xBD */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0xBE */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0xBF */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0xC0 */  [Dbgx80.INS.RNZ],
+/* 0xC1 */  [Dbgx80.INS.POP,   Dbgx80.TYPE_BC],
+/* 0xC2 */  [Dbgx80.INS.JNZ,   Dbgx80.TYPE_ADDR],
+/* 0xC3 */  [Dbgx80.INS.JMP,   Dbgx80.TYPE_ADDR],
+/* 0xC4 */  [Dbgx80.INS.CNZ,   Dbgx80.TYPE_ADDR],
+/* 0xC5 */  [Dbgx80.INS.PUSH,  Dbgx80.TYPE_BC],
+/* 0xC6 */  [Dbgx80.INS.ADI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xC7 */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT],
+/* 0xC8 */  [Dbgx80.INS.RZ],
+/* 0xC9 */  [Dbgx80.INS.RET],
+/* 0xCA */  [Dbgx80.INS.JZ,    Dbgx80.TYPE_ADDR],
+/* 0xCB */  [Dbgx80.INS.JMP,   Dbgx80.TYPE_ADDR | Dbgx80.TYPE_UNDOC],
+/* 0xCC */  [Dbgx80.INS.CZ,    Dbgx80.TYPE_ADDR],
+/* 0xCD */  [Dbgx80.INS.CALL,  Dbgx80.TYPE_ADDR],
+/* 0xCE */  [Dbgx80.INS.ACI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xCF */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT],
+/* 0xD0 */  [Dbgx80.INS.RNC],
+/* 0xD1 */  [Dbgx80.INS.POP,   Dbgx80.TYPE_DE],
+/* 0xD2 */  [Dbgx80.INS.JNC,   Dbgx80.TYPE_ADDR],
+/* 0xD3 */  [Dbgx80.INS.OUT,   Dbgx80.TYPE_IMM  | Dbgx80.TYPE_BYTE,Dbgx80.TYPE_A   | Dbgx80.TYPE_OPT],
+/* 0xD4 */  [Dbgx80.INS.CNC,   Dbgx80.TYPE_ADDR],
+/* 0xD5 */  [Dbgx80.INS.PUSH,  Dbgx80.TYPE_DE],
+/* 0xD6 */  [Dbgx80.INS.SUI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xD7 */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT],
+/* 0xD8 */  [Dbgx80.INS.RC],
+/* 0xD9 */  [Dbgx80.INS.RET,   Dbgx80.TYPE_UNDOC],
+/* 0xDA */  [Dbgx80.INS.JC,    Dbgx80.TYPE_ADDR],
+/* 0xDB */  [Dbgx80.INS.IN,    Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xDC */  [Dbgx80.INS.CC,    Dbgx80.TYPE_ADDR],
+/* 0xDD */  [Dbgx80.INS.CALL,  Dbgx80.TYPE_ADDR | Dbgx80.TYPE_UNDOC],
+/* 0xDE */  [Dbgx80.INS.SBI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xDF */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT],
+/* 0xE0 */  [Dbgx80.INS.RPO],
+/* 0xE1 */  [Dbgx80.INS.POP,   Dbgx80.TYPE_HL],
+/* 0xE2 */  [Dbgx80.INS.JPO,   Dbgx80.TYPE_ADDR],
+/* 0xE3 */  [Dbgx80.INS.XTHL,  Dbgx80.TYPE_SP   | Dbgx80.TYPE_MEM| Dbgx80.TYPE_OPT,  Dbgx80.TYPE_HL | Dbgx80.TYPE_OPT],
+/* 0xE4 */  [Dbgx80.INS.CPO,   Dbgx80.TYPE_ADDR],
+/* 0xE5 */  [Dbgx80.INS.PUSH,  Dbgx80.TYPE_HL],
+/* 0xE6 */  [Dbgx80.INS.ANI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xE7 */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT],
+/* 0xE8 */  [Dbgx80.INS.RPE],
+/* 0xE9 */  [Dbgx80.INS.PCHL,  Dbgx80.TYPE_HL],
+/* 0xEA */  [Dbgx80.INS.JPE,   Dbgx80.TYPE_ADDR],
+/* 0xEB */  [Dbgx80.INS.XCHG,  Dbgx80.TYPE_HL   | Dbgx80.TYPE_OPT, Dbgx80.TYPE_DE  | Dbgx80.TYPE_OPT],
+/* 0xEC */  [Dbgx80.INS.CPE,   Dbgx80.TYPE_ADDR],
+/* 0xED */  [Dbgx80.INS.CALL,  Dbgx80.TYPE_ADDR | Dbgx80.TYPE_UNDOC],
+/* 0xEE */  [Dbgx80.INS.XRI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xEF */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT],
+/* 0xF0 */  [Dbgx80.INS.RP],
+/* 0xF1 */  [Dbgx80.INS.POP,   Dbgx80.TYPE_PSW],
+/* 0xF2 */  [Dbgx80.INS.JP,    Dbgx80.TYPE_ADDR],
+/* 0xF3 */  [Dbgx80.INS.DI],
+/* 0xF4 */  [Dbgx80.INS.CP,    Dbgx80.TYPE_ADDR],
+/* 0xF5 */  [Dbgx80.INS.PUSH,  Dbgx80.TYPE_PSW],
+/* 0xF6 */  [Dbgx80.INS.ORI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xF7 */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT],
+/* 0xF8 */  [Dbgx80.INS.RM],
+/* 0xF9 */  [Dbgx80.INS.SPHL,  Dbgx80.TYPE_SP   | Dbgx80.TYPE_OPT, Dbgx80.TYPE_HL  | Dbgx80.TYPE_OPT],
+/* 0xFA */  [Dbgx80.INS.JM,    Dbgx80.TYPE_ADDR],
+/* 0xFB */  [Dbgx80.INS.EI],
+/* 0xFC */  [Dbgx80.INS.CM,    Dbgx80.TYPE_ADDR],
+/* 0xFD */  [Dbgx80.INS.CALL,  Dbgx80.TYPE_ADDR | Dbgx80.TYPE_UNDOC],
+/* 0xFE */  [Dbgx80.INS.CPI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xFF */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT]
 ];
 
-Defs.CLASSES["Dbg8080"] = Dbg8080;
+Defs.CLASSES["Dbgx80"] = Dbgx80;
+
+/**
+ * @copyright https://www.pcjs.org/machines/dec/vt100/lib/chips.js (C) 2012-2020 Jeff Parsons
+ */
+
+/**
+ * @class {VT100Chips}
+ * @unrestricted
+ */
+class VT100Chips extends Device {
+    /**
+     * VT100Chips(idMachine, idDevice, config)
+     *
+     * @this {VT100Chips}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {Config} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        super(idMachine, idDevice, config);
+        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
+        this.ports = /** @type {Ports} */ (this.findDeviceByClass("Ports"));
+        this.ports.addIOTable(this, VT100Chips.IOTABLE);
+        this.onReset();
+    }
+
+    /**
+     * loadState(state)
+     *
+     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
+     *
+     * @this {VT100Chips}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    loadState(state)
+    {
+        let idDevice = state.shift();
+        if (this.idDevice == idDevice) {
+            this.bBrightness    = state.shift();
+            this.bFlags         = state.shift();
+            this.bDC011Cols     = state.shift();
+            this.bDC011Rate     = state.shift();
+            this.bDC012Scroll   = state.shift();
+            this.bDC012Blink    = state.shift();
+            this.bDC012Reverse  = state.shift();
+            this.bDC012Attr     = state.shift();
+            this.dNVRAddr       = state.shift(); // 20-bit address
+            this.wNVRData       = state.shift(); // 14-bit word
+            this.bNVRLatch      = state.shift(); // 1 byte
+            this.bNVROut        = state.shift(); // 1 bit
+            this.aNVRWords      = state.shift(); // 100 14-bit words
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * saveState(state)
+     *
+     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
+     *
+     * @this {VT100Chips}
+     * @param {Array} state
+     */
+    saveState(state)
+    {
+        state.push(this.idDevice);
+        state.push(this.bBrightness);
+        state.push(this.bFlags);
+        state.push(this.bDC011Cols);
+        state.push(this.bDC011Rate);
+        state.push(this.bDC012Scroll);
+        state.push(this.bDC012Blink);
+        state.push(this.bDC012Reverse);
+        state.push(this.bDC012Attr);
+        state.push(this.dNVRAddr);
+        state.push(this.wNVRData);
+        state.push(this.bNVRLatch);
+        state.push(this.bNVROut);
+        state.push(this.aNVRWords);
+    }
+
+    /**
+     * onPower(on)
+     *
+     * Called by the Machine device to provide notification of a power event.
+     *
+     * @this {VT100Chips}
+     * @param {boolean} on (true to power on, false to power off)
+     */
+    onPower(on)
+    {
+        if (this.kbd === undefined) {
+            this.kbd = /** @type {VT100Keyboard} */ (this.findDeviceByClass("VT100Keyboard"));
+        }
+        if (this.serial === undefined) {
+            this.serial = /** @type {VT100Serial} */ (this.findDeviceByClass("VT100Serial"));
+        }
+        if (this.video === undefined) {
+            this.video = /** @type {VT100Video} */ (this.findDeviceByClass("VT100Video"));
+        }
+        /*
+         * This is also a good time to get access to the Debugger, if any, and add our dump extensions.
+         */
+        if (this.dbg === undefined) {
+            this.dbg = /** @type {Debugger} */ (this.findDeviceByClass("Debugger", false));
+            if (this.dbg) this.dbg.addDumper(this, "nvr", "dump non-volatile ram", this.dumpNVR);
+        }
+    }
+
+    /**
+     * onReset()
+     *
+     * Called by the Machine device to provide notification of a reset event.
+     *
+     * @this {VT100Chips}
+     */
+    onReset()
+    {
+        this.bBrightness    = VT100Chips.BRIGHTNESS.INIT;
+        this.bFlags         = VT100Chips.FLAGS.NO_AVO | VT100Chips.FLAGS.NO_GFX;
+        this.bDC011Cols     = VT100Chips.DC011.INITCOLS;
+        this.bDC011Rate     = VT100Chips.DC011.INITRATE;
+        this.bDC012Scroll   = VT100Chips.DC012.INITSCROLL;
+        this.bDC012Blink    = VT100Chips.DC012.INITBLINK;
+        this.bDC012Reverse  = VT100Chips.DC012.INITREVERSE;
+        this.bDC012Attr     = VT100Chips.DC012.INITATTR;
+        this.dNVRAddr       = 0;
+        this.wNVRData       = 0;
+        this.bNVRLatch      = 0;
+        this.bNVROut        = 0;
+       /*
+        * The following array contains the data we use to initialize all (100) words of NVR (Non-Volatile RAM).
+        *
+        * I used to initialize every word to 0x3ff, as if the NVR had been freshly erased, but that causes the
+        * firmware to (attempt to) beep and then display an error code (2).  As the DEC Technical Manual says:
+        *
+        *      If the NVR fails, the bell sounds several times to inform the operator, and then default settings
+        *      stored in the ROM allow the terminal to work.
+        *
+        * but I think what they meant to say is that default settings are stored in the RAM copy of NVR.  So then
+        * I went into SET-UP, pressed SHIFT-S to save those settings back to NVR, and then used the PCx80 debugger
+        * "d nvr" command to dump the NVR contents.  The results are below.
+        *
+        * The first dump actually contains only two modifications to the factory defaults: enabling ONLINE instead
+        * of LOCAL operation, and turning ANSI support ON.  The second dump is unmodified (the TRUE factory defaults).
+        *
+        * By making selective changes, you can discern where the bits for certain features are stored.  For example,
+        * smooth-scrolling is apparently controlled by bit 7 of the word at offset 0x2B (and is ON by default in
+        * the factory settings).  And it's likely that the word at offset 0x32 (ie, the last word that's not zero)
+        * is the NVR checksum.
+        *
+        * The TRUE factory defaults are here for reference:
+        *
+        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
+        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
+        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
+        *   0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E00,
+        *   0x2E08, 0x2E8E, 0x2E20, 0x2ED0, 0x2E50, 0x2E00, 0x2E20, 0x2E00, 0x2EE0, 0x2EE0,
+        *   0x2E69, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        *   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
+        */
+        this.aNVRWords = [
+            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
+            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
+            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80,
+            0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E80, 0x2E00,
+            0x2E08, 0x2E8E, 0x2E00, 0x2ED0, 0x2E70, 0x2E00, 0x2E20, 0x2E00, 0x2EE0, 0x2EE0,
+            0x2E7D, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
+        ];
+    }
+
+    /**
+     * getLBA(iBit)
+     *
+     * Returns the state of the requested (simulated) LBA bit.
+     *
+     * NOTE: This is currently only used to obtain LBA7, which we approximate with the slightly faster approach
+     * of masking bit 6 of the CPU cycle count (see the DC011 discussion above).  This will result in a shorter LBA7
+     * period than if we divided the cycle count by 88, but a shorter LBA7 period is probably helpful in terms of
+     * overall performance.
+     *
+     * @this {VT100Chips}
+     * @param {number} iBit
+     * @returns {number}
+     */
+    getLBA(iBit)
+    {
+        return (this.time.getCycles() & (1 << (iBit - 1))) << 1;
+    }
+
+    /**
+     * getNVRAddr()
+     *
+     * @this {VT100Chips}
+     * @returns {number}
+     */
+    getNVRAddr()
+    {
+        let i;
+        let tens = 0, ones = 0;
+        let addr = ~this.dNVRAddr;
+        for (i = 0; i < 10; i++) {
+            if (addr & 0x1) tens = 9-i;
+            addr >>= 1;
+        }
+        for (i = 0; i < 10; i++) {
+            if (addr & 0x1) ones = 9-i;
+            addr >>= 1;
+        }
+        addr = tens*10 + ones;
+
+        return addr;
+    }
+
+    /**
+     * doNVRCommand()
+     *
+     * @this {VT100Chips}
+     */
+    doNVRCommand()
+    {
+        let addr, data;
+        let bit = this.bNVRLatch & 0x1;
+        let bCmd = (this.bNVRLatch >> 1) & 0x7;
+
+        switch(bCmd) {
+        case VT100Chips.NVR.CMD.STANDBY:
+            break;
+
+        case VT100Chips.NVR.CMD.ACCEPT_ADDR:
+            this.dNVRAddr = (this.dNVRAddr << 1) | bit;
+            break;
+
+        case VT100Chips.NVR.CMD.ERASE:
+            addr = this.getNVRAddr();
+            this.aNVRWords[addr] = VT100Chips.NVR.WORDMASK;
+            this.printf(MESSAGE.CHIPS, "doNVRCommand(): erase data at addr %#06x\n", addr);
+            break;
+
+        case VT100Chips.NVR.CMD.ACCEPT_DATA:
+            this.wNVRData = (this.wNVRData << 1) | bit;
+            break;
+
+        case VT100Chips.NVR.CMD.WRITE:
+            addr = this.getNVRAddr();
+            data = this.wNVRData & VT100Chips.NVR.WORDMASK;
+            this.aNVRWords[addr] = data;
+            this.printf(MESSAGE.CHIPS, "doNVRCommand(): write data %#06x to addr %#06x\n", data, addr);
+            break;
+
+        case VT100Chips.NVR.CMD.READ:
+            addr = this.getNVRAddr();
+            data = this.aNVRWords[addr];
+            /*
+             * If we don't explicitly initialize aNVRWords[], pretend any uninitialized words contains WORDMASK.
+             */
+            if (data == null) data = VT100Chips.NVR.WORDMASK;
+            this.wNVRData = data;
+            this.printf(MESSAGE.CHIPS, "doNVRCommand(): read data %#06x from addr %#06x\n", data, addr);
+            break;
+
+        case VT100Chips.NVR.CMD.SHIFT_OUT:
+            this.wNVRData <<= 1;
+            /*
+             * Since WORDMASK is 0x3fff, this will mask the shifted data with 0x4000, which is the bit we want to isolate.
+             */
+            this.bNVROut = this.wNVRData & (VT100Chips.NVR.WORDMASK + 1);
+            break;
+
+        default:
+            this.printf(MESSAGE.CHIPS, "doNVRCommand(): unrecognized command %#04x\n", bCmd);
+            break;
+        }
+    }
+
+    /**
+     * inFlags(port)
+     *
+     * @this {VT100Chips}
+     * @param {number} port (0x42)
+     * @returns {number} simulated port value
+     */
+    inFlags(port)
+    {
+        let value = this.bFlags;
+
+        /*
+         * The NVR_CLK bit is driven by LBA7 (ie, bit 7 from Line Buffer Address generation); see the DC011 discussion above.
+         */
+        value &= ~VT100Chips.FLAGS.NVR_CLK;
+        if (this.getLBA(7)) {
+            value |= VT100Chips.FLAGS.NVR_CLK;
+            if (value != this.bFlags) {
+                this.doNVRCommand();
+            }
+        }
+
+        value &= ~VT100Chips.FLAGS.NVR_DATA;
+        if (this.bNVROut) {
+            value |= VT100Chips.FLAGS.NVR_DATA;
+        }
+
+        value &= ~VT100Chips.FLAGS.KBD_XMIT;
+        if (this.kbd && this.kbd.isTransmitterReady()) {
+            value |= VT100Chips.FLAGS.KBD_XMIT;
+        }
+
+        value &= ~VT100Chips.FLAGS.UART_XMIT;
+        if (this.serial && this.serial.isTransmitterReady()) {
+            value |= VT100Chips.FLAGS.UART_XMIT;
+        }
+
+        this.bFlags = value;
+        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "inFlags(%#04x): %#04x\n", port, value);
+        return value;
+    }
+
+    /**
+     * outBrightness(port, value)
+     *
+     * @this {VT100Chips}
+     * @param {number} port (0x42)
+     * @param {number} value
+     */
+    outBrightness(port, value)
+    {
+        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outBrightness(%#04x): %#04x\n", port, value);
+        this.bBrightness = value;
+    }
+
+    /**
+     * outNVRLatch(port, value)
+     *
+     * @this {VT100Chips}
+     * @param {number} port (0x62)
+     * @param {number} value
+     */
+    outNVRLatch(port, value)
+    {
+        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outNVRLatch(%#04x): %#04x\n", port, value);
+        this.bNVRLatch = value;
+    }
+
+    /**
+     * outDC012(port, value)
+     *
+     * TODO: Consider whether we should disable any interrupts (eg, vertical retrace) until
+     * this port is initialized at runtime.
+     *
+     * @this {VT100Chips}
+     * @param {number} port (0xA2)
+     * @param {number} value
+     */
+    outDC012(port, value)
+    {
+        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outDC012(%#04x): %#04x\n", port, value);
+        let bOpt = value & 0x3;
+        let bCmd = (value >> 2) & 0x3;
+        switch(bCmd) {
+        case 0x0:
+            this.bDC012Scroll = (this.bDC012Scroll & ~0x3) | bOpt;
+            break;
+        case 0x1:
+            this.bDC012Scroll = (this.bDC012Scroll & ~0xC) | (bOpt << 2);
+            if (this.video) this.video.updateScrollOffset(this.bDC012Scroll);
+            break;
+        case 0x2:
+            switch(bOpt) {
+            case 0x0:
+                this.bDC012Blink = ~this.bDC012Blink;
+                break;
+            case 0x1:
+                // TODO: Clear vertical frequency interrupt?
+                break;
+            case 0x2:
+            case 0x3:
+                this.bDC012Reverse = 0x3 - bOpt;
+                break;
+            }
+            break;
+        case 0x3:
+            this.bDC012Attr = bOpt;
+            break;
+        }
+    }
+
+    /**
+     * outDC011(port, value)
+     *
+     * @this {VT100Chips}
+     * @param {number} port (0xC2)
+     * @param {number} value
+     */
+    outDC011(port, value)
+    {
+        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outNDC011(%#04x): %#04x\n", port, value);
+        if (value & VT100Chips.DC011.RATE60) {
+            value &= VT100Chips.DC011.RATE50;
+            if (this.bDC011Rate != value) {
+                this.bDC011Rate = value;
+                if (this.video) {
+                    this.video.updateRate(this.bDC011Rate == VT100Chips.DC011.RATE50? 50 : 60);
+                }
+            }
+        } else {
+            value &= VT100Chips.DC011.COLS132;
+            if (this.bDC011Cols != value) {
+                this.bDC011Cols = value;
+                if (this.video) {
+                    let nCols = (this.bDC011Cols == VT100Chips.DC011.COLS132? 132 : 80);
+                    let nRows = (nCols > 80 && (this.bFlags & VT100Chips.FLAGS.NO_AVO)? 14 : 24);
+                    this.video.updateDimensions(nCols, nRows);
+                }
+            }
+        }
+    }
+
+    /**
+     * dumpNVR(values)
+     *
+     * @this {VT100Chips}
+     * @param {Array.<number>} values (the Debugger passes along any values on the command-line, but we don't use them)
+     */
+    dumpNVR(values)
+    {
+        let sDump = "";
+        for (let iWord = 1; iWord <= this.aNVRWords.length; iWord++) {
+            sDump += this.sprintf("%04x%c", this.aNVRWords[iWord-1], (iWord % 10)? ' ' : '\n');
+        }
+        return sDump;
+    }
+}
+
+/*
+ * One of the many chips in the VT100 is an 8224, which operates at 24.8832MHz.  That frequency is divided by 9
+ * to yield a 361.69ns clock period for the 8080 CPU, which means (in theory) that the CPU is running at 2.76Mhz,
+ * so the machine should be configured with "cyclesPerSecond" set to 2764800.
+ *
+ * WARNING: The choice of clock speed has an effect on other simulated VT100 circuits; see the DC011 Timing Chip
+ * discussion below, along with the getLBA() function.
+ *
+ * For reference, here is a list of all the VT100 I/O ports, from /devices/pc8080/machine/vt100/debugger/README.md,
+ * which in turn comes from p. 4-17 of the VT100 Technical Manual (July 1982):
+ *
+ *      READ OR WRITE
+ *      00H     PUSART data bus
+ *      01H     PUSART command port
+ *
+ *      WRITE ONLY (Decoded with I/O WR L)
+ *      02H     Baud rate generator
+ *      42H     Brightness D/A latch
+ *      62H     NVR latch
+ *      82H     Keyboard UART data input [used to update the Keyboard Status Byte -JP]
+ *      A2H     Video processor DC012
+ *      C2H     Video processor DC011
+ *      E2H     Graphics port
+ *
+ *      READ ONLY (Decoded with I/O RD L)
+ *      22H     Modem buffer
+ *      42H     Flags buffer
+ *      82H     Keyboard UART data output
+ */
+VT100Chips.FLAGS = {
+    PORT:       0x42,           // read-only
+    UART_XMIT:  0x01,           // PUSART transmit buffer empty if SET
+    NO_AVO:     0x02,           // AVO present if CLEAR
+    NO_GFX:     0x04,           // VT125 graphics board present if CLEAR
+    OPTION:     0x08,           // OPTION present if SET
+    NO_EVEN:    0x10,           // EVEN FIELD active if CLEAR
+    NVR_DATA:   0x20,           // NVR DATA if SET
+    NVR_CLK:    0x40,           // NVR CLOCK if SET
+    KBD_XMIT:   0x80            // KBD transmit buffer empty if SET
+};
+
+VT100Chips.BRIGHTNESS = {
+    PORT:       0x42,           // write-only
+    INIT:       0x00            // for lack of a better guess
+};
+
+/*
+ * Reading port 0x82 returns a key address from the VT100 keyboard's UART data output.
+ *
+ * Every time a keyboard scan is initiated (by setting the START bit of the status byte),
+ * our internal address index (iKeyNext) is set to zero, and an interrupt is generated for
+ * each entry in the aKeysActive array, along with a final interrupt for KEYLAST.
+ */
+VT100Chips.ADDRESS = {
+    PORT:       0x82,
+    INIT:       0x7F
+};
+
+/*
+ * Writing port 0x82 updates the VT100's keyboard status byte via the keyboard's UART data input.
+ */
+VT100Chips.STATUS = {
+    PORT:       0x82,               // write-only
+    LED4:       0x01,
+    LED3:       0x02,
+    LED2:       0x04,
+    LED1:       0x08,
+    LOCKED:     0x10,
+    LOCAL:      0x20,
+    LEDS:       0x3F,               // all LEDs
+    START:      0x40,               // set to initiate a scan
+    /*
+     * From p. 4-38 of the VT100 Technical Manual (July 1982):
+     *
+     *      A bit (CLICK) in the keyboard status word controls the bell....  When a single status word contains
+     *      the bell bit, flip-flop E3 toggles and turns on E1, generating a click. If the bell bit is set for
+     *      many words in succession, the UART latch holds the data output constant..., allowing the circuit to
+     *      produce an 800 hertz tone. Bell is generated by setting the bell bit for 0.25 seconds.  Each cycle of
+     *      the tone is at a reduced amplitude compared with the single keyclick....  The overall effect of the
+     *      tone burst on the ear is that of a beep.
+     */
+    CLICK:      0x80,
+    INIT:       0x00
+};
+
+/*
+ * DC011 is referred to as a Timing Chip.
+ *
+ * As p. 4-55 (105) of the VT100 Technical Manual (July 1982) explains:
+ *
+ *      The DCO11 is a custom designed bipolar circuit that provides most of the timing signals required by the
+ *      video processor. Internal counters divide the output of a 24.0734 MHz oscillator (located elsewhere on the
+ *      terminal controller module) into the lower frequencies that define dot, character, scan, and frame timing.
+ *      The counters are programmable through various input pins to control the number of characters per line,
+ *      the frequency at which the screen is refreshed, and whether the display is interlaced or noninterlaced.
+ *      These parameters can be controlled through SET-UP mode or by the host.
+ *
+ *          Table 4-6-1: Video Mode Selection (Write Address 0xC2)
+ *
+ *          D5  D4      Configuration
+ *          --  --      -------------
+ *          0   0       80-column mode, interlaced
+ *          0   1       132-column mode, interlaced
+ *          1   0       60Hz, non-interlaced
+ *          1   1       50Hz, non-interlaced
+ *
+ * On p. 4-56, the DC011 Block Diagram shows 8 outputs labeled LBA0 through LBA7.  From p. 4-61:
+ *
+ *      Several of the LBAs are used as general purpose clocks in the VT100. LBA3 and LBA4 are used to generate
+ *      timing for the keyboard. These signals satisfy the keyboard's requirement of two square-waves, one twice the
+ *      frequency of the other, even though every 16th transition is delayed (the second stage of the horizontal
+ *      counter divides by 17, not 16). LBA7 is used by the nonvolatile RAM.
+ *
+ * And on p. 4-62, timings are provided for the LBA0 through LBA7; in particular:
+ *
+ *      LBA6:   16.82353us (when LBA6 is low, for a period of 33.64706us)
+ *      LBA7:   31.77778us (when LBA7 is high, for a period of 63.55556us)
+ *
+ * If we assume that the CPU cycle count increments once every 361.69ns, it will increment roughly 88 times every
+ * time LBA7 toggles.  So we can divide the CPU cycle count by 88 and set LBA to the low bit of that truncated
+ * result.  An even faster (but less accurate) solution would be to mask bit 6 of the CPU cycle count, which will
+ * doesn't change until the count has been incremented 64 times.  See getLBA() for the chosen implementation.
+ */
+VT100Chips.DC011 = {            // generates Line Buffer Addresses (LBAs) for the Video Processor
+    PORT:       0xC2,           // write-only
+    COLS80:     0x00,
+    COLS132:    0x10,
+    RATE60:     0x20,
+    RATE50:     0x30,
+    INITCOLS:   0x00,           // ie, COLS80
+    INITRATE:   0x20            // ie, RATE60
+};
+
+/*
+ * DC012 is referred to as a Control Chip.
+ *
+ * As p. 4-67 (117) of the VT100 Technical Manual (July 1982) explains:
+ *
+ *      The DCO12 performs three main functions.
+ *
+ *       1. Scan count generation. This involves two counters, a multiplexer to switch between the counters,
+ *          double-height logic, scroll and line attribute latches, and various logic controlling switching between
+ *          the two counters. This is the biggest part of the chip. It includes all scrolling, double-height logic,
+ *          and feeds into the underline and hold request circuits.
+ *
+ *       2. Generation of HOLD REQUEST. This uses information from the scan counters and the scrolling logic to
+ *          decide when to generate HOLD REQUEST.
+ *
+ *       3. Video modifications: dot stretching, blanking, addition of attributes to video outputs, and multiple
+ *          intensity levels.
+ *
+ *      The input decoder accepts a 4-bit command from the microprocessor when VID WR 2 L is asserted. Table 4-6-2
+ *      lists the commands.
+ *
+ *      D3 D2 D1 D0     Function
+ *      -- -- -- --     --------
+ *      0  0  0  0      Load low order scroll latch = 00
+ *      0  0  0  1      Load low order scroll latch = 01
+ *      0  0  1  0      Load low order scroll latch = 10
+ *      0  0  1  1      Load low order scroll latch = 11
+ *
+ *      0  1  0  0      Load high order scroll latch = 00
+ *      0  1  0  1      Load high order scroll latch = 01
+ *      0  1  1  0      Load high order scroll latch = 10
+ *      0  1  1  1      Load high order scroll latch = 11 (not used)
+ *
+ *      1  0  0  0      Toggle blink flip-flop
+ *      1  0  0  1      Clear vertical frequency interrupt
+ *
+ *      1  0  1  0      Set reverse field on
+ *      1  0  1  1      Set reverse field off
+ *
+ *      1  1  0  0      Set basic attribute to underline*
+ *      1  1  0  1      Set basic attribute to reverse video*
+ *      1  1  1  0      Reserved for future specification*
+ *      1  1  1  1      Reserved for future specification*
+ *
+ *      *These functions also clear blink flip-flop.
+ */
+VT100Chips.DC012 = {            // generates scan counts for the Video Processor
+    PORT:       0xA2,           // write-only
+    SCROLL_LO:  0x00,
+    INITSCROLL: 0x00,
+    INITBLINK:  0x00,
+    INITREVERSE:0x00,
+    INITATTR:   0x00
+};
+
+/*
+ * ER1400 Non-Volatile RAM (NVR) Chip Definitions
+ */
+VT100Chips.NVR = {
+    LATCH: {
+        PORT:   0x62            // write-only
+    },
+    CMD: {
+        ACCEPT_DATA:    0x0,
+        ACCEPT_ADDR:    0x1,
+        SHIFT_OUT:      0x2,
+        WRITE:          0x4,
+        ERASE:          0x5,
+        READ:           0x6,
+        STANDBY:        0x7
+    },
+    WORDMASK:   0x3fff          // NVR words are 14-bit
+    /*
+     * The Technical Manual, p. 4-18, also notes that "Early VT100s can disable the receiver interrupt by
+     * programming D4 in the NVR latch. However, this is never used by the VT100."
+     */
+};
+
+VT100Chips.IOTABLE = {
+    0x42: [VT100Chips.prototype.inFlags, VT100Chips.prototype.outBrightness],
+    0x62: [null, VT100Chips.prototype.outNVRLatch],
+    0xA2: [null, VT100Chips.prototype.outDC012],
+    0xC2: [null, VT100Chips.prototype.outDC011]
+};
+
+Defs.CLASSES["VT100Chips"] = VT100Chips;
+
+/**
+ * @copyright https://www.pcjs.org/machines/dec/vt100/lib/keyboard.js (C) 2012-2020 Jeff Parsons
+ */
+
+/** @typedef {{ model: number }} */
+var VT100KeyboardConfig;
+
+/**
+ * @class {VT100Keyboard}
+ * @unrestricted
+ * @property {VT100KeyboardConfig} config
+ */
+class VT100Keyboard extends Device {
+    /**
+     * VT100Keyboard(idMachine, idDevice, config)
+     *
+     * @this {VT100Keyboard}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {VT100KeyboardConfig} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        super(idMachine, idDevice, config);
+
+        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
+        this.ports = /** @type {Ports} */ (this.findDeviceByClass("Ports"));
+        this.ports.addIOTable(this, VT100Keyboard.IOTABLE);
+
+        /*
+         * Whereas VT100Keyboard.LEDS maps bits to LED ID, this.leds maps bits to the actual LED devices.
+         */
+        this.leds = {};
+        for (let bit in VT100Keyboard.LEDS) {
+            this.leds[bit] = /** @type {LED} */ (this.findDevice(VT100Keyboard.LEDS[bit], false));
+        }
+
+        this.input = /** @type {Input} */ (this.findDeviceByClass("Input"));
+        this.input.addKeyMap(this, VT100Keyboard.KEYMAP, VT100Keyboard.CLICKMAP);
+
+        this.ledCaps = this.findDevice("ledCaps");
+        if (this.ledCaps) {
+            this.input.addListener(Input.TYPE.KEYCODE, WebIO.KEYCODE.CAPS_LOCK, this.onCapsLock.bind(this));
+        }
+        this.onReset();
+    }
+
+    /**
+     * loadState(state)
+     *
+     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
+     *
+     * @this {VT100Keyboard}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    loadState(state)
+    {
+        let idDevice = state.shift();
+        if (this.idDevice == idDevice) {
+            this.bStatus = state.shift();
+            this.bAddress = state.shift();
+            this.fUARTBusy = state.shift();
+            this.nUARTSnap = state.shift();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * saveState(state)
+     *
+     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
+     *
+     * @this {VT100Keyboard}
+     * @param {Array} state
+     */
+    saveState(state)
+    {
+        state.push(this.idDevice);
+        state.push(this.bStatus);
+        state.push(this.bAddress);
+        state.push(this.fUARTBusy);
+        state.push(this.nUARTSnap);
+    }
+
+    /**
+     * onCapsLock(id, on)
+     *
+     * @this {VT100Keyboard}
+     * @param {number} id
+     * @param {boolean} on
+     */
+    onCapsLock(id, on)
+    {
+        this.ledCaps.setLEDState(0, 0, on? LED.STATE.ON : LED.STATE.OFF);
+    }
+
+    /**
+     * onPower(on)
+     *
+     * Called by the Machine device to provide notification of a power event.
+     *
+     * @this {VT100Keyboard}
+     * @param {boolean} on
+     */
+    onPower(on)
+    {
+        if (!this.cpu) {
+            this.cpu = /** @type {CPUx80} */ (this.findDeviceByClass("CPU"));
+        }
+        this.updateLEDs(on? this.bStatus : undefined);
+    }
+
+    /**
+     * onReset()
+     *
+     * Called by the Machine device to provide notification of a reset event.
+     *
+     * @this {VT100Keyboard}
+     */
+    onReset()
+    {
+        this.bStatus = VT100Keyboard.STATUS.INIT;
+        this.bAddress = VT100Keyboard.ADDRESS.INIT;
+        this.fUARTBusy = false;
+        this.nUARTSnap = 0;
+        this.iKeyNext = -1;
+        this.updateLEDs();
+    }
+
+    /**
+     * isTransmitterReady()
+     *
+     * Called whenever the VT100 Chips device needs the VT100Keyboard UART transmitter status.
+     *
+     * From p. 4-32 of the VT100 Technical Manual (July 1982):
+     *
+     *      The operating clock for the keyboard interface comes from an address line in the video processor (LBA4).
+     *      This signal has an average period of 7.945 microseconds. Each data byte is transmitted with one start bit
+     *      and one stop bit, and each bit lasts 16 clock periods. The total time for each data byte is 160 times 7.945
+     *      or 1.27 milliseconds. Each time the Transmit Buffer Empty flag on the terminal's UART gets set (when the
+     *      current byte is being transmitted), the microprocessor loads another byte into the transmit buffer. In this
+     *      way, the stream of status bytes to the keyboard is continuous.
+     *
+     * We used to always return true (after all, what's wrong with an infinitely fast UART?), but unfortunately,
+     * the VT100 firmware relies on the UART's slow transmission speed to drive cursor blink rate.  We have several
+     * options:
+     *
+     *      1) Snapshot the CPU cycle count each time a byte is transmitted (see outVT100UARTStatus()) and then every
+     *      time this is polled, see if the cycle count has exceeded the snapshot value by the necessary threshold;
+     *      if we assume 361.69ns per CPU cycle, there are 22 CPU cycles for every 1 LBA4 cycle, and since transmission
+     *      time is supposed to last for 160 LBA4 cycles, the threshold is 22*160 CPU cycles, or 3520 cycles.
+     *
+     *      2) Set a CPU timer using the new setTimer() interface, which can be passed the number of milliseconds to
+     *      wait before firing (in this case, roughly 1.27ms).
+     *
+     *      3) Call the Chips device getLBA(4) function for the state of the simulated LBA4, and count 160 LBA4
+     *      transitions; however, that would be the worst solution, because there's no guarantee that the firmware's
+     *      UART polling will occur regularly and/or frequently enough for us to catch every LBA4 transition.
+     *
+     * I'm going with solution #1 because it's less overhead.
+     *
+     * @this {VT100Keyboard}
+     * @returns {boolean} (true if ready, false if not)
+     */
+    isTransmitterReady()
+    {
+        if (this.fUARTBusy) {
+            if (this.time.getCycles() >= this.nUARTSnap) {
+                this.fUARTBusy = false;
+            }
+        }
+        return !this.fUARTBusy;
+    }
+
+    /**
+     * inUARTAddress(port)
+     *
+     * We take our cue from iKeyNext.  If it's -1 (default), we simply return the last value latched
+     * in bAddress.  Otherwise, we call getActiveKey() to request the next mapped key value, latch it,
+     * and increment iKeyNext.  Failing that, we latch ADDRESS.KEYLAST and reset iKeyNext to -1.
+     *
+     * @this {VT100Keyboard}
+     * @param {number} port (0x82)
+     * @returns {number} simulated port value
+     */
+    inUARTAddress(port)
+    {
+        let value = this.bAddress;
+        if (this.iKeyNext >= 0) {
+            let value = this.input.getActiveKey(this.iKeyNext);
+            if (value >= 0) {
+                this.iKeyNext++;
+                if (value & 0x80) {
+                    /*
+                     * TODO: This code is supposed to be accompanied by a SHIFT key; make sure that it is.
+                     */
+                    value &= 0x7F;
+                }
+            } else {
+                this.iKeyNext = -1;
+                value = VT100Keyboard.ADDRESS.KEYLAST;
+            }
+            this.bAddress = value;
+            this.cpu.requestINTR(1);
+        }
+        this.printf(MESSAGE.KBD + MESSAGE.PORTS, "inUARTAddress(%#04x): %#04x\n", port, value);
+        return value;
+    }
+
+    /**
+     * outUARTStatus(port, value)
+     *
+     * @this {VT100Keyboard}
+     * @param {number} port (0x82)
+     * @param {number} value
+     */
+    outUARTStatus(port, value)
+    {
+        this.printf(MESSAGE.KBD + MESSAGE.PORTS, "outUARTStatus(%#04x): %#04x\n", port, value);
+        this.updateLEDs(value, this.bStatus);
+        this.bStatus = value;
+        this.fUARTBusy = true;
+        /*
+         * Set nUARTSnap to the number of cycles required before clearing fUARTBusy; see isTransmitterReady().
+         *
+         * NOTE: getCyclesPerMS(1.2731488) should work out to 3520 cycles for a CPU clocked at 361.69ns per cycle,
+         * which is roughly 2.76Mhz.  We could just hard-code 3520 instead of calling getCyclesPerMS(), but this helps
+         * maintain a reasonable blink rate for the cursor even when the user cranks up the CPU speed.
+         */
+        this.nUARTSnap = this.time.getCycles() + this.time.getCyclesPerMS(1.2731488);
+        if (value & VT100Keyboard.STATUS.START) {
+            this.iKeyNext = 0;
+            this.cpu.requestINTR(1);
+        }
+    }
+
+    /**
+     * updateLEDs(value, previous)
+     *
+     * @this {VT100Keyboard}
+     * @param {number} [value] (if not provided, all LEDS are turned off)
+     * @param {number} [previous] (if not provided, all LEDs are updated)
+     */
+    updateLEDs(value, previous)
+    {
+        for (let id in this.leds) {
+            let led = this.leds[id];
+            if (!led) continue;
+            let bit = +id, on, changed = 1, redraw = 1;
+            if (value != undefined) {
+                if (!(bit & (bit - 1))) {       // if a single bit is set, this will be zero
+                    on = value & bit;           // and "on" will be true if that single bit is set
+                } else {
+                    bit = ~bit & 0xff;          // otherwise, we assume that a single bit is clear
+                    on = !(value & bit);        // so "on" will be true if that same single bit is clear
+                }
+                if (previous != undefined) {
+                    changed = (value ^ previous) & bit;
+                    redraw = 0;
+                }
+            }
+            if (changed) {                      // call setLEDState() only if the bit changed
+                led.setLEDState(0, 0, on? LED.STATE.ON : LED.STATE.OFF);
+                if (redraw) led.drawBuffer();
+            }
+        }
+    }
+}
+
+/*
+ * Reading port 0x82 returns a key address from the VT100 keyboard's UART data output.
+ *
+ * Every time a keyboard scan is initiated (by setting the START bit of the status byte),
+ * our internal address index (iKeyNext) is set to zero, and an interrupt is generated for
+ * each entry in the aKeysActive array, along with a final interrupt for KEYLAST.
+ */
+VT100Keyboard.ADDRESS = {
+    PORT:       0x82,
+    INIT:       0x7F,
+    KEYLAST:    0x7F                // special end-of-scan key address (all valid key addresses are < KEYLAST)
+};
+
+/*
+ * Writing port 0x82 updates the VT100's keyboard status byte via the keyboard's UART data input.
+ */
+VT100Keyboard.STATUS = {
+    PORT:       0x82,               // write-only
+    LED4:       0x01,
+    LED3:       0x02,
+    LED2:       0x04,
+    LED1:       0x08,
+    LOCKED:     0x10,
+    LOCAL:      0x20,
+    LEDS:       0x3F,               // all LEDs
+    START:      0x40,               // set to initiate a scan
+    /*
+     * From p. 4-38 of the VT100 Technical Manual (July 1982):
+     *
+     *      A bit (CLICK) in the keyboard status word controls the bell....  When a single status word contains
+     *      the bell bit, flip-flop E3 toggles and turns on E1, generating a click. If the bell bit is set for
+     *      many words in succession, the UART latch holds the data output constant..., allowing the circuit to
+     *      produce an 800 hertz tone. Bell is generated by setting the bell bit for 0.25 seconds.  Each cycle of
+     *      the tone is at a reduced amplitude compared with the single keyclick....  The overall effect of the
+     *      tone burst on the ear is that of a beep.
+     */
+    CLICK:      0x80,
+    INIT:       0x00
+};
+
+/*
+ * Definitions of all VT100 keys (7-bit values representing key positions on the VT100).  We call these
+ * VT100 key values KEYNUMs, to avoid confusion with browser KEYCODEs.  They are be used in a subsequent
+ * KEYMAP table.
+ */
+VT100Keyboard.KEYNUM = {
+    DEL:        0x03,
+    P:          0x05,
+    O:          0x06,
+    Y:          0x07,
+    T:          0x08,
+    W:          0x09,
+    Q:          0x0A,
+    RIGHT:      0x10,
+    RBRACK:     0x14,
+    LBRACK:     0x15,
+    I:          0x16,
+    U:          0x17,
+    R:          0x18,
+    E:          0x19,
+    ONE:        0x1A,
+    LEFT:       0x20,
+    DOWN:       0x22,
+    BREAK:      0x23,   // aka BREAK
+    BQUOTE:     0x24,
+    DASH:       0x25,
+    NINE:       0x26,
+    SEVEN:      0x27,
+    FOUR:       0x28,
+    THREE:      0x29,
+    ESC:        0x2A,
+    UP:         0x30,
+    F3:         0x31,   // aka PF3
+    F1:         0x32,   // aka PF1
+    BS:         0x33,
+    EQUALS:     0x34,
+    ZERO:       0x35,
+    EIGHT:      0x36,
+    SIX:        0x37,
+    FIVE:       0x38,
+    TWO:        0x39,
+    TAB:        0x3A,
+    NUM_7:      0x40,
+    F4:         0x41,   // aka PF4
+    F2:         0x42,   // aka PF2
+    NUM_0:      0x43,
+    LF:         0x44,   // aka LINE-FEED
+    BSLASH:     0x45,
+    L:          0x46,
+    K:          0x47,
+    G:          0x48,
+    F:          0x49,
+    A:          0x4A,
+    NUM_8:      0x50,
+    NUM_CR:     0x51,
+    NUM_2:      0x52,
+    NUM_1:      0x53,
+    QUOTE:      0x55,
+    SEMI:       0x56,
+    J:          0x57,
+    H:          0x58,
+    D:          0x59,
+    S:          0x5A,
+    NUM_DEL:    0x60,   // aka KEYPAD PERIOD
+    NUM_COMMA:  0x61,   // aka KEYPAD COMMA
+    NUM_5:      0x62,
+    NUM_4:      0x63,
+    CR:         0x64,   // TODO: Figure out why the Technical Manual lists CR at both 0x04 and 0x64
+    PERIOD:     0x65,
+    COMMA:      0x66,
+    N:          0x67,
+    B:          0x68,
+    X:          0x69,
+    NO_SCROLL:  0x6A,   // aka NO-SCROLL
+    NUM_9:      0x70,
+    NUM_3:      0x71,
+    NUM_6:      0x72,
+    NUM_SUB:    0x73,   // aka KEYPAD MINUS
+    SLASH:      0x75,
+    M:          0x76,
+    SPACE:      0x77,
+    V:          0x78,
+    C:          0x79,
+    Z:          0x7A,
+    SETUP:      0x7B,   // aka SET-UP
+    CTRL:       0x7C,
+    SHIFT:      0x7D,   // either shift key (doesn't matter)
+    CAPS_LOCK:  0x7E
+};
+
+/*
+ * Virtual KEYCODE definitions.
+ *
+ * A virtual keyCode is one that is (hopefully) outside the range of all browser keyCodes.  Each refers
+ * to a key (or key combination) that has no analog on a modern keyboard and/or that we want to associate
+ * with an on-screen control.
+ *
+ * A good example is the VT100 SET-UP key, which has no counterpart on a modern keyboard.
+ */
+VT100Keyboard.KEYCODE = {
+    SETUP:      WebIO.KEYCODE.VIRTUAL + 1,
+    LF:         WebIO.KEYCODE.VIRTUAL + 2,
+    BREAK:      WebIO.KEYCODE.VIRTUAL + 3,
+    CTRL_C:     WebIO.KEYCODE.VIRTUAL + 4
+};
+
+/*
+ * KEYMAP maps a browser keyCode (or virtual keyCode) to a VT100 KEYNUM.
+ *
+ * NOTE: The VT100 keyboard has both BACKSPACE and DELETE keys, whereas modern keyboards generally only
+ * have DELETE.  And sadly, when you press DELETE, your modern keyboard and/or modern browser is reporting
+ * it as keyCode 8: the code for BACKSPACE, aka CTRL-H.  You have to press a modified DELETE key to get
+ * the actual DELETE keyCode of 127.
+ *
+ * We resolve this below by mapping KEYCODE.BS (8) to VT100 KEYNUM.DEL (0x03) and KEYCODE.DEL (127)
+ * to VT100 KEYNUM.BS (0x33).  So, DELETE is BACKSPACE and BACKSPACE is DELETE.  Fortunately, this
+ * confusion is all internal, because your physical key is (or should be) labeled DELETE, so the fact that
+ * the browser is converting it to BACKSPACE and that we're converting BACKSPACE back into DELETE is
+ * something most people don't need to worry their heads about.
+ */
+VT100Keyboard.KEYMAP = {
+    [WebIO.KEYCODE.BS]:             VT100Keyboard.KEYNUM.DEL,
+    [WebIO.KEYCODE.P]:              VT100Keyboard.KEYNUM.P,
+    [WebIO.KEYCODE.O]:              VT100Keyboard.KEYNUM.O,
+    [WebIO.KEYCODE.Y]:              VT100Keyboard.KEYNUM.Y,
+    [WebIO.KEYCODE.T]:              VT100Keyboard.KEYNUM.T,
+    [WebIO.KEYCODE.W]:              VT100Keyboard.KEYNUM.W,
+    [WebIO.KEYCODE.Q]:              VT100Keyboard.KEYNUM.Q,
+    [WebIO.KEYCODE.RIGHT]:          VT100Keyboard.KEYNUM.RIGHT,
+    [WebIO.KEYCODE.RBRACK]:         VT100Keyboard.KEYNUM.RBRACK,
+    [WebIO.KEYCODE.LBRACK]:         VT100Keyboard.KEYNUM.LBRACK,
+    [WebIO.KEYCODE.I]:              VT100Keyboard.KEYNUM.I,
+    [WebIO.KEYCODE.U]:              VT100Keyboard.KEYNUM.U,
+    [WebIO.KEYCODE.R]:              VT100Keyboard.KEYNUM.R,
+    [WebIO.KEYCODE.E]:              VT100Keyboard.KEYNUM.E,
+    [WebIO.KEYCODE.ONE]:            VT100Keyboard.KEYNUM.ONE,
+    [WebIO.KEYCODE.LEFT]:           VT100Keyboard.KEYNUM.LEFT,
+    [WebIO.KEYCODE.DOWN]:           VT100Keyboard.KEYNUM.DOWN,
+    [WebIO.KEYCODE.F6]:             VT100Keyboard.KEYNUM.BREAK,         // no natural mapping
+    [VT100Keyboard.KEYCODE.BREAK]:  VT100Keyboard.KEYNUM.BREAK,         // NOTE: virtual keyCode mapping
+    [WebIO.KEYCODE.BQUOTE]:         VT100Keyboard.KEYNUM.BQUOTE,
+    [WebIO.KEYCODE.DASH]:           VT100Keyboard.KEYNUM.DASH,
+    [WebIO.KEYCODE.NINE]:           VT100Keyboard.KEYNUM.NINE,
+    [WebIO.KEYCODE.SEVEN]:          VT100Keyboard.KEYNUM.SEVEN,
+    [WebIO.KEYCODE.FOUR]:           VT100Keyboard.KEYNUM.FOUR,
+    [WebIO.KEYCODE.THREE]:          VT100Keyboard.KEYNUM.THREE,
+    [WebIO.KEYCODE.ESC]:            VT100Keyboard.KEYNUM.ESC,
+    [WebIO.KEYCODE.UP]:             VT100Keyboard.KEYNUM.UP,
+    [WebIO.KEYCODE.F3]:             VT100Keyboard.KEYNUM.F3,
+    [WebIO.KEYCODE.F1]:             VT100Keyboard.KEYNUM.F1,
+    [WebIO.KEYCODE.DEL]:            VT100Keyboard.KEYNUM.BS,
+    [WebIO.KEYCODE.EQUALS]:         VT100Keyboard.KEYNUM.EQUALS,
+    [WebIO.KEYCODE.ZERO]:           VT100Keyboard.KEYNUM.ZERO,
+    [WebIO.KEYCODE.EIGHT]:          VT100Keyboard.KEYNUM.EIGHT,
+    [WebIO.KEYCODE.SIX]:            VT100Keyboard.KEYNUM.SIX,
+    [WebIO.KEYCODE.FIVE]:           VT100Keyboard.KEYNUM.FIVE,
+    [WebIO.KEYCODE.TWO]:            VT100Keyboard.KEYNUM.TWO,
+    [WebIO.KEYCODE.TAB]:            VT100Keyboard.KEYNUM.TAB,
+    [WebIO.KEYCODE.NUM_7]:          VT100Keyboard.KEYNUM.NUM_7,
+    [WebIO.KEYCODE.F4]:             VT100Keyboard.KEYNUM.F4,
+    [WebIO.KEYCODE.F2]:             VT100Keyboard.KEYNUM.F2,
+    [WebIO.KEYCODE.NUM_0]:          VT100Keyboard.KEYNUM.NUM_0,
+    [WebIO.KEYCODE.F7]:             VT100Keyboard.KEYNUM.LF,            // no natural mapping
+    [VT100Keyboard.KEYCODE.LF]:     VT100Keyboard.KEYNUM.LF,            // NOTE: virtual keyCode mapping
+    [WebIO.KEYCODE.BSLASH]:         VT100Keyboard.KEYNUM.BSLASH,
+    [WebIO.KEYCODE.L]:              VT100Keyboard.KEYNUM.L,
+    [WebIO.KEYCODE.K]:              VT100Keyboard.KEYNUM.K,
+    [WebIO.KEYCODE.G]:              VT100Keyboard.KEYNUM.G,
+    [WebIO.KEYCODE.F]:              VT100Keyboard.KEYNUM.F,
+    [WebIO.KEYCODE.A]:              VT100Keyboard.KEYNUM.A,
+    [WebIO.KEYCODE.NUM_8]:          VT100Keyboard.KEYNUM.NUM_8,
+    [WebIO.KEYCODE.CR]:             VT100Keyboard.KEYNUM.NUM_CR,
+    [WebIO.KEYCODE.NUM_2]:          VT100Keyboard.KEYNUM.NUM_2,
+    [WebIO.KEYCODE.NUM_1]:          VT100Keyboard.KEYNUM.NUM_1,
+    [WebIO.KEYCODE.QUOTE]:          VT100Keyboard.KEYNUM.QUOTE,
+    [WebIO.KEYCODE.SEMI]:           VT100Keyboard.KEYNUM.SEMI,
+    [WebIO.KEYCODE.J]:              VT100Keyboard.KEYNUM.J,
+    [WebIO.KEYCODE.H]:              VT100Keyboard.KEYNUM.H,
+    [WebIO.KEYCODE.D]:              VT100Keyboard.KEYNUM.D,
+    [WebIO.KEYCODE.S]:              VT100Keyboard.KEYNUM.S,
+    [WebIO.KEYCODE.NUM_DEL]:        VT100Keyboard.KEYNUM.NUM_DEL,
+    [WebIO.KEYCODE.F5]:             VT100Keyboard.KEYNUM.NUM_COMMA,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
+    [WebIO.KEYCODE.NUM_5]:          VT100Keyboard.KEYNUM.NUM_5,
+    [WebIO.KEYCODE.NUM_4]:          VT100Keyboard.KEYNUM.NUM_4,
+    [WebIO.KEYCODE.CR]:             VT100Keyboard.KEYNUM.CR,
+    [WebIO.KEYCODE.PERIOD]:         VT100Keyboard.KEYNUM.PERIOD,
+    [WebIO.KEYCODE.COMMA]:          VT100Keyboard.KEYNUM.COMMA,
+    [WebIO.KEYCODE.N]:              VT100Keyboard.KEYNUM.N,
+    [WebIO.KEYCODE.B]:              VT100Keyboard.KEYNUM.B,
+    [WebIO.KEYCODE.X]:              VT100Keyboard.KEYNUM.X,
+    [WebIO.KEYCODE.F8]:             VT100Keyboard.KEYNUM.NO_SCROLL,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
+    [WebIO.KEYCODE.NUM_9]:          VT100Keyboard.KEYNUM.NUM_9,
+    [WebIO.KEYCODE.NUM_3]:          VT100Keyboard.KEYNUM.NUM_3,
+    [WebIO.KEYCODE.NUM_6]:          VT100Keyboard.KEYNUM.NUM_6,
+    [WebIO.KEYCODE.NUM_SUB]:        VT100Keyboard.KEYNUM.NUM_SUB,
+    [WebIO.KEYCODE.SLASH]:          VT100Keyboard.KEYNUM.SLASH,
+    [WebIO.KEYCODE.M]:              VT100Keyboard.KEYNUM.M,
+    [WebIO.KEYCODE.SPACE]:          VT100Keyboard.KEYNUM.SPACE,
+    [WebIO.KEYCODE.V]:              VT100Keyboard.KEYNUM.V,
+    [WebIO.KEYCODE.C]:              VT100Keyboard.KEYNUM.C,
+    [WebIO.KEYCODE.Z]:              VT100Keyboard.KEYNUM.Z,
+    [WebIO.KEYCODE.F9]:             VT100Keyboard.KEYNUM.SETUP,         // no natural mapping
+    [VT100Keyboard.KEYCODE.SETUP]:  VT100Keyboard.KEYNUM.SETUP,         // NOTE: virtual keyCode mapping
+    [WebIO.KEYCODE.CTRL]:           VT100Keyboard.KEYNUM.CTRL,
+    [WebIO.KEYCODE.SHIFT]:          VT100Keyboard.KEYNUM.SHIFT,
+    [WebIO.KEYCODE.CAPS_LOCK]:      VT100Keyboard.KEYNUM.CAPS_LOCK,
+    /*
+     * Mappings can also be to an array of multiple keyNum combinations, such as:
+     */
+    [VT100Keyboard.KEYCODE.CTRL_C]: [VT100Keyboard.KEYNUM.CTRL, VT100Keyboard.KEYNUM.C]
+};
+
+/*
+ * CLICKMAP maps a binding ID to any of: browser (WebIO) keyCode, virtual (VT100Keyboard) keyCode, or array of keyCode modifier plus keyCode.
+ */
+VT100Keyboard.CLICKMAP = {
+    "keySetup":                     VT100Keyboard.KEYCODE.SETUP,        // NOTE: virtual keyCode mapping
+    "keyLineFeed":                  VT100Keyboard.KEYCODE.LF,           // NOTE: virtual keyCode mapping
+    "keyTab":                       WebIO.KEYCODE.TAB,
+    "keyEsc":                       WebIO.KEYCODE.ESC,
+    "keyBreak":                     VT100Keyboard.KEYCODE.BREAK,        // NOTE: virtual keyCode mapping
+    "keyCtrl":                      WebIO.KEYCODE.CTRL,
+    "keyCtrlC":                     VT100Keyboard.KEYCODE.CTRL_C,       // NOTE: virtual keyCode mapping
+    "keyCtrlLock":                  [WebIO.KEYCODE.LOCK, WebIO.KEYCODE.CTRL],
+    "keyShiftLock":                 [WebIO.KEYCODE.LOCK, WebIO.KEYCODE.SHIFT],
+    "keyCapsLock":                  WebIO.KEYCODE.CAPS_LOCK
+};
+
+VT100Keyboard.LEDS = {
+    [VT100Keyboard.STATUS.LED4]:            "led4",
+    [VT100Keyboard.STATUS.LED3]:            "led3",
+    [VT100Keyboard.STATUS.LED2]:            "led2",
+    [VT100Keyboard.STATUS.LED1]:            "led1",
+    [VT100Keyboard.STATUS.LOCKED]:          "ledLocked",
+    [VT100Keyboard.STATUS.LOCAL]:           "ledLocal",
+    [~VT100Keyboard.STATUS.LOCAL & 0xff]:   "ledOnline"                 // NOTE: ledOnline is the inverse of ledLocal; updateLEDs() understands inverted masks
+};
+
+VT100Keyboard.IOTABLE = {
+    0x82:   [VT100Keyboard.prototype.inUARTAddress, VT100Keyboard.prototype.outUARTStatus]
+};
+
+Defs.CLASSES["VT100Keyboard"] = VT100Keyboard;
+
+/**
+ * @copyright https://www.pcjs.org/machines/dec/vt100/lib/serial.js (C) 2012-2020 Jeff Parsons
+ */
+
+/**
+ * @class {VT100Serial}
+ * @unrestricted
+ */
+class VT100Serial extends Device {
+    /**
+     * VT100Serial(idMachine, idDevice, config)
+     *
+     * @this {VT100Serial}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {Config} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        super(idMachine, idDevice, config);
+
+        this.nIRQ = this.config['irq'] || 2;
+        this.portBase = this.config['portBase'] || 0;
+
+        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
+        this.ports = /** @type {Ports} */ (this.findDeviceByClass("Ports"));
+        this.ports.addIOTable(this, VT100Serial.IOTABLE, this.portBase);
+
+        /*
+         * Whereas VT100Serial.LEDS maps bits to LED ID, this.leds maps bits to the actual LED devices.
+         */
+        this.leds = {};
+        for (let bit in VT100Serial.LEDS) {
+            this.leds[bit] = /** @type {LED} */ (this.findDevice(VT100Serial.LEDS[bit], false));
+        }
+
+        this.timerReceiveNext = this.time.addTimer(this.idDevice + ".receive", this.receiveData.bind(this));
+        this.timerTransmitNext = this.time.addTimer(this.idDevice + ".transmit", this.transmitData.bind(this));
+
+        /*
+         * No connection until initConnection() is called.
+         */
+        this.sDataReceived = "";
+        this.connection = this.sendData = this.updateStatus = null;
+
+        /*
+         * Export all functions required by initConnection().
+         */
+        this['exports'] = {
+            'connect': this.initConnection,
+            'receiveData': this.receiveData,
+            'receiveStatus': this.receiveStatus
+        };
+        this.onReset();
+    }
+
+    /**
+     * initConnection(fNullModem)
+     *
+     * If a machine 'connection' parameter exists of the form "{sourcePort}->{targetMachine}.{targetPort}",
+     * and "{sourcePort}" matches our idDevice, then look for a component with id "{targetMachine}.{targetPort}".
+     *
+     * If the target component is found, then verify that it has exported functions with the following names:
+     *
+     *      receiveData(data): called when we have data to transmit; aliased internally to sendData(data)
+     *      receiveStatus(pins): called when our control signals have changed; aliased internally to updateStatus(pins)
+     *
+     * For now, we're not going to worry about communication in the other direction, because when the target component
+     * performs its own initConnection(), it will find our receiveData() and receiveStatus() functions, at which point
+     * communication in both directions should be established, and the circle of life complete.
+     *
+     * For added robustness, if the target machine initializes much more slowly than we do, and our connection attempt
+     * fails, that's OK, because when it finally initializes, its initConnection() will call our initConnection();
+     * if we've already initialized, no harm done.
+     *
+     * @this {VT100Serial}
+     * @param {boolean} [fNullModem] (caller's null-modem setting, to ensure our settings are in agreement)
+     */
+    initConnection(fNullModem)
+    {
+        if (!this.connection) {
+            let sConnection = this.getMachineConfig("connection");
+            if (sConnection) {
+                let asParts = sConnection.split('->');
+                if (asParts.length == 2) {
+                    let sSourceID = asParts[0].trim();
+                    if (sSourceID != this.idDevice) return;     // this connection string is intended for another instance
+                    let sTargetID = asParts[1].trim();
+                    this.connection = this.findDevice(sTargetID);
+                    if (this.connection) {
+                        let exports = this.connection['exports'];
+                        if (exports) {
+                            let fnConnect = /** @function */ (exports['connect']);
+                            if (fnConnect) fnConnect.call(this.connection, this.fNullModem);
+                            this.sendData = exports['receiveData'];
+                            if (this.sendData) {
+                                this.fNullModem = fNullModem;
+                                this.updateStatus = exports['receiveStatus'];
+                                this.printf("Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
+                                return;
+                            }
+                        }
+                    }
+                }
+                this.printf("Unable to establish connection: %s\n", sConnection);
+            }
+        }
+    }
+
+    /**
+     * loadState(state)
+     *
+     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
+     *
+     * @this {VT100Serial}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    loadState(state)
+    {
+        let idDevice = state.shift();
+        if (this.idDevice == idDevice) {
+            this.fReady     = state.shift();
+            this.bDataIn    = state.shift();
+            this.bDataOut   = state.shift();
+            this.bStatus    = state.shift();
+            this.bMode      = state.shift();
+            this.bCommand   = state.shift();
+            this.bBaudRates = state.shift();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * saveState(state)
+     *
+     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
+     *
+     * @this {VT100Serial}
+     * @param {Array} state
+     */
+    saveState(state)
+    {
+        state.push(this.idDevice);
+        state.push(this.fReady);
+        state.push(this.bDataIn);
+        state.push(this.bDataOut);
+        state.push(this.bStatus);
+        state.push(this.bMode);
+        state.push(this.bCommand);
+        state.push(this.bBaudRates);
+    }
+
+    /**
+     * onPower(on)
+     *
+     * Called by the Machine device to provide notification of a power event.
+     *
+     * @this {VT100Serial}
+     * @param {boolean} on (true to power on, false to power off)
+     */
+    onPower(on)
+    {
+        if (!this.cpu) {
+            this.cpu = /** @type {CPUx80} */ (this.findDeviceByClass("CPU"));
+            /*
+             * This is as late as we can currently wait to make our first inter-machine connection attempt;
+             * even so, the target machine's initialization process may still be ongoing, so any connection
+             * may be not fully resolved until the target machine performs its own initConnection(), which will
+             * in turn invoke our initConnection() again.
+             */
+            this.initConnection(this.fNullModem);
+        }
+    }
+
+    /**
+     * onReset()
+     *
+     * Called by the Machine device to provide notification of a reset event.
+     *
+     * @this {VT100Serial}
+     */
+    onReset()
+    {
+        this.fReady = false;
+        this.bDataIn = 0;
+        this.bDataOut = 0;
+        this.bStatus = VT100Serial.UART8251.STATUS.INIT;
+        this.bMode = VT100Serial.UART8251.MODE.INIT;
+        this.bCommand = VT100Serial.UART8251.COMMAND.INIT;
+        this.bBaudRates = VT100Serial.UART8251.BAUDRATES.INIT;
+        this.updateLEDs();
+    }
+
+    /**
+     * getBaudTimeout(maskRate)
+     *
+     * @this {VT100Serial}
+     * @param {number} maskRate (either VT100Serial.UART8251.BAUDRATES.RECV_RATE or VT100Serial.UART8251.BAUDRATES.XMIT_RATE)
+     * @returns {number} (number of milliseconds per byte)
+     */
+    getBaudTimeout(maskRate)
+    {
+        let indexRate = (this.bBaudRates & maskRate);
+        if (!(maskRate & 0xf)) indexRate >>= 4;
+        let nBaud = VT100Serial.UART8251.BAUDTABLE[indexRate];
+        let nBits = ((this.bMode & VT100Serial.UART8251.MODE.DATA_BITS) >> 2) + 6;   // includes an extra +1 for start bit
+        if (this.bMode & VT100Serial.UART8251.MODE.PARITY_ENABLE) nBits++;
+        nBits += ((((this.bMode & VT100Serial.UART8251.MODE.STOP_BITS) >> 6) + 1) >> 1);
+        let nBytesPerSecond = nBaud / nBits;
+        return (1000 / nBytesPerSecond)|0;
+    }
+
+    /**
+     * isTransmitterReady()
+     *
+     * Called when someone needs the UART's transmitter status.
+     *
+     * @this {VT100Serial}
+     * @returns {boolean} (true if ready, false if not)
+     */
+    isTransmitterReady()
+    {
+        return !!(this.bStatus & VT100Serial.UART8251.STATUS.XMIT_READY);
+    }
+
+    /**
+     * receiveByte(b)
+     *
+     * @this {VT100Serial}
+     * @param {number} b
+     * @returns {boolean}
+     */
+    receiveByte(b)
+    {
+        this.printf(MESSAGE.SERIAL, "receiveByte(%#04x): status=%#04x\n", b, this.bStatus);
+        if (!this.fAutoStop && !(this.bStatus & VT100Serial.UART8251.STATUS.RECV_FULL)) {
+            if (this.cpu) {
+                this.bDataIn = b;
+                this.bStatus |= VT100Serial.UART8251.STATUS.RECV_FULL;
+                this.cpu.requestINTR(this.nIRQ);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * receiveData(data)
+     *
+     * Helper for clocking received data at the expected RECV_RATE.
+     *
+     * When we're cramming test data down the terminal's throat, that data will typically be in the form
+     * of a string.  When we're called by another component, data will typically be a number (ie, byte).  If no
+     * data is specified at all, then all we do is "clock" any remaining data into the receiver.
+     *
+     * @this {VT100Serial}
+     * @param {number|string|undefined} [data]
+     * @returns {boolean} true if received, false if not
+     */
+    receiveData(data)
+    {
+        if (data != null) {
+            if (typeof data != "number") {
+                this.sDataReceived = data;
+            } else {
+                this.sDataReceived += String.fromCharCode(data);
+            }
+        }
+        if (this.sDataReceived) {
+            if (this.receiveByte(this.sDataReceived.charCodeAt(0))) {
+                this.sDataReceived = this.sDataReceived.substr(1);
+            }
+            if (this.sDataReceived) {
+                this.time.setTimer(this.timerReceiveNext, this.getBaudTimeout(VT100Serial.UART8251.BAUDRATES.RECV_RATE));
+            }
+        }
+        return true;                // for now, return true regardless, since we're buffering everything anyway
+    }
+
+    /**
+     * receiveStatus(pins)
+     *
+     * NOTE: Prior to the addition of this interface, the DSR bit was initialized set and remained set for the life
+     * of the machine.  It is entirely appropriate that this is the only way the bit can be changed, because it represents
+     * an external control signal.
+     *
+     * @this {VT100Serial}
+     * @param {number} pins
+     */
+    receiveStatus(pins)
+    {
+        this.bStatus &= ~VT100Serial.UART8251.STATUS.DSR;
+        if (pins & RS232.DSR.MASK) this.bStatus |= VT100Serial.UART8251.STATUS.DSR;
+    }
+
+    /**
+     * transmitByte(b)
+     *
+     * @this {VT100Serial}
+     * @param {number} b
+     * @returns {boolean} true if transmitted, false if not
+     */
+    transmitByte(b)
+    {
+        let fTransmitted = false;
+        this.printf(MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
+        if (this.fAutoXOFF) {
+            if (b == 0x13) {        // XOFF
+                this.fAutoStop = true;
+                return false;
+            }
+            if (b == 0x11) {        // XON
+                this.fAutoStop = false;
+                return false;
+            }
+        }
+        if (this.sendData && this.sendData.call(this.connection, b)) {
+            fTransmitted = true;
+        }
+        return fTransmitted;
+    }
+
+    /**
+     * transmitData(sData)
+     *
+     * Helper for clocking transmitted data at the expected XMIT_RATE.
+     *
+     * When timerTransmitNext fires, we have honored the programmed XMIT_RATE period, so we can
+     * set XMIT_READY (and XMIT_EMPTY), which signals the firmware that another byte can be transmitted.
+     *
+     * The sData parameter is not used when we're called via the timer; it's an optional parameter used by
+     * the Keyboard component to deliver data pasted via the clipboard, and is currently only useful when
+     * the VT100Serial is connected to another machine.  TODO: Define a separate interface for that feature.
+     *
+     * @this {VT100Serial}
+     * @param {string} [sData]
+     * @returns {boolean} true if successful, false if not
+     */
+    transmitData(sData)
+    {
+        this.bStatus |= (VT100Serial.UART8251.STATUS.XMIT_READY | VT100Serial.UART8251.STATUS.XMIT_EMPTY);
+        if (sData) {
+            return this.sendData? this.sendData.call(this.connection, sData) : false;
+        }
+        return true;
+    }
+
+    /**
+     * inData(port)
+     *
+     * @this {VT100Serial}
+     * @param {number} port (0x0)
+     * @returns {number} simulated port value
+     */
+    inData(port)
+    {
+        let value = this.bDataIn;
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "inData(%#04x): %#04x\n", port, value);
+        this.bStatus &= ~VT100Serial.UART8251.STATUS.RECV_FULL;
+        return value;
+    }
+
+    /**
+     * inStatus(port)
+     *
+     * @this {VT100Serial}
+     * @param {number} port (0x1)
+     * @returns {number} simulated port value
+     */
+    inStatus(port)
+    {
+        let value = this.bStatus;
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "inStatus(%#04x): %#04x\n", port, value);
+        return value;
+    }
+
+    /**
+     * outData(port, bOut)
+     *
+     * @this {VT100Serial}
+     * @param {number} port (0x0)
+     * @param {number} value
+     */
+    outData(port, value)
+    {
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outData(%#04x): %#04x\n", port, value);
+        this.bDataOut = value;
+        this.bStatus &= ~(VT100Serial.UART8251.STATUS.XMIT_READY | VT100Serial.UART8251.STATUS.XMIT_EMPTY);
+        /*
+         * If we're transmitting to a virtual device that has no measurable delay, this code may clear XMIT_READY
+         * too quickly:
+         *
+         *      if (this.transmitByte(bOut)) {
+         *          this.bStatus |= (VT100Serial.UART8251.STATUS.XMIT_READY | VT100Serial.UART8251.STATUS.XMIT_EMPTY);
+         *      }
+         *
+         * A better solution is to arm a timer based on the XMIT_RATE baud rate, and clear the above bits when that
+         * timer fires.  Consequently, we no longer care what transmitByte() reports.
+         */
+        this.transmitByte(value);
+        this.time.setTimer(this.timerTransmitNext, this.getBaudTimeout(VT100Serial.UART8251.BAUDRATES.XMIT_RATE));
+    }
+
+    /**
+     * outControl(port, value)
+     *
+     * Writes to the CONTROL port (0x1) are either MODE or COMMAND bytes.  If the device has just
+     * been powered or reset, it is in a "not ready" state and is waiting for a MODE byte.  Once it
+     * has received that initial byte, the device is marked "ready", and all further bytes are
+     * interpreted as COMMAND bytes (until/unless a COMMAND byte with the INTERNAL_RESET bit is set).
+     *
+     * @this {VT100Serial}
+     * @param {number} port (0x1)
+     * @param {number} value
+     */
+    outControl(port, value)
+    {
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outControl(%#04x): %#04x\n", port, value);
+        if (!this.fReady) {
+            this.bMode = value;
+            this.fReady = true;
+        } else {
+            /*
+             * Whenever DTR or RTS changes, we also want to notify any connected machine, via updateStatus().
+             */
+            if (this.updateStatus) {
+                let delta = (value ^ this.bCommand);
+                if (delta & (VT100Serial.UART8251.COMMAND.RTS | VT100Serial.UART8251.COMMAND.DTR)) {
+                    let pins = 0;
+                    if (this.fNullModem) {
+                        pins |= (value & VT100Serial.UART8251.COMMAND.RTS)? RS232.CTS.MASK : 0;
+                        pins |= (value & VT100Serial.UART8251.COMMAND.DTR)? (RS232.DSR.MASK | RS232.CD.MASK): 0;
+                    } else {
+                        pins |= (value & VT100Serial.UART8251.COMMAND.RTS)? RS232.RTS.MASK : 0;
+                        pins |= (value & VT100Serial.UART8251.COMMAND.DTR)? RS232.DTR.MASK : 0;
+                    }
+                    this.updateStatus.call(this.connection, pins);
+                }
+            }
+            this.updateLEDs(value, this.bCommand);
+            this.bCommand = value;
+            if (this.bCommand & VT100Serial.UART8251.COMMAND.INTERNAL_RESET) {
+                this.fReady = false;
+            }
+        }
+    }
+
+    /**
+     * outBaudRates(port, value)
+     *
+     * @this {VT100Serial}
+     * @param {number} port (0x2)
+     * @param {number} value
+     */
+    outBaudRates(port, value)
+    {
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outBaudRates(%#04x): %#04x\n", port, value);
+        this.bBaudRates = value;
+    }
+
+    /**
+     * updateLEDs(value, previous)
+     *
+     * @this {VT100Serial}
+     * @param {number} [value] (if not provided, all LEDS are turned off)
+     * @param {number} [previous] (if not provided, all LEDs are updated)
+     */
+    updateLEDs(value, previous)
+    {
+        for (let id in this.leds) {
+            let led = this.leds[id];
+            if (!led) continue;
+            let bit = +id, on, changed = 1, redraw = 1;
+            if (value != undefined) {
+                if (!(bit & (bit - 1))) {       // if a single bit is set, this will be zero
+                    on = value & bit;           // and "on" will be true if that single bit is set
+                } else {
+                    bit = ~bit & 0xff;          // otherwise, we assume that a single bit is clear
+                    on = !(value & bit);        // so "on" will be true if that same single bit is clear
+                }
+                if (previous != undefined) {
+                    changed = (value ^ previous) & bit;
+                    redraw = 0;
+                }
+            }
+            if (changed) {                      // call setLEDState() only if the bit changed
+                led.setLEDState(0, 0, on? LED.STATE.ON : LED.STATE.OFF);
+                if (redraw) led.drawBuffer();
+            }
+        }
+    }
+}
+
+VT100Serial.UART8251 = {
+    /*
+     * Format of MODE byte written to CONTROL port 0x1
+     */
+    MODE: {
+        BAUD_FACTOR:    0x03,       // 00=SYNC, 01=1x, 10=16x, 11=64x
+        DATA_BITS:      0x0C,       // 00=5, 01=6, 10=7, 11=8
+        PARITY_ENABLE:  0x10,
+        EVEN_PARITY:    0x20,
+        STOP_BITS:      0xC0,       // 00=invalid, 01=1, 10=1.5, 11=2
+        INIT:           0x8E        // 16x baud rate, 8 data bits, no parity, 1.5 stop bits
+    },
+    /*
+     * Format of COMMAND byte written to CONTROL port 0x1
+     */
+    COMMAND: {
+        XMIT_ENABLE:    0x01,
+        DTR:            0x02,       // Data Terminal Ready
+        RECV_ENABLE:    0x04,
+        SEND_BREAK:     0x08,
+        ERROR_RESET:    0x10,
+        RTS:            0x20,       // Request To Send
+        INTERNAL_RESET: 0x40,
+        HUNT_MODE:      0x80,
+        INIT:           0x27        // XMIT_ENABLE | DTR | RECV_ENABLE | RTS
+    },
+    /*
+     * Format of STATUS byte read from CONTROL port 0x1
+     */
+    STATUS: {
+        XMIT_READY:     0x01,
+        RECV_FULL:      0x02,
+        XMIT_EMPTY:     0x04,
+        PARITY_ERROR:   0x08,
+        OVERRUN_ERROR:  0x10,
+        FRAMING_ERROR:  0x20,
+        BREAK_DETECT:   0x40,
+        DSR:            0x80,       // Data Set Ready
+        INIT:           0x85        // XMIT_READY | XMIT_EMPTY | DSR
+    },
+    /*
+     * Format of BAUDRATES byte written to port 0x2
+     *
+     * Each nibble is an index (0x0-0xF) into a set of internal CPU clock divisors that yield the
+     * following baud rates:
+     *
+     *      Index   Divisor     Baud Rate
+     *      -----   -------     ---------
+     *      0x0      3456       50
+     *      0x1      2304       75
+     *      0x2      1571       110
+     *      0x3      1285       134.5
+     *      0x4      1152       150
+     *      0x5      864        200
+     *      0x6      576        300
+     *      0x7      288        600
+     *      0x8      144        1200
+     *      0x9      96         1800
+     *      0xA      86         2000
+     *      0xB      72         2400
+     *      0xC      48         3600
+     *      0xD      36         4800
+     *      0xE      18         9600    (default)
+     *      0xF      9          19200
+     *
+     * NOTE: This is a VT100-specific port and baud rate table.
+     */
+    BAUDRATES: {
+        RECV_RATE:      0x0F,
+        XMIT_RATE:      0xF0,
+        INIT:           0xEE    // default to 9600 (0xE) for both XMIT and RECV
+    },
+    BAUDTABLE: [
+        50, 75, 110, 134.5, 150, 200, 300, 600, 1200, 1800, 2000, 2400, 3600, 4800, 9600, 19200
+    ]
+};
+
+VT100Serial.LEDS = {
+    [VT100Serial.UART8251.COMMAND.DTR]:  "ledDTR",
+    [VT100Serial.UART8251.COMMAND.RTS]:  "ledRTS"
+};
+
+VT100Serial.IOTABLE = {
+    0x0: [VT100Serial.prototype.inData, VT100Serial.prototype.outData],
+    0x1: [VT100Serial.prototype.inStatus, VT100Serial.prototype.outControl],
+    0x2: [null, VT100Serial.prototype.outBaudRates]
+};
+
+Defs.CLASSES["VT100Serial"] = VT100Serial;
+
+/**
+ * @copyright https://www.pcjs.org/machines/dec/vt100/lib/video.js (C) 2012-2020 Jeff Parsons
+ */
+
+/** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */
+var VT100VideoConfig;
+
+/**
+ * @class {VT100Video}
+ * @unrestricted
+ * @property {VT100VideoConfig} config
+ */
+class VT100Video extends Monitor {
+    /**
+     * VT100Video(idMachine, idDevice, config)
+     *
+     * The VT100Video component can be configured with the following config properties:
+     *
+     *      bufferWidth: the width of a single frame buffer row, in pixels (eg, 256)
+     *      bufferHeight: the number of frame buffer rows (eg, 224)
+     *      bufferAddr: the starting address of the frame buffer (eg, 0x2400)
+     *      bufferRAM: true to use existing RAM (default is false)
+     *      bufferBits: the number of bits per column (default is 1)
+     *      bufferLeft: the bit position of the left-most pixel in a byte (default is 0; CGA uses 7)
+     *      interruptRate: normally the same as (or some multiple of) refreshRate (eg, 120)
+     *      refreshRate: how many times updateMonitor() should be performed per second (eg, 60)
+     *
+     *  In addition, if a text-only display is being emulated, define the following properties:
+     *
+     *      fontROM: URL of font ROM
+     *      fontColor: default is white
+     *      cellWidth: number (eg, 10 for VT100)
+     *      cellHeight: number (eg, 10 for VT100)
+     *
+     * We record all the above values now, but we defer creation of the frame buffer until initBuffers()
+     * is called.  At that point, we will also compute the extent of the frame buffer, determine the
+     * appropriate "cell" size (ie, the number of pixels that updateMonitor() will fetch and process at once),
+     * and then allocate our cell cache.
+     *
+     * Why interruptRate in addition to refreshRate?  A higher interrupt rate is required for Space Invaders,
+     * because even though the CRT refreshes at 60Hz, the CRT controller interrupts the CPU *twice* per
+     * refresh (once after the top half of the image has been redrawn, and again after the bottom half has
+     * been redrawn), so we need an interrupt rate of 120Hz.  We pass the higher rate on to the CPU, so that
+     * it will call updateMonitor() more frequently, but we still limit our monitor updates to every *other* call.
+     *
+     * @this {VT100Video}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {ROMConfig} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        super(idMachine, idDevice, config);
+        /*
+         * Setting the device's "messages" property eliminates the need for printf() calls to include this value;
+         * any printf() that omits a MESSAGE parameter will use this value by default.
+         */
+        this.messages = MESSAGE.VIDEO;
+
+        this.addrBuffer = this.config['bufferAddr'];
+        this.fUseRAM = this.config['bufferRAM'];
+
+        this.nColsBuffer = this.config['bufferWidth'];
+        this.nRowsBuffer = this.config['bufferHeight'];
+
+        this.cxCellDefault = this.cxCell = this.config['cellWidth'] || 1;
+        this.cyCellDefault = this.cyCell = this.config['cellHeight'] || 1;
+
+        this.abFontData = null;
+        this.fDotStretcher = false;
+
+        this.nBitsPerPixel = this.config['bufferBits'] || 1;
+        this.iBitFirstPixel = this.config['bufferLeft'] || 0;
+
+        this.rateInterrupt = this.config['interruptRate'];
+        this.rateRefresh = this.config['refreshRate'] || 60;
+
+        this.cxMonitorCell = (this.cxMonitor / this.nColsBuffer)|0;
+        this.cyMonitorCell = (this.cyMonitor / this.nRowsBuffer)|0;
+
+        /*
+         * Now that we've finished using nRowsBuffer to help define the monitor size, we add one more
+         * row for text modes, to account for the VT100's scroll line buffer (used for smooth scrolling).
+         */
+        if (this.cyCell > 1) {
+            this.nRowsBuffer++;
+            this.bScrollOffset = 0;
+            this.fSkipSingleCellUpdate = false;
+        }
+
+        this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['bus']));
+        this.initBuffers();
+
+        this.abFontData = this.config['fontROM'];
+        this.createFonts();
+
+        this.cpu = /** @type {CPUx80} */ (this.findDeviceByClass("CPU"));
+        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
+        this.timerUpdateNext = this.time.addTimer(this.idDevice, this.updateMonitor.bind(this));
+        this.time.addUpdate(this);
+
+        this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
+        this.nUpdates = 0;
+    }
+
+    /**
+     * onUpdate(fTransition)
+     *
+     * This is our obligatory update() function, which every device with visual components should have.
+     *
+     * For the video device, our sole function is making sure the screen display is up-to-date.  However, calling
+     * updateScreen() is a bad idea if the machine is running, because we already have a timer to take care of
+     * that.  But we can also be called when the machine is NOT running (eg, the Debugger may be stepping through
+     * some code, or editing the frame buffer directly, or something else).  Since we have no way of knowing, we
+     * simply force an update.
+     *
+     * @this {VT100Video}
+     * @param {boolean} [fTransition]
+     */
+    onUpdate(fTransition)
+    {
+        if (!this.time.isRunning()) this.updateScreen();
+    }
+
+    /**
+     * initBuffers()
+     *
+     * @this {VT100Video}
+     * @returns {boolean}
+     */
+    initBuffers()
+    {
+        /*
+         * Allocate off-screen buffers now
+         */
+        this.cxBuffer = this.nColsBuffer * this.cxCell;
+        this.cyBuffer = this.nRowsBuffer * this.cyCell;
+
+        let cxBuffer = this.cxBuffer;
+        let cyBuffer = this.cyBuffer;
+
+        this.sizeBuffer = 0;
+        if (!this.fUseRAM) {
+            this.sizeBuffer = ((this.cxBuffer * this.nBitsPerPixel) >> 3) * this.cyBuffer;
+            if (!this.busMemory.addBlocks(this.addrBuffer, this.sizeBuffer, Memory.TYPE.READWRITE)) {
+                return false;
+            }
+        }
+
+        /*
+         * Since we will read video data from the bus at its default width, get that width now;
+         * that width will also determine the size of a cell.
+         */
+        this.cellWidth = this.busMemory.dataWidth;
+
+        /*
+         * We add an extra column per row to store the visible line length at the start of every row.
+         */
+        this.initCache((this.nColsBuffer + 1) * this.nRowsBuffer);
+
+        this.canvasBuffer = document.createElement("canvas");
+        this.canvasBuffer.width = cxBuffer;
+        this.canvasBuffer.height = cyBuffer;
+        this.contextBuffer = this.canvasBuffer.getContext("2d");
+
+        this.aFonts = {};
+        this.initColors();
+
+        /*
+         * Beyond fonts, VT100 support requires that we maintain a number of additional properties:
+         *
+         *      rateMonitor: must be either 50 or 60 (defaults to 60); we don't emulate the monitor refresh rate,
+         *      but we do need to keep track of which rate has been selected, because that affects the number of
+         *      "fill lines" present at the top of the VT100's frame buffer: 2 lines for 60Hz, 5 lines for 50Hz.
+         *
+         *      The VT100 July 1982 Technical Manual, p. 4-89, shows the following sample frame buffer layout:
+         *
+         *                  00  01  02  03  04  05  06  07  08  09  0A  0B  0C  0D  0E  0F
+         *                  --------------------------------------------------------------
+         *          0x2000: 7F  70  03  7F  F2  D0  7F  70  06  7F  70  0C  7F  70  0F  7F
+         *          0x2010: 70  03  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..
+         *          ...
+         *          0x22D0: 'D' 'A' 'T' 'A' ' ' 'F' 'O' 'R' ' ' 'F' 'I' 'R' 'S' 'T' ' ' 'L'
+         *          0x22E0: 'I' 'N' 'E' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '
+         *          ...
+         *          0x2320: 7F  F3  23  'D' 'A' 'T' 'A' ' ' 'F' 'O' 'R' ' ' 'S' 'E' 'C' 'O'
+         *          0x2330: 'N' 'D' ' ' 'L' 'I' 'N' 'E' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '
+         *          ...
+         *          0x2BE0: ' ' ' ' 'E' 'N' 'D' ' ' 'O' 'F' ' ' 'L' 'A' 'S' 'T' ' ' 'L' 'I'
+         *          0x2BF0: 'N' 'E' 7F  70  06  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..  ..
+         *          0x2C00: [AVO SCREEN RAM, IF ANY, BEGINS HERE]
+         *
+         *      ERRATA: The manual claims that if you change the byte at 0x2002 from 03 to 09, the number of "fill
+         *      lines" will change from 2 to 5 (for 50Hz operation), but it shows 06 instead of 0C at location 0x200B;
+         *      if you follow the links, it's pretty clear that byte has to be 0C to yield 5 "fill lines".  Since the
+         *      address following the terminator at 0x2006 points to itself, it never makes sense for that terminator
+         *      to be used EXCEPT at the end of the frame buffer.
+         *
+         *      As an alternative to tracking the monitor refresh rate, we could hard-code some knowledge about how
+         *      the VT100's 8080 code uses memory, and simply ignore lines below address 0x22D0.  But the VT100 Video
+         *      Processor makes no such assumption, and it would also break our test code in createFonts(), which
+         *      builds a contiguous image of test data starting at the default frame buffer address (0x2000).
+         */
+        this.rateMonitor = 60;
+
+        /*
+         * The default character-selectable attribute (reverse video vs. underline) is controlled by fUnderline.
+         */
+        this.fUnderline = false;
+        this.abLineBuffer = new Array(this.nColsBuffer);
+
+        /*
+         * Our 'smoothing' parameter defaults to null (which we treat the same as undefined), which means that
+         * image smoothing will be selectively enabled (ie, true for text modes, false for graphics modes); otherwise,
+         * we'll set image smoothing to whatever value was provided for ALL modes -- assuming the browser supports it.
+         */
+        if (this.sSmoothing) {
+            this.contextMonitor[this.sSmoothing] = (this.fSmoothing == null? false : this.fSmoothing);
+        }
+        return true;
+    }
+
+    /**
+     * createFonts()
+     *
+     * @this {VT100Video}
+     * @returns {boolean}
+     */
+    createFonts()
+    {
+        /*
+         * We retain abFontData in case we have to rebuild the fonts (eg, when we switch from 80 to 132 columns)
+         */
+        if (this.abFontData) {
+            this.fDotStretcher = true;
+            this.aFonts[VT100Video.VT100.FONT.NORML] = [
+                this.createFontVariation(this.cxCell, this.cyCell),
+                this.createFontVariation(this.cxCell, this.cyCell, this.fUnderline)
+            ];
+            this.aFonts[VT100Video.VT100.FONT.DWIDE] = [
+                this.createFontVariation(this.cxCell*2, this.cyCell),
+                this.createFontVariation(this.cxCell*2, this.cyCell, this.fUnderline)
+            ];
+            this.aFonts[VT100Video.VT100.FONT.DHIGH] = this.aFonts[VT100Video.VT100.FONT.DHIGH_BOT] = [
+                this.createFontVariation(this.cxCell*2, this.cyCell*2),
+                this.createFontVariation(this.cxCell*2, this.cyCell*2, this.fUnderline)
+            ];
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * createFontVariation(cxCell, cyCell, fUnderline)
+     *
+     * This creates a 16x16 character grid for the requested font variation.  Variations include:
+     *
+     *      1) no variation (cell size is this.cxCell x this.cyCell)
+     *      2) double-wide characters (cell size is this.cxCell*2 x this.cyCell)
+     *      3) double-high double-wide characters (cell size is this.cxCell*2 x this.cyCell*2)
+     *      4) any of the above with either reverse video or underline enabled (default is neither)
+     *
+     * @this {VT100Video}
+     * @param {number} cxCell is the target width of each character in the grid
+     * @param {number} cyCell is the target height of each character in the grid
+     * @param {boolean} [fUnderline] (null for unmodified font, false for reverse video, true for underline)
+     * @returns {Object}
+     */
+    createFontVariation(cxCell, cyCell, fUnderline)
+    {
+        this.printf("createFontVariation(cxCell=%d, cyCell=%d, fUnderline=%b\n", cxCell, cyCell, fUnderline);
+
+        /*
+         * On a VT100, cxCell,cyCell is initially 10,10, but may change to 9,10 for 132-column mode.
+         */
+
+
+
+        /*
+         * Create a font canvas that is both 16 times the target character width and the target character height,
+         * ensuring that it will accommodate 16x16 characters (for a maximum of 256).  Note that the VT100 font ROM
+         * defines only 128 characters, so that canvas will contain only 16x8 entries.
+         */
+        let nFontBytesPerChar = this.cxCellDefault <= 8? 8 : 16;
+        let nFontByteOffset = nFontBytesPerChar > 8? 15 : 0;
+        let nChars = this.abFontData.length / nFontBytesPerChar;
+
+        /*
+         * The absence of a boolean for fUnderline means that both fReverse and fUnderline are "falsey".  The presence
+         * of a boolean means that fReverse will be true OR fUnderline will be true, but NOT both.
+         */
+        let fReverse = (fUnderline === false);
+
+        let font = {cxCell: cxCell, cyCell: cyCell};
+        font.canvas = document.createElement("canvas");
+        font.canvas.width = cxCell * 16;
+        font.canvas.height = cyCell * (nChars / 16);
+        font.context = font.canvas.getContext("2d");
+
+        let imageChar = font.context.createImageData(cxCell, cyCell);
+
+        for (let iChar = 0; iChar < nChars; iChar++) {
+            for (let y = 0, yDst = y; y < this.cyCell; y++) {
+                let offFontData = iChar * nFontBytesPerChar + ((nFontByteOffset + y) & (nFontBytesPerChar - 1));
+                let bits = (fUnderline && y == 8? 0xff : this.abFontData[offFontData]);
+                for (let nRows = 0; nRows < (cyCell / this.cyCell); nRows++) {
+                    let bitPrev = 0;
+                    for (let x = 0, xDst = x; x < this.cxCell; x++) {
+                        /*
+                         * While x goes from 0 to cxCell-1, obviously we will run out of bits after x is 7;
+                         * since the final bit must be replicated all the way to the right edge of the cell
+                         * (so that line-drawing characters seamlessly connect), we ensure that the effective
+                         * shift count remains stuck at 7 once it reaches 7.
+                         */
+                        let bitReal = bits & (0x80 >> (x > 7? 7 : x));
+                        let bit = (this.fDotStretcher && !bitReal && bitPrev)? bitPrev : bitReal;
+                        for (let nCols = 0; nCols < (cxCell / this.cxCell); nCols++) {
+                            if (fReverse) bit = !bit;
+                            this.setPixel(imageChar, xDst, yDst, bit? 1 : 0);
+                            xDst++;
+                        }
+                        bitPrev = bitReal;
+                    }
+                    yDst++;
+                }
+            }
+            /*
+             * (iChar >> 4) performs the integer equivalent of Math.floor(iChar / 16), and (iChar & 0xf) is the equivalent of (iChar % 16).
+             */
+            font.context.putImageData(imageChar, (iChar & 0xf) * cxCell, (iChar >> 4) * cyCell);
+        }
+        return font;
+    }
+
+    /**
+     * updateDimensions(nCols, nRows)
+     *
+     * Called from the Chip component whenever the monitor dimensions have been dynamically altered.
+     *
+     * @this {VT100Video}
+     * @param {number} nCols (should be either 80 or 132; 80 is the default)
+     * @param {number} nRows (should be either 24 or 14; 24 is the default)
+     */
+    updateDimensions(nCols, nRows)
+    {
+        this.printf("updateDimensions(%d,%d)\n", nCols, nRows);
+        this.nColsBuffer = nCols;
+        /*
+         * Even when the number of effective rows is 14 (or 15 counting the scroll line buffer), we want
+         * to leave the number of rows at 24 (or 25 counting the scroll line buffer), because the VT100 doesn't
+         * actually change character height (only character width).
+         *
+         *      this.nRowsBuffer = nRows+1; // +1 for scroll line buffer
+         */
+        this.cxCell = this.cxCellDefault;
+        if (nCols > 80) this.cxCell--;      // VT100 font cells are 9x10 instead of 10x10 in 132-column mode
+        if (this.initBuffers()) {
+            this.createFonts();
+        }
+    }
+
+    /**
+     * updateRate(nRate)
+     *
+     * Called from the Chip component whenever the monitor refresh rate has been dynamically altered.
+     *
+     * @this {VT100Video}
+     * @param {number} nRate (should be either 50 or 60; 60 is the default)
+     */
+    updateRate(nRate)
+    {
+        this.printf("updateRate(%d)\n", nRate);
+        this.rateMonitor = nRate;
+    }
+
+    /**
+     * updateScrollOffset(bScroll)
+     *
+     * Called from the Chip component whenever the monitor scroll offset has been dynamically altered.
+     *
+     * @this {VT100Video}
+     * @param {number} bScroll
+     */
+    updateScrollOffset(bScroll)
+    {
+        this.printf("updateScrollOffset(%d)\n", bScroll);
+        if (this.bScrollOffset !== bScroll) {
+            this.bScrollOffset = bScroll;
+            /*
+             * WARNING: If we immediately redraw the monitor on the first wrap of the scroll offset back to zero,
+             * we end up "slamming" the monitor's contents back down again, because it seems that the frame buffer
+             * contents haven't actually been scrolled yet.  So we redraw now ONLY if bScroll is non-zero, lest
+             * we ruin the smooth-scroll effect.
+             *
+             * And this change, while necessary, is not sufficient, because another intervening updateMonitor()
+             * call could still occur before the frame buffer contents are actually scrolled; and ordinarily, if the
+             * buffer hasn't changed, updateMonitor() would do nothing, but alas, if the cursor happens to get toggled
+             * in the interim, updateMonitor() will want to update exactly ONE cell.
+             *
+             * So we deal with that by setting the fSkipSingleCellUpdate flag.  Now of course, there's no guarantee
+             * that the next update of only ONE cell will always be a cursor update, but even if it isn't, skipping
+             * that update doesn't seem like a huge cause for concern.
+             */
+            if (bScroll) {
+                this.updateMonitor(true);
+            } else {
+                this.fSkipSingleCellUpdate = true;
+            }
+        }
+    }
+
+    /**
+     * getRefreshTime()
+     *
+     * @this {VT100Video}
+     * @returns {number} (number of milliseconds per refresh)
+     */
+    getRefreshTime()
+    {
+        return 1000 / Math.max(this.rateRefresh, this.rateInterrupt);
+    }
+
+    /**
+     * initCache(nCells)
+     *
+     * Initializes the contents of our internal cell cache.
+     *
+     * @this {VT100Video}
+     * @param {number} [nCells]
+     */
+    initCache(nCells)
+    {
+        this.fCacheValid = false;
+        if (nCells) {
+            this.nCacheCells = nCells;
+            if (this.aCacheCells === undefined || this.aCacheCells.length != this.nCacheCells) {
+                this.aCacheCells = new Array(this.nCacheCells);
+            }
+        }
+        /*
+         * Because the VT100 frame buffer can be located anywhere in RAM (above 0x2000), we must defer this
+         * test code until the powerUp() notification handler is called, when all RAM has (hopefully) been allocated.
+         *
+         * NOTE: The following test image was useful for early testing, but a *real* VT100 doesn't display a test image,
+         * so this code is no longer enabled by default.  Remove MAXDEBUG if you want to see it again.
+         */
+        if (MAXDEBUG && !this.test) {
+            /*
+             * Build a test iamge in the VT100 frame buffer; we'll mimic the "SET-UP A" image, since it uses
+             * all the font variations.  The process involves iterating over 0-based row numbers -2 (or -5 if 50Hz
+             * operation is selected) through 24, checking aLineData for a matching row number, and converting the
+             * corresponding string(s) to appropriate byte values.  Negative row numbers correspond to "fill lines"
+             * and do not require a row entry.  If multiple strings are present for a given row, we invert the
+             * default character attribute for subsequent strings.  An empty array ends the image build process.
+             */
+            let aLineData = {
+                 0: [VT100Video.VT100.FONT.DHIGH, 'SET-UP A'],
+                 2: [VT100Video.VT100.FONT.DWIDE, 'TO EXIT PRESS "SET-UP"'],
+                22: [VT100Video.VT100.FONT.NORML, '        T       T       T       T       T       T       T       T       T'],
+                23: [VT100Video.VT100.FONT.NORML, '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890'],
+                24: []
+            };
+            let addr = this.addrBuffer;
+            let addrNext = -1, font = -1;
+            let b, nFill = (this.rateMonitor == 60? 2 : 5);
+            for (let iRow = -nFill; iRow < this.nRowsBuffer; iRow++) {
+                let lineData = aLineData[iRow];
+                if (addrNext >= 0) {
+                    let fBreak = false;
+                    addrNext = addr + 2;
+                    if (!lineData) {
+                        if (font == VT100Video.VT100.FONT.DHIGH) {
+                            lineData = aLineData[iRow-1];
+                            font = VT100Video.VT100.FONT.DHIGH_BOT;
+                        }
+                    }
+                    else {
+                        if (lineData.length) {
+                            font = lineData[0];
+                        } else {
+                            addrNext = addr - 1;
+                            fBreak = true;
+                        }
+                    }
+                    b = (font & VT100Video.VT100.LINEATTR.FONTMASK) | ((addrNext >> 8) & VT100Video.VT100.LINEATTR.ADDRMASK) | VT100Video.VT100.LINEATTR.ADDRBIAS;
+                    this.busMemory.writeData(addr++, b);
+                    this.busMemory.writeData(addr++, addrNext & 0xff);
+                    if (fBreak) break;
+                }
+                if (lineData) {
+                    let attr = 0;
+                    for (let j = 1; j < lineData.length; j++) {
+                        let s = lineData[j];
+                        for (let k = 0; k < s.length; k++) {
+                            this.busMemory.writeData(addr++, s.charCodeAt(k) | attr);
+                        }
+                        attr ^= 0x80;
+                    }
+                }
+                this.busMemory.writeData(addr++, VT100Video.VT100.LINETERM);
+                addrNext = addr;
+            }
+            this.test = true;
+        }
+    }
+
+    /**
+     * initColors()
+     *
+     * @this {VT100Video}
+     */
+    initColors()
+    {
+        let rgbBlack  = [0x00, 0x00, 0x00, 0xff];
+        let rgbWhite  = [0xff, 0xff, 0xff, 0xff];
+        this.nColors = (1 << this.nBitsPerPixel);
+        this.aRGB = new Array(this.nColors);
+        this.aRGB[0] = rgbBlack;
+        this.aRGB[1] = rgbWhite;
+    }
+
+    /**
+     * setPixel(image, x, y, bPixel)
+     *
+     * @this {VT100Video}
+     * @param {Object} image
+     * @param {number} x
+     * @param {number} y
+     * @param {number} bPixel (ie, an index into aRGB)
+     */
+    setPixel(image, x, y, bPixel)
+    {
+        let index = (x + y * image.width);
+        let rgb = this.aRGB[bPixel];
+        index *= rgb.length;
+        image.data[index] = rgb[0];
+        image.data[index+1] = rgb[1];
+        image.data[index+2] = rgb[2];
+        image.data[index+3] = rgb[3];
+    }
+
+    /**
+     * updateChar(idFont, col, row, data, context)
+     *
+     * Updates a particular character cell (row,col) in the associated window.
+     *
+     * @this {VT100Video}
+     * @param {number} idFont
+     * @param {number} col
+     * @param {number} row
+     * @param {number} data
+     * @param {Object} [context]
+     */
+    updateChar(idFont, col, row, data, context)
+    {
+        let bChar = data & 0x7f;
+        let font = this.aFonts[idFont][(data & 0x80)? 1 : 0];
+        if (!font) return;
+
+        let xSrc = (bChar & 0xf) * font.cxCell;
+        let ySrc = (bChar >> 4) * font.cyCell;
+
+        let xDst, yDst, cxDst, cyDst;
+
+        let cxSrc = font.cxCell;
+        let cySrc = font.cyCell;
+
+        if (context) {
+            xDst = col * this.cxCell;
+            yDst = row * this.cyCell;
+            cxDst = this.cxCell;
+            cyDst = this.cyCell;
+        } else {
+            xDst = col * this.cxMonitorCell;
+            yDst = row * this.cyMonitorCell;
+            cxDst = this.cxMonitorCell;
+            cyDst = this.cyMonitorCell;
+        }
+
+        /*
+         * If font.cxCell > this.cxCell, then we assume the caller wants to draw a double-wide character,
+         * so we will double xDst and cxDst.
+         */
+        if (font.cxCell > this.cxCell) {
+            xDst *= 2;
+            cxDst *= 2;
+
+        }
+
+        /*
+         * If font.cyCell > this.cyCell, then we rely on idFont to indicate whether the top half or bottom half
+         * of the character should be drawn.
+         */
+        if (font.cyCell > this.cyCell) {
+            if (idFont == VT100Video.VT100.FONT.DHIGH_BOT) ySrc += this.cyCell;
+            cySrc = this.cyCell;
+
+        }
+
+        if (context) {
+            context.drawImage(font.canvas, xSrc, ySrc, cxSrc, cySrc, xDst, yDst, cxDst, cyDst);
+        } else {
+            xDst += this.xMonitorOffset;
+            yDst += this.yMonitorOffset;
+            this.contextMonitor.drawImage(font.canvas, xSrc, ySrc, cxSrc, cySrc, xDst, yDst, cxDst, cyDst);
+        }
+    }
+
+    /**
+     * updateMonitor(fForced)
+     *
+     * Forced updates are generally internal updates triggered by an I/O operation or other state change,
+     * while non-forced updates are periodic "refresh" updates.
+     *
+     * @this {VT100Video}
+     * @param {boolean} [fForced]
+     */
+    updateMonitor(fForced)
+    {
+        let fUpdate = true;
+        if (!fForced) {
+            if (this.rateInterrupt) {
+                this.cpu.requestINTR(4);
+            }
+            /*
+             * Since this is not a forced update, if our cell cache is valid AND we allocated our own buffer AND the buffer
+             * is clean, then there's nothing to do.
+             */
+            if (fUpdate && this.fCacheValid && this.sizeBuffer) {
+                if (this.busMemory.cleanBlocks(this.addrBuffer, this.sizeBuffer)) {
+                    fUpdate = false;
+                }
+            }
+            this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
+            this.nUpdates++;
+        }
+        if (!fUpdate) {
+            return;
+        }
+        this.updateScreen(fForced);
+    }
+
+    /**
+     * updateScreen(f)
+     *
+     * Propagates the video buffer to the cell cache and updates the screen with any changes on the monitor.
+     *
+     * For every cell in the video buffer, compare it to the cell stored in the cell cache, render if it differs,
+     * and then update the cell cache to match.  Since initCache() sets every cell in the cell cache to an
+     * invalid value, we're assured that the next call to updateScreen() will redraw the entire (visible) video buffer.
+     *
+     * @this {VT100Video}
+     * @param {boolean} [fForced]
+     */
+    updateScreen(fForced)
+    {
+        let nRows = 0;
+        let font, fontNext = -1;
+        let nFill = (this.rateMonitor == 60? 2 : 5);
+        let iCell = 0, cUpdated = 0, iCellUpdated = -1;
+
+        let addrNext = this.addrBuffer;
+
+
+        while (nRows < this.nRowsBuffer) {
+            /*
+             * Populate the line buffer
+             */
+            let nCols = 0;
+            let addr = addrNext;
+            let nColsVisible = this.nColsBuffer;
+            font = fontNext;
+            if (font != VT100Video.VT100.FONT.NORML) nColsVisible >>= 1;
+            while (true) {
+                let data = this.busMemory.readData(addr++);
+                if ((data & VT100Video.VT100.LINETERM) == VT100Video.VT100.LINETERM) {
+                    let b = this.busMemory.readData(addr++);
+                    fontNext = b & VT100Video.VT100.LINEATTR.FONTMASK;
+                    addrNext = ((b & VT100Video.VT100.LINEATTR.ADDRMASK) << 8) | this.busMemory.readData(addr);
+                    addrNext += (b & VT100Video.VT100.LINEATTR.ADDRBIAS)? VT100Video.VT100.ADDRBIAS_LO : VT100Video.VT100.ADDRBIAS_HI;
+                    break;
+                }
+                if (nCols < nColsVisible) {
+                    this.abLineBuffer[nCols++] = data;
+                } else {
+                    break;                          // ideally, we would wait for a LINETERM byte, but it's not safe to loop without limit
+                }
+            }
+
+            /*
+             * Skip the first few "fill lines"
+             */
+            if (nFill) {
+                nFill--;
+                continue;
+            }
+
+            /*
+             * Pad the line buffer as needed
+             */
+            while (nCols < this.abLineBuffer.length) {
+                this.abLineBuffer[nCols++] = 0;     // character code 0 is a empty font character
+            }
+
+            /*
+             * Display the line buffer; ordinarily, the font number would be valid after processing the "fill lines",
+             * but if the buffer isn't initialized yet, those lines might be missing, so the font number might not be set.
+             */
+            if (font >= 0) {
+                /*
+                 * Cell cache logic is complicated by the fact that a line may be single-width one frame and double-width
+                 * the next.  So we store the visible line length at the start of each row in the cache, which must match if
+                 * the cache can be considered valid for the current line.
+                 */
+                let fLineCacheValid = this.fCacheValid && (this.aCacheCells[iCell] == nColsVisible);
+                this.aCacheCells[iCell++] = nColsVisible;
+                for (let iCol = 0; iCol < nCols; iCol++) {
+                    let data = this.abLineBuffer[iCol];
+                    if (!fLineCacheValid || data !== this.aCacheCells[iCell]) {
+                        this.aCacheCells[iCellUpdated = iCell] = data;
+                        this.updateChar(font, iCol, nRows, data, this.contextBuffer);
+                        cUpdated++;
+                    }
+                    iCell++;
+                }
+            }
+            nRows++;
+        }
+        this.fCacheValid = true;
+
+
+
+        if (!fForced && this.fSkipSingleCellUpdate && cUpdated == 1) {
+            /*
+             * We're going to blow off this update, since it comes on the heels of a smooth-scroll that *may*
+             * not be completely finished yet, and at the same time, we're going to zap the only updated cell
+             * cache entry, to guarantee that it's redrawn on the next update.
+             */
+
+            /*
+             * TODO: If I change the RECV rate to 19200 and enable smooth scrolling, I sometimes see a spurious
+             * "H" on the bottom line after a long series of "HELLO WORLD!\r\n" tests.  Dumping video memory shows
+             * "HELLO WORLD!" on 23 lines and an "H" on the 24th line, so it's really there.  But strangely, if
+             * I then press SET-UP two times, the restored monitor does NOT have the spurious "H".  So somehow the
+             * firmware knows what should and shouldn't be on-screen.
+             *
+             * Possible VT100 firmware bug?  I'm not sure.  Anyway, this DEBUG-only code is here to help trap
+             * that scenario, until I figure it out.
+             */
+            if (DEBUG && (this.aCacheCells[iCellUpdated] & 0x7f) == 0x48) {
+                this.printf("spurious 'H' character at offset %d\n", iCellUpdated);
+            }
+            this.aCacheCells[iCellUpdated] = -1;
+            cUpdated = 0;
+        }
+        this.fSkipSingleCellUpdate = false;
+
+        if ((cUpdated || fForced) && this.contextBuffer) {
+            /*
+             * We must subtract cyCell from cyBuffer to avoid displaying the extra "scroll line" that we normally
+             * buffer, in support of smooth scrolling.  Speaking of which, we must also add bScrollOffset to ySrc
+             * (well, ySrc is always relative to zero, so no add is actually required).
+             */
+            this.contextMonitor.drawImage(
+                this.canvasBuffer,
+                0,                                  // xSrc
+                this.bScrollOffset,                 // ySrc
+                this.cxBuffer,                      // cxSrc
+                this.cyBuffer - this.cyCell,        // cySrc
+                this.xMonitorOffset,                // xDst
+                this.yMonitorOffset,                // yDst
+                this.cxMonitorOffset,               // cxDst
+                this.cyMonitorOffset                // cyDst
+            );
+        }
+    }
+}
+
+VT100Video.VT100 = {
+    /*
+     * The following font IDs are nothing more than all the possible LINEATTR values masked with FONTMASK;
+     * also, note that double-high implies double-wide; the VT100 doesn't support a double-high single-wide font.
+     */
+    FONT: {
+        NORML:      0x60,       // normal font (eg, 10x10)
+        DWIDE:      0x40,       // double-wide, single-high font (eg, 20x10)
+        DHIGH:      0x20,       // technically, this means display only the TOP half of the double-high font (eg, 20x20)
+        DHIGH_BOT:  0x00        // technically, this means display only the BOTTOM half of the double-high font (eg, 20x20)
+    },
+    LINETERM:       0x7F,
+    LINEATTR: {
+        ADDRMASK:   0x0F,
+        ADDRBIAS:   0x10,       // 0x10 == ADDRBIAS_LO, 0x00 = ADDRBIAS_HI
+        FONTMASK:   0x60,
+        SCROLL:     0x80
+    },
+    ADDRBIAS_LO:    0x2000,
+    ADDRBIAS_HI:    0x4000
+};
+
+Defs.CLASSES["VT100Video"] = VT100Video;
 
 /**
  * @copyright https://www.pcjs.org/machines/lib/machine.js (C) 2012-2020 Jeff Parsons

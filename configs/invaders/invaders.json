@@ -50,7 +50,7 @@
     "dataWidth": 8
   },
   "cpu": {
-    "class": "CPU8080",
+    "class": "CPUx80",
     "busIO": "busIO",
     "busMemory": "busMemory"
   },
@@ -681,7 +681,7 @@
     ]
   },
   "debugger": {
-    "class": "Dbg8080",
+    "class": "Dbgx80",
     "_JSONDoc": [
       "It's best to initialize the Debugger last, so that it can find any device it wants -- at the very least, the CPU."
     ]

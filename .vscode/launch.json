@@ -92,31 +92,38 @@
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC with Color Display",
+        "name": "IBM PC with CGA",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/cga/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC with Color Display and Debugger",
+        "name": "IBM PC with CGA and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/cga/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC with Monochrome Display",
+        "name": "IBM PC with MDA",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC with Monochrome Display and Debugger",
+        "name": "IBM PC with MDA and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/",
+        "webRoot": "${workspaceFolder}"
+      },
+      {
+        "name": "IBM PC with MDA and Debugger (v3)",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/v3/",
         "webRoot": "${workspaceFolder}"
       },
       {
@@ -127,63 +134,63 @@
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC with VGA Display",
+        "name": "IBM PC with VGA",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/vga/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC with VGA Display and Debugger",
+        "name": "IBM PC with VGA and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5150/vga/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC XT with Color Display",
+        "name": "IBM PC XT with CGA",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/cga/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC XT with Color Display and Debugger",
+        "name": "IBM PC XT with CGA and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/cga/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC XT with Enhanced Color Display",
+        "name": "IBM PC XT with EGA",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/ega/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC XT with Enhanced Color Display and Debugger",
+        "name": "IBM PC XT with EGA and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/ega/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC XT with Monochrome Display",
+        "name": "IBM PC XT with MDA",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/mda/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC XT with Monochrome Display and Debugger",
+        "name": "IBM PC XT with MDA and Debugger",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5160/mda/debugger/",
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "IBM PC AT with Color Display",
+        "name": "IBM PC AT with CGA",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4000/machines/pcx86/ibm/5170/cga/",

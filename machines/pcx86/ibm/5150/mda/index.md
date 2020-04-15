@@ -8,7 +8,7 @@ redirect_from:
 machines:
   - id: ibm-5150-mda
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/machine-mda.json
+    config: /configs/pcx86/machine/ibm/5150/mda/64kb/machine.json
 ---
 
 {% include machine.html id="ibm-5150-mda" %}

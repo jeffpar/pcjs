@@ -8,14 +8,14 @@
  https://www.pcjs.org/machines/lib/led.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/monitor.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/time.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/lib/bus/bus.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/lib/bus/memory.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/lib/bus/ram.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/lib/bus/rom.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/pcx86/libv3/video.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/lib/cpu/cpu.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/lib/bus.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/lib/memory.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/lib/ram.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/lib/rom.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/lib/cpu.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/lib/debugger.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/pcx86/libv3/cpux86.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/lib/cpu/debugger.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/pcx86/libv3/video.js (C) 2012-2020 Jeff Parsons
  https://www.pcjs.org/machines/lib/machine.js (C) 2012-2020 Jeff Parsons
 */
 var n;function aa(a){var b=0;return function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}}}function u(a){if(!(a instanceof Array)){var b="undefined"!=typeof Symbol&&Symbol.iterator&&a[Symbol.iterator];a=b?b.call(a):{next:aa(a)};for(var c=[];!(b=a.next()).done;)c.push(b.value);a=c}return a}var ba="function"==typeof Object.create?Object.create:function(a){function b(){}b.prototype=a;return new b},ca;
@@ -127,9 +127,9 @@ function zc(a,b,c){c.type=Z.NONE;Y.call(this,a,b,c);wc(this.b,this.g.addr,this.g
 function Ac(a,b,c){c.type=Z.mb;Y.call(this,a,b,c);wc(this.b,this.g.addr,this.g.size,this.g.type,this);ib(this,this.$.bind(this));this.aa=this.ba=void 0;if(B.LED&&this.w[Bc]){var d=this;this.h=Math.pow(2,Math.ceil(Math.log2(this.values.length)/2));this.i=this.values.length/this.h|0;this.a=new Gb(a,b+"LEDs",{"class":"LED",bindings:{container:Ha(this,Bc)},type:Ib,cols:this.h,rows:this.i,color:H(this,"colorROM","green"),backgroundColor:H(this,"backgroundColorROM","black"),persistent:!0}),Rb(this.a);this.s=
 new lb(a,b+"Input",{"class":"Input",location:[0,0,this.a.V,this.a.O,this.h,this.i],bindings:{surface:Ha(this,Bc)}});this.v=Ia(this)||"";ob(this.s,function(e,g){if(d.aa){var f=d.v;0<=e&&0<=g&&(e=g*d.h+e,f=d.aa.de(d.za+e,d.values[e]));Xa(d,Ja,f)}})}}v(Ac,Y);
 Ac.prototype.ha=function(a){var b=!0,c=a.shift();if(c&&this.a){var d=c.length;this.a.b.length==d?(this.a.b=c,Qb(this.a,!0)):(this.m("inconsistent saved LED state (%d), unable to load\n",d),b=!1)}a.length&&(d=(a=a.shift())&&a.length||-1,this.values.length==d?this.values=a:(this.m("inconsistent saved ROM state (%d), unable to load\n",d),b=!1));return b};Ac.prototype.Y=function(){void 0===this.aa&&(this.aa=Q(this,"CPU"));void 0===this.ba&&(this.ba=Q(this,"Debugger",!1))};
-Ac.prototype.ia=function(a){this.a&&(a.push(this.a.b),a.push(this.values))};var Bc="array",Ja="cellDesc";B.ROM=Ac;function Cc(a,b,c){W.call(this,a,b,c);this.M=this.g.bufferAddr;this.J=this.g.interruptRate;this.K=this.g.refreshRate||60;this.N=eb(this,this.g.bus);this.aa=Q(this,"CPU");this.time=Q(this,"Time");this.L=sb(this.time,this.I,this.V.bind(this));this.time.U.push(this);S(this.time,this.L,1E3/Math.max(this.K,this.J))}v(Cc,W);
-Cc.prototype.V=function(a){if(!a){if(this.S&&this.T){a=this.N;var b=this.M,c=this.T,d=b>>>a.c;for(b=a.a-(b&a.j);0<c&&d<a.b.length;){var e=a.b[d];e.f&&(e.f=!1,e.b.type==uc&&(e.ja=e.Cb));c-=b;b=a.a;d++}}S(this.time,this.L,1E3/Math.max(this.K,this.J))}};B.PCx86Video=Cc;function Dc(a,b,c){c["class"]="CPU";O.call(this,a,b,c);this.ba=void 0;this.tc=0;this.time=Q(this,"Time");this.time.v.push(this);this.time.U.push(this);this.b=this.a=0}v(Dc,O);Dc.prototype.abort=function(a){E(this,a.message);gc(this.time)};
-Dc.prototype.vc=function(a){this.b=this.a=void 0===a?0:a;return this.b-this.a};Dc.prototype.wc=function(){this.b-=this.a;this.a=0};function Ec(a,b,c){Dc.call(this,a,b,c)}v(Ec,Dc);B.CPUx86=Ec;
+Ac.prototype.ia=function(a){this.a&&(a.push(this.a.b),a.push(this.values))};var Bc="array",Ja="cellDesc";B.ROM=Ac;function Cc(a,b,c){c["class"]="CPU";O.call(this,a,b,c);this.ba=void 0;this.tc=0;this.time=Q(this,"Time");this.time.v.push(this);this.time.U.push(this);this.b=this.a=0}v(Cc,O);Cc.prototype.abort=function(a){E(this,a.message);gc(this.time)};Cc.prototype.vc=function(a){this.b=this.a=void 0===a?0:a;return this.b-this.a};Cc.prototype.wc=function(){this.b-=this.a;this.a=0};
+function Dc(a,b,c){Cc.call(this,a,b,c)}v(Dc,Cc);B.CPUx86=Dc;function Ec(a,b,c){W.call(this,a,b,c);this.M=this.g.bufferAddr;this.J=this.g.interruptRate;this.K=this.g.refreshRate||60;this.N=eb(this,this.g.bus);this.aa=Q(this,"CPU");this.time=Q(this,"Time");this.L=sb(this.time,this.I,this.V.bind(this));this.time.U.push(this);S(this.time,this.L,1E3/Math.max(this.K,this.J))}v(Ec,W);
+Ec.prototype.V=function(a){if(!a){if(this.S&&this.T){a=this.N;var b=this.M,c=this.T,d=b>>>a.c;for(b=a.a-(b&a.j);0<c&&d<a.b.length;){var e=a.b[d];e.f&&(e.f=!1,e.b.type==uc&&(e.ja=e.Cb));c-=b;b=a.a;d++}}S(this.time,this.L,1E3/Math.max(this.K,this.J))}};B.PCx86Video=Ec;
 function Fc(a,b,c){O.call(this,a,a);var d=this;this.c=!1;this.j=c;this.b="";this.i=this.h=!1;hb(this,!1);this.W=0;b=b.trim();"{"==b[0]?Gc(this,b):(this.b=b,La(this.b,function(e,g,f,m){4==f&&(!m&&g?(Gc(d,g),Hc(d)):d.m("error (%d) loading configuration: %s\n",m,e))}));window.addEventListener("load",function(){d.i=!0;Hc(d)});window.addEventListener(K("iOS")?"pagehide":K("Opera")?"unload":"beforeunload",function(){Ic(d)});window.addEventListener("pageshow",function(){d.c||d.Y(!0)})}v(Fc,O);
 Fc.prototype.ea=function(a,b){var c=this;switch(a){case Jc:b.onclick=function(){c.Y()};break;case Kc:b.onclick=function(){c.$()}}O.prototype.ea.call(this,a,b)};
 function Hc(a){var b=!0;if(a.h&&a.i){for(var c in a.a){var d=void 0,e=a.a[c];try{d=e["class"],B[d]?"Machine"==d?(a.m("PCjs %s v%3.2f\n%s\n",e.name,3,Lc),a.b&&a.m("Configuration: %s\n",a.b)):new B[d](a.u,c,e):a.m('unrecognized %s device "%s"\n',d,c)}catch(f){e.optional||(a.m('error initializing %s device "%s": %s\n',d,c,f.message),b=!1),kb(a,c)}}if(a.f){var g=Oa(a);gb(a,function(f){return f.zb&&!f.zb(g)?(f.m('unable to restore state for device "%s"\n',f.I),!1):!0})}hb(a,!0);ib(a,a.Y.bind(a,b))||a.m("machine %s not ready to power, waiting for device(s)\n",
