@@ -6,11 +6,6 @@ machines:
   - id: ibm-5150-vga
     type: pcx86
     config: /configs/pcx86/machine/ibm/5150/vga/64kb/debugger/machine.json
-    autoMount:
-        A:
-            name: Invaders Boot Sector (2019)
-        B:
-            name: None
 ---
 
 {% include machine.html id="ibm-5150-vga" %}

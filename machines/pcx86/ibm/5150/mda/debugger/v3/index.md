@@ -5,7 +5,7 @@ permalink: /machines/pcx86/ibm/5150/mda/debugger/v3/
 machines:
   - id: ibm5150
     type: pcx86v3
-    config: /configs/pcx86/machine/ibm/5150/mda/64kb/debugger/machine.json
+    config: /configs/pcx86/machine/ibm/5150/mda/64kb/debugger/v3/machine.json
 ---
 
 {% include machine.html id="ibm5150" %}
