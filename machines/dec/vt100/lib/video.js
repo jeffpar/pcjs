@@ -108,7 +108,7 @@ class VT100Video extends Monitor {
         this.abFontData = this.config['fontROM'];
         this.createFonts();
 
-        this.cpu = /** @type {CPU8080} */ (this.findDeviceByClass("CPU"));
+        this.cpu = /** @type {CPUx80} */ (this.findDeviceByClass("CPU"));
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.timerUpdateNext = this.time.addTimer(this.idDevice, this.updateMonitor.bind(this));
         this.time.addUpdate(this);

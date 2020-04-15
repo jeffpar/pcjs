@@ -80,7 +80,7 @@ For example, this [IBM PC](/machines/pcx86/ibm/5150/mda/) contains the following
     machines:
       - id: ibm-5150-mda
         type: pcx86
-        config: /configs/pcx86/machine/ibm/5150/machine-mda.json
+        config: /configs/pcx86/machine/ibm/5150/mda/64kb/machine.json
 
 If necessary, you can also override some of the settings in a machine XML file.  Here's an example of overriding the
 FDC `autoMount` setting, making it easy to reuse the same machine XML file with different boot disks:

@@ -104,6 +104,7 @@
       "./machines/lib/cpu.js",
       "./machines/lib/debugger.js",
       "./machines/pcx86/libv3/cpux86.js",
+      "./machines/pcx86/libv3/dbgx86.js",
       "./machines/pcx86/libv3/video.js",
       "./machines/lib/machine.js"
     ]

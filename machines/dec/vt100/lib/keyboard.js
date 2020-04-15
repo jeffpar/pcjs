@@ -116,7 +116,7 @@ class VT100Keyboard extends Device {
     onPower(on)
     {
         if (!this.cpu) {
-            this.cpu = /** @type {CPU8080} */ (this.findDeviceByClass("CPU"));
+            this.cpu = /** @type {CPUx80} */ (this.findDeviceByClass("CPU"));
         }
         this.updateLEDs(on? this.bStatus : undefined);
     }

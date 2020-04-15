@@ -6,7 +6,7 @@ redirect_from: /devices/pcx86/machine/5160/ega/640kb/
 machines:
   - id: ibm-5160-ega
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5160/machine-ega.json
+    config: /configs/pcx86/machine/ibm/5160/ega/256kb/machine.json
 ---
 
 {% include machine.html id="ibm-5160-ega" %}

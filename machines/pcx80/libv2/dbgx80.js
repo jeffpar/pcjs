@@ -12,14 +12,14 @@
 /**
  * Debugger for the 8080 CPU
  *
- * @class {Dbg8080}
+ * @class {Dbgx80}
  * @unrestricted
  */
-class Dbg8080 extends Debugger {
+class Dbgx80 extends Debugger {
     /**
-     * Dbg8080(idMachine, idDevice, config)
+     * Dbgx80(idMachine, idDevice, config)
      *
-     * @this {Dbg8080}
+     * @this {Dbgx80}
      * @param {string} idMachine
      * @param {string} idDevice
      * @param {Config} [config]
@@ -27,8 +27,8 @@ class Dbg8080 extends Debugger {
     constructor(idMachine, idDevice, config)
     {
         super(idMachine, idDevice, config);
-        this.styles = [Dbg8080.STYLE_8080, Dbg8080.STYLE_8086];
-        this.style = Dbg8080.STYLE_8086;
+        this.styles = [Dbgx80.STYLE_8080, Dbgx80.STYLE_8086];
+        this.style = Dbgx80.STYLE_8086;
         this.maxOpcodeLength = 3;
     }
 
@@ -37,7 +37,7 @@ class Dbg8080 extends Debugger {
      *
      * Overrides Debugger's default unassemble() function with one that understands 8080 instructions.
      *
-     * @this {Dbg8080}
+     * @this {Dbgx80}
      * @param {Address} address (advanced by the number of processed opcodes)
      * @param {Array.<number>} opcodes (each processed opcode is shifted out, reducing the size of the array)
      * @param {string} [annotation] (optional string to append to the final result)
@@ -76,24 +76,24 @@ class Dbg8080 extends Debugger {
          */
         let getImmOperand = (type) => {
             let sOperand = ' ';
-            let typeSize = type & Dbg8080.TYPE_SIZE;
+            let typeSize = type & Dbgx80.TYPE_SIZE;
             switch (typeSize) {
-            case Dbg8080.TYPE_BYTE:
+            case Dbgx80.TYPE_BYTE:
                 sOperand = this.toBase(getNextByte(), 16, 8, "");
                 break;
-            case Dbg8080.TYPE_SBYTE:
+            case Dbgx80.TYPE_SBYTE:
                 sOperand = this.toBase((getNextWord() << 24) >> 24, 16, 16, "");
                 break;
-            case Dbg8080.TYPE_WORD:
+            case Dbgx80.TYPE_WORD:
                 sOperand = this.toBase(getNextWord(), 16, 16, "");
                 break;
             default:
                 return "imm(" + this.toBase(type, 16, 16, "") + ')';
             }
-            if (this.style == Dbg8080.STYLE_8086 && (type & Dbg8080.TYPE_MEM)) {
+            if (this.style == Dbgx80.STYLE_8086 && (type & Dbgx80.TYPE_MEM)) {
                 sOperand = '[' + sOperand + ']';
-            } else if (!(type & Dbg8080.TYPE_REG)) {
-                sOperand = (this.style == Dbg8080.STYLE_8080? '$' : "0x") + sOperand;
+            } else if (!(type & Dbgx80.TYPE_REG)) {
+                sOperand = (this.style == Dbgx80.STYLE_8080? '$' : "0x") + sOperand;
             }
             return sOperand;
         };
@@ -111,9 +111,9 @@ class Dbg8080 extends Debugger {
              * mnemonics; specifically, "[HL]" instead of "M".  This is also more in keeping with how getImmOperand()
              * displays memory references (ie, by enclosing them in brackets).
              */
-            let sOperand = Dbg8080.REGS[iReg];
-            if (this.style == Dbg8080.STYLE_8086 && (type & Dbg8080.TYPE_MEM)) {
-                if (iReg == Dbg8080.REG_M) {
+            let sOperand = Dbgx80.REGS[iReg];
+            if (this.style == Dbgx80.STYLE_8086 && (type & Dbgx80.TYPE_MEM)) {
+                if (iReg == Dbgx80.REG_M) {
                     sOperand = "HL";
                 }
                 sOperand = '[' + sOperand + ']';
@@ -123,14 +123,14 @@ class Dbg8080 extends Debugger {
 
         let opcode = getNextByte();
 
-        let asOpcodes = this.style != Dbg8080.STYLE_8086? Dbg8080.INS_NAMES : Dbg8080.INS_NAMES_8086;
-        let aOpDesc = Dbg8080.aaOpDescs[opcode];
+        let asOpcodes = this.style != Dbgx80.STYLE_8086? Dbgx80.INS_NAMES : Dbgx80.INS_NAMES_8086;
+        let aOpDesc = Dbgx80.aaOpDescs[opcode];
         let opNum = aOpDesc[0];
 
         let sOperands = "";
         let sOpcode = asOpcodes[opNum];
         let cOperands = aOpDesc.length - 1;
-        let typeSizeDefault = Dbg8080.TYPE_NONE, type;
+        let typeSizeDefault = Dbgx80.TYPE_NONE, type;
 
         for (let iOperand = 1; iOperand <= cOperands; iOperand++) {
 
@@ -138,30 +138,30 @@ class Dbg8080 extends Debugger {
 
             type = aOpDesc[iOperand];
             if (type === undefined) continue;
-            if ((type & Dbg8080.TYPE_OPT) && this.style == Dbg8080.STYLE_8080) continue;
+            if ((type & Dbgx80.TYPE_OPT) && this.style == Dbgx80.STYLE_8080) continue;
 
-            let typeMode = type & Dbg8080.TYPE_MODE;
+            let typeMode = type & Dbgx80.TYPE_MODE;
             if (!typeMode) continue;
 
-            let typeSize = type & Dbg8080.TYPE_SIZE;
+            let typeSize = type & Dbgx80.TYPE_SIZE;
             if (!typeSize) {
                 type |= typeSizeDefault;
             } else {
                 typeSizeDefault = typeSize;
             }
 
-            let typeOther = type & Dbg8080.TYPE_OTHER;
+            let typeOther = type & Dbgx80.TYPE_OTHER;
             if (!typeOther) {
-                type |= (iOperand == 1? Dbg8080.TYPE_OUT : Dbg8080.TYPE_IN);
+                type |= (iOperand == 1? Dbgx80.TYPE_OUT : Dbgx80.TYPE_IN);
             }
 
-            if (typeMode & Dbg8080.TYPE_IMM) {
+            if (typeMode & Dbgx80.TYPE_IMM) {
                 sOperand = getImmOperand(type);
             }
-            else if (typeMode & Dbg8080.TYPE_REG) {
-                sOperand = getRegOperand((type & Dbg8080.TYPE_IREG) >> 8, type);
+            else if (typeMode & Dbgx80.TYPE_REG) {
+                sOperand = getRegOperand((type & Dbgx80.TYPE_IREG) >> 8, type);
             }
-            else if (typeMode & Dbg8080.TYPE_INT) {
+            else if (typeMode & Dbgx80.TYPE_INT) {
                 sOperand = ((opcode >> 3) & 0x7).toString();
             }
 
@@ -173,7 +173,7 @@ class Dbg8080 extends Debugger {
             sOperands += (sOperand || "???");
         }
 
-        let result = this.sprintf("%s %-7s%s %-7s %s", sAddr, sBytes, (type & Dbg8080.TYPE_UNDOC)? '*' : ' ', sOpcode, sOperands);
+        let result = this.sprintf("%s %-7s%s %-7s %s", sAddr, sBytes, (type & Dbgx80.TYPE_UNDOC)? '*' : ' ', sOpcode, sOperands);
         if (!annotation) {
             if (sComment) annotation = sComment;
         } else {
@@ -185,13 +185,13 @@ class Dbg8080 extends Debugger {
     }
 }
 
-Dbg8080.STYLE_8080 = "8080";
-Dbg8080.STYLE_8086 = "8086";
+Dbgx80.STYLE_8080 = "8080";
+Dbgx80.STYLE_8086 = "8086";
 
 /*
  * CPU instruction ordinals
  */
-Dbg8080.INS = {
+Dbgx80.INS = {
     NONE:   0,  ACI:    1,  ADC:    2,  ADD:    3,  ADI:    4,  ANA:    5,  ANI:    6,  CALL:   7,
     CC:     8,  CM:     9,  CNC:   10,  CNZ:   11,  CP:    12,  CPE:   13,  CPO:   14,  CZ:    15,
     CMA:   16,  CMC:   17,  CMP:   18,  CPI:   19,  DAA:   20,  DAD:   21,  DCR:   22,  DCX:   23,
@@ -210,7 +210,7 @@ Dbg8080.INS = {
  * If you change the default style, using the "s" command (eg, "s 8086"), then the 8086 table
  * will be used instead.  TODO: Add a "s z80" command for Z80-style mnemonics.
  */
-Dbg8080.INS_NAMES = [
+Dbgx80.INS_NAMES = [
     "NONE",     "ACI",      "ADC",      "ADD",      "ADI",      "ANA",      "ANI",      "CALL",
     "CC",       "CM",       "CNC",      "CNZ",      "CP",       "CPE",      "CPO",      "CZ",
     "CMA",      "CMC",      "CMP",      "CPI",      "DAA",      "DAD",      "DCR",      "DCX",
@@ -223,7 +223,7 @@ Dbg8080.INS_NAMES = [
     "STC",      "SUB",      "SUI",      "XCHG",     "XRA",      "XRI",      "XTHL"
 ];
 
-Dbg8080.INS_NAMES_8086 = [
+Dbgx80.INS_NAMES_8086 = [
     "NONE",     "ADC",      "ADC",      "ADD",      "ADD",      "AND",      "AND",      "CALL",
     "CALLC",    "CALLS",    "CALLNC",   "CALLNZ",   "CALLNS",   "CALLP",    "CALLNP",   "CALLZ",
     "NOT",      "CMC",      "CMP",      "CMP",      "DAA",      "ADD",      "DEC",      "DEC",
@@ -236,83 +236,83 @@ Dbg8080.INS_NAMES_8086 = [
     "STC",      "SUB",      "SUB",      "XCHG",     "XOR",      "XOR",      "XCHG"
 ];
 
-Dbg8080.REG_B      = 0x00;
-Dbg8080.REG_C      = 0x01;
-Dbg8080.REG_D      = 0x02;
-Dbg8080.REG_E      = 0x03;
-Dbg8080.REG_H      = 0x04;
-Dbg8080.REG_L      = 0x05;
-Dbg8080.REG_M      = 0x06;
-Dbg8080.REG_A      = 0x07;
-Dbg8080.REG_BC     = 0x08;
-Dbg8080.REG_DE     = 0x09;
-Dbg8080.REG_HL     = 0x0A;
-Dbg8080.REG_SP     = 0x0B;
-Dbg8080.REG_PC     = 0x0C;
-Dbg8080.REG_PS     = 0x0D;
-Dbg8080.REG_PSW    = 0x0E;      // aka AF if Z80-style mnemonics
+Dbgx80.REG_B      = 0x00;
+Dbgx80.REG_C      = 0x01;
+Dbgx80.REG_D      = 0x02;
+Dbgx80.REG_E      = 0x03;
+Dbgx80.REG_H      = 0x04;
+Dbgx80.REG_L      = 0x05;
+Dbgx80.REG_M      = 0x06;
+Dbgx80.REG_A      = 0x07;
+Dbgx80.REG_BC     = 0x08;
+Dbgx80.REG_DE     = 0x09;
+Dbgx80.REG_HL     = 0x0A;
+Dbgx80.REG_SP     = 0x0B;
+Dbgx80.REG_PC     = 0x0C;
+Dbgx80.REG_PS     = 0x0D;
+Dbgx80.REG_PSW    = 0x0E;      // aka AF if Z80-style mnemonics
 
 /*
  * NOTE: "PS" is the complete processor status, which includes bits like the Interrupt flag (IF),
  * which is NOT the same as "PSW", which is the low 8 bits of "PS" combined with "A" in the high byte.
  */
-Dbg8080.REGS = [
+Dbgx80.REGS = [
     "B", "C", "D", "E", "H", "L", "M", "A", "BC", "DE", "HL", "SP", "PC", "PS", "PSW"
 ];
 
 /*
  * Operand type descriptor masks and definitions
  */
-Dbg8080.TYPE_SIZE  = 0x000F;    // size field
-Dbg8080.TYPE_MODE  = 0x00F0;    // mode field
-Dbg8080.TYPE_IREG  = 0x0F00;    // implied register field
-Dbg8080.TYPE_OTHER = 0xF000;    // "other" field
+Dbgx80.TYPE_SIZE  = 0x000F;    // size field
+Dbgx80.TYPE_MODE  = 0x00F0;    // mode field
+Dbgx80.TYPE_IREG  = 0x0F00;    // implied register field
+Dbgx80.TYPE_OTHER = 0xF000;    // "other" field
 
 /*
  * TYPE_SIZE values
  */
-Dbg8080.TYPE_NONE  = 0x0000;    // (all other TYPE fields ignored)
-Dbg8080.TYPE_BYTE  = 0x0001;    // byte, regardless of operand size
-Dbg8080.TYPE_SBYTE = 0x0002;    // byte sign-extended to word
-Dbg8080.TYPE_WORD  = 0x0003;    // word (16-bit value)
+Dbgx80.TYPE_NONE  = 0x0000;    // (all other TYPE fields ignored)
+Dbgx80.TYPE_BYTE  = 0x0001;    // byte, regardless of operand size
+Dbgx80.TYPE_SBYTE = 0x0002;    // byte sign-extended to word
+Dbgx80.TYPE_WORD  = 0x0003;    // word (16-bit value)
 
 /*
  * TYPE_MODE values
  */
-Dbg8080.TYPE_REG   = 0x0010;    // register
-Dbg8080.TYPE_IMM   = 0x0020;    // immediate data
-Dbg8080.TYPE_ADDR  = 0x0033;    // immediate (word) address
-Dbg8080.TYPE_MEM   = 0x0040;    // memory reference
-Dbg8080.TYPE_INT   = 0x0080;    // interrupt level encoded in instruction (bits 3-5)
+Dbgx80.TYPE_REG   = 0x0010;    // register
+Dbgx80.TYPE_IMM   = 0x0020;    // immediate data
+Dbgx80.TYPE_ADDR  = 0x0033;    // immediate (word) address
+Dbgx80.TYPE_MEM   = 0x0040;    // memory reference
+Dbgx80.TYPE_INT   = 0x0080;    // interrupt level encoded in instruction (bits 3-5)
 
 /*
  * TYPE_IREG values, based on the REG_* constants.
  *
  * Note that TYPE_M isn't really a register, just an alternative form of TYPE_HL | TYPE_MEM.
  */
-Dbg8080.TYPE_A     = (Dbg8080.REG_A  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE);
-Dbg8080.TYPE_B     = (Dbg8080.REG_B  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE);
-Dbg8080.TYPE_C     = (Dbg8080.REG_C  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE);
-Dbg8080.TYPE_D     = (Dbg8080.REG_D  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE);
-Dbg8080.TYPE_E     = (Dbg8080.REG_E  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE);
-Dbg8080.TYPE_H     = (Dbg8080.REG_H  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE);
-Dbg8080.TYPE_L     = (Dbg8080.REG_L  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE);
-Dbg8080.TYPE_M     = (Dbg8080.REG_M  << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_BYTE | Dbg8080.TYPE_MEM);
-Dbg8080.TYPE_BC    = (Dbg8080.REG_BC << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_WORD);
-Dbg8080.TYPE_DE    = (Dbg8080.REG_DE << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_WORD);
-Dbg8080.TYPE_HL    = (Dbg8080.REG_HL << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_WORD);
-Dbg8080.TYPE_SP    = (Dbg8080.REG_SP << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_WORD);
-Dbg8080.TYPE_PC    = (Dbg8080.REG_PC << 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_WORD);
-Dbg8080.TYPE_PSW   = (Dbg8080.REG_PSW<< 8 | Dbg8080.TYPE_REG | Dbg8080.TYPE_WORD);
+Dbgx80.TYPE_A     = (Dbgx80.REG_A  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE);
+Dbgx80.TYPE_B     = (Dbgx80.REG_B  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE);
+Dbgx80.TYPE_C     = (Dbgx80.REG_C  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE);
+Dbgx80.TYPE_D     = (Dbgx80.REG_D  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE);
+Dbgx80.TYPE_E     = (Dbgx80.REG_E  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE);
+Dbgx80.TYPE_H     = (Dbgx80.REG_H  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE);
+Dbgx80.TYPE_L     = (Dbgx80.REG_L  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE);
+Dbgx80.TYPE_M     = (Dbgx80.REG_M  << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_BYTE | Dbgx80.TYPE_MEM);
+Dbgx80.TYPE_BC    = (Dbgx80.REG_BC << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
+Dbgx80.TYPE_DE    = (Dbgx80.REG_DE << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
+Dbgx80.TYPE_HL    = (Dbgx80.REG_HL << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
+Dbgx80.TYPE_SP    = (Dbgx80.REG_SP << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
+Dbgx80.TYPE_PC    = (Dbgx80.REG_PC << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
+Dbgx80.TYPE_PSW   = (Dbgx80.REG_PSW<< 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
 
 /*
  * TYPE_OTHER bit definitions
  */
-Dbg8080.TYPE_IN    = 0x1000;    // operand is input
-Dbg8080.TYPE_OUT   = 0x2000;    // operand is output
-Dbg8080.TYPE_BOTH  = (Dbg8080.TYPE_IN | Dbg8080.TYPE_OUT);
-Dbg8080.TYPE_OPT   = 0x4000;    // optional operand (ie, normally omitted in 8080 assembly language)
-Dbg8080.TYPE_UNDOC = 0x8000;    // opcode is an undocumented alternative encoding
+Dbgx80.TYPE_IN    = 0x1000;    // operand is input
+Dbgx80.TYPE_OUT   = 0x2000;    // operand is output
+Dbgx80.TYPE_BOTH  = (Dbgx80.TYPE_IN | Dbgx80.TYPE_OUT);
+Dbgx80.TYPE_OPT   = 0x4000;    // optional operand (ie, normally omitted in 8080 assembly language)
+Dbgx80.TYPE_UNDOC = 0x8000;    // opcode is an undocumented alternative encoding
 
 /*
  * The aaOpDescs array is indexed by opcode, and each element is a sub-array (aOpDesc) that describes
@@ -333,263 +333,263 @@ Dbg8080.TYPE_UNDOC = 0x8000;    // opcode is an undocumented alternative encodin
  *      2) If no TYPE_OTHER bits are specified for the second (source) operand, TYPE_IN is assumed;
  *      3) If no size is specified for the second operand, the size is assumed to match the first operand.
  */
-Dbg8080.aaOpDescs = [
-/* 0x00 */  [Dbg8080.INS.NOP],
-/* 0x01 */  [Dbg8080.INS.LXI,   Dbg8080.TYPE_BC,    Dbg8080.TYPE_IMM],
-/* 0x02 */  [Dbg8080.INS.STAX,  Dbg8080.TYPE_BC   | Dbg8080.TYPE_MEM, Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT],
-/* 0x03 */  [Dbg8080.INS.INX,   Dbg8080.TYPE_BC],
-/* 0x04 */  [Dbg8080.INS.INR,   Dbg8080.TYPE_B],
-/* 0x05 */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_B],
-/* 0x06 */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_B,     Dbg8080.TYPE_IMM],
-/* 0x07 */  [Dbg8080.INS.RLC],
-/* 0x08 */  [Dbg8080.INS.NOP,   Dbg8080.TYPE_UNDOC],
-/* 0x09 */  [Dbg8080.INS.DAD,   Dbg8080.TYPE_HL   | Dbg8080.TYPE_OPT, Dbg8080.TYPE_BC],
-/* 0x0A */  [Dbg8080.INS.LDAX,  Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_BC   | Dbg8080.TYPE_MEM],
-/* 0x0B */  [Dbg8080.INS.DCX,   Dbg8080.TYPE_BC],
-/* 0x0C */  [Dbg8080.INS.INR,   Dbg8080.TYPE_C],
-/* 0x0D */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_C],
-/* 0x0E */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_C,     Dbg8080.TYPE_IMM],
-/* 0x0F */  [Dbg8080.INS.RRC],
-/* 0x10 */  [Dbg8080.INS.NOP,   Dbg8080.TYPE_UNDOC],
-/* 0x11 */  [Dbg8080.INS.LXI,   Dbg8080.TYPE_DE,    Dbg8080.TYPE_IMM],
-/* 0x12 */  [Dbg8080.INS.STAX,  Dbg8080.TYPE_DE   | Dbg8080.TYPE_MEM, Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT],
-/* 0x13 */  [Dbg8080.INS.INX,   Dbg8080.TYPE_DE],
-/* 0x14 */  [Dbg8080.INS.INR,   Dbg8080.TYPE_D],
-/* 0x15 */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_D],
-/* 0x16 */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_D,     Dbg8080.TYPE_IMM],
-/* 0x17 */  [Dbg8080.INS.RAL],
-/* 0x18 */  [Dbg8080.INS.NOP,   Dbg8080.TYPE_UNDOC],
-/* 0x19 */  [Dbg8080.INS.DAD,   Dbg8080.TYPE_HL   | Dbg8080.TYPE_OPT, Dbg8080.TYPE_DE],
-/* 0x1A */  [Dbg8080.INS.LDAX,  Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_DE   | Dbg8080.TYPE_MEM],
-/* 0x1B */  [Dbg8080.INS.DCX,   Dbg8080.TYPE_DE],
-/* 0x1C */  [Dbg8080.INS.INR,   Dbg8080.TYPE_E],
-/* 0x1D */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_E],
-/* 0x1E */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_E,     Dbg8080.TYPE_IMM],
-/* 0x1F */  [Dbg8080.INS.RAR],
-/* 0x20 */  [Dbg8080.INS.NOP,   Dbg8080.TYPE_UNDOC],
-/* 0x21 */  [Dbg8080.INS.LXI,   Dbg8080.TYPE_HL,    Dbg8080.TYPE_IMM],
-/* 0x22 */  [Dbg8080.INS.SHLD,  Dbg8080.TYPE_ADDR | Dbg8080.TYPE_MEM, Dbg8080.TYPE_HL   | Dbg8080.TYPE_OPT],
-/* 0x23 */  [Dbg8080.INS.INX,   Dbg8080.TYPE_HL],
-/* 0x24 */  [Dbg8080.INS.INR,   Dbg8080.TYPE_H],
-/* 0x25 */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_H],
-/* 0x26 */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_H,     Dbg8080.TYPE_IMM],
-/* 0x27 */  [Dbg8080.INS.DAA],
-/* 0x28 */  [Dbg8080.INS.NOP,   Dbg8080.TYPE_UNDOC],
-/* 0x29 */  [Dbg8080.INS.DAD,   Dbg8080.TYPE_HL   | Dbg8080.TYPE_OPT, Dbg8080.TYPE_HL],
-/* 0x2A */  [Dbg8080.INS.LHLD,  Dbg8080.TYPE_HL   | Dbg8080.TYPE_OPT, Dbg8080.TYPE_ADDR | Dbg8080.TYPE_MEM],
-/* 0x2B */  [Dbg8080.INS.DCX,   Dbg8080.TYPE_HL],
-/* 0x2C */  [Dbg8080.INS.INR,   Dbg8080.TYPE_L],
-/* 0x2D */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_L],
-/* 0x2E */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_L,     Dbg8080.TYPE_IMM],
-/* 0x2F */  [Dbg8080.INS.CMA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT],
-/* 0x30 */  [Dbg8080.INS.NOP,   Dbg8080.TYPE_UNDOC],
-/* 0x31 */  [Dbg8080.INS.LXI,   Dbg8080.TYPE_SP,    Dbg8080.TYPE_IMM],
-/* 0x32 */  [Dbg8080.INS.STA,   Dbg8080.TYPE_ADDR | Dbg8080.TYPE_MEM, Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT],
-/* 0x33 */  [Dbg8080.INS.INX,   Dbg8080.TYPE_SP],
-/* 0x34 */  [Dbg8080.INS.INR,   Dbg8080.TYPE_M],
-/* 0x35 */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_M],
-/* 0x36 */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_M,     Dbg8080.TYPE_IMM],
-/* 0x37 */  [Dbg8080.INS.STC],
-/* 0x38 */  [Dbg8080.INS.NOP,   Dbg8080.TYPE_UNDOC],
-/* 0x39 */  [Dbg8080.INS.DAD,   Dbg8080.TYPE_HL   | Dbg8080.TYPE_OPT, Dbg8080.TYPE_SP],
-/* 0x3A */  [Dbg8080.INS.LDA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_ADDR | Dbg8080.TYPE_MEM],
-/* 0x3B */  [Dbg8080.INS.DCX,   Dbg8080.TYPE_SP],
-/* 0x3C */  [Dbg8080.INS.INR,   Dbg8080.TYPE_A],
-/* 0x3D */  [Dbg8080.INS.DCR,   Dbg8080.TYPE_A],
-/* 0x3E */  [Dbg8080.INS.MVI,   Dbg8080.TYPE_A,     Dbg8080.TYPE_IMM],
-/* 0x3F */  [Dbg8080.INS.CMC],
-/* 0x40 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_B],
-/* 0x41 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_C],
-/* 0x42 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_D],
-/* 0x43 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_E],
-/* 0x44 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_H],
-/* 0x45 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_L],
-/* 0x46 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_M],
-/* 0x47 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_B,     Dbg8080.TYPE_A],
-/* 0x48 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_B],
-/* 0x49 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_C],
-/* 0x4A */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_D],
-/* 0x4B */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_E],
-/* 0x4C */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_H],
-/* 0x4D */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_L],
-/* 0x4E */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_M],
-/* 0x4F */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_C,     Dbg8080.TYPE_A],
-/* 0x50 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_B],
-/* 0x51 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_C],
-/* 0x52 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_D],
-/* 0x53 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_E],
-/* 0x54 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_H],
-/* 0x55 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_L],
-/* 0x56 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_M],
-/* 0x57 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_D,     Dbg8080.TYPE_A],
-/* 0x58 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_B],
-/* 0x59 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_C],
-/* 0x5A */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_D],
-/* 0x5B */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_E],
-/* 0x5C */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_H],
-/* 0x5D */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_L],
-/* 0x5E */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_M],
-/* 0x5F */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_E,     Dbg8080.TYPE_A],
-/* 0x60 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_B],
-/* 0x61 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_C],
-/* 0x62 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_D],
-/* 0x63 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_E],
-/* 0x64 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_H],
-/* 0x65 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_L],
-/* 0x66 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_M],
-/* 0x67 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_H,     Dbg8080.TYPE_A],
-/* 0x68 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_B],
-/* 0x69 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_C],
-/* 0x6A */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_D],
-/* 0x6B */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_E],
-/* 0x6C */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_H],
-/* 0x6D */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_L],
-/* 0x6E */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_M],
-/* 0x6F */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_L,     Dbg8080.TYPE_A],
-/* 0x70 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_M,     Dbg8080.TYPE_B],
-/* 0x71 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_M,     Dbg8080.TYPE_C],
-/* 0x72 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_M,     Dbg8080.TYPE_D],
-/* 0x73 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_M,     Dbg8080.TYPE_E],
-/* 0x74 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_M,     Dbg8080.TYPE_H],
-/* 0x75 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_M,     Dbg8080.TYPE_L],
-/* 0x76 */  [Dbg8080.INS.HLT],
-/* 0x77 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_M,     Dbg8080.TYPE_A],
-/* 0x78 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_B],
-/* 0x79 */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_C],
-/* 0x7A */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_D],
-/* 0x7B */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_E],
-/* 0x7C */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_H],
-/* 0x7D */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_L],
-/* 0x7E */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_M],
-/* 0x7F */  [Dbg8080.INS.MOV,   Dbg8080.TYPE_A,     Dbg8080.TYPE_A],
-/* 0x80 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0x81 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0x82 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0x83 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0x84 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0x85 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0x86 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0x87 */  [Dbg8080.INS.ADD,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0x88 */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0x89 */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0x8A */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0x8B */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0x8C */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0x8D */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0x8E */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0x8F */  [Dbg8080.INS.ADC,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0x90 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0x91 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0x92 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0x93 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0x94 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0x95 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0x96 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0x97 */  [Dbg8080.INS.SUB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0x98 */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0x99 */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0x9A */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0x9B */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0x9C */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0x9D */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0x9E */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0x9F */  [Dbg8080.INS.SBB,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0xA0 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0xA1 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0xA2 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0xA3 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0xA4 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0xA5 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0xA6 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0xA7 */  [Dbg8080.INS.ANA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0xA8 */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0xA9 */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0xAA */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0xAB */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0xAC */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0xAD */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0xAE */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0xAF */  [Dbg8080.INS.XRA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0xB0 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0xB1 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0xB2 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0xB3 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0xB4 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0xB5 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0xB6 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0xB7 */  [Dbg8080.INS.ORA,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0xB8 */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_B],
-/* 0xB9 */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_C],
-/* 0xBA */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_D],
-/* 0xBB */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_E],
-/* 0xBC */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_H],
-/* 0xBD */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_L],
-/* 0xBE */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_M],
-/* 0xBF */  [Dbg8080.INS.CMP,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_A],
-/* 0xC0 */  [Dbg8080.INS.RNZ],
-/* 0xC1 */  [Dbg8080.INS.POP,   Dbg8080.TYPE_BC],
-/* 0xC2 */  [Dbg8080.INS.JNZ,   Dbg8080.TYPE_ADDR],
-/* 0xC3 */  [Dbg8080.INS.JMP,   Dbg8080.TYPE_ADDR],
-/* 0xC4 */  [Dbg8080.INS.CNZ,   Dbg8080.TYPE_ADDR],
-/* 0xC5 */  [Dbg8080.INS.PUSH,  Dbg8080.TYPE_BC],
-/* 0xC6 */  [Dbg8080.INS.ADI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xC7 */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT],
-/* 0xC8 */  [Dbg8080.INS.RZ],
-/* 0xC9 */  [Dbg8080.INS.RET],
-/* 0xCA */  [Dbg8080.INS.JZ,    Dbg8080.TYPE_ADDR],
-/* 0xCB */  [Dbg8080.INS.JMP,   Dbg8080.TYPE_ADDR | Dbg8080.TYPE_UNDOC],
-/* 0xCC */  [Dbg8080.INS.CZ,    Dbg8080.TYPE_ADDR],
-/* 0xCD */  [Dbg8080.INS.CALL,  Dbg8080.TYPE_ADDR],
-/* 0xCE */  [Dbg8080.INS.ACI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xCF */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT],
-/* 0xD0 */  [Dbg8080.INS.RNC],
-/* 0xD1 */  [Dbg8080.INS.POP,   Dbg8080.TYPE_DE],
-/* 0xD2 */  [Dbg8080.INS.JNC,   Dbg8080.TYPE_ADDR],
-/* 0xD3 */  [Dbg8080.INS.OUT,   Dbg8080.TYPE_IMM  | Dbg8080.TYPE_BYTE,Dbg8080.TYPE_A   | Dbg8080.TYPE_OPT],
-/* 0xD4 */  [Dbg8080.INS.CNC,   Dbg8080.TYPE_ADDR],
-/* 0xD5 */  [Dbg8080.INS.PUSH,  Dbg8080.TYPE_DE],
-/* 0xD6 */  [Dbg8080.INS.SUI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xD7 */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT],
-/* 0xD8 */  [Dbg8080.INS.RC],
-/* 0xD9 */  [Dbg8080.INS.RET,   Dbg8080.TYPE_UNDOC],
-/* 0xDA */  [Dbg8080.INS.JC,    Dbg8080.TYPE_ADDR],
-/* 0xDB */  [Dbg8080.INS.IN,    Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xDC */  [Dbg8080.INS.CC,    Dbg8080.TYPE_ADDR],
-/* 0xDD */  [Dbg8080.INS.CALL,  Dbg8080.TYPE_ADDR | Dbg8080.TYPE_UNDOC],
-/* 0xDE */  [Dbg8080.INS.SBI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xDF */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT],
-/* 0xE0 */  [Dbg8080.INS.RPO],
-/* 0xE1 */  [Dbg8080.INS.POP,   Dbg8080.TYPE_HL],
-/* 0xE2 */  [Dbg8080.INS.JPO,   Dbg8080.TYPE_ADDR],
-/* 0xE3 */  [Dbg8080.INS.XTHL,  Dbg8080.TYPE_SP   | Dbg8080.TYPE_MEM| Dbg8080.TYPE_OPT,  Dbg8080.TYPE_HL | Dbg8080.TYPE_OPT],
-/* 0xE4 */  [Dbg8080.INS.CPO,   Dbg8080.TYPE_ADDR],
-/* 0xE5 */  [Dbg8080.INS.PUSH,  Dbg8080.TYPE_HL],
-/* 0xE6 */  [Dbg8080.INS.ANI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xE7 */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT],
-/* 0xE8 */  [Dbg8080.INS.RPE],
-/* 0xE9 */  [Dbg8080.INS.PCHL,  Dbg8080.TYPE_HL],
-/* 0xEA */  [Dbg8080.INS.JPE,   Dbg8080.TYPE_ADDR],
-/* 0xEB */  [Dbg8080.INS.XCHG,  Dbg8080.TYPE_HL   | Dbg8080.TYPE_OPT, Dbg8080.TYPE_DE  | Dbg8080.TYPE_OPT],
-/* 0xEC */  [Dbg8080.INS.CPE,   Dbg8080.TYPE_ADDR],
-/* 0xED */  [Dbg8080.INS.CALL,  Dbg8080.TYPE_ADDR | Dbg8080.TYPE_UNDOC],
-/* 0xEE */  [Dbg8080.INS.XRI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xEF */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT],
-/* 0xF0 */  [Dbg8080.INS.RP],
-/* 0xF1 */  [Dbg8080.INS.POP,   Dbg8080.TYPE_PSW],
-/* 0xF2 */  [Dbg8080.INS.JP,    Dbg8080.TYPE_ADDR],
-/* 0xF3 */  [Dbg8080.INS.DI],
-/* 0xF4 */  [Dbg8080.INS.CP,    Dbg8080.TYPE_ADDR],
-/* 0xF5 */  [Dbg8080.INS.PUSH,  Dbg8080.TYPE_PSW],
-/* 0xF6 */  [Dbg8080.INS.ORI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xF7 */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT],
-/* 0xF8 */  [Dbg8080.INS.RM],
-/* 0xF9 */  [Dbg8080.INS.SPHL,  Dbg8080.TYPE_SP   | Dbg8080.TYPE_OPT, Dbg8080.TYPE_HL  | Dbg8080.TYPE_OPT],
-/* 0xFA */  [Dbg8080.INS.JM,    Dbg8080.TYPE_ADDR],
-/* 0xFB */  [Dbg8080.INS.EI],
-/* 0xFC */  [Dbg8080.INS.CM,    Dbg8080.TYPE_ADDR],
-/* 0xFD */  [Dbg8080.INS.CALL,  Dbg8080.TYPE_ADDR | Dbg8080.TYPE_UNDOC],
-/* 0xFE */  [Dbg8080.INS.CPI,   Dbg8080.TYPE_A    | Dbg8080.TYPE_OPT, Dbg8080.TYPE_IMM | Dbg8080.TYPE_BYTE],
-/* 0xFF */  [Dbg8080.INS.RST,   Dbg8080.TYPE_INT]
+Dbgx80.aaOpDescs = [
+/* 0x00 */  [Dbgx80.INS.NOP],
+/* 0x01 */  [Dbgx80.INS.LXI,   Dbgx80.TYPE_BC,    Dbgx80.TYPE_IMM],
+/* 0x02 */  [Dbgx80.INS.STAX,  Dbgx80.TYPE_BC   | Dbgx80.TYPE_MEM, Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT],
+/* 0x03 */  [Dbgx80.INS.INX,   Dbgx80.TYPE_BC],
+/* 0x04 */  [Dbgx80.INS.INR,   Dbgx80.TYPE_B],
+/* 0x05 */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_B],
+/* 0x06 */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_B,     Dbgx80.TYPE_IMM],
+/* 0x07 */  [Dbgx80.INS.RLC],
+/* 0x08 */  [Dbgx80.INS.NOP,   Dbgx80.TYPE_UNDOC],
+/* 0x09 */  [Dbgx80.INS.DAD,   Dbgx80.TYPE_HL   | Dbgx80.TYPE_OPT, Dbgx80.TYPE_BC],
+/* 0x0A */  [Dbgx80.INS.LDAX,  Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_BC   | Dbgx80.TYPE_MEM],
+/* 0x0B */  [Dbgx80.INS.DCX,   Dbgx80.TYPE_BC],
+/* 0x0C */  [Dbgx80.INS.INR,   Dbgx80.TYPE_C],
+/* 0x0D */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_C],
+/* 0x0E */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_C,     Dbgx80.TYPE_IMM],
+/* 0x0F */  [Dbgx80.INS.RRC],
+/* 0x10 */  [Dbgx80.INS.NOP,   Dbgx80.TYPE_UNDOC],
+/* 0x11 */  [Dbgx80.INS.LXI,   Dbgx80.TYPE_DE,    Dbgx80.TYPE_IMM],
+/* 0x12 */  [Dbgx80.INS.STAX,  Dbgx80.TYPE_DE   | Dbgx80.TYPE_MEM, Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT],
+/* 0x13 */  [Dbgx80.INS.INX,   Dbgx80.TYPE_DE],
+/* 0x14 */  [Dbgx80.INS.INR,   Dbgx80.TYPE_D],
+/* 0x15 */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_D],
+/* 0x16 */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_D,     Dbgx80.TYPE_IMM],
+/* 0x17 */  [Dbgx80.INS.RAL],
+/* 0x18 */  [Dbgx80.INS.NOP,   Dbgx80.TYPE_UNDOC],
+/* 0x19 */  [Dbgx80.INS.DAD,   Dbgx80.TYPE_HL   | Dbgx80.TYPE_OPT, Dbgx80.TYPE_DE],
+/* 0x1A */  [Dbgx80.INS.LDAX,  Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_DE   | Dbgx80.TYPE_MEM],
+/* 0x1B */  [Dbgx80.INS.DCX,   Dbgx80.TYPE_DE],
+/* 0x1C */  [Dbgx80.INS.INR,   Dbgx80.TYPE_E],
+/* 0x1D */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_E],
+/* 0x1E */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_E,     Dbgx80.TYPE_IMM],
+/* 0x1F */  [Dbgx80.INS.RAR],
+/* 0x20 */  [Dbgx80.INS.NOP,   Dbgx80.TYPE_UNDOC],
+/* 0x21 */  [Dbgx80.INS.LXI,   Dbgx80.TYPE_HL,    Dbgx80.TYPE_IMM],
+/* 0x22 */  [Dbgx80.INS.SHLD,  Dbgx80.TYPE_ADDR | Dbgx80.TYPE_MEM, Dbgx80.TYPE_HL   | Dbgx80.TYPE_OPT],
+/* 0x23 */  [Dbgx80.INS.INX,   Dbgx80.TYPE_HL],
+/* 0x24 */  [Dbgx80.INS.INR,   Dbgx80.TYPE_H],
+/* 0x25 */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_H],
+/* 0x26 */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_H,     Dbgx80.TYPE_IMM],
+/* 0x27 */  [Dbgx80.INS.DAA],
+/* 0x28 */  [Dbgx80.INS.NOP,   Dbgx80.TYPE_UNDOC],
+/* 0x29 */  [Dbgx80.INS.DAD,   Dbgx80.TYPE_HL   | Dbgx80.TYPE_OPT, Dbgx80.TYPE_HL],
+/* 0x2A */  [Dbgx80.INS.LHLD,  Dbgx80.TYPE_HL   | Dbgx80.TYPE_OPT, Dbgx80.TYPE_ADDR | Dbgx80.TYPE_MEM],
+/* 0x2B */  [Dbgx80.INS.DCX,   Dbgx80.TYPE_HL],
+/* 0x2C */  [Dbgx80.INS.INR,   Dbgx80.TYPE_L],
+/* 0x2D */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_L],
+/* 0x2E */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_L,     Dbgx80.TYPE_IMM],
+/* 0x2F */  [Dbgx80.INS.CMA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT],
+/* 0x30 */  [Dbgx80.INS.NOP,   Dbgx80.TYPE_UNDOC],
+/* 0x31 */  [Dbgx80.INS.LXI,   Dbgx80.TYPE_SP,    Dbgx80.TYPE_IMM],
+/* 0x32 */  [Dbgx80.INS.STA,   Dbgx80.TYPE_ADDR | Dbgx80.TYPE_MEM, Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT],
+/* 0x33 */  [Dbgx80.INS.INX,   Dbgx80.TYPE_SP],
+/* 0x34 */  [Dbgx80.INS.INR,   Dbgx80.TYPE_M],
+/* 0x35 */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_M],
+/* 0x36 */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_M,     Dbgx80.TYPE_IMM],
+/* 0x37 */  [Dbgx80.INS.STC],
+/* 0x38 */  [Dbgx80.INS.NOP,   Dbgx80.TYPE_UNDOC],
+/* 0x39 */  [Dbgx80.INS.DAD,   Dbgx80.TYPE_HL   | Dbgx80.TYPE_OPT, Dbgx80.TYPE_SP],
+/* 0x3A */  [Dbgx80.INS.LDA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_ADDR | Dbgx80.TYPE_MEM],
+/* 0x3B */  [Dbgx80.INS.DCX,   Dbgx80.TYPE_SP],
+/* 0x3C */  [Dbgx80.INS.INR,   Dbgx80.TYPE_A],
+/* 0x3D */  [Dbgx80.INS.DCR,   Dbgx80.TYPE_A],
+/* 0x3E */  [Dbgx80.INS.MVI,   Dbgx80.TYPE_A,     Dbgx80.TYPE_IMM],
+/* 0x3F */  [Dbgx80.INS.CMC],
+/* 0x40 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_B],
+/* 0x41 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_C],
+/* 0x42 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_D],
+/* 0x43 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_E],
+/* 0x44 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_H],
+/* 0x45 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_L],
+/* 0x46 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_M],
+/* 0x47 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_B,     Dbgx80.TYPE_A],
+/* 0x48 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_B],
+/* 0x49 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_C],
+/* 0x4A */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_D],
+/* 0x4B */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_E],
+/* 0x4C */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_H],
+/* 0x4D */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_L],
+/* 0x4E */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_M],
+/* 0x4F */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_C,     Dbgx80.TYPE_A],
+/* 0x50 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_B],
+/* 0x51 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_C],
+/* 0x52 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_D],
+/* 0x53 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_E],
+/* 0x54 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_H],
+/* 0x55 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_L],
+/* 0x56 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_M],
+/* 0x57 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_D,     Dbgx80.TYPE_A],
+/* 0x58 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_B],
+/* 0x59 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_C],
+/* 0x5A */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_D],
+/* 0x5B */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_E],
+/* 0x5C */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_H],
+/* 0x5D */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_L],
+/* 0x5E */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_M],
+/* 0x5F */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_E,     Dbgx80.TYPE_A],
+/* 0x60 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_B],
+/* 0x61 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_C],
+/* 0x62 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_D],
+/* 0x63 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_E],
+/* 0x64 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_H],
+/* 0x65 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_L],
+/* 0x66 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_M],
+/* 0x67 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_H,     Dbgx80.TYPE_A],
+/* 0x68 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_B],
+/* 0x69 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_C],
+/* 0x6A */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_D],
+/* 0x6B */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_E],
+/* 0x6C */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_H],
+/* 0x6D */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_L],
+/* 0x6E */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_M],
+/* 0x6F */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_L,     Dbgx80.TYPE_A],
+/* 0x70 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_M,     Dbgx80.TYPE_B],
+/* 0x71 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_M,     Dbgx80.TYPE_C],
+/* 0x72 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_M,     Dbgx80.TYPE_D],
+/* 0x73 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_M,     Dbgx80.TYPE_E],
+/* 0x74 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_M,     Dbgx80.TYPE_H],
+/* 0x75 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_M,     Dbgx80.TYPE_L],
+/* 0x76 */  [Dbgx80.INS.HLT],
+/* 0x77 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_M,     Dbgx80.TYPE_A],
+/* 0x78 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_B],
+/* 0x79 */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_C],
+/* 0x7A */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_D],
+/* 0x7B */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_E],
+/* 0x7C */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_H],
+/* 0x7D */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_L],
+/* 0x7E */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_M],
+/* 0x7F */  [Dbgx80.INS.MOV,   Dbgx80.TYPE_A,     Dbgx80.TYPE_A],
+/* 0x80 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0x81 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0x82 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0x83 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0x84 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0x85 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0x86 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0x87 */  [Dbgx80.INS.ADD,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0x88 */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0x89 */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0x8A */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0x8B */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0x8C */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0x8D */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0x8E */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0x8F */  [Dbgx80.INS.ADC,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0x90 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0x91 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0x92 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0x93 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0x94 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0x95 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0x96 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0x97 */  [Dbgx80.INS.SUB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0x98 */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0x99 */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0x9A */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0x9B */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0x9C */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0x9D */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0x9E */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0x9F */  [Dbgx80.INS.SBB,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0xA0 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0xA1 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0xA2 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0xA3 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0xA4 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0xA5 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0xA6 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0xA7 */  [Dbgx80.INS.ANA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0xA8 */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0xA9 */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0xAA */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0xAB */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0xAC */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0xAD */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0xAE */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0xAF */  [Dbgx80.INS.XRA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0xB0 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0xB1 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0xB2 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0xB3 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0xB4 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0xB5 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0xB6 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0xB7 */  [Dbgx80.INS.ORA,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0xB8 */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_B],
+/* 0xB9 */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_C],
+/* 0xBA */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_D],
+/* 0xBB */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_E],
+/* 0xBC */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_H],
+/* 0xBD */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_L],
+/* 0xBE */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_M],
+/* 0xBF */  [Dbgx80.INS.CMP,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_A],
+/* 0xC0 */  [Dbgx80.INS.RNZ],
+/* 0xC1 */  [Dbgx80.INS.POP,   Dbgx80.TYPE_BC],
+/* 0xC2 */  [Dbgx80.INS.JNZ,   Dbgx80.TYPE_ADDR],
+/* 0xC3 */  [Dbgx80.INS.JMP,   Dbgx80.TYPE_ADDR],
+/* 0xC4 */  [Dbgx80.INS.CNZ,   Dbgx80.TYPE_ADDR],
+/* 0xC5 */  [Dbgx80.INS.PUSH,  Dbgx80.TYPE_BC],
+/* 0xC6 */  [Dbgx80.INS.ADI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xC7 */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT],
+/* 0xC8 */  [Dbgx80.INS.RZ],
+/* 0xC9 */  [Dbgx80.INS.RET],
+/* 0xCA */  [Dbgx80.INS.JZ,    Dbgx80.TYPE_ADDR],
+/* 0xCB */  [Dbgx80.INS.JMP,   Dbgx80.TYPE_ADDR | Dbgx80.TYPE_UNDOC],
+/* 0xCC */  [Dbgx80.INS.CZ,    Dbgx80.TYPE_ADDR],
+/* 0xCD */  [Dbgx80.INS.CALL,  Dbgx80.TYPE_ADDR],
+/* 0xCE */  [Dbgx80.INS.ACI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xCF */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT],
+/* 0xD0 */  [Dbgx80.INS.RNC],
+/* 0xD1 */  [Dbgx80.INS.POP,   Dbgx80.TYPE_DE],
+/* 0xD2 */  [Dbgx80.INS.JNC,   Dbgx80.TYPE_ADDR],
+/* 0xD3 */  [Dbgx80.INS.OUT,   Dbgx80.TYPE_IMM  | Dbgx80.TYPE_BYTE,Dbgx80.TYPE_A   | Dbgx80.TYPE_OPT],
+/* 0xD4 */  [Dbgx80.INS.CNC,   Dbgx80.TYPE_ADDR],
+/* 0xD5 */  [Dbgx80.INS.PUSH,  Dbgx80.TYPE_DE],
+/* 0xD6 */  [Dbgx80.INS.SUI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xD7 */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT],
+/* 0xD8 */  [Dbgx80.INS.RC],
+/* 0xD9 */  [Dbgx80.INS.RET,   Dbgx80.TYPE_UNDOC],
+/* 0xDA */  [Dbgx80.INS.JC,    Dbgx80.TYPE_ADDR],
+/* 0xDB */  [Dbgx80.INS.IN,    Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xDC */  [Dbgx80.INS.CC,    Dbgx80.TYPE_ADDR],
+/* 0xDD */  [Dbgx80.INS.CALL,  Dbgx80.TYPE_ADDR | Dbgx80.TYPE_UNDOC],
+/* 0xDE */  [Dbgx80.INS.SBI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xDF */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT],
+/* 0xE0 */  [Dbgx80.INS.RPO],
+/* 0xE1 */  [Dbgx80.INS.POP,   Dbgx80.TYPE_HL],
+/* 0xE2 */  [Dbgx80.INS.JPO,   Dbgx80.TYPE_ADDR],
+/* 0xE3 */  [Dbgx80.INS.XTHL,  Dbgx80.TYPE_SP   | Dbgx80.TYPE_MEM| Dbgx80.TYPE_OPT,  Dbgx80.TYPE_HL | Dbgx80.TYPE_OPT],
+/* 0xE4 */  [Dbgx80.INS.CPO,   Dbgx80.TYPE_ADDR],
+/* 0xE5 */  [Dbgx80.INS.PUSH,  Dbgx80.TYPE_HL],
+/* 0xE6 */  [Dbgx80.INS.ANI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xE7 */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT],
+/* 0xE8 */  [Dbgx80.INS.RPE],
+/* 0xE9 */  [Dbgx80.INS.PCHL,  Dbgx80.TYPE_HL],
+/* 0xEA */  [Dbgx80.INS.JPE,   Dbgx80.TYPE_ADDR],
+/* 0xEB */  [Dbgx80.INS.XCHG,  Dbgx80.TYPE_HL   | Dbgx80.TYPE_OPT, Dbgx80.TYPE_DE  | Dbgx80.TYPE_OPT],
+/* 0xEC */  [Dbgx80.INS.CPE,   Dbgx80.TYPE_ADDR],
+/* 0xED */  [Dbgx80.INS.CALL,  Dbgx80.TYPE_ADDR | Dbgx80.TYPE_UNDOC],
+/* 0xEE */  [Dbgx80.INS.XRI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xEF */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT],
+/* 0xF0 */  [Dbgx80.INS.RP],
+/* 0xF1 */  [Dbgx80.INS.POP,   Dbgx80.TYPE_PSW],
+/* 0xF2 */  [Dbgx80.INS.JP,    Dbgx80.TYPE_ADDR],
+/* 0xF3 */  [Dbgx80.INS.DI],
+/* 0xF4 */  [Dbgx80.INS.CP,    Dbgx80.TYPE_ADDR],
+/* 0xF5 */  [Dbgx80.INS.PUSH,  Dbgx80.TYPE_PSW],
+/* 0xF6 */  [Dbgx80.INS.ORI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xF7 */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT],
+/* 0xF8 */  [Dbgx80.INS.RM],
+/* 0xF9 */  [Dbgx80.INS.SPHL,  Dbgx80.TYPE_SP   | Dbgx80.TYPE_OPT, Dbgx80.TYPE_HL  | Dbgx80.TYPE_OPT],
+/* 0xFA */  [Dbgx80.INS.JM,    Dbgx80.TYPE_ADDR],
+/* 0xFB */  [Dbgx80.INS.EI],
+/* 0xFC */  [Dbgx80.INS.CM,    Dbgx80.TYPE_ADDR],
+/* 0xFD */  [Dbgx80.INS.CALL,  Dbgx80.TYPE_ADDR | Dbgx80.TYPE_UNDOC],
+/* 0xFE */  [Dbgx80.INS.CPI,   Dbgx80.TYPE_A    | Dbgx80.TYPE_OPT, Dbgx80.TYPE_IMM | Dbgx80.TYPE_BYTE],
+/* 0xFF */  [Dbgx80.INS.RST,   Dbgx80.TYPE_INT]
 ];
 
-Defs.CLASSES["Dbg8080"] = Dbg8080;
+Defs.CLASSES["Dbgx80"] = Dbgx80;

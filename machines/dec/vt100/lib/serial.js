@@ -170,7 +170,7 @@ class VT100Serial extends Device {
     onPower(on)
     {
         if (!this.cpu) {
-            this.cpu = /** @type {CPU8080} */ (this.findDeviceByClass("CPU"));
+            this.cpu = /** @type {CPUx80} */ (this.findDeviceByClass("CPU"));
             /*
              * This is as late as we can currently wait to make our first inter-machine connection attempt;
              * even so, the target machine's initialization process may still be ongoing, so any connection

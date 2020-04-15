@@ -8,7 +8,7 @@ redirect_from:
 machines:
   - id: ibm-5150-cga
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/machine-cga.json
+    config: /configs/pcx86/machine/ibm/5150/cga/64kb/machine.json
     autoMount:
         A:
             name: PC DOS 2.00 (Disk 1)

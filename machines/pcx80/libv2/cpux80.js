@@ -12,17 +12,17 @@
 /**
  * Emulation of the 8080 CPU
  *
- * @class {CPU8080}
+ * @class {CPUx80}
  * @unrestricted
  * @property {Bus} busIO
  * @property {Bus} busMemory
  * @property {Input} input
  */
-class CPU8080 extends CPU {
+class CPUx80 extends CPU {
     /**
-     * CPU8080(idMachine, idDevice, config)
+     * CPUx80(idMachine, idDevice, config)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {string} idMachine
      * @param {string} idDevice
      * @param {Config} [config]
@@ -56,7 +56,7 @@ class CPU8080 extends CPU {
      * Executes the specified "burst" of instructions.  This code exists outside of the startClock() function
      * to ensure that its try/catch exception handler doesn't interfere with the optimization of this tight loop.
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} nCycles
      */
     execute(nCycles)
@@ -76,7 +76,7 @@ class CPU8080 extends CPU {
      *
      * Initializes the CPU's state.
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     initCPU()
     {
@@ -180,7 +180,7 @@ class CPU8080 extends CPU {
      *
      * If any saved values don't match (possibly overridden), abandon the given state and return false.
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {Array} stateCPU
      * @returns {boolean}
      */
@@ -218,7 +218,7 @@ class CPU8080 extends CPU {
     /**
      * saveState(stateCPU)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {Array} stateCPU
      */
     saveState(stateCPU)
@@ -244,7 +244,7 @@ class CPU8080 extends CPU {
      *
      * Automatically called by the Machine device if the machine's 'autoSave' property is true.
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {Array} state
      * @returns {boolean}
      */
@@ -265,7 +265,7 @@ class CPU8080 extends CPU {
      *
      * Called by the Machine device to provide notification of a power event.
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {boolean} on (true to power on, false to power off)
      */
     onPower(on)
@@ -283,7 +283,7 @@ class CPU8080 extends CPU {
      *
      * Called by the Machine device to provide notification of a reset event.
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     onReset()
     {
@@ -298,7 +298,7 @@ class CPU8080 extends CPU {
      * Automatically called by the Machine device before all other devices have been powered down (eg, during
      * a page unload event).
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {Array} state
      */
     onSave(state)
@@ -317,7 +317,7 @@ class CPU8080 extends CPU {
      * (default is twice per second), 2) a step() operation has just finished (ie, the device is being
      * single-stepped), and 3) a start() or stop() transition has occurred.
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {boolean} [fTransition]
      */
     onUpdate(fTransition)
@@ -328,7 +328,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x00 (NOP)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opNOP()
     {
@@ -338,7 +338,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x01 (LXI B,d16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opLXIB()
     {
@@ -349,7 +349,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x02 (STAX B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSTAXB()
     {
@@ -360,7 +360,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x03 (INX B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opINXB()
     {
@@ -371,7 +371,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x04 (INR B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opINRB()
     {
@@ -382,7 +382,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x05 (DCR B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDCRB()
     {
@@ -393,7 +393,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x06 (MVI B,d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMVIB()
     {
@@ -404,7 +404,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x07 (RLC)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRLC()
     {
@@ -417,7 +417,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x09 (DAD B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDADB()
     {
@@ -430,7 +430,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x0A (LDAX B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opLDAXB()
     {
@@ -441,7 +441,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x0B (DCX B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDCXB()
     {
@@ -452,7 +452,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x0C (INR C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opINRC()
     {
@@ -463,7 +463,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x0D (DCR C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDCRC()
     {
@@ -474,7 +474,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x0E (MVI C,d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMVIC()
     {
@@ -485,7 +485,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x0F (RRC)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRRC()
     {
@@ -498,7 +498,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x11 (LXI D,d16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opLXID()
     {
@@ -509,7 +509,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x12 (STAX D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSTAXD()
     {
@@ -520,7 +520,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x13 (INX D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opINXD()
     {
@@ -531,7 +531,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x14 (INR D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opINRD()
     {
@@ -542,7 +542,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x15 (DCR D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDCRD()
     {
@@ -553,7 +553,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x16 (MVI D,d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMVID()
     {
@@ -564,7 +564,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x17 (RAL)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRAL()
     {
@@ -577,7 +577,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x19 (DAD D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDADD()
     {
@@ -590,7 +590,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x1A (LDAX D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opLDAXD()
     {
@@ -601,7 +601,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x1B (DCX D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDCXD()
     {
@@ -612,7 +612,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x1C (INR E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opINRE()
     {
@@ -623,7 +623,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x1D (DCR E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDCRE()
     {
@@ -634,7 +634,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x1E (MVI E,d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMVIE()
     {
@@ -645,7 +645,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x1F (RAR)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRAR()
     {
@@ -658,7 +658,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x21 (LXI H,d16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opLXIH()
     {
@@ -669,7 +669,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x22 (SHLD a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSHLD()
     {
@@ -680,7 +680,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x23 (INX H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opINXH()
     {
@@ -691,7 +691,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x24 (INR H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opINRH()
     {
@@ -702,7 +702,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x25 (DCR H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDCRH()
     {
@@ -713,7 +713,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x26 (MVI H,d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMVIH()
     {
@@ -724,7 +724,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x27 (DAA)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDAA()
     {
@@ -736,7 +736,7 @@ class CPU8080 extends CPU {
         }
         if (CF || this.regA >= 0x9A) {
             src |= 0x60;
-            CF = CPU8080.PS.CF;
+            CF = CPUx80.PS.CF;
         }
         this.regA = this.addByte(src);
         this.updateCF(CF? 0x100 : 0);
@@ -746,7 +746,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x29 (DAD H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDADH()
     {
@@ -759,7 +759,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x2A (LHLD a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opLHLD()
     {
@@ -770,7 +770,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x2B (DCX H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDCXH()
     {
@@ -781,7 +781,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x2C (INR L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opINRL()
     {
@@ -792,7 +792,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x2D (DCR L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDCRL()
     {
@@ -803,7 +803,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x2E (MVI L,d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMVIL()
     {
@@ -814,7 +814,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x2F (CMA)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCMA()
     {
@@ -825,7 +825,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x31 (LXI SP,d16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opLXISP()
     {
@@ -836,7 +836,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x32 (STA a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSTA()
     {
@@ -847,7 +847,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x33 (INX SP)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opINXSP()
     {
@@ -858,7 +858,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x34 (INR M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opINRM()
     {
@@ -870,7 +870,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x35 (DCR M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDCRM()
     {
@@ -882,7 +882,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x36 (MVI M,d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMVIM()
     {
@@ -893,7 +893,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x37 (STC)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSTC()
     {
@@ -904,7 +904,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x39 (DAD SP)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDADSP()
     {
@@ -917,7 +917,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x3A (LDA a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opLDA()
     {
@@ -928,7 +928,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x3B (DCX SP)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDCXSP()
     {
@@ -939,7 +939,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x3C (INR A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opINRA()
     {
@@ -950,7 +950,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x3D (DCR A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDCRA()
     {
@@ -961,7 +961,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x3E (MVI A,d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMVIA()
     {
@@ -972,7 +972,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x3F (CMC)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCMC()
     {
@@ -983,7 +983,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x40 (MOV B,B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVBB()
     {
@@ -993,7 +993,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x41 (MOV B,C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVBC()
     {
@@ -1004,7 +1004,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x42 (MOV B,D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVBD()
     {
@@ -1015,7 +1015,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x43 (MOV B,E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVBE()
     {
@@ -1026,7 +1026,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x44 (MOV B,H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVBH()
     {
@@ -1037,7 +1037,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x45 (MOV B,L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVBL()
     {
@@ -1048,7 +1048,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x46 (MOV B,M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVBM()
     {
@@ -1059,7 +1059,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x47 (MOV B,A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVBA()
     {
@@ -1070,7 +1070,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x48 (MOV C,B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVCB()
     {
@@ -1081,7 +1081,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x49 (MOV C,C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVCC()
     {
@@ -1091,7 +1091,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x4A (MOV C,D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVCD()
     {
@@ -1102,7 +1102,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x4B (MOV C,E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVCE()
     {
@@ -1113,7 +1113,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x4C (MOV C,H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVCH()
     {
@@ -1124,7 +1124,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x4D (MOV C,L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVCL()
     {
@@ -1135,7 +1135,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x4E (MOV C,M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVCM()
     {
@@ -1146,7 +1146,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x4F (MOV C,A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVCA()
     {
@@ -1157,7 +1157,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x50 (MOV D,B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVDB()
     {
@@ -1168,7 +1168,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x51 (MOV D,C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVDC()
     {
@@ -1179,7 +1179,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x52 (MOV D,D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVDD()
     {
@@ -1189,7 +1189,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x53 (MOV D,E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVDE()
     {
@@ -1200,7 +1200,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x54 (MOV D,H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVDH()
     {
@@ -1211,7 +1211,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x55 (MOV D,L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVDL()
     {
@@ -1222,7 +1222,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x56 (MOV D,M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVDM()
     {
@@ -1233,7 +1233,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x57 (MOV D,A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVDA()
     {
@@ -1244,7 +1244,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x58 (MOV E,B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVEB()
     {
@@ -1255,7 +1255,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x59 (MOV E,C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVEC()
     {
@@ -1266,7 +1266,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x5A (MOV E,D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVED()
     {
@@ -1277,7 +1277,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x5B (MOV E,E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVEE()
     {
@@ -1287,7 +1287,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x5C (MOV E,H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVEH()
     {
@@ -1298,7 +1298,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x5D (MOV E,L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVEL()
     {
@@ -1309,7 +1309,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x5E (MOV E,M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVEM()
     {
@@ -1320,7 +1320,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x5F (MOV E,A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVEA()
     {
@@ -1331,7 +1331,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x60 (MOV H,B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVHB()
     {
@@ -1342,7 +1342,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x61 (MOV H,C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVHC()
     {
@@ -1353,7 +1353,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x62 (MOV H,D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVHD()
     {
@@ -1364,7 +1364,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x63 (MOV H,E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVHE()
     {
@@ -1375,7 +1375,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x64 (MOV H,H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVHH()
     {
@@ -1385,7 +1385,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x65 (MOV H,L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVHL()
     {
@@ -1396,7 +1396,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x66 (MOV H,M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVHM()
     {
@@ -1407,7 +1407,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x67 (MOV H,A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVHA()
     {
@@ -1418,7 +1418,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x68 (MOV L,B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVLB()
     {
@@ -1429,7 +1429,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x69 (MOV L,C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVLC()
     {
@@ -1440,7 +1440,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x6A (MOV L,D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVLD()
     {
@@ -1451,7 +1451,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x6B (MOV L,E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVLE()
     {
@@ -1462,7 +1462,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x6C (MOV L,H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVLH()
     {
@@ -1473,7 +1473,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x6D (MOV L,L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVLL()
     {
@@ -1483,7 +1483,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x6E (MOV L,M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVLM()
     {
@@ -1494,7 +1494,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x6F (MOV L,A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVLA()
     {
@@ -1505,7 +1505,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x70 (MOV M,B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVMB()
     {
@@ -1516,7 +1516,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x71 (MOV M,C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVMC()
     {
@@ -1527,7 +1527,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x72 (MOV M,D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVMD()
     {
@@ -1538,7 +1538,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x73 (MOV M,E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVME()
     {
@@ -1549,7 +1549,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x74 (MOV M,H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVMH()
     {
@@ -1560,7 +1560,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x75 (MOV M,L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVML()
     {
@@ -1571,7 +1571,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x76 (HLT)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opHLT()
     {
@@ -1597,7 +1597,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x77 (MOV M,A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVMA()
     {
@@ -1608,7 +1608,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x78 (MOV A,B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVAB()
     {
@@ -1619,7 +1619,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x79 (MOV A,C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVAC()
     {
@@ -1630,7 +1630,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x7A (MOV A,D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVAD()
     {
@@ -1641,7 +1641,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x7B (MOV A,E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVAE()
     {
@@ -1652,7 +1652,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x7C (MOV A,H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVAH()
     {
@@ -1663,7 +1663,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x7D (MOV A,L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVAL()
     {
@@ -1674,7 +1674,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x7E (MOV A,M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVAM()
     {
@@ -1685,7 +1685,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x7F (MOV A,A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opMOVAA()
     {
@@ -1695,7 +1695,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x80 (ADD B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADDB()
     {
@@ -1706,7 +1706,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x81 (ADD C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADDC()
     {
@@ -1717,7 +1717,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x82 (ADD D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADDD()
     {
@@ -1728,7 +1728,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x83 (ADD E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADDE()
     {
@@ -1739,7 +1739,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x84 (ADD H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADDH()
     {
@@ -1750,7 +1750,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x85 (ADD L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADDL()
     {
@@ -1761,7 +1761,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x86 (ADD M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADDM()
     {
@@ -1772,7 +1772,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x87 (ADD A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADDA()
     {
@@ -1783,7 +1783,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x88 (ADC B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADCB()
     {
@@ -1794,7 +1794,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x89 (ADC C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADCC()
     {
@@ -1805,7 +1805,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x8A (ADC D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADCD()
     {
@@ -1816,7 +1816,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x8B (ADC E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADCE()
     {
@@ -1827,7 +1827,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x8C (ADC H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADCH()
     {
@@ -1838,7 +1838,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x8D (ADC L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADCL()
     {
@@ -1849,7 +1849,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x8E (ADC M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADCM()
     {
@@ -1860,7 +1860,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x8F (ADC A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADCA()
     {
@@ -1871,7 +1871,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x90 (SUB B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSUBB()
     {
@@ -1882,7 +1882,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x91 (SUB C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSUBC()
     {
@@ -1893,7 +1893,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x92 (SUB D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSUBD()
     {
@@ -1904,7 +1904,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x93 (SUB E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSUBE()
     {
@@ -1915,7 +1915,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x94 (SUB H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSUBH()
     {
@@ -1926,7 +1926,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x95 (SUB L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSUBL()
     {
@@ -1937,7 +1937,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x96 (SUB M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSUBM()
     {
@@ -1948,7 +1948,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x97 (SUB A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSUBA()
     {
@@ -1959,7 +1959,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x98 (SBB B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSBBB()
     {
@@ -1970,7 +1970,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x99 (SBB C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSBBC()
     {
@@ -1981,7 +1981,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x9A (SBB D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSBBD()
     {
@@ -1992,7 +1992,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x9B (SBB E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSBBE()
     {
@@ -2003,7 +2003,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x9C (SBB H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSBBH()
     {
@@ -2014,7 +2014,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x9D (SBB L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSBBL()
     {
@@ -2025,7 +2025,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x9E (SBB M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSBBM()
     {
@@ -2036,7 +2036,7 @@ class CPU8080 extends CPU {
     /**
      * op=0x9F (SBB A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSBBA()
     {
@@ -2047,7 +2047,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xA0 (ANA B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opANAB()
     {
@@ -2058,7 +2058,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xA1 (ANA C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opANAC()
     {
@@ -2069,7 +2069,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xA2 (ANA D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opANAD()
     {
@@ -2080,7 +2080,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xA3 (ANA E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opANAE()
     {
@@ -2091,7 +2091,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xA4 (ANA H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opANAH()
     {
@@ -2102,7 +2102,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xA5 (ANA L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opANAL()
     {
@@ -2113,7 +2113,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xA6 (ANA M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opANAM()
     {
@@ -2124,7 +2124,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xA7 (ANA A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opANAA()
     {
@@ -2135,7 +2135,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xA8 (XRA B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opXRAB()
     {
@@ -2146,7 +2146,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xA9 (XRA C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opXRAC()
     {
@@ -2157,7 +2157,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xAA (XRA D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opXRAD()
     {
@@ -2168,7 +2168,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xAB (XRA E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opXRAE()
     {
@@ -2179,7 +2179,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xAC (XRA H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opXRAH()
     {
@@ -2190,7 +2190,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xAD (XRA L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opXRAL()
     {
@@ -2201,7 +2201,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xAE (XRA M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opXRAM()
     {
@@ -2212,7 +2212,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xAF (XRA A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opXRAA()
     {
@@ -2223,7 +2223,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xB0 (ORA B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opORAB()
     {
@@ -2234,7 +2234,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xB1 (ORA C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opORAC()
     {
@@ -2245,7 +2245,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xB2 (ORA D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opORAD()
     {
@@ -2256,7 +2256,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xB3 (ORA E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opORAE()
     {
@@ -2267,7 +2267,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xB4 (ORA H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opORAH()
     {
@@ -2278,7 +2278,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xB5 (ORA L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opORAL()
     {
@@ -2289,7 +2289,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xB6 (ORA M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opORAM()
     {
@@ -2300,7 +2300,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xB7 (ORA A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opORAA()
     {
@@ -2311,7 +2311,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xB8 (CMP B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCMPB()
     {
@@ -2322,7 +2322,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xB9 (CMP C)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCMPC()
     {
@@ -2333,7 +2333,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xBA (CMP D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCMPD()
     {
@@ -2344,7 +2344,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xBB (CMP E)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCMPE()
     {
@@ -2355,7 +2355,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xBC (CMP H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCMPH()
     {
@@ -2366,7 +2366,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xBD (CMP L)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCMPL()
     {
@@ -2377,7 +2377,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xBE (CMP M)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCMPM()
     {
@@ -2388,7 +2388,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xBF (CMP A)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCMPA()
     {
@@ -2399,7 +2399,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xC0 (RNZ)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRNZ()
     {
@@ -2413,7 +2413,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xC1 (POP B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opPOPB()
     {
@@ -2424,7 +2424,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xC2 (JNZ a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opJNZ()
     {
@@ -2436,7 +2436,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xC3 (JMP a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opJMP()
     {
@@ -2447,7 +2447,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xC4 (CNZ a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCNZ()
     {
@@ -2463,7 +2463,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xC5 (PUSH B)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opPUSHB()
     {
@@ -2474,7 +2474,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xC6 (ADI d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opADI()
     {
@@ -2485,7 +2485,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xC7 (RST 0)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRST0()
     {
@@ -2497,7 +2497,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xC8 (RZ)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRZ()
     {
@@ -2511,7 +2511,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xC9 (RET)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRET()
     {
@@ -2522,7 +2522,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xCA (JZ a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opJZ()
     {
@@ -2534,7 +2534,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xCC (CZ a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCZ()
     {
@@ -2550,7 +2550,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xCD (CALL a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCALL()
     {
@@ -2563,7 +2563,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xCE (ACI d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opACI()
     {
@@ -2574,7 +2574,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xCF (RST 1)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRST1()
     {
@@ -2586,7 +2586,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xD0 (RNC)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRNC()
     {
@@ -2600,7 +2600,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xD1 (POP D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opPOPD()
     {
@@ -2611,7 +2611,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xD2 (JNC a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opJNC()
     {
@@ -2623,7 +2623,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xD3 (OUT d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opOUT()
     {
@@ -2635,7 +2635,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xD4 (CNC a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCNC()
     {
@@ -2651,7 +2651,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xD5 (PUSH D)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opPUSHD()
     {
@@ -2662,7 +2662,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xD6 (SUI d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSUI()
     {
@@ -2673,7 +2673,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xD7 (RST 2)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRST2()
     {
@@ -2685,7 +2685,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xD8 (RC)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRC()
     {
@@ -2699,7 +2699,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xDA (JC a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opJC()
     {
@@ -2711,7 +2711,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xDB (IN d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opIN()
     {
@@ -2723,7 +2723,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xDC (CC a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCC()
     {
@@ -2739,7 +2739,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xDE (SBI d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSBI()
     {
@@ -2750,7 +2750,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xDF (RST 3)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRST3()
     {
@@ -2762,7 +2762,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xE0 (RPO)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRPO()
     {
@@ -2776,7 +2776,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xE1 (POP H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opPOPH()
     {
@@ -2787,7 +2787,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xE2 (JPO a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opJPO()
     {
@@ -2799,7 +2799,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xE3 (XTHL)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opXTHL()
     {
@@ -2812,7 +2812,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xE4 (CPO a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCPO()
     {
@@ -2828,7 +2828,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xE5 (PUSH H)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opPUSHH()
     {
@@ -2839,7 +2839,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xE6 (ANI d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opANI()
     {
@@ -2850,7 +2850,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xE7 (RST 4)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRST4()
     {
@@ -2862,7 +2862,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xE8 (RPE)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRPE()
     {
@@ -2876,7 +2876,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xE9 (PCHL)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opPCHL()
     {
@@ -2887,7 +2887,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xEA (JPE a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opJPE()
     {
@@ -2899,7 +2899,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xEB (XCHG)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opXCHG()
     {
@@ -2912,7 +2912,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xEC (CPE a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCPE()
     {
@@ -2928,7 +2928,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xEE (XRI d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opXRI()
     {
@@ -2939,7 +2939,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xEF (RST 5)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRST5()
     {
@@ -2951,7 +2951,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xF0 (RP)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRP()
     {
@@ -2965,7 +2965,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xF1 (POP PSW)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opPOPSW()
     {
@@ -2976,7 +2976,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xF2 (JP a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opJP()
     {
@@ -2988,7 +2988,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xF3 (DI)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opDI()
     {
@@ -2999,7 +2999,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xF4 (CP a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCP()
     {
@@ -3015,7 +3015,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xF5 (PUSH PSW)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opPUPSW()
     {
@@ -3026,7 +3026,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xF6 (ORI d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opORI()
     {
@@ -3037,7 +3037,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xF7 (RST 6)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRST6()
     {
@@ -3049,7 +3049,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xF8 (RM)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRM()
     {
@@ -3063,7 +3063,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xF9 (SPHL)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opSPHL()
     {
@@ -3074,7 +3074,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xFA (JM a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opJM()
     {
@@ -3086,7 +3086,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xFB (EI)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opEI()
     {
@@ -3098,7 +3098,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xFC (CM a16)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCM()
     {
@@ -3114,7 +3114,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xFE (CPI d8)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opCPI()
     {
@@ -3125,7 +3125,7 @@ class CPU8080 extends CPU {
     /**
      * op=0xFF (RST 7)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     opRST7()
     {
@@ -3137,7 +3137,7 @@ class CPU8080 extends CPU {
     /**
      * resetRegs()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     resetRegs()
     {
@@ -3168,13 +3168,13 @@ class CPU8080 extends CPU {
          * Trap software interrupt (INTR.TRAP) has been requested, as well as when we're in a "HLT" state (INTFLAG.HALT)
          * that requires us to wait for a hardware interrupt (INTFLAG.INTR) before continuing execution.
          */
-        this.intFlags = CPU8080.INTFLAG.NONE;
+        this.intFlags = CPUx80.INTFLAG.NONE;
     }
 
     /**
      * setReset(addr)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} addr
      */
     setReset(addr)
@@ -3186,7 +3186,7 @@ class CPU8080 extends CPU {
     /**
      * getBC()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @returns {number}
      */
     getBC()
@@ -3197,7 +3197,7 @@ class CPU8080 extends CPU {
     /**
      * setBC(w)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} w
      */
     setBC(w)
@@ -3209,7 +3209,7 @@ class CPU8080 extends CPU {
     /**
      * getDE()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @returns {number}
      */
     getDE()
@@ -3220,7 +3220,7 @@ class CPU8080 extends CPU {
     /**
      * setDE(w)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} w
      */
     setDE(w)
@@ -3232,7 +3232,7 @@ class CPU8080 extends CPU {
     /**
      * getHL()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @returns {number}
      */
     getHL()
@@ -3243,7 +3243,7 @@ class CPU8080 extends CPU {
     /**
      * setHL(w)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} w
      */
     setHL(w)
@@ -3255,7 +3255,7 @@ class CPU8080 extends CPU {
     /**
      * getSP()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @returns {number}
      */
     getSP()
@@ -3266,7 +3266,7 @@ class CPU8080 extends CPU {
     /**
      * setSP(off)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} off
      */
     setSP(off)
@@ -3277,7 +3277,7 @@ class CPU8080 extends CPU {
     /**
      * getPC()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @returns {number}
      */
     getPC()
@@ -3288,7 +3288,7 @@ class CPU8080 extends CPU {
     /**
      * offPC()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} off
      * @returns {number}
      */
@@ -3300,7 +3300,7 @@ class CPU8080 extends CPU {
     /**
      * setPC(off)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} off
      */
     setPC(off)
@@ -3311,7 +3311,7 @@ class CPU8080 extends CPU {
     /**
      * clearCF()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     clearCF()
     {
@@ -3321,18 +3321,18 @@ class CPU8080 extends CPU {
     /**
      * getCF()
      *
-     * @this {CPU8080}
-     * @returns {number} 0 or 1 (CPU8080.PS.CF)
+     * @this {CPUx80}
+     * @returns {number} 0 or 1 (CPUx80.PS.CF)
      */
     getCF()
     {
-        return (this.resultZeroCarry & 0x100)? CPU8080.PS.CF : 0;
+        return (this.resultZeroCarry & 0x100)? CPUx80.PS.CF : 0;
     }
 
     /**
      * setCF()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     setCF()
     {
@@ -3342,7 +3342,7 @@ class CPU8080 extends CPU {
     /**
      * updateCF(CF)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} CF (0x000 or 0x100)
      */
     updateCF(CF)
@@ -3353,7 +3353,7 @@ class CPU8080 extends CPU {
     /**
      * clearPF()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     clearPF()
     {
@@ -3363,18 +3363,18 @@ class CPU8080 extends CPU {
     /**
      * getPF()
      *
-     * @this {CPU8080}
-     * @returns {number} 0 or CPU8080.PS.PF
+     * @this {CPUx80}
+     * @returns {number} 0 or CPUx80.PS.PF
      */
     getPF()
     {
-        return (CPU8080.PARITY[this.resultParitySign & 0xff])? CPU8080.PS.PF : 0;
+        return (CPUx80.PARITY[this.resultParitySign & 0xff])? CPUx80.PS.PF : 0;
     }
 
     /**
      * setPF()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     setPF()
     {
@@ -3384,7 +3384,7 @@ class CPU8080 extends CPU {
     /**
      * clearAF()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     clearAF()
     {
@@ -3394,18 +3394,18 @@ class CPU8080 extends CPU {
     /**
      * getAF()
      *
-     * @this {CPU8080}
-     * @returns {number} 0 or CPU8080.PS.AF
+     * @this {CPUx80}
+     * @returns {number} 0 or CPUx80.PS.AF
      */
     getAF()
     {
-        return ((this.resultParitySign ^ this.resultAuxOverflow) & 0x10)? CPU8080.PS.AF : 0;
+        return ((this.resultParitySign ^ this.resultAuxOverflow) & 0x10)? CPUx80.PS.AF : 0;
     }
 
     /**
      * setAF()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     setAF()
     {
@@ -3415,7 +3415,7 @@ class CPU8080 extends CPU {
     /**
      * clearZF()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     clearZF()
     {
@@ -3425,18 +3425,18 @@ class CPU8080 extends CPU {
     /**
      * getZF()
      *
-     * @this {CPU8080}
-     * @returns {number} 0 or CPU8080.PS.ZF
+     * @this {CPUx80}
+     * @returns {number} 0 or CPUx80.PS.ZF
      */
     getZF()
     {
-        return (this.resultZeroCarry & 0xff)? 0 : CPU8080.PS.ZF;
+        return (this.resultZeroCarry & 0xff)? 0 : CPUx80.PS.ZF;
     }
 
     /**
      * setZF()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     setZF()
     {
@@ -3446,7 +3446,7 @@ class CPU8080 extends CPU {
     /**
      * clearSF()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     clearSF()
     {
@@ -3456,18 +3456,18 @@ class CPU8080 extends CPU {
     /**
      * getSF()
      *
-     * @this {CPU8080}
-     * @returns {number} 0 or CPU8080.PS.SF
+     * @this {CPUx80}
+     * @returns {number} 0 or CPUx80.PS.SF
      */
     getSF()
     {
-        return (this.resultParitySign & 0x80)? CPU8080.PS.SF : 0;
+        return (this.resultParitySign & 0x80)? CPUx80.PS.SF : 0;
     }
 
     /**
      * setSF()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     setSF()
     {
@@ -3477,90 +3477,90 @@ class CPU8080 extends CPU {
     /**
      * clearIF()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     clearIF()
     {
-        this.regPS &= ~CPU8080.PS.IF;
+        this.regPS &= ~CPUx80.PS.IF;
     }
 
     /**
      * getIF()
      *
-     * @this {CPU8080}
-     * @returns {number} 0 or CPU8080.PS.IF
+     * @this {CPUx80}
+     * @returns {number} 0 or CPUx80.PS.IF
      */
     getIF()
     {
-        return (this.regPS & CPU8080.PS.IF);
+        return (this.regPS & CPUx80.PS.IF);
     }
 
     /**
      * setIF()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     setIF()
     {
-        this.regPS |= CPU8080.PS.IF;
+        this.regPS |= CPUx80.PS.IF;
     }
 
     /**
      * getPS()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @returns {number}
      */
     getPS()
     {
-        return (this.regPS & ~CPU8080.PS.RESULT) | (this.getSF() | this.getZF() | this.getAF() | this.getPF() | this.getCF());
+        return (this.regPS & ~CPUx80.PS.RESULT) | (this.getSF() | this.getZF() | this.getAF() | this.getPF() | this.getCF());
     }
 
     /**
      * setPS(regPS)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} regPS
      */
     setPS(regPS)
     {
         this.resultZeroCarry = this.resultParitySign = this.resultAuxOverflow = 0;
-        if (regPS & CPU8080.PS.CF) this.resultZeroCarry |= 0x100;
-        if (!(regPS & CPU8080.PS.PF)) this.resultParitySign |= 0x01;
-        if (regPS & CPU8080.PS.AF) this.resultAuxOverflow |= 0x10;
-        if (!(regPS & CPU8080.PS.ZF)) this.resultZeroCarry |= 0xff;
-        if (regPS & CPU8080.PS.SF) this.resultParitySign ^= 0xc0;
-        this.regPS = (this.regPS & ~(CPU8080.PS.RESULT | CPU8080.PS.INTERNAL)) | (regPS & CPU8080.PS.INTERNAL) | CPU8080.PS.SET;
-        this.assert((regPS & CPU8080.PS.RESULT) == (this.getPS() & CPU8080.PS.RESULT));
+        if (regPS & CPUx80.PS.CF) this.resultZeroCarry |= 0x100;
+        if (!(regPS & CPUx80.PS.PF)) this.resultParitySign |= 0x01;
+        if (regPS & CPUx80.PS.AF) this.resultAuxOverflow |= 0x10;
+        if (!(regPS & CPUx80.PS.ZF)) this.resultZeroCarry |= 0xff;
+        if (regPS & CPUx80.PS.SF) this.resultParitySign ^= 0xc0;
+        this.regPS = (this.regPS & ~(CPUx80.PS.RESULT | CPUx80.PS.INTERNAL)) | (regPS & CPUx80.PS.INTERNAL) | CPUx80.PS.SET;
+        this.assert((regPS & CPUx80.PS.RESULT) == (this.getPS() & CPUx80.PS.RESULT));
     }
 
     /**
      * getPSW()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @returns {number}
      */
     getPSW()
     {
-        return (this.getPS() & CPU8080.PS.MASK) | (this.regA << 8);
+        return (this.getPS() & CPUx80.PS.MASK) | (this.regA << 8);
     }
 
     /**
      * setPSW(w)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} w
      */
     setPSW(w)
     {
-        this.setPS((w & CPU8080.PS.MASK) | (this.regPS & ~CPU8080.PS.MASK));
+        this.setPS((w & CPUx80.PS.MASK) | (this.regPS & ~CPUx80.PS.MASK));
         this.regA = w >> 8;
     }
 
     /**
      * addByte(src)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} src
      * @returns {number} regA + src
      */
@@ -3573,7 +3573,7 @@ class CPU8080 extends CPU {
     /**
      * addByteCarry(src)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} src
      * @returns {number} regA + src + carry
      */
@@ -3589,7 +3589,7 @@ class CPU8080 extends CPU {
      * Ordinarily, one would expect the Auxiliary Carry flag (AF) to be clear after this operation,
      * but apparently the 8080 will set AF if bit 3 in either operand is set.
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} src
      * @returns {number} regA & src
      */
@@ -3606,7 +3606,7 @@ class CPU8080 extends CPU {
      * We perform this operation using 8-bit two's complement arithmetic, by negating and then adding
      * the implied src of 1.  This appears to mimic how the 8080 manages the Auxiliary Carry flag (AF).
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} b
      * @returns {number}
      */
@@ -3621,7 +3621,7 @@ class CPU8080 extends CPU {
     /**
      * incByte(b)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} b
      * @returns {number}
      */
@@ -3636,7 +3636,7 @@ class CPU8080 extends CPU {
     /**
      * orByte(src)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} src
      * @returns {number} regA | src
      */
@@ -3675,7 +3675,7 @@ class CPU8080 extends CPU {
      *      ---------
      *    1 0101 0110   (0x56)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} src
      * @returns {number} regA - src
      */
@@ -3696,7 +3696,7 @@ class CPU8080 extends CPU {
      * This mimics the behavior of subByte() when the Carry flag (CF) is clear, and hopefully also mimics how the
      * 8080 manages the Auxiliary Carry flag (AF) when the Carry flag (CF) is set.
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} src
      * @returns {number} regA - src - carry
      */
@@ -3710,7 +3710,7 @@ class CPU8080 extends CPU {
     /**
      * xorByte(src)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} src
      * @returns {number} regA ^ src
      */
@@ -3722,7 +3722,7 @@ class CPU8080 extends CPU {
     /**
      * getByte(addr)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} addr is a linear address
      * @returns {number} byte (8-bit) value at that address
      */
@@ -3734,7 +3734,7 @@ class CPU8080 extends CPU {
     /**
      * getWord(addr)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} addr is a linear address
      * @returns {number} word (16-bit) value at that address
      */
@@ -3746,7 +3746,7 @@ class CPU8080 extends CPU {
     /**
      * setByte(addr, b)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} addr is a linear address
      * @param {number} b is the byte (8-bit) value to write (which we truncate to 8 bits to be safe)
      */
@@ -3758,7 +3758,7 @@ class CPU8080 extends CPU {
     /**
      * setWord(addr, w)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} addr is a linear address
      * @param {number} w is the word (16-bit) value to write (which we truncate to 16 bits to be safe)
      */
@@ -3770,7 +3770,7 @@ class CPU8080 extends CPU {
     /**
      * getPCByte()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @returns {number} byte at the current PC; PC advanced by 1
      */
     getPCByte()
@@ -3783,7 +3783,7 @@ class CPU8080 extends CPU {
     /**
      * getPCWord()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @returns {number} word at the current PC; PC advanced by 2
      */
     getPCWord()
@@ -3796,7 +3796,7 @@ class CPU8080 extends CPU {
     /**
      * popWord()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @returns {number} word popped from the current SP; SP increased by 2
      */
     popWord()
@@ -3809,7 +3809,7 @@ class CPU8080 extends CPU {
     /**
      * pushWord(w)
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} w is the word (16-bit) value to push at current SP; SP decreased by 2
      */
     pushWord(w)
@@ -3821,7 +3821,7 @@ class CPU8080 extends CPU {
     /**
      * checkINTR()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @returns {boolean} true if execution may proceed, false if not
      */
     checkINTR()
@@ -3832,18 +3832,18 @@ class CPU8080 extends CPU {
          * to resume normal interrupt processing.
          */
         if (this.time.isRunning()) {
-            if ((this.intFlags & CPU8080.INTFLAG.INTR) && this.getIF()) {
+            if ((this.intFlags & CPUx80.INTFLAG.INTR) && this.getIF()) {
                 let nLevel;
                 for (nLevel = 0; nLevel < 8; nLevel++) {
                     if (this.intFlags & (1 << nLevel)) break;
                 }
                 this.clearINTR(nLevel);
                 this.clearIF();
-                this.intFlags &= ~CPU8080.INTFLAG.HALT;
-                this.aOps[CPU8080.OPCODE.RST0 | (nLevel << 3)].call(this);
+                this.intFlags &= ~CPUx80.INTFLAG.HALT;
+                this.aOps[CPUx80.OPCODE.RST0 | (nLevel << 3)].call(this);
             }
         }
-        if (this.intFlags & CPU8080.INTFLAG.HALT) {
+        if (this.intFlags & CPUx80.INTFLAG.HALT) {
             /*
              * As discussed in opHLT(), the CPU is never REALLY halted by a HLT instruction; instead, opHLT()
              * calls requestHALT(), which sets INTFLAG.HALT and then ends the current burst; the CPU should not
@@ -3863,7 +3863,7 @@ class CPU8080 extends CPU {
      * nLevel can either be a valid interrupt level (0-7), or undefined to clear all pending interrupts
      * (eg, in the event of a system-wide reset).
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} [nLevel] (0-7, or undefined for all)
      */
     clearINTR(nLevel = -1)
@@ -3875,11 +3875,11 @@ class CPU8080 extends CPU {
     /**
      * requestHALT()
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      */
     requestHALT()
     {
-        this.intFlags |= CPU8080.INTFLAG.HALT;
+        this.intFlags |= CPUx80.INTFLAG.HALT;
         this.time.endBurst();
     }
 
@@ -3891,7 +3891,7 @@ class CPU8080 extends CPU {
      * Each interrupt level (0-7) has its own intFlags bit (0-7).  If the Interrupt Flag (IF) is also
      * set, then we know that checkINTR() will want to issue the interrupt, so we end the current burst.
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} nLevel (0-7)
      */
     requestINTR(nLevel)
@@ -3907,7 +3907,7 @@ class CPU8080 extends CPU {
      *
      * Returns a string representation of the specified instruction.
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @param {number} addr
      * @param {number|undefined} [opcode]
      * @returns {string}
@@ -3922,7 +3922,7 @@ class CPU8080 extends CPU {
      *
      * Returns a string representation of the current CPU state.
      *
-     * @this {CPU8080}
+     * @this {CPUx80}
      * @returns {string}
      */
     toString()
@@ -3934,18 +3934,18 @@ class CPU8080 extends CPU {
 /*
  * CPU model numbers (supported); future supported models could include the Z80.
  */
-CPU8080.MODEL_8080 = 8080;
+CPUx80.MODEL_8080 = 8080;
 
 /*
  * This constant is used to mark points in the code where the physical address being returned
  * is invalid and should not be used.
  */
-CPU8080.ADDR_INVALID = undefined;
+CPUx80.ADDR_INVALID = undefined;
 
 /*
  * Processor Status flag definitions (stored in regPS)
  */
-CPU8080.PS = {
+CPUx80.PS = {
     CF:     0x0001,     // bit 0: Carry Flag
     BIT1:   0x0002,     // bit 1: reserved, always set
     PF:     0x0004,     // bit 2: Parity Flag
@@ -3963,20 +3963,20 @@ CPU8080.PS = {
  * These are the internal PS bits (outside of PS.MASK) that getPS() and setPS() can get and set,
  * but which cannot be seen with any of the documented instructions.
  */
-CPU8080.PS.INTERNAL = CPU8080.PS.IF;
+CPUx80.PS.INTERNAL = CPUx80.PS.IF;
 
 /*
  * PS "arithmetic" flags are NOT stored in regPS; they are maintained across separate result registers,
  * hence the RESULT designation.
  */
-CPU8080.PS.RESULT   = CPU8080.PS.CF | CPU8080.PS.PF | CPU8080.PS.AF | CPU8080.PS.ZF | CPU8080.PS.SF;
+CPUx80.PS.RESULT   = CPUx80.PS.CF | CPUx80.PS.PF | CPUx80.PS.AF | CPUx80.PS.ZF | CPUx80.PS.SF;
 
 /*
  * These are the "always set" PS bits for the 8080.
  */
-CPU8080.PS.SET      = CPU8080.PS.BIT1;
+CPUx80.PS.SET      = CPUx80.PS.BIT1;
 
-CPU8080.PARITY = [          // 256-byte array with a 1 wherever the number of set bits of the array index is EVEN
+CPUx80.PARITY = [          // 256-byte array with a 1 wherever the number of set bits of the array index is EVEN
     1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
     0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
     0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
@@ -3998,7 +3998,7 @@ CPU8080.PARITY = [          // 256-byte array with a 1 wherever the number of se
 /*
  * Interrupt-related flags (stored in intFlags)
  */
-CPU8080.INTFLAG = {
+CPUx80.INTFLAG = {
     NONE:   0x0000,
     INTR:   0x00ff,     // mask for 8 bits, representing interrupt levels 0-7
     HALT:   0x0100      // halt requested; see opHLT()
@@ -4007,7 +4007,7 @@ CPU8080.INTFLAG = {
 /*
  * Opcode definitions
  */
-CPU8080.OPCODE = {
+CPUx80.OPCODE = {
     HLT:    0x76,       // Halt
     ACI:    0xCE,       // Add with Carry Immediate (affects PS.ALL)
     CALL:   0xCD,       // Call
@@ -4015,4 +4015,4 @@ CPU8080.OPCODE = {
     // to be continued....
 };
 
-Defs.CLASSES["CPU8080"] = CPU8080;
+Defs.CLASSES["CPUx80"] = CPUx80;
