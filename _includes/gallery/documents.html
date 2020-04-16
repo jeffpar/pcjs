@@ -32,6 +32,9 @@
     {%- else -%}
       {%- if data[part] -%}
         {%- assign data = data[part] %}
+        {%- if data[part]['@type'] -%}
+          {%- assign data = site.data[part].software -%}
+        {%- endif -%}
       {%- elsif data['@products'] -%}
         {%- assign data = data['@products'][part] -%}
       {%- elsif data['@versions'] -%}

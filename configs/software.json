@@ -14,7 +14,7 @@
       }
     }
   },
-  "ibm": {
+  "pcx86": {
     "pcx86": {
       "@title": "IBM PC",
       "@path": "/pcx86",

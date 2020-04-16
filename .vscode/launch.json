@@ -85,20 +85,6 @@
         "webRoot": "${workspaceFolder}"
       },
       {
-        "name": "Exploring the IBM PC (MDA)",
-        "type": "chrome",
-        "request": "launch",
-        "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/?software=/pcx86/demo/ibm/exploring/1.00-MDA&autoMount={%20A:{name:%22Exploring%20the%20IBM%20PC%20(MDA)%22,path:%22https://diskettes.pcjs.org/pcx86/demo/ibm/exploring/1.00-MDA/EXPLORING-THE-IBM-PC-100-MDA.json%22}%20}",
-        "webRoot": "${workspaceFolder}"
-      },
-      {
-        "name": "Game of Life (Color)",
-        "type": "chrome",
-        "request": "launch",
-        "url": "http://localhost:4000/machines/led/life/color/",
-        "webRoot": "${workspaceFolder}"
-      },
-      {
         "name": "IBM PC with CGA",
         "type": "chrome",
         "request": "launch",
@@ -256,7 +242,21 @@
         "name": "101 Monochrome Mazes (1983)",
         "type": "chrome",
         "request": "launch",
-        "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/?software=/pcx86/game/ibm/101mazes/&autoMount=%7BA:%7Bname:%22101%20Monochrome%20Mazes%20(1983)%22,path:%22/gamedisks/pcx86/game/ibm/101mazes/101-MONOCHROME-MAZES.json%22%7D%7D",
+        "url": "http://localhost:4000/software/pcx86/game/ibm/101mazes/",
+        "webRoot": "${workspaceFolder}"
+      },
+      {
+        "name": "Exploring the IBM PC (MDA)",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/?software=/pcx86/demo/ibm/exploring/1.00-MDA&autoMount={%20A:{name:%22Exploring%20the%20IBM%20PC%20(MDA)%22,path:%22https://diskettes.pcjs.org/pcx86/demo/ibm/exploring/1.00-MDA/EXPLORING-THE-IBM-PC-100-MDA.json%22}%20}",
+        "webRoot": "${workspaceFolder}"
+      },
+      {
+        "name": "Game of Life (Color)",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:4000/machines/led/life/color/",
         "webRoot": "${workspaceFolder}"
       },
       {

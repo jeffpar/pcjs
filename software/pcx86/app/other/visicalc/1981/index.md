@@ -19,8 +19,7 @@ machines:
 
 {% include machine.html id="ibm5150-visicalc" %}
 
-VisiCalc Reference
-------------------
+### VisiCalc Reference
 
 [From the [website](http://www.bricklin.com/history/refcard1.htm) of Dan Bricklin, co-author of VisiCalc]
 
@@ -34,10 +33,10 @@ VisiCalc Reference
 
 ![Reference Card 9-10](images/visicalc-refcard9-10.gif)
 
-VisiCalc History
-----------------
+### VisiCalc History
+
 See [http://www.bricklin.com/history/vcexecutable.htm](http://www.bricklin.com/history/vcexecutable.htm)
 
-VisiCalc License
-----------------
+### VisiCalc License
+
 See [http://www.bricklin.com/history/vclicense.htm](http://www.bricklin.com/history/vclicense.htm)
