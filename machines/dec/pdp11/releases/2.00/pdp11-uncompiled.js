@@ -1925,10 +1925,10 @@ Str.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "Ju
 
 
 /** @typedef {{ mask: number, shift: number }} */
-var BitField;
+let BitField;
 
 /** @typedef {Object.<BitField>} */
-var BitFields;
+let BitFields;
 
 class Usr {
     /**
@@ -7286,12 +7286,12 @@ Web.onInit(PanelPDP11.init);
  */
 
 /** @typedef {{ num: BitField, count: BitField, btmod: BitField, type: BitField }} */
-var BlockInfo;
+let BlockInfo;
 
  var BlockInfoPDP11 = /** @type {BlockInfo} */ (Usr.defineBitFields({num:20, count:8, btmod:1, type:3}));
 
 /** @typedef {{ cbTotal: number, cBlocks: number, aBlocks: Array.<BlockInfo> }} */
-var BusInfo;
+let BusInfo;
 
  /**
   * @type {BusInfo}
@@ -24566,7 +24566,7 @@ RX11.UNIBUS_IOTABLE = {
 
 
 /** @typedef {{ addr: (number|undefined), fTemporary: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined) }} */
-var DbgAddr;
+let DbgAddr;
 
 /**
  * Since the Closure Compiler treats ES6 classes as @struct rather than @dict by default,

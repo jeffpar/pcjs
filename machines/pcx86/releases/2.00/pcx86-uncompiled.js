@@ -1925,10 +1925,10 @@ Str.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "Ju
 
 
 /** @typedef {{ mask: number, shift: number }} */
-var BitField;
+let BitField;
 
 /** @typedef {Object.<BitField>} */
-var BitFields;
+let BitFields;
 
 class Usr {
     /**
@@ -8179,7 +8179,7 @@ Messages.CATEGORIES = {
 
 
 /** @typedef {{ iBlock: number, cBlocks: number, type: number }} */
-var Region;
+let Region;
 
 class Color {
     /**
@@ -10905,17 +10905,17 @@ class BusX86 extends Component {
  */
 
 /** @typedef {{ cbTotal: number, cBlocks: number }} */
-var BusInfo;
+let BusInfo;
 
 /*
  * This defines the BlockInfo bit fields used by scanMemory() when it creates the aBlocks array.
  */
 BusX86.BlockInfo = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
 
-if (BACKTRACK) {
-    /** @typedef {{ obj: Object, off: number, slot: number, refs: number }} */
-var BackTrack;
+/** @typedef {{ obj: Object, off: number, slot: number, refs: number }} */
+let BackTrack;
 
+if (BACKTRACK) {
     /*
      * BackTrack indexes are 31-bit values, where bits 0-8 store an object offset (0-511) and bits 16-30 store
      * an object number (1-32767).  Object number 0 is reserved for dynamic data (ie, data created independent
@@ -38409,7 +38409,7 @@ X86.aOpGrp8 = [
 
 
 /** @typedef {{ countInit: Array.<number>, countStart: Array.<number>, countCurrent: Array.<number>, countLatched: Array.<number>, bcd: number, mode: number, rw: number, countIndex: number, countBytes: number, fOUT: boolean, fCountLatched: boolean, fCounting: boolean, nCyclesStart: number, bStatus: number, fStatusLatched: boolean }} */
-var Timer;
+let Timer;
 
 /**
  * class ChipSet
@@ -57231,7 +57231,7 @@ VideoX86.MODEL = {
  */
 
 /** @typedef {{ nHorzPeriodsPerSec: number, nHorzPeriodsPerFrame: number, percentHorzActive: number, percentVertActive: number }} */
-var MonitorSpecs;
+let MonitorSpecs;
 
 /**
  * @type {Object}
@@ -57324,7 +57324,7 @@ VideoX86.aEGAMonitorSwitches = {
 };
 
 /** @typedef {{ cxChar: number, cyChar: number, cxCell: number, cyCell: number, aCSSColors: Array, aRGBColors: Array, aColorMap: Array, aCanvas: Array }} */
-var Font;
+let Font;
 
 /*
  * For each video mode, we need to know the following pieces of information:
@@ -61228,7 +61228,7 @@ Web.onInit(Mouse.init);
  */
 
 /** @typedef {{ sector: number, length: number, dataMark: number, headCRC: number, headError: boolean, dataCRC: number, dataError: boolean, data: Array.<number>, pattern: (number|null), iCylinder: number, iHead: number, iModify: number, cModify: number, file: FileInfo, offFile: number }} */
-var Sector;
+let Sector;
 
 /**
  * class Disk
@@ -64055,13 +64055,13 @@ FileInfo.NE = {
  */
 
 /** @typedef {{ name: string, path: string }} */
-var DiskImage;
+let DiskImage;
 
 /** @typedef {{ heads: number, tracks: number, boot: boolean }} */
-var DriveType;
+let DriveType;
 
  /** @typedef {{ iDrive: number, name: string, nCylinders: number, nHeads: number, nSectors: number, cbSector: number, fBusy: boolean, fLocal: boolean, fBootable: boolean, fRemovable: boolean, fWritable: boolean, nDiskCylinders: number, nDiskHeads: number, nDiskSectors: number, bHead: number, bCylinder: number, bCylinderSeek: number, bSector: number, bSectorEnd: number, nBytes: number, iByte: number }} */
-var DriveInfo;
+let DriveInfo;
 
 /**
  * class FDC
@@ -67242,10 +67242,10 @@ Web.onInit(FDC.init);
 
 
 /** @typedef {{ name: string, path: string, type: number, size: number, mode: string }} */
-var DriveConfig;
+let DriveConfig;
 
 /** @typedef {{ iDrive: number, errorCode: number, senseCode: number, fRemovable: boolean, abDriveParms: Array.<number>, buffer: Array.<number>, bHead: number, nHeads: number, wCylinder: number, nCylinders: number, bSector: number, bSectorEnd: number, nBytes: number, bSectorBias: number, name: string, path: string, mode: string, type: number, sDiskPath: string, nSectors: number, cbSector: number, cbTransfer: number, disk: (Disk|null), sector: (Sector|null), iByte: number, useBuffer: boolean, chunksCached: Array, chunksMRU: Array }} */
-var Drive;
+let Drive;
 
 /**
  * @class HDC
@@ -71132,7 +71132,7 @@ Web.onInit(HDC.init);
 
 
 /** @typedef {{ addr: (number|undefined), fTemporary: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined) }} */
-var DbgAddr;
+let DbgAddr;
 
 /**
  * Since the Closure Compiler treats ES6 classes as @struct rather than @dict by default,
@@ -72455,7 +72455,7 @@ if (DEBUGGER) {
 }
 
 /** @typedef {{ off: (number|undefined), sel: (number|undefined), addr: (number|undefined), type: (number|undefined), fData32: (boolean|undefined), fAddr32: (boolean|undefined), fData32Orig: (boolean|undefined), fAddr32Orig: (boolean|undefined), cOverrides: (number|undefined), fComplete: (boolean|undefined), fTempBreak: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined), nCPUCycles: (number|undefined), nDebugCycles: (number|undefined), nDebugState: (number|undefined) }} */
-var DbgAddrX86;
+let DbgAddrX86;
 
 /*
  * Debugger Breakpoint Tips

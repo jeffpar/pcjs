@@ -9,6 +9,7 @@ machines:
     name: Game of Life
     config: /configs/led/life-color.json
     layout: /_includes/led/life-color.html
+    unbundled: true
 ---
 
 Here's a simple demo of

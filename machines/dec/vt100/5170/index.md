@@ -17,10 +17,12 @@ machines:
     autoType: \r\rCTTY COM2\r
 ---
 
-Demonstration of a DEC VT100 Terminal connected to an IBM PC AT via COM2.  Also available with [Debuggers](debugger/).
+Demonstration of a DEC VT100 Terminal connected to an IBM PC AT via COM2.
 
 The DOS command `CTTY COM2` uses the VT100 for console operations.  `CTTY CON` will return control to the PC.
 
 {% include machine.html id="vt100" %}
 
 {% include machine.html id="ibm5170" %}
+
+These machines are also available with [PCjs Debuggers](debugger/).
