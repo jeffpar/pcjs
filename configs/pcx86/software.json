@@ -1586,13 +1586,13 @@
       "pascal": {
         "@title": "Turbo Pascal",
         "@versions": {
-          "2.00": {
-            "@title": "Borland Turbo Pascal 2.00",
+          "2.00b": {
+            "@title": "Borland Turbo Pascal 2.00B",
             "@media": [
               {
-                "@title": "Borland Turbo Pascal 2.00",
-                "@diskette": "TURBO-PASCAL-200.json",
-                "@type": "PC180K"
+                "@title": "Borland Turbo Pascal 2.00B",
+                "@diskette": "TURBO-PASCAL-200B.json",
+                "@type": "PC160K"
               }
             ]
           },

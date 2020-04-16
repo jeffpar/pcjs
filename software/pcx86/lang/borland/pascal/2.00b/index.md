@@ -1,8 +1,20 @@
 ---
 layout: page
-title: Borland Turbo Pascal 2.00
-permalink: /software/pcx86/lang/borland/pascal/2.00/
+title: Borland Turbo Pascal 2.00B
+permalink: /software/pcx86/lang/borland/pascal/2.00b/
 redirect_from: /disks/pcx86/tools/borland/pascal/2.00/
+machines:
+  - id: ibm-5150-cga
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5150/cga/64kb/machine.json
+    sizeRAM: 512
+    testRAM: false
+    autoMount:
+      A:
+        name: PC DOS 2.00 (Disk 1)
+      B:
+        name: Borland Turbo Pascal 2.00B
+    autoType: $date\r$time\rB:\rTURBO\r
 ---
 
 The following documentation is available online:
@@ -10,7 +22,9 @@ The following documentation is available online:
 - [Turbo Pascal Version 2.0 Reference Manual (1984)](http://bitsavers.org/pdf/borland/turbo_pascal/Turbo_Pascal_Version_2.0_Reference_1984.pdf)
 - [Turbo Pascal Version 2.0 Addendum to Reference Manual and 8087 Supplement (1984)](http://bitsavers.org/pdf/borland/turbo_pascal/Turbo_Pascal_Version_2.0_and_8087_Supplement_Apr84.pdf)
 
-### Directory of Borland Turbo Pascal 2.00
+{% include machine.html id="ibm-5150-cga" %}
+
+### Directory of Borland Turbo Pascal 2.00B
 
      Volume in drive A has no label
      Volume Serial Number is 3FFE-0276
