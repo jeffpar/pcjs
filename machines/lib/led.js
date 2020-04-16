@@ -130,6 +130,9 @@ export class LED extends Device {
             throw new Error(sError);
         }
 
+        this.idView = this.getBindingID(LED.BINDING.CONTAINER) + ".canvas";
+        canvasView.setAttribute("id", this.idView);
+
         this.container = container;
         this.canvasView = canvasView;
 

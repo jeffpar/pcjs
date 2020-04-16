@@ -110,7 +110,7 @@ export class LEDCtrl extends CPU {
                 "drag":         !!(this.input && this.input.fDrag),
                 "scroll":       !!(this.input && this.input.fScroll),
                 "hexagonal":    leds.fHexagonal,
-                "bindings":     {"surface": leds.getBindingID(LED.BINDING.CONTAINER)}
+                "bindings":     {"surface": leds.idView}
             };
 
             let cpu = this;

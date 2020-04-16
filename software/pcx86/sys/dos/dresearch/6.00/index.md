@@ -11,9 +11,9 @@ machines:
     floppyDrives: '[{boot:false}]'
     autoMount:
       A:
-        name: DR DOS 6.00 (1.2M Disk 1)
+        name: DR DOS 6.00 (1.2M StartUp)
       B:
-        name: DR DOS 6.00 (1.2M Disk 2)
+        name: DR DOS 6.00 (1.2M ViewMAX)
 ---
 
 {% include machine.html id="ibm5170-drdos600" %}

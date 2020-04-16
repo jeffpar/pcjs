@@ -6862,6 +6862,9 @@ class LED extends Device {
             throw new Error(sError);
         }
 
+        this.idView = this.getBindingID(LED.BINDING.CONTAINER) + ".canvas";
+        canvasView.setAttribute("id", this.idView);
+
         this.container = container;
         this.canvasView = canvasView;
 
@@ -9131,7 +9134,7 @@ class LEDCtrl extends CPU {
                 "drag":         !!(this.input && this.input.fDrag),
                 "scroll":       !!(this.input && this.input.fScroll),
                 "hexagonal":    leds.fHexagonal,
-                "bindings":     {"surface": leds.getBindingID(LED.BINDING.CONTAINER)}
+                "bindings":     {"surface": leds.idView}
             };
 
             let cpu = this;

@@ -1676,17 +1676,17 @@ class BusX86 extends Component {
  */
 BusX86.BlockInfo = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
 
-if (BACKTRACK) {
-    /**
-     * BackTrack object definition
-     *
-     * @typedef {Object} BackTrack
-     * @property {Object} obj   (reference to the source object (eg, ROM object, Sector object))
-     * @property {number} off   (the offset within the source object that this object refers to)
-     * @property {number} slot  (the slot (+1) in abtObjects which this object currently occupies)
-     * @property {number} refs  (the number of memory references, as recorded by writeBackTrack())
-     */
+/**
+ * BackTrack object definition
+ *
+ * @typedef {Object} BackTrack
+ * @property {Object} obj   (reference to the source object (eg, ROM object, Sector object))
+ * @property {number} off   (the offset within the source object that this object refers to)
+ * @property {number} slot  (the slot (+1) in abtObjects which this object currently occupies)
+ * @property {number} refs  (the number of memory references, as recorded by writeBackTrack())
+ */
 
+if (BACKTRACK) {
     /*
      * BackTrack indexes are 31-bit values, where bits 0-8 store an object offset (0-511) and bits 16-30 store
      * an object number (1-32767).  Object number 0 is reserved for dynamic data (ie, data created independent
