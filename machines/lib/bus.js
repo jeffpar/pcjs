@@ -7,7 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "./device.js";
+import { Memory } from "./memory.js";
 
 /**
  * @typedef {Config} BusConfig
@@ -36,7 +37,7 @@
  * @property {Array.<Memory>} blocks
  * @property {number} nTraps (number of blocks currently being trapped)
  */
-class Bus extends Device {
+export class Bus extends Device {
     /**
      * Bus(idMachine, idDevice, config)
      *
@@ -275,7 +276,7 @@ class Bus extends Device {
              * We must call the Debugger's printf() instead of our own in order to use its custom formatters (eg, %n).
              */
             if (this.dbg) {
-                this.dbg.printf(MESSAGE.FAULT, "bus fault (%d) at %n\n", reason, addr);
+                this.dbg.printf(Device.MESSAGE.FAULT, "bus fault (%d) at %n\n", reason, addr);
             }
             if (this.faultHandler) {
                 this.faultHandler(addr, reason);
@@ -722,4 +723,4 @@ Bus.TYPE = {
     DYNAMIC:    1
 };
 
-Defs.CLASSES["Bus"] = Bus;
+Bus.CLASSES["Bus"] = Bus;

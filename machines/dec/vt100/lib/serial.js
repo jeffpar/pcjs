@@ -7,13 +7,14 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "../../../lib/device.js";
+import { LED }    from "../../../lib/led.js";
 
 /**
  * @class {VT100Serial}
  * @unrestricted
  */
-class VT100Serial extends Device {
+export class VT100Serial extends Device {
     /**
      * VT100Serial(idMachine, idDevice, config)
      *
@@ -241,7 +242,7 @@ class VT100Serial extends Device {
      */
     receiveByte(b)
     {
-        this.printf(MESSAGE.SERIAL, "receiveByte(%#04x): status=%#04x\n", b, this.bStatus);
+        this.printf(Device.MESSAGE.SERIAL, "receiveByte(%#04x): status=%#04x\n", b, this.bStatus);
         if (!this.fAutoStop && !(this.bStatus & VT100Serial.UART8251.STATUS.RECV_FULL)) {
             if (this.cpu) {
                 this.bDataIn = b;
@@ -299,7 +300,7 @@ class VT100Serial extends Device {
     receiveStatus(pins)
     {
         this.bStatus &= ~VT100Serial.UART8251.STATUS.DSR;
-        if (pins & RS232.DSR.MASK) this.bStatus |= VT100Serial.UART8251.STATUS.DSR;
+        if (pins & VT100Serial.RS232.DSR.MASK) this.bStatus |= VT100Serial.UART8251.STATUS.DSR;
     }
 
     /**
@@ -312,7 +313,7 @@ class VT100Serial extends Device {
     transmitByte(b)
     {
         let fTransmitted = false;
-        this.printf(MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
+        this.printf(Device.MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
         if (this.fAutoXOFF) {
             if (b == 0x13) {        // XOFF
                 this.fAutoStop = true;
@@ -364,7 +365,7 @@ class VT100Serial extends Device {
     inData(port)
     {
         let value = this.bDataIn;
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "inData(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.SERIAL + Device.MESSAGE.PORTS, "inData(%#04x): %#04x\n", port, value);
         this.bStatus &= ~VT100Serial.UART8251.STATUS.RECV_FULL;
         return value;
     }
@@ -379,7 +380,7 @@ class VT100Serial extends Device {
     inStatus(port)
     {
         let value = this.bStatus;
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "inStatus(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.SERIAL + Device.MESSAGE.PORTS, "inStatus(%#04x): %#04x\n", port, value);
         return value;
     }
 
@@ -392,7 +393,7 @@ class VT100Serial extends Device {
      */
     outData(port, value)
     {
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outData(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.SERIAL + Device.MESSAGE.PORTS, "outData(%#04x): %#04x\n", port, value);
         this.bDataOut = value;
         this.bStatus &= ~(VT100Serial.UART8251.STATUS.XMIT_READY | VT100Serial.UART8251.STATUS.XMIT_EMPTY);
         /*
@@ -424,7 +425,7 @@ class VT100Serial extends Device {
      */
     outControl(port, value)
     {
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outControl(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.SERIAL + Device.MESSAGE.PORTS, "outControl(%#04x): %#04x\n", port, value);
         if (!this.fReady) {
             this.bMode = value;
             this.fReady = true;
@@ -437,11 +438,11 @@ class VT100Serial extends Device {
                 if (delta & (VT100Serial.UART8251.COMMAND.RTS | VT100Serial.UART8251.COMMAND.DTR)) {
                     let pins = 0;
                     if (this.fNullModem) {
-                        pins |= (value & VT100Serial.UART8251.COMMAND.RTS)? RS232.CTS.MASK : 0;
-                        pins |= (value & VT100Serial.UART8251.COMMAND.DTR)? (RS232.DSR.MASK | RS232.CD.MASK): 0;
+                        pins |= (value & VT100Serial.UART8251.COMMAND.RTS)? VT100Serial.RS232.CTS.MASK : 0;
+                        pins |= (value & VT100Serial.UART8251.COMMAND.DTR)? (VT100Serial.RS232.DSR.MASK | VT100Serial.RS232.CD.MASK): 0;
                     } else {
-                        pins |= (value & VT100Serial.UART8251.COMMAND.RTS)? RS232.RTS.MASK : 0;
-                        pins |= (value & VT100Serial.UART8251.COMMAND.DTR)? RS232.DTR.MASK : 0;
+                        pins |= (value & VT100Serial.UART8251.COMMAND.RTS)? VT100Serial.RS232.RTS.MASK : 0;
+                        pins |= (value & VT100Serial.UART8251.COMMAND.DTR)? VT100Serial.RS232.DTR.MASK : 0;
                     }
                     this.updateStatus.call(this.connection, pins);
                 }
@@ -463,7 +464,7 @@ class VT100Serial extends Device {
      */
     outBaudRates(port, value)
     {
-        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outBaudRates(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.SERIAL + Device.MESSAGE.PORTS, "outBaudRates(%#04x): %#04x\n", port, value);
         this.bBaudRates = value;
     }
 
@@ -588,4 +589,4 @@ VT100Serial.IOTABLE = {
     0x2: [null, VT100Serial.prototype.outBaudRates]
 };
 
-Defs.CLASSES["VT100Serial"] = VT100Serial;
+VT100Serial.CLASSES["VT100Serial"] = VT100Serial;

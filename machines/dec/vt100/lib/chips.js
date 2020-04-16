@@ -7,13 +7,13 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "../../../lib/device.js";
 
 /**
  * @class {VT100Chips}
  * @unrestricted
  */
-class VT100Chips extends Device {
+export class VT100Chips extends Device {
     /**
      * VT100Chips(idMachine, idDevice, config)
      *
@@ -250,7 +250,7 @@ class VT100Chips extends Device {
         case VT100Chips.NVR.CMD.ERASE:
             addr = this.getNVRAddr();
             this.aNVRWords[addr] = VT100Chips.NVR.WORDMASK;
-            this.printf(MESSAGE.CHIPS, "doNVRCommand(): erase data at addr %#06x\n", addr);
+            this.printf(Device.MESSAGE.CHIPS, "doNVRCommand(): erase data at addr %#06x\n", addr);
             break;
 
         case VT100Chips.NVR.CMD.ACCEPT_DATA:
@@ -261,7 +261,7 @@ class VT100Chips extends Device {
             addr = this.getNVRAddr();
             data = this.wNVRData & VT100Chips.NVR.WORDMASK;
             this.aNVRWords[addr] = data;
-            this.printf(MESSAGE.CHIPS, "doNVRCommand(): write data %#06x to addr %#06x\n", data, addr);
+            this.printf(Device.MESSAGE.CHIPS, "doNVRCommand(): write data %#06x to addr %#06x\n", data, addr);
             break;
 
         case VT100Chips.NVR.CMD.READ:
@@ -272,7 +272,7 @@ class VT100Chips extends Device {
              */
             if (data == null) data = VT100Chips.NVR.WORDMASK;
             this.wNVRData = data;
-            this.printf(MESSAGE.CHIPS, "doNVRCommand(): read data %#06x from addr %#06x\n", data, addr);
+            this.printf(Device.MESSAGE.CHIPS, "doNVRCommand(): read data %#06x from addr %#06x\n", data, addr);
             break;
 
         case VT100Chips.NVR.CMD.SHIFT_OUT:
@@ -284,7 +284,7 @@ class VT100Chips extends Device {
             break;
 
         default:
-            this.printf(MESSAGE.CHIPS, "doNVRCommand(): unrecognized command %#04x\n", bCmd);
+            this.printf(Device.MESSAGE.CHIPS, "doNVRCommand(): unrecognized command %#04x\n", bCmd);
             break;
         }
     }
@@ -327,7 +327,7 @@ class VT100Chips extends Device {
         }
 
         this.bFlags = value;
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "inFlags(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.CHIPS + Device.MESSAGE.PORTS, "inFlags(%#04x): %#04x\n", port, value);
         return value;
     }
 
@@ -340,7 +340,7 @@ class VT100Chips extends Device {
      */
     outBrightness(port, value)
     {
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outBrightness(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.CHIPS + Device.MESSAGE.PORTS, "outBrightness(%#04x): %#04x\n", port, value);
         this.bBrightness = value;
     }
 
@@ -353,7 +353,7 @@ class VT100Chips extends Device {
      */
     outNVRLatch(port, value)
     {
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outNVRLatch(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.CHIPS + Device.MESSAGE.PORTS, "outNVRLatch(%#04x): %#04x\n", port, value);
         this.bNVRLatch = value;
     }
 
@@ -369,7 +369,7 @@ class VT100Chips extends Device {
      */
     outDC012(port, value)
     {
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outDC012(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.CHIPS + Device.MESSAGE.PORTS, "outDC012(%#04x): %#04x\n", port, value);
         let bOpt = value & 0x3;
         let bCmd = (value >> 2) & 0x3;
         switch(bCmd) {
@@ -409,7 +409,7 @@ class VT100Chips extends Device {
      */
     outDC011(port, value)
     {
-        this.printf(MESSAGE.CHIPS + MESSAGE.PORTS, "outNDC011(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.CHIPS + Device.MESSAGE.PORTS, "outNDC011(%#04x): %#04x\n", port, value);
         if (value & VT100Chips.DC011.RATE60) {
             value &= VT100Chips.DC011.RATE50;
             if (this.bDC011Rate != value) {
@@ -665,4 +665,4 @@ VT100Chips.IOTABLE = {
     0xC2: [null, VT100Chips.prototype.outDC011]
 };
 
-Defs.CLASSES["VT100Chips"] = VT100Chips;
+VT100Chips.CLASSES["VT100Chips"] = VT100Chips;

@@ -7,7 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { CPU }    from "../../lib/cpu.js";
+import { Device } from "../../lib/device.js";
+import { LED }    from "../../lib/led.js";
 
 /**
  * 64-bit Register
@@ -17,7 +19,7 @@
  * @property {CPU1500} cpu
  * @property {Array.<number>} digits
  */
-class Reg64 extends Device {
+export class Reg64 extends Device {
     /**
      * Reg64(cpu, id, fInternal)
      *
@@ -338,7 +340,7 @@ class Reg64 extends Device {
  * @property {number} nStringFormat
  * @property {number} type (one of the CPU1500.TYPE values)
  */
-class CPU1500 extends CPU {
+export class CPU1500 extends CPU {
     /**
      * CPU1500(idMachine, idDevice, config)
      *
@@ -546,7 +548,7 @@ class CPU1500 extends CPU {
         this.addrStop = -1;
         this.breakConditions = {};
         this.nStringFormat = CPU1500.SFORMAT.DEFAULT;
-        this.addHandler(WebIO.HANDLER.COMMAND, this.onCommand.bind(this));
+        this.addHandler(CPU1500.HANDLER.COMMAND, this.onCommand.bind(this));
     }
 
     /**
@@ -878,7 +880,7 @@ class CPU1500 extends CPU {
             return false;
         }
         let version = stateCPU.shift();
-        if ((version|0) !== (+VERSION|0)) {
+        if ((version|0) !== (+CPU1500.VERSION|0)) {
             this.printf("saved state version mismatch: %3.2f\n", version);
             return false;
         }
@@ -1276,7 +1278,7 @@ class CPU1500 extends CPU {
     {
         let stateCPU = [];
         let stateROM = [];
-        stateCPU.push(+VERSION);
+        stateCPU.push(+CPU1500.VERSION);
         this.regsO.forEach((reg) => stateCPU.push(reg.get()));
         this.regsX.forEach((reg) => stateCPU.push(reg.get()));
         this.regsY.forEach((reg) => stateCPU.push(reg.get()));
@@ -1792,4 +1794,4 @@ CPU1500.COMMANDS = [
     "u [addr] [n]\tunassemble (at addr)"
 ];
 
-Defs.CLASSES["CPU1500"] = CPU1500;
+CPU1500.CLASSES["CPU1500"] = CPU1500;

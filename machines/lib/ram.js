@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Memory } from "./memory.js";
 
 /**
  * @typedef {Config} RAMConfig
@@ -25,7 +25,7 @@
  * @property {number} type
  * @property {Array.<number>} values
  */
-class RAM extends Memory {
+export class RAM extends Memory {
     /**
      * RAM(idMachine, idDevice, config)
      *
@@ -52,4 +52,4 @@ class RAM extends Memory {
     }
 }
 
-Defs.CLASSES["RAM"] = RAM;
+RAM.CLASSES["RAM"] = RAM;

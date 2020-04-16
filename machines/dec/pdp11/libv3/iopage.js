@@ -10,13 +10,13 @@
  * <paulnank@hotmail.com> at <http://skn.noip.me/pdp11/pdp11.html> with permission.
  */
 
-"use strict";
+import { Ports } from "../../../lib/ports.js";
 
 /**
  * @class {IOPage}
  * @unrestricted
  */
-class IOPage extends Ports {
+export class IOPage extends Ports {
     /**
      * IOPage(idMachine, idDevice, config)
      *
@@ -189,4 +189,4 @@ IOPage.IOTABLE = {
  // [PDP11.UNIBUS.PSW]:     /* 177776 */    [null, null, IOPage.prototype.readPSW,     IOPage.prototype.writePSW,     "PSW"]
 };
 
-Defs.CLASSES["IOPage"] = IOPage;
+IOPage.CLASSES["IOPage"] = IOPage;

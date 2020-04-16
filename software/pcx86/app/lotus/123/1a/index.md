@@ -3,6 +3,7 @@ layout: page
 title: Lotus 1-2-3 Release 1A
 permalink: /software/pcx86/app/lotus/123/1a/
 redirect_from: /disks/pcx86/apps/lotus/123/1a/
+preview: images/screenshot.png
 machines:
   - id: ibm5150-123-1a
     type: pcx86

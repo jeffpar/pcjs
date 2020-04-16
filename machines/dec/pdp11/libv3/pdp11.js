@@ -10,7 +10,7 @@
  * <paulnank@hotmail.com> at <http://skn.noip.me/pdp11/pdp11.html> with permission.
  */
 
-"use strict";
+import { PDP11Ops } from "./pdp11ops.js";
 
 /*
  * Overview of Device Interrupt Support
@@ -52,7 +52,7 @@
  * @property {Bus} bus
  * @property {Input} input
  */
-class PDP11 extends PDP11Ops {
+export class PDP11 extends PDP11Ops {
     /**
      * PDP11(idMachine, idDevice, config)
      *
@@ -1022,7 +1022,7 @@ class PDP11 extends PDP11Ops {
     {
         if (irq) {
             this.insertIRQ(irq);
-            this.printf(MESSAGE.INT + irq.message, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority + ")");
+            this.printf(PDP11.MESSAGE.INT + irq.message, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority + ")");
         }
     }
 
@@ -1036,7 +1036,7 @@ class PDP11 extends PDP11Ops {
     {
         if (irq) {
             this.removeIRQ(irq);
-            this.printf(MESSAGE.INT + irq.message, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority + ")");
+            this.printf(PDP11.MESSAGE.INT + irq.message, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority + ")");
         }
     }
 
@@ -1526,7 +1526,7 @@ class PDP11 extends PDP11Ops {
      */
     trap(vector, flag, reason)
     {
-        this.printf(MESSAGE.TRAP, "trap to vector %o (%o: %s)\n", vector, reason, reason < 0? PDP11.REASONS[-reason] : "BUS ERROR");
+        this.printf(PDP11.MESSAGE.TRAP, "trap to vector %o (%o: %s)\n", vector, reason, reason < 0? PDP11.REASONS[-reason] : "BUS ERROR");
 
         if (this.nDisableTraps) return;
 
@@ -2805,12 +2805,6 @@ class PDP11 extends PDP11Ops {
     }
 }
 
-MESSAGE.DL11            = 0x000100000000;
-MESSAGE.PC11            = 0x000200000000;
-
-WebIO.MESSAGE_NAMES["dl11"]     = MESSAGE.DL11;
-WebIO.MESSAGE_NAMES["pc11"]     = MESSAGE.PC11;
-
 /*
  * CPU model numbers (supported)
  *
@@ -3710,4 +3704,4 @@ PDP11.MASK_18BIT        = 0x03FFFF;     // 000777777
 PDP11.UNIBUS_22BIT      = 0x3C0000;     // 017000000
 PDP11.MASK_22BIT        = 0x3FFFFF;     // 017777777
 
-Defs.CLASSES["PDP11"] = PDP11;
+PDP11.CLASSES["PDP11"] = PDP11;

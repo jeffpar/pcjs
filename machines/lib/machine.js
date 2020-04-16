@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "./device.js";
 
 /**
  * @class {Machine}
@@ -17,7 +17,7 @@
  * @property {boolean} fConfigLoaded
  * @property {boolean} fPageLoaded
  */
-class Machine extends Device {
+export class Machine extends Device {
     /**
      * Machine(idMachine, sConfig, sParms)
      *
@@ -129,7 +129,7 @@ class Machine extends Device {
          * One alternative is to hard-code any MESSAGE groups here, to ensure that the relevant messages
          * from all device constructors get displayed.
          */
-        this.messages = DEBUG? MESSAGE.WARN : MESSAGE.DEFAULT;
+        this.messages = Device.DEBUG? Device.MESSAGE.WARN : Device.MESSAGE.DEFAULT;
 
         sConfig = sConfig.trim();
         if (sConfig[0] == '{') {
@@ -216,15 +216,15 @@ class Machine extends Device {
                 let config = this.deviceConfigs[idDevice];
                 try {
                     sClass = config['class'];
-                    if (!Defs.CLASSES[sClass]) {
+                    if (!Machine.CLASSES[sClass]) {
                         this.printf('unrecognized %s device "%s"\n', sClass, idDevice);
                     }
                     else if (sClass == "Machine") {
-                        this.printf("PCjs %s v%3.2f\n%s\n", config['name'], +VERSION, Machine.COPYRIGHT);
+                        this.printf("PCjs %s v%3.2f\n%s\n", config['name'], +Machine.VERSION, Machine.COPYRIGHT);
                         if (this.sConfigFile) this.printf("Configuration: %s\n", this.sConfigFile);
                     } else {
-                        let device = new Defs.CLASSES[sClass](this.idMachine, idDevice, config);
-                        if (MAXDEBUG) this.printf('%s device "%s"\n', sClass, idDevice);
+                        let device = new Machine.CLASSES[sClass](this.idMachine, idDevice, config);
+                        if (Machine.MAXDEBUG) this.printf('%s device "%s"\n', sClass, idDevice);
                     }
                 }
                 catch (err) {
@@ -411,33 +411,12 @@ Machine.COPYRIGHT = "Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>";
  * but not all machines will have such a control, and sometimes that control will be inaccessible (eg, if
  * the browser is currently debugging the machine).
  */
-window[FACTORY] = function createMachine(idMachine, sConfig, sParms) {
+window[Machine.FACTORY] = function createMachine(idMachine, sConfig, sParms) {
     let machine = new Machine(idMachine, sConfig, sParms);
-    window[COMMAND] = function(commands) {
+    window[Machine.COMMAND] = function(commands) {
         return machine.parseCommands(commands);
     };
     return machine;
 };
 
-/*
- * If we're NOT running a compiled release (ie, FACTORY wasn't overriden from "Machine" to something else),
- * then create hard-coded aliases for all known factories; only DEBUG servers should be running uncompiled code.
- *
- * Why is the PDP11 factory called 'PDP11v3' instead of simply 'PDP11'?  Because the CPU class for PDP11 machines
- * is already called PDP11, and we can't have both a class and a global function with the same name.  Besides,
- * these factory functions are creating entire "machines", not just "processors", so it makes sense for the names
- * to reflect that.
- *
- * And yes, by the same logic, one might think that 'TMS1500' should really be called 'TI57', except that the
- * TMS1500 factory can produce any of the TI-42, TI-55, or TI-57.  Naming is hard.
- */
-if (FACTORY == "Machine") {
-    window['Invaders']  = window[FACTORY];
-    window['LEDs']      = window[FACTORY];
-    window['PCx86v3']   = window[FACTORY];
-    window['PDP11v3']   = window[FACTORY];
-    window['TMS1500']   = window[FACTORY];
-    window['VT100']     = window[FACTORY];
-}
-
-Defs.CLASSES["Machine"] = Machine;
+Machine.CLASSES["Machine"] = Machine;

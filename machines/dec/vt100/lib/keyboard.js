@@ -7,7 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "../../../lib/device.js";
+import { Input }  from "../../../lib/input.js";
+import { LED }    from "../../../lib/led.js";
 
 /**
  * @typedef {Config} VT100KeyboardConfig
@@ -19,7 +21,7 @@
  * @unrestricted
  * @property {VT100KeyboardConfig} config
  */
-class VT100Keyboard extends Device {
+export class VT100Keyboard extends Device {
     /**
      * VT100Keyboard(idMachine, idDevice, config)
      *
@@ -49,7 +51,7 @@ class VT100Keyboard extends Device {
 
         this.ledCaps = this.findDevice("ledCaps");
         if (this.ledCaps) {
-            this.input.addListener(Input.TYPE.KEYCODE, WebIO.KEYCODE.CAPS_LOCK, this.onCapsLock.bind(this));
+            this.input.addListener(Input.TYPE.KEYCODE, Device.KEYCODE.CAPS_LOCK, this.onCapsLock.bind(this));
         }
         this.onReset();
     }
@@ -214,7 +216,7 @@ class VT100Keyboard extends Device {
             this.bAddress = value;
             this.cpu.requestINTR(1);
         }
-        this.printf(MESSAGE.KBD + MESSAGE.PORTS, "inUARTAddress(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.KBD + Device.MESSAGE.PORTS, "inUARTAddress(%#04x): %#04x\n", port, value);
         return value;
     }
 
@@ -227,7 +229,7 @@ class VT100Keyboard extends Device {
      */
     outUARTStatus(port, value)
     {
-        this.printf(MESSAGE.KBD + MESSAGE.PORTS, "outUARTStatus(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.KBD + Device.MESSAGE.PORTS, "outUARTStatus(%#04x): %#04x\n", port, value);
         this.updateLEDs(value, this.bStatus);
         this.bStatus = value;
         this.fUARTBusy = true;
@@ -418,10 +420,10 @@ VT100Keyboard.KEYNUM = {
  * A good example is the VT100 SET-UP key, which has no counterpart on a modern keyboard.
  */
 VT100Keyboard.KEYCODE = {
-    SETUP:      WebIO.KEYCODE.VIRTUAL + 1,
-    LF:         WebIO.KEYCODE.VIRTUAL + 2,
-    BREAK:      WebIO.KEYCODE.VIRTUAL + 3,
-    CTRL_C:     WebIO.KEYCODE.VIRTUAL + 4
+    SETUP:      Device.KEYCODE.VIRTUAL + 1,
+    LF:         Device.KEYCODE.VIRTUAL + 2,
+    BREAK:      Device.KEYCODE.VIRTUAL + 3,
+    CTRL_C:     Device.KEYCODE.VIRTUAL + 4
 };
 
 /*
@@ -439,91 +441,91 @@ VT100Keyboard.KEYCODE = {
  * something most people don't need to worry their heads about.
  */
 VT100Keyboard.KEYMAP = {
-    [WebIO.KEYCODE.BS]:             VT100Keyboard.KEYNUM.DEL,
-    [WebIO.KEYCODE.P]:              VT100Keyboard.KEYNUM.P,
-    [WebIO.KEYCODE.O]:              VT100Keyboard.KEYNUM.O,
-    [WebIO.KEYCODE.Y]:              VT100Keyboard.KEYNUM.Y,
-    [WebIO.KEYCODE.T]:              VT100Keyboard.KEYNUM.T,
-    [WebIO.KEYCODE.W]:              VT100Keyboard.KEYNUM.W,
-    [WebIO.KEYCODE.Q]:              VT100Keyboard.KEYNUM.Q,
-    [WebIO.KEYCODE.RIGHT]:          VT100Keyboard.KEYNUM.RIGHT,
-    [WebIO.KEYCODE.RBRACK]:         VT100Keyboard.KEYNUM.RBRACK,
-    [WebIO.KEYCODE.LBRACK]:         VT100Keyboard.KEYNUM.LBRACK,
-    [WebIO.KEYCODE.I]:              VT100Keyboard.KEYNUM.I,
-    [WebIO.KEYCODE.U]:              VT100Keyboard.KEYNUM.U,
-    [WebIO.KEYCODE.R]:              VT100Keyboard.KEYNUM.R,
-    [WebIO.KEYCODE.E]:              VT100Keyboard.KEYNUM.E,
-    [WebIO.KEYCODE.ONE]:            VT100Keyboard.KEYNUM.ONE,
-    [WebIO.KEYCODE.LEFT]:           VT100Keyboard.KEYNUM.LEFT,
-    [WebIO.KEYCODE.DOWN]:           VT100Keyboard.KEYNUM.DOWN,
-    [WebIO.KEYCODE.F6]:             VT100Keyboard.KEYNUM.BREAK,         // no natural mapping
+    [Device.KEYCODE.BS]:            VT100Keyboard.KEYNUM.DEL,
+    [Device.KEYCODE.P]:             VT100Keyboard.KEYNUM.P,
+    [Device.KEYCODE.O]:             VT100Keyboard.KEYNUM.O,
+    [Device.KEYCODE.Y]:             VT100Keyboard.KEYNUM.Y,
+    [Device.KEYCODE.T]:             VT100Keyboard.KEYNUM.T,
+    [Device.KEYCODE.W]:             VT100Keyboard.KEYNUM.W,
+    [Device.KEYCODE.Q]:             VT100Keyboard.KEYNUM.Q,
+    [Device.KEYCODE.RIGHT]:         VT100Keyboard.KEYNUM.RIGHT,
+    [Device.KEYCODE.RBRACK]:        VT100Keyboard.KEYNUM.RBRACK,
+    [Device.KEYCODE.LBRACK]:        VT100Keyboard.KEYNUM.LBRACK,
+    [Device.KEYCODE.I]:             VT100Keyboard.KEYNUM.I,
+    [Device.KEYCODE.U]:             VT100Keyboard.KEYNUM.U,
+    [Device.KEYCODE.R]:             VT100Keyboard.KEYNUM.R,
+    [Device.KEYCODE.E]:             VT100Keyboard.KEYNUM.E,
+    [Device.KEYCODE.ONE]:           VT100Keyboard.KEYNUM.ONE,
+    [Device.KEYCODE.LEFT]:          VT100Keyboard.KEYNUM.LEFT,
+    [Device.KEYCODE.DOWN]:          VT100Keyboard.KEYNUM.DOWN,
+    [Device.KEYCODE.F6]:            VT100Keyboard.KEYNUM.BREAK,         // no natural mapping
     [VT100Keyboard.KEYCODE.BREAK]:  VT100Keyboard.KEYNUM.BREAK,         // NOTE: virtual keyCode mapping
-    [WebIO.KEYCODE.BQUOTE]:         VT100Keyboard.KEYNUM.BQUOTE,
-    [WebIO.KEYCODE.DASH]:           VT100Keyboard.KEYNUM.DASH,
-    [WebIO.KEYCODE.NINE]:           VT100Keyboard.KEYNUM.NINE,
-    [WebIO.KEYCODE.SEVEN]:          VT100Keyboard.KEYNUM.SEVEN,
-    [WebIO.KEYCODE.FOUR]:           VT100Keyboard.KEYNUM.FOUR,
-    [WebIO.KEYCODE.THREE]:          VT100Keyboard.KEYNUM.THREE,
-    [WebIO.KEYCODE.ESC]:            VT100Keyboard.KEYNUM.ESC,
-    [WebIO.KEYCODE.UP]:             VT100Keyboard.KEYNUM.UP,
-    [WebIO.KEYCODE.F3]:             VT100Keyboard.KEYNUM.F3,
-    [WebIO.KEYCODE.F1]:             VT100Keyboard.KEYNUM.F1,
-    [WebIO.KEYCODE.DEL]:            VT100Keyboard.KEYNUM.BS,
-    [WebIO.KEYCODE.EQUALS]:         VT100Keyboard.KEYNUM.EQUALS,
-    [WebIO.KEYCODE.ZERO]:           VT100Keyboard.KEYNUM.ZERO,
-    [WebIO.KEYCODE.EIGHT]:          VT100Keyboard.KEYNUM.EIGHT,
-    [WebIO.KEYCODE.SIX]:            VT100Keyboard.KEYNUM.SIX,
-    [WebIO.KEYCODE.FIVE]:           VT100Keyboard.KEYNUM.FIVE,
-    [WebIO.KEYCODE.TWO]:            VT100Keyboard.KEYNUM.TWO,
-    [WebIO.KEYCODE.TAB]:            VT100Keyboard.KEYNUM.TAB,
-    [WebIO.KEYCODE.NUM_7]:          VT100Keyboard.KEYNUM.NUM_7,
-    [WebIO.KEYCODE.F4]:             VT100Keyboard.KEYNUM.F4,
-    [WebIO.KEYCODE.F2]:             VT100Keyboard.KEYNUM.F2,
-    [WebIO.KEYCODE.NUM_0]:          VT100Keyboard.KEYNUM.NUM_0,
-    [WebIO.KEYCODE.F7]:             VT100Keyboard.KEYNUM.LF,            // no natural mapping
+    [Device.KEYCODE.BQUOTE]:        VT100Keyboard.KEYNUM.BQUOTE,
+    [Device.KEYCODE.DASH]:          VT100Keyboard.KEYNUM.DASH,
+    [Device.KEYCODE.NINE]:          VT100Keyboard.KEYNUM.NINE,
+    [Device.KEYCODE.SEVEN]:         VT100Keyboard.KEYNUM.SEVEN,
+    [Device.KEYCODE.FOUR]:          VT100Keyboard.KEYNUM.FOUR,
+    [Device.KEYCODE.THREE]:         VT100Keyboard.KEYNUM.THREE,
+    [Device.KEYCODE.ESC]:           VT100Keyboard.KEYNUM.ESC,
+    [Device.KEYCODE.UP]:            VT100Keyboard.KEYNUM.UP,
+    [Device.KEYCODE.F3]:            VT100Keyboard.KEYNUM.F3,
+    [Device.KEYCODE.F1]:            VT100Keyboard.KEYNUM.F1,
+    [Device.KEYCODE.DEL]:           VT100Keyboard.KEYNUM.BS,
+    [Device.KEYCODE.EQUALS]:        VT100Keyboard.KEYNUM.EQUALS,
+    [Device.KEYCODE.ZERO]:          VT100Keyboard.KEYNUM.ZERO,
+    [Device.KEYCODE.EIGHT]:         VT100Keyboard.KEYNUM.EIGHT,
+    [Device.KEYCODE.SIX]:           VT100Keyboard.KEYNUM.SIX,
+    [Device.KEYCODE.FIVE]:          VT100Keyboard.KEYNUM.FIVE,
+    [Device.KEYCODE.TWO]:           VT100Keyboard.KEYNUM.TWO,
+    [Device.KEYCODE.TAB]:           VT100Keyboard.KEYNUM.TAB,
+    [Device.KEYCODE.NUM_7]:         VT100Keyboard.KEYNUM.NUM_7,
+    [Device.KEYCODE.F4]:            VT100Keyboard.KEYNUM.F4,
+    [Device.KEYCODE.F2]:            VT100Keyboard.KEYNUM.F2,
+    [Device.KEYCODE.NUM_0]:         VT100Keyboard.KEYNUM.NUM_0,
+    [Device.KEYCODE.F7]:            VT100Keyboard.KEYNUM.LF,            // no natural mapping
     [VT100Keyboard.KEYCODE.LF]:     VT100Keyboard.KEYNUM.LF,            // NOTE: virtual keyCode mapping
-    [WebIO.KEYCODE.BSLASH]:         VT100Keyboard.KEYNUM.BSLASH,
-    [WebIO.KEYCODE.L]:              VT100Keyboard.KEYNUM.L,
-    [WebIO.KEYCODE.K]:              VT100Keyboard.KEYNUM.K,
-    [WebIO.KEYCODE.G]:              VT100Keyboard.KEYNUM.G,
-    [WebIO.KEYCODE.F]:              VT100Keyboard.KEYNUM.F,
-    [WebIO.KEYCODE.A]:              VT100Keyboard.KEYNUM.A,
-    [WebIO.KEYCODE.NUM_8]:          VT100Keyboard.KEYNUM.NUM_8,
-    [WebIO.KEYCODE.CR]:             VT100Keyboard.KEYNUM.NUM_CR,
-    [WebIO.KEYCODE.NUM_2]:          VT100Keyboard.KEYNUM.NUM_2,
-    [WebIO.KEYCODE.NUM_1]:          VT100Keyboard.KEYNUM.NUM_1,
-    [WebIO.KEYCODE.QUOTE]:          VT100Keyboard.KEYNUM.QUOTE,
-    [WebIO.KEYCODE.SEMI]:           VT100Keyboard.KEYNUM.SEMI,
-    [WebIO.KEYCODE.J]:              VT100Keyboard.KEYNUM.J,
-    [WebIO.KEYCODE.H]:              VT100Keyboard.KEYNUM.H,
-    [WebIO.KEYCODE.D]:              VT100Keyboard.KEYNUM.D,
-    [WebIO.KEYCODE.S]:              VT100Keyboard.KEYNUM.S,
-    [WebIO.KEYCODE.NUM_DEL]:        VT100Keyboard.KEYNUM.NUM_DEL,
-    [WebIO.KEYCODE.F5]:             VT100Keyboard.KEYNUM.NUM_COMMA,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
-    [WebIO.KEYCODE.NUM_5]:          VT100Keyboard.KEYNUM.NUM_5,
-    [WebIO.KEYCODE.NUM_4]:          VT100Keyboard.KEYNUM.NUM_4,
-    [WebIO.KEYCODE.CR]:             VT100Keyboard.KEYNUM.CR,
-    [WebIO.KEYCODE.PERIOD]:         VT100Keyboard.KEYNUM.PERIOD,
-    [WebIO.KEYCODE.COMMA]:          VT100Keyboard.KEYNUM.COMMA,
-    [WebIO.KEYCODE.N]:              VT100Keyboard.KEYNUM.N,
-    [WebIO.KEYCODE.B]:              VT100Keyboard.KEYNUM.B,
-    [WebIO.KEYCODE.X]:              VT100Keyboard.KEYNUM.X,
-    [WebIO.KEYCODE.F8]:             VT100Keyboard.KEYNUM.NO_SCROLL,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
-    [WebIO.KEYCODE.NUM_9]:          VT100Keyboard.KEYNUM.NUM_9,
-    [WebIO.KEYCODE.NUM_3]:          VT100Keyboard.KEYNUM.NUM_3,
-    [WebIO.KEYCODE.NUM_6]:          VT100Keyboard.KEYNUM.NUM_6,
-    [WebIO.KEYCODE.NUM_SUB]:        VT100Keyboard.KEYNUM.NUM_SUB,
-    [WebIO.KEYCODE.SLASH]:          VT100Keyboard.KEYNUM.SLASH,
-    [WebIO.KEYCODE.M]:              VT100Keyboard.KEYNUM.M,
-    [WebIO.KEYCODE.SPACE]:          VT100Keyboard.KEYNUM.SPACE,
-    [WebIO.KEYCODE.V]:              VT100Keyboard.KEYNUM.V,
-    [WebIO.KEYCODE.C]:              VT100Keyboard.KEYNUM.C,
-    [WebIO.KEYCODE.Z]:              VT100Keyboard.KEYNUM.Z,
-    [WebIO.KEYCODE.F9]:             VT100Keyboard.KEYNUM.SETUP,         // no natural mapping
+    [Device.KEYCODE.BSLASH]:        VT100Keyboard.KEYNUM.BSLASH,
+    [Device.KEYCODE.L]:             VT100Keyboard.KEYNUM.L,
+    [Device.KEYCODE.K]:             VT100Keyboard.KEYNUM.K,
+    [Device.KEYCODE.G]:             VT100Keyboard.KEYNUM.G,
+    [Device.KEYCODE.F]:             VT100Keyboard.KEYNUM.F,
+    [Device.KEYCODE.A]:             VT100Keyboard.KEYNUM.A,
+    [Device.KEYCODE.NUM_8]:         VT100Keyboard.KEYNUM.NUM_8,
+    [Device.KEYCODE.CR]:            VT100Keyboard.KEYNUM.NUM_CR,
+    [Device.KEYCODE.NUM_2]:         VT100Keyboard.KEYNUM.NUM_2,
+    [Device.KEYCODE.NUM_1]:         VT100Keyboard.KEYNUM.NUM_1,
+    [Device.KEYCODE.QUOTE]:         VT100Keyboard.KEYNUM.QUOTE,
+    [Device.KEYCODE.SEMI]:          VT100Keyboard.KEYNUM.SEMI,
+    [Device.KEYCODE.J]:             VT100Keyboard.KEYNUM.J,
+    [Device.KEYCODE.H]:             VT100Keyboard.KEYNUM.H,
+    [Device.KEYCODE.D]:             VT100Keyboard.KEYNUM.D,
+    [Device.KEYCODE.S]:             VT100Keyboard.KEYNUM.S,
+    [Device.KEYCODE.NUM_DEL]:       VT100Keyboard.KEYNUM.NUM_DEL,
+    [Device.KEYCODE.F5]:            VT100Keyboard.KEYNUM.NUM_COMMA,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
+    [Device.KEYCODE.NUM_5]:         VT100Keyboard.KEYNUM.NUM_5,
+    [Device.KEYCODE.NUM_4]:         VT100Keyboard.KEYNUM.NUM_4,
+    [Device.KEYCODE.CR]:            VT100Keyboard.KEYNUM.CR,
+    [Device.KEYCODE.PERIOD]:        VT100Keyboard.KEYNUM.PERIOD,
+    [Device.KEYCODE.COMMA]:         VT100Keyboard.KEYNUM.COMMA,
+    [Device.KEYCODE.N]:             VT100Keyboard.KEYNUM.N,
+    [Device.KEYCODE.B]:             VT100Keyboard.KEYNUM.B,
+    [Device.KEYCODE.X]:             VT100Keyboard.KEYNUM.X,
+    [Device.KEYCODE.F8]:            VT100Keyboard.KEYNUM.NO_SCROLL,     // no natural mapping (TODO: Add virtual keyCode mapping as well?)
+    [Device.KEYCODE.NUM_9]:         VT100Keyboard.KEYNUM.NUM_9,
+    [Device.KEYCODE.NUM_3]:         VT100Keyboard.KEYNUM.NUM_3,
+    [Device.KEYCODE.NUM_6]:         VT100Keyboard.KEYNUM.NUM_6,
+    [Device.KEYCODE.NUM_SUB]:       VT100Keyboard.KEYNUM.NUM_SUB,
+    [Device.KEYCODE.SLASH]:         VT100Keyboard.KEYNUM.SLASH,
+    [Device.KEYCODE.M]:             VT100Keyboard.KEYNUM.M,
+    [Device.KEYCODE.SPACE]:         VT100Keyboard.KEYNUM.SPACE,
+    [Device.KEYCODE.V]:             VT100Keyboard.KEYNUM.V,
+    [Device.KEYCODE.C]:             VT100Keyboard.KEYNUM.C,
+    [Device.KEYCODE.Z]:             VT100Keyboard.KEYNUM.Z,
+    [Device.KEYCODE.F9]:            VT100Keyboard.KEYNUM.SETUP,         // no natural mapping
     [VT100Keyboard.KEYCODE.SETUP]:  VT100Keyboard.KEYNUM.SETUP,         // NOTE: virtual keyCode mapping
-    [WebIO.KEYCODE.CTRL]:           VT100Keyboard.KEYNUM.CTRL,
-    [WebIO.KEYCODE.SHIFT]:          VT100Keyboard.KEYNUM.SHIFT,
-    [WebIO.KEYCODE.CAPS_LOCK]:      VT100Keyboard.KEYNUM.CAPS_LOCK,
+    [Device.KEYCODE.CTRL]:          VT100Keyboard.KEYNUM.CTRL,
+    [Device.KEYCODE.SHIFT]:         VT100Keyboard.KEYNUM.SHIFT,
+    [Device.KEYCODE.CAPS_LOCK]:     VT100Keyboard.KEYNUM.CAPS_LOCK,
     /*
      * Mappings can also be to an array of multiple keyNum combinations, such as:
      */
@@ -536,14 +538,14 @@ VT100Keyboard.KEYMAP = {
 VT100Keyboard.CLICKMAP = {
     "keySetup":                     VT100Keyboard.KEYCODE.SETUP,        // NOTE: virtual keyCode mapping
     "keyLineFeed":                  VT100Keyboard.KEYCODE.LF,           // NOTE: virtual keyCode mapping
-    "keyTab":                       WebIO.KEYCODE.TAB,
-    "keyEsc":                       WebIO.KEYCODE.ESC,
+    "keyTab":                       Device.KEYCODE.TAB,
+    "keyEsc":                       Device.KEYCODE.ESC,
     "keyBreak":                     VT100Keyboard.KEYCODE.BREAK,        // NOTE: virtual keyCode mapping
-    "keyCtrl":                      WebIO.KEYCODE.CTRL,
+    "keyCtrl":                      Device.KEYCODE.CTRL,
     "keyCtrlC":                     VT100Keyboard.KEYCODE.CTRL_C,       // NOTE: virtual keyCode mapping
-    "keyCtrlLock":                  [WebIO.KEYCODE.LOCK, WebIO.KEYCODE.CTRL],
-    "keyShiftLock":                 [WebIO.KEYCODE.LOCK, WebIO.KEYCODE.SHIFT],
-    "keyCapsLock":                  WebIO.KEYCODE.CAPS_LOCK
+    "keyCtrlLock":                 [Device.KEYCODE.LOCK, Device.KEYCODE.CTRL],
+    "keyShiftLock":                [Device.KEYCODE.LOCK, Device.KEYCODE.SHIFT],
+    "keyCapsLock":                  Device.KEYCODE.CAPS_LOCK
 };
 
 VT100Keyboard.LEDS = {
@@ -560,4 +562,4 @@ VT100Keyboard.IOTABLE = {
     0x82:   [VT100Keyboard.prototype.inUARTAddress, VT100Keyboard.prototype.outUARTStatus]
 };
 
-Defs.CLASSES["VT100Keyboard"] = VT100Keyboard;
+VT100Keyboard.CLASSES["VT100Keyboard"] = VT100Keyboard;

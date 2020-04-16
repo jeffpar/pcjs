@@ -3,6 +3,7 @@ layout: page
 title: Norton Utilities 2.00
 permalink: /software/pcx86/util/norton/2.00/
 redirect_from: /disks/pcx86/tools/other/norton/2.00/
+preview: images/screenshot.png
 machines:
   - id: ibm5160
     type: pcx86

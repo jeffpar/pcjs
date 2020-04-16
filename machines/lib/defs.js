@@ -7,24 +7,20 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
-
-/* eslint-disable no-var */
-
 /**
  * COMMAND is the default name of the global command handler we will define, to provide
  * the same convenient access to all the WebIO COMMAND handlers that the Debugger enjoys.
  *
  * @define {string}
  */
-var COMMAND = "command";
+const COMMAND = "command";
 
 /**
  * COMPILED is false by default; overridden with true in the Closure Compiler release.
  *
  * @define {boolean}
  */
-var COMPILED = false;
+const COMPILED = false;
 
 /**
  * DEBUG is true by default, enabling assertions and other runtime checks; overridden with false
@@ -34,15 +30,15 @@ var COMPILED = false;
  *
  * @define {boolean}
  */
-var DEBUG = true;
+const DEBUG = true;
 
 /**
- * FACTORY is "Machine" by default; overridden with the machine's "factory" string in machines.json
+ * FACTORY is "PCjs" by default; overridden with the machine's "factory" string in machines.json
  * to ensure unique factories.
  *
  * @define {string}
  */
-var FACTORY = "Machine";
+const FACTORY = "NewMachine";
 
 /**
  * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
@@ -50,7 +46,7 @@ var FACTORY = "Machine";
  *
  * @define {boolean}
  */
-var MAXDEBUG = false;
+const MAXDEBUG = false;
 
 /**
  * VERSION is the current PCjs Project release number, updated somewhat arbitrarily and usually only after
@@ -58,7 +54,19 @@ var MAXDEBUG = false;
  *
  * @define {string}
  */
-var VERSION = "2.00";
+const VERSION = "2.00";
+
+/**
+ * @class {Defs}
+ */
+export class Defs {}
+
+Defs.COMMAND  = COMMAND;
+Defs.COMPILED = COMPILED;
+Defs.DEBUG    = DEBUG;
+Defs.FACTORY  = FACTORY;
+Defs.MAXDEBUG = MAXDEBUG;
+Defs.VERSION  = VERSION;
 
 /*
  * The following globals CANNOT be overridden.
@@ -66,7 +74,7 @@ var VERSION = "2.00";
  * LITTLE_ENDIAN is true if the browser's ArrayBuffer storage is little-endian.  If LITTLE_ENDIAN matches
  * the endian-ness of a machine being emulated, then that machine can use ArrayBuffers for Memory buffers as-is.
  */
-var LITTLE_ENDIAN = function() {
+Defs.LITTLE_ENDIAN = function() {
     let buffer = new ArrayBuffer(2);
     new DataView(buffer).setUint16(0, 256, true);
     return new Uint16Array(buffer)[0] === 256;
@@ -79,7 +87,7 @@ var LITTLE_ENDIAN = function() {
  *
  * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
  */
-var MESSAGE = {
+Defs.MESSAGE = {
     ALL:        0xffffffffffff,
     NONE:       0x000000000000,
     DEFAULT:    0x000000000000,
@@ -104,7 +112,7 @@ var MESSAGE = {
  *
  * TODO: Move these definitions to a more appropriate shared file at some point.
  */
-var RS232 = {
+Defs.RS232 = {
     RTS: {
         PIN:  4,
         MASK: 0x00000010
@@ -131,22 +139,5 @@ var RS232 = {
     }
 };
 
-/**
- * @class {Defs}
- * @unrestricted
- */
-class Defs {
-    /**
-     * Defs()
-     *
-     * @this {Defs}
-     */
-    constructor()
-    {
-    }
-}
-
 Defs.CLASSES = {};
 Defs.CLASSES["Defs"] = Defs;
-
-if (typeof module !== "undefined") module.exports = Defs;

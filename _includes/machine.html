@@ -79,14 +79,16 @@
     {%- endif %}
     <div class="pcjs-chassis" style="{{ machine_style }}">
   {%- for machine_component in machine.components -%}
-    {%- if machine_component.config -%}
+    {%- assign config = nil -%}
+    {%- if machine_component.config -%}{%- assign config = machine_component.config -%}{%- elsif machine_component.id == nil -%}{%- assign config = machine_component -%}{%- endif -%}
+    {%- if config -%}
       {%- assign config_data = site.data -%}
-      {%- assign config_paths = machine_component.config | replace: "/configs/", "" | replace: ".json", "" | split: "/" -%}
+      {%- assign config_paths = config | replace: "/configs/", "" | replace: ".json", "" | split: "/" -%}
       {%- for config_path in config_paths -%}{%- assign config_data = config_data[config_path] -%}{%- endfor -%}
       {%- assign component = config_data -%}
       {%- unless component %}
         {%- capture machine_errors %}{{ machine_errors }}
-<p class="machine-error">Missing component configuration file: {{ machine_component.config }}</p>
+<p class="machine-error">Missing component configuration file: {{ config }}</p>
         {%- endcapture -%}
         {%- continue -%}
       {%- endunless -%}

@@ -7,7 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Input }  from "./input.js";
+import { LED }    from "./led.js";
+import { Memory } from "./memory.js";
 
 /**
  * @typedef {Config} ROMConfig
@@ -27,7 +29,7 @@
  * @unrestricted
  * @property {ROMConfig} config
  */
-class ROM extends Memory {
+export class ROM extends Memory {
     /**
      * ROM(idMachine, idDevice, config)
      *
@@ -71,7 +73,7 @@ class ROM extends Memory {
          * one, by virtue of using Math.ceil() instead of Math.floor() for the columns calculation.
          */
         this.cpu = this.dbg = undefined;
-        if (Defs.CLASSES["LED"] && this.bindings[ROM.BINDING.ARRAY]) {
+        if (ROM.CLASSES["LED"] && this.bindings[ROM.BINDING.ARRAY]) {
             let rom = this;
             let addrLines = Math.log2(this.values.length) / 2;
             this.cols = Math.pow(2, Math.ceil(addrLines));
@@ -239,4 +241,4 @@ ROM.BINDING = {
     CELLDESC:   "cellDesc"
 };
 
-Defs.CLASSES["ROM"] = ROM;
+ROM.CLASSES["ROM"] = ROM;

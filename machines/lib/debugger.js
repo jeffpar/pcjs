@@ -7,7 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "./device.js";
+import { Memory } from "./memory.js";
 
 /**
  * DebuggerConfig properties
@@ -58,7 +59,7 @@
  * @unrestricted
  * @property {Array.<Array.<Address>>} aaBreakAddress
  */
-class Debugger extends Device {
+export class Debugger extends Device {
     /**
      * Debugger(idMachine, idDevice, config)
      *
@@ -153,7 +154,7 @@ class Debugger extends Device {
          * If set to MESSAGE.ALL, then we break on all messages.  It can be set to a subset of message bits,
          * but there is currently no UI for that.
          */
-        this.messagesBreak = MESSAGE.NONE;
+        this.messagesBreak = Device.MESSAGE.NONE;
 
         /*
          * variables is an object with properties that grow as setVariable() assigns more variables;
@@ -254,7 +255,7 @@ class Debugger extends Device {
         this.historyForced = false;
         this.historyNext = 0;
         this.historyBuffer = [];
-        this.addHandler(Device.HANDLER.COMMAND, this.onCommand.bind(this));
+        this.addHandler(Debugger.HANDLER.COMMAND, this.onCommand.bind(this));
 
         let commands = /** @type {string} */ (this.getMachineConfig("commands"));
         if (commands) this.parseCommands(commands);
@@ -762,7 +763,7 @@ class Debugger extends Device {
          */
         dst = this.truncate(dst, 0, true);
         src = this.truncate(src, 0, true);
-        return ((((dst / NumIO.TWO_POW32)|0) & ((src / NumIO.TWO_POW32)|0)) * NumIO.TWO_POW32) + ((dst & src) >>> 0);
+        return ((((dst / Debugger.TWO_POW32)|0) & ((src / Debugger.TWO_POW32)|0)) * Debugger.TWO_POW32) + ((dst & src) >>> 0);
     }
 
     /**
@@ -812,7 +813,7 @@ class Debugger extends Device {
          */
         dst = this.truncate(dst, 0, true);
         src = this.truncate(src, 0, true);
-        return ((((dst / NumIO.TWO_POW32)|0) | ((src / NumIO.TWO_POW32)|0)) * NumIO.TWO_POW32) + ((dst | src) >>> 0);
+        return ((((dst / Debugger.TWO_POW32)|0) | ((src / Debugger.TWO_POW32)|0)) * Debugger.TWO_POW32) + ((dst | src) >>> 0);
     }
 
     /**
@@ -846,7 +847,7 @@ class Debugger extends Device {
          */
         dst = this.truncate(dst, 0, true);
         src = this.truncate(src, 0, true);
-        return ((((dst / NumIO.TWO_POW32)|0) ^ ((src / NumIO.TWO_POW32)|0)) * NumIO.TWO_POW32) + ((dst ^ src) >>> 0);
+        return ((((dst / Debugger.TWO_POW32)|0) ^ ((src / Debugger.TWO_POW32)|0)) * Debugger.TWO_POW32) + ((dst ^ src) >>> 0);
     }
 
     /**
@@ -1369,7 +1370,7 @@ class Debugger extends Device {
                                 if (valueUndefined !== undefined) {
                                     value += valueUndefined;
                                 } else {
-                                    if (MAXDEBUG) this.printf("undefined %s: %s (%s)\n", (sName || "value"), sValue, sUndefined);
+                                    if (Debugger.MAXDEBUG) this.printf("undefined %s: %s (%s)\n", (sName || "value"), sValue, sUndefined);
                                     value = undefined;
                                 }
                             }
@@ -1380,10 +1381,10 @@ class Debugger extends Device {
             if (value != undefined) {
                 value = this.truncate(this.parseUnary(value, unary));
             } else {
-                if (MAXDEBUG) this.printf("invalid %s: %s\n", (sName || "value"), sValue);
+                if (Debugger.MAXDEBUG) this.printf("invalid %s: %s\n", (sName || "value"), sValue);
             }
         } else {
-            if (MAXDEBUG) this.printf("missing %s\n", (sName || "value"));
+            if (Debugger.MAXDEBUG) this.printf("missing %s\n", (sName || "value"));
         }
         return value;
     }
@@ -1438,7 +1439,7 @@ class Debugger extends Device {
             }
         }
         if (v != vNew) {
-            if (MAXDEBUG) this.printf("warning: value %d truncated to %d\n", v, vNew);
+            if (Debugger.MAXDEBUG) this.printf("warning: value %d truncated to %d\n", v, vNew);
             v = vNew;
         }
         return v;
@@ -1804,7 +1805,7 @@ class Debugger extends Device {
         if (option) {
             let on = this.parseBoolean(option);
             if (on != undefined) {
-                this.messagesBreak = on? MESSAGE.ALL : MESSAGE.NONE;
+                this.messagesBreak = on? Device.MESSAGE.ALL : Device.MESSAGE.NONE;
             } else {
                 result = this.sprintf("unrecognized message option: %s\n", option);
             }
@@ -2572,7 +2573,7 @@ class Debugger extends Device {
     setFocus()
     {
         if (this.cTransitions) {
-            let element = this.findBinding(WebIO.BINDING.PRINT, true);
+            let element = this.findBinding(Debugger.BINDING.PRINT, true);
             if (element) element.focus();
         }
     }
@@ -2762,4 +2763,4 @@ Debugger.DECOP_PRECEDENCE = {
     '}':    20      // close grouped expression (converted from achGroup[1])
 };
 
-// Defs.CLASSES["Debugger"] = Debugger;
+// Debugger.CLASSES["Debugger"] = Debugger;

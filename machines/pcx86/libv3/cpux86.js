@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { CPU } from "../../lib/cpu.js";
 
 /**
  * CPUx86
@@ -15,7 +15,7 @@
  * @class {CPUx86}
  * @unrestricted
  */
-class CPUx86 extends CPU {
+export class CPUx86 extends CPU {
     /**
      * CPUx86(idMachine, idDevice, config)
      *
@@ -900,4 +900,4 @@ CPUx86.PS_SAHF = (CPUx86.PS.CF | CPUx86.PS.PF | CPUx86.PS.AF | CPUx86.PS.ZF | CP
  */
 CPUx86.OPFLAG_PREFIXES = (CPUx86.OPFLAG.SEG | CPUx86.OPFLAG.LOCK | CPUx86.OPFLAG.REPZ | CPUx86.OPFLAG.REPNZ | CPUx86.OPFLAG.DATASIZE | CPUx86.OPFLAG.ADDRSIZE);
 
-Defs.CLASSES["CPUx86"] = CPUx86;
+CPUx86.CLASSES["CPUx86"] = CPUx86;

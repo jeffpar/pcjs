@@ -7,17 +7,13 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
-
-if (typeof module !== "undefined") {
-    var Defs = require("../../machines/lib/defs");      // eslint-disable-line no-var
-}
+import { Defs } from "./defs.js";
 
 /**
  * @class {NumIO}
  * @unrestricted
  */
-class NumIO extends Defs {
+export class NumIO extends Defs {
     /**
      * NumIO()
      *
@@ -50,10 +46,6 @@ class NumIO extends Defs {
      *
      * @this {NumIO}
      */
-    constructor()
-    {
-        super();
-    }
 
     /**
      * isInt(s, base)
@@ -609,6 +601,4 @@ class NumIO extends Defs {
  */
 NumIO.TWO_POW32 = Math.pow(2, 32);
 
-Defs.CLASSES["NumIO"] = NumIO;
-
-if (typeof module !== "undefined") module.exports = NumIO;
+NumIO.CLASSES["NumIO"] = NumIO;

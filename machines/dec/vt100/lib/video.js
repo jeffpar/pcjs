@@ -7,7 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Memory }  from "../../../lib/memory.js";
+import { Monitor } from "../../../lib/monitor.js";
 
 /**
  * @typedef {MonitorConfig} VT100VideoConfig
@@ -24,7 +25,7 @@
  * @unrestricted
  * @property {VT100VideoConfig} config
  */
-class VT100Video extends Monitor {
+export class VT100Video extends Monitor {
     /**
      * VT100Video(idMachine, idDevice, config)
      *
@@ -69,7 +70,7 @@ class VT100Video extends Monitor {
          * Setting the device's "messages" property eliminates the need for printf() calls to include this value;
          * any printf() that omits a MESSAGE parameter will use this value by default.
          */
-        this.messages = MESSAGE.VIDEO;
+        this.messages = VT100Video.MESSAGE.VIDEO;
 
         this.addrBuffer = this.config['bufferAddr'];
         this.fUseRAM = this.config['bufferRAM'];
@@ -458,7 +459,7 @@ class VT100Video extends Monitor {
          * NOTE: The following test image was useful for early testing, but a *real* VT100 doesn't display a test image,
          * so this code is no longer enabled by default.  Remove MAXDEBUG if you want to see it again.
          */
-        if (MAXDEBUG && !this.test) {
+        if (VT100Video.MAXDEBUG && !this.test) {
             /*
              * Build a test iamge in the VT100 frame buffer; we'll mimic the "SET-UP A" image, since it uses
              * all the font variations.  The process involves iterating over 0-based row numbers -2 (or -5 if 50Hz
@@ -761,7 +762,7 @@ class VT100Video extends Monitor {
              * Possible VT100 firmware bug?  I'm not sure.  Anyway, this DEBUG-only code is here to help trap
              * that scenario, until I figure it out.
              */
-            if (DEBUG && (this.aCacheCells[iCellUpdated] & 0x7f) == 0x48) {
+            if (VT100Video.DEBUG && (this.aCacheCells[iCellUpdated] & 0x7f) == 0x48) {
                 this.printf("spurious 'H' character at offset %d\n", iCellUpdated);
             }
             this.aCacheCells[iCellUpdated] = -1;
@@ -812,4 +813,4 @@ VT100Video.VT100 = {
     ADDRBIAS_HI:    0x4000
 };
 
-Defs.CLASSES["VT100Video"] = VT100Video;
+VT100Video.CLASSES["VT100Video"] = VT100Video;

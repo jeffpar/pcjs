@@ -7,7 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { CPU }   from "./cpu.js";
+import { Input } from "./input.js";
+import { LED }   from "./led.js";
 
 /**
  * @typedef {Config} LEDCtrlConfig
@@ -49,7 +51,7 @@
  * @property {string} colorSelected (set by updateColorSelection())
  * @property {Array.<string>} colors
  */
-class LEDCtrl extends CPU {
+export class LEDCtrl extends CPU {
     /**
      * LEDCtrl(idMachine, idDevice, config)
      *
@@ -126,7 +128,7 @@ class LEDCtrl extends CPU {
             /*
              * Establish an onCommand() handler.
              */
-            this.addHandler(WebIO.HANDLER.COMMAND, this.onCommand.bind(this));
+            this.addHandler(LED.HANDLER.COMMAND, this.onCommand.bind(this));
         }
     }
 
@@ -866,7 +868,7 @@ class LEDCtrl extends CPU {
             return false;
         }
         let version = stateCPU.shift();
-        if ((version|0) !== (+VERSION|0)) {
+        if ((version|0) !== (+LED.VERSION|0)) {
             this.printf("Saved state version mismatch: %3.2f\n", version);
             return false;
         }
@@ -1349,7 +1351,7 @@ class LEDCtrl extends CPU {
     {
         let stateCPU = [];
         let stateLEDs = [];
-        stateCPU.push(+VERSION);
+        stateCPU.push(+LED.VERSION);
         stateCPU.push(this.sMessage);
         stateCPU.push(this.iMessageNext);
         stateCPU.push(this.sMessageCmd);
@@ -1764,4 +1766,4 @@ LEDCtrl.FONTS = {
     }
 };
 
-Defs.CLASSES["LEDCtrl"] = LEDCtrl;
+LEDCtrl.CLASSES["LEDCtrl"] = LEDCtrl;

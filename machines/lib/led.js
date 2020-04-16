@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Device } from "./device.js";
 
 /**
  * @typedef {Config} LEDConfig
@@ -91,7 +91,7 @@
  * @property {boolean} fBufferModified
  * @property {boolean} fBufferTickled
  */
-class LED extends Device {
+export class LED extends Device {
     /**
      * LED(idMachine, idDevice, config)
      *
@@ -734,7 +734,7 @@ class LED extends Device {
     getRGBColor(color, colorDefault)
     {
         color = color || colorDefault;
-        return color && WebIO.COLORS[color] || color;
+        return color && Device.COLORS[color] || color;
     }
 
     /**
@@ -780,7 +780,7 @@ class LED extends Device {
     {
         if (color) {
             let rgb = [];
-            color = WebIO.COLORS[color] || color;
+            color = Device.COLORS[color] || color;
             if (this.parseRGBValues(color, rgb)) {
                 color = "rgba(";
                 let i;
@@ -1136,4 +1136,4 @@ LED.SYMBOL_SEGMENTS = {
     '.':        ['P']
 };
 
-Defs.CLASSES["LED"] = LED;
+LED.CLASSES["LED"] = LED;

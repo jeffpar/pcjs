@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import { Debugger } from "../../lib/debugger.js";
 
 /**
  * Debugger for the x86 CPU
@@ -15,7 +15,7 @@
  * @class {Dbgx86}
  * @unrestricted
  */
-class Dbgx86 extends Debugger {
+export class Dbgx86 extends Debugger {
     /**
      * Dbgx86(idMachine, idDevice, config)
      *
@@ -82,4 +82,4 @@ class Dbgx86 extends Debugger {
     }
 }
 
-Defs.CLASSES["Dbgx86"] = Dbgx86;
+Dbgx86.CLASSES["Dbgx86"] = Dbgx86;
