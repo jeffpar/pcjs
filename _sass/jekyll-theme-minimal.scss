@@ -208,6 +208,10 @@ section p.view {
   font-style: italic;
 }
 
+section > p > img {
+  width: 100%;
+}
+
 small {
   font-size: 11px;
 }
