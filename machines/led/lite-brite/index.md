@@ -3,6 +3,7 @@ layout: page
 title: Lite-Brite
 permalink: /machines/led/lite-brite/
 redirect_from: /devices/leds/litebrite/
+preview: images/screenshot.png
 machines:
   - id: lbDemo
     type: led

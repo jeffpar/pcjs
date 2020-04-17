@@ -3,6 +3,7 @@ layout: page
 title: Game of Life
 permalink: /machines/led/life/color/
 redirect_from: /devices/leds/life/colors/
+preview: images/screenshot.png
 machines:
   - id: lifeColorDemo
     type: led

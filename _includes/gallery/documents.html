@@ -1,7 +1,7 @@
 {% assign title = include.title | default: "Documents" %}
 {% assign group = include.group | default: "@documents" %}
 {% assign group_link = include.link %}
-{% assign group_id = title | replace: "@", "" | replace: " ", "-" | downcase %}
+{% assign group_id = title | slugify %}
 {% assign cover_width = include.width | default: "200" %}
 {% assign cover_height = include.height | default: "" %}
 {% assign path = include.path | default: include.target | default: page.permalink %}
@@ -70,7 +70,7 @@
           {%- assign doc_tags = doc['@tags'] | default: "" -%}
           {%- if doc_title and doc_title != "" and doc_tags contains doc_tag -%}
             {%- assign doc_file = doc['@file'] -%}
-            {%- assign doc_id = doc_file | replace: ".pdf","" | replace: ".png","" | default: doc_title | slugify -%}
+            {%- assign doc_id = doc_file | default: doc_title | slugify -%}
             {%- capture doc_path -%}{{ cur_path }}/{{ doc_file }}{%- endcapture -%}
             {%- assign doc_link = doc['@link'] | default: doc_path -%}
             {%- assign doc_cover = doc['@cover'] | default: "/documents/covers/default.jpg" -%}

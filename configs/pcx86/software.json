@@ -655,7 +655,7 @@
               },
               {
                 "@title": "WordStar 3.0 Reference Card",
-                "@file": "WordStar_3.2_Binder.png",
+                "@file": "WordStar_3.0_Reference_Card.png",
                 "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqkTDr8PVob3Mpvnxg?e=XPFAEC",
                 "@cover": ".png",
                 "@source": "PCjs"
@@ -2345,15 +2345,6 @@
                 "@diskette": "MSC510-01534-QUICKC.json",
                 "@type": "PC360K"
               }
-            ],
-            "@documents": [
-              {
-                "@title": "MS C 5.1 Update for MS OS/2 and MS-DOS (1988)",
-                "@file": "MSC51-UPDATE-1988.pdf",
-                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBuypY9jGc9RdsSRg?e=0QxeVw",
-                "@cover": ".jpg",
-                "@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.1-update-1988.pdf"
-              }
             ]
           },
           "5.10-os2": {
@@ -3049,14 +3040,14 @@
               {
                 "@title": "MS OS/2 SDK Utilities (1987 UPD)",
                 "@file": "MSOS2-1X-SDK-UTILS-UPD-1987.pdf",
-                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBq44aXH4eNRAsPng?e=HDoNzh",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBq44aXH4eNRAsPng?e=Vacg3z",
                 "@cover": ".jpg",
                 "@source": "http://www.os2museum.com/files/docs/os210sdk/sdk-utils-upd-1987.pdf"
               },
               {
                 "@title": "MS OS/2 SDK Utilities (1988 UPD)",
-                "@file": "MSOS2-1X-SDK-UTILS-UPD-1987.pdf",
-                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBq44aXH4eNRAsPng?e=HDoNzh",
+                "@file": "MSOS2-1X-SDK-UTILS-UPD-1988.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBp1qtO5yK6MkUiYA?e=Tq2D9J",
                 "@cover": ".jpg",
                 "@source": "http://www.os2museum.com/files/docs/os210sdk/sdk-utils-upd-1988.pdf"
               },
@@ -3369,7 +3360,7 @@
       "@title": "Books",
       "@versions": {
         "dos_internals": {
-          "@title": "DOS Internals",
+          "@title": "DOS Internals (1994)",
           "@media": [
             {
               "@diskette": "DOS-INTERN.json",
@@ -4633,13 +4624,6 @@
                 "@title": "COMPAQ BASIC Reference Guide (Dec 1982)",
                 "@file": "COMPAQ_BASIC_Reference_Guide_1982-12.pdf",
                 "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEZTO1wyEcsBJ1Njg",
-                "@cover": ".jpg",
-                "@source": "PCjs"
-              },
-              {
-                "@title": "COMPAQ Operations Guide (Nov 1982)",
-                "@file": "COMPAQ_Operations_Guide_1982-11.pdf",
-                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEafO5tOghjO67McQ",
                 "@cover": ".jpg",
                 "@source": "PCjs"
               }
