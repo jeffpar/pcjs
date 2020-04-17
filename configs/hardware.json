@@ -565,7 +565,7 @@
     "compaq": {
       "@title": "COMPAQ",
       "portable": {
-        "@title": "Portable",
+        "@title": "COMPAQ Portable",
         "vdu": {
           "@title": "Monochrome Graphics",
           "@redirect_from": "/devices/pcx86/machine/compaq/portable/vdu/128kb/"
@@ -755,11 +755,11 @@
         "@title": "PC AT (Model 5170)",
         "cga": {
           "@title": "Color Display",
-          "redirect_from": "/devices/pcx86/machine/5170/cga/640kb/rev3/"
+          "@redirect_from": "/devices/pcx86/machine/5170/cga/640kb/rev3/"
         },
         "vga/cdrom": {
           "@title": "VGA Display with CD-ROM",
-          "redirect_from": "/disks/pcx86/drives/cdrom/"
+          "@redirect_from": "/disks/pcx86/drives/cdrom/"
         },
         "@documents": [
           {
