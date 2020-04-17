@@ -12,7 +12,7 @@ machines:
       A:
         name: None
       B:
-        name: "Norton Utilities 4.00 (Advanced #1)"
+        name: "Norton Utilities 4.00 (Adv 1)"
     autoStart: true
     autoType: $date\r$time\rB:\rDIR\r
 ---
@@ -26,7 +26,7 @@ We also have copies of [Version 4.00 (Standard Edition)](../) from both March 1,
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of Norton Utilities 4.00 (Advanced #1)
+### Directory of Norton Utilities 4.00 (Adv 1)
 
     Volume in drive A is NU Adv Ed 1
     Directory of  A:\
@@ -61,7 +61,7 @@ We also have copies of [Version 4.00 (Standard Edition)](../) from both March 1,
     MARY              618   3-01-07   4:00p
         28 File(s)     27648 bytes free
 
-### Directory of Norton Utilities 4.00 (Advanced #2)
+### Directory of Norton Utilities 4.00 (Adv 2)
 
     Volume in drive A is NU Adv Ed 2
     Directory of  A:\
@@ -76,9 +76,9 @@ We also have copies of [Version 4.00 (Standard Edition)](../) from both March 1,
 
 ### Diskette Photos
 
-![Norton Utilities 4.00 (Advanced #1)]({{ site.software.diskettes.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK1.jpg)
+![Norton Utilities 4.00 (Adv 1)]({{ site.software.diskettes.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK1.jpg)
 
-![Norton Utilities 4.00 (Advanced #2)]({{ site.software.diskettes.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK2.jpg)
+![Norton Utilities 4.00 (Adv 2)]({{ site.software.diskettes.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK2.jpg)
 
 ![Norton Utilities 4.00 (Box Front)]({{ site.software.diskettes.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-BOX-FRONT.jpg)
 

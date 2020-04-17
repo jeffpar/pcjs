@@ -5,7 +5,7 @@ permalink: /software/pcx86/util/norton/4.50/advanced/
 redirect_from: /disks/pcx86/tools/other/norton/4.50/
 ---
 
-### Directory of Norton Utilities 4.50 (Disk 1)
+### Directory of Norton Utilities 4.50 (Adv 1)
 
 	 Volume in drive A is NU AE 4.5 1
 
@@ -23,7 +23,7 @@ redirect_from: /disks/pcx86/tools/other/norton/4.50/
 	        6 file(s)     348239 bytes
 	                       11264 bytes free
 
-### Directory of Norton Utilities 4.50 (Disk 2)
+### Directory of Norton Utilities 4.50 (Adv 2)
 
 	 Volume in drive A is NU AE 4.5 2
 
@@ -45,7 +45,7 @@ redirect_from: /disks/pcx86/tools/other/norton/4.50/
 	       10 file(s)     347378 bytes
 	                       10240 bytes free
 
-### Directory of Norton Utilities 4.50 (Disk 3)
+### Directory of Norton Utilities 4.50 (Adv 3)
 
 	 Volume in drive A is NU AE 4.5 3
 
