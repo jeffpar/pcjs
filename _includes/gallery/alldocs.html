@@ -37,7 +37,7 @@
       {%- capture target %}/{{ root | replace: "hardware","machines" }}{% endcapture %}
       {%- assign title = data['@title'] | default: item['@title'] %}
       {%- capture link %}{{ target }}/{% endcapture %}
-      {%- include gallery/documents.html target=target title=title link=link %}
+      {%- include gallery/documents.html target=target title=title link=link style="left" %}
       {%- assign alldocs_exist = true %}
     {%- endif %}
   {%- endif %}

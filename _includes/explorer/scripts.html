@@ -26,6 +26,7 @@
               let element;
               if (prefix) path = prefix + path;
               let id = path.substr(1).replace(/\//g, '-').replace(/-$/, '');
+              if (id == "documents") id = "library";
               do {
                 element = document.getElementById(id);
                 if (element) break;

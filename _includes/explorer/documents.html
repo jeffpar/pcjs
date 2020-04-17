@@ -52,13 +52,20 @@
               {%- if instance[0] contains '@' -%}{%- continue -%}{%- endif -%}
               {%- capture docs_path4 -%}{%- endcapture -%}
               {%- if instance[0] != "" -%}{%- capture docs_path4 -%}/{{ instance[0] }}{%- endcapture %}{%- endif -%}
-              {%- capture docs_url -%}{{ docs_path1 }}{{ docs_path2 }}{{ docs_path3 }}{{ docs_path4 }}{%- endcapture -%}
-              {%- capture docs_link -%}{% if instance[1]['@permalink'] %}{{ instance[1]['@permalink'] }}{% else %}/documents{{ docs_url }}/{% endif %}{%- endcapture -%}
+              {% if instance[1]['@permalink'] %}
+                {%- capture docs_link -%}{{ instance[1]['@permalink'] }}{%- endcapture -%}
+                {%- capture docs_url -%}{{ docs_link | replace: "/documents","" | append: "@" | replace: "/@","" }}{%- endcapture -%}
+              {% else %}
+                {%- capture docs_url -%}{{ docs_path1 }}{{ docs_path2 }}{{ docs_path3 }}{{ docs_path4 }}{%- endcapture -%}
+                {%- capture docs_link -%}/documents{{ docs_url }}/{%- endcapture -%}
+              {% endif %}
               {%- assign docs_item = instance[1]['@title'] -%}
               {%- if instance[1]['@permalink'] or instance[1]['@documents'] -%}
                 {%- capture docs_item -%}<a href="{{ docs_link }}">{{ docs_item }}</a>{%- endcapture -%}
               {%- endif %}
-              {%- capture attrs -%}id="documents-{{ docs_url | remove_first: "/" | replace: "/", "-" }}" class="pcjs-explorer-item"{%- if instance[1]['@desc'] %} title="{{ instance[1]['@desc'] }}"{%- endif -%}{%- endcapture %}
+              {%- capture docs_id -%}documents{{ docs_url | replace: "/", "-" }}{%- endcapture -%}
+              {%- if docs_id == "documents" -%}{%- assign docs_id = "library" -%}{%- endif -%}
+              {%- capture attrs -%}id="{{ docs_id }}" class="pcjs-explorer-item"{%- if instance[1]['@desc'] %} title="{{ instance[1]['@desc'] }}"{%- endif -%}{%- endcapture %}
                   <li {{ attrs }}>{{ docs_item }}</li>
             {%- endfor -%}
             {%- if subcategory[0] != "@instances" %}

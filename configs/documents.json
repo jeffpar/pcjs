@@ -77,15 +77,6 @@
             "@tags": "x86"
           },
           {
-            "@title": "The Undocumented PC (2nd Edition)",
-            "@author": "Frank van Gilluwe",
-            "@file": "The_Undocumented_PC--Second_Edition.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqB2ir5cexJmwbxuTA?e=A3siuY",
-            "@cover": ".jpg",
-            "@source": "PCjs",
-            "@tags": "ibmpc"
-          },
-          {
             "@title": "The Zen of Assembly Language",
             "@author": "Michael Abrash",
             "@file": "The_Zen_of_Assembly_Language.pdf",
@@ -313,161 +304,161 @@
         "@documents": [
           {
             "@title": "Microsoft Languages Newsletter, Vol. 1-1",
-            "@file": "PCTJ-1986-01.pdf",
+            "@file": "PCTJ-1986-01-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 1-2",
-            "@file": "PCTJ-1986-02.pdf",
+            "@file": "PCTJ-1986-02-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 1-3",
-            "@file": "PCTJ-1986-03.pdf",
+            "@file": "PCTJ-1986-03-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 1-4",
-            "@file": "PCTJ-1986-04.pdf",
+            "@file": "PCTJ-1986-04-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 1-5",
-            "@file": "PCTJ-1986-05.pdf",
+            "@file": "PCTJ-1986-05-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 1-6",
-            "@file": "PCTJ-1986-06.pdf",
+            "@file": "PCTJ-1986-06-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 1-7",
-            "@file": "PCTJ-1986-07.pdf",
+            "@file": "PCTJ-1986-07-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 1-8",
-            "@file": "PCTJ-1986-08.pdf",
+            "@file": "PCTJ-1986-08-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 1-9",
-            "@file": "PCTJ-1986-09.pdf",
+            "@file": "PCTJ-1986-09-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 1-10",
-            "@file": "PCTJ-1986-10.pdf",
+            "@file": "PCTJ-1986-10-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 1-11",
-            "@file": "PCTJ-1986-11.pdf",
+            "@file": "PCTJ-1986-11-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 1-12",
-            "@file": "PCTJ-1986-12.pdf",
+            "@file": "PCTJ-1986-12-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 2-1",
-            "@file": "PCTJ-1987-01.pdf",
+            "@file": "PCTJ-1987-01-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 2-2",
-            "@file": "PCTJ-1987-02.pdf",
+            "@file": "PCTJ-1987-02-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 2-3",
-            "@file": "PCTJ-1987-03.pdf",
+            "@file": "PCTJ-1987-03-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 2-4",
-            "@file": "PCTJ-1987-04.pdf",
+            "@file": "PCTJ-1987-04-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 2-5",
-            "@file": "PCTJ-1987-05.pdf",
+            "@file": "PCTJ-1987-05-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 2-6",
-            "@file": "PCTJ-1987-06.pdf",
+            "@file": "PCTJ-1987-06-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 2-7",
-            "@file": "PCTJ-1987-07.pdf",
+            "@file": "PCTJ-1987-07-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 2-8",
-            "@file": "PCTJ-1987-08.pdf",
+            "@file": "PCTJ-1987-08-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 2-9",
-            "@file": "PCTJ-1987-09.pdf",
+            "@file": "PCTJ-1987-09-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 2-10",
-            "@file": "PCTJ-1987-10.pdf",
+            "@file": "PCTJ-1987-10-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Languages Newsletter, Vol. 2-11",
-            "@file": "PCTJ-1987-11.pdf",
+            "@file": "PCTJ-1987-11-MLN.pdf",
             "@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gt1sUv2c5KzRTZRGfA?e=11iLnp",
             "@cover": ".jpg",
             "@source": "PCjs"
@@ -1147,7 +1138,7 @@
           "@documents": [
             {
               "@title": "Preliminary Discussion of the Logical Design of an Electronic Computing Instrument (Pomerene)",
-              "@file": "1946-06-28--Preliminary Discussion of the Logical Design of an Electronic Computing Instrument (Pomerene).pdf",
+              "@file": "1946-06-28--Preliminary_Discussion_of_the_Logical_Design_of_an_Electronic_Computing_Instrument-Pomerene.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV7M0pbf40DJ4Dh-A?e=SAF3Ay",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
@@ -1155,7 +1146,7 @@
             },
             {
               "@title": "First Progress Report",
-              "@file": "1947-01-01--First Progress Report.pdf",
+              "@file": "1947-01-01--First_Progress_Report.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV4ArnBifdbfjcL_w?e=lSPHvu",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
@@ -1163,7 +1154,7 @@
             },
             {
               "@title": "Planning and Coding of Problems for an Electronic Computing Instrument Volume I-III",
-              "@file": "1947-04-01--Planning and Coding of Problems for an Electronic Computing Instrument Volume I-III.pdf",
+              "@file": "1947-04-01--Planning_and_Coding_of_Problems_for_an_Electronic_Computing_Instrument_Volume_I-III.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grhb2dQou3dlDHUTuQ?e=eTHSr8",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
@@ -1171,7 +1162,7 @@
             },
             {
               "@title": "Second Progress Report",
-              "@file": "1947-07-01--Second Progress Report.pdf",
+              "@file": "1947-07-01--Second_Progress_Report.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grhZnqWtH6skeRPw8g?e=MdVxdJ",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
@@ -1179,7 +1170,7 @@
             },
             {
               "@title": "Preliminary Discussion of the Logical Design of an Electronic Computing Instrument",
-              "@file": "1947-09-02--Preliminary Discussion of the Logical Design of an Electronic Computing Instrument (Scan).pdf",
+              "@file": "1947-09-02--Preliminary_Discussion_of_the_Logical_Design_of_an_Electronic_Computing_Instrument-Scan.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grVz9pjWlNhZTZkxNQ?e=vd7aKK",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
@@ -1187,7 +1178,7 @@
             },
             {
               "@title": "Third Progress Report",
-              "@file": "1948-01-01--Third Progress Report.pdf",
+              "@file": "1948-01-01--Third_Progress_Report.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV1t6ytR6dOdhNdMQ?e=gD0kix",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
@@ -1195,7 +1186,7 @@
             },
             {
               "@title": "Planning and Coding of Problems for an Electronic Computing Instrument Volume II",
-              "@file": "1948-04-15--Planning and Coding of Problems for an Electronic Computing Instrument Volume II.pdf",
+              "@file": "1948-04-15--Planning_and_Coding_of_Problems_for_an_Electronic_Computing_Instrument_Volume_II.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV9ydwIr_A5xZY0Gw?e=1hx356",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
@@ -1203,7 +1194,7 @@
             },
             {
               "@title": "Fourth Progress Report",
-              "@file": "1948-07-01--Fourth Progress Report.pdf",
+              "@file": "1948-07-01--Fourth_Progress_Report.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grdBu1ICZ8NpdblkZQ?e=VNQuLp",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
@@ -1211,7 +1202,7 @@
             },
             {
               "@title": "Magnetic Drum Memory",
-              "@file": "1948-07-01--Magnetic Drum Memory.pdf",
+              "@file": "1948-07-01--Magnetic_Drum_Memory.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grVyp1t3l0jFHdpSwQ?e=5UIXxR",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
@@ -1219,7 +1210,7 @@
             },
             {
               "@title": "Planning and Coding of Problems for an Electronic Computing Instrument Volume III",
-              "@file": "1948-08-16--Planning and Coding of Problems for an Electronic Computing Instrument Volume III.pdf",
+              "@file": "1948-08-16--Planning_and_Coding_of_Problems_for_an_Electronic_Computing_Instrument_Volume_III.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV8NpRPrC_f7Pqomw?e=lRuNdH",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
@@ -1227,7 +1218,7 @@
             },
             {
               "@title": "Fifth Progress Report",
-              "@file": "1949-01--Fifth Progress Report.pdf",
+              "@file": "1949-01--Fifth_Progress_Report.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grV3blg-YSnk_iiC8g?e=qEGh4H",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
@@ -1235,7 +1226,7 @@
             },
             {
               "@title": "Sixth Progress Report",
-              "@file": "1951-09--Sixth Progress Report.pdf",
+              "@file": "1951-09--Sixth_Progress_Report.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grYB9MQXaD7G_V4hog?e=gonvvb",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
@@ -1243,7 +1234,7 @@
             },
             {
               "@title": "Final Progress Report",
-              "@file": "1954-01--Final Progress Report.pdf",
+              "@file": "1954-01--Final_Progress_Report.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9grhtAsdmjpJBCaWyew?e=jf7BTU",
               "@cover": ".jpg",
               "@source": "https://www.ias.edu/electronic-computer-project",
@@ -1568,7 +1559,11 @@
   "pcjs": {
     "@title": "PCjs",
     "@instances": {
-      "": {
+      "library": {
+        "@title": "Library",
+        "@permalink": "/documents/"
+      },
+      "personal": {
         "@title": "Document Archive",
         "@permalink": "/documents/pcjs/"
       },
