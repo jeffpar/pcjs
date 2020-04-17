@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/defs.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/defs.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -140,7 +140,7 @@ Defs.CLASSES = {};
 Defs.CLASSES["Defs"] = Defs;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/numio.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/numio.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -738,7 +738,7 @@ NumIO.TWO_POW32 = Math.pow(2, 32);
 NumIO.CLASSES["NumIO"] = NumIO;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/stdio.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/stdio.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {Function} */
@@ -1379,7 +1379,7 @@ StdIO.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "
 StdIO.CLASSES["StdIO"] = StdIO;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/webio.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/webio.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ name: string, path: string }} */
@@ -3015,7 +3015,7 @@ WebIO.LocalStorage = {
 WebIO.CLASSES["WebIO"] = WebIO;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/device.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/device.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ get: function(), set: (function(number)|null) }} */
@@ -3625,7 +3625,7 @@ Device.MESSAGE_NAMES["halt"]    = Device.MESSAGE.HALT;
 Device.CLASSES["Device"] = Device;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/input.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/input.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), location: Array.<number>, map: (Array.<Array.<number>>|Object|undefined), drag: (boolean|undefined), scroll: (boolean|undefined), hexagonal: (boolean|undefined), releaseDelay: (number|undefined) }} */
@@ -5054,7 +5054,7 @@ Input.KEYCODEMOD = {
 Input.CLASSES["Input"] = Input;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/led.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/led.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), type: number, width: (number|undefined), height: (number|undefined), cols: (number|undefined), colsExtra: (number|undefined), rows: (number|undefined), rowsExtra: (number|undefined), color: (string|undefined), backgroundColor: (string|undefined), fixed: (boolean|undefined), hexagonal: (boolean|undefined), highlight: (boolean|undefined), persistent: (boolean|undefined) }} */
@@ -6172,7 +6172,7 @@ LED.SYMBOL_SEGMENTS = {
 LED.CLASSES["LED"] = LED;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/monitor.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/monitor.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ monitorWidth: number, monitorHeight: number }} */
@@ -6636,7 +6636,7 @@ Monitor.BINDING = {
 Monitor.CLASSES["Monitor"] = Monitor;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/time.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/time.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ id: string, callBack: function(), msAuto: number, nCyclesLeft: number }} */
@@ -7662,7 +7662,7 @@ Time.BINDING = {
 Time.CLASSES["Time"] = Time;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/bus.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/bus.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ type: string, addrWidth: number, dataWidth: number, blockSize: (number|undefined), littleEndian: (boolean|undefined) }} */
@@ -8375,7 +8375,7 @@ Bus.TYPE = {
 Bus.CLASSES["Bus"] = Bus;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/memory.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/memory.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), size: number, type: (number|undefined), littleEndian: (boolean|undefined), values: (Array.<number>|string|undefined) }} */
@@ -9138,7 +9138,7 @@ Memory.TYPE = {
 Memory.CLASSES["Memory"] = Memory;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/ports.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/ports.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), size: number }} */
@@ -9335,7 +9335,7 @@ class Ports extends Memory {
 Ports.CLASSES["Ports"] = Ports;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/ram.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/ram.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, type: (number|undefined) }} */
@@ -9380,7 +9380,7 @@ class RAM extends Memory {
 RAM.CLASSES["RAM"] = RAM;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/rom.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/rom.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, values: Array.<number>, file: string, reference: string, chipID: string, revision: (number|undefined), colorROM: (string|undefined), backgroundColorROM: (string|undefined) }} */
@@ -9606,7 +9606,7 @@ ROM.BINDING = {
 ROM.CLASSES["ROM"] = ROM;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/cpu.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/cpu.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -9754,7 +9754,7 @@ class CPU extends Device {
 // CPU.CLASSES["CPU"] = CPU;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/debugger.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/debugger.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ defaultRadix: (number|undefined) }} */
@@ -12483,7 +12483,7 @@ Debugger.DECOP_PRECEDENCE = {
 // Debugger.CLASSES["Debugger"] = Debugger;
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/libv2/cpux80.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/cpux80.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -16495,7 +16495,7 @@ CPUx80.OPCODE = {
 CPUx80.CLASSES["CPUx80"] = CPUx80;
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/libv2/dbgx80.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/dbgx80.js (C) 2012-2020 Jeff Parsons
  */
 
 /**
@@ -17084,7 +17084,7 @@ Dbgx80.aaOpDescs = [
 Dbgx80.CLASSES["Dbgx80"] = Dbgx80;
 
 /**
- * @copyright https://www.pcjs.org/machines/arcade/invaders/lib/ports.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/ports.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, switches: Object }} */
@@ -17457,7 +17457,7 @@ InvadersPorts.IOTABLE = {
 InvadersPorts.CLASSES["InvadersPorts"] = InvadersPorts;
 
 /**
- * @copyright https://www.pcjs.org/machines/arcade/invaders/lib/video.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/video.js (C) 2012-2020 Jeff Parsons
  */
 
 /** @typedef {{ bufferWidth: number, bufferHeight: number, bufferRotate: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */
@@ -17881,7 +17881,7 @@ InvadersVideo.COLORS = {
 InvadersVideo.CLASSES["InvadersVideo"] = InvadersVideo;
 
 /**
- * @copyright https://www.pcjs.org/machines/lib/machine.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/machine.js (C) 2012-2020 Jeff Parsons
  */
 
 /**

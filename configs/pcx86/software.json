@@ -8163,16 +8163,16 @@
           ]
         },
         "4.00/advanced": {
-          "@title": "Norton Utilities 4.00 (Advanced)",
+          "@title": "Norton Utilities 4.00 (Adv)",
           "@media": [
             {
-              "@title": "Norton Utilities 4.00 (Advanced Disk 1)",
+              "@title": "Norton Utilities 4.00 (Adv 1)",
               "@diskette": "NU400-ADV-DISK1.json",
               "@photo": ".jpg",
               "@type": "PC360K"
             },
             {
-              "@title": "Norton Utilities 4.00 (Advanced Disk 2)",
+              "@title": "Norton Utilities 4.00 (Adv 2)",
               "@diskette": "NU400-ADV-DISK2.json",
               "@photo": ".jpg",
               "@type": "PC360K"
@@ -8180,20 +8180,20 @@
           ]
         },
         "4.50/advanced": {
-          "@title": "Norton Utilities 4.50 (Advanced)",
+          "@title": "Norton Utilities 4.50 (Adv)",
           "@media": [
             {
-              "@title": "Norton Utilities 4.50 (Advanced Disk 1)",
+              "@title": "Norton Utilities 4.50 (Adv 1)",
               "@diskette": "NU450-ADV-DISK1.json",
               "@type": "PC360K"
             },
             {
-              "@title": "Norton Utilities 4.50 (Advanced Disk 2)",
+              "@title": "Norton Utilities 4.50 (Adv 2)",
               "@diskette": "NU450-ADV-DISK2.json",
               "@type": "PC360K"
             },
             {
-              "@title": "Norton Utilities 4.50 (Advanced Disk 3)",
+              "@title": "Norton Utilities 4.50 (Adv 3)",
               "@diskette": "NU450-ADV-DISK3.json",
               "@type": "PC360K"
             }
