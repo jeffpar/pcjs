@@ -5,9 +5,6 @@ permalink: /software/pcx86/lang/dresearch/pascal/3.11/
 redirect_from: /disks/pcx86/tools/dresearch/pascal/3.11/
 ---
 
-Digital Research Pascal/MT+ 3.11
---------------------------------
-
 [Documentation](#documents) is also available.
 
 ### Directory of DR Pascal/MT+ 3.11 (Disk 1)

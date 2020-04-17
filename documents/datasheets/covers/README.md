@@ -1,11 +1,4 @@
----
-layout: page
-title: PC Component Datasheets
-permalink: /pubs/pc/datasheets/
----
-
-PC Component Datasheets
------------------------
+## PC Component Datasheets
 
 [<img src="8088-CPU.jpg" width="200" height="260" alt="8088 CPU"/>](https://1drv.ms/b/s!ArcO_mFRe1Z9gqEmGsBJPGmhiKeyTA)
 [<img src="8087-FPU.jpg" width="200" height="260" alt="8087 FPU"/>](https://1drv.ms/b/s!ArcO_mFRe1Z9gqEoVotqW_MruMmLfw)

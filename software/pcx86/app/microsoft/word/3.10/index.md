@@ -5,9 +5,6 @@ permalink: /software/pcx86/app/microsoft/word/3.10/
 redirect_from: /disks/pcx86/apps/microsoft/word/3.10/
 ---
 
-Microsoft Word 3.10
--------------------
-
 ### Directory of MS Word 3.10 (Disk 1)
 
 	 Volume in drive A is WORD PROGRM

@@ -3,12 +3,11 @@
   - Verify redirects for these remaining [links](/assets/tests/links/)
   - Turn the TI patents into a gallery: https://www.pcjs.org/devices/ti57/patents/
   - Machines like DEC PDP-11/70 with VT100 Terminal used to use special CSS classes (machine-right and machine-left) to arrange the machines side-by-side; think about alternatives.
-  - Retest all VT100 connection demos (eg, DEC VT100 Terminal connected to IBM PC AT, DEC PDP-11/70 with VT100 Terminal, and Connecting an IBM PC to a DEC VT100 Terminal).
-  - Add a page for Invaders Boot Sector (2019)
-  - Someone may have linked to text files, such as:
+  - Someone may have linked to text files (and I'm not sure I can provide redirects for these kinds of links), such as:
       - /apps/pdp10/diags/ka10/dakam/DAKAM.LST.txt
       - /devices/pcx86/keyboard/8042_INTERN.TXT
-    Not sure I can provide redirects for those kinds of links.
+  - Add manual to page for 101 Mazes
+  - Add page with instructions for Invaders Boot Sector (2019)
     
 ## Tips
 

@@ -3399,7 +3399,7 @@
               "@file": "Graphics_for_the_IBM_PC.pdf",
               "@link": "/software/pcx86/sw/books/graphics_for_the_ibm_pc/",
               "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBjvPCIs98PvKf1UA?e=gEOQUS",
-              "@cover": ".jpg",
+              "@cover": "/documents/books/programming/covers/Graphics_for_the_IBM_PC.jpg",
               "@source": "PCjs",
               "tags": "graphics"
             }
@@ -3424,7 +3424,7 @@
               "@title": "Unauthorized Windows 95 (1995)",
               "@file": "Unauthorized_Windows_95.pdf",
               "@link": "/software/pcx86/sw/books/unauthorized_windows_95/",
-              "@cover": ".jpg",
+              "@cover": "/documents/books/programming/covers/Unauthorized_Windows_95.jpg",
               "@source": "",
               "tags": "windows"
             }
@@ -3459,7 +3459,7 @@
               "@title": "Undocumented DOS (2nd Edition)",
               "@file": "Undocumented_DOS--Second_Edition.pdf",
               "@link": "/software/pcx86/sw/books/undocumented_dos/",
-              "@cover": ".jpg",
+              "@cover": "/documents/books/programming/covers/Undocumented_DOS--Second_Edition.jpg",
               "@source": "",
               "tags": "dos"
             }
@@ -3479,7 +3479,7 @@
               "@title": "The Undocumented PC (2nd Edition)",
               "@file": "The_Undocumented_PC--Second_Edition.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqB2ir5cexJmwbxuTA?e=ucWAij",
-              "@cover": ".jpg",
+              "@cover": "/documents/books/programming/covers/The_Undocumented_PC--Second_Edition.jpg",
               "@source": "PCjs"
             }
           ]

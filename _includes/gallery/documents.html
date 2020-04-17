@@ -1,9 +1,10 @@
 {% assign title = include.title | default: "Documents" %}
 {% assign group = include.group | default: "@documents" %}
+{% assign group_link = include.link %}
 {% assign group_id = title | replace: "@", "" | replace: " ", "-" | downcase %}
 {% assign cover_width = include.width | default: "200" %}
 {% assign cover_height = include.height | default: "" %}
-{% assign path = include.path | default: page.permalink %}
+{% assign path = include.path | default: include.target | default: page.permalink %}
 {% assign path_parts = path | split: "/" %}
 {% assign doc_style = include.style | default: "center" %}
 {% assign doc_tag = include.tag | default: "" %}
@@ -12,7 +13,7 @@
 {%- for part in path_parts -%}
   {%- if part == "" -%}{% continue %}{%- endif -%}
   {%- capture cur_path -%}{{ cur_path }}/{{ part }}{%- endcapture -%}
-  {%- if part == "machines" -%}
+  {%- if part == "hardware" or part == "machines" -%}
     {%- assign data = site.data.hardware -%}
   {%- elsif part == "software" -%}
     {%- assign data = site.data.software -%}
@@ -33,7 +34,8 @@
       {%- if data[part] -%}
         {%- assign data = data[part] %}
         {%- if data[part]['@type'] -%}
-          {%- assign data = site.data[part].software -%}
+          {%- assign type = data[part]['@type'] -%}
+          {%- assign data = site.data[part][type] -%}
         {%- endif -%}
       {%- elsif data['@products'] -%}
         {%- assign data = data['@products'][part] -%}
@@ -42,7 +44,8 @@
       {%- else %}
         {%- assign data = data['@instances'][part] -%}
         {%- if data['@type'] -%}
-          {%- assign data = site.data[part].software -%}
+          {%- assign type = data['@type'] -%}
+          {%- assign data = site.data[part][type] -%}
         {%- endif -%}
       {%- endif -%}
       {%- unless data -%}{%- break -%}{%- endunless %}
@@ -51,36 +54,42 @@
         {%- assign docs = data['@instances'][''][group] -%}
       {%- endunless -%}
     {%- endif -%}
-    {%- if docs -%}
-      {%- if docs_exist == false and title != "None" -%}
-  <h3 id="{{ group_id }}">{{ title }}</h3>
-      {%- endif -%}
-      {%- assign docs_exist = true -%}
-      {%- include gallery/begin.html style=doc_style -%}
-      {%- for doc in docs -%}
-        {%- assign doc_title = doc['@title'] -%}
-        {%- assign doc_tags = doc['@tags'] | default: "" -%}
-        {%- if doc_title and doc_title != "" and doc_tags contains doc_tag -%}
-          {%- assign doc_file = doc['@file'] -%}
-          {%- assign doc_id = doc_file | replace: ".pdf","" | replace: ".png","" | default: doc_title | slugify -%}
-          {%- capture doc_path -%}{{ cur_path }}/{{ doc_file }}{%- endcapture -%}
-          {%- assign doc_link = doc['@link'] | default: doc_path -%}
-          {%- assign doc_cover = doc['@cover'] | default: "/documents/covers/default.jpg" -%}
-          {%- if doc_link contains "http" -%}{%- assign doc_external = true -%}{%- else -%}{%- assign doc_external = false -%}{%- endif -%}
-          {%- assign doc_width = doc['@width'] | default: cover_width -%}
-          {%- assign doc_height = doc['@height'] | default: cover_height -%}
-          {%- if doc_cover == ".jpg" or doc_cover == ".png" -%}
-            {%- capture doc_cover -%}{{ cur_path }}/covers/{{ doc_file | replace: ".pdf",doc_cover | replace: ".png",doc_cover }}{%- endcapture -%}
-          {%- endif -%}
-          {%- assign doc_source = doc['@source'] -%}
-          {%- include gallery/image.html id=doc_id image=doc_cover link=doc_link title=doc_title width=doc_width height=doc_height source=doc_source external=doc_external -%}
+    {%- if include.target == nil or cur_path == include.target %}
+      {%- if docs -%}
+        {%- if docs_exist == false and title != "None" -%}
+        {%- if include.target == nil -%}
+    <h3 id="{{ group_id }}">{%- if group_link -%}<a href="{{ group_link }}">{{ title }}</a>{%- else -%}{{ title }}{%- endif -%}</h3>
+        {%- else -%}
+    <h4 id="{{ group_id }}">{%- if group_link -%}<a href="{{ group_link }}">{{ title }}</a>{%- else -%}{{ title }}{%- endif -%}</h4>
         {%- endif -%}
-      {%- endfor -%}
-      {%- include gallery/end.html -%}
+        {%- endif -%}
+        {%- assign docs_exist = true -%}
+        {%- include gallery/begin.html style=doc_style -%}
+        {%- for doc in docs -%}
+          {%- assign doc_title = doc['@title'] -%}
+          {%- assign doc_tags = doc['@tags'] | default: "" -%}
+          {%- if doc_title and doc_title != "" and doc_tags contains doc_tag -%}
+            {%- assign doc_file = doc['@file'] -%}
+            {%- assign doc_id = doc_file | replace: ".pdf","" | replace: ".png","" | default: doc_title | slugify -%}
+            {%- capture doc_path -%}{{ cur_path }}/{{ doc_file }}{%- endcapture -%}
+            {%- assign doc_link = doc['@link'] | default: doc_path -%}
+            {%- assign doc_cover = doc['@cover'] | default: "/documents/covers/default.jpg" -%}
+            {%- if doc_link contains "http" -%}{%- assign doc_external = true -%}{%- else -%}{%- assign doc_external = false -%}{%- endif -%}
+            {%- assign doc_width = doc['@width'] | default: cover_width -%}
+            {%- assign doc_height = doc['@height'] | default: cover_height -%}
+            {%- if doc_cover == ".jpg" or doc_cover == ".png" -%}
+              {%- capture doc_cover -%}{{ cur_path }}/covers/{{ doc_file | replace: ".pdf",doc_cover | replace: ".png",doc_cover }}{%- endcapture -%}
+            {%- endif -%}
+            {%- assign doc_source = doc['@source'] -%}
+            {%- include gallery/image.html id=doc_id image=doc_cover link=doc_link title=doc_title width=doc_width height=doc_height source=doc_source external=doc_external -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- include gallery/end.html -%}
+      {%- endif -%}
     {%- endif -%}
   {%- endif -%}
 {%- endfor -%}
 {%- if docs_exist == false %}
   <h3 id="{{ group_id }}">{{ title }}</h3>
-  <p>No documents available for {{ page.title }}</p>
+  <p>No documents available for <strong>{{ path }}/</strong></p>
 {%- endif -%}
