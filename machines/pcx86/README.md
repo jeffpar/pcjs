@@ -122,8 +122,10 @@ parameters to an "uncompiled" machine's URL; make sure there's also a *?* separa
 
 #### Microsoft Bus Mouse
 
-See this [Microsoft Bus Mouse implementation](https://www.virtualbox.org/svn/vbox/trunk/src/VBox/ExtPacks/BusMouseSample/BusMouse.cpp),
+See this [Microsoft Bus Mouse implementation](https://www.virtualbox.org/browser/vbox/trunk/src/VBox/ExtPacks/BusMouseSample/DevBusMouse.cpp),
 written by [Michal Necasek](http://www.os2museum.com) for Oracle's [VirtualBox](https://www.virtualbox.org).
+
+NOTE: The above file has already moved once (without any redirect), so just in case that happens again, we've saved a [copy](/machines/pcx86/devices/microsoft/mouse/virtualbox/BusMouse.cpp).
 
 It references two Microsoft KnowledgeBase (KB) Articles of note:
 
