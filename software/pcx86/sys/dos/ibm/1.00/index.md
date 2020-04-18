@@ -24,9 +24,8 @@ when IBM introduced the original IBM PC (Model 5150).  It was released on one si
 and included 23 [BASIC Programs](/software/pcx86/app/ibm/basic/1.00/).
 
 [Directory Listing](#directory-of-pc-dos-100), [Documentation](#documents), and [Feature Summary](#feature-summary)
-are provided below.
-
-You can also dig into the [PC DOS 1.00 Boot Sector](debugger/#pc-dos-100-boot-sector) using the [PCjs Debugger](debugger/).
+are provided below.  You can also dig into the [PC DOS 1.00 Boot Sector](debugger/#pc-dos-100-boot-sector)
+using the [PCjs Debugger](debugger/).
 
 {% include machine.html id="ibm5150-pcdos100" %}
 
