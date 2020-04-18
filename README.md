@@ -14,12 +14,17 @@ It is one of several JavaScript Machines in this project that span a variety of 
 
 along with a small collection of software used for archival/demonstration purposes only.
 
-To learn more about what you can do with the repository (besides simply browsing it), see the [PCjs Wiki](/jeffpar/pcjs.org/wiki).
+To learn more about what you can do with the repository, see the [PCjs Wiki](/jeffpar/pcjs.org/wiki),
+which covers topics such as:
+
+  - [Running PCjs locally](/jeffpar/pcjs.org/wiki/Running-PCjs-locally)
+  - [Compiling PCjs](/jeffpar/pcjs.org/wiki/Compiling-PCjs)
+  - [Adding machines to pages](/jeffpar/pcjs.org/wiki/Adding-machines-to-pages)
 
 ### License
 
-The [PCjs Project](https://github.com/jeffpar/pcjs.org) is an open-source project on [GitHub](https://github.com/jeffpar).
-All published portions are free for redistribution and/or modification under the terms of an [MIT License](/LICENSE.txt).
+The [PCjs Project](https://github.com/jeffpar/pcjs.org) is an open-source project on [GitHub](https://github.com/jeffpar)
+released under the terms of an [MIT License](/LICENSE.txt).
 
 You are required to include the following links and copyright notice:
 
