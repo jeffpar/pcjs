@@ -508,3 +508,8 @@ div.pcjs-gallery-image a {
     clear: both;
   }
 }
+@media (prefers-color-scheme: dark) {
+  .pcjs-gallery-image img {
+    background-color: black;
+  }
+}
