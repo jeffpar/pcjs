@@ -11,7 +11,7 @@ I even found some [software](https://github.com/fr1tz/aimsgui/blob/master/aid/os
 a "microsoft bus mouse" but was actually emulating an InPort mouse.
 
 Thankfully, one decidedly unconfused person, [Michal Necasek](http://www.os2museum.com), sent me a link to his
-[Bus Mouse](https://www.virtualbox.org/svn/vbox/trunk/src/VBox/ExtPacks/BusMouseSample/BusMouse.cpp) emulation,
+[Bus Mouse](https://www.virtualbox.org/browser/vbox/trunk/src/VBox/ExtPacks/BusMouseSample/DevBusMouse.cpp) emulation,
 which includes the following prologue that gets it exactly right:
 
 	The Microsoft Bus Mouse was an early mouse sold by Microsoft, originally
@@ -46,6 +46,9 @@ which includes the following prologue that gets it exactly right:
 
 This is one of the telltale signs of a conscientious programmer: comments that are relevant, detailed, accurate,
 and provide invaluable context that source code alone does not.
+
+NOTE: The above file has already moved once (without any redirect), so just in case that happens again, we've saved
+a [copy](/machines/pcx86/devices/microsoft/mouse/virtualbox/BusMouse.cpp).
 
 Anyway, I wanted to supplement this information with the Microsoft KnowledgeBase articles that he referenced;
 specifically:
