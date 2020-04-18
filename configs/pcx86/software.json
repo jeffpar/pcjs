@@ -4996,8 +4996,11 @@
           },
           "2.00": {
             "@title": "PC DOS 2.00",
-            "@bootable": true,
-            "@hardware": "/machines/pcx86/ibm/5160/cga/",
+            "@todo": {
+              "@bootable": true,
+              "@hardware": "/machines/pcx86/ibm/5160/cga/",
+              "@note": "It would be nice to have an Explorer UI option that defaults to the software's own page, but also allows you to launch it on appropriate hardware; but for now, the above two options are effectively disabled for this software."
+            },
             "@media": [
               {
                 "@title": "PC DOS 2.00 (Disk 1)",
@@ -5008,6 +5011,15 @@
                 "@title": "PC DOS 2.00 (Disk 2)",
                 "@diskette": "PCDOS200-DISK2.json",
                 "@type": "PC180K"
+              }
+            ],
+            "@documents": [
+              {
+                "@title": "IBM PC Disk Operating System 2.00",
+                "@file": "IBM_PC_DOS_200_1983-01.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heM4flDGLNdR1f_90w?e=0WbXAb",
+                "@cover": ".jpg",
+                "@source": "http://bitsavers.org/pdf/ibm/pc/dos/6936752_DOS_2.00_Jan83.pdf"
               }
             ]
           },
