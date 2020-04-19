@@ -12,7 +12,7 @@ machines:
       A:
         name: None
       B:
-        name: JEFFPAR DISK001
+        name: Jeff's MS-DOS 3.20 Tools
 ---
 
 Much like the [PCjs Document Archive](/documents/pcjs/), this collection is an assortment of
@@ -38,7 +38,7 @@ usually either because the disks contain a variety of unrelated files and/or uni
 
 ## Directory Listings
 
-### Directory of JEFFPAR DISK001
+### Directory of Jeff's MS-DOS 3.20 Tools
 
 	 Volume in drive A is MSDOS 32   
 	 Directory of  A:\
