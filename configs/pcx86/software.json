@@ -2550,6 +2550,22 @@
                 "@diskette": "MASM-016014-300.json",
                 "@type": "PC360K"
               }
+            ],
+            "@documents": [
+              {
+                "@title": "MS Macro Assembler Reference Manual (1984)",
+                "@file": "MASM30_Reference_Manual-1984.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gt4TMtBw579j2buNcw?e=MF2hsa",
+                "@cover": ".jpg",
+                "@source": "https://winworldpc.com/product/macro-assembler/3x"
+              },
+              {
+                "@title": "MS Macro Assembler User's Guide (1984)",
+                "@file": "MASM30_Users_Guide-1984.pdf",
+                "@link": "",
+                "@cover": ".jpg",
+                "@source": "https://winworldpc.com/product/macro-assembler/3x"
+              }
             ]
           },
           "3.01": {
@@ -2919,9 +2935,14 @@
       "jeffpar": {
         "@media": [
           {
-            "@title": "JEFFPAR DISK001",
-            "@diskette": "JEFFPAR-DISK001.json",
+            "@title": "Jeff's MS-DOS 3.20 Tools",
+            "@diskette": "JEFFPAR-MSDOS320-TOOLS.json",
             "@type": "PC360K"
+          },
+          {
+            "@title": "Jeff's PC DOS 1.00 with MASM",
+            "@diskette": "JEFFPAR-PCDOS100-MASM100-160K.img",
+            "@type": "PC160K"
           }
         ]
       }
