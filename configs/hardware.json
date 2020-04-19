@@ -886,14 +886,14 @@
         "@documents": [
           {
             "@title": "IBM Monochrome Display and Printer Adapter",
-            "@file": "IBM-MDA.pdf",
+            "@file": "IBM_MDA.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFPxcuda7FDcNW7BA?e=kOj1AO",
             "@cover": ".jpg",
             "@source": ""
           },
           {
             "@title": "IBM Color/Graphics Monitor Adapter",
-            "@file": "IBM-CGA.pdf",
+            "@file": "IBM_CGA.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFOOxc92qIsgXiyYw?e=MlkUfH",
             "@cover": ".jpg",
             "@source": ""

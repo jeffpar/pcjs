@@ -1836,7 +1836,17 @@
               {
                 "@title": "IBM Macro Assembler 1.00",
                 "@diskette": "IBM-MASM-100.json",
-                "@type": "PC160K"
+                "@type": "PC160K",
+                "@source": "https://winworldpc.com/product/ibm-macro-assembler/100"
+              }
+            ],
+            "@documents": [
+              {
+                "@title": "IBM Macro Assembler 1.00",
+                "@file": "IBM_Macro_Assembler_100.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heM9R4ZXrrB1ZRzjwA?e=IMhky8",
+                "@cover": ".jpg",
+                "@source": "https://winworldpc.com/product/ibm-macro-assembler/100"
               }
             ]
           },
@@ -2854,6 +2864,22 @@
                   "@title": "MS QuickPascal 1.00 (720K Disk 3)",
                   "@diskette": "QUICKPASCAL-100-720K-DISK3-LIBRARIES.json",
                   "@type": "PC720K"
+                }
+              ],
+              "@documents": [
+                {
+                  "@title": "Microsoft QuickPascal: Pascal By Example",
+                  "@file": "MS_QuickPascal_100_Pascal_by_Example.pdf",
+                  "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFVsisy9Gka2J_GxA?e=rNYD3n",
+                  "@cover": ".jpg",
+                  "@source": "PCjs"
+                },
+                {
+                  "@title": "Microsoft QuickPascal: Up and Running",
+                  "@file": "MS_QuickPascal_100_Up_and_Running.pdf",
+                  "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFOML1HOTUKRFZLEQ?e=f3fHKv",
+                  "@cover": ".jpg",
+                  "@source": "PCjs"
                 }
               ]
             }
