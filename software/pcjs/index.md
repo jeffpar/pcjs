@@ -16,9 +16,9 @@ machines:
 ---
 
 Much like the [PCjs Document Archive](/documents/pcjs/), this collection is an assortment of
-disk images from the PCjs Archives that may or may not be of historical interest.
+software from the PCjs Archives that may or may not be of historical interest.
 
-Some disks from this collection have already been archived elsewhere, including:
+Some disks from this collection include:
 
   - [COMPAQ Diagnostics 5.08](/software/pcx86/diag/compaq/5.08/)
   - [COMPAQ DeskPro 386 (1986)](/software/pcx86/diag/compaq/1986/)
@@ -26,13 +26,18 @@ Some disks from this collection have already been archived elsewhere, including:
   - [COMPAQ MS-DOS 3.31 (1987)](/software/pcx86/sys/dos/compaq/3.31/#directory-of-compaq-ms-dos-331-1987)
   - [DoubleDOS 2.1F](/software/pcx86/sys/ext/softlogic/doubledos/2.1f/)
   - [Multitasking MS-DOS 4.00](/software/pcx86/sys/dos/microsoft/4.0M/)
+  - [The Norton Utilities 2.00](/software/pcx86/util/norton/2.00/)
+  - [The Norton Utilities 2.01 (1983-11-03)](/software/pcx86/util/norton/2.01/)
   - [The Norton Utilities 3.00 (1984-12-07)](/software/pcx86/util/norton/3.00/)
   - [The Norton Utilities 4.00 (Standard Edition)](/software/pcx86/util/norton/4.00/)
   - [The Norton Utilities 4.00 (Advanced Edition)](/software/pcx86/util/norton/4.00/advanced/)
   - [Early OS/2 Prototypes](/software/pcx86/sys/os2/misc/) (eg, CP-DOS and FOOTBALL)
 
+You can probably find most or all of these disks on other software sites now, just as software from
+many other sites has found its way here, thanks to the Brownian motion of bits on the Internet.
+
 Any other disks you see [below](#directory-listings) are primarily ones that don't neatly fit into another PCjs category,
-usually either because the disks contain a variety of unrelated files and/or unique content.
+usually either because the disks contain a mixture of random/personal/unique content.
 
 {% include machine.html id="ibm5170" %}
 

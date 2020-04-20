@@ -98,6 +98,13 @@
         "webRoot": "${workspaceFolder}"
       },
       {
+        "name": "IBM PC with CGA and Debugger (256K)",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:4000/machines/pcx86/ibm/5150/cga/debugger/?sizeRAM=256&autoMount={A:{name:%22Jeff's PC DOS 1.00 with MASM%22}}&autoStart=true&autoType=$date\\r",
+        "webRoot": "${workspaceFolder}"
+      },
+      {
         "name": "IBM PC with MDA",
         "type": "chrome",
         "request": "launch",

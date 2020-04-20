@@ -5,7 +5,7 @@ permalink: /software/pcx86/lang/ibm/masm/1.00/
 redirect_from: /disks/pcx86/tools/ibm/masm/1.00/
 ---
 
-Directory listing of the 160Kb distribution diskette is provided below.
+[Documentation](#documents) and directory listing of the 160Kb distribution diskette are provided below.
 
 ### Directory of IBM Macro Assembler 1.00
 
@@ -27,3 +27,5 @@ Directory listing of the 160Kb distribution diskette is provided below.
     $ASML    BAT      622  10-29-81
     $LINK    ARF       23   9-25-81
            14 File(s)      4096 bytes free
+
+{% include gallery/documents.html %}

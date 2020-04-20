@@ -1845,6 +1845,7 @@
                 "@title": "IBM Macro Assembler 1.00",
                 "@file": "IBM_Macro_Assembler_100.pdf",
                 "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heM9R4ZXrrB1ZRzjwA?e=IMhky8",
+                "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2194653&authkey=AI7jcPAR_KQyyK0&em=2",
                 "@cover": ".jpg",
                 "@source": "https://winworldpc.com/product/ibm-macro-assembler/100"
               }
@@ -2936,13 +2937,14 @@
         "@media": [
           {
             "@title": "Jeff's MS-DOS 3.20 Tools",
-            "@diskette": "JEFFPAR-MSDOS320-TOOLS.json",
+            "@diskette": "JEFFPAR1-MSDOS320-TOOLS.json",
             "@type": "PC360K"
           },
           {
             "@title": "Jeff's PC DOS 1.00 with MASM",
-            "@diskette": "JEFFPAR-PCDOS100-MASM100-160K.img",
-            "@link": "http://localhost:8088/disks-demo/pcx86/personal/JEFFPAR-PCDOS100-MASM100-160K.img",
+            "@diskette": "JEFFPAR2-PCDOS100-MASM100-160K.img",
+            "@link": "/software/pcjs/JEFFPAR2-PCDOS100-MASM100-160K.img",
+            "@localonly": true,
             "@type": "PC160K"
           }
         ]
