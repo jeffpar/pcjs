@@ -63,6 +63,7 @@
     <h4 id="{{ group_id }}">{%- if group_link -%}<a href="{{ group_link }}">{{ title }}</a>{%- else -%}{{ title }}{%- endif -%}</h4>
         {%- endif -%}
         {%- endif -%}
+        {%- assign doc_embed = "" -%}
         {%- assign docs_exist = true -%}
         {%- include gallery/begin.html style=doc_style -%}
         {%- for doc in docs -%}
@@ -71,8 +72,17 @@
           {%- if doc_title and doc_title != "" and doc_tags contains doc_tag -%}
             {%- assign doc_file = doc['@file'] -%}
             {%- assign doc_id = doc_file | default: doc_title | slugify -%}
-            {%- capture doc_path -%}{{ cur_path }}/{{ doc_file }}{%- endcapture -%}
             {%- assign doc_source = doc['@source'] -%}{%- if doc_source contains "PCjs" or doc_source contains "pcjs" -%}{%- assign doc_source = "" -%}{%- endif -%}
+            {%- comment -%}
+              For now, we only embed the first document so marked, to keep things simple.
+            {%- endcomment -%}
+            {%- if doc['@embed'] and doc_embed == "" -%}
+              {%- assign doc_embed = doc['@embed'] -%}
+              {%- assign embed_title = doc_title -%}
+              {%- assign embed_source = doc_source -%}
+              {%- continue -%}
+            {%- endif -%}
+            {%- capture doc_path -%}{{ cur_path }}/{{ doc_file }}{%- endcapture -%}
             {%- assign doc_link = doc['@link'] | default: doc_source | default: doc_path -%}
             {%- assign doc_cover = doc['@cover'] | default: "/documents/covers/default.jpg" -%}
             {%- if doc_link contains "http" -%}{%- assign doc_external = true -%}{%- else -%}{%- assign doc_external = false -%}{%- endif -%}
@@ -85,6 +95,9 @@
           {%- endif -%}
         {%- endfor -%}
         {%- include gallery/end.html -%}
+        {%- if doc_embed != "" -%}
+          {% include embed.html src=doc_embed title=embed_title source=embed_source %}
+        {%- endif -%}
       {%- endif -%}
     {%- endif -%}
   {%- endif -%}

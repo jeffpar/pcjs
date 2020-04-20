@@ -1,3 +1,10 @@
 <div style="text-align:center">
-  <iframe src="{{ include.src }}" width="650" height="850" frameborder="0" scrolling="no"></iframe>
+  <iframe src="{{ include.src }}" width="{{ include.width | default: '650' }}" height="{{ include.height | default: '850' }}" scrolling="no"></iframe>
+  {%- if include.title %}
+  <span class="pcjs-gallery-label">{{ include.title }}</span>
+  <br/>
+  {%- endif %}
+  {%- if include.source %}
+  <span class="pcjs-gallery-label">[<a href="{{ include.source }}">Source</a>]</span>
+  {%- endif %}
 </div>
