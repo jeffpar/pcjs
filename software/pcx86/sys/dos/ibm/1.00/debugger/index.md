@@ -6,19 +6,13 @@ redirect_from:
   - /disks/pcx86/dos/ibm/1.00/
   - /disks/pc/dos/ibm/1.00/
 machines:
-  - id: ibm5150-256k
+  - id: ibm5150-pcdos100
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/mda/256kb/debugger/machine.xml
-    floppyDrives: '[{heads:1},{heads:1}]'
-    autoMount:
-      A:
-        name: PC DOS 1.00
-      B:
-        name: None
+    config: /configs/pcx86/machine/ibm/5150/mda/64kb/debugger/machine.json
     autoType: $date\r
 ---
 
-{% include machine.html id="ibm5150-256k" %}
+{% include machine.html id="ibm5150-pcdos100" %}
 
 ### PC DOS 1.00 Boot Sector
 

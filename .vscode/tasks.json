@@ -1,0 +1,34 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+    {
+      "type": "gulp",
+      "label": "gulp: watch",
+      "task": "watch",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "type": "shell",
+      "label": "bundle: server",
+      "command": "bundle exec jekyll serve --config _config.yml,_developer.yml",
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ]
+}

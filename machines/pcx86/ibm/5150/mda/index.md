@@ -9,10 +9,11 @@ machines:
   - id: ibm-5150-mda
     type: pcx86
     config: /configs/pcx86/machine/ibm/5150/mda/64kb/machine.json
+    autoType: $date\r
 ---
 
 {% include machine.html id="ibm-5150-mda" %}
 
-This machine is also available with the <a href="debugger/" onclick="pcjsOnClick(this)">PCjs Debugger</a>.
+This machine is also available with [Single-Sided Diskette Drives](ssdd/) or with the <a href="debugger/" onclick="pcjsOnClick(this)">PCjs Debugger</a>.
 
 {% include gallery/documents.html width="200" height="280" %}

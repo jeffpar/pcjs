@@ -7,11 +7,6 @@ machines:
   - id: ibm-5150-cga
     type: pcx86
     config: /configs/pcx86/machine/ibm/5150/cga/64kb/debugger/machine.json
-    autoMount:
-        A:
-            name: PC DOS 2.00 (Disk 1)
-        B:
-            name: PC DOS 2.00 (Disk 2)
     testRAM: false
 ---
 

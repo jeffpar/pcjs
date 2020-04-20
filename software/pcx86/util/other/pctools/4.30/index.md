@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/pctools/4.30/
 machines:
   - id: ibm5150
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/cga/64kb/machine.json
+    config: /configs/pcx86/machine/ibm/5150/cga/64kb/debugger/machine.json
     sizeRAM: 256
     testRAM: false
     autoMount:
@@ -15,6 +15,7 @@ machines:
       B:
         name: Central Point PC Tools 4.30
     autoType: $date\r$time\rB:\rPCTOOLS\r
+    autoStart: true
 ---
 
 {% include machine.html id="ibm5150" %}

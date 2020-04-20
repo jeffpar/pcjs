@@ -29,3 +29,11 @@ the next time you load this page, your progress (and the donkey) should be perfe
 
 Browse all the [BASIC Programs](/software/pcx86/app/ibm/basic/1.00/) included with
 [PC DOS 1.00](/software/pcx86/sys/dos/ibm/1.00/).
+
+### DONKEY.BAS
+
+[[Download](DONKEY.BAS)]
+
+```bas
+{% include_relative DONKEY.BAS %}
+```

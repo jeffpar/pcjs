@@ -112,6 +112,7 @@ if (pkg.homepage) {
 
 var aMachines = Object.keys(machines);
 var aConcatTasks = [], aCompileTasks = [];
+var aScripts = [];
 
 aMachines.forEach(function(machineID) {
     if (machineID[0] == '_' || machineID == "shared") return;
@@ -125,6 +126,12 @@ aMachines.forEach(function(machineID) {
 
     while (Machine && Machine.copy) {
         Machine = machines[Machine.copy];
+    }
+
+    if (Machine.scripts) {
+        Machine.scripts.forEach((script) => {
+            if (aScripts.indexOf(script) < 0) aScripts.push(script);
+        });
     }
 
     let machineDefines = [];
@@ -305,3 +312,7 @@ gulp.task("copyright", function(done) {
 });
 
 gulp.task("default", gulp.series("concat", "compile"));
+
+gulp.task("watch", function() {
+    return gulp.watch(aScripts, gulp.series("default"));
+});
