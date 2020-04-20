@@ -1,6 +1,6 @@
         <script>
           function pcjsGetURLVars() {
-            let vars = {}, parts = window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+            var vars = {}, parts = window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
               vars[key] = value;
             });
             return vars;
@@ -19,18 +19,19 @@
             }
           }
           function pcjsExplorerExpand(path, altpath, prefix) {
+            var expansions = 0;
             if (!path && altpath) {
               path = altpath.replace(/^\/[^/]*\/([^/]*)\/.*$/, "/$1/");
             }
             if (path) {
-              let element;
+              var element;
               if (prefix) path = prefix + path;
-              let id = path.substr(1).replace(/\//g, '-').replace(/-$/, '');
+              var id = path.substr(1).replace(/\//g, '-').replace(/-$/, '');
               if (id == "documents") id = "library";
               do {
                 element = document.getElementById(id);
                 if (element) break;
-                let idNew = id.replace(/-[^-]+$/, '');
+                var idNew = id.replace(/-[^-]+$/, '');
                 if (idNew == id) break;
                 id = idNew;
               } while (true);
@@ -43,32 +44,37 @@
                     element.classList.remove("pcjs-explorer-closed");
                   }
                   element = element.parentElement;
+                  expansions++;
                 } while (element);
               }
             }
+            return expansions;
           }
           function pcjsExplorerExpandAll(element, event, fExpand) {
             if (event) event.preventDefault();
-            let elements = document.querySelectorAll(fExpand? ".pcjs-explorer-closed" : ".pcjs-explorer-open");
+            var elements = document.querySelectorAll(fExpand? ".pcjs-explorer-closed" : ".pcjs-explorer-open");
             elements.forEach((element) => {pcjsExplorerClick(element);});
           }
           function pcjsExplorerSurprise() {
-            let elements = document.querySelectorAll(".pcjs-explorer-item");
-            let element = elements && elements[Math.random() * elements.length | 0];
+            var elements = document.querySelectorAll(".pcjs-explorer-item");
+            var element = elements && elements[Math.random() * elements.length | 0];
             if (element && element.children) window.location.href = element.children[0].href;
           }
           function pcjsExplorerView(element, event) {
             event.preventDefault();
-            let target = document.getElementById("pcjs-explorer-menu");
+            var target = document.getElementById("pcjs-explorer-menu");
             if (target) {
-              let yOffset = -48;
-              let y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+              var yOffset = -48;
+              var y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
               window.scrollTo({top: y, behavior: 'smooth'});
             }
           }
           function pcjsExplorerInit() {
             pcjsExplorerExpand(window.location.pathname + window.location.hash.substr(1));
             pcjsExplorerExpand(pcjsGetURLVars()['software'], window.location.pathname, "/software");
+            if (window.location.pathname.indexOf("/machines") < 0) {
+              if (window.location.pathname.indexOf("/pcx86") >= 0) pcjsExplorerExpand("/machines/pcx86/ibm/5150");
+            }
           }
           pcjsExplorerInit();
         </script>
