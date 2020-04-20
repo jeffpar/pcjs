@@ -1,9 +1,15 @@
 ---
 layout: page
-title: Microsoft Manuals and Programming Guides
+title: Microsoft Manuals
 permalink: /documents/manuals/microsoft/
 preview: /software/pcx86/game/microsoft/adventure/covers/Adventure_Manual.jpg
 ---
+
+{% include gallery/alldocs.html root="software" tag="microsoft" title="Microsoft Software Manuals" width="200" height="280" %}
+
+{% comment %}
+
+How we used to (manually) enumerate everything, before we had the "alldocs" template:
 
 {% include gallery/documents.html path="/software/pcx86/game/microsoft/adventure/" title="Microsoft Adventure" %}
 
@@ -20,3 +26,5 @@ preview: /software/pcx86/game/microsoft/adventure/covers/Adventure_Manual.jpg
 {% include gallery/documents.html path="/software/pcx86/lang/microsoft/masm/5.00/" title="Microsoft Macro Assembler 5.00" width="200" height="260" %}
 
 {% include gallery/documents.html path="/software/pcx86/sdk/os2/microsoft/1.02/" title="Microsoft OS/2 SDK 1.02" width="200" height="260" %}
+
+{% endcomment %}
