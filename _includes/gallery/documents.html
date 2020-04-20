@@ -76,7 +76,7 @@
             {%- comment -%}
               For now, we only embed the first document so marked, to keep things simple.
             {%- endcomment -%}
-            {%- if doc['@embed'] and doc_embed == "" -%}
+            {%- if doc['@embed'] and doc_embed == "" and include.target == nil -%}
               {%- assign doc_embed = doc['@embed'] -%}
               {%- assign embed_title = doc_title -%}
               {%- assign embed_source = doc_source -%}

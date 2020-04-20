@@ -1,6 +1,9 @@
 {%- assign root = include.root | default: "documents" %}
 {%- assign data = include.data | default: site.data[root] %}
 {%- assign tag = include.tag | default: "" %}
+{%- assign width = include.width %}
+{%- assign height = include.height %}
+{%- capture root_tag -%}{%- if tag != "" -%}/{{ tag }}{%- endif -%}{%- endcapture -%}
 {%- if include.saveroot == nil %}
   <h3>{{ include.title | default: "All Documents" }}</h3>
   {%- assign alldocs_exist = false %}
@@ -11,33 +14,33 @@
     {%- assign type = item[1]['@type'] %}
     {%- assign instances = site.data[machine][type] %}
     {%- capture path %}{{ type }}{{ item[1]['@path'] }}{% endcapture %}
-    {%- include gallery/alldocs.html root=path data=instances savedata=data saveroot=root tag=tag %}
+    {%- include gallery/alldocs.html root=path data=instances savedata=data saveroot=root tag=tag width=width height=height %}
     {%- continue %}
   {%- endif %}
   {%- if item[1]['@instances'] %}
     {%- assign instances = item[1]['@instances'] %}
     {%- capture path %}{{ root }}{%- if item[0] != "" -%}/{{ item[0] }}{%- endif -%}{% endcapture %}
-    {%- include gallery/alldocs.html root=path data=instances savedata=data saveroot=root tag=tag %}
+    {%- include gallery/alldocs.html root=path data=instances savedata=data saveroot=root tag=tag width=width height=height %}
     {%- continue %}
   {%- endif %}
   {%- if item[1]['@versions'] %}
     {%- assign instances = item[1]['@versions'] %}
     {%- capture path %}{{ root }}{%- if item[0] != "" -%}/{{ item[0] }}{%- endif -%}{% endcapture %}
-    {%- include gallery/alldocs.html root=path data=instances savedata=data saveroot=root tag=tag %}
+    {%- include gallery/alldocs.html root=path data=instances savedata=data saveroot=root tag=tag width=width height=height %}
     {%- continue %}
   {%- endif %}
   {%- unless item[0] contains "@" %}
     {%- assign instances = item[1] %}
     {%- capture path %}{{ root }}{%- if item[0] != "" -%}/{{ item[0] }}{%- endif -%}{% endcapture %}
-    {%- include gallery/alldocs.html root=path data=instances savedata=data saveroot=root tag=tag %}
+    {%- include gallery/alldocs.html root=path data=instances savedata=data saveroot=root tag=tag width=width height=height %}
     {%- continue %}
   {%- endunless %}
   {%- if item[0] == "@documents" %}
-    {%- if root contains tag %}
+    {%- if root contains root_tag %}
       {%- capture target %}/{{ root | replace: "hardware","machines" }}{% endcapture %}
       {%- assign title = data['@title'] | default: item['@title'] %}
       {%- capture link %}{{ target }}/{% endcapture %}
-      {%- include gallery/documents.html target=target title=title link=link style="left" %}
+      {%- include gallery/documents.html target=target title=title link=link style="left" width=width height=height %}
       {%- assign alldocs_exist = true %}
     {%- endif %}
   {%- endif %}
