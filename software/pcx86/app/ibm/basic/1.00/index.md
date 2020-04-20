@@ -14,6 +14,7 @@ machines:
       B:
         name: None
     autoType: $date\r
+    autoStart: true
 ---
 
 Using the PCx86 machine below, you can load any of the BASIC programs distributed with [PC DOS 1.00](/software/pcx86/sys/dos/ibm/1.00/),
@@ -87,7 +88,7 @@ NOTE: To save a BASIC program as an *ASCII* file, save it with the `A` option; e
 [[Download](DONKEY.BAS)]
 
 ```bas
-{% include_relative DONKEY.BAS %}
+{% include_relative donkey/DONKEY.BAS %}
 ```
 
 ### MORTGAGE.BAS

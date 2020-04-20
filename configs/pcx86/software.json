@@ -2942,6 +2942,7 @@
           {
             "@title": "Jeff's PC DOS 1.00 with MASM",
             "@diskette": "JEFFPAR-PCDOS100-MASM100-160K.img",
+            "@link": "http://localhost:8088/disks-demo/pcx86/personal/JEFFPAR-PCDOS100-MASM100-160K.img",
             "@type": "PC160K"
           }
         ]
