@@ -497,8 +497,10 @@ class FDC extends Component {
         } else {
             config = {};
         }
-        for (let sDrive in config) {
-            if (configMerge) configMerge[sDrive] = config[sDrive];
+        if (configMerge) {
+            for (let sDrive in config) {
+                configMerge[sDrive] = config[sDrive];
+            }
         }
         return config;
     }
@@ -1660,7 +1662,7 @@ class FDC extends Component {
                             }
                         }
                         let path = item['@link'] || (server + propPath + '/' + category + '/' + version + '/' + item['@diskette']);
-                        if (path.indexOf("localhost") < 0 || Web.getHostName() == "localhost") {
+                        if (!item['@localonly'] || Web.getHostName() == "localhost") {
                             this.aDiskettes.push({name, path});
                         }
                     }

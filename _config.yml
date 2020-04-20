@@ -24,6 +24,7 @@ exclude:
   - "**/private"
   - /package*.json
   - /.history
+  - /.vscode
   - /diskettes
   - /gamedisks
   - /harddisks

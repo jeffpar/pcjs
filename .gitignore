@@ -1,3 +1,4 @@
+*.img
 *.log
 *.obj
 .DS_Store

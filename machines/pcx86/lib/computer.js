@@ -558,11 +558,11 @@ class Computer extends Component {
                  * which could be overcome, but there's really no need to support more, since \xNN can be used to
                  * represent anything else.
                  *
-                 * Finally, while the user should escape any quotation characters, just to be safe, we will try to
-                 * choose the safest quoting character for the overall string.
+                 * Finally, while the user should escape any quotation characters, to be safe, we now ensure that all
+                 * double-quotes are escaped, so that we can safely double-quote the entire string.
                  */
-                let ch = value.indexOf("'") >= 0? '"' : "'";
-                value = /** @type {string} */ (eval(ch + value + ch));      // jshint ignore:line
+                value = value.replace(/([^\\])"/g, '$1\\"');
+                value = /** @type {string} */ (eval('"' + value + '"'));    // jshint ignore:line
             } catch(err) {
                 Component.error(err.message + " (" + value + ")");
                 value = undefined;

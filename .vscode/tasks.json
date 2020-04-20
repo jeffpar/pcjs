@@ -24,11 +24,12 @@
     },
     {
       "type": "shell",
-      "label": "bundle: server",
+      "label": "bundle: serve",
       "command": "bundle exec jekyll serve --config _config.yml,_developer.yml",
       "runOptions": {
         "runOn": "folderOpen"
-      }
+      },
+      "problemMatcher": []
     }
   ]
 }
