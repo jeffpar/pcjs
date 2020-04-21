@@ -30,12 +30,12 @@ const COMPILED = false;
 const DEBUG = true;
 
 /**
- * FACTORY is "PCjs" by default; overridden with the machine's "factory" string in machines.json
+ * FACTORY is "pcjsMachine" by default; overridden with the machine's "factory" string in machines.json
  * to ensure unique factories.
  *
  * @define {string}
  */
-const FACTORY = "NewMachine";
+const FACTORY = "pcjsMachine";
 
 /**
  * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
@@ -10452,7 +10452,7 @@ class Debugger extends Device {
     /**
      * evalAND(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.AND().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.AND().
      *
      * Performs the bitwise "and" (AND) of two operands > 32 bits.
      *
@@ -10486,7 +10486,7 @@ class Debugger extends Device {
     /**
      * evalMUL(dst, src)
      *
-     * I could have adapted the code from /modules/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
+     * I could have adapted the code from /machines/dec/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
      * write this base method and let the PDP-10 Debugger override it with a call to the *actual* doMUL() method.
      *
      * @this {Debugger}
@@ -10502,7 +10502,7 @@ class Debugger extends Device {
     /**
      * evalIOR(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.IOR().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.IOR().
      *
      * Performs the logical "inclusive-or" (OR) of two operands > 32 bits.
      *
@@ -10536,7 +10536,7 @@ class Debugger extends Device {
     /**
      * evalXOR(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.XOR().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.XOR().
      *
      * Performs the logical "exclusive-or" (XOR) of two operands > 32 bits.
      *

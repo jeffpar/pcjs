@@ -80,9 +80,9 @@ template doesn't add them to the Computer component anymore, since we started su
     {%- endunless -%}
   {%- endunless -%}
   {%- if machine.autoMount == nil -%}
-    {%- assign machine_autoMount = "autoMount:null" -%}
+    {%- assign machine_autoMount = "" -%}
   {%- else -%}
-    {%- capture machine_autoMount -%}autoMount:{{ machine.autoMount | jsonify | replace: "'", "\\'" }}{%- endcapture -%}
+    {%- capture machine_autoMount -%},autoMount:{{ machine.autoMount | jsonify | replace: "'", "\\'" }}{%- endcapture -%}
   {%- endif -%}
   {%- if machine.autoScript == nil -%}
     {%- assign machine_autoScript = "" -%}
@@ -176,7 +176,8 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- else -%}
     {%- capture machine_connection -%},connection:"{{ machine.connection }}"{%- endcapture -%}
   {%- endif -%}
-  {%- capture machine_parms -%}{{ site.left_brace }}{{ machine_autoMount }}{{ machine_autoScript }}{{ machine_autoStart }}{{ machine_autoType }}{{ machine_cdroms }}{{ machine_floppies }}{{ machine_drives }}{{ machine_resume }}{{ machine_sound }}{{ machine_state }}{{ machine_flicker }}{{ machine_sizeRAM }}{{ machine_testRAM }}{{ machine_commands }}{{ machine_messages }}{{ machine_connection }}{{ site.right_brace }}{%- endcapture -%}
+  {%- capture machine_parms -%}{{ machine_autoMount }}{{ machine_autoScript }}{{ machine_autoStart }}{{ machine_autoType }}{{ machine_cdroms }}{{ machine_floppies }}{{ machine_drives }}{{ machine_resume }}{{ machine_sound }}{{ machine_state }}{{ machine_flicker }}{{ machine_sizeRAM }}{{ machine_testRAM }}{{ machine_commands }}{{ machine_messages }}{{ machine_connection }}{%- endcapture -%}
+  {%- if machine_parms != "" -%}{%- capture machine_parms -%}{{ site.left_brace }}{{ machine_parms | prepend: "@" | replace: "@,","" }}{{ site.right_brace }}{%- endcapture -%}{%- endif -%}
   {%- if site.pcjs.uncompiled -%}
     {%- if machine.unbundled -%}
       {%- for script in machine_data.scripts -%}
@@ -212,9 +213,9 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- if machine_factory contains "embed" %}
     <script>{{ machine_factory }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});</script>
   {%- elsif site.pcjs.uncompiled and machine.unbundled %}
-    <script type="module">NewMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
+    <script type="module">pcjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
   {%- elsif site.pcjs.uncompiled or machine.uncompiled %}
-    <script>NewMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
+    <script>pcjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
   {%- else %}
     <script>{{ machine_factory }}('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
 {%- endif %}

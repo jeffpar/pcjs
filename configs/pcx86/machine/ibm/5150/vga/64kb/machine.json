@@ -12,17 +12,47 @@
       "id": "pcVGA",
       "class": "computer"
     },
-    "/configs/pcx86/machine/ibm/5150/rom-basic-100.json",
-    "/configs/pcx86/machine/ibm/5150/rom-bios-rev3.json",
-    "/configs/pcx86/machine/ibm/5150/rom-vga.json",
-    "/configs/pcx86/machine/ibm/5150/video-vga.json",
-    "/configs/pcx86/machine/ibm/5150/fdc.json",
     {
+      "id": "romBASIC",
+      "class": "rom",
+      "config": "/configs/pcx86/machine/ibm/5150/rom-basic-100.json"
+    },
+    {
+      "id": "romBIOS",
+      "class": "rom",
+      "config": "/configs/pcx86/machine/ibm/5150/rom-bios-rev3.json"
+    },
+    {
+      "id": "romVGA",
+      "class": "rom",
+      "config": "/configs/pcx86/machine/ibm/5150/rom-vga.json"
+    },
+    {
+      "id": "videoVGA",
+      "class": "video",
+      "config": "/configs/pcx86/machine/ibm/5150/video-vga.json"
+    },
+    {
+      "id": "fdcNEC",
+      "class": "fdc",
+      "config": "/configs/pcx86/machine/ibm/5150/fdc.json"
+    },
+    {
+      "id": "ramLow",
+      "class": "ram",
       "config": "/configs/pcx86/machine/ibm/5150/ram.json",
       "test": "false"
     },
-    "/configs/pcx86/machine/ibm/5150/cpu.json",
-    "/configs/pcx86/machine/ibm/5150/keyboard.json",
+    {
+      "id": "cpu8088",
+      "class": "cpu",
+      "config": "/configs/pcx86/machine/ibm/5150/cpu.json"
+    },
+    {
+      "id": "keyboard",
+      "class": "keyboard",
+      "config": "/configs/pcx86/machine/ibm/5150/keyboard.json"
+    },
     {
       "id": "chipset",
       "class": "chipset",

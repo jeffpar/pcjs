@@ -735,7 +735,7 @@ export class Debugger extends Device {
     /**
      * evalAND(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.AND().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.AND().
      *
      * Performs the bitwise "and" (AND) of two operands > 32 bits.
      *
@@ -769,7 +769,7 @@ export class Debugger extends Device {
     /**
      * evalMUL(dst, src)
      *
-     * I could have adapted the code from /modules/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
+     * I could have adapted the code from /machines/dec/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
      * write this base method and let the PDP-10 Debugger override it with a call to the *actual* doMUL() method.
      *
      * @this {Debugger}
@@ -785,7 +785,7 @@ export class Debugger extends Device {
     /**
      * evalIOR(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.IOR().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.IOR().
      *
      * Performs the logical "inclusive-or" (OR) of two operands > 32 bits.
      *
@@ -819,7 +819,7 @@ export class Debugger extends Device {
     /**
      * evalXOR(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.XOR().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.XOR().
      *
      * Performs the logical "exclusive-or" (XOR) of two operands > 32 bits.
      *

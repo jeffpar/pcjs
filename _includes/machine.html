@@ -80,28 +80,30 @@
     <div class="pcjs-chassis" style="{{ machine_style }}">
   {%- for machine_component in machine.components -%}
     {%- assign config = nil -%}
+    {%- comment -%}A machine_component with no "config" AND no "id" is assumed to simply be a string, containing the path to a config file.{%- endcomment -%}
     {%- if machine_component.config -%}{%- assign config = machine_component.config -%}{%- elsif machine_component.id == nil -%}{%- assign config = machine_component -%}{%- endif -%}
     {%- if config -%}
       {%- assign config_data = site.data -%}
       {%- assign config_paths = config | replace: "/configs/", "" | replace: ".json", "" | split: "/" -%}
       {%- for config_path in config_paths -%}{%- assign config_data = config_data[config_path] -%}{%- endfor -%}
       {%- assign component = config_data -%}
-      {%- unless component %}
+      {%- unless component and machine_component.class == nil or component.class == machine_component.class %}
         {%- capture machine_errors %}{{ machine_errors }}
-<p class="machine-error">Missing component configuration file: {{ config }}</p>
+<p class="machine-error">Missing or invalid component configuration file: {{ config }}</p>
         {%- endcapture -%}
         {%- continue -%}
       {%- endunless -%}
     {%- else -%}
       {%- assign component = machine_component -%}
     {%- endif -%}
+    {%- assign component_id = machine_component.id | default: component.id %}
     {%- assign component_config = "" %}
     {%- assign component_title = "" %}
     {%- assign component_class = "" %}
     {%- assign component_style = "" %}
     {%- assign component_controls = "" %}
     {%- assign component_elements = "" %}
-    {%- capture default_config -%}id:'{{ machine_id }}.{{ component.id }}',name:'{{ component.name }}'{%- endcapture -%}
+    {%- capture default_config -%}id:'{{ machine_id }}.{{ component_id }}',name:'{{ component.name }}'{%- endcapture -%}
     {%- if component.class == "computer" -%}
       {%- if component.modules -%}
         {%- capture module_config -%},modules:[{% for module in component.modules %}{ type:'{{ module.type }}',refID:'{{ module.id }}',start:{{ module.start }},end:{{ module.end }} },{% endfor %}@]{%- endcapture -%}
@@ -257,7 +259,7 @@
         {%- endcapture -%}
       {%- endif -%}
     {%- endif %}
-      <div id="{{ machine_id }}.{{ component.id }}" class="pcjs-{{ component.class }} {{ machine_type }}-{{ component.class }} {{ machine_type }}-component" style="{{ component_style }}">{{ component_title }}{{ component_controls }}
+      <div id="{{ machine_id }}.{{ component_id }}" class="pcjs-{{ component.class }} {{ machine_type }}-{{ component.class }} {{ machine_type }}-component" style="{{ component_style }}">{{ component_title }}{{ component_controls }}
         <div class="{{ machine_type }}-{{ component.class }}-object{{ component_class }}" data-value="{{ component_config }}">{{ component_elements }}</div>
       </div>
   {%- endfor %}
