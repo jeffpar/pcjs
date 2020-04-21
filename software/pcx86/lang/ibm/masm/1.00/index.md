@@ -3,9 +3,15 @@ layout: page
 title: IBM Macro Assembler 1.00
 permalink: /software/pcx86/lang/ibm/masm/1.00/
 redirect_from: /disks/pcx86/tools/ibm/masm/1.00/
+machines:
+  - id: ibm-5150-mda
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5150/mda/64kb/debugger/machine.json
 ---
 
 [Documentation](#documents) and directory listing of the 160Kb distribution diskette are provided below.
+
+{% include machine.html id="ibm-5150-mda" %}
 
 ### Directory of IBM Macro Assembler 1.00
 

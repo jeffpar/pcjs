@@ -2489,7 +2489,8 @@
               {
                 "@title": "MS Macro Assembler 1.00 (1981)",
                 "@diskette": "MASM100-1981.json",
-                "@type": "PC160K"
+                "@type": "PC160K",
+                "@source": "http://www.os2museum.com"
               }
             ]
           },
@@ -2499,7 +2500,8 @@
               {
                 "@title": "MS Macro Assembler 1.00 (1982)",
                 "@diskette": "MASM100.json",
-                "@type": "PC160K"
+                "@type": "PC160K",
+                "@source": "https://winworldpc.com/product/macro-assembler/1x"
               }
             ]
           },
