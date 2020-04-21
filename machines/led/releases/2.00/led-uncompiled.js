@@ -56,7 +56,7 @@ const VERSION = "2.00";
 /**
  * @class {Defs}
  */
-default class Defs {}
+class Defs {}
 
 Defs.COMMAND  = COMMAND;
 Defs.COMPILED = COMPILED;
@@ -147,7 +147,7 @@ Defs.CLASSES["Defs"] = Defs;
  * @class {NumIO}
  * @unrestricted
  */
-default class NumIO extends Defs {
+class NumIO extends Defs {
     /**
      * NumIO()
      *
@@ -749,7 +749,7 @@ let Formatter;
  * @unrestricted
  * @property {Object.<string,(Formatter|null)>}>} formatters
  */
-default class StdIO extends NumIO {
+class StdIO extends NumIO {
     /**
      * StdIO()
      *
@@ -1395,7 +1395,7 @@ let Config;
  * @property {number} messages
  * @property {WebIO} machine
  */
-default class WebIO extends StdIO {
+class WebIO extends StdIO {
     /**
      * WebIO(isMachine)
      *
@@ -3049,7 +3049,7 @@ let Register;
  * @property {CPU|undefined|null} cpu
  * @property {Debugger|undefined|null} dbg
  */
-default class Device extends WebIO {
+class Device extends WebIO {
     /**
      * Device()
      *
@@ -3649,7 +3649,7 @@ let BusConfig;
  * @property {Array.<Memory>} blocks
  * @property {number} nTraps (number of blocks currently being trapped)
  */
-default class Bus extends Device {
+class Bus extends Device {
     /**
      * Bus(idMachine, idDevice, config)
      *
@@ -4370,7 +4370,7 @@ let MemoryConfig;
  * @property {function((number|undefined),number,number)|null} readTrap
  * @property {function((number|undefined),number,number)|null} writeTrap
  */
-default class Memory extends Device {
+class Memory extends Device {
     /**
      * Memory(idMachine, idDevice, config)
      *
@@ -5112,7 +5112,7 @@ let ROMConfig;
  * @unrestricted
  * @property {ROMConfig} config
  */
-default class ROM extends Memory {
+class ROM extends Memory {
     /**
      * ROM(idMachine, idDevice, config)
      *
@@ -5365,7 +5365,7 @@ let SurfaceState;
  * @property {Array.<ActiveKey>} aActiveKeys
  * @property {number} keyMods
  */
-default class Input extends Device {
+class Input extends Device {
     /**
      * Input(idMachine, idDevice, config)
      *
@@ -6823,7 +6823,7 @@ let LEDConfig;
  * @property {boolean} fBufferModified
  * @property {boolean} fBufferTickled
  */
-default class LED extends Device {
+class LED extends Device {
     /**
      * LED(idMachine, idDevice, config)
      *
@@ -7893,7 +7893,7 @@ let TimeConfig;
  * @property {number} nUpdatesPerSecond
  * @property {boolean} timeLock
  */
-default class Time extends Device {
+class Time extends Device {
     /**
      * Time(idMachine, idDevice, config)
      *
@@ -8913,7 +8913,7 @@ Time.CLASSES["Time"] = Time;
  * @property {number} regPC
  * @property {number} regPCLast
  */
-default class CPU extends Device {
+class CPU extends Device {
     /**
      * CPU(idMachine, idDevice, config)
      *
@@ -9075,7 +9075,7 @@ let Debugger;
  * @property {string} colorSelected (set by updateColorSelection())
  * @property {Array.<string>} colors
  */
-default class LEDCtrl extends CPU {
+class LEDCtrl extends CPU {
     /**
      * LEDCtrl(idMachine, idDevice, config)
      *
@@ -10804,7 +10804,7 @@ LEDCtrl.CLASSES["LEDCtrl"] = LEDCtrl;
  * @property {boolean} fConfigLoaded
  * @property {boolean} fPageLoaded
  */
-default class Machine extends Device {
+class Machine extends Device {
     /**
      * Machine(idMachine, sConfig, sParms)
      *

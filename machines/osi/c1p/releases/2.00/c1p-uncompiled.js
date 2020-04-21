@@ -1337,10 +1337,10 @@ Str.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "Ju
 
 
 /** @typedef {{ mask: number, shift: number }} */
-var BitField;
+let BitField;
 
 /** @typedef {Object.<BitField>} */
-var BitFields;
+let BitFields;
 
 class Usr {
     /**
