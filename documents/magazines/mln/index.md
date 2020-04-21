@@ -2,7 +2,9 @@
 layout: page
 title: Microsoft Languages Newsletter
 permalink: /documents/magazines/mln/
-redirect_from: /disks/pcx86/tools/microsoft/
+redirect_from:
+  - /disks/pcx86/tools/microsoft/
+  - /disks/pc/tools/microsoft/
 preview: covers/PCTJ-1986-01.jpg
 ---
 
