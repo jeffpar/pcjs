@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Device } from "./device.js";
+import Device from "./device.js";
 
 /**
  * @typedef {Config} LEDConfig
@@ -91,7 +91,7 @@ import { Device } from "./device.js";
  * @property {boolean} fBufferModified
  * @property {boolean} fBufferTickled
  */
-export class LED extends Device {
+export default class LED extends Device {
     /**
      * LED(idMachine, idDevice, config)
      *

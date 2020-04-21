@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Device } from "./device.js";
-import { Memory } from "./memory.js";
+import Device from "./device.js";
+import Memory from "./memory.js";
 
 /**
  * DebuggerConfig properties
@@ -59,7 +59,7 @@ import { Memory } from "./memory.js";
  * @unrestricted
  * @property {Array.<Array.<Address>>} aaBreakAddress
  */
-export class Debugger extends Device {
+export default class Debugger extends Device {
     /**
      * Debugger(idMachine, idDevice, config)
      *

@@ -10,7 +10,9 @@
  * <paulnank@hotmail.com> at <http://skn.noip.me/pdp11/pdp11.html> with permission.
  */
 
-import { PDP11Ops } from "./pdp11ops.js";
+import PDP11Ops from "./pdp11ops.js";
+import Debugger from "../../../modules/debugger.js";
+import Memory   from "../../../modules/memory.js";
 
 /*
  * Overview of Device Interrupt Support
@@ -52,7 +54,7 @@ import { PDP11Ops } from "./pdp11ops.js";
  * @property {Bus} bus
  * @property {Input} input
  */
-export class PDP11 extends PDP11Ops {
+export default class PDP11 extends PDP11Ops {
     /**
      * PDP11(idMachine, idDevice, config)
      *
@@ -597,7 +599,7 @@ export class PDP11 extends PDP11Ops {
         }
         let idDevice = stateCPU.shift();
         let version = stateCPU.shift();
-        if (idDevice != this.idDevice || (version|0) !== (+VERSION|0)) {
+        if (idDevice != this.idDevice || (version|0) !== (+PDP11.VERSION|0)) {
             this.printf("CPU state mismatch (%s %3.2f)\n", idDevice, version);
             return false;
         }
@@ -645,7 +647,7 @@ export class PDP11 extends PDP11Ops {
     saveState(stateCPU)
     {
         stateCPU.push(this.idDevice);
-        stateCPU.push(+VERSION);
+        stateCPU.push(+PDP11.VERSION);
         stateCPU.push(this.regsGen);
         stateCPU.push(this.regsAlt);
         stateCPU.push(this.regsAltStack);
@@ -845,7 +847,7 @@ export class PDP11 extends PDP11Ops {
     {
         if (condition) {
             let off = ((opcode << 24) >> 23);
-            if (DEBUG && this.dbg && off == -2) {
+            if (PDP11.DEBUG && this.dbg && off == -2) {
                 this.dbg.stopCPU("branch to self");
             }
             this.setPC(this.getPC() + off);

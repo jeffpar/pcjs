@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { NumIO } from "./numio.js";
+import NumIO from "./numio.js";
 
 /**
  * Define the Formatter function type for addFormatType().
@@ -26,7 +26,7 @@ import { NumIO } from "./numio.js";
  * @unrestricted
  * @property {Object.<string,(Formatter|null)>}>} formatters
  */
-export class StdIO extends NumIO {
+export default class StdIO extends NumIO {
     /**
      * StdIO()
      *

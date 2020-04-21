@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Memory }  from "../../../lib/memory.js";
-import { Monitor } from "../../../lib/device.js";
+import Memory  from "../../../lib/memory.js";
+import Monitor from "../../../lib/device.js";
 
 /**
  * @typedef {MonitorConfig} InvadersVideoConfig
@@ -26,7 +26,7 @@ import { Monitor } from "../../../lib/device.js";
  * @unrestricted
  * @property {InvadersVideoConfig} config
  */
-export class InvadersVideo extends Monitor {
+export default class InvadersVideo extends Monitor {
     /**
      * InvadersVideo(idMachine, idDevice, config)
      *

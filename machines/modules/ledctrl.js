@@ -7,9 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { CPU }   from "./cpu.js";
-import { Input } from "./input.js";
-import { LED }   from "./led.js";
+import CPU   from "./cpu.js";
+import Input from "./input.js";
+import LED   from "./led.js";
 
 /**
  * @typedef {Config} LEDCtrlConfig
@@ -51,7 +51,7 @@ import { LED }   from "./led.js";
  * @property {string} colorSelected (set by updateColorSelection())
  * @property {Array.<string>} colors
  */
-export class LEDCtrl extends CPU {
+export default class LEDCtrl extends CPU {
     /**
      * LEDCtrl(idMachine, idDevice, config)
      *

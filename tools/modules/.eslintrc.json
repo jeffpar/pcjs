@@ -1,8 +1,5 @@
 {
   "parserOptions": {
     "sourceType": "module"
-  },
-  "rules": {
-    "sort-imports": "off"
   }
 }

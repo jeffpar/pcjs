@@ -1,0 +1,5 @@
+{
+  "name": "diskdump",
+  "description": "Disk image processing module",
+  "type": "module"
+}

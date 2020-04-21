@@ -7,9 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Device } from "../../../lib/device.js";
-import { Input }  from "../../../lib/input.js";
-import { LED }    from "../../../lib/led.js";
+import Device from "../../../lib/device.js";
+import Input  from "../../../lib/input.js";
+import LED    from "../../../lib/led.js";
 
 /**
  * @typedef {Config} VT100KeyboardConfig
@@ -21,7 +21,7 @@ import { LED }    from "../../../lib/led.js";
  * @unrestricted
  * @property {VT100KeyboardConfig} config
  */
-export class VT100Keyboard extends Device {
+export default class VT100Keyboard extends Device {
     /**
      * VT100Keyboard(idMachine, idDevice, config)
      *

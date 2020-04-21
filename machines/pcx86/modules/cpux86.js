@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { CPU } from "../../modules/cpu.js";
+import CPU from "../../modules/cpu.js";
 
 /**
  * CPUx86
@@ -15,7 +15,7 @@ import { CPU } from "../../modules/cpu.js";
  * @class {CPUx86}
  * @unrestricted
  */
-export class CPUx86 extends CPU {
+export default class CPUx86 extends CPU {
     /**
      * CPUx86(idMachine, idDevice, config)
      *

@@ -56,7 +56,7 @@ const VERSION = "2.00";
 /**
  * @class {Defs}
  */
-class Defs {}
+default class Defs {}
 
 Defs.COMMAND  = COMMAND;
 Defs.COMPILED = COMPILED;
@@ -147,7 +147,7 @@ Defs.CLASSES["Defs"] = Defs;
  * @class {NumIO}
  * @unrestricted
  */
-class NumIO extends Defs {
+default class NumIO extends Defs {
     /**
      * NumIO()
      *
@@ -749,7 +749,7 @@ let Formatter;
  * @unrestricted
  * @property {Object.<string,(Formatter|null)>}>} formatters
  */
-class StdIO extends NumIO {
+default class StdIO extends NumIO {
     /**
      * StdIO()
      *
@@ -1395,7 +1395,7 @@ let Config;
  * @property {number} messages
  * @property {WebIO} machine
  */
-class WebIO extends StdIO {
+default class WebIO extends StdIO {
     /**
      * WebIO(isMachine)
      *
@@ -3049,7 +3049,7 @@ let Register;
  * @property {CPU|undefined|null} cpu
  * @property {Debugger|undefined|null} dbg
  */
-class Device extends WebIO {
+default class Device extends WebIO {
     /**
      * Device()
      *
@@ -3631,16 +3631,16 @@ Device.CLASSES["Device"] = Device;
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), location: Array.<number>, map: (Array.<Array.<number>>|Object|undefined), drag: (boolean|undefined), scroll: (boolean|undefined), hexagonal: (boolean|undefined), releaseDelay: (number|undefined) }} */
 let InputConfig;
 
- /** @typedef {{ keyNum: number, msDown: number, autoRelease: boolean }} */
+/** @typedef {{ keyNum: number, msDown: number, autoRelease: boolean }} */
 let ActiveKey;
 
- /** @typedef {{ id: (string|number), func: function(string,boolean) }} */
+/** @typedef {{ id: (string|number), func: function(string,boolean) }} */
 let KeyListener;
 
- /** @typedef {{ id: string, cxGrid: number, cyGrid: number, xGrid: number, yGrid: number, func: function(boolean) }} */
+/** @typedef {{ id: string, cxGrid: number, cyGrid: number, xGrid: number, yGrid: number, func: function(boolean) }} */
 let SurfaceListener;
 
- /** @typedef {{ xInput: number, yInput: number, cxInput: number, cyInput: number, hGap: number, vGap: number, cxSurface: number, cySurface: number, xPower: number, yPower: number, cxPower: number, cyPower: number, nRows: number, nCols: number, cxButton: number, cyButton: number, cxGap: number, cyGap: number, xStart: number, yStart: number }} */
+/** @typedef {{ xInput: number, yInput: number, cxInput: number, cyInput: number, hGap: number, vGap: number, cxSurface: number, cySurface: number, xPower: number, yPower: number, cxPower: number, cyPower: number, nRows: number, nCols: number, cxButton: number, cyButton: number, cxGap: number, cyGap: number, xStart: number, yStart: number }} */
 let SurfaceState;
 
 /**
@@ -3663,7 +3663,7 @@ let SurfaceState;
  * @property {Array.<ActiveKey>} aActiveKeys
  * @property {number} keyMods
  */
-class Input extends Device {
+default class Input extends Device {
     /**
      * Input(idMachine, idDevice, config)
      *
@@ -5121,7 +5121,7 @@ let LEDConfig;
  * @property {boolean} fBufferModified
  * @property {boolean} fBufferTickled
  */
-class LED extends Device {
+default class LED extends Device {
     /**
      * LED(idMachine, idDevice, config)
      *
@@ -6183,7 +6183,7 @@ let MonitorConfig;
  * @unrestricted
  * @property {MonitorConfig} config
  */
-class Monitor extends Device {
+default class Monitor extends Device {
     /**
      * Monitor(idMachine, idDevice, config)
      *
@@ -6655,7 +6655,7 @@ let TimeConfig;
  * @property {number} nUpdatesPerSecond
  * @property {boolean} timeLock
  */
-class Time extends Device {
+default class Time extends Device {
     /**
      * Time(idMachine, idDevice, config)
      *
@@ -7686,7 +7686,7 @@ let BusConfig;
  * @property {Array.<Memory>} blocks
  * @property {number} nTraps (number of blocks currently being trapped)
  */
-class Bus extends Device {
+default class Bus extends Device {
     /**
      * Bus(idMachine, idDevice, config)
      *
@@ -8407,7 +8407,7 @@ let MemoryConfig;
  * @property {function((number|undefined),number,number)|null} readTrap
  * @property {function((number|undefined),number,number)|null} writeTrap
  */
-class Memory extends Device {
+default class Memory extends Device {
     /**
      * Memory(idMachine, idDevice, config)
      *
@@ -9156,7 +9156,7 @@ let PortsConfig;
  * @property {Array.<function(number,boolean)>} aInPair
  * @property {Array.<function(number,number)>} aOutPair
  */
-class Ports extends Memory {
+default class Ports extends Memory {
     /**
      * Ports(idMachine, idDevice, config)
      *
@@ -9350,7 +9350,7 @@ let RAMConfig;
  * @property {number} type
  * @property {Array.<number>} values
  */
-class RAM extends Memory {
+default class RAM extends Memory {
     /**
      * RAM(idMachine, idDevice, config)
      *
@@ -9391,7 +9391,7 @@ let ROMConfig;
  * @unrestricted
  * @property {ROMConfig} config
  */
-class ROM extends Memory {
+default class ROM extends Memory {
     /**
      * ROM(idMachine, idDevice, config)
      *
@@ -9619,7 +9619,7 @@ ROM.CLASSES["ROM"] = ROM;
  * @property {number} regPC
  * @property {number} regPCLast
  */
-class CPU extends Device {
+default class CPU extends Device {
     /**
      * CPU(idMachine, idDevice, config)
      *
@@ -9776,7 +9776,7 @@ let Dumper;
  * @unrestricted
  * @property {Array.<Array.<Address>>} aaBreakAddress
  */
-class Debugger extends Device {
+default class Debugger extends Device {
     /**
      * Debugger(idMachine, idDevice, config)
      *
@@ -12495,7 +12495,7 @@ Debugger.DECOP_PRECEDENCE = {
  * @property {Bus} busMemory
  * @property {Input} input
  */
-class CPUx80 extends CPU {
+default class CPUx80 extends CPU {
     /**
      * CPUx80(idMachine, idDevice, config)
      *
@@ -16504,7 +16504,7 @@ CPUx80.CLASSES["CPUx80"] = CPUx80;
  * @class {Dbgx80}
  * @unrestricted
  */
-class Dbgx80 extends Debugger {
+default class Dbgx80 extends Debugger {
     /**
      * Dbgx80(idMachine, idDevice, config)
      *
@@ -17091,7 +17091,7 @@ Dbgx80.CLASSES["Dbgx80"] = Dbgx80;
  * @class {VT100Chips}
  * @unrestricted
  */
-class VT100Chips extends Device {
+default class VT100Chips extends Device {
     /**
      * VT100Chips(idMachine, idDevice, config)
      *
@@ -17757,7 +17757,7 @@ let VT100KeyboardConfig;
  * @unrestricted
  * @property {VT100KeyboardConfig} config
  */
-class VT100Keyboard extends Device {
+default class VT100Keyboard extends Device {
     /**
      * VT100Keyboard(idMachine, idDevice, config)
      *
@@ -18308,7 +18308,7 @@ VT100Keyboard.CLASSES["VT100Keyboard"] = VT100Keyboard;
  * @class {VT100Serial}
  * @unrestricted
  */
-class VT100Serial extends Device {
+default class VT100Serial extends Device {
     /**
      * VT100Serial(idMachine, idDevice, config)
      *
@@ -18897,7 +18897,7 @@ let VT100VideoConfig;
  * @unrestricted
  * @property {VT100VideoConfig} config
  */
-class VT100Video extends Monitor {
+default class VT100Video extends Monitor {
     /**
      * VT100Video(idMachine, idDevice, config)
      *
@@ -19699,7 +19699,7 @@ VT100Video.CLASSES["VT100Video"] = VT100Video;
  * @property {boolean} fConfigLoaded
  * @property {boolean} fPageLoaded
  */
-class Machine extends Device {
+default class Machine extends Device {
     /**
      * Machine(idMachine, sConfig, sParms)
      *

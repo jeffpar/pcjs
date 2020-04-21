@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { StdIO } from "./stdio.js";
+import StdIO from "./stdio.js";
 
 /**
  * Media libraries generally consist of an array of Media objects.
@@ -34,7 +34,7 @@ import { StdIO } from "./stdio.js";
  * @property {number} messages
  * @property {WebIO} machine
  */
-export class WebIO extends StdIO {
+export default class WebIO extends StdIO {
     /**
      * WebIO(isMachine)
      *

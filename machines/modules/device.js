@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { WebIO } from "./webio.js";
+import WebIO from "./webio.js";
 
 /**
  * Every device has a 'registers' property that's a hash of register names to Register objects.
@@ -45,7 +45,7 @@ import { WebIO } from "./webio.js";
  * @property {CPU|undefined|null} cpu
  * @property {Debugger|undefined|null} dbg
  */
-export class Device extends WebIO {
+export default class Device extends WebIO {
     /**
      * Device()
      *

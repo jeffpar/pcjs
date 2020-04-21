@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Memory } from "./memory.js";
+import Memory from "./memory.js";
 
 /**
  * @typedef {Config} PortsConfig
@@ -27,7 +27,7 @@ import { Memory } from "./memory.js";
  * @property {Array.<function(number,boolean)>} aInPair
  * @property {Array.<function(number,number)>} aOutPair
  */
-export class Ports extends Memory {
+export default class Ports extends Memory {
     /**
      * Ports(idMachine, idDevice, config)
      *

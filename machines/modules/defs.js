@@ -59,7 +59,7 @@ const VERSION = "2.00";
 /**
  * @class {Defs}
  */
-export class Defs {}
+export default class Defs {}
 
 Defs.COMMAND  = COMMAND;
 Defs.COMPILED = COMPILED;

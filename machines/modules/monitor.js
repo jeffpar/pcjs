@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Device } from "./device.js";
+import Device from "./device.js";
 
 /**
  * @typedef {Config} MonitorConfig
@@ -20,7 +20,7 @@ import { Device } from "./device.js";
  * @unrestricted
  * @property {MonitorConfig} config
  */
-export class Monitor extends Device {
+export default class Monitor extends Device {
     /**
      * Monitor(idMachine, idDevice, config)
      *

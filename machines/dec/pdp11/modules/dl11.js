@@ -10,7 +10,7 @@
  * <paulnank@hotmail.com> at <http://skn.noip.me/pdp11/pdp11.html> with permission.
  */
 
-import { Device } from "../../../lib/device.js";
+import Device from "../../../lib/device.js";
 
 Device.MESSAGE.DL11             = 0x000100000000;
 Device.MESSAGE_NAMES["dl11"]    = Device.MESSAGE.DL11;
@@ -19,7 +19,7 @@ Device.MESSAGE_NAMES["dl11"]    = Device.MESSAGE.DL11;
  * @class {DL11}
  * @unrestricted
  */
-export class DL11 extends Device {
+export default class DL11 extends Device {
     /**
      * DL11(idMachine, idDevice, config)
      *
