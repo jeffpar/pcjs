@@ -12,37 +12,16 @@ import fs from "fs";
 import glob from "glob";
 import mkdirp from "mkdirp";
 import path from "path";
-import StdLib from "../../modules/stdlib.js";
-import StdIO from "../../../machines/modules/stdio.js";
-
-const stdio = new StdIO();
-
-/**
- * printf(format, ...args)
- *
- * @param {string} format
- * @param {...} args
- */
-function printf(format, ...args)
-{
-    process.stdout.write(stdio.sprintf(format, ...args));
-}
 
 export default class DiskDump {
-
     /**
-     * main(argc, argv)
+     * DiskDump(printf)
      *
-     * @param {number} argc
-     * @param {Array} argv
+     * @this DiskDump
+     * @param {function(string,...)} printf
      */
-    static main(argc, argv)
+    constructor(printf)
     {
         printf("hello world!\n");
-        for (let i = 0; i < argc; i++) {
-            printf("arg %d: %s\n", i, argv[i]);
-        }
     }
 }
-
-DiskDump.main(StdLib.args.argc, StdLib.args.argv);

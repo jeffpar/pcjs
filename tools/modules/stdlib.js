@@ -7,32 +7,25 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import StdIO from "../../machines/modules/stdio.js";
+
 export default class StdLib {
     /**
-     * getArgs()
+     * StdLib()
      *
-     * Processes command-line arguments.  Arguments may be introduced by either
-     * a double-hyphen (--) or a long dash (—), and argument values, if any, may
-     * either be separated by an "=" without any intervening whitespace or as the
-     * next argument.  Arguments without an explicit value default to false, and
-     * any argument appearing more than once is automatically converted to an Array.
-     *
-     * Single-hyphen (-) arguments are allowed as well; they are treated as a series
-     * of single-character arguments, each set to true, and any of these arguments
-     * appearing more than once is discarded.
-     *
-     * @returns {{argc:number, argv:{}}}
+     * @this {StdLib}
      */
-    static getArgs()
+    constructor()
     {
-        let argc = 0;
-        let argv = {};
-        argv[argc++] = process.argv[1];
+        this.argc = 0;
+        this.argv = {};
+        this.stdio = new StdIO();
+        this.argv[this.argc++] = process.argv[1];
         let i = 2;
         while (i < process.argv.length) {
             let j, sSep;
             let sArg = process.argv[i++];
-            argv[argc++] = sArg;
+            this.argv[this.argc++] = sArg;
             if (!sArg.indexOf(sSep = "--") || !sArg.indexOf(sSep = "—")) {
                 sArg = sArg.substr(sSep.length);
                 let sValue = false;
@@ -43,29 +36,49 @@ export default class StdLib {
                     sValue = (sValue == "true") ? true : ((sValue == "false") ? false : sValue);
                 }
                 else if (i < process.argv.length) {
-                    argv[argc++] = sValue = process.argv[i++];
+                    this.argv[this.argc++] = sValue = process.argv[i++];
                 }
-                if (argv[sArg] === undefined) {
-                    argv[sArg] = sValue;
+                if (this.argv[sArg] === undefined) {
+                    this.argv[sArg] = sValue;
                 }
                 else {
-                    if (typeof argv[sArg] == "string") {
-                        argv[sArg] = [argv[sArg]];
+                    if (typeof this.argv[sArg] == "string") {
+                        this.argv[sArg] = [this.argv[sArg]];
                     }
-                    argv[sArg].push(sValue);
+                    this.argv[sArg].push(sValue);
                 }
             }
             else if (!sArg.indexOf("-")) {
                 for (j = 1; j < sArg.length; j++) {
                     let ch = sArg.charAt(j);
-                    if (argv[ch] === undefined) {
-                        argv[ch] = true;
+                    if (this.argv[ch] === undefined) {
+                        this.argv[ch] = true;
                     }
                 }
             }
         }
-        return {argc: argc, argv: argv};
+    }
+
+    /**
+     * getArgs()
+     *
+     * @this {StdLib}
+     * @returns {{argc:number, argv:{}}}
+     */
+    getArgs()
+    {
+        return {argc: this.argc, argv: this.argv};
+    }
+
+    /**
+     * printf(format, ...args)
+     *
+     * @this {StdLib}
+     * @param {string} format
+     * @param {...} args
+     */
+    printf(format, ...args)
+    {
+        process.stdout.write(this.stdio.sprintf(format, ...args));
     }
 }
-
-StdLib.args = StdLib.getArgs();
