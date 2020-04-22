@@ -999,7 +999,7 @@ class StdIO extends NumIO {
         }
 
         let buffer = "";
-        let aParts = format.split(/%([-+ 0#]*)([0-9]*|\*)(\.[0-9]+|)([hlL]?)([A-Za-z%])/);
+        let aParts = format.split(/%([-+ 0#]*)([0-9]*|\*)(\.[0-9]+|)([bwhlL]?)([A-Za-z%])/);
 
         let iArg = 0, iPart;
         for (iPart = 0; iPart < aParts.length - 6; iPart += 6) {
@@ -1037,7 +1037,7 @@ class StdIO extends NumIO {
             }
             let precision = aParts[iPart+3];
             precision = precision? +precision.substr(1) : -1;
-            // let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L' (all currently ignored)
+            let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L'; we also allow 'w' (instead of 'h') and 'b' (instead of 'hh')
             let ach = null, s, radix = 0, prefix = "";
 
             /*
@@ -1293,17 +1293,25 @@ class StdIO extends NumIO {
                 }
                 if (zeroPad && !width) {
                     /*
-                     * When zero padding is specified without a width (eg, "%0x"), we select a width based on the value.
+                     * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
                      */
-                    let v = Math.abs(arg);
-                    if (v <= 0xff) {
-                        width = 2;
-                    } else if (v <= 0xffff) {
-                        width = 4;
-                    } else if (v <= 0xffffffff) {
-                        width = 8;
+                    if (length == 'b') {
+                        width = 2;      // if an 8-bit length was specified (eg, "%0bx"), then default to 2
+                    } else if (length == 'h' || length == 'w') {
+                        width = 4;      // if a 16-bit length was specified (eg, "%0wx"), then default to 4
+                    } else if (length == 'l') {
+                        width = 8;      // if a 32-bit length was specified (eg, "%0lx"), then default to 8
                     } else {
-                        width = 9;
+                        let v = Math.abs(arg);
+                        if (v <= 0xff) {
+                            width = 2;
+                        } else if (v <= 0xffff) {
+                            width = 4;
+                        } else if (v <= 0xffffffff) {
+                            width = 8;
+                        } else {
+                            width = 9;
+                        }
                     }
                     width += prefix.length;
                 }
@@ -1482,6 +1490,8 @@ class WebIO extends StdIO {
      */
     addBindings(bindings = {})
     {
+        if (typeof document == "undefined") return;
+
         if (!this.config.bindings) {
             this.config.bindings = bindings;
         }
@@ -3072,12 +3082,12 @@ class Device extends WebIO {
      * (boolean).
      *
      * @this {Device}
-     * @param {string} idMachine
-     * @param {string} idDevice
+     * @param {string} [idMachine]
+     * @param {string} [idDevice]
      * @param {Config} [config]
      * @param {Array} [overrides] (default overrides, if any, which in turn can be overridden by config['overrides'])
      */
-    constructor(idMachine, idDevice, config, overrides)
+    constructor(idMachine = "default", idDevice = "default", config = {}, overrides = [])
     {
         super(idMachine == idDevice);
         this.addDevice(idMachine, idDevice);
@@ -3151,10 +3161,10 @@ class Device extends WebIO {
      * checkConfig(config, overrides)
      *
      * @this {Device}
-     * @param {Config} [config]
-     * @param {Array} [overrides]
+     * @param {Config} config
+     * @param {Array} overrides
      */
-    checkConfig(config = {}, overrides = [])
+    checkConfig(config, overrides)
     {
         /*
          * If this device's config contains an "overrides" array, then any of the properties listed in
@@ -3544,7 +3554,7 @@ class Device extends WebIO {
     }
 }
 
-if (window) {
+if (typeof window != "undefined") {
     if (!window['PCjs']) window['PCjs'] = {};
     if (!window['PCjs']['Machines']) window['PCjs']['Machines'] = {};
     if (!window['PCjs']['Components']) window['PCjs']['Components'] = [];
@@ -3555,14 +3565,14 @@ if (window) {
  *
  * @type {Object}
  */
-Device.Machines = window? window['PCjs']['Machines'] : {};
+Device.Machines = typeof window != "undefined"? window['PCjs']['Machines'] : {};
 
 /**
  * Components is maintained for backward-compatibility with older PCjs machines, to facilitate machine connections.
  *
  * @type {Array}
  */
-Device.Components = window? window['PCjs']['Components'] : [];
+Device.Components = typeof window != "undefined"? window['PCjs']['Components'] : [];
 
 /*
  * List of additional message groups, extending the base set defined in lib/webio.js.
@@ -3585,15 +3595,17 @@ Device.MESSAGE.TRAP             = 0x000000001000;
 Device.MESSAGE.VIDEO            = 0x000000002000;       // used with video hardware messages (see video.js)
 Device.MESSAGE.MONITOR          = 0x000000004000;       // used with video monitor messages (see monitor.js)
 Device.MESSAGE.SCREEN           = 0x000000008000;       // used with screen-related messages (also monitor.js)
-Device.MESSAGE.TIME             = 0x000000010000;
-Device.MESSAGE.TIMER            = 0x000000020000;
-Device.MESSAGE.EVENT            = 0x000000040000;
-Device.MESSAGE.INPUT            = 0x000000080000;
-Device.MESSAGE.KEY              = 0x000000100000;
-Device.MESSAGE.MOUSE            = 0x000000200000;
-Device.MESSAGE.TOUCH            = 0x000000400000;
-Device.MESSAGE.WARN             = 0x000000800000;
-Device.MESSAGE.HALT             = 0x000001000000;
+Device.MESSAGE.DISK             = 0x000000010000;
+Device.MESSAGE.FILE             = 0x000000020000;
+Device.MESSAGE.TIME             = 0x000000040000;
+Device.MESSAGE.TIMER            = 0x000000080000;
+Device.MESSAGE.EVENT            = 0x000000100000;
+Device.MESSAGE.INPUT            = 0x000000200000;
+Device.MESSAGE.KEY              = 0x000000400000;
+Device.MESSAGE.MOUSE            = 0x000000800000;
+Device.MESSAGE.TOUCH            = 0x000001000000;
+Device.MESSAGE.WARN             = 0x000002000000;
+Device.MESSAGE.HALT             = 0x000004000000;
 Device.MESSAGE.CUSTOM           = 0x000100000000;       // all custom device messages must start here
 
 Device.MESSAGE_NAMES["addr"]    = Device.MESSAGE.ADDR;
@@ -3612,6 +3624,8 @@ Device.MESSAGE_NAMES["trap"]    = Device.MESSAGE.TRAP;
 Device.MESSAGE_NAMES["video"]   = Device.MESSAGE.VIDEO;
 Device.MESSAGE_NAMES["monitor"] = Device.MESSAGE.MONITOR;
 Device.MESSAGE_NAMES["screen"]  = Device.MESSAGE.SCREEN;
+Device.MESSAGE_NAMES["disk"]    = Device.MESSAGE.DISK;
+Device.MESSAGE_NAMES["file"]    = Device.MESSAGE.FILE;
 Device.MESSAGE_NAMES["time"]    = Device.MESSAGE.TIME;
 Device.MESSAGE_NAMES["timer"]   = Device.MESSAGE.TIMER;
 Device.MESSAGE_NAMES["event"]   = Device.MESSAGE.EVENT;

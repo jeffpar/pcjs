@@ -64068,7 +64068,7 @@ let DriveType;
 let DriveInfo;
 
 /**
- * class FDC
+ * @class FDC
  * @property {Array.<DriveInfo>} aDrives
  * @property {Array.<DriveType>|null} aDriveTypes
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)

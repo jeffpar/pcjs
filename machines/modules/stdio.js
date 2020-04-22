@@ -276,7 +276,7 @@ export default class StdIO extends NumIO {
         }
 
         let buffer = "";
-        let aParts = format.split(/%([-+ 0#]*)([0-9]*|\*)(\.[0-9]+|)([hlL]?)([A-Za-z%])/);
+        let aParts = format.split(/%([-+ 0#]*)([0-9]*|\*)(\.[0-9]+|)([bwhlL]?)([A-Za-z%])/);
 
         let iArg = 0, iPart;
         for (iPart = 0; iPart < aParts.length - 6; iPart += 6) {
@@ -314,7 +314,7 @@ export default class StdIO extends NumIO {
             }
             let precision = aParts[iPart+3];
             precision = precision? +precision.substr(1) : -1;
-            // let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L' (all currently ignored)
+            let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L'; we also allow 'w' (instead of 'h') and 'b' (instead of 'hh')
             let ach = null, s, radix = 0, prefix = "";
 
             /*
@@ -570,17 +570,25 @@ export default class StdIO extends NumIO {
                 }
                 if (zeroPad && !width) {
                     /*
-                     * When zero padding is specified without a width (eg, "%0x"), we select a width based on the value.
+                     * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
                      */
-                    let v = Math.abs(arg);
-                    if (v <= 0xff) {
-                        width = 2;
-                    } else if (v <= 0xffff) {
-                        width = 4;
-                    } else if (v <= 0xffffffff) {
-                        width = 8;
+                    if (length == 'b') {
+                        width = 2;      // if an 8-bit length was specified (eg, "%0bx"), then default to 2
+                    } else if (length == 'h' || length == 'w') {
+                        width = 4;      // if a 16-bit length was specified (eg, "%0wx"), then default to 4
+                    } else if (length == 'l') {
+                        width = 8;      // if a 32-bit length was specified (eg, "%0lx"), then default to 8
                     } else {
-                        width = 9;
+                        let v = Math.abs(arg);
+                        if (v <= 0xff) {
+                            width = 2;
+                        } else if (v <= 0xffff) {
+                            width = 4;
+                        } else if (v <= 0xffffffff) {
+                            width = 8;
+                        } else {
+                            width = 9;
+                        }
                     }
                     width += prefix.length;
                 }

@@ -25,6 +25,16 @@
         "console": "internalConsole"
       },
       {
+        "name": "Node: diskdump.js (v3)",
+        "type": "node",
+        "request": "launch",
+        "program": "${workspaceFolder}/tools/diskdump/modules/diskdump.js",
+        "args": ["--disk", "./diskettes/pcx86/util/other/pctools/1.03/archive/PCTOOLS103.img"],
+        "cwd": "${workspaceFolder}",
+        "stopOnEntry": false,
+        "console": "internalConsole"
+      },
+      {
         "name": "Node: pdfparse.js",
         "type": "node",
         "request": "launch",

@@ -68,12 +68,12 @@ export default class Device extends WebIO {
      * (boolean).
      *
      * @this {Device}
-     * @param {string} idMachine
-     * @param {string} idDevice
+     * @param {string} [idMachine]
+     * @param {string} [idDevice]
      * @param {Config} [config]
      * @param {Array} [overrides] (default overrides, if any, which in turn can be overridden by config['overrides'])
      */
-    constructor(idMachine, idDevice, config, overrides)
+    constructor(idMachine = "default", idDevice = "default", config = {}, overrides = [])
     {
         super(idMachine == idDevice);
         this.addDevice(idMachine, idDevice);
@@ -147,10 +147,10 @@ export default class Device extends WebIO {
      * checkConfig(config, overrides)
      *
      * @this {Device}
-     * @param {Config} [config]
-     * @param {Array} [overrides]
+     * @param {Config} config
+     * @param {Array} overrides
      */
-    checkConfig(config = {}, overrides = [])
+    checkConfig(config, overrides)
     {
         /*
          * If this device's config contains an "overrides" array, then any of the properties listed in
@@ -540,7 +540,7 @@ export default class Device extends WebIO {
     }
 }
 
-if (window) {
+if (typeof window != "undefined") {
     if (!window['PCjs']) window['PCjs'] = {};
     if (!window['PCjs']['Machines']) window['PCjs']['Machines'] = {};
     if (!window['PCjs']['Components']) window['PCjs']['Components'] = [];
@@ -551,14 +551,14 @@ if (window) {
  *
  * @type {Object}
  */
-Device.Machines = window? window['PCjs']['Machines'] : {};
+Device.Machines = typeof window != "undefined"? window['PCjs']['Machines'] : {};
 
 /**
  * Components is maintained for backward-compatibility with older PCjs machines, to facilitate machine connections.
  *
  * @type {Array}
  */
-Device.Components = window? window['PCjs']['Components'] : [];
+Device.Components = typeof window != "undefined"? window['PCjs']['Components'] : [];
 
 /*
  * List of additional message groups, extending the base set defined in lib/webio.js.
@@ -581,15 +581,17 @@ Device.MESSAGE.TRAP             = 0x000000001000;
 Device.MESSAGE.VIDEO            = 0x000000002000;       // used with video hardware messages (see video.js)
 Device.MESSAGE.MONITOR          = 0x000000004000;       // used with video monitor messages (see monitor.js)
 Device.MESSAGE.SCREEN           = 0x000000008000;       // used with screen-related messages (also monitor.js)
-Device.MESSAGE.TIME             = 0x000000010000;
-Device.MESSAGE.TIMER            = 0x000000020000;
-Device.MESSAGE.EVENT            = 0x000000040000;
-Device.MESSAGE.INPUT            = 0x000000080000;
-Device.MESSAGE.KEY              = 0x000000100000;
-Device.MESSAGE.MOUSE            = 0x000000200000;
-Device.MESSAGE.TOUCH            = 0x000000400000;
-Device.MESSAGE.WARN             = 0x000000800000;
-Device.MESSAGE.HALT             = 0x000001000000;
+Device.MESSAGE.DISK             = 0x000000010000;
+Device.MESSAGE.FILE             = 0x000000020000;
+Device.MESSAGE.TIME             = 0x000000040000;
+Device.MESSAGE.TIMER            = 0x000000080000;
+Device.MESSAGE.EVENT            = 0x000000100000;
+Device.MESSAGE.INPUT            = 0x000000200000;
+Device.MESSAGE.KEY              = 0x000000400000;
+Device.MESSAGE.MOUSE            = 0x000000800000;
+Device.MESSAGE.TOUCH            = 0x000001000000;
+Device.MESSAGE.WARN             = 0x000002000000;
+Device.MESSAGE.HALT             = 0x000004000000;
 Device.MESSAGE.CUSTOM           = 0x000100000000;       // all custom device messages must start here
 
 Device.MESSAGE_NAMES["addr"]    = Device.MESSAGE.ADDR;
@@ -608,6 +610,8 @@ Device.MESSAGE_NAMES["trap"]    = Device.MESSAGE.TRAP;
 Device.MESSAGE_NAMES["video"]   = Device.MESSAGE.VIDEO;
 Device.MESSAGE_NAMES["monitor"] = Device.MESSAGE.MONITOR;
 Device.MESSAGE_NAMES["screen"]  = Device.MESSAGE.SCREEN;
+Device.MESSAGE_NAMES["disk"]    = Device.MESSAGE.DISK;
+Device.MESSAGE_NAMES["file"]    = Device.MESSAGE.FILE;
 Device.MESSAGE_NAMES["time"]    = Device.MESSAGE.TIME;
 Device.MESSAGE_NAMES["timer"]   = Device.MESSAGE.TIMER;
 Device.MESSAGE_NAMES["event"]   = Device.MESSAGE.EVENT;

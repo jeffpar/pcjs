@@ -121,6 +121,8 @@ export default class WebIO extends StdIO {
      */
     addBindings(bindings = {})
     {
+        if (typeof document == "undefined") return;
+
         if (!this.config.bindings) {
             this.config.bindings = bindings;
         }
