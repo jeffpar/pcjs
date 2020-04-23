@@ -16,19 +16,41 @@ export default class DataBuffer {
     /**
      * DataBuffer
      *
+     * Our pseudo-Buffer class constructor needs to handle:
+     *
+     *   1) Array.<number> (array of bytes)
+     *   2) ArrayBuffer
+     *   3) another DataBuffer
+     *   4) string
+     *   5) number (to create a buffer with that many bytes)
+     *
+     * The start and end parameters are only used with #3 (ie, when another DataBuffer is passed).
+     *
      * @this {DataBuffer}
-     * @param {number|string|Array|DataBuffer|Buffer} [init]
+     * @param {Array|ArrayBuffer|DataBuffer|number|string} [init]
      * @param {number} [start]
      * @param {number} [end]
      */
     constructor(init, start, end)
     {
         if (typeof init == "number") {
-            this.ab = new ArrayBuffer(init);
-            this.dv = new DataView(this.ab, 0, init);
-            this.length = init;
+            init = new ArrayBuffer(init);
+            /* fall into the ArrayBuffer case */
         }
-        else if (start === undefined) {
+        if (init instanceof ArrayBuffer) {
+            this.ab = init;
+            this.length = this.ab.byteLength;
+            this.dv = new DataView(this.ab, 0, this.length);
+            return;
+        }
+        if (init instanceof DataBuffer) {
+            this.ab = init.ab;
+            if (start == undefined) start = 0;
+            if (end == undefined) end = init.length;
+            this.length = end - start;
+            this.dv = new DataView(this.ab, start, this.length);
+        }
+        else {
             let off;
             this.ab = new ArrayBuffer(init.length);
             this.dv = new DataView(this.ab, 0, init.length);
@@ -42,10 +64,6 @@ export default class DataBuffer {
                 }
             }
             this.length = init.length;
-        } else {
-            this.ab = init.ab;
-            if (end === undefined) end = this.ab.length;
-            this.dv = new DataView(this.ab, start, this.length = end - start);
         }
     }
 

@@ -8,64 +8,46 @@
  */
 
 import Device from "../../../machines/modules/device.js";
+import DiskImage from "./diskimage.js";
 
 /**
  * @class FileInfo
+ * @property {DiskImage} disk
+ * @property {string} sPath
+ * @property {string} sName
+ * @property {number} bAttr
+ * @property {Date} date
+ * @property {number} cbSize
+ * @property {Array.<number>} aLBA
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class FileInfo {
     /**
-     * FileInfo(disk, sPath, sName, bAttr, cbSize, aLBA)
-     *
-     * To the basic file information below, loadSymbols() may also add:
-     *
-     *      sModule
-     *      sDescription
-     *      aSegments[]
-     *
-     * which is indexed by 1-based segment numbers, where each aSegments[] element is an object
-     * containing:
-     *
-     *      offStart (file-relative offset of start of segment data)
-     *      offEnd (file-relative offset of end of segment data)
-     *      aEntries[]
-     *
-     * where aEntries is an array indexed by 1-based ordinals, where each aEntries[] element contains:
-     *
-     *      [offset, symbol]
-     *
-     * where offset is relative to the segment's offStart value, and symbol is a string describing the
-     * entry.
-     *
-     * NOTE: Although aEntries arrays are similar to the Debugger's aOffsets arrays, they are not
-     * interchangeable data structures, because ours is ordered by ordinal, whereas aOffsets is
-     * ordered by offset.  We provide an interface, getModuleInfo(), to the Debugger that converts
-     * our data into an intermediate array, aSymbols, which the Debugger then uses to build aOffsets.
-     * It would be nice to avoid building that intermediate representation, but it's a side-effect of
-     * the Debugger's earlier support for JSON-encoded MAP files.
-     *
-     * There will always be an offset at index 0 of an aEntries[] element, but some error or incomplete
-     * symbolic information could result in a missing symbol at index 1, because symbol name processing is
-     * separate from entry table processing.
+     * FileInfo(disk, sPath, sName, bAttr, cbSize, iCluster, aLBA)
      *
      * @param {DiskImage} disk
      * @param {string} sPath
      * @param {string} sName
      * @param {number} bAttr
+     * @param {Date} date
      * @param {number} cbSize
+     * @param {number} iCluster
      * @param {Array.<number>} aLBA
      */
-    constructor(disk, sPath, sName, bAttr, cbSize, aLBA)
+    constructor(disk, sPath, sName, bAttr, date, cbSize, iCluster, aLBA)
     {
-        this.disk = disk;
         this.device = disk.device;
-        this.printf = this.device.printf.bind(this.device);
-        this.sprintf = this.device.sprintf.bind(this.device);
+        this.disk = disk;
         this.sPath = sPath;
         this.sName = sName;
         this.bAttr = bAttr;
+        this.date = date;
         this.cbSize = cbSize;
+        this.iCluster = iCluster;
         this.aLBA = aLBA;
+        if (Device.DEBUG) {
+            this.device.printf(Device.MESSAGE.FILE, '"%s" size=%d attr=%#0bx date=%#T cluster=%d sectors=%j\n', sPath, cbSize, bAttr, date, iCluster, aLBA);
+        }
     }
 
     /**
@@ -87,7 +69,7 @@ export default class FileInfo {
             /*
              * If the read is wholly contained within a sector, read it with one call.
              */
-            if (offSector + length <= sector['length']) {
+            if (offSector + length <= sector[DiskImage.SECTOR.LENGTH]) {
                 return this.disk.getSectorData(sector, offSector, length);
             }
             /*
@@ -154,7 +136,7 @@ export default class FileInfo {
         this.aOrdinals = [];                // this is an optional array for quick ordinal-to-segment lookup
 
         if (Device.DEBUG) {
-            this.printf(Device.MESSAGE.FILE, "loadSegmentTable(%s,%#0lx,%#0wx)\n", this.sPath, offEntries, nEntries);
+            this.device.printf(Device.MESSAGE.FILE, "loadSegmentTable(%s,%#0lx,%#0wx)\n", this.sPath, offEntries, nEntries);
         }
 
         while (nEntries--) {
@@ -162,7 +144,7 @@ export default class FileInfo {
             if (offSegment) {
                 let lenSegment = this.loadValue(offEntries + 2) || 0x10000;       // 0 means 64K
                 if (Device.DEBUG) {
-                    this.printf(Device.MESSSAGE.FILE, "segment %d: offStart=%#0lx offEnd=%#0lx\n" + iSegment, offSegment, offSegment + lenSegment);
+                    this.device.printf(Device.MESSSAGE.FILE, "segment %d: offStart=%#0lx offEnd=%#0lx\n" + iSegment, offSegment, offSegment + lenSegment);
                 }
                 this.aSegments[iSegment++] = {offStart: offSegment, offEnd: offSegment + lenSegment - 1, aEntries: []};
             }
@@ -205,7 +187,7 @@ export default class FileInfo {
         let iOrdinal = 1;
 
         if (Device.DEBUG) {
-            this.printf("loadEntryTable(%#0lx,%#0lx)\n", offEntries, offEntriesEnd);
+            this.device.printf("loadEntryTable(%#0lx,%#0lx)\n", offEntries, offEntriesEnd);
         }
 
         while (offEntries < offEntriesEnd) {
@@ -216,7 +198,7 @@ export default class FileInfo {
             let bSegment = w >> 8, iSegment;
 
             if (Device.DEBUG) {
-                this.printf(Device.MESSAGE.FILE, "bundle for segment %d: %d entries @%#x\n", bSegment, bEntries, offEntries);
+                this.device.printf(Device.MESSAGE.FILE, "bundle for segment %d: %d entries @%#x\n", bSegment, bEntries, offEntries);
             }
 
             offEntries += 2;
@@ -253,12 +235,12 @@ export default class FileInfo {
                 }
                 if (!this.aSegments[iSegment]) {
                     if (Device.DEBUG) {
-                        this.printf(Device.MESSAGE.FILE, "invalid segment: %d\n", iSegment);
+                        this.device.printf(Device.MESSAGE.FILE, "invalid segment: %d\n", iSegment);
                     }
                 } else {
                     this.aSegments[iSegment].aEntries[iOrdinal] = [offEntry];
                     if (Device.DEBUG) {
-                        this.printf(Device.MESSAGE.FILE, "ordinal %d: segment=%d offset=%#0lx @%x\n", iOrdinal, iSegment, offEntry, offDebug);
+                        this.device.printf(Device.MESSAGE.FILE, "ordinal %d: segment=%d offset=%#0lx @%x\n", iOrdinal, iSegment, offEntry, offDebug);
                     }
                 }
                 this.aOrdinals[iOrdinal] = [iSegment, offEntry];
@@ -283,7 +265,7 @@ export default class FileInfo {
         let cNames = 0;
 
         if (Device.DEBUG) {
-            this.printf(Device.MESSAGE.FILE, "loadNameTable(%#0lx,%#0lx)\n", offEntries, offEntriesEnd || 0);
+            this.device.printf(Device.MESSAGE.FILE, "loadNameTable(%#0lx,%#0lx)\n", offEntries, offEntriesEnd || 0);
         }
 
         while (!offEntriesEnd || offEntries < offEntriesEnd) {
@@ -310,19 +292,19 @@ export default class FileInfo {
                     let iSegment = tuple[0];        // tuple[0] is the segment number and tuple[1] is the corresponding offEntry
                     if (this.aSegments[iSegment]) {
                         let aEntries = this.aSegments[iSegment].aEntries[iOrdinal];
-                        this.disk.assert(aEntries && aEntries.length == 1);
+                        this.device.assert(aEntries && aEntries.length == 1);
                         aEntries.push(sSymbol);
                         if (Device.DEBUG) {
-                            this.printf(Device.MESSAGE.FILE, "segment %d offset %#0wx ordinal %d: %s @ %x\n", iSegment, aEntries[0], iOrdinal, sSymbol, offDebug);
+                            this.device.printf(Device.MESSAGE.FILE, "segment %d offset %#0wx ordinal %d: %s @ %x\n", iSegment, aEntries[0], iOrdinal, sSymbol, offDebug);
                         }
                     } else {
                         if (Device.DEBUG) {
-                            this.printf("%s: cannot find segment %d (offset %#0wx) for symbol %s with ordinal %d @%x\n", this.sPath, iSegment, tuple[1], sSymbol, iOrdinal, offDebug);
+                            this.device.printf("%s: cannot find segment %d (offset %#0wx) for symbol %s with ordinal %d @%x\n", this.sPath, iSegment, tuple[1], sSymbol, iOrdinal, offDebug);
                         }
                     }
                 } else {
                     if (Device.DEBUG) {
-                        this.printf(Device.MESSAGE.FILE, "s: cannot find ordinal %d for symbol %s @%x\n", this.sPath, iOrdinal, sSymbol, offDebug);
+                        this.device.printf(Device.MESSAGE.FILE, "s: cannot find ordinal %d for symbol %s @%x\n", this.sPath, iOrdinal, sSymbol, offDebug);
                     }
                 }
             }
@@ -335,6 +317,36 @@ export default class FileInfo {
      * loadSymbols()
      *
      * For files with NE headers, extract all available symbolic information from the file.
+     *
+     * FileInfo is supplemented with the following properties:
+     *
+     *      sModule
+     *      sDescription
+     *      aSegments[]
+     *
+     * aSegments is indexed by 1-based segment numbers.  Each aSegments[] entry contains:
+     *
+     *      offStart (file-relative offset of start of segment data)
+     *      offEnd (file-relative offset of end of segment data)
+     *      aEntries[]
+     *
+     * aEntries is an array indexed by 1-based ordinals.  Each aEntries[] entry contains:
+     *
+     *      [offset, symbol]
+     *
+     * where offset is relative to the segment's offStart value, and symbol is a string describing the
+     * entry.
+     *
+     * NOTE: Although aEntries arrays are similar to the Debugger's aOffsets arrays, they are not
+     * interchangeable data structures, because ours is ordered by ordinal, whereas aOffsets is
+     * ordered by offset.  We provide an interface, getModuleInfo(), to the Debugger that converts
+     * our data into an intermediate array, aSymbols, which the Debugger then uses to build aOffsets.
+     * It would be nice to avoid building that intermediate representation, but it's a side-effect of
+     * the Debugger's earlier support for JSON-encoded MAP files.
+     *
+     * There will always be an offset at index 0 of an aEntries[] element, but some error or incomplete
+     * symbolic information could result in a missing symbol at index 1, because symbol name processing is
+     * separate from entry table processing.
      *
      * @this {FileInfo}
      */
@@ -427,13 +439,13 @@ export default class FileInfo {
                         }
                     }
                     if (!sSymbol && entryNearest) {
-                        sSymbol = this.sModule + '!' + entryNearest[1] + "+" + this.sprintf("%#0x", cbNearest);
+                        sSymbol = this.sModule + '!' + entryNearest[1] + "+" + this.device.sprintf("%#0x", cbNearest);
                     }
                     break;
                 }
             }
         }
-        return sSymbol || this.sName + '+' + this.sprintf("%#0x", off);
+        return sSymbol || this.sName + '+' + this.device.sprintf("%#0x", off);
     }
 }
 

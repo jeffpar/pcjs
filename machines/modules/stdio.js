@@ -161,7 +161,7 @@ export default class StdIO extends NumIO {
      * parseDate(year, month, day, hour, minute, second)
      *
      * Produces a UTC date when ONLY a date (no time) is provided; otherwise, it combines the date and
-     * and time, producing a date that is either UTC or local, depending on the presence (or lack) of time
+     * and time, producing a date that is either local or UTC, depending on the presence (or lack) of time
      * zone information.  Finally, if numeric inputs are provided, then Date.UTC() is called to generate
      * a UTC time.
      *
@@ -186,6 +186,7 @@ export default class StdIO extends NumIO {
         else if (args[1] === undefined) {
             date = new Date(args[0]);
         } else {
+            this.assert(args[1] < 12 && args[2] <= 31 && args[3] < 24 && args[4] < 60 && args[5] < 60);
             date = new Date(Date.UTC(...args));
         }
         return date;

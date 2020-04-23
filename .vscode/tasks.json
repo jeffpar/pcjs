@@ -26,9 +26,15 @@
       "type": "shell",
       "label": "bundle: serve",
       "command": "bundle exec jekyll serve --config _config.yml,_developer.yml",
+      "problemMatcher": [],
       "runOptions": {
         "runOn": "folderOpen"
-      },
+      }
+    },
+    {
+      "type": "shell",
+      "label": "bundle: serve release",
+      "command": "bundle exec jekyll serve --config _config.yml",
       "problemMatcher": []
     }
   ]

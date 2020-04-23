@@ -884,7 +884,7 @@ class StdIO extends NumIO {
      * parseDate(year, month, day, hour, minute, second)
      *
      * Produces a UTC date when ONLY a date (no time) is provided; otherwise, it combines the date and
-     * and time, producing a date that is either UTC or local, depending on the presence (or lack) of time
+     * and time, producing a date that is either local or UTC, depending on the presence (or lack) of time
      * zone information.  Finally, if numeric inputs are provided, then Date.UTC() is called to generate
      * a UTC time.
      *
@@ -909,6 +909,7 @@ class StdIO extends NumIO {
         else if (args[1] === undefined) {
             date = new Date(args[0]);
         } else {
+
             date = new Date(Date.UTC(...args));
         }
         return date;
@@ -3087,7 +3088,7 @@ class Device extends WebIO {
      * @param {Config} [config]
      * @param {Array} [overrides] (default overrides, if any, which in turn can be overridden by config['overrides'])
      */
-    constructor(idMachine = "default", idDevice = "default", config = {}, overrides = [])
+    constructor(idMachine = "default", idDevice = idMachine, config = {}, overrides = [])
     {
         super(idMachine == idDevice);
         this.addDevice(idMachine, idDevice);
@@ -3120,7 +3121,7 @@ class Device extends WebIO {
          * The new Device classes don't use the Components array or machine+device IDs, but we need to continue
          * updating both of those for backward compatibility with older PCjs machines.
          */
-        this['id'] = this.idMachine + '.' + this.idDevice;
+        this['id'] = this.idMachine == this.idDevice? this.idMachine : this.idMachine + '.' + this.idDevice;
         Device.Components.push(this);
         /*
          * The WebIO constructor set this.machine tentatively, so that it could define any per-machine variables

@@ -16,32 +16,36 @@ export default class DataBuffer {
     /**
      * DataBuffer
      *
+     * Our pseudo-Buffer class constructor needs to handle:
+     *
+     *   1) Array.<number> (array of bytes)
+     *   2) ArrayBuffer
+     *   3) another DataBuffer
+     *   4) string
+     *   5) number (to create a buffer with that many bytes)
+     *   6) Buffer (for Node-specific callers)
+     *
+     * The start and end parameters are only used with #3 (ie, when another DataBuffer is passed).
+     *
      * @this {DataBuffer}
-     * @param {number|string|Array|DataBuffer|Buffer} [init]
+     * @param {Array|ArrayBuffer|Buffer|DataBuffer|number|string} [init]
      * @param {number} [start]
      * @param {number} [end]
      */
     constructor(init, start, end)
     {
-        if (start === undefined) {
-            if (typeof init == "object" && init instanceof Buffer) {
+        if (typeof init == "number") {
+            this.buffer = Buffer.alloc(init);
+        }
+        else if (typeof init == "object") {
+            if (init instanceof Buffer) {
                 this.buffer = init;
             }
-            else {
-                /*
-                 * The following code replaces the now-deprecated code:
-                 *
-                 *      this.buffer = new Buffer(init);
-                 */
-                if (typeof init == "number") {
-                    this.buffer = Buffer.alloc(init);
-                }
-                else {
-                    this.buffer = Buffer.from(init);
-                }
+            if (init instanceof DataBuffer) {
+                this.buffer = init.buffer.slice(start, end);
             }
         } else {
-            this.buffer = init.buffer.slice(start, end);
+            this.buffer = Buffer.from(init);
         }
         this.length = this.buffer.length;
     }

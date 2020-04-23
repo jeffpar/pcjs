@@ -9,6 +9,11 @@
 
 import StdIO from "../../machines/modules/stdio.js";
 
+/**
+ * @class StdLib
+ * @property {number} argc
+ * @property {Array.<string>} argv
+ */
 export default class StdLib {
     /**
      * StdLib()
@@ -28,7 +33,7 @@ export default class StdLib {
             this.argv[this.argc++] = sArg;
             if (!sArg.indexOf(sSep = "--") || !sArg.indexOf(sSep = "—")) {
                 sArg = sArg.substr(sSep.length);
-                let sValue = false;
+                let sValue = true;
                 j = sArg.indexOf("=");
                 if (j > 0) {
                     sValue = sArg.substr(j + 1);
@@ -63,11 +68,11 @@ export default class StdLib {
      * getArgs()
      *
      * @this {StdLib}
-     * @returns {{argc:number, argv:{}}}
+     * @returns {Array} [this.argc, this.argv]
      */
     getArgs()
     {
-        return {argc: this.argc, argv: this.argv};
+        return [this.argc, this.argv];
     }
 
     /**

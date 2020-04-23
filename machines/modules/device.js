@@ -73,7 +73,7 @@ export default class Device extends WebIO {
      * @param {Config} [config]
      * @param {Array} [overrides] (default overrides, if any, which in turn can be overridden by config['overrides'])
      */
-    constructor(idMachine = "default", idDevice = "default", config = {}, overrides = [])
+    constructor(idMachine = "default", idDevice = idMachine, config = {}, overrides = [])
     {
         super(idMachine == idDevice);
         this.addDevice(idMachine, idDevice);
@@ -106,7 +106,7 @@ export default class Device extends WebIO {
          * The new Device classes don't use the Components array or machine+device IDs, but we need to continue
          * updating both of those for backward compatibility with older PCjs machines.
          */
-        this['id'] = this.idMachine + '.' + this.idDevice;
+        this['id'] = this.idMachine == this.idDevice? this.idMachine : this.idMachine + '.' + this.idDevice;
         Device.Components.push(this);
         /*
          * The WebIO constructor set this.machine tentatively, so that it could define any per-machine variables
