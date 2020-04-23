@@ -322,22 +322,16 @@ export default class StdIO extends NumIO {
              * The following non-standard sprintf() format types provide handy alternatives to the
              * PHP date() format types that we previously used with the old datelib.formatDate() function:
              *
-             *      a:  lowercase ante meridiem and post meridiem (am or pm)                %A
-             *      d:  day of the month, 2 digits with leading zeros (01, 02, ..., 31)     %02D
-             *      D:  3-letter day of the week ("Sun", "Mon", ..., "Sat")                 %.3W
-             *      F:  month ("January", "February", ..., "December")                      %F
-             *      g:  hour in 12-hour format, without leading zeros (1, 2, ..., 12)       %I
-             *      h:  hour in 24-hour format, without leading zeros (0, 1, ..., 23)       %H
-             *      H:  hour in 24-hour format, with leading zeros (00, 01, ..., 23)        %02H
-             *      i:  minutes, with leading zeros (00, 01, ..., 59)                       %02N
-             *      j:  day of the month, without leading zeros (1, 2, ..., 31)             %D
-             *      l:  day of the week ("Sunday", "Monday", ..., "Saturday")               %W
-             *      m:  month, with leading zeros (01, 02, ..., 12)                         %02M
-             *      M:  3-letter month ("Jan", "Feb", ..., "Dec")                           %.3F
-             *      n:  month, without leading zeros (1, 2, ..., 12)                        %M
-             *      s:  seconds, with leading zeros (00, 01, ..., 59)                       %02S
-             *      y:  2-digit year (eg, 14)                                               %0.2Y
-             *      Y:  4-digit year (eg, 2014)                                             %Y
+             *      a:  lowercase ante meridiem and post meridiem (am or pm)                %A (%.1A for a or p)
+             *      F:  month ("January", "February", ..., "December")                      %F (%.3F for 3-letter month)
+             *      g:  hour in 12-hour format                                              %I (%02I for leading zero)
+             *      h:  hour in 24-hour format                                              %H (%02H for leading zero)
+             *      i:  minutes (0, 1, ..., 59)                                             %N (%02N for leading zero)
+             *      j:  day of the month (1, 2, ..., 31)                                    %D (%02D for leading zero)
+             *      l:  day of the week ("Sunday", "Monday", ..., "Saturday")               %W (%.3W for 3-letter day)
+             *      n:  month (1, 2, ..., 12)                                               %M (%02M for leading zero)
+             *      s:  seconds (0, 1, ..., 59)                                             %S (%02S for leading zero)
+             *      Y:  4-digit year (eg, 2014)                                             %Y (%0.2Y for 2-digit year)
              *
              * We also support a few custom format types:
              *
