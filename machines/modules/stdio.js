@@ -492,10 +492,10 @@ export default class StdIO extends NumIO {
                             width--;
                             s = s.substr(1);
                         }
-                        s = ("0000000000" + s).slice(-width);
+                        s = ("0".repeat(width) + s).slice(-width);
                         if (arg < 0) s = '-' + s;
                     } else {
-                        s = ("          " + s).slice(-width);
+                        s = (" ".repeat(width) + s).slice(-width);
                     }
                 }
                 buffer += s;

@@ -43,6 +43,8 @@ export default class DiskImage {
     /**
      * DiskImage(db)
      *
+     * Build a disk image; set fRead to build a file table, and set fWrite to enable per-sector modification tracking.
+     *
      * @this DiskImage
      * @param {Device} device
      * @param {DataBuffer|string} db
@@ -59,17 +61,71 @@ export default class DiskImage {
         this.diskName = name || "[DiskImage]";
 
         if (typeof db == "string") {
-            this.buildDiskFromJSON(db);
+            this.buildDiskFromJSON(db, fRead, fWrite);
         } else {
             this.buildDiskFromBuffer(db, fRead, fWrite);
         }
     }
 
     /**
+     * buildDiskFromJSON(sData, fRead, fWrite)
+     *
+     * Build a disk image from JSON data.
+     *
+     * @this {DiskImage}
+     * @param {string} sData
+     * @param {boolean} [fRead]
+     * @param {boolean} [fWrite]
+     * @returns {boolean} true if successful (aDiskData initialized); false otherwise
+     */
+    buildDiskFromJSON(db, fRead, fWrite)
+    {
+        this.aDiskData = null;
+        this.cbDiskData = 0;
+        this.dwChecksum = 0;
+        try {
+            this.aDiskData = JSON.parse(db);
+        } catch(err) {
+            this.printf("error: %s\n", err.message);
+        }
+        if (this.aDiskData) {
+            let aCylinders = this.aDiskData;
+            this.nCylinders = aCylinders.length;
+            this.nSectors = this.cbSector = 0;
+            for (let iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
+                let aHeads = aCylinders[iCylinder];
+                this.nHeads = aHeads.length
+                for (let iHead = 0; iHead < aHeads.length; iHead++) {
+                    let aSectors = aHeads[iHead];
+                    let nSectors = aSectors.length;
+                    if (!this.nSectors) {
+                        this.nSectors = nSectors;
+                    } else if (this.nSectors != nSectors) {
+                        this.printf(Device.MESSAGE.DISK, "%d:%d contains variable sectors per track: %d\n", iCylinder, iHead, nSectors);
+                    }
+                    for (let iSector = 0; iSector < aSectors.length; iSector++) {
+                        let sector = aSectors[iSector];
+                        this.rebuildSector(iCylinder, iHead, sector, fWrite);
+                        let cbSector = sector[DiskImage.SECTOR.LENGTH];
+                        if (!this.cbSector) {
+                            this.cbSector = cbSector;
+                        } else if (this.cbSector != cbSector) {
+                            this.printf(Device.MESSAGE.DISK, "%d:%d:%d contains variable sector size: %d\n", iCylinder, iHead, sector[DiskImage.SECTOR.ID], cbSector);
+                        }
+                        this.cbDiskData += cbSector;
+                    }
+                }
+            }
+            if (fRead) this.buildFileTable();
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * buildDiskFromBuffer(db, fRead, fWrite)
      *
-     * Builds a disk image from a DataBuffer; set fRead to true if the image will be used for reading by
-     * the caller, and set fWrite to true if it will also be used for writing.
+     * Build a disk image from a DataBuffer.
      *
      * All callers are now required to convert their data to a DataBuffer first.  For example, if the caller
      * received an ArrayBuffer from a FileReader object, they must first create a DataBuffer from the ArrayBuffer.
@@ -83,11 +139,12 @@ export default class DiskImage {
     buildDiskFromBuffer(db, fRead, fWrite)
     {
         this.aDiskData = null;
-        this.cbDiskData = db.length;
+        this.cbDiskData = 0;
         this.dwChecksum = 0;
-        let diskFormat = DiskImage.GEOMETRIES[this.cbDiskData];
+        let diskFormat = DiskImage.GEOMETRIES[db.length];
         if (diskFormat) {
             let ib = 0;
+            this.cbDiskData = db.length;
             this.nCylinders = diskFormat[0];
             this.nHeads = diskFormat[1];
             this.nSectors = diskFormat[2];
@@ -98,20 +155,7 @@ export default class DiskImage {
                 for (let iHead = 0; iHead < cylinder.length; iHead++) {
                     let head = cylinder[iHead] = new Array(this.nSectors);
                     for (let iSector = 0; iSector < head.length; iSector++) {
-                        let sector = this.buildSector(iCylinder, iHead, iSector + 1, this.cbSector, db, ib, fRead);
-                        if (fWrite) {
-                            /*
-                             * If this disk is writable (ie, will be loaded into a machine with a read/write drive),
-                             * then we also maintain the following information on a per-sector basis, as sectors are modified:
-                             *
-                             *      iModify:    index of first modified dword in sector
-                             *      cModify:    number of modified dwords in sector
-                             *      fDirty:     true if sector is dirty, false if clean (or cleaning in progress)
-                             */
-                            sector.iModify = sector.cModify = 0;
-                            sector.fDirty = false;
-                        }
-                        head[iSector] = sector;
+                        head[iSector] = this.buildSector(iCylinder, iHead, iSector + 1, this.cbSector, db, ib, fWrite);
                         ib += this.cbSector;
                     }
                 }
@@ -320,6 +364,9 @@ export default class DiskImage {
                         if (sector) {
                             delete sector[DiskImage.SECTOR.FILE_INFO];
                             delete sector[DiskImage.SECTOR.FILE_OFFSET];
+                            delete sector.iModify;
+                            delete sector.cModify;
+                            delete sector.fDirty;
                         }
                     }
                 }
@@ -749,7 +796,7 @@ export default class DiskImage {
     }
 
     /**
-     * buildSector(iCylinder, iHead, idSector, cbSector, db, ib, fRead)
+     * buildSector(iCylinder, iHead, idSector, cbSector, db, ib, fWrite)
      *
      * Builds a Sector object with the following properties (see DiskImage.SECTOR for complete list):
      *
@@ -770,23 +817,120 @@ export default class DiskImage {
      * @param {number} cbSector
      * @param {DataBuffer} [db]
      * @param {number} [ib]
-     * @param {boolean} [fRead]
+     * @param {boolean} [fWrite]
      * @returns {Sector}
      */
-    buildSector(iCylinder, iHead, idSector, cbSector, db, ib, fRead)
+    buildSector(iCylinder, iHead, idSector, cbSector, db, ib, fWrite)
     {
-        let ad = [];
+        let adw = [];
+        let cdw = cbSector >> 2;
+        for (let idw = 0; idw < cdw; idw++, ib += 4) {
+            adw[idw] = db? db.readInt32LE(ib) : 0;
+        }
         let sector = /** @type {Sector} */ ({
             [DiskImage.SECTOR.CYLINDER]: iCylinder,
             [DiskImage.SECTOR.HEAD]:     iHead,
             [DiskImage.SECTOR.ID]:       idSector,
             [DiskImage.SECTOR.LENGTH]:   cbSector,
-            [DiskImage.SECTOR.DATA]:     ad
+            [DiskImage.SECTOR.DATA]:     adw
         });
-        let cd = this.cbSector >> 2;
+        return this.initSector(sector, adw, cbSector, 0, fWrite);
+    }
+
+    /**
+     * rebuildSector(iCylinder, iHead, sector, fWrite)
+     *
+     * Builds a Sector object with the following properties (see DiskImage.SECTOR for complete list):
+     *
+     *      Property    Description                     Deprecated
+     *      'c':        cylinder number (0-based)       ('cylinder')
+     *      'h':        head number (0-based)           ('head')
+     *      's':        sector ID                       ('sector')
+     *      'l':        size of the sector, in bytes    ('length')
+     *      'd':        array of dwords                 ('data')
+     *
+     * NOTE: The 'pattern' property is no longer used; if the sector ends with a repeated 32-bit pattern,
+     * we now store that pattern as the last 'd' array value and shrink the array.
+     *
+     * @this {DiskImage}
+     * @param {number} iCylinder
+     * @param {number} iHead
+     * @param {Object} sector
+     * @param {boolean} [fWrite]
+     * @returns {Sector}
+     */
+    rebuildSector(iCylinder, iHead, sector, fWrite)
+    {
+        if (sector[DiskImage.SECTOR.CYLINDER] != undefined) {
+            this.device.assert(sector[DiskImage.SECTOR.CYLINDER] == iCylinder);
+            delete sector[DiskImage.SECTOR.CYLINDER];
+        }
+        if (sector[DiskImage.SECTOR.HEAD] != undefined) {
+            this.device.assert(sector[DiskImage.SECTOR.HEAD] == iHead);
+            delete sector[DiskImage.SECTOR.HEAD];
+        }
+        let dwPattern;
+        let idSector = sector[DiskImage.SECTOR.ID];
+        if (idSector != undefined) {
+            delete sector[DiskImage.SECTOR.ID];
+        } else {
+            idSector = sector['sector'];
+            delete sector['sector'];
+            dwPattern = sector['pattern'] || 0;
+            delete sector['pattern'];
+        }
+        let cbSector = sector[DiskImage.SECTOR.LENGTH];
+        if (cbSector != undefined) {
+            delete sector[DiskImage.SECTOR.LENGTH];
+        } else {
+            cbSector = sector['length'] || 512;
+            delete sector['length'];
+        }
+        let adw = sector[DiskImage.SECTOR.DATA];
+        if (adw != undefined) {
+            delete sector[DiskImage.SECTOR.DATA];
+        } else {
+            adw = sector['data'];
+            if (adw == undefined) {
+                adw = [dwPattern];
+                this.device.assert(dwPattern != undefined);
+            } else {
+                delete sector['data'];
+            }
+        }
+        sector[DiskImage.SECTOR.CYLINDER] = iCylinder;
+        sector[DiskImage.SECTOR.HEAD] = iHead;
+        sector[DiskImage.SECTOR.ID] = idSector;
+        sector[DiskImage.SECTOR.LENGTH] = cbSector;
+        sector[DiskImage.SECTOR.DATA] = adw;
+        return this.initSector(sector, adw, cbSector, dwPattern, fWrite);
+    }
+
+    /**
+     * initSector(sector, adw, cbSector, dwPattern, fWrite)
+     *
+     * @this {DiskImage}
+     * @param {Sector} sector
+     * @param {Array.<number>} adw
+     * @param {number} cbSector
+     * @param {number} [dwPattern]
+     * @param {boolean} [fWrite]
+     * @returns {Sector}
+     */
+    initSector(sector, adw, cbSector, dwPattern, fWrite)
+    {
+        let cdw = cbSector >> 2;
         let dwPrev = null, cPrev = 0;
-        for (let id = 0; id < cd; id++, ib += 4) {
-            let dw = ad[id] = db? db.readInt32LE(ib) : 0;
+        for (let idw = 0; idw < cdw; idw++) {
+            let dw = adw[idw];
+            if (dw == undefined) {
+                if (dwPattern != undefined) {
+                    dw = dwPattern;
+                } else {
+                    dw = adw[adw.length-1];
+                }
+                adw[idw] = dw;
+            }
             if (dwPrev === dw) {
                 cPrev++;
             } else {
@@ -795,7 +939,19 @@ export default class DiskImage {
             }
             this.dwChecksum = (this.dwChecksum + dw) & (0xffffffff|0);
         }
-        ad.length -= cPrev;
+        adw.length -= cPrev;
+        if (fWrite) {
+            /*
+             * If this disk is writable (ie, will be loaded into a machine with a read/write drive),
+             * then we also maintain the following information on a per-sector basis, as sectors are modified:
+             *
+             *      iModify:    index of first modified dword in sector
+             *      cModify:    number of modified dwords in sector
+             *      fDirty:     true if sector is dirty, false if clean (or cleaning in progress)
+             */
+            sector.iModify = sector.cModify = 0;
+            sector.fDirty = false;
+        }
         return sector;
     }
 
@@ -987,7 +1143,6 @@ export default class DiskImage {
         }
         return null;
     }
-
 }
 
 /*
@@ -1000,7 +1155,7 @@ DiskImage.SECTOR = {
     LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks)
     DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated)
     /*
-     * The following properties are only added at runtime; they are not stored in JSON disk images.
+     * The following properties are only added for disk; they are not stored in JSON disk images.
      */
     FILE_INFO:  'fileInfo',
     FILE_OFFSET:'fileOffset'

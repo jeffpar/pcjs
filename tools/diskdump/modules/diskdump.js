@@ -37,12 +37,18 @@ function main(argc, argv)
     let input = argv['disk'];
     if (input) {
         try {
-            let db = new DataBuffer(fs.readFileSync(input));
+            let db;
+            if (input.endsWith(".json")) {
+                db = fs.readFileSync(input, "utf8");
+            } else {
+                db = new DataBuffer(fs.readFileSync(input));
+            }
             let di = new DiskImage(device, db, path.basename(input, ".img"), true);
             if (argv['list']) {
                 let list = di.getFileListing();
                 printf(list);
             }
+            printf("disk size: %d\n", di.getSize());
             let output = argv['output'];
             if (output) {
                 let data = di.getJSON();
