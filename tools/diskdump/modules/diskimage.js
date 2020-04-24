@@ -277,7 +277,7 @@ export default class DiskImage {
          */
         for (i = 0; i < this.aFileTable.length; i++) {
             let file = this.aFileTable[i];
-            if (file.name[0] == '.') continue;
+            if (file.name == "." || file.name == "..") continue;
             off = 0;
             for (iSector = 0; iSector < file.aLBA.length; iSector++) {
                 this.updateSector(file, file.aLBA[iSector], off);
@@ -285,6 +285,20 @@ export default class DiskImage {
             }
             file.loadSymbols();
         }
+
+        /*
+         * Calculate free space.
+         */
+        this.cbFree = 0;
+        let clustersFree = 0;
+        for (let cluster = 2; cluster < dir.nClusters + 2; cluster++) {
+            let clusterNext = this.getClusterEntry(dir, cluster, 0) | this.getClusterEntry(dir, cluster, 1);
+            if (!clusterNext) {
+                this.cbFree += dir.nClusterSecs * dir.cbSector;
+                clustersFree++;
+            }
+        }
+        if (Device.DEBUG) this.printf("free space: %d cluster(s), %d bytes\n", clustersFree, this.cbFree);
     }
 
     /**
@@ -367,6 +381,7 @@ export default class DiskImage {
                 sListing += "\nTotal files listed:\n"
                 sListing += getTotal(nTotal, cbTotal);
             }
+            sListing += this.device.sprintf("%28d bytes free\n",this.cbFree);
         }
         return sListing;
     }
@@ -462,7 +477,7 @@ export default class DiskImage {
                     iSector = aLBA.length;
                     break;
                 }
-                if (dir.name == null /* || dir.name == "." || dir.name == ".." */) continue;
+                if (dir.name == null) continue;
                 let path = dir.path + dir.name;
                 let dateMod = this.device.parseDate(
                     (dir.modDate >> 9) + 1980,
@@ -481,7 +496,7 @@ export default class DiskImage {
 
         for (let i = iStart; i < iEnd; i++) {
             file = this.aFileTable[i];
-            if ((file.attr & DiskImage.ATTR.SUBDIR) && file.aLBA.length && file.name[0] != '.') {
+            if ((file.attr & DiskImage.ATTR.SUBDIR) && file.aLBA.length && file.name != "." && file.name != "..") {
                 this.getDir(dir, path + "\\" + file.name, file.aLBA);
             }
         }
