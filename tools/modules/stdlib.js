@@ -40,7 +40,7 @@ export default class StdLib {
                     sArg = sArg.substr(0, j);
                     sValue = (sValue == "true") ? true : ((sValue == "false") ? false : sValue);
                 }
-                else if (i < process.argv.length) {
+                else if (i < process.argv.length && process.argv[i][0] != '-') {
                     this.argv[this.argc++] = sValue = process.argv[i++];
                 }
                 if (this.argv[sArg] === undefined) {

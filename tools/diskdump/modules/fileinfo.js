@@ -13,40 +13,40 @@ import DiskImage from "./diskimage.js";
 /**
  * @class FileInfo
  * @property {DiskImage} disk
- * @property {string} sPath
- * @property {string} sName
- * @property {number} bAttr
+ * @property {string} path
+ * @property {string} name
+ * @property {number} attr
  * @property {Date} date
- * @property {number} cbSize
+ * @property {number} size
  * @property {Array.<number>} aLBA
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class FileInfo {
     /**
-     * FileInfo(disk, sPath, sName, bAttr, cbSize, iCluster, aLBA)
+     * FileInfo(disk, path, name, attr, size, cluster, aLBA)
      *
      * @param {DiskImage} disk
-     * @param {string} sPath
-     * @param {string} sName
-     * @param {number} bAttr
+     * @param {string} path
+     * @param {string} name
+     * @param {number} attr
      * @param {Date} date
-     * @param {number} cbSize
-     * @param {number} iCluster
+     * @param {number} size
+     * @param {number} cluster
      * @param {Array.<number>} aLBA
      */
-    constructor(disk, sPath, sName, bAttr, date, cbSize, iCluster, aLBA)
+    constructor(disk, path, name, attr, date, size, cluster, aLBA)
     {
         this.device = disk.device;
         this.disk = disk;
-        this.sPath = sPath;
-        this.sName = sName;
-        this.bAttr = bAttr;
+        this.path = path;
+        this.name = name;
+        this.attr = attr;
         this.date = date;
-        this.cbSize = cbSize;
-        this.iCluster = iCluster;
+        this.size = size;
+        this.cluster = cluster;
         this.aLBA = aLBA;
         if (Device.DEBUG) {
-            this.device.printf(Device.MESSAGE.FILE, '"%s" size=%d attr=%#0bx date=%#T cluster=%d sectors=%j\n', sPath, cbSize, bAttr, date, iCluster, aLBA);
+            this.device.printf(Device.MESSAGE.FILE, '"%s" size=%d attr=%#0bx date=%#T cluster=%d sectors=%j\n', path, size, attr, date, cluster, aLBA);
         }
     }
 
@@ -136,7 +136,7 @@ export default class FileInfo {
         this.aOrdinals = [];                // this is an optional array for quick ordinal-to-segment lookup
 
         if (Device.DEBUG) {
-            this.device.printf(Device.MESSAGE.FILE, "loadSegmentTable(%s,%#0lx,%#0wx)\n", this.sPath, offEntries, nEntries);
+            this.device.printf(Device.MESSAGE.FILE, "loadSegmentTable(%s,%#0lx,%#0wx)\n", this.path, offEntries, nEntries);
         }
 
         while (nEntries--) {
@@ -299,12 +299,12 @@ export default class FileInfo {
                         }
                     } else {
                         if (Device.DEBUG) {
-                            this.device.printf("%s: cannot find segment %d (offset %#0wx) for symbol %s with ordinal %d @%x\n", this.sPath, iSegment, tuple[1], sSymbol, iOrdinal, offDebug);
+                            this.device.printf("%s: cannot find segment %d (offset %#0wx) for symbol %s with ordinal %d @%x\n", this.path, iSegment, tuple[1], sSymbol, iOrdinal, offDebug);
                         }
                     }
                 } else {
                     if (Device.DEBUG) {
-                        this.device.printf(Device.MESSAGE.FILE, "s: cannot find ordinal %d for symbol %s @%x\n", this.sPath, iOrdinal, sSymbol, offDebug);
+                        this.device.printf(Device.MESSAGE.FILE, "s: cannot find ordinal %d for symbol %s @%x\n", this.path, iOrdinal, sSymbol, offDebug);
                     }
                 }
             }
@@ -352,7 +352,7 @@ export default class FileInfo {
      */
     loadSymbols()
     {
-        if (!this.sName.endsWith(".EXE") && !this.sName.endsWith(".DLL") && !this.sName.endsWith(".DRV")) {
+        if (!this.name.endsWith(".EXE") && !this.name.endsWith(".DLL") && !this.name.endsWith(".DRV")) {
             return;
         }
 
@@ -445,7 +445,7 @@ export default class FileInfo {
                 }
             }
         }
-        return sSymbol || this.sName + '+' + this.device.sprintf("%#0x", off);
+        return sSymbol || this.name + '+' + this.device.sprintf("%#0x", off);
     }
 }
 
