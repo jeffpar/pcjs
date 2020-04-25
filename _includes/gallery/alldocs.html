@@ -10,10 +10,10 @@
 {%- endif %}
 {%- for item in data %}
   {%- if item[1]['@type'] %}
-    {%- assign machine = item[0] %}
+    {%- assign machine = item[0] | default: include.prev %}
     {%- assign type = item[1]['@type'] %}
     {%- assign instances = site.data[machine][type] %}
-    {%- capture path %}{{ type }}{{ item[1]['@path'] }}{% endcapture %}
+    {%- capture path %}{{ include.saveroot }}{{ item[1]['@path'] }}{% endcapture %}
     {%- include gallery/alldocs.html root=path data=instances savedata=data saveroot=root tag=tag width=width height=height %}
     {%- continue %}
   {%- endif %}
@@ -30,9 +30,10 @@
     {%- continue %}
   {%- endif %}
   {%- unless item[0] contains "@" %}
+    {%- assign prev = item[0] %}
     {%- assign instances = item[1] %}
     {%- capture path %}{{ root }}{%- if item[0] != "" -%}/{{ item[0] }}{%- endif -%}{% endcapture %}
-    {%- include gallery/alldocs.html root=path data=instances savedata=data saveroot=root tag=tag width=width height=height %}
+    {%- include gallery/alldocs.html root=path data=instances savedata=data saveroot=root tag=tag width=width height=height prev=prev %}
     {%- continue %}
   {%- endunless %}
   {%- if item[0] == "@documents" %}

@@ -15,10 +15,10 @@
     }
   },
   "pcx86": {
-    "pcx86": {
+    "": {
       "@title": "IBM PC",
       "@path": "/pcx86",
-      "@type": "software",
+      "@type": "diskettes",
       "@diskette_drives": ["A", "B"]
     }
   },

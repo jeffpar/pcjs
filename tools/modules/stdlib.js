@@ -47,7 +47,7 @@ export default class StdLib {
                     this.argv[sArg] = sValue;
                 }
                 else {
-                    if (typeof this.argv[sArg] == "string") {
+                    if (!Array.isArray(this.argv[sArg])) {
                         this.argv[sArg] = [this.argv[sArg]];
                     }
                     this.argv[sArg].push(sValue);

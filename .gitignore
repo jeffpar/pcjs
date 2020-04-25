@@ -6,6 +6,7 @@
 .sass-cache
 archive
 private
+private.json
 tmp
 /_site
 /decdisks

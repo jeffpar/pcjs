@@ -18,6 +18,7 @@ import DiskImage from "./diskimage.js";
  * @property {number} attr
  * @property {Date} date
  * @property {number} size
+ * @property {number} cluster
  * @property {Array.<number>} aLBA
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
@@ -448,6 +449,15 @@ export default class FileInfo {
         return sSymbol || this.name + '+' + this.device.sprintf("%#0x", off);
     }
 }
+
+FileInfo.MANIFEST = {
+    PATH:       'path',
+    NAME:       'name',
+    ATTR:       'attr',
+    DATE:       'date',
+    SIZE:       'size',
+    HASH:       'hash'
+};
 
 /*
  * Original (aka "Old") Executable MS-DOS File Format

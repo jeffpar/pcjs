@@ -33,7 +33,10 @@
     {%- else -%}
       {%- if data[part] -%}
         {%- assign data = data[part] %}
-        {%- if data[part]['@type'] -%}
+        {%- if data['']['@type'] -%}
+          {%- assign type = data['']['@type'] -%}
+          {%- assign data = site.data[part][type] -%}
+        {%- elsif data[part]['@type'] -%}
           {%- assign type = data[part]['@type'] -%}
           {%- assign data = site.data[part][type] -%}
         {%- endif -%}

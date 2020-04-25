@@ -101,7 +101,7 @@ export default class DiskImage {
                     if (!this.nSectors) {
                         this.nSectors = nSectors;
                     } else if (this.nSectors != nSectors) {
-                        this.printf(Device.MESSAGE.DISK, "%d:%d contains variable sectors per track: %d\n", iCylinder, iHead, nSectors);
+                        if (Device.DEBUG) this.printf(Device.MESSAGE.DISK, "%s warning: %d:%d contains variable sectors per track: %d\n", this.diskName, iCylinder, iHead, nSectors);
                     }
                     for (let iSector = 0; iSector < aSectors.length; iSector++) {
                         let sector = aSectors[iSector];
@@ -110,7 +110,7 @@ export default class DiskImage {
                         if (!this.cbSector) {
                             this.cbSector = cbSector;
                         } else if (this.cbSector != cbSector) {
-                            this.printf(Device.MESSAGE.DISK, "%d:%d:%d contains variable sector size: %d\n", iCylinder, iHead, sector[DiskImage.SECTOR.ID], cbSector);
+                            if (Device.DEBUG) this.printf(Device.MESSAGE.DISK, "%s warning: %d:%d:%d contains variable sector size: %d\n", this.diskName, iCylinder, iHead, sector[DiskImage.SECTOR.ID], cbSector);
                         }
                         this.cbDiskData += cbSector;
                     }
@@ -195,14 +195,24 @@ export default class DiskImage {
 
         let sectorBoot = this.getSector(0);
         if (!sectorBoot) {
-            if (Device.DEBUG) this.printf(Device.MESSAGE.FILE, "buildFileTable(): unable to read boot sector\n");
+            if (Device.DEBUG) this.printf(Device.MESSAGE.DISK, "%s error: unable to read boot sector\n", this.diskName);
             return;
         }
 
+        let idFAT = 0;
         dir.lbaVolume = dir.vbaTotal = 0;
         dir.cbSector = this.getSectorData(sectorBoot, DiskImage.BPB.SECTOR_BYTES, 2);
+        dir.idMedia = this.getSectorData(sectorBoot, DiskImage.BPB.MEDIA_ID, 1);
 
-        if (dir.cbSector != this.cbSector) {
+        if (dir.cbSector == this.cbSector) {
+            if (!this.checkMediaID(dir.idMedia)) {
+                if (Device.DEBUG) {
+                    this.printf(Device.MESSAGE.DISK, "%s error: unrecognized media ID %#0bx\n", this.diskName, dir.idMedia);
+                }
+                return;
+            }
+        }
+        else {
             /*
              * When the first sector doesn't appear to contain a valid BPB, the most likely explanations are:
              *
@@ -219,13 +229,16 @@ export default class DiskImage {
             dir.nClusterSecs = 1;
             dir.cbSector = this.cbSector;
 
-            if (cbDisk == 160 * 1024 && this.getClusterEntry(dir, 0, 0) == DiskImage.FAT.MEDIA_160KB) {
+            idFAT = this.getClusterEntry(dir, 0, 0);
+            if (cbDisk == 160 * 1024 && idFAT == DiskImage.FAT.MEDIA_160KB) {
                 dir.vbaTotal = 320;
                 dir.nEntries = 64;
+                dir.idMedia = DiskImage.FAT.MEDIA_160KB;
             }
-            else if (cbDisk == 320 * 1024 && this.getClusterEntry(dir, 0, 0) == DiskImage.FAT.MEDIA_320KB) {
+            else if (cbDisk == 320 * 1024 && idFAT == DiskImage.FAT.MEDIA_320KB) {
                 dir.vbaTotal = 640;
                 dir.nEntries = 112;
+                dir.idMedia = DiskImage.FAT.MEDIA_320KB;
                 this.assert(this.nHeads == 2);
                 dir.nClusterSecs++;         // 320Kb disks use 2 sectors/cluster
             }
@@ -251,7 +264,7 @@ export default class DiskImage {
             }
             if (!sectorBoot) {
                 if (Device.DEBUG) {
-                    this.printf(Device.MESSAGE.FILE, "buildFileTable(): unrecognized %d-byte disk image with %d-byte sectors\n", cbDisk, this.cbSector);
+                    this.printf(Device.MESSAGE.DISK, "%s error: unrecognized %d-byte disk image with %d-byte sectors\n", this.diskName, cbDisk, this.cbSector);
                 }
                 return;
             }
@@ -288,8 +301,18 @@ export default class DiskImage {
         dir.nFATBits = (dir.nClusters <= DiskImage.FAT12.MAX_CLUSTERS? 12 : 16);
         dir.clusterMax = (dir.nFATBits == 12? DiskImage.FAT12.CLUSNUM_MAX : DiskImage.FAT16.CLUSNUM_MAX);
 
+        if (!idFAT) {
+            idFAT = this.getClusterEntry(dir, 0, 0);
+        }
+        if (idFAT != dir.idMedia) {
+            if (Device.DEBUG) {
+                this.printf(Device.MESSAGE.DISK, "%s error: FAT ID (%#0bx) does not match media ID (%#0bx)\n", this.diskName, idFAT, dir.idMedia);
+            }
+            return;
+        }
+
         if (Device.DEBUG) {
-            this.printf(Device.MESSAGE.FILE, "buildFileTable()\n  vbaFAT: %d\n  vbaRoot: %d\n  vbaData: %d\n  vbaTotal: %d\n  nClusterSecs: %d\n  nClusters: %d\n", dir.vbaFAT, dir.vbaRoot, dir.vbaData, dir.vbaTotal, dir.nClusterSecs, dir.nClusters);
+            this.printf(Device.MESSAGE.FILE, "%s:\n  vbaFAT: %d\n  vbaRoot: %d\n  vbaData: %d\n  vbaTotal: %d\n  nClusterSecs: %d\n  nClusters: %d\n", this.diskName, dir.vbaFAT, dir.vbaRoot, dir.vbaData, dir.vbaTotal, dir.nClusterSecs, dir.nClusters);
         }
 
         /*
@@ -299,7 +322,7 @@ export default class DiskImage {
         i = (dir.vbaTotal - dir.vbaData) % dir.nClusterSecs;
         if (i) {
             if (Device.DEBUG) {
-                this.printf(Device.MESSAGE.FILE, "buildFileTable(): %d-byte disk image wasting %d sectors\n", cbDisk, i);
+                this.printf(Device.MESSAGE.FILE, "%s warning: %d-byte disk image wasting %d sectors\n", this.diskName, cbDisk, i);
             }
         }
 
@@ -342,7 +365,22 @@ export default class DiskImage {
                 clustersFree++;
             }
         }
-        if (Device.DEBUG) this.printf("free space: %d cluster(s), %d bytes\n", clustersFree, this.cbFree);
+        if (Device.DEBUG) this.printf("%s: %d cluster(s) free, %d bytes free\n", this.diskName, clustersFree, this.cbFree);
+    }
+
+    /**
+     * checkMediaID(idMedia)
+     *
+     * @this {DiskImage}
+     * @param {number} idMedia
+     * @returns {boolean} (true if idMedia is valid, false if not)
+     */
+    checkMediaID(idMedia)
+    {
+        for (let type in DiskImage.FAT) {
+            if (idMedia == DiskImage.FAT[type]) return true;
+        }
+        return false;
     }
 
     /**
@@ -366,7 +404,6 @@ export default class DiskImage {
                             delete sector[DiskImage.SECTOR.FILE_OFFSET];
                             delete sector.iModify;
                             delete sector.cModify;
-                            delete sector.fDirty;
                         }
                     }
                 }
@@ -377,6 +414,9 @@ export default class DiskImage {
     /**
      * getFileListing()
      *
+     * NOTE: The DiskImage must be built with fRead set, so that the file table is built as well.
+     *
+     * @this {DiskImage}
      * @returns {string}
      */
     getFileListing()
@@ -431,6 +471,46 @@ export default class DiskImage {
             sListing += this.device.sprintf("%28d bytes free\n",this.cbFree);
         }
         return sListing;
+    }
+
+    /**
+     * getFileManifest(fnHash, typeHash)
+     *
+     * Returns an array of info objects, to serve as a manifest.  Each object is largely a
+     * clone of the FileInfo object, with the exception of cluster and aLBA properties (which
+     * aren't useful outside the context of the DiskImage object), and with the inclusion of
+     * a hash, if the caller provides a hash function.
+     *
+     * NOTE: The DiskImage must be built with fRead set, so that the file table is built as well.
+     *
+     * @this {DiskImage}
+     * @param {function(Array,string)} [fnHash]
+     * @param {string} [typeHash] (eg, "MD5")
+     * @returns {Array}
+     */
+    getFileManifest(fnHash, typeHash)
+    {
+        let aFiles = [];
+        if (this.aFileTable) {
+            for (let i = 0; i < this.aFileTable.length; i++) {
+                let file = this.aFileTable[i];
+                if (file.name == "." || file.name == "..") continue;
+                let info = {
+                    [FileInfo.MANIFEST.PATH]: file.path.replace(/\\/g, '/'),
+                    [FileInfo.MANIFEST.NAME]: file.name,
+                    [FileInfo.MANIFEST.ATTR]: this.device.sprintf("%#0bx", file.attr),
+                    [FileInfo.MANIFEST.DATE]: this.device.sprintf("%#T", file.date),
+                    [FileInfo.MANIFEST.SIZE]: file.size
+                };
+                if (fnHash && file.size) {
+                    let ab = new Array(file.size);
+                    this.readSectorArray(ab, file.aLBA);
+                    info[typeHash] = fnHash(ab, typeHash);
+                }
+                aFiles.push(info);
+            }
+        }
+        return aFiles;
     }
 
     /**
@@ -499,6 +579,36 @@ export default class DiskImage {
         return aInfo;
     }
 
+    getDate(year, month, day, hour, minute, second, sFile)
+    {
+        let errors = 0;
+        let y = year, m = month, d = day, h = hour, n = minute, s = second;
+        if (m > 11) {
+            m = 11;
+            errors++;
+        }
+        if (d > 31) {
+            d = 31;
+            errors++;
+        }
+        if (h > 23) {
+            h = 23;
+            errors++;
+        }
+        if (n > 59) {
+            n = 59;
+            errors++;
+        }
+        if (s > 59) {
+            s = 59;
+            errors++;
+        }
+        if (errors) {
+            this.printf("%s warning: invalid timestamp: %04d-%02d-%02d %02d:%02d:%02d\n", sFile, year, month, day, hour, minute, second);
+        }
+        return this.device.parseDate(y, m, d, h, n, s);
+    }
+
     /**
      * getDir(dir, path, aLBA)
      *
@@ -526,13 +636,14 @@ export default class DiskImage {
                 }
                 if (dir.name == null) continue;
                 let path = dir.path + dir.name;
-                let dateMod = this.device.parseDate(
+                let dateMod = this.getDate(
                     (dir.modDate >> 9) + 1980,
                     ((dir.modDate >> 5) & 0xf) - 1,
                     (dir.modDate & 0x1f),
                     (dir.modTime >> 11),
                     (dir.modTime >> 5) & 0x3f,
-                    (dir.modTime & 0x1f) << 1
+                    (dir.modTime & 0x1f) << 1,
+                    this.diskName + ":" + path
                 );
                 file = new FileInfo(this, path, dir.name, dir.attr, dateMod, dir.size, dir.cluster, dir.aLBA);
                 this.aFileTable.push(file);
@@ -608,6 +719,9 @@ export default class DiskImage {
             dir.modDate = this.getSectorData(dir.sectorDirCache, off + DiskImage.DIRENT.MODDATE, 2);
             dir.modTime = this.getSectorData(dir.sectorDirCache, off + DiskImage.DIRENT.MODTIME, 2);
             dir.size = this.getSectorData(dir.sectorDirCache, off + DiskImage.DIRENT.SIZE, 4);
+            if (dir.size < 0) {
+                dir.size = 0;
+            }
             dir.cluster = this.getSectorData(dir.sectorDirCache, off + DiskImage.DIRENT.CLUSTER, 2);
             dir.aLBA = this.convertClusterToSectors(dir);
             return true;
@@ -708,6 +822,36 @@ export default class DiskImage {
     }
 
     /**
+     * readSectorArray(ab, aLBA)
+     *
+     * @this {DiskImage}
+     * @param {Array.<number>} ab
+     * @param {Array.<number>} aLBA
+     * @return {number} (number of bytes read)
+     */
+    readSectorArray(ab, aLBA)
+    {
+        let iLBA = 0, ib = 0;
+        let cbRemain = ab.length;
+        while (cbRemain > 0 && iLBA >= 0 && iLBA < aLBA.length) {
+            let sector = this.getSector(aLBA[iLBA++]);
+            if (!sector) break;
+            let cbSector = sector[DiskImage.SECTOR.LENGTH];
+            let cbRead = cbRemain > cbSector? cbSector : cbRemain;
+            for (let i = 0; i < cbRead; i++) {
+                let b = this.read(sector, i);
+                if (b < 0) {
+                    iLBA = -1;
+                    break;
+                }
+                ab[ib++] = b;
+                cbRemain--;
+            }
+        }
+        return ab.length - cbRemain;
+    }
+
+    /**
      * getSectorData(sector, off, len)
      *
      * WARNING: This function is restricted to reading data contained ENTIRELY within the specified sector.
@@ -791,7 +935,7 @@ export default class DiskImage {
             sector[DiskImage.SECTOR.FILE_OFFSET] = off;
             return true;
         }
-        if (Device.DEBUG) this.printf(Device.MESSAGE.DISK, "unable to map LBA %d to CHS\n", lba);
+        if (Device.DEBUG) this.printf(Device.MESSAGE.DISK, "%s error: unable to map LBA %d to CHS\n", this.diskName, lba);
         return false;
     }
 
@@ -947,10 +1091,8 @@ export default class DiskImage {
              *
              *      iModify:    index of first modified dword in sector
              *      cModify:    number of modified dwords in sector
-             *      fDirty:     true if sector is dirty, false if clean (or cleaning in progress)
              */
             sector.iModify = sector.cModify = 0;
-            sector.fDirty = false;
         }
         return sector;
     }

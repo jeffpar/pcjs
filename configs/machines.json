@@ -70,6 +70,7 @@
       "./machines/pcx86/lib/disk.js",
       "./machines/pcx86/lib/fdc.js",
       "./machines/pcx86/lib/hdc.js",
+      "./machines/modules/jsonlib.js",
       "./machines/shared/lib/debugger.js",
       "./machines/pcx86/lib/debugger.js",
       "./machines/pcx86/lib/computer.js",

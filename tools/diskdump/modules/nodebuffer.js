@@ -37,13 +37,11 @@ export default class DataBuffer {
         if (typeof init == "number") {
             this.buffer = Buffer.alloc(init);
         }
-        else if (typeof init == "object") {
-            if (init instanceof Buffer) {
-                this.buffer = init;
-            }
-            if (init instanceof DataBuffer) {
-                this.buffer = init.buffer.slice(start, end);
-            }
+        else if (init instanceof Buffer) {
+            this.buffer = init;
+        }
+        else if (init instanceof DataBuffer) {
+            this.buffer = init.buffer.slice(start, end);
         } else {
             this.buffer = Buffer.from(init);
         }
