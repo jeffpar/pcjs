@@ -12,22 +12,34 @@ import CPUx86 from "../../../machines/pcx86/modules/cpux86.js";
 import FileInfo from "./fileinfo.js";
 
 /**
-* @typedef {Object} Sector
-* @property {number} c
-* @property {number} h
-* @property {number} s
-* @property {number} l
-* @property {Array.<number>} d
-* @property {number} dataMark
-* @property {number} headCRC
-* @property {boolean} headError
-* @property {number} dataCRC
-* @property {boolean} dataError
-* @property {number} iModify
-* @property {number} cModify
-* @property {FileInfo} file
-* @property {number} offFile
-*/
+ * @typedef {Object} Sector
+ * @property {number} c
+ * @property {number} h
+ * @property {number} s
+ * @property {number} l
+ * @property {Array.<number>} d
+ * @property {number} dataMark
+ * @property {number} headCRC
+ * @property {boolean} headError
+ * @property {number} dataCRC
+ * @property {boolean} dataError
+ * @property {number} iModify
+ * @property {number} cModify
+ * @property {FileInfo} file
+ * @property {number} offFile
+ */
+
+/**
+ * @typedef {Object} FileData
+ * @property {string} path
+ * @property {string} name
+ * @property {number} attr
+ * @property {Date} date
+ * @property {number} size
+ * @property {DataBuffer} data
+ * @property {number} cluster
+ * @property {Array} files
+ */
 
 /**
  * @class DiskImage
@@ -64,14 +76,15 @@ export default class DiskImage {
     }
 
     /**
-     * buildDiskFromBuffer(db, forceBPB, sectorIDs, sectorErrors, suppData)
+     * buildDiskFromBuffer(dbDisk, forceBPB, sectorIDs, sectorErrors, suppData)
      *
      * Build a disk image from a DataBuffer.
      *
      * All callers are now required to convert their data to a DataBuffer first.  For example, if the caller
      * received an ArrayBuffer from a FileReader object, they must first create a DataBuffer from the ArrayBuffer.
      *
-     * Here's the initial (simplfied) version of this function:
+     * Here's the initial (simplified) version of this function.  It got much more complicated over time
+     * due to various discoveries.
      *
      *      let diskFormat = DiskImage.GEOMETRIES[db.length];
      *      if (diskFormat) {
@@ -96,14 +109,14 @@ export default class DiskImage {
      *      }
      *
      * @this {DiskImage}
-     * @param {DataBuffer} db
+     * @param {DataBuffer} dbDisk
      * @param {fForceBPP} [forceBPB]
      * @param {Array|string} [sectorIDs]
      * @param {Array|string} [sectorErrors]
      * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
      * @returns {boolean} true if successful (aDiskData initialized); false otherwise
      */
-    buildDiskFromBuffer(db, forceBPB, sectorIDs, sectorErrors, suppData)
+    buildDiskFromBuffer(dbDisk, forceBPB, sectorIDs, sectorErrors, suppData)
     {
         this.aDiskData = null;
         this.cbDiskData = 0;
@@ -116,22 +129,22 @@ export default class DiskImage {
         let cbSector = 512;                 // default sector size
         let bMediaID = 0;
         let offBootSector = 0;
-        let cbDiskData = db.length, cbPartition = cbDiskData;
+        let cbDiskData = dbDisk.length, cbPartition = cbDiskData;
 
         let dbTrack, dbSector;
         let iTrack, cbTrack, offTrack, offSector;
 
         if (cbDiskData >= 3000000) {        // arbitrary threshold between diskette image sizes and hard drive image sizes
-            let wSig = db.readUInt16LE(DiskImage.BOOT.SIG_OFFSET);
+            let wSig = dbDisk.readUInt16LE(DiskImage.BOOT.SIG_OFFSET);
             if (wSig == DiskImage.BOOT.SIGNATURE) {
                 /*
                  * In this case, the first sector should be an MBR; find the active partition entry,
                  * then read the LBA of the first partition sector to calculate the boot sector offset.
                  */
                 for (let offEntry = 0x1BE; offEntry <= 0x1EE; offEntry += 0x10) {
-                    if (db.readUInt8(offEntry) >= 0x80) {
-                        offBootSector = db.readUInt32LE(offEntry + 0x08) * cbSector;
-                        cbPartition = db.readUInt32LE(offEntry + 0x0C) * cbSector;
+                    if (dbDisk.readUInt8(offEntry) >= 0x80) {
+                        offBootSector = dbDisk.readUInt32LE(offEntry + 0x08) * cbSector;
+                        cbPartition = dbDisk.readUInt32LE(offEntry + 0x0C) * cbSector;
                         break;
                     }
                 }
@@ -144,9 +157,9 @@ export default class DiskImage {
              */
         }
 
-        let bByte0 = db.readUInt8(offBootSector + DiskImage.BOOT.JMP_OPCODE);
-        let bByte1 = db.readUInt8(offBootSector + DiskImage.BOOT.JMP_OPCODE + 1);
-        let cbSectorBPB = db.readUInt16LE(offBootSector + DiskImage.BPB.SECTOR_BYTES);
+        let bByte0 = dbDisk.readUInt8(offBootSector + DiskImage.BOOT.JMP_OPCODE);
+        let bByte1 = dbDisk.readUInt8(offBootSector + DiskImage.BOOT.JMP_OPCODE + 1);
+        let cbSectorBPB = dbDisk.readUInt16LE(offBootSector + DiskImage.BPB.SECTOR_BYTES);
 
         /*
          * These checks are not only necessary for DOS 1.x diskette images (and other pre-BPB images),
@@ -183,17 +196,17 @@ export default class DiskImage {
 
         if ((bByte0 == CPUx86.OPCODE.JMP || bByte0 == CPUx86.OPCODE.JMPS) && cbSectorBPB == cbSector) {
 
-            let nHeadsBPB = db.readUInt16LE(offBootSector + DiskImage.BPB.TOTAL_HEADS);
-            let nSectorsPerTrackBPB = db.readUInt16LE(offBootSector + DiskImage.BPB.TRACK_SECS);
+            let nHeadsBPB = dbDisk.readUInt16LE(offBootSector + DiskImage.BPB.TOTAL_HEADS);
+            let nSectorsPerTrackBPB = dbDisk.readUInt16LE(offBootSector + DiskImage.BPB.TRACK_SECS);
 
             if (nHeadsBPB && nSectorsPerTrackBPB) {
 
                 fBPBExists = true;
-                bMediaIDBPB = db.readUInt8(offBootSector + DiskImage.BPB.MEDIA_ID);
+                bMediaIDBPB = dbDisk.readUInt8(offBootSector + DiskImage.BPB.MEDIA_ID);
 
-                let nSectorsTotalBPB = db.readUInt16LE(offBootSector + DiskImage.BPB.TOTAL_SECS);
+                let nSectorsTotalBPB = dbDisk.readUInt16LE(offBootSector + DiskImage.BPB.TOTAL_SECS);
                 let nSectorsPerCylinderBPB = nSectorsPerTrackBPB * nHeadsBPB;
-                let nSectorsHiddenBPB = db.readUInt16LE(offBootSector + DiskImage.BPB.HIDDEN_SECS);
+                let nSectorsHiddenBPB = dbDisk.readUInt16LE(offBootSector + DiskImage.BPB.HIDDEN_SECS);
                 let nCylindersBPB = (nSectorsHiddenBPB + nSectorsTotalBPB) / nSectorsPerCylinderBPB;
 
                 if (diskFormat) {
@@ -271,7 +284,7 @@ export default class DiskImage {
                          * were happy with the defaults that FORMAT chooses for a given diskette size, but in a few cases
                          * (eg, PC DOS 4.01 720K diskettes), the manufacturer (IBM) opted for a smaller cluster size.
                          */
-                        let bClusterSecs = db.readUInt8(offBootSector + DiskImage.BPB.CLUSTER_SECS);
+                        let bClusterSecs = dbDisk.readUInt8(offBootSector + DiskImage.BPB.CLUSTER_SECS);
                         if (bMediaID != DiskImage.FAT.MEDIA_720KB || bClusterSecs == DiskImage.aDefaultBPBs[i][DiskImage.BPB.CLUSTER_SECS]) {
                             iBPB = i;
                             break;
@@ -290,7 +303,7 @@ export default class DiskImage {
              * for someone to take a diskette formatted with 9 sectors/track and then use FORMAT or DISKCOPY to create
              * a smaller file system on it (ie, using only 8 sectors/track).
              */
-            if (!bMediaIDBPB) bMediaIDBPB = db.readUInt8(offBootSector + 512);
+            if (!bMediaIDBPB) bMediaIDBPB = dbDisk.readUInt8(offBootSector + 512);
             if (iBPB >= 2 && bMediaIDBPB == DiskImage.FAT.MEDIA_320KB && bMediaID == DiskImage.FAT.MEDIA_360KB || bMediaIDBPB == DiskImage.FAT.MEDIA_160KB && bMediaID == DiskImage.FAT.MEDIA_180KB) {
                 iBPB -= 2;
                 bMediaID = DiskImage.aDefaultBPBs[iBPB][DiskImage.BPB.MEDIA_ID];
@@ -305,7 +318,7 @@ export default class DiskImage {
                  */
                 for (i = DiskImage.BPB.SECTOR_BYTES; i < DiskImage.BPB.HIDDEN_SECS + 2; i++) {
                     let bDefault = DiskImage.aDefaultBPBs[iBPB][i];
-                    let bActual = db.readUInt8(offBootSector + i);
+                    let bActual = dbDisk.readUInt8(offBootSector + i);
                     if (bDefault != bActual) {
                         this.printf(Device.MESSAGE.WARN, "BPB byte %#02bx default (%#02bx) does not match actual byte: %#02bx\n", i, bDefault, bActual);
                         fBPBWarning = true;
@@ -330,7 +343,7 @@ export default class DiskImage {
                      * be a mountable disk, not a bootable disk.  So the BPB copy starts at offset 0 instead of SECTOR_BYTES.
                      */
                     for (i = forceBPB? 0 : DiskImage.BPB.SECTOR_BYTES; i < DiskImage.BPB.LARGE_SECS+4; i++) {
-                        db.writeUInt8(DiskImage.aDefaultBPBs[iBPB][i] || 0, offBootSector + i);
+                        dbDisk.writeUInt8(DiskImage.aDefaultBPBs[iBPB][i] || 0, offBootSector + i);
                     }
                     this.printf(Device.MESSAGE.WARN, "BPB has been updated\n");
                 }
@@ -341,7 +354,7 @@ export default class DiskImage {
                      */
                     this.printf(Device.MESSAGE.WARN, "repairing damaged boot sector with BPB for media ID %#02bx\n", bMediaID);
                     for (i = 0; i < DiskImage.BPB.LARGE_SECS+4; i++) {
-                        db.writeUInt8(DiskImage.aDefaultBPBs[iBPB][i] || 0, offBootSector + i);
+                        dbDisk.writeUInt8(DiskImage.aDefaultBPBs[iBPB][i] || 0, offBootSector + i);
                     }
                 }
                 else {
@@ -350,7 +363,7 @@ export default class DiskImage {
             }
         }
 
-        if (fBPBExists && db.readUInt16LE(offBootSector + DiskImage.BOOT.SIG_OFFSET) == DiskImage.BOOT.SIGNATURE || forceBPB) {
+        if (fBPBExists && dbDisk.readUInt16LE(offBootSector + DiskImage.BOOT.SIG_OFFSET) == DiskImage.BOOT.SIGNATURE || forceBPB) {
             /*
              * Overwrite the OEM string with our own, so that people know how the image originated.  We do this
              * only for disks with pre-existing BPBs; it's not safe for pre-2.0 disks (and non-DOS disks, obviously).
@@ -358,7 +371,7 @@ export default class DiskImage {
              * The signature check is another pre-2.0 disk check, to avoid misinterpreting any BPB that we might have
              * previously added ourselves as an original BPB.
              */
-            db.write(DiskImage.PCJS_OEM, DiskImage.BOOT.OEM_STRING + offBootSector, DiskImage.PCJS_OEM.length);
+            dbDisk.write(DiskImage.PCJS_OEM, DiskImage.BOOT.OEM_STRING + offBootSector, DiskImage.PCJS_OEM.length);
             this.printf(Device.MESSAGE.WARN, "OEM string has been updated\n");
         }
 
@@ -385,22 +398,22 @@ export default class DiskImage {
              * we now prefer that read-only disk images simply include a "-readonly" suffix in the filename.
              */
             if (!(bByte0 & 0xFE)) {
-                let cbSectorDSK = db.readUInt16LE(offBootSector + 0x06);
+                let cbSectorDSK = dbDisk.readUInt16LE(offBootSector + 0x06);
                 if (!(cbSectorDSK & (cbSectorDSK - 1))) {
                     cbSector = cbSectorDSK;
-                    nHeads = db.readUInt8(offBootSector + 0x01);
-                    nCylinders = db.readUInt16LE(offBootSector + 0x02);
-                    nLogicalSectorsPerTrack = nSectorsPerTrack = db.readUInt16LE(offBootSector + 0x04);
+                    nHeads = dbDisk.readUInt8(offBootSector + 0x01);
+                    nCylinders = dbDisk.readUInt16LE(offBootSector + 0x02);
+                    nLogicalSectorsPerTrack = nSectorsPerTrack = dbDisk.readUInt16LE(offBootSector + 0x04);
                     let nTracks = nHeads * nCylinders;
                     cbTrack = nSectorsPerTrack * cbSector;
                     offTrack = 0x08;
                     if (!cbTrack) {
                         for (iTrack = 0; iTrack < nTracks; iTrack++) {
-                            nLogicalSectorsPerTrack = nSectorsPerTrack = db.readUInt16LE(offTrack);
-                            cbSectorDSK = db.readUInt16LE(offTrack+2);
+                            nLogicalSectorsPerTrack = nSectorsPerTrack = dbDisk.readUInt16LE(offTrack);
+                            cbSectorDSK = dbDisk.readUInt16LE(offTrack+2);
                             cbTrack = nSectorsPerTrack * cbSectorDSK;
-                            offSector = db.readUInt32LE(offTrack+4);
-                            dbTrack = db.slice(offSector, offSector + cbTrack);
+                            offSector = dbDisk.readUInt32LE(offTrack+4);
+                            dbTrack = dbDisk.slice(offSector, offSector + cbTrack);
                             aTracks[iTrack] = [nSectorsPerTrack, cbSectorDSK, dbTrack];
                             offTrack += 8;
                         }
@@ -418,12 +431,14 @@ export default class DiskImage {
             cbTrack = nSectorsPerTrack * cbSector;
             let suppObj = this.parseSuppData(suppData);
             this.aDiskData = new Array(nCylinders);
+            this.nCylinders = nCylinders;
 
             for (let iCylinder=0; iCylinder < nCylinders; iCylinder++) {
                 let aHeads = new Array(nHeads);
                 this.aDiskData[iCylinder] = aHeads;
-                let offHead = 0;
+                this.nHeads = nHeads;
 
+                let offHead = 0;
                 for (let iHead=0; iHead < nHeads; iHead++) {
                     if (aTracks.length) {
                         let aTrack = aTracks[iTrack++];
@@ -432,11 +447,12 @@ export default class DiskImage {
                         dbTrack = aTrack[2];
                         cbTrack = nSectorsPerTrack * cbSector;
                     } else {
-                        dbTrack = db.slice(offTrack + offHead, offTrack + offHead + cbTrack);
+                        dbTrack = dbDisk.slice(offTrack + offHead, offTrack + offHead + cbTrack);
                     }
 
                     let aSectors = new Array(nLogicalSectorsPerTrack);
                     aHeads[iHead] = aSectors;
+                    this.nSectors = nLogicalSectorsPerTrack;
 
                     /*
                      * For most disks, the size of every sector and the number of sectors/track are consistent, and the
@@ -447,6 +463,7 @@ export default class DiskImage {
                      */
                     let cbSectorThisTrack = cbSector;
                     let nSectorsThisTrack = nLogicalSectorsPerTrack;
+                    this.cbSector = cbSector;
 
                     /*
                      * Notes regarding XDF track layouts, from http://forum.kryoflux.com/viewtopic.php?f=3&t=234:
@@ -577,10 +594,636 @@ export default class DiskImage {
             }
             return true;
         }
-        // else if (this.db.readUInt16BE(0x900) == 0x4357) {
+        // else if (dbDisk.readUInt16BE(0x900) == 0x4357) {
         //     return this.convertOSIDiskToJSON();
         // }
         return false;
+    }
+
+    /**
+     * buildDiskFromFiles(dbDisk, aFileData, kbTarget)
+     *
+     * @this {DiskImage}
+     * @param {DataBuffer} dbDisk
+     * @param {Array.<FileData>} aFileData
+     * @param {number} [kbTarget]
+     * @returns {boolean} true if disk allocation successful, false if not
+     */
+    buildDiskFromFiles(dbDisk, aFileData, kbTarget = 0)
+    {
+        if (!aFileData || !aFileData.length) {
+            return false;
+        }
+
+        /*
+         * Put reasonable upper limits on both individual file sizes and the total size of all files.
+         */
+        let cbMax = (kbTarget || 1440) * 1024;
+        let nTargetSectors = (kbTarget? kbTarget * 2 : 0);
+
+        /*
+        * This initializes cbTotal assuming a "best case scenario" (ie, one sector per cluster); as soon as
+        * we find a BPB that will support that size, we recalculate cbTotal using that BPB's cluster size, and
+        * then we re-verify that that BPB will work.  If not, then we keep looking.
+        */
+        let cbTotal = this.calcFileSizes(aFileData);
+
+        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "calculated size for %d files: %d bytes (%#x)\n", aFileData.length, cbTotal);
+
+        if (cbTotal >= cbMax) {
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "file(s) too large (%d bytes total, %d bytes maximum)\n", cbTotal, cbMax);
+            return false;
+        }
+
+        let iBPB, abBoot, cbSector, cSectorsPerCluster, cbCluster, cFATs, cFATSectors;
+        let cRootEntries, cRootSectors, cTotalSectors, cHiddenSectors, cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
+
+        /*
+         * Find or build a BPB with enough capacity, and at the same time, calculate all the other values we'll need,
+         * including total number of data sectors (cDataSectors).
+         *
+         * TODO: For now, the code that chooses a default BPB starts with entry #3 instead of #0, because Windows 95
+         * (at least when running under VMware) fails to read the contents of such disks correctly.  Whether that's my
+         * fault or Windows 95's fault is still TBD (although it's probably mine -- perhaps 160Kb diskettes aren't
+         * supposed to have BPBs?)  The simple work-around is to avoid creating 160Kb diskette images used by PC DOS 1.0.
+         * To play it safe, I also skip the 320Kb format (added for PC DOS 1.1).  360Kb was the most commonly used format
+         * after PC DOS 2.0 introduced it.  PC DOS 2.0 also introduced 180Kb (a single-sided version of the 360Kb
+         * double-sided format), but it's less commonly used.
+         *
+         * UPDATE: I've undone the above change, because when creating a disk image for an old application like:
+         *
+         *      /apps/pcx86/1983/adventmath ["Adventures in Math (1983)"]
+         *
+         * it's important to create a disk image that will work with PC DOS 1.0, which didn't understand 180Kb and 360Kb
+         * disk images.
+         */
+        for (iBPB = 0; iBPB < DiskImage.aDefaultBPBs.length; iBPB++) {
+            /*
+             * Use slice() to copy the BPB, to ensure we don't alter the original.
+             */
+            abBoot = DiskImage.aDefaultBPBs[iBPB].slice();
+            /*
+             * If this BPB is for a hard drive but a disk size was not specified, skip it.
+             */
+            if ((abBoot[DiskImage.BPB.MEDIA_ID] == DiskImage.FAT.MEDIA_FIXED) != (kbTarget >= 10000)) continue;
+            cRootEntries = abBoot[DiskImage.BPB.ROOT_DIRENTS] | (abBoot[DiskImage.BPB.ROOT_DIRENTS + 1] << 8);
+            if (aFileData.length > cRootEntries) continue;
+            cbSector = abBoot[DiskImage.BPB.SECTOR_BYTES] | (abBoot[DiskImage.BPB.SECTOR_BYTES + 1] << 8);
+            cSectorsPerCluster = abBoot[DiskImage.BPB.CLUSTER_SECS];
+            cbCluster = cbSector * cSectorsPerCluster;
+            cFATs = abBoot[DiskImage.BPB.TOTAL_FATS];
+            cFATSectors = abBoot[DiskImage.BPB.FAT_SECS] | (abBoot[DiskImage.BPB.FAT_SECS + 1] << 8);
+            cRootSectors = (((cRootEntries * DiskImage.DIRENT.LENGTH) + cbSector - 1) / cbSector) | 0;
+            cTotalSectors = abBoot[DiskImage.BPB.TOTAL_SECS] | (abBoot[DiskImage.BPB.TOTAL_SECS + 1] << 8);
+            cHiddenSectors = abBoot[DiskImage.BPB.HIDDEN_SECS] | (abBoot[DiskImage.BPB.HIDDEN_SECS + 1] << 8);
+            cSectorsPerTrack = abBoot[DiskImage.BPB.TRACK_SECS] | (abBoot[DiskImage.BPB.TRACK_SECS + 1] << 8);
+            cHeads = abBoot[DiskImage.BPB.TOTAL_HEADS] | (abBoot[DiskImage.BPB.TOTAL_HEADS + 1] << 8);
+            cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + 1);
+            cbAvail = cDataSectors * cbSector;
+            if (!nTargetSectors || cHiddenSectors) {
+                if (cbTotal <= cbAvail) {
+                    let cb = this.calcFileSizes(aFileData, cSectorsPerCluster);
+                    if (cb <= cbAvail) {
+                        cbTotal = cb;
+                        break;
+                    }
+                }
+            } else {
+                if (cTotalSectors == nTargetSectors) break;
+            }
+        }
+
+        if (iBPB == DiskImage.aDefaultBPBs.length) {
+            this.printf(Device.MESSAGE.DISK + Device.MESSASGE.ERROR, "too many file(s) for disk image (%d files, %d bytes)\n", aFileData.length, cbTotal);
+            return false;
+        }
+
+        let abSector;
+        let offDisk = 0;
+        let cbDisk = cTotalSectors * cbSector;
+
+        /*
+         * If the disk is actually a partition on a larger drive, calculate how much larger the image should be
+         * (ie, hidden sectors plus an entire cylinder reserved for diagnostics, head parking, etc).
+         */
+        let cbDrive = (cHiddenSectors? (cHiddenSectors + cSectorsPerTrack * cHeads) * cbSector : 0) + cbDisk;
+
+        /*
+         * TODO: Consider doing what convertToIMG() does, which is deferring setting this.bufDisk until the
+         * buffer is fully (and successfully) initialized.  Here, however, the build process relies on worker
+         * functions that prefer not passing around temporary buffers.  In the meantime, perhaps any catastrophic
+         * failures should set bufDisk back to null?
+         */
+        dbDisk.new(cbDrive);
+
+        /*
+         * WARNING: Buffers are NOT zero-initialized, so we need explicitly fill bufDisk with zeros (this seems
+         * to be a reversal in the trend to zero buffers, when security concerns would trump performance concerns).
+         */
+        dbDisk.fill(0);
+
+        /*
+         * Output a Master Boot Record (MBR) if this is a hard drive image.
+         */
+        if (cHiddenSectors) {
+            abSector = this.buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors);
+            offDisk += this.copyData(dbDisk, offDisk, abSector) * cHiddenSectors;
+        }
+
+        /*
+         * Output a boot sector.
+         */
+        abBoot[DiskImage.BOOT.SIG_OFFSET] = DiskImage.BOOT.SIGNATURE & 0xff;            // 0x55
+        abBoot[DiskImage.BOOT.SIG_OFFSET + 1] = (DiskImage.BOOT.SIGNATURE >> 8) & 0xff; // 0xAA
+        abSector = this.buildData(cbSector, abBoot);
+        offDisk += this.copyData(dbDisk, offDisk, abSector);
+
+        /*
+         * Build the FAT, noting the starting cluster number that each file will use along the way.
+         *
+         * Also, notice that the first byte of the FAT is the "media ID" byte that's replicated in the
+         * BPB at offset 0x15.  For old BPB-less diskettes, this is where you must look for the media ID.
+         */
+        let abFAT = [];
+        this.buildFATEntry(abFAT, 0, abBoot[DiskImage.BPB.MEDIA_ID] | 0xF00);
+        this.buildFATEntry(abFAT, 1, 0xFFF);
+        this.buildFAT(abFAT, aFileData, 2, cbCluster);
+
+        /*
+         * Output the FAT sectors; we simplify the logic a bit by writing each FAT table as if it
+         * were one giant sector.
+         */
+        while (cFATs--) {
+            abSector = this.buildData(cFATSectors * cbSector, abFAT);
+            offDisk += this.copyData(dbDisk, offDisk, abSector);
+        }
+
+        /*
+         * Build the root directory
+         */
+        let abRoot = [];
+        let cEntries = this.buildDir(abRoot, aFileData);
+
+        /*
+         * PC DOS 1.0 requires ALL unused directory entries to start with 0xE5; 0x00 isn't good enough,
+         * so we must loop through all the remaining directory entries and zap them with 0xE5.
+         */
+        let offRoot = cEntries * DiskImage.DIRENT.LENGTH;
+        while (cEntries++ < cRootEntries) {
+            abRoot[offRoot] = DiskImage.DIRENT.INVALID;         // 0xE5
+            offRoot += DiskImage.DIRENT.LENGTH;                 // 0x20 (32)
+        }
+
+        /*
+         * Output the root directory sectors (as before, as if they were one giant sector)
+         */
+        abSector = this.buildData(cRootSectors * cbSector, abRoot);
+        offDisk += this.copyData(dbDisk, offDisk, abSector);
+
+        /*
+         * Output the file data clusters, which must be stored sequentially, mirroring the order in which
+         * we wrote the cluster sequences to the FAT, above.
+         */
+        let cClusters = this.buildClusters(dbDisk, aFileData, offDisk, cbCluster, 0, 0);
+        offDisk += cClusters * cSectorsPerCluster * cbSector;
+
+        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%d bytes written, %d bytes available\n", offDisk, cbDisk);
+
+        if (offDisk > cbDisk) {
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "too much data for disk image (%d clusters required)\n", cClusters);
+            return false;
+        }
+
+        return this.buildDiskFromBuffer(dbDisk);
+    }
+
+    /**
+     * calcFileSizes(aFileData, cSectorsPerCluster)
+     *
+     * @this {DiskImage}
+     * @param {Array.<FileData>} aFileData
+     * @param {number} [cSectorsPerCluster] (default is 1)
+     * @returns {number} of bytes required for all files, including all subdirectories
+     */
+    calcFileSizes(aFileData, cSectorsPerCluster)
+    {
+        let cbTotal = 0;
+        let cbCluster = (cSectorsPerCluster || 1) * 512;
+        for (let iFile = 0; iFile < aFileData.length; iFile++) {
+            let cb = aFileData[iFile].size;
+            let cbSubTotal = 0;
+            if (cb < 0) {
+                cb = (aFileData[iFile].files.length + 2) * 32;
+                cbSubTotal = this.calcFileSizes(aFileData[iFile].files, cSectorsPerCluster);
+            }
+            cbTotal += cb;
+            if ((cb %= cbCluster)) {
+                cbTotal += cbCluster - cb;
+            }
+            cbTotal += cbSubTotal;
+        }
+        return cbTotal;
+    }
+
+    /**
+     * buildData(cb)
+     *
+     * @this {DiskImage}
+     * @param {number} cb
+     * @param {Array.<number>} [abInit]
+     * @returns {Array.<number>} of bytes, initialized with abInit (or with zero when abInit is empty or exhausted)
+     */
+    buildData(cb, abInit)
+    {
+        let ab = new Array(cb);
+        for (let i = 0; i < cb; i++) {
+            ab[i] = abInit && abInit[i] || 0;
+        }
+        return ab;
+    }
+
+    /**
+     * copyData(db, offset, ab)
+     *
+     * @this {DiskImage}
+     * @param {BufferData} db
+     * @param {number} offset
+     * @param {Array.<number>} ab
+     * @returns {number} number of bytes written
+     */
+    copyData(db, offset, ab)
+    {
+        db.fill(ab, offset, offset + ab.length);
+        return ab.length;
+    }
+
+    /**
+     * buildClusters(dbDisk, aFileData, offDisk, cbCluster, iParentCluster, done)
+     *
+     * @this {DiskImage}
+     * @param {DataBuffer} dbDisk
+     * @param {Array.<FileData>} aFileData
+     * @param {number} offDisk
+     * @param {number} cbCluster
+     * @param {number} iParentCluster
+     * @param {number} iLevel
+     * @param {function(Error)} done
+     * @returns {number} number of clusters built
+     */
+    buildClusters(dbDisk, aFileData, offDisk, cbCluster, iParentCluster, iLevel)
+    {
+        let cSubDirs = 0;
+        let cClusters = 0;
+
+        for (let iFile = 0; iFile < aFileData.length; iFile++) {
+            let dbData = aFileData[iFile].data;
+            let cbData = aFileData[iFile].size;
+            if (cbData > 0) {
+                this.assert(cbData == dbData.length);
+            }
+            else if (cbData < 0) {
+                let abData = [];
+                cbData = this.buildDir(abData, aFileData[iFile].files, aFileData[iFile].date, aFileData[iFile].cluster, iParentCluster) * 32;
+                dbData.new(cbData);
+                dbData.fill(abData);
+                cSubDirs++;
+            }
+            if (cbData) {
+                dbData.copy(dbDisk, offDisk);
+                if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%#x: %#x bytes written for %s\n", offDisk, dbData.length, aFileData[iFile].path);
+            }
+            offDisk += cbData;
+            cClusters += ((cbData / cbCluster) | 0);
+            let cbPartial = (cbData % cbCluster);
+            if (cbPartial) {
+                cbPartial = cbCluster - cbPartial;
+                offDisk += cbPartial;
+                cClusters++;
+            }
+        }
+
+        if (cSubDirs > 0) {
+            for (let iFile = 0; iFile < aFileData.length; iFile++) {
+                let cb = aFileData[iFile].size;
+                if (cb < 0) {
+                    if (Device.DEBUG) this.printf("%#x: buildClusters()\n", offDisk);
+                    let cSubClusters = this.buildClusters(dbDisk, aFileData[iFile].files, offDisk, cbCluster, aFileData[iFile].cluster, iLevel + 1);
+                    cClusters += cSubClusters;
+                    offDisk += cSubClusters * cbCluster;
+                    if (Device.DEBUG) this.printf("%#x: buildClusters() returned, writing %d clusters\n", offDisk, cSubClusters);
+                }
+            }
+        }
+
+        return cClusters;
+    }
+
+    /**
+     * buildDateTime(dateMod)
+     *
+     * @this {DiskImage}
+     * @param {Date} dateMod contains the modification time of a file
+     * @returns {number} the time (bits 0-15) and date (bits 16-31) in FAT format
+     */
+    buildDateTime(dateMod)
+    {
+        let year = dateMod.getFullYear();
+        let month = dateMod.getMonth() + 1;
+        let day = dateMod.getDate();
+        let time = ((dateMod.getHours() & 0x1F) << 11) | ((dateMod.getMinutes() & 0x3F) << 5) | ((dateMod.getSeconds() >> 1) & 0x1F);
+        /*
+         * NOTE: If validateTime() is doing its job, then we should never have to do this.  This is simple paranoia.
+         */
+        if (year < 1980) {
+            year = 1980; month = 1; day = 1; time = 1;
+        } else if (year > 2099) {
+            year = 2099; month = 12; day = 31; time = 1;
+        }
+        let date = (((year - 1980) & 0x7F) << 9) | (month << 5) | day;
+        return ((date & 0xffff) << 16) | (time & 0xffff);
+    }
+
+    /**
+     * buildDir(abDir, aFileData, dateMod, iCluster, iParentCluster)
+     *
+     * @this {DiskImage}
+     * @param {Array.<number>} abDir
+     * @param {Array.<FileData>} aFileData
+     * @param {Date} [dateMod]
+     * @param {number} [iCluster]
+     * @param {number} [iParentCluster]
+     * @returns {number} number of directory entries built
+     */
+    buildDir(abDir, aFileData, dateMod, iCluster, iParentCluster)
+    {
+        if (dateMod === undefined) dateMod = null;
+        if (iCluster === undefined) iCluster = -1;
+        if (iParentCluster === undefined) iParentCluster = -1;
+
+        let offDir = 0;
+        let cEntries = 0;
+        if (iCluster >= 0) {
+            offDir += this.buildDirEntry(abDir, offDir, ".", 0, DiskImage.ATTR.SUBDIR, dateMod, iCluster);
+            offDir += this.buildDirEntry(abDir, offDir, "..", 0, DiskImage.ATTR.SUBDIR, dateMod, iParentCluster);
+            cEntries += 2;
+        }
+        for (let iFile = 0; iFile < aFileData.length; iFile++) {
+            let file = aFileData[iFile];
+            if (file.cluster === undefined) {
+                this.printf(Device.MESSAGE.DISK, "file %s missing cluster, skipping\n", file.name);
+                continue;
+            }
+            let name = this.buildShortName(file.name, !!(file.attr & DiskImage.ATTR.LABEL));
+            offDir += this.buildDirEntry(abDir, offDir, name, file.size, file.attr, file.date, file.cluster);
+            cEntries++;
+        }
+        return cEntries;
+    }
+
+    /**
+     * buildDirEntry(ab, off, sName, cbFile, bAttr, dateMod, iCluster)
+     *
+     * TODO: Create constants that define the various directory entry fields, including the overall size (32 bytes).
+     *
+     * @this {DiskImage}
+     * @param {Array.<number>} ab contains the bytes of a directory
+     * @param {number} off is the offset within ab to build the next directory entry
+     * @param {string} sName is the file name
+     * @param {number} cbFile is the size of the file, in bytes
+     * @param {number} bAttr contains the attribute bits of the file
+     * @param {Date} dateMod contains the modification date of the file
+     * @param {number} iCluster is the starting cluster of the file
+     * @returns {number} number of bytes added to the directory (normally 32)
+     */
+    buildDirEntry(ab, off, sName, cbFile, bAttr, dateMod, iCluster)
+    {
+        let sExt = "";
+        let offDir = off;
+        let i = sName.indexOf('.');
+        if (i > 0) {
+            sExt = sName.substr(i+1);
+            sName = sName.substr(0, i);
+        }
+        for (i = 0; i < 8; i++) {
+            ab[off++] = (i < sName.length? sName.charCodeAt(i) : 0x20);
+        }
+        for (i = 0; i < 3; i++) {
+            ab[off++] = (i < sExt.length? sExt.charCodeAt(i) : 0x20);
+        }
+
+        /*
+         * File attribute bits at offset 0x0B are next: (0x01 for read-only, 0x02 for hidden, 0x04 for system,
+         * 0x08 for volume label, 0x10 for subdirectory, and 0x20 for archive)
+         */
+        ab[off++] = bAttr;
+
+        /*
+         * Skip 10 bytes, bringing us to offset 0x16: 2 bytes for modification time, plus 2 bytes for modification date.
+         */
+        off += 10;
+        if (dateMod) {
+            let dateTime = this.buildDateTime(dateMod);
+            ab[off++] = dateTime & 0xff;
+            ab[off++] = (dateTime >> 8) & 0xff;
+            dateTime >>= 16;
+            ab[off++] = dateTime & 0xff;
+            ab[off++] = (dateTime >> 8) & 0xff;
+        } else {
+            for (i = 0; i < 4; i++) ab[off++] = 0;
+        }
+
+        /*
+         * Now we're at offset 0x1A, where the starting cluster (2 bytes) and file size (4 bytes) are stored,
+         * completing the 32-byte directory entry.
+         */
+        ab[off++] = iCluster & 0xff;                // first file cluster (low byte)
+        ab[off++] = (iCluster >> 8) & 0xff;         // first file cluster (high byte)
+
+        /*
+         * For subdirectories, we recorded a -1 rather than a 0, because unlike true 0-length files, they DO actually
+         * have a size, it's just not immediately known until we traverse the directory's contents.  However, when it
+         * comes time to the write the directory entry for a subdirectory, the FAT convention is to record it as zero.
+         */
+        if (cbFile < 0) cbFile = 0;
+        ab[off++] = cbFile & 0xff;
+        ab[off++] = (cbFile >> 8) & 0xff;
+        ab[off++] = (cbFile >> 16) & 0xff;
+        ab[off++] = (cbFile >> 24) & 0xff;
+
+        return off - offDir;
+    }
+
+    /**
+     * buildFAT(abFAT, aFileData, iCluster, cbCluster)
+     *
+     * @this {DiskImage}
+     * @param {Array.<number>} abFAT
+     * @param {Array.<FileData>} aFileData
+     * @param {number} iCluster
+     * @param {number} cbCluster
+     * @returns {number}
+     */
+    buildFAT(abFAT, aFileData, iCluster, cbCluster)
+    {
+        let cb;
+        let cSubDirs = 0;
+        for (let iFile = 0; iFile < aFileData.length; iFile++) {
+            cb = aFileData[iFile].size;
+            if (cb < 0) {
+                cb = (aFileData[iFile].files.length + 2) * 32;
+                cSubDirs++;
+            }
+            let cFileClusters = ((cb + cbCluster - 1) / cbCluster) | 0;
+            if (!cFileClusters) {
+                aFileData[iFile].cluster = 0;
+            } else {
+                aFileData[iFile].cluster = iCluster;
+                while (cFileClusters-- > 0) {
+                    let iNextCluster = iCluster + 1;
+                    if (!cFileClusters) iNextCluster = 0xFFF;
+                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: setting cluster entry %d to %#0wx\n", aFileData[iFile].name, iCluster, iNextCluster);
+                    this.buildFATEntry(abFAT, iCluster++, iNextCluster);
+                }
+            }
+        }
+        if (cSubDirs) {
+            for (let iFile = 0; iFile < aFileData.length; iFile++) {
+                cb = aFileData[iFile].size;
+                if (cb < 0) {
+                    iCluster = this.buildFAT(abFAT, aFileData[iFile].files, iCluster, cbCluster);
+                }
+            }
+        }
+        return iCluster;
+    }
+
+    /**
+     * buildFATEntry(abFat, iFat, v)
+     *
+     * @this {DiskImage}
+     * @param {Array.<number>} abFAT
+     * @param {number} iFAT
+     * @param {number} v
+     */
+    buildFATEntry(abFAT, iFAT, v)
+    {
+        let iBit = iFAT * 12;
+        let iByte = (iBit >> 3);
+        if ((iBit % 8) === 0) {
+            abFAT[iByte] = v & 0xff;
+            iByte++;
+            if (abFAT[iByte] === undefined) abFAT[iByte] = 0;
+            abFAT[iByte] = (abFAT[iByte] & 0xF0) | (v >> 8);
+        }
+        else {
+            if (abFAT[iByte] === undefined) abFAT[iByte] = 0;
+            abFAT[iByte] = (abFAT[iByte] & 0x0F) | ((v & 0xF) << 4);
+            abFAT[iByte + 1] = (v >> 4);
+        }
+    }
+
+    /**
+     * buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors)
+     *
+     * @this {DiskImage}
+     * @param {number} cHeads
+     * @param {number} cSectorsPerTrack
+     * @param {number} cbSector
+     * @param {number} cTotalSectors
+     * @returns {Array.<number>}
+     */
+    buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors)
+    {
+        /*
+         * There are four 16-byte partition entries in the MBR, starting at offset 0x1BE,
+         * but we need only one, and like DOS 2.0, we'll use the last one, at offset 0x1EE.
+         */
+        let offSector = 0x1EE;
+        let abSector = this.buildData(cbSector);
+
+        /*
+         * Next 1 byte: status + physical drive #
+         */
+        abSector[offSector++] = 0x80;           // 0x80 indicates an active partition entry
+
+        /*
+         * Next 3 bytes: CHS (Cylinder/Head/Sector) of first partition sector
+         */
+        abSector[offSector++] = 0x00;           // head: 0
+        abSector[offSector++] = 0x02;           // sector: 1 (bits 0-5), cyclinder bits 8-9: 0 (bits 6-7)
+        abSector[offSector++] = 0x00;           // cylinder bits 0-7: 0
+
+        /*
+         * Next 1 byte: partition ID
+         */
+        abSector[offSector++] = 0x01;           // partition ID: 0x01 (FAT12)
+
+        /*
+         * Next 3 bytes: CHS (Cylinder/Head/Sector) of last partition sector
+         */
+        abSector[offSector++] = cHeads-1;
+        let cCylinders = (cTotalSectors / (cHeads * cSectorsPerTrack)) | 0;
+        abSector[offSector++] = cSectorsPerTrack | ((cCylinders & 0x300) >> 2);
+        abSector[offSector++] = cCylinders & 0xff;
+
+        /*
+         * Next 4 bytes: LBA (Logical Block Address) of first partition sector
+         */
+        abSector[offSector++] = 1;
+        abSector[offSector++] = 0x00;
+        abSector[offSector++] = 0x00;
+        abSector[offSector++] = 0x00;
+
+        /*
+         * Next 4 bytes: Number of sectors in partition
+         */
+        abSector[offSector++] = (cTotalSectors & 0xff);
+        abSector[offSector++] = ((cTotalSectors >> 8) & 0xff);
+        abSector[offSector++] = ((cTotalSectors >> 16) & 0xff);
+        abSector[offSector++] = ((cTotalSectors >> 24) & 0xff);
+
+        /*
+         * Since we should be at offset 0x1FE now, store the MBR signature bytes
+         */
+        abSector[offSector++] = 0x55;
+        abSector[offSector] = 0xAA;
+        return abSector;
+    }
+
+    /**
+     * buildShortName(sFile, fLabel)
+     *
+     * @this {DiskImage}
+     * @param {string} sFile is the basename of a file
+     * @param {boolean} [fLabel]
+     * @return {string} containing a corresponding filename in FAT "8.3" format
+     */
+    buildShortName(sFile, fLabel)
+    {
+        let sName = sFile.toUpperCase();
+        let iExt = sName.lastIndexOf('.');
+        let sExt = "";
+        if (iExt >= 0) {
+            sExt = sName.substr(iExt+1);
+            sName = sName.substr(0, iExt);
+        } else if (fLabel && sName.length > 8) {
+            sExt = sName.substr(8);
+        }
+        sName = sName.substr(0, 8).trim();
+        sExt = sExt.substr(0, 3).trim();
+        let iPeriod = -1;
+        if (sExt) {
+            iPeriod = sName.length;
+            sName += '.' + sExt;
+        }
+        for (let i = 0; i < sName.length; i++) {
+            if (i == iPeriod) continue;
+            let ch = sName.charAt(i);
+            if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()-@^_`{}~".indexOf(ch) < 0) {
+                sName = sName.substr(0, i) + '_' + sName.substr(i+1);
+            }
+        }
+        return sName;
     }
 
     /**
@@ -645,17 +1288,17 @@ export default class DiskImage {
      * PSI files are PCE Sector Image files; see https://github.com/jeffpar/pce/blob/master/doc/psi-format.txt for details.
      *
      * @this {DiskImage}
-     * @param {DataBuffer} db
+     * @param {DataBuffer} dbDisk
      * @returns {boolean} true if successful (aDiskData initialized); false otherwise
      */
-    buildDiskFromPSI(db)
+    buildDiskFromPSI(dbDisk)
     {
         this.aDiskData = null;
         this.cbDiskData = 0;
 
         let data = [];
         let chunkOffset = 0;
-        let chunkEnd = db.length;
+        let chunkEnd = dbDisk.length;
         let chunkID, chunkSize = 0, dbChunk;
 
         let CHUNK_PSI  = 0x50534920;
@@ -669,7 +1312,7 @@ export default class DiskImage {
         let getCRC = function(start, end) {
             let crc = 0;
             for (let i = start; i < end; i++) {
-                crc ^= db.readUInt8(i) << 24;
+                crc ^= dbDisk.readUInt8(i) << 24;
                 for (let j = 0; j < 8; j++) {
                     if (crc & 0x80000000) {
                         crc = (crc << 1) ^ 0x1edc6f41;
@@ -683,12 +1326,12 @@ export default class DiskImage {
 
         let getNextChunk = function() {
             if (chunkSize) chunkOffset += chunkSize + 12;
-            chunkID = db.readUInt32BE(chunkOffset);
-            chunkSize = db.readUInt32BE(chunkOffset + 4);
-            let chunkCRC = db.readInt32BE(chunkOffset + 8 + chunkSize);
+            chunkID = dbDisk.readUInt32BE(chunkOffset);
+            chunkSize = dbDisk.readUInt32BE(chunkOffset + 4);
+            let chunkCRC = dbDisk.readInt32BE(chunkOffset + 8 + chunkSize);
             let myCRC = getCRC(chunkOffset, chunkOffset + 8 + chunkSize);
             if (chunkCRC == myCRC) {
-                dbChunk = db.slice(chunkOffset + 8, chunkOffset + 8 + chunkSize);
+                dbChunk = dbDisk.slice(chunkOffset + 8, chunkOffset + 8 + chunkSize);
             } else {
                 this.printf(Device.MESSAGE.WARN, "chunk 0x%x at 0x%x: CRC 0x%x != calculated CRC 0x%x\n", chunkID, chunkOffset, chunkCRC, myCRC);
                 chunkID = CHUNK_END;
@@ -1031,8 +1674,8 @@ export default class DiskImage {
                     }
                 }
             }
-            this.aFileTable = [];
         }
+        this.aFileTable = [];
     }
 
     /**
@@ -1141,7 +1784,7 @@ export default class DiskImage {
      * @this {DiskImage}
      * @param {string} sModule
      * @param {number} nSegment
-     * @return {Object}
+     * @returns {Object}
      */
     getModuleInfo(sModule, nSegment)
     {
@@ -1176,7 +1819,7 @@ export default class DiskImage {
      *
      * @this {DiskImage}
      * @param {string} sSymbol
-     * @return {Array}
+     * @returns {Array}
      */
     getSymbolInfo(sSymbol)
     {
@@ -1367,7 +2010,7 @@ export default class DiskImage {
      *
      * @this {DiskImage}
      * @param {Object} dir
-     * @return {Array.<number>} of LBAs (physical block addresses)
+     * @returns {Array.<number>} of LBAs (physical block addresses)
      */
     convertClusterToSectors(dir)
     {
@@ -1399,7 +2042,7 @@ export default class DiskImage {
      * @param {Object} dir
      * @param {number} cluster
      * @param {number} iByte (0 for low byte of cluster entry, 1 for high byte)
-     * @return {number}
+     * @returns {number}
      */
     getClusterEntry(dir, cluster, iByte)
     {
@@ -1438,7 +2081,7 @@ export default class DiskImage {
      *
      * @this {DiskImage}
      * @param {number} lba (physical block address)
-     * @return {Sector|null} sector
+     * @returns {Sector|null} sector
      */
     getSector(lba)
     {
@@ -1462,7 +2105,7 @@ export default class DiskImage {
      * @this {DiskImage}
      * @param {Array.<number>} ab
      * @param {Array.<number>} aLBA
-     * @return {number} (number of bytes read)
+     * @returns {number} (number of bytes read)
      */
     readSectorArray(ab, aLBA)
     {
@@ -1499,7 +2142,7 @@ export default class DiskImage {
      * @param {Sector} sector
      * @param {number} off (byte offset)
      * @param {number} len (1 to 4 bytes)
-     * @return {number}
+     * @returns {number}
      */
     getSectorData(sector, off, len)
     {
@@ -1526,7 +2169,7 @@ export default class DiskImage {
      * @param {Sector} sector
      * @param {number} off (byte offset)
      * @param {number} len (use -1 to read a null-terminated string)
-     * @return {string}
+     * @returns {string}
      */
     getSectorString(sector, off, len)
     {
@@ -1548,7 +2191,7 @@ export default class DiskImage {
      * @param {FileInfo} file
      * @param {number} lba (physical block address from the file's aLBA)
      * @param {number} off (file offset corresponding to the given LBA of the given file)
-     * @return {boolean} true if successfully updated, false if not
+     * @returns {boolean} true if successfully updated, false if not
      */
     updateSector(file, lba, off)
     {
@@ -1639,11 +2282,11 @@ export default class DiskImage {
     rebuildSector(iCylinder, iHead, sector)
     {
         if (sector[DiskImage.SECTOR.CYLINDER] != undefined) {
-            this.device.assert(sector[DiskImage.SECTOR.CYLINDER] == iCylinder);
+            this.assert(sector[DiskImage.SECTOR.CYLINDER] == iCylinder);
             delete sector[DiskImage.SECTOR.CYLINDER];
         }
         if (sector[DiskImage.SECTOR.HEAD] != undefined) {
-            this.device.assert(sector[DiskImage.SECTOR.HEAD] == iHead);
+            this.assert(sector[DiskImage.SECTOR.HEAD] == iHead);
             delete sector[DiskImage.SECTOR.HEAD];
         }
         let dwPattern;
@@ -1670,7 +2313,7 @@ export default class DiskImage {
             adw = sector['data'];
             if (adw == undefined) {
                 adw = [dwPattern];
-                this.device.assert(dwPattern != undefined);
+                this.assert(dwPattern != undefined);
             } else {
                 delete sector['data'];
             }
@@ -1730,13 +2373,13 @@ export default class DiskImage {
     }
 
     /**
-     * getData(db)
+     * getData(dbDisk)
      *
      * @this {DiskImage}
-     * @param {DataBuffer} db
+     * @param {DataBuffer} dbDisk
      * @returns {boolean} (true if successful, false if error)
      */
-    getData(db)
+    getData(dbDisk)
     {
         let ib = 0;
         let aDiskData = this.aDiskData;
@@ -1749,13 +2392,13 @@ export default class DiskImage {
                         for (let i = 0; i < n; i++) {
                             let b = this.read(sector, i);
                             this.assert(b >= 0);
-                            db.writeUInt8(b, ib++);
+                            dbDisk.writeUInt8(b, ib++);
                         }
                     }
                 }
             }
         }
-        this.assert(ib == db.length);
+        this.assert(ib == dbDisk.length);
         return true;
     }
 
@@ -1839,7 +2482,7 @@ export default class DiskImage {
      * @param {Sector} sector (returned from a previous seek)
      * @param {number} iByte (byte index within the given sector)
      * @param {boolean} [fCompare] is true if this write-compare read
-     * @return {number} the specified (unsigned) byte, or -1 if no more data in the sector
+     * @returns {number} the specified (unsigned) byte, or -1 if no more data in the sector
      */
     read(sector, iByte, fCompare)
     {
@@ -1876,7 +2519,7 @@ export default class DiskImage {
      * @param {number} idSector
      * @param {Sector|null} [sectorPrev]
      * @param {function(Sector,boolean)} [done]
-     * @return {Sector|null} is the requested sector, or null if not found (or not available yet)
+     * @returns {Sector|null} is the requested sector, or null if not found (or not available yet)
      */
     seek(iCylinder, iHead, idSector, sectorPrev, done)
     {
@@ -1960,7 +2603,7 @@ export default class DiskImage {
      * @param {Sector} sector (returned from a previous seek)
      * @param {number} iByte (byte index within the given sector)
      * @param {number} b the byte value to write
-     * @return {boolean|null} true if write successful, false if write-protected, null if out of bounds
+     * @returns {boolean|null} true if write successful, false if write-protected, null if out of bounds
      */
     write(sector, iByte, b)
     {
@@ -2058,7 +2701,7 @@ DiskImage.BOOT = {
 
 /*
  * PCJS_LABEL is our default label, used whenever a more suitable label (eg, the disk image's folder name)
- * is not available or not supplied, and PCJS_OEM is inserted into any DiskDump-generated diskette images.
+ * is not available or not supplied, and PCJS_OEM is inserted into any DiskImage-generated diskette images.
  */
 DiskImage.PCJS_LABEL = "PCJS";
 DiskImage.PCJS_OEM   = "PCJS.ORG";

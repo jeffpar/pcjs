@@ -13,12 +13,12 @@ import DiskImage from "./diskimage.js";
 /**
  * @class FileInfo
  * @property {DiskImage} disk
- * @property {string} path
- * @property {string} name
- * @property {number} attr
- * @property {Date} date
- * @property {number} size
- * @property {number} cluster
+ * @property {string}    path
+ * @property {string}    name
+ * @property {number}    attr
+ * @property {Date}      date
+ * @property {number}    size
+ * @property {number}    cluster
  * @property {Array.<number>} aLBA
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */

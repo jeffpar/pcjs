@@ -1790,7 +1790,8 @@ DiskDump.prototype.readDir = function(sDir, fRoot, done)
     }
 
     let obj = this;
-    let cCallbacks = 0;
+    var cCallbacks = 0;
+
     fs.readdir(sDir, function doneReadDir(err, asFiles) {
         let iFile;
         if (err) {

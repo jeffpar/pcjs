@@ -31,7 +31,7 @@ export default class DataBuffer {
      * @param {number} [start]
      * @param {number} [end]
      */
-    constructor(init, start, end)
+    constructor(init = 0, start, end)
     {
         if (typeof init == "number") {
             init = new ArrayBuffer(init);
@@ -68,16 +68,63 @@ export default class DataBuffer {
     }
 
     /**
-     * fill(b)
+     * copy(dbTarget, offTarget)
      *
      * @this {DataBuffer}
-     * @param {number} b
+     * @param {DataBuffer} dbTarget
+     * @param {number} offTarget
      */
-    fill(b)
+    copy(dbTarget, offTarget)
     {
-        for (let off = 0; off < this.length; off++) {
-            this.dv.setUint8(off, b);
+        let offMax = this.length;
+        let cbMax = dbTarget.length - offTarget;
+        if (offMax > cbMax) offMax = cbMax;
+        for (let off = 0; off < offMax; off++) {
+            dbTarget.writeUInt8(this.readUInt8(off), offTarget + off);
         }
+    }
+
+    /**
+     * fill(data, off, end)
+     *
+     * @this {DataBuffer}
+     * @param {Array|number} data
+     * @param {number} [off]
+     * @param {number} [end]
+     */
+    fill(data, off = 0, end = this.length)
+    {
+        let i = 0;
+        if (end > this.length) end = this.length;
+        for (let o = off; o < end; o++) {
+            this.dv.setUint8(o, typeof data == "number"? data : data[i++]);
+        }
+    }
+
+    /**
+     * new(size)
+     *
+     * @this {DataBuffer}
+     * @param {number} size
+     */
+    new(size)
+    {
+        this.ab = new ArrayBuffer(size);
+        this.length = this.ab.byteLength;
+        this.dv = new DataView(this.ab, 0, this.length);
+    }
+
+    /**
+     * slice(start, end)
+     *
+     * @this {DataBuffer}
+     * @param {number} [start]
+     * @param {number} [end]
+     * @return {DataBuffer}
+     */
+    slice(start, end)
+    {
+        return new DataBuffer(this, start || 0, end);
     }
 
     /**
@@ -203,36 +250,6 @@ export default class DataBuffer {
     writeInt32LE(dw, off)
     {
         this.dv.setInt32(off, dw, true);
-    }
-
-    /**
-     * copy(bufTarget, offTarget)
-     *
-     * @this {DataBuffer}
-     * @param {DataBuffer} bufTarget
-     * @param {number} offTarget
-     */
-    copy(bufTarget, offTarget)
-    {
-        let offMax = this.length;
-        let cbMax = bufTarget.length - offTarget;
-        if (offMax > cbMax) offMax = cbMax;
-        for (let off = 0; off < offMax; off++) {
-            bufTarget.writeUInt8(this.readUInt8(off), offTarget + off);
-        }
-    }
-
-    /**
-     * slice(start, end)
-     *
-     * @this {DataBuffer}
-     * @param {number} [start]
-     * @param {number} [end]
-     * @return {DataBuffer}
-     */
-    slice(start, end)
-    {
-        return new DataBuffer(this, start || 0, end);
     }
 
     /**

@@ -32,10 +32,10 @@ export default class DataBuffer {
      * @param {number} [start]
      * @param {number} [end]
      */
-    constructor(init, start, end)
+    constructor(init = 0, start, end)
     {
         if (typeof init == "number") {
-            this.buffer = Buffer.alloc(init);
+            this.new(init);
         }
         else if (init instanceof Buffer) {
             this.buffer = init;
@@ -49,14 +49,61 @@ export default class DataBuffer {
     }
 
     /**
-     * fill(b)
+     * copy(dbTarget, offTarget)
      *
      * @this {DataBuffer}
-     * @param {number} b
+     * @param {DataBuffer} dbTarget
+     * @param {number} offTarget
      */
-    fill(b)
+    copy(dbTarget, offTarget)
     {
-        this.buffer.fill(b);
+        this.buffer.copy(dbTarget.buffer, offTarget);
+    }
+
+    /**
+     * fill(data, off, end)
+     *
+     * @this {DataBuffer}
+     * @param {Array|number} data
+     * @param {number} [off]
+     * @param {number} [end]
+     */
+    fill(data, off = 0, end = this.length)
+    {
+        if (typeof data == "number") {
+            this.buffer.fill(data, off, end);
+        } else {
+            let i = 0;
+            if (end > this.length) end = this.length;
+            for (let o = off; o < end; o++) {
+                this.buffer[o] = data[i++];
+            }
+        }
+    }
+
+    /**
+     * new(size)
+     *
+     * @this {DataBuffer}
+     * @param {number} size
+     */
+    new(size)
+    {
+        this.buffer = Buffer.alloc(size);
+        this.length = size;
+    }
+
+    /**
+     * slice(start, end)
+     *
+     * @this {DataBuffer}
+     * @param {number} [start]
+     * @param {number} [end]
+     * @returns {DataBuffer}
+     */
+    slice(start, end)
+    {
+        return new DataBuffer(this, start || 0, end);
     }
 
     /**
@@ -77,7 +124,7 @@ export default class DataBuffer {
      *
      * @this {DataBuffer}
      * @param {number} off
-     * @return {number}
+     * @returns {number}
      */
     readUInt8(off)
     {
@@ -101,7 +148,7 @@ export default class DataBuffer {
      *
      * @this {DataBuffer}
      * @param {number} off
-     * @return {number}
+     * @returns {number}
      */
     readUInt16BE(off)
     {
@@ -113,7 +160,7 @@ export default class DataBuffer {
      *
      * @this {DataBuffer}
      * @param {number} off
-     * @return {number}
+     * @returns {number}
      */
     readUInt16LE(off)
     {
@@ -125,7 +172,7 @@ export default class DataBuffer {
      *
      * @this {DataBuffer}
      * @param {number} off
-     * @return {number}
+     * @returns {number}
      */
     readUInt32BE(off)
     {
@@ -137,7 +184,7 @@ export default class DataBuffer {
      *
      * @this {DataBuffer}
      * @param {number} off
-     * @return {number}
+     * @returns {number}
      */
     readUInt32LE(off)
     {
@@ -149,7 +196,7 @@ export default class DataBuffer {
      *
      * @this {DataBuffer}
      * @param {number} off
-     * @return {number}
+     * @returns {number}
      */
     readInt32BE(off)
     {
@@ -161,7 +208,7 @@ export default class DataBuffer {
      *
      * @this {DataBuffer}
      * @param {number} off
-     * @return {number}
+     * @returns {number}
      */
     readInt32LE(off)
     {
@@ -181,36 +228,11 @@ export default class DataBuffer {
     }
 
     /**
-     * copy(bufTarget, offTarget)
-     *
-     * @this {DataBuffer}
-     * @param {DataBuffer} bufTarget
-     * @param {number} offTarget
-     */
-    copy(bufTarget, offTarget)
-    {
-        this.buffer.copy(bufTarget.buffer, offTarget);
-    }
-
-    /**
-     * slice(start, end)
-     *
-     * @this {DataBuffer}
-     * @param {number} [start]
-     * @param {number} [end]
-     * @return {DataBuffer}
-     */
-    slice(start, end)
-    {
-        return new DataBuffer(this, start || 0, end);
-    }
-
-    /**
      * toString(format)
      *
      * @this {DataBuffer}
      * @param {string} [format]
-     * @return {string}
+     * @returns {string}
      */
     toString(format)
     {

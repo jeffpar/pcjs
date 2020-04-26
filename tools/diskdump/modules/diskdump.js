@@ -21,6 +21,16 @@ let device = new Device("node");
 let printf = device.printf.bind(device);
 let stdlib = new StdLib();
 let rootDir;
+let nMaxFiles;
+
+/*
+ * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
+ * A warning is always displayed when we replace line endings in any file being copied to a disk image.
+ *
+ * NOTE: Some files, like ".BAS" files, aren't always ASCII, which is why we now call isASCII() on all
+ * these file contents first.
+ */
+let asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".ASM", ".LRF", ".MAK", ".TXT", ".XML"];
 
 /**
  * getHash(ab, type)
@@ -33,6 +43,150 @@ function getHash(ab, type = "md5")
 {
     let db = new DataBuffer(ab);
     return crypto.createHash(type).update(db.buffer).digest('hex');
+}
+
+/**
+ * isASCII(cata)
+ *
+ * @param {string} data
+ * @return {boolean} true if sData is entirely ASCII (ie, no bytes with bit 7 set)
+ */
+function isASCII(data)
+{
+    for (let i = 0; i < data.length; i++) {
+        let b = data.charCodeAt(i);
+        if (b & 0x80) return false;
+    }
+    return true;
+}
+
+/**
+ * isTextFile(sName)
+ *
+ * @param {string} sName
+ * @return {boolean} true if the filename contains a known text file extension, false if unknown
+ */
+function isTextFile(sName)
+{
+    sName = sName.toUpperCase();
+    for (let i = 0; i < asTextFileExts.length; i++) {
+        if (sName.endsWith(asTextFileExts[i])) return true;
+    }
+    return false;
+}
+
+/**
+ * readDir(sDir, fNormalize, sLabel, nMax)
+ *
+ * @param {string} sDir (directory name)
+ * @param {boolean} [fNormalize] (if true, then known text files will have their line-endings "fixed")
+ * @param {string} [sLabel] (if not set with --label, then basename(sDir) will be used instead)
+ * @param {number} [nMax] (maximum number of files to read; default is 256)
+ * @returns {DiskImage|null}
+ */
+function readDir(sDir, fNormalize = false, sLabel, nMax)
+{
+    let di;
+    nMaxFiles = nMax || 256;
+    if (!sLabel) sLabel = path.basename(sDir);
+    try {
+        let aFileData = readDirFiles(sDir, fNormalize, sLabel);
+        di = new DiskImage(device);
+        let db = new DataBuffer();
+        di.buildDiskFromFiles(db, aFileData);
+    } catch(err) {
+        printf("error: %s\n", err.message);
+        di = null;
+    }
+    return di;
+}
+
+/**
+ * readDirFiles(sDir, fNormalize, sLabel)
+ *
+ * @param {string} sDir (directory name)
+ * @param {boolean} [fNormalize] (if true, then known text files will have their line-endings "fixed")
+ * @param {boolean} [sLabel] (optional volume label; this should NEVER be set when reading subdirectories)
+ * @returns {Array.<FileData>}
+ */
+function readDirFiles(sDir, fNormalize = false, sLabel)
+{
+    let aFileData = [];
+    let asFiles = fs.readdirSync(sDir);
+
+    /*
+     * There are two special label strings you can pass on the command-line:
+     *
+     *      "--label none" (for no volume label at all)
+     *      "--label default" (for our default volume label; currently "PCJS")
+     *
+     * Any other string following "--label" will be used as-is, and if no "--label" is specified
+     * at all, we build a volume label from the basename of the directory.
+     */
+    if (sLabel == "none") {
+        sLabel = "";
+    } else if (sLabel == "default") {
+        sLabel = DiskImage.PCJS_LABEL;
+    }
+
+    /*
+     * The label, if any, will always be first in the list; this shouldn't be a concern since
+     * there is currently no support for building "bootable" disks from a set of files.
+     */
+    if (sLabel) {
+        /*
+         * I used to prefer a hard-coded date/time (eg, the day the IBM PC was introduced, August 12, 1981,
+         * with an arbitrary time of 12pm), in part because it avoided creating different disk images every
+         * time DiskDump was run.  However, I'm not sure I care about that anymore.  Having a timestamp
+         * that reflects the creation date of the disk image seems more useful.
+         */
+        let dateLabel = new Date();
+        let file = {path: sDir, name: sLabel, attr: DiskImage.ATTR.LABEL, date: dateLabel, size: 0};
+        aFileData.push(file);
+    }
+
+    for (let iFile = 0; iFile < asFiles.length && nMaxFiles > 0; iFile++, nMaxFiles--) {
+        /*
+         * fs.readdir() already excludes "." and ".." but there are also a wide variety of hidden
+         * files on *nix systems that begin with a period, which in general we should ignore, too.
+         *
+         * TODO: Consider an override option that will allow hidden file(s) to be included as well.
+         */
+        let sName = asFiles[iFile];
+        if (sName.charAt(0) == '.') continue;
+        let sPath = path.join(sDir, sName);
+        let file = {path: sPath, name: sName};
+        let stats = fs.statSync(sPath);
+        file.date = stats.mtime;
+        if (stats.isDirectory()) {
+            file.attr = DiskImage.ATTR.SUBDIR;
+            file.size = -1;
+            file.data = new DataBuffer();
+            file.files = readDirFiles(sPath, fNormalize);
+        } else {
+            let fText = fNormalize && isTextFile(sName);
+            let data = readFile(sPath, fText? "utf8" : null);
+            if (!data) continue;
+            if (data.length != stats.size) {
+                printf("file data length (%d) does not match file size (%d)\n", data.length, stats.size);
+            }
+            if (fText) {
+                if (isASCII(data)) {
+                    let dataNew = data.replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
+                    if (dataNew != data) printf("replaced line endings in %s (size changed from %d to %d bytes)\n", sName, data.length, dataNew.length);
+                    data = dataNew;
+                } else {
+                    printf("non-ASCII data in %s (line endings unchanged)\n", sName);
+                }
+                data = new DataBuffer(data);
+            }
+            file.attr = 0;      // TODO: Determine when we should specify, say, DiskImage.ATTR.ARCHIVE
+            file.size = data.length;
+            file.data = data;
+        }
+        aFileData.push(file);
+    }
+    return aFileData;
 }
 
 /**
@@ -60,7 +214,7 @@ function readDisk(sFile, forceBPB, sectorIDs, sectorErrors, suppData)
             if (diskName.endsWith(".psi")) {
                 di.buildDiskFromPSI(db);
             } else {
-                di.buildDiskFromBuffer(db, forceBPB, sectorIDs, suppData);
+                di.buildDiskFromBuffer(db, forceBPB, sectorIDs, sectorErrors, suppData);
             }
         }
     } catch(err) {
@@ -71,24 +225,26 @@ function readDisk(sFile, forceBPB, sectorIDs, sectorErrors, suppData)
 }
 
 /**
- * readFile(sFile)
+ * readFile(sFile, encoding)
  *
  * @param {string} [sFile]
- * @returns {string|undefined}
+ * @param {string|null} [encoding]
+ * @returns {DataBuffer|string|undefined}
  */
-function readFile(sFile)
+function readFile(sFile, encoding = "utf8")
 {
-    let sData;
+    let data;
     if (sFile) {
         try {
             if (fs.existsSync(sFile)) {
-                sData = fs.readFileSync(sFile, "utf8");
+                data = fs.readFileSync(sFile, encoding);
+                if (!encoding) data = new DataBuffer(data);
             }
         } catch(err) {
             printf("error: %s\n", err.message);
         }
     }
-    return sData;
+    return data;
 }
 
 /**
@@ -119,21 +275,26 @@ function readJSON(sFile)
 function writeDisk(sFile, di, fOverwrite)
 {
     let diskName = path.basename(sFile);
-    if (!fs.existsSync(sFile) || fOverwrite) {
-        let data;
-        if (sFile.endsWith(".json")) {
-            data = di.getJSON();
+    try {
+        if (!fs.existsSync(sFile) || fOverwrite) {
+            let data;
+            if (sFile.endsWith(".json")) {
+                data = di.getJSON();
+            } else {
+                let db = new DataBuffer(di.getSize());
+                if (di.getData(db)) data = db.buffer;
+            }
+            if (data) {
+                fs.writeFileSync(sFile, data);
+            } else {
+                printf("%s not written, no data\n", diskName);
+            }
         } else {
-            let db = new DataBuffer(di.getSize());
-            if (di.getData(db)) data = db.buffer;
+            printf("%s exists, use --overwrite to replace\n", diskName);
         }
-        if (data) {
-            fs.writeFileSync(sFile, data);
-        } else {
-            printf("%s not written, no data\n", diskName);
-        }
-    } else {
-        printf("%s exists, use --overwrite to replace\n", diskName);
+    }
+    catch(err) {
+        printf("error: %s\n", err.message);
     }
 }
 
@@ -154,18 +315,21 @@ function main(argc, argv)
     }
     device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);
 
-    let input = argv['disk'];
-    if (input) {
-        let di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['supp']));
-        if (di) {
-            if (argv['list']) {
-                let list = di.getFileListing();
-                printf(list);
-            }
-            printf("disk size: %d\n", di.getSize());
-            let output = argv['output'];
-            if (output) writeDisk(output, di, argv['overwrite']);
+    let input, di;
+    if ((input = argv['disk'])) {
+        di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['supp']));
+    }
+    else if ((input = argv['dir'])) {
+        di = readDir(input, argv['normalize'], argv['label'], +argv['maxfiles']);
+    }
+    if (di) {
+        if (argv['list']) {
+            let list = di.getFileListing();
+            printf(list);
         }
+        printf("disk size: %d\n", di.getSize());
+        let output = argv['output'];
+        if (output) writeDisk(output, di, argv['overwrite']);
         return;
     }
 

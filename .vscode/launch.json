@@ -29,7 +29,7 @@
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/tools/diskdump/modules/diskdump.js",
-        "args": ["--disk","../../../diskettes/pcx86/sys/dos/ibm/2.00/archive/PCDOS200-DISK1.img","--output","foo.json","--overwrite"],
+        "args": ["--dir","archive/test","--output","test.img","--overwrite","--list","--normalize"],
         "cwd": "${workspaceFolder}/tools/diskdump/modules",
         "stopOnEntry": false,
         "console": "internalConsole"
