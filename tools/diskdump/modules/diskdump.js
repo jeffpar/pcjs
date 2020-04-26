@@ -36,28 +36,59 @@ function getHash(ab, type = "md5")
 }
 
 /**
- * readDisk(sFile, fRead)
+ * readDisk(sFile, forceBPB, sectorIDs, sectorErrors, suppData)
  *
  * @param {string} sFile
- * @param {boolean} [fRead]
- * @returns {DiskImage|undefined}
+ * @param {boolean} [forceBPB]
+ * @param {Array|string} [sectorIDs]
+ * @param {Array|string} [sectorErrors]
+ * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
+ * @returns {DiskImage|null}
  */
-function readDisk(sFile, fRead)
+function readDisk(sFile, forceBPB, sectorIDs, sectorErrors, suppData)
 {
-    let db, di, baseName;
+    let db, di
     try {
-        if (sFile.endsWith(".json")) {
+        let diskName = path.basename(sFile);
+        di = new DiskImage(device, diskName);
+        if (diskName.endsWith(".json")) {
             db = fs.readFileSync(sFile, "utf8");
-            baseName = path.basename(sFile, ".json")
-        } else {
-            db = new DataBuffer(fs.readFileSync(sFile));
-            baseName = path.basename(sFile, ".img")
+            di.buildDiskFromJSON(db);
         }
-        di = new DiskImage(device, db, baseName, fRead);
+        else {
+            db = new DataBuffer(fs.readFileSync(sFile));
+            if (diskName.endsWith(".psi")) {
+                di.buildDiskFromPSI(db);
+            } else {
+                di.buildDiskFromBuffer(db, forceBPB, sectorIDs, suppData);
+            }
+        }
     } catch(err) {
         printf("error: %s\n", err.message);
+        return null;
     }
     return di;
+}
+
+/**
+ * readFile(sFile)
+ *
+ * @param {string} [sFile]
+ * @returns {string|undefined}
+ */
+function readFile(sFile)
+{
+    let sData;
+    if (sFile) {
+        try {
+            if (fs.existsSync(sFile)) {
+                sData = fs.readFileSync(sFile, "utf8");
+            }
+        } catch(err) {
+            printf("error: %s\n", err.message);
+        }
+    }
+    return sData;
 }
 
 /**
@@ -79,18 +110,30 @@ function readJSON(sFile)
 }
 
 /**
- * writeDisk(sFile, data, fOverwrite)
+ * writeDisk(sFile, di, fOverwrite)
  *
  * @param {string} sFile
- * @param {Buffer|string} data
+ * @param {DiskImage} di
  * @param {boolean} [fOverwrite]
  */
-function writeDisk(sFile, data, fOverwrite)
+function writeDisk(sFile, di, fOverwrite)
 {
+    let diskName = path.basename(sFile);
     if (!fs.existsSync(sFile) || fOverwrite) {
-        fs.writeFileSync(sFile, data);
+        let data;
+        if (sFile.endsWith(".json")) {
+            data = di.getJSON();
+        } else {
+            let db = new DataBuffer(di.getSize());
+            if (di.getData(db)) data = db.buffer;
+        }
+        if (data) {
+            fs.writeFileSync(sFile, data);
+        } else {
+            printf("%s not written, no data\n", diskName);
+        }
     } else {
-        printf("%s exists, use --overwrite to replace\n", path.basename(sFile));
+        printf("%s exists, use --overwrite to replace\n", diskName);
     }
 }
 
@@ -109,21 +152,19 @@ function main(argc, argv)
         printf("diskdump v%s\n", Device.VERSION);
         device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.FILE, true);
     }
+    device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);
 
     let input = argv['disk'];
     if (input) {
-        let di = readDisk(input, argv['list']);
-        if (argv['list']) {
-            let list = di.getFileListing();
-            printf(list);
-            let manifest = di.getFileManifest(getHash, "md5");
-            printf("manifest: %2j\n", manifest);
-        }
-        printf("disk size: %d\n", di.getSize());
-        let output = argv['output'];
-        if (output) {
-            let data = di.getJSON();
-            writeDisk(output, data, argv['overwrite']);
+        let di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['supp']));
+        if (di) {
+            if (argv['list']) {
+                let list = di.getFileListing();
+                printf(list);
+            }
+            printf("disk size: %d\n", di.getSize());
+            let output = argv['output'];
+            if (output) writeDisk(output, di, argv['overwrite']);
         }
         return;
     }
@@ -142,7 +183,16 @@ function main(argc, argv)
                     let di = readDisk(sFile, true);
                     if (di) {
                         let manifest = di.getFileManifest(getHash, "md5");
-                        if (argv['verbose']) {
+                        if (argv['dumpall'] == "md5") {
+                            manifest.forEach((file) => {
+                                if (file['md5']) {
+                                    printf("%s  %-12s  %s  %s:%s\n", file['md5'], file.name, file.date, di.diskName, file.path);
+                                } else {
+                                    device.assert(file.size == 0);
+                                }
+                            });
+                        }
+                        else if (argv['verbose']) {
                             printf("manifest for %s: %2j\n", diskette.path, manifest);
                         } else {
                             printf("manifest for %s contains %d file(s)\n", diskette.path, manifest.length);

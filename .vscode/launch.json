@@ -29,18 +29,8 @@
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/tools/diskdump/modules/diskdump.js",
-        "args": ["--dumpall"],
-        "cwd": "${workspaceFolder}",
-        "stopOnEntry": false,
-        "console": "internalConsole"
-      },
-      {
-        "name": "Node: diskettes.js",
-        "type": "node",
-        "request": "launch",
-        "program": "${workspaceFolder}/tmp/misc/diskettes.js",
-        "args": ["~/Sites/pcjs/private", "--debug"],
-        "cwd": "${workspaceFolder}",
+        "args": ["--disk","../../../diskettes/pcx86/sys/dos/ibm/2.00/archive/PCDOS200-DISK1.img","--output","foo.json","--overwrite"],
+        "cwd": "${workspaceFolder}/tools/diskdump/modules",
         "stopOnEntry": false,
         "console": "internalConsole"
       },

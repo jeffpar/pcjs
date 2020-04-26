@@ -62,6 +62,8 @@ Output from SYMDEB Version 4.00:
     <expr> ops: + - * / : not seg off by wo dw poi port wport mod and xor or
     <type> : Byte, Word, Doubleword, Asciz, Shortreal, Longreal, Tenbytereal
 
+### Earlier Versions
+
 Earlier versions of SYMDEB existed, too.  For example, it was part of
 [Microsoft Macro Assembler 3.01](/software/pcx86/lang/microsoft/masm/3.01/):
 
@@ -123,6 +125,8 @@ If there was a SYMDEB Version 1.xx or 2.xx, I've never seen it.  It's possible t
 the first (public) version, and since it would have started as a fork of the DOS DEBUG utility, the initial version
 may have simply mirrored the contemporaneous version of DOS, which in mid-1984, would have been DOS Version 3.00.
 
+### Windows SDK Versions
+
 Other early versions of SYMDEB were also bundled with Windows SDKs.  In the Windows 1.01 SDK:
 
 	 Volume in drive A is WINDEV1    
@@ -159,6 +163,16 @@ and included several Windows-specific commands, such as:
     DH - Displays local heap for current DS
     DG - Displays global heap for Windows
     DQ - Displays [*] HQ - HTASK    CHANGEBITS WAKEBITS WAKEMASK
+
+In the Windows 2.03 SDK:
+
+     Volume in drive A is UTILITY 
+     Directory of  A:\BINAPPS
+    
+    SYMDEB   EXE    43593   1-29-88  12:00a
+            1 File(s)    577024 bytes free
+
+Although the binary had changed, SYMDEB displayed the same version and copyright as in the Windows 1.03 SDK.
 
 In the Windows 3.00 SDK:
  
