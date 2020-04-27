@@ -266,20 +266,22 @@ function readJSON(sFile)
 }
 
 /**
- * writeDisk(sFile, di, fOverwrite)
+ * writeDisk(sFile, di, fLegacy, indent, fOverwrite)
  *
  * @param {string} sFile
  * @param {DiskImage} di
+ * @param {boolean} [fLegacy]
+ * @param {number} [indent]
  * @param {boolean} [fOverwrite]
  */
-function writeDisk(sFile, di, fOverwrite)
+function writeDisk(sFile, di, fLegacy = false, indent = 0, fOverwrite = false)
 {
     let diskName = path.basename(sFile);
     try {
         if (!fs.existsSync(sFile) || fOverwrite) {
             let data;
             if (sFile.endsWith(".json")) {
-                data = di.getJSON();
+                data = di.getJSON(fLegacy);
             } else {
                 let db = new DataBuffer(di.getSize());
                 if (di.getData(db)) data = db.buffer;
@@ -337,7 +339,7 @@ function main(argc, argv)
             });
         }
         let output = argv['output'];
-        if (output) writeDisk(output, di, argv['overwrite']);
+        if (output) writeDisk(output, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite']);
         return;
     }
 

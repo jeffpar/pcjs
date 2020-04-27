@@ -72,6 +72,7 @@ export default class DiskImage {
         this.assert = device.assert.bind(device);
         this.diskName = diskName;
         this.fWritable = fWritable;
+        this.volDesc = null;
         this.aFileTable = null;
     }
 
@@ -1468,7 +1469,7 @@ export default class DiskImage {
             /*
              * TODO: The following volume detection logic could be simplified or even eliminated by creating
              * a uniform volume descriptor at the time the image is loaded, and persisting that as part of a new
-             * "extended" JSON disk format.  THe reason that hasn't happened already is that not all image types
+             * "extended" JSON disk format.  The reason that hasn't happened already is that not all image types
              * require it.  In particular, if the disk image was built from an (older) JSON file, that file only
              * tells us the disk geometry, nothing about the volume inside.
              */
@@ -1482,7 +1483,7 @@ export default class DiskImage {
             }
 
             let idFAT = 0;
-            dir.lbaVolume = dir.vbaTotal = 0;
+            dir.lbaVolume = dir.lbaTotal = 0;
             dir.cbSector = this.getSectorData(sectorBoot, DiskImage.BPB.SECTOR_BYTES, 2);
             dir.idMedia = this.getSectorData(sectorBoot, DiskImage.BPB.MEDIA_ID, 1);
 
@@ -1515,7 +1516,7 @@ export default class DiskImage {
                              */
                             dir.vbaRoot = dir.vbaFAT + bpb[DiskImage.BPB.FAT_SECS] * bpb[DiskImage.BPB.TOTAL_FATS];
                             dir.nClusterSecs = bpb[DiskImage.BPB.CLUSTER_SECS];
-                            dir.vbaTotal = cbDiskBPB / this.cbSector;
+                            dir.lbaTotal = cbDiskBPB / this.cbSector;
                             dir.nEntries = bpb[DiskImage.BPB.ROOT_DIRENTS];
                             dir.cbSector = this.cbSector;
                             break;
@@ -1523,7 +1524,7 @@ export default class DiskImage {
                     }
                 }
 
-                if (!dir.vbaTotal) {
+                if (!dir.lbaTotal) {
                     /*
                      * So, this is either a fixed (partitioned) disk, or a disk using a non-standard sector size; let's assume
                      * the former and check for an MBR.  For now, we're only going to process the first active partition we find.
@@ -1550,8 +1551,8 @@ export default class DiskImage {
                 }
             }
 
-            if (!dir.vbaTotal) {
-                dir.vbaTotal = this.getSectorData(sectorBoot, DiskImage.BPB.TOTAL_SECS, 2) || this.getSectorData(sectorBoot, DiskImage.BPB.LARGE_SECS, 4);
+            if (!dir.lbaTotal) {
+                dir.lbaTotal = this.getSectorData(sectorBoot, DiskImage.BPB.TOTAL_SECS, 2) || this.getSectorData(sectorBoot, DiskImage.BPB.LARGE_SECS, 4);
                 dir.vbaFAT = this.getSectorData(sectorBoot, DiskImage.BPB.RESERVED_SECS, 2);
                 dir.vbaRoot = dir.vbaFAT + this.getSectorData(sectorBoot, DiskImage.BPB.FAT_SECS, 2) * this.getSectorData(sectorBoot, DiskImage.BPB.TOTAL_FATS, 1);
                 dir.nEntries = this.getSectorData(sectorBoot, DiskImage.BPB.ROOT_DIRENTS, 2);
@@ -1559,7 +1560,7 @@ export default class DiskImage {
             }
 
             dir.vbaData = dir.vbaRoot + (((dir.nEntries * DiskImage.DIRENT.LENGTH + (dir.cbSector - 1)) / dir.cbSector) | 0);
-            dir.nClusters = (((dir.vbaTotal - dir.vbaData) / dir.nClusterSecs) | 0);
+            dir.nClusters = (((dir.lbaTotal - dir.vbaData) / dir.nClusterSecs) | 0);
 
             /*
              * In all FATs, the first valid cluster number is 2, as 0 is used to indicate a free cluster and 1 is reserved.
@@ -1590,13 +1591,13 @@ export default class DiskImage {
                 return;
             }
 
-            if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s:\n  vbaFAT: %d\n  vbaRoot: %d\n  vbaData: %d\n  vbaTotal: %d\n  nClusterSecs: %d\n  nClusters: %d\n", this.diskName, dir.vbaFAT, dir.vbaRoot, dir.vbaData, dir.vbaTotal, dir.nClusterSecs, dir.nClusters);
+            if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s:\n  vbaFAT: %d\n  vbaRoot: %d\n  vbaData: %d\n  lbaTotal: %d\n  nClusterSecs: %d\n  nClusters: %d\n", this.diskName, dir.vbaFAT, dir.vbaRoot, dir.vbaData, dir.lbaTotal, dir.nClusterSecs, dir.nClusters);
 
             /*
              * The following assertion is here only to catch anomalies; it is NOT a requirement that the number of data sectors
              * be a perfect multiple of nClusterSecs, but if it ever happens, it's worth verifying we didn't miscalculate something.
              */
-            let nWasted = (dir.vbaTotal - dir.vbaData) % dir.nClusterSecs;
+            let nWasted = (dir.lbaTotal - dir.vbaData) % dir.nClusterSecs;
             if (nWasted) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: %d-byte disk image wasting %d sectors\n", this.diskName, cbDisk, nWasted);
 
             /*
@@ -1608,6 +1609,8 @@ export default class DiskImage {
              */
             this.assert(!((dir.nEntries * DiskImage.DIRENT.LENGTH) % dir.cbSector));
 
+            this.buildVolDesc(dir);
+
             let aLBA = [];
             for (let vba = dir.vbaRoot; vba < dir.vbaData; vba++) aLBA.push(dir.lbaVolume + vba);
             this.getDir(dir, "", aLBA);
@@ -1615,12 +1618,12 @@ export default class DiskImage {
             /*
              * Create the sector-to-file mappings now.
              */
-            for (i = 0; i < this.aFileTable.length; i++) {
-                let file = this.aFileTable[i];
+            for (let iFile = 0; iFile < this.aFileTable.length; iFile++) {
+                let file = this.aFileTable[iFile];
                 if (file.name == "." || file.name == "..") continue;
                 off = 0;
                 for (iSector = 0; iSector < file.aLBA.length; iSector++) {
-                    this.updateSector(file, file.aLBA[iSector], off);
+                    this.updateSector(iFile, off, file.aLBA[iSector]);
                     off += this.cbSector;
                 }
                 file.loadSymbols();
@@ -1665,6 +1668,33 @@ export default class DiskImage {
     }
 
     /**
+     * buildVolDesc(dir)
+     *
+     * The directory (dir) object used to read FAT directories contains everything we need to know about the volume as well.
+     *
+     * NOTE: This assumes a disk image containing a single FAT volume.  For partitioned disk images, only the first volume will be recorded.
+     *
+     * @this {DiskImage}
+     * @param {Object} dir
+     */
+    buildVolDesc(dir)
+    {
+        this.volDesc = {
+            [DiskImage.VOLDESC.MEDIA_ID]: dir.idMedia,
+            [DiskImage.VOLDESC.LBA_VOL]: dir.lbaVolume,
+            [DiskImage.VOLDESC.LBA_TOTAL]: dir.lbaTotal,
+            [DiskImage.VOLDESC.VBA_FAT]: dir.vbaFAT,
+            [DiskImage.VOLDESC.FAT_ID]: dir.nFATBits,
+            [DiskImage.VOLDESC.VBA_ROOT]: dir.vbaRoot,
+            [DiskImage.VOLDESC.ROOT_TOTAL]: dir.nEntries,
+            [DiskImage.VOLDESC.VBA_DATA]: dir.vbaData,
+            [DiskImage.VOLDESC.CLUS_SECS]: dir.nClusterSecs,
+            [DiskImage.VOLDESC.CLUS_TOTAL]: dir.nClusters,
+            [DiskImage.VOLDESC.CLUS_MAX]: dir.clusterMax
+        };
+    }
+
+    /**
      * checkMediaID(idMedia)
      *
      * @this {DiskImage}
@@ -1689,6 +1719,7 @@ export default class DiskImage {
      */
     deleteFileTable()
     {
+        this.volDesc = null;
         if (this.aFileTable && this.aFileTable.length) {
             let aDiskData = this.aDiskData;
             for (let iCylinder = 0; iCylinder < aDiskData.length; iCylinder++) {
@@ -1781,6 +1812,26 @@ export default class DiskImage {
     }
 
     /**
+     * getFileInfo(file, fComplete)
+     *
+     * @this {DiskImage}
+     * @param {FileInfo} file
+     * @returns {Object}
+     */
+    getFileInfo(file, fComplete)
+    {
+        let info = {};
+        info[FileInfo.MANIFEST.PATH] = file.path.replace(/\\/g, '/');
+        if (fComplete) {
+            info[FileInfo.MANIFEST.NAME] = file.name;
+        }
+        info[FileInfo.MANIFEST.ATTR] = this.device.sprintf("%#0bx", file.attr);
+        info[FileInfo.MANIFEST.DATE] = this.device.sprintf("%#T", file.date);
+        info[FileInfo.MANIFEST.SIZE] = file.size;
+        return info;
+    }
+
+    /**
      * getFileManifest(fnHash, typeHash)
      *
      * Returns an array of info objects, to serve as a manifest.  Each object is largely a
@@ -1800,13 +1851,7 @@ export default class DiskImage {
             for (let i = 0; i < this.aFileTable.length; i++) {
                 let file = this.aFileTable[i];
                 if (file.name == "." || file.name == "..") continue;
-                let info = {
-                    [FileInfo.MANIFEST.PATH]: file.path.replace(/\\/g, '/'),
-                    [FileInfo.MANIFEST.NAME]: file.name,
-                    [FileInfo.MANIFEST.ATTR]: this.device.sprintf("%#0bx", file.attr),
-                    [FileInfo.MANIFEST.DATE]: this.device.sprintf("%#T", file.date),
-                    [FileInfo.MANIFEST.SIZE]: file.size
-                };
+                let info = this.getFileInfo(file, true);
                 if (fnHash && file.size) {
                     let ab = new Array(file.size);
                     this.readSectorArray(ab, file.aLBA);
@@ -2225,17 +2270,17 @@ export default class DiskImage {
     }
 
     /**
-     * updateSector(file, lba, off)
+     * updateSector(iFile, off, lba)
      *
      * Like getSector(), this must convert a LBA into CHS values; consider factoring that conversion code out.
      *
      * @this {DiskImage}
-     * @param {FileInfo} file
-     * @param {number} lba (physical block address from the file's aLBA)
+     * @param {number} iFile
      * @param {number} off (file offset corresponding to the given LBA of the given file)
+     * @param {number} lba (physical block address from the file's aLBA)
      * @returns {boolean} true if successfully updated, false if not
      */
-    updateSector(file, lba, off)
+    updateSector(iFile, off, lba)
     {
         let nSectorsPerCylinder = this.nHeads * this.nSectors;
         let iCylinder = (lba / nSectorsPerCylinder) | 0;
@@ -2244,6 +2289,7 @@ export default class DiskImage {
         let iSector = (nSectorsRemaining % this.nSectors);
         let cylinder, head, sector;
         if ((cylinder = this.aDiskData[iCylinder]) && (head = cylinder[iHead]) && (sector = head[iSector])) {
+            let file = this.aFileTable[iFile];
             if (sector[DiskImage.SECTOR.ID] != iSector + 1) {
                 this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "warning: %d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, iSector + 1, sector[DiskImage.SECTOR.ID], file.path);
             }
@@ -2251,7 +2297,7 @@ export default class DiskImage {
                 this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, 'warning: "%s" cross-linked at offset %d with "%s" at offset %d\n', sector[DiskImage.SECTOR.FILE_INFO].path, sector[DiskImage.SECTOR.FILE_OFFSET], file.path, off);
                 return false;
             }
-            sector[DiskImage.SECTOR.FILE_INFO] = file;
+            sector[DiskImage.SECTOR.FILE_INFO] = iFile;
             sector[DiskImage.SECTOR.FILE_OFFSET] = off;
             return true;
         }
@@ -2445,16 +2491,41 @@ export default class DiskImage {
     }
 
     /**
-     * getJSON(indent)
+     * getJSON(fLegacy, indent)
+     *
+     * If a disk image contains a recognized volume type (ie, FAT12 or FAT16), we now prefer to produce an
+     * "extended" JSON image, which will include a volume descriptor (think "modern BPB"), a file table, and
+     * sector-level "metadata" which, for every used sector, refers back to a file in the file table (along
+     * with a file offset).
+     *
+     * To create a "legacy" JSON image, without any "extended" information, set fLegacy to true.
      *
      * @this {DiskImage}
-     * @param {number} [indent]
+     * @param {boolean} [fLegacy] (must be explicitly set to true to generate a "legacy" JSON disk image)
+     * @param {number} [indent] (indentation is not recommended, due to significant bloat)
      * @returns {string}
      */
-    getJSON(indent = 0)
+    getJSON(fLegacy = false, indent = 0)
     {
-        this.deleteFileTable();
-        return JSON.stringify(this.aDiskData, null, indent);
+        let aFileData;
+        if (!fLegacy) {
+            this.buildFileTable();
+            if (this.aFileTable.length) {
+                aFileData = [];
+                for (let iFile = 0; iFile < this.aFileTable.length; iFile++) {
+                    aFileData.push(this.getFileInfo(this.aFileTable[iFile]));
+                }
+            }
+        } else {
+            this.deleteFileTable();
+        }
+        let sDiskData = JSON.stringify(this.aDiskData, null, indent);
+        if (aFileData) {
+            let sVolDesc = JSON.stringify(this.volDesc, null, indent + 2);
+            let sFileData = JSON.stringify(aFileData, null, indent + 2);
+            sDiskData = "{\n\"volDesc\":" + sVolDesc + ",\n\"fileTable\":" + sFileData + ",\n\"diskData\":" + sDiskData + "\n}";
+        }
+        return sDiskData;
     }
 
     /**
@@ -2694,7 +2765,24 @@ export default class DiskImage {
 }
 
 /*
- * Sector object keys.
+ * Volume descriptor properties.
+ */
+DiskImage.VOLDESC = {
+    MEDIA_ID:   'idMedia',          // media ID
+    LBA_VOL:    'lbaVol',           // LBA of volume
+    LBA_TOTAL:  'lbaTotal',         // total blocks in volume
+    VBA_FAT:    'vbaFAT',           // VBA of first block of (first) FAT
+    FAT_ID:     'idFAT',            // type of FAT (ie, 12 or 16)
+    VBA_ROOT:   'vbaRoot',          // VBA of root directory
+    ROOT_TOTAL: 'rootTotal',        // total entries in root directory
+    VBA_DATA:   'vbaData',          // VBA of data area
+    CLUS_SECS:  'clusSecs',         // number of sectors per cluster
+    CLUS_TOTAL: 'clusTotal',        // total clusters in data area
+    CLUS_MAX:   'clusMax'           // maximum valid cluster number
+};
+
+/*
+ * Sector object properties.
  */
 DiskImage.SECTOR = {
     CYLINDER:   'c',                // cylinder number (0-based)
@@ -2702,16 +2790,17 @@ DiskImage.SECTOR = {
     ID:         's',                // sector ID (generally 1-based, except for unusual/copy-protected disks)
     LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks)
     DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated)
+    FILE_INFO:  'f',                // "extended" JSON disk images only
+    FILE_OFFSET:'o',                // "extended" JSON disk images only
+    /*
+     * The following properties occur very infrequently (and usually only in copy-protected or degraded disk images),
+     * hence the longer, more meaningful strings.
+     */
     DATA_CRC:   'dataCRC',
     DATA_ERROR: 'dataError',
     DATA_MARK:  'dataMark',
     HEAD_CRC:   'headCRC',
-    HEAD_ERROR: 'headError',
-    /*
-     * The following properties are only added for disk; they are not stored in JSON disk images.
-     */
-    FILE_INFO:  'fileInfo',
-    FILE_OFFSET:'fileOffset'
+    HEAD_ERROR: 'headError'
 };
 
 DiskImage.MBR = {
