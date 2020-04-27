@@ -29,7 +29,7 @@
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/tools/diskdump/modules/diskdump.js",
-        "args": ["--dir","archive/test","--output","test.img","--overwrite","--list","--normalize"],
+        "args": ["--disk","test.json","--list"],
         "cwd": "${workspaceFolder}/tools/diskdump/modules",
         "stopOnEntry": false,
         "console": "internalConsole"
