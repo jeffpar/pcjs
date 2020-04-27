@@ -29,7 +29,7 @@
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/tools/diskdump/modules/diskdump.js",
-        "args": ["--disk","test.json","--list"],
+        "args": ["--disk","../../../harddisks/pcx86/10mb/archive/MSDOS320-C400.img","--list"],
         "cwd": "${workspaceFolder}/tools/diskdump/modules",
         "stopOnEntry": false,
         "console": "internalConsole"

@@ -1461,7 +1461,7 @@ export default class DiskImage {
                 break;
 
             default:
-                this.printf(Device.MESSAGE.WARNING, "unrecognized chunk at 0x%x: 0x%08x\n", chunkOffset, chunkID);
+                this.printf(Device.MESSAGE.WARN, "unrecognized chunk at 0x%x: 0x%08x\n", chunkOffset, chunkID);
                 chunkID = 0;
             }
             if (!chunkID) break;
@@ -1592,6 +1592,8 @@ export default class DiskImage {
         }
 
         if (!vol.idMedia) {
+            idFAT = 0;
+            vol.cbSector = this.cbSector;
             /*
              * So, this is either a fixed (partitioned) disk, or a disk using a non-standard sector size; let's assume
              * the former and check for an MBR.  For now, we're only going to process the first active partition we find.
@@ -1613,13 +1615,15 @@ export default class DiskImage {
             }
             if (iEntry == 4) sectorBoot = null;
             if (!sectorBoot) {
-                if (!iVol) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: %d-byte disk image contains unknown volume(s)\n", this.diskName, cbDisk);
+                if (!iVol) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: %d-byte disk image contains unknown volume(s)\n", this.diskName, cbDisk);
                 return null;
             }
             vol.iPartition = iEntry;
+            vol.sectorFATCache = null;  // since vol.lbsStart may have changed, these cache variables must be flushed as well
         }
 
         if (!vol.lbaTotal) {
+            vol.idMedia = this.getSectorData(sectorBoot, DiskImage.BPB.MEDIA_ID, 1);
             vol.lbaTotal = this.getSectorData(sectorBoot, DiskImage.BPB.TOTAL_SECS, 2) || this.getSectorData(sectorBoot, DiskImage.BPB.LARGE_SECS, 4);
             vol.vbaFAT = this.getSectorData(sectorBoot, DiskImage.BPB.RESERVED_SECS, 2);
             vol.vbaRoot = vol.vbaFAT + this.getSectorData(sectorBoot, DiskImage.BPB.FAT_SECS, 2) * this.getSectorData(sectorBoot, DiskImage.BPB.TOTAL_FATS, 1);
@@ -1765,25 +1769,33 @@ export default class DiskImage {
     }
 
     /**
-     * getFileListing()
+     * getFileListing(iVol)
      *
      * @this {DiskImage}
+     * @param {number} [iVol]
      * @returns {string}
      */
-    getFileListing()
+    getFileListing(iVol = 0)
     {
         let sListing = "";
         if (this.buildTables()) {
+            let curVol = -1;
             let curDir = null;
-            let cbDir = 0, nDir = 0;
+            let cbDir = 0, nFiles = 0;
             let cbTotal = 0, nTotal = 0;
-            let getTotal = function(nDir, cbDir) {
-                return this.device.sprintf(" %8d file(s)   %8d bytes\n", nDir, cbDir);
+            let getTotal = function(nFiles, cbDir) {
+                return this.device.sprintf(" %8d file(s)   %8d bytes\n", nFiles, cbDir);
             }.bind(this);
-            let i, sLabel = "";
+            let i, sLabel = "", sDrive = "?";
             for (i = 0; i < this.fileTable.length; i++) {
                 let file = this.fileTable[i];
-                if (file.path.lastIndexOf('\\') > 0) break;     // don't search beyond the root directory for a volume label
+                if (file.iVol != iVol) continue;
+                if (curVol != file.iVol) {
+                    let vol = this.volTable[file.iVol];
+                    sDrive = vol.iPartition < 0? "A" : "C";
+                    curVol = file.iVol;
+                }
+                if (file.path.lastIndexOf('\\') > 0) break;     // don't look beyond the root directory for a volume label
                 if (file.attr & DiskImage.ATTR.VOLUME) {
                     sLabel = file.name.replace(".", "");
                     break;
@@ -1806,13 +1818,13 @@ export default class DiskImage {
                 }
                 if (curDir != dir) {
                     if (curDir != null) {
-                        sListing += getTotal(nDir, cbDir);
+                        sListing += getTotal(nFiles, cbDir);
                     } else {
-                        sListing += this.device.sprintf("\nVolume in drive A %s%s\n", sLabel? "is " : "has no label", sLabel);
+                        sListing += this.device.sprintf("\nVolume in drive %s %s%s", sDrive, sLabel? "is " : "has no label", sLabel);
                     }
                     curDir = dir;
-                    sListing += this.device.sprintf("Directory of A:%s\n\n", dir);
-                    cbDir = nDir = 0;
+                    sListing += this.device.sprintf("\nDirectory of %s:%s\n\n", sDrive, dir);
+                    cbDir = nFiles = 0;
                 }
                 let sSize;
                 if (file.attr & DiskImage.ATTR.SUBDIR) {
@@ -1822,12 +1834,17 @@ export default class DiskImage {
                     cbDir += file.size;
                     cbTotal += file.size;
                 }
-                sListing += this.device.sprintf("%-8s %-3s %s  %#2M-%#02D-%#0.2Y  %#2I:%#02N%#.1A\n", name, ext, sSize, file.date);
+                sListing += this.device.sprintf("%-8s %-3s%s%s  %#2M-%#02D-%#0.2Y  %#2I:%#02N%#.1A\n", name, ext, (file.attr & (DiskImage.ATTR.READONLY | DiskImage.ATTR.HIDDEN | DiskImage.ATTR.SYSTEM))? "*" : " ", sSize, file.date);
                 nTotal++;
-                nDir++;
+                /*
+                 * NOTE: While it seems odd to include all SUBDIR entries in the file count, that's what DOS always did, so we do, too.
+                 * They don't affect the current directory's byte total (cbDir), since A) the size of a SUBDIR entry is normally zero, and
+                 * B) we don't add their size to the total anyway.
+                 */
+                nFiles++;
             }
-            sListing += getTotal(nDir, cbDir);
-            if (nTotal > nDir) {
+            sListing += getTotal(nFiles, cbDir);
+            if (nTotal > nFiles) {
                 sListing += "\nTotal files listed:\n"
                 sListing += getTotal(nTotal, cbTotal);
             }
