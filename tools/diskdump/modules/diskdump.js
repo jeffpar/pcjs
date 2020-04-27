@@ -141,7 +141,7 @@ function readDirFiles(sDir, fNormalize = false, sLabel)
          * that reflects the creation date of the disk image seems more useful.
          */
         let dateLabel = new Date();
-        let file = {path: sDir, name: sLabel, attr: DiskImage.ATTR.LABEL, date: dateLabel, size: 0};
+        let file = {path: sDir, name: sLabel, attr: DiskImage.ATTR.VOLUME, date: dateLabel, size: 0};
         aFileData.push(file);
     }
 
@@ -311,7 +311,7 @@ function main(argc, argv)
 
     if (Device.DEBUG) {
         printf("diskdump v%s\n", Device.VERSION);
-        device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.FILE, true);
+        device.setMessages(Device.MESSAGE.FILE + Device.MESSAGE.INFO, true);
     }
     device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);
 
@@ -323,11 +323,19 @@ function main(argc, argv)
         di = readDir(input, argv['normalize'], argv['label'], +argv['maxfiles']);
     }
     if (di) {
+        printf("disk size: %d\n", di.getSize());
         if (argv['list']) {
             let list = di.getFileListing();
             printf(list);
         }
-        printf("disk size: %d\n", di.getSize());
+        if (argv['dump']) {
+            let manifest = di.getFileManifest(getHash, "md5");
+            manifest.forEach((file) => {
+                if (file['md5']) {
+                    printf("%s  %-12s  %s  %s:%s\n", file['md5'], file.name, file.date, di.getName(), file.path);
+                }
+            });
+        }
         let output = argv['output'];
         if (output) writeDisk(output, di, argv['overwrite']);
         return;
@@ -338,6 +346,7 @@ function main(argc, argv)
         let cConfigs = 0, cManifests = 0, cFiles = 0;
         let asFiles = glob.sync(path.join(rootDir, "/configs" + family + "/*.json"));
         asFiles.forEach((sFile) => {
+            if (argv['verbose']) printf("reading %s...\n", sFile);
             let library = readJSON(sFile);
             if (library) {
                 let aDiskettes = [];
@@ -350,9 +359,7 @@ function main(argc, argv)
                         if (argv['dumpall'] == "md5") {
                             manifest.forEach((file) => {
                                 if (file['md5']) {
-                                    printf("%s  %-12s  %s  %s:%s\n", file['md5'], file.name, file.date, di.diskName, file.path);
-                                } else {
-                                    device.assert(file.size == 0);
+                                    printf("%s  %-12s  %s  %s:%s:%s\n", file['md5'], file.name, file.date, diskette.path, file.path);
                                 }
                             });
                         }

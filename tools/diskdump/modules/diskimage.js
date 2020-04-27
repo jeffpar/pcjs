@@ -973,7 +973,7 @@ export default class DiskImage {
                 this.printf(Device.MESSAGE.DISK, "file %s missing cluster, skipping\n", file.name);
                 continue;
             }
-            let name = this.buildShortName(file.name, !!(file.attr & DiskImage.ATTR.LABEL));
+            let name = this.buildShortName(file.name, !!(file.attr & DiskImage.ATTR.VOLUME));
             offDir += this.buildDirEntry(abDir, offDir, name, file.size, file.attr, file.date, file.cluster);
             cEntries++;
         }
@@ -1260,7 +1260,7 @@ export default class DiskImage {
                     if (!this.nSectors) {
                         this.nSectors = nSectors;
                     } else if (this.nSectors != nSectors) {
-                        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: %d:%d contains varying sectors per track: %d\n", this.diskName, iCylinder, iHead, nSectors);
+                        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d:%d contains varying sectors per track: %d\n", this.diskName, iCylinder, iHead, nSectors);
                     }
                     for (let iSector = 0; iSector < aSectors.length; iSector++) {
                         let sector = aSectors[iSector];
@@ -1269,7 +1269,7 @@ export default class DiskImage {
                         if (!this.cbSector) {
                             this.cbSector = cbSector;
                         } else if (this.cbSector != cbSector) {
-                            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: %d:%d:%d contains varying sector sizes: %d\n", this.diskName, iCylinder, iHead, sector[DiskImage.SECTOR.ID], cbSector);
+                            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d:%d:%d contains varying sector sizes: %d\n", this.diskName, iCylinder, iHead, sector[DiskImage.SECTOR.ID], cbSector);
                         }
                         this.cbDiskData += cbSector;
                     }
@@ -1465,6 +1465,13 @@ export default class DiskImage {
 
             this.deleteFileTable();
 
+            /*
+             * TODO: The following volume detection logic could be simplified or even eliminated by creating
+             * a uniform volume descriptor at the time the image is loaded, and persisting that as part of a new
+             * "extended" JSON disk format.  THe reason that hasn't happened already is that not all image types
+             * require it.  In particular, if the disk image was built from an (older) JSON file, that file only
+             * tells us the disk geometry, nothing about the volume inside.
+             */
             let i, off, dir = {}, iSector;
             let cbDisk = this.nCylinders * this.nHeads * this.nSectors * this.cbSector;
 
@@ -1479,43 +1486,44 @@ export default class DiskImage {
             dir.cbSector = this.getSectorData(sectorBoot, DiskImage.BPB.SECTOR_BYTES, 2);
             dir.idMedia = this.getSectorData(sectorBoot, DiskImage.BPB.MEDIA_ID, 1);
 
-            if (dir.cbSector == this.cbSector) {
-                if (!this.checkMediaID(dir.idMedia)) {
-                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: unrecognized media ID %#0bx\n", this.diskName, dir.idMedia);
-                    return;
-                }
-            }
-            else {
+            if (dir.cbSector != this.cbSector || !this.checkMediaID(dir.idMedia)) {
                 /*
                  * When the first sector doesn't appear to contain a valid BPB, the most likely explanations are:
                  *
-                 *      1. The image is from a diskette formatted by DOS 1.xx, which didn't use BPBs
+                 *      1. The image is from a diskette formatted by DOS 1.x, which didn't use BPBs
                  *      2. The image is a fixed (partitioned) disk and the first sector is actually an MBR
-                 *      3. The image is from a diskette that used a non-standard sector size (ie, not 512)
+                 *      3. The image is from a diskette that used a non-standard boot sector (or sector size)
                  *
-                 * To start, if this is an 160Kb disk (circa DOS 1.00) or a 320Kb disk (circa DOS 1.10), then we'll
-                 * assume it's a 12-bit FAT, set assorted BPB values accordingly, and see if our assumption holds up.
+                 * However, instead of first assuming it's a DOS 1.x diskette, we'll check ALL our default (diskette)
+                 * BPBs -- which includes 160Kb disks (circa DOS 1.00) and 320Kb disks (circa DOS 1.10).  If the diskette
+                 * looks like a match (both in terms of FAT ID and total disk size), then we'll extract the remaining
+                 * BPB defaults.
                  */
                 dir.vbaFAT = 1;
                 dir.nFATBits = 12;
-                dir.vbaRoot = dir.vbaFAT + 2;   // both 160Kb and 320Kb disks contained 2 FATs, each containing 1 sector
-                dir.nClusterSecs = 1;
-                dir.cbSector = this.cbSector;
-
+                dir.cbSector == this.cbSector;
                 idFAT = this.getClusterEntry(dir, 0, 0);
-                if (cbDisk == 160 * 1024 && idFAT == DiskImage.FAT.MEDIA_160KB) {
-                    dir.vbaTotal = 320;
-                    dir.nEntries = 64;
-                    dir.idMedia = DiskImage.FAT.MEDIA_160KB;
+                for (i = 0; i < DiskImage.aDefaultBPBs.length; i++) {
+                    let bpb = DiskImage.aDefaultBPBs[i];
+                    if (bpb[DiskImage.BPB.MEDIA_ID] == idFAT) {
+                        let cbDiskBPB = (bpb[DiskImage.BPB.TOTAL_SECS] + (bpb[DiskImage.BPB.TOTAL_SECS + 1] * 0x100)) * this.cbSector;
+                        if (cbDiskBPB == cbDisk) {
+                            dir.idMedia = idFAT;
+                            /*
+                             * NOTE: Like TOTAL_SECS, FAT_SECS and ROOT_DIRENTS are 2-byte fields; but unlike TOTAL_SECS,
+                             * their upper byte is zero in all our default (diskette) BPBs, so there's no need to fetch them.
+                             */
+                            dir.vbaRoot = dir.vbaFAT + bpb[DiskImage.BPB.FAT_SECS] * bpb[DiskImage.BPB.TOTAL_FATS];
+                            dir.nClusterSecs = bpb[DiskImage.BPB.CLUSTER_SECS];
+                            dir.vbaTotal = cbDiskBPB / this.cbSector;
+                            dir.nEntries = bpb[DiskImage.BPB.ROOT_DIRENTS];
+                            dir.cbSector = this.cbSector;
+                            break;
+                        }
+                    }
                 }
-                else if (cbDisk == 320 * 1024 && idFAT == DiskImage.FAT.MEDIA_320KB) {
-                    dir.vbaTotal = 640;
-                    dir.nEntries = 112;
-                    dir.idMedia = DiskImage.FAT.MEDIA_320KB;
-                    this.assert(this.nHeads == 2);
-                    dir.nClusterSecs++;         // 320Kb disks use 2 sectors/cluster
-                }
-                else {
+
+                if (!dir.vbaTotal) {
                     /*
                      * So, this is either a fixed (partitioned) disk, or a disk using a non-standard sector size; let's assume
                      * the former and check for an MBR.  For now, we're only going to process the first active partition we find.
@@ -1535,8 +1543,9 @@ export default class DiskImage {
                     }
                     if (i == 4) sectorBoot = null;
                 }
+
                 if (!sectorBoot) {
-                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: unrecognized %d-byte disk image with %d-byte sectors\n", this.diskName, cbDisk, this.cbSector);
+                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: %d-byte disk image contains unknown volume(s)\n", this.diskName, cbDisk);
                     return;
                 }
             }
@@ -1575,6 +1584,7 @@ export default class DiskImage {
             if (!idFAT) {
                 idFAT = this.getClusterEntry(dir, 0, 0);
             }
+
             if (idFAT != dir.idMedia) {
                 this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: FAT ID (%#0bx) does not match media ID (%#0bx)\n", this.diskName, idFAT, dir.idMedia);
                 return;
@@ -1617,19 +1627,39 @@ export default class DiskImage {
             }
 
             /*
-             * Calculate free space.
+             * Calculate free (unused) space, as well as total "bad" space.
+             *
+             * Some disks, like FLICKERFREE.img, mark all their unused clusters as bad, perhaps to discourage anyone
+             * from writing to the disk.  Here's what CHKDSK reports for the FLICKERFREE diskette:
+             *
+             *      Volume FlickerFree created Apr 1, 1986 12:00a
+             *
+             *         179712 bytes total disk space
+             *              0 bytes in 1 hidden files
+             *          48128 bytes in 5 user files
+             *         131584 bytes in bad sectors
+             *              0 bytes available on disk
+             *
+             *         262144 bytes total memory
+             *         237568 bytes free
+             *
+             * And it's a bit of misnomer to list the total as "bad sectors", because the unit of "badness" is a cluster,
+             * not a sector, and while for floppies, it's usually true that a cluster is the same size as a sector, that's
+             * not true in general.
              */
-            this.cbFree = 0;
-            let clustersFree = 0;
+            this.cbFree = this.cbBad = 0;
+            let clustersBad = 0, clustersFree = 0;
             for (let cluster = 2; cluster < dir.nClusters + 2; cluster++) {
                 let clusterNext = this.getClusterEntry(dir, cluster, 0) | this.getClusterEntry(dir, cluster, 1);
                 if (!clusterNext) {
                     this.cbFree += dir.nClusterSecs * dir.cbSector;
                     clustersFree++;
+                } else if (clusterNext == dir.clusterMax + 1) {
+                    this.cbBad += dir.nClusterSecs * dir.cbSector;
+                    clustersBad++;
                 }
             }
-
-            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d cluster(s) free, %d bytes free\n", this.diskName, clustersFree, this.cbFree);
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d cluster(s) bad, %d cluster(s) free, %d bytes free\n", this.diskName, clustersBad, clustersFree, this.cbFree);
         }
         return this.aFileTable;
     }
@@ -1694,8 +1724,18 @@ export default class DiskImage {
             let getTotal = function(nDir, cbDir) {
                 return this.device.sprintf(" %8d file(s)   %8d bytes\n", nDir, cbDir);
             }.bind(this);
-            for (let i = 0; i < this.aFileTable.length; i++) {
+            let i, sLabel = "";
+            for (i = 0; i < this.aFileTable.length; i++) {
                 let file = this.aFileTable[i];
+                if (file.path.lastIndexOf('\\') > 0) break;     // don't search beyond the root directory for a volume label
+                if (file.attr & DiskImage.ATTR.VOLUME) {
+                    sLabel = file.name.replace(".", "");
+                    break;
+                }
+            }
+            for (i = 0; i < this.aFileTable.length; i++) {
+                let file = this.aFileTable[i];
+                if (file.attr & DiskImage.ATTR.VOLUME) continue;
                 let name = file.name;
                 let j = file.path.lastIndexOf('\\');
                 let dir = file.path.substring(0, j);
@@ -1711,9 +1751,11 @@ export default class DiskImage {
                 if (curDir != dir) {
                     if (curDir != null) {
                         sListing += getTotal(nDir, cbDir);
+                    } else {
+                        sListing += this.device.sprintf("\nVolume in drive A %s%s\n", sLabel? "is " : "has no label", sLabel);
                     }
                     curDir = dir;
-                    sListing += this.device.sprintf("\nDirectory of A:%s\n\n", dir);
+                    sListing += this.device.sprintf("Directory of A:%s\n\n", dir);
                     cbDir = nDir = 0;
                 }
                 let sSize;
@@ -1733,7 +1775,7 @@ export default class DiskImage {
                 sListing += "\nTotal files listed:\n"
                 sListing += getTotal(nTotal, cbTotal);
             }
-            sListing += this.device.sprintf("%28d bytes free\n",this.cbFree);
+            sListing += this.device.sprintf("%28d bytes free\n", this.cbFree);
         }
         return sListing;
     }
@@ -2416,6 +2458,17 @@ export default class DiskImage {
     }
 
     /**
+     * getName()
+     *
+     * @this {DiskImage}
+     * @returns {string}
+     */
+    getName()
+    {
+        return this.diskName;
+    }
+
+    /**
      * getSize()
      *
      * @this {DiskImage}
@@ -2706,7 +2759,7 @@ DiskImage.BOOT = {
 DiskImage.PCJS_LABEL = "PCJS";
 DiskImage.PCJS_OEM   = "PCJS.ORG";
 
-/**
+/*
  * The BPBs that buildDiskFromBuffer() currently supports; these BPBs should be in order of smallest to largest capacity,
  * to help ensure we don't select a disk format larger than necessary.
  */
@@ -3035,7 +3088,7 @@ DiskImage.ATTR = {
     READONLY:       0x01,       // PC-DOS 2.0 and up
     HIDDEN:         0x02,
     SYSTEM:         0x04,
-    LABEL:          0x08,       // PC-DOS 2.0 and up
+    VOLUME:         0x08,       // PC-DOS 2.0 and up
     SUBDIR:         0x10,       // PC-DOS 2.0 and up
     ARCHIVE:        0x20        // PC-DOS 2.0 and up
 };
