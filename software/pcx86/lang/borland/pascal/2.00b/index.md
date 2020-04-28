@@ -27,29 +27,25 @@ The following documentation is available online:
 ### Directory of Borland Turbo Pascal 2.00B
 
      Volume in drive A has no label
-     Volume Serial Number is 3FFE-0276
-    
-    Directory of A:\
-    
-    ART      PAS      2904 03-24-89  12:47a
-    CALC     HLP      4803 01-01-80  12:27a
-    CALC     PAS     34087 01-01-80   8:36p
-    CALCDEMO MCS     11760 01-01-80   8:29p
-    CALCMAIN PAS       780 01-01-80  12:14a
-    COLOR    PAS      3349 01-01-80   1:05a
-    DOSFCALL DOC      1306 01-01-80  12:32a
-    EXTERNAL DOC      1783 01-01-80   3:29a
-    INTRPTCL DOC      1303 01-01-80  12:21a
-    READ     ME       1280 04-17-84   5:40p
-    SOUND    PAS      1691 01-01-80  12:42a
-    TINST    COM     28479 04-04-84   5:41p
-    TINST    MSG      4096 04-04-84   5:44p
-    TLIST    COM     17271 01-01-80  12:18a
-    TURBO    COM     36480 03-24-89  12:42a
-    TURBO    MSG      1536 04-17-84   2:19p
-    WINDOW   PAS      2639 01-01-80  12:13a
+     Directory of A:\
+
+    ART      PAS      2904   3-24-89  12:47a
+    CALC     HLP      4803   1-01-80  12:27a
+    CALC     PAS     34087   1-01-80   8:36p
+    CALCDEMO MCS     11760   1-01-80   8:29p
+    CALCMAIN PAS       780   1-01-80  12:14a
+    COLOR    PAS      3349   1-01-80   1:05a
+    DOSFCALL DOC      1306   1-01-80  12:32a
+    EXTERNAL DOC      1783   1-01-80   3:29a
+    INTRPTCL DOC      1303   1-01-80  12:21a
+    READ     ME       1280   4-17-84   5:40p
+    SOUND    PAS      1691   1-01-80  12:42a
+    TINST    COM     28479   4-04-84   5:41p
+    TINST    MSG      4096   4-04-84   5:44p
+    TLIST    COM     17271   1-01-80  12:18a
+    TURBO    COM     36480   3-24-89  12:42a
+    TURBO    MSG      1536   4-17-84   2:19p
+    WINDOW   PAS      2639   1-01-80  12:13a
            17 file(s)     155547 bytes
-    
-    Total files listed:
-           17 file(s)     155547 bytes
-                           16384 bytes free
+                            1024 bytes free
+

@@ -68,13 +68,13 @@
                     <!-- machine: {{ machine[0] }} -->
                     <!-- machine_data: {{ machine[1] }} -->
                   {%- endif -%}
-                  {%- capture machine_type -%}{{ machine[0] }}{%- endcapture -%}
+                  {%- capture machine_type -%}{%- if machine[0] != "" -%}{{ machine[0] }}{%- else -%}{{ family[0] }}{%- endif -%}{%- endcapture -%}
                   {%- capture software_type -%}{{ machine[1]['@type'] }}{%- endcapture -%}
                   {%- capture software_path1 -%}{{ machine[1]['@path'] }}{%- endcapture -%}
                   {%- capture machine_url -%}/machines{{ software_path1 }}/{%- endcapture -%}
                   {%- assign diskette_drives = machine[1]['@diskette_drives'] -%}
                   {%- assign categories = site.data[machine_type][software_type] %}
-                    <li id="software-{{ machine_type }}" class="pcjs-explorer-platform pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ machine[1]['@title'] | default: machine[0] }}
+                    <li id="software-{{ machine_type }}" class="pcjs-explorer-platform pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ machine[1]['@title'] | default: machine_type }}
                       <ul>
                     {%- for category in categories -%}
                       {%- if site.developer %}

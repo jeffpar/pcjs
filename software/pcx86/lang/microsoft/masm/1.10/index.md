@@ -9,15 +9,16 @@ Directory listing of a recreated 320Kb diskette is provided below.
 
 ### Directory of MS Macro Assembler 1.10
 
-	 Volume in drive A is MASM110    
-	 Directory of A:\
+     Volume in drive A has no label
+     Directory of A:\
 
-	CREF     EXE     13824 06-02-82   8:06p
-	DEBUG    COM     11764 02-01-83  10:13a
-	EDLIN    COM      4389 02-01-83   9:31a
-	EXE2BIN  EXE      1649 02-01-83   9:19a
-	LIB      EXE     32128 12-18-81  12:00a
-	LINK     EXE     42368 01-06-83   4:36p
-	MASM     EXE     77440 02-01-83   1:13p
-	        7 file(s)     183562 bytes
-	                      135168 bytes free
+    CREF     EXE     13824   6-02-82  12:00a
+    DEBUG    COM     11764   2-01-83  12:00a
+    EDLIN    COM      4389   2-01-83  12:00a
+    EXE2BIN  EXE      1649   2-01-83  12:00a
+    LIB      EXE     32128  12-18-81  12:00a
+    LINK     EXE     42368   1-06-83  12:00a
+    MASM     EXE     77440   2-01-83  12:00a
+            7 file(s)     183562 bytes
+                          135168 bytes free
+

@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Device } from "./device.js";
-import { Memory } from "./memory.js";
+import Device from "./device.js";
+import Memory from "./memory.js";
 
 /**
  * @typedef {Config} BusConfig
@@ -37,7 +37,7 @@ import { Memory } from "./memory.js";
  * @property {Array.<Memory>} blocks
  * @property {number} nTraps (number of blocks currently being trapped)
  */
-export class Bus extends Device {
+export default class Bus extends Device {
     /**
      * Bus(idMachine, idDevice, config)
      *

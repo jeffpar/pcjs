@@ -2342,7 +2342,7 @@ class Web {
         }
 
         if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|pcjs)$/)) {
-            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
         }
 
 
@@ -64002,6 +64002,7 @@ FileInfo.NE = {
  */
 
 
+
 /*
  * FDC Terms (see FDC.TERMS)
  *
@@ -64068,7 +64069,7 @@ let DriveType;
 let DriveInfo;
 
 /**
- * class FDC
+ * @class FDC
  * @property {Array.<DriveInfo>} aDrives
  * @property {Array.<DriveType>|null} aDriveTypes
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
@@ -64392,18 +64393,31 @@ class FDC extends Component {
         if (this.aDiskettes) {
             if (typeof this.aDiskettes == "string") {
                 let fdc = this;
-                let sURL = this.aDiskettes;
-                Web.getResource(sURL, "json", true, function loadDone(sURL, sResponse, nErrorCode) {
-                    fdc.aDiskettes = [];
-                    if (sResponse && !nErrorCode) {
-                        try {
-                            fdc.parseDiskettes(/** @type {Object} */ (JSON.parse(sResponse)), fdc.getDriveLimits());
-                        } catch(err) {
-                            fdc.println("Unable to parse " + sURL + ": " + err.message);
-                        }
+                let hostName = Web.getHostName();
+                let limits = fdc.getDriveLimits();
+                let urls = fdc.aDiskettes.split(',');
+                var cLoaded = 0;
+                fdc.aDiskettes = [];
+                for (let i = 0; i < urls.length; i++) {
+                    let url = urls[i];
+                    if (hostName == "localhost" || url.indexOf("private") < 0) {
+                        let sProgress = "Loading " + url + "...";
+                        Web.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
+                            if (sResponse && !nErrorCode) {
+                                try {
+                                    JSONLib.parseDiskettes(fdc.aDiskettes, /** @type {Object} */ (JSON.parse(sResponse)), "/pcx86", fdc.sDisketteServer, hostName, limits);
+                                } catch(err) {
+                                    fdc.println("Unable to parse " + url + ": " + err.message);
+                                }
+                            } else {
+                                fdc.println("Unable to open " + url + " (" + nErrorCode + ")");
+                            }
+                            if (++cLoaded == urls.length) fdc.addDiskettes();
+                        }, function(nState) {
+                            fdc.println(sProgress, Component.PRINT.PROGRESS);
+                        });
                     }
-                    fdc.addDiskettes();
-                });
+                }
                 return;
             }
         }
@@ -65529,100 +65543,6 @@ class FDC extends Component {
         this.addDiskette("Remote Disk", "??");
 
         if (!this.autoMount()) this.setReady();
-    }
-
-    /**
-     * parseDiskettes(library, limits, propPath, server)
-     *
-     * @this {FDC}
-     * @param {Object} library
-     * @param {Array} limits (from getDriveLimits())
-     * @param {string} propPath
-     * @param {string} server
-     */
-    parseDiskettes(library, limits, propPath = "/pcx86", server = this.sDisketteServer)
-    {
-        for (let category in library) {
-            let group = library[category];
-            let products = group['@products'];
-            if (products) {
-                this.parseDiskettes(products, limits, propPath + '/' + category);
-                continue;
-            }
-            let versions = group['@versions'];
-            if (versions) {
-                for (let version in versions) {
-                    let release = versions[version];
-                    let media = release['@media'];
-                    if (!media) continue;
-                    for (let i = 0; i < media.length; i++) {
-                        let item = media[i];
-                        if (!item['@diskette']) continue;
-                        /*
-                         * One advantage of the new JSON library manifest is that it gives us more information about the
-                         * available diskettes before loading any of them.  For example, if the drives support only one head,
-                         * we can avoid including any diskette whose '@type' is "PC320K", "PC360K", etc; and if the drives
-                         * don't support 80 tracks, we can skip any "PC1200K" and "PC1440K" diskettes.
-                         *
-                         * Unfortunately, either of those drive criteria must be true for ALL installed drives, due to the way
-                         * our UI works, which displays only one list of diskettes for all drives.  But that's reasonable,
-                         * since most (if not all) of our machines have matching diskette drives.
-                         *
-                         * NOTE: It's best not to check for specific '@type' values, because there were many unusual diskette
-                         * formats.
-                         *
-                         * Standard PC types included:
-                         *
-                         *      PC160K
-                         *      PC180K
-                         *      PC320K
-                         *      PC360K
-                         *      PC720K
-                         *      PC1200K
-                         *      PC1440K
-                         *
-                         * Non-standard PC types included:
-                         *
-                         *      PC1840K (eg, XDF diskettes that shipped with PC DOS 7.0)
-                         *      PC1680K (eg, DMF diskettes that shipped with Windows 95)
-                         *
-                         * and this list should certainly NOT be considered exhaustive.  Non-PC types would include things like
-                         * game disks with unusual track formats, assorted UNIX distribution diskettes, etc; for those disks,
-                         * we haven't come up with a type nomenclature yet, so no '@type' will be specified.  Any disk of unknown
-                         * type should always be included.
-                         */
-                        let type = item['@type'];
-                        if (type) {
-                            let match = type.match(/^PC([0-9]+)K$/);
-                            if (match) {
-                                let size = +match[1];
-                                if (limits[0] == 1 && size > 180 || limits[1] == 40 && size > 360) {
-                                    continue;
-                                }
-                            }
-                        }
-                        let name = item['@title'];
-                        if (!name) {
-                            name = release['@title'];
-                            if (!name) {
-                                name = group['@title'];
-                                if (version) name += ' ' + version;
-                            }
-                            if (media.length > 1) {
-                                name += " (Disk " + (i + 1) + ")";
-                            }
-                        }
-                        let path = item['@link'] || (server + propPath + '/' + category + '/' + version + '/' + item['@diskette']);
-                        if (!item['@localonly'] || Web.getHostName() == "localhost") {
-                            this.aDiskettes.push({name, path});
-                        }
-                    }
-                }
-                continue;
-            }
-            if (category[0] == '@') continue;
-            this.parseDiskettes(group, limits, propPath + '/' + category, group['@server'] || server);
-        }
     }
 
     /**
@@ -71201,6 +71121,114 @@ Web.onInit(HDC.init);
 
 
 /**
+ * @copyright https://www.pcjs.org/modules/jsonlib.js (C) 2012-2020 Jeff Parsons
+ */
+
+/**
+ * @class {JSONLib}
+ */
+class JSONLib {
+    /**
+     * parseDiskettes(aDiskettes, library, propPath, server, hostName, limits)
+     *
+     * @param {Array} aDiskettes
+     * @param {Object} library
+     * @param {string} [propPath]
+     * @param {string} [server]
+     * @param {string} [hostName]
+     * @param {Array} [limits] (optional drive limits from FDC.getDriveLimits())
+     */
+    static parseDiskettes(aDiskettes, library, propPath = "/pcx86", server = "", hostName = "", limits = [])
+    {
+        for (let category in library) {
+            if (category[0] == '@') {
+                if (category == '@server') server = library[category];
+                continue;
+            }
+            let group = library[category];
+            let products = group['@products'];
+            if (products) {
+                JSONLib.parseDiskettes(aDiskettes, products, propPath + '/' + category, server, hostName, limits);
+                continue;
+            }
+            let versions = group['@versions'];
+            if (versions) {
+                for (let version in versions) {
+                    let release = versions[version];
+                    let media = release['@media'];
+                    if (!media) continue;
+                    for (let i = 0; i < media.length; i++) {
+                        let item = media[i];
+                        if (!item['@diskette']) continue;
+                        /*
+                         * One advantage of the new JSON library manifest is that it gives us more information about the
+                         * available diskettes before loading any of them.  For example, if the drives support only one head,
+                         * we can avoid including any diskette whose '@type' is "PC320K", "PC360K", etc; and if the drives
+                         * don't support 80 tracks, we can skip any "PC1200K" and "PC1440K" diskettes.
+                         *
+                         * Unfortunately, either of those drive criteria must be true for ALL installed drives, due to the way
+                         * our UI works, which displays only one list of diskettes for all drives.  But that's reasonable,
+                         * since most (if not all) of our machines have matching diskette drives.
+                         *
+                         * NOTE: It's best not to check for specific '@type' values, because there were many unusual diskette
+                         * formats.
+                         *
+                         * Standard PC types included:
+                         *
+                         *      PC160K
+                         *      PC180K
+                         *      PC320K
+                         *      PC360K
+                         *      PC720K
+                         *      PC1200K
+                         *      PC1440K
+                         *
+                         * Non-standard PC types included:
+                         *
+                         *      PC1840K (eg, XDF diskettes that shipped with PC DOS 7.0)
+                         *      PC1680K (eg, DMF diskettes that shipped with Windows 95)
+                         *
+                         * and this list should certainly NOT be considered exhaustive.  Non-PC types would include things like
+                         * game disks with unusual track formats, assorted UNIX distribution diskettes, etc; for those disks,
+                         * we haven't come up with a type nomenclature yet, so no '@type' will be specified.  Any disk of unknown
+                         * type should always be included.
+                         */
+                        let type = item['@type'];
+                        if (type && limits.length) {
+                            let match = type.match(/^PC([0-9]+)K$/);
+                            if (match) {
+                                let size = +match[1];
+                                if (limits[0] == 1 && size > 180 || limits[1] == 40 && size > 360) {
+                                    continue;
+                                }
+                            }
+                        }
+                        let name = item['@title'];
+                        if (!name) {
+                            name = release['@title'];
+                            if (!name) {
+                                name = group['@title'];
+                                if (version) name += ' ' + version;
+                            }
+                            if (media.length > 1) {
+                                name += " (Disk " + (i + 1) + ")";
+                            }
+                        }
+                        let path = item['@link'] || (server + propPath + '/' + category + '/' + (version? version + '/' : '') + item['@diskette']);
+                        if (!item['@localonly'] || hostName == "localhost") {
+                            aDiskettes.push({name, path});
+                        }
+                    }
+                }
+                continue;
+            }
+            if (category[0] == '@') continue;
+            JSONLib.parseDiskettes(aDiskettes, group, propPath + '/' + category, group['@server'] || server, hostName, limits);
+        }
+    }
+}
+
+/**
  * @copyright https://www.pcjs.org/machines/shared/lib/debugger.js (C) 2012-2020 Jeff Parsons
  */
 
@@ -71472,7 +71500,7 @@ class DbgLib extends Component {
     /**
      * evalAND(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.AND().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.AND().
      *
      * Performs the bitwise "and" (AND) of two operands > 32 bits.
      *
@@ -71506,7 +71534,7 @@ class DbgLib extends Component {
     /**
      * evalIOR(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.IOR().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.IOR().
      *
      * Performs the logical "inclusive-or" (OR) of two operands > 32 bits.
      *
@@ -71540,7 +71568,7 @@ class DbgLib extends Component {
     /**
      * evalXOR(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.XOR().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.XOR().
      *
      * Performs the logical "exclusive-or" (XOR) of two operands > 32 bits.
      *
@@ -71574,7 +71602,7 @@ class DbgLib extends Component {
     /**
      * evalMUL(dst, src)
      *
-     * I could have adapted the code from /modules/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
+     * I could have adapted the code from /machines/dec/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
      * write this base method and let the PDP-10 Debugger override it with a call to the *actual* doMUL() method.
      *
      * @this {DbgLib}

@@ -11,14 +11,11 @@ Directory listing of the 160Kb diskette ([Source](https://winworldpc.com/product
 
 ### Directory of MS Macro Assembler 1.00 (1982)
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
+    M        EXE     67840   2-05-82  12:49p
+    LINK     EXE     41216   2-04-82   1:47p
+            2 file(s)     109056 bytes
+                           50688 bytes free
 
-	M        EXE     67840 02-05-82  12:49p
-	LINK     EXE     41216 02-04-82   1:47p
-	        2 file(s)     109056 bytes
-
-	Total files listed:
-	        2 file(s)     109056 bytes
-	                       50688 bytes free

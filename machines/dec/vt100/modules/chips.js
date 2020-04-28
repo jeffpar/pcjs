@@ -7,13 +7,13 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Device } from "../../../lib/device.js";
+import Device from "../../../lib/device.js";
 
 /**
  * @class {VT100Chips}
  * @unrestricted
  */
-export class VT100Chips extends Device {
+export default class VT100Chips extends Device {
     /**
      * VT100Chips(idMachine, idDevice, config)
      *

@@ -31,79 +31,79 @@ All files on both sides of that diskette appear to be OK.  Directory listings of
 
 ### Directory of Norton Utilities 2.01 (1983-07-04-A)
 
-	 Volume in drive A is NU-2.01, #1
-	 Directory of A:\
+     Volume in drive A is NU-201,.#1
+     Directory of A:\
 
-	DISKLOOK BAT       384 07-04-83   2:01p
-	BATHIDE  COM      7632 07-04-83   2:01p
-	BEEP     COM       154 07-04-83   2:01p
-	BLOAD    COM     17859 07-04-83   2:01p
-	CLEAR    COM       139 07-04-83   2:01p
-	CLS      COM       139 07-04-83   2:01p
-	DISKOPT  COM      6560 07-04-83   2:01p
-	DL       COM     32950 07-04-83   2:01p
-	FH       COM     14281 07-04-83   2:01p
-	FILEFIX  COM      7438 07-04-83   2:01p
-	FILESORT COM      7131 07-04-83   2:01p
-	HL       COM     35769 07-04-83   2:01p
-	HM       COM     21742 07-04-83   2:01p
-	       13 file(s)     152178 bytes
-	                        5632 bytes free
+    DISKLOOK BAT       384   7-04-83   2:01p
+    BATHIDE  COM      7632   7-04-83   2:01p
+    BEEP     COM       154   7-04-83   2:01p
+    BLOAD    COM     17859   7-04-83   2:01p
+    CLEAR    COM       139   7-04-83   2:01p
+    CLS      COM       139   7-04-83   2:01p
+    DISKOPT  COM      6560   7-04-83   2:01p
+    DL       COM     32950   7-04-83   2:01p
+    FH       COM     14281   7-04-83   2:01p
+    FILEFIX  COM      7438   7-04-83   2:01p
+    FILESORT COM      7131   7-04-83   2:01p
+    HL       COM     35769   7-04-83   2:01p
+    HM       COM     21742   7-04-83   2:01p
+           13 file(s)     152178 bytes
+                            5632 bytes free
 
 ### Directory of Norton Utilities 2.01 (1983-07-04-B)
 
-	 Volume in drive A is NU-2.01, #2
-	 Directory of A:\
+     Volume in drive A is NU-201,.#2
+     Directory of A:\
 
-	HU       COM     27628 07-04-83   2:01p
-	LABEL    COM      8340 07-04-83   2:01p
-	LPRINT   COM     24405 07-04-83   2:01p
-	REVERSE  COM      1441 07-04-83   2:01p
-	SCRATR   COM      3570 07-04-83   2:01p
-	SM       COM     19374 07-04-83   2:01p
-	SSAR     COM     24331 07-04-83   2:01p
-	TIMEMARK COM      7234 07-04-83   2:01p
-	UE       COM     26231 07-04-83   2:01p
-	        9 file(s)     142554 bytes
-	                       15872 bytes free
+    HU       COM     27628   7-04-83   2:01p
+    LABEL    COM      8340   7-04-83   2:01p
+    LPRINT   COM     24405   7-04-83   2:01p
+    REVERSE  COM      1441   7-04-83   2:01p
+    SCRATR   COM      3570   7-04-83   2:01p
+    SM       COM     19374   7-04-83   2:01p
+    SSAR     COM     24331   7-04-83   2:01p
+    TIMEMARK COM      7234   7-04-83   2:01p
+    UE       COM     26231   7-04-83   2:01p
+            9 file(s)     142554 bytes
+                           15872 bytes free
 
 ### Directory of Norton Utilities 2.01 (1983-11-03-A)
 
-	 Volume in drive A is NU-2.01, #1
-	 Directory of A:\
+     Volume in drive A is NU-201,.#1
+     Directory of A:\
 
-	DISKLOOK BAT       384 11-03-83   2:01p
-	BATHIDE  COM      7752 11-03-83   2:01p
-	BEEP     COM       154 11-03-83   2:01p
-	BLOAD    COM     17859 11-03-83   2:01p
-	CLEAR    COM       139 11-03-83   2:01p
-	CLS      COM       139 11-03-83   2:01p
-	DISKOPT  COM      6615 11-03-83   2:01p
-	DL       COM     33344 11-03-83   2:01p
-	FH       COM     14612 11-03-83   2:01p
-	FILEFIX  COM      7581 11-03-83   2:01p
-	FILESORT COM      7207 11-03-83   2:01p
-	HL       COM     36212 11-03-83   2:01p
-	HM       COM     22138 11-03-83   2:01p
-	       13 file(s)     154136 bytes
-	                        2560 bytes free
+    DISKLOOK BAT       384  11-03-83   2:01p
+    BATHIDE  COM      7752  11-03-83   2:01p
+    BEEP     COM       154  11-03-83   2:01p
+    BLOAD    COM     17859  11-03-83   2:01p
+    CLEAR    COM       139  11-03-83   2:01p
+    CLS      COM       139  11-03-83   2:01p
+    DISKOPT  COM      6615  11-03-83   2:01p
+    DL       COM     33344  11-03-83   2:01p
+    FH       COM     14612  11-03-83   2:01p
+    FILEFIX  COM      7581  11-03-83   2:01p
+    FILESORT COM      7207  11-03-83   2:01p
+    HL       COM     36212  11-03-83   2:01p
+    HM       COM     22138  11-03-83   2:01p
+           13 file(s)     154136 bytes
+                            2560 bytes free
 
 ### Directory of Norton Utilities 2.01 (1983-11-03-B)
 
-	 Volume in drive A is NU-2.01, #2
-	 Directory of A:\
+     Volume in drive A is NU-201,.#2
+     Directory of A:\
 
-	HU       COM     28030 11-03-83   2:01p
-	LABEL    COM      8307 11-03-83   2:01p
-	LPRINT   COM     24405 11-03-83   2:01p
-	REVERSE  COM      1441 11-03-83   2:01p
-	SCRATR   COM      3570 11-03-83   2:01p
-	SM       COM     19792 11-03-83   2:01p
-	SSAR     COM     24542 11-03-83   2:01p
-	TIMEMARK COM      3819 11-03-83   2:01p
-	UE       COM     26749 11-04-83   2:01p
-	        9 file(s)     140655 bytes
-	                       17920 bytes free
+    HU       COM     28030  11-03-83   2:01p
+    LABEL    COM      8307  11-03-83   2:01p
+    LPRINT   COM     24405  11-03-83   2:01p
+    REVERSE  COM      1441  11-03-83   2:01p
+    SCRATR   COM      3570  11-03-83   2:01p
+    SM       COM     19792  11-03-83   2:01p
+    SSAR     COM     24542  11-03-83   2:01p
+    TIMEMARK COM      3819  11-03-83   2:01p
+    UE       COM     26749  11-04-83   2:01p
+            9 file(s)     140655 bytes
+                           17920 bytes free
 
 ### Diskette Photos
 

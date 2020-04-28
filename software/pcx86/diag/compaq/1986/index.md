@@ -38,32 +38,29 @@ From `README.CPQ`:
 
 ### Directory of COMPAQ DeskPro 386 (1986)
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
+    IBMBIO   COM*     9728   3-27-86  12:00p
+    IBMDOS   COM*    27760   3-27-86  12:00p
+    COMMAND  COM*    23210   3-27-86  12:00p
+    AUTOEXEC BAT*       33   8-08-86  12:00p
+    DISKINIT COM      9259   8-08-86  12:00p
+    INST386  EXE     31808   8-08-86  12:00p
+    CEMM     EXE     64736   8-08-86  12:00p
+    CEMM     COM       963   8-08-86  12:00p
+    VDISK    SYS      3420   8-08-86  12:00p
+    README   CPQ      1788   8-08-86  12:00p
+    1        BAT        74   8-08-86  12:00p
+    2        BAT        73   8-08-86  12:00p
+    3        BAT        71   8-08-86  12:00p
+    4        BAT        71   8-08-86  12:00p
+    5        BAT        71   8-08-86  12:00p
+    DISKINIT SCR       670   8-08-86  12:00p
+    INST386  SCR       713   8-08-86  12:00p
+    CEMME    SCR       672   8-08-86  12:00p
+    CEMMC    SCR       397   8-08-86  12:00p
+    VDISK    SCR       567   8-08-86  12:00p
+           20 file(s)     176084 bytes
+                          173056 bytes free
 
-	IBMBIO   COM      9728 03-27-86  12:00p
-	IBMDOS   COM     27760 03-27-86  12:00p
-	COMMAND  COM     23210 03-27-86  12:00p
-	AUTOEXEC BAT        33 08-08-86  12:00p
-	DISKINIT COM      9259 08-08-86  12:00p
-	INST386  EXE     31808 08-08-86  12:00p
-	CEMM     EXE     64736 08-08-86  12:00p
-	CEMM     COM       963 08-08-86  12:00p
-	VDISK    SYS      3420 08-08-86  12:00p
-	README   CPQ      1788 08-08-86  12:00p
-	1        BAT        74 08-08-86  12:00p
-	2        BAT        73 08-08-86  12:00p
-	3        BAT        71 08-08-86  12:00p
-	4        BAT        71 08-08-86  12:00p
-	5        BAT        71 08-08-86  12:00p
-	DISKINIT SCR       670 08-08-86  12:00p
-	INST386  SCR       713 08-08-86  12:00p
-	CEMME    SCR       672 08-08-86  12:00p
-	CEMMC    SCR       397 08-08-86  12:00p
-	VDISK    SCR       567 08-08-86  12:00p
-	       20 file(s)     176084 bytes
-
-	Total files listed:
-	       20 file(s)     176084 bytes
-	                      173056 bytes free

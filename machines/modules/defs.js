@@ -33,12 +33,12 @@ const COMPILED = false;
 const DEBUG = true;
 
 /**
- * FACTORY is "PCjs" by default; overridden with the machine's "factory" string in machines.json
+ * FACTORY is "pcjsMachine" by default; overridden with the machine's "factory" string in machines.json
  * to ensure unique factories.
  *
  * @define {string}
  */
-const FACTORY = "NewMachine";
+const FACTORY = "pcjsMachine";
 
 /**
  * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
@@ -59,7 +59,7 @@ const VERSION = "2.00";
 /**
  * @class {Defs}
  */
-export class Defs {}
+export default class Defs {}
 
 Defs.COMMAND  = COMMAND;
 Defs.COMPILED = COMPILED;

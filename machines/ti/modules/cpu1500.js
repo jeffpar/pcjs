@@ -7,9 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { CPU }    from "../../lib/cpu.js";
-import { Device } from "../../lib/device.js";
-import { LED }    from "../../lib/led.js";
+import CPU    from "../../lib/cpu.js";
+import Device from "../../lib/device.js";
+import LED    from "../../lib/led.js";
 
 /**
  * 64-bit Register
@@ -19,7 +19,7 @@ import { LED }    from "../../lib/led.js";
  * @property {CPU1500} cpu
  * @property {Array.<number>} digits
  */
-export class Reg64 extends Device {
+class Reg64 extends Device {
     /**
      * Reg64(cpu, id, fInternal)
      *
@@ -340,7 +340,7 @@ export class Reg64 extends Device {
  * @property {number} nStringFormat
  * @property {number} type (one of the CPU1500.TYPE values)
  */
-export class CPU1500 extends CPU {
+export default class CPU1500 extends CPU {
     /**
      * CPU1500(idMachine, idDevice, config)
      *

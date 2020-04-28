@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Monitor } from "../../lib/monitor.js";
+import Monitor from "../../modules/monitor.js";
 
 /**
  * @typedef {MonitorConfig} PCx86VideoConfig
@@ -24,7 +24,7 @@ import { Monitor } from "../../lib/monitor.js";
  * @unrestricted
  * @property {PCx86VideoConfig} config
  */
-export class PCx86Video extends Monitor {
+export default class PCx86Video extends Monitor {
     /**
      * PCx86Video(idMachine, idDevice, config)
      *

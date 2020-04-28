@@ -28,18 +28,15 @@ From `README.CPQ`:
 
 ### Directory of COMPAQ Diagnostics 6.12
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
+    DIAG     CPQ*     8320   6-21-89  12:00p
+    USER     EXE*   243296   6-21-89  12:00p
+    TEST     COM      2576   6-21-89  12:00p
+    SETUP    EXE     84992   6-21-89  12:00p
+    INSPECT  EXE     59392   6-21-89  12:00p
+    README   CPQ      1849   6-21-89  12:00p
+            6 file(s)     400425 bytes
+                          327680 bytes free
 
-	DIAG     CPQ      8320 06-21-89  12:00p
-	USER     EXE    243296 06-21-89  12:00p
-	TEST     COM      2576 06-21-89  12:00p
-	SETUP    EXE     84992 06-21-89  12:00p
-	INSPECT  EXE     59392 06-21-89  12:00p
-	README   CPQ      1849 06-21-89  12:00p
-	        6 file(s)     400425 bytes
-
-	Total files listed:
-	        6 file(s)     400425 bytes
-	                      327680 bytes free

@@ -10,7 +10,7 @@
 	<fdc ref="/configs/pcx86/fdc/library.xml" autoMount='{A:{name:"PC DOS 3.30 (Disk 1)"}, B:{name:"PC DOS 3.30 (Disk 2)"}}'/>
 	<keyboard ref="/configs/pcx86/keyboard/us84-softkeys.xml"/>
 	<debugger id="debugger"/>
-	<panel ref="/configs/pcx86/panel/wide.xml"/>
+	<panel ref="/configs/pcx86/panel/wide286.xml"/>
 	<hdc ref="/configs/pcx86/hdc/20mb/pcdos330-empty-at2.xml"/>
 	<cpu id="cpu286" model="80286" cycles="8000000"/>
 	<chipset id="chipset" model="5170" floppies="[1440,1200]"/>

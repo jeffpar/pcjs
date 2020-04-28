@@ -49,77 +49,81 @@ MSDOS.SYS and COMMAND.COM.
 
 ### Directory of MS-DOS 3.20 (Disk 1)
 
-	 Volume in drive A has no label
-	 Directory of  A:\
-	
-	IO       SYS    16138   7-07-86  12:00p
-	MSDOS    SYS    28480   7-07-86  12:00p
-	ANSI     SYS     1651   7-07-86  12:00p
-	APPEND   COM     1725   7-07-86  12:00p
-	ASSIGN   COM     1523   7-07-86  12:00p
-	ATTRIB   EXE     8234   7-07-86  12:00p
-	CHKDSK   EXE     9680   7-07-86  12:00p
-	COMMAND  COM    23612   7-07-86  12:00p
-	DISKCOMP EXE     3808   7-07-86  12:00p
-	DISKCOPY EXE     4096   7-07-86  12:00p
-	DRIVER   SYS     1102   7-07-86  12:00p
-	EDLIN    EXE     7356   7-07-86  12:00p
-	EXE2BIN  EXE     3050   7-07-86  12:00p
-	FC       EXE    14558   7-07-86  12:00p
-	FDISK    EXE    16830   7-07-86  12:00p
-	FIND     EXE     6403   7-07-86  12:00p
-	FORMAT   EXE    11005   7-07-86  12:00p
-	GRAFTABL EXE     8210   7-07-86  12:00p
-	GRAPHICS EXE    13170   7-07-86  12:00p
-	JOIN     EXE     9012   7-07-86  12:00p
-	KEYBDV   EXE     2886   7-07-86  12:00p
-	KEYBFR   EXE     2948   7-07-86  12:00p
-	KEYBGR   EXE     2940   7-07-86  12:00p
-	KEYBIT   EXE     2892   7-07-86  12:00p
-	KEYBSP   EXE     2983   7-07-86  12:00p
-	KEYBUK   EXE     2886   7-07-86  12:00p
-	LABEL    EXE     2750   7-07-86  12:00p
-	MODE     EXE    13928   7-07-86  12:00p
-	MORE     COM      282   7-07-86  12:00p
-	PRINT    EXE     8824   7-07-86  12:00p
-	RAMDRIVE SYS     6462   7-07-86  12:00p
-	RECOVER  EXE     4145   7-07-86  12:00p
-	REPLACE  EXE     4852   7-07-86  12:00p
-	SORT     EXE     1898   7-07-86  12:00p
-	SUBST    EXE     9898   7-07-86  12:00p
-	SYS      COM     4607   7-07-86  12:00p
-	       36 File(s)     81920 bytes free
+     Volume in drive A has no label
+     Directory of A:\
+
+    IO       SYS*    16138   7-07-86  12:00p
+    MSDOS    SYS*    28480   7-07-86  12:00p
+    ANSI     SYS      1651   7-07-86  12:00p
+    APPEND   COM      1725   7-07-86  12:00p
+    ASSIGN   COM      1523   7-07-86  12:00p
+    ATTRIB   EXE      8234   7-07-86  12:00p
+    CHKDSK   EXE      9680   7-07-86  12:00p
+    COMMAND  COM     23612   7-07-86  12:00p
+    DISKCOMP EXE      3808   7-07-86  12:00p
+    DISKCOPY EXE      4096   7-07-86  12:00p
+    DRIVER   SYS      1102   7-07-86  12:00p
+    EDLIN    EXE      7356   7-07-86  12:00p
+    EXE2BIN  EXE      3050   7-07-86  12:00p
+    FC       EXE     14558   7-07-86  12:00p
+    FDISK    EXE     16830   7-07-86  12:00p
+    FIND     EXE      6403   7-07-86  12:00p
+    FORMAT   EXE     11005   7-07-86  12:00p
+    GRAFTABL EXE      8210   7-07-86  12:00p
+    GRAPHICS EXE     13170   7-07-86  12:00p
+    JOIN     EXE      9012   7-07-86  12:00p
+    KEYBDV   EXE      2886   7-07-86  12:00p
+    KEYBFR   EXE      2948   7-07-86  12:00p
+    KEYBGR   EXE      2940   7-07-86  12:00p
+    KEYBIT   EXE      2892   7-07-86  12:00p
+    KEYBSP   EXE      2983   7-07-86  12:00p
+    KEYBUK   EXE      2886   7-07-86  12:00p
+    LABEL    EXE      2750   7-07-86  12:00p
+    MODE     EXE     13928   7-07-86  12:00p
+    MORE     COM       282   7-07-86  12:00p
+    PRINT    EXE      8824   7-07-86  12:00p
+    RAMDRIVE SYS      6462   7-07-86  12:00p
+    RECOVER  EXE      4145   7-07-86  12:00p
+    REPLACE  EXE      4852   7-07-86  12:00p
+    SORT     EXE      1898   7-07-86  12:00p
+    SUBST    EXE      9898   7-07-86  12:00p
+    SYS      COM      4607   7-07-86  12:00p
+           36 file(s)     264824 bytes
+                           81920 bytes free
 
 ### Directory of MS-DOS 3.20 (Disk 2)
 
-	 Volume in drive A has no label
-	 Directory of  A:\
-	
-	BACKUP   EXE    23404   7-07-86  12:00p
-	DEBUG    EXE    15647   7-07-86  12:00p
-	GWBASIC  EXE    78864   7-07-86  12:00p
-	LINK     EXE    43988   7-07-86  12:00p
-	RESTORE  EXE    21750   7-07-86  12:00p
-	SHARE    EXE     8544   7-07-86  12:00p
-	TREE     EXE     8588   7-07-86  12:00p
-	XCOPY    EXE     5396   7-07-86  12:00p
-	        8 File(s)    151552 bytes free
+     Volume in drive A has no label
+     Directory of A:\
+
+    BACKUP   EXE     23404   7-07-86  12:00p
+    DEBUG    EXE     15647   7-07-86  12:00p
+    GWBASIC  EXE     78864   7-07-86  12:00p
+    LINK     EXE     43988   7-07-86  12:00p
+    RESTORE  EXE     21750   7-07-86  12:00p
+    SHARE    EXE      8544   7-07-86  12:00p
+    TREE     EXE      8588   7-07-86  12:00p
+    XCOPY    EXE      5396   7-07-86  12:00p
+            8 file(s)     206181 bytes
+                          151552 bytes free
 
 ### Directory of MS-DOS 3.20 (ProgRef 1)
 
-	 Volume in drive A is MS320DOC03 
-	 Directory of  A:\
-	
-	PROGREF1 DOC   357451   2-14-86  12:00a
-	        1 File(s)         0 bytes free
+     Volume in drive A is MS320DOC03
+     Directory of A:\
+
+    PROGREF1 DOC    357451   2-14-86  12:00a
+            1 file(s)     357451 bytes
+                            4096 bytes free
 
 ### Directory of MS-DOS 3.20 (ProgRef 2)
 
-	 Volume in drive A is MS320DOC04 
-	 Directory of  A:\
-	
-	PROGREF2 DOC   305536   3-14-86   9:44a
-	        1 File(s)     56320 bytes free
+     Volume in drive A is MS320DOC04
+     Directory of A:\
+
+    PROGREF2 DOC    305536   3-14-86   9:44a
+            1 file(s)     305536 bytes
+                           56320 bytes free
 
 ### Surprisingly Bad Bug in MS-DOS 3.20
 

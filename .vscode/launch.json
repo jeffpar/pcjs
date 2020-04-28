@@ -25,10 +25,20 @@
         "console": "internalConsole"
       },
       {
+        "name": "Node: diskdump.js (v3)",
+        "type": "node",
+        "request": "launch",
+        "program": "${workspaceFolder}/tools/diskdump/modules/diskdump.js",
+        "args": ["--dumpall","--checkall"],
+        "cwd": "${workspaceFolder}/tools/diskdump/modules",
+        "stopOnEntry": false,
+        "console": "internalConsole"
+      },
+      {
         "name": "Node: pdfparse.js",
         "type": "node",
         "request": "launch",
-        "program": "${workspaceFolder}/tools/misc/pdfparse.js",
+        "program": "${workspaceFolder}/tmp/misc/pdfparse.js",
         "args": [".", "--page=11", "--debug"],
         "cwd": "${workspaceFolder}",
         "stopOnEntry": false,

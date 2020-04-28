@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Input } from "../../../lib/input.js";
-import { Ports } from "../../../lib/ports.js";
+import Input from "../../../lib/input.js";
+import Ports from "../../../lib/ports.js";
 
 /**
  * @typedef {PortsConfig} InvadersPortsConfig
@@ -22,7 +22,7 @@ import { Ports } from "../../../lib/ports.js";
  * @unrestricted
  * @property {InvadersPortsConfig} config
  */
-export class InvadersPorts extends Ports {
+export default class InvadersPorts extends Ports {
     /**
      * InvadersPorts(idMachine, idDevice, config)
      *

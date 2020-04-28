@@ -31,43 +31,39 @@ To learn more about this double-sided 320Kb diskette, see the
 
 ### Directory of COMPAQ MS-DOS 1.11
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
-
-	IOSYS    COM      1998 05-13-83  12:00p
-	MSDOS    COM      6136 05-13-83  12:00p
-	COMMAND  COM      4959 05-13-83  12:00p
-	LINK     EXE     41856 05-13-83  12:00p
-	EDLIN    COM      2432 05-13-83  12:00p
-	SYS      COM       645 05-13-83  12:00p
-	DEBUG    COM      6619 05-13-83  12:00p
-	BASIC    COM       549 05-13-83  12:00p
-	BASICA   COM       547 05-13-83  12:00p
-	FORMAT   COM      3296 05-13-83  12:00p
-	EXE2BIN  EXE      1280 05-13-83  12:00p
-	DISKCOPY COM      1812 05-13-83  12:00p
-	DISKCOMP COM      1291 05-13-83  12:00p
-	MODE     COM      1800 05-13-83  12:00p
-	CHKDSK   COM      1720 05-13-83  12:00p
-	COMP     COM      1484 05-13-83  12:00p
-	WORDS             1242 05-13-83  12:00p
-	BASICA   EXE     54272 05-13-83  12:00p
-	TEST     EXE     18560 05-13-83  12:00p
-	DEMO     BAT        14 05-13-83  12:00p
-	DEMO     BAS      7808 05-13-83  12:00p
-	DEMO1    BAS     17920 05-13-83  12:00p
-	DEMO2    BAS     17792 05-13-83  12:00p
-	DEMO3    BAS     21120 05-13-83  12:00p
-	DEMO4    BAS      6528 05-13-83  12:00p
-	JUGGLER  DAT     16128 05-13-83  12:00p
-	USA      DAT     16128 05-13-83  12:00p
-	INTEREST BAS       384 05-13-83  12:00p
-	       28 file(s)     256320 bytes
-
-	Total files listed:
-	       28 file(s)     256320 bytes
-	                       53248 bytes free
+    IOSYS    COM*     1998   5-13-83  12:00p
+    MSDOS    COM*     6136   5-13-83  12:00p
+    COMMAND  COM      4959   5-13-83  12:00p
+    LINK     EXE     41856   5-13-83  12:00p
+    EDLIN    COM      2432   5-13-83  12:00p
+    SYS      COM       645   5-13-83  12:00p
+    DEBUG    COM      6619   5-13-83  12:00p
+    BASIC    COM       549   5-13-83  12:00p
+    BASICA   COM       547   5-13-83  12:00p
+    FORMAT   COM      3296   5-13-83  12:00p
+    EXE2BIN  EXE      1280   5-13-83  12:00p
+    DISKCOPY COM      1812   5-13-83  12:00p
+    DISKCOMP COM      1291   5-13-83  12:00p
+    MODE     COM      1800   5-13-83  12:00p
+    CHKDSK   COM      1720   5-13-83  12:00p
+    COMP     COM      1484   5-13-83  12:00p
+    WORDS             1242   5-13-83  12:00p
+    BASICA   EXE     54272   5-13-83  12:00p
+    TEST     EXE     18560   5-13-83  12:00p
+    DEMO     BAT        14   5-13-83  12:00p
+    DEMO     BAS      7808   5-13-83  12:00p
+    DEMO1    BAS     17920   5-13-83  12:00p
+    DEMO2    BAS     17792   5-13-83  12:00p
+    DEMO3    BAS     21120   5-13-83  12:00p
+    DEMO4    BAS      6528   5-13-83  12:00p
+    JUGGLER  DAT     16128   5-13-83  12:00p
+    USA      DAT     16128   5-13-83  12:00p
+    INTEREST BAS       384   5-13-83  12:00p
+           28 file(s)     256320 bytes
+                           53248 bytes free
 
 One curiosity regarding this disk are the BASIC files.  **BASIC.COM** and **BASICA.COM** are nothing more than
 tiny programs to load **BASICA.EXE**, a stand-alone version of BASIC that doesn't require any BASIC ROMs.  And

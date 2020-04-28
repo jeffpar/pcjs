@@ -1337,10 +1337,10 @@ Str.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "Ju
 
 
 /** @typedef {{ mask: number, shift: number }} */
-var BitField;
+let BitField;
 
 /** @typedef {Object.<BitField>} */
-var BitFields;
+let BitFields;
 
 class Usr {
     /**
@@ -1754,7 +1754,7 @@ class Web {
         }
 
         if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|pcjs)$/)) {
-            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
         }
 
 

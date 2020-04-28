@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Device } from "../../../lib/device.js";
+import Device from "../../../lib/device.js";
 
 Device.MESSAGE.PC11             = 0x000200000000;
 Device.MESSAGE_NAMES["pc11"]    = Device.MESSAGE.PC11;
@@ -43,7 +43,7 @@ Device.MESSAGE_NAMES["pc11"]    = Device.MESSAGE.PC11;
  * @class {PC11}
  * @unrestricted
  */
-export class PC11 extends Device {
+export default class PC11 extends Device {
     /**
      * PC11(idMachine, idDevice, config)
      *

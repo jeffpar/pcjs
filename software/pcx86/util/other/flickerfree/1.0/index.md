@@ -34,16 +34,16 @@ load FlickerFree (`FF.COM`) and then run the companion FlickerFree Performance A
 
 ### Directory of FlickerFree 1.0
 
-	 Volume in drive B is FlickerFree
-	 Directory of B:\
+     Volume in drive A is FlickerFree
+     Directory of A:\
 
-	FF       COM     22330 04-01-86  12:00a
-	FPA      COM      5438 04-01-86  12:00a
-	FFIX     COM      3590 04-01-86  12:00a
-	FF_HIST          14610 04-01-86  12:00a
-	README             859 04-01-86  12:00a
-	        5 file(s)      46827 bytes
-	                           0 bytes free
+    FF       COM     22330   4-01-86  12:00a
+    FPA      COM      5438   4-01-86  12:00a
+    FFIX     COM      3590   4-01-86  12:00a
+    FF_HIST          14610   4-01-86  12:00a
+    README             859   4-01-86  12:00a
+            5 file(s)      46827 bytes
+                               0 bytes free
 
 ### A Brief History of FlickerFree
 

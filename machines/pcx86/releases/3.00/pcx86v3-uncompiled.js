@@ -30,12 +30,12 @@ const COMPILED = false;
 const DEBUG = true;
 
 /**
- * FACTORY is "PCjs" by default; overridden with the machine's "factory" string in machines.json
+ * FACTORY is "pcjsMachine" by default; overridden with the machine's "factory" string in machines.json
  * to ensure unique factories.
  *
  * @define {string}
  */
-const FACTORY = "NewMachine";
+const FACTORY = "pcjsMachine";
 
 /**
  * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
@@ -884,7 +884,7 @@ class StdIO extends NumIO {
      * parseDate(year, month, day, hour, minute, second)
      *
      * Produces a UTC date when ONLY a date (no time) is provided; otherwise, it combines the date and
-     * and time, producing a date that is either UTC or local, depending on the presence (or lack) of time
+     * and time, producing a date that is either local or UTC, depending on the presence (or lack) of time
      * zone information.  Finally, if numeric inputs are provided, then Date.UTC() is called to generate
      * a UTC time.
      *
@@ -909,6 +909,7 @@ class StdIO extends NumIO {
         else if (args[1] === undefined) {
             date = new Date(args[0]);
         } else {
+
             date = new Date(Date.UTC(...args));
         }
         return date;
@@ -999,7 +1000,7 @@ class StdIO extends NumIO {
         }
 
         let buffer = "";
-        let aParts = format.split(/%([-+ 0#]*)([0-9]*|\*)(\.[0-9]+|)([hlL]?)([A-Za-z%])/);
+        let aParts = format.split(/%([-+ 0#]*)([0-9]*|\*)(\.[0-9]+|)([bwhlL]?)([A-Za-z%])/);
 
         let iArg = 0, iPart;
         for (iPart = 0; iPart < aParts.length - 6; iPart += 6) {
@@ -1037,29 +1038,23 @@ class StdIO extends NumIO {
             }
             let precision = aParts[iPart+3];
             precision = precision? +precision.substr(1) : -1;
-            // let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L' (all currently ignored)
+            let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L'; we also allow 'w' (instead of 'h') and 'b' (instead of 'hh')
             let ach = null, s, radix = 0, prefix = "";
 
             /*
              * The following non-standard sprintf() format types provide handy alternatives to the
              * PHP date() format types that we previously used with the old datelib.formatDate() function:
              *
-             *      a:  lowercase ante meridiem and post meridiem (am or pm)                %A
-             *      d:  day of the month, 2 digits with leading zeros (01, 02, ..., 31)     %02D
-             *      D:  3-letter day of the week ("Sun", "Mon", ..., "Sat")                 %.3W
-             *      F:  month ("January", "February", ..., "December")                      %F
-             *      g:  hour in 12-hour format, without leading zeros (1, 2, ..., 12)       %I
-             *      h:  hour in 24-hour format, without leading zeros (0, 1, ..., 23)       %H
-             *      H:  hour in 24-hour format, with leading zeros (00, 01, ..., 23)        %02H
-             *      i:  minutes, with leading zeros (00, 01, ..., 59)                       %02N
-             *      j:  day of the month, without leading zeros (1, 2, ..., 31)             %D
-             *      l:  day of the week ("Sunday", "Monday", ..., "Saturday")               %W
-             *      m:  month, with leading zeros (01, 02, ..., 12)                         %02M
-             *      M:  3-letter month ("Jan", "Feb", ..., "Dec")                           %.3F
-             *      n:  month, without leading zeros (1, 2, ..., 12)                        %M
-             *      s:  seconds, with leading zeros (00, 01, ..., 59)                       %02S
-             *      y:  2-digit year (eg, 14)                                               %0.2Y
-             *      Y:  4-digit year (eg, 2014)                                             %Y
+             *      a:  lowercase ante meridiem and post meridiem (am or pm)                %A (%.1A for a or p)
+             *      F:  month ("January", "February", ..., "December")                      %F (%.3F for 3-letter month)
+             *      g:  hour in 12-hour format                                              %I (%02I for leading zero)
+             *      h:  hour in 24-hour format                                              %H (%02H for leading zero)
+             *      i:  minutes (0, 1, ..., 59)                                             %N (%02N for leading zero)
+             *      j:  day of the month (1, 2, ..., 31)                                    %D (%02D for leading zero)
+             *      l:  day of the week ("Sunday", "Monday", ..., "Saturday")               %W (%.3W for 3-letter day)
+             *      n:  month (1, 2, ..., 12)                                               %M (%02M for leading zero)
+             *      s:  seconds (0, 1, ..., 59)                                             %S (%02S for leading zero)
+             *      Y:  4-digit year (eg, 2014)                                             %Y (%0.2Y for 2-digit year)
              *
              * We also support a few custom format types:
              *
@@ -1220,10 +1215,10 @@ class StdIO extends NumIO {
                             width--;
                             s = s.substr(1);
                         }
-                        s = ("0000000000" + s).slice(-width);
+                        s = ("0".repeat(width) + s).slice(-width);
                         if (arg < 0) s = '-' + s;
                     } else {
-                        s = ("          " + s).slice(-width);
+                        s = (" ".repeat(width) + s).slice(-width);
                     }
                 }
                 buffer += s;
@@ -1293,17 +1288,25 @@ class StdIO extends NumIO {
                 }
                 if (zeroPad && !width) {
                     /*
-                     * When zero padding is specified without a width (eg, "%0x"), we select a width based on the value.
+                     * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
                      */
-                    let v = Math.abs(arg);
-                    if (v <= 0xff) {
-                        width = 2;
-                    } else if (v <= 0xffff) {
-                        width = 4;
-                    } else if (v <= 0xffffffff) {
-                        width = 8;
+                    if (length == 'b') {
+                        width = 2;      // if an 8-bit length was specified (eg, "%0bx"), then default to 2
+                    } else if (length == 'h' || length == 'w') {
+                        width = 4;      // if a 16-bit length was specified (eg, "%0wx"), then default to 4
+                    } else if (length == 'l') {
+                        width = 8;      // if a 32-bit length was specified (eg, "%0lx"), then default to 8
                     } else {
-                        width = 9;
+                        let v = Math.abs(arg);
+                        if (v <= 0xff) {
+                            width = 2;
+                        } else if (v <= 0xffff) {
+                            width = 4;
+                        } else if (v <= 0xffffffff) {
+                            width = 8;
+                        } else {
+                            width = 9;
+                        }
                     }
                     width += prefix.length;
                 }
@@ -1482,6 +1485,8 @@ class WebIO extends StdIO {
      */
     addBindings(bindings = {})
     {
+        if (typeof document == "undefined") return;
+
         if (!this.config.bindings) {
             this.config.bindings = bindings;
         }
@@ -3072,12 +3077,12 @@ class Device extends WebIO {
      * (boolean).
      *
      * @this {Device}
-     * @param {string} idMachine
-     * @param {string} idDevice
+     * @param {string} [idMachine]
+     * @param {string} [idDevice]
      * @param {Config} [config]
      * @param {Array} [overrides] (default overrides, if any, which in turn can be overridden by config['overrides'])
      */
-    constructor(idMachine, idDevice, config, overrides)
+    constructor(idMachine = "default", idDevice = idMachine, config = {}, overrides = [])
     {
         super(idMachine == idDevice);
         this.addDevice(idMachine, idDevice);
@@ -3110,7 +3115,7 @@ class Device extends WebIO {
          * The new Device classes don't use the Components array or machine+device IDs, but we need to continue
          * updating both of those for backward compatibility with older PCjs machines.
          */
-        this['id'] = this.idMachine + '.' + this.idDevice;
+        this['id'] = this.idMachine == this.idDevice? this.idMachine : this.idMachine + '.' + this.idDevice;
         Device.Components.push(this);
         /*
          * The WebIO constructor set this.machine tentatively, so that it could define any per-machine variables
@@ -3151,10 +3156,10 @@ class Device extends WebIO {
      * checkConfig(config, overrides)
      *
      * @this {Device}
-     * @param {Config} [config]
-     * @param {Array} [overrides]
+     * @param {Config} config
+     * @param {Array} overrides
      */
-    checkConfig(config = {}, overrides = [])
+    checkConfig(config, overrides)
     {
         /*
          * If this device's config contains an "overrides" array, then any of the properties listed in
@@ -3544,7 +3549,7 @@ class Device extends WebIO {
     }
 }
 
-if (window) {
+if (typeof window != "undefined") {
     if (!window['PCjs']) window['PCjs'] = {};
     if (!window['PCjs']['Machines']) window['PCjs']['Machines'] = {};
     if (!window['PCjs']['Components']) window['PCjs']['Components'] = [];
@@ -3555,14 +3560,14 @@ if (window) {
  *
  * @type {Object}
  */
-Device.Machines = window? window['PCjs']['Machines'] : {};
+Device.Machines = typeof window != "undefined"? window['PCjs']['Machines'] : {};
 
 /**
  * Components is maintained for backward-compatibility with older PCjs machines, to facilitate machine connections.
  *
  * @type {Array}
  */
-Device.Components = window? window['PCjs']['Components'] : [];
+Device.Components = typeof window != "undefined"? window['PCjs']['Components'] : [];
 
 /*
  * List of additional message groups, extending the base set defined in lib/webio.js.
@@ -3585,15 +3590,19 @@ Device.MESSAGE.TRAP             = 0x000000001000;
 Device.MESSAGE.VIDEO            = 0x000000002000;       // used with video hardware messages (see video.js)
 Device.MESSAGE.MONITOR          = 0x000000004000;       // used with video monitor messages (see monitor.js)
 Device.MESSAGE.SCREEN           = 0x000000008000;       // used with screen-related messages (also monitor.js)
-Device.MESSAGE.TIME             = 0x000000010000;
-Device.MESSAGE.TIMER            = 0x000000020000;
-Device.MESSAGE.EVENT            = 0x000000040000;
-Device.MESSAGE.INPUT            = 0x000000080000;
-Device.MESSAGE.KEY              = 0x000000100000;
-Device.MESSAGE.MOUSE            = 0x000000200000;
-Device.MESSAGE.TOUCH            = 0x000000400000;
-Device.MESSAGE.WARN             = 0x000000800000;
-Device.MESSAGE.HALT             = 0x000001000000;
+Device.MESSAGE.DISK             = 0x000000010000;
+Device.MESSAGE.FILE             = 0x000000020000;
+Device.MESSAGE.TIME             = 0x000000040000;
+Device.MESSAGE.TIMER            = 0x000000080000;
+Device.MESSAGE.EVENT            = 0x000000100000;
+Device.MESSAGE.INPUT            = 0x000000200000;
+Device.MESSAGE.KEY              = 0x000000400000;
+Device.MESSAGE.MOUSE            = 0x000000800000;
+Device.MESSAGE.TOUCH            = 0x000001000000;
+Device.MESSAGE.INFO             = 0x000002000000;
+Device.MESSAGE.WARN             = 0x000004000000;
+Device.MESSAGE.ERROR            = 0x000008000000;
+Device.MESSAGE.HALT             = 0x000010000000;
 Device.MESSAGE.CUSTOM           = 0x000100000000;       // all custom device messages must start here
 
 Device.MESSAGE_NAMES["addr"]    = Device.MESSAGE.ADDR;
@@ -3612,6 +3621,8 @@ Device.MESSAGE_NAMES["trap"]    = Device.MESSAGE.TRAP;
 Device.MESSAGE_NAMES["video"]   = Device.MESSAGE.VIDEO;
 Device.MESSAGE_NAMES["monitor"] = Device.MESSAGE.MONITOR;
 Device.MESSAGE_NAMES["screen"]  = Device.MESSAGE.SCREEN;
+Device.MESSAGE_NAMES["disk"]    = Device.MESSAGE.DISK;
+Device.MESSAGE_NAMES["file"]    = Device.MESSAGE.FILE;
 Device.MESSAGE_NAMES["time"]    = Device.MESSAGE.TIME;
 Device.MESSAGE_NAMES["timer"]   = Device.MESSAGE.TIMER;
 Device.MESSAGE_NAMES["event"]   = Device.MESSAGE.EVENT;
@@ -3619,7 +3630,9 @@ Device.MESSAGE_NAMES["input"]   = Device.MESSAGE.INPUT;
 Device.MESSAGE_NAMES["key"]     = Device.MESSAGE.KEY;
 Device.MESSAGE_NAMES["mouse"]   = Device.MESSAGE.MOUSE;
 Device.MESSAGE_NAMES["touch"]   = Device.MESSAGE.TOUCH;
+Device.MESSAGE_NAMES["info"]    = Device.MESSAGE.INFO;
 Device.MESSAGE_NAMES["warn"]    = Device.MESSAGE.WARN;
+Device.MESSAGE_NAMES["error"]   = Device.MESSAGE.ERROR;
 Device.MESSAGE_NAMES["halt"]    = Device.MESSAGE.HALT;
 
 Device.CLASSES["Device"] = Device;
@@ -3631,16 +3644,16 @@ Device.CLASSES["Device"] = Device;
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), location: Array.<number>, map: (Array.<Array.<number>>|Object|undefined), drag: (boolean|undefined), scroll: (boolean|undefined), hexagonal: (boolean|undefined), releaseDelay: (number|undefined) }} */
 let InputConfig;
 
- /** @typedef {{ keyNum: number, msDown: number, autoRelease: boolean }} */
+/** @typedef {{ keyNum: number, msDown: number, autoRelease: boolean }} */
 let ActiveKey;
 
- /** @typedef {{ id: (string|number), func: function(string,boolean) }} */
+/** @typedef {{ id: (string|number), func: function(string,boolean) }} */
 let KeyListener;
 
- /** @typedef {{ id: string, cxGrid: number, cyGrid: number, xGrid: number, yGrid: number, func: function(boolean) }} */
+/** @typedef {{ id: string, cxGrid: number, cyGrid: number, xGrid: number, yGrid: number, func: function(boolean) }} */
 let SurfaceListener;
 
- /** @typedef {{ xInput: number, yInput: number, cxInput: number, cyInput: number, hGap: number, vGap: number, cxSurface: number, cySurface: number, xPower: number, yPower: number, cxPower: number, cyPower: number, nRows: number, nCols: number, cxButton: number, cyButton: number, cxGap: number, cyGap: number, xStart: number, yStart: number }} */
+/** @typedef {{ xInput: number, yInput: number, cxInput: number, cyInput: number, hGap: number, vGap: number, cxSurface: number, cySurface: number, xPower: number, yPower: number, cxPower: number, cyPower: number, nRows: number, nCols: number, cxButton: number, cyButton: number, cxGap: number, cyGap: number, xStart: number, yStart: number }} */
 let SurfaceState;
 
 /**
@@ -10255,7 +10268,7 @@ class Debugger extends Device {
     /**
      * evalAND(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.AND().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.AND().
      *
      * Performs the bitwise "and" (AND) of two operands > 32 bits.
      *
@@ -10289,7 +10302,7 @@ class Debugger extends Device {
     /**
      * evalMUL(dst, src)
      *
-     * I could have adapted the code from /modules/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
+     * I could have adapted the code from /machines/dec/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
      * write this base method and let the PDP-10 Debugger override it with a call to the *actual* doMUL() method.
      *
      * @this {Debugger}
@@ -10305,7 +10318,7 @@ class Debugger extends Device {
     /**
      * evalIOR(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.IOR().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.IOR().
      *
      * Performs the logical "inclusive-or" (OR) of two operands > 32 bits.
      *
@@ -10339,7 +10352,7 @@ class Debugger extends Device {
     /**
      * evalXOR(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.XOR().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.XOR().
      *
      * Performs the logical "exclusive-or" (XOR) of two operands > 32 bits.
      *

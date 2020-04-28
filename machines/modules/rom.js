@@ -7,9 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Input }  from "./input.js";
-import { LED }    from "./led.js";
-import { Memory } from "./memory.js";
+import Input  from "./input.js";
+import LED    from "./led.js";
+import Memory from "./memory.js";
 
 /**
  * @typedef {Config} ROMConfig
@@ -29,7 +29,7 @@ import { Memory } from "./memory.js";
  * @unrestricted
  * @property {ROMConfig} config
  */
-export class ROM extends Memory {
+export default class ROM extends Memory {
     /**
      * ROM(idMachine, idDevice, config)
      *

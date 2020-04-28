@@ -22,80 +22,60 @@ are provided below.  The disk images were obtained from [WinWorld](https://winwo
 
 ### Directory of WordStar 3.30 (Disk 1)
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
-
-	WINSTALL COM      1152 03-02-83  12:00a
-	WINSTALL OVR     38528 03-02-83  12:00a
-	WS       INS     43776 03-02-83  12:00a
-	        3 file(s)      83456 bytes
-
-	Total files listed:
-	        3 file(s)      83456 bytes
-	                       75776 bytes free
+    WINSTALL COM      1152   3-02-83  12:00a
+    WINSTALL OVR     38528   3-02-83  12:00a
+    WS       INS     43776   3-02-83  12:00a
+            3 file(s)      83456 bytes
+                           75776 bytes free
 
 ### Directory of WordStar 3.30 (Disk 2)
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
-
-	WSOVLY1  OVR     41216 04-12-83  12:00a
-	WSMSGS   OVR     29056 04-12-83  12:00a
-	WSU      COM     21376 01-01-80  12:02a
-	PRINT    TST      3968 04-12-83  12:00a
-	WSCOLOR  BAS      6656 04-12-83  12:00a
-	WS       COM     21376 01-01-80  12:09a
-	        6 file(s)     123648 bytes
-
-	Total files listed:
-	        6 file(s)     123648 bytes
-	                       35840 bytes free
+    WSOVLY1  OVR     41216   4-12-83  12:00a
+    WSMSGS   OVR     29056   4-12-83  12:00a
+    WSU      COM     21376   1-01-80  12:02a
+    PRINT    TST      3968   4-12-83  12:00a
+    WSCOLOR  BAS      6656   4-12-83  12:00a
+    WS       COM     21376   1-01-80  12:09a
+            6 file(s)     123648 bytes
+                           35840 bytes free
 
 ### Directory of WordStar 3.30 (Disk 3)
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
-
-	SPELSTAR OVR     22784 03-31-83  12:00a
-	SPELSTAR DCT     97024 03-31-83  12:00a
-	SAMPLE   TXT      3328 03-31-83  12:00a
-	        3 file(s)     123136 bytes
-
-	Total files listed:
-	        3 file(s)     123136 bytes
-	                       36352 bytes free
+    SPELSTAR OVR     22784   3-31-83  12:00a
+    SPELSTAR DCT     97024   3-31-83  12:00a
+    SAMPLE   TXT      3328   3-31-83  12:00a
+            3 file(s)     123136 bytes
+                           36352 bytes free
 
 ### Directory of WordStar 3.30 (Disk 4)
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
-
-	STARINDX COM      1920 07-27-83  12:06a
-	STYLE    COM      1152 07-27-83  12:06a
-	STARINDX OVR     40192 02-01-83  12:06a
-	STYLE    OVR     30848 02-01-83  12:07a
-	FORMAT   FMT       384 07-27-83  12:07a
-	MACHINES TXT      6912 07-27-83  12:08a
-	        6 file(s)      81408 bytes
-
-	Total files listed:
-	        6 file(s)      81408 bytes
-	                       77312 bytes free
+    STARINDX COM      1920   7-27-83  12:06a
+    STYLE    COM      1152   7-27-83  12:06a
+    STARINDX OVR     40192   2-01-83  12:06a
+    STYLE    OVR     30848   2-01-83  12:07a
+    FORMAT   FMT       384   7-27-83  12:07a
+    MACHINES TXT      6912   7-27-83  12:08a
+            6 file(s)      81408 bytes
+                           77312 bytes free
 
 ### Directory of WordStar 3.30 (Disk 5)
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
-
-	MAILMRGE OVR     11520 03-31-83  12:00a
-	        1 file(s)      11520 bytes
-
-	Total files listed:
-	        1 file(s)      11520 bytes
-	                      148480 bytes free
+    MAILMRGE OVR     11520   3-31-83  12:00a
+            1 file(s)      11520 bytes
+                          148480 bytes free
 

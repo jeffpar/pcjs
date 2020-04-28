@@ -28,35 +28,39 @@ You can also dig into the [PC DOS 1.10 Boot Sector](debugger/#pc-dos-110-boot-se
 
 ### Directory of PC DOS 1.10
 
-	IBMBIO    COM        1920  05-07-82
-	IBMDOS    COM        6400  05-07-82
-	COMMAND   COM        4959  05-07-82
-	FORMAT    COM        3816  05-07-82
-	CHKDSK    COM        1720  05-07-82
-	SYS       COM         605  05-07-82
-	DISKCOPY  COM        2008  05-07-82
-	DISKCOMP  COM        1640  05-07-82
-	COMP      COM        1649  05-07-82
-	EXE2BIN   EXE        1280  05-07-82
-	MODE      COM        2509  05-07-82
-	EDLIN     COM        2392  05-07-82
-	DEBUG     COM        5999  05-07-82
-	LINK      EXE       41856  05-07-82
-	BASIC     COM       11392  05-07-82
-	BASICA    COM       16768  05-07-82
-	ART       BAS        1920  05-07-82
-	SAMPLES   BAS        2432  05-07-82
-	MORTGAGE  BAS        6272  05-07-82
-	COLORBAR  BAS        1536  05-07-82
-	CALENDAR  BAS        3840  05-07-82
-	MUSIC     BAS        8704  05-07-82
-	DONKEY    BAS        3584  05-07-82
-	CIRCLE    BAS        1664  05-07-82
-	PIECHART  BAS        2304  05-07-82
-	SPACE     BAS        1920  05-07-82
-	BALL      BAS        2048  05-07-82
-	COMM      BAS        4352  05-07-82
-	        28 File(s)
+     Volume in drive A has no label
+     Directory of A:\
+
+    IBMBIO   COM*     1920   5-07-82  12:00p
+    IBMDOS   COM*     6400   5-07-82  12:00p
+    COMMAND  COM      4959   5-07-82  12:00p
+    FORMAT   COM      3816   5-07-82  12:00p
+    CHKDSK   COM      1720   5-07-82  12:00p
+    SYS      COM       605   5-07-82  12:00p
+    DISKCOPY COM      2008   5-07-82  12:00p
+    DISKCOMP COM      1640   5-07-82  12:00p
+    COMP     COM      1649   5-07-82  12:00p
+    EXE2BIN  EXE      1280   5-07-82  12:00p
+    MODE     COM      2509   5-07-82  12:00p
+    EDLIN    COM      2392   5-07-82  12:00p
+    DEBUG    COM      5999   5-07-82  12:00p
+    LINK     EXE     41856   5-07-82  12:00p
+    BASIC    COM     11392   5-07-82  12:00p
+    BASICA   COM     16768   5-07-82  12:00p
+    ART      BAS      1920   5-07-82  12:00p
+    SAMPLES  BAS      2432   5-07-82  12:00p
+    MORTGAGE BAS      6272   5-07-82  12:00p
+    COLORBAR BAS      1536   5-07-82  12:00p
+    CALENDAR BAS      3840   5-07-82  12:00p
+    MUSIC    BAS      8704   5-07-82  12:00p
+    DONKEY   BAS      3584   5-07-82  12:00p
+    CIRCLE   BAS      1664   5-07-82  12:00p
+    PIECHART BAS      2304   5-07-82  12:00p
+    SPACE    BAS      1920   5-07-82  12:00p
+    BALL     BAS      2048   5-07-82  12:00p
+    COMM     BAS      4352   5-07-82  12:00p
+           28 file(s)     147489 bytes
+                            7168 bytes free
 
 CHKDSK reports:
 

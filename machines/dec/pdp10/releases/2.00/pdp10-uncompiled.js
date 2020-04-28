@@ -1696,10 +1696,10 @@ Str.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "Ju
 
 
 /** @typedef {{ mask: number, shift: number }} */
-var BitField;
+let BitField;
 
 /** @typedef {Object.<BitField>} */
-var BitFields;
+let BitFields;
 
 class Usr {
     /**
@@ -2113,7 +2113,7 @@ class Web {
         }
 
         if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|pcjs)$/)) {
-            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
         }
 
 
@@ -6249,12 +6249,12 @@ Web.onInit(PanelPDP10.init);
  */
 
 /** @typedef {{ num: BitField, count: BitField, btmod: BitField, type: BitField }} */
-var BlockInfo;
+let BlockInfo;
 
 var BlockInfoPDP10 = /** @type {BlockInfo} */ (Usr.defineBitFields({num:20, count:8, btmod:1, type:3}));
 
 /** @typedef {{ cbTotal: number, cBlocks: number, aBlocks: Array.<BlockInfo> }} */
-var BusInfo;
+let BusInfo;
 
  /**
   * @type {BusInfo}
@@ -18630,7 +18630,7 @@ Web.onInit(SerialPortPDP10.init);
 
 
 /** @typedef {{ addr: (number|undefined), fTemporary: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined) }} */
-var DbgAddr;
+let DbgAddr;
 
 /**
  * Since the Closure Compiler treats ES6 classes as @struct rather than @dict by default,
@@ -18896,7 +18896,7 @@ class DbgLib extends Component {
     /**
      * evalAND(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.AND().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.AND().
      *
      * Performs the bitwise "and" (AND) of two operands > 32 bits.
      *
@@ -18930,7 +18930,7 @@ class DbgLib extends Component {
     /**
      * evalIOR(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.IOR().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.IOR().
      *
      * Performs the logical "inclusive-or" (OR) of two operands > 32 bits.
      *
@@ -18964,7 +18964,7 @@ class DbgLib extends Component {
     /**
      * evalXOR(dst, src)
      *
-     * Adapted from /modules/pdp10/lib/cpuops.js:PDP10.XOR().
+     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.XOR().
      *
      * Performs the logical "exclusive-or" (XOR) of two operands > 32 bits.
      *
@@ -18998,7 +18998,7 @@ class DbgLib extends Component {
     /**
      * evalMUL(dst, src)
      *
-     * I could have adapted the code from /modules/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
+     * I could have adapted the code from /machines/dec/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
      * write this base method and let the PDP-10 Debugger override it with a call to the *actual* doMUL() method.
      *
      * @this {DbgLib}

@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Device } from "./device.js";
+import Device from "./device.js";
 
 /**
  * @class {Machine}
@@ -17,7 +17,7 @@ import { Device } from "./device.js";
  * @property {boolean} fConfigLoaded
  * @property {boolean} fPageLoaded
  */
-export class Machine extends Device {
+export default class Machine extends Device {
     /**
      * Machine(idMachine, sConfig, sParms)
      *

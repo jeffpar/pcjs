@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { CPU }      from "../../lib/cpu.js";
-import { Debugger } from "../../lib/debugger.js";
+import CPU      from "../../lib/cpu.js";
+import Debugger from "../../lib/debugger.js";
 
 /**
  * Emulation of the 8080 CPU
@@ -19,7 +19,7 @@ import { Debugger } from "../../lib/debugger.js";
  * @property {Bus} busMemory
  * @property {Input} input
  */
-export class CPUx80 extends CPU {
+export default class CPUx80 extends CPU {
     /**
      * CPUx80(idMachine, idDevice, config)
      *

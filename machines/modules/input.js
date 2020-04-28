@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Device } from "./device.js";
+import Device from "./device.js";
 
 /**
  * @typedef {Config} InputConfig
@@ -23,52 +23,52 @@ import { Device } from "./device.js";
  * @property {number} [releaseDelay]
  */
 
- /**
-  * @typedef {Object} ActiveKey
-  * @property {number} keyNum (key number from the supplied keyMap)
-  * @property {number} msDown (timestamp of the most recent "down" event)
-  * @property {boolean} autoRelease (true to auto-release the key after 'releaseDelay'; set when "up" occurs too quickly)
-  */
+/**
+ * @typedef {Object} ActiveKey
+ * @property {number} keyNum (key number from the supplied keyMap)
+ * @property {number} msDown (timestamp of the most recent "down" event)
+ * @property {boolean} autoRelease (true to auto-release the key after 'releaseDelay'; set when "up" occurs too quickly)
+ */
 
- /**
-  * @typedef {Object} KeyListener
-  * @property {string|number} id
-  * @property {function(string,boolean)} func
-  */
+/**
+ * @typedef {Object} KeyListener
+ * @property {string|number} id
+ * @property {function(string,boolean)} func
+ */
 
- /**
-  * @typedef {Object} SurfaceListener
-  * @property {string} id
-  * @property {number} cxGrid
-  * @property {number} cyGrid
-  * @property {number} xGrid
-  * @property {number} yGrid
-  * @property {function(boolean)} func
-  */
+/**
+ * @typedef {Object} SurfaceListener
+ * @property {string} id
+ * @property {number} cxGrid
+ * @property {number} cyGrid
+ * @property {number} xGrid
+ * @property {number} yGrid
+ * @property {function(boolean)} func
+ */
 
- /**
-  * @typedef {Object} SurfaceState
-  * @property {number} xInput
-  * @property {number} yInput
-  * @property {number} cxInput
-  * @property {number} cyInput
-  * @property {number} hGap
-  * @property {number} vGap
-  * @property {number} cxSurface
-  * @property {number} cySurface
-  * @property {number} xPower
-  * @property {number} yPower
-  * @property {number} cxPower
-  * @property {number} cyPower
-  * @property {number} nRows
-  * @property {number} nCols
-  * @property {number} cxButton
-  * @property {number} cyButton
-  * @property {number} cxGap
-  * @property {number} cyGap
-  * @property {number} xStart
-  * @property {number} yStart
-  */
+/**
+ * @typedef {Object} SurfaceState
+ * @property {number} xInput
+ * @property {number} yInput
+ * @property {number} cxInput
+ * @property {number} cyInput
+ * @property {number} hGap
+ * @property {number} vGap
+ * @property {number} cxSurface
+ * @property {number} cySurface
+ * @property {number} xPower
+ * @property {number} yPower
+ * @property {number} cxPower
+ * @property {number} cyPower
+ * @property {number} nRows
+ * @property {number} nCols
+ * @property {number} cxButton
+ * @property {number} cyButton
+ * @property {number} cxGap
+ * @property {number} cyGap
+ * @property {number} xStart
+ * @property {number} yStart
+ */
 
 /**
  * @class {Input}
@@ -90,7 +90,7 @@ import { Device } from "./device.js";
  * @property {Array.<ActiveKey>} aActiveKeys
  * @property {number} keyMods
  */
-export class Input extends Device {
+export default class Input extends Device {
     /**
      * Input(idMachine, idDevice, config)
      *

@@ -25,36 +25,39 @@ and [Version Notes](#5150v1-notes-from-pc-dos-retro) are provided below.
 
 ### Directory of IBM PC BIOS Sources (V1)
 
-     Volume in drive A is 5150V1     
-     Directory of  A:\
-    
-    5150     TXT     4087   7-27-14  10:53a
-    5150V1   ASM   179480   9-01-14   5:59p
-    README   TXT     3460   3-03-18   9:57a
-    VERSIONS TXT     8490   3-03-18   9:59a
-            4 File(s)    124928 bytes free
+     Volume in drive A is 5150V1
+     Directory of A:\
+
+    5150     TXT      4087   7-27-14  10:53a
+    5150V1   ASM    179480   9-01-14   5:59p
+    README   TXT      3460   3-03-18   9:57a
+    VERSIONS TXT      8490   3-03-18   9:59a
+            4 file(s)     195517 bytes
+                          124928 bytes free
 
 ### Directory of IBM PC BIOS Sources (V2)
 
-     Volume in drive A is 5150V2     
-     Directory of  A:\
-    
-    5150     TXT     4087   7-27-14  10:53a
-    5150V2   ASM   179424   9-01-14   5:59p
-    README   TXT     3460   3-03-18   9:57a
-    VERSIONS TXT     8490   3-03-18   9:59a
-            4 File(s)    124928 bytes free
+     Volume in drive A is 5150V2
+     Directory of A:\
+
+    5150     TXT      4087   7-27-14  10:53a
+    5150V2   ASM    179424   9-01-14   5:59p
+    README   TXT      3460   3-03-18   9:57a
+    VERSIONS TXT      8490   3-03-18   9:59a
+            4 file(s)     195461 bytes
+                          124928 bytes free
 
 ### Directory of IBM PC BIOS Sources (V3)
 
-     Volume in drive A is 5150V3     
-     Directory of  A:\
-    
-    5150     TXT     4087   7-27-14  10:53a
-    5150V3   ASM   193439   9-01-14   5:59p
-    README   TXT     3460   3-03-18   9:57a
-    VERSIONS TXT     8490   3-03-18   9:59a
-            4 File(s)    111616 bytes free
+     Volume in drive A is 5150V3
+     Directory of A:\
+
+    5150     TXT      4087   7-27-14  10:53a
+    5150V3   ASM    193439   9-01-14   5:59p
+    README   TXT      3460   3-03-18   9:57a
+    VERSIONS TXT      8490   3-03-18   9:59a
+            4 file(s)     209476 bytes
+                          111616 bytes free
 
 ### 5150V1 Notes (from PC DOS Retro)
 

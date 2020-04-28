@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { NumIO } from "./numio.js";
+import NumIO from "./numio.js";
 
 /**
  * Define the Formatter function type for addFormatType().
@@ -26,7 +26,7 @@ import { NumIO } from "./numio.js";
  * @unrestricted
  * @property {Object.<string,(Formatter|null)>}>} formatters
  */
-export class StdIO extends NumIO {
+export default class StdIO extends NumIO {
     /**
      * StdIO()
      *
@@ -161,7 +161,7 @@ export class StdIO extends NumIO {
      * parseDate(year, month, day, hour, minute, second)
      *
      * Produces a UTC date when ONLY a date (no time) is provided; otherwise, it combines the date and
-     * and time, producing a date that is either UTC or local, depending on the presence (or lack) of time
+     * and time, producing a date that is either local or UTC, depending on the presence (or lack) of time
      * zone information.  Finally, if numeric inputs are provided, then Date.UTC() is called to generate
      * a UTC time.
      *
@@ -186,6 +186,7 @@ export class StdIO extends NumIO {
         else if (args[1] === undefined) {
             date = new Date(args[0]);
         } else {
+            this.assert(args[1] < 12 && args[2] <= 31 && args[3] < 24 && args[4] < 60 && args[5] < 60);
             date = new Date(Date.UTC(...args));
         }
         return date;
@@ -276,7 +277,7 @@ export class StdIO extends NumIO {
         }
 
         let buffer = "";
-        let aParts = format.split(/%([-+ 0#]*)([0-9]*|\*)(\.[0-9]+|)([hlL]?)([A-Za-z%])/);
+        let aParts = format.split(/%([-+ 0#]*)([0-9]*|\*)(\.[0-9]+|)([bwhlL]?)([A-Za-z%])/);
 
         let iArg = 0, iPart;
         for (iPart = 0; iPart < aParts.length - 6; iPart += 6) {
@@ -314,29 +315,23 @@ export class StdIO extends NumIO {
             }
             let precision = aParts[iPart+3];
             precision = precision? +precision.substr(1) : -1;
-            // let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L' (all currently ignored)
+            let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L'; we also allow 'w' (instead of 'h') and 'b' (instead of 'hh')
             let ach = null, s, radix = 0, prefix = "";
 
             /*
              * The following non-standard sprintf() format types provide handy alternatives to the
              * PHP date() format types that we previously used with the old datelib.formatDate() function:
              *
-             *      a:  lowercase ante meridiem and post meridiem (am or pm)                %A
-             *      d:  day of the month, 2 digits with leading zeros (01, 02, ..., 31)     %02D
-             *      D:  3-letter day of the week ("Sun", "Mon", ..., "Sat")                 %.3W
-             *      F:  month ("January", "February", ..., "December")                      %F
-             *      g:  hour in 12-hour format, without leading zeros (1, 2, ..., 12)       %I
-             *      h:  hour in 24-hour format, without leading zeros (0, 1, ..., 23)       %H
-             *      H:  hour in 24-hour format, with leading zeros (00, 01, ..., 23)        %02H
-             *      i:  minutes, with leading zeros (00, 01, ..., 59)                       %02N
-             *      j:  day of the month, without leading zeros (1, 2, ..., 31)             %D
-             *      l:  day of the week ("Sunday", "Monday", ..., "Saturday")               %W
-             *      m:  month, with leading zeros (01, 02, ..., 12)                         %02M
-             *      M:  3-letter month ("Jan", "Feb", ..., "Dec")                           %.3F
-             *      n:  month, without leading zeros (1, 2, ..., 12)                        %M
-             *      s:  seconds, with leading zeros (00, 01, ..., 59)                       %02S
-             *      y:  2-digit year (eg, 14)                                               %0.2Y
-             *      Y:  4-digit year (eg, 2014)                                             %Y
+             *      a:  lowercase ante meridiem and post meridiem (am or pm)                %A (%.1A for a or p)
+             *      F:  month ("January", "February", ..., "December")                      %F (%.3F for 3-letter month)
+             *      g:  hour in 12-hour format                                              %I (%02I for leading zero)
+             *      h:  hour in 24-hour format                                              %H (%02H for leading zero)
+             *      i:  minutes (0, 1, ..., 59)                                             %N (%02N for leading zero)
+             *      j:  day of the month (1, 2, ..., 31)                                    %D (%02D for leading zero)
+             *      l:  day of the week ("Sunday", "Monday", ..., "Saturday")               %W (%.3W for 3-letter day)
+             *      n:  month (1, 2, ..., 12)                                               %M (%02M for leading zero)
+             *      s:  seconds (0, 1, ..., 59)                                             %S (%02S for leading zero)
+             *      Y:  4-digit year (eg, 2014)                                             %Y (%0.2Y for 2-digit year)
              *
              * We also support a few custom format types:
              *
@@ -497,10 +492,10 @@ export class StdIO extends NumIO {
                             width--;
                             s = s.substr(1);
                         }
-                        s = ("0000000000" + s).slice(-width);
+                        s = ("0".repeat(width) + s).slice(-width);
                         if (arg < 0) s = '-' + s;
                     } else {
-                        s = ("          " + s).slice(-width);
+                        s = (" ".repeat(width) + s).slice(-width);
                     }
                 }
                 buffer += s;
@@ -570,17 +565,25 @@ export class StdIO extends NumIO {
                 }
                 if (zeroPad && !width) {
                     /*
-                     * When zero padding is specified without a width (eg, "%0x"), we select a width based on the value.
+                     * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
                      */
-                    let v = Math.abs(arg);
-                    if (v <= 0xff) {
-                        width = 2;
-                    } else if (v <= 0xffff) {
-                        width = 4;
-                    } else if (v <= 0xffffffff) {
-                        width = 8;
+                    if (length == 'b') {
+                        width = 2;      // if an 8-bit length was specified (eg, "%0bx"), then default to 2
+                    } else if (length == 'h' || length == 'w') {
+                        width = 4;      // if a 16-bit length was specified (eg, "%0wx"), then default to 4
+                    } else if (length == 'l') {
+                        width = 8;      // if a 32-bit length was specified (eg, "%0lx"), then default to 8
                     } else {
-                        width = 9;
+                        let v = Math.abs(arg);
+                        if (v <= 0xff) {
+                            width = 2;
+                        } else if (v <= 0xffff) {
+                            width = 4;
+                        } else if (v <= 0xffffffff) {
+                            width = 8;
+                        } else {
+                            width = 9;
+                        }
                     }
                     width += prefix.length;
                 }

@@ -11,7 +11,7 @@
 	<hdc ref="/configs/pcx86/hdc/47mb/unformatted-at5.xml"/>
 	<keyboard ref="/configs/pcx86/keyboard/us84-softkeys.xml"/>
 	<debugger id="debugger" messages="fault" commands=""/>
-	<panel ref="/configs/pcx86/panel/wide.xml"/>
+	<panel ref="/configs/pcx86/panel/wide286.xml"/>
 	<chipset id="chipset" model="5170" floppies="[1200,1200]"/>
 	<serial id="com1" adapter="1"/>
 	<serial id="com2" adapter="2"/>

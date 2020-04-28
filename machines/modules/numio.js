@@ -7,13 +7,13 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { Defs } from "./defs.js";
+import Defs from "./defs.js";
 
 /**
  * @class {NumIO}
  * @unrestricted
  */
-export class NumIO extends Defs {
+export default class NumIO extends Defs {
     /**
      * NumIO()
      *
