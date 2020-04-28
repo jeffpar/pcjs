@@ -380,13 +380,16 @@ function main(argc, argv)
                 JSONLib.parseDiskettes(aDiskettes, library, "/pcx86", "/diskettes");
                 aDiskettes.forEach((diskette) => {
                     let sFile = path.join(rootDir, diskette.path);
-                    let di = readDisk(sFile, true);
-                    if (di) {
+                    let di = readDisk(sFile);
+                    /*
+                     * Nothing to check if we couldn't read the disk image or we couldn't find any files.
+                     */
+                    if (di && di.getFiles()) {
                         if (argv['checkall']) {
                             let sIndexFile = path.join(path.dirname(sFile.replace("/diskettes/", "/software/")), "index.md");
                             if (fs.existsSync(sIndexFile)) {
                                 let sIndex = readFile(sIndexFile);
-                                let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)") + "\n([\\s\\S]*?)\n(\\S)";
+                                let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*") + "\n([\\s\\S]*?)\n(\\S|$)";
                                 let matchDirectory = sIndex.match(new RegExp(sMatch));
                                 if (matchDirectory) {
                                     di.getFileListing(0, 4);

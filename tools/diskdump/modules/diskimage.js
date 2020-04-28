@@ -1905,7 +1905,7 @@ export default class DiskImage {
                     sListing += "\n" + sIndent + "Total files listed:\n";
                     sListing += getTotal(nTotal, cbTotal);
                 }
-                sListing += this.device.sprintf("%28d bytes free\n", vol.clustersFree * vol.clusterSecs * vol.cbSector);
+                sListing += this.device.sprintf("%s%28d bytes free\n", sIndent, vol.clustersFree * vol.clusterSecs * vol.cbSector);
                 iVolume++;
             }
         }
@@ -2673,6 +2673,17 @@ export default class DiskImage {
             sDiskData = "{\n\"" + DiskImage.DESC.VOLUMES + "\":" + sVolTable + ",\n\"" + DiskImage.DESC.FILES + "\":" + sFileTable + ",\n\"" + DiskImage.DESC.SECTORS + "\":" + sDiskData + "\n}";
         }
         return sDiskData;
+    }
+
+    /**
+     * getFiles()
+     *
+     * @this {DiskImage}
+     * @returns {number}
+     */
+    getFiles()
+    {
+        return this.fileTable.length;
     }
 
     /**
