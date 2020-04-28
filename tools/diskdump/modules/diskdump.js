@@ -327,7 +327,9 @@ function main(argc, argv)
     if (di) {
         printf("disk size: %d\n", di.getSize());
         if (argv['list']) {
-            let list = di.getFileListing();
+            let iVolume = +argv['volume'];
+            if (isNaN(iVolume)) iVolume = -1;
+            let list = di.getFileListing(iVolume);
             printf(list);
         }
         if (argv['dump']) {

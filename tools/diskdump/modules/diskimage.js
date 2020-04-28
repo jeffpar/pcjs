@@ -43,7 +43,7 @@ import FileInfo from "./fileinfo.js";
 
  /**
   * @typedef {Object} VolInfo
-  * @property {number} iVol
+  * @property {number} iVolume
   * @property {number} iPartition
   * @property {number} idMedia
   * @property {number} lbaStart
@@ -53,9 +53,11 @@ import FileInfo from "./fileinfo.js";
   * @property {number} vbaRoot
   * @property {number} nEntries
   * @property {number} vbaData
-  * @property {number} nClusterSecs
-  * @property {number} nClusters
+  * @property {number} clusterSecs
   * @property {number} clusterMax
+  * @property {number} clustersBad
+  * @property {number} clustersFree
+  * @property {number} clustersTotal
   */
 
 /**
@@ -1511,11 +1513,11 @@ export default class DiskImage {
              * NOTE: Our file table currently supports only files on FAT volumes, and there is only one file
              * table for all FAT volumes; every FileInfo object contains a volume index to indicate the volume.
              */
-            let iVol = 0;
+            let iVolume = 0;
             while (true) {
-                let vol = this.buildVolume(iVol, sectorBoot);
+                let vol = this.buildVolume(iVolume, sectorBoot);
                 if (!vol || vol.iPartition < 0) break;
-                iVol++;
+                iVolume++;
             }
 
             /*
@@ -1535,19 +1537,19 @@ export default class DiskImage {
     }
 
     /**
-     * buildVolume(iVol, sectorBoot)
+     * buildVolume(iVolume, sectorBoot)
      *
-     * @param {number} iVol
+     * @param {number} iVolume
      * @param {Sector} sectorBoot
      * @returns {VolInfo|null}
      */
-    buildVolume(iVol, sectorBoot)
+    buildVolume(iVolume, sectorBoot)
     {
         let idFAT = 0;
         let cbDisk = this.nCylinders * this.nHeads * this.nSectors * this.cbSector;
-        let vol = /** @type {VolInfo} */({iVol, iPartition: -1, idMedia: 0, lbaStart: 0, lbaTotal: 0});
+        let vol = /** @type {VolInfo} */({iVolume, iPartition: -1, idMedia: 0, lbaStart: 0, lbaTotal: 0});
 
-        if (iVol == 0) {
+        if (iVolume == 0) {
 
             vol.idMedia = this.getSectorData(sectorBoot, DiskImage.BPB.MEDIA_ID, 1);
             vol.cbSector = this.getSectorData(sectorBoot, DiskImage.BPB.SECTOR_BYTES, 2);
@@ -1580,7 +1582,7 @@ export default class DiskImage {
                              * their upper byte is zero in all our default (diskette) BPBs, so there's no need to fetch them.
                              */
                             vol.vbaRoot = vol.vbaFAT + bpb[DiskImage.BPB.FAT_SECS] * bpb[DiskImage.BPB.TOTAL_FATS];
-                            vol.nClusterSecs = bpb[DiskImage.BPB.CLUSTER_SECS];
+                            vol.clusterSecs = bpb[DiskImage.BPB.CLUSTER_SECS];
                             vol.lbaTotal = cbDiskBPB / this.cbSector;
                             vol.nEntries = bpb[DiskImage.BPB.ROOT_DIRENTS];
                             vol.cbSector = this.cbSector;
@@ -1591,36 +1593,75 @@ export default class DiskImage {
             }
         }
 
+        let iVolFound = 0;
         if (!vol.idMedia) {
+
             idFAT = 0;
             vol.cbSector = this.cbSector;
+
             /*
-             * So, this is either a fixed (partitioned) disk, or a disk using a non-standard sector size; let's assume
-             * the former and check for an MBR.  For now, we're only going to process the first active partition we find.
+             * So, this is either a fixed (partitioned) disk, or a disk using a non-standard sector size.
+             *
+             * Let's assume the former (we have an MBR) and check for partition records.  And we will do this check
+             * in two phases: checking for "primary" partition records first, and for "extended" partition records next.
              */
-            let iEntry = iVol;
-            let off = DiskImage.MBR.PARTITIONS.OFFSET;
-            while (iEntry < 4) {
-                let bStatus = this.getSectorData(sectorBoot, off + DiskImage.MBR.PARTITIONS.ENTRY.STATUS, 1);
-                if (bStatus == DiskImage.MBR.PARTITIONS.STATUS.ACTIVE) {
-                    vol.lbaStart = this.getSectorData(sectorBoot, off + DiskImage.MBR.PARTITIONS.ENTRY.VBA_FIRST, 4);
-                    sectorBoot = this.getSector(vol.lbaStart);
-                    if (sectorBoot && this.getSectorData(sectorBoot, DiskImage.BPB.SECTOR_BYTES, 2) != this.cbSector) {
-                        sectorBoot = null;
+            let iEntry;
+            let lbaPrimary = 0, lbaExtended = 0;
+            for (let iType = 0; iType <= 1; iType++) {
+
+                iEntry = 0;
+                while (iEntry < 4) {
+
+                    let lba;
+                    let off = DiskImage.MBR.PARTITIONS.OFFSET + iEntry * DiskImage.MBR.PARTITIONS.ENTRY_LENGTH;
+                    let bStatus = this.getSectorData(sectorBoot, off + DiskImage.MBR.PARTITIONS.ENTRY.STATUS, 1);
+
+                    if (bStatus == DiskImage.MBR.PARTITIONS.STATUS.ACTIVE || bStatus == DiskImage.MBR.PARTITIONS.STATUS.INACTIVE) {
+
+                        let bType = this.getSectorData(sectorBoot, off + DiskImage.MBR.PARTITIONS.ENTRY.TYPE, 1);
+
+                        if (bType == DiskImage.MBR.PARTITIONS.TYPE.FAT12_PRIMARY || bType == DiskImage.MBR.PARTITIONS.TYPE.FAT16_PRIMARY) {
+                            if (iType == 0 && iVolFound++ == iVolume) {
+                                lba = this.getSectorData(sectorBoot, off + DiskImage.MBR.PARTITIONS.ENTRY.VBA_FIRST, 4);
+                                vol.lbaStart = lba + lbaPrimary;
+                                sectorBoot = this.getSector(vol.lbaStart);
+                                if (!sectorBoot) break;     // something's wrong
+                                if (this.getSectorData(sectorBoot, DiskImage.BPB.SECTOR_BYTES, 2) != this.cbSector) {
+                                    sectorBoot = null;      // sectorBoot should have contained a DOS boot sector with BPB, but apparently not
+                                }
+                                break;
+                            }
+                        }
+
+                        if (bType == DiskImage.MBR.PARTITIONS.TYPE.EXTENDED) {
+                            if (iType == 1) {
+                                lba = this.getSectorData(sectorBoot, off + DiskImage.MBR.PARTITIONS.ENTRY.VBA_FIRST, 4);
+                                lbaPrimary = lba + lbaExtended;
+                                if (!lbaExtended) lbaExtended = lbaPrimary;
+                                sectorBoot = this.getSector(lbaPrimary);
+                                if (!sectorBoot) break;     // something's wrong
+                                iEntry = iType = 0;         // sectorBoot should contain another (extended) boot record table
+                                continue;
+                            }
+                        }
                     }
-                    break;
+
+                    iEntry++;
                 }
-                off += DiskImage.MBR.PARTITIONS.ENTRY_LENGTH;
-                iEntry++;
+                if (iEntry < 4) break;
             }
+
             if (iEntry == 4) sectorBoot = null;
+
             if (!sectorBoot) {
-                if (!iVol) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: %d-byte disk image contains unknown volume(s)\n", this.diskName, cbDisk);
+                if (!iVolume) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: %d-byte disk image contains unknown volume(s)\n", this.diskName, cbDisk);
                 return null;
             }
-            vol.iPartition = iEntry;
+
             vol.sectorFATCache = null;  // since vol.lbsStart may have changed, these cache variables must be flushed as well
         }
+
+        vol.iPartition = iVolFound - 1;
 
         if (!vol.lbaTotal) {
             vol.idMedia = this.getSectorData(sectorBoot, DiskImage.BPB.MEDIA_ID, 1);
@@ -1628,11 +1669,11 @@ export default class DiskImage {
             vol.vbaFAT = this.getSectorData(sectorBoot, DiskImage.BPB.RESERVED_SECS, 2);
             vol.vbaRoot = vol.vbaFAT + this.getSectorData(sectorBoot, DiskImage.BPB.FAT_SECS, 2) * this.getSectorData(sectorBoot, DiskImage.BPB.TOTAL_FATS, 1);
             vol.nEntries = this.getSectorData(sectorBoot, DiskImage.BPB.ROOT_DIRENTS, 2);
-            vol.nClusterSecs = this.getSectorData(sectorBoot, DiskImage.BPB.CLUSTER_SECS, 1);
+            vol.clusterSecs = this.getSectorData(sectorBoot, DiskImage.BPB.CLUSTER_SECS, 1);
         }
 
         vol.vbaData = vol.vbaRoot + (((vol.nEntries * DiskImage.DIRENT.LENGTH + (vol.cbSector - 1)) / vol.cbSector) | 0);
-        vol.nClusters = (((vol.lbaTotal - vol.vbaData) / vol.nClusterSecs) | 0);
+        vol.clustersTotal = (((vol.lbaTotal - vol.vbaData) / vol.clusterSecs) | 0);
 
         /*
          * In all FATs, the first valid cluster number is 2, as 0 is used to indicate a free cluster and 1 is reserved.
@@ -1651,24 +1692,24 @@ export default class DiskImage {
          *
          * TODO: Eventually add support for FAT32.
          */
-        vol.nFATBits = (vol.nClusters <= DiskImage.FAT12.MAX_CLUSTERS? 12 : 16);
+        vol.nFATBits = (vol.clustersTotal <= DiskImage.FAT12.MAX_CLUSTERS? 12 : 16);
         vol.clusterMax = (vol.nFATBits == 12? DiskImage.FAT12.CLUSNUM_MAX : DiskImage.FAT16.CLUSNUM_MAX);
 
         if (!idFAT) idFAT = this.getClusterEntry(vol, 0, 0);
 
         if (idFAT != vol.idMedia) {
-            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: FAT ID (%#0bx) does not match media ID (%#0bx)\n", this.diskName, idFAT, vol.idMedia);
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "volume %d error: FAT ID (%#0bx) does not match media ID (%#0bx)\n", iVolume, idFAT, vol.idMedia);
             return null;
         }
 
-        if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s:\n  vbaFAT: %d\n  vbaRoot: %d\n  vbaData: %d\n  lbaTotal: %d\n  nClusterSecs: %d\n  nClusters: %d\n", this.diskName, vol.vbaFAT, vol.vbaRoot, vol.vbaData, vol.lbaTotal, vol.nClusterSecs, vol.nClusters);
+        if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s:\n  vbaFAT: %d\n  vbaRoot: %d\n  vbaData: %d\n  lbaTotal: %d\n  clusterSecs: %d\n  clustersTotal: %d\n", this.diskName, vol.vbaFAT, vol.vbaRoot, vol.vbaData, vol.lbaTotal, vol.clusterSecs, vol.clustersTotal);
 
         /*
          * The following assertion is here only to catch anomalies; it is NOT a requirement that the number of data sectors
-         * be a perfect multiple of nClusterSecs, but if it ever happens, it's worth verifying we didn't miscalculate something.
+         * be a perfect multiple of clusterSecs, but if it ever happens, it's worth verifying we didn't miscalculate something.
          */
-        let nWasted = (vol.lbaTotal - vol.vbaData) % vol.nClusterSecs;
-        if (nWasted) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: %d-byte disk image wasting %d sectors\n", this.diskName, cbDisk, nWasted);
+        let nWasted = (vol.lbaTotal - vol.vbaData) % vol.clusterSecs;
+        if (nWasted) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "volume %d contains %d sectors, wasting %d sectors\n", iVolume, vol.lbaTotal, nWasted);
 
         /*
          * Similarly, it is NOT a requirement that the size of all root directory entries be a perfect multiple of the sector
@@ -1706,20 +1747,17 @@ export default class DiskImage {
          * not a sector, and while for floppies, it's usually true that a cluster is the same size as a sector, that's
          * not true in general.
          */
-        this.cbFree = this.cbBad = 0;
-        let clustersBad = 0, clustersFree = 0;
-        for (let cluster = 2; cluster < vol.nClusters + 2; cluster++) {
+        vol.clustersBad = 0, vol.clustersFree = 0;
+        for (let cluster = 2; cluster < vol.clustersTotal + 2; cluster++) {
             let clusterNext = this.getClusterEntry(vol, cluster, 0) | this.getClusterEntry(vol, cluster, 1);
             if (!clusterNext) {
-                this.cbFree += vol.nClusterSecs * vol.cbSector;
-                clustersFree++;
+                vol.clustersFree++;
             } else if (clusterNext == vol.clusterMax + 1) {
-                this.cbBad += vol.nClusterSecs * vol.cbSector;
-                clustersBad++;
+                vol.clustersBad++;
             }
         }
 
-        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d cluster(s) bad, %d cluster(s) free, %d bytes free\n", this.diskName, clustersBad, clustersFree, this.cbFree);
+        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d cluster(s) bad, %d cluster(s) free, %d bytes free\n", this.diskName, vol.clustersBad, vol.clustersFree, vol.clustersFree * vol.clusterSecs * vol.cbSector);
         return vol;
     }
 
@@ -1769,86 +1807,97 @@ export default class DiskImage {
     }
 
     /**
-     * getFileListing(iVol)
+     * getFileListing(iVolume)
      *
      * @this {DiskImage}
-     * @param {number} [iVol]
+     * @param {number} [iVolume] (-1 to list contents of ALL volumes in image)
      * @returns {string}
      */
-    getFileListing(iVol = 0)
+    getFileListing(iVolume = -1)
     {
         let sListing = "";
         if (this.buildTables()) {
-            let curVol = -1;
-            let curDir = null;
-            let cbDir = 0, nFiles = 0;
-            let cbTotal = 0, nTotal = 0;
-            let getTotal = function(nFiles, cbDir) {
-                return this.device.sprintf(" %8d file(s)   %8d bytes\n", nFiles, cbDir);
-            }.bind(this);
-            let i, sLabel = "", sDrive = "?";
-            for (i = 0; i < this.fileTable.length; i++) {
-                let file = this.fileTable[i];
-                if (file.iVol != iVol) continue;
-                if (curVol != file.iVol) {
-                    let vol = this.volTable[file.iVol];
-                    sDrive = vol.iPartition < 0? "A" : "C";
-                    curVol = file.iVol;
-                }
-                if (file.path.lastIndexOf('\\') > 0) break;     // don't look beyond the root directory for a volume label
-                if (file.attr & DiskImage.ATTR.VOLUME) {
-                    sLabel = file.name.replace(".", "");
-                    break;
-                }
+            let nVolumes = this.volTable.length;
+            if (iVolume < 0) {
+                iVolume = 0;
+            } else {
+                nVolumes = 1;
             }
-            for (i = 0; i < this.fileTable.length; i++) {
-                let file = this.fileTable[i];
-                if (file.attr & DiskImage.ATTR.VOLUME) continue;
-                let name = file.name;
-                let j = file.path.lastIndexOf('\\');
-                let dir = file.path.substring(0, j);
-                if (!dir) dir = "\\";
-                let ext = "";
-                if (name[0] != '.') {
-                    j = name.indexOf(".");
-                    if (j >= 0) {
-                        ext = name.substr(j + 1);
-                        name = name.substr(0, j);
+            while (iVolume < this.volTable.length && nVolumes-- > 0) {
+                let vol = this.volTable[iVolume];
+                let curVol = -1;
+                let curDir = null;
+                let cbDir = 0, nFiles = 0;
+                let cbTotal = 0, nTotal = 0;
+                let getTotal = function(nFiles, cbDir) {
+                    return this.device.sprintf(" %8d file(s)   %8d bytes\n", nFiles, cbDir);
+                }.bind(this);
+                let i, sLabel = "", sDrive = "?";
+                for (i = 0; i < this.fileTable.length; i++) {
+                    let file = this.fileTable[i];
+                    if (file.iVolume != iVolume) continue;
+                    if (file.path.lastIndexOf('\\') > 0) break;     // don't look beyond the root directory for a volume label
+                    if (file.attr & DiskImage.ATTR.VOLUME) {
+                        sLabel = file.name.replace(".", "");
+                        break;
                     }
                 }
-                if (curDir != dir) {
-                    if (curDir != null) {
-                        sListing += getTotal(nFiles, cbDir);
+                for (i = 0; i < this.fileTable.length; i++) {
+                    let file = this.fileTable[i];
+                    if (file.iVolume != iVolume) continue;
+                    if (file.attr & DiskImage.ATTR.VOLUME) continue;
+                    if (curVol != file.iVolume) {
+                        let vol = this.volTable[file.iVolume];
+                        sDrive = String.fromCharCode(vol.iPartition < 0? 0x41 : 0x43 + vol.iPartition);
+                        curVol = file.iVolume;
+                    }
+                    let name = file.name;
+                    let j = file.path.lastIndexOf('\\');
+                    let dir = file.path.substring(0, j);
+                    if (!dir) dir = "\\";
+                    let ext = "";
+                    if (name[0] != '.') {
+                        j = name.indexOf(".");
+                        if (j >= 0) {
+                            ext = name.substr(j + 1);
+                            name = name.substr(0, j);
+                        }
+                    }
+                    if (curDir != dir) {
+                        if (curDir != null) {
+                            sListing += getTotal(nFiles, cbDir);
+                        } else {
+                            sListing += this.device.sprintf("\nVolume in drive %s %s%s", sDrive, sLabel? "is " : "has no label", sLabel);
+                        }
+                        curDir = dir;
+                        sListing += this.device.sprintf("\nDirectory of %s:%s\n\n", sDrive, dir);
+                        cbDir = nFiles = 0;
+                    }
+                    let sSize;
+                    if (file.attr & DiskImage.ATTR.SUBDIR) {
+                        sSize = "<DIR>    ";
                     } else {
-                        sListing += this.device.sprintf("\nVolume in drive %s %s%s", sDrive, sLabel? "is " : "has no label", sLabel);
+                        sSize = this.device.sprintf("%9d", file.size);
+                        cbDir += file.size;
+                        cbTotal += file.size;
                     }
-                    curDir = dir;
-                    sListing += this.device.sprintf("\nDirectory of %s:%s\n\n", sDrive, dir);
-                    cbDir = nFiles = 0;
+                    sListing += this.device.sprintf("%-8s %-3s%s%s  %#2M-%#02D-%#0.2Y  %#2I:%#02N%#.1A\n", name, ext, (file.attr & (DiskImage.ATTR.READONLY | DiskImage.ATTR.HIDDEN | DiskImage.ATTR.SYSTEM))? "*" : " ", sSize, file.date);
+                    nTotal++;
+                    /*
+                    * NOTE: While it seems odd to include all SUBDIR entries in the file count, that's what DOS always did, so we do, too.
+                    * They don't affect the current directory's byte total (cbDir), since A) the size of a SUBDIR entry is normally zero, and
+                    * B) we don't add their size to the total anyway.
+                    */
+                    nFiles++;
                 }
-                let sSize;
-                if (file.attr & DiskImage.ATTR.SUBDIR) {
-                    sSize = "<DIR>    ";
-                } else {
-                    sSize = this.device.sprintf("%9d", file.size);
-                    cbDir += file.size;
-                    cbTotal += file.size;
+                sListing += getTotal(nFiles, cbDir);
+                if (nTotal > nFiles) {
+                    sListing += "\nTotal files listed:\n"
+                    sListing += getTotal(nTotal, cbTotal);
                 }
-                sListing += this.device.sprintf("%-8s %-3s%s%s  %#2M-%#02D-%#0.2Y  %#2I:%#02N%#.1A\n", name, ext, (file.attr & (DiskImage.ATTR.READONLY | DiskImage.ATTR.HIDDEN | DiskImage.ATTR.SYSTEM))? "*" : " ", sSize, file.date);
-                nTotal++;
-                /*
-                 * NOTE: While it seems odd to include all SUBDIR entries in the file count, that's what DOS always did, so we do, too.
-                 * They don't affect the current directory's byte total (cbDir), since A) the size of a SUBDIR entry is normally zero, and
-                 * B) we don't add their size to the total anyway.
-                 */
-                nFiles++;
+                sListing += this.device.sprintf("%28d bytes free\n", vol.clustersFree * vol.clusterSecs * vol.cbSector);
+                iVolume++;
             }
-            sListing += getTotal(nFiles, cbDir);
-            if (nTotal > nFiles) {
-                sListing += "\nTotal files listed:\n"
-                sListing += getTotal(nTotal, cbTotal);
-            }
-            sListing += this.device.sprintf("%28d bytes free\n", this.cbFree);
         }
         return sListing;
     }
@@ -1864,7 +1913,7 @@ export default class DiskImage {
     getFileDesc(file, fComplete)
     {
         let desc = {
-            [DiskImage.FILEDESC.VOL]:  file.iVol,
+            [DiskImage.FILEDESC.IVOL]: file.iVolume,
             [DiskImage.FILEDESC.PATH]: file.path.replace(/\\/g, '/'),
             [DiskImage.FILEDESC.NAME]: file.name,
             [DiskImage.FILEDESC.ATTR]: this.device.sprintf("%#0bx", file.attr),
@@ -1896,9 +1945,11 @@ export default class DiskImage {
             [DiskImage.VOLDESC.VBA_ROOT]:   vol.vbaRoot,
             [DiskImage.VOLDESC.ROOT_TOTAL]: vol.nEntries,
             [DiskImage.VOLDESC.VBA_DATA]:   vol.vbaData,
-            [DiskImage.VOLDESC.CLUS_SECS]:  vol.nClusterSecs,
-            [DiskImage.VOLDESC.CLUS_TOTAL]: vol.nClusters,
-            [DiskImage.VOLDESC.CLUS_MAX]:   vol.clusterMax
+            [DiskImage.VOLDESC.CLUS_SECS]:  vol.clusterSecs,
+            [DiskImage.VOLDESC.CLUS_MAX]:   vol.clusterMax,
+            [DiskImage.VOLDESC.CLUS_BAD]:   vol.clustersBad,
+            [DiskImage.VOLDESC.CLUS_FREE]:  vol.clustersFree,
+            [DiskImage.VOLDESC.CLUS_TOTAL]: vol.clustersTotal
         };
         return desc;
     }
@@ -2077,7 +2128,7 @@ export default class DiskImage {
                     (dir.modTime & 0x1f) << 1,
                     this.diskName + ":" + path
                 );
-                file = new FileInfo(this, vol.iVol, path, dir.name, dir.attr, dateMod, dir.size, dir.cluster, dir.aLBA);
+                file = new FileInfo(this, vol.iVolume, path, dir.name, dir.attr, dateMod, dir.size, dir.cluster, dir.aLBA);
                 this.fileTable.push(file);
             }
         }
@@ -2118,7 +2169,7 @@ export default class DiskImage {
      *      vbaData
      *      cbSector
      *      clusterMax
-     *      nClusterSecs
+     *      clusterSecs
      *      nFATBits
      *
      * @this {DiskImage}
@@ -2179,8 +2230,8 @@ export default class DiskImage {
                 if (cluster < DiskImage.FAT12.CLUSNUM_MIN) {
                     break;
                 }
-                let vba = vol.vbaData + ((cluster - DiskImage.FAT12.CLUSNUM_MIN) * vol.nClusterSecs);
-                for (let i = 0; i < vol.nClusterSecs; i++) {
+                let vba = vol.vbaData + ((cluster - DiskImage.FAT12.CLUSNUM_MIN) * vol.clusterSecs);
+                for (let i = 0; i < vol.clusterSecs; i++) {
                     aLBA.push(vol.lbaStart + vba++);
                 }
                 cluster = this.getClusterEntry(vol, cluster, 0) | this.getClusterEntry(vol, cluster, 1);
@@ -2591,8 +2642,8 @@ export default class DiskImage {
         if (!fLegacy) {
             if (this.buildTables()) {
                 volTable = [];
-                for (let iVol = 0; iVol < this.volTable.length; iVol++) {
-                    volTable.push(this.getVolDesc(this.volTable[iVol]));
+                for (let iVolume = 0; iVolume < this.volTable.length; iVolume++) {
+                    volTable.push(this.getVolDesc(this.volTable[iVolume]));
                 }
                 fileTable = [];
                 for (let iFile = 0; iFile < this.fileTable.length; iFile++) {
@@ -2871,15 +2922,17 @@ DiskImage.VOLDESC = {
     ROOT_TOTAL: 'rootTotal',        // total entries in root directory
     VBA_DATA:   'vbaData',          // VBA of data area
     CLUS_SECS:  'clusSecs',         // number of sectors per cluster
-    CLUS_TOTAL: 'clusTotal',        // total clusters in data area
-    CLUS_MAX:   'clusMax'           // maximum valid cluster number
+    CLUS_MAX:   'clusMax',          // maximum valid cluster number
+    CLUS_BAD:   'clusBad',          // total bad clusters
+    CLUS_FREE:  'clusFree',         // total free clusters
+    CLUS_TOTAL: 'clusTotal'         // total clusters
 };
 
 /*
  * File descriptor properties.
  */
 DiskImage.FILEDESC = {
-    VOL:        'vol',
+    IVOL:       'vol',
     PATH:       'path',
     NAME:       'name',
     ATTR:       'attr',
@@ -2915,20 +2968,22 @@ DiskImage.MBR = {
         OFFSET:     0x1BE,
         ENTRY: {
             STATUS:         0x00,   // 1-byte (0x80 if active)
-            CHS_FIRST:      0x01,   // 3-byte CHS specifier
+            CHS_FIRST:      0x01,   // 3-byte CHS specifier of first partition sector
             TYPE:           0x04,   // 1-byte TYPE (see below)
-            CHS_LAST:       0x05,   // 3-byte CHS specifier
+            CHS_LAST:       0x05,   // 3-byte CHS specifier of last partition sector
             VBA_FIRST:      0x08,   // 4-byte Volume Block Address
             VBA_TOTAL:      0x0C,   // 4-byte Volume Block Address
         },
         ENTRY_LENGTH:       0x10,
         STATUS: {
-            ACTIVE:         0x80
+            ACTIVE:         0x80,   // ie, bootable
+            INACTIVE:       0x00
         },
         TYPE: {
             EMPTY:          0x00,
             FAT12_PRIMARY:  0x01,   // DOS 2.0 and up (12-bit FAT)
-            FAT16_PRIMARY:  0x04    // DOS 3.0 and up (16-bit FAT)
+            FAT16_PRIMARY:  0x04,   // DOS 3.0 and up (16-bit FAT)
+            EXTENDED:       0x05    // DOS 3.3 and up (must reside within the first 8Gb)
         }
     },
     SIG_OFFSET:     0x1FE,

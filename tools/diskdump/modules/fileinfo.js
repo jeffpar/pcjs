@@ -13,7 +13,7 @@ import DiskImage from "./diskimage.js";
 /**
  * @class FileInfo
  * @property {DiskImage} disk
- * @property {number}    iVol
+ * @property {number}    iVolume
  * @property {string}    path
  * @property {string}    name
  * @property {number}    attr
@@ -25,10 +25,10 @@ import DiskImage from "./diskimage.js";
  */
 export default class FileInfo {
     /**
-     * FileInfo(disk, iVol, path, name, attr, size, cluster, aLBA)
+     * FileInfo(disk, iVolume, path, name, attr, size, cluster, aLBA)
      *
      * @param {DiskImage} disk
-     * @param {number} iVol
+     * @param {number} iVolume
      * @param {string} path
      * @param {string} name
      * @param {number} attr
@@ -37,11 +37,11 @@ export default class FileInfo {
      * @param {number} cluster
      * @param {Array.<number>} aLBA
      */
-    constructor(disk, iVol, path, name, attr, date, size, cluster, aLBA)
+    constructor(disk, iVolume, path, name, attr, date, size, cluster, aLBA)
     {
         this.device = disk.device;
         this.disk = disk;
-        this.iVol = iVol;
+        this.iVolume = iVolume;
         this.path = path;
         this.name = name;
         this.attr = attr;
@@ -50,7 +50,7 @@ export default class FileInfo {
         this.cluster = cluster;
         this.aLBA = aLBA;
         if (Device.DEBUG) {
-            this.device.printf(Device.MESSAGE.FILE, '"%d:%s" size=%d attr=%#0bx date=%#T cluster=%d sectors=%j\n', iVol, path, size, attr, date, cluster, aLBA);
+            this.device.printf(Device.MESSAGE.FILE, '"%d:%s" size=%d attr=%#0bx date=%#T cluster=%d sectors=%j\n', iVolume, path, size, attr, date, cluster, aLBA);
         }
     }
 

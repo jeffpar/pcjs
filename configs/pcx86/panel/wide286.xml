@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panel id="panel" width="100%" padding="8px">
+	<name>PCjs Debugger</name>
+	<control type="container" class="pcjs-textarea" width="60%" padBottom="8px" padRight="8px">
+		<control type="textarea" binding="print" width="100%" height="260px" pos="relative" padBottom="4px" style="resize:vertical;"/>
+		<control type="container" width="100%">
+			<control type="text" binding="debugInput" width="auto"/>
+			<control type="button" binding="debugEnter">Enter</control>
+			<control type="button" binding="clear">Clear</control>
+		</control>
+	</control>
+	<control type="container" class="pcjs-registers" width="35%" padLeft="8px">
+		<control type="register" label="AX" binding="AX" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="BX" binding="BX" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="CX" binding="CX" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="DX" binding="DX" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="SP" binding="SP" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="BP" binding="BP" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="SI" binding="SI" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="DI" binding="DI" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="DS" binding="DS" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="ES" binding="ES" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="SS" binding="SS" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="CS" binding="CS" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="register" label="IP" binding="IP" pos="left" width="40px" padRight="8px" padBottom="8px">0000</control>
+		<control type="container" width="200px" pos="left">
+			<control type="flag" label="V" binding="V" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="D" binding="D" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="I" binding="I" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="T" binding="T" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="S" binding="S" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="Z" binding="Z" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="A" binding="A" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="P" binding="P" width="8px" padRight="4px" padBottom="8px">0</control>
+			<control type="flag" label="C" binding="C" width="8px" padRight="4px" padBottom="8px">0</control>
+		</control>
+		<control pos=""/>
+		<control type="description" padBottom="8px">Speed:</control>
+		<control type="description" binding="speed" padLeft="4px" padBottom="8px">Stopped</control>
+	</control>
+	<control type="container" padLeft="8px" padBottom="8px">
+		<control type="button" binding="run">Run</control>
+		<control type="button" binding="step">Step</control>
+		<control type="button" binding="reset">Reset</control>
+		<control type="button" binding="setSpeed">Speed</control>
+		<control type="button" binding="save">Save</control>
+	</control>
+	<comment>
+		The 5170 doesn't have DIP switches like previous models, but it still has a few switches and jumpers.
+
+		First and foremost, there is a "Display Switch" near the battery connector that must be pushed "toward the
+		front of your system unit" if you have a CGA that is your only (or primary) display adapter, or "toward the
+		back of your system unit" if you're using an MDA as your only (or primary) display.
+
+		We support the "Display Switch" setting with the *monitor* property, which you can set to either "mono"
+		(aka "mda") or "color" (aka "cga").  However, unlike the model 5150/5160 DIP switches, we currently offer no
+		UI for this switch, so it cannot be changed by the user.
+
+		Second, there is the "keyboard inhibit switch"; it defaults to UNLOCKED and stays UNLOCKED, since no UI or
+		configuration property is currently provided.
+
+		Finally, there is a "manufacturing jumper" that can be installed, enabling additional diagnostic functions
+		in the ROM; it defaults to UNINSTALLED and stays UNINSTALLED, since no UI or configuration property is currently
+		provided.
+
+		The rest of a 5170 machine's configuration is handled through CMOS settings, which PCjs configures automatically
+		based on other settings (eg, the chipset's *floppies* property).
+	</comment>
+</panel>

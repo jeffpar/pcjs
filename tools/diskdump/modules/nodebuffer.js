@@ -63,6 +63,10 @@ export default class DataBuffer {
     /**
      * fill(data, off, end)
      *
+     * NOTE: The Node Buffer class doesn't support fill() with a simple Array of bytes (aka octets), which seems a bit odd,
+     * since Buffer class methods, such as from(), DO support such arrays.  Since our modules will always be using DataBuffer,
+     * I'm going to take the liberty of adding that support.
+     *
      * @this {DataBuffer}
      * @param {Array|number} data
      * @param {number} [off]
@@ -83,6 +87,9 @@ export default class DataBuffer {
 
     /**
      * new(size)
+     *
+     * NOTE: This method isn't part of the Node Buffer class, but it's useful for creating new buffers without the client
+     * needing to known which DataBuffer class to import (eg, nodebuffer.js or webbuffer.js).
      *
      * @this {DataBuffer}
      * @param {number} size

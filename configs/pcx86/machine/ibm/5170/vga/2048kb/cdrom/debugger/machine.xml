@@ -11,7 +11,7 @@
 	<fdc ref="/configs/pcx86/fdc/library.xml" autoMount='{A:{name:"None"}, B:{name:"None"}}'/>
 	<keyboard ref="/configs/pcx86/keyboard/us84-softkeys.xml"/>
 	<debugger id="debugger"/>
-	<panel ref="/configs/pcx86/panel/wide.xml"/>
+	<panel ref="/configs/pcx86/panel/wide286.xml"/>
 	<hdc ref="/configs/pcx86/hdc/20mb/pcdos330-win310-vga-at2.xml"/>
 	<hdc ref="/configs/pcx86/hdc/cdrom/library-atapi.xml"/>
 	<chipset id="chipset" model="5170" floppies="[1440,1200]"/>
