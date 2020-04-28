@@ -7,6 +7,7 @@ machines:
   - id: ibm5160-cga-win101
     type: pcx86
     debugger: true
+    uncompiled: true
     resume: 1
     state: /software/pcx86/sys/windows/1.01/cga/state.json
     config: /configs/pcx86/machine/ibm/5160/cga/256kb/debugger/machine.xml
