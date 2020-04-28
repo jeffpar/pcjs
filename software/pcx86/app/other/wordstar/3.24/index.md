@@ -25,15 +25,15 @@ an interesting review/rant from 1983 on this and other versions of WordStar for 
 
 ### Directory of WordStar 3.24
 
-	 Volume in drive A has no label
-	 Directory of A:\
+     Volume in drive A has no label
+     Directory of A:\
 
-	WSOVLY1  OVR     41216 11-15-82  12:00a
-	WSMSGS   OVR     28160 11-15-82  12:00a
-	INSTALL  BAS     17152 10-01-82  12:00a
-	PRINT    TST      3968 01-01-80  12:00a
-	WS       COM     20864 02-01-83  12:00a
-	        5 file(s)     111360 bytes
-	                       48128 bytes free
+    WSOVLY1  OVR     41216  11-15-82  12:00a
+    WSMSGS   OVR     28160  11-15-82  12:00a
+    INSTALL  BAS     17152  10-01-82  12:00a
+    PRINT    TST      3968   1-01-80  12:00a
+    WS       COM     20864   2-01-83  12:00a
+            5 file(s)     111360 bytes
+                           48128 bytes free
 
 ![WordStar 3.24 Diskette]({{ site.software.diskettes.server }}/pcx86/app/other/wordstar/3.24/WS324.jpg)

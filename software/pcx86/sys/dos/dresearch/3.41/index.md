@@ -18,72 +18,65 @@ machines:
 
 ### Directory of DR DOS 3.41 (Disk 1)
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
-
-	DRBIOS   SYS     18304 06-30-89  12:16p
-	DRBDOS   SYS     39385 07-14-89  12:00p
-	COMMAND  COM     35840 06-30-89  12:16p
-	AUTOEXEC BAT        24 06-30-89  12:16p
-	ANSI     SYS      4773 06-30-89  12:16p
-	COUNTRY  SYS      9216 06-30-89  12:16p
-	DISPLAY  SYS      3311 06-30-89  12:16p
-	DRIVER   SYS      2150 06-30-89  12:16p
-	EMM386   SYS      8266 06-30-89  12:16p
-	EMMXMA   SYS      5995 06-30-89  12:16p
-	PRINTER  SYS      5448 06-30-89  12:16p
-	VDISK    SYS      3765 06-30-89  12:16p
-	EGA      CPI     48987 06-30-89  12:16p
-	4201     CPI      6680 06-30-89  12:16p
-	4208     CPI       348 06-30-89  12:16p
-	5202     CPI       361 06-30-89  12:16p
-	DISKCOPY COM     11475 06-30-89  12:16p
-	INSTALL  EXE     71321 06-30-89  12:16p
-	GRAFTABL COM      7051 06-30-89  12:16p
-	KEYB     COM     22749 06-30-89  12:16p
-	LABEL    COM      6462 06-30-89  12:16p
-	MODE     COM     17065 06-30-89  12:16p
-	SHARE    EXE       918 06-30-89  12:16p
-	SYS      COM      9658 06-30-89  12:16p
-	       24 file(s)     339552 bytes
-
-	Total files listed:
-	       24 file(s)     339552 bytes
-	                       11264 bytes free
+    DRBIOS   SYS     18304   6-30-89  12:16p
+    DRBDOS   SYS     39385   7-14-89  12:00p
+    COMMAND  COM     35840   6-30-89  12:16p
+    AUTOEXEC BAT        24   6-30-89  12:16p
+    ANSI     SYS      4773   6-30-89  12:16p
+    COUNTRY  SYS      9216   6-30-89  12:16p
+    DISPLAY  SYS      3311   6-30-89  12:16p
+    DRIVER   SYS      2150   6-30-89  12:16p
+    EMM386   SYS      8266   6-30-89  12:16p
+    EMMXMA   SYS      5995   6-30-89  12:16p
+    PRINTER  SYS      5448   6-30-89  12:16p
+    VDISK    SYS      3765   6-30-89  12:16p
+    EGA      CPI     48987   6-30-89  12:16p
+    4201     CPI      6680   6-30-89  12:16p
+    4208     CPI       348   6-30-89  12:16p
+    5202     CPI       361   6-30-89  12:16p
+    DISKCOPY COM     11475   6-30-89  12:16p
+    INSTALL  EXE     71321   6-30-89  12:16p
+    GRAFTABL COM      7051   6-30-89  12:16p
+    KEYB     COM     22749   6-30-89  12:16p
+    LABEL    COM      6462   6-30-89  12:16p
+    MODE     COM     17065   6-30-89  12:16p
+    SHARE    EXE       918   6-30-89  12:16p
+    SYS      COM      9658   6-30-89  12:16p
+           24 file(s)     339552 bytes
+                           11264 bytes free
 
 ### Directory of DR DOS 3.41 (Disk 2)
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
+    ATTRIB   EXE     11026   6-30-89  12:16p
+    BACKUP   COM     18787   6-30-89  12:16p
+    CHKDSK   COM     21255   6-30-89  12:16p
+    COMP     COM     11081   6-30-89  12:16p
+    DISKCOMP COM     11267   6-30-89  12:16p
+    EDITOR   EXE     23416   6-30-89  12:16p
+    FASTOPEN EXE       675   6-30-89  12:16p
+    FDISK    COM     20947   6-30-89  12:16p
+    FIND     EXE     12998   6-30-89  12:16p
+    FORMAT   COM     18083   6-30-89  12:16p
+    GRAPHICS COM      5358   6-30-89  12:16p
+    NLSFUNC  EXE       629   6-30-89  12:16p
+    PASSWORD EXE     13294   6-30-89  12:16p
+    PRINT    COM     16958   6-30-89  12:16p
+    RECOVER  COM     12740   6-30-89  12:16p
+    REPLACE  EXE     15024   6-30-89  12:16p
+    RESTORE  COM     15057   6-30-89  12:16p
+    SORT     EXE      8782   6-30-89  12:16p
+    SID86    EXE     28160   6-30-89  12:16p
+    TOUCH    EXE     12102   6-30-89  12:16p
+    TREE     COM     11808   6-30-89  12:16p
+    XCOPY    EXE     18390   6-30-89  12:16p
+    XDEL     EXE     10700   6-30-89  12:16p
+    XDIR     EXE     15158   6-30-89  12:16p
+           24 file(s)     333695 bytes
+                           19456 bytes free
 
-	ATTRIB   EXE     11026 06-30-89  12:16p
-	BACKUP   COM     18787 06-30-89  12:16p
-	CHKDSK   COM     21255 06-30-89  12:16p
-	COMP     COM     11081 06-30-89  12:16p
-	DISKCOMP COM     11267 06-30-89  12:16p
-	EDITOR   EXE     23416 06-30-89  12:16p
-	FASTOPEN EXE       675 06-30-89  12:16p
-	FDISK    COM     20947 06-30-89  12:16p
-	FIND     EXE     12998 06-30-89  12:16p
-	FORMAT   COM     18083 06-30-89  12:16p
-	GRAPHICS COM      5358 06-30-89  12:16p
-	NLSFUNC  EXE       629 06-30-89  12:16p
-	PASSWORD EXE     13294 06-30-89  12:16p
-	PRINT    COM     16958 06-30-89  12:16p
-	RECOVER  COM     12740 06-30-89  12:16p
-	REPLACE  EXE     15024 06-30-89  12:16p
-	RESTORE  COM     15057 06-30-89  12:16p
-	SORT     EXE      8782 06-30-89  12:16p
-	SID86    EXE     28160 06-30-89  12:16p
-	TOUCH    EXE     12102 06-30-89  12:16p
-	TREE     COM     11808 06-30-89  12:16p
-	XCOPY    EXE     18390 06-30-89  12:16p
-	XDEL     EXE     10700 06-30-89  12:16p
-	XDIR     EXE     15158 06-30-89  12:16p
-	       24 file(s)     333695 bytes
-
-	Total files listed:
-	       24 file(s)     333695 bytes
-	                       19456 bytes free

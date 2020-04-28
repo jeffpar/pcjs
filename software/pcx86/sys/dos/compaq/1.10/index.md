@@ -38,42 +38,38 @@ We also have copies of the original [COMPAQ MS-DOS 1.10 Documentation](#document
 
 ### Directory of COMPAQ MS-DOS 1.10 Rev B
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
-
-	IOSYS    COM      1998 01-20-83  12:00p
-	MSDOS    COM      6136 01-20-83  12:00p
-	COMMAND  COM      4959 01-20-83  12:00p
-	LINK     EXE     41856 01-20-83  12:00p
-	EDLIN    COM      2432 01-20-83  12:00p
-	SYS      COM       645 01-20-83  12:00p
-	DEBUG    COM      6619 01-20-83  12:00p
-	BASIC    COM       502 01-20-83  12:00p
-	BASICA   COM       500 01-20-83  12:00p
-	FORMAT   COM      3296 01-20-83  12:00p
-	EXE2BIN  EXE      1280 01-20-83  12:00p
-	DISKCOPY COM      1812 01-20-83  12:00p
-	DISKCOMP COM      1291 01-20-83  12:00p
-	MODE     COM      1800 01-20-83  12:00p
-	CHKDSK   COM      1720 01-20-83  12:00p
-	COMP     COM      1484 01-20-83  12:00p
-	WORDS             1242 01-20-83  12:00p
-	DEMO     BAT        14 01-20-83  12:00p
-	DEMO     BAS      5888 01-20-83  12:00p
-	DEMO1    BAS     15872 01-20-83  12:00p
-	DEMO2    BAS     17536 01-20-83  12:00p
-	DEMO3    BAS     21632 01-20-83  12:00p
-	DEMO4    BAS      7424 01-20-83  12:00p
-	JUGGLER  DAT     16128 01-20-83  12:00p
-	USA      DAT     16128 01-20-83  12:00p
-	BASICA   EXE     53760 02-08-83  12:00p
-	TEST     EXE     18560 01-20-83  12:00p
-	       27 file(s)     252514 bytes
-
-	Total files listed:
-	       27 file(s)     252514 bytes
-	                       56320 bytes free
+    IOSYS    COM*     1998   1-20-83  12:00p
+    MSDOS    COM*     6136   1-20-83  12:00p
+    COMMAND  COM      4959   1-20-83  12:00p
+    LINK     EXE     41856   1-20-83  12:00p
+    EDLIN    COM      2432   1-20-83  12:00p
+    SYS      COM       645   1-20-83  12:00p
+    DEBUG    COM      6619   1-20-83  12:00p
+    BASIC    COM       502   1-20-83  12:00p
+    BASICA   COM       500   1-20-83  12:00p
+    FORMAT   COM      3296   1-20-83  12:00p
+    EXE2BIN  EXE      1280   1-20-83  12:00p
+    DISKCOPY COM      1812   1-20-83  12:00p
+    DISKCOMP COM      1291   1-20-83  12:00p
+    MODE     COM      1800   1-20-83  12:00p
+    CHKDSK   COM      1720   1-20-83  12:00p
+    COMP     COM      1484   1-20-83  12:00p
+    WORDS             1242   1-20-83  12:00p
+    DEMO     BAT        14   1-20-83  12:00p
+    DEMO     BAS      5888   1-20-83  12:00p
+    DEMO1    BAS     15872   1-20-83  12:00p
+    DEMO2    BAS     17536   1-20-83  12:00p
+    DEMO3    BAS     21632   1-20-83  12:00p
+    DEMO4    BAS      7424   1-20-83  12:00p
+    JUGGLER  DAT     16128   1-20-83  12:00p
+    USA      DAT     16128   1-20-83  12:00p
+    BASICA   EXE     53760   2-08-83  12:00p
+    TEST     EXE     18560   1-20-83  12:00p
+           27 file(s)     252514 bytes
+                           56320 bytes free
 
 ![COMPAQ MS-DOS 1.10B Diskette]({{ site.software.diskettes.server }}/pcx86/sys/dos/compaq/1.10/COMPAQ-DOS110B.jpg)
 

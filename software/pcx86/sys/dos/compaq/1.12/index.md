@@ -30,43 +30,39 @@ To learn more about this double-sided 320Kb diskette, see the
 
 ### Directory of COMPAQ MS-DOS 1.12
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
-
-	IOSYS    COM      1998 11-28-83  12:00p
-	MSDOS    COM      6140 11-28-83  12:00p
-	COMMAND  COM      4959 11-28-83  12:00p
-	LINK     EXE     41856 11-28-83  12:00p
-	EDLIN    COM      2432 11-28-83  12:00p
-	SYS      COM       645 11-28-83  12:00p
-	DEBUG    COM      6619 11-28-83  12:00p
-	BASIC    COM       549 11-28-83  12:00p
-	BASICA   COM       547 11-28-83  12:00p
-	FORMAT   COM      3376 11-28-83  12:00p
-	EXE2BIN  EXE      1280 11-28-83  12:00p
-	DISKCOPY COM      1946 11-28-83  12:00p
-	DISKCOMP COM      1433 11-28-83  12:00p
-	MODE     COM      1800 11-28-83  12:00p
-	CHKDSK   COM      1770 11-28-83  12:00p
-	COMP     COM      1484 11-28-83  12:00p
-	WORDS             1242 11-28-83  12:00p
-	BASICA   EXE     54304 11-28-83  12:00p
-	TEST     EXE     18560 11-28-83  12:00p
-	DEMO     BAT        14 11-28-83  12:00p
-	DEMO     BAS      7936 11-28-83  12:00p
-	DEMO1    BAS     18048 11-28-83  12:00p
-	DEMO2    BAS     17920 11-28-83  12:00p
-	DEMO3    BAS     21248 11-28-83  12:00p
-	DEMO4    BAS      6656 11-28-83  12:00p
-	JUGGLER  DAT     16128 11-28-83  12:00p
-	USA      DAT     16128 11-28-83  12:00p
-	INTEREST BAS       384 11-28-83  12:00p
-	       28 file(s)     257402 bytes
-
-	Total files listed:
-	       28 file(s)     257402 bytes
-	                       52224 bytes free
+    IOSYS    COM*     1998  11-28-83  12:00p
+    MSDOS    COM*     6140  11-28-83  12:00p
+    COMMAND  COM      4959  11-28-83  12:00p
+    LINK     EXE     41856  11-28-83  12:00p
+    EDLIN    COM      2432  11-28-83  12:00p
+    SYS      COM       645  11-28-83  12:00p
+    DEBUG    COM      6619  11-28-83  12:00p
+    BASIC    COM       549  11-28-83  12:00p
+    BASICA   COM       547  11-28-83  12:00p
+    FORMAT   COM      3376  11-28-83  12:00p
+    EXE2BIN  EXE      1280  11-28-83  12:00p
+    DISKCOPY COM      1946  11-28-83  12:00p
+    DISKCOMP COM      1433  11-28-83  12:00p
+    MODE     COM      1800  11-28-83  12:00p
+    CHKDSK   COM      1770  11-28-83  12:00p
+    COMP     COM      1484  11-28-83  12:00p
+    WORDS             1242  11-28-83  12:00p
+    BASICA   EXE     54304  11-28-83  12:00p
+    TEST     EXE     18560  11-28-83  12:00p
+    DEMO     BAT        14  11-28-83  12:00p
+    DEMO     BAS      7936  11-28-83  12:00p
+    DEMO1    BAS     18048  11-28-83  12:00p
+    DEMO2    BAS     17920  11-28-83  12:00p
+    DEMO3    BAS     21248  11-28-83  12:00p
+    DEMO4    BAS      6656  11-28-83  12:00p
+    JUGGLER  DAT     16128  11-28-83  12:00p
+    USA      DAT     16128  11-28-83  12:00p
+    INTEREST BAS       384  11-28-83  12:00p
+           28 file(s)     257402 bytes
+                           52224 bytes free
 
 ### COMPAQ MS-DOS 1.12 Boot Sector
 

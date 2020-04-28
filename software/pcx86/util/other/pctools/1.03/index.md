@@ -20,14 +20,11 @@ machines:
 {% include machine.html id="ibm5150" %}
 
 ### Directory of Central Point PC Tools 1.03
- 
-	 Volume in drive A has no label
 
-	Directory of A:\
+     Volume in drive A has no label
+     Directory of A:\
 
-	PCTOOLS  EXE     83072 01-25-86   7:08p
-	        1 file(s)      83072 bytes
+    PCTOOLS  EXE     83072   1-25-86   7:08p
+            1 file(s)      83072 bytes
+                          278528 bytes free
 
-	Total files listed:
-	        1 file(s)      83072 bytes
-	                      278528 bytes free

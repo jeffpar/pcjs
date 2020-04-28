@@ -35,44 +35,44 @@ You can browse all of the [Additional Materials](#additional-materials) below.
 
 ### Directory of WordStar 3.20 (Original)
 
-	 Volume in drive A has no label
-	 Directory of A:\
+     Volume in drive A has no label
+     Directory of A:\
 
-	WS       COM     20480
-	WSMSGS   OVR     27264
-	WSOVLY1  OVR     40960
-	INSTALL  BAS     14848
-	WSBAUD   BAS      1152
-	EXAMPLE  TXT      9216
-	        6 file(s)     113920 bytes
-	                       45568 bytes free
+    WS       COM     20480  11-30-79  12:00a
+    WSMSGS   OVR     27264  11-30-79  12:00a
+    WSOVLY1  OVR     40960  11-30-79  12:00a
+    INSTALL  BAS     14848  11-30-79  12:00a
+    WSBAUD   BAS      1152  11-30-79  12:00a
+    EXAMPLE  TXT      9216  11-30-79  12:00a
+            6 file(s)     113920 bytes
+                           45568 bytes free
 
 ![WordStar 3.20 Disk 1]({{ site.software.diskettes.server }}/pcx86/app/other/wordstar/3.20/WS320-ORIG.png)
 
 ### Directory of WordStar 3.20 (MailMerge)
 
-	 Volume in drive A has no label
-	 Directory of A:\
+     Volume in drive A has no label
+     Directory of A:\
 
-	MAILMRGE OVR     11520
-	        1 file(s)      11520 bytes
-	                      148480 bytes free
+    MAILMRGE OVR     11520  11-30-79  12:00a
+            1 file(s)      11520 bytes
+                          148480 bytes free
 
 ![WordStar 3.20 Disk 2]({{ site.software.diskettes.server }}/pcx86/app/other/wordstar/3.20/MM320-ORIG.png)
 
 ### Directory of WordStar 3.20 (Recreated)
 
-	 Volume in drive A has no label
-	 Directory of A:\
+     Volume in drive A has no label
+     Directory of A:\
 
-	WSOVLY1  OVR     40960 01-01-80  12:00a
-	WSMSGS   OVR     27264 01-01-80  12:00a
-	INSTALL  BAS     17152 10-01-82  12:00a
-	PRINT    TST      3968 01-01-80  12:00a
-	WS       COM     20480 01-01-80  12:00a
-	MAILMRGE OVR     11520 01-01-80  12:00a
-	WSBAUD   BAS      1152 02-23-13   8:45a
-	        7 file(s)     122496 bytes
-	                       36352 bytes free
+    WSOVLY1  OVR     40960   1-01-80  12:00a
+    WSMSGS   OVR     27264   1-01-80  12:00a
+    INSTALL  BAS     17152  10-01-82  12:00a
+    PRINT    TST      3968   1-01-80  12:00a
+    WS       COM     20480   1-01-80  12:00a
+    MAILMRGE OVR     11520   1-01-80  12:00a
+    WSBAUD   BAS      1152   2-23-13   8:45a
+            7 file(s)     122496 bytes
+                           36352 bytes free
 
 {% include gallery/documents.html title="Additional Materials" width="320" height="460" %}

@@ -83,144 +83,148 @@ New functions:
 
 ### Directory of PC DOS 3.20 (720K)
 
-	 Volume in drive A has no label
-	 Directory of A:\
+     Volume in drive A has no label
+     Directory of A:\
 
-	IBMBIO   COM     16369 12-30-85  12:00p
-	IBMDOS   COM     28477 12-30-85  12:00p
-	ANSI     SYS      1651 12-30-85  12:00p
-	ASSIGN   COM      1536 12-30-85  12:00p
-	ATTRIB   EXE      8247 12-30-85  12:00p
-	BACKUP   COM      6234 12-30-85  12:00p
-	BASIC    COM     19298 12-30-85  12:00p
-	BASICA   COM     36396 12-30-85  12:00p
-	CHKDSK   COM      9832 12-30-85  12:00p
-	COMMAND  COM     23791 12-30-85  12:00p
-	COMP     COM      4184 12-30-85  12:00p
-	DISKCOMP COM      5792 12-30-85  12:00p
-	DISKCOPY COM      6224 12-30-85  12:00p
-	DRIVER   SYS      1115 12-30-85  12:00p
-	EDLIN    COM      7508 12-30-85  12:00p
-	FDISK    COM      8173 12-30-85  12:00p
-	FIND     EXE      6416 12-30-85  12:00p
-	FORMAT   COM     11135 12-30-85  12:00p
-	GRAFTABL COM      1169 12-30-85  12:00p
-	GRAPHICS COM      3220 12-30-85  12:00p
-	JOIN     EXE      8955 12-30-85  12:00p
-	KEYBFR   COM      3291 12-30-85  12:00p
-	KEYBGR   COM      3274 12-30-85  12:00p
-	KEYBIT   COM      3060 12-30-85  12:00p
-	KEYBSP   COM      3187 12-30-85  12:00p
-	KEYBUK   COM      3036 12-30-85  12:00p
-	LABEL    COM      2346 12-30-85  12:00p
-	MODE     COM      6864 12-30-85  12:00p
-	MORE     COM       295 12-30-85  12:00p
-	PRINT    COM      8976 12-30-85  12:00p
-	RECOVER  COM      4297 12-30-85  12:00p
-	REPLACE  EXE     11650 12-30-85  12:00p
-	RESTORE  COM      6012 12-30-85  12:00p
-	SELECT   COM      3826 12-30-85  12:00p
-	SHARE    EXE      8580 12-30-85  12:00p
-	SORT     EXE      1911 12-30-85  12:00p
-	SUBST    EXE      9911 12-30-85  12:00p
-	SYS      COM      4620 12-30-85  12:00p
-	TREE     COM      3357 12-30-85  12:00p
-	VDISK    SYS      3307 12-30-85  12:00p
-	XCOPY    EXE     11200 12-30-85  12:00p
-	ART      BAS      1879 12-30-85  12:00p
-	BALL     BAS      1966 12-30-85  12:00p
-	BASIC    PIF       369 12-30-85  12:00p
-	BASICA   PIF       369 12-30-85  12:00p
-	CIRCLE   BAS      1643 12-30-85  12:00p
-	COLORBAR BAS      1427 12-30-85  12:00p
-	COMM     BAS      4254 12-30-85  12:00p
-	DEBUG    COM     15799 12-30-85  12:00p
-	DONKEY   BAS      3572 12-30-85  12:00p
-	EXE2BIN  EXE      3063 12-30-85  12:00p
-	LINK     EXE     39076 12-30-85  12:00p
-	MORTGAGE BAS      6178 12-30-85  12:00p
-	MUSIC    BAS      8575 12-30-85  12:00p
-	MUSICA   BAS     13431 12-30-85  12:00p
-	PIECHART BAS      2180 12-30-85  12:00p
-	SAMPLES  BAS      2363 12-30-85  12:00p
-	SPACE    BAS      1851 12-30-85  12:00p
-	VDISK    LST    136315 12-30-85  12:00p
-	VENDOR-# DO1         0 07-04-83  12:00a
-	       60 file(s)     563032 bytes
-	                      135168 bytes free
+    IBMBIO   COM*    16369  12-30-85  12:00p
+    IBMDOS   COM*    28477  12-30-85  12:00p
+    ANSI     SYS      1651  12-30-85  12:00p
+    ASSIGN   COM      1536  12-30-85  12:00p
+    ATTRIB   EXE      8247  12-30-85  12:00p
+    BACKUP   COM      6234  12-30-85  12:00p
+    BASIC    COM     19298  12-30-85  12:00p
+    BASICA   COM     36396  12-30-85  12:00p
+    CHKDSK   COM      9832  12-30-85  12:00p
+    COMMAND  COM     23791  12-30-85  12:00p
+    COMP     COM      4184  12-30-85  12:00p
+    DISKCOMP COM      5792  12-30-85  12:00p
+    DISKCOPY COM      6224  12-30-85  12:00p
+    DRIVER   SYS      1115  12-30-85  12:00p
+    EDLIN    COM      7508  12-30-85  12:00p
+    FDISK    COM      8173  12-30-85  12:00p
+    FIND     EXE      6416  12-30-85  12:00p
+    FORMAT   COM     11135  12-30-85  12:00p
+    GRAFTABL COM      1169  12-30-85  12:00p
+    GRAPHICS COM      3220  12-30-85  12:00p
+    JOIN     EXE      8955  12-30-85  12:00p
+    KEYBFR   COM      3291  12-30-85  12:00p
+    KEYBGR   COM      3274  12-30-85  12:00p
+    KEYBIT   COM      3060  12-30-85  12:00p
+    KEYBSP   COM      3187  12-30-85  12:00p
+    KEYBUK   COM      3036  12-30-85  12:00p
+    LABEL    COM      2346  12-30-85  12:00p
+    MODE     COM      6864  12-30-85  12:00p
+    MORE     COM       295  12-30-85  12:00p
+    PRINT    COM      8976  12-30-85  12:00p
+    RECOVER  COM      4297  12-30-85  12:00p
+    REPLACE  EXE     11650  12-30-85  12:00p
+    RESTORE  COM      6012  12-30-85  12:00p
+    SELECT   COM      3826  12-30-85  12:00p
+    SHARE    EXE      8580  12-30-85  12:00p
+    SORT     EXE      1911  12-30-85  12:00p
+    SUBST    EXE      9911  12-30-85  12:00p
+    SYS      COM      4620  12-30-85  12:00p
+    TREE     COM      3357  12-30-85  12:00p
+    VDISK    SYS      3307  12-30-85  12:00p
+    XCOPY    EXE     11200  12-30-85  12:00p
+    ART      BAS      1879  12-30-85  12:00p
+    BALL     BAS      1966  12-30-85  12:00p
+    BASIC    PIF       369  12-30-85  12:00p
+    BASICA   PIF       369  12-30-85  12:00p
+    CIRCLE   BAS      1643  12-30-85  12:00p
+    COLORBAR BAS      1427  12-30-85  12:00p
+    COMM     BAS      4254  12-30-85  12:00p
+    DEBUG    COM     15799  12-30-85  12:00p
+    DONKEY   BAS      3572  12-30-85  12:00p
+    EXE2BIN  EXE      3063  12-30-85  12:00p
+    LINK     EXE     39076  12-30-85  12:00p
+    MORTGAGE BAS      6178  12-30-85  12:00p
+    MUSIC    BAS      8575  12-30-85  12:00p
+    MUSICA   BAS     13431  12-30-85  12:00p
+    PIECHART BAS      2180  12-30-85  12:00p
+    SAMPLES  BAS      2363  12-30-85  12:00p
+    SPACE    BAS      1851  12-30-85  12:00p
+    VDISK    LST    136315  12-30-85  12:00p
+    VENDOR-# DO1*        0   7-04-83  12:00a
+           60 file(s)     563032 bytes
+                          135168 bytes free
 
 ### Directory of PC DOS 3.20 (Disk 1)
 
-	 Volume in drive A has no label
-	 Directory of  A:\
-	
-	IBMBIO   COM    16369  12-30-85  12:00p
-	IBMDOS   COM    28477  12-30-85  12:00p
-	ANSI     SYS     1651  12-30-85  12:00p
-	ASSIGN   COM     1536  12-30-85  12:00p
-	ATTRIB   EXE     8247  12-30-85  12:00p
-	BACKUP   COM     6234  12-30-85  12:00p
-	BASIC    COM    19298   2-21-86  12:00p
-	BASICA   COM    36396   2-21-86  12:00p
-	CHKDSK   COM     9832  12-30-85  12:00p
-	COMMAND  COM    23791  12-30-85  12:00p
-	COMP     COM     4184  12-30-85  12:00p
-	DISKCOMP COM     5792  12-30-85  12:00p
-	DISKCOPY COM     6266   4-11-86  12:39a
-	DRIVER   SYS     1115  12-30-85  12:00p
-	EDLIN    COM     7508  12-30-85  12:00p
-	FDISK    COM     8173  12-30-85  12:00p
-	FIND     EXE     6416  12-30-85  12:00p
-	FORMAT   COM    11135  12-30-85  12:00p
-	GRAFTABL COM     1169  12-30-85  12:00p
-	GRAPHICS COM     3220  12-30-85  12:00p
-	JOIN     EXE     8955  12-30-85  12:00p
-	KEYBFR   COM     3295   3-07-86  12:00p
-	KEYBGR   COM     3278   3-07-86  12:00p
-	KEYBIT   COM     3060  12-30-85  12:00p
-	KEYBSP   COM     3187  12-30-85  12:00p
-	KEYBUK   COM     3036  12-30-85  12:00p
-	LABEL    COM     2346  12-30-85  12:00p
-	MODE     COM     6864  12-30-85  12:00p
-	MORE     COM      295  12-30-85  12:00p
-	PRINT    COM     8976  12-30-85  12:00p
-	RECOVER  COM     4297  12-30-85  12:00p
-	REPLACE  EXE    11650  12-30-85  12:00p
-	RESTORE  COM     6012  12-30-85  12:00p
-	SELECT   COM     3826  12-30-85  12:00p
-	SHARE    EXE     8580  12-30-85  12:00p
-	SORT     EXE     1911  12-30-85  12:00p
-	SUBST    EXE     9911  12-30-85  12:00p
-	SYS      COM     4620  12-30-85  12:00p
-	TREE     COM     3357  12-30-85  12:00p
-	VDISK    SYS     3307  12-30-85  12:00p
-	XCOPY    EXE    11200  12-30-85  12:00p
-	       41 File(s)     22528 bytes free
+     Volume in drive A has no label
+     Directory of A:\
+
+    IBMBIO   COM*    16369  12-30-85  12:00p
+    IBMDOS   COM*    28477  12-30-85  12:00p
+    ANSI     SYS      1651  12-30-85  12:00p
+    ASSIGN   COM      1536  12-30-85  12:00p
+    ATTRIB   EXE      8247  12-30-85  12:00p
+    BACKUP   COM      6234  12-30-85  12:00p
+    BASIC    COM     19298   2-21-86  12:00p
+    BASICA   COM     36396   2-21-86  12:00p
+    CHKDSK   COM      9832  12-30-85  12:00p
+    COMMAND  COM     23791  12-30-85  12:00p
+    COMP     COM      4184  12-30-85  12:00p
+    DISKCOMP COM      5792  12-30-85  12:00p
+    DISKCOPY COM      6266   4-11-86  12:39a
+    DRIVER   SYS      1115  12-30-85  12:00p
+    EDLIN    COM      7508  12-30-85  12:00p
+    FDISK    COM      8173  12-30-85  12:00p
+    FIND     EXE      6416  12-30-85  12:00p
+    FORMAT   COM     11135  12-30-85  12:00p
+    GRAFTABL COM      1169  12-30-85  12:00p
+    GRAPHICS COM      3220  12-30-85  12:00p
+    JOIN     EXE      8955  12-30-85  12:00p
+    KEYBFR   COM      3295   3-07-86  12:00p
+    KEYBGR   COM      3278   3-07-86  12:00p
+    KEYBIT   COM      3060  12-30-85  12:00p
+    KEYBSP   COM      3187  12-30-85  12:00p
+    KEYBUK   COM      3036  12-30-85  12:00p
+    LABEL    COM      2346  12-30-85  12:00p
+    MODE     COM      6864  12-30-85  12:00p
+    MORE     COM       295  12-30-85  12:00p
+    PRINT    COM      8976  12-30-85  12:00p
+    RECOVER  COM      4297  12-30-85  12:00p
+    REPLACE  EXE     11650  12-30-85  12:00p
+    RESTORE  COM      6012  12-30-85  12:00p
+    SELECT   COM      3826  12-30-85  12:00p
+    SHARE    EXE      8580  12-30-85  12:00p
+    SORT     EXE      1911  12-30-85  12:00p
+    SUBST    EXE      9911  12-30-85  12:00p
+    SYS      COM      4620  12-30-85  12:00p
+    TREE     COM      3357  12-30-85  12:00p
+    VDISK    SYS      3307  12-30-85  12:00p
+    XCOPY    EXE     11200  12-30-85  12:00p
+    VENDOR-# WT1*        0   7-04-83  12:00a
+           42 file(s)     318772 bytes
+                           22528 bytes free
 
 ### Directory of PC DOS 3.20 (Disk 2)
 
-	 Volume in drive A has no label
-	 Directory of  A:\
-	
-	ART      BAS     1879  12-30-85  12:00p
-	BALL     BAS     1966  12-30-85  12:00p
-	BASIC    PIF      369  12-30-85  12:00p
-	BASICA   PIF      369  12-30-85  12:00p
-	CIRCLE   BAS     1643  12-30-85  12:00p
-	COLORBAR BAS     1427  12-30-85  12:00p
-	COMM     BAS     4254  12-30-85  12:00p
-	DEBUG    COM    15799  12-30-85  12:00p
-	DONKEY   BAS     3572  12-30-85  12:00p
-	EXE2BIN  EXE     3063  12-30-85  12:00p
-	LINK     EXE    39076  12-30-85  12:00p
-	MORTGAGE BAS     6178  12-30-85  12:00p
-	MUSIC    BAS     8575  12-30-85  12:00p
-	MUSICA   BAS    13431  12-30-85  12:00p
-	PIECHART BAS     2180  12-30-85  12:00p
-	SAMPLES  BAS     2363  12-30-85  12:00p
-	SPACE    BAS     1851  12-30-85  12:00p
-	VDISK    LST   136315  12-30-85  12:00p
-	       18 File(s)    107520 bytes free
+     Volume in drive A has no label
+     Directory of A:\
+
+    ART      BAS      1879  12-30-85  12:00p
+    BALL     BAS      1966  12-30-85  12:00p
+    BASIC    PIF       369  12-30-85  12:00p
+    BASICA   PIF       369  12-30-85  12:00p
+    CIRCLE   BAS      1643  12-30-85  12:00p
+    COLORBAR BAS      1427  12-30-85  12:00p
+    COMM     BAS      4254  12-30-85  12:00p
+    DEBUG    COM     15799  12-30-85  12:00p
+    DONKEY   BAS      3572  12-30-85  12:00p
+    EXE2BIN  EXE      3063  12-30-85  12:00p
+    LINK     EXE     39076  12-30-85  12:00p
+    MORTGAGE BAS      6178  12-30-85  12:00p
+    MUSIC    BAS      8575  12-30-85  12:00p
+    MUSICA   BAS     13431  12-30-85  12:00p
+    PIECHART BAS      2180  12-30-85  12:00p
+    SAMPLES  BAS      2363  12-30-85  12:00p
+    SPACE    BAS      1851  12-30-85  12:00p
+    VDISK    LST    136315  12-30-85  12:00p
+    VENDOR-# WT1*        0   7-04-83  12:00a
+           19 file(s)     244310 bytes
+                          107520 bytes free
 
 ---
 

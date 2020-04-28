@@ -22,29 +22,26 @@ should also be conducted.
 
 ### Directory of MS Chart 2.02 (Modified)
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
+    IBMBIO   COM*     7321   7-17-84  12:00p
+    IBMDOS   COM*    17092   8-28-84  12:00p
+    CHART    COM     43858   5-23-86  12:00p
+    MC       COD     98784   5-23-86  12:00p
+    MC       SYS     44848   5-23-86  12:00p
+    MC       DAT     22960   5-23-86  12:00p
+    MC       HLP     67628   5-23-86  12:00p
+    CENSUS            1724   5-23-86  12:00p
+    FONTLIST           214   5-23-86  12:00p
+    CHART    PIF       369   5-23-86  12:00p
+    EXAMPLE1 MC       3609   5-23-86  12:00p
+    EXAMPLE2 MC       2543   5-23-86  12:00p
+    EXAMPLE3 MC       4149   5-23-86  12:00p
+    MC       INI       183   3-28-15  12:20p
+    HP7475A  GPD      3303   3-16-87  10:14a
+    COMMAND  COM     16229   3-16-87  10:14a
+    PARKS             1146   3-17-87  10:06a
+           17 file(s)     335960 bytes
+                           16384 bytes free
 
-	IBMBIO   COM      7321 07-17-84  12:00p
-	IBMDOS   COM     17092 08-28-84  12:00p
-	CHART    COM     43858 05-23-86  12:00p
-	MC       COD     98784 05-23-86  12:00p
-	MC       SYS     44848 05-23-86  12:00p
-	MC       DAT     22960 05-23-86  12:00p
-	MC       HLP     67628 05-23-86  12:00p
-	CENSUS            1724 05-23-86  12:00p
-	FONTLIST           214 05-23-86  12:00p
-	CHART    PIF       369 05-23-86  12:00p
-	EXAMPLE1 MC       3609 05-23-86  12:00p
-	EXAMPLE2 MC       2543 05-23-86  12:00p
-	EXAMPLE3 MC       4149 05-23-86  12:00p
-	MC       INI       183 03-28-15  12:20p
-	HP7475A  GPD      3303 03-16-87  10:14a
-	COMMAND  COM     16229 03-16-87  10:14a
-	PARKS             1146 03-17-87  10:06a
-	       17 file(s)     335960 bytes
-
-	Total files listed:
-	       17 file(s)     335960 bytes
-	                       16384 bytes free

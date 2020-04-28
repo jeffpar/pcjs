@@ -13,176 +13,163 @@ We don't have any documents from this release, but you can browse [README.DOC](#
 
 ### Directory of MS Macro Assembler 5.10 (Disk 1)
 
-	 Volume in drive A is MASM       
+     Volume in drive A is MASM
+     Directory of A:\
 
-	Directory of A:\
+    SETUP    BAT        33   1-31-88  11:00p
+    README   DOC     39353   1-31-88  11:00p
+    PACKING  LST      5212   1-31-88  11:00p
+    SETUP    SUS      5157   1-31-88  11:00p
+    CREF     EXE     28427   1-31-88  11:00p
+    MASM     EXE    110703   1-31-88  11:00p
+    RUNME    EXE     29497   1-31-88  11:00p
+    SHOW     EXE      4964   1-31-88  11:00p
+    MIXED        <DIR>       1-31-88  11:00p
+            9 file(s)     223346 bytes
 
-	MIXED        <DIR>     02-01-88   1:00p
-	CREF     EXE     28427 02-01-88   1:00p
-	MASM     EXE    110703 02-01-88   1:00p
-	PACKING  LST      5170 02-01-88   1:00p
-	README   DOC     39353 02-01-88   1:00p
-	RUNME    EXE     31701 02-01-88   1:00p
-	SETUP    BAT        33 02-01-88   1:00p
-	SETUP    SUS      7353 02-01-88   1:00p
-	SHOW     EXE      4964 02-01-88   1:00p
-	        9 file(s)     227704 bytes
+     Directory of A:\MIXED
 
-	Directory of A:\MIXED
+    .            <DIR>       1-31-88  11:00p
+    ..           <DIR>       1-31-88  11:00p
+    MIXED    INC      3179   1-31-88  11:00p
+    CAMAIN   C         111   1-31-88  11:00p
+    PAMAIN   PAS       164   1-31-88  11:00p
+    BAMAIN   BAS       567   1-31-88  11:00p
+    BA       ASM      1138   1-31-88  11:00p
+    CA       ASM       298   1-31-88  11:00p
+    FA       ASM       426   1-31-88  11:00p
+    PA       ASM       388   1-31-88  11:00p
+    POWER2   ASM      2065   1-31-88  11:00p
+    MIXED    DOC      9107   1-31-88  11:00p
+    FAMAIN   FOR       190   1-31-88  11:00p
+           13 file(s)      17633 bytes
 
-	.            <DIR>     02-01-88   1:00p
-	..           <DIR>     02-01-88   1:00p
-	BA       ASM      1138 02-01-88   1:00p
-	BAMAIN   BAS       567 02-01-88   1:00p
-	CA       ASM       298 02-01-88   1:00p
-	CAMAIN   C         111 02-01-88   1:00p
-	FA       ASM       426 02-01-88   1:00p
-	FAMAIN   FOR       190 02-01-88   1:00p
-	MIXED    DOC      9107 02-01-88   1:00p
-	MIXED    INC      3179 02-01-88   1:00p
-	PA       ASM       388 02-01-88   1:00p
-	PAMAIN   PAS       164 02-01-88   1:00p
-	POWER2   ASM      2065 02-01-88   1:00p
-	       13 file(s)      17633 bytes
-
-	Total files listed:
-	       22 file(s)     245337 bytes
-	                      103424 bytes free
+    Total files listed:
+           22 file(s)     240979 bytes
+                          107520 bytes free
 
 ### Directory of MS Macro Assembler 5.10 (Disk 2)
 
-	 Volume in drive A is UTILITIES  
+     Volume in drive A is UTILITIES
+     Directory of A:\
 
-	Directory of A:\
-
-	CVPACK   EXE     49400 02-01-88   1:00p
-	ERROUT   EXE     10729 02-01-88   1:00p
-	EXEHDR   EXE     29942 02-01-88   1:00p
-	EXEMOD   EXE     11765 02-01-88   1:00p
-	EXEPACK  EXE     14803 02-01-88   1:00p
-	LIB      EXE     49661 02-01-88   1:00p
-	LINK     EXE     65475 02-01-88   1:00p
-	MAKE     EXE     38613 02-01-88   1:00p
-	MOUSE    COM     14551 02-01-88   1:00p
-	SETENV   EXE     10313 02-01-88   1:00p
-	       10 file(s)     295252 bytes
-
-	Total files listed:
-	       10 file(s)     295252 bytes
-	                       61440 bytes free
+    MOUSE    COM     14455   1-31-88  11:00p
+    CVPACK   EXE     57437   1-31-88  11:00p
+    ERROUT   EXE     10729   1-31-88  11:00p
+    EXEHDR   EXE     29942   1-31-88  11:00p
+    EXEMOD   EXE     11765   1-31-88  11:00p
+    EXEPACK  EXE     14803   1-31-88  11:00p
+    LIB      EXE     49661   1-31-88  11:00p
+    LINK     EXE     65475   1-31-88  11:00p
+    MAKE     EXE     38613   1-31-88  11:00p
+    SETENV   EXE     10313   1-31-88  11:00p
+           10 file(s)     303193 bytes
+                           53248 bytes free
 
 ### Directory of MS Macro Assembler 5.10 (Disk 3)
 
-	 Volume in drive A is CODEVIEW   
+     Volume in drive A is CODEVIEW
+     Directory of A:\
 
-	Directory of A:\
-
-	BIOS     INC      2302 02-01-88   1:00p
-	CV       EXE    232896 02-01-88   1:00p
-	CV       HLP     21552 02-01-88   1:00p
-	DEMO     EXE     14725 02-01-88   1:00p
-	DOS      INC      9862 02-01-88   1:00p
-	E_AUTO   CV       7409 02-01-88   1:00p
-	MACRO    DOC     17983 02-01-88   1:00p
-	M_AUTO   CV        570 02-01-88   1:00p
-	PAGERR   ASM     11192 02-01-88   1:00p
-	Q_AUTO   CV         16 02-01-88   1:00p
-	SETUP    SUS      3680 02-01-88   1:00p
-	SHOWR    ASM      8944 02-01-88   1:00p
-	SHOWR    EXE      5419 02-01-88   1:00p
-	U_AUTO   CV       5153 02-01-88   1:00p
-	W_AUTO   CV       9641 02-01-88   1:00p
-	       15 file(s)     351344 bytes
-
-	Total files listed:
-	       15 file(s)     351344 bytes
-	                        2048 bytes free
+    BIOS     INC      2302   1-31-88  11:00p
+    DOS      INC      9862   1-31-88  11:00p
+    PAGERR   ASM     11192   1-31-88  11:00p
+    SHOWR    ASM      8944   1-31-88  11:00p
+    MACRO    DOC     17983   1-31-88  11:00p
+    CV       HLP     21552   1-31-88  11:00p
+    E_AUTO   CV       7409   1-31-88  11:00p
+    M_AUTO   CV        570   1-31-88  11:00p
+    Q_AUTO   CV         16   1-31-88  11:00p
+    U_AUTO   CV       5153   1-31-88  11:00p
+    W_AUTO   CV       9641   1-31-88  11:00p
+    SETUP    SUS      3680   1-31-88  11:00p
+    CV       EXE    232896   1-31-88  11:00p
+    DEMO     EXE     14725   1-31-88  11:00p
+    SHOWR    EXE      5419   1-31-88  11:00p
+           15 file(s)     351344 bytes
+                            2048 bytes free
 
 ### Directory of MS Macro Assembler 5.10 (Disk 4)
 
-	 Volume in drive A is EDITOR     
+     Volume in drive A is EDITOR
+     Directory of A:\
 
-	Directory of A:\
+    FIXSHIFT COM       690   1-31-88  11:00p
+    EDITOR   SUS      2123   1-31-88  11:00p
+    CALLTREE EXE     31233   1-31-88  11:00p
+    ECH      EXE     19351   1-31-88  11:00p
+    EXP      EXE     32220   1-31-88  11:00p
+    M        EXE     94821   1-31-88  11:00p
+    MEGREP   EXE     31915   1-31-88  11:00p
+    RM       EXE     24884   1-31-88  11:00p
+    UNDEL    EXE     30046   1-31-88  11:00p
+    EXT          <DIR>       1-31-88  11:00p
+    INI          <DIR>       1-31-88  11:00p
+           11 file(s)     267283 bytes
 
-	INI          <DIR>     02-01-88   1:00p
-	EXT          <DIR>     02-01-88   1:00p
-	CALLTREE EXE     31233 02-01-88   1:00p
-	ECH      EXE     19351 02-01-88   1:00p
-	EXP      EXE     32220 02-01-88   1:00p
-	FIXSHIFT COM       690 02-01-88   1:00p
-	M        EXE     94821 02-01-88   1:00p
-	MEGREP   EXE     31915 02-01-88   1:00p
-	RM       EXE     24884 02-01-88   1:00p
-	UNDEL    EXE     30046 02-01-88   1:00p
-	       10 file(s)     265160 bytes
+     Directory of A:\EXT
 
-	Directory of A:\EXT
+    .            <DIR>       1-31-88  11:00p
+    ..           <DIR>       1-31-88  11:00p
+    EXT      H        8730   1-31-88  11:00p
+    SKEL     C        2457   1-31-88  11:00p
+    SKEL     DEF       211   1-31-88  11:00p
+    EXT      DOC     15877   1-31-88  11:00p
+    EXTHDR   OBJ      1893   1-31-88  11:00p
+    EXTHDRP  OBJ      2021   1-31-88  11:00p
+            8 file(s)      31189 bytes
 
-	.            <DIR>     02-01-88   1:00p
-	..           <DIR>     02-01-88   1:00p
-	EXT      DOC     15877 02-01-88   1:00p
-	EXT      H        8730 02-01-88   1:00p
-	EXTHDR   OBJ      1893 02-01-88   1:00p
-	EXTHDRP  OBJ      2021 02-01-88   1:00p
-	SKEL     C        2457 02-01-88   1:00p
-	SKEL     DEF       211 02-01-88   1:00p
-	        8 file(s)      31189 bytes
+     Directory of A:\INI
 
-	Directory of A:\INI
+    .            <DIR>       1-31-88  11:00p
+    ..           <DIR>       1-31-88  11:00p
+    BRIEF    INI      2094   1-31-88  11:00p
+    EPSILON  INI       978   1-31-88  11:00p
+    QUICK    INI      1058   1-31-88  11:00p
+    WS       ZXT      2084   1-31-88  11:00p
+    WS       DLL      2609   1-31-88  11:00p
+            7 file(s)       8823 bytes
 
-	.            <DIR>     02-01-88   1:00p
-	..           <DIR>     02-01-88   1:00p
-	BRIEF    INI      2094 02-01-88   1:00p
-	EPSILON  INI       978 02-01-88   1:00p
-	QUICK    INI      1058 02-01-88   1:00p
-	WS       DLL      2609 02-01-88   1:00p
-	WS       ZXT      2084 02-01-88   1:00p
-	        7 file(s)       8823 bytes
-
-	Total files listed:
-	       25 file(s)     305172 bytes
-	                       45056 bytes free
+    Total files listed:
+           26 file(s)     307295 bytes
+                           41984 bytes free
 
 ### Directory of MS Macro Assembler 5.10 (Disk 5)
 
-	 Volume in drive A is OS2 PROGRAM
+     Volume in drive A is OS2 PROGRAM
+     Directory of A:\
 
-	Directory of A:\
+    SHOW               379   1-31-88  11:00p
+    BSE      INC       768   1-31-88  11:00p
+    BSEDOS   INC     17479   1-31-88  11:00p
+    BSEERR   INC      6723   1-31-88  11:00p
+    BSESUB   INC     10693   1-31-88  11:00p
+    OS2      INC       391   1-31-88  11:00p
+    OS2DEF   INC      5119   1-31-88  11:00p
+    SHOWS    DEF        18   1-31-88  11:00p
+    PAGERP   ASM     11504   1-31-88  11:00p
+    SHOWP    ASM     15079   1-31-88  11:00p
+    MAKESHOW BAT      2054   1-31-88  11:00p
+    MAKESHOW CMD      1991   1-31-88  11:00p
+    OS2      DOC     33751   1-31-88  11:00p
+    CVP      HLP     21552   1-31-88  11:00p
+    APILMR   OBJ       105   1-31-88  11:00p
+    API      LIB     81408   1-31-88  11:00p
+    DOSCALLS LIB     29184   1-31-88  11:00p
+    PTRACE87 PAT       188   1-31-88  11:00p
+    BIND     EXE     36946   1-31-88  11:00p
+    CVP      EXE    222505   1-31-88  11:00p
+    EXEC     EXE      9299   1-31-88  11:00p
+    ILINK    EXE     88929   1-31-88  11:00p
+    IMPLIB   EXE     30166   1-31-88  11:00p
+    LINK     EXE    117001   1-31-88  11:00p
+    MASM     EXE    124712   1-31-88  11:00p
+    MEP      EXE     97063   1-31-88  11:00p
+    OS2PATCH EXE      1069   1-31-88  11:00p
+           27 file(s)     966076 bytes
+                          241152 bytes free
 
-	API      LIB     81408 02-01-88   1:00p
-	APILMR   OBJ       105 02-01-88   1:00p
-	BIND     EXE     36946 02-01-88   1:00p
-	BSE      INC       768 02-01-88   1:00p
-	BSEDOS   INC     17479 02-01-88   1:00p
-	BSEERR   INC      6723 02-01-88   1:00p
-	BSESUB   INC     10693 02-01-88   1:00p
-	CVP      EXE    222505 02-01-88   1:00p
-	CVP      HLP     21552 02-01-88   1:00p
-	DOSCALLS LIB     29184 02-01-88   1:00p
-	EXEC     EXE      9299 02-01-88   1:00p
-	ILINK    EXE     88929 02-01-88   1:00p
-	IMPLIB   EXE     30166 02-01-88   1:00p
-	LINK     EXE    117001 02-01-88   1:00p
-	MAKESHOW BAT      2054 02-01-88   1:00p
-	MAKESHOW CMD      1991 02-01-88   1:00p
-	MASM     EXE    124712 02-01-88   1:00p
-	MEP      EXE     97063 02-01-88   1:00p
-	OS2      DOC     33751 02-01-88   1:00p
-	OS2      INC       391 02-01-88   1:00p
-	OS2DEF   INC      5119 02-01-88   1:00p
-	OS2PATCH EXE      1069 02-01-88   1:00p
-	PAGERP   ASM     11504 02-01-88   1:00p
-	PTRACE87 PAT       188 02-01-88   1:00p
-	SHOW               379 02-01-88   1:00p
-	SHOWP    ASM     15079 02-01-88   1:00p
-	SHOWS    DEF        18 02-01-88   1:00p
-	       27 file(s)     966076 bytes
-
-	Total files listed:
-	       27 file(s)     966076 bytes
-	                      241152 bytes free
-
-### Directory of MS Macro Assembler 5.10A (Update)
+### Directory of MS Macro Assembler 5.10A
 
 	 Volume in drive A is MASM-5-10A 
 
@@ -206,7 +193,7 @@ We don't have any documents from this release, but you can browse [README.DOC](#
 
 ### Contents of README.DOC
 
-From the **MS Macro Assembler 5.10A (Update)** Diskette:
+From the **MS Macro Assembler 5.10A** Diskette:
 
 	Dear Macro Assembler Customer,
 	

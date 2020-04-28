@@ -17,20 +17,16 @@ machines:
 
 ### Directory of Small Computer Book Club (1990)
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
-
-	RUN-A    BAT       199 11-05-90   7:13p
-	DIREX             1136 11-05-90   6:28p
-	PKUNZIP  EXE     22022 10-01-89   1:02a
-	PROGRAMS ZIP    316836 06-03-90   8:17p
-	DOCUMENT         12509 11-06-90   2:19p
-	RUN-B    BAT       199 11-05-90   7:14p
-	        6 file(s)     352901 bytes
-
-	Total files listed:
-	        6 file(s)     352901 bytes
-	                        5120 bytes free
+    RUN-A    BAT       199  11-05-90   7:13p
+    DIREX             1136  11-05-90   6:28p
+    PKUNZIP  EXE     22022  10-01-89   1:02a
+    PROGRAMS ZIP    316836   6-03-90   8:17p
+    DOCUMENT         12509  11-06-90   2:19p
+    RUN-B    BAT       199  11-05-90   7:14p
+            6 file(s)     352901 bytes
+                            5120 bytes free
 
 ![Small Computer Book Club (1990)]({{ site.software.diskettes.server }}/pcx86/sw/misc/scbc/SCBC-1990.jpg)

@@ -60,84 +60,77 @@ To manually start TopView: {% include machine-command.html type='button' label='
 
 ### Directory of IBM TopView 1.00 (Program)
 
-	 Volume in drive A is TUP011085  
+     Volume in drive A is TUP011085
+     Directory of A:\
 
-	Directory of A:\
-
-	TV       PIF     13946 01-10-85  12:00p
-	TV       PII      1408 01-10-85  12:00p
-	TV       EXT     49731 01-10-85  12:00p
-	FDPGM    COM       187 01-10-85  12:00p
-	TV       COM     43008 01-10-85  12:00p
-	SETUP    BAT        74 01-10-85  12:00p
-	ADD      EXT     16384 01-10-85  12:00p
-	ATRIBUTE DEF        32 01-10-85  12:00p
-	AUTOPIF            369 01-10-85  12:00p
-	G        BAT        33 01-10-85  12:00p
-	CHANGE   EXT     13568 01-10-85  12:00p
-	CLOCK    COM      3682 01-10-85  12:00p
-	CLOCK    PLB      2071 01-10-85  12:00p
-	COLORS   EXT     10752 01-10-85  12:00p
-	COLORS   PIF       369 01-10-85  12:00p
-	DELETE   EXT      6400 01-10-85  12:00p
-	DOS      EXT     39168 01-10-85  12:00p
-	DOSHELP  PLB     10237 01-10-85  12:00p
-	DW1      TBL        51 01-10-85  12:00p
-	DW2      TBL        51 01-10-85  12:00p
-	EW       TBL        55 01-10-85  12:00p
-	FD       BAT      6163 01-10-85  12:00p
-	FDR      BAT        46 01-10-85  12:00p
-	FILTER   EXT      3905 01-10-85  12:00p
-	PCW      TBL        55 01-10-85  12:00p
-	PDIO     EXT      3072 01-10-85  12:00p
-	PDIOKEYB EXT      3072 01-10-85  12:00p
-	PDIOMICP EXT      3222 01-10-85  12:00p
-	PDIOMICS EXT      3209 01-10-85  12:00p
-	PDIOMSY1 EXT      3096 01-10-85  12:00p
-	PDIOVIS1 EXT      3214 01-10-85  12:00p
-	PE       TBL        44 01-10-85  12:00p
-	PROFED   TBL        65 01-10-85  12:00p
-	PROGRAMS COM     11520 01-10-85  12:00p
-	PROGRAMS HLP      9979 01-10-85  12:00p
-	SETSYS   EXT     11008 01-10-85  12:00p
-	SYSTEM              84 01-10-85  12:00p
-	TUTORPIF           369 01-10-85  12:00p
-	WA       TBL        56 01-10-85  12:00p
-	WELCOME  EXT      2560 01-10-85  12:00p
-	WP       TBL        53 01-10-85  12:00p
-	VENDOR-# DO1         0 07-04-83  12:00a
-	       42 file(s)     276368 bytes
-
-	Total files listed:
-	       42 file(s)     276368 bytes
-	                       58368 bytes free
+    TV       PIF     13946   1-10-85  12:00p
+    TV       PII      1408   1-10-85  12:00p
+    TV       EXT     49731   1-10-85  12:00p
+    FDPGM    COM       187   1-10-85  12:00p
+    TV       COM     43008   1-10-85  12:00p
+    SETUP    BAT        74   1-10-85  12:00p
+    ADD      EXT     16384   1-10-85  12:00p
+    ATRIBUTE DEF        32   1-10-85  12:00p
+    AUTOPIF            369   1-10-85  12:00p
+    G        BAT        33   1-10-85  12:00p
+    CHANGE   EXT     13568   1-10-85  12:00p
+    CLOCK    COM      3682   1-10-85  12:00p
+    CLOCK    PLB      2071   1-10-85  12:00p
+    COLORS   EXT     10752   1-10-85  12:00p
+    COLORS   PIF       369   1-10-85  12:00p
+    DELETE   EXT      6400   1-10-85  12:00p
+    DOS      EXT     39168   1-10-85  12:00p
+    DOSHELP  PLB     10237   1-10-85  12:00p
+    DW1      TBL        51   1-10-85  12:00p
+    DW2      TBL        51   1-10-85  12:00p
+    EW       TBL        55   1-10-85  12:00p
+    FD       BAT      6163   1-10-85  12:00p
+    FDR      BAT        46   1-10-85  12:00p
+    FILTER   EXT      3905   1-10-85  12:00p
+    PCW      TBL        55   1-10-85  12:00p
+    PDIO     EXT      3072   1-10-85  12:00p
+    PDIOKEYB EXT      3072   1-10-85  12:00p
+    PDIOMICP EXT      3222   1-10-85  12:00p
+    PDIOMICS EXT      3209   1-10-85  12:00p
+    PDIOMSY1 EXT      3096   1-10-85  12:00p
+    PDIOVIS1 EXT      3214   1-10-85  12:00p
+    PE       TBL        44   1-10-85  12:00p
+    PROFED   TBL        65   1-10-85  12:00p
+    PROGRAMS COM     11520   1-10-85  12:00p
+    PROGRAMS HLP      9979   1-10-85  12:00p
+    SETSYS   EXT     11008   1-10-85  12:00p
+    SYSTEM              84   1-10-85  12:00p
+    TUTORPIF           369   1-10-85  12:00p
+    WA       TBL        56   1-10-85  12:00p
+    WELCOME  EXT      2560   1-10-85  12:00p
+    WP       TBL        53   1-10-85  12:00p
+    VENDOR-# DO1*        0   7-04-83  12:00a
+           42 file(s)     276368 bytes
+                           58368 bytes free
 
 ### Directory of IBM TopView 1.00 (Tutorial)
 
-	 Volume in drive A is TUT110784  
+     Volume in drive A is TUT110784
+     Directory of A:\
 
-	Directory of A:\
+    CALC     EXE     56549  11-07-84  12:00p
+    CALC     PIF       369  11-07-84  12:00p
+    CALC     PLB      5133  11-07-84  12:00p
+    ERROR    LIB      8765  11-07-84  12:00p
+    GASWAP   BAT       758  11-07-84  12:00p
+    INSTRUCT GRA      2540  11-07-84  12:00p
+    INSTRUCT WRT      2734  11-07-84  12:00p
+    LESSON1  LIB     56019  11-07-84  12:00p
+    LESSON2  LIB     10256  11-07-84  12:00p
+    LESSON3  LIB     10083  11-07-84  12:00p
+    LESSON4  LIB     43072  11-07-84  12:00p
+    OCRS     PIF       369  11-07-84  12:00p
+    QUD      PNL       121  11-07-84  12:00p
+    QUIT     PNL       139  11-07-84  12:00p
+    TUTORIAL EXT      6556  11-07-84  12:00p
+    TUTORIAL PIF       369  11-07-84  12:00p
+    WASWAP   BAT      1190  11-07-84  12:00p
+    VENDOR-# DO1*        0   7-04-83  12:00a
+           18 file(s)     205022 bytes
+                          146432 bytes free
 
-	CALC     EXE     56549 11-07-84  12:00p
-	CALC     PIF       369 11-07-84  12:00p
-	CALC     PLB      5133 11-07-84  12:00p
-	ERROR    LIB      8765 11-07-84  12:00p
-	GASWAP   BAT       758 11-07-84  12:00p
-	INSTRUCT GRA      2540 11-07-84  12:00p
-	INSTRUCT WRT      2734 11-07-84  12:00p
-	LESSON1  LIB     56019 11-07-84  12:00p
-	LESSON2  LIB     10256 11-07-84  12:00p
-	LESSON3  LIB     10083 11-07-84  12:00p
-	LESSON4  LIB     43072 11-07-84  12:00p
-	OCRS     PIF       369 11-07-84  12:00p
-	QUD      PNL       121 11-07-84  12:00p
-	QUIT     PNL       139 11-07-84  12:00p
-	TUTORIAL EXT      6556 11-07-84  12:00p
-	TUTORIAL PIF       369 11-07-84  12:00p
-	WASWAP   BAT      1190 11-07-84  12:00p
-	VENDOR-# DO1         0 07-04-83  12:00a
-	       18 file(s)     205022 bytes
-
-	Total files listed:
-	       18 file(s)     205022 bytes
-	                      146432 bytes free

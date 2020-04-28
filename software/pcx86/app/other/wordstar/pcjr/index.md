@@ -34,50 +34,51 @@ fact that both files have dates well past the apparent release date of August 17
 
 ### Directory of WordStar for PCjr (Disk 1)
 
-	 Volume in drive A has no label
-	 Directory of A:\
+     Volume in drive A has no label
+     Directory of A:\
 
-	WSU      EXE     87792 07-30-87   7:50p
-	MATRIX2  TST      3840 08-17-84   8:41a
-	MATRIX1  TST      3840 08-17-84   8:41a
-	DAISY    TST      3840 08-17-84   8:41a
-	WS       PIC     16392 08-17-84   8:41a
-	WS       INS     57216 08-17-84   8:41a
-	WINSTALL EXE     40960 08-17-84   8:41a
-	WS       EXE     87680 12-26-17   2:07p
-	        8 file(s)     301560 bytes
-	                       58368 bytes free
+    WSU      EXE     87792   7-30-87   7:50p
+    MATRIX2  TST      3840   8-17-84   8:41a
+    MATRIX1  TST      3840   8-17-84   8:41a
+    DAISY    TST      3840   8-17-84   8:41a
+    WS       PIC     16392   8-17-84   8:41a
+    WS       INS     57216   8-17-84   8:41a
+    WINSTALL EXE     40960   8-17-84   8:41a
+    WS       EXE     87680  12-26-17   2:07p
+            8 file(s)     301560 bytes
+                           58368 bytes free
 
 ### Directory of WordStar for PCjr (Disk 2)
 
-	 Volume in drive A has no label
-	 Directory of A:\
+     Volume in drive A has no label
+     Directory of A:\
 
-	FEARNOT  COM     11008 08-17-84   5:06p
-	FEARNOT  OVR     38400 08-17-84   5:06p
-	WSTUTOR  COM     11008 08-17-84   5:06p
-	WSTUTOR  OVR     44032 08-17-84   5:06p
-	WSTUTOR1 COM     11008 08-17-84   5:06p
-	WST1     OVR     48896 08-17-84   5:06p
-	WSTUTOR2 COM     11008 08-17-84   5:06p
-	WST2     OVR     40064 08-17-84   5:06p
-	TUTOR    INS       512 08-17-84   5:06p
-	        9 file(s)     215936 bytes
-	                      143360 bytes free
+    FEARNOT  COM     11008   8-17-84   5:06p
+    FEARNOT  OVR     38400   8-17-84   5:06p
+    WSTUTOR  COM     11008   8-17-84   5:06p
+    WSTUTOR  OVR     44032   8-17-84   5:06p
+    WSTUTOR1 COM     11008   8-17-84   5:06p
+    WST1     OVR     48896   8-17-84   5:06p
+    WSTUTOR2 COM     11008   8-17-84   5:06p
+    WST2     OVR     40064   8-17-84   5:06p
+    TUTOR    INS       512   8-17-84   5:06p
+            9 file(s)     215936 bytes
+                          143360 bytes free
 
 ### Directory of WordStar for PCjr (Disk 3)
 
-	 Volume in drive A has no label
-	 Directory of A:\
+     Volume in drive A has no label
+     Directory of A:\
 
-	WSTUTOR3 COM     11008 08-17-84   5:10p
-	WST3     OVR     55168 08-17-84   5:10p
-	WSTUTOR4 COM     11008 08-17-84   5:10p
-	WST4     OVR     34688 08-17-84   5:10p
-	WSTUTOR5 COM     11008 08-17-84   5:10p
-	WST5     OVR     42752 08-17-84   5:10p
-	WSTUTOR6 COM     11008 08-17-84   5:10p
-	WST6     OVR     44672 08-17-84   5:10p
-	TUTOR    INS       512 08-17-84   5:10p
-	        9 file(s)     221824 bytes
-	                      138240 bytes free
+    WSTUTOR3 COM     11008   8-17-84   5:10p
+    WST3     OVR     55168   8-17-84   5:10p
+    WSTUTOR4 COM     11008   8-17-84   5:10p
+    WST4     OVR     34688   8-17-84   5:10p
+    WSTUTOR5 COM     11008   8-17-84   5:10p
+    WST5     OVR     42752   8-17-84   5:10p
+    WSTUTOR6 COM     11008   8-17-84   5:10p
+    WST6     OVR     44672   8-17-84   5:10p
+    TUTOR    INS       512   8-17-84   5:10p
+            9 file(s)     221824 bytes
+                          138240 bytes free
+

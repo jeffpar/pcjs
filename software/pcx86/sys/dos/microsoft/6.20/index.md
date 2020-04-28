@@ -22,184 +22,164 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.20 (1.2M Disk 1)
 
-	 Volume in drive A is DISK      1
-	 Volume Serial Number is 0234-0311
+     Volume in drive A is DISK1
+     Directory of A:\
 
-	Directory of A:\
-
-	IO       SYS     40566 09-30-93   6:20a
-	MSDOS    SYS     38138 09-30-93   6:20a
-	COMMAND  COM     54619 09-30-93   6:20a
-	DBLSPACE BIN     64246 09-30-93   6:20a
-	ATTRIB   EXE     11208 09-30-93   6:20a
-	AUTOEXEC BAT        37 09-30-93   6:20a
-	CHKDSK   EXE     12241 09-30-93   6:20a
-	CONFIG   SYS        13 09-30-93   6:20a
-	COUNTRY  SYS     19546 09-30-93   6:20a
-	DEBUG    EXE     15718 09-30-93   6:20a
-	DOSSETUP INI      3094 09-30-93   6:20a
-	EDIT     COM       413 09-30-93   6:20a
-	EXPAND   EXE     16129 09-30-93   6:20a
-	FDISK    EXE     29334 09-30-93   6:20a
-	FORMAT   COM     22916 09-30-93   6:20a
-	HELP     HL_    267126 09-30-93   6:20a
-	KEYB     COM     15750 09-30-93   6:20a
-	KEYBOARD SYS     34598 09-30-93   6:20a
-	MEM      EX_     19512 09-30-93   6:20a
-	NLSFUNC  EXE      7036 09-30-93   6:20a
-	PACKING  LST      6161 09-30-93   6:20a
-	QBASIC   EXE    194309 09-30-93   6:20a
-	README   TXT     59813 09-30-93   6:20a
-	SCANDISK EXE    119761 09-30-93   6:20a
-	SCANDISK INI      6470 09-30-93   6:20a
-	SETUP    EXE     72601 09-30-93   6:20a
-	SETUP    MSG      1392 09-30-93   6:20a
-	SYS      COM      9432 09-30-93   6:20a
-	XCOPY    EX_     11093 09-30-93   6:20a
-	       29 file(s)    1153272 bytes
-
-	Total files listed:
-	       29 file(s)    1153272 bytes
-	                       53760 bytes free
+    IO       SYS*    40566   9-30-93   6:20a
+    MSDOS    SYS*    38138   9-30-93   6:20a
+    COMMAND  COM     54619   9-30-93   6:20a
+    DBLSPACE BIN     64246   9-30-93   6:20a
+    ATTRIB   EXE     11208   9-30-93   6:20a
+    AUTOEXEC BAT        37   9-30-93   6:20a
+    CHKDSK   EXE     12241   9-30-93   6:20a
+    CONFIG   SYS        13   9-30-93   6:20a
+    COUNTRY  SYS     19546   9-30-93   6:20a
+    DEBUG    EXE     15718   9-30-93   6:20a
+    DOSSETUP INI      3094   9-30-93   6:20a
+    EDIT     COM       413   9-30-93   6:20a
+    EXPAND   EXE     16129   9-30-93   6:20a
+    FDISK    EXE     29334   9-30-93   6:20a
+    FORMAT   COM     22916   9-30-93   6:20a
+    HELP     HL_    267126   9-30-93   6:20a
+    KEYB     COM     15750   9-30-93   6:20a
+    KEYBOARD SYS     34598   9-30-93   6:20a
+    MEM      EX_     19512   9-30-93   6:20a
+    NLSFUNC  EXE      7036   9-30-93   6:20a
+    PACKING  LST      6161   9-30-93   6:20a
+    QBASIC   EXE    194309   9-30-93   6:20a
+    README   TXT     59813   9-30-93   6:20a
+    SCANDISK EXE    119761   9-30-93   6:20a
+    SCANDISK INI      6470   9-30-93   6:20a
+    SETUP    EXE     72601   9-30-93   6:20a
+    SETUP    MSG      1392   9-30-93   6:20a
+    SYS      COM      9432   9-30-93   6:20a
+    XCOPY    EX_     11093   9-30-93   6:20a
+           29 file(s)    1153272 bytes
+                           53760 bytes free
 
 ### Directory of MS-DOS 6.20 (1.2M Disk 2)
 
-	 Volume in drive A is DISK      2
-	 Volume Serial Number is 2B1C-0411
+     Volume in drive A is DISK2
+     Directory of A:\
 
-	Directory of A:\
-
-	ANSI     SY_      6260 09-30-93   6:20a
-	APPEND   EX_      7467 09-30-93   6:20a
-	CHKSTATE SY_     16770 09-30-93   6:20a
-	CHOICE   COM      1754 09-30-93   6:20a
-	DBLSPACE EXE    177034 09-30-93   6:20a
-	DBLSPACE HL_     24852 09-30-93   6:20a
-	DBLSPACE IN_      1256 09-30-93   6:20a
-	DBLSPACE SY_      8387 09-30-93   6:20a
-	DBLWIN   HL_      4205 09-30-93   6:20a
-	DELTREE  EX_      7249 09-30-93   6:20a
-	DISKCOMP CO_      6762 09-30-93   6:20a
-	DISKCOPY CO_      8306 09-30-93   6:20a
-	DISPLAY  SY_      9797 09-30-93   6:20a
-	DOSHELP  HL_      2492 09-30-93   6:20a
-	DOSKEY   CO_      4213 09-30-93   6:20a
-	DRIVER   SY_      4030 09-30-93   6:20a
-	EDIT     HL_     15709 09-30-93   6:20a
-	EGA      CP_     18340 09-30-93   6:20a
-	EMM386   EX_     50079 09-30-93   6:20a
-	FASTHELP EX_      7539 09-30-93   6:20a
-	FASTOPEN EX_      7829 09-30-93   6:20a
-	FC       EX_     12065 09-30-93   6:20a
-	FIND     EX_      4880 09-30-93   6:20a
-	GRAPHICS CO_     11375 09-30-93   6:20a
-	HELP     COM       413 09-30-93   6:20a
-	HIMEM    SY_     10064 09-30-93   6:20a
-	INTERLNK EX_     10720 09-30-93   6:20a
-	INTERSVR EX_     26446 09-30-93   6:20a
-	LOADFIX  CO_       649 09-30-93   6:20a
-	MEMMAKER EXE    119557 09-30-93   6:20a
-	MEMMAKER IN_      1306 09-30-93   6:20a
-	MEMMAKER HL_      6017 09-30-93   6:20a
-	MODE     CO_     14899 09-30-93   6:20a
-	MORE     COM      2545 09-30-93   6:20a
-	MOVE     EX_     11957 09-30-93   6:20a
-	MSCDEX   EXE     25361 09-30-93   6:20a
-	MSD      COM       867 09-30-93   6:20a
-	MSD      EXE    158470 09-30-93   6:20a
-	MWBACKUP EX_    159138 09-30-93   6:20a
-	NETWORKS TXT     20553 09-30-93   6:20a
-	POWER    EX_      5549 09-30-93   6:20a
-	QBASIC   HL_    113105 09-30-93   6:20a
-	RAMDRIVE SY_      3282 09-30-93   6:20a
-	REPLACE  EX_     12835 09-30-93   6:20a
-	SHARE    EX_      8120 09-30-93   6:20a
-	SUBST    EX_     12740 09-30-93   6:20a
-	VFINTD   38_      1289 09-30-93   6:20a
-	WINA20   38_      2661 09-30-93   6:20a
-	       48 file(s)    1147193 bytes
-
-	Total files listed:
-	       48 file(s)    1147193 bytes
-	                       55296 bytes free
+    ANSI     SY_      6260   9-30-93   6:20a
+    APPEND   EX_      7467   9-30-93   6:20a
+    CHKSTATE SY_     16770   9-30-93   6:20a
+    CHOICE   COM      1754   9-30-93   6:20a
+    DBLSPACE EXE    177034   9-30-93   6:20a
+    DBLSPACE HL_     24852   9-30-93   6:20a
+    DBLSPACE IN_      1256   9-30-93   6:20a
+    DBLSPACE SY_      8387   9-30-93   6:20a
+    DBLWIN   HL_      4205   9-30-93   6:20a
+    DELTREE  EX_      7249   9-30-93   6:20a
+    DISKCOMP CO_      6762   9-30-93   6:20a
+    DISKCOPY CO_      8306   9-30-93   6:20a
+    DISPLAY  SY_      9797   9-30-93   6:20a
+    DOSHELP  HL_      2492   9-30-93   6:20a
+    DOSKEY   CO_      4213   9-30-93   6:20a
+    DRIVER   SY_      4030   9-30-93   6:20a
+    EDIT     HL_     15709   9-30-93   6:20a
+    EGA      CP_     18340   9-30-93   6:20a
+    EMM386   EX_     50079   9-30-93   6:20a
+    FASTHELP EX_      7539   9-30-93   6:20a
+    FASTOPEN EX_      7829   9-30-93   6:20a
+    FC       EX_     12065   9-30-93   6:20a
+    FIND     EX_      4880   9-30-93   6:20a
+    GRAPHICS CO_     11375   9-30-93   6:20a
+    HELP     COM       413   9-30-93   6:20a
+    HIMEM    SY_     10064   9-30-93   6:20a
+    INTERLNK EX_     10720   9-30-93   6:20a
+    INTERSVR EX_     26446   9-30-93   6:20a
+    LOADFIX  CO_       649   9-30-93   6:20a
+    MEMMAKER EXE    119557   9-30-93   6:20a
+    MEMMAKER IN_      1306   9-30-93   6:20a
+    MEMMAKER HL_      6017   9-30-93   6:20a
+    MODE     CO_     14899   9-30-93   6:20a
+    MORE     COM      2545   9-30-93   6:20a
+    MOVE     EX_     11957   9-30-93   6:20a
+    MSCDEX   EXE     25361   9-30-93   6:20a
+    MSD      COM       867   9-30-93   6:20a
+    MSD      EXE    158470   9-30-93   6:20a
+    MWBACKUP EX_    159138   9-30-93   6:20a
+    NETWORKS TXT     20553   9-30-93   6:20a
+    POWER    EX_      5549   9-30-93   6:20a
+    QBASIC   HL_    113105   9-30-93   6:20a
+    RAMDRIVE SY_      3282   9-30-93   6:20a
+    REPLACE  EX_     12835   9-30-93   6:20a
+    SHARE    EX_      8120   9-30-93   6:20a
+    SUBST    EX_     12740   9-30-93   6:20a
+    VFINTD   38_      1289   9-30-93   6:20a
+    WINA20   38_      2661   9-30-93   6:20a
+           48 file(s)    1147193 bytes
+                           55296 bytes free
 
 ### Directory of MS-DOS 6.20 (1.2M Disk 3)
 
-	 Volume in drive A is DISK      3
-	 Volume Serial Number is 4B03-0511
+     Volume in drive A is DISK3
+     Directory of A:\
 
-	Directory of A:\
-
-	DEFRAG   EXE     79177 09-30-93   6:20a
-	DEFRAG   HL_      4284 09-30-93   6:20a
-	EGA2     CP_     18569 09-30-93   6:20a
-	GRAPHICS PR_      3883 09-30-93   6:20a
-	KEYBRD2  SY_     13942 09-30-93   6:20a
-	LABEL    EX_      6176 09-30-93   6:20a
-	MONOUMB  38_       950 09-30-93   6:20a
-	MSBACKDB OVL     63098 09-30-93   6:20a
-	MSBACKDR OVL     66906 09-30-93   6:20a
-	MSBACKFB OVL     69066 09-30-93   6:20a
-	MSBACKFR OVL     72474 09-30-93   6:20a
-	MSBACKUP EX_      2487 09-30-93   6:20a
-	MSBACKUP HL_    112396 09-30-93   6:20a
-	MSBACKUP OVL    133952 09-30-93   6:20a
-	MSBCONFG HL_     18549 09-30-93   6:20a
-	MSBCONFG OVL     47210 09-30-93   6:20a
-	MWBACKF  DL_      6956 09-30-93   6:20a
-	MWBACKR  DL_     30277 09-30-93   6:20a
-	MWBACKUP HL_    141281 09-30-93   6:20a
-	MWGRAFIC DL_     18094 09-30-93   6:20a
-	MWUNDEL  EX_     66012 09-30-93   6:20a
-	MWUNDEL  HL_     17458 09-30-93   6:20a
-	PRINT    EX_      9614 09-30-93   6:20a
-	RESTORE  EX_     23380 09-30-93   6:20a
-	SETVER   EX_      6649 09-30-93   6:20a
-	SIZER    EX_      4136 09-30-93   6:20a
-	SMARTDRV EX_     15478 09-30-93   6:20a
-	SMARTMON EX_     13747 09-30-93   6:20a
-	SMARTMON HL_      7319 09-30-93   6:20a
-	SORT     EX_      4355 09-30-93   6:20a
-	TREE     CO_      4794 09-30-93   6:20a
-	UNDELETE EXE     26416 09-30-93   6:20a
-	WNTOOLS  GR_      1071 09-30-93   6:20a
-	       33 file(s)    1110156 bytes
-
-	Total files listed:
-	       33 file(s)    1110156 bytes
-	                       95232 bytes free
+    DEFRAG   EXE     79177   9-30-93   6:20a
+    DEFRAG   HL_      4284   9-30-93   6:20a
+    EGA2     CP_     18569   9-30-93   6:20a
+    GRAPHICS PR_      3883   9-30-93   6:20a
+    KEYBRD2  SY_     13942   9-30-93   6:20a
+    LABEL    EX_      6176   9-30-93   6:20a
+    MONOUMB  38_       950   9-30-93   6:20a
+    MSBACKDB OVL     63098   9-30-93   6:20a
+    MSBACKDR OVL     66906   9-30-93   6:20a
+    MSBACKFB OVL     69066   9-30-93   6:20a
+    MSBACKFR OVL     72474   9-30-93   6:20a
+    MSBACKUP EX_      2487   9-30-93   6:20a
+    MSBACKUP HL_    112396   9-30-93   6:20a
+    MSBACKUP OVL    133952   9-30-93   6:20a
+    MSBCONFG HL_     18549   9-30-93   6:20a
+    MSBCONFG OVL     47210   9-30-93   6:20a
+    MWBACKF  DL_      6956   9-30-93   6:20a
+    MWBACKR  DL_     30277   9-30-93   6:20a
+    MWBACKUP HL_    141281   9-30-93   6:20a
+    MWGRAFIC DL_     18094   9-30-93   6:20a
+    MWUNDEL  EX_     66012   9-30-93   6:20a
+    MWUNDEL  HL_     17458   9-30-93   6:20a
+    PRINT    EX_      9614   9-30-93   6:20a
+    RESTORE  EX_     23380   9-30-93   6:20a
+    SETVER   EX_      6649   9-30-93   6:20a
+    SIZER    EX_      4136   9-30-93   6:20a
+    SMARTDRV EX_     15478   9-30-93   6:20a
+    SMARTMON EX_     13747   9-30-93   6:20a
+    SMARTMON HL_      7319   9-30-93   6:20a
+    SORT     EX_      4355   9-30-93   6:20a
+    TREE     CO_      4794   9-30-93   6:20a
+    UNDELETE EXE     26416   9-30-93   6:20a
+    WNTOOLS  GR_      1071   9-30-93   6:20a
+           33 file(s)    1110156 bytes
+                           95232 bytes free
 
 ### Directory of MS-DOS 6.20 (1.2M Disk 4)
 
-	 Volume in drive A is DISK      4
-	 Volume Serial Number is 601C-0511
+     Volume in drive A is DISK4
+     Directory of A:\
 
-	Directory of A:\
+    MSAV     EXE    172198   9-30-93   6:20a
+    MSAV     HL_     12230   9-30-93   6:20a
+    MSAVHELP OV_     17796   9-30-93   6:20a
+    MSAVIRUS LS_     11473   9-30-93   6:20a
+    MSTOOLS  DL_      8376   9-30-93   6:20a
+    MWAV     EX_     65629   9-30-93   6:20a
+    MWAV     HL_     12070   9-30-93   6:20a
+    MWAVABSI DL_     23085   9-30-93   6:20a
+    MWAVDLG  DL_     10232   9-30-93   6:20a
+    MWAVDOSL DL_     19702   9-30-93   6:20a
+    MWAVDRVL DL_      4219   9-30-93   6:20a
+    MWAVMGR  DL_      9569   9-30-93   6:20a
+    MWAVSCAN DL_     70797   9-30-93   6:20a
+    MWAVSOS  DL_      3983   9-30-93   6:20a
+    MWAVTSR  EX_      8445   9-30-93   6:20a
+    UNFORMAT COM     12738   9-30-93   6:20a
+    VSAFE    CO_     33046   9-30-93   6:20a
+           17 file(s)     495588 bytes
+                          714240 bytes free
 
-	MSAV     EXE    172198 09-30-93   6:20a
-	MSAV     HL_     12230 09-30-93   6:20a
-	MSAVHELP OV_     17796 09-30-93   6:20a
-	MSAVIRUS LS_     11473 09-30-93   6:20a
-	MSTOOLS  DL_      8376 09-30-93   6:20a
-	MWAV     EX_     65629 09-30-93   6:20a
-	MWAV     HL_     12070 09-30-93   6:20a
-	MWAVABSI DL_     23085 09-30-93   6:20a
-	MWAVDLG  DL_     10232 09-30-93   6:20a
-	MWAVDOSL DL_     19702 09-30-93   6:20a
-	MWAVDRVL DL_      4219 09-30-93   6:20a
-	MWAVMGR  DL_      9569 09-30-93   6:20a
-	MWAVSCAN DL_     70797 09-30-93   6:20a
-	MWAVSOS  DL_      3983 09-30-93   6:20a
-	MWAVTSR  EX_      8445 09-30-93   6:20a
-	UNFORMAT COM     12738 09-30-93   6:20a
-	VSAFE    CO_     33046 09-30-93   6:20a
-	       17 file(s)     495588 bytes
-
-	Total files listed:
-	       17 file(s)     495588 bytes
-	                      714240 bytes free
-
-### Directory of MS-DOS 6.20 (1.2M Supp Disk)
+### Directory of MS-DOS 6.20 (1.2M Supp)
 
 	 Volume in drive A is SUPPDISK  1
 	 Volume Serial Number is 0537-0A0E
@@ -280,171 +260,156 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.20 (1.44M Disk 1)
 
-	 Volume in drive A is DISK      1
-	 Volume Serial Number is 113B-0511
+     Volume in drive A is DISK1
+     Directory of A:\
 
-	Directory of A:\
-
-	IO       SYS     40566 09-30-93   6:20a
-	MSDOS    SYS     38138 09-30-93   6:20a
-	COMMAND  COM     54619 09-30-93   6:20a
-	DBLSPACE BIN     64246 09-30-93   6:20a
-	ANSI     SY_      6260 09-30-93   6:20a
-	APPEND   EX_      7467 09-30-93   6:20a
-	ATTRIB   EXE     11208 09-30-93   6:20a
-	AUTOEXEC BAT        37 09-30-93   6:20a
-	CHKDSK   EXE     12241 09-30-93   6:20a
-	CONFIG   SYS        13 09-30-93   6:20a
-	COUNTRY  SYS     19546 09-30-93   6:20a
-	DBLWIN   HL_      4205 09-30-93   6:20a
-	DEBUG    EXE     15718 09-30-93   6:20a
-	DELTREE  EX_      7249 09-30-93   6:20a
-	DISKCOMP CO_      6762 09-30-93   6:20a
-	DISKCOPY CO_      8306 09-30-93   6:20a
-	DISPLAY  SY_      9797 09-30-93   6:20a
-	DOSHELP  HL_      2492 09-30-93   6:20a
-	DOSKEY   CO_      4213 09-30-93   6:20a
-	DOSSETUP INI      3052 09-30-93   6:20a
-	DRIVER   SY_      4030 09-30-93   6:20a
-	EDIT     COM       413 09-30-93   6:20a
-	EXPAND   EXE     16129 09-30-93   6:20a
-	FASTHELP EX_      7539 09-30-93   6:20a
-	FASTOPEN EX_      7829 09-30-93   6:20a
-	FC       EX_     12065 09-30-93   6:20a
-	FDISK    EXE     29334 09-30-93   6:20a
-	FIND     EX_      4880 09-30-93   6:20a
-	FORMAT   COM     22916 09-30-93   6:20a
-	GRAPHICS CO_     11375 09-30-93   6:20a
-	HELP     COM       413 09-30-93   6:20a
-	HELP     HL_    267126 09-30-93   6:20a
-	HIMEM    SY_     10064 09-30-93   6:20a
-	INTERLNK EX_     10720 09-30-93   6:20a
-	INTERSVR EX_     26446 09-30-93   6:20a
-	KEYB     COM     15750 09-30-93   6:20a
-	KEYBOARD SYS     34598 09-30-93   6:20a
-	MEM      EX_     19512 09-30-93   6:20a
-	MODE     CO_     14899 09-30-93   6:20a
-	MOVE     EX_     11957 09-30-93   6:20a
-	NLSFUNC  EXE      7036 09-30-93   6:20a
-	PACKING  LST      6132 09-30-93   6:20a
-	POWER    EX_      5549 09-30-93   6:20a
-	QBASIC   EXE    194309 09-30-93   6:20a
-	RAMDRIVE SY_      3282 09-30-93   6:20a
-	README   TXT     59813 09-30-93   6:20a
-	SCANDISK EXE    119761 09-30-93   6:20a
-	SCANDISK INI      6470 09-30-93   6:20a
-	SETUP    EXE     72601 09-30-93   6:20a
-	SETUP    MSG      1392 09-30-93   6:20a
-	SHARE    EX_      8120 09-30-93   6:20a
-	SUBST    EX_     12740 09-30-93   6:20a
-	SYS      COM      9432 09-30-93   6:20a
-	VFINTD   38_      1289 09-30-93   6:20a
-	WINA20   38_      2661 09-30-93   6:20a
-	XCOPY    EX_     11093 09-30-93   6:20a
-	       56 file(s)    1365810 bytes
-
-	Total files listed:
-	       56 file(s)    1365810 bytes
-	                       78848 bytes free
+    IO       SYS*    40566   9-30-93   6:20a
+    MSDOS    SYS*    38138   9-30-93   6:20a
+    COMMAND  COM     54619   9-30-93   6:20a
+    DBLSPACE BIN     64246   9-30-93   6:20a
+    ANSI     SY_      6260   9-30-93   6:20a
+    APPEND   EX_      7467   9-30-93   6:20a
+    ATTRIB   EXE     11208   9-30-93   6:20a
+    AUTOEXEC BAT        37   9-30-93   6:20a
+    CHKDSK   EXE     12241   9-30-93   6:20a
+    CONFIG   SYS        13   9-30-93   6:20a
+    COUNTRY  SYS     19546   9-30-93   6:20a
+    DBLWIN   HL_      4205   9-30-93   6:20a
+    DEBUG    EXE     15718   9-30-93   6:20a
+    DELTREE  EX_      7249   9-30-93   6:20a
+    DISKCOMP CO_      6762   9-30-93   6:20a
+    DISKCOPY CO_      8306   9-30-93   6:20a
+    DISPLAY  SY_      9797   9-30-93   6:20a
+    DOSHELP  HL_      2492   9-30-93   6:20a
+    DOSKEY   CO_      4213   9-30-93   6:20a
+    DOSSETUP INI      3052   9-30-93   6:20a
+    DRIVER   SY_      4030   9-30-93   6:20a
+    EDIT     COM       413   9-30-93   6:20a
+    EXPAND   EXE     16129   9-30-93   6:20a
+    FASTHELP EX_      7539   9-30-93   6:20a
+    FASTOPEN EX_      7829   9-30-93   6:20a
+    FC       EX_     12065   9-30-93   6:20a
+    FDISK    EXE     29334   9-30-93   6:20a
+    FIND     EX_      4880   9-30-93   6:20a
+    FORMAT   COM     22916   9-30-93   6:20a
+    GRAPHICS CO_     11375   9-30-93   6:20a
+    HELP     COM       413   9-30-93   6:20a
+    HELP     HL_    267126   9-30-93   6:20a
+    HIMEM    SY_     10064   9-30-93   6:20a
+    INTERLNK EX_     10720   9-30-93   6:20a
+    INTERSVR EX_     26446   9-30-93   6:20a
+    KEYB     COM     15750   9-30-93   6:20a
+    KEYBOARD SYS     34598   9-30-93   6:20a
+    MEM      EX_     19512   9-30-93   6:20a
+    MODE     CO_     14899   9-30-93   6:20a
+    MOVE     EX_     11957   9-30-93   6:20a
+    NLSFUNC  EXE      7036   9-30-93   6:20a
+    PACKING  LST      6132   9-30-93   6:20a
+    POWER    EX_      5549   9-30-93   6:20a
+    QBASIC   EXE    194309   9-30-93   6:20a
+    RAMDRIVE SY_      3282   9-30-93   6:20a
+    README   TXT     59813   9-30-93   6:20a
+    SCANDISK EXE    119761   9-30-93   6:20a
+    SCANDISK INI      6470   9-30-93   6:20a
+    SETUP    EXE     72601   9-30-93   6:20a
+    SETUP    MSG      1392   9-30-93   6:20a
+    SHARE    EX_      8120   9-30-93   6:20a
+    SUBST    EX_     12740   9-30-93   6:20a
+    SYS      COM      9432   9-30-93   6:20a
+    VFINTD   38_      1289   9-30-93   6:20a
+    WINA20   38_      2661   9-30-93   6:20a
+    XCOPY    EX_     11093   9-30-93   6:20a
+           56 file(s)    1365810 bytes
+                           78848 bytes free
 
 ### Directory of MS-DOS 6.20 (1.44M Disk 2)
 
-	 Volume in drive A is DISK      2
-	 Volume Serial Number is 2E29-0611
+     Volume in drive A is DISK2
+     Directory of A:\
 
-	Directory of A:\
-
-	CHKSTATE SY_     16770 09-30-93   6:20a
-	CHOICE   COM      1754 09-30-93   6:20a
-	DBLSPACE EXE    177034 09-30-93   6:20a
-	DBLSPACE HL_     24852 09-30-93   6:20a
-	DBLSPACE IN_      1256 09-30-93   6:20a
-	DBLSPACE SY_      8387 09-30-93   6:20a
-	DEFRAG   EXE     79177 09-30-93   6:20a
-	DEFRAG   HL_      4284 09-30-93   6:20a
-	EDIT     HL_     15709 09-30-93   6:20a
-	EGA      CP_     18340 09-30-93   6:20a
-	EGA2     CP_     18569 09-30-93   6:20a
-	EMM386   EX_     50079 09-30-93   6:20a
-	GRAPHICS PR_      3883 09-30-93   6:20a
-	KEYBRD2  SY_     13942 09-30-93   6:20a
-	LABEL    EX_      6176 09-30-93   6:20a
-	LOADFIX  CO_       649 09-30-93   6:20a
-	MEMMAKER EXE    119557 09-30-93   6:20a
-	MEMMAKER HL_      6017 09-30-93   6:20a
-	MEMMAKER IN_      1306 09-30-93   6:20a
-	MONOUMB  38_       950 09-30-93   6:20a
-	MORE     COM      2545 09-30-93   6:20a
-	MSCDEX   EXE     25361 09-30-93   6:20a
-	MSD      COM       867 09-30-93   6:20a
-	MSD      EXE    158470 09-30-93   6:20a
-	MWBACKF  DL_      6956 09-30-93   6:20a
-	MWBACKR  DL_     30277 09-30-93   6:20a
-	MWBACKUP EX_    159138 09-30-93   6:20a
-	MWBACKUP HL_    141281 09-30-93   6:20a
-	NETWORKS TXT     20553 09-30-93   6:20a
-	PRINT    EX_      9614 09-30-93   6:20a
-	QBASIC   HL_    113105 09-30-93   6:20a
-	REPLACE  EX_     12835 09-30-93   6:20a
-	RESTORE  EX_     23380 09-30-93   6:20a
-	SETVER   EX_      6649 09-30-93   6:20a
-	SIZER    EX_      4136 09-30-93   6:20a
-	SMARTDRV EX_     15478 09-30-93   6:20a
-	SMARTMON EX_     13747 09-30-93   6:20a
-	SMARTMON HL_      7319 09-30-93   6:20a
-	SORT     EX_      4355 09-30-93   6:20a
-	TREE     CO_      4794 09-30-93   6:20a
-	       40 file(s)    1329551 bytes
-
-	Total files listed:
-	       40 file(s)    1329551 bytes
-	                      118784 bytes free
+    CHKSTATE SY_     16770   9-30-93   6:20a
+    CHOICE   COM      1754   9-30-93   6:20a
+    DBLSPACE EXE    177034   9-30-93   6:20a
+    DBLSPACE HL_     24852   9-30-93   6:20a
+    DBLSPACE IN_      1256   9-30-93   6:20a
+    DBLSPACE SY_      8387   9-30-93   6:20a
+    DEFRAG   EXE     79177   9-30-93   6:20a
+    DEFRAG   HL_      4284   9-30-93   6:20a
+    EDIT     HL_     15709   9-30-93   6:20a
+    EGA      CP_     18340   9-30-93   6:20a
+    EGA2     CP_     18569   9-30-93   6:20a
+    EMM386   EX_     50079   9-30-93   6:20a
+    GRAPHICS PR_      3883   9-30-93   6:20a
+    KEYBRD2  SY_     13942   9-30-93   6:20a
+    LABEL    EX_      6176   9-30-93   6:20a
+    LOADFIX  CO_       649   9-30-93   6:20a
+    MEMMAKER EXE    119557   9-30-93   6:20a
+    MEMMAKER HL_      6017   9-30-93   6:20a
+    MEMMAKER IN_      1306   9-30-93   6:20a
+    MONOUMB  38_       950   9-30-93   6:20a
+    MORE     COM      2545   9-30-93   6:20a
+    MSCDEX   EXE     25361   9-30-93   6:20a
+    MSD      COM       867   9-30-93   6:20a
+    MSD      EXE    158470   9-30-93   6:20a
+    MWBACKF  DL_      6956   9-30-93   6:20a
+    MWBACKR  DL_     30277   9-30-93   6:20a
+    MWBACKUP EX_    159138   9-30-93   6:20a
+    MWBACKUP HL_    141281   9-30-93   6:20a
+    NETWORKS TXT     20553   9-30-93   6:20a
+    PRINT    EX_      9614   9-30-93   6:20a
+    QBASIC   HL_    113105   9-30-93   6:20a
+    REPLACE  EX_     12835   9-30-93   6:20a
+    RESTORE  EX_     23380   9-30-93   6:20a
+    SETVER   EX_      6649   9-30-93   6:20a
+    SIZER    EX_      4136   9-30-93   6:20a
+    SMARTDRV EX_     15478   9-30-93   6:20a
+    SMARTMON EX_     13747   9-30-93   6:20a
+    SMARTMON HL_      7319   9-30-93   6:20a
+    SORT     EX_      4355   9-30-93   6:20a
+    TREE     CO_      4794   9-30-93   6:20a
+           40 file(s)    1329551 bytes
+                          118784 bytes free
 
 ### Directory of MS-DOS 6.20 (1.44M Disk 3)
 
-	 Volume in drive A is DISK      3
-	 Volume Serial Number is 3D15-0711
+     Volume in drive A is DISK3
+     Directory of A:\
 
-	Directory of A:\
+    MSAV     EXE    172198   9-30-93   6:20a
+    MSAV     HL_     12230   9-30-93   6:20a
+    MSAVHELP OV_     17796   9-30-93   6:20a
+    MSAVIRUS LS_     11473   9-30-93   6:20a
+    MSBACKDB OVL     63098   9-30-93   6:20a
+    MSBACKDR OVL     66906   9-30-93   6:20a
+    MSBACKFB OVL     69066   9-30-93   6:20a
+    MSBACKFR OVL     72474   9-30-93   6:20a
+    MSBACKUP EX_      2487   9-30-93   6:20a
+    MSBACKUP HL_    112396   9-30-93   6:20a
+    MSBACKUP OVL    133952   9-30-93   6:20a
+    MSBCONFG HL_     18549   9-30-93   6:20a
+    MSBCONFG OVL     47210   9-30-93   6:20a
+    MSTOOLS  DL_      8376   9-30-93   6:20a
+    MWAV     EX_     65629   9-30-93   6:20a
+    MWAV     HL_     12070   9-30-93   6:20a
+    MWAVABSI DL_     23085   9-30-93   6:20a
+    MWAVDLG  DL_     10232   9-30-93   6:20a
+    MWAVDOSL DL_     19702   9-30-93   6:20a
+    MWAVDRVL DL_      4219   9-30-93   6:20a
+    MWAVMGR  DL_      9569   9-30-93   6:20a
+    MWAVSCAN DL_     70797   9-30-93   6:20a
+    MWAVSOS  DL_      3983   9-30-93   6:20a
+    MWAVTSR  EX_      8445   9-30-93   6:20a
+    MWGRAFIC DL_     18094   9-30-93   6:20a
+    MWUNDEL  EX_     66012   9-30-93   6:20a
+    MWUNDEL  HL_     17458   9-30-93   6:20a
+    UNDELETE EXE     26416   9-30-93   6:20a
+    UNFORMAT COM     12738   9-30-93   6:20a
+    VSAFE    CO_     33046   9-30-93   6:20a
+    WNTOOLS  GR_      1071   9-30-93   6:20a
+           31 file(s)    1210777 bytes
+                          239104 bytes free
 
-	MSAV     EXE    172198 09-30-93   6:20a
-	MSAV     HL_     12230 09-30-93   6:20a
-	MSAVHELP OV_     17796 09-30-93   6:20a
-	MSAVIRUS LS_     11473 09-30-93   6:20a
-	MSBACKDB OVL     63098 09-30-93   6:20a
-	MSBACKDR OVL     66906 09-30-93   6:20a
-	MSBACKFB OVL     69066 09-30-93   6:20a
-	MSBACKFR OVL     72474 09-30-93   6:20a
-	MSBACKUP EX_      2487 09-30-93   6:20a
-	MSBACKUP HL_    112396 09-30-93   6:20a
-	MSBACKUP OVL    133952 09-30-93   6:20a
-	MSBCONFG HL_     18549 09-30-93   6:20a
-	MSBCONFG OVL     47210 09-30-93   6:20a
-	MSTOOLS  DL_      8376 09-30-93   6:20a
-	MWAV     EX_     65629 09-30-93   6:20a
-	MWAV     HL_     12070 09-30-93   6:20a
-	MWAVABSI DL_     23085 09-30-93   6:20a
-	MWAVDLG  DL_     10232 09-30-93   6:20a
-	MWAVDOSL DL_     19702 09-30-93   6:20a
-	MWAVDRVL DL_      4219 09-30-93   6:20a
-	MWAVMGR  DL_      9569 09-30-93   6:20a
-	MWAVSCAN DL_     70797 09-30-93   6:20a
-	MWAVSOS  DL_      3983 09-30-93   6:20a
-	MWAVTSR  EX_      8445 09-30-93   6:20a
-	MWGRAFIC DL_     18094 09-30-93   6:20a
-	MWUNDEL  EX_     66012 09-30-93   6:20a
-	MWUNDEL  HL_     17458 09-30-93   6:20a
-	UNDELETE EXE     26416 09-30-93   6:20a
-	UNFORMAT COM     12738 09-30-93   6:20a
-	VSAFE    CO_     33046 09-30-93   6:20a
-	WNTOOLS  GR_      1071 09-30-93   6:20a
-	       31 file(s)    1210777 bytes
-
-	Total files listed:
-	       31 file(s)    1210777 bytes
-	                      239104 bytes free
-
-### Directory of MS-DOS 6.20 (1.44M Supp Disk)
+### Directory of MS-DOS 6.20 (1.44M Supp)
 
 	 Volume in drive A is SUPPDISK  1
 	 Volume Serial Number is 0537-0A0E
