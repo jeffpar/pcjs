@@ -398,7 +398,7 @@ function main(argc, argv)
                                     }
                                 }
                             } else {
-                                printf("\tno directory listing for \"%s\" (%s)\n", diskette.name, sMatch);
+                                printf("\twarning: no directory listing for \"%s\"\n", diskette.name);
                             }
                         } else {
                             printf("\tmissing index: %s\n", sIndexFile);

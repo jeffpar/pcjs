@@ -17,7 +17,7 @@ machines:
 
 [Directory Listings](#directory-of-wordstar-320-original) of original single-sided (160Kb)
 WordStar 3.20 diskettes are provided below.  Before we acquired the originals, all we had was a
-disk image recreated by [The OS/2 Museum](http://www.os2museum.com/).  We have retained both
+backup disk image recreated by [The OS/2 Museum](http://www.os2museum.com/).  We have retained both
 sets of files for comparison purposes.
 
 The same May 2019 acquisition included:
@@ -60,19 +60,29 @@ You can browse all of the [Additional Materials](#additional-materials) below.
 
 ![WordStar 3.20 Disk 2]({{ site.software.diskettes.server }}/pcx86/app/other/wordstar/3.20/MM320-ORIG.png)
 
-### Directory of WordStar 3.20 (Recreated)
+### Directory of WordStar 3.20 (Backup)
 
      Volume in drive A has no label
      Directory of A:\
 
-    WSOVLY1  OVR     40960   1-01-80  12:00a
-    WSMSGS   OVR     27264   1-01-80  12:00a
-    INSTALL  BAS     17152  10-01-82  12:00a
-    PRINT    TST      3968   1-01-80  12:00a
-    WS       COM     20480   1-01-80  12:00a
-    MAILMRGE OVR     11520   1-01-80  12:00a
-    WSBAUD   BAS      1152   2-23-13   8:45a
-            7 file(s)     122496 bytes
-                           36352 bytes free
+    IBMBIO   COM*     1920   5-07-82  12:00p
+    IBMDOS   COM*     6400   5-07-82  12:00p
+    COMMAND  COM      4959   5-07-82  12:00p
+    WS       COM     20480   1-01-80  12:02a
+    WSMSGS   OVR     27264  11-30-79  12:00a
+    WSOVLY1  OVR     40960  11-30-79  12:00a
+    EXAMPLE  TXT      9216  11-30-79  12:00a
+    INSTALL  BAS     14848  11-30-79  12:00a
+    WSBAUD   BAS      1152  11-30-79  12:00a
+    MAILMRGE OVR     11520  11-30-79  12:00a
+    SETCLOCK COM       853   9-19-82  12:00a
+    INSTALL              0   1-01-80  12:40a
+    ASTCLOCK COM       813   9-18-82  12:00a
+    AUTOEXEC BAT        10   5-24-84   1:57p
+    PIFINTRO          5248  10-30-86  11:47a
+    PRT               3221   1-01-80   2:07a
+    LPA0              3221   1-01-80   2:07a
+           17 file(s)     152085 bytes
+                            2048 bytes free
 
 {% include gallery/documents.html title="Additional Materials" width="320" height="460" %}

@@ -23,25 +23,24 @@ of the original distribution disks.
 
 {% include machine.html id="ibm5150-123-1aa" %}
 
-### Directory of Lotus 1-2-3 1A* (1-System) (PATCHED)
+### Directory of Lotus 1-2-3 1A* (1-System)
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
-
-	IBMBIO   COM      4736 10-20-83  12:00p
-	IBMDOS   COM     17024 10-20-83  12:00p
-	123      EXE     89984 08-17-84   3:59p
-	123      HLP    113416 07-01-83   1:23a
-	123      CNF       256 07-01-83   1:23a
-	LOTUS    COM       481 07-01-83   1:23a
-	LTSLOAD  COM     10144 07-01-83   1:23a
-	TD       DRV      5294 07-01-83   1:23a
-	GD       DRV      2139 07-01-83   1:23a
-	KB       DRV       352 07-01-83   1:23a
-	PR       DRV       329 07-01-83   1:23a
-	       11 file(s)     244155 bytes
-	                       72704 bytes free
+    IBMBIO   COM*     4736  10-20-83  12:00p
+    IBMDOS   COM*    17024  10-20-83  12:00p
+    123      EXE     89984   8-17-84   3:59p
+    123      HLP    113416   7-01-83   1:23a
+    123      CNF       256   7-01-83   1:23a
+    LOTUS    COM       481   7-01-83   1:23a
+    LTSLOAD  COM     10144   7-01-83   1:23a
+    TD       DRV      5294   7-01-83   1:23a
+    GD       DRV      2139   7-01-83   1:23a
+    KB       DRV       352   7-01-83   1:23a
+    PR       DRV       329   7-01-83   1:23a
+           11 file(s)     244155 bytes
+                           72704 bytes free
 
 ### Directory of Lotus 1-2-3 1A* (2-Utility)
 

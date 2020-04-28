@@ -26,27 +26,27 @@ original Lotus 1-2-3 files dated `6-07-83` along with a random mixture of PC DOS
 
 {% include machine.html id="ibm5150-123-1a" %}
 
-### Directory of Lotus 1-2-3 1A (1-System) (PATCHED)
+### Directory of Lotus 1-2-3 1A (1-System)
 
-	 Volume in drive A has no label
-	 Directory of A:\
+     Volume in drive A has no label
+     Directory of A:\
 
-	IBMBIO   COM      1920 06-02-83   5:20p
-	IBMDOS   COM      6400 06-02-83   5:20p
-	123      EXE     89856 07-09-17   9:18a
-	123      HLP    113416 06-07-83   1:23a
-	123      CNF       256 06-07-83   1:23a
-	LOTUS    COM       481 06-07-83   1:23a
-	LTSLOAD  COM     10144 06-07-83   1:23a
-	AUTOEXEC BAT        20 06-07-83   1:23a
-	INSTALL  BAT       870 06-07-83   1:23a
-	GD       DRV      2139 06-07-83   1:23a
-	ID       DRV      5294 06-07-83   1:23a
-	KB       DRV       352 06-07-83   1:23a
-	PR       DRV       329 06-07-83   1:23a
-	TD       DRV      5294 06-07-83   1:23a
-	       14 file(s)     236771 bytes
-	                       77824 bytes free
+    IBMBIO   COM*     1920   6-02-83   5:20p
+    IBMDOS   COM*     6400   6-02-83   5:20p
+    123      EXE     89856   7-09-17   9:18a
+    123      HLP    113416   6-07-83   1:23a
+    123      CNF       256   6-07-83   1:23a
+    LOTUS    COM       481   6-07-83   1:23a
+    LTSLOAD  COM     10144   6-07-83   1:23a
+    AUTOEXEC BAT        20   6-07-83   1:23a
+    INSTALL  BAT       870   6-07-83   1:23a
+    GD       DRV      2139   6-07-83   1:23a
+    ID       DRV      5294   6-07-83   1:23a
+    KB       DRV       352   6-07-83   1:23a
+    PR       DRV       329   6-07-83   1:23a
+    TD       DRV      5294   6-07-83   1:23a
+           14 file(s)     236771 bytes
+                           77824 bytes free
 
 ### Directory of Lotus 1-2-3 1A (2-Utility)
 

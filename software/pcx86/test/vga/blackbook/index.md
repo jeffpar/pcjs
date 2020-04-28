@@ -48,113 +48,105 @@ into Drive B.  Click the **Run** button to start the machine.
 
 {% include machine.html id="deskpro386" %}
 
-### Directory of VGA "Black Book" Sources
+The following disk image contains the source code for selected [VGA "Black Book" Tests](#selected-vga-black-book-tests).
+It was built using [DiskDump]({{ site.github.pages }}/tools/diskdump/) and the *--normalize* option, which automatically
+converts linefeeds in known text files (including ASM files) into DOS-compatible CR/LF sequences.
 
-This disk image contains the source code for selected [VGA "Black Book" Tests](#selected-vga-black-book-tests).
-It was built using [DiskDump]({{ site.github.pages }}/tools/diskdump/) and the *--normalize* option, which automatically converts linefeeds
-in known text files (including ASM files) into DOS-compatible CR/LF sequences.
+### Directory of VGA Black Book Sources
 
-	 Volume in drive A is VGASRC     
+     Volume in drive A is VGASRC
+     Directory of A:\
 
-	Directory of A:\
+    L23-1    ASM     15245   8-09-16  11:53a
+    L24-1    ASM      7497   8-09-16  11:53a
+    L25-1    ASM      5102   8-09-16  11:53a
+    L25-2    ASM      1687   8-09-16  11:53a
+    L25-3    ASM      2455   8-09-16  11:53a
+    L25-4    ASM      2545   8-09-16  11:53a
+    L26-1    ASM      7242   8-09-16  11:53a
+    L26-2    ASM      7488   8-09-16  11:53a
+    L27-1    ASM      5984   8-09-16  11:53a
+    L27-2    ASM      6382   8-09-16  11:53a
+    L27-3    ASM      4120   8-09-16  11:53a
+    L28-1    ASM      6044   8-09-16  11:53a
+    L28-2    ASM      4597   8-09-16  11:53a
+    L28-3    ASM      2388   8-09-16  11:53a
+    L29-1    ASM      3390   8-09-16  11:53a
+    L29-2    ASM      3033   8-09-16  11:53a
+    L29-3    ASM      6191   8-09-16  11:53a
+    L29-4    ASM      1695   8-09-16  11:53a
+    L30-1    ASM     10550   8-09-16  11:53a
+    L30-2    ASM     12918   8-09-16  11:53a
+    L31-1    ASM      8399   8-09-16  11:53a
+    L31-2    ASM      6962   8-09-16  11:53a
+    L32-1    ASM      5704   8-09-16  11:53a
+    L32-2    C        6000   8-09-16  11:53a
+    L33-1    ASM      4964   8-09-16  11:53a
+    L34-1    ASM      9912   8-09-16  11:53a
+    L35-1    C        6037   8-09-16  11:53a
+    L35-2    C        2371   8-09-16  11:53a
+    L35-3    ASM      9624   8-09-16  11:53a
+    L42-1    C        5353   8-09-16  11:53a
+    L42-2    C        5294   8-09-16  11:53a
+    L42-3    C         715   8-09-16  11:53a
+    L42-4    C        2288   8-09-16  11:53a
+    L42-5    C        1263   8-09-16  11:53a
+    L42-6    ASM     10367   8-09-16  11:53a
+    L47-1    ASM      2881   8-09-16  11:53a
+    L47-2    ASM      1616   8-09-16  11:53a
+    L47-3    ASM      1502   8-09-16  11:53a
+    L47-4    ASM      3282   8-09-16  11:53a
+    L47-5    ASM      4456   8-09-16  11:53a
+    L47-6    ASM      4093   8-09-16  11:53a
+    L47-7    C         680   8-09-16  11:53a
+    L48-1    C        1886   8-09-16  11:53a
+    L48-2    ASM      6737   8-09-16  11:53a
+    L48-3    ASM      6785   8-09-16  11:53a
+    L48-4    ASM      4633   8-09-16  11:53a
+    MAKEFILE          1011   8-09-16  11:53a
+    REGS     H         662   8-09-16  11:53a
+           48 file(s)     242030 bytes
+                           57344 bytes free
 
-	L23-1    ASM     14690 08-09-16  11:53a
-	L24-1    ASM      7243 08-09-16  11:53a
-	L25-1    ASM      4872 08-09-16  11:53a
-	L25-2    ASM      1606 08-09-16  11:53a
-	L25-3    ASM      2347 08-09-16  11:53a
-	L25-4    ASM      2437 08-09-16  11:53a
-	L26-1    ASM      6949 08-09-16  11:53a
-	L26-2    ASM      7170 08-09-16  11:53a
-	L27-1    ASM      5766 08-09-16  11:53a
-	L27-2    ASM      6055 08-09-16  11:53a
-	L27-3    ASM      3928 08-09-16  11:53a
-	L28-1    ASM      5809 08-09-16  11:53a
-	L28-2    ASM      4436 08-09-16  11:53a
-	L28-3    ASM      2285 08-09-16  11:53a
-	L29-1    ASM      3262 08-09-16  11:53a
-	L29-2    ASM      2919 08-09-16  11:53a
-	L29-3    ASM      5940 08-09-16  11:53a
-	L29-4    ASM      1614 08-09-16  11:53a
-	L30-1    ASM     10178 08-09-16  11:53a
-	L30-2    ASM     12499 08-09-16  11:53a
-	L31-1    ASM      8073 08-09-16  11:53a
-	L31-2    ASM      6703 08-09-16  11:53a
-	L32-1    ASM      5493 08-09-16  11:53a
-	L32-2    C        6000 08-09-16  11:53a
-	L33-1    ASM      4788 08-09-16  11:53a
-	L34-1    ASM      9662 08-09-16  11:53a
-	L35-1    C        6037 08-09-16  11:53a
-	L35-2    C        2371 08-09-16  11:53a
-	L35-3    ASM      9258 08-09-16  11:53a
-	L42-1    C        5353 08-09-16  11:53a
-	L42-2    C        5294 08-09-16  11:53a
-	L42-3    C         715 08-09-16  11:53a
-	L42-4    C        2288 08-09-16  11:53a
-	L42-5    C        1263 08-09-16  11:53a
-	L42-6    ASM     10098 08-09-16  11:53a
-	L47-1    ASM      2793 08-09-16  11:53a
-	L47-2    ASM      1564 08-09-16  11:53a
-	L47-3    ASM      1453 08-09-16  11:53a
-	L47-4    ASM      3192 08-09-16  11:53a
-	L47-5    ASM      4329 08-09-16  11:53a
-	L47-6    ASM      3980 08-09-16  11:53a
-	L47-7    C         680 08-09-16  11:53a
-	L48-1    C        1886 08-09-16  11:53a
-	L48-2    ASM      6563 08-09-16  11:53a
-	L48-3    ASM      6612 08-09-16  11:53a
-	L48-4    ASM      4515 08-09-16  11:53a
-	MAKEFILE          1011 08-09-16  11:53a
-	REGS     H         662 08-09-16  11:53a
-	       48 file(s)     234641 bytes
+The following disk image contains executables built from selected [VGA "Black Book" Tests](#selected-vga-black-book-tests).
 
-	Total files listed:
-	       48 file(s)     234641 bytes
-	                       64512 bytes free
+### Directory of VGA Black Book Binaries
 
-### Directory of VGA "Black Book" Binaries
+     Volume in drive A is VGABIN
+     Directory of A:\
 
-This disk image contains executables built from selected [VGA "Black Book" Tests](#selected-vga-black-book-tests).
-
-	 Volume in drive A is VGABIN     
-
-	Directory of A:\
-
-	L23-1    EXE      2176 07-05-15   1:12p
-	L24-1    EXE      1482 06-27-15  11:56a
-	L25-1    EXE      1253 06-26-15   2:06p
-	L25-2    EXE      1097 06-26-15   2:06p
-	L25-3    EXE      1131 06-27-15  11:56a
-	L25-4    EXE      1131 07-07-15  12:45p
-	L26-1    EXE      1322 06-27-15  11:56a
-	L26-2    EXE      1334 06-27-15  11:56a
-	L27-1    EXE      1327 06-27-15   6:26p
-	L27-2    EXE      1541 06-27-15   6:26p
-	L27-3    EXE     13604 06-27-15   6:26p
-	L28-1    EXE      2279 06-29-15  10:29a
-	L28-2    EXE      1173 06-29-15  10:29a
-	L28-3    EXE      1109 06-29-15  10:29a
-	L29-1    EXE      1400 07-05-15   7:59a
-	L29-2    EXE      1290 07-05-15   7:59a
-	L29-3    EXE      1687 07-05-15   7:59a
-	L29-4    EXE      1242 07-05-15   7:59a
-	L30-1    EXE      1391 07-05-15   7:59a
-	L30-2    EXE      1351 07-05-15   7:59a
-	L31-1    EXE      1385 07-06-15   2:11p
-	L31-2    EXE      1245 07-05-15   7:59a
-	L33-1    EXE      1430 07-05-15  11:26a
-	L34-1    EXE       664 07-05-15   1:12p
-	L35-1    EXE      9185 07-07-15  12:49p
-	L35-3    EXE      8801 07-06-15   3:32p
-	L47-4    EXE      3643 07-06-15   3:33p
-	L47-5    EXE      3707 07-07-15  12:42p
-	L47-6    EXE      3683 07-07-15  12:42p
-	L48-2    EXE      3923 07-07-15   1:34p
-	       30 file(s)      77986 bytes
-
-	Total files listed:
-	       30 file(s)      77986 bytes
-	                       73728 bytes free
+    L23-1    EXE      2176   7-05-15   1:12p
+    L24-1    EXE      1482   6-27-15  11:56a
+    L25-1    EXE      1253   6-26-15   2:06p
+    L25-2    EXE      1097   6-26-15   2:06p
+    L25-3    EXE      1131   6-27-15  11:56a
+    L25-4    EXE      1131   7-07-15  12:45p
+    L26-1    EXE      1322   6-27-15  11:56a
+    L26-2    EXE      1334   6-27-15  11:56a
+    L27-1    EXE      1327   6-27-15   6:26p
+    L27-2    EXE      1541   6-27-15   6:26p
+    L27-3    EXE     13604   6-27-15   6:26p
+    L28-1    EXE      2279   6-29-15  10:29a
+    L28-2    EXE      1173   6-29-15  10:29a
+    L28-3    EXE      1109   6-29-15  10:29a
+    L29-1    EXE      1400   7-05-15   7:59a
+    L29-2    EXE      1290   7-05-15   7:59a
+    L29-3    EXE      1687   7-05-15   7:59a
+    L29-4    EXE      1242   7-05-15   7:59a
+    L30-1    EXE      1391   7-05-15   7:59a
+    L30-2    EXE      1351   7-05-15   7:59a
+    L31-1    EXE      1385   7-06-15   2:11p
+    L31-2    EXE      1245   7-05-15   7:59a
+    L33-1    EXE      1430   7-05-15  11:26a
+    L34-1    EXE       664   7-05-15   1:12p
+    L35-1    EXE      9185   7-07-15  12:49p
+    L35-3    EXE      8801   7-06-15   3:32p
+    L47-4    EXE      3643   7-06-15   3:33p
+    L47-5    EXE      3707   7-07-15  12:42p
+    L47-6    EXE      3683   7-07-15  12:42p
+    L48-2    EXE      3923   7-07-15   1:34p
+           30 file(s)      77986 bytes
+                           73728 bytes free
 
 ### Selected VGA "Black Book" Tests
 
