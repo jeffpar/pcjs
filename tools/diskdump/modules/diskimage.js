@@ -1602,12 +1602,14 @@ export default class DiskImage {
             /*
              * So, this is either a fixed (partitioned) disk, or a disk using a non-standard sector size.
              *
-             * Let's assume the former (we have an MBR) and check for partition records.  And we will do this check
+             * Let's assume the former (ie, we have an MBR) and check for partition records.  We will do this check
              * in two phases: checking for "primary" partition records first, and for "extended" partition records next.
              */
             let iEntry;
+            let maxIterations = 48;     // circuit breaker tripped after 24 potential volumes (with 2 phases per volume)
             let lbaPrimary = 0, lbaExtended = 0;
-            for (let iType = 0; iType <= 1; iType++) {
+
+            for (let iPhase = 0; iPhase <= 1; iPhase++) {
 
                 iEntry = 0;
                 while (iEntry < 4) {
@@ -1621,7 +1623,7 @@ export default class DiskImage {
                         let bType = this.getSectorData(sectorBoot, off + DiskImage.MBR.PARTITIONS.ENTRY.TYPE, 1);
 
                         if (bType == DiskImage.MBR.PARTITIONS.TYPE.FAT12_PRIMARY || bType == DiskImage.MBR.PARTITIONS.TYPE.FAT16_PRIMARY) {
-                            if (iType == 0 && iVolFound++ == iVolume) {
+                            if (iPhase == 0 && iVolFound++ == iVolume) {
                                 lba = this.getSectorData(sectorBoot, off + DiskImage.MBR.PARTITIONS.ENTRY.VBA_FIRST, 4);
                                 vol.lbaStart = lba + lbaPrimary;
                                 sectorBoot = this.getSector(vol.lbaStart);
@@ -1632,28 +1634,24 @@ export default class DiskImage {
                                 break;
                             }
                         }
-
                         if (bType == DiskImage.MBR.PARTITIONS.TYPE.EXTENDED) {
-                            if (iType == 1) {
+                            if (iPhase == 1) {
                                 lba = this.getSectorData(sectorBoot, off + DiskImage.MBR.PARTITIONS.ENTRY.VBA_FIRST, 4);
                                 lbaPrimary = lba + lbaExtended;
                                 if (!lbaExtended) lbaExtended = lbaPrimary;
                                 sectorBoot = this.getSector(lbaPrimary);
                                 if (!sectorBoot) break;     // something's wrong
-                                iEntry = iType = 0;         // sectorBoot should contain another (extended) boot record table
+                                iEntry = iPhase = 0;        // sectorBoot should contain another (extended) boot record table
                                 continue;
                             }
                         }
                     }
-
                     iEntry++;
                 }
-                if (iEntry < 4) break;
+                if (iEntry < 4 || !--maxIterations) break;
             }
 
-            if (iEntry == 4) sectorBoot = null;
-
-            if (!sectorBoot) {
+            if (!sectorBoot || iEntry == 4) {
                 if (!iVolume) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: %d-byte disk image contains unknown volume(s)\n", this.diskName, cbDisk);
                 return null;
             }
@@ -1698,7 +1696,7 @@ export default class DiskImage {
         if (!idFAT) idFAT = this.getClusterEntry(vol, 0, 0);
 
         if (idFAT != vol.idMedia) {
-            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "volume %d error: FAT ID (%#0bx) does not match media ID (%#0bx)\n", iVolume, idFAT, vol.idMedia);
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s volume %d error: FAT ID (%#0bx) does not match media ID (%#0bx)\n", this.diskName, iVolume, idFAT, vol.idMedia);
             return null;
         }
 
@@ -1709,7 +1707,7 @@ export default class DiskImage {
          * be a perfect multiple of clusterSecs, but if it ever happens, it's worth verifying we didn't miscalculate something.
          */
         let nWasted = (vol.lbaTotal - vol.vbaData) % vol.clusterSecs;
-        if (nWasted) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "volume %d contains %d sectors, wasting %d sectors\n", iVolume, vol.lbaTotal, nWasted);
+        if (nWasted) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s volume %d contains %d sectors, wasting %d sectors\n", this.diskName, iVolume, vol.lbaTotal, nWasted);
 
         /*
          * Similarly, it is NOT a requirement that the size of all root directory entries be a perfect multiple of the sector
@@ -1757,7 +1755,7 @@ export default class DiskImage {
             }
         }
 
-        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d cluster(s) bad, %d cluster(s) free, %d bytes free\n", this.diskName, vol.clustersBad, vol.clustersFree, vol.clustersFree * vol.clusterSecs * vol.cbSector);
+        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s volume %d: %d cluster(s) bad, %d cluster(s) free, %d bytes free\n", this.diskName, iVolume, vol.clustersBad, vol.clustersFree, vol.clustersFree * vol.clusterSecs * vol.cbSector);
         return vol;
     }
 
@@ -2415,8 +2413,9 @@ export default class DiskImage {
             if (sector[DiskImage.SECTOR.ID] != iSector + 1) {
                 this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "warning: %d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, iSector + 1, sector[DiskImage.SECTOR.ID], file.path);
             }
-            if (sector[DiskImage.SECTOR.FILE_INFO]) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, 'warning: "%s" cross-linked at offset %d with "%s" at offset %d\n', sector[DiskImage.SECTOR.FILE_INFO].path, sector[DiskImage.SECTOR.FILE_OFFSET], file.path, off);
+            if (sector[DiskImage.SECTOR.FILE_INFO] != undefined) {
+                let filePrev = this.fileTable[sector[DiskImage.SECTOR.FILE_INFO]];
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, 'warning: "%s" cross-linked at offset %d with "%s" at offset %d\n', filePrev.path, sector[DiskImage.SECTOR.FILE_OFFSET], file.path, off);
                 return false;
             }
             sector[DiskImage.SECTOR.FILE_INFO] = iFile;
