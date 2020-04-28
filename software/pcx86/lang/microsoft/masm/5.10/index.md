@@ -171,25 +171,24 @@ We don't have any documents from this release, but you can browse [README.DOC](#
 
 ### Directory of MS Macro Assembler 5.10A
 
-	 Volume in drive A is MASM-5-10A 
+     Volume in drive A is MASM-5-10A
+     Directory of A:\
 
-	Directory of A:\
+    MASM     EXE    110937   1-16-89  11:16a
+    BINB         <DIR>       3-19-90  12:15p
+    README   DOC      3951   3-10-90   4:06p
+            3 file(s)     114888 bytes
 
-	MASM     EXE    110937 01-16-89  11:16a
-	BINB         <DIR>     03-19-90  12:15p
-	README   DOC      3951 03-10-90   4:06p
-	        3 file(s)     114888 bytes
+     Directory of A:\BINB
 
-	Directory of A:\BINB
+    .            <DIR>       3-19-90  12:15p
+    ..           <DIR>       3-19-90  12:15p
+    MASM     EXE    124448   1-16-89  11:11a
+            3 file(s)     124448 bytes
 
-	.            <DIR>     03-19-90  12:15p
-	..           <DIR>     03-19-90  12:15p
-	MASM     EXE    124448 01-16-89  11:11a
-	        3 file(s)     124448 bytes
-
-	Total files listed:
-	        6 file(s)     239336 bytes
-	                      120832 bytes free
+    Total files listed:
+            6 file(s)     239336 bytes
+                          120832 bytes free
 
 ### Contents of README.DOC
 

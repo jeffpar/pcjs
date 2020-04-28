@@ -292,25 +292,22 @@ Directory listings of the seven 1.44Mb distribution diskettes are provided below
 
 ### Directory of IBM OS/2 1.1 (Printers)
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
+    IBMNULL  DRV     84992   2-11-89  12:00p
+    IBM4202  DRV     84992   2-11-89  12:00p
+    IBM5202  DRV     91648   2-11-89  12:00p
+    IBM3852  DRV     84480   2-11-89  12:00p
+    IBM4207  DRV     92672   2-11-89  12:00p
+    IBM4208  DRV     92672   2-11-89  12:00p
+    IBM5152  DRV     84480   2-11-89  12:00p
+    IBM5182  DRV     89600   2-11-89  12:00p
+    IBM5216  DRV     66048   2-11-89  12:00p
+    IBM52011 DRV     66048   2-11-89  12:00p
+    IBM52012 DRV     90112   2-11-89  12:00p
+    IBM4201  DCP     17069   2-11-89  12:00p
+    4208     DCP       533   2-11-89  12:00p
+           13 file(s)     945346 bytes
+                          511488 bytes free
 
-	IBMNULL  DRV     84992 02-11-89  12:00p
-	IBM4202  DRV     84992 02-11-89  12:00p
-	IBM5202  DRV     91648 02-11-89  12:00p
-	IBM3852  DRV     84480 02-11-89  12:00p
-	IBM4207  DRV     92672 02-11-89  12:00p
-	IBM4208  DRV     92672 02-11-89  12:00p
-	IBM5152  DRV     84480 02-11-89  12:00p
-	IBM5182  DRV     89600 02-11-89  12:00p
-	IBM5216  DRV     66048 02-11-89  12:00p
-	IBM52011 DRV     66048 02-11-89  12:00p
-	IBM52012 DRV     90112 02-11-89  12:00p
-	IBM4201  DCP     17069 02-11-89  12:00p
-	4208     DCP       533 02-11-89  12:00p
-	       13 file(s)     945346 bytes
-
-	Total files listed:
-	       13 file(s)     945346 bytes
-	                      511488 bytes free

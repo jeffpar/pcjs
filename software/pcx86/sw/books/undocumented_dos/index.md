@@ -350,400 +350,398 @@ by Schulman, Brown, Maxey, Michels, Kyle
 ### Directory of Undocumented DOS (2nd Ed. BIN)
 
      Volume in drive A is UNDOC-DOS2B
-    
-    Directory of A:\
-    
-    CHAP1        <DIR>     01-24-18   2:26a
-    CHAP10       <DIR>     01-24-18   2:24a
-    CHAP2        <DIR>     01-24-18   2:26a
-    CHAP3        <DIR>     01-24-18   2:25a
-    CHAP4        <DIR>     01-24-18   2:25a
-    CHAP5        <DIR>     01-24-18   2:25a
-    CHAP6        <DIR>     01-24-18   2:25a
-    CHAP7        <DIR>     01-24-18   2:25a
-    CHAP8        <DIR>     01-24-18   2:24a
-    CHAP9        <DIR>     01-24-18   2:24a
-    INTRLIST     <DIR>     01-24-18   2:24a
+     Directory of A:\
+
+    CHAP1        <DIR>       1-24-18   2:26a
+    CHAP10       <DIR>       1-24-18   2:24a
+    CHAP2        <DIR>       1-24-18   2:26a
+    CHAP3        <DIR>       1-24-18   2:25a
+    CHAP4        <DIR>       1-24-18   2:25a
+    CHAP5        <DIR>       1-24-18   2:25a
+    CHAP6        <DIR>       1-24-18   2:25a
+    CHAP7        <DIR>       1-24-18   2:25a
+    CHAP8        <DIR>       1-24-18   2:24a
+    CHAP9        <DIR>       1-24-18   2:24a
+    INTRLIST     <DIR>       1-24-18   2:24a
            11 file(s)          0 bytes
-    
-    Directory of A:\CHAP1
-    
-    .            <DIR>     01-24-18   2:26a
-    ..           <DIR>     01-24-18   2:26a
-    MSDETECT EXE      8909 01-24-18   2:26a
-    NODOSMGR EXE     10715 01-24-18   2:26a
+
+     Directory of A:\CHAP1
+
+    .            <DIR>       1-24-18   2:26a
+    ..           <DIR>       1-24-18   2:26a
+    MSDETECT EXE      8909   1-24-18   2:26a
+    NODOSMGR EXE     10715   1-24-18   2:26a
             4 file(s)      19624 bytes
-    
-    Directory of A:\CHAP10
-    
-    .            <DIR>     01-24-18   2:24a
-    ..           <DIR>     01-24-18   2:24a
-    ENVEDT   EXE     11429 01-24-18   2:24a
-    EPTEST   EXE      7377 01-24-18   2:24a
-    F3TEST   EXE       894 01-24-18   2:24a
-    INSTCMD  EXE     10549 01-24-18   2:24a
-    MSTENVP  EXE      8287 01-24-18   2:24a
-    REDIR    EXE     10339 01-24-18   2:24a
-    SWITCHAR EXE      2943 01-24-18   2:24a
-    TEST2E   EXE      8075 01-24-18   2:24a
-    TSHELL   COM      7614 01-24-18   2:24a
+
+     Directory of A:\CHAP10
+
+    .            <DIR>       1-24-18   2:24a
+    ..           <DIR>       1-24-18   2:24a
+    ENVEDT   EXE     11429   1-24-18   2:24a
+    EPTEST   EXE      7377   1-24-18   2:24a
+    F3TEST   EXE       894   1-24-18   2:24a
+    INSTCMD  EXE     10549   1-24-18   2:24a
+    MSTENVP  EXE      8287   1-24-18   2:24a
+    REDIR    EXE     10339   1-24-18   2:24a
+    SWITCHAR EXE      2943   1-24-18   2:24a
+    TEST2E   EXE      8075   1-24-18   2:24a
+    TSHELL   COM      7614   1-24-18   2:24a
            11 file(s)      67507 bytes
-    
-    Directory of A:\CHAP2
-    
-    .            <DIR>     01-24-18   2:26a
-    ..           <DIR>     01-24-18   2:26a
-    DOSVER   EXE     11115 01-24-18   2:26a
-    FUNC0E32 EXE      9705 01-24-18   2:26a
-    LASTDRV  EXE       561 01-24-18   2:26a
-    LASTDRV2 EXE       635 01-24-18   2:26a
-    OKAY     EXE      6243 01-24-18   2:26a
-    XLASTDRV EXE     10927 01-24-18   2:26a
+
+     Directory of A:\CHAP2
+
+    .            <DIR>       1-24-18   2:26a
+    ..           <DIR>       1-24-18   2:26a
+    DOSVER   EXE     11115   1-24-18   2:26a
+    FUNC0E32 EXE      9705   1-24-18   2:26a
+    LASTDRV  EXE       561   1-24-18   2:26a
+    LASTDRV2 EXE       635   1-24-18   2:26a
+    OKAY     EXE      6243   1-24-18   2:26a
+    XLASTDRV EXE     10927   1-24-18   2:26a
             8 file(s)      39186 bytes
-    
-    Directory of A:\CHAP3
-    
-    .            <DIR>     01-24-18   2:25a
-    ..           <DIR>     01-24-18   2:25a
-    CURRDRIV EXE      6006 01-24-18   2:26a
-    DENUMDRV EXE     12755 01-24-18   2:26a
-    DEV      EXE      7682 01-24-18   2:26a
-    DLASTDRV EXE      8001 01-24-18   2:26a
-    DOSSPEED EXE      9337 01-24-18   2:26a
-    DPMITEST EXE      7749 01-24-18   2:26a
-    DSFTWLK2 EXE      9827 01-24-18   2:26a
-    DVMWALK  EXE     10251 01-24-18   2:26a
-    ENUMDRV  EXE     12755 01-24-18   2:26a
-    HELLO    EXE      3668 01-24-18   2:26a
-    HELLO2   EXE      3662 01-24-18   2:26a
-    ISWIN    EXE      7427 01-24-18   2:26a
-    LASTDRIV EXE      8001 01-24-18   2:26a
-    LASTDRV  EXE      5876 01-24-18   2:26a
-    SFTWALK  EXE     13796 01-24-18   2:26a
-    SFTWALK2 EXE      6938 01-24-18   2:26a
-    STUB     386      8735 01-24-18   2:26a
-    TRUENAME EXE      7852 01-24-18   2:26a
-    UNDOC    EXE     12922 01-24-18   2:25a
-    UNDOSMGR 386      9269 01-24-18   2:25a
-    VMWALK   EXE     10251 01-24-18   2:25a
-    VXD      386      1737 01-24-18   2:25a
-    WENUMDRV EXE     15398 01-24-18   2:25a
-    WINPSP   EXE     14678 01-24-18   2:25a
-    WLASTDRV EXE      5876 01-24-18   2:25a
-    WSFTWLK2 EXE      6938 01-24-18   2:25a
-    WVMWALK  EXE     38723 01-24-18   2:25a
-    W_ENMDRV EXE     40535 01-24-18   2:25a
-    W_VMWALK EXE     16526 01-24-18   2:25a
-    SAVE     386      8757 01-24-18   2:26a
+
+     Directory of A:\CHAP3
+
+    .            <DIR>       1-24-18   2:25a
+    ..           <DIR>       1-24-18   2:25a
+    CURRDRIV EXE      6006   1-24-18   2:26a
+    DENUMDRV EXE     12755   1-24-18   2:26a
+    DEV      EXE      7682   1-24-18   2:26a
+    DLASTDRV EXE      8001   1-24-18   2:26a
+    DOSSPEED EXE      9337   1-24-18   2:26a
+    DPMITEST EXE      7749   1-24-18   2:26a
+    DSFTWLK2 EXE      9827   1-24-18   2:26a
+    DVMWALK  EXE     10251   1-24-18   2:26a
+    ENUMDRV  EXE     12755   1-24-18   2:26a
+    HELLO    EXE      3668   1-24-18   2:26a
+    HELLO2   EXE      3662   1-24-18   2:26a
+    ISWIN    EXE      7427   1-24-18   2:26a
+    LASTDRIV EXE      8001   1-24-18   2:26a
+    LASTDRV  EXE      5876   1-24-18   2:26a
+    SFTWALK  EXE     13796   1-24-18   2:26a
+    SFTWALK2 EXE      6938   1-24-18   2:26a
+    STUB     386      8735   1-24-18   2:26a
+    TRUENAME EXE      7852   1-24-18   2:26a
+    UNDOC    EXE     12922   1-24-18   2:25a
+    UNDOSMGR 386      9269   1-24-18   2:25a
+    VMWALK   EXE     10251   1-24-18   2:25a
+    VXD      386      1737   1-24-18   2:25a
+    WENUMDRV EXE     15398   1-24-18   2:25a
+    WINPSP   EXE     14678   1-24-18   2:25a
+    WLASTDRV EXE      5876   1-24-18   2:25a
+    WSFTWLK2 EXE      6938   1-24-18   2:25a
+    WVMWALK  EXE     38723   1-24-18   2:25a
+    W_ENMDRV EXE     40535   1-24-18   2:25a
+    W_VMWALK EXE     16526   1-24-18   2:25a
+    SAVE     386      8757   1-24-18   2:26a
            32 file(s)     331928 bytes
-    
-    Directory of A:\CHAP4
-    
-    .            <DIR>     01-24-18   2:25a
-    ..           <DIR>     01-24-18   2:25a
-    IS_DRDOS EXE      7647 01-24-18   2:25a
-    PSPTEST  EXE      6807 01-24-18   2:25a
+
+     Directory of A:\CHAP4
+
+    .            <DIR>       1-24-18   2:25a
+    ..           <DIR>       1-24-18   2:25a
+    IS_DRDOS EXE      7647   1-24-18   2:25a
+    PSPTEST  EXE      6807   1-24-18   2:25a
             4 file(s)      14454 bytes
-    
-    Directory of A:\CHAP5
-    
-    .            <DIR>     01-24-18   2:25a
-    ..           <DIR>     01-24-18   2:25a
-    CMDSPY   EXE     69708 01-24-18   2:25a
-    INTRSPY  EXE      5956 01-24-18   2:25a
+
+     Directory of A:\CHAP5
+
+    .            <DIR>       1-24-18   2:25a
+    ..           <DIR>       1-24-18   2:25a
+    CMDSPY   EXE     69708   1-24-18   2:25a
+    INTRSPY  EXE      5956   1-24-18   2:25a
             4 file(s)      75664 bytes
-    
-    Directory of A:\CHAP6
-    
-    .            <DIR>     01-24-18   2:25a
-    ..           <DIR>     01-24-18   2:25a
-    DEV_FUNC EXE      7195 01-24-18   2:25a
-    FTAB     EXE     11125 01-24-18   2:25a
-    INTCHAIN EXE     14389 01-24-18   2:25a
-    INTVECT  EXE      9767 01-24-18   2:25a
-    MAP      EXE      8951 01-24-18   2:25a
-    NICEDBG  EXE     81412 01-24-18   2:25a
+
+     Directory of A:\CHAP6
+
+    .            <DIR>       1-24-18   2:25a
+    ..           <DIR>       1-24-18   2:25a
+    DEV_FUNC EXE      7195   1-24-18   2:25a
+    FTAB     EXE     11125   1-24-18   2:25a
+    INTCHAIN EXE     14389   1-24-18   2:25a
+    INTVECT  EXE      9767   1-24-18   2:25a
+    MAP      EXE      8951   1-24-18   2:25a
+    NICEDBG  EXE     81412   1-24-18   2:25a
             8 file(s)     132839 bytes
-    
-    Directory of A:\CHAP7
-    
-    .            <DIR>     01-24-18   2:25a
-    ..           <DIR>     01-24-18   2:25a
-    DEV      EXE       625 01-24-18   2:25a
-    DEVLOD   COM      2849 01-24-18   2:25a
-    FIRSTHI  EXE      6898 01-24-18   2:25a
-    ROOTS    EXE      6823 01-24-18   2:25a
-    UDMEM    EXE     14481 01-24-18   2:25a
-    UDMEM1   EXE      7679 01-24-18   2:25a
+
+     Directory of A:\CHAP7
+
+    .            <DIR>       1-24-18   2:25a
+    ..           <DIR>       1-24-18   2:25a
+    DEV      EXE       625   1-24-18   2:25a
+    DEVLOD   COM      2849   1-24-18   2:25a
+    FIRSTHI  EXE      6898   1-24-18   2:25a
+    ROOTS    EXE      6823   1-24-18   2:25a
+    UDMEM    EXE     14481   1-24-18   2:25a
+    UDMEM1   EXE      7679   1-24-18   2:25a
             8 file(s)      39355 bytes
-    
-    Directory of A:\CHAP8
-    
-    .            <DIR>     01-24-18   2:24a
-    ..           <DIR>     01-24-18   2:24a
-    BUFFERS  EXE      8659 01-24-18   2:25a
-    CLUSTNAM EXE     11043 01-24-18   2:25a
-    DPBTEST  EXE      9529 01-24-18   2:25a
-    DRVOFF   EXE      7827 01-24-18   2:25a
-    DRVSET   EXE      7827 01-24-18   2:25a
-    ENUMDRV  EXE     10551 01-24-18   2:25a
-    FAT      EXE      9261 01-24-18   2:25a
-    FHANDLE  EXE     11479 01-24-18   2:25a
-    FILES    EXE      9357 01-24-18   2:25a
-    H2NAME   EXE     11271 01-24-18   2:25a
-    IS_SHARE EXE      6003 01-24-18   2:24a
-    IS_STACK EXE      7903 01-24-18   2:24a
-    LONGFILE EXE      7544 01-24-18   2:24a
-    MDFAT    EXE     12149 01-24-18   2:24a
-    NAMCLUST EXE     10951 01-24-18   2:24a
-    NETDRV   EXE      6869 01-24-18   2:24a
-    PHANTOM  EXE     14412 01-24-18   2:24a
-    SECTDUMP EXE     12789 01-24-18   2:24a
-    SFTWALK  EXE      6933 01-24-18   2:24a
-    SFT_FREE EXE      6691 01-24-18   2:24a
-    SHARHOOK EXE      7173 01-24-18   2:24a
-    TRUNAM   EXE      8975 01-24-18   2:24a
-    WFILES   EXE     15226 01-24-18   2:24a
+
+     Directory of A:\CHAP8
+
+    .            <DIR>       1-24-18   2:24a
+    ..           <DIR>       1-24-18   2:24a
+    BUFFERS  EXE      8659   1-24-18   2:25a
+    CLUSTNAM EXE     11043   1-24-18   2:25a
+    DPBTEST  EXE      9529   1-24-18   2:25a
+    DRVOFF   EXE      7827   1-24-18   2:25a
+    DRVSET   EXE      7827   1-24-18   2:25a
+    ENUMDRV  EXE     10551   1-24-18   2:25a
+    FAT      EXE      9261   1-24-18   2:25a
+    FHANDLE  EXE     11479   1-24-18   2:25a
+    FILES    EXE      9357   1-24-18   2:25a
+    H2NAME   EXE     11271   1-24-18   2:25a
+    IS_SHARE EXE      6003   1-24-18   2:24a
+    IS_STACK EXE      7903   1-24-18   2:24a
+    LONGFILE EXE      7544   1-24-18   2:24a
+    MDFAT    EXE     12149   1-24-18   2:24a
+    NAMCLUST EXE     10951   1-24-18   2:24a
+    NETDRV   EXE      6869   1-24-18   2:24a
+    PHANTOM  EXE     14412   1-24-18   2:24a
+    SECTDUMP EXE     12789   1-24-18   2:24a
+    SFTWALK  EXE      6933   1-24-18   2:24a
+    SFT_FREE EXE      6691   1-24-18   2:24a
+    SHARHOOK EXE      7173   1-24-18   2:24a
+    TRUNAM   EXE      8975   1-24-18   2:24a
+    WFILES   EXE     15226   1-24-18   2:24a
            25 file(s)     220422 bytes
-    
-    Directory of A:\CHAP9
-    
-    .            <DIR>     01-24-18   2:24a
-    ..           <DIR>     01-24-18   2:24a
-    CRITSECT EXE      8247 01-24-18   2:24a
-    MULTI    EXE      8665 01-24-18   2:24a
-    STSR2E   EXE     15069 01-24-18   2:24a
-    STSRFILE EXE     14315 01-24-18   2:24a
-    STSRMEM  EXE     16733 01-24-18   2:24a
-    TSR2E    EXE     14221 01-24-18   2:24a
-    TSRFILE  EXE     13467 01-24-18   2:24a
-    TSRMEM   EXE     15885 01-24-18   2:24a
+
+     Directory of A:\CHAP9
+
+    .            <DIR>       1-24-18   2:24a
+    ..           <DIR>       1-24-18   2:24a
+    CRITSECT EXE      8247   1-24-18   2:24a
+    MULTI    EXE      8665   1-24-18   2:24a
+    STSR2E   EXE     15069   1-24-18   2:24a
+    STSRFILE EXE     14315   1-24-18   2:24a
+    STSRMEM  EXE     16733   1-24-18   2:24a
+    TSR2E    EXE     14221   1-24-18   2:24a
+    TSRFILE  EXE     13467   1-24-18   2:24a
+    TSRMEM   EXE     15885   1-24-18   2:24a
            10 file(s)     106602 bytes
-    
-    Directory of A:\INTRLIST
-    
-    .            <DIR>     01-24-18   2:24a
-    ..           <DIR>     01-24-18   2:24a
-    INTERVUE EXE     16480 01-24-18   2:24a
+
+     Directory of A:\INTRLIST
+
+    .            <DIR>       1-24-18   2:24a
+    ..           <DIR>       1-24-18   2:24a
+    INTERVUE EXE     16480   1-24-18   2:24a
             3 file(s)      16480 bytes
-    
+
     Total files listed:
           128 file(s)    1064061 bytes
                           115712 bytes free
-    
+
 ### Directory of Undocumented DOS (2nd Ed. SRC)
 
      Volume in drive A is UNDOC-DOS2S
-    
-    Directory of A:\
-    
-    CHAP1        <DIR>     01-24-18   2:58p
-    CHAP10       <DIR>     01-24-18   2:58p
-    CHAP2        <DIR>     01-24-18   2:58p
-    CHAP3        <DIR>     01-24-18   2:58p
-    CHAP4        <DIR>     01-24-18   2:58p
-    CHAP6        <DIR>     01-24-18   2:58p
-    CHAP7        <DIR>     01-24-18   2:58p
-    CHAP8        <DIR>     01-24-18   2:58p
-    CHAP9        <DIR>     01-24-18   2:58p
+     Directory of A:\
+
+    CHAP1        <DIR>       1-24-18   2:58p
+    CHAP10       <DIR>       1-24-18   2:58p
+    CHAP2        <DIR>       1-24-18   2:58p
+    CHAP3        <DIR>       1-24-18   2:58p
+    CHAP4        <DIR>       1-24-18   2:58p
+    CHAP6        <DIR>       1-24-18   2:58p
+    CHAP7        <DIR>       1-24-18   2:58p
+    CHAP8        <DIR>       1-24-18   2:58p
+    CHAP9        <DIR>       1-24-18   2:58p
             9 file(s)          0 bytes
-    
-    Directory of A:\CHAP1
-    
-    .            <DIR>     01-24-18   2:58p
-    ..           <DIR>     01-24-18   2:58p
-    MSDETECT C        5538 04-23-98   9:20a
-    NODOSMGR C        3256 09-16-93   7:27a
+
+     Directory of A:\CHAP1
+
+    .            <DIR>       1-24-18   2:58p
+    ..           <DIR>       1-24-18   2:58p
+    MSDETECT C        5538   4-23-98   9:20a
+    NODOSMGR C        3256   9-16-93   7:27a
             4 file(s)       8794 bytes
-    
-    Directory of A:\CHAP10
-    
-    .            <DIR>     01-24-18   2:58p
-    ..           <DIR>     01-24-18   2:58p
-    DO2E     ASM       820 08-10-93   4:12p
-    EEA      ASM      1994 04-10-93   9:12p
-    ENVEDT   C       14111 04-10-93   9:27p
-    ENVPKG   ASM      1267 08-10-93   4:29p
-    EPTEST   C         810 08-10-93   4:29p
-    F3TEST   ASM      2265 08-10-93   4:12p
-    FIRSTHI  C        3209 08-10-93   3:48p
-    FMEV     C        1098 08-10-93   4:11p
-    HAVE2E   ASM       546 09-16-93  12:21p
-    INSTCMD  C        5456 09-16-93   7:23a
-    MSTENVP  C        4424 08-10-93   4:33p
-    NEV      C         553 08-10-93   4:10p
-    NXTEVAR  ASM       589 04-10-93   9:16p
-    REDIR    C        2403 08-10-93   4:10p
-    SEND2E   C         600 08-10-93   4:11p
-    SWITCHAR C         611 08-10-93   4:16p
-    TEST2E   C         601 09-15-93   3:49p
-    TSHELL   C        2647 09-17-93   8:30a
-    UNDOCDOS H       13911 09-15-93   4:47p
+
+     Directory of A:\CHAP10
+
+    .            <DIR>       1-24-18   2:58p
+    ..           <DIR>       1-24-18   2:58p
+    DO2E     ASM       820   8-10-93   4:12p
+    EEA      ASM      1994   4-10-93   9:12p
+    ENVEDT   C       14111   4-10-93   9:27p
+    ENVPKG   ASM      1267   8-10-93   4:29p
+    EPTEST   C         810   8-10-93   4:29p
+    F3TEST   ASM      2265   8-10-93   4:12p
+    FIRSTHI  C        3209   8-10-93   3:48p
+    FMEV     C        1098   8-10-93   4:11p
+    HAVE2E   ASM       546   9-16-93  12:21p
+    INSTCMD  C        5456   9-16-93   7:23a
+    MSTENVP  C        4424   8-10-93   4:33p
+    NEV      C         553   8-10-93   4:10p
+    NXTEVAR  ASM       589   4-10-93   9:16p
+    REDIR    C        2403   8-10-93   4:10p
+    SEND2E   C         600   8-10-93   4:11p
+    SWITCHAR C         611   8-10-93   4:16p
+    TEST2E   C         601   9-15-93   3:49p
+    TSHELL   C        2647   9-17-93   8:30a
+    UNDOCDOS H       13911   9-15-93   4:47p
            21 file(s)      57915 bytes
-    
-    Directory of A:\CHAP2
-    
-    .            <DIR>     01-24-18   2:58p
-    ..           <DIR>     01-24-18   2:58p
-    DOSVER   C        3331 09-16-93   7:21a
-    FUNC0E32 C        1642 09-15-93   1:45p
-    LASTDRV  ASM      1272 08-09-93   8:59a
-    LASTDRV  C         857 08-09-93   9:10a
-    LASTDRV  PAS       431 08-09-93   9:47a
-    LASTDRV2 ASM      2754 08-09-93   9:00a
-    LASTDRV2 C        1085 08-09-93   9:11a
-    LASTDRV2 PAS       838 08-09-93   9:48a
-    LASTDRV3 C         498 08-09-93   9:11a
-    LASTDRV3 PAS      2217 08-09-93   9:48a
-    LASTDRV4 C        1864 08-09-93   9:11a
-    LASTDRV5 C        2496 08-09-93   9:11a
-    LASTDRV6 C        1095 08-09-93   9:12a
-    OKAY     C        2713 09-15-93  12:44p
-    XLASTDRV C        9230 09-15-93   1:46p
+
+     Directory of A:\CHAP2
+
+    .            <DIR>       1-24-18   2:58p
+    ..           <DIR>       1-24-18   2:58p
+    DOSVER   C        3331   9-16-93   7:21a
+    FUNC0E32 C        1642   9-15-93   1:45p
+    LASTDRV  ASM      1272   8-09-93   8:59a
+    LASTDRV  C         857   8-09-93   9:10a
+    LASTDRV  PAS       431   8-09-93   9:47a
+    LASTDRV2 ASM      2754   8-09-93   9:00a
+    LASTDRV2 C        1085   8-09-93   9:11a
+    LASTDRV2 PAS       838   8-09-93   9:48a
+    LASTDRV3 C         498   8-09-93   9:11a
+    LASTDRV3 PAS      2217   8-09-93   9:48a
+    LASTDRV4 C        1864   8-09-93   9:11a
+    LASTDRV5 C        2496   8-09-93   9:11a
+    LASTDRV6 C        1095   8-09-93   9:12a
+    OKAY     C        2713   9-15-93  12:44p
+    XLASTDRV C        9230   9-15-93   1:46p
            17 file(s)      32323 bytes
-    
-    Directory of A:\CHAP3
-    
-    .            <DIR>     01-24-18   2:58p
-    ..           <DIR>     01-24-18   2:58p
-    CTRL_C   ASM       238 08-14-93   1:06p
-    CURRDRIV C        1331 09-15-93   2:09p
-    DESQVIEW C         696 09-15-93   3:27p
-    DEV      C        6051 09-17-93  11:14a
-    DOSSPEED C        1548 08-14-93  12:57p
-    DPMISH   C        3902 08-14-93   1:11p
-    DPMISH   H         816 08-09-93  11:40a
-    DPMITEST C        1051 04-24-98   4:39p
-    ENUMDRV  C        8038 09-16-93   1:22p
-    GETSDA   C         581 08-14-93  12:55p
-    HELLO    C         248 08-09-93  10:22a
-    HELLO2   C         609 07-31-95   3:10p
-    ISWIN    C        4339 08-09-93  10:21a
-    LASTDRIV C        1848 08-14-93  12:54p
-    LASTDRV  C        1192 09-15-93   2:44p
-    NESTTASK C         415 03-17-99   9:00a
-    PRINTF   C        2825 08-14-93   1:02p
-    PRINTF   H         183 08-09-93  10:21a
-    PROT     C        7575 04-15-95   8:02a
-    PROT     H        2528 09-15-93   4:47p
-    SFTWALK  C         998 09-15-93   2:41p
-    SFTWALK2 C        3537 08-16-93   5:38p
-    SYSVARS  C         451 08-14-93  12:55p
-    TMP      C          72 08-05-98   2:20p
-    TRUENAME C        2246 08-09-93  11:42a
-    UNDOC    C        1425 08-14-93  12:28p
-    UNDOSMGR ASM      4875 08-05-98   2:50p
-    VMWALK   C        3612 09-17-93   8:38a
-    VMWALK   H        2052 09-16-93   1:40p
-    VXDCALLS C        2120 08-09-93  12:34p
-    VXDCALLS H        1844 08-09-93  12:13p
-    W3MAP    H       15297 08-09-93   2:11p
-    WINPSP   C        5587 09-15-93   4:49p
-    WVMWALK  C        3699 09-15-93   1:49p
-    STUB     ASM      1881 06-26-98  10:57a
+
+     Directory of A:\CHAP3
+
+    .            <DIR>       1-24-18   2:58p
+    ..           <DIR>       1-24-18   2:58p
+    CTRL_C   ASM       238   8-14-93   1:06p
+    CURRDRIV C        1331   9-15-93   2:09p
+    DESQVIEW C         696   9-15-93   3:27p
+    DEV      C        6051   9-17-93  11:14a
+    DOSSPEED C        1548   8-14-93  12:57p
+    DPMISH   C        3902   8-14-93   1:11p
+    DPMISH   H         816   8-09-93  11:40a
+    DPMITEST C        1051   4-24-98   4:39p
+    ENUMDRV  C        8038   9-16-93   1:22p
+    GETSDA   C         581   8-14-93  12:55p
+    HELLO    C         248   8-09-93  10:22a
+    HELLO2   C         609   7-31-95   3:10p
+    ISWIN    C        4339   8-09-93  10:21a
+    LASTDRIV C        1848   8-14-93  12:54p
+    LASTDRV  C        1192   9-15-93   2:44p
+    NESTTASK C         415   3-17-99   9:00a
+    PRINTF   C        2825   8-14-93   1:02p
+    PRINTF   H         183   8-09-93  10:21a
+    PROT     C        7575   4-15-95   8:02a
+    PROT     H        2528   9-15-93   4:47p
+    SFTWALK  C         998   9-15-93   2:41p
+    SFTWALK2 C        3537   8-16-93   5:38p
+    SYSVARS  C         451   8-14-93  12:55p
+    TMP      C          72   8-05-98   2:20p
+    TRUENAME C        2246   8-09-93  11:42a
+    UNDOC    C        1425   8-14-93  12:28p
+    UNDOSMGR ASM      4875   8-05-98   2:50p
+    VMWALK   C        3612   9-17-93   8:38a
+    VMWALK   H        2052   9-16-93   1:40p
+    VXDCALLS C        2120   8-09-93  12:34p
+    VXDCALLS H        1844   8-09-93  12:13p
+    W3MAP    H       15297   8-09-93   2:11p
+    WINPSP   C        5587   9-15-93   4:49p
+    WVMWALK  C        3699   9-15-93   1:49p
+    STUB     ASM      1881   6-26-98  10:57a
            37 file(s)      95710 bytes
-    
-    Directory of A:\CHAP4
-    
-    .            <DIR>     01-24-18   2:58p
-    ..           <DIR>     01-24-18   2:58p
-    GEN_UMB  PAS      2066 08-09-93   3:19p
-    GEO_FULK ASM      1480 08-09-93   3:20p
-    IS_DRDOS C        3435 07-28-98   4:51p
-    PSPTEST  C        2968 03-07-99   5:38p
+
+     Directory of A:\CHAP4
+
+    .            <DIR>       1-24-18   2:58p
+    ..           <DIR>       1-24-18   2:58p
+    GEN_UMB  PAS      2066   8-09-93   3:19p
+    GEO_FULK ASM      1480   8-09-93   3:20p
+    IS_DRDOS C        3435   7-28-98   4:51p
+    PSPTEST  C        2968   3-07-99   5:38p
             6 file(s)       9949 bytes
-    
-    Directory of A:\CHAP6
-    
-    .            <DIR>     01-24-18   2:58p
-    ..           <DIR>     01-24-18   2:58p
-    DEV_FUNC C        1656 09-07-93  12:10p
-    FTAB     C        1778 08-09-93   3:58p
-    INTCHAIN C        5277 01-29-98   9:48a
-    INTVECT  C        1860 09-15-93   4:45p
-    MAP      C        6653 09-15-93   3:07p
+
+     Directory of A:\CHAP6
+
+    .            <DIR>       1-24-18   2:58p
+    ..           <DIR>       1-24-18   2:58p
+    DEV_FUNC C        1656   9-07-93  12:10p
+    FTAB     C        1778   8-09-93   3:58p
+    INTCHAIN C        5277   1-29-98   9:48a
+    INTVECT  C        1860   9-15-93   4:45p
+    MAP      C        6653   9-15-93   3:07p
             7 file(s)      17224 bytes
-    
-    Directory of A:\CHAP7
-    
-    .            <DIR>     01-24-18   2:58p
-    ..           <DIR>     01-24-18   2:58p
-    C0       ASM      6491 03-13-93   1:17p
-    DEV      ASM      2326 08-10-93  12:12p
-    DEVLOD   C       22201 08-19-93  10:11a
-    FIRSTHI  C        3209 08-10-93   3:48p
-    MOVUP    ASM      1691 03-13-93   1:17p
-    ROOTS    C         556 08-10-93  12:11p
-    TESTNAME ASM      1650 08-14-93   3:27p
-    UDMEM    C        9155 09-15-93   4:39p
-    UDMEM1   C        1464 08-10-93   3:37p
-    UNDOCDOS H       13611 09-15-93   4:45p
+
+     Directory of A:\CHAP7
+
+    .            <DIR>       1-24-18   2:58p
+    ..           <DIR>       1-24-18   2:58p
+    C0       ASM      6491   3-13-93   1:17p
+    DEV      ASM      2326   8-10-93  12:12p
+    DEVLOD   C       22201   8-19-93  10:11a
+    FIRSTHI  C        3209   8-10-93   3:48p
+    MOVUP    ASM      1691   3-13-93   1:17p
+    ROOTS    C         556   8-10-93  12:11p
+    TESTNAME ASM      1650   8-14-93   3:27p
+    UDMEM    C        9155   9-15-93   4:39p
+    UDMEM1   C        1464   8-10-93   3:37p
+    UNDOCDOS H       13611   9-15-93   4:45p
            12 file(s)      62354 bytes
-    
-    Directory of A:\CHAP8
-    
-    .            <DIR>     01-24-18   2:58p
-    ..           <DIR>     01-24-18   2:58p
-    BUFFERS  C        5824 09-15-93   9:53a
-    CLUSTNAM C        6170 09-15-93   9:41a
-    CURRDIR  C        2076 08-09-93   5:01p
-    CURRDIR  H        1936 09-15-93   9:56a
-    DISKSTUF C        6578 09-15-93   9:36a
-    DISKSTUF H        2319 09-15-93   9:37a
-    DPBTEST  C        2378 09-15-93   9:42a
-    DRVSET   C        3661 09-16-93   7:37a
-    ENUMDRV  C        2320 09-15-93   9:55a
-    FAT      C        1795 09-15-93   9:17a
-    FHANDLE  C        4163 09-15-93  11:56a
-    FILES    C        9741 09-16-93   7:34a
-    H2NAME   C        3654 09-15-93  11:40a
-    IS_DSPAC C        1616 08-09-93   5:01p
-    IS_SHARE C        1313 08-10-93   9:32a
-    IS_STACK C        2444 09-15-93  11:24a
-    MDFAT    C        6516 09-15-93  10:32a
-    NAMCLUST C        6808 09-15-93   9:32a
-    NETDRV   C        1287 09-15-93  11:26a
-    PHANTOM  C       64629 09-15-93  12:21p
-    SECTDUMP C        2015 09-13-93   2:14p
-    SFTWALK  C        1266 08-09-93   5:03p
-    SFT_FREE C        3031 09-15-93  11:44a
-    SHARHOOK C        1449 09-17-93   8:10a
-    TRUNAM   C         435 08-14-93  12:09p
+
+     Directory of A:\CHAP8
+
+    .            <DIR>       1-24-18   2:58p
+    ..           <DIR>       1-24-18   2:58p
+    BUFFERS  C        5824   9-15-93   9:53a
+    CLUSTNAM C        6170   9-15-93   9:41a
+    CURRDIR  C        2076   8-09-93   5:01p
+    CURRDIR  H        1936   9-15-93   9:56a
+    DISKSTUF C        6578   9-15-93   9:36a
+    DISKSTUF H        2319   9-15-93   9:37a
+    DPBTEST  C        2378   9-15-93   9:42a
+    DRVSET   C        3661   9-16-93   7:37a
+    ENUMDRV  C        2320   9-15-93   9:55a
+    FAT      C        1795   9-15-93   9:17a
+    FHANDLE  C        4163   9-15-93  11:56a
+    FILES    C        9741   9-16-93   7:34a
+    H2NAME   C        3654   9-15-93  11:40a
+    IS_DSPAC C        1616   8-09-93   5:01p
+    IS_SHARE C        1313   8-10-93   9:32a
+    IS_STACK C        2444   9-15-93  11:24a
+    MDFAT    C        6516   9-15-93  10:32a
+    NAMCLUST C        6808   9-15-93   9:32a
+    NETDRV   C        1287   9-15-93  11:26a
+    PHANTOM  C       64629   9-15-93  12:21p
+    SECTDUMP C        2015   9-13-93   2:14p
+    SFTWALK  C        1266   8-09-93   5:03p
+    SFT_FREE C        3031   9-15-93  11:44a
+    SHARHOOK C        1449   9-17-93   8:10a
+    TRUNAM   C         435   8-14-93  12:09p
            27 file(s)     145424 bytes
-    
-    Directory of A:\CHAP9
-    
-    .            <DIR>     01-24-18   2:58p
-    ..           <DIR>     01-24-18   2:58p
-    BREAK    C         726 08-10-93  10:15a
-    CRITSECT C        4052 08-13-93   1:35p
-    DO2E     ASM       566 09-26-90   9:42p
-    DOSSWAP  C        6249 08-10-93  10:25a
-    EXTERR   C        1694 09-05-92   9:20p
-    FILE     C        1754 08-10-93  10:18a
-    HAVE2E   ASM       546 09-16-93  12:21p
-    INDOS    C        1809 07-18-92   4:57a
-    MULTI    C       12150 04-25-95   2:42a
-    NOTIFY   ASM      6719 10-02-92  10:15p
-    PSP      C        1168 08-10-93  10:58p
-    PUT      C        2139 08-11-93   2:58p
-    PUT      H         781 08-10-93   9:45a
-    SEND2E   C         598 09-26-90   9:43p
-    STACK    ASM      1869 07-18-92   4:56a
-    SWITCHER C        7145 08-10-93  10:12a
-    TEST     C         134 09-15-92   9:32p
-    TEST2E   C        1660 08-11-93   9:36a
-    TSR      H        2923 08-11-93   4:38p
-    TSREXAMP C       19605 08-13-93   1:44p
-    TSRUTIL  ASM      7366 12-03-92   9:03p
-    UDMEM    C       10101 08-11-93   2:57p
-    UNDOCDOS H       13842 08-02-92   9:43a
+
+     Directory of A:\CHAP9
+
+    .            <DIR>       1-24-18   2:58p
+    ..           <DIR>       1-24-18   2:58p
+    BREAK    C         726   8-10-93  10:15a
+    CRITSECT C        4052   8-13-93   1:35p
+    DO2E     ASM       566   9-26-90   9:42p
+    DOSSWAP  C        6249   8-10-93  10:25a
+    EXTERR   C        1694   9-05-92   9:20p
+    FILE     C        1754   8-10-93  10:18a
+    HAVE2E   ASM       546   9-16-93  12:21p
+    INDOS    C        1809   7-18-92   4:57a
+    MULTI    C       12150   4-25-95   2:42a
+    NOTIFY   ASM      6719  10-02-92  10:15p
+    PSP      C        1168   8-10-93  10:58p
+    PUT      C        2139   8-11-93   2:58p
+    PUT      H         781   8-10-93   9:45a
+    SEND2E   C         598   9-26-90   9:43p
+    STACK    ASM      1869   7-18-92   4:56a
+    SWITCHER C        7145   8-10-93  10:12a
+    TEST     C         134   9-15-92   9:32p
+    TEST2E   C        1660   8-11-93   9:36a
+    TSR      H        2923   8-11-93   4:38p
+    TSREXAMP C       19605   8-13-93   1:44p
+    TSRUTIL  ASM      7366  12-03-92   9:03p
+    UDMEM    C       10101   8-11-93   2:57p
+    UNDOCDOS H       13842   8-02-92   9:43a
            25 file(s)     105596 bytes
-    
+
     Total files listed:
           165 file(s)     535289 bytes
                           633344 bytes free
-    
+
 ### Errata (1st Edition)
 
 	Date: Mon, 18 Mar 91 15:03:13 EST

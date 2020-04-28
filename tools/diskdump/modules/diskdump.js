@@ -383,16 +383,19 @@ function main(argc, argv)
                     let di = readDisk(sFile);
                     if (!di) return;
                     if (argv['checkall']) {
+                        let sListing = di.getFileListing(0, 4);
+                        if (!sListing) return;
                         let sIndexFile = path.join(path.dirname(sFile.replace("/diskettes/", "/software/")), "index.md");
                         if (fs.existsSync(sIndexFile)) {
                             let sIndex = readFile(sIndexFile);
                             let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*") + "\n([\\s\\S]*?)\n(\\S|$)";
                             let matchDirectory = sIndex.match(new RegExp(sMatch));
                             if (matchDirectory) {
-                                di.getFileListing(0, 4);
-                                sIndex = sIndex.replace(matchDirectory[2], di.getFileListing(0, 4));
-                                if (writeFile(sIndexFile, sIndex)) {
-                                    printf("\tupdated directory listing for \"%s\"\n", diskette.name);
+                                let sIndexNew = sIndex.replace(matchDirectory[2], sListing);
+                                if (sIndexNew != sIndex) {
+                                    if (writeFile(sIndexFile, sIndexNew)) {
+                                        printf("\tupdated directory listing for \"%s\"\n", diskette.name);
+                                    }
                                 }
                             } else {
                                 printf("\tno directory listing for \"%s\" (%s)\n", diskette.name, sMatch);

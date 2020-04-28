@@ -125,33 +125,29 @@ Directory listings of the two 360Kb distribution diskettes are provided below.
 
 ### Directory of COMPAQ PC DOS 3.20 Support
 
-	 Volume in drive A has no label
+     Volume in drive A has no label
+     Directory of A:\
 
-	Directory of A:\
-
-	IBMBIO   COM      9728 03-27-86  12:00p
-	IBMDOS   COM     27760 03-27-86  12:00p
-	COMMAND  COM     23210 03-27-86  12:00p
-	DISKCOPY COM      3006 08-14-86  12:00p
-	YCR                  4 08-14-86  12:00p
-	AUTOEXEC BAT        33 08-14-86  12:00p
-	README   CPQ      1796 08-14-86  12:00p
-	INSTALL  DOC      6790 08-14-86  12:00p
-	DISKINIT COM      9259 08-14-86  12:00p
-	SUPINST  BAT        76 08-14-86  12:00p
-	ENHDISK  SYS      1569 08-14-86  12:00p
-	FDISK    COM      7200 08-14-86  12:00p
-	FORMAT   COM      8987 08-14-86  12:00p
-	SYS      COM      3823 08-14-86  12:00p
-	INST1    BAT      1875 08-14-86  12:00p
-	INST1    SCR       645 08-14-86  12:00p
-	INST2    SCR       479 08-14-86  12:00p
-	INSTDEL  BAT        49 08-14-86  12:00p
-	       18 file(s)     106289 bytes
-
-	Total files listed:
-	       18 file(s)     106289 bytes
-	                      245760 bytes free
+    IBMBIO   COM*     9728   3-27-86  12:00p
+    IBMDOS   COM*    27760   3-27-86  12:00p
+    COMMAND  COM*    23210   3-27-86  12:00p
+    DISKCOPY COM*     3006   8-14-86  12:00p
+    YCR         *        4   8-14-86  12:00p
+    AUTOEXEC BAT        33   8-14-86  12:00p
+    README   CPQ      1796   8-14-86  12:00p
+    INSTALL  DOC      6790   8-14-86  12:00p
+    DISKINIT COM      9259   8-14-86  12:00p
+    SUPINST  BAT        76   8-14-86  12:00p
+    ENHDISK  SYS      1569   8-14-86  12:00p
+    FDISK    COM      7200   8-14-86  12:00p
+    FORMAT   COM      8987   8-14-86  12:00p
+    SYS      COM      3823   8-14-86  12:00p
+    INST1    BAT      1875   8-14-86  12:00p
+    INST1    SCR       645   8-14-86  12:00p
+    INST2    SCR       479   8-14-86  12:00p
+    INSTDEL  BAT        49   8-14-86  12:00p
+           18 file(s)     106289 bytes
+                          245760 bytes free
 
 ---
 

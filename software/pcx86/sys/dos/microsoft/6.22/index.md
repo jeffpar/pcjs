@@ -338,82 +338,78 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.22 (1.44M Supp)
 
-	 Volume in drive A is SUPPDISK  1
-	 Volume Serial Number is 5B0A-1710
+     Volume in drive A is SUPPDISK1
+     Directory of A:\
 
-	Directory of A:\
+    ADOS     CFG        61   5-31-94   6:22a
+    ADOS     CO_     17911   5-31-94   6:22a
+    ADOS     OV_     45289   5-31-94   6:22a
+    ADOS     TX_     40535   5-31-94   6:22a
+    AM       EXE      7825   5-31-94   6:22a
+    AREADME  TX_     12280   5-31-94   6:22a
+    FAKEMOUS COM       307   5-31-94   6:22a
+    DRVBOOT  BA_      1277   5-31-94   6:22a
+    DVORAK   SY_      1779   5-31-94   6:22a
+    DVORAK   TX_      3215   5-31-94   6:22a
+    KBDBUF   SYS      1140   5-31-94   6:22a
+    ISO      CP_     15240   5-31-94   6:22a
+    ISO      TXT      2761   5-31-94   6:22a
+    ASSIGN   CO_      4547   5-31-94   6:22a
+    BACKUP   EX_     22966   5-31-94   6:22a
+    COMP     EX_      8738   5-31-94   6:22a
+    CV       COM       716   5-31-94   6:22a
+    EDLIN    EXE     12674   5-31-94   6:22a
+    EXE2BIN  EX_      5983   5-31-94   6:22a
+    GRAFTABL CO_      6078   5-31-94   6:22a
+    JOIN     EX_     12237   5-31-94   6:22a
+    4201     CP_      2399   5-31-94   6:22a
+    4208     CP_       359   5-31-94   6:22a
+    5202     CP_       260   5-31-94   6:22a
+    LCD      CP_      2793   5-31-94   6:22a
+    MIRROR   CO_     11424   5-31-94   6:22a
+    MSHERC   CO_      4086   5-31-94   6:22a
+    PRINTER  SY_     10961   5-31-94   6:22a
+    PRINTFIX COM       234   5-31-94   6:22a
+    GORILLA  BA_     10439   5-31-94   6:22a
+    REMLINE  BA_      4435   5-31-94   6:22a
+    NIBBLES  BA_      7182   5-31-94   6:22a
+    MONEY    BA_     13049   5-31-94   6:22a
+    COMMANDS TX_     25400   5-31-94   6:22a
+    SETUP    BAT     13208   5-31-94   6:22a
+    SD6COPY  BAT       758   5-31-94   6:22a
+    CHOICE   COM      1754   5-31-94   6:22a
+    EXPAND   EXE     16129   5-31-94   6:22a
+    GET_FUNC COM        24   5-31-94   6:22a
+    NET      1X_      4704   5-31-94   6:22a
+    NET      TX_      2656   5-31-94   6:22a
+    NETBEUI  DO_     21122   5-31-94   6:22a
+    NETWKSTA 1X_     38186   5-31-94   6:22a
+    NETWKSTA 2X_     60768   5-31-94   6:22a
+    REDIR    1X_     19627   5-31-94   6:22a
+    REDIR    2X_     20033   5-31-94   6:22a
+    SETNAME  EX_      3131   5-31-94   6:22a
+    8514     VI_      6421   5-31-94   6:22a
+    CGA      GR_      1617   5-31-94   6:22a
+    CGA      IN_      2775   5-31-94   6:22a
+    CGA      VI_      6131   5-31-94   6:22a
+    DOSSHELL CO_      1907   5-31-94   6:22a
+    DOSSHELL EX_    142511   5-31-94   6:22a
+    DOSSHELL HL_     48773   5-31-94   6:22a
+    DOSSWAP  EX_     13498   5-31-94   6:22a
+    EGA      GR_      2466   5-31-94   6:22a
+    EGA      IN_      2776   5-31-94   6:22a
+    EGA      SY_      3684   5-31-94   6:22a
+    EGA      VI_      6160   5-31-94   6:22a
+    EGAMONO  GR_      2318   5-31-94   6:22a
+    HERC     GR_      1636   5-31-94   6:22a
+    HERC     VI_      6271   5-31-94   6:22a
+    MONO     GR_       296   5-31-94   6:22a
+    MONO     IN_      2451   5-31-94   6:22a
+    VGA      GR_      3198   5-31-94   6:22a
+    VGA      VI_      6355   5-31-94   6:22a
+    VGAMONO  GR_      3214   5-31-94   6:22a
+    720ID01  BAT       109   5-31-94   6:22a
+    720ID02  BAT       109   5-31-94   6:22a
+           69 file(s)     783356 bytes
+                          655360 bytes free
 
-	ADOS     CFG        61 05-31-94   6:22a
-	ADOS     CO_     17911 05-31-94   6:22a
-	ADOS     OV_     45289 05-31-94   6:22a
-	ADOS     TX_     40535 05-31-94   6:22a
-	AM       EXE      7825 05-31-94   6:22a
-	AREADME  TX_     12280 05-31-94   6:22a
-	FAKEMOUS COM       307 05-31-94   6:22a
-	DRVBOOT  BA_      1277 05-31-94   6:22a
-	DVORAK   SY_      1779 05-31-94   6:22a
-	DVORAK   TX_      3215 05-31-94   6:22a
-	KBDBUF   SYS      1140 05-31-94   6:22a
-	ISO      CP_     15240 05-31-94   6:22a
-	ISO      TXT      2761 05-31-94   6:22a
-	ASSIGN   CO_      4547 05-31-94   6:22a
-	BACKUP   EX_     22966 05-31-94   6:22a
-	COMP     EX_      8738 05-31-94   6:22a
-	CV       COM       716 05-31-94   6:22a
-	EDLIN    EXE     12674 05-31-94   6:22a
-	EXE2BIN  EX_      5983 05-31-94   6:22a
-	GRAFTABL CO_      6078 05-31-94   6:22a
-	JOIN     EX_     12237 05-31-94   6:22a
-	4201     CP_      2399 05-31-94   6:22a
-	4208     CP_       359 05-31-94   6:22a
-	5202     CP_       260 05-31-94   6:22a
-	LCD      CP_      2793 05-31-94   6:22a
-	MIRROR   CO_     11424 05-31-94   6:22a
-	MSHERC   CO_      4086 05-31-94   6:22a
-	PRINTER  SY_     10961 05-31-94   6:22a
-	PRINTFIX COM       234 05-31-94   6:22a
-	GORILLA  BA_     10439 05-31-94   6:22a
-	REMLINE  BA_      4435 05-31-94   6:22a
-	NIBBLES  BA_      7182 05-31-94   6:22a
-	MONEY    BA_     13049 05-31-94   6:22a
-	COMMANDS TX_     25400 05-31-94   6:22a
-	SETUP    BAT     13208 05-31-94   6:22a
-	SD6COPY  BAT       758 05-31-94   6:22a
-	CHOICE   COM      1754 05-31-94   6:22a
-	EXPAND   EXE     16129 05-31-94   6:22a
-	GET_FUNC COM        24 05-31-94   6:22a
-	NET      1X_      4704 05-31-94   6:22a
-	NET      TX_      2656 05-31-94   6:22a
-	NETBEUI  DO_     21122 05-31-94   6:22a
-	NETWKSTA 1X_     38186 05-31-94   6:22a
-	NETWKSTA 2X_     60768 05-31-94   6:22a
-	REDIR    1X_     19627 05-31-94   6:22a
-	REDIR    2X_     20033 05-31-94   6:22a
-	SETNAME  EX_      3131 05-31-94   6:22a
-	8514     VI_      6421 05-31-94   6:22a
-	CGA      GR_      1617 05-31-94   6:22a
-	CGA      IN_      2775 05-31-94   6:22a
-	CGA      VI_      6131 05-31-94   6:22a
-	DOSSHELL CO_      1907 05-31-94   6:22a
-	DOSSHELL EX_    142511 05-31-94   6:22a
-	DOSSHELL HL_     48773 05-31-94   6:22a
-	DOSSWAP  EX_     13498 05-31-94   6:22a
-	EGA      GR_      2466 05-31-94   6:22a
-	EGA      IN_      2776 05-31-94   6:22a
-	EGA      SY_      3684 05-31-94   6:22a
-	EGA      VI_      6160 05-31-94   6:22a
-	EGAMONO  GR_      2318 05-31-94   6:22a
-	HERC     GR_      1636 05-31-94   6:22a
-	HERC     VI_      6271 05-31-94   6:22a
-	MONO     GR_       296 05-31-94   6:22a
-	MONO     IN_      2451 05-31-94   6:22a
-	VGA      GR_      3198 05-31-94   6:22a
-	VGA      VI_      6355 05-31-94   6:22a
-	VGAMONO  GR_      3214 05-31-94   6:22a
-	720ID01  BAT       109 05-31-94   6:22a
-	720ID02  BAT       109 05-31-94   6:22a
-	       69 file(s)     783356 bytes
-
-	Total files listed:
-	       69 file(s)     783356 bytes
-	                      655360 bytes free

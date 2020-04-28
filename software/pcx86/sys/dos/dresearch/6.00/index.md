@@ -171,151 +171,146 @@ machines:
 
 ### Directory of DR DOS 6.00 (1.2M StartUp)
 
-	 Volume in drive A is STARTUP    
+     Volume in drive A is STARTUP
+     Directory of A:\
 
-	Directory of A:\
-
-	IBMBIO   COM     24442 08-23-91   6:00a
-	IBMDOS   COM     39239 08-23-91   6:00a
-	COMMAND  COM     50456 08-23-91   6:00a
-	AUTOEXEC BAT       178 08-23-91   6:00a
-	CONFIG   SYS        63 08-23-91   6:00a
-	ANSI     SYS      4833 08-23-91   6:00a
-	COUNTRY  SYS     10752 08-23-91   6:00a
-	DISPLAY  SYS      4608 08-23-91   6:00a
-	DRIVER   SYS      2150 08-23-91   6:00a
-	EMM386   SYS     39498 08-23-91   6:00a
-	HIDOS    SYS     18562 08-23-91   6:00a
-	EMMXMA   SYS      6847 08-23-91   6:00a
-	PRINTER  SYS      5590 08-23-91   6:00a
-	VDISK    SYS      5190 08-23-91   6:00a
-	SSTORDRV SYS     35327 08-23-91   6:00a
-	DEVSWAP  COM      1583 08-23-91   6:00a
-	SYS      COM      8917 08-23-91   6:00a
-	KEYB     COM     34591 08-23-91   6:00a
-	NLSFUNC  EXE      2707 08-23-91   6:00a
-	SHARE    EXE      2781 08-23-91   6:00a
-	MODE     COM     14134 08-23-91   6:00a
-	APPEND   EXE      3073 08-23-91   6:00a
-	MEMMAX   EXE      2214 08-23-91   6:00a
-	LOGIN    EXE     14858 08-23-91   6:00a
-	LOGIN    TXT      1283 08-23-91   6:00a
-	LOGIN    ERR       402 08-23-91   6:00a
-	1050     CPI      5467 08-23-91   6:00a
-	4201     CPI     21547 08-23-91   6:00a
-	4208     CPI       492 08-23-91   6:00a
-	5202     CPI       492 08-23-91   6:00a
-	EGA      CPI     24888 08-23-91   6:00a
-	INSTALL  EXE     79298 08-23-91   6:00a
-	UNINSTAL EXE     18506 08-23-91   6:00a
-	INSTALL  INI       272 08-23-91   6:00a
-	TASKMAX  EXE     17581 08-23-91   6:00a
-	TASKMAX  INI      3360 08-23-91   6:00a
-	DRDOS    INI      2896 08-23-91   6:00a
-	VIEWMAX  INI      3730 08-23-91   6:00a
-	GRAFTABL COM      2851 08-23-91   6:00a
-	FDISK    COM     17487 08-23-91   6:00a
-	FORMAT   COM     15206 08-23-91   6:00a
-	UNFORMAT COM      7480 08-23-91   6:00a
-	TREE     COM      9847 08-23-91   6:00a
-	XCOPY    EXE     13660 08-23-91   6:00a
-	XDEL     EXE     10768 08-23-91   6:00a
-	CHKDSK   COM     16429 08-23-91   6:00a
-	XDIR     EXE     13665 08-23-91   6:00a
-	FASTOPEN EXE       680 08-23-91   6:00a
-	MEM      EXE     11309 08-23-91   6:00a
-	EDITOR   EXE     21819 08-23-91   6:00a
-	MOVE     EXE     16611 08-23-91   6:00a
-	ASSIGN   COM      4849 08-23-91   6:00a
-	RENDIR   EXE      4957 08-23-91   6:00a
-	SUBST    EXE      4837 08-23-91   6:00a
-	BACKUP   COM     12984 08-23-91   6:00a
-	RESTORE  COM     14319 08-23-91   6:00a
-	DISKOPT  EXE     50080 08-23-91   6:00a
-	DELWATCH EXE     11527 08-23-91   6:00a
-	DELPURGE EXE     19771 08-23-91   6:00a
-	UNDELETE EXE     74410 08-23-91   6:00a
-	DISKCOPY COM     11359 08-23-91   6:00a
-	DISKCOMP COM     11457 08-23-91   6:00a
-	DISKMAP  EXE      8233 08-23-91   6:00a
-	FILELINK EXE     21571 08-23-91   6:00a
-	LOCK     EXE     15662 08-23-91   6:00a
-	LOCK     TXT      1309 08-23-91   6:00a
-	LOCK     ERR       422 08-23-91   6:00a
-	PCKWIK   SYS      2382 08-23-91   6:00a
-	PCKWIN   SYS      2940 08-23-91   6:00a
-	SUPERPCK EXE     38525 08-23-91   6:00a
-	SUPERPCK SB1     41536 08-23-91   6:00a
-	SUPERPCK SB6     52128 08-23-91   6:00a
-	SUPERPCK SB7     46320 08-23-91   6:00a
-	SUPERPCK SB8     37952 08-23-91   6:00a
-	       74 file(s)    1160149 bytes
-
-	Total files listed:
-	       74 file(s)    1160149 bytes
-	                       33792 bytes free
+    IBMBIO   COM*    24442   8-23-91   6:00a
+    IBMDOS   COM*    39239   8-23-91   6:00a
+    COMMAND  COM     50456   8-23-91   6:00a
+    AUTOEXEC BAT       178   8-23-91   6:00a
+    CONFIG   SYS        63   8-23-91   6:00a
+    ANSI     SYS      4833   8-23-91   6:00a
+    COUNTRY  SYS     10752   8-23-91   6:00a
+    DISPLAY  SYS      4608   8-23-91   6:00a
+    DRIVER   SYS      2150   8-23-91   6:00a
+    EMM386   SYS     39498   8-23-91   6:00a
+    HIDOS    SYS     18562   8-23-91   6:00a
+    EMMXMA   SYS      6847   8-23-91   6:00a
+    PRINTER  SYS      5590   8-23-91   6:00a
+    VDISK    SYS      5190   8-23-91   6:00a
+    SSTORDRV SYS     35327   8-23-91   6:00a
+    DEVSWAP  COM      1583   8-23-91   6:00a
+    SYS      COM      8917   8-23-91   6:00a
+    KEYB     COM     34591   8-23-91   6:00a
+    NLSFUNC  EXE      2707   8-23-91   6:00a
+    SHARE    EXE      2781   8-23-91   6:00a
+    MODE     COM     14134   8-23-91   6:00a
+    APPEND   EXE      3073   8-23-91   6:00a
+    MEMMAX   EXE      2214   8-23-91   6:00a
+    LOGIN    EXE     14858   8-23-91   6:00a
+    LOGIN    TXT      1283   8-23-91   6:00a
+    LOGIN    ERR       402   8-23-91   6:00a
+    1050     CPI      5467   8-23-91   6:00a
+    4201     CPI     21547   8-23-91   6:00a
+    4208     CPI       492   8-23-91   6:00a
+    5202     CPI       492   8-23-91   6:00a
+    EGA      CPI     24888   8-23-91   6:00a
+    INSTALL  EXE     79298   8-23-91   6:00a
+    UNINSTAL EXE     18506   8-23-91   6:00a
+    INSTALL  INI       272   8-23-91   6:00a
+    TASKMAX  EXE     17581   8-23-91   6:00a
+    TASKMAX  INI      3360   8-23-91   6:00a
+    DRDOS    INI      2896   8-23-91   6:00a
+    VIEWMAX  INI      3730   8-23-91   6:00a
+    GRAFTABL COM      2851   8-23-91   6:00a
+    FDISK    COM     17487   8-23-91   6:00a
+    FORMAT   COM     15206   8-23-91   6:00a
+    UNFORMAT COM      7480   8-23-91   6:00a
+    TREE     COM      9847   8-23-91   6:00a
+    XCOPY    EXE     13660   8-23-91   6:00a
+    XDEL     EXE     10768   8-23-91   6:00a
+    CHKDSK   COM     16429   8-23-91   6:00a
+    XDIR     EXE     13665   8-23-91   6:00a
+    FASTOPEN EXE       680   8-23-91   6:00a
+    MEM      EXE     11309   8-23-91   6:00a
+    EDITOR   EXE     21819   8-23-91   6:00a
+    MOVE     EXE     16611   8-23-91   6:00a
+    ASSIGN   COM      4849   8-23-91   6:00a
+    RENDIR   EXE      4957   8-23-91   6:00a
+    SUBST    EXE      4837   8-23-91   6:00a
+    BACKUP   COM     12984   8-23-91   6:00a
+    RESTORE  COM     14319   8-23-91   6:00a
+    DISKOPT  EXE     50080   8-23-91   6:00a
+    DELWATCH EXE     11527   8-23-91   6:00a
+    DELPURGE EXE     19771   8-23-91   6:00a
+    UNDELETE EXE     74410   8-23-91   6:00a
+    DISKCOPY COM     11359   8-23-91   6:00a
+    DISKCOMP COM     11457   8-23-91   6:00a
+    DISKMAP  EXE      8233   8-23-91   6:00a
+    FILELINK EXE     21571   8-23-91   6:00a
+    LOCK     EXE     15662   8-23-91   6:00a
+    LOCK     TXT      1309   8-23-91   6:00a
+    LOCK     ERR       422   8-23-91   6:00a
+    PCKWIK   SYS      2382   8-23-91   6:00a
+    PCKWIN   SYS      2940   8-23-91   6:00a
+    SUPERPCK EXE     38525   8-23-91   6:00a
+    SUPERPCK SB1     41536   8-23-91   6:00a
+    SUPERPCK SB6     52128   8-23-91   6:00a
+    SUPERPCK SB7     46320   8-23-91   6:00a
+    SUPERPCK SB8     37952   8-23-91   6:00a
+           74 file(s)    1160149 bytes
+                           33792 bytes free
 
 ### Directory of DR DOS 6.00 (1.2M ViewMAX)
 
-	 Volume in drive A is VMAX       
+     Volume in drive A is VMAX
+     Directory of A:\
 
-	Directory of A:\
+    SSTOR    EXE     65605   8-23-91   6:00a
+    REPLACE  EXE     12058   8-23-91   6:00a
+    SORT     EXE      6956   8-23-91   6:00a
+    TOUCH    EXE     10754   8-23-91   6:00a
+    LABEL    COM      5202   8-23-91   6:00a
+    ATTRIB   EXE      9855   8-23-91   6:00a
+    COMP     COM      8506   8-23-91   6:00a
+    GRAPHICS COM      2016   8-23-91   6:00a
+    PASSWORD EXE     11290   8-23-91   6:00a
+    SCRIPT   EXE     20126   8-23-91   6:00a
+    PRINT    COM     12196   8-23-91   6:00a
+    RECOVER  COM      9575   8-23-91   6:00a
+    JOIN     EXE      6393   8-23-91   6:00a
+    FIND     EXE     10717   8-23-91   6:00a
+    SID      EXE     16501   8-23-91   6:00a
+    CURSOR   EXE      5200   8-23-91   6:00a
+    FC       EXE     12437   8-23-91   6:00a
+    DOSBOOK  EXE    281507   8-23-91   6:00a
+    HELP     BAT        21   8-23-91   6:00a
+    EXE2BIN  EXE      8857   8-23-91   6:00a
+    README           16659   8-23-91   6:00a
+    TASKMAX  INI      3360   8-23-91   6:00a
+    VIEWHI   ICN      8896   8-23-91   6:00a
+    VIEWLO   ICN      9664   8-23-91   6:00a
+    VIEWMAX  INI      3730   8-23-91   6:00a
+    VIEWMAX          73220   8-23-91   6:00a
+    VIEWMAX  EXE     10607   8-23-91   6:00a
+    VIEWMAX  OVL     37722   8-23-91   6:00a
+    VIEWRUN  RSC      5768   8-23-91   6:00a
+    VIEWMAX  RSC     26526   8-23-91   6:00a
+    VIEWHELP RSC      6642   8-23-91   6:00a
+    VIEWMAX  ACC     21602   8-23-91   6:00a
+    UDCAT9   EGA     49664   8-23-91   6:00a
+    UDHRC9   EGA     46592   8-23-91   6:00a
+    UDUNI9   VGA     53248   8-23-91   6:00a
+    NETWARE      <DIR>       8-23-91  11:53a
+           36 file(s)     889672 bytes
 
-	SSTOR    EXE     65605 08-23-91   6:00a
-	REPLACE  EXE     12058 08-23-91   6:00a
-	SORT     EXE      6956 08-23-91   6:00a
-	TOUCH    EXE     10754 08-23-91   6:00a
-	LABEL    COM      5202 08-23-91   6:00a
-	ATTRIB   EXE      9855 08-23-91   6:00a
-	COMP     COM      8506 08-23-91   6:00a
-	GRAPHICS COM      2016 08-23-91   6:00a
-	PASSWORD EXE     11290 08-23-91   6:00a
-	SCRIPT   EXE     20126 08-23-91   6:00a
-	PRINT    COM     12196 08-23-91   6:00a
-	RECOVER  COM      9575 08-23-91   6:00a
-	JOIN     EXE      6393 08-23-91   6:00a
-	FIND     EXE     10717 08-23-91   6:00a
-	SID      EXE     16501 08-23-91   6:00a
-	CURSOR   EXE      5200 08-23-91   6:00a
-	FC       EXE     12437 08-23-91   6:00a
-	DOSBOOK  EXE    281507 08-23-91   6:00a
-	HELP     BAT        21 08-23-91   6:00a
-	EXE2BIN  EXE      8857 08-23-91   6:00a
-	README           16659 08-23-91   6:00a
-	TASKMAX  INI      3360 08-23-91   6:00a
-	VIEWHI   ICN      8896 08-23-91   6:00a
-	VIEWLO   ICN      9664 08-23-91   6:00a
-	VIEWMAX  INI      3730 08-23-91   6:00a
-	VIEWMAX          73220 08-23-91   6:00a
-	VIEWMAX  EXE     10607 08-23-91   6:00a
-	VIEWMAX  OVL     37722 08-23-91   6:00a
-	VIEWRUN  RSC      5768 08-23-91   6:00a
-	VIEWMAX  RSC     26526 08-23-91   6:00a
-	VIEWHELP RSC      6642 08-23-91   6:00a
-	VIEWMAX  ACC     21602 08-23-91   6:00a
-	UDCAT9   EGA     49664 08-23-91   6:00a
-	UDHRC9   EGA     46592 08-23-91   6:00a
-	UDUNI9   VGA     53248 08-23-91   6:00a
-	NETWARE      <DIR>     08-23-91  11:53a
-	       36 file(s)     889672 bytes
+     Directory of A:\NETWARE
 
-	Directory of A:\NETWARE
+    .            <DIR>       8-23-91  11:53a
+    ..           <DIR>       8-23-91  11:53a
+    MAP      EXE     27449   8-23-91   6:00a
+    EMSNETX  EXE     63838   8-23-91   6:00a
+    XMSNETX  EXE     60307   8-23-91   6:00a
+    IPX      OBJ     20141   8-23-91   6:00a
+    NETX     COM     51201   8-23-91   6:00a
+    TBMI2    COM      4950   8-23-91   6:00a
+    TBMI2    DOC      9355   8-23-91   6:00a
+    RPLFIX   COM      1232   8-23-91   6:00a
+           10 file(s)     238473 bytes
 
-	.            <DIR>     08-23-91  11:53a
-	..           <DIR>     08-23-91  11:53a
-	MAP      EXE     27449 08-23-91   6:00a
-	EMSNETX  EXE     63838 08-23-91   6:00a
-	XMSNETX  EXE     60307 08-23-91   6:00a
-	IPX      OBJ     20141 08-23-91   6:00a
-	NETX     COM     51201 08-23-91   6:00a
-	TBMI2    COM      4950 08-23-91   6:00a
-	TBMI2    DOC      9355 08-23-91   6:00a
-	RPLFIX   COM      1232 08-23-91   6:00a
-	       10 file(s)     238473 bytes
-
-	Total files listed:
-	       46 file(s)    1128145 bytes
-	                       74240 bytes free
+    Total files listed:
+           46 file(s)    1128145 bytes
+                           74240 bytes free
 
 ### Directory of DR DOS 6.00 (1991 Update 1)
 

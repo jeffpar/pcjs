@@ -236,22 +236,19 @@ Directory listings of the seven 360Kb distribution diskettes are provided below.
 
 ### Directory of Windows 1.04 (SUPP)
 
-	 Volume in drive A is SPDISK     
-	
-	Directory of A:\
-	
-	PCLPFM   PIF       369 01-14-87   8:26a
-	SOFTFONT INI      1341 01-12-87  12:31p
-	PCLPFM   EXE     23892 03-09-87   6:49p
-	LASRHARD TXT       372 06-11-86  11:23a
-	LASRSOFT TXT       372 06-11-86  11:22a
-	HP7470A  DRV     16336 07-29-86   2:20p
-	NEC3550  DRV     22512 05-22-86  10:23a
-	PSPREP   TXT     15600 01-11-87   3:01p
-	PSREADME TXT      7047 04-06-87  11:17a
-	HPREADME TXT      5852 03-27-87   5:36p
-	       10 file(s)      93693 bytes
-	
-	Total files listed:
-	       10 file(s)      93693 bytes
-	                      264192 bytes free
+     Volume in drive A is SPDISK
+     Directory of A:\
+
+    PCLPFM   PIF       369   1-14-87   8:26a
+    SOFTFONT INI      1341   1-12-87  12:31p
+    PCLPFM   EXE     23892   3-09-87   6:49p
+    LASRHARD TXT       372   6-11-86  11:23a
+    LASRSOFT TXT       372   6-11-86  11:22a
+    HP7470A  DRV     16336   7-29-86   2:20p
+    NEC3550  DRV     22512   5-22-86  10:23a
+    PSPREP   TXT     15600   1-11-87   3:01p
+    PSREADME TXT      7047   4-06-87  11:17a
+    HPREADME TXT      5852   3-27-87   5:36p
+           10 file(s)      93693 bytes
+                          264192 bytes free
+
