@@ -52,13 +52,13 @@ The `FASTART` program on Disk 1 expects a "USER PROGRAMS" disk.  For example, yo
 "[COMPAQ User Programs (1989)](/software/pcx86/diag/compaq/1989/)" diskette, which was part of a later
 COMPAQ MS-DOS 4.01 release, since COMPAQ states that the disk "supersedes earlier versions".
 
-[Directory Listings](#directory-of-compaq-ms-dos-331-disk-1) of the distribution diskettes are provided below.
+[Directory Listings](#directory-listings) of the distribution diskettes are provided below.
 
 {% include machine.html id="deskpro386" %}
 
-### Directory of COMPAQ MS-DOS 3.31 (1987)
+### Directory Listings
 
-This disk from the [PCjs Software Archive](/software/pcjs/) is, unfortunately, not an original
+The following disk is from the [PCjs Software Archive](/software/pcjs/), and unfortunately, it is not an original
 distribution disk, but it's included here because it's the only available copy of other COMPAQ MS-DOS 3.31 binaries
 released in 1987.
 
@@ -69,6 +69,8 @@ It's safe to say the following binaries were not part of the original distributi
 - SMARTDRV.SYS (Microsoft SMARTDrive Disk Cache v2.10)
 
 but, in the interest of preserving all manner of historical curiosities, we have decided to leave the disk as-is.
+
+### Directory of COMPAQ MS-DOS 3.31 (1987)
 
 	 Volume in drive A has no label
 
