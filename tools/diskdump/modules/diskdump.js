@@ -227,7 +227,7 @@ function readDisk(sFile, forceBPB, sectorIDs, sectorErrors, suppData)
 /**
  * readFile(sFile, encoding)
  *
- * @param {string} [sFile]
+ * @param {string} sFile
  * @param {string|null} [encoding]
  * @returns {DataBuffer|string|undefined}
  */
@@ -301,6 +301,29 @@ function writeDisk(sFile, di, fLegacy = false, indent = 0, fOverwrite = false)
 }
 
 /**
+ * writeFile(sFile, data)
+ *
+ * @param {string} sFile
+ * @param {DataBuffer|string} data
+ * @returns {boolean}
+ */
+function writeFile(sFile, data)
+{
+    if (sFile) {
+        try {
+            if (data instanceof DataBuffer) {
+                data = data.buffer;
+            }
+            fs.writeFileSync(sFile, data);
+            return true;
+        } catch(err) {
+            printf("error: %s\n", err.message);
+        }
+    }
+    return false;
+}
+
+/**
  * main(argc, argv)
  *
  * @param {number} argc
@@ -346,9 +369,9 @@ function main(argc, argv)
     }
 
     if (argv['dumpall']) {
-        let family = "/pcx86";
+        let family = "pcx86";
         let cConfigs = 0, cManifests = 0, cFiles = 0;
-        let asFiles = glob.sync(path.join(rootDir, "/configs" + family + "/*.json"));
+        let asFiles = glob.sync(path.join(rootDir, "/configs/" + family + "/*.json"));
         asFiles.forEach((sFile) => {
             if (argv['verbose']) printf("reading %s...\n", sFile);
             let library = readJSON(sFile);
@@ -359,6 +382,25 @@ function main(argc, argv)
                     let sFile = path.join(rootDir, diskette.path);
                     let di = readDisk(sFile, true);
                     if (di) {
+                        if (argv['checkall']) {
+                            let sIndexFile = path.join(path.dirname(sFile.replace("/diskettes/", "/software/")), "index.md");
+                            if (fs.existsSync(sIndexFile)) {
+                                let sIndex = readFile(sIndexFile);
+                                let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)") + "\n([\\s\\S]*?)\n(\\S)";
+                                let matchDirectory = sIndex.match(new RegExp(sMatch));
+                                if (matchDirectory) {
+                                    di.getFileListing(0, 4);
+                                    sIndex = sIndex.replace(matchDirectory[2], di.getFileListing(0, 4));
+                                    if (writeFile(sIndexFile, sIndex)) {
+                                        printf("\tupdated directory listing for \"%s\"\n", diskette.name);
+                                    }
+                                } else {
+                                    printf("\tno directory listing for \"%s\" (%s)\n", diskette.name, sMatch);
+                                }
+                            } else {
+                                printf("\tmissing index: %s\n", sIndexFile);
+                            }
+                        }
                         let manifest = di.getFileManifest(getHash, "md5");
                         if (argv['dumpall'] == "md5") {
                             manifest.forEach((file) => {

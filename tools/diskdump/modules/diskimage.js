@@ -12,24 +12,31 @@ import CPUx86 from "../../../machines/pcx86/modules/cpux86.js";
 import FileInfo from "./fileinfo.js";
 
 /**
- * @typedef {Object} Sector
- * @property {number} c
- * @property {number} h
- * @property {number} s
- * @property {number} l
- * @property {Array.<number>} d
- * @property {number} dataMark
- * @property {number} headCRC
- * @property {boolean} headError
- * @property {number} dataCRC
- * @property {boolean} dataError
- * @property {number} iModify
- * @property {number} cModify
- * @property {FileInfo} file
- * @property {number} offFile
+ * VolInfo describes a volume.  NOTE: this list of properties may not be
+ * exhaustive (it may omit certain internal calculations), but at the very least,
+ * it should include every "volume descriptor" property we export via getVolDesc().
+ *
+ * @typedef {Object} VolInfo
+ * @property {number} iVolume
+ * @property {number} iPartition
+ * @property {number} idMedia
+ * @property {number} lbaStart
+ * @property {number} lbaTotal
+ * @property {number} nFATBits
+ * @property {number} vbaFAT
+ * @property {number} vbaRoot
+ * @property {number} nEntries
+ * @property {number} vbaData
+ * @property {number} clusterSecs
+ * @property {number} clusterMax
+ * @property {number} clustersBad
+ * @property {number} clustersFree
+ * @property {number} clustersTotal
  */
 
 /**
+ * FileData is an input data structure that callers of buildDiskFromFiles() must provide.
+ *
  * @typedef {Object} FileData
  * @property {string} path
  * @property {string} name
@@ -41,24 +48,27 @@ import FileInfo from "./fileinfo.js";
  * @property {Array.<FileData>} files
  */
 
- /**
-  * @typedef {Object} VolInfo
-  * @property {number} iVolume
-  * @property {number} iPartition
-  * @property {number} idMedia
-  * @property {number} lbaStart
-  * @property {number} lbaTotal
-  * @property {number} nFATBits
-  * @property {number} vbaFAT
-  * @property {number} vbaRoot
-  * @property {number} nEntries
-  * @property {number} vbaData
-  * @property {number} clusterSecs
-  * @property {number} clusterMax
-  * @property {number} clustersBad
-  * @property {number} clustersFree
-  * @property {number} clustersTotal
-  */
+/**
+ * Sector describes a sector contained within a disk image.  Storing the cylinder and head
+ * of a sector within the structure is a bit redundant, but I find it helpful for inspection
+ * and verification purposes.
+ *
+ * @typedef {Object} Sector
+ * @property {number} c (cylinder #)
+ * @property {number} h (head #)
+ * @property {number} s (sector ID)
+ * @property {number} l (length of sector, in bytes)
+ * @property {Array.<number>} d (array of 32-bit values)
+ * @property {number} f (index into the disk's file table)
+ * @property {number} o (offset of this sector within the file's data stream)
+ * @property {number} dataCRC
+ * @property {boolean} dataError
+ * @property {number} dataMark
+ * @property {number} headCRC
+ * @property {boolean} headError
+ * @property {number} iModify (used only with fWritable disk images)
+ * @property {number} cModify (used only with fWritable disk images)
+ */
 
 /**
  * @class DiskImage
@@ -105,7 +115,7 @@ export default class DiskImage {
      * received an ArrayBuffer from a FileReader object, they must first create a DataBuffer from the ArrayBuffer.
      *
      * Here's the initial (simplified) version of this function.  It got much more complicated over time
-     * due to various discoveries.
+     * as more diskettes were processed and anomalies were discovered.
      *
      *      let diskFormat = DiskImage.GEOMETRIES[db.length];
      *      if (diskFormat) {
@@ -595,10 +605,10 @@ export default class DiskImage {
                         if (suppSector) {
                             sector[DiskImage.SECTOR.ID] = suppSector['sectorID'];
                             if (suppSector['length']) sector[DiskImage.SECTOR.LENGTH] = suppSector['length'];
-                            if (suppSector['dataMark']) sector[DiskImage.SECTOR.DATA_MARK] = suppSector['dataMark'];
                             if (suppSector['headCRC']) sector[DiskImage.SECTOR.HEAD_CRC] = suppSector['headCRC'];
                             if (suppSector['headError']) sector[DiskImage.SECTOR.HEAD_ERROR] = true;
                             if (suppSector['dataCRC']) sector[DiskImage.SECTOR.DATA_CRC] = suppSector['dataCRC'];
+                            if (suppSector['dataMark']) sector[DiskImage.SECTOR.DATA_MARK] = suppSector['dataMark'];
                             if (!sectorError) sectorError = suppSector['dataError'];
                             sector[DiskImage.SECTOR.DATA] = suppSector['data'];
                         }
@@ -643,10 +653,10 @@ export default class DiskImage {
         let nTargetSectors = (kbTarget? kbTarget * 2 : 0);
 
         /*
-        * This initializes cbTotal assuming a "best case scenario" (ie, one sector per cluster); as soon as
-        * we find a BPB that will support that size, we recalculate cbTotal using that BPB's cluster size, and
-        * then we re-verify that that BPB will work.  If not, then we keep looking.
-        */
+         * This initializes cbTotal assuming a "best case scenario" (ie, one sector per cluster); as soon as
+         * we find a BPB that will support that size, we recalculate cbTotal using that BPB's cluster size, and
+         * then we re-verify that that BPB will work.  If not, then we keep looking.
+         */
         let cbTotal = this.calcFileSizes(aFileData);
 
         this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "calculated size for %d files: %d bytes (%#x)\n", aFileData.length, cbTotal);
@@ -730,15 +740,15 @@ export default class DiskImage {
         let cbDrive = (cHiddenSectors? (cHiddenSectors + cSectorsPerTrack * cHeads) * cbSector : 0) + cbDisk;
 
         /*
-         * TODO: Consider doing what convertToIMG() does, which is deferring setting this.bufDisk until the
+         * TODO: Consider doing what convertToIMG() did, which was deferring setting dbDisk until the
          * buffer is fully (and successfully) initialized.  Here, however, the build process relies on worker
          * functions that prefer not passing around temporary buffers.  In the meantime, perhaps any catastrophic
-         * failures should set bufDisk back to null?
+         * failures should set dbDisk back to null?
          */
         dbDisk.new(cbDrive);
 
         /*
-         * WARNING: Buffers are NOT zero-initialized, so we need explicitly fill bufDisk with zeros (this seems
+         * WARNING: Buffers are NOT zero-initialized, so we need explicitly fill dbDisk with zeros (this seems
          * to be a reversal in the trend to zero buffers, when security concerns would trump performance concerns).
          */
         dbDisk.fill(0);
@@ -1805,13 +1815,14 @@ export default class DiskImage {
     }
 
     /**
-     * getFileListing(iVolume)
+     * getFileListing(iVolume, indent)
      *
      * @this {DiskImage}
      * @param {number} [iVolume] (-1 to list contents of ALL volumes in image)
+     * @param {number} [indent]
      * @returns {string}
      */
-    getFileListing(iVolume = -1)
+    getFileListing(iVolume = -1, indent = 0)
     {
         let sListing = "";
         if (this.buildTables()) {
@@ -1821,6 +1832,7 @@ export default class DiskImage {
             } else {
                 nVolumes = 1;
             }
+            let sIndent = " ".repeat(indent);
             while (iVolume < this.volTable.length && nVolumes-- > 0) {
                 let vol = this.volTable[iVolume];
                 let curVol = -1;
@@ -1828,7 +1840,7 @@ export default class DiskImage {
                 let cbDir = 0, nFiles = 0;
                 let cbTotal = 0, nTotal = 0;
                 let getTotal = function(nFiles, cbDir) {
-                    return this.device.sprintf(" %8d file(s)   %8d bytes\n", nFiles, cbDir);
+                    return this.device.sprintf("%s %8d file(s)   %8d bytes\n", sIndent, nFiles, cbDir);
                 }.bind(this);
                 let i, sLabel = "", sDrive = "?";
                 for (i = 0; i < this.fileTable.length; i++) {
@@ -1865,10 +1877,10 @@ export default class DiskImage {
                         if (curDir != null) {
                             sListing += getTotal(nFiles, cbDir);
                         } else {
-                            sListing += this.device.sprintf("\nVolume in drive %s %s%s", sDrive, sLabel? "is " : "has no label", sLabel);
+                            sListing += this.device.sprintf("\n%s Volume in drive %s %s%s", sIndent, sDrive, sLabel? "is " : "has no label", sLabel);
                         }
                         curDir = dir;
-                        sListing += this.device.sprintf("\nDirectory of %s:%s\n\n", sDrive, dir);
+                        sListing += this.device.sprintf("\n%s Directory of %s:%s\n\n", sIndent, sDrive, dir);
                         cbDir = nFiles = 0;
                     }
                     let sSize;
@@ -1879,7 +1891,7 @@ export default class DiskImage {
                         cbDir += file.size;
                         cbTotal += file.size;
                     }
-                    sListing += this.device.sprintf("%-8s %-3s%s%s  %#2M-%#02D-%#0.2Y  %#2I:%#02N%#.1A\n", name, ext, (file.attr & (DiskImage.ATTR.READONLY | DiskImage.ATTR.HIDDEN | DiskImage.ATTR.SYSTEM))? "*" : " ", sSize, file.date);
+                    sListing += this.device.sprintf("%s%-8s %-3s%s%s  %#2M-%#02D-%#0.2Y  %#2I:%#02N%#.1A\n", sIndent, name, ext, (file.attr & (DiskImage.ATTR.READONLY | DiskImage.ATTR.HIDDEN | DiskImage.ATTR.SYSTEM))? "*" : " ", sSize, file.date);
                     nTotal++;
                     /*
                     * NOTE: While it seems odd to include all SUBDIR entries in the file count, that's what DOS always did, so we do, too.
@@ -1890,7 +1902,7 @@ export default class DiskImage {
                 }
                 sListing += getTotal(nFiles, cbDir);
                 if (nTotal > nFiles) {
-                    sListing += "\nTotal files listed:\n"
+                    sListing += "\n" + sIndent + "Total files listed:\n";
                     sListing += getTotal(nTotal, cbTotal);
                 }
                 sListing += this.device.sprintf("%28d bytes free\n", vol.clustersFree * vol.clusterSecs * vol.cbSector);
@@ -1905,7 +1917,7 @@ export default class DiskImage {
      *
      * @this {DiskImage}
      * @param {FileInfo} file
-     * @param {boolean} fComplete
+     * @param {boolean} [fComplete]
      * @returns {Object}
      */
     getFileDesc(file, fComplete)
@@ -1929,10 +1941,10 @@ export default class DiskImage {
      *
      * @this {DiskImage}
      * @param {VolInfo} vol
-     * @param {boolean} fComplete
+     * @param {boolean} [fComplete]
      * @returns {Object}
      */
-    getVolDesc(vol)
+    getVolDesc(vol, fComplete)
     {
         let desc = {
             [DiskImage.VOLDESC.MEDIA_ID]:   vol.idMedia,
@@ -2953,7 +2965,7 @@ DiskImage.SECTOR = {
     FILE_OFFSET:'o',                // "extended" JSON disk images only
     /*
      * The following properties occur very infrequently (and usually only in copy-protected or degraded disk images),
-     * hence the longer, more meaningful strings.
+     * hence the longer, more meaningful IDs.
      */
     DATA_CRC:   'dataCRC',
     DATA_ERROR: 'dataError',
