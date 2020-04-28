@@ -381,45 +381,41 @@ function main(argc, argv)
                 aDiskettes.forEach((diskette) => {
                     let sFile = path.join(rootDir, diskette.path);
                     let di = readDisk(sFile);
-                    /*
-                     * Nothing to check if we couldn't read the disk image or we couldn't find any files.
-                     */
-                    if (di && di.getFiles()) {
-                        if (argv['checkall']) {
-                            let sIndexFile = path.join(path.dirname(sFile.replace("/diskettes/", "/software/")), "index.md");
-                            if (fs.existsSync(sIndexFile)) {
-                                let sIndex = readFile(sIndexFile);
-                                let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*") + "\n([\\s\\S]*?)\n(\\S|$)";
-                                let matchDirectory = sIndex.match(new RegExp(sMatch));
-                                if (matchDirectory) {
-                                    di.getFileListing(0, 4);
-                                    sIndex = sIndex.replace(matchDirectory[2], di.getFileListing(0, 4));
-                                    if (writeFile(sIndexFile, sIndex)) {
-                                        printf("\tupdated directory listing for \"%s\"\n", diskette.name);
-                                    }
-                                } else {
-                                    printf("\tno directory listing for \"%s\" (%s)\n", diskette.name, sMatch);
+                    if (!di) return;
+                    if (argv['checkall']) {
+                        let sIndexFile = path.join(path.dirname(sFile.replace("/diskettes/", "/software/")), "index.md");
+                        if (fs.existsSync(sIndexFile)) {
+                            let sIndex = readFile(sIndexFile);
+                            let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*") + "\n([\\s\\S]*?)\n(\\S|$)";
+                            let matchDirectory = sIndex.match(new RegExp(sMatch));
+                            if (matchDirectory) {
+                                di.getFileListing(0, 4);
+                                sIndex = sIndex.replace(matchDirectory[2], di.getFileListing(0, 4));
+                                if (writeFile(sIndexFile, sIndex)) {
+                                    printf("\tupdated directory listing for \"%s\"\n", diskette.name);
                                 }
                             } else {
-                                printf("\tmissing index: %s\n", sIndexFile);
+                                printf("\tno directory listing for \"%s\" (%s)\n", diskette.name, sMatch);
                             }
-                        }
-                        let manifest = di.getFileManifest(getHash, "md5");
-                        if (argv['dumpall'] == "md5") {
-                            manifest.forEach((file) => {
-                                if (file['md5']) {
-                                    printf("%s  %-12s  %s  %s:%s:%s\n", file['md5'], file.name, file.date, diskette.path, file.path);
-                                }
-                            });
-                        }
-                        else if (argv['verbose']) {
-                            printf("manifest for %s: %2j\n", diskette.path, manifest);
                         } else {
-                            printf("manifest for %s contains %d file(s)\n", diskette.path, manifest.length);
+                            printf("\tmissing index: %s\n", sIndexFile);
                         }
-                        cFiles += manifest.length;
-                        cManifests++;
                     }
+                    let manifest = di.getFileManifest(getHash, "md5");
+                    if (argv['dumpall'] == "md5") {
+                        manifest.forEach((file) => {
+                            if (file['md5']) {
+                                printf("%s  %-12s  %s  %s:%s:%s\n", file['md5'], file.name, file.date, diskette.path, file.path);
+                            }
+                        });
+                    }
+                    else if (argv['verbose']) {
+                        printf("manifest for %s: %2j\n", diskette.path, manifest);
+                    } else {
+                        printf("manifest for %s contains %d file(s)\n", diskette.path, manifest.length);
+                    }
+                    cFiles += manifest.length;
+                    cManifests++;
                 });
             }
             cConfigs++;

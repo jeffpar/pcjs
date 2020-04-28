@@ -29,7 +29,7 @@
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/tools/diskdump/modules/diskdump.js",
-        "args": ["--disk","20MB-PARTS.img","--list","--volume=2"],
+        "args": ["--dumpall","--checkall"],
         "cwd": "${workspaceFolder}/tools/diskdump/modules",
         "stopOnEntry": false,
         "console": "internalConsole"
