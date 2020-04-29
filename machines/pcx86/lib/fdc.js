@@ -446,11 +446,12 @@ class FDC extends Component {
                 let hostName = Web.getHostName();
                 let limits = fdc.getDriveLimits();
                 let urls = fdc.aDiskettes.split(',');
-                var cLoaded = 0;
+                var cRequested = 0, cLoaded = 0;
                 fdc.aDiskettes = [];
                 for (let i = 0; i < urls.length; i++) {
                     let url = urls[i];
                     if (hostName == "localhost" || url.indexOf("private") < 0) {
+                        cRequested++;
                         let sProgress = "Loading " + url + "...";
                         Web.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
                             if (sResponse && !nErrorCode) {
@@ -462,7 +463,7 @@ class FDC extends Component {
                             } else {
                                 fdc.println("Unable to open " + url + " (" + nErrorCode + ")");
                             }
-                            if (++cLoaded == urls.length) fdc.addDiskettes();
+                            if (++cLoaded == cRequested) fdc.addDiskettes();
                         }, function(nState) {
                             fdc.println(sProgress, Component.PRINT.PROGRESS);
                         });
