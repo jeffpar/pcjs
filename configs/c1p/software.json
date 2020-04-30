@@ -7,37 +7,37 @@
         "math": {
           "@title": "BASIC MATH",
           "@tape": "MATH.BAS",
-          "@type": "ASCII"
+          "@format": "ASCII"
         },
         "checking": {
           "@title": "CHECKING",
           "@tape": "CHECKING.BAS",
-          "@type": "ASCII"
+          "@format": "ASCII"
         },
         "counter": {
           "@title": "COUNTER",
           "@tape": "COUNTER.BAS",
-          "@type": "ASCII"
+          "@format": "ASCII"
         },
         "poker": {
           "@title": "POKER",
           "@tape": "POKER.BAS",
-          "@type": "ASCII"
+          "@format": "ASCII"
         },
         "presidents": {
           "@title": "PRESIDENTS",
           "@tape": "PRESIDENTS.BAS",
-          "@type": "ASCII"
+          "@format": "ASCII"
         },
         "starwars": {
           "@title": "STAR WARS",
           "@tape": "STARWARS.BAS",
-          "@type": "ASCII"
+          "@format": "ASCII"
         },
         "trigtutor": {
           "@title": "TRIG TUTOR",
           "@tape": "TRIGTUTOR.BAS",
-          "@type": "ASCII"
+          "@format": "ASCII"
         }
       }
     },
@@ -47,25 +47,25 @@
         "osiweb/seawolfe": {
           "@title": "SEAWOLFE",
           "@tape": "SEAWOLFE.BAS",
-          "@type": "ASCII",
+          "@format": "ASCII",
           "@source": "http://www.osiweb.org/programs/basic/"
         },
         "osiweb/spacewar": {
           "@title": "SPACEWAR",
           "@tape": "SPACEWAR.BAS",
-          "@type": "ASCII",
+          "@format": "ASCII",
           "@source": "http://www.osiweb.org/programs/basic/"
         },
         "osiweb/startrek": {
           "@title": "STAR TREK",
           "@tape": "STARTREK.BAS",
-          "@type": "ASCII",
+          "@format": "ASCII",
           "@source": "http://www.osiweb.org/programs/basic/"
         },
         "osiweb/tankfortwo": {
           "@title": "TANK FOR TWO",
           "@tape": "TANKFORTWO.BAS",
-          "@type": "ASCII",
+          "@format": "ASCII",
           "@source": "http://www.osiweb.org/programs/basic/"
         }
       }
@@ -76,32 +76,32 @@
         "checkers": {
           "@title": "CHECKERS",
           "@tape": "CHECKERS.BAS",
-          "@type": "ASCII"
+          "@format": "ASCII"
         },
         "hangwoman": {
           "@title": "HANGWOMAN",
           "@tape": "HANGWOMAN.BAS",
-          "@type": "ASCII"
+          "@format": "ASCII"
         },
         "life": {
           "@title": "LIFE",
           "@tape": "LIFE.BAS",
-          "@type": "ASCII"
+          "@format": "ASCII"
         },
         "othello": {
           "@title": "OTHELLO",
           "@tape": "OTHELLO.BAS",
-          "@type": "ASCII"
+          "@format": "ASCII"
         },
         "soforecast": {
           "@title": "SOFORECAST",
           "@tape": "SOFORECAST.BAS",
-          "@type": "ASCII"
+          "@format": "ASCII"
         },
         "tubelist": {
           "@title": "TUBELIST",
           "@tape": "TUBELIST.BAS",
-          "@type": "ASCII"
+          "@format": "ASCII"
         }
       }
     }
@@ -114,19 +114,19 @@
         "assembler": {
           "@title": "6502 Assembler (8K)",
           "@tape": "ASSEMBLER-8K.json",
-          "@type": "BINARY",
+          "@format": "BINARY",
           "@source": "PCjs"
         },
         "basicext": {
           "@title": "BASIC Extensions",
           "@tape": "BASICEXT.json",
-          "@type": "BINARY",
+          "@format": "BINARY",
           "@source": "PCjs"
         },
         "life": {
           "@title": "LIFE",
           "@tape": "LIFE.json",
-          "@type": "BINARY",
+          "@format": "BINARY",
           "@source": "PCjs"
         }
       }
@@ -137,13 +137,13 @@
         "bcd": {
           "@title": "BCD Tests",
           "@test": "BCD.json",
-          "@type": "BINARY",
+          "@format": "BINARY",
           "@source": "http://www.6502.org/tutorials/decimal_mode.html"
         },
         "vflag": {
           "@title": "Overflow Tests",
           "@test": "VFLAG.json",
-          "@type": "BINARY",
+          "@format": "BINARY",
           "@source": "http://www.6502.org/tutorials/vflag.html"
         }
       }

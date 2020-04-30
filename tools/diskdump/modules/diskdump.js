@@ -20,8 +20,7 @@ import JSONLib    from "../../../machines/modules/jsonlib.js";
 let device = new Device("node");
 let printf = device.printf.bind(device);
 let stdlib = new StdLib();
-let rootDir;
-let nMaxFiles;
+let rootDir, nMaxFiles;
 
 /*
  * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
@@ -33,15 +32,20 @@ let nMaxFiles;
 let asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".ASM", ".LRF", ".MAK", ".TXT", ".XML"];
 
 /**
- * getHash(ab, type)
+ * getHash(data, type)
  *
- * @param {Array.<number>} ab (array of bytes)
+ * @param {Array.<number>|DataBuffer} data
  * @param {string} [type] (eg, "md5")
  * @returns {string}
  */
-function getHash(ab, type = "md5")
+function getHash(data, type = "md5")
 {
-    let db = new DataBuffer(ab);
+    let db;
+    if (data instanceof DataBuffer) {
+        db = data;
+    } else {
+        db = new DataBuffer(data);
+    }
     return crypto.createHash(type).update(db.buffer).digest('hex');
 }
 
@@ -76,24 +80,27 @@ function isTextFile(sName)
 }
 
 /**
- * readDir(sDir, fNormalize, sLabel, nMax)
+ * readDir(sDir, fNormalize, sLabel, kbTarget, nMax)
  *
  * @param {string} sDir (directory name)
- * @param {boolean} [fNormalize] (if true, then known text files will have their line-endings "fixed")
+ * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {string} [sLabel] (if not set with --label, then basename(sDir) will be used instead)
+ * @param {number} [kbTarget] (target disk size, in Kb)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
  * @returns {DiskImage|null}
  */
-function readDir(sDir, fNormalize = false, sLabel, nMax)
+function readDir(sDir, fNormalize = false, sLabel, kbTarget, nMax)
 {
     let di;
-    nMaxFiles = nMax || 256;
     if (!sLabel) sLabel = path.basename(sDir);
     try {
+        nMaxFiles = nMax || 256;
         let aFileData = readDirFiles(sDir, fNormalize, sLabel);
         di = new DiskImage(device);
         let db = new DataBuffer();
-        di.buildDiskFromFiles(db, aFileData);
+        if (!di.buildDiskFromFiles(db, aFileData, kbTarget || 0)) {
+            di = null;
+        }
     } catch(err) {
         printf("error: %s\n", err.message);
         di = null;
@@ -105,7 +112,7 @@ function readDir(sDir, fNormalize = false, sLabel, nMax)
  * readDirFiles(sDir, fNormalize, sLabel)
  *
  * @param {string} sDir (directory name)
- * @param {boolean} [fNormalize] (if true, then known text files will have their line-endings "fixed")
+ * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {boolean} [sLabel] (optional volume label; this should NEVER be set when reading subdirectories)
  * @returns {Array.<FileData>}
  */
@@ -211,10 +218,11 @@ function readDisk(sFile, forceBPB, sectorIDs, sectorErrors, suppData)
         }
         else {
             db = new DataBuffer(fs.readFileSync(sFile));
+            let hash = getHash(db);
             if (diskName.endsWith(".psi")) {
                 di.buildDiskFromPSI(db);
             } else {
-                di.buildDiskFromBuffer(db, forceBPB, sectorIDs, sectorErrors, suppData);
+                di.buildDiskFromBuffer(db, hash, forceBPB, sectorIDs, sectorErrors, suppData);
             }
         }
     } catch(err) {
@@ -278,7 +286,8 @@ function writeDisk(sFile, di, fLegacy = false, indent = 0, fOverwrite = false)
 {
     let diskName = path.basename(sFile);
     try {
-        if (!fs.existsSync(sFile) || fOverwrite) {
+        let fExists = fs.existsSync(sFile);
+        if (!fExists || fOverwrite) {
             let data;
             if (sFile.endsWith(".json")) {
                 data = di.getJSON(fLegacy);
@@ -287,7 +296,9 @@ function writeDisk(sFile, di, fLegacy = false, indent = 0, fOverwrite = false)
                 if (di.getData(db)) data = db.buffer;
             }
             if (data) {
+                if (fExists) fs.unlinkSync(sFile);
                 fs.writeFileSync(sFile, data);
+                fs.chmodSync(sFile, 0o444);
             } else {
                 printf("%s not written, no data\n", diskName);
             }
@@ -345,9 +356,11 @@ function main(argc, argv)
         di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['supp']));
     }
     else if ((input = argv['dir'])) {
-        di = readDir(input, argv['normalize'], argv['label'], +argv['maxfiles']);
+        di = readDir(input, argv['normalize'], argv['label'], +argv['target'], +argv['maxfiles']);
     }
+    if (di === null) return;
     if (di) {
+        di.setArgs(argv.slice(1).join(' '));
         printf("disk size: %d\n", di.getSize());
         if (argv['list']) {
             let iVolume = +argv['volume'];

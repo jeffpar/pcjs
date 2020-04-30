@@ -46,17 +46,17 @@ export default class JSONLib {
                         /*
                          * One advantage of the new JSON library manifest is that it gives us more information about the
                          * available diskettes before loading any of them.  For example, if the drives support only one head,
-                         * we can avoid including any diskette whose '@type' is "PC320K", "PC360K", etc; and if the drives
+                         * we can avoid including any diskette whose '@format' is "PC320K", "PC360K", etc; and if the drives
                          * don't support 80 tracks, we can skip any "PC1200K" and "PC1440K" diskettes.
                          *
                          * Unfortunately, either of those drive criteria must be true for ALL installed drives, due to the way
                          * our UI works, which displays only one list of diskettes for all drives.  But that's reasonable,
                          * since most (if not all) of our machines have matching diskette drives.
                          *
-                         * NOTE: It's best not to check for specific '@type' values, because there were many unusual diskette
+                         * NOTE: It's best not to check for specific '@format' values, because there were many unusual diskette
                          * formats.
                          *
-                         * Standard PC types included:
+                         * Standard PC formats included:
                          *
                          *      PC160K
                          *      PC180K
@@ -66,19 +66,19 @@ export default class JSONLib {
                          *      PC1200K
                          *      PC1440K
                          *
-                         * Non-standard PC types included:
+                         * Non-standard PC formats included:
                          *
                          *      PC1840K (eg, XDF diskettes that shipped with PC DOS 7.0)
                          *      PC1680K (eg, DMF diskettes that shipped with Windows 95)
                          *
-                         * and this list should certainly NOT be considered exhaustive.  Non-PC types would include things like
+                         * and this list should certainly NOT be considered exhaustive.  Non-PC formats would include things like
                          * game disks with unusual track formats, assorted UNIX distribution diskettes, etc; for those disks,
-                         * we haven't come up with a type nomenclature yet, so no '@type' will be specified.  Any disk of unknown
-                         * type should always be included.
+                         * we haven't come up with a format nomenclature yet, so no '@format' will be specified.  Any disk of unknown
+                         * format should always be included.
                          */
-                        let type = item['@type'];
-                        if (type && limits.length) {
-                            let match = type.match(/^PC([0-9]+)K$/);
+                        let format = item['@format'];
+                        if (format && limits.length) {
+                            let match = format.match(/^PC([0-9]+)K$/);
                             if (match) {
                                 let size = +match[1];
                                 if (limits[0] == 1 && size > 180 || limits[1] == 40 && size > 360) {

@@ -1744,7 +1744,7 @@ class HDC extends Component {
          * to know which drive to talk to ("this.drive"), to issue their own readData() and writeData() calls.
          *
          * The XTC didn't need this, because it used doRead(), doWrite(), doFormat() helper functions, which reset
-         * the current drive's "sector" and "errorCode" properties themselves and then used DMA functions that delivered
+         * the current drive's sector and errorCode properties themselves and then used DMA functions that delivered
          * drive data with direct calls to readData() and writeData().
          */
         drive.sector = null;

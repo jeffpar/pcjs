@@ -146,12 +146,12 @@ if (typeof module !== "undefined") {
  */
 
 /**
- * Every Sector object (once loaded, parsed, and "normalized") should have ALL of the following named properties:
+ * Every Sector object (once loaded, parsed, and "normalized") should have ALL of the following properties:
  *
- *      'sector':   sector number
- *      'length':   size of the sector, in bytes
- *      'data':     array of dwords
- *      'pattern':  dword pattern to use for empty or partial sectors (or null if sector still needs to be loaded)
+ *      [ID]:       sector ID
+ *      [LENGTH]:   size of the sector, in bytes
+ *      [DATA]:     array of dwords
+ *      dwPattern:  dword pattern to use for empty or partial sectors (or null if sector still needs to be loaded)
  *
  * initSector() also sets the following properties, to help us quickly identify its location within aDiskData:
  *
@@ -176,21 +176,30 @@ if (typeof module !== "undefined") {
  * threshold.  Error-handling, as usual, is the thorniest problem.
  *
  * @typedef {Object} Sector
- * @property {number} sector
- * @property {number} length
+ * @property {number} c (cylinder #)
+ * @property {number} h (head #)
+ * @property {number} s (sector ID)
+ * @property {number} l (length of sector, in bytes)
+ * @property {Array.<number>} d (array of 32-bit values)
+ * @property {number} f (index into the disk's file table)
+ * @property {number} o (offset of this sector within the file's data stream)
+ * @property {number} iCylinder (deprecated; see c)
+ * @property {number} iHead (deprecated; see h)
+ * @property {number} sector (deprecated; see s)
+ * @property {number} length (deprecated; see l)
+ * @property {Array.<number>} data (deprecated; see d)
+ * @property {number|null} pattern (deprecated; see dwPattern)
+ * @property {FileInfo} file (deprecated; see f)
+ * @property {number} offFile (deprecated; see o)
+ * @property {number} dataCRC
+ * @property {boolean} dataError
  * @property {number} dataMark
  * @property {number} headCRC
  * @property {boolean} headError
- * @property {number} dataCRC
- * @property {boolean} dataError
- * @property {Array.<number>} data
- * @property {number|null} pattern
- * @property {number} iCylinder
- * @property {number} iHead
- * @property {number} iModify
- * @property {number} cModify
- * @property {FileInfo} file
- * @property {number} offFile
+ * @property {number} iModify (for internal use only)
+ * @property {number} cModify (for internal use only)
+ * @property {number|null} dwPattern (for internal use only)
+ * @property {boolean} fDirty (for internal use only)
  */
 
 /**
@@ -212,7 +221,7 @@ class Disk extends Component {
      * disk images (ie, as JSON-encoded streams).
      *
      * This means, for example, that all references to "track[iSector].data" must actually appear as
-     * "track[iSector]['data']".
+     * "track[iSector][Disk.SECTOR.DATA]".
      *
      * @this {Disk}
      * @param {HDC|FDC} controller
@@ -430,7 +439,7 @@ class Disk extends Component {
                         /*
                          * Now that our read() and write() functions can deal with unallocated data
                          * arrays, and can read/write the specified pattern on-the-fly, we no longer need
-                         * to pre-allocate and pre-initialize the 'data' array.
+                         * to pre-allocate and pre-initialize the DATA array.
                          *
                          * For "local" disks, we can assume a 'pattern' of 0, but for "demandrw" and "demandro"
                          * disks, 'pattern' is set to null, as yet another indication that I/O is required to load
@@ -605,7 +614,7 @@ class Disk extends Component {
                     let head = cylinder[iHead] = new Array(this.nSectors);
                     for (let iSector = 0; iSector < head.length; iSector++) {
                         let sector = this.initSector(null, iCylinder, iHead, iSector + 1, this.cbSector, dwPattern);
-                        let adw = sector['data'];
+                        let adw = sector[Disk.SECTOR.DATA];
                         for (let idw = 0; idw < cdw; idw++, ib += 4) {
                             let dw = adw[idw] = dv.getInt32(ib, true);
                             dwChecksum = (dwChecksum + dw) & (0xffffffff|0);
@@ -628,17 +637,17 @@ class Disk extends Component {
     }
 
     /**
-     * doneLoad(sURL, diskData, nErrorCode)
+     * doneLoad(sURL, imageData, nErrorCode)
      *
      * This function was originally called mount().  If the mount is successful, we pass the Disk object to the
      * caller's fnNotify handler; otherwise, we pass null.
      *
      * @this {Disk}
      * @param {string} sURL
-     * @param {string|ArrayBuffer} diskData
+     * @param {string|ArrayBuffer} imageData
      * @param {number} nErrorCode (response from server if anything other than 200)
      */
-    doneLoad(sURL, diskData, nErrorCode)
+    doneLoad(sURL, imageData, nErrorCode)
     {
         let disk = null;
         this.fWriteProtected = false;
@@ -653,7 +662,7 @@ class Disk extends Component {
                 if (BACKTRACK || SYMBOLS) this.buildFileTable();
                 disk = this;
             } else {
-                this.notice('Unable to connect to disk "' + this.sDiskPath + '" (error ' + nErrorCode + ': ' + diskData + ')', fPrintOnly);
+                this.notice('Unable to connect to disk "' + this.sDiskPath + '" (error ' + nErrorCode + ': ' + imageData + ')', fPrintOnly);
             }
         }
         else if (nErrorCode) {
@@ -674,8 +683,8 @@ class Disk extends Component {
              * If we received binary data instead of JSON, we can use the same buildDisk() function that our FileReader
              * code uses.
              */
-            if (typeof diskData != "string") {
-                this.buildDisk(diskData);
+            if (typeof imageData != "string") {
+                this.buildDisk(imageData);
                 return;
             }
 
@@ -693,9 +702,9 @@ class Disk extends Component {
                 if (sBaseName.indexOf("-readonly") > 0) {
                     this.fWriteProtected = true;
                 } else {
-                    let iEOL = diskData.indexOf("\n");
+                    let iEOL = imageData.indexOf("\n");
                     if (iEOL > 0 && iEOL < 1024) {
-                        let sConfig = diskData.substring(0, iEOL);
+                        let sConfig = imageData.substring(0, iEOL);
                         if (sConfig.indexOf("write-protected") > 0) {
                             this.fWriteProtected = true;
                         }
@@ -705,7 +714,7 @@ class Disk extends Component {
                  * The most likely source of any exception will be here, where we're parsing the disk data.
                  */
                 let aDiskData;
-                if (diskData.substr(0, 1) == "<") {        // if the "data" begins with a "<"...
+                if (imageData.substr(0, 1) == "<") {    // if the "data" begins with a "<"...
                     /*
                      * Early server configs reported an error (via the nErrorCode parameter) if a disk URL was invalid,
                      * but more recent server configs now display a somewhat friendlier HTML error page.  The downside,
@@ -723,7 +732,7 @@ class Disk extends Component {
                      * IE9 with an "Out of memory" exception.  One work-around would be to chop the data into chunks
                      * (perhaps one track per chunk, using regular expressions) and then manually re-assemble it.
                      *
-                     * However, it turns out that using JSON.parse(diskData) instead of eval("(" + diskData + ")")
+                     * However, it turns out that using JSON.parse(imageData) instead of eval("(" + imageData + ")")
                      * is a much easier fix. The only drawback is that we must first quote any unquoted property names
                      * and remove any comments, because while eval() was cool with them, JSON.parse() is more particular;
                      * the following RegExp replacements take care of those requirements.
@@ -736,10 +745,13 @@ class Disk extends Component {
                      *
                      *      ["unrecognized disk path: test.img"]
                      */
-                    if (diskData.indexOf("0x") < 0 && diskData.substr(0, 2) != "[\"") {
-                        aDiskData = JSON.parse(diskData.replace(/([a-z]+):/gm, "\"$1\":").replace(/\/\/[^\n]*/gm, ""));
+                    if (imageData[0] == '{') {
+                        let image = JSON.parse(imageData);
+                        aDiskData = image['diskData'];
+                    } else if (imageData.indexOf("0x") < 0 && imageData.substr(0, 2) != "[\"") {
+                        aDiskData = JSON.parse(imageData.replace(/([a-z]+):/gm, "\"$1\":").replace(/\/\/[^\n]*/gm, ""));
                     } else {
-                        aDiskData = eval("(" + diskData + ")");
+                        aDiskData = eval("(" + imageData + ")");
                     }
                 }
 
@@ -757,17 +769,15 @@ class Disk extends Component {
                  * WARNING: All accesses to sector object properties must be via their string names, not their
                  * "dot" names, otherwise code will break after it's been processed by the Closure Compiler.
                  *
-                 * Sector object properties include:
+                 * Sector object properties (from Disk.SECTOR) include:
                  *
-                 *      'sector'    the sector number (1-based, not required to be sequential)
-                 *      'length'    the byte-length (ie, formatted length) of the sector
-                 *      'data'      the dword-array containing the sector data
-                 *      'pattern'   if the dword-array length is less than 'length'/4, this value must be used
-                 *                  to pad out the sector; if no 'pattern' is specified, it's assumed to be zero
+                 *      [ID]        the sector ID (1-based, not required to be sequential)
+                 *      [LENGTH]    the byte-length (ie, formatted length) of the sector
+                 *      [DATA]      the dword-array containing the sector data
                  *
                  * We still support the older JSON encoding, where sector data was encoded as an array of 'bytes'
-                 * rather than a dword 'data' array.  However, our support is strictly limited to an on-the-fly
-                 * conversion to a forward-compatible 'data' array.
+                 * rather than a dword DATA array.  However, our support is strictly limited to an on-the-fly
+                 * conversion to a forward-compatible DATA array.
                  */
                 else {
                     if (DEBUG && this.messageEnabled(Messages.DISK + Messages.DATA)) {
@@ -781,15 +791,16 @@ class Disk extends Component {
                     /*
                      * Before the image is usable, we must "normalize" all the sectors.  In the past, this meant
                      * "inflating" them all.  However, that's no longer strictly necessary.  Mainly, it just means
-                     * setting 'length', 'data', and 'pattern' properties, so that all the sectors are well-defined.
+                     * setting LENGTH and DATA properties, so that all the sectors are well-defined.
+                     *
                      * This includes detecting sector data in older formats (eg, the old array of 'bytes' instead
-                     * of the new 'data' array of dwords) and converting them on-the-fly to the current format.
+                     * of the new DATA array of dwords) and converting them on-the-fly to the current format.
                      */
                     this.nCylinders = aDiskData.length;
                     this.nHeads = aDiskData[0].length;
                     this.nSectors = aDiskData[0][0].length;
                     let sector = aDiskData[0][0][0];
-                    this.cbSector = (sector && sector['length']) || 512;
+                    this.cbSector = (sector && (sector[Disk.SECTOR.LENGTH] || sector['length'])) || 512;
 
                     let dwChecksum = 0;
                     for (let iCylinder = 0; iCylinder < this.nCylinders; iCylinder++) {
@@ -797,48 +808,74 @@ class Disk extends Component {
                             for (let iSector = 0; iSector < this.nSectors; iSector++) {
                                 sector = aDiskData[iCylinder][iHead][iSector];
                                 if (!sector) continue;          // non-standard (eg, XDF) disk images may have "unused" (null) sectors
-                                let length = sector['length'];
-                                if (length === undefined) {     // provide backward-compatibility with older JSON...
-                                    length = sector['length'] = 512;
+                                /*
+                                 * "Upgrade" all sector object properties.
+                                 */
+                                let idSector = sector[Disk.SECTOR.ID];
+                                if (idSector == undefined) {
+                                    idSector = sector['sector'];
+                                    sector[Disk.SECTOR.ID] = idSector;
+                                    delete sector['sector'];
+                                }
+                                let length = sector[Disk.SECTOR.LENGTH];
+                                if (length == undefined) {
+                                    length = sector['length'] || 512;
+                                    sector[Disk.SECTOR.LENGTH] = length;
+                                    delete sector['length'];
                                 }
                                 let dwPattern = sector['pattern'];
-                                if (dwPattern === undefined) {
-                                    dwPattern = sector['pattern'] = 0;
+                                if (dwPattern == undefined) {
+                                    dwPattern = 0;
+                                } else {
+                                    delete sector['pattern'];
                                 }
-                                let adw = sector['data'];
-                                if (adw === undefined) {
-                                    let ab = sector['bytes'];
-                                    if (ab === undefined || !ab.length) {
-                                        /*
-                                         * If there is neither a 'bytes' nor 'data' array, then our job is simple:
-                                         * create an empty 'data' array; it will be filled in with the dword pattern
-                                         * as needed later.
-                                         *
-                                         * The only wrinkle is if there *is* a 'bytes' array but it's empty, in which
-                                         * case we must assume that the pattern was a byte pattern, so convert it to a
-                                         * dword pattern.
-                                         */
-                                        sector['data'] = adw = [];
-                                        if (ab) {
-                                            this.assert((dwPattern & 0xff) == dwPattern);
-                                            sector['pattern'] = (dwPattern | (dwPattern << 8) | (dwPattern << 16) | (dwPattern << 24));
-                                        }
+                                let adw = sector[Disk.SECTOR.DATA];
+                                if (adw == undefined) {
+                                    adw = sector['data'];
+                                    if (adw != undefined) {
+                                        sector[Disk.SECTOR.DATA] = adw;
+                                        delete sector['data'];
                                     }
                                     else {
-                                        /*
-                                         * To keep the conversion code simple, we'll do any necessary pattern-filling first,
-                                         * to fully "inflate" the sector, eliminating the possibility of partial dwords and
-                                         * saving any code downstream from dealing with byte-size patterns.
-                                         */
-                                        this.assert((dwPattern & 0xff) == dwPattern);
-                                        for (let ib = ab.length; ib < length; ib++) {
-                                            ab[ib] = dwPattern;         // the pattern for byte-arrays was only a byte
+                                        let ab = sector['bytes'];
+                                        if (ab === undefined || !ab.length) {
+                                            /*
+                                             * If there is neither a 'bytes' nor 'data' array, then our job is simple:
+                                             * create an empty 'data' array; it will be filled in with the dword pattern
+                                             * as needed later.
+                                             *
+                                             * The only wrinkle is if there *is* a 'bytes' array but it's empty, in which
+                                             * case we must assume that the pattern was a byte pattern, so convert it to a
+                                             * dword pattern.
+                                             */
+                                            sector[Disk.SECTOR.DATA] = adw = [];
+                                            if (ab) {
+                                                this.assert((dwPattern & 0xff) == dwPattern);
+                                                dwPattern = (dwPattern | (dwPattern << 8) | (dwPattern << 16) | (dwPattern << 24));
+                                            }
                                         }
-                                        this.fill(sector, ab, 0);
+                                        else {
+                                            /*
+                                             * To keep the conversion code simple, we'll do any necessary pattern-filling first,
+                                             * to fully "inflate" the sector, eliminating the possibility of partial dwords and
+                                             * saving any code downstream from dealing with byte-size patterns.
+                                             */
+                                            this.assert((dwPattern & 0xff) == dwPattern);
+                                            for (let ib = ab.length; ib < length; ib++) {
+                                                ab[ib] = dwPattern;         // the pattern for byte-arrays was only a byte
+                                            }
+                                            this.fill(sector, ab, 0);
+                                        }
+                                        delete sector['bytes'];
                                     }
-                                    delete sector['bytes'];
                                 }
-                                this.initSector(sector, iCylinder, iHead);
+                                else {
+                                    if (adw.length < (length >> 2)) {
+                                        dwPattern = adw[adw.length - 1];
+                                    }
+                                }
+                                this.initSector(sector, iCylinder, iHead, idSector, this.cbSector, dwPattern);
+
                                 /*
                                  * For the disk as a whole, we maintain a checksum of the original unmodified data:
                                  *
@@ -860,11 +897,11 @@ class Disk extends Component {
                 }
             } catch (e) {
                 Component.error("Disk image error (" + sURL + "): " + e.message);
-                diskData = null;
+                imageData = null;
             }
 
-            if (diskData) {
-                Component.addMachineResource(this.controller.idMachine, sURL, diskData);
+            if (imageData) {
+                Component.addMachineResource(this.controller.idMachine, sURL, imageData);
             }
         }
 
@@ -913,8 +950,8 @@ class Disk extends Component {
                         for (iSector = 0; iSector < aDiskData[iCylinder][iHead].length; iSector++) {
                             let sector = aDiskData[iCylinder][iHead][iSector];
                             if (sector) {
-                                delete sector['file'];
-                                delete sector.offFile;
+                                delete sector[Disk.SECTOR.FILE_INFO];
+                                delete sector[Disk.SECTOR.FILE_OFFSET];
                             }
                         }
                     }
@@ -1370,7 +1407,7 @@ class Disk extends Component {
         let nShift = 0;
         this.assert(len > 0 && len <= 4);
         while (len--) {
-            this.assert(off < sector['length']);
+            this.assert(off < sector[Disk.SECTOR.LENGTH]);
             let b = this.read(sector, off++);
             this.assert(b >= 0);
             if (b < 0) break;
@@ -1422,17 +1459,17 @@ class Disk extends Component {
         let iSector = (nSectorsRemaining % this.nSectors);
         let cylinder, head, sector;
         if ((cylinder = this.aDiskData[iCylinder]) && (head = cylinder[iHead]) && (sector = head[iSector])) {
-            if (sector['sector'] != iSector + 1) {
-                if (DEBUG) this.printf("warning: %d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, iSector + 1, sector['sector'], file.sPath);
+            if (sector[Disk.SECTOR.ID] != iSector + 1) {
+                if (DEBUG) this.printf("warning: %d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, iSector + 1, sector[Disk.SECTOR.ID], file.sPath);
             }
-            if (sector['file']) {
+            if (sector[Disk.SECTOR.ID]) {
                 if (DEBUG && this.messageEnabled()) {
-                    this.printMessage('"' + sector['file'].sPath + '" cross-linked at offset ' + sector['file'].offFile + ' with "' + file.sPath + '" at offset ' + off);
+                    this.printMessage('"' + sector[Disk.SECTOR.FILE_INFO] + '" cross-linked at offset ' + sector[Disk.SECTOR.FILE_OFFSET] + ' with "' + file.sPath + '" at offset ' + off);
                 }
                 return false;
             }
-            sector['file'] = file;
-            sector.offFile = off;
+            sector[Disk.SECTOR.FILE_INFO] = file;
+            sector[Disk.SECTOR.FILE_OFFSET] = off;
             return true;
         }
         if (DEBUG && this.messageEnabled()) this.printMessage("unable to map PBA " + pba + " to CHS");
@@ -1440,18 +1477,14 @@ class Disk extends Component {
     }
 
     /**
-     * initSector(sector, iCylinder, iHead, sectorID, cbSector, dwPattern)
+     * initSector(sector, iCylinder, iHead, idSector, cbSector, dwPattern)
      *
-     * Ensures every sector has ALL the properties of a proper Sector object; ie:
-     *
-     *      'sector':   sector ID
-     *      'length':   size of the sector, in bytes
-     *      'data':     array of dwords
-     *      'pattern':  dword pattern to use for empty or partial sectors (null for unread remote sectors)
+     * Ensures every sector has ALL the properties of a proper Sector object.
      *
      * In addition, we will maintain the following information on a per-sector basis,
      * as sectors are modified:
      *
+     *      dwPattern:  pattern used to fill partial sectors
      *      iModify:    index of first modified dword in sector
      *      cModify:    number of modified dwords in sector
      *      fDirty:     true if sector is dirty, false if clean (or cleaning in progress)
@@ -1460,18 +1493,28 @@ class Disk extends Component {
      * @param {Sector|null} sector
      * @param {number} iCylinder
      * @param {number} iHead
-     * @param {number} [sectorID]
-     * @param {number} [cbSector]
-     * @param {number|null} [dwPattern]
+     * @param {number} idSector
+     * @param {number} cbSector
+     * @param {number|null} dwPattern
      * @return {Sector}
      */
-    initSector(sector, iCylinder, iHead, sectorID, cbSector, dwPattern)
+    initSector(sector, iCylinder, iHead, idSector, cbSector, dwPattern)
     {
         if (!sector) {
-            sector = /** @type {Sector} */ ({'sector': sectorID, 'length': cbSector, 'data': [], 'pattern': dwPattern});
+            sector = /** @type {Sector} */ ({
+                [Disk.SECTOR.CYLINDER]: iCylinder,
+                [Disk.SECTOR.HEAD]: iHead,
+                [Disk.SECTOR.ID]: idSector,
+                [Disk.SECTOR.LENGTH]: cbSector,
+                [Disk.SECTOR.DATA]: []
+            });
+        } else {
+            sector[Disk.SECTOR.CYLINDER] = iCylinder;
+            sector[Disk.SECTOR.HEAD] = iHead;
+            this.assert(sector[Disk.SECTOR.ID] == idSector);
+            this.assert(sector[Disk.SECTOR.LENGTH] == cbSector);
         }
-        sector.iCylinder = iCylinder;
-        sector.iHead = iHead;
+        sector.dwPattern = dwPattern;
         sector.iModify = sector.cModify = 0;
         sector.fDirty = false;
         return sector;
@@ -1572,7 +1615,7 @@ class Disk extends Component {
                     break;
                 }
                 this.fill(sector, abData, offData);
-                offData += sector['length'];
+                offData += sector[Disk.SECTOR.LENGTH];
                 /*
                  * We happen to know that when seek() calls readRemoteSectors(), it limits the number of sectors
                  * to the current track, so the only variable we need to advance is iSector.
@@ -1663,7 +1706,7 @@ class Disk extends Component {
                     }
                 } else {
                     if (DEBUG && this.messageEnabled()) {
-                        this.printMessage("doneWriteRemoteSectors(CHS=" + iCylinder + ':' + iHead + ':' + sector['sector'] + ") returned error " + nErrorCode);
+                        this.printMessage("doneWriteRemoteSectors(CHS=" + iCylinder + ':' + iHead + ':' + sector[Disk.SECTOR.ID] + ") returned error " + nErrorCode);
                     }
                     this.queueDirtySector(sector, false);
                 }
@@ -1723,7 +1766,7 @@ class Disk extends Component {
         this.aDirtyTimestamps.push(Usr.getTime());
 
         if (DEBUG && this.messageEnabled()) {
-            this.printMessage("queueDirtySector(CHS=" + sector.iCylinder + ':' + sector.iHead + ':' + sector['sector'] + "): " + this.aDirtySectors.length + " dirty");
+            this.printMessage("queueDirtySector(CHS=" + sector.iCylinder + ':' + sector.iHead + ':' + sector[Disk.SECTOR.ID] + "): " + this.aDirtySectors.length + " dirty");
         }
 
         return fAsync && this.updateWriteTimer();
@@ -1787,16 +1830,16 @@ class Disk extends Component {
         if (sector) {
             let iCylinder = sector.iCylinder;
             let iHead = sector.iHead;
-            let iSector = sector['sector'];
+            let iSector = sector[Disk.SECTOR.ID];
             let nSectors = 0;
             let abSectors = [];
             for (let i = iSector - 1; i < this.aDiskData[iCylinder][iHead].length; i++) {
                 let sectorNext = this.aDiskData[iCylinder][iHead][i];
                 if (!sectorNext.fDirty) break;
                 let j = this.aDirtySectors.indexOf(sectorNext);
-                this.assert(j >= 0, "findDirtySectors(CHS=" + iCylinder + ':' + iHead + ':' + sectorNext['sector'] + ") missing from aDirtySectors");
+                this.assert(j >= 0, "findDirtySectors(CHS=" + iCylinder + ':' + iHead + ':' + sectorNext[Disk.SECTOR.ID] + ") missing from aDirtySectors");
                 if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("findDirtySectors(CHS=" + iCylinder + ':' + iHead + ':' + sectorNext['sector'] + ")");
+                    this.printMessage("findDirtySectors(CHS=" + iCylinder + ':' + iHead + ':' + sectorNext[Disk.SECTOR.ID] + ")");
                 }
                 this.aDirtySectors.splice(j, 1);
                 this.aDirtyTimestamps.splice(j, 1);
@@ -1804,7 +1847,7 @@ class Disk extends Component {
                 sectorNext.fDirty = false;
                 nSectors++;
             }
-            this.assert(!!abSectors.length, "no data for dirty sector (CHS=" + iCylinder + ':' + iHead + ':' + sector['sector'] + ")");
+            this.assert(!!abSectors.length, "no data for dirty sector (CHS=" + iCylinder + ':' + iHead + ':' + sector[Disk.SECTOR.ID] + ")");
             let response = this.writeRemoteSectors(iCylinder, iHead, iSector, nSectors, abSectors, fAsync);
             return fAsync || response;
         }
@@ -1822,7 +1865,7 @@ class Disk extends Component {
         if (!this.aDiskData.length) {
             return [0, 0, 0, 0];
         }
-        return [this.aDiskData.length, this.aDiskData[0].length, this.aDiskData[0][0].length, this.aDiskData[0][0][0]['length']];
+        return [this.aDiskData.length, this.aDiskData[0].length, this.aDiskData[0][0].length, this.aDiskData[0][0][0][Disk.SECTOR.LENGTH]];
     }
 
     /**
@@ -1879,7 +1922,7 @@ class Disk extends Component {
             }
             if (track) {
                 for (i = 0; i < track.length; i++) {
-                    if (track[i] && track[i]['sector'] == iSector) {
+                    if (track[i] && track[i][Disk.SECTOR.ID] == iSector) {
                         sector = track[i];
                         /*
                          * When confronted with a series of sectors with the same sector ID (as found, for example, on
@@ -1893,7 +1936,7 @@ class Disk extends Component {
                                 if (++j >= track.length) j = 0;
                                 sectorNext = track[j];
                                 if (sectorNext == sector) break;
-                                if (sectorNext['sector'] == iSector) {
+                                if (sectorNext[Disk.SECTOR.ID] == iSector) {
                                     sector = sectorNext;
                                     i = j;
                                     break;
@@ -1904,13 +1947,13 @@ class Disk extends Component {
                          * If the sector's pattern is null, then this sector's true contents have not yet
                          * been fetched from the server.
                          */
-                        if (sector['pattern'] === null) {
+                        if (sector.dwPattern === null) {
                             if (fWrite) {
                                 /*
                                  * Optimization: if the caller has explicitly told us that they're about to WRITE to the
                                  * sector, then we shouldn't need to read it from the server; assume a zero pattern and return.
                                  */
-                                sector['pattern'] = 0;
+                                sector.dwPattern = 0;
                             } else {
                                 let nSectors = 1;
                                 /*
@@ -1918,7 +1961,7 @@ class Disk extends Component {
                                  * on the same track that may also be required.
                                  */
                                 while (++i < track.length) {
-                                    if (track[i]['pattern'] === null) nSectors++;
+                                    if (track[i].dwPattern === null) nSectors++;
                                 }
                                 this.readRemoteSectors(iCylinder, iHead, iSector, nSectors, done != null, function onReadRemoteComplete(err, fAsync) {
                                     if (err) sector = null;
@@ -1960,16 +2003,16 @@ class Disk extends Component {
      */
     fill(sector, ab, off)
     {
-        let cdw = sector['length'] >> 2;
+        let cdw = sector[Disk.SECTOR.LENGTH] >> 2;
         let adw = new Array(cdw);
         for (let idw = 0; idw < cdw; idw++) {
             adw[idw] = ab[off] | (ab[off + 1] << 8) | (ab[off + 2] << 16) | (ab[off + 3] << 24);
             off += 4;
         }
-        sector['data'] = adw;
+        sector[Disk.SECTOR.DATA] = adw;
         /*
-         * TODO: Consider taking this opportunity to shrink 'data' down by the number of dwords at the end of the buffer that
-         * contain the same pattern, and setting 'pattern' accordingly.
+         * TODO: Consider taking this opportunity to shrink DATA down by the number of dwords at the end of the buffer that
+         * contain the same pattern, and setting dwPattern accordingly.
          */
     }
 
@@ -1982,12 +2025,12 @@ class Disk extends Component {
      */
     toBytes(sector)
     {
-        let cb = sector['length'];
+        let cb = sector[Disk.SECTOR.LENGTH];
         let ab = new Array(cb);
         let ib = 0;
         let cdw = cb >> 2;
-        let adw = sector['data'];
-        let dwPattern = sector['pattern'];
+        let adw = sector[Disk.SECTOR.DATA];
+        let dwPattern = sector.dwPattern;
         for (let idw = 0; idw < cdw; idw++) {
             let dw = (idw < adw.length? adw[idw] : dwPattern);
             ab[ib++] = dw & 0xff;
@@ -2012,12 +2055,12 @@ class Disk extends Component {
         let b = -1;
         if (sector) {
             if (DEBUG && !iByte && !fCompare && this.messageEnabled()) {
-                this.printMessage('read("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector['sector'] + ')');
+                this.printMessage('read("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector[Disk.SECTOR.ID] + ')');
             }
-            if (iByte < sector['length']) {
-                let adw = sector['data'];
+            if (iByte < sector[Disk.SECTOR.LENGTH]) {
+                let adw = sector[Disk.SECTOR.DATA];
                 let idw = iByte >> 2;
-                let dw = (idw < adw.length ? adw[idw] : sector['pattern']);
+                let dw = (idw < adw.length ? adw[idw] : sector.dwPattern);
                 b = ((dw >> ((iByte & 0x3) << 3)) & 0xff);
             }
         }
@@ -2039,13 +2082,13 @@ class Disk extends Component {
             return false;
 
         if (DEBUG && !iByte && this.messageEnabled()) {
-            this.printMessage('write("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector['sector'] + ')');
+            this.printMessage('write("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector[Disk.SECTOR.ID] + ')');
         }
 
-        if (iByte < sector['length']) {
+        if (iByte < sector[Disk.SECTOR.LENGTH]) {
             if (b != this.read(sector, iByte, true)) {
-                let adw = sector['data'];
-                let dwPattern = sector['pattern'];
+                let adw = sector[Disk.SECTOR.DATA];
+                let dwPattern = sector.dwPattern;
                 let idw = iByte >> 2;
                 let nShift = (iByte & 0x3) << 3;
 
@@ -2085,7 +2128,7 @@ class Disk extends Component {
          */
         let s = "", pba = 0, sector;
         while ((sector = this.getSector(pba++))) {
-            for (let off = 0, len = sector['length']; off < len; off++) {
+            for (let off = 0, len = sector[Disk.SECTOR.LENGTH]; off < len; off++) {
                 s += String.fromCharCode(this.getSectorData(sector, off, 1));
             }
         }
@@ -2101,7 +2144,7 @@ class Disk extends Component {
     encodeAsBinary() {
         let s = [], pba = 0, sector;
         while ((sector = this.getSector(pba++))) {
-            for (let off = 0, len = sector['length']; off < len; off++) {
+            for (let off = 0, len = sector[Disk.SECTOR.LENGTH]; off < len; off++) {
                 s.push(this.getSectorData(sector, off, 1));
             }
         }
@@ -2139,7 +2182,7 @@ class Disk extends Component {
                             let mods = [], n = 0;
                             let iModify = sector.iModify, iModifyLimit = sector.iModify + sector.cModify;
                             while (iModify < iModifyLimit) {
-                                mods[n++] = sector['data'][iModify++];
+                                mods[n++] = sector[Disk.SECTOR.DATA][iModify++];
                             }
                             deltas[i++] = [iCylinder, iHead, iSector, sector.iModify, mods];
                         }
@@ -2266,15 +2309,15 @@ class Disk extends Component {
                  * the sector prior to applying modifications.  So let's just make sure that the sector is "inflated"
                  * up to iModify.
                  */
-                let idw = sector['data'].length;
+                let idw = sector[Disk.SECTOR.DATA].length;
                 while (idw < iModify) {
-                    sector['data'][idw++] = sector['pattern'];
+                    sector[Disk.SECTOR.DATA][idw++] = sector.dwPattern;
                 }
                 let n = 0;
                 sector.iModify = iModify;
                 sector.cModify = mods.length;
                 while (iModify < iModifyLimit) {
-                    sector['data'][iModify++] = mods[n++];
+                    sector[Disk.SECTOR.DATA][iModify++] = mods[n++];
                 }
                 nChanges++;
             }
@@ -2303,8 +2346,8 @@ class Disk extends Component {
      * convertToJSON(fFormatted)
      *
      * We perform some RegExp massaging on the JSON data to eliminate unnecessary properties
-     * (eg, 'length' values of 512, 'pattern' values of 0, and empty 'data' arrays, since those
-     * are defaults).
+     * (eg, LENGTH values of 512, dwPattern values of 0, and empty DATA arrays, since those are
+     * defaults).
      *
      * In addition, we first check every sector to see if it can be "deflated".  Sectors that were
      * initially "deflated" should remain that way unless/until they were modified, so technically,
@@ -2335,7 +2378,7 @@ class Disk extends Component {
         });
 
         /*
-         * Eliminate unnecessary default properties (eg, 'length' values of 512, 'pattern' values of 0, etc).
+         * Eliminate old default properties (eg, 'length' values of 512, 'pattern' values of 0, etc).
          */
         s = s.replace(/,"length":512/g, "").replace(/,"pattern":0/g, "").replace(/,"data":\[]/g, "");
 
@@ -2346,14 +2389,14 @@ class Disk extends Component {
          * easily be stripped out, by virtue of their being the only quoted properties left.  We then "requote"
          * all the property names that remain.
          */
-        s = s.replace(/"(sector|length|data|pattern)":/g, "$1:");
+        s = s.replace(/"(c|h|s|l|d|sector|length|data|pattern)":/g, "$1:");
 
         /*
          * The next line will remove any other numeric or boolean properties that were added at runtime, although
          * they may have completely different ("minified") names if the code has been compiled.
          */
         s = s.replace(/,"[^"]*":([0-9]+|true|false)/g, "");
-        s = s.replace(/(sector|length|data|pattern):/g, "\"$1\":");
+        s = s.replace(/(c|h|s|l|d|sector|length|data|pattern):/g, "\"$1\":");
 
         /*
          * Last but not least, insert line breaks after every object definition, to improve human readability
@@ -2373,9 +2416,9 @@ class Disk extends Component {
      */
     deflateSector(sector)
     {
-        let adw = sector['data'];
+        let adw = sector[Disk.SECTOR.DATA];
         let cdw = adw.length;
-        if ((cdw << 2) == sector['length']) {
+        if ((cdw << 2) == sector[Disk.SECTOR.LENGTH]) {
             let idw = cdw - 1;
             let dwPattern = adw[idw], cDupes = 0;
             while (idw--) {
@@ -2384,7 +2427,7 @@ class Disk extends Component {
             }
             if (cDupes++) {
                 adw.length = cdw - cDupes;
-                sector['pattern'] = dwPattern;
+                sector.dwPattern = dwPattern;
             }
         }
     }
@@ -2404,8 +2447,8 @@ class Disk extends Component {
         if (DEBUG && sector) {
             if (pba != null) sDump += "sector " + pba + (sDesc? (" for " + sDesc) : "") + ':';
             let sBytes = "", sChars = "";
-            let cbSector = sector['length'];
-            let cdwData = sector['data'].length;
+            let cbSector = sector[Disk.SECTOR.LENGTH];
+            let cdwData = sector[Disk.SECTOR.DATA].length;
             let dw = 0;
             for (let i = 0; i < cbSector; i++) {
                 if ((i % 16) === 0) {
@@ -2415,7 +2458,7 @@ class Disk extends Component {
                 }
                 if ((i % 4) === 0) {
                     let idw = i >> 2;
-                    dw = (idw < cdwData? sector['data'][idw] : sector['pattern']);
+                    dw = (idw < cdwData? sector[Disk.SECTOR.DATA][idw] : sector.dwPattern);
                 }
                 let b = dw & 0xff;
                 dw >>>= 8;
@@ -2427,6 +2470,29 @@ class Disk extends Component {
         return sDump;
     }
 }
+
+/*
+ * Sector object "public" properties.
+ */
+Disk.SECTOR = {
+    CYLINDER:   'c',                // cylinder number (0-based) [formerly iCylinder]
+    HEAD:       'h',                // head number (0-based) [formerly iHead]
+    ID:         's',                // sector ID (generally 1-based, except for unusual/copy-protected disks) [formerly 'sector']
+    LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks) [formerly 'length']
+    DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
+    FILE_INFO:  'f',                // "extended" JSON disk images only [formerly file]
+    FILE_OFFSET:'o',                // "extended" JSON disk images only [formerly offFile]
+                                    // [no longer used: 'pattern']
+    /*
+     * The following properties occur very infrequently (and usually only in copy-protected or degraded disk images),
+     * hence the longer, more meaningful IDs.
+     */
+    DATA_CRC:   'dataCRC',
+    DATA_ERROR: 'dataError',
+    DATA_MARK:  'dataMark',
+    HEAD_CRC:   'headCRC',
+    HEAD_ERROR: 'headError'
+};
 
 /**
  * The default number of milliseconds to wait before writing a dirty sector back to a remote disk image
@@ -2515,7 +2581,7 @@ class FileInfo {
             /*
              * If the read is wholly contained within a sector, read it with one call.
              */
-            if (offSector + length <= sector['length']) {
+            if (offSector + length <= sector[Disk.SECTOR.LENGTH]) {
                 return this.disk.getSectorData(sector, offSector, length);
             }
             /*

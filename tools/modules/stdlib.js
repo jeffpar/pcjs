@@ -23,14 +23,14 @@ export default class StdLib {
     constructor()
     {
         this.argc = 0;
-        this.argv = {};
+        this.argv = [];
         this.stdio = new StdIO();
-        this.argv[this.argc++] = process.argv[1];
+        this.argv.push(process.argv[1]);
         let i = 2;
         while (i < process.argv.length) {
             let j, sSep;
             let sArg = process.argv[i++];
-            this.argv[this.argc++] = sArg;
+            this.argv.push(sArg);
             if (!sArg.indexOf(sSep = "--") || !sArg.indexOf(sSep = "—")) {
                 sArg = sArg.substr(sSep.length);
                 let sValue = true;
@@ -41,7 +41,7 @@ export default class StdLib {
                     sValue = (sValue == "true") ? true : ((sValue == "false") ? false : sValue);
                 }
                 else if (i < process.argv.length && process.argv[i][0] != '-') {
-                    this.argv[this.argc++] = sValue = process.argv[i++];
+                    this.argv.push(sValue = process.argv[i++]);
                 }
                 if (this.argv[sArg] === undefined) {
                     this.argv[sArg] = sValue;
@@ -62,6 +62,7 @@ export default class StdLib {
                 }
             }
         }
+        this.argc = this.argv.length;
     }
 
     /**

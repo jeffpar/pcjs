@@ -30,12 +30,12 @@ const COMPILED = false;
 const DEBUG = true;
 
 /**
- * FACTORY is "pcjsMachine" by default; overridden with the machine's "factory" string in machines.json
+ * FACTORY is "PCjsMachine" by default; overridden with the machine's "factory" string in machines.json
  * to ensure unique factories.
  *
  * @define {string}
  */
-const FACTORY = "pcjsMachine";
+const FACTORY = "PCjsMachine";
 
 /**
  * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
@@ -54,16 +54,24 @@ const MAXDEBUG = false;
 const VERSION = "2.00";
 
 /**
+ * REPOSITORY is the current PCjs repository.
+ *
+ * @define {string}
+ */
+const REPOSITORY = "pcjs.org";
+
+/**
  * @class {Defs}
  */
 class Defs {}
 
-Defs.COMMAND  = COMMAND;
-Defs.COMPILED = COMPILED;
-Defs.DEBUG    = DEBUG;
-Defs.FACTORY  = FACTORY;
-Defs.MAXDEBUG = MAXDEBUG;
-Defs.VERSION  = VERSION;
+Defs.COMMAND    = COMMAND;
+Defs.COMPILED   = COMPILED;
+Defs.DEBUG      = DEBUG;
+Defs.FACTORY    = FACTORY;
+Defs.MAXDEBUG   = MAXDEBUG;
+Defs.REPOSITORY = REPOSITORY;
+Defs.VERSION    = VERSION;
 
 /*
  * The following globals CANNOT be overridden.
