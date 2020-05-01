@@ -90,7 +90,8 @@
                 "@title": "IBM Multiplan 1.00 (Program)",
                 "@diskette": "MULTIPLAN-IBM100-PROGRAM.json",
                 "@photo": ".jpg",
-                "@format": "PC160K"
+                "@format": "PC160K",
+                "@options": "--sectorID=11:0:8:61"
               },
               {
                 "@title": "IBM Multiplan 1.00 (Tutorial)",
@@ -113,22 +114,22 @@
             "@media": [
               {
                 "@title": "Lotus 1-2-3 1A (1-System)",
-                "@diskette": "123-DISK1-SYSTEM-PATCHED.json",
+                "@diskette": "123-1A-DISK1-SYSTEM-PATCHED.json",
                 "@format": "PC320K"
               },
               {
                 "@title": "Lotus 1-2-3 1A (2-Utility)",
-                "@diskette": "123-DISK2-UTILITY.json",
+                "@diskette": "123-1A-DISK2-UTILITY.json",
                 "@format": "PC320K"
               },
               {
                 "@title": "Lotus 1-2-3 1A (3-Graph)",
-                "@diskette": "123-DISK3-GRAPH.json",
+                "@diskette": "123-1A-DISK3-GRAPH.json",
                 "@format": "PC320K"
               },
               {
                 "@title": "Lotus 1-2-3 1A (4-Tutorial)",
-                "@diskette": "123-DISK4-TUTORIAL.json",
+                "@diskette": "123-1A-DISK4-TUTORIAL.json",
                 "@format": "PC320K"
               }
             ]
@@ -138,25 +139,26 @@
             "@media": [
               {
                 "@title": "Lotus 1-2-3 1A* (1-System)",
-                "@diskette": "123-DISK1-SYSTEM-PATCHED.json",
+                "@diskette": "123-1AA-DISK1-SYSTEM-PATCHED.json",
                 "@format": "PC320K"
               },
               {
                 "@title": "Lotus 1-2-3 1A* (2-Utility)",
-                "@diskette": "123-DISK2-UTILITY.json",
+                "@diskette": "123-1AA-DISK2-UTILITY.json",
                 "@format": "PC320K"
               },
               {
                 "@title": "Lotus 1-2-3 1A* (3-Graph)",
-                "@diskette": "123-DISK3-GRAPH.json",
+                "@diskette": "123-1AA-DISK3-GRAPH.json",
                 "@format": "PC320K"
               },
               {
                 "@title": "Lotus 1-2-3 1A* (4-Tutorial)",
-                "@diskette": "123-DISK4-TUTORIAL.json",
+                "@diskette": "123-1AA-DISK4-TUTORIAL.json",
                 "@format": "PC320K"
               }
-            ]
+            ],
+            "@source": "https://winworldpc.com/product/lotus-1-2-3/1x"
           }
         }
       }

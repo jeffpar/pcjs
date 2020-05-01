@@ -15,14 +15,13 @@ if (typeof module !== "undefined") {
     var DiskAPI     = require("../../shared/lib/diskapi");
     var Component   = require("../../shared/lib/component");
     var State       = require("../../shared/lib/state");
-    var JSONLib     = require("../../modules/json");
+    var JSONLib     = require("../../modules/jsonlib");
     var PCx86       = require("./defines");
     var Messages    = require("./messages");
     var ChipSet     = require("./chipset");
     var Disk        = require("./disk");
     var Panel       = require("./panel");
 }
-
 
 /*
  * FDC Terms (see FDC.TERMS)

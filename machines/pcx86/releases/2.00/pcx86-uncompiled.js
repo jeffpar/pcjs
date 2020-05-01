@@ -64059,7 +64059,6 @@ FileInfo.NE = {
  */
 
 
-
 /*
  * FDC Terms (see FDC.TERMS)
  *
@@ -71273,8 +71272,9 @@ class JSONLib {
                             }
                         }
                         let path = item['@link'] || (server + propPath + '/' + category + '/' + (version? version + '/' : '') + item['@diskette']);
+                        let options = item['@options'];
                         if (!item['@localonly'] || hostName == "localhost") {
-                            aDiskettes.push({name, path});
+                            aDiskettes.push({name, path, options});
                         }
                     }
                 }
