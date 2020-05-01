@@ -373,7 +373,7 @@ function main(argc, argv)
 
     let input, di;
     if ((input = argv['disk'])) {
-        di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['supp']));
+        di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData']));
     }
     else if ((input = argv['dir'])) {
         di = readDir(input, argv['normalize'], argv['label'], +argv['target'], +argv['maxfiles']);
@@ -423,6 +423,7 @@ function main(argc, argv)
                         [optc, optv] = stdlib.getArgs(diskette.options);
                         diskette.options = ' ' + diskette.options;
                     }
+
                     /*
                      * Task #1: If --checklisting, then get the disk's listing and see if it's up-to-date in the website's index.md
                      */
@@ -457,24 +458,32 @@ function main(argc, argv)
                      */
                     if (argv['checkarchive']) {
                         if (sFile.endsWith(".json")) {
-                            let sArchiveFile = path.join(path.dirname(sFile), "archive", path.basename(sFile).replace(".json", ".img"));
+                            let sArchiveFile = path.join(path.dirname(sFile), "archive", diskette.original || path.basename(sFile).replace(".json", ".img"));
                             if (typeof argv['checkarchive'] != "string" || sArchiveFile.indexOf(argv['checkarchive']) >= 0) {
                                 printf("reading  %s...\n", sArchiveFile.substr(rootDir.length));
-                                let diArchive = readDisk(sArchiveFile, false, argv['sectorID'] || optv['sectorID']);
+                                let sectorIDs = argv['sectorID'] || optv['sectorID'];
+                                let sectorErrors = argv['sectorError'] || optv['sectorError'];
+                                let suppData = argv['suppData'] || optv['suppData'];
+                                if (suppData) suppData = readFile(path.join(rootDir, suppData));
+                                let diArchive = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
                                 if (diArchive) {
                                     let name = path.basename(sArchiveFile);
-                                    let sTempJSON = path.basename(sArchiveFile).replace(".img",".json");
-                                    diArchive.setArgs(sprintf("--disk %s --output %s%s", name, name.replace(".img",".json"), diskette.options));
+                                    let sTempJSON = path.basename(sArchiveFile).replace(".img",".json").replace(".psi",".json");
+                                    diArchive.setArgs(sprintf("--disk %s --output %s%s", name, sTempJSON, diskette.options));
                                     writeDisk(sTempJSON, diArchive, false, 0, true);
                                     let json = diArchive.getJSON();
                                     diArchive.buildDiskFromJSON(json);
-                                    let sTempIMG = path.basename(sArchiveFile);
+                                    let sTempIMG = path.basename(sArchiveFile).replace(".psi",".img");
                                     writeDisk(sTempIMG, diArchive, false, 0, true);
                                     if (!compareDisks(sTempIMG, sArchiveFile)) {
                                         printf("warning: %s unsuccessfully rebuilt\n", sArchiveFile);
                                     } else {
+                                        if (argv['rebuild']) {
+                                            fs.renameSync(sTempJSON, sFile);
+                                        } else {
+                                            fs.unlinkSync(sTempJSON);
+                                        }
                                         fs.unlinkSync(sTempIMG);
-                                        fs.unlinkSync(sTempJSON);
                                     }
                                 }
                             }

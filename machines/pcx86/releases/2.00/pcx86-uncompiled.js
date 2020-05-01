@@ -61899,7 +61899,7 @@ class Disk extends Component {
                                 }
                                 else {
                                     if (adw.length < (length >> 2)) {
-                                        dwPattern = adw[adw.length - 1];
+                                        dwPattern = adw[--adw.length];
                                     }
                                 }
                                 this.initSector(sector, iCylinder, iHead, idSector, this.cbSector, dwPattern);
@@ -71273,8 +71273,9 @@ class JSONLib {
                         }
                         let path = item['@link'] || (server + propPath + '/' + category + '/' + (version? version + '/' : '') + item['@diskette']);
                         let options = item['@options'];
+                        let original = item['@original'];
                         if (!item['@localonly'] || hostName == "localhost") {
-                            aDiskettes.push({name, path, options});
+                            aDiskettes.push({name, path, options, original});
                         }
                     }
                 }

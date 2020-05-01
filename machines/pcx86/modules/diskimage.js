@@ -1369,6 +1369,9 @@ export default class DiskImage {
         this.aDiskData = null;
         this.cbDiskData = 0;
 
+        this.abOrigBPB = [];
+        this.fBPBModified = false;
+
         let data = [];
         let chunkOffset = 0;
         let chunkEnd = dbDisk.length;
@@ -2507,7 +2510,7 @@ export default class DiskImage {
         let adw = [];
         let cdw = cbSector >> 2;
         for (let idw = 0; idw < cdw; idw++, ib += 4) {
-            adw[idw] = db? db.readInt32LE(ib) : 0;
+            adw[idw] = db && ib < db.length? db.readInt32LE(ib) : 0;
         }
         let sector = /** @type {Sector} */ ({
             [DiskImage.SECTOR.CYLINDER]: iCylinder,

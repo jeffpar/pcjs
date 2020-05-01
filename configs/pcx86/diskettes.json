@@ -229,7 +229,8 @@
               {
                 "@title": "MS Word 1.15 (Program)",
                 "@diskette": "MSWORD-115-PROGRAM.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@options": "--suppData=/software/pcx86/app/microsoft/word/1.15/debugger/index.md"
               },
               {
                 "@title": "MS Word 1.15 (Utilities)",
@@ -502,7 +503,8 @@
               {
                 "@title": "dBASE III 1.0 (Locked)",
                 "@diskette": "DBIII-100-LOCKED.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@options": "--sectorError=39:0:5:204"
               },
               {
                 "@title": "dBASE III 1.0 (Patched)",
@@ -1358,7 +1360,8 @@
             },
             {
               "@title": "Microsoft Adventure (Unmodified)",
-              "@diskette": "ADVENTURE-1981-UNMODIFIED.json"
+              "@diskette": "ADVENTURE-1981-UNMODIFIED.json",
+              "@original": "ADVENTURE-1981-UNMODIFIED.psi"
             }
           ],
           "@documents": [

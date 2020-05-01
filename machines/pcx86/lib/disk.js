@@ -871,7 +871,7 @@ class Disk extends Component {
                                 }
                                 else {
                                     if (adw.length < (length >> 2)) {
-                                        dwPattern = adw[adw.length - 1];
+                                        dwPattern = adw[--adw.length];
                                     }
                                 }
                                 this.initSector(sector, iCylinder, iHead, idSector, this.cbSector, dwPattern);

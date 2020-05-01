@@ -99,8 +99,9 @@ export default class JSONLib {
                         }
                         let path = item['@link'] || (server + propPath + '/' + category + '/' + (version? version + '/' : '') + item['@diskette']);
                         let options = item['@options'];
+                        let original = item['@original'];
                         if (!item['@localonly'] || hostName == "localhost") {
-                            aDiskettes.push({name, path, options});
+                            aDiskettes.push({name, path, options, original});
                         }
                     }
                 }
