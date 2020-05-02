@@ -326,10 +326,11 @@ export default class DiskImage {
                         /*
                          * This code was added to deal with variations in sectors/cluster.  Most software manufacturers
                          * were happy with the defaults that FORMAT chooses for a given diskette size, but in a few cases
-                         * (eg, PC DOS 4.01 720K diskettes), the manufacturer (IBM) opted for a smaller cluster size.
+                         * (eg, PC DOS 4.00 360K diskettes, PC DOS 4.01 720K diskettes, etc), the manufacturer (IBM) opted
+                         * for a smaller cluster size.
                          */
                         let bClusterSecs = dbDisk.readUInt8(offBootSector + DiskImage.BPB.CLUSTER_SECS);
-                        if (bMediaID != DiskImage.FAT.MEDIA_720KB || bClusterSecs == DiskImage.aDefaultBPBs[i][DiskImage.BPB.CLUSTER_SECS]) {
+                        if (bClusterSecs == DiskImage.aDefaultBPBs[i][DiskImage.BPB.CLUSTER_SECS]) {
                             iBPB = i;
                             break;
                         }
