@@ -71276,10 +71276,16 @@ class JSONLib {
                             'name': name,
                             'path': path
                         };
+                        /*
+                         * The FDC calls us with drive limits, and all it cares about is the 'name' and 'path' of each diskette,
+                         * so we use those two facts to limit what each diskette object returns.  Other callers, like the DiskDump
+                         * utility, want ALL the diskette details.
+                         */
                         if (!limits.length) {
                             let archive = item['@archive'];
                             let label = item['@label'];
                             let options = item['@options'];
+                            if (format) diskette['format'] = format;
                             if (archive) diskette['archive'] = archive;
                             if (label) diskette['label'] = label;
                             if (options) diskette['options'] = options;

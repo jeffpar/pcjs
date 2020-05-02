@@ -424,9 +424,20 @@ function main(argc, argv)
                 JSONLib.parseDiskettes(aDiskettes, library, "/pcx86", "/diskettes");
                 aDiskettes.forEach(function readAllDiskettes(diskette) {
                     let sFile = path.join(rootDir, diskette.path);
-                    if (argv['verbose']) printf("reading %s...\n", sFile.substr(rootDir.length));
+                    let sLocalFile = sFile.substr(rootDir.length);
+                    if (argv['verbose']) printf("reading %s...\n", sLocalFile);
                     let di = readDisk(sFile);
                     if (!di) return;
+
+                    if (diskette.format) {
+                        let matchFormat = diskette.format.match(/PC([0-9]+)K/);
+                        if (matchFormat) {
+                            let diskSize = di.getSize();
+                            if (+matchFormat[1] * 1024 != diskSize) {
+                                printf("warning: format '%s' does not match disk size (%d) for %s\n", diskette.format, diskSize, sLocalFile);
+                            }
+                        }
+                    }
 
                     let optc = 0, optv = [];
                     if (!diskette.options) {
@@ -491,6 +502,11 @@ function main(argc, argv)
                                 } else {
                                     sArchiveFile = sArchiveFile.replace(".img",'.'+diskette.archive);
                                 }
+                            } else if (!fs.existsSync(sArchiveFile)) {
+                                /*
+                                 * Try automatically switching from a "--disk" to a "--dir" operation if there's no IMG file.
+                                 */
+                                sArchiveFile = sArchiveFile.replace(".img","/");
                             }
                             if (typeof argv['checkarchive'] != "string" || sArchiveFile.indexOf(argv['checkarchive']) >= 0) {
                                 printf("reading %s...\n", sArchiveFile.substr(rootDir.length));
@@ -527,7 +543,7 @@ function main(argc, argv)
                                         if (argv['rebuild']) {
                                             fs.renameSync(sTempJSON, sFile);
                                         } else {
-                                            // fs.unlinkSync(sTempJSON);
+                                            fs.unlinkSync(sTempJSON);
                                         }
                                     }
                                 }

@@ -575,7 +575,7 @@
               {
                 "@title": "ThinkTank (1987)",
                 "@diskette": "THINKTANK-1987.json",
-                "@format": "PC360K",
+                "@format": "PC1200K",
                 "@archive": "folder"
               }
             ],
@@ -874,13 +874,14 @@
           "@media": [
             {
               "@title": "DOS Drivers: ATAPI Boot",
-              "@diskette": "BOOT-CDROM-ATAPI.json",
+              "@diskette": "ATAPI-CDROM-BOOT.json",
               "@format": "PC1200K"
             },
             {
               "@title": "DOS Drivers: ATAPI CD-ROM",
-              "@diskette": "DRIVERS-CDROM-ATAPI.json",
-              "@format": "PC360K"
+              "@diskette": "ATAPI-CDROM-DRIVERS.json",
+              "@format": "PC360K",
+              "@archive": "folder"
             }
           ]
         }
@@ -914,7 +915,7 @@
               {
                 "@title": "MS Mouse 2.50 (Serial)",
                 "@diskette": "MSMOUSE-250-SERIAL.json",
-                "@format": "PC320K"
+                "@format": "PC160K"
               }
             ]
           },
@@ -1419,7 +1420,7 @@
           "@media": [
             {
               "@diskette": "FLIGHTSIM-1984.json",
-              "@format": "PC360K",
+              "@format": "PC320K",
               "@archive": "folder"
             }
           ]
@@ -1459,7 +1460,7 @@
           "@media": [
             {
               "@diskette": "ESUITE-1982.json",
-              "@format": "PC360K",
+              "@format": "PC320K",
               "@archive": "folder",
               "@source": ""
             }
@@ -1548,7 +1549,7 @@
           "@media": [
             {
               "@diskette": "MORIA-1992.json",
-              "@format": "PC360K",
+              "@format": "PC320K",
               "@archive": "folder",
               "@source": ""
             }
@@ -2881,19 +2882,19 @@
                 {
                   "@title": "MS Pascal 4.00 (Disk 7)",
                   "@diskette": "PASCAL400-DISK7.json",
-                  "@format": "PC360K",
+                  "@format": "PC320K",
                   "@archive": "folder"
                 },
                 {
                   "@title": "MS Pascal 4.00 (Disk 8)",
                   "@diskette": "PASCAL400-DISK8.json",
-                  "@format": "PC360K",
+                  "@format": "PC320K",
                   "@archive": "folder"
                 },
                 {
                   "@title": "MS Pascal 4.00 (Disk 9)",
                   "@diskette": "PASCAL400-DISK9.json",
-                  "@format": "PC360K",
+                  "@format": "PC320K",
                   "@archive": "folder"
                 }
               ]
@@ -4039,7 +4040,7 @@
             {
               "@title": "PC Magazine (Vol. 09 No. 06)",
               "@diskette": "PCMAG-VOL09N06.json",
-              "@format": "PC160K",
+              "@format": "PC320K",
               "@archive": "folder"
             },
             {
@@ -4699,14 +4700,12 @@
             {
               "@title": "PC Magazine Utils Vol1",
               "@diskette": "PCMAG-UTIL-VOL1-1986.json",
-              "@format": "PC320K",
-              "@archive": "folder"
+              "@format": "PC320K"
             },
             {
               "@title": "PC Magazine Utils Vol2",
               "@diskette": "PCMAG-UTIL-VOL2.json",
-              "@format": "PC360K",
-              "@archive": "folder"
+              "@format": "PC360K"
             }
           ]
         },
@@ -6236,7 +6235,7 @@
                 {
                   "@title": "Omniview 386 4.30",
                   "@diskette": "OMNIVIEW386-430.json",
-                  "@format": "PC720K",
+                  "@format": "PC1200K",
                   "@archive": "folder"
                 }
               ]
@@ -8281,12 +8280,14 @@
           {
             "@title": "VGA Black Book Binaries",
             "@diskette": "VGABIN.json",
-            "@format": "PC160K"
+            "@format": "PC360K",
+            "@archive": "folder"
           },
           {
             "@title": "VGA Black Book Sources",
             "@diskette": "VGASRC.json",
-            "@format": "PC320K"
+            "@format": "PC320K",
+            "@archive": "folder"
           }
         ]
       }

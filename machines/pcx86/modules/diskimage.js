@@ -1929,10 +1929,10 @@ export default class DiskImage {
                     sListing += this.device.sprintf("%s%-8s %-3s%s%s  %#2M-%#02D-%#0.2Y  %#2I:%#02N%#.1A\n", sIndent, name, ext, (file.attr & (DiskImage.ATTR.READONLY | DiskImage.ATTR.HIDDEN | DiskImage.ATTR.SYSTEM))? "*" : " ", sSize, file.date);
                     nTotal++;
                     /*
-                    * NOTE: While it seems odd to include all SUBDIR entries in the file count, that's what DOS always did, so we do, too.
-                    * They don't affect the current directory's byte total (cbDir), since A) the size of a SUBDIR entry is normally zero, and
-                    * B) we don't add their size to the total anyway.
-                    */
+                     * NOTE: While it seems odd to include all SUBDIR entries in the file count, that's what DOS always did, so we do, too.
+                     * SUBDIRs don't affect the current directory's byte total (cbDir), since A) the size of a SUBDIR entry is normally recorded
+                     * as zero (regardless whether the SUBDIR contains files or not), and B) we don't add their size to the total anyway.
+                     */
                     nFiles++;
                 }
                 sListing += getTotal(nFiles, cbDir);
@@ -2736,6 +2736,7 @@ export default class DiskImage {
             [DiskImage.IMAGE.TYPE]: DiskImage.TYPE.CHS,
             [DiskImage.IMAGE.NAME]: this.diskName,
             [DiskImage.IMAGE.HASH]: this.hash,
+            [DiskImage.IMAGE.CHECKSUM]: this.dwChecksum,
             [DiskImage.IMAGE.CYLINDERS]: this.nCylinders,
             [DiskImage.IMAGE.HEADS]: this.nHeads,
             [DiskImage.IMAGE.TRACKDEF]: this.nSectors,
@@ -3073,12 +3074,13 @@ DiskImage.IMAGE = {
     TYPE:       'type',
     NAME:       'name',
     HASH:       'hash',
+    CHECKSUM:   'checksum',
     CYLINDERS:  'cylinders',
     HEADS:      'heads',
     TRACKDEF:   'trackDefault',
     SECTORDEF:  'sectorDefault',
     DISKSIZE:   'diskSize',
-    ORIGBPB:    'origBPB',
+    ORIGBPB:    'bootSector',
     VERSION:    'version',
     REPOSITORY: 'repository',
     COMMAND:    'diskdump.js'
