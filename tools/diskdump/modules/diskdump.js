@@ -116,7 +116,7 @@ function readDir(sDir, fNormalize = false, sLabel, kbTarget, nMax)
         let aFileData = readDirFiles(sDir, fNormalize, sLabel);
         di = new DiskImage(device);
         let db = new DataBuffer();
-        if (!di.buildDiskFromFiles(db, aFileData, kbTarget || 0)) {
+        if (!di.buildDiskFromFiles(db, path.basename(sDir), aFileData, kbTarget || 0)) {
             di = null;
         }
     } catch(err) {
@@ -416,6 +416,7 @@ function main(argc, argv)
                     if (argv['verbose']) printf("reading  %s...\n", sFile.substr(rootDir.length));
                     let di = readDisk(sFile);
                     if (!di) return;
+
                     let optc = 0, optv = [];
                     if (!diskette.options) {
                         diskette.options = "";
@@ -425,7 +426,15 @@ function main(argc, argv)
                     }
 
                     /*
-                     * Task #1: If --checklisting, then get the disk's listing and see if it's up-to-date in the website's index.md
+                     * Task #1: If --rebuild, then rewrite the JSON disk image.
+                     */
+                    if (argv['rebuild']) {
+                        if (sFile.endsWith(".json")) {
+                            writeDisk(sFile, di, false, 0, true);
+                        }
+                    }
+                    /*
+                     * Task #2: If --checklisting, then get the disk's listing and see if it's up-to-date in the website's index.md
                      */
                     if (argv['checklisting']) {
                         let sListing = di.getFileListing(0, 4);
@@ -451,39 +460,66 @@ function main(argc, argv)
                     }
 
                     /*
-                     * Task #2: If --checkarchive, then let's load the corresponding archived disk image (.IMG) as well, convert it to JSON,
+                     * Task #3: If --checkarchive, then let's load the corresponding archived disk image (.IMG) as well, convert it to JSON,
                      * load the JSON as a disk image, save it as a temp .IMG, and verify that temp image and archived image are identical.
                      *
                      * To check a specific archive, use --checkarchive=[IMG filename].
                      */
                     if (argv['checkarchive']) {
                         if (sFile.endsWith(".json")) {
-                            let sArchiveFile = path.join(path.dirname(sFile), "archive", diskette.original || path.basename(sFile).replace(".json", ".img"));
+                            if (typeof argv['ignore'] == "string" && sFile.indexOf(argv['ignore']) >= 0) return;
+                            let sArchiveFolder = "archive/";
+                            if (path.dirname(sFile).endsWith("/disks")) {
+                                sArchiveFolder = "../archive/";
+                            }
+                            let sArchiveFile = path.join(path.dirname(sFile), sArchiveFolder, path.basename(sFile).replace(".json", ".img"));
+                            if (diskette.archive) {
+                                if (diskette.archive == "folder") {
+                                    sArchiveFile = sArchiveFile.replace(".img","/");
+                                } else {
+                                    sArchiveFile = sArchiveFile.replace(".img",'.'+diskette.archive);
+                                }
+                            }
                             if (typeof argv['checkarchive'] != "string" || sArchiveFile.indexOf(argv['checkarchive']) >= 0) {
                                 printf("reading  %s...\n", sArchiveFile.substr(rootDir.length));
                                 let sectorIDs = argv['sectorID'] || optv['sectorID'];
                                 let sectorErrors = argv['sectorError'] || optv['sectorError'];
                                 let suppData = argv['suppData'] || optv['suppData'];
                                 if (suppData) suppData = readFile(path.join(rootDir, suppData));
-                                let diArchive = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
+                                let diArchive, command, name = path.basename(sArchiveFile);
+                                if (sArchiveFile.endsWith('/')) {
+                                    command = "--dir " + name;
+                                    diArchive = readDir(sArchiveFile);
+                                } else {
+                                    command = "--disk " + name;
+                                    diArchive = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
+                                }
                                 if (diArchive) {
-                                    let name = path.basename(sArchiveFile);
-                                    let sTempJSON = path.basename(sArchiveFile).replace(".img",".json").replace(".psi",".json");
-                                    diArchive.setArgs(sprintf("--disk %s --output %s%s", name, sTempJSON, diskette.options));
+                                    let sTempJSON = name;
+                                    let i = sTempJSON.indexOf(".");
+                                    if (i > 0) sTempJSON = sTempJSON.substr(0, i);
+                                    sTempJSON += ".json";
+                                    diArchive.setArgs(sprintf("%s --output %s%s", command, sTempJSON, diskette.options));
                                     writeDisk(sTempJSON, diArchive, false, 0, true);
-                                    let json = diArchive.getJSON();
-                                    diArchive.buildDiskFromJSON(json);
-                                    let sTempIMG = path.basename(sArchiveFile).replace(".psi",".img");
-                                    writeDisk(sTempIMG, diArchive, false, 0, true);
-                                    if (!compareDisks(sTempIMG, sArchiveFile)) {
-                                        printf("warning: %s unsuccessfully rebuilt\n", sArchiveFile);
-                                    } else {
+                                    let warning = false;
+                                    if (sArchiveFile.endsWith(".img")) {
+                                        let json = diArchive.getJSON();
+                                        diArchive.buildDiskFromJSON(json);
+                                        let sTempIMG = sTempJSON.replace(".json",".img");
+                                        writeDisk(sTempIMG, diArchive, false, 0, true);
+                                        if (!compareDisks(sTempIMG, sArchiveFile)) {
+                                            printf("warning: %s unsuccessfully rebuilt\n", sArchiveFile);
+                                            warning = true;
+                                        } else {
+                                            fs.unlinkSync(sTempIMG);
+                                        }
+                                    }
+                                    if (!warning) {
                                         if (argv['rebuild']) {
                                             fs.renameSync(sTempJSON, sFile);
                                         } else {
                                             fs.unlinkSync(sTempJSON);
                                         }
-                                        fs.unlinkSync(sTempIMG);
                                     }
                                 }
                             }
@@ -491,7 +527,7 @@ function main(argc, argv)
                     }
 
                     /*
-                     * Task #3: Create manifests that can used to evaluate the contents of the entire collection.
+                     * Task #4: Create manifests that can used to evaluate the contents of the entire collection.
                      */
                     if (argv['checkmanifests']) {
                         let manifest = di.getFileManifest(getHash);

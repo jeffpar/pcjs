@@ -71273,9 +71273,9 @@ class JSONLib {
                         }
                         let path = item['@link'] || (server + propPath + '/' + category + '/' + (version? version + '/' : '') + item['@diskette']);
                         let options = item['@options'];
-                        let original = item['@original'];
+                        let archive = item['@archive'];
                         if (!item['@localonly'] || hostName == "localhost") {
-                            aDiskettes.push({name, path, options, original});
+                            aDiskettes.push({name, path, options, archive});
                         }
                     }
                 }

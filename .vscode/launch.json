@@ -29,7 +29,7 @@
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/tools/diskdump/modules/diskdump.js",
-        "args": ["--readall","--checkarchive=ADVENTURE-1981-UNMODIFIED","--verbose","--rebuild"],
+        "args": ["--readall","--rebuild"],
         "cwd": "${workspaceFolder}/tools/diskdump/modules",
         "stopOnEntry": false,
         "console": "internalConsole"

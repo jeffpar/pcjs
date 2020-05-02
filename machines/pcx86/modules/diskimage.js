@@ -651,21 +651,22 @@ export default class DiskImage {
     }
 
     /**
-     * buildDiskFromFiles(dbDisk, aFileData, kbTarget)
+     * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget)
      *
      * @this {DiskImage}
      * @param {DataBuffer} dbDisk
+     * @param {string} diskName
      * @param {Array.<FileData>} aFileData
      * @param {number} [kbTarget]
      * @returns {boolean} true if disk allocation successful, false if not
      */
-    buildDiskFromFiles(dbDisk, aFileData, kbTarget = 0)
+    buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0)
     {
         if (!aFileData || !aFileData.length) {
             return false;
         }
 
-        this.diskName = "directory";
+        this.diskName = diskName;
         this.abOrigBPB = [];
         this.fBPBModified = false;
 
