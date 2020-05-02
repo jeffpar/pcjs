@@ -595,7 +595,8 @@
                 "@title": "VisiCalc (1981)",
                 "@diskette": "VISICALC-1981.json",
                 "@format": "PC160K",
-                "@archive": "folder"
+                "@archive": "folder",
+                "@label": "VISICALC81"
               }
             ]
           }

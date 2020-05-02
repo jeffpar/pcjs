@@ -29,7 +29,7 @@
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/tools/diskdump/modules/diskdump.js",
-        "args": ["--disk","../../../diskettes/pcx86/sys/dos/ibm/4.00/archive/PCDOS400-DISK1.img","--list"],
+        "args": ["--readall","--checkarchive=VISICALC"],
         "cwd": "${workspaceFolder}/tools/diskdump/modules",
         "stopOnEntry": false,
         "console": "internalConsole"

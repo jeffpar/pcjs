@@ -329,8 +329,7 @@ export default class DiskImage {
                          * (eg, PC DOS 4.00 360K diskettes, PC DOS 4.01 720K diskettes, etc), the manufacturer (IBM) opted
                          * for a smaller cluster size.
                          */
-                        let bClusterSecs = dbDisk.readUInt8(offBootSector + DiskImage.BPB.CLUSTER_SECS);
-                        if (bClusterSecs == DiskImage.aDefaultBPBs[i][DiskImage.BPB.CLUSTER_SECS]) {
+                        if (!fBPBExists || dbDisk.readUInt8(offBootSector + DiskImage.BPB.CLUSTER_SECS) == DiskImage.aDefaultBPBs[i][DiskImage.BPB.CLUSTER_SECS]) {
                             iBPB = i;
                             break;
                         }
@@ -1953,7 +1952,7 @@ export default class DiskImage {
      *
      * @this {DiskImage}
      * @param {FileInfo} file
-     * @param {boolean} [fComplete]
+     * @param {boolean} [fComplete] (if not "complete", then the descriptor omits NAME, since PATH includes it, as well as SIZE and VOL when they are zero)
      * @param {function(Array,string)} [fnHash]
      * @returns {Object}
      */
@@ -1992,7 +1991,7 @@ export default class DiskImage {
      *
      * @this {DiskImage}
      * @param {VolInfo} vol
-     * @param {boolean} [fComplete]
+     * @param {boolean} [fComplete] (currently, all descriptors are "complete")
      * @returns {Object}
      */
     getVolDesc(vol, fComplete)
@@ -2016,19 +2015,18 @@ export default class DiskImage {
     }
 
     /**
-     * getFileManifest(fnHash, typeHash)
+     * getFileManifest(fnHash)
      *
-     * Returns an array of info objects, to serve as a manifest.  Each object is largely a
-     * clone of the FileInfo object, with the exception of cluster and aLBA properties (which
-     * aren't useful outside the context of the DiskImage object), and with the inclusion of
-     * a hash, if the caller provides a hash function.
+     * Returns an array of FILEDESC (file descriptors).  Each object is largely a clone
+     * of the FileInfo object, with the exception of cluster and aLBA properties (which aren't
+     * useful outside the context of the DiskImage object), and with the inclusion of
+     * a HASH property, if the caller provides a hash function.
      *
      * @this {DiskImage}
      * @param {function(Array,string)} [fnHash]
-     * @param {string} [typeHash] (eg, "MD5")
      * @returns {Array}
      */
-    getFileManifest(fnHash, typeHash)
+    getFileManifest(fnHash)
     {
         let aFiles = [];
         if (this.buildTables()) {
@@ -2580,11 +2578,13 @@ export default class DiskImage {
         if (adw != undefined) {
             delete sector[DiskImage.SECTOR.DATA];
         } else {
+            let cdw = 0;
             adw = sector['data'];
             if (adw == undefined) {
                 adw = [dwPattern];
                 this.assert(dwPattern != undefined);
             } else {
+                cdw = adw.length;
                 delete sector['data'];
             }
         }
@@ -2608,7 +2608,7 @@ export default class DiskImage {
      * @param {Sector} sector
      * @param {Array.<number>} adw
      * @param {number} cbSector
-     * @param {number} [dwPattern]
+     * @param {number} [dwPattern] (undefined for new JSON disk images, because they simply store any final repeating value as the last DATA value)
      * @returns {Sector}
      */
     initSector(sector, adw, cbSector, dwPattern)
@@ -2631,9 +2631,20 @@ export default class DiskImage {
                 dwPrev = dw;
                 cPrev = 0;
             }
-            this.dwChecksum = (this.dwChecksum + dw) & (0xffffffff|0);
         }
         adw.length -= cPrev;
+        /*
+         * To be backward-compatible with the checksumming logic used with older JSON disk images (where
+         * any ending pattern was stored in a separate 'pattern' property and omitted from the 'data' array),
+         * we must omit the final data value from *our* checksum as well, but only if it's the final value
+         * in a less-than-full sector.
+         */
+        cdw = adw.length < cdw? adw.length - 1 : adw.length;
+        let dwChecksum = 0;
+        for (let idw = 0; idw < cdw; idw++) {
+            dwChecksum = (dwChecksum + adw[idw]) & (0xffffffff|0);
+        }
+        this.dwChecksum = (this.dwChecksum + dwChecksum) & (0xffffffff|0);
         if (this.fWritable) {
             /*
              * If this disk is writable (ie, will be loaded into a machine with a read/write drive),
@@ -2756,6 +2767,31 @@ export default class DiskImage {
     }
 
     /**
+     * getChecksum()
+     *
+     * NOTE: As noted in initSector(), our checksums are somewhat constrained by compatibility with previous JSON formats;
+     * in particular, for sectors that end with a repeating value, only the DATA values up to but NOT including that final
+     * repeating value are checksummed.
+     *
+     * Technically, the checksums we calculated for older JSON formats should have repeatedly summed their 'pattern' value
+     * as well.  But they didn't.  And I would like to avoid checksum warnings for anyone loading the new JSON format for the
+     * first time, due to an old checksum stored in their browser's local storage.  The warnings aren't fatal, but they do
+     * cause any saved machine state to be discarded, since the validity of a machine state is predicated on all the original
+     * inputs (including the original diskette images) matching the current inputs.  And while it's unfortunate that our
+     * checksums didn't (and still don't) sum the entire image, the limited purpose that they serve is still satisfied.
+     *
+     * TODO: Add a new "full" checksum property to DiskImage that checksums the entire disk image, including repeated values,
+     * along with an option to return the "full" checksum here.
+     *
+     * @this {DiskImage}
+     * @returns {number}
+     */
+    getChecksum()
+    {
+        return this.dwChecksum;
+    }
+
+    /**
      * getFiles()
      *
      * @this {DiskImage}
@@ -2774,7 +2810,7 @@ export default class DiskImage {
      */
     getName()
     {
-        return this.diskName;
+        return this.diskName.replace(/\.[a-z]+$/i, "");
     }
 
     /**

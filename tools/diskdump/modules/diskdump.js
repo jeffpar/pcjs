@@ -50,6 +50,21 @@ function compareDisks(sDisk1, sDisk2)
 }
 
 /**
+ * dumpManifest(diskName, manifest)
+ *
+ * @param {string} diskName
+ * @param {Array.<FILEDESC>} manifest
+ */
+function dumpManifest(diskName, manifest)
+{
+    manifest.forEach(function dumpManifestFiles(desc) {
+        if (desc[DiskImage.FILEDESC.HASH]) {
+            printf("%s  %-12s  %s  %s:%s\n", desc[DiskImage.FILEDESC.HASH], desc[DiskImage.FILEDESC.NAME], desc[DiskImage.FILEDESC.DATE], diskName, desc[DiskImage.FILEDESC.PATH]);
+        }
+    });
+}
+
+/**
  * getHash(data, type)
  *
  * @param {Array.<number>|DataBuffer} data
@@ -68,7 +83,7 @@ function getHash(data, type = "md5")
 }
 
 /**
- * isASCII(cata)
+ * isASCII(data)
  *
  * @param {string} data
  * @return {boolean} true if sData is entirely ASCII (ie, no bytes with bit 7 set)
@@ -98,22 +113,24 @@ function isTextFile(sFile)
 }
 
 /**
- * readDir(sDir, fNormalize, sLabel, kbTarget, nMax)
+ * readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
  *
  * @param {string} sDir (directory name)
- * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {string} [sLabel] (if not set with --label, then basename(sDir) will be used instead)
+ * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [kbTarget] (target disk size, in Kb)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
  * @returns {DiskImage|null}
  */
-function readDir(sDir, fNormalize = false, sLabel, kbTarget, nMax)
+function readDir(sDir, sLabel, fNormalize = false, kbTarget, nMax)
 {
     let di;
-    if (!sLabel) sLabel = path.basename(sDir);
+    if (!sLabel) {
+        sLabel = path.basename(sDir).replace(/^PCMAG-/, "").replace(/[-_].*$/, "");
+    }
     try {
         nMaxFiles = nMax || 256;
-        let aFileData = readDirFiles(sDir, fNormalize, sLabel);
+        let aFileData = readDirFiles(sDir, sLabel, fNormalize);
         di = new DiskImage(device);
         let db = new DataBuffer();
         if (!di.buildDiskFromFiles(db, path.basename(sDir), aFileData, kbTarget || 0)) {
@@ -127,14 +144,14 @@ function readDir(sDir, fNormalize = false, sLabel, kbTarget, nMax)
 }
 
 /**
- * readDirFiles(sDir, fNormalize, sLabel)
+ * readDirFiles(sDir, sLabel, fNormalize)
  *
  * @param {string} sDir (directory name)
+ * @param {boolean|null} [sLabel] (optional volume label; this should NEVER be set when reading subdirectories)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
- * @param {boolean} [sLabel] (optional volume label; this should NEVER be set when reading subdirectories)
  * @returns {Array.<FileData>}
  */
-function readDirFiles(sDir, fNormalize = false, sLabel)
+function readDirFiles(sDir, sLabel, fNormalize = false)
 {
     let aFileData = [];
     let asFiles = fs.readdirSync(sDir);
@@ -160,12 +177,10 @@ function readDirFiles(sDir, fNormalize = false, sLabel)
      */
     if (sLabel) {
         /*
-         * I used to prefer a hard-coded date/time (eg, the day the IBM PC was introduced, August 12, 1981,
-         * with an arbitrary time of 12pm), in part because it avoided creating different disk images every
-         * time DiskDump was run.  However, I'm not sure I care about that anymore.  Having a timestamp
-         * that reflects the creation date of the disk image seems more useful.
+         * I prefer a hard-coded date/time, because it avoids creating different disk images every
+         * time DiskDump is run.
          */
-        let dateLabel = new Date();
+        let dateLabel = new Date(1989, 9, 27, 3, 0, 0);
         let file = {path: sDir, name: sLabel, attr: DiskImage.ATTR.VOLUME, date: dateLabel, size: 0};
         aFileData.push(file);
     }
@@ -187,7 +202,7 @@ function readDirFiles(sDir, fNormalize = false, sLabel)
             file.attr = DiskImage.ATTR.SUBDIR;
             file.size = -1;
             file.data = new DataBuffer();
-            file.files = readDirFiles(sPath, fNormalize);
+            file.files = readDirFiles(sPath, null, fNormalize);
         } else {
             let fText = fNormalize && isTextFile(sName);
             let data = readFile(sPath, fText? "utf8" : null);
@@ -315,7 +330,7 @@ function writeDisk(sFile, di, fLegacy = false, indent = 0, fOverwrite = false)
                 if (di.getData(db)) data = db.buffer;
             }
             if (data) {
-                printf("writing  %s...\n", sFile.indexOf(path.delimiter) == 0? sFile.substr(rootDir.length) : sFile);
+                printf("writing %s...\n", sFile.indexOf(path.delimiter) == 0? sFile.substr(rootDir.length) : sFile);
                 if (fExists) fs.unlinkSync(sFile);
                 fs.writeFileSync(sFile, data);
                 if (sFileUC.endsWith(".IMG")) fs.chmodSync(sFile, 0o444);
@@ -376,12 +391,12 @@ function main(argc, argv)
         di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData']));
     }
     else if ((input = argv['dir'])) {
-        di = readDir(input, argv['normalize'], argv['label'], +argv['target'], +argv['maxfiles']);
+        di = readDir(input, argv['label'], argv['normalize'], +argv['target'], +argv['maxfiles']);
     }
     if (di === null) return;
     if (di) {
         di.setArgs(argv.slice(1).join(' '));
-        printf("disk size: %d\n", di.getSize());
+        printf("disk size %d bytes, checksum %d (%#0lx)\n", di.getSize(), di.getChecksum());
         if (argv['list']) {
             let iVolume = +argv['volume'];
             if (isNaN(iVolume)) iVolume = -1;
@@ -390,11 +405,7 @@ function main(argc, argv)
         }
         if (argv['dump']) {
             let manifest = di.getFileManifest(getHash);
-            manifest.forEach(function dumpFiles(file) {
-                if (file['md5']) {
-                    printf("%s  %-12s  %s  %s:%s\n", file['md5'], file.name, file.date, di.getName(), file.path);
-                }
-            });
+            dumpManifest(di.getName(), manifest);
         }
         let output = argv['output'];
         if (output) writeDisk(output, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite']);
@@ -406,14 +417,14 @@ function main(argc, argv)
         let cConfigs = 0, cManifests = 0, cFiles = 0;
         let asFiles = glob.sync(path.join(rootDir, "/configs/" + family + "/*.json"));
         asFiles.forEach(function readAllConfigs(sFile) {
-            if (argv['verbose']) printf("reading  %s...\n", sFile.substr(rootDir.length));
+            if (argv['verbose']) printf("reading %s...\n", sFile.substr(rootDir.length));
             let library = readJSON(sFile);
             if (library) {
                 let aDiskettes = [];
                 JSONLib.parseDiskettes(aDiskettes, library, "/pcx86", "/diskettes");
                 aDiskettes.forEach(function readAllDiskettes(diskette) {
                     let sFile = path.join(rootDir, diskette.path);
-                    if (argv['verbose']) printf("reading  %s...\n", sFile.substr(rootDir.length));
+                    if (argv['verbose']) printf("reading %s...\n", sFile.substr(rootDir.length));
                     let di = readDisk(sFile);
                     if (!di) return;
 
@@ -422,7 +433,7 @@ function main(argc, argv)
                         diskette.options = "";
                     } else {
                         [optc, optv] = stdlib.getArgs(diskette.options);
-                        diskette.options = ' ' + diskette.options;
+                        diskette.options = " " + diskette.options;
                     }
 
                     /*
@@ -482,7 +493,7 @@ function main(argc, argv)
                                 }
                             }
                             if (typeof argv['checkarchive'] != "string" || sArchiveFile.indexOf(argv['checkarchive']) >= 0) {
-                                printf("reading  %s...\n", sArchiveFile.substr(rootDir.length));
+                                printf("reading %s...\n", sArchiveFile.substr(rootDir.length));
                                 let sectorIDs = argv['sectorID'] || optv['sectorID'];
                                 let sectorErrors = argv['sectorError'] || optv['sectorError'];
                                 let suppData = argv['suppData'] || optv['suppData'];
@@ -490,16 +501,13 @@ function main(argc, argv)
                                 let diArchive, command, name = path.basename(sArchiveFile);
                                 if (sArchiveFile.endsWith('/')) {
                                     command = "--dir " + name;
-                                    diArchive = readDir(sArchiveFile);
+                                    diArchive = readDir(sArchiveFile, diskette.label);
                                 } else {
                                     command = "--disk " + name;
                                     diArchive = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
                                 }
                                 if (diArchive) {
-                                    let sTempJSON = name;
-                                    let i = sTempJSON.indexOf(".");
-                                    if (i > 0) sTempJSON = sTempJSON.substr(0, i);
-                                    sTempJSON += ".json";
+                                    let sTempJSON = name.replace(/\.[a-z]+$/, "") + ".json";
                                     diArchive.setArgs(sprintf("%s --output %s%s", command, sTempJSON, diskette.options));
                                     writeDisk(sTempJSON, diArchive, false, 0, true);
                                     let warning = false;
@@ -519,7 +527,7 @@ function main(argc, argv)
                                         if (argv['rebuild']) {
                                             fs.renameSync(sTempJSON, sFile);
                                         } else {
-                                            fs.unlinkSync(sTempJSON);
+                                            // fs.unlinkSync(sTempJSON);
                                         }
                                     }
                                 }
@@ -532,12 +540,8 @@ function main(argc, argv)
                      */
                     if (argv['checkmanifests']) {
                         let manifest = di.getFileManifest(getHash);
-                        if (argv['readall'] == "md5") {
-                            manifest.forEach(function readAllFiles(file) {
-                                if (file['md5']) {
-                                    printf("%s  %-12s  %s  %s:%s:%s\n", file['md5'], file.name, file.date, diskette.path, file.path);
-                                }
-                            });
+                        if (argv['readall'] == DiskImage.FILEDESC.HASH) {
+                            dumpManifest(diskette.path, manifest);
                         }
                         else if (argv['verbose']) {
                             printf("manifest for %s: %2j\n", diskette.path, manifest);

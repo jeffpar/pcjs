@@ -71272,10 +71272,20 @@ class JSONLib {
                             }
                         }
                         let path = item['@link'] || (server + propPath + '/' + category + '/' + (version? version + '/' : '') + item['@diskette']);
-                        let options = item['@options'];
-                        let archive = item['@archive'];
+                        let diskette = {
+                            'name': name,
+                            'path': path
+                        };
+                        if (!limits) {
+                            let archive = item['@archive'];
+                            let label = item['@label'];
+                            let options = item['@options'];
+                            if (archive) diskette['archive'] = archive;
+                            if (label) diskette['label'] = label;
+                            if (options) diskette['options'] = options;
+                        }
                         if (!item['@localonly'] || hostName == "localhost") {
-                            aDiskettes.push({name, path, format, options, archive});
+                            aDiskettes.push(diskette);
                         }
                     }
                 }
