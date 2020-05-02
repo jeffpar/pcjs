@@ -215,12 +215,14 @@
               {
                 "@title": "MS Multiplan 2.01 (INSTALL)",
                 "@diskette": "MULTIPLAN201-INSTALL.json",
-                "@format": "PC320K"
+                "@format": "PC320K",
+                "@archive": "folder"
               },
               {
                 "@title": "MS Multiplan 2.01 (PROGRAM)",
                 "@diskette": "MULTIPLAN201-PROGRAM.json",
-                "@format": "PC320K"
+                "@format": "PC320K",
+                "@archive": "folder"
               }
             ]
           }
@@ -573,7 +575,8 @@
               {
                 "@title": "ThinkTank (1987)",
                 "@diskette": "THINKTANK-1987.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@archive": "folder"
               }
             ],
             "@author": "Living Videotext",
@@ -591,7 +594,8 @@
               {
                 "@title": "VisiCalc (1981)",
                 "@diskette": "VISICALC-1981.json",
-                "@format": "PC160K"
+                "@format": "PC160K",
+                "@archive": "folder"
               }
             ]
           }
@@ -982,17 +986,20 @@
               {
                 "@title": "IBM PC BIOS Sources (V1)",
                 "@diskette": "IBM-BIOS-SRC-5150V1.json",
-                "@format": "PC320K"
+                "@format": "PC320K",
+                "@archive": "folder"
               },
               {
                 "@title": "IBM PC BIOS Sources (V2)",
                 "@diskette": "IBM-BIOS-SRC-5150V2.json",
-                "@format": "PC320K"
+                "@format": "PC320K",
+                "@archive": "folder"
               },
               {
                 "@title": "IBM PC BIOS Sources (V3)",
                 "@diskette": "IBM-BIOS-SRC-5150V3.json",
-                "@format": "PC320K"
+                "@format": "PC320K",
+                "@archive": "folder"
               }
             ]
           },
@@ -1002,17 +1009,20 @@
               {
                 "@title": "IBM PC XT BIOS Sources (V1)",
                 "@diskette": "IBM-BIOS-SRC-5160V1.json",
-                "@format": "PC320K"
+                "@format": "PC320K",
+                "@archive": "folder"
               },
               {
                 "@title": "IBM PC XT BIOS Sources (V2)",
                 "@diskette": "IBM-BIOS-SRC-5160V2.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@archive": "folder"
               },
               {
                 "@title": "IBM PC XT BIOS Sources (V3)",
                 "@diskette": "IBM-BIOS-SRC-5160V3.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@archive": "folder"
               }
             ]
           },
@@ -1022,17 +1032,20 @@
               {
                 "@title": "IBM PC AT BIOS Sources (V1)",
                 "@diskette": "IBM-BIOS-SRC-5170V1.json",
-                "@format": "PC1200K"
+                "@format": "PC1200K",
+                "@archive": "folder"
               },
               {
                 "@title": "IBM PC AT BIOS Sources (V2)",
                 "@diskette": "IBM-BIOS-SRC-5170V2.json",
-                "@format": "PC1200K"
+                "@format": "PC1200K",
+                "@archive": "folder"
               },
               {
                 "@title": "IBM PC AT BIOS Sources (V3)",
                 "@diskette": "IBM-BIOS-SRC-5170V3.json",
-                "@format": "PC1200K"
+                "@format": "PC1200K",
+                "@archive": "folder"
               }
             ]
           }
@@ -1282,7 +1295,8 @@
             {
               "@title": "Commander Keen: Episode One",
               "@diskette": "KEEN1-V11.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             }
           ]
         },
@@ -1306,7 +1320,8 @@
           "@media": [
             {
               "@title": "Hitchhiker's Guide",
-              "@diskette": "HHIKER-READONLY.json"
+              "@diskette": "HHIKER-READONLY.json",
+              "@archive": "DSK"
             }
           ]
         },
@@ -1324,7 +1339,8 @@
           "@media": [
             {
               "@title": "Planetfall",
-              "@diskette": "PLANETFALL-READONLY.json"
+              "@diskette": "PLANETFALL-READONLY.json",
+              "@archive": "DSK"
             }
           ]
         },
@@ -1333,7 +1349,8 @@
           "@media": [
             {
               "@title": "Zork I",
-              "@diskette": "ZORK1-READONLY.json"
+              "@diskette": "ZORK1-READONLY.json",
+              "@archive": "DSK"
             }
           ]
         },
@@ -1342,7 +1359,8 @@
           "@media": [
             {
               "@title": "Zork II",
-              "@diskette": "ZORK2-READONLY.json"
+              "@diskette": "ZORK2-READONLY.json",
+              "@archive": "DSK"
             }
           ]
         },
@@ -1351,7 +1369,8 @@
           "@media": [
             {
               "@title": "Zork III",
-              "@diskette": "ZORK3-READONLY.json"
+              "@diskette": "ZORK3-READONLY.json",
+              "@archive": "DSK"
             }
           ]
         }
@@ -1399,7 +1418,8 @@
           "@media": [
             {
               "@diskette": "FLIGHTSIM-1984.json",
-              "@format": "PC360K"
+              "@format": "PC360K",
+              "@archive": "folder"
             }
           ]
         }
@@ -1427,6 +1447,7 @@
             {
               "@diskette": "CASTLE-ADVENTURE-1985.json",
               "@format": "PC160K",
+              "@archive": "folder",
               "@source": ""
             }
           ],
@@ -1438,6 +1459,7 @@
             {
               "@diskette": "ESUITE-1982.json",
               "@format": "PC360K",
+              "@archive": "folder",
               "@source": ""
             }
           ],
@@ -1513,6 +1535,7 @@
               "@title": "Lemmings (1991)",
               "@diskette": "LEMMINGS-1991.json",
               "@format": "PC1200K",
+              "@archive": "folder",
               "@source": ""
             }
           ],
@@ -1525,6 +1548,7 @@
             {
               "@diskette": "MORIA-1992.json",
               "@format": "PC360K",
+              "@archive": "folder",
               "@source": ""
             }
           ],
@@ -1555,6 +1579,7 @@
             {
               "@diskette": "ROGUE-1985.json",
               "@format": "PC160K",
+              "@archive": "folder",
               "@source": ""
             }
           ],
@@ -1572,6 +1597,7 @@
               "@title": "Trump Castle 1.20 (1988)",
               "@diskette": "TRUMP-CASTLE-120.json",
               "@format": "PC1200K",
+              "@archive": "folder",
               "@source": ""
             }
           ],
@@ -1893,17 +1919,20 @@
               {
                 "@title": "IBM Pascal 1.00 (Disk 1)",
                 "@diskette": "PASCAL100-DISK1.json",
-                "@format": "PC160K"
+                "@format": "PC160K",
+                "@archive": "folder"
               },
               {
                 "@title": "IBM Pascal 1.00 (Disk 2)",
                 "@diskette": "PASCAL100-DISK2.json",
-                "@format": "PC160K"
+                "@format": "PC160K",
+                "@archive": "folder"
               },
               {
                 "@title": "IBM Pascal 1.00 (Disk 3)",
                 "@diskette": "PASCAL100-DISK3.json",
-                "@format": "PC160K"
+                "@format": "PC160K",
+                "@archive": "folder"
               },
               {
                 "@title": "IBM Pascal 1.00 (Combined)",
@@ -1926,17 +1955,20 @@
               {
                 "@title": "Modula-2/86 1.00 (1-System)",
                 "@diskette": "LOGITECH-MODULA2-DISK1-SYSTEM.json",
-                "@format": "PC320K"
+                "@format": "PC320K",
+                "@archive": "folder"
               },
               {
                 "@title": "Modula-2/86 1.00 (2-Linker)",
                 "@diskette": "LOGITECH-MODULA2-DISK2-LINKER.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@archive": "folder"
               },
               {
                 "@title": "Modula-2/86 1.00 (3-Compiler)",
                 "@diskette": "LOGITECH-MODULA2-DISK3-COMPILER.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@archive": "folder"
               }
             ]
           },
@@ -2510,6 +2542,7 @@
                 "@title": "MS Macro Assembler 1.00 (1981)",
                 "@diskette": "MASM100-1981.json",
                 "@format": "PC160K",
+                "@archive": "folder",
                 "@source": "http://www.os2museum.com"
               }
             ]
@@ -2531,7 +2564,8 @@
               {
                 "@title": "MS Macro Assembler 1.10",
                 "@diskette": "MASM110.json",
-                "@format": "PC320K"
+                "@format": "PC320K",
+                "@archive": "folder"
               }
             ]
           },
@@ -2541,7 +2575,8 @@
               {
                 "@title": "MS Macro Assembler 1.12",
                 "@diskette": "MASM112.json",
-                "@format": "PC320K"
+                "@format": "PC320K",
+                "@archive": "folder"
               }
             ]
           },
@@ -2551,7 +2586,8 @@
               {
                 "@title": "MS Macro Assembler 1.25",
                 "@diskette": "MASM125.json",
-                "@format": "PC320K"
+                "@format": "PC320K",
+                "@archive": "folder"
               }
             ]
           },
@@ -2561,7 +2597,8 @@
               {
                 "@title": "MS Macro Assembler 2.04",
                 "@diskette": "MASM204.json",
-                "@format": "PC160K"
+                "@format": "PC160K",
+                "@archive": "folder"
               }
             ]
           },
@@ -2807,47 +2844,56 @@
                 {
                   "@title": "MS Pascal 4.00 (Disk 1)",
                   "@diskette": "PASCAL400-DISK1.json",
-                  "@format": "PC360K"
+                  "@format": "PC360K",
+                  "@archive": "folder"
                 },
                 {
                   "@title": "MS Pascal 4.00 (Disk 2)",
                   "@diskette": "PASCAL400-DISK2.json",
-                  "@format": "PC360K"
+                  "@format": "PC360K",
+                  "@archive": "folder"
                 },
                 {
                   "@title": "MS Pascal 4.00 (Disk 3)",
                   "@diskette": "PASCAL400-DISK3.json",
-                  "@format": "PC360K"
+                  "@format": "PC360K",
+                  "@archive": "folder"
                 },
                 {
                   "@title": "MS Pascal 4.00 (Disk 4)",
                   "@diskette": "PASCAL400-DISK4.json",
-                  "@format": "PC360K"
+                  "@format": "PC360K",
+                  "@archive": "folder"
                 },
                 {
                   "@title": "MS Pascal 4.00 (Disk 5)",
                   "@diskette": "PASCAL400-DISK5.json",
-                  "@format": "PC360K"
+                  "@format": "PC360K",
+                  "@archive": "folder"
                 },
                 {
                   "@title": "MS Pascal 4.00 (Disk 6)",
                   "@diskette": "PASCAL400-DISK6.json",
-                  "@format": "PC360K"
+                  "@format": "PC360K",
+                  "@archive": "folder"
                 },
                 {
                   "@title": "MS Pascal 4.00 (Disk 7)",
                   "@diskette": "PASCAL400-DISK7.json",
-                  "@format": "PC360K"
+                  "@format": "PC360K",
+                  "@archive": "folder"
                 },
                 {
                   "@title": "MS Pascal 4.00 (Disk 8)",
                   "@diskette": "PASCAL400-DISK8.json",
-                  "@format": "PC360K"
+                  "@format": "PC360K",
+                  "@archive": "folder"
                 },
                 {
                   "@title": "MS Pascal 4.00 (Disk 9)",
                   "@diskette": "PASCAL400-DISK9.json",
-                  "@format": "PC360K"
+                  "@format": "PC360K",
+                  "@archive": "folder"
                 }
               ]
             }
@@ -3453,7 +3499,8 @@
           "@title": "Graphics for the IBM PC",
           "@media": [
             {
-              "@diskette": "BASIC-GRAPHICS.json"
+              "@diskette": "BASIC-GRAPHICS.json",
+              "@archive": "folder"
             }
           ],
           "@documents": [
@@ -3474,12 +3521,14 @@
             {
               "@title": "Unauthorized Windows 95 (BIN)",
               "@diskette": "UNAUTH-W95B.json",
-              "@format": "PC1440K"
+              "@format": "PC1440K",
+              "@archive": "folder"
             },
             {
               "@title": "Unauthorized Windows 95 (SRC)",
               "@diskette": "UNAUTH-W95S.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             }
           ],
           "@documents": [
@@ -3509,12 +3558,14 @@
             {
               "@title": "Undocumented DOS (2nd Ed. BIN)",
               "@diskette": "UNDOC-DOS-2ED-BIN.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             },
             {
               "@title": "Undocumented DOS (2nd Ed. SRC)",
               "@diskette": "UNDOC-DOS-2ED-SRC.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             }
           ],
           "@documents": [
@@ -3615,872 +3666,1046 @@
             {
               "@title": "PC Magazine (Vol. 06 No. 08)",
               "@diskette": "PCMAG-VOL06N08.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 09)",
               "@diskette": "PCMAG-VOL06N09.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 10)",
               "@diskette": "PCMAG-VOL06N10.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 11)",
               "@diskette": "PCMAG-VOL06N11.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 12)",
               "@diskette": "PCMAG-VOL06N12.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 13)",
               "@diskette": "PCMAG-VOL06N13.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 14)",
               "@diskette": "PCMAG-VOL06N14.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 15)",
               "@diskette": "PCMAG-VOL06N15.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 16)",
               "@diskette": "PCMAG-VOL06N16.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 17)",
               "@diskette": "PCMAG-VOL06N17.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 18)",
               "@diskette": "PCMAG-VOL06N18.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 19)",
               "@diskette": "PCMAG-VOL06N19.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 20)",
               "@diskette": "PCMAG-VOL06N20.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 21)",
               "@diskette": "PCMAG-VOL06N21.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 06 No. 22)",
               "@diskette": "PCMAG-VOL06N22.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 01)",
               "@diskette": "PCMAG-VOL07N01.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 02)",
               "@diskette": "PCMAG-VOL07N02.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 03)",
               "@diskette": "PCMAG-VOL07N03.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 05)",
               "@diskette": "PCMAG-VOL07N05.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 06)",
               "@diskette": "PCMAG-VOL07N06.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 07)",
               "@diskette": "PCMAG-VOL07N07.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 08)",
               "@diskette": "PCMAG-VOL07N08.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 09)",
               "@diskette": "PCMAG-VOL07N09.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 10)",
               "@diskette": "PCMAG-VOL07N10.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 12)",
               "@diskette": "PCMAG-VOL07N12.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 13)",
               "@diskette": "PCMAG-VOL07N13.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 14)",
               "@diskette": "PCMAG-VOL07N14.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 15)",
               "@diskette": "PCMAG-VOL07N15.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 16)",
               "@diskette": "PCMAG-VOL07N16.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 17)",
               "@diskette": "PCMAG-VOL07N17.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 18)",
               "@diskette": "PCMAG-VOL07N18.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 19)",
               "@diskette": "PCMAG-VOL07N19.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 20)",
               "@diskette": "PCMAG-VOL07N20.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 21)",
               "@diskette": "PCMAG-VOL07N21.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 07 No. 22)",
               "@diskette": "PCMAG-VOL07N22.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 01)",
               "@diskette": "PCMAG-VOL08N01.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 02)",
               "@diskette": "PCMAG-VOL08N02.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 03)",
               "@diskette": "PCMAG-VOL08N03.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 04)",
               "@diskette": "PCMAG-VOL08N04.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 05)",
               "@diskette": "PCMAG-VOL08N05.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 06)",
               "@diskette": "PCMAG-VOL08N06.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 07)",
               "@diskette": "PCMAG-VOL08N07.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 08)",
               "@diskette": "PCMAG-VOL08N08.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 09)",
               "@diskette": "PCMAG-VOL08N09.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 10)",
               "@diskette": "PCMAG-VOL08N10.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 11)",
               "@diskette": "PCMAG-VOL08N11.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 12)",
               "@diskette": "PCMAG-VOL08N12.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 13)",
               "@diskette": "PCMAG-VOL08N13.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 14)",
               "@diskette": "PCMAG-VOL08N14.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 15)",
               "@diskette": "PCMAG-VOL08N15.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 16)",
               "@diskette": "PCMAG-VOL08N16.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 17)",
               "@diskette": "PCMAG-VOL08N17.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 18)",
               "@diskette": "PCMAG-VOL08N18.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 19)",
               "@diskette": "PCMAG-VOL08N19.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 20)",
               "@diskette": "PCMAG-VOL08N20.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 21)",
               "@diskette": "PCMAG-VOL08N21.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 08 No. 22)",
               "@diskette": "PCMAG-VOL08N22.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 01)",
               "@diskette": "PCMAG-VOL09N01.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 02)",
               "@diskette": "PCMAG-VOL09N02.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 03)",
               "@diskette": "PCMAG-VOL09N03.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 04)",
               "@diskette": "PCMAG-VOL09N04.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 05)",
               "@diskette": "PCMAG-VOL09N05.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 06)",
               "@diskette": "PCMAG-VOL09N06.json",
-              "@format": "PC320K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 07)",
               "@diskette": "PCMAG-VOL09N07.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 08)",
               "@diskette": "PCMAG-VOL09N08.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 09)",
               "@diskette": "PCMAG-VOL09N09.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 10)",
               "@diskette": "PCMAG-VOL09N10.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 11)",
               "@diskette": "PCMAG-VOL09N11.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 12)",
               "@diskette": "PCMAG-VOL09N12.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 13)",
               "@diskette": "PCMAG-VOL09N13.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 14)",
               "@diskette": "PCMAG-VOL09N14.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 15)",
               "@diskette": "PCMAG-VOL09N15.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 16)",
               "@diskette": "PCMAG-VOL09N16.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 17)",
               "@diskette": "PCMAG-VOL09N17.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 19)",
               "@diskette": "PCMAG-VOL09N19.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 20)",
               "@diskette": "PCMAG-VOL09N20.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 21)",
               "@diskette": "PCMAG-VOL09N21.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 09 No. 22)",
               "@diskette": "PCMAG-VOL09N22.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 01)",
               "@diskette": "PCMAG-VOL10N01.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 02)",
               "@diskette": "PCMAG-VOL10N02.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 03)",
               "@diskette": "PCMAG-VOL10N03.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 04)",
               "@diskette": "PCMAG-VOL10N04.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 05)",
               "@diskette": "PCMAG-VOL10N05.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 06)",
               "@diskette": "PCMAG-VOL10N06.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 07)",
               "@diskette": "PCMAG-VOL10N07.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 08)",
               "@diskette": "PCMAG-VOL10N08.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 09)",
               "@diskette": "PCMAG-VOL10N09.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 10)",
               "@diskette": "PCMAG-VOL10N10.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 11)",
               "@diskette": "PCMAG-VOL10N11.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 12)",
               "@diskette": "PCMAG-VOL10N12.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 13)",
               "@diskette": "PCMAG-VOL10N13.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 14)",
               "@diskette": "PCMAG-VOL10N14.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 15)",
               "@diskette": "PCMAG-VOL10N15.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 16)",
               "@diskette": "PCMAG-VOL10N16.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 17)",
               "@diskette": "PCMAG-VOL10N17.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 18)",
               "@diskette": "PCMAG-VOL10N18.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 19)",
               "@diskette": "PCMAG-VOL10N19.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 20)",
               "@diskette": "PCMAG-VOL10N20.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 21)",
               "@diskette": "PCMAG-VOL10N21.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 10 No. 22)",
               "@diskette": "PCMAG-VOL10N22.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 01)",
               "@diskette": "PCMAG-VOL11N01.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 02)",
               "@diskette": "PCMAG-VOL11N02.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 03)",
               "@diskette": "PCMAG-VOL11N03.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 04)",
               "@diskette": "PCMAG-VOL11N04.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 05)",
               "@diskette": "PCMAG-VOL11N05.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 06)",
               "@diskette": "PCMAG-VOL11N06.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 07)",
               "@diskette": "PCMAG-VOL11N07.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 08)",
               "@diskette": "PCMAG-VOL11N08.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 09)",
               "@diskette": "PCMAG-VOL11N09.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 10)",
               "@diskette": "PCMAG-VOL11N10.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 11)",
               "@diskette": "PCMAG-VOL11N11.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 12)",
               "@diskette": "PCMAG-VOL11N12.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 13)",
               "@diskette": "PCMAG-VOL11N13.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 14)",
               "@diskette": "PCMAG-VOL11N14.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 15)",
               "@diskette": "PCMAG-VOL11N15.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 16)",
               "@diskette": "PCMAG-VOL11N16.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 17)",
               "@diskette": "PCMAG-VOL11N17.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 18)",
               "@diskette": "PCMAG-VOL11N18.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 19)",
               "@diskette": "PCMAG-VOL11N19.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 20)",
               "@diskette": "PCMAG-VOL11N20.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 21)",
               "@diskette": "PCMAG-VOL11N21.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 11 No. 22)",
               "@diskette": "PCMAG-VOL11N22.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 01)",
               "@diskette": "PCMAG-VOL12N01.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 02)",
               "@diskette": "PCMAG-VOL12N02.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 03)",
               "@diskette": "PCMAG-VOL12N03.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 04)",
               "@diskette": "PCMAG-VOL12N04.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 05)",
               "@diskette": "PCMAG-VOL12N05.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 06)",
               "@diskette": "PCMAG-VOL12N06.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 07)",
               "@diskette": "PCMAG-VOL12N07.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 08)",
               "@diskette": "PCMAG-VOL12N08.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 09)",
               "@diskette": "PCMAG-VOL12N09.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 10)",
               "@diskette": "PCMAG-VOL12N10.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 11)",
               "@diskette": "PCMAG-VOL12N11.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 12)",
               "@diskette": "PCMAG-VOL12N12.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 13)",
               "@diskette": "PCMAG-VOL12N13.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 14)",
               "@diskette": "PCMAG-VOL12N14.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 15)",
               "@diskette": "PCMAG-VOL12N15.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 16)",
               "@diskette": "PCMAG-VOL12N16.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 17)",
               "@diskette": "PCMAG-VOL12N17.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 18)",
               "@diskette": "PCMAG-VOL12N18.json",
-              "@format": "PC1440K"
+              "@format": "PC1440K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 19)",
               "@diskette": "PCMAG-VOL12N19.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 20)",
               "@diskette": "PCMAG-VOL12N20.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 21)",
               "@diskette": "PCMAG-VOL12N21.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 12 No. 22)",
               "@diskette": "PCMAG-VOL12N22.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 01)",
               "@diskette": "PCMAG-VOL13N01.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 02)",
               "@diskette": "PCMAG-VOL13N02.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 03)",
               "@diskette": "PCMAG-VOL13N03.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 04)",
               "@diskette": "PCMAG-VOL13N04.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 05)",
               "@diskette": "PCMAG-VOL13N05.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 06)",
               "@diskette": "PCMAG-VOL13N06.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 07)",
               "@diskette": "PCMAG-VOL13N07.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 08)",
               "@diskette": "PCMAG-VOL13N08.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 09)",
               "@diskette": "PCMAG-VOL13N09.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 10)",
               "@diskette": "PCMAG-VOL13N10.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 11)",
               "@diskette": "PCMAG-VOL13N11.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 12)",
               "@diskette": "PCMAG-VOL13N12.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 13)",
               "@diskette": "PCMAG-VOL13N13.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 14)",
               "@diskette": "PCMAG-VOL13N14.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 15)",
               "@diskette": "PCMAG-VOL13N15.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 16)",
               "@diskette": "PCMAG-VOL13N16.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 17)",
               "@diskette": "PCMAG-VOL13N17.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 18)",
               "@diskette": "PCMAG-VOL13N18.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 19)",
               "@diskette": "PCMAG-VOL13N19.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 20)",
               "@diskette": "PCMAG-VOL13N20.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 21)",
               "@diskette": "PCMAG-VOL13N21.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 13 No. 22)",
               "@diskette": "PCMAG-VOL13N22.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 14 No. 01)",
               "@diskette": "PCMAG-VOL14N01.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 14 No. 02)",
               "@diskette": "PCMAG-VOL14N02.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 14 No. 03)",
               "@diskette": "PCMAG-VOL14N03.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 14 No. 04)",
               "@diskette": "PCMAG-VOL14N04.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 14 No. 05)",
               "@diskette": "PCMAG-VOL14N05.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine (Vol. 14 No. 06)",
               "@diskette": "PCMAG-VOL14N06.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine Utils Vol1",
               "@diskette": "PCMAG-UTIL-VOL1-1986.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Magazine Utils Vol2",
               "@diskette": "PCMAG-UTIL-VOL2.json",
-              "@format": "PC360K"
+              "@format": "PC360K",
+              "@archive": "folder"
             }
           ]
         },
@@ -4490,102 +4715,122 @@
             {
               "@title": "PC Tech Journal (1985-12)",
               "@diskette": "PCTJ8512.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1986-03)",
               "@diskette": "PCTJ8603.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1986-10)",
               "@diskette": "PCTJ8610.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1986-12)",
               "@diskette": "PCTJ8612.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1987-02)",
               "@diskette": "PCTJ8702.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1987-06)",
               "@diskette": "PCTJ8706.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1987-07)",
               "@diskette": "PCTJ8707.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1987-10)",
               "@diskette": "PCTJ8710.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1987-11)",
               "@diskette": "PCTJ8711.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1988-04)",
               "@diskette": "PCTJ8804.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1988-05)",
               "@diskette": "PCTJ8805.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1988-06)",
               "@diskette": "PCTJ8806.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1988-07)",
               "@diskette": "PCTJ8807.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1988-08)",
               "@diskette": "PCTJ8808.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1988-09)",
               "@diskette": "PCTJ8809.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1988-11)",
               "@diskette": "PCTJ8811.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1988-12)",
               "@diskette": "PCTJ8812.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (1989-01)",
               "@diskette": "PCTJ8901.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (Benchmarks)",
               "@diskette": "PCTBENCH.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             },
             {
               "@title": "PC Tech Journal (Best Of)",
               "@diskette": "PCTJBEST.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             }
           ]
         }
@@ -4614,7 +4859,8 @@
             {
               "@title": "Unprotect Files (UNPROT 1 & 2)",
               "@diskette": "UNPROT-1-2.json",
-              "@format": "PC1200K"
+              "@format": "PC1200K",
+              "@archive": "folder"
             }
           ]
         }
@@ -4652,12 +4898,14 @@
             {
               "@title": "PCjs CP/M-86 (Disk 1)",
               "@diskette": "CPM86-DISK1-PCJS.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "dsk"
             },
             {
               "@title": "PCjs CP/M-86 (Disk 2)",
               "@diskette": "CPM86-DISK2-PCJS.json",
-              "@format": "PC320K"
+              "@format": "PC320K",
+              "@archive": "dsk"
             }
           ]
         }
@@ -8361,7 +8609,8 @@
               {
                 "@title": "Enhanced DEBUG 1.32b",
                 "@diskette": "ENHDEBUG.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@archive": "folder"
               }
             ]
           }
@@ -8391,12 +8640,14 @@
               {
                 "@title": "OBJASM 2.0 (Bin)",
                 "@diskette": "OBJASM-BIN.json",
-                "@format": "PC320K"
+                "@format": "PC320K",
+                "@archive": "folder"
               },
               {
                 "@title": "OBJASM 2.0 (Src)",
                 "@diskette": "OBJASM-SRC.json",
-                "@format": "PC320K"
+                "@format": "PC320K",
+                "@archive": "folder"
               }
             ]
           }
@@ -8436,7 +8687,8 @@
               {
                 "@title": "PFM (Paul's File Manager) 3.14",
                 "@diskette": "COMPAQ-PFM.json",
-                "@format": "PC320K"
+                "@format": "PC320K",
+                "@archive": "folder"
               }
             ]
           }
@@ -8451,7 +8703,8 @@
               {
                 "@title": "Realia Spacemaker 1.06",
                 "@diskette": "SM106.json",
-                "@format": "PC160K"
+                "@format": "PC160K",
+                "@archive": "folder"
               }
             ]
           }
@@ -8465,13 +8718,15 @@
             "@media": [
               {
                 "@title": "UNP (Executable Unpacker) 4.11",
-                "@diskette": "UNP411.json",
-                "@format": "PC160K"
+                "@diskette": "UNP411-BIN.json",
+                "@format": "PC160K",
+                "@archive": "folder"
               },
               {
                 "@title": "UNP (Executable Unpacker) Source",
                 "@diskette": "UNP411-SRC.json",
-                "@format": "PC1200K"
+                "@format": "PC1200K",
+                "@archive": "folder"
               }
             ]
           }

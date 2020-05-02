@@ -426,13 +426,14 @@ function main(argc, argv)
                     }
 
                     /*
-                     * Task #1: If --rebuild, then rewrite the JSON disk image.
+                     * Task #1: If --rewrite, then rewrite the JSON disk image.
                      */
-                    if (argv['rebuild']) {
+                    if (argv['rewrite']) {
                         if (sFile.endsWith(".json")) {
                             writeDisk(sFile, di, false, 0, true);
                         }
                     }
+
                     /*
                      * Task #2: If --checklisting, then get the disk's listing and see if it's up-to-date in the website's index.md
                      */

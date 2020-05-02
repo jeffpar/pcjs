@@ -101,7 +101,7 @@ export default class JSONLib {
                         let options = item['@options'];
                         let archive = item['@archive'];
                         if (!item['@localonly'] || hostName == "localhost") {
-                            aDiskettes.push({name, path, options, archive});
+                            aDiskettes.push({name, path, format, options, archive});
                         }
                     }
                 }
