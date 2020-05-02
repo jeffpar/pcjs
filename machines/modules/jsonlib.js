@@ -102,7 +102,7 @@ export default class JSONLib {
                             'name': name,
                             'path': path
                         };
-                        if (!limits) {
+                        if (!limits.length) {
                             let archive = item['@archive'];
                             let label = item['@label'];
                             let options = item['@options'];
