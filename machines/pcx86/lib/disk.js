@@ -871,7 +871,18 @@ class Disk extends Component {
                                 }
                                 else {
                                     if (adw.length < (length >> 2)) {
-                                        dwPattern = adw[--adw.length];
+                                        /*
+                                         * To minimize breakage and changes, I opted to convert new data arrays to the old format,
+                                         * where the data array is just the non-repeating data and dwPattern is the repeating value,
+                                         * like so:
+                                         *
+                                         *      dwPattern = adw[--adw.length];
+                                         *
+                                         * But that was a bone-headed move, because that line will ALWAYS return undefined, since the
+                                         * array gets shortened BEFORE the fetch of the final value.
+                                         */
+                                        dwPattern = adw[adw.length - 1];
+                                        adw.length--;
                                     }
                                 }
                                 this.initSector(sector, iCylinder, iHead, idSector, this.cbSector, dwPattern);
