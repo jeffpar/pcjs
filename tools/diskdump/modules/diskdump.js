@@ -246,11 +246,11 @@ function readDisk(sFile, forceBPB, sectorIDs, sectorErrors, suppData)
         let diskName = path.basename(sFile);
         di = new DiskImage(device, diskName);
         if (diskName.endsWith(".json")) {
-            db = fs.readFileSync(sFile, "utf8");
+            db = readFile(sFile, "utf8");
             if (!di.buildDiskFromJSON(db)) di = null;
         }
         else {
-            db = new DataBuffer(fs.readFileSync(sFile));
+            db = new DataBuffer(readFile(sFile, null));
             let hash = getHash(db);
             if (diskName.endsWith(".psi")) {
                 if (!di.buildDiskFromPSI(db)) di = null;
@@ -277,6 +277,9 @@ function readFile(sFile, encoding = "utf8")
     let data;
     if (sFile) {
         try {
+            if (sFile[0] == '/') {
+                sFile = rootDir + sFile;
+            }
             if (fs.existsSync(sFile)) {
                 data = fs.readFileSync(sFile, encoding);
                 if (!encoding) data = new DataBuffer(data);
@@ -298,7 +301,7 @@ function readJSON(sFile)
 {
     let data, json;
     try {
-        data = fs.readFileSync(sFile, "utf8");
+        data = readFile(sFile, "utf8");
         json = JSON.parse(data);
     } catch(err) {
         printf("error: %s\n", err.message);

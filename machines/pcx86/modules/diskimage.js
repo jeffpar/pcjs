@@ -1976,6 +1976,12 @@ export default class DiskImage {
                 delete desc[DiskImage.FILEDESC.VOL];
             }
         }
+        if (file.module) {
+            desc[DiskImage.FILEDESC.MODULE] = file.module;
+            desc[DiskImage.FILEDESC.MODDESC] = file.modDesc;
+            desc[DiskImage.FILEDESC.SEGMENTS] = file.segments;
+            desc[DiskImage.FILEDESC.ORDINALS] = file.ordinals;
+        }
         if (fnHash && file.size) {
             let ab = new Array(file.size);
             this.readSectorArray(ab, file.aLBA);
@@ -2057,11 +2063,11 @@ export default class DiskImage {
             if (file.sModule != sModule) continue;
             let segment = file.aSegments[nSegment];
             if (!segment) continue;
-            for (let iOrdinal in segment.aEntries) {
-                let entry = segment.aEntries[iOrdinal];
+            for (let iOrdinal in segment.entries) {
+                let entry = segment.entries[iOrdinal];
                 /*
-                    * entry[1] is the symbol name, which becomes the index, and entry[0] is the offset.
-                    */
+                 * entry[1] is the symbol name, which becomes the index, and entry[0] is the offset.
+                 */
                 aSymbols[entry[1]] = entry[0];
             }
             break;
@@ -2090,8 +2096,8 @@ export default class DiskImage {
             let file = this.fileTable[iFile];
             for (let iSegment in file.aSegments) {
                 let segment = file.aSegments[iSegment];
-                for (let iOrdinal in segment.aEntries) {
-                    let entry = segment.aEntries[iOrdinal];
+                for (let iOrdinal in segment.entries) {
+                    let entry = segment.entries[iOrdinal];
                     if (entry[1] && entry[1].indexOf(sSymbolUpper) >= 0) {
                         aInfo.push([entry[1], file.name, iSegment, entry[0], segment.offEnd - segment.offStart]);
                     }
@@ -2726,7 +2732,9 @@ export default class DiskImage {
                 for (let iFile = 0; iFile < this.fileTable.length; iFile++) {
                     let file = this.fileTable[iFile];
                     if (file.name == "." || file.name == "..") continue;
-                    fileTable.push(JSON.stringify(this.getFileDesc(file, false, fnHash)));
+                    let desc = this.getFileDesc(file, false, fnHash);
+                    let indentDesc = desc[DiskImage.FILEDESC.MODULE]? 4 : 0;
+                    fileTable.push(JSON.stringify(desc, null, indentDesc));
                 }
             }
         } else {
@@ -3115,7 +3123,11 @@ DiskImage.FILEDESC = {
     ATTR:       'attr',
     DATE:       'date',
     SIZE:       'size',
-    HASH:       'hash'
+    HASH:       'hash',
+    MODULE:     'module',
+    MODDESC:    'modDesc',
+    SEGMENTS:   'segments',
+    ORDINALS:   'ordinals'
 };
 
 /*

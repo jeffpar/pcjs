@@ -11,6 +11,13 @@ import Device from "../../modules/device.js";
 import DiskImage from "./diskimage.js";
 
 /**
+ * @typedef {Object} segInfo
+ * @property {number} offStart
+ * @property {number} offEnd
+ * @property {Object} entries
+ */
+
+/**
  * @class FileInfo
  * @property {DiskImage} disk
  * @property {number}    iVolume
@@ -21,6 +28,10 @@ import DiskImage from "./diskimage.js";
  * @property {number}    size
  * @property {number}    cluster
  * @property {Array.<number>} aLBA
+ * @property {string}           [module]
+ * @property {string}           [modDesc]
+ * @property {Object.<segInfo>} [segments]
+ * @property {Object.<Array>}   [ordinals] (ordinal[0] is iSegment, ordinal[1] is offEntry)
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class FileInfo {
@@ -136,8 +147,8 @@ export default class FileInfo {
          * Read the Segment Table entries now.
          */
         let iSegment = 1;
-        this.aSegments = [];
-        this.aOrdinals = [];                // this is an optional array for quick ordinal-to-segment lookup
+        this.segments = {};
+        this.ordinals = {};                 // this is an optional table for quick ordinal-to-segment lookup
 
         if (Device.DEBUG) {
             this.device.printf(Device.MESSAGE.FILE, "loadSegmentTable(%s,%#0lx,%#0wx)\n", this.path, offEntries, nEntries);
@@ -150,7 +161,7 @@ export default class FileInfo {
                 if (Device.DEBUG) {
                     this.device.printf(Device.MESSSAGE.FILE, "segment %d: offStart=%#0lx offEnd=%#0lx\n" + iSegment, offSegment, offSegment + lenSegment);
                 }
-                this.aSegments[iSegment++] = {offStart: offSegment, offEnd: offSegment + lenSegment - 1, aEntries: []};
+                this.segments[iSegment++] = {offStart: offSegment, offEnd: offSegment + lenSegment - 1};
             }
             offEntries += 8;
         }
@@ -174,9 +185,9 @@ export default class FileInfo {
          *      cannot find segment 254 (offset 0xF000) for symbol __F000H with ordinal 194
          *      cannot find segment 254 (offset 0x0001) for symbol __WINFLAGS with ordinal 178
          *
-         * The simplest way to handle those Entry Table entries is creating an additional (fake) aSegments table entry.
+         * The simplest way to handle those Entry Table entries is creating an additional (fake) segments table entry.
          */
-        this.aSegments[0xFE] = {offStart: 0, offEnd: 0, aEntries: []};
+        this.segments[0xFE] = {offStart: 0, offEnd: 0};
     }
 
     /**
@@ -237,17 +248,18 @@ export default class FileInfo {
                     offEntry = this.loadValue(offEntries + 4);
                     offEntries += 6;
                 }
-                if (!this.aSegments[iSegment]) {
+                if (!this.segments[iSegment]) {
                     if (Device.DEBUG) {
                         this.device.printf(Device.MESSAGE.FILE, "invalid segment: %d\n", iSegment);
                     }
                 } else {
-                    this.aSegments[iSegment].aEntries[iOrdinal] = [offEntry];
+                    if (!this.segments[iSegment].entries) this.segments[iSegment].entries = {};
+                    this.segments[iSegment].entries[iOrdinal] = [offEntry];
                     if (Device.DEBUG) {
                         this.device.printf(Device.MESSAGE.FILE, "ordinal %d: segment=%d offset=%#0lx @%x\n", iOrdinal, iSegment, offEntry, offDebug);
                     }
                 }
-                this.aOrdinals[iOrdinal] = [iSegment, offEntry];
+                this.ordinals[iOrdinal] = [iSegment, offEntry];
                 iOrdinal++;
             }
         }
@@ -284,18 +296,19 @@ export default class FileInfo {
 
             if (!cNames) {
                 if (!offEntriesEnd) {
-                    this.sModule = sSymbol;
+                    this.module = sSymbol;
                 } else {
-                    this.sDescription = sSymbol;
+                    this.modDesc = sSymbol;
                 }
             }
             else {
                 let iOrdinal = this.loadValue(offEntries);
-                let tuple = this.aOrdinals[iOrdinal];
+                let tuple = this.ordinals[iOrdinal];
                 if (tuple) {
                     let iSegment = tuple[0];        // tuple[0] is the segment number and tuple[1] is the corresponding offEntry
-                    if (this.aSegments[iSegment]) {
-                        let aEntries = this.aSegments[iSegment].aEntries[iOrdinal];
+                    if (this.segments[iSegment]) {
+                        if (!this.segments[iSegment].entries) this.segments[iSegment].entries = {};
+                        let aEntries = this.segments[iSegment].entries[iOrdinal];
                         this.device.assert(aEntries && aEntries.length == 1);
                         aEntries.push(sSymbol);
                         if (Device.DEBUG) {
@@ -324,31 +337,31 @@ export default class FileInfo {
      *
      * FileInfo is supplemented with the following properties:
      *
-     *      sModule
-     *      sDescription
-     *      aSegments[]
+     *      module (string)
+     *      modDesc (string)
+     *      segments[] (Object)
      *
-     * aSegments is indexed by 1-based segment numbers.  Each aSegments[] entry contains:
+     * segments is indexed by 1-based segment numbers.  Each segments[] entry is a segInfo:
      *
      *      offStart (file-relative offset of start of segment data)
      *      offEnd (file-relative offset of end of segment data)
-     *      aEntries[]
+     *      entries[] (Array)
      *
-     * aEntries is an array indexed by 1-based ordinals.  Each aEntries[] entry contains:
+     * entries is a table indexed by 1-based ordinals.  Each entries[] entry contains:
      *
      *      [offset, symbol]
      *
      * where offset is relative to the segment's offStart value, and symbol is a string describing the
      * entry.
      *
-     * NOTE: Although aEntries arrays are similar to the Debugger's aOffsets arrays, they are not
+     * NOTE: Although entries arrays are similar to the Debugger's aOffsets arrays, they are not
      * interchangeable data structures, because ours is ordered by ordinal, whereas aOffsets is
      * ordered by offset.  We provide an interface, getModuleInfo(), to the Debugger that converts
      * our data into an intermediate array, aSymbols, which the Debugger then uses to build aOffsets.
      * It would be nice to avoid building that intermediate representation, but it's a side-effect of
      * the Debugger's earlier support for JSON-encoded MAP files.
      *
-     * There will always be an offset at index 0 of an aEntries[] element, but some error or incomplete
+     * There will always be an offset at index 0 of an entries[] element, but some error or incomplete
      * symbolic information could result in a missing symbol at index 1, because symbol name processing is
      * separate from entry table processing.
      *
@@ -418,9 +431,9 @@ export default class FileInfo {
     getSymbol(off, fNearest)
     {
         let sSymbol = null;
-        if (this.aSegments) {
-            for (let iSegment in this.aSegments) {
-                let segment = this.aSegments[iSegment];
+        if (this.segments) {
+            for (let iSegment in this.segments) {
+                let segment = this.segments[iSegment];
                 if (off >= segment.offStart && off <= segment.offEnd) {
                     /*
                      * This is the one and only segment we need to check, so we can make off segment-relative now.
@@ -430,20 +443,22 @@ export default class FileInfo {
                      * To support fNearest, save the entry where (off - entry[0]) yields the smallest positive result.
                      */
                     let cbNearest = off, entryNearest;
-                    for (let iOrdinal in segment.aEntries) {
-                        let entry = segment.aEntries[iOrdinal];
-                        let cb = off - entry[0];
-                        if (!cb) {
-                            sSymbol = this.sModule + '!' + entry[1];
-                            break;
+                    if (segment.entries) {
+                        for (let iOrdinal in segment.entries) {
+                            let entry = segment.entries[iOrdinal];
+                            let cb = off - entry[0];
+                            if (!cb) {
+                                sSymbol = this.module + '!' + entry[1];
+                                break;
+                            }
+                            if (fNearest && cb > 0 && cb < cbNearest) {
+                                entryNearest = entry;
+                                cbNearest = cb;
+                            }
                         }
-                        if (fNearest && cb > 0 && cb < cbNearest) {
-                            entryNearest = entry;
-                            cbNearest = cb;
+                        if (!sSymbol && entryNearest) {
+                            sSymbol = this.module + '!' + entryNearest[1] + "+" + this.device.sprintf("%#0x", cbNearest);
                         }
-                    }
-                    if (!sSymbol && entryNearest) {
-                        sSymbol = this.sModule + '!' + entryNearest[1] + "+" + this.device.sprintf("%#0x", cbNearest);
                     }
                     break;
                 }
