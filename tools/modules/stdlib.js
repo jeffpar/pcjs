@@ -22,15 +22,44 @@ export default class StdLib {
      */
     constructor()
     {
-        this.argc = 0;
-        this.argv = {};
         this.stdio = new StdIO();
-        this.argv[this.argc++] = process.argv[1];
-        let i = 2;
-        while (i < process.argv.length) {
+        [this.argc, this.argv] = this.parseArgs(process.argv);
+    }
+
+    /**
+     * getArgs(s)
+     *
+     * @this {StdLib}
+     * @param {string} [s]
+     * @returns {Array} [argc, argv]
+     */
+    getArgs(s)
+    {
+        if (s) {
+            let args = s.split(' ');
+            return this.parseArgs(args, 0);
+        }
+        return [this.argc, this.argv];
+    }
+
+    /**
+     * parseArgs(args)
+     *
+     * @this {StdLib}
+     * @param {Array.<string>} [args]
+     * @param {number} [start]
+     * @returns {Array} [argc, argv]
+     */
+    parseArgs(args, start = 1)
+    {
+        let argc = 0;
+        let argv = [];
+        if (start) argv.push(args[start++]);
+        let i = start;
+        while (i < args.length) {
             let j, sSep;
-            let sArg = process.argv[i++];
-            this.argv[this.argc++] = sArg;
+            let sArg = args[i++];
+            argv.push(sArg);
             if (!sArg.indexOf(sSep = "--") || !sArg.indexOf(sSep = "—")) {
                 sArg = sArg.substr(sSep.length);
                 let sValue = true;
@@ -40,39 +69,30 @@ export default class StdLib {
                     sArg = sArg.substr(0, j);
                     sValue = (sValue == "true") ? true : ((sValue == "false") ? false : sValue);
                 }
-                else if (i < process.argv.length && process.argv[i][0] != '-') {
-                    this.argv[this.argc++] = sValue = process.argv[i++];
+                else if (i < args.length && args[i][0] != '-') {
+                    argv.push(sValue = args[i++]);
                 }
-                if (this.argv[sArg] === undefined) {
-                    this.argv[sArg] = sValue;
+                if (!argv.hasOwnProperty(sArg)) {
+                    argv[sArg] = sValue;
                 }
                 else {
-                    if (!Array.isArray(this.argv[sArg])) {
-                        this.argv[sArg] = [this.argv[sArg]];
+                    if (!Array.isArray(argv[sArg])) {
+                        argv[sArg] = [argv[sArg]];
                     }
-                    this.argv[sArg].push(sValue);
+                    argv[sArg].push(sValue);
                 }
             }
             else if (!sArg.indexOf("-")) {
                 for (j = 1; j < sArg.length; j++) {
                     let ch = sArg.charAt(j);
-                    if (this.argv[ch] === undefined) {
-                        this.argv[ch] = true;
+                    if (argv[ch] === undefined) {
+                        argv[ch] = true;
                     }
                 }
             }
         }
-    }
-
-    /**
-     * getArgs()
-     *
-     * @this {StdLib}
-     * @returns {Array} [this.argc, this.argv]
-     */
-    getArgs()
-    {
-        return [this.argc, this.argv];
+        argc = argv.length;
+        return [argc, argv];
     }
 
     /**

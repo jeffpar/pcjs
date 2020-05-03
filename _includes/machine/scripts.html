@@ -213,9 +213,9 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- if machine_factory contains "embed" %}
     <script>{{ machine_factory }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});</script>
   {%- elsif site.pcjs.uncompiled and machine.unbundled %}
-    <script type="module">pcjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
+    <script type="module">PCjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
   {%- elsif site.pcjs.uncompiled or machine.uncompiled %}
-    <script>pcjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
+    <script>PCjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
   {%- else %}
     <script>{{ machine_factory }}('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
 {%- endif %}

@@ -49,6 +49,23 @@ export default class DataBuffer {
     }
 
     /**
+     * compare(dbTarget)
+     *
+     * NOTE: This method isn't part of the Node Buffer class, but it's useful for creating comparing buffers without the client
+     * needing to known which DataBuffer class to import (eg, nodebuffer.js or webbuffer.js).
+     *
+     * The implementation here in nodebuffer.js is trivial, because there's a Node Buffer class method that compares two buffers.
+     *
+     * @this {DataBuffer}
+     * @param {DataBuffer} dbTarget
+     * @returns {boolean} (true if the contents of this buffer are equal to the contents of the specified buffer, false otherwise)
+     */
+    compare(dbTarget)
+    {
+        return !Buffer.compare(this.buffer, dbTarget.buffer);
+    }
+
+    /**
      * copy(dbTarget, offTarget)
      *
      * @this {DataBuffer}

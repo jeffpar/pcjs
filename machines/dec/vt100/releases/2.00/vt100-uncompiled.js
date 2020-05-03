@@ -30,12 +30,12 @@ const COMPILED = false;
 const DEBUG = true;
 
 /**
- * FACTORY is "pcjsMachine" by default; overridden with the machine's "factory" string in machines.json
+ * FACTORY is "PCjsMachine" by default; overridden with the machine's "factory" string in machines.json
  * to ensure unique factories.
  *
  * @define {string}
  */
-const FACTORY = "pcjsMachine";
+const FACTORY = "PCjsMachine";
 
 /**
  * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
@@ -54,16 +54,24 @@ const MAXDEBUG = false;
 const VERSION = "2.00";
 
 /**
+ * REPOSITORY is the current PCjs repository.
+ *
+ * @define {string}
+ */
+const REPOSITORY = "pcjs.org";
+
+/**
  * @class {Defs}
  */
 class Defs {}
 
-Defs.COMMAND  = COMMAND;
-Defs.COMPILED = COMPILED;
-Defs.DEBUG    = DEBUG;
-Defs.FACTORY  = FACTORY;
-Defs.MAXDEBUG = MAXDEBUG;
-Defs.VERSION  = VERSION;
+Defs.COMMAND    = COMMAND;
+Defs.COMPILED   = COMPILED;
+Defs.DEBUG      = DEBUG;
+Defs.FACTORY    = FACTORY;
+Defs.MAXDEBUG   = MAXDEBUG;
+Defs.REPOSITORY = REPOSITORY;
+Defs.VERSION    = VERSION;
 
 /*
  * The following globals CANNOT be overridden.
@@ -886,7 +894,7 @@ class StdIO extends NumIO {
      * Produces a UTC date when ONLY a date (no time) is provided; otherwise, it combines the date and
      * and time, producing a date that is either local or UTC, depending on the presence (or lack) of time
      * zone information.  Finally, if numeric inputs are provided, then Date.UTC() is called to generate
-     * a UTC time.
+     * a UTC time (since there is no provision for a time zone in that case either).
      *
      * In general, you should use this instead of new Date(), because the Date constructor implicitly calls
      * Date.parse(s), which behaves inconsistently.  For example, ISO date-only strings (e.g. "1970-01-01")
@@ -904,7 +912,18 @@ class StdIO extends NumIO {
             date = new Date(Date.now());
         }
         else if (typeof args[0] === "string") {
-            date = new Date(args[0] + ' ' + (args[1] || "00:00:00 GMT"));
+            let s = args[0];
+            if (s.indexOf(':') < 0) {
+                s += ' ' + (args[1] || "00:00:00 GMT");
+            } else if (s.match(/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/)) {
+                /*
+                 * I don't care to support all the possible time zone specifiers just to determine whether or not
+                 * a time zone was provided, so for now, I simply look for common date+time patterns I use, such as
+                 * the "timestamp" pattern above.  TODO: Make this general-purpose someday.
+                 */
+                s += " GMT";
+            }
+            date = new Date(s);
         }
         else if (args[1] === undefined) {
             date = new Date(args[0]);
@@ -2553,6 +2572,17 @@ class WebIO extends StdIO {
     }
 
     /**
+     * getMessages()
+     *
+     * @this {WebIO}
+     * @returns {number}
+     */
+    getMessages()
+    {
+        return this.machine.messages;
+    }
+
+    /**
      * setMessages(messages, on)
      *
      * Use this function to set/clear message groups.  Use isMessageOn() to decide whether to print
@@ -2564,10 +2594,12 @@ class WebIO extends StdIO {
      * @this {WebIO}
      * @param {number} messages
      * @param {boolean} on (true to set, false to clear)
+     * @returns {number} (previous messages set)
      */
     setMessages(messages, on)
     {
         let flush = false;
+        let previous = this.machine.messages;
         if (on) {
             this.machine.messages = this.setBits(this.machine.messages, messages);
         } else {
@@ -2575,6 +2607,7 @@ class WebIO extends StdIO {
             this.machine.messages = this.clearBits(this.machine.messages, messages);
         }
         if (flush) this.flush();
+        return previous;
     }
 }
 

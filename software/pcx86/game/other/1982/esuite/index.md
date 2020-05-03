@@ -8,7 +8,12 @@ machines:
   - id: ibm5160-esuite
     type: pcx86
     config: /configs/pcx86/machine/ibm/5160/mda/256kb/fake188/machine.xml
-    state: state.json
+    autoMount:
+      A:
+        name: PC DOS 2.00 (Disk 1)
+      B:
+        name: Executive Suite (1982)
+    autoType: $date\r$time\rB:\rESUITE\r
 ---
 
 {% include machine.html id="ibm5160-esuite" %}

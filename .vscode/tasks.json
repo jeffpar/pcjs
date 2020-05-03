@@ -24,7 +24,7 @@
     },
     {
       "type": "shell",
-      "label": "bundle: serve",
+      "label": "bundle: serve uncompiled",
       "command": "bundle exec jekyll serve --config _config.yml,_developer.yml",
       "problemMatcher": [],
       "runOptions": {
@@ -33,7 +33,7 @@
     },
     {
       "type": "shell",
-      "label": "bundle: serve release",
+      "label": "bundle: serve",
       "command": "bundle exec jekyll serve --config _config.yml",
       "problemMatcher": []
     }

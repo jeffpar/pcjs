@@ -23,7 +23,7 @@
       "addr": 983296,
       "size": 65276,
       "alias": 4294902016,
-      "file": "/tests/pcx86/80386/test386.json",
+      "file": "/machines/pcx86/bin/test386.json",
       "notify": ""
     }
   ],
@@ -37,7 +37,7 @@
       "scale": true,
       "charCols": 80,
       "charRows": 25,
-      "fontROM": "/devices/pcx86/video/ibm/mda/ibm-mda.json",
+      "fontROM": "/machines/pcx86/ibm/video/mda/IBM-MDA.json",
       "screenColor": "black",
       "touchScreen": false
     }
@@ -64,11 +64,11 @@
     "autoMount": {
       "A": {
         "name": "PC DOS 2.00 (Disk 1)",
-        "path": "/disks/pcx86/dos/ibm/2.00/PCDOS200-DISK1.json"
+        "path": "/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json"
       },
       "B": {
         "name": "PC DOS 2.00 (Disk 2)",
-        "path": "/disks/pcx86/dos/ibm/2.00/PCDOS200-DISK2.json"
+        "path": "/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK2.json"
       }
     }
   },

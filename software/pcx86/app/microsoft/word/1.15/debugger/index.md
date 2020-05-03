@@ -695,4 +695,4 @@ machines:
 
 The following *diskdump* command was used to reflect the above data in our disk image:
 
-    diskdump --disk=archive/MSWORD-115-PROGRAM-BACKUP.img --format=json --output=MSWORD-115-PROGRAM.json --suppData=/disks/pcx86/apps/microsoft/word/1.15/debugger/README.md --overwrite --manifest
+    diskdump --disk=archive/MSWORD-115-PROGRAM-BACKUP.img --format=json --output=MSWORD-115-PROGRAM.json --suppData=/software/pcx86/app/microsoft/word/1.15/debugger/index.md --overwrite --manifest

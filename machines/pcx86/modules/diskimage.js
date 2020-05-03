@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "../../../machines/modules/device.js";
-import CPUx86 from "../../../machines/pcx86/modules/cpux86.js";
+import CPUx86 from "./cpux86.js";
+import Device from "../../modules/device.js";
 import FileInfo from "./fileinfo.js";
 
 /**
@@ -95,19 +95,21 @@ export default class DiskImage {
      * @param {string} [diskName]
      * @param {boolean} [fWritable]
      */
-    constructor(device, diskName = "[DiskImage]", fWritable = false)
+    constructor(device, diskName = "", fWritable = false)
     {
         this.device = device;
         this.printf = device.printf.bind(device);
         this.assert = device.assert.bind(device);
         this.diskName = diskName;
+        this.hash = "none";
+        this.args = "";
         this.fWritable = fWritable;
         this.volTable = [];
         this.fileTable = [];
     }
 
     /**
-     * buildDiskFromBuffer(dbDisk, forceBPB, sectorIDs, sectorErrors, suppData)
+     * buildDiskFromBuffer(dbDisk, hash, forceBPB, sectorIDs, sectorErrors, suppData)
      *
      * Build a disk image from a DataBuffer.
      *
@@ -141,13 +143,14 @@ export default class DiskImage {
      *
      * @this {DiskImage}
      * @param {DataBuffer} dbDisk
+     * @param {string} [hash]
      * @param {fForceBPP} [forceBPB]
      * @param {Array|string} [sectorIDs]
      * @param {Array|string} [sectorErrors]
      * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
      * @returns {boolean} true if successful (aDiskData initialized); false otherwise
      */
-    buildDiskFromBuffer(dbDisk, forceBPB, sectorIDs, sectorErrors, suppData)
+    buildDiskFromBuffer(dbDisk, hash, forceBPB, sectorIDs, sectorErrors, suppData)
     {
         this.aDiskData = null;
         this.cbDiskData = 0;
@@ -188,9 +191,19 @@ export default class DiskImage {
              */
         }
 
-        let bByte0 = dbDisk.readUInt8(offBootSector + DiskImage.BOOT.JMP_OPCODE);
-        let bByte1 = dbDisk.readUInt8(offBootSector + DiskImage.BOOT.JMP_OPCODE + 1);
+        let bByte0 = dbDisk.readUInt8(offBootSector + DiskImage.BPB.JMP_OPCODE);
+        let bByte1 = dbDisk.readUInt8(offBootSector + DiskImage.BPB.JMP_OPCODE + 1);
         let cbSectorBPB = dbDisk.readUInt16LE(offBootSector + DiskImage.BPB.SECTOR_BYTES);
+
+        /*
+         * Save the original BPB, in case we need to modify it later.
+         */
+        this.abOrigBPB = [];
+        this.fBPBModified = false;
+        this.abOrigBPB.push(offBootSector);
+        for (let i = DiskImage.BPB.JMP_OPCODE; i < DiskImage.BPB.LARGE_SECS+4; i++) {
+            this.abOrigBPB.push(dbDisk.readUInt8(offBootSector + i));
+        }
 
         /*
          * These checks are not only necessary for DOS 1.x diskette images (and other pre-BPB images),
@@ -304,19 +317,19 @@ export default class DiskImage {
         /*
          * Let's see if we can find a corresponding BPB in our table of default BPBs.
          */
-        let i, iBPB = -1;
+        let iBPB = -1;
         if (bMediaID) {
-            for (i = 0; i < DiskImage.aDefaultBPBs.length; i++) {
+            for (let i = 0; i < DiskImage.aDefaultBPBs.length; i++) {
                 if (DiskImage.aDefaultBPBs[i][DiskImage.BPB.MEDIA_ID] == bMediaID) {
                     let cbDiskBPB = (DiskImage.aDefaultBPBs[i][DiskImage.BPB.TOTAL_SECS] + (DiskImage.aDefaultBPBs[i][DiskImage.BPB.TOTAL_SECS + 1] * 0x100)) * cbSector;
                     if (cbDiskBPB == cbDiskData) {
                         /*
                          * This code was added to deal with variations in sectors/cluster.  Most software manufacturers
                          * were happy with the defaults that FORMAT chooses for a given diskette size, but in a few cases
-                         * (eg, PC DOS 4.01 720K diskettes), the manufacturer (IBM) opted for a smaller cluster size.
+                         * (eg, PC DOS 4.00 360K diskettes, PC DOS 4.01 720K diskettes, etc), the manufacturer (IBM) opted
+                         * for a smaller cluster size.
                          */
-                        let bClusterSecs = dbDisk.readUInt8(offBootSector + DiskImage.BPB.CLUSTER_SECS);
-                        if (bMediaID != DiskImage.FAT.MEDIA_720KB || bClusterSecs == DiskImage.aDefaultBPBs[i][DiskImage.BPB.CLUSTER_SECS]) {
+                        if (!fBPBExists || dbDisk.readUInt8(offBootSector + DiskImage.BPB.CLUSTER_SECS) == DiskImage.aDefaultBPBs[i][DiskImage.BPB.CLUSTER_SECS]) {
                             iBPB = i;
                             break;
                         }
@@ -347,7 +360,7 @@ export default class DiskImage {
                  * In deference to the PC DOS 2.0 BPB behavior discussed above, we stop our BPB verification after
                  * the first word of HIDDEN_SECS.
                  */
-                for (i = DiskImage.BPB.SECTOR_BYTES; i < DiskImage.BPB.HIDDEN_SECS + 2; i++) {
+                for (let i = DiskImage.BPB.SECTOR_BYTES; i < DiskImage.BPB.HIDDEN_SECS + 2; i++) {
                     let bDefault = DiskImage.aDefaultBPBs[iBPB][i];
                     let bActual = dbDisk.readUInt8(offBootSector + i);
                     if (bDefault != bActual) {
@@ -373,18 +386,20 @@ export default class DiskImage {
                      * However, if --forceBPB is specified, all those concerns go out the window: the goal is assumed to
                      * be a mountable disk, not a bootable disk.  So the BPB copy starts at offset 0 instead of SECTOR_BYTES.
                      */
-                    for (i = forceBPB? 0 : DiskImage.BPB.SECTOR_BYTES; i < DiskImage.BPB.LARGE_SECS+4; i++) {
+                    for (let i = forceBPB? 0 : DiskImage.BPB.SECTOR_BYTES; i < DiskImage.BPB.LARGE_SECS+4; i++) {
                         dbDisk.writeUInt8(DiskImage.aDefaultBPBs[iBPB][i] || 0, offBootSector + i);
                     }
-                    this.printf(Device.MESSAGE.WARN, "BPB has been updated\n");
+                    this.printf(Device.MESSAGE.INFO, "BPB has been updated\n");
+                    if (hash) this.fBPBModified = true;
                 }
-                else if (bByte0 == 0xF6 && bByte1 == 0xF6) {
+                else if (bByte0 == 0xF6 && bByte1 == 0xF6 && bMediaIDBPB > 0xF8) {
                     /*
                      * WARNING: I've added this "0xF6" hack expressly to fix boot sectors that may have been zapped by an
-                     * inadvertent reformat, or...?
+                     * inadvertent reformat, or...?  However, certain Xenix diskettes get misdetected by this, so we at least
+                     * require the media ID (from the first byte of the first FAT sector) be sensible.
                      */
                     this.printf(Device.MESSAGE.WARN, "repairing damaged boot sector with BPB for media ID %#02bx\n", bMediaID);
-                    for (i = 0; i < DiskImage.BPB.LARGE_SECS+4; i++) {
+                    for (let i = 0; i < DiskImage.BPB.LARGE_SECS+4; i++) {
                         dbDisk.writeUInt8(DiskImage.aDefaultBPBs[iBPB][i] || 0, offBootSector + i);
                     }
                 }
@@ -402,8 +417,12 @@ export default class DiskImage {
              * The signature check is another pre-2.0 disk check, to avoid misinterpreting any BPB that we might have
              * previously added ourselves as an original BPB.
              */
-            dbDisk.write(DiskImage.PCJS_OEM, DiskImage.BOOT.OEM_STRING + offBootSector, DiskImage.PCJS_OEM.length);
-            this.printf(Device.MESSAGE.WARN, "OEM string has been updated\n");
+            let dw = dbDisk.readInt32BE(DiskImage.BPB.OEM_STRING + offBootSector);
+            if (dw != 0x50434A53) {
+                dbDisk.write(DiskImage.PCJS_OEM, DiskImage.BPB.OEM_STRING + offBootSector, DiskImage.PCJS_OEM.length);
+                this.printf(Device.MESSAGE.INFO, "OEM string has been updated\n");
+                if (hash) this.fBPBModified = true;
+            }
         }
 
         if (!nHeads) {
@@ -462,6 +481,7 @@ export default class DiskImage {
             cbTrack = nSectorsPerTrack * cbSector;
             let suppObj = this.parseSuppData(suppData);
             this.aDiskData = new Array(nCylinders);
+            if (hash) this.hash = hash;
             this.nCylinders = nCylinders;
 
             for (let iCylinder=0; iCylinder < nCylinders; iCylinder++) {
@@ -555,7 +575,7 @@ export default class DiskImage {
                         let aParts, n;
                         if (sectorIDs) {
                             let aSectorIDs = (typeof sectorIDs == "string")? [sectorIDs] : sectorIDs;
-                            for (i = 0; i < aSectorIDs.length; i++) {
+                            for (let i = 0; i < aSectorIDs.length; i++) {
                                 aParts = aSectorIDs[i].split(":");
                                 if (+aParts[0] === iCylinder && +aParts[1] === iHead && +aParts[2] === sectorID) {
                                     n = +aParts[3];
@@ -569,7 +589,7 @@ export default class DiskImage {
                         let sectorError = 0;
                         if (sectorErrors) {
                             let aSectorErrors = (typeof sectorErrors == "string")? [sectorErrors] : sectorErrors;
-                            for (i = 0; i < aSectorErrors.length; i++) {
+                            for (let i = 0; i < aSectorErrors.length; i++) {
                                 aParts = aSectorErrors[i].split(":");
                                 if (+aParts[0] === iCylinder && +aParts[1] === iHead && +aParts[2] === sectorID) {
                                     n = +aParts[3] || -1;
@@ -632,19 +652,24 @@ export default class DiskImage {
     }
 
     /**
-     * buildDiskFromFiles(dbDisk, aFileData, kbTarget)
+     * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget)
      *
      * @this {DiskImage}
      * @param {DataBuffer} dbDisk
+     * @param {string} diskName
      * @param {Array.<FileData>} aFileData
      * @param {number} [kbTarget]
      * @returns {boolean} true if disk allocation successful, false if not
      */
-    buildDiskFromFiles(dbDisk, aFileData, kbTarget = 0)
+    buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0)
     {
         if (!aFileData || !aFileData.length) {
             return false;
         }
+
+        this.diskName = diskName;
+        this.abOrigBPB = [];
+        this.fBPBModified = false;
 
         /*
          * Put reasonable upper limits on both individual file sizes and the total size of all files.
@@ -1272,21 +1297,26 @@ export default class DiskImage {
         this.cbDiskData = 0;
         this.dwChecksum = 0;
 
-        let diskData;
+        this.abOrigBPB = [];
+        this.fBPBModified = false;
+
+        let imageData;
         try {
-            diskData = JSON.parse(sData);
-            if (diskData) {
+            imageData = JSON.parse(sData);
+            if (imageData) {
                 /*
                  * We must now differentiate between "legacy" JSON images (which were simply arrays of CHS sector data)
                  * and "extended" JSON images, which are objects with a CHS "diskData" property, among other things.
-                 *
-                 * TODO: Add support for ingesting the DESC.VOLUMES and DESC.FILES properties, too, so that we can avoid
-                 * rebuilding the volume and file tables from scratch.  That will also involve updating rebuildSector() to
-                 * not throw away any existing per-sector file info.
                  */
-                let sectorData = diskData[DiskImage.DESC.SECTORS] || diskData;
-                if (sectorData && sectorData.length) {
-                    let aCylinders = this.aDiskData = sectorData;
+                let imageInfo = imageData[DiskImage.DESC.IMAGE];
+                if (imageInfo) {
+                    let sOrigBPB = imageInfo[DiskImage.IMAGE.ORIGBPB];
+                    if (sOrigBPB) this.abOrigBPB = JSON.parse(sOrigBPB);
+                    this.buildFileTableFromJSON(imageData[DiskImage.DESC.FILES]);
+                }
+                let aDiskData = imageData[DiskImage.DESC.DISKDATA] || imageData;
+                if (aDiskData && aDiskData.length) {
+                    let aCylinders = this.aDiskData = aDiskData;
                     this.nCylinders = aCylinders.length;
                     this.nSectors = this.cbSector = 0;
                     for (let iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
@@ -1337,6 +1367,9 @@ export default class DiskImage {
     {
         this.aDiskData = null;
         this.cbDiskData = 0;
+
+        this.abOrigBPB = [];
+        this.fBPBModified = false;
 
         let data = [];
         let chunkOffset = 0;
@@ -1482,6 +1515,34 @@ export default class DiskImage {
     }
 
     /**
+     * buildFileTableFromJSON(fileTable)
+     *
+     * Convert an array of JSON FILEDESC objects to FileInfo objects.
+     *
+     * @this {DiskImage}
+     * @param {Array.<Object>} fileTable
+     */
+    buildFileTableFromJSON(fileTable)
+    {
+        if (!fileTable) return;
+        if (!this.fileTable.length) {
+            for (let i = 0; i < fileTable.length; i++) {
+                let desc = fileTable[i];
+                let iVolume = desc[DiskImage.FILEDESC.VOL] || 0;
+                let name = this.device.getBaseName(desc[DiskImage.FILEDESC.PATH]);
+                let path = desc[DiskImage.FILEDESC.PATH].replace(/\//g, '\\');
+                let attr = +desc[DiskImage.FILEDESC.ATTR];
+                let date = this.device.parseDate(desc[DiskImage.FILEDESC.DATE]);
+                let size = desc[DiskImage.FILEDESC.SIZE] || 0;
+                fileTable[i] = new FileInfo(this, iVolume, path, name, attr, date, size)
+                let hash = desc[DiskImage.FILEDESC.HASH];
+                if (hash) fileTable[i].hash = hash;
+            }
+            this.fileTable = fileTable;
+        }
+    }
+
+    /**
      * buildTables()
      *
      * This function builds (or rebuilds) a complete file table from all FAT volumes found on the current disk,
@@ -1502,12 +1563,11 @@ export default class DiskImage {
      * was the source of the image.
      *
      * @this {DiskImage}
-     * @param {boolean} [fRebuild]
      * @returns {number}
      */
-    buildTables(fRebuild)
+    buildTables()
     {
-        if (!this.fileTable.length || fRebuild) {
+        if (!this.fileTable.length) {
 
             this.deleteTables();
 
@@ -1894,10 +1954,10 @@ export default class DiskImage {
                     sListing += this.device.sprintf("%s%-8s %-3s%s%s  %#2M-%#02D-%#0.2Y  %#2I:%#02N%#.1A\n", sIndent, name, ext, (file.attr & (DiskImage.ATTR.READONLY | DiskImage.ATTR.HIDDEN | DiskImage.ATTR.SYSTEM))? "*" : " ", sSize, file.date);
                     nTotal++;
                     /*
-                    * NOTE: While it seems odd to include all SUBDIR entries in the file count, that's what DOS always did, so we do, too.
-                    * They don't affect the current directory's byte total (cbDir), since A) the size of a SUBDIR entry is normally zero, and
-                    * B) we don't add their size to the total anyway.
-                    */
+                     * NOTE: While it seems odd to include all SUBDIR entries in the file count, that's what DOS always did, so we do, too.
+                     * SUBDIRs don't affect the current directory's byte total (cbDir), since A) the size of a SUBDIR entry is normally recorded
+                     * as zero (regardless whether the SUBDIR contains files or not), and B) we don't add their size to the total anyway.
+                     */
                     nFiles++;
                 }
                 sListing += getTotal(nFiles, cbDir);
@@ -1913,25 +1973,47 @@ export default class DiskImage {
     }
 
     /**
-     * getFileDesc(file, fComplete)
+     * getFileDesc(file, fComplete, fnHash)
      *
      * @this {DiskImage}
      * @param {FileInfo} file
-     * @param {boolean} [fComplete]
+     * @param {boolean} [fComplete] (if not "complete", then the descriptor omits NAME, since PATH includes it, as well as SIZE and VOL when they are zero)
+     * @param {function(Array,string)} [fnHash]
      * @returns {Object}
      */
-    getFileDesc(file, fComplete)
+    getFileDesc(file, fComplete, fnHash)
     {
         let desc = {
-            [DiskImage.FILEDESC.IVOL]: file.iVolume,
+            [DiskImage.FILEDESC.HASH]: file.hash,
             [DiskImage.FILEDESC.PATH]: file.path.replace(/\\/g, '/'),
             [DiskImage.FILEDESC.NAME]: file.name,
             [DiskImage.FILEDESC.ATTR]: this.device.sprintf("%#0bx", file.attr),
             [DiskImage.FILEDESC.DATE]: this.device.sprintf("%#T", file.date),
-            [DiskImage.FILEDESC.SIZE]: file.size
+            [DiskImage.FILEDESC.SIZE]: file.size,
+            [DiskImage.FILEDESC.VOL]:  file.iVolume
         };
         if (!fComplete) {
             delete desc[DiskImage.FILEDESC.NAME];
+            if (!file.size && (file.attr & DiskImage.ATTR.SUBDIR | DiskImage.ATTR.VOLUME)) {
+                delete desc[DiskImage.FILEDESC.SIZE];
+            }
+            if (!file.iVolume) {
+                delete desc[DiskImage.FILEDESC.VOL];
+            }
+        }
+        if (file.module) {
+            desc[DiskImage.FILEDESC.MODULE] = {
+                [DiskImage.FILEDESC.MODNAME]: file.module,
+                [DiskImage.FILEDESC.MODDESC]: file.modDesc,
+                [DiskImage.FILEDESC.MODSEGS]: file.segments
+            }
+        }
+        if (fnHash && file.size) {
+            let ab = new Array(file.size);
+            this.readSectorArray(ab, file.aLBA);
+            desc[DiskImage.FILEDESC.HASH] = fnHash(ab);
+        } else {
+            if (!desc[DiskImage.FILEDESC.HASH]) delete desc[DiskImage.FILEDESC.HASH];
         }
         return desc;
     }
@@ -1941,7 +2023,7 @@ export default class DiskImage {
      *
      * @this {DiskImage}
      * @param {VolInfo} vol
-     * @param {boolean} [fComplete]
+     * @param {boolean} [fComplete] (currently, all descriptors are "complete")
      * @returns {Object}
      */
     getVolDesc(vol, fComplete)
@@ -1965,32 +2047,25 @@ export default class DiskImage {
     }
 
     /**
-     * getFileManifest(fnHash, typeHash)
+     * getFileManifest(fnHash)
      *
-     * Returns an array of info objects, to serve as a manifest.  Each object is largely a
-     * clone of the FileInfo object, with the exception of cluster and aLBA properties (which
-     * aren't useful outside the context of the DiskImage object), and with the inclusion of
-     * a hash, if the caller provides a hash function.
+     * Returns an array of FILEDESC (file descriptors).  Each object is largely a clone
+     * of the FileInfo object, with the exception of cluster and aLBA properties (which aren't
+     * useful outside the context of the DiskImage object), and with the inclusion of
+     * a HASH property, if the caller provides a hash function.
      *
      * @this {DiskImage}
      * @param {function(Array,string)} [fnHash]
-     * @param {string} [typeHash] (eg, "MD5")
      * @returns {Array}
      */
-    getFileManifest(fnHash, typeHash)
+    getFileManifest(fnHash)
     {
         let aFiles = [];
         if (this.buildTables()) {
             for (let i = 0; i < this.fileTable.length; i++) {
                 let file = this.fileTable[i];
                 if (file.name == "." || file.name == "..") continue;
-                let info = this.getFileDesc(file, true);
-                if (fnHash && file.size) {
-                    let ab = new Array(file.size);
-                    this.readSectorArray(ab, file.aLBA);
-                    info[typeHash] = fnHash(ab, typeHash);
-                }
-                aFiles.push(info);
+                aFiles.push(this.getFileDesc(file, true, fnHash));
             }
         }
         return aFiles;
@@ -2014,11 +2089,11 @@ export default class DiskImage {
             if (file.sModule != sModule) continue;
             let segment = file.aSegments[nSegment];
             if (!segment) continue;
-            for (let iOrdinal in segment.aEntries) {
-                let entry = segment.aEntries[iOrdinal];
+            for (let iOrdinal in segment.entries) {
+                let entry = segment.entries[iOrdinal];
                 /*
-                    * entry[1] is the symbol name, which becomes the index, and entry[0] is the offset.
-                    */
+                 * entry[1] is the symbol name, which becomes the index, and entry[0] is the offset.
+                 */
                 aSymbols[entry[1]] = entry[0];
             }
             break;
@@ -2047,8 +2122,8 @@ export default class DiskImage {
             let file = this.fileTable[iFile];
             for (let iSegment in file.aSegments) {
                 let segment = file.aSegments[iSegment];
-                for (let iOrdinal in segment.aEntries) {
-                    let entry = segment.aEntries[iOrdinal];
+                for (let iOrdinal in segment.entries) {
+                    let entry = segment.entries[iOrdinal];
                     if (entry[1] && entry[1].indexOf(sSymbolUpper) >= 0) {
                         aInfo.push([entry[1], file.name, iSegment, entry[0], segment.offEnd - segment.offStart]);
                     }
@@ -2059,7 +2134,7 @@ export default class DiskImage {
     }
 
     /**
-     * getData(year, month, day, hour, minute, second, sFile)
+     * getDate(year, month, day, hour, minute, second, sFile)
      *
      * @this {DiskImage}
      * @param {number} year
@@ -2467,7 +2542,7 @@ export default class DiskImage {
         let adw = [];
         let cdw = cbSector >> 2;
         for (let idw = 0; idw < cdw; idw++, ib += 4) {
-            adw[idw] = db? db.readInt32LE(ib) : 0;
+            adw[idw] = db && ib < db.length? db.readInt32LE(ib) : 0;
         }
         let sector = /** @type {Sector} */ ({
             [DiskImage.SECTOR.CYLINDER]: iCylinder,
@@ -2535,11 +2610,13 @@ export default class DiskImage {
         if (adw != undefined) {
             delete sector[DiskImage.SECTOR.DATA];
         } else {
+            let cdw = 0;
             adw = sector['data'];
             if (adw == undefined) {
                 adw = [dwPattern];
                 this.assert(dwPattern != undefined);
             } else {
+                cdw = adw.length;
                 delete sector['data'];
             }
         }
@@ -2563,7 +2640,7 @@ export default class DiskImage {
      * @param {Sector} sector
      * @param {Array.<number>} adw
      * @param {number} cbSector
-     * @param {number} [dwPattern]
+     * @param {number} [dwPattern] (undefined for new JSON disk images, because they simply store any final repeating value as the last DATA value)
      * @returns {Sector}
      */
     initSector(sector, adw, cbSector, dwPattern)
@@ -2586,9 +2663,20 @@ export default class DiskImage {
                 dwPrev = dw;
                 cPrev = 0;
             }
-            this.dwChecksum = (this.dwChecksum + dw) & (0xffffffff|0);
         }
         adw.length -= cPrev;
+        /*
+         * To be backward-compatible with the checksumming logic used with older JSON disk images (where
+         * any ending pattern was stored in a separate 'pattern' property and omitted from the 'data' array),
+         * we must omit the final data value from *our* checksum as well, but only if it's the final value
+         * in a less-than-full sector.
+         */
+        cdw = adw.length < cdw? adw.length - 1 : adw.length;
+        let dwChecksum = 0;
+        for (let idw = 0; idw < cdw; idw++) {
+            dwChecksum = (dwChecksum + adw[idw]) & (0xffffffff|0);
+        }
+        this.dwChecksum = (this.dwChecksum + dwChecksum) & (0xffffffff|0);
         if (this.fWritable) {
             /*
              * If this disk is writable (ie, will be loaded into a machine with a read/write drive),
@@ -2611,29 +2699,38 @@ export default class DiskImage {
      */
     getData(dbDisk)
     {
-        let ib = 0;
-        let aDiskData = this.aDiskData;
-        for (let iCylinder = 0; iCylinder < aDiskData.length; iCylinder++) {
-            for (let iHead = 0; iHead < aDiskData[iCylinder].length; iHead++) {
-                for (let iSector = 0; iSector < aDiskData[iCylinder][iHead].length; iSector++) {
-                    let sector = aDiskData[iCylinder][iHead][iSector];
-                    if (sector) {
-                        let n = sector[DiskImage.SECTOR.LENGTH];
-                        for (let i = 0; i < n; i++) {
-                            let b = this.read(sector, i);
-                            this.assert(b >= 0);
-                            dbDisk.writeUInt8(b, ib++);
+        if (this.aDiskData) {
+            let ib = 0;
+            let aDiskData = this.aDiskData;
+            for (let iCylinder = 0; iCylinder < aDiskData.length; iCylinder++) {
+                for (let iHead = 0; iHead < aDiskData[iCylinder].length; iHead++) {
+                    for (let iSector = 0; iSector < aDiskData[iCylinder][iHead].length; iSector++) {
+                        let sector = aDiskData[iCylinder][iHead][iSector];
+                        if (sector) {
+                            let n = sector[DiskImage.SECTOR.LENGTH];
+                            for (let i = 0; i < n; i++) {
+                                let b = this.read(sector, i);
+                                this.assert(b >= 0);
+                                dbDisk.writeUInt8(b, ib++);
+                            }
                         }
                     }
                 }
             }
+            if (this.abOrigBPB.length) {
+                let off = this.abOrigBPB.shift();
+                for (let i = DiskImage.BPB.JMP_OPCODE; i < DiskImage.BPB.LARGE_SECS+4; i++) {
+                    dbDisk.writeUInt8(this.abOrigBPB[i - DiskImage.BPB.JMP_OPCODE], off + i);
+                }
+            }
+            this.assert(ib == dbDisk.length);
+            return true;
         }
-        this.assert(ib == dbDisk.length);
-        return true;
+        return false;
     }
 
     /**
-     * getJSON(fLegacy, indent)
+     * getJSON(fnHash, fLegacy, indent)
      *
      * If a disk image contains a recognized volume type (eg, FAT12, FAT16), we now prefer to produce an
      * "extended" JSON image, which will include a volume table (of volume descriptors), a file table (of
@@ -2643,11 +2740,12 @@ export default class DiskImage {
      * To create a "legacy" JSON image, without any "extended" information, set fLegacy to true.
      *
      * @this {DiskImage}
+     * @param {function(Array,string)} [fnHash]
      * @param {boolean} [fLegacy] (must be explicitly set to true to generate a "legacy" JSON disk image)
      * @param {number} [indent] (indentation is not recommended, due to significant bloat)
      * @returns {string}
      */
-    getJSON(fLegacy = false, indent = 0)
+    getJSON(fnHash, fLegacy = false, indent = 0)
     {
         let volTable, fileTable;
         if (!fLegacy) {
@@ -2660,19 +2758,96 @@ export default class DiskImage {
                 for (let iFile = 0; iFile < this.fileTable.length; iFile++) {
                     let file = this.fileTable[iFile];
                     if (file.name == "." || file.name == "..") continue;
-                    fileTable.push(this.getFileDesc(file));
+                    let desc = this.getFileDesc(file, false, fnHash);
+                    // let indentDesc = desc[DiskImage.FILEDESC.MODULE]? 4 : 0;
+                    fileTable.push(JSON.stringify(desc, null, 0));
                 }
             }
         } else {
             this.deleteTables();
         }
-        let sDiskData = JSON.stringify(this.aDiskData, null, indent);
-        if (fileTable) {
-            let sVolTable = JSON.stringify(volTable, null, indent + 2);
-            let sFileTable = JSON.stringify(fileTable, null, indent + 2);
-            sDiskData = "{\n\"" + DiskImage.DESC.VOLUMES + "\":" + sVolTable + ",\n\"" + DiskImage.DESC.FILES + "\":" + sFileTable + ",\n\"" + DiskImage.DESC.SECTORS + "\":" + sDiskData + "\n}";
+        let imageInfo = {
+            [DiskImage.IMAGE.TYPE]: DiskImage.TYPE.CHS,
+            [DiskImage.IMAGE.NAME]: this.diskName,
+            [DiskImage.IMAGE.HASH]: this.hash,
+            [DiskImage.IMAGE.CHECKSUM]: this.dwChecksum,
+            [DiskImage.IMAGE.CYLINDERS]: this.nCylinders,
+            [DiskImage.IMAGE.HEADS]: this.nHeads,
+            [DiskImage.IMAGE.TRACKDEF]: this.nSectors,
+            [DiskImage.IMAGE.SECTORDEF]: this.cbSector,
+            [DiskImage.IMAGE.DISKSIZE]: this.cbDiskData,
+            [DiskImage.IMAGE.DISKSIZE]: this.cbDiskData,
+            [DiskImage.IMAGE.ORIGBPB]: JSON.stringify(this.abOrigBPB),
+            [DiskImage.IMAGE.VERSION]: Device.VERSION,
+            [DiskImage.IMAGE.REPOSITORY]: Device.REPOSITORY,
+            [DiskImage.IMAGE.COMMAND]: this.args,
+        };
+        if (!this.fBPBModified) {
+            delete imageInfo[DiskImage.IMAGE.ORIGBPB];
         }
-        return sDiskData;
+        let sImageInfo = JSON.stringify(imageInfo, null, indent + 2);
+        let sVolTable, sFileTable;
+        if (fileTable) {
+            sVolTable = JSON.stringify(volTable, null, indent + 2);
+            sFileTable = '';
+            fileTable.forEach((desc) => {
+                if (sFileTable) sFileTable += ',\n';
+                sFileTable += '  ' + desc;
+            });
+            sFileTable = '[\n' + sFileTable + '\n]';
+        }
+        let sDiskData = JSON.stringify(this.aDiskData, null, indent);
+        let sImageData = "{\n\"" + DiskImage.DESC.IMAGE + "\": " + sImageInfo + ",\n\"" + (sVolTable? DiskImage.DESC.VOLUMES + "\": " + sVolTable + ",\n\"" : "") + (sFileTable? DiskImage.DESC.FILES + "\": " + sFileTable + ",\n\"" : "") + DiskImage.DESC.DISKDATA + "\":" + sDiskData + "\n}";
+        return sImageData;
+    }
+
+    /**
+     * findFile(sName)
+     *
+     * @param {string} name
+     * @return {Object|null}
+     */
+    findFile(name)
+    {
+        let desc = null;
+        if (this.buildTables()) {
+            name = name.toUpperCase();
+            if (this.fileTable) {
+                for (let i = 0; i < this.fileTable.length; i++) {
+                    let file = this.fileTable[i];
+                    if (name == file.name) {
+                        desc = this.getFileDesc(file, true);
+                        break;
+                    }
+                }
+            }
+        }
+        return desc;
+    }
+
+    /**
+     * getChecksum()
+     *
+     * NOTE: As noted in initSector(), our checksums are somewhat constrained by compatibility with previous JSON formats;
+     * in particular, for sectors that end with a repeating value, only the DATA values up to but NOT including that final
+     * repeating value are checksummed.
+     *
+     * Technically, the checksums we calculated for older JSON formats should have repeatedly summed their 'pattern' value
+     * as well.  But they didn't.  And I would like to avoid checksum warnings for anyone loading the new JSON format for the
+     * first time, due to an old checksum stored in their browser's local storage.  The warnings aren't fatal, but they do
+     * cause any saved machine state to be discarded, since the validity of a machine state is predicated on all the original
+     * inputs (including the original diskette images) matching the current inputs.  And while it's unfortunate that our
+     * checksums didn't (and still don't) sum the entire image, the limited purpose that they serve is still satisfied.
+     *
+     * TODO: Add a new "full" checksum property to DiskImage that checksums the entire disk image, including repeated values,
+     * along with an option to return the "full" checksum here.
+     *
+     * @this {DiskImage}
+     * @returns {number}
+     */
+    getChecksum()
+    {
+        return this.dwChecksum;
     }
 
     /**
@@ -2694,7 +2869,7 @@ export default class DiskImage {
      */
     getName()
     {
-        return this.diskName;
+        return this.diskName.replace(/\.[a-z]+$/i, "");
     }
 
     /**
@@ -2709,6 +2884,17 @@ export default class DiskImage {
     }
 
     /**
+     * setArgs(args)
+     *
+     * @this {DiskImage}
+     * @param {string} args
+     */
+    setArgs(args)
+    {
+        this.args = args;
+    }
+
+    /**
      * parseSuppData()
      *
      * @this {DiskImage}
@@ -2719,9 +2905,9 @@ export default class DiskImage {
     {
         let suppObj = {};
         if (suppData) {
-            let aSectorData = suppData.split(/[ \t]*MFM Sector\s*\n/);
-            for (let i = 1; i < aSectorData.length; i++) {
-                let metaData = aSectorData[i].match(/Sector ID:([0-9]+)[\s\S]*?Track ID:([0-9]+)[\s\S]*?Side ID:([0-9]+)[\s\S]*?Size:([0-9]+)[\s\S]*?DataMark:0x([0-9A-F]+)[\s\S]*?Head CRC:0x([0-9A-F]+)\s+\(([^)]*)\)[\s\S]*?Data CRC:0x([0-9A-F]+)\s+\(([^)]*)\)/);
+            let aSuppData = suppData.split(/[ \t]*MFM Sector\s*\n/);
+            for (let i = 1; i < aSuppData.length; i++) {
+                let metaData = aSuppData[i].match(/Sector ID:([0-9]+)[\s\S]*?Track ID:([0-9]+)[\s\S]*?Side ID:([0-9]+)[\s\S]*?Size:([0-9]+)[\s\S]*?DataMark:0x([0-9A-F]+)[\s\S]*?Head CRC:0x([0-9A-F]+)\s+\(([^)]*)\)[\s\S]*?Data CRC:0x([0-9A-F]+)\s+\(([^)]*)\)/);
                 if (metaData) {
                     let data = [];
                     let sectorID = +metaData[1];
@@ -2734,7 +2920,7 @@ export default class DiskImage {
                     let dataCRC = parseInt(metaData[8], 16)
                     let dataError = (metaData[9].toLowerCase() == "ok")? 0 : -1;
                     let matchData, reData = /([0-9A-F]+)\|([^|]*)\|/g;
-                    while ((matchData = reData.exec(aSectorData[i]))) {
+                    while ((matchData = reData.exec(aSuppData[i]))) {
                         let shift = 0, dw = 0;
                         let matchByte, reByte = /\s+([0-9A-F]+)/g;
                         while ((matchByte = reByte.exec(matchData[2]))) {
@@ -2926,9 +3112,36 @@ export default class DiskImage {
  * Top-level descriptors in "extended" JSON disk images.
  */
 DiskImage.DESC = {
+    IMAGE:      'imageInfo',
     VOLUMES:    'volTable',
     FILES:      'fileTable',
-    SECTORS:    'diskData'
+    DISKDATA:   'diskData'
+};
+
+/*
+ * Supported image types.
+ */
+DiskImage.TYPE = {
+    CHS:        'CHS'
+};
+
+/*
+ * Image descriptor properties.
+ */
+DiskImage.IMAGE = {
+    TYPE:       'type',
+    NAME:       'name',
+    HASH:       'hash',
+    CHECKSUM:   'checksum',
+    CYLINDERS:  'cylinders',
+    HEADS:      'heads',
+    TRACKDEF:   'trackDefault',
+    SECTORDEF:  'sectorDefault',
+    DISKSIZE:   'diskSize',
+    ORIGBPB:    'bootSector',
+    VERSION:    'version',
+    REPOSITORY: 'repository',
+    COMMAND:    'diskdump.js'
 };
 
 /*
@@ -2954,26 +3167,31 @@ DiskImage.VOLDESC = {
  * File descriptor properties.
  */
 DiskImage.FILEDESC = {
-    IVOL:       'vol',
+    VOL:        'vol',
     PATH:       'path',
     NAME:       'name',
     ATTR:       'attr',
     DATE:       'date',
     SIZE:       'size',
-    HASH:       'hash'              //
+    HASH:       'hash',
+    MODULE:     'module',
+    MODNAME:    'name',
+    MODDESC:    'description',
+    MODSEGS:    'segments'
 };
 
 /*
- * Sector object properties.
+ * Sector object "public" properties.
  */
 DiskImage.SECTOR = {
-    CYLINDER:   'c',                // cylinder number (0-based)
-    HEAD:       'h',                // head number (0-based)
-    ID:         's',                // sector ID (generally 1-based, except for unusual/copy-protected disks)
-    LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks)
-    DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated)
-    FILE_INFO:  'f',                // "extended" JSON disk images only
-    FILE_OFFSET:'o',                // "extended" JSON disk images only
+    CYLINDER:   'c',                // cylinder number (0-based) [formerly iCylinder]
+    HEAD:       'h',                // head number (0-based) [formerly iHead]
+    ID:         's',                // sector ID (generally 1-based, except for unusual/copy-protected disks) [formerly 'sector']
+    LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks) [formerly 'length']
+    DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
+    FILE_INFO:  'f',                // "extended" JSON disk images only [formerly file]
+    FILE_OFFSET:'o',                // "extended" JSON disk images only [formerly offFile]
+                                    // [no longer used: 'pattern']
     /*
      * The following properties occur very infrequently (and usually only in copy-protected or degraded disk images),
      * hence the longer, more meaningful IDs.
@@ -3019,17 +3237,15 @@ DiskImage.MBR = {
  * (ie, 0x55AA instead 0xAA55) -- perhaps by a dyslexic programmer -- so be careful out there.
  */
 DiskImage.BOOT = {
-    JMP_OPCODE:     0x000,      // 1 byte for a JMP opcode, followed by a 1 or 2-byte offset
-    OEM_STRING:     0x003,      // 8 bytes
     SIG_OFFSET:     0x1FE,
     SIGNATURE:      0xAA55      // to be clear, the low byte (at offset 0x1FE) is 0x55 and the high byte (at offset 0x1FF) is 0xAA
 };
 
 /*
  * PCJS_LABEL is our default label, used whenever a more suitable label (eg, the disk image's folder name)
- * is not available or not supplied, and PCJS_OEM is inserted into any DiskImage-generated diskette images.
+ * is not available (or not supplied), and PCJS_OEM is inserted into any DiskImage-generated diskette images.
  */
-DiskImage.PCJS_LABEL = "PCJS";
+DiskImage.PCJS_LABEL = "PCJSDISK";
 DiskImage.PCJS_OEM   = "PCJS.ORG";
 
 /*
@@ -3233,6 +3449,9 @@ DiskImage.aDefaultBPBs = [
 /*
  * BIOS Parameter Block (BPB) offsets in DOS-compatible boot sectors (DOS 2.x and up)
  *
+ * Technically, JMP_OPCODE and OEM_STRING are not part of a BPB, but for simplicity's sake, this is where we're
+ * recording those offsets.
+ *
  * NOTE: DOS 2.x OEM documentation says that the words starting at offset 0x018 (TRACK_SECS, TOTAL_HEADS, and HIDDEN_SECS)
  * are optional, but even the DOS 2.0 FORMAT utility initializes all three of those words.  There may be some OEM media out
  * there with BPBs that are only valid up to offset 0x018, but I've not run across any media like that.
@@ -3241,6 +3460,8 @@ DiskImage.aDefaultBPBs = [
  * to make both HIDDEN_SECS and LARGE_SECS 4-byte values, which meant that LARGE_SECS had to move from 0x01E to 0x020.
  */
 DiskImage.BPB = {
+    JMP_OPCODE:     0x000,      // 1 byte for a JMP opcode, followed by a 1 or 2-byte offset
+    OEM_STRING:     0x003,      // 8 bytes
     SECTOR_BYTES:   0x00B,      // 2 bytes: bytes per sector (eg, 0x200 or 512)
     CLUSTER_SECS:   0x00D,      // 1 byte: sectors per cluster (eg, 1)
     RESERVED_SECS:  0x00E,      // 2 bytes: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (eg, 1)

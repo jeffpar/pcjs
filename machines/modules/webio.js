@@ -1189,6 +1189,17 @@ export default class WebIO extends StdIO {
     }
 
     /**
+     * getMessages()
+     *
+     * @this {WebIO}
+     * @returns {number}
+     */
+    getMessages()
+    {
+        return this.machine.messages;
+    }
+
+    /**
      * setMessages(messages, on)
      *
      * Use this function to set/clear message groups.  Use isMessageOn() to decide whether to print
@@ -1200,10 +1211,12 @@ export default class WebIO extends StdIO {
      * @this {WebIO}
      * @param {number} messages
      * @param {boolean} on (true to set, false to clear)
+     * @returns {number} (previous messages set)
      */
     setMessages(messages, on)
     {
         let flush = false;
+        let previous = this.machine.messages;
         if (on) {
             this.machine.messages = this.setBits(this.machine.messages, messages);
         } else {
@@ -1211,6 +1224,7 @@ export default class WebIO extends StdIO {
             this.machine.messages = this.clearBits(this.machine.messages, messages);
         }
         if (flush) this.flush();
+        return previous;
     }
 }
 

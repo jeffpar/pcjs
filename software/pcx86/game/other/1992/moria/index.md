@@ -7,7 +7,13 @@ machines:
   - id: ibm5160-moria55
     type: pcx86
     config: /configs/pcx86/machine/ibm/5160/cga/640kb/machine.xml
-    state: state.json
+    autoMount:
+      A:
+        name: PC DOS 2.00 (Disk 1)
+      B:
+        name: Moria (1992)
+    autoType: $date\r$time\rB:\rMORIA88\r
+    resume: 1
 ---
 
 {% include machine.html id="ibm5160-moria55" %}
