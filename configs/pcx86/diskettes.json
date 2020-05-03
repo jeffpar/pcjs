@@ -92,7 +92,8 @@
                 "@photo": ".jpg",
                 "@format": "PC160K",
                 "@options": "--sectorID=11:0:8:61",
-                "@kryoflux": true
+                "@kryoflux": true,
+                "@archive": "MULTIPLAN-IBM100-PROGRAM-BACKUP.img"
               },
               {
                 "@title": "IBM Multiplan 1.00 (Tutorial)",

@@ -269,7 +269,7 @@ function readAll(argv)
                             } else if (diskette.archive == "folder") {
                                 sArchiveFile = sArchiveFile.replace(".img", path.sep);
                             } else {
-                                sArchiveFile = path.join(path.dirname(sArchiveFile), diskette.archive) + path.sep;
+                                sArchiveFile = path.join(path.dirname(sArchiveFile), diskette.archive) + (diskette.archive.indexOf(".img") < 0? path.sep : "");
                             }
                         } else if (!existsFile(sArchiveFile)) {
                             /*
