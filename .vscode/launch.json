@@ -29,7 +29,7 @@
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/tools/diskdump/modules/diskdump.js",
-        "args": ["--disk","/harddisks/pcx86/10mb/PCDOS200-WIN101-EGA.json","--output","PCDOS200-WIN101-EGA.json"],
+        "args": ["--readall","--find=link.exe"],
         "cwd": "${workspaceFolder}/tools/diskdump/modules",
         "stopOnEntry": false,
         "console": "internalConsole"

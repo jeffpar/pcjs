@@ -163,7 +163,7 @@ export default class StdIO extends NumIO {
      * Produces a UTC date when ONLY a date (no time) is provided; otherwise, it combines the date and
      * and time, producing a date that is either local or UTC, depending on the presence (or lack) of time
      * zone information.  Finally, if numeric inputs are provided, then Date.UTC() is called to generate
-     * a UTC time.
+     * a UTC time (since there is no provision for a time zone in that case either).
      *
      * In general, you should use this instead of new Date(), because the Date constructor implicitly calls
      * Date.parse(s), which behaves inconsistently.  For example, ISO date-only strings (e.g. "1970-01-01")
@@ -181,7 +181,18 @@ export default class StdIO extends NumIO {
             date = new Date(Date.now());
         }
         else if (typeof args[0] === "string") {
-            date = new Date(args[0] + ' ' + (args[1] || "00:00:00 GMT"));
+            let s = args[0];
+            if (s.indexOf(':') < 0) {
+                s += ' ' + (args[1] || "00:00:00 GMT");
+            } else if (s.match(/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/)) {
+                /*
+                 * I don't care to support all the possible time zone specifiers just to determine whether or not
+                 * a time zone was provided, so for now, I simply look for common date+time patterns I use, such as
+                 * the "timestamp" pattern above.  TODO: Make this general-purpose someday.
+                 */
+                s += " GMT";
+            }
+            date = new Date(s);
         }
         else if (args[1] === undefined) {
             date = new Date(args[0]);

@@ -27,11 +27,11 @@ import DiskImage from "./diskimage.js";
  * @property {Date}      date
  * @property {number}    size
  * @property {number}    cluster
- * @property {Array.<number>} aLBA
+ * @property {Array.<number>}   aLBA
  * @property {string}           [module]
  * @property {string}           [modDesc]
  * @property {Object.<segInfo>} [segments]
- * @property {Object.<Array>}   [ordinals] (ordinal[0] is iSegment, ordinal[1] is offEntry)
+ * @property {Object.<Array>}   [ordinals] (ordinal[0] is iSegment, ordinal[1] is offset)
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class FileInfo {
@@ -45,10 +45,10 @@ export default class FileInfo {
      * @param {number} attr
      * @param {Date} date
      * @param {number} size
-     * @param {number} cluster
-     * @param {Array.<number>} aLBA
+     * @param {number} [cluster]
+     * @param {Array.<number>} [aLBA]
      */
-    constructor(disk, iVolume, path, name, attr, date, size, cluster, aLBA)
+    constructor(disk, iVolume, path, name, attr, date, size, cluster = -1, aLBA = null)
     {
         this.device = disk.device;
         this.disk = disk;
@@ -134,21 +134,22 @@ export default class FileInfo {
     }
 
     /**
-     * loadSegmentTable(offEntries, nEntries, nSegOffShift)
+     * loadSegmentTable(offEntries, nEntries, nSegOffShift, fOrdinalTable)
      *
      * @this {FileInfo}
      * @param {number} offEntries
      * @param {number} nEntries
      * @param {number} nSegOffShift
+     * @param {boolean} [fOrdinalTable] (currently this is always, since this "optional" table is still required for ordinal lookups)
      */
-    loadSegmentTable(offEntries, nEntries, nSegOffShift)
+    loadSegmentTable(offEntries, nEntries, nSegOffShift, fOrdinalTable = true)
     {
         /*
          * Read the Segment Table entries now.
          */
         let iSegment = 1;
         this.segments = {};
-        this.ordinals = {};                 // this is an optional table for quick ordinal-to-segment lookup
+        this.ordinals = fOrdinalTable? {} : null;   // this is an optional table for quick ordinal-to-segment lookup
 
         if (Device.DEBUG) {
             this.device.printf(Device.MESSAGE.FILE, "loadSegmentTable(%s,%#0lx,%#0wx)\n", this.path, offEntries, nEntries);
@@ -231,13 +232,13 @@ export default class FileInfo {
                  * byte contains flags indicating exported (0x1) and/or global/shared (0x2) data, and the
                  * next word is the offset within the segment.
                  */
-                let offEntry;
+                let offset;
                 let offDebug = offEntries;
                 let bFlags = this.loadValue(offEntries, 1);
 
                 if (bSegment <= 0xFE) {
                     iSegment = bSegment;
-                    offEntry = this.loadValue(offEntries + 1);
+                    offset = this.loadValue(offEntries + 1);
                     offEntries += 3;
                 } else {
                     /*
@@ -245,7 +246,7 @@ export default class FileInfo {
                      * we've already read), an INT 0x3F (0xCD,0x3F), a 1-byte segment number, and a 2-byte offset.
                      */
                     iSegment = this.loadValue(offEntries + 3, 1);
-                    offEntry = this.loadValue(offEntries + 4);
+                    offset = this.loadValue(offEntries + 4);
                     offEntries += 6;
                 }
                 if (!this.segments[iSegment]) {
@@ -253,13 +254,13 @@ export default class FileInfo {
                         this.device.printf(Device.MESSAGE.FILE, "invalid segment: %d\n", iSegment);
                     }
                 } else {
-                    if (!this.segments[iSegment].entries) this.segments[iSegment].entries = {};
-                    this.segments[iSegment].entries[iOrdinal] = [offEntry];
+                    if (!this.segments[iSegment].ordinals) this.segments[iSegment].ordinals = {};
+                    this.segments[iSegment].ordinals[iOrdinal] = {[FileInfo.ENTRY.OFFSET]: offset};
                     if (Device.DEBUG) {
-                        this.device.printf(Device.MESSAGE.FILE, "ordinal %d: segment=%d offset=%#0lx @%x\n", iOrdinal, iSegment, offEntry, offDebug);
+                        this.device.printf(Device.MESSAGE.FILE, "ordinal %d: segment=%d offset=%#0lx @%x\n", iOrdinal, iSegment, offset, offDebug);
                     }
                 }
-                this.ordinals[iOrdinal] = [iSegment, offEntry];
+                if (this.ordinals) this.ordinals[iOrdinal] = [iSegment, offset];
                 iOrdinal++;
             }
         }
@@ -302,27 +303,31 @@ export default class FileInfo {
                 }
             }
             else {
+                let ordinalEntry;
                 let iOrdinal = this.loadValue(offEntries);
-                let tuple = this.ordinals[iOrdinal];
+                let tuple = this.ordinals && this.ordinals[iOrdinal];
                 if (tuple) {
-                    let iSegment = tuple[0];        // tuple[0] is the segment number and tuple[1] is the corresponding offEntry
+                    let iSegment = tuple[0];        // tuple[0] is the segment number and tuple[1] is the corresponding offset
                     if (this.segments[iSegment]) {
-                        if (!this.segments[iSegment].entries) this.segments[iSegment].entries = {};
-                        let aEntries = this.segments[iSegment].entries[iOrdinal];
-                        this.device.assert(aEntries && aEntries.length == 1);
-                        aEntries.push(sSymbol);
-                        if (Device.DEBUG) {
-                            this.device.printf(Device.MESSAGE.FILE, "segment %d offset %#0wx ordinal %d: %s @ %x\n", iSegment, aEntries[0], iOrdinal, sSymbol, offDebug);
+                        let ordinalEntries = this.segments[iSegment].ordinals;
+                        this.device.assert(ordinalEntries && ordinalEntries[iOrdinal]);
+                        if (ordinalEntries) {
+                            ordinalEntry = ordinalEntries[iOrdinal];
+                            if (ordinalEntry) {
+                                ordinalEntry[FileInfo.ENTRY.SYMBOL] = sSymbol;
+                                if (Device.DEBUG) {
+                                    this.device.printf(Device.MESSAGE.FILE, "segment %d offset %#0wx ordinal %d: %s @ %x\n", iSegment, ordinalEntry[FileInfo.ENTRY.OFFSET], iOrdinal, sSymbol, offDebug);
+                                }
+                            }
                         }
                     } else {
                         if (Device.DEBUG) {
                             this.device.printf("%s: cannot find segment %d (offset %#0wx) for symbol %s with ordinal %d @%x\n", this.path, iSegment, tuple[1], sSymbol, iOrdinal, offDebug);
                         }
                     }
-                } else {
-                    if (Device.DEBUG) {
-                        this.device.printf(Device.MESSAGE.FILE, "s: cannot find ordinal %d for symbol %s @%x\n", this.path, iOrdinal, sSymbol, offDebug);
-                    }
+                }
+                if (Device.DEBUG && !ordinalEntry) {
+                    this.device.printf(Device.MESSAGE.FILE, "s: cannot find ordinal %d for symbol %s @%x\n", this.path, iOrdinal, sSymbol, offDebug);
                 }
             }
             offEntries += 2;
@@ -443,9 +448,9 @@ export default class FileInfo {
                      * To support fNearest, save the entry where (off - entry[0]) yields the smallest positive result.
                      */
                     let cbNearest = off, entryNearest;
-                    if (segment.entries) {
-                        for (let iOrdinal in segment.entries) {
-                            let entry = segment.entries[iOrdinal];
+                    if (segment.ordinals) {
+                        for (let iOrdinal in segment.ordinals) {
+                            let entry = segment.ordinals[iOrdinal];
                             let cb = off - entry[0];
                             if (!cb) {
                                 sSymbol = this.module + '!' + entry[1];
@@ -467,6 +472,11 @@ export default class FileInfo {
         return sSymbol || this.name + '+' + this.device.sprintf("%#0x", off);
     }
 }
+
+FileInfo.ENTRY = {
+    OFFSET: "o",
+    SYMBOL: "s"
+};
 
 /*
  * Original (aka "Old") Executable MS-DOS File Format

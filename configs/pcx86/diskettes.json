@@ -1323,7 +1323,7 @@
             {
               "@title": "Hitchhiker's Guide",
               "@diskette": "HHIKER-READONLY.json",
-              "@archive": "DSK"
+              "@archive": ".DSK"
             }
           ]
         },
@@ -1342,7 +1342,7 @@
             {
               "@title": "Planetfall",
               "@diskette": "PLANETFALL-READONLY.json",
-              "@archive": "DSK"
+              "@archive": ".DSK"
             }
           ]
         },
@@ -1352,7 +1352,7 @@
             {
               "@title": "Zork I",
               "@diskette": "ZORK1-READONLY.json",
-              "@archive": "DSK"
+              "@archive": ".DSK"
             }
           ]
         },
@@ -1362,7 +1362,7 @@
             {
               "@title": "Zork II",
               "@diskette": "ZORK2-READONLY.json",
-              "@archive": "DSK"
+              "@archive": ".DSK"
             }
           ]
         },
@@ -1372,7 +1372,7 @@
             {
               "@title": "Zork III",
               "@diskette": "ZORK3-READONLY.json",
-              "@archive": "DSK"
+              "@archive": ".DSK"
             }
           ]
         }
@@ -1391,7 +1391,7 @@
             {
               "@title": "Microsoft Adventure (Unmodified)",
               "@diskette": "ADVENTURE-1981-UNMODIFIED.json",
-              "@archive": "psi"
+              "@archive": ".psi"
             }
           ],
           "@documents": [
@@ -1485,7 +1485,7 @@
             {
               "@title": "King's Quest (1985-09-04 #1)",
               "@diskette": "KINGS_QUEST1-1985-09-04-DISK1.json",
-              "@archive": "psi",
+              "@archive": ".psi",
               "@format": "PC360K",
               "@kryoflux": true
             },
@@ -1504,7 +1504,7 @@
             {
               "@title": "King's Quest (1987-05-05 #1)",
               "@diskette": "KINGS_QUEST1-1987-05-05-DISK1.json",
-              "@archive": "psi",
+              "@archive": ".psi",
               "@format": "PC360K",
               "@kryoflux": true,
               "@source": "https://archive.org/details/kingsquestipc"
@@ -4899,13 +4899,13 @@
               "@title": "PCjs CP/M-86 (Disk 1)",
               "@diskette": "CPM86-DISK1-PCJS.json",
               "@format": "PC320K",
-              "@archive": "dsk"
+              "@archive": ".dsk"
             },
             {
               "@title": "PCjs CP/M-86 (Disk 2)",
               "@diskette": "CPM86-DISK2-PCJS.json",
               "@format": "PC320K",
-              "@archive": "dsk"
+              "@archive": ".dsk"
             }
           ]
         }
@@ -8261,7 +8261,8 @@
         "@media": [
           {
             "@diskette": "CPUTESTS.json",
-            "@format": "PC160K"
+            "@format": "PC160K",
+            "@archive": "CPUTESTS"
           }
         ]
       },
@@ -8270,7 +8271,8 @@
         "@media": [
           {
             "@diskette": "INT14.json",
-            "@format": "PC160K"
+            "@format": "PC160K",
+            "@archive": "INT14"
           }
         ]
       },
@@ -8280,7 +8282,7 @@
           {
             "@title": "VGA Black Book Binaries",
             "@diskette": "VGABIN.json",
-            "@format": "PC360K",
+            "@format": "PC160K",
             "@archive": "folder"
           },
           {
@@ -8430,7 +8432,8 @@
             {
               "@title": "Norton Utilities 3.00 (1985-01-14)",
               "@diskette": "NU300-1985-01-14.json",
-              "@format": "PC160K"
+              "@format": "PC160K",
+              "@archive": "NU30-850114"
             },
             {
               "@title": "Norton Utilities 3.00 (1985-01-21)",

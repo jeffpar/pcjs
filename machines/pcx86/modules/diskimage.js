@@ -392,10 +392,11 @@ export default class DiskImage {
                     this.printf(Device.MESSAGE.INFO, "BPB has been updated\n");
                     if (hash) this.fBPBModified = true;
                 }
-                else if (bByte0 == 0xF6 && bByte1 == 0xF6) {
+                else if (bByte0 == 0xF6 && bByte1 == 0xF6 && bMediaIDBPB > 0xF8) {
                     /*
                      * WARNING: I've added this "0xF6" hack expressly to fix boot sectors that may have been zapped by an
-                     * inadvertent reformat, or...?
+                     * inadvertent reformat, or...?  However, certain Xenix diskettes get misdetected by this, so we at least
+                     * require the media ID (from the first byte of the first FAT sector) be sensible.
                      */
                     this.printf(Device.MESSAGE.WARN, "repairing damaged boot sector with BPB for media ID %#02bx\n", bMediaID);
                     for (let i = 0; i < DiskImage.BPB.LARGE_SECS+4; i++) {
@@ -1306,15 +1307,12 @@ export default class DiskImage {
                 /*
                  * We must now differentiate between "legacy" JSON images (which were simply arrays of CHS sector data)
                  * and "extended" JSON images, which are objects with a CHS "diskData" property, among other things.
-                 *
-                 * TODO: Add support for ingesting the DESC.VOLUMES and DESC.FILES properties, too, so that we can avoid
-                 * rebuilding the volume and file tables from scratch.  That will also involve updating rebuildSector() to
-                 * not throw away any existing per-sector file info.
                  */
                 let imageInfo = imageData[DiskImage.DESC.IMAGE];
                 if (imageInfo) {
                     let sOrigBPB = imageInfo[DiskImage.IMAGE.ORIGBPB];
                     if (sOrigBPB) this.abOrigBPB = JSON.parse(sOrigBPB);
+                    this.buildFileTableFromJSON(imageData[DiskImage.DESC.FILES]);
                 }
                 let aDiskData = imageData[DiskImage.DESC.DISKDATA] || imageData;
                 if (aDiskData && aDiskData.length) {
@@ -1517,6 +1515,34 @@ export default class DiskImage {
     }
 
     /**
+     * buildFileTableFromJSON(fileTable)
+     *
+     * Convert an array of JSON FILEDESC objects to FileInfo objects.
+     *
+     * @this {DiskImage}
+     * @param {Array.<Object>} fileTable
+     */
+    buildFileTableFromJSON(fileTable)
+    {
+        if (!fileTable) return;
+        if (!this.fileTable.length) {
+            for (let i = 0; i < fileTable.length; i++) {
+                let desc = fileTable[i];
+                let iVolume = desc[DiskImage.FILEDESC.VOL] || 0;
+                let name = this.device.getBaseName(desc[DiskImage.FILEDESC.PATH]);
+                let path = desc[DiskImage.FILEDESC.PATH].replace(/\//g, '\\');
+                let attr = +desc[DiskImage.FILEDESC.ATTR];
+                let date = this.device.parseDate(desc[DiskImage.FILEDESC.DATE]);
+                let size = desc[DiskImage.FILEDESC.SIZE] || 0;
+                fileTable[i] = new FileInfo(this, iVolume, path, name, attr, date, size)
+                let hash = desc[DiskImage.FILEDESC.HASH];
+                if (hash) fileTable[i].hash = hash;
+            }
+            this.fileTable = fileTable;
+        }
+    }
+
+    /**
      * buildTables()
      *
      * This function builds (or rebuilds) a complete file table from all FAT volumes found on the current disk,
@@ -1537,12 +1563,11 @@ export default class DiskImage {
      * was the source of the image.
      *
      * @this {DiskImage}
-     * @param {boolean} [fRebuild]
      * @returns {number}
      */
-    buildTables(fRebuild)
+    buildTables()
     {
-        if (!this.fileTable.length || fRebuild) {
+        if (!this.fileTable.length) {
 
             this.deleteTables();
 
@@ -1959,7 +1984,7 @@ export default class DiskImage {
     getFileDesc(file, fComplete, fnHash)
     {
         let desc = {
-            [DiskImage.FILEDESC.HASH]: "",
+            [DiskImage.FILEDESC.HASH]: file.hash,
             [DiskImage.FILEDESC.PATH]: file.path.replace(/\\/g, '/'),
             [DiskImage.FILEDESC.NAME]: file.name,
             [DiskImage.FILEDESC.ATTR]: this.device.sprintf("%#0bx", file.attr),
@@ -1977,17 +2002,18 @@ export default class DiskImage {
             }
         }
         if (file.module) {
-            desc[DiskImage.FILEDESC.MODULE] = file.module;
-            desc[DiskImage.FILEDESC.MODDESC] = file.modDesc;
-            desc[DiskImage.FILEDESC.SEGMENTS] = file.segments;
-            desc[DiskImage.FILEDESC.ORDINALS] = file.ordinals;
+            desc[DiskImage.FILEDESC.MODULE] = {
+                [DiskImage.FILEDESC.MODNAME]: file.module,
+                [DiskImage.FILEDESC.MODDESC]: file.modDesc,
+                [DiskImage.FILEDESC.MODSEGS]: file.segments
+            }
         }
         if (fnHash && file.size) {
             let ab = new Array(file.size);
             this.readSectorArray(ab, file.aLBA);
             desc[DiskImage.FILEDESC.HASH] = fnHash(ab);
         } else {
-            delete desc[DiskImage.FILEDESC.HASH];
+            if (!desc[DiskImage.FILEDESC.HASH]) delete desc[DiskImage.FILEDESC.HASH];
         }
         return desc;
     }
@@ -2733,8 +2759,8 @@ export default class DiskImage {
                     let file = this.fileTable[iFile];
                     if (file.name == "." || file.name == "..") continue;
                     let desc = this.getFileDesc(file, false, fnHash);
-                    let indentDesc = desc[DiskImage.FILEDESC.MODULE]? 4 : 0;
-                    fileTable.push(JSON.stringify(desc, null, indentDesc));
+                    // let indentDesc = desc[DiskImage.FILEDESC.MODULE]? 4 : 0;
+                    fileTable.push(JSON.stringify(desc, null, 0));
                 }
             }
         } else {
@@ -2773,6 +2799,30 @@ export default class DiskImage {
         let sDiskData = JSON.stringify(this.aDiskData, null, indent);
         let sImageData = "{\n\"" + DiskImage.DESC.IMAGE + "\": " + sImageInfo + ",\n\"" + (sVolTable? DiskImage.DESC.VOLUMES + "\": " + sVolTable + ",\n\"" : "") + (sFileTable? DiskImage.DESC.FILES + "\": " + sFileTable + ",\n\"" : "") + DiskImage.DESC.DISKDATA + "\":" + sDiskData + "\n}";
         return sImageData;
+    }
+
+    /**
+     * findFile(sName)
+     *
+     * @param {string} name
+     * @return {Object|null}
+     */
+    findFile(name)
+    {
+        let desc = null;
+        if (this.buildTables()) {
+            name = name.toUpperCase();
+            if (this.fileTable) {
+                for (let i = 0; i < this.fileTable.length; i++) {
+                    let file = this.fileTable[i];
+                    if (name == file.name) {
+                        desc = this.getFileDesc(file, true);
+                        break;
+                    }
+                }
+            }
+        }
+        return desc;
     }
 
     /**
@@ -3125,9 +3175,9 @@ DiskImage.FILEDESC = {
     SIZE:       'size',
     HASH:       'hash',
     MODULE:     'module',
-    MODDESC:    'modDesc',
-    SEGMENTS:   'segments',
-    ORDINALS:   'ordinals'
+    MODNAME:    'name',
+    MODDESC:    'description',
+    MODSEGS:    'segments'
 };
 
 /*

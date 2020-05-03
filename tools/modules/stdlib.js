@@ -72,7 +72,7 @@ export default class StdLib {
                 else if (i < args.length && args[i][0] != '-') {
                     argv.push(sValue = args[i++]);
                 }
-                if (argv[sArg] === undefined) {
+                if (!argv.hasOwnProperty(sArg)) {
                     argv[sArg] = sValue;
                 }
                 else {
