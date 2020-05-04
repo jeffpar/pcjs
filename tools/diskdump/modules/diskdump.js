@@ -416,8 +416,11 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
         /*
          * I prefer a hard-coded date/time, because it avoids creating different disk images every
          * time DiskDump is run.
+         *
+         * And remember, of all the Date() constructor parameters, month is the oddball;
+         * it's interpreted as the actual month - 1, so 8 corresponds to September.  Brilliant.
          */
-        let dateLabel = new Date(1989, 9, 27, 3, 0, 0);
+        let dateLabel = new Date(1989, 8, 27, 3, 0, 0);
         let file = {path: sDir, name: sLabel, attr: DiskImage.ATTR.VOLUME, date: dateLabel, size: 0};
         aFileData.push(file);
     }
@@ -457,7 +460,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
                 }
                 data = new DataBuffer(data);
             }
-            file.attr = 0;      // TODO: Determine when we should specify, say, DiskImage.ATTR.ARCHIVE
+            file.attr = DiskImage.ATTR.ARCHIVE;
             file.size = data.length;
             file.data = data;
         }
