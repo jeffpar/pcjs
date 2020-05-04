@@ -36,6 +36,7 @@ export default class JSONLib {
             }
             let versions = group['@versions'];
             if (versions) {
+                if (group['@server']) server = group['@server'];
                 for (let version in versions) {
                     let release = versions[version];
                     let media = release['@media'];

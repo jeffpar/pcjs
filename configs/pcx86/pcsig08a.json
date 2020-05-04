@@ -1,0 +1,4010 @@
+{
+  "@local": "/discs/pcx86/pcsig/pcsig8a",
+  "@server": "https://pcsig8a-disks.pcjs.org",
+  "shareware": {
+    "@title": "PCSIG8A Disks",
+    "@versions": {
+      "pcsig08": {
+        "@title": "PCSIG8A (Disks 1-999)",
+        "@media": [
+          {
+            "@title": "PCSIG08: DISK0001",
+            "@diskette": "DISK0001.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0002",
+            "@diskette": "DISK0002.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0003",
+            "@diskette": "DISK0003.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0004",
+            "@diskette": "DISK0004.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0005",
+            "@diskette": "DISK0005.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0006",
+            "@diskette": "DISK0006.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0007",
+            "@diskette": "DISK0007.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0008",
+            "@diskette": "DISK0008.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0009",
+            "@diskette": "DISK0009.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0010",
+            "@diskette": "DISK0010.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0011",
+            "@diskette": "DISK0011.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0012",
+            "@diskette": "DISK0012.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0013",
+            "@diskette": "DISK0013.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0014",
+            "@diskette": "DISK0014.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0015",
+            "@diskette": "DISK0015.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0016",
+            "@diskette": "DISK0016.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0017",
+            "@diskette": "DISK0017.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0018",
+            "@diskette": "DISK0018.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0019",
+            "@diskette": "DISK0019.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0020",
+            "@diskette": "DISK0020.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0021",
+            "@diskette": "DISK0021.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0022",
+            "@diskette": "DISK0022.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0023",
+            "@diskette": "DISK0023.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0024",
+            "@diskette": "DISK0024.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0025",
+            "@diskette": "DISK0025.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0026",
+            "@diskette": "DISK0026.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0027",
+            "@diskette": "DISK0027.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0028",
+            "@diskette": "DISK0028.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0029",
+            "@diskette": "DISK0029.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0030",
+            "@diskette": "DISK0030.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0031",
+            "@diskette": "DISK0031.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0032",
+            "@diskette": "DISK0032.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0033",
+            "@diskette": "DISK0033.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0034",
+            "@diskette": "DISK0034.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0035",
+            "@diskette": "DISK0035.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0036",
+            "@diskette": "DISK0036.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0037",
+            "@diskette": "DISK0037.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0038",
+            "@diskette": "DISK0038.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0039",
+            "@diskette": "DISK0039.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0040",
+            "@diskette": "DISK0040.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0041",
+            "@diskette": "DISK0041.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0042",
+            "@diskette": "DISK0042.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0043",
+            "@diskette": "DISK0043.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0044",
+            "@diskette": "DISK0044.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0045",
+            "@diskette": "DISK0045.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0046",
+            "@diskette": "DISK0046.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0047",
+            "@diskette": "DISK0047.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0048",
+            "@diskette": "DISK0048.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0049",
+            "@diskette": "DISK0049.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0050",
+            "@diskette": "DISK0050.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0051",
+            "@diskette": "DISK0051.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0052",
+            "@diskette": "DISK0052.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0053",
+            "@diskette": "DISK0053.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0054",
+            "@diskette": "DISK0054.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0055",
+            "@diskette": "DISK0055.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0056",
+            "@diskette": "DISK0056.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0057",
+            "@diskette": "DISK0057.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0058",
+            "@diskette": "DISK0058.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0059",
+            "@diskette": "DISK0059.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0060",
+            "@diskette": "DISK0060.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0061",
+            "@diskette": "DISK0061.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0062",
+            "@diskette": "DISK0062.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0063",
+            "@diskette": "DISK0063.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0064",
+            "@diskette": "DISK0064.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0065",
+            "@diskette": "DISK0065.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0066",
+            "@diskette": "DISK0066.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0067",
+            "@diskette": "DISK0067.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0068",
+            "@diskette": "DISK0068.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0069",
+            "@diskette": "DISK0069.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0070",
+            "@diskette": "DISK0070.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0071",
+            "@diskette": "DISK0071.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0072",
+            "@diskette": "DISK0072.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0073",
+            "@diskette": "DISK0073.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0074",
+            "@diskette": "DISK0074.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0075",
+            "@diskette": "DISK0075.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0076",
+            "@diskette": "DISK0076.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0077",
+            "@diskette": "DISK0077.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0078",
+            "@diskette": "DISK0078.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0079",
+            "@diskette": "DISK0079.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0080",
+            "@diskette": "DISK0080.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0081",
+            "@diskette": "DISK0081.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0082",
+            "@diskette": "DISK0082.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0083",
+            "@diskette": "DISK0083.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0084",
+            "@diskette": "DISK0084.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0085",
+            "@diskette": "DISK0085.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0086",
+            "@diskette": "DISK0086.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0087",
+            "@diskette": "DISK0087.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0088",
+            "@diskette": "DISK0088.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0089",
+            "@diskette": "DISK0089.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0090",
+            "@diskette": "DISK0090.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0091",
+            "@diskette": "DISK0091.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0092",
+            "@diskette": "DISK0092.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0093",
+            "@diskette": "DISK0093.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0094",
+            "@diskette": "DISK0094.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0095",
+            "@diskette": "DISK0095.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0096",
+            "@diskette": "DISK0096.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0097",
+            "@diskette": "DISK0097.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0098",
+            "@diskette": "DISK0098.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0099",
+            "@diskette": "DISK0099.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0100",
+            "@diskette": "DISK0100.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0101",
+            "@diskette": "DISK0101.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0102",
+            "@diskette": "DISK0102.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0103",
+            "@diskette": "DISK0103.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0104",
+            "@diskette": "DISK0104.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0105",
+            "@diskette": "DISK0105.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0106",
+            "@diskette": "DISK0106.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0107",
+            "@diskette": "DISK0107.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0108",
+            "@diskette": "DISK0108.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0109",
+            "@diskette": "DISK0109.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0110",
+            "@diskette": "DISK0110.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0111",
+            "@diskette": "DISK0111.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0112",
+            "@diskette": "DISK0112.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0113",
+            "@diskette": "DISK0113.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0114",
+            "@diskette": "DISK0114.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0115",
+            "@diskette": "DISK0115.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0116",
+            "@diskette": "DISK0116.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0117",
+            "@diskette": "DISK0117.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0118",
+            "@diskette": "DISK0118.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0119",
+            "@diskette": "DISK0119.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0120",
+            "@diskette": "DISK0120.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0121",
+            "@diskette": "DISK0121.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0122",
+            "@diskette": "DISK0122.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0123",
+            "@diskette": "DISK0123.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0124",
+            "@diskette": "DISK0124.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0125",
+            "@diskette": "DISK0125.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0126",
+            "@diskette": "DISK0126.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0127",
+            "@diskette": "DISK0127.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0128",
+            "@diskette": "DISK0128.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0129",
+            "@diskette": "DISK0129.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0130",
+            "@diskette": "DISK0130.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0131",
+            "@diskette": "DISK0131.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0132",
+            "@diskette": "DISK0132.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0133",
+            "@diskette": "DISK0133.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0134",
+            "@diskette": "DISK0134.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0135",
+            "@diskette": "DISK0135.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0136",
+            "@diskette": "DISK0136.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0137",
+            "@diskette": "DISK0137.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0138",
+            "@diskette": "DISK0138.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0139",
+            "@diskette": "DISK0139.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0140",
+            "@diskette": "DISK0140.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0141",
+            "@diskette": "DISK0141.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0142",
+            "@diskette": "DISK0142.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0143",
+            "@diskette": "DISK0143.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0144",
+            "@diskette": "DISK0144.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0145",
+            "@diskette": "DISK0145.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0146",
+            "@diskette": "DISK0146.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0147",
+            "@diskette": "DISK0147.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0148",
+            "@diskette": "DISK0148.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0149",
+            "@diskette": "DISK0149.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0150",
+            "@diskette": "DISK0150.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0151",
+            "@diskette": "DISK0151.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0152",
+            "@diskette": "DISK0152.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0153",
+            "@diskette": "DISK0153.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0154",
+            "@diskette": "DISK0154.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0155",
+            "@diskette": "DISK0155.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0156",
+            "@diskette": "DISK0156.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0157",
+            "@diskette": "DISK0157.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0158",
+            "@diskette": "DISK0158.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0159",
+            "@diskette": "DISK0159.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0160",
+            "@diskette": "DISK0160.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0161",
+            "@diskette": "DISK0161.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0162",
+            "@diskette": "DISK0162.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0163",
+            "@diskette": "DISK0163.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0164",
+            "@diskette": "DISK0164.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0165",
+            "@diskette": "DISK0165.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0166",
+            "@diskette": "DISK0166.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0167",
+            "@diskette": "DISK0167.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0168",
+            "@diskette": "DISK0168.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0169",
+            "@diskette": "DISK0169.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0170",
+            "@diskette": "DISK0170.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0171",
+            "@diskette": "DISK0171.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0172",
+            "@diskette": "DISK0172.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0173",
+            "@diskette": "DISK0173.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0174",
+            "@diskette": "DISK0174.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0175",
+            "@diskette": "DISK0175.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0176",
+            "@diskette": "DISK0176.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0177",
+            "@diskette": "DISK0177.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0178",
+            "@diskette": "DISK0178.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0179",
+            "@diskette": "DISK0179.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0180",
+            "@diskette": "DISK0180.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0181",
+            "@diskette": "DISK0181.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0182",
+            "@diskette": "DISK0182.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0183",
+            "@diskette": "DISK0183.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0184",
+            "@diskette": "DISK0184.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0185",
+            "@diskette": "DISK0185.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0186",
+            "@diskette": "DISK0186.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0187",
+            "@diskette": "DISK0187.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0188",
+            "@diskette": "DISK0188.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0189",
+            "@diskette": "DISK0189.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0190",
+            "@diskette": "DISK0190.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0191",
+            "@diskette": "DISK0191.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0192",
+            "@diskette": "DISK0192.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0193",
+            "@diskette": "DISK0193.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0194",
+            "@diskette": "DISK0194.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0195",
+            "@diskette": "DISK0195.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0196",
+            "@diskette": "DISK0196.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0197",
+            "@diskette": "DISK0197.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0198",
+            "@diskette": "DISK0198.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0199",
+            "@diskette": "DISK0199.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0200",
+            "@diskette": "DISK0200.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0201",
+            "@diskette": "DISK0201.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0202",
+            "@diskette": "DISK0202.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0203",
+            "@diskette": "DISK0203.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0204",
+            "@diskette": "DISK0204.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0205",
+            "@diskette": "DISK0205.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0206",
+            "@diskette": "DISK0206.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0207",
+            "@diskette": "DISK0207.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0208",
+            "@diskette": "DISK0208.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0209",
+            "@diskette": "DISK0209.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0210",
+            "@diskette": "DISK0210.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0211",
+            "@diskette": "DISK0211.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0212",
+            "@diskette": "DISK0212.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0213",
+            "@diskette": "DISK0213.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0214",
+            "@diskette": "DISK0214.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0215",
+            "@diskette": "DISK0215.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0216",
+            "@diskette": "DISK0216.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0217",
+            "@diskette": "DISK0217.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0218",
+            "@diskette": "DISK0218.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0219",
+            "@diskette": "DISK0219.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0220",
+            "@diskette": "DISK0220.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0221",
+            "@diskette": "DISK0221.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0222",
+            "@diskette": "DISK0222.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0223",
+            "@diskette": "DISK0223.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0224",
+            "@diskette": "DISK0224.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0225",
+            "@diskette": "DISK0225.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0226",
+            "@diskette": "DISK0226.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0227",
+            "@diskette": "DISK0227.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0228",
+            "@diskette": "DISK0228.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0229",
+            "@diskette": "DISK0229.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0230",
+            "@diskette": "DISK0230.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0231",
+            "@diskette": "DISK0231.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0232",
+            "@diskette": "DISK0232.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0233",
+            "@diskette": "DISK0233.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0234",
+            "@diskette": "DISK0234.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0235",
+            "@diskette": "DISK0235.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0236",
+            "@diskette": "DISK0236.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0237",
+            "@diskette": "DISK0237.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0238",
+            "@diskette": "DISK0238.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0239",
+            "@diskette": "DISK0239.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0240",
+            "@diskette": "DISK0240.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0241",
+            "@diskette": "DISK0241.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0242",
+            "@diskette": "DISK0242.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0243",
+            "@diskette": "DISK0243.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0244",
+            "@diskette": "DISK0244.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0245",
+            "@diskette": "DISK0245.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0246",
+            "@diskette": "DISK0246.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0247",
+            "@diskette": "DISK0247.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0248",
+            "@diskette": "DISK0248.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0249",
+            "@diskette": "DISK0249.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0250",
+            "@diskette": "DISK0250.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0251",
+            "@diskette": "DISK0251.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0252",
+            "@diskette": "DISK0252.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0253",
+            "@diskette": "DISK0253.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0254",
+            "@diskette": "DISK0254.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0255",
+            "@diskette": "DISK0255.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0256",
+            "@diskette": "DISK0256.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0257",
+            "@diskette": "DISK0257.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0258",
+            "@diskette": "DISK0258.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0259",
+            "@diskette": "DISK0259.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0260",
+            "@diskette": "DISK0260.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0261",
+            "@diskette": "DISK0261.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0262",
+            "@diskette": "DISK0262.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0263",
+            "@diskette": "DISK0263.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0264",
+            "@diskette": "DISK0264.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0265",
+            "@diskette": "DISK0265.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0266",
+            "@diskette": "DISK0266.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0267",
+            "@diskette": "DISK0267.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0268",
+            "@diskette": "DISK0268.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0269",
+            "@diskette": "DISK0269.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0270",
+            "@diskette": "DISK0270.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0271",
+            "@diskette": "DISK0271.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0272",
+            "@diskette": "DISK0272.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0273",
+            "@diskette": "DISK0273.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0274",
+            "@diskette": "DISK0274.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0275",
+            "@diskette": "DISK0275.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0276",
+            "@diskette": "DISK0276.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0277",
+            "@diskette": "DISK0277.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0278",
+            "@diskette": "DISK0278.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0279",
+            "@diskette": "DISK0279.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0280",
+            "@diskette": "DISK0280.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0281",
+            "@diskette": "DISK0281.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0282",
+            "@diskette": "DISK0282.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0283",
+            "@diskette": "DISK0283.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0284",
+            "@diskette": "DISK0284.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0285",
+            "@diskette": "DISK0285.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0286",
+            "@diskette": "DISK0286.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0287",
+            "@diskette": "DISK0287.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0288",
+            "@diskette": "DISK0288.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0289",
+            "@diskette": "DISK0289.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0290",
+            "@diskette": "DISK0290.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0291",
+            "@diskette": "DISK0291.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0292",
+            "@diskette": "DISK0292.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0293",
+            "@diskette": "DISK0293.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0294",
+            "@diskette": "DISK0294.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0295",
+            "@diskette": "DISK0295.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0296",
+            "@diskette": "DISK0296.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0297",
+            "@diskette": "DISK0297.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0298",
+            "@diskette": "DISK0298.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0299",
+            "@diskette": "DISK0299.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0300",
+            "@diskette": "DISK0300.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0301",
+            "@diskette": "DISK0301.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0302",
+            "@diskette": "DISK0302.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0303",
+            "@diskette": "DISK0303.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0304",
+            "@diskette": "DISK0304.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0305",
+            "@diskette": "DISK0305.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0306",
+            "@diskette": "DISK0306.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0307",
+            "@diskette": "DISK0307.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0308",
+            "@diskette": "DISK0308.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0309",
+            "@diskette": "DISK0309.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0310",
+            "@diskette": "DISK0310.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0311",
+            "@diskette": "DISK0311.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0312",
+            "@diskette": "DISK0312.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0313",
+            "@diskette": "DISK0313.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0314",
+            "@diskette": "DISK0314.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0315",
+            "@diskette": "DISK0315.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0316",
+            "@diskette": "DISK0316.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0317",
+            "@diskette": "DISK0317.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0318",
+            "@diskette": "DISK0318.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0319",
+            "@diskette": "DISK0319.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0320",
+            "@diskette": "DISK0320.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0321",
+            "@diskette": "DISK0321.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0322",
+            "@diskette": "DISK0322.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0323",
+            "@diskette": "DISK0323.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0324",
+            "@diskette": "DISK0324.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0325",
+            "@diskette": "DISK0325.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0326",
+            "@diskette": "DISK0326.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0327",
+            "@diskette": "DISK0327.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0328",
+            "@diskette": "DISK0328.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0329",
+            "@diskette": "DISK0329.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0330",
+            "@diskette": "DISK0330.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0331",
+            "@diskette": "DISK0331.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0332",
+            "@diskette": "DISK0332.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0333",
+            "@diskette": "DISK0333.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0334",
+            "@diskette": "DISK0334.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0335",
+            "@diskette": "DISK0335.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0336",
+            "@diskette": "DISK0336.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0337",
+            "@diskette": "DISK0337.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0338",
+            "@diskette": "DISK0338.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0339",
+            "@diskette": "DISK0339.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0340",
+            "@diskette": "DISK0340.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0341",
+            "@diskette": "DISK0341.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0342",
+            "@diskette": "DISK0342.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0343",
+            "@diskette": "DISK0343.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0344",
+            "@diskette": "DISK0344.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0345",
+            "@diskette": "DISK0345.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0346",
+            "@diskette": "DISK0346.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0347",
+            "@diskette": "DISK0347.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0348",
+            "@diskette": "DISK0348.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0349",
+            "@diskette": "DISK0349.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0350",
+            "@diskette": "DISK0350.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0351",
+            "@diskette": "DISK0351.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0352",
+            "@diskette": "DISK0352.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0353",
+            "@diskette": "DISK0353.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0354",
+            "@diskette": "DISK0354.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0355",
+            "@diskette": "DISK0355.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0356",
+            "@diskette": "DISK0356.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0357",
+            "@diskette": "DISK0357.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0358",
+            "@diskette": "DISK0358.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0359",
+            "@diskette": "DISK0359.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0360",
+            "@diskette": "DISK0360.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0361",
+            "@diskette": "DISK0361.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0362",
+            "@diskette": "DISK0362.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0363",
+            "@diskette": "DISK0363.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0364",
+            "@diskette": "DISK0364.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0365",
+            "@diskette": "DISK0365.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0366",
+            "@diskette": "DISK0366.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0367",
+            "@diskette": "DISK0367.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0368",
+            "@diskette": "DISK0368.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0369",
+            "@diskette": "DISK0369.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0370",
+            "@diskette": "DISK0370.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0371",
+            "@diskette": "DISK0371.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0372",
+            "@diskette": "DISK0372.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0373",
+            "@diskette": "DISK0373.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0374",
+            "@diskette": "DISK0374.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0375",
+            "@diskette": "DISK0375.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0376",
+            "@diskette": "DISK0376.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0377",
+            "@diskette": "DISK0377.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0378",
+            "@diskette": "DISK0378.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0379",
+            "@diskette": "DISK0379.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0380",
+            "@diskette": "DISK0380.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0381",
+            "@diskette": "DISK0381.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0382",
+            "@diskette": "DISK0382.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0383",
+            "@diskette": "DISK0383.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0384",
+            "@diskette": "DISK0384.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0385",
+            "@diskette": "DISK0385.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0386",
+            "@diskette": "DISK0386.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0387",
+            "@diskette": "DISK0387.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0388",
+            "@diskette": "DISK0388.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0389",
+            "@diskette": "DISK0389.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0390",
+            "@diskette": "DISK0390.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0391",
+            "@diskette": "DISK0391.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0392",
+            "@diskette": "DISK0392.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0393",
+            "@diskette": "DISK0393.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0394",
+            "@diskette": "DISK0394.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0395",
+            "@diskette": "DISK0395.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0396",
+            "@diskette": "DISK0396.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0397",
+            "@diskette": "DISK0397.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0398",
+            "@diskette": "DISK0398.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0399",
+            "@diskette": "DISK0399.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0400",
+            "@diskette": "DISK0400.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0401",
+            "@diskette": "DISK0401.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0402",
+            "@diskette": "DISK0402.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0403",
+            "@diskette": "DISK0403.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0404",
+            "@diskette": "DISK0404.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0405",
+            "@diskette": "DISK0405.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0406",
+            "@diskette": "DISK0406.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0407",
+            "@diskette": "DISK0407.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0408",
+            "@diskette": "DISK0408.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0409",
+            "@diskette": "DISK0409.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0410",
+            "@diskette": "DISK0410.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0411",
+            "@diskette": "DISK0411.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0412",
+            "@diskette": "DISK0412.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0413",
+            "@diskette": "DISK0413.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0414",
+            "@diskette": "DISK0414.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0415",
+            "@diskette": "DISK0415.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0416",
+            "@diskette": "DISK0416.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0417",
+            "@diskette": "DISK0417.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0418",
+            "@diskette": "DISK0418.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0419",
+            "@diskette": "DISK0419.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0420",
+            "@diskette": "DISK0420.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0421",
+            "@diskette": "DISK0421.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0422",
+            "@diskette": "DISK0422.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0423",
+            "@diskette": "DISK0423.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0424",
+            "@diskette": "DISK0424.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0425",
+            "@diskette": "DISK0425.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0426",
+            "@diskette": "DISK0426.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0427",
+            "@diskette": "DISK0427.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0428",
+            "@diskette": "DISK0428.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0429",
+            "@diskette": "DISK0429.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0430",
+            "@diskette": "DISK0430.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0431",
+            "@diskette": "DISK0431.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0432",
+            "@diskette": "DISK0432.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0433",
+            "@diskette": "DISK0433.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0434",
+            "@diskette": "DISK0434.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0435",
+            "@diskette": "DISK0435.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0436",
+            "@diskette": "DISK0436.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0437",
+            "@diskette": "DISK0437.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0438",
+            "@diskette": "DISK0438.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0439",
+            "@diskette": "DISK0439.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0440",
+            "@diskette": "DISK0440.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0441",
+            "@diskette": "DISK0441.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0442",
+            "@diskette": "DISK0442.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0443",
+            "@diskette": "DISK0443.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0444",
+            "@diskette": "DISK0444.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0445",
+            "@diskette": "DISK0445.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0446",
+            "@diskette": "DISK0446.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0447",
+            "@diskette": "DISK0447.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0448",
+            "@diskette": "DISK0448.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0449",
+            "@diskette": "DISK0449.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0450",
+            "@diskette": "DISK0450.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0451",
+            "@diskette": "DISK0451.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0452",
+            "@diskette": "DISK0452.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0453",
+            "@diskette": "DISK0453.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0454",
+            "@diskette": "DISK0454.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0455",
+            "@diskette": "DISK0455.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0456",
+            "@diskette": "DISK0456.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0457",
+            "@diskette": "DISK0457.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0458",
+            "@diskette": "DISK0458.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0459",
+            "@diskette": "DISK0459.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0460",
+            "@diskette": "DISK0460.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0461",
+            "@diskette": "DISK0461.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0462",
+            "@diskette": "DISK0462.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0463",
+            "@diskette": "DISK0463.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0464",
+            "@diskette": "DISK0464.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0465",
+            "@diskette": "DISK0465.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0466",
+            "@diskette": "DISK0466.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0467",
+            "@diskette": "DISK0467.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0468",
+            "@diskette": "DISK0468.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0469",
+            "@diskette": "DISK0469.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0470",
+            "@diskette": "DISK0470.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0471",
+            "@diskette": "DISK0471.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0472",
+            "@diskette": "DISK0472.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0473",
+            "@diskette": "DISK0473.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0474",
+            "@diskette": "DISK0474.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0475",
+            "@diskette": "DISK0475.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0476",
+            "@diskette": "DISK0476.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0477",
+            "@diskette": "DISK0477.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0478",
+            "@diskette": "DISK0478.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0479",
+            "@diskette": "DISK0479.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0480",
+            "@diskette": "DISK0480.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0481",
+            "@diskette": "DISK0481.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0482",
+            "@diskette": "DISK0482.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0483",
+            "@diskette": "DISK0483.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0484",
+            "@diskette": "DISK0484.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0485",
+            "@diskette": "DISK0485.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0486",
+            "@diskette": "DISK0486.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0487",
+            "@diskette": "DISK0487.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0488",
+            "@diskette": "DISK0488.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0489",
+            "@diskette": "DISK0489.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0490",
+            "@diskette": "DISK0490.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0491",
+            "@diskette": "DISK0491.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0492",
+            "@diskette": "DISK0492.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0493",
+            "@diskette": "DISK0493.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0494",
+            "@diskette": "DISK0494.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0495",
+            "@diskette": "DISK0495.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0496",
+            "@diskette": "DISK0496.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0497",
+            "@diskette": "DISK0497.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0498",
+            "@diskette": "DISK0498.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0499",
+            "@diskette": "DISK0499.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0500",
+            "@diskette": "DISK0500.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0501",
+            "@diskette": "DISK0501.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0502",
+            "@diskette": "DISK0502.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0503",
+            "@diskette": "DISK0503.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0504",
+            "@diskette": "DISK0504.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0505",
+            "@diskette": "DISK0505.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0506",
+            "@diskette": "DISK0506.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0507",
+            "@diskette": "DISK0507.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0508",
+            "@diskette": "DISK0508.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0509",
+            "@diskette": "DISK0509.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0510",
+            "@diskette": "DISK0510.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0511",
+            "@diskette": "DISK0511.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0512",
+            "@diskette": "DISK0512.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0513",
+            "@diskette": "DISK0513.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0514",
+            "@diskette": "DISK0514.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0515",
+            "@diskette": "DISK0515.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0516",
+            "@diskette": "DISK0516.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0517",
+            "@diskette": "DISK0517.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0518",
+            "@diskette": "DISK0518.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0519",
+            "@diskette": "DISK0519.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0520",
+            "@diskette": "DISK0520.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0521",
+            "@diskette": "DISK0521.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0522",
+            "@diskette": "DISK0522.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0523",
+            "@diskette": "DISK0523.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0524",
+            "@diskette": "DISK0524.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0525",
+            "@diskette": "DISK0525.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0526",
+            "@diskette": "DISK0526.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0527",
+            "@diskette": "DISK0527.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0528",
+            "@diskette": "DISK0528.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0529",
+            "@diskette": "DISK0529.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0530",
+            "@diskette": "DISK0530.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0531",
+            "@diskette": "DISK0531.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0532",
+            "@diskette": "DISK0532.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0533",
+            "@diskette": "DISK0533.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0534",
+            "@diskette": "DISK0534.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0535",
+            "@diskette": "DISK0535.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0536",
+            "@diskette": "DISK0536.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0537",
+            "@diskette": "DISK0537.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0538",
+            "@diskette": "DISK0538.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0539",
+            "@diskette": "DISK0539.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0540",
+            "@diskette": "DISK0540.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0541",
+            "@diskette": "DISK0541.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0542",
+            "@diskette": "DISK0542.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0543",
+            "@diskette": "DISK0543.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0544",
+            "@diskette": "DISK0544.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0545",
+            "@diskette": "DISK0545.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0546",
+            "@diskette": "DISK0546.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0547",
+            "@diskette": "DISK0547.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0548",
+            "@diskette": "DISK0548.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0549",
+            "@diskette": "DISK0549.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0550",
+            "@diskette": "DISK0550.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0551",
+            "@diskette": "DISK0551.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0552",
+            "@diskette": "DISK0552.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0553",
+            "@diskette": "DISK0553.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0554",
+            "@diskette": "DISK0554.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0555",
+            "@diskette": "DISK0555.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0556",
+            "@diskette": "DISK0556.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0557",
+            "@diskette": "DISK0557.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0558",
+            "@diskette": "DISK0558.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0559",
+            "@diskette": "DISK0559.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0560",
+            "@diskette": "DISK0560.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0561",
+            "@diskette": "DISK0561.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0562",
+            "@diskette": "DISK0562.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0563",
+            "@diskette": "DISK0563.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0564",
+            "@diskette": "DISK0564.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0565",
+            "@diskette": "DISK0565.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0566",
+            "@diskette": "DISK0566.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0567",
+            "@diskette": "DISK0567.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0568",
+            "@diskette": "DISK0568.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0569",
+            "@diskette": "DISK0569.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0570",
+            "@diskette": "DISK0570.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0571",
+            "@diskette": "DISK0571.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0572",
+            "@diskette": "DISK0572.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0573",
+            "@diskette": "DISK0573.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0574",
+            "@diskette": "DISK0574.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0575",
+            "@diskette": "DISK0575.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0576",
+            "@diskette": "DISK0576.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0577",
+            "@diskette": "DISK0577.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0578",
+            "@diskette": "DISK0578.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0579",
+            "@diskette": "DISK0579.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0580",
+            "@diskette": "DISK0580.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0581",
+            "@diskette": "DISK0581.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0582",
+            "@diskette": "DISK0582.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0583",
+            "@diskette": "DISK0583.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0584",
+            "@diskette": "DISK0584.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0585",
+            "@diskette": "DISK0585.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0586",
+            "@diskette": "DISK0586.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0587",
+            "@diskette": "DISK0587.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0588",
+            "@diskette": "DISK0588.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0589",
+            "@diskette": "DISK0589.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0590",
+            "@diskette": "DISK0590.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0591",
+            "@diskette": "DISK0591.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0592",
+            "@diskette": "DISK0592.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0593",
+            "@diskette": "DISK0593.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0594",
+            "@diskette": "DISK0594.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0595",
+            "@diskette": "DISK0595.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0596",
+            "@diskette": "DISK0596.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0597",
+            "@diskette": "DISK0597.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0598",
+            "@diskette": "DISK0598.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0599",
+            "@diskette": "DISK0599.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0600",
+            "@diskette": "DISK0600.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0601",
+            "@diskette": "DISK0601.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0602",
+            "@diskette": "DISK0602.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0603",
+            "@diskette": "DISK0603.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0604",
+            "@diskette": "DISK0604.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0605",
+            "@diskette": "DISK0605.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0606",
+            "@diskette": "DISK0606.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0607",
+            "@diskette": "DISK0607.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0608",
+            "@diskette": "DISK0608.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0609",
+            "@diskette": "DISK0609.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0610",
+            "@diskette": "DISK0610.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0611",
+            "@diskette": "DISK0611.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0612",
+            "@diskette": "DISK0612.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0613",
+            "@diskette": "DISK0613.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0614",
+            "@diskette": "DISK0614.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0615",
+            "@diskette": "DISK0615.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0616",
+            "@diskette": "DISK0616.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0617",
+            "@diskette": "DISK0617.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0618",
+            "@diskette": "DISK0618.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0619",
+            "@diskette": "DISK0619.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0620",
+            "@diskette": "DISK0620.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0621",
+            "@diskette": "DISK0621.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0622",
+            "@diskette": "DISK0622.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0623",
+            "@diskette": "DISK0623.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0624",
+            "@diskette": "DISK0624.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0625",
+            "@diskette": "DISK0625.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0626",
+            "@diskette": "DISK0626.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0627",
+            "@diskette": "DISK0627.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0628",
+            "@diskette": "DISK0628.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0629",
+            "@diskette": "DISK0629.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0630",
+            "@diskette": "DISK0630.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0631",
+            "@diskette": "DISK0631.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0632",
+            "@diskette": "DISK0632.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0633",
+            "@diskette": "DISK0633.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0634",
+            "@diskette": "DISK0634.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0635",
+            "@diskette": "DISK0635.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0636",
+            "@diskette": "DISK0636.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0637",
+            "@diskette": "DISK0637.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0638",
+            "@diskette": "DISK0638.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0639",
+            "@diskette": "DISK0639.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0640",
+            "@diskette": "DISK0640.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0641",
+            "@diskette": "DISK0641.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0642",
+            "@diskette": "DISK0642.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0643",
+            "@diskette": "DISK0643.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0644",
+            "@diskette": "DISK0644.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0645",
+            "@diskette": "DISK0645.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0646",
+            "@diskette": "DISK0646.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0647",
+            "@diskette": "DISK0647.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0648",
+            "@diskette": "DISK0648.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0649",
+            "@diskette": "DISK0649.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0650",
+            "@diskette": "DISK0650.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0651",
+            "@diskette": "DISK0651.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0652",
+            "@diskette": "DISK0652.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0653",
+            "@diskette": "DISK0653.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0654",
+            "@diskette": "DISK0654.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0655",
+            "@diskette": "DISK0655.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0656",
+            "@diskette": "DISK0656.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0657",
+            "@diskette": "DISK0657.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0658",
+            "@diskette": "DISK0658.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0659",
+            "@diskette": "DISK0659.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0660",
+            "@diskette": "DISK0660.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0661",
+            "@diskette": "DISK0661.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0662",
+            "@diskette": "DISK0662.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0663",
+            "@diskette": "DISK0663.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0664",
+            "@diskette": "DISK0664.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0665",
+            "@diskette": "DISK0665.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0666",
+            "@diskette": "DISK0666.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0667",
+            "@diskette": "DISK0667.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0668",
+            "@diskette": "DISK0668.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0669",
+            "@diskette": "DISK0669.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0670",
+            "@diskette": "DISK0670.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0671",
+            "@diskette": "DISK0671.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0672",
+            "@diskette": "DISK0672.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0673",
+            "@diskette": "DISK0673.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0674",
+            "@diskette": "DISK0674.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0675",
+            "@diskette": "DISK0675.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0676",
+            "@diskette": "DISK0676.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0677",
+            "@diskette": "DISK0677.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0678",
+            "@diskette": "DISK0678.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0679",
+            "@diskette": "DISK0679.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0680",
+            "@diskette": "DISK0680.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0681",
+            "@diskette": "DISK0681.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0682",
+            "@diskette": "DISK0682.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0683",
+            "@diskette": "DISK0683.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0684",
+            "@diskette": "DISK0684.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0685",
+            "@diskette": "DISK0685.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0686",
+            "@diskette": "DISK0686.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0687",
+            "@diskette": "DISK0687.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0688",
+            "@diskette": "DISK0688.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0689",
+            "@diskette": "DISK0689.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0690",
+            "@diskette": "DISK0690.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0691",
+            "@diskette": "DISK0691.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0692",
+            "@diskette": "DISK0692.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0693",
+            "@diskette": "DISK0693.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0694",
+            "@diskette": "DISK0694.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0695",
+            "@diskette": "DISK0695.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0696",
+            "@diskette": "DISK0696.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0697",
+            "@diskette": "DISK0697.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0698",
+            "@diskette": "DISK0698.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0699",
+            "@diskette": "DISK0699.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0700",
+            "@diskette": "DISK0700.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0701",
+            "@diskette": "DISK0701.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0702",
+            "@diskette": "DISK0702.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0703",
+            "@diskette": "DISK0703.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0704",
+            "@diskette": "DISK0704.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0705",
+            "@diskette": "DISK0705.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0706",
+            "@diskette": "DISK0706.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0707",
+            "@diskette": "DISK0707.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0708",
+            "@diskette": "DISK0708.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0709",
+            "@diskette": "DISK0709.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0710",
+            "@diskette": "DISK0710.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0711",
+            "@diskette": "DISK0711.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0712",
+            "@diskette": "DISK0712.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0713",
+            "@diskette": "DISK0713.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0714",
+            "@diskette": "DISK0714.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0715",
+            "@diskette": "DISK0715.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0716",
+            "@diskette": "DISK0716.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0717",
+            "@diskette": "DISK0717.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0718",
+            "@diskette": "DISK0718.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0719",
+            "@diskette": "DISK0719.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0720",
+            "@diskette": "DISK0720.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0721",
+            "@diskette": "DISK0721.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0722",
+            "@diskette": "DISK0722.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0723",
+            "@diskette": "DISK0723.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0724",
+            "@diskette": "DISK0724.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0725",
+            "@diskette": "DISK0725.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0726",
+            "@diskette": "DISK0726.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0727",
+            "@diskette": "DISK0727.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0728",
+            "@diskette": "DISK0728.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0729",
+            "@diskette": "DISK0729.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0730",
+            "@diskette": "DISK0730.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0731",
+            "@diskette": "DISK0731.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0732",
+            "@diskette": "DISK0732.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0733",
+            "@diskette": "DISK0733.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0734",
+            "@diskette": "DISK0734.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0735",
+            "@diskette": "DISK0735.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0736",
+            "@diskette": "DISK0736.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0737",
+            "@diskette": "DISK0737.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0738",
+            "@diskette": "DISK0738.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0739",
+            "@diskette": "DISK0739.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0740",
+            "@diskette": "DISK0740.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0741",
+            "@diskette": "DISK0741.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0742",
+            "@diskette": "DISK0742.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0743",
+            "@diskette": "DISK0743.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0744",
+            "@diskette": "DISK0744.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0745",
+            "@diskette": "DISK0745.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0746",
+            "@diskette": "DISK0746.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0747",
+            "@diskette": "DISK0747.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0748",
+            "@diskette": "DISK0748.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0749",
+            "@diskette": "DISK0749.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0750",
+            "@diskette": "DISK0750.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0751",
+            "@diskette": "DISK0751.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0752",
+            "@diskette": "DISK0752.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0753",
+            "@diskette": "DISK0753.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0754",
+            "@diskette": "DISK0754.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0755",
+            "@diskette": "DISK0755.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0756",
+            "@diskette": "DISK0756.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0757",
+            "@diskette": "DISK0757.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0758",
+            "@diskette": "DISK0758.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0759",
+            "@diskette": "DISK0759.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0760",
+            "@diskette": "DISK0760.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0761",
+            "@diskette": "DISK0761.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0762",
+            "@diskette": "DISK0762.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0763",
+            "@diskette": "DISK0763.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0764",
+            "@diskette": "DISK0764.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0765",
+            "@diskette": "DISK0765.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0766",
+            "@diskette": "DISK0766.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0767",
+            "@diskette": "DISK0767.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0768",
+            "@diskette": "DISK0768.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0769",
+            "@diskette": "DISK0769.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0770",
+            "@diskette": "DISK0770.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0771",
+            "@diskette": "DISK0771.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0772",
+            "@diskette": "DISK0772.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0773",
+            "@diskette": "DISK0773.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0774",
+            "@diskette": "DISK0774.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0775",
+            "@diskette": "DISK0775.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0776",
+            "@diskette": "DISK0776.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0777",
+            "@diskette": "DISK0777.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0778",
+            "@diskette": "DISK0778.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0779",
+            "@diskette": "DISK0779.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0780",
+            "@diskette": "DISK0780.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0781",
+            "@diskette": "DISK0781.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0782",
+            "@diskette": "DISK0782.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0783",
+            "@diskette": "DISK0783.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0784",
+            "@diskette": "DISK0784.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0785",
+            "@diskette": "DISK0785.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0786",
+            "@diskette": "DISK0786.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0787",
+            "@diskette": "DISK0787.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0788",
+            "@diskette": "DISK0788.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0789",
+            "@diskette": "DISK0789.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0790",
+            "@diskette": "DISK0790.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0791",
+            "@diskette": "DISK0791.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0792",
+            "@diskette": "DISK0792.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0793",
+            "@diskette": "DISK0793.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0794",
+            "@diskette": "DISK0794.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0795",
+            "@diskette": "DISK0795.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0796",
+            "@diskette": "DISK0796.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0797",
+            "@diskette": "DISK0797.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0798",
+            "@diskette": "DISK0798.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0799",
+            "@diskette": "DISK0799.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0800",
+            "@diskette": "DISK0800.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0801",
+            "@diskette": "DISK0801.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0802",
+            "@diskette": "DISK0802.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0803",
+            "@diskette": "DISK0803.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0804",
+            "@diskette": "DISK0804.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0805",
+            "@diskette": "DISK0805.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0806",
+            "@diskette": "DISK0806.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0807",
+            "@diskette": "DISK0807.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0808",
+            "@diskette": "DISK0808.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0809",
+            "@diskette": "DISK0809.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0810",
+            "@diskette": "DISK0810.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0811",
+            "@diskette": "DISK0811.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0812",
+            "@diskette": "DISK0812.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0813",
+            "@diskette": "DISK0813.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0814",
+            "@diskette": "DISK0814.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0815",
+            "@diskette": "DISK0815.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0816",
+            "@diskette": "DISK0816.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0817",
+            "@diskette": "DISK0817.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0818",
+            "@diskette": "DISK0818.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0819",
+            "@diskette": "DISK0819.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0820",
+            "@diskette": "DISK0820.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0821",
+            "@diskette": "DISK0821.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0822",
+            "@diskette": "DISK0822.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0823",
+            "@diskette": "DISK0823.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0824",
+            "@diskette": "DISK0824.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0825",
+            "@diskette": "DISK0825.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0826",
+            "@diskette": "DISK0826.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0827",
+            "@diskette": "DISK0827.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0828",
+            "@diskette": "DISK0828.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0829",
+            "@diskette": "DISK0829.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0830",
+            "@diskette": "DISK0830.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0831",
+            "@diskette": "DISK0831.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0832",
+            "@diskette": "DISK0832.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0833",
+            "@diskette": "DISK0833.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0834",
+            "@diskette": "DISK0834.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0835",
+            "@diskette": "DISK0835.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0836",
+            "@diskette": "DISK0836.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0837",
+            "@diskette": "DISK0837.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0838",
+            "@diskette": "DISK0838.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0839",
+            "@diskette": "DISK0839.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0840",
+            "@diskette": "DISK0840.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0841",
+            "@diskette": "DISK0841.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0842",
+            "@diskette": "DISK0842.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0843",
+            "@diskette": "DISK0843.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0844",
+            "@diskette": "DISK0844.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0845",
+            "@diskette": "DISK0845.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0846",
+            "@diskette": "DISK0846.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0847",
+            "@diskette": "DISK0847.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0848",
+            "@diskette": "DISK0848.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0849",
+            "@diskette": "DISK0849.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0850",
+            "@diskette": "DISK0850.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0851",
+            "@diskette": "DISK0851.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0852",
+            "@diskette": "DISK0852.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0853",
+            "@diskette": "DISK0853.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0854",
+            "@diskette": "DISK0854.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0855",
+            "@diskette": "DISK0855.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0856",
+            "@diskette": "DISK0856.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0857",
+            "@diskette": "DISK0857.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0858",
+            "@diskette": "DISK0858.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0859",
+            "@diskette": "DISK0859.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0860",
+            "@diskette": "DISK0860.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0861",
+            "@diskette": "DISK0861.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0862",
+            "@diskette": "DISK0862.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0863",
+            "@diskette": "DISK0863.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0864",
+            "@diskette": "DISK0864.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0865",
+            "@diskette": "DISK0865.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0866",
+            "@diskette": "DISK0866.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0867",
+            "@diskette": "DISK0867.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0868",
+            "@diskette": "DISK0868.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0869",
+            "@diskette": "DISK0869.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0870",
+            "@diskette": "DISK0870.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0871",
+            "@diskette": "DISK0871.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0872",
+            "@diskette": "DISK0872.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0873",
+            "@diskette": "DISK0873.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0874",
+            "@diskette": "DISK0874.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0875",
+            "@diskette": "DISK0875.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0876",
+            "@diskette": "DISK0876.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0877",
+            "@diskette": "DISK0877.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0878",
+            "@diskette": "DISK0878.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0879",
+            "@diskette": "DISK0879.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0880",
+            "@diskette": "DISK0880.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0881",
+            "@diskette": "DISK0881.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0882",
+            "@diskette": "DISK0882.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0883",
+            "@diskette": "DISK0883.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0884",
+            "@diskette": "DISK0884.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0885",
+            "@diskette": "DISK0885.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0886",
+            "@diskette": "DISK0886.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0887",
+            "@diskette": "DISK0887.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0888",
+            "@diskette": "DISK0888.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0889",
+            "@diskette": "DISK0889.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0890",
+            "@diskette": "DISK0890.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0891",
+            "@diskette": "DISK0891.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0892",
+            "@diskette": "DISK0892.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0893",
+            "@diskette": "DISK0893.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0894",
+            "@diskette": "DISK0894.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0895",
+            "@diskette": "DISK0895.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0896",
+            "@diskette": "DISK0896.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0897",
+            "@diskette": "DISK0897.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0898",
+            "@diskette": "DISK0898.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0899",
+            "@diskette": "DISK0899.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0900",
+            "@diskette": "DISK0900.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0901",
+            "@diskette": "DISK0901.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0902",
+            "@diskette": "DISK0902.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0903",
+            "@diskette": "DISK0903.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0904",
+            "@diskette": "DISK0904.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0905",
+            "@diskette": "DISK0905.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0906",
+            "@diskette": "DISK0906.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0907",
+            "@diskette": "DISK0907.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0908",
+            "@diskette": "DISK0908.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0909",
+            "@diskette": "DISK0909.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0910",
+            "@diskette": "DISK0910.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0911",
+            "@diskette": "DISK0911.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0912",
+            "@diskette": "DISK0912.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0913",
+            "@diskette": "DISK0913.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0914",
+            "@diskette": "DISK0914.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0915",
+            "@diskette": "DISK0915.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0916",
+            "@diskette": "DISK0916.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0917",
+            "@diskette": "DISK0917.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0918",
+            "@diskette": "DISK0918.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0919",
+            "@diskette": "DISK0919.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0920",
+            "@diskette": "DISK0920.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0921",
+            "@diskette": "DISK0921.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0922",
+            "@diskette": "DISK0922.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0923",
+            "@diskette": "DISK0923.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0924",
+            "@diskette": "DISK0924.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0925",
+            "@diskette": "DISK0925.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0926",
+            "@diskette": "DISK0926.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0927",
+            "@diskette": "DISK0927.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0928",
+            "@diskette": "DISK0928.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0929",
+            "@diskette": "DISK0929.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0930",
+            "@diskette": "DISK0930.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0931",
+            "@diskette": "DISK0931.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0932",
+            "@diskette": "DISK0932.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0933",
+            "@diskette": "DISK0933.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0934",
+            "@diskette": "DISK0934.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0935",
+            "@diskette": "DISK0935.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0936",
+            "@diskette": "DISK0936.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0937",
+            "@diskette": "DISK0937.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0938",
+            "@diskette": "DISK0938.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0939",
+            "@diskette": "DISK0939.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0940",
+            "@diskette": "DISK0940.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0941",
+            "@diskette": "DISK0941.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0942",
+            "@diskette": "DISK0942.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0943",
+            "@diskette": "DISK0943.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0944",
+            "@diskette": "DISK0944.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0945",
+            "@diskette": "DISK0945.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0946",
+            "@diskette": "DISK0946.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0947",
+            "@diskette": "DISK0947.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0948",
+            "@diskette": "DISK0948.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0949",
+            "@diskette": "DISK0949.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0950",
+            "@diskette": "DISK0950.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0951",
+            "@diskette": "DISK0951.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0952",
+            "@diskette": "DISK0952.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0953",
+            "@diskette": "DISK0953.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0954",
+            "@diskette": "DISK0954.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0955",
+            "@diskette": "DISK0955.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0956",
+            "@diskette": "DISK0956.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0957",
+            "@diskette": "DISK0957.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0958",
+            "@diskette": "DISK0958.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0959",
+            "@diskette": "DISK0959.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0960",
+            "@diskette": "DISK0960.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0961",
+            "@diskette": "DISK0961.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0962",
+            "@diskette": "DISK0962.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0963",
+            "@diskette": "DISK0963.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0964",
+            "@diskette": "DISK0964.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0965",
+            "@diskette": "DISK0965.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0966",
+            "@diskette": "DISK0966.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0967",
+            "@diskette": "DISK0967.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0968",
+            "@diskette": "DISK0968.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0969",
+            "@diskette": "DISK0969.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0970",
+            "@diskette": "DISK0970.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0971",
+            "@diskette": "DISK0971.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0972",
+            "@diskette": "DISK0972.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0973",
+            "@diskette": "DISK0973.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0974",
+            "@diskette": "DISK0974.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0975",
+            "@diskette": "DISK0975.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0976",
+            "@diskette": "DISK0976.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0977",
+            "@diskette": "DISK0977.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0978",
+            "@diskette": "DISK0978.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0979",
+            "@diskette": "DISK0979.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0980",
+            "@diskette": "DISK0980.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0981",
+            "@diskette": "DISK0981.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0982",
+            "@diskette": "DISK0982.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0983",
+            "@diskette": "DISK0983.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0984",
+            "@diskette": "DISK0984.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0985",
+            "@diskette": "DISK0985.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0986",
+            "@diskette": "DISK0986.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0987",
+            "@diskette": "DISK0987.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0988",
+            "@diskette": "DISK0988.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0989",
+            "@diskette": "DISK0989.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0990",
+            "@diskette": "DISK0990.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0991",
+            "@diskette": "DISK0991.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0992",
+            "@diskette": "DISK0992.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0993",
+            "@diskette": "DISK0993.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0994",
+            "@diskette": "DISK0994.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0995",
+            "@diskette": "DISK0995.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0996",
+            "@diskette": "DISK0996.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0997",
+            "@diskette": "DISK0997.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0998",
+            "@diskette": "DISK0998.json"
+          },
+          {
+            "@title": "PCSIG08: DISK0999",
+            "@diskette": "DISK0999.json"
+          }
+        ]
+      }
+    }
+  }
+}

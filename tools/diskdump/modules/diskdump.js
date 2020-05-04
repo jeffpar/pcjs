@@ -179,6 +179,9 @@ function readAll(argv)
             let aDiskettes = [];
             JSONLib.parseDiskettes(aDiskettes, library, "/pcx86", "/diskettes");
             aDiskettes.forEach(function readAllDiskettes(diskette) {
+                if (library['@local']) {
+                    diskette.path = diskette.path.replace(library['@server'], library['@local']);
+                }
                 let sFile = diskette.path;
                 if (typeof argv['readall'] == "string" && sFile.indexOf(argv['readall']) < 0) return;
                 if (argv['verbose']) printf("reading %s...\n", sFile);

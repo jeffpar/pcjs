@@ -64467,7 +64467,7 @@ class FDC extends Component {
                 fdc.aDiskettes = [];
                 for (let i = 0; i < urls.length; i++) {
                     let url = urls[i];
-                    if (hostName == "localhost" || url.indexOf("private") < 0) {
+                    if (hostName == "localhost" || url.indexOf("private") < 0 && url.indexOf("pcsig") < 0) {
                         cRequested++;
                         let sProgress = "Loading " + url + "...";
                         Web.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
@@ -71221,6 +71221,7 @@ class JSONLib {
             }
             let versions = group['@versions'];
             if (versions) {
+                if (group['@server']) server = group['@server'];
                 for (let version in versions) {
                     let release = versions[version];
                     let media = release['@media'];

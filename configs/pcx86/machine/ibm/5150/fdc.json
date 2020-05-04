@@ -4,7 +4,7 @@
   "autoMount": {
     "A": {"name": "PC DOS 1.00"}
   },
-  "diskettes": "/configs/pcx86/diskettes.json,/configs/pcx86/private.json",
+  "diskettes": "/configs/pcx86/diskettes.json,/configs/pcx86/private.json,/configs/pcx86/pcsig08a.json,/configs/pcx86/pcsig08b.json",
   "server": "/diskettes",
   "style": {
     "float": "left",

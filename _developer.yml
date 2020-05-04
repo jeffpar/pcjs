@@ -25,6 +25,7 @@ exclude:
   - /package*.json
   - /.history
   - /.vscode
+  - /discs
   - /node_modules
   - /software/pcx86/sys/dos/microsoft/1.25/src
   - /software/pcx86/sys/dos/microsoft/2.11/src

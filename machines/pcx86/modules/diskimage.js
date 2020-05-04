@@ -27,11 +27,11 @@ import FileInfo from "./fileinfo.js";
  * @property {number} vbaRoot
  * @property {number} nEntries
  * @property {number} vbaData
- * @property {number} clusterSecs
- * @property {number} clusterMax
- * @property {number} clustersBad
- * @property {number} clustersFree
- * @property {number} clustersTotal
+ * @property {number} clusSecs
+ * @property {number} clusMax
+ * @property {number} clusBad
+ * @property {number} clusFree
+ * @property {number} clusTotal
  */
 
 /**
@@ -155,6 +155,7 @@ export default class DiskImage {
         this.aDiskData = null;
         this.cbDiskData = 0;
         this.dwChecksum = 0;
+        this.fromJSON = false;
 
         let nHeads = 0;
         let nCylinders = 0;
@@ -1296,6 +1297,7 @@ export default class DiskImage {
         this.aDiskData = null;
         this.cbDiskData = 0;
         this.dwChecksum = 0;
+        this.fromJSON = false;
 
         this.abOrigBPB = [];
         this.fBPBModified = false;
@@ -1312,7 +1314,11 @@ export default class DiskImage {
                 if (imageInfo) {
                     let sOrigBPB = imageInfo[DiskImage.IMAGE.ORIGBPB];
                     if (sOrigBPB) this.abOrigBPB = JSON.parse(sOrigBPB);
+                    if (!this.volTable.length && imageData.volTable) {
+                        this.volTable = imageData.volTable;
+                    }
                     this.buildFileTableFromJSON(imageData[DiskImage.DESC.FILES]);
+                    this.fromJSON = true;
                 }
                 let aDiskData = imageData[DiskImage.DESC.DISKDATA] || imageData;
                 if (aDiskData && aDiskData.length) {
@@ -1543,7 +1549,7 @@ export default class DiskImage {
     }
 
     /**
-     * buildTables()
+     * buildTables(fRebuild)
      *
      * This function builds (or rebuilds) a complete file table from all FAT volumes found on the current disk,
      * and then updates all the sector objects with references to the corresponding file and offset.  Used for
@@ -1563,11 +1569,12 @@ export default class DiskImage {
      * was the source of the image.
      *
      * @this {DiskImage}
+     * @param {boolean} fRebuild
      * @returns {number}
      */
-    buildTables()
+    buildTables(fRebuild)
     {
-        if (!this.fileTable.length) {
+        if (!this.fileTable.length || fRebuild) {
 
             this.deleteTables();
 
@@ -1652,7 +1659,7 @@ export default class DiskImage {
                              * their upper byte is zero in all our default (diskette) BPBs, so there's no need to fetch them.
                              */
                             vol.vbaRoot = vol.vbaFAT + bpb[DiskImage.BPB.FAT_SECS] * bpb[DiskImage.BPB.TOTAL_FATS];
-                            vol.clusterSecs = bpb[DiskImage.BPB.CLUSTER_SECS];
+                            vol.clusSecs = bpb[DiskImage.BPB.CLUSTER_SECS];
                             vol.lbaTotal = cbDiskBPB / this.cbSector;
                             vol.nEntries = bpb[DiskImage.BPB.ROOT_DIRENTS];
                             vol.cbSector = this.cbSector;
@@ -1737,16 +1744,16 @@ export default class DiskImage {
             vol.vbaFAT = this.getSectorData(sectorBoot, DiskImage.BPB.RESERVED_SECS, 2);
             vol.vbaRoot = vol.vbaFAT + this.getSectorData(sectorBoot, DiskImage.BPB.FAT_SECS, 2) * this.getSectorData(sectorBoot, DiskImage.BPB.TOTAL_FATS, 1);
             vol.nEntries = this.getSectorData(sectorBoot, DiskImage.BPB.ROOT_DIRENTS, 2);
-            vol.clusterSecs = this.getSectorData(sectorBoot, DiskImage.BPB.CLUSTER_SECS, 1);
+            vol.clusSecs = this.getSectorData(sectorBoot, DiskImage.BPB.CLUSTER_SECS, 1);
         }
 
         vol.vbaData = vol.vbaRoot + (((vol.nEntries * DiskImage.DIRENT.LENGTH + (vol.cbSector - 1)) / vol.cbSector) | 0);
-        vol.clustersTotal = (((vol.lbaTotal - vol.vbaData) / vol.clusterSecs) | 0);
+        vol.clusTotal = (((vol.lbaTotal - vol.vbaData) / vol.clusSecs) | 0);
 
         /*
          * In all FATs, the first valid cluster number is 2, as 0 is used to indicate a free cluster and 1 is reserved.
          *
-         * In a 12-bit FAT chain, the largest valid cluster number (clusterMax) is 0xFF6; 0xFF7 is reserved for marking
+         * In a 12-bit FAT chain, the largest valid cluster number (clusMax) is 0xFF6; 0xFF7 is reserved for marking
          * bad clusters and should NEVER appear in a cluster chain, and 0xFF8-0xFFF are used to indicate the end of a chain.
          * Reports that cluster numbers 0xFF0-0xFF6 are "reserved" (eg, http://support.microsoft.com/KB/65541) should be
          * ignored; those numbers may have been considered "reserved" at some early point in FAT's history, but no longer.
@@ -1760,8 +1767,8 @@ export default class DiskImage {
          *
          * TODO: Eventually add support for FAT32.
          */
-        vol.nFATBits = (vol.clustersTotal <= DiskImage.FAT12.MAX_CLUSTERS? 12 : 16);
-        vol.clusterMax = (vol.nFATBits == 12? DiskImage.FAT12.CLUSNUM_MAX : DiskImage.FAT16.CLUSNUM_MAX);
+        vol.nFATBits = (vol.clusTotal <= DiskImage.FAT12.MAX_CLUSTERS? 12 : 16);
+        vol.clusMax = (vol.nFATBits == 12? DiskImage.FAT12.CLUSNUM_MAX : DiskImage.FAT16.CLUSNUM_MAX);
 
         if (!idFAT) idFAT = this.getClusterEntry(vol, 0, 0);
 
@@ -1770,13 +1777,13 @@ export default class DiskImage {
             return null;
         }
 
-        if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s:\n  vbaFAT: %d\n  vbaRoot: %d\n  vbaData: %d\n  lbaTotal: %d\n  clusterSecs: %d\n  clustersTotal: %d\n", this.diskName, vol.vbaFAT, vol.vbaRoot, vol.vbaData, vol.lbaTotal, vol.clusterSecs, vol.clustersTotal);
+        if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s:\n  vbaFAT: %d\n  vbaRoot: %d\n  vbaData: %d\n  lbaTotal: %d\n  clusSecs: %d\n  clusTotal: %d\n", this.diskName, vol.vbaFAT, vol.vbaRoot, vol.vbaData, vol.lbaTotal, vol.clusSecs, vol.clusTotal);
 
         /*
          * The following assertion is here only to catch anomalies; it is NOT a requirement that the number of data sectors
-         * be a perfect multiple of clusterSecs, but if it ever happens, it's worth verifying we didn't miscalculate something.
+         * be a perfect multiple of clusSecs, but if it ever happens, it's worth verifying we didn't miscalculate something.
          */
-        let nWasted = (vol.lbaTotal - vol.vbaData) % vol.clusterSecs;
+        let nWasted = (vol.lbaTotal - vol.vbaData) % vol.clusSecs;
         if (nWasted) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s volume %d contains %d sectors, wasting %d sectors\n", this.diskName, iVolume, vol.lbaTotal, nWasted);
 
         /*
@@ -1815,17 +1822,17 @@ export default class DiskImage {
          * not a sector, and while for floppies, it's usually true that a cluster is the same size as a sector, that's
          * not true in general.
          */
-        vol.clustersBad = 0, vol.clustersFree = 0;
-        for (let cluster = 2; cluster < vol.clustersTotal + 2; cluster++) {
+        vol.clusBad = 0, vol.clusFree = 0;
+        for (let cluster = 2; cluster < vol.clusTotal + 2; cluster++) {
             let clusterNext = this.getClusterEntry(vol, cluster, 0) | this.getClusterEntry(vol, cluster, 1);
             if (!clusterNext) {
-                vol.clustersFree++;
-            } else if (clusterNext == vol.clusterMax + 1) {
-                vol.clustersBad++;
+                vol.clusFree++;
+            } else if (clusterNext == vol.clusMax + 1) {
+                vol.clusBad++;
             }
         }
 
-        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s volume %d: %d cluster(s) bad, %d cluster(s) free, %d bytes free\n", this.diskName, iVolume, vol.clustersBad, vol.clustersFree, vol.clustersFree * vol.clusterSecs * vol.cbSector);
+        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s volume %d: %d cluster(s) bad, %d cluster(s) free, %d bytes free\n", this.diskName, iVolume, vol.clusBad, vol.clusFree, vol.clusFree * vol.clusSecs * vol.cbSector);
         return vol;
     }
 
@@ -1965,7 +1972,14 @@ export default class DiskImage {
                     sListing += "\n" + sIndent + "Total files listed:\n";
                     sListing += getTotal(nTotal, cbTotal);
                 }
-                sListing += this.device.sprintf("%s%28d bytes free\n", sIndent, vol.clustersFree * vol.clusterSecs * vol.cbSector);
+                /*
+                 * This calculation used to use vol.cbSector, but we don't really support volumes with (default) sector sizes that
+                 * that differ from the disk's (default) sector size, nor do we export per-volume sector sizes in the VOLDESC structure,
+                 * so the only code that can rely on vol.cbSector is buildTables(), buildVolume(), and any other code that follows
+                 * those calls -- and if we've reconstituted the disk and all its tables using buildDiskFromJSON(), that doesn't happen
+                 * automatically.
+                 */
+                sListing += this.device.sprintf("%s%28d bytes free\n", sIndent, vol.clusFree * vol.clusSecs * this.cbSector);
                 iVolume++;
             }
         }
@@ -2037,11 +2051,11 @@ export default class DiskImage {
             [DiskImage.VOLDESC.VBA_ROOT]:   vol.vbaRoot,
             [DiskImage.VOLDESC.ROOT_TOTAL]: vol.nEntries,
             [DiskImage.VOLDESC.VBA_DATA]:   vol.vbaData,
-            [DiskImage.VOLDESC.CLUS_SECS]:  vol.clusterSecs,
-            [DiskImage.VOLDESC.CLUS_MAX]:   vol.clusterMax,
-            [DiskImage.VOLDESC.CLUS_BAD]:   vol.clustersBad,
-            [DiskImage.VOLDESC.CLUS_FREE]:  vol.clustersFree,
-            [DiskImage.VOLDESC.CLUS_TOTAL]: vol.clustersTotal
+            [DiskImage.VOLDESC.CLUS_SECS]:  vol.clusSecs,
+            [DiskImage.VOLDESC.CLUS_MAX]:   vol.clusMax,
+            [DiskImage.VOLDESC.CLUS_BAD]:   vol.clusBad,
+            [DiskImage.VOLDESC.CLUS_FREE]:  vol.clusFree,
+            [DiskImage.VOLDESC.CLUS_TOTAL]: vol.clusTotal
         };
         return desc;
     }
@@ -2253,8 +2267,8 @@ export default class DiskImage {
      *      vbaFAT
      *      vbaData
      *      cbSector
-     *      clusterMax
-     *      clusterSecs
+     *      clusMax
+     *      clusSecs
      *      nFATBits
      *
      * @this {DiskImage}
@@ -2315,14 +2329,14 @@ export default class DiskImage {
                 if (cluster < DiskImage.FAT12.CLUSNUM_MIN) {
                     break;
                 }
-                let vba = vol.vbaData + ((cluster - DiskImage.FAT12.CLUSNUM_MIN) * vol.clusterSecs);
-                for (let i = 0; i < vol.clusterSecs; i++) {
+                let vba = vol.vbaData + ((cluster - DiskImage.FAT12.CLUSNUM_MIN) * vol.clusSecs);
+                for (let i = 0; i < vol.clusSecs; i++) {
                     aLBA.push(vol.lbaStart + vba++);
                 }
                 cluster = this.getClusterEntry(vol, cluster, 0) | this.getClusterEntry(vol, cluster, 1);
-            } while (cluster <= vol.clusterMax);
+            } while (cluster <= vol.clusMax);
 
-            if (cluster < DiskImage.FAT12.CLUSNUM_MIN || cluster == vol.clusterMax + 1 /* aka CLUSNUM_BAD */) {
+            if (cluster < DiskImage.FAT12.CLUSNUM_MIN || cluster == vol.clusMax + 1 /* aka CLUSNUM_BAD */) {
                 this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: %s contains invalid cluster (%d)\n", this.diskName, dir.name, cluster);
             }
         }
@@ -2749,7 +2763,7 @@ export default class DiskImage {
     {
         let volTable, fileTable;
         if (!fLegacy) {
-            if (this.buildTables()) {
+            if (this.buildTables(this.fromJSON)) {
                 volTable = [];
                 for (let iVolume = 0; iVolume < this.volTable.length; iVolume++) {
                     volTable.push(this.getVolDesc(this.volTable[iVolume]));
