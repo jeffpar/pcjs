@@ -361,12 +361,26 @@ export default class DiskImage {
                  * In deference to the PC DOS 2.0 BPB behavior discussed above, we stop our BPB verification after
                  * the first word of HIDDEN_SECS.
                  */
-                for (let i = DiskImage.BPB.SECTOR_BYTES; i < DiskImage.BPB.HIDDEN_SECS + 2; i++) {
-                    let bDefault = DiskImage.aDefaultBPBs[iBPB][i];
-                    let bActual = dbDisk.readUInt8(offBootSector + i);
+                for (let off = DiskImage.BPB.SECTOR_BYTES; off < DiskImage.BPB.HIDDEN_SECS + 2; off++) {
+                    let bDefault = DiskImage.aDefaultBPBs[iBPB][off];
+                    let bActual = dbDisk.readUInt8(offBootSector + off);
                     if (bDefault != bActual) {
-                        this.printf(Device.MESSAGE.WARN, "BPB byte %#02bx default (%#02bx) does not match actual byte: %#02bx\n", i, bDefault, bActual);
-                        fBPBWarning = true;
+                        this.printf(Device.MESSAGE.WARN, "BPB byte %#02bx default (%#02bx) does not match actual byte: %#02bx\n", off, bDefault, bActual);
+                        /*
+                         * Silly me for thinking that a given media ID (eg, 0xF9) AND a given disk size (eg, 720K)
+                         * AND a given number of sectors/cluster (eg, 2) would always map to the same BPB.  I had already
+                         * added *two* 720K BPBs -- one for the common case of 2 sectors/cluster and another for 720K
+                         * disks like PC DOS 4.01 which use 1 sector/cluster -- but it turns out there are even more
+                         * variations.  For example, the number of root directory entries: I was under the impression that
+                         * the "standard" value was 0x70, but the number used by PC DOS 3.3 is 0xE0 entries (exactly
+                         * twice as many).
+                         *
+                         * And while it doesn't much matter which BPB variation we use when we're *building* a new disk OR
+                         * sprucing up a disk that never had a BPB anyway, it's a much more serious matter when there's
+                         * an existing BPB.  So I have narrowed the conditions where fBPBWarning is set, thereby reducing
+                         * the odds of damaging a good BPB versus repairing or replacing a bad one.
+                         */
+                        if (off != DiskImage.BPB.TOTAL_FATS && off != DiskImage.BPB.ROOT_DIRENTS) fBPBWarning = true;
                     }
                 }
             }
@@ -3263,6 +3277,36 @@ DiskImage.PCJS_LABEL = "PCJSDISK";
 DiskImage.PCJS_OEM   = "PCJS.ORG";
 
 /*
+ * BIOS Parameter Block (BPB) offsets in DOS-compatible boot sectors (DOS 2.x and up)
+ *
+ * Technically, JMP_OPCODE and OEM_STRING are not part of a BPB, but for simplicity's sake, this is where we're
+ * recording those offsets.
+ *
+ * NOTE: DOS 2.x OEM documentation says that the words starting at offset 0x018 (TRACK_SECS, TOTAL_HEADS, and HIDDEN_SECS)
+ * are optional, but even the DOS 2.0 FORMAT utility initializes all three of those words.  There may be some OEM media out
+ * there with BPBs that are only valid up to offset 0x018, but I've not run across any media like that.
+ *
+ * DOS 3.20 added LARGE_SECS, but unfortunately, it was added as a 2-byte value at offset 0x01E.  DOS 3.31 decided
+ * to make both HIDDEN_SECS and LARGE_SECS 4-byte values, which meant that LARGE_SECS had to move from 0x01E to 0x020.
+ */
+DiskImage.BPB = {
+    JMP_OPCODE:     0x000,      // 1 byte for a JMP opcode, followed by a 1 or 2-byte offset
+    OEM_STRING:     0x003,      // 8 bytes
+    SECTOR_BYTES:   0x00B,      // 2 bytes: bytes per sector (eg, 0x200 or 512)
+    CLUSTER_SECS:   0x00D,      // 1 byte: sectors per cluster (eg, 1)
+    RESERVED_SECS:  0x00E,      // 2 bytes: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (eg, 1)
+    TOTAL_FATS:     0x010,      // 1 byte: FAT copies (eg, 2)
+    ROOT_DIRENTS:   0x011,      // 2 bytes: root directory entries (eg, 0x40 or 64) 0x40 * 0x20 = 0x800 (1 sector is 0x200 bytes, total of 4 sectors)
+    TOTAL_SECS:     0x013,      // 2 bytes: number of sectors (eg, 0x140 or 320); if zero, refer to LARGE_SECS
+    MEDIA_ID:       0x015,      // 1 byte: media ID (see DiskImage.FAT.MEDIA_*); should also match the first byte of the FAT (aka FAT ID)
+    FAT_SECS:       0x016,      // 2 bytes: sectors per FAT (eg, 1)
+    TRACK_SECS:     0x018,      // 2 bytes: sectors per track (eg, 8)
+    TOTAL_HEADS:    0x01A,      // 2 bytes: number of heads (eg, 1)
+    HIDDEN_SECS:    0x01C,      // 2 bytes (DOS 2.x) or 4 bytes (DOS 3.31 and up): number of hidden sectors (always 0 for non-partitioned media)
+    LARGE_SECS:     0x020       // 4 bytes (DOS 3.31 and up): number of sectors if TOTAL_SECS is zero
+};
+
+/*
  * The BPBs that buildDiskFromBuffer() currently supports; these BPBs should be in order of smallest to largest capacity,
  * to help ensure we don't select a disk format larger than necessary.
  */
@@ -3459,36 +3503,6 @@ DiskImage.aDefaultBPBs = [
     0x01, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
   ]
 ];
-
-/*
- * BIOS Parameter Block (BPB) offsets in DOS-compatible boot sectors (DOS 2.x and up)
- *
- * Technically, JMP_OPCODE and OEM_STRING are not part of a BPB, but for simplicity's sake, this is where we're
- * recording those offsets.
- *
- * NOTE: DOS 2.x OEM documentation says that the words starting at offset 0x018 (TRACK_SECS, TOTAL_HEADS, and HIDDEN_SECS)
- * are optional, but even the DOS 2.0 FORMAT utility initializes all three of those words.  There may be some OEM media out
- * there with BPBs that are only valid up to offset 0x018, but I've not run across any media like that.
- *
- * DOS 3.20 added LARGE_SECS, but unfortunately, it was added as a 2-byte value at offset 0x01E.  DOS 3.31 decided
- * to make both HIDDEN_SECS and LARGE_SECS 4-byte values, which meant that LARGE_SECS had to move from 0x01E to 0x020.
- */
-DiskImage.BPB = {
-    JMP_OPCODE:     0x000,      // 1 byte for a JMP opcode, followed by a 1 or 2-byte offset
-    OEM_STRING:     0x003,      // 8 bytes
-    SECTOR_BYTES:   0x00B,      // 2 bytes: bytes per sector (eg, 0x200 or 512)
-    CLUSTER_SECS:   0x00D,      // 1 byte: sectors per cluster (eg, 1)
-    RESERVED_SECS:  0x00E,      // 2 bytes: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (eg, 1)
-    TOTAL_FATS:     0x010,      // 1 byte: FAT copies (eg, 2)
-    ROOT_DIRENTS:   0x011,      // 2 bytes: root directory entries (eg, 0x40 or 64) 0x40 * 0x20 = 0x800 (1 sector is 0x200 bytes, total of 4 sectors)
-    TOTAL_SECS:     0x013,      // 2 bytes: number of sectors (eg, 0x140 or 320); if zero, refer to LARGE_SECS
-    MEDIA_ID:       0x015,      // 1 byte: media ID (see DiskImage.FAT.MEDIA_*); should also match the first byte of the FAT (aka FAT ID)
-    FAT_SECS:       0x016,      // 2 bytes: sectors per FAT (eg, 1)
-    TRACK_SECS:     0x018,      // 2 bytes: sectors per track (eg, 8)
-    TOTAL_HEADS:    0x01A,      // 2 bytes: number of heads (eg, 1)
-    HIDDEN_SECS:    0x01C,      // 2 bytes (DOS 2.x) or 4 bytes (DOS 3.31 and up): number of hidden sectors (always 0 for non-partitioned media)
-    LARGE_SECS:     0x020       // 4 bytes (DOS 3.31 and up): number of sectors if TOTAL_SECS is zero
-};
 
 /*
  * Common (supported) diskette geometries.
