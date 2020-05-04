@@ -106,6 +106,7 @@ export default class DiskImage {
         this.fWritable = fWritable;
         this.volTable = [];
         this.fileTable = [];
+        this.tablesBuilt = false;
     }
 
     /**
@@ -1329,10 +1330,14 @@ export default class DiskImage {
                     let sOrigBPB = imageInfo[DiskImage.IMAGE.ORIGBPB];
                     if (sOrigBPB) this.abOrigBPB = JSON.parse(sOrigBPB);
                     if (!this.volTable.length && imageData.volTable) {
-                        this.volTable = imageData.volTable;
+                        let volTable = imageData.volTable;
+                        for (let iVol = 0; iVol < volTable.length; iVol++) {
+                            volTable[iVol].iPartition = volTable.length > 1? iVol : -1;
+                        }
+                        this.volTable = volTable;
                     }
                     this.buildFileTableFromJSON(imageData[DiskImage.DESC.FILES]);
-                    this.fromJSON = true;
+                    this.tablesBuilt = this.fromJSON = true;
                 }
                 let aDiskData = imageData[DiskImage.DESC.DISKDATA] || imageData;
                 if (aDiskData && aDiskData.length) {
@@ -1554,9 +1559,11 @@ export default class DiskImage {
                 let attr = +desc[DiskImage.FILEDESC.ATTR];
                 let date = this.device.parseDate(desc[DiskImage.FILEDESC.DATE]);
                 let size = desc[DiskImage.FILEDESC.SIZE] || 0;
-                fileTable[i] = new FileInfo(this, iVolume, path, name, attr, date, size)
+                let file = new FileInfo(this, iVolume, path, name, attr, date, size);
+                file.index = i;
+                fileTable[i] = file;
                 let hash = desc[DiskImage.FILEDESC.HASH];
-                if (hash) fileTable[i].hash = hash;
+                if (hash) file.hash = hash;
             }
             this.fileTable = fileTable;
         }
@@ -1588,7 +1595,12 @@ export default class DiskImage {
      */
     buildTables(fRebuild)
     {
-        if (!this.fileTable.length || fRebuild) {
+        if (!this.fileTable.length && !this.tablesBuilt || fRebuild) {
+
+            /*
+             * The built flag helps us avoid rebuilding the tables needlessly for volumes that simply have zero files.
+             */
+            this.tablesBuilt = true;
 
             this.deleteTables();
 
@@ -1882,7 +1894,7 @@ export default class DiskImage {
                     for (let iSector = 0; iSector < aDiskData[iCylinder][iHead].length; iSector++) {
                         let sector = aDiskData[iCylinder][iHead][iSector];
                         if (sector) {
-                            delete sector[DiskImage.SECTOR.FILE_INFO];
+                            delete sector[DiskImage.SECTOR.FILE_INDEX];
                             delete sector[DiskImage.SECTOR.FILE_OFFSET];
                             delete sector.iModify;
                             delete sector.cModify;
@@ -2011,6 +2023,7 @@ export default class DiskImage {
      */
     getFileDesc(file, fComplete, fnHash)
     {
+        let ab = null;
         let desc = {
             [DiskImage.FILEDESC.HASH]: file.hash,
             [DiskImage.FILEDESC.PATH]: file.path.replace(/\\/g, '/'),
@@ -2020,7 +2033,14 @@ export default class DiskImage {
             [DiskImage.FILEDESC.SIZE]: file.size,
             [DiskImage.FILEDESC.VOL]:  file.iVolume
         };
-        if (!fComplete) {
+        if (file.size && (fComplete || fnHash)) {
+            this.assert(file.name[0] != '.');   // make sure we're not hashing "." and ".." DIRENTs
+            ab = new Array(file.size);
+            this.readSectorArray(file, ab);
+        }
+        if (fComplete) {
+            if (ab) desc[DiskImage.FILEDESC.CONTENTS] = ab;
+        } else {
             delete desc[DiskImage.FILEDESC.NAME];
             if (!file.size && (file.attr & DiskImage.ATTR.SUBDIR | DiskImage.ATTR.VOLUME)) {
                 delete desc[DiskImage.FILEDESC.SIZE];
@@ -2036,9 +2056,7 @@ export default class DiskImage {
                 [DiskImage.FILEDESC.MODSEGS]: file.segments
             }
         }
-        if (fnHash && file.size) {
-            let ab = new Array(file.size);
-            this.readSectorArray(ab, file.aLBA);
+        if (fnHash && ab) {
             desc[DiskImage.FILEDESC.HASH] = fnHash(ab);
         } else {
             if (!desc[DiskImage.FILEDESC.HASH]) delete desc[DiskImage.FILEDESC.HASH];
@@ -2242,6 +2260,7 @@ export default class DiskImage {
                     this.diskName + ":" + path
                 );
                 file = new FileInfo(this, vol.iVolume, path, dir.name, dir.attr, dateMod, dir.size, dir.cluster, dir.aLBA);
+                file.index = this.fileTable.length;
                 this.fileTable.push(file);
             }
         }
@@ -2422,30 +2441,80 @@ export default class DiskImage {
     }
 
     /**
-     * readSectorArray(ab, aLBA)
+     * getSectorArray(file)
      *
      * @this {DiskImage}
+     * @param {FileInfo} [file]
+     * @returns {number} (number of sectors mapped)
+     */
+    getSectorArray(file)
+    {
+        let nSectors = 0;
+        if (this.fileTable.length && (!file || file.size > 0 && !file.aLBA)) {
+            let aDiskData = this.aDiskData, lba = 0;
+            for (let iCylinder = 0; iCylinder < aDiskData.length; iCylinder++) {
+                for (let iHead = 0; iHead < aDiskData[iCylinder].length; iHead++) {
+                    for (let iSector = 0; iSector < aDiskData[iCylinder][iHead].length; iSector++) {
+                        let sector = aDiskData[iCylinder][iHead][iSector];
+                        if (sector) {
+                            let iFile = sector[DiskImage.SECTOR.FILE_INDEX];
+                            if (iFile != undefined) {
+                                /*
+                                 * When the caller specifies a particular file, it is tempting to do this:
+                                 *
+                                 *      if (file.index === iFile) ...
+                                 *
+                                 * but if we have to scan every sector for a single file, we may as well do ALL files.
+                                 */
+                                let fileCur = this.fileTable[iFile];
+                                this.assert(fileCur);
+                                if (!fileCur.aLBA) fileCur.aLBA = [];
+                                let iLBA = sector[DiskImage.SECTOR.FILE_OFFSET] / this.cbSector;
+                                /*
+                                 * Disks that have known errors (like the APL-100 disk image we received) can trigger this
+                                 * assertion, so it should be a DEBUG-only check.
+                                 */
+                                if (Device.DEBUG) this.assert(fileCur.aLBA[iLBA] == undefined || fileCur.aLBA[iLBA] == iLBA);
+                                fileCur.aLBA[iLBA] = lba;
+                                if (!file || file.index == iFile) nSectors++;
+                            }
+                        }
+                        lba++;
+                    }
+                }
+            }
+        }
+        return nSectors;
+    }
+
+    /**
+     * readSectorArray(file, ab)
+     *
+     * @this {DiskImage}
+     * @param {FileInfo} file
      * @param {Array.<number>} ab
-     * @param {Array.<number>} aLBA
      * @returns {number} (number of bytes read)
      */
-    readSectorArray(ab, aLBA)
+    readSectorArray(file, ab)
     {
         let iLBA = 0, ib = 0;
         let cbRemain = ab.length;
-        while (cbRemain > 0 && iLBA >= 0 && iLBA < aLBA.length) {
-            let sector = this.getSector(aLBA[iLBA++]);
-            if (!sector) break;
-            let cbSector = sector[DiskImage.SECTOR.LENGTH];
-            let cbRead = cbRemain > cbSector? cbSector : cbRemain;
-            for (let i = 0; i < cbRead; i++) {
-                let b = this.read(sector, i);
-                if (b < 0) {
-                    iLBA = -1;
-                    break;
+        if (!file.aLBA) this.getSectorArray(file);
+        if (file.aLBA) {
+            while (cbRemain > 0 && iLBA >= 0 && iLBA < file.aLBA.length) {
+                let sector = this.getSector(file.aLBA[iLBA++]);
+                if (!sector) break;
+                let cbSector = sector[DiskImage.SECTOR.LENGTH];
+                let cbRead = cbRemain > cbSector? cbSector : cbRemain;
+                for (let i = 0; i < cbRead; i++) {
+                    let b = this.read(sector, i);
+                    if (b < 0) {
+                        iLBA = -1;
+                        break;
+                    }
+                    ab[ib++] = b;
+                    cbRemain--;
                 }
-                ab[ib++] = b;
-                cbRemain--;
             }
         }
         return ab.length - cbRemain;
@@ -2528,12 +2597,12 @@ export default class DiskImage {
             if (sector[DiskImage.SECTOR.ID] != iSector + 1) {
                 this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "warning: %d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, iSector + 1, sector[DiskImage.SECTOR.ID], file.path);
             }
-            if (sector[DiskImage.SECTOR.FILE_INFO] != undefined) {
-                let filePrev = this.fileTable[sector[DiskImage.SECTOR.FILE_INFO]];
+            if (sector[DiskImage.SECTOR.FILE_INDEX] != undefined) {
+                let filePrev = this.fileTable[sector[DiskImage.SECTOR.FILE_INDEX]];
                 this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, 'warning: "%s" cross-linked at offset %d with "%s" at offset %d\n', filePrev.path, sector[DiskImage.SECTOR.FILE_OFFSET], file.path, off);
                 return false;
             }
-            sector[DiskImage.SECTOR.FILE_INFO] = iFile;
+            sector[DiskImage.SECTOR.FILE_INDEX] = iFile;
             sector[DiskImage.SECTOR.FILE_OFFSET] = off;
             return true;
         }
@@ -2648,9 +2717,6 @@ export default class DiskImage {
                 delete sector['data'];
             }
         }
-
-        delete sector[DiskImage.SECTOR.FILE_INFO];
-        delete sector[DiskImage.SECTOR.FILE_OFFSET];
 
         sector[DiskImage.SECTOR.CYLINDER] = iCylinder;
         sector[DiskImage.SECTOR.HEAD] = iHead;
@@ -2785,7 +2851,11 @@ export default class DiskImage {
                 fileTable = [];
                 for (let iFile = 0; iFile < this.fileTable.length; iFile++) {
                     let file = this.fileTable[iFile];
-                    if (file.name == "." || file.name == "..") continue;
+                    /*
+                     * We can't skip any "." and ".." entries without adjusting file indexes, so let's not.
+                     *
+                     *      if (file.name == "." || file.name == "..") continue;
+                     */
                     let desc = this.getFileDesc(file, false, fnHash);
                     // let indentDesc = desc[DiskImage.FILEDESC.MODULE]? 4 : 0;
                     fileTable.push(JSON.stringify(desc, null, 0));
@@ -2830,9 +2900,11 @@ export default class DiskImage {
     }
 
     /**
-     * findFile(sName)
+     * findFile(name, text)
      *
+     * @this {DiskImage}
      * @param {string} name
+     * @param {string} [text]
      * @return {Object|null}
      */
     findFile(name)
@@ -3193,6 +3265,9 @@ DiskImage.VOLDESC = {
 
 /*
  * File descriptor properties.
+ *
+ * getFileDesc() is the mechanism for callers to obtain a FILEDESC, and there are two flavors: abbreviated and complete.
+ * Only the "complete" form includes NAME, SIZE and VOL (regardless if zero), and CONTENTS (if any).
  */
 DiskImage.FILEDESC = {
     VOL:        'vol',
@@ -3205,7 +3280,8 @@ DiskImage.FILEDESC = {
     MODULE:     'module',
     MODNAME:    'name',
     MODDESC:    'description',
-    MODSEGS:    'segments'
+    MODSEGS:    'segments',
+    CONTENTS:   'contents'
 };
 
 /*
@@ -3217,7 +3293,7 @@ DiskImage.SECTOR = {
     ID:         's',                // sector ID (generally 1-based, except for unusual/copy-protected disks) [formerly 'sector']
     LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks) [formerly 'length']
     DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
-    FILE_INFO:  'f',                // "extended" JSON disk images only [formerly file]
+    FILE_INDEX: 'f',                // "extended" JSON disk images only [formerly file]
     FILE_OFFSET:'o',                // "extended" JSON disk images only [formerly offFile]
                                     // [no longer used: 'pattern']
     /*

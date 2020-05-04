@@ -136,7 +136,7 @@ function isTextFile(sFile)
  */
 function printFileDesc(diskName, desc)
 {
-    printf("%-32s  %-12s  %s  %s:%s\n", desc[DiskImage.FILEDESC.HASH], desc[DiskImage.FILEDESC.NAME], desc[DiskImage.FILEDESC.DATE], diskName, desc[DiskImage.FILEDESC.PATH]);
+    printf("%-32s  %-12s  %s  %s %7d  %s:%s\n", desc[DiskImage.FILEDESC.HASH] || "-".repeat(32), desc[DiskImage.FILEDESC.NAME], desc[DiskImage.FILEDESC.DATE], desc[DiskImage.FILEDESC.ATTR], desc[DiskImage.FILEDESC.SIZE] || 0, diskName, desc[DiskImage.FILEDESC.PATH]);
 }
 
 /**
@@ -167,11 +167,13 @@ function readAll(argv)
      * Suppress all DiskImage errors/warnings for certain operations (eg, searching for files)
      */
     let messages;
-    if (typeof argv['find'] == "string") {
+    if (typeof argv['file'] == "string") {
         messages = device.setMessages(Device.MESSAGE.WARN + Device.MESSAGE.ERROR, false);
     }
 
+    let aDiskNames = {};        // we use this table of disk names to detect non-unique disk names
     asFiles.forEach(function readAllConfigs(sFile) {
+
         sFile = sFile.substr(rootDir.length);
         if (argv['verbose']) printf("reading %s...\n", sFile);
         let library = readJSON(sFile);
@@ -179,12 +181,22 @@ function readAll(argv)
             let aDiskettes = [];
             JSONLib.parseDiskettes(aDiskettes, library, "/pcx86", "/diskettes");
             aDiskettes.forEach(function readAllDiskettes(diskette) {
+
                 if (library['@local']) {
                     diskette.path = diskette.path.replace(library['@server'], library['@local']);
                 }
+
                 let sFile = diskette.path;
                 if (typeof argv['readall'] == "string" && sFile.indexOf(argv['readall']) < 0) return;
                 if (argv['verbose']) printf("reading %s...\n", sFile);
+
+                let sName = path.basename(sFile);
+                if (aDiskNames[sName]) {
+                    if (argv['verbose']) printf("warning: %s disk name is not unique (see %s)\n", sFile, aDiskNames[sName]);
+                } else {
+                    aDiskNames[sName] = sFile;
+                }
+
                 let di = readDisk(sFile);
                 if (!di) return;
 
@@ -206,14 +218,14 @@ function readAll(argv)
                 }
 
                 /*
-                 * Optional task: If --find, then find all occurrences of a file (eg, --find=LINK.EXE)
+                 * Optional task: If --file, then find all occurrences of a file (eg, --file=LINK.EXE)
                  */
-                let sFind = argv['find'];
-                if (typeof sFind == "string") {
-                    let desc = di.findFile(sFind);
-                    if (desc) {
-                        printFileDesc(di.getName(), desc);
-                    }
+                let sFindName = argv['file'];
+                if (typeof sFindName == "string") {
+                    let sFindText = argv['find'];
+                    if (typeof sFindText != "string") sFindText = undefined;
+                    let desc = di.findFile(sFindName, sFindText);
+                    if (desc) printFileDesc(di.getName(), desc);
                 }
 
                 /*
@@ -326,10 +338,10 @@ function readAll(argv)
                 /*
                  * Optional task: Create manifest lists that can used to evaluate the contents of the entire collection.
                  */
-                if (argv['checkmanifests']) {
+                if (argv['manifest']) {
                     let manifest = di.getFileManifest(getHash);
-                    if (argv['readall'] == DiskImage.FILEDESC.HASH) {
-                        printManifest(diskette.path, manifest);
+                    if (argv['manifest'] == DiskImage.FILEDESC.HASH) {
+                        printManifest(path.basename(diskette.path), manifest);
                     }
                     else if (argv['verbose']) {
                         printf("manifest for %s: %2j\n", diskette.path, manifest);

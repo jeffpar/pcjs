@@ -61989,7 +61989,7 @@ class Disk extends Component {
                         for (iSector = 0; iSector < aDiskData[iCylinder][iHead].length; iSector++) {
                             let sector = aDiskData[iCylinder][iHead][iSector];
                             if (sector) {
-                                delete sector[Disk.SECTOR.FILE_INFO];
+                                delete sector[Disk.SECTOR.FILE_INDEX];
                                 delete sector[Disk.SECTOR.FILE_OFFSET];
                             }
                         }
@@ -62503,11 +62503,11 @@ class Disk extends Component {
             }
             if (sector[Disk.SECTOR.ID]) {
                 if (DEBUG && this.messageEnabled()) {
-                    this.printMessage('"' + sector[Disk.SECTOR.FILE_INFO] + '" cross-linked at offset ' + sector[Disk.SECTOR.FILE_OFFSET] + ' with "' + file.sPath + '" at offset ' + off);
+                    this.printMessage('"' + sector[Disk.SECTOR.FILE_INDEX] + '" cross-linked at offset ' + sector[Disk.SECTOR.FILE_OFFSET] + ' with "' + file.sPath + '" at offset ' + off);
                 }
                 return false;
             }
-            sector[Disk.SECTOR.FILE_INFO] = file;
+            sector[Disk.SECTOR.FILE_INDEX] = file;
             sector[Disk.SECTOR.FILE_OFFSET] = off;
             return true;
         }
@@ -63519,7 +63519,7 @@ Disk.SECTOR = {
     ID:         's',                // sector ID (generally 1-based, except for unusual/copy-protected disks) [formerly 'sector']
     LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks) [formerly 'length']
     DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
-    FILE_INFO:  'f',                // "extended" JSON disk images only [formerly file]
+    FILE_INDEX: 'f',                // "extended" JSON disk images only [formerly file]
     FILE_OFFSET:'o',                // "extended" JSON disk images only [formerly offFile]
                                     // [no longer used: 'pattern']
     /*
