@@ -432,8 +432,8 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
      */
     if (sLabel) {
         /*
-         * I prefer a hard-coded date/time, because it avoids creating different disk images every
-         * time DiskDump is run.
+         * I prefer a hard-coded date/time, because it avoids creating different disk images
+         * time this utility is run.
          *
          * And remember, of all the Date() constructor parameters, month is the oddball;
          * it's interpreted as the actual month - 1, so 8 corresponds to September.  Brilliant.
@@ -632,6 +632,10 @@ function writeFile(sFile, data)
 /**
  * main(argc, argv)
  *
+ * Usage:
+ *
+ *      node di.js [disk/directory] [options]
+ *
  * @param {number} argc
  * @param {Array} argv
  */
@@ -640,8 +644,9 @@ function main(argc, argv)
     Device.DEBUG = !!argv['debug'];
     rootDir = path.join(path.dirname(argv[0]), "../../..");
 
+    printf("DiskImage v%s\n", Device.VERSION);
+
     if (Device.DEBUG) {
-        printf("diskdump v%s\n", Device.VERSION);
         device.setMessages(Device.MESSAGE.FILE + Device.MESSAGE.INFO, true);
     }
 
