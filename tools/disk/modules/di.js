@@ -164,6 +164,16 @@ function processDisk(sFile, di, argv, diskette)
 {
     di.setArgs(argv.slice(1).join(' '));
 
+    /*
+     * Any "--format=xxx" acts as a filter function; if the disk's format doesn't contain
+     * the specified format, we skip the disk.
+     */
+    if (typeof argv['format'] == "string") {
+        if (di.getFormat().indexOf(argv['format']) < 0) {
+            return;
+        }
+    }
+
     printf("processing %s: %d bytes (checksum %d)\n", sFile, di.getSize(), di.getChecksum());
 
     let sFindName = argv['file'];
@@ -216,7 +226,7 @@ function processDisk(sFile, di, argv, diskette)
      */
     if (argv['rewrite']) {
         if (sFile.endsWith(".json")) {
-            writeDisk(sFile, di, false, 0, true);
+            writeDisk(sFile, di, argv['legacy'], 0, true);
         }
     }
 
@@ -298,13 +308,13 @@ function processDisk(sFile, di, argv, diskette)
                 if (diArchive) {
                     let sTempJSON = name.replace(/\.[a-z]+$/, "") + ".json";
                     diArchive.setArgs(sprintf("%s --output %s%s", command, sTempJSON, diskette.options));
-                    writeDisk(sTempJSON, diArchive, false, 0, true, false);
+                    writeDisk(sTempJSON, diArchive, argv['legacy'], 0, true, false);
                     let warning = false;
                     if (sArchiveFile.endsWith(".img")) {
                         let json = diArchive.getJSON();
                         diArchive.buildDiskFromJSON(json);
                         let sTempIMG = sTempJSON.replace(".json",".img");
-                        writeDisk(sTempIMG, diArchive, false, 0, true, false);
+                        writeDisk(sTempIMG, diArchive, true, 0, true, false);
                         if (!compareDisks(sTempIMG, sArchiveFile)) {
                             printf("warning: %s unsuccessfully rebuilt\n", sArchiveFile);
                             if (!suppData) warning = true;
@@ -326,7 +336,7 @@ function processDisk(sFile, di, argv, diskette)
     }
 
     if (!diskette) {
-        let output = argv['output'];
+        let output = argv['output'] || argv[1];
         if (output) writeDisk(output, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite']);
     }
 }
@@ -372,17 +382,18 @@ function readAll(argv)
                     aDiskNames[sName] = sFile;
                 }
                 let di = readDisk(sFile);
-                if (!di) return;
-                diskette.optc = 0;
-                diskette.optv = [];
-                if (!diskette.options) {
-                    diskette.options = "";
-                } else {
-                    [diskette.optc, diskette.optv] = stdlib.getArgs(diskette.options);
-                    diskette.options = " " + diskette.options;
+                if (di) {
+                    diskette.optc = 0;
+                    diskette.optv = [];
+                    if (!diskette.options) {
+                        diskette.options = "";
+                    } else {
+                        [diskette.optc, diskette.optv] = stdlib.getArgs(diskette.options);
+                        diskette.options = " " + diskette.options;
+                    }
+                    processDisk(sFile, di, argv, diskette);
+                    cDisks++;
                 }
-                processDisk(sFile, di, argv, diskette);
-                cDisks++;
             });
         }
         cConfigs++;
@@ -617,19 +628,19 @@ function writeDisk(sFile, di, fLegacy = false, indent = 0, fOverwrite = false, f
         let fExists = existsFile(sFile);
         if (!fExists || fOverwrite) {
             let data;
-            let sFileUC = sFile.toUpperCase();
-            if (sFileUC.endsWith(".JSON")) {
+            let sFileLC = sFile.toLowerCase();
+            if (sFileLC.endsWith(".json")) {
                 data = di.getJSON(getHash, fLegacy, 0);
             } else {
                 let db = new DataBuffer(di.getSize());
-                if (di.getData(db)) data = db.buffer;
+                if (di.getData(db, fLegacy)) data = db.buffer;
             }
             if (data) {
                 if (fPrint) printf("writing %s...\n", sFile);
                 sFile = getFullPath(sFile);
                 if (fExists) fs.unlinkSync(sFile);
                 fs.writeFileSync(sFile, data);
-                if (sFileUC.endsWith(".IMG")) fs.chmodSync(sFile, 0o444);
+                if (sFileLC.endsWith(".img")) fs.chmodSync(sFile, 0o444);
             } else {
                 printf("%s not written, no data\n", diskName);
             }
@@ -700,6 +711,7 @@ function main(argc, argv)
         input = argv['dir'];
         if (!input) {
             input = argv[1];
+            argv.splice(1, 1);
         } else {
             if (!input.endsWith('/')) input += '/';
         }

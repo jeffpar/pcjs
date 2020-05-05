@@ -1,15 +1,26 @@
 ## TODO
 
-  - Verify redirects for these remaining [links](/assets/tests/links/)
-  - Turn the TI patents into a gallery: https://www.pcjs.org/devices/ti57/patents/
+### Minor Improvements
+
+  - Add manual for 101 Mazes
+  - Add instructions for Invaders Boot Sector (2019)
+  - Add manuals for Turbo Pascal
+  - Look into copy-protection status of Software Carousel
+  - This [machine](/machines/dec/pdp11/1170/monitor/) says "Debugger" but only this [machine](/machines/dec/pdp11/1170/monitor/debugger/) actually has the Debugger enabled.
+
+### Visual Improvements
+
+  - Turn the [TI patents](/machines/ti/ti57/patents/) into a gallery
   - Machines like DEC PDP-11/70 with VT100 Terminal used to use special CSS classes (machine-right and machine-left) to arrange the machines side-by-side; think about alternatives.
-  - Someone may have linked to text files (and I'm not sure I can provide redirects for these kinds of links), such as:
+
+### Link Issues
+
+  - Verify redirects for these remaining [links](/assets/tests/links/)
+  - There may be external links to a few text files, which I'm not sure Jekyll will allow me to redirect; eg:
       - /apps/pdp10/diags/ka10/dakam/DAKAM.LST.txt
       - /devices/pcx86/keyboard/8042_INTERN.TXT
-  - Add manual to page for 101 Mazes
-  - Add page with instructions for Invaders Boot Sector (2019)
     
-## Tips
+## Random Tips
 
 ### Generating Random Numbers in Jekyll
 

@@ -2785,13 +2785,14 @@ export default class DiskImage {
     }
 
     /**
-     * getData(dbDisk)
+     * getData(dbDisk, fLegacy)
      *
      * @this {DiskImage}
      * @param {DataBuffer} dbDisk
+     * @param {boolean} [fLegacy]
      * @returns {boolean} (true if successful, false if error)
      */
-    getData(dbDisk)
+    getData(dbDisk, fLegacy)
     {
         if (this.aDiskData) {
             let ib = 0;
@@ -2811,7 +2812,7 @@ export default class DiskImage {
                     }
                 }
             }
-            if (this.abOrigBPB.length) {
+            if (this.abOrigBPB.length && fLegacy) {
                 let off = this.abOrigBPB.shift();
                 for (let i = DiskImage.BPB.JMP_OPCODE; i < DiskImage.BPB.LARGE_SECS+4; i++) {
                     dbDisk.writeUInt8(this.abOrigBPB[i - DiskImage.BPB.JMP_OPCODE], off + i);
@@ -2867,6 +2868,7 @@ export default class DiskImage {
         let imageInfo = {
             [DiskImage.IMAGE.TYPE]: DiskImage.TYPE.CHS,
             [DiskImage.IMAGE.NAME]: this.diskName,
+            [DiskImage.IMAGE.FORMAT]: this.getFormat(),
             [DiskImage.IMAGE.HASH]: this.hash,
             [DiskImage.IMAGE.CHECKSUM]: this.dwChecksum,
             [DiskImage.IMAGE.CYLINDERS]: this.nCylinders,
@@ -2874,11 +2876,10 @@ export default class DiskImage {
             [DiskImage.IMAGE.TRACKDEF]: this.nSectors,
             [DiskImage.IMAGE.SECTORDEF]: this.cbSector,
             [DiskImage.IMAGE.DISKSIZE]: this.cbDiskData,
-            [DiskImage.IMAGE.DISKSIZE]: this.cbDiskData,
             [DiskImage.IMAGE.ORIGBPB]: JSON.stringify(this.abOrigBPB),
             [DiskImage.IMAGE.VERSION]: Device.VERSION,
             [DiskImage.IMAGE.REPOSITORY]: Device.REPOSITORY,
-            [DiskImage.IMAGE.COMMAND]: this.args,
+            // [DiskImage.IMAGE.COMMAND]: this.args,
         };
         if (!this.fBPBModified) {
             delete imageInfo[DiskImage.IMAGE.ORIGBPB];
@@ -2959,6 +2960,67 @@ export default class DiskImage {
     getFiles()
     {
         return this.fileTable.length;
+    }
+
+    /**
+     * getFormat()
+     *
+     * For disks that match a standard "PC" disk geometry, returns a "PCxxxK" string;
+     * otherwise, returns "Unknown".  Additionally, if any sector contains a non-standard
+     * "marker", eg:
+     *
+     *      dataCRC
+     *      dataError
+     *      dataMark
+     *      headCRC
+     *      headError
+     *
+     * or contains a non-standard sector ID, then the string will be flagged with an asterisk
+     * (eg, "PC360K*", "Unknown*", etc.)
+     *
+     * @this {DiskImage}
+     * @returns {string}
+     */
+    getFormat()
+    {
+        let flags = "";
+        let sFormat = "Unknown";
+        let markers = [
+            DiskImage.SECTOR.DATA_CRC,
+            DiskImage.SECTOR.DATA_ERROR,
+            DiskImage.SECTOR.DATA_MARK,
+            DiskImage.SECTOR.HEAD_CRC,
+            DiskImage.SECTOR.HEAD_ERROR
+        ];
+        if (this.aDiskData) {
+            let aDiskData = this.aDiskData;
+            for (let iCylinder = 0; iCylinder < aDiskData.length && !flags; iCylinder++) {
+                for (let iHead = 0; iHead < aDiskData[iCylinder].length && !flags; iHead++) {
+                    for (let iSector = 0; iSector < aDiskData[iCylinder][iHead].length && !flags; iSector++) {
+                        let sector = aDiskData[iCylinder][iHead][iSector];
+                        if (sector) {
+                            if (+sector[DiskImage.SECTOR.ID] != iSector + 1) {
+                                flags = "*";
+                                break;
+                            }
+                            for (let marker in markers) {
+                                if (sector[markers[marker]] !== undefined) {
+                                    flags = "*";
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            let geometry = DiskImage.GEOMETRIES[this.cbDiskData];
+            if (geometry) {
+                if (geometry[0] == 40 || geometry[0] == 80) {
+                    sFormat = "PC" + (this.cbDiskData / 1024) + "K";
+                }
+            }
+        }
+        return sFormat + flags;
     }
 
     /**
@@ -3231,6 +3293,7 @@ DiskImage.TYPE = {
 DiskImage.IMAGE = {
     TYPE:       'type',
     NAME:       'name',
+    FORMAT:     'format',
     HASH:       'hash',
     CHECKSUM:   'checksum',
     CYLINDERS:  'cylinders',
