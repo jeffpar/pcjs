@@ -18,19 +18,19 @@
         "name": "Node: diskdump.js",
         "type": "node",
         "request": "launch",
-        "program": "${workspaceFolder}/tools/diskdump/bin/diskdump",
+        "program": "${workspaceFolder}/tools/disk/bin/diskdump",
         "args": ["--disk=disk1.psi", "--format=json", "--output=disk1.json","--overwrite"],
         "cwd": "${workspaceFolder}/gamedisks/pcx86/game/other/1984/kings_quest1/archive",
         "stopOnEntry": false,
         "console": "internalConsole"
       },
       {
-        "name": "Node: diskdump.js (v3)",
+        "name": "Node: di.js",
         "type": "node",
         "request": "launch",
-        "program": "${workspaceFolder}/tools/diskdump/modules/diskdump.js",
+        "program": "${workspaceFolder}/tools/disk/modules/di.js",
         "args": ["--all","--list"],
-        "cwd": "${workspaceFolder}/tools/diskdump/modules",
+        "cwd": "${workspaceFolder}/tools/disk/modules",
         "stopOnEntry": false,
         "console": "internalConsole"
       },

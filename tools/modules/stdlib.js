@@ -43,24 +43,36 @@ export default class StdLib {
     }
 
     /**
-     * parseArgs(args)
+     * parseArgs(args, i)
      *
-     * Any argument prefaced with "--option" is saved in the argv array with key "option".
-     * If there are multiple "option" arguments, the argv entry becomes an array.  Only arguments
-     * not prefaced with "--option" are pushed onto the argv array; those arguments can only be
-     * and can be accessed with numeric keys.
+     * Any argument value preceded by a double-hyphen or long-dash switch (eg, "--option value") is
+     * saved in argv with the switch as the key (eg, argv["option"] == "value").
+     *
+     * If there are multiple arguments preceded by the same double-hyphen switch, then the argv entry
+     * becomes an array (eg, argv["option"] == ["value1","value2"]).
+     *
+     * If a double-hypen switch is followed by another switch (or by nothing, if it's the last argument),
+     * then the value of the switch will be a boolean instead of a string (eg, argv["option"] == true).
+     *
+     * Single-hypen switches are different: every character following a single hyphen is transformed into
+     * a boolean value (eg, "-abc" produces argv["a"] == true, argv["b"] == true, and argv["c"] == true).
+     *
+     * Only arguments NOT preceded by (or part of) a switch are pushed onto the argv array; they can be
+     * accessed as argv[i], argv[i+1], etc.
+     *
+     * In addition, when the initial i >= 1, then argv[0] is set to the concatenation of all args, starting
+     * with args[i], and the first non-switch argument begins at argv[1].
      *
      * @this {StdLib}
      * @param {Array.<string>} [args]
-     * @param {number} [start]
+     * @param {number} [i] (default is 1, because if you're passing process.argv, process.argv[0] is useless)
      * @returns {Array} [argc, argv]
      */
-    parseArgs(args, start = 1)
+    parseArgs(args, i = 1)
     {
         let argc = 0;
         let argv = [];
-        if (start) argv.push(args[start++]);
-        let i = start;
+        if (i) argv.push(args.slice(i++).join(' '));
         while (i < args.length) {
             let j, sSep;
             let sArg = args[i++];

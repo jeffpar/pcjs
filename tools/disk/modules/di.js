@@ -21,7 +21,7 @@ let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
 let stdlib = new StdLib();
-let rootDir, nMaxFiles;
+let moduleDir, rootDir, nMaxFiles, sManifestLog;
 
 /*
  * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
@@ -170,8 +170,33 @@ function processDisk(sFile, di, argv, diskette)
     if (typeof sFindName == "string") {
         let sFindText = argv['find'];
         if (typeof sFindText != "string") sFindText = undefined;
+        /*
+         * TODO: Implement support for finding text in findFile()....
+         */
         let desc = di.findFile(sFindName, sFindText);
-        if (desc) printFileDesc(di.getName(), desc);
+        if (desc) {
+            printFileDesc(sFile /* di.getName() */, desc);
+            if (argv['duplicates']) {
+                /*
+                 * We cheat and search for matching hash values in manifest.log; this is much faster than laboriously
+                 * opening and searching all the other disk images, even when they DO contain pre-generated file tables.
+                 */
+                if (sManifestLog === undefined) {
+                    sManifestLog = readFile(path.join(moduleDir, "manifest.log"));
+                    if (!sManifestLog) sManifestLog = null;
+                }
+                let cMatches = 0;
+                if (sManifestLog) {
+                    let re = new RegExp("^" + desc[DiskImage.FILEDESC.HASH] + ".*$", "gm"), match;
+                    while ((match = re.exec(sManifestLog))) {
+                        if (match[0].indexOf(sFile) >= 0) continue;
+                        if (!cMatches++) printf("see also:\n");
+                        printf("%s\n", match[0]);
+                    }
+                }
+                if (!cMatches) printf("no matches\n");
+            }
+        }
     }
 
     if (argv['list']) {
@@ -257,7 +282,7 @@ function processDisk(sFile, di, argv, diskette)
                 sArchiveFile = sArchiveFile.replace(".img", path.sep);
             }
             if (typeof argv['checkarchive'] != "string" || sArchiveFile.indexOf(argv['checkarchive']) >= 0) {
-                printf("reading %s...\n", sArchiveFile);
+                if (argv['verbose']) printf("reading %s...\n", sArchiveFile);
                 let sectorIDs = argv['sectorID'] || diskette.optv['sectorID'];
                 let sectorErrors = argv['sectorError'] || diskette.optv['sectorError'];
                 let suppData = argv['suppData'] || diskette.optv['suppData'];
@@ -273,13 +298,13 @@ function processDisk(sFile, di, argv, diskette)
                 if (diArchive) {
                     let sTempJSON = name.replace(/\.[a-z]+$/, "") + ".json";
                     diArchive.setArgs(sprintf("%s --output %s%s", command, sTempJSON, diskette.options));
-                    writeDisk(sTempJSON, diArchive, false, 0, true);
+                    writeDisk(sTempJSON, diArchive, false, 0, true, false);
                     let warning = false;
                     if (sArchiveFile.endsWith(".img")) {
                         let json = diArchive.getJSON();
                         diArchive.buildDiskFromJSON(json);
                         let sTempIMG = sTempJSON.replace(".json",".img");
-                        writeDisk(sTempIMG, diArchive, false, 0, true);
+                        writeDisk(sTempIMG, diArchive, false, 0, true, false);
                         if (!compareDisks(sTempIMG, sArchiveFile)) {
                             printf("warning: %s unsuccessfully rebuilt\n", sArchiveFile);
                             if (!suppData) warning = true;
@@ -289,6 +314,7 @@ function processDisk(sFile, di, argv, diskette)
                     }
                     if (!warning) {
                         if (argv['rebuild']) {
+                            printf("rebuilding %s\n", sFile);
                             fs.renameSync(sTempJSON, getFullPath(sFile));
                         } else {
                             fs.unlinkSync(sTempJSON);
@@ -313,14 +339,11 @@ function processDisk(sFile, di, argv, diskette)
 function readAll(argv)
 {
     let family = "pcx86";
-    let cConfigs = 0, cManifests = 0, cFiles = 0;
+    let cConfigs = 0, cDisks = 0;
     let asFiles = glob.sync(path.join(rootDir, "/configs/" + family + "/*.json"));
 
-    /*
-     * Suppress all DiskImage errors/warnings for certain operations (eg, searching for files)
-     */
     let messages;
-    if (typeof argv['file'] == "string") {
+    if (argv['quiet']) {
         messages = device.setMessages(Device.MESSAGE.WARN + Device.MESSAGE.ERROR, false);
     }
 
@@ -338,8 +361,10 @@ function readAll(argv)
                     diskette.path = diskette.path.replace(library['@server'], library['@local']);
                 }
                 let sFile = diskette.path;
-                if (typeof argv['all'] == "string" && sFile.indexOf(argv['all']) < 0) return;
-                if (argv['verbose']) printf("reading %s...\n", sFile);
+                if (typeof argv['all'] == "string") {
+                    if (argv['verbose']) printf("checking %s for '%s'...\n", sFile, argv['all']);
+                    if (sFile.indexOf(argv['all']) < 0) return;
+                }
                 let sName = path.basename(sFile);
                 if (aDiskNames[sName]) {
                     if (argv['verbose']) printf("warning: %s disk name is not unique (see %s)\n", sFile, aDiskNames[sName]);
@@ -357,12 +382,13 @@ function readAll(argv)
                     diskette.options = " " + diskette.options;
                 }
                 processDisk(sFile, di, argv, diskette);
+                cDisks++;
             });
         }
         cConfigs++;
     });
 
-    printf("%d config(s), %d manifest(s), %d files(s)\n", cConfigs, cManifests, cFiles);
+    printf("%d config(s), %d disks(s) processed\n\n", cConfigs, cDisks);
     if (messages) device.setMessages(messages, true);
 }
 
@@ -505,15 +531,26 @@ function readDisk(sFile, forceBPB, sectorIDs, sectorErrors, suppData)
         di = new DiskImage(device, diskName);
         if (diskName.endsWith(".json")) {
             db = readFile(sFile, "utf8");
-            if (!di.buildDiskFromJSON(db)) di = null;
+            if (!db) {
+                di = null;
+            } else {
+                if (!di.buildDiskFromJSON(db)) di = null;
+            }
         }
         else {
-            db = new DataBuffer(readFile(sFile, null));
-            let hash = getHash(db);
-            if (diskName.endsWith(".psi")) {
-                if (!di.buildDiskFromPSI(db)) di = null;
+            /*
+             * Passing null for the encoding parameter tells readFile() to return a buffer (which, in our case, is a DataBuffer).
+             */
+            db = readFile(sFile, null);
+            if (!db) {
+                di = null;
             } else {
-                if (!di.buildDiskFromBuffer(db, hash, forceBPB, sectorIDs, sectorErrors, suppData)) di = null;
+                let hash = getHash(db);
+                if (diskName.endsWith(".psi")) {
+                    if (!di.buildDiskFromPSI(db)) di = null;
+                } else {
+                    if (!di.buildDiskFromBuffer(db, hash, forceBPB, sectorIDs, sectorErrors, suppData)) di = null;
+                }
             }
         }
     } catch(err) {
@@ -536,10 +573,8 @@ function readFile(sFile, encoding = "utf8")
     if (sFile) {
         try {
             sFile = getFullPath(sFile);
-            if (fs.existsSync(sFile)) {
-                data = fs.readFileSync(sFile, encoding);
-                if (!encoding) data = new DataBuffer(data);
-            }
+            data = fs.readFileSync(sFile, encoding);
+            if (!encoding) data = new DataBuffer(data);
         } catch(err) {
             printf("error: %s\n", err.message);
         }
@@ -557,7 +592,7 @@ function readJSON(sFile)
 {
     let data, json;
     try {
-        data = readFile(sFile, "utf8");
+        data = readFile(sFile);
         json = JSON.parse(data);
     } catch(err) {
         printf("error: %s\n", err.message);
@@ -566,15 +601,16 @@ function readJSON(sFile)
 }
 
 /**
- * writeDisk(sFile, di, fLegacy, indent, fOverwrite)
+ * writeDisk(sFile, di, fLegacy, indent, fOverwrite, fPrint)
  *
  * @param {string} sFile
  * @param {DiskImage} di
  * @param {boolean} [fLegacy]
  * @param {number} [indent]
  * @param {boolean} [fOverwrite]
+ * @param {boolean} [fPrint]
  */
-function writeDisk(sFile, di, fLegacy = false, indent = 0, fOverwrite = false)
+function writeDisk(sFile, di, fLegacy = false, indent = 0, fOverwrite = false, fPrint = true)
 {
     let diskName = path.basename(sFile);
     try {
@@ -589,7 +625,7 @@ function writeDisk(sFile, di, fLegacy = false, indent = 0, fOverwrite = false)
                 if (di.getData(db)) data = db.buffer;
             }
             if (data) {
-                printf("writing %s...\n", sFile);
+                if (fPrint) printf("writing %s...\n", sFile);
                 sFile = getFullPath(sFile);
                 if (fExists) fs.unlinkSync(sFile);
                 fs.writeFileSync(sFile, data);
@@ -641,10 +677,11 @@ function writeFile(sFile, data)
  */
 function main(argc, argv)
 {
+    let argv0 = argv[0].split(' ');
     Device.DEBUG = !!argv['debug'];
-    rootDir = path.join(path.dirname(argv[0]), "../../..");
-
-    printf("DiskImage v%s\n", Device.VERSION);
+    moduleDir = path.dirname(argv0[0]);
+    rootDir = path.join(moduleDir, "../../..");
+    printf("DiskImage v%s\noptions: %s\n", Device.VERSION, argv0.slice(1).join(' '));
 
     if (Device.DEBUG) {
         device.setMessages(Device.MESSAGE.FILE + Device.MESSAGE.INFO, true);
