@@ -45,6 +45,11 @@ export default class StdLib {
     /**
      * parseArgs(args)
      *
+     * Any argument prefaced with "--option" is saved in the argv array with key "option".
+     * If there are multiple "option" arguments, the argv entry becomes an array.  Only arguments
+     * not prefaced with "--option" are pushed onto the argv array; those arguments can only be
+     * and can be accessed with numeric keys.
+     *
      * @this {StdLib}
      * @param {Array.<string>} [args]
      * @param {number} [start]
@@ -59,7 +64,6 @@ export default class StdLib {
         while (i < args.length) {
             let j, sSep;
             let sArg = args[i++];
-            argv.push(sArg);
             if (!sArg.indexOf(sSep = "--") || !sArg.indexOf(sSep = "—")) {
                 sArg = sArg.substr(sSep.length);
                 let sValue = true;
@@ -70,7 +74,7 @@ export default class StdLib {
                     sValue = (sValue == "true") ? true : ((sValue == "false") ? false : sValue);
                 }
                 else if (i < args.length && args[i][0] != '-') {
-                    argv.push(sValue = args[i++]);
+                    sValue = args[i++];
                 }
                 if (!argv.hasOwnProperty(sArg)) {
                     argv[sArg] = sValue;
@@ -81,15 +85,18 @@ export default class StdLib {
                     }
                     argv[sArg].push(sValue);
                 }
+                continue;
             }
-            else if (!sArg.indexOf("-")) {
+            if (!sArg.indexOf("-")) {
                 for (j = 1; j < sArg.length; j++) {
                     let ch = sArg.charAt(j);
                     if (argv[ch] === undefined) {
                         argv[ch] = true;
                     }
                 }
+                continue;
             }
+            argv.push(sArg);
         }
         argc = argv.length;
         return [argc, argv];

@@ -153,6 +153,159 @@ function printManifest(diskName, manifest)
 }
 
 /**
+ * processDisk(sFile, di, argv, diskette)
+ *
+ * @param {string} sFile
+ * @param {DiskImage} di
+ * @param {Array} argv
+ * @param {Object} [diskette] (if present, then we were invoked by readAll(), so any --output option should be ignored)
+ */
+function processDisk(sFile, di, argv, diskette)
+{
+    di.setArgs(argv.slice(1).join(' '));
+
+    printf("processing %s: %d bytes (checksum %d)\n", sFile, di.getSize(), di.getChecksum());
+
+    let sFindName = argv['file'];
+    if (typeof sFindName == "string") {
+        let sFindText = argv['find'];
+        if (typeof sFindText != "string") sFindText = undefined;
+        let desc = di.findFile(sFindName, sFindText);
+        if (desc) printFileDesc(di.getName(), desc);
+    }
+
+    if (argv['list']) {
+        let iVolume = +argv['volume'];
+        if (isNaN(iVolume)) iVolume = -1;
+        let list = di.getFileListing(iVolume) || "\tno listing available\n";
+        printf("%s\n", list);
+    }
+
+    if (argv['manifest']) {
+        let manifest = di.getFileManifest(getHash);
+        printManifest(di.getName(), manifest);
+    }
+
+    /*
+     * If --rewrite, then rewrite the JSON disk image.  --overwrite is implicit.
+     */
+    if (argv['rewrite']) {
+        if (sFile.endsWith(".json")) {
+            writeDisk(sFile, di, false, 0, true);
+        }
+    }
+
+    /*
+     * If --checklisting, then get the disk's listing and see if it's up-to-date in the website's index.md
+     */
+    if (argv['checklisting'] && diskette) {
+        let sListing = di.getFileListing(0, 4);
+        if (!sListing) return;
+        let sIndexFile = path.join(path.dirname(sFile.replace("/diskettes/", "/software/")), "index.md");
+        if (existsFile(sIndexFile)) {
+            let sIndex = readFile(sIndexFile);
+            let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*") + "\n([\\s\\S]*?)\n(\\S|$)";
+            let matchDirectory = sIndex.match(new RegExp(sMatch));
+            if (matchDirectory) {
+                let sIndexNew = sIndex.replace(matchDirectory[2], sListing);
+                if (sIndexNew != sIndex) {
+                    if (writeFile(sIndexFile, sIndexNew)) {
+                        printf("\tupdated directory listing for \"%s\"\n", diskette.name);
+                    }
+                }
+            } else {
+                printf("\twarning: no directory listing for \"%s\"\n", diskette.name);
+            }
+        } else {
+            printf("\tmissing index: %s\n", sIndexFile);
+        }
+    }
+
+    /*
+     * If --checkarchive, then let's load the corresponding archived disk image (.IMG) as well, convert it to JSON,
+     * load the JSON as a disk image, save it as a temp .IMG, and verify that temp image and archived image are identical.
+     */
+    if (argv['checkarchive']) {
+        if (diskette.format) {
+            let matchFormat = diskette.format.match(/PC([0-9]+)K/);
+            if (matchFormat) {
+                let diskSize = di.getSize();
+                if (+matchFormat[1] * 1024 != diskSize) {
+                    printf("warning: format '%s' does not match disk size (%d) for %s\n", diskette.format, diskSize, sFile);
+                }
+            }
+        }
+        if (sFile.endsWith(".json")) {
+            if (typeof argv['ignore'] == "string" && sFile.indexOf(argv['ignore']) >= 0) return;
+            let sArchiveFolder = "archive/";
+            if (path.dirname(sFile).endsWith("/disks")) {
+                sArchiveFolder = "../archive/";
+            }
+            let sArchiveFile = path.join(path.dirname(sFile), sArchiveFolder, path.basename(sFile).replace(".json", ".img"));
+            if (diskette.archive) {
+                if (diskette.archive[0] == ".") {
+                    sArchiveFile = sArchiveFile.replace(".img", diskette.archive);
+                } else if (diskette.archive == "folder") {
+                    sArchiveFile = sArchiveFile.replace(".img", path.sep);
+                } else {
+                    sArchiveFile = path.join(path.dirname(sArchiveFile), diskette.archive) + (diskette.archive.indexOf(".img") < 0? path.sep : "");
+                }
+            } else if (!existsFile(sArchiveFile)) {
+                /*
+                 * Try automatically switching from a "--disk" to a "--dir" operation if there's no IMG file.
+                 */
+                sArchiveFile = sArchiveFile.replace(".img", path.sep);
+            }
+            if (typeof argv['checkarchive'] != "string" || sArchiveFile.indexOf(argv['checkarchive']) >= 0) {
+                printf("reading %s...\n", sArchiveFile);
+                let sectorIDs = argv['sectorID'] || diskette.optv['sectorID'];
+                let sectorErrors = argv['sectorError'] || diskette.optv['sectorError'];
+                let suppData = argv['suppData'] || diskette.optv['suppData'];
+                if (suppData) suppData = readFile(suppData);
+                let diArchive, command, name = path.basename(sArchiveFile);
+                if (sArchiveFile.endsWith(path.sep)) {
+                    command = "--dir " + name;
+                    diArchive = readDir(sArchiveFile, diskette.label);
+                } else {
+                    command = "--disk " + name;
+                    diArchive = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
+                }
+                if (diArchive) {
+                    let sTempJSON = name.replace(/\.[a-z]+$/, "") + ".json";
+                    diArchive.setArgs(sprintf("%s --output %s%s", command, sTempJSON, diskette.options));
+                    writeDisk(sTempJSON, diArchive, false, 0, true);
+                    let warning = false;
+                    if (sArchiveFile.endsWith(".img")) {
+                        let json = diArchive.getJSON();
+                        diArchive.buildDiskFromJSON(json);
+                        let sTempIMG = sTempJSON.replace(".json",".img");
+                        writeDisk(sTempIMG, diArchive, false, 0, true);
+                        if (!compareDisks(sTempIMG, sArchiveFile)) {
+                            printf("warning: %s unsuccessfully rebuilt\n", sArchiveFile);
+                            if (!suppData) warning = true;
+                        } else {
+                            fs.unlinkSync(sTempIMG);
+                        }
+                    }
+                    if (!warning) {
+                        if (argv['rebuild']) {
+                            fs.renameSync(sTempJSON, getFullPath(sFile));
+                        } else {
+                            fs.unlinkSync(sTempJSON);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (!diskette) {
+        let output = argv['output'];
+        if (output) writeDisk(output, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite']);
+    }
+}
+
+/**
  * readAll(argv)
  *
  * @param {Array} argv
@@ -181,176 +334,29 @@ function readAll(argv)
             let aDiskettes = [];
             JSONLib.parseDiskettes(aDiskettes, library, "/pcx86", "/diskettes");
             aDiskettes.forEach(function readAllDiskettes(diskette) {
-
                 if (library['@local']) {
                     diskette.path = diskette.path.replace(library['@server'], library['@local']);
                 }
-
                 let sFile = diskette.path;
-                if (typeof argv['readall'] == "string" && sFile.indexOf(argv['readall']) < 0) return;
+                if (typeof argv['all'] == "string" && sFile.indexOf(argv['all']) < 0) return;
                 if (argv['verbose']) printf("reading %s...\n", sFile);
-
                 let sName = path.basename(sFile);
                 if (aDiskNames[sName]) {
                     if (argv['verbose']) printf("warning: %s disk name is not unique (see %s)\n", sFile, aDiskNames[sName]);
                 } else {
                     aDiskNames[sName] = sFile;
                 }
-
                 let di = readDisk(sFile);
                 if (!di) return;
-
-                let optc = 0, optv = [];
+                diskette.optc = 0;
+                diskette.optv = [];
                 if (!diskette.options) {
                     diskette.options = "";
                 } else {
-                    [optc, optv] = stdlib.getArgs(diskette.options);
+                    [diskette.optc, diskette.optv] = stdlib.getArgs(diskette.options);
                     diskette.options = " " + diskette.options;
                 }
-
-                /*
-                 * Optional task: If --rewrite, then rewrite the JSON disk image.
-                 */
-                if (argv['rewrite']) {
-                    if (sFile.endsWith(".json")) {
-                        writeDisk(sFile, di, false, 0, true);
-                    }
-                }
-
-                /*
-                 * Optional task: If --file, then find all occurrences of a file (eg, --file=LINK.EXE)
-                 */
-                let sFindName = argv['file'];
-                if (typeof sFindName == "string") {
-                    let sFindText = argv['find'];
-                    if (typeof sFindText != "string") sFindText = undefined;
-                    let desc = di.findFile(sFindName, sFindText);
-                    if (desc) printFileDesc(di.getName(), desc);
-                }
-
-                /*
-                 * Optional task: If --checklisting, then get the disk's listing and see if it's up-to-date in the website's index.md
-                 */
-                if (argv['checklisting']) {
-                    let sListing = di.getFileListing(0, 4);
-                    if (!sListing) return;
-                    let sIndexFile = path.join(path.dirname(sFile.replace("/diskettes/", "/software/")), "index.md");
-                    if (existsFile(sIndexFile)) {
-                        let sIndex = readFile(sIndexFile);
-                        let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*") + "\n([\\s\\S]*?)\n(\\S|$)";
-                        let matchDirectory = sIndex.match(new RegExp(sMatch));
-                        if (matchDirectory) {
-                            let sIndexNew = sIndex.replace(matchDirectory[2], sListing);
-                            if (sIndexNew != sIndex) {
-                                if (writeFile(sIndexFile, sIndexNew)) {
-                                    printf("\tupdated directory listing for \"%s\"\n", diskette.name);
-                                }
-                            }
-                        } else {
-                            printf("\twarning: no directory listing for \"%s\"\n", diskette.name);
-                        }
-                    } else {
-                        printf("\tmissing index: %s\n", sIndexFile);
-                    }
-                }
-
-                /*
-                 * Optional task: If --checkarchive, then let's load the corresponding archived disk image (.IMG) as well, convert it to JSON,
-                 * load the JSON as a disk image, save it as a temp .IMG, and verify that temp image and archived image are identical.
-                 *
-                 * To check a specific archive, use --checkarchive=[IMG filename].
-                 */
-                if (argv['checkarchive']) {
-                    if (typeof argv['checkarchive'] == "string" && sFile.indexOf(argv['checkarchive']) < 0) return;
-                    if (diskette.format) {
-                        let matchFormat = diskette.format.match(/PC([0-9]+)K/);
-                        if (matchFormat) {
-                            let diskSize = di.getSize();
-                            if (+matchFormat[1] * 1024 != diskSize) {
-                                printf("warning: format '%s' does not match disk size (%d) for %s\n", diskette.format, diskSize, sFile);
-                            }
-                        }
-                    }
-                    if (sFile.endsWith(".json")) {
-                        if (typeof argv['ignore'] == "string" && sFile.indexOf(argv['ignore']) >= 0) return;
-                        let sArchiveFolder = "archive/";
-                        if (path.dirname(sFile).endsWith("/disks")) {
-                            sArchiveFolder = "../archive/";
-                        }
-                        let sArchiveFile = path.join(path.dirname(sFile), sArchiveFolder, path.basename(sFile).replace(".json", ".img"));
-                        if (diskette.archive) {
-                            if (diskette.archive[0] == ".") {
-                                sArchiveFile = sArchiveFile.replace(".img", diskette.archive);
-                            } else if (diskette.archive == "folder") {
-                                sArchiveFile = sArchiveFile.replace(".img", path.sep);
-                            } else {
-                                sArchiveFile = path.join(path.dirname(sArchiveFile), diskette.archive) + (diskette.archive.indexOf(".img") < 0? path.sep : "");
-                            }
-                        } else if (!existsFile(sArchiveFile)) {
-                            /*
-                             * Try automatically switching from a "--disk" to a "--dir" operation if there's no IMG file.
-                             */
-                            sArchiveFile = sArchiveFile.replace(".img", path.sep);
-                        }
-                        if (typeof argv['checkarchive'] != "string" || sArchiveFile.indexOf(argv['checkarchive']) >= 0) {
-                            printf("reading %s...\n", sArchiveFile);
-                            let sectorIDs = argv['sectorID'] || optv['sectorID'];
-                            let sectorErrors = argv['sectorError'] || optv['sectorError'];
-                            let suppData = argv['suppData'] || optv['suppData'];
-                            if (suppData) suppData = readFile(suppData);
-                            let diArchive, command, name = path.basename(sArchiveFile);
-                            if (sArchiveFile.endsWith(path.sep)) {
-                                command = "--dir " + name;
-                                diArchive = readDir(sArchiveFile, diskette.label);
-                            } else {
-                                command = "--disk " + name;
-                                diArchive = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
-                            }
-                            if (diArchive) {
-                                let sTempJSON = name.replace(/\.[a-z]+$/, "") + ".json";
-                                diArchive.setArgs(sprintf("%s --output %s%s", command, sTempJSON, diskette.options));
-                                writeDisk(sTempJSON, diArchive, false, 0, true);
-                                let warning = false;
-                                if (sArchiveFile.endsWith(".img")) {
-                                    let json = diArchive.getJSON();
-                                    diArchive.buildDiskFromJSON(json);
-                                    let sTempIMG = sTempJSON.replace(".json",".img");
-                                    writeDisk(sTempIMG, diArchive, false, 0, true);
-                                    if (!compareDisks(sTempIMG, sArchiveFile)) {
-                                        printf("warning: %s unsuccessfully rebuilt\n", sArchiveFile);
-                                        if (!suppData) warning = true;
-                                    } else {
-                                        fs.unlinkSync(sTempIMG);
-                                    }
-                                }
-                                if (!warning) {
-                                    if (argv['rebuild']) {
-                                        fs.renameSync(sTempJSON, getFullPath(sFile));
-                                    } else {
-                                        fs.unlinkSync(sTempJSON);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                /*
-                 * Optional task: Create manifest lists that can used to evaluate the contents of the entire collection.
-                 */
-                if (argv['manifest']) {
-                    let manifest = di.getFileManifest(getHash);
-                    if (argv['manifest'] == DiskImage.FILEDESC.HASH) {
-                        printManifest(path.basename(diskette.path), manifest);
-                    }
-                    else if (argv['verbose']) {
-                        printf("manifest for %s: %2j\n", diskette.path, manifest);
-                    } else {
-                        printf("manifest for %s contains %d file(s)\n", diskette.path, manifest.length);
-                    }
-                    cFiles += manifest.length;
-                    cManifests++;
-                }
+                processDisk(sFile, di, argv, diskette);
             });
         }
         cConfigs++;
@@ -641,35 +647,32 @@ function main(argc, argv)
 
     device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);
 
-    let input, di;
-    if ((input = argv['disk'])) {
-        di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData']));
+    if (argv['all']) {
+        readAll(argv);
+        return;
     }
-    else if ((input = argv['dir'])) {
-        di = readDir(input, argv['label'], argv['normalize'], +argv['target'], +argv['maxfiles']);
+
+    let input, di;
+    input = argv['disk'];
+    if (!input) {
+        input = argv['dir'];
+        if (!input) {
+            input = argv[1];
+        } else {
+            if (!input.endsWith('/')) input += '/';
+        }
+    }
+    if (input) {
+        if (input.endsWith('/')) {
+            di = readDir(input, argv['label'], argv['normalize'], +argv['target'], +argv['maxfiles']);
+        } else {
+            di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData']));
+        }
     }
     if (di === null) return;
 
     if (di) {
-        di.setArgs(argv.slice(1).join(' '));
-        printf("disk size %d bytes, checksum %d (%#0lx)\n", di.getSize(), di.getChecksum());
-        if (argv['list']) {
-            let iVolume = +argv['volume'];
-            if (isNaN(iVolume)) iVolume = -1;
-            let list = di.getFileListing(iVolume);
-            printf(list);
-        }
-        if (argv['manifest']) {
-            let manifest = di.getFileManifest(getHash);
-            printManifest(di.getName(), manifest);
-        }
-        let output = argv['output'];
-        if (output) writeDisk(output, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite']);
-        return;
-    }
-
-    if (argv['readall']) {
-        readAll(argv);
+        processDisk(input, di, argv);
         return;
     }
 
