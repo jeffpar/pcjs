@@ -2095,7 +2095,7 @@ export default class DiskImage {
          */
         if (!fComplete) {
             if (vol.iPartition < 0) {
-                delete [DiskImage.VOLDESC.PARTITION];
+                delete desc[DiskImage.VOLDESC.PARTITION];
             }
         }
         return desc;
