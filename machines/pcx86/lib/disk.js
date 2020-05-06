@@ -189,8 +189,8 @@ if (typeof module !== "undefined") {
  * @property {number} length (deprecated; see l)
  * @property {Array.<number>} data (deprecated; see d)
  * @property {number|null} pattern (deprecated; see dwPattern)
- * @property {FileInfo} file (deprecated; see f)
- * @property {number} offFile (deprecated; see o)
+ * @property {FileInfo} file
+ * @property {number} offFile
  * @property {number} dataCRC
  * @property {boolean} dataError
  * @property {number} dataMark
@@ -202,13 +202,35 @@ if (typeof module !== "undefined") {
  * @property {boolean} fDirty (for internal use only)
  */
 
- /**
-  * @typedef {Object} FileDesc
-  * @property {string} path
-  * @property {string} date
-  * @property {string} attr
-  * @property {number} size
-  */
+/**
+ * @typedef {Object} FileDesc
+ * @property {string} hash
+ * @property {string} path
+ * @property {string} attr
+ * @property {string} date
+ * @property {number} size
+ * @property {FileModule} [module]
+ */
+
+/**
+ * @typedef {Object} FileModule
+ * @property {string} name
+ * @property {string} sDescription
+ * @property {Object.<FileSegment>} [segments]
+ */
+
+/**
+ * @typedef {Object} FileSegment
+ * @property {number} offStart
+ * @property {number} offEnd
+ * @property {Object.<FileOrdinal>} [ordinals]
+ */
+
+/**
+ * @typedef {Object} FileOrdinal
+ * @property {number} o (offset within segment)
+ * @property {string} s (name of symbol, if any)
+ */
 
 /**
  * class Disk
@@ -667,7 +689,6 @@ class Disk extends Component {
                     this.printMessage('doneLoad("' + this.sDiskPath + '")');
                 }
                 this.fRemote = true;
-                if (BACKTRACK || SYMBOLS) this.buildFileTable();
                 disk = this;
             } else {
                 this.notice('Unable to connect to disk "' + this.sDiskPath + '" (error ' + nErrorCode + ': ' + imageData + ')', fPrintOnly);
@@ -934,21 +955,9 @@ class Disk extends Component {
     /**
      * buildFileTable(aFileDescs)
      *
-     * This function builds (or rebuilds) a complete file table from the (first) FAT volume found on the current
-     * disk, and then updates all the sector objects to point back to the corresponding file.  Used for BACKTRACK
-     * and SYMBOLS support.  Because this is an expensive operation, in terms of both time and memory, it should
-     * only be called when a disk is mounted or has been modified (eg, by applying deltas from a saved machine state).
-     *
-     * More recently, the FileInfo objects in the table have been enhanced to include debugging information if
-     * the file is an EXE or DLL, which we determine merely by checking the file extension.
-     *
-     * Note that while most of the methods in this module use CHS-style parameters, because our primary clients
-     * are old disk controllers that deal exclusively with cylinder/head/sector values, here we use 0-based
-     * "logical" sector numbers for volume-relative block addresses (aka LBAs or Logical Block Addresses), and
-     * 0-based "physical" sector numbers for disk-relative block addresses (aka PBAs or Physical Block Addresses).
-     *
-     * Also, our use of the term LBA differs from that of more modern disk controllers; in the pre-modern world
-     * of PCx86, what we call PBA numbers are what those controllers would later call LBA numbers.
+     * This function builds a table of FileInfo objects from any and all file descriptors present in the
+     * "extended" JSON disk image, and updates all the sector objects to point back to the corresponding FileInfo.
+     * Used for BACKTRACK and SYMBOLS support.
      *
      * @this {Disk}
      * @param {Array.<FileDesc>} [aFileDescs] (array of FileDescs, if any, stored in the JSON disk image)
@@ -956,33 +965,24 @@ class Disk extends Component {
     buildFileTable(aFileDescs)
     {
         if (BACKTRACK || SYMBOLS) {
-
-            let i, off, dir = {}, iSector;
-
-            if (this.aFileTable && this.aFileTable.length || aFileDescs) {
-                /*
-                 * In order for buildFileTable() to rebuild an existing table (eg, after deltas have been
-                 * applied), we need to zap any and all existing file table references in the sector data.
-                 */
+            if (aFileDescs) {
                 let aDiskData = this.aDiskData;
-                if (aFileDescs) this.aFileTable = [];
+                this.aFileTable = [];
                 for (let iCylinder = 0; iCylinder < aDiskData.length; iCylinder++) {
                     for (let iHead = 0; iHead < aDiskData[iCylinder].length; iHead++) {
-                        for (iSector = 0; iSector < aDiskData[iCylinder][iHead].length; iSector++) {
+                        for (let iSector = 0; iSector < aDiskData[iCylinder][iHead].length; iSector++) {
                             let sector = aDiskData[iCylinder][iHead][iSector];
                             if (sector) {
-                                if (aFileDescs) {
-                                    let index = sector[Disk.SECTOR.FILE_INDEX];
-                                    if (index != undefined) {
-                                        let file = this.aFileTable[index];
-                                        if (!file) {
-                                            let desc = aFileDescs[index];
-                                            file = new FileInfo(this, desc.path, Str.getBaseName(desc.path), +desc.attr, desc.size || 0, []);
-                                            this.aFileTable[index] = file;
-                                        }
-                                        sector.file = file;
-                                        sector.offFile = sector[Disk.SECTOR.FILE_OFFSET];
+                                let index = sector[Disk.SECTOR.FILE_INDEX];
+                                if (index != undefined) {
+                                    let file = this.aFileTable[index];
+                                    if (!file) {
+                                        let desc = aFileDescs[index];
+                                        file = new FileInfo(this, desc.path, Str.getBaseName(desc.path), +desc.attr, desc.size || 0, desc.module);
+                                        this.aFileTable[index] = file;
                                     }
+                                    sector.file = file;
+                                    sector.offFile = sector[Disk.SECTOR.FILE_OFFSET];
                                 }
                                 delete sector[Disk.SECTOR.FILE_INDEX];
                                 delete sector[Disk.SECTOR.FILE_OFFSET];
@@ -990,164 +990,6 @@ class Disk extends Component {
                         }
                     }
                 }
-            }
-
-            if (aFileDescs) return;
-
-            this.aFileTable = [];
-
-            dir.pbaVolume = dir.lbaTotal = 0;
-
-            let cbDisk = this.nCylinders * this.nHeads * this.nSectors * this.cbSector;
-
-            /*
-             * At this point, if this is a remote disk, you may see some warning messages in your browser's console,
-             * like this message from Chrome:
-             *
-             *      "Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects
-             *      to the end user's experience. For more help, check http://xhr.spec.whatwg.org/."
-             *
-             * This is because I was lazy and made the buildFileTable() worker function getSector() use the synchronous
-             * form of seek().  For development purposes, that was fine, but...  TODO: Eventually change buildFileTable()
-             * to use async I/O.
-             */
-            if (this.fRemote) this.log("ignore any synchronous XMLHttpRequest warnings here (for now)");
-
-            let sectorBoot = this.getSector(0);
-            if (!sectorBoot) {
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("buildFileTable(): unable to read boot sector");
-                }
-                return;
-            }
-
-            dir.cbSector = this.getSectorData(sectorBoot, DiskAPI.BPB.SECTOR_BYTES, 2);
-
-            if (dir.cbSector != this.cbSector) {
-                /*
-                 * When the first sector doesn't appear to contain a valid BPB, the most likely explanations are:
-                 *
-                 *      1. The image is from a diskette formatted by DOS 1.xx, which didn't use BPBs
-                 *      2. The image is a fixed (partitioned) disk and the first sector is actually an MBR
-                 *      3. The image is from a diskette that used a non-standard sector size (ie, not 512)
-                 *
-                 * To start, if this is an 160Kb disk (circa DOS 1.00) or a 320Kb disk (circa DOS 1.10), then we'll
-                 * assume it's a 12-bit FAT, set assorted BPB values accordingly, and see if our assumption holds up.
-                 */
-                dir.lbaFAT = 1;
-                dir.nFATBits = 12;
-                dir.lbaRoot = dir.lbaFAT + 2;   // both 160Kb and 320Kb disks contained 2 FATs, each containing 1 sector
-                dir.nClusterSecs = 1;
-                dir.cbSector = this.cbSector;
-
-                if (cbDisk == 160 * 1024 && this.getClusterEntry(dir, 0, 0) == DiskAPI.FAT.MEDIA_160KB) {
-                    dir.lbaTotal = 320;
-                    dir.nEntries = 64;
-                }
-                else if (cbDisk == 320 * 1024 && this.getClusterEntry(dir, 0, 0) == DiskAPI.FAT.MEDIA_320KB) {
-                    dir.lbaTotal = 640;
-                    dir.nEntries = 112;
-                    this.assert(this.nHeads == 2);
-                    dir.nClusterSecs++;         // 320Kb disks use 2 sectors/cluster
-                }
-                else {
-                    /*
-                     * So, this is either a fixed (partitioned) disk, or a disk using a non-standard sector size; let's assume
-                     * the former and check for an MBR.  For now, we're only going to process the first active partition we find.
-                     */
-                    off = DiskAPI.MBR.PARTITIONS.OFFSET;
-                    for (i = 0; i < 4; i++) {
-                        let bStatus = this.getSectorData(sectorBoot, off + DiskAPI.MBR.PARTITIONS.ENTRY.STATUS, 1);
-                        if (bStatus == DiskAPI.MBR.PARTITIONS.STATUS.ACTIVE) {
-                            dir.pbaVolume = this.getSectorData(sectorBoot, off + DiskAPI.MBR.PARTITIONS.ENTRY.LBA_FIRST, 4);
-                            sectorBoot = this.getSector(dir.pbaVolume);
-                            if (sectorBoot && this.getSectorData(sectorBoot, DiskAPI.BPB.SECTOR_BYTES, 2) != this.cbSector) {
-                                sectorBoot = null;
-                            }
-                            break;
-                        }
-                        off += DiskAPI.MBR.PARTITIONS.ENTRY_LENGTH;
-                    }
-                    if (i == 4) sectorBoot = null;
-                }
-                if (!sectorBoot) {
-                    if (DEBUG && this.messageEnabled()) {
-                        this.printMessage("buildFileTable(): unrecognized " + cbDisk + "-byte disk image with " + this.cbSector + "-byte sectors");
-                    }
-                    return;
-                }
-            }
-
-            if (!dir.lbaTotal) {
-                dir.lbaTotal = this.getSectorData(sectorBoot, DiskAPI.BPB.TOTAL_SECS, 2) || this.getSectorData(sectorBoot, DiskAPI.BPB.LARGE_SECS, 4);
-                dir.lbaFAT = this.getSectorData(sectorBoot, DiskAPI.BPB.RESERVED_SECS, 2);
-                dir.lbaRoot = dir.lbaFAT + this.getSectorData(sectorBoot, DiskAPI.BPB.FAT_SECS, 2) * this.getSectorData(sectorBoot, DiskAPI.BPB.TOTAL_FATS, 1);
-                dir.nEntries = this.getSectorData(sectorBoot, DiskAPI.BPB.ROOT_DIRENTS, 2);
-                dir.nClusterSecs = this.getSectorData(sectorBoot, DiskAPI.BPB.CLUSTER_SECS, 1);
-            }
-
-            dir.lbaData = dir.lbaRoot + (((dir.nEntries * DiskAPI.DIRENT.LENGTH + (dir.cbSector - 1)) / dir.cbSector) | 0);
-            dir.nClusters = (((dir.lbaTotal - dir.lbaData) / dir.nClusterSecs) | 0);
-
-            /*
-             * In all FATs, the first valid cluster number is 2, as 0 is used to indicate a free cluster and 1 is reserved.
-             *
-             * In a 12-bit FAT chain, the largest valid cluster number (iClusterMax) is 0xFF6; 0xFF7 is reserved for marking
-             * bad clusters and should NEVER appear in a cluster chain, and 0xFF8-0xFFF are used to indicate the end of a chain.
-             * Reports that cluster numbers 0xFF0-0xFF6 are "reserved" (eg, http://support.microsoft.com/KB/65541) should be
-             * ignored; those numbers may have been considered "reserved" at some early point in FAT's history, but no longer.
-             *
-             * Since 12 bits yield 4096 possible values, and since 11 of the values (0, 1, and 0xFF7-0xFFF) cannot be used to
-             * refer to an actual cluster, that leaves a theoretical maximum of 4085 clusters for a 12-bit FAT.  However, for
-             * reasons that only a small (and shrinking -- RIP AAR) number of people know, the actual cut-off is 4084.
-             *
-             * So, a FAT volume with 4084 or fewer clusters uses a 12-bit FAT, a FAT volume with 4085 to 65524 clusters uses
-             * a 16-bit FAT, and a FAT volume with more than 65524 clusters uses a 32-bit FAT.
-             *
-             * TODO: Eventually add support for FAT32.
-             */
-            dir.nFATBits = (dir.nClusters <= DiskAPI.FAT12.MAX_CLUSTERS? 12 : 16);
-            dir.iClusterMax = (dir.nFATBits == 12? DiskAPI.FAT12.CLUSNUM_MAX : DiskAPI.FAT16.CLUSNUM_MAX);
-
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("buildFileTable()\n\tlbaFAT: " + dir.lbaFAT + "\n\tlbaRoot: " + dir.lbaRoot + "\n\tlbaData: " + dir.lbaData + "\n\tlbaTotal: " + dir.lbaTotal + "\n\tnClusterSecs: " + dir.nClusterSecs + "\n\tnClusters: " + dir.nClusters);
-            }
-
-            /*
-             * The following assertion is here only to catch anomalies; it is NOT a requirement that the number of data sectors
-             * be a perfect multiple of nClusterSecs, but if it ever happens, it's worth verifying we didn't miscalculate something.
-             */
-            i = (dir.lbaTotal - dir.lbaData) % dir.nClusterSecs;
-            if (i) {
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("buildFileTable(): " + cbDisk + "-byte disk image wasting " + i + " sectors");
-                }
-            }
-
-            /*
-             * Similarly, it is NOT a requirement that the size of all root directory entries be a perfect multiple of the sector
-             * size (cbSector), but it may indicate a problem if it's not.  Note that when it comes time to read the root directory,
-             * we treat it exactly like any other directory; that is, we ignore the nEntries value and scan the entire contents of
-             * every sector allocated to the directory.  TODO: Determine whether DOS reads all root sector contents or only nEntries
-             * (ie, create a test volume where nEntries * 32 is NOT a multiple of cbSector and watch what happens).
-             */
-            this.assert(!((dir.nEntries * DiskAPI.DIRENT.LENGTH) % dir.cbSector));
-
-            let apba = [];
-            for (let lba = dir.lbaRoot; lba < dir.lbaData; lba++) apba.push(dir.pbaVolume + lba);
-            this.getDir(dir, this.sDiskFile, "", apba);
-
-            /*
-             * Create the sector-to-file mappings now.
-             */
-            for (i = 0; i < this.aFileTable.length; i++) {
-                let file = this.aFileTable[i];
-                off = 0;
-                for (iSector = 0; iSector < file.apba.length; iSector++) {
-                    this.updateSector(file, file.apba[iSector], off);
-                    off += this.cbSector;
-                }
-                file.loadSymbols();
             }
         }
     }
@@ -1168,15 +1010,15 @@ class Disk extends Component {
         if (SYMBOLS && this.aFileTable) {
             for (let iFile = 0; iFile < this.aFileTable.length; iFile++) {
                 let file = this.aFileTable[iFile];
-                if (file.sModule != sModule) continue;
-                let segment = file.aSegments[nSegment];
+                if (!file.module || file.module.name != sModule) continue;
+                let segment = file.module.segments[nSegment];
                 if (!segment) continue;
-                for (let iOrdinal in segment.aEntries) {
-                    let entry = segment.aEntries[iOrdinal];
+                for (let ord in segment.ordinals) {
+                    let entry = segment.ordinals[ord];
                     /*
                      * entry[1] is the symbol name, which becomes the index, and entry[0] is the offset.
                      */
-                    aSymbols[entry[1]] = entry[0];
+                    aSymbols[entry['s']] = entry['o'];
                 }
                 break;
             }
@@ -1204,12 +1046,13 @@ class Disk extends Component {
             let sSymbolUpper = sSymbol.toUpperCase();
             for (let iFile = 0; iFile < this.aFileTable.length; iFile++) {
                 let file = this.aFileTable[iFile];
-                for (let iSegment in file.aSegments) {
-                    let segment = file.aSegments[iSegment];
-                    for (let iOrdinal in segment.aEntries) {
-                        let entry = segment.aEntries[iOrdinal];
-                        if (entry[1] && entry[1].indexOf(sSymbolUpper) >= 0) {
-                            aInfo.push([entry[1], file.sName, iSegment, entry[0], segment.offEnd - segment.offStart]);
+                if (!file.module) continue;
+                for (let seg in file.module.segments) {
+                    let segment = file.module.segments[seg];
+                    for (let ord in segment.ordinals) {
+                        let entry = segment.ordinals[ord];
+                        if (entry['s'] && entry['s'].indexOf(sSymbolUpper) >= 0) {
+                            aInfo.push([entry['s'], file.sName, +seg, entry['o'], segment.offEnd - segment.offStart]);
                         }
                     }
                 }
@@ -1219,201 +1062,21 @@ class Disk extends Component {
     }
 
     /**
-     * getDir(dir, sDisk, sDir, apba)
+     * getSector(lba)
      *
      * @this {Disk}
-     * @param {Object} dir
-     * @param {string} sDisk
-     * @param {string} sDir
-     * @param {Array.<number>} apba
-     */
-    getDir(dir, sDisk, sDir, apba)
-    {
-        let file;
-        let iStart = this.aFileTable.length;
-        let nEntriesPerSector = (dir.cbSector / DiskAPI.DIRENT.LENGTH) | 0;
-
-        dir.sDir = sDir + "\\";
-
-        if (DEBUG && this.messageEnabled()) this.printMessage('getDir("' + sDisk + '","' + dir.sDir + '")');
-
-        for (let iSector = 0; iSector < apba.length; iSector++) {
-            let pba = apba[iSector];
-            for (let iEntry = 0; iEntry < nEntriesPerSector; iEntry++) {
-                if (!this.getDirEntry(dir, pba, iEntry)) {
-                    iSector = apba.length;
-                    break;
-                }
-                if (dir.sName == null || dir.sName == "." || dir.sName == "..") continue;
-                let sPath = dir.sDir + dir.sName;
-                if (DEBUG && this.messageEnabled(Messages.DISK + Messages.DATA)) {
-                    this.printMessage('"' + sPath + '" size=' + dir.cbSize + ' cluster=' + dir.iCluster + ' sectors=' + JSON.stringify(dir.apba));
-                    if (dir.apba.length) this.printMessage(this.dumpSector(this.getSector(dir.apba[0]), dir.apba[0], sPath));
-                }
-                file = new FileInfo(this, sPath, dir.sName, dir.bAttr, dir.cbSize, dir.apba);
-                this.aFileTable.push(file);
-            }
-        }
-
-        let iEnd = this.aFileTable.length;
-
-        for (let i = iStart; i < iEnd; i++) {
-            file = this.aFileTable[i];
-            if (file.bAttr & DiskAPI.ATTR.SUBDIR && file.apba.length) this.getDir(dir, sDisk, sDir + "\\" + file.sName, file.apba);
-        }
-    }
-
-    /**
-     * getDirEntry(dir, pba, i)
-     *
-     * This sets the following properties on the 'dir' object:
-     *
-     *      sName (null if invalid/deleted entry)
-     *      bAttr
-     *      cbSize
-     *      iCluster
-     *      apba (ie, array of physical block addresses)
-     *
-     * On return, it's the caller's responsibility to copy out any data into a new object
-     * if it wants to preserve any of the above information.
-     *
-     * This function also caches the following properties in the 'dir' object:
-     *
-     *      pbaDirCache (of the last directory sector read, if any)
-     *      sectorDirCache (of the last directory sector read, if any)
-     *
-     * Also, the caller must also set the following 'dir' helper properties, so that clusters
-     * can be located and converted to sectors (see convertClusterToSectors):
-     *
-     *      lbaFAT
-     *      lbaData
-     *      cbSector
-     *      iClusterMax
-     *      nClusterSecs
-     *      nFATBits
-     *
-     * @this {Disk}
-     * @param {Object} dir (to be filled in)
-     * @param {number} pba (a sector of the directory)
-     * @param {number} i (an entry in the directory sector, 0-based)
-     * @returns {boolean} true if entry was returned (even if invalid/deleted), false if no more entries
-     */
-    getDirEntry(dir, pba, i)
-    {
-        if (!dir.sectorDirCache || !dir.pbaDirCache || dir.pbaDirCache != pba) {
-            dir.pbaDirCache = pba;
-            dir.sectorDirCache = this.getSector(dir.pbaDirCache);
-            if (DEBUG && this.messageEnabled(Messages.DISK + Messages.DATA)) {
-                this.printMessage(this.dumpSector(dir.sectorDirCache, dir.pbaDirCache, dir.sDir));
-            }
-        }
-        if (dir.sectorDirCache) {
-            let off = i * DiskAPI.DIRENT.LENGTH;
-            let b = this.getSectorData(dir.sectorDirCache, off, 1);
-            if (b == DiskAPI.DIRENT.UNUSED) {
-                return false;
-            }
-            if (b == DiskAPI.DIRENT.INVALID) {
-                dir.sName = null;
-                return true;
-            }
-            dir.sName = Str.trim(this.getSectorString(dir.sectorDirCache, off + DiskAPI.DIRENT.NAME, 8));
-            let s = Str.trim(this.getSectorString(dir.sectorDirCache, off + DiskAPI.DIRENT.EXT, 3));
-            if (s.length) dir.sName += '.' + s;
-            dir.bAttr = this.getSectorData(dir.sectorDirCache, off + DiskAPI.DIRENT.ATTR, 1);
-            dir.cbSize = this.getSectorData(dir.sectorDirCache, off + DiskAPI.DIRENT.SIZE, 2);
-            dir.iCluster = this.getSectorData(dir.sectorDirCache, off + DiskAPI.DIRENT.CLUSTER, 2);
-            dir.apba = this.convertClusterToSectors(dir);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * convertClusterToSectors(dir)
-     *
-     * @this {Disk}
-     * @param {Object} dir
-     * @return {Array.<number>} of PBAs (physical block addresses)
-     */
-    convertClusterToSectors(dir)
-    {
-        let apba = [];
-        let iCluster = dir.iCluster;
-        if (iCluster) {
-            do {
-                if (iCluster < DiskAPI.FAT12.CLUSNUM_MIN) {
-                    this.assert(false);
-                    break;
-                }
-                let lba = dir.lbaData + ((iCluster - DiskAPI.FAT12.CLUSNUM_MIN) * dir.nClusterSecs);
-                for (let i = 0; i < dir.nClusterSecs; i++) {
-                    apba.push(dir.pbaVolume + lba++);
-                }
-                iCluster = this.getClusterEntry(dir, iCluster, 0) | this.getClusterEntry(dir, iCluster, 1);
-            } while (iCluster <= dir.iClusterMax);
-            this.assert(iCluster != dir.iClusterMax + 1);       // make sure we never see CLUSNUM_BAD in a cluster chain
-        }
-        return apba;
-    }
-
-    /**
-     * getClusterEntry(dir, iCluster, iByte)
-     *
-     * @this {Disk}
-     * @param {Object} dir
-     * @param {number} iCluster
-     * @param {number} iByte (0 for low byte of cluster entry, 1 for high byte)
-     * @return {number}
-     */
-    getClusterEntry(dir, iCluster, iByte)
-    {
-        let w = 0;
-        let cbitsSector = dir.cbSector * 8;
-        let offBits = dir.nFATBits * iCluster + (iByte? 8 : 0);
-        let iSector = (offBits / cbitsSector) | 0;
-        if (!dir.sectorFATCache || !dir.lbaFATCache || dir.lbaFATCache != dir.lbaFAT + iSector) {
-            dir.lbaFATCache = dir.lbaFAT + iSector;
-            dir.sectorFATCache = this.getSector(dir.pbaVolume + dir.lbaFATCache);
-        }
-        if (dir.sectorFATCache) {
-            offBits = (offBits % cbitsSector) | 0;
-            let off = (offBits >> 3);
-            w = this.getSectorData(dir.sectorFATCache, off, 1);
-            if (!iByte) {
-                if (offBits & 0x7) w >>= 4;
-            } else {
-                if (dir.nFATBits == 16) {
-                    w <<= 8;
-                } else {
-                    this.assert(dir.nFATBits == 12);
-                    if (offBits & 0x7) {
-                        w <<= 4;
-                    } else {
-                        w = (w & 0xf) << 8;
-                    }
-                }
-            }
-        }
-        return w;
-    }
-
-    /**
-     * getSector(pba)
-     *
-     * @this {Disk}
-     * @param {number} pba (physical block address)
+     * @param {number} lba (logical block address)
      * @return {Sector|null} sector
      */
-    getSector(pba)
+    getSector(lba)
     {
         let nSectorsPerCylinder = this.nHeads * this.nSectors;
-        let iCylinder = (pba / nSectorsPerCylinder) | 0;
+        let iCylinder = (lba / nSectorsPerCylinder) | 0;
         if (iCylinder < this.nCylinders) {
-            let nSectorsRemaining = (pba % nSectorsPerCylinder);
+            let nSectorsRemaining = (lba % nSectorsPerCylinder);
             let iHead = (nSectorsRemaining / this.nSectors) | 0;
             /*
-             * PBA numbers are 0-based, but the sector numbers in CHS addressing are 1-based, so add one to iSector
+             * LBAs are 0-based, but the sector numbers in CHS addressing are 1-based, so add one to iSector
              */
             let iSector = (nSectorsRemaining % this.nSectors) + 1;
             return this.seek(iCylinder, iHead, iSector);
@@ -1450,65 +1113,6 @@ class Disk extends Component {
             nShift += 8;
         }
         return dw;
-    }
-
-    /**
-     * getSectorString(sector, off, len)
-     *
-     * WARNING: This function is restricted to reading a string contained ENTIRELY within the specified sector.
-     *
-     * @this {Disk}
-     * @param {Sector} sector
-     * @param {number} off (byte offset)
-     * @param {number} len (use -1 to read a null-terminated string)
-     * @return {string}
-     */
-    getSectorString(sector, off, len)
-    {
-        let s = "";
-        while (len--) {
-            let b = this.read(sector, off++);
-            if (b <= 0) break;
-            s += String.fromCharCode(b);
-        }
-        return s;
-    }
-
-    /**
-     * updateSector(file, pba, off)
-     *
-     * Like getSector(), this must convert a PBA into CHS values; consider factoring that conversion code out.
-     *
-     * @this {Disk}
-     * @param {FileInfo} file
-     * @param {number} pba (physical block address from the file's apba)
-     * @param {number} off (file offset corresponding to the given pba of the given file)
-     * @return {boolean} true if successfully updated, false if not
-     */
-    updateSector(file, pba, off)
-    {
-        let nSectorsPerCylinder = this.nHeads * this.nSectors;
-        let iCylinder = (pba / nSectorsPerCylinder) | 0;
-        let nSectorsRemaining = (pba % nSectorsPerCylinder);
-        let iHead = (nSectorsRemaining / this.nSectors) | 0;
-        let iSector = (nSectorsRemaining % this.nSectors);
-        let cylinder, head, sector;
-        if ((cylinder = this.aDiskData[iCylinder]) && (head = cylinder[iHead]) && (sector = head[iSector])) {
-            if (sector[Disk.SECTOR.ID] != iSector + 1) {
-                if (DEBUG) this.printf("warning: %d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, iSector + 1, sector[Disk.SECTOR.ID], file.sPath);
-            }
-            if (sector[Disk.SECTOR.ID]) {
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage('"' + sector[Disk.SECTOR.FILE_INDEX] + '" cross-linked at offset ' + sector[Disk.SECTOR.FILE_OFFSET] + ' with "' + file.sPath + '" at offset ' + off);
-                }
-                return false;
-            }
-            sector[Disk.SECTOR.FILE_INDEX] = file;
-            sector[Disk.SECTOR.FILE_OFFSET] = off;
-            return true;
-        }
-        if (DEBUG && this.messageEnabled()) this.printMessage("unable to map PBA " + pba + " to CHS");
-        return false;
     }
 
     /**
@@ -2161,8 +1765,8 @@ class Disk extends Component {
         /*
          * Gross, but simple; more importantly, it works -- at least for disks of typical floppy magnitude.
          */
-        let s = "", pba = 0, sector;
-        while ((sector = this.getSector(pba++))) {
+        let s = "", lba = 0, sector;
+        while ((sector = this.getSector(lba++))) {
             for (let off = 0, len = sector[Disk.SECTOR.LENGTH]; off < len; off++) {
                 s += String.fromCharCode(this.getSectorData(sector, off, 1));
             }
@@ -2177,8 +1781,8 @@ class Disk extends Component {
      * @return {Uint8Array}
      */
     encodeAsBinary() {
-        let s = [], pba = 0, sector;
-        while ((sector = this.getSector(pba++))) {
+        let s = [], lba = 0, sector;
+        while ((sector = this.getSector(lba++))) {
             for (let off = 0, len = sector[Disk.SECTOR.LENGTH]; off < len; off++) {
                 s.push(this.getSectorData(sector, off, 1));
             }
@@ -2395,9 +1999,9 @@ class Disk extends Component {
      */
     convertToJSON(fFormatted)
     {
-        let s, pba = 0, sector, sectorLast;
+        let s, lba = 0, sector, sectorLast;
 
-        while ((sector = this.getSector(pba++))) {
+        while ((sector = this.getSector(lba++))) {
             this.deflateSector(sector);
         }
 
@@ -2468,19 +2072,19 @@ class Disk extends Component {
     }
 
     /**
-     * dumpSector(sector, pba, sDesc)
+     * dumpSector(sector, lba, sDesc)
      *
      * @this {Disk}
      * @param {Sector|null} sector (returned from a previous seek)
-     * @param {number} [pba]
+     * @param {number} [lba]
      * @param {string} [sDesc]
      * @return {string}
      */
-    dumpSector(sector, pba, sDesc)
+    dumpSector(sector, lba, sDesc)
     {
         let sDump = "";
         if (DEBUG && sector) {
-            if (pba != null) sDump += "sector " + pba + (sDesc? (" for " + sDesc) : "") + ':';
+            if (lba != null) sDump += "sector " + lba + (sDesc? (" for " + sDesc) : "") + ':';
             let sBytes = "", sChars = "";
             let cbSector = sector[Disk.SECTOR.LENGTH];
             let cdwData = sector[Disk.SECTOR.DATA].length;
@@ -2547,379 +2151,24 @@ Disk.nDisks = 0;
  */
 class FileInfo {
     /**
-     * FileInfo(disk, sPath, sName, bAttr, cbSize, apba)
+     * FileInfo(disk, sPath, sName, bAttr, cbSize, module)
      *
-     * To the basic file information below, loadSymbols() may also add:
-     *
-     *      sModule
-     *      sDescription
-     *      aSegments[]
-     *
-     * which is indexed by 1-based segment numbers, where each aSegments[] element is an object
-     * containing:
-     *
-     *      offStart (file-relative offset of start of segment data)
-     *      offEnd (file-relative offset of end of segment data)
-     *      aEntries[]
-     *
-     * where aEntries is an array indexed by 1-based ordinals, where each aEntries[] element contains:
-     *
-     *      [offset, symbol]
-     *
-     * where offset is relative to the segment's offStart value, and symbol is a string describing the
-     * entry.
-     *
-     * NOTE: Although aEntries arrays are similar to the Debugger's aOffsets arrays, they are not
-     * interchangeable data structures, because ours is ordered by ordinal, whereas aOffsets is
-     * ordered by offset.  We provide an interface, getModuleInfo(), to the Debugger that converts
-     * our data into an intermediate array, aSymbols, which the Debugger then uses to build aOffsets.
-     * It would be nice to avoid building that intermediate representation, but it's a side-effect of
-     * the Debugger's earlier support for JSON-encoded MAP files.
-     *
-     * There will always be an offset at index 0 of an aEntries[] element, but some error or incomplete
-     * symbolic information could result in a missing symbol at index 1, because symbol name processing is
-     * separate from entry table processing.
-     *
+     * @this {FileInfo}
      * @param {Disk} disk
      * @param {string} sPath
      * @param {string} sName
      * @param {number} bAttr
      * @param {number} cbSize
-     * @param {Array.<number>} apba
+     * @param {Object} [module]
      */
-    constructor(disk, sPath, sName, bAttr, cbSize, apba)
+    constructor(disk, sPath, sName, bAttr, cbSize, module)
     {
         this.disk = disk;
         this.sPath = sPath;
         this.sName = sName;
         this.bAttr = bAttr;
         this.cbSize = cbSize;
-        this.apba = apba;
-    }
-
-    /**
-     * loadValue(offset, length)
-     *
-     * @this {FileInfo}
-     * @param {number} offset
-     * @param {number} [length] (1, 2 or 4 bytes; default is 2)
-     * @return {number|undefined}
-     */
-    loadValue(offset, length)
-    {
-        let l;
-        length = length || 2;
-        let iSector = offset >> 9;
-        let offSector = offset & 0x1ff;
-        let sector = this.disk.getSector(this.apba[iSector]);
-        if (sector) {
-            /*
-             * If the read is wholly contained within a sector, read it with one call.
-             */
-            if (offSector + length <= sector[Disk.SECTOR.LENGTH]) {
-                return this.disk.getSectorData(sector, offSector, length);
-            }
-            /*
-             * The spans a sector boundary, so we just call ourselves one byte at a time.
-             */
-            l = 0;
-            let shift = 0;
-            while (length--) {
-                l |= this.loadValue(offset++, 1) << shift;
-                shift += 8;
-            }
-        }
-        return l;
-    }
-
-    /**
-     * loadString(offset, length)
-     *
-     * @this {FileInfo}
-     * @param {number} offset
-     * @param {number} [length] (if omitted, then string must be zero-terminated)
-     * @return {string}
-     */
-    loadString(offset, length)
-    {
-        let s = "";
-        if (!length) length = -1;
-        while (length--) {
-            let b = this.loadValue(offset++, 1);
-            if (!b) break;
-            s += String.fromCharCode(b);
-        }
-        return s;
-    }
-
-    /**
-     * loadField(aField, offset)
-     *
-     * @this {FileInfo}
-     * @param {Array.<number>} aField
-     * @param {number} [offset] (0 if not specified)
-     * @return {number|undefined}
-     */
-    loadField(aField, offset)
-    {
-        return this.loadValue(aField[0] + (offset || 0), aField[1]);
-    }
-
-    /**
-     * loadSegmentTable(offEntries, nEntries, nSegOffShift)
-     *
-     * @this {FileInfo}
-     * @param {number} offEntries
-     * @param {number} nEntries
-     * @param {number} nSegOffShift
-     */
-    loadSegmentTable(offEntries, nEntries, nSegOffShift)
-    {
-        /*
-         * Read the Segment Table entries now.
-         */
-        let iSegment = 1;
-        this.aSegments = [];
-        this.aOrdinals = [];                // this is an optional array for quick ordinal-to-segment lookup
-
-        if (DEBUG && this.disk.messageEnabled(Messages.DISK + Messages.DATA)) {
-            this.disk.printMessage("loadSegmentTable(" + this.sPath + "," + Str.toHexLong(offEntries) + "," + Str.toHexWord(nEntries) + ")");
-        }
-
-        while (nEntries--) {
-            let offSegment = this.loadValue(offEntries) << nSegOffShift;
-            if (offSegment) {
-                let lenSegment = this.loadValue(offEntries + 2) || 0x10000;       // 0 means 64K
-
-                if (DEBUG && this.disk.messageEnabled(Messages.DISK + Messages.DATA)) {
-                    this.disk.printMessage("segment " + iSegment + ": offStart=" + Str.toHexLong(offSegment) + " offEnd=" + Str.toHexLong(offSegment + lenSegment));
-                }
-
-                this.aSegments[iSegment++] = {offStart: offSegment, offEnd: offSegment + lenSegment - 1, aEntries: []};
-            }
-            offEntries += 8;
-        }
-        /*
-         * Although not documented (at least not in any of the early Windows "New Executable" documents I've seen),
-         * the Entry Table may also contain entries whose bSegment field is 0xFE, which doesn't correspond to a valid
-         * segment number.  That pseudo-segment number appears to be reserved for constants.  Here are some examples
-         * from a 3.1-vintage KRNL386.EXE:
-         *
-         *      cannot find segment 254 (offset 0xF000) for symbol __ROMBIOS with ordinal 173
-         *      cannot find segment 254 (offset 0x0000) for symbol __0000H with ordinal 183
-         *      cannot find segment 254 (offset 0x0040) for symbol __0040H with ordinal 193
-         *      cannot find segment 254 (offset 0x0008) for symbol __AHINCR with ordinal 114
-         *      cannot find segment 254 (offset 0x0003) for symbol __AHSHIFT with ordinal 113
-         *      cannot find segment 254 (offset 0xA000) for symbol __A000H with ordinal 174
-         *      cannot find segment 254 (offset 0xB000) for symbol __B000H with ordinal 181
-         *      cannot find segment 254 (offset 0xC000) for symbol __C000H with ordinal 195
-         *      cannot find segment 254 (offset 0xB800) for symbol __B800H with ordinal 182
-         *      cannot find segment 254 (offset 0xD000) for symbol __D000H with ordinal 179
-         *      cannot find segment 254 (offset 0xE000) for symbol __E000H with ordinal 190
-         *      cannot find segment 254 (offset 0xF000) for symbol __F000H with ordinal 194
-         *      cannot find segment 254 (offset 0x0001) for symbol __WINFLAGS with ordinal 178
-         *
-         * The simplest way to handle those Entry Table entries is creating an additional (fake) aSegments table entry.
-         */
-        this.aSegments[0xFE] = {offStart: 0, offEnd: 0, aEntries: []};
-    }
-
-    /**
-     * loadEntryTable(offEntries, offEntriesEnd)
-     *
-     * @this {FileInfo}
-     * @param {number} offEntries
-     * @param {number} offEntriesEnd
-     */
-    loadEntryTable(offEntries, offEntriesEnd)
-    {
-        let iOrdinal = 1;
-
-        if (DEBUG && this.disk.messageEnabled(Messages.DISK + Messages.DATA)) {
-            this.disk.printMessage("loadEntryTable(" + Str.toHexLong(offEntries) + "," + Str.toHexLong(offEntriesEnd) + ")");
-        }
-
-        while (offEntries < offEntriesEnd) {
-
-            let w = this.loadValue(offEntries);
-            let bEntries = w & 0xff;
-            if (!bEntries) break;
-            let bSegment = w >> 8, iSegment;
-
-            if (DEBUG && this.disk.messageEnabled(Messages.DISK + Messages.DATA)) {
-                this.disk.printMessage("bundle for segment " + bSegment + ": " + bEntries + " entries @" + Str.toHex(offEntries));
-            }
-
-            offEntries += 2;
-
-            /*
-             * bSegment 0x00 means all the entries spanned by bEntries are unused, so move on.
-             */
-            if (!bSegment) {
-                iOrdinal += bEntries;
-                continue;
-            }
-            while (bEntries--) {
-                /*
-                 * bSegment 0x01-0xFE means the next 3 bytes describe a fixed segment entry; the next
-                 * byte contains flags indicating exported (0x1) and/or global/shared (0x2) data, and the
-                 * next word is the offset within the segment.
-                 */
-                let offEntry;
-                let offDebug = offEntries;
-                let bFlags = this.loadValue(offEntries, 1);
-
-                if (bSegment <= 0xFE) {
-                    iSegment = bSegment;
-                    offEntry = this.loadValue(offEntries + 1);
-                    offEntries += 3;
-                } else {
-                    /*
-                     * bSegment 0xFF means a movable segment entry, which is 6 bytes long: flags byte (which
-                     * we've already read), an INT 0x3F (0xCD,0x3F), a 1-byte segment number, and a 2-byte offset.
-                     */
-                    iSegment = this.loadValue(offEntries + 3, 1);
-                    offEntry = this.loadValue(offEntries + 4);
-                    offEntries += 6;
-                }
-                if (!this.aSegments[iSegment]) {
-                    if (DEBUG && this.disk.messageEnabled(Messages.DISK + Messages.DATA)) {
-                        this.disk.printMessage("invalid segment: " + iSegment);
-                    }
-                } else {
-                    this.aSegments[iSegment].aEntries[iOrdinal] = [offEntry];
-                    if (DEBUG && this.disk.messageEnabled(Messages.DISK + Messages.DATA)) {
-                        this.disk.printMessage("ordinal " + iOrdinal + ": segment=" + iSegment + " offset=" + Str.toHexLong(offEntry) + " @" + Str.toHex(offDebug));
-                    }
-                }
-                this.aOrdinals[iOrdinal] = [iSegment, offEntry];
-                iOrdinal++;
-            }
-        }
-    }
-
-    /**
-     * loadNameTable(aField, offset)
-     *
-     * NOTE: If offset is omitted, we assume we're reading the Resident Name Table, and therefore
-     * the first name is the module name; otherwise, we assume it is the Non-Resident Name Table, and
-     * that the first name is the module description.
-     *
-     * @this {FileInfo}
-     * @param {number} offEntries
-     * @param {number} [offEntriesEnd] (if omitted, then the table must be null-terminated)
-     */
-    loadNameTable(offEntries, offEntriesEnd)
-    {
-        let cNames = 0;
-
-        if (DEBUG && this.disk.messageEnabled(Messages.DISK + Messages.DATA)) {
-            this.disk.printMessage("loadNameTable(" + Str.toHexLong(offEntries) + (offEntriesEnd? ("," + Str.toHexLong(offEntriesEnd)) : "") + ")");
-        }
-
-        while (!offEntriesEnd || offEntries < offEntriesEnd) {
-
-            let offDebug = offEntries;
-            let bLength = this.loadValue(offEntries, 1);
-            if (!bLength) break;
-
-            let sSymbol = this.loadString(offEntries + 1, bLength);
-            if (!sSymbol) break;                    // an error must have occurred (this is not a natural way to end)
-            offEntries += 1 + bLength;
-
-            if (!cNames) {
-                if (!offEntriesEnd) {
-                    this.sModule = sSymbol;
-                } else {
-                    this.sDescription = sSymbol;
-                }
-            }
-            else {
-                let iOrdinal = this.loadValue(offEntries);
-                let tuple = this.aOrdinals[iOrdinal];
-                if (tuple) {
-                    let iSegment = tuple[0];        // tuple[0] is the segment number and tuple[1] is the corresponding offEntry
-                    if (this.aSegments[iSegment]) {
-                        let aEntries = this.aSegments[iSegment].aEntries[iOrdinal];
-                        this.disk.assert(aEntries && aEntries.length == 1);
-                        aEntries.push(sSymbol);
-                        if (DEBUG && this.disk.messageEnabled(Messages.DISK + Messages.DATA)) {
-                            this.disk.printMessage("segment " + iSegment + " offset " + Str.toHexWord(aEntries[0]) + " ordinal " + iOrdinal + ": " + sSymbol + " @" + Str.toHex(offDebug));
-                        }
-                    } else {
-                        if (DEBUG && this.disk.messageEnabled(Messages.DISK + Messages.DATA)) {
-                            this.disk.printMessage(this.sPath + ": cannot find segment " + iSegment + " (offset " + Str.toHexWord(tuple[1]) + ") for symbol " + sSymbol + " with ordinal " + iOrdinal + " @" + Str.toHex(offDebug));
-                        }
-                    }
-                } else {
-                    if (DEBUG && this.disk.messageEnabled(Messages.DISK + Messages.DATA)) {
-                        this.disk.printMessage(this.sPath + ": cannot find ordinal " + iOrdinal + " for symbol " + sSymbol + " @" + Str.toHex(offDebug));
-                    }
-                }
-            }
-            offEntries += 2;
-            cNames++;
-        }
-    }
-
-    /**
-     * loadSymbols()
-     *
-     * For files with NE headers, extract all available symbolic information from the file.
-     *
-     * @this {FileInfo}
-     */
-    loadSymbols()
-    {
-        if (!Str.endsWith(this.sName, ".EXE") && !Str.endsWith(this.sName, ".DLL") && !Str.endsWith(this.sName, ".DRV")) {
-            return;
-        }
-
-        if (this.loadField(FileInfo.OE.oeSignature) != FileInfo.OE.SIG) {
-            return;
-        }
-
-        if (this.loadField(FileInfo.OE.oeRelocOffset) != FileInfo.OE.NE_SIG) {
-            return;
-        }
-
-        let offNEHeader = this.loadField(FileInfo.OE.oeNEHeader);
-        if (this.loadField(FileInfo.NE.neSignature, offNEHeader) != FileInfo.NE.SIG) {
-            return;
-        }
-
-        let nEntries = this.loadField(FileInfo.NE.neSTEntries, offNEHeader);
-        let offEntries = this.loadField(FileInfo.NE.neSTOffset, offNEHeader);
-        let nSegOffShift = this.loadField(FileInfo.NE.neSegOffShift, offNEHeader);
-
-        if (offEntries && nEntries) {
-            this.loadSegmentTable(offEntries + offNEHeader, nEntries, nSegOffShift || 0);
-        }
-
-        offEntries = this.loadField(FileInfo.NE.neETOffset, offNEHeader);
-        let cbEntries = this.loadField(FileInfo.NE.neETSize, offNEHeader);
-        if (offEntries && cbEntries) {
-            this.loadEntryTable(offEntries += offNEHeader, offEntries + cbEntries);
-        }
-
-        /*
-         * Time to walk the Resident Name Table and update the corresponding ordinals.
-         */
-        offEntries = this.loadField(FileInfo.NE.neRNTOffset, offNEHeader);
-        if (offEntries) {
-            this.loadNameTable(offEntries + offNEHeader);
-        }
-
-        /*
-         * Ditto for the Non-Resident Name Table, which for some reason, uses a file-relative offset rather than
-         * an NE header-relative offset, and which is both sized AND null-terminated; we check both terminating
-         * conditions to be safe.
-         */
-        offEntries = this.loadField(FileInfo.NE.neNRNTOffset, offNEHeader);
-        cbEntries = this.loadField(FileInfo.NE.neNRNTSize, offNEHeader);
-        if (offEntries && cbEntries) {
-            this.loadNameTable(offEntries, offEntries + cbEntries);
-        }
+        this.module = module;
     }
 
     /**
@@ -2933,9 +2182,10 @@ class FileInfo {
     getSymbol(off, fNearest)
     {
         let sSymbol = null;
-        if (this.aSegments) {
-            for (let iSegment in this.aSegments) {
-                let segment = this.aSegments[iSegment];
+        if (this.module) {
+            let segments = this.module.segments;
+            for (let seg in segments) {
+                let segment = segments[seg];
                 if (off >= segment.offStart && off <= segment.offEnd) {
                     /*
                      * This is the one and only segment we need to check, so we can make off segment-relative now.
@@ -2945,11 +2195,11 @@ class FileInfo {
                      * To support fNearest, save the entry where (off - entry[0]) yields the smallest positive result.
                      */
                     let cbNearest = off, entryNearest;
-                    for (let iOrdinal in segment.aEntries) {
-                        let entry = segment.aEntries[iOrdinal];
-                        let cb = off - entry[0];
+                    for (let ord in segment.ordinals) {
+                        let entry = segment.ordinals[ord];
+                        let cb = off - entry['o'];
                         if (!cb) {
-                            sSymbol = this.sModule + '!' + entry[1];
+                            sSymbol = this.module.name + '!' + entry['s'];
                             break;
                         }
                         if (fNearest && cb > 0 && cb < cbNearest) {
@@ -2958,7 +2208,7 @@ class FileInfo {
                         }
                     }
                     if (!sSymbol && entryNearest) {
-                        sSymbol = this.sModule + '!' + entryNearest[1] + "+" + Str.toHex(cbNearest, 0, true);
+                        sSymbol = this.module.name + '!' + entryNearest[1] + "+" + Str.toHex(cbNearest, 0, true);
                     }
                     break;
                 }
@@ -2967,97 +2217,5 @@ class FileInfo {
         return sSymbol || this.sName + '+' + Str.toHex(off, 0, true);
     }
 }
-
-/*
- * Original (aka "Old") Executable MS-DOS File Format
- *
- * Relocation entries are pairs of 16-bit words:
- *
- *      wOffset
- *      wSegment
- *
- * I've noticed that a "PKLITE" EXE may have a oeRelocOffset of 0x52, where the word at 0x001C is 0x210F and the
- * bytes from 0x001E through 0x0051 are:
- *
- *      "PKLITE Copr. 1990-92 PKWARE Inc. All Rights Reserved"
- *
- * Other EXEs have a oeRelocOffset of 0x1E, which begs the question: what is the word at 0x001C typically used for?
- *
- * It was not uncommon for there to be wasted space in the header; even an EXE with, say, 20 (0x14) entries would
- * likely have a wHeaderParas value of 0x20, which is 512 (0x200) bytes.  The desire, no doubt, was to align the
- * start of the EXE segment(s) to a traditional sector boundary.
- */
-FileInfo.OE = {
-    SIG:            0x5A4D,
-    oeSignature:    [0x0000, 2],        // "MZ" (0x4D,0x5A)
-    oeLastBytes:    [0x0002, 2],        // 0-511 (0 means the entire last block is used)
-    oeBlocks:       [0x0004, 2],        // number of blocks in the file
-    oeRelocEntries: [0x0006, 2],        // number of relocation entries in the header
-    oeHeaderParas:  [0x0008, 2],        // number of (16-byte) paragraphs in the header
-    oeExtraParas:   [0x000A, 2],        // minimum number of additional paragraphs required at load-time
-    oeMaxParas:     [0x000C, 2],        // maximum number of additional paragraphs required at load-time
-    oeSSRel:        [0x000E, 2],        // relative value of SS
-    oeSPInit:       [0x0010, 2],        // initial value of SP
-    oeChecksum:     [0x0012, 2],        // checksum if non-zero (sum of all words, including this, should be zero)
-    oeIPInit:       [0x0014, 2],        // initial value of IP
-    oeCSRel:        [0x0016, 2],        // relative value of CS
-    oeRelocOffset:  [0x0018, 2],        // offset of first relocation item
-    oeOverlay:      [0x001A, 2],        // overlay number (normally zero, implying main program)
-    /*
-     * The following fields are accommodated by the NE format, but they were actually defined by "the DOS 4.0 group"
-     * as extensions to the OE format.
-     */
-    oeDOS40Bits:    [0x0020, 2],        // DOS 4.0 behavior bits
-    oeUnusedBits:   [0x0022, 2],        // unused behavior bits
-    /*
-     * If oeRelocOffset (0x0018) is 0x40, then the file is considered an NE (New Executable) MS-DOS file, and
-     * the offset of the NE header (from the start of the file) is a 32-bit value stored at 0x003C.  Note that early
-     * versions of Windows (aka "DOS 2.0 Windows") originally defined the NE header offset as a 16-bit value stored
-     * at 0x003E.  And before that, it may have been a 16-bit value stored at 0x0024, which would have been immediately
-     * after the "behavior bits" fields shown above).
-     */
-    oeNEHeader:     [0x003C, 4],        // offset from start of file to NE header
-    NE_SIG:         0x40
-};
-
-/*
- * New Executable MS-DOS File Format
- *
- * Unless otherwise specified, all *Offset fields are relative to the start of the NE header, and all *Size fields
- * are in bytes.
- */
-FileInfo.NE = {
-    SIG:            0x454E,
-    neSignature:    [0x0000, 2],        // "NE" (0x4E,0x45)
-    neLinkerVer:    [0x0002, 2],        // (low byte is version, high byte is revision)
-    neETOffset:     [0x0004, 2],        // Entry Table offset
-    neETSize:       [0x0006, 2],        // Entry Table size
-    neChecksum:     [0x0008, 4],        // checksum (sum of all DWORDs in the file, excluding this one)
-    neFlags:        [0x000C, 2],
-    neDataSeg:      [0x000E, 2],
-    neHeapSize:     [0x0010, 2],
-    neStackSize:    [0x0012, 2],
-    neCSIP:         [0x0014, 4],
-    neSSSP:         [0x0018, 4],
-    neSTEntries:    [0x001C, 2],        // Segment Table entries
-    neMRTEntries:   [0x001E, 2],        // Module Reference Table entries
-    neNRNTSize:     [0x0020, 2],        // Non-Resident Name Table size
-    neSTOffset:     [0x0022, 2],        // Segment Table offset
-    neRTOffset:     [0x0024, 2],        // Resource Table offset
-    neRNTOffset:    [0x0026, 2],        // Resident Name Table offset
-    neMRTOffset:    [0x0028, 2],        // Module Reference Table offset
-    neINTOffset:    [0x002A, 2],        // Imported Names Table offset
-    neNRNTOffset:   [0x002C, 4],        // Non-Resident Name Table offset (relative to start of file)
-    neETMovable:    [0x0030, 2],        // number of movable entries in the Entry Table
-    neSegOffShift:  [0x0032, 2],        // logical sector alignment shift count, log(base 2) of the segment sector size (default 9)
-    /*
-     * Fields after this point are post "DOS 2.0 Windows"...
-     */
-    neRTEntries:    [0x0034, 2],        // Resource Table entries
-    neEXEType:      [0x0036, 1]         // executable type (0x02 for Windows)
-    /*
-     * 0x37 through 0x3F is reserved.
-     */
-};
 
 if (typeof module !== "undefined") module.exports = Disk;

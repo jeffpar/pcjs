@@ -29,7 +29,7 @@
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/tools/disk/modules/di.js",
-        "args": ["--all","--list"],
+        "args": ["../../../harddisks/pcx86/20mb/IBMOS210-EGA.json","--rewrite"],
         "cwd": "${workspaceFolder}/tools/disk/modules",
         "stopOnEntry": false,
         "console": "internalConsole"

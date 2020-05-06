@@ -1322,8 +1322,8 @@ export default class DiskImage {
             imageData = JSON.parse(sData);
             if (imageData) {
                 /*
-                 * We must now differentiate between "legacy" JSON images (which were simply arrays of CHS sector data)
-                 * and "extended" JSON images, which are objects with a CHS "diskData" property, among other things.
+                 * We must now differentiate between "legacy" JSON images (which were simply arrays of CHS data)
+                 * and "extended" JSON images, which are objects with a CHS diskData property, among other things.
                  */
                 let imageInfo = imageData[DiskImage.DESC.IMAGE];
                 if (imageInfo) {
@@ -1332,7 +1332,7 @@ export default class DiskImage {
                     if (!this.volTable.length && imageData.volTable) {
                         let volTable = imageData.volTable;
                         for (let iVol = 0; iVol < volTable.length; iVol++) {
-                            volTable[iVol].iPartition = volTable.length > 1? iVol : -1;
+                            if (volTable[iVol].iPartition == undefined) volTable[iVol].iPartition = -1;
                         }
                         this.volTable = volTable;
                     }
@@ -1598,7 +1598,7 @@ export default class DiskImage {
         if (!this.fileTable.length && !this.tablesBuilt || fRebuild) {
 
             /*
-             * The built flag helps us avoid rebuilding the tables needlessly for volumes that simply have zero files.
+             * The built flag avoids rebuilding tables needlessly for volumes that simply have zero files.
              */
             this.tablesBuilt = true;
 
@@ -2069,12 +2069,13 @@ export default class DiskImage {
      *
      * @this {DiskImage}
      * @param {VolInfo} vol
-     * @param {boolean} [fComplete] (currently, all descriptors are "complete")
+     * @param {boolean} [fComplete]
      * @returns {Object}
      */
     getVolDesc(vol, fComplete)
     {
         let desc = {
+            [DiskImage.VOLDESC.PARTITION]:  vol.iPartition,
             [DiskImage.VOLDESC.MEDIA_ID]:   vol.idMedia,
             [DiskImage.VOLDESC.LBA_VOL]:    vol.lbaStart,
             [DiskImage.VOLDESC.LBA_TOTAL]:  vol.lbaTotal,
@@ -2089,6 +2090,14 @@ export default class DiskImage {
             [DiskImage.VOLDESC.CLUS_FREE]:  vol.clusFree,
             [DiskImage.VOLDESC.CLUS_TOTAL]: vol.clusTotal
         };
+        /*
+         * By default, we don't include a partition number if it's an unpartitioned disk.
+         */
+        if (!fComplete) {
+            if (vol.iPartition < 0) {
+                delete [DiskImage.VOLDESC.PARTITION];
+            }
+        }
         return desc;
     }
 
@@ -3013,11 +3022,8 @@ export default class DiskImage {
                     }
                 }
             }
-            let geometry = DiskImage.GEOMETRIES[this.cbDiskData];
-            if (geometry) {
-                if (geometry[0] == 40 || geometry[0] == 80) {
-                    sFormat = "PC" + (this.cbDiskData / 1024) + "K";
-                }
+            if (this.volTable.length) {
+                sFormat = "PC" + (this.cbDiskData / 1024) + "K";
             }
         }
         return sFormat + flags;
@@ -3311,6 +3317,7 @@ DiskImage.IMAGE = {
  * Volume descriptor properties.
  */
 DiskImage.VOLDESC = {
+    PARTITION:  'iPartition',       // partition (if applicable)
     MEDIA_ID:   'idMedia',          // media ID
     LBA_VOL:    'lbaStart',         // LBA of volume
     LBA_TOTAL:  'lbaTotal',         // total blocks in volume

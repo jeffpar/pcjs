@@ -70,10 +70,11 @@
             }
           }
           function pcjsExplorerInit() {
-            pcjsExplorerExpand(window.location.pathname + window.location.hash.substr(1));
-            pcjsExplorerExpand(pcjsGetURLVars()['software'], window.location.pathname, "/software");
-            if (window.location.pathname.indexOf("/machines") < 0) {
-              if (window.location.pathname.indexOf("/pcx86") >= 0) pcjsExplorerExpand("/machines/pcx86/ibm/5150");
+            let path = window.location.pathname;
+            pcjsExplorerExpand(path + window.location.hash.substr(1));
+            pcjsExplorerExpand(pcjsGetURLVars()['software'], path, "/software");
+            if (path.indexOf("/machines") < 0) {
+              if (path == '/' || path.indexOf("/pcx86") >= 0) pcjsExplorerExpand("/machines/pcx86/ibm/5150");
             }
           }
           pcjsExplorerInit();
