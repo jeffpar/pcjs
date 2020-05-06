@@ -202,6 +202,14 @@ if (typeof module !== "undefined") {
  * @property {boolean} fDirty (for internal use only)
  */
 
+ /**
+  * @typedef {Object} FileDesc
+  * @property {string} path
+  * @property {string} date
+  * @property {string} attr
+  * @property {number} size
+  */
+
 /**
  * class Disk
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
@@ -680,8 +688,8 @@ class Disk extends Component {
             }
 
             /*
-             * If we received binary data instead of JSON, we can use the same buildDisk() function that our FileReader
-             * code uses.
+             * If we received binary data instead of JSON, we can use the same buildDisk() function that
+             * our FileReader code uses.
              */
             if (typeof imageData != "string") {
                 this.buildDisk(imageData);
@@ -713,7 +721,7 @@ class Disk extends Component {
                 /*
                  * The most likely source of any exception will be here, where we're parsing the disk data.
                  */
-                let aDiskData;
+                let aDiskData, aFileDescs;
                 if (imageData.substr(0, 1) == "<") {    // if the "data" begins with a "<"...
                     /*
                      * Early server configs reported an error (via the nErrorCode parameter) if a disk URL was invalid,
@@ -748,6 +756,7 @@ class Disk extends Component {
                     if (imageData[0] == '{') {
                         let image = JSON.parse(imageData);
                         aDiskData = image['diskData'];
+                        aFileDescs = image['fileTable'];
                     } else if (imageData.indexOf("0x") < 0 && imageData.substr(0, 2) != "[\"") {
                         aDiskData = JSON.parse(imageData.replace(/([a-z]+):/gm, "\"$1\":").replace(/\/\/[^\n]*/gm, ""));
                     } else {
@@ -903,7 +912,7 @@ class Disk extends Component {
                     }
                     this.aDiskData = aDiskData;
                     this.dwChecksum = dwChecksum;
-                    if (BACKTRACK || SYMBOLS) this.buildFileTable();
+                    if (BACKTRACK || SYMBOLS) this.buildFileTable(aFileDescs);
                     disk = this;
                 }
             } catch (e) {
@@ -923,7 +932,7 @@ class Disk extends Component {
     }
 
     /**
-     * buildFileTable()
+     * buildFileTable(aFileDescs)
      *
      * This function builds (or rebuilds) a complete file table from the (first) FAT volume found on the current
      * disk, and then updates all the sector objects to point back to the corresponding file.  Used for BACKTRACK
@@ -942,25 +951,39 @@ class Disk extends Component {
      * of PCx86, what we call PBA numbers are what those controllers would later call LBA numbers.
      *
      * @this {Disk}
-     * @return {Array.<FileInfo>|undefined}
+     * @param {Array.<FileDesc>} [aFileDescs] (array of FileDescs, if any, stored in the JSON disk image)
      */
-    buildFileTable()
+    buildFileTable(aFileDescs)
     {
         if (BACKTRACK || SYMBOLS) {
 
             let i, off, dir = {}, iSector;
 
-            if (this.aFileTable && this.aFileTable.length) {
+            if (this.aFileTable && this.aFileTable.length || aFileDescs) {
                 /*
                  * In order for buildFileTable() to rebuild an existing table (eg, after deltas have been
                  * applied), we need to zap any and all existing file table references in the sector data.
                  */
                 let aDiskData = this.aDiskData;
+                if (aFileDescs) this.aFileTable = [];
                 for (let iCylinder = 0; iCylinder < aDiskData.length; iCylinder++) {
                     for (let iHead = 0; iHead < aDiskData[iCylinder].length; iHead++) {
                         for (iSector = 0; iSector < aDiskData[iCylinder][iHead].length; iSector++) {
                             let sector = aDiskData[iCylinder][iHead][iSector];
                             if (sector) {
+                                if (aFileDescs) {
+                                    let index = sector[Disk.SECTOR.FILE_INDEX];
+                                    if (index != undefined) {
+                                        let file = this.aFileTable[index];
+                                        if (!file) {
+                                            let desc = aFileDescs[index];
+                                            file = new FileInfo(this, desc.path, Str.getBaseName(desc.path), +desc.attr, desc.size || 0, []);
+                                            this.aFileTable[index] = file;
+                                        }
+                                        sector.file = file;
+                                        sector.offFile = sector[Disk.SECTOR.FILE_OFFSET];
+                                    }
+                                }
                                 delete sector[Disk.SECTOR.FILE_INDEX];
                                 delete sector[Disk.SECTOR.FILE_OFFSET];
                             }
@@ -968,6 +991,8 @@ class Disk extends Component {
                     }
                 }
             }
+
+            if (aFileDescs) return;
 
             this.aFileTable = [];
 
@@ -1125,7 +1150,6 @@ class Disk extends Component {
                 file.loadSymbols();
             }
         }
-        return this.aFileTable;
     }
 
     /**
