@@ -26,7 +26,7 @@ After formatting, PC DOS 2.00 reports:
 	10592256 bytes total disk space
 	10592256 bytes available on disk
 
-As explained in our [DiskDump source code](/tools/diskdump/lib/diskdump.js), in its description of the 10Mb
+As explained in our [DiskImage source code](/machines/pcx86/modules/diskimage.js), in its description of the 10Mb
 BPB, a 10Mb "Type 3" PC XT fixed disk contains:
 
 	306 cylinders

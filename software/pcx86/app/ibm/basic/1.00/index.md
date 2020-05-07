@@ -85,7 +85,7 @@ NOTE: To save a BASIC program as an *ASCII* file, save it with the `A` option; e
 
 ### DONKEY.BAS
 
-[[Download](DONKEY.BAS)]
+[[Download](donkey/DONKEY.BAS)]
 
 ```bas
 {% include_relative donkey/DONKEY.BAS %}
