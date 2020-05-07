@@ -344,6 +344,8 @@ function processDisk(sFile, di, argv, diskette)
 /**
  * readAll(argv)
  *
+ * If "--all=<string>" then the set of disks is limited to those where pathname contains <string>.
+ *
  * @param {Array} argv
  */
 function readAll(argv)

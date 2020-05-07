@@ -8374,6 +8374,23 @@
         }
       }
     },
+    "microsoft": {
+      "@title": "Microsoft",
+      "unfiled": {
+        "@title": "Unfiled Utilities",
+        "@versions": {
+          "": {
+            "@title": "MS Unfiled Utilities",
+            "@media": [
+              {
+                "@diskette": "MSUTIL-UNFILED.json",
+                "@archive": "folder"
+              }
+            ]
+          }
+        }
+      }
+    },
     "norton": {
       "@title": "Norton Utilities",
       "@versions": {
