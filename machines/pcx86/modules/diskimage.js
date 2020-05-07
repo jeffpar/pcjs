@@ -1309,70 +1309,76 @@ export default class DiskImage {
      */
     buildDiskFromJSON(sData)
     {
+        let imageData;
+
         this.aDiskData = null;
         this.cbDiskData = 0;
         this.dwChecksum = 0;
         this.fromJSON = false;
-
         this.abOrigBPB = [];
         this.fBPBModified = false;
 
-        let imageData;
         try {
             imageData = JSON.parse(sData);
-            if (imageData) {
-                /*
-                 * We must now differentiate between "legacy" JSON images (which were simply arrays of CHS data)
-                 * and "extended" JSON images, which are objects with a CHS diskData property, among other things.
-                 */
-                let imageInfo = imageData[DiskImage.DESC.IMAGE];
-                if (imageInfo) {
-                    let sOrigBPB = imageInfo[DiskImage.IMAGE.ORIGBPB];
-                    if (sOrigBPB) this.abOrigBPB = JSON.parse(sOrigBPB);
-                    if (!this.volTable.length && imageData.volTable) {
-                        let volTable = imageData.volTable;
-                        for (let iVol = 0; iVol < volTable.length; iVol++) {
-                            if (volTable[iVol].iPartition == undefined) volTable[iVol].iPartition = -1;
-                        }
-                        this.volTable = volTable;
-                    }
-                    this.buildFileTableFromJSON(imageData[DiskImage.DESC.FILES]);
-                    this.tablesBuilt = this.fromJSON = true;
-                }
-                let aDiskData = imageData[DiskImage.DESC.DISKDATA] || imageData;
-                if (aDiskData && aDiskData.length) {
-                    let aCylinders = this.aDiskData = aDiskData;
-                    this.nCylinders = aCylinders.length;
-                    this.nSectors = this.cbSector = 0;
-                    for (let iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
-                        let aHeads = aCylinders[iCylinder];
-                        this.nHeads = aHeads.length
-                        for (let iHead = 0; iHead < aHeads.length; iHead++) {
-                            let aSectors = aHeads[iHead];
-                            let nSectors = aSectors.length;
-                            if (!this.nSectors) {
-                                this.nSectors = nSectors;
-                            } else if (this.nSectors != nSectors) {
-                                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d:%d contains varying sectors per track: %d\n", this.diskName, iCylinder, iHead, nSectors);
-                            }
-                            for (let iSector = 0; iSector < aSectors.length; iSector++) {
-                                let sector = aSectors[iSector];
-                                this.rebuildSector(iCylinder, iHead, sector);
-                                let cbSector = sector[DiskImage.SECTOR.LENGTH];
-                                if (!this.cbSector) {
-                                    this.cbSector = cbSector;
-                                } else if (this.cbSector != cbSector) {
-                                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d:%d:%d contains varying sector sizes: %d\n", this.diskName, iCylinder, iHead, sector[DiskImage.SECTOR.ID], cbSector);
-                                }
-                                this.cbDiskData += cbSector;
-                            }
-                        }
-                    }
-                    return true;
-                }
+        } catch(e) {
+            try {
+                imageData = JSON.parse(sData.replace(/([a-z]+):/gm, "\"$1\":").replace(/\/\/[^\n]*/gm, ""));
+            } catch(err) {
+                this.printf(Device.MESSAGE.ERROR, "error: %s\n", err.message);
             }
-        } catch(err) {
-            this.printf(Device.MESSAGE.ERROR, "error: %s\n", err.message);
+        }
+
+        if (imageData) {
+            /*
+             * We must now differentiate between "legacy" JSON images (which were simply arrays of CHS data)
+             * and "extended" JSON images, which are objects with a CHS diskData property, among other things.
+             */
+            let imageInfo = imageData[DiskImage.DESC.IMAGE];
+            if (imageInfo) {
+                let sOrigBPB = imageInfo[DiskImage.IMAGE.ORIGBPB];
+                if (sOrigBPB) this.abOrigBPB = JSON.parse(sOrigBPB);
+                if (!this.volTable.length && imageData.volTable) {
+                    let volTable = imageData.volTable;
+                    for (let iVol = 0; iVol < volTable.length; iVol++) {
+                        if (volTable[iVol].iPartition == undefined) volTable[iVol].iPartition = -1;
+                    }
+                    this.volTable = volTable;
+                }
+                this.buildFileTableFromJSON(imageData[DiskImage.DESC.FILES]);
+                this.tablesBuilt = this.fromJSON = true;
+            }
+            let aDiskData = imageData[DiskImage.DESC.DISKDATA] || imageData;
+            if (aDiskData && aDiskData.length) {
+                let aCylinders = aDiskData;
+                this.aDiskData = aDiskData;
+                this.nCylinders = aCylinders.length;
+                this.nSectors = this.cbSector = 0;
+                for (let iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
+                    let aHeads = aCylinders[iCylinder];
+                    this.nHeads = aHeads.length
+                    for (let iHead = 0; iHead < aHeads.length; iHead++) {
+                        let aSectors = aHeads[iHead];
+                        let nSectors = aSectors.length;
+                        if (!this.nSectors) {
+                            this.nSectors = nSectors;
+                        } else if (this.nSectors != nSectors) {
+                            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d:%d contains varying sectors per track: %d\n", this.diskName, iCylinder, iHead, nSectors);
+                        }
+                        for (let iSector = 0; iSector < aSectors.length; iSector++) {
+                            let sector = aSectors[iSector];
+                            this.rebuildSector(iCylinder, iHead, sector);
+                            let cbSector = sector[DiskImage.SECTOR.LENGTH];
+                            if (!this.cbSector) {
+                                this.cbSector = cbSector;
+                            } else if (this.cbSector != cbSector) {
+                                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d:%d:%d contains varying sector sizes: %d\n", this.diskName, iCylinder, iHead, sector[DiskImage.SECTOR.ID], cbSector);
+                            }
+                            this.cbDiskData += cbSector;
+                        }
+                    }
+                }
+                return true;
+            }
         }
         return false;
     }
@@ -1725,7 +1731,8 @@ export default class DiskImage {
 
                         let bType = this.getSectorData(sectorBoot, off + DiskImage.MBR.PARTITIONS.ENTRY.TYPE, 1);
 
-                        if (bType == DiskImage.MBR.PARTITIONS.TYPE.FAT12_PRIMARY || bType == DiskImage.MBR.PARTITIONS.TYPE.FAT16_PRIMARY) {
+                        if (bType == DiskImage.MBR.PARTITIONS.TYPE.FAT12_PRIMARY ||
+                            bType == DiskImage.MBR.PARTITIONS.TYPE.FAT16_PRIMARY || bType == DiskImage.MBR.PARTITIONS.TYPE.FAT16_BIG) {
                             if (iPhase == 0 && iVolFound++ == iVolume) {
                                 lba = this.getSectorData(sectorBoot, off + DiskImage.MBR.PARTITIONS.ENTRY.VBA_FIRST, 4);
                                 vol.lbaStart = lba + lbaPrimary;
@@ -2258,6 +2265,7 @@ export default class DiskImage {
                     break;
                 }
                 if (dir.name == null) continue;
+                if (dir.attr == DiskImage.ATTR.LFN) continue;
                 let path = dir.path + dir.name;
                 let dateMod = this.getDate(
                     (dir.modDate >> 9) + 1980,
@@ -3396,8 +3404,9 @@ DiskImage.MBR = {
         TYPE: {
             EMPTY:          0x00,
             FAT12_PRIMARY:  0x01,   // DOS 2.0 and up (12-bit FAT)
-            FAT16_PRIMARY:  0x04,   // DOS 3.0 and up (16-bit FAT)
-            EXTENDED:       0x05    // DOS 3.3 and up (must reside within the first 8Gb)
+            FAT16_PRIMARY:  0x04,   // DOS 3.0 and up (16-bit FAT with less than 65536 sectors (< 32Mb))
+            EXTENDED:       0x05,   // DOS 3.3 and up (must reside within the first 8Gb)
+            FAT16_BIG:      0x06    // DOS 3.31 and up (16-bit FAT with 65536 or more sectors (>= 32Mb and < 8Gb))
         }
     },
     SIG_OFFSET:     0x1FE,
@@ -3753,10 +3762,11 @@ DiskImage.DIRENT = {
  * Possible values for DIRENT.ATTR
  */
 DiskImage.ATTR = {
-    READONLY:       0x01,       // PC-DOS 2.0 and up
+    READONLY:       0x01,       // PC DOS 2.0 and up
     HIDDEN:         0x02,
     SYSTEM:         0x04,
-    VOLUME:         0x08,       // PC-DOS 2.0 and up
-    SUBDIR:         0x10,       // PC-DOS 2.0 and up
-    ARCHIVE:        0x20        // PC-DOS 2.0 and up
+    VOLUME:         0x08,       // PC DOS 2.0 and up
+    LFN:            0x0f,       // combination used by Windows 95 (MS-DOS 7.0) and up, indicating a long filename (LFN) DIRENT
+    SUBDIR:         0x10,       // PC DOS 2.0 and up
+    ARCHIVE:        0x20        // PC DOS 2.0 and up
 };
