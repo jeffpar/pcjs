@@ -1560,7 +1560,7 @@ export default class DiskImage {
             for (let i = 0; i < fileTable.length; i++) {
                 let desc = fileTable[i];
                 let iVolume = desc[DiskImage.FILEDESC.VOL] || 0;
-                let name = this.device.getBaseName(desc[DiskImage.FILEDESC.PATH]);
+                let name = this.device.getBaseName(desc[DiskImage.FILEDESC.PATH], false, true);
                 let path = desc[DiskImage.FILEDESC.PATH].replace(/\//g, '\\');
                 let attr = +desc[DiskImage.FILEDESC.ATTR];
                 let date = this.device.parseDate(desc[DiskImage.FILEDESC.DATE]);

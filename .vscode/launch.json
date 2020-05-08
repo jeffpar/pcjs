@@ -29,7 +29,7 @@
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/tools/disk/modules/di.js",
-        "args": ["../../../harddisks/pcx86/68mb/WIN95.json","--rewrite"],
+        "args": ["--all=microsoft","--checkarchive=MASM51"],
         "cwd": "${workspaceFolder}/tools/disk/modules",
         "stopOnEntry": false,
         "console": "internalConsole"
