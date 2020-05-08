@@ -4,6 +4,8 @@ title: IBM COBOL 1.00
 permalink: /software/pcx86/lang/ibm/cobol/1.00/
 ---
 
+[Documentation](#documents) and directory listings of the 160Kb distribution diskettes are provided below.
+
 ### Directory of IBM COBOL 1.00 (Disk 1)
 
      Volume in drive A has no label
@@ -31,4 +33,4 @@ permalink: /software/pcx86/lang/ibm/cobol/1.00/
             4 file(s)     126848 bytes
                            33280 bytes free
 
-{% include embed.html src="https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2194688&authkey=ANqaZ9JL50ssPKw&em=2" %}
+{% include gallery/documents.html %}
