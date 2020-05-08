@@ -19,7 +19,7 @@ both in terms of keeping up with growth in the Roseville area and dealing with t
 telephone industry transitioned from mechanical to digital switching.
 
 I don't recall the details, but this program appears to be a simple tool for forecasting some aspect of telephone
-customer activity ("SO" is an acronym, perhaps for "Switching Office").
+customer activity ("SO" was an acronym, perhaps for "Service Orders").
 
 {% include machine.html id="c1p8k" %}
 

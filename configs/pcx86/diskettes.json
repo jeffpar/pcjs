@@ -2791,32 +2791,38 @@
               {
                 "@title": "MS Macro Assembler 5.10 (Disk 1)",
                 "@diskette": "MASM51-01510-DISK1.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "https://winworldpc.com/product/macro-assembler/5x"
               },
               {
                 "@title": "MS Macro Assembler 5.10 (Disk 2)",
                 "@diskette": "MASM51-01511-DISK2.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "https://winworldpc.com/product/macro-assembler/5x"
               },
               {
                 "@title": "MS Macro Assembler 5.10 (Disk 3)",
                 "@diskette": "MASM51-01512-DISK3.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "https://winworldpc.com/product/macro-assembler/5x"
               },
               {
                 "@title": "MS Macro Assembler 5.10 (Disk 4)",
                 "@diskette": "MASM51-01514-DISK4.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "https://winworldpc.com/product/macro-assembler/5x"
               },
               {
                 "@title": "MS Macro Assembler 5.10 (Disk 5)",
                 "@diskette": "MASM51-03159-DISK5.json",
-                "@format": "PC1200K"
+                "@format": "PC1200K",
+                "@source": "https://winworldpc.com/product/macro-assembler/5x"
               },
               {
                 "@title": "MS Macro Assembler 5.10 (Update)",
                 "@diskette": "MASM51-UPDATE.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "https://winworldpc.com/product/macro-assembler/5x"
               }
             ]
           },
@@ -2826,32 +2832,38 @@
               {
                 "@title": "MS MASM 5.10 (Feb 1988 Disk 1)",
                 "@diskette": "MASM51X-01510-DISK1.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "PCjs"
               },
               {
                 "@title": "MS MASM 5.10 (Feb 1988 Disk 2)",
                 "@diskette": "MASM51X-01511-DISK2.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "PCjs"
               },
               {
                 "@title": "MS MASM 5.10 (Feb 1988 Disk 3)",
                 "@diskette": "MASM51X-01512-DISK3.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "PCjs"
               },
               {
                 "@title": "MS MASM 5.10 (Feb 1988 Disk 4)",
                 "@diskette": "MASM51X-01514-DISK4.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "PCjs"
               },
               {
                 "@title": "MS MASM 5.10 (Feb 1988 Disk 5)",
                 "@diskette": "MASM51X-03159-DISK5.json",
-                "@format": "PC1200K"
+                "@format": "PC1200K",
+                "@source": "PCjs"
               },
               {
                 "@title": "MS Macro Assembler 5.10A (Update)",
                 "@diskette": "MASM51A-UPDATE.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "PCjs"
               }
             ]
           },
