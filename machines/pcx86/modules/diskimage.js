@@ -2982,9 +2982,9 @@ export default class DiskImage {
     /**
      * getFormat()
      *
-     * For disks that match a standard "PC" disk geometry, returns a "PCxxxK" string;
-     * otherwise, returns "Unknown".  Additionally, if any sector contains a non-standard
-     * "marker", eg:
+     * For disks that match a standard "PC" disk geometry AND contain 1 or more FAT volumes,
+     * this returns a "PCxxxK" string; otherwise, it returns "Unknown".  Additionally, if any
+     * sector contains a non-standard "marker", eg:
      *
      *      dataCRC
      *      dataError
@@ -2992,8 +2992,8 @@ export default class DiskImage {
      *      headCRC
      *      headError
      *
-     * or contains a non-standard sector ID, then the string will be flagged with an asterisk
-     * (eg, "PC360K*", "Unknown*", etc.)
+     * or a non-standard sector ID, then the string will be flagged with an asterisk (eg, "PC360K*",
+     * "Unknown*", etc.)
      *
      * @this {DiskImage}
      * @returns {string}

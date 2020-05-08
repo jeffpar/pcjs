@@ -20,6 +20,10 @@
       - /apps/pdp10/diags/ka10/dakam/DAKAM.LST.txt
       - /devices/pcx86/keyboard/8042_INTERN.TXT
     
+### Bugs
+
+  - This [COMPAQ machine](https://www.pcjs.org/software/pcx86/sys/dos/compaq/1.12/) does not appear to run their DEMO correctly; either there's an MDA bug or COMPAQ VDU emulation isn't up to the task.
+    
 ## Random Tips
 
 ### Generating Random Numbers in Jekyll

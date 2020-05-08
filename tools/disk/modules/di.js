@@ -11,7 +11,6 @@ import fs         from "fs";
 import crypto     from "crypto";
 import glob       from "glob";
 import path       from "path";
-import mkdirp     from "mkdirp";
 import DataBuffer from "../../modules/nodebuffer.js";
 import StdLib     from "../../modules/stdlib.js";
 import Device     from "../../../machines/modules/device.js";
@@ -22,7 +21,7 @@ let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
 let stdlib = new StdLib();
-let moduleDir, rootDir, nMaxFiles, sManifestLog;
+let moduleDir, rootDir, nMaxFiles, sFileIndex;
 
 /*
  * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
@@ -72,14 +71,16 @@ function createDisk(sFile, diskette, argv)
          *
          *  1) If it begins with a period, then we assume it's a file extension (eg, ".img", ".psi", etc)
          *  2) If it's "folder", then the name of the diskette is used as a folder name (with trailing slash)
-         *  3) Anything else is more or less used as-is (and unless it ends with ".img", we add a trailing slash)
+         *  3) Anything else is more or less used as-is (and unless it contains a period, we add a trailing slash)
          */
-        if (diskette.archive[0] == ".") {
+        if (diskette.archive[0] == "/") {
+            sArchiveFile = diskette.archive;
+        } else if (diskette.archive[0] == ".") {
             sArchiveFile = sArchiveFile.replace(".img", diskette.archive);
         } else if (diskette.archive == "folder") {
             sArchiveFile = sArchiveFile.replace(".img", path.sep);
         } else {
-            sArchiveFile = path.join(path.dirname(sArchiveFile), diskette.archive) + (!diskette.archive.endsWith(".img") && !diskette.archive.endsWith(path.sep)? path.sep : "");
+            sArchiveFile = path.join(path.dirname(sArchiveFile), diskette.archive) + (diskette.archive.indexOf(".") < 0 && !diskette.archive.endsWith(path.sep)? path.sep : "");
         }
     } else if (!existsFile(sArchiveFile)) {
         /*
@@ -91,16 +92,15 @@ function createDisk(sFile, diskette, argv)
     let sectorErrors = argv['sectorError'] || diskette.optv['sectorError'];
     let suppData = argv['suppData'] || diskette.optv['suppData'];
     if (suppData) suppData = readFile(suppData);
-    let command, name = path.basename(sArchiveFile);
+    let name = path.basename(sArchiveFile);
     if (sArchiveFile.endsWith(path.sep)) {
-        command = "--dir " + name;
+        diskette.command = "--dir " + name;
         di = readDir(sArchiveFile, diskette.label);
     } else {
-        command = "--disk " + name;
+        diskette.command = "--disk " + name;
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
     }
-    diskette.path = sArchiveFile;
-    diskette.command = command;
+    diskette.archive = sArchiveFile;
     return di;
 }
 
@@ -202,20 +202,20 @@ function printFileDesc(diskName, desc)
  */
 function printManifest(diskName, manifest)
 {
-    manifest.forEach(function dumpManifestFiles(desc) {
+    manifest.forEach(function dumpManifestFile(desc) {
         printFileDesc(diskName, desc);
     });
 }
 
 /**
- * processDisk(sFile, di, argv, diskette)
+ * processDisk(di, sFile, argv, diskette)
  *
- * @param {string} sFile
  * @param {DiskImage} di
+ * @param {string} sFile
  * @param {Array} argv
  * @param {Object} [diskette] (if present, then we were invoked by readAll(), so any --output option should be ignored)
  */
-function processDisk(sFile, di, argv, diskette)
+function processDisk(di, sFile, argv, diskette)
 {
     di.setArgs(argv.slice(1).join(' '));
 
@@ -229,7 +229,9 @@ function processDisk(sFile, di, argv, diskette)
         }
     }
 
-    printf("processing %s: %d bytes (checksum %d)\n", sFile, di.getSize(), di.getChecksum());
+    if (!argv['quiet']) {
+        printf("processing %s: %d bytes (checksum %d)\n", sFile, di.getSize(), di.getChecksum());
+    }
 
     let sFindName = argv['file'];
     if (typeof sFindName == "string") {
@@ -241,19 +243,19 @@ function processDisk(sFile, di, argv, diskette)
         let desc = di.findFile(sFindName, sFindText);
         if (desc) {
             printFileDesc(sFile /* di.getName() */, desc);
-            if (argv['duplicates']) {
+            if (argv['index']) {
                 /*
-                 * We cheat and search for matching hash values in manifest.log; this is much faster than laboriously
+                 * We cheat and search for matching hash values in the provided index; this is much faster than laboriously
                  * opening and searching all the other disk images, even when they DO contain pre-generated file tables.
                  */
-                if (sManifestLog === undefined) {
-                    sManifestLog = readFile(path.join(moduleDir, "manifest.log"));
-                    if (!sManifestLog) sManifestLog = null;
+                if (sFileIndex === undefined) {
+                    sFileIndex = readFile(argv['index']);
+                    if (!sFileIndex) sFileIndex = null;
                 }
                 let cMatches = 0;
-                if (sManifestLog) {
+                if (sFileIndex) {
                     let re = new RegExp("^" + desc[DiskImage.FILEDESC.HASH] + ".*$", "gm"), match;
-                    while ((match = re.exec(sManifestLog))) {
+                    while ((match = re.exec(sFileIndex))) {
                         if (match[0].indexOf(sFile) >= 0) continue;
                         if (!cMatches++) printf("see also:\n");
                         printf("%s\n", match[0]);
@@ -269,6 +271,36 @@ function processDisk(sFile, di, argv, diskette)
         if (isNaN(iVolume)) iVolume = -1;
         let list = di.getFileListing(iVolume) || "\tno listing available\n";
         printf("%s\n", list);
+    }
+
+    if (argv['extract']) {
+        let manifest = di.getFileManifest();
+        manifest.forEach(function extractManifestFile(desc) {
+            /*
+             * Parse each file descriptor in much the same way that buildFileTableFromJSON() does.  That function
+             * doesn't get the file's CONTENTS, because it's working with the file descriptors that have been stored
+             * in a JSON file (where CONTENTS would be redundant and a waste of space).  Here, we call getFileManifest(),
+             * which calls getFileDesc(true), which returns a complete file descriptor that includes CONTENTS.
+             */
+            let sPath = desc[DiskImage.FILEDESC.PATH];
+            if (sPath[0] == '/') sPath = sPath.substr(1);       // PATH should ALWAYS start with a slash, but let's be safe
+            let name = path.basename(sPath);
+            let size = desc[DiskImage.FILEDESC.SIZE] || 0;
+            let attr = +desc[DiskImage.FILEDESC.ATTR];
+            let date = device.parseDate(desc[DiskImage.FILEDESC.DATE]);
+            let contents = desc[DiskImage.FILEDESC.CONTENTS] || [];
+            let db = new DataBuffer(contents);
+            if (typeof argv['extract'] != "string" || name == argv['extract']) {
+                let dir = path.dirname(sPath);
+                if (!existsFile(dir)) fs.mkdirSync(dir, {recursive: true});
+                if (attr & DiskImage.ATTR.SUBDIR) {
+                    if (!existsFile(sPath)) fs.mkdirSync(sPath);
+                } else {
+                    writeFile(sPath, db);
+                }
+                fs.utimesSync(sPath, date, date);
+            }
+        });
     }
 
     if (argv['manifest']) {
@@ -357,7 +389,7 @@ function processDisk(sFile, di, argv, diskette)
      *
      * You must ALSO specify --rebuild if you want the JSON disk image updated as well.
      */
-    if (argv['checkarchive']) {
+    if (argv['checkarchive'] && diskette) {
         if (diskette.format) {
             let matchFormat = diskette.format.match(/PC([0-9]+)K/);
             if (matchFormat) {
@@ -369,20 +401,19 @@ function processDisk(sFile, di, argv, diskette)
         }
         if (sFile.endsWith(".json")) {
             if (typeof argv['checkarchive'] == "string" && sFile.indexOf(argv['checkarchive']) < 0) return;
-            let diArchive = createDisk(sFile, diskette, argv);
-            if (diArchive) {
-                let name = path.basename(diskette.path);
-                let sTempJSON = name.replace(/\.[a-z]+$/, "") + ".json";
-                diArchive.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.options));
-                writeDisk(sTempJSON, diArchive, argv['legacy'], 0, true, false);
+            let diTemp = createDisk(sFile, diskette, argv);
+            if (diTemp) {
+                let sTempJSON = path.join(rootDir, "tmp", path.basename(sFile).replace(/\.[a-z]+$/, "") + ".json");
+                diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.options));
+                writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, false);
                 let warning = false;
-                if (diskette.path.endsWith(".img")) {
-                    let json = diArchive.getJSON();
-                    diArchive.buildDiskFromJSON(json);
+                if (diskette.archive.endsWith(".img")) {
+                    let json = diTemp.getJSON();
+                    diTemp.buildDiskFromJSON(json);
                     let sTempIMG = sTempJSON.replace(".json",".img");
-                    writeDisk(sTempIMG, diArchive, true, 0, true, false);
-                    if (!compareDisks(sTempIMG, diskette.path)) {
-                        printf("warning: %s unsuccessfully rebuilt\n", diskette.path);
+                    writeDisk(sTempIMG, diTemp, true, 0, true, false);
+                    if (!compareDisks(sTempIMG, diskette.archive)) {
+                        printf("warning: %s unsuccessfully rebuilt\n", diskette.archive);
                         warning = true;
                     } else {
                         fs.unlinkSync(sTempIMG);
@@ -462,7 +493,7 @@ function readAll(argv)
                     writeDisk(sFile, di);
                 }
                 if (di) {
-                    processDisk(sFile, di, argv, diskette);
+                    processDisk(di, sFile, argv, diskette);
                     cDisks++;
                 }
             });
@@ -741,7 +772,7 @@ function writeFile(sFile, data, fCreateDir)
             }
             if (fCreateDir) {
                 let sDir = path.dirname(sFile);
-                if (!existsFile(sDir)) mkdirp.sync(sDir);
+                if (!existsFile(sDir)) fs.mkdirSync(sDir, {recursive: true});
             }
             fs.writeFileSync(sFile, data);
             return true;
@@ -802,7 +833,7 @@ function main(argc, argv)
     if (di === null) return;
 
     if (di) {
-        processDisk(input, di, argv);
+        processDisk(di, input, argv);
         return;
     }
 
