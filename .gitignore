@@ -15,4 +15,5 @@ tmp
 /gamedisks
 /harddisks
 /node_modules
+/.vscode/launch.json
 /.vscode/settings.json
