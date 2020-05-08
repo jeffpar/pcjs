@@ -490,7 +490,9 @@ function readAll(argv)
                 let di = readDisk(sFile);
                 if (!di) {
                     di = createDisk(sFile, diskette, argv);
-                    writeDisk(sFile, di);
+                    if (di) {
+                        writeDisk(sFile, di);
+                    }
                 }
                 if (di) {
                     processDisk(di, sFile, argv, diskette);
