@@ -2377,11 +2377,13 @@ export default class DiskImage {
             }
             dir.attr = this.getSectorData(vol.sectorDirCache, off + DiskImage.DIRENT.ATTR, 1);
             dir.name = this.getSectorString(vol.sectorDirCache, off + DiskImage.DIRENT.NAME, 8);
-            let ext = this.getSectorString(vol.sectorDirCache, off + DiskImage.DIRENT.EXT, 3).trim();
+            let ext = this.getSectorString(vol.sectorDirCache, off + DiskImage.DIRENT.EXT, 3);
             if (dir.attr & DiskImage.ATTR.VOLUME) {
                 dir.name = (dir.name + ext).trim();
             } else {
-                dir.name = dir.name.trim() + (ext.length? '.' + ext : "");
+                dir.name = dir.name.trim();
+                ext = ext.trim();
+                if (ext.length) dir.name += '.' + ext;
             }
             dir.modDate = this.getSectorData(vol.sectorDirCache, off + DiskImage.DIRENT.MODDATE, 2);
             dir.modTime = this.getSectorData(vol.sectorDirCache, off + DiskImage.DIRENT.MODTIME, 2);

@@ -23,4 +23,3 @@ redirect_from: /disks/pcx86/tools/borland/sidekick/1.11c/
     SK       HLP     43520  10-09-84   4:21p
            11 file(s)     206920 bytes
                           149504 bytes free
-

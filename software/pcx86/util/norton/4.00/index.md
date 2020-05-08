@@ -30,7 +30,7 @@ We also have a copy of [Version 4.00 (Advanced Edition)](advanced/), which conta
 
 ### Directory of Norton Utilities 4.00 (1987-03-01 #1)
 
-     Volume in drive A is NU v400.#1
+     Volume in drive A is NU v4.00#1
      Directory of A:\
 
     READ     ME *      599   3-01-87   4:00p
@@ -64,7 +64,7 @@ We also have a copy of [Version 4.00 (Advanced Edition)](advanced/), which conta
 
 ### Directory of Norton Utilities 4.00 (1987-03-01 #2)
 
-     Volume in drive A is NU v400.#2
+     Volume in drive A is NU v4.00#2
      Directory of A:\
 
     NU       EXE*   102383   3-01-87   4:00p
@@ -78,7 +78,7 @@ We also have a copy of [Version 4.00 (Advanced Edition)](advanced/), which conta
 
 ### Directory of Norton Utilities 4.00 (1987-05-15 #1)
 
-     Volume in drive A is NU v400.#1
+     Volume in drive A is NU v4.00#1
      Directory of A:\
 
     ASK      EXE*     1184   5-15-87   4:00p
@@ -112,7 +112,7 @@ We also have a copy of [Version 4.00 (Advanced Edition)](advanced/), which conta
 
 ### Directory of Norton Utilities 4.00 (1987-05-15 #2)
 
-     Volume in drive A is NU v400.#2
+     Volume in drive A is NU v4.00#2
      Directory of A:\
 
     NU       EXE*   107278   5-15-87   4:00p

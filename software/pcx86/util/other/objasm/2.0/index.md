@@ -415,3 +415,59 @@ machines:
 
     -----------------
     End of OBJASM.DOC
+
+### Directory of OBJASM 2.0 (Bin)
+
+     Volume in drive A is OBJASM
+     Directory of A:\
+
+    OBJASM   DOC     20019  12-22-90   3:54p
+    OBJASM   EXE     98915   8-13-93  10:51a
+    OBJUNARC EXE    125440   8-13-93   7:49a
+    READ     ME       5986   1-28-91  12:59p
+            4 file(s)     250360 bytes
+                           70656 bytes free
+
+### Directory of OBJASM 2.0 (Src)
+
+     Volume in drive A is OBJASM
+     Directory of A:\
+
+    O                 2592  11-09-90   1:25p
+    O        H       17544  12-12-90   2:29p
+    OBJASM   LRF       335  11-09-90   1:26p
+    ODISASM  C       59149   1-12-91   9:59a
+    ODISFP   C        3553  11-15-90   6:36a
+    OEXTRA   C       10583  12-19-90  11:28a
+    OMAIN    C       17392   1-03-91   2:02p
+    OOUTPUT  C        3573  10-02-90   1:05a
+    OPROCESS C       35990  12-19-90  11:35a
+    ORCOMDEF C        1823   7-02-90   2:25p
+    ORCOMENT C        5041  11-17-90   7:37a
+    OREPORT  C        6802  11-03-90   7:26a
+    OREXTDEF C        1649   9-28-90  12:55a
+    ORFIXUPP C        6728  10-14-90   9:30a
+    ORGRPDEF C        4293  10-04-90  10:30a
+    ORLEDATA C        2567  11-02-90  10:04a
+    ORLIDATA C        1215   9-15-90   6:56a
+    ORLNAMES C        1018   2-25-90   8:03a
+    ORMODEND C         481   2-25-90  10:19a
+    ORPUBDEF C        2122  11-03-90   3:17a
+    ORSEGDEF C        5909  11-15-90   6:27a
+    ORTHEADR C         397   5-23-89   4:57p
+    OUBUFF   C        7362  10-08-90   1:05a
+    OUFIND   C        1752  11-15-90   8:41a
+    OUFMTERR C         194   2-25-90   7:40a
+    OUGET    C        1409   2-25-90   7:33a
+    OUINITRE C        3547  12-05-90   4:05p
+    OUINSERT C        6585   5-18-90   3:48p
+    OUMALLOC C         324   2-25-90   7:36a
+    OUNEWTRE C         670   5-23-89   4:57p
+    OUSEGEXT C        1053   9-27-90   2:22p
+    OUSIZE   C        2660  12-10-90   5:56p
+    OUSTRUCT C         996  11-03-90   3:20a
+    OUTABLE  C       44081   1-03-91   1:33p
+    OUTARGET C       20940  11-10-90   4:15a
+    OUTRAVER C         826   5-23-89   4:57p
+           36 file(s)     283155 bytes
+                           20480 bytes free

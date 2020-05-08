@@ -21,7 +21,7 @@ UNP 4.11 is an EXE unpacking utility created by [Ben Castricum](http://unp.benca
 
 ### Directory of UNP (Executable Unpacker) Source
 
-     Volume in drive A is UNP411SRC
+     Volume in drive A is UNP411
      Directory of A:\
 
     COM          <DIR>      12-26-98   2:36p
@@ -142,4 +142,3 @@ UNP 4.11 is an EXE unpacking utility created by [Ben Castricum](http://unp.benca
     Total files listed:
           105 file(s)     712437 bytes
                           474112 bytes free
-

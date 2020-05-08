@@ -23,4 +23,3 @@ redirect_from: /disks/pcx86/tools/borland/sidekick/1.56/
     READ-ME  SK      12928   8-14-85  11:10a
            11 file(s)     263652 bytes
                            92160 bytes free
-
