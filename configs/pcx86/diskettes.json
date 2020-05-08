@@ -506,6 +506,7 @@
                 "@title": "dBASE III 1.0 (Disk 1)",
                 "@diskette": "DBIII-100-DISK1.json",
                 "@format": "PC360K",
+                "@options": "--sectorError=39:0:5:272",
                 "@kryoflux": true
               },
               {
