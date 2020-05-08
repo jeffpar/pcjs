@@ -230,7 +230,9 @@ function processDisk(di, sFile, argv, diskette)
         }
     }
 
-    printf("processing %s: %d bytes (checksum %d)\n", sFile, di.getSize(), di.getChecksum());
+    if (!argv['quiet']) {
+        printf("processing %s: %d bytes (checksum %d)\n", sFile, di.getSize(), di.getChecksum());
+    }
 
     let sFindName = argv['file'];
     if (typeof sFindName == "string") {
