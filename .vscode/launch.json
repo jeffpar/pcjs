@@ -29,7 +29,7 @@
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/tools/disk/modules/di.js",
-        "args": ["--all=microsoft","--checkarchive=MASM51"],
+        "args": ["--all=ibm","--checkarchive=XENIX","--rebuild"],
         "cwd": "${workspaceFolder}/tools/disk/modules",
         "stopOnEntry": false,
         "console": "internalConsole"
