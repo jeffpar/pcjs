@@ -11,6 +11,7 @@ import fs         from "fs";
 import crypto     from "crypto";
 import glob       from "glob";
 import path       from "path";
+import mkdirp     from "mkdirp";
 import DataBuffer from "../../modules/nodebuffer.js";
 import StdLib     from "../../modules/stdlib.js";
 import Device     from "../../../machines/modules/device.js";
@@ -335,10 +336,11 @@ function processDisk(sFile, di, argv, diskette)
                 }
             }
         } else if (diskette.title) {
-            sIndexNew = "---\nlayout: page\ntitle: " + diskette.title + "\npermalink: " + diskette.path + "\n---\n";
+            let permalink = path.dirname(diskette.path.replace(/^\/[^/]+/, "/software")) + path.sep;
+            sIndexNew = "---\nlayout: page\ntitle: " + diskette.title + "\npermalink: " + permalink + "\n---\n";
             sIndexNew += sHeading + sListing;
             if (argv['rebuild']) {
-                if (writeFile(getFullPath(sIndexFile), sIndexNew)) {
+                if (writeFile(getFullPath(sIndexFile), sIndexNew, true)) {
                     printf("\tcreated index: %s\n", sIndexFile);
                 }
             } else {
@@ -723,18 +725,23 @@ function writeDisk(sFile, di, fLegacy = false, indent = 0, fOverwrite = false, f
 }
 
 /**
- * writeFile(sFile, data)
+ * writeFile(sFile, data, fCreateDir)
  *
  * @param {string} sFile
  * @param {DataBuffer|string} data
+ * @param {boolean} [fCreateDir]
  * @returns {boolean}
  */
-function writeFile(sFile, data)
+function writeFile(sFile, data, fCreateDir)
 {
     if (sFile) {
         try {
             if (data instanceof DataBuffer) {
                 data = data.buffer;
+            }
+            if (fCreateDir) {
+                let sDir = path.dirname(sFile);
+                if (!existsFile(sDir)) mkdirp.sync(sDir);
             }
             fs.writeFileSync(sFile, data);
             return true;
