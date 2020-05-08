@@ -18,4 +18,3 @@ Directory listing of the 160Kb diskette ([Source](https://winworldpc.com/product
     LINK     EXE     41216   2-04-82   1:47p
             2 file(s)     109056 bytes
                            50688 bytes free
-

@@ -29,4 +29,3 @@ the 4.00 distribution files, even though they have been time-stamped with the sa
     STARTUP  MOD      7303   9-23-85  12:00p
            10 file(s)     250546 bytes
                            67584 bytes free
-

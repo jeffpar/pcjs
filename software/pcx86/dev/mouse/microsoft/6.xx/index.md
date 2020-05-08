@@ -180,4 +180,3 @@ We don't have any information regarding the labels of the [MS Mouse 6.24](#direc
     TWO      DEV      1164   8-01-88  12:00a
            60 file(s)     342727 bytes
                                0 bytes free
-

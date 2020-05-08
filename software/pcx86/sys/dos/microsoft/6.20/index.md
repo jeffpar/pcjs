@@ -477,4 +477,3 @@ distribution diskettes are provided below.
     720ID02  BAT        42   9-30-93   6:20a
            66 file(s)     762439 bytes
                           676864 bytes free
-

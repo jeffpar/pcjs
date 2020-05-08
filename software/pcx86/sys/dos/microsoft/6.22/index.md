@@ -479,4 +479,3 @@ distribution diskettes are provided below.
     AUTOEXEC BAT        19   4-25-16   2:29p
            59 file(s)    1198754 bytes
                             1024 bytes free
-

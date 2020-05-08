@@ -294,12 +294,11 @@ function processDisk(sFile, di, argv, diskette)
         let sListing = di.getFileListing(0, 4);
         if (!sListing) return;
         let sHeading = "\n### Directory of " + diskette.name + "\n";
-        sListing += "\n";
         let sIndex, sIndexNew;
         let sIndexFile = path.join(path.dirname(sFile.replace("/diskettes/", "/software/")), "index.md");
         if (existsFile(sIndexFile)) {
             sIndex = readFile(sIndexFile);
-            let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*") + " *\n([\\s\\S]*?)\n(\\S|$)";
+            let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*") + " *\n([\\s\\S]*?)(\n\\S|$)";
             let matchDirectory = sIndex.match(new RegExp(sMatch));
             let sAction = "";
             if (matchDirectory) {

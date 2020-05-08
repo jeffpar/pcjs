@@ -287,4 +287,3 @@ diskettes are provided below.
     SHELLC   EXE    153855   4-07-89  12:00a
            32 file(s)     705915 bytes
                             7168 bytes free
-

@@ -24,4 +24,3 @@ Directory listing of the 360Kb distribution diskette is provided below.
     README   DOC      4085  12-07-84   2:30p
             8 file(s)     220344 bytes
                           138240 bytes free
-

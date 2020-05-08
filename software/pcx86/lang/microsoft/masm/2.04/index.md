@@ -19,4 +19,3 @@ Directory listing of a recreated 160Kb diskette is provided below.
     MASM     EXE     67968   3-16-82  12:00a
             5 file(s)     157056 bytes
                             2560 bytes free
-

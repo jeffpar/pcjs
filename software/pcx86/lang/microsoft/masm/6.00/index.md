@@ -262,4 +262,3 @@ Directory listings of the five 1.44Mb distribution diskettes are provided below.
     UTILERR  HL$     79695   2-14-91  11:22a
             4 file(s)    1066718 bytes
                           390144 bytes free
-

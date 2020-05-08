@@ -288,4 +288,3 @@ distribution diskettes are provided below.
     PRINTFIX COM       236  11-11-91   5:00a
            36 file(s)     310678 bytes
                           398336 bytes free
-

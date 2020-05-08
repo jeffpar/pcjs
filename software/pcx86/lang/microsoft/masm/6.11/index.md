@@ -404,4 +404,3 @@ Directory listings of the five 1.44Mb distribution diskettes are provided below.
     Total files listed:
             9 file(s)    1340912 bytes
                           114688 bytes free
-

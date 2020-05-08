@@ -342,4 +342,3 @@ From the **MS Macro Assembler 5.10A** Diskette:
     Total files listed:
            20 file(s)     293634 bytes
                            61440 bytes free
-

@@ -18,4 +18,3 @@ Directory listing of a recreated 160Kb diskette ([Source](http://www.os2museum.c
     M        EXE     67456  11-04-81  12:00a
             4 file(s)     154624 bytes
                             5120 bytes free
-

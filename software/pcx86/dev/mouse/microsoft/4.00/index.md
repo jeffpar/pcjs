@@ -88,4 +88,3 @@ redirect_from: /disks/pcx86/tools/microsoft/mouse/4.00/
     SCRIPT   FNT      6578   5-01-85  12:00p
            31 file(s)     278954 bytes
                            66560 bytes free
-

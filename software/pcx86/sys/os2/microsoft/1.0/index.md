@@ -161,4 +161,3 @@ Directory listings of the three 1.2Mb distribution diskettes are provided below.
     XCOPY    EXE     41168  12-15-87  12:00a
            38 file(s)    1162678 bytes
                            40960 bytes free
-

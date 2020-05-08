@@ -125,4 +125,3 @@ subdirectory with a mouse driver that displays:
     Total files listed:
            36 file(s)     309148 bytes
                            31744 bytes free
-

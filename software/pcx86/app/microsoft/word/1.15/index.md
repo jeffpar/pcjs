@@ -122,4 +122,3 @@ machines:
     LW       DAT     16928   9-20-84   4:00p
             7 file(s)     332725 bytes
                            27648 bytes free
-
