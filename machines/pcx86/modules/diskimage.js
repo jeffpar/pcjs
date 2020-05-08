@@ -1288,11 +1288,17 @@ export default class DiskImage {
             iPeriod = sName.length;
             sName += '.' + sExt;
         }
-        for (let i = 0; i < sName.length; i++) {
-            if (i == iPeriod) continue;
-            let ch = sName.charAt(i);
-            if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()-@^_`{}~".indexOf(ch) < 0) {
-                sName = sName.substr(0, i) + '_' + sName.substr(i+1);
+        /*
+         * Character validation is disabled for labels; I'm not sure what the limitations are on label characters,
+         * if any, but they definitely allow for things like extra periods and lower-case letters.
+         */
+        if (!fLabel) {
+            for (let i = 0; i < sName.length; i++) {
+                if (i == iPeriod) continue;
+                let ch = sName.charAt(i);
+                if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()-@^_`{}~".indexOf(ch) < 0) {
+                    sName = sName.substr(0, i) + '_' + sName.substr(i + 1);
+                }
             }
         }
         return sName;
@@ -1956,12 +1962,18 @@ export default class DiskImage {
                     if (file.attr & DiskImage.ATTR.VOLUME) {
                         /*
                          * Volume labels are displayed slightly differently from all other directory entries;
-                         * specifically, they may contain non-standard characters (eg, lower-case), and the name and
-                         * extension are displayed as 8-character and 3-character sequences with no space between
-                         * them.
+                         * specifically, they may contain non-standard characters (eg, extra periods, lower-case letters),
+                         * and they are displayed as an 11-character sequence.  In other words, they are displayed as-is.
+                         *
+                         * Unfortunately, we built some disk images whose file tables contain volume labels with periods
+                         * inserted between the name and ext.  We try to detect those cases here, by removing any period past
+                         * the 8th character.
                          */
-                        let label = file.name.split(".");
-                        sLabel = this.device.sprintf("%-8s%-3s", label[0], label[1]);
+                        sLabel = file.name;
+                        let j = sLabel.lastIndexOf('.');
+                        if (j >= 8) {
+                            sLabel = sLabel.substr(0, j) + sLabel.substr(j + 1);
+                        }
                         break;
                     }
                 }
@@ -2313,11 +2325,13 @@ export default class DiskImage {
      *
      * This sets the following properties on the 'dir' object:
      *
-     *      sName (null if invalid/deleted entry)
+     *      name (null if invalid/deleted entry)
      *      attr
+     *      modDate
+     *      modTime
      *      size
      *      cluster
-     *      aLBA (ie, array of physical block addresses)
+     *      aLBA (ie, array of logical block addresses)
      *
      * On return, it's the caller's responsibility to copy out any data into a new object
      * if it wants to preserve any of the above information.
@@ -2361,10 +2375,14 @@ export default class DiskImage {
                 dir.name = null;
                 return true;
             }
-            dir.name = this.getSectorString(vol.sectorDirCache, off + DiskImage.DIRENT.NAME, 8).trim();
-            let s = this.getSectorString(vol.sectorDirCache, off + DiskImage.DIRENT.EXT, 3).trim();
-            if (s.length) dir.name += '.' + s;
             dir.attr = this.getSectorData(vol.sectorDirCache, off + DiskImage.DIRENT.ATTR, 1);
+            dir.name = this.getSectorString(vol.sectorDirCache, off + DiskImage.DIRENT.NAME, 8);
+            let ext = this.getSectorString(vol.sectorDirCache, off + DiskImage.DIRENT.EXT, 3).trim();
+            if (dir.attr & DiskImage.ATTR.VOLUME) {
+                dir.name = (dir.name + ext).trim();
+            } else {
+                dir.name = dir.name.trim() + (ext.length? '.' + ext : "");
+            }
             dir.modDate = this.getSectorData(vol.sectorDirCache, off + DiskImage.DIRENT.MODDATE, 2);
             dir.modTime = this.getSectorData(vol.sectorDirCache, off + DiskImage.DIRENT.MODTIME, 2);
             dir.size = this.getSectorData(vol.sectorDirCache, off + DiskImage.DIRENT.SIZE, 4);
