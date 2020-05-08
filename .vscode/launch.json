@@ -29,7 +29,7 @@
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/tools/disk/modules/di.js",
-        "args": ["--all=ibm","--checkarchive=XENIX","--rebuild"],
+        "args": ["--all","--checkarchive","--rebuild"],
         "cwd": "${workspaceFolder}/tools/disk/modules",
         "stopOnEntry": false,
         "console": "internalConsole"
