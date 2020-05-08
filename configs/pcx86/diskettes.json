@@ -1847,7 +1847,7 @@
               {
                 "@title": "IBM APL 1.00",
                 "@diskette": "APL-100.json",
-                "@format": "PC360K"
+                "@format": "PC320K"
               }
             ]
           }
@@ -7822,32 +7822,32 @@
           "@media": [
             {
               "@title": "Windows 1.03b (SETUP)",
-              "@diskette": "WIN103-DISK1-SETUP.json",
+              "@diskette": "WIN103B-DISK1-SETUP.json",
               "@format": "PC360K"
             },
             {
               "@title": "Windows 1.03b (BUILD)",
-              "@diskette": "WIN103-DISK2-BUILD.json",
+              "@diskette": "WIN103B-DISK2-BUILD.json",
               "@format": "PC360K"
             },
             {
               "@title": "Windows 1.03b (UTILITY)",
-              "@diskette": "WIN103-DISK3-UTILITY.json",
+              "@diskette": "WIN103B-DISK3-UTILITY.json",
               "@format": "PC360K"
             },
             {
               "@title": "Windows 1.03b (FONT)",
-              "@diskette": "WIN103-DISK4-FONT.json",
+              "@diskette": "WIN103B-DISK4-FONT.json",
               "@format": "PC360K"
             },
             {
               "@title": "Windows 1.03b (APPS)",
-              "@diskette": "WIN103-DISK5-APPS.json",
+              "@diskette": "WIN103B-DISK5-APPS.json",
               "@format": "PC360K"
             },
             {
               "@title": "Windows 1.03b (PROGRAM)",
-              "@diskette": "WIN103-DISK6-PROGRAM.json",
+              "@diskette": "WIN103B-DISK6-PROGRAM.json",
               "@format": "PC360K"
             }
           ]

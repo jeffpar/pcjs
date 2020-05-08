@@ -50,21 +50,21 @@ function compareDisks(sDisk1, sDisk2)
 }
 
 /**
- * createDisk(sFile, diskette, argv)
+ * createDisk(diskFile, diskette, argv)
  *
- * @param {string} sFile
+ * @param {string} diskFile
  * @param {Object} diskette
  * @param {Array} argv
  * @returns {DiskImage|null}
  */
-function createDisk(sFile, diskette, argv)
+function createDisk(diskFile, diskette, argv)
 {
     let di;
     let sArchiveFolder = "archive/";
-    if (path.dirname(sFile).endsWith("/disks")) {
+    if (path.dirname(diskFile).endsWith("/disks")) {
         sArchiveFolder = "../archive/";
     }
-    let sArchiveFile = path.join(path.dirname(sFile), sArchiveFolder, path.basename(sFile).replace(".json", ".img"));
+    let sArchiveFile = path.join(path.dirname(diskFile), sArchiveFolder, path.basename(diskFile).replace(".json", ".img"));
     if (diskette.archive) {
         /*
          * The "archive" property determines what we look for in an "archive/" folder alongside the JSON disk image:
@@ -184,38 +184,40 @@ function isTextFile(sFile)
 }
 
 /**
- * printFileDesc(desc)
+ * printFileDesc(diskFile, diskName, desc)
  *
+ * @param {string} diskFile
  * @param {string} diskName
  * @param {Object} desc
  */
-function printFileDesc(diskName, desc)
+function printFileDesc(diskFile, diskName, desc)
 {
-    printf("%-32s  %-12s  %s  %s %7d  %s:%s\n", desc[DiskImage.FILEDESC.HASH] || "-".repeat(32), desc[DiskImage.FILEDESC.NAME], desc[DiskImage.FILEDESC.DATE], desc[DiskImage.FILEDESC.ATTR], desc[DiskImage.FILEDESC.SIZE] || 0, diskName, desc[DiskImage.FILEDESC.PATH]);
+    printf("%-32s  %-12s  %s  %s %7d  %-60s %s\n", desc[DiskImage.FILEDESC.HASH] || "-".repeat(32), desc[DiskImage.FILEDESC.NAME], desc[DiskImage.FILEDESC.DATE], desc[DiskImage.FILEDESC.ATTR], desc[DiskImage.FILEDESC.SIZE] || 0, diskName + ':' + desc[DiskImage.FILEDESC.PATH], diskFile);
 }
 
 /**
- * printManifest(diskName, manifest)
+ * printManifest(diskFile, diskName, manifest)
  *
+ * @param {string} diskFile
  * @param {string} diskName
  * @param {Array.<FILEDESC>} manifest
  */
-function printManifest(diskName, manifest)
+function printManifest(diskFile, diskName, manifest)
 {
     manifest.forEach(function dumpManifestFile(desc) {
-        printFileDesc(diskName, desc);
+        printFileDesc(diskFile, diskName, desc);
     });
 }
 
 /**
- * processDisk(di, sFile, argv, diskette)
+ * processDisk(di, diskFile, argv, diskette)
  *
  * @param {DiskImage} di
- * @param {string} sFile
+ * @param {string} diskFile
  * @param {Array} argv
  * @param {Object} [diskette] (if present, then we were invoked by readAll(), so any --output option should be ignored)
  */
-function processDisk(di, sFile, argv, diskette)
+function processDisk(di, diskFile, argv, diskette)
 {
     di.setArgs(argv.slice(1).join(' '));
 
@@ -230,7 +232,7 @@ function processDisk(di, sFile, argv, diskette)
     }
 
     if (!argv['quiet']) {
-        printf("processing %s: %d bytes (checksum %d)\n", sFile, di.getSize(), di.getChecksum());
+        printf("processing %s: %d bytes (checksum %d)\n", diskFile, di.getSize(), di.getChecksum());
     }
 
     let sFindName = argv['file'];
@@ -242,7 +244,7 @@ function processDisk(di, sFile, argv, diskette)
          */
         let desc = di.findFile(sFindName, sFindText);
         if (desc) {
-            printFileDesc(sFile /* di.getName() */, desc);
+            printFileDesc(diskFile /* di.getName() */, desc);
             if (argv['index']) {
                 /*
                  * We cheat and search for matching hash values in the provided index; this is much faster than laboriously
@@ -256,7 +258,7 @@ function processDisk(di, sFile, argv, diskette)
                 if (sFileIndex) {
                     let re = new RegExp("^" + desc[DiskImage.FILEDESC.HASH] + ".*$", "gm"), match;
                     while ((match = re.exec(sFileIndex))) {
-                        if (match[0].indexOf(sFile) >= 0) continue;
+                        if (match[0].indexOf(diskFile) >= 0) continue;
                         if (!cMatches++) printf("see also:\n");
                         printf("%s\n", match[0]);
                     }
@@ -305,15 +307,15 @@ function processDisk(di, sFile, argv, diskette)
 
     if (argv['manifest']) {
         let manifest = di.getFileManifest(getHash);
-        printManifest(di.getName(), manifest);
+        printManifest(diskFile, di.getName(), manifest);
     }
 
     /*
      * If --rewrite, then rewrite the JSON disk image.  --overwrite is implicit.
      */
     if (argv['rewrite']) {
-        if (sFile.endsWith(".json")) {
-            writeDisk(sFile, di, argv['legacy'], 0, true);
+        if (diskFile.endsWith(".json")) {
+            writeDisk(diskFile, di, argv['legacy'], 0, true);
         }
     }
 
@@ -323,12 +325,12 @@ function processDisk(di, sFile, argv, diskette)
      * You must ALSO specify --rebuild if you want the index.md updated (or created) as well.
      */
     if (argv['checklisting'] && diskette && !diskette.hidden) {
-        if (sFile.indexOf("/private") >= 0) return;
+        if (diskFile.indexOf("/private") >= 0) return;
         let sListing = di.getFileListing(0, 4);
         if (!sListing) return;
         let sHeading = "\n### Directory of " + diskette.name + "\n";
         let sIndex, sIndexNew;
-        let sIndexFile = path.join(path.dirname(sFile.replace("/diskettes/", "/software/")), "index.md");
+        let sIndexFile = path.join(path.dirname(diskFile.replace("/diskettes/", "/software/")), "index.md");
         if (existsFile(sIndexFile)) {
             sIndex = readFile(sIndexFile);
             let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*") + " *\n([\\s\\S]*?)(\n\\S|$)";
@@ -395,15 +397,15 @@ function processDisk(di, sFile, argv, diskette)
             if (matchFormat) {
                 let diskSize = di.getSize();
                 if (+matchFormat[1] * 1024 != diskSize) {
-                    printf("warning: format '%s' does not match disk size (%d) for %s\n", diskette.format, diskSize, sFile);
+                    printf("warning: format '%s' does not match disk size (%d) for %s\n", diskette.format, diskSize, diskFile);
                 }
             }
         }
-        if (sFile.endsWith(".json")) {
-            if (typeof argv['checkarchive'] == "string" && sFile.indexOf(argv['checkarchive']) < 0) return;
-            let diTemp = createDisk(sFile, diskette, argv);
+        if (diskFile.endsWith(".json")) {
+            if (typeof argv['checkarchive'] == "string" && diskFile.indexOf(argv['checkarchive']) < 0) return;
+            let diTemp = createDisk(diskFile, diskette, argv);
             if (diTemp) {
-                let sTempJSON = path.join(rootDir, "tmp", path.basename(sFile).replace(/\.[a-z]+$/, "") + ".json");
+                let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
                 diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.options));
                 writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, false);
                 let warning = false;
@@ -421,8 +423,8 @@ function processDisk(di, sFile, argv, diskette)
                 }
                 if (!warning) {
                     if (argv['rebuild']) {
-                        printf("rebuilding %s\n", sFile);
-                        fs.renameSync(sTempJSON, getFullPath(sFile));
+                        printf("rebuilding %s\n", diskFile);
+                        fs.renameSync(sTempJSON, getFullPath(diskFile));
                     } else {
                         fs.unlinkSync(sTempJSON);
                     }
@@ -456,11 +458,11 @@ function readAll(argv)
     }
 
     let aDiskNames = {};        // we use this table of disk names to detect non-unique disk names
-    asFiles.forEach(function readAllConfigs(sFile) {
+    asFiles.forEach(function readAllConfigs(configFile) {
 
-        sFile = sFile.substr(rootDir.length);
-        if (argv['verbose']) printf("reading %s...\n", sFile);
-        let library = readJSON(sFile);
+        configFile = configFile.substr(rootDir.length);
+        if (argv['verbose']) printf("reading %s...\n", configFile);
+        let library = readJSON(configFile);
         if (library) {
             let aDiskettes = [];
             JSONLib.parseDiskettes(aDiskettes, library, "/pcx86", "/diskettes");
@@ -476,26 +478,26 @@ function readAll(argv)
                 if (library['@local']) {
                     diskette.path = diskette.path.replace(library['@server'], library['@local']);
                 }
-                let sFile = diskette.path;
+                let diskFile = diskette.path;
                 if (typeof argv['all'] == "string") {
-                    if (argv['verbose']) printf("checking %s for '%s'...\n", sFile, argv['all']);
-                    if (sFile.indexOf(argv['all']) < 0) return;
+                    if (argv['verbose']) printf("checking %s for '%s'...\n", diskFile, argv['all']);
+                    if (diskFile.indexOf(argv['all']) < 0) return;
                 }
-                let sName = path.basename(sFile);
+                let sName = path.basename(diskFile);
                 if (aDiskNames[sName]) {
-                    if (argv['verbose']) printf("warning: %s disk name is not unique (see %s)\n", sFile, aDiskNames[sName]);
+                    if (argv['verbose']) printf("warning: %s disk name is not unique (see %s)\n", diskFile, aDiskNames[sName]);
                 } else {
-                    aDiskNames[sName] = sFile;
+                    aDiskNames[sName] = diskFile;
                 }
-                let di = readDisk(sFile);
+                let di = readDisk(diskFile);
                 if (!di) {
-                    di = createDisk(sFile, diskette, argv);
+                    di = createDisk(diskFile, diskette, argv);
                     if (di) {
-                        writeDisk(sFile, di);
+                        writeDisk(diskFile, di);
                     }
                 }
                 if (di) {
-                    processDisk(di, sFile, argv, diskette);
+                    processDisk(di, diskFile, argv, diskette);
                     cDisks++;
                 }
             });
@@ -629,23 +631,23 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
 }
 
 /**
- * readDisk(sFile, forceBPB, sectorIDs, sectorErrors, suppData)
+ * readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
  *
- * @param {string} sFile
+ * @param {string} diskFile
  * @param {boolean} [forceBPB]
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
  * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
  * @returns {DiskImage|null}
  */
-function readDisk(sFile, forceBPB, sectorIDs, sectorErrors, suppData)
+function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
 {
     let db, di
     try {
-        let diskName = path.basename(sFile);
+        let diskName = path.basename(diskFile);
         di = new DiskImage(device, diskName);
         if (diskName.endsWith(".json")) {
-            db = readFile(sFile, "utf8");
+            db = readFile(diskFile, "utf8");
             if (!db) {
                 di = null;
             } else {
@@ -656,7 +658,7 @@ function readDisk(sFile, forceBPB, sectorIDs, sectorErrors, suppData)
             /*
              * Passing null for the encoding parameter tells readFile() to return a buffer (which, in our case, is a DataBuffer).
              */
-            db = readFile(sFile, null);
+            db = readFile(diskFile, null);
             if (!db) {
                 di = null;
             } else {
@@ -716,35 +718,35 @@ function readJSON(sFile)
 }
 
 /**
- * writeDisk(sFile, di, fLegacy, indent, fOverwrite, fPrint)
+ * writeDisk(diskFile, di, fLegacy, indent, fOverwrite, fPrint)
  *
- * @param {string} sFile
+ * @param {string} diskFile
  * @param {DiskImage} di
  * @param {boolean} [fLegacy]
  * @param {number} [indent]
  * @param {boolean} [fOverwrite]
  * @param {boolean} [fPrint]
  */
-function writeDisk(sFile, di, fLegacy = false, indent = 0, fOverwrite = false, fPrint = true)
+function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fPrint = true)
 {
-    let diskName = path.basename(sFile);
+    let diskName = path.basename(diskFile);
     try {
-        let fExists = existsFile(sFile);
+        let fExists = existsFile(diskFile);
         if (!fExists || fOverwrite) {
             let data;
-            let sFileLC = sFile.toLowerCase();
-            if (sFileLC.endsWith(".json")) {
+            let diskFileLC = diskFile.toLowerCase();
+            if (diskFileLC.endsWith(".json")) {
                 data = di.getJSON(getHash, fLegacy, 0);
             } else {
                 let db = new DataBuffer(di.getSize());
                 if (di.getData(db, fLegacy)) data = db.buffer;
             }
             if (data) {
-                if (fPrint) printf("writing %s...\n", sFile);
-                sFile = getFullPath(sFile);
-                if (fExists) fs.unlinkSync(sFile);
-                fs.writeFileSync(sFile, data);
-                if (sFileLC.endsWith(".img")) fs.chmodSync(sFile, 0o444);
+                if (fPrint) printf("writing %s...\n", diskFile);
+                diskFile = getFullPath(diskFile);
+                if (fExists) fs.unlinkSync(diskFile);
+                fs.writeFileSync(diskFile, data);
+                if (diskFileLC.endsWith(".img")) fs.chmodSync(diskFile, 0o444);
             } else {
                 printf("%s not written, no data\n", diskName);
             }

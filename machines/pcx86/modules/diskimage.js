@@ -1944,12 +1944,24 @@ export default class DiskImage {
                     return this.device.sprintf("%s %8d file(s)   %8d bytes\n", sIndent, nFiles, cbDir);
                 }.bind(this);
                 let i, sLabel = "", sDrive = "?";
+                /*
+                 * Do a preliminary scan for a volume label, and don't look beyond root directory entries;
+                 * since those are all at the beginning of the file table, we can stop as soon as we see a SUBDIR.
+                 */
                 for (i = 0; i < this.fileTable.length; i++) {
                     let file = this.fileTable[i];
+                    if (file.iVolume > iVolume) break;
                     if (file.iVolume != iVolume) continue;
-                    if (file.path.lastIndexOf('\\') > 0) break;     // don't look beyond the root directory for a volume label
+                    if (file.attr & DiskImage.ATTR.SUBDIR) break;
                     if (file.attr & DiskImage.ATTR.VOLUME) {
-                        sLabel = file.name.replace(".", "");
+                        /*
+                         * Volume labels are displayed slightly differently from all other directory entries;
+                         * specifically, they may contain non-standard characters (eg, lower-case), and the name and
+                         * extension are displayed as 8-character and 3-character sequences with no space between
+                         * them.
+                         */
+                        let label = file.name.split(".");
+                        sLabel = this.device.sprintf("%-8s%-3s", label[0], label[1]);
                         break;
                     }
                 }
@@ -1962,14 +1974,17 @@ export default class DiskImage {
                         sDrive = String.fromCharCode(vol.iPartition < 0? 0x41 : 0x43 + vol.iPartition);
                         curVol = file.iVolume;
                     }
-                    let name = file.name;
+                    let name = file.name, ext = "";
                     let j = file.path.lastIndexOf('\\');
                     let dir = file.path.substring(0, j);
                     if (!dir) dir = "\\";
-                    let ext = "";
-                    if (name[0] != '.') {
+                    /*
+                     * The only names allowed to begin with a period are "." and "..", and those should always
+                     * have an attr with DiskImage.ATTR.SUBDIR set.
+                     */
+                    if (name[0] != ".") {
                         j = name.indexOf(".");
-                        if (j >= 0) {
+                        if (j > 0) {
                             ext = name.substr(j + 1);
                             name = name.substr(0, j);
                         }
