@@ -29,7 +29,7 @@ are provided below.
 
 ### Directory of Norton Utilities 2.00 (Side A)
 
-     Volume in drive A is NU-2.00,#1
+     Volume in drive A is NU-2.00, #1
      Directory of A:\
 
     DISKLOOK BAT       384   6-01-83   2:00p
@@ -52,7 +52,7 @@ are provided below.
 
 ### Directory of Norton Utilities 2.00 (Side B)
 
-     Volume in drive A is NU-2.00,#2
+     Volume in drive A is NU-2.00, #2
      Directory of A:\
 
     DISKLOOK BAT       384   6-01-83   2:00p

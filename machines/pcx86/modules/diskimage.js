@@ -1964,16 +1964,8 @@ export default class DiskImage {
                          * Volume labels are displayed slightly differently from all other directory entries;
                          * specifically, they may contain non-standard characters (eg, extra periods, lower-case letters),
                          * and they are displayed as an 11-character sequence.  In other words, they are displayed as-is.
-                         *
-                         * Unfortunately, we built some disk images whose file tables contain volume labels with periods
-                         * inserted between the name and ext.  We try to detect those cases here, by removing any period past
-                         * the 8th character.
                          */
                         sLabel = file.name;
-                        let j = sLabel.lastIndexOf('.');
-                        if (j >= 8) {
-                            sLabel = sLabel.substr(0, j) + sLabel.substr(j + 1);
-                        }
                         break;
                     }
                 }

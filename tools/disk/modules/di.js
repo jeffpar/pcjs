@@ -320,6 +320,54 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     /*
+     * If --checkarchive, then let's load the corresponding archived disk image (.IMG) as well, convert it to JSON,
+     * load the JSON as a disk image, save it as a temp .IMG, and verify that temp image and archived image are identical.
+     *
+     * You must ALSO specify --rebuild if you want the JSON disk image updated as well.
+     */
+    if (argv['checkarchive'] && diskette) {
+        if (diskette.format) {
+            let matchFormat = diskette.format.match(/PC([0-9]+)K/);
+            if (matchFormat) {
+                let diskSize = di.getSize();
+                if (+matchFormat[1] * 1024 != diskSize) {
+                    printf("warning: format '%s' does not match disk size (%d) for %s\n", diskette.format, diskSize, diskFile);
+                }
+            }
+        }
+        if (diskFile.endsWith(".json")) {
+            if (typeof argv['checkarchive'] == "string" && diskFile.indexOf(argv['checkarchive']) < 0) return;
+            let diTemp = createDisk(diskFile, diskette, argv);
+            if (diTemp) {
+                let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
+                diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.options));
+                writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, false);
+                let warning = false;
+                if (diskette.archive.endsWith(".img")) {
+                    let json = diTemp.getJSON();
+                    diTemp.buildDiskFromJSON(json);
+                    let sTempIMG = sTempJSON.replace(".json",".img");
+                    writeDisk(sTempIMG, diTemp, true, 0, true, false);
+                    if (!compareDisks(sTempIMG, diskette.archive)) {
+                        printf("warning: %s unsuccessfully rebuilt\n", diskette.archive);
+                        warning = true;
+                    } else {
+                        fs.unlinkSync(sTempIMG);
+                    }
+                }
+                if (!warning) {
+                    if (argv['rebuild']) {
+                        printf("rebuilding %s\n", diskFile);
+                        fs.renameSync(sTempJSON, getFullPath(diskFile));
+                    } else {
+                        fs.unlinkSync(sTempJSON);
+                    }
+                }
+            }
+        }
+    }
+
+    /*
      * If --checklisting, then get the disk's listing and see if it's up-to-date in the website's index.md.
      *
      * You must ALSO specify --rebuild if you want the index.md updated (or created) as well.
@@ -330,7 +378,7 @@ function processDisk(di, diskFile, argv, diskette)
         if (!sListing) return;
         let sHeading = "\n### Directory of " + diskette.name + "\n";
         let sIndex, sIndexNew;
-        let sIndexFile = path.join(path.dirname(diskFile.replace("/diskettes/", "/software/")), "index.md");
+        let sIndexFile = path.join(path.dirname(diskFile.replace(/\/(diskettes|gamedisks|harddisks|pcsig[0-9a-z-]*|private)\//, "/software/")), "index.md");
         if (existsFile(sIndexFile)) {
             sIndex = readFile(sIndexFile);
             let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*") + " *\n([\\s\\S]*?)(\n\\S|$)";
@@ -382,54 +430,6 @@ function processDisk(di, diskFile, argv, diskette)
             }
         } else {
             printf("\tmissing index: %s\n", sIndexFile);
-        }
-    }
-
-    /*
-     * If --checkarchive, then let's load the corresponding archived disk image (.IMG) as well, convert it to JSON,
-     * load the JSON as a disk image, save it as a temp .IMG, and verify that temp image and archived image are identical.
-     *
-     * You must ALSO specify --rebuild if you want the JSON disk image updated as well.
-     */
-    if (argv['checkarchive'] && diskette) {
-        if (diskette.format) {
-            let matchFormat = diskette.format.match(/PC([0-9]+)K/);
-            if (matchFormat) {
-                let diskSize = di.getSize();
-                if (+matchFormat[1] * 1024 != diskSize) {
-                    printf("warning: format '%s' does not match disk size (%d) for %s\n", diskette.format, diskSize, diskFile);
-                }
-            }
-        }
-        if (diskFile.endsWith(".json")) {
-            if (typeof argv['checkarchive'] == "string" && diskFile.indexOf(argv['checkarchive']) < 0) return;
-            let diTemp = createDisk(diskFile, diskette, argv);
-            if (diTemp) {
-                let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
-                diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.options));
-                writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, false);
-                let warning = false;
-                if (diskette.archive.endsWith(".img")) {
-                    let json = diTemp.getJSON();
-                    diTemp.buildDiskFromJSON(json);
-                    let sTempIMG = sTempJSON.replace(".json",".img");
-                    writeDisk(sTempIMG, diTemp, true, 0, true, false);
-                    if (!compareDisks(sTempIMG, diskette.archive)) {
-                        printf("warning: %s unsuccessfully rebuilt\n", diskette.archive);
-                        warning = true;
-                    } else {
-                        fs.unlinkSync(sTempIMG);
-                    }
-                }
-                if (!warning) {
-                    if (argv['rebuild']) {
-                        printf("rebuilding %s\n", diskFile);
-                        fs.renameSync(sTempJSON, getFullPath(diskFile));
-                    } else {
-                        fs.unlinkSync(sTempJSON);
-                    }
-                }
-            }
         }
     }
 
