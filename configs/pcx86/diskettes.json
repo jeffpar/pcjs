@@ -577,8 +577,14 @@
             "@title": "ThinkTank (1987)",
             "@media": [
               {
-                "@title": "ThinkTank (1987)",
-                "@diskette": "THINKTANK-1987.json",
+                "@title": "ThinkTank (DOS)",
+                "@diskette": "THINKTANK-DOS.json",
+                "@format": "PC320K",
+                "@archive": "folder"
+              },
+              {
+                "@title": "ThinkTank (OS/2)",
+                "@diskette": "THINKTANK-OS2.json",
                 "@format": "PC1200K",
                 "@archive": "folder"
               }

@@ -11,7 +11,6 @@ import fs         from "fs";
 import crypto     from "crypto";
 import glob       from "glob";
 import path       from "path";
-import mkdirp     from "mkdirp";
 import DataBuffer from "../../modules/nodebuffer.js";
 import StdLib     from "../../modules/stdlib.js";
 import Device     from "../../../machines/modules/device.js";
@@ -22,7 +21,7 @@ let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
 let stdlib = new StdLib();
-let moduleDir, rootDir, nMaxFiles, sManifestLog;
+let moduleDir, rootDir, nMaxFiles, sFileIndex;
 
 /*
  * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
@@ -203,7 +202,7 @@ function printFileDesc(diskName, desc)
  */
 function printManifest(diskName, manifest)
 {
-    manifest.forEach(function dumpManifestFiles(desc) {
+    manifest.forEach(function dumpManifestFile(desc) {
         printFileDesc(diskName, desc);
     });
 }
@@ -244,19 +243,19 @@ function processDisk(di, sFile, argv, diskette)
         let desc = di.findFile(sFindName, sFindText);
         if (desc) {
             printFileDesc(sFile /* di.getName() */, desc);
-            if (argv['duplicates']) {
+            if (argv['index']) {
                 /*
-                 * We cheat and search for matching hash values in manifest.log; this is much faster than laboriously
+                 * We cheat and search for matching hash values in the provided index; this is much faster than laboriously
                  * opening and searching all the other disk images, even when they DO contain pre-generated file tables.
                  */
-                if (sManifestLog === undefined) {
-                    sManifestLog = readFile(path.join(moduleDir, "manifest.log"));
-                    if (!sManifestLog) sManifestLog = null;
+                if (sFileIndex === undefined) {
+                    sFileIndex = readFile(argv['index']);
+                    if (!sFileIndex) sFileIndex = null;
                 }
                 let cMatches = 0;
-                if (sManifestLog) {
+                if (sFileIndex) {
                     let re = new RegExp("^" + desc[DiskImage.FILEDESC.HASH] + ".*$", "gm"), match;
-                    while ((match = re.exec(sManifestLog))) {
+                    while ((match = re.exec(sFileIndex))) {
                         if (match[0].indexOf(sFile) >= 0) continue;
                         if (!cMatches++) printf("see also:\n");
                         printf("%s\n", match[0]);
@@ -272,6 +271,36 @@ function processDisk(di, sFile, argv, diskette)
         if (isNaN(iVolume)) iVolume = -1;
         let list = di.getFileListing(iVolume) || "\tno listing available\n";
         printf("%s\n", list);
+    }
+
+    if (argv['extract']) {
+        let manifest = di.getFileManifest();
+        manifest.forEach(function extractManifestFile(desc) {
+            /*
+             * Parse each file descriptor in much the same way that buildFileTableFromJSON() does.  That function
+             * doesn't get the file's CONTENTS, because it's working with the file descriptors that have been stored
+             * in a JSON file (where CONTENTS would be redundant and a waste of space).  Here, we call getFileManifest(),
+             * which calls getFileDesc(true), which returns a complete file descriptor that includes CONTENTS.
+             */
+            let sPath = desc[DiskImage.FILEDESC.PATH];
+            if (sPath[0] == '/') sPath = sPath.substr(1);       // PATH should ALWAYS start with a slash, but let's be safe
+            let name = path.basename(sPath);
+            let size = desc[DiskImage.FILEDESC.SIZE] || 0;
+            let attr = +desc[DiskImage.FILEDESC.ATTR];
+            let date = device.parseDate(desc[DiskImage.FILEDESC.DATE]);
+            let contents = desc[DiskImage.FILEDESC.CONTENTS] || [];
+            let db = new DataBuffer(contents);
+            if (typeof argv['extract'] != "string" || name == argv['extract']) {
+                let dir = path.dirname(sPath);
+                if (!existsFile(dir)) fs.mkdirSync(dir, {recursive: true});
+                if (attr & DiskImage.ATTR.SUBDIR) {
+                    if (!existsFile(sPath)) fs.mkdirSync(sPath);
+                } else {
+                    writeFile(sPath, db);
+                }
+                fs.utimesSync(sPath, date, date);
+            }
+        });
     }
 
     if (argv['manifest']) {
@@ -743,7 +772,7 @@ function writeFile(sFile, data, fCreateDir)
             }
             if (fCreateDir) {
                 let sDir = path.dirname(sFile);
-                if (!existsFile(sDir)) mkdirp.sync(sDir);
+                if (!existsFile(sDir)) fs.mkdirSync(sDir, {recursive: true});
             }
             fs.writeFileSync(sFile, data);
             return true;
