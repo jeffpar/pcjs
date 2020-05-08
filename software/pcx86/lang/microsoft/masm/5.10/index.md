@@ -303,3 +303,43 @@ From the **MS Macro Assembler 5.10A** Diskette:
 	          not defined" errors when used with text equates.
 	     
 	     o    Text macro expansions no longer cause GP faults.
+
+### Directory of MS Macro Assembler 5.10 (Update)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    OS2      DOC     33751   3-10-88   3:10p
+    README   MSM     35744   3-10-88   3:10p
+    CREF     EXE     28427   3-10-88   3:10p
+    MASM     EXE    124712   3-10-88   3:10p
+    EXAMPLE      <DIR>       3-10-88   3:10p
+    INCLUDE      <DIR>       3-10-88   3:10p
+            6 file(s)     222634 bytes
+
+     Directory of A:\EXAMPLE
+
+    .            <DIR>       3-10-88   3:10p
+    ..           <DIR>       3-10-88   3:10p
+    SHOW               338   3-10-88   3:10p
+    PAGERP   ASM     11504   3-10-88   3:10p
+    SHOWP    ASM     15079   3-10-88   3:10p
+    SHOW     EXE      2916   3-10-88   3:10p
+            6 file(s)      29837 bytes
+
+     Directory of A:\INCLUDE
+
+    .            <DIR>       3-10-88   3:10p
+    ..           <DIR>       3-10-88   3:10p
+    BSE      INC       768   3-10-88   3:10p
+    BSEDOS   INC     17479   3-10-88   3:10p
+    BSEERR   INC      6723   3-10-88   3:10p
+    BSESUB   INC     10693   3-10-88   3:10p
+    OS2      INC       391   3-10-88   3:10p
+    OS2DEF   INC      5109   3-10-88   3:10p
+            8 file(s)      41163 bytes
+
+    Total files listed:
+           20 file(s)     293634 bytes
+                           61440 bytes free
+

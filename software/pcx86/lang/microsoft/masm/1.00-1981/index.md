@@ -9,7 +9,7 @@ Directory listing of a recreated 160Kb diskette ([Source](http://www.os2museum.c
 
 ### Directory of MS Macro Assembler 1.00 (1981)
 
-     Volume in drive A has no label
+     Volume in drive A is MASM100
      Directory of A:\
 
     CREF     EXE     13824  10-05-81  12:00a

@@ -14,7 +14,7 @@ the 4.00 distribution files, even though they have been time-stamped with the sa
 
 ### Directory of MS Multiplan 2.00 (Modified)
 
-     Volume in drive A is MP200
+     Volume in drive A is MULTIPLAN20
      Directory of A:\
 
     LINKMC   COM       934   9-23-85  12:00p

@@ -45,12 +45,12 @@ an original disk image, the difference in timestamps is not meaningful. All file
 
 ### Directory of MS Mouse 2.50 (Serial)
 
-     Volume in drive A is MSMOUSE-250
+     Volume in drive A is MSMOUSE
      Directory of A:\
 
     MOUSE    COM      4138   9-13-84  10:00a
     MOUSE    SYS      4386   9-13-84  10:00a
             2 file(s)       8524 bytes
-                          312320 bytes free
+                          151040 bytes free
 
 ![MS Mouse 2.50 Diskette]({{ site.software.diskettes.server }}/pcx86/dev/mouse/microsoft/2.50/MSMOUSE-250.jpg)

@@ -27,7 +27,7 @@ Directory listings of the diskettes are provided [below](#directory-of-ms-quickp
 
 {% include machine.html id="ibm5170-msdos320" %}
 
-### Directory of MS QuickPascal 1.00 (360K Disk 1) ("Setup/Utilities")
+### Directory of MS QuickPascal 1.00 (360K Disk 1)
 
 	 Volume in drive A is QP100      
 
@@ -69,7 +69,7 @@ Directory listings of the diskettes are provided [below](#directory-of-ms-quickp
 
 ![MS QuickPascal 1.00 (360K Disk 1)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/pascal/quickpascal/1.00//QUICKPASCAL-100-DISK1.jpg)
 
-### Directory of MS QuickPascal 1.00 (360K Disk 2) ("Libraries")
+### Directory of MS QuickPascal 1.00 (360K Disk 2)
 
 	 Volume in drive A is QP100      
 
@@ -96,7 +96,7 @@ Directory listings of the diskettes are provided [below](#directory-of-ms-quickp
 
 ![MS QuickPascal 1.00 (360K Disk 2)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/pascal/quickpascal/1.00//QUICKPASCAL-100-DISK2.jpg)
 
-### Directory of MS QuickPascal 1.00 (360K Disk 3) ("Program")
+### Directory of MS QuickPascal 1.00 (360K Disk 3)
 
 	 Volume in drive A is QP100      
 
@@ -113,7 +113,7 @@ Directory listings of the diskettes are provided [below](#directory-of-ms-quickp
 
 ![MS QuickPascal 1.00 (360K Disk 3)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/pascal/quickpascal/1.00//QUICKPASCAL-100-DISK3.jpg)
 
-### Directory of MS QuickPascal 1.00 (360K Disk 4) ("Microsoft QuickPascal Express")
+### Directory of MS QuickPascal 1.00 (360K Disk 4)
 
 	 Volume in drive A is QP100      
 
@@ -140,7 +140,7 @@ Directory listings of the diskettes are provided [below](#directory-of-ms-quickp
 
 ![MS QuickPascal 1.00 (360K Disk 4)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/pascal/quickpascal/1.00//QUICKPASCAL-100-DISK4.jpg)
 
-### Directory of MS QuickPascal 1.00 (360K Disk 5) ("Microsoft QuickPascal Advisor")
+### Directory of MS QuickPascal 1.00 (360K Disk 5)
 
 	 Volume in drive A is QP100      
 
@@ -156,7 +156,7 @@ Directory listings of the diskettes are provided [below](#directory-of-ms-quickp
 
 ![MS QuickPascal 1.00 (360K Disk 5)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/pascal/quickpascal/1.00//QUICKPASCAL-100-DISK5.jpg)
 
-### Directory of MS QuickPascal 1.00 (720K Disk 1) ("Setup/Program/Utilities")
+### Directory of MS QuickPascal 1.00 (720K Disk 1)
 
      Volume in drive A is QP100      
     
@@ -199,7 +199,7 @@ Directory listings of the diskettes are provided [below](#directory-of-ms-quickp
            27 file(s)     603574 bytes
                           112640 bytes free
 
-### Directory of MS QuickPascal 1.00 (720K Disk 2) ("QuickPascal Advisor/QuickPascal Express")
+### Directory of MS QuickPascal 1.00 (720K Disk 2)
 
      Volume in drive A is QP100      
     
@@ -226,7 +226,7 @@ Directory listings of the diskettes are provided [below](#directory-of-ms-quickp
            15 file(s)     688948 bytes
                            33792 bytes free
 
-### Directory of MS QuickPascal 1.00 (720K Disk 3) ("Libraries")
+### Directory of MS QuickPascal 1.00 (720K Disk 3)
 
      Volume in drive A is QP100      
     
