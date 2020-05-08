@@ -1,6 +1,6 @@
 # PCjs Machines
 
-Welcome to PCjs, home of [PCx86](/machines/pcx86/), the original IBM PC simulation that runs in your web browser.
+[PCjs](https://www.pcjs.org) is the home of [PCx86](/machines/pcx86/), the original IBM PC emulator that runs in your web browser.
 
 It is one of several JavaScript Machines in this project that span a variety of devices:
 
