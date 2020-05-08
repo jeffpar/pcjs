@@ -9,7 +9,7 @@ Directory listing of a recreated 320Kb diskette is provided below.
 
 ### Directory of MS Macro Assembler 1.12
 
-     Volume in drive A has no label
+     Volume in drive A is MASM112
      Directory of A:\
 
     CREF     EXE     13824   6-02-82  12:00a
@@ -19,4 +19,3 @@ Directory listing of a recreated 320Kb diskette is provided below.
     MASM     EXE     74112   4-01-83  12:00a
             5 file(s)     193611 bytes
                           125952 bytes free
-

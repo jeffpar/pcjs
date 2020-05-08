@@ -413,3 +413,69 @@ distribution diskettes are provided below.
            69 file(s)     783356 bytes
                           655360 bytes free
 
+### Directory of MS-DOS 6.22 (1.2M Boot)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    IO       SYS*    40774   5-31-94   6:22a
+    MSDOS    SYS*    38138   5-31-94   6:22a
+    COMMAND  COM     54645   5-31-94   6:22a
+    ANSI     SYS      9065   5-31-94   6:22a
+    APPEND   EXE     10774   5-31-94   6:22a
+    ASSIGN   COM      6399   5-31-94   6:22a
+    ATTRIB   EXE     11208   5-31-94   6:22a
+    BACKUP   EXE     36140   5-31-94   6:22a
+    CHKDSK   EXE     12241   5-31-94   6:22a
+    CHOICE   COM      1754   5-31-94   6:22a
+    COMP     EXE     13084   5-31-94   6:22a
+    COUNTRY  SYS     26936   5-31-94   6:22a
+    DEBUG    EXE     15718   5-31-94   6:22a
+    DELTREE  EXE     11111   5-31-94   6:22a
+    DISKCOMP COM     10748   5-31-94   6:22a
+    DISKCOPY COM     13335   5-31-94   6:22a
+    DISPLAY  SYS     15789   5-31-94   6:22a
+    DOSKEY   COM      5861   5-31-94   6:22a
+    DRIVER   SYS      5406   5-31-94   6:22a
+    EDLIN    EXE     12674   5-31-94   6:22a
+    EGA      CPI     58870   5-31-94   6:22a
+    EGA      SYS      4885   5-31-94   6:22a
+    EMM386   EXE    120926   5-31-94   6:22a
+    EXE2BIN  EXE      8424   5-31-94   6:22a
+    FC       EXE     18650   5-31-94   6:22a
+    FDISK    EXE     29336   5-31-94   6:22a
+    FIND     EXE      6770   5-31-94   6:22a
+    FORMAT   COM     22974   5-31-94   6:22a
+    GRAFTABL COM     11205   5-31-94   6:22a
+    GRAPHICS COM     19742   5-31-94   6:22a
+    GRAPHICS PRO     21232   5-31-94   6:22a
+    HIMEM    SYS     29136   5-31-94   6:22a
+    ISO      CPI     49754   5-31-94   6:22a
+    JOIN     EXE     17918   5-31-94   6:22a
+    KEYB     COM     15750   5-31-94   6:22a
+    KEYBOARD SYS     34598   5-31-94   6:22a
+    LABEL    EXE      9390   5-31-94   6:22a
+    LOADFIX  COM      1131   5-31-94   6:22a
+    MEM      EXE     32502   5-31-94   6:22a
+    MODE     COM     23569   5-31-94   6:22a
+    MORE     COM      2545   5-31-94   6:22a
+    MOUSE    COM     56408   5-31-94   6:22a
+    MOVE     EXE     18319   5-31-94   6:22a
+    NLSFUNC  EXE      7036   5-31-94   6:22a
+    PRINT    EXE     15656   5-31-94   6:22a
+    PRINTER  SYS     18804   5-31-94   6:22a
+    RAMDRIVE SYS      5873   5-31-94   6:22a
+    REPLACE  EXE     20274   5-31-94   6:22a
+    RESTORE  EXE     38342   5-31-94   6:22a
+    SETVER   EXE     12015   5-31-94   6:22a
+    SHARE    EXE     10912   5-31-94   6:22a
+    SMARTDRV EXE     45145   5-31-94   6:22a
+    SORT     EXE      6938   5-31-94   6:22a
+    SUBST    EXE     18526   5-31-94   6:22a
+    SYS      COM      9432   5-31-94   6:22a
+    TREE     COM      6945   5-31-94   6:22a
+    XCOPY    EXE     16930   5-31-94   6:22a
+    CONFIG   SYS        73   4-25-16   2:28p
+    AUTOEXEC BAT        19   4-25-16   2:29p
+           59 file(s)    1198754 bytes
+                            1024 bytes free

@@ -145,3 +145,80 @@ List of features and differences between standard DOS and Multitasking MS-DOS 4.
 	  - 10 DOSDISCARDCODE
 	  - 11 DOSGETHANDLE
 	  - 12 DOSHANDLEJUMP
+
+### Directory of MS-DOS 4.0M (Disk 1)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    IBMBIO   COM*    23962  11-26-85  10:49p
+    IBMDOS   COM*    62080  11-26-85  10:49p
+    COMMAND  COM     37488  11-26-85  10:49p
+    HE_DAEM  EXE      3580  11-26-85  10:49p
+    POPUP    EXE      1870  11-26-85  11:04p
+    ANSI     SYS      2535  11-26-85  10:49p
+    RAMDRIVE SYS      6466  11-26-85  10:49p
+    POPUP    PIF       369   9-20-85   2:28p
+    HE_DAEM  PIF       369   9-20-85   2:27p
+    COM      SYS      2325  11-26-85  10:49p
+    EGA      SYS      7599  11-26-85  10:49p
+    CONFIG   SYS        58   3-10-13  12:07a
+    AUTOEXEC BAT        62   3-10-13  12:01a
+    BIN          <DIR>       3-10-13  12:08a
+    README   TXT        62   3-08-18  12:01a
+           15 file(s)     148825 bytes
+
+     Directory of A:\BIN
+
+    .            <DIR>       3-10-13  12:08a
+    ..           <DIR>       3-10-13  12:08a
+    ASSIGN   EXE      5344  11-26-85  11:03p
+    CHKDSK   EXE      9280  11-26-85  11:03p
+    COMMAND  COM     37488   2-24-86  11:42a
+    DISKCOPY PIF       369   7-15-85   9:28p
+    DISKCOPY EXE      4504  11-26-85  11:03p
+    FDISK    EXE     16294  11-26-85  11:03p
+    FORMAT   EXE      8897  11-26-85  11:57a
+    JOIN     EXE      9060  11-26-85  11:04p
+    MODE     EXE     11554  11-26-85  11:04p
+    SM       EXE      5700  11-26-85  11:04p
+    SM       PIF       369   9-11-85  10:26a
+    SUBST    EXE      8400  11-26-85  11:05p
+    SWAPPER  DOC      1247  11-26-85  12:31p
+    SWAPPER  EXE      2816  11-26-85  10:49p
+    SWAPPER  PIF       369   9-20-85   2:28p
+    SYS      EXE      3693  11-26-85  11:55a
+           18 file(s)     125384 bytes
+
+    Total files listed:
+           33 file(s)     274209 bytes
+                           69632 bytes free
+
+### Directory of MS-DOS 4.0M (Disk 2)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    APPEND   EXE      2508  11-26-85  11:03p
+    ATTRIB   EXE      6410  11-26-85  11:03p
+    BACKUP   EXE     21304  11-26-85  11:03p
+    EDLIN    EXE      7044  11-26-85  11:03p
+    FC       EXE      2585  11-26-85  11:03p
+    FIND     EXE      6363  11-26-85  11:03p
+    KEYBFR   EXE      2846  11-26-85  11:04p
+    KEYBGR   EXE      2838  11-26-85  11:04p
+    KEYBUK   EXE      2784  11-26-85  11:04p
+    KEYBIT   EXE      2790  11-26-85  11:04p
+    KEYBSP   EXE      2881  11-26-85  11:04p
+    KEYBDV   EXE      2784   9-27-85   8:35a
+    LABEL    EXE      9830  11-26-85  11:04p
+    LINK4    EXE     52604  11-26-85  11:04p
+    MORE     EXE       938  11-26-85  11:04p
+    PIFEDIT  EXE     32366  11-26-85  11:04p
+    PRINT    EXE      9444  11-26-85  11:04p
+    QUEUER   EXE      6312  11-26-85  11:04p
+    RECOVER  EXE      3953  11-26-85  11:04p
+    RESTORE  EXE     19756  11-26-85  11:04p
+    SORT     EXE      1632  11-26-85  11:05p
+           21 file(s)     199972 bytes
+                          153600 bytes free

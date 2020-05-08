@@ -17,7 +17,7 @@ files.
 
 ### Directory of MS Multiplan 2.01 (INSTALL)
 
-     Volume in drive A is INSTALL
+     Volume in drive A is MP201INST
      Directory of A:\
 
     CONVERTD EXE     34944   2-10-86  12:00p
@@ -33,7 +33,7 @@ files.
 
 ### Directory of MS Multiplan 2.01 (PROGRAM)
 
-     Volume in drive A is PROGRAM
+     Volume in drive A is MP201PROG
      Directory of A:\
 
     AMOR     MOD      7184   2-10-86  12:00p
@@ -55,4 +55,3 @@ files.
     STARTUP  MOD      7345   2-10-86  12:00p
            17 file(s)     276873 bytes
                            35840 bytes free
-

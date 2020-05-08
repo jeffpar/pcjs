@@ -850,9 +850,10 @@ class StdIO extends NumIO {
      * @this {StdIO}
      * @param {string} sFileName
      * @param {boolean} [fStripExt]
+     * @param {boolean} [fAllowAmp]
      * @returns {string}
      */
-    getBaseName(sFileName, fStripExt)
+    getBaseName(sFileName, fStripExt, fAllowAmp)
     {
         let sBaseName = sFileName;
 
@@ -861,9 +862,12 @@ class StdIO extends NumIO {
 
         /*
          * This next bit is a kludge to clean up names that are part of a URL that includes unsightly query parameters.
+         * However, don't do that if fAllowAmp (which will be true, for example, when parsing 8.3 filenames in diskimage.js).
          */
-        i = sBaseName.indexOf('&');
-        if (i > 0) sBaseName = sBaseName.substr(0, i);
+        if (!fAllowAmp) {
+            i = sBaseName.indexOf('&');
+            if (i > 0) sBaseName = sBaseName.substr(0, i);
+        }
 
         if (fStripExt) {
             i = sBaseName.lastIndexOf(".");

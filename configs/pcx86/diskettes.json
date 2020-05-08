@@ -217,13 +217,15 @@
                 "@title": "MS Multiplan 2.01 (INSTALL)",
                 "@diskette": "MULTIPLAN201-INSTALL.json",
                 "@format": "PC320K",
-                "@archive": "folder"
+                "@archive": "folder",
+                "@label": "MP201INST"
               },
               {
                 "@title": "MS Multiplan 2.01 (PROGRAM)",
                 "@diskette": "MULTIPLAN201-PROGRAM.json",
                 "@format": "PC320K",
-                "@archive": "folder"
+                "@archive": "folder",
+                "@label": "MP201PROG"
               }
             ]
           }
@@ -916,7 +918,8 @@
               {
                 "@title": "MS Mouse 2.50 (Serial)",
                 "@diskette": "MSMOUSE-250-SERIAL.json",
-                "@format": "PC160K"
+                "@format": "PC160K",
+                "@archive": "folder"
               }
             ]
           },
@@ -2029,7 +2032,8 @@
               "@media": [
                 {
                   "@diskette": "QBASIC110.json",
-                  "@format": "PC360K"
+                  "@format": "PC360K",
+                  "@archive": "folder"
                 }
               ]
             }
@@ -2753,7 +2757,42 @@
                 "@format": "PC1200K"
               },
               {
-                "@title": "MS Macro Assembler 5.10A",
+                "@title": "MS Macro Assembler 5.10 (Update)",
+                "@diskette": "MASM51-UPDATE.json",
+                "@format": "PC360K"
+              }
+            ]
+          },
+          "5.10x": {
+            "@title": "Macro Assembler 5.10 (Feb 1988)",
+            "@media": [
+              {
+                "@title": "MS MASM 5.10 (Feb 1988 Disk 1)",
+                "@diskette": "MASM51X-01510-DISK1.json",
+                "@format": "PC360K"
+              },
+              {
+                "@title": "MS MASM 5.10 (Feb 1988 Disk 2)",
+                "@diskette": "MASM51X-01511-DISK2.json",
+                "@format": "PC360K"
+              },
+              {
+                "@title": "MS MASM 5.10 (Feb 1988 Disk 3)",
+                "@diskette": "MASM51X-01512-DISK3.json",
+                "@format": "PC360K"
+              },
+              {
+                "@title": "MS MASM 5.10 (Feb 1988 Disk 4)",
+                "@diskette": "MASM51X-01514-DISK4.json",
+                "@format": "PC360K"
+              },
+              {
+                "@title": "MS MASM 5.10 (Feb 1988 Disk 5)",
+                "@diskette": "MASM51X-03159-DISK5.json",
+                "@format": "PC1200K"
+              },
+              {
+                "@title": "MS Macro Assembler 5.10A (Update)",
                 "@diskette": "MASM51A-UPDATE.json",
                 "@format": "PC360K"
               }
@@ -2910,46 +2949,54 @@
               "@media": [
                 {
                   "@title": "MS QuickPascal 1.00 (360K Disk 1)",
+                  "@subtitle": "Setup/Utilities",
                   "@diskette": "QUICKPASCAL-100-DISK1.json",
                   "@photo": ".jpg",
                   "@format": "PC360K"
                 },
                 {
                   "@title": "MS QuickPascal 1.00 (360K Disk 2)",
+                  "@subtitle": "Libraries",
                   "@diskette": "QUICKPASCAL-100-DISK2.json",
                   "@photo": ".jpg",
                   "@format": "PC360K"
                 },
                 {
                   "@title": "MS QuickPascal 1.00 (360K Disk 3)",
+                  "@subtitle": "Program",
                   "@diskette": "QUICKPASCAL-100-DISK3.json",
                   "@photo": ".jpg",
                   "@format": "PC360K"
                 },
                 {
                   "@title": "MS QuickPascal 1.00 (360K Disk 4)",
+                  "@subtitle": "Microsoft QuickPascal Express",
                   "@diskette": "QUICKPASCAL-100-DISK4.json",
                   "@photo": ".jpg",
                   "@format": "PC360K"
                 },
                 {
                   "@title": "MS QuickPascal 1.00 (360K Disk 5)",
+                  "@subtitle": "Microsoft QuickPascal Advisor",
                   "@diskette": "QUICKPASCAL-100-DISK5.json",
                   "@photo": ".jpg",
                   "@format": "PC360K"
                 },
                 {
                   "@title": "MS QuickPascal 1.00 (720K Disk 1)",
+                  "@subtitle": "Setup/Program/Utilities",
                   "@diskette": "QUICKPASCAL-100-720K-DISK1-SETUP.json",
                   "@format": "PC720K"
                 },
                 {
                   "@title": "MS QuickPascal 1.00 (720K Disk 2)",
+                  "@subtitle": "QuickPascal Advisor/QuickPascal Express",
                   "@diskette": "QUICKPASCAL-100-720K-DISK2-ADVISOR.json",
                   "@format": "PC720K"
                 },
                 {
                   "@title": "MS QuickPascal 1.00 (720K Disk 3)",
+                  "@subtitle": "Libraries",
                   "@diskette": "QUICKPASCAL-100-720K-DISK3-LIBRARIES.json",
                   "@format": "PC720K"
                 }

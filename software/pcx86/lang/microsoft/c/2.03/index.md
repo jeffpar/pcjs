@@ -41,4 +41,3 @@ We do not have an original distribution disk for Microsoft C Compiler 2.03.  It 
     TINYMAIN C         896   7-06-83   5:53p
            27 file(s)     337909 bytes
                            11264 bytes free
-

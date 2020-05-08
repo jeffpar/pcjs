@@ -11,7 +11,7 @@ Directory listings of the five 1.44Mb distribution diskettes are provided below.
 
 ### Directory of MS Macro Assembler 6.00 (Disk 1)
 
-     Volume in drive A is AR
+     Volume in drive A is DISK 1
      Directory of A:\
 
     BINB         <DIR>      12-13-99   4:11p
@@ -262,4 +262,3 @@ Directory listings of the five 1.44Mb distribution diskettes are provided below.
     UTILERR  HL$     79695   2-14-91  11:22a
             4 file(s)    1066718 bytes
                           390144 bytes free
-

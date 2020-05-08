@@ -26,6 +26,7 @@ Some disks from this collection include:
   - [COMPAQ MS-DOS 3.31 (1987)](/software/pcx86/sys/dos/compaq/3.31/#directory-of-compaq-ms-dos-331-1987)
   - [DoubleDOS 2.1F](/software/pcx86/sys/ext/softlogic/doubledos/2.1f/)
   - [Multitasking MS-DOS 4.00](/software/pcx86/sys/dos/microsoft/4.0M/)
+  - [Microsoft Macro Assembler 5.10 (Feb 1988)](/software/pcx86/lang/microsoft/masm/5.10x/)
   - [The Norton Utilities 2.00](/software/pcx86/util/norton/2.00/)
   - [The Norton Utilities 2.01 (1983-11-03)](/software/pcx86/util/norton/2.01/)
   - [The Norton Utilities 3.00 (1984-12-07)](/software/pcx86/util/norton/3.00/)

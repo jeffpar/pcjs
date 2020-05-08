@@ -37,12 +37,14 @@ machines:
     EXAMPLE  DOC      4352   9-18-84  12:00p
     MWCOPY2  BAT       292   9-18-84  12:00p
     MW       PGM     72848   9-18-84  12:00p
-    MW       HLP     58169   9-18-84  12:00p
+    MW       HLP     58750  10-16-84  12:06p
     TTY      PRD       820   9-18-84  12:00p
     PLAIN    PRD       896   9-18-84  12:00p
     DEFAULT  STY       768   9-18-84  12:00p
-           18 file(s)     280776 bytes
-                           66560 bytes free
+    MW011294 TMP      1024   1-01-80  12:01a
+    MW       INI        54   1-01-80   1:37a
+           20 file(s)     282435 bytes
+                           63488 bytes free
 
 ### Directory of MS Word 1.15 (Utilities)
 
@@ -120,4 +122,3 @@ machines:
     LW       DAT     16928   9-20-84   4:00p
             7 file(s)     332725 bytes
                            27648 bytes free
-
