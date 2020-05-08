@@ -293,7 +293,8 @@ function processDisk(sFile, di, argv, diskette)
         if (sFile.indexOf("/private") >= 0) return;
         let sListing = di.getFileListing(0, 4);
         if (!sListing) return;
-        let sHeading = "\n### Directory of " + diskette.name + "\n\n";
+        let sHeading = "\n### Directory of " + diskette.name + "\n";
+        sListing += "\n";
         let sIndex, sIndexNew;
         let sIndexFile = path.join(path.dirname(sFile.replace("/diskettes/", "/software/")), "index.md");
         if (existsFile(sIndexFile)) {
@@ -312,7 +313,7 @@ function processDisk(sFile, di, argv, diskette)
                  * Look for the last "Directory of ..." entry and insert this directory listing after it (and if there's none, append it).
                  */
                 sAction = "added";
-                sListing = sHeading + sListing + "\n";
+                sListing = sHeading + sListing;
                 let matchLast, match, re = /\n(##+)\\s+Directory of [^\n]*\n([\\s\\S]*?)\n(\\S|$)/g;
                 while ((match = re.exec(sIndex))) {
                     matchLast = match;
