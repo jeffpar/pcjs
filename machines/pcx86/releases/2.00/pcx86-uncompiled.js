@@ -70458,7 +70458,7 @@ class JSONLib {
                          * utility, want ALL the diskette details.
                          */
                         if (!limits.length) {
-                            let title = group['@title'];
+                            let title = release['@title'] || group['@title'];
                             let archive = item['@archive'];
                             let label = item['@label'];
                             let options = item['@options'];

@@ -458,7 +458,7 @@ export default class DiskImage {
              *      0x02: # bytes/sector (2 bytes)
              *      0x04: file offset of track data (4 bytes)
              *
-             * TODO: Our JSON disk format doesn't explicitly support a write-protect indicator.  Instead, we
+             * TODO: Our new JSON disk format should probably include a write-protect indicator.  Instead, we
              * (used to) include the string "write-protected" as a comment in the first line of the JSON data
              * as a work-around, and if the FDC component sees that comment string, it will honor it; however,
              * we now prefer that read-only disk images simply include a "-readonly" suffix in the filename.
@@ -781,7 +781,7 @@ export default class DiskImage {
         let cbDrive = (cHiddenSectors? (cHiddenSectors + cSectorsPerTrack * cHeads) * cbSector : 0) + cbDisk;
 
         /*
-         * TODO: Consider doing what convertToIMG() did, which was deferring setting dbDisk until the
+         * TODO: Consider doing what (the old) convertToIMG() did, which was deferring setting dbDisk until the
          * buffer is fully (and successfully) initialized.  Here, however, the build process relies on worker
          * functions that prefer not passing around temporary buffers.  In the meantime, perhaps any catastrophic
          * failures should set dbDisk back to null?
@@ -1055,7 +1055,7 @@ export default class DiskImage {
     /**
      * buildDirEntry(ab, off, sName, cbFile, bAttr, dateMod, iCluster)
      *
-     * TODO: Create constants that define the various directory entry fields, including the overall size (32 bytes).
+     * TODO: This function should now be using DiskImage.DIRENT constants where appropriate.
      *
      * @this {DiskImage}
      * @param {Array.<number>} ab contains the bytes of a directory
@@ -1592,8 +1592,9 @@ export default class DiskImage {
      * "volume" sector numbers for volume-relative block addresses (aka VBAs or Volume Block Addresses), and
      * 0-based "logical" sector numbers for disk-relative block addresses (aka LBAs or Logical Block Addresses).
      *
-     * TODO: It should be possible to reconstitute these tables from our newer "extended" JSON images, if that
-     * was the source of the image.
+     * NOTE: It's now possible to reconstitute these tables from our newer "extended" JSON images, if that
+     * was the source of the image.  See buildDiskFromJSON(), which in turn calls buildFileTableFromJSON() when
+     * a new JSON disk image is loaded.
      *
      * @this {DiskImage}
      * @param {boolean} fRebuild

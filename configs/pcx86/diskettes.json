@@ -1886,6 +1886,36 @@
           }
         }
       },
+      "cobol": {
+        "@title": "COBOL",
+        "@versions": {
+          "1.00": {
+            "@title": "IBM COBOL 1.00",
+            "@media": [
+              {
+                "@title": "IBM COBOL 1.00 (Disk 1)",
+                "@diskette": "IBM-COBOL-100-DISK1.json",
+                "@format": "PC160K"
+              },
+              {
+                "@title": "IBM COBOL 1.00 (Disk 2)",
+                "@diskette": "IBM-COBOL-100-DISK2.json",
+                "@format": "PC160K"
+              }
+            ],
+            "@documents": [
+              {
+                "@title": "IBM COBOL Compiler 1.00",
+                "@file": "IBM_COBOL_Compiler_V1_1982-03.pdf",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heNgckNGawAfsQxs-w?e=P9m6LU",
+                "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2194688&authkey=ANqaZ9JL50ssPKw&em=2",
+                "@cover": ".jpg",
+                "@source": "https://winworldpc.com/product/ibm-cobol-compiler/1x"
+              }
+            ]
+          }
+        }
+      },
       "masm": {
         "@title": "Macro Assembler",
         "@versions": {
@@ -2543,6 +2573,26 @@
                 }
               ]
             }
+          }
+        }
+      },
+      "cobol": {
+        "@title": "COBOL",
+        "@versions": {
+          "1.12": {
+            "@title": "MS COBOL 1.12",
+            "@media": [
+              {
+                "@title": "MS COBOL 1.12 (Disk 1)",
+                "@diskette": "MS-COBOL-112-DISK1.json",
+                "@format": "PC360K"
+              },
+              {
+                "@title": "MS COBOL 1.00 (Disk 2)",
+                "@diskette": "MS-COBOL-112-DISK2.json",
+                "@format": "PC360K"
+              }
+            ]
           }
         }
       },
