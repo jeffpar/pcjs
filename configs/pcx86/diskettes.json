@@ -506,6 +506,7 @@
                 "@title": "dBASE III 1.0 (Disk 1)",
                 "@diskette": "DBIII-100-DISK1.json",
                 "@format": "PC360K",
+                "@options": "--sectorError=39:0:5:272",
                 "@kryoflux": true
               },
               {
@@ -518,7 +519,7 @@
                 "@title": "dBASE III 1.0 (Locked)",
                 "@diskette": "DBIII-100-LOCKED.json",
                 "@format": "PC360K",
-                "@options": "--sectorError=39:0:5:204"
+                "@options": "--sectorError=39:0:2:204"
               },
               {
                 "@title": "dBASE III 1.0 (Patched)",
