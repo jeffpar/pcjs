@@ -192,7 +192,7 @@ function isTextFile(sFile)
  */
 function printFileDesc(diskFile, diskName, desc)
 {
-    printf("%-32s  %-12s  %s  %s %7d  %-60s %s\n", desc[DiskImage.FILEDESC.HASH] || "-".repeat(32), desc[DiskImage.FILEDESC.NAME], desc[DiskImage.FILEDESC.DATE], desc[DiskImage.FILEDESC.ATTR], desc[DiskImage.FILEDESC.SIZE] || 0, diskName + ':' + desc[DiskImage.FILEDESC.PATH], diskFile);
+    printf("%-32s  %-12s  %s  %s %7d  %s\n", desc[DiskImage.FILEDESC.HASH] || "-".repeat(32), desc[DiskImage.FILEDESC.NAME], desc[DiskImage.FILEDESC.DATE], desc[DiskImage.FILEDESC.ATTR], desc[DiskImage.FILEDESC.SIZE] || 0, diskName + ':' + desc[DiskImage.FILEDESC.PATH]);
 }
 
 /**
