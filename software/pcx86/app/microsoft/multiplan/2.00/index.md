@@ -3,6 +3,15 @@ layout: page
 title: Microsoft Multiplan 2.00
 permalink: /software/pcx86/app/microsoft/multiplan/2.00/
 redirect_from: /disks/pcx86/apps/microsoft/multiplan/2.00/
+machines:
+  - id: ibm5160
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS Multiplan 2.00 (Modified)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 NOTE: The Microsoft Multiplan 2.00 disk below is *not* an original distribution disk.  It was obtained from
@@ -11,6 +20,8 @@ NOTE: The Microsoft Multiplan 2.00 disk below is *not* an original distribution 
 
 The disk also includes [Microsoft Mouse 4.00](/software/pcx86/dev/mouse/microsoft/4.00/) driver files.  They match
 the 4.00 distribution files, even though they have been time-stamped with the same date as the Multiplan files.
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of MS Multiplan 2.00 (Modified)
 

@@ -390,20 +390,22 @@ function processDisk(di, diskFile, argv, diskette)
                 sAction = "created";
             }
         }
+
         /*
          * Step 1: make sure there's a machine present to load/examine/test the software.
          */
         let sMachineEmbed = "";
         let matchFrontMatter = sIndexNew.match(/^---\n([\s\S]*?\n)---\n/);
-        if (matchFrontMatter) {
+        if (matchFrontMatter && diskette) {
             let sFrontMatter = matchFrontMatter[1];
             let matchMachines = sFrontMatter.match(/^machines: *\n([\s\S]*?\n)(\S|$)/m);
             if (matchMachines) {
                 /*
                  * If this was a generated machine and --rebuild is set, then we'll regenerate it.
                  */
-                if (matchMachines[1].indexOf("autoGen: true") >= 0 && argv['rebuild']) {
+                if (matchMachines[1].indexOf("autoGen: true") >= 0 && matchMachines[1].indexOf(diskette.name) >= 0 && argv['rebuild']) {
                     sFrontMatter = sFrontMatter.replace(matchMachines[0], matchMachines[2]);
+                    sIndexNew = sIndexNew.replace(/\n\{% include machine.html .*?%\}\n/, "");
                     matchMachines = null;
                 }
             }
@@ -415,8 +417,8 @@ function processDisk(di, diskFile, argv, diskette)
                  *      otherwise, if any file dates are >= 1984, a PC XT ("5160") is preferred;
                  *      otherwise, a PC ("5150") should suffice.
                  *
-                 * However, a diskette's "version" definition can also include machine preferences ("prefs") that supplement
-                 * or override those initial preferences:
+                 * However, a diskette's "version" definition can also include a machine "config" definition that supplements
+                 * or overrides those initial preferences:
                  *
                  *      manufacturer, such as "ibm" or "compaq"
                  *      model, such as "5150" or "5160"
@@ -425,14 +427,21 @@ function processDisk(di, diskFile, argv, diskette)
                  *      hardware preference, such as "com1" or "mouse"
                  *      operating system (aka boot disk) preference, such as "PC DOS 2.00 (Disk 1)"
                  *
-                 * Browse diskettes.json for more examples (look for "@prefs" properties).
+                 * Browse diskettes.json for more examples (look for "@config" properties).
                  *
                  * TODO: Finish support for all of the above preferences (eg, mouse support, serial and parallel ports, etc).
                  */
                 let diskSize = di.getSize() / 1024;
                 let dateNewest = di.getNewestDate(true);
                 let yearNewest = dateNewest && dateNewest.getFullYear() || 1981;
-                let aPrefs = (diskette.prefs || "").split(",");
+                let config = diskette.config || {}, prefs;
+                if (typeof config == "string") {
+                    prefs = config;
+                    config = {};
+                } else {
+                    prefs = config.prefs || "";
+                }
+                let aPrefs = prefs.split(",");
                 let findPref = function(aPossiblePrefs) {
                     for (let i = 0; i < aPossiblePrefs.length; i++) {
                         if (!aPossiblePrefs[i]) continue;
@@ -442,16 +451,16 @@ function processDisk(di, diskFile, argv, diskette)
                     }
                     return aPossiblePrefs[0];
                 };
-                let findConfig = function(configFile) {
+                let findConfig = function(configPath) {
+                    configPath = getFullPath(configPath);
                     let configPossible;
-                    let configPath = getFullPath(configFile);
                     let aPossibleConfigs = glob.sync(configPath);
                     let prefMemory = findPref(["kb"]);
                     for (let i = 0; i < aPossibleConfigs.length; i++) {
-                        let config = aPossibleConfigs[i];
-                        if (config.indexOf("debugger") > 0) continue;       // weed out debugger configs by default
-                        configPossible = config.substr(rootDir.length);
-                        if (config.indexOf(prefMemory) >= 0) break;
+                        let configFile = aPossibleConfigs[i];
+                        if (configFile.indexOf("debugger") > 0 || configFile.indexOf("array") > 0) continue;
+                        configPossible = configFile.substr(rootDir.length);
+                        if (configFile.indexOf(prefMemory) >= 0) break;
                     }
                     return configPossible;
                 };
@@ -466,21 +475,32 @@ function processDisk(di, diskFile, argv, diskette)
                     "compaq": [sDefaultCOMPAQModel, "portable","deskpro386"]
                 }[manufacturer]);
                 let video = findPref(["*","mda","cga","ega","vga","vdu"]);
-                let configFile = findConfig("/configs/pcx86/machine/" + manufacturer + "/" + model + "/" + video + "/**/machine.xml");
+                let configFile = config.file || findConfig("/configs/pcx86/machine/" + manufacturer + "/" + model + "/" + video + "/**/machine.xml");
                 let bootDisk = findPref(["", "DOS"]);
-                if (bootDisk) bootDisk = "      A:\n        name: \"" + bootDisk + "\"\n";
                 let sAutoGen = "    autoGen: true\n";
-                let sAutoMount = "    autoMount:\n" + bootDisk + "      B:\n        name: \"" + diskette.name + "\"\n";
                 let sAutoType = "    autoType: $date\\r$time\\rB:\\rDIR\\r\n";
                 let sMachineID = (model.length <= 4? manufacturer : "") + model;
                 let sMachine = "  - id: " + sMachineID + "\n    type: pcx86\n    config: " + configFile + "\n";
+                for (let prop in config) {
+                    if (prop == "prefs" || prop == "file") continue;
+                    let chQuote = "";
+                    if (prop == "drives") {
+                        chQuote = "'";
+                        bootDisk = "None";
+                    }
+                    sMachine += "    " + prop + ": " + chQuote + config[prop] + chQuote + "\n";
+                    sAutoType = "";
+                }
+                if (bootDisk) bootDisk = "      A:\n        name: \"" + bootDisk + "\"\n";
+                let sAutoMount = "    autoMount:\n" + bootDisk + "      B:\n        name: \"" + diskette.name + "\"\n";
                 sFrontMatter += "machines:\n" + sMachine + sAutoGen + sAutoMount + sAutoType;
                 sIndexNew = sIndexNew.replace(matchFrontMatter[1], sFrontMatter);
                 sMachineEmbed = "\n{% include machine.html id=\"" + sMachineID + "\" %}\n";
             }
         }
+
         /*
-         * The second step of checking the page is making sure there's an up-to-date directory listing...
+         * Step 2: Making sure there's an up-to-date directory listing...
          */
         let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n[^{\\s]|$)";
         let matchDirectory = sIndexNew.match(new RegExp(sMatch));
@@ -489,12 +509,12 @@ function processDisk(di, diskFile, argv, diskette)
                 printf("warning: directory heading level '%s' should really be '###'\n", matchDirectory[1]);
             }
             let matchInclude = matchDirectory[2].match(/\n\{%.*?%}\n/);
-            sIndexNew = sIndexNew.replace(matchDirectory[0], sMachineEmbed + sHeading + (matchInclude? matchInclude[0] : "") + sListing + matchDirectory[3]);
+            sIndexNew = sIndexNew.replace(matchDirectory[0], sHeading + (matchInclude? matchInclude[0] : "") + sListing + matchDirectory[3]);
         } else {
             /*
              * Look for the last "Directory of ..." entry and insert this directory listing after it (and if there's none, append it).
              */
-            sListing = sMachineEmbed + sHeading + sListing;
+            sListing = sHeading + sListing;
             let matchLast, match, re = /\n(##+)\\s+Directory of [^\n]*\n([\\s\\S]*?)\n(\\S|$)/g;
             while ((match = re.exec(sIndexNew))) {
                 matchLast = match;
@@ -506,6 +526,18 @@ function processDisk(di, diskFile, argv, diskette)
                 if (matchLast[3]) length--;
             }
             sIndexNew = sIndexNew.substr(0, index + length) + sListing + sIndex.substr(index + length);
+        }
+
+        /*
+         * Step 3: If a generated machine needs to be embedded, put it ahead of the first directory listing (which is why we waited until now).
+         */
+        if (sMachineEmbed) {
+            matchDirectory = sIndexNew.match(/\n(##+)\s+Directory of /);
+            if (matchDirectory) {
+                sIndexNew = sIndexNew.replace(matchDirectory[0], sMachineEmbed + matchDirectory[0]);
+            } else {
+                printf("warning: unable to embed machine: %s\n", sIndexFile);
+            }
         }
 
         if (!sIndex) {

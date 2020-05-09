@@ -70463,14 +70463,14 @@ class JSONLib {
                             let label = item['@label'];
                             let options = item['@options'];
                             let hidden = !!(group['@hidden'] || release['@hidden']);
-                            let prefs = release['@prefs'];
+                            let config = release['@config'];
                             if (title) diskette['title'] = title;
                             if (format) diskette['format'] = format;
                             if (archive) diskette['archive'] = archive;
                             if (label) diskette['label'] = label;
                             if (options) diskette['options'] = options;
                             if (hidden) diskette['hidden'] = hidden;
-                            if (prefs) diskette['prefs'] = prefs;
+                            if (config) diskette['config'] = config;
                         }
                         if (!item['@localonly'] || hostName == "localhost") {
                             aDiskettes.push(diskette);

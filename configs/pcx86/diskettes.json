@@ -413,6 +413,10 @@
         "@versions": {
           "2.0c": {
             "@title": "Word for Windows 2.0c",
+            "@config": {
+              "file": "/configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml",
+              "drives": "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]"
+            },
             "@media": [
               {
                 "@title": "Word for Windows 2.0c (Disk 1)",
@@ -906,7 +910,7 @@
         "@versions": {
           "2.00": {
             "@title": "MS Mouse 2.00",
-            "@prefs": "mouse",
+            "@config": "mouse",
             "@media": [
               {
                 "@title": "MS Mouse 2.00",
@@ -918,7 +922,7 @@
           },
           "2.50": {
             "@title": "MS Mouse 2.50",
-            "@prefs": "mouse",
+            "@config": "mouse",
             "@media": [
               {
                 "@title": "MS Mouse 2.50 (Bus)",
@@ -936,7 +940,7 @@
           },
           "4.00": {
             "@title": "MS Mouse 4.00",
-            "@prefs": "mouse",
+            "@config": "mouse",
             "@media": [
               {
                 "@title": "MS Mouse 4.00 (SYSTEM)",
@@ -952,7 +956,7 @@
           },
           "5.00": {
             "@title": "MS Mouse 5.00",
-            "@prefs": "mouse",
+            "@config": "mouse",
             "@media": [
               {
                 "@title": "MS Mouse 5.00 (SYSTEM)",
@@ -968,7 +972,7 @@
           },
           "6.xx": {
             "@title": "MS Mouse 6.xx",
-            "@prefs": "mouse",
+            "@config": "mouse",
             "@media": [
               {
                 "@title": "MS Mouse 6.14 (SETUP)",
