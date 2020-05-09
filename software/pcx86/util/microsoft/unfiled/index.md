@@ -4,6 +4,26 @@ title: Microsoft Unfiled Utilities
 permalink: /software/pcx86/util/microsoft/unfiled/
 ---
 
+Versions of *all* the utilities on the [MS Unfiled Utilities](#directory-of-ms-unfiled-utilities) diskette can be found on
+other disks in the collection, such as:
+
+  - [IBM Macro Assembler 1.00](/software/pcx86/lang/ibm/masm/1.00/)
+  - [IBM Macro Assembler 2.00](/software/pcx86/lang/ibm/masm/2.00/)
+  - [Microsoft Macro Assembler 1.00 (1981)](/software/pcx86/lang/microsoft/masm/1.00-1981/)
+  - [Microsoft Macro Assembler 1.10](/software/pcx86/lang/microsoft/masm/1.10/)
+  - [Microsoft Macro Assembler 1.12](/software/pcx86/lang/microsoft/masm/1.12/)
+  - [Microsoft Macro Assembler 1.25](/software/pcx86/lang/microsoft/masm/1.25/)
+  - [Microsoft Macro Assembler 2.04](/software/pcx86/lang/microsoft/masm/2.04/)
+  - [Microsoft Macro Assembler 3.00](/software/pcx86/lang/microsoft/masm/3.00/)
+  - [Microsoft Macro Assembler 3.01](/software/pcx86/lang/microsoft/masm/3.01/)
+  - [Microsoft Macro Assembler 4.00](/software/pcx86/lang/microsoft/masm/4.00/)
+  - [Microsoft Macro Assembler 5.00](/software/pcx86/lang/microsoft/masm/5.00/)
+  - [Microsoft Macro Assembler 5.10](/software/pcx86/lang/microsoft/masm/5.10/)
+  - [Microsoft Macro Assembler 5.10 (Feb 1988)](/software/pcx86/lang/microsoft/masm/5.10x/)
+  - [Microsoft OS/2 SDK 1.02](/software/pcx86/sdk/os2/microsoft/1.02/)
+
+However, none of the *specific* versions shown below have been found in other distributions, so their origins remain a mystery.
+
 ### Directory of MS Unfiled Utilities
 
      Volume in drive A is UNFILED
