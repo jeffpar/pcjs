@@ -3077,17 +3077,22 @@ export default class DiskImage {
     }
 
     /**
-     * getNewestDate()
+     * getNewestDate(fExecutable)
+     *
+     * Looks through the dates of all the specified files and returns the newest date found, if any.
      *
      * @this {DiskImage}
+     * @param {boolean} [fExecutable] (true for executable files only, false for all files)
      * @returns {Date|undefined}
      */
-    getNewestDate()
+    getNewestDate(fExecutable)
     {
         let date;
         for (let i = 0; i < this.fileTable.length; i++) {
             let file = this.fileTable[i];
-            if (!date || date.getTime() < file.date.getTime()) date = file.date;
+            if (!fExecutable || file.name.indexOf(".COM") > 0 || file.name.indexOf(".EXE") > 0) {
+                if (!date || date.getTime() < file.date.getTime()) date = file.date;
+            }
         }
         return date;
     }

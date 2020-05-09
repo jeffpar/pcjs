@@ -391,38 +391,90 @@ function processDisk(di, diskFile, argv, diskette)
             }
         }
         /*
-         * The first step of checking the page is making sure there's a machine present to load/examine/test the software...
+         * Step 1: make sure there's a machine present to load/examine/test the software.
          */
         let sMachineEmbed = "";
         let matchFrontMatter = sIndexNew.match(/^---\n([\s\S]*?\n)---\n/);
         if (matchFrontMatter) {
             let sFrontMatter = matchFrontMatter[1];
-            let matchMachines = sFrontMatter.match(/^machines:/m);
+            let matchMachines = sFrontMatter.match(/^machines: *\n([\s\S]*?\n)(\S|$)/m);
+            if (matchMachines) {
+                /*
+                 * If this was a generated machine and --rebuild is set, then we'll regenerate it.
+                 */
+                if (matchMachines[1].indexOf("autoGen: true") >= 0 && argv['rebuild']) {
+                    sFrontMatter = sFrontMatter.replace(matchMachines[0], matchMachines[2]);
+                    matchMachines = null;
+                }
+            }
             if (!matchMachines) {
                 /*
-                 * To add a compatible machine, we look at a couple of factors:
+                 * To add a compatible machine, we look at a few aspects of the diskette itself:
                  *
-                 *   The diskette format: if > 360K, then a PC AT is required; otherwise, if any files are >= 1984, a PC XT is required.
+                 *      if the diskette format > 360K or any file dates are >= 1986, then a PC AT ("5170") is preferred;
+                 *      otherwise, if any file dates are >= 1984, a PC XT ("5160") is preferred;
+                 *      otherwise, a PC ("5150") should suffice.
+                 *
+                 * However, a diskette's "version" definition can also include machine preferences ("prefs") that supplement
+                 * or override those initial preferences:
+                 *
+                 *      manufacturer, such as "ibm" or "compaq"
+                 *      model, such as "5150" or "5160"
+                 *      video preference, such as "mda" or "cga"
+                 *      memory preference, such "256kb" or "640kb"
+                 *      hardware preference, such as "com1" or "mouse"
+                 *      operating system (aka boot disk) preference, such as "PC DOS 2.00 (Disk 1)"
+                 *
+                 * Browse diskettes.json for more examples (look for "@prefs" properties).
+                 *
+                 * TODO: Finish support for all of the above preferences (eg, mouse support, serial and parallel ports, etc).
                  */
-                let sMachine, sMachineID;
-                let sAutoType = "    autoType: \\r\\rB:\\rDIR\\r\n";
-                let sAutoMount = "    autoMount:\n      B:\n        name: \"" + diskette.name + "\"\n";
-                if (di.getSize() > 360 * 1024) {
-                    sMachineID = "ibm5170";
-                    sMachine = "  - id: %id%\n    type: pcx86\n    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml\n";
-                }
-                else {
-                    sAutoType = "    autoType: $date\\r$time\\rB:\\rDIR\\r\n";
-                    let date = di.getNewestDate();
-                    if (date && date.getFullYear() >= 1984) {
-                        sMachineID = "ibm5160";
-                        sMachine = "  - id: %id%\n    type: pcx86\n    config: /configs/pcx86/machine/ibm/5160/cga/512kb/machine.xml\n";
-                    } else {
-                        sMachineID = "ibm5150";
-                        sMachine = "  - id: %id%\n    type: pcx86\n    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml\n";
+                let diskSize = di.getSize() / 1024;
+                let dateNewest = di.getNewestDate(true);
+                let yearNewest = dateNewest && dateNewest.getFullYear() || 1981;
+                let aPrefs = (diskette.prefs || "").split(",");
+                let findPref = function(aPossiblePrefs) {
+                    for (let i = 0; i < aPossiblePrefs.length; i++) {
+                        if (!aPossiblePrefs[i]) continue;
+                        for (let j = 0; j < aPrefs.length; j++) {
+                            if (aPrefs[j].indexOf(aPossiblePrefs[i]) >= 0) return aPrefs[j];
+                        }
                     }
-                }
-                sFrontMatter += "machines:\n" + sMachine.replace("%id%", sMachineID) + sAutoMount + sAutoType;
+                    return aPossiblePrefs[0];
+                };
+                let findConfig = function(configFile) {
+                    let configPossible;
+                    let configPath = getFullPath(configFile);
+                    let aPossibleConfigs = glob.sync(configPath);
+                    let prefMemory = findPref(["kb"]);
+                    for (let i = 0; i < aPossibleConfigs.length; i++) {
+                        let config = aPossibleConfigs[i];
+                        if (config.indexOf("debugger") > 0) continue;       // weed out debugger configs by default
+                        configPossible = config.substr(rootDir.length);
+                        if (config.indexOf(prefMemory) >= 0) break;
+                    }
+                    return configPossible;
+                };
+                /*
+                 * Now that we have all the raw inputs ("ingredients"), let's toss some defaults together.
+                 */
+                let manufacturer = findPref(["ibm","compaq"]);
+                let sDefaultIBMModel = diskSize > 360 || yearNewest >= 1986? "5170" : (yearNewest >= 1984? "5160" : "5150");
+                let sDefaultCOMPAQModel = diskSize > 360 || yearNewest >= 1986? "deskpro386" : "portable";
+                let model = findPref({
+                    "ibm": [sDefaultIBMModel, "5150","5160","5170"],
+                    "compaq": [sDefaultCOMPAQModel, "portable","deskpro386"]
+                }[manufacturer]);
+                let video = findPref(["*","mda","cga","ega","vga","vdu"]);
+                let configFile = findConfig("/configs/pcx86/machine/" + manufacturer + "/" + model + "/" + video + "/**/machine.xml");
+                let bootDisk = findPref(["", "DOS"]);
+                if (bootDisk) bootDisk = "      A:\n        name: \"" + bootDisk + "\"\n";
+                let sAutoGen = "    autoGen: true\n";
+                let sAutoMount = "    autoMount:\n" + bootDisk + "      B:\n        name: \"" + diskette.name + "\"\n";
+                let sAutoType = "    autoType: $date\\r$time\\rB:\\rDIR\\r\n";
+                let sMachineID = (model.length <= 4? manufacturer : "") + model;
+                let sMachine = "  - id: " + sMachineID + "\n    type: pcx86\n    config: " + configFile + "\n";
+                sFrontMatter += "machines:\n" + sMachine + sAutoGen + sAutoMount + sAutoType;
                 sIndexNew = sIndexNew.replace(matchFrontMatter[1], sFrontMatter);
                 sMachineEmbed = "\n{% include machine.html id=\"" + sMachineID + "\" %}\n";
             }

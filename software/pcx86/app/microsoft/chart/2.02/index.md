@@ -3,6 +3,15 @@ layout: page
 title: Microsoft Chart 2.02
 permalink: /software/pcx86/app/microsoft/chart/2.02/
 redirect_from: /disks/pcx86/apps/microsoft/chart/2.02/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS Chart 2.02 (Modified)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 NOTE: The Microsoft Chart 2.02 disk below is *not* an original distribution disk.
@@ -19,6 +28,8 @@ I'm sure with further debugging we could find out one way or the other, but let'
 clear it's really worth the effort.  To start, the IBMBIO.COM, IBMDOS.COM and COMMAND.COM files should be placed onto
 their own MS-DOS disk image and archived appropriately.  A search for the rest of the SPERRY OEM distribution files
 should also be conducted.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of MS Chart 2.02 (Modified)
 
