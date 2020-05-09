@@ -2,6 +2,14 @@
 layout: page
 title: Microsoft Unfiled Utilities
 permalink: /software/pcx86/util/microsoft/unfiled/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoMount:
+      B:
+        name: "MS Unfiled Utilities"
+    autoType: \r\rB:\rDIR\r
 ---
 
 Versions of *all* the utilities on the [MS Unfiled Utilities](#directory-of-ms-unfiled-utilities) diskette can be found on
@@ -26,6 +34,8 @@ However, none of the *specific* versions on the diskette below have been found i
 
 Thanks to several PCjs users for donating these mysterious binaries to the collection, and perhaps other PCjs users will be able to puzzle
 out where they came from.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of MS Unfiled Utilities
 

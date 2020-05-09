@@ -3077,6 +3077,22 @@ export default class DiskImage {
     }
 
     /**
+     * getNewestDate()
+     *
+     * @this {DiskImage}
+     * @returns {Date|undefined}
+     */
+    getNewestDate()
+    {
+        let date;
+        for (let i = 0; i < this.fileTable.length; i++) {
+            let file = this.fileTable[i];
+            if (!date || date.getTime() < file.date.getTime()) date = file.date;
+        }
+        return date;
+    }
+
+    /**
      * getSize()
      *
      * @this {DiskImage}
