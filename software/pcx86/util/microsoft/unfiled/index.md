@@ -5,7 +5,7 @@ permalink: /software/pcx86/util/microsoft/unfiled/
 ---
 
 Versions of *all* the utilities on the [MS Unfiled Utilities](#directory-of-ms-unfiled-utilities) diskette can be found on
-other disks in the collection, such as:
+other disks in the PCjs collection, such as:
 
   - [IBM Macro Assembler 1.00](/software/pcx86/lang/ibm/masm/1.00/)
   - [IBM Macro Assembler 2.00](/software/pcx86/lang/ibm/masm/2.00/)
@@ -22,7 +22,10 @@ other disks in the collection, such as:
   - [Microsoft Macro Assembler 5.10 (Feb 1988)](/software/pcx86/lang/microsoft/masm/5.10x/)
   - [Microsoft OS/2 SDK 1.02](/software/pcx86/sdk/os2/microsoft/1.02/)
 
-However, none of the *specific* versions shown below have been found in other distributions, so their origins remain a mystery.
+However, none of the *specific* versions on the diskette below have been found in other distributions, so their origins remain a mystery.
+
+Thanks to several PCjs users for donating these mysterious binaries to the collection, and perhaps other PCjs users will be able to puzzle
+out where they came from.
 
 ### Directory of MS Unfiled Utilities
 
