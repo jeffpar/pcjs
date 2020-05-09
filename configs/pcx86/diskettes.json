@@ -580,13 +580,15 @@
                 "@title": "ThinkTank (DOS)",
                 "@diskette": "THINKTANK-DOS.json",
                 "@format": "PC320K",
-                "@archive": "folder"
+                "@archive": "folder",
+                "@label": "ThinkTank"
               },
               {
                 "@title": "ThinkTank (OS/2)",
                 "@diskette": "THINKTANK-OS2.json",
                 "@format": "PC1200K",
-                "@archive": "folder"
+                "@archive": "folder",
+                "@label": "ThinkTank"
               }
             ],
             "@author": "Living Videotext",
@@ -1000,19 +1002,22 @@
                 "@title": "IBM PC BIOS Sources (V1)",
                 "@diskette": "IBM-BIOS-SRC-5150V1.json",
                 "@format": "PC320K",
-                "@archive": "folder"
+                "@archive": "folder",
+                "@label": "5150V1"
               },
               {
                 "@title": "IBM PC BIOS Sources (V2)",
                 "@diskette": "IBM-BIOS-SRC-5150V2.json",
                 "@format": "PC320K",
-                "@archive": "folder"
+                "@archive": "folder",
+                "@label": "5150V2"
               },
               {
                 "@title": "IBM PC BIOS Sources (V3)",
                 "@diskette": "IBM-BIOS-SRC-5150V3.json",
                 "@format": "PC320K",
-                "@archive": "folder"
+                "@archive": "folder",
+                "@label": "5150V3"
               }
             ]
           },
@@ -1023,19 +1028,22 @@
                 "@title": "IBM PC XT BIOS Sources (V1)",
                 "@diskette": "IBM-BIOS-SRC-5160V1.json",
                 "@format": "PC320K",
-                "@archive": "folder"
+                "@archive": "folder",
+                "@label": "5160V1"
               },
               {
                 "@title": "IBM PC XT BIOS Sources (V2)",
                 "@diskette": "IBM-BIOS-SRC-5160V2.json",
                 "@format": "PC360K",
-                "@archive": "folder"
+                "@archive": "folder",
+                "@label": "5160V2"
               },
               {
                 "@title": "IBM PC XT BIOS Sources (V3)",
                 "@diskette": "IBM-BIOS-SRC-5160V3.json",
                 "@format": "PC360K",
-                "@archive": "folder"
+                "@archive": "folder",
+                "@label": "5160V3"
               }
             ]
           },
@@ -1046,19 +1054,22 @@
                 "@title": "IBM PC AT BIOS Sources (V1)",
                 "@diskette": "IBM-BIOS-SRC-5170V1.json",
                 "@format": "PC1200K",
-                "@archive": "folder"
+                "@archive": "folder",
+                "@label": "5170V1"
               },
               {
                 "@title": "IBM PC AT BIOS Sources (V2)",
                 "@diskette": "IBM-BIOS-SRC-5170V2.json",
                 "@format": "PC1200K",
-                "@archive": "folder"
+                "@archive": "folder",
+                "@label": "5170V2"
               },
               {
                 "@title": "IBM PC AT BIOS Sources (V3)",
                 "@diskette": "IBM-BIOS-SRC-5170V3.json",
                 "@format": "PC1200K",
-                "@archive": "folder"
+                "@archive": "folder",
+                "@label": "5170V3"
               }
             ]
           }
@@ -1309,7 +1320,8 @@
               "@title": "Commander Keen: Episode One",
               "@diskette": "KEEN1-V11.json",
               "@format": "PC320K",
-              "@archive": "folder"
+              "@archive": "folder",
+              "@label": "KEEN1"
             }
           ]
         },
@@ -1432,7 +1444,8 @@
             {
               "@diskette": "FLIGHTSIM-1984.json",
               "@format": "PC320K",
-              "@archive": "folder"
+              "@archive": "folder",
+              "@label": "FLIGHTSIM"
             }
           ]
         }
@@ -1461,6 +1474,7 @@
               "@diskette": "CASTLE-ADVENTURE-1985.json",
               "@format": "PC160K",
               "@archive": "folder",
+              "@label": "CASTLE",
               "@source": ""
             }
           ],
@@ -1473,6 +1487,7 @@
               "@diskette": "ESUITE-1982.json",
               "@format": "PC320K",
               "@archive": "folder",
+              "@label": "ESUITE",
               "@source": ""
             }
           ],
@@ -1549,6 +1564,7 @@
               "@diskette": "LEMMINGS-1991.json",
               "@format": "PC1200K",
               "@archive": "folder",
+              "@label": "LEMMINGS",
               "@source": ""
             }
           ],
@@ -1562,6 +1578,7 @@
               "@diskette": "MORIA-1992.json",
               "@format": "PC320K",
               "@archive": "folder",
+              "@label": "MORIA",
               "@source": ""
             }
           ],
@@ -1593,6 +1610,7 @@
               "@diskette": "ROGUE-1985.json",
               "@format": "PC160K",
               "@archive": "folder",
+              "@label": "ROGUE",
               "@source": ""
             }
           ],
@@ -1611,6 +1629,7 @@
               "@diskette": "TRUMP-CASTLE-120.json",
               "@format": "PC1200K",
               "@archive": "folder",
+              "@label": "TRUMP",
               "@source": ""
             }
           ],
@@ -2610,6 +2629,7 @@
                 "@diskette": "MASM100-1981.json",
                 "@format": "PC160K",
                 "@archive": "folder",
+                "@label": "MASM100",
                 "@source": "http://www.os2museum.com"
               }
             ]
@@ -3642,13 +3662,13 @@
           "@media": [
             {
               "@title": "Unauthorized Windows 95 (BIN)",
-              "@diskette": "UNAUTH-W95B.json",
+              "@diskette": "UNAUTH_W95B.json",
               "@format": "PC1440K",
               "@archive": "folder"
             },
             {
               "@title": "Unauthorized Windows 95 (SRC)",
-              "@diskette": "UNAUTH-W95S.json",
+              "@diskette": "UNAUTH_W95S.json",
               "@format": "PC1200K",
               "@archive": "folder"
             }
@@ -3669,23 +3689,23 @@
           "@media": [
             {
               "@title": "Undocumented DOS (Disk 1)",
-              "@diskette": "UNDOC-DOS-DISK1.json",
+              "@diskette": "UNDOC_DOS-DISK1.json",
               "@format": "PC1200K"
             },
             {
               "@title": "Undocumented DOS (Disk 2)",
-              "@diskette": "UNDOC-DOS-DISK2.json",
+              "@diskette": "UNDOC_DOS-DISK2.json",
               "@format": "PC1200K"
             },
             {
               "@title": "Undocumented DOS (2nd Ed. BIN)",
-              "@diskette": "UNDOC-DOS-2ED-BIN.json",
+              "@diskette": "UNDOC_DOS-2ED-BIN.json",
               "@format": "PC1200K",
               "@archive": "folder"
             },
             {
               "@title": "Undocumented DOS (2nd Ed. SRC)",
-              "@diskette": "UNDOC-DOS-2ED-SRC.json",
+              "@diskette": "UNDOC_DOS-2ED-SRC.json",
               "@format": "PC1200K",
               "@archive": "folder"
             }
@@ -3706,8 +3726,9 @@
           "@media": [
             {
               "@title": "Undocumented PC",
-              "@diskette": "UNDOC-PC.json",
-              "@format": "PC1200K"
+              "@diskette": "UNDOC_PC.json",
+              "@format": "PC1200K",
+              "@archive": "folder"
             }
           ],
           "@documents": [
@@ -3725,8 +3746,9 @@
           "@media": [
             {
               "@title": "Undocumented Windows",
-              "@diskette": "UNDOC-WIN.json",
-              "@format": "PC1200K"
+              "@diskette": "UNDOC_WIN.json",
+              "@format": "PC1200K",
+              "@archive": "folder"
             }
           ]
         }
@@ -6356,7 +6378,8 @@
                   "@title": "Omniview 386 4.30",
                   "@diskette": "OMNIVIEW386-430.json",
                   "@format": "PC1200K",
-                  "@archive": "folder"
+                  "@archive": "folder",
+                  "@label": "OMNIVIEW386"
                 }
               ]
             }
@@ -8781,13 +8804,13 @@
             "@media": [
               {
                 "@title": "OBJASM 2.0 (Bin)",
-                "@diskette": "OBJASM-BIN.json",
+                "@diskette": "OBJASM_BIN.json",
                 "@format": "PC320K",
                 "@archive": "folder"
               },
               {
                 "@title": "OBJASM 2.0 (Src)",
-                "@diskette": "OBJASM-SRC.json",
+                "@diskette": "OBJASM_SRC.json",
                 "@format": "PC320K",
                 "@archive": "folder"
               }
@@ -8860,13 +8883,13 @@
             "@media": [
               {
                 "@title": "UNP (Executable Unpacker) 4.11",
-                "@diskette": "UNP411-BIN.json",
+                "@diskette": "UNP411_BIN.json",
                 "@format": "PC160K",
                 "@archive": "folder"
               },
               {
                 "@title": "UNP (Executable Unpacker) Source",
-                "@diskette": "UNP411-SRC.json",
+                "@diskette": "UNP411_SRC.json",
                 "@format": "PC1200K",
                 "@archive": "folder"
               }

@@ -173,4 +173,6 @@ NOTE: This appears to be an *incomplete* set.
            14 file(s)     295633 bytes
                            61440 bytes free
 
+<!-- Documentation -->
+
 {% include gallery/documents.html width="200" height="260" %}

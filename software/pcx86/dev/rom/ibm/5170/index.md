@@ -25,7 +25,7 @@ and [Version Notes](#5170v1-notes-from-pc-dos-retro) are provided below.
 
 ### Directory of IBM PC AT BIOS Sources (V1)
 
-     Volume in drive A is IBM
+     Volume in drive A is 5170V1
      Directory of A:\
 
     5170V1   TXT       903   3-27-20   3:00p
@@ -65,7 +65,7 @@ and [Version Notes](#5170v1-notes-from-pc-dos-retro) are provided below.
 
 ### Directory of IBM PC AT BIOS Sources (V2)
 
-     Volume in drive A is IBM
+     Volume in drive A is 5170V2
      Directory of A:\
 
     5170V2   TXT       803   3-27-20   3:00p
@@ -99,7 +99,7 @@ and [Version Notes](#5170v1-notes-from-pc-dos-retro) are provided below.
 
 ### Directory of IBM PC AT BIOS Sources (V3)
 
-     Volume in drive A is IBM
+     Volume in drive A is 5170V3
      Directory of A:\
 
     5170V3   TXT       799   3-27-20   3:00p

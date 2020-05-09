@@ -349,7 +349,7 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
 ### Directory of Undocumented DOS (2nd Ed. BIN)
 
-     Volume in drive A is UNDOC
+     Volume in drive A is BIN
      Directory of A:\
 
     CHAP1        <DIR>       1-24-18   2:26a
@@ -532,7 +532,7 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
 ### Directory of Undocumented DOS (2nd Ed. SRC)
 
-     Volume in drive A is UNDOC
+     Volume in drive A is SRC
      Directory of A:\
 
     CHAP1        <DIR>       5-02-20  10:13a

@@ -33,4 +33,6 @@ permalink: /software/pcx86/lang/ibm/cobol/1.00/
             4 file(s)     126848 bytes
                            33280 bytes free
 
+<!-- Documentation -->
+
 {% include gallery/documents.html %}

@@ -13,7 +13,7 @@ PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DO
 
 ### Directory of MS Pascal 4.00 (Disk 1)
 
-     Volume in drive A is PASCAL400
+     Volume in drive A is DISK1
      Directory of A:\
 
     87       EXE      8798   7-23-87   3:34p
@@ -34,7 +34,7 @@ PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DO
 
 ### Directory of MS Pascal 4.00 (Disk 2)
 
-     Volume in drive A is PASCAL400
+     Volume in drive A is DISK2
      Directory of A:\
 
     MAKE     EXE     38613   1-29-88  11:26a
@@ -46,7 +46,7 @@ PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DO
 
 ### Directory of MS Pascal 4.00 (Disk 3)
 
-     Volume in drive A is PASCAL400
+     Volume in drive A is DISK3
      Directory of A:\
 
     BSE      INT      1062   1-15-88   9:46p
@@ -78,7 +78,7 @@ PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DO
 
 ### Directory of MS Pascal 4.00 (Disk 4)
 
-     Volume in drive A is PASCAL400
+     Volume in drive A is DISK4
      Directory of A:\
 
     5ENTX6L  OBJ      1320   3-09-88  11:54p
@@ -105,7 +105,7 @@ PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DO
 
 ### Directory of MS Pascal 4.00 (Disk 5)
 
-     Volume in drive A is PASCAL400
+     Volume in drive A is DISK5
      Directory of A:\
 
     8087     LIB     24849   1-14-88   4:54p
@@ -125,7 +125,7 @@ PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DO
 
 ### Directory of MS Pascal 4.00 (Disk 6)
 
-     Volume in drive A is PASCAL400
+     Volume in drive A is DISK6
      Directory of A:\
 
     CV       EXE    263890   3-09-88   2:54a
@@ -137,7 +137,7 @@ PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DO
 
 ### Directory of MS Pascal 4.00 (Disk 7)
 
-     Volume in drive A is PASCAL400
+     Volume in drive A is DISK7
      Directory of A:\
 
     CVP      EXE    233249   3-09-88   2:56a
@@ -147,7 +147,7 @@ PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DO
 
 ### Directory of MS Pascal 4.00 (Disk 8)
 
-     Volume in drive A is PASCAL400
+     Volume in drive A is DISK8
      Directory of A:\
 
     BRIEF    INI      2094   1-14-88  11:38p
@@ -170,7 +170,7 @@ PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DO
 
 ### Directory of MS Pascal 4.00 (Disk 9)
 
-     Volume in drive A is PASCAL400
+     Volume in drive A is DISK9
      Directory of A:\
 
     BRKCTL   INC       784   2-09-88  11:08p

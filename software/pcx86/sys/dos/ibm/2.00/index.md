@@ -78,6 +78,8 @@ PC DOS 2.00 was released in March 1983.
            14 file(s)      90112 bytes
                            87040 bytes free
 
+<!-- Documentation -->
+
 {% include gallery/documents.html width="200" height="280" %}
 
 ### Feature Summary

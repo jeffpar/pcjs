@@ -25,7 +25,7 @@ and [Version Notes](#5150v1-notes-from-pc-dos-retro) are provided below.
 
 ### Directory of IBM PC BIOS Sources (V1)
 
-     Volume in drive A is IBM
+     Volume in drive A is 5150V1
      Directory of A:\
 
     5150     TXT      4087   3-27-20   3:00p
@@ -37,7 +37,7 @@ and [Version Notes](#5150v1-notes-from-pc-dos-retro) are provided below.
 
 ### Directory of IBM PC BIOS Sources (V2)
 
-     Volume in drive A is IBM
+     Volume in drive A is 5150V2
      Directory of A:\
 
     5150     TXT      4087   3-27-20   3:00p
@@ -49,7 +49,7 @@ and [Version Notes](#5150v1-notes-from-pc-dos-retro) are provided below.
 
 ### Directory of IBM PC BIOS Sources (V3)
 
-     Volume in drive A is IBM
+     Volume in drive A is 5150V3
      Directory of A:\
 
     5150     TXT      4087   3-27-20   3:00p
