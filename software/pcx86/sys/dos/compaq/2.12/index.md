@@ -77,4 +77,6 @@ We also have copies of the original [COMPAQ MS-DOS Version 2 Documentation](#doc
            41 file(s)     340291 bytes
                             2048 bytes free
 
+## Documentation
+
 {% include gallery/documents.html path="/software/pcx86/sys/dos/compaq/2.11/" %}

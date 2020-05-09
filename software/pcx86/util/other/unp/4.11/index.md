@@ -9,7 +9,7 @@ UNP 4.11 is an EXE unpacking utility created by [Ben Castricum](http://unp.benca
 
 ### Directory of UNP (Executable Unpacker) 4.11
 
-     Volume in drive A is UNP411
+     Volume in drive A is UNP411_BIN
      Directory of A:\
 
     FILE_ID  DIZ       327   4-10-95   5:38a
@@ -21,7 +21,7 @@ UNP 4.11 is an EXE unpacking utility created by [Ben Castricum](http://unp.benca
 
 ### Directory of UNP (Executable Unpacker) Source
 
-     Volume in drive A is UNP411
+     Volume in drive A is UNP411_SRC
      Directory of A:\
 
     COM          <DIR>      12-26-98   2:36p

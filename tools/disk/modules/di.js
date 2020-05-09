@@ -524,7 +524,7 @@ function readDir(sDir, sLabel, fNormalize = false, kbTarget, nMax)
 {
     let di;
     if (!sLabel) {
-        sLabel = path.basename(sDir).replace(/^.*-([^-]+)$/, "$1");
+        sLabel = path.basename(sDir).replace(/^.*-([^0-9][^-]+)$/, "$1");
     }
     sDir = getFullPath(sDir);
     try {
@@ -793,7 +793,7 @@ function writeFile(sFile, data, fCreateDir)
  *
  * Usage:
  *
- *      node di.js [disk/directory] [options]
+ *      node di.js [input disk image or directory] [output disk image] [options]
  *
  * @param {number} argc
  * @param {Array} argv

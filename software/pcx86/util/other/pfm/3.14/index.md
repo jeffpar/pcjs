@@ -888,7 +888,7 @@ paulc@bangate.compaq.com
 
 ### Directory of PFM (Paul's File Manager) 3.14
 
-     Volume in drive A is COMPAQ
+     Volume in drive A is PFM
      Directory of A:\
 
     PFM      COM     47616   2-14-91  12:00a

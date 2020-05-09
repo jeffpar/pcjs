@@ -418,7 +418,7 @@ machines:
 
 ### Directory of OBJASM 2.0 (Bin)
 
-     Volume in drive A is OBJASM
+     Volume in drive A is OBJASM_BIN
      Directory of A:\
 
     OBJASM   DOC     20019  12-22-90   3:54p
@@ -430,7 +430,7 @@ machines:
 
 ### Directory of OBJASM 2.0 (Src)
 
-     Volume in drive A is OBJASM
+     Volume in drive A is OBJASM_SRC
      Directory of A:\
 
     O                 2592  11-09-90   1:25p

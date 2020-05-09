@@ -25,7 +25,7 @@ and [Version Notes](#5160v1-notes-from-pc-dos-retro) are provided below.
 
 ### Directory of IBM PC XT BIOS Sources (V1)
 
-     Volume in drive A is IBM
+     Volume in drive A is 5160V1
      Directory of A:\
 
     5160V1   TXT       980   3-27-20   3:00p
@@ -37,7 +37,7 @@ and [Version Notes](#5160v1-notes-from-pc-dos-retro) are provided below.
 
 ### Directory of IBM PC XT BIOS Sources (V2)
 
-     Volume in drive A is IBM
+     Volume in drive A is 5160V2
      Directory of A:\
 
     5160V2   TXT       542   3-27-20   3:00p
@@ -61,7 +61,7 @@ and [Version Notes](#5160v1-notes-from-pc-dos-retro) are provided below.
 
 ### Directory of IBM PC XT BIOS Sources (V3)
 
-     Volume in drive A is IBM
+     Volume in drive A is 5160V3
      Directory of A:\
 
     5160V3   TXT       563   3-27-20   3:00p

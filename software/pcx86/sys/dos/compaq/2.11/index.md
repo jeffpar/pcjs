@@ -75,4 +75,6 @@ We also have copies of the original [COMPAQ MS-DOS Version 2 Documentation](#doc
            39 file(s)     335452 bytes
                             7168 bytes free
 
+## Documentation
+
 {% include gallery/documents.html %}

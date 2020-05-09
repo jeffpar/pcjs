@@ -11,7 +11,7 @@ A directory listing of *The Undocumented PC* diskette that accompanied the book 
 
 ### Directory of Undocumented PC
 
-     Volume in drive A is PCJSDISK
+     Volume in drive A is UNDOC_PC
      Directory of A:\
 
     --EXES-- ---         2  11-01-96   1:00a
@@ -84,5 +84,7 @@ A directory listing of *The Undocumented PC* diskette that accompanied the book 
     VCOM     MSG     49120  11-01-96   1:00a
            68 file(s)     996481 bytes
                           200192 bytes free
+
+## Documentation
 
 {% include embed.html src="https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2136982&authkey=AGBgodjA3pTpptQ&em=2" %}

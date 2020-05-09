@@ -45,7 +45,7 @@ an original disk image, the difference in timestamps is not meaningful. All file
 
 ### Directory of MS Mouse 2.50 (Serial)
 
-     Volume in drive A is MSMOUSE
+     Volume in drive A is SERIAL
      Directory of A:\
 
     MOUSE    COM      4138   9-13-84  10:00a
