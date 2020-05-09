@@ -80,6 +80,6 @@ redirect_from:
            18 file(s)     352110 bytes
                             1024 bytes free
 
-## Documentation
+<!-- Documentation -->
 
 {% include gallery/documents.html width="200" height="260" %}

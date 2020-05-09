@@ -100,6 +100,6 @@ You can browse all of the [Additional Materials](#additional-materials) below.
             7 file(s)     122496 bytes
                            36352 bytes free
 
-## Documentation
+<!-- Documentation -->
 
 {% include gallery/documents.html title="Additional Materials" width="320" height="460" %}

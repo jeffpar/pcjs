@@ -35,6 +35,6 @@ machines:
            14 file(s)     152986 bytes
                             4096 bytes free
 
-## Documentation
+<!-- Documentation -->
 
 {% include gallery/documents.html %}
