@@ -87,4 +87,3 @@ machines:
     SC3MSG   PRN      6528   1-01-80   1:00a
            16 file(s)     171930 bytes
                           181248 bytes free
-

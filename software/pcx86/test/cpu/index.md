@@ -22,3 +22,15 @@ redirect_from: /tests/pcx86/cpu/
 ```asm
 {% include_relative 80386/test386.asm %}
 ```
+
+### Directory of PCx86 CPU Tests
+
+     Volume in drive A is CPUTESTS
+     Directory of A:\
+
+    CPUID    ASM     19038   3-08-20  12:38a
+    ID       ASM      2299   3-08-20  12:38a
+    ID       COM       347   3-08-20  12:38a
+    TEST386  COM     65276   3-08-20  12:38a
+            4 file(s)      86960 bytes
+                           72192 bytes free

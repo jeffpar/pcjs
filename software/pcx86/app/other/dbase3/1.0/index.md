@@ -241,4 +241,3 @@ so overall, the disks from our private collection may be more authentic.
     DOCTORS  DBF       253  11-13-84  10:18a
            76 file(s)     284288 bytes
                            48128 bytes free
-

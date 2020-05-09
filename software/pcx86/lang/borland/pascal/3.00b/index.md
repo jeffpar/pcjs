@@ -55,4 +55,3 @@ The following documentation is available online:
     INSTALL  DOC     11264   7-25-84   4:49p
            39 file(s)     322199 bytes
                            17408 bytes free
-

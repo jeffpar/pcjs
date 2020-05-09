@@ -226,4 +226,3 @@ Directory listings of the six 360Kb distribution diskettes are provided below.
     PRACTICE DOC      2944   1-15-86   6:00p
             3 file(s)     197098 bytes
                           164864 bytes free
-

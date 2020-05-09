@@ -45,4 +45,3 @@ The following documentation is available online:
     README           11612   9-17-86   3:02a
            29 file(s)     325859 bytes
                            19456 bytes free
-

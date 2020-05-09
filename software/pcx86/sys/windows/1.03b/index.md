@@ -247,4 +247,3 @@ Directory listings of the six 360Kb distribution diskettes are provided below.
     Total files listed:
            61 file(s)     254770 bytes
                            69632 bytes free
-

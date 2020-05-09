@@ -269,4 +269,3 @@ These PCjs disk images are from our private collection.  Differences include:
     Total files listed:
            72 file(s)     316537 bytes
                             3072 bytes free
-

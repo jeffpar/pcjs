@@ -22,7 +22,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.20 (1.2M Disk 1)
 
-     Volume in drive A is DISK1
+     Volume in drive A is DISK      1
      Directory of A:\
 
     IO       SYS*    40566   9-30-93   6:20a
@@ -59,7 +59,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.20 (1.2M Disk 2)
 
-     Volume in drive A is DISK2
+     Volume in drive A is DISK      2
      Directory of A:\
 
     ANSI     SY_      6260   9-30-93   6:20a
@@ -115,7 +115,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.20 (1.2M Disk 3)
 
-     Volume in drive A is DISK3
+     Volume in drive A is DISK      3
      Directory of A:\
 
     DEFRAG   EXE     79177   9-30-93   6:20a
@@ -156,7 +156,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.20 (1.2M Disk 4)
 
-     Volume in drive A is DISK4
+     Volume in drive A is DISK      4
      Directory of A:\
 
     MSAV     EXE    172198   9-30-93   6:20a
@@ -181,7 +181,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.20 (1.2M Supp)
 
-     Volume in drive A is SUPPDISK1
+     Volume in drive A is SUPPDISK  1
      Directory of A:\
 
     ADOS     CFG        61   9-30-93   6:20a
@@ -255,7 +255,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.20 (1.44M Disk 1)
 
-     Volume in drive A is DISK1
+     Volume in drive A is DISK      1
      Directory of A:\
 
     IO       SYS*    40566   9-30-93   6:20a
@@ -319,7 +319,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.20 (1.44M Disk 2)
 
-     Volume in drive A is DISK2
+     Volume in drive A is DISK      2
      Directory of A:\
 
     CHKSTATE SY_     16770   9-30-93   6:20a
@@ -367,7 +367,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.20 (1.44M Disk 3)
 
-     Volume in drive A is DISK3
+     Volume in drive A is DISK      3
      Directory of A:\
 
     MSAV     EXE    172198   9-30-93   6:20a
@@ -406,7 +406,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.20 (1.44M Supp)
 
-     Volume in drive A is SUPPDISK1
+     Volume in drive A is SUPPDISK  1
      Directory of A:\
 
     ADOS     CFG        61   9-30-93   6:20a

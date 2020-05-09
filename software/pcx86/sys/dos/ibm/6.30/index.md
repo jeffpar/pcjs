@@ -22,7 +22,7 @@ Directory listings of the five 1.44Mb distribution diskettes are provided below.
 
 ### Directory of PC DOS 6.30 (Disk 1)
 
-     Volume in drive A is DISK1
+     Volume in drive A is DISK      1
      Directory of A:\
 
     IBMBIO   COM*    40758  12-31-93  12:00a
@@ -119,7 +119,7 @@ Directory listings of the five 1.44Mb distribution diskettes are provided below.
 
 ### Directory of PC DOS 6.30 (Disk 2)
 
-     Volume in drive A is DISK2
+     Volume in drive A is DISK      2
      Directory of A:\
 
     AV       GR$       600  12-31-93  12:00a
@@ -213,7 +213,7 @@ Directory listings of the five 1.44Mb distribution diskettes are provided below.
 
 ### Directory of PC DOS 6.30 (Disk 3)
 
-     Volume in drive A is DISK3
+     Volume in drive A is DISK      3
      Directory of A:\
 
     CPB1     OVL     10425  12-31-93  12:00a
@@ -277,7 +277,7 @@ Directory listings of the five 1.44Mb distribution diskettes are provided below.
 
 ### Directory of PC DOS 6.30 (Disk 4)
 
-     Volume in drive A is DISK4
+     Volume in drive A is DISK      4
      Directory of A:\
 
     ADMIN    PRF       715  12-31-93  12:00a
@@ -351,7 +351,7 @@ Directory listings of the five 1.44Mb distribution diskettes are provided below.
 
 ### Directory of PC DOS 6.30 (Disk 5)
 
-     Volume in drive A is DISK5
+     Volume in drive A is DISK      5
      Directory of A:\
 
     ADDHELP  OV_      6883  12-31-93  12:00a
@@ -390,4 +390,3 @@ Directory listings of the five 1.44Mb distribution diskettes are provided below.
     WPCMINFO HL_      5540  12-31-93  12:00a
            34 file(s)    1071412 bytes
                           377856 bytes free
-

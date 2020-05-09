@@ -79,4 +79,3 @@ PC DOS 2.10 was finalized in October 1983 and released on November 1, 1983.
     VENDOR-# DA1*        0   7-04-83  12:00a
            16 file(s)     107534 bytes
                            69120 bytes free
-

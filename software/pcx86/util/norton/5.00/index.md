@@ -7,7 +7,7 @@ redirect_from: /disks/pcx86/tools/other/norton/5.00/
 
 ### Directory of Norton Utilities 5.00 (Disk 1)
 
-     Volume in drive A is NU 50 1.of6
+     Volume in drive A is NU 5.0 1of6
      Directory of A:\
 
     NDD      EXE    188062   9-25-90   5:00p
@@ -17,7 +17,7 @@ redirect_from: /disks/pcx86/tools/other/norton/5.00/
 
 ### Directory of Norton Utilities 5.00 (Disk 2)
 
-     Volume in drive A is NU 50 2.of6
+     Volume in drive A is NU 5.0 2of6
      Directory of A:\
 
     CALIBRAT EXE    124760   9-25-90   5:00p
@@ -29,7 +29,7 @@ redirect_from: /disks/pcx86/tools/other/norton/5.00/
 
 ### Directory of Norton Utilities 5.00 (Disk 3)
 
-     Volume in drive A is NU 50 3.of6
+     Volume in drive A is NU 5.0 3of6
      Directory of A:\
 
     DISKEDIT EXE    216512   9-25-90   5:00p
@@ -39,7 +39,7 @@ redirect_from: /disks/pcx86/tools/other/norton/5.00/
 
 ### Directory of Norton Utilities 5.00 (Disk 4)
 
-     Volume in drive A is NU 50 4.of6
+     Volume in drive A is NU 5.0 4of6
      Directory of A:\
 
     NU5_ARC1 EXE    357451   9-25-90   5:00p
@@ -48,7 +48,7 @@ redirect_from: /disks/pcx86/tools/other/norton/5.00/
 
 ### Directory of Norton Utilities 5.00 (Disk 5)
 
-     Volume in drive A is NU 50 5.of6
+     Volume in drive A is NU 5.0 5of6
      Directory of A:\
 
     NU5_ARC2 EXE    356122   9-25-90   5:00p
@@ -57,7 +57,7 @@ redirect_from: /disks/pcx86/tools/other/norton/5.00/
 
 ### Directory of Norton Utilities 5.00 (Install)
 
-     Volume in drive A is NU 50 6.of6
+     Volume in drive A is NU 5.0 6of6
      Directory of A:\
 
     INSTALL  EXE    111721   9-25-90   5:00p
@@ -65,4 +65,3 @@ redirect_from: /disks/pcx86/tools/other/norton/5.00/
     READ     ME      22505   9-25-90   5:00p
             3 file(s)     360698 bytes
                                0 bytes free
-

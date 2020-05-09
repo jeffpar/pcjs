@@ -79,4 +79,3 @@ machines:
     XDIR     EXE     15158   6-30-89  12:16p
            24 file(s)     333695 bytes
                            19456 bytes free
-

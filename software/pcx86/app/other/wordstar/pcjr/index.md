@@ -44,9 +44,8 @@ fact that both files have dates well past the apparent release date of August 17
     WS       PIC     16392   8-17-84   8:41a
     WS       INS     57216   8-17-84   8:41a
     WINSTALL EXE     40960   8-17-84   8:41a
-    WS       EXE     87680  12-26-17   2:07p
-            8 file(s)     301560 bytes
-                           58368 bytes free
+            7 file(s)     213880 bytes
+                          146432 bytes free
 
 ### Directory of WordStar for PCjr (Disk 2)
 
@@ -81,4 +80,3 @@ fact that both files have dates well past the apparent release date of August 17
     TUTOR    INS       512   8-17-84   5:10p
             9 file(s)     221824 bytes
                           138240 bytes free
-

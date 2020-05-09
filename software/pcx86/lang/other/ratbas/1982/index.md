@@ -30,23 +30,22 @@ at the time of this RatBas release.
 
 {% include machine.html id="ibm5150-ratbas" %}
 
-Directory Listing of RatBas 2.13
---------------------------------
+### Directory of RatBas (1982)
 
-	 Volume in drive B is RATBAS  213
-	 Directory of B:\
+     Volume in drive A is RATBAS  213
+     Directory of A:\
 
-	CRC      TXT       980 11-08-84  11:29p
-	CRCK4    COM      1536 10-21-82  12:54p
-	RATBAS   TXT     30080 08-13-82   5:00p
-	RATBAS   UM       9856 08-09-82   5:00p
-	RT       EXE     35456 11-05-82   1:48a
-	RT       UM       3328 10-29-82   4:32a
-	SORT     INC       896 10-29-82   4:42a
-	TEST     BAS      5632 11-04-82   4:21p
-	TEST     RAT      2304 11-01-82   1:30a
-	        9 file(s)      90068 bytes
-	                       68608 bytes free
+    CRC      TXT       980  11-08-84  11:29p
+    CRCK4    COM      1536  10-21-82  12:54p
+    RATBAS   TXT     30080   8-13-82   5:00p
+    RATBAS   UM       9856   8-09-82   5:00p
+    RT       EXE     35456  11-05-82   1:48a
+    RT       UM       3328  10-29-82   4:32a
+    SORT     INC       896  10-29-82   4:42a
+    TEST     BAS      5632  11-04-82   4:21p
+    TEST     RAT      2304  11-01-82   1:30a
+            9 file(s)      90068 bytes
+                           68608 bytes free
 
 Here's the output of CRCK4:
 

@@ -39,4 +39,3 @@ From `README.CPQ`:
     README   CPQ      1849   6-21-89  12:00p
             6 file(s)     400425 bytes
                           327680 bytes free
-

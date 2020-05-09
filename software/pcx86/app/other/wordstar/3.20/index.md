@@ -85,4 +85,19 @@ You can browse all of the [Additional Materials](#additional-materials) below.
            17 file(s)     152085 bytes
                             2048 bytes free
 
+### Directory of WordStar 3.20 (Recreated)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    WSOVLY1  OVR     40960   1-01-80  12:00a
+    WSMSGS   OVR     27264   1-01-80  12:00a
+    INSTALL  BAS     17152  10-01-82  12:00a
+    PRINT    TST      3968   1-01-80  12:00a
+    WS       COM     20480   1-01-80  12:00a
+    MAILMRGE OVR     11520   1-01-80  12:00a
+    WSBAUD   BAS      1152   2-23-13   8:45a
+            7 file(s)     122496 bytes
+                           36352 bytes free
+
 {% include gallery/documents.html title="Additional Materials" width="320" height="460" %}

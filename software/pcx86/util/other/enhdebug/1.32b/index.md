@@ -33,10 +33,10 @@ This machine is also available with the [PCjs Debugger](debugger/).  Because you
 
     DEBUG    ASM    230208   5-14-16  10:32a
     DEBUG    COM     20788   5-14-16  10:32a
-    DEBUGX   COM     26164   5-14-16  10:32a
-    DEBUGTBL INC     46060   5-10-16  10:44a
-    FPTOSTR  INC      7908  11-28-14   4:28p
     DEBUG    TXT     27998   4-12-16  11:44a
+    DEBUGTBL INC     46060   5-10-16  10:44a
+    DEBUGX   COM     26164   5-14-16  10:32a
+    FPTOSTR  INC      7908  11-28-14   3:28p
             6 file(s)     359126 bytes
                             1024 bytes free
 

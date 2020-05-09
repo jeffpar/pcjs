@@ -1288,11 +1288,17 @@ export default class DiskImage {
             iPeriod = sName.length;
             sName += '.' + sExt;
         }
-        for (let i = 0; i < sName.length; i++) {
-            if (i == iPeriod) continue;
-            let ch = sName.charAt(i);
-            if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()-@^_`{}~".indexOf(ch) < 0) {
-                sName = sName.substr(0, i) + '_' + sName.substr(i+1);
+        /*
+         * Character validation is disabled for labels; I'm not sure what the limitations are on label characters,
+         * if any, but they definitely allow for things like extra periods and lower-case letters.
+         */
+        if (!fLabel) {
+            for (let i = 0; i < sName.length; i++) {
+                if (i == iPeriod) continue;
+                let ch = sName.charAt(i);
+                if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()-@^_`{}~".indexOf(ch) < 0) {
+                    sName = sName.substr(0, i) + '_' + sName.substr(i + 1);
+                }
             }
         }
         return sName;
@@ -1944,12 +1950,22 @@ export default class DiskImage {
                     return this.device.sprintf("%s %8d file(s)   %8d bytes\n", sIndent, nFiles, cbDir);
                 }.bind(this);
                 let i, sLabel = "", sDrive = "?";
+                /*
+                 * Do a preliminary scan for a volume label, and don't look beyond root directory entries;
+                 * since those are all at the beginning of the file table, we can stop as soon as we see a SUBDIR.
+                 */
                 for (i = 0; i < this.fileTable.length; i++) {
                     let file = this.fileTable[i];
+                    if (file.iVolume > iVolume) break;
                     if (file.iVolume != iVolume) continue;
-                    if (file.path.lastIndexOf('\\') > 0) break;     // don't look beyond the root directory for a volume label
+                    if (file.path.lastIndexOf('\\') > 0) break;
                     if (file.attr & DiskImage.ATTR.VOLUME) {
-                        sLabel = file.name.replace(".", "");
+                        /*
+                         * Volume labels are displayed slightly differently from all other directory entries;
+                         * specifically, they may contain non-standard characters (eg, extra periods, lower-case letters),
+                         * and they are displayed as an 11-character sequence.  In other words, they are displayed as-is.
+                         */
+                        sLabel = file.name;
                         break;
                     }
                 }
@@ -1962,14 +1978,17 @@ export default class DiskImage {
                         sDrive = String.fromCharCode(vol.iPartition < 0? 0x41 : 0x43 + vol.iPartition);
                         curVol = file.iVolume;
                     }
-                    let name = file.name;
+                    let name = file.name, ext = "";
                     let j = file.path.lastIndexOf('\\');
                     let dir = file.path.substring(0, j);
                     if (!dir) dir = "\\";
-                    let ext = "";
-                    if (name[0] != '.') {
+                    /*
+                     * The only names allowed to begin with a period are "." and "..", and those should always
+                     * have an attr with DiskImage.ATTR.SUBDIR set.
+                     */
+                    if (name[0] != ".") {
                         j = name.indexOf(".");
-                        if (j >= 0) {
+                        if (j > 0) {
                             ext = name.substr(j + 1);
                             name = name.substr(0, j);
                         }
@@ -2298,11 +2317,13 @@ export default class DiskImage {
      *
      * This sets the following properties on the 'dir' object:
      *
-     *      sName (null if invalid/deleted entry)
+     *      name (null if invalid/deleted entry)
      *      attr
+     *      modDate
+     *      modTime
      *      size
      *      cluster
-     *      aLBA (ie, array of physical block addresses)
+     *      aLBA (ie, array of logical block addresses)
      *
      * On return, it's the caller's responsibility to copy out any data into a new object
      * if it wants to preserve any of the above information.
@@ -2346,10 +2367,16 @@ export default class DiskImage {
                 dir.name = null;
                 return true;
             }
-            dir.name = this.getSectorString(vol.sectorDirCache, off + DiskImage.DIRENT.NAME, 8).trim();
-            let s = this.getSectorString(vol.sectorDirCache, off + DiskImage.DIRENT.EXT, 3).trim();
-            if (s.length) dir.name += '.' + s;
             dir.attr = this.getSectorData(vol.sectorDirCache, off + DiskImage.DIRENT.ATTR, 1);
+            dir.name = this.getSectorString(vol.sectorDirCache, off + DiskImage.DIRENT.NAME, 8);
+            let ext = this.getSectorString(vol.sectorDirCache, off + DiskImage.DIRENT.EXT, 3);
+            if (dir.attr & DiskImage.ATTR.VOLUME) {
+                dir.name = (dir.name + ext).trim();
+            } else {
+                dir.name = dir.name.trim();
+                ext = ext.trim();
+                if (ext.length) dir.name += '.' + ext;
+            }
             dir.modDate = this.getSectorData(vol.sectorDirCache, off + DiskImage.DIRENT.MODDATE, 2);
             dir.modTime = this.getSectorData(vol.sectorDirCache, off + DiskImage.DIRENT.MODTIME, 2);
             dir.size = this.getSectorData(vol.sectorDirCache, off + DiskImage.DIRENT.SIZE, 4);

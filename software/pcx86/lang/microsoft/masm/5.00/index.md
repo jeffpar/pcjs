@@ -11,7 +11,7 @@ redirect_from:
 
 ### Directory of MS Macro Assembler 5.00 (Disk 1)
 
-     Volume in drive A is MASM 500#1
+     Volume in drive A is MASM 500 #1
      Directory of A:\
 
     MIXED        <DIR>       7-31-87  12:04a
@@ -56,7 +56,7 @@ redirect_from:
 
 ### Directory of MS Macro Assembler 5.00 (Disk 2)
 
-     Volume in drive A is MASM 500#2
+     Volume in drive A is MASM 500 #2
      Directory of A:\
 
     PAGER    ASM     11192   7-31-87  12:00a

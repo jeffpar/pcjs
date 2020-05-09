@@ -14,7 +14,7 @@ Directory listings of disks containing software that accompanied *Unauthorized W
 
 ### Directory of Unauthorized Windows 95 (BIN)
 
-     Volume in drive A is UNAUTH-W95B
+     Volume in drive A is UNAUTH
      Directory of A:\
 
     CHGDIR   EXE     19968   1-24-18   2:35a
@@ -90,7 +90,7 @@ Directory listings of disks containing software that accompanied *Unauthorized W
 
 ### Directory of Unauthorized Windows 95 (SRC)
 
-     Volume in drive A is UNAUTH-W95S
+     Volume in drive A is UNAUTH
      Directory of A:\
 
     ARGCARGV C        2984   6-08-92   6:43a
@@ -192,4 +192,3 @@ Directory listings of disks containing software that accompanied *Unauthorized W
     WTEST    C        6348   7-06-98   5:58p
            97 file(s)     616117 bytes
                           574976 bytes free
-

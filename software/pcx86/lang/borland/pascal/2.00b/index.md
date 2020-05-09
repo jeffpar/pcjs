@@ -48,4 +48,3 @@ The following documentation is available online:
     WINDOW   PAS      2639   1-01-80  12:13a
            17 file(s)     155547 bytes
                             1024 bytes free
-

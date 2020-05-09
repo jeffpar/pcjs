@@ -22,7 +22,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.00 (1.2M Disk 1)
 
-     Volume in drive A is DISK1
+     Volume in drive A is DISK      1
      Directory of A:\
 
     IO       SYS*    40470   3-10-93   6:00a
@@ -60,7 +60,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.00 (1.2M Disk 2)
 
-     Volume in drive A is DISK2
+     Volume in drive A is DISK      2
      Directory of A:\
 
     8514     VI_      6421   3-10-93   6:00a
@@ -129,7 +129,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.00 (1.2M Disk 3)
 
-     Volume in drive A is DISK3
+     Volume in drive A is DISK      3
      Directory of A:\
 
     CHKSTATE SY_     16770   3-10-93   6:00a
@@ -159,7 +159,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.00 (1.2M Disk 4)
 
-     Volume in drive A is DISK4
+     Volume in drive A is DISK      4
      Directory of A:\
 
     DBLSPACE EX_    170947   3-10-93   6:00a
@@ -199,7 +199,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.00 (1.44M Disk 1)
 
-     Volume in drive A is DISK1
+     Volume in drive A is DISK      1
      Directory of A:\
 
     IO       SYS*    40470   3-10-93   6:00a
@@ -266,7 +266,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.00 (1.44M Disk 2)
 
-     Volume in drive A is DISK2
+     Volume in drive A is DISK      2
      Directory of A:\
 
     APPEND   EX_      7462   3-10-93   6:00a
@@ -318,7 +318,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.00 (1.44M Disk 3)
 
-     Volume in drive A is DISK3
+     Volume in drive A is DISK      3
      Directory of A:\
 
     CHKSTATE SY_     16770   3-10-93   6:00a

@@ -469,4 +469,3 @@ Directory listings of the five 720Kb distribution diskettes are provided below.
     XER4020  DRV     22032  11-12-87   1:21p
            28 file(s)     653158 bytes
                            60416 bytes free
-

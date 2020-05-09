@@ -80,4 +80,3 @@ second (Tutorial) disk, but we don't have a copy of it.  The machine below is al
     VENDOR-# DO1*        0   7-04-83  12:00a
            46 file(s)     328055 bytes
                             8192 bytes free
-

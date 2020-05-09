@@ -60,4 +60,3 @@ The following documentation is available online:
     ONLINE   ZIP     54329  10-23-90   6:00a
             6 file(s)     358978 bytes
                                0 bytes free
-

@@ -127,3 +127,13 @@ That appears to have resolved the copy-protection issue.  The next hurdle is now
   - [Nerdly Pleasures](http://nerdlypleasures.blogspot.com/2017/04/the-evolution-of-kings-quest.html)
 
 ![King's Quest Artwork]({{ site.software.gamedisks.server }}/pcx86/game/other/1985/kings_quest1/KINGS_QUEST1.jpg)
+
+### Directory of King's Quest (1985-09-04 #2)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    LOAD        *     1482   6-19-84  11:14a
+    MAIN     EXE*    28868   9-04-85  10:16p
+            2 file(s)      30350 bytes
+                          330752 bytes free

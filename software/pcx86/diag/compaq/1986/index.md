@@ -63,4 +63,3 @@ From `README.CPQ`:
     VDISK    SCR       567   8-08-86  12:00p
            20 file(s)     176084 bytes
                           173056 bytes free
-

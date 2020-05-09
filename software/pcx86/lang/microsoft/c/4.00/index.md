@@ -118,7 +118,7 @@ redirect_from:
 
 ### Directory of MS C 4.00 (Disk 4)
 
-     Volume in drive A is C LIB MC
+     Volume in drive A is C LIB M C
      Directory of A:\
 
     CLIBC    LIB    112640   6-27-86   4:00a

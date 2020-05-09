@@ -346,4 +346,3 @@ Directory listings of the eight 360Kb diskettes are provided below.
     Total files listed:
            27 file(s)     346271 bytes
                             3072 bytes free
-

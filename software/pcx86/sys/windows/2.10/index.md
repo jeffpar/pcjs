@@ -279,4 +279,3 @@ are provided below.
     Total files listed:
            66 file(s)     685820 bytes
                           515584 bytes free
-

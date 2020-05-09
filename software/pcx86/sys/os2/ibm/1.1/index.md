@@ -107,7 +107,7 @@ Directory listings of the seven 1.44Mb distribution diskettes are provided below
 
 ### Directory of IBM OS/2 1.1 (Disk 1)
 
-     Volume in drive A is OS2 DISK1
+     Volume in drive A is OS2 DISK 1
      Directory of A:\
 
     ANSI     SY@      1846  10-26-88  12:00p
@@ -155,7 +155,7 @@ Directory listings of the seven 1.44Mb distribution diskettes are provided below
 
 ### Directory of IBM OS/2 1.1 (Disk 2)
 
-     Volume in drive A is OS2 DISK2
+     Volume in drive A is OS2 DISK 2
      Directory of A:\
 
     ANSI     EX@      9023  10-26-88  12:00p
@@ -199,7 +199,7 @@ Directory listings of the seven 1.44Mb distribution diskettes are provided below
 
 ### Directory of IBM OS/2 1.1 (Disk 3)
 
-     Volume in drive A is OS2 DISK3
+     Volume in drive A is OS2 DISK 3
      Directory of A:\
 
     PMGPI    DL@    135872  10-26-88  12:00p
@@ -243,7 +243,7 @@ Directory listings of the seven 1.44Mb distribution diskettes are provided below
 
 ### Directory of IBM OS/2 1.1 (Disk 4)
 
-     Volume in drive A is OS2 DISK4
+     Volume in drive A is OS2 DISK 4
      Directory of A:\
 
     PMAVIO   DL@      3775  10-26-88  12:00p
@@ -310,4 +310,3 @@ Directory listings of the seven 1.44Mb distribution diskettes are provided below
     4208     DCP       533   2-11-89  12:00p
            13 file(s)     945346 bytes
                           511488 bytes free
-

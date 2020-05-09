@@ -213,3 +213,19 @@ References
 
   - [MobyGames](http://www.mobygames.com/game/dos/adventures-in-math)
   - [Internet Archive](https://archive.org/details/msdos_Adventures_in_Math_1983)
+
+### Directory of Adventures in Math 1.00
+
+     Volume in drive A is ADVEMATH100
+     Directory of A:\
+
+    ADVENTUR BAS     18688   8-11-83  12:00p
+    CASTLE   BAS     11904   8-11-83  12:00p
+    EXIT     BAS      6400   8-11-83  12:00p
+    HELP     BAS      4992   8-11-83  12:00p
+    MAZE1             1418   8-11-83  12:00p
+    MAZE2             2179   8-11-83  12:00p
+    MAZE3             3892   8-11-83  12:00p
+    SN                  13   8-11-83  12:00p
+            8 file(s)      49486 bytes
+                          108544 bytes free

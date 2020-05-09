@@ -31,7 +31,7 @@ All files on both sides of that diskette appear to be OK.  Directory listings of
 
 ### Directory of Norton Utilities 2.01 (1983-07-04-A)
 
-     Volume in drive A is NU-201,.#1
+     Volume in drive A is NU-2.01, #1
      Directory of A:\
 
     DISKLOOK BAT       384   7-04-83   2:01p
@@ -52,7 +52,7 @@ All files on both sides of that diskette appear to be OK.  Directory listings of
 
 ### Directory of Norton Utilities 2.01 (1983-07-04-B)
 
-     Volume in drive A is NU-201,.#2
+     Volume in drive A is NU-2.01, #2
      Directory of A:\
 
     HU       COM     27628   7-04-83   2:01p
@@ -69,7 +69,7 @@ All files on both sides of that diskette appear to be OK.  Directory listings of
 
 ### Directory of Norton Utilities 2.01 (1983-11-03-A)
 
-     Volume in drive A is NU-201,.#1
+     Volume in drive A is NU-2.01, #1
      Directory of A:\
 
     DISKLOOK BAT       384  11-03-83   2:01p
@@ -90,7 +90,7 @@ All files on both sides of that diskette appear to be OK.  Directory listings of
 
 ### Directory of Norton Utilities 2.01 (1983-11-03-B)
 
-     Volume in drive A is NU-201,.#2
+     Volume in drive A is NU-2.01, #2
      Directory of A:\
 
     HU       COM     28030  11-03-83   2:01p

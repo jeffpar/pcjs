@@ -87,7 +87,7 @@ so it seems the file names as they presently exist are correct.
 
 ### Directory of Norton Utilities 3.00 (1985-01-14)
 
-     Volume in drive A is NU30-850114
+     Volume in drive A is NU30
      Directory of A:\
 
     BEEP     COM        16   1-14-85   2:00p

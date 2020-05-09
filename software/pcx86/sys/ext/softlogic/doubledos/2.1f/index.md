@@ -48,4 +48,3 @@ that's what we boot with here.  A directory listing of the 160Kb diskette is pro
     DOUBLED1 EXE     11264   1-01-80  12:14a
            17 file(s)     127835 bytes
                            25088 bytes free
-
