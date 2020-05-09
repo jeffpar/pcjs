@@ -320,12 +320,12 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     /*
-     * If --checkarchive, then let's load the corresponding archived disk image (.IMG) as well, convert it to JSON,
+     * If --checkdisk, then let's load the corresponding archived disk image (.IMG) as well, convert it to JSON,
      * load the JSON as a disk image, save it as a temp .IMG, and verify that temp image and archived image are identical.
      *
      * You must ALSO specify --rebuild if you want the JSON disk image updated as well.
      */
-    if (argv['checkarchive'] && diskette) {
+    if (argv['checkdisk'] && diskette) {
         if (diskette.format) {
             let matchFormat = diskette.format.match(/PC([0-9]+)K/);
             if (matchFormat) {
@@ -336,7 +336,7 @@ function processDisk(di, diskFile, argv, diskette)
             }
         }
         if (diskFile.endsWith(".json")) {
-            if (typeof argv['checkarchive'] == "string" && diskFile.indexOf(argv['checkarchive']) < 0) return;
+            if (typeof argv['checkdisk'] == "string" && diskFile.indexOf(argv['checkdisk']) < 0) return;
             let diTemp = createDisk(diskFile, diskette, argv);
             if (diTemp) {
                 let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
@@ -368,69 +368,105 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     /*
-     * If --checklisting, then get the disk's listing and see if it's up-to-date in the website's index.md.
+     * If --checkpage, then get the disk's listing and see if it's up-to-date in the website's index.md.
      *
      * You must ALSO specify --rebuild if you want the index.md updated (or created) as well.
      */
-    if (argv['checklisting'] && diskette && !diskette.hidden) {
+    if (argv['checkpage'] && diskette && !diskette.hidden) {
         if (diskFile.indexOf("/private") >= 0) return;
         let sListing = di.getFileListing(0, 4);
         if (!sListing) return;
+        let sIndex = "", sIndexNew = "", sAction = "";
         let sHeading = "\n### Directory of " + diskette.name + "\n";
-        let sIndex, sIndexNew;
         let sIndexFile = path.join(path.dirname(diskFile.replace(/\/(diskettes|gamedisks|harddisks|pcsig[0-9a-z-]*|private)\//, "/software/")), "index.md");
         if (existsFile(sIndexFile)) {
-            sIndex = readFile(sIndexFile);
-            let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n[^{\\s]|$)";
-            let matchDirectory = sIndex.match(new RegExp(sMatch));
-            let sAction = "";
-            if (matchDirectory) {
-                sAction = "updated";
-                if (matchDirectory[1].length != 3) {
-                    printf("warning: directory heading level '%s' should really be '###'\n", matchDirectory[1]);
-                }
-                let matchInclude = matchDirectory[2].match(/\n\{%.*?%}\n/);
-                sIndexNew = sIndex.replace(matchDirectory[0], sHeading + (matchInclude? matchInclude[0] : "") + sListing + matchDirectory[3]);
-            } else {
+            sIndex = sIndexNew = readFile(sIndexFile);
+            sAction = "updated";
+        } else {
+            if (diskette.title) {
+                let permalink = path.dirname(diskette.path.replace(/^\/[^/]+/, "/software")) + path.sep;
+                sIndexNew = "---\nlayout: page\ntitle: " + diskette.title + "\npermalink: " + permalink + "\n---\n";
+                sIndexNew += sHeading + sListing;
+                sAction = "created";
+            }
+        }
+        /*
+         * The first step of checking the page is making sure there's a machine present to load/examine/test the software...
+         */
+        let sMachineEmbed = "";
+        let matchFrontMatter = sIndexNew.match(/^---\n([\s\S]*?\n)---\n/);
+        if (matchFrontMatter) {
+            let sFrontMatter = matchFrontMatter[1];
+            let matchMachines = sFrontMatter.match(/^machines:/m);
+            if (!matchMachines) {
                 /*
-                 * Look for the last "Directory of ..." entry and insert this directory listing after it (and if there's none, append it).
+                 * To add a compatible machine, we look at a couple of factors:
+                 *
+                 *   The diskette format: if > 360K, then a PC AT is required; otherwise, if any files are >= 1984, a PC XT is required.
                  */
-                sAction = "added";
-                sListing = sHeading + sListing;
-                let matchLast, match, re = /\n(##+)\\s+Directory of [^\n]*\n([\\s\\S]*?)\n(\\S|$)/g;
-                while ((match = re.exec(sIndex))) {
-                    matchLast = match;
+                let sMachine, sMachineID;
+                let sAutoType = "    autoType: \\r\\rB:\\rDIR\\r\n";
+                let sAutoMount = "    autoMount:\n      B:\n        name: \"" + diskette.name + "\"\n";
+                if (di.getSize() > 360 * 1024) {
+                    sMachineID = "ibm5170";
+                    sMachine = "  - id: %id%\n    type: pcx86\n    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml\n";
                 }
-                let index = sIndex.length, length = 0;
-                if (matchLast) {
-                    index = matchLast.index;
-                    length = matchLast[0].length;
-                    if (matchLast[3]) length--;
-                }
-                sIndexNew = sIndex.substr(0, index + length) + sListing + sIndex.substr(index + length);
-            }
-            if (sIndexNew != sIndex) {
-                if (argv['rebuild']) {
-                    if (writeFile(getFullPath(sIndexFile), sIndexNew)) {
-                        printf("\t%s directory listing for \"%s\"\n", sAction, diskette.name);
+                else {
+                    sAutoType = "    autoType: $date\\r$time\\rB:\\rDIR\\r\n";
+                    let date = di.getNewestDate();
+                    if (date && date.getFullYear() >= 1984) {
+                        sMachineID = "ibm5160";
+                        sMachine = "  - id: %id%\n    type: pcx86\n    config: /configs/pcx86/machine/ibm/5160/cga/512kb/machine.xml\n";
+                    } else {
+                        sMachineID = "ibm5150";
+                        sMachine = "  - id: %id%\n    type: pcx86\n    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml\n";
                     }
-                } else {
-                    printf("\tdirectory listing for \"%s\" should be %s in %s; use --rebuild\n", diskette.name, sAction, sIndexFile);
                 }
+                sFrontMatter += "machines:\n" + sMachine.replace("%id%", sMachineID) + sAutoMount + sAutoType;
+                sIndexNew = sIndexNew.replace(matchFrontMatter[1], sFrontMatter);
+                sMachineEmbed = "\n{% include machine.html id=\"" + sMachineID + "\" %}\n";
             }
-        } else if (diskette.title) {
-            let permalink = path.dirname(diskette.path.replace(/^\/[^/]+/, "/software")) + path.sep;
-            sIndexNew = "---\nlayout: page\ntitle: " + diskette.title + "\npermalink: " + permalink + "\n---\n";
-            sIndexNew += sHeading + sListing;
+        }
+        /*
+         * The second step of checking the page is making sure there's an up-to-date directory listing...
+         */
+        let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n[^{\\s]|$)";
+        let matchDirectory = sIndexNew.match(new RegExp(sMatch));
+        if (matchDirectory) {
+            if (matchDirectory[1].length != 3) {
+                printf("warning: directory heading level '%s' should really be '###'\n", matchDirectory[1]);
+            }
+            let matchInclude = matchDirectory[2].match(/\n\{%.*?%}\n/);
+            sIndexNew = sIndexNew.replace(matchDirectory[0], sMachineEmbed + sHeading + (matchInclude? matchInclude[0] : "") + sListing + matchDirectory[3]);
+        } else {
+            /*
+             * Look for the last "Directory of ..." entry and insert this directory listing after it (and if there's none, append it).
+             */
+            sListing = sMachineEmbed + sHeading + sListing;
+            let matchLast, match, re = /\n(##+)\\s+Directory of [^\n]*\n([\\s\\S]*?)\n(\\S|$)/g;
+            while ((match = re.exec(sIndexNew))) {
+                matchLast = match;
+            }
+            let index = sIndexNew.length, length = 0;
+            if (matchLast) {
+                index = matchLast.index;
+                length = matchLast[0].length;
+                if (matchLast[3]) length--;
+            }
+            sIndexNew = sIndexNew.substr(0, index + length) + sListing + sIndex.substr(index + length);
+        }
+
+        if (!sIndex) {
+            printf("\tmissing index for \"%s\": %s\n", diskette.title, sIndexFile);
+        }
+        else if (sIndexNew != sIndex) {
             if (argv['rebuild']) {
                 if (writeFile(getFullPath(sIndexFile), sIndexNew, true)) {
-                    printf("\tcreated index: %s\n", sIndexFile);
+                    printf("\t%s index for \"%s\": %s\n", sAction, diskette.title, sIndexFile);
                 }
             } else {
-                printf("\tdirectory listing for \"%s\" should be created in %s; use --rebuild\n", diskette.title, sIndexFile);
+                printf("\tindex for \"%s\" should be %s; use --rebuild\n", diskette.title, sAction);
             }
-        } else {
-            printf("\tmissing index: %s\n", sIndexFile);
         }
     }
 
