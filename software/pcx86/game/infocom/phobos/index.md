@@ -40,3 +40,13 @@ References
 [Internet Archive: Leather Goddesses of Phobos: Internal Documents](https://archive.org/download/InfocomCabinetLeatherGoddessesOfPhobos/Infocom_Cabinet_Leather_Goddesses_of_Phobos.pdf)
 
 [Internet Archive: TOSEC: The Old School Emulation Center: IBM PC Compatibles: Leather Goddesses of Phobos: Disk Image](https://archive.org/download/IBM_PC_Compatibles_TOSEC_2012_04_23/IBM_PC_Compatibles_TOSEC_2012_04_23.zip/IBM%20PC%20Compatibles%20%5BTOSEC%5D%2FIBM%20PC%20Compatibles%20-%20Diskimages%20-%205.25%27%27%20%28TOSEC-v2009-09-01_CM%29%2FLeather%20Goddesses%20of%20Phobos%20%281986%29%28Infocom%29.zip)
+
+### Directory of Leather Goddesses of Phobos
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    LEATHER  EXE     34390   4-12-88  12:50p
+    LEATHER  DAT    159929   4-12-88  12:07p
+            2 file(s)     194319 bytes
+                          166912 bytes free

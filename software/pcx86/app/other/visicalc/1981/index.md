@@ -40,3 +40,12 @@ See [http://www.bricklin.com/history/vcexecutable.htm](http://www.bricklin.com/h
 ### VisiCalc License
 
 See [http://www.bricklin.com/history/vclicense.htm](http://www.bricklin.com/history/vclicense.htm)
+
+### Directory of VisiCalc (1981)
+
+     Volume in drive A is VISICALC81
+     Directory of A:\
+
+    VC       COM     27520  12-17-81  12:00a
+            1 file(s)      27520 bytes
+                          132608 bytes free

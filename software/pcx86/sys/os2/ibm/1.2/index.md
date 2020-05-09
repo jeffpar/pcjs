@@ -71,7 +71,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.2/
 
 ### Directory of IBM OS/2 1.2 (Disk 1)
 
-     Volume in drive A is OS2 DISK1
+     Volume in drive A is OS2 DISK 1
      Directory of A:\
 
     ANSI     EX@      9521   8-31-89  12:00p
@@ -110,7 +110,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.2/
 
 ### Directory of IBM OS/2 1.2 (Disk 2)
 
-     Volume in drive A is OS2 DISK2
+     Volume in drive A is OS2 DISK 2
      Directory of A:\
 
     BASIC    CO@       479   8-31-89  12:00p
@@ -170,7 +170,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.2/
 
 ### Directory of IBM OS/2 1.2 (Disk 3)
 
-     Volume in drive A is OS2 DISK3
+     Volume in drive A is OS2 DISK 3
      Directory of A:\
 
     CMDREF   IN@    164344   8-31-89  12:00p
@@ -211,7 +211,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.2/
 
 ### Directory of IBM OS/2 1.2 (Disk 4)
 
-     Volume in drive A is OS2 DISK4
+     Volume in drive A is OS2 DISK 4
      Directory of A:\
 
     4201     DC@      5150   8-31-89  12:00p
@@ -269,7 +269,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.2/
 
 ### Directory of IBM OS/2 1.2 (Disk 5)
 
-     Volume in drive A is OS2 DISK5
+     Volume in drive A is OS2 DISK 5
      Directory of A:\
 
     BVH8514A DL@      6248   8-31-89  12:00p
@@ -297,7 +297,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.2/
 
 ### Directory of IBM OS/2 1.2 (Driver 1)
 
-     Volume in drive A is OS2 DISK6
+     Volume in drive A is OS2 DISK 6
      Directory of A:\
 
     IBMNULL  DRV     81760   8-31-89  12:00p
@@ -320,7 +320,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.2/
 
 ### Directory of IBM OS/2 1.2 (Driver 2)
 
-     Volume in drive A is OS2 DISK7
+     Volume in drive A is OS2 DISK 7
      Directory of A:\
 
     EPSON    DRV     48640   8-31-89  12:00p
@@ -331,4 +331,3 @@ redirect_from: /disks/pcx86/os2/ibm/1.2/
     IBM4019  PMF    173665   8-31-89  12:00p
             6 file(s)     786017 bytes
                           671232 bytes free
-

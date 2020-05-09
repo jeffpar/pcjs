@@ -259,4 +259,3 @@ IBM OS/2 1.0 has been pre-installed on this machine's 20Mb hard disk, along with
     Total files listed:
            33 file(s)     658170 bytes
                           789504 bytes free
-

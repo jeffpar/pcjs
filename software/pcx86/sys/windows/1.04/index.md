@@ -251,4 +251,3 @@ Directory listings of the seven 360Kb distribution diskettes are provided below.
     HPREADME TXT      5852   3-27-87   5:36p
            10 file(s)      93693 bytes
                           264192 bytes free
-

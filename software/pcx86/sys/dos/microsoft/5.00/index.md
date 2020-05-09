@@ -22,7 +22,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 5.00 (360K Disk 1)
 
-     Volume in drive A is DISK1
+     Volume in drive A is DISK      1
      Directory of A:\
 
     IO       SYS*    33430   4-09-91   5:00a
@@ -46,7 +46,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 5.00 (360K Disk 2)
 
-     Volume in drive A is DISK2
+     Volume in drive A is DISK      2
      Directory of A:\
 
     DISPLAY  SY_     11186   4-09-91   5:00a
@@ -74,7 +74,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 5.00 (360K Disk 3)
 
-     Volume in drive A is DISK3
+     Volume in drive A is DISK      3
      Directory of A:\
 
     DOSKEY   CO_      4730   4-09-91   5:00a
@@ -108,7 +108,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 5.00 (360K Disk 4)
 
-     Volume in drive A is DISK4
+     Volume in drive A is DISK      4
      Directory of A:\
 
     QBASIC   HL_    123120   4-09-91   5:00a
@@ -121,7 +121,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 5.00 (360K Disk 5)
 
-     Volume in drive A is DISK5
+     Volume in drive A is DISK      5
      Directory of A:\
 
     GORILLA  BA_     11991   4-09-91   5:00a
@@ -164,7 +164,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 5.00 (720K Disk 1)
 
-     Volume in drive A is DISK1
+     Volume in drive A is DISK      1
      Directory of A:\
 
     IO       SYS*    33430  11-11-91   5:00a
@@ -209,7 +209,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 5.00 (720K Disk 2)
 
-     Volume in drive A is DISK2
+     Volume in drive A is DISK      2
      Directory of A:\
 
     CGA      GR_      1768  11-11-91   5:00a
@@ -247,7 +247,7 @@ distribution diskettes are provided below.
 
 ### Directory of MS-DOS 5.00 (720K Disk 3)
 
-     Volume in drive A is DISK3
+     Volume in drive A is DISK      3
      Directory of A:\
 
     GORILLA  BA_     11991  11-11-91   5:00a

@@ -1958,7 +1958,7 @@ export default class DiskImage {
                     let file = this.fileTable[i];
                     if (file.iVolume > iVolume) break;
                     if (file.iVolume != iVolume) continue;
-                    if (file.attr & DiskImage.ATTR.SUBDIR) break;
+                    if (file.path.lastIndexOf('\\') > 0) break;
                     if (file.attr & DiskImage.ATTR.VOLUME) {
                         /*
                          * Volume labels are displayed slightly differently from all other directory entries;

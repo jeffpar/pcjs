@@ -22,7 +22,7 @@ Directory listings of the four 1.44Mb distribution diskettes are provided below.
 
 ### Directory of PC DOS 6.10 (Disk 1)
 
-     Volume in drive A is DISK1
+     Volume in drive A is DISK      1
      Directory of A:\
 
     IBMBIO   COM*    40694   6-29-93  12:00p
@@ -124,7 +124,7 @@ Directory listings of the four 1.44Mb distribution diskettes are provided below.
 
 ### Directory of PC DOS 6.10 (Disk 2)
 
-     Volume in drive A is DISK2
+     Volume in drive A is DISK      2
      Directory of A:\
 
     FILES    TX_      5238   6-29-93  12:00p
@@ -229,7 +229,7 @@ Directory listings of the four 1.44Mb distribution diskettes are provided below.
 
 ### Directory of PC DOS 6.10 (Disk 3)
 
-     Volume in drive A is DISK3
+     Volume in drive A is DISK      3
      Directory of A:\
 
     WNSCHEDL HL_      5859   6-29-93  12:00p
@@ -293,7 +293,7 @@ Directory listings of the four 1.44Mb distribution diskettes are provided below.
 
 ### Directory of PC DOS 6.10 (Disk 4)
 
-     Volume in drive A is DISK4
+     Volume in drive A is DISK      4
      Directory of A:\
 
     CPBNMI   38_       926   6-29-93  12:00p
@@ -366,4 +366,3 @@ Directory listings of the four 1.44Mb distribution diskettes are provided below.
     SETUP2   OVL     25602   6-29-93  12:00p
            68 file(s)    1416606 bytes
                            24064 bytes free
-

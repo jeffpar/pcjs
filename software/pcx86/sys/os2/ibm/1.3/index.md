@@ -90,7 +90,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.3/
 
 ### Directory of IBM OS/2 1.3 (Disk 1)
 
-     Volume in drive A is OS2 DISK1
+     Volume in drive A is OS2 DISK 1
      Directory of A:\
 
     ATTRIB   EX@     28223  11-02-90  12:00p
@@ -125,7 +125,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.3/
 
 ### Directory of IBM OS/2 1.3 (Disk 2)
 
-     Volume in drive A is OS2 DISK2
+     Volume in drive A is OS2 DISK 2
      Directory of A:\
 
     ANSI     EX@      7245  11-02-90  12:00p
@@ -191,7 +191,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.3/
 
 ### Directory of IBM OS/2 1.3 (Disk 3)
 
-     Volume in drive A is OS2 DISK3
+     Volume in drive A is OS2 DISK 3
      Directory of A:\
 
     CMDREF   IN@    165680  11-02-90  12:00p
@@ -240,7 +240,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.3/
 
 ### Directory of IBM OS/2 1.3 (Disk 4)
 
-     Volume in drive A is OS2 DISK4
+     Volume in drive A is OS2 DISK 4
      Directory of A:\
 
     DISK4    SCD       907  11-02-90  12:00p
@@ -282,7 +282,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.3/
 
 ### Directory of IBM OS/2 1.3 (Disk 5)
 
-     Volume in drive A is OS2 DISK5
+     Volume in drive A is OS2 DISK 5
      Directory of A:\
 
     DISK5    SCD       543  11-02-90  12:00p
@@ -315,7 +315,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.3/
 
 ### Directory of IBM OS/2 1.3 (Disk 6)
 
-     Volume in drive A is OS2 DISK6
+     Volume in drive A is OS2 DISK 6
      Directory of A:\
 
     DISK6    SCD      1740  11-02-90  12:00p
@@ -359,7 +359,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.3/
 
 ### Directory of IBM OS/2 1.3 (Driver 1)
 
-     Volume in drive A is OS2 PMDD1
+     Volume in drive A is OS2 PMDD 1
      Directory of A:\
 
     IBMNULL  DRV     88160  11-02-90  12:00p
@@ -425,7 +425,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.3/
 
 ### Directory of IBM OS/2 1.3 (Driver 2)
 
-     Volume in drive A is OS2 PMDD2
+     Volume in drive A is OS2 PMDD 2
      Directory of A:\
 
     IBM3852  DRV     88496  11-02-90  12:00p
@@ -448,7 +448,7 @@ redirect_from: /disks/pcx86/os2/ibm/1.3/
 
 ### Directory of IBM OS/2 1.3 (Fonts)
 
-     Volume in drive A is OS2 FONT1
+     Volume in drive A is OS2 FONT 1
      Directory of A:\
 
     COU      AFM     23654  11-02-90  12:00p
@@ -477,4 +477,3 @@ redirect_from: /disks/pcx86/os2/ibm/1.3/
     TNRI     PFB     50940  11-02-90  12:00p
            24 file(s)     855256 bytes
                           595456 bytes free
-

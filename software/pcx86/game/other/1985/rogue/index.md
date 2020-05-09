@@ -467,3 +467,17 @@ References
 
   - [The roguelike archive](https://britzl.github.io/roguearchive/)
   - [Moby Games: Rogue (DOS)](http://www.mobygames.com/game/dos/rogue)
+
+### Directory of Rogue (1985)
+
+     Volume in drive A is ROGUE
+     Directory of A:\
+
+    MKOPT    EXE     14016   3-25-85   2:33p
+    ROGUE    COM      2616   9-01-95   6:46p
+    ROGUE    EXE     71520   5-30-86  12:55p
+    ROGUE    OPT         0   8-26-95  12:11p
+    ROGUE    PIC     16391   3-25-85   4:53p
+    ROGUE    SCR         0   8-26-95  12:11p
+            6 file(s)     104543 bytes
+                           54272 bytes free

@@ -58,4 +58,3 @@ The following documentation is available online:
     THELP    COM     28246   5-02-89   5:50a
             4 file(s)     318453 bytes
                            41984 bytes free
-

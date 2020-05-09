@@ -23,7 +23,7 @@ The COMPAQ DeskPro 386 machine below is recommended for Omniview 386 4.30.  A [d
 
 ### Directory of Omniview 386 4.30
 
-     Volume in drive A is OMNIVIEW430
+     Volume in drive A is OMNIVIEW386
      Directory of A:\
 
     2                 4790   1-07-92   9:25a
@@ -40,5 +40,4 @@ The COMPAQ DeskPro 386 machine below is recommended for Omniview 386 4.30.  A [d
     SEARCH   CM        833   8-31-91  12:39p
     XMSCHECK EXE      1099  10-01-91   4:30a
            13 file(s)     574577 bytes
-                          148480 bytes free
-
+                          635392 bytes free

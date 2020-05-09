@@ -638,4 +638,3 @@ Directory listings of the eight 1.44Mb distribution diskettes are provided below
     WINPOPUP HL_      6430  11-01-93   3:11a
            82 file(s)    1238949 bytes
                           198656 bytes free
-

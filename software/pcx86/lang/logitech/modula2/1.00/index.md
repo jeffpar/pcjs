@@ -15,7 +15,7 @@ from [VETUSWARE](https://vetusware.com/download/MODULE%202%20_SETUP_DEBUG_COMPIL
 
 ### Directory of Modula-2/86 1.00 (1-System)
 
-     Volume in drive A is DISK1
+     Volume in drive A is LOGITECH
      Directory of A:\
 
     ASCII    DEF       814   2-09-84  11:20a
@@ -79,7 +79,7 @@ from [VETUSWARE](https://vetusware.com/download/MODULE%202%20_SETUP_DEBUG_COMPIL
 
 ### Directory of Modula-2/86 1.00 (2-Linker)
 
-     Volume in drive A is DISK2
+     Volume in drive A is LOGITECH
      Directory of A:\
 
     ASCII    LNK       128   3-02-84   1:43a
@@ -143,7 +143,7 @@ from [VETUSWARE](https://vetusware.com/download/MODULE%202%20_SETUP_DEBUG_COMPIL
 
 ### Directory of Modula-2/86 1.00 (3-Compiler)
 
-     Volume in drive A is DISK3
+     Volume in drive A is LOGITECH
      Directory of A:\
 
     ASCII    SYM       768   1-01-80  12:12a
@@ -183,4 +183,3 @@ from [VETUSWARE](https://vetusware.com/download/MODULE%202%20_SETUP_DEBUG_COMPIL
     TERMINAL SYM       384   1-01-80   5:09a
            35 file(s)     336432 bytes
                             8192 bytes free
-

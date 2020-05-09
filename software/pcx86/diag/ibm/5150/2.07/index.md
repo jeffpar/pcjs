@@ -29,3 +29,38 @@ This disk displays the following startup messages:
     ENTER THE ACTION DESIRED                                                        
 
 {% include machine.html id="ibm5150" %}
+
+### Directory of IBM PC Diagnostics 2.07
+
+     Volume in drive A is DIAGS V207
+     Directory of A:\
+
+    IBMBIO   COM*     4608   3-08-83  12:00p
+    IBMDOS   COM*    17152   3-08-83  12:00p
+    COMMAND  COM      3612   6-12-84  12:00p
+    DCOPY    COM      2293   6-12-84  12:00p
+    DFORMAT  COM       872   6-12-84  12:00p
+    DIAGS    COM      3888   6-12-84  12:00p
+    SHIPDISK COM       436   6-12-84  12:00p
+    VERSION  207        78   6-12-84  12:00p
+    US0CPU   DGS       695   6-12-84  12:00p
+    US0STG   DGS       557   6-12-84  12:00p
+    US0KBD   DGS       784   6-12-84  12:00p
+    US0EXP   DGS       762   6-12-84  12:00p
+    US1ADG2  DGS      8692   6-12-84  12:00p
+    US1DSK   DGS      3455   6-12-84  12:00p
+    US0PAR   DGS      1021   6-12-84  12:00p
+    US1SRL   DGS      3661   6-12-84  12:00p
+    US0PRT   DGS       870   6-12-84  12:00p
+    US0GCTL  DGS      1575   6-12-84  12:00p
+    US1FDK   DGS      2301   6-12-84  12:00p
+    US0M87   DGS      2318   6-12-84  12:00p
+    US1CPRT  DGS      2705   6-12-84  12:00p
+    US1PCL   DGS      3092   6-12-84  12:00p
+    US0PCN   DGS      1936   6-12-84  12:00p
+    US0CUA   DGS      3864   6-12-84  12:00p
+    US1SDL   DGS      5045   6-12-84  12:00p
+    US0BSC   DGS      5417   6-12-84  12:00p
+    VENDOR-# DA1*        0   7-04-83  12:00a
+           27 file(s)      81689 bytes
+                           91648 bytes free

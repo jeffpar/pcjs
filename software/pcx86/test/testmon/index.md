@@ -30,3 +30,18 @@ from the command-line.  When using a physical PC, the [INT14.ASM](int14/) Termin
 should be installed, to minimize the risk of dropped characters when using the DOS "CTTY" command.
 
 {% include machine.html id="ibm5170" %}
+
+### Directory of PCx86 TestMonitor
+
+     Volume in drive A is INT14
+     Directory of A:\
+
+    DOWNLOAD ASM     10032   3-22-20  10:57p
+    DOWNLOAD COM      1826   3-08-20  12:38a
+    FAKECTTY ASM      2796   3-08-20  12:38a
+    FAKECTTY COM       307   3-08-20  12:38a
+    INT14    ASM     12480   3-08-20  12:38a
+    INT14    COM      2335   3-08-20  12:38a
+    MK       BAT       219   3-08-20  12:38a
+            7 file(s)      29995 bytes
+                          128512 bytes free

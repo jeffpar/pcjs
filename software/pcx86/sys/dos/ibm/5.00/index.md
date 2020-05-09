@@ -82,7 +82,7 @@ Removed functions:
 
 ### Directory of PC DOS 5.00 (Disk 1)
 
-     Volume in drive A is DISK1
+     Volume in drive A is DISK      1
      Directory of A:\
 
     IBMBIO   COM*    33430   5-09-91  12:00p
@@ -123,7 +123,7 @@ Removed functions:
 
 ### Directory of PC DOS 5.00 (Disk 2)
 
-     Volume in drive A is DISK2
+     Volume in drive A is DISK      2
      Directory of A:\
 
     DOSKEY   CO_      4729   5-09-91  12:00p
@@ -162,7 +162,7 @@ Removed functions:
 
 ### Directory of PC DOS 5.00 (Disk 3)
 
-     Volume in drive A is DISK3
+     Volume in drive A is DISK      3
      Directory of A:\
 
     GORILLA  BA_     11957   5-09-91  12:00p
@@ -212,4 +212,3 @@ Removed functions:
     EGAX     CP_     14101   5-09-91  12:00p
            45 file(s)     534255 bytes
                           169984 bytes free
-

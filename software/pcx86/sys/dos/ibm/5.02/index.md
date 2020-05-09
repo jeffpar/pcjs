@@ -50,7 +50,7 @@ New functions:
 
 ### Directory of PC DOS 5.02 (Disk 1)
 
-     Volume in drive A is DISK1
+     Volume in drive A is DISK      1
      Directory of A:\
 
     IBMBIO   COM*    33718   9-01-92  12:00p
@@ -92,7 +92,7 @@ New functions:
 
 ### Directory of PC DOS 5.02 (Disk 2)
 
-     Volume in drive A is DISK2
+     Volume in drive A is DISK      2
      Directory of A:\
 
     DOSKEY   CO_      4730   9-01-92  12:00p
@@ -131,7 +131,7 @@ New functions:
 
 ### Directory of PC DOS 5.02 (Disk 3)
 
-     Volume in drive A is DISK3
+     Volume in drive A is DISK      3
      Directory of A:\
 
     GORILLA  BA_     11956   9-01-92  12:00p
@@ -186,4 +186,3 @@ New functions:
     PRINTFIX CO_        84   9-01-92  12:00p
            50 file(s)     555085 bytes
                           149504 bytes free
-

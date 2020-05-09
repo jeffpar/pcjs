@@ -1711,16 +1711,19 @@
             "@media": [
               {
                 "@title": "Borland Turbo Pascal 5.00 (Disk 1)",
+                "@subtitle": "INSTALL",
                 "@diskette": "TURBO-PASCAL-500-DISK1.json",
                 "@format": "PC360K"
               },
               {
                 "@title": "Borland Turbo Pascal 5.00 (Disk 2)",
+                "@subtitle": "HELP/UTILITIES",
                 "@diskette": "TURBO-PASCAL-500-DISK2.json",
                 "@format": "PC360K"
               },
               {
                 "@title": "Borland Turbo Pascal 5.00 (Disk 3)",
+                "@subtitle": "BGI/DEMOS/DOC/TURBO3",
                 "@diskette": "TURBO-PASCAL-500-DISK3.json",
                 "@format": "PC360K"
               }

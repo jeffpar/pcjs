@@ -30,7 +30,7 @@ from the August 1981 time frame.
 
 ### Directory of IBM Pascal 1.00 (Disk 1)
 
-     Volume in drive A is PAS1
+     Volume in drive A is PASCAL100
      Directory of A:\
 
     ENTX6S   ASM      8320   8-31-81  12:00p
@@ -43,7 +43,7 @@ from the August 1981 time frame.
 
 ### Directory of IBM Pascal 1.00 (Disk 2)
 
-     Volume in drive A is PAS2
+     Volume in drive A is PASCAL100
      Directory of A:\
 
     PAS2     EXE     99200   8-31-81  12:00p
@@ -52,7 +52,7 @@ from the August 1981 time frame.
 
 ### Directory of IBM Pascal 1.00 (Disk 3)
 
-     Volume in drive A is PAS3
+     Volume in drive A is PASCAL100
      Directory of A:\
 
     PASCAL              50   8-31-81  12:00p
@@ -76,4 +76,3 @@ from the August 1981 time frame.
     LINK     EXE     43264   8-04-81  12:00a
             9 file(s)     325374 bytes
                            31744 bytes free
-

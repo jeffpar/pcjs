@@ -381,7 +381,7 @@ function processDisk(di, diskFile, argv, diskette)
         let sIndexFile = path.join(path.dirname(diskFile.replace(/\/(diskettes|gamedisks|harddisks|pcsig[0-9a-z-]*|private)\//, "/software/")), "index.md");
         if (existsFile(sIndexFile)) {
             sIndex = readFile(sIndexFile);
-            let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*") + " *\n([\\s\\S]*?)(\n\\S|$)";
+            let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n\\S|$)";
             let matchDirectory = sIndex.match(new RegExp(sMatch));
             let sAction = "";
             if (matchDirectory) {
@@ -523,7 +523,7 @@ function readDir(sDir, sLabel, fNormalize = false, kbTarget, nMax)
 {
     let di;
     if (!sLabel) {
-        sLabel = path.basename(sDir).replace(/^PCMAG-/, "").replace(/[-_].*$/, "");
+        sLabel = path.basename(sDir).replace(/^(IBM|PCMAG)-/, "").replace(/[-_].*$/, "");
     }
     sDir = getFullPath(sDir);
     try {

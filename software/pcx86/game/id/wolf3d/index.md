@@ -25,18 +25,14 @@ This is a shareware version (1.4) of Wolfenstein 3D.  Directory listings and scr
 
 ### Directory of Wolfenstein 3D 1.4
 
-	 Volume in drive A is 1WOLF14    
+     Volume in drive A is 1WOLF14
+     Directory of A:\
 
-	Directory of A:\
-
-	FILE_ID  DIZ       350 01-01-93  12:40p
-	INSTALL  EXE    142181 01-01-93  12:40p
-	W3DSW14  SHR    790409 01-01-93  12:40p
-	        3 file(s)     932940 bytes
-
-	Total files listed:
-	        3 file(s)     932940 bytes
-	                      280576 bytes free
+    FILE_ID  DIZ       350   1-01-93  12:40p
+    INSTALL  EXE    142181   1-01-93  12:40p
+    W3DSW14  SHR    790409   1-01-93  12:40p
+            3 file(s)     932940 bytes
+                          280576 bytes free
 
 ### Directory of C:\WOLF3D
 

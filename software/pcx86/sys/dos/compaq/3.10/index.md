@@ -254,4 +254,3 @@ The ENHDISK.SYS file dated 08-14-86 is identical to ENHDISK.SYS dated 10-31-86 o
     PCPAL    EXE     63088   6-23-87  12:21p
            66 file(s)     631654 bytes
                           564736 bytes free
-

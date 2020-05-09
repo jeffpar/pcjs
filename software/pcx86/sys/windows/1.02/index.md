@@ -105,7 +105,7 @@ Directory listings of the six 360Kb distribution diskettes are provided below.
 
 ### Directory of Windows 1.02 (FONT)
 
-     Volume in drive A is FONT
+     Volume in drive A has no label
      Directory of A:\
 
     PIF          <DIR>       1-15-86   5:37p
@@ -226,4 +226,3 @@ Directory listings of the six 360Kb distribution diskettes are provided below.
     PRACTICE DOC      2944   1-15-86   6:00p
             3 file(s)     197098 bytes
                           164864 bytes free
-

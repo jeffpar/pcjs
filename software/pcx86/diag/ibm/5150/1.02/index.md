@@ -28,3 +28,18 @@ This disk displays the following startup messages:
     INSERT  DIAGNOSTIC DISKETTE  IN DRIVE A AND ENTER THE ACTION DESIRED
  
 {% include machine.html id="ibm5150" %}
+
+### Directory of IBM PC Diagnostics 1.02
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    IBMBIO   COM*     1920   7-23-81  12:00a
+    IBMDOS   COM*     6400   8-13-81  12:00a
+    COMMAND  COM       943   2-09-82   5:36p
+    DCOPY    COM      3199   2-09-82   5:38p
+    DFORMAT  COM      2688   2-09-82   5:40p
+    CMD99    COM      2367   2-09-82   5:37p
+    DIAGS    COM     16575   2-09-82   8:37p
+            7 file(s)      34092 bytes
+                          124416 bytes free
