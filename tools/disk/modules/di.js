@@ -381,7 +381,7 @@ function processDisk(di, diskFile, argv, diskette)
         let sIndexFile = path.join(path.dirname(diskFile.replace(/\/(diskettes|gamedisks|harddisks|pcsig[0-9a-z-]*|private)\//, "/software/")), "index.md");
         if (existsFile(sIndexFile)) {
             sIndex = readFile(sIndexFile);
-            let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n\\S|$)";
+            let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n[^{\\s]|$)";
             let matchDirectory = sIndex.match(new RegExp(sMatch));
             let sAction = "";
             if (matchDirectory) {
@@ -389,7 +389,8 @@ function processDisk(di, diskFile, argv, diskette)
                 if (matchDirectory[1].length != 3) {
                     printf("warning: directory heading level '%s' should really be '###'\n", matchDirectory[1]);
                 }
-                sIndexNew = sIndex.replace(matchDirectory[0], sHeading + sListing + matchDirectory[3]);
+                let matchInclude = matchDirectory[2].match(/\n\{%.*?%}\n/);
+                sIndexNew = sIndex.replace(matchDirectory[0], sHeading + (matchInclude? matchInclude[0] : "") + sListing + matchDirectory[3]);
             } else {
                 /*
                  * Look for the last "Directory of ..." entry and insert this directory listing after it (and if there's none, append it).
