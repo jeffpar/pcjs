@@ -25,61 +25,61 @@ and [Version Notes](#5160v1-notes-from-pc-dos-retro) are provided below.
 
 ### Directory of IBM PC XT BIOS Sources (V1)
 
-     Volume in drive A is 5160V1
+     Volume in drive A is IBM
      Directory of A:\
 
-    5160V1   TXT       980   8-01-14  10:05a
-    README   TXT      3460   3-03-18   9:57a
-    VERSIONS TXT      8490   3-03-18   9:59a
-    XTBIOS   ASM    184626   9-01-14   5:59p
+    5160V1   TXT       980   3-27-20   3:00p
+    README   TXT      3460   3-27-20   3:00p
+    VERSIONS TXT      8490   3-27-20   3:00p
+    XTBIOS   ASM    184626   3-27-20   3:00p
             4 file(s)     197556 bytes
                           122880 bytes free
 
 ### Directory of IBM PC XT BIOS Sources (V2)
 
-     Volume in drive A is 5160V2
+     Volume in drive A is IBM
      Directory of A:\
 
-    5160V2   TXT       542   9-03-14  10:03p
-    BIOS1    ASM      9426   7-30-14   5:41p
-    DSEG     INC      8182   7-30-14  12:48p
-    DSKETTE  ASM     85367   9-01-14   6:02p
-    EXE2BIN             81   7-30-14   6:32p
-    FILL     ASM       123   7-30-14   6:34p
-    HEADER   ASM      3633   7-30-14   6:41p
-    KEYBRD   ASM     31888   8-30-14   9:12p
-    POST     ASM     87861   8-07-14   3:00p
-    POSTEQU  INC      9421   7-30-14   9:57p
-    PRT      ASM      5498   8-30-14   3:52p
-    README   TXT      3460   3-03-18   9:57a
-    RS232    ASM      7834   8-30-14   3:56p
-    VERSIONS TXT      8490   3-03-18   9:59a
-    VIDEO    ASM     66334   8-31-14   9:35a
-    XTLINK              79   7-30-14   6:28p
+    5160V2   TXT       542   3-27-20   3:00p
+    BIOS1    ASM      9426   3-27-20   3:00p
+    DSEG     INC      8182   3-27-20   3:00p
+    DSKETTE  ASM     85367   3-27-20   3:00p
+    EXE2BIN             81   3-27-20   3:00p
+    FILL     ASM       123   3-27-20   3:00p
+    HEADER   ASM      3633   3-27-20   3:00p
+    KEYBRD   ASM     31888   3-27-20   3:00p
+    POST     ASM     87861   3-27-20   3:00p
+    POSTEQU  INC      9421   3-27-20   3:00p
+    PRT      ASM      5498   3-27-20   3:00p
+    README   TXT      3460   3-27-20   3:00p
+    RS232    ASM      7834   3-27-20   3:00p
+    VERSIONS TXT      8490   3-27-20   3:00p
+    VIDEO    ASM     66334   3-27-20   3:00p
+    XTLINK              79   3-27-20   3:00p
            16 file(s)     328219 bytes
                            24576 bytes free
 
 ### Directory of IBM PC XT BIOS Sources (V3)
 
-     Volume in drive A is 5160V3
+     Volume in drive A is IBM
      Directory of A:\
 
-    5160V3   TXT       563   9-03-14  10:03p
-    BIOS1    ASM      9426   7-30-14   5:41p
-    DSEG     INC      8182   7-30-14  12:48p
-    DSKETTE  ASM     85323   9-01-14   6:02p
-    EXE2BIN             81   8-29-14   6:43p
-    FILL     ASM       123   8-29-14   1:53p
-    HEADER   ASM      3624   8-29-14   1:26p
-    KEYBRD   ASM     32034   8-30-14   9:12p
-    POST     ASM     87457   8-29-14   9:55p
-    POSTEQU  INC      9421   8-29-14   5:38p
-    PRT      ASM      5498   8-30-14   3:52p
-    README   TXT      3460   3-03-18   9:57a
-    RS232    ASM      7834   8-30-14   3:56p
-    VERSIONS TXT      8490   3-03-18   9:59a
-    VIDEO    ASM     66337   8-31-14   9:35a
-    XTLINK              79   8-29-14   1:19p
+    5160V3   TXT       563   3-27-20   3:00p
+    BIOS1    ASM      9426   3-27-20   3:00p
+    DSEG     INC      8182   3-27-20   3:00p
+    DSKETTE  ASM     85323   3-27-20   3:00p
+    EXE2BIN             81   3-27-20   3:00p
+    FILL     ASM       123   3-27-20   3:00p
+    HEADER   ASM      3624   3-27-20   3:00p
+    KEYBRD   ASM     32034   3-27-20   3:00p
+    POST     ASM     87457   3-27-20   3:00p
+    POSTEQU  INC      9421   3-27-20   3:00p
+    PRT      ASM      5498   3-27-20   3:00p
+    README   TXT      3460   3-27-20   3:00p
+    RS232    ASM      7834   3-27-20   3:00p
+    VERSIONS TXT      8490   3-27-20   3:00p
+    VIDEO    ASM     66337   3-27-20   3:00p
+    XTLINK              79   3-27-20   3:00p
            16 file(s)     327932 bytes
                            24576 bytes free
 

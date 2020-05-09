@@ -423,4 +423,3 @@ Directory listings of the eight SDK and four runtime 360Kb distribution diskette
     DOTHIS   TXT       493  10-25-85   1:02p
            11 file(s)     247719 bytes
                           108544 bytes free
-

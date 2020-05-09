@@ -27,7 +27,7 @@ A demo of an earlier pre-release version, [Windows 1.0 ("Premiere Edition")](../
 
 ### Directory of Windows 1.01 (SETUP)
 
-     Volume in drive A has no label
+     Volume in drive A is SETUP
      Directory of A:\
 
     PIF          <DIR>      11-14-85   3:10p

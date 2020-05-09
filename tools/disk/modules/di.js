@@ -523,7 +523,7 @@ function readDir(sDir, sLabel, fNormalize = false, kbTarget, nMax)
 {
     let di;
     if (!sLabel) {
-        sLabel = path.basename(sDir).replace(/^(IBM|PCMAG)-/, "").replace(/[-_].*$/, "");
+        sLabel = path.basename(sDir).replace(/^.*-([^-]+)$/, "$1");
     }
     sDir = getFullPath(sDir);
     try {

@@ -36,7 +36,7 @@ A directory listing of this disk is provided [below](#directory-of-os2-cpdos-boo
 
 ### Directory of OS/2 CP-DOS (v7.68)
 
-     Volume in drive A has no label
+     Volume in drive A is DOS5 768
      Directory of A:\
 
     IBMBIO   COM     49408  10-22-86   7:27p
