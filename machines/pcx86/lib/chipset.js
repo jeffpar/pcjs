@@ -4294,7 +4294,7 @@ class ChipSet extends Component {
         default:
             if (!COMPILED) {
                 this.printf(Messages.ALL, "unrecognized 8042 command: %#04X\n", this.b8042InBuff);
-                if (this.dbg) this.dbg.stopCPU();
+                // if (this.dbg) this.dbg.stopCPU();
             }
             break;
         }

@@ -915,6 +915,7 @@ class Disk extends Component {
                                         adw.length--;
                                     }
                                 }
+
                                 this.initSector(sector, iCylinder, iHead, idSector, this.cbSector, dwPattern);
 
                                 /*
@@ -1010,7 +1011,12 @@ class Disk extends Component {
         if (SYMBOLS && this.aFileTable) {
             for (let iFile = 0; iFile < this.aFileTable.length; iFile++) {
                 let file = this.aFileTable[iFile];
-                if (!file.module || file.module.name != sModule) continue;
+                /*
+                 * NOTE: Given how we now build the file table based on file indexes in the sector
+                 * data, there could well be "holes" in the file table (ie, entries that were used to
+                 * describe a volume label or some other directory entry that has no associated sectors).
+                 */
+                if (!file || !file.module || file.module.name != sModule) continue;
                 let segment = file.module.segments[nSegment];
                 if (!segment) continue;
                 for (let ord in segment.ordinals) {
@@ -1046,7 +1052,12 @@ class Disk extends Component {
             let sSymbolUpper = sSymbol.toUpperCase();
             for (let iFile = 0; iFile < this.aFileTable.length; iFile++) {
                 let file = this.aFileTable[iFile];
-                if (!file.module) continue;
+                /*
+                 * NOTE: Given how we now build the file table based on file indexes in the sector
+                 * data, there could well be "holes" in the file table (ie, entries that were used to
+                 * describe a volume label or some other directory entry that has no associated sectors).
+                 */
+                if (!file || !file.module) continue;
                 for (let seg in file.module.segments) {
                     let segment = file.module.segments[seg];
                     for (let ord in segment.ordinals) {

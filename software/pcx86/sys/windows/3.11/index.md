@@ -3,7 +3,17 @@ layout: page
 title: Microsoft Windows 3.11 (aka Windows for Workgroups)
 permalink: /software/pcx86/sys/windows/3.11/
 redirect_from: /disks/pcx86/windows/3.11/
+machines:
+  - id: deskpro386
+    type: pcx86
+    config: /configs/pcx86/machine/compaq/deskpro386/vga/2048kb/debugger/machine.xml
+    drives: '[{name:"20Mb Hard Disk",type:2}]'
+    autoMount:
+      B:
+        name: Windows 3.11 (Disk 1)
 ---
+
+{% include machine.html id="deskpro386" %}
 
 Directory listings of the eight 1.44Mb distribution diskettes are provided below.
 
