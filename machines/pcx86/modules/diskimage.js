@@ -2232,9 +2232,15 @@ export default class DiskImage {
     {
         let errors = 0;
         let y = year, m = month, d = day, h = hour, n = minute, s = second;
+        if (m < 0) {
+            m = 0;
+        }
         if (m > 11) {
             m = 11;
             errors++;
+        }
+        if (d < 1) {
+            d = 1;
         }
         if (d > 31) {
             d = 31;

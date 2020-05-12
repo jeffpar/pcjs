@@ -8,6 +8,7 @@
  */
 
 import fs         from "fs";
+import os         from "os";
 import crypto     from "crypto";
 import glob       from "glob";
 import path       from "path";
@@ -147,7 +148,10 @@ function getHash(data, type = "md5")
  */
 function getFullPath(sFile)
 {
-    if (sFile[0] == path.sep && sFile.indexOf(rootDir) < 0) {
+    if (sFile[0] == '~') {
+        sFile = os.homedir() + sFile.substr(1);
+    }
+    else if (sFile[0] == path.sep && sFile.indexOf(rootDir) < 0) {
         sFile = rootDir + sFile;
     }
     return sFile;
