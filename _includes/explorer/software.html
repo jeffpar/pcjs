@@ -153,7 +153,7 @@
                                 {%- capture software_desc -%}{%- if product[1]['@desc'] %} title="{{ product[1]['@desc'] }}"{%- endif -%}{%- endcapture -%}
                                 {%- capture software_title %}{{ product[1]['@title'] }}{% if version[0] != "" %} {{ version[0] }}{% endif %}{% endcapture -%}
                               {%- endif -%}
-                              {%- capture hardware_url -%}{{ release['@hardware'] }}{%- endcapture -%}
+                              {%- capture hardware_url -%}{{ release['@hardware']['url'] }}{%- endcapture -%}
                               {%- capture alternate_url -%}{{ release['@permalink'] }}{%- endcapture -%}
                               {%- if category[0] != "game" -%}{%- assign diskette_default = "/diskettes" -%}{%- else -%}{%- assign diskette_default = "/gamedisks" -%}{%- endif -%}
                               {%- capture diskette_server -%}{{ release['@server'] | default: diskette_default }}{%- endcapture -%}

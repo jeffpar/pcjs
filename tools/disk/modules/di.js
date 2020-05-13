@@ -421,8 +421,8 @@ function processDisk(di, diskFile, argv, diskette)
                  *      otherwise, if any file dates are >= 1984, a PC XT ("5160") is preferred;
                  *      otherwise, a PC ("5150") should suffice.
                  *
-                 * However, a diskette's "version" definition can also include a machine "config" definition that supplements
-                 * or overrides those initial preferences:
+                 * However, a diskette's "version" definition can also include a "@hardware" configuration with "options"
+                 * that supplement or override those initial preferences:
                  *
                  *      manufacturer, such as "ibm" or "compaq"
                  *      model, such as "5150" or "5160"
@@ -431,68 +431,63 @@ function processDisk(di, diskFile, argv, diskette)
                  *      hardware preference, such as "com1" or "mouse"
                  *      operating system (aka boot disk) preference, such as "PC DOS 2.00 (Disk 1)"
                  *
-                 * Browse diskettes.json for more examples (look for "@config" properties).
+                 * Browse diskettes.json for more examples (look for "@hardware" properties).
                  *
                  * TODO: Finish support for all of the above preferences (eg, mouse support, serial and parallel ports, etc).
                  */
                 let diskSize = di.getSize() / 1024;
                 let dateNewest = di.getNewestDate(true);
                 let yearNewest = dateNewest && dateNewest.getFullYear() || 1981;
-                let config = diskette.config || {}, prefs;
-                if (typeof config == "string") {
-                    prefs = config;
-                    config = {};
-                } else {
-                    prefs = config.prefs || "";
-                }
-                let aPrefs = prefs.split(",");
-                let findPref = function(aPossiblePrefs) {
-                    for (let i = 0; i < aPossiblePrefs.length; i++) {
-                        if (!aPossiblePrefs[i]) continue;
-                        for (let j = 0; j < aPrefs.length; j++) {
-                            if (aPrefs[j].indexOf(aPossiblePrefs[i]) >= 0) return aPrefs[j];
+                let hardware = diskette.hardware || {}, options = "";
+                if (hardware) options = hardware.options || "";
+                let aOptions = options.split(",");
+                let findOption = function(aPossibleOptions) {
+                    for (let i = 0; i < aPossibleOptions.length; i++) {
+                        if (!aPossibleOptions[i]) continue;
+                        for (let j = 0; j < aOptions.length; j++) {
+                            if (aOptions[j].indexOf(aPossibleOptions[i]) >= 0) return aOptions[j];
                         }
                     }
-                    return aPossiblePrefs[0];
+                    return aPossibleOptions[0];
                 };
                 let findConfig = function(configPath) {
                     configPath = getFullPath(configPath);
                     let configPossible;
                     let aPossibleConfigs = glob.sync(configPath);
-                    let prefMemory = findPref(["kb"]);
+                    let optionMemory = findOption(["kb"]);
                     for (let i = 0; i < aPossibleConfigs.length; i++) {
                         let configFile = aPossibleConfigs[i];
                         if (configFile.indexOf("debugger") > 0 || configFile.indexOf("array") > 0) continue;
                         configPossible = configFile.substr(rootDir.length);
-                        if (configFile.indexOf(prefMemory) >= 0) break;
+                        if (configFile.indexOf(optionMemory) >= 0) break;
                     }
                     return configPossible;
                 };
                 /*
                  * Now that we have all the raw inputs ("ingredients"), let's toss some defaults together.
                  */
-                let manufacturer = findPref(["ibm","compaq"]);
+                let manufacturer = findOption(["ibm","compaq"]);
                 let sDefaultIBMModel = diskSize > 360 || yearNewest >= 1986? "5170" : (yearNewest >= 1984? "5160" : "5150");
                 let sDefaultCOMPAQModel = diskSize > 360 || yearNewest >= 1986? "deskpro386" : "portable";
-                let model = findPref({
+                let model = findOption({
                     "ibm": [sDefaultIBMModel, "5150","5160","5170"],
                     "compaq": [sDefaultCOMPAQModel, "portable","deskpro386"]
                 }[manufacturer]);
-                let video = findPref(["*","mda","cga","ega","vga","vdu"]);
-                let configFile = config.file || findConfig("/configs/pcx86/machine/" + manufacturer + "/" + model + "/" + video + "/**/machine.xml");
-                let bootDisk = findPref(["", "DOS"]);
+                let video = findOption(["*","mda","cga","ega","vga","vdu"]);
+                let configFile = hardware.file || findConfig("/configs/pcx86/machine/" + manufacturer + "/" + model + "/" + video + "/**/machine.xml");
+                let bootDisk = findOption(["", "DOS"]);
                 let sAutoGen = "    autoGen: true\n";
                 let sAutoType = "    autoType: $date\\r$time\\rB:\\rDIR\\r\n";
                 let sMachineID = (model.length <= 4? manufacturer : "") + model;
                 let sMachine = "  - id: " + sMachineID + "\n    type: pcx86\n    config: " + configFile + "\n";
-                for (let prop in config) {
-                    if (prop == "prefs" || prop == "file") continue;
+                for (let prop in hardware) {
+                    if (prop == "file" || prop == "options" || prop == "url") continue;
                     let chQuote = "";
                     if (prop == "drives") {
                         chQuote = "'";
                         bootDisk = "None";
                     }
-                    sMachine += "    " + prop + ": " + chQuote + config[prop] + chQuote + "\n";
+                    sMachine += "    " + prop + ": " + chQuote + hardware[prop] + chQuote + "\n";
                     sAutoType = "";
                 }
                 if (bootDisk) bootDisk = "      A:\n        name: \"" + bootDisk + "\"\n";
