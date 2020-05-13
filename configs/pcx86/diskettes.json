@@ -234,6 +234,17 @@
       "word": {
         "@title": "Microsoft Word",
         "@versions": {
+          "1.xx": {
+            "@title": "Microsoft Word 1.xx",
+            "@media": [
+              {
+                "@title": "MS Word 1.xx",
+                "@diskette": "MSWORD-1XX.json",
+                "@format": "PC320K",
+                "@kryoflux": true
+              }
+            ]
+          },
           "1.15": {
             "@title": "Microsoft Word 1.15",
             "@media": [
@@ -2237,6 +2248,38 @@
       "c": {
         "@title": "C Compiler",
         "@versions": {
+          "1.03": {
+            "@title": "Microsoft C Compiler 1.03",
+            "@media": [
+              {
+                "@title": "MS C 1.03 Beta (Disk 1)",
+                "@diskette": "MSC103-BETA-DISK1.json",
+                "@format": "PC160K",
+                "@kryoflux": true
+              },
+              {
+                "@title": "MS C 1.03 Beta (Disk 2)",
+                "@diskette": "MSC103-BETA-DISK2.json",
+                "@format": "PC160K",
+                "@kryoflux": true
+              }
+            ]
+          },
+          "1.04": {
+            "@title": "Microsoft C Compiler 1.04",
+            "@media": [
+              {
+                "@title": "MS C 1.04 (Disk 1)",
+                "@diskette": "MSC104-DISK1.json",
+                "@format": "PC160K"
+              },
+              {
+                "@title": "MS C 1.04 (Disk 2)",
+                "@diskette": "MSC104-DISK2.json",
+                "@format": "PC160K"
+              }
+            ]
+          },
           "2.03": {
             "@title": "Microsoft C Compiler 2.03",
             "@media": [
@@ -3663,6 +3706,37 @@
               "@cover": "/documents/books/programming/covers/Graphics_for_the_IBM_PC.jpg",
               "@source": "PCjs",
               "tags": "graphics"
+            }
+          ]
+        },
+        "inside_the_ibm_pc": {
+          "@title": "Inside the IBM PC",
+          "@media": [
+            {
+              "@title": "Inside the IBM PC (Disk 1)",
+              "@diskette": "INSIDE-THE-IBM-PC-1A.json",
+              "@kryoflux": true
+            },
+            {
+              "@title": "Inside the IBM PC (Disk 2)",
+              "@diskette": "INSIDE-THE-IBM-PC-1B.json",
+              "@kryoflux": true
+            },
+            {
+              "@title": "Inside the IBM PC (Disk 3)",
+              "@diskette": "INSIDE-THE-IBM-PC-2A.json"
+            }
+          ],
+          "@documents": [
+            {
+              "@title": "Inside the IBM PC (1983)",
+              "@file": "Inside_the_IBM_PC-1983.pdf",
+              "@link": "/software/pcx86/sw/books/inside_the_ibm_pc/",
+              "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9heNXH482S8MFYjo4LQ?e=URcAbM",
+              "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2194679&authkey=ABB7WIsESPdRXgY&em=2",
+              "@cover": "/documents/books/programming/covers/Inside_the_IBM_PC-1983.jpg",
+              "@source": "PCjs",
+              "tags": "norton"
             }
           ]
         },

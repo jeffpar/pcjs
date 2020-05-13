@@ -29,3 +29,11 @@ exclude:
   - /node_modules
   - /software/pcx86/sys/dos/microsoft/1.25/src
   - /software/pcx86/sys/dos/microsoft/2.11/src
+
+software:
+  diskettes:
+    server: /diskettes
+  gamedisks:
+    server: /gamedisks
+  harddisks:
+    server: /harddisks
