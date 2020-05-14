@@ -7,6 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import { COMPILED } from "./defs.js";
+
 /**
  * @class {JSONLib}
  */
@@ -111,25 +113,27 @@ export default class JSONLib {
                          * All these optional properties are either strings or booleans, except for 'hardware', which is an object
                          * that may contain:
                          *
-                         *      url:        URL of the preferred machine to run the software (eg, "/machines/pcx86/ibm/5150/cga/")
-                         *      file:       a specific configuration file (eg, "/configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml")
-                         *      drives:     one of more hard drive configs (eg, "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]")
-                         *      options:    assorted hardware options (eg, "mouse")
+                         *      'url':      URL of the preferred machine to run the software (eg, "/machines/pcx86/ibm/5150/cga/")
+                         *      'config':   a specific configuration file (eg, "/configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml")
+                         *      'drives':   one of more hard drive configs (eg, "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]")
+                         *      'options':  assorted hardware options (eg, "mouse")
                          */
-                        if (!limits.length) {
+                        if (!COMPILED) {
                             let title = release['@title'] || group['@title'];
                             let archive = item['@archive'];
                             let label = item['@label'];
-                            let options = item['@options'];
+                            let args = item['@args'];
                             let kryoflux = item['@kryoflux'];
+                            let normalize = item['@normalize'];
                             let hidden = group['@hidden'] || release['@hidden'];
                             let hardware = release['@hardware'];
                             if (title) diskette['title'] = title;                       // the software title (as opposed to the diskette name)
                             if (format) diskette['format'] = format;                    // eg, "PC360K"
                             if (archive) diskette['archive'] = archive;                 // eg, "folder", or the name of a specific ".img" file, etc
                             if (label) diskette['label'] = label;                       // the volume label to use (eg, for a diskette generated from a folder)
-                            if (options) diskette['options'] = options;                 // DiskImage options
+                            if (args) diskette['args'] = args;                          // DiskImage command-line arguments
                             if (kryoflux) diskette['kryoflux'] = true;                  // true if a Kryoflux dump is available
+                            if (normalize) diskette['normalize'] = true;                // true if a line-endings in known text files should be "normalized"
                             if (hidden) diskette['hidden'] = true;                      // true if hidden from the Explorer (still in the library)
                             if (hardware) diskette['hardware'] = hardware;              // hardware configuration
                         }

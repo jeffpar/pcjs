@@ -89,14 +89,16 @@ function createDisk(diskFile, diskette, argv)
          */
         sArchiveFile = sArchiveFile.replace(".img", path.sep);
     }
-    let sectorIDs = argv['sectorID'] || diskette.optv['sectorID'];
-    let sectorErrors = argv['sectorError'] || diskette.optv['sectorError'];
-    let suppData = argv['suppData'] || diskette.optv['suppData'];
+    let sectorIDs = argv['sectorID'] || diskette.argv['sectorID'];
+    let sectorErrors = argv['sectorError'] || diskette.argv['sectorError'];
+    let suppData = argv['suppData'] || diskette.argv['suppData'];
     if (suppData) suppData = readFile(suppData);
     let name = path.basename(sArchiveFile);
     if (sArchiveFile.endsWith(path.sep)) {
         diskette.command = "--dir " + name;
-        di = readDir(sArchiveFile, diskette.label);
+        let match = diskette.format && diskette.format.match(/^PC([0-9]+)K/);
+        let kbTarget = match && +match[1] || 0;
+        di = readDir(sArchiveFile, diskette.label, diskette.normalize, kbTarget);
     } else {
         diskette.command = "--disk " + name;
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
@@ -344,7 +346,7 @@ function processDisk(di, diskFile, argv, diskette)
             let diTemp = createDisk(diskFile, diskette, argv);
             if (diTemp) {
                 let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
-                diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.options));
+                diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
                 writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, false);
                 let warning = false;
                 if (diskette.archive.endsWith(".img")) {
@@ -373,6 +375,8 @@ function processDisk(di, diskFile, argv, diskette)
 
     /*
      * If --checkpage, then get the disk's listing and see if it's up-to-date in the website's index.md.
+     *
+     * Additionally, if the page doesn't have a machine, add one, tailored to the software's requirements as best we can.
      *
      * You must ALSO specify --rebuild if you want the index.md updated (or created) as well.
      */
@@ -474,14 +478,14 @@ function processDisk(di, diskFile, argv, diskette)
                     "compaq": [sDefaultCOMPAQModel, "portable","deskpro386"]
                 }[manufacturer]);
                 let video = findOption(["*","mda","cga","ega","vga","vdu"]);
-                let configFile = hardware.file || findConfig("/configs/pcx86/machine/" + manufacturer + "/" + model + "/" + video + "/**/machine.xml");
+                let configFile = hardware.config || findConfig("/configs/pcx86/machine/" + manufacturer + "/" + model + "/" + video + "/**/machine.xml");
                 let bootDisk = findOption(["", "DOS"]);
                 let sAutoGen = "    autoGen: true\n";
                 let sAutoType = "    autoType: $date\\r$time\\rB:\\rDIR\\r\n";
                 let sMachineID = (model.length <= 4? manufacturer : "") + model;
                 let sMachine = "  - id: " + sMachineID + "\n    type: pcx86\n    config: " + configFile + "\n";
                 for (let prop in hardware) {
-                    if (prop == "file" || prop == "options" || prop == "url") continue;
+                    if (prop == "config" || prop == "options" || prop == "url") continue;
                     let chQuote = "";
                     if (prop == "drives") {
                         chQuote = "'";
@@ -587,13 +591,13 @@ function readAll(argv)
             let aDiskettes = [];
             JSONLib.parseDiskettes(aDiskettes, library, "/pcx86", "/diskettes");
             aDiskettes.forEach(function readAllDiskettes(diskette) {
-                diskette.optc = 0;
-                diskette.optv = [];
-                if (!diskette.options) {
-                    diskette.options = "";
+                diskette.argc = 0;
+                diskette.argv = [];
+                if (!diskette.args) {
+                    diskette.args = "";
                 } else {
-                    [diskette.optc, diskette.optv] = stdlib.getArgs(diskette.options);
-                    diskette.options = " " + diskette.options;
+                    [diskette.argc, diskette.argv] = stdlib.getArgs(diskette.args);
+                    diskette.args = " " + diskette.args;
                 }
                 if (library['@local']) {
                     diskette.path = diskette.path.replace(library['@server'], library['@local']);
@@ -635,11 +639,11 @@ function readAll(argv)
  * @param {string} sDir (directory name)
  * @param {string} [sLabel] (if not set with --label, then basename(sDir) will be used instead)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
- * @param {number} [kbTarget] (target disk size, in Kb)
+ * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
  * @returns {DiskImage|null}
  */
-function readDir(sDir, sLabel, fNormalize = false, kbTarget, nMax)
+function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
 {
     let di;
     if (!sLabel) {

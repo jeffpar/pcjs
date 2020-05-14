@@ -67,6 +67,7 @@ const REPOSITORY = "pcjs.org";
  * @class {Defs}
  */
 export default class Defs {}
+export { COMPILED };
 
 Defs.COMMAND    = COMMAND;
 Defs.COMPILED   = COMPILED;

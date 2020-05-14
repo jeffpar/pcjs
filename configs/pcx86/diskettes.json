@@ -91,7 +91,7 @@
                 "@diskette": "MULTIPLAN-IBM100-PROGRAM.json",
                 "@photo": ".jpg",
                 "@format": "PC160K",
-                "@options": "--sectorID=11:0:8:61",
+                "@args": "--sectorID=11:0:8:61",
                 "@kryoflux": true,
                 "@archive": "MULTIPLAN-IBM100-PROGRAM-BACKUP.img"
               },
@@ -253,7 +253,7 @@
                 "@diskette": "MSWORD-115-PROGRAM.json",
                 "@format": "PC360K",
                 "@kryoflux": true,
-                "@options": "--suppData=/software/pcx86/app/microsoft/word/1.15/debugger/index.md"
+                "@args": "--suppData=/software/pcx86/app/microsoft/word/1.15/debugger/index.md"
               },
               {
                 "@title": "MS Word 1.15 (Utilities)",
@@ -521,7 +521,7 @@
                 "@title": "dBASE III 1.0 (Disk 1)",
                 "@diskette": "DBIII-100-DISK1.json",
                 "@format": "PC360K",
-                "@options": "--sectorError=39:0:5:272",
+                "@args": "--sectorError=39:0:5:272",
                 "@kryoflux": true
               },
               {
@@ -534,7 +534,7 @@
                 "@title": "dBASE III 1.0 (Locked)",
                 "@diskette": "DBIII-100-LOCKED.json",
                 "@format": "PC360K",
-                "@options": "--sectorError=39:0:2:204"
+                "@args": "--sectorError=39:0:2:204"
               },
               {
                 "@title": "dBASE III 1.0 (Patched)",
@@ -821,7 +821,8 @@
             "@title": "Exploring the IBM PC (CGA)",
             "@bootable": true,
             "@hardware": {
-              "url": "/machines/pcx86/ibm/5150/cga/"
+              "url": "/machines/pcx86/ibm/5150/cga/",
+              "options": "5150,cga"
             },
             "@media": [
               {
@@ -835,7 +836,8 @@
             "@title": "Exploring the IBM PC (MDA)",
             "@bootable": true,
             "@hardware": {
-              "url": "/machines/pcx86/ibm/5150/mda/"
+              "url": "/machines/pcx86/ibm/5150/mda/",
+              "options": "5150,mda"
             },
             "@media": [
               {
@@ -849,7 +851,8 @@
             "@title": "Exploring the IBM PC AT 1.00",
             "@bootable": true,
             "@hardware": {
-              "url": "/machines/pcx86/ibm/5170/cga/"
+              "url": "/machines/pcx86/ibm/5170/cga/",
+              "options": "5170,cga"
             },
             "@media": [
               {
@@ -863,7 +866,8 @@
             "@title": "Exploring the IBM PC AT 2.00",
             "@bootable": true,
             "@hardware": {
-              "url": "/machines/pcx86/ibm/5170/cga/"
+              "url": "/machines/pcx86/ibm/5170/cga/",
+              "options": "5170,cga"
             },
             "@media": [
               {

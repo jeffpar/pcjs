@@ -65,6 +65,7 @@ const REPOSITORY = "pcjs.org";
  */
 class Defs {}
 
+
 Defs.COMMAND    = COMMAND;
 Defs.COMPILED   = COMPILED;
 Defs.DEBUG      = DEBUG;
