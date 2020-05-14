@@ -2460,9 +2460,9 @@ class ChipSet extends Component {
                                  */
                                 if (BACKTRACK && obj) {
                                     if (!off && obj.file) {
-                                        chipset.printf(Messages.DISK, "loading %s[%d] at %%%0X\n", obj.file.sPath, obj.offFile, addrCur);
+                                        chipset.printf(Messages.DISK, "loading %s[%#0X] at %%%0X\n", obj.file.path, obj.offFile, addrCur);
                                         /*
-                                        if (obj.file.sPath == "\\SYSBAS.EXE" && obj.offFile == 512) {
+                                        if (obj.file.path == "\\SYSBAS.EXE" && obj.offFile == 512) {
                                             chipset.cpu.stopCPU();
                                         }
                                         */

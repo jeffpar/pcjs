@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Microsoft Word 3.00
+title: Microsoft Word 3.00 (for DOS)
 permalink: /software/pcx86/app/microsoft/word/3.00/
 redirect_from: /disks/pcx86/apps/microsoft/word/3.00/
 machines:

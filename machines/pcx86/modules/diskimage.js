@@ -2735,15 +2735,16 @@ export default class DiskImage {
             delete sector[DiskImage.SECTOR.HEAD];
         }
 
-        let dwPattern;
+        let dwPattern = sector['pattern'];
+        delete sector['pattern'];
+
         let idSector = sector[DiskImage.SECTOR.ID];
         if (idSector != undefined) {
             delete sector[DiskImage.SECTOR.ID];
         } else {
+            dwPattern |= 0;
             idSector = sector['sector'];
             delete sector['sector'];
-            dwPattern = sector['pattern'] || 0;
-            delete sector['pattern'];
         }
 
         let cbSector = sector[DiskImage.SECTOR.LENGTH];
@@ -2755,17 +2756,15 @@ export default class DiskImage {
         }
 
         let adw = sector[DiskImage.SECTOR.DATA];
-        if (adw != undefined) {
+        if (adw) {
             delete sector[DiskImage.SECTOR.DATA];
         } else {
-            let cdw = 0;
             adw = sector['data'];
-            if (adw == undefined) {
-                adw = [dwPattern];
-                this.assert(dwPattern != undefined);
-            } else {
-                cdw = adw.length;
+            if (adw) {
                 delete sector['data'];
+            } else {
+                this.assert(dwPattern != undefined);
+                adw = [dwPattern];
             }
         }
 
@@ -3065,7 +3064,7 @@ export default class DiskImage {
                 }
             }
             if (this.volTable.length) {
-                sFormat = "PC" + (this.cbDiskData / 1024) + "K";
+                sFormat = "PC" + Math.round(this.cbDiskData / 1024) + "K";
             }
         }
         return sFormat + flags;

@@ -539,7 +539,7 @@ function processDisk(di, diskFile, argv, diskette)
             }
         }
 
-        if (!sIndex) {
+        if (!sIndexNew) {
             printf("\tmissing index for \"%s\": %s\n", diskette.title, sIndexFile);
         }
         else if (sIndexNew != sIndex) {

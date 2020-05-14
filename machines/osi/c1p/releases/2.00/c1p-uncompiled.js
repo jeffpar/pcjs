@@ -14887,13 +14887,12 @@ function resolveXML(sURL, sXML, display, done)
 }
 
 /**
- * embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFile, sParms, sClass)
+ * embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms, sClass)
  *
  * This allows to you embed a machine on a web page, by transforming the machine XML into HTML.
  *
  * @param {string} sAppName is the app name (eg, "PCx86")
  * @param {string} sAppClass is the app class (eg, "pcx86"); also known as the machine class
- * @param {string} sVersion is the app version (eg, "1.15.7")
  * @param {string} idMachine
  * @param {string} [sXMLFile]
  * @param {string} [sXSLFile]
@@ -14901,7 +14900,7 @@ function resolveXML(sURL, sXML, display, done)
  * @param {string} [sClass] (an optional machine class name used to style the machine)
  * @return {boolean} true if successful, false if error
  */
-function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFile, sParms, sClass)
+function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     let eMachine, eWarning, fSuccess = true;
 
@@ -14928,7 +14927,7 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
             Component.addMachineResource(idMachine, "parms", sParms);
         }
         /*
-         * We use to replace a missing XML configuration file with a default path, but since we now support JSON-based configs,
+         * We used to replace a missing XML configuration file with a default path, but since we now support JSON-based configs,
          * that had to change.
          *
          *      sXMLFile = "machine.xml";
@@ -14936,6 +14935,10 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
          */
         doneMachine();
         return fSuccess;
+    }
+
+    if (Web.getURLParm('debugger') == "true" && sXMLFile.indexOf("/debugger") < 0) {
+        sXMLFile = sXMLFile.replace("/machine.xml", "/debugger/machine.xml");
     }
 
     let displayError = function(sURL, sError) {
@@ -15171,7 +15174,7 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("C1Pjs", "c1p", APPVERSION, idMachine, sXMLFile, sXSLFile, undefined, sClass);
+    return embedMachine("C1Pjs", "c1p", idMachine, sXMLFile, sXSLFile, undefined, sClass);
 }
 
 /**
@@ -15187,7 +15190,7 @@ function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PCx86", "pcx86", APPVERSION, idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PCx86", "pcx86", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**
@@ -15203,7 +15206,7 @@ function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PCx80", "pcx80", APPVERSION, idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PCx80", "pcx80", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**
@@ -15219,7 +15222,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PDPjs", "pdp10", APPVERSION, idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PDPjs", "pdp10", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**
@@ -15235,7 +15238,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PDPjs", "pdp11", APPVERSION, idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PDPjs", "pdp11", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**

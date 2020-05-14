@@ -2714,7 +2714,7 @@ class FDC extends Component {
         drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
         if (drive.disk) {
             if (this.messageEnabled()) {
-                this.printf("%s.doRead(drive=%d,CHS=%d:%d:%d,PBA=%d,addr=0x%x)\n",
+                this.printf("%s.doRead(drive=%d,CHS=%d:%d:%d,LBA=%d,addr=%#X)\n",
                             this.idComponent, drive.iDrive, drive.bCylinder, drive.bHead, drive.bSector,
                             (drive.bCylinder * (drive.disk.nHeads * drive.disk.nSectors) + drive.bHead * drive.disk.nSectors + drive.bSector-1),
                             this.chipset.checkDMA(ChipSet.DMA_FDC));
@@ -2750,7 +2750,7 @@ class FDC extends Component {
         drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
         if (drive.disk) {
             if (this.messageEnabled()) {
-                this.printf("%s.doWrite(drive=%d,CHS=%d:%d:%d,PBA=%d,addr=0x%x)\n",
+                this.printf("%s.doWrite(drive=%d,CHS=%d:%d:%d,LBA=%d,addr=%#X)\n",
                             this.idComponent, drive.iDrive, drive.bCylinder, drive.bHead, drive.bSector,
                             (drive.bCylinder * (drive.disk.nHeads * drive.disk.nSectors) + drive.bHead * drive.disk.nSectors + drive.bSector-1),
                             this.chipset.checkDMA(ChipSet.DMA_FDC));
