@@ -15,6 +15,4 @@ machines:
 
 {% include machine.html id="compaq-portable-vdu" %}
 
-This machine is also available with the [PCjs Debugger](debugger/).
-
 {% include gallery/documents.html %}

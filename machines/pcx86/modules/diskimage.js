@@ -2714,8 +2714,12 @@ export default class DiskImage {
      *      'l':        size of the sector, in bytes    ('length')
      *      'd':        array of dwords                 ('data')
      *
-     * NOTE: The 'pattern' property is no longer used; if the sector ends with a repeated 32-bit pattern,
-     * we now store that pattern as the last 'd' array value and shrink the array.
+     * NOTE: The 'pattern' property is no longer stored in JSON images; if the sector ends with a repeated
+     * 32-bit pattern, we now store that pattern as the last 'd' array value and shrink the array.
+     *
+     * However, IF the JSON data comes directly from the Disk component, which still uses 'pattern' internally,
+     * we will honor it, and fill out any partial sector with the given pattern, instead of assuming we should
+     * use the last 'd' value.
      *
      * @this {DiskImage}
      * @param {number} iCylinder
@@ -2757,14 +2761,14 @@ export default class DiskImage {
 
         let adw = sector[DiskImage.SECTOR.DATA];
         if (adw) {
+            this.assert(adw.length);
             delete sector[DiskImage.SECTOR.DATA];
         } else {
             adw = sector['data'];
-            if (adw) {
-                delete sector['data'];
+            if (!adw) {
+                adw = [];
             } else {
-                this.assert(dwPattern != undefined);
-                adw = [dwPattern];
+                delete sector['data'];
             }
         }
 
@@ -2798,6 +2802,7 @@ export default class DiskImage {
                     dw = dwPattern;
                 } else {
                     dw = adw[adw.length-1];
+                    this.assert(dw != undefined);
                 }
                 adw[idw] = dw;
             }

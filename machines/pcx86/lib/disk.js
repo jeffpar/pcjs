@@ -2020,9 +2020,8 @@ class Disk extends Component {
     /**
      * convertToJSON(fFormatted)
      *
-     * We perform some RegExp massaging on the JSON data to eliminate unnecessary properties
-     * (eg, LENGTH values of 512, dwPattern values of 0, and empty DATA arrays, since those are
-     * defaults).
+     * We perform some RegExp massaging on the JSON data to eliminate (old) unnecessary properties
+     * (eg, 'length' values of 512, empty 'data' arrays), since those were defaults.
      *
      * In addition, we first check every sector to see if it can be "deflated".  Sectors that were
      * initially "deflated" should remain that way unless/until they were modified, so technically,
@@ -2157,9 +2156,9 @@ Disk.SECTOR = {
     DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
     FILE_INDEX: 'f',                // "extended" JSON disk images only [formerly file]
     FILE_OFFSET:'o',                // "extended" JSON disk images only [formerly offFile]
-    PATTERN:    'pattern',          // deprecated
+    PATTERN:    'pattern',          // deprecated (no longer used in external images, still used internally)
     /*
-     * The following properties occur very infrequently (and usually only in copy-protected or degraded disk images),
+     * The following properties occur very infrequently (and usually only in copy-protected or damaged disk images),
      * hence the longer, more meaningful IDs.
      */
     DATA_CRC:   'dataCRC',
