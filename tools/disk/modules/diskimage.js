@@ -952,7 +952,7 @@ function main(argc, argv)
     moduleDir = path.dirname(argv0[0]);
     rootDir = path.join(moduleDir, "../../..");
 
-    printf("DiskImage v%s\n", Device.VERSION);
+    printf("DiskImage v%s\n%s\n", Device.VERSION, Device.COPYRIGHT);
     if (options) printf("options: %s\n", options);
 
     if (Device.DEBUG) {
