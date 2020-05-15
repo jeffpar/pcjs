@@ -215,7 +215,7 @@ function printFileDesc(diskFile, diskName, desc)
  */
 function printManifest(diskFile, diskName, manifest)
 {
-    manifest.forEach(function dumpManifestFile(desc) {
+    manifest.forEach(function printManifestFile(desc) {
         printFileDesc(diskFile, diskName, desc);
     });
 }
@@ -275,6 +275,39 @@ function processDisk(di, diskFile, argv, diskette)
                     }
                 }
                 if (!cMatches) printf("no matches\n");
+            }
+        }
+    }
+
+    let chs = argv['dump'];
+    if (chs) {
+        if (typeof chs != "string") {
+            printf("specify --dump=C:H:S[:N]\n");
+        } else {
+            let values = chs.split(':');
+            let iCylinder = +values[0], iHead = +values[1], idSector = +values[2], nSectors = +values[3] || 1;
+            while (nSectors-- > 0) {
+                let sector = di.seek(iCylinder, iHead, idSector);
+                if (!sector) {
+                    printf("unable to find %d:%d:%d\n", iCylinder, iHead, idSector);
+                    break;
+                }
+                let i = 0;
+                let sBytes = "", sChars = "", sLines = "";
+                sLines = sprintf("CHS=%d:%d:%d\n", iCylinder, iHead, idSector);
+                while (true) {
+                    let b = di.read(sector, i);
+                    if (b < 0) break;
+                    if (i % 16 == 0) sLines += sprintf("%#06x  ", i);
+                    sBytes += sprintf("%02x ", b);
+                    sChars += (b >= 0x20 && b < 0x7f? String.fromCharCode(b) : '.');
+                    if (++i % 16 == 0) {
+                        sLines += sBytes + "  " + sChars + '\n';
+                        sBytes = sChars = "";
+                    }
+                }
+                printf("%s\n", sLines);
+                idSector++;
             }
         }
     }

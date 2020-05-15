@@ -3007,17 +3007,6 @@ export default class DiskImage {
     }
 
     /**
-     * getFiles()
-     *
-     * @this {DiskImage}
-     * @returns {number}
-     */
-    getFiles()
-    {
-        return this.fileTable.length;
-    }
-
-    /**
      * getFormat()
      *
      * For disks that match a standard "PC" disk geometry AND contain 1 or more FAT volumes,
