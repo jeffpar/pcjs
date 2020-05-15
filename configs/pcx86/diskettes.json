@@ -6441,7 +6441,8 @@
             "4.10": {
               "@title": "QEMM-386 4.10",
               "@hardware": {
-                "options": "compaq,deskpro386"
+                "options": "compaq,deskpro386",
+                "autoType": ""
               },
               "@media": [
                 {
@@ -6455,7 +6456,8 @@
             "4.23": {
               "@title": "QEMM-386 4.23",
               "@hardware": {
-                "options": "compaq,deskpro386"
+                "options": "compaq,deskpro386",
+                "autoType": ""
               },
               "@media": [
                 {
@@ -6469,7 +6471,8 @@
             "5.13": {
               "@title": "QEMM-386 5.13",
               "@hardware": {
-                "options": "compaq,deskpro386"
+                "options": "compaq,deskpro386",
+                "autoType": ""
               },
               "@media": [
                 {
@@ -6482,7 +6485,8 @@
             "6.02": {
               "@title": "QEMM-386 6.02",
               "@hardware": {
-                "options": "compaq,deskpro386"
+                "options": "compaq,deskpro386",
+                "autoType": ""
               },
               "@media": [
                 {

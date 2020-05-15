@@ -7,11 +7,11 @@ machines:
   - id: deskpro386
     type: pcx86
     config: /configs/pcx86/machine/compaq/deskpro386/cga/640kb/machine.xml
+    autoType: 
     autoGen: true
     autoMount:
       B:
         name: "QEMM-386 4.23"
-    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="deskpro386" %}
