@@ -20,7 +20,7 @@ diskette, which appeared as Diskette #1 when inserted normally and as Diskette #
 diskette was a single-sided diskette containing the contents of Diskette #3.  We have preserved all three sides as separate
 single-sided 160Kb disk images.
 
-In addition, we were unable to successfully read the entire contents of Diskette #3, due to its age, so the files on that diskette
+WARNING: We were unable to successfully read the entire contents of Diskette #3, due to its age, so the files on that diskette
 are unfortunately incomplete.
 
 {% include machine.html id="ibm5150" %}
