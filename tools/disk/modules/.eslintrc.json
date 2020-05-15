@@ -1,6 +1,7 @@
 {
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaVersion": 8
   },
   "rules": {
     "sort-imports": "off"

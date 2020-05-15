@@ -302,7 +302,7 @@ function processDisk(di, diskFile, argv, diskette)
                     sBytes += sprintf("%02x ", b);
                     sChars += (b >= 0x20 && b < 0x7f? String.fromCharCode(b) : '.');
                     if (++i % 16 == 0) {
-                        sLines += sBytes + "  " + sChars + '\n';
+                        sLines += sBytes + " " + sChars + '\n';
                         sBytes = sChars = "";
                     }
                 }
@@ -967,6 +967,83 @@ function writeFile(sFile, data, fCreateDir)
 }
 
 /**
+ * processDiskAsync(input, argv)
+ *
+ * @param {string} input
+ * @param {Array} argv
+ */
+async function processDiskAsync(input, argv)
+{
+    let di = await readDiskAsync(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData']));
+    if (di) {
+        processDisk(di, input, argv);
+    }
+}
+
+/**
+ * readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+ *
+ * @param {string} diskFile
+ * @param {boolean} [forceBPB]
+ * @param {Array|string} [sectorIDs]
+ * @param {Array|string} [sectorErrors]
+ * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
+ */
+async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+{
+    let db, di
+    try {
+        let diskName = path.basename(diskFile);
+        di = new DiskImage(device, diskName);
+        if (diskName.endsWith(".json")) {
+            db = await readFileAsync(diskFile, "utf8");
+            if (!db) {
+                di = null;
+            } else {
+                if (!di.buildDiskFromJSON(db)) di = null;
+            }
+        }
+        else {
+            /*
+             * Passing null for the encoding parameter tells readFile() to return a buffer (which, in our case, is a DataBuffer).
+             */
+            db = await readFileAsync(diskFile, null);
+            if (!db) {
+                di = null;
+            } else {
+                let hash = getHash(db);
+                if (diskName.endsWith(".psi")) {
+                    if (!di.buildDiskFromPSI(db)) di = null;
+                } else {
+                    if (!di.buildDiskFromBuffer(db, hash, forceBPB, sectorIDs, sectorErrors, suppData)) di = null;
+                }
+            }
+        }
+    } catch(err) {
+        printError(err);
+        return null;
+    }
+    return di;
+}
+
+/**
+ * readFileAsync(sFile, encoding)
+ *
+ * @param {string} sFile
+ * @param {string|null} [encoding]
+ */
+function readFileAsync(sFile, encoding = "utf8")
+{
+    sFile = getFullPath(sFile);
+    return new Promise((resolve, reject) => {
+        fs.readFile(sFile, encoding, (err, data) => {
+            if (err) reject(err);
+            resolve(data);
+        });
+    });
+}
+
+/**
  * main(argc, argv)
  *
  * Usage:
@@ -999,17 +1076,24 @@ function main(argc, argv)
         return;
     }
 
-    let input, di;
-    input = argv['disk'];
-    if (!input) {
-        input = argv['dir'];
-        if (!input) {
-            input = argv[1];
-            argv.splice(1, 1);
-        } else {
-            if (!input.endsWith('/')) input += '/';
-        }
+    let input = argv['disk'];
+    if (input) {
+        /*
+         * If you use --disk to specify a disk image, then I call the experimental async function.
+         */
+        processDiskAsync(input, argv);
+        return;
     }
+
+    input = argv['dir'];
+    if (!input) {
+        input = argv[1];
+        argv.splice(1, 1);
+    } else {
+        if (!input.endsWith('/')) input += '/';
+    }
+
+    let di;
     if (input) {
         if (input.endsWith('/')) {
             di = readDir(input, argv['label'], argv['normalize'], +argv['target'], +argv['maxfiles']);
