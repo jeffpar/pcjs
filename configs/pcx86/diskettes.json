@@ -425,7 +425,7 @@
           "2.0c": {
             "@title": "Word for Windows 2.0c",
             "@hardware": {
-              "file": "/configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml",
+              "config": "/configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml",
               "drives": "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]"
             },
             "@media": [
@@ -813,15 +813,11 @@
       "exploring": {
         "@title": "Exploring the IBM PC",
         "@versions": {
-          "": {
-            "@title": "Exploring the IBM PC",
-            "@permalink": "/software/pcx86/demo/ibm/exploring/"
-          },
           "1.00-CGA": {
             "@title": "Exploring the IBM PC (CGA)",
             "@bootable": true,
             "@hardware": {
-              "url": "/machines/pcx86/ibm/5150/cga/",
+              "machine": "/machines/pcx86/ibm/5150/cga/",
               "options": "5150,cga"
             },
             "@media": [
@@ -836,7 +832,7 @@
             "@title": "Exploring the IBM PC (MDA)",
             "@bootable": true,
             "@hardware": {
-              "url": "/machines/pcx86/ibm/5150/mda/",
+              "machine": "/machines/pcx86/ibm/5150/mda/",
               "options": "5150,mda"
             },
             "@media": [
@@ -851,7 +847,7 @@
             "@title": "Exploring the IBM PC AT 1.00",
             "@bootable": true,
             "@hardware": {
-              "url": "/machines/pcx86/ibm/5170/cga/",
+              "machine": "/machines/pcx86/ibm/5170/cga/",
               "options": "5170,cga"
             },
             "@media": [
@@ -866,7 +862,7 @@
             "@title": "Exploring the IBM PC AT 2.00",
             "@bootable": true,
             "@hardware": {
-              "url": "/machines/pcx86/ibm/5170/cga/",
+              "machine": "/machines/pcx86/ibm/5170/cga/",
               "options": "5170,cga"
             },
             "@media": [
@@ -5586,9 +5582,9 @@
             "@title": "PC DOS 2.00",
             "@bootable": true,
             "@hardware": {
-              "path": "/machines/pcx86/ibm/5160/cga/"
+              "machine": "/machines/pcx86/ibm/5160/cga/"
             },
-            "@todo": "Need an Explorer UI option that defaults to the software's own page, but also allows you to launch it with an appropriate hardware url; for now, the hardware url is disabled, by renaming it to 'path' instead.",
+            "@todo": "Need an Explorer UI option that defaults to the software's own page, but also allows you to launch it with an appropriate hardware url; for now, the hardware url is disabled, by renaming it to 'machine' instead.",
             "@media": [
               {
                 "@title": "PC DOS 2.00 (Disk 1)",

@@ -70499,13 +70499,13 @@ class JSONLib {
                          * so we use those two facts to limit what each diskette object returns.  Other callers, like the DiskImage
                          * utility, want ALL the diskette details.
                          *
-                         * All these optional properties are either strings or booleans, except for 'hardware', which is an object
+                         * All these optional properties are either strings or booleans, except for '@hardware', which is an object
                          * that may contain:
                          *
-                         *      'url':      URL of the preferred machine to run the software (eg, "/machines/pcx86/ibm/5150/cga/")
-                         *      'config':   a specific configuration file (eg, "/configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml")
-                         *      'drives':   one of more hard drive configs (eg, "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]")
-                         *      'options':  assorted hardware options (eg, "mouse")
+                         *      '@url':     URL of the preferred machine to run the software (eg, "/machines/pcx86/ibm/5150/cga/")
+                         *      '@config':  a specific configuration file (eg, "/configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml")
+                         *      '@drives':  one of more hard drive configs (eg, "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]")
+                         *      '@options': assorted hardware options (eg, "mouse")
                          */
                         if (!COMPILED) {
                             let title = release['@title'] || group['@title'];
@@ -70515,7 +70515,9 @@ class JSONLib {
                             let kryoflux = item['@kryoflux'];
                             let normalize = item['@normalize'];
                             let hidden = group['@hidden'] || release['@hidden'];
+                            let bootable = release['@bootable'];
                             let hardware = release['@hardware'];
+                            let autoType = release['@autoType'];
                             if (title) diskette['title'] = title;                       // the software title (as opposed to the diskette name)
                             if (format) diskette['format'] = format;                    // eg, "PC360K"
                             if (archive) diskette['archive'] = archive;                 // eg, "folder", or the name of a specific ".img" file, etc
@@ -70524,7 +70526,9 @@ class JSONLib {
                             if (kryoflux) diskette['kryoflux'] = true;                  // true if a Kryoflux dump is available
                             if (normalize) diskette['normalize'] = true;                // true if a line-endings in known text files should be "normalized"
                             if (hidden) diskette['hidden'] = true;                      // true if hidden from the Explorer (still in the library)
+                            if (bootable) diskette['bootable'] = true;                  // true if diskette marked bootable
                             if (hardware) diskette['hardware'] = hardware;              // hardware configuration
+                            if (autoType) diskette['autoType'] = autoType;              // optional custom autoType string
                         }
                         if (!item['@localonly'] || hostName == "localhost") {
                             aDiskettes.push(diskette);

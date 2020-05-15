@@ -110,7 +110,7 @@ export default class JSONLib {
                          * so we use those two facts to limit what each diskette object returns.  Other callers, like the DiskImage
                          * utility, want ALL the diskette details.
                          *
-                         * All these optional properties are either strings or booleans, except for 'hardware', which is an object
+                         * All these optional properties are either strings or booleans, except for '@hardware', which is an object
                          * that may contain:
                          *
                          *      'url':      URL of the preferred machine to run the software (eg, "/machines/pcx86/ibm/5150/cga/")
@@ -126,7 +126,9 @@ export default class JSONLib {
                             let kryoflux = item['@kryoflux'];
                             let normalize = item['@normalize'];
                             let hidden = group['@hidden'] || release['@hidden'];
+                            let bootable = release['@bootable'];
                             let hardware = release['@hardware'];
+                            let autoType = release['@autoType'];
                             if (title) diskette['title'] = title;                       // the software title (as opposed to the diskette name)
                             if (format) diskette['format'] = format;                    // eg, "PC360K"
                             if (archive) diskette['archive'] = archive;                 // eg, "folder", or the name of a specific ".img" file, etc
@@ -135,7 +137,9 @@ export default class JSONLib {
                             if (kryoflux) diskette['kryoflux'] = true;                  // true if a Kryoflux dump is available
                             if (normalize) diskette['normalize'] = true;                // true if a line-endings in known text files should be "normalized"
                             if (hidden) diskette['hidden'] = true;                      // true if hidden from the Explorer (still in the library)
+                            if (bootable) diskette['bootable'] = true;                  // true if diskette marked bootable
                             if (hardware) diskette['hardware'] = hardware;              // hardware configuration
+                            if (autoType) diskette['autoType'] = autoType;              // optional custom autoType string
                         }
                         if (!item['@localonly'] || hostName == "localhost") {
                             aDiskettes.push(diskette);

@@ -2,7 +2,21 @@
 layout: page
 title: Exploring the IBM PC (MDA)
 permalink: /software/pcx86/demo/ibm/exploring/1.00-MDA/
+preview: /software/pcx86/demo/ibm/exploring/images/screenshot.png
+machines:
+  - id: ibm5150
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5150/mda/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      A:
+        name: "Exploring the IBM PC (MDA)"
 ---
+
+There are four versions of this software, which you can {% include explorer/link.html title="Explore" %} by clicking the appropriate link on the left.
+For more information about this software, see the [PCjs blog](/blog/2018/04/01/).
+
+{% include machine.html id="ibm5150" %}
 
 ### Directory of Exploring the IBM PC (MDA)
 
@@ -23,3 +37,5 @@ permalink: /software/pcx86/demo/ibm/exploring/1.00-MDA/
     DLSS01            3764   1-17-83  12:58a
            12 file(s)     128236 bytes
                            29696 bytes free
+
+![Exploring the IBM PC (MDA)]({{ site.software.diskettes.server }}/pcx86/demo/ibm/exploring/1.00-MDA/EXPLORING-THE-IBM-PC-100-MDA.jpg)

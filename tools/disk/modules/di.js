@@ -470,6 +470,8 @@ function processDisk(di, diskFile, argv, diskette)
                 /*
                  * Now that we have all the raw inputs ("ingredients"), let's toss some defaults together.
                  */
+                let sAutoGen = "    autoGen: true\n";
+                let sAutoType = diskette.autoType || "";
                 let manufacturer = findOption(["ibm","compaq"]);
                 let sDefaultIBMModel = diskSize > 360 || yearNewest >= 1986? "5170" : (yearNewest >= 1984? "5160" : "5150");
                 let sDefaultCOMPAQModel = diskSize > 360 || yearNewest >= 1986? "deskpro386" : "portable";
@@ -480,12 +482,17 @@ function processDisk(di, diskFile, argv, diskette)
                 let video = findOption(["*","mda","cga","ega","vga","vdu"]);
                 let configFile = hardware.config || findConfig("/configs/pcx86/machine/" + manufacturer + "/" + model + "/" + video + "/**/machine.xml");
                 let bootDisk = findOption(["", "DOS"]);
-                let sAutoGen = "    autoGen: true\n";
-                let sAutoType = "    autoType: $date\\r$time\\rB:\\rDIR\\r\n";
+                let demoDisk = diskette.name;
+                if (diskette.bootable) {
+                    bootDisk = demoDisk;
+                    demoDisk = "";
+                } else {
+                    sAutoType = "$date\\r$time\\rB:\\rDIR\\r";
+                }
                 let sMachineID = (model.length <= 4? manufacturer : "") + model;
                 let sMachine = "  - id: " + sMachineID + "\n    type: pcx86\n    config: " + configFile + "\n";
                 for (let prop in hardware) {
-                    if (prop == "config" || prop == "options" || prop == "url") continue;
+                    if (prop == "config" || prop == "machine" || prop == "options" || prop == "url") continue;
                     let chQuote = "";
                     if (prop == "drives") {
                         chQuote = "'";
@@ -495,7 +502,9 @@ function processDisk(di, diskFile, argv, diskette)
                     sAutoType = "";
                 }
                 if (bootDisk) bootDisk = "      A:\n        name: \"" + bootDisk + "\"\n";
-                let sAutoMount = "    autoMount:\n" + bootDisk + "      B:\n        name: \"" + diskette.name + "\"\n";
+                if (demoDisk) demoDisk = "      B:\n        name: \"" + demoDisk + "\"\n";
+                let sAutoMount = "    autoMount:\n" + bootDisk + demoDisk;
+                if (sAutoType) sAutoType = "    autoType: " + sAutoType + "\n";
                 sFrontMatter += "machines:\n" + sMachine + sAutoGen + sAutoMount + sAutoType;
                 sIndexNew = sIndexNew.replace(matchFrontMatter[1], sFrontMatter);
                 sMachineEmbed = "\n{% include machine.html id=\"" + sMachineID + "\" %}\n";
