@@ -4,17 +4,17 @@ title: QEMM-386 v6.02
 permalink: /software/pcx86/sys/ext/quarterdeck/qemm386/6.02/
 redirect_from: /disks/pcx86/tools/other/qemm386/6.02/
 machines:
-  - id: ibm5170
+  - id: deskpro386
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /configs/pcx86/machine/compaq/deskpro386/cga/640kb/machine.xml
+    autoType: 
     autoGen: true
     autoMount:
       B:
         name: "QEMM-386 6.02"
-    autoType: $date\r$time\rB:\rDIR\r
 ---
 
-{% include machine.html id="ibm5170" %}
+{% include machine.html id="deskpro386" %}
 
 ### Directory of QEMM-386 6.02
 
