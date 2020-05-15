@@ -930,6 +930,7 @@
           "2.00": {
             "@title": "MS Mouse 2.00",
             "@hardware": {
+              "config": "none",
               "options": "mouse"
             },
             "@media": [
@@ -944,6 +945,7 @@
           "2.50": {
             "@title": "MS Mouse 2.50",
             "@hardware": {
+              "config": "none",
               "options": "mouse"
             },
             "@media": [

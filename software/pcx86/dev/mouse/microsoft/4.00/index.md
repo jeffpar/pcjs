@@ -3,7 +3,18 @@ layout: page
 title: Microsoft Mouse 4.00
 permalink: /software/pcx86/dev/mouse/microsoft/4.00/
 redirect_from: /disks/pcx86/tools/microsoft/mouse/4.00/
+machines:
+  - id: ibm5160
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS Mouse 4.00 (SYSTEM)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of MS Mouse 4.00 (SYSTEM)
 

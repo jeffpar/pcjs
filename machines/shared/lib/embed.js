@@ -111,10 +111,12 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
              */
             Component.addMachineResource(idMachine, sXMLFile, sXML);
 
+            let match;
             let sURL = sXMLFile;
             if (sURL && sURL.indexOf('/') < 0 && window.location.pathname.slice(-1) == '/') {
                 sURL = window.location.pathname + sURL;
             }
+
             /*
              * We embed the URL of the XML file both as a separate "xml" attribute for easy access from the
              * XSL file, and as part of the "parms" attribute for easy access from machines (see getMachineParm()).
@@ -128,6 +130,7 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
                 sParms = '{state:"' + sParms + '",';
             }
             sParms += 'url:"' + sURL + '"}';
+
             /*
              * Note that while we no longer generate a machine XML file with a "state" attribute (because it's
              * encoded inside the "parms" attribute), the XSL file must still cope with "state" attributes inside
@@ -145,12 +148,23 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
                  * replacement below, just like we do for sParms and sURL.  However, if a "class" attribute already
                  * exists, we need alter it and then zap the sClass variable.
                  */
-                let match = sXML.match(/(<machine[^>]*\sclass=)(['"])(.*?)(\2.*?>)/);
+                match = sXML.match(/(<machine[^>]*\sclass=)(['"])(.*?)(\2[^>]*>)/);
                 if (match) {
                     sXML = sXML.replace(match[0], match[1] + match[2] + sClass + match[4]);
                     sClass = "";
                 }
             }
+
+            /*
+             * If the machine element contains a 'debugger' attribute set to 'available', we change it to 'optional',
+             * which signals the XSL template to generate a "soft link" to the debugger (using a URL parameter), rather
+             * than a "hard link" to the debugger XML file.
+             */
+            match = sXML.match(/(<machine[^>]*\sdebugger=)(['"])(available)(\2[^>]*>)/);
+            if (match) {
+                sXML = sXML.replace(match[0], match[1] + match[2] + "optional" + match[4]);
+            }
+
             sXML = sXML.replace(/(<machine[^>]*\sid=)(['"]).*?\2/, "$1$2" + idMachine + "$2" + (sClass? ' class="' + sClass + '"' : '') + (sParms? " parms='" + sParms + "'" : "") + (sURL? ' url="' + sURL + '"' : ''));
         }
 

@@ -3,7 +3,18 @@ layout: page
 title: Borland Sidekick 1.56
 permalink: /software/pcx86/util/borland/sidekick/1.56/
 redirect_from: /disks/pcx86/tools/borland/sidekick/1.56/
+machines:
+  - id: ibm5160
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "Borland Sidekick 1.56"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of Borland Sidekick 1.56
 

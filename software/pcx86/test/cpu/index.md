@@ -3,6 +3,15 @@ layout: page
 title: PCx86 CPU Tests
 permalink: /software/pcx86/test/cpu/
 redirect_from: /tests/pcx86/cpu/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "PCx86 CPU Tests"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 ### [CPUID.ASM](cpuid.asm)
@@ -22,6 +31,8 @@ redirect_from: /tests/pcx86/cpu/
 ```asm
 {% include_relative 80386/test386.asm %}
 ```
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of PCx86 CPU Tests
 

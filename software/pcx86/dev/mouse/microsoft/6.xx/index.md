@@ -3,6 +3,15 @@ layout: page
 title: Microsoft Mouse 6.xx
 permalink: /software/pcx86/dev/mouse/microsoft/6.xx/
 redirect_from: /disks/pcx86/tools/microsoft/mouse/6.00/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS Mouse 6.14 (SETUP)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 The [MS Mouse 6.14 (SETUP)](#directory-of-ms-mouse-614-setup) disk was labeled:
@@ -19,6 +28,8 @@ The [MS Mouse 6.14 (SETUP)](#directory-of-ms-mouse-614-setup) disk was labeled:
 	00420  056199.100
 
 We don't have any information regarding the labels of the [MS Mouse 6.24](#directory-of-ms-mouse-624-setup) diskettes.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of MS Mouse 6.14 (SETUP)
 

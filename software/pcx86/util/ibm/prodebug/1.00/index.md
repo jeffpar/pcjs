@@ -2,7 +2,18 @@
 layout: page
 title: IBM Professional Debug Facility 1.00
 permalink: /software/pcx86/util/ibm/prodebug/1.00/
+machines:
+  - id: ibm5160
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "IBM Professional Debug Facility 1.00"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of IBM Professional Debug Facility 1.00
 

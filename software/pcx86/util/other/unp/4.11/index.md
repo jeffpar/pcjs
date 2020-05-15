@@ -3,9 +3,20 @@ layout: page
 title: UNP 4.11
 permalink: /software/pcx86/util/other/unp/4.11/
 redirect_from: /disks/pcx86/tools/other/unp/4.11/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "UNP (Executable Unpacker) 4.11"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 UNP 4.11 is an EXE unpacking utility created by [Ben Castricum](http://unp.bencastricum.nl/).
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of UNP (Executable Unpacker) 4.11
 

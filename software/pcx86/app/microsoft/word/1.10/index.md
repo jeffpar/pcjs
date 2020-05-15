@@ -38,15 +38,8 @@ machines:
     CLOCK    COM       340   1-02-84  11:20a
     DEFAULT  STY       640   3-07-84  12:00p
     COMMAND  COM     17664   3-08-83  12:00p
-    MW       INI        65   1-01-80  12:19a
     D1610    PRD      2366   5-10-84  11:40a
     AUTOEXEC BAT       196   5-13-84   6:54p
     EPSONMXG PRD      1136   3-07-84  12:00p
-    NORMAL   GLY      5248   8-25-85   7:16p
-    C        DOC       512   1-16-86  12:08p
-    CC       DOC       512   1-16-86  12:08p
-    CBBC     DOC       512   1-16-86  12:09p
-    CBBUUUC  DOC       512   1-16-86  12:10p
-    CBBCCCC  DOC       512   1-16-86  12:10p
-           28 file(s)     265187 bytes
-                           36864 bytes free
+           21 file(s)     257314 bytes
+                           49152 bytes free

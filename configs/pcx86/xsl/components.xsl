@@ -87,7 +87,6 @@
 						<xsl:otherwise><xsl:value-of select="@parms"/></xsl:otherwise>
 					</xsl:choose>
 				</xsl:with-param>
-				<xsl:with-param name="url"><xsl:value-of select="@url"/></xsl:with-param>
 			</xsl:call-template>
 		</div>
 	</xsl:template>
@@ -115,7 +114,6 @@
 		<xsl:param name="component" select="name(.)"/>
 		<xsl:param name="class" select="''"/>
 		<xsl:param name="parms" select="''"/>
-		<xsl:param name="url" select="''"/>
 		<xsl:param name="screenWidth" select="''"/>
 		<xsl:param name="screenHeight" select="''"/>
 		<xsl:variable name="id">
@@ -247,12 +245,14 @@
 				</xsl:apply-templates>
 			</div>
 			<xsl:if test="$component = 'machine'">
+				<xsl:if test="@url != ''"><div class="{$CSSCLASS}-reference">[<a href="{@url}">XML</a>]</div></xsl:if>
+				<xsl:if test="$APPCLASS = 'pcx86'"><div class="{$CSSCLASS}-reference" style="padding-left:8px">[<a href="#" onclick="savePC('{$machine}'); return false;">Save Machine</a>]</div></xsl:if>
+				<xsl:if test="@debugger = 'available'"></xsl:if>
 				<xsl:choose>
-					<xsl:when test="$url != ''"><div class="{$CSSCLASS}-reference">[<a href="{$url}">XML</a>]</div></xsl:when>
+					<xsl:when test="@debugger = 'optional'"><div class="{$CSSCLASS}-reference" style="padding-left:8px">[<a href="?debugger=true">Debugger</a>]</div></xsl:when>
+					<xsl:when test="@debugger = 'available'"><div class="{$CSSCLASS}-reference" style="padding-left:8px">[<a href="debugger/machine.xml">Debugger</a>]</div></xsl:when>
 					<xsl:otherwise/>
 				</xsl:choose>
-				<xsl:if test="$APPCLASS = 'pcx86'"><div class="{$CSSCLASS}-reference" style="padding-left:8px">[<a href="#" onclick="savePC('{$machine}'); return false;">Save Machine</a>]</div></xsl:if>
-				<xsl:if test="@debugger = 'available'"><div class="{$CSSCLASS}-reference" style="padding-left:8px">[<a href="?debugger=true">Debugger</a>]</div></xsl:if>
 				<div class="{$CSSCLASS}-copyright">
 					<a href="{$SITEURL}" target="_blank"><xsl:value-of select="$APPNAME"/></a> v<xsl:value-of select="$APPVERSION"/> © 2012-2020 by <a href="https://jeffpar.com" target="_blank">@jeffpar</a>
 				</div>
@@ -1481,16 +1481,6 @@
 		<xsl:comment><xsl:apply-templates/></xsl:comment>
 	</xsl:template>
 
-	<xsl:template name="displayAttr">
-		<xsl:for-each select="@*"><xsl:value-of select="concat(' ', name(), '=&quot;', ., '&quot;')"/></xsl:for-each>
-	</xsl:template>
-
-	<xsl:template name="displayXML"><xsl:param name="tag"/>&lt;<xsl:value-of select="$tag"/><xsl:call-template name="displayAttr"/>&gt;<xsl:apply-templates mode="display"/>&lt;/<xsl:value-of select="$tag"/>&gt;</xsl:template>
-
-	<xsl:template name="displayMachine">
-		<pre>&lt;machine<xsl:call-template name="displayAttr"/>&gt;<xsl:apply-templates mode="display"/>&lt;/machine&gt;</pre>
-	</xsl:template>
-
 	<xsl:template match="intro">
 	</xsl:template>
 
@@ -1510,6 +1500,27 @@
 		<xsl:apply-templates select="outro" mode="doc"/>
 	</xsl:template>
 
-	<xsl:template match="*" mode="display"><xsl:call-template name="displayXML"><xsl:with-param name="tag"><xsl:value-of select="name(.)"/></xsl:with-param></xsl:call-template></xsl:template>
+	<xsl:template name="displayAttr">
+		<xsl:for-each select="@*"><xsl:value-of select="concat(' ', name(), '=&quot;', ., '&quot;')"/></xsl:for-each>
+	</xsl:template>
+
+	<xsl:template name="displayXML">
+		<xsl:param name="tag"/>
+		<xsl:param name="indent" select="''"/>
+		<xsl:choose>
+			<xsl:when test="@ref and $tag != 'panel'">
+				<xsl:variable name="refFile"><xsl:value-of select="$rootDir"/><xsl:value-of select="@ref"/></xsl:variable>
+				<xsl:apply-templates mode="display" select="document($refFile)"><xsl:with-param name="indent" select="'&#x9;'"/></xsl:apply-templates>
+			</xsl:when>
+			<xsl:when test="$tag = 'control' and contains(@class,'soft-keyboard')"><xsl:value-of select="$indent"/>&lt;!-- <xsl:value-of select="@class"/> --&gt;</xsl:when>
+			<xsl:otherwise>&lt;<xsl:value-of select="$tag"/><xsl:call-template name="displayAttr"/>&gt;<xsl:apply-templates mode="display"/><xsl:value-of select="$indent"/>&lt;/<xsl:value-of select="$tag"/>&gt;</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="displayMachine">
+		<pre>&lt;machine<xsl:call-template name="displayAttr"/>&gt;<xsl:apply-templates mode="display"/>&lt;/machine&gt;</pre>
+	</xsl:template>
+
+	<xsl:template match="*" mode="display"><xsl:param name="indent" select="''"/><xsl:call-template name="displayXML"><xsl:with-param name="tag" select="name(.)"/><xsl:with-param name="indent" select="$indent"/></xsl:call-template></xsl:template>
 
 </xsl:stylesheet>
