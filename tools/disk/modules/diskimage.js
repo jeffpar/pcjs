@@ -8,6 +8,7 @@
  */
 
 import fs         from "fs";
+import os         from "os";
 import crypto     from "crypto";
 import glob       from "glob";
 import path       from "path";
@@ -22,6 +23,11 @@ let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
 let stdlib = new StdLib();
 let moduleDir, rootDir, nMaxFiles, sFileIndex;
+
+function printError(err)
+{
+    printf("%s\n", err.message);
+}
 
 /*
  * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
@@ -88,14 +94,16 @@ function createDisk(diskFile, diskette, argv)
          */
         sArchiveFile = sArchiveFile.replace(".img", path.sep);
     }
-    let sectorIDs = argv['sectorID'] || diskette.optv['sectorID'];
-    let sectorErrors = argv['sectorError'] || diskette.optv['sectorError'];
-    let suppData = argv['suppData'] || diskette.optv['suppData'];
+    let sectorIDs = argv['sectorID'] || diskette.argv['sectorID'];
+    let sectorErrors = argv['sectorError'] || diskette.argv['sectorError'];
+    let suppData = argv['suppData'] || diskette.argv['suppData'];
     if (suppData) suppData = readFile(suppData);
     let name = path.basename(sArchiveFile);
     if (sArchiveFile.endsWith(path.sep)) {
         diskette.command = "--dir " + name;
-        di = readDir(sArchiveFile, diskette.label);
+        let match = diskette.format && diskette.format.match(/^PC([0-9]+)K/);
+        let kbTarget = match && +match[1] || 0;
+        di = readDir(sArchiveFile, diskette.label, diskette.normalize, kbTarget);
     } else {
         diskette.command = "--disk " + name;
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
@@ -116,7 +124,7 @@ function existsFile(sFile)
         sFile = getFullPath(sFile);
         return fs.existsSync(sFile);
     } catch(err) {
-        printf("error: %s\n", err.message);
+        printError(err);
     }
     return false;
 }
@@ -147,7 +155,10 @@ function getHash(data, type = "md5")
  */
 function getFullPath(sFile)
 {
-    if (sFile[0] == path.sep && sFile.indexOf(rootDir) < 0) {
+    if (sFile[0] == '~') {
+        sFile = os.homedir() + sFile.substr(1);
+    }
+    else if (sFile[0] == path.sep && sFile.indexOf(rootDir) < 0) {
         sFile = rootDir + sFile;
     }
     return sFile;
@@ -340,7 +351,7 @@ function processDisk(di, diskFile, argv, diskette)
             let diTemp = createDisk(diskFile, diskette, argv);
             if (diTemp) {
                 let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
-                diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.options));
+                diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
                 writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, false);
                 let warning = false;
                 if (diskette.archive.endsWith(".img")) {
@@ -370,6 +381,8 @@ function processDisk(di, diskFile, argv, diskette)
     /*
      * If --checkpage, then get the disk's listing and see if it's up-to-date in the website's index.md.
      *
+     * Additionally, if the page doesn't have a machine, add one, tailored to the software's requirements as best we can.
+     *
      * You must ALSO specify --rebuild if you want the index.md updated (or created) as well.
      */
     if (argv['checkpage'] && diskette && !diskette.hidden) {
@@ -390,45 +403,129 @@ function processDisk(di, diskFile, argv, diskette)
                 sAction = "created";
             }
         }
+
         /*
-         * The first step of checking the page is making sure there's a machine present to load/examine/test the software...
+         * Step 1: make sure there's a machine present to load/examine/test the software.
          */
         let sMachineEmbed = "";
         let matchFrontMatter = sIndexNew.match(/^---\n([\s\S]*?\n)---\n/);
-        if (matchFrontMatter) {
+        if (matchFrontMatter && diskette) {
             let sFrontMatter = matchFrontMatter[1];
-            let matchMachines = sFrontMatter.match(/^machines:/m);
+            let matchMachines = sFrontMatter.match(/^machines: *\n([\s\S]*?\n)(\S|$)/m);
+            if (matchMachines) {
+                /*
+                 * If this was a generated machine and --rebuild is set, then we'll regenerate it.
+                 */
+                if (matchMachines[1].indexOf("autoGen: true") >= 0 && matchMachines[1].indexOf(diskette.name) >= 0 && argv['rebuild']) {
+                    sFrontMatter = sFrontMatter.replace(matchMachines[0], matchMachines[2]);
+                    sIndexNew = sIndexNew.replace(/\n\{% include machine.html .*?%\}\n/, "");
+                    matchMachines = null;
+                }
+            }
             if (!matchMachines) {
                 /*
-                 * To add a compatible machine, we look at a couple of factors:
+                 * To add a compatible machine, we look at a few aspects of the diskette itself:
                  *
-                 *   The diskette format: if > 360K, then a PC AT is required; otherwise, if any files are >= 1984, a PC XT is required.
+                 *      if the diskette format > 360K or any file dates are >= 1986, then a PC AT ("5170") is preferred;
+                 *      otherwise, if any file dates are >= 1984, a PC XT ("5160") is preferred;
+                 *      otherwise, a PC ("5150") should suffice.
+                 *
+                 * However, a diskette's "version" definition can also include a "@hardware" configuration with "options"
+                 * that supplement or override those initial preferences:
+                 *
+                 *      manufacturer, such as "ibm" or "compaq"
+                 *      model, such as "5150" or "5160"
+                 *      video preference, such as "mda" or "cga"
+                 *      memory preference, such "256kb" or "640kb"
+                 *      hardware preference, such as "com1" or "mouse"
+                 *      operating system (aka boot disk) preference, such as "PC DOS 2.00 (Disk 1)"
+                 *
+                 * Browse diskettes.json for more examples (look for "@hardware" properties).
+                 *
+                 * TODO: Finish support for all of the above preferences (eg, mouse support, serial and parallel ports, etc).
+                 *
+                 * TODO: Consider using the @hardware 'machine' property to allow a specific machine to be used; when that property
+                 * is named 'url' instead, the /_includes/explorer/software.html template uses it to create a hardware_url link for the
+                 * software, but we REALLY prefer having dedicated pages for each piece of software.
                  */
-                let sMachine, sMachineID;
-                let sAutoType = "    autoType: \\r\\rB:\\rDIR\\r\n";
-                let sAutoMount = "    autoMount:\n      B:\n        name: \"" + diskette.name + "\"\n";
-                if (di.getSize() > 360 * 1024) {
-                    sMachineID = "ibm5170";
-                    sMachine = "  - id: %id%\n    type: pcx86\n    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml\n";
-                }
-                else {
-                    sAutoType = "    autoType: $date\\r$time\\rB:\\rDIR\\r\n";
-                    let date = di.getNewestDate();
-                    if (date && date.getFullYear() >= 1984) {
-                        sMachineID = "ibm5160";
-                        sMachine = "  - id: %id%\n    type: pcx86\n    config: /configs/pcx86/machine/ibm/5160/cga/512kb/machine.xml\n";
-                    } else {
-                        sMachineID = "ibm5150";
-                        sMachine = "  - id: %id%\n    type: pcx86\n    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml\n";
+                let diskSize = di.getSize() / 1024;
+                let dateNewest = di.getNewestDate(true);
+                let yearNewest = dateNewest && dateNewest.getFullYear() || 1981;
+                let hardware = diskette.hardware || {}, options = "";
+                if (hardware) options = hardware.options || "";
+                let aOptions = options.split(",");
+                let findOption = function(aPossibleOptions) {
+                    for (let i = 0; i < aPossibleOptions.length; i++) {
+                        if (!aPossibleOptions[i]) continue;
+                        for (let j = 0; j < aOptions.length; j++) {
+                            if (aOptions[j].indexOf(aPossibleOptions[i]) >= 0) return aOptions[j];
+                        }
                     }
+                    return aPossibleOptions[0];
+                };
+                let findConfig = function(configPath) {
+                    configPath = getFullPath(configPath);
+                    let configPossible;
+                    let aPossibleConfigs = glob.sync(configPath);
+                    let optionMemory = findOption(["kb"]);
+                    for (let i = 0; i < aPossibleConfigs.length; i++) {
+                        let configFile = aPossibleConfigs[i];
+                        if (configFile.indexOf("debugger") > 0 || configFile.indexOf("array") > 0) continue;
+                        configPossible = configFile.substr(rootDir.length);
+                        if (configFile.indexOf(optionMemory) >= 0) break;
+                    }
+                    return configPossible;
+                };
+                /*
+                 * Now that we have all the raw inputs ("ingredients"), let's toss some defaults together.
+                 */
+                let sAutoGen = "    autoGen: true\n";
+                let sAutoType = hardware.autoType;
+                if (sAutoType == undefined) sAutoType = diskette.autoType;
+                let manufacturer = findOption(["ibm","compaq"]);
+                let sDefaultIBMModel = diskSize > 360 || yearNewest >= 1986? "5170" : (yearNewest >= 1984? "5160" : "5150");
+                let sDefaultCOMPAQModel = diskSize > 360 || yearNewest >= 1986? "deskpro386" : "portable";
+                let model = findOption({
+                    "ibm": [sDefaultIBMModel, "5150","5160","5170"],
+                    "compaq": [sDefaultCOMPAQModel, "portable","deskpro386"]
+                }[manufacturer]);
+                let video = findOption(["*","mda","cga","ega","vga","vdu"]);
+                let configFile = hardware.config || findConfig("/configs/pcx86/machine/" + manufacturer + "/" + model + "/" + video + "/**/machine.xml");
+                if (configFile == "none") configFile = "";
+                if (configFile) {
+                    let bootDisk = findOption(["", "DOS"]);
+                    let demoDisk = diskette.name;
+                    if (diskette.bootable) {
+                        bootDisk = demoDisk;
+                        demoDisk = "";
+                    } else {
+                        if (sAutoType == undefined) sAutoType = "$date\\r$time\\rB:\\rDIR\\r";
+                    }
+                    let sMachineID = (model.length <= 4? manufacturer : "") + model;
+                    let sMachine = "  - id: " + sMachineID + "\n    type: pcx86\n    config: " + configFile + "\n";
+                    for (let prop in hardware) {
+                        if (prop == "config" || prop == "machine" || prop == "options" || prop == "url" || prop[0] == '@') continue;
+                        let chQuote = "";
+                        if (prop == "drives") {
+                            chQuote = "'";
+                            bootDisk = "None";
+                        }
+                        sMachine += "    " + prop + ": " + chQuote + hardware[prop] + chQuote + "\n";
+                        sAutoType = "";
+                    }
+                    if (bootDisk) bootDisk = "      A:\n        name: \"" + bootDisk + "\"\n";
+                    if (demoDisk) demoDisk = "      B:\n        name: \"" + demoDisk + "\"\n";
+                    let sAutoMount = "    autoMount:\n" + bootDisk + demoDisk;
+                    if (sAutoType) sAutoType = "    autoType: " + sAutoType + "\n";
+                    sFrontMatter += "machines:\n" + sMachine + sAutoGen + sAutoMount + (sAutoType || "");
+                    sIndexNew = sIndexNew.replace(matchFrontMatter[1], sFrontMatter);
+                    sMachineEmbed = "\n{% include machine.html id=\"" + sMachineID + "\" %}\n";
                 }
-                sFrontMatter += "machines:\n" + sMachine.replace("%id%", sMachineID) + sAutoMount + sAutoType;
-                sIndexNew = sIndexNew.replace(matchFrontMatter[1], sFrontMatter);
-                sMachineEmbed = "\n{% include machine.html id=\"" + sMachineID + "\" %}\n";
             }
         }
+
         /*
-         * The second step of checking the page is making sure there's an up-to-date directory listing...
+         * Step 2: Making sure there's an up-to-date directory listing...
          */
         let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n[^{\\s]|$)";
         let matchDirectory = sIndexNew.match(new RegExp(sMatch));
@@ -437,12 +534,12 @@ function processDisk(di, diskFile, argv, diskette)
                 printf("warning: directory heading level '%s' should really be '###'\n", matchDirectory[1]);
             }
             let matchInclude = matchDirectory[2].match(/\n\{%.*?%}\n/);
-            sIndexNew = sIndexNew.replace(matchDirectory[0], sMachineEmbed + sHeading + (matchInclude? matchInclude[0] : "") + sListing + matchDirectory[3]);
+            sIndexNew = sIndexNew.replace(matchDirectory[0], sHeading + (matchInclude? matchInclude[0] : "") + sListing + matchDirectory[3]);
         } else {
             /*
              * Look for the last "Directory of ..." entry and insert this directory listing after it (and if there's none, append it).
              */
-            sListing = sMachineEmbed + sHeading + sListing;
+            sListing = sHeading + sListing;
             let matchLast, match, re = /\n(##+)\\s+Directory of [^\n]*\n([\\s\\S]*?)\n(\\S|$)/g;
             while ((match = re.exec(sIndexNew))) {
                 matchLast = match;
@@ -456,7 +553,19 @@ function processDisk(di, diskFile, argv, diskette)
             sIndexNew = sIndexNew.substr(0, index + length) + sListing + sIndex.substr(index + length);
         }
 
-        if (!sIndex) {
+        /*
+         * Step 3: If a generated machine needs to be embedded, put it ahead of the first directory listing (which is why we waited until now).
+         */
+        if (sMachineEmbed) {
+            matchDirectory = sIndexNew.match(/\n(##+)\s+Directory of /);
+            if (matchDirectory) {
+                sIndexNew = sIndexNew.replace(matchDirectory[0], sMachineEmbed + matchDirectory[0]);
+            } else {
+                printf("warning: unable to embed machine: %s\n", sIndexFile);
+            }
+        }
+
+        if (!sIndexNew) {
             printf("\tmissing index for \"%s\": %s\n", diskette.title, sIndexFile);
         }
         else if (sIndexNew != sIndex) {
@@ -504,13 +613,13 @@ function readAll(argv)
             let aDiskettes = [];
             JSONLib.parseDiskettes(aDiskettes, library, "/pcx86", "/diskettes");
             aDiskettes.forEach(function readAllDiskettes(diskette) {
-                diskette.optc = 0;
-                diskette.optv = [];
-                if (!diskette.options) {
-                    diskette.options = "";
+                diskette.argc = 0;
+                diskette.argv = [];
+                if (!diskette.args) {
+                    diskette.args = "";
                 } else {
-                    [diskette.optc, diskette.optv] = stdlib.getArgs(diskette.options);
-                    diskette.options = " " + diskette.options;
+                    [diskette.argc, diskette.argv] = stdlib.getArgs(diskette.args);
+                    diskette.args = " " + diskette.args;
                 }
                 if (library['@local']) {
                     diskette.path = diskette.path.replace(library['@server'], library['@local']);
@@ -552,11 +661,11 @@ function readAll(argv)
  * @param {string} sDir (directory name)
  * @param {string} [sLabel] (if not set with --label, then basename(sDir) will be used instead)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
- * @param {number} [kbTarget] (target disk size, in Kb)
+ * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
  * @returns {DiskImage|null}
  */
-function readDir(sDir, sLabel, fNormalize = false, kbTarget, nMax)
+function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
 {
     let di;
     if (!sLabel) {
@@ -572,7 +681,7 @@ function readDir(sDir, sLabel, fNormalize = false, kbTarget, nMax)
             di = null;
         }
     } catch(err) {
-        printf("error: %s\n", err.message);
+        printError(err);
         di = null;
     }
     return di;
@@ -708,7 +817,7 @@ function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
             }
         }
     } catch(err) {
-        printf("error: %s\n", err.message);
+        printError(err);
         return null;
     }
     return di;
@@ -730,7 +839,7 @@ function readFile(sFile, encoding = "utf8")
             data = fs.readFileSync(sFile, encoding);
             if (!encoding) data = new DataBuffer(data);
         } catch(err) {
-            printf("error: %s\n", err.message);
+            printError(err);
         }
     }
     return data;
@@ -749,7 +858,7 @@ function readJSON(sFile)
         data = readFile(sFile);
         json = JSON.parse(data);
     } catch(err) {
-        printf("error: %s\n", err.message);
+        printError(err);
     }
     return json;
 }
@@ -792,7 +901,7 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
         }
     }
     catch(err) {
-        printf("error: %s\n", err.message);
+        printError(err);
     }
 }
 
@@ -818,7 +927,7 @@ function writeFile(sFile, data, fCreateDir)
             fs.writeFileSync(sFile, data);
             return true;
         } catch(err) {
-            printf("error: %s\n", err.message);
+            printError(err);
         }
     }
     return false;
@@ -829,7 +938,7 @@ function writeFile(sFile, data, fCreateDir)
  *
  * Usage:
  *
- *      node di.js [input disk image or directory] [output disk image] [options]
+ *      node diskimage.js [input disk image or directory] [output disk image] [options]
  *
  * @param {number} argc
  * @param {Array} argv
@@ -837,10 +946,14 @@ function writeFile(sFile, data, fCreateDir)
 function main(argc, argv)
 {
     let argv0 = argv[0].split(' ');
+    let options = argv0.slice(1).join(' ');
+
     Device.DEBUG = !!argv['debug'];
     moduleDir = path.dirname(argv0[0]);
     rootDir = path.join(moduleDir, "../../..");
-    printf("DiskImage v%s\noptions: %s\n", Device.VERSION, argv0.slice(1).join(' '));
+
+    printf("DiskImage v%s\n%s\n", Device.VERSION, Device.COPYRIGHT);
+    if (options) printf("options: %s\n", options);
 
     if (Device.DEBUG) {
         device.setMessages(Device.MESSAGE.FILE + Device.MESSAGE.INFO, true);

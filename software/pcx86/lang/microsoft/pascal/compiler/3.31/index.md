@@ -3,7 +3,18 @@ layout: page
 title: Microsoft Pascal Compiler 3.31
 permalink: /software/pcx86/lang/microsoft/pascal/compiler/3.31/
 redirect_from: /disks/pcx86/tools/microsoft/pascal/compiler/3.31/
+machines:
+  - id: ibm5160
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS Pascal 3.31 (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of MS Pascal 3.31 (Disk 1)
 

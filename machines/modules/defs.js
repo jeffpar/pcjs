@@ -63,13 +63,17 @@ const VERSION = "2.00";
  */
 const REPOSITORY = "pcjs.org";
 
+const COPYRIGHT = "Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>";
+
 /**
  * @class {Defs}
  */
 export default class Defs {}
+export { COMPILED };
 
 Defs.COMMAND    = COMMAND;
 Defs.COMPILED   = COMPILED;
+Defs.COPYRIGHT  = COPYRIGHT;
 Defs.DEBUG      = DEBUG;
 Defs.FACTORY    = FACTORY;
 Defs.MAXDEBUG   = MAXDEBUG;

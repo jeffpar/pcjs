@@ -3,6 +3,15 @@ layout: page
 title: Microsoft Multiplan 2.01
 permalink: /software/pcx86/app/microsoft/multiplan/2.01/
 redirect_from: /disks/pcx86/apps/microsoft/multiplan/2.01/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS Multiplan 2.01 (INSTALL)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 NOTE: The Microsoft Multiplan 2.01 disks below are *not* original distribution disks.  They were obtained from
@@ -14,6 +23,8 @@ you must run the installation program to properly "install" `MP.COM` for the mac
 The `PROGRAM` disk also includes [Microsoft Mouse 5.00](/software/pcx86/dev/mouse/microsoft/5.00/) driver files.
 They match the 5.00 distribution files, even though they have been time-stamped with the same date as the Multiplan
 files.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of MS Multiplan 2.01 (INSTALL)
 

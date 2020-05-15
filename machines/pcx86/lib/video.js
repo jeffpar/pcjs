@@ -3922,9 +3922,11 @@ class VideoX86 extends Component {
              * For VGA cards, in the absence of any parameters, we assume that we're receiving the original
              * IBM VGA ROM, which contains an 8x14 font at 0x3F8D (and corresponding supplemental table at 0x4D8D)
              * and an 8x8 font at 0x378D; however, it also contains an 8x16 font at 0x4EBA (and corresponding
-             * supplemental table at 0x5EBA).  See our reconstructed source code in ibm-vga.nasm.
+             * supplemental table at 0x5EBA).  See our reconstructed source code in:
+             *
+             *      /machines/pcx86/ibm/video/vga/1986-10-27/IBM-VGA.asm
              */
-            this.setFontData(abROM, aParms || [0x378d, 0x3f8d], 8);
+            this.setFontData(abROM, aParms || [0x378d, 0x3f8d, 0x4eba], 8);
         }
         this.setReady();
     }
@@ -3944,7 +3946,7 @@ class VideoX86 extends Component {
      *
      * @this {VideoX86}
      * @param {Array.<number>} abFontData is the raw font data, from the ROM font file
-     * @param {Array.<number>} aFontOffsets contains offsets into abFontData: [0] for CGA, [1] for MDA
+     * @param {Array.<number>} aFontOffsets contains offsets into abFontData: [0] for CGA, [1] for MDA/EGA, and [2] for VGA
      * @param {number} [cxFontChar] is a fixed character width to use for all fonts; undefined to use MDA/CGA defaults
      */
     setFontData(abFontData, aFontOffsets, cxFontChar)
@@ -4263,6 +4265,10 @@ class VideoX86 extends Component {
                 cxChar = this.cxFontChar || 8;
                 cyChar = 14;
                 offData = this.aFontOffsets[1];
+                if (this.aFontOffsets[2]) {
+                    cyChar = 16;
+                    offData = this.aFontOffsets[2];
+                }
                 bitsBanks = 0;
                 cx = (this.cardEGA.regSEQData[Card.SEQ.CLKMODE.INDX] & Card.SEQ.CLKMODE.DOTS8)? 8 : 9;
                 cy = (this.cardEGA.regCRTData[Card.CRTC.MAXSCAN] & Card.CRTCMASKS[Card.CRTC.MAXSCAN]);

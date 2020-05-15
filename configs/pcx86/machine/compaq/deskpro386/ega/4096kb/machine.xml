@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
-<machine id="deskpro386" type="pcx86" border="1" pos="center" background="default">
+<machine id="deskpro386" type="pcx86" border="1" pos="center" background="default" debugger="available">
 	<name pos="center">COMPAQ DeskPro 386, 4Mb RAM, 128Kb IBM EGA</name>
 	<computer id="deskpro386-ega-2048k" name="COMPAQ DeskPro 386" buswidth="32"/>
 	<cpu id="cpu386" model="80386"/>

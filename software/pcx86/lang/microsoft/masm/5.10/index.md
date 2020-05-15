@@ -5,12 +5,23 @@ permalink: /software/pcx86/lang/microsoft/masm/5.10/
 redirect_from:
   - /disks/pcx86/tools/microsoft/masm/5.10/
   - /disks/pc/tools/microsoft/masm/5.10/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS Macro Assembler 5.10 (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 Directory listings of the five distribution diskettes (plus an update disk issued by Microsoft in March 1988) are provided below.
 
 We don't have any documents from this release, but you can browse the
 [Microsoft Macro Assembler 5.0 Documentation](/software/pcx86/lang/microsoft/masm/5.00/#documents).
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of MS Macro Assembler 5.10 (Disk 1)
 

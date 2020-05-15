@@ -3,6 +3,15 @@ layout: page
 title: Borland Turbo Pascal 6.00
 permalink: /software/pcx86/lang/borland/pascal/6.00/
 redirect_from: /disks/pcx86/tools/borland/pascal/6.00/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "Borland Turbo Pascal 6.00 (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 The following documentation is available online:
@@ -11,6 +20,8 @@ The following documentation is available online:
 - [Turbo Pascal Version 6.0 Programmer's Guide (1990)](http://bitsavers.org/pdf/borland/turbo_pascal/Turbo_Pascal_Version_6.0_Programmers_Guide.pdf)
 - [Turbo Pascal Version 6.0 Library Reference (1990)](http://bitsavers.org/pdf/borland/turbo_pascal/Turbo_Pascal_Version_6.0_Library_Ref_1990.pdf)
 - [Turbo Pascal Version 6.0 Turbo Vision Guide (1990)](http://bitsavers.org/pdf/borland/turbo_pascal/Turbo_Pascal_Version_6.0_Turbo_Vision_1990.pdf)
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Borland Turbo Pascal 6.00 (Disk 1)
 

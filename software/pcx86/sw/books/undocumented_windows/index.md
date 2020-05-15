@@ -3,11 +3,22 @@ layout: page
 title: Undocumented Windows
 permalink: /software/pcx86/sw/books/undocumented_windows/
 redirect_from: /pubs/pc/programming/Undocumented_Windows/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "Undocumented Windows"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 (Covers Windows 3.1 and 3.0) by Schulman, Maxey, Pietrek
 
 A directory listing of the *Undocumented Windows* diskette that accompanied the book is provided below.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Undocumented Windows
 

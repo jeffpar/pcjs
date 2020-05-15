@@ -5,12 +5,23 @@ permalink: /software/pcx86/app/microsoft/multiplan/1.06/
 redirect_from:
   - /disks/pcx86/apps/microsoft/multiplan/1.06/
   - /disks/pcx86/apps/microsoft/multiplan/
+machines:
+  - id: ibm5160
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS Multiplan 1.06 (Modified)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 NOTE: The Microsoft Multiplan 1.06 disk below is *not* an original distribution disk.  It was obtained from
 [VETUSWARE](https://vetusware.com/download/Multiplan%203.0%201.0/?id=8608) and contains a pre-installed copy of
 `MP.COM` (the original `MP.COM` may have been preserved as `MPBARE.COM`).  No installation files were included
 with the disk.
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of MS Multiplan 1.06 (Modified)
 

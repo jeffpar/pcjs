@@ -3,6 +3,15 @@ layout: page
 title: IBM Pascal Compiler 1.00
 permalink: /software/pcx86/lang/ibm/pascal/1.00/
 redirect_from: /disks/pcx86/tools/ibm/pascal/1.00/
+machines:
+  - id: ibm5150
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "IBM Pascal 1.00 (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 When the IBM Pascal Compiler 1.00 was originally released in August 1981, the standard IBM PC contained at most
@@ -27,6 +36,8 @@ of using a newer and potentially incompatible linker.
 NOTE: We do not have copies of the three original distribution disks.  However, based on information in IBM's Pascal
 Compiler documentation, we were able to recreate the contents of the disks.  The file dates were arbitrarily selected
 from the August 1981 time frame.
+
+{% include machine.html id="ibm5150" %}
 
 ### Directory of IBM Pascal 1.00 (Disk 1)
 

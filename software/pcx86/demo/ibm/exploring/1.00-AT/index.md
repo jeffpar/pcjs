@@ -2,7 +2,21 @@
 layout: page
 title: Exploring the IBM PC AT 1.00
 permalink: /software/pcx86/demo/ibm/exploring/1.00-AT/
+preview: /software/pcx86/demo/ibm/exploring/images/screenshot.png
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      A:
+        name: "Exploring the IBM PC AT 1.00"
 ---
+
+There are four versions of this software, which you can {% include explorer/link.html title="Explore" %} by clicking the appropriate link on the left.
+For more information about this software, see the [PCjs blog](/blog/2018/04/01/).
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Exploring the IBM PC AT 1.00
 
@@ -68,3 +82,5 @@ permalink: /software/pcx86/demo/ibm/exploring/1.00-AT/
     VENDOR-# DA1*        0   7-04-83  12:00a
            57 file(s)     266659 bytes
                            66560 bytes free
+
+![Exploring the IBM PC AT 1.00]({{ site.software.diskettes.server }}/pcx86/demo/ibm/exploring/1.00-AT/EXPLORING-THE-IBM-PC-AT-100.jpg)

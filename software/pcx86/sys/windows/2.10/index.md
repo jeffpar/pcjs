@@ -10,7 +10,7 @@ Microsoft Windows 2.10 was actually released as two separate products:
   - [Windows/286 2.10](#microsoft-windows286-210)
   - [Windows/386 2.10](#microsoft-windows386-210)
 
-### Microsoft Windows/286 2.10
+## Microsoft Windows/286 2.10
 
 Windows/286 2.10 was released on May 27, 1988, less than six months after the release of
 [Windows 2.0](/software/pcx86/sys/windows/2.03/).
@@ -18,6 +18,8 @@ Windows/286 2.10 was released on May 27, 1988, less than six months after the re
 No disks are available at this time.
 
 In the meantime, take a look at [Windows/286 2.11](/software/pcx86/sys/windows/2.11/#microsoft-windows286-211).   
+
+## Microsoft Windows/386 2.10
 
 Reportedly, Windows/386 2.10 was also released on May 27, 1988.  However, as you can see from the directory listings
 below, these disks may not have been released until September 1988, if the timestamps are accurate.

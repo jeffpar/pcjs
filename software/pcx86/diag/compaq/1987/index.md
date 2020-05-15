@@ -3,6 +3,14 @@ layout: page
 title: "COMPAQ User Programs (1987)"
 permalink: /software/pcx86/diag/compaq/1987/
 redirect_from: /disks/pcx86/diags/compaq/utilities/1987/
+machines:
+  - id: deskpro386
+    type: pcx86
+    config: /configs/pcx86/machine/compaq/deskpro386/cga/640kb/machine.xml
+    autoGen: true
+    autoMount:
+      A:
+        name: "COMPAQ User Programs (1987)"
 ---
 
 From `README.CPQ`:
@@ -27,6 +35,8 @@ From `README.CPQ`:
       4.  CEMM.EXE         8.  INST386.EXE        12.  VDISK.SYS
     
     SETUP is located on the COMPAQ USER DIAGNOSTICS diskette.
+
+{% include machine.html id="deskpro386" %}
 
 ### Directory of COMPAQ User Programs (1987)
 

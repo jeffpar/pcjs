@@ -397,8 +397,6 @@ Machine.BINDING = {
     RESET:      "reset",
 };
 
-Machine.COPYRIGHT = "Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>";
-
 /*
  * Create the designated machine FACTORY function (this should suffice for all compiled versions).
  *

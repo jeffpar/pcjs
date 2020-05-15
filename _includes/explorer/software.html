@@ -24,7 +24,9 @@
               the version key *is* the version number, and if a no @title is present for a version,
               a default title (product @title plus version key) will be used instead.
 
-              @hardware: an optional entry inside a version to define a default hardware configuration.
+              @hardware: an optional entry inside a version to define a default hardware configuration;
+              if that entry contains a 'url' property, we will use it to generate a link (hardware_url) for
+              running the software.
 
               @autoMount: an optional entry inside a version to define a "custom" autoMount URL parameter,
               instead of the one automatically generated from the list of @media items; eg:
@@ -153,7 +155,7 @@
                                 {%- capture software_desc -%}{%- if product[1]['@desc'] %} title="{{ product[1]['@desc'] }}"{%- endif -%}{%- endcapture -%}
                                 {%- capture software_title %}{{ product[1]['@title'] }}{% if version[0] != "" %} {{ version[0] }}{% endif %}{% endcapture -%}
                               {%- endif -%}
-                              {%- capture hardware_url -%}{{ release['@hardware'] }}{%- endcapture -%}
+                              {%- capture hardware_url -%}{{ release['@hardware']['url'] }}{%- endcapture -%}
                               {%- capture alternate_url -%}{{ release['@permalink'] }}{%- endcapture -%}
                               {%- if category[0] != "game" -%}{%- assign diskette_default = "/diskettes" -%}{%- else -%}{%- assign diskette_default = "/gamedisks" -%}{%- endif -%}
                               {%- capture diskette_server -%}{{ release['@server'] | default: diskette_default }}{%- endcapture -%}

@@ -3,7 +3,20 @@ layout: page
 title: Microsoft Word for Windows 2.0c
 permalink: /software/pcx86/app/microsoft/winword/2.0c/
 redirect_from: /disks/pcx86/apps/microsoft/winword/2.0c/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml
+    drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json"}]'
+    autoGen: true
+    autoMount:
+      A:
+        name: "None"
+      B:
+        name: "Word for Windows 2.0c (Disk 1)"
 ---
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Word for Windows 2.0c (Disk 1)
 

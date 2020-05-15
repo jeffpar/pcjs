@@ -3,9 +3,20 @@ layout: page
 title: Microsoft C Compiler 2.03
 permalink: /software/pcx86/lang/microsoft/c/2.03/
 redirect_from: /disks/pcx86/tools/microsoft/c/2.03/
+machines:
+  - id: ibm5160
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS C 2.03 (Installed)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 We do not have an original distribution disk for Microsoft C Compiler 2.03.  It included the following files.
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of MS C 2.03 (Installed)
 

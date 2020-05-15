@@ -3,9 +3,20 @@ layout: page
 title: Digital Research Pascal/MT+ 3.11
 permalink: /software/pcx86/lang/dresearch/pascal/3.11/
 redirect_from: /disks/pcx86/tools/dresearch/pascal/3.11/
+machines:
+  - id: ibm5150
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "DR Pascal/MT+ 3.11 (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 [Documentation](#documents) is also available.
+
+{% include machine.html id="ibm5150" %}
 
 ### Directory of DR Pascal/MT+ 3.11 (Disk 1)
 

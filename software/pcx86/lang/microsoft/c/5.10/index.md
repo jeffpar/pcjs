@@ -5,6 +5,15 @@ permalink: /software/pcx86/lang/microsoft/c/5.10/
 redirect_from:
   - /disks/pcx86/tools/microsoft/c/5.10/
   - /pubs/pc/software/tools/microsoft/c/5.10/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS C 5.10 (SETUP)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 NOTE: Microsoft released the 5.1 C compiler in two different packages: this 11-disk set containing
@@ -13,6 +22,8 @@ only files for DOS, and a larger 14-disk set with files for both DOS and OS/2.  
 
 Directory listings of the eleven 360Kb distribution diskettes, a copy of the [PACKING.LST](#packinglst),
 and some [Documentation](#documents) are provided below.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of MS C 5.10 (SETUP)
 

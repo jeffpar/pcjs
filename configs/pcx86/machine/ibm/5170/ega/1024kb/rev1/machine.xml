@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
-<machine id="ibm5170" type="pcx86" border="1" pos="center" background="default">
+<machine id="ibm5170" type="pcx86" border="1" pos="center" background="default" debugger="available">
 	<name pos="center">IBM PC AT (6Mhz), 1Mb RAM, 20Mb Hard Disk, 128Kb EGA, Enhanced Color Display</name>
 	<computer id="at-ega-1024k-rev1" name="IBM PC AT" buswidth="24"/>
 	<cpu id="cpu286" model="80286"/>

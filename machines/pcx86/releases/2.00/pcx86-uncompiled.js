@@ -40830,9 +40830,9 @@ class ChipSet extends Component {
                                  */
                                 if (BACKTRACK && obj) {
                                     if (!off && obj.file) {
-                                        chipset.printf(Messages.DISK, "loading %s[%d] at %%%0X\n", obj.file.sPath, obj.offFile, addrCur);
+                                        chipset.printf(Messages.DISK, "loading %s[%#0X] at %%%0X\n", obj.file.path, obj.offFile, addrCur);
                                         /*
-                                        if (obj.file.sPath == "\\SYSBAS.EXE" && obj.offFile == 512) {
+                                        if (obj.file.path == "\\SYSBAS.EXE" && obj.offFile == 512) {
                                             chipset.cpu.stopCPU();
                                         }
                                         */
@@ -42664,7 +42664,7 @@ class ChipSet extends Component {
         default:
             if (!COMPILED) {
                 this.printf(Messages.ALL, "unrecognized 8042 command: %#04X\n", this.b8042InBuff);
-                if (this.dbg) this.dbg.stopCPU();
+                // if (this.dbg) this.dbg.stopCPU();
             }
             break;
         }
@@ -53002,9 +53002,11 @@ class VideoX86 extends Component {
              * For VGA cards, in the absence of any parameters, we assume that we're receiving the original
              * IBM VGA ROM, which contains an 8x14 font at 0x3F8D (and corresponding supplemental table at 0x4D8D)
              * and an 8x8 font at 0x378D; however, it also contains an 8x16 font at 0x4EBA (and corresponding
-             * supplemental table at 0x5EBA).  See our reconstructed source code in ibm-vga.nasm.
+             * supplemental table at 0x5EBA).  See our reconstructed source code in:
+             *
+             *      /machines/pcx86/ibm/video/vga/1986-10-27/IBM-VGA.asm
              */
-            this.setFontData(abROM, aParms || [0x378d, 0x3f8d], 8);
+            this.setFontData(abROM, aParms || [0x378d, 0x3f8d, 0x4eba], 8);
         }
         this.setReady();
     }
@@ -53024,7 +53026,7 @@ class VideoX86 extends Component {
      *
      * @this {VideoX86}
      * @param {Array.<number>} abFontData is the raw font data, from the ROM font file
-     * @param {Array.<number>} aFontOffsets contains offsets into abFontData: [0] for CGA, [1] for MDA
+     * @param {Array.<number>} aFontOffsets contains offsets into abFontData: [0] for CGA, [1] for MDA/EGA, and [2] for VGA
      * @param {number} [cxFontChar] is a fixed character width to use for all fonts; undefined to use MDA/CGA defaults
      */
     setFontData(abFontData, aFontOffsets, cxFontChar)
@@ -53343,6 +53345,10 @@ class VideoX86 extends Component {
                 cxChar = this.cxFontChar || 8;
                 cyChar = 14;
                 offData = this.aFontOffsets[1];
+                if (this.aFontOffsets[2]) {
+                    cyChar = 16;
+                    offData = this.aFontOffsets[2];
+                }
                 bitsBanks = 0;
                 cx = (this.cardEGA.regSEQData[Card.SEQ.CLKMODE.INDX] & Card.SEQ.CLKMODE.DOTS8)? 8 : 9;
                 cy = (this.cardEGA.regCRTData[Card.CRTC.MAXSCAN] & Card.CRTCMASKS[Card.CRTC.MAXSCAN]);
@@ -61227,7 +61233,7 @@ Web.onInit(Mouse.init);
  * at the wrong time, you could say that we're simply providing a faithful simulation of reality.
  */
 
-/** @typedef {{ c: number, h: number, s: number, l: number, d: Array.<number>, f: number, o: number, iCylinder: number, iHead: number, sector: number, length: number, data: Array.<number>, pattern: (number|null), file: FileInfo, offFile: number, dataCRC: number, dataError: boolean, dataMark: number, headCRC: number, headError: boolean, iModify: number, cModify: number, dwPattern: (number|null), fDirty: boolean }} */
+/** @typedef {{ c: number, h: number, s: number, l: number, d: Array.<number>, f: number, o: number, iCylinder: number, iHead: number, sector: number, length: number, data: Array.<number>, pattern: (number|null), file: FileInfo, offFile: number, dataCRC: number, dataError: boolean, dataMark: number, headCRC: number, headError: boolean, iModify: number, cModify: number, fDirty: boolean }} */
 let Sector;
 
 /** @typedef {{ hash: string, path: string, attr: string, date: string, size: number, module: (FileModule|undefined) }} */
@@ -61925,6 +61931,7 @@ class Disk extends Component {
                                         adw.length--;
                                     }
                                 }
+
                                 this.initSector(sector, iCylinder, iHead, idSector, this.cbSector, dwPattern);
 
                                 /*
@@ -62005,6 +62012,32 @@ class Disk extends Component {
     }
 
     /**
+     * getFileInfo(sector)
+     *
+     * @this {Disk}
+     * @param {Sector} sector
+     * @returns {string}
+     */
+    getFileInfo(sector)
+    {
+        //
+        // The following code would work if we retained the FILE_INDEX and FILE_OFFSET properties
+        // from the original JSON data, but buildFileTable() converts those to file (FileInfo) and
+        // offFile (number) properties and then discards them.  However, I may decide to leave
+        // FILE_INDEX and FILE_OFFSET in place, and use this code in the future.  It would be a little
+        // less overhead per sector (ie, using numbers of instead object references).
+        //
+        // if (this.aFileTable) {
+        //     let iFile = sector[Disk.SECTOR.FILE_INDEX];
+        //     if (iFile !== undefined) {
+        //         let file = this.aFileTable[iFile];
+        //         return file.path + "[" + Str.toHex(sector[Disk.SECTOR.FILE_OFFSET], 0, true) + "]";
+        //     }
+        // }
+        return sector.file? (sector.file.path + "[" + Str.toHex(sector.offFile, 0, true) + "]") : "unknown";
+    }
+
+    /**
      * getModuleInfo(sModule, nSegment)
      *
      * If the given module and segment number is found, we return an Array of symbol offsets, indexed by symbol name.
@@ -62020,7 +62053,12 @@ class Disk extends Component {
         if (SYMBOLS && this.aFileTable) {
             for (let iFile = 0; iFile < this.aFileTable.length; iFile++) {
                 let file = this.aFileTable[iFile];
-                if (!file.module || file.module.name != sModule) continue;
+                /*
+                 * NOTE: Given how we now build the file table based on file indexes in the sector
+                 * data, there could well be "holes" in the file table (ie, entries that were used to
+                 * describe a volume label or some other directory entry that has no associated sectors).
+                 */
+                if (!file || !file.module || file.module.name != sModule) continue;
                 let segment = file.module.segments[nSegment];
                 if (!segment) continue;
                 for (let ord in segment.ordinals) {
@@ -62056,13 +62094,18 @@ class Disk extends Component {
             let sSymbolUpper = sSymbol.toUpperCase();
             for (let iFile = 0; iFile < this.aFileTable.length; iFile++) {
                 let file = this.aFileTable[iFile];
-                if (!file.module) continue;
+                /*
+                 * NOTE: Given how we now build the file table based on file indexes in the sector
+                 * data, there could well be "holes" in the file table (ie, entries that were used to
+                 * describe a volume label or some other directory entry that has no associated sectors).
+                 */
+                if (!file || !file.module) continue;
                 for (let seg in file.module.segments) {
                     let segment = file.module.segments[seg];
                     for (let ord in segment.ordinals) {
                         let entry = segment.ordinals[ord];
                         if (entry['s'] && entry['s'].indexOf(sSymbolUpper) >= 0) {
-                            aInfo.push([entry['s'], file.sName, +seg, entry['o'], segment.offEnd - segment.offStart]);
+                            aInfo.push([entry['s'], file.name, +seg, entry['o'], segment.offEnd - segment.offStart]);
                         }
                     }
                 }
@@ -62163,7 +62206,7 @@ class Disk extends Component {
 
 
         }
-        sector.dwPattern = dwPattern;
+        sector[Disk.SECTOR.PATTERN] = dwPattern;
         sector.iModify = sector.cModify = 0;
         sector.fDirty = false;
         return sector;
@@ -62415,7 +62458,7 @@ class Disk extends Component {
         this.aDirtyTimestamps.push(Usr.getTime());
 
         if (DEBUG && this.messageEnabled()) {
-            this.printMessage("queueDirtySector(CHS=" + sector.iCylinder + ':' + sector.iHead + ':' + sector[Disk.SECTOR.ID] + "): " + this.aDirtySectors.length + " dirty");
+            this.printMessage("queueDirtySector(CHS=" + sector[Disk.SECTOR.CYLINDER] + ':' + sector[Disk.SECTOR.HEAD] + ':' + sector[Disk.SECTOR.ID] + "): " + this.aDirtySectors.length + " dirty");
         }
 
         return fAsync && this.updateWriteTimer();
@@ -62477,8 +62520,8 @@ class Disk extends Component {
         }
         let sector = this.aDirtySectors[0];
         if (sector) {
-            let iCylinder = sector.iCylinder;
-            let iHead = sector.iHead;
+            let iCylinder = sector[Disk.SECTOR.CYLINDER];
+            let iHead = sector[Disk.SECTOR.HEAD];
             let iSector = sector[Disk.SECTOR.ID];
             let nSectors = 0;
             let abSectors = [];
@@ -62596,13 +62639,13 @@ class Disk extends Component {
                          * If the sector's pattern is null, then this sector's true contents have not yet
                          * been fetched from the server.
                          */
-                        if (sector.dwPattern === null) {
+                        if (sector[Disk.SECTOR.PATTERN] === null) {
                             if (fWrite) {
                                 /*
                                  * Optimization: if the caller has explicitly told us that they're about to WRITE to the
                                  * sector, then we shouldn't need to read it from the server; assume a zero pattern and return.
                                  */
-                                sector.dwPattern = 0;
+                                sector[Disk.SECTOR.PATTERN] = 0;
                             } else {
                                 let nSectors = 1;
                                 /*
@@ -62610,7 +62653,7 @@ class Disk extends Component {
                                  * on the same track that may also be required.
                                  */
                                 while (++i < track.length) {
-                                    if (track[i].dwPattern === null) nSectors++;
+                                    if (track[i][Disk.SECTOR.PATTERN] === null) nSectors++;
                                 }
                                 this.readRemoteSectors(iCylinder, iHead, iSector, nSectors, done != null, function onReadRemoteComplete(err, fAsync) {
                                     if (err) sector = null;
@@ -62679,7 +62722,7 @@ class Disk extends Component {
         let ib = 0;
         let cdw = cb >> 2;
         let adw = sector[Disk.SECTOR.DATA];
-        let dwPattern = sector.dwPattern;
+        let dwPattern = sector[Disk.SECTOR.PATTERN];
         for (let idw = 0; idw < cdw; idw++) {
             let dw = (idw < adw.length? adw[idw] : dwPattern);
             ab[ib++] = dw & 0xff;
@@ -62704,12 +62747,12 @@ class Disk extends Component {
         let b = -1;
         if (sector) {
             if (DEBUG && !iByte && !fCompare && this.messageEnabled()) {
-                this.printMessage('read("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector[Disk.SECTOR.ID] + ')');
+                this.printMessage('read("' + this.sDiskFile + '",CHS=' + sector[Disk.SECTOR.CYLINDER] + ':' + sector[Disk.SECTOR.HEAD] + ':' + sector[Disk.SECTOR.ID] + '): ' + this.getFileInfo(sector));
             }
             if (iByte < sector[Disk.SECTOR.LENGTH]) {
                 let adw = sector[Disk.SECTOR.DATA];
                 let idw = iByte >> 2;
-                let dw = (idw < adw.length ? adw[idw] : sector.dwPattern);
+                let dw = (idw < adw.length ? adw[idw] : sector[Disk.SECTOR.PATTERN]);
                 b = ((dw >> ((iByte & 0x3) << 3)) & 0xff);
             }
         }
@@ -62731,13 +62774,13 @@ class Disk extends Component {
             return false;
 
         if (DEBUG && !iByte && this.messageEnabled()) {
-            this.printMessage('write("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector[Disk.SECTOR.ID] + ')');
+            this.printMessage('write("' + this.sDiskFile + '",CHS=' + sector[Disk.SECTOR.CYLINDER] + ':' + sector[Disk.SECTOR.HEAD] + ':' + sector[Disk.SECTOR.ID] + ')');
         }
 
         if (iByte < sector[Disk.SECTOR.LENGTH]) {
             if (b != this.read(sector, iByte, true)) {
                 let adw = sector[Disk.SECTOR.DATA];
-                let dwPattern = sector.dwPattern;
+                let dwPattern = sector[Disk.SECTOR.PATTERN];
                 let idw = iByte >> 2;
                 let nShift = (iByte & 0x3) << 3;
 
@@ -62960,7 +63003,7 @@ class Disk extends Component {
                  */
                 let idw = sector[Disk.SECTOR.DATA].length;
                 while (idw < iModify) {
-                    sector[Disk.SECTOR.DATA][idw++] = sector.dwPattern;
+                    sector[Disk.SECTOR.DATA][idw++] = sector[Disk.SECTOR.PATTERN];
                 }
                 let n = 0;
                 sector.iModify = iModify;
@@ -62994,9 +63037,8 @@ class Disk extends Component {
     /**
      * convertToJSON(fFormatted)
      *
-     * We perform some RegExp massaging on the JSON data to eliminate unnecessary properties
-     * (eg, LENGTH values of 512, dwPattern values of 0, and empty DATA arrays, since those are
-     * defaults).
+     * We perform some RegExp massaging on the JSON data to eliminate (old) unnecessary properties
+     * (eg, 'length' values of 512, empty 'data' arrays), since those were defaults.
      *
      * In addition, we first check every sector to see if it can be "deflated".  Sectors that were
      * initially "deflated" should remain that way unless/until they were modified, so technically,
@@ -63027,9 +63069,9 @@ class Disk extends Component {
         });
 
         /*
-         * Eliminate old default properties (eg, 'length' values of 512, 'pattern' values of 0, etc).
+         * Eliminate old default properties (eg, 'length' values of 512, empty 'data' arrays, etc).
          */
-        s = s.replace(/,"length":512/g, "").replace(/,"pattern":0/g, "").replace(/,"data":\[]/g, "");
+        s = s.replace(/,"length":512/g, "").replace(/,"data":\[]/g, "");
 
         /*
          * I don't really want to strip quotes from disk image property names, since I would have to put them
@@ -63076,7 +63118,7 @@ class Disk extends Component {
             }
             if (cDupes++) {
                 adw.length = cdw - cDupes;
-                sector.dwPattern = dwPattern;
+                sector[Disk.SECTOR.PATTERN] = dwPattern;
             }
         }
     }
@@ -63107,7 +63149,7 @@ class Disk extends Component {
                 }
                 if ((i % 4) === 0) {
                     let idw = i >> 2;
-                    dw = (idw < cdwData? sector[Disk.SECTOR.DATA][idw] : sector.dwPattern);
+                    dw = (idw < cdwData? sector[Disk.SECTOR.DATA][idw] : sector[Disk.SECTOR.PATTERN]);
                 }
                 let b = dw & 0xff;
                 dw >>>= 8;
@@ -63131,9 +63173,9 @@ Disk.SECTOR = {
     DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
     FILE_INDEX: 'f',                // "extended" JSON disk images only [formerly file]
     FILE_OFFSET:'o',                // "extended" JSON disk images only [formerly offFile]
-                                    // [no longer used: 'pattern']
+    PATTERN:    'pattern',          // deprecated (no longer used in external images, still used internally)
     /*
-     * The following properties occur very infrequently (and usually only in copy-protected or degraded disk images),
+     * The following properties occur very infrequently (and usually only in copy-protected or damaged disk images),
      * hence the longer, more meaningful IDs.
      */
     DATA_CRC:   'dataCRC',
@@ -63148,7 +63190,7 @@ Disk.SECTOR = {
  *
  * @const {number}
  */
-Disk.REMOTE_WRITE_DELAY = 2000;         // 2-second delay
+Disk.REMOTE_WRITE_DELAY = 2000;     // 2-second delay
 
 /*
  * A global disk count, used to form unique Disk component IDs (totally optional; for debugging purposes only)
@@ -63161,23 +63203,23 @@ Disk.nDisks = 0;
  */
 class FileInfo {
     /**
-     * FileInfo(disk, sPath, sName, bAttr, cbSize, module)
+     * FileInfo(disk, path, name, attr, size, module)
      *
      * @this {FileInfo}
      * @param {Disk} disk
-     * @param {string} sPath
-     * @param {string} sName
-     * @param {number} bAttr
-     * @param {number} cbSize
+     * @param {string} path
+     * @param {string} name
+     * @param {number} attr
+     * @param {number} size
      * @param {Object} [module]
      */
-    constructor(disk, sPath, sName, bAttr, cbSize, module)
+    constructor(disk, path, name, attr, size, module)
     {
         this.disk = disk;
-        this.sPath = sPath;
-        this.sName = sName;
-        this.bAttr = bAttr;
-        this.cbSize = cbSize;
+        this.path = path;
+        this.name = name;
+        this.attr = attr;
+        this.size = size;
         this.module = module;
     }
 
@@ -63224,7 +63266,7 @@ class FileInfo {
                 }
             }
         }
-        return sSymbol || this.sName + '+' + Str.toHex(off, 0, true);
+        return sSymbol || this.name + '+' + Str.toHex(off, 0, true);
     }
 }
 
@@ -65896,7 +65938,7 @@ class FDC extends Component {
         drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
         if (drive.disk) {
             if (this.messageEnabled()) {
-                this.printf("%s.doRead(drive=%d,CHS=%d:%d:%d,PBA=%d,addr=0x%x)\n",
+                this.printf("%s.doRead(drive=%d,CHS=%d:%d:%d,LBA=%d,addr=%#X)\n",
                             this.idComponent, drive.iDrive, drive.bCylinder, drive.bHead, drive.bSector,
                             (drive.bCylinder * (drive.disk.nHeads * drive.disk.nSectors) + drive.bHead * drive.disk.nSectors + drive.bSector-1),
                             this.chipset.checkDMA(ChipSet.DMA_FDC));
@@ -65932,7 +65974,7 @@ class FDC extends Component {
         drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
         if (drive.disk) {
             if (this.messageEnabled()) {
-                this.printf("%s.doWrite(drive=%d,CHS=%d:%d:%d,PBA=%d,addr=0x%x)\n",
+                this.printf("%s.doWrite(drive=%d,CHS=%d:%d:%d,LBA=%d,addr=%#X)\n",
                             this.idComponent, drive.iDrive, drive.bCylinder, drive.bHead, drive.bSector,
                             (drive.bCylinder * (drive.disk.nHeads * drive.disk.nSectors) + drive.bHead * drive.disk.nSectors + drive.bSector-1),
                             this.chipset.checkDMA(ChipSet.DMA_FDC));
@@ -67629,7 +67671,7 @@ class HDC extends Component {
 
                 if (BACKTRACK && obj) {
                     if (!off && obj.file && hdc.messageEnabled(Messages.DISK)) {
-                        hdc.printMessage("loading " + obj.file.sPath + '[' + obj.offFile + "] via port " + Str.toHexWord(port), true);
+                        hdc.printMessage("loading " + obj.file.path + '[' + obj.offFile + "] via port " + Str.toHexWord(port), true);
                     }
                     /*
                      * TODO: We could define a cached BTO that's reset prior to a new ATC command, and then pass that
@@ -70454,21 +70496,48 @@ class JSONLib {
                         };
                         /*
                          * The FDC calls us with drive limits, and all it cares about is the 'name' and 'path' of each diskette,
-                         * so we use those two facts to limit what each diskette object returns.  Other callers, like the DiskDump
+                         * so we use those two facts to limit what each diskette object returns.  Other callers, like the DiskImage
                          * utility, want ALL the diskette details.
+                         *
+                         * All these optional properties are either strings or booleans, except for '@hardware', which is an object
+                         * that may contain:
+                         *
+                         *      'url':      URL of the preferred machine to run the software (eg, "/machines/pcx86/ibm/5150/cga/")
+                         *      'config':   a specific configuration file (eg, "/configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml")
+                         *      'drives':   one of more hard drive configs (eg, "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]")
+                         *      'options':  assorted hardware options (eg, "mouse")
+                         *      'autoType': if present, overrides any '@autoType' set for the software
+                         *
+                         * The @hardware 'url' parameter is currently only used by /_includes/explorer/software.html, which will craft
+                         * a link to the specified machine URL with the first software diskette loaded into one of the disk drives; however,
+                         * that feature isn't used much anymore, since we use "diskimage.js --all --checkpage --rebuild" to build dedicated
+                         * pages for most every piece of software.
+                         *
+                         * The 'url' property may take on significance again if we ever provide some kind of UI for launching software
+                         * EITHER with a generic machine OR on a dedicated page.
                          */
-                        if (!limits.length) {
+                        if (!COMPILED) {
                             let title = release['@title'] || group['@title'];
                             let archive = item['@archive'];
                             let label = item['@label'];
-                            let options = item['@options'];
-                            let hidden = !!(group['@hidden'] || release['@hidden']);
-                            if (title) diskette['title'] = title;
-                            if (format) diskette['format'] = format;
-                            if (archive) diskette['archive'] = archive;
-                            if (label) diskette['label'] = label;
-                            if (options) diskette['options'] = options;
-                            if (hidden) diskette['hidden'] = hidden;
+                            let args = item['@args'];
+                            let kryoflux = item['@kryoflux'];
+                            let normalize = item['@normalize'];
+                            let hidden = group['@hidden'] || release['@hidden'];
+                            let bootable = release['@bootable'];
+                            let autoType = release['@autoType'];
+                            let hardware = release['@hardware'];
+                            if (title) diskette['title'] = title;                       // the software title (as opposed to the diskette name)
+                            if (format) diskette['format'] = format;                    // eg, "PC360K"
+                            if (archive) diskette['archive'] = archive;                 // eg, "folder", or the name of a specific ".img" file, etc
+                            if (label) diskette['label'] = label;                       // the volume label to use (eg, for a diskette generated from a folder)
+                            if (args) diskette['args'] = args;                          // DiskImage command-line arguments
+                            if (kryoflux) diskette['kryoflux'] = true;                  // true if a Kryoflux dump is available
+                            if (normalize) diskette['normalize'] = true;                // true if a line-endings in known text files should be "normalized"
+                            if (hidden) diskette['hidden'] = true;                      // true if hidden from the Explorer (still in the library)
+                            if (bootable) diskette['bootable'] = true;                  // true if diskette marked bootable
+                            if (autoType) diskette['autoType'] = autoType;              // optional custom autoType string
+                            if (hardware) diskette['hardware'] = hardware;              // hardware configuration
                         }
                         if (!item['@localonly'] || hostName == "localhost") {
                             aDiskettes.push(diskette);
@@ -82082,10 +82151,12 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
              */
             Component.addMachineResource(idMachine, sXMLFile, sXML);
 
+            let match;
             let sURL = sXMLFile;
             if (sURL && sURL.indexOf('/') < 0 && window.location.pathname.slice(-1) == '/') {
                 sURL = window.location.pathname + sURL;
             }
+
             /*
              * We embed the URL of the XML file both as a separate "xml" attribute for easy access from the
              * XSL file, and as part of the "parms" attribute for easy access from machines (see getMachineParm()).
@@ -82099,6 +82170,7 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
                 sParms = '{state:"' + sParms + '",';
             }
             sParms += 'url:"' + sURL + '"}';
+
             /*
              * Note that while we no longer generate a machine XML file with a "state" attribute (because it's
              * encoded inside the "parms" attribute), the XSL file must still cope with "state" attributes inside
@@ -82116,12 +82188,23 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
                  * replacement below, just like we do for sParms and sURL.  However, if a "class" attribute already
                  * exists, we need alter it and then zap the sClass variable.
                  */
-                let match = sXML.match(/(<machine[^>]*\sclass=)(['"])(.*?)(\2.*?>)/);
+                match = sXML.match(/(<machine[^>]*\sclass=)(['"])(.*?)(\2[^>]*>)/);
                 if (match) {
                     sXML = sXML.replace(match[0], match[1] + match[2] + sClass + match[4]);
                     sClass = "";
                 }
             }
+
+            /*
+             * If the machine element contains a 'debugger' attribute set to 'available', we change it to 'optional',
+             * which signals the XSL template to generate a "soft link" to the debugger (using a URL parameter), rather
+             * than a "hard link" to the debugger XML file.
+             */
+            match = sXML.match(/(<machine[^>]*\sdebugger=)(['"])(available)(\2[^>]*>)/);
+            if (match) {
+                sXML = sXML.replace(match[0], match[1] + match[2] + "optional" + match[4]);
+            }
+
             sXML = sXML.replace(/(<machine[^>]*\sid=)(['"]).*?\2/, "$1$2" + idMachine + "$2" + (sClass? ' class="' + sClass + '"' : '') + (sParms? " parms='" + sParms + "'" : "") + (sURL? ' url="' + sURL + '"' : ''));
         }
 
@@ -82295,13 +82378,12 @@ function resolveXML(sURL, sXML, display, done)
 }
 
 /**
- * embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFile, sParms, sClass)
+ * embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms, sClass)
  *
  * This allows to you embed a machine on a web page, by transforming the machine XML into HTML.
  *
  * @param {string} sAppName is the app name (eg, "PCx86")
  * @param {string} sAppClass is the app class (eg, "pcx86"); also known as the machine class
- * @param {string} sVersion is the app version (eg, "1.15.7")
  * @param {string} idMachine
  * @param {string} [sXMLFile]
  * @param {string} [sXSLFile]
@@ -82309,7 +82391,7 @@ function resolveXML(sURL, sXML, display, done)
  * @param {string} [sClass] (an optional machine class name used to style the machine)
  * @return {boolean} true if successful, false if error
  */
-function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFile, sParms, sClass)
+function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     let eMachine, eWarning, fSuccess = true;
 
@@ -82336,7 +82418,7 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
             Component.addMachineResource(idMachine, "parms", sParms);
         }
         /*
-         * We use to replace a missing XML configuration file with a default path, but since we now support JSON-based configs,
+         * We used to replace a missing XML configuration file with a default path, but since we now support JSON-based configs,
          * that had to change.
          *
          *      sXMLFile = "machine.xml";
@@ -82344,6 +82426,10 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
          */
         doneMachine();
         return fSuccess;
+    }
+
+    if (Web.getURLParm('debugger') == "true" && sXMLFile.indexOf("/debugger") < 0) {
+        sXMLFile = sXMLFile.replace("/machine.xml", "/debugger/machine.xml");
     }
 
     let displayError = function(sURL, sError) {
@@ -82579,7 +82665,7 @@ function embedMachine(sAppName, sAppClass, sVersion, idMachine, sXMLFile, sXSLFi
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("C1Pjs", "c1p", APPVERSION, idMachine, sXMLFile, sXSLFile, undefined, sClass);
+    return embedMachine("C1Pjs", "c1p", idMachine, sXMLFile, sXSLFile, undefined, sClass);
 }
 
 /**
@@ -82595,7 +82681,7 @@ function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PCx86", "pcx86", APPVERSION, idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PCx86", "pcx86", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**
@@ -82611,7 +82697,7 @@ function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PCx80", "pcx80", APPVERSION, idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PCx80", "pcx80", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**
@@ -82627,7 +82713,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PDPjs", "pdp10", APPVERSION, idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PDPjs", "pdp10", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**
@@ -82643,7 +82729,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PDPjs", "pdp11", APPVERSION, idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PDPjs", "pdp11", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**

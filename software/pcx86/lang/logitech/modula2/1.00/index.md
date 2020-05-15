@@ -3,6 +3,15 @@ layout: page
 title: Logitech Modula-2/86 Compiler 1.00
 permalink: /software/pcx86/lang/logitech/modula2/1.00/
 redirect_from: /disks/pcx86/tools/logitech/modula2/1.00/
+machines:
+  - id: ibm5160
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "Modula-2/86 1.00 (1-System)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 Links to [Modula-2/86 Documentation](http://www.bitsavers.org/pdf/logitech/modula-2/):
@@ -12,6 +21,8 @@ Links to [Modula-2/86 Documentation](http://www.bitsavers.org/pdf/logitech/modul
 
 NOTE: We do not have copies of the original distribution disks.  These disks have been rebuilt from ZIP archives obtained
 from [VETUSWARE](https://vetusware.com/download/MODULE%202%20_SETUP_DEBUG_COMPILER.DISCS%201.0/?id=11456).
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of Modula-2/86 1.00 (1-System)
 

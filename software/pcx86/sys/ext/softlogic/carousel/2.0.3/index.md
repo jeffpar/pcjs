@@ -3,9 +3,20 @@ layout: page
 title: Software Carousel 2.0.3
 permalink: /software/pcx86/sys/ext/softlogic/carousel/2.0.3/
 redirect_from: /disks/pcx86/tools/softlogic/carousel/2.0.3/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "Software Carousel 2.0.3"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 ![Software Carousel Diskette]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL.jpg)
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Software Carousel 2.0.3
 

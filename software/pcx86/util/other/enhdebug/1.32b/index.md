@@ -24,7 +24,7 @@ A [Directory Listing](#directory-of-enhanced-debug-132b), along with copies of [
 
 {% include machine.html id="ibm5160-pcdos200" %}
 
-This machine is also available with the [PCjs Debugger](debugger/).  Because you can never have too many debuggers.
+This machine is also available with the [PCjs Debugger](?debugger=true).  Because you can never have too many debuggers.
 
 ### Directory of Enhanced DEBUG 1.32b
 

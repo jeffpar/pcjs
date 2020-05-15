@@ -3,7 +3,18 @@ layout: page
 title: Borland SideKick Plus 1.00A
 permalink: /software/pcx86/util/borland/skplus/1.00a/
 redirect_from: /disks/pcx86/tools/borland/skplus/1.00a/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "Borland SideKick Plus 1.00A (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Borland SideKick Plus 1.00A (Disk 1)
 

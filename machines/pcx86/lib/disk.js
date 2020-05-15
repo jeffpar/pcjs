@@ -151,7 +151,7 @@ if (typeof module !== "undefined") {
  *      [ID]:       sector ID
  *      [LENGTH]:   size of the sector, in bytes
  *      [DATA]:     array of dwords
- *      dwPattern:  dword pattern to use for empty or partial sectors (or null if sector still needs to be loaded)
+ *      pattern:    dword pattern to use for empty or partial sectors (or null if sector still needs to be loaded)
  *
  * initSector() also sets the following properties, to help us quickly identify its location within aDiskData:
  *
@@ -188,7 +188,7 @@ if (typeof module !== "undefined") {
  * @property {number} sector (deprecated; see s)
  * @property {number} length (deprecated; see l)
  * @property {Array.<number>} data (deprecated; see d)
- * @property {number|null} pattern (deprecated; see dwPattern)
+ * @property {number|null} pattern (deprecated)
  * @property {FileInfo} file
  * @property {number} offFile
  * @property {number} dataCRC
@@ -198,7 +198,6 @@ if (typeof module !== "undefined") {
  * @property {boolean} headError
  * @property {number} iModify (for internal use only)
  * @property {number} cModify (for internal use only)
- * @property {number|null} dwPattern (for internal use only)
  * @property {boolean} fDirty (for internal use only)
  */
 
@@ -915,6 +914,7 @@ class Disk extends Component {
                                         adw.length--;
                                     }
                                 }
+
                                 this.initSector(sector, iCylinder, iHead, idSector, this.cbSector, dwPattern);
 
                                 /*
@@ -995,6 +995,32 @@ class Disk extends Component {
     }
 
     /**
+     * getFileInfo(sector)
+     *
+     * @this {Disk}
+     * @param {Sector} sector
+     * @returns {string}
+     */
+    getFileInfo(sector)
+    {
+        //
+        // The following code would work if we retained the FILE_INDEX and FILE_OFFSET properties
+        // from the original JSON data, but buildFileTable() converts those to file (FileInfo) and
+        // offFile (number) properties and then discards them.  However, I may decide to leave
+        // FILE_INDEX and FILE_OFFSET in place, and use this code in the future.  It would be a little
+        // less overhead per sector (ie, using numbers of instead object references).
+        //
+        // if (this.aFileTable) {
+        //     let iFile = sector[Disk.SECTOR.FILE_INDEX];
+        //     if (iFile !== undefined) {
+        //         let file = this.aFileTable[iFile];
+        //         return file.path + "[" + Str.toHex(sector[Disk.SECTOR.FILE_OFFSET], 0, true) + "]";
+        //     }
+        // }
+        return sector.file? (sector.file.path + "[" + Str.toHex(sector.offFile, 0, true) + "]") : "unknown";
+    }
+
+    /**
      * getModuleInfo(sModule, nSegment)
      *
      * If the given module and segment number is found, we return an Array of symbol offsets, indexed by symbol name.
@@ -1010,7 +1036,12 @@ class Disk extends Component {
         if (SYMBOLS && this.aFileTable) {
             for (let iFile = 0; iFile < this.aFileTable.length; iFile++) {
                 let file = this.aFileTable[iFile];
-                if (!file.module || file.module.name != sModule) continue;
+                /*
+                 * NOTE: Given how we now build the file table based on file indexes in the sector
+                 * data, there could well be "holes" in the file table (ie, entries that were used to
+                 * describe a volume label or some other directory entry that has no associated sectors).
+                 */
+                if (!file || !file.module || file.module.name != sModule) continue;
                 let segment = file.module.segments[nSegment];
                 if (!segment) continue;
                 for (let ord in segment.ordinals) {
@@ -1046,13 +1077,18 @@ class Disk extends Component {
             let sSymbolUpper = sSymbol.toUpperCase();
             for (let iFile = 0; iFile < this.aFileTable.length; iFile++) {
                 let file = this.aFileTable[iFile];
-                if (!file.module) continue;
+                /*
+                 * NOTE: Given how we now build the file table based on file indexes in the sector
+                 * data, there could well be "holes" in the file table (ie, entries that were used to
+                 * describe a volume label or some other directory entry that has no associated sectors).
+                 */
+                if (!file || !file.module) continue;
                 for (let seg in file.module.segments) {
                     let segment = file.module.segments[seg];
                     for (let ord in segment.ordinals) {
                         let entry = segment.ordinals[ord];
                         if (entry['s'] && entry['s'].indexOf(sSymbolUpper) >= 0) {
-                            aInfo.push([entry['s'], file.sName, +seg, entry['o'], segment.offEnd - segment.offStart]);
+                            aInfo.push([entry['s'], file.name, +seg, entry['o'], segment.offEnd - segment.offStart]);
                         }
                     }
                 }
@@ -1153,7 +1189,7 @@ class Disk extends Component {
             this.assert(sector[Disk.SECTOR.ID] == idSector);
             this.assert(sector[Disk.SECTOR.LENGTH] == cbSector);
         }
-        sector.dwPattern = dwPattern;
+        sector[Disk.SECTOR.PATTERN] = dwPattern;
         sector.iModify = sector.cModify = 0;
         sector.fDirty = false;
         return sector;
@@ -1405,7 +1441,7 @@ class Disk extends Component {
         this.aDirtyTimestamps.push(Usr.getTime());
 
         if (DEBUG && this.messageEnabled()) {
-            this.printMessage("queueDirtySector(CHS=" + sector.iCylinder + ':' + sector.iHead + ':' + sector[Disk.SECTOR.ID] + "): " + this.aDirtySectors.length + " dirty");
+            this.printMessage("queueDirtySector(CHS=" + sector[Disk.SECTOR.CYLINDER] + ':' + sector[Disk.SECTOR.HEAD] + ':' + sector[Disk.SECTOR.ID] + "): " + this.aDirtySectors.length + " dirty");
         }
 
         return fAsync && this.updateWriteTimer();
@@ -1467,8 +1503,8 @@ class Disk extends Component {
         }
         let sector = this.aDirtySectors[0];
         if (sector) {
-            let iCylinder = sector.iCylinder;
-            let iHead = sector.iHead;
+            let iCylinder = sector[Disk.SECTOR.CYLINDER];
+            let iHead = sector[Disk.SECTOR.HEAD];
             let iSector = sector[Disk.SECTOR.ID];
             let nSectors = 0;
             let abSectors = [];
@@ -1586,13 +1622,13 @@ class Disk extends Component {
                          * If the sector's pattern is null, then this sector's true contents have not yet
                          * been fetched from the server.
                          */
-                        if (sector.dwPattern === null) {
+                        if (sector[Disk.SECTOR.PATTERN] === null) {
                             if (fWrite) {
                                 /*
                                  * Optimization: if the caller has explicitly told us that they're about to WRITE to the
                                  * sector, then we shouldn't need to read it from the server; assume a zero pattern and return.
                                  */
-                                sector.dwPattern = 0;
+                                sector[Disk.SECTOR.PATTERN] = 0;
                             } else {
                                 let nSectors = 1;
                                 /*
@@ -1600,7 +1636,7 @@ class Disk extends Component {
                                  * on the same track that may also be required.
                                  */
                                 while (++i < track.length) {
-                                    if (track[i].dwPattern === null) nSectors++;
+                                    if (track[i][Disk.SECTOR.PATTERN] === null) nSectors++;
                                 }
                                 this.readRemoteSectors(iCylinder, iHead, iSector, nSectors, done != null, function onReadRemoteComplete(err, fAsync) {
                                     if (err) sector = null;
@@ -1669,7 +1705,7 @@ class Disk extends Component {
         let ib = 0;
         let cdw = cb >> 2;
         let adw = sector[Disk.SECTOR.DATA];
-        let dwPattern = sector.dwPattern;
+        let dwPattern = sector[Disk.SECTOR.PATTERN];
         for (let idw = 0; idw < cdw; idw++) {
             let dw = (idw < adw.length? adw[idw] : dwPattern);
             ab[ib++] = dw & 0xff;
@@ -1694,12 +1730,12 @@ class Disk extends Component {
         let b = -1;
         if (sector) {
             if (DEBUG && !iByte && !fCompare && this.messageEnabled()) {
-                this.printMessage('read("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector[Disk.SECTOR.ID] + ')');
+                this.printMessage('read("' + this.sDiskFile + '",CHS=' + sector[Disk.SECTOR.CYLINDER] + ':' + sector[Disk.SECTOR.HEAD] + ':' + sector[Disk.SECTOR.ID] + '): ' + this.getFileInfo(sector));
             }
             if (iByte < sector[Disk.SECTOR.LENGTH]) {
                 let adw = sector[Disk.SECTOR.DATA];
                 let idw = iByte >> 2;
-                let dw = (idw < adw.length ? adw[idw] : sector.dwPattern);
+                let dw = (idw < adw.length ? adw[idw] : sector[Disk.SECTOR.PATTERN]);
                 b = ((dw >> ((iByte & 0x3) << 3)) & 0xff);
             }
         }
@@ -1721,13 +1757,13 @@ class Disk extends Component {
             return false;
 
         if (DEBUG && !iByte && this.messageEnabled()) {
-            this.printMessage('write("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector[Disk.SECTOR.ID] + ')');
+            this.printMessage('write("' + this.sDiskFile + '",CHS=' + sector[Disk.SECTOR.CYLINDER] + ':' + sector[Disk.SECTOR.HEAD] + ':' + sector[Disk.SECTOR.ID] + ')');
         }
 
         if (iByte < sector[Disk.SECTOR.LENGTH]) {
             if (b != this.read(sector, iByte, true)) {
                 let adw = sector[Disk.SECTOR.DATA];
-                let dwPattern = sector.dwPattern;
+                let dwPattern = sector[Disk.SECTOR.PATTERN];
                 let idw = iByte >> 2;
                 let nShift = (iByte & 0x3) << 3;
 
@@ -1950,7 +1986,7 @@ class Disk extends Component {
                  */
                 let idw = sector[Disk.SECTOR.DATA].length;
                 while (idw < iModify) {
-                    sector[Disk.SECTOR.DATA][idw++] = sector.dwPattern;
+                    sector[Disk.SECTOR.DATA][idw++] = sector[Disk.SECTOR.PATTERN];
                 }
                 let n = 0;
                 sector.iModify = iModify;
@@ -1984,9 +2020,8 @@ class Disk extends Component {
     /**
      * convertToJSON(fFormatted)
      *
-     * We perform some RegExp massaging on the JSON data to eliminate unnecessary properties
-     * (eg, LENGTH values of 512, dwPattern values of 0, and empty DATA arrays, since those are
-     * defaults).
+     * We perform some RegExp massaging on the JSON data to eliminate (old) unnecessary properties
+     * (eg, 'length' values of 512, empty 'data' arrays), since those were defaults.
      *
      * In addition, we first check every sector to see if it can be "deflated".  Sectors that were
      * initially "deflated" should remain that way unless/until they were modified, so technically,
@@ -2017,9 +2052,9 @@ class Disk extends Component {
         });
 
         /*
-         * Eliminate old default properties (eg, 'length' values of 512, 'pattern' values of 0, etc).
+         * Eliminate old default properties (eg, 'length' values of 512, empty 'data' arrays, etc).
          */
-        s = s.replace(/,"length":512/g, "").replace(/,"pattern":0/g, "").replace(/,"data":\[]/g, "");
+        s = s.replace(/,"length":512/g, "").replace(/,"data":\[]/g, "");
 
         /*
          * I don't really want to strip quotes from disk image property names, since I would have to put them
@@ -2066,7 +2101,7 @@ class Disk extends Component {
             }
             if (cDupes++) {
                 adw.length = cdw - cDupes;
-                sector.dwPattern = dwPattern;
+                sector[Disk.SECTOR.PATTERN] = dwPattern;
             }
         }
     }
@@ -2097,7 +2132,7 @@ class Disk extends Component {
                 }
                 if ((i % 4) === 0) {
                     let idw = i >> 2;
-                    dw = (idw < cdwData? sector[Disk.SECTOR.DATA][idw] : sector.dwPattern);
+                    dw = (idw < cdwData? sector[Disk.SECTOR.DATA][idw] : sector[Disk.SECTOR.PATTERN]);
                 }
                 let b = dw & 0xff;
                 dw >>>= 8;
@@ -2121,9 +2156,9 @@ Disk.SECTOR = {
     DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
     FILE_INDEX: 'f',                // "extended" JSON disk images only [formerly file]
     FILE_OFFSET:'o',                // "extended" JSON disk images only [formerly offFile]
-                                    // [no longer used: 'pattern']
+    PATTERN:    'pattern',          // deprecated (no longer used in external images, still used internally)
     /*
-     * The following properties occur very infrequently (and usually only in copy-protected or degraded disk images),
+     * The following properties occur very infrequently (and usually only in copy-protected or damaged disk images),
      * hence the longer, more meaningful IDs.
      */
     DATA_CRC:   'dataCRC',
@@ -2138,7 +2173,7 @@ Disk.SECTOR = {
  *
  * @const {number}
  */
-Disk.REMOTE_WRITE_DELAY = 2000;         // 2-second delay
+Disk.REMOTE_WRITE_DELAY = 2000;     // 2-second delay
 
 /*
  * A global disk count, used to form unique Disk component IDs (totally optional; for debugging purposes only)
@@ -2151,23 +2186,23 @@ Disk.nDisks = 0;
  */
 class FileInfo {
     /**
-     * FileInfo(disk, sPath, sName, bAttr, cbSize, module)
+     * FileInfo(disk, path, name, attr, size, module)
      *
      * @this {FileInfo}
      * @param {Disk} disk
-     * @param {string} sPath
-     * @param {string} sName
-     * @param {number} bAttr
-     * @param {number} cbSize
+     * @param {string} path
+     * @param {string} name
+     * @param {number} attr
+     * @param {number} size
      * @param {Object} [module]
      */
-    constructor(disk, sPath, sName, bAttr, cbSize, module)
+    constructor(disk, path, name, attr, size, module)
     {
         this.disk = disk;
-        this.sPath = sPath;
-        this.sName = sName;
-        this.bAttr = bAttr;
-        this.cbSize = cbSize;
+        this.path = path;
+        this.name = name;
+        this.attr = attr;
+        this.size = size;
         this.module = module;
     }
 
@@ -2214,7 +2249,7 @@ class FileInfo {
                 }
             }
         }
-        return sSymbol || this.sName + '+' + Str.toHex(off, 0, true);
+        return sSymbol || this.name + '+' + Str.toHex(off, 0, true);
     }
 }
 

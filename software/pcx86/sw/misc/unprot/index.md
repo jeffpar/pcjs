@@ -3,6 +3,15 @@ layout: page
 title: Unprotect Files
 permalink: /software/pcx86/sw/misc/unprot/
 redirect_from: /disks/pcx86/shareware/unprot/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "Unprotect Files (UNPROT 1 & 2)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 The following collection of "unprotects" was obtained from [The Programmer's Corner](https://www.pcorner.com/)
@@ -246,6 +255,8 @@ which can be loaded in any IBM PC AT-compatible machine.
 - [XUVISION.UNP](https://diskettes.pcjs.org/pcx86/sw/misc/unprot/UNPROT-2/XUVISION.UNP.txt)
 - [ZORK12.UNP](https://diskettes.pcjs.org/pcx86/sw/misc/unprot/UNPROT-2/ZORK12.UNP.txt)
 - [ZORK3.UNP](https://diskettes.pcjs.org/pcx86/sw/misc/unprot/UNPROT-2/ZORK3.UNP.txt)
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Unprotect Files (UNPROT 1 & 2)
 

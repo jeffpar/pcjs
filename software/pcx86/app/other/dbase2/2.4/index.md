@@ -3,7 +3,18 @@ layout: page
 title: dBASE II v2.4
 permalink: /software/pcx86/app/other/dbase2/2.4/
 redirect_from: /disks/pcx86/apps/other/dbase2/2.4/
+machines:
+  - id: ibm5150
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "dBASE II 2.4 (PROGRAM)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
+
+{% include machine.html id="ibm5150" %}
 
 ### Directory of dBASE II 2.4 (PROGRAM)
 

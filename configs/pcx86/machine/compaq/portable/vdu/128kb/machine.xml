@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
-<machine id="compaq-portable-128kb" type="pcx86" border="1" pos="center" background="default">
+<machine id="compaq-portable-128kb" type="pcx86" border="1" pos="center" background="default" debugger="available">
 	<name pos="center">COMPAQ Portable with 128Kb RAM</name>
 	<computer id="compaq-vdu-128k" name="COMPAQ Portable"/>
 	<ram id="ramLow" addr="0x00000" test="false"/>

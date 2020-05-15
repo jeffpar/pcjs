@@ -3,6 +3,14 @@ layout: page
 title: "COMPAQ User Programs (1989)"
 permalink: /software/pcx86/diag/compaq/1989/
 redirect_from: /disks/pcx86/diags/compaq/utilities/1989/
+machines:
+  - id: deskpro386
+    type: pcx86
+    config: /configs/pcx86/machine/compaq/deskpro386/cga/640kb/machine.xml
+    autoGen: true
+    autoMount:
+      A:
+        name: "COMPAQ User Programs (1989)"
 ---
 
 From `README.CPQ`:
@@ -25,6 +33,8 @@ From `README.CPQ`:
     be obtained by referring to the User Programs Reference, or the
     Supplemental Software Guide, or by booting this diskette, typing
     HELP at the A> prompt, and then pressing the ENTER key.
+
+{% include machine.html id="deskpro386" %}
 
 ### Directory of COMPAQ User Programs (1989)
 

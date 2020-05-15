@@ -23,7 +23,7 @@ While TopView 1.01 ran with Keyboard support enabled "out of the box," TopView 1
 which is why the `SETUP` batch file is run first.
 
 NOTE: This disk image is from the PCjs disk collection.  Presumably, as in [TopView 1.01](../1.01/), there was a
-second (Tutorial) disk, but we don't have a copy of it.  The machine below is also available with the [PCjs Debugger](debugger/).
+second (Tutorial) disk, but we don't have a copy of it.
 
 {% include machine.html id="ibm5160" %}
 

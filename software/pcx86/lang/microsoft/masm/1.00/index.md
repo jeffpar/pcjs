@@ -5,9 +5,20 @@ permalink: /software/pcx86/lang/microsoft/masm/1.00/
 redirect_from:
   - /disks/pcx86/tools/microsoft/masm/1.00/
   - /disks/pc/tools/microsoft/masm/1.00/
+machines:
+  - id: ibm5150
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS Macro Assembler 1.00 (1982)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 Directory listing of the 160Kb diskette ([Source](https://winworldpc.com/product/macro-assembler/1x)) is provided below.
+
+{% include machine.html id="ibm5150" %}
 
 ### Directory of MS Macro Assembler 1.00 (1982)
 

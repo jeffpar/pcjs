@@ -3,7 +3,18 @@ layout: page
 title: Microsoft QBASIC
 permalink: /software/pcx86/lang/microsoft/basic/qbasic/1.10/
 redirect_from: /disks/pcx86/tools/microsoft/basic/qbasic/1.10/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS QBasic 1.10"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of MS QBasic 1.10
 

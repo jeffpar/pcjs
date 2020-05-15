@@ -3,6 +3,15 @@ layout: page
 title: Microsoft Pascal Compiler 4.00
 permalink: /software/pcx86/lang/microsoft/pascal/compiler/4.00/
 redirect_from: /disks/pcx86/tools/microsoft/pascal/compiler/4.00/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS Pascal 4.00 (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 We do not have copies of the original distribution disks, but using the archive
@@ -10,6 +19,8 @@ We do not have copies of the original distribution disks, but using the archive
 and the disk contents described in PACKING.LST, we were able to recreate the nine original 360Kb disk images.  All that
 was missing from the archive was the contents of the PATCH32 directory on Disk 9, which we were able to retrieve from the
 PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DOS and OS/2](/software/pcx86/lang/microsoft/c/5.10-os2/).
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of MS Pascal 4.00 (Disk 1)
 

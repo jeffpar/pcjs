@@ -91,7 +91,7 @@
                 "@diskette": "MULTIPLAN-IBM100-PROGRAM.json",
                 "@photo": ".jpg",
                 "@format": "PC160K",
-                "@options": "--sectorID=11:0:8:61",
+                "@args": "--sectorID=11:0:8:61",
                 "@kryoflux": true,
                 "@archive": "MULTIPLAN-IBM100-PROGRAM-BACKUP.img"
               },
@@ -234,6 +234,17 @@
       "word": {
         "@title": "Microsoft Word",
         "@versions": {
+          "1.10": {
+            "@title": "Microsoft Word 1.10",
+            "@media": [
+              {
+                "@title": "MS Word 1.10",
+                "@diskette": "MSWORD-110.json",
+                "@format": "PC320K",
+                "@kryoflux": true
+              }
+            ]
+          },
           "1.15": {
             "@title": "Microsoft Word 1.15",
             "@media": [
@@ -242,7 +253,7 @@
                 "@diskette": "MSWORD-115-PROGRAM.json",
                 "@format": "PC360K",
                 "@kryoflux": true,
-                "@options": "--suppData=/software/pcx86/app/microsoft/word/1.15/debugger/index.md"
+                "@args": "--suppData=/software/pcx86/app/microsoft/word/1.15/debugger/index.md"
               },
               {
                 "@title": "MS Word 1.15 (Utilities)",
@@ -250,7 +261,7 @@
                 "@format": "PC360K"
               },
               {
-                "@title": "MS Word 1.00 (Learning)",
+                "@title": "MS Word 1.15 (Learning)",
                 "@diskette": "MSWORD-100-LEARNING.json",
                 "@format": "PC360K"
               }
@@ -413,6 +424,10 @@
         "@versions": {
           "2.0c": {
             "@title": "Word for Windows 2.0c",
+            "@hardware": {
+              "config": "/configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml",
+              "drives": "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]"
+            },
             "@media": [
               {
                 "@title": "Word for Windows 2.0c (Disk 1)",
@@ -506,7 +521,7 @@
                 "@title": "dBASE III 1.0 (Disk 1)",
                 "@diskette": "DBIII-100-DISK1.json",
                 "@format": "PC360K",
-                "@options": "--sectorError=39:0:5:272",
+                "@args": "--sectorError=39:0:5:272",
                 "@kryoflux": true
               },
               {
@@ -519,7 +534,7 @@
                 "@title": "dBASE III 1.0 (Locked)",
                 "@diskette": "DBIII-100-LOCKED.json",
                 "@format": "PC360K",
-                "@options": "--sectorError=39:0:2:204"
+                "@args": "--sectorError=39:0:2:204"
               },
               {
                 "@title": "dBASE III 1.0 (Patched)",
@@ -798,14 +813,13 @@
       "exploring": {
         "@title": "Exploring the IBM PC",
         "@versions": {
-          "": {
-            "@title": "Exploring the IBM PC",
-            "@permalink": "/software/pcx86/demo/ibm/exploring/"
-          },
           "1.00-CGA": {
             "@title": "Exploring the IBM PC (CGA)",
             "@bootable": true,
-            "@hardware": "/machines/pcx86/ibm/5150/cga/",
+            "@hardware": {
+              "machine": "/machines/pcx86/ibm/5150/cga/",
+              "options": "5150,cga"
+            },
             "@media": [
               {
                 "@diskette": "EXPLORING-THE-IBM-PC-100-CGA.json",
@@ -817,7 +831,10 @@
           "1.00-MDA": {
             "@title": "Exploring the IBM PC (MDA)",
             "@bootable": true,
-            "@hardware": "/machines/pcx86/ibm/5150/mda/",
+            "@hardware": {
+              "machine": "/machines/pcx86/ibm/5150/mda/",
+              "options": "5150,mda"
+            },
             "@media": [
               {
                 "@diskette": "EXPLORING-THE-IBM-PC-100-MDA.json",
@@ -829,7 +846,10 @@
           "1.00-AT": {
             "@title": "Exploring the IBM PC AT 1.00",
             "@bootable": true,
-            "@hardware": "/machines/pcx86/ibm/5170/cga/",
+            "@hardware": {
+              "machine": "/machines/pcx86/ibm/5170/cga/",
+              "options": "5170,cga"
+            },
             "@media": [
               {
                 "@diskette": "EXPLORING-THE-IBM-PC-AT-100.json",
@@ -841,7 +861,10 @@
           "2.00-AT": {
             "@title": "Exploring the IBM PC AT 2.00",
             "@bootable": true,
-            "@hardware": "/machines/pcx86/ibm/5170/cga/",
+            "@hardware": {
+              "machine": "/machines/pcx86/ibm/5170/cga/",
+              "options": "5170,cga"
+            },
             "@media": [
               {
                 "@diskette": "EXPLORING-THE-IBM-PC-AT-200.json",
@@ -906,6 +929,10 @@
         "@versions": {
           "2.00": {
             "@title": "MS Mouse 2.00",
+            "@hardware": {
+              "config": "none",
+              "options": "mouse"
+            },
             "@media": [
               {
                 "@title": "MS Mouse 2.00",
@@ -917,6 +944,10 @@
           },
           "2.50": {
             "@title": "MS Mouse 2.50",
+            "@hardware": {
+              "config": "none",
+              "options": "mouse"
+            },
             "@media": [
               {
                 "@title": "MS Mouse 2.50 (Bus)",
@@ -934,6 +965,9 @@
           },
           "4.00": {
             "@title": "MS Mouse 4.00",
+            "@hardware": {
+              "options": "mouse"
+            },
             "@media": [
               {
                 "@title": "MS Mouse 4.00 (SYSTEM)",
@@ -949,6 +983,9 @@
           },
           "5.00": {
             "@title": "MS Mouse 5.00",
+            "@hardware": {
+              "options": "mouse"
+            },
             "@media": [
               {
                 "@title": "MS Mouse 5.00 (SYSTEM)",
@@ -964,6 +1001,9 @@
           },
           "6.xx": {
             "@title": "MS Mouse 6.xx",
+            "@hardware": {
+              "options": "mouse"
+            },
             "@media": [
               {
                 "@title": "MS Mouse 6.14 (SETUP)",
@@ -1101,6 +1141,9 @@
         "5.02": {
           "@title": "COMPAQ Diagnostics 5.02",
           "@hidden": true,
+          "@hardware": {
+            "options": "compaq,deskpro386"
+          },
           "@media": [
             {
               "@title": "COMPAQ Diagnostics 5.02",
@@ -1118,6 +1161,10 @@
         },
         "5.08": {
           "@title": "COMPAQ Diagnostics 5.08",
+          "@bootable": true,
+          "@hardware": {
+            "options": "compaq,deskpro386"
+          },
           "@media": [
             {
               "@diskette": "COMPAQ-DIAGS-508-012988-REVK.json",
@@ -1128,6 +1175,7 @@
         },
         "6.12": {
           "@title": "COMPAQ Diagnostics 6.12",
+          "@bootable": true,
           "@media": [
             {
               "@diskette": "COMPAQ-DIAGS-612-062189.json",
@@ -1137,6 +1185,10 @@
         },
         "1986": {
           "@title": "COMPAQ DeskPro 386 (1986)",
+          "@bootable": true,
+          "@hardware": {
+            "options": "compaq,deskpro386"
+          },
           "@media": [
             {
               "@diskette": "COMPAQ-DESKPRO386-SUPP-1986-08-08.json",
@@ -1146,6 +1198,10 @@
         },
         "1987": {
           "@title": "COMPAQ User Programs (1987)",
+          "@bootable": true,
+          "@hardware": {
+            "options": "compaq,deskpro386"
+          },
           "@media": [
             {
               "@diskette": "COMPAQ-UTILS-506-110387-REVG.json",
@@ -1156,6 +1212,10 @@
         },
         "1989": {
           "@title": "COMPAQ User Programs (1989)",
+          "@bootable": true,
+          "@hardware": {
+            "options": "compaq,deskpro386"
+          },
           "@media": [
             {
               "@diskette": "COMPAQ-UTILS-072789.json",
@@ -1172,6 +1232,7 @@
         "@versions": {
           "1.00": {
             "@title": "IBM PC Diagnostics 1.00",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-DIAG-100.json",
@@ -1181,6 +1242,7 @@
           },
           "1.02": {
             "@title": "IBM PC Diagnostics 1.02",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-DIAG-102.json",
@@ -1190,6 +1252,7 @@
           },
           "1.02A": {
             "@title": "IBM PC Diagnostics 1.02 (Adv)",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-DIAG-102A.json",
@@ -1199,6 +1262,7 @@
           },
           "2.02": {
             "@title": "IBM PC Diagnostics 2.02",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-DIAG-202.json",
@@ -1208,6 +1272,7 @@
           },
           "2.05": {
             "@title": "IBM PC Diagnostics 2.05",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-DIAG-205.json",
@@ -1218,6 +1283,7 @@
           },
           "2.05A": {
             "@title": "IBM PC Diagnostics 2.05 (Adv)",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-DIAG-205A.json",
@@ -1228,6 +1294,7 @@
           },
           "2.07": {
             "@title": "IBM PC Diagnostics 2.07",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-DIAG-207.json",
@@ -1237,6 +1304,7 @@
           },
           "2.20A": {
             "@title": "IBM PC Diagnostics 2.20 (Adv)",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-5155-5160-DIAG-220A.json",
@@ -1251,6 +1319,7 @@
         "@versions": {
           "1.01A": {
             "@title": "IBM PC AT Diagnostics 1.01 (Adv)",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5170-DIAG-101A.json",
@@ -1261,6 +1330,7 @@
           },
           "1.02": {
             "@title": "IBM PC AT Diagnostics 1.02",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5170-DIAG-102.json",
@@ -1270,6 +1340,7 @@
           },
           "2.00": {
             "@title": "IBM PC AT Diagnostics 2.00",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5170-DIAG-200.json",
@@ -1279,6 +1350,7 @@
           },
           "2.07A": {
             "@title": "IBM PC AT Diagnostics 2.07 (Adv)",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5170-DIAG-207A.json",
@@ -1440,6 +1512,9 @@
         },
         "flightsim/1984": {
           "@title": "Flight Simulator (1984)",
+          "@hardware": {
+            "options": "ibm,5160"
+          },
           "@media": [
             {
               "@diskette": "FLIGHTSIM-1984.json",
@@ -1496,7 +1571,9 @@
         "2019/invaders": {
           "@title": "Invaders Boot Sector (2019)",
           "@bootable": true,
-          "@hardware": "/machines/pcx86/ibm/5150/vga/",
+          "@hardware": {
+            "url": "/machines/pcx86/ibm/5150/vga/"
+          },
           "@media": [
             {
               "@diskette": "INVADERS-BOOT.json",
@@ -2228,6 +2305,38 @@
       "c": {
         "@title": "C Compiler",
         "@versions": {
+          "1.03": {
+            "@title": "Microsoft C Compiler 1.03",
+            "@media": [
+              {
+                "@title": "MS C 1.03 Beta (Disk 1)",
+                "@diskette": "MSC103-BETA-DISK1.json",
+                "@format": "PC160K",
+                "@kryoflux": true
+              },
+              {
+                "@title": "MS C 1.03 Beta (Disk 2)",
+                "@diskette": "MSC103-BETA-DISK2.json",
+                "@format": "PC160K",
+                "@kryoflux": true
+              }
+            ]
+          },
+          "1.04": {
+            "@title": "Microsoft C Compiler 1.04",
+            "@media": [
+              {
+                "@title": "MS C 1.04 (Disk 1)",
+                "@diskette": "MSC104-DISK1.json",
+                "@format": "PC160K"
+              },
+              {
+                "@title": "MS C 1.04 (Disk 2)",
+                "@diskette": "MSC104-DISK2.json",
+                "@format": "PC160K"
+              }
+            ]
+          },
           "2.03": {
             "@title": "Microsoft C Compiler 2.03",
             "@media": [
@@ -3657,6 +3766,37 @@
             }
           ]
         },
+        "inside_the_ibm_pc": {
+          "@title": "Inside the IBM PC",
+          "@media": [
+            {
+              "@title": "Inside the IBM PC (Disk 1)",
+              "@diskette": "INSIDE-THE-IBM-PC-1A.json",
+              "@kryoflux": true
+            },
+            {
+              "@title": "Inside the IBM PC (Disk 2)",
+              "@diskette": "INSIDE-THE-IBM-PC-1B.json",
+              "@kryoflux": true
+            },
+            {
+              "@title": "Inside the IBM PC (Disk 3)",
+              "@diskette": "INSIDE-THE-IBM-PC-2A.json"
+            }
+          ],
+          "@documents": [
+            {
+              "@title": "Inside the IBM PC (1983)",
+              "@file": "Inside_the_IBM_PC-1983.pdf",
+              "@link": "/software/pcx86/sw/books/inside_the_ibm_pc/",
+              "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9heNXH482S8MFYjo4LQ?e=URcAbM",
+              "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2194679&authkey=ABB7WIsESPdRXgY&em=2",
+              "@cover": "/documents/books/programming/covers/Inside_the_IBM_PC-1983.jpg",
+              "@source": "PCjs",
+              "tags": "norton"
+            }
+          ]
+        },
         "unauthorized_windows_95": {
           "@title": "Unauthorized Windows 95",
           "@media": [
@@ -5060,6 +5200,7 @@
         "@versions": {
           "1.10": {
             "@title": "COMPAQ MS-DOS 1.10",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "COMPAQ MS-DOS 1.10 Rev B",
@@ -5093,6 +5234,7 @@
           },
           "1.11": {
             "@title": "COMPAQ MS-DOS 1.11",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "COMPAQ MS-DOS 1.11",
@@ -5103,6 +5245,7 @@
           },
           "1.12": {
             "@title": "COMPAQ MS-DOS 1.12",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "COMPAQ MS-DOS 1.12",
@@ -5113,6 +5256,7 @@
           },
           "2.11": {
             "@title": "COMPAQ MS-DOS 2.11",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "COMPAQ MS-DOS 2.11",
@@ -5146,6 +5290,7 @@
           },
           "2.12": {
             "@title": "COMPAQ MS-DOS 2.12",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "COMPAQ MS-DOS 2.12",
@@ -5156,6 +5301,7 @@
           },
           "3.00": {
             "@title": "COMPAQ MS-DOS 3.00",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "COMPAQ MS-DOS 3.00 (Disk 1)",
@@ -5171,6 +5317,7 @@
           },
           "3.10": {
             "@title": "COMPAQ MS-DOS 3.10",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "COMPAQ MS-DOS 3.10 (Disk 1)",
@@ -5196,6 +5343,7 @@
           },
           "3.31": {
             "@title": "COMPAQ MS-DOS 3.31",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "COMPAQ MS-DOS 3.31 (Disk 1)",
@@ -5241,6 +5389,7 @@
         "@versions": {
           "3.31": {
             "@title": "DR DOS 3.31",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "DR DOS 3.31",
@@ -5251,6 +5400,7 @@
           },
           "3.32": {
             "@title": "DR DOS 3.32",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "DR DOS 3.32",
@@ -5261,6 +5411,7 @@
           },
           "3.33": {
             "@title": "DR DOS 3.33",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "DR DOS 3.33",
@@ -5271,6 +5422,7 @@
           },
           "3.34": {
             "@title": "DR DOS 3.34",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "DR DOS 3.34",
@@ -5281,6 +5433,7 @@
           },
           "3.40": {
             "@title": "DR DOS 3.40",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "DR DOS 3.40 (Disk 1)",
@@ -5296,6 +5449,7 @@
           },
           "3.41": {
             "@title": "DR DOS 3.41",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "DR DOS 3.41 (Disk 1)",
@@ -5311,6 +5465,7 @@
           },
           "5.00": {
             "@title": "DR DOS 5.00",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "DR DOS 5.00 (Disk 1)",
@@ -5336,6 +5491,7 @@
           },
           "6.00": {
             "@title": "DR DOS 6.00",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "DR DOS 6.00 (360K Disk 1)",
@@ -5406,6 +5562,7 @@
         "@versions": {
           "0.90": {
             "@title": "PC DOS 0.90",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "PCDOS090.json",
@@ -5415,6 +5572,7 @@
           },
           "1.00": {
             "@title": "PC DOS 1.00",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "PCDOS100.json",
@@ -5433,6 +5591,7 @@
           },
           "1.10": {
             "@title": "PC DOS 1.10",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "PCDOS110.json",
@@ -5458,11 +5617,11 @@
           },
           "2.00": {
             "@title": "PC DOS 2.00",
-            "@todo": {
-              "@bootable": true,
-              "@hardware": "/machines/pcx86/ibm/5160/cga/",
-              "@note": "It would be nice to have an Explorer UI option that defaults to the software's own page, but also allows you to launch it on appropriate hardware; but for now, the above two options are effectively disabled for this software."
+            "@bootable": true,
+            "@hardware": {
+              "machine": "/machines/pcx86/ibm/5160/cga/"
             },
+            "@todo": "Need an Explorer UI option that defaults to the software's own page, but also allows you to launch it with an appropriate hardware url; for now, the hardware 'url' is disabled, by renaming it to 'machine' instead.",
             "@media": [
               {
                 "@title": "PC DOS 2.00 (Disk 1)",
@@ -5487,6 +5646,7 @@
           },
           "2.10": {
             "@title": "PC DOS 2.10",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "PC DOS 2.10 (Disk 1)",
@@ -5502,6 +5662,7 @@
           },
           "3.00": {
             "@title": "PC DOS 3.00",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "PC DOS 3.00 (Disk 1)",
@@ -5517,6 +5678,7 @@
           },
           "3.10": {
             "@title": "PC DOS 3.10",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "PC DOS 3.10 (Disk 1)",
@@ -5537,6 +5699,7 @@
           },
           "3.20": {
             "@title": "PC DOS 3.20",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "PC DOS 3.20 (Disk 1)",
@@ -5557,6 +5720,7 @@
           },
           "3.30": {
             "@title": "PC DOS 3.30",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "PC DOS 3.30 (Disk 1)",
@@ -5582,6 +5746,7 @@
           },
           "4.00": {
             "@title": "PC DOS 4.00",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "PC DOS 4.00 (Disk 1)",
@@ -5617,6 +5782,7 @@
           },
           "4.01": {
             "@title": "PC DOS 4.01",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "PC DOS 4.01 (Disk 1)",
@@ -5632,6 +5798,7 @@
           },
           "5.00": {
             "@title": "PC DOS 5.00",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "PC DOS 5.00 (Disk 1)",
@@ -5652,6 +5819,7 @@
           },
           "5.02": {
             "@title": "PC DOS 5.02",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "PC DOS 5.02 (Disk 1)",
@@ -5672,6 +5840,7 @@
           },
           "6.10": {
             "@title": "PC DOS 6.10",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "PC DOS 6.10 (Disk 1)",
@@ -5697,6 +5866,7 @@
           },
           "6.30": {
             "@title": "PC DOS 6.30",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "PC DOS 6.30 (Disk 1)",
@@ -5727,6 +5897,7 @@
           },
           "7.00": {
             "@title": "PC DOS 7.00",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "PC DOS 7.00 (Disk 1)",
@@ -5802,6 +5973,7 @@
           },
           "3.20": {
             "@title": "MS-DOS 3.20",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "MS-DOS 3.20 (Disk 1)",
@@ -5828,6 +6000,7 @@
           },
           "3.21": {
             "@title": "MS-DOS 3.21",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "MS-DOS 3.21 (Disk 1)",
@@ -5843,6 +6016,7 @@
           },
           "3.30": {
             "@title": "MS-DOS 3.30",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "MS-DOS 3.30 (Disk 1)",
@@ -5858,6 +6032,7 @@
           },
           "3.31": {
             "@title": "MS-DOS 3.31",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "MS-DOS 3.31 (1.44M Disk)",
@@ -5868,6 +6043,7 @@
           },
           "4.00": {
             "@title": "MS-DOS 4.00",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "MS-DOS 4.00 (Disk 1)",
@@ -5903,6 +6079,7 @@
           },
           "4.01": {
             "@title": "MS-DOS 4.01",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "MS-DOS 4.01 (360K Disk 1)",
@@ -5953,6 +6130,7 @@
           },
           "4.0M": {
             "@title": "MS-DOS 4.0M",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "MS-DOS 4.0M (Disk 1)",
@@ -5968,6 +6146,7 @@
           },
           "5.00": {
             "@title": "MS-DOS 5.00",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "MS-DOS 5.00 (360K Disk 1)",
@@ -6013,6 +6192,7 @@
           },
           "6.00": {
             "@title": "MS-DOS 6.00",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "MS-DOS 6.00 (1.2M Disk 1)",
@@ -6053,6 +6233,7 @@
           },
           "6.20": {
             "@title": "MS-DOS 6.20",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "MS-DOS 6.20 (1.2M Disk 1)",
@@ -6103,6 +6284,7 @@
           },
           "6.22": {
             "@title": "MS-DOS 6.22",
+            "@bootable": true,
             "@media": [
               {
                 "@title": "MS-DOS 6.22 (1.2M Boot)",
@@ -6155,7 +6337,7 @@
       }
     },
     "ext": {
-      "@title": "Extenders",
+      "@title": "DOS Extensions",
       "ibm": {
         "@title": "IBM",
         "topview": {
@@ -6211,8 +6393,10 @@
           "@versions": {
             "1.00": {
               "@title": "MS-DOS Manager 1.00",
-              "@hardware": "/machines/pcx86/ibm/5170/cga/",
               "@autoType": "\\r\\rB:\\rMANAGER\\r",
+              "@hardware": {
+                "machine": "/machines/pcx86/ibm/5170/cga/"
+              },
               "@media": [
                 {
                   "@title": "MS-DOS Manager 1.00",
@@ -7700,7 +7884,9 @@
             "cga": {
               "@title": "Windows 1.01 (CGA)",
               "@bootable": true,
-              "@hardware": "/machines/pcx86/ibm/5160/cga/",
+              "@hardware": {
+                "url": "/machines/pcx86/ibm/5160/cga/"
+              },
               "@state": "PCDOS200-WIN101-CGA-STATE.json",
               "@media": [
                 {
@@ -7714,7 +7900,9 @@
             "ega": {
               "@title": "Windows 1.01 (EGA)",
               "@bootable": true,
-              "@hardware": "/machines/pcx86/ibm/5160/ega/debugger/?sizeRAM=640",
+              "@hardware": {
+                "url": "/machines/pcx86/ibm/5160/ega/debugger/?sizeRAM=640"
+              },
               "@state": "PCDOS200-WIN101-EGA-STATE.json",
               "@media": [
                 {
@@ -7730,6 +7918,9 @@
         },
         "1.02": {
           "@title": "Microsoft Windows 1.02",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows 1.02 (SETUP)",
@@ -7765,6 +7956,9 @@
         },
         "1.03": {
           "@title": "Microsoft Windows 1.03",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows 1.03 (SETUP)",
@@ -7800,6 +7994,9 @@
         },
         "1.03a": {
           "@title": "Microsoft Windows 1.03a",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows 1.03a (SETUP)",
@@ -7845,6 +8042,9 @@
         },
         "1.03b": {
           "@title": "Microsoft Windows 1.03b",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows 1.03b (SETUP)",
@@ -7880,6 +8080,9 @@
         },
         "1.04": {
           "@title": "Microsoft Windows 1.04",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows 1.04 (SETUP)",
@@ -7920,6 +8123,9 @@
         },
         "2.03": {
           "@title": "Microsoft Windows 2.03",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows 2.03 (SETUP)",
@@ -8015,6 +8221,9 @@
         },
         "2.10": {
           "@title": "Microsoft Windows/386 2.10",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows/386 2.10 (SETUP)",
@@ -8050,6 +8259,9 @@
         },
         "2.11": {
           "@title": "Microsoft Windows 2.11",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows/286 2.11 (SETUP)",

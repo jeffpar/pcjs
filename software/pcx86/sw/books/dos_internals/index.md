@@ -3,11 +3,22 @@ layout: page
 title: DOS Internals
 permalink: /software/pcx86/sw/books/dos_internals/
 redirect_from: /pubs/pc/programming/DOS_Internals/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "DOS Internals (1994)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 by Geoff Chappell (January 1994)
 
 A directory listing of the *DOS Internals* diskette that accompanied the book is provided below.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of DOS Internals (1994)
 

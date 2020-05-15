@@ -2,7 +2,21 @@
 layout: page
 title: Exploring the IBM PC (CGA)
 permalink: /software/pcx86/demo/ibm/exploring/1.00-CGA/
+preview: /software/pcx86/demo/ibm/exploring/images/screenshot.png
+machines:
+  - id: ibm5150
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      A:
+        name: "Exploring the IBM PC (CGA)"
 ---
+
+There are four versions of this software, which you can {% include explorer/link.html title="Explore" %} by clicking the appropriate link on the left.
+For more information about this software, see the [PCjs blog](/blog/2018/04/01/).
+
+{% include machine.html id="ibm5150" %}
 
 ### Directory of Exploring the IBM PC (CGA)
 
@@ -26,3 +40,5 @@ permalink: /software/pcx86/demo/ibm/exploring/1.00-CGA/
     VENDOR-# DO1*        0   7-04-83  12:00a
            15 file(s)     136732 bytes
                            20480 bytes free
+
+![Exploring the IBM PC (CGA)]({{ site.software.diskettes.server }}/pcx86/demo/ibm/exploring/1.00-CGA/EXPLORING-THE-IBM-PC-100-CGA.jpg)

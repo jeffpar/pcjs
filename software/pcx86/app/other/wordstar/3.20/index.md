@@ -38,12 +38,12 @@ You can browse all of the [Additional Materials](#additional-materials) below.
      Volume in drive A has no label
      Directory of A:\
 
-    WS       COM     20480  11-30-79  12:00a
-    WSMSGS   OVR     27264  11-30-79  12:00a
-    WSOVLY1  OVR     40960  11-30-79  12:00a
-    INSTALL  BAS     14848  11-30-79  12:00a
-    WSBAUD   BAS      1152  11-30-79  12:00a
-    EXAMPLE  TXT      9216  11-30-79  12:00a
+    WS       COM     20480   1-01-80  12:00a
+    WSMSGS   OVR     27264   1-01-80  12:00a
+    WSOVLY1  OVR     40960   1-01-80  12:00a
+    INSTALL  BAS     14848   1-01-80  12:00a
+    WSBAUD   BAS      1152   1-01-80  12:00a
+    EXAMPLE  TXT      9216   1-01-80  12:00a
             6 file(s)     113920 bytes
                            45568 bytes free
 
@@ -54,7 +54,7 @@ You can browse all of the [Additional Materials](#additional-materials) below.
      Volume in drive A has no label
      Directory of A:\
 
-    MAILMRGE OVR     11520  11-30-79  12:00a
+    MAILMRGE OVR     11520   1-01-80  12:00a
             1 file(s)      11520 bytes
                           148480 bytes free
 
@@ -69,12 +69,12 @@ You can browse all of the [Additional Materials](#additional-materials) below.
     IBMDOS   COM*     6400   5-07-82  12:00p
     COMMAND  COM      4959   5-07-82  12:00p
     WS       COM     20480   1-01-80  12:02a
-    WSMSGS   OVR     27264  11-30-79  12:00a
-    WSOVLY1  OVR     40960  11-30-79  12:00a
-    EXAMPLE  TXT      9216  11-30-79  12:00a
-    INSTALL  BAS     14848  11-30-79  12:00a
-    WSBAUD   BAS      1152  11-30-79  12:00a
-    MAILMRGE OVR     11520  11-30-79  12:00a
+    WSMSGS   OVR     27264   1-01-80  12:00a
+    WSOVLY1  OVR     40960   1-01-80  12:00a
+    EXAMPLE  TXT      9216   1-01-80  12:00a
+    INSTALL  BAS     14848   1-01-80  12:00a
+    WSBAUD   BAS      1152   1-01-80  12:00a
+    MAILMRGE OVR     11520   1-01-80  12:00a
     SETCLOCK COM       853   9-19-82  12:00a
     INSTALL              0   1-01-80  12:40a
     ASTCLOCK COM       813   9-18-82  12:00a

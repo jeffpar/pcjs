@@ -108,7 +108,7 @@ machines:
            54 file(s)     185506 bytes
                           150528 bytes free
 
-### Directory of MS Word 1.00 (Learning)
+### Directory of MS Word 1.15 (Learning)
 
      Volume in drive A is LEARN WORD
      Directory of A:\

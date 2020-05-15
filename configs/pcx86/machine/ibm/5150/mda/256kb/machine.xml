@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
-<machine id="ibm5150" type="pcx86" border="1" pos="center" background="default">
+<machine id="ibm5150" type="pcx86" border="1" pos="center" background="default" debugger="available">
 	<name pos="center">IBM PC (Model 5150), 256Kb RAM, Monochrome Display</name>
 	<computer id="pc-mda-256k" name="IBM PC"/>
 	<ram id="ramLow" addr="0x00000" test="false" comment="ROM BIOS memory test has been disabled"/>

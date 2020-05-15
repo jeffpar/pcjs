@@ -3,6 +3,15 @@ layout: page
 title: Microsoft C Compiler 5.10 for DOS and OS/2
 permalink: /software/pcx86/lang/microsoft/c/5.10-os2/
 redirect_from: /disks/pcx86/tools/microsoft/c/5.10-os2/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS C 5.10-OS/2 (SETUP)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 NOTE: These disks are referred to internally as version **5.10-OS/2**, because Microsoft released the 5.10
@@ -11,6 +20,8 @@ set containing only files for DOS.  For the latter, see [Microsoft C Compiler 5.
 
 Directory listings of the twelve 360Kb and two 1.2Mb distribution diskettes, a copy of the [PACKING.LST](#packinglst),
 and some [Documentation](#documents) are provided below.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of MS C 5.10-OS/2 (SETUP)
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
-<machine id="ibm5160" type="pcx86" border="1" pos="center" background="default">
+<machine id="ibm5160" type="pcx86" border="1" pos="center" background="default" debugger="available">
 	<name pos="center">IBM PC XT (80188 CPU), 256Kb RAM, 10Mb Hard Disk, Monochrome Display</name>
 	<computer id="xt188-mda-256k" name="IBM PC XT"/>
 	<ram id="ramLow" addr="0x00000" test="false"/>

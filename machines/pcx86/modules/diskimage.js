@@ -2232,9 +2232,15 @@ export default class DiskImage {
     {
         let errors = 0;
         let y = year, m = month, d = day, h = hour, n = minute, s = second;
+        if (m < 0) {
+            m = 0;
+        }
         if (m > 11) {
             m = 11;
             errors++;
+        }
+        if (d < 1) {
+            d = 1;
         }
         if (d > 31) {
             d = 31;
@@ -2708,8 +2714,12 @@ export default class DiskImage {
      *      'l':        size of the sector, in bytes    ('length')
      *      'd':        array of dwords                 ('data')
      *
-     * NOTE: The 'pattern' property is no longer used; if the sector ends with a repeated 32-bit pattern,
-     * we now store that pattern as the last 'd' array value and shrink the array.
+     * NOTE: The 'pattern' property is no longer stored in JSON images; if the sector ends with a repeated
+     * 32-bit pattern, we now store that pattern as the last 'd' array value and shrink the array.
+     *
+     * However, IF the JSON data comes directly from the Disk component, which still uses 'pattern' internally,
+     * we will honor it, and fill out any partial sector with the given pattern, instead of assuming we should
+     * use the last 'd' value.
      *
      * @this {DiskImage}
      * @param {number} iCylinder
@@ -2729,15 +2739,16 @@ export default class DiskImage {
             delete sector[DiskImage.SECTOR.HEAD];
         }
 
-        let dwPattern;
+        let dwPattern = sector['pattern'];
+        delete sector['pattern'];
+
         let idSector = sector[DiskImage.SECTOR.ID];
         if (idSector != undefined) {
             delete sector[DiskImage.SECTOR.ID];
         } else {
+            dwPattern |= 0;
             idSector = sector['sector'];
             delete sector['sector'];
-            dwPattern = sector['pattern'] || 0;
-            delete sector['pattern'];
         }
 
         let cbSector = sector[DiskImage.SECTOR.LENGTH];
@@ -2749,16 +2760,14 @@ export default class DiskImage {
         }
 
         let adw = sector[DiskImage.SECTOR.DATA];
-        if (adw != undefined) {
+        if (adw) {
+            this.assert(adw.length);
             delete sector[DiskImage.SECTOR.DATA];
         } else {
-            let cdw = 0;
             adw = sector['data'];
-            if (adw == undefined) {
-                adw = [dwPattern];
-                this.assert(dwPattern != undefined);
+            if (!adw) {
+                adw = [];
             } else {
-                cdw = adw.length;
                 delete sector['data'];
             }
         }
@@ -2793,6 +2802,7 @@ export default class DiskImage {
                     dw = dwPattern;
                 } else {
                     dw = adw[adw.length-1];
+                    this.assert(dw != undefined);
                 }
                 adw[idw] = dw;
             }
@@ -3059,7 +3069,7 @@ export default class DiskImage {
                 }
             }
             if (this.volTable.length) {
-                sFormat = "PC" + (this.cbDiskData / 1024) + "K";
+                sFormat = "PC" + Math.round(this.cbDiskData / 1024) + "K";
             }
         }
         return sFormat + flags;
@@ -3077,17 +3087,22 @@ export default class DiskImage {
     }
 
     /**
-     * getNewestDate()
+     * getNewestDate(fExecutable)
+     *
+     * Looks through the dates of all the specified files and returns the newest date found, if any.
      *
      * @this {DiskImage}
+     * @param {boolean} [fExecutable] (true for executable files only, false for all files)
      * @returns {Date|undefined}
      */
-    getNewestDate()
+    getNewestDate(fExecutable)
     {
         let date;
         for (let i = 0; i < this.fileTable.length; i++) {
             let file = this.fileTable[i];
-            if (!date || date.getTime() < file.date.getTime()) date = file.date;
+            if (!fExecutable || file.name.indexOf(".COM") > 0 || file.name.indexOf(".EXE") > 0) {
+                if (!date || date.getTime() < file.date.getTime()) date = file.date;
+            }
         }
         return date;
     }
