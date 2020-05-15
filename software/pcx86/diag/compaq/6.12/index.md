@@ -3,6 +3,14 @@ layout: page
 title: COMPAQ Diagnostics 6.12
 permalink: /software/pcx86/diag/compaq/6.12/
 redirect_from: /disks/pcx86/diags/compaq/6.12/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      A:
+        name: "COMPAQ Diagnostics 6.12"
 ---
 
 From `README.CPQ`:
@@ -25,6 +33,8 @@ From `README.CPQ`:
          1.  SETUP
          2.  TEST
          3.  INSPECT
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of COMPAQ Diagnostics 6.12
 

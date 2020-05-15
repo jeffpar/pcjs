@@ -2,6 +2,15 @@
 layout: page
 title: Microsoft Macro Assembler 5.10 (Feb 1988)
 permalink: /software/pcx86/lang/microsoft/masm/5.10x/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS MASM 5.10 (Feb 1988 Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 Directory listings of the five distribution diskettes (plus a 5.10A update disk issued by Microsoft in March 1990)
@@ -9,6 +18,8 @@ from the [PCjs Software Archive](/software/pcjs/) are provided below.
 
 We don't have any documents from this release, but you can browse the [5.10A README.DOC](#contents-of-readmedoc) below,
 as well as the [Microsoft Macro Assembler 5.0 Documentation](/software/pcx86/lang/microsoft/masm/5.00/#documents).
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of MS MASM 5.10 (Feb 1988 Disk 1)
 

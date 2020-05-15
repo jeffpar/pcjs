@@ -2,7 +2,18 @@
 layout: page
 title: Microsoft COBOL 1.12
 permalink: /software/pcx86/lang/microsoft/cobol/1.12/
+machines:
+  - id: ibm5160
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS COBOL 1.12 (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of MS COBOL 1.12 (Disk 1)
 

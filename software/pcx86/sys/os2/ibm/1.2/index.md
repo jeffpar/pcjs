@@ -3,7 +3,18 @@ layout: page
 title: IBM OS/2 1.2
 permalink: /software/pcx86/sys/os2/ibm/1.2/
 redirect_from: /disks/pcx86/os2/ibm/1.2/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "IBM OS/2 1.2 (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of IBM OS/2 1.2 (Install)
 

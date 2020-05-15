@@ -3,6 +3,15 @@ layout: page
 title: Unauthorized Windows 95
 permalink: /software/pcx86/sw/books/unauthorized_windows_95/
 redirect_from: /pubs/pc/programming/Unauthorized_Windows_95/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "Unauthorized Windows 95 (BIN)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 by Andrew Schulman
@@ -11,6 +20,8 @@ Directory listings of disks containing software that accompanied *Unauthorized W
 
   - [Directory of Unauthorized Windows 95 (BIN)](#directory-of-unauthorized-windows-95-bin)
   - [Directory of Unauthorized Windows 95 (SRC)](#directory-of-unauthorized-windows-95-src)
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Unauthorized Windows 95 (BIN)
 

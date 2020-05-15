@@ -3,11 +3,22 @@ layout: page
 title: Microsoft OS/2 1.0
 permalink: /software/pcx86/sys/os2/microsoft/1.0/
 redirect_from: /disks/pcx86/os2/microsoft/1.0/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS OS/2 1.0 (1.2M Install)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 Microsoft OS/2 1.0 was released in December 1987.
 
 Directory listings of the three 1.2Mb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of MS OS/2 1.0 (1.2M Install)
 

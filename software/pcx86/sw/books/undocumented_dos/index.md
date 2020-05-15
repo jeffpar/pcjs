@@ -3,6 +3,15 @@ layout: page
 title: "Undocumented DOS (1st Edition)"
 permalink: /software/pcx86/sw/books/undocumented_dos/
 redirect_from: /pubs/pc/programming/Undocumented_DOS/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "Undocumented DOS (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 by Schulman, Michels, Kyle, Paterson, Maxey, Brown
@@ -115,6 +124,8 @@ by Schulman, Brown, Maxey, Michels, Kyle
 	                                       andrew@pharlap.com
 	                                       uunet!pharlap!andrew
 	                                       CIS: 76320,302
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Undocumented DOS (Disk 1)
 

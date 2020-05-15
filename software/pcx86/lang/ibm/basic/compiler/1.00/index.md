@@ -3,7 +3,18 @@ layout: page
 title: IBM BASIC Compiler 1.00
 permalink: /software/pcx86/lang/ibm/basic/compiler/1.00/
 redirect_from: /disks/pcx86/tools/ibm/basic/compiler/1.00/
+machines:
+  - id: ibm5150
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "IBM BASIC Compiler 1.00 (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
+
+{% include machine.html id="ibm5150" %}
 
 ### Directory of IBM BASIC Compiler 1.00 (Disk 1)
 

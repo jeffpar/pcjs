@@ -3,6 +3,14 @@ layout: page
 title: COMPAQ Diagnostics 5.08
 permalink: /software/pcx86/diag/compaq/5.08/
 redirect_from: /disks/pcx86/diags/compaq/5.08/
+machines:
+  - id: deskpro386
+    type: pcx86
+    config: /configs/pcx86/machine/compaq/deskpro386/cga/640kb/machine.xml
+    autoGen: true
+    autoMount:
+      A:
+        name: "COMPAQ Diagnostics 5.08"
 ---
 
 This early COMPAQ Diagnostics diskette from the PCjs archives is noteworthy because it contains
@@ -28,6 +36,8 @@ From `README.CPQ`:
          2.  Information about the SETUP program.
     
          3.  Information about the ROMREV program.
+
+{% include machine.html id="deskpro386" %}
 
 ### Directory of COMPAQ Diagnostics 5.08
 

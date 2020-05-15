@@ -3,6 +3,14 @@ layout: page
 title: "COMPAQ User Programs (1986)"
 permalink: /software/pcx86/diag/compaq/1986/
 redirect_from: /disks/pcx86/diags/compaq/utilities/1986/
+machines:
+  - id: deskpro386
+    type: pcx86
+    config: /configs/pcx86/machine/compaq/deskpro386/cga/640kb/machine.xml
+    autoGen: true
+    autoMount:
+      A:
+        name: "COMPAQ DeskPro 386 (1986)"
 ---
 
 ### COMPAQ DeskPro 386 (1986)
@@ -35,6 +43,8 @@ From `README.CPQ`:
         4.  Information about the CEMM.COM utility.
     
         5.  Information about the VDISK.SYS device driver.
+
+{% include machine.html id="deskpro386" %}
 
 ### Directory of COMPAQ DeskPro 386 (1986)
 

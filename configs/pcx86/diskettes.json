@@ -1141,6 +1141,9 @@
         "5.02": {
           "@title": "COMPAQ Diagnostics 5.02",
           "@hidden": true,
+          "@hardware": {
+            "options": "compaq,deskpro386"
+          },
           "@media": [
             {
               "@title": "COMPAQ Diagnostics 5.02",
@@ -1158,6 +1161,10 @@
         },
         "5.08": {
           "@title": "COMPAQ Diagnostics 5.08",
+          "@bootable": true,
+          "@hardware": {
+            "options": "compaq,deskpro386"
+          },
           "@media": [
             {
               "@diskette": "COMPAQ-DIAGS-508-012988-REVK.json",
@@ -1168,6 +1175,7 @@
         },
         "6.12": {
           "@title": "COMPAQ Diagnostics 6.12",
+          "@bootable": true,
           "@media": [
             {
               "@diskette": "COMPAQ-DIAGS-612-062189.json",
@@ -1177,6 +1185,10 @@
         },
         "1986": {
           "@title": "COMPAQ DeskPro 386 (1986)",
+          "@bootable": true,
+          "@hardware": {
+            "options": "compaq,deskpro386"
+          },
           "@media": [
             {
               "@diskette": "COMPAQ-DESKPRO386-SUPP-1986-08-08.json",
@@ -1186,6 +1198,10 @@
         },
         "1987": {
           "@title": "COMPAQ User Programs (1987)",
+          "@bootable": true,
+          "@hardware": {
+            "options": "compaq,deskpro386"
+          },
           "@media": [
             {
               "@diskette": "COMPAQ-UTILS-506-110387-REVG.json",
@@ -1196,6 +1212,10 @@
         },
         "1989": {
           "@title": "COMPAQ User Programs (1989)",
+          "@bootable": true,
+          "@hardware": {
+            "options": "compaq,deskpro386"
+          },
           "@media": [
             {
               "@diskette": "COMPAQ-UTILS-072789.json",
@@ -1212,6 +1232,7 @@
         "@versions": {
           "1.00": {
             "@title": "IBM PC Diagnostics 1.00",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-DIAG-100.json",
@@ -1221,6 +1242,7 @@
           },
           "1.02": {
             "@title": "IBM PC Diagnostics 1.02",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-DIAG-102.json",
@@ -1230,6 +1252,7 @@
           },
           "1.02A": {
             "@title": "IBM PC Diagnostics 1.02 (Adv)",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-DIAG-102A.json",
@@ -1239,6 +1262,7 @@
           },
           "2.02": {
             "@title": "IBM PC Diagnostics 2.02",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-DIAG-202.json",
@@ -1248,6 +1272,7 @@
           },
           "2.05": {
             "@title": "IBM PC Diagnostics 2.05",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-DIAG-205.json",
@@ -1258,6 +1283,7 @@
           },
           "2.05A": {
             "@title": "IBM PC Diagnostics 2.05 (Adv)",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-DIAG-205A.json",
@@ -1268,6 +1294,7 @@
           },
           "2.07": {
             "@title": "IBM PC Diagnostics 2.07",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-DIAG-207.json",
@@ -1277,6 +1304,7 @@
           },
           "2.20A": {
             "@title": "IBM PC Diagnostics 2.20 (Adv)",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5150-5155-5160-DIAG-220A.json",
@@ -1291,6 +1319,7 @@
         "@versions": {
           "1.01A": {
             "@title": "IBM PC AT Diagnostics 1.01 (Adv)",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5170-DIAG-101A.json",
@@ -1301,6 +1330,7 @@
           },
           "1.02": {
             "@title": "IBM PC AT Diagnostics 1.02",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5170-DIAG-102.json",
@@ -1310,6 +1340,7 @@
           },
           "2.00": {
             "@title": "IBM PC AT Diagnostics 2.00",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5170-DIAG-200.json",
@@ -1319,6 +1350,7 @@
           },
           "2.07A": {
             "@title": "IBM PC AT Diagnostics 2.07 (Adv)",
+            "@bootable": true,
             "@media": [
               {
                 "@diskette": "5170-DIAG-207A.json",
@@ -1480,6 +1512,9 @@
         },
         "flightsim/1984": {
           "@title": "Flight Simulator (1984)",
+          "@hardware": {
+            "options": "ibm,5160"
+          },
           "@media": [
             {
               "@diskette": "FLIGHTSIM-1984.json",
@@ -5586,7 +5621,7 @@
             "@hardware": {
               "machine": "/machines/pcx86/ibm/5160/cga/"
             },
-            "@todo": "Need an Explorer UI option that defaults to the software's own page, but also allows you to launch it with an appropriate hardware url; for now, the hardware url is disabled, by renaming it to 'machine' instead.",
+            "@todo": "Need an Explorer UI option that defaults to the software's own page, but also allows you to launch it with an appropriate hardware url; for now, the hardware 'url' is disabled, by renaming it to 'machine' instead.",
             "@media": [
               {
                 "@title": "PC DOS 2.00 (Disk 1)",
@@ -6358,10 +6393,10 @@
           "@versions": {
             "1.00": {
               "@title": "MS-DOS Manager 1.00",
-              "@hardware": {
-                "url": "/machines/pcx86/ibm/5170/cga/"
-              },
               "@autoType": "\\r\\rB:\\rMANAGER\\r",
+              "@hardware": {
+                "machine": "/machines/pcx86/ibm/5170/cga/"
+              },
               "@media": [
                 {
                   "@title": "MS-DOS Manager 1.00",

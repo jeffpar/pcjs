@@ -3,11 +3,22 @@ layout: page
 title: Borland Turbo Pascal 4.00
 permalink: /software/pcx86/lang/borland/pascal/4.00/
 redirect_from: /disks/pcx86/tools/borland/pascal/4.00/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "Borland Turbo Pascal 4.00 (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 The following documentation is available online:
 
 - [Turbo Pascal Version 4.0 Owner's Handbook (1987)](http://bitsavers.org/pdf/borland/turbo_pascal/Turbo_Pascal_Version_4.0_Owners_Manual_1987.pdf)
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Borland Turbo Pascal 4.00 (Disk 1)
 

@@ -70506,6 +70506,15 @@ class JSONLib {
                          *      'config':   a specific configuration file (eg, "/configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml")
                          *      'drives':   one of more hard drive configs (eg, "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]")
                          *      'options':  assorted hardware options (eg, "mouse")
+                         *      'autoType': if present, overrides any '@autoType' set for the software
+                         *
+                         * The @hardware 'url' parameter is currently only used by /_includes/explorer/software.html, which will craft
+                         * a link to the specified machine URL with the first software diskette loaded into one of the disk drives; however,
+                         * that feature isn't used much anymore, since we use "diskimage.js --all --checkpage --rebuild" to build dedicated
+                         * pages for most every piece of software.
+                         *
+                         * The 'url' property may take on significance again if we ever provide some kind of UI for launching software
+                         * EITHER with a generic machine OR on a dedicated page.
                          */
                         if (!COMPILED) {
                             let title = release['@title'] || group['@title'];
@@ -70516,8 +70525,8 @@ class JSONLib {
                             let normalize = item['@normalize'];
                             let hidden = group['@hidden'] || release['@hidden'];
                             let bootable = release['@bootable'];
-                            let hardware = release['@hardware'];
                             let autoType = release['@autoType'];
+                            let hardware = release['@hardware'];
                             if (title) diskette['title'] = title;                       // the software title (as opposed to the diskette name)
                             if (format) diskette['format'] = format;                    // eg, "PC360K"
                             if (archive) diskette['archive'] = archive;                 // eg, "folder", or the name of a specific ".img" file, etc
@@ -70527,8 +70536,8 @@ class JSONLib {
                             if (normalize) diskette['normalize'] = true;                // true if a line-endings in known text files should be "normalized"
                             if (hidden) diskette['hidden'] = true;                      // true if hidden from the Explorer (still in the library)
                             if (bootable) diskette['bootable'] = true;                  // true if diskette marked bootable
-                            if (hardware) diskette['hardware'] = hardware;              // hardware configuration
                             if (autoType) diskette['autoType'] = autoType;              // optional custom autoType string
+                            if (hardware) diskette['hardware'] = hardware;              // hardware configuration
                         }
                         if (!item['@localonly'] || hostName == "localhost") {
                             aDiskettes.push(diskette);

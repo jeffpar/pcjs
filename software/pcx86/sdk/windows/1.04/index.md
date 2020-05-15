@@ -3,9 +3,20 @@ layout: page
 title: Microsoft Windows SDK 1.04
 permalink: /software/pcx86/sdk/windows/1.04/
 redirect_from: /disks/pcx86/tools/microsoft/windows/sdk/1.04/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "Windows SDK 1.04 (UTIL 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 Directory listings of the seven 360Kb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Windows SDK 1.04 (UTIL 1)
 

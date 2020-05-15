@@ -2,9 +2,20 @@
 layout: page
 title: IBM COBOL 1.00
 permalink: /software/pcx86/lang/ibm/cobol/1.00/
+machines:
+  - id: ibm5150
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "IBM COBOL 1.00 (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 [Documentation](#documents) and directory listings of the 160Kb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5150" %}
 
 ### Directory of IBM COBOL 1.00 (Disk 1)
 

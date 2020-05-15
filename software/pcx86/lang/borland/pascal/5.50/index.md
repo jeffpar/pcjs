@@ -3,11 +3,22 @@ layout: page
 title: Borland Turbo Pascal 5.50
 permalink: /software/pcx86/lang/borland/pascal/5.50/
 redirect_from: /disks/pcx86/tools/borland/pascal/5.50/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "Borland Turbo Pascal 5.50 (INSTALL)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 The following documentation is available online:
 
 - [Turbo Pascal Version 5.5 Object-Oriented Programming Guide (1989)](http://bitsavers.org/pdf/borland/turbo_pascal/Turbo_Pascal_Version_5.5_Object-Oriented_Programming_Guide_1989.pdf)
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Borland Turbo Pascal 5.50 (INSTALL)
 

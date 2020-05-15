@@ -3,7 +3,18 @@ layout: page
 title: QEMM-386 v5.13
 permalink: /software/pcx86/sys/ext/quarterdeck/qemm386/5.13/
 redirect_from: /disks/pcx86/tools/other/qemm386/5.13/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "QEMM-386 5.13"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of QEMM-386 5.13
 

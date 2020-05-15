@@ -24,6 +24,11 @@ let sprintf = device.sprintf.bind(device);
 let stdlib = new StdLib();
 let moduleDir, rootDir, nMaxFiles, sFileIndex;
 
+function printError(err)
+{
+    printf("%s\n", err.message);
+}
+
 /*
  * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
  * A warning is always displayed when we replace line endings in any file being copied to a disk image.
@@ -119,7 +124,7 @@ function existsFile(sFile)
         sFile = getFullPath(sFile);
         return fs.existsSync(sFile);
     } catch(err) {
-        printf("error: %s\n", err.message);
+        printError(err);
     }
     return false;
 }
@@ -403,7 +408,7 @@ function processDisk(di, diskFile, argv, diskette)
          * Step 1: make sure there's a machine present to load/examine/test the software.
          */
         let sMachineEmbed = "";
-        let matchFrontMatter = sIndexNew.match(/^---\n([\s\S]*?\n)---\n/);
+        let matchFrontMatter = sIndexNew.match(/^---\n([\s\S]*?\n)(undefined|)---\n/);
         if (matchFrontMatter && diskette) {
             let sFrontMatter = matchFrontMatter[1];
             let matchMachines = sFrontMatter.match(/^machines: *\n([\s\S]*?\n)(\S|$)/m);
@@ -438,6 +443,10 @@ function processDisk(di, diskFile, argv, diskette)
                  * Browse diskettes.json for more examples (look for "@hardware" properties).
                  *
                  * TODO: Finish support for all of the above preferences (eg, mouse support, serial and parallel ports, etc).
+                 *
+                 * TODO: Consider using @hardware 'machine' property to allow a specific machine to be used; when that property is
+                 * named 'url' instead, the /_includes/explorer/software.html template uses it to create a hardware_url link for the
+                 * software, but we REALLY prefer having dedicated pages for each piece of software.
                  */
                 let diskSize = di.getSize() / 1024;
                 let dateNewest = di.getNewestDate(true);
@@ -471,7 +480,8 @@ function processDisk(di, diskFile, argv, diskette)
                  * Now that we have all the raw inputs ("ingredients"), let's toss some defaults together.
                  */
                 let sAutoGen = "    autoGen: true\n";
-                let sAutoType = diskette.autoType || "";
+                let sAutoType = hardware.autoType;
+                if (sAutoType == undefined) sAutoType = diskette.autoType;
                 let manufacturer = findOption(["ibm","compaq"]);
                 let sDefaultIBMModel = diskSize > 360 || yearNewest >= 1986? "5170" : (yearNewest >= 1984? "5160" : "5150");
                 let sDefaultCOMPAQModel = diskSize > 360 || yearNewest >= 1986? "deskpro386" : "portable";
@@ -489,12 +499,12 @@ function processDisk(di, diskFile, argv, diskette)
                         bootDisk = demoDisk;
                         demoDisk = "";
                     } else {
-                        sAutoType = "$date\\r$time\\rB:\\rDIR\\r";
+                        if (sAutoType == undefined) sAutoType = "$date\\r$time\\rB:\\rDIR\\r";
                     }
                     let sMachineID = (model.length <= 4? manufacturer : "") + model;
                     let sMachine = "  - id: " + sMachineID + "\n    type: pcx86\n    config: " + configFile + "\n";
                     for (let prop in hardware) {
-                        if (prop == "config" || prop == "machine" || prop == "options" || prop == "url") continue;
+                        if (prop == "config" || prop == "options" || prop == "url" || prop[0] == '@') continue;
                         let chQuote = "";
                         if (prop == "drives") {
                             chQuote = "'";
@@ -507,8 +517,8 @@ function processDisk(di, diskFile, argv, diskette)
                     if (demoDisk) demoDisk = "      B:\n        name: \"" + demoDisk + "\"\n";
                     let sAutoMount = "    autoMount:\n" + bootDisk + demoDisk;
                     if (sAutoType) sAutoType = "    autoType: " + sAutoType + "\n";
-                    sFrontMatter += "machines:\n" + sMachine + sAutoGen + sAutoMount + sAutoType;
-                    sIndexNew = sIndexNew.replace(matchFrontMatter[1], sFrontMatter);
+                    sFrontMatter += "machines:\n" + sMachine + sAutoGen + sAutoMount + (sAutoType || "");
+                    sIndexNew = sIndexNew.replace(matchFrontMatter[1] + matchFrontMatter[2], sFrontMatter);
                     sMachineEmbed = "\n{% include machine.html id=\"" + sMachineID + "\" %}\n";
                 }
             }
@@ -671,7 +681,7 @@ function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
             di = null;
         }
     } catch(err) {
-        printf("error: %s\n", err.message);
+        printError(err);
         di = null;
     }
     return di;
@@ -807,7 +817,7 @@ function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
             }
         }
     } catch(err) {
-        printf("error: %s\n", err.message);
+        printError(err);
         return null;
     }
     return di;
@@ -829,7 +839,7 @@ function readFile(sFile, encoding = "utf8")
             data = fs.readFileSync(sFile, encoding);
             if (!encoding) data = new DataBuffer(data);
         } catch(err) {
-            printf("error: %s\n", err.message);
+            printError(err);
         }
     }
     return data;
@@ -848,7 +858,7 @@ function readJSON(sFile)
         data = readFile(sFile);
         json = JSON.parse(data);
     } catch(err) {
-        printf("error: %s\n", err.message);
+        printError(err);
     }
     return json;
 }
@@ -891,7 +901,7 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
         }
     }
     catch(err) {
-        printf("error: %s\n", err.message);
+        printError(err);
     }
 }
 
@@ -917,7 +927,7 @@ function writeFile(sFile, data, fCreateDir)
             fs.writeFileSync(sFile, data);
             return true;
         } catch(err) {
-            printf("error: %s\n", err.message);
+            printError(err);
         }
     }
     return false;
@@ -928,7 +938,7 @@ function writeFile(sFile, data, fCreateDir)
  *
  * Usage:
  *
- *      node di.js [input disk image or directory] [output disk image] [options]
+ *      node diskimage.js [input disk image or directory] [output disk image] [options]
  *
  * @param {number} argc
  * @param {Array} argv
@@ -936,10 +946,14 @@ function writeFile(sFile, data, fCreateDir)
 function main(argc, argv)
 {
     let argv0 = argv[0].split(' ');
+    let options = argv0.slice(1).join(' ');
+
     Device.DEBUG = !!argv['debug'];
     moduleDir = path.dirname(argv0[0]);
     rootDir = path.join(moduleDir, "../../..");
-    printf("DiskImage v%s\noptions: %s\n", Device.VERSION, argv0.slice(1).join(' '));
+
+    printf("DiskImage v%s\n", Device.VERSION);
+    if (options) printf("options: %s\n", options);
 
     if (Device.DEBUG) {
         device.setMessages(Device.MESSAGE.FILE + Device.MESSAGE.INFO, true);

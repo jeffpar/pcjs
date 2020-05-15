@@ -5,9 +5,20 @@ permalink: /software/pcx86/lang/microsoft/masm/6.11/
 redirect_from:
   - /disks/pcx86/tools/microsoft/masm/6.11/
   - /disks/pc/tools/microsoft/masm/6.11/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS Macro Assembler 6.11 (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 Directory listings of the five 1.44Mb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of MS Macro Assembler 6.11 (Disk 1)
 

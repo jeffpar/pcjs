@@ -3,11 +3,22 @@ layout: page
 title: The Undocumented PC
 permalink: /software/pcx86/sw/books/undocumented_pc/
 redirect_from: /pubs/pc/programming/The_Undocumented_PC/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "Undocumented PC"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 by Frank van Gilluwe (December 1996)
 
 A directory listing of *The Undocumented PC* diskette that accompanied the book is provided below.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Undocumented PC
 

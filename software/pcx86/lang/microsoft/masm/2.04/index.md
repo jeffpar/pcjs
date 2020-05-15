@@ -3,9 +3,20 @@ layout: page
 title: Microsoft Macro Assembler 2.04
 permalink: /software/pcx86/lang/microsoft/masm/2.04/
 redirect_from: /disks/pcx86/tools/microsoft/masm/2.04/
+machines:
+  - id: ibm5150
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS Macro Assembler 2.04"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 Directory listing of a recreated 160Kb diskette is provided below.
+
+{% include machine.html id="ibm5150" %}
 
 ### Directory of MS Macro Assembler 2.04
 

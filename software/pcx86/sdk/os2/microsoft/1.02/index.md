@@ -5,6 +5,15 @@ permalink: /software/pcx86/sdk/os2/microsoft/1.02/
 redirect_from:
   - /disks/pcx86/tools/microsoft/os2/sdk/1.02/
   - /pubs/pc/software/os2/microsoft/ptk10/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS OS/2 SDK 1.02 (INSTALL)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 This copy of the Microsoft OS/2 SDK (1.02) was obtained from the [WinWorld](https://winworldpc.com/product/os-2-1x/10)
@@ -81,6 +90,8 @@ the missing **NETWORK** disk; specifically:
 
 but you aren't likely to need those.  We will rebuild a copy of that missing disk from other sources and
 include it with the SDK diskettes at a later date.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of MS OS/2 SDK 1.02 (INSTALL)
 

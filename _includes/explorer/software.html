@@ -24,7 +24,9 @@
               the version key *is* the version number, and if a no @title is present for a version,
               a default title (product @title plus version key) will be used instead.
 
-              @hardware: an optional entry inside a version to define a default hardware configuration.
+              @hardware: an optional entry inside a version to define a default hardware configuration;
+              if that entry contains a 'url' property, we will use it to generate a link (hardware_url) for
+              running the software.
 
               @autoMount: an optional entry inside a version to define a "custom" autoMount URL parameter,
               instead of the one automatically generated from the list of @media items; eg:

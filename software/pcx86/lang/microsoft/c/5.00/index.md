@@ -3,11 +3,22 @@ layout: page
 title: Microsoft C Compiler 5.0
 permalink: /software/pcx86/lang/microsoft/c/5.00/
 redirect_from: /disks/pcx86/tools/microsoft/c/5.00/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS C 5.00 (SETUP)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 [Documentation](#documents) and directory listings of the four 360Kb distribution diskettes are provided below.
 
 NOTE: This appears to be an *incomplete* set.
+
+{% include machine.html id="ibm5170" %}
 
 ### Directory of MS C 5.00 (SETUP)
 

@@ -5,6 +5,15 @@ permalink: /software/pcx86/lang/microsoft/basic/compiler/5.36/
 redirect_from:
   - /disks/pcx86/tools/microsoft/basic/compiler/5.36/
   - /disks/pcx86/tools/microsoft/basic/compiler/
+machines:
+  - id: ibm5160
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS BASIC Compiler 5.36"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 The only version of the Microsoft BASIC Compiler we have added to the project so far is
@@ -13,6 +22,8 @@ It is not an original distribution disk, and it contains a number of unrelated f
 from a demo version of BetterBASIC, a competing product from Summit Software Technology, Inc.
 
 See the [IBM BASIC Compiler](/software/pcx86/lang/ibm/basic/compiler/1.00/), which was also produced by Microsoft.
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of MS BASIC Compiler 5.36
 

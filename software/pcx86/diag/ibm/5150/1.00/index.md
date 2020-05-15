@@ -34,7 +34,7 @@ This disk displays the following startup messages:
      Volume in drive A has no label
      Directory of A:\
 
-    IBMBIO   COM*     1920  11-30-79  12:00a
+    IBMBIO   COM*     1920   1-01-80  12:00a
     IBMDOS   COM*     6211   7-09-81  12:00a
     COMMAND  COM       895   7-22-81  12:00a
     DFORMAT  COM      2399   8-05-81  12:00a

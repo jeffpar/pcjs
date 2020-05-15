@@ -4,7 +4,18 @@ title: Microsoft Flight Simulator (1984)
 permalink: /software/pcx86/game/microsoft/flightsim/1984/
 redirect_from:
   - /disks/pcx86/games/microsoft/flightsim/
+machines:
+  - id: ibm5160
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "Flight Simulator (1984)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of Flight Simulator (1984)
 

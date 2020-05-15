@@ -3,9 +3,20 @@ layout: page
 title: Microsoft C Compiler 3.00
 permalink: /software/pcx86/lang/microsoft/c/3.00/
 redirect_from: /disks/pcx86/tools/microsoft/c/3.00/
+machines:
+  - id: ibm5160
+    type: pcx86
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    autoGen: true
+    autoMount:
+      B:
+        name: "MS C 3.00 (Disk 1)"
+    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 Directory listings of the three 360Kb distribution diskettes are provided below.
+
+{% include machine.html id="ibm5160" %}
 
 ### Directory of MS C 3.00 (Disk 1)
 
