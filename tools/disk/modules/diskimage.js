@@ -408,7 +408,7 @@ function processDisk(di, diskFile, argv, diskette)
          * Step 1: make sure there's a machine present to load/examine/test the software.
          */
         let sMachineEmbed = "";
-        let matchFrontMatter = sIndexNew.match(/^---\n([\s\S]*?\n)(undefined|)---\n/);
+        let matchFrontMatter = sIndexNew.match(/^---\n([\s\S]*?\n)---\n/);
         if (matchFrontMatter && diskette) {
             let sFrontMatter = matchFrontMatter[1];
             let matchMachines = sFrontMatter.match(/^machines: *\n([\s\S]*?\n)(\S|$)/m);
@@ -444,8 +444,8 @@ function processDisk(di, diskFile, argv, diskette)
                  *
                  * TODO: Finish support for all of the above preferences (eg, mouse support, serial and parallel ports, etc).
                  *
-                 * TODO: Consider using @hardware 'machine' property to allow a specific machine to be used; when that property is
-                 * named 'url' instead, the /_includes/explorer/software.html template uses it to create a hardware_url link for the
+                 * TODO: Consider using the @hardware 'machine' property to allow a specific machine to be used; when that property
+                 * is named 'url' instead, the /_includes/explorer/software.html template uses it to create a hardware_url link for the
                  * software, but we REALLY prefer having dedicated pages for each piece of software.
                  */
                 let diskSize = di.getSize() / 1024;
@@ -504,7 +504,7 @@ function processDisk(di, diskFile, argv, diskette)
                     let sMachineID = (model.length <= 4? manufacturer : "") + model;
                     let sMachine = "  - id: " + sMachineID + "\n    type: pcx86\n    config: " + configFile + "\n";
                     for (let prop in hardware) {
-                        if (prop == "config" || prop == "options" || prop == "url" || prop[0] == '@') continue;
+                        if (prop == "config" || prop == "machine" || prop == "options" || prop == "url" || prop[0] == '@') continue;
                         let chQuote = "";
                         if (prop == "drives") {
                             chQuote = "'";
@@ -518,7 +518,7 @@ function processDisk(di, diskFile, argv, diskette)
                     let sAutoMount = "    autoMount:\n" + bootDisk + demoDisk;
                     if (sAutoType) sAutoType = "    autoType: " + sAutoType + "\n";
                     sFrontMatter += "machines:\n" + sMachine + sAutoGen + sAutoMount + (sAutoType || "");
-                    sIndexNew = sIndexNew.replace(matchFrontMatter[1] + matchFrontMatter[2], sFrontMatter);
+                    sIndexNew = sIndexNew.replace(matchFrontMatter[1], sFrontMatter);
                     sMachineEmbed = "\n{% include machine.html id=\"" + sMachineID + "\" %}\n";
                 }
             }
