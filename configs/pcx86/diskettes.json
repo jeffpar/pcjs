@@ -7881,6 +7881,9 @@
         },
         "1.02": {
           "@title": "Microsoft Windows 1.02",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows 1.02 (SETUP)",
@@ -7916,6 +7919,9 @@
         },
         "1.03": {
           "@title": "Microsoft Windows 1.03",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows 1.03 (SETUP)",
@@ -7951,6 +7957,9 @@
         },
         "1.03a": {
           "@title": "Microsoft Windows 1.03a",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows 1.03a (SETUP)",
@@ -7996,6 +8005,9 @@
         },
         "1.03b": {
           "@title": "Microsoft Windows 1.03b",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows 1.03b (SETUP)",
@@ -8031,6 +8043,9 @@
         },
         "1.04": {
           "@title": "Microsoft Windows 1.04",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows 1.04 (SETUP)",
@@ -8071,6 +8086,9 @@
         },
         "2.03": {
           "@title": "Microsoft Windows 2.03",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows 2.03 (SETUP)",
@@ -8166,6 +8184,9 @@
         },
         "2.10": {
           "@title": "Microsoft Windows/386 2.10",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows/386 2.10 (SETUP)",
@@ -8201,6 +8222,9 @@
         },
         "2.11": {
           "@title": "Microsoft Windows 2.11",
+          "@hardware": {
+            "config": "none"
+          },
           "@media": [
             {
               "@title": "Windows/286 2.11 (SETUP)",

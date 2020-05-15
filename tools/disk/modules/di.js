@@ -481,33 +481,36 @@ function processDisk(di, diskFile, argv, diskette)
                 }[manufacturer]);
                 let video = findOption(["*","mda","cga","ega","vga","vdu"]);
                 let configFile = hardware.config || findConfig("/configs/pcx86/machine/" + manufacturer + "/" + model + "/" + video + "/**/machine.xml");
-                let bootDisk = findOption(["", "DOS"]);
-                let demoDisk = diskette.name;
-                if (diskette.bootable) {
-                    bootDisk = demoDisk;
-                    demoDisk = "";
-                } else {
-                    sAutoType = "$date\\r$time\\rB:\\rDIR\\r";
-                }
-                let sMachineID = (model.length <= 4? manufacturer : "") + model;
-                let sMachine = "  - id: " + sMachineID + "\n    type: pcx86\n    config: " + configFile + "\n";
-                for (let prop in hardware) {
-                    if (prop == "config" || prop == "machine" || prop == "options" || prop == "url") continue;
-                    let chQuote = "";
-                    if (prop == "drives") {
-                        chQuote = "'";
-                        bootDisk = "None";
+                if (configFile == "none") configFile = "";
+                if (configFile) {
+                    let bootDisk = findOption(["", "DOS"]);
+                    let demoDisk = diskette.name;
+                    if (diskette.bootable) {
+                        bootDisk = demoDisk;
+                        demoDisk = "";
+                    } else {
+                        sAutoType = "$date\\r$time\\rB:\\rDIR\\r";
                     }
-                    sMachine += "    " + prop + ": " + chQuote + hardware[prop] + chQuote + "\n";
-                    sAutoType = "";
+                    let sMachineID = (model.length <= 4? manufacturer : "") + model;
+                    let sMachine = "  - id: " + sMachineID + "\n    type: pcx86\n    config: " + configFile + "\n";
+                    for (let prop in hardware) {
+                        if (prop == "config" || prop == "machine" || prop == "options" || prop == "url") continue;
+                        let chQuote = "";
+                        if (prop == "drives") {
+                            chQuote = "'";
+                            bootDisk = "None";
+                        }
+                        sMachine += "    " + prop + ": " + chQuote + hardware[prop] + chQuote + "\n";
+                        sAutoType = "";
+                    }
+                    if (bootDisk) bootDisk = "      A:\n        name: \"" + bootDisk + "\"\n";
+                    if (demoDisk) demoDisk = "      B:\n        name: \"" + demoDisk + "\"\n";
+                    let sAutoMount = "    autoMount:\n" + bootDisk + demoDisk;
+                    if (sAutoType) sAutoType = "    autoType: " + sAutoType + "\n";
+                    sFrontMatter += "machines:\n" + sMachine + sAutoGen + sAutoMount + sAutoType;
+                    sIndexNew = sIndexNew.replace(matchFrontMatter[1], sFrontMatter);
+                    sMachineEmbed = "\n{% include machine.html id=\"" + sMachineID + "\" %}\n";
                 }
-                if (bootDisk) bootDisk = "      A:\n        name: \"" + bootDisk + "\"\n";
-                if (demoDisk) demoDisk = "      B:\n        name: \"" + demoDisk + "\"\n";
-                let sAutoMount = "    autoMount:\n" + bootDisk + demoDisk;
-                if (sAutoType) sAutoType = "    autoType: " + sAutoType + "\n";
-                sFrontMatter += "machines:\n" + sMachine + sAutoGen + sAutoMount + sAutoType;
-                sIndexNew = sIndexNew.replace(matchFrontMatter[1], sFrontMatter);
-                sMachineEmbed = "\n{% include machine.html id=\"" + sMachineID + "\" %}\n";
             }
         }
 
