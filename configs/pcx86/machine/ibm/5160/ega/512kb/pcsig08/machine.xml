@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
 <machine id="pcsig08" type="pcx86" border="1" pos="center" background="default" debugger="available">
-	<name pos="center">IBM PC XT, 128K EGA, 512K RAM, 10Mb Hard Disk (Formatted)</name>
+	<name pos="center">IBM PC XT, 512Kb RAM, 10Mb Hard Disk (Formatted), IBM EGA (128Kb)</name>
 	<computer id="xt-ega-512k" name="IBM PC XT"/>
 	<ram id="ramLow" addr="0x00000" test="false" size="0x80000" comment="0x80000 (512Kb) size overrides SW1|ROM BIOS memory test has been disabled"/>
 	<rom id="romHDC" addr="0xc8000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/hdc/IBM-XEBEC-1982.json"/>
