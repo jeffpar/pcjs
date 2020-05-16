@@ -214,6 +214,9 @@
 			<xsl:value-of select="$APPCLASS"/><xsl:text>-</xsl:text><xsl:value-of select="$component"/><xsl:text> </xsl:text><xsl:value-of select="$APPCLASS"/><xsl:text>-component</xsl:text>
 		</xsl:variable>
 		<div id="{$id}" class="{$componentClass}" style="{$width}{$height}{$pos}{$left}{$top}{$padding}" data-value="{$machineParms}">
+			<xsl:if test="$component = 'machine'">
+				<xsl:apply-templates select="name" mode="machine"/>
+			</xsl:if>
 			<xsl:if test="$component != 'machine'">
 				<xsl:apply-templates select="name" mode="component"/>
 			</xsl:if>
@@ -276,7 +279,7 @@
 	<xsl:template match="name" mode="machine">
 		<xsl:variable name="pos">
 			<xsl:choose>
-				<xsl:when test="@pos = 'center'">text-align:center;</xsl:when>
+				<xsl:when test="@pos = 'middle'">text-align:center;</xsl:when>
 				<xsl:otherwise/>
 			</xsl:choose>
 		</xsl:variable>
