@@ -6,11 +6,13 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/harddisks/pcx86/10mb/PCDOS200-C400.json"}]'
     autoGen: true
     autoMount:
+      A:
+        name: "None"
       B:
         name: "MS C 1.04 (Disk 1)"
-    autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}

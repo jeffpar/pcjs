@@ -2309,7 +2309,7 @@
             "@title": "Microsoft C Compiler 1.03",
             "@hardware": {
               "options": "ibm,5160",
-              "@notes": "Selected 'ibm,5160' only because the default (256kb) machine also includes a ready-to-use harddisk, making compilation easier"
+              "drives": "[{name:\"PC-DOS 2.00 w/Tools (10Mb)\",type:3,path:\"/harddisks/pcx86/10mb/PCDOS200-C400.json\"}]"
             },
             "@media": [
               {
@@ -2330,7 +2330,7 @@
             "@title": "Microsoft C Compiler 1.04",
             "@hardware": {
               "options": "ibm,5160",
-              "@notes": "Selected 'ibm,5160' only because the default (256kb) machine also includes a ready-to-use harddisk, making compilation easier"
+              "drives": "[{name:\"PC-DOS 2.00 w/Tools (10Mb)\",type:3,path:\"/harddisks/pcx86/10mb/PCDOS200-C400.json\"}]"
             },
             "@media": [
               {

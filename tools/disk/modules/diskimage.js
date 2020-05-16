@@ -596,9 +596,9 @@ function processDisk(di, diskFile, argv, diskette)
                     for (let prop in hardware) {
                         if (prop == "config" || prop == "machine" || prop == "options" || prop == "url" || prop[0] == '@') continue;
                         let chQuote = "";
-                        if (prop == "drives") {
+                        if (prop == "drives" || prop == "floppyDrives") {
                             chQuote = "'";
-                            bootDisk = "None";
+                            if (prop == "drives") bootDisk = "None";
                         }
                         sMachine += "    " + prop + ": " + chQuote + hardware[prop] + chQuote + "\n";
                         sAutoType = "";
@@ -660,7 +660,7 @@ function processDisk(di, diskFile, argv, diskette)
         }
         else if (sIndexNew != sIndex) {
             if (argv['rebuild']) {
-                if (writeFile(getFullPath(sIndexFile), sIndexNew, true)) {
+                if (writeFile(getFullPath(sIndexFile), sIndexNew, true, true)) {
                     printf("\t%s index for \"%s\": %s\n", sAction, diskette.title, sIndexFile);
                 }
             } else {
