@@ -1050,6 +1050,15 @@ function readFileAsync(sFile, encoding = "utf8")
  *
  *      node diskimage.js [input disk image or directory] [output disk image] [options]
  *
+ * You can use --disk and --dir to explicitly specify an input disk or directory, or you can implicitly
+ * specify one as the first non-option argument (a directory is indicated by a trailing '/'); similarly,
+ * you can use --output to explicitly specify an output disk image, or you can implicitly specify one as
+ * the second non-option argument.
+ *
+ * Use --all to process all catalogued disks with the specified options, or --all=[subset] to process only
+ * disks whose path or name contains [subset]; any input/output disk/directory names are ignored when
+ * using --all.
+ *
  * @param {number} argc
  * @param {Array} argv
  */
