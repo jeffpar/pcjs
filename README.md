@@ -25,8 +25,6 @@ Topics covered in the repository itself include:
 
   - [PCjs Disk Images](/tools/disk/)
 
-with more to come.
-
 ### License
 
 The [PCjs Project](https://github.com/jeffpar/pcjs.org) is an open-source project on [GitHub](https://github.com/jeffpar)
