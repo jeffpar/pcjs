@@ -1484,10 +1484,12 @@
 		<xsl:comment><xsl:apply-templates/></xsl:comment>
 	</xsl:template>
 
-	<xsl:template match="intro">
-	</xsl:template>
+	<xsl:template match="heading"></xsl:template>
+	<xsl:template match="intro"></xsl:template>
+	<xsl:template match="outro"></xsl:template>
 
-	<xsl:template match="outro">
+	<xsl:template match="heading" mode="doc">
+		<h2><xsl:apply-templates mode="doc"/></h2>
 	</xsl:template>
 
 	<xsl:template match="intro|outro" mode="doc">
@@ -1495,7 +1497,7 @@
 	</xsl:template>
 
 	<xsl:template name="displayIntro">
-		<xsl:apply-templates select="name" mode="doc"/>
+		<xsl:apply-templates select="heading" mode="doc"/>
 		<xsl:apply-templates select="intro" mode="doc"/>
 	</xsl:template>
 
