@@ -5,7 +5,7 @@ PCjs 2.0 disk images are JSON objects with the following properties:
   - *imageInfo*: an object describing the type of disk (eg, "CHS") and other characteristics
   - *volTable*: an Array of VolInfo objects, one for each logical FAT volume on the disk (optional)
   - *fileTable*: an Array of FileInfo objects, one for each file across all FAT volumes on the disk (optional)
-  - *diskData*: an Array of sector data; for "CHS" disk images, the data is organized as an array of cylinders, heads, and sectors
+  - *diskData*: an Array of sector data; for "CHS" disk images, the data is organized as an array of sectors within an array of heads within an array of cylinders
 
 Older (PCjs 1.0) disk images were basically just an Array of sector data (what is now called the *diskData* object), without
 any other information.  Such disk images are still supported, but all the disk images now stored on PCjs disk servers,
@@ -71,9 +71,10 @@ To display all the unused bytes of a disk image:
 
     node modules/diskimage.js PCDOS200-DISK1.json --list=unused
 
-NOTE: Unused bytes are different than (ie, are a superset of) free bytes.  Free bytes are always measured in terms of unused clusters,
-multiplied by the cluster size, whereas unused bytes are the combination of all completely unused clusters *plus* any partially unused
-clusters.  Being able to see all the unused data on a disk can be a valuable forensic tool.
+NOTE: Unused bytes are a superset of free bytes.  Free bytes are always measured in terms of unused clusters,
+multiplied by the cluster size, whereas unused bytes are the combination of all completely unused cluster space *plus* any partially
+unused cluster space.  Being able to see all the unused bytes on a disk can be useful for studying disk image usage, or simply making
+sure that a disk is free of any unwanted data.
 
 TODO: Update the unused byte report to include unused bytes, if any, in all FAT sectors and directory sectors.
 
