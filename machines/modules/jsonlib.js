@@ -142,7 +142,7 @@ export default class JSONLib {
                             if (format) diskette['format'] = format;                    // eg, "PC360K"
                             if (archive) diskette['archive'] = archive;                 // eg, "folder", or the name of a specific ".img" file, etc
                             if (label) diskette['label'] = label;                       // the volume label to use (eg, for a diskette generated from a folder)
-                            if (args) diskette['args'] = args;                          // DiskImage command-line arguments
+                            if (args) diskette['args'] = args;                          // DiskInfo command-line arguments
                             if (kryoflux) diskette['kryoflux'] = true;                  // true if a Kryoflux dump is available
                             if (normalize) diskette['normalize'] = true;                // true if a line-endings in known text files should be "normalized"
                             if (hidden) diskette['hidden'] = true;                      // true if hidden from the Explorer (still in the library)
