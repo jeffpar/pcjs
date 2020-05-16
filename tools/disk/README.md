@@ -46,13 +46,15 @@ which translates to these commands (using a 360K PC diskette named "disk1" as an
 To build a [VisiCalc diskette](https://diskettes.pcjs.org/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
 from a directory containing VC.COM, specify the name of the directory, including a trailing slash; eg:
 
-    node modules/diskinfo.js /diskettes/pcx86/app/other/visicalc/1981/VISICALC-1981/ VISICALC-1981.json
+    node modules/diskinfo.js /diskettes/pcx86/app/other/visicalc/1981/archive/VISICALC-1981/ VISICALC-1981.json
 
-By default, the diskette will be given an 11-character volume label derived from the directory name (eg, "VISICALC-1981");
-however, you can specify your own label with `--label=[name]`, or use `--label=none` to disable the volume label.
+By default, the diskette will be given an 11-character volume label derived from the directory name (eg, "VISICALC-19");
+however, you can use `--label` to specify your own label (eg, `--label=VISICALC81`), or use `--label=none` to suppress
+the volume label.
 
 The smallest standard PC diskette format that can accomodate all the files will be automatically selected, but you can
-specify a different target size (in Kb) using `--target=N`, where N is 160, 180, 320, 360, 720, 1200, or 1440.
+specify a different target size (in Kb) using `--target=N`, where N is 160, 180, 320, 360, 720, 1200, or 1440.  For
+example, if your diskette *must* work with PC DOS 1.0, use `--target=160`.
 
 Another useful option is `--normalize`, which will transform the line-endings in all recognized text files from LF to CR/LF;
 a recognized text file is any file ending with one of these extensions (".MD", ".ME", ".BAS", ".BAT", ".ASM", ".LRF", ".MAK",
