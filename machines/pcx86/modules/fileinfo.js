@@ -1,5 +1,5 @@
 /**
- * @fileoverview File Disk image processing module
+ * @fileoverview File processing module
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2020 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -8,7 +8,7 @@
  */
 
 import Device from "../../modules/device.js";
-import DiskImage from "./diskimage.js";
+import DiskInfo from "./diskinfo.js";
 
 /**
  * @typedef {Object} segInfo
@@ -19,7 +19,7 @@ import DiskImage from "./diskimage.js";
 
 /**
  * @class FileInfo
- * @property {DiskImage} disk
+ * @property {DiskInfo}  disk
  * @property {number}    iVolume
  * @property {string}    path
  * @property {string}    name
@@ -38,7 +38,7 @@ export default class FileInfo {
     /**
      * FileInfo(disk, iVolume, path, name, attr, size, cluster, aLBA)
      *
-     * @param {DiskImage} disk
+     * @param {DiskInfo} disk
      * @param {number} iVolume
      * @param {string} path
      * @param {string} name
@@ -84,7 +84,7 @@ export default class FileInfo {
             /*
              * If the read is wholly contained within a sector, read it with one call.
              */
-            if (offSector + length <= sector[DiskImage.SECTOR.LENGTH]) {
+            if (offSector + length <= sector[DiskInfo.SECTOR.LENGTH]) {
                 return this.disk.getSectorData(sector, offSector, length);
             }
             /*

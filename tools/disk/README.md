@@ -13,10 +13,10 @@ such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to
 
 ## PCjs Disk Utilities
 
-[DiskInfo](modules/diskinfo.js) is a Node command-line application that imports the new PCjs 2.0
-[DiskImage](../../machines/pcx86/modules/diskimage.js) module for reading and writing [PCjs Disk Images](#pcjs-disk-images).
+[DiskImage](modules/diskimage.js) is a Node command-line application that imports the new PCjs 2.0
+[DiskInfo](../../machines/pcx86/modules/diskinfo.js) module for reading and writing [PCjs Disk Images](#pcjs-disk-images).
 
-[DiskInfo](modules/diskinfo.js) supersedes the older PCjs 1.0 [DiskDump](lib/diskdump.js) utility.
+[DiskImage](modules/diskimage.js) supersedes the older PCjs 1.0 [DiskDump](lib/diskdump.js) utility.
 
 ## Building PCjs Disk Images from IMG files
 
@@ -25,13 +25,13 @@ from an IMG file:
 
     node modules/diskinfo.js /diskettes/pcx86/sys/dos/2.00/archive/PCDOS200-DISK1.img PCDOS200-DISK1.json
 
-In addition to IMG files, DiskInfo also includes (experimental) support for PSI (PCE Sector Image) files, which can in
+In addition to IMG files, DiskImage also includes (experimental) support for PSI (PCE Sector Image) files, which can in
 turn be built from Kryoflux RAW files.  Here are the basic steps, using tools from [PCE](http://www.hampa.ch/pce/):
 
  1. From the Kryoflux RAW files, create a PFI ("PCE Flux Image") file
  2. Next, create a PRI ("PCE Raw Image") file, with the flux reversal pulses converted to bits
  3. From the PRI file, create a PSI ("PCE Sector Image") file
- 4. From the PSI file, create a JSON-encoded disk image file, using the PCjs `DiskInfo` utility
+ 4. From the PSI file, create a JSON-encoded disk image file, using the PCjs `DiskImage` utility
 
 which translates to these commands (using a 360K PC diskette named "disk1" as an example):
 
@@ -67,9 +67,15 @@ To get a DOS-compatible directory listing of a disk image:
 
     node modules/diskinfo.js PCDOS200-DISK1.json --list
 
-To display all the unallocated bytes of a disk image:
+To display all the unused bytes of a disk image:
 
-    node modules/diskinfo.js PCDOS200-DISK1.json --list=unallocated
+    node modules/diskinfo.js PCDOS200-DISK1.json --list=unused
+
+NOTE: Unused bytes are different than (ie, are a superset of) free bytes.  Free bytes are always measured in terms of unused clusters,
+multiplied by the cluster size, whereas unused bytes are the combination of all completely unused clusters *plus* any partially unused
+clusters.  Being able to see all the unused data on a disk can be a valuable forensic tool.
+
+TODO: Update the unused byte report to include unused bytes, if any, in all FAT sectors and directory sectors.
 
 To extract all the files from a disk image:
 
@@ -86,4 +92,3 @@ To dump a specific (C:H:S) sector from a disk image:
 To dump multiple (C:H:S) sectors from a disk image track, follow the C:H:S values with a sector count; eg:
 
     node modules/diskinfo.js PCDOS200-DISK1.json --dump=0:0:1:4
-
