@@ -49,6 +49,20 @@ import FileInfo from "./fileinfo.js";
  */
 
 /**
+ * DirInfo is an internal data structure used to help build FileInfo objects.
+ *
+ * @typedef {Object} DirInfo
+ * @property {string} path (filled in by getDir(); the rest are filled in by getDirEntry())
+ * @property {string} name (null if invalid/deleted entry)
+ * @property {number} attr
+ * @property {number} modDate
+ * @property {number} modTime
+ * @property {number} size
+ * @property {number} cluster
+ * @property {Array.<number>} aLBA (ie, array of logical block addresses)
+ */
+
+/**
  * Sector describes a sector contained within a disk image.  Storing the cylinder and head
  * of a sector within the structure is a bit redundant, but I find it helpful for inspection
  * and verification purposes.
@@ -3004,17 +3018,6 @@ export default class DiskImage {
     getChecksum()
     {
         return this.dwChecksum;
-    }
-
-    /**
-     * getFiles()
-     *
-     * @this {DiskImage}
-     * @returns {number}
-     */
-    getFiles()
-    {
-        return this.fileTable.length;
     }
 
     /**

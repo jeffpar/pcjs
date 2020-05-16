@@ -215,7 +215,7 @@ function printFileDesc(diskFile, diskName, desc)
  */
 function printManifest(diskFile, diskName, manifest)
 {
-    manifest.forEach(function dumpManifestFile(desc) {
+    manifest.forEach(function printManifestFile(desc) {
         printFileDesc(diskFile, diskName, desc);
     });
 }
@@ -275,6 +275,39 @@ function processDisk(di, diskFile, argv, diskette)
                     }
                 }
                 if (!cMatches) printf("no matches\n");
+            }
+        }
+    }
+
+    let chs = argv['dump'];
+    if (chs) {
+        if (typeof chs != "string") {
+            printf("specify --dump=C:H:S[:N]\n");
+        } else {
+            let values = chs.split(':');
+            let iCylinder = +values[0], iHead = +values[1], idSector = +values[2], nSectors = +values[3] || 1;
+            while (nSectors-- > 0) {
+                let sector = di.seek(iCylinder, iHead, idSector);
+                if (!sector) {
+                    printf("unable to find %d:%d:%d\n", iCylinder, iHead, idSector);
+                    break;
+                }
+                let i = 0;
+                let sBytes = "", sChars = "", sLines = "";
+                sLines = sprintf("CHS=%d:%d:%d\n", iCylinder, iHead, idSector);
+                while (true) {
+                    let b = di.read(sector, i);
+                    if (b < 0) break;
+                    if (i % 16 == 0) sLines += sprintf("%#06x  ", i);
+                    sBytes += sprintf("%02x ", b);
+                    sChars += (b >= 0x20 && b < 0x7f? String.fromCharCode(b) : '.');
+                    if (++i % 16 == 0) {
+                        sLines += sBytes + " " + sChars + '\n';
+                        sBytes = sChars = "";
+                    }
+                }
+                printf("%s\n", sLines);
+                idSector++;
             }
         }
     }
@@ -934,11 +967,97 @@ function writeFile(sFile, data, fCreateDir)
 }
 
 /**
+ * processDiskAsync(input, argv)
+ *
+ * @param {string} input
+ * @param {Array} argv
+ */
+async function processDiskAsync(input, argv)
+{
+    let di = await readDiskAsync(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData']));
+    if (di) {
+        processDisk(di, input, argv);
+    }
+}
+
+/**
+ * readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+ *
+ * @param {string} diskFile
+ * @param {boolean} [forceBPB]
+ * @param {Array|string} [sectorIDs]
+ * @param {Array|string} [sectorErrors]
+ * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
+ */
+async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+{
+    let db, di
+    try {
+        let diskName = path.basename(diskFile);
+        di = new DiskImage(device, diskName);
+        if (diskName.endsWith(".json")) {
+            db = await readFileAsync(diskFile, "utf8");
+            if (!db) {
+                di = null;
+            } else {
+                if (!di.buildDiskFromJSON(db)) di = null;
+            }
+        }
+        else {
+            /*
+             * Passing null for the encoding parameter tells readFile() to return a buffer (which, in our case, is a DataBuffer).
+             */
+            db = await readFileAsync(diskFile, null);
+            if (!db) {
+                di = null;
+            } else {
+                let hash = getHash(db);
+                if (diskName.endsWith(".psi")) {
+                    if (!di.buildDiskFromPSI(db)) di = null;
+                } else {
+                    if (!di.buildDiskFromBuffer(db, hash, forceBPB, sectorIDs, sectorErrors, suppData)) di = null;
+                }
+            }
+        }
+    } catch(err) {
+        printError(err);
+        return null;
+    }
+    return di;
+}
+
+/**
+ * readFileAsync(sFile, encoding)
+ *
+ * @param {string} sFile
+ * @param {string|null} [encoding]
+ */
+function readFileAsync(sFile, encoding = "utf8")
+{
+    sFile = getFullPath(sFile);
+    return new Promise((resolve, reject) => {
+        fs.readFile(sFile, encoding, (err, data) => {
+            if (err) reject(err);
+            resolve(data);
+        });
+    });
+}
+
+/**
  * main(argc, argv)
  *
  * Usage:
  *
  *      node diskimage.js [input disk image or directory] [output disk image] [options]
+ *
+ * You can use --disk and --dir to explicitly specify an input disk or directory, or you can implicitly
+ * specify one as the first non-option argument (a directory is indicated by a trailing '/'); similarly,
+ * you can use --output to explicitly specify an output disk image, or you can implicitly specify one as
+ * the second non-option argument.
+ *
+ * Use --all to process all catalogued disks with the specified options, or --all=[subset] to process only
+ * disks whose path or name contains [subset]; any input/output disk/directory names are ignored when
+ * using --all.
  *
  * @param {number} argc
  * @param {Array} argv
@@ -966,17 +1085,24 @@ function main(argc, argv)
         return;
     }
 
-    let input, di;
-    input = argv['disk'];
-    if (!input) {
-        input = argv['dir'];
-        if (!input) {
-            input = argv[1];
-            argv.splice(1, 1);
-        } else {
-            if (!input.endsWith('/')) input += '/';
-        }
+    let input = argv['disk'];
+    if (input) {
+        /*
+         * If you use --disk to specify a disk image, then I call the experimental async function.
+         */
+        processDiskAsync(input, argv);
+        return;
     }
+
+    input = argv['dir'];
+    if (!input) {
+        input = argv[1];
+        argv.splice(1, 1);
+    } else {
+        if (!input.endsWith('/')) input += '/';
+    }
+
+    let di;
     if (input) {
         if (input.endsWith('/')) {
             di = readDir(input, argv['label'], argv['normalize'], +argv['target'], +argv['maxfiles']);
