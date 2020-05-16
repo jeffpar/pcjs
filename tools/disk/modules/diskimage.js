@@ -380,6 +380,13 @@ function processDisk(di, diskFile, argv, diskette)
             let name = path.basename(sPath);
             let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
             let attr = +desc[DiskInfo.FILEDESC.ATTR];
+            /*
+             * We call parseDate() requesting a *local* date from the timestamp, because that's exactly how we're going
+             * to use it: as a local file modification time.  Ordinarily we want to deal exclusively in UTC dates, unpolluted
+             * by timezone information, but here we don't really have a choice.  Trying to fix the date after the fact,
+             * by adding Date.getTimezoneOffset(), doesn't always work either, probably due to daylight savings time considerations;
+             * best not to go down that rabbit hole.
+             */
             let date = device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
             let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
             let db = new DataBuffer(contents);
