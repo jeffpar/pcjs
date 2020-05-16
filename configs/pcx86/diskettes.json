@@ -2307,6 +2307,10 @@
         "@versions": {
           "1.03": {
             "@title": "Microsoft C Compiler 1.03",
+            "@hardware": {
+              "options": "ibm,5160",
+              "@notes": "Selected 'ibm,5160' only because the default (256kb) machine also includes a ready-to-use harddisk, making compilation easier"
+            },
             "@media": [
               {
                 "@title": "MS C 1.03 Beta (Disk 1)",
@@ -2324,6 +2328,10 @@
           },
           "1.04": {
             "@title": "Microsoft C Compiler 1.04",
+            "@hardware": {
+              "options": "ibm,5160",
+              "@notes": "Selected 'ibm,5160' only because the default (256kb) machine also includes a ready-to-use harddisk, making compilation easier"
+            },
             "@media": [
               {
                 "@title": "MS C 1.04 (Disk 1)",

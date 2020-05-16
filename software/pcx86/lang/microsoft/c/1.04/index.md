@@ -3,9 +3,9 @@ layout: page
 title: Microsoft C Compiler 1.04
 permalink: /software/pcx86/lang/microsoft/c/1.04/
 machines:
-  - id: ibm5150
+  - id: ibm5160
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     autoGen: true
     autoMount:
       B:
@@ -13,7 +13,7 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-{% include machine.html id="ibm5150" %}
+{% include machine.html id="ibm5160" %}
 
 ### Directory of MS C 1.04 (Disk 1)
 

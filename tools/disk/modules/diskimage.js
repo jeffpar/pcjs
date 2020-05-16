@@ -380,16 +380,19 @@ function processDisk(di, diskFile, argv, diskette)
             let name = path.basename(sPath);
             let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
             let attr = +desc[DiskInfo.FILEDESC.ATTR];
-            let date = device.parseDate(desc[DiskInfo.FILEDESC.DATE]);
+            let date = device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
             let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
             let db = new DataBuffer(contents);
-            if (typeof argv['extract'] != "string" || name == argv['extract']) {
+            device.assert(size == db.length);
+            let subDir = argv['extract'] != "string"? di.getName() : "";
+            if (subDir || name == argv['extract']) {
+                if (subDir) sPath = path.join(subDir, sPath);
                 let dir = path.dirname(sPath);
                 if (!existsFile(dir)) fs.mkdirSync(dir, {recursive: true});
                 if (attr & DiskInfo.ATTR.SUBDIR) {
                     if (!existsFile(sPath)) fs.mkdirSync(sPath);
                 } else {
-                    writeFile(sPath, db);
+                    writeFile(sPath, db, true, argv['overwrite']);
                 }
                 fs.utimesSync(sPath, date, date);
             }
@@ -986,14 +989,15 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
 }
 
 /**
- * writeFile(sFile, data, fCreateDir)
+ * writeFile(sFile, data, fCreateDir, fOverwrite)
  *
  * @param {string} sFile
  * @param {DataBuffer|string} data
  * @param {boolean} [fCreateDir]
+ * @param {boolean} [fOverwrite]
  * @returns {boolean}
  */
-function writeFile(sFile, data, fCreateDir)
+function writeFile(sFile, data, fCreateDir, fOverwrite)
 {
     if (sFile) {
         try {
@@ -1004,7 +1008,11 @@ function writeFile(sFile, data, fCreateDir)
                 let sDir = path.dirname(sFile);
                 if (!existsFile(sDir)) fs.mkdirSync(sDir, {recursive: true});
             }
-            fs.writeFileSync(sFile, data);
+            if (!existsFile(sFile) || fOverwrite) {
+                fs.writeFileSync(sFile, data);
+            } else {
+                printf("%s exists, use --overwrite to replace\n", sFile);
+            }
             return true;
         } catch(err) {
             printError(err);

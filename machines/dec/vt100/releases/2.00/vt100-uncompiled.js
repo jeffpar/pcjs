@@ -898,6 +898,7 @@ class StdIO extends NumIO {
      * parseDate(date)
      * parseDate(date, time)
      * parseDate(year, month, day, hour, minute, second)
+     * parseDate(timestamp, fLocal)
      *
      * Produces a UTC date when ONLY a date (no time) is provided; otherwise, it combines the date and
      * and time, producing a date that is either local or UTC, depending on the presence (or lack) of time
@@ -911,7 +912,7 @@ class StdIO extends NumIO {
      *
      * @this {StdIO}
      * @param {...} args
-     * @returns {Date} (UTC unless a time string with a non-GMT timezone is explicitly provided)
+     * @returns {Date} (UTC unless a time string with a timezone is explicitly provided)
      */
     parseDate(...args)
     {
@@ -922,14 +923,18 @@ class StdIO extends NumIO {
         else if (typeof args[0] === "string") {
             let s = args[0];
             if (s.indexOf(':') < 0) {
-                s += ' ' + (args[1] || "00:00:00 GMT");
+                s += ' ' + (args[1] || "00:00:00 UTC");
             } else if (s.match(/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/)) {
                 /*
                  * I don't care to support all the possible time zone specifiers just to determine whether or not
                  * a time zone was provided, so for now, I simply look for common date+time patterns I use, such as
                  * the "timestamp" pattern above.  TODO: Make this general-purpose someday.
+                 *
+                 * Also, when a timestamp is provided, then a second (optional) fLocal parameter can be specified;
+                 * requesting a (local) non-UTC date can be helpful, for example, when the date is going to be used
+                 * as a local file modification time.
                  */
-                s += " GMT";
+                if (!args[1]) s += " UTC";
             }
             date = new Date(s);
         }
