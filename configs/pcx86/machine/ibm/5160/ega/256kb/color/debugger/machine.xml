@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
 <machine id="ibm5160" type="pcx86" border="1" pos="center" background="default">
-	<name pos="center">IBM PC XT, 256Kb RAM, 10Mb Hard Disk, 256Kb EGA, Color Display</name>
+	<name pos="center">IBM PC XT, 256Kb RAM, 10Mb Hard Disk, IBM EGA (256Kb)</name>
 	<computer id="xt-ega-256k" name="IBM PC XT"/>
 	<cpu id="cpu8088" model="8088"/>
 	<ram id="ramLow" addr="0x00000" test="false"/>
