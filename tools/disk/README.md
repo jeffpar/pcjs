@@ -23,7 +23,7 @@ such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to
 To build a PCjs disk image, such as this [PC DOS 2.00 diskette](https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json),
 from an IMG file:
 
-    node modules/diskinfo.js /diskettes/pcx86/sys/dos/2.00/archive/PCDOS200-DISK1.img PCDOS200-DISK1.json
+    node modules/diskimage.js /diskettes/pcx86/sys/dos/2.00/archive/PCDOS200-DISK1.img PCDOS200-DISK1.json
 
 In addition to IMG files, DiskImage also includes (experimental) support for PSI (PCE Sector Image) files, which can in
 turn be built from Kryoflux RAW files.  Here are the basic steps, using tools from [PCE](http://www.hampa.ch/pce/):
@@ -39,14 +39,14 @@ which translates to these commands (using a 360K PC diskette named "disk1" as an
     pfi disk1.pfi -p double-step -r 600000 -p decode pri disk1.pri
     pri disk1.pri -c 40-99 -p delete disk1.pri
     pri disk1.pri -p decode mfm disk1.psi
-    node modules/diskinfo.js disk1.psi disk1.json
+    node modules/diskimage.js disk1.psi disk1.json
 
 ## Building PCjs Disk Images from directories
 
 To build a [VisiCalc diskette](https://diskettes.pcjs.org/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
 from a directory containing VC.COM, specify the name of the directory, including a trailing slash; eg:
 
-    node modules/diskinfo.js /diskettes/pcx86/app/other/visicalc/1981/archive/VISICALC-1981/ VISICALC-1981.json
+    node modules/diskimage.js /diskettes/pcx86/app/other/visicalc/1981/archive/VISICALC-1981/ VISICALC-1981.json
 
 By default, the diskette will be given an 11-character volume label derived from the directory name (eg, "VISICALC-19");
 however, you can use `--label` to specify your own label (eg, `--label=VISICALC81`), or use `--label=none` to suppress
@@ -65,11 +65,11 @@ ASCII or non-ASCII data.
 
 To get a DOS-compatible directory listing of a disk image:
 
-    node modules/diskinfo.js PCDOS200-DISK1.json --list
+    node modules/diskimage.js PCDOS200-DISK1.json --list
 
 To display all the unused bytes of a disk image:
 
-    node modules/diskinfo.js PCDOS200-DISK1.json --list=unused
+    node modules/diskimage.js PCDOS200-DISK1.json --list=unused
 
 NOTE: Unused bytes are different than (ie, are a superset of) free bytes.  Free bytes are always measured in terms of unused clusters,
 multiplied by the cluster size, whereas unused bytes are the combination of all completely unused clusters *plus* any partially unused
@@ -79,16 +79,16 @@ TODO: Update the unused byte report to include unused bytes, if any, in all FAT 
 
 To extract all the files from a disk image:
 
-    node modules/diskinfo.js PCDOS200-DISK1.json --extract
+    node modules/diskimage.js PCDOS200-DISK1.json --extract
 
 To extract a specific file from a disk image:
 
-    node modules/diskinfo.js PCDOS200-DISK1.json --extract=COMMAND.COM
+    node modules/diskimage.js PCDOS200-DISK1.json --extract=COMMAND.COM
 
 To dump a specific (C:H:S) sector from a disk image:
 
-    node modules/diskinfo.js PCDOS200-DISK1.json --dump=0:0:1
+    node modules/diskimage.js PCDOS200-DISK1.json --dump=0:0:1
 
 To dump multiple (C:H:S) sectors from a disk image track, follow the C:H:S values with a sector count; eg:
 
-    node modules/diskinfo.js PCDOS200-DISK1.json --dump=0:0:1:4
+    node modules/diskimage.js PCDOS200-DISK1.json --dump=0:0:1:4
