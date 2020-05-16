@@ -1,10 +1,3 @@
-## PCjs Disk Utilities
-
-[DiskInfo](modules/diskinfo.js) is a Node command-line application that imports the new PCjs 2.0
-[DiskImage](../../machines/pcx86/modules/diskimage.js) module for reading and writing [PCjs Disk Images](#pcjs-disk-images).
-
-[DiskInfo](modules/diskinfo.js) supersedes the older PCjs 1.0 [DiskDump](lib/diskdump.js) utility.
-
 ## PCjs Disk Images
 
 PCjs 2.0 disk images are JSON objects with the following properties:
@@ -18,9 +11,14 @@ Older (PCjs 1.0) disk images were basically just an Array of sector data (what i
 any other information.  Such disk images are still supported, but all the disk images now stored on PCjs disk servers,
 such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to the 2.0 format.
 
-## Using DiskInfo
+## PCjs Disk Utilities
 
-### Building PCjs Disk Images from IMG files
+[DiskInfo](modules/diskinfo.js) is a Node command-line application that imports the new PCjs 2.0
+[DiskImage](../../machines/pcx86/modules/diskimage.js) module for reading and writing [PCjs Disk Images](#pcjs-disk-images).
+
+[DiskInfo](modules/diskinfo.js) supersedes the older PCjs 1.0 [DiskDump](lib/diskdump.js) utility.
+
+## Building PCjs Disk Images from IMG files
 
 To build a PCjs disk image, such as this [PC DOS 2.00 diskette](https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json),
 from an IMG file:
@@ -43,7 +41,7 @@ which translates to these commands (using a 360K PC diskette named "disk1" as an
     pri disk1.pri -p decode mfm disk1.psi
     node modules/diskinfo.js disk1.psi disk1.json
 
-### Building PCjs Disk Images from directories
+## Building PCjs Disk Images from directories
 
 To build a [VisiCalc diskette](https://diskettes.pcjs.org/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
 from a directory containing VC.COM, specify the name of the directory, including a trailing slash; eg:
@@ -61,7 +59,7 @@ a recognized text file is any file ending with one of these extensions (".MD", "
 ".TXT", or ".XML") AND which contains only 7-bit ASCII characters -- since some files, like ".BAS" files, can contain either
 ASCII or non-ASCII data.
 
-### Examining PCjs Disk Images
+## Examining PCjs Disk Images
 
 To get a DOS-compatible directory listing of a disk image:
 
