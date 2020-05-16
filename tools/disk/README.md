@@ -3,7 +3,7 @@
 [DiskInfo](modules/diskinfo.js) is a Node command-line application that imports the new PCjs 2.0
 [DiskImage](../../machines/pcx86/modules/diskimage.js) module for reading and writing [PCjs Disk Images](#pcjs-disk-images).
 
-**DiskInfo** supersedes the older PCjs 1.0 [DiskDump](lib/diskdump.js) utility.
+[DiskInfo](modules/diskinfo.js) supersedes the older PCjs 1.0 [DiskDump](lib/diskdump.js) utility.
 
 ## PCjs Disk Images
 
@@ -17,6 +17,8 @@ PCjs 2.0 disk images are JSON objects with the following properties:
 Older (PCjs 1.0) disk images were basically just an Array of sector data (what is now called the *diskData* object), without
 any other information.  Such disk images are still supported, but all the disk images now stored on PCjs disk servers,
 such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to the 2.0 format.
+
+## Using DiskInfo
 
 ### Building PCjs Disk Images from IMG files
 
