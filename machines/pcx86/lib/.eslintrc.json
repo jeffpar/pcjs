@@ -22,7 +22,6 @@
     "SITEURL": true,
     "SYMBOLS": true,
     "TYPEDARRAYS": true,
-    "XMLVERSION": true,
     "resources": true
   },
   "rules": {

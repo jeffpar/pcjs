@@ -9,8 +9,6 @@
  */
 var APPVERSION = "2.00";                // this @define is overridden by the Closure Compiler with the version in machines.json
 
-var XMLVERSION = null;                  // this is set in non-COMPILED builds by embedMachine() if a version number was found in the machine XML
-
 var COPYRIGHT = "Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>";
 
 var LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
@@ -4747,8 +4745,7 @@ var PCX80 = {
     MAXDEBUG:    MAXDEBUG,      // shared
     PRIVATE:     PRIVATE,       // shared
     TYPEDARRAYS: TYPEDARRAYS,
-    SITEURL:     SITEURL,       // shared
-    XMLVERSION:  XMLVERSION     // shared
+    SITEURL:     SITEURL        // shared
 };
 
 
@@ -23126,7 +23123,7 @@ class DebuggerX80 extends DbgLib {
                         }
                         break;
                     }
-                    this.println((PCX80.APPNAME || "PCX80") + " version " + (XMLVERSION || PCX80.APPVERSION) + " (" + this.cpu.model + (PCX80.COMPILED? ",RELEASE" : (PCX80.DEBUG? ",DEBUG" : ",NODEBUG")) + (PCX80.TYPEDARRAYS? ",TYPEDARRAYS" : (PCX80.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")) + ')');
+                    this.println((PCX80.APPNAME || "PCX80") + " version " + PCX80.APPVERSION + " (" + this.cpu.model + (PCX80.COMPILED? ",RELEASE" : (PCX80.DEBUG? ",DEBUG" : ",NODEBUG")) + (PCX80.TYPEDARRAYS? ",TYPEDARRAYS" : (PCX80.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")) + ')');
                     this.println(Web.getUserAgent());
                     break;
                 case '?':
@@ -23814,7 +23811,7 @@ class ComputerX80 extends Component {
             }
         }
 
-        this.println(PCX80.APPNAME + " v" + (XMLVERSION || PCX80.APPVERSION) + "\n" + COPYRIGHT + "\n" + LICENSE);
+        this.println(PCX80.APPNAME + " v" + PCX80.APPVERSION + "\n" + COPYRIGHT + "\n" + LICENSE);
 
         if (DEBUG && this.messageEnabled()) this.printMessage("TYPEDARRAYS: " + TYPEDARRAYS);
 
@@ -25126,11 +25123,6 @@ class ComputerX80 extends Component {
      */
     static init()
     {
-        /*
-         * In non-COMPILED builds, embedMachine() may have set XMLVERSION.
-         */
-        if (!COMPILED && XMLVERSION) PCX80.APPVERSION = XMLVERSION;
-
         var aeMachines = Component.getElementsByClass(document, PCX80.APPCLASS + "-machine");
 
         for (var iMachine = 0; iMachine < aeMachines.length; iMachine++) {
@@ -25825,14 +25817,12 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
             sXML = sXML.replace(/(<xsl:variable name="APPCLASS">).*?(<\/xsl:variable>)/, "$1" + sAppClass + "$2");
 
             /*
-             * Non-COMPILED kludge to replace the version number template in the XSL file (which we assume we're reading,
-             * since fResolve is false) with whatever XMLVERSION we extracted from the XML file (see corresponding kludge below).
+             * Replace the version number template in the XSL file (which we assume we're reading, since fResolve is false)
+             * with the current APPVERSION.
              *
              * ES6 ALERT: Template strings.
              */
-            if (!COMPILED && XMLVERSION) {
-                sXML = sXML.replace(/<xsl:variable name="APPVERSION"(\/>|><\/xsl:variable>)/, `<xsl:variable name="APPVERSION">${XMLVERSION}</xsl:variable>`);
-            }
+            sXML = sXML.replace(/<xsl:variable name="APPVERSION"(\/>|>[^<]*<\/xsl:variable>)/, `<xsl:variable name="APPVERSION">${APPVERSION}</xsl:variable>`);
         }
 
         /*
@@ -26110,17 +26100,6 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                 if (!xml) {
                     displayError(sURL, sXML);
                     return;
-                }
-
-                /*
-                 * Non-COMPILED kludge to extract the version number from the stylesheet path in the machine XML file;
-                 * we don't need this code in COMPILED (non-DEBUG) releases, because APPVERSION is hard-coded into them.
-                 */
-                if (!COMPILED) {
-                    let aMatch = sXML.match(/<\?xml-stylesheet[^>]* href=(['"])[^'"]*?\/([0-9.]*)\/([^'"]*)\1/);
-                    if (aMatch) {
-                        XMLVERSION = aMatch[2];
-                    }
                 }
 
                 let transformXML = function(sURL, sXSL, xsl) {

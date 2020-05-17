@@ -32,9 +32,9 @@ function savePC(idMachine, sPCJSFile, callback)
         let sParms = cmp.saveMachineParms();
         if (!sPCJSFile) {
             if (DEBUG) {
-                sPCJSFile = "/machines/pcx86/releases/" + (XMLVERSION || APPVERSION) + "/pcx86-uncompiled.js"
+                sPCJSFile = "/machines/pcx86/releases/" + APPVERSION + "/pcx86-uncompiled.js"
             } else {
-                sPCJSFile = "/machines/pcx86/releases/" + (XMLVERSION || APPVERSION) + "/pcx86" + (dbg? "-dbg" : "") + ".js";
+                sPCJSFile = "/machines/pcx86/releases/" + APPVERSION + "/pcx86" + (dbg? "-dbg" : "") + ".js";
             }
         }
         if (callback && callback({ state: sState, parms: sParms })) return true;

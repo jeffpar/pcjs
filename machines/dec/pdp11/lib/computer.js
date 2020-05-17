@@ -1498,11 +1498,6 @@ class ComputerPDP11 extends Component {
      */
     static init()
     {
-        /*
-         * In non-COMPILED builds, embedMachine() may have set XMLVERSION.
-         */
-        if (!COMPILED && XMLVERSION) PDP11.APPVERSION = XMLVERSION;
-
         var aeMachines = Component.getElementsByClass(document, PDP11.APPCLASS + "-machine");
 
         for (var iMachine = 0; iMachine < aeMachines.length; iMachine++) {

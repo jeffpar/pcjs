@@ -3889,7 +3889,7 @@ class DebuggerPDP10 extends DbgLib {
                         break;
                     }
                     if (asArgs[0] == "ver") {
-                        this.println((PDP10.APPNAME || "PDP10") + " version " + (XMLVERSION || PDP10.APPVERSION) + " (" + this.cpu.model + (PDP10.COMPILED? ",RELEASE" : (PDP10.DEBUG? ",DEBUG" : ",NODEBUG")) + ')');
+                        this.println((PDP10.APPNAME || "PDP10") + " version " + PDP10.APPVERSION + " (" + this.cpu.model + (PDP10.COMPILED? ",RELEASE" : (PDP10.DEBUG? ",DEBUG" : ",NODEBUG")) + ')');
                         this.println(Web.getUserAgent());
                         break;
                     }

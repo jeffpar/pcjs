@@ -22,6 +22,7 @@
   },
   "pcx86": {
     "name": "PCx86",
+    "version": "2.01",
     "defines": [
       "APPVERSION",
       "DEBUGGER",
@@ -451,16 +452,12 @@
     ],
     "css": [
       "./configs/shared/xsl/common.css",
-      "./configs/shared/xsl/components.css",
-      "./configs/shared/xsl/document.css"
+      "./configs/shared/xsl/components.css"
     ],
     "xsl": [
       "./configs/shared/xsl/common.xsl",
       "./configs/shared/xsl/components.xsl",
-      "./configs/shared/xsl/document.xsl",
-      "./configs/shared/xsl/machine.xsl",
-      "./configs/shared/xsl/manifest.xsl",
-      "./configs/shared/xsl/outline.xsl"
+      "./configs/shared/xsl/machine.xsl"
     ]
   }
 }

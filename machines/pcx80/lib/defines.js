@@ -68,8 +68,7 @@ var PCX80 = {
     MAXDEBUG:    MAXDEBUG,      // shared
     PRIVATE:     PRIVATE,       // shared
     TYPEDARRAYS: TYPEDARRAYS,
-    SITEURL:     SITEURL,       // shared
-    XMLVERSION:  XMLVERSION     // shared
+    SITEURL:     SITEURL        // shared
 };
 
 if (typeof module !== "undefined") {

@@ -1,12 +1,17 @@
 {
   "globals": {
+    "APPCLASS": true,
+    "APPNAME": true,
     "APPVERSION": true,
     "BACKTRACK": true,
     "BYTEARRAYS": true,
+    "COMPILED": true,
     "COPYRIGHT": true,
     "CSSCLASS": true,
+    "DEBUG": true,
     "DEBUGGER": true,
     "LICENSE": true,
+    "MAXDEBUG": true,
     "PDP10": true,
     "PRIVATE": true,
     "RS232": true,
@@ -14,7 +19,6 @@
     "SITEURL": true,
     "SYMBOLS": true,
     "TYPEDARRAYS": true,
-    "XMLVERSION": true,
     "resources": true
   },
   "rules": {

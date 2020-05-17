@@ -9,8 +9,6 @@
  */
 var APPVERSION = "2.00";                // this @define is overridden by the Closure Compiler with the version in machines.json
 
-var XMLVERSION = null;                  // this is set in non-COMPILED builds by embedMachine() if a version number was found in the machine XML
-
 var COPYRIGHT = "Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>";
 
 var LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
@@ -4368,8 +4366,7 @@ var C1PJS = {
     DEBUGGER:    DEBUGGER,
     MAXDEBUG:    MAXDEBUG,      // shared
     PRIVATE:     PRIVATE,       // shared
-    SITEURL:     SITEURL,       // shared
-    XMLVERSION:  XMLVERSION     // shared
+    SITEURL:     SITEURL        // shared
 };
 
 /**
@@ -14459,11 +14456,6 @@ class C1PComputer extends Component {
      */
     static init()
     {
-        /*
-         * In non-COMPILED builds, embedMachine() may have set XMLVERSION.
-         */
-        if (!COMPILED && XMLVERSION) C1PJS.APPVERSION = XMLVERSION;
-
         var aeComputers = Component.getElementsByClass(document, C1PJS.APPCLASS, "computer");
 
         for (var iComputer=0; iComputer < aeComputers.length; iComputer++) {
@@ -14740,14 +14732,12 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
             sXML = sXML.replace(/(<xsl:variable name="APPCLASS">).*?(<\/xsl:variable>)/, "$1" + sAppClass + "$2");
 
             /*
-             * Non-COMPILED kludge to replace the version number template in the XSL file (which we assume we're reading,
-             * since fResolve is false) with whatever XMLVERSION we extracted from the XML file (see corresponding kludge below).
+             * Replace the version number template in the XSL file (which we assume we're reading, since fResolve is false)
+             * with the current APPVERSION.
              *
              * ES6 ALERT: Template strings.
              */
-            if (!COMPILED && XMLVERSION) {
-                sXML = sXML.replace(/<xsl:variable name="APPVERSION"(\/>|><\/xsl:variable>)/, `<xsl:variable name="APPVERSION">${XMLVERSION}</xsl:variable>`);
-            }
+            sXML = sXML.replace(/<xsl:variable name="APPVERSION"(\/>|>[^<]*<\/xsl:variable>)/, `<xsl:variable name="APPVERSION">${APPVERSION}</xsl:variable>`);
         }
 
         /*
@@ -15025,17 +15015,6 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                 if (!xml) {
                     displayError(sURL, sXML);
                     return;
-                }
-
-                /*
-                 * Non-COMPILED kludge to extract the version number from the stylesheet path in the machine XML file;
-                 * we don't need this code in COMPILED (non-DEBUG) releases, because APPVERSION is hard-coded into them.
-                 */
-                if (!COMPILED) {
-                    let aMatch = sXML.match(/<\?xml-stylesheet[^>]* href=(['"])[^'"]*?\/([0-9.]*)\/([^'"]*)\1/);
-                    if (aMatch) {
-                        XMLVERSION = aMatch[2];
-                    }
                 }
 
                 let transformXML = function(sURL, sXSL, xsl) {

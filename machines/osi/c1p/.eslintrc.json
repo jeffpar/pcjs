@@ -12,7 +12,6 @@
     "PRIVATE": true,
     "RS232": true,
     "SITEURL": true,
-    "XMLVERSION": true,
     "resources": true
   },
   "rules": {

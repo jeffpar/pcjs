@@ -3819,7 +3819,7 @@ class DebuggerX80 extends DbgLib {
                         }
                         break;
                     }
-                    this.println((PCX80.APPNAME || "PCX80") + " version " + (XMLVERSION || PCX80.APPVERSION) + " (" + this.cpu.model + (PCX80.COMPILED? ",RELEASE" : (PCX80.DEBUG? ",DEBUG" : ",NODEBUG")) + (PCX80.TYPEDARRAYS? ",TYPEDARRAYS" : (PCX80.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")) + ')');
+                    this.println((PCX80.APPNAME || "PCX80") + " version " + PCX80.APPVERSION + " (" + this.cpu.model + (PCX80.COMPILED? ",RELEASE" : (PCX80.DEBUG? ",DEBUG" : ",NODEBUG")) + (PCX80.TYPEDARRAYS? ",TYPEDARRAYS" : (PCX80.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")) + ')');
                     this.println(Web.getUserAgent());
                     break;
                 case '?':

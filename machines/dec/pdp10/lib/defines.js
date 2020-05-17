@@ -57,7 +57,6 @@ var PDP10 = {
     MAXDEBUG:   MAXDEBUG,       // shared
     PRIVATE:    PRIVATE,        // shared
     SITEURL:    SITEURL,        // shared
-    XMLVERSION: XMLVERSION,     // shared
 
     /*
      * CPU model numbers (supported)

@@ -176,7 +176,7 @@ class ComputerX80 extends Component {
             }
         }
 
-        this.println(PCX80.APPNAME + " v" + (XMLVERSION || PCX80.APPVERSION) + "\n" + COPYRIGHT + "\n" + LICENSE);
+        this.println(PCX80.APPNAME + " v" + PCX80.APPVERSION + "\n" + COPYRIGHT + "\n" + LICENSE);
 
         if (DEBUG && this.messageEnabled()) this.printMessage("TYPEDARRAYS: " + TYPEDARRAYS);
 
@@ -1488,11 +1488,6 @@ class ComputerX80 extends Component {
      */
     static init()
     {
-        /*
-         * In non-COMPILED builds, embedMachine() may have set XMLVERSION.
-         */
-        if (!COMPILED && XMLVERSION) PCX80.APPVERSION = XMLVERSION;
-
         var aeMachines = Component.getElementsByClass(document, PCX80.APPCLASS + "-machine");
 
         for (var iMachine = 0; iMachine < aeMachines.length; iMachine++) {
