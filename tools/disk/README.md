@@ -16,7 +16,7 @@ such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to
 ## PCjs DiskImage Utility
 
 [DiskImage](modules/diskimage.js) is a Node command-line application that imports the new PCjs 2.0
-[DiskInfo](../../machines/pcx86/modules/diskinfo.js) module for reading and writing [PCjs Disk Images](#pcjs-disk-images).
+[DiskInfo](../../machines/pcx86/modules/diskinfo.js) module for reading and writing PCjs disk images.
 [DiskImage](modules/diskimage.js) supersedes the older PCjs 1.0 [DiskDump](lib/diskdump.js) utility.
 
 ## Building PCjs Disk Images from IMG files
@@ -24,7 +24,7 @@ such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to
 To build a PCjs disk image, such as this [PC DOS 2.00 diskette](https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json),
 from an IMG file:
 
-    node modules/diskimage.js /diskettes/pcx86/sys/dos/2.00/archive/PCDOS200-DISK1.img PCDOS200-DISK1.json
+    node modules/diskimage.js /diskettes/pcx86/sys/dos/2.00/PCDOS200-DISK1.img PCDOS200-DISK1.json
 
 In addition to IMG files, DiskImage also includes (experimental) support for PSI (PCE Sector Image) files, which can in
 turn be built from Kryoflux RAW files.  Here are the basic steps, using tools from [PCE](http://www.hampa.ch/pce/):
@@ -45,9 +45,9 @@ which translates to these commands (using a 360K PC diskette named "disk1" as an
 ## Building PCjs Disk Images from Directories
 
 To build a [VisiCalc diskette](https://diskettes.pcjs.org/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
-from a directory containing VC.COM, specify the name of the directory, including a trailing slash; eg:
+from a directory containing VC.COM, specify the name of the directory, including a trailing slash, like so:
 
-    node modules/diskimage.js /diskettes/pcx86/app/other/visicalc/1981/archive/VISICALC-1981/ VISICALC-1981.json
+    node modules/diskimage.js /diskettes/pcx86/app/other/visicalc/1981/VISICALC-1981/ VISICALC-1981.json
 
 By default, the diskette will be given an 11-character volume label derived from the directory name (eg, "VISICALC-19");
 however, you can use `--label` to specify your own label (eg, `--label=VISICALC81`), or use `--label=none` to suppress
@@ -58,20 +58,20 @@ specify a different target size (in Kb) using `--target=N`, where N is 160, 180,
 example, if your diskette *must* work with PC DOS 1.0, use `--target=160`.
 
 Another useful option is `--normalize`, which will transform the line-endings in all recognized text files from LF to CR/LF;
-a recognized text file is any file ending with one of these extensions (".MD", ".ME", ".BAS", ".BAT", ".ASM", ".LRF", ".MAK",
-".TXT", or ".XML") AND which contains only 7-bit ASCII characters -- since some files, like ".BAS" files, can contain either
-ASCII or non-ASCII data.
+a recognized text file is any file ending with one of these extensions (.md, .me, .bas, .bat, .asm, .lrf, .mak, .txt, or .xml)
+AND which contains only 7-bit ASCII characters -- since some files, like .bas files, can contain either ASCII or non-ASCII
+data.  The list of recognized text file extensions is likely to grow over time.
 
 ## Examining PCjs Disk Images
 
 Both local and remote diskette images can be examined.  To examine a remote image, you *must* use the `--disk` option,
 with either an explicit URL, as in:
 
-    node --disk https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+    node modules/diskimage.js --disk https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
 
 or with one of PCjs' implicit diskette paths, such as `/diskettes`, which currently maps to disk server `https://diskettes.pcjs.org`:
 
-    node --disk /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+    node modules/diskimage.js --disk /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
 
 If you happen to have a local file that exists in the same location as the implicit diskette path, use `--server` to force
 the server mapping.  The list of implicit paths for PC diskettes currently includes:
