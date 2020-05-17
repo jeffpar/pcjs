@@ -1,7 +1,7 @@
 {
-  "@title": "IBM PC XT (Model 5160) with Enhanced Color Display and Debugger",
+  "name": "IBM PC XT, 256Kb RAM, 10Mb Hard Disk, EGA (128Kb), Debugger",
   "defaults": {
-    "ram": "640K",
+    "ram": "256K",
     "fpu": "None",
     "fdc": "2 diskette drives",
     "parallel": "LPT1",

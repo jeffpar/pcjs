@@ -11,6 +11,7 @@
     {%- if candidate.type -%}{%- assign machine_type = candidate.type -%}{%- endif -%}
     {%- if candidate.config -%}{%- assign machine_config = candidate.config -%}{%- endif -%}
     {%- if candidate.layout -%}{%- assign machine_layout = candidate.layout | replace: "/_includes/", "" | replace: ".html", "" -%}{%- endif -%}
+    {%- if candidate.debugger -%}{%- assign machine_debugger = candidate.debugger -%}{%- endif -%}
     {%- assign machine_does_not_exist = false -%}
     {%- break -%}
   {%- endif -%}
@@ -75,7 +76,7 @@
 <div class="machine {{ machine_type }}" id="{{ machine_id }}">
   <div id="{{ machine_id }}.machine" class="pcjs-machine {{ machine_type }}-machine {{ machine_type }}-component"{{ machine_parms | replace: ",@", "" }}>
     {%- if machine_name != page.title %}
-    <!-- {{ machine_name }} -->
+    <h3>{{ machine_name }}</h3>
     {%- endif %}
     <div class="pcjs-chassis" style="{{ machine_style }}">
   {%- for machine_component in machine.components -%}
@@ -262,7 +263,14 @@
       <div id="{{ machine_id }}.{{ component_id }}" class="pcjs-{{ component.class }} {{ machine_type }}-{{ component.class }} {{ machine_type }}-component" style="{{ component_style }}">{{ component_title }}{{ component_controls }}
         <div class="{{ machine_type }}-{{ component.class }}-object{{ component_class }}" data-value="{{ component_config }}">{{ component_elements }}</div>
       </div>
-  {%- endfor %}
+  {%- endfor -%}
+    </div>
+  {%- if machine_debugger == "available" %}
+    <div class="pcjs-reference" style="padding-left:8px">[<a href="debugger/" onclick="pcjsOnClick(this)">Debugger</a>]</div>
+  {%- endif %}
+    <div class="pcjs-copyright">
+  {%- assign machine_version = site.data.machines[machine_type]['version'] | default: site.data.machines['shared']['version'] %}
+      <a href="{{ '/' | absolute_url }}" target="_blank">PCx86</a> v{{ machine_version }} © 2012-2020 by <a href="https://jeffpar.com" target="_blank">@jeffpar</a>
     </div>
   </div>
 </div>

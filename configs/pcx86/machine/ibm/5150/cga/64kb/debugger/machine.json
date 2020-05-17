@@ -1,5 +1,5 @@
 {
-  "@title": "IBM PC (Model 5150) with Color Display and Debugger",
+  "name": "IBM PC, 64Kb RAM, Dual Floppy Drives, CGA, Debugger",
   "defaults": {
     "ram": "64K",
     "fpu": "None",

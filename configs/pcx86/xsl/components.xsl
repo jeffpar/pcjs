@@ -252,8 +252,8 @@
 				<xsl:if test="$APPCLASS = 'pcx86'"><div class="{$CSSCLASS}-reference" style="padding-left:8px">[<a href="#" onclick="savePC('{$machine}'); return false;">Save Machine</a>]</div></xsl:if>
 				<xsl:if test="@debugger = 'available'"></xsl:if>
 				<xsl:choose>
-					<xsl:when test="@debugger = 'optional'"><div class="{$CSSCLASS}-reference" style="padding-left:8px">[<a href="?debugger=true">Debugger</a>]</div></xsl:when>
-					<xsl:when test="@debugger = 'available'"><div class="{$CSSCLASS}-reference" style="padding-left:8px">[<a href="debugger/machine.xml">Debugger</a>]</div></xsl:when>
+					<xsl:when test="@debugger = 'optional'"><div class="{$CSSCLASS}-reference">[<a href="?debugger=true">Debugger</a>]</div></xsl:when>
+					<xsl:when test="@debugger = 'available'"><div class="{$CSSCLASS}-reference">[<a href="debugger/machine.xml">Debugger</a>]</div></xsl:when>
 					<xsl:otherwise/>
 				</xsl:choose>
 				<div class="{$CSSCLASS}-copyright">
