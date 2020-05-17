@@ -25,6 +25,7 @@ Some disks from this collection include:
   - [COMPAQ MS-DOS 3.10 (12-17-85)](/software/pcx86/sys/dos/compaq/3.10/#compaq-ms-dos-310-12-17-85)
   - [COMPAQ MS-DOS 3.31 (1987)](/software/pcx86/sys/dos/compaq/3.31/#directory-of-compaq-ms-dos-331-1987)
   - [DoubleDOS 2.1F](/software/pcx86/sys/ext/softlogic/doubledos/2.1f/)
+  - [Inside the IBM PC (1983)](/software/pcx86/sw/books/inside_the_ibm_pc/)
   - [Multitasking MS-DOS 4.00](/software/pcx86/sys/dos/microsoft/4.0M/)
   - [Microsoft C Compiler 1.03 (Beta)](/software/pcx86/lang/microsoft/c/1.03/)
   - [Microsoft C Compiler 1.04](/software/pcx86/lang/microsoft/c/1.04/)
