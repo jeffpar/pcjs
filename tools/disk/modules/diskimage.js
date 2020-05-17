@@ -23,7 +23,7 @@ let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
 let stdlib = new StdLib();
-let moduleDir, rootDir, nMaxFiles, sFileIndex;
+let moduleDir, rootDir, nMaxFiles, sFileIndex, useServer;
 
 function printError(err)
 {
@@ -224,14 +224,14 @@ function isTextFile(sFile)
 }
 
 /**
- * mapDiskFile(diskFile)
+ * mapDiskToServer(diskFile)
  *
  * @param {string} diskFile
  * @returns {string}
  */
-function mapDiskFile(diskFile)
+function mapDiskToServer(diskFile)
 {
-    if (Device.DEBUG || !existsFile(diskFile)) {
+    if (useServer || !existsFile(diskFile)) {
         diskFile = diskFile.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
     }
     return diskFile;
@@ -1073,7 +1073,7 @@ async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
         let diskName = path.basename(diskFile);
         di = new DiskInfo(device, diskName);
         if (diskName.endsWith(".json")) {
-            diskFile = mapDiskFile(diskFile);
+            diskFile = mapDiskToServer(diskFile);
             if (diskFile.startsWith("http")) {
                 printf("fetching %s\n", diskFile);
                 let response = await got(diskFile);
@@ -1154,6 +1154,7 @@ function main(argc, argv)
     Device.DEBUG = !!argv['debug'];
     moduleDir = path.dirname(argv0[0]);
     rootDir = path.join(moduleDir, "../../..");
+    useServer = !!argv['server'];
 
     printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s\n", options) : ""));
 

@@ -7,15 +7,16 @@ PCjs 2.0 disk images are JSON objects with the following properties:
   - *fileTable*: an Array of FileInfo objects, one for each file across all FAT volumes on the disk (optional)
   - *diskData*: an Array of sector data; for "CHS" disk images, the data is organized as an array of sectors within an array of heads within an array of cylinders
 
+For example, take a look at this [PC DOS diskette](https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json)].
+
 Older (PCjs 1.0) disk images were basically just an Array of sector data (what is now called the *diskData* object), without
 any other information.  Such disk images are still supported, but all the disk images now stored on PCjs disk servers,
 such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to the 2.0 format.
 
-## PCjs Disk Utilities
+## PCjs DiskImage Utility
 
 [DiskImage](modules/diskimage.js) is a Node command-line application that imports the new PCjs 2.0
 [DiskInfo](../../machines/pcx86/modules/diskinfo.js) module for reading and writing [PCjs Disk Images](#pcjs-disk-images).
-
 [DiskImage](modules/diskimage.js) supersedes the older PCjs 1.0 [DiskDump](lib/diskdump.js) utility.
 
 ## Building PCjs Disk Images from IMG files
@@ -41,7 +42,7 @@ which translates to these commands (using a 360K PC diskette named "disk1" as an
     pri disk1.pri -p decode mfm disk1.psi
     node modules/diskimage.js disk1.psi disk1.json
 
-## Building PCjs Disk Images from directories
+## Building PCjs Disk Images from Directories
 
 To build a [VisiCalc diskette](https://diskettes.pcjs.org/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
 from a directory containing VC.COM, specify the name of the directory, including a trailing slash; eg:
@@ -63,13 +64,33 @@ ASCII or non-ASCII data.
 
 ## Examining PCjs Disk Images
 
+Both local and remote diskette images can be examined.  To examine a remote image, you *must* use the `--disk` option,
+with either an explicit URL, as in:
+
+    node --disk https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+
+or with one of PCjs' implicit diskette paths, such as `/diskettes`, which currently maps to disk server `https://diskettes.pcjs.org`:
+
+    node --disk /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+
+If you happen to have a local file that exists in the same location as the implicit diskette path, use `--server` to force
+the server mapping.  The list of implicit paths for PC diskettes currently includes:
+
+  - /diskettes
+  - /gamedisks
+  - /harddisks
+  - /pcsig8a-disks
+  - /pcsig8b-disks
+
+## Commonly Used DiskImage Options
+
 To get a DOS-compatible directory listing of a disk image:
 
-    node modules/diskimage.js PCDOS200-DISK1.json --list
+    node modules/diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list
 
 To display all the unused bytes of a disk image:
 
-    node modules/diskimage.js PCDOS200-DISK1.json --list=unused
+    node modules/diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list=unused
 
 NOTE: Unused bytes are a superset of free bytes.  Free bytes are always measured in terms of unused clusters,
 multiplied by the cluster size, whereas unused bytes are the combination of all completely unused cluster space *plus* any partially
@@ -80,16 +101,16 @@ TODO: Update the unused byte report to include unused bytes, if any, in all FAT 
 
 To extract all the files from a disk image:
 
-    node modules/diskimage.js PCDOS200-DISK1.json --extract
+    node modules/diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract
 
 To extract a specific file from a disk image:
 
-    node modules/diskimage.js PCDOS200-DISK1.json --extract=COMMAND.COM
+    node modules/diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract=COMMAND.COM
 
 To dump a specific (C:H:S) sector from a disk image:
 
-    node modules/diskimage.js PCDOS200-DISK1.json --dump=0:0:1
+    node modules/diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1
 
 To dump multiple (C:H:S) sectors from a disk image track, follow the C:H:S values with a sector count; eg:
 
-    node modules/diskimage.js PCDOS200-DISK1.json --dump=0:0:1:4
+    node modules/diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1:4
