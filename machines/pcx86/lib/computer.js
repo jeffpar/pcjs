@@ -223,7 +223,7 @@ class Computer extends Component {
             this.enableDiagnostics();
         }
 
-        this.println(PCx86.APPNAME + " v" + (XMLVERSION || PCx86.APPVERSION) + "\n" + COPYRIGHT + "\n" + LICENSE);
+        this.println(PCx86.APPNAME + " v" + PCx86.APPVERSION + "\n" + COPYRIGHT + "\n" + LICENSE);
 
         if (DEBUG) this.printf("PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
 
@@ -1769,11 +1769,6 @@ class Computer extends Component {
      */
     static init()
     {
-        /*
-         * In non-COMPILED builds, embedMachine() may have set XMLVERSION.
-         */
-        if (!COMPILED && XMLVERSION) PCx86.APPVERSION = XMLVERSION;
-
         let aeMachines = Component.getElementsByClass(document, PCx86.APPCLASS + "-machine");
 
         for (let iMachine = 0; iMachine < aeMachines.length; iMachine++) {

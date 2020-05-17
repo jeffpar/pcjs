@@ -100,7 +100,6 @@ var PDP11 = {
     MEMFAULT:   MEMFAULT,
     WORDBUS:    WORDBUS,
     SITEURL:    SITEURL,        // shared
-    XMLVERSION: XMLVERSION,     // shared
 
     /*
      * CPU model numbers (supported)

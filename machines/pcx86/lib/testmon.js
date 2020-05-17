@@ -91,7 +91,7 @@ class TestMonitor {
         this.sendOutput = sendOutput.bind(controller);
         this.printf = printf.bind(controller);
         controller.bindMonitor(this, this.receiveData, this.receiveInput, this.receiveTests);
-        this.printf("%s TestMonitor v%s\n", APPNAME, APPVERSION || XMLVERSION);
+        this.printf("%s TestMonitor v%s\n", APPNAME, APPVERSION);
         this.printf("Use Ctrl-T to toggle terminal mode%s\n", (sBinding? " (" + sBinding.toUpperCase() + ")" : ""));
         this.setMode(TestMonitor.MODE.TERMINAL);
     }

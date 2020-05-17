@@ -1,12 +1,17 @@
 {
   "globals": {
+    "APPCLASS": true,
+    "APPNAME": true,
     "APPVERSION": true,
     "BACKTRACK": true,
     "BYTEARRAYS": true,
+    "COMPILED": true,
     "COPYRIGHT": true,
     "CSSCLASS": true,
+    "DEBUG": true,
     "DEBUGGER": true,
     "LICENSE": true,
+    "MAXDEBUG": true,
     "MEMFAULT": true,
     "PDP11": true,
     "PRIVATE": true,
@@ -16,7 +21,6 @@
     "SYMBOLS": true,
     "TYPEDARRAYS": true,
     "WORDBUS": true,
-    "XMLVERSION": true,
     "resources": true
   },
   "rules": {

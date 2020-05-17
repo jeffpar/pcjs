@@ -6665,7 +6665,7 @@ class DebuggerX86 extends DbgLib {
                         }
                         break;
                     }
-                    this.println((PCx86.APPNAME || "PCx86") + " version " + (XMLVERSION || PCx86.APPVERSION) + " (" + this.cpu.model + (PCx86.COMPILED? ",RELEASE" : (PCx86.DEBUG? ",DEBUG" : ",NODEBUG")) + (PCx86.PREFETCH? ",PREFETCH" : ",NOPREFETCH") + (PCx86.TYPEDARRAYS? ",TYPEDARRAYS" : (PCx86.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")) + (PCx86.BACKTRACK? ",BACKTRACK" : ",NOBACKTRACK") + ')');
+                    this.println((PCx86.APPNAME || "PCx86") + " version " + PCx86.APPVERSION + " (" + this.cpu.model + (PCx86.COMPILED? ",RELEASE" : (PCx86.DEBUG? ",DEBUG" : ",NODEBUG")) + (PCx86.PREFETCH? ",PREFETCH" : ",NOPREFETCH") + (PCx86.TYPEDARRAYS? ",TYPEDARRAYS" : (PCx86.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")) + (PCx86.BACKTRACK? ",BACKTRACK" : ",NOBACKTRACK") + ')');
                     this.println(Web.getUserAgent());
                     break;
                 case 'x':

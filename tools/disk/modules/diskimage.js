@@ -614,12 +614,12 @@ function processDisk(di, diskFile, argv, diskette)
                         if (prop == "drives" || prop == "floppyDrives") {
                             chQuote = "'";
                             if (prop == "drives") bootDisk = "None";
+                            sAutoType = "";
                         }
                         sMachine += "    " + prop + ": " + chQuote + hardware[prop] + chQuote + "\n";
-                        sAutoType = "";
                     }
-                    if (bootDisk) bootDisk = "      A:\n        name: \"" + bootDisk + "\"\n";
-                    if (demoDisk) demoDisk = "      B:\n        name: \"" + demoDisk + "\"\n";
+                    if (bootDisk) bootDisk = "      A: \"" + bootDisk + "\"\n";
+                    if (demoDisk) demoDisk = "      B: \"" + demoDisk + "\"\n";
                     let sAutoMount = "    autoMount:\n" + bootDisk + demoDisk;
                     if (sAutoType) sAutoType = "    autoType: " + sAutoType + "\n";
                     sFrontMatter += "machines:\n" + sMachine + sAutoGen + sAutoMount + (sAutoType || "");

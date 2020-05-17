@@ -169,8 +169,7 @@ var PCx86 = {
     PRIVATE:     PRIVATE,       // shared
     TYPEDARRAYS: TYPEDARRAYS,
     SITEURL:     SITEURL,       // shared
-    SYMBOLS:     SYMBOLS,
-    XMLVERSION:  XMLVERSION     // shared
+    SYMBOLS:     SYMBOLS
 };
 
 if (typeof module !== "undefined") {

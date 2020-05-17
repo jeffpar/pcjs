@@ -223,11 +223,6 @@ class C1PComputer extends Component {
      */
     static init()
     {
-        /*
-         * In non-COMPILED builds, embedMachine() may have set XMLVERSION.
-         */
-        if (!COMPILED && XMLVERSION) C1PJS.APPVERSION = XMLVERSION;
-
         var aeComputers = Component.getElementsByClass(document, C1PJS.APPCLASS, "computer");
 
         for (var iComputer=0; iComputer < aeComputers.length; iComputer++) {

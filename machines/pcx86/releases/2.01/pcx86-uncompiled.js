@@ -7,9 +7,7 @@
 /**
  * @define {string}
  */
-var APPVERSION = "2.00";                // this @define is overridden by the Closure Compiler with the version in machines.json
-
-var XMLVERSION = null;                  // this is set in non-COMPILED builds by embedMachine() if a version number was found in the machine XML
+var APPVERSION = "2.01";                // this @define is overridden by the Closure Compiler with the version in machines.json
 
 var COPYRIGHT = "Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>";
 
@@ -5074,8 +5072,7 @@ var PCx86 = {
     PRIVATE:     PRIVATE,       // shared
     TYPEDARRAYS: TYPEDARRAYS,
     SITEURL:     SITEURL,       // shared
-    SYMBOLS:     SYMBOLS,
-    XMLVERSION:  XMLVERSION     // shared
+    SYMBOLS:     SYMBOLS
 };
 
 
@@ -59773,7 +59770,7 @@ class TestMonitor {
         this.sendOutput = sendOutput.bind(controller);
         this.printf = printf.bind(controller);
         controller.bindMonitor(this, this.receiveData, this.receiveInput, this.receiveTests);
-        this.printf("%s TestMonitor v%s\n", APPNAME, APPVERSION || XMLVERSION);
+        this.printf("%s TestMonitor v%s\n", APPNAME, APPVERSION);
         this.printf("Use Ctrl-T to toggle terminal mode%s\n", (sBinding? " (" + sBinding.toUpperCase() + ")" : ""));
         this.setMode(TestMonitor.MODE.TERMINAL);
     }
@@ -78512,7 +78509,7 @@ class DebuggerX86 extends DbgLib {
                         }
                         break;
                     }
-                    this.println((PCx86.APPNAME || "PCx86") + " version " + (XMLVERSION || PCx86.APPVERSION) + " (" + this.cpu.model + (PCx86.COMPILED? ",RELEASE" : (PCx86.DEBUG? ",DEBUG" : ",NODEBUG")) + (PCx86.PREFETCH? ",PREFETCH" : ",NOPREFETCH") + (PCx86.TYPEDARRAYS? ",TYPEDARRAYS" : (PCx86.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")) + (PCx86.BACKTRACK? ",BACKTRACK" : ",NOBACKTRACK") + ')');
+                    this.println((PCx86.APPNAME || "PCx86") + " version " + PCx86.APPVERSION + " (" + this.cpu.model + (PCx86.COMPILED? ",RELEASE" : (PCx86.DEBUG? ",DEBUG" : ",NODEBUG")) + (PCx86.PREFETCH? ",PREFETCH" : ",NOPREFETCH") + (PCx86.TYPEDARRAYS? ",TYPEDARRAYS" : (PCx86.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")) + (PCx86.BACKTRACK? ",BACKTRACK" : ",NOBACKTRACK") + ')');
                     this.println(Web.getUserAgent());
                     break;
                 case 'x':
@@ -79989,7 +79986,7 @@ class Computer extends Component {
             this.enableDiagnostics();
         }
 
-        this.println(PCx86.APPNAME + " v" + (XMLVERSION || PCx86.APPVERSION) + "\n" + COPYRIGHT + "\n" + LICENSE);
+        this.println(PCx86.APPNAME + " v" + PCx86.APPVERSION + "\n" + COPYRIGHT + "\n" + LICENSE);
 
         if (DEBUG) this.printf("PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
 
@@ -81535,11 +81532,6 @@ class Computer extends Component {
      */
     static init()
     {
-        /*
-         * In non-COMPILED builds, embedMachine() may have set XMLVERSION.
-         */
-        if (!COMPILED && XMLVERSION) PCx86.APPVERSION = XMLVERSION;
-
         let aeMachines = Component.getElementsByClass(document, PCx86.APPCLASS + "-machine");
 
         for (let iMachine = 0; iMachine < aeMachines.length; iMachine++) {
@@ -82228,14 +82220,12 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
             sXML = sXML.replace(/(<xsl:variable name="APPCLASS">).*?(<\/xsl:variable>)/, "$1" + sAppClass + "$2");
 
             /*
-             * Non-COMPILED kludge to replace the version number template in the XSL file (which we assume we're reading,
-             * since fResolve is false) with whatever XMLVERSION we extracted from the XML file (see corresponding kludge below).
+             * Replace the version number template in the XSL file (which we assume we're reading, since fResolve is false)
+             * with the current APPVERSION.
              *
              * ES6 ALERT: Template strings.
              */
-            if (!COMPILED && XMLVERSION) {
-                sXML = sXML.replace(/<xsl:variable name="APPVERSION"(\/>|><\/xsl:variable>)/, `<xsl:variable name="APPVERSION">${XMLVERSION}</xsl:variable>`);
-            }
+            sXML = sXML.replace(/<xsl:variable name="APPVERSION"(\/>|>[^<]*<\/xsl:variable>)/, `<xsl:variable name="APPVERSION">${APPVERSION}</xsl:variable>`);
         }
 
         /*
@@ -82513,17 +82503,6 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                 if (!xml) {
                     displayError(sURL, sXML);
                     return;
-                }
-
-                /*
-                 * Non-COMPILED kludge to extract the version number from the stylesheet path in the machine XML file;
-                 * we don't need this code in COMPILED (non-DEBUG) releases, because APPVERSION is hard-coded into them.
-                 */
-                if (!COMPILED) {
-                    let aMatch = sXML.match(/<\?xml-stylesheet[^>]* href=(['"])[^'"]*?\/([0-9.]*)\/([^'"]*)\1/);
-                    if (aMatch) {
-                        XMLVERSION = aMatch[2];
-                    }
                 }
 
                 let transformXML = function(sURL, sXSL, xsl) {
@@ -82847,9 +82826,9 @@ function savePC(idMachine, sPCJSFile, callback)
         let sParms = cmp.saveMachineParms();
         if (!sPCJSFile) {
             if (DEBUG) {
-                sPCJSFile = "/machines/pcx86/releases/" + (XMLVERSION || APPVERSION) + "/pcx86-uncompiled.js"
+                sPCJSFile = "/machines/pcx86/releases/" + APPVERSION + "/pcx86-uncompiled.js"
             } else {
-                sPCJSFile = "/machines/pcx86/releases/" + (XMLVERSION || APPVERSION) + "/pcx86" + (dbg? "-dbg" : "") + ".js";
+                sPCJSFile = "/machines/pcx86/releases/" + APPVERSION + "/pcx86" + (dbg? "-dbg" : "") + ".js";
             }
         }
         if (callback && callback({ state: sState, parms: sParms })) return true;

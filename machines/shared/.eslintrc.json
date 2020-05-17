@@ -8,7 +8,6 @@
     "DEBUGGER": true,
     "PRIVATE": true,
     "SITEURL": true,
-    "XMLVERSION": true,
     "resources": true
   },
   "rules": {

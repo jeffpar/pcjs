@@ -14,8 +14,6 @@
  */
 var APPVERSION = "0.00";                // this @define is overridden by the Closure Compiler with the version in machines.json
 
-var XMLVERSION = null;                  // this is set in non-COMPILED builds by embedMachine() if a version number was found in the machine XML
-
 var COPYRIGHT = "Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>";
 
 var LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
@@ -95,7 +93,6 @@ var RS232 = {
 if (typeof module !== "undefined") {
     global.window       = false;        // provides an alternative "if (typeof window === 'undefined')" (ie, "if (window) ...")
     global.APPVERSION   = APPVERSION;
-    global.XMLVERSION   = XMLVERSION;
     global.COPYRIGHT    = COPYRIGHT;
     global.LICENSE      = LICENSE;
     global.CSSCLASS     = CSSCLASS;

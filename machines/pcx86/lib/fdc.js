@@ -186,7 +186,7 @@ class FDC extends Component {
          * We record any 'autoMount' object now, but we no longer parse it until initBus(), because the Computer's
          * getMachineParm() service may have an override for us.
          */
-        this.configMount = this.parseConfig(parmsFDC['autoMount']);
+        this.configMount = this.parseMount(parmsFDC['autoMount']);
 
         /*
          * This establishes "name" as the default; if we decide we'd prefer "none" to be the default (ie, the order
@@ -425,7 +425,7 @@ class FDC extends Component {
         }
 
         this.chipset = cmp.getMachineComponent("ChipSet");
-        this.parseConfig(this.cmp.getMachineParm('autoMount'), this.configMount);
+        this.configMount = this.parseMount(this.cmp.getMachineParm('autoMount'), this.configMount);
 
         this.panel = cmp.getMachineComponent("Panel");
 
@@ -488,14 +488,14 @@ class FDC extends Component {
     }
 
     /**
-     * parseConfig(config, configMerge)
+     * parseMount(config, configMerge)
      *
      * @this {FDC}
      * @param {Object|string|undefined} config
      * @param {Object} [configMerge]
      * @return {Object}
      */
-    parseConfig(config, configMerge)
+    parseMount(config, configMerge)
     {
         if (config) {
             if (typeof config == "string") {
@@ -512,10 +512,21 @@ class FDC extends Component {
         } else {
             config = {};
         }
+        /*
+         * Instead of modifying configMerge, we merely import anything in configMerge that doesn't exist in the new config.
+         */
         if (configMerge) {
-            for (let sDrive in config) {
-                configMerge[sDrive] = config[sDrive];
+            for (let sDrive in configMerge) {
+                if (!config[sDrive]) config[sDrive] = configMerge[sDrive];
             }
+        }
+        /*
+         * We now allow "shorthand" configs, where each drive property can simply be a string (ie, the implied 'name' of a diskette)
+         * instead of an object containing 'name' and/or 'path' strings.
+         */
+        for (let sDrive in config) {
+            let drive = config[sDrive];
+            if (typeof drive == "string") config[sDrive] = {'name': drive};
         }
         return config;
     }
