@@ -618,8 +618,8 @@ function processDisk(di, diskFile, argv, diskette)
                         }
                         sMachine += "    " + prop + ": " + chQuote + hardware[prop] + chQuote + "\n";
                     }
-                    if (bootDisk) bootDisk = "      A:\n        name: \"" + bootDisk + "\"\n";
-                    if (demoDisk) demoDisk = "      B:\n        name: \"" + demoDisk + "\"\n";
+                    if (bootDisk) bootDisk = "      A: \"" + bootDisk + "\"\n";
+                    if (demoDisk) demoDisk = "      B: \"" + demoDisk + "\"\n";
                     let sAutoMount = "    autoMount:\n" + bootDisk + demoDisk;
                     if (sAutoType) sAutoType = "    autoType: " + sAutoType + "\n";
                     sFrontMatter += "machines:\n" + sMachine + sAutoGen + sAutoMount + (sAutoType || "");
