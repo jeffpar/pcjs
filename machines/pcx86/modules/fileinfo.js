@@ -60,7 +60,7 @@ export default class FileInfo {
         this.size = size;
         this.cluster = cluster;
         this.aLBA = aLBA;
-        if (Device.DEBUG) {
+        if (Device.DEBUG && cluster >= 0) {
             this.device.printf(Device.MESSAGE.FILE, '"%d:%s" size=%d attr=%#0bx date=%#T cluster=%d sectors=%j\n', iVolume, path, size, attr, date, cluster, aLBA);
         }
     }

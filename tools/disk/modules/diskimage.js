@@ -12,6 +12,7 @@ import os         from "os";
 import crypto     from "crypto";
 import glob       from "glob";
 import path       from "path";
+import got        from "got";
 import DataBuffer from "../../modules/nodebuffer.js";
 import StdLib     from "../../modules/stdlib.js";
 import Device     from "../../../machines/modules/device.js";
@@ -220,6 +221,20 @@ function isTextFile(sFile)
         if (sFileUC.endsWith(asTextFileExts[i])) return true;
     }
     return false;
+}
+
+/**
+ * mapDiskFile(diskFile)
+ *
+ * @param {string} diskFile
+ * @returns {string}
+ */
+function mapDiskFile(diskFile)
+{
+    if (Device.DEBUG || !existsFile(diskFile)) {
+        diskFile = diskFile.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+    }
+    return diskFile;
 }
 
 /**
@@ -1058,7 +1073,14 @@ async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
         let diskName = path.basename(diskFile);
         di = new DiskInfo(device, diskName);
         if (diskName.endsWith(".json")) {
-            db = await readFileAsync(diskFile, "utf8");
+            diskFile = mapDiskFile(diskFile);
+            if (diskFile.startsWith("http")) {
+                printf("fetching %s\n", diskFile);
+                let response = await got(diskFile);
+                db = response.body;
+            } else {
+                db = await readFileAsync(diskFile, "utf8");
+            }
             if (!db) {
                 di = null;
             } else {
@@ -1133,11 +1155,10 @@ function main(argc, argv)
     moduleDir = path.dirname(argv0[0]);
     rootDir = path.join(moduleDir, "../../..");
 
-    printf("DiskImage v%s\n%s\n", Device.VERSION, Device.COPYRIGHT);
-    if (options) printf("options: %s\n", options);
+    printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s\n", options) : ""));
 
     if (Device.DEBUG) {
-        device.setMessages(Device.MESSAGE.FILE + Device.MESSAGE.INFO, true);
+        device.setMessages(Device.MESSAGE.FILE, true);
     }
 
     device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);

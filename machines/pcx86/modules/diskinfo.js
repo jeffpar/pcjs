@@ -291,7 +291,7 @@ export default class DiskInfo {
                     nSectorsPerTrack = nSectorsPerTrackBPB;
                     nCylinders = cbDiskData / (nHeads * nSectorsPerTrack * cbSector);
                     if (nCylinders != (nCylinders|0)) {
-                        this.printf(Device.MESSAGE.WARN, "total cylinders (%d) not a multiple of heads (%d) and sectors/track (%d)\n", nCylinders, nHeads, nSectorsPerTrack);
+                        this.printf(Device.MESSAGE.WARN, "total cylinders (%d) not a multiple of %d sectors per cylinder\n", nCylinders, nHeads * nSectorsPerTrack);
                         nCylinders |= 0;
                     }
                     bMediaID = bMediaIDBPB;
@@ -1382,7 +1382,7 @@ export default class DiskInfo {
                         if (!this.nSectors) {
                             this.nSectors = nSectors;
                         } else if (this.nSectors != nSectors) {
-                            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d:%d contains varying sectors per track: %d\n", this.diskName, iCylinder, iHead, nSectors);
+                            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d:%d has non-standard sector count: %d\n", this.diskName, iCylinder, iHead, nSectors);
                         }
                         for (let iSector = 0; iSector < aSectors.length; iSector++) {
                             let sector = aSectors[iSector];
@@ -1391,7 +1391,7 @@ export default class DiskInfo {
                             if (!this.cbSector) {
                                 this.cbSector = cbSector;
                             } else if (this.cbSector != cbSector) {
-                                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d:%d:%d contains varying sector sizes: %d\n", this.diskName, iCylinder, iHead, sector[DiskInfo.SECTOR.ID], cbSector);
+                                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d:%d:%d has non-standard sector size: %d\n", this.diskName, iCylinder, iHead, sector[DiskInfo.SECTOR.ID], cbSector);
                             }
                             this.cbDiskData += cbSector;
                         }
