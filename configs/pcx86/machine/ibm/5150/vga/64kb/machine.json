@@ -1,5 +1,5 @@
 {
-  "@title": "IBM PC (Model 5150) with VGA Display",
+  "name": "IBM PC, 64Kb RAM, Dual Floppy Drives, VGA",
   "defaults": {
     "ram": "64K",
     "fpu": "None",

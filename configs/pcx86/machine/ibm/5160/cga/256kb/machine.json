@@ -1,5 +1,5 @@
 {
-  "@title": "IBM PC XT (Model 5160) with Color Display",
+  "name": "IBM PC XT, 256Kb RAM, 10Mb Hard Disk, CGA",
   "defaults": {
     "ram": "256K",
     "fpu": "None",

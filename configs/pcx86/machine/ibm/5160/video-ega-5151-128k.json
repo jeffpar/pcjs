@@ -1,7 +1,7 @@
 {
   "id": "videoEGA",
   "class": "video",
-  "title": "EGA (128K) with Monochrome Display",
+  "title": "Monochrome Display",
   "model": "ega",
   "memory": "0x20000",
   "switches": "0010",

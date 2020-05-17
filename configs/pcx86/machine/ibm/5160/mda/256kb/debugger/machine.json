@@ -1,5 +1,5 @@
 {
-  "@title": "IBM PC XT (Model 5160) with Monochrome Display and Debugger",
+  "name": "IBM PC XT, 256Kb RAM, 10Mb Hard Disk, MDA, Debugger",
   "defaults": {
     "ram": "256K",
     "fpu": "None",

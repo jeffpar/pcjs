@@ -1,5 +1,5 @@
 {
-  "@title": "IBM PC (Model 5150) with Dual Displays",
+  "name": "IBM PC, 64Kb RAM, Dual Floppy Drives, MDA and CGA",
   "defaults": {
     "ram": "64K",
     "fpu": "None",
