@@ -13,6 +13,23 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
+This is *not* a complete version of Microsoft Word 1.10.  We received only one diskette, and the diskette was incomplete,
+containing a variety of personal information (which we removed) and an assortment of other software (which we preserved).
+However, until a *complete* copy of Microsoft Word 1.10 decides to make an appearance, this will have to do.
+
+Microsoft Word 1.10 was distributed on a copy-protected diskette, and the copy-protected data was missing from the diskette as
+well.  However, we were able to restore that data from the [Microsoft Word 1.15 Program Disk](/software/pcx86/app/microsoft/word/1.15/).
+
+So, despite the scary words embedded in `WORD.COM`:
+
+    ***INTERNAL SECURITY VIOLATION***
+    The tree of evil bears bitter fruit,
+    crime does not pay.
+        THE SHADOW KNOWS
+    Trashing program disk.
+
+nothing was trashed, and WORD.COM happily runs now.
+
 {% include machine.html id="ibm5160" %}
 
 ### Directory of MS Word 1.10
