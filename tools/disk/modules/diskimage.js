@@ -614,9 +614,9 @@ function processDisk(di, diskFile, argv, diskette)
                         if (prop == "drives" || prop == "floppyDrives") {
                             chQuote = "'";
                             if (prop == "drives") bootDisk = "None";
+                            sAutoType = "";
                         }
                         sMachine += "    " + prop + ": " + chQuote + hardware[prop] + chQuote + "\n";
-                        sAutoType = "";
                     }
                     if (bootDisk) bootDisk = "      A:\n        name: \"" + bootDisk + "\"\n";
                     if (demoDisk) demoDisk = "      B:\n        name: \"" + demoDisk + "\"\n";

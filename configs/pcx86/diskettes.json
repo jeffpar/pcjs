@@ -2309,7 +2309,8 @@
             "@title": "Microsoft C Compiler 1.03",
             "@hardware": {
               "options": "ibm,5160",
-              "drives": "[{name:\"PC-DOS 2.00 w/Tools (10Mb)\",type:3,path:\"/harddisks/pcx86/10mb/PCDOS200-C400.json\"}]"
+              "drives": "[{name:\"PC-DOS 2.00 w/Tools (10Mb)\",type:3,path:\"/harddisks/pcx86/10mb/PCDOS200-C400.json\"}]",
+              "autoType": "$date\\r$time\\r"
             },
             "@media": [
               {
@@ -2330,7 +2331,8 @@
             "@title": "Microsoft C Compiler 1.04",
             "@hardware": {
               "options": "ibm,5160",
-              "drives": "[{name:\"PC-DOS 2.00 w/Tools (10Mb)\",type:3,path:\"/harddisks/pcx86/10mb/PCDOS200-C400.json\"}]"
+              "drives": "[{name:\"PC-DOS 2.00 w/Tools (10Mb)\",type:3,path:\"/harddisks/pcx86/10mb/PCDOS200-C400.json\"}]",
+              "autoType": "$date\\r$time\\r"
             },
             "@media": [
               {
