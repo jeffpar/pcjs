@@ -21,6 +21,10 @@ which covers topics such as:
   - [Compiling PCjs](https://github.com/jeffpar/pcjs.org/wiki/Compiling-PCjs)
   - [Adding machines to pages](https://github.com/jeffpar/pcjs.org/wiki/Adding-machines-to-pages)
 
+Topics covered in the repository itself include:
+
+  - [PCjs Disk Images](/tools/disk/)
+
 ### License
 
 The [PCjs Project](https://github.com/jeffpar/pcjs.org) is an open-source project on [GitHub](https://github.com/jeffpar)

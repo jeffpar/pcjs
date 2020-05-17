@@ -2307,6 +2307,10 @@
         "@versions": {
           "1.03": {
             "@title": "Microsoft C Compiler 1.03",
+            "@hardware": {
+              "options": "ibm,5160",
+              "drives": "[{name:\"PC-DOS 2.00 w/Tools (10Mb)\",type:3,path:\"/harddisks/pcx86/10mb/PCDOS200-C400.json\"}]"
+            },
             "@media": [
               {
                 "@title": "MS C 1.03 Beta (Disk 1)",
@@ -2324,6 +2328,10 @@
           },
           "1.04": {
             "@title": "Microsoft C Compiler 1.04",
+            "@hardware": {
+              "options": "ibm,5160",
+              "drives": "[{name:\"PC-DOS 2.00 w/Tools (10Mb)\",type:3,path:\"/harddisks/pcx86/10mb/PCDOS200-C400.json\"}]"
+            },
             "@media": [
               {
                 "@title": "MS C 1.04 (Disk 1)",

@@ -1,19 +1,22 @@
 ---
 layout: page
-title: Microsoft C Compiler 1.03
+title: Microsoft C Compiler 1.03 (Beta)
 permalink: /software/pcx86/lang/microsoft/c/1.03/
+preview: https://diskettes.pcjs.org/pcx86/lang/microsoft/c/1.03/MSC103-BETA-DISK1.jpg
 machines:
-  - id: ibm5150
+  - id: ibm5160
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/harddisks/pcx86/10mb/PCDOS200-C400.json"}]'
     autoGen: true
     autoMount:
+      A:
+        name: "None"
       B:
         name: "MS C 1.03 Beta (Disk 1)"
-    autoType: $date\r$time\rB:\rDIR\r
 ---
 
-{% include machine.html id="ibm5150" %}
+{% include machine.html id="ibm5160" %}
 
 ### Directory of MS C 1.03 Beta (Disk 1)
 
@@ -37,6 +40,8 @@ machines:
            14 file(s)     157184 bytes
                                0 bytes free
 
+![MS C 1.03 Beta (Disk 1)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/c/1.03/MSC103-BETA-DISK1.jpg)
+
 ### Directory of MS C 1.03 Beta (Disk 2)
 
      Volume in drive A has no label
@@ -51,3 +56,5 @@ machines:
     SIEVE    C         493   1-01-80  12:06a
             7 file(s)      69956 bytes
                            89088 bytes free
+
+![MS C 1.03 Beta (Disk 2)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/c/1.03/MSC103-BETA-DISK2.jpg)

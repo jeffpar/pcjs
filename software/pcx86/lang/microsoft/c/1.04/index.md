@@ -2,18 +2,21 @@
 layout: page
 title: Microsoft C Compiler 1.04
 permalink: /software/pcx86/lang/microsoft/c/1.04/
+preview: https://diskettes.pcjs.org/pcx86/lang/microsoft/c/1.04/MSC104-DISK1.jpg
 machines:
-  - id: ibm5150
+  - id: ibm5160
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/harddisks/pcx86/10mb/PCDOS200-C400.json"}]'
     autoGen: true
     autoMount:
+      A:
+        name: "None"
       B:
         name: "MS C 1.04 (Disk 1)"
-    autoType: $date\r$time\rB:\rDIR\r
 ---
 
-{% include machine.html id="ibm5150" %}
+{% include machine.html id="ibm5160" %}
 
 ### Directory of MS C 1.04 (Disk 1)
 
@@ -29,6 +32,8 @@ machines:
     MC       BAT       128   4-09-83   8:02a
             7 file(s)     157440 bytes
                             1536 bytes free
+
+![MS C 1.04 (Disk 1)]({{ site.software.diskettes.server }}/diskettes/pcx86/lang/microsoft/c/1.04/MSC104-DISK1.jpg)
 
 ### Directory of MS C 1.04 (Disk 2)
 
@@ -53,3 +58,5 @@ machines:
     IO       ASM      1024   4-09-83   8:02a
            16 file(s)     155161 bytes
                             2560 bytes free
+
+![MS C 1.04 (Disk 2)]({{ site.software.diskettes.server }}/diskettes/pcx86/lang/microsoft/c/1.04/MSC104-DISK2.jpg)

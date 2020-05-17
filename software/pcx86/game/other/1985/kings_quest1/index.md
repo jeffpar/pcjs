@@ -43,7 +43,7 @@ I could see that track 38 contained 10 256-byte sectors; in addition, the first 
 Next, just as I did for [Microsoft Adventure](/blog/2019/06/13/), I wanted to create a PSI ("PCE Sector Image") representation of the disk,
 since I already have some tools that understand PSI files.
 
-To quickly recap, here are the basic steps:
+To quickly recap, here are the basic steps, using tools from [PCE](http://www.hampa.ch/pce/):
 
  1. From the Kryoflux RAW files, create a PFI ("PCE Flux Image") file
  2. Next, create a PRI ("PCE Raw Image") file, with the flux reversal pulses converted to bits

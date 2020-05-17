@@ -12,17 +12,18 @@ import os         from "os";
 import crypto     from "crypto";
 import glob       from "glob";
 import path       from "path";
+import got        from "got";
 import DataBuffer from "../../modules/nodebuffer.js";
 import StdLib     from "../../modules/stdlib.js";
 import Device     from "../../../machines/modules/device.js";
 import JSONLib    from "../../../machines/modules/jsonlib.js";
-import DiskImage  from "../../../machines/pcx86/modules/diskimage.js";
+import DiskInfo   from "../../../machines/pcx86/modules/diskinfo.js";
 
 let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
 let stdlib = new StdLib();
-let moduleDir, rootDir, nMaxFiles, sFileIndex;
+let moduleDir, rootDir, nMaxFiles, sFileIndex, useServer;
 
 function printError(err)
 {
@@ -61,7 +62,7 @@ function compareDisks(sDisk1, sDisk2)
  * @param {string} diskFile
  * @param {Object} diskette
  * @param {Array} argv
- * @returns {DiskImage|null}
+ * @returns {DiskInfo|null}
  */
 function createDisk(diskFile, diskette, argv)
 {
@@ -110,6 +111,34 @@ function createDisk(diskFile, diskette, argv)
     }
     diskette.archive = sArchiveFile;
     return di;
+}
+
+/**
+ * dumpSector(di, sector, offset, limit)
+ *
+ * @param {DiskInfo} di
+ * @param {Sector} sector
+ * @param {number} [offset]
+ * @param {number} [limit]
+ * @returns {string}
+ */
+function dumpSector(di, sector, offset = 0, limit = -1)
+{
+    let sBytes = "", sChars = "", sLines = "";
+    if (limit < 0) limit = di.cbSector;
+    while (offset < limit) {
+        let b = di.read(sector, offset);
+        if (b < 0) break;
+        if (!sLines || offset % 16 == 0) sLines += sprintf("%#06x  ", offset);
+        sBytes += sprintf("%02x ", b);
+        sChars += (b >= 0x20 && b < 0x7f? String.fromCharCode(b) : '.');
+        if (++offset % 16 == 0) {
+            sLines += sprintf("%48s %16s\n", sBytes, sChars);
+            sBytes = sChars = "";
+        }
+    }
+    if (sBytes) sLines += sprintf("%-48s %-16s\n", sBytes, sChars);
+    return sLines;
 }
 
 /**
@@ -195,6 +224,20 @@ function isTextFile(sFile)
 }
 
 /**
+ * mapDiskToServer(diskFile)
+ *
+ * @param {string} diskFile
+ * @returns {string}
+ */
+function mapDiskToServer(diskFile)
+{
+    if (useServer || !existsFile(diskFile)) {
+        diskFile = diskFile.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+    }
+    return diskFile;
+}
+
+/**
  * printFileDesc(diskFile, diskName, desc)
  *
  * @param {string} diskFile
@@ -203,7 +246,7 @@ function isTextFile(sFile)
  */
 function printFileDesc(diskFile, diskName, desc)
 {
-    printf("%-32s  %-12s  %s  %s %7d  %s\n", desc[DiskImage.FILEDESC.HASH] || "-".repeat(32), desc[DiskImage.FILEDESC.NAME], desc[DiskImage.FILEDESC.DATE], desc[DiskImage.FILEDESC.ATTR], desc[DiskImage.FILEDESC.SIZE] || 0, diskName + ':' + desc[DiskImage.FILEDESC.PATH]);
+    printf("%-32s  %-12s  %s  %s %7d  %s\n", desc[DiskInfo.FILEDESC.HASH] || "-".repeat(32), desc[DiskInfo.FILEDESC.NAME], desc[DiskInfo.FILEDESC.DATE], desc[DiskInfo.FILEDESC.ATTR], desc[DiskInfo.FILEDESC.SIZE] || 0, diskName + ':' + desc[DiskInfo.FILEDESC.PATH]);
 }
 
 /**
@@ -223,7 +266,7 @@ function printManifest(diskFile, diskName, manifest)
 /**
  * processDisk(di, diskFile, argv, diskette)
  *
- * @param {DiskImage} di
+ * @param {DiskInfo} di
  * @param {string} diskFile
  * @param {Array} argv
  * @param {Object} [diskette] (if present, then we were invoked by readAll(), so any --output option should be ignored)
@@ -267,7 +310,7 @@ function processDisk(di, diskFile, argv, diskette)
                 }
                 let cMatches = 0;
                 if (sFileIndex) {
-                    let re = new RegExp("^" + desc[DiskImage.FILEDESC.HASH] + ".*$", "gm"), match;
+                    let re = new RegExp("^" + desc[DiskInfo.FILEDESC.HASH] + ".*$", "gm"), match;
                     while ((match = re.exec(sFileIndex))) {
                         if (match[0].indexOf(diskFile) >= 0) continue;
                         if (!cMatches++) printf("see also:\n");
@@ -292,20 +335,8 @@ function processDisk(di, diskFile, argv, diskette)
                     printf("unable to find %d:%d:%d\n", iCylinder, iHead, idSector);
                     break;
                 }
-                let i = 0;
-                let sBytes = "", sChars = "", sLines = "";
-                sLines = sprintf("CHS=%d:%d:%d\n", iCylinder, iHead, idSector);
-                while (true) {
-                    let b = di.read(sector, i);
-                    if (b < 0) break;
-                    if (i % 16 == 0) sLines += sprintf("%#06x  ", i);
-                    sBytes += sprintf("%02x ", b);
-                    sChars += (b >= 0x20 && b < 0x7f? String.fromCharCode(b) : '.');
-                    if (++i % 16 == 0) {
-                        sLines += sBytes + " " + sChars + '\n';
-                        sBytes = sChars = "";
-                    }
-                }
+                let sLines = sprintf("CHS=%d:%d:%d\n", iCylinder, iHead, idSector);
+                sLines += dumpSector(di, sector, 0);
                 printf("%s\n", sLines);
                 idSector++;
             }
@@ -313,10 +344,41 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     if (argv['list']) {
+        let sLines = "";
         let iVolume = +argv['volume'];
         if (isNaN(iVolume)) iVolume = -1;
-        let list = di.getFileListing(iVolume) || "\tno listing available\n";
-        printf("%s\n", list);
+        if (argv['list'] == "unused") {
+            let lba = -1;
+            while ((lba = di.getUnusedSector(iVolume, lba)) >= 0) {
+                let sector = di.getSector(lba);
+                let offset = di.getUnusedSectorData(sector);
+                sLines += sprintf("\nLBA=%d\n", lba);
+                /*
+                 * There are two partial sector usage cases: the current sector contains the last N bytes of a file,
+                 * or the sector is COMPLETELY unused (ie, offset is zero).  When would a file have a completely unused
+                 * sector?  When the disk's cluster size is 2 or more sectors.  If a file ends somewhere in the middle
+                 * of a cluster, leaving 1 or more sectors in that cluster unused, we still "flag" all the sectors in
+                 * the cluster as belonging to the file.
+                 *
+                 * This is why we don't differentiate those cases on the basis of whether there's an associated file,
+                 * but simply on whether the offset is zero.
+                 */
+                if (offset) {
+                    let iFile = sector[DiskInfo.SECTOR.FILE_INDEX];
+                    device.assert(iFile != undefined);
+                    let file = di.fileTable[iFile];
+                    let cbPartial = file.size - sector[DiskInfo.SECTOR.FILE_OFFSET];
+                    sLines += sprintf("last %d bytes of %s:\n", cbPartial, file.path);
+                    sLines += dumpSector(di, sector, 0, offset);
+                }
+                sLines += sprintf("unused %d bytes:\n", di.cbSector - offset);
+                sLines += dumpSector(di, sector, offset);
+            }
+            if (!sLines) sLines = "no unused data space on disk";
+        } else {
+            sLines = di.getFileListing(iVolume) || "\tno listing available\n";
+        }
+        printf("%s\n", sLines);
     }
 
     if (argv['extract']) {
@@ -328,21 +390,31 @@ function processDisk(di, diskFile, argv, diskette)
              * in a JSON file (where CONTENTS would be redundant and a waste of space).  Here, we call getFileManifest(),
              * which calls getFileDesc(true), which returns a complete file descriptor that includes CONTENTS.
              */
-            let sPath = desc[DiskImage.FILEDESC.PATH];
+            let sPath = desc[DiskInfo.FILEDESC.PATH];
             if (sPath[0] == '/') sPath = sPath.substr(1);       // PATH should ALWAYS start with a slash, but let's be safe
             let name = path.basename(sPath);
-            let size = desc[DiskImage.FILEDESC.SIZE] || 0;
-            let attr = +desc[DiskImage.FILEDESC.ATTR];
-            let date = device.parseDate(desc[DiskImage.FILEDESC.DATE]);
-            let contents = desc[DiskImage.FILEDESC.CONTENTS] || [];
+            let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
+            let attr = +desc[DiskInfo.FILEDESC.ATTR];
+            /*
+             * We call parseDate() requesting a *local* date from the timestamp, because that's exactly how we're going
+             * to use it: as a local file modification time.  Ordinarily we want to deal exclusively in UTC dates, unpolluted
+             * by timezone information, but here we don't really have a choice.  Trying to fix the date after the fact,
+             * by adding Date.getTimezoneOffset(), doesn't always work either, probably due to daylight savings time considerations;
+             * best not to go down that rabbit hole.
+             */
+            let date = device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
+            let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
             let db = new DataBuffer(contents);
-            if (typeof argv['extract'] != "string" || name == argv['extract']) {
+            device.assert(size == db.length);
+            let subDir = argv['extract'] != "string"? di.getName() : "";
+            if (subDir || name == argv['extract']) {
+                if (subDir) sPath = path.join(subDir, sPath);
                 let dir = path.dirname(sPath);
                 if (!existsFile(dir)) fs.mkdirSync(dir, {recursive: true});
-                if (attr & DiskImage.ATTR.SUBDIR) {
+                if (attr & DiskInfo.ATTR.SUBDIR) {
                     if (!existsFile(sPath)) fs.mkdirSync(sPath);
                 } else {
-                    writeFile(sPath, db);
+                    writeFile(sPath, db, true, argv['overwrite']);
                 }
                 fs.utimesSync(sPath, date, date);
             }
@@ -539,9 +611,9 @@ function processDisk(di, diskFile, argv, diskette)
                     for (let prop in hardware) {
                         if (prop == "config" || prop == "machine" || prop == "options" || prop == "url" || prop[0] == '@') continue;
                         let chQuote = "";
-                        if (prop == "drives") {
+                        if (prop == "drives" || prop == "floppyDrives") {
                             chQuote = "'";
-                            bootDisk = "None";
+                            if (prop == "drives") bootDisk = "None";
                         }
                         sMachine += "    " + prop + ": " + chQuote + hardware[prop] + chQuote + "\n";
                         sAutoType = "";
@@ -603,7 +675,7 @@ function processDisk(di, diskFile, argv, diskette)
         }
         else if (sIndexNew != sIndex) {
             if (argv['rebuild']) {
-                if (writeFile(getFullPath(sIndexFile), sIndexNew, true)) {
+                if (writeFile(getFullPath(sIndexFile), sIndexNew, true, true)) {
                     printf("\t%s index for \"%s\": %s\n", sAction, diskette.title, sIndexFile);
                 }
             } else {
@@ -696,7 +768,7 @@ function readAll(argv)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
- * @returns {DiskImage|null}
+ * @returns {DiskInfo|null}
  */
 function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
 {
@@ -708,7 +780,7 @@ function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
     try {
         nMaxFiles = nMax || 256;
         let aFileData = readDirFiles(sDir, sLabel, fNormalize);
-        di = new DiskImage(device);
+        di = new DiskInfo(device);
         let db = new DataBuffer();
         if (!di.buildDiskFromFiles(db, path.basename(sDir), aFileData, kbTarget || 0)) {
             di = null;
@@ -745,7 +817,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
     if (sLabel == "none") {
         sLabel = "";
     } else if (sLabel == "default") {
-        sLabel = DiskImage.PCJS_LABEL;
+        sLabel = DiskInfo.PCJS_LABEL;
     }
 
     /*
@@ -761,7 +833,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
          * it's interpreted as the actual month - 1, so 8 corresponds to September.  Brilliant.
          */
         let dateLabel = new Date(1989, 8, 27, 3, 0, 0);
-        let file = {path: sDir, name: sLabel, attr: DiskImage.ATTR.VOLUME, date: dateLabel, size: 0};
+        let file = {path: sDir, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date: dateLabel, size: 0};
         aFileData.push(file);
     }
 
@@ -779,7 +851,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
         let stats = fs.statSync(sPath);
         file.date = stats.mtime;
         if (stats.isDirectory()) {
-            file.attr = DiskImage.ATTR.SUBDIR;
+            file.attr = DiskInfo.ATTR.SUBDIR;
             file.size = -1;
             file.data = new DataBuffer();
             file.files = readDirFiles(sPath, null, fNormalize);
@@ -800,7 +872,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
                 }
                 data = new DataBuffer(data);
             }
-            file.attr = DiskImage.ATTR.ARCHIVE;
+            file.attr = DiskInfo.ATTR.ARCHIVE;
             file.size = data.length;
             file.data = data;
         }
@@ -817,14 +889,14 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
  * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
- * @returns {DiskImage|null}
+ * @returns {DiskInfo|null}
  */
 function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
 {
     let db, di
     try {
         let diskName = path.basename(diskFile);
-        di = new DiskImage(device, diskName);
+        di = new DiskInfo(device, diskName);
         if (diskName.endsWith(".json")) {
             db = readFile(diskFile, "utf8");
             if (!db) {
@@ -900,7 +972,7 @@ function readJSON(sFile)
  * writeDisk(diskFile, di, fLegacy, indent, fOverwrite, fPrint)
  *
  * @param {string} diskFile
- * @param {DiskImage} di
+ * @param {DiskInfo} di
  * @param {boolean} [fLegacy]
  * @param {number} [indent]
  * @param {boolean} [fOverwrite]
@@ -939,14 +1011,15 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
 }
 
 /**
- * writeFile(sFile, data, fCreateDir)
+ * writeFile(sFile, data, fCreateDir, fOverwrite)
  *
  * @param {string} sFile
  * @param {DataBuffer|string} data
  * @param {boolean} [fCreateDir]
+ * @param {boolean} [fOverwrite]
  * @returns {boolean}
  */
-function writeFile(sFile, data, fCreateDir)
+function writeFile(sFile, data, fCreateDir, fOverwrite)
 {
     if (sFile) {
         try {
@@ -957,7 +1030,11 @@ function writeFile(sFile, data, fCreateDir)
                 let sDir = path.dirname(sFile);
                 if (!existsFile(sDir)) fs.mkdirSync(sDir, {recursive: true});
             }
-            fs.writeFileSync(sFile, data);
+            if (!existsFile(sFile) || fOverwrite) {
+                fs.writeFileSync(sFile, data);
+            } else {
+                printf("%s exists, use --overwrite to replace\n", sFile);
+            }
             return true;
         } catch(err) {
             printError(err);
@@ -994,9 +1071,16 @@ async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
     let db, di
     try {
         let diskName = path.basename(diskFile);
-        di = new DiskImage(device, diskName);
+        di = new DiskInfo(device, diskName);
         if (diskName.endsWith(".json")) {
-            db = await readFileAsync(diskFile, "utf8");
+            diskFile = mapDiskToServer(diskFile);
+            if (diskFile.startsWith("http")) {
+                printf("fetching %s\n", diskFile);
+                let response = await got(diskFile);
+                db = response.body;
+            } else {
+                db = await readFileAsync(diskFile, "utf8");
+            }
             if (!db) {
                 di = null;
             } else {
@@ -1070,12 +1154,12 @@ function main(argc, argv)
     Device.DEBUG = !!argv['debug'];
     moduleDir = path.dirname(argv0[0]);
     rootDir = path.join(moduleDir, "../../..");
+    useServer = !!argv['server'];
 
-    printf("DiskImage v%s\n%s\n", Device.VERSION, Device.COPYRIGHT);
-    if (options) printf("options: %s\n", options);
+    printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s\n", options) : ""));
 
     if (Device.DEBUG) {
-        device.setMessages(Device.MESSAGE.FILE + Device.MESSAGE.INFO, true);
+        device.setMessages(Device.MESSAGE.FILE, true);
     }
 
     device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);
