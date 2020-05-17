@@ -27,4 +27,4 @@ shipping *and* publicly acknowledge your generous contribution.
 
 [![MS C 1.03 Beta (Disk 1)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/c/1.03/MSC103-BETA-DISK1.jpg)](/software/pcx86/lang/microsoft/c/1.03/)
 
-[![MS C 1.04 (Disk 1)]({{ site.software.diskettes.server }}/diskettes/pcx86/lang/microsoft/c/1.04/MSC104-DISK1.jpg)](/software/pcx86/lang/microsoft/c/1.04/)
+[![MS C 1.04 (Disk 1)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/c/1.04/MSC104-DISK1.jpg)](/software/pcx86/lang/microsoft/c/1.04/)
