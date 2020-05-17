@@ -1,5 +1,5 @@
 {
-  "name": "IBM PC, 64Kb RAM, LPT1, COM1, MDA and CGA",
+  "name": "IBM PC, 64Kb RAM, LPT1, COM1, MDA and CGA, Debugger",
   "defaults": {
     "ram": "64K",
     "fpu": "None",
@@ -11,6 +11,10 @@
     {
       "id": "pcDual",
       "class": "computer"
+    },
+    {
+      "id": "debugger",
+      "class": "debugger"
     },
     "/configs/pcx86/machine/ibm/5150/rom-basic-100.json",
     "/configs/pcx86/machine/ibm/5150/rom-bios-rev1.json",
@@ -27,28 +31,23 @@
     "/configs/pcx86/machine/ibm/5150/ram.json",
     "/configs/pcx86/machine/ibm/5150/cpu.json",
     "/configs/pcx86/machine/ibm/5150/keyboard.json",
+    "/configs/pcx86/machine/ibm/5150/panel.json",
     {
-      "id": "chipset",
-      "class": "chipset",
-      "model": 5150,
-      "scaleTimers": false,
+      "config": "/configs/pcx86/machine/ibm/5150/chipset.json",
       "sw1": "01000001",
-      "sw2": "11111000",
-      "@note": "The above switch settings indicate '64K, No FPU, Monochrome Monitor, 2 Floppy Drives'.",
-      "sound": true,
-      "floppies": "",
-      "monitor": "",
-      "dateRTC": ""
+      "sw2": "11111000"
     },
     {
       "id": "lpt1",
       "class": "parallel",
-      "adapter": 2
+      "adapter": 2,
+      "binding": "print"
     },
     {
       "id": "com1",
       "class": "serial",
-      "adapter": 1
+      "adapter": 1,
+      "binding": "print"
     }
   ]
 }
