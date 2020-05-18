@@ -297,7 +297,7 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     if (!argv['quiet']) {
-        printf("processing %s: %d bytes (checksum %d)\n", diskFile, di.getSize(), di.getChecksum());
+        printf("processing %s: %d bytes (checksum %d)\n", di.getName(), di.getSize(), di.getChecksum());
     }
 
     let sFindName = argv['file'];
@@ -309,7 +309,7 @@ function processDisk(di, diskFile, argv, diskette)
          */
         let desc = di.findFile(sFindName, sFindText);
         if (desc) {
-            printFileDesc(diskFile /* di.getName() */, desc);
+            printFileDesc(di.getName(), desc);
             if (argv['index']) {
                 /*
                  * We cheat and search for matching hash values in the provided index; this is much faster than laboriously
@@ -417,7 +417,7 @@ function processDisk(di, diskFile, argv, diskette)
             let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
             let db = new DataBuffer(contents);
             device.assert(size == db.length);
-            let subDir = argv['extract'] != "string"? di.getName() : "";
+            let subDir = typeof argv['extract'] != "string"? di.getName() : "";
             if (subDir || name == argv['extract']) {
                 let fSuccess = false;
                 if (subDir) sPath = path.join(subDir, sPath);
@@ -701,14 +701,17 @@ function processDisk(di, diskFile, argv, diskette)
 
     if (!diskette) {
         let output = argv['output'] || argv[1];
-        if (output) writeDisk(output, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite']);
+        if (argv['boot']) {
+            di.updateBootSector(readFile(argv['boot'], null));
+        }
+        if (output) writeDisk(output, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], true, argv['writable']);
     }
 }
 
 /**
  * readAll(argv)
  *
- * If "--all=<string>" then the set of disks is limited to those where pathname contains <string>.
+ * If "--all=[string]" then the set of disks is limited to those where pathname contains [string].
  *
  * @param {Array} argv
  */
@@ -787,9 +790,17 @@ function readAll(argv)
  */
 function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
 {
-    let di;
-    if (!sLabel) {
-        sLabel = path.basename(sDir).replace(/^.*-([^0-9][^-]+)$/, "$1");
+    let di, diskName;
+    if (sDir.endsWith('/')) {
+        diskName = path.basename(sDir);
+        if (!sLabel) {
+            sLabel = path.basename(sDir).replace(/^.*-([^0-9][^-]+)$/, "$1");
+        }
+    } else {
+        diskName = path.basename(path.dirname(sDir));
+        /*
+         * When we're given a list of files, we don't pick a default label; use --label if you want one.
+         */
     }
     sDir = getFullPath(sDir);
     try {
@@ -797,7 +808,7 @@ function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
         let aFileData = readDirFiles(sDir, sLabel, fNormalize);
         di = new DiskInfo(device);
         let db = new DataBuffer();
-        if (!di.buildDiskFromFiles(db, path.basename(sDir), aFileData, kbTarget || 0)) {
+        if (!di.buildDiskFromFiles(db, diskName, aFileData, kbTarget || 0)) {
             di = null;
         }
     } catch(err) {
@@ -818,7 +829,22 @@ function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
 function readDirFiles(sDir, sLabel, fNormalize = false)
 {
     let aFileData = [];
-    let asFiles = fs.readdirSync(sDir);
+
+    let asFiles;
+    if (sDir.endsWith('/')) {
+        asFiles = fs.readdirSync(sDir);
+        for (let i = 0; i < asFiles.length; i++) {
+            asFiles[i] = path.join(sDir, asFiles[i]);
+        }
+    } else {
+        asFiles = sDir.split(',');
+        sDir = ".";
+        for (let i = 0; i < asFiles.length; i++) {
+            let sDirFile = path.dirname(asFiles[i]);
+            if (sDirFile != ".") sDir = sDirFile;
+            asFiles[i] = path.join(sDir, path.basename(asFiles[i]));
+        }
+    }
 
     /*
      * There are two special label strings you can pass on the command-line:
@@ -859,9 +885,9 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
          *
          * TODO: Consider an override option that will allow hidden file(s) to be included as well.
          */
-        let sName = asFiles[iFile];
+        let sPath = asFiles[iFile];
+        let sName = path.basename(sPath);
         if (sName.charAt(0) == '.') continue;
-        let sPath = path.join(sDir, sName);
         let file = {path: sPath, name: sName};
         let stats = fs.statSync(sPath);
         file.date = stats.mtime;
@@ -984,7 +1010,7 @@ function readJSON(sFile)
 }
 
 /**
- * writeDisk(diskFile, di, fLegacy, indent, fOverwrite, fPrint)
+ * writeDisk(diskFile, di, fLegacy, indent, fOverwrite, fPrint, fWritable)
  *
  * @param {string} diskFile
  * @param {DiskInfo} di
@@ -992,8 +1018,9 @@ function readJSON(sFile)
  * @param {number} [indent]
  * @param {boolean} [fOverwrite]
  * @param {boolean} [fPrint]
+ * @param {boolean} [fWritable]
  */
-function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fPrint = true)
+function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fPrint = true, fWritable = false)
 {
     let diskName = path.basename(diskFile);
     try {
@@ -1010,9 +1037,11 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
             if (data) {
                 if (fPrint) printf("writing %s...\n", diskFile);
                 diskFile = getFullPath(diskFile);
+                let sDir = path.dirname(diskFile);
+                if (!existsFile(sDir)) fs.mkdirSync(sDir, {recursive: true});
                 if (fExists) fs.unlinkSync(diskFile);
                 fs.writeFileSync(diskFile, data);
-                if (diskFileLC.endsWith(".img")) fs.chmodSync(diskFile, 0o444);
+                if (diskFileLC.endsWith(".img") && !fWritable) fs.chmodSync(diskFile, 0o444);
             } else {
                 printf("%s not written, no data\n", diskName);
             }
@@ -1153,6 +1182,9 @@ function readFileAsync(sFile, encoding = "utf8")
  * you can use --output to explicitly specify an output disk image, or you can implicitly specify one as
  * the second non-option argument.
  *
+ * To add files to a disk in a specific order, use --files=[comma-separated list of files].  And if you
+ * want a particular boot sector, use --boot=[sector image file].
+ *
  * Use --all to process all catalogued disks with the specified options, or --all=[subset] to process only
  * disks whose path or name contains [subset]; any input/output disk/directory names are ignored when
  * using --all.
@@ -1192,18 +1224,33 @@ function main(argc, argv)
         return;
     }
 
+    let fDirectory = false
     input = argv['dir'];
-    if (!input) {
-        input = argv[1];
-        argv.splice(1, 1);
-    } else {
+    if (input) {
+        fDirectory = true;          // directories should end with a trailing slash, but we'll make sure
         if (!input.endsWith('/')) input += '/';
+    } else {
+        input = argv['files'];
+        if (input) {
+            fDirectory = true;      // files must be a comma-separated list of files (and NO trailing slash)
+        } else {
+            input = argv[1];
+            argv.splice(1, 1);
+            fDirectory = input.endsWith('/');
+        }
     }
 
     let di;
     if (input) {
-        if (input.endsWith('/')) {
+        if (fDirectory) {
+            /*
+             * readDir() takes care of both directories and files, distinguishing between them on the basis of a trailing slash.
+             */
             di = readDir(input, argv['label'], argv['normalize'], +argv['target'], +argv['maxfiles']);
+            if (di) {
+                let name = argv['output'] || argv[1];
+                if (name) di.setName(path.basename(name));
+            }
         } else {
             di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData']));
         }

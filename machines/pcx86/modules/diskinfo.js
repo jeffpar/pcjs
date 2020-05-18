@@ -1618,7 +1618,7 @@ export default class DiskInfo {
      *
      * @this {DiskInfo}
      * @param {boolean} fRebuild
-     * @returns {number}
+     * @returns {number} (-1 if error, otherwise number of files found across all volumes)
      */
     buildTables(fRebuild)
     {
@@ -1634,7 +1634,7 @@ export default class DiskInfo {
             let sectorBoot = this.getSector(0);
             if (!sectorBoot) {
                 this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: unable to read boot sector\n", this.diskName);
-                return;
+                return -1;
             }
 
             /*
@@ -1946,7 +1946,7 @@ export default class DiskInfo {
     getFileListing(iVolume = -1, indent = 0)
     {
         let sListing = "";
-        if (this.buildTables()) {
+        if (this.buildTables() > 0) {
             let nVolumes = this.volTable.length;
             if (iVolume < 0) {
                 iVolume = 0;
@@ -2157,7 +2157,7 @@ export default class DiskInfo {
     getFileManifest(fnHash)
     {
         let aFiles = [];
-        if (this.buildTables()) {
+        if (this.buildTables() > 0) {
             for (let i = 0; i < this.fileTable.length; i++) {
                 let file = this.fileTable[i];
                 if (file.name == "." || file.name == "..") continue;
@@ -2416,7 +2416,7 @@ export default class DiskInfo {
      * @this {DiskInfo}
      * @param {VolInfo} vol
      * @param {DirInfo} dir
-     * @returns {Array.<number>} of LBAs (physical block addresses)
+     * @returns {Array.<number>} of LBAs (logical block addresses)
      */
     convertClusterToSectors(vol, dir)
     {
@@ -2483,26 +2483,39 @@ export default class DiskInfo {
     }
 
     /**
+     * getCHS(lba)
+     *
+     * @this {DiskInfo}
+     * @param {number} lba (logical block address)
+     * @returns {Array.<number>} [iCylinder, iHead, idSector] (if idSector is zero, the conversion failed)
+     */
+    getCHS(lba)
+    {
+        let iCylinder, iHead = 0, idSector = 0;
+        let nSectorsPerCylinder = this.nHeads * this.nSectors;
+        iCylinder = (lba / nSectorsPerCylinder) | 0;
+        if (iCylinder < this.nCylinders) {
+            let nSectorsRemaining = (lba % nSectorsPerCylinder);
+            iHead = (nSectorsRemaining / this.nSectors) | 0;
+            /*
+             * LBA numbers are 0-based, but the sector numbers in CHS addressing are 1-based, so add 1 to the sector index.
+             */
+            idSector = (nSectorsRemaining % this.nSectors) + 1;
+        }
+        return [iCylinder, iHead, idSector];
+    }
+
+    /**
      * getSector(lba)
      *
      * @this {DiskInfo}
-     * @param {number} lba (physical block address)
+     * @param {number} lba (logical block address)
      * @returns {Sector|null} sector
      */
     getSector(lba)
     {
-        let nSectorsPerCylinder = this.nHeads * this.nSectors;
-        let iCylinder = (lba / nSectorsPerCylinder) | 0;
-        if (iCylinder < this.nCylinders) {
-            let nSectorsRemaining = (lba % nSectorsPerCylinder);
-            let iHead = (nSectorsRemaining / this.nSectors) | 0;
-            /*
-             * LBA numbers are 0-based, but the sector numbers in CHS addressing are 1-based, so add one to iSector
-             */
-            let iSector = (nSectorsRemaining % this.nSectors) + 1;
-            return this.seek(iCylinder, iHead, iSector);
-        }
-        return null;
+        let [iCylinder, iHead, idSector] = this.getCHS(lba);
+        return this.seek(iCylinder, iHead, idSector);
     }
 
     /**
@@ -2696,21 +2709,17 @@ export default class DiskInfo {
      * @this {DiskInfo}
      * @param {number} iFile
      * @param {number} off (file offset corresponding to the given LBA of the given file)
-     * @param {number} lba (physical block address from the file's aLBA)
+     * @param {number} lba (logical block address from the file's aLBA)
      * @returns {boolean} true if successfully updated, false if not
      */
     updateSector(iFile, off, lba)
     {
-        let nSectorsPerCylinder = this.nHeads * this.nSectors;
-        let iCylinder = (lba / nSectorsPerCylinder) | 0;
-        let nSectorsRemaining = (lba % nSectorsPerCylinder);
-        let iHead = (nSectorsRemaining / this.nSectors) | 0;
-        let iSector = (nSectorsRemaining % this.nSectors);
         let cylinder, head, sector;
-        if ((cylinder = this.aDiskData[iCylinder]) && (head = cylinder[iHead]) && (sector = head[iSector])) {
+        let [iCylinder, iHead, idSector] = this.getCHS(lba);
+        if ((cylinder = this.aDiskData[iCylinder]) && (head = cylinder[iHead]) && (sector = head[idSector - 1])) {
             let file = this.fileTable[iFile];
-            if (sector[DiskInfo.SECTOR.ID] != iSector + 1) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "warning: %d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, iSector + 1, sector[DiskInfo.SECTOR.ID], file.path);
+            if (sector[DiskInfo.SECTOR.ID] != idSector) {
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "warning: %d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, idSector, sector[DiskInfo.SECTOR.ID], file.path);
             }
             if (sector[DiskInfo.SECTOR.FILE_INDEX] != undefined) {
                 let filePrev = this.fileTable[sector[DiskInfo.SECTOR.FILE_INDEX]];
@@ -2963,7 +2972,7 @@ export default class DiskInfo {
     {
         let volTable, fileTable;
         if (!fLegacy) {
-            if (this.buildTables(this.fromJSON)) {
+            if (this.buildTables(this.fromJSON) >= 0) {
                 volTable = [];
                 for (let iVolume = 0; iVolume < this.volTable.length; iVolume++) {
                     volTable.push(this.getVolDesc(this.volTable[iVolume]));
@@ -3030,7 +3039,7 @@ export default class DiskInfo {
     findFile(name)
     {
         let desc = null;
-        if (this.buildTables()) {
+        if (this.buildTables() > 0) {
             name = name.toUpperCase();
             if (this.fileTable) {
                 for (let i = 0; i < this.fileTable.length; i++) {
@@ -3137,6 +3146,21 @@ export default class DiskInfo {
     getName()
     {
         return this.diskName.replace(/\.[a-z]+$/i, "");
+    }
+
+    /**
+     * setName(name)
+     *
+     * A disk image file name is normally associated with the DiskInfo when it's created (see the constructor), and it
+     * doesn't normally change.  However, there are cases where the disk was created from a set of files, and so the default
+     * name isn't particularly meaningful or appropriate, so we let the caller update the name as needed.
+     *
+     * @this {DiskInfo}
+     * @param {string} name
+     */
+    setName(name)
+    {
+        if (name) this.diskName = name;
     }
 
     /**
@@ -3353,17 +3377,18 @@ export default class DiskInfo {
     }
 
     /**
-     * write(sector, iByte, b)
+     * write(sector, iByte, b, fForce)
      *
      * @this {DiskInfo}
      * @param {Sector} sector (returned from a previous seek)
      * @param {number} iByte (byte index within the given sector)
      * @param {number} b the byte value to write
+     * @param {boolean} [fForce] (true to force a write operation, even if disk not writable)
      * @returns {boolean|null} true if write successful, false if write-protected, null if out of bounds
      */
-    write(sector, iByte, b)
+    write(sector, iByte, b, fForce)
     {
-        if (!this.fWritable) return false;
+        if (!fForce && !this.fWritable) return false;
 
         if (Device.DEBUG && !iByte) {
             this.printf(Device.MESSAGE.DISK, 'write("%s",CHS=%d:%d:%d)\n', this.diskName, sector.iCylinder, sector.iHead, sector[DiskInfo.SECTOR.ID]);
@@ -3379,20 +3404,66 @@ export default class DiskInfo {
                  * Ensure every byte up to the specified byte is properly initialized.
                  */
                 for (let i = adw.length; i <= idw; i++) adw[i] = dwPattern;
-                if (!sector.cModify) {
-                    sector.iModify = idw;
-                    sector.cModify = 1;
-                } else if (idw < sector.iModify) {
-                    sector.cModify += sector.iModify - idw;
-                    sector.iModify = idw;
-                } else if (idw >= sector.iModify + sector.cModify) {
-                    sector.cModify += idw - (sector.iModify + sector.cModify) + 1;
+                /*
+                 * Non-writable disks don't need to track modifications, and the only way we can get here
+                 * on a non-writable disk is if this is a "forced" write, which again doesn't need to be tracked.
+                 */
+                if (this.fWritable) {
+                    if (!sector.cModify) {
+                        sector.iModify = idw;
+                        sector.cModify = 1;
+                    } else if (idw < sector.iModify) {
+                        sector.cModify += sector.iModify - idw;
+                        sector.iModify = idw;
+                    } else if (idw >= sector.iModify + sector.cModify) {
+                        sector.cModify += idw - (sector.iModify + sector.cModify) + 1;
+                    }
                 }
+                /*
+                 * Finally, write the byte.
+                 */
                 adw[idw] = (adw[idw] & ~(0xff << nShift)) | (b << nShift);
             }
             return true;
         }
         return null;
+    }
+
+    /**
+     * updateBootSector(dbBoot, fReplaceBPB, iVolume)
+     *
+     * We use the write() interface to modify the bytes of the boot sector, with fForce
+     * set, which allows writes even when the disk wasn't opened for writing.
+     *
+     * @this {DiskInfo}
+     * @param {DataBuffer} dbBoot (DataBuffer containing new boot sector)
+     * @param {boolean} [fReplaceBPB] (default is false, so we preserve the existing BPB)
+     * @param {number} [iVolume] (default is first volume, which is all most disks have anyway)
+     * @returns {boolean} (true if successful, false otherwise)
+     */
+    updateBootSector(db, fReplaceBPB = false, iVolume = 0)
+    {
+        let fSuccess = false;
+        if (this.buildTables() >= 0) {
+            if (iVolume >= 0 && iVolume < this.volTable.length) {
+                let lbaBoot = this.volTable[iVolume].lbaStart;
+                let sectorBoot = this.getSector(lbaBoot);
+                if (sectorBoot) {
+                    fSuccess = true;
+                    let cb = sectorBoot[DiskInfo.SECTOR.LENGTH];
+                    for (let ib = 0; ib < cb; ib++) {
+                        if (!fReplaceBPB) {
+                            if (ib >= DiskInfo.BPB.BEGIN && ib < DiskInfo.BPB.END) continue;
+                        }
+                        if (!this.write(sectorBoot, ib, db.readUInt8(ib), true)) {
+                            fSuccess = false;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return fSuccess;
     }
 }
 
@@ -3558,6 +3629,7 @@ DiskInfo.PCJS_OEM   = "PCJS.ORG";
  */
 DiskInfo.BPB = {
     JMP_OPCODE:     0x000,      // 1 byte for a JMP opcode, followed by a 1 or 2-byte offset
+    BEGIN:          0x003,      //
     OEM_STRING:     0x003,      // 8 bytes
     SECTOR_BYTES:   0x00B,      // 2 bytes: bytes per sector (eg, 0x200 or 512)
     CLUSTER_SECS:   0x00D,      // 1 byte: sectors per cluster (eg, 1)
@@ -3570,7 +3642,8 @@ DiskInfo.BPB = {
     TRACK_SECS:     0x018,      // 2 bytes: sectors per track (eg, 8)
     TOTAL_HEADS:    0x01A,      // 2 bytes: number of heads (eg, 1)
     HIDDEN_SECS:    0x01C,      // 2 bytes (DOS 2.x) or 4 bytes (DOS 3.31 and up): number of hidden sectors (always 0 for non-partitioned media)
-    LARGE_SECS:     0x020       // 4 bytes (DOS 3.31 and up): number of sectors if TOTAL_SECS is zero
+    LARGE_SECS:     0x020,      // 4 bytes (DOS 3.31 and up): number of sectors if TOTAL_SECS is zero
+    END:            0x024       //
 };
 
 /*

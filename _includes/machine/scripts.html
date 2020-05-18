@@ -42,6 +42,7 @@ Note that the 'resume' and 'state' properties were originally (and still are) Co
 template doesn't add them to the Computer component anymore, since we started supporting them here as machine "override" properties.
 
 {%- endcomment -%}
+
 {%- for candidate in page.machines -%}
   {%- assign machine_id = candidate.id -%}
   {%- capture machine_type -%}{{ candidate.type | remove: "-dbg" }}{%- endcapture -%}
@@ -53,7 +54,24 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- unless machine -%}
     {%- continue -%}
   {%- endunless -%}
+  {%- comment -%}
+
+    On the PCjs web server, the site.data folder contains a machines.json, which includes machine data for all available machine types.
+
+    For other servers, we support an alternative: the same data may be stored inside a 'machine' property of the machine's configuration file.
+
+    The only machine data properties we really need are: 'version', 'factory', and 'script'.  Other properties such as 'folder', 'copy', and
+    'scripts' (which allows multiple unbundled scripts per machine) are only supported on the PCjs web server.
+
+  {%- endcomment -%}
   {%- assign machine_data = site.data.machines[machine_type] -%}
+  {%- unless machine_data -%}
+    {%- assign machine_data = site.data -%}
+    {%- assign machine_paths = machine.config | replace: "/configs/", "" | replace: ".json", "" | split: "/" -%}
+    {%- for machine_path in machine_paths -%}{%- assign machine_data = machine_data[machine_path] -%}{%- endfor -%}
+    {%- assign machine_data = machine_data.machine -%}
+  {%- endunless -%}
+
   {%- assign machine_folder = machine_data.folder -%}
   {%- if machine_data.copy != nil -%}
     {%- assign machine_data = site.data.machines[machine_data.copy] -%}
@@ -199,8 +217,12 @@ template doesn't add them to the Computer component anymore, since we started su
       {%- capture page_scripts -%}{{ page_scripts }}{{ page_script }}{%- endcapture -%}
     {%- endif -%}
   {%- else -%}
-    {%- capture page_script %}
+    {%- capture page_script -%}
+    {%- if machine_data.script %}
+    <script src="{{ site.baseurl }}{{ machine_data.script }}"></script>
+    {%- else %}
     <script src="{{ site.baseurl }}/machines/{{ machine_folder }}/releases/{{ machine_version }}/{{ machine_type }}{%- if machine.uncompiled -%}-uncompiled{%- endif -%}.js"></script>
+    {%- endif -%}
     {%- endcapture -%}
     {%- unless page_scripts contains page_script -%}
       {{ page_script }}
@@ -218,7 +240,7 @@ template doesn't add them to the Computer component anymore, since we started su
     <script>PCjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
   {%- else %}
     <script>{{ machine_factory }}('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
-{%- endif %}
+  {%- endif %}
   {%- if machine.sticky == "top" %}
     <script src="{{ site.baseurl }}/machines/shared/lib/sticky.js"></script>
     <script>addStickyMachine('{{ machine_id }}');</script>
