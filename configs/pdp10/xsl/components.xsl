@@ -256,7 +256,7 @@
 				</xsl:choose>
 				<xsl:if test="$APPCLASS = 'pcx86'"><div class="{$CSSCLASS}-reference">[<a href="#" onclick="savePC('{$machine}'); return false;">Save Machine</a>]</div></xsl:if>
 				<div class="{$CSSCLASS}-copyright">
-					<a href="{$SITEURL}" target="_blank"><xsl:value-of select="$APPNAME"/></a> v<xsl:value-of select="$APPVERSION"/> © 2012-2020 by <a href="https://jeffpar.com" target="_blank">@jeffpar</a>
+					<a href="{$SITEURL}" target="_blank"><xsl:value-of select="$APPNAME"/></a> v<xsl:value-of select="$APPVERSION"/> © 2012-2020 <a href="https://github.com/jeffpar" target="_blank">Jeff Parsons</a>
 				</div>
 				<div style="clear:both"> </div>
 			</xsl:if>

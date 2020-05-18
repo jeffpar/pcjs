@@ -1,0 +1,440 @@
+@CHARSET "UTF-8";
+/*
+*:not(input,textarea) {
+  -webkit-user-select: none;
+}
+*/
+.machine {
+  margin: 0 0 2em;
+}
+.machine h3 {
+  color: #6091b7;
+}
+.pcjs-embed {
+}
+.pcjs-embed:after {
+  clear: both;
+}
+.pcjs-machine {
+  clear: both;
+  margin: 0 auto;
+}
+.pcjs-name, .pcjs-title {
+  clear: both;
+  font-weight: bold;
+  padding-bottom: 4px;
+}
+.pcjs-title {
+  float: left;
+}
+.pcjs-chassis {
+  color: black;
+  background-color: #fff8e7;
+  border: 1px solid black;
+  border-radius: 15px;
+  overflow: auto;
+  padding: 8px;
+}
+.pcjs-console {
+  font-family: monospace;
+  width: 100%;
+}
+.pcjs-controls-left {
+  display: table;
+  float: left;
+}
+.pcjs-controls-right {
+  display: table;
+  float: right;
+  padding-bottom: 4px;
+}
+.pcjs-controls-top {
+  display: table;
+  float: right;
+  margin-bottom: 4px;
+}
+.pcjs-controls-bottom {
+  display: table;
+  float: right;
+  margin-top: 4px;
+}
+.pcjs-monitor {
+  width: 100%;
+  height: auto;
+  background-color: black;
+  position: relative;
+  clear: both;
+}
+.pcjs-surface {
+  width: 100%;
+  height: auto;
+  background-color: black;
+}
+.pcjs-video {
+  margin: 0 auto;
+  clear: both;
+  padding-bottom: 8px;
+}
+.pcjs-canvas {
+  width: 100%;
+  height: auto;
+}
+.pcjs-container {
+  color: #000000;
+  position: relative;
+}
+.pcjs-group, .pcjs-dip {
+  float: left;
+}
+.pcjs-block {
+  display: table;
+}
+.pcjs-block-control {
+  display: table-cell;
+  padding-right: 8px;
+  vertical-align: middle;
+}
+.pcjs-block-button {
+  display: block;
+  user-select: none;
+}
+.pcjs-control {
+  float: left;
+}
+.pcjs-control-title {
+  font-size: small;
+  line-height: 20px;
+  vertical-align: middle;
+  float: left;
+  font-family: Monaco, "Lucida Console", monospace;
+}
+.pcjs-diagnostics {
+  clear: both;
+  margin-bottom: 20px;
+}
+.pcjs-dip-switch {
+  float: left;
+  width: 19px;
+  height: 19px;
+  margin-right: -1px;
+  margin-bottom: -1px;
+  border: 1px solid black;
+  text-align: center;
+  line-height: 19px;
+  border-color: gray;
+  user-select: none;
+}
+.pcjs-dip-switch-on {
+  color: white;
+  background-color: black;
+}
+.pcjs-dip-switch-off {
+  color: black;
+  background-color: white;
+}
+.pcjs-label {
+  font-size: small;
+  line-height: 19px;
+  vertical-align: middle;
+  float: left;
+  font-family: "Lucida Console", monospace;
+}
+.pcjs-label-right {
+  float: left;
+  text-align: right;
+  font-size: small;
+}
+.pcjs-controls textarea {
+  font-family: Monaco, monospace;
+  font-size: x-small;
+}
+.pcjs-button {
+  user-select: none;
+}
+.pcjs-panel {
+  clear: both;
+  padding-right: 8px;
+  padding-bottom: 8px;
+  width: 512px;
+}
+.pcjs-textarea {
+  font-family: Monaco, "Lucida Console", monospace;
+  font-size: x-small;
+}
+.pcjs-fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+.pcjs-flag {
+  font-family: Monaco, "Lucida Console", monospace;
+  font-size: small;
+  text-align: center;
+  line-height: 20px;
+  vertical-align: middle;
+  width: 8px;
+  user-select: none;
+}
+.pcjs-progress {
+  height: 20px;
+  width: 200px;
+  margin-top: 8px;
+  border: 1px solid black;
+  position: relative;
+}
+.pcjs-progress-bar {
+  height: 20px;
+  width: 0; /* this will be updated pragmatically */
+  background-color: gold;
+  position: absolute;
+  top: 0;
+}
+.pcjs-progress-text {
+  height: 20px;
+  width: 200px;
+  font-size: small;
+  line-height: 20px;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+.pcjs-register {
+  font-family: Monaco, "Lucida Console", monospace;
+  font-size: small;
+  text-align: center;
+  line-height: 20px;
+  vertical-align: middle;
+  border: 1px solid black;
+  width: 40px;
+  user-select: none;
+}
+.pcjs-switches {
+  float: left;
+  user-select: none;
+}
+.pcjs-bitBucket {
+  float: left;
+  width: 19px;
+  height: 38px;
+}
+.pcjs-bitCell {
+  float: left;
+  width: 19px;
+  height: 19px;
+  margin-right: -1px;
+  margin-bottom: -1px;
+  border: 1px solid black;
+  text-align: center;
+  line-height: 19px; /* the equivalent of "vertical-align: middle" for single-line elements */
+}
+.pcjs-bitCellLeft {
+  border-left: 1px solid black;
+}
+.pcjs-bitLabel {
+  font-size: xx-small;
+  text-align: center;
+}
+.pcjs-description, .pcjs-status {
+  font-size: x-small;
+  line-height: 2.0em;
+  user-select: none;
+}
+.pcjs-soft-keyboard {
+  clear: both;
+  margin: 0 auto;
+  padding-top: 8px;
+  height: 210px;
+  max-width: 860px;
+  float: none;
+  display: none;
+}
+.pcjs-soft-keyboard-mobile {
+  clear: both;
+  margin: 0 auto;
+  padding-top: 8px;
+  height: 252px;
+  max-width: 680px;
+  float: none;
+  display: none;
+}
+.pcjs-soft-key {
+  border: 1px solid black;
+  font-size: x-small;
+  text-align: center;
+  position: absolute;
+  height: 34px;
+  line-height: 34px; /* the equivalent of "vertical-align: middle" for single-line elements */
+  background-color: #ffffff;
+  overflow: hidden;
+  width:100%;
+  user-select: none;
+}
+.pcjs-panel-group {
+  color: #ffffff;
+  background-color: #404040;
+}
+.pcjs-triplet {
+  padding: 1px;
+}
+.pcjs-ledlbl {
+  text-align: center;
+  font-size: 40%;
+  background-color: #000000;
+}
+.pcjs-ledlbl0 {
+  text-align: right;
+  font-size: 50%;
+  background-color: #8d4076;
+}
+.pcjs-ledlbl1 {
+  text-align: right;
+  font-size: 50%;
+  background-color: #d83662;
+}
+.pcjs-ledpad {
+  text-align: center;
+  font-size: x-small;
+  line-height: 32px;
+  background-color: #000000;
+  border-bottom-left-radius: 20%;
+  border-bottom-right-radius: 20%;
+}
+.pcjs-led {
+  display: inline-block;
+  float: left;
+  width: 8px;
+  height: 8px;
+  margin: 4px;
+  border: 1px solid black;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #000000;
+}
+.pcjs-led-large {
+  float: left;
+  width: 16px;
+  height: 16px;
+}
+.pcjs-rled {
+  float: left;
+  width: 8px;
+  height: 8px;
+  margin: 4px;
+  border: 1px solid black;
+  border-radius: 50%;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #ff0000;
+  max-width: 50%;
+  max-height: 50%;
+}
+.pcjs-swlbl {
+  text-align: center;
+  font-size: 40%;
+  line-height: 16px;
+  background-color: #000000;
+  border-top-left-radius: 20%;
+  border-top-right-radius: 20%;
+}
+.pcjs-swpad {
+  height: 32px;
+  background-color: #000000;
+}
+.pcjs-switch {
+  height: 10px;
+  width: 28px;
+  margin-top: 0;
+  max-width: 90%;
+  background-color: #00ff00;
+}
+.pcjs-screen {
+  clear: both;
+  height: auto;
+  position: relative;
+  line-height: 0; /* this is just an attempt to eliminate the side-effects of any whitespace between inner DIVs */
+}
+.pcjs-overlay, .pcjs-screen textarea {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  resize: none;
+  color: white;
+  font-family: Monaco, "Lucida Console", monospace;
+  font-size: small;
+  background: black;
+  opacity: 0;
+  line-height: 0; /* try to prevent Safari on iOS from always displaying a blinking caret */
+}
+.pcjs-key {
+  border: 1px solid black;
+  font-size: x-small;
+  text-align: center;
+  position: absolute;
+  height: 34px;
+  line-height: 34px;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+.pcjs-reference {
+  float: left;
+  font-size: x-small;
+  padding-left: 8px;
+}
+.pcjs-reference a {
+  text-decoration: none;
+}
+.pcjs-copyright {
+  float: right;
+  font-size: x-small;
+  padding-right: 8px;
+}
+.pcjs-copyright a {
+  text-decoration: none;
+}
+@media screen and (max-width: 1500px) {
+  .pcjs-panel {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 800px) {
+  .pcjs-textarea {
+    width: 100% !important;
+  }
+  .pcjs-registers {
+    width: 100% !important;
+    max-width: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .pdp11-device {
+    width: 98% !important;
+    max-width: none !important;
+    margin-left: 8px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+@media screen and (min-width: 1024px) {
+  .machine-left {
+    max-width: 48%;
+    float: left;
+  }
+  .machine-right {
+    max-width: 48%;
+    float: left;
+    margin-left: 30px;
+  }
+  .machine-right + * {
+    clear: both;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .pcjs-gallery-image img {
+    background-color: black;
+  }
+}

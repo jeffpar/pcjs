@@ -35,6 +35,7 @@
     {%- assign machine_paths = machine_config | replace: "/configs/", "" | replace: ".json", "" | split: "/" -%}
     {%- for machine_path in machine_paths -%}{%- assign machine_data = machine_data[machine_path] -%}{%- endfor -%}
     {%- assign machine = machine_data -%}
+    {%- assign machine_data = machine.machine -%}
     {%- comment -%}Any JSON configuration file in the /configs folder should be accessible through site.data, driving layout generation below.{%- endcomment -%}
     {%- unless machine %}
       {%- capture machine_errors %}{{ machine_errors }}
@@ -56,6 +57,9 @@
   {%- endunless -%}
 {%- endif -%}
 {%- if machine -%}
+  {%- unless machine_data -%}
+    {%- assign machine_data = site.data.machines[machine_type] -%}
+  {%- endunless -%}
   {%- if machine_name == "PCjs Machine" -%}
     {%- if machine.name -%}
       {%- assign machine_name = machine.name -%}
@@ -269,8 +273,9 @@
     <div class="pcjs-reference" style="padding-left:8px">[<a href="debugger/" onclick="pcjsOnClick(this)">Debugger</a>]</div>
   {%- endif %}
     <div class="pcjs-copyright">
-  {%- assign machine_version = site.data.machines[machine_type]['version'] | default: site.data.machines['shared']['version'] %}
-      <a href="{{ '/' | absolute_url }}" target="_blank">PCx86</a> v{{ machine_version }} © 2012-2020 by <a href="https://jeffpar.com" target="_blank">@jeffpar</a>
+  {%- assign machine_name = machine_data['name'] | default: "PCjs Machines" %}
+  {%- assign machine_version = machine_data['version'] | default: machine_data['shared']['version'] | default: "X.XX" %}
+      <a href="{{ '/' | absolute_url }}" target="_blank">{{ machine_name }}</a> v{{ machine_version }} © 2012-2020 <a href="{{ site.github.owner_url }}" target="_blank">Jeff Parsons</a>
     </div>
   </div>
 </div>

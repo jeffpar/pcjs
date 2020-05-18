@@ -417,7 +417,7 @@ function processDisk(di, diskFile, argv, diskette)
             let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
             let db = new DataBuffer(contents);
             device.assert(size == db.length);
-            let subDir = argv['extract'] != "string"? di.getName() : "";
+            let subDir = typeof argv['extract'] != "string"? di.getName() : "";
             if (subDir || name == argv['extract']) {
                 let fSuccess = false;
                 if (subDir) sPath = path.join(subDir, sPath);
@@ -708,7 +708,7 @@ function processDisk(di, diskFile, argv, diskette)
 /**
  * readAll(argv)
  *
- * If "--all=<string>" then the set of disks is limited to those where pathname contains <string>.
+ * If "--all=[string]" then the set of disks is limited to those where pathname contains [string].
  *
  * @param {Array} argv
  */
@@ -788,7 +788,7 @@ function readAll(argv)
 function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
 {
     let di;
-    if (!sLabel) {
+    if (!sLabel && sDir.endsWith('/')) {
         sLabel = path.basename(sDir).replace(/^.*-([^0-9][^-]+)$/, "$1");
     }
     sDir = getFullPath(sDir);
@@ -818,7 +818,22 @@ function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
 function readDirFiles(sDir, sLabel, fNormalize = false)
 {
     let aFileData = [];
-    let asFiles = fs.readdirSync(sDir);
+
+    let asFiles;
+    if (sDir.endsWith('/')) {
+        asFiles = fs.readdirSync(sDir);
+        for (let i = 0; i < asFiles.length; i++) {
+            asFiles[i] = path.join(sDir, asFiles[i]);
+        }
+    } else {
+        asFiles = sDir.split(',');
+        sDir = ".";
+        for (let i = 0; i < asFiles.length; i++) {
+            let sDirFile = path.dirname(asFiles[i]);
+            if (sDirFile != ".") sDir = sDirFile;
+            asFiles[i] = path.join(sDir, path.basename(asFiles[i]));
+        }
+    }
 
     /*
      * There are two special label strings you can pass on the command-line:
@@ -859,9 +874,9 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
          *
          * TODO: Consider an override option that will allow hidden file(s) to be included as well.
          */
-        let sName = asFiles[iFile];
+        let sPath = asFiles[iFile];
+        let sName = path.basename(sPath);
         if (sName.charAt(0) == '.') continue;
-        let sPath = path.join(sDir, sName);
         let file = {path: sPath, name: sName};
         let stats = fs.statSync(sPath);
         file.date = stats.mtime;
@@ -1153,6 +1168,9 @@ function readFileAsync(sFile, encoding = "utf8")
  * you can use --output to explicitly specify an output disk image, or you can implicitly specify one as
  * the second non-option argument.
  *
+ * To add files to a disk in a specific order, use --files=[comma-separated list of files].  And if you
+ * want a particular boot sector, use --boot=[sector image file].
+ *
  * Use --all to process all catalogued disks with the specified options, or --all=[subset] to process only
  * disks whose path or name contains [subset]; any input/output disk/directory names are ignored when
  * using --all.
@@ -1192,17 +1210,27 @@ function main(argc, argv)
         return;
     }
 
+    let fDirectory = false
     input = argv['dir'];
-    if (!input) {
-        input = argv[1];
-        argv.splice(1, 1);
-    } else {
+    if (input) {
+        fDirectory = true;          // directories should end with a trailing slash, but we'll make sure
         if (!input.endsWith('/')) input += '/';
+    } else {
+        input = argv['files'];
+        if (input) {
+            fDirectory = true;      // files must be a comma-separated list of files (and NO trailing slash)
+        } else {
+            input = argv[1];
+            argv.splice(1, 1);
+        }
     }
 
     let di;
     if (input) {
-        if (input.endsWith('/')) {
+        if (fDirectory) {
+            /*
+             * readDir() takes care of both directories and files, distinguishing between them on the basis of a trailing slash.
+             */
             di = readDir(input, argv['label'], argv['normalize'], +argv['target'], +argv['maxfiles']);
         } else {
             di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData']));
