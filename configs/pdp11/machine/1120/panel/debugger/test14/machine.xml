@@ -4,7 +4,7 @@
 	<name pos="center">PDP-11/20 with Front Panel and TEST 14</name>
 	<computer id="computer" busWidth="16"/>
 	<cpu id="cpu" model="1120" cycles="6666667"/>
-	<ram id="ram" addr="0x00000" size="0xE000" file="/software/dec/pdp11/tapes/diags/MAINDEC-11-D0NA-PB.json"/>
+	<ram id="ram" addr="0x00000" size="0xE000" file="/software/dec/pdp11/tapes/diag/d0na/MAINDEC-11-D0NA-PB.json"/>
 	<device id="default" type="default"/>
 	<serial id="dl11" adapter="0" binding="print" upperCase="true"/>
 	<panel ref="/configs/pdp11/panel/1120/debugger/front.xml"/>
