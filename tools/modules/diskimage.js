@@ -13,11 +13,11 @@ import crypto     from "crypto";
 import glob       from "glob";
 import path       from "path";
 import got        from "got";
-import DataBuffer from "../../modules/nodebuffer.js";
-import StdLib     from "../../modules/stdlib.js";
-import Device     from "../../../machines/modules/device.js";
-import JSONLib    from "../../../machines/modules/jsonlib.js";
-import DiskInfo   from "../../../machines/pcx86/modules/diskinfo.js";
+import DataBuffer from "./nodebuffer.js";
+import StdLib     from "./stdlib.js";
+import Device     from "../../machines/modules/device.js";
+import JSONLib    from "../../machines/modules/jsonlib.js";
+import DiskInfo   from "../../machines/pcx86/modules/diskinfo.js";
 
 let device = new Device("node");
 let printf = device.printf.bind(device);
@@ -187,21 +187,21 @@ function getFullPath(sFile)
     if (sFile[0] == '~') {
         sFile = os.homedir() + sFile.substr(1);
     }
-    else if (isDiskRoot(sFile)) {
+    else if (isServerRoot(sFile)) {
         sFile = rootDir + sFile;
     }
     return sFile;
 }
 
 /**
- * isDiskRoot(diskFile)
+ * isServerRoot(diskFile)
  *
  * @param {string} diskFile
  * @returns {boolean}
  */
-function isDiskRoot(diskFile)
+function isServerRoot(diskFile)
 {
-    return !!(diskFile.match(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private|disks-cds)\//));
+    return !!(diskFile.match(/^\/(configs|diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private|disks-cds)\//));
 }
 
 /**
@@ -1199,7 +1199,7 @@ function main(argc, argv)
 
     Device.DEBUG = !!argv['debug'];
     moduleDir = path.dirname(argv0[0]);
-    rootDir = path.join(moduleDir, "../../..");
+    rootDir = path.join(moduleDir, "../..");
     useServer = !!argv['server'];
 
     printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s\n", options) : ""));
@@ -1236,7 +1236,7 @@ function main(argc, argv)
         } else {
             input = argv[1];
             argv.splice(1, 1);
-            fDirectory = input.endsWith('/');
+            fDirectory = !!(input && input.endsWith('/'));
         }
     }
 

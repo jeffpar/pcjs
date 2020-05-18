@@ -49,7 +49,7 @@ into Drive B.  Click the **Run** button to start the machine.
 {% include machine.html id="deskpro386" %}
 
 The following disk image contains the source code for selected [VGA "Black Book" Tests](#selected-vga-black-book-tests).
-It was built using [DiskDump]({{ site.github.pages }}/tools/diskdump/) and the *--normalize* option, which automatically
+It was built using [DiskDump]({{ site.github.pages }}/tools/old/diskdump/) and the *--normalize* option, which automatically
 converts linefeeds in known text files (including ASM files) into DOS-compatible CR/LF sequences.
 
 ### Directory of VGA Black Book Sources

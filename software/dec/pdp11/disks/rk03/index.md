@@ -21,7 +21,7 @@ While the geometry of an RK03 disk implies that the total image size should be 2
 disks we've archived started out that way.  For example, the RT-11 v4.0 disk image was originally 1,454,592
 bytes long.  Presumably, when it was used by other emulators, they assumed zeros for the missing sectors.
 
-Since the PCjs [DiskDump]({{ site.github.pages }}/tools/diskdump/) utility relies on exact file sizes to match disk images to
+Since the PCjs [DiskDump]({{ site.github.pages }}/tools/old/diskdump/) utility relies on exact file sizes to match disk images to
 supported geometries, I padded the disk image:
 
 	dd if=/dev/zero bs=1 count=1039872 >> RK03-RT11-V40.dsk

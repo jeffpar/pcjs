@@ -10,10 +10,10 @@ This past summer, I added a couple sets of Lotus 1-2-3 disk images to the PCjs a
 noticed with some amusement that Lotus had timestamped all their files with the local time of 1:23am.
 
 Fast-forward to this December, when I was updating the directory listings for these Lotus 1-2-3 disks with my
-[DiskDump utility]({{ site.github.pages }}/tools/diskdump/), and I noticed that all the file times were *now* being
+[DiskDump utility]({{ site.github.pages }}/tools/old/diskdump/), and I noticed that all the file times were *now* being
 recorded as 2:23am.
 
-I should explain that Diskdump doesn't crack the contents of each disk image itself: it leaves the details of the FAT file
+I should explain that DiskDump doesn't crack the contents of each disk image itself: it leaves the details of the FAT file
 system to the local operating system, which in my case is macOS (High Sierra).  Each disk image is mounted using the macOS
 `hdiutil` utility, and then DiskDump enumerates the contents of the mounted volume.
 
