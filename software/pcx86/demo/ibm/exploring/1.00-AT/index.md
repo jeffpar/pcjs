@@ -2,7 +2,7 @@
 layout: page
 title: Exploring the IBM PC AT 1.00
 permalink: /software/pcx86/demo/ibm/exploring/1.00-AT/
-preview: /software/pcx86/demo/ibm/exploring/images/screenshot.png
+preview: /software/pcx86/demo/ibm/exploring/1.00-MDA/images/screenshot.png
 machines:
   - id: ibm5170
     type: pcx86

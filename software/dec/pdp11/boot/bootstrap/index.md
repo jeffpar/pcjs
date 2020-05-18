@@ -53,7 +53,7 @@ Pre-loading DEC's Bootstrap Loader
 ----------------------------------
 
 I pasted the disassembled code (above) into a listing file, [BOOTSTRAP-16KB.txt](BOOTSTRAP-16KB.txt),
-and then ran [FileDump](/tools/filedump) to produce a [BOOTSTRAP-16KB.json](BOOTSTRAP-16KB.json) that can
+and then ran [FileDump]({{ site.github.pages }}/tools/old/filedump) to produce a [BOOTSTRAP-16KB.json](BOOTSTRAP-16KB.json) that can
 be automatically pre-loaded into any machine:
 
 	filedump --file=BOOTSTRAP-16KB.txt --format=octal --output=BOOTSTRAP-16KB.json

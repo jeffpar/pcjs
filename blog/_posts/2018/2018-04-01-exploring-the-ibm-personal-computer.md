@@ -52,7 +52,7 @@ So I changed the block size to 4K for *all* machines, irrespective of bus width.
 could still attempt to load states with an older (larger) block size, so I also had to add code to "fix up" blocks whenever
 a non-4K block was detected.
 
-The good news is that, after dealing with all these ripple effects, [Exploring The IBM Personal Computer](/software/pcx86/demo/ibm/exploring/)
+The good news is that, after dealing with all these ripple effects, [Exploring The IBM Personal Computer](/software/pcx86/demo/ibm/exploring/1.00-MDA/)
 now runs as intended.  Well, except for the awful sound it makes, which I'll be looking into at a later date.
 
 For now, turn your volume down (and appreciate the fact that you *can* turn your volume down, because the speaker on

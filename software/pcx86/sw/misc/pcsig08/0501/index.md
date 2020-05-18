@@ -14,8 +14,7 @@ machines:
 The machine below has access to all 2,121 diskette images from the PC-SIG Library 8th Edition CD-ROM (April 1990).
 
 Preceding each directory listing is a **Load Disk** button that will automatically load the corresponding disk into
-the machine's drive A.  Make sure the machine has finished booting before loading any disks.  The same machine is also
-available with the [PCjs Debugger](../debugger/).
+the machine's drive A.  Make sure the machine has finished booting before loading any disks.
 
 - Disks [PCSIG08: DISK0001](../) through [DISK0500](../#directory-of-pcsig08-disk0500) 
 - Disks [PCSIG08: DISK0501](#directory-of-pcsig08-disk0501) through [DISK1000](#directory-of-pcsig08-disk1000) 
