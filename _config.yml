@@ -39,7 +39,7 @@ github:
   owner_name: "jeffpar"
   owner_url: https://github.com/jeffpar
   repository_url: https://github.com/jeffpar/pcjs.org
-  pages: https://github.com/jeffpar/pcjs.org/tree/master
+  pages: https://github.com/jeffpar/pcjs.org/tree/gh-pages
 
 kramdown:
   input: GFM

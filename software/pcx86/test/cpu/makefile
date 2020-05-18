@@ -12,5 +12,5 @@ bin/id.com: id.asm
 bin/test386.com: 80386/test386.asm ../inc/dos.inc ../inc/misc.inc ../inc/x86.inc
 	nasm -i../inc/ -f bin 80386/test386.asm -l bin/test386.lst -o bin/test386.com
 
-CPUTESTS.json: cpuid.asm id.asm bin/id.com bin/test386.com
-	node ../../../modules/diskdump/bin/diskdump --path="cpuid.asm;bin/id.com;test386.com" --label=CPUTESTS --output=CPUTESTS.json --format=json --manifest --overwrite
+CPUTESTS.json: bin/id.com bin/test386.com
+	node ../../../../tools/disk/modules/diskimage.js bin/ CPUTESTS.json --label=CPUTESTS --overwrite
