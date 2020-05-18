@@ -419,15 +419,19 @@ function processDisk(di, diskFile, argv, diskette)
             device.assert(size == db.length);
             let subDir = argv['extract'] != "string"? di.getName() : "";
             if (subDir || name == argv['extract']) {
+                let fSuccess = false;
                 if (subDir) sPath = path.join(subDir, sPath);
                 let dir = path.dirname(sPath);
                 if (!existsFile(dir)) fs.mkdirSync(dir, {recursive: true});
                 if (attr & DiskInfo.ATTR.SUBDIR) {
-                    if (!existsFile(sPath)) fs.mkdirSync(sPath);
-                } else {
-                    writeFile(sPath, db, true, argv['overwrite']);
+                    if (!existsFile(sPath)) {
+                        fs.mkdirSync(sPath);
+                        fSuccess = true;
+                    }
+                } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
+                    fSuccess = writeFile(sPath, db, true, argv['overwrite']);
                 }
-                fs.utimesSync(sPath, date, date);
+                if (fSuccess) fs.utimesSync(sPath, date, date);
             }
         });
     }
@@ -1043,10 +1047,9 @@ function writeFile(sFile, data, fCreateDir, fOverwrite)
             }
             if (!existsFile(sFile) || fOverwrite) {
                 fs.writeFileSync(sFile, data);
-            } else {
-                printf("%s exists, use --overwrite to replace\n", sFile);
+                return true;
             }
-            return true;
+            printf("%s exists, use --overwrite to replace\n", sFile);
         } catch(err) {
             printError(err);
         }
