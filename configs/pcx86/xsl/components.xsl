@@ -19,7 +19,7 @@
 	<xsl:variable name="BGNDCOLOR">#fff8e7</xsl:variable>
 
 	<xsl:template name="componentStyles">
-		<link rel="stylesheet" type="text/css" href="/configs/{$APPCLASS}/xsl/components.css"/>
+		<link rel="stylesheet" type="text/css" href="/assets/css/pcjs.css"/>
 	</xsl:template>
 
 	<xsl:template name="componentScripts">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
-<machine id="ibm5160" type="pcx86" border="1" width="980px" pos="center" background="default">
+<machine id="ibm5160" type="pcx86" border="1" pos="center" background="default">
 	<name pos="center">IBM PC XT, 640Kb RAM, 10Mb Hard Disk (Formatted), CGA</name>
 	<computer id="xt-cga-640k" name="IBM PC XT"/>
 	<cpu id="cpu8088" model="8088" autostart="true"/>
