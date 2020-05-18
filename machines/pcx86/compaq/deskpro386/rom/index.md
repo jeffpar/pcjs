@@ -202,7 +202,7 @@ of obfuscation -- until I saw this snippet of COMPAQ ROM source code and we were
     ;
     ; External References
 
-Mike explained that an IBM program called "[Exploring the IBM Personal Computer](/software/pcx86/demo/ibm/exploring/)"
+Mike explained that an IBM program called "[Exploring the IBM Personal Computer](/software/pcx86/demo/ibm/exploring/1.00-MDA/)"
 contained some code that checksummed the first few bytes of the ROM and would refuse to run if the result didn't match
 that of a genuine IBM PC.  So one of the COMPAQ engineers simply inserted a series of characters ("93") between their
 initials which, when checksummed, yielded the same result.

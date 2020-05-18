@@ -330,7 +330,7 @@ author, and somewhat less conspicuous and more modest than the `Robert O'Rear` s
 Note that the disk cannot be mounted by a modern operating system (e.g., macOS), because it lacks a proper
 BPB at offset 0x000B.
 
-To resolve the mounting problem, one solution is to use the [DiskDump]({{ site.github.pages }}/tools/diskdump/) utility's *--forceBPB*
+To resolve the mounting problem, one solution is to use the [DiskDump]({{ site.github.pages }}/tools/old/diskdump/) utility's *--forceBPB*
 option, which creates a mountable disk image by making the following boot sector modifications:
 
 	00000000  eb fe 90 50 43 4a 53 2e  4f 52 47 00 02 02 01 00  |...PCJS.ORG.....|
@@ -355,7 +355,7 @@ by pointing out that some (newer) ROMs will not boot from a disk if that signatu
 However, those ROMs check only *hard disk* boot sectors for the 0xAA55 signature, not diskettes, and hard disk support
 didn't exist until DOS version 2.0, when BPBs and the 0xAA55 boot sector signature were introduced.
 
-Here's how you can use [DiskDump]({{ site.github.pages }}/tools/diskdump/) to a mountable disk.  Note that *two* DiskDump commands are
+Here's how you can use [DiskDump]({{ site.github.pages }}/tools/old/diskdump/) to a mountable disk.  Note that *two* DiskDump commands are
 required, because BPB modification only happens when converting an IMG file to a JSON file; the second DiskDump command
 converts the modified JSON back into an IMG file.
 

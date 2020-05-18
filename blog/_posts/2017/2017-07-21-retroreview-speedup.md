@@ -69,7 +69,7 @@ Fortunately, we don't have to type the program in.  If you skim our archived cop
 [PC-SIG Library 8th Edition CD-ROM (April 1990)](/software/pcx86/sw/misc/pcsig08/), you'll see `SPEEDUP.BAS`
 in the [Directory of PCSIG08: DISK0011](/software/pcx86/sw/misc/pcsig08/#directory-of-pcsig08-disk0011).
 
-So, fire up the [PC-SIG Machine (with Debugger)](/software/pcx86/sw/misc/pcsig08/debugger/).  Or use the machine
+So, fire up the [PC-SIG Machine](/software/pcx86/sw/misc/pcsig08/).  Or use the machine
 below, which has conveniently pre-loaded "PC DOS 1.00" in drive A and "PCSIG80: DISK0011" in drive B.
 
 At the DOS prompt, run `BASIC` and type `LOAD "B:SPEEDUP.BAS"`.

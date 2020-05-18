@@ -100,7 +100,7 @@ about a duplication process that involves writing modifications to the original 
 
 I didn't have to wrestle with that concern, however, because I no longer have an original diskette.  All I had was a
 KryoFlux dump, which doesn't tell you much about the physical condition of the diskette.  So I resorted to
-[debugging](/software/pcx86/app/other/dbase3/1.0/debugger/#debugging-notes) the software again (as I did
+[debugging](/software/pcx86/app/other/dbase3/1.0/#debugging-notes) the software again (as I did
 [35 years ago](/documents/pcjs/programming/)), watching the reads and writes, observing what PROLok's expectations
 were, inferring that one of the 512-byte sectors must have been physically damaged within +/-10 bytes of the 272nd byte,
 and then recording that in my annotated disk image.

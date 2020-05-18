@@ -52,7 +52,7 @@ testmon.js uses the same default speed of 2400 baud, which you can explicitly se
 There are currently no `parity`, `databits`, or `stopbits` overrides, so you should always use "N,8,1" with the DOS
 **MODE** command.
 
-To create a disk image containing the INT14 source code, run the following [DiskDump]({{ site.github.pages }}/tools/diskdump/lib/) command
+To create a disk image containing the INT14 source code, run the following [DiskDump]({{ site.github.pages }}/tools/old/diskdump/lib/) command
 in the [testmon](../) directory:
 
     diskdump --path="int14/INT14.ASM;DOWNLOAD.ASM;FAKECTTY.ASM;MK.BAT" --format=img --output=INT14.img --normalize --overwrite

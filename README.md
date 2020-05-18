@@ -23,7 +23,7 @@ which covers topics such as:
 
 Topics covered in the repository itself include:
 
-  - [PCjs Disk Images](/tools/disk/)
+  - [PCjs Disk Images](/tools/)
 
 ### License
 

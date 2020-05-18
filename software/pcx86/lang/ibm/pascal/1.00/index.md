@@ -21,7 +21,7 @@ linking process.  Moreover, the user was required to copy LINK.EXE from their PC
 of PC DOS available at the time) to the third disk.
 
 To make life a bit simpler (but only a bit), we've combined the contents of all three diskettes onto a 360Kb "Combined"
-diskette, along with LINK.EXE from PC DOS 1.00.  Here's the [DiskDump]({{ site.github.pages }}/tools/diskdump/) command used to produce the
+diskette, along with LINK.EXE from PC DOS 1.00.  Here's the [DiskDump]({{ site.github.pages }}/tools/old/diskdump/) command used to produce the
 diskette image:
 
 	diskdump --path="archive/PAS1/PAS1.EXE;PASKEY;ENTX6S.ASM;FILKQQ.INC;FILUQQ.INC;archive/PAS2/PAS2.EXE;
