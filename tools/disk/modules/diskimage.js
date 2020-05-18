@@ -187,10 +187,21 @@ function getFullPath(sFile)
     if (sFile[0] == '~') {
         sFile = os.homedir() + sFile.substr(1);
     }
-    else if (sFile[0] == path.sep && sFile.indexOf(rootDir) < 0) {
+    else if (isDiskRoot(sFile)) {
         sFile = rootDir + sFile;
     }
     return sFile;
+}
+
+/**
+ * isDiskRoot(diskFile)
+ *
+ * @param {string} diskFile
+ * @returns {boolean}
+ */
+function isDiskRoot(diskFile)
+{
+    return !!(diskFile.match(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private|disks-cds)\//));
 }
 
 /**
@@ -231,7 +242,7 @@ function isTextFile(sFile)
  */
 function mapDiskToServer(diskFile)
 {
-    if (useServer || !existsFile(diskFile)) {
+    if (useServer || !existsFile(getFullPath(diskFile))) {
         diskFile = diskFile.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
     }
     return diskFile;
