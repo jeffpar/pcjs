@@ -80,9 +80,9 @@ function createDisk(diskFile, diskette, argv)
          *  2) If it's "folder", then the name of the diskette is used as a folder name (with trailing slash)
          *  3) Anything else is more or less used as-is (and unless it contains a period, we add a trailing slash)
          */
-        if (diskette.archive[0] == "/") {
+        if (diskette.archive[0] == '/') {
             sArchiveFile = diskette.archive;
-        } else if (diskette.archive[0] == ".") {
+        } else if (diskette.archive[0] == '.') {
             sArchiveFile = sArchiveFile.replace(".img", diskette.archive);
         } else if (diskette.archive == "folder") {
             sArchiveFile = sArchiveFile.replace(".img", path.sep);
@@ -201,7 +201,7 @@ function getFullPath(sFile)
  */
 function isServerRoot(diskFile)
 {
-    return !!(diskFile.match(/^\/(configs|diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private|disks-cds)\//));
+    return !!(diskFile.match(/^\/(configs|software|diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private|disks-cds)\//));
 }
 
 /**
@@ -610,7 +610,7 @@ function processDisk(di, diskFile, argv, diskette)
                     "compaq": [sDefaultCOMPAQModel, "portable","deskpro386"]
                 }[manufacturer]);
                 let video = findOption(["*","mda","cga","ega","vga","vdu"]);
-                let configFile = hardware.config || findConfig("/configs/pcx86/machine/" + manufacturer + "/" + model + "/" + video + "/**/machine.xml");
+                let configFile = hardware.config || findConfig("/configs/pcx86/machine/" + manufacturer + '/' + model + '/' + video + "/**/machine.xml");
                 if (configFile == "none") configFile = "";
                 if (configFile) {
                     let bootDisk = findOption(["", "DOS"]);
@@ -895,7 +895,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
             file.attr = DiskInfo.ATTR.SUBDIR;
             file.size = -1;
             file.data = new DataBuffer();
-            file.files = readDirFiles(sPath, null, fNormalize);
+            file.files = readDirFiles(sPath + '/', null, fNormalize);
         } else {
             let fText = fNormalize && isTextFile(sName);
             let data = readFile(sPath, fText? "utf8" : null);

@@ -253,7 +253,7 @@
                 "@diskette": "MSWORD-115-PROGRAM.json",
                 "@format": "PC360K",
                 "@kryoflux": true,
-                "@args": "--suppData=/software/pcx86/app/microsoft/word/1.15/debugger/index.md"
+                "@args": "--suppData=/software/pcx86/app/microsoft/word/1.15/index.md"
               },
               {
                 "@title": "MS Word 1.15 (Utilities)",

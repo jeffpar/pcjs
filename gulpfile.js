@@ -16,7 +16,7 @@
  *          respect to the individual files (under /machines).  The target version comes from
  *          configs/machines.json:shared.version.
  *
- *          It does this by running the `concat`, `compile`, and `copy` tasks for all machines, in that order.
+ *          It does this by running the `concat` and `compile` tasks for all machines.
  *
  *      concat (eg: `gulp concat` or `gulp concat/{machine}`)
  *
@@ -39,11 +39,6 @@
  *
  *          This special task compiles all new work-in-progress (v3) machines; you can also compile them individually,
  *          just like any other machine (eg, `gulp compile/pcx86v3`).
- *
- *      copy (eg: `gulp copy` or `gulp copy/{machine}`)
- *
- *          Copies any other individual resources files listed in machines.json (other than scripts) to the
- *          machine's current version folder.
  *
  *      version
  *
