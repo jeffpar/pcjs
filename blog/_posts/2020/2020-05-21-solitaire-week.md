@@ -2,7 +2,7 @@
 layout: post
 title: Solitaire Week at LCM
 date: 2020-05-21 09:00:00
-permalink: /blog/2020/05/12/
+permalink: /blog/2020/05/21/
 preview: /blog/images/solitaire-week.png
 machines:
   - id: ibm5170-win300
