@@ -433,6 +433,7 @@ function processDisk(di, diskFile, argv, diskette)
                         fSuccess = true;
                     }
                 } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
+                    printf("extracting: %s\n", name);
                     fSuccess = writeFile(sPath, db, true, argv['overwrite']);
                 }
                 if (fSuccess) fs.utimesSync(sPath, date, date);
