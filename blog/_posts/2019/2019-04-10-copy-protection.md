@@ -46,7 +46,7 @@ I took a closer look with HxC:
 
 ![HxC Microsoft Word 1.15](/blog/images/word115-disk-image.png)
 
-I [discovered](/software/pcx86/app/microsoft/word/1.15/debugger/#copy-protection-information) that the last track on
+I [discovered](/software/pcx86/app/microsoft/word/1.15/#copy-protection-information) that the last track on
 the disk (track 39, side 1) contained 12 sectors instead of the 9 typically found on a 360Kb diskette, that the 5th sector
 contained a deliberate CRC error, and that the other 11 sectors were all 256 bytes in length, instead of the usual 512.
 
@@ -107,7 +107,7 @@ And WORD.COM contains the following messages:
     Trashing program disk.
 
 Those messages are fairly easy to trigger.  You just have to make WORD.COM think that a debugger is running.
-The [PCjs Debugger](/software/pcx86/app/microsoft/word/1.15/debugger/) won't trigger it, because that debugger
+Using the [PCjs Debugger](/software/pcx86/app/microsoft/word/1.15/?debugger=true) won't trigger it, because our debugger
 doesn't run inside the virtual machine, so it can't be detected.  But you can simulate the effect.
 
 First, set a write breakpoint on address 0000:0004:

@@ -1705,7 +1705,13 @@ export default class DiskInfo {
                     let bpb = DiskInfo.aDefaultBPBs[i];
                     if (bpb[DiskInfo.BPB.MEDIA_ID] == idFAT) {
                         let cbDiskBPB = (bpb[DiskInfo.BPB.TOTAL_SECS] + (bpb[DiskInfo.BPB.TOTAL_SECS + 1] * 0x100)) * this.cbSector;
-                        if (cbDiskBPB == cbDisk) {
+                        /*
+                         * With such a heavy reliance on a single byte (idFAT) from the first FAT sector, we're going
+                         * believe this BPB match only for disks <= 360K.  I would have limited it to 320K (the largest
+                         * that DOS 1.x supported), but there's the 360K Microsoft Chart 2.02 disk image (and a few others),
+                         * which are a bit "off", so there you go.
+                         */
+                        if (cbDiskBPB == cbDisk && cbDisk <= 360 * 1024) {
                             vol.idMedia = idFAT;
                             /*
                              * NOTE: Like TOTAL_SECS, FAT_SECS and ROOT_DIRENTS are 2-byte fields; but unlike TOTAL_SECS,
@@ -2973,11 +2979,10 @@ export default class DiskInfo {
         let volTable, fileTable;
         if (!fLegacy) {
             if (this.buildTables(this.fromJSON) >= 0) {
-                volTable = [];
                 for (let iVolume = 0; iVolume < this.volTable.length; iVolume++) {
+                    if (!volTable) volTable = [];
                     volTable.push(this.getVolDesc(this.volTable[iVolume]));
                 }
-                fileTable = [];
                 for (let iFile = 0; iFile < this.fileTable.length; iFile++) {
                     let file = this.fileTable[iFile];
                     /*
@@ -2987,6 +2992,7 @@ export default class DiskInfo {
                      */
                     let desc = this.getFileDesc(file, false, fnHash);
                     // let indentDesc = desc[DiskInfo.FILEDESC.MODULE]? 4 : 0;
+                    if (!fileTable) fileTable = [];
                     fileTable.push(JSON.stringify(desc, null, 0));
                 }
             }
@@ -3014,8 +3020,10 @@ export default class DiskInfo {
         }
         let sImageInfo = JSON.stringify(imageInfo, null, indent + 2);
         let sVolTable, sFileTable;
-        if (fileTable) {
+        if (volTable) {
             sVolTable = JSON.stringify(volTable, null, indent + 2);
+        }
+        if (fileTable) {
             sFileTable = '';
             fileTable.forEach((desc) => {
                 if (sFileTable) sFileTable += ',\n';

@@ -253,7 +253,7 @@
                 "@diskette": "MSWORD-115-PROGRAM.json",
                 "@format": "PC360K",
                 "@kryoflux": true,
-                "@args": "--suppData=/software/pcx86/app/microsoft/word/1.15/debugger/index.md"
+                "@args": "--suppData=/software/pcx86/app/microsoft/word/1.15/index.md"
               },
               {
                 "@title": "MS Word 1.15 (Utilities)",
@@ -2828,7 +2828,7 @@
               {
                 "@title": "MS Macro Assembler User's Guide (1984)",
                 "@file": "MASM30_Users_Guide-1984.pdf",
-                "@link": "",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heM-dT-jTCe_z5Ld6A?e=IVcl3W",
                 "@cover": ".jpg",
                 "@source": "https://winworldpc.com/product/macro-assembler/3x"
               }
