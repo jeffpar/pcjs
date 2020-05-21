@@ -1,10 +1,9 @@
-WARNING: This utility is obsolete.  It has been superseded by [test386](/tests/pcx86/80386/),
+WARNING: This utility is obsolete.  It has been superseded by [test386](/software/pcx86/test/cpu/80386/),
 which, going forward, serves as our new model for instruction-level testing.  As a result,
 the **traceLog()** functionality mentioned below has been removed from the PCjs source code
 (but you can always dig it back up if you really want it).
 
-Overview
----
+### Overview
 
 TRACE.COM takes an instruction log, as recorded by the PCjs Debugger's traceLog() function, and
 "plays" the instructions back on another machine DOS-compatible 8086 machine, verifying that:
@@ -28,24 +27,19 @@ between single-bit shifts and multi-bit shifts (because the latter leaves PS_OF 
 state), or we have to ignore PS_OF altogether.  For now, I'm specifying PS_ALL_BUT_OF for those
 instructions, even though we'll be missing OVERFLOW validation for all single-bit shifts and rotates.
 
-Operation
----
+### Operation
 
 To load TRACE.COM and TRACE.TXT onto a virtual disk image that PCjs can access, you can add an
-"autoMount" setting to your PCjs <fdc> configuration that will dynamically generate a fresh disk image
-every time the machine is loaded, via the DiskDump API.  This is useful when you're constantly
-generating new test results:
+"autoMount" setting to your PCjs <fdc> configuration to load a TRACE disk image; eg:
 
 ```xml
-<fdc id="fdcNEC" autoMount='{B:{name:"Trace Tests",path:"/tests/pcx86/trace/trace.com;trace.txt"}}'/>
+<fdc id="fdcNEC" autoMount='{B:{name:"Trace Tests",path:"/software/pcx86/test/TRACE.json"}}'/>
 ```
 
-Alternatively, if you want to run the tests in another virtual PC environment (eg, VMware Fusion),
-you can create an IMG disk image from a directory using DiskDump's command-line interface:
+To create the necessary TRACE disk image, using our built-in DiskImage utility:
 
-	cd tests/pcx86
-	node ../../modules/diskdump/bin/diskdump --dir=trace --format=img --output=trace.img
- 
+	node tools/modules/diskimage.js --dir=software/pcx86/test/trace --output=software/pcx86/test/TRACE.json
+
 OS X users can also create an ISO image like so:
 
-	hdiutil makehybrid -o tests/pcx86/trace.iso tests/pcx86/trace -iso -joliet
+	hdiutil makehybrid -o software/pcx86/test/trace.iso software/pcx86/test/trace -iso -joliet

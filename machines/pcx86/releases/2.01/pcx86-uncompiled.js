@@ -64529,7 +64529,10 @@ class FDC extends Component {
             }
 
             while (this.loadDrive(iDrive, sDiskName, sDiskPath, false, file) < 0) {
-                if (!window.confirm("Click OK to reload the original disk and discard any changes.")) {
+                /*
+                 * I got tired of the "reload" warning when running locally, so I've disabled it there.
+                 */
+                if (Web.getHostName() != "localhost" && !window.confirm("Click OK to reload the original disk and discard any changes.")) {
                     if (DEBUG) this.println("load cancelled");
                     return false;
                 }
