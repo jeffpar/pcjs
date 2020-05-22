@@ -139,10 +139,9 @@
     {%- elsif component.class == "parallel" -%}
       {%- capture component_config -%}{ {{ default_config }},adapter:{{ component.adapter | default: "0" }},binding:'{{ component.binding }}'}{%- endcapture -%}
     {%- elsif component.class == "ram" -%}
-      {%- comment -%}The RAM component has a 'size' property, but Front Matter objects apparently also have a 'size' property, so we look for 'length' instead.{%- endcomment -%}
-      {%- capture component_config -%}{ {{ default_config }},addr:{{ component.addr | default: "0" }},size:{{ component.length | default: "0" }},file:'{{ component.file }}',load:{{ component.load | default: "null" }},exec:{{ component.exec | default: "null" }},test:{{ machine_component.test | default: component.test | default: "true" }} }{%- endcapture -%}
+      {%- capture component_config -%}{ {{ default_config }},addr:{{ component.addr | default: "0" }},size:{{ component['size'] | default: "0" }},file:'{{ component.file }}',load:{{ component.load | default: "null" }},exec:{{ component.exec | default: "null" }},test:{{ machine_component.test | default: component.test | default: "true" }} }{%- endcapture -%}
     {%- elsif component.class == "rom" -%}
-      {%- capture component_config -%}{ {{ default_config }},addr:{{ component.addr | default: "0" }},size:{{ component.length | default: "0" }},file:'{{ component.file }}',alias:{{ component.alias | default: "null" }},notify:'{{ component.notify }}' }{%- endcapture -%}
+      {%- capture component_config -%}{ {{ default_config }},addr:{{ component.addr | default: "0" }},size:{{ component['size'] | default: "0" }},file:'{{ component.file }}',alias:{{ component.alias | default: "null" }},notify:'{{ component.notify }}' }{%- endcapture -%}
     {%- elsif component.class == "serial" -%}
       {%- capture component_config -%}{ {{ default_config }},adapter:{{ component.adapter | default: "0" }},binding:'{{ component.binding }}',baudReceive:{{ component.baudReceive | default: "0" }},baudTransmit:{{ component.baudTransmit | default: "0" }},tabSize:{{ component.tabSize | default: "0" }},charBOL:{{ component.charBOL | default: "0" }},upperCase:{{ component.upperCase | default: "false" }} }{%- endcapture -%}
     {%- elsif component.class == "video" -%}
