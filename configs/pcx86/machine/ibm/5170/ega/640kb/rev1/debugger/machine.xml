@@ -15,7 +15,7 @@
 	<chipset id="chipset" model="5170" floppies="[1200,1200]"/>
 	<serial id="com1" adapter="1" binding="print"/>
 	<serial id="com2" adapter="2"/>
-	<testctl id="test" binding="com2" tests="/tests/pcx86/testmon/tests.json">
+	<testctl id="test" binding="com2" tests="/software/pcx86/test/testmon/tests.json">
 		<control type="container" class="pcjs-textarea" width="96%" padding="8px">
 			<name>TestMonitor</name>
 			<control type="textarea" binding="testCommands" width="100%" padRight="16px" height="130px" pos="relative" style="resize:vertical;"/>
