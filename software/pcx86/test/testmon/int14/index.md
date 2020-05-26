@@ -82,7 +82,7 @@ Before using [DOWNLOAD.COM](DOWNLOAD.COM), be sure sure to heed the advice at th
 	the operation and try again.
 	
 	Currently, the only component that knows how to send files to DOWNLOAD.COM
-	is our Node test utility: https://www.pcjs.org/tests/pcx86/testmon/testmon.js:
+	is our Node test utility: https://www.pcjs.org/software/pcx86/test/testmon/testmon.js:
 
 		node testmon.js [--baud=xxxx]
 	
