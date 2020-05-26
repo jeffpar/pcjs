@@ -28,4 +28,4 @@ redirect_from: /pubs/pc/reference/intel/80286/
 
   - [LOADALL](loadall/)
 
-{% include gallery/documents.html title="80286 Manuals" path="/documents/manuals/intel/" tag="80286-manuals" width="200" height="260" %}
+{% include gallery/documents.html title="80286 Documents" path="/documents/manuals/intel/" tag="80286" width="200" height="260" %}

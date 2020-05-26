@@ -3477,6 +3477,12 @@ X86.opRETF = function()
  */
 X86.opINT3 = function()
 {
+    if (DEBUG && this.flags.running) {
+        this.printMessage("debugger halting on INT 3", DEBUGGER || this.bitsMessage);
+        if (DEBUGGER && this.dbg) this.dbg.stopCPU();
+        return;
+    }
+
     /*
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */

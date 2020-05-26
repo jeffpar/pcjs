@@ -5,24 +5,10 @@ permalink: /documents/manuals/intel/80386/
 redirect_from: /pubs/pc/reference/intel/80386/
 ---
 
-  - [80386 Errata](#80386-errata)
   - [80386 Steppings](#80386-steppings)
+  - [80386 Documents](#80386-documents)
   - [80386 Undocumented Instructions](#80386-undocumented-instructions)
-    * [LOADALL](loadall/)
-    * [IBTS](ibts_xbts/), [XBTS](ibts_xbts/)
-
-### 80386 Errata
-
-  - [A0 Stepping](#a0-stepping)
-  - [A1 Stepping](#a1-stepping)
-  - [A2 Stepping](#a2-stepping)
-  - [B0 Stepping](#b0-stepping)
-  - [B1 Stepping](#b1-stepping)
-  - [C0 Stepping](#c0-stepping)
-  - [D0 Stepping](#d0-stepping)
-  - [D1 Stepping](#d1-stepping)
-  - [D2 Stepping](#d2-stepping)
-
+  
 ### 80386 Steppings
 
 As the "INTEL 80386 PROGRAMMER'S REFERENCE MANUAL 1986", section 10.1, explains:
@@ -37,6 +23,16 @@ which indicates an 80386 component. DL contains a unique identifier of the revis
 
 However, at this late date, it is unclear exactly what steppings Intel released and what "revision level",
 if any, was associated with each stepping.
+
+  - [A0 Stepping](#a0-stepping)
+  - [A1 Stepping](#a1-stepping)
+  - [A2 Stepping](#a2-stepping)
+  - [B0 Stepping](#b0-stepping)
+  - [B1 Stepping](#b1-stepping) 
+  - [C0 Stepping](#c0-stepping)
+  - [D0 Stepping](#d0-stepping)
+  - [D1 Stepping](#d1-stepping)
+  - [D2 Stepping](#d2-stepping)
 
 #### A0 Stepping
 
@@ -814,6 +810,8 @@ Revision identifier: 0x08.
 #### D2 Stepping
 
 Revision identifier: 0x08 (same as the D1 stepping).
+
+{% include gallery/documents.html title="80386 Documents" path="/documents/manuals/intel/" tag="80386" width="200" height="260" %}
 
 ### 80386 Undocumented Instructions
 

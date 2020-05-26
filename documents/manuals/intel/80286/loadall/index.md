@@ -155,3 +155,5 @@ For proper protected mode operation, the following is required:
 
  4. The DPL fields of the ES and DS descriptors should be 3 to prevent their being zeroed by RET or IRET
  instructions.
+
+{% include embed.html src="https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%219674&authkey=ACh5u1RonNCbNm8&em=2" %}
