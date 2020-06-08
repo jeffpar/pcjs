@@ -851,7 +851,7 @@ export default class DiskInfo {
         let cEntries = this.buildDir(abRoot, aFileData);
 
         /*
-         * PC DOS 1.0 requires ALL unused directory entries to start with 0xE5; 0x00 isn't good enough,
+         * PC DOS 1.x requires ALL unused directory entries to start with 0xE5; 0x00 isn't good enough,
          * so we must loop through all the remaining directory entries and zap them with 0xE5.
          */
         let offRoot = cEntries * DiskInfo.DIRENT.LENGTH;

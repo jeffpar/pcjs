@@ -22,7 +22,7 @@
   },
   "pcx86": {
     "name": "PCx86",
-    "version": "2.01",
+    "version": "2.02",
     "defines": [
       "APPVERSION",
       "DEBUGGER",
