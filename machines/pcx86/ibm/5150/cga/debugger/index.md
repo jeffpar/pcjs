@@ -8,6 +8,8 @@ machines:
     type: pcx86
     config: /configs/pcx86/machine/ibm/5150/cga/64kb/debugger/machine.json
     testRAM: false
+    autoStart: true
+    autoType: $date\r
 ---
 
 {% include machine.html id="ibm-5150-cga" %}

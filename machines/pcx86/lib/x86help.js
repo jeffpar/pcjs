@@ -658,7 +658,7 @@ X86.helpDIVOverflow = function()
      *
      * TODO: Determine the proper cycle cost.
      */
-    if (this.model == X86.MODEL_8086) {
+    if (this.model <= X86.MODEL_8088) {
         X86.helpTrap.call(this, X86.EXCEPTION.DE_EXC, 2);
     } else {
         X86.helpFault.call(this, X86.EXCEPTION.DE_EXC, null, 2);

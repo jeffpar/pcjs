@@ -1,6 +1,6 @@
 ## TODO
 
-### Minor Improvements
+### Site Improvements
 
   - Add manual for 101 Mazes
   - Add instructions for Invaders Boot Sector (2019)
@@ -13,17 +13,23 @@
   - Turn the [TI patents](/machines/ti/ti57/patents/) into a gallery
   - Machines like DEC PDP-11/70 with VT100 Terminal used to use special CSS classes (machine-right and machine-left) to arrange the machines side-by-side; think about alternatives.
 
-### Link Issues
+### Site Issues (eg, broken links)
 
   - Verify redirects for these remaining [links](/assets/tests/links/)
   - There may be external links to a few text files, which I'm not sure Jekyll will allow me to redirect; eg:
       - /apps/pdp10/diags/ka10/dakam/DAKAM.LST.txt
       - /devices/pcx86/keyboard/8042_INTERN.TXT
-    
+
+### Software Enhancements
+
+  - Allow PCx86 to mount .json disk images (ie, not just .img disk images)
+  - PCx86 debugger should recognize certain BD conventions
+
 ### Bugs
 
   - This [COMPAQ machine](https://www.pcjs.org/software/pcx86/sys/dos/compaq/1.12/) does not appear to run their DEMO correctly; either there's an MDA bug or COMPAQ VDU emulation isn't up to the task.
   - This [COMPAQ machine](https://www/pcjs.org/configs/pcx86/machine/compaq/deskpro386/other/2048kb/debugger/visual/machine.xml) doesn't initialize its VGA successfully, and has other other issues as well.
+  - 8088 machines are allowed to execute instructions like POPA and OUTS; that should not be allowed
 
 ### Mysteries
 

@@ -6057,7 +6057,7 @@ class DebuggerX86 extends DbgLib {
             let dbgAddr = this.newAddr(this.cpu.getIP(), this.cpu.getCS());
             do {
                 fPrefix = false;
-                let bOpcode = this.getByte(dbgAddr);
+                let bOpcode = this.getByte(dbgAddr), bOp2;
                 switch (bOpcode) {
                 case X86.OPCODE.ES:
                 case X86.OPCODE.CS:
@@ -6077,6 +6077,21 @@ class DebuggerX86 extends DbgLib {
                     this.incAddr(dbgAddr, 1);
                     break;
                 case X86.OPCODE.INTN:
+                    this.nStep = nStep;
+                    this.incAddr(dbgAddr, 1);
+                    bOp2 = this.getByte(dbgAddr);
+                    this.incAddr(dbgAddr, 1);
+                    if (bOp2 == 0x21) {
+                        let regAX = this.cpu.regEAX & 0xFFFF;
+                        if (regAX == 0x1804 || regAX == 0x1805) {
+                            let limit = 128;
+                            while ((bOp2 = this.getByte(dbgAddr)) && limit--) {
+                                this.incAddr(dbgAddr, 1);
+                            }
+                            this.incAddr(dbgAddr, 1);
+                        }
+                    }
+                    break;
                 case X86.OPCODE.LOOPNZ:
                 case X86.OPCODE.LOOPZ:
                 case X86.OPCODE.LOOP:

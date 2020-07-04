@@ -784,7 +784,7 @@ X86.fnIDIVb = function(dst, src)
      *      These numbers represent the most negative numbers representable using 2's complement arithmetic (equaling
      *      -32768 and -128 in decimal, respectively)."
      */
-    if (result != ((result << 24) >> 24) || this.model == X86.MODEL_8086 && result == -128) {
+    if (result != ((result << 24) >> 24) || this.model <= X86.MODEL_8088 && result == -128) {
         X86.helpDIVOverflow.call(this);
         return dst;
     }
@@ -831,7 +831,7 @@ X86.fnIDIVw = function(dst, src)
          *      These numbers represent the most negative numbers representable using 2's complement arithmetic (equaling
          *      -32768 and -128 in decimal, respectively)."
          */
-        if (result != ((result << 16) >> 16) || this.model == X86.MODEL_8086 && result == -32768) {
+        if (result != ((result << 16) >> 16) || this.model <= X86.MODEL_8088 && result == -32768) {
             X86.helpDIVOverflow.call(this);
             return dst;
         }

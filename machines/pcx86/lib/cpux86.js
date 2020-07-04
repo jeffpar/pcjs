@@ -2341,10 +2341,7 @@ class CPUx86 extends CPULib {
     /**
      * rewindIP(fCheckSeg)
      *
-     * This "rewinds" IP to the beginning of the current instruction (ie, the REP prefix of a string instruction);
-     * this also sets the REPSEG flag to record string instructions with multiple prefixes (ie, a segment override),
-     * so that checkINTR() has the option to simulate the 8086/8088's failure to properly restart such an instruction
-     * after a hardware interrupt (which became known as a "feature", hence not part of BUGS_8086).
+     * This "rewinds" IP to the beginning of the current instruction (ie, the REP prefix of a string instruction).
      *
      * @this {CPUx86}
      * @param {boolean} [fCheckSeg]
@@ -2352,7 +2349,14 @@ class CPUx86 extends CPULib {
     rewindIP(fCheckSeg = false)
     {
         if (fCheckSeg && (this.opPrefixes & X86.OPFLAG.SEG)) {
-            this.opFlags |= X86.OPFLAG.REPSEG;
+            /*
+             * This instruction has both REP and SEG overrides, so if we IRET'ed to it with interrupts enabled,
+             * don't repeat it; this helps simulate the 8086/8088's failure to properly restart such an instruction
+             * after a hardware interrupt (which became known as a "feature", hence not part of BUGS_8086).
+             */
+            if (this.model <= X86.MODEL_8088 && (this.opPrefixes & X86.OPFLAG.IRET) && (this.regPS & X86.PS.IF)) {
+                return;
+            }
         }
         this.opFlags |= X86.OPFLAG.REPEAT;
         this.resetIP();
@@ -4182,15 +4186,6 @@ class CPUx86 extends CPULib {
                             this.intFlags &= ~X86.INTFLAG.INTR;
                             if (nIDT >= 0) {
                                 this.intFlags &= ~X86.INTFLAG.HALT;
-                                /*
-                                 * This is a hack that simulates the 8086/8088's failure to preserve more than one prefix
-                                 * when a string instruction is interrupted.  TODO: Faithful simulation would require maintaining
-                                 * a prefix byte count, whereas we simply maintain a special flag (REPSEG) that indicates multiple
-                                 * prefixes were detected, so we simply "skip over" one of them.
-                                 */
-                                if (this.model <= X86.MODEL_8088 && (this.opFlags & X86.OPFLAG.REPSEG)) {
-                                    this.regLIP = (this.regLIP + 1)|0;
-                                }
                                 X86.helpInterrupt.call(this, nIDT);
                                 return true;
                             }
@@ -4458,7 +4453,7 @@ class CPUx86 extends CPULib {
                     this.resetSizes();
                 }
 
-                this.opPrefixes = this.opFlags & X86.OPFLAG.REPEAT;
+                this.opPrefixes = this.opFlags & (X86.OPFLAG.REPEAT | X86.OPFLAG.IRET);
 
                 if (this.intFlags) {
                     if (this.checkINTR()) {

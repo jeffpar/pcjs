@@ -7,7 +7,7 @@
 /**
  * @define {string}
  */
-var APPVERSION = "2.01";                // this @define is overridden by the Closure Compiler with the version in machines.json
+var APPVERSION = "2.03";                // this @define is overridden by the Closure Compiler with the version in machines.json
 
 var COPYRIGHT = "Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>";
 
@@ -1462,7 +1462,7 @@ class Str {
              *      d:  day of the month, 2 digits with leading zeros (01, 02, ..., 31)     %02D
              *      D:  3-letter day of the week ("Sun", "Mon", ..., "Sat")                 %.3W
              *      F:  month ("January", "February", ..., "December")                      %F
-             *      g:  hour in 12-hour format, without leading zeros (1, 2, ..., 12)       %I
+             *      g:  hour in 12-hour format, without leading zeros (1, 2, ..., 12)       %G
              *      h:  hour in 24-hour format, without leading zeros (0, 1, ..., 23)       %H
              *      H:  hour in 24-hour format, with leading zeros (00, 01, ..., 23)        %02H
              *      i:  minutes, with leading zeros (00, 01, ..., 59)                       %02N
@@ -1481,7 +1481,7 @@ class Str {
              *      %T:  timestamp output (equivalent to: %Y-%02M-%02D %02H:%02N:%02S)
              *
              * Use the optional '#' flag with any of the above '%' format codes to produce UTC results
-             * (eg, '%#I' instead of '%I').
+             * (eg, '%#G' instead of '%G').
              *
              * The %A, %F, and %W types act as strings (which support the '-' left justification flag, as well as
              * the width and precision options), and the rest act as integers (which support the '0' padding flag
@@ -1520,15 +1520,15 @@ class Str {
                 break;
 
             case 'A':
+            case 'G':
             case 'H':
-            case 'I':
                 arg = hash? date.getUTCHours() : date.getHours();
                 if (type == 'A') {
                     arg = (arg < 12 ? "am" : "pm");
                     type = 's';
                 }
                 else {
-                    if (type == 'I') {
+                    if (type == 'G') {
                         arg = (!arg? 12 : (arg > 12 ? arg - 12 : arg));
                     }
                     type = 'd';
@@ -5489,7 +5489,7 @@ var X86 = {
         ADDRSIZE:   0x0800,     // address size override
         FAULT:      0x1000,     // a fault occurred during the current instruction
         DBEXC:      0x2000,     // a DB_EXC exception occurred during the current instruction
-        REPSEG:     0x4000      // an instruction is being repeated with a segment prefix (used for 8086/8088 "feature" simulation)
+        IRET:       0x4000      // remembers if we arrived at the current instruction via IRET (used for 8086/8088 "feature" simulation)
     },
     /*
      * Bit values for intFlags
@@ -16423,10 +16423,7 @@ class CPUx86 extends CPULib {
     /**
      * rewindIP(fCheckSeg)
      *
-     * This "rewinds" IP to the beginning of the current instruction (ie, the REP prefix of a string instruction);
-     * this also sets the REPSEG flag to record string instructions with multiple prefixes (ie, a segment override),
-     * so that checkINTR() has the option to simulate the 8086/8088's failure to properly restart such an instruction
-     * after a hardware interrupt (which became known as a "feature", hence not part of BUGS_8086).
+     * This "rewinds" IP to the beginning of the current instruction (ie, the REP prefix of a string instruction).
      *
      * @this {CPUx86}
      * @param {boolean} [fCheckSeg]
@@ -16434,7 +16431,14 @@ class CPUx86 extends CPULib {
     rewindIP(fCheckSeg = false)
     {
         if (fCheckSeg && (this.opPrefixes & X86.OPFLAG.SEG)) {
-            this.opFlags |= X86.OPFLAG.REPSEG;
+            /*
+             * This instruction has both REP and SEG overrides, so if we IRET'ed to it with interrupts enabled,
+             * don't repeat it; this helps simulate the 8086/8088's failure to properly restart such an instruction
+             * after a hardware interrupt (which became known as a "feature", hence not part of BUGS_8086).
+             */
+            if (this.model <= X86.MODEL_8088 && (this.opPrefixes & X86.OPFLAG.IRET) && (this.regPS & X86.PS.IF)) {
+                return;
+            }
         }
         this.opFlags |= X86.OPFLAG.REPEAT;
         this.resetIP();
@@ -18264,15 +18268,6 @@ class CPUx86 extends CPULib {
                             this.intFlags &= ~X86.INTFLAG.INTR;
                             if (nIDT >= 0) {
                                 this.intFlags &= ~X86.INTFLAG.HALT;
-                                /*
-                                 * This is a hack that simulates the 8086/8088's failure to preserve more than one prefix
-                                 * when a string instruction is interrupted.  TODO: Faithful simulation would require maintaining
-                                 * a prefix byte count, whereas we simply maintain a special flag (REPSEG) that indicates multiple
-                                 * prefixes were detected, so we simply "skip over" one of them.
-                                 */
-                                if (this.model <= X86.MODEL_8088 && (this.opFlags & X86.OPFLAG.REPSEG)) {
-                                    this.regLIP = (this.regLIP + 1)|0;
-                                }
                                 X86.helpInterrupt.call(this, nIDT);
                                 return true;
                             }
@@ -18540,7 +18535,7 @@ class CPUx86 extends CPULib {
                     this.resetSizes();
                 }
 
-                this.opPrefixes = this.opFlags & X86.OPFLAG.REPEAT;
+                this.opPrefixes = this.opFlags & (X86.OPFLAG.REPEAT | X86.OPFLAG.IRET);
 
                 if (this.intFlags) {
                     if (this.checkINTR()) {
@@ -35649,6 +35644,7 @@ X86.opIRET = function()
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
+    this.opFlags |= X86.OPFLAG.IRET;
     X86.helpIRET.call(this);
 };
 
@@ -77910,7 +77906,7 @@ class DebuggerX86 extends DbgLib {
             let dbgAddr = this.newAddr(this.cpu.getIP(), this.cpu.getCS());
             do {
                 fPrefix = false;
-                let bOpcode = this.getByte(dbgAddr);
+                let bOpcode = this.getByte(dbgAddr), bOp2;
                 switch (bOpcode) {
                 case X86.OPCODE.ES:
                 case X86.OPCODE.CS:
@@ -77930,6 +77926,21 @@ class DebuggerX86 extends DbgLib {
                     this.incAddr(dbgAddr, 1);
                     break;
                 case X86.OPCODE.INTN:
+                    this.nStep = nStep;
+                    this.incAddr(dbgAddr, 1);
+                    bOp2 = this.getByte(dbgAddr);
+                    this.incAddr(dbgAddr, 1);
+                    if (bOp2 == 0x21) {
+                        let regAX = this.cpu.regEAX & 0xFFFF;
+                        if (regAX == 0x1804 || regAX == 0x1805) {
+                            let limit = 128;
+                            while ((bOp2 = this.getByte(dbgAddr)) && limit--) {
+                                this.incAddr(dbgAddr, 1);
+                            }
+                            this.incAddr(dbgAddr, 1);
+                        }
+                    }
+                    break;
                 case X86.OPCODE.LOOPNZ:
                 case X86.OPCODE.LOOPZ:
                 case X86.OPCODE.LOOP:

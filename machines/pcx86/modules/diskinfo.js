@@ -851,7 +851,7 @@ export default class DiskInfo {
         let cEntries = this.buildDir(abRoot, aFileData);
 
         /*
-         * PC DOS 1.0 requires ALL unused directory entries to start with 0xE5; 0x00 isn't good enough,
+         * PC DOS 1.x requires ALL unused directory entries to start with 0xE5; 0x00 isn't good enough,
          * so we must loop through all the remaining directory entries and zap them with 0xE5.
          */
         let offRoot = cEntries * DiskInfo.DIRENT.LENGTH;
@@ -2031,7 +2031,7 @@ export default class DiskInfo {
                         cbDir += file.size;
                         cbTotal += file.size;
                     }
-                    sListing += this.device.sprintf("%s%-8s %-3s%s%s  %#2M-%#02D-%#0.2Y  %#2I:%#02N%#.1A\n", sIndent, name, ext, (file.attr & (DiskInfo.ATTR.READONLY | DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM))? "*" : " ", sSize, file.date);
+                    sListing += this.device.sprintf("%s%-8s %-3s%s%s  %#2M-%#02D-%#0.2Y  %#2G:%#02N%#.1A\n", sIndent, name, ext, (file.attr & (DiskInfo.ATTR.READONLY | DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM))? "*" : " ", sSize, file.date);
                     nTotal++;
                     /*
                      * NOTE: While it seems odd to include all SUBDIR entries in the file count, that's what DOS always did, so we do, too.
