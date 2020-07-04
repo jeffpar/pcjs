@@ -418,7 +418,7 @@ var X86 = {
         ADDRSIZE:   0x0800,     // address size override
         FAULT:      0x1000,     // a fault occurred during the current instruction
         DBEXC:      0x2000,     // a DB_EXC exception occurred during the current instruction
-        REPSEG:     0x4000      // an instruction is being repeated with a segment prefix (used for 8086/8088 "feature" simulation)
+        IRET:       0x4000      // remembers if we arrived at the current instruction via IRET (used for 8086/8088 "feature" simulation)
     },
     /*
      * Bit values for intFlags

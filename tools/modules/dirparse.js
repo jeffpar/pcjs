@@ -9,10 +9,6 @@
  */
 
 import fs         from "fs";
-import os         from "os";
-import crypto     from "crypto";
-import glob       from "glob";
-import path       from "path";
 import StdLib     from "./stdlib.js";
 import Device     from "../../machines/modules/device.js";
 
@@ -21,7 +17,7 @@ let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
 let stdlib = new StdLib();
 
-function parseListing(listing, inventory, filter, target)
+function parseListing(listing, inventory, filter, exclude, target)
 {
     let cwd = "";
     let lines = listing.split('\n');
@@ -60,7 +56,7 @@ function parseListing(listing, inventory, filter, target)
                         let i = path.indexOf(target);
                         if (i > 0) {
                             let targetFile = path.substr(i + target.length + 1);
-                            if (inventory.indexOf(targetFile.replace(/\\/g, "/")) >= 0) {
+                            if (inventory.indexOf(targetFile.replace(/\\/g, "/")) >= 0 || exclude && targetFile.indexOf(exclude) >= 0) {
                                 printf("REM skipping \"Files\\%s\"\n", targetFile);
                             } else {
                                 printf("ECHO F|XCOPY \"%s\" \"Files\\%s\" /Y /D\n", path, targetFile);
@@ -94,12 +90,12 @@ function main(argc, argv)
 
     Device.DEBUG = !!argv['debug'];
 
-    // printf("DirParse v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s\n", options) : ""));
+    printf("DirParse v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s\n", options) : ""));
 
     if (!argv[1]) {
         printf("missing filename\n");
     } else {
-        parseListing(fs.readFileSync(argv[1], "utf-8"), fs.readFileSync(argv[2], "utf-8"), argv[3], argv[4]);
+        parseListing(fs.readFileSync(argv[1], "utf-8"), fs.readFileSync(argv[2], "utf-8"), argv[3], argv[4], argv[5]);
     }
 }
 

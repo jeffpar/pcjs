@@ -3564,6 +3564,7 @@ X86.opIRET = function()
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
+    this.opFlags |= X86.OPFLAG.IRET;
     X86.helpIRET.call(this);
 };
 

@@ -803,7 +803,7 @@ class StdIO extends NumIO {
          * current Debugger preferences.
          */
         this.formatters = {};
-        let predefinedTypes = "ACDFHIMNSTWYbdfjcsoXx%";
+        let predefinedTypes = "ACDFHGMNSTWYbdfjcsoXx%";
         for (let i = 0; i < predefinedTypes.length; i++) {
             this.formatters[predefinedTypes[i]] = null;
         }
@@ -1079,7 +1079,7 @@ class StdIO extends NumIO {
              *
              *      a:  lowercase ante meridiem and post meridiem (am or pm)                %A (%.1A for a or p)
              *      F:  month ("January", "February", ..., "December")                      %F (%.3F for 3-letter month)
-             *      g:  hour in 12-hour format                                              %I (%02I for leading zero)
+             *      g:  hour in 12-hour format                                              %G (%02G for leading zero)
              *      h:  hour in 24-hour format                                              %H (%02H for leading zero)
              *      i:  minutes (0, 1, ..., 59)                                             %N (%02N for leading zero)
              *      j:  day of the month (1, 2, ..., 31)                                    %D (%02D for leading zero)
@@ -1094,7 +1094,7 @@ class StdIO extends NumIO {
              *      %T:  timestamp output (equivalent to: %Y-%02M-%02D %02H:%02N:%02S)
              *
              * Use the optional '#' flag with any of the above '%' format types to produce UTC results
-             * (eg, '%#I' instead of '%I').
+             * (eg, '%#G' instead of '%G').
              *
              * The %A, %F, and %W types act as strings (which support the '-' left justification flag, as well as
              * the width and precision options), and the rest act as integers (which support the '0' padding flag
@@ -1119,7 +1119,7 @@ class StdIO extends NumIO {
              *
              * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
              */
-            let ch, date = /** @type {Date} */ ("ACDFHIMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
+            let ch, date = /** @type {Date} */ ("ACDFHGMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
 
             switch(type) {
             case 'C':
@@ -1133,15 +1133,15 @@ class StdIO extends NumIO {
                 break;
 
             case 'A':
+            case 'G':
             case 'H':
-            case 'I':
                 arg = hash? date.getUTCHours() : date.getHours();
                 if (type == 'A') {
                     arg = (arg < 12 ? "am" : "pm");
                     type = 's';
                 }
                 else {
-                    if (type == 'I') {
+                    if (type == 'G') {
                         arg = (!arg? 12 : (arg > 12 ? arg - 12 : arg));
                     }
                     type = 'd';

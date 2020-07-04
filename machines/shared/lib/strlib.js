@@ -710,7 +710,7 @@ class Str {
              *      d:  day of the month, 2 digits with leading zeros (01, 02, ..., 31)     %02D
              *      D:  3-letter day of the week ("Sun", "Mon", ..., "Sat")                 %.3W
              *      F:  month ("January", "February", ..., "December")                      %F
-             *      g:  hour in 12-hour format, without leading zeros (1, 2, ..., 12)       %I
+             *      g:  hour in 12-hour format, without leading zeros (1, 2, ..., 12)       %G
              *      h:  hour in 24-hour format, without leading zeros (0, 1, ..., 23)       %H
              *      H:  hour in 24-hour format, with leading zeros (00, 01, ..., 23)        %02H
              *      i:  minutes, with leading zeros (00, 01, ..., 59)                       %02N
@@ -729,7 +729,7 @@ class Str {
              *      %T:  timestamp output (equivalent to: %Y-%02M-%02D %02H:%02N:%02S)
              *
              * Use the optional '#' flag with any of the above '%' format codes to produce UTC results
-             * (eg, '%#I' instead of '%I').
+             * (eg, '%#G' instead of '%G').
              *
              * The %A, %F, and %W types act as strings (which support the '-' left justification flag, as well as
              * the width and precision options), and the rest act as integers (which support the '0' padding flag
@@ -768,15 +768,15 @@ class Str {
                 break;
 
             case 'A':
+            case 'G':
             case 'H':
-            case 'I':
                 arg = hash? date.getUTCHours() : date.getHours();
                 if (type == 'A') {
                     arg = (arg < 12 ? "am" : "pm");
                     type = 's';
                 }
                 else {
-                    if (type == 'I') {
+                    if (type == 'G') {
                         arg = (!arg? 12 : (arg > 12 ? arg - 12 : arg));
                     }
                     type = 'd';

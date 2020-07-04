@@ -7,7 +7,7 @@
 /**
  * @define {string}
  */
-var APPVERSION = "2.02";                // this @define is overridden by the Closure Compiler with the version in machines.json
+var APPVERSION = "2.03";                // this @define is overridden by the Closure Compiler with the version in machines.json
 
 var COPYRIGHT = "Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>";
 
@@ -5941,11 +5941,8 @@ X86.PS_SAHF = (X86.PS.CF | X86.PS.PF | X86.PS.AF | X86.PS.ZF | X86.PS.SF);
  * they are OR'ed into opPrefixes; otherwise, opPrefixes is zeroed as well.  This gives prefix-conscious
  * instructions like LODS, MOVS, STOS, CMPS, etc, a way of determining which prefixes, if any, immediately
  * preceded them.
- *
- * The IRET flag is a "pseudo" prefix bit that simply helps us remember whether we arrived at a repeated
- * string instruction via IRET, which is used to fake restartability problems (ie, "features").
  */
-X86.OPFLAG_PREFIXES = (X86.OPFLAG.SEG | X86.OPFLAG.LOCK | X86.OPFLAG.REPZ | X86.OPFLAG.REPNZ | X86.OPFLAG.DATASIZE | X86.OPFLAG.ADDRSIZE | X86.OPFLAG.IRET);
+X86.OPFLAG_PREFIXES = (X86.OPFLAG.SEG | X86.OPFLAG.LOCK | X86.OPFLAG.REPZ | X86.OPFLAG.REPNZ | X86.OPFLAG.DATASIZE | X86.OPFLAG.ADDRSIZE);
 
 
 /**
@@ -16435,11 +16432,13 @@ class CPUx86 extends CPULib {
     {
         if (fCheckSeg && (this.opPrefixes & X86.OPFLAG.SEG)) {
             /*
-             * This instruction has both a REP and a SEG override, so if we IRET'ed to it with interrupts enabled,
+             * This instruction has both REP and SEG overrides, so if we IRET'ed to it with interrupts enabled,
              * don't repeat it; this helps simulate the 8086/8088's failure to properly restart such an instruction
              * after a hardware interrupt (which became known as a "feature", hence not part of BUGS_8086).
              */
-            if ((this.opPrefixes & X86.OPFLAG.IRET) && (this.regPS & X86.PS.IF)) return;
+            if ((this.opPrefixes & X86.OPFLAG.IRET) && (this.regPS & X86.PS.IF)) {
+                return;
+            }
         }
         this.opFlags |= X86.OPFLAG.REPEAT;
         this.resetIP();
@@ -18536,7 +18535,7 @@ class CPUx86 extends CPULib {
                     this.resetSizes();
                 }
 
-                this.opPrefixes = this.opFlags & X86.OPFLAG.REPEAT;
+                this.opPrefixes = this.opFlags & (X86.OPFLAG.REPEAT | X86.OPFLAG.IRET);
 
                 if (this.intFlags) {
                     if (this.checkINTR()) {
@@ -35645,7 +35644,7 @@ X86.opIRET = function()
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
-    this.opFlag |= X86.OPFLAG.IRET;
+    this.opFlags |= X86.OPFLAG.IRET;
     X86.helpIRET.call(this);
 };
 
@@ -77907,7 +77906,7 @@ class DebuggerX86 extends DbgLib {
             let dbgAddr = this.newAddr(this.cpu.getIP(), this.cpu.getCS());
             do {
                 fPrefix = false;
-                let bOpcode = this.getByte(dbgAddr);
+                let bOpcode = this.getByte(dbgAddr), bOp2;
                 switch (bOpcode) {
                 case X86.OPCODE.ES:
                 case X86.OPCODE.CS:
@@ -77927,6 +77926,21 @@ class DebuggerX86 extends DbgLib {
                     this.incAddr(dbgAddr, 1);
                     break;
                 case X86.OPCODE.INTN:
+                    this.nStep = nStep;
+                    this.incAddr(dbgAddr, 1);
+                    bOp2 = this.getByte(dbgAddr);
+                    this.incAddr(dbgAddr, 1);
+                    if (bOp2 == 0x21) {
+                        let regAX = this.cpu.regEAX & 0xFFFF;
+                        if (regAX == 0x1804 || regAX == 0x1805) {
+                            let limit = 128;
+                            while ((bOp2 = this.getByte(dbgAddr)) && limit--) {
+                                this.incAddr(dbgAddr, 1);
+                            }
+                            this.incAddr(dbgAddr, 1);
+                        }
+                    }
+                    break;
                 case X86.OPCODE.LOOPNZ:
                 case X86.OPCODE.LOOPZ:
                 case X86.OPCODE.LOOP:
