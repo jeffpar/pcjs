@@ -16436,7 +16436,7 @@ class CPUx86 extends CPULib {
              * don't repeat it; this helps simulate the 8086/8088's failure to properly restart such an instruction
              * after a hardware interrupt (which became known as a "feature", hence not part of BUGS_8086).
              */
-            if ((this.opPrefixes & X86.OPFLAG.IRET) && (this.regPS & X86.PS.IF)) {
+            if (this.model <= X86.MODEL_8088 && (this.opPrefixes & X86.OPFLAG.IRET) && (this.regPS & X86.PS.IF)) {
                 return;
             }
         }
