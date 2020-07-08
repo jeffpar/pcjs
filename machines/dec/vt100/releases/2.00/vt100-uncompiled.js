@@ -51,7 +51,7 @@ const MAXDEBUG = false;
  *
  * @define {string}
  */
-const VERSION = "2.00";
+const VERSION = "2.03";
 
 /**
  * REPOSITORY is the current PCjs repository.

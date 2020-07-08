@@ -247,14 +247,15 @@ export default class DiskInfo {
          * I used to do these BPB tests only if diskFormat was undefined, but now I always do them, because I
          * want to make sure they're in agreement (and if not, then figure out why not).
          *
-         * See if the first sector of the image contains a valid DOS BPB.  That begs the question: what IS a valid
-         * DOS BPB?  For starters, the first word (at offset 0x0B) is invariably 0x0200, indicating a 512-byte sector
-         * size.  I also check the first byte for an Intel JMP opcode (0xEB is JMP with a 1-byte displacement, and
-         * 0xE9 is JMP with a 2-byte displacement).  What else?
+         * See if the first sector of the image contains a valid DOS BPB.  This is tricky, because there are lots
+         * of variations.  For now, the checks are simplistic: the first byte is checked for an Intel JMP opcode
+         * (0xEB is JMP with a 1-byte displacement, and 0xE9 is JMP with a 2-byte displacement) or an Intel CLD opcode
+         * (used by BASIC-DOS), and the sector size (word at offset 0x0B) is checked for any power of two >= 128
+         * (the "standard" IBM sector size was 512, but 128, 256, and 1024 were also possible).
          */
         let fBPBExists = false, bMediaIDBPB = 0;
 
-        if ((bByte0 == CPUx86.OPCODE.JMP || bByte0 == CPUx86.OPCODE.JMPS) && cbSectorBPB == cbSector) {
+        if ((bByte0 == CPUx86.OPCODE.JMP || bByte0 == CPUx86.OPCODE.JMPS || bByte0 == CPUx86.OPCODE.CLD) && cbSectorBPB >= 128 && (cbSectorBPB & (cbSectorBPB - 1)) == 0) {
 
             let nHeadsBPB = dbDisk.readUInt16LE(offBootSector + DiskInfo.BPB.TOTAL_HEADS);
             let nSectorsPerTrackBPB = dbDisk.readUInt16LE(offBootSector + DiskInfo.BPB.TRACK_SECS);
@@ -289,10 +290,14 @@ export default class DiskInfo {
                 else {
                     nHeads = nHeadsBPB;
                     nSectorsPerTrack = nSectorsPerTrackBPB;
-                    nCylinders = cbDiskData / (nHeads * nSectorsPerTrack * cbSector);
+                    nCylinders = cbDiskData / (nHeads * nSectorsPerTrack * cbSectorBPB);
                     if (nCylinders != (nCylinders|0)) {
                         this.printf(Device.MESSAGE.WARN, "total cylinders (%d) not a multiple of %d sectors per cylinder\n", nCylinders, nHeads * nSectorsPerTrack);
                         nCylinders |= 0;
+                    }
+                    if (cbSector != cbSectorBPB) {
+                        this.printf(Device.MESSAGE.WARN, "overriding default sector size (%d) with BPB sector size (%d)\n", cbSector, cbSectorBPB);
+                        cbSector = cbSectorBPB;
                     }
                     bMediaID = bMediaIDBPB;
                 }
@@ -334,21 +339,19 @@ export default class DiskInfo {
          * Let's see if we can find a corresponding BPB in our table of default BPBs.
          */
         let iBPB = -1;
-        if (bMediaID) {
-            for (let i = 0; i < DiskInfo.aDefaultBPBs.length; i++) {
-                if (DiskInfo.aDefaultBPBs[i][DiskInfo.BPB.MEDIA_ID] == bMediaID) {
-                    let cbDiskBPB = (DiskInfo.aDefaultBPBs[i][DiskInfo.BPB.TOTAL_SECS] + (DiskInfo.aDefaultBPBs[i][DiskInfo.BPB.TOTAL_SECS + 1] * 0x100)) * cbSector;
-                    if (cbDiskBPB == cbDiskData) {
-                        /*
-                         * This code was added to deal with variations in sectors/cluster.  Most software manufacturers
-                         * were happy with the defaults that FORMAT chooses for a given diskette size, but in a few cases
-                         * (eg, PC DOS 4.00 360K diskettes, PC DOS 4.01 720K diskettes, etc), the manufacturer (IBM) opted
-                         * for a smaller cluster size.
-                         */
-                        if (!fBPBExists || dbDisk.readUInt8(offBootSector + DiskInfo.BPB.CLUSTER_SECS) == DiskInfo.aDefaultBPBs[i][DiskInfo.BPB.CLUSTER_SECS]) {
-                            iBPB = i;
-                            break;
-                        }
+        for (let i = 0; i < DiskInfo.aDefaultBPBs.length; i++) {
+            if (DiskInfo.aDefaultBPBs[i][DiskInfo.BPB.MEDIA_ID] == bMediaID) {
+                let cbDiskBPB = (DiskInfo.aDefaultBPBs[i][DiskInfo.BPB.TOTAL_SECS] + (DiskInfo.aDefaultBPBs[i][DiskInfo.BPB.TOTAL_SECS + 1] * 0x100)) * cbSector;
+                if (cbDiskBPB == cbDiskData) {
+                    /*
+                        * This code was added to deal with variations in sectors/cluster.  Most software manufacturers
+                        * were happy with the defaults that FORMAT chooses for a given diskette size, but in a few cases
+                        * (eg, PC DOS 4.00 360K diskettes, PC DOS 4.01 720K diskettes, etc), the manufacturer (IBM) opted
+                        * for a smaller cluster size.
+                        */
+                    if (!fBPBExists || dbDisk.readUInt8(offBootSector + DiskInfo.BPB.CLUSTER_SECS) == DiskInfo.aDefaultBPBs[i][DiskInfo.BPB.CLUSTER_SECS]) {
+                        iBPB = i;
+                        break;
                     }
                 }
             }
@@ -1703,7 +1706,7 @@ export default class DiskInfo {
                 idFAT = this.getClusterEntry(vol, 0, 0);
                 for (let i = 0; i < DiskInfo.aDefaultBPBs.length; i++) {
                     let bpb = DiskInfo.aDefaultBPBs[i];
-                    if (bpb[DiskInfo.BPB.MEDIA_ID] == idFAT) {
+                    if (bpb[DiskInfo.BPB.MEDIA_ID] == idFAT || !bpb[DiskInfo.BPB.MEDIA_ID] && idFAT >= 0xF8) {
                         let cbDiskBPB = (bpb[DiskInfo.BPB.TOTAL_SECS] + (bpb[DiskInfo.BPB.TOTAL_SECS + 1] * 0x100)) * this.cbSector;
                         /*
                          * With such a heavy reliance on a single byte (idFAT) from the first FAT sector, we're going
@@ -1711,7 +1714,7 @@ export default class DiskInfo {
                          * that DOS 1.x supported), but there's the 360K Microsoft Chart 2.02 disk image (and a few others),
                          * which are a bit "off", so there you go.
                          */
-                        if (cbDiskBPB == cbDisk && cbDisk <= 360 * 1024) {
+                        if (cbDiskBPB == cbDisk && (cbDisk <= 360 * 1024 || !bpb[DiskInfo.BPB.MEDIA_ID])) {
                             vol.idMedia = idFAT;
                             /*
                              * NOTE: Like TOTAL_SECS, FAT_SECS and ROOT_DIRENTS are 2-byte fields; but unlike TOTAL_SECS,
@@ -3655,8 +3658,18 @@ DiskInfo.BPB = {
 };
 
 /*
- * The BPBs that buildDiskFromBuffer() currently supports; these BPBs should be in order of smallest to largest capacity,
- * to help ensure we don't select a disk format larger than necessary.
+ * The BPBs that buildDiskFromBuffer() currently supports; these BPBs should be in order of smallest/oldest to largest/newest
+ * capacity, to help ensure we don't select a disk format larger (or newer) than necessary.
+ *
+ * The first two entries MUST be the first two diskette formats (160K and 320K) defined by PC DOS 1.0 and 1.1, respectively,
+ * and the next two entries MUST be the corresponding extensions defined by PC DOS 2.0 (ie, 180K and 360K), as there's code above
+ * that assumes that order when trying to resolve discrepancies between a disk image's actual size and its "formatted" size.
+ *
+ * Even though original 160K and 320K diskettes did not include any BPBs, any images we generate with those formats DO include
+ * BPBs, because 1) it doesn't hurt anything, and 2) it makes the images mountable on modern operating systems.
+ *
+ * Finally, we've started adding some non-standard BPBs to the end of the table, with the intention of supporting older DOS-like
+ * disk images (eg, SCP diskettes created by Seattle Computer Products).  These are distinguished by a ZERO media ID.
  */
 DiskInfo.aDefaultBPBs = [
   [                             // define BPB for 160Kb diskette
@@ -3849,6 +3862,36 @@ DiskInfo.aDefaultBPBs = [
       // TODO: Investigate PC DOS 2.0 BPB behavior (ie, what did the 0x80 mean)?
       //
     0x01, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+  ],
+  [                             // define BPB for 256Kb diskette (single-sided, 77 tracks, 26 sectors/track, 128-byte sectors, 256256 total bytes)
+    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
+    0x80, 0x00,                 // 0x0B: bytes per sector (0x80 or 128)
+    0x04,                       // 0x0D: sectors per cluster (4)
+    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+    0x02,                       // 0x10: FAT copies (2)
+    0x44, 0x00,                 // 0x11: root directory entries (0x44 or 68)  0x44 * 0x20 = 0x880 (1 sector is 0x80 bytes, total of 0x11 sectors)
+    0xD2, 0x07,                 // 0x13: number of sectors (0x7D2 or 2002; ie, 77 * 26)
+    0x00,                       // 0x15: media ID (0x00 indicates this is a non-standard format)
+    0x06, 0x00,                 // 0x16: sectors per FAT (6)
+    0x1A, 0x00,                 // 0x18: sectors per track (26)
+    0x01, 0x00,                 // 0x1A: number of heads (1)
+    0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+  ],
+  [                             // define BPB for 1232Kb diskette (double-sided, 77 tracks, 8 sectors/track, 1024-byte sectors, 1261568 total bytes)
+    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
+    0x00, 0x04,                 // 0x0B: bytes per sector (0x400 or 1024)
+    0x01,                       // 0x0D: sectors per cluster (1)
+    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+    0x02,                       // 0x10: FAT copies (2)
+    0xC0, 0x00,                 // 0x11: root directory entries (0xC0 or 192)  0xC0 * 0x20 = 0x1800 (1 sector is 1024 bytes, total of 6 sectors)
+    0xD0, 0x04,                 // 0x13: number of sectors (0x4D0 or 1232; ie, 2 * 77 * 8)
+    0x00,                       // 0x15: media ID (0x00 indicates this is a non-standard format)
+    0x02, 0x00,                 // 0x16: sectors per FAT (2)
+    0x08, 0x00,                 // 0x18: sectors per track (8)
+    0x02, 0x00,                 // 0x1A: number of heads (2)
+    0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
   ]
 ];
 
@@ -3864,27 +3907,29 @@ DiskInfo.aDefaultBPBs = [
  * heads, each of which is an array of sector objects.
  */
 DiskInfo.GEOMETRIES = {
-    163840:  [40,1,8,,0xFE],    // media ID 0xFE: 40 cylinders, 1 head (single-sided),   8 sectors/track, ( 320 total sectors x 512 bytes/sector ==  163840)
-    184320:  [40,1,9,,0xFC],    // media ID 0xFC: 40 cylinders, 1 head (single-sided),   9 sectors/track, ( 360 total sectors x 512 bytes/sector ==  184320)
-    327680:  [40,2,8,,0xFF],    // media ID 0xFF: 40 cylinders, 2 heads (double-sided),  8 sectors/track, ( 640 total sectors x 512 bytes/sector ==  327680)
-    368640:  [40,2,9,,0xFD],    // media ID 0xFD: 40 cylinders, 2 heads (double-sided),  9 sectors/track, ( 720 total sectors x 512 bytes/sector ==  368640)
-    737280:  [80,2,9,,0xF9],    // media ID 0xF9: 80 cylinders, 2 heads (double-sided),  9 sectors/track, (1440 total sectors x 512 bytes/sector ==  737280)
-    1228800: [80,2,15,,0xF9],   // media ID 0xF9: 80 cylinders, 2 heads (double-sided), 15 sectors/track, (2400 total sectors x 512 bytes/sector == 1228800)
-    1474560: [80,2,18,,0xF0],   // media ID 0xF0: 80 cylinders, 2 heads (double-sided), 18 sectors/track, (2880 total sectors x 512 bytes/sector == 1474560)
-    2949120: [80,2,36,,0xF0],   // media ID 0xF0: 80 cylinders, 2 heads (double-sided), 36 sectors/track, (5760 total sectors x 512 bytes/sector == 2949120)
+    163840:  [40,1, 8,512,0xFE],    // media ID 0xFE: 40 cylinders, 1 head (single-sided),   8 sectors/track, ( 320 total sectors x 512 bytes/sector ==  163840)
+    184320:  [40,1, 9,512,0xFC],    // media ID 0xFC: 40 cylinders, 1 head (single-sided),   9 sectors/track, ( 360 total sectors x 512 bytes/sector ==  184320)
+    327680:  [40,2, 8,512,0xFF],    // media ID 0xFF: 40 cylinders, 2 heads (double-sided),  8 sectors/track, ( 640 total sectors x 512 bytes/sector ==  327680)
+    368640:  [40,2, 9,512,0xFD],    // media ID 0xFD: 40 cylinders, 2 heads (double-sided),  9 sectors/track, ( 720 total sectors x 512 bytes/sector ==  368640)
+    737280:  [80,2, 9,512,0xF9],    // media ID 0xF9: 80 cylinders, 2 heads (double-sided),  9 sectors/track, (1440 total sectors x 512 bytes/sector ==  737280)
+    1228800: [80,2,15,512,0xF9],    // media ID 0xF9: 80 cylinders, 2 heads (double-sided), 15 sectors/track, (2400 total sectors x 512 bytes/sector == 1228800)
+    1474560: [80,2,18,512,0xF0],    // media ID 0xF0: 80 cylinders, 2 heads (double-sided), 18 sectors/track, (2880 total sectors x 512 bytes/sector == 1474560)
+    2949120: [80,2,36,512,0xF0],    // media ID 0xF0: 80 cylinders, 2 heads (double-sided), 36 sectors/track, (5760 total sectors x 512 bytes/sector == 2949120)
     /*
      * The following are some common disk sizes and their CHS values, since missing or bogus MBR and/or BPB values
      * might mislead us when attempting to determine the exact disk geometry.
      */
-    10653696:[306,4,17],        // PC XT 10Mb hard drive (type 3)
-    21411840:[615,4,17],        // PC AT 20Mb hard drive (type 2)
+    10653696:[306,4,17],            // PC XT 10Mb hard drive (type 3)
+    21411840:[615,4,17],            // PC AT 20Mb hard drive (type 2)
     /*
-     * Assorted DEC disk formats.
+     * Other assorted disk formats, used by DEC and others.
+     * For example, the 256256-byte format was also used on early CP/M and SCP (Seattle Computer Products) systems
      */
-    256256:  [77, 1,26,128],    // RX01 single-platter diskette: 77 tracks, 1 head, 26 sectors/track, 128 bytes/sector, for a total of 256256 bytes
-    2494464: [203,2,12,512],    // RK03 single-platter disk cartridge: 203 tracks, 2 heads, 12 sectors/track, 512 bytes/sector, for a total of 2494464 bytes
-    5242880: [256,2,40,256],    // RL01K single-platter disk cartridge: 256 tracks, 2 heads, 40 sectors/track, 256 bytes/sector, for a total of 5242880 bytes
-    10485760:[512,2,40,256]     // RL02K single-platter disk cartridge: 512 tracks, 2 heads, 40 sectors/track, 256 bytes/sector, for a total of 10485760 bytes
+    256256:  [77,  1, 26, 128],     // RX01 single-platter diskette: 77 tracks, 1 head, 26 sectors/track, 128 bytes/sector, for a total of 256256 bytes
+    1261568: [77,  2, 8, 1024],     // SCP(?) single-platter diskette: 77 tracks, 2 heads, 8 sectors/track, 1024-byte sectors, for a total of 1261568 bytes
+    2494464: [203, 2, 12, 512],     // RK03 single-platter disk cartridge: 203 tracks, 2 heads, 12 sectors/track, 512 bytes/sector, for a total of 2494464 bytes
+    5242880: [256, 2, 40, 256],     // RL01K single-platter disk cartridge: 256 tracks, 2 heads, 40 sectors/track, 256 bytes/sector, for a total of 5242880 bytes
+    10485760:[512, 2, 40, 256]      // RL02K single-platter disk cartridge: 512 tracks, 2 heads, 40 sectors/track, 256 bytes/sector, for a total of 10485760 bytes
 };
 
 /*

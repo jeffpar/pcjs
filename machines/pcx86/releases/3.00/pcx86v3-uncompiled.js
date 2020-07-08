@@ -51,7 +51,7 @@ const MAXDEBUG = false;
  *
  * @define {string}
  */
-const VERSION = "2.00";
+const VERSION = "2.03";
 
 /**
  * REPOSITORY is the current PCjs repository.
@@ -12868,6 +12868,10 @@ CPUx86.OPCODE = {
     INT1:       0xF1,       // opINT1()
     REPNZ:      0xF2,       // opREPNZ()
     REPZ:       0xF3,       // opREPZ()
+    CLI:        0xFA,       // opCLI()
+    STI:        0xFB,       // opSTI()
+    CLD:        0xFC,       // opCLD()
+    STD:        0xFD,       // opSTD()
     GRP4W:      0xFF,
     CALLW:      0x10FF,     // GRP4W: fnCALLw()
     CALLFDW:    0x18FF,     // GRP4W: fnCALLFdw()
