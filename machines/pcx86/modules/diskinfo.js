@@ -235,6 +235,16 @@ export default class DiskInfo {
          */
         let fXDFOutput = false;
         let diskFormat = DiskInfo.GEOMETRIES[cbDiskData];
+        if (!diskFormat) {
+            /*
+             * I've come across some disk images that were .IMD files that I had converted to .IMG using HxC,
+             * and everything was fine except that there was 128 bytes of extra "stuff" af the end of the image,
+             * defeating our simple geometry check.
+             *
+             * Example: Microsoft Macro Assembler 1.10 [Tandy 2000 (r01.00.00)] (5.25-360k)/t2kasm_imd.img
+             */
+            diskFormat = DiskInfo.GEOMETRIES[cbDiskData - 0x80];
+        }
         if (diskFormat) {
             nCylinders = diskFormat[0];
             nHeads = diskFormat[1];
