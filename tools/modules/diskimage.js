@@ -652,7 +652,10 @@ function processDisk(di, diskFile, argv, diskette)
         /*
          * Step 2: Making sure there's an up-to-date directory listing...
          */
-        let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n[^{\\s]|$)";
+        if (diskette.source && !diskette.source.indexOf("http")) {
+            sListing += "\n[Source](" + diskette.source + ")\n";
+        }
+        let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n[^{[\\s]|$)";
         let matchDirectory = sIndexNew.match(new RegExp(sMatch));
         if (matchDirectory) {
             if (matchDirectory[1].length != 3) {
@@ -705,11 +708,16 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     if (!diskette) {
-        let output = argv['output'] || argv[1];
         if (argv['boot']) {
             di.updateBootSector(readFile(argv['boot'], null));
         }
-        if (output) writeDisk(output, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], true, argv['writable']);
+        let output = argv['output'] || argv[1];
+        if (output) {
+            if (typeof output == "string") output = [output];
+            output.forEach((outputFile) => {
+                writeDisk(outputFile, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], true, argv['writable']);
+            });
+        }
     }
 }
 
@@ -1254,7 +1262,10 @@ function main(argc, argv)
             di = readDir(input, argv['label'], argv['normalize'], +argv['target'], +argv['maxfiles']);
             if (di) {
                 let name = argv['output'] || argv[1];
-                if (name) di.setName(path.basename(name));
+                if (name) {
+                    if (typeof name != "string") name = name[0];
+                    di.setName(path.basename(name));
+                }
             }
         } else {
             di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData']));

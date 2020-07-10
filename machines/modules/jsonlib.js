@@ -138,6 +138,7 @@ export default class JSONLib {
                             let bootable = release['@bootable'];
                             let autoType = release['@autoType'];
                             let hardware = release['@hardware'];
+                            let source = item['@source'];
                             if (title) diskette['title'] = title;                       // the software title (as opposed to the diskette name)
                             if (format) diskette['format'] = format;                    // eg, "PC360K"
                             if (archive) diskette['archive'] = archive;                 // eg, "folder", or the name of a specific ".img" file, etc
@@ -149,6 +150,7 @@ export default class JSONLib {
                             if (bootable) diskette['bootable'] = true;                  // true if diskette marked bootable
                             if (autoType) diskette['autoType'] = autoType;              // optional custom autoType string
                             if (hardware) diskette['hardware'] = hardware;              // hardware configuration
+                            if (source) diskette['source'] = source;                    // source (eg, URL) of our copy of the media
                         }
                         if (!item['@localonly'] || hostName == "localhost") {
                             aDiskettes.push(diskette);
