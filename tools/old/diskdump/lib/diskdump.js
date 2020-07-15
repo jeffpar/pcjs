@@ -584,7 +584,7 @@ DiskDump.aDefaultBPBs = [
     /*
      * Here's some useful background information on a 10Mb PC XT fixed disk, partitioned with a single DOS partition.
      *
-     * The BPB for a 10Mb "type 3" PC XT hard disk specifies 0x5103 or 20739 for TOTAL_SECS, which is the partition
+     * The BPB for a 10Mb "type 3" PC XT hard disk specifies 0x5103 or 20739 for DISKSECS, which is the partition
      * size in sectors (10,618,368 bytes), whereas total disk size is 20808 sectors (10,653,696 bytes).  The partition
      * is 69 sectors smaller than the disk because the first sector is reserved for the MBR and 68 sectors (the entire
      * last cylinder) are reserved for diagnostics, head parking, etc.  This cylinder usage is confirmed by FDISK,
@@ -633,8 +633,8 @@ DiskDump.aDefaultBPBs = [
       //
       // Wikipedia (http://en.wikipedia.org/wiki/File_Allocation_Table#BIOS_Parameter_Block) implies everything past
       // this point was introduced post-DOS 2.0.  However, DOS 2.0 merely said they were optional, and in fact, DOS 2.0
-      // FORMAT always initializes the next 3 words.  A 4th word, LARGE_SECS, was added in DOS 3.20 at offset 0x1E,
-      // and then in DOS 3.31, both HIDDEN_SECS and LARGE_SECS were widened from words to dwords.
+      // FORMAT always initializes the next 3 words.  A 4th word, LARGESECS, was added in DOS 3.20 at offset 0x1E,
+      // and then in DOS 3.31, both HIDDENSECS and LARGESECS were widened from words to dwords.
       //
     0x11, 0x00,                 // 0x18: sectors per track (17)
     0x04, 0x00,                 // 0x1A: number of heads (4)
@@ -2615,19 +2615,19 @@ DiskDump.prototype.buildImageFromFiles = function(aFiles, done)
         /*
          * If this BPB is for a hard drive but a disk size was not specified, skip it.
          */
-        if ((abBoot[DiskAPI.BPB.MEDIA_ID] == DiskAPI.FAT.MEDIA_FIXED) != (this.kbTarget >= 10000)) continue;
-        cRootEntries = abBoot[DiskAPI.BPB.ROOT_DIRENTS] | (abBoot[DiskAPI.BPB.ROOT_DIRENTS + 1] << 8);
+        if ((abBoot[DiskAPI.BPB.MEDIA] == DiskAPI.FAT.MEDIA_FIXED) != (this.kbTarget >= 10000)) continue;
+        cRootEntries = abBoot[DiskAPI.BPB.DIRENTS] | (abBoot[DiskAPI.BPB.DIRENTS + 1] << 8);
         if (aFiles.length > cRootEntries) continue;
-        cbSector = abBoot[DiskAPI.BPB.SECTOR_BYTES] | (abBoot[DiskAPI.BPB.SECTOR_BYTES + 1] << 8);
-        cSectorsPerCluster = abBoot[DiskAPI.BPB.CLUSTER_SECS];
+        cbSector = abBoot[DiskAPI.BPB.SECBYTES] | (abBoot[DiskAPI.BPB.SECBYTES + 1] << 8);
+        cSectorsPerCluster = abBoot[DiskAPI.BPB.CLUSSECS];
         cbCluster = cbSector * cSectorsPerCluster;
-        cFATs = abBoot[DiskAPI.BPB.TOTAL_FATS];
-        cFATSectors = abBoot[DiskAPI.BPB.FAT_SECS] | (abBoot[DiskAPI.BPB.FAT_SECS + 1] << 8);
+        cFATs = abBoot[DiskAPI.BPB.FATS];
+        cFATSectors = abBoot[DiskAPI.BPB.FATSECS] | (abBoot[DiskAPI.BPB.FATSECS + 1] << 8);
         cRootSectors = (((cRootEntries * DiskAPI.DIRENT.LENGTH) + cbSector - 1) / cbSector) | 0;
-        cTotalSectors = abBoot[DiskAPI.BPB.TOTAL_SECS] | (abBoot[DiskAPI.BPB.TOTAL_SECS + 1] << 8);
-        cHiddenSectors = abBoot[DiskAPI.BPB.HIDDEN_SECS] | (abBoot[DiskAPI.BPB.HIDDEN_SECS + 1] << 8);
-        cSectorsPerTrack = abBoot[DiskAPI.BPB.TRACK_SECS] | (abBoot[DiskAPI.BPB.TRACK_SECS + 1] << 8);
-        cHeads = abBoot[DiskAPI.BPB.TOTAL_HEADS] | (abBoot[DiskAPI.BPB.TOTAL_HEADS + 1] << 8);
+        cTotalSectors = abBoot[DiskAPI.BPB.DISKSECS] | (abBoot[DiskAPI.BPB.DISKSECS + 1] << 8);
+        cHiddenSectors = abBoot[DiskAPI.BPB.HIDDENSECS] | (abBoot[DiskAPI.BPB.HIDDENSECS + 1] << 8);
+        cSectorsPerTrack = abBoot[DiskAPI.BPB.TRACKSECS] | (abBoot[DiskAPI.BPB.TRACKSECS + 1] << 8);
+        cHeads = abBoot[DiskAPI.BPB.DRIVEHEADS] | (abBoot[DiskAPI.BPB.DRIVEHEADS + 1] << 8);
         cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + 1);
         cbAvail = cDataSectors * cbSector;
         if (!nTargetSectors || cHiddenSectors) {
@@ -2695,7 +2695,7 @@ DiskDump.prototype.buildImageFromFiles = function(aFiles, done)
      * BPB at offset 0x15.  For old BPB-less diskettes, this is where you must look for the media ID.
      */
     let abFAT = [];
-    this.buildFATEntry(abFAT, 0, abBoot[DiskAPI.BPB.MEDIA_ID] | 0xF00);
+    this.buildFATEntry(abFAT, 0, abBoot[DiskAPI.BPB.MEDIA] | 0xF00);
     this.buildFATEntry(abFAT, 1, 0xFFF);
     this.buildFAT(abFAT, aFiles, 2, cbCluster);
 
@@ -2885,9 +2885,9 @@ DiskDump.prototype.convertToJSON = function()
              */
         }
 
-        let bByte0 = this.bufDisk.readUInt8(offBootSector + DiskAPI.BOOT.JMP_OPCODE);
-        let bByte1 = this.bufDisk.readUInt8(offBootSector + DiskAPI.BOOT.JMP_OPCODE + 1);
-        let cbSectorBPB = this.bufDisk.readUInt16LE(offBootSector + DiskAPI.BPB.SECTOR_BYTES);
+        let bByte0 = this.bufDisk.readUInt8(offBootSector + DiskAPI.BOOT.OPCODE);
+        let bByte1 = this.bufDisk.readUInt8(offBootSector + DiskAPI.BOOT.OPCODE + 1);
+        let cbSectorBPB = this.bufDisk.readUInt16LE(offBootSector + DiskAPI.BPB.SECBYTES);
 
         /*
          * These checks are not only necessary for DOS 1.x diskette images (and other pre-BPB images),
@@ -2924,17 +2924,17 @@ DiskDump.prototype.convertToJSON = function()
 
         if ((bByte0 == X86.OPCODE.JMP || bByte0 == X86.OPCODE.JMPS) && cbSectorBPB == cbSector) {
 
-            let nHeadsBPB = this.bufDisk.readUInt16LE(offBootSector + DiskAPI.BPB.TOTAL_HEADS);
-            let nSectorsPerTrackBPB = this.bufDisk.readUInt16LE(offBootSector + DiskAPI.BPB.TRACK_SECS);
+            let nHeadsBPB = this.bufDisk.readUInt16LE(offBootSector + DiskAPI.BPB.DRIVEHEADS);
+            let nSectorsPerTrackBPB = this.bufDisk.readUInt16LE(offBootSector + DiskAPI.BPB.TRACKSECS);
 
             if (nHeadsBPB && nSectorsPerTrackBPB) {
 
                 fBPBExists = true;
-                bMediaIDBPB = this.bufDisk.readUInt8(offBootSector + DiskAPI.BPB.MEDIA_ID);
+                bMediaIDBPB = this.bufDisk.readUInt8(offBootSector + DiskAPI.BPB.MEDIA);
 
-                let nSectorsTotalBPB = this.bufDisk.readUInt16LE(offBootSector + DiskAPI.BPB.TOTAL_SECS);
+                let nSectorsTotalBPB = this.bufDisk.readUInt16LE(offBootSector + DiskAPI.BPB.DISKSECS);
                 let nSectorsPerCylinderBPB = nSectorsPerTrackBPB * nHeadsBPB;
-                let nSectorsHiddenBPB = this.bufDisk.readUInt16LE(offBootSector + DiskAPI.BPB.HIDDEN_SECS);
+                let nSectorsHiddenBPB = this.bufDisk.readUInt16LE(offBootSector + DiskAPI.BPB.HIDDENSECS);
                 let nCylindersBPB = (nSectorsHiddenBPB + nSectorsTotalBPB) / nSectorsPerCylinderBPB;
 
                 if (diskFormat) {
@@ -3004,16 +3004,16 @@ DiskDump.prototype.convertToJSON = function()
         let i, iBPB = -1;
         if (bMediaID) {
             for (i = 0; i < DiskDump.aDefaultBPBs.length; i++) {
-                if (DiskDump.aDefaultBPBs[i][DiskAPI.BPB.MEDIA_ID] == bMediaID) {
-                    let cbDiskBPB = (DiskDump.aDefaultBPBs[i][DiskAPI.BPB.TOTAL_SECS] + (DiskDump.aDefaultBPBs[i][DiskAPI.BPB.TOTAL_SECS + 1] * 0x100)) * cbSector;
+                if (DiskDump.aDefaultBPBs[i][DiskAPI.BPB.MEDIA] == bMediaID) {
+                    let cbDiskBPB = (DiskDump.aDefaultBPBs[i][DiskAPI.BPB.DISKSECS] + (DiskDump.aDefaultBPBs[i][DiskAPI.BPB.DISKSECS + 1] * 0x100)) * cbSector;
                     if (cbDiskBPB == cbDiskData) {
                         /*
                          * This code was added to deal with variations in sectors/cluster.  Most software manufacturers
                          * were happy with the defaults that FORMAT chooses for a given diskette size, but in a few cases
                          * (eg, PC DOS 4.01 720K diskettes), the manufacturer (IBM) opted for a smaller cluster size.
                          */
-                        let bClusterSecs = this.bufDisk.readUInt8(offBootSector + DiskAPI.BPB.CLUSTER_SECS);
-                        if (bMediaID != DiskAPI.FAT.MEDIA_720KB || bClusterSecs == DiskDump.aDefaultBPBs[i][DiskAPI.BPB.CLUSTER_SECS]) {
+                        let bClusterSecs = this.bufDisk.readUInt8(offBootSector + DiskAPI.BPB.CLUSSECS);
+                        if (bMediaID != DiskAPI.FAT.MEDIA_720KB || bClusterSecs == DiskDump.aDefaultBPBs[i][DiskAPI.BPB.CLUSSECS]) {
                             iBPB = i;
                             break;
                         }
@@ -3032,17 +3032,17 @@ DiskDump.prototype.convertToJSON = function()
             if (!bMediaIDBPB) bMediaIDBPB = this.bufDisk.readUInt8(offBootSector + 512);
             if (iBPB >= 2 && bMediaIDBPB == DiskAPI.FAT.MEDIA_320KB && bMediaID == DiskAPI.FAT.MEDIA_360KB || bMediaIDBPB == DiskAPI.FAT.MEDIA_160KB && bMediaID == DiskAPI.FAT.MEDIA_180KB) {
                 iBPB -= 2;
-                bMediaID = DiskDump.aDefaultBPBs[iBPB][DiskAPI.BPB.MEDIA_ID];
-                nLogicalSectorsPerTrack = DiskDump.aDefaultBPBs[iBPB][DiskAPI.BPB.TRACK_SECS];
+                bMediaID = DiskDump.aDefaultBPBs[iBPB][DiskAPI.BPB.MEDIA];
+                nLogicalSectorsPerTrack = DiskDump.aDefaultBPBs[iBPB][DiskAPI.BPB.TRACKSECS];
                 DiskDump.logWarning("shrinking track size to " + nLogicalSectorsPerTrack + " sectors/track");
             }
             let fBPBWarning = false;
             if (fBPBExists) {
                 /*
                  * In deference to the PC DOS 2.0 BPB behavior discussed above, we stop our BPB verification after
-                 * the first word of HIDDEN_SECS.
+                 * the first word of HIDDENSECS.
                  */
-                for (i = DiskAPI.BPB.SECTOR_BYTES; i < DiskAPI.BPB.HIDDEN_SECS + 2; i++) {
+                for (i = DiskAPI.BPB.SECBYTES; i < DiskAPI.BPB.HIDDENSECS + 2; i++) {
                     let bDefault = DiskDump.aDefaultBPBs[iBPB][i];
                     let bActual = this.bufDisk.readUInt8(offBootSector + i);
                     if (bDefault != bActual) {
@@ -3066,9 +3066,9 @@ DiskDump.prototype.convertToJSON = function()
                      * signature at the end of the boot sector.
                      *
                      * However, if --forceBPB is specified, all those concerns go out the window: the goal is assumed to
-                     * be a mountable disk, not a bootable disk.  So the BPB copy starts at offset 0 instead of SECTOR_BYTES.
+                     * be a mountable disk, not a bootable disk.  So the BPB copy starts at offset 0 instead of SECBYTES.
                      */
-                    for (i = this.forceBPB? 0 : DiskAPI.BPB.SECTOR_BYTES; i < DiskAPI.BPB.LARGE_SECS+4; i++) {
+                    for (i = this.forceBPB? 0 : DiskAPI.BPB.SECBYTES; i < DiskAPI.BPB.LARGESECS+4; i++) {
                         this.bufDisk.writeUInt8(DiskDump.aDefaultBPBs[iBPB][i] || 0, offBootSector + i);
                     }
                     DiskDump.logWarning("BPB has been updated");
@@ -3079,7 +3079,7 @@ DiskDump.prototype.convertToJSON = function()
                      * inadvertent reformat, or...?
                      */
                     DiskDump.logWarning("repairing damaged boot sector with BPB for media ID " + str.toHexByte(bMediaID));
-                    for (i = 0; i < DiskAPI.BPB.LARGE_SECS+4; i++) {
+                    for (i = 0; i < DiskAPI.BPB.LARGESECS+4; i++) {
                         this.bufDisk.writeUInt8(DiskDump.aDefaultBPBs[iBPB][i] || 0, offBootSector + i);
                     }
                 }
@@ -3096,7 +3096,7 @@ DiskDump.prototype.convertToJSON = function()
              * The signature check is another pre-2.0 disk check, to avoid misinterpreting any BPB that we might have
              * previously added ourselves as an original BPB.
              */
-            this.bufDisk.write(DiskDump.PCJS_OEM, DiskAPI.BOOT.OEM_STRING + offBootSector, DiskDump.PCJS_OEM.length);
+            this.bufDisk.write(DiskDump.PCJS_OEM, DiskAPI.BOOT.OEM + offBootSector, DiskDump.PCJS_OEM.length);
             DiskDump.logWarning("OEM string has been updated");
         }
         if (!nHeads) {
@@ -3839,14 +3839,14 @@ DiskDump.prototype.convertToIMG = function(fRaw)
             //     /*
             //      * Mimic the BPB test in convertToJSON(), because we don't want to blast an OEM string into non-DOS diskette images
             //      */
-            //     let bByte0 = buf.readUInt8(DiskAPI.BOOT.JMP_OPCODE);
-            //     let cbSectorBPB = buf.readUInt16LE(DiskAPI.BPB.SECTOR_BYTES);
+            //     let bByte0 = buf.readUInt8(DiskAPI.BOOT.OPCODE);
+            //     let cbSectorBPB = buf.readUInt16LE(DiskAPI.BPB.SECBYTES);
             //     let wSig = buf.readUInt16LE(DiskAPI.BOOT.SIG_OFFSET);
             //     if ((bByte0 == X86.OPCODE.JMP || bByte0 == X86.OPCODE.JMPS) && cbSectorBPB == 512 && wSig == DiskAPI.BOOT.SIGNATURE) {
             //         /*
             //          * Overwrite the OEM string with our own, so that people know how the image originated.
             //          */
-            //         buf.write(DiskDump.PCJS_OEM, DiskAPI.BOOT.OEM_STRING, DiskDump.PCJS_OEM.length);
+            //         buf.write(DiskDump.PCJS_OEM, DiskAPI.BOOT.OEM, DiskDump.PCJS_OEM.length);
             //         DiskDump.logWarning("OEM string has been updated");
             //     }
             // }

@@ -192,6 +192,18 @@ export default class DataBuffer {
     }
 
     /**
+     * writeUInt16LE(w, off)
+     *
+     * @this {DataBuffer}
+     * @param {number} w
+     * @param {number} off
+     */
+    writeUInt16LE(w, off)
+    {
+        this.buffer.writeUInt16LE(w, off);
+    }
+
+    /**
      * readUInt32BE(off)
      *
      * @this {DataBuffer}
