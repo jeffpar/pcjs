@@ -46,15 +46,16 @@ const FACTORY = "PCjsMachine";
 const MAXDEBUG = false;
 
 /**
- * VERSION is the current PCjs Project release number, updated somewhat arbitrarily and usually only after
- * significant changes.  It will be overriden the machine's "version" string in machines.json.
+ * VERSION is the current PCjs Project release number, updated somewhat arbitrarily and usually only
+ * after significant changes.  It will be overriden the machine's "version" string in machines.json.
  *
  * @define {string}
  */
-const VERSION = "2.00";
+const VERSION = "2.03";
 
 /**
- * REPOSITORY is the current PCjs repository.
+ * REPOSITORY is the primary location (eg, URL) where all PCjs-related resources can be found; it is not
+ * intended to refer to any specific type of container (such as a Git repository).
  *
  * @define {string}
  */
@@ -12868,6 +12869,10 @@ CPUx86.OPCODE = {
     INT1:       0xF1,       // opINT1()
     REPNZ:      0xF2,       // opREPNZ()
     REPZ:       0xF3,       // opREPZ()
+    CLI:        0xFA,       // opCLI()
+    STI:        0xFB,       // opSTI()
+    CLD:        0xFC,       // opCLD()
+    STD:        0xFD,       // opSTD()
     GRP4W:      0xFF,
     CALLW:      0x10FF,     // GRP4W: fnCALLw()
     CALLFDW:    0x18FF,     // GRP4W: fnCALLFdw()

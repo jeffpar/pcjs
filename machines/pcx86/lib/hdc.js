@@ -2654,7 +2654,7 @@ class HDC extends Component {
             if (drive.type) {
                 setWord(HDC.ATC.IDENTIFY.CYLS, drive.nCylinders);
                 setWord(HDC.ATC.IDENTIFY.HEADS, drive.nHeads);
-                setWord(HDC.ATC.IDENTIFY.SECTOR_BYTES, drive.cbSector);
+                setWord(HDC.ATC.IDENTIFY.SECBYTES, drive.cbSector);
                 setWord(HDC.ATC.IDENTIFY.SECTORS, drive.nSectors);
             }
             setString(HDC.ATC.IDENTIFY.SERIAL_NUMBER, "PCJS-20190528", 20);
@@ -3595,7 +3595,7 @@ HDC.ATC.IDENTIFY = {
     CONFIG2:            0x04,   // WORD: SPECIFIC_CONFIG
     HEADS:              0x06,   // WORD: number of physical heads
     TRACK_BYTES:        0x08,   // WORD: bytes per track
-    SECTOR_BYTES:       0x0A,   // WORD: bytes per sector
+    SECBYTES:           0x0A,   // WORD: bytes per sector
     SECTORS:            0x0C,   // WORD: sectors per track
                                 // (reserved words at 0x0E, 0x10, and 0x12)
     SERIAL_NUMBER:      0x14,   // CHAR: 20 ASCII characters

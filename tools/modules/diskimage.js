@@ -23,7 +23,8 @@ let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
 let stdlib = new StdLib();
-let moduleDir, rootDir, nMaxFiles, sFileIndex, useServer;
+let nMaxDefault = 512, nMaxInit, nMaxCount;
+let moduleDir, rootDir, sFileIndex, useServer;
 
 function printError(err)
 {
@@ -652,7 +653,10 @@ function processDisk(di, diskFile, argv, diskette)
         /*
          * Step 2: Making sure there's an up-to-date directory listing...
          */
-        let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n[^{\\s]|$)";
+        if (diskette.source && !diskette.source.indexOf("http")) {
+            sListing += "\n[Source](" + diskette.source + ")\n";
+        }
+        let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n[^{[\\s]|$)";
         let matchDirectory = sIndexNew.match(new RegExp(sMatch));
         if (matchDirectory) {
             if (matchDirectory[1].length != 3) {
@@ -705,11 +709,16 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     if (!diskette) {
-        let output = argv['output'] || argv[1];
         if (argv['boot']) {
             di.updateBootSector(readFile(argv['boot'], null));
         }
-        if (output) writeDisk(output, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], true, argv['writable']);
+        let output = argv['output'] || argv[1];
+        if (output) {
+            if (typeof output == "string") output = [output];
+            output.forEach((outputFile) => {
+                writeDisk(outputFile, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], true, argv['writable']);
+            });
+        }
     }
 }
 
@@ -809,8 +818,8 @@ function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
     }
     sDir = getFullPath(sDir);
     try {
-        nMaxFiles = nMax || 256;
-        let aFileData = readDirFiles(sDir, sLabel, fNormalize);
+        nMaxInit = nMaxCount = nMax || nMaxDefault;
+        let aFileData = readDirFiles(sDir, sLabel, fNormalize, 0);
         di = new DiskInfo(device);
         let db = new DataBuffer();
         if (!di.buildDiskFromFiles(db, diskName, aFileData, kbTarget || 0)) {
@@ -824,14 +833,15 @@ function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
 }
 
 /**
- * readDirFiles(sDir, sLabel, fNormalize)
+ * readDirFiles(sDir, sLabel, fNormalize, iLevel)
  *
  * @param {string} sDir (directory name)
  * @param {boolean|null} [sLabel] (optional volume label; this should NEVER be set when reading subdirectories)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
+ * @param {number} [iLevel] (current directory level, primarily for diagnostic purposes only; zero if unspecified)
  * @returns {Array.<FileData>}
  */
-function readDirFiles(sDir, sLabel, fNormalize = false)
+function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
 {
     let aFileData = [];
 
@@ -883,7 +893,8 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
         aFileData.push(file);
     }
 
-    for (let iFile = 0; iFile < asFiles.length && nMaxFiles > 0; iFile++, nMaxFiles--) {
+    let iFile;
+    for (iFile = 0; iFile < asFiles.length && nMaxCount > 0; iFile++, nMaxCount--) {
         /*
          * fs.readdir() already excludes "." and ".." but there are also a wide variety of hidden
          * files on *nix systems that begin with a period, which in general we should ignore, too.
@@ -900,7 +911,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
             file.attr = DiskInfo.ATTR.SUBDIR;
             file.size = -1;
             file.data = new DataBuffer();
-            file.files = readDirFiles(sPath + '/', null, fNormalize);
+            file.files = readDirFiles(sPath + '/', null, fNormalize, iLevel + 1);
         } else {
             let fText = fNormalize && isTextFile(sName);
             let data = readFile(sPath, fText? "utf8" : null);
@@ -923,6 +934,9 @@ function readDirFiles(sDir, sLabel, fNormalize = false)
             file.data = data;
         }
         aFileData.push(file);
+    }
+    if (iFile < asFiles.length && nMaxCount <= 0) {
+        printf("warning: %d file limit reached, use --maxfiles # to increase\n", nMaxInit);
     }
     return aFileData;
 }
@@ -1207,7 +1221,7 @@ function main(argc, argv)
     rootDir = path.join(moduleDir, "../..");
     useServer = !!argv['server'];
 
-    printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s\n", options) : ""));
+    printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s", options) : ""));
 
     if (Device.DEBUG) {
         device.setMessages(Device.MESSAGE.FILE, true);
@@ -1254,7 +1268,10 @@ function main(argc, argv)
             di = readDir(input, argv['label'], argv['normalize'], +argv['target'], +argv['maxfiles']);
             if (di) {
                 let name = argv['output'] || argv[1];
-                if (name) di.setName(path.basename(name));
+                if (name) {
+                    if (typeof name != "string") name = name[0];
+                    di.setName(path.basename(name));
+                }
             }
         } else {
             di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData']));

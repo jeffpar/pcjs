@@ -1797,7 +1797,12 @@ class Kbdx86 extends Component {
         if (fDown) {
             this.cKeysPressed++;
             this.sInjectBuffer = "";                    // actual key DOWN (not UP) events should also stop any injection in progress
+            /*
+             * Unless the key happens to be ESC, ANY user input at all now cancels injection.
+             */
+            if (keyCode != 27) this.nInjection = Kbdx86.INJECTION.NONE;
         }
+
         Component.processScript(this.idMachine);        // and any script, too
 
         /*
@@ -2378,7 +2383,8 @@ Kbdx86.SIMCODE = {
     CTRL_ALT_INS:   Keys.KEYCODE.INS         + Keys.KEYCODE.FAKE,
     CTRL_ALT_ADD:   Keys.KEYCODE.NUM_ADD     + Keys.KEYCODE.FAKE,
     CTRL_ALT_SUB:   Keys.KEYCODE.NUM_SUB     + Keys.KEYCODE.FAKE,
-    CTRL_ALT_ENTER: Keys.KEYCODE.NUM_CR      + Keys.KEYCODE.FAKE
+    CTRL_ALT_ENTER: Keys.KEYCODE.NUM_CR      + Keys.KEYCODE.FAKE,
+    SHIFT_TAB:      Keys.KEYCODE.TAB         + Keys.KEYCODE.FAKE
 };
 
 /*
@@ -2593,7 +2599,8 @@ Kbdx86.CLICKCODES = {
     'CTRL_ALT_INS':     Kbdx86.SIMCODE.CTRL_ALT_INS,
     'CTRL_ALT_ADD':     Kbdx86.SIMCODE.CTRL_ALT_ADD,
     'CTRL_ALT_SUB':     Kbdx86.SIMCODE.CTRL_ALT_SUB,
-    'CTRL_ALT_ENTER':   Kbdx86.SIMCODE.CTRL_ALT_ENTER
+    'CTRL_ALT_ENTER':   Kbdx86.SIMCODE.CTRL_ALT_ENTER,
+    'SHIFT_TAB':        Kbdx86.SIMCODE.SHIFT_TAB
 };
 
 /*
@@ -2942,9 +2949,9 @@ Kbdx86.SIMCODES = {
     [Kbdx86.SIMCODE.NUM_SUB]:     Kbdx86.SCANCODE.NUM_SUB,
     [Kbdx86.SIMCODE.DEL]:         Kbdx86.SCANCODE.NUM_DEL,
     [Kbdx86.SIMCODE.NUM_DEL]:     Kbdx86.SCANCODE.NUM_DEL,
-    [Kbdx86.SIMCODE.SYS_REQ]:     Kbdx86.SCANCODE.SYS_REQ,
+
     /*
-     * Entries beyond this point are for keys that existed only on 101-key keyboards (well, except for 'sys-req',
+     * The next 6 entries are for keys that existed only on 101-key keyboards (well, except for SYS_REQ,
      * which also existed on the 84-key keyboard), which ALSO means that these keys essentially did not exist
      * for a MODEL_5150 or MODEL_5160 machine, because those machines could use only 83-key keyboards.  Remember
      * that IBM machines and IBM keyboards are our reference point here, so while there were undoubtedly 5150/5160
@@ -2959,6 +2966,7 @@ Kbdx86.SIMCODES = {
      * TODO: Add entries for 'num-mul', 'num-div', 'num-enter', the stand-alone arrow keys, etc, AND at the same time,
      * make sure that keys with multi-byte sequences (eg, 0xe0 0x1c) work properly.
      */
+    [Kbdx86.SIMCODE.SYS_REQ]:     Kbdx86.SCANCODE.SYS_REQ,
     [Kbdx86.SIMCODE.F11]:         Kbdx86.SCANCODE.F11,
     [Kbdx86.SIMCODE.F12]:         Kbdx86.SCANCODE.F12,
     [Kbdx86.SIMCODE.CMD]:         Kbdx86.SCANCODE.WIN,
@@ -2997,7 +3005,9 @@ Kbdx86.SIMCODES = {
     [Kbdx86.SIMCODE.CTRL_ALT_INS]:    Kbdx86.SCANCODE.NUM_INS | (Kbdx86.SCANCODE.CTRL << 8) | (Kbdx86.SCANCODE.ALT << 16),
     [Kbdx86.SIMCODE.CTRL_ALT_ADD]:    Kbdx86.SCANCODE.NUM_ADD | (Kbdx86.SCANCODE.CTRL << 8) | (Kbdx86.SCANCODE.ALT << 16),
     [Kbdx86.SIMCODE.CTRL_ALT_SUB]:    Kbdx86.SCANCODE.NUM_SUB | (Kbdx86.SCANCODE.CTRL << 8) | (Kbdx86.SCANCODE.ALT << 16),
-    [Kbdx86.SIMCODE.CTRL_ALT_ENTER]:  Kbdx86.SCANCODE.ENTER   | (Kbdx86.SCANCODE.CTRL << 8) | (Kbdx86.SCANCODE.ALT << 16)
+    [Kbdx86.SIMCODE.CTRL_ALT_ENTER]:  Kbdx86.SCANCODE.ENTER   | (Kbdx86.SCANCODE.CTRL << 8) | (Kbdx86.SCANCODE.ALT << 16),
+
+    [Kbdx86.SIMCODE.SHIFT_TAB]:   Kbdx86.SCANCODE.TAB         | (Kbdx86.SCANCODE.SHIFT << 8)
 };
 
 /**

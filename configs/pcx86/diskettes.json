@@ -2764,6 +2764,17 @@
               }
             ]
           },
+          "1.06": {
+            "@title": "Macro Assembler 1.06",
+            "@media": [
+              {
+                "@title": "MS Macro Assembler 1.06",
+                "@diskette": "MASM106.json",
+                "@format": "PC160K",
+                "@source": "https://winworldpc.com/product/macro-assembler/1x"
+              }
+            ]
+          },
           "1.10": {
             "@title": "Macro Assembler 1.10",
             "@media": [

@@ -172,8 +172,8 @@ DiskAPI.MBR = {
  * (ie, 0x55AA instead 0xAA55) -- perhaps by a dyslexic programmer -- so be careful out there.
  */
 DiskAPI.BOOT = {
-    JMP_OPCODE:     0x000,      // 1 byte for a JMP opcode, followed by a 1 or 2-byte offset
-    OEM_STRING:     0x003,      // 8 bytes
+    OPCODE:         0x000,      // 1 byte for a JMP opcode, followed by a 1 or 2-byte offset
+    OEM:            0x003,      // 8 bytes
     SIG_OFFSET:     0x1FE,
     SIGNATURE:      0xAA55      // to be clear, the low byte (at offset 0x1FE) is 0x55 and the high byte (at offset 0x1FF) is 0xAA
 };
@@ -181,26 +181,26 @@ DiskAPI.BOOT = {
 /*
  * BIOS Parameter Block (BPB) offsets in DOS-compatible boot sectors (DOS 2.x and up)
  *
- * NOTE: DOS 2.x OEM documentation says that the words starting at offset 0x018 (TRACK_SECS, TOTAL_HEADS, and HIDDEN_SECS)
+ * NOTE: DOS 2.x OEM documentation says that the words starting at offset 0x018 (TRACKSECS, DRIVEHEADS, and HIDDENSECS)
  * are optional, but even the DOS 2.0 FORMAT utility initializes all three of those words.  There may be some OEM media out
  * there with BPBs that are only valid up to offset 0x018, but I've not run across any media like that.
  *
- * DOS 3.20 added LARGE_SECS, but unfortunately, it was added as a 2-byte value at offset 0x01E.  DOS 3.31 decided
- * to make both HIDDEN_SECS and LARGE_SECS 4-byte values, which meant that LARGE_SECS had to move from 0x01E to 0x020.
+ * DOS 3.20 added LARGESECS, but unfortunately, it was added as a 2-byte value at offset 0x01E.  DOS 3.31 decided
+ * to make both HIDDENSECS and LARGESECS 4-byte values, which meant that LARGESECS had to move from 0x01E to 0x020.
  */
 DiskAPI.BPB = {
-    SECTOR_BYTES:   0x00B,      // 2 bytes: bytes per sector (eg, 0x200 or 512)
-    CLUSTER_SECS:   0x00D,      // 1 byte: sectors per cluster (eg, 1)
-    RESERVED_SECS:  0x00E,      // 2 bytes: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (eg, 1)
-    TOTAL_FATS:     0x010,      // 1 byte: FAT copies (eg, 2)
-    ROOT_DIRENTS:   0x011,      // 2 bytes: root directory entries (eg, 0x40 or 64) 0x40 * 0x20 = 0x800 (1 sector is 0x200 bytes, total of 4 sectors)
-    TOTAL_SECS:     0x013,      // 2 bytes: number of sectors (eg, 0x140 or 320); if zero, refer to LARGE_SECS
-    MEDIA_ID:       0x015,      // 1 byte: media ID (see DiskAPI.FAT.MEDIA_*); should also match the first byte of the FAT (aka FAT ID)
-    FAT_SECS:       0x016,      // 2 bytes: sectors per FAT (eg, 1)
-    TRACK_SECS:     0x018,      // 2 bytes: sectors per track (eg, 8)
-    TOTAL_HEADS:    0x01A,      // 2 bytes: number of heads (eg, 1)
-    HIDDEN_SECS:    0x01C,      // 2 bytes (DOS 2.x) or 4 bytes (DOS 3.31 and up): number of hidden sectors (always 0 for non-partitioned media)
-    LARGE_SECS:     0x020       // 4 bytes (DOS 3.31 and up): number of sectors if TOTAL_SECS is zero
+    SECBYTES:       0x00B,      // 2 bytes: bytes per sector (eg, 0x200 or 512)
+    CLUSSECS:       0x00D,      // 1 byte: sectors per cluster (eg, 1)
+    RESSECS:        0x00E,      // 2 bytes: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (eg, 1)
+    FATS:           0x010,      // 1 byte: FAT copies (eg, 2)
+    DIRENTS:        0x011,      // 2 bytes: root directory entries (eg, 0x40 or 64) 0x40 * 0x20 = 0x800 (1 sector is 0x200 bytes, total of 4 sectors)
+    DISKSECS:       0x013,      // 2 bytes: number of sectors (eg, 0x140 or 320); if zero, refer to LARGESECS
+    MEDIA:          0x015,      // 1 byte: media ID (see DiskAPI.FAT.MEDIA_*); should also match the first byte of the FAT (aka FAT ID)
+    FATSECS:        0x016,      // 2 bytes: sectors per FAT (eg, 1)
+    TRACKSECS:      0x018,      // 2 bytes: sectors per track (eg, 8)
+    DRIVEHEADS:     0x01A,      // 2 bytes: number of heads (eg, 1)
+    HIDDENSECS:     0x01C,      // 2 bytes (DOS 2.x) or 4 bytes (DOS 3.31 and up): number of hidden sectors (always 0 for non-partitioned media)
+    LARGESECS:      0x020       // 4 bytes (DOS 3.31 and up): number of sectors if DISKSECS is zero
 };
 
 /*

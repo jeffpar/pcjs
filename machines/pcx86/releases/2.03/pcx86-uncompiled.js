@@ -172,8 +172,8 @@ DiskAPI.MBR = {
  * (ie, 0x55AA instead 0xAA55) -- perhaps by a dyslexic programmer -- so be careful out there.
  */
 DiskAPI.BOOT = {
-    JMP_OPCODE:     0x000,      // 1 byte for a JMP opcode, followed by a 1 or 2-byte offset
-    OEM_STRING:     0x003,      // 8 bytes
+    OPCODE:         0x000,      // 1 byte for a JMP opcode, followed by a 1 or 2-byte offset
+    OEM:            0x003,      // 8 bytes
     SIG_OFFSET:     0x1FE,
     SIGNATURE:      0xAA55      // to be clear, the low byte (at offset 0x1FE) is 0x55 and the high byte (at offset 0x1FF) is 0xAA
 };
@@ -181,26 +181,26 @@ DiskAPI.BOOT = {
 /*
  * BIOS Parameter Block (BPB) offsets in DOS-compatible boot sectors (DOS 2.x and up)
  *
- * NOTE: DOS 2.x OEM documentation says that the words starting at offset 0x018 (TRACK_SECS, TOTAL_HEADS, and HIDDEN_SECS)
+ * NOTE: DOS 2.x OEM documentation says that the words starting at offset 0x018 (TRACKSECS, DRIVEHEADS, and HIDDENSECS)
  * are optional, but even the DOS 2.0 FORMAT utility initializes all three of those words.  There may be some OEM media out
  * there with BPBs that are only valid up to offset 0x018, but I've not run across any media like that.
  *
- * DOS 3.20 added LARGE_SECS, but unfortunately, it was added as a 2-byte value at offset 0x01E.  DOS 3.31 decided
- * to make both HIDDEN_SECS and LARGE_SECS 4-byte values, which meant that LARGE_SECS had to move from 0x01E to 0x020.
+ * DOS 3.20 added LARGESECS, but unfortunately, it was added as a 2-byte value at offset 0x01E.  DOS 3.31 decided
+ * to make both HIDDENSECS and LARGESECS 4-byte values, which meant that LARGESECS had to move from 0x01E to 0x020.
  */
 DiskAPI.BPB = {
-    SECTOR_BYTES:   0x00B,      // 2 bytes: bytes per sector (eg, 0x200 or 512)
-    CLUSTER_SECS:   0x00D,      // 1 byte: sectors per cluster (eg, 1)
-    RESERVED_SECS:  0x00E,      // 2 bytes: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (eg, 1)
-    TOTAL_FATS:     0x010,      // 1 byte: FAT copies (eg, 2)
-    ROOT_DIRENTS:   0x011,      // 2 bytes: root directory entries (eg, 0x40 or 64) 0x40 * 0x20 = 0x800 (1 sector is 0x200 bytes, total of 4 sectors)
-    TOTAL_SECS:     0x013,      // 2 bytes: number of sectors (eg, 0x140 or 320); if zero, refer to LARGE_SECS
-    MEDIA_ID:       0x015,      // 1 byte: media ID (see DiskAPI.FAT.MEDIA_*); should also match the first byte of the FAT (aka FAT ID)
-    FAT_SECS:       0x016,      // 2 bytes: sectors per FAT (eg, 1)
-    TRACK_SECS:     0x018,      // 2 bytes: sectors per track (eg, 8)
-    TOTAL_HEADS:    0x01A,      // 2 bytes: number of heads (eg, 1)
-    HIDDEN_SECS:    0x01C,      // 2 bytes (DOS 2.x) or 4 bytes (DOS 3.31 and up): number of hidden sectors (always 0 for non-partitioned media)
-    LARGE_SECS:     0x020       // 4 bytes (DOS 3.31 and up): number of sectors if TOTAL_SECS is zero
+    SECBYTES:       0x00B,      // 2 bytes: bytes per sector (eg, 0x200 or 512)
+    CLUSSECS:       0x00D,      // 1 byte: sectors per cluster (eg, 1)
+    RESSECS:        0x00E,      // 2 bytes: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (eg, 1)
+    FATS:           0x010,      // 1 byte: FAT copies (eg, 2)
+    DIRENTS:        0x011,      // 2 bytes: root directory entries (eg, 0x40 or 64) 0x40 * 0x20 = 0x800 (1 sector is 0x200 bytes, total of 4 sectors)
+    DISKSECS:       0x013,      // 2 bytes: number of sectors (eg, 0x140 or 320); if zero, refer to LARGESECS
+    MEDIA:          0x015,      // 1 byte: media ID (see DiskAPI.FAT.MEDIA_*); should also match the first byte of the FAT (aka FAT ID)
+    FATSECS:        0x016,      // 2 bytes: sectors per FAT (eg, 1)
+    TRACKSECS:      0x018,      // 2 bytes: sectors per track (eg, 8)
+    DRIVEHEADS:     0x01A,      // 2 bytes: number of heads (eg, 1)
+    HIDDENSECS:     0x01C,      // 2 bytes (DOS 2.x) or 4 bytes (DOS 3.31 and up): number of hidden sectors (always 0 for non-partitioned media)
+    LARGESECS:      0x020       // 4 bytes (DOS 3.31 and up): number of sectors if DISKSECS is zero
 };
 
 /*
@@ -5563,6 +5563,10 @@ var X86 = {
         INT1:       0xF1,       // opINT1()
         REPNZ:      0xF2,       // opREPNZ()
         REPZ:       0xF3,       // opREPZ()
+        CLI:        0xFA,       // opCLI()
+        STI:        0xFB,       // opSTI()
+        CLD:        0xFC,       // opCLD()
+        STD:        0xFD,       // opSTD()
         GRP4W:      0xFF,
         CALLW:      0x10FF,     // GRP4W: fnCALLw()
         CALLFDW:    0x18FF,     // GRP4W: fnCALLFdw()
@@ -47691,7 +47695,12 @@ class Kbdx86 extends Component {
         if (fDown) {
             this.cKeysPressed++;
             this.sInjectBuffer = "";                    // actual key DOWN (not UP) events should also stop any injection in progress
+            /*
+             * Unless the key happens to be ESC, ANY user input at all now cancels injection.
+             */
+            if (keyCode != 27) this.nInjection = Kbdx86.INJECTION.NONE;
         }
+
         Component.processScript(this.idMachine);        // and any script, too
 
         /*
@@ -48272,7 +48281,8 @@ Kbdx86.SIMCODE = {
     CTRL_ALT_INS:   Keys.KEYCODE.INS         + Keys.KEYCODE.FAKE,
     CTRL_ALT_ADD:   Keys.KEYCODE.NUM_ADD     + Keys.KEYCODE.FAKE,
     CTRL_ALT_SUB:   Keys.KEYCODE.NUM_SUB     + Keys.KEYCODE.FAKE,
-    CTRL_ALT_ENTER: Keys.KEYCODE.NUM_CR      + Keys.KEYCODE.FAKE
+    CTRL_ALT_ENTER: Keys.KEYCODE.NUM_CR      + Keys.KEYCODE.FAKE,
+    SHIFT_TAB:      Keys.KEYCODE.TAB         + Keys.KEYCODE.FAKE
 };
 
 /*
@@ -48487,7 +48497,8 @@ Kbdx86.CLICKCODES = {
     'CTRL_ALT_INS':     Kbdx86.SIMCODE.CTRL_ALT_INS,
     'CTRL_ALT_ADD':     Kbdx86.SIMCODE.CTRL_ALT_ADD,
     'CTRL_ALT_SUB':     Kbdx86.SIMCODE.CTRL_ALT_SUB,
-    'CTRL_ALT_ENTER':   Kbdx86.SIMCODE.CTRL_ALT_ENTER
+    'CTRL_ALT_ENTER':   Kbdx86.SIMCODE.CTRL_ALT_ENTER,
+    'SHIFT_TAB':        Kbdx86.SIMCODE.SHIFT_TAB
 };
 
 /*
@@ -48836,9 +48847,9 @@ Kbdx86.SIMCODES = {
     [Kbdx86.SIMCODE.NUM_SUB]:     Kbdx86.SCANCODE.NUM_SUB,
     [Kbdx86.SIMCODE.DEL]:         Kbdx86.SCANCODE.NUM_DEL,
     [Kbdx86.SIMCODE.NUM_DEL]:     Kbdx86.SCANCODE.NUM_DEL,
-    [Kbdx86.SIMCODE.SYS_REQ]:     Kbdx86.SCANCODE.SYS_REQ,
+
     /*
-     * Entries beyond this point are for keys that existed only on 101-key keyboards (well, except for 'sys-req',
+     * The next 6 entries are for keys that existed only on 101-key keyboards (well, except for SYS_REQ,
      * which also existed on the 84-key keyboard), which ALSO means that these keys essentially did not exist
      * for a MODEL_5150 or MODEL_5160 machine, because those machines could use only 83-key keyboards.  Remember
      * that IBM machines and IBM keyboards are our reference point here, so while there were undoubtedly 5150/5160
@@ -48853,6 +48864,7 @@ Kbdx86.SIMCODES = {
      * TODO: Add entries for 'num-mul', 'num-div', 'num-enter', the stand-alone arrow keys, etc, AND at the same time,
      * make sure that keys with multi-byte sequences (eg, 0xe0 0x1c) work properly.
      */
+    [Kbdx86.SIMCODE.SYS_REQ]:     Kbdx86.SCANCODE.SYS_REQ,
     [Kbdx86.SIMCODE.F11]:         Kbdx86.SCANCODE.F11,
     [Kbdx86.SIMCODE.F12]:         Kbdx86.SCANCODE.F12,
     [Kbdx86.SIMCODE.CMD]:         Kbdx86.SCANCODE.WIN,
@@ -48891,7 +48903,9 @@ Kbdx86.SIMCODES = {
     [Kbdx86.SIMCODE.CTRL_ALT_INS]:    Kbdx86.SCANCODE.NUM_INS | (Kbdx86.SCANCODE.CTRL << 8) | (Kbdx86.SCANCODE.ALT << 16),
     [Kbdx86.SIMCODE.CTRL_ALT_ADD]:    Kbdx86.SCANCODE.NUM_ADD | (Kbdx86.SCANCODE.CTRL << 8) | (Kbdx86.SCANCODE.ALT << 16),
     [Kbdx86.SIMCODE.CTRL_ALT_SUB]:    Kbdx86.SCANCODE.NUM_SUB | (Kbdx86.SCANCODE.CTRL << 8) | (Kbdx86.SCANCODE.ALT << 16),
-    [Kbdx86.SIMCODE.CTRL_ALT_ENTER]:  Kbdx86.SCANCODE.ENTER   | (Kbdx86.SCANCODE.CTRL << 8) | (Kbdx86.SCANCODE.ALT << 16)
+    [Kbdx86.SIMCODE.CTRL_ALT_ENTER]:  Kbdx86.SCANCODE.ENTER   | (Kbdx86.SCANCODE.CTRL << 8) | (Kbdx86.SCANCODE.ALT << 16),
+
+    [Kbdx86.SIMCODE.SHIFT_TAB]:   Kbdx86.SCANCODE.TAB         | (Kbdx86.SCANCODE.SHIFT << 8)
 };
 
 /**
@@ -69119,7 +69133,7 @@ class HDC extends Component {
             if (drive.type) {
                 setWord(HDC.ATC.IDENTIFY.CYLS, drive.nCylinders);
                 setWord(HDC.ATC.IDENTIFY.HEADS, drive.nHeads);
-                setWord(HDC.ATC.IDENTIFY.SECTOR_BYTES, drive.cbSector);
+                setWord(HDC.ATC.IDENTIFY.SECBYTES, drive.cbSector);
                 setWord(HDC.ATC.IDENTIFY.SECTORS, drive.nSectors);
             }
             setString(HDC.ATC.IDENTIFY.SERIAL_NUMBER, "PCJS-20190528", 20);
@@ -70060,7 +70074,7 @@ HDC.ATC.IDENTIFY = {
     CONFIG2:            0x04,   // WORD: SPECIFIC_CONFIG
     HEADS:              0x06,   // WORD: number of physical heads
     TRACK_BYTES:        0x08,   // WORD: bytes per track
-    SECTOR_BYTES:       0x0A,   // WORD: bytes per sector
+    SECBYTES:           0x0A,   // WORD: bytes per sector
     SECTORS:            0x0C,   // WORD: sectors per track
                                 // (reserved words at 0x0E, 0x10, and 0x12)
     SERIAL_NUMBER:      0x14,   // CHAR: 20 ASCII characters
@@ -70540,6 +70554,7 @@ class JSONLib {
                             let bootable = release['@bootable'];
                             let autoType = release['@autoType'];
                             let hardware = release['@hardware'];
+                            let source = item['@source'];
                             if (title) diskette['title'] = title;                       // the software title (as opposed to the diskette name)
                             if (format) diskette['format'] = format;                    // eg, "PC360K"
                             if (archive) diskette['archive'] = archive;                 // eg, "folder", or the name of a specific ".img" file, etc
@@ -70551,6 +70566,7 @@ class JSONLib {
                             if (bootable) diskette['bootable'] = true;                  // true if diskette marked bootable
                             if (autoType) diskette['autoType'] = autoType;              // optional custom autoType string
                             if (hardware) diskette['hardware'] = hardware;              // hardware configuration
+                            if (source) diskette['source'] = source;                    // source (eg, URL) of our copy of the media
                         }
                         if (!item['@localonly'] || hostName == "localhost") {
                             aDiskettes.push(diskette);
@@ -77932,7 +77948,7 @@ class DebuggerX86 extends DbgLib {
                     this.incAddr(dbgAddr, 1);
                     if (bOp2 == 0x21) {
                         let regAX = this.cpu.regEAX & 0xFFFF;
-                        if (regAX == 0x1804 || regAX == 0x1805) {
+                        if (regAX >= 0x1804 && regAX <= 0x1806) {
                             let limit = 128;
                             while ((bOp2 = this.getByte(dbgAddr)) && limit--) {
                                 this.incAddr(dbgAddr, 1);

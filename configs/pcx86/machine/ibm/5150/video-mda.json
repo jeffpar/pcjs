@@ -8,7 +8,6 @@
   "charCols": 80,
   "charRows": 25,
   "fontROM": "/machines/pcx86/ibm/video/mda/IBM-MDA.json",
-  "flicker": 1.0,
   "overlay": true,
   "controls": [
     {
