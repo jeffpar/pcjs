@@ -2,13 +2,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% if page.title %}{{ page.title }} | PCjs{% else %}{{ site.title }}{% endif %}</title>
+    <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
     {%- comment %}{% seo %}{% endcomment %}
     <meta name="description" content="{{ site.tagline }} {{ site.description | default: site.github.project_tagline | rstrip }}">
     {%- if page.iconTitle != nil %}
     <meta name="apple-mobile-web-app-title" content="{{ page.iconTitle }}">
     {%- else %}
-    <meta name="apple-mobile-web-app-title" content="PCjs">
+    <meta name="apple-mobile-web-app-title" content="{{ site.title }}">
     {%- endif %}
     {%- if page.layout == "pwa" %}
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,7 +16,7 @@
     {%- if page.title != nil %}
     <meta name="twitter:title" property="og:title" content="{{ page.title }}">
     {%- else %}
-    <meta name="twitter:title" property="og:title" content="PCjs Machines">
+    <meta name="twitter:title" property="og:title" content="{{ site.title }}">
     {%- endif %}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@jeffpar">
