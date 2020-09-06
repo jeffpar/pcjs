@@ -21,7 +21,15 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@jeffpar">
     {%- if page.preview != nil %}
+      {%- assign preview_start = page.preview | slice: 0 %}
+      {%- assign preview_prefix = page.preview | slice: 0, 4 %}
+      {%- if preview_prefix == "http" %}
+    <meta name="twitter:image" property="og:image" content="{{ page.preview }}">
+      {%- elsif preview_start == "/" %}
     <meta name="twitter:image" property="og:image" content="{{ page.preview | prepend: site.baseurl | prepend: site.url }}">
+      {%- else %}
+    <meta name="twitter:image" property="og:image" content="{{ page.preview | prepend: page.dir | prepend: site.baseurl | prepend: site.url }}">
+      {%- endif %}
     {%- else %}
     <meta name="twitter:image" property="og:image" content="{{ '/assets/img/logo-home.png' | prepend: site.baseurl | prepend: site.url }}">
     {%- endif %}
