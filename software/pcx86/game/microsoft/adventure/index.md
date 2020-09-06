@@ -10,7 +10,6 @@ machines:
   - id: ibm5150-adventure
     type: pcx86
     resume: 1
-    uncompiled: true
     config: /configs/pcx86/machine/ibm/5150/mda/64kb/machine.json
     autoMount:
       A:
