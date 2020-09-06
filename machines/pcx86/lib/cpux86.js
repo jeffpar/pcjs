@@ -1939,7 +1939,7 @@ class CPUx86 extends CPULib {
         this.nTotalCycles = a[1];   // a[0] was previously nBurstDivisor (no longer used)
         this.setSpeed(a[2]);        // old states didn't contain a value from getSpeed(), but setSpeed() checks
         if (a[3] != null) {         // less old states didn't preserve the original running state, so we must check it
-            this.flags.autoStart = a[3];
+            this.flags.autoStart = a[3] || undefined;   // prefer undefined over false, because false is a firm no-autoStart
         }
         if (a[4] != null) {
             this.restoreTimers(a[4]);
