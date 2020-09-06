@@ -11,7 +11,7 @@ machines:
     type: pcx86
     resume: 1
     uncompiled: true
-    config: /configs/pcx86/machine/ibm/5150/mda/64kb/debugger/machine.json
+    config: /configs/pcx86/machine/ibm/5150/mda/64kb/machine.json
     autoMount:
       A:
         name: Microsoft Adventure (Unmodified)
