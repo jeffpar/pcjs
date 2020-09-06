@@ -485,6 +485,37 @@ X86.helpINT = function(nIDT, nError, nCycles)
     let oldPS = this.getPS();
     let oldCS = this.getCS();
     let oldIP = this.getIP();
+    /*
+     * Support for INT 06h operation checks.
+     */
+    if (nIDT == 0x06 && this.model <= X86.MODEL_8088) {
+        let op = this.getSOWord(this.segCS, oldIP-2);
+        if (op == 0x06CD) {
+            let actual;
+            let argA = this.getSOWord(this.segSS, this.regEBP+10) | (this.getSOWord(this.segSS, this.regEBP+12) << 16);
+            let argB = this.getSOWord(this.segSS, this.regEBP+6) | (this.getSOWord(this.segSS, this.regEBP+8) << 16);
+            let result = this.regEAX | (this.regEDX << 16);
+            let remainder = this.regEDI | (this.regESI << 16);
+            switch(this.regECX & 0xff) {
+            case 0x01:
+                actual = (argA * argB)|0;
+                if (result != actual) {
+                    if (!COMPILED) this.printf(Messages.INT, "result %#x for %#x * %#x does not match actual: %#x\n", result, argA, argB, actual);
+                }
+                break;
+            case 0x02:
+                actual = (argA / argB)|0;
+                if (result != actual) {
+                    if (!COMPILED) this.printf(Messages.INT, "result %#x for %#x / %#x does not match actual: %#x\n", result, argA, argB, actual);
+                }
+                actual = (argA % argB)|0;
+                if (remainder != actual) {
+                    if (!COMPILED) this.printf(Messages.INT, "result %#x for %#x % %#x does not match actual: %#x\n", result, argA, argB, actual);
+                }
+                break;
+            }
+        }
+    }
     let addr = this.segCS.loadIDT(nIDT);
     if (addr !== X86.ADDR_INVALID) {
         /*
