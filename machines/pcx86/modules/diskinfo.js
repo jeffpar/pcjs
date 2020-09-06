@@ -866,11 +866,16 @@ export default class DiskInfo {
         /*
          * PC DOS 1.x requires ALL unused directory entries to start with 0xE5; 0x00 isn't good enough,
          * so we must loop through all the remaining directory entries and zap them with 0xE5.
+         *
+         * However, we do this ONLY for the first two BPB types (160K and 320K diskettes), since those are
+         * the only formats PC DOS 1.x understood.
          */
-        let offRoot = cEntries * DiskInfo.DIRENT.LENGTH;
-        while (cEntries++ < cRootEntries) {
-            abRoot[offRoot] = DiskInfo.DIRENT.INVALID;         // 0xE5
-            offRoot += DiskInfo.DIRENT.LENGTH;                 // 0x20 (32)
+        if (iBPB < 2) {
+            let offRoot = cEntries * DiskInfo.DIRENT.LENGTH;
+            while (cEntries++ < cRootEntries) {
+                abRoot[offRoot] = DiskInfo.DIRENT.INVALID;         // 0xE5
+                offRoot += DiskInfo.DIRENT.LENGTH;                 // 0x20 (32)
+            }
         }
 
         /*

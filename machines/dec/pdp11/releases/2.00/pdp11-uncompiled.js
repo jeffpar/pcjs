@@ -2857,6 +2857,10 @@ class Web {
      * any code that cares about "MSIE", but I've left the change in place, because I wouldn't be surprised if I'll
      * need more IE-specific code in the future, perhaps for things like copy/paste functionality, or mouse capture.
      *
+     * 2019-10-26: Apple has pulled a stunt in iPadOS 13 similar to MSFT: trying to pretend that Safari on iPadOS is
+     * indistinguishable from the desktop version.  Except that there are still situations where we need to know the
+     * difference (eg, when there's only a soft keyboard as opposed to a dedicated keyboard).  See monitor.js for details.
+     *
      * @param {string} s is a substring to search for in the user-agent; as noted above, "iOS" and "MSIE" are special values
      * @return {boolean} is true if the string was found, false if not
      */
@@ -2873,7 +2877,7 @@ class Web {
              * And yes, it would be pointless to use the conditional (?) operator below, if not for the Google Closure
              * Compiler (v20130823) failing to detect the entire expression as a boolean.
              */
-            return s == "iOS" && !!userAgent.match(/(iPod|iPhone|iPad)/) && !!userAgent.match(/AppleWebKit/) || s == "MSIE" && !!userAgent.match(/(MSIE|Trident)/) || (userAgent.indexOf(s) >= 0);
+            return s == "iOS" && (!!userAgent.match(/(iPod|iPhone|iPad)/) || (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1)) || s == "MSIE" && !!userAgent.match(/(MSIE|Trident)/) || (userAgent.indexOf(s) >= 0);
         }
         return false;
     }
