@@ -6081,9 +6081,12 @@ class DebuggerX86 extends DbgLib {
                     this.incAddr(dbgAddr, 1);
                     bOp2 = this.getByte(dbgAddr);
                     this.incAddr(dbgAddr, 1);
-                    if (bOp2 == 0x21) {
-                        let regAX = this.cpu.regEAX & 0xFFFF;
-                        if (regAX >= 0x1804 && regAX <= 0x1806) {
+                    /*
+                     * Look for INT 0x32 functions 4-6 and skip over the null-terminated string following the interrupt.
+                     */
+                    if (bOp2 == 0x32) {
+                        let regAH = (this.cpu.regEAX >> 8) & 0xFF;
+                        if (regAH >= 0x04 && regAH <= 0x06) {
                             let limit = 128;
                             while ((bOp2 = this.getByte(dbgAddr)) && limit--) {
                                 this.incAddr(dbgAddr, 1);
