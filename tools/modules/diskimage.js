@@ -296,7 +296,9 @@ function processDisk(di, diskFile, argv, diskette)
      * the specified format, we skip the disk.
      */
     if (typeof argv['format'] == "string") {
-        if (di.getFormat().indexOf(argv['format']) < 0) {
+        let sFormat = di.getFormat();
+        if (sFormat.indexOf(argv['format']) < 0) {
+            printf("warning: specified format (\"%s\") does not match disk format (\"%s\")\n", argv['format'], sFormat);
             return;
         }
     }
