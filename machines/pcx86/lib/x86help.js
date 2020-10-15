@@ -486,7 +486,9 @@ X86.helpINT = function(nIDT, nError, nCycles)
     let oldCS = this.getCS();
     let oldIP = this.getIP();
     /*
-     * Support for INT 06h operation checks.
+     * Support for INT 06h operation checks.  The only operation we consume is the one reserved for breakpoints,
+     * and only if our debugger is running.  All these should only occur in DEBUG builds of the underlying operating
+     * system, which should clean up after itself.
      */
     if (nIDT == 0x06 && this.model <= X86.MODEL_8088) {
         let op = this.getSOWord(this.segCS, oldIP-2);
@@ -496,14 +498,22 @@ X86.helpINT = function(nIDT, nError, nCycles)
             let argB = this.getSOWord(this.segSS, this.regEBP+6) | (this.getSOWord(this.segSS, this.regEBP+8) << 16);
             let result = this.regEAX | (this.regEDX << 16);
             let remainder = this.regEDI | (this.regESI << 16);
-            switch(this.regECX & 0xff) {
-            case 0x01:
+            switch(this.peekIPByte()) {
+            case 0xCC:
+                if (DEBUGGER && this.dbg && this.flags.running) {
+                    this.getIPByte();
+                    this.printMessage("debugger halting on INT 0x06,0xCC", DEBUGGER || this.bitsMessage);
+                    this.dbg.stopCPU();
+                    return;
+                }
+                break;
+            case 0xFB:
                 actual = (argA * argB)|0;
                 if (result != actual) {
                     if (!COMPILED) this.printf(Messages.INT, "result %#x for %#x * %#x does not match actual: %#x\n", result, argA, argB, actual);
                 }
                 break;
-            case 0x02:
+            case 0xFC:
                 actual = (argA / argB)|0;
                 if (result != actual) {
                     if (!COMPILED) this.printf(Messages.INT, "result %#x for %#x / %#x does not match actual: %#x\n", result, argA, argB, actual);
@@ -514,6 +524,11 @@ X86.helpINT = function(nIDT, nError, nCycles)
                 }
                 break;
             }
+        }
+    }
+    if (nIDT == 0x13 && this.model <= X86.MODEL_8088) {
+        if (DEBUGGER && this.dbg && this.regEAX == 0x0201 && this.regEBX == 0x7C00 && this.segES.sel == 0) {
+            this.setShort(0x52D, 0x4442);       // on 8088 boot up, set a special "BD" boot indicator in low memory
         }
     }
     let addr = this.segCS.loadIDT(nIDT);

@@ -7376,6 +7376,58 @@
           }
         }
       },
+      "qnx": {
+        "@title": "QNX",
+        "@versions": {
+          "1.1": {
+            "@title": "QNX 1.1",
+            "@bootable": true,
+            "@media": [
+              {
+                "@title": "QNX 1.1 DEMO",
+                "@diskette": "QNX11-DEMO.json",
+                "@format": "Unknown"
+              }
+            ]
+          },
+          "1.2": {
+            "@title": "QNX 1.2",
+            "@bootable": true,
+            "@media": [
+              {
+                "@title": "QNX 1.2 BOOT",
+                "@diskette": "QNX12-BOOT.json",
+                "@format": "Unknown"
+              },
+              {
+                "@title": "QNX 1.2 C COMPILER",
+                "@diskette": "QNX12-CC.json",
+                "@format": "Unknown"
+              },
+              {
+                "@title": "QNX 1.2 DOS FSYS",
+                "@diskette": "QNX12-DOSFSYS.json",
+                "@format": "Unknown"
+              },
+              {
+                "@title": "QNX 1.2 DOS FSYSB",
+                "@diskette": "QNX12-DOSFSYSB.json",
+                "@format": "Unknown"
+              },
+              {
+                "@title": "QNX 1.2 QDOS2",
+                "@diskette": "QNX12-QDOS2.json",
+                "@format": "Unknown"
+              },
+              {
+                "@title": "QNX 1.2 UTILITIES",
+                "@diskette": "QNX12-UTILS.json",
+                "@format": "Unknown"
+              }
+            ]
+          }
+        }
+      },
       "sco": {
         "@title": "SCO",
         "xenix/086": {

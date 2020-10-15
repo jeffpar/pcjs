@@ -4,7 +4,9 @@
   "year": 2020,
   "description": "PCjs",
   "license": "MIT",
-  "engine": "node ^6.7.0",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "build": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -32,7 +34,7 @@
     "eslint": "^6.8.0",
     "glob": "^7.1.6",
     "google-closure-compiler": "^20200112.0.0",
-    "got": "^11.1.4",
+    "got": "^11.7.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-foreach": "^0.1.0",
