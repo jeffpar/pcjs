@@ -2425,11 +2425,7 @@ class Web {
         }
         else {
             sURI = "data:application/" + sType + (fBase64? ";base64" : "") + ",";
-            if (!Web.isUserAgent("Firefox")) {
-                sURI += (fBase64? sData : encodeURI(sData));
-            } else {
-                sURI += (fBase64? sData : encodeURIComponent(sData));
-            }
+            sURI += (fBase64? sData : encodeURIComponent(sData));
         }
         if (!sURI) {
             sAlert = 'Operation unsupported by your browser.';

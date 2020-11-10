@@ -439,37 +439,36 @@ class FDC extends Component {
         bus.addPortInputTable(this, FDC.aPortInput);
         bus.addPortOutputTable(this, FDC.aPortOutput);
 
-        if (this.aDiskettes) {
-            if (typeof this.aDiskettes == "string") {
-                let fdc = this;
-                let hostName = Web.getHostName();
-                let limits = fdc.getDriveLimits();
-                let urls = fdc.aDiskettes.split(',');
-                var cRequested = 0, cLoaded = 0;
-                fdc.aDiskettes = [];
-                for (let i = 0; i < urls.length; i++) {
-                    let url = urls[i];
-                    if (hostName == "localhost" || url.indexOf("private") < 0 && url.indexOf("pcsig") < 0) {
-                        cRequested++;
-                        let sProgress = "Loading " + url + "...";
-                        Web.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
-                            if (sResponse && !nErrorCode) {
-                                try {
-                                    JSONLib.parseDiskettes(fdc.aDiskettes, /** @type {Object} */ (JSON.parse(sResponse)), "/pcx86", fdc.sDisketteServer, hostName, limits);
-                                } catch(err) {
-                                    fdc.println("Unable to parse " + url + ": " + err.message);
-                                }
-                            } else {
-                                fdc.println("Unable to open " + url + " (" + nErrorCode + ")");
+        if (this.aDiskettes && typeof this.aDiskettes == "string") {
+            let fdc = this;
+            let hostName = Web.getHostName();
+            let limits = fdc.getDriveLimits();
+            let urls = fdc.aDiskettes.split(',');
+            var cRequested = 0, cLoaded = 0, cSuccessful = 0;
+            fdc.aDiskettes = [];
+            for (let i = 0; i < urls.length; i++) {
+                let url = urls[i];
+                if (hostName == "localhost" || url.indexOf("private") < 0 && url.indexOf("pcsig") < 0) {
+                    cRequested++;
+                    let sProgress = "Loading " + url + "...";
+                    Web.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
+                        if (sResponse && !nErrorCode) {
+                            try {
+                                JSONLib.parseDiskettes(fdc.aDiskettes, /** @type {Object} */ (JSON.parse(sResponse)), "/pcx86", fdc.sDisketteServer, hostName, limits);
+                                cSuccessful++;
+                            } catch(err) {
+                                fdc.println("Unable to parse " + url + ": " + err.message);
                             }
-                            if (++cLoaded == cRequested) fdc.addDiskettes();
-                        }, function(nState) {
-                            fdc.println(sProgress, Component.PRINT.PROGRESS);
-                        });
-                    }
+                        } else {
+                            fdc.println("Unable to open " + url + " (" + nErrorCode + ")");
+                        }
+                        if (++cLoaded == cRequested) fdc.addDiskettes(!cSuccessful);
+                    }, function(nState) {
+                        fdc.println(sProgress, Component.PRINT.PROGRESS);
+                    });
                 }
-                return;
             }
+            return;
         }
         this.addDiskettes();
     }
@@ -1541,11 +1540,12 @@ class FDC extends Component {
     }
 
     /**
-     * addDiskettes()
+     * addDiskettes(fSilent)
      *
      * @this {FDC}
+     * @param {boolean} [fSilent]
      */
-    addDiskettes()
+    addDiskettes(fSilent)
     {
         if (this.aDiskettes) {
             for (let i = 0; i < this.aDiskettes.length; i++) {
@@ -1606,7 +1606,7 @@ class FDC extends Component {
         if (this.fLocalDisks) this.addDiskette("Local Disk", "?");
         this.addDiskette("Remote Disk", "??");
 
-        if (!this.autoMount()) this.setReady();
+        if (fSilent || !this.autoMount()) this.setReady();
     }
 
     /**
