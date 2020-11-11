@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
 <machine id="att6300" type="pcx86" border="1" pos="center" background="default" debugger="available">
-	<name pos="center">AT&amp;T Personal Computer 6300 with Color Display</name>
+	<name pos="center">AT&amp;T Personal Computer 6300 with CGA</name>
 	<computer id="att6300-640k" name="MPC 1600"/>
 	<ram id="ramLow" addr="0x00000" size="0xa0000"/>
 	<rom ref="/configs/pcx86/rom/att/6300/bios-143.xml"/>
