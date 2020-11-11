@@ -1,6 +1,6 @@
 ---
 layout: page
-title: AT&amp;T Personal Computer 6300 with Color Display
+title: AT&amp;T Personal Computer 6300 with Color Graphics
 permalink: /machines/pcx86/att/6300/cga/
 redirect_from:
   - /devices/pcx86/machine/att/6300/cga/640kb/

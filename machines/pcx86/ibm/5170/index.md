@@ -12,7 +12,7 @@ redirect_from:
 Our IBM PC AT configurations include:
 
   - IBM PC AT with Monochrome Display Adapter (MDA)
-  - IBM PC AT with Color Color Graphics Adapter (CGA)
+  - IBM PC AT with Color Graphics Adapter (CGA)
   - IBM PC AT with Enhanced Graphics Adapter (EGA)
   - IBM PC AT with Video Graphics Array (VGA)
 

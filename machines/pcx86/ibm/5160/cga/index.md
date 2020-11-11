@@ -1,6 +1,6 @@
 ---
 layout: page
-title: IBM PC XT (Model 5160) with Color Display
+title: IBM PC XT (Model 5160) with Color Graphics
 permalink: /machines/pcx86/ibm/5160/cga/
 redirect_from:
   - /devices/pcx86/machine/5160/cga/256kb/
@@ -15,5 +15,16 @@ machines:
 ---
 
 {% include machine.html id="ibm-5160-cga" %}
+
+### Additional CGA Configurations
+
+Other IBM PC XT machines with a Color Graphics Adapter (CGA) include:
+
+- [IBM PC XT, 256Kb RAM, 10Mb Hard Disk (PC DOS 2.00)](/configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml)
+- [IBM PC XT, 512Kb RAM, 10Mb Hard Disk (Unformatted), Coprocessor](/configs/pcx86/machine/ibm/5160/cga/512kb/machine.xml)
+- [IBM PC XT, 640Kb RAM, 10Mb Hard Disk (Formatted)](/configs/pcx86/machine/ibm/5160/cga/640kb/machine.xml)
+- [IBM PC XT, 640Kb RAM, 10Mb Hard Disk (Formatted), Serial Mouse](/configs/pcx86/machine/ibm/5160/cga/640kb/machine.xml)
+
+To initialize the hard disk, use the `FDISK` command to create a DOS partition, restart the machine, and then run `FORMAT C:`.
 
 {% include gallery/documents.html width="200" height="280" %}

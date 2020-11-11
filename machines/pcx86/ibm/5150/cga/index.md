@@ -1,6 +1,6 @@
 ---
 layout: page
-title: IBM PC (Model 5150) with Color Display
+title: IBM PC (Model 5150) with Color Graphics
 permalink: /machines/pcx86/ibm/5150/cga/
 redirect_from:
   - /devices/pcx86/machine/5150/cga/64kb/
