@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/configs/pcx86/xsl/machine.xsl"?>
 <machine id="mpc1600" type="pcx86" border="1" pos="center" background="default">
-	<name pos="center">Columbia Data Products MPC 1600 with Color Display</name>
+	<name pos="center">Columbia Data Products MPC 1600 with CGA</name>
 	<computer id="mpc1600-640k" name="MPC 1600"/>
 	<cpu id="cpu8088" model="8088"/>
 	<ram id="ramLow" addr="0x00000" size="0xa0000"/>

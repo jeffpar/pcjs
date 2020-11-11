@@ -13,8 +13,6 @@ machines:
 
 {% include machine.html id="z150" %}
 
-This machine is also available with the [PCjs Debugger](/configs/pcx86/machine/zenith/z150/cga/640kb/debugger/machine.xml).
-
-And remember: "The quality goes in before the name goes on."
+Remember: "The quality goes in before the name goes on."
 
 {% include gallery/documents.html width="200" height="280" %}
