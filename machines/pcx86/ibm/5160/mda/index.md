@@ -13,4 +13,12 @@ machines:
 
 {% include machine.html id="ibm-5160-mda" %}
 
+### Additional MDA Configurations
+
+Other IBM PC XT machines with a Monochrome Display Adapter (MDA) include:
+
+- [IBM PC XT, 256Kb RAM, 10Mb Hard Disk (Unformatted)](/configs/pcx86/machine/ibm/5160/mda/256kb/machine.xml)
+
+To initialize the hard disk, use the `FDISK` command to create a DOS partition, restart the machine, and then run `FORMAT C:`.
+
 {% include gallery/documents.html width="200" height="280" %}

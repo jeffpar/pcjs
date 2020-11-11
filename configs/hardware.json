@@ -501,7 +501,7 @@
       "6300": {
         "@title": "AT&T 6300",
         "cga": {
-          "@title": "Color Display",
+          "@title": "Color Graphics",
           "@redirect_from": "/devices/pcx86/machine/att/6300/cga/640kb/"
         },
         "@documents": [
@@ -548,7 +548,7 @@
       "mpc1600": {
         "@title": "CDP MPC 1600",
         "cga": {
-          "@title": "Color Display",
+          "@title": "Color Graphics",
           "@redirect_from": "/devices/pcx86/machine/cdp/mpc1600/cga/640kb/"
         },
         "@documents": [
@@ -667,7 +667,7 @@
       "5150": {
         "@title": "PC (Model 5150)",
         "cga": {
-          "@title": "Color Display",
+          "@title": "Color Graphics",
           "@redirect_from": "/devices/pcx86/machine/5150/cga/64kb/"
         },
         "mda": {
@@ -724,11 +724,11 @@
       "5160": {
         "@title": "PC XT (Model 5160)",
         "cga": {
-          "@title": "Color Display",
+          "@title": "Color Graphics",
           "@redirect_from": "/devices/pcx86/machine/5160/cga/256kb/"
         },
         "ega": {
-          "@title": "Enhanced Display",
+          "@title": "Enhanced Graphics",
           "@redirect_from": "/devices/pcx86/machine/5160/ega/640kb/"
         },
         "mda": {
@@ -755,7 +755,7 @@
       "5170": {
         "@title": "PC AT (Model 5170)",
         "cga": {
-          "@title": "Color Display",
+          "@title": "Color Graphics",
           "@redirect_from": "/devices/pcx86/machine/5170/cga/640kb/rev3/"
         },
         "vga/cdrom": {
@@ -928,7 +928,7 @@
       "z150": {
         "@title": "Zenith Z-150",
         "cga": {
-          "@title": "Color Display",
+          "@title": "Color Graphics",
           "@redirect_from": "/devices/pcx86/machine/zenith/z150/cga/640kb/"
         },
         "@documents": [

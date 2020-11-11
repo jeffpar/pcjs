@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Zenith Z-150 with Color Display
+title: Zenith Z-150 with Color Graphics
 permalink: /machines/pcx86/zenith/z150/cga/
 redirect_from:
   - /devices/pcx86/machine/zenith/z150/cga/640kb/
