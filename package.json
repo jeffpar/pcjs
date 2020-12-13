@@ -22,7 +22,7 @@
     "pc",
     "x86",
     "emulator",
-    "javscript"
+    "javascript"
   ],
   "author": "Jeff Parsons <Jeff@pcjs.org>",
   "bugs": {

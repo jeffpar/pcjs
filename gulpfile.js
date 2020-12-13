@@ -20,7 +20,7 @@
  *
  *      concat (eg: `gulp concat` or `gulp concat/{machine}`)
  *
- *          Concatenates all the individual files (under /machines) that comprise the machines's compiled
+ *          Concatenates all the individual files (under /machines) that comprise the machine's compiled
  *          script; the resulting file (eg, pcx86-uncompiled.js) becomes the input file for the Closure
  *          Compiler, which is why each machine's `compile` task lists the corresponding `concat` task as
  *          a dependency/prerequisite.
