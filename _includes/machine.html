@@ -77,12 +77,12 @@
   {%- if machine.parms -%}
     {%- capture machine_parms %} data-value="{ {% for prop in machine.parms %}{{ prop[0] }}:'{{ prop[1] }}',{% endfor %}@ }"{%- endcapture -%}
   {%- endif %}
-<div class="machine {{ machine_type }}" id="{{ machine_id }}">
+<div class="machine {{ machine_type }} {{ machine_data.class }}" id="{{ machine_id }}">
   <div id="{{ machine_id }}.machine" class="pcjs-machine {{ machine_type }}-machine {{ machine_type }}-component"{{ machine_parms | replace: ",@", "" }}>
     {%- if machine_name != page.title %}
     <h3>{{ machine_name }}</h3>
     {%- endif %}
-    <div class="pcjs-chassis" style="{{ machine_style }}">
+    <div class="pcjs-chassis"{% if machine_style != "" %} style="{{ machine_style }}"{% endif %}>
   {%- for machine_component in machine.components -%}
     {%- assign config = nil -%}
     {%- comment -%}A machine_component with no "config" AND no "id" is assumed to simply be a string, containing the path to a config file.{%- endcomment -%}
@@ -185,7 +185,7 @@
               {%- if control_group != "" -%}
         </div>
               {%- endif %}
-        <div class="pcjs-group{{ control_class }}" style="{{ control_style }}">
+        <div class="pcjs-group{{ control_class }}"{% if control_style != "" %} style="{{ control_style }}"{% endif %}>
               {%- capture control_group -%}{{ control.group }}.{{ control.id }}{%- endcapture -%}
               {%- continue -%}
             {%- endif %}
@@ -218,7 +218,7 @@
             <div class="{{ machine_type }}-binding pcjs-{{ control.type }}" data-value="{type:'{{ control.type }}',binding:'{{ control.id }}',value:''}"></div>
             <div style="clear:both"></div>
             {%- elsif control.type == "list" %}
-            <select class="{{ machine_type }}-binding" data-value="{type:'{{ control.type }}',binding:'{{ control.id }}'}" style="">
+            <select class="{{ machine_type }}-binding" data-value="{type:'{{ control.type }}',binding:'{{ control.id }}'}">
               {%- if control.options -%}
                 {%- for option in control.options %}
               <option value="{{ option[0] }}">{{ option[1] }}</option>
@@ -263,18 +263,18 @@
         {%- endcapture -%}
       {%- endif -%}
     {%- endif %}
-      <div id="{{ machine_id }}.{{ component_id }}" class="pcjs-{{ component.class }} {{ machine_type }}-{{ component.class }} {{ machine_type }}-component" style="{{ component_style }}">{{ component_title }}{{ component_controls }}
+      <div id="{{ machine_id }}.{{ component_id }}" class="pcjs-{{ component.class }} {{ machine_type }}-{{ component.class }} {{ machine_type }}-component"{% if component_style != "" %} style="{{ component_style }}"{% endif %}>{{ component_title }}{{ component_controls }}
         <div class="{{ machine_type }}-{{ component.class }}-object{{ component_class }}" data-value="{{ component_config }}">{{ component_elements }}</div>
       </div>
   {%- endfor -%}
     </div>
-  {%- if machine_debugger == "available" %}
-    <div class="pcjs-reference" style="padding-left:8px">[<a href="debugger/" onclick="pcjsOnClick(this)">Debugger</a>]</div>
+  {%- if machine_debugger %}
+    <div class="pcjs-reference" style="padding-left:8px">[<a href="{% if machine_debugger == "available" %}debugger{% else %}{{ machine_debugger }}{% endif %}/" onclick="pcjsOnClick(this)">Debugger</a>]</div>
   {%- endif %}
     <div class="pcjs-copyright">
-  {%- assign machine_name = machine_data['name'] | default: "PCjs Machines" %}
-  {%- assign machine_version = machine_data['version'] | default: machine_data['shared']['version'] | default: "X.XX" %}
-      <a href="{{ '/' | absolute_url }}" target="_blank">{{ machine_name }}</a> v{{ machine_version }} © 2012-2020 <a href="{{ site.github.owner_url }}" target="_blank">Jeff Parsons</a>
+  {%- assign machine_name = machine_data.name | default: "PCjs Machines" %}
+  {%- assign machine_version = machine_data.version | default: machine_data.shared.version | default: "1.00" %}
+      <a href="{{ '/' | absolute_url }}" target="_blank">{{ machine_name }}</a> v{{ machine_version }} © 2012-2021 <a href="{{ site.github.owner_url }}" target="_blank">Jeff Parsons</a>
     </div>
   </div>
 </div>

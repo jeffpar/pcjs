@@ -20,7 +20,7 @@
  *
  *      concat (eg: `gulp concat` or `gulp concat/{machine}`)
  *
- *          Concatenates all the individual files (under /machines) that comprise the machines's compiled
+ *          Concatenates all the individual files (under /machines) that comprise the machine's compiled
  *          script; the resulting file (eg, pcx86-uncompiled.js) becomes the input file for the Closure
  *          Compiler, which is why each machine's `compile` task lists the corresponding `concat` task as
  *          a dependency/prerequisite.
@@ -211,7 +211,7 @@ aMachines.forEach(function(machineID) {
             .pipe(gulpForEach(function(stream, file) {
                 aMachinesOutdated.push(machineID);
                 return stream
-                    .pipe(gulpHeader('/**\n * @copyright ' + file.path.replace(/.*\/(modules|machines)\/(.*)/, "https://www.pcjs.org/$1/$2") + ' (C) 2012-' + pkg.year + ' Jeff Parsons\n */\n\n'))
+                    .pipe(gulpHeader('/**\n * @copyright ' + file.path.replace(/.*[\\/](modules|machines)[\\/](.*)/, "https://www.pcjs.org/$1/$2").replace(/\\/g,'/') + ' (C) 2012-' + pkg.year + ' Jeff Parsons\n */\n\n'))
                     .pipe(gulpReplace(/APPVERSION = "0.00"/g, 'APPVERSION = "' + machineVersion + '"'))
                     .pipe(gulpReplace(/(var\s+VERSION\s*=\s*)"[0-9.]*"/g, '$1"' + machineVersion + '"'))
                     .pipe(gulpReplace(/(^|\n)[ \t]*(['"])use strict\2;?/g, ""))

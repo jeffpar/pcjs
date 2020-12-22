@@ -793,7 +793,7 @@ export default class DiskInfo {
         }
 
         if (iBPB == DiskInfo.aDefaultBPBs.length) {
-            this.printf(Device.MESSAGE.DISK + Device.MESSASGE.ERROR, "too many file(s) for disk image (%d files, %d bytes)\n", aFileData.length, cbTotal);
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "too many file(s) for disk image (%d files, %d bytes)\n", aFileData.length, cbTotal);
             return false;
         }
 
@@ -1254,7 +1254,7 @@ export default class DiskInfo {
          * Next 3 bytes: CHS (Cylinder/Head/Sector) of first partition sector
          */
         abSector[offSector++] = 0x00;           // head: 0
-        abSector[offSector++] = 0x02;           // sector: 1 (bits 0-5), cyclinder bits 8-9: 0 (bits 6-7)
+        abSector[offSector++] = 0x02;           // sector: 1 (bits 0-5), cylinder bits 8-9: 0 (bits 6-7)
         abSector[offSector++] = 0x00;           // cylinder bits 0-7: 0
 
         /*
