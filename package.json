@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/jeffpar/pcjs.org.git"
+    "url": "git://github.com/jeffpar/pcjs.git"
   },
   "keywords": [
     "pcjs",
@@ -26,7 +26,7 @@
   ],
   "author": "Jeff Parsons <Jeff@pcjs.org>",
   "bugs": {
-    "url": "https://github.com/jeffpar/pcjs.org/issues"
+    "url": "https://github.com/jeffpar/pcjs/issues"
   },
   "homepage": "https://www.pcjs.org/",
   "dependencies": {

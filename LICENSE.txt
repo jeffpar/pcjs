@@ -1,7 +1,7 @@
 MIT License
 
 PCjs is free/open source software released under this MIT license.  PCjs
-software includes the PCjs repository <https://github.com/jeffpar/pcjs.org>
+software includes the PCjs repository <https://github.com/jeffpar/pcjs>
 and website <https://www.pcjs.org>, excluding all programs, images and
 documentation produced by other parties and which have been included in PCjs
 solely for archival/demonstration purposes.
