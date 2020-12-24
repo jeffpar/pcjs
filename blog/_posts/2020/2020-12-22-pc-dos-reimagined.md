@@ -60,6 +60,8 @@ combines the power of BASIC with a multitasking DOS.
 
 [![BASIC-DOS Demo #1](https://basicdos.com/assets/images/BASIC-DOS1.png)](https://basicdos.com/preview/)
 
+[![BASIC-DOS Demo #2](https://basicdos.com/assets/images/BASIC-DOS2.png)](https://basicdos.com/preview/part4/)
+
 Read the [BASIC-DOS Blog](https://basicdos.com/blog/), check out the [BASIC-DOS Preview](https://basicdos.com/preview/),
 and see what you think.
 
