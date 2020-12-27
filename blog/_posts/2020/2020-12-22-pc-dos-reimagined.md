@@ -10,7 +10,7 @@ Next year, on August 12, 2021, we'll be celebrating the 40th anniversary of the 
 put the world of personal computing on a path we're still on today.
 
 Granted, that path looks a lot different now, but if you open a Command Prompt on Windows, you can still
-type a few of the commands that were introduced in PC DOS 1.00 (eg, `DIR`, `COPY`, and `TYPE`), you can
+type a few of the commands that were introduced in PC DOS 1.00 (eg, `DIR`, `COPY`, `TYPE`), you can
 still run batch (`BAT`) files, and you can even change the `DATE` and `TIME` just like you used to almost
 40 years ago.
 
@@ -25,13 +25,14 @@ were extremely difficult.
 
 In 1983, PC DOS 2.00 represented perhaps the most dramatic and successful overhaul of PC DOS ever,
 with the introduction of installable device drivers, a hierarchical file system, and a more powerful shell.
-Yet it still couldn't make the leap to asynchronous I/O and true multitasking.
+Unfortunately, the shell missed an opportunity to embrace BASIC, choosing to simply mimic a few BASIC-like
+features instead, and the system still couldn't make the leap to asynchronous I/O and true multitasking.
 
 And multitasking was clearly something a lot of people wanted -- even Microsoft.
-By late 1985, they had had some success multitasking DOS applications in other products, such as
+By late 1985, they had had some success running multiple DOS applications in other products, such as
 [Microsoft Windows 1.01](https://www.pcjs.org/software/pcx86/sys/windows/1.01/) and
-[Multitasking MS-DOS 4.00](/software/pcx86/sys/dos/microsoft/4.0M/).  But they were never able to add
-that feature to PC DOS.
+[Multitasking MS-DOS 4.00](/software/pcx86/sys/dos/microsoft/4.0M/).  But they were unable
+(or perhaps unwilling) to add that feature to PC DOS.
 
 As a result, a variety of third-party solutions emerged, like VisiCorp's **Visi On**, IBM's **TopView**,
 SoftLogic's **DoubleDOS** and **Software Carousel**, and Quarterdeck's **Desqview**.
@@ -50,7 +51,8 @@ But all those solutions felt like band-aids.  As Michael J. Miller lamented in t
 By that time, Microsoft and IBM were already hard at work on **OS/2**, but OS/2 was an effort to move
 the world to an entirely new operating system, and it was a transition that ultimately proved too costly, both
 in terms of the required hardware and the sacrifices in DOS compatibility, and not enough people were willing to
-pay the price.
+pay the price.  Despite all the power of OS/2 1.x, it could still run only one DOS application at a time, and
+only when it was running full-screen.
 
 ### Introducing BASIC-DOS
 
