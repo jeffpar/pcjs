@@ -19,19 +19,27 @@ any point in time, so it was by no means inevitable that we'd always end up wher
 true that each new step was constrained in many ways by the previous step.
 
 Each new version of DOS had to retain compatibility with the previous version, and old features could
-rarely be dropped, so the system inevitably grew.  And that growth, combined with the need to rapidly
-turn around new versions, meant that major redesigns of DOS weren't feasible.  Features like preemptive
-multitasking of DOS applications *were* implemented in other products as early as 1985 (see
-[Multitasking MS-DOS 4.00](/software/pcx86/sys/dos/microsoft/4.0M/)), but that was never going to happen
-in PC DOS, even though it was clearly something a lot of people wanted.
+rarely be dropped, so the system inevitably grew.  The need to rapidly add new features and turn around
+new versions, combined with compatibility constraints, meant that major architectural changes to DOS
+were extremely difficult.
 
-The mid-1980's saw lots of third-party solutions emerge, like VisiCorp's **Visi On**, IBM's **TopView**,
-SoftLogic's **DoubleDOS** and **Software Carousel**, and Quarterdeck's **Desqview**.  And of course
-**Microsoft Windows** -- although all it really multitasked were Windows applications, not DOS applications.
+In 1983, PC DOS 2.00 represented perhaps the most dramatic and successful overhaul of PC DOS ever,
+with the introduction of installable device drivers, a hierarchical file system, and a more powerful shell.
+Yet it still couldn't make the leap to asynchronous I/O and true multitasking.
+
+And multitasking was clearly something a lot of people wanted -- even Microsoft.
+By late 1985, they had had some success multitasking DOS applications in other products, such as
+[Microsoft Windows 1.01](https://www.pcjs.org/software/pcx86/sys/windows/1.01/) and
+[Multitasking MS-DOS 4.00](/software/pcx86/sys/dos/microsoft/4.0M/).  But they were never able to add
+that feature to PC DOS.
+
+As a result, a variety of third-party solutions emerged, like VisiCorp's **Visi On**, IBM's **TopView**,
+SoftLogic's **DoubleDOS** and **Software Carousel**, and Quarterdeck's **Desqview**.
 
 ![DoubleDOS Advertisement, PC Magazine, February 7, 1984](/blog/images/DoubleDOS-1984.jpg)
 
-And yet, as Michael J. Miller lamented in the August 11, 1986 issue of InfoWorld:
+But all those solutions felt like band-aids.  As Michael J. Miller lamented in the August 11, 1986
+issue of [InfoWorld](https://books.google.com/books?id=Zi8EAAAAMBAJ&q=juggle#v=onepage&q&f=false):
 
     All these programs may just be interim solutions. Given the increasing
     acceptance of 80286-based machines (the [IBM PC] AT and compatibles),
@@ -39,7 +47,7 @@ And yet, as Michael J. Miller lamented in the August 11, 1986 issue of InfoWorld
     single-tasking operating system.  What we really need is a multitasking
     operating system that addresses lots of memory.  Hello, Microsoft?
 
-Granted, at that time, Microsoft and IBM were already hard at work on **OS/2**, but OS/2 was an effort to move
+By that time, Microsoft and IBM were already hard at work on **OS/2**, but OS/2 was an effort to move
 the world to an entirely new operating system, and it was a transition that ultimately proved too costly, both
 in terms of the required hardware and the sacrifices in DOS compatibility, and not enough people were willing to
 pay the price.
