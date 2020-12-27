@@ -38,8 +38,8 @@ SoftLogic's **DoubleDOS** and **Software Carousel**, and Quarterdeck's **Desqvie
 
 ![DoubleDOS Advertisement, PC Magazine, February 7, 1984](/blog/images/DoubleDOS-1984.jpg)
 
-But all those solutions felt like band-aids.  As Michael J. Miller lamented in the August 11, 1986
-issue of [InfoWorld](https://books.google.com/books?id=Zi8EAAAAMBAJ&q=juggle#v=onepage&q&f=false):
+But all those solutions felt like band-aids.  As Michael J. Miller lamented in the
+[August 11, 1986 issue of InfoWorld](https://books.google.com/books?id=Zi8EAAAAMBAJ&lpg=PA34&pg=PA34#v=onepage&q&f=false):
 
     All these programs may just be interim solutions. Given the increasing
     acceptance of 80286-based machines (the [IBM PC] AT and compatibles),
