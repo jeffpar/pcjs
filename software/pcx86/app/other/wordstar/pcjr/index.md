@@ -13,7 +13,7 @@ machines:
       B:
         name: WordStar for PCjr (Disk 1)
     autoStart: true
-    autoType: $date\r$time\rB:\rWS\r
+    autoType: $date\r$time\rB:\rWSU\r
 ---
 
 [Directory Listings](#directory-of-wordstar-for-pcjr-disk-1) of the double-sided (360Kb) WordStar for PCjr diskettes
