@@ -3,6 +3,7 @@ layout: page
 title: Microsoft MS-DOS 2.00
 permalink: /software/pcx86/sys/dos/microsoft/2.00/
 redirect_from: /disks/pcx86/dos/microsoft/2.00/
+preview: https://diskettes.pcjs.org/pcx86/sys/dos/microsoft/2.00/MSDOS200-DISKS.jpg
 machines:
   - id: ibm5160
     type: pcx86
@@ -98,12 +99,12 @@ CHM's original archive suffer from similar timestamp alterations is hard to say 
     as follows:
     
     1.   DOS distribution diskette.  This diskette contains files which
-         should be distriibuted to all users.  This allows the DOS distri-
-         bution diskette to meet the requirements of users of high level
+         should be distributed to all users.  This allows the DOS
+         distribution diskette to meet the requirements of users of high level
          language compilers as well as users running only applications.
          Many compilers marketed independently through the retail channel
          (including those of Microsoft) assume LINK comes with the DOS, as
-         in the case of IBM.  How you choose to distrubute BASIC (contracted
+         in the case of IBM.  How you choose to distribute BASIC (contracted
          for separately) is up to you.
     
     2.   Assembly Language Development System diskette.  This diskette
@@ -118,11 +119,11 @@ CHM's original archive suffer from similar timestamp alterations is hard to say 
          may wish to customize for greater performance.  .OBJ files are also
          included for the FORMAT utility.
     
-    4.   Skeltal BIOS and documentation diskette.  This diskette contains
-         the skeltal BIOS source code and the SYSINIT and SYSIMES object
+    4.   Skeletal BIOS and documentation diskette.  This diskette contains
+         the skeletal BIOS source code and the SYSINIT and SYSIMES object
          modules which must be linked with your BIOS module.  The proper
          sequence for linking is BIOS - SYSINIT - SYSIMES.
-         A profiler utiliity is also included on the diskette, but this
+         A profiler utility is also included on the diskette, but this
          is not intended for end-users.  This is distributed for use by
          your development staff only and is not supported by Microsoft
          If you do decide to distribute it, it is at your own risk!
@@ -324,35 +325,35 @@ original timestamps:
 
 The 2.11 source files were further organized into folders corresponding to their respective binaries,
 along with makefiles where appropriate
-(eg, [MSDOS.MAK]({{ site.github.repository_url }}/blob/master/pcx86/sys/dos/microsoft/2.11/src/MSDOS/MSDOS.MAK)).
-Also, in the 2.11 [INC]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/INC) folder,
+(eg, [MSDOS.MAK]({{ site.github.repository_url }}/blob/master/software/pcx86/sys/dos/microsoft/2.11/src/MSDOS/MSDOS.MAK)).
+Also, in the 2.11 [INC]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/INC) folder,
 `DOSMAC_v211.ASM` was copied to `DOSMAC.ASM`, and `DOSSYM_v211.ASM` was copied to `DOSSYM.ASM`.
 
-- [CHKDSK]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/CHKDSK)
-- [COMMAND]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/COMMAND)
-- [DEBUG]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/DEBUG)
-- [DISKCOPY]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/DISKCOPY)
-- [EDLIN]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/EDLIN)
-- [EXE2BIN]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/EXE2BIN)
-- [FC]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/FC)
-- [FIND]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/FIND)
-- [FORMAT]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/FORMAT)
-- [INC]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/INC)
-- [IO]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/IO)
-- [MORE]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/MORE)
-- [MSDOS]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/MSDOS)
-- [PRINT]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/PRINT)
-- [RECOVER]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/RECOVER)
-- [SORT]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/SORT)
-- [SYS]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/SYS)
+- [CHKDSK]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/CHKDSK)
+- [COMMAND]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/COMMAND)
+- [DEBUG]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/DEBUG)
+- [DISKCOPY]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/DISKCOPY)
+- [EDLIN]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/EDLIN)
+- [EXE2BIN]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/EXE2BIN)
+- [FC]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/FC)
+- [FIND]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/FIND)
+- [FORMAT]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/FORMAT)
+- [INC]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/INC)
+- [IO]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/IO)
+- [MORE]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/MORE)
+- [MSDOS]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/MSDOS)
+- [PRINT]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/PRINT)
+- [RECOVER]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/RECOVER)
+- [SORT]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/SORT)
+- [SYS]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/SYS)
 
-Then the [MSDOS]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/MSDOS)
+Then the [MSDOS]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/MSDOS)
 folder was supplemented with reconstructed
-[IO.ASM](https://demo-disks.pcjs.org/pcx86/sys/dos/microsoft/2.11/src/MSDOS/IO.ASM) and
-[IO2.ASM](https://demo-disks.pcjs.org/pcx86/sys/dos/microsoft/2.11/src/MSDOS/IO2.ASM) files from
+[IO.ASM](https://diskettes.pcjs.org/pcx86/sys/dos/microsoft/2.11/src/MSDOS/IO.ASM) and
+[IO2.ASM](https://diskettes.pcjs.org/pcx86/sys/dos/microsoft/2.11/src/MSDOS/IO2.ASM) files from
 [John Elliott](http://www.seasip.info/DOS/).
 
-The resulting files, along with a [MK.BAT]({{ site.github.repository_url }}/blob/master/pcx86/sys/dos/microsoft/2.11/src/MK.BAT)
+The resulting files, along with a [MK.BAT]({{ site.github.repository_url }}/blob/master/software/pcx86/sys/dos/microsoft/2.11/src/MK.BAT)
 batch file, were installed in the machine below on drive D.  Drive C contains a bootable copy of PC DOS 2.00, along with
 Microsoft MASM 4.00 and other assorted tools.
 
@@ -363,7 +364,7 @@ folder; to build all the folders, use `MK ALL`.
 folder with symbols **OEMIBM** and **VER200** defined.  Over time, the PCjs Project will use those symbols to
 tweak the source files, in order to produce binaries that match the corresponding original release.
 
-[DOSSYM.ASM]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/INC/DOSSYM.ASM) has been
+[DOSSYM.ASM]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/INC/DOSSYM.ASM) has been
 modified to check for "OEM" and "VER" symbols, and to display messages indicating the current build selection, alerting
 you that the resulting binaries may differ from those produced by the original source code snapshot.
 
@@ -378,12 +379,12 @@ However, you will sometimes see these messages:
     VERSION 2.00 selected 
 
 which means that another file, such as
-[COMSW.ASM]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/COMMAND/COMSW.ASM) or
-[STDSW.ASM]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/MSDOS/STDSW.ASM),
+[COMSW.ASM]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/COMMAND/COMSW.ASM) or
+[STDSW.ASM]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/MSDOS/STDSW.ASM),
 defined **IBM** before including
-[DOSSYM.ASM]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/INC/DOSSYM.ASM).
+[DOSSYM.ASM]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/INC/DOSSYM.ASM).
 And sometimes a file will set **IBM** itself, such as
-[GETSET.ASM]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/src/MSDOS/GETSET.ASM).
+[GETSET.ASM]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/MSDOS/GETSET.ASM).
 The "pre-selected" messages help you catch any build discrepancies due to these oddities.
 
 Other files have been modified here as well, primarily to eliminate extraneous characters that caused warnings or
@@ -401,12 +402,12 @@ More information on [The MASM Question](/blog/2018/11/21/#the-masm-question) is 
 
 A quick note about speed: the typical PC in the early 1980s was still a 4.77Mhz 8088-based machine, so it took
 a considerable amount of time to assemble all the MS-DOS 2.x sources.  If you're impatient, you can load the machine
-on this page with a higher speed multiplier (eg, [multiplier=8](https://www.pcjs.org/software/pcx86/sys/dos/microsoft/2.00/?multiplier=8))
+on this page with a higher speed multiplier (eg, [multiplier=8](?multiplier=8))
 or click the *Speed* button below until it's running at speed that you prefer (and that your browser supports).
 
 In addition, all the build products (**OBJ**, **EXE**, **COM**, **LST**, and **MAP** files) from a successful
 `MK ALL` command have already been saved in the [PCjs repository]({{ site.github.repository_url }}), in the
-[/pcx86/sys/dos/microsoft/2.11/built]({{ site.github.repository_url }}/tree/master/pcx86/sys/dos/microsoft/2.11/built)
+[/pcx86/sys/dos/microsoft/2.11/built]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/bin)
 folder.
 
 {% include machine.html id="ibm5160" %}
