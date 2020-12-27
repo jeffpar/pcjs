@@ -2532,7 +2532,7 @@ class HDC extends Component {
             /*
              * ATA Note: It's unclear just from reading specs whether the original PC AT adapter updated
              * the Drive/Head register to reflect the current head at the end of a command.  Since later adapters
-             * apparently did, and since the risk of always updating it seems mininal, that's what we'll do.
+             * apparently did, and since the risk of always updating it seems minimal, that's what we'll do.
              */
             this.regDrvHd = (this.regDrvHd & ~HDC.ATC.DRVHD.HEAD_MASK) | (drive.bHead & HDC.ATC.DRVHD.HEAD_MASK);
         }
@@ -2911,7 +2911,7 @@ class HDC extends Component {
                     2) 0030:c13d65b0 5a 00 41 00 00 00 00 00-10 00 00 00 00 00 00 00 Z.A.............
 
                 The word at offset 7 specifies a Parameter List Length (aka limit) of 0x0010, so we'll
-                restrict our reponse to that many bytes.
+                restrict our response to that many bytes.
 
                 Sample responses (0x10 bytes):
 
@@ -2933,7 +2933,7 @@ class HDC extends Component {
                     0030:c13d7ba8 5a 00 2a 00 00 00 00 00-1c 00 00 00 00 00 00 00 Z.*.............
 
                 The word at offset 7 specifies a Parameter List Length (aka limit) of 0x001C, so we should
-                restrict our reponse to that many bytes; however, the sample VirtualBox response below didn't
+                restrict our response to that many bytes; however, the sample VirtualBox response below didn't
                 appear to honor that limit (unless I'm misunderstanding how it's interpreted).
 
                 Sample response:
@@ -3618,7 +3618,7 @@ HDC.ATC.IDENTIFY = {
     CUR_HEADS:          0x6E,   // WORD: number of logical heads
     CUR_SECTORS:        0x70,   // WORD: number of logical sectors per track
     CUR_CAPACITY:       0x72,   // LONG: logical capacity in sectors
-    MULTISECT:          0x76,   // BYTE: current mutiple sector count
+    MULTISECT:          0x76,   // BYTE: current multiple sector count
     MULTISECT_VALID:    0x77,   // BYTE: bit0=1 if MULTSECT is valid, 0 if not
     LBA_CAPACITY:       0x78,   // LONG: total number of sectors
     DMA_SINGLE:         0x7C,   // BYTE
