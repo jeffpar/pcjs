@@ -11,7 +11,7 @@ And like all PCjs applications, there's nothing to install.  It runs safely and 
 
 Check out the ALPHA release demo below. 
 
-<iframe width="720" height="512" src="http://bing.com/" style="border-webkit-transform:scale(0.5);-moz-transform-scale(0.5);border:1px solid black;border-radius:15px;overflow:auto;width:100%;background-color:#FAEBD7;"></iframe>
+<iframe width="720" height="512" src="https://bing.com/" style="border-webkit-transform:scale(0.5);-moz-transform-scale(0.5);border:1px solid black;border-radius:15px;overflow:auto;width:100%;background-color:#FAEBD7;"></iframe>
 
 Disclaimer: InternetJS may not be suitable for everyone.  Ask your doctor if InternetJS is right for you.  Side-effects may include:
 
