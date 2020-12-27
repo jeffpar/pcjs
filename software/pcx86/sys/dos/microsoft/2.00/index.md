@@ -407,7 +407,7 @@ or click the *Speed* button below until it's running at speed that you prefer (a
 
 In addition, all the build products (**OBJ**, **EXE**, **COM**, **LST**, and **MAP** files) from a successful
 `MK ALL` command have already been saved in the [PCjs repository]({{ site.github.repository_url }}), in the
-[/pcx86/sys/dos/microsoft/2.11/built]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/bin)
+[/software/pcx86/sys/dos/microsoft/2.11/bin]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/bin)
 folder.
 
 {% include machine.html id="ibm5160" %}
