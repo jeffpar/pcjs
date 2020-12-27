@@ -59,7 +59,7 @@ code contains the string "Ver 2.10"?  Were these sources modified *after* work o
 
 On the other hand, an inspection of CHKDSK.COM in the [COMPAQ MS-DOS 2.11](/software/pcx86/sys/dos/compaq/2.11/) distribution ALSO
 shows the string "Ver 2.30", and in fact, the CHKDSK.COM from COMPAQ MS-DOS 2.11 matches the
-[CHKDSK.COM]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/bin/CHKDSK)
+[CHKDSK.COM]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/bin/CHKDSK)
 built from the MS-DOS 2.x sources *perfectly*.
 
 Go figure.
@@ -196,7 +196,7 @@ or click the *Speed* button below until it's running at speed that you prefer (a
 
 In addition, all the build products (**OBJ**, **EXE**, **COM**, **LST**, and **MAP** files) from a successful
 `MK ALL` command have already been saved in the [PCjs repository]({{ site.github.repository_url }}), in the
-[/pcx86/sys/dos/microsoft/2.11/built]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/src/bin)
+[/pcx86/sys/dos/microsoft/2.11/built]({{ site.github.repository_url }}/tree/master/software/pcx86/sys/dos/microsoft/2.11/bin)
 folder.
 
 {% include machine.html id="ibm5160" %}
