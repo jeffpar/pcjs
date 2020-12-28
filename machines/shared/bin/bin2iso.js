@@ -95,7 +95,7 @@ function convertBinToISO(sInput, sOutput, fDebug, fOverwrite, fVerbose)
         // process.exit(1);
     }
     if (!fOverwrite && fs.existsSync(sOutput)) {
-        printf("warning: output file '%s' aready exists; use --overwrite\n", sOutput);
+        printf("warning: output file '%s' already exists; use --overwrite\n", sOutput);
         process.exit(1);
     }
     try {
@@ -122,7 +122,7 @@ function convertBinToISO(sInput, sOutput, fDebug, fOverwrite, fVerbose)
 }
 
 if (args.argc < 3) {
-    printf("usage: node bin2iso [input file] [output file] [options]\n");
+    printf("usage: node bin2iso.js [input file] [output file] [options]\n");
 } else {
     let argv = args.argv;
     convertBinToISO(argv[1], argv[2], argv['debug'], argv['overwrite'], argv['verbose']);
