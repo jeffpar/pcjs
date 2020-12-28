@@ -1,42 +1,71 @@
 #!/bin/bash
-drive=`diskutil list | grep CD_partition_scheme | sed -E "s|.*(disk[0-9]*)$|\1|"`
-if [ -z "$drive" ]; then
-    echo "unknown CD-ROM drive"
+volume=$1
+if [ -z "$volume" ]; then
+    volume=CD_partition_scheme
+fi
+drive=`diskutil list | grep -e "$volume" | head -n 1 | sed -E "s|.*(disk[0-9]*)$|\1|"`
+if [ -z "${drive}" ]; then
+    echo "cannot find disc"
     exit 1
 fi
-diskID=$1
-next=`cat next`
-if [ -z "$1" ]; then
-    next=`expr $next + 1`
-    disk=$(printf "%03d" $next)
-    diskID=CD${disk}
+next=1
+if [ -f "next" ]; then
+    next=`cat next`
 fi
-diskname=`df | grep -e "/dev/${drive}" | sed -E "s|.*/Volumes/(.*)|MSDN-${diskID}-\1|"`
-if [ -z "$diskname" ]; then
-    diskname=MSDN-${diskID}
-    sudo diskutil unmountDisk /dev/$drive
-    echo Creating $diskname.bin
-    sudo dd if=/dev/${drive} of=$diskname.bin
-    drutil eject
-    if [ -f "${diskname}.iso" ]; then
-        chmod +w $diskname.iso
-    fi
-    node bin2iso.js $diskname.bin $diskname.iso --overwrite
-    if [ $? -eq 0 ]; then
-        chmod a-w $diskname.iso
-        hashiso.sh $diskname.iso
-        rm $diskname.bin
+diskNum=$(printf "%03d" ${next})
+if [ -z "$1" ]; then
+    diskID=CD${diskNum}
+    if [ -b /dev/${drive}s0 ]; then
+        diskDrive=${drive}s0
+    elif [ -b /dev/${drive}s1 ]; then
+        diskDrive=${drive}s1
     else
-        echo error converting $diskname.bin
+        echo "cannot find disc volume"
         exit 1
     fi
 else
-    echo $next>next
-    sudo diskutil unmountDisk /dev/$drive
-    echo Creating $diskname.iso
-#   hdiutil makehybrid -iso -joliet -o ${diskname}.iso /dev/$drive
-    sudo dd if=/dev/${drive}s0 of=$diskname.iso
-    drutil eject
-    chmod a-w $diskname.iso
-    dumpiso.sh $diskname.iso
+    diskID=DVD${diskNum}
+    diskDrive=${drive}
 fi
+diskLabel=PCjs
+if [ -f "label" ]; then
+    diskLabel=`cat label`
+fi
+diskVol=`df | grep -e "/dev/${drive}[^0-9]" | sed -E "s|.*/Volumes/(.*)|\1|"`
+if [ -z "${diskVol}" ]; then
+    diskName=${diskLabel}-${diskID}
+    sudo diskutil unmountDisk /dev/${drive}
+    echo Creating ${diskName}.bin
+    sudo dd if=/dev/${drive} of="${diskName}.bin"
+    sudo chown $USER "${diskName}.bin"
+    if [ ! -f "${diskName}.bin" ]; then
+        exit 1
+    fi
+    drutil eject
+    if [ -f "${diskName}.iso" ]; then
+        chmod +w "${diskName}.iso"
+    fi
+    node $PCJS/modules/shared/bin/bin2iso.js "${diskName}.bin" "${diskName}.iso" --overwrite
+    if [ $? -eq 0 ]; then
+        chmod a-w "${diskName}.iso"
+        rm "${diskName}.bin"
+    else
+        echo error converting ${diskName}.bin
+        exit 1
+    fi
+else
+    diskName=${diskLabel}-${diskID}-${diskVol}
+    sudo diskutil unmountDisk /dev/${drive}
+    echo Creating ${diskName}.iso
+#   hdiutil makehybrid -iso -joliet -o "${diskName}.iso" /dev/${drive}
+    sudo dd if=/dev/${diskDrive} of="${diskName}.iso"
+    sudo chown $USER "${diskName}.iso"
+    if [ ! -f "${diskName}.iso" ]; then
+        exit 1
+    fi
+    drutil eject
+    chmod a-w "${diskName}.iso"
+fi
+next=`expr ${next} + 1`
+echo ${next}>next
+dumpiso.sh "${diskName}.iso"

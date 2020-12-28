@@ -49401,7 +49401,7 @@ Web.onInit(Kbdx86.init);
  *      imposed by the scan doubling logic in the CRTC.
  *
  *      If the Cursor Start register (CRTC register hex 0A) is programmed with a value greater than that in the Cursor End
- *      register (CRTC register hex 0B), then no cursor is displayed.  A split cursor is not possible.
+ *      register (CRTC register hex 0B), then no cursor is displayed.  A split cursor is not possible on the VGA.
  *
  *      In 8-dot character modes, the underline attribute produces a solid line across adjacent characters, as in the IBM
  *      Color/Graphics Monitor Adapter, Monochrome Display Adapter and the Enhanced Graphics Adapter.  In 9-dot modes, the
@@ -53883,8 +53883,8 @@ class VideoX86 extends Component {
      *      CRTC.CURSORLO
      *
      * The top of the cursor starts at CURSCAN, and the bottom is CURSCANB - 1, except that if CURSCAN == CURSCANB
-     * (or more precisely, if CURSCAN == CURSCANB mod 16), then a single scan line is still drawn.  Also, on the EGA,
-     * if CURSCANB < CURSCAN, a split cursor is drawn.
+     * (or more precisely, if CURSCAN == CURSCANB mod 16), then a single scan line is still drawn.  Also, on cards
+     * older than VGA, if CURSCANB < CURSCAN, a split cursor is drawn.
      *
      * Also, at least on the EGA, if CURSCANB is set to a value > MAXSCAN (typically 13 on an EGA), cursor scan line
      * drawing wraps around to zero and does not stop until we reach CURSCAN again.  However, this happens only when
@@ -54947,7 +54947,7 @@ class VideoX86 extends Component {
      * drawCursor(yCursor, cyCursor, xDst, yDst, iFgnd, font, context)
      *
      * We have factored the cursor-drawing code out of updateChar() so that we can call this function multiple times,
-     * in case we have to draw a "split cursor" (something that only happens on the EGA).
+     * in case we have to draw a "split cursor".
      *
      * @this {VideoX86}
      * @param {number} yCursor

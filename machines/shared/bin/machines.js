@@ -99,7 +99,7 @@ function processLaunch(aMachines, fDebug)
  * processMachines(sDir, fLaunch, fDebug)
  *
  * @param {string} sDir
- * @param {boolean} [fLaunch] (true if --lanuch is specified on the command-line)
+ * @param {boolean} [fLaunch] (true if --launch is specified on the command-line)
  * @param {boolean} [fDebug] (true if --debug is specified on the command-line)
  */
 function processMachines(sDir, fLaunch, fDebug)

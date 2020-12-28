@@ -169,7 +169,7 @@ function processText(sID, sTitle, sProductID, sProductName, sProductVersions, sO
 }
 
 if (process.argv.length <= 2) {
-    console.log("usage: node kbgen [input filename]");
+    console.log("usage: node kbgen.js [input filename]");
     process.exit();
 }
 
