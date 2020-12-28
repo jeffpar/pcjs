@@ -1555,6 +1555,66 @@
           ],
           "@author": "Kevin Bales"
         },
+        "1992/dune2": {
+          "@title": "Dune II (1992)",
+          "@media": [
+            {
+              "@title": "Dune II (1.2M Disk 1)",
+              "@diskette": "DUNE2-1200K-DISK1.json",
+              "@format": "PC1200K",
+              "@source": ""
+            },
+            {
+              "@title": "Dune II (1.2M Disk 2)",
+              "@diskette": "DUNE2-1200K-DISK2.json",
+              "@format": "PC1200K",
+              "@source": ""
+            },
+            {
+              "@title": "Dune II (1.2M Disk 3)",
+              "@diskette": "DUNE2-1200K-DISK3.json",
+              "@format": "PC1200K",
+              "@source": ""
+            },
+            {
+              "@title": "Dune II (1.2M Disk 4)",
+              "@diskette": "DUNE2-1200K-DISK4.json",
+              "@format": "PC1200K",
+              "@source": ""
+            },
+            {
+              "@title": "Dune II (1.2M Disk 5)",
+              "@diskette": "DUNE2-1200K-DISK5.json",
+              "@format": "PC1200K",
+              "@source": ""
+            },
+            {
+              "@title": "Dune II (1.44M Disk 1)",
+              "@diskette": "DUNE2-1440K-DISK1.json",
+              "@format": "PC1440K",
+              "@source": ""
+            },
+            {
+              "@title": "Dune II (1.44M Disk 2)",
+              "@diskette": "DUNE2-1440K-DISK2.json",
+              "@format": "PC1440K",
+              "@source": ""
+            },
+            {
+              "@title": "Dune II (1.44M Disk 3)",
+              "@diskette": "DUNE2-1440K-DISK3.json",
+              "@format": "PC1440K",
+              "@source": ""
+            },
+            {
+              "@title": "Dune II (1.44M Disk 4)",
+              "@diskette": "DUNE2-1440K-DISK4.json",
+              "@format": "PC1440K",
+              "@source": ""
+            }
+          ],
+          "@author": "Westwood Studios, Inc."
+        },
         "1982/esuite": {
           "@title": "Executive Suite (1982)",
           "@media": [
