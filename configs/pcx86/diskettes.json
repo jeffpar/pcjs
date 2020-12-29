@@ -1613,7 +1613,17 @@
               "@source": ""
             }
           ],
-          "@author": "Westwood Studios, Inc."
+          "@author": "Westwood Studios, Inc.",
+          "@documents": [
+            {
+              "@title": "Dune II Manual",
+              "@file": "DUNE2.pdf",
+              "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9iNsbYL9bFfNgR8LHhQ?e=QI1BTd",
+              "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%21142747&authkey=AHsHrNq23yynffI&em=2",
+              "@cover": ".jpg",
+              "@source": ""
+            }
+          ]
         },
         "1982/esuite": {
           "@title": "Executive Suite (1982)",

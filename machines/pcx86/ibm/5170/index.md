@@ -73,10 +73,10 @@ In PCjs, the 5170 **Display Switch** is configured with the [ChipSet](/machines/
 property, which you can set to either "mono" (aka "mda") or "color" (aka "cga").  Unlike the Model 5150/5160 DIP
 switches, there is no UI for this switch, so once the machine has been created, it cannot be changed by the user.
 
-Also, there is the "keyboard inhibit switch"; it defaults to UNLOCKED and stays UNLOCKED, since no UI or
+Also, there is the **Keyboard Inhibit Switch**; it defaults to UNLOCKED and stays UNLOCKED, since no UI or
 configuration property is currently provided.
 
-Finally, there is a "manufacturing jumper" that can be installed, enabling additional diagnostic functions
+Finally, there is a **Manufacturing Jumper** that can be installed, enabling additional diagnostic functions
 in the ROM; it defaults to UNINSTALLED and stays UNINSTALLED, since no UI or configuration property is currently
 provided.
 

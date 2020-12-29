@@ -10,7 +10,7 @@ Each ROM chip apparently contains 32Kb of data, but only the upper 16Kb of each 
 	VGA_Wonder_V3-1.02_EVEN.BIN
 	VGA_Wonder_V3-1.02_ODD.BIN
 
-and merge them into a single 64Kb file, using the PCjs [FileDump](/tools/filedump/) utility:
+and merge them into a single 64Kb file, using the PCjs [FileDump](/tools/old/filedump/) utility:
 
 	filedump --file=1988-11-11/archive/VGA_Wonder_V3-1.02_EVEN.BIN --merge=1988-11-11/archive/VGA_Wonder_V3-1.02_ODD.BIN --format=rom --output=1988-11-11/archive/VGA_Wonder_V3-1.02.rom
 

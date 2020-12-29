@@ -34,7 +34,7 @@ computers.
 
 > To your system, the board looks like an EGA adapter--that is, you run the appropriate setup procedure for
 setting CMOS memory as if it were an EGA card. The two jumpers on the board (its only hardware adjustments)
-alter its base address for matchng unusual systems and ordinarily require no change.
+alter its base address for matching unusual systems and ordinarily require no change.
 
 > In testing, the Compaq Board proved itself functionally compatible with the IBM PS/2 Display Adapter but
 faster, because of its 16-bit interface. On an ordinary AT, it nearly achieved the display speeds of the
@@ -48,7 +48,7 @@ for mating a VGA-style monitor and VGA graphics to your AT.
 
 A copy of the board's [VGA ROM BIOS](109360-001/COMPAQ-VGA-1988-05-18.json) was created by [dumping](/machines/pcx86/compaq/deskpro386/rom/#dumping-the-roms)
 the contents of each EPROM chip to a *.hex* file, and then merging the *.hex* files with the following
-[FileDump]({{ site.github.pages }}/tools/filedump/) command:
+[FileDump]({{ site.github.pages }}/tools/old/filedump/) command:
 
 	cd 109360-001
 	filedump --file=109793-002.hex --merge=109794-002.hex --output=COMPAQ-VGA-1988-05-18.json

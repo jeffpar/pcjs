@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/drives/10mb/
 ---
 
 PCjs includes 10Mb drives in selected IBM PC XT, IBM PC AT, and COMPAQ DeskPro machines,
-because all machines support [drive types](../) that use the following drive parameters:
+because all machines support a 10Mb [Drive Type](../) with the following drive parameters:
 
     306 cylinders
     4 heads
@@ -26,15 +26,11 @@ After formatting, PC DOS 2.00 reports:
 	10592256 bytes total disk space
 	10592256 bytes available on disk
 
-As explained in our [DiskImage source code](/machines/pcx86/modules/diskinfo.js), in its description of the 10Mb
-BPB, a 10Mb "Type 3" PC XT fixed disk contains:
+As explained in our [DiskImage source code](/machines/pcx86/modules/diskinfo.js), in the BPB descriptions,
+a 10Mb "Type 3" PC XT fixed disk uses drive parameters of 306 cylinders, 4 heads, and 17 sectors/track,
+for a total of 20808 sectors or 10,653,696 bytes.
 
-	306 cylinders
-	4 heads
-	17 sectors/track
-
-for a total of 20808 sectors or 10,653,696 bytes.  However, as page 1-179 of the PC XT Technical Reference Manual
-(April 1983) notes:
+However, as page 1-179 of the PC XT Technical Reference Manual (April 1983) notes:
 
 	WARNING: The last cylinder on the fixed disk drive is reserved for diagnostic use.
     Diagnostic write tests will destroy any data on this cylinder.
@@ -49,7 +45,7 @@ the end of the disk.  In addition, the first sector of the disk is reserved for 
 are a total of 69 reserved sectors.  20808 - 69 = 20739 sectors (0x5103), which is exactly what's stored in the
 "total sectors" field of the disk's BPB, yielding a total volume size of 10,618,368 bytes.
 
-However, that 69-sector overhead is not the end of the story.  There is also overhead incurred by the FAT file system,
+But that 69-sector overhead is not the end of the story.  There is also overhead incurred by the FAT file system,
 which, in this case, consists of:
 
     DOS Boot sector: 1
