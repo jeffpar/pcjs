@@ -6,7 +6,7 @@ This Paradise VGA board was manufactured in 1988 and sold by Western Digital Cor
 
 A copy of the board's [ROM BIOS](1988-05-23.json) was created by [dumping](/machines/pcx86/compaq/deskpro386/rom/#dumping-the-roms)
 the contents of each of the board's two M27128AZB PROMs to a *.hex* file, and then merging the *.hex* files with the following
-[FileDump](/tools/filedump/) command:
+[FileDump](/tools/old/filedump/) command:
 
 	filedump --file=62-003084-060.hex --merge=62-003085-060.hex --output=1988-05-23.json
 

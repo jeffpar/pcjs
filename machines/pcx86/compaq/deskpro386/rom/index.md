@@ -18,11 +18,12 @@ able to add the `Rev K.2` ROM.
 More recently (January 2018), I discovered that I still had a copy of the 1986 `Rev F` ROM, which I had made on
 April 22, 1987, using one of the early DeskPro 386 machines that Microsoft had purchased for the OS/2 development team.
 The only downside of my `Rev F` ROM image is that it was dumped using the DOS `DEBUG` utility, since I didn't have
-ROM reader hardware in those days.  Fortunately, since I wasn't sure how large the ROM actually was, I had dumped the
-entire 64Kb from F000:0000 through F000:FFFF.  As it turns out, that entire address range is actually write-protected
-RAM (since RAM provided faster 32-bit access), where the first 32Kb contained a modified copy of the second.  For example,
-the first 32Kb contains some data structures that are updated by COMPAQ utilities such as `CEMM` to record "Built-in Memory"
-allocations.
+ROM reader hardware in those days.
+
+Fortunately, since I wasn't sure how large the ROM actually was, I had dumped the entire 64Kb from F000:0000 through
+F000:FFFF.  As it turns out, that entire address range is actually write-protected RAM (since RAM provided faster
+32-bit access), where the first 32Kb contained a modified copy of the second.  For example, the first 32Kb contains
+some data structures that are updated by COMPAQ utilities such as `CEMM` to record "Built-in Memory" allocations.
 
 Sure enough, attempting to use the [first 32Kb](1986-09-04/1986-09-04-LO.json) as a DeskPro 386 ROM generated a
 "ROM Error", no doubt due to a checksum mismatch.  However, the [second 32Kb](1986-09-04/1986-09-04-HI.json) appeared
@@ -53,7 +54,7 @@ earliest (if not *the* earliest) ROMs commercially available for this line of CO
 	M.1  109592-004  109591-004
 	N.1  109592-005  109591-005  32Kb  1989-04-14	
 
-[1988-01-28.json](1988-01-28/1988-01-28.json) was created with the following [FileDump]({{ site.github.pages }}/tools/filedump/) command:
+[1988-01-28.json](1988-01-28/1988-01-28.json) was created with the following [FileDump]({{ site.github.pages }}/tools/old/filedump/) command:
 
 	cd 1988-01-28
 	filedump --file=109592-001.hex --merge=109591-001.hex --output=1988-01-28.json
@@ -69,8 +70,7 @@ from the two 16Kb BIN files provided by [Al Kossow](http://www.vintage-computer.
 	filedump --file=archive/109592-005.U11.bin --merge=archive/109591-005.U13.bin --output=archive/1989-04-14.rom --format=rom
 	filedump --file=archive/1989-04-14.rom --output=1989-04-14.json
 
-Dumping the ROMs
-----------------
+## Dumping the ROMs
 
 The *.hex* files for the 1988-01-28 DeskPro ROM were produced by running
 [eeprom_read](http://github.com/phooky/PROM/blob/master/tools/eeprom_read/eeprom_read.pde)
@@ -90,12 +90,11 @@ INPUT LOW VOLTAGE, while the /PGM should be connected to INPUT HIGH VOLTAGE.  So
 of GND, and the dump worked perfectly.  The NYC Resistor article implied that every *active low* pin should be
 connected to GND, but apparently there are exceptions to that general rule.
 
-Recreating ROM Source Code
---------------------------
+## Recreating ROM Source Code
 
 In the current directory, an original ROM can be regenerated from the JSON-encoded file:
 
-	cd 1988-01-28
+  cd 1988-01-28
 	filedump --file=1988-01-28.json --output=1988-01-28.rom --format=rom
 
 The ROM can then be fed into NDISASM, the disassembler included with NASM:
@@ -106,9 +105,9 @@ The `-o0x8000` argument is required to "org" the file at the proper starting add
 are optional; they simply establish a few sync points within the ROM image that save a little cleanup effort, by
 preventing disassembly in the middle of instructions.
 
-Next, the PCjs [TextOut]({{ site.github.pages }}/tools/textout/) command, with the *--nasm* option, prepares the code for reassembly:
+Next, the PCjs [TextOut]({{ site.github.pages }}/tools/old/textout/) command, with the *--nasm* option, prepares the code for reassembly:
 
-	node /tools/textout/bin/textout --file=1988-01-28.asm --nasm > temp.asm
+	node /tools/old/textout/bin/textout --file=1988-01-28.asm --nasm > temp.asm
 	mv temp.asm 1988-01-28.asm
 
 The result, [1988-01-28.asm](1988-01-28/1988-01-28.asm), after a small amount of manual cleanup, can now be
@@ -192,7 +191,7 @@ of obfuscation -- until I saw this snippet of COMPAQ ROM source code and we were
     ; Public Declarations
     ;
       public  _CMESG      ; ...So it shows up in the link map
-      PUBLIC  _INIT     ; CRTL-ALT-DEL entry point
+      PUBLIC  _INIT     ; CTRL-ALT-DEL entry point
       public  COMPAQ    ; For general use
     ;
       extrn bas_main:far    ; BAS_MAIN Entry to BASIC intercept

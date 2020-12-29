@@ -43,7 +43,14 @@
       {%- elsif data['@products'] -%}
         {%- assign data = data['@products'][part] -%}
       {%- elsif data['@versions'] -%}
-        {%- assign data = data['@versions'][part] -%}
+        {%- assign tmp = data['@versions'][part] -%}
+        {%- if tmp -%}
+          {%- assign data = tmp -%}
+        {%- else -%}
+          {%- assign i = forloop.index -%}
+          {%- capture tmp -%}{{ part }}/{{ path_parts[i] }}{%- endcapture -%}
+          {%- assign data = data['@versions'][tmp] -%}
+        {%- endif -%}
       {%- else %}
         {%- assign data = data['@instances'][part] -%}
         {%- if data['@type'] -%}
@@ -107,5 +114,5 @@
 {%- endfor -%}
 {%- if docs_exist == false %}
   <h3 id="{{ group_id }}">{{ title }}</h3>
-  <p>No documents available for <strong>{{ path }}/</strong></p>
+  <p>No documents available for <strong>{{ path }}</strong></p>
 {%- endif -%}
