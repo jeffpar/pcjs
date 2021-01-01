@@ -1,7 +1,7 @@
 /**
  * @fileoverview PCjs compile-time definitions
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2020 Jeff Parsons
+ * @copyright © 2012-2021 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -14,7 +14,7 @@
  */
 var APPVERSION = "0.00";                // this @define is overridden by the Closure Compiler with the version in machines.json
 
-var COPYRIGHT = "Copyright © 2012-2020 Jeff Parsons <Jeff@pcjs.org>";
+var COPYRIGHT = "Copyright © 2012-2021 Jeff Parsons <Jeff@pcjs.org>";
 
 var LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
 

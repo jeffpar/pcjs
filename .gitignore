@@ -4,6 +4,7 @@
 .DS_Store
 .history
 .sass-cache
+Thumbs.db
 archive
 private
 private.json
