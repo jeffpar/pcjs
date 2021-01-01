@@ -2,7 +2,7 @@
 /**
  * @fileoverview Tool for converting bin file to JSON
  * @author <a href="mailto:Jeff@pcjs.org">Jeff Parsons</a>
- * @copyright © 2012-2020 Jeff Parsons
+ * @copyright © 2012-2021 Jeff Parsons
  * @suppress {missingProperties}
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
