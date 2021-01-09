@@ -978,7 +978,7 @@
     "@instances": {
       "life/color": {
         "@title": "Game of Life",
-        "@redirect_from": "/devices/leds/life/colorss"
+        "@redirect_from": "/devices/leds/life/colors"
       },
       "lite-brite": {
         "@title": "Lite-Brite",
@@ -1006,7 +1006,7 @@
           {
             "@title": "OSI C1P Graphics Manual",
             "@file": "OSI_C1P_Character_Graphics_Reference_Manual.pdf",
-            "@link": "ttps://1drv.ms/b/s!ArcO_mFRe1Z9gt4M_mo_3EnvSCoo_Q?e=Ft2NMa",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gt4M_mo_3EnvSCoo_Q?e=Ft2NMa",
             "@cover": ".jpg",
             "@source": ""
           },
