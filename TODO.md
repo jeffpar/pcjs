@@ -23,7 +23,6 @@
 ### Software Enhancements
 
   - Allow PCx86 to mount .json disk images (ie, not just .img disk images)
-  - PCx86 debugger should recognize certain BD conventions
 
 ### Bugs
 
