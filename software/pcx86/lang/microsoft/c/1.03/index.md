@@ -11,10 +11,8 @@ machines:
     autoType: $date\r$time\r
     autoGen: true
     autoMount:
-      A:
-        name: "None"
-      B:
-        name: "MS C 1.03 Beta (Disk 1)"
+      A: "None"
+      B: "MS C 1.03 Beta (Disk 1)"
 ---
 
 {% include machine.html id="ibm5160" %}

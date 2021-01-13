@@ -550,6 +550,42 @@
           }
         }
       },
+      "sc1": {
+        "@title": "SuperCalc",
+        "@versions": {
+          "1.10": {
+            "@title": "SuperCalc 1.10",
+            "@hardware": {
+              "options": "PC DOS 1.10"
+            },
+            "@media": [
+              {
+                "@title": "SuperCalc 1.10",
+                "@diskette": "SC1_V110.json",
+                "@format": "PC160K",
+                "@kryoflux": true,
+                "@photo": ".png"
+              }
+            ],
+            "@documents": [
+              {
+                "@title": "SuperCalc 1.10 Manual",
+                "@file": "SuperCalc-1981.png",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9iMMVOsUIxq7s1s6Mog?e=0Nyc1a",
+                "@cover": ".png",
+                "@source": "PCjs"
+              },
+              {
+                "@title": "SuperCalc 1.10 Addendum",
+                "@file": "SuperCalc-Addendum.png",
+                "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9iMMWJlszoT0Y5LL21g?e=fgkSWn",
+                "@cover": ".png",
+                "@source": "PCjs"
+              }
+            ]
+          }
+        }
+      },
       "sc2": {
         "@title": "SuperCalc2",
         "@versions": {
