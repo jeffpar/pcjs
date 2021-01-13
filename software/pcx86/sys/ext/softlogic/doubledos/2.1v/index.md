@@ -3,6 +3,7 @@ layout: page
 title: DoubleDOS 2.1V
 permalink: /software/pcx86/sys/ext/softlogic/doubledos/2.1v/
 redirect_from: /disks/pcx86/tools/softlogic/doubledos/2.1v/
+preview: https://diskettes.pcjs.org/pcx86/sys/ext/softlogic/doubledos/2.1v/DOUBLEDOS-21V-DISK1.jpg
 machines:
   - id: ibm5170
     type: pcx86
@@ -13,6 +14,13 @@ machines:
         name: "DoubleDOS 2.1V (Disk 1)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
+
+NOTE: DoubleDOS was distributed on a copy-protected diskette.  We have created a Kryoflux copy
+of the diskette in our possession (shown below), and it's clear that track 16 has some unusual characteristics,
+but until we have time to analyze the diskette and software more closely, it will not operate in the PCx86
+emulator as intended.
+
+![DOUBLEDOS-21V-DISK1-HxC](DOUBLEDOS-21V-DISK1-HxC.png)
 
 {% include machine.html id="ibm5170" %}
 
