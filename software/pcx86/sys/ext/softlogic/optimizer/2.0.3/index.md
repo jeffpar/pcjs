@@ -3,6 +3,7 @@ layout: page
 title: Disk Optimizer 2.0.3
 permalink: /software/pcx86/sys/ext/softlogic/optimizer/2.0.3/
 redirect_from: /disks/pcx86/tools/softlogic/optimizer/2.0.3/
+preview: https://diskettes.pcjs.org/pcx86/sys/ext/softlogic/optimizer/2.0.3/DISK-OPTIMIZER.jpg
 machines:
   - id: ibm5170
     type: pcx86
@@ -14,7 +15,12 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-![Disk Optimizer Diskette]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/optimizer/2.0.3/DISK-OPTIMIZER.jpg)
+NOTE: Disk Optimizer was distributed on a copy-protected diskette.  We have created a Kryoflux copy
+of the diskette in our possession (shown below), and it's clear that track 16 has some unusual characteristics,
+but until we have time to analyze the diskette and software more closely, it will not operate in the PCx86
+emulator as intended.
+
+![DISK-OPTIMIZER-HxC](DISK-OPTIMIZER-HxC.png)
 
 {% include machine.html id="ibm5170" %}
 
@@ -41,3 +47,5 @@ machines:
     OPTIMIZE COM      2016   4-18-85  10:01a
            16 file(s)     143015 bytes
                           211968 bytes free
+
+![Disk Optimizer Diskette]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/optimizer/2.0.3/DISK-OPTIMIZER.jpg)

@@ -3,6 +3,7 @@ layout: page
 title: Software Carousel 2.0.3
 permalink: /software/pcx86/sys/ext/softlogic/carousel/2.0.3/
 redirect_from: /disks/pcx86/tools/softlogic/carousel/2.0.3/
+preview: https://diskettes.pcjs.org/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL.jpg
 machines:
   - id: ibm5170
     type: pcx86
@@ -14,7 +15,12 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-![Software Carousel Diskette]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL.jpg)
+NOTE: Software Carousel was distributed on a copy-protected diskette.  We have created a Kryoflux copy
+of the diskette in our possession (shown below), and it's clear that track 16 has some unusual characteristics,
+but until we have time to analyze the diskette and software more closely, it will not operate in the PCx86
+emulator as intended.
+
+![SOFTWARE-CAROUSEL-HxC](SOFTWARE-CAROUSEL-HxC.png)
 
 {% include machine.html id="ibm5170" %}
 
@@ -56,3 +62,5 @@ machines:
     Total files listed:
            24 file(s)     195978 bytes
                           155648 bytes free
+
+![Software Carousel Diskette]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL.jpg)
