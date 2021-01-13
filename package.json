@@ -34,7 +34,7 @@
     "eslint": "^6.8.0",
     "glob": "^7.1.6",
     "google-closure-compiler": "^20200112.0.0",
-    "got": "^11.8.0",
+    "got": "^11.8.1",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-foreach": "^0.1.0",
@@ -46,6 +46,7 @@
     "path": "^0.12.7",
     "pdf-parse": "^1.1.1",
     "replace": "^1.2.0",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.4.23",
+    "yargs-parser": "^20.2.4"
   }
 }
