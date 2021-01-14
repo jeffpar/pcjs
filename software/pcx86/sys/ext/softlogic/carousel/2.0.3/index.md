@@ -8,10 +8,9 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
-    autoGen: true
     autoMount:
-      B:
-        name: "Software Carousel 2.0.3"
+      A: "PC DOS 3.00 (Disk 1)"
+      B: "Software Carousel 2.0.3"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
@@ -73,7 +72,7 @@ emulator as intended.
     Size:08192 (ID:0x06)
     DataMark:0xFB
     Head CRC:0x914C (Ok)
-    Data CRC:0x1004 (BAD CRC!)
+    Data CRC:0x1004 (BAD)
     Start Sector cell:2704
     Start Sector Data cell:3408
     End Sector cell:34643
@@ -1112,7 +1111,7 @@ emulator as intended.
     Size:01024 (ID:0x03)
     DataMark:0xFB
     Head CRC:0x94BA (Ok)
-    Data CRC:0x6C39 (BAD CRC!)
+    Data CRC:0x6C39 (BAD)
     Start Sector cell:14224
     Start Sector Data cell:14928
     End Sector cell:31408
@@ -1255,7 +1254,7 @@ emulator as intended.
     Size:01024 (ID:0x03)
     DataMark:0xFB
     Head CRC:0xA78B (Ok)
-    Data CRC:0x6EF9 (BAD CRC!)
+    Data CRC:0x6EF9 (BAD)
     Start Sector cell:25744
     Start Sector Data cell:26448
     End Sector cell:42928
@@ -1398,7 +1397,7 @@ emulator as intended.
     Size:01024 (ID:0x03)
     DataMark:0xFB
     Head CRC:0x3E1C (Ok)
-    Data CRC:0xA19A (BAD CRC!)
+    Data CRC:0xA19A (BAD)
     Start Sector cell:37264
     Start Sector Data cell:37968
     End Sector cell:54448
@@ -1541,7 +1540,7 @@ emulator as intended.
     Size:01024 (ID:0x03)
     DataMark:0xFB
     Head CRC:0x0D2D (Ok)
-    Data CRC:0x67B6 (BAD CRC!)
+    Data CRC:0x67B6 (BAD)
     Start Sector cell:48784
     Start Sector Data cell:49488
     End Sector cell:65968
@@ -1682,7 +1681,7 @@ emulator as intended.
     Size:01024 (ID:0x03)
     DataMark:0xFB
     Head CRC:0x587E (Ok)
-    Data CRC:0xD4E9 (BAD CRC!)
+    Data CRC:0xD4E9 (BAD)
     Start Sector cell:60304
     Start Sector Data cell:61008
     End Sector cell:77488
@@ -1825,7 +1824,7 @@ emulator as intended.
     Size:01024 (ID:0x03)
     DataMark:0xFB
     Head CRC:0x6B4F (Ok)
-    Data CRC:0x5DF9 (BAD CRC!)
+    Data CRC:0x5DF9 (BAD)
     Start Sector cell:71824
     Start Sector Data cell:72528
     End Sector cell:89008
@@ -1968,7 +1967,7 @@ emulator as intended.
     Size:01024 (ID:0x03)
     DataMark:0xFB
     Head CRC:0x7B71 (Ok)
-    Data CRC:0x4242 (BAD CRC!)
+    Data CRC:0x4242 (BAD)
     Start Sector cell:83344
     Start Sector Data cell:84048
     End Sector cell:595
