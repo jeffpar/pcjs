@@ -1610,7 +1610,7 @@ class Disk extends Component {
                             while (true) {
                                 if (++j >= track.length) j = 0;
                                 sectorNext = track[j];
-                                if (sectorNext == sector) break;
+                                if (!sectorNext || sectorNext == sector) break;
                                 if (sectorNext[Disk.SECTOR.ID] == iSector) {
                                     sector = sectorNext;
                                     i = j;

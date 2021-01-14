@@ -62702,7 +62702,7 @@ class Disk extends Component {
                             while (true) {
                                 if (++j >= track.length) j = 0;
                                 sectorNext = track[j];
-                                if (sectorNext == sector) break;
+                                if (!sectorNext || sectorNext == sector) break;
                                 if (sectorNext[Disk.SECTOR.ID] == iSector) {
                                     sector = sectorNext;
                                     i = j;
@@ -65574,6 +65574,7 @@ class FDC extends Component {
             /* fall through */
 
         case FDC.REG_DATA.CMD.READ_DATA:                    // 0x06
+        case FDC.REG_DATA.CMD.READ_TRACK:                   // 0x02
             if (!ledState) ledState = Panel.STATE.READ;
             bDrive = this.popCmd(FDC.TERMS.DS);             // Drive Select
             bHead = (bDrive >> 2) & 0x1;                    // isolate HD (Head Select) bits
@@ -65594,7 +65595,7 @@ class FDC extends Component {
             this.popCmd(FDC.TERMS.GPL);                     // GPL (spacing between sectors, excluding VCO Sync Field; 3)
             this.popCmd(FDC.TERMS.DTL);                     // DTL (when N is 0, DTL stands for the data length to read out or write into the sector)
             this.setLED(ledState);
-            if (bCmdMasked == FDC.REG_DATA.CMD.READ_DATA) {
+            if (bCmdMasked != FDC.REG_DATA.CMD.WRITE_DATA) {
                 fIRQ = this.doRead(drive);
             } else {
                 fIRQ = this.doWrite(drive);
@@ -66536,6 +66537,7 @@ FDC.REG_CONTROL = {
  */
 if (DEBUG) {
     FDC.CMDS = {
+        READ_TRACK:   "READ TRACK",
         SPECIFY:      "SPECIFY",
         SENSE_DRIVE:  "SENSE DRIVE",
         WRITE_DATA:   "WRITE DATA",
@@ -66551,6 +66553,7 @@ if (DEBUG) {
 }
 
 FDC.aCmdInfo = {
+    0x02: {cbReq: 9, cbRes: 7, name: FDC.CMDS.READ_TRACK},
     0x03: {cbReq: 3, cbRes: 0, name: FDC.CMDS.SPECIFY},
     0x04: {cbReq: 2, cbRes: 1, name: FDC.CMDS.SENSE_DRIVE},
     0x05: {cbReq: 9, cbRes: 7, name: FDC.CMDS.WRITE_DATA},
