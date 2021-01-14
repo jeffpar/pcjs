@@ -3254,9 +3254,9 @@ export default class DiskInfo {
                     let length = +metaData[4];
                     let dataMark = parseInt(metaData[5], 16);
                     let headCRC = parseInt(metaData[6], 16);
-                    let headError = metaData[7].toLowerCase() != "ok";
+                    let headError = (metaData[7] != "Ok");
                     let dataCRC = parseInt(metaData[8], 16)
-                    let dataError = (metaData[9].toLowerCase() == "ok")? 0 : -1;
+                    let dataError = (metaData[9] != "BAD CRC!"? 0 : -1);
                     let matchData, reData = /([0-9A-F]+)\|([^|]*)\|/g;
                     while ((matchData = reData.exec(aSuppData[i]))) {
                         let shift = 0, dw = 0;
