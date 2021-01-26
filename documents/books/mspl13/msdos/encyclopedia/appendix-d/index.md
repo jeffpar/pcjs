@@ -14,38 +14,38 @@ redirect_from: /pubs/pc/reference/microsoft/mspl13/msdos/encyclopedia/appendix-d
 ╓┌──────────────┌────────┌─────────┌────────┌────────────────────────────────╖
     Char      Dec#     Hex#      Control
     ──────────────────────────────────────────────────────────────────
-                0       00        NUL      (Null)
-               1       01        SOH      (Start of heading)
-               2       02        STX      (Start of text)
-               3       03        ETX      (End of text)
-               4       04        EOT      (End of transmission)
-               5       05        ENQ      (Enquiry)
-               6       06        ACK      (Acknowledge)
-               7       07        BEL      (Bell)
-               8       08        BS       (Backspace)
-                9       09        HT       (Horizontal tab)
-                10       0A        LF       (Linefeed)
-                11       0B        VT       (Vertical tab)
-                12       0C        FF       (Formfeed)
-                13       0D        CR       (Carriage return)
-              14       0E        SO       (Shift out)
-              15       0F        SI       (Shift in)
-              16       10        DLE      (Data link escape)
-              17       11        DC1      (Device control 1)
-              18       12        DC2      (Device control 2)
-              19       13        DC3      (Device control 3)
-              20       14        DC4      (Device control 4)
-              21       15        NAK      (Negative acknowledge)
-              22       16        SYN      (Synchronous idle)
-              23       17        ETB      (End transmission block)
-              24       18        CAN      (Cancel)
-              25       19        EM       (End of medium)
-              26       1A        SUB      (Substitute)
-              27       1B        ESC      (Escape)
-              28       1C        FS       (File separator)
-              29       1D        GS       (Group separator)
-              30       1E        RS       (Record separator)
-                31       1F        US       (Unit separator)
+               0       00        NUL      (Null)
+               1       01        SOH      (Start of heading)
+               2       02        STX      (Start of text)
+               3       03        ETX      (End of text)
+               4       04        EOT      (End of transmission)
+               5       05        ENQ      (Enquiry)
+               6       06        ACK      (Acknowledge)
+               7       07        BEL      (Bell)
+               8       08        BS       (Backspace)
+               9       09        HT       (Horizontal tab)
+              10       0A        LF       (Linefeed)
+              11       0B        VT       (Vertical tab)
+              12       0C        FF       (Formfeed)
+              13       0D        CR       (Carriage return)
+              14       0E        SO       (Shift out)
+              15       0F        SI       (Shift in)
+              16       10        DLE      (Data link escape)
+              17       11        DC1      (Device control 1)
+              18       12        DC2      (Device control 2)
+              19       13        DC3      (Device control 3)
+              20       14        DC4      (Device control 4)
+              21       15        NAK      (Negative acknowledge)
+              22       16        SYN      (Synchronous idle)
+              23       17        ETB      (End transmission block)
+              24       18        CAN      (Cancel)
+              25       19        EM       (End of medium)
+              26       1A        SUB      (Substitute)
+              27       1B        ESC      (Escape)
+              28       1C        FS       (File separator)
+              29       1D        GS       (Group separator)
+              30       1E        RS       (Record separator)
+              31       1F        US       (Unit separator)
     <space>   32       20
     !         33       21
     "         34       22
@@ -141,7 +141,7 @@ redirect_from: /pubs/pc/reference/microsoft/mspl13/msdos/encyclopedia/appendix-d
     |        124       7C
     }        125       7D
     ~        126       7E
-             127       7F        DEL
+             127       7F        DEL
     Ç        128       80
     ü        129       81
     é        130       82
@@ -238,7 +238,7 @@ redirect_from: /pubs/pc/reference/microsoft/mspl13/msdos/encyclopedia/appendix-d
     ▌        221       DD
     ▐        222       DE
     ▀        223       DF
-                224       E0
+             224       E0
     ß        225       E1
     Γ        226       E2
     π        227       E3
