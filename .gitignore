@@ -5,6 +5,7 @@
 .history
 .sass-cache
 Thumbs.db
+Gemfile.lock
 archive
 private
 private.json
