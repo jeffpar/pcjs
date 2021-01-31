@@ -3,7 +3,7 @@
 	"tasks": [
     {
       "type": "gulp",
-      "label": "gulp: watch",
+      "label": "gulp watch",
       "task": "watch",
       "problemMatcher": [],
       "group": {
@@ -24,18 +24,18 @@
     },
     {
       "type": "shell",
-      "label": "bundle: serve uncompiled",
-      "command": "bundle exec jekyll serve --config _config.yml,_developer.yml",
+      "label": "bundle serve",
+      "command": "bundle exec jekyll serve --config _config.yml",
+      "problemMatcher": []
+    },
+    {
+      "type": "shell",
+      "label": "bundle serve uncompiled",
+      "command": "bundle exec jekyll serve --host=0.0.0.0 --config _config.yml,_developer.yml",
       "problemMatcher": [],
       "runOptions": {
         "runOn": "folderOpen"
       }
-    },
-    {
-      "type": "shell",
-      "label": "bundle: serve",
-      "command": "bundle exec jekyll serve --config _config.yml",
-      "problemMatcher": []
     }
   ]
 }
