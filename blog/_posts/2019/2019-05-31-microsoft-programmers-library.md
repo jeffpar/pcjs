@@ -97,11 +97,11 @@ and if you run it from Windows, you will see the following message:
 
     Your pop-up program has been loaded and you may activate it as you would
     normally.  When you have finished using this pop-up program, exit it and
-    press Ctrl+C to return the Shell.
+    press Ctrl+C to return to the Shell.
 
 which you gives you the opportunity to activate the utility before control returns to Windows.
 
-The default activation key sequence is `LEFT SHIFT` + `ALT`.  Press and then release both those keys
+The default activation key sequence is `LEFT SHIFT` + `ALT`.  Press and then release both keys
 to activate the library's menus.
 
 {% include machine.html id="ibm-5170-vga" %}
