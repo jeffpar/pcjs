@@ -88,6 +88,22 @@ The machine is using the same hard disk image created for [Microsoft Windows 3.1
 The disk's CONFIG.SYS was modified to load a real-mode ATAPI CD-ROM driver, and its AUTOEXEC.BAT loads
 the Microsoft CD-ROM Extensions (MSCDEX.EXE).
 
+### Running Microsoft Programmer's Library
+
+After the software has been installed on the hard disk, run MSL.EXE to load it.  It was designed
+as a "terminate-and-stay-resident" (TSR) utility, which means after it loads, it returns control to
+the shell.  In other words, if you run it from COMMAND.COM, control will return to the command prompt,
+and if you run it from Windows, you will see the following message:
+
+    Your pop-up program has been loaded and you may activate it as you would
+    normally.  When you have finished using this pop-up program, exit it and
+    press Ctrl+C to return the Shell.
+
+which you gives you the opportunity to activate the utility before control returns to Windows.
+
+The default activation key sequence is `LEFT SHIFT` + `ALT`.  Press and then release both those keys
+to activate the library's menus.
+
 {% include machine.html id="ibm-5170-vga" %}
 
 ![Microsoft Programmer's Library 1.0 - Box Front](https://cds002.pcjs.org/microsoft/tools/MSPL10/MSPL10-Box-Front.png)
