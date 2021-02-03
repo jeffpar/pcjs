@@ -23,12 +23,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/old/diskdump/bin/diskdump",
       "args": [
-        "--disk=disk1.psi",
+        "--disk=gamedisks/pcx86/game/other/1984/kings_quest1/archive/disk1.psi",
         "--format=json",
         "--output=disk1.json",
         "--overwrite"
       ],
-      "cwd": "${workspaceFolder}/gamedisks/pcx86/game/other/1984/kings_quest1/archive",
+      "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
       "console": "internalConsole",
       "outFiles": [
@@ -39,16 +39,16 @@
       "name": "Node: diskimage.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/pcjs/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
         "--disk",
-        "archive/QNX12-UTILS.img",
+        "diskettes/pcx86/sys/unix/qnx/1.2/archive/QNX12-UTILS.img",
         "--format",
         "json",
         "--output",
         "QNX12-UTILS.json"
       ],
-      "cwd": "${workspaceFolder}/diskettes/pcx86/sys/unix/qnx/1.2",
+      "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
       "console": "internalConsole",
       "outFiles": [
