@@ -18,7 +18,7 @@
       ]
     },
     {
-      "name": "Node: diskdump.js",
+      "name": "Node: diskdump.js (deprecated; use diskimage.js)",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/old/diskdump/bin/diskdump",
@@ -43,8 +43,6 @@
       "args": [
         "--disk",
         "diskettes/pcx86/sys/unix/qnx/1.2/archive/QNX12-UTILS.img",
-        "--format",
-        "json",
         "--output",
         "QNX12-UTILS.json"
       ],
