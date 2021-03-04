@@ -15,7 +15,7 @@
     "files.trimFinalNewlines": true
   },
   "[markdown]": {
-    "editor.insertSpaces": false,
+    "editor.insertSpaces": true,
     "editor.tabSize": 4,
     "files.trimTrailingWhitespace": false,
     "files.insertFinalNewline": true,
