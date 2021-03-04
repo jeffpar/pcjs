@@ -7,15 +7,24 @@ machines:
   - id: deskpro386
     type: pcx86
     config: /configs/pcx86/machine/compaq/deskpro386/vga/4096kb/machine.xml
+    autoMount:
+        A: "MS-DOS 5.00 (720K Disk 1)"
+        B: "None"
 ---
 
-The PCjs Project was first to unearth this pre-release version of Windows 95 since its *extremely* limited
+PCjs was the first to unearth this pre-release version of Windows 95 since its *extremely* limited
 test release back in June 1995.  It was one of the last (if not *the* last) test versions produced before
 [Windows 95](/software/pcx86/sys/windows/win95/4.00.950/) was released to manufacturing on July 14, 1995 and went on sale
 at midnight on August 24, 1995.
 
 This pre-release is an upgrade version consisting of 13 1.44Mb diskettes.  You can use the machine below to test the
-installation process.  Start with "Windows 95 (Build 499 Disk 1)" in Drive A.
+installation process.  For example:
+
+- From the MS-DOS 5.00 Setup screen, press F3 and then Y to exit.
+- Run FDISK, create a primary DOS partition, restart, and exit again.
+- Run FORMAT C: and press Y to proceed with the format.
+- Select "Windows 95 (Build 499 Disk 01)" for drive A: and click Load.
+- Run SETUP.
 
 {% include machine.html id="deskpro386" %}
 

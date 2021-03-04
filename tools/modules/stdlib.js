@@ -51,10 +51,10 @@ export default class StdLib {
      * If there are multiple arguments preceded by the same double-hyphen switch, then the argv entry
      * becomes an array (eg, argv["option"] == ["value1","value2"]).
      *
-     * If a double-hypen switch is followed by another switch (or by nothing, if it's the last argument),
+     * If a double-hyphen switch is followed by another switch (or by nothing, if it's the last argument),
      * then the value of the switch will be a boolean instead of a string (eg, argv["option"] == true).
      *
-     * Single-hypen switches are different: every character following a single hyphen is transformed into
+     * Single-hyphen switches are different: every character following a single hyphen is transformed into
      * a boolean value (eg, "-abc" produces argv["a"] == true, argv["b"] == true, and argv["c"] == true).
      *
      * Only arguments NOT preceded by (or part of) a switch are pushed onto the argv array; they can be
