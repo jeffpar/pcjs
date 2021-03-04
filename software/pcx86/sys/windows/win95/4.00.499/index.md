@@ -22,7 +22,7 @@ installation process.  For example:
 
 - From the MS-DOS 5.00 Setup screen, press F3 and then Y to exit.
 - Run FDISK, create a primary DOS partition, restart, and exit again.
-- Run FORMAT C: and press Y to proceed with the format.
+- Run FORMAT C: and proceed with the format.
 - Select "Windows 95 (Build 499 Disk 01)" for drive A: and click Load.
 - Run SETUP.
 
