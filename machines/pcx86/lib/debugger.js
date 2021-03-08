@@ -3819,7 +3819,7 @@ class DebuggerX86 extends DbgLib {
                 sLine += (nSequence >= 0? '=' + nSequence.toString() : "");
             } else {
                 let nCycles = this.cpu.getCycles();
-                sLine += "cycles=" + nCycles.toString() + " cs=" + Str.toHex(this.cpu.counts.nChecksum);
+                sLine += "cycles=" + nCycles.toString() + " cs=" + Str.toHex(this.cpu.nChecksum);
             }
         }
 
@@ -5227,8 +5227,8 @@ class DebuggerX86 extends DbgLib {
     doInfo(asArgs)
     {
         if (DEBUG) {
-            this.println("msPerYield: " + this.cpu.counts.msPerYield);
-            this.println("nCyclesPerYield: " + this.cpu.counts.nCyclesPerYield);
+            this.println("msPerYield: " + this.cpu.msPerYield);
+            this.println("nCyclesPerYield: " + this.cpu.nCyclesPerYield);
             return true;
         }
         return false;
@@ -5633,13 +5633,13 @@ class DebuggerX86 extends DbgLib {
             if (asArgs[3] !== undefined) nCycles = +asArgs[3];          // warning: decimal instead of hex conversion
             switch (asArgs[2]) {
                 case "int":
-                    this.cpu.counts.nCyclesChecksumInterval = nCycles;
+                    this.cpu.nCyclesChecksumInterval = nCycles;
                     break;
                 case "start":
-                    this.cpu.counts.nCyclesChecksumStart = nCycles;
+                    this.cpu.nCyclesChecksumStart = nCycles;
                     break;
                 case "stop":
-                    this.cpu.counts.nCyclesChecksumStop = nCycles;
+                    this.cpu.nCyclesChecksumStop = nCycles;
                     break;
                 default:
                     this.println("unknown cs option");

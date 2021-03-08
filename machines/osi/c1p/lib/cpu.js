@@ -11,7 +11,6 @@
 
 if (typeof module !== "undefined") {
     var Str         = require("../../../modules/shared/lib/strlib");
-    var Usr         = require("../../../modules/shared/lib/usrlib");
     var Web         = require("../../../modules/shared/lib/weblib");
     var Component   = require("../../../modules/shared/lib/component");
 }
@@ -801,7 +800,7 @@ class C1PCPU extends Component {
             if (fOnClick) this.setFocus();
         }
         this.nRunCycles = 0;
-        this.msRunStart = Usr.getTime();
+        this.msRunStart = Component.getTime();
         this.calcCycles();
     }
 
@@ -947,7 +946,7 @@ class C1PCPU extends Component {
             this.calcCycles(true);
         }
         this.nCyclesThisRun = 0;
-        this.msStartThisRun = Usr.getTime();
+        this.msStartThisRun = Component.getTime();
     }
 
     /**
@@ -956,7 +955,7 @@ class C1PCPU extends Component {
      */
     calcRemainingTime()
     {
-        var msCurrent = Usr.getTime();
+        var msCurrent = Component.getTime();
         var msYield = this.msPerYield;
 
         if (this.nCyclesThisRun) {

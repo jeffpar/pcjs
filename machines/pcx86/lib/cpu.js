@@ -11,10 +11,24 @@
 
 if (typeof module !== "undefined") {
     var Str         = require("../../shared/lib/strlib");
-    var Usr         = require("../../shared/lib/usrlib");
     var Component   = require("../../shared/lib/component");
     var Messages    = require("./messages");
 }
+
+/**
+ * TimeLog objects record the duration of "work" and "idle" intervals, which normally alternate.
+ *
+ * aTimeLogs normally keeps the last 600 TimeLog objects; ie, new objects are pushed and when the
+ * length of the array exceeds 600, we "splice" out the first (oldest) object in the array.  The first
+ * two array entries are special: [0] accumulates total "work" and [1] accumulates total "work+idle" time.
+ *
+ * @typedef {Object} TimeLog
+ * @property {number} nCycles       // number of cycles of "work" performed this interval (0 if "idle" interval)
+ * @property {number} nCyclesTotal
+ * @property {number} msDuration    // duration of this interval
+ * @property {number} msLag         // how far this interval "lagged" the previous interval
+ * @property {number} msBegin       // start of this interval
+ */
 
 /**
  * class CPULib
@@ -59,9 +73,9 @@ class CPULib extends Component {
 
         let nMultiplier = parmsCPU['multiplier'] || 1;
 
-        this.counts = {};
-        this.counts.nBaseCyclesPerSecond = nCycles;
-        this.counts.msPerYield = Math.round(1000 / CPULib.YIELDS_PER_SECOND);
+        if (DEBUG) this.aTimeLogs = [null, null];
+        this.nBaseCyclesPerSecond = nCycles;
+        this.msPerYield = Math.round(1000 / CPULib.YIELDS_PER_SECOND);
 
         /*
          * nTargetMultiplier replaces the old "speed" variable (0, 1, 2) and eliminates the need for
@@ -69,9 +83,9 @@ class CPULib extends Component {
          * until we've exceeded the host's speed limit (ie, the current value is unable to reach the target),
          * at which point we reset the target back to the default.
          */
-        this.counts.nBaseMultiplier = this.counts.nCurrentMultiplier = this.counts.nTargetMultiplier = nMultiplier;
-        this.counts.mhzBase = Math.round(this.counts.nBaseCyclesPerSecond / 10000) / 100;
-        this.counts.mhzCurrent = this.counts.mhzTarget = this.counts.mhzBase * this.counts.nTargetMultiplier;
+        this.nBaseMultiplier = this.nCurrentMultiplier = this.nTargetMultiplier = nMultiplier;
+        this.mhzBase = Math.round(this.nBaseCyclesPerSecond / 10000) / 100;
+        this.mhzCurrent = this.mhzTarget = this.mhzBase * this.nTargetMultiplier;
 
         /*
          * We add a number of flags to those initialized by Component.
@@ -94,10 +108,10 @@ class CPULib extends Component {
          * and call resetChecksum().
          */
         this.flags.checksum = false;
-        this.counts.nChecksum = this.counts.nCyclesChecksumNext = 0;
-        this.counts.nCyclesChecksumStart = parmsCPU["csStart"];
-        this.counts.nCyclesChecksumInterval = parmsCPU["csInterval"];
-        this.counts.nCyclesChecksumStop = parmsCPU["csStop"];
+        this.nChecksum = this.nCyclesChecksumNext = 0;
+        this.nCyclesChecksumStart = parmsCPU["csStart"];
+        this.nCyclesChecksumInterval = parmsCPU["csInterval"];
+        this.nCyclesChecksumStop = parmsCPU["csStop"];
 
         /*
          * Array of countdown timers managed by addTimer() and setTimer().
@@ -108,6 +122,46 @@ class CPULib extends Component {
 
         this.idRunTimeout = 0;
         this.onRunTimeout = this.runCPU.bind(this); // function onRunTimeout() { cpu.runCPU(); };
+    }
+
+    /**
+     * addTimeLog(nCycles, nCyclesTotal, msBegin, msDuration)
+     *
+     * @this {CPULib}
+     * @param {number} nCycles
+     * @param {number} nCyclesTotal
+     * @param {number} msBegin
+     * @param {number} msDuration
+     */
+    addTimeLog(nCycles, nCyclesTotal, msBegin, msDuration)
+    {
+        if (DEBUG) {
+            let msLag = 0;
+            if (nCycles) {
+                if (!this.aTimeLogs[0]) {
+                    this.aTimeLogs[0] = {nCycles, msDuration, msLag, msBegin};
+                } else {
+                    this.aTimeLogs[0].nCycles += nCycles;
+                    this.aTimeLogs[0].msDuration += msDuration;
+                }
+            }
+            if (!this.aTimeLogs[1]) {
+                this.aTimeLogs[1] = {nCycles, msDuration, msLag, msBegin};
+            } else {
+                this.aTimeLogs[1].nCycles += nCycles;
+                this.aTimeLogs[1].msDuration += msDuration;
+            }
+            if (this.aTimeLogs.length > 2) {
+                let prevLog = this.aTimeLogs[this.aTimeLogs.length-1];
+                let msEndPrev = prevLog.msBegin + prevLog.msDuration;
+                this.assert(msBegin >= msEndPrev);
+                msLag = msBegin - msEndPrev;
+            }
+            this.aTimeLogs.push({nCycles, msDuration, msLag, msBegin});
+            if (this.aTimeLogs.length > 600 + 2) {
+                this.aTimeLogs.splice(2, 1);
+            }
+        }
     }
 
     /**
@@ -147,11 +201,11 @@ class CPULib extends Component {
         this.flags.autoStart = cmp.getMachineBoolean('autoStart', this.flags.autoStart);
 
         let nMultiplier = cmp.getMachineParm('multiplier');
-        if (nMultiplier) this.counts.nBaseMultiplier = +nMultiplier;
+        if (nMultiplier) this.nBaseMultiplier = +nMultiplier;
 
         this.timerYield = cpu.addTimer(this.id, function yieldTimer() {
             cpu.flags.yield = true;
-        }, this.counts.msPerYield);
+        }, this.msPerYield);
 
         this.setReady();
     }
@@ -324,16 +378,16 @@ class CPULib extends Component {
      */
     resetChecksum()
     {
-        if (this.counts.nCyclesChecksumStart === undefined) this.counts.nCyclesChecksumStart = 0;
-        if (this.counts.nCyclesChecksumInterval === undefined) this.counts.nCyclesChecksumInterval = -1;
-        if (this.counts.nCyclesChecksumStop === undefined) this.counts.nCyclesChecksumStop = -1;
-        this.flags.checksum = (this.counts.nCyclesChecksumStart >= 0 && this.counts.nCyclesChecksumInterval > 0);
+        if (this.nCyclesChecksumStart === undefined) this.nCyclesChecksumStart = 0;
+        if (this.nCyclesChecksumInterval === undefined) this.nCyclesChecksumInterval = -1;
+        if (this.nCyclesChecksumStop === undefined) this.nCyclesChecksumStop = -1;
+        this.flags.checksum = (this.nCyclesChecksumStart >= 0 && this.nCyclesChecksumInterval > 0);
         if (this.flags.checksum) {
-            this.counts.nChecksum = 0;
-            this.counts.nCyclesChecksumNext = this.counts.nCyclesChecksumStart - this.nTotalCycles;
+            this.nChecksum = 0;
+            this.nCyclesChecksumNext = this.nCyclesChecksumStart - this.nTotalCycles;
             /*
-             *  this.counts.nCyclesChecksumNext = this.counts.nCyclesChecksumStart + this.counts.nCyclesChecksumInterval -
-             *      (this.nTotalCycles % this.counts.nCyclesChecksumInterval);
+             *  this.nCyclesChecksumNext = this.nCyclesChecksumStart + this.nCyclesChecksumInterval -
+             *      (this.nTotalCycles % this.nCyclesChecksumInterval);
              */
             return true;
         }
@@ -358,15 +412,15 @@ class CPULib extends Component {
              * Get a 32-bit summation of the current CPU state and add it to our running 32-bit checksum
              */
             let fDisplay = false;
-            this.counts.nChecksum = (this.counts.nChecksum + this.getChecksum())|0;
-            this.counts.nCyclesChecksumNext -= nCycles;
-            if (this.counts.nCyclesChecksumNext <= 0) {
-                this.counts.nCyclesChecksumNext += this.counts.nCyclesChecksumInterval;
+            this.nChecksum = (this.nChecksum + this.getChecksum())|0;
+            this.nCyclesChecksumNext -= nCycles;
+            if (this.nCyclesChecksumNext <= 0) {
+                this.nCyclesChecksumNext += this.nCyclesChecksumInterval;
                 fDisplay = true;
             }
-            if (this.counts.nCyclesChecksumStop >= 0) {
-                if (this.counts.nCyclesChecksumStop <= this.getCycles()) {
-                    this.counts.nCyclesChecksumInterval = this.counts.nCyclesChecksumStop = -1;
+            if (this.nCyclesChecksumStop >= 0) {
+                if (this.nCyclesChecksumStop <= this.getCycles()) {
+                    this.nCyclesChecksumInterval = this.nCyclesChecksumStop = -1;
                     this.resetChecksum();
                     this.stopCPU();
                     fDisplay = true;
@@ -387,7 +441,7 @@ class CPULib extends Component {
      */
     displayChecksum()
     {
-        this.println(this.getCycles() + " cycles: " + "checksum=" + Str.toHex(this.counts.nChecksum));
+        this.println(this.getCycles() + " cycles: " + "checksum=" + Str.toHex(this.nChecksum));
     }
 
     /**
@@ -480,7 +534,7 @@ class CPULib extends Component {
         case "setSpeed":
             this.bindings[sBinding] = control;
             control.onclick = function onClickSetSpeed() {
-                cpu.setSpeed(cpu.counts.nTargetMultiplier << 1, true);
+                cpu.setSpeed(cpu.nTargetMultiplier << 1, true);
             };
             control.textContent = this.getSpeedTarget();
             fBound = true;
@@ -545,13 +599,15 @@ class CPULib extends Component {
      */
     calcCycles()
     {
-        let nMultiplier = this.counts.mhzCurrent / this.counts.mhzBase;
-        if (!nMultiplier || nMultiplier > this.counts.nTargetMultiplier) {
-            nMultiplier = this.counts.nTargetMultiplier;
+        let nMultiplier = this.mhzCurrent / this.mhzBase;
+        if (!nMultiplier || nMultiplier > this.nTargetMultiplier) {
+            nMultiplier = this.nTargetMultiplier;
+        } else if (nMultiplier < 1) {
+            nMultiplier = 1;
         }
-        this.counts.nCyclesPerYield = Math.floor(this.counts.nBaseCyclesPerSecond / CPULib.YIELDS_PER_SECOND * nMultiplier);
-        if (this.counts.nCurrentMultiplier !== nMultiplier) {
-            this.counts.nCurrentMultiplier = nMultiplier;
+        this.nCyclesPerYield = Math.floor(this.nBaseCyclesPerSecond / CPULib.YIELDS_PER_SECOND * nMultiplier);
+        if (this.nCurrentMultiplier !== nMultiplier) {
+            this.nCurrentMultiplier = nMultiplier;
             return true;
         }
         return false;
@@ -577,11 +633,11 @@ class CPULib extends Component {
     getCycles(fScaled)
     {
         let nCycles = this.nTotalCycles + this.nRunCycles + this.nBurstCycles - this.nStepCycles;
-        if (fScaled && this.counts.nTargetMultiplier > 1 && this.counts.mhzCurrent > this.counts.mhzBase) {
+        if (fScaled && this.nTargetMultiplier > 1 && this.mhzCurrent > this.mhzBase) {
             /*
-             * We could scale the current cycle count by the current speed (this.counts.mhzCurrent); eg:
+             * We could scale the current cycle count by the current speed (this.mhzCurrent); eg:
              *
-             *      nCycles = Math.round(nCycles / (this.counts.mhzCurrent / this.counts.mhzBase));
+             *      nCycles = Math.round(nCycles / (this.mhzCurrent / this.mhzBase));
              *
              * but that speed will fluctuate somewhat: large fluctuations at first, but increasingly smaller
              * fluctuations after each burst of instructions that runCPU() executes.
@@ -596,7 +652,7 @@ class CPULib extends Component {
              * interface allows any value, as does the CPU "multiplier" parmsCPU property (from the machine's
              * XML file).
              */
-            nCycles = Math.round(nCycles / this.counts.nTargetMultiplier);
+            nCycles = Math.round(nCycles / this.nTargetMultiplier);
         }
         return nCycles;
     }
@@ -611,7 +667,7 @@ class CPULib extends Component {
      */
     getBaseCyclesPerSecond()
     {
-        return this.counts.nBaseCyclesPerSecond;
+        return this.nBaseCyclesPerSecond;
     }
 
     /**
@@ -624,7 +680,7 @@ class CPULib extends Component {
      */
     getCurrentCyclesPerSecond()
     {
-        return (this.counts.nBaseCyclesPerSecond * this.counts.nCurrentMultiplier)|0;
+        return (this.nBaseCyclesPerSecond * this.nCurrentMultiplier)|0;
     }
 
     /**
@@ -640,7 +696,7 @@ class CPULib extends Component {
     {
         this.nTotalCycles = this.nRunCycles = this.nBurstCycles = this.nStepCycles = 0;
         this.resetChecksum();
-        this.setSpeed(this.counts.nBaseMultiplier);
+        this.setSpeed(this.nBaseMultiplier);
     }
 
     /**
@@ -651,7 +707,7 @@ class CPULib extends Component {
      */
     getSpeed()
     {
-        return this.counts.nTargetMultiplier;
+        return this.nTargetMultiplier;
     }
 
     /**
@@ -662,7 +718,7 @@ class CPULib extends Component {
      */
     getSpeedCurrent()
     {
-        return ((this.flags.running && this.counts.mhzCurrent)? (this.counts.mhzCurrent.toFixed(2) + "Mhz") : "Stopped");
+        return ((this.flags.running && this.mhzCurrent)? (this.mhzCurrent.toFixed(2) + "Mhz") : "Stopped");
     }
 
     /**
@@ -673,7 +729,7 @@ class CPULib extends Component {
      */
     getSpeedTarget()
     {
-        return this.counts.mhzTarget.toFixed(2) + "Mhz";
+        return this.mhzTarget.toFixed(2) + "Mhz";
     }
 
     /**
@@ -695,15 +751,15 @@ class CPULib extends Component {
             /*
              * If we haven't reached 90% (0.9) of the current target speed, revert to the default multiplier.
              */
-            if (this.counts.mhzCurrent > 0 && this.counts.mhzCurrent < this.counts.mhzTarget * 0.9) {
-                nMultiplier = this.counts.nBaseMultiplier;
+            if (this.mhzCurrent > 0 && this.mhzCurrent < this.mhzTarget * 0.9) {
+                nMultiplier = this.nBaseMultiplier;
                 fSuccess = false;
             }
-            this.counts.mhzCurrent = 0;
-            this.counts.nTargetMultiplier = nMultiplier;
-            let mhzTarget = this.counts.mhzBase * this.counts.nTargetMultiplier;
-            if (this.counts.mhzTarget != mhzTarget) {
-                this.counts.mhzTarget = mhzTarget;
+            this.mhzCurrent = 0;
+            this.nTargetMultiplier = nMultiplier;
+            let mhzTarget = this.mhzBase * this.nTargetMultiplier;
+            if (this.mhzTarget != mhzTarget) {
+                this.mhzTarget = mhzTarget;
                 let sSpeed = this.getSpeedTarget();
                 let controlSpeed = this.bindings["setSpeed"];
                 if (controlSpeed) controlSpeed.textContent = sSpeed;
@@ -713,7 +769,7 @@ class CPULib extends Component {
         }
         this.addCycles(this.nRunCycles);
         this.nRunCycles = 0;
-        this.counts.msStartRun = this.counts.msEndThisRun = 0;
+        this.msStartRun = this.msEndThisRun = 0;
         if (this.calcCycles()) {    // if a new value was calculated for the current cycle multiplier
             this.resetTimers();     // then update all the fixed-period timers using the new cycle multiplier
         }
@@ -730,7 +786,7 @@ class CPULib extends Component {
     calcSpeed(nCycles, msElapsed)
     {
         if (msElapsed) {
-            this.counts.mhzCurrent = Math.round(nCycles / (msElapsed * 10)) / 100;
+            this.mhzCurrent = Math.round(nCycles / (msElapsed * 10)) / 100;
             if (msElapsed >= 86400000) {
                 this.nTotalCycles = 0;
                 if (this.chipset) this.chipset.updateAllTimers(true);
@@ -748,11 +804,11 @@ class CPULib extends Component {
     {
         this.calcCycles();
 
-        this.counts.nCyclesThisRun = 0;
-        this.counts.msDiscount = 0;
-        this.counts.msStartThisRun = Usr.getTime();
-        if (!this.counts.msStartRun) {
-            this.counts.msStartRun = this.counts.msStartThisRun;
+        this.nCyclesThisRun = 0;
+        this.msDiscount = 0;
+        this.msStartThisRun = Component.getTime();
+        if (!this.msStartRun) {
+            this.msStartRun = this.msStartThisRun;
         }
 
         /*
@@ -780,18 +836,18 @@ class CPULib extends Component {
          * to hit its target speed, since any instruction that displays a message is unavoidably slooooow.
          */
         let msDelta = 0;
-        if (this.counts.msEndThisRun) {
-            msDelta = this.counts.msStartThisRun - this.counts.msEndThisRun;
-            if (msDelta > this.counts.msPerYield) {
-                this.counts.msStartRun += msDelta;
+        if (this.msEndThisRun) {
+            msDelta = this.msStartThisRun - this.msEndThisRun;
+            if (msDelta > this.msPerYield) {
+                this.msStartRun += msDelta;
                 /*
                  * Bumping msStartRun forward should NEVER cause it to exceed msStartThisRun; however, just
                  * in case, I make absolutely sure it cannot happen, since doing so could result in negative
                  * speed calculations.
                  */
-                this.assert(this.counts.msStartRun <= this.counts.msStartThisRun);
-                if (this.counts.msStartRun > this.counts.msStartThisRun) {
-                    this.counts.msStartRun = this.counts.msStartThisRun;
+                this.assert(this.msStartRun <= this.msStartThisRun);
+                if (this.msStartRun > this.msStartThisRun) {
+                    this.msStartRun = this.msStartThisRun;
                 }
             }
         }
@@ -805,39 +861,39 @@ class CPULib extends Component {
      */
     calcRemainingTime()
     {
-        this.counts.msEndThisRun = Usr.getTime();
+        this.msEndThisRun = Component.getTime();
 
-        if (this.counts.msDiscount) {
-            this.counts.msStartRun += this.counts.msDiscount;
-            this.counts.msStartThisRun += this.counts.msDiscount;
+        if (this.msDiscount) {
+            this.msStartRun += this.msDiscount;
+            this.msStartThisRun += this.msDiscount;
         }
 
-        let msYield = this.counts.msPerYield;
-        if (this.counts.nCyclesThisRun) {
+        let msYield = this.msPerYield;
+        if (this.nCyclesThisRun) {
             /*
              * Normally, we would assume we executed a full quota of work over msPerYield, but since the CPU
              * now has the option of calling yieldCPU(), that might not be true.  If nCyclesThisRun is correct, then
              * the ratio of nCyclesThisRun/nCyclesPerYield should represent the percentage of work we performed,
              * and so applying that percentage to msPerYield should give us a better estimate of work vs. time.
              */
-            msYield = Math.round(msYield * this.counts.nCyclesThisRun / this.counts.nCyclesPerYield);
+            msYield = Math.round(msYield * this.nCyclesThisRun / this.nCyclesPerYield);
         }
 
-        let msElapsedThisRun = this.counts.msEndThisRun - this.counts.msStartThisRun;
+        let msElapsedThisRun = this.msEndThisRun - this.msStartThisRun;
         let msRemainsThisRun = msYield - msElapsedThisRun;
 
         /*
          * We could pass only "this run" results to calcSpeed():
          *
-         *      nCycles = this.counts.nCyclesThisRun;
+         *      nCycles = this.nCyclesThisRun;
          *      msElapsed = msElapsedThisRun;
          *
          * but it seems preferable to use longer time periods and hopefully get a more accurate speed.
          */
         let nCycles = this.nRunCycles;
-        let msElapsed = this.counts.msEndThisRun - this.counts.msStartRun;
+        let msElapsed = this.msEndThisRun - this.msStartRun;
 
-        if (MAXDEBUG && msRemainsThisRun < 0 && this.counts.nTargetMultiplier > 1) {
+        if (MAXDEBUG && msRemainsThisRun < 0 && this.nTargetMultiplier > 1) {
             this.println("warning: updates @" + msElapsedThisRun + "ms (prefer " + Math.round(msYield) + "ms)");
         }
 
@@ -850,7 +906,7 @@ class CPULib extends Component {
              * tool or feature that is interfering with our overall execution.
              */
             if (msRemainsThisRun < -1000) {
-                this.counts.msStartRun -= msRemainsThisRun;
+                this.msStartRun -= msRemainsThisRun;
             }
             /*
              * If the last burst took MORE time than we allotted (ie, it's taking more than 1 second to simulate
@@ -859,7 +915,7 @@ class CPULib extends Component {
              */
             msRemainsThisRun = 0;
         }
-        else if (this.counts.mhzCurrent < this.counts.mhzTarget) {
+        else if (this.mhzCurrent < this.mhzTarget) {
             msRemainsThisRun = 0;
         }
 
@@ -871,15 +927,15 @@ class CPULib extends Component {
             this.printMessage(Str.sprintf("%3dms run  %3dms wait  %6dcy  %6.2fmhz  %6dms total  %8dcy total  %6.2fmhz total",
                 msElapsedThisRun,
                 msRemainsThisRun,
-                this.counts.nCyclesThisRun,
-                Math.round(this.counts.nCyclesThisRun / (msElapsedThisRun * 10)) / 100,
+                this.nCyclesThisRun,
+                Math.round(this.nCyclesThisRun / (msElapsedThisRun * 10)) / 100,
                 msElapsed,
                 nCycles,
-                this.counts.mhzCurrent
+                this.mhzCurrent
             ));
         }
 
-        this.counts.msEndThisRun += msRemainsThisRun;
+        this.msEndThisRun += msRemainsThisRun;
 
         return msRemainsThisRun;
     }
@@ -1113,7 +1169,7 @@ class CPULib extends Component {
      */
     getMSCycles(ms)
     {
-        return ((this.counts.nBaseCyclesPerSecond * this.counts.nCurrentMultiplier) / 1000 * ms)|0;
+        return ((this.nBaseCyclesPerSecond * this.nCurrentMultiplier) / 1000 * ms)|0;
     }
 
     /**
@@ -1146,7 +1202,7 @@ class CPULib extends Component {
     {
         let nCycles = this.nBurstCycles - this.nStepCycles;
         this.nBurstCycles = this.nStepCycles = 0;
-        this.counts.nCyclesThisRun += nCycles;
+        this.nCyclesThisRun += nCycles;
         this.nRunCycles += nCycles;
         return nCycles;
     }
@@ -1160,6 +1216,9 @@ class CPULib extends Component {
     {
         this.idRunTimeout = 0;
         if (!this.flags.running) return;
+
+        let msRunStart = 0, msRunStop = 0, nRunCycles = 0;
+        if (DEBUG) msRunStart = Component.getTime();
 
         /*
          *  calcStartTime() initializes the cycle counter and timestamp for this runCPU() invocation.
@@ -1207,6 +1266,7 @@ class CPULib extends Component {
                  */
                 nCycles = this.endBurst();
                 if (nCycles) {
+                    nRunCycles += nCycles;
                     this.updateTimers(nCycles);
                     this.updateChecksum(nCycles);
                 }
@@ -1215,14 +1275,21 @@ class CPULib extends Component {
         catch (e) {
             this.stopCPU();
             this.updateCPU();
-            if (this.cmp) this.cmp.stop(Usr.getTime(), this.getCycles());
+            if (this.cmp) this.cmp.stop(Component.getTime(), this.getCycles());
             this.setError(e.stack || e.message);
             return;
         }
 
+        if (DEBUG) {
+            msRunStop = Component.getTime();
+            this.addTimeLog(nRunCycles, this.getCycles(), msRunStart, msRunStop - msRunStart);
+        }
+
         if (this.flags.running) {
             this.assert(!this.idRunTimeout);
-            this.idRunTimeout = setTimeout(this.onRunTimeout, this.calcRemainingTime());
+            let msTimeout = this.calcRemainingTime();
+            if (DEBUG) this.addTimeLog(0, 0, msRunStop, msTimeout);
+            this.idRunTimeout = setTimeout(this.onRunTimeout, msTimeout);
         }
     }
 
@@ -1262,7 +1329,7 @@ class CPULib extends Component {
         if (this.cmp) {
             this.cmp.updateStatus(true);
             if (fUpdateFocus) this.cmp.updateFocus();
-            this.cmp.start(this.counts.msStartRun, this.getCycles());
+            this.cmp.start(Component.getTime(), this.getCycles());
         }
         this.assert(!this.idRunTimeout);
         this.idRunTimeout = setTimeout(this.onRunTimeout, 0);
@@ -1330,10 +1397,10 @@ class CPULib extends Component {
      */
     nonCPU(fn)
     {
-        let msStart = Usr.getTime();
+        let msStart = Component.getTime();
         if (fn()) {
-            let msStop = Usr.getTime();
-            this.counts.msDiscount += msStop - msStart;
+            let msStop = Component.getTime();
+            this.msDiscount += msStop - msStart;
             return true;
         }
         return false;

@@ -11,7 +11,6 @@
 
 if (typeof module !== "undefined") {
     var Str         = require("../../shared/lib/strlib");
-    var Usr         = require("../../shared/lib/usrlib");
     var Web         = require("../../shared/lib/weblib");
     var DiskAPI     = require("../../shared/lib/diskapi");
     var DumpAPI     = require("../../shared/lib/dumpapi");
@@ -1438,7 +1437,7 @@ class Disk extends Component {
             this.aDirtyTimestamps.splice(j, 1);
         }
         this.aDirtySectors.push(sector);
-        this.aDirtyTimestamps.push(Usr.getTime());
+        this.aDirtyTimestamps.push(Component.getTime());
 
         if (DEBUG && this.messageEnabled()) {
             this.printMessage("queueDirtySector(CHS=" + sector[Disk.SECTOR.CYLINDER] + ':' + sector[Disk.SECTOR.HEAD] + ':' + sector[Disk.SECTOR.ID] + "): " + this.aDirtySectors.length + " dirty");
@@ -1468,7 +1467,7 @@ class Disk extends Component {
             }
             if (!this.timerWrite) {
                 let obj = this;
-                let msNow = Usr.getTime();
+                let msNow = Component.getTime();
                 let msDelay = msWrite - msNow;
                 if (msDelay < 0) msDelay = 0;
                 if (msDelay > Disk.REMOTE_WRITE_DELAY) msDelay = Disk.REMOTE_WRITE_DELAY;

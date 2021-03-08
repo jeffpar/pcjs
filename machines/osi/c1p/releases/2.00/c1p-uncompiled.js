@@ -1573,13 +1573,6 @@ class Usr {
 
 Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-/**
- * getTime()
- *
- * @return {number} the current time, in milliseconds
- */
-Usr.getTime = Date.now || function() { return +new Date(); };
-
 
 /**
  * @copyright https://www.pcjs.org/machines/shared/lib/weblib.js (C) 2012-2020 Jeff Parsons
@@ -5265,7 +5258,7 @@ class C1PCPU extends Component {
             if (fOnClick) this.setFocus();
         }
         this.nRunCycles = 0;
-        this.msRunStart = Usr.getTime();
+        this.msRunStart = Component.getTime();
         this.calcCycles();
     }
 
@@ -5411,7 +5404,7 @@ class C1PCPU extends Component {
             this.calcCycles(true);
         }
         this.nCyclesThisRun = 0;
-        this.msStartThisRun = Usr.getTime();
+        this.msStartThisRun = Component.getTime();
     }
 
     /**
@@ -5420,7 +5413,7 @@ class C1PCPU extends Component {
      */
     calcRemainingTime()
     {
-        var msCurrent = Usr.getTime();
+        var msCurrent = Component.getTime();
         var msYield = this.msPerYield;
 
         if (this.nCyclesThisRun) {
@@ -12908,7 +12901,7 @@ class C1PDebugger extends Component {
         if (!this.fStepOver) {
             this.println("stopped");
             if (nCycles) {
-                var msTotal = Usr.getTime();
+                var msTotal = Component.getTime();
                 msTotal -= msStart;
                 this.println(msTotal + "ms (" + nCycles + " cycles)");
                 if (DEBUG && msTotal > 0) {
