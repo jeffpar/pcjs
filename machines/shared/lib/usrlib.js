@@ -256,11 +256,4 @@ class Usr {
 
 Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-/**
- * getTime()
- *
- * @return {number} the current time, in milliseconds
- */
-Usr.getTime = Date.now || function() { return +new Date(); };
-
 if (typeof module !== "undefined") module.exports = Usr;

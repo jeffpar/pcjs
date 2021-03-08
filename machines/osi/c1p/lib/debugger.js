@@ -11,7 +11,6 @@
 
 if (typeof module !== "undefined") {
     var Str         = require("../../shared/lib/strlib");
-    var Usr         = require("../../shared/lib/usrlib");
     var Web         = require("../../shared/lib/weblib");
     var Component   = require("../../shared/lib/component");
 }
@@ -868,7 +867,7 @@ class C1PDebugger extends Component {
         if (!this.fStepOver) {
             this.println("stopped");
             if (nCycles) {
-                var msTotal = Usr.getTime();
+                var msTotal = Component.getTime();
                 msTotal -= msStart;
                 this.println(msTotal + "ms (" + nCycles + " cycles)");
                 if (DEBUG && msTotal > 0) {

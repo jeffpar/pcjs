@@ -1932,13 +1932,6 @@ class Usr {
 
 Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-/**
- * getTime()
- *
- * @return {number} the current time, in milliseconds
- */
-Usr.getTime = Date.now || function() { return +new Date(); };
-
 
 /**
  * @copyright https://www.pcjs.org/machines/shared/lib/weblib.js (C) 2012-2020 Jeff Parsons
