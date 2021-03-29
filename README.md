@@ -32,10 +32,10 @@ released under the terms of an [MIT License](/LICENSE.txt).
 
 You are required to include the following links and copyright notice:
 
-> PCjs Machines © 2012-2021 [Jeff Parsons](https://www.pcjs.org)
+> [PCjs](https://www.pcjs.org) © 2012-2021 [Jeff Parsons](https://github.com/jeffpar)
 
 in every copy or modified version of this work, and to display that notice on every web page or computer that it runs on.
 
 ### Copyright
 
-All PCjs content (including source code, blog posts, and website design) © 2012-2021 [Jeff Parsons](https://www.pcjs.org)
+All PCjs content (including source code, blog posts, and website design) © 2012-2021 [Jeff Parsons](https://jeffpar.com)
