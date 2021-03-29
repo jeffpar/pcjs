@@ -7,7 +7,7 @@ PCjs 2.0 disk images are JSON objects with the following properties:
   - *fileTable*: an Array of FileInfo objects, one for each file across all FAT volumes on the disk (optional)
   - *diskData*: an Array of sector data; for "CHS" disk images, the data is organized as an array of sectors within an array of heads within an array of cylinders
 
-For example, take a look at this [PC DOS diskette](https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json).
+For example, take a look at this [PC DOS 2.00 diskette](https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json).
 
 Older (PCjs 1.0) disk images were basically just an Array of sector data (what is now called the *diskData* object), without
 any other information.  Such disk images are still supported, but all the disk images now stored on PCjs disk servers,
@@ -15,7 +15,7 @@ such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to
 
 ## PCjs DiskImage Utility
 
-[DiskImage](modules/diskimage.js) is a Node command-line application that imports the new PCjs 2.0
+[DiskImage](modules/diskimage.js) is a Node command-line application that reads/writes PCjs 2.0 disk images.
 [DiskInfo](../machines/pcx86/modules/diskinfo.js) module for reading and writing PCjs disk images.
 [DiskImage](modules/diskimage.js) supersedes the older PCjs 1.0 [DiskDump](old/diskdump/lib/diskdump.js) utility.
 
@@ -53,7 +53,7 @@ By default, the diskette will be given an 11-character volume label derived from
 however, you can use `--label` to specify your own label (eg, `--label=VISICALC81`), or use `--label=none` to suppress
 the volume label.
 
-The smallest standard PC diskette format that can accomodate all the files will be automatically selected, but you can
+The smallest standard PC diskette format that can accommodate all the files will be automatically selected, but you can
 specify a different target size (in Kb) using `--target=N`, where N is 160, 180, 320, 360, 720, 1200, or 1440.  For
 example, if your diskette *must* work with PC DOS 1.0, use `--target=160`.
 

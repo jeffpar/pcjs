@@ -2654,7 +2654,7 @@ class VideoX86 extends Component {
         }
 
         /*
-         * Moved this from the constructor (and changed Web.getURLParm() to cmp.etMachineParm()),
+         * Moved this from the constructor (and changed Web.getURLParm() to cmp.getMachineParm()),
          * so that the flicker setting can be easily overridden from the page, not just from the URL.
          */
         this.opacityFlicker = (1 - (cmp.getMachineParm('flicker', this.parmsVideo) || 0)).toString();
