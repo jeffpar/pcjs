@@ -1066,6 +1066,7 @@ export default class DiskInfo {
 
         let offDir = 0;
         let cEntries = 0;
+        let names = [];
         if (iCluster >= 0) {
             offDir += this.buildDirEntry(abDir, offDir, ".", 0, DiskInfo.ATTR.SUBDIR, dateMod, iCluster);
             offDir += this.buildDirEntry(abDir, offDir, "..", 0, DiskInfo.ATTR.SUBDIR, dateMod, iParentCluster);
@@ -1077,7 +1078,11 @@ export default class DiskInfo {
                 this.printf(Device.MESSAGE.DISK, "file %s missing cluster, skipping\n", file.name);
                 continue;
             }
-            let name = this.buildShortName(file.name, !!(file.attr & DiskInfo.ATTR.VOLUME));
+            let name, uniqueID = 0;
+            do {
+                name = this.buildShortName(file.name, !!(file.attr & DiskInfo.ATTR.VOLUME), uniqueID++);
+            } while (names.indexOf(name) >= 0);
+            names.push(name);
             offDir += this.buildDirEntry(abDir, offDir, name, file.size, file.attr, file.date, file.cluster);
             cEntries++;
         }
@@ -1295,14 +1300,15 @@ export default class DiskInfo {
     }
 
     /**
-     * buildShortName(sFile, fLabel)
+     * buildShortName(sFile, fLabel, uniqueID)
      *
      * @this {DiskInfo}
      * @param {string} sFile is the basename of a file
      * @param {boolean} [fLabel]
+     * @param {number} [uniqueID]
      * @return {string} containing a corresponding filename in FAT "8.3" format
      */
-    buildShortName(sFile, fLabel)
+    buildShortName(sFile, fLabel=false, uniqueID=0)
     {
         let sName = sFile.toUpperCase();
         let iExt = sName.lastIndexOf('.');
@@ -1314,6 +1320,10 @@ export default class DiskInfo {
             sExt = sName.substr(8);
         }
         sName = sName.substr(0, 8).trim();
+        if (uniqueID) {
+            let suffix = "~" + uniqueID;
+            sName = sName.substr(0, 8 - suffix.length) + suffix;
+        }
         sExt = sExt.substr(0, 3).trim();
         let iPeriod = -1;
         if (sExt) {

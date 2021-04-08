@@ -38,7 +38,7 @@ function printError(err)
  * NOTE: Some files, like ".BAS" files, aren't always ASCII, which is why we now call isASCII() on all
  * these file contents first.
  */
-let asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".ASM", ".LRF", ".MAK", ".TXT", ".XML"];
+let asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".LRF", ".MAK", ".TXT", ".XML"];
 
 /**
  * compareDisks(sDisk1, sDisk2)
