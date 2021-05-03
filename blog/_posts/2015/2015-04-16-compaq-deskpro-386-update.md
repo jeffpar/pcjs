@@ -59,7 +59,7 @@ So there you have it.  Once the ROM has relocated itself to RAM at the top of th
 megabyte, there are no less than THREE physical address ranges where ROM code and data
 structures can be accessed:
 
- 1. %000F0000 through %000FFFFF (aka real-mode adresses F000:0000 through F000:FFFF)
+ 1. %000F0000 through %000FFFFF (aka real-mode addresses F000:0000 through F000:FFFF)
  2. %00FF0000 through %00FFFFFF (the relocated copy)
  3. %FFFF0000 through %FFFFFFFF (the physical alias of %000F0000 through %000FFFFF)
 

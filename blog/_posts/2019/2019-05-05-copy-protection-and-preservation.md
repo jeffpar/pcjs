@@ -76,7 +76,7 @@ Even today, duplicating this kind of error on another physical disk still seems 
 duplication hardware that can somehow create the same kind of "damage" in the middle of a sector, it's hard to
 see how another working physical copy of the disk could be made.
 
-### The Software Preservation Quandry
+### The Software Preservation Quandary
 
 From a software preservation standpoint, it might be sufficient to simply duplicate all the undamaged sectors and
 call it a day, since -- at least in the case of PROLok -- there isn't any code or data in the damaged sectors that

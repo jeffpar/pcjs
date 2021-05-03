@@ -71,7 +71,7 @@ While `Shift-PrtSc` is handled entirely by the PC ROM BIOS, `Ctrl-PrtSc` is simp
 the key internally to `Ctrl-P`.  PC DOS uses `Ctrl-P` to toggle printer echo, while other OEM versions of DOS
 use `Ctrl-P` to enable printer echo and `Ctrl-N` to disable it.
 
-The problem of "untypable" keys can be worsened by whatever operating system and browser combination you're using.  For
+The problem of "untypeable" keys can be worsened by whatever operating system and browser combination you're using.  For
 example, if you're running Windows, then it intercepts a variety of Alt-key combinations, such as Alt-Tab, which means
 that if you're running an old version of Windows inside a PCjs machine, that machine won't be able to receive Alt-Tab.
 
