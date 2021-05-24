@@ -16,8 +16,7 @@ const strlib = require("../../../../machines/shared/lib/strlib");
 const proclib = require("../../../../machines/shared/lib/proclib");
 const args = proclib.getArgs();
 
-let sSubcategory = "";
-let dataBuffer = fs.readFileSync("../archive/Whats_In_Print_1984.pdf");
+let dataBuffer, sSubcategory = "";
 
 /**
  * printf(format, ...args)
@@ -41,8 +40,106 @@ function sprintf(format, ...args)
     return strlib.sprintf(format, ...args);
 }
 
+function renderSheet(pageData)
+{
+    let fDebug = args.argv['debug'];
+    let sHeadings = [], xHeadings = [], xPrev = -1, yPrev = -1, nLines = 0, rows = [];
+
+    let checkItem = function(item) {
+        let i, j;
+        let s = getString(item);
+        let x = item.transform[4];
+        let y = item.transform[5];
+        if (x < xPrev) {
+            if (!nLines) {
+                rows.push(sHeadings);
+            } else {
+                if (Math.abs(y - yPrev) <= 1) {
+                    /*
+                     * We seem to have rewound to an earlier position on the same line.  Figure out what column
+                     * that is, and then gather up all column data from that point on and append it to the preceding
+                     * column.
+                     */
+                    for (i = 0; i < xHeadings.length; i++) {
+                        if (xHeadings[i] >= x) break;
+                    }
+                    let t = "";
+                    for (j = i; j < xHeadings.length; j++) {
+                        if (rows[nLines][j] != undefined) {
+                            t += rows[nLines][j];
+                            delete rows[nLines][j];
+                        }
+                    }
+                    rows[nLines][i-1] += t;
+                    xPrev = -1;
+                }
+            }
+            if (x < xPrev) {
+                rows.push(new Array(sHeadings.length));
+                nLines++;
+                xPrev = -1;
+            }
+        }
+        if (!nLines) {
+            sHeadings.push(s);
+            xHeadings.push(x);
+        } else {
+            /*
+             * Check the current X position against those in xHeadings.  As soon as we find a heading whose X is >= the
+             * current X, that's where we'll drop the current item.
+             */
+            for (i = 0; i < xHeadings.length; i++) {
+                if (xHeadings[i] >= x) break;
+            }
+            rows[nLines][i] = s;
+        }
+        xPrev = x;
+        yPrev = y;
+        if (fDebug) printf("found \"%s\" at (%d,%d)\n", getString(item), x, y);
+    };
+
+    let getString = function(item) {
+        let str = item.str;
+        if (str.length > 1 && !str.match(/\S\S+/)) {    // this is intended only to repair strings like "B U S I N E S S   A R T I C L E S"....
+            str = str.replace(/(\S)\s/g, "$1");
+        }
+        return str.replace(/\s+/g, " ").trim().replace(/"/g, '""');
+    };
+
+    let makeCSVLine = function(row) {
+        let sLine = "";
+        for (let i = 0; i < row.length; i++) {
+            let col = row[i] || "";
+            col = col.trim().replace(/"/g, '""');
+            if (col.indexOf(',') >= 0 || col.indexOf('"') >= 0) col = '"' + col + '"';
+            if (i > 0) sLine += ',';
+            sLine += col;
+        }
+        return sLine;
+    };
+
+    let render_options = {              // documentation at https://mozilla.github.io/pdf.js/
+        normalizeWhitespace: true,      // replaces all occurrences of whitespace with standard spaces (0x20); default is false
+        disableCombineTextItems: true   // do not attempt to combine same line TextItems; default false
+    }
+
+    return pageData.getTextContent(render_options).then(function(textContent) {
+        if (args.argv['page'] && pageData.pageNumber != args.argv['page']) return "";
+        for (let i = 0; i < textContent.items.length; i++) {
+            let item = textContent.items[i];
+            checkItem(item);
+        }
+        let csv = "";
+        for (let i = 0; i < rows.length; i++) {
+            csv += makeCSVLine(rows[i]) + '\n';
+        }
+        return csv;
+    });
+}
+
 function renderPage(pageData)
 {
+    let fDebug = args.argv['debug'];
     /*
      * rows is an array of row data, where each row element is an array with the following columns:
      *
@@ -52,7 +149,6 @@ function renderPage(pageData)
      *
      *      y,subcategory
      */
-    let fDebug = args.argv['debug'];
     let rows = [], subs = [], headings = 0;
     let colNames = ["title","author","magazine","date"];
     let sCategory = "", sError = "";
@@ -73,14 +169,6 @@ function renderPage(pageData)
         headings++;
         if (fDebug) printf("found %s \"%s\" at (%d,%d)\n", colNames[col-1], getString(item), x, y);
         return x;
-    };
-
-    let getString = function(item) {
-        let str = item.str;
-        if (str.length > 1 && !str.match(/\S\S+/)) {    // this is intended only to repair strings like "B U S I N E S S   A R T I C L E S"....
-            str = str.replace(/(\S)\s/g, "$1");
-        }
-        return str.replace(/\s+/g, " ").trim().replace(/"/g, '""');
     };
 
     let addRow = function(item, col) {
@@ -164,13 +252,21 @@ function renderPage(pageData)
         return false;
     };
 
+    let getString = function(item) {
+        let str = item.str;
+        if (str.length > 1 && !str.match(/\S\S+/)) {    // this is intended only to repair strings like "B U S I N E S S   A R T I C L E S"....
+            str = str.replace(/(\S)\s/g, "$1");
+        }
+        return str.replace(/\s+/g, " ").trim().replace(/"/g, '""');
+    };
+
     let render_options = {              // documentation at https://mozilla.github.io/pdf.js/
         normalizeWhitespace: true,      // replaces all occurrences of whitespace with standard spaces (0x20); default is false
         disableCombineTextItems: true   // do not attempt to combine same line TextItems; default false
     }
 
     return pageData.getTextContent(render_options).then(function(textContent) {
-        if (pageData.pageNumber != args.argv['page']) return "";
+        if (args.argv['page'] && pageData.pageNumber != args.argv['page']) return "";
         for (let i = 0; i < textContent.items.length; i++) {
             let item = textContent.items[i];
             if (headings < 5) {
@@ -179,16 +275,16 @@ function renderPage(pageData)
                     sCategory = str;
                     headings++;
                 }
-                else if (str == "Title") {
+                else if (str.indexOf("Ti") == 0) {
                     xTitle = checkHeading(item, 1);
                 }
-                else if (str == "Author") {
+                else if (str.indexOf("Au") == 0) {
                     xAuthor = checkHeading(item, 2);
                 }
                 else if (str.indexOf("Ma") == 0) {
                     xMagazine = checkHeading(item, 3);
                 }
-                else if (str == "Date") {
+                else if (str.indexOf("Da") == 0) {
                     xDate = checkHeading(item, 4);
                 }
                 else {
@@ -202,6 +298,7 @@ function renderPage(pageData)
                 addSub(item);
             }
         }
+
         /*
          * Let's make sure that the rows are sorted by descending y values (ie, row[0]); ditto for subs.
          *
@@ -233,7 +330,9 @@ function renderPage(pageData)
  */
 function main(argc, argv)
 {
-    printf("--page = %d\n", argv['page']);
+    printf("%s --page=%d\n", argv[1], argv['page']);
+
+    dataBuffer = fs.readFileSync(argv[1]);
 
     pdf(dataBuffer, {
         pagerender: renderPage
@@ -249,7 +348,7 @@ function main(argc, argv)
         // check https://mozilla.github.io/pdf.js/getting_started/
         // console.log(data.version);
         // PDF text
-        console.log(data.text);
+        // console.log(data.text);
     });
 }
 

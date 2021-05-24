@@ -30,7 +30,7 @@
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
-      "console": "internalConsole",
+      "console": "integratedTerminal",
       "outFiles": [
         "${workspaceFolder}/none/**/*.js"
       ]
@@ -48,7 +48,7 @@
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
-      "console": "internalConsole",
+      "console": "integratedTerminal",
       "outFiles": [
         "${workspaceFolder}/none/**/*.js"
       ]
@@ -59,13 +59,16 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/old/textout/lib/pdfparse.js",
       "args": [
-        ".",
+        "archive/Whats_In_Print_1984-BW-OCR.pdf",
         "--page=11",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/tools/old/textout",
       "stopOnEntry": false,
-      "console": "internalConsole"
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
     },
     {
       "name": "PCjs Machines",
