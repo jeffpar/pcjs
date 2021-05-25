@@ -141,9 +141,9 @@ function renderPage(pageData)
 {
     let fDebug = args.argv['debug'];
     /*
-     * headings and subs are arrays of triplets: [string, x, y].
+     * headings and subs are arrays of descriptors: [string, x, y, cx, cy].
      *
-     * rows are arrays of arrays of triplets.
+     * rows are arrays of arrays of descriptors.
      */
     let rows = [], subs = [];
     let headings = [], pageHeadings = false, xPrev = -1;
@@ -160,31 +160,32 @@ function renderPage(pageData)
                 let i = 0;
                 if (headings.length) {
                     for (i = 1; i < headings.length; i++) {
-                        if (headings[i][1] > x - 2) {
-                            if (i > 1) i--;
+                        if (Math.abs(headings[i][1] + headings[i][3] - x) <= 2) {
                             break;
                         }
                     }
                 }
                 if (!headings[i]) {
-                    headings[i] = [str, x, y];
+                    headings[i] = [str, x, y, item.width, item.height];
                 } else {
                     headings[i][0] += ' ' + str;
+                    headings[i][3] += 2 + item.width;
                 }
                 if (fDebug) printf("heading %d at (%d,%d): \"%s\"\n", i, x, y, headings[i][0]);
+                xPrev = x;
                 return true;
             }
             pageHeadings = true;
-            return false;
         }
         /*
          * Deal with subheadings next.
          */
         if (x < xPrev && x > headings[1][1] + 2) {
             if (!subs.length || Math.abs(subs[subs.length - 1][2] - y) > 2) {
-                subs.push([str, x, y]);
+                subs.push([str, x, y, item.width, item.height]);
             } else {
                 subs[subs.length - 1][0] += ' ' + str;
+                subs[subs.length - 1][3] += 2 + item.width;
             }
             if (fDebug) printf("subheading at (%d,%d): \"%s\"\n", x, y, subs[subs.length - 1][0]);
             return true;
@@ -231,9 +232,10 @@ function renderPage(pageData)
         i -= 2;
         if (i < 0) i = 0;
         if (!row[i]) {
-            row[i] = [str, x, y];
+            row[i] = [str, x, y, item.width, item.height];
         } else {
             row[i][0] += ' ' + str;
+            row[i][3] += 2 + item.width;
         }
         if (fDebug) printf("%s at (%d,%d): \"%s\"\n", headings[i+1][0], row[i][1], row[i][2], row[i][0]);
         xPrev = x;
@@ -254,10 +256,11 @@ function renderPage(pageData)
 
     return pageData.getTextContent(render_options).then(function(textContent) {
         if (args.argv['page'] && pageData.pageNumber != args.argv['page']) return "";
+        if (pageData.pageNumber < 10 || pageData.pageNumber > 457) return "";
         for (let i = 0; i < textContent.items.length; i++) {
             let item = textContent.items[i];
             if (isHeading(item) || isValue(item)) continue;
-            printf("unrecognized text: " + getString(item));
+            printf("unrecognized text: \"%s\"\n", getString(item));
         }
 
         /*
@@ -308,7 +311,7 @@ function main(argc, argv)
         // check https://mozilla.github.io/pdf.js/getting_started/
         // console.log(data.version);
         // PDF text
-        // console.log(data.text);
+        console.log(data.text);
     });
 }
 

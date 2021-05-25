@@ -59,8 +59,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/old/textout/lib/pdfparse.js",
       "args": [
-        "archive/Whats_In_Print_1984-OCR.pdf",
-        "--page=15",
+        "archive/Whats_In_Print_1984.pdf",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/old/textout",
