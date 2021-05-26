@@ -132,5 +132,5 @@ in the November 18, 1985 issue of InfoWorld.
 When the message was first reported in InfoWorld's [October 28, 1985 issue](https://books.google.com/books?id=fS8EAAAAMBAJ&pg=PA3&dq=infoworld+microsoft+access+excises+excess+october+28+1985&hl=en&sa=X&ved=0ahUKEwjYgILCv8fhAhWiMHwKHVE7CrgQ6AEIOjAE#v=onepage&q&f=false),
 Jeff Raikes reportedly blamed the message on an unnamed programmer who place the "idle threat" into the program without the knowledge of Microsoft officials.
 
-That sounds a little disingenous but not particularly surprising.  Corporations have long been masters at the art of
+That sounds a little disingenuous but not particularly surprising.  Corporations have long been masters at the art of
 deflecting blame and minimizing missteps.

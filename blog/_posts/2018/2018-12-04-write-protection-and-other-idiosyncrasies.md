@@ -107,7 +107,7 @@ to examine original software operating under original hardware constraints.
 
 Look at [PC DOS 1.10](/software/pcx86/sys/dos/ibm/1.10/): the **FORMAT** utility was modified to automatically
 format all new diskettes with the new, higher capacity of 320K -- provided of course that the drive *truly* had
-two heads and the diskette was *truly* double-sided.  You had to specifiy **FORMAT /1** if you really wanted to
+two heads and the diskette was *truly* double-sided.  You had to specify **FORMAT /1** if you really wanted to
 use only one side of the diskette.
 
 Most PCx86 machines have double-sided drives.  The machine below, however, contains diskette drives

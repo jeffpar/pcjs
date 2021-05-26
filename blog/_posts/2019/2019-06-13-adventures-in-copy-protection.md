@@ -31,7 +31,7 @@ load them into [HxC](http://hxc2001.free.fr/).
 
 The basic steps:
 
-- Run PCE's **PRI** utilty to convert the `.tc` file to a `.pri` (PCE Raw Image) file
+- Run PCE's **PRI** utility to convert the `.tc` file to a `.pri` (PCE Raw Image) file
 - Run PCE's **PFI** utility to convert the `.pri` file to a `.pfi` (PCE Flux Image) file
 - Run PCE's **PFI** utility again to convert the `.pfi` file to a set of `.raw` track files
 

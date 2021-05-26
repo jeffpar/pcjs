@@ -16,8 +16,7 @@ const strlib = require("../../../../machines/shared/lib/strlib");
 const proclib = require("../../../../machines/shared/lib/proclib");
 const args = proclib.getArgs();
 
-let sSubcategory = "";
-let dataBuffer = fs.readFileSync("../archive/Whats_In_Print_1984.pdf");
+let dataBuffer;
 
 /**
  * printf(format, ...args)
@@ -41,38 +40,62 @@ function sprintf(format, ...args)
     return strlib.sprintf(format, ...args);
 }
 
-function renderPage(pageData)
+function renderSheet(pageData)
 {
-    /*
-     * rows is an array of row data, where each row element is an array with the following columns:
-     *
-     *      y,title,author,magazine,date
-     *
-     * subs is a similar array of subcategory data:
-     *
-     *      y,subcategory
-     */
     let fDebug = args.argv['debug'];
-    let rows = [], subs = [], headings = 0;
-    let colNames = ["title","author","magazine","date"];
-    let sCategory = "", sError = "";
-    let yHeadings = -1, yHeadingVariation = -1, yRows = [];
-    let xTitle = -1, xAuthor = -1, xMagazine = -1, xDate = -1;
+    let sHeadings = [], xHeadings = [], xPrev = -1, yPrev = -1, nLines = 0, rows = [];
 
-    let checkHeading = function(item, col) {
+    let checkItem = function(item) {
+        let i, j;
+        let s = getString(item);
         let x = item.transform[4];
         let y = item.transform[5];
-        if (yHeadings < 0) {
-            yHeadings = y;
-        } else {
-            let yVariation = Math.abs(yHeadings - y);
-            if (yHeadingVariation < yVariation) {
-                yHeadingVariation = yVariation;
+        if (x < xPrev) {
+            if (!nLines) {
+                rows.push(sHeadings);
+            } else {
+                if (Math.abs(y - yPrev) <= 1) {
+                    /*
+                     * We seem to have rewound to an earlier position on the same line.  Figure out what column
+                     * that is, and then gather up all column data from that point on and append it to the preceding
+                     * column.
+                     */
+                    for (i = 0; i < xHeadings.length; i++) {
+                        if (xHeadings[i] >= x) break;
+                    }
+                    let t = "";
+                    for (j = i; j < xHeadings.length; j++) {
+                        if (rows[nLines][j] != undefined) {
+                            t += rows[nLines][j];
+                            delete rows[nLines][j];
+                        }
+                    }
+                    rows[nLines][i-1] += t;
+                    xPrev = -1;
+                }
+            }
+            if (x < xPrev) {
+                rows.push(new Array(sHeadings.length));
+                nLines++;
+                xPrev = -1;
             }
         }
-        headings++;
-        if (fDebug) printf("found %s \"%s\" at (%d,%d)\n", colNames[col-1], getString(item), x, y);
-        return x;
+        if (!nLines) {
+            sHeadings.push(s);
+            xHeadings.push(x);
+        } else {
+            /*
+             * Check the current X position against those in xHeadings.  As soon as we find a heading whose X is >= the
+             * current X, that's where we'll drop the current item.
+             */
+            for (i = 0; i < xHeadings.length; i++) {
+                if (xHeadings[i] >= x) break;
+            }
+            rows[nLines][i] = s;
+        }
+        xPrev = x;
+        yPrev = y;
+        if (fDebug) printf("found \"%s\" at (%d,%d)\n", getString(item), x, y);
     };
 
     let getString = function(item) {
@@ -83,85 +106,16 @@ function renderPage(pageData)
         return str.replace(/\s+/g, " ").trim().replace(/"/g, '""');
     };
 
-    let addRow = function(item, col) {
-        let i, row;
-        let x = item.transform[4];
-        let y = item.transform[5];
-        let str = getString(item);
-        for (i = 0; i < rows.length; i++) {
-            row = rows[i];
-            if (y <= row[0] + 2 && y >= row[0] - 2) {
-                if (row[col] != undefined) {
-                    sError = sprintf("duplicate %s found at (%d,%d): \"%s\"", colNames[col-1], x, y, str);
-                    if (fDebug) printf("error: %s\n", sError);
-                    return;
-                }
-                break;
-            }
+    let makeCSVLine = function(row) {
+        let sLine = "";
+        for (let i = 0; i < row.length; i++) {
+            let col = row[i] || "";
+            col = col.trim().replace(/"/g, '""');
+            if (col.indexOf(',') >= 0 || col.indexOf('"') >= 0) col = '"' + col + '"';
+            if (i > 0) sLine += ',';
+            sLine += col;
         }
-        if (i == rows.length) {
-            row = [y];
-            rows.push(row);
-        }
-        if (fDebug) sprintf("added %s found at (%d,%d): \"%s\"", colNames[col-1], x, y, str);
-        row[col] = str;
-    };
-
-    let addSub = function(item) {
-        let i, sub;
-        let x = item.transform[4];
-        let y = item.transform[5];
-        let str = getString(item);
-        for (i = 0; i < subs.length; i++) {
-            sub = subs[i];
-            if (y <= sub[0] + 2 && y >= sub[0] - 2) {
-                sError = sprintf("duplicate subcategory found at (%d,%d): \"%s\"", x, y, str);
-                if (fDebug) printf("error: %s\n", sError);
-                break;
-            }
-        }
-        if (i == subs.length) {
-            sub = [y];
-            sub[1] = str;
-            subs.push(sub);
-            if (fDebug) printf("added subcategory from (%d,%d): \"%s\"\n", x, y, str);
-        }
-    };
-
-    let checkTitle = function(item) {
-        let x = item.transform[4];
-        if (x >= xTitle - 2 && x <= xTitle + 2) {
-            addRow(item, 1);
-            return true;
-        }
-        return false;
-    };
-
-    let checkAuthor = function(item) {
-        let x = item.transform[4];
-        if (x >= xAuthor - 2 && x <= xAuthor + 2) {
-            addRow(item, 2);
-            return true;
-        }
-        return false;
-    };
-
-    let checkMagazine = function(item) {
-        let x = item.transform[4];
-        if (x >= xMagazine - 2 && x <= xMagazine + 2) {
-            addRow(item, 3);
-            return true;
-        }
-        return false;
-    };
-
-    let checkDate = function(item) {
-        let x = item.transform[4];
-        if (x >= xDate - 2 && x <= xDate + 2) {
-            addRow(item, 4);
-            return true;
-        }
-        return false;
+        return sLine;
     };
 
     let render_options = {              // documentation at https://mozilla.github.io/pdf.js/
@@ -170,56 +124,162 @@ function renderPage(pageData)
     }
 
     return pageData.getTextContent(render_options).then(function(textContent) {
-        if (pageData.pageNumber != args.argv['page']) return "";
+        if (args.argv['page'] && pageData.pageNumber != args.argv['page']) return "";
         for (let i = 0; i < textContent.items.length; i++) {
             let item = textContent.items[i];
-            if (headings < 5) {
-                let str = getString(item);
-                if (i == 0) {
-                    sCategory = str;
-                    headings++;
+            checkItem(item);
+        }
+        let csv = "";
+        for (let i = 0; i < rows.length; i++) {
+            csv += makeCSVLine(rows[i]) + '\n';
+        }
+        return csv;
+    });
+}
+
+function renderPage(pageData)
+{
+    let fDebug = args.argv['debug'];
+    /*
+     * headings and subs are arrays of descriptors: [string, x, y, cx, cy].
+     *
+     * rows are arrays of arrays of descriptors.
+     */
+    let rows = [], subs = [];
+    let headings = [], pageHeadings = false, xPrev = -1;
+
+    let isHeading = function(item) {
+        let x = item.transform[4];
+        let y = item.transform[5];
+        let str = getString(item);
+        /*
+         * Deal with page and column headings first.
+         */
+        if (!pageHeadings) {
+            if (headings.length <= 1 || Math.abs(headings[headings.length - 1][2] - y) <= 2) {
+                let i = 0;
+                if (headings.length) {
+                    for (i = 1; i < headings.length; i++) {
+                        if (Math.abs(headings[i][1] + headings[i][3] - x) <= 2) {
+                            break;
+                        }
+                    }
                 }
-                else if (str == "Title") {
-                    xTitle = checkHeading(item, 1);
+                if (!headings[i]) {
+                    headings[i] = [str, x, y, item.width, item.height];
+                } else {
+                    headings[i][0] += ' ' + str;
+                    headings[i][3] += 2 + item.width;
                 }
-                else if (str == "Author") {
-                    xAuthor = checkHeading(item, 2);
-                }
-                else if (str.indexOf("Ma") == 0) {
-                    xMagazine = checkHeading(item, 3);
-                }
-                else if (str == "Date") {
-                    xDate = checkHeading(item, 4);
-                }
-                else {
-                    sError = "unable to find all headings";
-                    if (fDebug) printf("%s\n", sError);
-                    break;
-                }
-                continue;
+                if (fDebug) printf("heading %d at (%d,%d): \"%s\"\n", i, x, y, headings[i][0]);
+                xPrev = x;
+                return true;
             }
-            if (!checkTitle(item) && !checkAuthor(item) && !checkMagazine(item) && !checkDate(item)) {
-                addSub(item);
-            }
+            pageHeadings = true;
         }
         /*
-         * Let's make sure that the rows are sorted by descending y values (ie, row[0]); ditto for subs.
+         * Deal with subheadings next.
+         */
+        if (x < xPrev && x > headings[1][1] + 2) {
+            if (!subs.length || Math.abs(subs[subs.length - 1][2] - y) > 2) {
+                subs.push([str, x, y, item.width, item.height]);
+            } else {
+                subs[subs.length - 1][0] += ' ' + str;
+                subs[subs.length - 1][3] += 2 + item.width;
+            }
+            if (fDebug) printf("subheading at (%d,%d): \"%s\"\n", x, y, subs[subs.length - 1][0]);
+            return true;
+        }
+        return false;
+    };
+
+    let isValue = function(item) {
+        let row = getRow(rows, item);
+        if (row) {
+            addValue(row, item);
+            return true;
+        }
+        return false;
+    };
+
+    let getRow = function(rows, item) {
+        let x = item.transform[4];
+        let y = item.transform[5];
+        for (let i = 0; i < rows.length; i++) {
+            let row = rows[i];
+            if (Math.abs(row[0][2] - y) <= 2) {
+                return row;
+            }
+        }
+        if (Math.abs(headings[1][1] - x) <= 2) {
+            let row = [];
+            rows.push(row);
+            return row;
+        }
+        return null;
+    };
+
+    let addValue = function(row, item) {
+        let i;
+        let x = item.transform[4];
+        let y = item.transform[5];
+        let str = getString(item);
+        for (i = 1; i < headings.length; i++) {
+            if (headings[i][1] > x + 2) {
+                break;
+            }
+        }
+        i -= 2;
+        if (i < 0) i = 0;
+        if (!row[i]) {
+            row[i] = [str, x, y, item.width, item.height];
+        } else {
+            row[i][0] += ' ' + str;
+            row[i][3] += 2 + item.width;
+        }
+        if (fDebug) printf("%s at (%d,%d): \"%s\"\n", headings[i+1][0], row[i][1], row[i][2], row[i][0]);
+        xPrev = x;
+    };
+
+    let getString = function(item) {
+        let str = item.str;
+        if (str.length > 1 && !str.match(/\S\S+/)) {    // this is intended only to repair strings like "B U S I N E S S   A R T I C L E S"....
+            str = str.replace(/(\S)\s/g, "$1");
+        }
+        return str.replace(/\s+/g, " ").trim().replace(/"/g, '""');
+    };
+
+    let render_options = {              // documentation at https://mozilla.github.io/pdf.js/
+        normalizeWhitespace: true,      // replaces all occurrences of whitespace with standard spaces (0x20); default is false
+        disableCombineTextItems: true   // do not attempt to combine same line TextItems; default false
+    }
+
+    return pageData.getTextContent(render_options).then(function(textContent) {
+        if (args.argv['page'] && pageData.pageNumber != args.argv['page']) return "";
+        if (pageData.pageNumber < 10 || pageData.pageNumber > 457) return "";
+        for (let i = 0; i < textContent.items.length; i++) {
+            let item = textContent.items[i];
+            if (isHeading(item) || isValue(item)) continue;
+            printf("unrecognized text: \"%s\"\n", getString(item));
+        }
+
+        /*
+         * Let's make sure that the rows are sorted by descending y values; ditto for subs.
          *
          * The ordinary top-down flow of text data inside PDFs means this is generally already true, but this
          * will guarantee it, ensuring we can safely insert the subs into the rows at the appropriate points.
          */
-        rows.sort((a, b) => {a[0] > b[0]? -1 : (a[0] < b[0]? 1 : 0)});
-        subs.sort((a, b) => {a[0] > b[0]? -1 : (a[0] < b[0]? 1 : 0)});
+        rows.sort((a, b) => {a[0][2] > b[0][2]? -1 : (a[0][2] < b[0][2]? 1 : 0)});
+        subs.splice(subs.length - 1, 1);
+        subs.sort((a, b) => {a[2] > b[2]? -1 : (a[2] < b[2]? 1 : 0)});
 
-        let csv = "";
-        let j = 0, sub = subs[j];
-        for (let i = 0, j = 0; i < rows.length; i++) {
+        let csv = "", j = 0;
+        for (let i = 0; i < rows.length; i++) {
             let row = rows[i];
-            if (sub && sub[0] > row[0]) {
-                sSubcategory = sub[1];
-                sub = subs[++j];
+            while (subs[j+1] && subs[j+1][2] < row[0][2]) {
+                j++;
             }
-            csv += sprintf('%d,"%s","%s","%s","%s","%s","%s"\n', pageData.pageNumber, sCategory, sSubcategory, row[1], row[2], row[3], row[4]);
+            csv += sprintf('%d,"%s","%s","%s","%s","%s","%s"\n', pageData.pageNumber, headings[0][0], subs[j]? subs[j][0] : "", row[0]? row[0][0] : "", row[1]? row[1][0] : "", row[2]? row[2][0] : "", row[3]? row[3][0] : "");
         }
         return csv;
     });
@@ -233,7 +293,9 @@ function renderPage(pageData)
  */
 function main(argc, argv)
 {
-    printf("--page = %d\n", argv['page']);
+    printf("%s --page=%d\n", argv[1], argv['page']);
+
+    dataBuffer = fs.readFileSync(argv[1]);
 
     pdf(dataBuffer, {
         pagerender: renderPage

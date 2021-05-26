@@ -207,7 +207,7 @@ this one is not very convenient to use. The screen attribute is set by passing e
 hex digits, thus requiring the user to calculate, using the IBM Technical Manual, the appropriate parameter.
 Hopefully an updated version would allow the input to follow the BASIC conventions for controlling the display.
 
-> **PRINT** - This utility is a simple formatting program, which trans fers an ASCII file to a printer. A
+> **PRINT** - This utility is a simple formatting program, which transfers an ASCII file to a printer. A
 no-numbering option suppresses line numbers. **PRINT** inserts page breaks and prints the file name, current
 date and time at the top of each page.
 
@@ -318,8 +318,8 @@ all erased files on the disk. The first letter of these file names are all quest
 second letter. Once a file has been designated for recovery, **UNERASE** will display all of the data it knows about the
 file, like its size and condition of the first data sector. You then have the option of selecting sectors for recovery
 manually, or letting **UNERASE** do it for you. The data in each sector may be displayed in either hex or ASCII. This
-allows you to make sure that the sector you are about to save actually belongs to the file in ques tion. At any time during
-the recovery process, you may review your progress and make sure that everyhing is proceeding as planned.
+allows you to make sure that the sector you are about to save actually belongs to the file in question. At any time during
+the recovery process, you may review your progress and make sure that everything is proceeding as planned.
 
 > The reviewer tried out the program on an erased, outdated version of an old program, and it worked perfectly after the
 process became familiar. Again, this utility is one that will be priceless when needed and should have a place in the library
@@ -340,7 +340,7 @@ bit more personal but this utility has some obvious, less trivial uses, such as 
 use.
 
 > **DISKLOOK** - This last program is the most unique, imaginative, enjoyable and educational one in the package. Again,
-entirely menu driven, it provides complete infor mation on every file on the disk, in cluding the name, directory number,
+entirely menu driven, it provides complete information on every file on the disk, including the name, directory number,
 size, creation date, attribute, starting cluster, track and sector and whether the file is available or erased. This
 data is presented as textual material at the top of the screen, but the best part of this program is the disk map which
 accompanies each file. The conceptual and graphic presentation of the information is absolutely outstanding.

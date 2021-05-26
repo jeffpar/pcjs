@@ -30,7 +30,7 @@
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
-      "console": "internalConsole",
+      "console": "integratedTerminal",
       "outFiles": [
         "${workspaceFolder}/none/**/*.js"
       ]
@@ -48,7 +48,7 @@
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
-      "console": "internalConsole",
+      "console": "integratedTerminal",
       "outFiles": [
         "${workspaceFolder}/none/**/*.js"
       ]
@@ -59,283 +59,324 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/old/textout/lib/pdfparse.js",
       "args": [
-        ".",
-        "--page=11",
+        "archive/Whats_In_Print_1984-OCR.pdf",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/tools/old/textout",
       "stopOnEntry": false,
-      "console": "internalConsole"
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
     },
     {
       "name": "PCjs Machines",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "8080 Exerciser Test Machine",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx80/exerciser/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "COMPAQ Portable with Monochrome Graphics",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/compaq/portable/vdu/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "DEC PDP-11/20 BASIC with Debugger",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1120/basic/debugger/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "DEC PDP-11/20 BASIC with Debugger (v3)",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1120/basic/debugger/v3/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "DEC PDP-11/20 Bootstrap Loader with Debugger",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1120/bootstrap/debugger/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "DEC PDP-11/70 for XXDP+ with Front Panel and Debugger",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1170/panel/debugger/xxdp/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC with CGA",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/cga/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC with CGA and Debugger",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/cga/debugger/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC with MDA",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC with MDA and Debugger",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC with MDA and Debugger (v3)",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/v3/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC with Dual Displays",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/dual/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC with VGA",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/vga/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC with VGA and Debugger",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/vga/debugger/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC XT with CGA",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/cga/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC XT with CGA and Debugger",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/cga/debugger/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC XT with EGA",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/ega/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC XT with EGA and Debugger",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/ega/debugger/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC XT with MDA",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/mda/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC XT with MDA and Debugger",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/mda/debugger/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM PC AT with CGA",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5170/cga/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "Ohio Scientific Challenger 1P",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/osi/c1p/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "Ohio Scientific Challenger 1P with Debugger",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/osi/c1p/debugger/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "Ohio Scientific Challenger 1P with Debugger (XML)",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/configs/c1p/xml/c1p8k-debugger.xml",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "Ohio Scientific Challenger 1P \"Array\"",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/osi/c1p/array/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "TI-57 Programmable Calculator",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/ti/ti57/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "TI-57 with Original ROM and Debugger",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/ti/ti57/rev0/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "TI-57 with Revised ROM and Debugger",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/ti/ti57/rev1/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "101 Monochrome Mazes (1983)",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/ibm/101mazes/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "Dune II (1992)",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/other/1992/dune2/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "Exploring the IBM PC (MDA)",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/?software=/pcx86/demo/ibm/exploring/1.00-MDA&autoMount={%20A:{name:%22Exploring%20the%20IBM%20PC%20(MDA)%22,path:%22https://diskettes.pcjs.org/pcx86/demo/ibm/exploring/1.00-MDA/EXPLORING-THE-IBM-PC-100-MDA.json%22}%20}",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "Game of Life (Color)",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/machines/led/life/color/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "IBM Macro Assembler 1.00",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/lang/ibm/masm/1.00/?sizeRAM=256&autoMount={A:{name:%22Jeff's PC DOS 1.00 with MASM%22}}&autoStart=true&autoType=$date\\r",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "Inside the IBM PC (1983)",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sw/books/inside_the_ibm_pc/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "King's Quest (1985)",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/other/1985/kings_quest1/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "Microsoft Windows 3.11",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/windows/3.11/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "Microsoft Windows 95",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/windows/win95/4.00.950/?debugger=true",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "Software Carousel 2.0.3",
-      "type": "chrome",
+      "type": "edge",
+      "port": 9222,
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/ext/softlogic/carousel/2.0.3/?debugger=true",
       "webRoot": "${workspaceFolder}"

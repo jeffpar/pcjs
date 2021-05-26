@@ -88,7 +88,7 @@ website:
 > These self­-extracting, self­-installing files install 2 modified files, PANDORA.EXE and LANGENU.DLL.
 > This patch fixes a bug specific to computers with new Pentium III processors, which produce the error
 > "Unable to create DirectDraw surface. Make sure that DirectX is installed, and then try again" upon startup.
-> If you do not have a computer with a Pentium III processor and do not recieve this error upon startup,
+> If you do not have a computer with a Pentium III processor and do not recieve [sic] this error upon startup,
 > then there is no need to patch your existing setup.
 
 One important side-effect of the patch: the copy-protection was removed.  Whether that's because the
@@ -101,13 +101,13 @@ main executable to PANDORA.ICD and calling the SafeDisc loader PANDORA.EXE.  It 
 ### The Art of Software Preservation
 
 **Pandora's Box** illustrates more than just the obvious principle that "copy-protected software is hard to
-copy", to which I've already [alluded](/blog/2019/05/05/#the-software-preservation-quandry).
+copy", to which I've already [alluded](/blog/2019/05/05/#the-software-preservation-quandary).
 
 More than that, it shows that there's more to preservation than simply figuring out how to "copy the bits".
 There is also a history associated with each piece of software that needs to be researched, captured, and
 preserved as well.  And that history may span a variety of obsolete media, including print media (magazine
 articles, advertisements, newsletters, etc) and online media (product pages and support articles that have
-been deleted, FTP servers that have been decomissioned, etc).
+been deleted, FTP servers that have been decommissioned, etc).
 
 The worst-case scenario is software that requires a live server to authenticate users or provide some sort
 of virtual environment -- a scenario that has tended to get more attention and hand-wringing lately, with the
@@ -127,7 +127,7 @@ and it's still possible to access the web pages for [Pandora's Box](https://web.
 including the [Downloads](https://web.archive.org/web/20000815060252/http://www.microsoft.com/games/pandorasbox/downloads.htm) page,
 where the previously mentioned patch is described.
 
-Unfortunately, the patch is located on Microsoft's decomissioned FTP server, which the Internet Archive
+Unfortunately, the patch is located on Microsoft's decommissioned FTP server, which the Internet Archive
 apparently didn't snapshot.  But other people did, and some of them even [uploaded](https://archive.org/details/ftp.microsoft.com)
 their snapshots to the Internet Archive.  So with a bit more work, it's possible to eventually locate and
 download the patch for **Pandora's Box**, eliminate the copy protection, and preserve another fine piece of software
