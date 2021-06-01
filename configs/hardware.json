@@ -492,6 +492,15 @@
           "@redirect_from": "/devices/pcx86/machine/5170/ega/2048kb/rev3/vt100/"
         }
       }
+    },
+    "roms": {
+      "@title": "ROMs",
+      "@instances": {
+        "assorted": {
+          "@title": "Assorted DEC ROMs",
+          "@redirect_from": "/machines/dec/rom/"
+        }
+      }
     }
   },
   "pcx86": {

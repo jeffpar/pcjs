@@ -1,8 +1,10 @@
 ---
 layout: page
-title: Digital Equipment Corp. (DEC) ROMs
-permalink: /machines/dec/rom/
-redirect_from: /devices/dec/rom/
+title: Assorted Digital Equipment Corp. (DEC) ROMs
+permalink: /machines/dec/roms/assorted/
+redirect_from:
+  - /devices/dec/rom/
+  - /machines/dec/rom/
 ---
 
 This directory describes a variety of ROMs for DEC equipment, originally made available by Pete Turnbull at
