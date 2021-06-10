@@ -10,8 +10,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5150/mda/256kb/machine.xml
     autoGen: true
     autoMount:
-      A:
-        name: "Exploring the IBM PC (MDA)"
+      A: "Exploring the IBM PC (MDA)"
 ---
 
 There are four versions of this software, which you can {% include explorer/link.html title="Explore" %} by clicking the appropriate link on the left.

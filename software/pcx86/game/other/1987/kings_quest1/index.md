@@ -38,6 +38,8 @@ copy-protection test.  The IBM PC AT below has diskette `King's Quest (1987-05-0
             3 file(s)     137575 bytes
                           223232 bytes free
 
+[Source](https://archive.org/details/kingsquestipc)
+
 ### Directory of King's Quest (1987-12-01 #1)
 
      Volume in drive A is KQ1 DISK 1
@@ -71,6 +73,8 @@ copy-protection test.  The IBM PC AT below has diskette `King's Quest (1987-05-0
            25 file(s)     323844 bytes
                            20480 bytes free
 
+[Source](http://www.r-09.net/stuff/index.php?dir=Floppy)
+
 ### Directory of King's Quest (1987-12-01 #2)
 
      Volume in drive A has no label
@@ -82,3 +86,5 @@ copy-protection test.  The IBM PC AT below has diskette `King's Quest (1987-05-0
     KQ101078 QA         12   1-01-80  12:50a
             4 file(s)     139706 bytes
                           220160 bytes free
+
+[Source](http://www.r-09.net/stuff/index.php?dir=Floppy)

@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "IBM OS/2 1.3 (Install)"
+      B: "IBM OS/2 1.3 (Install)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

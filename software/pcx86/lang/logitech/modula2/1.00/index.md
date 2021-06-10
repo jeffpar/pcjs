@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "Modula-2/86 1.00 (1-System)"
+      B: "Modula-2/86 1.00 (1-System)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

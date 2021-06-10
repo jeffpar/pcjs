@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "Borland Turbo Pascal 4.00 (Disk 1)"
+      B: "Borland Turbo Pascal 4.00 (Disk 1)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

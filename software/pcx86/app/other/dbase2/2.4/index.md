@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "dBASE II 2.4 (PROGRAM)"
+      B: "dBASE II 2.4 (PROGRAM)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

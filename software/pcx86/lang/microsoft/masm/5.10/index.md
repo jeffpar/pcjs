@@ -11,8 +11,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "MS Macro Assembler 5.10 (Disk 1)"
+      B: "MS Macro Assembler 5.10 (Disk 1)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
@@ -60,6 +59,8 @@ We don't have any documents from this release, but you can browse the
            22 file(s)     240979 bytes
                           107520 bytes free
 
+[Source](https://winworldpc.com/product/macro-assembler/5x)
+
 ### Directory of MS Macro Assembler 5.10 (Disk 2)
 
      Volume in drive A is UTILITIES
@@ -77,6 +78,8 @@ We don't have any documents from this release, but you can browse the
     SETENV   EXE     10313   1-31-88  11:00p
            10 file(s)     303193 bytes
                            53248 bytes free
+
+[Source](https://winworldpc.com/product/macro-assembler/5x)
 
 ### Directory of MS Macro Assembler 5.10 (Disk 3)
 
@@ -100,6 +103,8 @@ We don't have any documents from this release, but you can browse the
     SHOWR    EXE      5419   1-31-88  11:00p
            15 file(s)     351344 bytes
                             2048 bytes free
+
+[Source](https://winworldpc.com/product/macro-assembler/5x)
 
 ### Directory of MS Macro Assembler 5.10 (Disk 4)
 
@@ -146,6 +151,8 @@ We don't have any documents from this release, but you can browse the
            26 file(s)     307295 bytes
                            41984 bytes free
 
+[Source](https://winworldpc.com/product/macro-assembler/5x)
+
 ### Directory of MS Macro Assembler 5.10 (Disk 5)
 
      Volume in drive A is OS2 PROGRAM
@@ -180,6 +187,8 @@ We don't have any documents from this release, but you can browse the
     OS2PATCH EXE      1069   1-31-88  11:00p
            27 file(s)     966076 bytes
                           241152 bytes free
+
+[Source](https://winworldpc.com/product/macro-assembler/5x)
 
 ### Directory of MS Macro Assembler 5.10 (Update)
 
@@ -219,3 +228,5 @@ We don't have any documents from this release, but you can browse the
     Total files listed:
            20 file(s)     293634 bytes
                            61440 bytes free
+
+[Source](https://winworldpc.com/product/macro-assembler/5x)

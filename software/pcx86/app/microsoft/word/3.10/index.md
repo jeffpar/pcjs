@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "MS Word 3.10 (Disk 1)"
+      B: "MS Word 3.10 (Disk 1)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

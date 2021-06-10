@@ -1413,13 +1413,15 @@ export default class DiskInfo {
                             this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d:%d has non-standard sector count: %d\n", this.diskName, iCylinder, iHead, nSectors);
                         }
                         for (let iSector = 0; iSector < aSectors.length; iSector++) {
-                            let sector = aSectors[iSector];
-                            this.rebuildSector(iCylinder, iHead, sector);
-                            let cbSector = sector[DiskInfo.SECTOR.LENGTH];
-                            if (!this.cbSector) {
+                            let sector = aSectors[iSector], cbSector = 0;
+                            if (sector) {
+                                this.rebuildSector(iCylinder, iHead, sector);
+                                cbSector = sector[DiskInfo.SECTOR.LENGTH];
+                            }
+                            if (!this.cbSector && cbSector) {
                                 this.cbSector = cbSector;
                             } else if (this.cbSector != cbSector) {
-                                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d:%d:%d has non-standard sector size: %d\n", this.diskName, iCylinder, iHead, sector[DiskInfo.SECTOR.ID], cbSector);
+                                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: %d:%d:%d has non-standard sector size: %d\n", this.diskName, iCylinder, iHead, sector? sector[DiskInfo.SECTOR.ID] : (iSector+1), cbSector);
                             }
                             this.cbDiskData += cbSector;
                         }

@@ -8,8 +8,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "MS MASM 5.10 (Feb 1988 Disk 1)"
+      B: "MS MASM 5.10 (Feb 1988 Disk 1)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

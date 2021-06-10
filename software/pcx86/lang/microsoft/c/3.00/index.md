@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "MS C 3.00 (Disk 1)"
+      B: "MS C 3.00 (Disk 1)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

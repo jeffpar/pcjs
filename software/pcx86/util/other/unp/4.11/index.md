@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "UNP (Executable Unpacker) 4.11"
+      B: "UNP (Executable Unpacker) 4.11"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

@@ -1176,7 +1176,6 @@
       "@versions": {
         "5.02": {
           "@title": "COMPAQ Diagnostics 5.02",
-          "@hidden": true,
           "@hardware": {
             "options": "compaq,deskpro386"
           },

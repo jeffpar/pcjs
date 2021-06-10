@@ -11,8 +11,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "MS BASIC Compiler 5.36"
+      B: "MS BASIC Compiler 5.36"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

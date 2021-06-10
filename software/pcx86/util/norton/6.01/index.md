@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "Norton Utilities 6.01 (Install)"
+      B: "Norton Utilities 6.01 (Install)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

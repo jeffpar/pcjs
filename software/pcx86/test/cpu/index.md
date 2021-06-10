@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "PCx86 CPU Tests"
+      B: "PCx86 CPU Tests"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
