@@ -8,8 +8,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "MS COBOL 1.12 (Disk 1)"
+      B: "MS COBOL 1.12 (Disk 1)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

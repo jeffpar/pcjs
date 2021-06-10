@@ -11,8 +11,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "MS Multiplan 1.06 (Modified)"
+      B: "MS Multiplan 1.06 (Modified)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

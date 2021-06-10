@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "MS C 5.10-OS/2 (SETUP)"
+      B: "MS C 5.10-OS/2 (SETUP)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

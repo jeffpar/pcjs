@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "IBM BASIC Compiler 1.00 (Disk 1)"
+      B: "IBM BASIC Compiler 1.00 (Disk 1)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

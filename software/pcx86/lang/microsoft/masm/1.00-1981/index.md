@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "MS Macro Assembler 1.00 (1981)"
+      B: "MS Macro Assembler 1.00 (1981)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
@@ -29,3 +28,5 @@ Directory listing of a recreated 160Kb diskette ([Source](http://www.os2museum.c
     M        EXE     67456  11-04-81  12:00a
             4 file(s)     154624 bytes
                             5120 bytes free
+
+[Source](http://www.os2museum.com)

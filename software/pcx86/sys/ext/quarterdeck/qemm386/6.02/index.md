@@ -10,8 +10,7 @@ machines:
     autoType: 
     autoGen: true
     autoMount:
-      B:
-        name: "QEMM-386 6.02"
+      B: "QEMM-386 6.02"
 ---
 
 {% include machine.html id="deskpro386" %}

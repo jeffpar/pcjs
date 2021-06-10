@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "MS C 2.03 (Installed)"
+      B: "MS C 2.03 (Installed)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

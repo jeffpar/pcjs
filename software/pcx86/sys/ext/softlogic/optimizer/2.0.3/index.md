@@ -10,8 +10,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "Disk Optimizer 2.0.3"
+      B: "Disk Optimizer 2.0.3"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

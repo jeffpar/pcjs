@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/compaq/deskpro386/cga/640kb/machine.xml
     autoGen: true
     autoMount:
-      A:
-        name: "COMPAQ Diagnostics 5.08"
+      A: "COMPAQ Diagnostics 5.08"
 ---
 
 This early COMPAQ Diagnostics diskette from the PCjs archives is noteworthy because it contains

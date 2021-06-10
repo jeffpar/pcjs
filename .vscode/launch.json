@@ -41,10 +41,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--disk",
-        "diskettes/pcx86/sys/unix/qnx/1.2/archive/QNX12-UTILS.img",
-        "--output",
-        "QNX12-UTILS.json"
+        "--all",
+        "--checkpage",
+        "--rebuild"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,

@@ -8,8 +8,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "Inside the IBM PC (Disk 1)"
+      B: "Inside the IBM PC (Disk 1)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

@@ -8,8 +8,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "MS Word 1.10"
+      B: "MS Word 1.10"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

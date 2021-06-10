@@ -10,8 +10,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "Flight Simulator (1984)"
+      B: "Flight Simulator (1984)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

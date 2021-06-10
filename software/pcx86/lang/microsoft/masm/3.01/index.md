@@ -11,8 +11,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "MS Macro Assembler 3.01"
+      B: "MS Macro Assembler 3.01"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

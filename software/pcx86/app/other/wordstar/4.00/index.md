@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "WordStar 4.00 (INSTALL)"
+      B: "WordStar 4.00 (INSTALL)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

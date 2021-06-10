@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      A:
-        name: "Exploring the IBM PC (CGA)"
+      A: "Exploring the IBM PC (CGA)"
 ---
 
 There are four versions of this software, which you can {% include explorer/link.html title="Explore" %} by clicking the appropriate link on the left.

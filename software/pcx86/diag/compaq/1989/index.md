@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/compaq/deskpro386/cga/640kb/machine.xml
     autoGen: true
     autoMount:
-      A:
-        name: "COMPAQ User Programs (1989)"
+      A: "COMPAQ User Programs (1989)"
 ---
 
 From `README.CPQ`:

@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/compaq/deskpro386/cga/640kb/machine.xml
     autoGen: true
     autoMount:
-      A:
-        name: "COMPAQ DeskPro 386 (1986)"
+      A: "COMPAQ DeskPro 386 (1986)"
 ---
 
 ### COMPAQ DeskPro 386 (1986)

@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
-      A:
-        name: "Exploring the IBM PC AT 2.00"
+      A: "Exploring the IBM PC AT 2.00"
 ---
 
 There are four versions of this software, which you can {% include explorer/link.html title="Explore" %} by clicking the appropriate link on the left.

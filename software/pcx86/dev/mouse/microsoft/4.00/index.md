@@ -9,8 +9,7 @@ machines:
     config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B:
-        name: "MS Mouse 4.00 (SYSTEM)"
+      B: "MS Mouse 4.00 (SYSTEM)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
