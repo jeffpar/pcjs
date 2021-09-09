@@ -189,13 +189,8 @@ And in August 1984, PC DOS 3.00 added:
 
 This explains why, when I first ran `SPEEDUP` on PC DOS 2.00, it crashed.  In fact, the *only* version
 of DOS that supports `SPEEDUP` is version 1.00.  It crashes on all other versions of DOS because it "trashes"
-critical PSP bytes; specifically, the Parent's PSP segment at offset 16h.  The author of `SPEEDUP` ignored IBM's
+critical PSP bytes (eg, the Parent's PSP segment at offset 16h).  The author of `SPEEDUP` ignored IBM's
 warning that PSP bytes at offset 12h and higher were "reserved" and used them anyway.
-
-> NOTE: Other sites, like [PC DOS Retro](https://sites.google.com/site/pcdosretro/doshist), suggest that
-the "Parent's PSP segment" at offset 16h wasn't introduced until PC DOS 2.00, but that's incorrect.  Even though
-the PC DOS 1.10 Manual (p. E-6) mentions only the addition of the "Critical Error Exit Address" at offset 12h,
-both fields were in fact added in PC DOS 1.10.
 
 Sadly, the history of the IBM PC and DOS is littered with examples of programmers ignoring the "reserved"
 admonitions of others -- even IBM, when they designed the IBM PC to use interrupt vectors that Intel had "reserved"
