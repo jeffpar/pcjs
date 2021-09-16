@@ -248,7 +248,7 @@ function isTextFile(sFile)
 function mapDiskToServer(diskFile)
 {
     if (useServer || !existsFile(getFullPath(diskFile))) {
-        diskFile = diskFile.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+        diskFile = diskFile.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/discs\/([^/]*)\//, "https://$1.pcjs.org/");
     }
     return diskFile;
 }

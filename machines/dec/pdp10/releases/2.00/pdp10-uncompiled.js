@@ -2103,8 +2103,8 @@ class Web {
             return response;
         }
 
-        if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|pcjs)$/)) {
-            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+        if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
+            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/discs\/([^/]*)\//, "https://$1.pcjs.org/");
         }
 
 

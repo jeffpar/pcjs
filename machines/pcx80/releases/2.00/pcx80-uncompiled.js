@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/defines.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/defines.js (C) 2012-2021 Jeff Parsons
  */
 
 /**
@@ -87,7 +87,7 @@ var RS232 = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/dumpapi.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/dumpapi.js (C) 2012-2021 Jeff Parsons
  */
 
 /*
@@ -147,7 +147,7 @@ DumpAPI.asFileCommands = [DumpAPI.QUERY.FILE];
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/reportapi.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/reportapi.js (C) 2012-2021 Jeff Parsons
  */
 
 var ReportAPI = {
@@ -170,7 +170,7 @@ var ReportAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/userapi.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/userapi.js (C) 2012-2021 Jeff Parsons
  */
 
 /*
@@ -212,7 +212,7 @@ var UserAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/keys.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/keys.js (C) 2012-2021 Jeff Parsons
  */
 
 var Keys = {
@@ -529,7 +529,7 @@ Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.ASCII[':'];
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/strlib.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/strlib.js (C) 2012-2021 Jeff Parsons
  */
 
 class Str {
@@ -1689,7 +1689,7 @@ Str.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "Ju
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/usrlib.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/usrlib.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -1934,7 +1934,7 @@ Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/weblib.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/weblib.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -2103,8 +2103,8 @@ class Web {
             return response;
         }
 
-        if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|pcjs)$/)) {
-            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+        if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
+            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/discs\/([^/]*)\//, "https://$1.pcjs.org/");
         }
 
 
@@ -3100,7 +3100,7 @@ if (DEBUG && window) {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/component.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/component.js (C) 2012-2021 Jeff Parsons
  */
 
 /*
@@ -4676,7 +4676,7 @@ if (!Function.prototype.bind) {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/defines.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/defines.js (C) 2012-2021 Jeff Parsons
  */
 
 /**
@@ -4743,7 +4743,7 @@ var PCX80 = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/cpudef.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/cpudef.js (C) 2012-2021 Jeff Parsons
  */
 
 var CPUDefX80 = {
@@ -4844,7 +4844,7 @@ CPUDefX80.PS.SET       =   (CPUDefX80.PS.BIT1);
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/messages.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/messages.js (C) 2012-2021 Jeff Parsons
  */
 
 var MessagesX80 = {
@@ -4914,7 +4914,7 @@ MessagesX80.CATEGORIES = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/panel.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/panel.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -5066,7 +5066,7 @@ Web.onInit(PanelX80.init);
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/bus.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/bus.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -6096,7 +6096,7 @@ var BusInfoX80;
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/memory.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/memory.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -6984,7 +6984,7 @@ if (TYPEDARRAYS) {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/cpu.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/cpu.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -8236,7 +8236,7 @@ CPUX80.BUTTONS = ["power", "reset"];
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/cpustate.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/cpustate.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -9379,7 +9379,7 @@ Web.onInit(CPUStateX80.init);
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/cpuops.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/cpuops.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -12289,7 +12289,7 @@ CPUDefX80.aOpsX80 = [
 ];
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/chipset.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/chipset.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -13393,7 +13393,7 @@ Web.onInit(ChipSetX80.init);
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/rom.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/rom.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -13745,7 +13745,7 @@ Web.onInit(ROMX80.init);
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/ram.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/ram.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -14106,7 +14106,7 @@ Web.onInit(RAMX80.init);
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/keyboard.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/keyboard.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -15540,7 +15540,7 @@ Web.onInit(KeyboardX80.init);
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/video.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/video.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -17071,7 +17071,7 @@ Web.onInit(VideoX80.init);
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/serial.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/serial.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -17996,7 +17996,7 @@ Web.onInit(SerialPortX80.init);
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/debugger.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/debugger.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -19317,7 +19317,7 @@ if (DEBUGGER) {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/debugger.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/debugger.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -23646,7 +23646,7 @@ if (DEBUGGER) {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/lib/computer.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/lib/computer.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -25279,7 +25279,7 @@ Web.onExit(ComputerX80.exit);
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/state.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/state.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -25644,7 +25644,7 @@ class State {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/embed.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/embed.js (C) 2012-2021 Jeff Parsons
  */
 
 

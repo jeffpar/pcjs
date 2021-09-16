@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/defines.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/defines.js (C) 2012-2021 Jeff Parsons
  */
 
 /**
@@ -87,7 +87,7 @@ var RS232 = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/dumpapi.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/dumpapi.js (C) 2012-2021 Jeff Parsons
  */
 
 /*
@@ -147,7 +147,7 @@ DumpAPI.asFileCommands = [DumpAPI.QUERY.FILE];
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/reportapi.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/reportapi.js (C) 2012-2021 Jeff Parsons
  */
 
 var ReportAPI = {
@@ -170,7 +170,7 @@ var ReportAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/strlib.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/strlib.js (C) 2012-2021 Jeff Parsons
  */
 
 class Str {
@@ -1330,7 +1330,7 @@ Str.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "Ju
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/usrlib.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/usrlib.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -1575,7 +1575,7 @@ Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/weblib.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/weblib.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -1744,8 +1744,8 @@ class Web {
             return response;
         }
 
-        if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|pcjs)$/)) {
-            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+        if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
+            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/discs\/([^/]*)\//, "https://$1.pcjs.org/");
         }
 
 
@@ -2741,7 +2741,7 @@ if (DEBUG && window) {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/component.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/component.js (C) 2012-2021 Jeff Parsons
  */
 
 /*
@@ -4317,7 +4317,7 @@ if (!Function.prototype.bind) {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/lib/defines.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/lib/defines.js (C) 2012-2021 Jeff Parsons
  */
 
 /**
@@ -4363,7 +4363,7 @@ var C1PJS = {
 };
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/lib/panel.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/lib/panel.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -4469,7 +4469,7 @@ class C1PPanel extends Component {
 Web.onInit(C1PPanel.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/lib/cpu.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/lib/cpu.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -8342,7 +8342,7 @@ class C1PCPU extends Component {
 Web.onInit(C1PCPU.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/lib/rom.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/lib/rom.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -8563,7 +8563,7 @@ class C1PROM extends Component {
 Web.onInit(C1PROM.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/lib/ram.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/lib/ram.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -8635,7 +8635,7 @@ class C1PRAM extends Component {
 Web.onInit(C1PRAM.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/lib/keyboard.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/lib/keyboard.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -9717,7 +9717,7 @@ class C1PKeyboard extends Component {
 Web.onInit(C1PKeyboard.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/lib/video.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/lib/video.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -10340,7 +10340,7 @@ class C1PVideo extends Component {
 Web.onInit(C1PVideo.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/lib/serial.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/lib/serial.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -10801,7 +10801,7 @@ C1PSerialPort.AUTOLOAD_6502  = 2;
 Web.onInit(C1PSerialPort.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/lib/disk.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/lib/disk.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -12045,7 +12045,7 @@ class C1PDiskController extends Component {
 Web.onInit(C1PDiskController.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/lib/debugger.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/lib/debugger.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -14236,7 +14236,7 @@ if (DEBUGGER) {
 }   // endif DEBUGGER
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/lib/computer.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/lib/computer.js (C) 2012-2021 Jeff Parsons
  */
 
 
@@ -14559,7 +14559,7 @@ class C1PComputer extends Component {
 Web.onInit(C1PComputer.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/shared/lib/embed.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/shared/lib/embed.js (C) 2012-2021 Jeff Parsons
  */
 
 
