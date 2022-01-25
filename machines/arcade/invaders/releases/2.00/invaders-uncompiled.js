@@ -61,7 +61,7 @@ const VERSION = "2.04";
  */
 const REPOSITORY = "pcjs.org";
 
-const COPYRIGHT = "Copyright © 2012-2021 Jeff Parsons <Jeff@pcjs.org>";
+const COPYRIGHT = "Copyright © 2012-2022 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
  * @class {Defs}
