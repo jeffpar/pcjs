@@ -92,7 +92,7 @@ export default class Debugger extends Device {
         this.maxOpcodeLength = 1;
 
         /*
-         * Default parsing parameters, subexpression and address delimiters.
+         * Default parsing parameters, sub-expression and address delimiters.
          */
         this.nASCIIBits = 8;                    // change to 7 for MACRO-10 compatibility
         this.achGroup = ['(',')'];
@@ -146,7 +146,7 @@ export default class Debugger extends Device {
         this.fExceptionOnBreak = false;
 
         /*
-         * If greater than zero, decremented on every instruction until it hits zero, then CPU is stoppped.
+         * If greater than zero, decremented on every instruction until it hits zero, then CPU is stopped.
          */
         this.counterBreak = 0;
 
@@ -1244,7 +1244,7 @@ export default class Debugger extends Device {
              * conflicts with the operators below.
              *
              * NOTE: MACRO-10 packs up to 5 7-bit ASCII codes from a double-quoted value, and up to 6 6-bit ASCII
-             * (SIXBIT) codes from a sinqle-quoted value.
+             * (SIXBIT) codes from a single-quoted value.
              */
             expr = this.parseASCII(expr, '"', this.nASCIIBits);
             if (!expr) return value;
