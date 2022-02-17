@@ -373,6 +373,39 @@
       "./machines/modules/machine.js"
     ]
   },
+  "palm": {
+    "name": "Palm Pilot",
+    "folder": "palm/pilot",
+    "version": "2.00",
+    "defines": [
+      "FACTORY",
+      "VERSION"
+    ],
+    "factory": "Pilot",
+    "scripts": [
+      "./machines/modules/defs.js",
+      "./machines/modules/numio.js",
+      "./machines/modules/stdio.js",
+      "./machines/modules/webio.js",
+      "./machines/modules/device.js",
+      "./machines/modules/input.js",
+      "./machines/modules/led.js",
+      "./machines/modules/monitor.js",
+      "./machines/modules/time.js",
+      "./machines/modules/bus.js",
+      "./machines/modules/memory.js",
+      "./machines/modules/ports.js",
+      "./machines/modules/ram.js",
+      "./machines/modules/rom.js",
+      "./machines/modules/cpu.js",
+      "./machines/modules/debugger.js",
+      "./machines/motorola/mc68328/modules/cpu.js",
+      "./machines/motorola/mc68328/modules/debugger.js",
+      "./machines/palm/pilot/modules/ports.js",
+      "./machines/palm/pilot/modules/video.js",
+      "./machines/modules/machine.js"
+    ]
+  },
   "vt100": {
     "name": "VT100",
     "folder": "dec/vt100",

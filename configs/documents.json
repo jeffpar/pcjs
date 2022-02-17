@@ -23,7 +23,7 @@
             "@tags": "msdos"
           },
           {
-            "@title": "The MS-DOS Ecyclopedia (1988)",
+            "@title": "The MS-DOS Encyclopedia (1988)",
             "@author": "Ray Duncan",
             "@file": "The_MS-DOS_Encyclopedia.pdf",
             "@link": "/documents/books/mspl13/msdos/encyclopedia/",
@@ -114,7 +114,7 @@
             "@title": "MS QuickBASIC 4.5 Programming in BASIC"
           },
           "qbtools": {
-            "@title": "MS QuickPBASIC Programmer's Toolbox"
+            "@title": "MS QuickBASIC Programmer's Toolbox"
           }
         }
       }
@@ -124,7 +124,65 @@
     "@title": "Datasheets",
     "@instances": {
       "intel": {
-        "@title": "Intel"
+        "@title": "Intel",
+        "@documents": [
+          {
+            "@title": "8088",
+            "@file": "INTEL_8088_CPU.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEmGsBJPGmhiKeyTA",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "8087",
+            "@file": "INTEL_8087_FPU.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEoVotqW_MruMmLfw",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "80186",
+            "@file": "INTEL_80186_CPU.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEvskcvMIf8KCHaKg",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "8237A",
+            "@file": "INTEL_8237A_DMA.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEplB6u0R8D4bOTDw",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "8254",
+            "@file": "INTEL_82C54_TIMER.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEnm15_gGWgUcpq6g",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "8255A",
+            "@file": "INTEL_8255A_PPI.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqErS8v_ueBb4mxD4Q",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "8259A",
+            "@file": "INTEL_8259A_PIC.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEqEu5mCovLRzAbqQ",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "27128A",
+            "@file": "INTEL_27128A_EPROM.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEu9pZaLgq772i_fQ",
+            "@cover": ".jpg",
+            "@source": ""
+          }
+        ]
       },
       "motorola": {
         "@title": "Motorola",
@@ -146,12 +204,38 @@
             "@tags": "c1p"
           },
           {
+            "@title": "MC6845",
+            "@file": "MC6845_CRT.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqE4Eyff4TPfBbFUTg",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
             "@title": "MC6850",
             "@file": "MC6850.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gt4Qomu856PJZ8gvyA?e=U1kue1",
             "@cover": ".jpg",
             "@source": "",
             "@tags": "c1p"
+          }
+        ]
+      },
+      "ns": {
+        "@title": "National Semiconductor",
+        "@documents": [
+          {
+            "@title": "8250A",
+            "@file": "NS8250A_UART.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEs5UFgL4kDuJUf2w",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "16550",
+            "@file": "NS16550_UART.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEtFiH6E3BrGiJj6g",
+            "@cover": ".jpg",
+            "@source": ""
           }
         ]
       }
@@ -1225,6 +1309,19 @@
       "microsoft": {
         "@title": "Microsoft",
         "@permalink": "/documents/manuals/microsoft/"
+      },
+      "motorola": {
+        "@title": "Motorola",
+        "@documents": [
+          {
+            "@title": "MC68VZ328 User's Manual (2000)",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9iNolP9OZyCSPjf7u5w",
+            "@file": "MC68VZ328UM-REV0.pdf",
+            "@cover": ".jpg",
+            "@source": "",
+            "@tags": "68k,manuals"
+          }
+        ]
       }
     }
   },
