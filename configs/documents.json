@@ -1314,6 +1314,70 @@
         "@title": "Motorola",
         "@documents": [
           {
+            "@title": "M68000 Programmer's Reference Manual (1992)",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9irpIqNnbX5194STaBw",
+            "@file": "M68000PRM.pdf",
+            "@cover": ".jpg",
+            "@source": "",
+            "@tags": "68k,manuals"
+          },
+          {
+            "@title": "M68000 User's Manual (1993)",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9irpKi8eiaIdPokXUzQ",
+            "@file": "M68000UM.pdf",
+            "@cover": ".jpg",
+            "@source": "",
+            "@tags": "68k,manuals"
+          },
+          {
+            "@title": "M68000 User Manual Addendum (1994)",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9irpNTD3MvK7_n6jB7w",
+            "@file": "M68000UMAD.pdf",
+            "@cover": ".jpg",
+            "@source": "",
+            "@tags": "68k,manuals"
+          },
+          {
+            "@title": "Audio Generation by DragonBall MC68EZ328 PWM Output (1996)",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9irpOKQPbB708fACWqQ",
+            "@file": "MC68EZ328PWM.pdf",
+            "@cover": ".jpg",
+            "@source": "",
+            "@tags": "68k,manuals"
+          },
+          {
+            "@title": "M68000 User Manual Addendum (1997)",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9irpJgK1wwMNImkZ8RA",
+            "@file": "M68000AD.pdf",
+            "@cover": ".jpg",
+            "@source": "",
+            "@tags": "68k,manuals"
+          },
+          {
+            "@title": "MC68328 User’s Manual (1997 Preliminary)",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9irpMvApRo9WacSiYxQ",
+            "@file": "MC68328-PRELIM.pdf",
+            "@cover": ".jpg",
+            "@source": "",
+            "@tags": "68k,manuals"
+          },
+          {
+            "@title": "MC68EZ328 Integrated Processor User’s Manual (1998)",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9irpLto3ZZX7rcg3Y2w",
+            "@file": "MC68EZ328UM.pdf",
+            "@cover": ".jpg",
+            "@source": "",
+            "@tags": "68k,manuals"
+          },
+          {
+            "@title": "M68VZ328 Application Development System (1999)",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9irpPwmTRYAu8HvAfDg",
+            "@file": "MC68VZ328ADSUM.pdf",
+            "@cover": ".jpg",
+            "@source": "",
+            "@tags": "68k,manuals"
+          },
+          {
             "@title": "MC68VZ328 User's Manual (2000)",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9iNolP9OZyCSPjf7u5w",
             "@file": "MC68VZ328UM-REV0.pdf",
