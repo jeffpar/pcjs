@@ -373,7 +373,7 @@
       "./machines/modules/machine.js"
     ]
   },
-  "palm": {
+  "pilot": {
     "name": "Palm Pilot",
     "folder": "palm/pilot",
     "version": "2.00",
@@ -399,8 +399,8 @@
       "./machines/modules/rom.js",
       "./machines/modules/cpu.js",
       "./machines/modules/debugger.js",
-      "./machines/motorola/mc68328/modules/cpu.js",
-      "./machines/motorola/mc68328/modules/debugger.js",
+      "./machines/motorola/68k/modules/cpu68k.js",
+      "./machines/motorola/68k/modules/dbg68k.js",
       "./machines/palm/pilot/modules/ports.js",
       "./machines/palm/pilot/modules/video.js",
       "./machines/modules/machine.js"
