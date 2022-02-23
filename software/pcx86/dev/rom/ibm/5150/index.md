@@ -17,9 +17,7 @@ machines:
     autoStart: true
 ---
 
-PCjs has created and archived a collection IBM PC ROM BIOS diskettes.  Their contents are thanks to the
-[PC DOS Retro](https://sites.google.com/site/pcdosretro/) website.  [Directory Listings](#directory-of-ibm-pc-bios-sources-v1)
-and [Version Notes](#5150v1-notes-from-pc-dos-retro) are provided below.
+PCjs has created and archived a collection IBM PC ROM BIOS diskettes.  Their contents are thanks to the [PC DOS Retro](https://pcdosretro.github.io) website.  [Directory Listings](#directory-of-ibm-pc-bios-sources-v1) and [Version Notes](#5150v1-notes-from-pc-dos-retro) are provided below.
 
 {% include machine.html id="ibm5160-msdos320" %}
 

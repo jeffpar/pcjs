@@ -17,9 +17,7 @@ machines:
     autoStart: true
 ---
 
-PCjs has created and archived a collection IBM PC XT ROM BIOS diskettes.  Their contents are thanks to the
-[PC DOS Retro](https://sites.google.com/site/pcdosretro/) website.  [Directory Listings](#directory-of-ibm-pc-xt-bios-sources-v1)
-and [Version Notes](#5160v1-notes-from-pc-dos-retro) are provided below.
+PCjs has created and archived a collection IBM PC XT ROM BIOS diskettes.  Their contents are thanks to the [PC DOS Retro](https://pcdosretro.github.io) website.  [Directory Listings](#directory-of-ibm-pc-xt-bios-sources-v1) and [Version Notes](#5160v1-notes-from-pc-dos-retro) are provided below.
 
 {% include machine.html id="ibm5160-msdos320" %}
 
