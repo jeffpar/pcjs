@@ -43,6 +43,7 @@
   position: relative;
   width: 100%;
   height: auto;
+  clear: both;
 }
 .pcjs-console {
   font-family: monospace;
