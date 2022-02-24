@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Memory  from "../../../lib/memory.js";
-import Monitor from "../../../lib/monitor.js";
+import Memory  from "../../../modules/memory.js";
+import Monitor from "../../../modules/monitor.js";
 
 /**
  * @typedef {MonitorConfig} VT100VideoConfig

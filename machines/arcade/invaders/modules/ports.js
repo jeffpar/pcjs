@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Input from "../../../lib/input.js";
-import Ports from "../../../lib/ports.js";
+import Input from "../../../modules/input.js";
+import Ports from "../../../modules/ports.js";
 
 /**
  * @typedef {PortsConfig} InvadersPortsConfig

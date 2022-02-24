@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "../../../lib/device.js";
-import LED    from "../../../lib/led.js";
+import Device from "../../../modules/device.js";
+import LED    from "../../../modules/led.js";
 
 /**
  * @class {VT100Serial}

@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Memory  from "../../../lib/memory.js";
-import Monitor from "../../../lib/device.js";
+import Memory  from "../../../modules/memory.js";
+import Monitor from "../../../modules/monitor.js";
 
 /**
  * @typedef {MonitorConfig} PilotVideoConfig
@@ -67,7 +67,6 @@ export default class PilotVideo extends Monitor {
     {
         super(idMachine, idDevice, config);
 
-        let video = this
         this.addrBuffer = this.config['bufferAddr'];
         this.fUseRAM = this.config['bufferRAM'];
 

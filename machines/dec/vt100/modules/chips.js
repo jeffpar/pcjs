@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "../../../lib/device.js";
+import Device from "../../../modules/device.js";
 
 /**
  * @class {VT100Chips}

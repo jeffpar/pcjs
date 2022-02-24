@@ -373,7 +373,7 @@
       "./machines/modules/machine.js"
     ]
   },
-  "pilot": {
+  "palm-pilot": {
     "name": "Palm Pilot",
     "folder": "palm/pilot",
     "version": "2.00",

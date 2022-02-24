@@ -1148,6 +1148,18 @@
                 "@label": "5170V3"
               }
             ]
+          },
+          "ega": {
+            "@title": "IBM EGA BIOS Sources",
+            "@media": [
+              {
+                "@title": "IBM EGA BIOS Source (V1)",
+                "@diskette": "IBM-BIOS-SRC-EGAV1.json",
+                "@format": "PC1200K",
+                "@archive": "folder",
+                "@label": "EGAV1"
+              }
+            ]
           }
         }
       }

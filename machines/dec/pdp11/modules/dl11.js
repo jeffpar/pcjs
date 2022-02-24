@@ -10,7 +10,7 @@
  * <paulnank@hotmail.com> at <http://skn.noip.me/pdp11/pdp11.html> with permission.
  */
 
-import Device from "../../../lib/device.js";
+import Device from "../../../modules/device.js";
 
 Device.MESSAGE.DL11             = 0x000100000000;
 Device.MESSAGE_NAMES["dl11"]    = Device.MESSAGE.DL11;

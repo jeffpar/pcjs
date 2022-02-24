@@ -7856,7 +7856,7 @@ class Bus extends Device {
                 blockNew = new Memory(this.idMachine, idBlock, {type, addr: addrNext, size: sizeBlock, "bus": this.idDevice});
             } else {
                 /*
-                 * When a block is provided, make sure its size maches the default Bus block size, and use it if so.
+                 * When a block is provided, make sure its size matches the default Bus block size, and use it if so.
                  */
                 if (block.size == this.blockSize) {
                     blockNew = block;
@@ -17569,7 +17569,6 @@ class PilotVideo extends Monitor {
     {
         super(idMachine, idDevice, config);
 
-        let video = this
         this.addrBuffer = this.config['bufferAddr'];
         this.fUseRAM = this.config['bufferRAM'];
 

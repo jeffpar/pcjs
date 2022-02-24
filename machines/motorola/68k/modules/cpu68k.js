@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import CPU      from "../../lib/cpu.js";
-import Debugger from "../../lib/debugger.js";
+import CPU      from "../../../modules/cpu.js";
+import Debugger from "../../../modules/debugger.js";
 
 /**
  * Emulation of 68K CPUs

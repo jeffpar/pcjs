@@ -13,18 +13,18 @@ machines:
       A:
         name: None
       B:
-        name: IBM PC AT BIOS Sources (V1)
+        name: IBM PC AT BIOS Source (V1)
     autoStart: true
 ---
 
-PCjs has created and archived a collection IBM PC AT ROM BIOS diskettes.  Their contents are thanks to the [PC DOS Retro](https://pcdosretro.github.io) website.  [Directory Listings](#directory-of-ibm-pc-at-bios-sources-v1) and [Version Notes](#5170v1-notes-from-pc-dos-retro) are provided below.
+PCjs has created and archived a collection IBM PC AT ROM BIOS diskettes.  Their contents are thanks to the [PC DOS Retro](https://pcdosretro.github.io) website.  [Directory Listings](#directory-of-ibm-pc-at-bios-source-v1) and [Version Notes](#5170v1-notes-from-pc-dos-retro) are provided below.
 
 {% include machine.html id="ibm5170-msdos320" %}
 
-### Directory of IBM PC AT BIOS Sources (V1)
+### Directory of IBM PC AT BIOS Source (V1)
 
-     Volume in drive A is 5170V1
-     Directory of A:\
+     Volume in drive B is 5170V1
+     Directory of B:\
 
     5170V1   TXT       903   3-27-20   3:00p
     ATLINK             151   3-27-20   3:00p
@@ -61,10 +61,10 @@ PCjs has created and archived a collection IBM PC AT ROM BIOS diskettes.  Their 
            32 file(s)     493776 bytes
                           712704 bytes free
 
-### Directory of IBM PC AT BIOS Sources (V2)
+### Directory of IBM PC AT BIOS Source (V2)
 
-     Volume in drive A is 5170V2
-     Directory of A:\
+     Volume in drive B is 5170V2
+     Directory of B:\
 
     5170V2   TXT       803   3-27-20   3:00p
     ATLINK             123   3-27-20   3:00p
@@ -95,10 +95,10 @@ PCjs has created and archived a collection IBM PC AT ROM BIOS diskettes.  Their 
            26 file(s)     568458 bytes
                           638976 bytes free
 
-### Directory of IBM PC AT BIOS Sources (V3)
+### Directory of IBM PC AT BIOS Source (V3)
 
-     Volume in drive A is 5170V3
-     Directory of A:\
+     Volume in drive B is 5170V3
+     Directory of B:\
 
     5170V3   TXT       799   3-27-20   3:00p
     ATLINK             123   3-27-20   3:00p

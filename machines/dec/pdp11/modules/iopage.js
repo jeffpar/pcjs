@@ -10,7 +10,7 @@
  * <paulnank@hotmail.com> at <http://skn.noip.me/pdp11/pdp11.html> with permission.
  */
 
-import Ports from "../../../lib/ports.js";
+import Ports from "../../../modules/ports.js";
 
 /**
  * @class {IOPage}

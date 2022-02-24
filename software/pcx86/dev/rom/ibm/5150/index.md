@@ -13,18 +13,18 @@ machines:
       A:
         name: None
       B:
-        name: IBM PC BIOS Sources (V1)
+        name: IBM PC BIOS Source (V1)
     autoStart: true
 ---
 
-PCjs has created and archived a collection IBM PC ROM BIOS diskettes.  Their contents are thanks to the [PC DOS Retro](https://pcdosretro.github.io) website.  [Directory Listings](#directory-of-ibm-pc-bios-sources-v1) and [Version Notes](#5150v1-notes-from-pc-dos-retro) are provided below.
+PCjs has created and archived a collection IBM PC ROM BIOS diskettes.  Their contents are thanks to the [PC DOS Retro](https://pcdosretro.github.io) website.  [Directory Listings](#directory-of-ibm-pc-bios-source-v1) and [Version Notes](#5150v1-notes-from-pc-dos-retro) are provided below.
 
 {% include machine.html id="ibm5160-msdos320" %}
 
-### Directory of IBM PC BIOS Sources (V1)
+### Directory of IBM PC BIOS Source (V1)
 
-     Volume in drive A is 5150V1
-     Directory of A:\
+     Volume in drive B is 5150V1
+     Directory of B:\
 
     5150     TXT      4087   3-27-20   3:00p
     5150V1   ASM    179480   3-27-20   3:00p
@@ -33,10 +33,10 @@ PCjs has created and archived a collection IBM PC ROM BIOS diskettes.  Their con
             4 file(s)     195517 bytes
                           124928 bytes free
 
-### Directory of IBM PC BIOS Sources (V2)
+### Directory of IBM PC BIOS Source (V2)
 
-     Volume in drive A is 5150V2
-     Directory of A:\
+     Volume in drive B is 5150V2
+     Directory of B:\
 
     5150     TXT      4087   3-27-20   3:00p
     5150V2   ASM    179424   3-27-20   3:00p
@@ -45,10 +45,10 @@ PCjs has created and archived a collection IBM PC ROM BIOS diskettes.  Their con
             4 file(s)     195461 bytes
                           124928 bytes free
 
-### Directory of IBM PC BIOS Sources (V3)
+### Directory of IBM PC BIOS Source (V3)
 
-     Volume in drive A is 5150V3
-     Directory of A:\
+     Volume in drive B is 5150V3
+     Directory of B:\
 
     5150     TXT      4087   3-27-20   3:00p
     5150V3   ASM    193439   3-27-20   3:00p

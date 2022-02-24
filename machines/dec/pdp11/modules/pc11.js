@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "../../../lib/device.js";
+import Device from "../../../modules/device.js";
 
 Device.MESSAGE.PC11             = 0x000200000000;
 Device.MESSAGE_NAMES["pc11"]    = Device.MESSAGE.PC11;

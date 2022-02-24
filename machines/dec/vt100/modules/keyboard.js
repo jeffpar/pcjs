@@ -7,9 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "../../../lib/device.js";
-import Input  from "../../../lib/input.js";
-import LED    from "../../../lib/led.js";
+import Device from "../../../modules/device.js";
+import Input  from "../../../modules/input.js";
+import LED    from "../../../modules/led.js";
 
 /**
  * @typedef {Config} VT100KeyboardConfig

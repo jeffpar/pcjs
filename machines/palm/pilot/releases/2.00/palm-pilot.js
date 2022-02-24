@@ -261,4 +261,4 @@ function Mf(a,b){try{a.a=JSON.parse(b);var c=a.a[a.U];if(!c){c=a.a[Ja(a.b)];if(!
 Lf.prototype.qa=function(a){a=void 0===a?!this.c:a;if(Fb(this)){var b=this;a&&w(this,"power on");Cb(this,function(c){c.qa&&c!=b&&("CPU"!=c.m["class"]||b.j||Fb(b)?c.qa(a):c.time.update(!0));return!0});(this.c=a)||w(this,"power off")}};Lf.prototype.oa=function(){if(Fb(this)){var a=this;Cb(this,function(b){b.oa&&b!=a&&b.oa();return!0});w(this,"reset")}};function Of(a){if(a.f){var b=[];Cb(a,function(c){c.Qa&&c.Qa(b);return!0});pb(a,b)}a.qa(!1)}var Pf="power",Qf="reset";
 window.Pilot=function(a,b,c){var d=new Lf(a,b,c);window.command=function(e){return ib(d,e)};return d};p.Machine=Lf;})()
 
-//# sourceMappingURL=pilot.js.map
+//# sourceMappingURL=palm-pilot.js.map
