@@ -1,4 +1,474 @@
 {
+  "pcx86": {
+    "@title": "All PCs",
+    "att": {
+      "@title": "AT&T",
+      "6300": {
+        "@title": "AT&T 6300",
+        "cga": {
+          "@title": "Color Graphics",
+          "@redirect_from": "/devices/pcx86/machine/att/6300/cga/640kb/"
+        },
+        "@documents": [
+          {
+            "@title": "AT&T 6300 GWBASIC Programmer's Guide (1985)",
+            "@file": "ATT_PC_6300_Programmers_Guide_GWBASIC_1985.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFLW1snGb1Z-lrMhw?e=j71u9Z",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/999-802-000IS_Programmers_Guide_PC6300_GWBASIC_by_Microsoft_1985.pdf"
+          },
+          {
+            "@title": "AT&T 6300 PLUS ROM-BIOS Listing (1986)",
+            "@file": "ATT_PC_6300_Plus_ROM-BIOS_Listing_1986.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFInlKWgh8AL81igA?e=M654eo",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/ATT_Personal_Computer_6300_Plus_-_ROM-BIOS_Listing_-_Rel_2.05_Issue_1_-_1986.pdf"
+          },
+          {
+            "@title": "AT&T 6300 System Programmer's Guide (1985)",
+            "@file": "ATT_PC_6300_System_Programmers_Guide_1985.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFNtVfFVzNzMvJhpw?e=hM1Yg2",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/999-802-200IS_System_Programmers_Guide_PC6300_1985.pdf"
+          },
+          {
+            "@title": "AT&T 6300 Service Manual",
+            "@file": "ATT_PC_6300_Service_Manual.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFMs31Uchp2WucCxw?e=Jj2rR2",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/ATT_PC_6300_Service_Manual.pdf"
+          },
+          {
+            "@title": "AT&T 6300 User's Guide",
+            "@file": "ATT_PC_6300_Users_Guide.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFJ8XlR3Snxd9EnBQ?e=qixCcK",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/att/6300/ATT_PC_6300_Users_Guide.pdf"
+          }
+        ]
+      }
+    },
+    "cdp": {
+      "@title": "CDP",
+      "mpc1600": {
+        "@title": "CDP MPC 1600",
+        "cga": {
+          "@title": "Color Graphics",
+          "@redirect_from": "/devices/pcx86/machine/cdp/mpc1600/cga/640kb/"
+        },
+        "@documents": [
+          {
+            "@title": "Columbia Data Products MP Operations Guide (1983)",
+            "@file": "Columbia_Data_Products_MPC_1600-Operations_Guide.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMScGXgEVN-4-XyfA?e=2iQVlh",
+            "@cover": ".jpg",
+            "@source": "http://www.minuszerodegrees.net/manuals/Columbia%20Data%20Products/Columbia%20Data%20Products%20MPC%201600%20-%20Operations%20Guide.pdf"
+          }
+        ]
+      }
+    },
+    "compaq": {
+      "@title": "COMPAQ",
+      "portable": {
+        "@title": "Portable",
+        "vdu": {
+          "@title": "Monochrome Graphics",
+          "@redirect_from": "/devices/pcx86/machine/compaq/portable/vdu/128kb/"
+        },
+        "@documents": [
+          {
+            "@title": "COMPAQ Portable Operations Guide (Nov 1982)",
+            "@file": "COMPAQ_Operations_Guide_1982-11.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEafO5tOghjO67McQ?e=QsXzCl",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          }
+        ]
+      },
+      "deskpro286": {
+        "@title": "DeskPro 286",
+        "@documents": [
+          {
+            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, May 1987)"
+          },
+          {
+            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, May 1987)",
+            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol2_1987-05.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq463rsLHiJe9AY7FQ?e=Xxtt3j",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, Dec 1987)",
+            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol1_1987-12.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvAnh2ZAxwmv7UMrSw?e=nQPirJ",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, Dec 1987)",
+            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol2_1987-12.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvAok6a1GZWGWEvr-g?e=EToJaL",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ DeskPro 286 Operations Guide (Feb 1987)",
+            "@file": "COMPAQ_DeskPro_286_Operations_Guide_1987-02.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq1_tSCFGeiC6Yghpw?e=wI7uEo",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ DeskPro 286 Operations Guide - READ THIS FIRST (Sep 1987)",
+            "@file": "COMPAQ_DeskPro_286_Operations_Guide_READ_THIS_FIRST_1987-09.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq4Cb6j-SlhNicPrCg?e=cGbEsS",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          }
+        ]
+      },
+      "deskpro386": {
+        "@title": "DeskPro 386",
+        "@documents": [
+          {
+            "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume I, Sep 1986)",
+            "@file": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol1_1986-09.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-kRDehAMRp7BDfn0A?e=MNNw9w",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume II, Sep 1986)",
+            "@file": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol2_1986-09.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-kS9Xp8xd_kHMKCqg?e=fWqJ0F",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ DeskPro 386/25 Technical Reference Guide (Volume I, Aug 1988)",
+            "@file": "COMPAQ_DeskPro_386-25_Technical_Reference_Guide_Vol1_1988-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq5BThwmEpfyp0EBdA?e=53SAyY",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          }
+        ]
+      }
+    },
+    "ibm": {
+      "@title": "IBM",
+      "4860": {
+        "@title": "PCJr (Model 4860)",
+        "@documents": [
+          {
+            "@title": "IBM 4860 Technical Reference (Nov 1983)",
+            "@file": "IBM_4860_Technical_Reference_6322971_1983-11.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heE3ehC5BWxiIhMbUQ?e=pymkiO",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.trailing-edge.com/pdf/ibm/pc/pc_jr/PCjr_Technical_Reference_Nov83.pdf"
+          }
+        ]
+      },
+      "5150": {
+        "@title": "PC (Model 5150)",
+        "cga": {
+          "@title": "Color Graphics",
+          "@redirect_from": "/devices/pcx86/machine/5150/cga/64kb/"
+        },
+        "mda": {
+          "@title": "Monochrome Display",
+          "@redirect_from": "/devices/pcx86/machine/5150/cga/64kb/"
+        },
+        "dual": {
+          "@title": "Dual Displays",
+          "@redirect_from": "/devices/pcx86/machine/5150/dual/64kb/"
+        },
+        "vga": {
+          "@title": "VGA Display"
+        },
+        "@documents": [
+          {
+            "@title": "IBM 5150 Guide to Operations (Aug 1981)",
+            "@file": "IBM_5150_Guide_to_Operations_6025000_1981-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEHlreeAL-NbpxGVg?e=zyjiew",
+            "@cover": ".jpg",
+            "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Guide_to_Operations_6025000_AUG81.pdf"
+          },
+          {
+            "@title": "IBM 5150 Guide to Operations (Apr 1984)",
+            "@file": "IBM_5150_Guide_to_Operations_6322510_1984-04.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEIEyguxuImec_aLA?e=C91ffv",
+            "@cover": ".jpg",
+            "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Guide_to_Operations_6322510_APR84.pdf"
+          },
+          {
+            "@title": "IBM 5150 Technical Reference (Aug 1981)",
+            "@file": "IBM_5150_Technical_Reference_6025005_1981-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqELFEzc8B_rRcEPrA?e=2TJqcJ",
+            "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2137003&authkey=AN_bx8xT3-kuJ2w&em=2",
+            "@cover": ".jpg",
+            "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Technical_Reference_6025005_AUG81.pdf",
+            "@altsource": "http://bitsavers.org/pdf/ibm/pc/pc/6025008_PC_Technical_Reference_Aug81.pdf"
+          },
+          {
+            "@title": "IBM 5150 Technical Reference (Apr 1983)",
+            "@file": "IBM_5150_Technical_Reference_1502234_1983-04.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEJiwNxqCk17DLlxw?e=CaTFg4",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/ibm/pc/pc/1502234_PC_Technical_Reference_Apr83.pdf"
+          },
+          {
+            "@title": "IBM 5150 Technical Reference (Apr 1984)",
+            "@file": "IBM_5150_Technical_Reference_6322507_1984-04.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEKmmBoHcZHx06phA?e=cwe8cT",
+            "@cover": ".jpg",
+            "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Technical_Reference_6322507_APR84.pdf"
+          }
+        ]
+      },
+      "5160": {
+        "@title": "PC XT (Model 5160)",
+        "cga": {
+          "@title": "Color Graphics",
+          "@redirect_from": "/devices/pcx86/machine/5160/cga/256kb/"
+        },
+        "ega": {
+          "@title": "Enhanced Graphics",
+          "@redirect_from": "/devices/pcx86/machine/5160/ega/640kb/"
+        },
+        "mda": {
+          "@title": "Monochrome Display",
+          "@redirect_from": "/devices/pcx86/machine/5160/mda/256kb/"
+        },
+        "@documents": [
+          {
+            "@title": "IBM 5160 Guide to Operations (Apr 1984)",
+            "@file": "IBM_5160_Guide_to_Operations_6322511_1984-04.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEGQjCUU_ObE_XCmA?e=grxl9S",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM 5160 Technical Reference (April 1983)",
+            "@file": "IBM_5160_Technical_Reference_1983-04.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEF_79DWDCuHOZmWQ?e=UmJotY",
+            "@cover": ".jpg",
+            "@source": "http://retroarchive.org/dos/docs/ibm5160techref.pdf"
+          }
+        ]
+      },
+      "5170": {
+        "@title": "PC AT (Model 5170)",
+        "cga": {
+          "@title": "Color Graphics",
+          "@redirect_from": "/devices/pcx86/machine/5170/cga/640kb/rev3/"
+        },
+        "vga/cdrom": {
+          "@title": "VGA Display with CD-ROM",
+          "@redirect_from": "/disks/pcx86/drives/cdrom/"
+        },
+        "@documents": [
+          {
+            "@title": "IBM 5170 Installation and Setup, March 1984",
+            "@file": "IBM_5170_Installation_and_Setup_1502491_1984-03.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEMJzq91y_eQIV6PQ?e=mE0RSQ",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM 5170 Technical Reference, March 1984",
+            "@file": "IBM_5170_Technical_Reference_1502243_1984-03.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEPV82VBi1so8Tt-A?e=KXNZcv",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM 5170 (Model 239) Technical Reference, September 1985",
+            "@file": "IBM_5170_Technical_Reference_6280070_1985-09.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEQEDH43qL0Jl9nsQ?e=iwEViI",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM 5170 (Models 319 and 339) Technical Reference, March 1986",
+            "@file": "IBM_5170_Technical_Reference_6183355_1986-03.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqERdutb7IYT0pcugQ?e=DiQ35K",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM 5170 Double-Sided Diskette Drive",
+            "@file": "IBM_5170_Double-Sided_Diskette_Drive.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lFyUh1iagIHOfKaw?e=6AFXdb",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "IBM 5170 High-Capacity Diskette Drive",
+            "@file": "IBM_5170_High-Capacity_Diskette_Drive.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lIr9Grzhroy7j0FA?e=Xzh9jl",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "IBM 5170 Serial/Parallel Adapter",
+            "@file": "IBM_5170_Serial_Parallel.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lLZxGYvTR7JzvGWA?e=DGHRuL",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "IBM 5170 Serial/Parallel Adapter (Aug 1984)",
+            "@file": "IBM_5170_Serial_Parallel_1984-08-31.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heE_I_9IbmmltKFy9w?e=e8SzvS",
+            "@cover": ".jpg",
+            "@source": "http://minuszerodegrees.net/oa/OA%20-%20IBM%20PC%20AT%20Serial_Parallel%20Adapter.pdf"
+          },
+          {
+            "@title": "IBM 5170 128KB Memory Expansion",
+            "@file": "IBM_5170_128KB_Memory_Expansion.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lDQ8FEh981ypkHQA?e=oTnvCs",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "IBM 5170 512KB Memory Expansion",
+            "@file": "IBM_5170_512KB_Memory_Expansion.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lE52hJ4Iu3MX1ZqQ?e=1U30d6",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "IBM 5170 Communications Cable",
+            "@file": "IBM_5170_Communications_Cable.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lGrU3VcVL_rpUNfw?e=93UCNC",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "IBM 5170 Prototype Adapter",
+            "@file": "IBM_5170_Prototype_Adapter.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lKotCHFGpTk0VgwQ?e=lNJo62",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          },
+          {
+            "@title": "IBM 5170 Updates",
+            "@file": "IBM_5170_Updates.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lJBRb36NH-gIM2kw?e=F4361P",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          }
+        ]
+      },
+      "hdc": {
+        "@title": "PC Hard Drives",
+        "@documents": [
+          {
+            "@title": "IBM 5170 Fixed Disk and Diskette Drive Adapter, August 1984",
+            "@file": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1984-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqENe6VOosR1hAu0Qg?e=rn4aJb",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM 5170 Fixed Disk and Diskette Drive Adapter, August 1986",
+            "@file": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1986-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEON8qBHJZmbQ5fGw?e=6iAC5s",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM 5170 20MB Fixed Disk Drive",
+            "@file": "IBM_5170_20MB_Fixed_Disk_Drive.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lHGhPhb9qr8O7ilA?e=82OOXR",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          }
+        ]
+      },
+      "video": {
+        "@title": "PC Video Adapters",
+        "@documents": [
+          {
+            "@title": "IBM Monochrome Display and Printer Adapter",
+            "@file": "IBM_MDA.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFPxcuda7FDcNW7BA?e=kOj1AO",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM Color/Graphics Monitor Adapter",
+            "@file": "IBM_CGA.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFOOxc92qIsgXiyYw?e=MlkUfH",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM Enhanced Graphics Adapter",
+            "@file": "IBM_EGA_1984-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqETcfH-OJbF8XjjQA?e=9iPpJa",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM EGA Installation Instructions",
+            "@file": "IBM_EGA_Installation_Instructions_1984-08.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqESv2LrxGsMlNweRA?e=3ABlJl",
+            "@cover": ".jpg",
+            "@source": ""
+          },
+          {
+            "@title": "IBM VGA Technical Reference (Excerpt)",
+            "@file": "IBM_VGA_Technical_Reference-Excerpt.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFQgmvof3IQdrHQKQ?e=y8QOzc",
+            "@cover": ".jpg",
+            "@source": "PCjs"
+          }
+        ]
+      }
+    },
+    "zenith": {
+      "@title": "Zenith",
+      "z150": {
+        "@title": "Zenith Z-150",
+        "cga": {
+          "@title": "Color Graphics",
+          "@redirect_from": "/devices/pcx86/machine/zenith/z150/cga/640kb/"
+        },
+        "@documents": [
+          {
+            "@title": "Programmer's Reference Manual (Z-100 Series)",
+            "@file": "Z-100_Programmers_Reference_Manual-OCR.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMO1vgXSvBjIOkc3Q?e=qgpTCc",
+            "@cover": ".jpg",
+            "@source": "http://planemo.org/retro/downloads/z100/manuals/Z-100%20Programmers%20Reference%20Manual-OCR.pdf"
+          },
+          {
+            "@title": "Z-150 User's Guide",
+            "@file": "Zenith_Z-150_PC_Users_and_Operations_Manual_Guide.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMPDkwuMejqkVxIlw?e=VsZFfo",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.org/pdf/zenith/z150/Zenith_Z-150_PC_Users_and_Operations_Manual_Guide.pdf"
+          },
+          {
+            "@title": "Z-150 Service Manuals",
+            "@file": "Zenith_Z-150_PC_Service_Manuals.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMRQSy0MqaRkMLS1g?e=7jb8nH",
+            "@cover": ".jpg",
+            "@source": "http://www.minuszerodegrees.net/manuals/Zenith%20Data%20Systems/Zenith%20Z-150%20PC%20-%20Service%20Manual.pdf"
+          },
+          {
+            "@title": "Z-150 Brochure",
+            "@file": "ZDS-Z150.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMTIvsHMytwFM_6wg?e=rpMsYK",
+            "@cover": ".jpg",
+            "@source": "https://computerarchive.org/files/comp/ad/zenith/ZDS-Z150.pdf"
+          }
+        ]
+      }
+    }
+  },
   "arcade": {
     "@title": "Arcade",
     "@instances": {
@@ -422,6 +892,25 @@
         }
       ]
     },
+    "roms": {
+      "@title": "ROMs",
+      "@instances": {
+        "m9312": {
+          "@title": "DEC PDP-11 ROMs",
+          "@permalink": "/machines/dec/pdp11/rom/M9312/",
+          "@redirect_from": "/devices/pdp11/rom/M9312/"
+        },
+        "vt100": {
+          "@title": "DEC VT100 ROMs",
+          "@permalink": "/machines/dec/vt100/rom/",
+          "@redirect_from": "/devices/pc8080/rom/vt100/"
+        },
+        "assorted": {
+          "@title": "Other DEC ROMs",
+          "@redirect_from": "/machines/dec/rom/"
+        }
+      }
+    },
     "vt100": {
       "@title": "VT100",
       "@instances": {
@@ -492,489 +981,10 @@
           "@redirect_from": "/devices/pcx86/machine/5170/ega/2048kb/rev3/vt100/"
         }
       }
-    },
-    "roms": {
-      "@title": "ROMs",
-      "@instances": {
-        "assorted": {
-          "@title": "Assorted DEC ROMs",
-          "@redirect_from": "/machines/dec/rom/"
-        }
-      }
-    }
-  },
-  "pcx86": {
-    "@title": "IBM PC",
-    "att": {
-      "@title": "AT&T",
-      "6300": {
-        "@title": "AT&T 6300",
-        "cga": {
-          "@title": "Color Graphics",
-          "@redirect_from": "/devices/pcx86/machine/att/6300/cga/640kb/"
-        },
-        "@documents": [
-          {
-            "@title": "AT&T 6300 GWBASIC Programmer's Guide (1985)",
-            "@file": "ATT_PC_6300_Programmers_Guide_GWBASIC_1985.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFLW1snGb1Z-lrMhw?e=j71u9Z",
-            "@cover": ".jpg",
-            "@source": "http://bitsavers.org/pdf/att/6300/999-802-000IS_Programmers_Guide_PC6300_GWBASIC_by_Microsoft_1985.pdf"
-          },
-          {
-            "@title": "AT&T 6300 PLUS ROM-BIOS Listing (1986)",
-            "@file": "ATT_PC_6300_Plus_ROM-BIOS_Listing_1986.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFInlKWgh8AL81igA?e=M654eo",
-            "@cover": ".jpg",
-            "@source": "http://bitsavers.org/pdf/att/6300/ATT_Personal_Computer_6300_Plus_-_ROM-BIOS_Listing_-_Rel_2.05_Issue_1_-_1986.pdf"
-          },
-          {
-            "@title": "AT&T 6300 System Programmer's Guide (1985)",
-            "@file": "ATT_PC_6300_System_Programmers_Guide_1985.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFNtVfFVzNzMvJhpw?e=hM1Yg2",
-            "@cover": ".jpg",
-            "@source": "http://bitsavers.org/pdf/att/6300/999-802-200IS_System_Programmers_Guide_PC6300_1985.pdf"
-          },
-          {
-            "@title": "AT&T 6300 Service Manual",
-            "@file": "ATT_PC_6300_Service_Manual.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFMs31Uchp2WucCxw?e=Jj2rR2",
-            "@cover": ".jpg",
-            "@source": "http://bitsavers.org/pdf/att/6300/ATT_PC_6300_Service_Manual.pdf"
-          },
-          {
-            "@title": "AT&T 6300 User's Guide",
-            "@file": "ATT_PC_6300_Users_Guide.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFJ8XlR3Snxd9EnBQ?e=qixCcK",
-            "@cover": ".jpg",
-            "@source": "http://bitsavers.org/pdf/att/6300/ATT_PC_6300_Users_Guide.pdf"
-          }
-        ]
-      }
-    },
-    "cdp": {
-      "@title": "CDP",
-      "mpc1600": {
-        "@title": "CDP MPC 1600",
-        "cga": {
-          "@title": "Color Graphics",
-          "@redirect_from": "/devices/pcx86/machine/cdp/mpc1600/cga/640kb/"
-        },
-        "@documents": [
-          {
-            "@title": "Columbia Data Products MP Operations Guide (1983)",
-            "@file": "Columbia_Data_Products_MPC_1600-Operations_Guide.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMScGXgEVN-4-XyfA?e=2iQVlh",
-            "@cover": ".jpg",
-            "@source": "http://www.minuszerodegrees.net/manuals/Columbia%20Data%20Products/Columbia%20Data%20Products%20MPC%201600%20-%20Operations%20Guide.pdf"
-          }
-        ]
-      }
-    },
-    "compaq": {
-      "@title": "COMPAQ",
-      "portable": {
-        "@title": "COMPAQ Portable",
-        "vdu": {
-          "@title": "Monochrome Graphics",
-          "@redirect_from": "/devices/pcx86/machine/compaq/portable/vdu/128kb/"
-        },
-        "@documents": [
-          {
-            "@title": "COMPAQ Portable Operations Guide (Nov 1982)",
-            "@file": "COMPAQ_Operations_Guide_1982-11.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEafO5tOghjO67McQ?e=QsXzCl",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          }
-        ]
-      },
-      "deskpro286": {
-        "@title": "DeskPro 286",
-        "@documents": [
-          {
-            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, May 1987)"
-          },
-          {
-            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, May 1987)",
-            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol2_1987-05.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq463rsLHiJe9AY7FQ?e=Xxtt3j",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, Dec 1987)",
-            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol1_1987-12.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvAnh2ZAxwmv7UMrSw?e=nQPirJ",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, Dec 1987)",
-            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol2_1987-12.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvAok6a1GZWGWEvr-g?e=EToJaL",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "COMPAQ DeskPro 286 Operations Guide (Feb 1987)",
-            "@file": "COMPAQ_DeskPro_286_Operations_Guide_1987-02.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq1_tSCFGeiC6Yghpw?e=wI7uEo",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "COMPAQ DeskPro 286 Operations Guide - READ THIS FIRST (Sep 1987)",
-            "@file": "COMPAQ_DeskPro_286_Operations_Guide_READ_THIS_FIRST_1987-09.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq4Cb6j-SlhNicPrCg?e=cGbEsS",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          }
-        ]
-      },
-      "deskpro386": {
-        "@title": "DeskPro 386",
-        "@documents": [
-          {
-            "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume I, Sep 1986)",
-            "@file": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol1_1986-09.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-kRDehAMRp7BDfn0A?e=MNNw9w",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume II, Sep 1986)",
-            "@file": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol2_1986-09.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-kS9Xp8xd_kHMKCqg?e=fWqJ0F",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "COMPAQ DeskPro 386/25 Technical Reference Guide (Volume I, Aug 1988)",
-            "@file": "COMPAQ_DeskPro_386-25_Technical_Reference_Guide_Vol1_1988-08.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq5BThwmEpfyp0EBdA?e=53SAyY",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          }
-        ]
-      }
-    },
-    "ibm": {
-      "@title": "IBM",
-      "4860": {
-        "@title": "PCJr (Model 4860)",
-        "@documents": [
-          {
-            "@title": "IBM 4860 Technical Reference (Nov 1983)",
-            "@file": "IBM_4860_Technical_Reference_6322971_1983-11.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heE3ehC5BWxiIhMbUQ?e=pymkiO",
-            "@cover": ".jpg",
-            "@source": "http://bitsavers.trailing-edge.com/pdf/ibm/pc/pc_jr/PCjr_Technical_Reference_Nov83.pdf"
-          }
-        ]
-      },
-      "5150": {
-        "@title": "PC (Model 5150)",
-        "cga": {
-          "@title": "Color Graphics",
-          "@redirect_from": "/devices/pcx86/machine/5150/cga/64kb/"
-        },
-        "mda": {
-          "@title": "Monochrome Display",
-          "@redirect_from": "/devices/pcx86/machine/5150/cga/64kb/"
-        },
-        "dual": {
-          "@title": "Dual Displays",
-          "@redirect_from": "/devices/pcx86/machine/5150/dual/64kb/"
-        },
-        "vga": {
-          "@title": "VGA Display"
-        },
-        "@documents": [
-          {
-            "@title": "IBM 5150 Guide to Operations (Aug 1981)",
-            "@file": "IBM_5150_Guide_to_Operations_6025000_1981-08.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEHlreeAL-NbpxGVg?e=zyjiew",
-            "@cover": ".jpg",
-            "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Guide_to_Operations_6025000_AUG81.pdf"
-          },
-          {
-            "@title": "IBM 5150 Guide to Operations (Apr 1984)",
-            "@file": "IBM_5150_Guide_to_Operations_6322510_1984-04.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEIEyguxuImec_aLA?e=C91ffv",
-            "@cover": ".jpg",
-            "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Guide_to_Operations_6322510_APR84.pdf"
-          },
-          {
-            "@title": "IBM 5150 Technical Reference (Aug 1981)",
-            "@file": "IBM_5150_Technical_Reference_6025005_1981-08.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqELFEzc8B_rRcEPrA?e=2TJqcJ",
-            "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2137003&authkey=AN_bx8xT3-kuJ2w&em=2",
-            "@cover": ".jpg",
-            "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Technical_Reference_6025005_AUG81.pdf",
-            "@altsource": "http://bitsavers.org/pdf/ibm/pc/pc/6025008_PC_Technical_Reference_Aug81.pdf"
-          },
-          {
-            "@title": "IBM 5150 Technical Reference (Apr 1983)",
-            "@file": "IBM_5150_Technical_Reference_1502234_1983-04.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEJiwNxqCk17DLlxw?e=CaTFg4",
-            "@cover": ".jpg",
-            "@source": "http://bitsavers.org/pdf/ibm/pc/pc/1502234_PC_Technical_Reference_Apr83.pdf"
-          },
-          {
-            "@title": "IBM 5150 Technical Reference (Apr 1984)",
-            "@file": "IBM_5150_Technical_Reference_6322507_1984-04.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEKmmBoHcZHx06phA?e=cwe8cT",
-            "@cover": ".jpg",
-            "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Technical_Reference_6322507_APR84.pdf"
-          }
-        ]
-      },
-      "5160": {
-        "@title": "PC XT (Model 5160)",
-        "cga": {
-          "@title": "Color Graphics",
-          "@redirect_from": "/devices/pcx86/machine/5160/cga/256kb/"
-        },
-        "ega": {
-          "@title": "Enhanced Graphics",
-          "@redirect_from": "/devices/pcx86/machine/5160/ega/640kb/"
-        },
-        "mda": {
-          "@title": "Monochrome Display",
-          "@redirect_from": "/devices/pcx86/machine/5160/mda/256kb/"
-        },
-        "@documents": [
-          {
-            "@title": "IBM 5160 Guide to Operations (Apr 1984)",
-            "@file": "IBM_5160_Guide_to_Operations_6322511_1984-04.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEGQjCUU_ObE_XCmA?e=grxl9S",
-            "@cover": ".jpg",
-            "@source": ""
-          },
-          {
-            "@title": "IBM 5160 Technical Reference (April 1983)",
-            "@file": "IBM_5160_Technical_Reference_1983-04.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEF_79DWDCuHOZmWQ?e=UmJotY",
-            "@cover": ".jpg",
-            "@source": "http://retroarchive.org/dos/docs/ibm5160techref.pdf"
-          }
-        ]
-      },
-      "5170": {
-        "@title": "PC AT (Model 5170)",
-        "cga": {
-          "@title": "Color Graphics",
-          "@redirect_from": "/devices/pcx86/machine/5170/cga/640kb/rev3/"
-        },
-        "vga/cdrom": {
-          "@title": "VGA Display with CD-ROM",
-          "@redirect_from": "/disks/pcx86/drives/cdrom/"
-        },
-        "@documents": [
-          {
-            "@title": "IBM 5170 Installation and Setup, March 1984",
-            "@file": "IBM_5170_Installation_and_Setup_1502491_1984-03.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEMJzq91y_eQIV6PQ?e=mE0RSQ",
-            "@cover": ".jpg",
-            "@source": ""
-          },
-          {
-            "@title": "IBM 5170 Technical Reference, March 1984",
-            "@file": "IBM_5170_Technical_Reference_1502243_1984-03.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEPV82VBi1so8Tt-A?e=KXNZcv",
-            "@cover": ".jpg",
-            "@source": ""
-          },
-          {
-            "@title": "IBM 5170 (Model 239) Technical Reference, September 1985",
-            "@file": "IBM_5170_Technical_Reference_6280070_1985-09.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEQEDH43qL0Jl9nsQ?e=iwEViI",
-            "@cover": ".jpg",
-            "@source": ""
-          },
-          {
-            "@title": "IBM 5170 (Models 319 and 339) Technical Reference, March 1986",
-            "@file": "IBM_5170_Technical_Reference_6183355_1986-03.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqERdutb7IYT0pcugQ?e=DiQ35K",
-            "@cover": ".jpg",
-            "@source": ""
-          },
-          {
-            "@title": "IBM 5170 Double-Sided Diskette Drive",
-            "@file": "IBM_5170_Double-Sided_Diskette_Drive.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lFyUh1iagIHOfKaw?e=6AFXdb",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "IBM 5170 High-Capacity Diskette Drive",
-            "@file": "IBM_5170_High-Capacity_Diskette_Drive.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lIr9Grzhroy7j0FA?e=Xzh9jl",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "IBM 5170 Serial/Parallel Adapter",
-            "@file": "IBM_5170_Serial_Parallel.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lLZxGYvTR7JzvGWA?e=DGHRuL",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "IBM 5170 Serial/Parallel Adapter (Aug 1984)",
-            "@file": "IBM_5170_Serial_Parallel_1984-08-31.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heE_I_9IbmmltKFy9w?e=e8SzvS",
-            "@cover": ".jpg",
-            "@source": "http://minuszerodegrees.net/oa/OA%20-%20IBM%20PC%20AT%20Serial_Parallel%20Adapter.pdf"
-          },
-          {
-            "@title": "IBM 5170 128KB Memory Expansion",
-            "@file": "IBM_5170_128KB_Memory_Expansion.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lDQ8FEh981ypkHQA?e=oTnvCs",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "IBM 5170 512KB Memory Expansion",
-            "@file": "IBM_5170_512KB_Memory_Expansion.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lE52hJ4Iu3MX1ZqQ?e=1U30d6",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "IBM 5170 Communications Cable",
-            "@file": "IBM_5170_Communications_Cable.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lGrU3VcVL_rpUNfw?e=93UCNC",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "IBM 5170 Prototype Adapter",
-            "@file": "IBM_5170_Prototype_Adapter.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lKotCHFGpTk0VgwQ?e=lNJo62",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          },
-          {
-            "@title": "IBM 5170 Updates",
-            "@file": "IBM_5170_Updates.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lJBRb36NH-gIM2kw?e=F4361P",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          }
-        ]
-      },
-      "hdc": {
-        "@title": "PC Hard Drives",
-        "@documents": [
-          {
-            "@title": "IBM 5170 Fixed Disk and Diskette Drive Adapter, August 1984",
-            "@file": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1984-08.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqENe6VOosR1hAu0Qg?e=rn4aJb",
-            "@cover": ".jpg",
-            "@source": ""
-          },
-          {
-            "@title": "IBM 5170 Fixed Disk and Diskette Drive Adapter, August 1986",
-            "@file": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1986-08.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEON8qBHJZmbQ5fGw?e=6iAC5s",
-            "@cover": ".jpg",
-            "@source": ""
-          },
-          {
-            "@title": "IBM 5170 20MB Fixed Disk Drive",
-            "@file": "IBM_5170_20MB_Fixed_Disk_Drive.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lHGhPhb9qr8O7ilA?e=82OOXR",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          }
-        ]
-      },
-      "video": {
-        "@title": "PC Video Adapters",
-        "@documents": [
-          {
-            "@title": "IBM Monochrome Display and Printer Adapter",
-            "@file": "IBM_MDA.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFPxcuda7FDcNW7BA?e=kOj1AO",
-            "@cover": ".jpg",
-            "@source": ""
-          },
-          {
-            "@title": "IBM Color/Graphics Monitor Adapter",
-            "@file": "IBM_CGA.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFOOxc92qIsgXiyYw?e=MlkUfH",
-            "@cover": ".jpg",
-            "@source": ""
-          },
-          {
-            "@title": "IBM Enhanced Graphics Adapter",
-            "@file": "IBM_EGA_1984-08.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqETcfH-OJbF8XjjQA?e=9iPpJa",
-            "@cover": ".jpg",
-            "@source": ""
-          },
-          {
-            "@title": "IBM EGA Installation Instructions",
-            "@file": "IBM_EGA_Installation_Instructions_1984-08.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqESv2LrxGsMlNweRA?e=3ABlJl",
-            "@cover": ".jpg",
-            "@source": ""
-          },
-          {
-            "@title": "IBM VGA Technical Reference (Excerpt)",
-            "@file": "IBM_VGA_Technical_Reference-Excerpt.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFQgmvof3IQdrHQKQ?e=y8QOzc",
-            "@cover": ".jpg",
-            "@source": "PCjs"
-          }
-        ]
-      }
-    },
-    "zenith": {
-      "@title": "Zenith",
-      "z150": {
-        "@title": "Zenith Z-150",
-        "cga": {
-          "@title": "Color Graphics",
-          "@redirect_from": "/devices/pcx86/machine/zenith/z150/cga/640kb/"
-        },
-        "@documents": [
-          {
-            "@title": "Programmer's Reference Manual (Z-100 Series)",
-            "@file": "Z-100_Programmers_Reference_Manual-OCR.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMO1vgXSvBjIOkc3Q?e=qgpTCc",
-            "@cover": ".jpg",
-            "@source": "http://planemo.org/retro/downloads/z100/manuals/Z-100%20Programmers%20Reference%20Manual-OCR.pdf"
-          },
-          {
-            "@title": "Z-150 User's Guide",
-            "@file": "Zenith_Z-150_PC_Users_and_Operations_Manual_Guide.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMPDkwuMejqkVxIlw?e=VsZFfo",
-            "@cover": ".jpg",
-            "@source": "http://bitsavers.org/pdf/zenith/z150/Zenith_Z-150_PC_Users_and_Operations_Manual_Guide.pdf"
-          },
-          {
-            "@title": "Z-150 Service Manuals",
-            "@file": "Zenith_Z-150_PC_Service_Manuals.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMRQSy0MqaRkMLS1g?e=7jb8nH",
-            "@cover": ".jpg",
-            "@source": "http://www.minuszerodegrees.net/manuals/Zenith%20Data%20Systems/Zenith%20Z-150%20PC%20-%20Service%20Manual.pdf"
-          },
-          {
-            "@title": "Z-150 Brochure",
-            "@file": "ZDS-Z150.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMTIvsHMytwFM_6wg?e=rpMsYK",
-            "@cover": ".jpg",
-            "@source": "https://computerarchive.org/files/comp/ad/zenith/ZDS-Z150.pdf"
-          }
-        ]
-      }
     }
   },
   "pcx80": {
-    "@title": "Intel 8080",
+    "@title": "Intel",
     "@instances": {
       "exerciser": {
         "@title": "8080 Exerciser",
@@ -983,7 +993,7 @@
     }
   },
   "led": {
-    "@title": "LED Simulations",
+    "@title": "LEDs",
     "@instances": {
       "life/color": {
         "@title": "Game of Life",
@@ -1000,7 +1010,7 @@
     }
   },
   "osi": {
-    "@title": "Ohio Scientific",
+    "@title": "OSI",
     "@instances": {
       "c1p": {
         "@title": "Challenger 1P",
@@ -1047,8 +1057,16 @@
       }
     }
   },
+  "palm": {
+    "@title": "Palm",
+    "@instances": {
+      "pilot": {
+        "@title": "Palm Pilot"
+      }
+    }
+  },
   "ti": {
-    "@title": "Texas Instruments",
+    "@title": "TI",
     "ti42": {
       "@title": "TI-42 Calculator",
       "@instances": {

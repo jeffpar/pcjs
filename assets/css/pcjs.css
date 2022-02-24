@@ -35,6 +35,15 @@
   overflow: auto;
   padding: 8px;
 }
+.pcjs-chassis-clear {
+  overflow: auto;
+  padding: 8px;
+}
+.pcjs-chassis-image {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
 .pcjs-console {
   font-family: monospace;
   width: 100%;
@@ -69,6 +78,12 @@
   width: 100%;
   height: auto;
   background-color: black;
+}
+.pcjs-chassis-image .pcjs-monitor {
+  position: absolute;
+}
+.pcjs-chassis-image .pcjs-surface {
+  height: 100%;
 }
 .pcjs-video {
   margin: 0 auto;
