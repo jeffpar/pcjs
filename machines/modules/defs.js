@@ -1,7 +1,7 @@
 /**
  * @fileoverview Basic definitions
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -50,7 +50,7 @@ const MAXDEBUG = false;
 
 /**
  * VERSION is the current PCjs Project release number, updated somewhat arbitrarily and usually only
- * after significant changes.  It will be overriden the machine's "version" string in machines.json.
+ * after significant changes.  It will be overridden the machine's "version" string in machines.json.
  *
  * @define {string}
  */
@@ -64,7 +64,7 @@ const VERSION = "2.04";
  */
 const REPOSITORY = "pcjs.org";
 
-const COPYRIGHT = "Copyright © 2012-2021 Jeff Parsons <Jeff@pcjs.org>";
+const COPYRIGHT = "Copyright © 2012-2022 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
  * @class {Defs}

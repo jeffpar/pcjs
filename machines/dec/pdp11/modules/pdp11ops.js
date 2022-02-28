@@ -1,7 +1,7 @@
 /**
  * @fileoverview PDP-11 Opcode Handlers and Helper Functions
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -10,7 +10,7 @@
  * <paulnank@hotmail.com> at <http://skn.noip.me/pdp11/pdp11.html> with permission.
  */
 
-import CPU from "../../../lib/cpu.js";
+import CPU from "../../../modules/cpu.js";
 
 /**
  * @class {PDP11Ops}

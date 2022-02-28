@@ -1,14 +1,14 @@
 /**
  * @fileoverview Implements Space Invaders I/O ports
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Input from "../../../lib/input.js";
-import Ports from "../../../lib/ports.js";
+import Input from "../../../modules/input.js";
+import Ports from "../../../modules/ports.js";
 
 /**
  * @typedef {PortsConfig} InvadersPortsConfig

@@ -47,7 +47,7 @@ const MAXDEBUG = false;
 
 /**
  * VERSION is the current PCjs Project release number, updated somewhat arbitrarily and usually only
- * after significant changes.  It will be overriden the machine's "version" string in machines.json.
+ * after significant changes.  It will be overridden the machine's "version" string in machines.json.
  *
  * @define {string}
  */
@@ -61,7 +61,7 @@ const VERSION = "2.04";
  */
 const REPOSITORY = "pcjs.org";
 
-const COPYRIGHT = "Copyright © 2012-2021 Jeff Parsons <Jeff@pcjs.org>";
+const COPYRIGHT = "Copyright © 2012-2022 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
  * @class {Defs}
@@ -7856,7 +7856,7 @@ class Bus extends Device {
                 blockNew = new Memory(this.idMachine, idBlock, {type, addr: addrNext, size: sizeBlock, "bus": this.idDevice});
             } else {
                 /*
-                 * When a block is provided, make sure its size maches the default Bus block size, and use it if so.
+                 * When a block is provided, make sure its size matches the default Bus block size, and use it if so.
                  */
                 if (block.size == this.blockSize) {
                     blockNew = block;
@@ -9869,7 +9869,7 @@ class Debugger extends Device {
         this.maxOpcodeLength = 1;
 
         /*
-         * Default parsing parameters, subexpression and address delimiters.
+         * Default parsing parameters, sub-expression and address delimiters.
          */
         this.nASCIIBits = 8;                    // change to 7 for MACRO-10 compatibility
         this.achGroup = ['(',')'];
@@ -9923,7 +9923,7 @@ class Debugger extends Device {
         this.fExceptionOnBreak = false;
 
         /*
-         * If greater than zero, decremented on every instruction until it hits zero, then CPU is stoppped.
+         * If greater than zero, decremented on every instruction until it hits zero, then CPU is stopped.
          */
         this.counterBreak = 0;
 
@@ -11021,7 +11021,7 @@ class Debugger extends Device {
              * conflicts with the operators below.
              *
              * NOTE: MACRO-10 packs up to 5 7-bit ASCII codes from a double-quoted value, and up to 6 6-bit ASCII
-             * (SIXBIT) codes from a sinqle-quoted value.
+             * (SIXBIT) codes from a single-quoted value.
              */
             expr = this.parseASCII(expr, '"', this.nASCIIBits);
             if (!expr) return value;
@@ -17569,7 +17569,6 @@ class InvadersVideo extends Monitor {
     {
         super(idMachine, idDevice, config);
 
-        let video = this
         this.addrBuffer = this.config['bufferAddr'];
         this.fUseRAM = this.config['bufferRAM'];
 

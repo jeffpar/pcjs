@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- author="Jeff Parsons (@jeffpar)" copyright="© 2012-2021 Jeff Parsons" license="https://www.pcjs.org/LICENSE.txt" -->
+<!-- author="Jeff Parsons (@jeffpar)" copyright="© 2012-2022 Jeff Parsons" license="https://www.pcjs.org/LICENSE.txt" -->
 <!DOCTYPE xsl:stylesheet [
 	<!ENTITY nbsp "&#160;"> <!ENTITY ne "&#8800;"> <!ENTITY le "&#8804;"> <!ENTITY ge "&#8805;">
 	<!ENTITY times "&#215;"> <!ENTITY sdot "&#8901;"> <!ENTITY divide "&#247;">
@@ -47,7 +47,7 @@
 		<div class="common-bottom">
 			<p class="common-reference"></p>
 			<p class="common-copyright">
-				<span class="common-copyright"><a href="https://www.pcjs.org/">pcjs.org</a> © 2012-2021 by <a href="https://jeffpar.com">@jeffpar</a></span><br/>
+				<span class="common-copyright"><a href="https://www.pcjs.org/">pcjs.org</a> © 2012-2022 by <a href="https://jeffpar.com">@Jeffpar</a></span><br/>
 				<span class="common-copyright"><a href="https://github.com/jeffpar/pcjs">PCjs</a> is released under <a href="https://www.pcjs.org/LICENSE.txt">MIT License</a></span><br/>
 				<span>Powered by <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a>, <a href="http://vanilla-js.com/" target="_blank">Vanilla JS</a>, and <a href="https://github.com/jeffpar" target="_blank">GitHub</a></span>
 			</p>

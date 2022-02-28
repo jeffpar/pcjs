@@ -18,7 +18,7 @@
       ]
     },
     {
-      "name": "Node: diskdump.js (deprecated; use diskimage.js)",
+      "name": "Node: diskdump.js (deprecated)",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/old/diskdump/bin/diskdump",
@@ -248,6 +248,20 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/osi/c1p/array/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Palm Pilot",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/palm/pilot/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Space Invaders",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/arcade/invaders/",
       "webRoot": "${workspaceFolder}"
     },
     {

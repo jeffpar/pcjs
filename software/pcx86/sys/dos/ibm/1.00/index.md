@@ -82,7 +82,7 @@ CHKDSK reports:
 
 ### Feature Summary
 
-Courtesy of [PC DOS Retro](https://sites.google.com/site/pcdosretro/doshist):
+Courtesy of [PC DOS Retro](https://pcdosretro.github.io/doshist.txt):
 
   - distributed on 1 160KB floppy disk
   - initial release (equivalent to 86-DOS 1.14)

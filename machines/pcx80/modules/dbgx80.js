@@ -1,13 +1,13 @@
 /**
  * @fileoverview Debugger for the 8080 CPU
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Debugger from "../../lib/debugger.js";
+import Debugger from "../../modules/debugger.js";
 
 /**
  * Debugger for the 8080 CPU

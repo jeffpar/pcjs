@@ -1,23 +1,23 @@
 (function(){/*
- https://www.pcjs.org/machines/shared/lib/dumpapi.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/shared/lib/reportapi.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/shared/lib/strlib.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/shared/lib/weblib.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/shared/lib/embed.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/shared/lib/defines.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/shared/lib/usrlib.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/shared/lib/component.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/defines.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/panel.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/cpu.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/rom.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/ram.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/keyboard.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/video.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/serial.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/disk.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/debugger.js (C) 2012-2020 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/computer.js (C) 2012-2020 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/dumpapi.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/reportapi.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/strlib.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/weblib.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/embed.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/defines.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/usrlib.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/component.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/defines.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/panel.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/cpu.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/rom.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/ram.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/keyboard.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/video.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/serial.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/disk.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/debugger.js (C) 2012-2021 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/computer.js (C) 2012-2021 Jeff Parsons
 */
 var f;function aa(a){var b=0;return function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}}}function ba(a){var b="undefined"!=typeof Symbol&&Symbol.iterator&&a[Symbol.iterator];return b?b.call(a):{next:aa(a)}}function ca(a){for(var b,c=[];!(b=a.next()).done;)c.push(b.value);return c}var da="function"==typeof Object.create?Object.create:function(a){function b(){}b.prototype=a;return new b},ea;
 if("function"==typeof Object.setPrototypeOf)ea=Object.setPrototypeOf;else{var fa;a:{var ha={Mb:!0},ia={};try{ia.__proto__=ha;fa=ia.Mb;break a}catch(a){}fa=!1}ea=fa?function(a,b){a.__proto__=b;if(a.__proto__!==b)throw new TypeError(a+" is not extensible");return a}:null}var ja=ea;
@@ -32,8 +32,8 @@ e[h+3];r=r?+r.substr(1):-1;var D=null,y=0,x="";k=12>k&&"object"!=typeof m?ta(m):
 l="d";break;case "S":m=p?k.getUTCSeconds():k.getSeconds();l="d";break;case "T":m=p?"#":"";d+=isNaN(k.getTime())?void 0:ua(ua("%%%sY-%%%s02M-%%%s02D %%%s02H:%%%s02N:%%%s02S",m),k);continue;case "W":m=wa[p?k.getUTCDay():k.getDay()];l="s";break;case "Y":m=p?k.getUTCFullYear():k.getFullYear(),0<r&&(m%=Math.pow(10,r),r=-1),l="d"}switch(l){case "b":d+=m?"true":"false";break;case "d":m=Math.trunc(m),0<=r&&(t=!0,q<r&&(q=r),r=-1);case "f":l=m+"";0<=r&&(l=m.toFixed(r));l.length<q&&(t?(0>m&&(q--,l=l.substr(1)),
 l=("0000000000"+l).slice(-q),0>m&&(l="-"+l)):l=("          "+l).slice(-q));d+=l;break;case "j":d+=JSON.stringify(m,null,q||void 0);break;case "c":m="string"==typeof m?m[0]:String.fromCharCode(m);case "s":if(void 0!=m)for("string"!=typeof m&&(m=m.toString()),0<=r&&(m=m.substr(0,r));m.length<q;)m=0<=n.indexOf("-")?m+" ":" "+m;d+=m;break;case "o":y=8,p&&(x="0");case "X":D=xa;case "x":l="";y||(y=16);!x&&p&&(x="0x");D||(D=ya);m=Math.trunc(m);0<=r&&(t=!0,q<r&&(q=r));t&&!q&&(q=Math.abs(m),q=255>=q?2:65535>=
 q?4:4294967295>=q?8:9,q+=x.length);q-=x.length;do p=m&y-1,m>>>=16==y?4:3,t||!l||p||m?l=D[p]+l:(x&&(l=x+l,x=""),0<q&&(l=" "+l));while(0<--q||m);d+=x+l;break;case "%":d+="%";break;default:d+="(unimplemented printf type %"+l+")"}}}return d+=e[h]}var sa={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;",$:"&dollar;"},ya="0123456789abcdef",xa="0123456789ABCDEF",wa="Sunday Monday Tuesday Wednesday Thursday Friday Saturday".split(" "),va="January February March April May June July August September October November December".split(" ");
-function A(a,b){var c=null,d=!0;c=void 0===c?"text":c;d=void 0===d?!1:d;var e=0,g=null;if("object"==typeof resources&&(g=resources[a]))b&&b(a,g,e);else if(d&&"function"==typeof resources)resources(a,function(p,t){b&&b(a,p,t)});else{a=a.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//,"https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//,"https://$1.pcjs.org/");var h=window.XMLHttpRequest?new window.XMLHttpRequest:new window.ActiveXObject("Microsoft.XMLHTTP"),
-l=!1,k="string"===typeof h.responseType,m=function(){if(4!==h.readyState)return null;try{g=l?h.response:h.responseText}catch(t){}if(null==g||200!=h.status&&(h.status||!g.length||"file:"!=(window?window.location.protocol:"file:")))if(e=h.status||-1,!h.status&&!za){var p=a.match(/(^https?:\/\/[^/]+)(.*)/);p&&(za=!0,B("PCjs was unable to perform a cross-origin resource request to '"+p[1]+"'.\n\nIf you're running an ad blocker, try adding '"+Aa()+"' to your whitelist (or find a smarter ad blocker)."))}b&&
+function A(a,b){var c=null,d=!0;c=void 0===c?"text":c;d=void 0===d?!1:d;var e=0,g=null;if("object"==typeof resources&&(g=resources[a]))b&&b(a,g,e);else if(d&&"function"==typeof resources)resources(a,function(p,t){b&&b(a,p,t)});else{a=a.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//,"https://$1.pcjs.org/").replace(/^\/discs\/([^/]*)\//,"https://$1.pcjs.org/");var h=window.XMLHttpRequest?new window.XMLHttpRequest:new window.ActiveXObject("Microsoft.XMLHTTP"),l=
+!1,k="string"===typeof h.responseType,m=function(){if(4!==h.readyState)return null;try{g=l?h.response:h.responseText}catch(t){}if(null==g||200!=h.status&&(h.status||!g.length||"file:"!=(window?window.location.protocol:"file:")))if(e=h.status||-1,!h.status&&!za){var p=a.match(/(^https?:\/\/[^/]+)(.*)/);p&&(za=!0,B("PCjs was unable to perform a cross-origin resource request to '"+p[1]+"'.\n\nIf you're running an ad blocker, try adding '"+Aa()+"' to your whitelist (or find a smarter ad blocker)."))}b&&
 b(a,g,e);return[g,e]};d&&(h.onreadystatechange=m);if(c&&"object"==typeof c){k="";for(var n in c)c.hasOwnProperty(n)&&(k&&(k+="&"),k+=n+"="+encodeURIComponent(c[n]));k=k.replace(/%20/g,"+");h.open("POST",a,d);h.setRequestHeader("Content-type","application/x-www-form-urlencoded");h.send(k)}else h.open("GET",a,d),"arraybuffer"==c&&(k?(l=!0,h.responseType=c):h.overrideMimeType("text/plain; charset=x-user-defined")),h.send();d||(h.readyState=4,m())}}
 function Aa(){return window?window.location.protocol+"//"+window.location.host:"https://www.pcjs.org"}function C(a){if(window){var b=window?window.navigator.userAgent:"";return"iOS"==a&&(!!b.match(/(iPod|iPhone|iPad)/)||"MacIntel"===window.navigator.platform&&1<window.navigator.maxTouchPoints)||"MSIE"==a&&!!b.match(/(MSIE|Trident)/)||0<=b.indexOf(a)}return!1}
 function Ba(){var a,b=Ca("mobile");if(b)return"true"==b;if(C("Mobi")){if(!a)return!0;(b="!"==a[0])&&(a=a.substr(1));return C(a)!=b}return!1}function Ca(a){if(!Da){var b,c={};if(window){b||(b=window.location.search.substr(1));for(var d,e=/\+/g,g=/([^&=]+)=?([^&]*)/g;d=g.exec(b);)c[decodeURIComponent(d[1].replace(e," "))]=decodeURIComponent(d[2].replace(e," "))}Da=c}return Da[a]||Da[a.toLowerCase()]}function Ea(a,b,c){function d(){--a;0<=a&&(b()||(a=0));0<a?setTimeout(d,0):c()}d()}
@@ -197,7 +197,7 @@ c[1];void 0!==k&&lc(a,Z(a,k));a.va()||a.u.da();break;case "h":a.ba();break;case 
 d.length+" available"),b=d.length);void 0!==h&&(a.fb=0,a.l(b+" instructions earlier:"));h=a.fb?a.fb:1;c-=b;for(0>c&&(c=d.length-1);k&&c!=a.Ma;){e=d[c];if(0>e)break;a.l(mc(a,e,h++));++c==d.length&&(c=0);k--;b--}a.Qb=b;a.fb=h}10==k&&a.l("no history available");break;case "r":gc(a,c);break;case "s":a.S(a.u.f)==a.u.Pa?(lc(a,a.u.f+3),a.Aa=!0,a.va()||a.u.da()):oc(a);break;case "t":oc(a,c[1]);break;case "u":fc(a,c[1],c[2],8);break;case "?":case "help":a.l("\ncommands:\n?\thelp\na [#]\tassemble\nb [#]\tbreakpoint\nd [#]\tdump memory\ne [#]\tedit memory\nf\tdump frequencies\ng [#]\trun to [#]\nh\thalt\no\toptions\np [#]\tdump history\nr\tdump/edit registers\ns\tstep over instruction\nt [#]\tstep instruction(s)\nu [#]\tunassemble");
 a.l("note: frequency and history commands operate only when breakpoints are set");break;default:a.l("unknown command: "+b)}}}E(function(){for(var a=J(document,"c1p","debugger"),b=0;b<a.length;b++){var c=a[b],d=K(c);d=new bc(d);I(d,c)}});function pc(a,b){G.call(this,"C1PComputer",a);this.aa=b}u(pc,G);pc.prototype.reset=function(a){var b=null,c;for(c in this.aa)for(var d=0;d<this.aa[c].length;d++){var e=this.aa[c][d];e&&e.reset&&(e.reset(),"cpu"==c&&(b=e))}b&&(b.update(),a&&b.va())};
 pc.prototype.start=function(){for(var a in this.aa)if("cpu"!=a)for(var b=0;b<this.aa[a].length;b++){var c=this.aa[a][b];c&&c.start&&c.start()}};pc.prototype.stop=function(a,b){for(var c in this.aa)if("cpu"!=c)for(var d=0;d<this.aa[c].length;d++){var e=this.aa[c][d];e&&e.stop&&e.stop(a,b)}};pc.prototype.T=function(a,b,c){switch(b){case "reset":return this.H[b]=c,c.onclick=function(d){return function(){d.reset()}}(this),!0}return!1};function P(a,b){return a.aa[b]?a.aa[b][0]:null}
-function qc(a){var b=null,c;for(c in a.aa)for(var d=0;d<a.aa[c].length;d++){var e=a.aa[c][d];if(e){if(!M(e)){M(e,function(g){return function(){qc(g)}}(a));return}"cpu"==c?b=e:e.ja&&e.ja(!0,a)}}a.U();a.l("C1Pjs v2.00\nCopyright \u00a9 2012-2021 Jeff Parsons <Jeff@pcjs.org>");b&&b.ja(!0,a)}
+function qc(a){var b=null,c;for(c in a.aa)for(var d=0;d<a.aa[c].length;d++){var e=a.aa[c][d];if(e){if(!M(e)){M(e,function(g){return function(){qc(g)}}(a));return}"cpu"==c?b=e:e.ja&&e.ja(!0,a)}}a.U();a.l("C1Pjs v2.00\nCopyright \u00a9 2012-2022 Jeff Parsons <Jeff@pcjs.org>");b&&b.ja(!0,a)}
 E(function(){for(var a=J(document,"c1p","computer"),b=0;b<a.length;b++){for(var c=a[b],d=K(c),e,g={},h,l=0,k=0,m=0;m<d.modules.length;m++){var n=d.modules[m];if(!m){if("cpu"!=n.type)break;l=+n.start;k=+n.end;h=Array(k+1-l);for(e=l;e<h.length;e++)h[e]=0}if(e=Pa(n.refID,d.id)){var p=n.type;void 0===g[p]&&(g[p]=[]);g[p].push(e);e.ca&&void 0!==n.start&&e.ca(h,+n.start,+n.end,g.cpu[0])}else{B('no component for <module refid="'+n.refID+'">');return}}if(void 0===h){B('<module type="cpu"> definition must appear first in the <computer> specification');
 break}if(e=Pa("debugger",d.id))g["debugger"]=[e],e.ca&&e.ca(h,l,k,g.cpu[0]);l=new pc(d,g);if(k=Pa("panel",d.id))if(g.panel=[k],k.H.print){e=void 0;d=d.id;g=[];d&&(d=0<(e=d.indexOf("."))?d.substr(0,e+1):"");for(e=0;e<H.length;e++)m=H[e],d&&m.id.indexOf(d)||g.push(m);d=g;for(g=0;g<d.length;g++)e=d[g],e!=k&&(e.Wa=k.Wa,e.print=k.print,e.l=k.l)}I(l,c);qc(l)}});var rc=0;
 function sc(a,b,c,d,e,g){e("Loading "+a+"...");A(a,function(h,l,k){k?(l||(l="unable to load "+a+" ("+k+")"),g(h,l,null)):tc(l,a,b,c,d,e,g)})}

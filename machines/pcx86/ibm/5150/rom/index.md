@@ -21,8 +21,7 @@ byte from 0x78 to 0x77.  However, the project includes only the original "1981" 
 
 ### Source Code
 
-PCjs has created and archived a collection IBM PC ROM BIOS diskettes.  Their contents are thanks to the
-[PC DOS Retro](https://sites.google.com/site/pcdosretro/) website.
+PCjs has created and archived a collection IBM PC ROM BIOS diskettes.  Their contents are thanks to the [PC DOS Retro](https://pcdosretro.github.io) website.
 
   - [IBM PC (Model 5150) BIOS Sources](/software/pcx86/dev/rom/ibm/5150/)
   - [IBM PC XT (Model 5160) BIOS Sources](/software/pcx86/dev/rom/ibm/5160/)

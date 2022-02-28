@@ -1,13 +1,13 @@
 /**
  * @fileoverview Implements PDP-11 High-Speed Paper Tape Reader/Punch (eg, PC11)
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "../../../lib/device.js";
+import Device from "../../../modules/device.js";
 
 Device.MESSAGE.PC11             = 0x000200000000;
 Device.MESSAGE_NAMES["pc11"]    = Device.MESSAGE.PC11;

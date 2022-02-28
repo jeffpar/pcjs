@@ -9,7 +9,7 @@
  */
 var APPVERSION = "2.07";                // this @define is overridden by the Closure Compiler with the version in machines.json
 
-var COPYRIGHT = "Copyright © 2012-2021 Jeff Parsons <Jeff@pcjs.org>";
+var COPYRIGHT = "Copyright © 2012-2022 Jeff Parsons <Jeff@pcjs.org>";
 
 var LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
 
@@ -2332,8 +2332,8 @@ class Web {
             return response;
         }
 
-        if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|pcjs)$/)) {
-            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks-cds\/([^/]*)\//, "https://$1.pcjs.org/");
+        if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
+            sURL = sURL.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/discs\/([^/]*)\//, "https://$1.pcjs.org/");
         }
 
 
@@ -6292,7 +6292,7 @@ if (DEBUGGER) {
 }
 
 /*
- * DOS function reference (from https://sites.google.com/site/pcdosretro/dosfuncs)
+ * DOS function reference (from https://pcdosretro.github.io/dosfunc.txt)
  *
  *      INT 20 Program terminate (1.0+)
  *      Entry: CS=PSP
@@ -7575,7 +7575,7 @@ if (DEBUGGER) {
  *      52 Cannot make directory entry
  *      53 Fail on INT 24
  *
- * DOS table and structure reference (from https://sites.google.com/site/pcdosretro/dostables)
+ * DOS table and structure reference (from https://pcdosretro.github.io/dosblks.txt)
  *
  *      Program Segment Prefix (100h bytes)
  *      00 INT 20

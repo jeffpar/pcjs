@@ -2,7 +2,7 @@
 /**
  * @fileoverview Tool for converting binary CD dumps to ISOs
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -28,19 +28,29 @@ function printf(format, ...args)
 }
 
 /**
- * dumpBytes(buffer, offset, length)
+ * dumpBytes(buffer, offset, length, desc)
  *
  * @param {Buffer} buffer
  * @param {number} offset
  * @param {number} length
+ * @param {string} desc
  */
-function dumpBytes(buffer, offset, length)
+function dumpBytes(buffer, offset, length, desc)
 {
-    let line = "", off = offset;
-    while (length-- > 0) {
-        line += Str.sprintf("%02x ", buffer[off++]);
+    if (desc) {
+        printf("%s\n", desc);
     }
-    printf("%08x: %s\n", offset, line);
+    while (length > 0) {
+        let i, bytes = "", chars = "";
+        for (i = 0; i < 16 && i < length; i++) {
+            let b = buffer[offset + i];
+            bytes += Str.sprintf("%02x ", b);
+            chars += b >= 0x20 && b < 0x7f? String.fromCharCode(b) : '.';
+        }
+        printf("%08x: %s  %s\n", offset, bytes, chars);
+        length -= i;
+        offset += i;
+    }
 }
 
 /**
@@ -77,10 +87,11 @@ function dumpBytes(buffer, offset, length)
  * @param {boolean} [fDebug]
  * @param {boolean} [fOverwrite]
  * @param {boolean} [fVerbose]
+ * @param {string} [nSkip]
  */
-function convertBinToISO(sInput, sOutput, fDebug, fOverwrite, fVerbose)
+function convertBinToISO(sInput, sOutput, fDebug, fOverwrite, fVerbose, nSkip)
 {
-    let bufferBin, streamISO;
+    let bufferBin, streamISO, exitCode = 0;
     try {
         printf("Reading '%s'...\n", sInput);
         bufferBin = fs.readFileSync(sInput);
@@ -92,38 +103,47 @@ function convertBinToISO(sInput, sOutput, fDebug, fOverwrite, fVerbose)
     printf("%d bytes (%f sectors) read\n", bufferBin.length, nSectors);
     if (nSectors != (nSectors|0)) {
         printf("warning: fractional sector, possible image error\n");
-        // process.exit(1);
+        exitCode = 1;
     }
     if (!fOverwrite && fs.existsSync(sOutput)) {
         printf("warning: output file '%s' already exists; use --overwrite\n", sOutput);
         process.exit(1);
     }
-    try {
-        streamISO = fs.createWriteStream(sOutput);
-    } catch(err) {
-        printf("error: unable to create '%s' (%s)\n", sOutput, err.message);
-        process.exit(1);
+    if (sOutput && sOutput != "null") {
+        try {
+            streamISO = fs.createWriteStream(sOutput);
+        } catch(err) {
+            printf("error: unable to create '%s' (%s)\n", sOutput, err.message);
+            process.exit(1);
+        }
     }
-    let cbSector = 2048, cbTotal = 0;
+    let cbSector = 2048, cbTotal = 0, skip = +nSkip;
     for (let iSector = 0; iSector < nSectors; iSector++) {
         let iBuffer = iSector * 2352;
         let bufferSector = Buffer.alloc(cbSector);
-        if (fVerbose) dumpBytes(bufferBin, iBuffer, 16);
+        if (fVerbose && !skip) {
+            dumpBytes(bufferBin, iBuffer, 16, "\nleader");
+            dumpBytes(bufferBin, iBuffer+16, cbSector, "sector " + iSector);
+            dumpBytes(bufferBin, iBuffer+16+cbSector, 288, "footer");
+        }
         iBuffer += 16;
         bufferBin.copy(bufferSector, 0, iBuffer, iBuffer + cbSector);
-        streamISO.write(bufferSector);
+        if (streamISO && !skip) streamISO.write(bufferSector);
+        if (skip > 0) skip--;
         cbTotal += cbSector;
     }
-    streamISO.on('finish', function() {
-        printf("%d bytes written\n", cbTotal);
-        process.exit(0);
-    });
-    streamISO.end();
+    if (streamISO) {
+        streamISO.on('finish', function() {
+            printf("%d bytes written\n", cbTotal);
+            process.exit(exitCode);
+        });
+        streamISO.end();
+    }
 }
 
-if (args.argc < 3) {
+if (args.argc < 2) {
     printf("usage: node bin2iso.js [input file] [output file] [options]\n");
 } else {
     let argv = args.argv;
-    convertBinToISO(argv[1], argv[2], argv['debug'], argv['overwrite'], argv['verbose']);
+    convertBinToISO(argv[1], argv[2], argv['debug'], argv['overwrite'], argv['verbose'], argv['skip']);
 }

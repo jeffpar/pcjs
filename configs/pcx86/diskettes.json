@@ -1148,6 +1148,18 @@
                 "@label": "5170V3"
               }
             ]
+          },
+          "ega": {
+            "@title": "IBM EGA BIOS Sources",
+            "@media": [
+              {
+                "@title": "IBM EGA BIOS Source (V1)",
+                "@diskette": "IBM-BIOS-SRC-EGAV1.json",
+                "@format": "PC1200K",
+                "@archive": "folder",
+                "@label": "EGAV1"
+              }
+            ]
           }
         }
       }
@@ -1255,6 +1267,50 @@
             {
               "@diskette": "COMPAQ-UTILS-072789.json",
               "@format": "PC720K"
+            }
+          ]
+        },
+        "1990": {
+          "@title": "COMPAQ SystemPro",
+          "@hardware": {
+            "options": "compaq,systempro"
+          },
+          "@media": [
+            {
+              "@title": "SystemPro Configuration Files 1.03",
+              "@diskette": "COMPAQ-CONFLIB-1.03-071090.json",
+              "@photo": ".jpg",
+              "@format": "PC1440K"
+            },
+            {
+              "@title": "SystemPro Diagnostics 7.08",
+              "@diskette": "COMPAQ-DIAGS-708-092590.json",
+              "@photo": ".jpg",
+              "@format": "PC720K"
+            },
+            {
+              "@title": "SystemPro Owner Registration 3.05",
+              "@diskette": "COMPAQ-OWNREG-3.05-100890.json",
+              "@photo": ".jpg",
+              "@format": "PC720K"
+            },
+            {
+              "@title": "SystemPro EISA Configuration 1.15",
+              "@diskette": "COMPAQ-SYSCONFIG-1.15-082790.json",
+              "@photo": ".jpg",
+              "@format": "PC1440K"
+            },
+            {
+              "@title": "SystemPro User Programs 7.05 (Disk 1)",
+              "@diskette": "COMPAQ-USER_1-7.05-092890.json",
+              "@photo": ".jpg",
+              "@format": "PC1440K"
+            },
+            {
+              "@title": "SystemPro User Programs 7.05 (Disk 2)",
+              "@diskette": "COMPAQ-USER_2-7.05-092890.json",
+              "@photo": ".jpg",
+              "@format": "PC1440K"
             }
           ]
         }
