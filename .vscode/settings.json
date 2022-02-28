@@ -324,6 +324,7 @@
     "INPORT",
     "installable",
     "INSW",
+    "INTFLAG",
     "IOMODE",
     "iopage",
     "IORD",
