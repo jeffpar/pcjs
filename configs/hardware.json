@@ -1059,6 +1059,7 @@
   },
   "palm": {
     "@title": "Palm",
+    "@hidden": true,
     "@instances": {
       "pilot": {
         "@title": "Palm Pilot"

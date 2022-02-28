@@ -47,7 +47,7 @@ const MAXDEBUG = false;
 
 /**
  * VERSION is the current PCjs Project release number, updated somewhat arbitrarily and usually only
- * after significant changes.  It will be overriden the machine's "version" string in machines.json.
+ * after significant changes.  It will be overridden the machine's "version" string in machines.json.
  *
  * @define {string}
  */
