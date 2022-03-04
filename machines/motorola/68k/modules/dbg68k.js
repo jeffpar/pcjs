@@ -33,6 +33,32 @@ export default class Dbg68K extends Debugger {
     }
 
     /**
+     * break(addr, fArmed)
+     *
+     * @this {Dbg68K}
+     * @param {number} addr
+     * @param {boolean} fArmed
+     * @returns {boolean}
+     */
+    break(addr, fArmed)
+    {
+        return false;       // TODO
+    }
+
+    /**
+     * markDataAccess(addr, length, iAccess)
+     *
+     * @this {Dbg68K}
+     * @param {number} addr
+     * @param {number} length
+     * @param {number} iAccess
+     */
+    markDataAccess(addr, length, iAccess)
+    {
+        // TODO
+    }
+
+    /**
      * unassemble(address, opcodes, annotation)
      *
      * Overrides Debugger's default unassemble() function with one that understands 8080 instructions.
@@ -184,6 +210,20 @@ export default class Dbg68K extends Debugger {
         return result + "\n";
     }
 }
+
+/**
+ * Definitions ported from DebuggerInterface.java
+ */
+Dbg68K.MEMTYPE_ROM         = 0;
+Dbg68K.MEMTYPE_DEVICE      = 1;
+Dbg68K.MEMTYPE_CODE        = 2;
+Dbg68K.MEMTYPE_DATA        = 3;
+
+Dbg68K.DATAACCESS_NONE     = 0;
+Dbg68K.DATAACCESS_READ     = 1;
+Dbg68K.DATAACCESS_WRITE    = 2;
+Dbg68K.DATAACCESS_UNINIT   = 3;
+
 
 Dbg68K.STYLE_8080 = "8080";
 Dbg68K.STYLE_8086 = "8086";

@@ -33,6 +33,10 @@ import Memory from "./memory.js";
  * @property {number} blockLimit
  * @property {number} dataWidth
  * @property {number} dataLimit
+ * @property {number} pairWidth
+ * @property {number} pairLimit
+ * @property {number} quadWidth
+ * @property {number} quadLimit
  * @property {boolean} littleEndian
  * @property {Array.<Memory>} blocks
  * @property {number} nTraps (number of blocks currently being trapped)
@@ -83,6 +87,10 @@ export default class Bus extends Device {
         this.blockLimit = (1 << this.blockShift) - 1;
         this.dataWidth = this.config['dataWidth'] || 8;
         this.dataLimit = Math.pow(2, this.dataWidth) - 1;
+        this.pairWidth = this.dataWidth << 1;
+        this.pairLimit = Math.pow(2, this.pairWidth) - 1;
+        this.quadWidth = this.dataWidth << 2;
+        this.quadLimit = Math.pow(2, this.quadWidth) - 1;
         this.littleEndian = this.config['littleEndian'] !== false;
         this.blocks = new Array(this.blockTotal);
         this.nTraps = 0;
@@ -503,6 +511,25 @@ export default class Bus extends Device {
     }
 
     /**
+     * readValueQuadBE(addr)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readValueQuadBE(addr)
+    {
+        this.assert(!((addr + 3) & ~this.addrLimit), "readValueQuadBE(%#0x) exceeds address width", addr);
+        if (addr & 0x3) {
+            return this.readPair((addr + 2) & this.addrLimit) | (this.readPair(addr) << this.pairWidth);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
+    }
+
+    /**
      * readValuePairLE(addr)
      *
      * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
@@ -522,6 +549,25 @@ export default class Bus extends Device {
     }
 
     /**
+     * readValueQuadLE(addr)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readValueQuadLE(addr)
+    {
+        this.assert(!((addr + 3) & ~this.addrLimit), "readValueQuadLE(%#0x) exceeds address width", addr);
+        if (addr & 0x3) {
+            return this.readPair(addr) | (this.readPair((addr + 2) & this.addrLimit) << this.pairWidth);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
+    }
+
+    /**
      * readDynamicPair(addr)
      *
      * Unlike the readValuePairLE()/readValuePairBE() interfaces, we pass any offset -- even or odd -- directly to the block's
@@ -538,6 +584,25 @@ export default class Bus extends Device {
             return this.littleEndian? this.readValuePairLE(addr) : this.readValuePairBE(addr);
         }
         return this.blocks[addr >>> this.blockShift].readPair(addr & this.blockLimit);
+    }
+
+    /**
+     * readDynamicQuad(addr)
+     *
+     * Unlike the readValueQuadLE()/readValueQuadBE() interfaces, we pass any offset -- even or odd -- directly to the block's
+     * readQuad() interface.  Our only special concern here is whether the request straddles two blocks.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readDynamicQuad(addr)
+    {
+        this.assert(!((addr + 3) & ~this.addrLimit), "readDynamicQuad(%#0x) exceeds address width", addr);
+        if ((addr & this.blockLimit) + 3 > this.blockLimit) {
+            return this.littleEndian? this.readValueQuadLE(addr) : this.readValueQuadBE(addr);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
     }
 
     /**
@@ -562,6 +627,27 @@ export default class Bus extends Device {
     }
 
     /**
+     * writeValueQuadBE(addr, value)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeValueQuadBE(addr, value)
+    {
+        this.assert(!((addr + 3) & ~this.addrLimit), "writeValueQuadBE(%#0x,%#0x) exceeds address width", addr, value);
+        if (addr & 0x3) {
+            this.writePair(addr, value >> this.pairWidth);
+            this.writePair((addr + 2) & this.addrLimit, value & this.pairLimit);
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
+    }
+
+    /**
      * writeValuePairLE(addr, value)
      *
      * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
@@ -580,6 +666,27 @@ export default class Bus extends Device {
             return;
         }
         this.blocks[addr >>> this.blockShift].writePair(addr & this.blockLimit, value);
+    }
+
+    /**
+     * writeValueQuadLE(addr, value)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeValueQuadLE(addr, value)
+    {
+        this.assert(!((addr + 3) & ~this.addrLimit), "writeValueQuadLE(%#0x,%#0x) exceeds address width", addr, value);
+        if (addr & 0x3) {
+            this.writePair(addr, value & this.pairLimit);
+            this.writeData((addr + 2) & this.addrLimit, value >> this.pairWidth);
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
     }
 
     /**
@@ -607,6 +714,30 @@ export default class Bus extends Device {
     }
 
     /**
+     * writeDynamicQuad(addr, value)
+     *
+     * Unlike the writeValueQuadLE()/writeValueQuadBE() interfaces, we pass any offset -- even or odd -- directly to the block's
+     * writeDynamicQuad() interface.  Our only special concern here is whether the request straddles two blocks.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeDynamicQuad(addr, value)
+    {
+        this.assert(!((addr + 3) & ~this.addrLimit), "writeDynamicQuad(%#0x,%#0x) exceeds address width", addr, value);
+        if ((addr & this.blockLimit) + 3 > this.blockLimit) {
+            if (this.littleEndian) {
+                this.writeValueQuadLE(addr, value);
+            } else {
+                this.writeValueQuadBE(addr, value);
+            }
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
+    }
+
+    /**
      * selectInterface(n)
      *
      * @this {Bus}
@@ -622,14 +753,20 @@ export default class Bus extends Device {
             this.writeData = this.writeValue;
             if (this.type == Bus.TYPE.DYNAMIC) {
                 this.readPair = this.readDynamicPair;
+                this.readQuad = this.readDynamicQuad;
                 this.writePair = this.writeDynamicPair;
+                this.writeQuad = this.writeDynamicQuad;
             }
             else if (!this.littleEndian) {
                 this.readPair = this.readValuePairBE;
+                this.readQuad = this.readValueQuadBE;
                 this.writePair = this.writeValuePairBE;
+                this.writeQuad = this.writeValueQuadBE;
             } else {
                 this.readPair = this.readValuePairLE;
+                this.readQuad = this.readValueQuadLE;
                 this.writePair = this.writeValuePairLE;
+                this.writeQuad = this.writeValueQuadLE;
             }
         }
     }

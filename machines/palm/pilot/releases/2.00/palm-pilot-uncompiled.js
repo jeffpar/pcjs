@@ -7742,6 +7742,10 @@ let BusConfig;
  * @property {number} blockLimit
  * @property {number} dataWidth
  * @property {number} dataLimit
+ * @property {number} pairWidth
+ * @property {number} pairLimit
+ * @property {number} quadWidth
+ * @property {number} quadLimit
  * @property {boolean} littleEndian
  * @property {Array.<Memory>} blocks
  * @property {number} nTraps (number of blocks currently being trapped)
@@ -7792,6 +7796,10 @@ class Bus extends Device {
         this.blockLimit = (1 << this.blockShift) - 1;
         this.dataWidth = this.config['dataWidth'] || 8;
         this.dataLimit = Math.pow(2, this.dataWidth) - 1;
+        this.pairWidth = this.dataWidth << 1;
+        this.pairLimit = Math.pow(2, this.pairWidth) - 1;
+        this.quadWidth = this.dataWidth << 2;
+        this.quadLimit = Math.pow(2, this.quadWidth) - 1;
         this.littleEndian = this.config['littleEndian'] !== false;
         this.blocks = new Array(this.blockTotal);
         this.nTraps = 0;
@@ -8212,6 +8220,25 @@ class Bus extends Device {
     }
 
     /**
+     * readValueQuadBE(addr)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readValueQuadBE(addr)
+    {
+
+        if (addr & 0x3) {
+            return this.readPair((addr + 2) & this.addrLimit) | (this.readPair(addr) << this.pairWidth);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
+    }
+
+    /**
      * readValuePairLE(addr)
      *
      * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
@@ -8231,6 +8258,25 @@ class Bus extends Device {
     }
 
     /**
+     * readValueQuadLE(addr)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readValueQuadLE(addr)
+    {
+
+        if (addr & 0x3) {
+            return this.readPair(addr) | (this.readPair((addr + 2) & this.addrLimit) << this.pairWidth);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
+    }
+
+    /**
      * readDynamicPair(addr)
      *
      * Unlike the readValuePairLE()/readValuePairBE() interfaces, we pass any offset -- even or odd -- directly to the block's
@@ -8247,6 +8293,25 @@ class Bus extends Device {
             return this.littleEndian? this.readValuePairLE(addr) : this.readValuePairBE(addr);
         }
         return this.blocks[addr >>> this.blockShift].readPair(addr & this.blockLimit);
+    }
+
+    /**
+     * readDynamicQuad(addr)
+     *
+     * Unlike the readValueQuadLE()/readValueQuadBE() interfaces, we pass any offset -- even or odd -- directly to the block's
+     * readQuad() interface.  Our only special concern here is whether the request straddles two blocks.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readDynamicQuad(addr)
+    {
+
+        if ((addr & this.blockLimit) + 3 > this.blockLimit) {
+            return this.littleEndian? this.readValueQuadLE(addr) : this.readValueQuadBE(addr);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
     }
 
     /**
@@ -8271,6 +8336,27 @@ class Bus extends Device {
     }
 
     /**
+     * writeValueQuadBE(addr, value)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeValueQuadBE(addr, value)
+    {
+
+        if (addr & 0x3) {
+            this.writePair(addr, value >> this.pairWidth);
+            this.writePair((addr + 2) & this.addrLimit, value & this.pairLimit);
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
+    }
+
+    /**
      * writeValuePairLE(addr, value)
      *
      * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
@@ -8289,6 +8375,27 @@ class Bus extends Device {
             return;
         }
         this.blocks[addr >>> this.blockShift].writePair(addr & this.blockLimit, value);
+    }
+
+    /**
+     * writeValueQuadLE(addr, value)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeValueQuadLE(addr, value)
+    {
+
+        if (addr & 0x3) {
+            this.writePair(addr, value & this.pairLimit);
+            this.writeData((addr + 2) & this.addrLimit, value >> this.pairWidth);
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
     }
 
     /**
@@ -8316,6 +8423,30 @@ class Bus extends Device {
     }
 
     /**
+     * writeDynamicQuad(addr, value)
+     *
+     * Unlike the writeValueQuadLE()/writeValueQuadBE() interfaces, we pass any offset -- even or odd -- directly to the block's
+     * writeDynamicQuad() interface.  Our only special concern here is whether the request straddles two blocks.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeDynamicQuad(addr, value)
+    {
+
+        if ((addr & this.blockLimit) + 3 > this.blockLimit) {
+            if (this.littleEndian) {
+                this.writeValueQuadLE(addr, value);
+            } else {
+                this.writeValueQuadBE(addr, value);
+            }
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
+    }
+
+    /**
      * selectInterface(n)
      *
      * @this {Bus}
@@ -8331,14 +8462,20 @@ class Bus extends Device {
             this.writeData = this.writeValue;
             if (this.type == Bus.TYPE.DYNAMIC) {
                 this.readPair = this.readDynamicPair;
+                this.readQuad = this.readDynamicQuad;
                 this.writePair = this.writeDynamicPair;
+                this.writeQuad = this.writeDynamicQuad;
             }
             else if (!this.littleEndian) {
                 this.readPair = this.readValuePairBE;
+                this.readQuad = this.readValueQuadBE;
                 this.writePair = this.writeValuePairBE;
+                this.writeQuad = this.writeValueQuadBE;
             } else {
                 this.readPair = this.readValuePairLE;
+                this.readQuad = this.readValueQuadLE;
                 this.writePair = this.writeValuePairLE;
+                this.writeQuad = this.writeValueQuadLE;
             }
         }
     }
@@ -8450,7 +8587,10 @@ let MemoryConfig;
  * @property {Bus} bus
  * @property {number} dataWidth
  * @property {number} dataLimit
+ * @property {number} pairWidth
  * @property {number} pairLimit
+ * @property {number} quadWidth
+ * @property {number} quadLimit
  * @property {boolean} littleEndian
  * @property {ArrayBuffer|null} buffer
  * @property {DataView|null} dataView
@@ -8464,6 +8604,8 @@ let MemoryConfig;
  * @property {function(number,number)|null} writeDataOrig
  * @property {function(number)|null} readPairOrig
  * @property {function(number,number)|null} writePairOrig
+ * @property {function(number)|null} readQuadOrig
+ * @property {function(number,number)|null} writeQuadOrig
  * @property {function((number|undefined),number,number)|null} readTrap
  * @property {function((number|undefined),number,number)|null} writeTrap
  */
@@ -8493,7 +8635,10 @@ class Memory extends Device {
 
         this.dataWidth = this.bus.dataWidth;
         this.dataLimit = Math.pow(2, this.dataWidth) - 1;
-        this.pairLimit = Math.pow(2, this.dataWidth * 2) - 1;
+        this.pairWidth = this.dataWidth << 1;
+        this.pairLimit = Math.pow(2, this.pairWidth) - 1;
+        this.quadWidth = this.dataWidth << 2;
+        this.quadLimit = Math.pow(2, this.quadWidth) - 1;
 
         this.fDirty = this.fUseArrayBuffer = false;
         this.littleEndian = this.bus.littleEndian !== false;
@@ -8504,14 +8649,19 @@ class Memory extends Device {
         let writeValue = this.writeValue;
         let readPair = this.littleEndian? this.readDynamicPairLE : this.readDynamicPairBE;
         let writePair = this.littleEndian? this.writeDynamicPairLE : this.writeDynamicPairBE;
+        let readQuad = this.littleEndian? this.readDynamicQuadLE : this.readDynamicQuadBE;
+        let writeQuad = this.littleEndian? this.writeDynamicQuadLE : this.writeDynamicQuadBE;
 
         if (this.bus.type == Bus.TYPE.STATIC) {
             writeValue = this.writeValueDirty;
             readPair = this.littleEndian? this.readValuePairLE : this.readValuePairBE;
+            readQuad = this.littleEndian? this.readValueQuadLE : this.readValueQuadBE;
             writePair = this.writeValuePairDirty;
+            writeQuad = this.writeValueQuadDirty;
             if (this.dataWidth == 8 && this.getMachineConfig('ArrayBuffer') !== false) {
                 this.fUseArrayBuffer = true;
                 readPair = this.littleEndian == Memory.LITTLE_ENDIAN? this.readValuePair16 : this.readValuePair16SE;
+                readQuad = this.littleEndian == Memory.LITTLE_ENDIAN? this.readValueQuad32 : this.readValueQuad32SE;
             }
         }
 
@@ -8521,18 +8671,24 @@ class Memory extends Device {
             this.writeData = this.writeNone;
             this.readPair = this.readNonePair;
             this.writePair = this.writeNonePair;
+            this.readQuad = this.readNoneQuad;
+            this.writeQuad = this.writeNoneQuad;
             break;
         case Memory.TYPE.READONLY:
             this.readData = readValue;
             this.writeData = this.writeNone;
             this.readPair = readPair;
             this.writePair = this.writeNone;
+            this.readQuad = readQuad;
+            this.writeQuad = this.writeNone;
             break;
         case Memory.TYPE.READWRITE:
             this.readData = readValue;
             this.writeData = writeValue;
             this.readPair = readPair;
             this.writePair = writePair;
+            this.readQuad = readQuad;
+            this.writeQuad = writeQuad;
             break;
         default:
 
@@ -8546,6 +8702,7 @@ class Memory extends Device {
         this.readTrap = this.writeTrap = null;
         this.readDataOrig = this.writeDataOrig = null;
         this.readPairOrig = this.writePairOrig = null;
+        this.readQuadOrig = this.writeQuadOrig = null;
 
         this.getValues(this.config['values']);
         this.initValues();
@@ -8662,9 +8819,11 @@ class Memory extends Device {
                 if (!this.nWriteTraps) {
                     this.writeData = this.writeValueDirty;
                     this.writePair = this.writeValuePairDirty;
+                    this.writeQuad = this.writeValueQuadDirty;
                 } else {
                     this.writeDataOrig = this.writeValueDirty;
                     this.writePairOrig = this.writeValuePairDirty;
+                    this.writeQuadOrig = this.writeValueQuadDirty;
                 }
             }
             return true;
@@ -8699,6 +8858,22 @@ class Memory extends Device {
             return this.readNone(offset + 1) | (this.readNone(offset) << this.dataWidth);
         }
     }
+
+    /**
+     * readNoneQuad(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @returns {number}
+     */
+     readNoneQuad(offset)
+     {
+         if (this.littleEndian) {
+             return this.readNonePair(offset) | (this.readNonePair(offset + 2) << this.pairWidth);
+         } else {
+             return this.readNonePair(offset + 2) | (this.readNonePair(offset) << this.pairWidth);
+         }
+     }
 
     /**
      * readDirect(offset)
@@ -8742,6 +8917,18 @@ class Memory extends Device {
     }
 
     /**
+     * readValueQuadBE(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @returns {number}
+     */
+    readValueQuadBE(offset)
+    {
+         return this.readValuePairBE(offset + 2) | (this.readValuePairBE(offset) << this.pairWidth);
+    }
+
+    /**
      * readValuePairLE(offset)
      *
      * @this {Memory}
@@ -8754,6 +8941,18 @@ class Memory extends Device {
     }
 
     /**
+     * readValueQuadLE(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @returns {number}
+     */
+    readValueQuadLE(offset)
+    {
+         return this.readValuePairLE(offset) | (this.readValuePairLE(offset + 2) << this.pairWidth);
+    }
+
+    /**
      * readValuePair16(offset)
      *
      * @this {Memory}
@@ -8763,6 +8962,18 @@ class Memory extends Device {
     readValuePair16(offset)
     {
         return this.valuePairs[offset >>> 1];
+    }
+
+    /**
+     * readValueQuad32(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-4 block offset)
+     * @returns {number}
+     */
+    readValueQuad32(offset)
+    {
+         return this.valueQuads[offset >>> 2];
     }
 
     /**
@@ -8782,9 +8993,25 @@ class Memory extends Device {
     }
 
     /**
+     * readValueQuad32SE(offset)
+     *
+     * This function is neither big-endian (BE) or little-endian (LE), but rather "swap-endian" (SE), which
+     * means there's a mismatch between our emulated machine and the host machine, so we call the appropriate
+     * DataView function with the desired littleEndian setting.
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @returns {number}
+     */
+    readValueQuad32SE(offset)
+    {
+        return this.dataView.getInt32(offset, this.littleEndian);
+    }
+
+    /**
      * readDynamicPairBE(offset)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -8797,9 +9024,24 @@ class Memory extends Device {
     }
 
     /**
+     * readDynamicQuadBE(offset)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @returns {number}
+     */
+    readDynamicQuadBE(offset)
+    {
+
+        return this.readPair(offset + 2) | (this.readPair(offset) << this.pairWidth);
+    }
+
+    /**
      * readDynamicPairLE(offset)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -8809,6 +9051,21 @@ class Memory extends Device {
     {
 
         return this.readValue(offset) | (this.readValue(offset + 1) << this.dataWidth);
+    }
+
+    /**
+     * readDynamicPairLE(offset)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @returns {number}
+     */
+    readDynamicQuadLE(offset)
+    {
+
+        return this.readPair(offset) | (this.readPair(offset + 2) << this.pairWidth);
     }
 
     /**
@@ -8839,6 +9096,24 @@ class Memory extends Device {
             this.writeNone(offset + 1, value & this.dataLimit);
         }
     }
+
+    /**
+     * writeNoneQuad(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @param {number} value
+     */
+     writeNoneQuad(offset, value)
+     {
+         if (this.littleEndian) {
+             this.writeNonePair(offset, value & this.pairLimit);
+             this.writeNonePair(offset + 2, value >> this.pairWidth);
+         } else {
+             this.writeNonePair(offset, value >> this.pairWidth);
+             this.writeNonePair(offset + 2, value & this.pairLimit);
+         }
+     }
 
     /**
      * writeDirect(offset, value)
@@ -8902,6 +9177,20 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuadBE(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuadBE(offset, value)
+    {
+
+        this.writeValuePairBE(offset, value >> this.pairWidth);
+        this.writeValuePairBE(offset + 2, value & this.pairLimit);
+    }
+
+    /**
      * writeValuePairLE(offset, value)
      *
      * @this {Memory}
@@ -8916,6 +9205,20 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuadLE(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuadLE(offset, value)
+    {
+
+        this.writeValuePairLE(offset, value & this.pairLimit);
+        this.writeValuePairLE(offset + 2, value >> this.pairWidth);
+    }
+
+    /**
      * writeValuePair16(offset, value)
      *
      * @this {Memory}
@@ -8927,6 +9230,20 @@ class Memory extends Device {
         let off = offset >>> 1;
 
         this.valuePairs[off] = value;
+    }
+
+    /**
+     * writeValueQuad32(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuad32(offset, value)
+    {
+        let off = offset >>> 2;
+
+        this.valueQuads[off] = value;
     }
 
     /**
@@ -8947,9 +9264,26 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuad32SE(offset, value)
+     *
+     * This function is neither big-endian (BE) or little-endian (LE), but rather "swap-endian" (SE), which
+     * means there's a mismatch between our emulated machine and the host machine, so we call the appropriate
+     * DataView function with the desired littleEndian setting.
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuad32SE(offset, value)
+    {
+
+        this.dataView.setInt32(offset, value, this.littleEndian);
+    }
+
+    /**
      * writeDynamicPairBE(offset, value)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -8963,9 +9297,25 @@ class Memory extends Device {
     }
 
     /**
+     * writeDynamicQuadBE(offset, value)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @param {number} value
+     */
+    writeDynamicQuadBE(offset, value)
+    {
+
+        this.writePair(offset, value >> this.pairWidth);
+        this.writePair(offset + 2, value & this.pairLimit);
+    }
+
+    /**
      * writeDynamicPairLE(offset, value)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -8979,10 +9329,26 @@ class Memory extends Device {
     }
 
     /**
+     * writeDynamicQuadLE(offset, value)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @param {number} value
+     */
+    writeDynamicQuadLE(offset, value)
+    {
+
+        this.writePair(offset, value & this.pairLimit);
+        this.writePair(offset + 2, value >> this.pairWidth);
+    }
+
+    /**
      * writeValuePairDirty(offset, value)
      *
      * @this {Memory}
-     * @param {number} offset (must be an even block offset, because we will halve it to obtain a pair offset)
+     * @param {number} offset (must be an even block offset)
      * @param {number} value
      */
     writeValuePairDirty(offset, value)
@@ -9023,6 +9389,50 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuadDirty(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four offset)
+     * @param {number} value
+     */
+     writeValueQuadDirty(offset, value)
+     {
+         if (!this.buffer) {
+             if (this.littleEndian) {
+                 this.writeValueQuadLE(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuadLE;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuadLE;
+                 }
+             } else {
+                 this.writeValueQuadBE(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuadBE;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuadBE;
+                 }
+             }
+         } else {
+             if (this.littleEndian == Memory.LITTLE_ENDIAN) {
+                 this.writeValueQuad32(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuad32;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuad32;
+                 }
+             } else {
+                 this.writeValueQuad32SE(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuad32SE;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuad32SE;
+                 }
+             }
+         }
+     }
+
+    /**
      * trapRead(func)
      *
      * I've decided to call the trap handler AFTER reading the value, so that we can pass the value
@@ -9043,6 +9453,7 @@ class Memory extends Device {
             this.readTrap = func;
             this.readDataOrig = this.readData;
             this.readPairOrig = this.readPair;
+            this.readQuadOrig = this.readQuad;
             this.readData = function readDataTrap(offset) {
                 let value = block.readDataOrig(offset);
                 block.readTrap(block.addr, offset, value);
@@ -9052,6 +9463,14 @@ class Memory extends Device {
                 let value = block.readPairOrig(offset);
                 block.readTrap(block.addr, offset, value);
                 block.readTrap(block.addr, offset + 1, value);
+                return value;
+            };
+            this.readQuad = function readQuadTrap(offset) {
+                let value = block.readQuadOrig(offset);
+                block.readTrap(block.addr, offset, value);
+                block.readTrap(block.addr, offset + 1, value);
+                block.readTrap(block.addr, offset + 2, value);
+                block.readTrap(block.addr, offset + 3, value);
                 return value;
             };
             return true;
@@ -9081,6 +9500,7 @@ class Memory extends Device {
             this.writeTrap = func;
             this.writeDataOrig = this.writeData;
             this.writePairOrig = this.writePair;
+            this.writeQuadOrig = this.writeQuad;
             this.writeData = function writeDataTrap(offset, value) {
                 block.writeTrap(block.addr, offset, value);
                 block.writeDataOrig(offset, value);
@@ -9089,6 +9509,13 @@ class Memory extends Device {
                 block.writeTrap(block.addr, offset, value);
                 block.writeTrap(block.addr, offset + 1, value);
                 block.writePairOrig(offset, value);
+            };
+            this.writeQuad = function writeQuadTrap(offset, value) {
+                block.writeTrap(block.addr, offset, value);
+                block.writeTrap(block.addr, offset + 1, value);
+                block.writeTrap(block.addr, offset + 2, value);
+                block.writeTrap(block.addr, offset + 3, value);
+                block.writeQuadOrig(offset, value);
             };
             return true;
         }
@@ -9112,7 +9539,8 @@ class Memory extends Device {
             if (!--this.nReadTraps) {
                 this.readData = this.readDataOrig;
                 this.readPair = this.readPairOrig;
-                this.readDataOrig = this.readPairOrig = this.readTrap = null;
+                this.readQuad = this.readQuadOrig;
+                this.readDataOrig = this.readPairOrig = this.readQuadOrig = this.readTrap = null;
             }
 
             return true;
@@ -9133,7 +9561,8 @@ class Memory extends Device {
             if (!--this.nWriteTraps) {
                 this.writeData = this.writeDataOrig;
                 this.writePair = this.writePairOrig;
-                this.writeDataOrig = this.writePairOrig = this.writeTrap = null;
+                this.writeQuad = this.writeQuadOrig;
+                this.writeDataOrig = this.writePairOrig = this.writeQuadOrig = this.writeTrap = null;
             }
 
             return true;
@@ -12546,16 +12975,22 @@ Debugger.DECOP_PRECEDENCE = {
  * @copyright https://www.pcjs.org/modules/cpu68k.js (C) 2012-2021 Jeff Parsons
  */
 
+/* eslint-disable no-labels */
+/* eslint-disable no-extra-label */
+/* eslint-disable sort-imports */
+/* eslint-disable no-duplicate-imports */
+
+
 /**
- * Emulation of 68K CPUs
+ * Emulation of a 68K CPU
  *
  * @class {CPU68K}
  * @unrestricted
- * @property {Bus} busIO
  * @property {Bus} busMemory
  * @property {Input} input
  */
-class CPU68K extends CPU {
+class CPU68K extends CPU
+{
     /**
      * CPU68K(idMachine, idDevice, config)
      *
@@ -12574,15 +13009,14 @@ class CPU68K extends CPU {
         this.initCPU();
 
         /*
-         * Get access to the Bus devices, so we have access to the I/O and memory address spaces.
+         * Get access to the Bus that provides access to physical memory.
          */
-        this.busIO = /** @type {Bus} */ (this.findDevice(this.config['busIO']));
         this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['busMemory']));
 
         /*
          * Get access to the Input device, so we can call setFocus() as needed.
          */
-        this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
+        this.inputDevice = /** @type {Input} */ (this.findDeviceByClass("Input", false));
     }
 
     /**
@@ -12598,14 +13032,1598 @@ class CPU68K extends CPU {
      */
     execute(nCycles)
     {
-        /*
-         * If checkINTR() returns false, INTFLAG.HALT must be set, so no instructions should be executed.
-         */
-        if (!this.checkINTR()) return;
+        let aEAModes = this.aEAModes;
+        let dataNew, dataTmp, cBits, cRegs, fCond;
+        let op1, op2, reg, ss, rrr, nnn, eaModeSrc, eaModeDst, iModeSrc, iModeDst, iMask;
+
         while (this.nCyclesRemain > 0) {
-            this.regPCLast = this.regPC;
-            this.aOps[this.getPCByte()].call(this);
+
+            let nCyclesCur = nCycles;           // make sure the next opcode generates a non-zero cycle count
+
+            this.regPCLast = this.regPCThis;    // save previously current opcode address
+            this.regPCThis = this.regPC;        // and update currently current opcode address
+            op1 = this.getPCWord();             // get next instruction (don't forget this can be a signed integer if the opcode is a signed word)
+
+            ss = 0;                             // (ssBYTE << 6)
+            nnn = op1 & 0x7;
+            rrr = (op1 >> 9) & 0x7;
+
+stage1:     switch ((op1 >> 12) & 0xf) {
+
+            case 0x0:
+                //  case 0x0000:   ori      [00000000sswwwnnn, format ????????sswwwnnn, p.258]
+                //  case 0x003c:   ori      [0000000000111100, format none,             p.260]
+                //  case 0x007c:   ori      [0000000001111100, format none,             p.482]
+                //  case 0x0100:   btst     [0000rrr100yyynnn, format ??????????yyynnn, p.166]
+                //  case 0x0108:   movep    [0000rrr100001nnn, format none,             p.236]
+                //  case 0x0140:   bchg     [0000rrr101bbbnnn, format ??????????bbbnnn, p.132]
+                //  case 0x0148:   movep    [0000rrr101001nnn, format none,             p.236]
+                //  case 0x0180:   bclr     [0000rrr110bbbnnn, format ??????????bbbnnn, p.135]
+                //  case 0x0188:   movep    [0000rrr110001nnn, format none,             p.236]
+                //  case 0x01c0:   bset     [0000rrr111bbbnnn, format ??????????bbbnnn, p.161]
+                //  case 0x01c8:   movep    [0000rrr111001nnn, format none,             p.236]
+                //  case 0x0200:   andi     [00000010sswwwnnn, format ????????sswwwnnn, p.123]
+                //  case 0x023c:   andi     [0000001000111100, format none,             p.125]
+                //  case 0x027c:   andi     [0000001001111100, format none,             p.457]
+                //  case 0x0400:   subi     [00000100sswwwnnn, format ????????sswwwnnn, p.284]
+                //  case 0x0600:   addi     [00000110sswwwnnn, format ????????sswwwnnn, p.114]
+                //  case 0x0800:   btst     [0000100000zzznnn, format ??????????zzznnn, p.166]
+                //  case 0x0840:   bchg     [0000100001bbbnnn, format ??????????bbbnnn, p.132]
+                //  case 0x0880:   bclr     [0000100010bbbnnn, format ??????????bbbnnn, p.135]
+                //  case 0x08c0:   bset     [0000100011bbbnnn, format ??????????bbbnnn, p.161]
+                //  case 0x0a00:   eori     [00001010sswwwnnn, format ????????sswwwnnn, p.207]
+                //  case 0x0a3c:   eori     [0000101000111100, format none,             p.209]
+                //  case 0x0a7c:   eori     [0000101001111100, format none,             p.465]
+                //  case 0x0c00:   cmpi     [00001100sswwwnnn, format ????????sswwwnnn, p.184]
+
+                iModeSrc = CPU68K.EAMODEINDEX_DREG_LONG;
+
+                switch ((op1 >> 8) & 0xf) {
+
+                case 0x0:
+                    //  case 0x0000:   ori      [....0000sswwwnnn, format ????????sswwwnnn, p.258]
+                    //  case 0x003c:   ori      [....000000111100, format none,             p.260]
+                    //  case 0x007c:   ori      [....000001111100, format none,             p.482]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    this.dataSrc = eaModeSrc.getEAData(0);
+                    if ((op1 & 0x3f) != 0x3c) {
+                        if (op1 == 0 && this.dataSrc == 0) {
+                            // BUGBUG: This isn't really an illegal instruction, but it probably
+                            // wouldn't be found under normal circumstances, so let's help ourselves
+                            // out by flagging it as an illegal instruction for now.... -JP
+                            this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                        }
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst | this.dataSrc);
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0000) {
+                        this.setORFlagsCCR(this.dataSrc);
+                        this.addCycles(20);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0040) {
+                        this.setORFlagsSR(this.dataSrc);
+                        this.addCycles(20);
+                    }
+                    else {
+                        this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                    }
+                    break stage1;
+
+                case 0x2:
+                    //  case 0x0200:   andi     [....0010sswwwnnn, format ????????sswwwnnn, p.123]
+                    //  case 0x023c:   andi     [....001000111100, format none,             p.125]
+                    //  case 0x027c:   andi     [....001001111100, format none,             p.457]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    this.dataSrc = eaModeSrc.getEAData(0);
+                    if ((op1 & 0x3f) != 0x3c) {
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst & this.dataSrc);
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD - eaModeDst.cycle2Dl);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0000) {
+                        this.setANDFlagsCCR(this.dataSrc);
+                        this.addCycles(20);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0040) {
+                        this.setANDFlagsSR(this.dataSrc);
+                        this.addCycles(20);
+                    }
+                    else {
+                        this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                    }
+                    break stage1;
+
+                case 0x4:
+                    //  case 0x0400:   subi     [....0100sswwwnnn, format ????????sswwwnnn, p.284]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    this.dataSrc = eaModeSrc.getEAData(0);
+                    eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    eaModeDst.setDataFlags(this.dataDst - this.dataSrc);
+                    this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD);
+                    break stage1;
+
+                case 0x6:
+                    //  case 0x0600:   addi     [....0110sswwwnnn, format ????????sswwwnnn, p.114]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    this.dataSrc = eaModeSrc.getEAData(0);
+                    eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    eaModeDst.setDataFlagsForAdd(this.dataDst + this.dataSrc);
+                    this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD);
+                    break stage1;
+
+                case 0x8:
+                    //  case 0x0800:   btst     [....100000zzznnn, format ??????????zzznnn, p.166]
+                    //  case 0x0840:   bchg     [....100001bbbnnn, format ??????????bbbnnn, p.132]
+                    //  case 0x0880:   bclr     [....100010bbbnnn, format ??????????bbbnnn, p.135]
+                    //  case 0x08c0:   bset     [....100011bbbnnn, format ??????????bbbnnn, p.161]
+                    iModeSrc = CPU68K.EAMODEINDEX_IMMEDIATE_WORD;
+                    rrr = 0;
+                    break;
+
+                case 0xa:
+                    //  case 0x0a00:   eori     [....1010sswwwnnn, format ????????sswwwnnn, p.207]
+                    //  case 0x0a3c:   eori     [....101000111100, format none,             p.209]
+                    //  case 0x0a7c:   eori     [....101001111100, format none,             p.465]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    this.dataSrc = eaModeSrc.getEAData(0);
+                    if ((op1 & 0x3f) != 0x3c) {
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst ^ this.dataSrc);
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0000) {
+                        this.setEORFlagsCCR(this.dataSrc);
+                        this.addCycles(20);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0040) {
+                        this.setEORFlagsSR(this.dataSrc);
+                        this.addCycles(20);
+                    }
+                    else {
+                        this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                    }
+                    break stage1;
+
+                case 0xc:
+                    //  case 0x0c00:   cmpi     [....1100sswwwnnn, format ????????sswwwnnn, p.184]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    this.dataSrc = eaModeSrc.getEAData(0);
+                    eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    eaModeDst.updateFlagsExceptX(this.dataDst - this.dataSrc);
+                    this.addCycles(4 + eaModeDst.cycle2Dl);
+                    break stage1;
+
+                case 0xe:
+                    this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                    break stage1;
+
+                case 0x1:
+                    //  case 0x0100:   btst     [....rrr100yyynnn, format ??????????yyynnn, p.166]
+                    //  case 0x0108:   movep    [....rrr100001nnn, format none,             p.236]
+                    //  case 0x0140:   bchg     [....rrr101bbbnnn, format ??????????bbbnnn, p.132]
+                    //  case 0x0148:   movep    [....rrr101001nnn, format none,             p.236]
+                    //  case 0x0180:   bclr     [....rrr110bbbnnn, format ??????????bbbnnn, p.135]
+                    //  case 0x0188:   movep    [....rrr110001nnn, format none,             p.236]
+                    //  case 0x01c0:   bset     [....rrr111bbbnnn, format ??????????bbbnnn, p.161]
+                    //  case 0x01c8:   movep    [....rrr111001nnn, format none,             p.236]
+                    rrr = 0;
+                    break;
+                case 0x3:
+                    rrr = 1;
+                    break;
+                case 0x5:
+                    rrr = 2;
+                    break;
+                case 0x7:
+                    rrr = 3;
+                    break;
+                case 0x9:
+                    rrr = 4;
+                    break;
+                case 0xb:
+                    rrr = 5;
+                    break;
+                case 0xd:
+                    rrr = 6;
+                    break;
+                case 0xf:
+                    rrr = 7;
+                    break;
+                }
+
+                if ((op1 & 0x0038) == 0x0008) {
+                    //  case 0x0108:   movep    [....rrr100001nnn, format none, p.236]
+                    //  case 0x0148:   movep    [....rrr101001nnn, format none, p.236]
+                    //  case 0x0188:   movep    [....rrr110001nnn, format none, p.236]
+                    //  case 0x01c8:   movep    [....rrr111001nnn, format none, p.236]
+                    this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
+                    this.addCycles(16 + this.eaModeDRegLong.cycle4l*2);
+                }
+                else {
+                    //  case 0x0100:   btst     [....rrr100yyynnn, format ??????????yyynnn, p.166]
+                    //  case 0x0140:   bchg     [....rrr101bbbnnn, format ??????????bbbnnn, p.132]
+                    //  case 0x0180:   bclr     [....rrr110bbbnnn, format ??????????bbbnnn, p.135]
+                    //  case 0x01c0:   bset     [....rrr111bbbnnn, format ??????????bbbnnn, p.161]
+                    eaModeSrc = aEAModes[iModeSrc];
+                    this.dataSrc = eaModeSrc.getEAData(rrr);
+                    if ((op1 & 0x0038) == 0x0000) {
+                        this.dataSrc = (1 << (this.dataSrc & 31));
+                        eaModeDst = this.eaModeDRegLong;        // aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                    }
+                    else {
+                        this.dataSrc = (1 << (this.dataSrc & 7));
+                        if ((op1 & 0x00c0) == 0)
+                            eaModeDst = aEAModes[this.abModes401[op1 & 0x3f]];  // +(ssBYTE << 6)
+                        else
+                            eaModeDst = aEAModes[this.abModes407[op1 & 0x3f]];  // +(ssBYTE << 6)
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                    }
+                    switch ((op1 >> 6) & 0x3) {
+                    case 0:
+                        //  case 0x0800:   btst     [....100000zzznnn, format ??????????zzznnn, p.166]
+                        eaModeDst.updateFlagZ(this.dataDst & this.dataSrc);
+                        this.addCycles(4 + (iModeSrc == CPU68K.EAMODEINDEX_DREG_LONG? 0 : 4) + eaModeDst.cycle2l);
+                        break;
+                    case 1:
+                        //  case 0x0840:   bchg     [....100001bbbnnn, format ??????????bbbnnn, p.132]
+                        eaModeDst.setData(this.dataDst ^ this.dataSrc);
+                        eaModeDst.updateFlagZ(this.dataDst & this.dataSrc);
+                        this.addCycles(8 + (iModeSrc == CPU68K.EAMODEINDEX_DREG_LONG? 0 : 4));
+                        break;
+
+                    case 2:
+                        //  case 0x0880:   bclr     [....100010bbbnnn, format ??????????bbbnnn, p.135]
+                        eaModeDst.setData(this.dataDst & ~this.dataSrc);
+                        eaModeDst.updateFlagZ(this.dataDst & this.dataSrc);
+                        this.addCycles(8 + (iModeSrc == CPU68K.EAMODEINDEX_DREG_LONG? 0 : 4) + eaModeDst.cycle2l);
+                        break;
+
+                    case 3:
+                        //  case 0x08c0:   bset     [....100011bbbnnn, format ??????????bbbnnn, p.161]
+                        eaModeDst.setData(this.dataDst | this.dataSrc);
+                        eaModeDst.updateFlagZ(this.dataDst & this.dataSrc);
+                        this.addCycles(8 + (iModeSrc == CPU68K.EAMODEINDEX_DREG_LONG? 0 : 4));
+                        break;
+                    }
+                }
+                break stage1;
+
+            case 0x2:
+                ss += 0x40;     // fall through...
+
+            case 0x3:
+                ss += 0x40;     // fall through...
+
+            case 0x1:
+                //  case 0x1000:   move     [00ssrrrwwwmmmnnn, format ??ssrrrwwwmmmnnn, p.221]
+                //  case 0x1040:   movea    [00ssrrr001mmmnnn, format ??ss??????mmmnnn, p.224]
+                eaModeSrc = aEAModes[this.abModes000[ss + (op1 & 0x3f)]];
+                this.dataSrc = eaModeSrc.getEAData(nnn);
+                if ((op1 & 0x01c0) != 0x0040) {
+                    //  case 0x1000:   move     [00ssrrrwwwmmmnnn, format ??ssrrrwwwmmmnnn, p.221]
+                    eaModeDst = aEAModes[this.abModesMove[ss + ((op1 >> 6) & 0x3f)]];
+                    eaModeDst.setEADataFlagsZNClearCV(rrr, this.dataSrc);
+                    this.addCycles(4);
+                }
+                else {
+                    //  case 0x1040:   movea    [00ssrrr001mmmnnn, format ??ss??????mmmnnn, p.224]
+                    this.regA[rrr] = this.dataSrc;
+                    this.addCycles(4);
+                }
+                break stage1;
+
+            case 0x4:
+                //  case 0x4000:   negx     [01000000sswwwnnn, format ????????sswwwnnn, p.250]
+                //  case 0x40c0:   move     [0100000011wwwnnn, format ??????????wwwnnn, p.230]
+                //  case 0x4180:   chk      [0100rrr110xxxnnn, format ??????????xxxnnn, p.174]
+                //  case 0x41c0:   lea      [0100rrr111pppnnn, format ??????????pppnnn, p.215]
+                //  case 0x4200:   clr      [01000010sswwwnnn, format ????????sswwwnnn, p.178]
+                //  case 0x42c0:   move     [0100001011wwwnnn, format ??????????wwwnnn, p.226]
+                //  case 0x4400:   neg      [01000100sswwwnnn, format ????????sswwwnnn, p.248]
+                //  case 0x44c0:   move     [0100010011xxxnnn, format ??????????xxxnnn, p.228]
+                //  case 0x4600:   not      [01000110sswwwnnn, format ????????sswwwnnn, p.253]
+                //  case 0x46c0:   move     [0100011011xxxnnn, format ??????????xxxnnn, p.474]
+                //  case 0x4800:   nbcd     [0100100000wwwnnn, format ??????????wwwnnn, p.246]
+                //  case 0x4840:   pea      [0100100001pppnnn, format ??????????pppnnn, p.264]
+                //  case 0x4840:   swap     [0100100001000nnn, format none,             p.290]
+                //  case 0x4880:   ext      [0100100010000nnn, format none,             p.211]
+                //  case 0x4880:   movem    [010010001kuuunnn, format ?????????kuuunnn, p.233]
+                //  case 0x48c0:   ext      [0100100011000nnn, format none,             p.211]
+                //  case 0x49c0:   ext      [0100100111000nnn, format none,             p.211]
+                //  case 0x4a00:   tst      [01001010ssmmmnnn, format ????????ssmmmnnn, p.297]
+                //  case 0x4ac0:   tas      [0100101011wwwnnn, format ??????????wwwnnn, p.291]
+                //  case 0x4afc:   illegal  [0100101011111100, format none,             p.212]
+                //  case 0x4c80:   movem    [010011001ktttnnn, format ?????????ktttnnn, p.233]
+                //  case 0x4e40:   trap     [010011100100vvvv, format none,             p.293]
+                //  case 0x4e50:   link     [0100111001010nnn, format none,             p.216]
+                //  case 0x4e58:   unlk     [0100111001011nnn, format none,             p.299]
+                //  case 0x4e60:   move     [0100111001100nnn, format none,             p.476]
+                //  case 0x4e68:   move     [0100111001101nnn, format none,             p.476]
+                //  case 0x4e70:   reset    [0100111001110000, format none,             p.538]
+                //  case 0x4e71:   nop      [0100111001110001, format none,             p.253]
+                //  case 0x4e72:   stop     [0100111001110010, format none,             p.540]
+                //  case 0x4e73:   rte      [0100111001110011, format none,             p.539]
+                //  case 0x4e75:   rts      [0100111001110101, format none,             p.274]
+                //  case 0x4e76:   trapv    [0100111001110110, format none,             p.296]
+                //  case 0x4e77:   rtr      [0100111001110111, format none,             p.273]
+                //  case 0x4e80:   jsr      [0100111010pppnnn, format ??????????pppnnn, p.214]
+                //  case 0x4ec0:   jmp      [0100111011pppnnn, format ??????????pppnnn, p.213]
+
+                switch ((op1 >> 8) & 0xf) {
+
+                case 0x0:
+                    if ((op1 & 0x00c0) != 0x00c0) {
+                        //  case 0x4000:   negx     [....0000sswwwnnn, format ????????sswwwnnn, p.250]
+                        // I have to code this up to make it look like we're modifying a
+                        // source rather than a destination, because even though the effective
+                        // address should be considered the "destination", we are subtracting from zero,
+                        // not from the destination.
+                        this.dataDst = 0;
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                        this.dataSrc = eaModeDst.getEAData(nnn) - this.getFlagX();
+                        this.flagZTmp = this.flagZNew;
+                        eaModeDst.setDataFlags(-this.dataSrc);
+                        if (this.flagZNew == 0) {
+                            this.flagZNew = this.flagZTmp;
+                        }
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD - eaModeDst.cycle2ADl);
+                    }
+                    else {              // MOVE SR,%s
+                        //  case 0x40c0:   move     [....000011wwwnnn, format ??????????wwwnnn, p.230]
+                        eaModeDst = aEAModes[this.abModes407[(op1 & 0x3f)+0x40]];    // +(ssWORD << 6)
+                        eaModeDst.setEAData(nnn, this.getFlags());
+                        this.addCycles(8 - eaModeDst.cycle2ADI);
+                    }
+                    break stage1;
+
+                case 0x2:
+                    if ((op1 & 0x00c0) != 0x00c0) {
+                        //  case 0x4200:   clr      [....0010sswwwnnn, format ????????sswwwnnn, p.178]
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                      //this.dataDst = eaModeDst.getEAData(nnn);         // technically, we're supposed to read the data from EA first,
+                        eaModeDst.setEADataFlagsZNClearCV(nnn, 0);  // even though all we're going to do is immediately overwrite it -JP
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD - eaModeDst.cycle2ADl);
+                    }
+                    else {              // MOVE CCR,%s
+                        //  case 0x42c0:   move     [....001011wwwnnn, format ??????????wwwnnn, p.226]
+                        eaModeDst = aEAModes[this.abModes407[(op1 & 0x3f)+0x40]];    // +(ssWORD << 6)
+                        eaModeDst.setEAData(nnn, this.getFlags() & CPU68K.FLAGS_CCR);
+                        this.addCycles(8 - eaModeDst.cycle2ADI);   // BUGBUG: Need to confirm this is the same as "MOVE SR,%s" -JP
+                    }
+                    break stage1;
+
+                case 0x4:
+                    if ((op1 & 0x00c0) != 0x00c0) {
+                        //  case 0x4400:   neg      [....0100sswwwnnn, format ????????sswwwnnn, p.248]
+                        // I have to code this up to make it look like we're modifying a
+                        // source rather than a destination, because even though the effective
+                        // address should be considered the "destination", we are subtracting from zero,
+                        // not from the destination.
+                        this.dataDst = 0;
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                        this.dataSrc = eaModeDst.getEAData(nnn);
+                        eaModeDst.setDataFlags(-this.dataSrc);
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD - eaModeDst.cycle2ADl);
+                    }
+                    else {              // MOVE %s,CCR
+                        //  case 0x44c0:   move     [....010011xxxnnn, format ??????????xxxnnn, p.228]
+                        eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];    // +(ssWORD << 6)
+                        this.setFlagsCCR(eaModeSrc.getEAData(nnn));
+                        this.addCycles(12);
+                    }
+                    break stage1;
+
+                case 0x6:
+                    if ((op1 & 0x00c0) != 0x00c0) {
+                        //  case 0x4600:   not      [....0110sswwwnnn, format ????????sswwwnnn, p.253]
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                        eaModeDst.setDataFlagsZNClearCV(~this.dataDst);
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD - eaModeDst.cycle2ADl);
+                    }
+                    else {              // MOVE %s,SR
+                        //  case 0x46c0:   move     [....011011xxxnnn, format ??????????xxxnnn, p.474]
+                        eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];    // +(ssWORD << 6)
+                        this.setFlagsSR(eaModeSrc.getEAData(nnn));
+                        this.addCycles(12);
+                    }
+                    break stage1;
+
+                case 0x8:
+                    //  case 0x4800:   nbcd     [....100000wwwnnn, format ??????????wwwnnn, p.246]
+                    //  case 0x4840:   pea      [....100001pppnnn, format ??????????pppnnn, p.264]
+                    //  case 0x4840:   swap     [....100001000nnn, format none,             p.290]
+                    //  case 0x4880:   ext      [....100010000nnn, format none,             p.211]
+                    //  case 0x4880:   movem    [....10001kuuunnn, format ?????????kuuunnn, p.233]
+                    //  case 0x48c0:   ext      [....100011000nnn, format none,             p.211]
+                    switch ((op1 >> 6) & 0x3) {
+                    case 0x0:
+                        //  case 0x4800:   nbcd     [........00wwwnnn, format ??????????wwwnnn, p.246]
+                        this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
+                        this.addCycles(8 - eaModeDst.cycle2ADI);
+                        break stage1;
+
+                    case 0x1:
+                        if ((op1 & 0x0038) == 0) {
+                            //  case 0x4840:   swap     [........01000nnn, format none, p.290]
+                            eaModeDst = this.eaModeDRegLong;    // aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                            this.dataDst = eaModeDst.getEAData(nnn);
+                            eaModeDst.setDataFlagsZNClearCV((this.dataDst >>> 16) | ((this.dataDst & 0xffff) << 16));
+                            this.addCycles(4);
+                        }
+                        else {
+                            //  case 0x4840:   pea      [........01pppnnn, format ??????????pppnnn, p.264]
+                            eaModeSrc = aEAModes[this.abModesD81[(op1 & 0x3f)+0x80]];// +(ssLONG << 6)
+                            this.dataSrc = eaModeSrc.getEA(nnn);
+                            this.pushLong(this.dataSrc);        // aEAModes[CPU68K.EAMODEINDEX_AREG_PUSHLONG].setEAData(7, this.dataSrc);
+                            this.addCycles(4);                  // BUGBUG: approximate -JP
+                        }
+                        break stage1;
+
+                    case 0x2:
+                        if ((op1 & 0x0038) == 0) {
+                            //  case 0x4880:   ext      [........10000nnn, format none, p.211]
+                            eaModeDst = aEAModes[CPU68K.EAMODEINDEX_DREG_WORD];
+                            this.dataDst = eaModeDst.getEAData(nnn);
+                            eaModeDst.setDataFlagsZNClearCV(this.dataDst << 24 >> 24);
+                            this.addCycles(4);
+                            break stage1;
+                        }
+                        /* falls through (BUGBUG: verify) */
+
+                    case 0x3:
+                        if ((op1 & 0x0038) == 0) {
+                            //  case 0x4880:   ext      [........10000nnn, format none, p.211]
+                            eaModeDst = this.eaModeDRegLong;    // aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                            this.dataDst = eaModeDst.getEAData(nnn);
+                            eaModeDst.setDataFlagsZNClearCV(this.dataDst << 16 >> 16);
+                            this.addCycles(4);
+                            break stage1;
+                        }
+                        /* falls through (BUGBUG: verify) */
+                    }
+
+                    //  case 0x4880:   movem    [........1kuuunnn, format ?????????kuuunnn, p.233]
+                    //  NOTES: 1) This is a register-to-memory operation
+                    //         2) For pre-decrement, the order of storing is A7 to A0, then D7 to D0 (bit 0 to bit 15)
+                    //         3) For all other modes, the order of storing is D0 to D7, then A0 to A7 (bit 0 to bit 15)
+                    //         4) Any register used in pre-decrement mode is stored before being decremented
+                    iModeSrc = this.getPCWord();
+                    eaModeDst = aEAModes[this.abModesD07[(op1 - 0x40) & 0xff]];
+                    cRegs = 0;
+                    reg = this.regA[nnn];
+                    eaModeDst.getEA(nnn);
+                    iMask = 0x1;
+                    if ((op1 & 0x38) == 0x20) {
+                        //
+                        // Pre-decrement (NOTE: If the address register used in pre-decrement mode is also
+                        // one of the source operands, the 68000 writes the register's initial value, not its
+                        // decremented value, hence it's important that we call setEAData(a[i]) instead of
+                        // getEA() followed by setData(a[i]) -JP)
+                        //
+                        for (let i = 7; i >= 0; i--, iMask <<= 1) {
+                            if ((iModeSrc & iMask) != 0) {
+                                if (cRegs++ != 0) {
+                                    reg = this.regA[nnn];
+                                    eaModeDst.advanceEA(nnn);
+                                }
+                                if (i != nnn) reg = this.regA[i];
+                                eaModeDst.setData(reg);
+                            }
+                        }
+                        for (let i = 7; i >= 0; i--, iMask <<= 1) {
+                            if ((iModeSrc & iMask) != 0) {
+                                if (cRegs++ != 0) eaModeDst.advanceEA(nnn);
+                                eaModeDst.setData(this.regD[i]);
+                            }
+                        }
+                        if (cRegs == 0) this.regA[nnn] = reg;
+                    }
+                    else {
+                        // All other modes
+                        for (let i = 0; i <= 7; i++, iMask <<= 1) {
+                            if ((iModeSrc & iMask) != 0) {
+                                if (cRegs++ != 0) eaModeDst.advanceEA(nnn);
+                                eaModeDst.setData(this.regD[i]);
+                            }
+                        }
+                        for (let i = 0; i <= 7; i++, iMask <<= 1) {
+                            if ((iModeSrc & iMask) != 0) {
+                                if (cRegs++ != 0) eaModeDst.advanceEA(nnn);
+                                eaModeDst.setData(this.regA[i]);
+                            }
+                        }
+                    }
+                    this.addCycles((4+eaModeDst.cycle4l)*cRegs);
+                    break stage1;
+
+                case 0xa:
+                    if ((op1 & 0xc0) != 0xc0) {
+                        //  case 0x4a00:   tst      [........ssmmmnnn, format ????????ssmmmnnn, p.297]
+                        eaModeDst = aEAModes[this.abModes000[op1 & 0xff]];
+                        eaModeDst.updateFlagsZNClearCV(eaModeDst.getEAData(nnn));
+                        this.addCycles(4);
+                    }
+                    else if ((op1 & 0x3f) != 0x3c) {
+                        //  case 0x4ac0:   tas      [........11wwwnnn, format ??????????wwwnnn, p.291]
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0x3f]];           // +(ssBYTE << 6)
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                        eaModeDst.updateFlagsZNClearCV(this.dataSrc);
+                        eaModeDst.setData(this.dataSrc | 0x80);
+                        this.addCycles(14 - eaModeDst.cycle2ADI*5);
+                    }
+                    else {
+                        //  case 0x4afc:   illegal  [........11111100, format none, p.212]
+                        this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                    }
+                    break stage1;
+
+                case 0xc:
+                    //  case 0x4c80:   movem    [....11001ktttnnn, format ?????????ktttnnn, p.233]
+                    //  NOTES: 1) This is a memory-to-register operation
+                    //         2) For all modes, the order of storing is D0 to D7, then A0 to A7 (bit 0 to bit 15)
+                    //         3) Any register used in post-increment mode is not affected by the value loaded for it (if any)
+                    iModeDst = this.getPCWord();
+                    iModeSrc = op1 & 0x38;
+                    eaModeSrc = aEAModes[this.abModesC81[(op1 - 0x40) & 0xff]];
+                    cRegs = 0;
+                    reg = this.regA[nnn];
+                    eaModeSrc.getEA(nnn);
+                    iMask = 0x1;
+                    for (let i = 0; i <= 7; i++, iMask <<= 1)
+                        if ((iModeDst & iMask) != 0) {
+                            if (cRegs++ != 0) eaModeSrc.advanceEA(nnn);
+                            this.regD[i] = eaModeSrc.getData();
+                        }
+                    for (let i = 0; i <= 7; i++, iMask <<= 1)
+                        if ((iModeDst & iMask) != 0) {
+                            if (cRegs++ != 0) eaModeSrc.advanceEA(nnn);
+                            op2 = eaModeSrc.getData();
+                            if (iModeSrc != 0x18 || i != nnn) { // if mode is "A[i]+" and i == nnn, then we must not set A[i]
+                                this.regA[i] = op2;
+                            }
+                        }
+                    if (cRegs == 0) this.regA[nnn] = reg;
+                    this.addCycles(4 + (4+eaModeDst.cycle4l)*cRegs);
+                    break stage1;
+
+                case 0xe:
+                    switch ((op1 >> 4) & 0xf) {
+                    case 0x4:
+                        //  case 0x4e40:   trap     [........0100vvvv, format none, p.293]
+                        if (this.dbg) {                         // see if the debugger wants us to break
+                            if (this.dbg.break(this.regPCThis, true)) {
+                                this.regPC = this.regPCThis;
+                                this.fCPU |= CPU68K.CPU_BREAKPOINT;
+                                return;                         // BUGBUG: nExecute + 1;
+                            }
+                        }
+                        this.regPCTrap = this.regPCThis;        // keep track the last trap encountered
+                        this.callException((op1 & 0xf) + 0x20);
+                        this.addCycles(34);
+                        break stage1;
+
+                    case 0x5:
+                        if ((op1 & 0x8) == 0) {
+                            //  case 0x4e50:   link     [........01010nnn, format none, p.216]
+                            this.pushLong(this.regA[nnn]);      // aEAModes[CPU68K.EAMODEINDEX_AREG_PUSHLONG].setEAData(7, this.regA[nnn]);
+                            this.regA[nnn] = this.regA[7];
+                            this.regA[7] += this.getPCWord();   // aEAModes[CPU68K.EAMODEINDEX_IMMEDIATE_WORD].getEAData(0);
+                            this.addCycles(16);
+                        }
+                        else {
+                            //  case 0x4e58:   unlk     [........01011nnn, format none, p.299]
+                            op2 = this.regA[7];         // this is strictly for MarkDataAccess's benefit (see below)
+                            this.regA[7] = this.regA[nnn];
+                            this.regA[nnn] = this.popLong();
+                            this.addCycles(12);
+                            if (this.dbg != null) {
+                                //
+                                // Mark the entire frame just removed as "uninitialized", to
+                                // help catch more errors.  There are other places where it might
+                                // be nice to do this as well, like after we've returned to the
+                                // caller and he's removed his args from the stack with an "ADD #xxx,A7",
+                                // but we don't want to slow things down *too* much.... -JP
+                                //
+                                this.dbg.markDataAccess(op2, this.regA[7]-op2, Dbg68K.DATAACCESS_UNINIT);
+                            }
+                        }
+                        break stage1;
+
+                    case 0x6:
+                        //  case 0x4e60:   move     [........01100nnn, format none, p.476]
+                        //  case 0x4e68:   move     [........01101nnn, format none, p.476]
+                        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+                            this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
+                            break stage1;
+                        }
+                        if ((op1 & 0x8) == 0) {
+                            this.regUSP = this.regA[nnn];
+                        }
+                        else {
+                            this.regA[nnn] = this.regUSP;
+                        }
+                        this.addCycles(4);
+                        break stage1;
+
+                    case 0x7:
+                        switch (op1 & 0xf) {
+                        case 0x0:
+                            //  case 0x4e70:   reset    [........01110000, format none, p.538]
+                            this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
+                            this.addCycles(132);
+                            break stage1;
+
+                        case 0x1:
+                            //  case 0x4e71:   nop      [........01110001, format none, p.253]
+                            this.addCycles(4);
+                            break stage1;
+
+                        case 0x2:
+                            //  case 0x4e72:   stop     [........01110010, format none, p.540]
+                            if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+                                this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
+                                break stage1;
+                            }
+                            op2 = this.getPCWord() & 0xffff;
+                            // Check for OP_STOP_TRACE, OP_STOP_FREEZE, OP_STOP_INJECT
+                            if (op2 < (CPU68K.OP_STOP_TRACE & 0xffff)) {
+                                this.setFlagsSR(op2);
+                            }
+                            else {
+                                //
+                                // The definition of both OP_STOP_FREEZE and OP_STOP_INJECT is to reset
+                                // the stack to PC, and then pop the next 'long' into PC.  This effectively
+                                // "returns" us from a call injected by ScriptVarFunc.Call().
+                                //
+                                this.regA[7] = this.regPC;
+                                this.regPC = this.popLong();
+                                //
+                                // OP_STOP_FREEZE also means that since the CPU was frozen at the time of
+                                // the injection, that we should re-freeze the CPU now.  We're not really allowed
+                                // to set CPU_FREEZE ourselves (that bit is "owned" by CPUThread), but setting
+                                // CPU_FREEZEONSTOP should be good enough, since we're also setting CPU_STOPPED....
+                                //
+                                if (op2 == (CPU68K.OP_STOP_TRACE & 0xffff)) {
+                                    this.fCPU |= CPU68K.CPU_TRACEONSTOP;
+                                }
+                                else if (op2 == (CPU68K.OP_STOP_FREEZE & 0xffff)) {
+                                    this.fCPU |= CPU68K.CPU_FREEZEONSTOP;
+                                }
+                            }
+                            this.fCPU |= CPU68K.CPU_STOPPED;
+                            this.addCycles(4);
+                            break stage1;
+
+                        case 0x3:
+                            //  case 0x4e73:   rte      [........01110011, format none, p.539]
+                            this.returnFromException();
+                            this.addCycles(20);
+                            break stage1;
+
+                        case 0x5:
+                            //  case 0x4e75:   rts      [........01110101, format none, p.274]
+                            this.regPC = this.popLong();        // aEAModes[CPU68K.EAMODEINDEX_AREG_POPLONG].getEAData(7);
+                            this.addCycles(16);
+                            break stage1;
+
+                        case 0x6:
+                            //  case 0x4e76:   trapv    [........01110110, format none, p.296]
+                            if (this.getFlagV() != 0) {
+                                this.genException(CPU68K.EXCEPTION_TRAPV_OVERFLOW);
+                                this.addCycles(34);
+                                break stage1;
+                            }
+                            this.addCycles(4);
+                            break stage1;
+
+                        case 0x7:
+                            //  case 0x4e77:   rtr      [........01110111, format none, p.273]
+                            this.setFlagsCCR(aEAModes[CPU68K.EAMODEINDEX_AREG_INCWORD].getEAData(7));
+                            this.regPC = this.popLong();                // aEAModes[CPU68K.EAMODEINDEX_AREG_POPLONG].getEAData(7);
+                            this.addCycles(20);
+                            break stage1;
+
+                        case 0x8:
+                        case 0x9:
+                        case 0xa:
+                        case 0xb:
+                        case 0xc:
+                        case 0xd:
+                        case 0xe:
+                        case 0xf:
+                            break;              // end up at this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION)
+                        }
+                        /* falls through (BUGBUG: verify) */
+
+                    case 0x8:
+                    case 0x9:
+                    case 0xa:
+                    case 0xb:
+                        //  case 0x4e80:   jsr      [........10pppnnn, format ??????????pppnnn, p.214]
+                        eaModeSrc = aEAModes[this.abModesD81[(op1 & 0x3f)+0x80]];    // +(ssLONG << 6)
+                        this.dataSrc = eaModeSrc.getEA(nnn);
+                        this.pushLong(this.regPC);              // aEAModes[CPU68K.EAMODEINDEX_AREG_PUSHLONG].setEAData(7, this.regPC);
+                        this.regPC = this.dataSrc;
+                        this.addCycles(6);                      // BUGBUG: approximate -JP
+                        break stage1;
+
+                    case 0xc:
+                    case 0xd:
+                    case 0xe:
+                    case 0xf:
+                        //  case 0x4ec0:   jmp      [........11pppnnn, format ??????????pppnnn, p.213]
+                        eaModeSrc = aEAModes[this.abModesD81[(op1 & 0x3f)+0x80]];    // +(ssLONG << 6)
+                        this.regPC = eaModeSrc.getEA(nnn);
+                        break stage1;
+                    }
+                    this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                    break stage1;
+
+                case 0x1:
+                    //  case 0x4180:   chk      [....rrr110xxxnnn, format ??????????xxxnnn, p.174]
+                    //  case 0x41c0:   lea      [....rrr111pppnnn, format ??????????pppnnn, p.215]
+                    rrr = 0;
+                    break;
+                case 0x3:
+                    rrr = 1;
+                    break;
+                case 0x5:
+                    rrr = 2;
+                    break;
+                case 0x7:
+                    rrr = 3;
+                    break;
+                case 0x9:
+                    if ((op1 & 0x00f8) == 0x00c0) {
+                        //  case 0x49c0:   ext      [....100111000nnn, format none, p.211]
+                        eaModeDst = this.eaModeDRegLong;        // aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst << 24 >> 24);
+                        this.addCycles(4);
+                        break stage1;
+                    }
+                    rrr = 4;
+                    break;
+                case 0xb:
+                    rrr = 5;
+                    break;
+                case 0xd:
+                    rrr = 6;
+                    break;
+                case 0xf:
+                    rrr = 7;
+                    break;
+                }
+
+                if ((op1 & 0x00c0) == 0x0080) {
+                    //  case 0x4180:   chk      [....rrr110xxxnnn, format ??????????xxxnnn, p.174]
+                    eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    this.dataDst = this.regD[rrr] << 16 >> 16;
+                    if (this.dataDst < 0) {
+                        this.setFlagN(-1);
+                        this.genException(CPU68K.EXCEPTION_CHK_INSTRUCTION);
+                        this.addCycles(40);
+                    }
+                    else if (this.dataDst > this.dataSrc) {
+                        this.setFlagN(0);
+                        this.genException(CPU68K.EXCEPTION_CHK_INSTRUCTION);
+                        this.addCycles(40);
+                    }
+                    else
+                        this.addCycles(10);
+                }
+                else {
+                    //  case 0x41c0:   lea      [....rrr111pppnnn, format ??????????pppnnn, p.215]
+                    eaModeSrc = aEAModes[this.abModesD81[(op1 & 0x3f)+0x80]];        // +(ssLONG << 6)
+                    this.regA[rrr] = eaModeSrc.getEA(nnn);
+                }
+                break stage1;
+
+            case 0x5:
+                //  case 0x5000:   addq     [0101qqq0ssvvvnnn, format ????????ssvvvnnn, p.116]
+                //  case 0x50c0:   scc      [0101cccc11wwwnnn, format ????cccc??wwwnnn, p.277]
+                //  case 0x50c8:   dbcc     [0101cccc11001nnn, format ????cccc????????, p.195]
+                //  case 0x5100:   subq     [0101qqq1ssvvvnnn, format ????????ssvvvnnn, p.286]
+                if ((op1 & 0x00c0) != 0x00c0) {
+                    this.dataSrc = CPU68K.aByteQuick[rrr];
+                    iModeDst = op1 & 0xf8;
+                    if (iModeDst == 0x48 || iModeDst == 0x88) { // EAMODEINDEX_AREG_WORD or EAMODEINDEX_AREG_LONG
+                        if ((op1 & 0x0100) == 0x0000) {         // affects entire A register and does not affect flags
+                            this.regA[nnn] += this.dataSrc;
+                            this.addCycles(8);                  // BUGBUG: For word accesses, table 8.5 says this is only 4 cycles (but only for ADDQ, not SUBQ) -JP
+                        }
+                        else {
+                            this.regA[nnn] -= this.dataSrc;
+                            this.addCycles(8);
+                        }
+                        break stage1;
+                    }
+                    eaModeDst = aEAModes[this.abModes007[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    if ((op1 & 0x0100) == 0x0000) {
+                        //  case 0x5000:   addq     [0101qqq0ssvvvnnn, format ????????ssvvvnnn, p.116]
+                        eaModeDst.setDataFlagsForAdd(this.dataDst + this.dataSrc);
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD);
+                    }
+                    else {
+                        //  case 0x5100:   subq     [0101qqq1ssvvvnnn, format ????????ssvvvnnn. p.286]
+                        eaModeDst.setDataFlags(this.dataDst - this.dataSrc);
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD + eaModeDst.cycle4Aw);
+                    }
+                }
+                else {
+                    if ((op1 & 0x0038) != 0x0008) {
+                        //  case 0x50c0:   scc      [0101cccc11wwwnnn, format ????cccc??wwwnnn, p.277]
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0x3f]];           // +(ssBYTE << 6)
+                        eaModeDst.getEA(nnn);
+                        op2 = 0;                // prevent "used before initialization" warning
+                        switch ((op1 >> 8) & 0xf) {
+                        case 0x0:               // ST
+                            op2 = -1;
+                            break;
+                        case 0x1:               // SF
+                            op2 = 0;
+                            break;
+                        case 0x2:               // SHI
+                            op2 = this.getFlagHI();
+                            break;
+                        case 0x3:               // SLS
+                            op2 = ~this.getFlagHI();
+                            break;
+                        case 0x4:               // SCC
+                            op2 = ~this.getFlagC();
+                            break;
+                        case 0x5:               // SCS
+                            op2 = this.getFlagC();
+                            break;
+                        case 0x6:               // SNE
+                            op2 = ~this.getFlagZ();
+                            break;
+                        case 0x7:               // SEQ
+                            op2 = this.getFlagZ();
+                            break;
+                        case 0x8:               // SVC
+                            op2 = ~this.getFlagV();
+                            break;
+                        case 0x9:               // SVS
+                            op2 = this.getFlagV();
+                            break;
+                        case 0xa:               // SPL
+                            op2 = ~this.getFlagN();
+                            break;
+                        case 0xb:               // SMI
+                            op2 = this.getFlagN();
+                            break;
+                        case 0xc:               // SGE
+                            op2 = this.getFlagGE();
+                            break;
+                        case 0xd:               // SLT
+                            op2 = this.getFlagLT();
+                            break;
+                        case 0xe:               // SGT
+                            op2 = this.getFlagGT();
+                            break;
+                        case 0xf:               // SLE
+                            op2 = this.getFlagLE();
+                            break;
+                        }
+                        eaModeDst.setData(op2);
+                        this.addCycles(8 - eaModeDst.cycle2ADI - (op2 == 0? eaModeDst.cycle2ADI : 0));
+                        break stage1;
+                    }
+                    else {
+                        //  case 0x50c8:   dbcc     [0101cccc11001nnn, format ????cccc????????, p.195]
+                        let fCond = -1;
+                        switch ((op1 >> 8) & 0xf) {
+                        case 0x0:               // BUGBUG: Valid? -JP
+                          //fCond = -1;
+                            break;
+                        case 0x1:               // DBRA
+                            fCond = 0;
+                            break;
+                        case 0x2:               // DBHI
+                            fCond = this.getFlagHI();
+                            break;
+                        case 0x3:               // DBLS
+                            fCond = this.getFlagHI()+1;
+                            break;
+                        case 0x4:               // DBCC
+                            fCond = this.getFlagC()+1;
+                            break;
+                        case 0x5:               // DBCS
+                            fCond = this.getFlagC();
+                            break;
+                        case 0x6:               // DBNE
+                            fCond = this.getFlagZ()+1;
+                            break;
+                        case 0x7:               // DBEQ
+                            fCond = this.getFlagZ();
+                            break;
+                        case 0x8:               // DBVC
+                            fCond = this.getFlagV()+1;
+                            break;
+                        case 0x9:               // DBVS
+                            fCond = this.getFlagV();
+                            break;
+                        case 0xa:               // DBPL
+                            fCond = this.getFlagN()+1;
+                            break;
+                        case 0xb:               // DBMI
+                            fCond = this.getFlagN();
+                            break;
+                        case 0xc:               // DBGE
+                            fCond = this.getFlagGE();
+                            break;
+                        case 0xd:               // DBLT
+                            fCond = this.getFlagLT();
+                            break;
+                        case 0xe:               // DBGT
+                            fCond = this.getFlagGT();
+                            break;
+                        case 0xf:               // DBLE
+                            fCond = this.getFlagLE();
+                            break;
+                        }
+                        this.dataSrc = this.getPCWord() - 2;    // aEAModes[CPU68K.EAMODEINDEX_IMMEDIATE_WORD].GetEAData(0) - 2;
+                        if (fCond == 0) {
+                            //
+                            // The DBcc instructions are hard-coded to decrement ONLY the low-order
+                            // 16 bits of the data register, so we need both of the following lines, not
+                            // simply "this.dataDst = --d[nnn]"...
+                            //
+                            this.dataDst = (this.regD[nnn] << 16 >> 16) - 1;
+                            this.regD[nnn] = (this.regD[nnn] & ~0xffff) | (this.dataDst & 0xffff);
+
+                            if (this.dataDst != -1) {
+                                this.regPC += this.dataSrc;
+                                this.addCycles(10);
+                            }
+                            else {
+                                this.addCycles(14);
+                            }
+                        }
+                        else {
+                            this.addCycles(12);
+                        }
+                        break stage1;
+                    }
+                }
+                break;
+
+            case 0x6:
+                //  case 0x6000:   bcc      [0110ccccdddddddd, format ????ccccdddddddd, p.130]
+                //  case 0x6100:   bsr      [01100001dddddddd, format none,             p.164]
+                fCond = -1;
+                this.dataSrc = op1 << 24 >> 24;
+                op2 = 0;
+                if (this.dataSrc == 0) {
+                    this.dataSrc = this.getPCWord() - 2;        // aEAModes[CPU68K.EAMODEINDEX_IMMEDIATE_WORD].GetEAData(0) - 2;
+                    op2 = 4;
+                }
+
+                switch ((op1 >> 8) & 0xf) {
+                case 0x0:               // BRA
+                  //fCond = -1;
+                    break;
+                case 0x1:               // BSR
+                    this.pushLong(this.regPC);                  // aEAModes[CPU68K.EAMODEINDEX_AREG_PUSHLONG].setEAData(7, this.regPC);
+                    this.regPC += this.dataSrc;
+                    this.addCycles(18);
+                    break stage1;
+                case 0x2:               // BHI
+                    fCond = this.getFlagHI();
+                    break;
+                case 0x3:               // BLS
+                    fCond = this.getFlagHI()+1;
+                    break;
+                case 0x4:               // BCC
+                    fCond = this.getFlagC()+1;
+                    break;
+                case 0x5:               // BCS
+                    fCond = this.getFlagC();
+                    break;
+                case 0x6:               // BNE
+                    fCond = this.getFlagZ()+1;
+                    break;
+                case 0x7:               // BEQ
+                    fCond = this.getFlagZ();
+                    break;
+                case 0x8:               // BVC
+                    fCond = this.getFlagV()+1;
+                    break;
+                case 0x9:               // BVS
+                    fCond = this.getFlagV();
+                    break;
+                case 0xa:               // BPL
+                    fCond = this.getFlagN()+1;
+                    break;
+                case 0xb:               // BMI
+                    fCond = this.getFlagN();
+                    break;
+                case 0xc:               // BGE
+                    fCond = this.getFlagGE();
+                    break;
+                case 0xd:               // BLT
+                    fCond = this.getFlagLT();
+                    break;
+                case 0xe:               // BGT
+                    fCond = this.getFlagGT();
+                    break;
+                case 0xf:               // BLE
+                    fCond = this.getFlagLE();
+                    break;
+                }
+                if (fCond != 0) {
+                    this.regPC += this.dataSrc;
+                    this.addCycles(10);
+                }
+                else {
+                    this.addCycles(8 + op2);
+                }
+                break stage1;
+
+            case 0x7:
+                //  case 0x7000:   moveq    [0111rrr0dddddddd, format none, p.239]
+                this.eaModeDRegLong.setEADataFlagsZNClearCV(rrr, op1 << 24 >> 24);
+                this.addCycles(4);
+                break stage1;
+
+            case 0x8:
+                //  case 0x8100:   sbcd     [1000rrr10000knnn, format ????rrr?bbkkknnn, p.275]
+                //  case 0x80c0:   divu     [1000rrr011xxxnnn, format ??????????xxxnnn, p.201]
+                //  case 0x81c0:   divs     [1000rrr111xxxnnn, format ??????????xxxnnn, p.197]
+                //  case 0x8000:   or       [1000rrr0ssxxxnnn, format ????????ssxxxnnn, p.255]
+                //  case 0x8100:   or       [1000rrr1ssuuunnn, format ????????ssuuunnn, p.255]
+                if ((op1 & 0x01f0) == 0x0100) {
+                    //  case 0x8100:   sbcd     [1000rrr10000knnn, format ????rrr?bbkkknnn, p.275]
+                    this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
+                    if ((op1 & 0x8) == 0)
+                        this.addCycles(6);
+                    break stage1;
+                }
+                if ((op1 & 0x01c0) == 0x00c0) {
+                    //  case 0x80c0:   divu     [1000rrr011xxxnnn, format ??????????xxxnnn, p.201]
+                    eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                    this.dataSrc = eaModeSrc.getEAData(nnn) & 0xffff;
+                    if (this.dataSrc == 0) {
+                        this.genException(CPU68K.EXCEPTION_INT_DIVIDE_BY_ZERO);
+                        this.addCycles(38);
+                    }
+                    else {
+                        eaModeDst = this.eaModeDRegLong;        // this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                        this.dataDst = eaModeDst.getEAData(rrr);
+                        dataTmp = this.dataDst >>> 0;           // make dividend unsigned
+                        dataNew = (dataTmp / this.dataSrc)|0;
+                        dataTmp = (dataTmp % this.dataSrc)|0;
+                        if ((dataNew & 0xffff0000) != 0) {
+                            this.setFlagV(-1);
+                        }
+                        else {                                  // flags are based on quotient (dataNew), not the quotient+remainder combo
+                            eaModeDst.setData((dataNew & 0xffff) | (dataTmp << 16));
+                            eaModeDst.updateFlagsZNClearCV(dataNew);
+                        }
+                        this.addCycles(140);
+                    }
+                    break stage1;
+                }
+                if ((op1 & 0x01c0) == 0x01c0) {
+                    //  case 0x81c0:   divs     [1000rrr111xxxnnn, format ??????????xxxnnn, p.197]
+                    eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    if (this.dataSrc == 0) {
+                        this.genException(CPU68K.EXCEPTION_INT_DIVIDE_BY_ZERO);
+                        this.addCycles(38);
+                    }
+                    else {
+                        eaModeDst = this.eaModeDRegLong;        // this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                        this.dataDst = eaModeDst.getEAData(rrr);
+                        dataNew = (this.dataDst / this.dataSrc)|0;
+                        dataTmp = (this.dataDst % this.dataSrc)|0;
+                        if ((dataNew & 0xffff0000) != 0 && (dataNew & 0xffff0000) != 0xffff0000)
+                            this.setFlagV(-1);
+                        else {                                  // flags are based on quotient (dataNew), not the quotient+remainder combo
+                            eaModeDst.setData((dataNew & 0xffff) | (dataTmp << 16));
+                            eaModeDst.updateFlagsZNClearCV(dataNew);
+                        }
+                        this.addCycles(158);
+                    }
+                    break stage1;
+                }
+                if ((op1 & 0x0100) == 0x0000) { // EA is src
+                    //  case 0x8000:   or       [1000rrr0ssxxxnnn, format ????????ssxxxnnn, p.255]
+                    eaModeSrc = aEAModes[this.abModes400[op1 & 0xff]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst | this.dataSrc);
+                    this.addCycles(4 + eaModeSrc.cycle2l + eaModeSrc.cycle2ADI);
+                }
+                else {                          // EA is dst
+                    //  case 0x8100:   or       [1000rrr1ssuuunnn, format ????????ssuuunnn, p.255]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataSrc = eaModeSrc.getEAData(rrr);
+                    eaModeDst = aEAModes[this.abModesC07[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst | this.dataSrc);
+                    this.addCycles(8 + eaModeDst.cycle4l);
+                }
+                break stage1;
+
+            case 0x9:
+                //  case 0x9000:   suba     [1001rrrk11mmmnnn, format ???????kssmmmnnn, p.282]
+                //  case 0x9000:   sub      [1001rrr0ssmmmnnn, format ????????ssmmmnnn, p.279]
+                //  case 0x9100:   sub      [1001rrr1ssuuunnn, format ????????ssuuunnn, p.279]
+                //  case 0x9100:   subx     [1001rrr1ss00knnn, format ????rrr?sskkknnn, p.288]
+                if ((op1 & 0x00c0) == 0x00c0) {
+                    //  case 0x9000:   suba     [1001rrrk11mmmnnn, format ???????kssmmmnnn, p.282]
+                    eaModeSrc = aEAModes[this.abModes000[(((op1 >> 2) & 0x40) + 0x40) | (op1 & 0x3f)]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    this.regA[rrr] -= this.dataSrc;
+                    this.addCycles(8 - eaModeSrc.cycle2l + eaModeSrc.cycle2ADI);
+                    break stage1;
+                }
+                if ((op1 & 0x0100) == 0) {      // EA is src
+                    //  case 0x9000:   sub      [1001rrr0ssmmmnnn, format ????????ssmmmnnn, p.279]
+                    eaModeSrc = aEAModes[this.abModes000[op1 & 0xff]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    eaModeDst.setDataFlags(this.dataDst - this.dataSrc);
+                    this.addCycles(4 + eaModeSrc.cycle2l + eaModeSrc.cycle2ADI);
+                    break stage1;
+                }
+                if ((op1 & 0x0030) != 0) {      // EA is dst
+                    //  case 0x9100:   sub      [1001rrr1ssuuunnn, format ????????ssuuunnn, p.279]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataSrc = eaModeSrc.getEAData(rrr);
+                    eaModeDst = aEAModes[this.abModesC07[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    eaModeDst.setDataFlags(this.dataDst - this.dataSrc);
+                    this.addCycles(8 + eaModeDst.cycle4l);
+                }
+                else {
+                    //  case 0x9100:   subx     [1001rrr1ss00knnn, format ????rrr?sskkknnn, p.288]
+                    eaModeSrc = aEAModes[this.abModesAddSubX[((op1 >> 5) & 0x6) | ((op1 >> 3) & 0x1)]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn) - this.getFlagX();
+                    eaModeDst = eaModeSrc;
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    this.flagZTmp = this.flagZNew;
+                    eaModeDst.setDataFlags(this.dataDst - this.dataSrc);
+                    if (this.flagZNew == 0) {
+                        this.flagZNew = this.flagZTmp;
+                    }
+                    if ((op1 & 0x8) == 0)
+                        this.addCycles(4 + eaModeDst.cycle4l);
+                }
+                break stage1;
+
+            case 0xa:
+                this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                break;
+
+            case 0xb:
+                //  case 0xb000:   cmpa     [1011rrrk11mmmnnn, format ???????kssmmmnnn, p.182]
+                //  case 0xb000:   cmp      [1011rrr0ssmmmnnn, format ????????ssmmmnnn, p.180]
+                //  case 0xb100:   eor      [1011rrr1sswwwnnn, format ????????sswwwnnn, p.205]
+                //  case 0xb108:   cmpm     [1011xxx1ss001yyy, format ????????ss??????, p.186]
+                if ((op1 & 0x00c0) == 0x00c0) {
+                    //  case 0xb000:   cmpa     [1011rrrk11mmmnnn, format ???????kssmmmnnn, p.182]
+                    eaModeSrc = aEAModes[this.abModes000[(((op1 >> 2) & 0x40) + 0x40) | (op1 & 0x3f)]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = aEAModes[CPU68K.EAMODEINDEX_AREG_LONG];
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    eaModeDst.updateFlagsExceptX(this.dataDst - this.dataSrc);
+                    this.addCycles(6);
+                    break stage1;
+                }
+                if ((op1 & 0x0100) == 0) {      // EA is src
+                    //  case 0xb000:   cmp      [1011rrr0ssmmmnnn, format ????????ssmmmnnn, p.180]
+                    eaModeSrc = aEAModes[this.abModes000[op1 & 0xff]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    eaModeDst.updateFlagsExceptX(this.dataDst - this.dataSrc);
+                    this.addCycles(4 + eaModeSrc.cycle2l);
+                    break stage1;
+                }
+                if ((op1 & 0x0038) != 0x08) {
+                    //  case 0xb100:   eor      [1011rrr1sswwwnnn, format ????????sswwwnnn, p.205]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataSrc = eaModeSrc.getEAData(rrr);
+                    eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst ^ this.dataSrc);
+                    this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD);
+                }
+                else {
+                    //  case 0xb108:   cmpm     [1011xxx1ss001yyy, format ????????ss??????, p.186]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_AREG_INCBYTE];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = eaModeSrc;
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    eaModeDst.updateFlagsExceptX(this.dataDst - this.dataSrc);
+                    // Cycles needs no adjustment -- CMPM should be covered by EA cycles
+                }
+                break stage1;
+
+            case 0xc:
+                //  case 0xc000:   and      [1100rrr0ssxxxnnn, format ????????ssxxxnnn, p.120]
+                //  case 0xc0c0:   mulu     [1100rrr011xxxnnn, format ??????????xxxnnn, p.243]
+                //  case 0xc100:   abcd     [1100rrr10000knnn, format ????rrr?bbkkknnn, p.107]
+                //  case 0xc100:   and      [1100rrr1ssuuunnn, format ????????ssuuunnn, p.120]
+                //  case 0xc1c0:   muls     [1100rrr111xxxnnn, format ??????????xxxnnn, p.240]
+                op2 = (op1 >> 6) & 0x7;
+
+                switch(op2) {
+                case 0x0:
+                case 0x1:
+                case 0x2:                       // EA is src
+                    //  case 0xc000:   and      [1100rrr0ssxxxnnn, format ????????ssxxxnnn, p.120]
+                    eaModeSrc = aEAModes[this.abModes400[op1 & 0xff]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst & this.dataSrc);
+                    this.addCycles(4 + eaModeSrc.cycle2l + eaModeSrc.cycle2ADI);
+                    break stage1;
+
+                case 0x3:
+                    //  case 0xc0c0:   mulu     [1100rrr011xxxnnn, format ??????????xxxnnn, p.243]
+                    eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                    this.dataSrc = eaModeSrc.getEAData(nnn) & 0xffff;
+                    eaModeDst = this.eaModeDRegLong;            // this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                    this.dataDst = eaModeDst.getEAData(rrr) & 0xffff;
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst * this.dataSrc);
+                    this.addCycles(70);        // BUGBUG: worst-case timing -JP
+                    break stage1;
+
+                case 0x4:
+                case 0x5:
+                case 0x6:                       // EA is dst
+                    //  case 0xc100:   and      [1100rrr1ssuuunnn, format ????????ssuuunnn, p.120]
+                    if ((op1 & 0x0030) != 0) {
+                        eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                        this.dataSrc = eaModeSrc.getEAData(rrr);
+                        eaModeDst = aEAModes[this.abModesC07[op1 & 0xff]];
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst & this.dataSrc);
+                        this.addCycles(8 + eaModeDst.cycle4l);
+                        break stage1;
+                    }
+
+                    switch(op2) {
+                    case 0x4:
+                        //  case 0xc100:   abcd     [1100rrr10000knnn, format ????rrr?bbkkknnn, p.107]
+                        eaModeSrc = aEAModes[this.abModesAddSubX[(op1 >> 3) & 0x1]]; // 0 or 1 (both ssBYTE)
+                        this.dataSrc = eaModeSrc.getEAData(nnn);
+                        eaModeDst = eaModeSrc;
+                        this.dataDst = eaModeDst.getEAData(rrr);
+                        dataNew = (this.dataSrc & 0x0f) + (this.dataDst & 0x0f) - this.getFlagX();
+                        dataNew += (dataNew > 9)? 6 : 0;
+                        dataNew += (this.dataSrc & 0xf0) + (this.dataDst & 0xf0);
+                        if (dataNew <= 0x90) {
+                            eaModeDst.setData(dataNew);
+                            this.setFlagCX(0);
+                        }
+                        else {
+                            dataNew += 0x60;
+                            eaModeDst.setData(dataNew);
+                            this.setFlagCX(-1);
+                        }
+                        if ((dataNew & 0xff) != 0) {    // conditionally clear Z
+                            this.flagZNew = dataNew << 24 >> 24;
+                        }
+                        this.flagVSrc = this.dataSrc << 24 >> 24;
+                        this.flagVDst = this.dataDst << 24 >> 24;
+                        this.flagNNew = this.flagVNew = dataNew << 24 >> 24;
+                        if ((op1 & 0x8) == 0)
+                            this.addCycles(6);
+                        break stage1;
+
+                    case 0x5:
+                        if ((op1 & 0x8) == 0) { // EXG Drrr,Dnnn
+                            //  case 0xc140:   exg      [1100rrr101000nnn, format ????rrr??????nnn, p.210]
+                            op2 = this.regD[rrr];
+                            this.regD[rrr] = this.regD[nnn];
+                            this.regD[nnn] = op2;
+                        }
+                        else {                  // EXG Arrr,Annn
+                            //  case 0xc148:   exg      [1100rrr101001nnn, format ????rrr??????nnn, p.210]
+                            op2 = this.regA[rrr];
+                            this.regA[rrr] = this.regA[nnn];
+                            this.regA[nnn] = op2;
+                        }
+                        this.addCycles(6);
+                        break stage1;
+
+                    case 0x6:
+                        if ((op1 & 0x8) != 0) { // EXG Drrr,Annn
+                            //  case 0xc188:   exg      [1100rrr110001nnn, format ????rrr??????nnn, p.210]
+                            op2 = this.regD[rrr];
+                            this.regD[rrr] = this.regA[nnn];
+                            this.regA[nnn] = op2;
+                            this.addCycles(6);
+                            break stage1;
+                        }
+                    }
+                    break;      // If we're still here, must be an invalid opcode
+
+                case 0x7:
+                    //  case 0xc1c0:   muls     [1100rrr111xxxnnn, format ??????????xxxnnn, p.240]
+                    eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = this.eaModeDRegLong;            // this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                    this.dataDst = eaModeDst.getEAData(rrr) << 16 >> 16;
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst * this.dataSrc);
+                    this.addCycles(70);        // BUGBUG: worst-case timing -JP
+                    break stage1;
+                }
+
+                this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                break;
+
+            case 0xd:
+                //  case 0xd000:   adda     [1101rrrk11mmmnnn, format ???????kssmmmnnn, p.112]
+                //  case 0xd000:   add      [1101rrr0ssmmmnnn, format ????????ssmmmnnn, p.109]
+                //  case 0xd100:   add      [1101rrr1ssuuunnn, format ????????ssuuunnn, p.109]
+                //  case 0xd100:   addx     [1101rrr1ss00knnn, format ????rrr?sskkknnn, p.118]
+                if ((op1 & 0x00c0) == 0x00c0) {
+                    //  case 0xd000:   adda     [1101rrrk11mmmnnn, format ???????kssmmmnnn, p.112]
+                    eaModeSrc = aEAModes[this.abModes000[(((op1 >> 2) & 0x40) + 0x40) | (op1 & 0x3f)]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    this.regA[rrr] += this.dataSrc;     // entire destination updated regardless of operand size
+                    this.addCycles(8 - eaModeSrc.cycle2l + eaModeSrc.cycle2ADI);
+                    break stage1;
+                }
+                if ((op1 & 0x0100) == 0) {      // EA is src
+                    //  case 0xd000:   add      [1101rrr0ssmmmnnn, format ????????ssmmmnnn, p.109]
+                    eaModeSrc = aEAModes[this.abModes000[op1 & 0xff]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    eaModeDst.setDataFlagsForAdd(this.dataDst + this.dataSrc);
+                    this.addCycles(4 + eaModeSrc.cycle2l + eaModeSrc.cycle2ADI);
+                    break stage1;
+                }
+                if ((op1 & 0x0030) != 0) {      // EA is dst
+                    //  case 0xd100:   add      [1101rrr1ssuuunnn, format ????????ssuuunnn, p.109]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataSrc = eaModeSrc.getEAData(rrr);
+                    eaModeDst = aEAModes[this.abModesC07[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    eaModeDst.setDataFlagsForAdd(this.dataDst + this.dataSrc);
+                    this.addCycles(8 + eaModeDst.cycle4l);
+                }
+                else {
+                    //  case 0xd100:   addx     [1101rrr1ss00knnn, format ????rrr?sskkknnn, p.118]
+                    eaModeSrc = aEAModes[this.abModesAddSubX[((op1 >> 5) & 0x6) | ((op1 >> 3) & 0x1)]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn) - this.getFlagX();
+                    eaModeDst = eaModeSrc;
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    this.flagZTmp = this.flagZNew;
+                    eaModeDst.setDataFlagsForAdd(this.dataSrc + this.dataDst);
+                    if (this.flagZNew == 0) {
+                        this.flagZNew = this.flagZTmp;
+                    }
+                    if ((op1 & 0x8) == 0) {
+                        this.addCycles(4 + eaModeDst.cycle4l);
+                    }
+                }
+                break stage1;
+
+            case 0xe:
+                //  case 0xe000:   asr      [1110000011uuunnn, format ??????????uuunnn, p.126]
+                //  case 0xe000:   asr      [1110rrr0ssk00nnn, format ????rrr?ssk??nnn, p.126]
+                //  case 0xe008:   lsr      [1110rrr0ssk01nnn, format ????rrr?ssk??nnn, p.218]
+                //  case 0xe010:   roxr     [1110rrr0ssk10nnn, format ????rrr?ssk??nnn, p.268]
+                //  case 0xe018:   ror      [1110rrr0ssk11nnn, format ????rrr?ssk??nnn, p.265]
+                //  case 0xe100:   asl      [1110rrr1ssk00nnn, format ????rrr?ssk??nnn, p.126]
+                //  case 0xe100:   asl      [1110000111uuunnn, format ??????????uuunnn, p.126]
+                //  case 0xe108:   lsl      [1110rrr1ssk01nnn, format ????rrr?ssk??nnn, p.218]
+                //  case 0xe110:   roxl     [1110rrr1ssk10nnn, format ????rrr?ssk??nnn, p.268]
+                //  case 0xe118:   rol      [1110rrr1ssk11nnn, format ????rrr?ssk??nnn, p.265]
+                //  case 0xe200:   lsr      [1110001011uuunnn, format ??????????uuunnn, p.218]
+                //  case 0xe300:   lsl      [1110001111uuunnn, format ??????????uuunnn, p.218]
+                //  case 0xe400:   roxr     [1110010011uuunnn, format ??????????uuunnn, p.268]
+                //  case 0xe500:   roxl     [1110010111uuunnn, format ??????????uuunnn, p.268]
+                //  case 0xe600:   ror      [1110011011uuunnn, format ??????????uuunnn, p.265]
+                //  case 0xe700:   rol      [1110011111uuunnn, format ??????????uuunnn, p.265]
+                if ((op1 & 0x00c0) != 0x00c0) {
+                    cBits = ((op1 & 0x20) == 0)? CPU68K.aByteQuick[rrr] : (this.regD[rrr] & 0x3f);
+                    op2 = ((op1 >> 2) & 0x6) | ((op1 >> 8) & 0x1);
+                    eaModeDst = aEAModes[CPU68K.EAMODEINDEX_DREG_BYTE + ((op1 >> 6) & 0x3)];
+                }
+                else {
+                    cBits = 1;
+                    op2 = op1 >> 8;
+                    eaModeDst = aEAModes[this.abModesC07[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                }
+                this.dataDst = eaModeDst.getEAData(nnn);
+                this.addCycles(8 + eaModeDst.cycle2ADl + (eaModeDst.cycle2ADI-1)*cBits);
+
+                switch (op2 & 0x7) {
+                case 0x0:
+                    //  case 0xe000:   asr      [....000011uuunnn, format ??????????uuunnn, p.126]
+                    //  case 0xe000:   asr      [....rrr0ssk00nnn, format ????rrr?ssk??nnn, p.126]
+                    if (cBits >= eaModeDst.width) {
+                        this.dataDst >>= 1;
+                        cBits = eaModeDst.width-1;
+                    }
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst >> cBits);
+                    if (cBits != 0) {
+                        this.setFlagCX((this.dataDst >> (cBits-1)) & 0x1);
+                    }
+                    break stage1;
+
+                case 0x1:
+                    //  case 0xe100:   asl      [....000111uuunnn, format ??????????uuunnn, p.126]
+                    //  case 0xe100:   asl      [....rrr1ssk00nnn, format ????rrr?ssk??nnn, p.126]
+                    dataTmp = 0;                // assume no overflow
+                    if (cBits >= eaModeDst.width) {
+                        if ((this.dataDst & eaModeDst.sign) != (this.dataDst & (eaModeDst.sign >>> 1))) {
+                            dataTmp = 1;        // we've already "overflowed"
+                        }
+                        this.dataDst <<= 1;
+                        cBits = eaModeDst.width-1;
+                    }
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst << cBits);
+                    if (cBits != 0) {
+                        this.setFlagCX((this.dataDst << (cBits-1)) & eaModeDst.sign);
+                        if (dataTmp == 0) {
+                            // All cBits from eaModeDst.sign on down must either be all set or all clear
+                            dataTmp = eaModeDst.mask;
+                            dataTmp = (dataTmp << (eaModeDst.width-cBits-1)) & dataTmp;
+                            dataTmp = ((this.dataDst & dataTmp) != dataTmp && (this.dataDst & dataTmp) != 0)? 1 : 0;
+                        }
+                        if (dataTmp != 0) this.setFlagV(-1);
+                    }
+                    break stage1;
+
+                case 0x2:
+                    //  case 0xe200:   lsr      [....001011uuunnn, format ??????????uuunnn, p.218]
+                    //  case 0xe008:   lsr      [....rrr0ssk01nnn, format ????rrr?ssk??nnn, p.218]
+                    this.dataDst &= eaModeDst.mask;
+                    if (cBits >= eaModeDst.width) {
+                        this.dataDst >>>= 1;
+                        cBits = eaModeDst.width-1;
+                    }
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst >>> cBits);
+                    if (cBits != 0) {
+                        this.setFlagCX((this.dataDst >>> (cBits-1)) & 0x1);
+                    }
+                    break stage1;
+
+                case 0x3:
+                    //  case 0xe300:   lsl      [....001111uuunnn, format ??????????uuunnn, p.218]
+                    //  case 0xe108:   lsl      [....rrr1ssk01nnn, format ????rrr?ssk??nnn, p.218]
+                    if (cBits >= eaModeDst.width) {
+                        this.dataDst <<= 1;
+                        cBits = eaModeDst.width-1;
+                    }
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst << cBits);
+                    if (cBits != 0) {
+                        this.setFlagCX((this.dataDst << (cBits-1)) & eaModeDst.sign);
+                    }
+                    break stage1;
+
+                case 0x4:
+                    //  case 0xe400:   roxr     [....010011uuunnn, format ??????????uuunnn, p.268]
+                    //  case 0xe010:   roxr     [....rrr0ssk10nnn, format ????rrr?ssk??nnn, p.268]
+                    this.dataDst &= eaModeDst.mask;
+                    while (cBits-- != 0) {              // BUGBUG: should eliminate method calls inside loop -JP
+                        dataNew = (this.dataDst >>> 1) | (this.getFlagX() & eaModeDst.sign);
+                        this.setFlagX(this.dataDst & 0x1);
+                        this.dataDst = dataNew;
+                    }
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst);
+                    this.setFlagC(this.getFlagX());
+                    break stage1;
+
+                case 0x5:
+                    //  case 0xe500:   roxl     [....010111uuunnn, format ??????????uuunnn, p.268]
+                    //  case 0xe110:   roxl     [....rrr1ssk10nnn, format ????rrr?ssk??nnn, p.268]
+                    while (cBits-- != 0) {              // BUGBUG: should eliminate method calls inside loop -JP
+                        dataNew = (this.dataDst << 1) | (this.getFlagX() & 0x1);
+                        this.setFlagX(this.dataDst & eaModeDst.sign);
+                        this.dataDst = dataNew;
+                    }
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst);
+                    this.setFlagC(this.getFlagX());
+                    break stage1;
+
+                case 0x6:
+                    //  case 0xe600:   ror      [....011011uuunnn, format ??????????uuunnn, p.265]
+                    //  case 0xe018:   ror      [....rrr0ssk11nnn, format ????rrr?ssk??nnn, p.265]
+                    if (cBits == 0) {
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst);
+                        break stage1;
+                    }
+                    this.dataDst &= eaModeDst.mask;
+                    while (cBits-- != 0) {              // BUGBUG: should eliminate method calls inside loop -JP
+                        dataNew = (this.dataDst >>> 1) | ((this.dataDst & 0x1) << (eaModeDst.width-1));
+                        this.setFlagC(this.dataDst & 0x1);
+                        this.dataDst = dataNew;
+                    }
+                    eaModeDst.setDataFlagsZNClearV(this.dataDst);
+                    break stage1;
+
+                case 0x7:
+                    //  case 0xe700:   rol      [....011111uuunnn, format ??????????uuunnn, p.265]
+                    //  case 0xe118:   rol      [....rrr1ssk11nnn, format ????rrr?ssk??nnn, p.265]
+                    if (cBits == 0) {
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst);
+                        break stage1;
+                    }
+                    while (cBits-- != 0) {              // BUGBUG: should eliminate method calls inside loop -JP
+                        dataNew = (this.dataDst << 1) | ((this.dataDst & eaModeDst.sign) >>> (eaModeDst.width-1));
+                        this.setFlagC(this.dataDst & eaModeDst.sign);
+                        this.dataDst = dataNew;
+                    }
+                    eaModeDst.setDataFlagsZNClearV(this.dataDst);
+                    // eslint-disable-next-line no-labels
+                    break stage1;
+                }
+                break;
+
+            case 0xf:
+                if (this.dbg && (op1 & CPU68K.OP_MYBREAKPOINT_MASK) == CPU68K.OP_MYBREAKPOINT) {
+                    if (this.dbg.break(this.regPCThis, true)) { // see if the debugger wants us to break
+                        this.regPC = this.regPCThis;
+                        this.fCPU |= CPU68K.CPU_BREAKPOINT;
+                        return;     // nExecute + 1;
+                    }
+                }
+                this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                break;
+
+            }   // End stage1
+
+            //
+            // Catch any executable instructions that still don't provide a cycle count
+            //
+            if (nCyclesCur == nCycles) {
+                this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
+            }
+
+            ++this.nOpcodesUncycled;
+            ++this.nOpcodes;
+
+            if ((this.fCPU & CPU68K.CPU_BREAKFLAGS) != 0) {
+                //
+                // If CPU_TRACING was the sole breaking condition, make sure that CPU_STEPPING was not also set;
+                // otherwise, we should continue executing, because CPU_STEPPING means that nExecute is a step count.
+                //
+                if ((this.fCPU & (CPU68K.CPU_BREAKFLAGS | CPU68K.CPU_STEPPING)) != (CPU68K.CPU_TRACING | CPU68K.CPU_STEPPING)) {
+                    // nExecute--; // over-decrement nExecute, since we won't be revisiting the post-decrementing while-loop again...
+                    break;
+                }
+            }
         }
+
+        if (this.nOpcodes < 0) {        // if the opcode count underflows, reset all the counters
+            this.resetCounters();
+        }
+
+        // Note that we've added CPU_BREAKPOINT to the list of flags that can kick us out of the execution loop.
+        // That's because the breakpoint and TRAP instructions, which still return immediately because the desired
+        // instruction has not actually been executed yet, are no longer the only reasons CPU_BREAKPOINT can be set.
+        //
+        // Data read/write breakpoints can now trigger CPU_BREAKPOINT condition as well (see MarkDataAccess() in
+        // the Debugger).  We can't stop the instruction from executing, because not all emulated instruction are
+        // "restartable" (eg, instructions that do pre-decrement or post-increment), so we have to let it finish and
+        // then wind out of ExecuteOpcodes() normally, here at the bottom....
+
+        return;                         // nExecute + 1;
     }
 
     /**
@@ -12617,99 +14635,214 @@ class CPU68K extends CPU {
      */
     initCPU()
     {
-        this.resetRegs()
+        this.initRegs();
+        this.initEAModes();
+        this.defineRegister("A0", () => this.regA[0], (value) => this.regA[0] = value);
+        this.defineRegister("A1", () => this.regA[1], (value) => this.regA[1] = value);
+        this.defineRegister("A2", () => this.regA[2], (value) => this.regA[2] = value);
+        this.defineRegister("A3", () => this.regA[3], (value) => this.regA[3] = value);
+        this.defineRegister("A4", () => this.regA[4], (value) => this.regA[4] = value);
+        this.defineRegister("A5", () => this.regA[5], (value) => this.regA[5] = value);
+        this.defineRegister("A6", () => this.regA[6], (value) => this.regA[6] = value);
+        this.defineRegister("A7", () => this.regA[7], (value) => this.regA[7] = value);
+        this.defineRegister("D0", () => this.regD[0], (value) => this.regD[0] = value);
+        this.defineRegister("D1", () => this.regD[1], (value) => this.regD[1] = value);
+        this.defineRegister("D2", () => this.regD[2], (value) => this.regD[2] = value);
+        this.defineRegister("D3", () => this.regD[3], (value) => this.regD[3] = value);
+        this.defineRegister("D4", () => this.regD[4], (value) => this.regD[4] = value);
+        this.defineRegister("D5", () => this.regD[5], (value) => this.regD[5] = value);
+        this.defineRegister("D6", () => this.regD[6], (value) => this.regD[6] = value);
+        this.defineRegister("D7", () => this.regD[7], (value) => this.regD[7] = value);
+        this.defineRegister("C",  () => (this.getFlagC()? 1 : 0), (value) => this.setFlagC(value));
+        this.defineRegister("V",  () => (this.getFlagV()? 1 : 0), (value) => this.setFlagV(value));
+        this.defineRegister("Z",  () => (this.getFlagZ()? 1 : 0), (value) => this.setFlagZ(value));
+        this.defineRegister("N",  () => (this.getFlagN()? 1 : 0), (value) => this.setFlagN(value));
+        this.defineRegister("X",  () => (this.getFlagX()? 1 : 0), (value) => this.setFlagX(value));
+        this.defineRegister(Debugger.REGISTER.PC, () => this.regPC, (value) => this.regPC = value);
+    }
 
-        this.defineRegister("A", () => this.regA, (value) => this.regA = value & 0xff);
-        this.defineRegister("B", () => this.regB, (value) => this.regB = value & 0xff);
-        this.defineRegister("C", () => this.regC, (value) => this.regC = value & 0xff);
-        this.defineRegister("D", () => this.regD, (value) => this.regD = value & 0xff);
-        this.defineRegister("E", () => this.regE, (value) => this.regE = value & 0xff);
-        this.defineRegister("H", () => this.regH, (value) => this.regH = value & 0xff);
-        this.defineRegister("L", () => this.regL, (value) => this.regL = value & 0xff);
-        this.defineRegister("CF", () => (this.getCF()? 1 : 0), (value) => {value? this.setCF() : this.clearCF()});
-        this.defineRegister("PF", () => (this.getPF()? 1 : 0), (value) => {value? this.setPF() : this.clearPF()});
-        this.defineRegister("AF", () => (this.getAF()? 1 : 0), (value) => {value? this.setAF() : this.clearAF()});
-        this.defineRegister("ZF", () => (this.getZF()? 1 : 0), (value) => {value? this.setZF() : this.clearZF()});
-        this.defineRegister("SF", () => (this.getSF()? 1 : 0), (value) => {value? this.setSF() : this.clearSF()});
-        this.defineRegister("IF", () => (this.getIF()? 1 : 0), (value) => {value? this.setIF() : this.clearIF()});
-        this.defineRegister("BC", this.getBC, this.setBC);
-        this.defineRegister("DE", this.getDE, this.setDE);
-        this.defineRegister("HL", this.getHL, this.setHL);
-        this.defineRegister(Debugger.REGISTER.PC, this.getPC, this.setPC);
+    /**
+     * InitEAModes()
+     *
+     * @this {CPU68K}
+     */
+    initEAModes()
+    {
+        let i = 0;
+        this.aEAModes = new Array(CPU68K.ssMAX * CPU68K.mmmMAX + 1);    // +1 for EAMODEINDEX_IMMEDIATE_ILLEGAL
 
-        /*
-         * This 256-entry array of opcode functions is at the heart of the CPU engine.
-         *
-         * It might be worth trying a switch() statement instead, to see how the performance compares,
-         * but I suspect that would vary quite a bit across JavaScript engines; for now, I'm putting my
-         * money on array lookup.
+        this.aEAModes[i++] = new EAModeDRegByte(this);                  // must match EAMODEINDEX_DREG_BYTE
+        this.aEAModes[i++] = new EAModeDRegWord(this);                  // must match EAMODEINDEX_DREG_WORD
+        this.aEAModes[i++] = this.eaModeDRegLong = new EAModeDRegLong(this);
+
+        this.aEAModes[i++] = new EAModeIllegal(this);                   // must match EAMODEINDEX_ILLEGAL
+        this.aEAModes[i++] = new EAModeARegWord(this);                  // must match EAMODEINDEX_AREG_WORD
+        this.aEAModes[i++] = new EAModeARegLong(this);                  // must match EAMODEINDEX_AREG_LONG
+
+        this.aEAModes[i++] = new EAModeAValByte(this);
+        this.aEAModes[i++] = new EAModeAValWord(this);
+        this.aEAModes[i++] = new EAModeAValLong(this);
+
+        this.aEAModes[i++] = new EAModeAValIncByte(this);               // must match EAMODEINDEX_AREG_INCBYTE
+        this.aEAModes[i++] = new EAModeAValIncWord(this);               // must match EAMODEINDEX_AREG_INCWORD
+        this.aEAModes[i++] = new EAModeAValIncLong(this);               // must match EAMODEINDEX_AREG_INCLONG
+
+        this.aEAModes[i++] = new EAModeAValDecByte(this);               // must match EAMODEINDEX_AREG_DECBYTE
+        this.aEAModes[i++] = new EAModeAValDecWord(this);               // must match EAMODEINDEX_AREG_DECWORD
+        this.aEAModes[i++] = new EAModeAValDecLong(this);               // must match EAMODEINDEX_AREG_DECLONG
+
+        this.aEAModes[i++] = new EAModeAValDispByte(this);
+        this.aEAModes[i++] = new EAModeAValDispWord(this);
+        this.aEAModes[i++] = new EAModeAValDispLong(this);
+
+        this.aEAModes[i++] = new EAModeAValIndexByte(this);
+        this.aEAModes[i++] = new EAModeAValIndexWord(this);
+        this.aEAModes[i++] = new EAModeAValIndexLong(this);
+
+        this.aEAModes[i++] = new EAModeAbs16Byte(this);
+        this.aEAModes[i++] = new EAModeAbs16Word(this);
+        this.aEAModes[i++] = new EAModeAbs16Long(this);
+
+        this.aEAModes[i++] = new EAModeAbs32Byte(this);
+        this.aEAModes[i++] = new EAModeAbs32Word(this);
+        this.aEAModes[i++] = new EAModeAbs32Long(this);
+
+        this.aEAModes[i++] = new EAModePCValDispByte(this);
+        this.aEAModes[i++] = new EAModePCValDispWord(this);
+        this.aEAModes[i++] = new EAModePCValDispLong(this);
+
+        this.aEAModes[i++] = new EAModePCValIndexByte(this);
+        this.aEAModes[i++] = new EAModePCValIndexWord(this);
+        this.aEAModes[i++] = new EAModePCValIndexLong(this);
+
+        this.aEAModes[i++] = new EAModeImmediateByte(this);             // must match EAMODEINDEX_IMMEDIATE_BYTE
+        this.aEAModes[i++] = new EAModeImmediateWord(this);             // must match EAMODEINDEX_IMMEDIATE_WORD
+        this.aEAModes[i++] = new EAModeImmediateLong(this);             // must match EAMODEINDEX_IMMEDIATE_LONG
+        this.aEAModes[i++] = new EAModeIllegal(this);                   // must match EAMODEINDEX_IMMEDIATE_ILLEGAL
+
+        /**
+         * The EA mode index arrays are (for the most part) designed to convert an 8-bit mode encoding
+         * into an index that allows us to quickly obtain the correct EAMode object from the aEAModes array.
          */
-        this.aOps = [
-            /* 0x00-0x03 */ this.opNOP,   this.opLXIB,  this.opSTAXB, this.opINXB,
-            /* 0x04-0x07 */ this.opINRB,  this.opDCRB,  this.opMVIB,  this.opRLC,
-            /* 0x08-0x0B */ this.opNOP,   this.opDADB,  this.opLDAXB, this.opDCXB,
-            /* 0x0C-0x0F */ this.opINRC,  this.opDCRC,  this.opMVIC,  this.opRRC,
-            /* 0x10-0x13 */ this.opNOP,   this.opLXID,  this.opSTAXD, this.opINXD,
-            /* 0x14-0x17 */ this.opINRD,  this.opDCRD,  this.opMVID,  this.opRAL,
-            /* 0x18-0x1B */ this.opNOP,   this.opDADD,  this.opLDAXD, this.opDCXD,
-            /* 0x1C-0x1F */ this.opINRE,  this.opDCRE,  this.opMVIE,  this.opRAR,
-            /* 0x20-0x23 */ this.opNOP,   this.opLXIH,  this.opSHLD,  this.opINXH,
-            /* 0x24-0x27 */ this.opINRH,  this.opDCRH,  this.opMVIH,  this.opDAA,
-            /* 0x28-0x2B */ this.opNOP,   this.opDADH,  this.opLHLD,  this.opDCXH,
-            /* 0x2C-0x2F */ this.opINRL,  this.opDCRL,  this.opMVIL,  this.opCMA,
-            /* 0x30-0x33 */ this.opNOP,   this.opLXISP, this.opSTA,   this.opINXSP,
-            /* 0x34-0x37 */ this.opINRM,  this.opDCRM,  this.opMVIM,  this.opSTC,
-            /* 0x38-0x3B */ this.opNOP,   this.opDADSP, this.opLDA,   this.opDCXSP,
-            /* 0x3C-0x3F */ this.opINRA,  this.opDCRA,  this.opMVIA,  this.opCMC,
-            /* 0x40-0x43 */ this.opMOVBB, this.opMOVBC, this.opMOVBD, this.opMOVBE,
-            /* 0x44-0x47 */ this.opMOVBH, this.opMOVBL, this.opMOVBM, this.opMOVBA,
-            /* 0x48-0x4B */ this.opMOVCB, this.opMOVCC, this.opMOVCD, this.opMOVCE,
-            /* 0x4C-0x4F */ this.opMOVCH, this.opMOVCL, this.opMOVCM, this.opMOVCA,
-            /* 0x50-0x53 */ this.opMOVDB, this.opMOVDC, this.opMOVDD, this.opMOVDE,
-            /* 0x54-0x57 */ this.opMOVDH, this.opMOVDL, this.opMOVDM, this.opMOVDA,
-            /* 0x58-0x5B */ this.opMOVEB, this.opMOVEC, this.opMOVED, this.opMOVEE,
-            /* 0x5C-0x5F */ this.opMOVEH, this.opMOVEL, this.opMOVEM, this.opMOVEA,
-            /* 0x60-0x63 */ this.opMOVHB, this.opMOVHC, this.opMOVHD, this.opMOVHE,
-            /* 0x64-0x67 */ this.opMOVHH, this.opMOVHL, this.opMOVHM, this.opMOVHA,
-            /* 0x68-0x6B */ this.opMOVLB, this.opMOVLC, this.opMOVLD, this.opMOVLE,
-            /* 0x6C-0x6F */ this.opMOVLH, this.opMOVLL, this.opMOVLM, this.opMOVLA,
-            /* 0x70-0x73 */ this.opMOVMB, this.opMOVMC, this.opMOVMD, this.opMOVME,
-            /* 0x74-0x77 */ this.opMOVMH, this.opMOVML, this.opHLT,   this.opMOVMA,
-            /* 0x78-0x7B */ this.opMOVAB, this.opMOVAC, this.opMOVAD, this.opMOVAE,
-            /* 0x7C-0x7F */ this.opMOVAH, this.opMOVAL, this.opMOVAM, this.opMOVAA,
-            /* 0x80-0x83 */ this.opADDB,  this.opADDC,  this.opADDD,  this.opADDE,
-            /* 0x84-0x87 */ this.opADDH,  this.opADDL,  this.opADDM,  this.opADDA,
-            /* 0x88-0x8B */ this.opADCB,  this.opADCC,  this.opADCD,  this.opADCE,
-            /* 0x8C-0x8F */ this.opADCH,  this.opADCL,  this.opADCM,  this.opADCA,
-            /* 0x90-0x93 */ this.opSUBB,  this.opSUBC,  this.opSUBD,  this.opSUBE,
-            /* 0x94-0x97 */ this.opSUBH,  this.opSUBL,  this.opSUBM,  this.opSUBA,
-            /* 0x98-0x9B */ this.opSBBB,  this.opSBBC,  this.opSBBD,  this.opSBBE,
-            /* 0x9C-0x9F */ this.opSBBH,  this.opSBBL,  this.opSBBM,  this.opSBBA,
-            /* 0xA0-0xA3 */ this.opANAB,  this.opANAC,  this.opANAD,  this.opANAE,
-            /* 0xA4-0xA7 */ this.opANAH,  this.opANAL,  this.opANAM,  this.opANAA,
-            /* 0xA8-0xAB */ this.opXRAB,  this.opXRAC,  this.opXRAD,  this.opXRAE,
-            /* 0xAC-0xAF */ this.opXRAH,  this.opXRAL,  this.opXRAM,  this.opXRAA,
-            /* 0xB0-0xB3 */ this.opORAB,  this.opORAC,  this.opORAD,  this.opORAE,
-            /* 0xB4-0xB7 */ this.opORAH,  this.opORAL,  this.opORAM,  this.opORAA,
-            /* 0xB8-0xBB */ this.opCMPB,  this.opCMPC,  this.opCMPD,  this.opCMPE,
-            /* 0xBC-0xBF */ this.opCMPH,  this.opCMPL,  this.opCMPM,  this.opCMPA,
-            /* 0xC0-0xC3 */ this.opRNZ,   this.opPOPB,  this.opJNZ,   this.opJMP,
-            /* 0xC4-0xC7 */ this.opCNZ,   this.opPUSHB, this.opADI,   this.opRST0,
-            /* 0xC8-0xCB */ this.opRZ,    this.opRET,   this.opJZ,    this.opJMP,
-            /* 0xCC-0xCF */ this.opCZ,    this.opCALL,  this.opACI,   this.opRST1,
-            /* 0xD0-0xD3 */ this.opRNC,   this.opPOPD,  this.opJNC,   this.opOUT,
-            /* 0xD4-0xD7 */ this.opCNC,   this.opPUSHD, this.opSUI,   this.opRST2,
-            /* 0xD8-0xDB */ this.opRC,    this.opRET,   this.opJC,    this.opIN,
-            /* 0xDC-0xDF */ this.opCC,    this.opCALL,  this.opSBI,   this.opRST3,
-            /* 0xE0-0xE3 */ this.opRPO,   this.opPOPH,  this.opJPO,   this.opXTHL,
-            /* 0xE4-0xE7 */ this.opCPO,   this.opPUSHH, this.opANI,   this.opRST4,
-            /* 0xE8-0xEB */ this.opRPE,   this.opPCHL,  this.opJPE,   this.opXCHG,
-            /* 0xEC-0xEF */ this.opCPE,   this.opCALL,  this.opXRI,   this.opRST5,
-            /* 0xF0-0xF3 */ this.opRP,    this.opPOPSW, this.opJP,    this.opDI,
-            /* 0xF4-0xF7 */ this.opCP,    this.opPUPSW, this.opORI,   this.opRST6,
-            /* 0xF8-0xFB */ this.opRM,    this.opSPHL,  this.opJM,    this.opEI,
-            /* 0xFC-0xFF */ this.opCM,    this.opCALL,  this.opCPI,   this.opRST7
-        ];
+        this.abModes000 = new Array(256);
+        this.initEAModeIndexArray(this.abModes000, 0x000);
+
+        this.abModes007 = new Array(256);
+        this.initEAModeIndexArray(this.abModes007, 0x007);
+
+        this.abModes400 = new Array(256);
+        this.initEAModeIndexArray(this.abModes400, 0x400);
+
+        this.abModes401 = new Array(256);
+        this.initEAModeIndexArray(this.abModes401, 0x401);
+
+        this.abModes407 = new Array(256);
+        this.initEAModeIndexArray(this.abModes407, 0x407);
+
+        this.abModesC07 = new Array(256);
+        this.initEAModeIndexArray(this.abModesC07, 0xC07);
+
+        this.abModesC81 = new Array(256);
+        this.initEAModeIndexArray(this.abModesC81, 0xC81);
+
+        this.abModesD07 = new Array(256);
+        this.initEAModeIndexArray(this.abModesD07, 0xD07);
+
+        this.abModesD81 = new Array(256);
+        this.initEAModeIndexArray(this.abModesD81, 0xD81);
+
+        this.abModesMove = new Array(256);
+        this.initEAModeIndexArrayInverted(this.abModesMove, 0x400);
+
+        this.abModesAddSubX = new Array(6);
+        this.abModesAddSubX[0] = CPU68K.EAMODEINDEX_DREG_BYTE;
+        this.abModesAddSubX[1] = CPU68K.EAMODEINDEX_AREG_DECBYTE;
+        this.abModesAddSubX[2] = CPU68K.EAMODEINDEX_DREG_WORD;
+        this.abModesAddSubX[3] = CPU68K.EAMODEINDEX_AREG_DECWORD;
+        this.abModesAddSubX[4] = CPU68K.EAMODEINDEX_DREG_LONG;
+        this.abModesAddSubX[5] = CPU68K.EAMODEINDEX_AREG_DECLONG;
+    }
+
+    /**
+     * initEAModeIndexArray(abModes, maskIllegal)
+     *
+     * The EA mode index arrays are (for the most part) designed to convert an 8-bit mode encoding
+     * into an index that allows us to quickly obtain the correct EAMode object from the aEAModes array
+     * that CPUModes.InitModes() creates.  In fact, it is that function which calls US.
+     *
+     * @this {CPU68K}
+     * @param {Array.<number>} abModes
+     * @param {number} maskIllegal
+     */
+    initEAModeIndexArray(abModes, maskIllegal)
+    {
+        let i = 0;
+        for (let ss = 0; ss < CPU68K.ssMAX && i < abModes.length; ss++) {
+            let mmm, nnn;
+            for (mmm = 0; mmm < 7; mmm++) {
+                for (nnn = 0; nnn < 8; nnn++) {
+                    if ((maskIllegal & (0x800 >> mmm)) != 0) {
+                        abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
+                    }
+                    else {
+                        abModes[i++] = mmm * CPU68K.ssMAX + ss;
+
+                    }
+                }
+            }
+            for (nnn = 0; nnn < 5; nnn++) {
+                if ((maskIllegal & (0x10 >> nnn)) != 0) {
+                    abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
+                }
+                else {
+                    abModes[i++] = (mmm + nnn) * CPU68K.ssMAX + ss;
+
+                }
+            }
+            for (; nnn < 8; nnn++) {
+                abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
+            }
+        }
+    }
+
+    /**
+     * initEAModeIndexArrayInverted(abModes, maskIllegal)
+     *
+     * The EA mode index arrays are (for the most part) designed to convert an 8-bit mode encoding
+     * into an index that allows us to quickly obtain the correct EAMode object from the aEAModes array
+     * that initModes() creates.  In fact, it is that function which calls US.
+     *
+     * @this {CPU68K}
+     * @param {Array.<number>} abModes
+     * @param {number} maskIllegal
+     */
+    initEAModeIndexArrayInverted(abModes, maskIllegal)
+    {
+        let i = 0;
+        for (let ss = 0; ss < CPU68K.ssMAX && i < abModes.length; ss++) {
+            let rrr, www;
+            for (rrr = 0; rrr < 8; rrr++) {
+                for (www = 0; www < 7; www++) {
+                    if ((maskIllegal & (0x800 >> www)) != 0) {
+                        abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
+                    }
+                    else {
+                        abModes[i++] = www * CPU68K.ssMAX + ss;
+
+                    }
+                }
+                if (rrr >= 5) {
+                    abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
+                }
+                else if ((maskIllegal & (0x10 >> rrr)) != 0) {
+                    abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
+                }
+                else {
+                    abModes[i++] = (www +rrr) * CPU68K.ssMAX + ss;
+
+                }
+            }
+        }
     }
 
     /**
@@ -12735,16 +14868,7 @@ class CPU68K extends CPU {
         }
         try {
             this.regA = stateCPU.shift();
-            this.regB = stateCPU.shift();
-            this.regC = stateCPU.shift();
             this.regD = stateCPU.shift();
-            this.regE = stateCPU.shift();
-            this.regH = stateCPU.shift();
-            this.regL = stateCPU.shift();
-            this.setPC(stateCPU.shift());
-            this.setSP(stateCPU.shift());
-            this.setPS(stateCPU.shift());
-            this.intFlags = stateCPU.shift();
         } catch(err) {
             this.println("CPU state error: " + err.message);
             return false;
@@ -12763,16 +14887,7 @@ class CPU68K extends CPU {
         stateCPU.push(this.idDevice);
         stateCPU.push(+CPU68K.VERSION);
         stateCPU.push(this.regA);
-        stateCPU.push(this.regB);
-        stateCPU.push(this.regC);
         stateCPU.push(this.regD);
-        stateCPU.push(this.regE);
-        stateCPU.push(this.regH);
-        stateCPU.push(this.regL);
-        stateCPU.push(this.getPC());
-        stateCPU.push(this.getSP());
-        stateCPU.push(this.getPS());
-        stateCPU.push(this.intFlags);
     }
 
 
@@ -12809,7 +14924,7 @@ class CPU68K extends CPU {
     {
         if (on) {
             this.time.start();
-            if (this.input) this.input.setFocus();
+            if (this.inputDevice) this.inputDevice.setFocus();
         } else {
             this.time.stop();
         }
@@ -12863,2812 +14978,490 @@ class CPU68K extends CPU {
     }
 
     /**
-     * op=0x00 (NOP)
+     * resetFlags(flagsNew)
      *
      * @this {CPU68K}
+     * @param {number} flagsNew
      */
-    opNOP()
+    resetFlags(flagsNew)
     {
-        this.nCyclesRemain -= 4;
+        this.setFlagsSR(flagsNew);
+        this.fCPU &= ~CPU68K.CPU_RESETFLAGS;
     }
 
     /**
-     * op=0x01 (LXI B,d16)
+     * getFlags()
+     *
+     * This function wants to perform unsigned 32-bit comparisons, and like Java, JavaScript does
+     * not have an unsigned data type; however, unlike Java, JavaScript has an unsigned right-shift (>>>)
+     * operator, which like all JavaScript bit-wise operators, also truncates the result to 32 bits.
+     *
+     * So the seemingly useless ">>> 0" operation is actually quite useful here.  Another option would be
+     * to "mod" the values with 2^32 (eg, "flag % Math.pow(2,32)"), but that seems slower.
      *
      * @this {CPU68K}
      */
-    opLXIB()
+    getFlags()
     {
-        this.setBC(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
+        let flagsNew = this.flags & ~(CPU68K.FLAGS_EXTEND | CPU68K.FLAGS_NEGATIVE | CPU68K.FLAGS_ZERO | CPU68K.FLAGS_OVERFLOW | CPU68K.FLAGS_CARRY);
 
-    /**
-     * op=0x02 (STAX B)
-     *
-     * @this {CPU68K}
-     */
-    opSTAXB()
-    {
-        this.setByte(this.getBC(), this.regA);
-        this.nCyclesRemain -= 7;
-    }
+        // The following code is deliberate in-lining of the individual getFlag* functions, for performance
 
-    /**
-     * op=0x03 (INX B)
-     *
-     * @this {CPU68K}
-     */
-    opINXB()
-    {
-        this.setBC(this.getBC() + 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x04 (INR B)
-     *
-     * @this {CPU68K}
-     */
-    opINRB()
-    {
-        this.regB = this.incByte(this.regB);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x05 (DCR B)
-     *
-     * @this {CPU68K}
-     */
-    opDCRB()
-    {
-        this.regB = this.decByte(this.regB);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x06 (MVI B,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVIB()
-    {
-        this.regB = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x07 (RLC)
-     *
-     * @this {CPU68K}
-     */
-    opRLC()
-    {
-        let carry = this.regA << 1;
-        this.regA = (carry & 0xff) | (carry >> 8);
-        this.updateCF(carry & 0x100);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x09 (DAD B)
-     *
-     * @this {CPU68K}
-     */
-    opDADB()
-    {
-        let w;
-        this.setHL(w = this.getHL() + this.getBC());
-        this.updateCF((w >> 8) & 0x100);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x0A (LDAX B)
-     *
-     * @this {CPU68K}
-     */
-    opLDAXB()
-    {
-        this.regA = this.getByte(this.getBC());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x0B (DCX B)
-     *
-     * @this {CPU68K}
-     */
-    opDCXB()
-    {
-        this.setBC(this.getBC() - 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x0C (INR C)
-     *
-     * @this {CPU68K}
-     */
-    opINRC()
-    {
-        this.regC = this.incByte(this.regC);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x0D (DCR C)
-     *
-     * @this {CPU68K}
-     */
-    opDCRC()
-    {
-        this.regC = this.decByte(this.regC);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x0E (MVI C,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVIC()
-    {
-        this.regC = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x0F (RRC)
-     *
-     * @this {CPU68K}
-     */
-    opRRC()
-    {
-        let carry = (this.regA << 8) & 0x100;
-        this.regA = (carry | this.regA) >> 1;
-        this.updateCF(carry);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x11 (LXI D,d16)
-     *
-     * @this {CPU68K}
-     */
-    opLXID()
-    {
-        this.setDE(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x12 (STAX D)
-     *
-     * @this {CPU68K}
-     */
-    opSTAXD()
-    {
-        this.setByte(this.getDE(), this.regA);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x13 (INX D)
-     *
-     * @this {CPU68K}
-     */
-    opINXD()
-    {
-        this.setDE(this.getDE() + 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x14 (INR D)
-     *
-     * @this {CPU68K}
-     */
-    opINRD()
-    {
-        this.regD = this.incByte(this.regD);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x15 (DCR D)
-     *
-     * @this {CPU68K}
-     */
-    opDCRD()
-    {
-        this.regD = this.decByte(this.regD);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x16 (MVI D,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVID()
-    {
-        this.regD = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x17 (RAL)
-     *
-     * @this {CPU68K}
-     */
-    opRAL()
-    {
-        let carry = this.regA << 1;
-        this.regA = (carry & 0xff) | this.getCF();
-        this.updateCF(carry & 0x100);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x19 (DAD D)
-     *
-     * @this {CPU68K}
-     */
-    opDADD()
-    {
-        let w;
-        this.setHL(w = this.getHL() + this.getDE());
-        this.updateCF((w >> 8) & 0x100);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x1A (LDAX D)
-     *
-     * @this {CPU68K}
-     */
-    opLDAXD()
-    {
-        this.regA = this.getByte(this.getDE());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x1B (DCX D)
-     *
-     * @this {CPU68K}
-     */
-    opDCXD()
-    {
-        this.setDE(this.getDE() - 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x1C (INR E)
-     *
-     * @this {CPU68K}
-     */
-    opINRE()
-    {
-        this.regE = this.incByte(this.regE);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x1D (DCR E)
-     *
-     * @this {CPU68K}
-     */
-    opDCRE()
-    {
-        this.regE = this.decByte(this.regE);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x1E (MVI E,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVIE()
-    {
-        this.regE = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x1F (RAR)
-     *
-     * @this {CPU68K}
-     */
-    opRAR()
-    {
-        let carry = (this.regA << 8);
-        this.regA = ((this.getCF() << 8) | this.regA) >> 1;
-        this.updateCF(carry & 0x100);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x21 (LXI H,d16)
-     *
-     * @this {CPU68K}
-     */
-    opLXIH()
-    {
-        this.setHL(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x22 (SHLD a16)
-     *
-     * @this {CPU68K}
-     */
-    opSHLD()
-    {
-        this.setWord(this.getPCWord(), this.getHL());
-        this.nCyclesRemain -= 16;
-    }
-
-    /**
-     * op=0x23 (INX H)
-     *
-     * @this {CPU68K}
-     */
-    opINXH()
-    {
-        this.setHL(this.getHL() + 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x24 (INR H)
-     *
-     * @this {CPU68K}
-     */
-    opINRH()
-    {
-        this.regH = this.incByte(this.regH);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x25 (DCR H)
-     *
-     * @this {CPU68K}
-     */
-    opDCRH()
-    {
-        this.regH = this.decByte(this.regH);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x26 (MVI H,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVIH()
-    {
-        this.regH = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x27 (DAA)
-     *
-     * @this {CPU68K}
-     */
-    opDAA()
-    {
-        let src = 0;
-        let CF = this.getCF();
-        let AF = this.getAF();
-        if (AF || (this.regA & 0x0F) > 9) {
-            src |= 0x06;
+        if (this.flagZNew == 0) {
+            flagsNew |= CPU68K.FLAGS_ZERO;
         }
-        if (CF || this.regA >= 0x9A) {
-            src |= 0x60;
-            CF = CPU68K.PS.CF;
+
+        if (this.flagNNew < 0) {
+            flagsNew |= CPU68K.FLAGS_NEGATIVE;
         }
-        this.regA = this.addByte(src);
-        this.updateCF(CF? 0x100 : 0);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x29 (DAD H)
-     *
-     * @this {CPU68K}
-     */
-    opDADH()
-    {
-        let w;
-        this.setHL(w = this.getHL() + this.getHL());
-        this.updateCF((w >> 8) & 0x100);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x2A (LHLD a16)
-     *
-     * @this {CPU68K}
-     */
-    opLHLD()
-    {
-        this.setHL(this.getWord(this.getPCWord()));
-        this.nCyclesRemain -= 16;
-    }
-
-    /**
-     * op=0x2B (DCX H)
-     *
-     * @this {CPU68K}
-     */
-    opDCXH()
-    {
-        this.setHL(this.getHL() - 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x2C (INR L)
-     *
-     * @this {CPU68K}
-     */
-    opINRL()
-    {
-        this.regL = this.incByte(this.regL);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x2D (DCR L)
-     *
-     * @this {CPU68K}
-     */
-    opDCRL()
-    {
-        this.regL = this.decByte(this.regL);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x2E (MVI L,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVIL()
-    {
-        this.regL = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x2F (CMA)
-     *
-     * @this {CPU68K}
-     */
-    opCMA()
-    {
-        this.regA = ~this.regA & 0xff;
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x31 (LXI SP,d16)
-     *
-     * @this {CPU68K}
-     */
-    opLXISP()
-    {
-        this.setSP(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x32 (STA a16)
-     *
-     * @this {CPU68K}
-     */
-    opSTA()
-    {
-        this.setByte(this.getPCWord(), this.regA);
-        this.nCyclesRemain -= 13;
-    }
-
-    /**
-     * op=0x33 (INX SP)
-     *
-     * @this {CPU68K}
-     */
-    opINXSP()
-    {
-        this.setSP(this.getSP() + 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x34 (INR M)
-     *
-     * @this {CPU68K}
-     */
-    opINRM()
-    {
-        let addr = this.getHL();
-        this.setByte(addr, this.incByte(this.getByte(addr)));
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x35 (DCR M)
-     *
-     * @this {CPU68K}
-     */
-    opDCRM()
-    {
-        let addr = this.getHL();
-        this.setByte(addr, this.decByte(this.getByte(addr)));
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x36 (MVI M,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVIM()
-    {
-        this.setByte(this.getHL(), this.getPCByte());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x37 (STC)
-     *
-     * @this {CPU68K}
-     */
-    opSTC()
-    {
-        this.setCF();
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x39 (DAD SP)
-     *
-     * @this {CPU68K}
-     */
-    opDADSP()
-    {
-        let w;
-        this.setHL(w = this.getHL() + this.getSP());
-        this.updateCF((w >> 8) & 0x100);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x3A (LDA a16)
-     *
-     * @this {CPU68K}
-     */
-    opLDA()
-    {
-        this.regA = this.getByte(this.getPCWord());
-        this.nCyclesRemain -= 13;
-    }
-
-    /**
-     * op=0x3B (DCX SP)
-     *
-     * @this {CPU68K}
-     */
-    opDCXSP()
-    {
-        this.setSP(this.getSP() - 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x3C (INR A)
-     *
-     * @this {CPU68K}
-     */
-    opINRA()
-    {
-        this.regA = this.incByte(this.regA);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x3D (DCR A)
-     *
-     * @this {CPU68K}
-     */
-    opDCRA()
-    {
-        this.regA = this.decByte(this.regA);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x3E (MVI A,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVIA()
-    {
-        this.regA = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x3F (CMC)
-     *
-     * @this {CPU68K}
-     */
-    opCMC()
-    {
-        this.updateCF(this.getCF()? 0 : 0x100);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x40 (MOV B,B)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBB()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x41 (MOV B,C)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBC()
-    {
-        this.regB = this.regC;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x42 (MOV B,D)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBD()
-    {
-        this.regB = this.regD;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x43 (MOV B,E)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBE()
-    {
-        this.regB = this.regE;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x44 (MOV B,H)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBH()
-    {
-        this.regB = this.regH;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x45 (MOV B,L)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBL()
-    {
-        this.regB = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x46 (MOV B,M)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBM()
-    {
-        this.regB = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x47 (MOV B,A)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBA()
-    {
-        this.regB = this.regA;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x48 (MOV C,B)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCB()
-    {
-        this.regC = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x49 (MOV C,C)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCC()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4A (MOV C,D)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCD()
-    {
-        this.regC = this.regD;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4B (MOV C,E)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCE()
-    {
-        this.regC = this.regE;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4C (MOV C,H)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCH()
-    {
-        this.regC = this.regH;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4D (MOV C,L)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCL()
-    {
-        this.regC = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4E (MOV C,M)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCM()
-    {
-        this.regC = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x4F (MOV C,A)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCA()
-    {
-        this.regC = this.regA;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x50 (MOV D,B)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDB()
-    {
-        this.regD = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x51 (MOV D,C)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDC()
-    {
-        this.regD = this.regC;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x52 (MOV D,D)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDD()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x53 (MOV D,E)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDE()
-    {
-        this.regD = this.regE;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x54 (MOV D,H)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDH()
-    {
-        this.regD = this.regH;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x55 (MOV D,L)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDL()
-    {
-        this.regD = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x56 (MOV D,M)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDM()
-    {
-        this.regD = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x57 (MOV D,A)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDA()
-    {
-        this.regD = this.regA;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x58 (MOV E,B)
-     *
-     * @this {CPU68K}
-     */
-    opMOVEB()
-    {
-        this.regE = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x59 (MOV E,C)
-     *
-     * @this {CPU68K}
-     */
-    opMOVEC()
-    {
-        this.regE = this.regC;
-        this.nCyclesRemain -= 5;
-    }
 
-    /**
-     * op=0x5A (MOV E,D)
-     *
-     * @this {CPU68K}
-     */
-    opMOVED()
-    {
-        this.regE = this.regD;
-        this.nCyclesRemain -= 5;
-    }
+        if ((this.flagCSrc >>> 0) > (this.flagCDst >>> 0)) {
+            flagsNew |= CPU68K.FLAGS_CARRY;
+        }
 
-    /**
-     * op=0x5B (MOV E,E)
-     *
-     * @this {CPU68K}
-     */
-    opMOVEE()
-    {
-        this.nCyclesRemain -= 5;
-    }
+        if ((this.flagXSrc >>> 0) > (this.flagXDst >>> 0)) {
+            flagsNew |= CPU68K.FLAGS_EXTEND;
+        }
 
-    /**
-     * op=0x5C (MOV E,H)
-     *
-     * @this {CPU68K}
-     */
-    opMOVEH()
-    {
-        this.regE = this.regH;
-        this.nCyclesRemain -= 5;
-    }
+        if ((this.flagVNew < 0) != (this.flagVDst < 0) && (this.flagVSrc < 0) != (this.flagVDst < 0)) {
+            flagsNew |= CPU68K.FLAGS_OVERFLOW;
+        }
 
-    /**
-     * op=0x5D (MOV E,L)
-     *
-     * @this {CPU68K}
-     */
-    opMOVEL()
-    {
-        this.regE = this.regL;
-        this.nCyclesRemain -= 5;
-    }
+        // BUGBUG: No one should be depending on getFlags() propagating the arithmetic states to the CCR bits.
+        // The main motivation for NOT propagating is that the debugger calls getFlags(), and we don't want the
+        // debugger to have any side-effects (even supposedly innocuous ones). -JP
+        //
+        // return flags = flagsNew;
 
-    /**
-     * op=0x5E (MOV E,M)
-     *
-     * @this {CPU68K}
-     */
-    opMOVEM()
-    {
-        this.regE = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
+        return flagsNew;
     }
 
     /**
-     * op=0x5F (MOV E,A)
+     * getFlagC()
      *
-     * @this {CPU68K}
-     */
-    opMOVEA()
-    {
-        this.regE = this.regA;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x60 (MOV H,B)
+     * This function wants to perform an unsigned 32-bit comparison, and like Java, JavaScript does
+     * not have an unsigned data type; however, unlike Java, JavaScript has an unsigned right-shift (>>>)
+     * operator, which like all JavaScript bit-wise operators, also truncates the result to 32 bits.
      *
-     * @this {CPU68K}
-     */
-    opMOVHB()
-    {
-        this.regH = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x61 (MOV H,C)
+     * So the seemingly useless ">>> 0" operation is actually quite useful here.  Another option would be
+     * to "mod" the values with 2^32 (eg, "flag % Math.pow(2,32)"), but that seems slower.
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVHC()
-    {
-        this.regH = this.regC;
-        this.nCyclesRemain -= 5;
-    }
+     getFlagC()
+     {
+         //
+         // This needs to be an unsigned comparison, but unfortunately, Java doesn't
+         // have unsigned data types.  The easiest thing to do is promote our variables to
+         // 64-bit longs, and then mask them to 32 bits, insuring that we are comparing
+         // positive values.
+         //
+         // NOTE: the 'L' appended to each 0xffffffff mask is essential, since otherwise
+         // the masks would be treated as signed integers, and automatic promotion to longs
+         // would turn them into 0xffffffffffffffff instead of 0x00000000ffffffff.
+         //
+         // return (((long)flagCSrc & 0xffffffffL) > ((long)flagCDst & 0xffffffffL))? -1 : 0;
+         //
+         return ((this.flagCSrc >>> 0) > (this.flagCDst >>> 0))? -1 : 0;
+     }
 
     /**
-     * op=0x62 (MOV H,D)
+     * getFlagV()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVHD()
-    {
-        this.regH = this.regD;
-        this.nCyclesRemain -= 5;
-    }
+     getFlagV()
+     {
+         return ((this.flagVNew < 0) != (this.flagVDst < 0) && (this.flagVSrc < 0) != (this.flagVDst < 0))? -1 : 0;
+     }
 
     /**
-     * op=0x63 (MOV H,E)
+     * getFlagZ()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVHE()
+    getFlagZ()
     {
-        this.regH = this.regE;
-        this.nCyclesRemain -= 5;
+        return (this.flagZNew == 0)? -1 : 0;
     }
 
     /**
-     * op=0x64 (MOV H,H)
+     * getFlagN()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVHH()
+    getFlagN()
     {
-        this.nCyclesRemain -= 5;
+        return (this.flagNNew < 0)? -1 : 0;
     }
 
     /**
-     * op=0x65 (MOV H,L)
+     * getFlagX()
      *
-     * @this {CPU68K}
-     */
-    opMOVHL()
-    {
-        this.regH = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x66 (MOV H,M)
+     * This function wants to perform an unsigned 32-bit comparison, and like Java, JavaScript does
+     * not have an unsigned data type; however, unlike Java, JavaScript has an unsigned right-shift (>>>)
+     * operator, which like all JavaScript bit-wise operators, also truncates the result to 32 bits.
      *
-     * @this {CPU68K}
-     */
-    opMOVHM()
-    {
-        this.regH = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x67 (MOV H,A)
+     * So the seemingly useless ">>> 0" operation is actually quite useful here.  Another option would be
+     * to "mod" the values with 2^32 (eg, "flag % Math.pow(2,32)"), but that seems slower.
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVHA()
+    getFlagX()
     {
-        this.regH = this.regA;
-        this.nCyclesRemain -= 5;
+        //
+        // This needs to be an unsigned comparison, but unfortunately, Java doesn't
+        // have unsigned data types.  The easiest thing to do is promote our variables to
+        // 64-bit longs, and then mask them to 32 bits, insuring that we are comparing
+        // positive values.
+        //
+        // NOTE: the 'L' appended to each 0xffffffff mask is essential, since otherwise
+        // the masks would be treated as signed integers, and automatic promotion to longs
+        // would turn them into 0xffffffffffffffff instead of 0x00000000ffffffff.
+        //
+        // return (((long)flagXSrc & 0xffffffffL) > ((long)flagXDst & 0xffffffffL))? -1 : 0;
+        //
+        return ((this.flagXSrc >>> 0) > (this.flagXDst >>> 0))? -1 : 0;
     }
 
     /**
-     * op=0x68 (MOV L,B)
+     * getFlagHI()
      *
-     * @this {CPU68K}
-     */
-    opMOVLB()
-    {
-        this.regL = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x69 (MOV L,C)
+     * This function wants to perform an unsigned 32-bit comparison, and like Java, JavaScript does
+     * not have an unsigned data type; however, unlike Java, JavaScript has an unsigned right-shift (>>>)
+     * operator, which like all JavaScript bit-wise operators, also truncates the result to 32 bits.
      *
-     * @this {CPU68K}
-     */
-    opMOVLC()
-    {
-        this.regL = this.regC;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x6A (MOV L,D)
+     * So the seemingly useless ">>> 0" operation is actually quite useful here.  Another option would be
+     * to "mod" the values with 2^32 (eg, "flag % Math.pow(2,32)"), but that seems slower.
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVLD()
+    getFlagHI()
     {
-        this.regL = this.regD;
-        this.nCyclesRemain -= 5;
+        return (/* getFlagC() == 0 */ (this.flagCSrc >>> 0) <= (this.flagCDst >>> 0) && /* getFlagZ() == 0 */ this.flagZNew != 0)? -1 : 0;
     }
 
     /**
-     * op=0x6B (MOV L,E)
+     * getFlagGE()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVLE()
+    getFlagGE()
     {
-        this.regL = this.regE;
-        this.nCyclesRemain -= 5;
+        let N = this.getFlagN() != 0;
+        let V = this.getFlagV() != 0;
+        return (N && V || !N && !V)? -1 : 0;
     }
 
     /**
-     * op=0x6C (MOV L,H)
+     * getFlagLT()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVLH()
+    getFlagLT()
     {
-        this.regL = this.regH;
-        this.nCyclesRemain -= 5;
+        let N = this.getFlagN() != 0;
+        let V = this.getFlagV() != 0;
+        return (N && !V || !N && V)? -1 : 0;
     }
 
     /**
-     * op=0x6D (MOV L,L)
+     * getFlagGT()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVLL()
+    getFlagGT()
     {
-        this.nCyclesRemain -= 5;
+        let Z = this.getFlagZ() != 0;
+        let N = this.getFlagN() != 0;
+        let V = this.getFlagV() != 0;
+        return (N && V && !Z || !N && !V && !Z)? -1 : 0;
     }
 
     /**
-     * op=0x6E (MOV L,M)
+     * getFlagLE()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVLM()
+    getFlagLE()
     {
-        this.regL = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
+        let Z = this.getFlagZ() != 0;
+        let N = this.getFlagN() != 0;
+        let V = this.getFlagV() != 0;
+        return (Z || N && !V || !N && V)? -1 : 0;
     }
 
     /**
-     * op=0x6F (MOV L,A)
+     * getFlagIPM()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVLA()
+    getFlagIPM()
     {
-        this.regL = this.regA;
-        this.nCyclesRemain -= 5;
+        return (this.flags & CPU68K.FLAGS_IPM) >> CPU68K.FLAGS_IPM_SHIFT;
     }
 
     /**
-     * op=0x70 (MOV M,B)
+     * setFlagsCCR(flags)
      *
-     * @this {CPU68K}
-     */
-    opMOVMB()
-    {
-        this.setByte(this.getHL(), this.regB);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x71 (MOV M,C)
+     * Formerly setFlags(byte flags), setFlagsCCR() effectively sets the low byte of SR.
      *
      * @this {CPU68K}
+     * @param {number} flags
      */
-    opMOVMC()
+    setFlagsCCR(flags)
     {
-        this.setByte(this.getHL(), this.regC);
-        this.nCyclesRemain -= 7;
-    }
+        this.flagNNew = 0;
+        this.flagCSrc = this.flagCDst = 0;
+        this.flagVNew = this.flagVDst = 0;
+        this.flagXSrc = this.flagXDst = 0;
+        this.flagZNew = this.flagZTmp = 0;
 
-    /**
-     * op=0x72 (MOV M,D)
-     *
-     * @this {CPU68K}
-     */
-    opMOVMD()
-    {
-        this.setByte(this.getHL(), this.regD);
-        this.nCyclesRemain -= 7;
-    }
+        if ((flags & CPU68K.FLAGS_ZERO) == 0) {
+            this.flagZNew = -1;
+        }
 
-    /**
-     * op=0x73 (MOV M,E)
-     *
-     * @this {CPU68K}
-     */
-    opMOVME()
-    {
-        this.setByte(this.getHL(), this.regE);
-        this.nCyclesRemain -= 7;
-    }
+        if ((flags & CPU68K.FLAGS_NEGATIVE) != 0) {
+            this.flagNNew = -1;
+        }
 
-    /**
-     * op=0x74 (MOV M,H)
-     *
-     * @this {CPU68K}
-     */
-    opMOVMH()
-    {
-        this.setByte(this.getHL(), this.regH);
-        this.nCyclesRemain -= 7;
-    }
+        if ((flags & CPU68K.FLAGS_CARRY) != 0) {
+            this.flagCSrc = -1;
+        }
 
-    /**
-     * op=0x75 (MOV M,L)
-     *
-     * @this {CPU68K}
-     */
-    opMOVML()
-    {
-        this.setByte(this.getHL(), this.regL);
-        this.nCyclesRemain -= 7;
-    }
+        if ((flags & CPU68K.FLAGS_EXTEND) != 0) {
+            this.flagXSrc = -1;
+        }
 
-    /**
-     * op=0x76 (HLT)
-     *
-     * @this {CPU68K}
-     */
-    opHLT()
-    {
-        this.nCyclesRemain -= 7;
-        /*
-         * The CPU is never REALLY halted by a HLT instruction; instead, we call requestHALT(), which
-         * which sets INTFLAG.HALT and then ends the current burst; the CPU should not execute any
-         * more instructions until checkINTR() indicates that a hardware interrupt has been requested.
-         */
-        this.requestHALT();
-        /*
-         * If interrupts have been disabled, then the machine is dead in the water (there is no NMI
-         * NMI generation mechanism for this CPU), so let's stop the CPU; similarly, if the HALT message
-         * category is enabled, then the Debugger must want us to stop the CPU.
-         */
-        if (!this.getIF() || this.isMessageOn(CPU.MESSAGE.HALT)) {
-            let addr = this.getPC() - 1;
-            this.setPC(addr);           // this is purely for the Debugger's benefit, to show the HLT
-            this.time.stop();
+        if ((flags & CPU68K.FLAGS_OVERFLOW) != 0) {
+            this.flagVNew = this.flagVSrc = -1;
         }
     }
 
     /**
-     * op=0x77 (MOV M,A)
+     * setFlagsSR(flags)
      *
-     * @this {CPU68K}
-     */
-    opMOVMA()
-    {
-        this.setByte(this.getHL(), this.regA);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x78 (MOV A,B)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAB()
-    {
-        this.regA = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x79 (MOV A,C)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAC()
-    {
-        this.regA = this.regC;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7A (MOV A,D)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAD()
-    {
-        this.regA = this.regD;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7B (MOV A,E)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAE()
-    {
-        this.regA = this.regE;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7C (MOV A,H)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAH()
-    {
-        this.regA = this.regH;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7D (MOV A,L)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAL()
-    {
-        this.regA = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7E (MOV A,M)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAM()
-    {
-        this.regA = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x7F (MOV A,A)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAA()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x80 (ADD B)
-     *
-     * @this {CPU68K}
-     */
-    opADDB()
-    {
-        this.regA = this.addByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x81 (ADD C)
-     *
-     * @this {CPU68K}
-     */
-    opADDC()
-    {
-        this.regA = this.addByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x82 (ADD D)
-     *
-     * @this {CPU68K}
-     */
-    opADDD()
-    {
-        this.regA = this.addByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x83 (ADD E)
-     *
-     * @this {CPU68K}
-     */
-    opADDE()
-    {
-        this.regA = this.addByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x84 (ADD H)
-     *
-     * @this {CPU68K}
-     */
-    opADDH()
-    {
-        this.regA = this.addByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x85 (ADD L)
-     *
-     * @this {CPU68K}
-     */
-    opADDL()
-    {
-        this.regA = this.addByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x86 (ADD M)
-     *
-     * @this {CPU68K}
-     */
-    opADDM()
-    {
-        this.regA = this.addByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x87 (ADD A)
-     *
-     * @this {CPU68K}
-     */
-    opADDA()
-    {
-        this.regA = this.addByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x88 (ADC B)
-     *
-     * @this {CPU68K}
-     */
-    opADCB()
-    {
-        this.regA = this.addByteCarry(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x89 (ADC C)
-     *
-     * @this {CPU68K}
-     */
-    opADCC()
-    {
-        this.regA = this.addByteCarry(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8A (ADC D)
-     *
-     * @this {CPU68K}
-     */
-    opADCD()
-    {
-        this.regA = this.addByteCarry(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8B (ADC E)
-     *
-     * @this {CPU68K}
-     */
-    opADCE()
-    {
-        this.regA = this.addByteCarry(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8C (ADC H)
-     *
-     * @this {CPU68K}
-     */
-    opADCH()
-    {
-        this.regA = this.addByteCarry(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8D (ADC L)
-     *
-     * @this {CPU68K}
-     */
-    opADCL()
-    {
-        this.regA = this.addByteCarry(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8E (ADC M)
-     *
-     * @this {CPU68K}
-     */
-    opADCM()
-    {
-        this.regA = this.addByteCarry(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x8F (ADC A)
-     *
-     * @this {CPU68K}
-     */
-    opADCA()
-    {
-        this.regA = this.addByteCarry(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x90 (SUB B)
-     *
-     * @this {CPU68K}
-     */
-    opSUBB()
-    {
-        this.regA = this.subByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x91 (SUB C)
-     *
-     * @this {CPU68K}
-     */
-    opSUBC()
-    {
-        this.regA = this.subByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x92 (SUB D)
-     *
-     * @this {CPU68K}
-     */
-    opSUBD()
-    {
-        this.regA = this.subByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x93 (SUB E)
-     *
-     * @this {CPU68K}
-     */
-    opSUBE()
-    {
-        this.regA = this.subByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x94 (SUB H)
-     *
-     * @this {CPU68K}
-     */
-    opSUBH()
-    {
-        this.regA = this.subByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x95 (SUB L)
-     *
-     * @this {CPU68K}
-     */
-    opSUBL()
-    {
-        this.regA = this.subByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x96 (SUB M)
-     *
-     * @this {CPU68K}
-     */
-    opSUBM()
-    {
-        this.regA = this.subByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x97 (SUB A)
-     *
-     * @this {CPU68K}
-     */
-    opSUBA()
-    {
-        this.regA = this.subByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x98 (SBB B)
-     *
-     * @this {CPU68K}
-     */
-    opSBBB()
-    {
-        this.regA = this.subByteBorrow(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x99 (SBB C)
-     *
-     * @this {CPU68K}
-     */
-    opSBBC()
-    {
-        this.regA = this.subByteBorrow(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9A (SBB D)
-     *
-     * @this {CPU68K}
-     */
-    opSBBD()
-    {
-        this.regA = this.subByteBorrow(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9B (SBB E)
-     *
-     * @this {CPU68K}
-     */
-    opSBBE()
-    {
-        this.regA = this.subByteBorrow(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9C (SBB H)
-     *
-     * @this {CPU68K}
-     */
-    opSBBH()
-    {
-        this.regA = this.subByteBorrow(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9D (SBB L)
-     *
-     * @this {CPU68K}
-     */
-    opSBBL()
-    {
-        this.regA = this.subByteBorrow(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9E (SBB M)
-     *
-     * @this {CPU68K}
-     */
-    opSBBM()
-    {
-        this.regA = this.subByteBorrow(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x9F (SBB A)
-     *
-     * @this {CPU68K}
-     */
-    opSBBA()
-    {
-        this.regA = this.subByteBorrow(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA0 (ANA B)
-     *
-     * @this {CPU68K}
-     */
-    opANAB()
-    {
-        this.regA = this.andByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA1 (ANA C)
-     *
-     * @this {CPU68K}
-     */
-    opANAC()
-    {
-        this.regA = this.andByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA2 (ANA D)
-     *
-     * @this {CPU68K}
-     */
-    opANAD()
-    {
-        this.regA = this.andByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA3 (ANA E)
-     *
-     * @this {CPU68K}
-     */
-    opANAE()
-    {
-        this.regA = this.andByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA4 (ANA H)
-     *
-     * @this {CPU68K}
-     */
-    opANAH()
-    {
-        this.regA = this.andByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA5 (ANA L)
-     *
-     * @this {CPU68K}
-     */
-    opANAL()
-    {
-        this.regA = this.andByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA6 (ANA M)
-     *
-     * @this {CPU68K}
-     */
-    opANAM()
-    {
-        this.regA = this.andByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xA7 (ANA A)
-     *
-     * @this {CPU68K}
-     */
-    opANAA()
-    {
-        this.regA = this.andByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA8 (XRA B)
-     *
-     * @this {CPU68K}
-     */
-    opXRAB()
-    {
-        this.regA = this.xorByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA9 (XRA C)
-     *
-     * @this {CPU68K}
-     */
-    opXRAC()
-    {
-        this.regA = this.xorByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAA (XRA D)
-     *
-     * @this {CPU68K}
-     */
-    opXRAD()
-    {
-        this.regA = this.xorByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAB (XRA E)
-     *
-     * @this {CPU68K}
-     */
-    opXRAE()
-    {
-        this.regA = this.xorByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAC (XRA H)
-     *
-     * @this {CPU68K}
-     */
-    opXRAH()
-    {
-        this.regA = this.xorByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAD (XRA L)
-     *
-     * @this {CPU68K}
-     */
-    opXRAL()
-    {
-        this.regA = this.xorByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAE (XRA M)
-     *
-     * @this {CPU68K}
-     */
-    opXRAM()
-    {
-        this.regA = this.xorByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xAF (XRA A)
-     *
-     * @this {CPU68K}
-     */
-    opXRAA()
-    {
-        this.regA = this.xorByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB0 (ORA B)
-     *
-     * @this {CPU68K}
-     */
-    opORAB()
-    {
-        this.regA = this.orByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB1 (ORA C)
-     *
-     * @this {CPU68K}
-     */
-    opORAC()
-    {
-        this.regA = this.orByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB2 (ORA D)
-     *
-     * @this {CPU68K}
-     */
-    opORAD()
-    {
-        this.regA = this.orByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB3 (ORA E)
-     *
-     * @this {CPU68K}
-     */
-    opORAE()
-    {
-        this.regA = this.orByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB4 (ORA H)
-     *
-     * @this {CPU68K}
-     */
-    opORAH()
-    {
-        this.regA = this.orByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB5 (ORA L)
-     *
-     * @this {CPU68K}
-     */
-    opORAL()
-    {
-        this.regA = this.orByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB6 (ORA M)
-     *
-     * @this {CPU68K}
-     */
-    opORAM()
-    {
-        this.regA = this.orByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xB7 (ORA A)
-     *
-     * @this {CPU68K}
-     */
-    opORAA()
-    {
-        this.regA = this.orByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB8 (CMP B)
-     *
-     * @this {CPU68K}
-     */
-    opCMPB()
-    {
-        this.subByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB9 (CMP C)
-     *
-     * @this {CPU68K}
-     */
-    opCMPC()
-    {
-        this.subByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBA (CMP D)
-     *
-     * @this {CPU68K}
-     */
-    opCMPD()
-    {
-        this.subByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBB (CMP E)
-     *
-     * @this {CPU68K}
-     */
-    opCMPE()
-    {
-        this.subByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBC (CMP H)
-     *
-     * @this {CPU68K}
-     */
-    opCMPH()
-    {
-        this.subByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBD (CMP L)
-     *
-     * @this {CPU68K}
-     */
-    opCMPL()
-    {
-        this.subByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBE (CMP M)
-     *
-     * @this {CPU68K}
-     */
-    opCMPM()
-    {
-        this.subByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xBF (CMP A)
-     *
-     * @this {CPU68K}
-     */
-    opCMPA()
-    {
-        this.subByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xC0 (RNZ)
+     * Formerly setFlags(int flags), setFlagsSR() sets both the high and low (CCR) bytes of SR.
      *
      * @this {CPU68K}
+     * @param {number} flags
      */
-    opRNZ()
+    setFlagsSR(flags)
     {
-        if (!this.getZF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
+        // Before we blow away the original flag bits, let's see if the interrupt level
+        // is dropping; if so, we'll want to set CPU_CHECKINTS....
+        if ((flags & CPU68K.FLAGS_IPM) < (this.flags & CPU68K.FLAGS_IPM)) {
+            this.fCPU |= CPU68K.CPU_CHECKINTS;
         }
-        this.nCyclesRemain -= 5;
+
+        // Clear everything outside the CCR bits.
+        this.flags &= CPU68K.FLAGS_CCR;
+
+        // We probably don't need to carefully exclude the caller's CCR bits at this step,
+        // since the CCR bits are always computed dynamically, but let's avoid any confusion.
+        this.flags |= (flags & ~CPU68K.FLAGS_CCR);
+
+        this.setFlagsCCR(flags);
     }
 
     /**
-     * op=0xC1 (POP B)
+     * setFlagC(c)
      *
      * @this {CPU68K}
+     * @param {number} c
      */
-    opPOPB()
-    {
-        this.setBC(this.popWord());
-        this.nCyclesRemain -= 10;
-    }
+     setFlagC(c)
+     {
+         this.flagCSrc = this.flagCDst = 0;
+         if (c != 0) {
+             this.flagCSrc = -1;
+         }
+     }
 
     /**
-     * op=0xC2 (JNZ a16)
+     * setFlagV(v)
      *
      * @this {CPU68K}
+     * @param {number} v
      */
-    opJNZ()
+    setFlagV(v)
     {
-        let w = this.getPCWord();
-        if (!this.getZF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xC3 (JMP a16)
-     *
-     * @this {CPU68K}
-     */
-    opJMP()
-    {
-        this.setPC(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xC4 (CNZ a16)
-     *
-     * @this {CPU68K}
-     */
-    opCNZ()
-    {
-        let w = this.getPCWord();
-        if (!this.getZF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
+        this.flagVNew = this.flagVDst = 0;
+        if (v != 0) {
+            this.flagVNew = this.flagVSrc = -1;
         }
-        this.nCyclesRemain -= 11;
     }
 
     /**
-     * op=0xC5 (PUSH B)
+     * setFlagZ(z)
      *
      * @this {CPU68K}
+     * @param {number} z
      */
-    opPUSHB()
+    setFlagZ(z)
     {
-        this.pushWord(this.getBC());
-        this.nCyclesRemain -= 11;
+        this.flagZNew = (z == 0)? -1 : 0;
     }
 
     /**
-     * op=0xC6 (ADI d8)
+     * setFlagN(n)
      *
      * @this {CPU68K}
+     * @param {number} n
      */
-    opADI()
+    setFlagN(n)
     {
-        this.regA = this.addByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
+        this.flagNNew = (n != 0)? -1 : 0;
     }
 
     /**
-     * op=0xC7 (RST 0)
+     * setFlagX(x)
      *
      * @this {CPU68K}
+     * @param {number} x
      */
-    opRST0()
+    setFlagX(x)
     {
-        this.pushWord(this.getPC());
-        this.setPC(0);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xC8 (RZ)
-     *
-     * @this {CPU68K}
-     */
-    opRZ()
-    {
-        if (this.getZF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
+        this.flagXSrc = this.flagXDst = 0;
+        if (x != 0) {
+            this.flagXSrc = -1;
         }
-        this.nCyclesRemain -= 5;
     }
 
     /**
-     * op=0xC9 (RET)
+     * setFlagCX(c)
      *
      * @this {CPU68K}
+     * @param {number} c
      */
-    opRET()
+    setFlagCX(c)
     {
-        this.setPC(this.popWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xCA (JZ a16)
-     *
-     * @this {CPU68K}
-     */
-    opJZ()
-    {
-        let w = this.getPCWord();
-        if (this.getZF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xCC (CZ a16)
-     *
-     * @this {CPU68K}
-     */
-    opCZ()
-    {
-        let w = this.getPCWord();
-        if (this.getZF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
+        this.flagCSrc = this.flagCDst = 0;
+        this.flagXSrc = this.flagXDst = 0;
+        if (c != 0) {
+            this.flagCSrc = this.flagXSrc = -1;
         }
-        this.nCyclesRemain -= 11;
     }
 
     /**
-     * op=0xCD (CALL a16)
+     * setORFlagsCCR(b)
      *
      * @this {CPU68K}
+     * @param {number} b
      */
-    opCALL()
+    setORFlagsCCR(b)                    // used to OR flags into CCR
     {
-        let w = this.getPCWord();
-        this.pushWord(this.getPC());
-        this.setPC(w);
-        this.nCyclesRemain -= 17;
+        this.setFlagsCCR(this.getFlags() | b);
     }
 
     /**
-     * op=0xCE (ACI d8)
+     * setORFlagsSR(s)
      *
      * @this {CPU68K}
+     * @param {number} s
      */
-    opACI()
+    setORFlagsSR(s)                     // used to OR flags into SR (PRIVILEGED)
     {
-        this.regA = this.addByteCarry(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xCF (RST 1)
-     *
-     * @this {CPU68K}
-     */
-    opRST1()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x08);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xD0 (RNC)
-     *
-     * @this {CPU68K}
-     */
-    opRNC()
-    {
-        if (!this.getCF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
+        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+            this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
+            return;
         }
-        this.nCyclesRemain -= 5;
+        this.setFlagsSR(this.getFlags() | s);
     }
 
     /**
-     * op=0xD1 (POP D)
+     * setANDFlagsCCR(b)
      *
      * @this {CPU68K}
+     * @param {number} b
      */
-    opPOPD()
+    setANDFlagsCCR(b)                   // used to AND flags out of CCR
     {
-        this.setDE(this.popWord());
-        this.nCyclesRemain -= 10;
+        this.setFlagsCCR(this.getFlags() & b);
     }
 
     /**
-     * op=0xD2 (JNC a16)
+     * setANDFlagsSR(s)
      *
      * @this {CPU68K}
+     * @param {number} s
      */
-    opJNC()
+    setANDFlagsSR(s)                    // used to AND flags out of SR (PRIVILEGED)
     {
-        let w = this.getPCWord();
-        if (!this.getCF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xD3 (OUT d8)
-     *
-     * @this {CPU68K}
-     */
-    opOUT()
-    {
-        let port = this.getPCByte();
-        this.busIO.writeData(port, this.regA);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xD4 (CNC a16)
-     *
-     * @this {CPU68K}
-     */
-    opCNC()
-    {
-        let w = this.getPCWord();
-        if (!this.getCF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
+        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+            this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
+            return;
         }
-        this.nCyclesRemain -= 11;
+        this.setFlagsSR(this.getFlags() & s);
     }
 
     /**
-     * op=0xD5 (PUSH D)
+     * setEORFlagsCCR(b)
      *
      * @this {CPU68K}
+     * @param {number} b
      */
-    opPUSHD()
+    setEORFlagsCCR(b)                   // used to EOR flags in CCR
     {
-        this.pushWord(this.getDE());
-        this.nCyclesRemain -= 11;
+        this.setFlagsCCR(this.getFlags() ^ b);
     }
 
     /**
-     * op=0xD6 (SUI d8)
+     * setEORFlagsSR(s)
      *
      * @this {CPU68K}
+     * @param {number} s
      */
-    opSUI()
+    setEORFlagsSR(s)                    // used to EOR flags in SR (PRIVILEGED)
     {
-        this.regA = this.subByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xD7 (RST 2)
-     *
-     * @this {CPU68K}
-     */
-    opRST2()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x10);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xD8 (RC)
-     *
-     * @this {CPU68K}
-     */
-    opRC()
-    {
-        if (this.getCF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
+        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+            this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
+            return;
         }
-        this.nCyclesRemain -= 5;
+        this.setFlagsSR(this.getFlags() ^ s);
     }
 
     /**
-     * op=0xDA (JC a16)
+     * setFlagIPM(iLevel)
      *
      * @this {CPU68K}
+     * @param {number} iLevel
      */
-    opJC()
+    setFlagIPM(iLevel)
     {
-        let w = this.getPCWord();
-        if (this.getCF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
+        this.flags &= ~CPU68K.FLAGS_IPM;
+        this.flags |= (iLevel << CPU68K.FLAGS_IPM_SHIFT);
     }
 
     /**
-     * op=0xDB (IN d8)
+     * initRegs()
      *
      * @this {CPU68K}
      */
-    opIN()
+    initRegs()
     {
-        let port = this.getPCByte();
-        this.regA = this.busIO.readData(port) & 0xff;
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xDC (CC a16)
-     *
-     * @this {CPU68K}
-     */
-    opCC()
-    {
-        let w = this.getPCWord();
-        if (this.getCF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xDE (SBI d8)
-     *
-     * @this {CPU68K}
-     */
-    opSBI()
-    {
-        this.regA = this.subByteBorrow(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xDF (RST 3)
-     *
-     * @this {CPU68K}
-     */
-    opRST3()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x18);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xE0 (RPO)
-     *
-     * @this {CPU68K}
-     */
-    opRPO()
-    {
-        if (!this.getPF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xE1 (POP H)
-     *
-     * @this {CPU68K}
-     */
-    opPOPH()
-    {
-        this.setHL(this.popWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xE2 (JPO a16)
-     *
-     * @this {CPU68K}
-     */
-    opJPO()
-    {
-        let w = this.getPCWord();
-        if (!this.getPF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xE3 (XTHL)
-     *
-     * @this {CPU68K}
-     */
-    opXTHL()
-    {
-        let w = this.popWord();
-        this.pushWord(this.getHL());
-        this.setHL(w);
-        this.nCyclesRemain -= 18;
-    }
-
-    /**
-     * op=0xE4 (CPO a16)
-     *
-     * @this {CPU68K}
-     */
-    opCPO()
-    {
-        let w = this.getPCWord();
-        if (!this.getPF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xE5 (PUSH H)
-     *
-     * @this {CPU68K}
-     */
-    opPUSHH()
-    {
-        this.pushWord(this.getHL());
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xE6 (ANI d8)
-     *
-     * @this {CPU68K}
-     */
-    opANI()
-    {
-        this.regA = this.andByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xE7 (RST 4)
-     *
-     * @this {CPU68K}
-     */
-    opRST4()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x20);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xE8 (RPE)
-     *
-     * @this {CPU68K}
-     */
-    opRPE()
-    {
-        if (this.getPF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xE9 (PCHL)
-     *
-     * @this {CPU68K}
-     */
-    opPCHL()
-    {
-        this.setPC(this.getHL());
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xEA (JPE a16)
-     *
-     * @this {CPU68K}
-     */
-    opJPE()
-    {
-        let w = this.getPCWord();
-        if (this.getPF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xEB (XCHG)
-     *
-     * @this {CPU68K}
-     */
-    opXCHG()
-    {
-        let w = this.getHL();
-        this.setHL(this.getDE());
-        this.setDE(w);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xEC (CPE a16)
-     *
-     * @this {CPU68K}
-     */
-    opCPE()
-    {
-        let w = this.getPCWord();
-        if (this.getPF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xEE (XRI d8)
-     *
-     * @this {CPU68K}
-     */
-    opXRI()
-    {
-        this.regA = this.xorByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xEF (RST 5)
-     *
-     * @this {CPU68K}
-     */
-    opRST5()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x28);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xF0 (RP)
-     *
-     * @this {CPU68K}
-     */
-    opRP()
-    {
-        if (!this.getSF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xF1 (POP PSW)
-     *
-     * @this {CPU68K}
-     */
-    opPOPSW()
-    {
-        this.setPSW(this.popWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xF2 (JP a16)
-     *
-     * @this {CPU68K}
-     */
-    opJP()
-    {
-        let w = this.getPCWord();
-        if (!this.getSF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xF3 (DI)
-     *
-     * @this {CPU68K}
-     */
-    opDI()
-    {
-        this.clearIF();
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xF4 (CP a16)
-     *
-     * @this {CPU68K}
-     */
-    opCP()
-    {
-        let w = this.getPCWord();
-        if (!this.getSF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xF5 (PUSH PSW)
-     *
-     * @this {CPU68K}
-     */
-    opPUPSW()
-    {
-        this.pushWord(this.getPSW());
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xF6 (ORI d8)
-     *
-     * @this {CPU68K}
-     */
-    opORI()
-    {
-        this.regA = this.orByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xF7 (RST 6)
-     *
-     * @this {CPU68K}
-     */
-    opRST6()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x30);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xF8 (RM)
-     *
-     * @this {CPU68K}
-     */
-    opRM()
-    {
-        if (this.getSF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xF9 (SPHL)
-     *
-     * @this {CPU68K}
-     */
-    opSPHL()
-    {
-        this.setSP(this.getHL());
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xFA (JM a16)
-     *
-     * @this {CPU68K}
-     */
-    opJM()
-    {
-        let w = this.getPCWord();
-        if (this.getSF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xFB (EI)
-     *
-     * @this {CPU68K}
-     */
-    opEI()
-    {
-        this.setIF();
-        this.nCyclesRemain -= 4;
-        this.checkINTR();
-    }
-
-    /**
-     * op=0xFC (CM a16)
-     *
-     * @this {CPU68K}
-     */
-    opCM()
-    {
-        let w = this.getPCWord();
-        if (this.getSF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xFE (CPI d8)
-     *
-     * @this {CPU68K}
-     */
-    opCPI()
-    {
-        this.subByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xFF (RST 7)
-     *
-     * @this {CPU68K}
-     */
-    opRST7()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x38);
-        this.nCyclesRemain -= 11;
+        this.fCPU = 0;
+        this.regPC = 0;                 // program counter
+        this.regPCThis = 0;             // program counter for the current instruction
+        this.regPCLast = 0;             // program counter for the previous instruction
+        this.regPCTrap = 0;             // program counter for the last TRAP executed
+        this.regSSP = 0;                // supervisor stack pointer
+        this.regUSP = 0;                // user stack pointer (to save/restore a[7] on user/supervisor transitions)
+        this.regD = [0,0,0,0,0,0,0,0];  // data registers
+        this.regA = [0,0,0,0,0,0,0,0];  // address registers
+        this.dataSrc = this.dataDst = 0;// internal data operands (exposed to the EAMode classes)
+        this.resetRegs();
     }
 
     /**
@@ -15678,34 +15471,32 @@ class CPU68K extends CPU {
      */
     resetRegs()
     {
-        this.regA = 0;
-        this.regB = 0;
-        this.regC = 0;
-        this.regD = 0;
-        this.regE = 0;
-        this.regH = 0;
-        this.regL = 0;
-        this.setSP(0);
-        this.setPC(this.addrReset);
+        this.resetFlags(CPU68K.FLAGS_SU);
+        for (let i = 0; i < this.regD.length; i++) {
+            this.regD[i] = 0;
+        }
+        for (let i = 0; i < this.regA.length; i++) {
+            this.regA[i] = 0;
+        }
+        this.nStep = 0;                 // instruction step counter
+        this.iPendingException = CPU68K.EXCEPTION_NONE;
+        this.addrPendingException = 0;  // set to exception-specific address, if any (eg, EA from EXCEPTION_ADDRESS_ERROR)
+        this.resetCounters();
+        this.nOpcodesUncycled = 0;      // no need to reset this in ResetCounters() because it's not allowed to become arbitrarily large
+    }
 
-        /*
-         * regPCLast is an internal register that simply snapshots the PC at the start of every instruction;
-         * this is useful not only for CPUs that need to support instruction restartability, but also for
-         * diagnostic/debugging purposes.
-         */
-        this.regPCLast = this.regPC;
-
-        /*
-         * This resets the Processor Status flags (regPS), along with all the internal "result registers".
-         */
-        this.setPS(0);
-
-        /*
-         * intFlags contains some internal states we use to indicate whether a hardware interrupt (INTFLAG.INTR) or
-         * Trap software interrupt (INTR.TRAP) has been requested, as well as when we're in a "HLT" state (INTFLAG.HALT)
-         * that requires us to wait for a hardware interrupt (INTFLAG.INTR) before continuing execution.
-         */
-        this.intFlags = CPU68K.INTFLAG.NONE;
+    /**
+     * resetCounters()
+     *
+     * @this {CPU68K}
+     */
+    resetCounters()
+    {
+        this.nCycles = 0;               // cycle counter
+        this.nCyclesDebug = 0;          // cycle counter maintained in DEBUG only
+        this.nOpcodes = 0;              // opcode (instruction) counter
+        this.nOpcodesUncycled = 0;      // count of opcodes that have not been attributed to cCycles
+        this.nInterrupts = 0;           // count of interrupts
     }
 
     /**
@@ -15716,544 +15507,102 @@ class CPU68K extends CPU {
      */
     setReset(addr)
     {
-        this.addrReset = addr;
-        this.setPC(addr);
+        this.addrReset = this.regPC = addr;
     }
 
     /**
-     * getBC()
+     * addCycles(nCyclesAdd)
      *
      * @this {CPU68K}
-     * @returns {number}
+     * @param {number} nCyclesAdd
      */
-    getBC()
+    addCycles(nCyclesAdd)
     {
-        return (this.regB << 8) | this.regC;
+        this.nCyclesDebug += nCyclesAdd;
+
+        if (this.nCyclesDebug < 0) {    // if the cycle count underflows, reset all the counters
+            this.resetCounters();
+        }
     }
 
     /**
-     * setBC(w)
+     * callException(iVector)
      *
      * @this {CPU68K}
-     * @param {number} w
+     * @param {number} iVector
      */
-    setBC(w)
+     callException(iVector)
+     {
+        // TODO: use getLongEX() to avoid triggering "null (or almost null) pointer detection"
+        let handler = this.getLong(CPU68K.EVT_BASE + iVector*4);
+
+        if (handler == 0) {                      // we're outta here
+            this.genException(CPU68K.EXCEPTION_INVALID_HANDLER);
+        }
+
+        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+            this.regUSP = this.regA[7];
+            this.regA[7] = this.regSSP;
+        }
+        this.pushLong(this.regPC);
+        this.regA[7] -= 2;
+        this.setWord(this.regA[7], this.getFlags());
+        this.flags |= CPU68K.FLAGS_SU;          // indicates we're in supervisor mode now
+        this.flags &= ~CPU68K.FLAGS_T1;         // the trace bit is also supposed to be cleared
+        this.regPC = handler;
+
+        //
+        //  BUGBUG: EXCEPTION_ACCESS_FAULT isn't being generated anywhere (I assume it should occur when an address
+        //  outside valid ranges is encountered), and even EXCEPTION_ADDRESS_ERROR is only being generated in DEBUG builds,
+        //  by MarkDataAccess_Debug().  Don't forget to call the "GenerateException(iVector, addr)" form whenever these
+        //  particular exceptions are being generated. -JP
+        //
+        if (iVector == CPU68K.EXCEPTION_ACCESS_FAULT || iVector == CPU68K.EXCEPTION_ADDRESS_ERROR) {
+            //
+            //  BUGBUG: This is documented as "instruction register", but I'm not sure what that means; perhaps the
+            //  16-bit instruction that triggered the exception?  Documentation is weak, but I didn't look too hard yet. -JP
+            //
+            this.pushWord(0);
+            this.pushLong(this.addrPendingException);
+            //
+            //  BUGBUG: This is documented as "R/W" (bit 4), where Write=0 and Read=1, "I/N" (bit 3),
+            //  where Instruction=0 and Not=1, and "Function Code" (bits 2-0), but the 68K Programmer's Reference Manual doesn't
+            //  document. -JP
+            //
+            this.pushWord(0);
+        }
+     }
+
+    /**
+     * returnFromException()
+     *
+     * @this {CPU68K}
+     */
+    returnFromException()
     {
-        this.regB = (w >> 8) & 0xff;
-        this.regC = w & 0xff;
+        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+            this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
+            return;
+        }
+        this.setFlagsSR(this.getWord(this.regA[7]));
+        this.regA[7] += 2;
+        this.regPC = this.popLong();
+        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+            this.regSSP = this.regA[7];
+            this.regA[7] = this.regUSP;
+        }
     }
 
     /**
-     * getDE()
+     * genException(iVector, sMessage)
      *
      * @this {CPU68K}
-     * @returns {number}
+     * @param {number} iVector
+     * @param {string} [sMessage]
      */
-    getDE()
+    genException(iVector, sMessage)
     {
-        return (this.regD << 8) | this.regE;
-    }
-
-    /**
-     * setDE(w)
-     *
-     * @this {CPU68K}
-     * @param {number} w
-     */
-    setDE(w)
-    {
-        this.regD = (w >> 8) & 0xff;
-        this.regE = w & 0xff;
-    }
-
-    /**
-     * getHL()
-     *
-     * @this {CPU68K}
-     * @returns {number}
-     */
-    getHL()
-    {
-        return (this.regH << 8) | this.regL;
-    }
-
-    /**
-     * setHL(w)
-     *
-     * @this {CPU68K}
-     * @param {number} w
-     */
-    setHL(w)
-    {
-        this.regH = (w >> 8) & 0xff;
-        this.regL = w & 0xff;
-    }
-
-    /**
-     * getSP()
-     *
-     * @this {CPU68K}
-     * @returns {number}
-     */
-    getSP()
-    {
-        return this.regSP;
-    }
-
-    /**
-     * setSP(off)
-     *
-     * @this {CPU68K}
-     * @param {number} off
-     */
-    setSP(off)
-    {
-        this.regSP = off & 0xffff;
-    }
-
-    /**
-     * getPC()
-     *
-     * @this {CPU68K}
-     * @returns {number}
-     */
-    getPC()
-    {
-        return this.regPC;
-    }
-
-    /**
-     * offPC()
-     *
-     * @this {CPU68K}
-     * @param {number} off
-     * @returns {number}
-     */
-    offPC(off)
-    {
-        return (this.regPC + off) & 0xffff;
-    }
-
-    /**
-     * setPC(off)
-     *
-     * @this {CPU68K}
-     * @param {number} off
-     */
-    setPC(off)
-    {
-        this.regPC = off & 0xffff;
-    }
-
-    /**
-     * clearCF()
-     *
-     * @this {CPU68K}
-     */
-    clearCF()
-    {
-        this.resultZeroCarry &= 0xff;
-    }
-
-    /**
-     * getCF()
-     *
-     * @this {CPU68K}
-     * @returns {number} 0 or 1 (CPU68K.PS.CF)
-     */
-    getCF()
-    {
-        return (this.resultZeroCarry & 0x100)? CPU68K.PS.CF : 0;
-    }
-
-    /**
-     * setCF()
-     *
-     * @this {CPU68K}
-     */
-    setCF()
-    {
-        this.resultZeroCarry |= 0x100;
-    }
-
-    /**
-     * updateCF(CF)
-     *
-     * @this {CPU68K}
-     * @param {number} CF (0x000 or 0x100)
-     */
-    updateCF(CF)
-    {
-        this.resultZeroCarry = (this.resultZeroCarry & 0xff) | CF;
-    }
-
-    /**
-     * clearPF()
-     *
-     * @this {CPU68K}
-     */
-    clearPF()
-    {
-        if (this.getPF()) this.resultParitySign ^= 0x1;
-    }
-
-    /**
-     * getPF()
-     *
-     * @this {CPU68K}
-     * @returns {number} 0 or CPU68K.PS.PF
-     */
-    getPF()
-    {
-        return (CPU68K.PARITY[this.resultParitySign & 0xff])? CPU68K.PS.PF : 0;
-    }
-
-    /**
-     * setPF()
-     *
-     * @this {CPU68K}
-     */
-    setPF()
-    {
-        if (!this.getPF()) this.resultParitySign ^= 0x1;
-    }
-
-    /**
-     * clearAF()
-     *
-     * @this {CPU68K}
-     */
-    clearAF()
-    {
-        this.resultAuxOverflow = (this.resultParitySign & 0x10) | (this.resultAuxOverflow & ~0x10);
-    }
-
-    /**
-     * getAF()
-     *
-     * @this {CPU68K}
-     * @returns {number} 0 or CPU68K.PS.AF
-     */
-    getAF()
-    {
-        return ((this.resultParitySign ^ this.resultAuxOverflow) & 0x10)? CPU68K.PS.AF : 0;
-    }
-
-    /**
-     * setAF()
-     *
-     * @this {CPU68K}
-     */
-    setAF()
-    {
-        this.resultAuxOverflow = (~this.resultParitySign & 0x10) | (this.resultAuxOverflow & ~0x10);
-    }
-
-    /**
-     * clearZF()
-     *
-     * @this {CPU68K}
-     */
-    clearZF()
-    {
-        this.resultZeroCarry |= 0xff;
-    }
-
-    /**
-     * getZF()
-     *
-     * @this {CPU68K}
-     * @returns {number} 0 or CPU68K.PS.ZF
-     */
-    getZF()
-    {
-        return (this.resultZeroCarry & 0xff)? 0 : CPU68K.PS.ZF;
-    }
-
-    /**
-     * setZF()
-     *
-     * @this {CPU68K}
-     */
-    setZF()
-    {
-        this.resultZeroCarry &= ~0xff;
-    }
-
-    /**
-     * clearSF()
-     *
-     * @this {CPU68K}
-     */
-    clearSF()
-    {
-        if (this.getSF()) this.resultParitySign ^= 0xc0;
-    }
-
-    /**
-     * getSF()
-     *
-     * @this {CPU68K}
-     * @returns {number} 0 or CPU68K.PS.SF
-     */
-    getSF()
-    {
-        return (this.resultParitySign & 0x80)? CPU68K.PS.SF : 0;
-    }
-
-    /**
-     * setSF()
-     *
-     * @this {CPU68K}
-     */
-    setSF()
-    {
-        if (!this.getSF()) this.resultParitySign ^= 0xc0;
-    }
-
-    /**
-     * clearIF()
-     *
-     * @this {CPU68K}
-     */
-    clearIF()
-    {
-        this.regPS &= ~CPU68K.PS.IF;
-    }
-
-    /**
-     * getIF()
-     *
-     * @this {CPU68K}
-     * @returns {number} 0 or CPU68K.PS.IF
-     */
-    getIF()
-    {
-        return (this.regPS & CPU68K.PS.IF);
-    }
-
-    /**
-     * setIF()
-     *
-     * @this {CPU68K}
-     */
-    setIF()
-    {
-        this.regPS |= CPU68K.PS.IF;
-    }
-
-    /**
-     * getPS()
-     *
-     * @this {CPU68K}
-     * @returns {number}
-     */
-    getPS()
-    {
-        return (this.regPS & ~CPU68K.PS.RESULT) | (this.getSF() | this.getZF() | this.getAF() | this.getPF() | this.getCF());
-    }
-
-    /**
-     * setPS(regPS)
-     *
-     * @this {CPU68K}
-     * @param {number} regPS
-     */
-    setPS(regPS)
-    {
-        this.resultZeroCarry = this.resultParitySign = this.resultAuxOverflow = 0;
-        if (regPS & CPU68K.PS.CF) this.resultZeroCarry |= 0x100;
-        if (!(regPS & CPU68K.PS.PF)) this.resultParitySign |= 0x01;
-        if (regPS & CPU68K.PS.AF) this.resultAuxOverflow |= 0x10;
-        if (!(regPS & CPU68K.PS.ZF)) this.resultZeroCarry |= 0xff;
-        if (regPS & CPU68K.PS.SF) this.resultParitySign ^= 0xc0;
-        this.regPS = (this.regPS & ~(CPU68K.PS.RESULT | CPU68K.PS.INTERNAL)) | (regPS & CPU68K.PS.INTERNAL) | CPU68K.PS.SET;
-
-    }
-
-    /**
-     * getPSW()
-     *
-     * @this {CPU68K}
-     * @returns {number}
-     */
-    getPSW()
-    {
-        return (this.getPS() & CPU68K.PS.MASK) | (this.regA << 8);
-    }
-
-    /**
-     * setPSW(w)
-     *
-     * @this {CPU68K}
-     * @param {number} w
-     */
-    setPSW(w)
-    {
-        this.setPS((w & CPU68K.PS.MASK) | (this.regPS & ~CPU68K.PS.MASK));
-        this.regA = w >> 8;
-    }
-
-    /**
-     * addByte(src)
-     *
-     * @this {CPU68K}
-     * @param {number} src
-     * @returns {number} regA + src
-     */
-    addByte(src)
-    {
-        this.resultAuxOverflow = this.regA ^ src;
-        return this.resultParitySign = (this.resultZeroCarry = this.regA + src) & 0xff;
-    }
-
-    /**
-     * addByteCarry(src)
-     *
-     * @this {CPU68K}
-     * @param {number} src
-     * @returns {number} regA + src + carry
-     */
-    addByteCarry(src)
-    {
-        this.resultAuxOverflow = this.regA ^ src;
-        return this.resultParitySign = (this.resultZeroCarry = this.regA + src + ((this.resultZeroCarry & 0x100)? 1 : 0)) & 0xff;
-    }
-
-    /**
-     * andByte(src)
-     *
-     * Ordinarily, one would expect the Auxiliary Carry flag (AF) to be clear after this operation,
-     * but apparently the 8080 will set AF if bit 3 in either operand is set.
-     *
-     * @this {CPU68K}
-     * @param {number} src
-     * @returns {number} regA & src
-     */
-    andByte(src)
-    {
-        this.resultZeroCarry = this.resultParitySign = this.resultAuxOverflow = this.regA & src;
-        if ((this.regA | src) & 0x8) this.resultAuxOverflow ^= 0x10;        // set AF by inverting bit 4 in resultAuxOverflow
-        return this.resultZeroCarry;
-    }
-
-    /**
-     * decByte(b)
-     *
-     * We perform this operation using 8-bit two's complement arithmetic, by negating and then adding
-     * the implied src of 1.  This appears to mimic how the 8080 manages the Auxiliary Carry flag (AF).
-     *
-     * @this {CPU68K}
-     * @param {number} b
-     * @returns {number}
-     */
-    decByte(b)
-    {
-        this.resultAuxOverflow = b ^ 0xff;
-        b = this.resultParitySign = (b + 0xff) & 0xff;
-        this.resultZeroCarry = (this.resultZeroCarry & ~0xff) | b;
-        return b;
-    }
-
-    /**
-     * incByte(b)
-     *
-     * @this {CPU68K}
-     * @param {number} b
-     * @returns {number}
-     */
-    incByte(b)
-    {
-        this.resultAuxOverflow = b;
-        b = this.resultParitySign = (b + 1) & 0xff;
-        this.resultZeroCarry = (this.resultZeroCarry & ~0xff) | b;
-        return b;
-    }
-
-    /**
-     * orByte(src)
-     *
-     * @this {CPU68K}
-     * @param {number} src
-     * @returns {number} regA | src
-     */
-    orByte(src)
-    {
-        return this.resultParitySign = this.resultZeroCarry = this.resultAuxOverflow = this.regA | src;
-    }
-
-    /**
-     * subByte(src)
-     *
-     * We perform this operation using 8-bit two's complement arithmetic, by inverting src, adding
-     * src + 1, and then inverting the resulting carry (resultZeroCarry ^ 0x100).  This appears to mimic
-     * how the 8080 manages the Auxiliary Carry flag (AF).
-     *
-     * This function is also used as a cmpByte() function; compare instructions simply ignore the
-     * return value.
-     *
-     * Example: A=66, SUI $10
-     *
-     * If we created the two's complement of 0x10 by negating it, there would just be one addition:
-     *
-     *      0110 0110   (0x66)
-     *    + 1111 0000   (0xF0)  (ie, -0x10)
-     *      ---------
-     *    1 0101 0110   (0x56)
-     *
-     * But in order to mimic the 8080's AF flag, we must perform the two's complement of src in two steps,
-     * inverting it before the add, and then incrementing after the add; eg:
-     *
-     *      0110 0110   (0x66)
-     *    + 1110 1111   (0xEF)  (ie, ~0x10)
-     *      ---------
-     *    1 0101 0101   (0x55)
-     *    + 0000 0001   (0x01)
-     *      ---------
-     *    1 0101 0110   (0x56)
-     *
-     * @this {CPU68K}
-     * @param {number} src
-     * @returns {number} regA - src
-     */
-    subByte(src)
-    {
-        src ^= 0xff;
-        this.resultAuxOverflow = this.regA ^ src;
-        return this.resultParitySign = (this.resultZeroCarry = (this.regA + src + 1) ^ 0x100) & 0xff;
-    }
-
-    /**
-     * subByteBorrow(src)
-     *
-     * We perform this operation using 8-bit two's complement arithmetic, using logic similar to subByte(),
-     * but changing the final increment to a conditional increment, because if the Carry flag (CF) is set, then
-     * we don't need to perform the increment at all.
-     *
-     * This mimics the behavior of subByte() when the Carry flag (CF) is clear, and hopefully also mimics how the
-     * 8080 manages the Auxiliary Carry flag (AF) when the Carry flag (CF) is set.
-     *
-     * @this {CPU68K}
-     * @param {number} src
-     * @returns {number} regA - src - carry
-     */
-    subByteBorrow(src)
-    {
-        src ^= 0xff;
-        this.resultAuxOverflow = this.regA ^ src;
-        return this.resultParitySign = (this.resultZeroCarry = (this.regA + src + ((this.resultZeroCarry & 0x100)? 0 : 1)) ^ 0x100) & 0xff;
-    }
-
-    /**
-     * xorByte(src)
-     *
-     * @this {CPU68K}
-     * @param {number} src
-     * @returns {number} regA ^ src
-     */
-    xorByte(src)
-    {
-        return this.resultParitySign = this.resultZeroCarry = this.resultAuxOverflow = this.regA ^ src;
+        // TODO
     }
 
     /**
@@ -16281,6 +15630,18 @@ class CPU68K extends CPU {
     }
 
     /**
+     * getLong(addr)
+     *
+     * @this {CPU68K}
+     * @param {number} addr is a linear address
+     * @returns {number} long (32-bit) value at that address
+     */
+    getLong(addr)
+    {
+        return this.busMemory.readQuad(addr);
+    }
+
+    /**
      * setByte(addr, b)
      *
      * @this {CPU68K}
@@ -16305,6 +15666,18 @@ class CPU68K extends CPU {
     }
 
     /**
+     * setLoad(addr, l)
+     *
+     * @this {CPU68K}
+     * @param {number} addr is a linear address
+     * @param {number} l is the long (32-bit) value to write (which we truncate to 32 bits to be safe)
+     */
+    setLong(addr, l)
+    {
+        this.busMemory.writeQuad(addr, l & 0xffffffff);
+    }
+
+    /**
      * getPCByte()
      *
      * @this {CPU68K}
@@ -16313,7 +15686,7 @@ class CPU68K extends CPU {
     getPCByte()
     {
         let b = this.getByte(this.regPC);
-        this.setPC(this.regPC + 1);
+        this.regPC += 1;
         return b;
     }
 
@@ -16326,117 +15699,77 @@ class CPU68K extends CPU {
     getPCWord()
     {
         let w = this.getWord(this.regPC);
-        this.setPC(this.regPC + 2);
+        this.regPC += 2;
         return w;
+    }
+
+    /**
+     * getPCLong()
+     *
+     * @this {CPU68K}
+     * @returns {number} word at the current PC; PC advanced by 4
+     */
+    getPCLong()
+    {
+        let l = this.getLong(this.regPC);
+        this.regPC += 4;
+        return l;
     }
 
     /**
      * popWord()
      *
+     * Pop one word from the default stack.
+     *
      * @this {CPU68K}
-     * @returns {number} word popped from the current SP; SP increased by 2
+     * @returns {number}
      */
     popWord()
     {
-        let w = this.getWord(this.regSP);
-        this.setSP(this.regSP + 2);
+        let w = this.getWord(this.regA[7]);
+        this.regA[7] += 2;
         return w;
     }
 
     /**
-     * pushWord(w)
+     * pushWord(data)
+     *
+     * Push one word onto the default stack.
      *
      * @this {CPU68K}
-     * @param {number} w is the word (16-bit) value to push at current SP; SP decreased by 2
+     * @param {number} data
      */
-    pushWord(w)
+    pushWord(data)
     {
-        this.setSP(this.regSP - 2);
-        this.setWord(this.regSP, w);
+        this.setWord(this.regA[7] -= 2, data);
     }
 
     /**
-     * checkINTR()
+     * popLong()
+     *
+     * Pop one long from the default stack.
      *
      * @this {CPU68K}
-     * @returns {boolean} true if execution may proceed, false if not
+     * @returns {number}
      */
-    checkINTR()
+    popLong()
     {
-        /*
-         * If the Debugger is single-stepping, isRunning() will be false, which we take advantage
-         * of here to avoid processing interrupts.  The Debugger will have to issue a "g" command
-         * to resume normal interrupt processing.
-         */
-        if (this.time.isRunning()) {
-            if ((this.intFlags & CPU68K.INTFLAG.INTR) && this.getIF()) {
-                let nLevel;
-                for (nLevel = 0; nLevel < 8; nLevel++) {
-                    if (this.intFlags & (1 << nLevel)) break;
-                }
-                this.clearINTR(nLevel);
-                this.clearIF();
-                this.intFlags &= ~CPU68K.INTFLAG.HALT;
-                this.aOps[CPU68K.OPCODE.RST0 | (nLevel << 3)].call(this);
-            }
-        }
-        if (this.intFlags & CPU68K.INTFLAG.HALT) {
-            /*
-             * As discussed in opHLT(), the CPU is never REALLY halted by a HLT instruction; instead, opHLT()
-             * calls requestHALT(), which sets INTFLAG.HALT and then ends the current burst; the CPU should not
-             * execute any more instructions until checkINTR() indicates a hardware interrupt has been requested.
-             */
-            this.time.endBurst();
-            return false;
-        }
-        return true;
+        let l = this.getLong(this.regA[7]);
+        this.regA[7] += 4;
+        return l;
     }
 
     /**
-     * clearINTR(nLevel)
+     * pushLong(data)
      *
-     * Clear the corresponding interrupt level.
-     *
-     * nLevel can either be a valid interrupt level (0-7), or undefined to clear all pending interrupts
-     * (eg, in the event of a system-wide reset).
+     * Push one long onto the default stack.
      *
      * @this {CPU68K}
-     * @param {number} [nLevel] (0-7, or undefined for all)
+     * @param {number} data
      */
-    clearINTR(nLevel = -1)
+    pushLong(data)
     {
-        let bitsClear = nLevel < 0? 0xff : (1 << nLevel);
-        this.intFlags &= ~bitsClear;
-    }
-
-    /**
-     * requestHALT()
-     *
-     * @this {CPU68K}
-     */
-    requestHALT()
-    {
-        this.intFlags |= CPU68K.INTFLAG.HALT;
-        this.time.endBurst();
-    }
-
-    /**
-     * requestINTR(nLevel)
-     *
-     * Request the corresponding interrupt level.
-     *
-     * Each interrupt level (0-7) has its own intFlags bit (0-7).  If the Interrupt Flag (IF) is also
-     * set, then we know that checkINTR() will want to issue the interrupt, so we end the current burst.
-     *
-     * @this {CPU68K}
-     * @param {number} nLevel (0-7)
-     */
-    requestINTR(nLevel)
-    {
-        this.intFlags |= (1 << nLevel);
-        if (this.getIF()) {
-            this.time.endBurst();
-        }
+        this.setLong(this.regA[7] -= 4, data);
     }
 
     /**
@@ -16457,100 +15790,237 @@ class CPU68K extends CPU {
     /**
      * toString()
      *
-     * Returns a string representation of the current CPU state.
+     * Returns a string representation of the current CPU state.  For example, my original 68K Java emulator displayed:
+     *
+     *      D0=00002604 D1=000008fc D2=00000000 D3=00005e56
+     *      D4=10c4b47e D5=00000000 D6=10c6e44c D7=00000001
+     *      A0=fffff000 A1=10c068b6 A2=fffff000 A3=000071e0
+     *      A4=00007abc A5=0000551e A6=000074b8 A7=000074a4 SR=2000 IC=1358690
+     *      10c07148: 4e75            RTS                                             ;xnzvc
      *
      * @this {CPU68K}
      * @returns {string}
      */
     toString()
     {
-        return this.sprintf("A=%02X BC=%04X DE=%04X HL=%04X SP=%04X I%d S%d Z%d A%d P%d C%d\n%s", this.regA, this.getBC(), this.getDE(), this.getHL(), this.getSP(), this.getIF()?1:0, this.getSF()?1:0, this.getZF()?1:0, this.getAF()?1:0, this.getPF()?1:0, this.getCF()?1:0, this.toInstruction(this.regPC));
+        return this.sprintf("D0=%08x D1=%08x D2=%08x D3=%08x\nD4=%08x D5=%08x D6=%08x D7=%08x\nA0=%08x A1=%08x A2=%08x A3=%08x\nA4=%08x A5=%08x A6=%08x A7=%08x SR=%04x\n", this.regD[0], this.regD[1], this.regD[2], this.regD[3], this.regD[4], this.regD[5], this.regD[6], this.regD[7], this.regA[0], this.regA[1], this.regA[2], this.regA[3], this.regA[4], this.regA[5], this.regA[6], this.regA[7], this.getFlags());
     }
 }
 
-/*
- * CPU model numbers (supported); future supported models could include the Z80.
+/**
+ * Definitions ported from CPUDefs.java
+ *
+ * Exception vector assignments (see p.631)
  */
-CPU68K.MODEL_8080 = 8080;
+CPU68K.EXCEPTION_NONE                  = 0x00;  // vector 0 contains reset SSP, vector 1 contains reset PC
+CPU68K.EXCEPTION_ACCESS_FAULT          = 0x02;  // aka "Bus Error"
+CPU68K.EXCEPTION_ADDRESS_ERROR         = 0x03;
+CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION   = 0x04;
+CPU68K.EXCEPTION_INT_DIVIDE_BY_ZERO    = 0x05;
+CPU68K.EXCEPTION_CHK_INSTRUCTION       = 0x06;
+CPU68K.EXCEPTION_TRAPV_OVERFLOW        = 0x07;
+CPU68K.EXCEPTION_PRIVILEGE_VIOLATION   = 0x08;
+CPU68K.EXCEPTION_TRACE                 = 0x09;
+CPU68K.EXCEPTION_UNINITIALIZED_IVR     = 0x0f;  // where interrupts go when the IVR hasn't been initialized yet
 
-/*
- * This constant is used to mark points in the code where the physical address being returned
- * is invalid and should not be used.
+CPU68K.EXCEPTION_TRAP_0xF              = 0x2f;  // TRAP 0xf uses vector 0x2f (ie, TRAP n uses vector 0x2n)
+
+CPU68K.TRAP_0xF_PALMOS_API             = 0xa000;// PalmOS encodes API numbers in the word following the OP_TRAP_0xF instruction, starting with this value
+
+/**
+ * Exception vector numbers < 0 are used for internal "warning exceptions" and can be ignored
  */
-CPU68K.ADDR_INVALID = undefined;
+CPU68K.EXCEPTION_INVALID_CODE          = -1;
+CPU68K.EXCEPTION_INVALID_DATA          = -2;
+CPU68K.EXCEPTION_UNIMPLEMENTED_CODE    = -3;
+CPU68K.EXCEPTION_UNINITIALIZED_DATA    = -4;
 
-/*
- * Processor Status flag definitions (stored in regPS)
+/**
+ * Exception vector numbers >= 256 are used for internal "error exceptions" (eg, assertion failures) and cannot be ignored
  */
-CPU68K.PS = {
-    CF:     0x0001,     // bit 0: Carry Flag
-    BIT1:   0x0002,     // bit 1: reserved, always set
-    PF:     0x0004,     // bit 2: Parity Flag
-    BIT3:   0x0008,     // bit 3: reserved, always clear
-    AF:     0x0010,     // bit 4: Auxiliary Carry Flag
-    BIT5:   0x0020,     // bit 5: reserved, always clear
-    ZF:     0x0040,     // bit 6: Zero Flag
-    SF:     0x0080,     // bit 7: Sign Flag
-    ALL:    0x00D5,     // all "arithmetic" flags (CF, PF, AF, ZF, SF)
-    MASK:   0x00FF,     //
-    IF:     0x0200      // bit 9: Interrupt Flag (set if interrupts enabled; Intel calls this the INTE bit)
-};
+CPU68K.EXCEPTION_UNSUPP_INSTRUCTION    = 0x100; // unsupported instruction
+CPU68K.EXCEPTION_INVALID_HANDLER       = 0x101; // exception handler is invalid (eg, corrupt vector contents)
 
-/*
- * These are the internal PS bits (outside of PS.MASK) that getPS() and setPS() can get and set,
- * but which cannot be seen with any of the documented instructions.
+/**
+ * Opcodes that we have special checks for in various places...
  */
-CPU68K.PS.INTERNAL = CPU68K.PS.IF;
+CPU68K.OP_TRAP                         = 0x4e40;
+CPU68K.OP_TRAP_MASK                    = 0xfff0;
+CPU68K.OP_TRAP_0xF                     = 0x4e4f;// vectors via EXCEPTION_TRAP_0xF
+CPU68K.OP_TRAP_0xF_MASK                = 0xffff;
+CPU68K.OP_LINK                         = 0x4e50;
+CPU68K.OP_LINK_MASK                    = 0xfff8;
+CPU68K.OP_STOP                         = 0x4e72;
+CPU68K.OP_STOP_TRACE                   = 0x4e72fffd;
+CPU68K.OP_STOP_FREEZE                  = 0x4e72fffe;
+CPU68K.OP_STOP_INJECT                  = 0x4e72ffff;
+CPU68K.OP_RTE                          = 0x4e73;
+CPU68K.OP_RTS                          = 0x4e75;
+CPU68K.OP_JSR                          = 0x4e80;
+CPU68K.OP_JSR_MASK                     = 0xffc0;
+CPU68K.OP_JSR_PC_REL                   = 0x4eba;
+CPU68K.OP_JSR_PC_REL_INDEX             = 0x4ebb;
+CPU68K.OP_JMP_PC_REL                   = 0x4efa;
+CPU68K.OP_JMP_PC_REL_INDEX             = 0x4efb;
+CPU68K.OP_BSR                          = 0x6100;
+CPU68K.OP_BSR_MASK                     = 0xff00;
+CPU68K.OP_MYBREAKPOINT                 = 0xf003;// my "unofficial" breakpoint instruction
+CPU68K.OP_MYBREAKPOINT_MASK            = 0xffff;// mask needed only because opcode happens to be a signed value
 
-/*
- * PS "arithmetic" flags are NOT stored in regPS; they are maintained across separate result registers,
- * hence the RESULT designation.
+/**
+ * Descriptions of known memory locations/limits.  See CPUMem for a description of the entire
+ * memory map.  Suffice to say here that we only provide for (at most) 32Mb unique addresses, because
+ * CPUMem masks the top 7 bits from all effective addresses.  In other words, all unique memory
+ * locations must be unique in the low 25 bits.  Also note that those locations are effectively
+ * replicated 128 times throughout the entire 4Gb (32-bit) address space.  RAM_LIMIT is set to the
+ * largest power-of-two RAM size (0x800000 or 8Mb) that fits within that unique address space (32Mb)
+ * AND still leaves enough room for a ROM (typically starting around 0x10c00000, equivalent to 0xc00000
+ * after masking, or 12Mb).
+ *
+ * RAM must also be mirrored at offset 0x10000000.  The exact extent and behavior (eg, write-protection)
+ * of the mirrored region is TBD, until we have a better understanding of the hardware.  The fact that
+ * we're masking the top two hex digits from all effective addresses provides sufficiently compatible
+ * mirroring for now.
  */
-CPU68K.PS.RESULT   = CPU68K.PS.CF | CPU68K.PS.PF | CPU68K.PS.AF | CPU68K.PS.ZF | CPU68K.PS.SF;
+CPU68K.EVT_BASE                = 0x00000000;
+CPU68K.EVT_SIZE                = 4*256;
+CPU68K.RAM_BASE                = 0x00000000;
+CPU68K.RAM_LIMIT               = 0x00800000;    // 8Mb
+CPU68K.RAM_MIRROR              = 0x10000000;
 
-/*
- * These are the "always set" PS bits for the 8080.
+/**
+ * CPU states
+ *
+ * CPU_STARTED is set by CPUThread.Start(), and cleared by the CPU thread itself (inside CPUThread.run())
+ * in response to seeing CPU_KILLED (at which time the CPU thread clears CPU_KILLED as well).  CPUThread.Stop()
+ * only has work to do if CPU_STARTED is set.  CPUThread.Thaw() automatically calls CPUThread.Start() to
+ * insure the CPU has been started.  Start() and Thaw(), as well as Resume(), along with Stop() and Freeze(),
+ * are all synchronized.
+ *
+ * CPU_RUNNING is set by the CPU thread immediately before executing any opcodes (before ExecuteOpcodes()).
+ * After it has finished executing some number of opcodes, it calls WaitResume(), which then clears
+ * CPU_RUNNING.  WaitResume() then wakes up anyone who's blocked in Freeze(), Halt() or WaitStep(), as
+ * they wait for their blocking request to be honored.  Freeze(), Halt(), WaitStep() and WaitResume() are
+ * all synchronized.  WaitResume() returns and allows the CPU to continue running once it has been unblocked
+ * or killed.
+ *
+ * NOTE: CPU_RUNNING is an internal state, used to detect when the CPU has acknowledged a pending freeze or
+ * suspend or halt.  For example, if the CPU encounters a "STOP", CPU_RUNNING will be cleared, but only temporarily,
+ * so use IsHalted() to accurately determine the CPU's "run state".
+ *
+ * CPU_FROZEN, CPU_SUSPENDED, CPU_STOPPED, and CPU_TRACING have similar effects (ie, to block CPU execution) but
+ * are necessarily independent.  The CPU_SUSPENDED state may change as the needs of the device change (eg, it may
+ * be set when a "STOP" instruction is encountered, and it may be cleared when a simulated hardware interrupt
+ * fires), and the debugger is not allowed to modify that state.  On the other hand, CPU_TRACING is specifically
+ * for the debugger alone to modify.  Unlike other debuggers that must use the hardware's trace flag, our
+ * debugger prefers to not interfere with the hardware, making it possible even to debug software trace handlers.
+ * As for CPU_FROZEN, that happens when the CPU needs to be stopped externally, such as when the device is being
+ * powered down, memory is being reinitialized, calls are being injected, or possibly if/when we decide to replace
+ * selected OS functions with native functions that must block the CPU until the native function is done.
+ *
+ * NOTE: CPU_SUSPENDED is not currently used with "STOP" instructions, largely because we aren't using an
+ * external event (eg, separate thread) to drive our virtual timer hardware.  Instead, we are depending on
+ * the CPU to execute instructions regularly, and then we're using the instruction count to simulate a
+ * virtual cycle count that in turn drives the virtual timer(s).  That means the CPU thread can only yield/sleep
+ * briefly on "STOP" instructions, otherwise the timer(s) would never advance.
+ *
+ * Also, it's easy to be confused about why we need CPU_TRACING *and* CPU_STEPPING *and* a stepping count.
+ * Here's why: the debugger can't use CPU_SUSPENDED to stop the CPU because that would interfere with the
+ * device's simulated suspend state (well, IF we were using CPU_SUSPENDED on "STOP" instructions that is),
+ * so CPU_TRACING serves the same purpose, exclusively for the debugger.  Second, yes, a stepping count is the
+ * only other thing the debugger would need to implement single-stepping, but that would require any code
+ * monitoring changes in the CPU's state to check TWO variables;  by changing one more bit (CPU_STEPPING)
+ * whenever the debugger also changes the stepping count, the state change can be detected more simply.
+ *
+ * Finally, why is CPU_WATCHALL also separate?  Because instruction watching is yet another state completely
+ * independent of whether or not the device is suspended (eg, powered down, dozing, or whatever) and also
+ * independent of whether or not the debugger is currently single-stepping, running free until a breakpoint, etc.
  */
-CPU68K.PS.SET      = CPU68K.PS.BIT1;
 
-CPU68K.PARITY = [          // 256-byte array with a 1 wherever the number of set bits of the array index is EVEN
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1
-];
+CPU68K.CPU_NONE             = 0x00000000;
+CPU68K.CPU_STARTED          = 0x00000001;   // CPU thread created
+CPU68K.CPU_RUNNING          = 0x00000002;   // CPU thread executing opcodes
+CPU68K.CPU_WAITING          = 0x00000004;   // CPU thread waiting (to be unfrozen, unsuspended or untraced)
+CPU68K.CPU_KILLED           = 0x00000008;   // CPU thread needs to be shut down
+CPU68K.CPU_FROZEN           = 0x00000010;   // block execution until unfrozen (asynchronous)
+CPU68K.CPU_SUSPENDED        = 0x00000020;   // block execution until resumed (synchronous)
+CPU68K.CPU_TRACING          = 0x00000040;   // used by debugger to block execution (independent of CPU_FROZEN and CPU_SUSPENDED)
+CPU68K.CPU_STEPPING         = 0x00000080;   // used by debugger to single-step instruction(s) until step count goes to zero
+CPU68K.CPU_STOPPED          = 0x00000100;   // this is how we currently implement STOP (instead of CPU_SUSPENDED)
+CPU68K.CPU_WATCHHW          = 0x00000200;   // used by debugger to watch hardware accesses
+CPU68K.CPU_WATCHALL         = 0x00000400;   // used by debugger to single-step and display every instruction
+CPU68K.CPU_BREAKPOINT       = 0x00000800;   // ExecuteOpcodes detected one of the debugger's breakpoints
+CPU68K.CPU_EXCEPTION        = 0x00001000;   // CPUThread.run() caught an exception
+CPU68K.CPU_CHECKINTS        = 0x00002000;   // some condition has changed warranting interrupt check
+CPU68K.CPU_CHECKLCD         = 0x00004000;   // some condition has changed warranting LCD screen check
+CPU68K.CPU_TRACEONSTOP      = 0x00008000;   // auto-trace the CPU on STOP
+CPU68K.CPU_FREEZEONSTOP     = 0x00010000;   // auto-freeze the CPU on STOP
+CPU68K.CPU_INJECTING        = 0x00020000;   // in the process of injecting a call
+CPU68K.CPU_PAGING           = 0x00040000;   // in the process of demand-paging some memory
+CPU68K.CPU_MEMINIT          = 0x10000000;   // memory subsystem initialized (CPUMem.InitMem has been called)
+CPU68K.CPU_VALID            = 0x20000000;   // CPU loaded from valid server
 
-/*
- * Interrupt-related flags (stored in intFlags)
+CPU68K.CPU_RESETFLAGS       = (CPU68K.CPU_STOPPED | CPU68K.CPU_WATCHHW | CPU68K.CPU_WATCHALL | CPU68K.CPU_BREAKPOINT | CPU68K.CPU_EXCEPTION | CPU68K.CPU_CHECKINTS | CPU68K.CPU_CHECKLCD | CPU68K.CPU_TRACEONSTOP | CPU68K.CPU_FREEZEONSTOP | CPU68K.CPU_INJECTING);
+CPU68K.CPU_BREAKFLAGS       = (CPU68K.CPU_KILLED | CPU68K.CPU_FROZEN | CPU68K.CPU_SUSPENDED | CPU68K.CPU_STOPPED | CPU68K.CPU_TRACING | CPU68K.CPU_BREAKPOINT | CPU68K.CPU_CHECKINTS | CPU68K.CPU_CHECKLCD);
+
+CPU68K.aByteInc         = [1, 1, 1, 1, 1, 1, 1, 2];
+CPU68K.aByteQuick       = [8, 1, 2, 3, 4, 5, 6, 7];
+
+CPU68K.ssBYTE           = 0;
+CPU68K.ssWORD           = 1;
+CPU68K.ssLONG           = 2;
+CPU68K.ssMAX            = 3;
+
+CPU68K.mmmDREG          = 0;
+CPU68K.mmmAREG          = 1;
+CPU68K.mmmAVAL          = 2;
+CPU68K.mmmAVALINC       = 3;
+CPU68K.mmmAVALDEC       = 4;
+CPU68K.mmmAVALDISP      = 5;
+CPU68K.mmmAVALINDEX     = 6;
+CPU68K.mmmABS16         = 7;
+CPU68K.mmmABS32         = 8;
+CPU68K.mmmPCVALDISP     = 9;
+CPU68K.mmmPCVALINDEX    = 10;
+CPU68K.mmmIMMEDIATE     = 11;
+CPU68K.mmmMAX           = 12;
+
+CPU68K.EAMODEINDEX_DREG                 = 0;
+CPU68K.EAMODEINDEX_DREG_BYTE            = 0;
+CPU68K.EAMODEINDEX_DREG_WORD            = 1;
+CPU68K.EAMODEINDEX_DREG_LONG            = 2;
+CPU68K.EAMODEINDEX_ILLEGAL              = 3;
+CPU68K.EAMODEINDEX_AREG_WORD            = 4;
+CPU68K.EAMODEINDEX_AREG_LONG            = 5;
+CPU68K.EAMODEINDEX_AREG_INCBYTE         = 9;
+CPU68K.EAMODEINDEX_AREG_INCWORD         = 10;
+CPU68K.EAMODEINDEX_AREG_INCLONG         = 11;
+CPU68K.EAMODEINDEX_AREG_DECBYTE         = 12;
+CPU68K.EAMODEINDEX_AREG_DECWORD         = 13;
+CPU68K.EAMODEINDEX_AREG_DECLONG         = 14;
+CPU68K.EAMODEINDEX_IMMEDIATE            = 33;
+CPU68K.EAMODEINDEX_IMMEDIATE_BYTE       = 33;
+CPU68K.EAMODEINDEX_IMMEDIATE_WORD       = 34;
+CPU68K.EAMODEINDEX_IMMEDIATE_LONG       = 35;
+CPU68K.EAMODEINDEX_IMMEDIATE_ILLEGAL    = 36;
+
+/**
+ * Definitions ported from CPUFlags.java
  */
-CPU68K.INTFLAG = {
-    NONE:   0x0000,
-    INTR:   0x00ff,     // mask for 8 bits, representing interrupt levels 0-7
-    HALT:   0x0100      // halt requested; see opHLT()
-};
-
-/*
- * Opcode definitions
- */
-CPU68K.OPCODE = {
-    HLT:    0x76,       // Halt
-    ACI:    0xCE,       // Add with Carry Immediate (affects PS.ALL)
-    CALL:   0xCD,       // Call
-    RST0:   0xC7
-    // to be continued....
-};
+CPU68K.FLAGS_CARRY        = 0x0001;
+CPU68K.FLAGS_OVERFLOW     = 0x0002;
+CPU68K.FLAGS_ZERO         = 0x0004;
+CPU68K.FLAGS_NEGATIVE     = 0x0008;
+CPU68K.FLAGS_EXTEND       = 0x0010;
+CPU68K.FLAGS_CCR          = 0x001f;
+CPU68K.FLAGS_RESERVED1    = 0x00e0;
+CPU68K.FLAGS_IPM          = 0x0700;             // Interrupt Priority Mask
+CPU68K.FLAGS_IPM_SHIFT    = 8;
+CPU68K.FLAGS_RESERVED2    = 0x0800;
+CPU68K.FLAGS_MI           = 0x1000;             // (always 0 on 68000)
+CPU68K.FLAGS_SU           = 0x2000;             // 1 == supervisor mode
+CPU68K.FLAGS_T0           = 0x4000;             // (always 0 on 68000)
+CPU68K.FLAGS_T1           = 0x8000;             // 1 == trace on any instruction
 
 CPU68K.CLASSES["CPU68K"] = CPU68K;
 
@@ -16579,6 +16049,32 @@ class Dbg68K extends Debugger {
         this.styles = [Dbg68K.STYLE_8080, Dbg68K.STYLE_8086];
         this.style = Dbg68K.STYLE_8086;
         this.maxOpcodeLength = 3;
+    }
+
+    /**
+     * break(addr, fArmed)
+     *
+     * @this {Dbg68K}
+     * @param {number} addr
+     * @param {boolean} fArmed
+     * @returns {boolean}
+     */
+    break(addr, fArmed)
+    {
+        return false;       // TODO
+    }
+
+    /**
+     * markDataAccess(addr, length, iAccess)
+     *
+     * @this {Dbg68K}
+     * @param {number} addr
+     * @param {number} length
+     * @param {number} iAccess
+     */
+    markDataAccess(addr, length, iAccess)
+    {
+        // TODO
     }
 
     /**
@@ -16733,6 +16229,20 @@ class Dbg68K extends Debugger {
         return result + "\n";
     }
 }
+
+/**
+ * Definitions ported from DebuggerInterface.java
+ */
+Dbg68K.MEMTYPE_ROM         = 0;
+Dbg68K.MEMTYPE_DEVICE      = 1;
+Dbg68K.MEMTYPE_CODE        = 2;
+Dbg68K.MEMTYPE_DATA        = 3;
+
+Dbg68K.DATAACCESS_NONE     = 0;
+Dbg68K.DATAACCESS_READ     = 1;
+Dbg68K.DATAACCESS_WRITE    = 2;
+Dbg68K.DATAACCESS_UNINIT   = 3;
+
 
 Dbg68K.STYLE_8080 = "8080";
 Dbg68K.STYLE_8086 = "8086";
@@ -17142,6 +16652,1475 @@ Dbg68K.aaOpDescs = [
 ];
 
 Dbg68K.CLASSES["Dbg68K"] = Dbg68K;
+
+/**
+ * @copyright https://www.pcjs.org/modules/eamodes.js (C) 2012-2021 Jeff Parsons
+ */
+
+/**
+ * All EAMode subclasses must implement the following abstract methods:
+ *
+ *  getEA: calculate and set an effective address (ea)
+ *  getData: get data from the effective address (ea)
+ *  setData: set data at the effective address (ea)
+ *  updateFlagZ: update Z flag
+ *  updateFlagV: update V flag (WARNING: updateFlagZ must be called first)
+ *
+ * The EAMode class already provides wrappers for combining the above methods into frequently-used operations
+ * (eg, getEAData() instead of getEA() + getData()).
+ */
+class EAMode
+{
+    /**
+     * EAMode(mask, sign, width, type)
+     *
+     * @this {EAMode}
+     * @param {CPU68K} cpu
+     * @param {number} mask
+     * @param {number} sign
+     * @param {number} width
+     * @param {number} type
+     */
+    constructor(cpu, mask, sign, width, type)
+    {
+        this.cpu = cpu;
+        this.ea = 0;
+        this.mask = mask;
+        this.sign = sign;
+        this.width = width;
+        this.cycle2l = type * 2;
+        this.cycle4l = type * 4;
+        this.cycle2ADI = this.cycle2Dl = this.cycle4Aw = this.cycle4AD = this.cycle2ADl = this.cycle4ADl = 0;
+    }
+
+    /**
+     * getEA(nnn)
+     *
+     * @this {EAMode}
+     * @param {number} nnn
+     * @returns {number}
+     */
+    getEA(nnn) {
+        return this.ea = nnn;
+    }
+
+    /**
+     * getData()
+     *
+     * @this {EAMode}
+     * @returns {number}
+     */
+    getData() {
+        return 0;
+    }
+
+    /**
+     * setData(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+     setData(data) {
+     }
+
+    /**
+     * updateFlagZ(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    updateFlagZ(data) {
+    }
+
+    /**
+     * updateFlagV()
+     *
+     * @this {EAMode}
+     */
+    updateFlagV() {
+    }
+
+    /**
+     * advanceEA(nnn)
+     *
+     * @this {EAMode}
+     * @param {number} nnn
+     */
+    advanceEA(nnn)
+    {
+        let nCycles = this.cpu.nCyclesDebug;
+        this.getEA(nnn);
+        this.cpu.nCyclesDebug = nCycles;
+    }
+
+    /**
+     * getEAData(nnn)
+     *
+     * @this {EAMode}
+     * @param {number} nnn
+     * @returns {number}
+     */
+    getEAData(nnn)
+    {
+        this.getEA(nnn);
+        return this.getData();
+    }
+
+    /**
+     * setEAData(nnn, data)
+     *
+     * @this {EAMode}
+     * @param {number} nnn
+     * @param {number} data
+     */
+    setEAData(nnn, data)
+    {
+        this.getEA(nnn);
+        this.setData(data);
+    }
+
+    /**
+     * updateFlagsZNClearCV(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    updateFlagsZNClearCV(data)
+    {
+        this.updateFlagZ(data);
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVNew = this.cpu.flagVDst = 0;
+        this.cpu.flagCSrc = this.cpu.flagCDst = 0;
+    }
+
+    /**
+     * setDataFlagsZNClearV(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    setDataFlagsZNClearV(data)
+    {
+        this.setData(data);
+        this.updateFlagZ(data);
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = 0;
+        this.cpu.flagVNew = 0;
+    }
+
+    /**
+     * setDataFlagsZNClearCV(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    setDataFlagsZNClearCV(data)
+    {
+        this.setData(data);
+        this.updateFlagZ(data);
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVNew = this.cpu.flagVDst = 0;
+        this.cpu.flagCSrc = this.cpu.flagCDst = 0;
+    }
+
+    /**
+     * setDataFlagsExceptXClearCV(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    setDataFlagsExceptXClearCV(data)
+    {
+        this.setData(data);
+        this.updateFlagZ(data);
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVNew = this.cpu.flagVDst = 0;
+        this.cpu.flagCSrc = this.cpu.flagCDst = 0;
+    }
+
+    /**
+     * setEADataFlagsZNClearCV(nnn, data)
+     *
+     * @this {EAMode}
+     * @param {number} nnn
+     * @param {number} data
+     */
+    setEADataFlagsZNClearCV(nnn, data)
+    {
+        this.getEA(nnn);
+        this.setData(data);
+        this.updateFlagZ(data);
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVNew = this.cpu.flagVDst = 0;
+        this.cpu.flagCSrc = this.cpu.flagCDst = 0;
+    }
+
+    // The rest of the Flags functions require that both dataSrc and dataDst be set first
+
+    /**
+     * updateFlags(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    updateFlags(data)
+    {
+        this.updateFlagZ(data);
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.updateFlagV();
+        this.cpu.flagCSrc = this.cpu.flagXSrc = this.cpu.flagVSrc;
+        this.cpu.flagCDst = this.cpu.flagXDst = this.cpu.flagVDst;
+    }
+
+    /**
+     * updateFlagsExceptX(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    updateFlagsExceptX(data)
+    {
+        this.updateFlagZ(data);
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.updateFlagV();
+        this.cpu.flagCSrc = this.cpu.flagVSrc;
+        this.cpu.flagCDst = this.cpu.flagVDst;
+    }
+
+    /**
+     * setDataFlags(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    setDataFlags(data)
+    {
+        this.setData(data);
+        this.updateFlags(data);
+    }
+
+    /**
+     * setDataFlagsForAdd(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    setDataFlagsForAdd(data)
+    {
+        this.setData(data);
+        this.updateFlags(data);
+        this.cpu.flagVSrc = ~this.cpu.flagVSrc;
+        this.cpu.flagCDst = this.cpu.flagXDst = ~this.cpu.flagCDst;
+    }
+
+    /**
+     * getIndexAddr(base)
+     *
+     * @this {EAMode}
+     * @param {number} base
+     * @returns {number}
+     */
+    getIndexAddr(base)
+    {
+        let addr = this.cpu.getPCWord();
+        let i = (addr & 0x7000) >> 12;
+
+        if ((addr & 0x0800) != 0) {
+            if ((addr & 0x8000) != 0) {
+                return base + this.cpu.regA[i] + (addr << 24 >> 24);
+            }
+            else {
+                return base + this.cpu.regD[i] + (addr << 24 >> 24);
+            }
+        }
+        else {
+            if ((addr & 0x8000) != 0) {
+                return base + (this.cpu.regA[i] << 16 >> 16) + (addr << 24 >> 24);
+            }
+            else {
+                return base + (this.cpu.regD[i] << 16 >> 16) + (addr << 24 >> 24);
+            }
+        }
+    }
+
+}
+
+class EAModeIllegal extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0, 0, 0, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+        return 0;
+    }
+
+    getData() {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+        return 0;
+    }
+
+    setData(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagV() {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+}
+
+class EAModeDRegByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+        this.cycle2ADI = 2;
+        this.cycle4AD = 4;
+    }
+
+    getData() {
+        return this.cpu.regD[this.ea] << 24 >> 24;
+    }
+
+    getEAData(nnn) {                            // overrides default method, for speed
+        return this.cpu.regD[this.ea = nnn] << 24 >> 24;
+    }
+
+    setData(data) {
+        this.cpu.regD[this.ea] = (this.cpu.regD[this.ea] & ~0xff) | (data & 0xff);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+
+    setEADataFlagsZNClearCV(nnn, data) {        // overrides default method, for speed
+        this.ea = nnn;
+        this.cpu.regD[this.ea] = (this.cpu.regD[this.ea] & ~0xff) | (data & 0xff);
+        this.cpu.flagZNew = data << 24 >> 24;
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVNew = this.cpu.flagVDst = 0;
+        this.cpu.flagCSrc = this.cpu.flagCDst = 0;
+    }
+}
+class EAModeDRegWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+        this.cycle2ADI = 2;
+        this.cycle4AD = 4;
+    }
+
+    getData() {
+        return this.cpu.regD[this.ea] << 16 >> 16;
+    }
+
+    getEAData(nnn) {                            // overrides default method, for speed
+        return this.cpu.regD[this.ea = nnn] << 16 >> 16;
+    }
+
+    setData(data) {
+        this.cpu.regD[this.ea] = (this.cpu.regD[this.ea] & ~0xffff) | (data & 0xffff);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+
+    setEADataFlagsZNClearCV(nnn, data) {        // overrides default method, for speed
+        this.ea = nnn;
+        this.cpu.regD[this.ea] = (this.cpu.regD[this.ea] & ~0xffff) | (data & 0xffff);
+        this.cpu.flagZNew = data << 16 >> 16;
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVNew = this.cpu.flagVDst = 0;
+        this.cpu.flagCSrc = this.cpu.flagCDst = 0;
+    }
+}
+class EAModeDRegLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+        this.cycle2Dl = this.cycle2ADI = this.cycle2ADl = 2;
+        this.cycle4AD = this.cycle4ADl = 4;
+    }
+
+    getData() {
+        return this.cpu.regD[this.ea];
+    }
+
+    getEAData(nnn) {                            // overrides default method, for speed
+        return this.cpu.regD[this.ea = nnn];
+    }
+
+    setData(data) {
+        this.cpu.regD[this.ea] = data;
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+
+    setEADataFlagsZNClearCV(nnn, data) {        // overrides default method, for speed
+        this.ea = nnn;
+        this.cpu.regD[this.ea] = data;
+        this.cpu.flagZNew = data;
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVNew = this.cpu.flagVDst = 0;
+        this.cpu.flagCSrc = this.cpu.flagCDst = 0;
+    }
+}
+
+class EAModeARegWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+        this.cycle2ADI = 2;
+        this.cycle4Aw = this.cycle4AD = 4;
+    }
+
+    getData() {
+        return this.cpu.regA[this.ea] << 16 >> 16;
+    }
+
+    setData(data) {
+        this.cpu.regA[this.ea] = data;          // NOTE: the entire A register is always updated, and byte operations are illegal
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+class EAModeARegLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+        this.cycle2ADI = this.cycle2ADl = 2;
+        this.cycle4AD = this.cycle4ADl = 4;
+    }
+
+    getData() {
+        return this.cpu.regA[this.ea];
+    }
+
+    setData(data) {
+        this.cpu.regA[this.ea] = data;
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+
+    setEAData(nnn, data) {                      // overrides default method, for speed
+        this.cpu.regA[this.ea = nnn] = data;
+    }
+}
+
+class EAModeAValByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);
+        return this.ea = this.cpu.regA[nnn];
+    }
+
+    advanceEA(nnn) {
+        this.ea += 1;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+class EAModeAValWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);
+        return this.ea = this.cpu.regA[nnn];
+    }
+
+    advanceEA(nnn) {
+        this.ea += 2;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+class EAModeAValLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        return this.ea = this.cpu.regA[nnn];
+    }
+
+    advanceEA(nnn) {
+        this.ea += 4;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModeAValIncByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);
+        this.ea = this.cpu.regA[nnn];
+        this.cpu.regA[nnn] += CPU68K.aByteInc[nnn];
+        return this.ea;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+
+class EAModeAValIncWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);
+        this.ea = this.cpu.regA[nnn];
+        this.cpu.regA[nnn] += 2;
+        return this.ea;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+class EAModeAValIncLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        this.ea = this.cpu.regA[nnn];
+        this.cpu.regA[nnn] += 4;
+        return this.ea;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModeAValDecByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);                  // BUGBUG: 6 if source operand (allocate separate EAMode instances for source and dest operands?) -JP
+        this.cpu.regA[nnn] -= CPU68K.aByteInc[nnn];
+        return this.ea = this.cpu.regA[nnn];
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+
+class EAModeAValDecWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);                  // BUGBUG: 6 if source operand (allocate separate EAMode instances for source and dest operands?) -JP
+        this.cpu.regA[nnn] -= 2;
+        return this.ea = this.cpu.regA[nnn];
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+
+class EAModeAValDecLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);                  // BUGBUG: 10 if source operand (allocate separate EAMode instances for source and dest operands?) -JP
+        this.cpu.regA[nnn] -= 4;
+        return this.ea = this.cpu.regA[nnn];
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModeAValDispByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        return this.ea = this.cpu.regA[nnn] + this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 1;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+
+class EAModeAValDispWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        return this.ea = this.cpu.regA[nnn] + this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 2;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+
+class EAModeAValDispLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(12);
+        return this.ea = this.cpu.regA[nnn] + this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 4;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModeAValIndexByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(10);
+        return this.ea = this.getIndexAddr(this.cpu.regA[nnn]);
+    }
+
+    advanceEA(nnn) {
+        this.ea += 1;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+
+class EAModeAValIndexWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(10);
+        return this.ea = this.getIndexAddr(this.cpu.regA[nnn]);
+    }
+
+    advanceEA(nnn) {
+        this.ea += 2;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+
+class EAModeAValIndexLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(14);
+        return this.ea = this.getIndexAddr(this.cpu.regA[nnn]);
+    }
+
+    advanceEA(nnn) {
+        this.ea += 4;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModeAbs16Byte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        return this.ea = this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 1;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+class EAModeAbs16Word extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        return this.ea = this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 2;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+
+class EAModeAbs16Long extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(12);
+        return this.ea = this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 4;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModeAbs32Byte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(12);
+        return this.ea = this.cpu.getPCLong();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 1;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+class EAModeAbs32Word extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(12);
+        return this.ea = this.cpu.getPCLong();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 2;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+
+class EAModeAbs32Long extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(16);
+        return this.ea = this.cpu.getPCLong();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 4;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModePCValDispByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        return this.ea = this.cpu.regPC + this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 1;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+
+class EAModePCValDispWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        return this.ea = this.cpu.regPC + this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 2;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+
+class EAModePCValDispLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(12);
+        return this.ea = this.cpu.regPC + this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 4;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModePCValIndexByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(10);
+        return this.ea = this.getIndexAddr(this.cpu.regPC);
+    }
+
+    advanceEA(nnn) {
+        this.ea += 1;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+
+class EAModePCValIndexWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(10);
+        return this.ea = this.getIndexAddr(this.cpu.regPC);
+    }
+
+    advanceEA(nnn) {
+        this.ea += 2;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+
+class EAModePCValIndexLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(14);
+        return this.ea = this.getIndexAddr(this.cpu.regPC);
+    }
+
+    advanceEA(nnn) {
+        this.ea += 4;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModeImmediateByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+        this.cycle2ADI = 2;
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);
+        this.ea = this.cpu.regPC+1;
+        this.cpu.regPC += 2;
+        return this.ea;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    getEAData(nnn) {                            // overrides default method, for speed
+        this.cpu.addCycles(4);
+        this.ea = this.cpu.regPC+1;
+        return this.cpu.getPCWord() << 24 >> 24;
+    }
+
+    setData(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagV() {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+}
+
+class EAModeImmediateWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+        this.cycle2ADI = 2;
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);
+        this.ea = this.cpu.regPC;
+        this.cpu.regPC += 2;
+        return this.ea;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    getEAData(nnn) {                            // overrides default method, for speed
+        this.cpu.addCycles(4);
+        this.ea = this.cpu.regPC;
+        return this.cpu.getPCWord();
+    }
+
+    setData(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagV() {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+}
+
+class EAModeImmediateLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+        this.cycle2ADI = 2;
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        this.ea = this.cpu.regPC;
+        this.cpu.regPC += 4;
+        return this.ea;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    getEAData(nnn) {                            // overrides default method, for speed
+        this.cpu.addCycles(8);
+        this.ea = this.cpu.regPC;
+        return this.cpu.getPCLong();
+    }
+
+    setData(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagV() {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+}
 
 /**
  * @copyright https://www.pcjs.org/modules/ports.js (C) 2012-2021 Jeff Parsons
@@ -17813,14 +18792,14 @@ class PilotVideo extends Monitor {
                         /*
                          * On even updates, call cpu.requestINTR(1), and also update our copy of the image.
                          */
-                        this.cpu.requestINTR(1);
+                        // this.cpu.requestINTR(1);
                     } else {
                         /*
                          * On odd updates, call cpu.requestINTR(2), but do NOT update our copy of the image, because
                          * the machine has presumably only updated the top half of the frame buffer at this point; it will
                          * update the bottom half of the frame buffer after acknowledging this interrupt.
                          */
-                        this.cpu.requestINTR(2);
+                        // this.cpu.requestINTR(2);
                         fUpdate = false;
                     }
                 }

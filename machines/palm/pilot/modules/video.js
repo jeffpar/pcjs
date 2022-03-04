@@ -311,14 +311,14 @@ export default class PilotVideo extends Monitor {
                         /*
                          * On even updates, call cpu.requestINTR(1), and also update our copy of the image.
                          */
-                        this.cpu.requestINTR(1);
+                        // this.cpu.requestINTR(1);
                     } else {
                         /*
                          * On odd updates, call cpu.requestINTR(2), but do NOT update our copy of the image, because
                          * the machine has presumably only updated the top half of the frame buffer at this point; it will
                          * update the bottom half of the frame buffer after acknowledging this interrupt.
                          */
-                        this.cpu.requestINTR(2);
+                        // this.cpu.requestINTR(2);
                         fUpdate = false;
                     }
                 }

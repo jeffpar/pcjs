@@ -12,11 +12,11 @@
 var fs      = require("fs");
 var path    = require("path");
 var mkdirp  = require("mkdirp");
-var defines = require("../../../machines/shared/lib/defines");
-var net     = require("../../../machines/shared/lib/netlib");
-var proc    = require("../../../machines/shared/lib/proclib");
-var str     = require("../../../machines/shared/lib/strlib");
-var DumpAPI = require("../../../machines/shared/lib/dumpapi");
+var defines = require("../../../../machines/shared/lib/defines.js");
+var net     = require("../../../../machines/shared/lib/netlib");
+var proc    = require("../../../../machines/shared/lib/proclib");
+var str     = require("../../../../machines/shared/lib/strlib");
+var DumpAPI = require("../../../../machines/shared/lib/dumpapi");
 
 /**
  * FileDump()

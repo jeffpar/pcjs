@@ -110,7 +110,7 @@ var aConcatTasks = [], aCompileTasks = [];
 var aScripts = [];
 
 aMachines.forEach(function(machineID) {
-    if (machineID[0] == '_' || machineID == "shared") return;
+    if (machineID[0] == '@' || machineID == "shared") return;
 
     /**
      * @type {Machine}
