@@ -67,7 +67,7 @@ export default class Bus extends Device {
     constructor(idMachine, idDevice, config)
     {
         super(idMachine, idDevice, config);
-        /*
+        /**
          * Our default type is DYNAMIC for the sake of older device configs (eg, TI-57)
          * which didn't specify a type and need a dynamic bus to ensure that their LED ROM array
          * (if any) gets updated on ROM accesses.
@@ -131,7 +131,7 @@ export default class Bus extends Device {
             let sizeBlock = this.blockSize - (addrNext - addrBlock);
             if (sizeBlock > sizeLeft) sizeBlock = sizeLeft;
             let blockExisting = this.blocks[iBlock];
-            /*
+            /**
              * If addrNext does not equal addrBlock, or sizeBlock does not equal this.blockSize, then either
              * the current block doesn't start on a block boundary or the size is something other than a block;
              * while we might support such requests down the road, that is currently a configuration error.
@@ -140,21 +140,21 @@ export default class Bus extends Device {
                 this.assert(false, "addBlocks(%#0x,%#0x): block boundary error", addrNext, sizeBlock);
                 return false;
             }
-            /*
+            /**
              * Make sure that no block exists at the specified address, or if so, make sure its type is NONE.
              */
             if (blockExisting && blockExisting.type != Memory.TYPE.NONE) {
                 this.assert(false, "addBlocks(%#0x,%#0x): block (%d) already exists", addrNext, sizeBlock, blockExisting.type);
                 return false;
             }
-            /*
+            /**
              * When no block is provided, we must allocate one that matches the specified type (and remaining size).
              */
             let idBlock = this.idDevice + '[' + this.toBase(addrNext, 16, this.addrWidth) + ']';
             if (!block) {
                 blockNew = new Memory(this.idMachine, idBlock, {type, addr: addrNext, size: sizeBlock, "bus": this.idDevice});
             } else {
-                /*
+                /**
                  * When a block is provided, make sure its size matches the default Bus block size, and use it if so.
                  */
                 if (block.size == this.blockSize) {
@@ -280,7 +280,7 @@ export default class Bus extends Device {
     {
         this.fFault = true;
         if (!this.nDisableFaults) {
-            /*
+            /**
              * We must call the Debugger's printf() instead of our own in order to use its custom formatters (eg, %n).
              */
             if (this.dbg) {
@@ -360,7 +360,7 @@ export default class Bus extends Device {
      */
     onReset()
     {
-        /*
+        /**
          * The following logic isn't needed because Memory and Port objects are Devices as well,
          * so their onReset() handlers will be invoked automatically.
          *
@@ -843,7 +843,7 @@ export default class Bus extends Device {
     }
 }
 
-/*
+/**
  * A "dynamic" bus (eg, an I/O bus) is one where block accesses must always be performed via function (no direct
  * value access) because there's "logic" on the other end, whereas a "static" bus can be accessed either way, via
  * function or value.

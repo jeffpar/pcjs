@@ -129,17 +129,17 @@ export default class InvadersPorts extends Ports {
      */
     setSwitches(switches)
     {
-        /*
+        /**
          * switches may be undefined when called from loadState() if a "pre-switches" state was loaded.
          */
         if (switches == undefined) return;
-        /*
+        /**
          * If this.switches is undefined, then this is the first setSwitches() call, so we should set func
          * to onSwitch(); otherwise, we omit func so that all addListener() will do is initialize the visual
          * state of the SWITCH controls.
          */
         let func = this.switches == undefined? this.onSwitch.bind(this) : null;
-        /*
+        /**
          * Now we can set the actual switches to the supplied setting, and initialize each of the (8) switches.
          */
         this.switches = switches;

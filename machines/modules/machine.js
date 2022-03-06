@@ -120,7 +120,7 @@ export default class Machine extends Device {
         this.fPageLoaded = false;
         this.setReady(false);
 
-        /*
+        /**
          * You can pass "m" commands to the machine via the "commands" parameter to turn on any desired
          * message groups, but since the Debugger is responsible for parsing those commands, and since the
          * Debugger is usually not initialized until last, messages from any earlier constructor calls will
@@ -149,7 +149,7 @@ export default class Machine extends Device {
             });
         }
 
-        /*
+        /**
          * Device initialization is now deferred until after the page is fully loaded, for the benefit
          * of devices (eg, Input) that may be dependent on page resources.
          *
@@ -277,7 +277,7 @@ export default class Machine extends Device {
             this.deviceConfigs = JSON.parse(sConfig);
             let config = this.deviceConfigs[this.idMachine];
             if (!config) {
-                /*
+                /**
                  * Pages that want to instantiate multiple machines using identical configs would normally
                  * have to create unique config files for each machine, even though the only difference between
                  * the configs would be the machine ID.  To reduce that redundancy, we'll try to identify the
@@ -295,14 +295,14 @@ export default class Machine extends Device {
             this.fAutoSave = (this.config['autoSave'] !== false);
             this.fAutoStart = (this.config['autoStart'] !== false);
             if (this.sParms) {
-                /*
+                /**
                  * Historically, my web servers have not been consistent about quoting property names inside
                  * the optional parameters object, so we must use eval() instead of JSON.parse() to parse them.
                  * Of couse, the REAL problem is that JSON.parse() is being a dick about otherwise perfectly
                  * legitimate Object syntax, but I shall not repeat my long list of gripes about JSON here.
                  */
                 let parms = /** @type {Object} */ (eval("(" + this.sParms + ")"));
-                /*
+                /**
                  * Slam all these parameters into the machine's config, overriding any matching machine configuration
                  * properties.  Any other devices that need access to these properties should use getMachineConfig().
                  */
@@ -397,7 +397,7 @@ Machine.BINDING = {
     RESET:      "reset",
 };
 
-/*
+/**
  * Create the designated machine FACTORY function (this should suffice for all compiled versions).
  *
  * In addition, expose the machine's COMMAND handler interface, so that it's easy to access any of the

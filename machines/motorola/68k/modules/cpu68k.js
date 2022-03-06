@@ -1,5 +1,5 @@
 /**
- * @fileoverview 68K CPU Emulation
+ * @fileoverview 68K Emulator
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -13,47 +13,47 @@
 /* eslint-disable no-duplicate-imports */
 
 import CPU                  from "../../../modules/cpu.js";
-import Dbg68K               from "dbg68k.js";
+import Dbg68K               from "./dbg68k.js";
 import Debugger             from "../../../modules/debugger.js";
-import EAModeDRegByte       from "eamodes.js";
-import EAModeDRegWord       from "eamodes.js";
-import EAModeDRegLong       from "eamodes.js";
-import EAModeIllegal        from "eamodes.js";
-import EAModeARegWord       from "eamodes.js";
-import EAModeARegLong       from "eamodes.js";
-import EAModeAValByte       from "eamodes.js";
-import EAModeAValWord       from "eamodes.js";
-import EAModeAValLong       from "eamodes.js";
-import EAModeAValIncByte    from "eamodes.js";
-import EAModeAValIncWord    from "eamodes.js";
-import EAModeAValIncLong    from "eamodes.js";
-import EAModeAValDecByte    from "eamodes.js";
-import EAModeAValDecWord    from "eamodes.js";
-import EAModeAValDecLong    from "eamodes.js";
-import EAModeAValDispByte   from "eamodes.js";
-import EAModeAValDispWord   from "eamodes.js";
-import EAModeAValDispLong   from "eamodes.js";
-import EAModeAValIndexByte  from "eamodes.js";
-import EAModeAValIndexWord  from "eamodes.js";
-import EAModeAValIndexLong  from "eamodes.js";
-import EAModeAbs16Byte      from "eamodes.js";
-import EAModeAbs16Word      from "eamodes.js";
-import EAModeAbs16Long      from "eamodes.js";
-import EAModeAbs32Byte      from "eamodes.js";
-import EAModeAbs32Word      from "eamodes.js";
-import EAModeAbs32Long      from "eamodes.js";
-import EAModePCValDispByte  from "eamodes.js";
-import EAModePCValDispWord  from "eamodes.js";
-import EAModePCValDispLong  from "eamodes.js";
-import EAModePCValIndexByte from "eamodes.js";
-import EAModePCValIndexWord from "eamodes.js";
-import EAModePCValIndexLong from "eamodes.js";
-import EAModeImmediateByte  from "eamodes.js";
-import EAModeImmediateWord  from "eamodes.js";
-import EAModeImmediateLong  from "eamodes.js";
+import EAModeDRegByte       from "./eamodes.js";
+import EAModeDRegWord       from "./eamodes.js";
+import EAModeDRegLong       from "./eamodes.js";
+import EAModeIllegal        from "./eamodes.js";
+import EAModeARegWord       from "./eamodes.js";
+import EAModeARegLong       from "./eamodes.js";
+import EAModeAValByte       from "./eamodes.js";
+import EAModeAValWord       from "./eamodes.js";
+import EAModeAValLong       from "./eamodes.js";
+import EAModeAValIncByte    from "./eamodes.js";
+import EAModeAValIncWord    from "./eamodes.js";
+import EAModeAValIncLong    from "./eamodes.js";
+import EAModeAValDecByte    from "./eamodes.js";
+import EAModeAValDecWord    from "./eamodes.js";
+import EAModeAValDecLong    from "./eamodes.js";
+import EAModeAValDispByte   from "./eamodes.js";
+import EAModeAValDispWord   from "./eamodes.js";
+import EAModeAValDispLong   from "./eamodes.js";
+import EAModeAValIndexByte  from "./eamodes.js";
+import EAModeAValIndexWord  from "./eamodes.js";
+import EAModeAValIndexLong  from "./eamodes.js";
+import EAModeAbs16Byte      from "./eamodes.js";
+import EAModeAbs16Word      from "./eamodes.js";
+import EAModeAbs16Long      from "./eamodes.js";
+import EAModeAbs32Byte      from "./eamodes.js";
+import EAModeAbs32Word      from "./eamodes.js";
+import EAModeAbs32Long      from "./eamodes.js";
+import EAModePCValDispByte  from "./eamodes.js";
+import EAModePCValDispWord  from "./eamodes.js";
+import EAModePCValDispLong  from "./eamodes.js";
+import EAModePCValIndexByte from "./eamodes.js";
+import EAModePCValIndexWord from "./eamodes.js";
+import EAModePCValIndexLong from "./eamodes.js";
+import EAModeImmediateByte  from "./eamodes.js";
+import EAModeImmediateWord  from "./eamodes.js";
+import EAModeImmediateLong  from "./eamodes.js";
 
 /**
- * 68K CPU Emulation
+ * 68K Emulator
  *
  * @class {CPU68K}
  * @unrestricted

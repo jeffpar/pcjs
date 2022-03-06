@@ -81,7 +81,7 @@ Defs.MAXDEBUG   = MAXDEBUG;
 Defs.REPOSITORY = REPOSITORY;
 Defs.VERSION    = VERSION;
 
-/*
+/**
  * The following globals CANNOT be overridden.
  *
  * LITTLE_ENDIAN is true if the browser's ArrayBuffer storage is little-endian.  If LITTLE_ENDIAN matches
@@ -93,7 +93,7 @@ Defs.LITTLE_ENDIAN = function() {
     return new Uint16Array(buffer)[0] === 256;
 }();
 
-/*
+/**
  * List of standard message groups.  The messages properties defines the set of active message
  * groups, and their names are defined by MESSAGE_NAMES.  See the Device class for more message
  * group definitions.
@@ -107,7 +107,7 @@ Defs.MESSAGE = {
     BUFFER:     0x800000000000,
 };
 
-/*
+/**
  * RS-232 DB-25 Pin Definitions, mapped to bits 1-25 in a 32-bit status value.
  *
  * Serial devices in PCjs machines are considered DTE (Data Terminal Equipment), which means they should be "virtually"

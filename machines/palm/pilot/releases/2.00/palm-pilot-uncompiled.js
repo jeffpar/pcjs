@@ -78,7 +78,7 @@ Defs.MAXDEBUG   = MAXDEBUG;
 Defs.REPOSITORY = REPOSITORY;
 Defs.VERSION    = VERSION;
 
-/*
+/**
  * The following globals CANNOT be overridden.
  *
  * LITTLE_ENDIAN is true if the browser's ArrayBuffer storage is little-endian.  If LITTLE_ENDIAN matches
@@ -90,7 +90,7 @@ Defs.LITTLE_ENDIAN = function() {
     return new Uint16Array(buffer)[0] === 256;
 }();
 
-/*
+/**
  * List of standard message groups.  The messages properties defines the set of active message
  * groups, and their names are defined by MESSAGE_NAMES.  See the Device class for more message
  * group definitions.
@@ -104,7 +104,7 @@ Defs.MESSAGE = {
     BUFFER:     0x800000000000,
 };
 
-/*
+/**
  * RS-232 DB-25 Pin Definitions, mapped to bits 1-25 in a 32-bit status value.
  *
  * Serial devices in PCjs machines are considered DTE (Data Terminal Equipment), which means they should be "virtually"
@@ -308,13 +308,14 @@ class NumIO extends Defs {
                 chSuffix = '000000000';
             }
             if (ch != chSuffix) s = s.slice(0, -1) + chSuffix;
-            /*
+            /**
              * This adds support for the MACRO-10 binary shifting (Bn) suffix, which must be stripped from the
              * number before parsing, and then applied to the value after parsing.  If n is omitted, 35 is assumed,
              * which is a net shift of zero.  If n < 35, then a left shift of (35 - n) is required; if n > 35, then
              * a right shift of -(35 - n) is required.
              */
-            let v, shift = 0;
+            let v;
+            let shift = 0;
             if (base <= 10) {
                 let match = s.match(/(-?[0-9]+)B([0-9]*)$/);
                 if (match) {
@@ -323,13 +324,13 @@ class NumIO extends Defs {
                 }
             }
             if (this.isInt(s, base) && !isNaN(v = parseInt(s, base))) {
-                /*
+                /**
                  * With the need to support larger (eg, 36-bit) integers, truncating to 32 bits is no longer helpful.
                  *
                  *      value = v|0;
                  */
                 if (shift) {
-                    /*
+                    /**
                      * Since binary shifting is a logical operation, and since shifting by division only works properly
                      * with positive numbers, we must convert a negative value to a positive value, by computing the two's
                      * complement.
@@ -387,7 +388,7 @@ class NumIO extends Defs {
                 let a, ib, data;
 
                 if (sData.substr(0, 1) == "<") {    // if the "data" begins with a "<"...
-                    /*
+                    /**
                      * Early server configs reported an error (via the nErrorCode parameter) if a tape URL was invalid,
                      * but more recent server configs now display a somewhat friendlier HTML error page.  The downside,
                      * however, is that the original error has been buried, and we've received "data" that isn't actually
@@ -396,7 +397,7 @@ class NumIO extends Defs {
                     throw new Error(sData);
                 }
 
-                /*
+                /**
                  * TODO: IE9 is rather unfriendly and restrictive with regard to how much data it's willing to
                  * eval().  In particular, the 10Mb disk image we use for the Windows 1.01 demo config fails in
                  * IE9 with an "Out of memory" exception.  One work-around would be to chop the data into chunks
@@ -442,7 +443,7 @@ class NumIO extends Defs {
                     resource.aBytes = a;
                 }
                 else if ((a = data['words'])) {
-                    /*
+                    /**
                      * Convert all words into bytes
                      */
                     resource.aBytes = new Array(a.length * 2);
@@ -453,7 +454,7 @@ class NumIO extends Defs {
                     }
                 }
                 else if ((a = data['longs'])) {
-                    /*
+                    /**
                      * Convert all dwords (longs) into bytes
                      */
                     resource.aBytes = new Array(a.length * 4);
@@ -489,7 +490,7 @@ class NumIO extends Defs {
             }
         }
         else {
-            /*
+            /**
              * Parse the data manually; we assume it's a series of hex byte-values separated by whitespace.
              */
             let ab = [];
@@ -524,7 +525,7 @@ class NumIO extends Defs {
         if (!sws) {
             switches = switchesDefault;
         } else {
-            /*
+            /**
              * NOTE: It's not convenient to use parseInt() with a base of 2, in part because both bit order
              * and bit sense are reversed, but also because we use this function to parse switch masks, which
              * contain non-digits.  See the "switches" defined in invaders.json for examples.
@@ -563,7 +564,7 @@ class NumIO extends Defs {
      */
     toBase(n, base, bits = 0, prefix = undefined, nGrouping = 0)
     {
-        /*
+        /**
          * We can't rely entirely on isNaN(), because isNaN(null) returns false, and we can't rely
          * entirely on typeof either, because typeof NaN returns "number".  Sigh.
          *
@@ -571,7 +572,9 @@ class NumIO extends Defs {
          * since JavaScript coerces such operands to zero, but I think there's "value" in seeing those
          * values displayed differently.
          */
-        let s = "", suffix = "", cch = -1;
+        let s = "";
+        let suffix = "";
+        let cch = -1;
         if (!base) base = this.nDefaultRadix || 10;
         if (bits) cch = Math.ceil(bits / Math.log2(base));
         if (prefix == undefined) {
@@ -594,14 +597,14 @@ class NumIO extends Defs {
             n = undefined;
             prefix = suffix = "";
         } else {
-            /*
+            /**
              * Callers that produced an input by dividing by a power of two rather than shifting (in order
              * to access more than 32 bits) may produce a fractional result, which ordinarily we would simply
              * ignore, but if the integer portion is zero and the sign is negative, we should probably treat
              * this value as a sign-extension.
              */
             if (n < 0 && n > -1) n = -1;
-            /*
+            /**
              * Negative values should be twos-complemented to produce a positive value for conversion purposes,
              * but we can only do that if/when we're given the number of bits; Math.pow(base, cch) is equivalent
              * to Math.pow(2, bits), but less precise for bases that aren't a power of two (eg, base 10).
@@ -743,7 +746,7 @@ class NumIO extends Defs {
     }
 }
 
-/*
+/**
  * Assorted constants
  */
 NumIO.TWO_POW32 = Math.pow(2, 32);
@@ -793,7 +796,7 @@ class StdIO extends NumIO {
     constructor()
     {
         super();
-        /*
+        /**
          * We populate the sprintf() formatters table with null functions for all the predefined (built-in) types,
          * so that type validation has only one look-up to perform.
          *
@@ -865,7 +868,7 @@ class StdIO extends NumIO {
         let i = sFileName.lastIndexOf('/');
         if (i >= 0) sBaseName = sFileName.substr(i + 1);
 
-        /*
+        /**
          * This next bit is a kludge to clean up names that are part of a URL that includes unsightly query parameters.
          * However, don't do that if fAllowAmp (which will be true, for example, when parsing 8.3 filenames in diskimage.js).
          */
@@ -926,7 +929,7 @@ class StdIO extends NumIO {
             if (s.indexOf(':') < 0) {
                 s += ' ' + (args[1] || "00:00:00 UTC");
             } else if (s.match(/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/)) {
-                /*
+                /**
                  * I don't care to support all the possible time zone specifiers just to determine whether or not
                  * a time zone was provided, so for now, I simply look for common date+time patterns I use, such as
                  * the "timestamp" pattern above.  TODO: Make this general-purpose someday.
@@ -1024,7 +1027,7 @@ class StdIO extends NumIO {
      */
     sprintf(format, ...args)
     {
-        /*
+        /**
          * This isn't just a nice optimization; it's also important if the caller is simply trying
          * to printf() a string that may also contain '%' and doesn't want or expect any formatting.
          */
@@ -1041,7 +1044,7 @@ class StdIO extends NumIO {
             buffer += aParts[iPart];
             let arg, type = aParts[iPart+5];
 
-            /*
+            /**
              * Check for unrecognized types immediately, so we don't inadvertently pop any arguments.
              */
             if (this.formatters[type] === undefined) {
@@ -1074,7 +1077,7 @@ class StdIO extends NumIO {
             let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L'; we also allow 'w' (instead of 'h') and 'b' (instead of 'hh')
             let ach = null, s, radix = 0, prefix = "";
 
-            /*
+            /**
              * The following non-standard sprintf() format types provide handy alternatives to the
              * PHP date() format types that we previously used with the old datelib.formatDate() function:
              *
@@ -1120,7 +1123,8 @@ class StdIO extends NumIO {
              *
              * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
              */
-            let ch, date = /** @type {Date} */ ("ACDFHGMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
+            let ch;
+            let date = /** @type {Date} */ ("ACDFHGMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
 
             switch(type) {
             case 'C':
@@ -1193,14 +1197,14 @@ class StdIO extends NumIO {
 
             switch(type) {
             case 'b':
-                /*
+                /**
                  * "%b" for boolean-like values is a non-standard format specifier that seems handy.
                  */
                 buffer += (arg? "true" : "false");
                 break;
 
             case 'd':
-                /*
+                /**
                  * I could use "arg |= 0", but there may be some value to supporting integers > 32 bits,
                  * so I use Math.trunc() instead.  Bit-wise operators also mask a lot of evils, by converting
                  * complete nonsense into zero, so while I'm ordinarily a fan, that's not desirable here.
@@ -1221,7 +1225,7 @@ class StdIO extends NumIO {
                  * is zero, since parseInt() happily stops parsing when it reaches the first non-radix 10 digit.
                  */
                 arg = Math.trunc(arg);
-                /*
+                /**
                  * Before falling into the decimal floating-point code, we take this opportunity to convert
                  * the precision value, if any, to the minimum number of digits to print.  Which basically means
                  * setting zeroPad to true, width to precision, and then unsetting precision.
@@ -1258,7 +1262,7 @@ class StdIO extends NumIO {
                 break;
 
             case 'j':
-                /*
+                /**
                  * 'j' is one of our non-standard extensions to the sprintf() interface; it signals that
                  * the caller is providing an Object that should be rendered as JSON.  If a width is included
                  * (eg, "%2j"), it's used as an indentation value; otherwise, no whitespace is added.
@@ -1271,7 +1275,7 @@ class StdIO extends NumIO {
                 /* falls through */
 
             case 's':
-                /*
+                /**
                  * 's' includes some non-standard benefits, such as coercing non-strings to strings first;
                  * we know undefined and null values don't have a toString() method, but hopefully everything
                  * else does.
@@ -1309,7 +1313,7 @@ class StdIO extends NumIO {
                 if (!radix) radix = 16;
                 if (!prefix && hash) prefix = "0x";
                 if (!ach) ach = StdIO.HexLowerCase;
-                /*
+                /**
                  * For all the same reasons articulated above (for type 'd'), we pass the arg through Math.trunc(),
                  * and we honor precision, if any, as the minimum number of digits to print.
                  */
@@ -1320,7 +1324,7 @@ class StdIO extends NumIO {
                     precision = -1;
                 }
                 if (zeroPad && !width) {
-                    /*
+                    /**
                      * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
                      */
                     if (length == 'b') {
@@ -1398,13 +1402,13 @@ class StdIO extends NumIO {
     }
 }
 
-/*
+/**
  * Global variables
  */
 StdIO.PrintBuffer = "";
 StdIO.PrintTime = null;
 
-/*
+/**
  * Global constants
  */
 StdIO.HexLowerCase = "0123456789abcdef";
@@ -1443,7 +1447,7 @@ class WebIO extends StdIO {
         super();
         this.bindings = {};
         this.messages = 0;
-        /*
+        /**
          * If this is the machine device, initialize a set of per-machine variables; if it's not,
          * the Device constructor will update this.machine with the actual machine device (see addDevice()).
          */
@@ -1476,7 +1480,7 @@ class WebIO extends StdIO {
 
         case WebIO.BINDING.PRINT:
             this.disableAuto(element);
-            /*
+            /**
              * An onKeyDown handler has been added to this element to intercept special (non-printable) keys, such as
              * the UP and DOWN arrow keys, which are used to implement a simple command history/recall feature.
              */
@@ -1486,7 +1490,7 @@ class WebIO extends StdIO {
                     webIO.onCommandEvent(event, true);
                 }
             );
-            /*
+            /**
              * One purpose of the onKeyPress handler for this element is to stop event propagation, so that if the
              * element has been explicitly given focus, any key presses won't be picked up by the Input device (which,
              * as that device's constructor explains, is monitoring key presses for the entire document).
@@ -1523,7 +1527,7 @@ class WebIO extends StdIO {
         if (!this.config.bindings) {
             this.config.bindings = bindings;
         }
-        /*
+        /**
          * To relieve every device from having to explicitly declare its own container, set up a default.
          * When using direct bindings, the default is simply 'container'; otherwise, the default 'container'
          * element ID is whatever the device ID is.
@@ -1543,7 +1547,7 @@ class WebIO extends StdIO {
             if (fDirectBindings) {
                 binding = id;
             } else {
-                /*
+                /**
                  * This new bit of code allows us to define a binding like this:
                  *
                  *      "label": "0"
@@ -1682,7 +1686,7 @@ class WebIO extends StdIO {
         element.setAttribute("autocomplete", "off");
         element.setAttribute("autocorrect", "off");
         element.setAttribute("spellcheck", "false");
-        /*
+        /**
          * This was added for Firefox (Safari will clear the <textarea> on a page reload, but Firefox does not).
          */
         element.value = "";
@@ -1977,7 +1981,7 @@ class WebIO extends StdIO {
                 let fDiag = false;
                 let sErrorMessage, resource;
                 if (nErrorCode) {
-                    /*
+                    /**
                      * Errors can happen for innocuous reasons, such as the user switching away too quickly, forcing
                      * the request to be cancelled.  And unfortunately, the browser cancels XMLHttpRequest requests
                      * BEFORE it notifies any page event handlers, so if the machine is being powered down, we won't
@@ -2036,7 +2040,7 @@ class WebIO extends StdIO {
                 return;
             }
 
-            /*
+            /**
              * The following line was recommended for WebKit, as a work-around to prevent the handler firing multiple
              * times when debugging.  Unfortunately, that's not the only XMLHttpRequest problem that occurs when
              * debugging, so I think the WebKit problem is deeper than that.  When we have multiple XMLHttpRequests
@@ -2047,7 +2051,7 @@ class WebIO extends StdIO {
              */
             sResource = xmlHTTP.responseText;
 
-            /*
+            /**
              * The normal "success" case is an HTTP status code of 200, but when testing with files loaded
              * from the local file system (ie, when using the "file:" protocol), we have to be a bit more "flexible".
              */
@@ -2078,7 +2082,7 @@ class WebIO extends StdIO {
             parms = {};
             if (window) {
                 if (!sParms) {
-                    /*
+                    /**
                      * Note that window.location.href returns the entire URL, whereas window.location.search
                      * returns only parameters, if any (starting with the '?', which we skip over with a substr() call).
                      */
@@ -2219,10 +2223,10 @@ class WebIO extends StdIO {
                 let consume = false, s;
                 let text = element.value;
                 let i = text.lastIndexOf('\n');
-                /*
-                * Checking for BACKSPACE is not as important as the UP and DOWN arrows, but it's helpful to ensure
-                * that BACKSPACE only erases characters on the final line; consume it otherwise.
-                */
+                /**
+                 * Checking for BACKSPACE is not as important as the UP and DOWN arrows, but it's helpful to ensure
+                 * that BACKSPACE only erases characters on the final line; consume it otherwise.
+                 */
                 if (keyCode == WebIO.KEYCODE.BS) {
                     if (element.selectionStart <= i + 1) {
                         consume = true;
@@ -2248,7 +2252,7 @@ class WebIO extends StdIO {
             else {
                 let charCode = keyCode;
                 let char = String.fromCharCode(charCode);
-                /*
+                /**
                  * Move the caret to the end of any text in the textarea, unless it's already
                  * past the final LF (because it's OK to insert characters on the last line).
                  */
@@ -2257,12 +2261,12 @@ class WebIO extends StdIO {
                 if (element.selectionStart <= i) {
                     element.setSelectionRange(text.length, text.length);
                 }
-                /*
+                /**
                  * Don't let the Input device's document-based keypress handler see any key presses
                  * that came to this element first.
                  */
                 event.stopPropagation();
-                /*
+                /**
                  * If '@' is pressed as the first character on the line, then append the last command
                  * that parseCommands() processed, and transform '@' into ENTER.
                  */
@@ -2272,7 +2276,7 @@ class WebIO extends StdIO {
                         char = '\r';
                     }
                 }
-                /*
+                /**
                  * On the ENTER key, call parseCommands() to look for any COMMAND handlers and invoke
                  * them until one of them returns true.
                  *
@@ -2281,7 +2285,7 @@ class WebIO extends StdIO {
                  * as ASCII character '\n' (aka LINEFEED aka LF).
                  */
                 if (char == '\r') {
-                    /*
+                    /**
                      * At the time we call any command handlers, a LINEFEED will not yet have been
                      * appended to the text, so for consistency, we prevent the default behavior and
                      * add the LINEFEED ourselves.  Unfortunately, one side-effect is that we must
@@ -2322,7 +2326,7 @@ class WebIO extends StdIO {
             if (typeof fnPrev !== 'function') {
                 window[sFunc] = fn;
             } else {
-                /*
+                /**
                  * TODO: Determine whether there's any value in receiving/sending the Event object that the
                  * browser provides when it generates the original event.
                  */
@@ -2487,20 +2491,20 @@ class WebIO extends StdIO {
         if (!fBuffer) {
             let element = this.findBinding(WebIO.BINDING.PRINT, true);
             if (element) {
-                /*
+                /**
                  * To help avoid situations where the element can get overwhelmed by the same repeated string,
                  * don't add the string if it already appears at the end.
                  */
                 if (element.value.substr(-s.length) != s) {
                     element.value += s;
-                    /*
+                    /**
                      * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
                      */
                     if (!WebIO.DEBUG && element.value.length > 8192) {
                         element.value = element.value.substr(element.value.length - 4096);
                     }
                     element.scrollTop = element.scrollHeight;
-                    /*
+                    /**
                      * Safari requires this, to keep the caret at the end; Chrome and Firefox, not so much.  Go figure.
                      *
                      * However, if I do this in Safari on iPadOS WHILE the app is full-screen, Safari cancels full-screen
@@ -2644,7 +2648,7 @@ WebIO.MESSAGE_COMMANDS = [
     "m ... [on|off]\tturn selected messages on or off"
 ];
 
-/*
+/**
  * NOTE: The first name is automatically omitted from global "on" and "off" operations.
  */
 WebIO.MESSAGE_NAMES = {
@@ -2656,7 +2660,7 @@ WebIO.HANDLER = {
     COMMAND:    "command"
 };
 
-/*
+/**
  * Codes provided by KeyboardEvent.keyCode on a "keypress" event (aka ASCII codes).
  */
 WebIO.CHARCODE = {
@@ -2715,7 +2719,7 @@ WebIO.CHARCODE = {
     /* 0x7A */ z:           122
 };
 
-/*
+/**
  * Codes provided by KeyboardEvent.keyCode on "keydown" and "keyup" events.
  */
 WebIO.KEYCODE = {
@@ -2845,7 +2849,7 @@ WebIO.KEYCODE = {
                 VIRTUAL:    1000        // bias used by other devices to define "virtual" keyCodes
 };
 
-/*
+/**
  * Maps Firefox-specific keyCodes to their more common keyCode counterparts.
  */
 WebIO.FF_KEYCODE = {
@@ -2855,7 +2859,7 @@ WebIO.FF_KEYCODE = {
     [WebIO.KEYCODE.FF_CMD]:     WebIO.KEYCODE.CMD       // 224 -> 91
 };
 
-/*
+/**
  * Supported values that a browser may store in the 'location' property of a keyboard event object.
  */
 WebIO.LOCATION = {
@@ -2864,7 +2868,7 @@ WebIO.LOCATION = {
     NUMPAD:     3
 };
 
-/*
+/**
  * This maps KEYCODE values to ASCII character (or a string representation for non-ASCII keys).
  */
 WebIO.KEYNAME = {
@@ -3158,13 +3162,13 @@ class Device extends WebIO {
             this.printf("warning: machine configuration contains multiple '%s' devices\n", this.idDevice);
         }
         Device.Machines[this.idMachine][this.idDevice] = this;
-        /*
+        /**
          * The new Device classes don't use the Components array or machine+device IDs, but we need to continue
          * updating both of those for backward compatibility with older PCjs machines.
          */
         this['id'] = this.idMachine == this.idDevice? this.idMachine : this.idMachine + '.' + this.idDevice;
         Device.Components.push(this);
-        /*
+        /**
          * The WebIO constructor set this.machine tentatively, so that it could define any per-machine variables
          * it needed; we now set it definitively.
          */
@@ -3208,7 +3212,7 @@ class Device extends WebIO {
      */
     checkConfig(config, overrides)
     {
-        /*
+        /**
          * If this device's config contains an "overrides" array, then any of the properties listed in
          * that array may be overridden with a URL parameter.  We don't impose any checks on the overriding
          * value, so it is the responsibility of the component with overridable properties to validate them.
@@ -3381,7 +3385,7 @@ class Device extends WebIO {
         let devices = Device.Machines[idMachine];
         let device = devices && devices[idDevice] || null;
         if (!device) {
-            /*
+            /**
              * Also check the old list of PCjs machine component IDs, to maintain backward compatibility.
              */
             for (i = 0; i < Device.Components.length; i++) {
@@ -3467,7 +3471,7 @@ class Device extends WebIO {
         if (this != this.machine || !this.ready) {
             return this.ready;
         }
-        /*
+        /**
          * Machine readiness is more complicated: check the readiness of all devices.  This is easily
          * checked with an enumDevices() function that returns false if a device isn't ready yet, which
          * in turn terminates the enumeration and returns false.
@@ -3537,7 +3541,7 @@ class Device extends WebIO {
     printf(format, ...args)
     {
         if (typeof format == "number" && this.isMessageOn(format)) {
-            /*
+            /**
              * The following call will execute at most once, because findDeviceByClass() returns either a Device or null,
              * neither of which is undefined.
              */
@@ -3548,7 +3552,7 @@ class Device extends WebIO {
                 this.dbg.notifyMessage(format);
             }
             if (this.machine.messages & Device.MESSAGE.ADDR) {
-                /*
+                /**
                  * Same rules as above apply here.  Hopefully no message-based printf() calls will arrive with MESSAGE.ADDR
                  * set *before* the CPU device has been initialized.
                  */
@@ -3616,7 +3620,7 @@ Device.Machines = typeof window != "undefined"? window['PCjs']['Machines'] : {};
  */
 Device.Components = typeof window != "undefined"? window['PCjs']['Components'] : [];
 
-/*
+/**
  * List of additional message groups, extending the base set defined in lib/webio.js.
  *
  * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
@@ -3769,7 +3773,7 @@ class Input extends Device {
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.machine = /** @type {Machine} */ (this.findDeviceByClass("Machine"));
 
-        /*
+        /**
          * If 'drag' is true, then the onInput() handler will be called whenever the current col and/or row
          * changes, even if the mouse hasn't been released since the previous onInput() call.
          *
@@ -3779,32 +3783,32 @@ class Input extends Device {
          */
         this.fDrag = this.getDefaultBoolean('drag', false);
 
-        /*
+        /**
          * If 'scroll' is true, then we do NOT call preventDefault() on touch events; this permits the input
          * surface to be scrolled like any other part of the page.  The default is false, because this has other
          * side-effects (eg, inadvertent zooms).
          */
         this.fScroll = this.getDefaultBoolean('scroll', false);
 
-        /*
+        /**
          * If 'hexagonal' is true, then we treat the input grid as hexagonal, where even rows of the associated
          * display are offset.
          */
         this.fHexagonal = this.getDefaultBoolean('hexagonal', false);
 
-        /*
+        /**
          * The 'releaseDelay' setting is necessary for devices (eg, old calculators) that are either too slow to
          * notice every input transition and/or have debouncing logic that would otherwise be defeated.
          */
         this.releaseDelay = this.getDefaultNumber('releaseDelay', 0);
 
-        /*
+        /**
          * This is set on receipt of the first 'touch' event of any kind, and is used by the 'mouse' event
          * handlers to disregard mouse events if set.
          */
         this.fTouch = false;
 
-        /*
+        /**
          * There are two supported configuration maps: a two-dimensional grid (gridMap) and a list of IDs (idMap).
          *
          * The two-dimensional button layouts do not (currently) support individual listeners; instead, any key event
@@ -3914,7 +3918,7 @@ class Input extends Device {
             }
             return false;
         }
-        /*
+        /**
          * The visual state of a SWITCH control (which could be a div or button or any other element) is controlled
          * by its class attribute -- specifically, the last class name in the attribute.  You must define two classes:
          * one that ends with "-on" for the on (true) state and another that ends with "-off" for the off (false) state.
@@ -3987,14 +3991,14 @@ class Input extends Device {
                             if (typeof clickBinding == "number") {
                                 keyCode = clickBinding;
                             } else {
-                                /*
+                                /**
                                  * If clickBinding is not a number, the only other possibility currently supported
                                  * is an Array where the first entry is a keyCode modifier; specifically, KEYCODE.LOCK.
                                  */
                                 keyCode = clickBinding[0];
 
                                 if (keyCode == Input.KEYCODE.LOCK) {
-                                    /*
+                                    /**
                                      * In the case of KEYCODE.LOCK, the next entry is the actual keyCode, and we look
                                      * to the element's "data-value" attribute for whether clicking the element should
                                      * "lock" the keyCode ("0") or "unlock" it ("1").  Locking a key is a simple matter
@@ -4048,7 +4052,7 @@ class Input extends Device {
      */
     addSurface(inputElement, focusElement, location = [])
     {
-        /*
+        /**
          * The location array, eg:
          *
          *      "location": [139, 325, 368, 478, 0.34, 0.5, 640, 853, 180, 418, 75, 36],
@@ -4095,7 +4099,7 @@ class Input extends Device {
                 state.hGap = state.vGap = 0;
             }
 
-            /*
+            /**
              * To calculate the average button width (cxButton), we know that the overall width
              * must equal the sum of all the button widths + the sum of all the button gaps:
              *
@@ -4111,7 +4115,7 @@ class Input extends Device {
             state.cxGap = (state.cxButton * state.hGap)|0;
             state.cyGap = (state.cyButton * state.vGap)|0;
 
-            /*
+            /**
              * xStart and yStart record the last 'touchstart' or 'mousedown' position on the surface
              * image; they will be reset to -1 when movement has ended (eg, 'touchend' or 'mouseup').
              */
@@ -4120,7 +4124,7 @@ class Input extends Device {
             this.captureMouse(inputElement, state);
             this.captureTouch(inputElement, state);
 
-            /*
+            /**
              * We use a timer for the touch/mouse release events, to ensure that the machine had
              * enough time to notice the input before releasing it.
              */
@@ -4135,7 +4139,7 @@ class Input extends Device {
         }
 
         if (this.gridMap || this.idMap || this.keyMap) {
-            /*
+            /**
              * This auto-releases the last key reported after an appropriate delay, to ensure that
              * the machine had enough time to notice the corresponding button was pressed.
              */
@@ -4146,7 +4150,7 @@ class Input extends Device {
                 });
             }
 
-            /*
+            /**
              * I used to maintain a single-key buffer (this.keyPressed) and would immediately release
              * that key as soon as another key was pressed, but it appears that the ROM wants a minimum
              * delay between release and the next press -- probably for de-bouncing purposes.  So we
@@ -4158,7 +4162,7 @@ class Input extends Device {
             this.keyActive = "";
             this.keysPressed = [];
 
-            /*
+            /**
              * I'm attaching my key event handlers to the document object, since image elements are
              * not focusable.  I'm disinclined to do what I've done with other machines (ie, create an
              * invisible <textarea> overlay), because in this case, I don't really want a soft keyboard
@@ -4175,7 +4179,7 @@ class Input extends Device {
                 if (!this.focusElement && focusElement.nodeName == "BUTTON") {
                     element = document;
                     this.focusElement = focusElement;
-                    /*
+                    /**
                      * Although we've elected to attach key handlers to the document object in this case,
                      * we also attach to the inputElement as an alternative.
                      */
@@ -4367,7 +4371,7 @@ class Input extends Device {
                     let used = input.onKeyCode(keyCode, false, false, event);
                     printEvent("Up", keyCode);
                     if (used) event.preventDefault();
-                    /*
+                    /**
                      * We reset the contents of any textarea element being used exclusively
                      * for keyboard input, to prevent its contents from growing uncontrollably.
                      */
@@ -4376,7 +4380,7 @@ class Input extends Device {
             }
         );
 
-        /*
+        /**
          * The following onBlur() and onFocus() handlers are currently just for debugging purposes, but
          * PCx86 experience suggests that we may also eventually need them for future pointer-locking support.
          */
@@ -4411,7 +4415,7 @@ class Input extends Device {
             'mousedown',
             function onMouseDown(event) {
                 if (input.fTouch) return;
-                /*
+                /**
                  * If there are any text input elements on the page that might currently have focus,
                  * this is a good time to divert focus to a focusable element of our own (eg, focusElement).
                  * Otherwise, key presses could be confusingly processed in two places.
@@ -4473,14 +4477,14 @@ class Input extends Device {
     {
         let input = this;
 
-        /*
+        /**
          * NOTE: The mouse event handlers below deal only with events where the left button is involved
          * (ie, left button is pressed, down, or released).
          */
         element.addEventListener(
             'touchstart',
             function onTouchStart(event) {
-                /*
+                /**
                  * Under normal circumstances (ie, when fScroll is false), when any touch events arrive,
                  * onSurfaceEvent() calls preventDefault(), which prevents a variety of potentially annoying
                  * behaviors (ie, zooming, scrolling, fake mouse events, etc).  Under non-normal circumstances,
@@ -4530,7 +4534,7 @@ class Input extends Device {
                         msDelayMin = msDelay;
                     }
                 } else {
-                    /*
+                    /**
                      * Because the key is already in the auto-release state, this next call guarantees that the
                      * key will be removed from the array; a consequence of that removal, however, is that we must
                      * reset our array index to zero.
@@ -4662,7 +4666,7 @@ class Input extends Device {
                 keyMod >>= 1;
             }
             if (keyMod) {
-                /*
+                /**
                  * Firefox generates only keyDown events for CAPS-LOCK, whereas Chrome generates only keyDown
                  * when it's locking and keyUp when it's unlocking.  To support Firefox, we must simply toggle the
                  * current state on a down.
@@ -4680,7 +4684,7 @@ class Input extends Device {
         } else {
             keyCode = 0;
             keyName = String.fromCharCode(code).toUpperCase();
-            /*
+            /**
              * Since code is presumably a charCode, this is a good opportunity to update keyMods with
              * with the *real* CAPS-LOCK setting; that is, we will assume CAPS-LOCK is "off" whenever
              * a lower-case letter arrives and "on" whenever an upper-case letter arrives when neither
@@ -4747,7 +4751,7 @@ class Input extends Device {
                 } else {
                     this.removeActiveKey(keyNum);
                 }
-                /*
+                /**
                  * At this point, I used to return true, indicating that we're not interested in a keypress
                  * event, but in fact, onkeyCode() is now interested in them only insofar as letters can convey
                  * information about the state of CAPS-LOCK (see above).
@@ -4788,20 +4792,20 @@ class Input extends Device {
      */
     onReset()
     {
-        /*
+        /**
          * As keyDown events are encountered, the event keyCode is checked against the active keyMap, if any.
          * If the keyCode exists in the keyMap, then each keyNum in the keyMap is added to the aActiveKeys array.
          * As each key is released (or auto-released), its entry is removed from the array.
          */
         this.aActiveKeys = [];
 
-        /*
+        /**
          * The current (assumed) physical states of the various shift/lock "modifier" keys (formerly bitsState);
          * the browser doesn't provide a way to query them, so all we can do is infer them as events arrive.
          */
         this.keyMods = 0;               // zero or more KEYMOD bits
 
-        /*
+        /**
          * Finally, the active input state.  If there is no active input, col and row are -1.  After
          * this point, these variables will be updated by setPosition().
          */
@@ -4839,7 +4843,7 @@ class Input extends Device {
                 fMultiTouch = (event.targetTouches.length > 1);
             }
 
-            /*
+            /**
              * The following code replaces the older code below it.  It requires that we use clientX and clientY
              * instead of pageX and pageY from the targetTouches array.  The older code seems to be completely broken
              * whenever the page is full-screen, hence this change.
@@ -4848,7 +4852,7 @@ class Input extends Device {
             x -= rect.left;
             y -= rect.top;
 
-            /*
+            /**
              * Touch coordinates (that is, the pageX and pageY properties) are relative to the page, so to make
              * them relative to the element, we must subtract the element's left and top positions.  This Apple document:
              *
@@ -4870,7 +4874,7 @@ class Input extends Device {
              *      y -= yOffset;
              */
 
-            /*
+            /**
              * Due to the responsive nature of our pages, the displayed size of the surface image may be smaller than
              * the original size, and the coordinates we receive from events are based on the currently displayed size.
              */
@@ -4880,7 +4884,7 @@ class Input extends Device {
             xInput = x - state.xInput;
             yInput = y - state.yInput;
 
-            /*
+            /**
              * fInput is set if the event occurred somewhere within the input region (ie, the calculator keypad),
              * either on a button or between buttons, whereas fButton is set if the event occurred squarely (rectangularly?)
              * on a button.  fPower deals separately with the power button; it is set if the event occurred on the
@@ -4889,13 +4893,13 @@ class Input extends Device {
             fInput = fButton = false;
             fPower = (x >= state.xPower && x < state.xPower + state.cxPower && y >= state.yPower && y < state.yPower + state.cyPower);
 
-            /*
+            /**
              * I use the top of the input region, less some gap, to calculate a dividing line, above which
              * default actions should be allowed, and below which they should not.  Ditto for any event inside
              * the power button.
              */
             if (xInput >= 0 && xInput < state.cxInput && yInput + state.cyGap >= 0 || fPower) {
-                /*
+                /**
                  * If we allow touch events to be processed, they will generate mouse events as well, causing
                  * confusion and delays.  We can sidestep that problem by preventing default actions on any event
                  * that occurs within the input region.  One downside is that you can no longer scroll or zoom the
@@ -4908,7 +4912,7 @@ class Input extends Device {
 
                 if (xInput >= 0 && xInput < state.cxInput && yInput >= 0 && yInput < state.cyInput) {
                     fInput = true;
-                    /*
+                    /**
                      * The width and height of each column and row could be determined by computing cxGap + cxButton
                      * and cyGap + cyButton, respectively, but those gap and button sizes are merely estimates, and should
                      * only be used to help with the final button coordinate checks farther down.
@@ -4918,7 +4922,7 @@ class Input extends Device {
                     let colInput = (xInput / cxCol) | 0;
                     let rowInput = (yInput / cyCol) | 0;
 
-                    /*
+                    /**
                      * If the grid is hexagonal (aka "Lite-Brite" mode), then the cells of even-numbered rows are
                      * offset horizontally by 1/2 cell.  In addition, the last cell in those rows is unused, so if
                      * after compensating by 1/2 cell, the target column is the last cell, we set xInput to -1,
@@ -4930,7 +4934,7 @@ class Input extends Device {
                         if (colInput == state.nCols - 1) xInput = -1;
                     }
 
-                    /*
+                    /**
                      * (xCol,yCol) will be the top left corner of the button closest to the point of input.  However, that's
                      * based on our gap estimate.  If things seem "too tight", shrink the gap estimates, which will automatically
                      * increase the button size estimates.
@@ -4954,18 +4958,18 @@ class Input extends Device {
         if (fMultiTouch) return;
 
         if (action == Input.ACTION.PRESS) {
-            /*
+            /**
              * Record the position of the event, transitioning xStart and yStart to non-negative values.
              */
             state.xStart = x;
             state.yStart = y;
             if (fInput) {
-                /*
+                /**
                  * The event occurred in the input region, so we call setPosition() regardless of whether
                  * it hit or missed a button.
                  */
                 this.setPosition(col, row);
-                /*
+                /**
                  * On the other hand, if it DID hit a button, then we arm the auto-release timer, to ensure
                  * a minimum amount of time (ie, releaseDelay).
                  */
@@ -4985,7 +4989,7 @@ class Input extends Device {
             }
         }
         else if (action == Input.ACTION.RELEASE) {
-            /*
+            /**
              * Don't immediately signal the release if the release timer is active (let the timer take care of it).
              */
             if (!this.releaseDelay || !this.time.isTimerSet(this.timerInputRelease)) {
@@ -5008,7 +5012,7 @@ class Input extends Device {
      */
     setFocus()
     {
-        /*
+        /**
          * In addition, we now check machine.isReady(), to avoid jerking the page's focus around when a machine is first
          * powered; it won't be marked ready until all the onPower() calls have completed, including the CPU's onPower()
          * call, which in turn calls setFocus().
@@ -5071,7 +5075,7 @@ Input.TYPE = {                  // types for addListener()
     SWITCH:     "switch"
 };
 
-/*
+/**
  * To keep track of the state of modifier keys, I've grabbed a copy of the same bit definitions
  * used by /modules/pcx86/lib/keyboard.js, since it's only important that we have a set of unique
  * values; what the values are isn't critical.
@@ -5244,7 +5248,7 @@ class LED extends Device {
         this.colorHighlight = this.getRGBAColor(this.colorOn, 1.0, 2.0);
         this.colorBackground = this.getRGBColor(this.config['backgroundColor']);
 
-        /*
+        /**
          * We generally want our view canvas to be "responsive", not "fixed" (ie, to automatically resize
          * with changes to the overall window size), so we apply the following style attributes:
          *
@@ -5259,13 +5263,13 @@ class LED extends Device {
             canvasView.style.height = "auto";
         }
 
-        /*
+        /**
          * Hexagonal (aka "Lite-Brite" mode) and highlighting options
          */
         this.fHexagonal = this.getDefaultBoolean('hexagonal', false);
         this.fHighlight = this.getDefaultBoolean('highlight', true);
 
-        /*
+        /**
          * Persistent LEDS are the default, except for LED.TYPE.DIGIT, which is used with calculator displays
          * whose underlying hardware must constantly "refresh" the LEDs to prevent them from going dark.
          */
@@ -5277,7 +5281,7 @@ class LED extends Device {
         container.appendChild(canvasView);
         this.contextView = /** @type {CanvasRenderingContext2D} */ (canvasView.getContext("2d"));
 
-        /*
+        /**
          * canvasGrid is where all LED segments are composited; then they're drawn onto canvasView.
          */
         this.canvasGrid = /** @type {HTMLCanvasElement} */ (document.createElement("canvas"));
@@ -5287,7 +5291,7 @@ class LED extends Device {
             this.contextGrid = this.canvasGrid.getContext("2d");
         }
 
-        /*
+        /**
          * Time to allocate our internal LED buffer.  Other devices access the buffer through interfaces
          * like setLEDState() and getLEDState().  The LED buffer contains four per elements per LED cell:
          *
@@ -5306,7 +5310,7 @@ class LED extends Device {
         this.bufferClone = null;
         this.nBufferIncExtra = (this.colsView < this.cols? (this.cols - this.colsView) * 4 : 0);
 
-        /*
+        /**
          * fBufferModified is straightforward: set to true by any setLEDState() call that actually
          * changed something in the LED buffer, set to false after every drawBuffer() call, periodic
          * or otherwise.
@@ -5322,14 +5326,14 @@ class LED extends Device {
         this.msLastDraw = 0;
         this.fDisplayOn = true;
 
-        /*
+        /**
          * nShiftedLeft is an optimization that tells drawGrid() when it can minimize the number of
          * individual cells to redraw, by shifting the entire grid image leftward and redrawing only
          * the rightmost cells.
          */
         this.nShiftedLeft = 0;
 
-        /*
+        /**
          * This records the location of the most recent LED buffer location updated via setLEDState(),
          * in case we want to highlight it.
          */
@@ -5453,7 +5457,7 @@ class LED extends Device {
             let xStart = this.widthCell * this.nShiftedLeft;
             let cxVisible = this.widthCell * colRedraw;
             this.contextGrid.drawImage(this.canvasGrid, xStart, 0, cxVisible, this.heightGrid, 0, 0, cxVisible, this.heightGrid);
-            /*
+            /**
              * At this point, the only grid drawing we might need to do now is the column at colRedraw,
              * but we still loop over the entire buffer to ensure all the cell MODIFIED states are in sync.
              */
@@ -5529,7 +5533,7 @@ class LED extends Device {
         let xDst = col * this.widthCell + xOffset;
         let yDst = row * this.heightCell;
 
-        /*
+        /**
          * If this is NOT a persistent LED display, then drawGrid() will have done a preliminary clearGrid(),
          * eliminating the need to clear individual cells.  Whereas if this IS a persistent LED display, then
          * we need to clear cells on an as-drawn basis.  If we don't, there could be residual "bleed over"
@@ -5546,7 +5550,7 @@ class LED extends Device {
             this.contextGrid.beginPath();
             this.contextGrid.arc(xDst + coords[0], yDst + coords[1], coords[2], 0, Math.PI * 2);
             if (fTransparent) {
-                /*
+                /**
                  * The following code works as well:
                  *
                  *      this.contextGrid.save();
@@ -5657,7 +5661,7 @@ class LED extends Device {
      */
     drawView()
     {
-        /*
+        /**
          * Setting the 'globalCompositeOperation' property of a 2D context is something you rarely need to do,
          * because the default draw behavior ("source-over") is fine for most cases.  One case where it is NOT
          * fine is when we're using a transparent background color, because it doesn't copy over any transparent
@@ -5936,7 +5940,7 @@ class LED extends Device {
         let buffer = state.shift();
         if (colorOn == this.colorOn && colorBackground == this.colorBackground && buffer && buffer.length == this.buffer.length) {
             this.buffer = buffer;
-            /*
+            /**
              * Loop over all the buffer colors to fix a legacy problem (ie, before we started storing null for colorTransparent)
              */
             for (let i = 0; i <= this.buffer.length - this.nBufferInc; i += this.nBufferInc) {
@@ -6152,7 +6156,7 @@ LED.STATE = {
     ON:         1
 };
 
-/*
+/**
  * NOTE: Although technically the MODIFIED flag is an internal flag, it may be set explicitly as well;
  * the ROM device uses the setLEDState() flags parameter to set it, in order to trigger highlighting of
  * the most recently active LED.
@@ -6177,7 +6181,7 @@ LED.SIZES = [
     [96, 128]           // LED.TYPE.DIGIT
 ];
 
-/*
+/**
  * The segments are arranged roughly as follows, in a 96x128 grid:
  *
  *      AAAA
@@ -6204,7 +6208,7 @@ LED.SEGMENTS = {
     'P':        [80, 102,  8]
 };
 
-/*
+/**
  * Segmented symbols are formed with the following segments.
  */
 LED.SYMBOL_SEGMENTS = {
@@ -6286,7 +6290,7 @@ class Monitor extends Device {
 
         this.monitor = this.bindings[Monitor.BINDING.MONITOR];
         if (this.monitor) {
-            /*
+            /**
              * Making sure the monitor had a "tabindex" attribute seemed like a nice way of ensuring we
              * had a single focusable surface that we could pass to our Input device, but that would be too
              * simple.  Safari once again bites us in the butt, just like it did when we tried to add the
@@ -6299,7 +6303,7 @@ class Monitor extends Device {
         }
         this.container = this.findBinding(Monitor.BINDING.CONTAINER) || this.monitor;
 
-        /*
+        /**
          * Create the Monitor canvas if we weren't given a predefined canvas; we'll assume that an existing
          * canvas is already contained within the monitor.
          */
@@ -6319,7 +6323,7 @@ class Monitor extends Device {
         }
         this.canvasMonitor = canvas;
 
-        /*
+        /**
          * The "contenteditable" attribute on a canvas is a simple way of creating a display surface that can
          * also receive focus and generate input events.  Unfortunately, in Safari, that attribute NOTICEABLY
          * slows down canvas operations whenever it has focus.  All you have to do is click away from the canvas,
@@ -6332,7 +6336,7 @@ class Monitor extends Device {
         let context = canvas.getContext("2d");
         this.contextMonitor = context;
 
-        /*
+        /**
          * HACK: A canvas style of "auto" provides for excellent responsive canvas scaling in EVERY browser
          * except IE9/IE10, so I recalculate the appropriate CSS height every time the parent div is resized;
          * IE11 works without this hack, so we take advantage of the fact that IE11 doesn't identify as "MSIE".
@@ -6349,7 +6353,7 @@ class Monitor extends Device {
             this.monitor.onresize();
         }
 
-        /*
+        /**
          * The following is a related hack that allows the user to force the monitor to use a particular aspect
          * ratio if an 'aspect' attribute or URL parameter is set.  Initially, it's just for testing purposes
          * until we figure out a better UI.  And note that we use our onPageEvent() helper function to make sure
@@ -6357,14 +6361,14 @@ class Monitor extends Device {
          */
         let aspect = +(this.config['aspect'] || this.getURLParms()['aspect']);
 
-        /*
+        /**
          * No 'aspect' parameter yields NaN, which is falsey, and anything else must satisfy my arbitrary
          * constraints of 0.3 <= aspect <= 3.33, to prevent any useless (or worse, browser-blowing) results.
          */
         if (aspect && aspect >= 0.3 && aspect <= 3.33) {
             this.onPageEvent('onresize', function(parentElement, childElement, aspectRatio) {
                 return function onResizeWindow() {
-                    /*
+                    /**
                      * Since aspectRatio is the target width/height, we have:
                      *
                      *      parentElement.clientWidth / childElement.style.height = aspectRatio
@@ -6382,7 +6386,7 @@ class Monitor extends Device {
             window['onresize']();
         }
 
-        /*
+        /**
          * Here's the gross code to handle full-screen support across all supported browsers.  Most of the crud is
          * now buried inside findProperty(), which checks for all the browser prefix variations (eg, "moz", "webkit")
          * and deals with certain property name variations, like 'Fullscreen' (new) vs 'FullScreen' (old).
@@ -6415,7 +6419,7 @@ class Monitor extends Device {
             }
         }
 
-        /*
+        /**
          * The 'touchType' config property can be set to true for machines that require a full keyboard.  If set,
          * we create a transparent textarea "overlay" on top of the canvas and provide it to the Input device
          * via addSurface(), making it easy for the user to activate the on-screen keyboard for touch-type devices.
@@ -6467,7 +6471,7 @@ class Monitor extends Device {
             this.monitor.appendChild(textarea);
         }
 
-        /*
+        /**
          * If there's an Input device, make sure it is associated with our default input surface.
          */
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
@@ -6475,14 +6479,14 @@ class Monitor extends Device {
             this.input.addSurface(textarea || this.monitor, this.findBinding(this.config['focusBinding'], true));
         }
 
-        /*
+        /**
          * These variables are here in case we want/need to add support for borders later...
          */
         this.xMonitorOffset = this.yMonitorOffset = 0;
         this.cxMonitorOffset = this.cxMonitor;
         this.cyMonitorOffset = this.cyMonitor;
 
-        /*
+        /**
          * Support for disabling (or, less commonly, enabling) image smoothing, which all browsers
          * seem to support now (well, OK, I still have to test the latest MS Edge browser), despite
          * it still being labelled "experimental technology".  Let's hope the browsers standardize
@@ -6499,7 +6503,7 @@ class Monitor extends Device {
         if (this.rotateMonitor) {
             this.rotateMonitor = this.rotateMonitor % 360;
             if (this.rotateMonitor > 0) this.rotateMonitor -= 360;
-            /*
+            /**
              * TODO: Consider also disallowing any rotateMonitor value if bufferRotate was already set; setting
              * both is most likely a mistake, but who knows, maybe someone wants to use both for 180-degree rotation?
              */
@@ -6528,7 +6532,7 @@ class Monitor extends Device {
         switch(binding) {
         case Monitor.BINDING.FULLSCREEN:
             element.onclick = function onClickFullScreen() {
-                /*
+                /**
                  * I've encountered situations in Safari on iPadOS where full-screen mode was cancelled without
                  * notification via onFullScreen() (eg, diagnostic printf() calls that used to inadvertently change
                  * focus), so we'd mistakenly think we were still full-screen.
@@ -6572,7 +6576,7 @@ class Monitor extends Device {
         let fSuccess = false;
         if (Monitor.DEBUG) this.printf(Device.MESSAGE.MONITOR, "doFullScreen()\n");
         if (this.container && this.container.doFullScreen) {
-            /*
+            /**
              * Styling the container with a width of "100%" and a height of "auto" works great when the aspect ratio
              * of our virtual monitor is at least roughly equivalent to the physical screen's aspect ratio, but now that
              * we support virtual VGA monitors with an aspect ratio of 1.33, that's very much out of step with modern
@@ -6600,7 +6604,7 @@ class Monitor extends Device {
                 this.container.style.width = sWidth;
                 this.container.style.height = sHeight;
             } else {
-                /*
+                /**
                  * Sadly, the above code doesn't work for Firefox (nor for Chrome, as of Chrome 75 or so), because as
                  * http://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Using_full_screen_mode explains:
                  *
@@ -6762,14 +6766,15 @@ class Time extends Device {
         this.nStepping = 0;
         this.idStepTimeout = this.idAnimationTimeout = 0;
 
-        /*
+        /**
          * I avoid hard-coding the use of requestAnimationFrame() and cancelAnimationFrame() so that
          * we can still use the older setTimeout() and clearTimeout() functions if need be (or want be).
          * However, I've done away with all the old code that used to calculate the optimal setTimeout()
          * delay; in either case, run() is simply called N frames/second, and it's up to calcSpeed() to
          * calculate the appropriate number of cycles to execute per "frame" (nCyclesDepositPerFrame).
          */
-        let sRequestAnimationTimeout = this.findProperty(window, 'requestAnimationFrame'), timeout;
+        let sRequestAnimationTimeout = this.findProperty(window, 'requestAnimationFrame');
+        let timeout;
         if (!sRequestAnimationTimeout) {
             sRequestAnimationTimeout = 'setTimeout';
             timeout = this.msFrameDefault;
@@ -6778,7 +6783,7 @@ class Time extends Device {
         let sCancelAnimationTimeout = this.findProperty(window, 'cancelAnimationFrame') || 'clearTimeout';
         this.cancelAnimationTimeout = window[sCancelAnimationTimeout].bind(window);
 
-        /*
+        /**
          * Assorted bookkeeping variables.  A running machine actually performs one long series of "runs"
          * (aka animation frames), each followed by a yield back to the browser.  And each "run" consists of
          * one or more "bursts"; the size and number of "bursts" depends on how often the machine's timers
@@ -6789,7 +6794,7 @@ class Time extends Device {
         this.nCyclesBurst = 0;          // number of cycles requested for the next "burst"
         this.nCyclesRemain = 0;         // number of cycles remaining in the next "burst"
 
-        /*
+        /**
          * Now that clocking is driven exclusively by animation frames, calcSpeed() calculates how many
          * cycles each animation frame should "deposit" in our cycle bank:
          *
@@ -6805,7 +6810,7 @@ class Time extends Device {
          */
         this.nCyclesDeposited = this.nCyclesDepositPerFrame = 0;
 
-        /*
+        /**
          * Reset speed to the base multiplier and perform an initial calcSpeed().
          */
         this.resetSpeed();
@@ -6955,7 +6960,7 @@ class Time extends Device {
             this.printf(Device.MESSAGE.TIME, "calcSpeed(%d cycles, %5.3fms): %5.3fMhz\n", nCycles, msElapsed, mhz);
             if (msFrame > this.msFrameDefault) {
                 if (this.nTargetMultiplier > 1) {
-                    /*
+                    /**
                      * Alternatively, we could call setSpeed(this.nTargetMultiplier >> 1) at this point, but the
                      * advantages of quietly reduing the target multiplier here are: 1) it will still slow us down,
                      * and 2) allow the next attempt to increase speed via setSpeed() to detect that we didn't
@@ -6964,7 +6969,7 @@ class Time extends Device {
                     this.nTargetMultiplier >>= 1;
                     this.printf(Device.MESSAGE.WARN, "warning: frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
                 }
-                /*
+                /**
                  * If we (potentially) took too long on this last run, we pass that time back as an adjustment,
                  * which runStop() can add to msStartThisRun, thereby reducing the likelihood that the next runStart()
                  * will (potentially) misinterpret the excessive time as browser throttling.
@@ -6974,7 +6979,7 @@ class Time extends Device {
         }
         this.mhzCurrent = mhz;
         this.nCurrentMultiplier = mhz / this.mhzBase;
-        /*
+        /**
          * If we're running twice as fast as the base speed (say, 4Mhz instead of 2Mhz), then the current multiplier
          * will be 2; similarly, if we're running at half the base speed (say, 1Mhz instead of 2Mhz), the current
          * multiplier will be 0.5.  And if all we needed to do was converge on the base speed, we would simply divide
@@ -7271,7 +7276,7 @@ class Time extends Device {
     onPower(on)
     {
         this.fPowered = on;
-        /*
+        /**
          * This is also a good time to get access to the Debugger, if any, and add our dump extensions.
          */
         if (this.dbg === undefined) {
@@ -7403,7 +7408,7 @@ class Time extends Device {
         try {
             this.fYield = false;
             do {
-                /*
+                /**
                  * Execute a normal burst and then update all timers.
                  */
                 this.notifyTimers(this.endBurst(this.doBurst(this.getCyclesPerRun())));
@@ -7424,7 +7429,7 @@ class Time extends Device {
     runStart(t)
     {
         let msStartThisRun = Date.now();
-        /*
+        /**
          * If there was no interruption between the last run and this run (ie, msEndRun wasn't zeroed by
          * intervening setSpeed() or stop()/start() calls), and there was an unusual delay between the two
          * runs, then we assume that "browser throttling" is occurring due to visibility or redraw issues
@@ -7435,7 +7440,7 @@ class Time extends Device {
          * so we must try to estimate and incorporate that delay into our overall run time.
          */
         if (this.msEndRun) {
-            /*
+            /**
              * In a perfect world, the difference between the start of this run and the start of the last run
              * (which is still in this.msStartThisRun since we haven't updated it yet) would be msFrameDefault;
              * if it's more than twice that, we assume the browser is either throttling us or is simply too
@@ -7482,7 +7487,7 @@ class Time extends Device {
     setSpeed(nMultiplier)
     {
         if (nMultiplier !== undefined) {
-            /*
+            /**
              * If the multiplier is invalid, or we haven't reached 90% of the current target speed,
              * revert to the base multiplier.
              */
@@ -7512,7 +7517,7 @@ class Time extends Device {
      */
     setSpeedThrottle()
     {
-        /*
+        /**
          * We're not going to assume any direct relationship between the slider's min/max/value
          * and our own nCyclesMinimum/nCyclesMaximum/nCyclesPerSecond.  We're just going to calculate
          * a new target nCyclesPerSecond that is proportional, and then convert that to a speed multiplier.
@@ -7548,7 +7553,7 @@ class Time extends Device {
             let timer = this.aTimers[iTimer-1];
             if (fReset || timer.nCyclesLeft < 0) {
                 nCycles = this.getCyclesPerMS(ms);
-                /*
+                /**
                  * If we're currently executing a burst of cycles, the number of cycles executed in the burst
                  * so far must NOT be charged against the cycle timeout we're about to set.  The simplest way to
                  * resolve that is to immediately call endBurst() and bias the cycle timeout by the number of
@@ -7596,7 +7601,7 @@ class Time extends Device {
                 this.nStepping = nRepeat;
             }
             if (this.nStepping) {
-                /*
+                /**
                  * Execute a minimum-cycle burst and then update all timers.
                  */
                 this.nStepping--;
@@ -7776,7 +7781,7 @@ class Bus extends Device {
     constructor(idMachine, idDevice, config)
     {
         super(idMachine, idDevice, config);
-        /*
+        /**
          * Our default type is DYNAMIC for the sake of older device configs (eg, TI-57)
          * which didn't specify a type and need a dynamic bus to ensure that their LED ROM array
          * (if any) gets updated on ROM accesses.
@@ -7840,7 +7845,7 @@ class Bus extends Device {
             let sizeBlock = this.blockSize - (addrNext - addrBlock);
             if (sizeBlock > sizeLeft) sizeBlock = sizeLeft;
             let blockExisting = this.blocks[iBlock];
-            /*
+            /**
              * If addrNext does not equal addrBlock, or sizeBlock does not equal this.blockSize, then either
              * the current block doesn't start on a block boundary or the size is something other than a block;
              * while we might support such requests down the road, that is currently a configuration error.
@@ -7849,21 +7854,21 @@ class Bus extends Device {
 
                 return false;
             }
-            /*
+            /**
              * Make sure that no block exists at the specified address, or if so, make sure its type is NONE.
              */
             if (blockExisting && blockExisting.type != Memory.TYPE.NONE) {
 
                 return false;
             }
-            /*
+            /**
              * When no block is provided, we must allocate one that matches the specified type (and remaining size).
              */
             let idBlock = this.idDevice + '[' + this.toBase(addrNext, 16, this.addrWidth) + ']';
             if (!block) {
                 blockNew = new Memory(this.idMachine, idBlock, {type, addr: addrNext, size: sizeBlock, "bus": this.idDevice});
             } else {
-                /*
+                /**
                  * When a block is provided, make sure its size matches the default Bus block size, and use it if so.
                  */
                 if (block.size == this.blockSize) {
@@ -7989,7 +7994,7 @@ class Bus extends Device {
     {
         this.fFault = true;
         if (!this.nDisableFaults) {
-            /*
+            /**
              * We must call the Debugger's printf() instead of our own in order to use its custom formatters (eg, %n).
              */
             if (this.dbg) {
@@ -8069,7 +8074,7 @@ class Bus extends Device {
      */
     onReset()
     {
-        /*
+        /**
          * The following logic isn't needed because Memory and Port objects are Devices as well,
          * so their onReset() handlers will be invoked automatically.
          *
@@ -8552,7 +8557,7 @@ class Bus extends Device {
     }
 }
 
-/*
+/**
  * A "dynamic" bus (eg, an I/O bus) is one where block accesses must always be performed via function (no direct
  * value access) because there's "logic" on the other end, whereas a "static" bus can be accessed either way, via
  * function or value.
@@ -9721,7 +9726,7 @@ class ROM extends Memory {
         this.bus.addBlocks(this.config['addr'], this.config['size'], this.config['type'], this);
         this.whenReady(this.onReset.bind(this));
 
-        /*
+        /**
          * If an "array" binding has been supplied, then create an LED array sufficiently large to represent the
          * entire ROM.  If data.length is an odd power-of-two, then we will favor a slightly wider array over a taller
          * one, by virtue of using Math.ceil() instead of Math.floor() for the columns calculation.
@@ -9815,7 +9820,7 @@ class ROM extends Memory {
                 success = false;
             }
         }
-        /*
+        /**
          * Version 1.21 and up also saves the ROM contents, since our "mini-debugger" has been updated
          * with an edit command ("e") to enable ROM patching.  However, we prefer to detect improvements
          * in saved state based on the length of the array, not the version number.
@@ -9843,13 +9848,13 @@ class ROM extends Memory {
      */
     onPower(on)
     {
-        /*
+        /**
          * We only care about the first power event, because it's a safe opportunity to find the CPU.
          */
         if (this.cpu === undefined) {
             this.cpu = /** @type {CPU} */ (this.findDeviceByClass("CPU"));
         }
-        /*
+        /**
          * This is also a good time to get access to the Debugger, if any, and pass it symbol information, if any.
          */
         if (this.dbg === undefined) {
@@ -9925,14 +9930,14 @@ class CPU extends Device {
         config['class'] = "CPU";
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * If a Debugger is loaded, it will call connectDebugger().  Having access to the Debugger
          * allows our toString() function to include the instruction, via toInstruction(), and conversely,
          * the Debugger will enjoy access to all our defined register names.
          */
         this.dbg = undefined;
 
-        /*
+        /**
          * regPC is the CPU's program counter, which all CPUs are required to have.
          *
          * regPCLast is an internal register that snapshots the PC at the start of every instruction;
@@ -9941,14 +9946,14 @@ class CPU extends Device {
          */
         this.regPC = this.regPCLast = 0;
 
-        /*
+        /**
          * Get access to the Time device, so we can give it our clock and update functions.
          */
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.time.addClock(this);
         this.time.addUpdate(this);
 
-        /*
+        /**
          * nCyclesStart and nCyclesRemain are initialized on every startClock() invocation.
          * The number of cycles executed during the current burst is nCyclesStart - nCyclesRemain,
          * and the burst is complete when nCyclesRemain has been exhausted (ie, is <= 0).
@@ -10082,7 +10087,7 @@ class Debugger extends Device {
         config['class'] = "Debugger";
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * Default radix (base).  This is used by our own functions (eg, parseExpression()),
          * but not by those we inherited (eg, parseInt()), which still use base 10 by default;
          * however, you can always coerce values to any base in any of those functions with
@@ -10090,24 +10095,24 @@ class Debugger extends Device {
          */
         this.nDefaultRadix = this.config['defaultRadix'] || 16;
 
-        /*
+        /**
          * Default endian (0 = little, 1 = big).
          */
         this.nDefaultEndian = 0;                // TODO: Use it or lose it
 
-        /*
+        /**
          * Default maximum instruction (opcode) length, overridden by the CPU-specific debugger.
          */
         this.maxOpcodeLength = 1;
 
-        /*
+        /**
          * Default parsing parameters, sub-expression and address delimiters.
          */
         this.nASCIIBits = 8;                    // change to 7 for MACRO-10 compatibility
         this.achGroup = ['(',')'];
         this.achAddress = ['[',']'];
 
-        /*
+        /**
          * Add a new format type ('a') that understands Address objects, where width represents
          * the size of the address in bits, and uses the Debugger's default radix.
          *
@@ -10129,7 +10134,7 @@ class Debugger extends Device {
             (type, flags, width, precision, address) => this.toBase(address.off, this.nDefaultRadix, width)
         );
 
-        /*
+        /**
          * Add a new format type ('n') for numbers, where width represents the size of the value in bits,
          * and uses the Debugger's default radix.
          */
@@ -10145,7 +10150,7 @@ class Debugger extends Device {
             (type, flags, width, precision, value) => this.toBase(value, this.nDefaultRadix, width, flags.indexOf('#') < 0? "" : undefined)
         );
 
-        /*
+        /**
          * This controls how we stop the CPU on a break condition.  If fExceptionOnBreak is true, we'll
          * throw an exception, which the CPU will catch and halt; however, the downside of that approach
          * is that, in some cases, it may leave the CPU in an inconsistent state.  It's generally safer to
@@ -10154,18 +10159,18 @@ class Debugger extends Device {
          */
         this.fExceptionOnBreak = false;
 
-        /*
+        /**
          * If greater than zero, decremented on every instruction until it hits zero, then CPU is stopped.
          */
         this.counterBreak = 0;
 
-        /*
+        /**
          * If set to MESSAGE.ALL, then we break on all messages.  It can be set to a subset of message bits,
          * but there is currently no UI for that.
          */
         this.messagesBreak = Device.MESSAGE.NONE;
 
-        /*
+        /**
          * variables is an object with properties that grow as setVariable() assigns more variables;
          * each property corresponds to one variable, where the property name is the variable name (ie,
          * a string beginning with a non-digit, followed by zero or more symbol characters and/or digits)
@@ -10181,25 +10186,25 @@ class Debugger extends Device {
          */
         this.variables = {};
 
-        /*
+        /**
          * Arrays of Symbol objects, one sorted by name and the other sorted by value; see addSymbols().
          */
         this.symbolsByName = [];
         this.symbolsByValue = [];
 
-        /*
+        /**
          * Get access to the CPU, so that in part so we can connect to all its registers; the Debugger has
          * no registers of its own, so we simply replace our registers with the CPU's.
          */
         this.cpu = /** @type {CPU} */ (this.findDeviceByClass("CPU"));
         this.registers = this.cpu.connectDebugger(this);
 
-        /*
+        /**
          * Get access to the Input device, so that we can switch focus whenever we start the machine.
          */
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
 
-        /*
+        /**
          * Get access to the Bus devices, so we have access to the I/O and memory address spaces.
          * To minimize configuration redundancy, we rely on the CPU's configuration to get the Bus device IDs.
          */
@@ -10218,7 +10223,7 @@ class Debugger extends Device {
         this.nDefaultBits = this.busMemory.addrWidth;
         this.addrMask = (Math.pow(2, this.nDefaultBits) - 1)|0;
 
-        /*
+        /**
          * Since we want to be able to clear/disable/enable/list break addresses by index number, we maintain
          * an array (aBreakIndexes) that maps index numbers to address array entries.  The mapping values are
          * a combination of BREAKTYPE (high byte) and break address entry (low byte).
@@ -10244,14 +10249,14 @@ class Debugger extends Device {
         this.tempBreak = null;                  // temporary auto-cleared break address managed by setTemp() and clearTemp()
         this.cInstructions = 0;                 // instruction counter (updated only if history is enabled)
 
-        /*
+        /**
          * Get access to the Time device, so we can stop and start time as needed.
          */
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.time.addUpdate(this);
         this.cTransitions = 0;
 
-        /*
+        /**
          * Initialize additional properties required for our onCommand() handler, including
          * support for dump extensions (which we use ourselves to implement the "d state" command).
          */
@@ -10755,7 +10760,7 @@ class Debugger extends Device {
      */
     evalAND(dst, src)
     {
-        /*
+        /**
          * We AND the low 32 bits separately from the higher bits, and then combine them with addition.
          * Since all bits above 32 will be zero, and since 0 AND 0 is 0, no special masking for the higher
          * bits is required.
@@ -10767,7 +10772,7 @@ class Debugger extends Device {
         if (this.nDefaultBits <= 32) {
             return dst & src;
         }
-        /*
+        /**
          * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
          */
         dst = this.truncate(dst, 0, true);
@@ -10805,7 +10810,7 @@ class Debugger extends Device {
      */
     evalIOR(dst, src)
     {
-        /*
+        /**
          * We OR the low 32 bits separately from the higher bits, and then combine them with addition.
          * Since all bits above 32 will be zero, and since 0 OR 0 is 0, no special masking for the higher
          * bits is required.
@@ -10817,7 +10822,7 @@ class Debugger extends Device {
         if (this.nDefaultBits <= 32) {
             return dst | src;
         }
-        /*
+        /**
          * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
          */
         dst = this.truncate(dst, 0, true);
@@ -10839,7 +10844,7 @@ class Debugger extends Device {
      */
     evalXOR(dst, src)
     {
-        /*
+        /**
          * We XOR the low 32 bits separately from the higher bits, and then combine them with addition.
          * Since all bits above 32 will be zero, and since 0 XOR 0 is 0, no special masking for the higher
          * bits is required.
@@ -10851,7 +10856,7 @@ class Debugger extends Device {
         if (this.nDefaultBits <= 32) {
             return dst ^ src;
         }
-        /*
+        /**
          * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
          */
         dst = this.truncate(dst, 0, true);
@@ -10961,14 +10966,14 @@ class Debugger extends Device {
             case '_':
             case '^_':
                 valNew = val1;
-                /*
+                /**
                  * While we always try to avoid assuming any particular number of bits of precision, the 'B' shift
                  * operator (which we've converted to '^_') is unique to the MACRO-10 environment, which imposes the
                  * following restrictions on the shift count.
                  */
                 if (chOp == '^_') val2 = 35 - (val2 & 0xff);
                 if (val2) {
-                    /*
+                    /**
                      * Since binary shifting is a logical (not arithmetic) operation, and since shifting by division only
                      * works properly with positive numbers, we call truncate() to produce an unsigned value.
                      */
@@ -11050,7 +11055,7 @@ class Debugger extends Device {
                     sOp = (iValue < iLimit? asValues[iValue++] : "");
                 }
                 else {
-                    /*
+                    /**
                      * When parseExpression() calls us, it has collapsed all runs of whitespace into single spaces,
                      * and although it allows single spaces to divide the elements of the expression, a space is neither
                      * a unary nor binary operator.  It's essentially a no-op.  If we encounter it here, then it followed
@@ -11107,7 +11112,7 @@ class Debugger extends Device {
 
             aVals.push(this.truncate(v));
 
-            /*
+            /**
              * When parseExpression() calls us, it has collapsed all runs of whitespace into single spaces,
              * and although it allows single spaces to divide the elements of the expression, a space is neither
              * a unary nor binary operator.  It's essentially a no-op.  If we encounter it here, then it followed
@@ -11136,7 +11141,7 @@ class Debugger extends Device {
             }
             aOps.push(sOp);
 
-            /*
+            /**
              * The MACRO-10 binary shifting operator assumes a base-10 shift count, regardless of the current
              * base, so we must override the current base to ensure the count is parsed correctly.
              */
@@ -11234,7 +11239,7 @@ class Debugger extends Device {
     {
         let value;
         if (expr) {
-            /*
+            /**
              * The default delimiting characters for grouped expressions are braces; they can be changed by altering
              * achGroup, but when that happens, instead of changing our regular expressions and operator tables,
              * we simply replace all achGroup characters with braces in the given expression.
@@ -11248,7 +11253,7 @@ class Debugger extends Device {
                 expr = expr.split(this.achGroup[0]).join('{').split(this.achGroup[1]).join('}');
             }
 
-            /*
+            /**
              * Quoted ASCII characters can have a numeric value, too, which must be converted now, to avoid any
              * conflicts with the operators below.
              *
@@ -11260,7 +11265,7 @@ class Debugger extends Device {
             expr = this.parseASCII(expr, "'", 6);
             if (!expr) return value;
 
-            /*
+            /**
              * All browsers (including, I believe, IE9 and up) support the following idiosyncrasy of a RegExp split():
              * when the RegExp uses a capturing pattern, the resulting array will include entries for all the pattern
              * matches along with the non-matches.  This effectively means that, in the set of expressions that we
@@ -11365,7 +11370,7 @@ class Debugger extends Device {
                 if (value == undefined) {
                     value = this.getVariable(sValue);
                     if (value == undefined) {
-                        /*
+                        /**
                          * A feature of MACRO-10 is that any single-digit number is automatically interpreted as base-10.
                          */
                         value = this.parseInt(sValue, sValue.length > 1 || this.nDefaultRadix > 10? this.nDefaultRadix : 10);
@@ -11790,7 +11795,7 @@ class Debugger extends Device {
         if (n >= 0) this.counterBreak = n;
         result += "instruction break count: " + (this.counterBreak > 0? this.counterBreak : "disabled") + "\n";
         if (n > 0) {
-            /*
+            /**
              * It doesn't hurt to always call enableHistory(), but avoiding the call minimizes unnecessary messages.
              */
             if (!this.historyBuffer.length) result += this.enableHistory(true);
@@ -11976,7 +11981,7 @@ class Debugger extends Device {
     {
         message = this.sprintf(message, ...args);
         if (this.time.isRunning() && this.fExceptionOnBreak) {
-            /*
+            /**
              * We don't print the message in this case, because the CPU's exception handler already
              * does that; it has to be prepared for any kind of exception, not just those that we throw.
              */
@@ -12238,7 +12243,7 @@ class Debugger extends Device {
             this.stopCPU("break on message");
             return;
         }
-        /*
+        /**
          * This is an effort to help keep the browser responsive when lots of messages are being generated.
          */
         this.time.yield();
@@ -12281,7 +12286,7 @@ class Debugger extends Device {
             cmd = this.sDumpPrev || cmd;
         }
 
-        /*
+        /**
          * We refrain from reporting potentially undefined symbols until after we've checked for dump extensions.
          */
         if (cmd[0] != 's' && aUndefined.length) {
@@ -12414,7 +12419,7 @@ class Debugger extends Device {
         case 's':
             enable = this.parseBoolean(option);
             if (cmd[1] == 'h') {
-                /*
+                /**
                  * Don't let the user turn off history if any breaks (which may depend on history) are still set.
                  */
                 if (this.cBreaks || this.counterBreak > 0) {
@@ -12660,7 +12665,7 @@ Debugger.ADDRESS = {
     REAL:       0x00
 };
 
-/*
+/**
  * The required characteristics of these assigned values are as follows: all even values must be read
  * operations and all odd values must be write operations; all busMemory operations must come before all
  * busIO operations; and INPUT must be the first busIO operation.
@@ -12679,7 +12684,7 @@ Debugger.BREAKCMD = {
     [Debugger.BREAKTYPE.OUTPUT]:   "bo"
 };
 
-/*
+/**
  * Predefined "virtual registers" that we expect the CPU to support.
  */
 Debugger.REGISTER = {
@@ -12706,7 +12711,7 @@ Debugger.SYMBOL_TYPES = {
 
 Debugger.HISTORY_LIMIT = 100000;
 
-/*
+/**
  * These are our operator precedence tables.  Operators toward the bottom (with higher values) have
  * higher precedence.  BINOP_PRECEDENCE was our original table; we had to add DECOP_PRECEDENCE because
  * the precedence of operators in DEC's MACRO-10 expressions differ.  Having separate tables also allows
@@ -12785,7 +12790,7 @@ Debugger.DECOP_PRECEDENCE = {
 
 
 /**
- * 68K CPU Emulation
+ * 68K Emulator
  *
  * @class {CPU68K}
  * @unrestricted
@@ -15803,7 +15808,7 @@ CPU68K.CLASSES["CPU68K"] = CPU68K;
  */
 
 /**
- * Debugger for 68K CPUs
+ * 68K Debugger
  *
  * @class {Dbg68K}
  * @unrestricted
@@ -15820,9 +15825,7 @@ class Dbg68K extends Debugger {
     constructor(idMachine, idDevice, config)
     {
         super(idMachine, idDevice, config);
-        this.styles = [Dbg68K.STYLE_8080, Dbg68K.STYLE_8086];
-        this.style = Dbg68K.STYLE_8086;
-        this.maxOpcodeLength = 3;
+        this.maxOpcodeLength = 6;
     }
 
     /**
@@ -15868,131 +15871,7 @@ class Dbg68K extends Debugger {
         let sLabel = this.getSymbolName(address, Debugger.SYMBOL.LABEL);
         let sComment = this.getSymbolName(address, Debugger.SYMBOL.COMMENT);
 
-        /**
-         * getNextByte()
-         *
-         * @returns {number}
-         */
-        let getNextByte = () => {
-            let byte = opcodes.shift();
-            sBytes += this.toBase(byte, 16, 8, "");
-            this.addAddress(address, 1);
-            return byte;
-        };
-
-        /**
-         * getNextWord()
-         *
-         * @returns {number}
-         */
-        let getNextWord = () => getNextByte() | (getNextByte() << 8);
-
-        /**
-         * getImmOperand(type)
-         *
-         * @param {number} type
-         * @returns {string} operand
-         */
-        let getImmOperand = (type) => {
-            let sOperand = ' ';
-            let typeSize = type & Dbg68K.TYPE_SIZE;
-            switch (typeSize) {
-            case Dbg68K.TYPE_BYTE:
-                sOperand = this.toBase(getNextByte(), 16, 8, "");
-                break;
-            case Dbg68K.TYPE_SBYTE:
-                sOperand = this.toBase((getNextWord() << 24) >> 24, 16, 16, "");
-                break;
-            case Dbg68K.TYPE_WORD:
-                sOperand = this.toBase(getNextWord(), 16, 16, "");
-                break;
-            default:
-                return "imm(" + this.toBase(type, 16, 16, "") + ')';
-            }
-            if (this.style == Dbg68K.STYLE_8086 && (type & Dbg68K.TYPE_MEM)) {
-                sOperand = '[' + sOperand + ']';
-            } else if (!(type & Dbg68K.TYPE_REG)) {
-                sOperand = (this.style == Dbg68K.STYLE_8080? '$' : "0x") + sOperand;
-            }
-            return sOperand;
-        };
-
-        /**
-         * getRegOperand(iReg, type)
-         *
-         * @param {number} iReg
-         * @param {number} type
-         * @returns {string} operand
-         */
-        let getRegOperand = (iReg, type) => {
-            /*
-             * Although this breaks with 8080 assembler conventions, I'm going to experiment with some different
-             * mnemonics; specifically, "[HL]" instead of "M".  This is also more in keeping with how getImmOperand()
-             * displays memory references (ie, by enclosing them in brackets).
-             */
-            let sOperand = Dbg68K.REGS[iReg];
-            if (this.style == Dbg68K.STYLE_8086 && (type & Dbg68K.TYPE_MEM)) {
-                if (iReg == Dbg68K.REG_M) {
-                    sOperand = "HL";
-                }
-                sOperand = '[' + sOperand + ']';
-            }
-            return sOperand;
-        };
-
-        let opcode = getNextByte();
-
-        let asOpcodes = this.style != Dbg68K.STYLE_8086? Dbg68K.INS_NAMES : Dbg68K.INS_NAMES_8086;
-        let aOpDesc = Dbg68K.aaOpDescs[opcode];
-        let opNum = aOpDesc[0];
-
-        let sOperands = "";
-        let sOpcode = asOpcodes[opNum];
-        let cOperands = aOpDesc.length - 1;
-        let typeSizeDefault = Dbg68K.TYPE_NONE, type;
-
-        for (let iOperand = 1; iOperand <= cOperands; iOperand++) {
-
-            let sOperand = "";
-
-            type = aOpDesc[iOperand];
-            if (type === undefined) continue;
-            if ((type & Dbg68K.TYPE_OPT) && this.style == Dbg68K.STYLE_8080) continue;
-
-            let typeMode = type & Dbg68K.TYPE_MODE;
-            if (!typeMode) continue;
-
-            let typeSize = type & Dbg68K.TYPE_SIZE;
-            if (!typeSize) {
-                type |= typeSizeDefault;
-            } else {
-                typeSizeDefault = typeSize;
-            }
-
-            let typeOther = type & Dbg68K.TYPE_OTHER;
-            if (!typeOther) {
-                type |= (iOperand == 1? Dbg68K.TYPE_OUT : Dbg68K.TYPE_IN);
-            }
-
-            if (typeMode & Dbg68K.TYPE_IMM) {
-                sOperand = getImmOperand(type);
-            }
-            else if (typeMode & Dbg68K.TYPE_REG) {
-                sOperand = getRegOperand((type & Dbg68K.TYPE_IREG) >> 8, type);
-            }
-            else if (typeMode & Dbg68K.TYPE_INT) {
-                sOperand = ((opcode >> 3) & 0x7).toString();
-            }
-
-            if (!sOperand || !sOperand.length) {
-                sOperands = "INVALID";
-                break;
-            }
-            if (sOperands.length > 0) sOperands += ',';
-            sOperands += (sOperand || "???");
-        }
-
-        let result = this.sprintf("%s %-7s%s %-7s %s", sAddr, sBytes, (type & Dbg68K.TYPE_UNDOC)? '*' : ' ', sOpcode, sOperands);
+        let result = this.sprintf("%s %-7s %-7s %s", sAddr, sBytes);
         if (!annotation) {
             if (sComment) annotation = sComment;
         } else {
@@ -16016,414 +15895,6 @@ Dbg68K.DATAACCESS_NONE     = 0;
 Dbg68K.DATAACCESS_READ     = 1;
 Dbg68K.DATAACCESS_WRITE    = 2;
 Dbg68K.DATAACCESS_UNINIT   = 3;
-
-
-Dbg68K.STYLE_8080 = "8080";
-Dbg68K.STYLE_8086 = "8086";
-
-/*
- * CPU instruction ordinals
- */
-Dbg68K.INS = {
-    NONE:   0,  ACI:    1,  ADC:    2,  ADD:    3,  ADI:    4,  ANA:    5,  ANI:    6,  CALL:   7,
-    CC:     8,  CM:     9,  CNC:   10,  CNZ:   11,  CP:    12,  CPE:   13,  CPO:   14,  CZ:    15,
-    CMA:   16,  CMC:   17,  CMP:   18,  CPI:   19,  DAA:   20,  DAD:   21,  DCR:   22,  DCX:   23,
-    DI:    24,  EI:    25,  HLT:   26,  IN:    27,  INR:   28,  INX:   29,  JMP:   30,  JC:    31,
-    JM:    32,  JNC:   33,  JNZ:   34,  JP:    35,  JPE:   36,  JPO:   37,  JZ:    38,  LDA:   39,
-    LDAX:  40,  LHLD:  41,  LXI:   42,  MOV:   43,  MVI:   44,  NOP:   45,  ORA:   46,  ORI:   47,
-    OUT:   48,  PCHL:  49,  POP:   50,  PUSH:  51,  RAL:   52,  RAR:   53,  RET:   54,  RC:    55,
-    RM:    56,  RNC:   57,  RNZ:   58,  RP:    59,  RPE:   60,  RPO:   61,  RZ:    62,  RLC:   63,
-    RRC:   64,  RST:   65,  SBB:   66,  SBI:   67,  SHLD:  68,  SPHL:  69,  STA:   70,  STAX:  71,
-    STC:   72,  SUB:   73,  SUI:   74,  XCHG:  75,  XRA:   76,  XRI:   77,  XTHL:  78
-};
-
-/*
- * CPU instruction names (mnemonics), indexed by CPU instruction ordinal (above)
- *
- * If you change the default style, using the "s" command (eg, "s 8086"), then the 8086 table
- * will be used instead.  TODO: Add a "s z80" command for Z80-style mnemonics.
- */
-Dbg68K.INS_NAMES = [
-    "NONE",     "ACI",      "ADC",      "ADD",      "ADI",      "ANA",      "ANI",      "CALL",
-    "CC",       "CM",       "CNC",      "CNZ",      "CP",       "CPE",      "CPO",      "CZ",
-    "CMA",      "CMC",      "CMP",      "CPI",      "DAA",      "DAD",      "DCR",      "DCX",
-    "DI",       "EI",       "HLT",      "IN",       "INR",      "INX",      "JMP",      "JC",
-    "JM",       "JNC",      "JNZ",      "JP",       "JPE",      "JPO",      "JZ",       "LDA",
-    "LDAX",     "LHLD",     "LXI",      "MOV",      "MVI",      "NOP",      "ORA",      "ORI",
-    "OUT",      "PCHL",     "POP",      "PUSH",     "RAL",      "RAR",      "RET",      "RC",
-    "RM",       "RNC",      "RNZ",      "RP",       "RPE",      "RPO",      "RZ",       "RLC",
-    "RRC",      "RST",      "SBB",      "SBI",      "SHLD",     "SPHL",     "STA",      "STAX",
-    "STC",      "SUB",      "SUI",      "XCHG",     "XRA",      "XRI",      "XTHL"
-];
-
-Dbg68K.INS_NAMES_8086 = [
-    "NONE",     "ADC",      "ADC",      "ADD",      "ADD",      "AND",      "AND",      "CALL",
-    "CALLC",    "CALLS",    "CALLNC",   "CALLNZ",   "CALLNS",   "CALLP",    "CALLNP",   "CALLZ",
-    "NOT",      "CMC",      "CMP",      "CMP",      "DAA",      "ADD",      "DEC",      "DEC",
-    "CLI",      "STI",      "HLT",      "IN",       "INC",      "INC",      "JMP",      "JC",
-    "JS",       "JNC",      "JNZ",      "JNS",      "JP",       "JNP",      "JZ",       "MOV",
-    "MOV",      "MOV",      "MOV",      "MOV",      "MOV",      "NOP",      "OR",       "OR",
-    "OUT",      "JMP",      "POP",      "PUSH",     "RCL",      "RCR",      "RET",      "RETC",
-    "RETS",     "RETNC",    "RETNZ",    "RETNS",    "RETP",     "RETNP",    "RETZ",     "ROL",
-    "ROR",      "RST",      "SBB",      "SBB",      "MOV",      "MOV",      "MOV",      "MOV",
-    "STC",      "SUB",      "SUB",      "XCHG",     "XOR",      "XOR",      "XCHG"
-];
-
-Dbg68K.REG_B      = 0x00;
-Dbg68K.REG_C      = 0x01;
-Dbg68K.REG_D      = 0x02;
-Dbg68K.REG_E      = 0x03;
-Dbg68K.REG_H      = 0x04;
-Dbg68K.REG_L      = 0x05;
-Dbg68K.REG_M      = 0x06;
-Dbg68K.REG_A      = 0x07;
-Dbg68K.REG_BC     = 0x08;
-Dbg68K.REG_DE     = 0x09;
-Dbg68K.REG_HL     = 0x0A;
-Dbg68K.REG_SP     = 0x0B;
-Dbg68K.REG_PC     = 0x0C;
-Dbg68K.REG_PS     = 0x0D;
-Dbg68K.REG_PSW    = 0x0E;      // aka AF if Z80-style mnemonics
-
-/*
- * NOTE: "PS" is the complete processor status, which includes bits like the Interrupt flag (IF),
- * which is NOT the same as "PSW", which is the low 8 bits of "PS" combined with "A" in the high byte.
- */
-Dbg68K.REGS = [
-    "B", "C", "D", "E", "H", "L", "M", "A", "BC", "DE", "HL", "SP", "PC", "PS", "PSW"
-];
-
-/*
- * Operand type descriptor masks and definitions
- */
-Dbg68K.TYPE_SIZE  = 0x000F;    // size field
-Dbg68K.TYPE_MODE  = 0x00F0;    // mode field
-Dbg68K.TYPE_IREG  = 0x0F00;    // implied register field
-Dbg68K.TYPE_OTHER = 0xF000;    // "other" field
-
-/*
- * TYPE_SIZE values
- */
-Dbg68K.TYPE_NONE  = 0x0000;    // (all other TYPE fields ignored)
-Dbg68K.TYPE_BYTE  = 0x0001;    // byte, regardless of operand size
-Dbg68K.TYPE_SBYTE = 0x0002;    // byte sign-extended to word
-Dbg68K.TYPE_WORD  = 0x0003;    // word (16-bit value)
-
-/*
- * TYPE_MODE values
- */
-Dbg68K.TYPE_REG   = 0x0010;    // register
-Dbg68K.TYPE_IMM   = 0x0020;    // immediate data
-Dbg68K.TYPE_ADDR  = 0x0033;    // immediate (word) address
-Dbg68K.TYPE_MEM   = 0x0040;    // memory reference
-Dbg68K.TYPE_INT   = 0x0080;    // interrupt level encoded in instruction (bits 3-5)
-
-/*
- * TYPE_IREG values, based on the REG_* constants.
- *
- * Note that TYPE_M isn't really a register, just an alternative form of TYPE_HL | TYPE_MEM.
- */
-Dbg68K.TYPE_A     = (Dbg68K.REG_A  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE);
-Dbg68K.TYPE_B     = (Dbg68K.REG_B  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE);
-Dbg68K.TYPE_C     = (Dbg68K.REG_C  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE);
-Dbg68K.TYPE_D     = (Dbg68K.REG_D  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE);
-Dbg68K.TYPE_E     = (Dbg68K.REG_E  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE);
-Dbg68K.TYPE_H     = (Dbg68K.REG_H  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE);
-Dbg68K.TYPE_L     = (Dbg68K.REG_L  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE);
-Dbg68K.TYPE_M     = (Dbg68K.REG_M  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE | Dbg68K.TYPE_MEM);
-Dbg68K.TYPE_BC    = (Dbg68K.REG_BC << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_WORD);
-Dbg68K.TYPE_DE    = (Dbg68K.REG_DE << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_WORD);
-Dbg68K.TYPE_HL    = (Dbg68K.REG_HL << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_WORD);
-Dbg68K.TYPE_SP    = (Dbg68K.REG_SP << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_WORD);
-Dbg68K.TYPE_PC    = (Dbg68K.REG_PC << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_WORD);
-Dbg68K.TYPE_PSW   = (Dbg68K.REG_PSW<< 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_WORD);
-
-/*
- * TYPE_OTHER bit definitions
- */
-Dbg68K.TYPE_IN    = 0x1000;    // operand is input
-Dbg68K.TYPE_OUT   = 0x2000;    // operand is output
-Dbg68K.TYPE_BOTH  = (Dbg68K.TYPE_IN | Dbg68K.TYPE_OUT);
-Dbg68K.TYPE_OPT   = 0x4000;    // optional operand (ie, normally omitted in 8080 assembly language)
-Dbg68K.TYPE_UNDOC = 0x8000;    // opcode is an undocumented alternative encoding
-
-/*
- * The aaOpDescs array is indexed by opcode, and each element is a sub-array (aOpDesc) that describes
- * the corresponding opcode. The sub-elements are as follows:
- *
- *      [0]: {number} of the opcode name (see INS.*)
- *      [1]: {number} containing the destination operand descriptor bit(s), if any
- *      [2]: {number} containing the source operand descriptor bit(s), if any
- *      [3]: {number} containing the occasional third operand descriptor bit(s), if any
- *
- * These sub-elements are all optional. If [0] is not present, the opcode is undefined; if [1] is not
- * present (or contains zero), the opcode has no (or only implied) operands; if [2] is not present, the
- * opcode has only a single operand.  And so on.
- *
- * Additional default rules:
- *
- *      1) If no TYPE_OTHER bits are specified for the first (destination) operand, TYPE_OUT is assumed;
- *      2) If no TYPE_OTHER bits are specified for the second (source) operand, TYPE_IN is assumed;
- *      3) If no size is specified for the second operand, the size is assumed to match the first operand.
- */
-Dbg68K.aaOpDescs = [
-/* 0x00 */  [Dbg68K.INS.NOP],
-/* 0x01 */  [Dbg68K.INS.LXI,   Dbg68K.TYPE_BC,    Dbg68K.TYPE_IMM],
-/* 0x02 */  [Dbg68K.INS.STAX,  Dbg68K.TYPE_BC   | Dbg68K.TYPE_MEM, Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT],
-/* 0x03 */  [Dbg68K.INS.INX,   Dbg68K.TYPE_BC],
-/* 0x04 */  [Dbg68K.INS.INR,   Dbg68K.TYPE_B],
-/* 0x05 */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_B],
-/* 0x06 */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_B,     Dbg68K.TYPE_IMM],
-/* 0x07 */  [Dbg68K.INS.RLC],
-/* 0x08 */  [Dbg68K.INS.NOP,   Dbg68K.TYPE_UNDOC],
-/* 0x09 */  [Dbg68K.INS.DAD,   Dbg68K.TYPE_HL   | Dbg68K.TYPE_OPT, Dbg68K.TYPE_BC],
-/* 0x0A */  [Dbg68K.INS.LDAX,  Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_BC   | Dbg68K.TYPE_MEM],
-/* 0x0B */  [Dbg68K.INS.DCX,   Dbg68K.TYPE_BC],
-/* 0x0C */  [Dbg68K.INS.INR,   Dbg68K.TYPE_C],
-/* 0x0D */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_C],
-/* 0x0E */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_C,     Dbg68K.TYPE_IMM],
-/* 0x0F */  [Dbg68K.INS.RRC],
-/* 0x10 */  [Dbg68K.INS.NOP,   Dbg68K.TYPE_UNDOC],
-/* 0x11 */  [Dbg68K.INS.LXI,   Dbg68K.TYPE_DE,    Dbg68K.TYPE_IMM],
-/* 0x12 */  [Dbg68K.INS.STAX,  Dbg68K.TYPE_DE   | Dbg68K.TYPE_MEM, Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT],
-/* 0x13 */  [Dbg68K.INS.INX,   Dbg68K.TYPE_DE],
-/* 0x14 */  [Dbg68K.INS.INR,   Dbg68K.TYPE_D],
-/* 0x15 */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_D],
-/* 0x16 */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_D,     Dbg68K.TYPE_IMM],
-/* 0x17 */  [Dbg68K.INS.RAL],
-/* 0x18 */  [Dbg68K.INS.NOP,   Dbg68K.TYPE_UNDOC],
-/* 0x19 */  [Dbg68K.INS.DAD,   Dbg68K.TYPE_HL   | Dbg68K.TYPE_OPT, Dbg68K.TYPE_DE],
-/* 0x1A */  [Dbg68K.INS.LDAX,  Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_DE   | Dbg68K.TYPE_MEM],
-/* 0x1B */  [Dbg68K.INS.DCX,   Dbg68K.TYPE_DE],
-/* 0x1C */  [Dbg68K.INS.INR,   Dbg68K.TYPE_E],
-/* 0x1D */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_E],
-/* 0x1E */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_E,     Dbg68K.TYPE_IMM],
-/* 0x1F */  [Dbg68K.INS.RAR],
-/* 0x20 */  [Dbg68K.INS.NOP,   Dbg68K.TYPE_UNDOC],
-/* 0x21 */  [Dbg68K.INS.LXI,   Dbg68K.TYPE_HL,    Dbg68K.TYPE_IMM],
-/* 0x22 */  [Dbg68K.INS.SHLD,  Dbg68K.TYPE_ADDR | Dbg68K.TYPE_MEM, Dbg68K.TYPE_HL   | Dbg68K.TYPE_OPT],
-/* 0x23 */  [Dbg68K.INS.INX,   Dbg68K.TYPE_HL],
-/* 0x24 */  [Dbg68K.INS.INR,   Dbg68K.TYPE_H],
-/* 0x25 */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_H],
-/* 0x26 */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_H,     Dbg68K.TYPE_IMM],
-/* 0x27 */  [Dbg68K.INS.DAA],
-/* 0x28 */  [Dbg68K.INS.NOP,   Dbg68K.TYPE_UNDOC],
-/* 0x29 */  [Dbg68K.INS.DAD,   Dbg68K.TYPE_HL   | Dbg68K.TYPE_OPT, Dbg68K.TYPE_HL],
-/* 0x2A */  [Dbg68K.INS.LHLD,  Dbg68K.TYPE_HL   | Dbg68K.TYPE_OPT, Dbg68K.TYPE_ADDR | Dbg68K.TYPE_MEM],
-/* 0x2B */  [Dbg68K.INS.DCX,   Dbg68K.TYPE_HL],
-/* 0x2C */  [Dbg68K.INS.INR,   Dbg68K.TYPE_L],
-/* 0x2D */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_L],
-/* 0x2E */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_L,     Dbg68K.TYPE_IMM],
-/* 0x2F */  [Dbg68K.INS.CMA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT],
-/* 0x30 */  [Dbg68K.INS.NOP,   Dbg68K.TYPE_UNDOC],
-/* 0x31 */  [Dbg68K.INS.LXI,   Dbg68K.TYPE_SP,    Dbg68K.TYPE_IMM],
-/* 0x32 */  [Dbg68K.INS.STA,   Dbg68K.TYPE_ADDR | Dbg68K.TYPE_MEM, Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT],
-/* 0x33 */  [Dbg68K.INS.INX,   Dbg68K.TYPE_SP],
-/* 0x34 */  [Dbg68K.INS.INR,   Dbg68K.TYPE_M],
-/* 0x35 */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_M],
-/* 0x36 */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_M,     Dbg68K.TYPE_IMM],
-/* 0x37 */  [Dbg68K.INS.STC],
-/* 0x38 */  [Dbg68K.INS.NOP,   Dbg68K.TYPE_UNDOC],
-/* 0x39 */  [Dbg68K.INS.DAD,   Dbg68K.TYPE_HL   | Dbg68K.TYPE_OPT, Dbg68K.TYPE_SP],
-/* 0x3A */  [Dbg68K.INS.LDA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_ADDR | Dbg68K.TYPE_MEM],
-/* 0x3B */  [Dbg68K.INS.DCX,   Dbg68K.TYPE_SP],
-/* 0x3C */  [Dbg68K.INS.INR,   Dbg68K.TYPE_A],
-/* 0x3D */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_A],
-/* 0x3E */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_A,     Dbg68K.TYPE_IMM],
-/* 0x3F */  [Dbg68K.INS.CMC],
-/* 0x40 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_B],
-/* 0x41 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_C],
-/* 0x42 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_D],
-/* 0x43 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_E],
-/* 0x44 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_H],
-/* 0x45 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_L],
-/* 0x46 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_M],
-/* 0x47 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_A],
-/* 0x48 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_B],
-/* 0x49 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_C],
-/* 0x4A */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_D],
-/* 0x4B */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_E],
-/* 0x4C */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_H],
-/* 0x4D */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_L],
-/* 0x4E */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_M],
-/* 0x4F */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_A],
-/* 0x50 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_B],
-/* 0x51 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_C],
-/* 0x52 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_D],
-/* 0x53 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_E],
-/* 0x54 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_H],
-/* 0x55 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_L],
-/* 0x56 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_M],
-/* 0x57 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_A],
-/* 0x58 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_B],
-/* 0x59 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_C],
-/* 0x5A */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_D],
-/* 0x5B */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_E],
-/* 0x5C */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_H],
-/* 0x5D */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_L],
-/* 0x5E */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_M],
-/* 0x5F */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_A],
-/* 0x60 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_B],
-/* 0x61 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_C],
-/* 0x62 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_D],
-/* 0x63 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_E],
-/* 0x64 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_H],
-/* 0x65 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_L],
-/* 0x66 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_M],
-/* 0x67 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_A],
-/* 0x68 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_B],
-/* 0x69 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_C],
-/* 0x6A */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_D],
-/* 0x6B */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_E],
-/* 0x6C */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_H],
-/* 0x6D */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_L],
-/* 0x6E */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_M],
-/* 0x6F */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_A],
-/* 0x70 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_M,     Dbg68K.TYPE_B],
-/* 0x71 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_M,     Dbg68K.TYPE_C],
-/* 0x72 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_M,     Dbg68K.TYPE_D],
-/* 0x73 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_M,     Dbg68K.TYPE_E],
-/* 0x74 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_M,     Dbg68K.TYPE_H],
-/* 0x75 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_M,     Dbg68K.TYPE_L],
-/* 0x76 */  [Dbg68K.INS.HLT],
-/* 0x77 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_M,     Dbg68K.TYPE_A],
-/* 0x78 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_B],
-/* 0x79 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_C],
-/* 0x7A */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_D],
-/* 0x7B */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_E],
-/* 0x7C */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_H],
-/* 0x7D */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_L],
-/* 0x7E */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_M],
-/* 0x7F */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_A],
-/* 0x80 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0x81 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0x82 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0x83 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0x84 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0x85 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0x86 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0x87 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0x88 */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0x89 */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0x8A */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0x8B */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0x8C */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0x8D */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0x8E */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0x8F */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0x90 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0x91 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0x92 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0x93 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0x94 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0x95 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0x96 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0x97 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0x98 */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0x99 */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0x9A */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0x9B */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0x9C */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0x9D */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0x9E */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0x9F */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0xA0 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0xA1 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0xA2 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0xA3 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0xA4 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0xA5 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0xA6 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0xA7 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0xA8 */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0xA9 */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0xAA */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0xAB */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0xAC */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0xAD */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0xAE */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0xAF */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0xB0 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0xB1 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0xB2 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0xB3 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0xB4 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0xB5 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0xB6 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0xB7 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0xB8 */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0xB9 */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0xBA */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0xBB */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0xBC */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0xBD */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0xBE */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0xBF */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0xC0 */  [Dbg68K.INS.RNZ],
-/* 0xC1 */  [Dbg68K.INS.POP,   Dbg68K.TYPE_BC],
-/* 0xC2 */  [Dbg68K.INS.JNZ,   Dbg68K.TYPE_ADDR],
-/* 0xC3 */  [Dbg68K.INS.JMP,   Dbg68K.TYPE_ADDR],
-/* 0xC4 */  [Dbg68K.INS.CNZ,   Dbg68K.TYPE_ADDR],
-/* 0xC5 */  [Dbg68K.INS.PUSH,  Dbg68K.TYPE_BC],
-/* 0xC6 */  [Dbg68K.INS.ADI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xC7 */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT],
-/* 0xC8 */  [Dbg68K.INS.RZ],
-/* 0xC9 */  [Dbg68K.INS.RET],
-/* 0xCA */  [Dbg68K.INS.JZ,    Dbg68K.TYPE_ADDR],
-/* 0xCB */  [Dbg68K.INS.JMP,   Dbg68K.TYPE_ADDR | Dbg68K.TYPE_UNDOC],
-/* 0xCC */  [Dbg68K.INS.CZ,    Dbg68K.TYPE_ADDR],
-/* 0xCD */  [Dbg68K.INS.CALL,  Dbg68K.TYPE_ADDR],
-/* 0xCE */  [Dbg68K.INS.ACI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xCF */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT],
-/* 0xD0 */  [Dbg68K.INS.RNC],
-/* 0xD1 */  [Dbg68K.INS.POP,   Dbg68K.TYPE_DE],
-/* 0xD2 */  [Dbg68K.INS.JNC,   Dbg68K.TYPE_ADDR],
-/* 0xD3 */  [Dbg68K.INS.OUT,   Dbg68K.TYPE_IMM  | Dbg68K.TYPE_BYTE,Dbg68K.TYPE_A   | Dbg68K.TYPE_OPT],
-/* 0xD4 */  [Dbg68K.INS.CNC,   Dbg68K.TYPE_ADDR],
-/* 0xD5 */  [Dbg68K.INS.PUSH,  Dbg68K.TYPE_DE],
-/* 0xD6 */  [Dbg68K.INS.SUI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xD7 */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT],
-/* 0xD8 */  [Dbg68K.INS.RC],
-/* 0xD9 */  [Dbg68K.INS.RET,   Dbg68K.TYPE_UNDOC],
-/* 0xDA */  [Dbg68K.INS.JC,    Dbg68K.TYPE_ADDR],
-/* 0xDB */  [Dbg68K.INS.IN,    Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xDC */  [Dbg68K.INS.CC,    Dbg68K.TYPE_ADDR],
-/* 0xDD */  [Dbg68K.INS.CALL,  Dbg68K.TYPE_ADDR | Dbg68K.TYPE_UNDOC],
-/* 0xDE */  [Dbg68K.INS.SBI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xDF */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT],
-/* 0xE0 */  [Dbg68K.INS.RPO],
-/* 0xE1 */  [Dbg68K.INS.POP,   Dbg68K.TYPE_HL],
-/* 0xE2 */  [Dbg68K.INS.JPO,   Dbg68K.TYPE_ADDR],
-/* 0xE3 */  [Dbg68K.INS.XTHL,  Dbg68K.TYPE_SP   | Dbg68K.TYPE_MEM| Dbg68K.TYPE_OPT,  Dbg68K.TYPE_HL | Dbg68K.TYPE_OPT],
-/* 0xE4 */  [Dbg68K.INS.CPO,   Dbg68K.TYPE_ADDR],
-/* 0xE5 */  [Dbg68K.INS.PUSH,  Dbg68K.TYPE_HL],
-/* 0xE6 */  [Dbg68K.INS.ANI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xE7 */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT],
-/* 0xE8 */  [Dbg68K.INS.RPE],
-/* 0xE9 */  [Dbg68K.INS.PCHL,  Dbg68K.TYPE_HL],
-/* 0xEA */  [Dbg68K.INS.JPE,   Dbg68K.TYPE_ADDR],
-/* 0xEB */  [Dbg68K.INS.XCHG,  Dbg68K.TYPE_HL   | Dbg68K.TYPE_OPT, Dbg68K.TYPE_DE  | Dbg68K.TYPE_OPT],
-/* 0xEC */  [Dbg68K.INS.CPE,   Dbg68K.TYPE_ADDR],
-/* 0xED */  [Dbg68K.INS.CALL,  Dbg68K.TYPE_ADDR | Dbg68K.TYPE_UNDOC],
-/* 0xEE */  [Dbg68K.INS.XRI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xEF */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT],
-/* 0xF0 */  [Dbg68K.INS.RP],
-/* 0xF1 */  [Dbg68K.INS.POP,   Dbg68K.TYPE_PSW],
-/* 0xF2 */  [Dbg68K.INS.JP,    Dbg68K.TYPE_ADDR],
-/* 0xF3 */  [Dbg68K.INS.DI],
-/* 0xF4 */  [Dbg68K.INS.CP,    Dbg68K.TYPE_ADDR],
-/* 0xF5 */  [Dbg68K.INS.PUSH,  Dbg68K.TYPE_PSW],
-/* 0xF6 */  [Dbg68K.INS.ORI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xF7 */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT],
-/* 0xF8 */  [Dbg68K.INS.RM],
-/* 0xF9 */  [Dbg68K.INS.SPHL,  Dbg68K.TYPE_SP   | Dbg68K.TYPE_OPT, Dbg68K.TYPE_HL  | Dbg68K.TYPE_OPT],
-/* 0xFA */  [Dbg68K.INS.JM,    Dbg68K.TYPE_ADDR],
-/* 0xFB */  [Dbg68K.INS.EI],
-/* 0xFC */  [Dbg68K.INS.CM,    Dbg68K.TYPE_ADDR],
-/* 0xFD */  [Dbg68K.INS.CALL,  Dbg68K.TYPE_ADDR | Dbg68K.TYPE_UNDOC],
-/* 0xFE */  [Dbg68K.INS.CPI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xFF */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT]
-];
 
 Dbg68K.CLASSES["Dbg68K"] = Dbg68K;
 
@@ -17900,7 +17371,7 @@ class EAModeImmediateLong extends EAMode {
  * @copyright https://www.pcjs.org/modules/ioregs.js (C) 2012-2021 Jeff Parsons
  */
 
-/** @typedef {{ addr: number, size: number, switches: Object }} */
+/** @typedef {{ addr: number, size: number }} */
 let PilotIOConfig;
 
 /**
@@ -17908,7 +17379,7 @@ let PilotIOConfig;
  * @unrestricted
  * @property {PilotIOConfig} config
  */
-class PilotIO extends Device {
+class PilotIO extends Memory {
     /**
      * PilotIO(idMachine, idDevice, config)
      *
@@ -17921,14 +17392,8 @@ class PilotIO extends Device {
     {
         super(idMachine, idDevice, config);
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input"));
-        let onButton = this.onButton.bind(this);
-        let buttonIDs = Object.keys(PilotIO.STATUS1.KEYMAP);
-        for (let i = 0; i < buttonIDs.length; i++) {
-            this.input.addListener(Input.TYPE.IDMAP, buttonIDs[i], onButton);
-        }
-        this.switchConfig = this.config['switches'] || {};
-        this.defaultSwitches = this.parseSwitches(this.switchConfig['default'], 0xff);
-        this.setSwitches(this.defaultSwitches);
+        this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['bus']));
+        this.busMemory.addBlocks(PilotIO.DBREGS_BASE, PilotIO.DBREGS_SIZE, Memory.TYPE.READWRITE, this);
         this.onReset();
     }
 
@@ -17946,12 +17411,6 @@ class PilotIO extends Device {
         if (state) {
             let idDevice = state.shift();
             if (this.idDevice == idDevice) {
-                this.bStatus0 = state.shift();
-                this.bStatus1 = state.shift();
-                this.bStatus2 = state.shift();
-                this.wShiftData = state.shift();
-                this.bShiftCount = state.shift();
-                this.setSwitches(state.shift());
                 return true;
             }
         }
@@ -17969,12 +17428,6 @@ class PilotIO extends Device {
     saveState(state)
     {
         state.push(this.idDevice);
-        state.push(this.bStatus0);
-        state.push(this.bStatus1);
-        state.push(this.bStatus2);
-        state.push(this.wShiftData);
-        state.push(this.bShiftCount);
-        state.push(this.switches);
     }
 
     /**
@@ -17986,8 +17439,6 @@ class PilotIO extends Device {
      */
     onButton(id, down)
     {
-        let bit = PilotIO.STATUS1.KEYMAP[id];
-        this.bStatus1 = (this.bStatus1 & ~bit) | (down? bit : 0);
     }
 
     /**
@@ -17999,273 +17450,437 @@ class PilotIO extends Device {
      */
     onReset()
     {
-        this.bStatus0 = 0;
-        this.bStatus1 = 0;
-        this.bStatus2 = 0;
-        this.wShiftData = 0;
-        this.bShiftCount = 0;
-    }
-
-    /**
-     * setSwitches(switches)
-     *
-     * @this {PilotIO}
-     * @param {number|undefined} switches
-     */
-    setSwitches(switches)
-    {
-        /**
-         * switches may be undefined when called from loadState() if a "pre-switches" state was loaded.
-         */
-        if (switches == undefined) return;
-
-        /**
-         * If this.switches is undefined, then this is the first setSwitches() call, so we should set func
-         * to onSwitch(); otherwise, we omit func so that all addListener() will do is initialize the visual
-         * state of the SWITCH controls.
-         */
-        let func = this.switches == undefined? this.onSwitch.bind(this) : null;
-
-        /**
-         * Now we can set the actual switches to the supplied setting, and initialize each of the (8) switches.
-         */
-        this.switches = switches;
-        for (let i = 1; i <= 8; i++) {
-            this.input.addListener(Input.TYPE.SWITCH, "sw"+i, func, !(switches & (1 << (i - 1))));
+        for (let offset in PilotIO.abRegsInit) {
+            this.printf("reset byte I/O register 0x%08x to 0x%02x\n", PilotIO.DBREGS_BASE + offset, PilotIO.abRegsInit[offset]);
         }
     }
 
     /**
-     * onSwitch(id, state)
+     * readData(offset)
+     *
+     * Implements the required Memory interface for reading a single value (ie, byte) at the given offset.
      *
      * @this {PilotIO}
-     * @param {string} id
-     * @param {boolean} state
+     * @param {number} offset
+     * @returns {number}
      */
-    onSwitch(id, state)
+    readData(offset)
     {
-        let desc;
-        let i = +id.slice(-1) - 1, bit = 1 << i;
-        if (!state) {
-            this.switches |= bit;
-        } else {
-            this.switches &= ~bit;
-        }
-        for (let sws in this.switchConfig) {
-            if (sws == "default" || sws[i] != '0' && sws[i] != '1') continue;
-            let mask = this.parseSwitches(sws, -1);
-            let switches = this.parseSwitches(sws);
-            if (switches == (this.switches & mask)) {
-                desc = this.switchConfig[sws];
-                break;
-            }
-        }
-        this.printf("%s: %b (%s)\n", id, state, desc);
+        let data = 0;
+        this.printf("PilotIO.readData(0x%08x): 0x%02x\n", PilotIO.DBREGS_BASE + offset, data);
+        return data;
     }
 
     /**
-     * inStatus0(port)
+     * writeData(offset, data)
      *
-     * @this {PilotIO}
-     * @param {number} port (0x00)
-     * @returns {number} simulated port value
-     */
-    inStatus0(port)
-    {
-        let value = this.bStatus0;
-        this.printf(Device.MESSAGE.BUS, "inStatus0(%#04x): %#04x\n", port, value);
-        return value;
-    }
-
-    /**
-     * inStatus1(port)
+     * Implements the required Memory interface for writing a single value (ie, byte) at the given offset.
      *
-     * @this {PilotIO}
-     * @param {number} port (0x01)
-     * @returns {number} simulated port value
+     * @this {Memory}
+     * @param {number} offset
+     * @param {number} data
      */
-    inStatus1(port)
-    {
-        let value = this.bStatus1;
-        this.printf(Device.MESSAGE.BUS, "inStatus1(%#04x): %#04x\n", port, value);
-        return value;
-    }
+     writeData(offset, data)
+     {
+        this.printf("PilotIO.writeData(0x%08x, 0x%02x)\n", PilotIO.DBREGS_BASE + offset, data);
+     }
 
-    /**
-     * inStatus2(port)
-     *
-     * @this {PilotIO}
-     * @param {number} port (0x02)
-     * @returns {number} simulated port value
-     */
-    inStatus2(port)
-    {
-        let value = this.bStatus2 | (this.switches & (PilotIO.STATUS2.DIP1_2 | PilotIO.STATUS2.DIP4 | PilotIO.STATUS2.DIP7));
-        this.printf(Device.MESSAGE.BUS, "inStatus2(%#04x): %#04x\n", port, value);
-        return value;
-    }
+  }
 
-    /**
-     * inShiftResult(port)
-     *
-     * @this {PilotIO}
-     * @param {number} port (0x03)
-     * @returns {number} simulated port value
-     */
-    inShiftResult(port)
-    {
-        let value = (this.wShiftData >> (8 - this.bShiftCount)) & 0xff;
-        this.printf(Device.MESSAGE.BUS, "inShiftResult(%#04x): %#04x\n", port, value);
-        return value;
-    }
+/**
+ * List of supported DragonBall h/w registers (see p.24 of MC68328 User's Manual 12/9/97)
+ */
+PilotIO.DBREGS_BASE         = 0xfffff000;
+PilotIO.DBREGS_SIZE         = 0x00001000;
+PilotIO.DBREGS_LIMIT        = PilotIO.DBREGS_BASE + PilotIO.DBREGS_SIZE;
 
-    /**
-     * outShiftCount(port, value)
-     *
-     * @this {PilotIO}
-     * @param {number} port (0x02)
-     * @param {number} value
-     */
-    outShiftCount(port, value)
-    {
-        this.printf(Device.MESSAGE.BUS, "outShiftCount(%#04x): %#04x\n", port, value);
-        this.bShiftCount = value;
-    }
+/**
+ * System Control Register
+ */
+PilotIO.DBREG_SCR           = 0x000;
 
-    /**
-     * outSound1(port, value)
-     *
-     * @this {PilotIO}
-     * @param {number} port (0x03)
-     * @param {number} value
-     */
-    outSound1(port, value)
-    {
-        this.printf(Device.MESSAGE.BUS, "outSound1(%#04x): %#04x\n", port, value);
-        this.bSound1 = value;
-    }
+/**
+ * Mask Revision Register
+ */
+PilotIO.DBREG_MRR           = 0x004;
 
-    /**
-     * outShiftData(port, value)
-     *
-     * @this {PilotIO}
-     * @param {number} port (0x04)
-     * @param {number} value
-     */
-    outShiftData(port, value)
-    {
-        this.printf(Device.MESSAGE.BUS, "outShiftData(%#04x): %#04x\n", port, value);
-        this.wShiftData = (value << 8) | (this.wShiftData >> 8);
-    }
+/**
+ * Chip Select Base Registers
+ */
+PilotIO.DBREG_GRPBASEA      = 0x100;
+PilotIO.DBREG_GRPBASEB      = 0x102;
+PilotIO.DBREG_GRPBASEC      = 0x104;
+PilotIO.DBREG_GRPBASED      = 0x106;
 
-    /**
-     * outSound2(port, value)
-     *
-     * @this {PilotIO}
-     * @param {number} port (0x05)
-     * @param {number} value
-     */
-    outSound2(port, value)
-    {
-        this.printf(Device.MESSAGE.BUS, "outSound2(%#04x): %#04x\n", port, value);
-        this.bSound2 = value;
-    }
+/**
+ * Chip Select A Mask Registers
+ */
+PilotIO.DBREG_GRPMASKA      = 0x108;
+PilotIO.DBREG_GRPMASKB      = 0x10A;
+PilotIO.DBREG_GRPMASKC      = 0x10C;
+PilotIO.DBREG_GRPMASKD      = 0x10E;
 
-    /**
-     * outWatchdog(port, value)
-     *
-     * @this {PilotIO}
-     * @param {number} port (0x06)
-     * @param {number} value
-     */
-    outWatchdog(port, value)
-    {
-        this.printf(Device.MESSAGE.BUS, "outWatchDog(%#04x): %#04x\n", port, value);
-    }
-}
+/**
+ * Group Chip Select Option Registers
+ */
+PilotIO.DBREG_CSA0          = 0x110;
+PilotIO.DBREG_CSA1          = 0x114;
+PilotIO.DBREG_CSA2          = 0x118;
+PilotIO.DBREG_CSA3          = 0x11C;
+PilotIO.DBREG_CSB0          = 0x120;
+PilotIO.DBREG_CSB1          = 0x124;
+PilotIO.DBREG_CSB2          = 0x128;
+PilotIO.DBREG_CSB3          = 0x12C;
+PilotIO.DBREG_CSC0          = 0x130;
+PilotIO.DBREG_CSC1          = 0x134;
+PilotIO.DBREG_CSC2          = 0x138;
+PilotIO.DBREG_CSC3          = 0x13C;
+PilotIO.DBREG_CSD0          = 0x140;
+PilotIO.DBREG_CSD1          = 0x144;
+PilotIO.DBREG_CSD2          = 0x148;
+PilotIO.DBREG_CSD3          = 0x14C;
 
-PilotIO.STATUS0 = {                 // NOTE: STATUS0 not used by the SI1978 ROMs; refer to STATUS1 instead
-    PORT:       0,
-    DIP4:       0x01,               // self-test request at power up?
-    FIRE:       0x10,               // 1 = fire
-    LEFT:       0x20,               // 1 = left
-    RIGHT:      0x40,               // 1 = right
-    PORT7:      0x80,               // some connection to (undocumented) port 7
-    ALWAYS_SET: 0x0E                // always set
+PilotIO.CHIP_SELECT_DEFAULT = 0x00010006;
+
+/**
+ * PLL (Phase-Locked Loop Clock Generator) Control Register (16-bit)
+ *
+ * To put the CPU in "sleep mode", the simplest approach is to wait until PLLFSR_CLK32 in DBREG_PLLFSR goes high,
+ * and then shut down the PLL by setting PLLCR_DISPLL in DBREG_PLLCR.  Any interrupt specified as a "wake up" interrupt
+ * in DBREG_IWR can take the CPU out of "sleep mode" (true even if the interrupt is masked).  For example:
+ *
+ *      lea     #$fff202,A1     ; point to the Freq Sel reg.
+ *      lea     #$fff200,A0     ; point to the Ctrl reg.
+ *  l1: move.w  (A1),D0         ; sync to rising CLK32 edge
+ *      bpl.w   l1              ; wait for CLK32 to go high
+ *      bset    #3,(A0)         ; disable PLL
+ *      stop    #$2000          ; stop fetching and wait for any IRQ
+ *
+ * It's also good practice to disable CLKO before sleeping and re-enabling after wake-up (but I'm not sure if this
+ * is a software recommendation or a hardware-only issue).  There's also the potential for an external device to try to power
+ * itself from the DragonBall's output pins, in which case it may be best to insure the pin(s) are in the "low state"
+ * (which again may be a hardware-only issue).
+ */
+PilotIO.DBREG_PLLCR         = 0x200;
+PilotIO.PLLCR_DISPLL                = 0x0008;       // disables PLL if set (to put the CPU in "sleep mode")
+PilotIO.PLLCR_CLKEN                 = 0x0010;       // enables CLKO pin if set
+PilotIO.PLLCR_SYSCLK                = 0x0700;       // sets system clock to VCO/(2^(SYSCLK+1)), or to VCO if SYSCLK >= 4
+PilotIO.PLLCR_PIXCLK                = 0x3800;       // sets LCD pixel clock to VCO/(2^(PIXCLK+1)), or to VCO if PIXCLK >= 4
+
+/**
+ * PLL (Phase-Locked Loop Clock Generator) Frequency Select Register (16-bit)
+ *
+ * On a Pilot, PLLFSR's default value of 0x0123 is used, which means that P is 35 and Q is 1.  P and Q and used to form
+ * what's called the "PLL Divisor", using the following formula:  14*(P+1) + Q+1.  So the default PLL Divisor is 506.
+ * When choosing other divisors, Q must range from 1 to 14, and P must be greater than Q (which also means that not
+ * all divisor values below 225 are possible).
+ *
+ * The PLL Divisor is used to generate the master frequency, aka system clock.  Assuming a 32.768Khz crystal, multiply that
+ * by 506 to get a master frequency of 16.580608Mhz.  DragonBall documentation says 506 was chosen since it can generate standard
+ * baud frequencies with an error of only 0.05% (they say an "accuracy of 0.05%" but I think they misspoke :-)).
+ */
+PilotIO.DBREG_PLLFSR        = 0x202;
+PilotIO.PLLFSR_PCOUNT               = 0x00FF;       // P counter
+PilotIO.PLLFSR_QCOUNT               = 0x0F00;       // Q counter
+PilotIO.PLLFSR_PROT                 = 0x4000;       // protects P and Q counters from additional writes
+PilotIO.PLLFSR_CLK32                = 0x8000;       // current state of the CLK32 signal (BUGBUG: we just toggle it -JP)
+
+/**
+ * Power Control Register (8-bit, but could also be accessed as a word at 0x206, where bits 8-15 are reserved)
+ */
+PilotIO.DBREG_PCTLR         = 0x207;
+PilotIO.PCTLR_WIDTH                 = 0x1f;         // # of 1/31 the clock is bursted
+PilotIO.PCTLR_STOP                  = 0x40;         // immediately enters power-saving mode ("doze mode")
+PilotIO.PCTLR_PCEN                  = 0x80;         // enables power controller (disabled by interrupts)
+
+/**
+ * Interrupt Vector Register (8-bit)
+ */
+PilotIO.DBREG_IVR           = 0x300;
+
+/**
+ * Interrupt levels (7 is highest priority, 1 is lowest).  The interrupt vector
+ * number for an interrupt is formed by the low 3 bits of the level and the high 5 bits
+ * of the IVR (the low 3 bits of the IVR are always zero).  If an interrupt occurs
+ * before the IVR has been programmed, vector number 0xf is generated by default.
+ * The vector number is then multiplied by 4 to form the corresponding vector address (ie,
+ * there is no vector base register (VBR); the 68000's vector base is hard-coded to zero).
+ */
+PilotIO.INTLVL_IRQ7             = 7;
+PilotIO.INTLVL_SPIS             = 6;        // Serial Peripheral Interface Slave
+PilotIO.INTLVL_TMR1             = 6;
+PilotIO.INTLVL_IRQ6             = 6;
+PilotIO.INTLVL_PEN              = 5;
+PilotIO.INTLVL_SPIM             = 4;        // Serial Peripheral Interface Master
+PilotIO.INTLVL_TMR2             = 4;
+PilotIO.INTLVL_UART             = 4;
+PilotIO.INTLVL_WDT              = 4;        // Watchdog Timer
+PilotIO.INTLVL_RTC              = 4;
+PilotIO.INTLVL_KBD              = 4;
+PilotIO.INTLVL_PWM              = 4;
+PilotIO.INTLVL_INT              = 4;
+PilotIO.INTLVL_IRQ3             = 3;
+PilotIO.INTLVL_IRQ2             = 2;
+PilotIO.INTLVL_IRQ1             = 1;
+
+PilotIO.abIMRLvl = [4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1, 2, 3, 6, 5, 6, 6, 7];
+
+/**
+ * Interrupt Control Register (16-bit)
+ */
+PilotIO.DBREG_ICR           = 0x302;
+PilotIO.ICR_ET6                     = 0x0100;
+PilotIO.ICR_ET3                     = 0x0200;
+PilotIO.ICR_ET2                     = 0x0400;
+PilotIO.ICR_ET1                     = 0x0800;
+
+/**
+ * Interrupt Mask Register (32-bit)
+ */
+PilotIO.DBREG_IMR           = 0x304;
+PilotIO.IMR_SPIM                    = 0x00000001;
+PilotIO.IMR_TMR2                    = 0x00000002;
+PilotIO.IMR_UART                    = 0x00000004;
+PilotIO.IMR_WDT                     = 0x00000008;
+PilotIO.IMR_RTC                     = 0x00000010;
+PilotIO.IMR_KBD                     = 0x00000040;
+PilotIO.IMR_PWM                     = 0x00000080;
+PilotIO.IMR_INT0                    = 0x00000100;
+PilotIO.IMR_INT1                    = 0x00000200;
+PilotIO.IMR_INT2                    = 0x00000400;
+PilotIO.IMR_INT3                    = 0x00000800;
+PilotIO.IMR_INT4                    = 0x00001000;
+PilotIO.IMR_INT5                    = 0x00002000;
+PilotIO.IMR_INT6                    = 0x00004000;
+PilotIO.IMR_INT7                    = 0x00008000;
+PilotIO.IMR_IRQ1                    = 0x00010000;
+PilotIO.IMR_IRQ2                    = 0x00020000;
+PilotIO.IMR_IRQ3                    = 0x00040000;
+PilotIO.IMR_IRQ6                    = 0x00080000;
+PilotIO.IMR_PEN                     = 0x00100000;
+PilotIO.IMR_SPIS                    = 0x00200000;
+PilotIO.IMR_TMR1                    = 0x00400000;
+PilotIO.IMR_IRQ7                    = 0x00800000;
+
+PilotIO.DBREG_IWR           = 0x308;        // Interrupt Wakeup Enable Register (32-bit)
+PilotIO.DBREG_ISR           = 0x30C;        // Interrupt Status Register (32-bit)
+PilotIO.DBREG_IPR           = 0x310;        // Interrupt Pending Register (32-bit)
+
+/**
+ * Port registers (all 8-bit)
+ */
+PilotIO.DBREG_PADIR         = 0x400;
+PilotIO.DBREG_PADATA        = 0x401;
+PilotIO.DBREG_PASEL         = 0x403;
+PilotIO.DBREG_PBDIR         = 0x408;
+PilotIO.DBREG_PBDATA        = 0x409;
+PilotIO.DBREG_PBSEL         = 0x40B;
+PilotIO.DBREG_PCDIR         = 0x410;
+
+/**
+ * I don't know the details of the Port C Data register (PCDATA), but I do know that in PalmOS 3.3,
+ * in a routine called PrvLowBatteryShutdownNow, if it doesn't see bit 4 (value 0x10) set in PCDATA,
+ * then it wants to go to sleep (ie, TRAP HwrSleep).  Let's avoid that for now.  ;-) -JP
+ */
+PilotIO.DBREG_PCDATA        = 0x411;
+PilotIO.DBREG_PCSEL         = 0x413;
+
+/**
+ * The Port D Data register contains bits that map to the hardware button interrupt lines:
+ *      Bit 0:  DeviceInterface.BUTTON_POWER
+ *      Bit 1:  DeviceInterface.BUTTON_UP
+ *      Bit 2:  DeviceInterface.BUTTON_DOWN
+ *      Bit 3:  DeviceInterface.BUTTON_DATEBOOK
+ *      Bit 4:  DeviceInterface.BUTTON_ADDRESS
+ *      Bit 5:  DeviceInterface.BUTTON_TODOLIST
+ *      Bit 6:  DeviceInterface.BUTTON_MEMOPAD
+ *      Bit 7:  Undefined
+ */
+PilotIO.DBREG_PDDIR         = 0x418;
+PilotIO.DBREG_PDDATA        = 0x419;
+PilotIO.DBREG_PDPUEN        = 0x41A;
+PilotIO.DBREG_PDPOL         = 0x41C;
+PilotIO.DBREG_PDIRQEN       = 0x41D;
+PilotIO.DBREG_PDIRQEDGE     = 0x41F;
+PilotIO.DBREG_PEDIR         = 0x420;
+PilotIO.DBREG_PEDATA        = 0x421;
+PilotIO.DBREG_PEPUEN        = 0x422;
+PilotIO.DBREG_PESEL         = 0x423;
+PilotIO.DBREG_PFDIR         = 0x428;
+
+/**
+ * The Port F Data register contains bits that control the LCD display.  The most important one is bit 4 (0x10).
+ */
+PilotIO.DBREG_PFDATA        = 0x429;
+PilotIO.PFDATA_LCDENABLE            = 0x10;
+PilotIO.DBREG_PFPUEN        = 0x42A;
+PilotIO.DBREG_PFSEL         = 0x42B;
+PilotIO.DBREG_PGDIR         = 0x430;
+PilotIO.DBREG_PGDATA        = 0x431;
+PilotIO.DBREG_PGPUEN        = 0x432;
+PilotIO.DBREG_PGSEL         = 0x433;
+PilotIO.DBREG_PJDIR         = 0x438;
+PilotIO.DBREG_PJDATA        = 0x439;
+PilotIO.DBREG_PJSEL         = 0x43B;
+PilotIO.DBREG_PKDIR         = 0x440;
+PilotIO.DBREG_PKDATA        = 0x441;
+PilotIO.DBREG_PKPUEN        = 0x442;
+PilotIO.DBREG_PKSEL         = 0x443;
+PilotIO.DBREG_PMDIR         = 0x448;
+PilotIO.DBREG_PMDATA        = 0x449;
+PilotIO.DBREG_PMPUEN        = 0x44A;
+PilotIO.DBREG_PMSEL         = 0x44B;
+
+PilotIO.DBREG_PWMC          = 0x500;        // PWM Control Register
+PilotIO.DBREG_PWMP          = 0x502;        // PWM Period Register
+PilotIO.DBREG_PWMW          = 0x504;        // PWM Width Register
+PilotIO.DBREG_PWMCNT        = 0x506;        // PWM Counter Register
+
+PilotIO.DBREG_TCTL1         = 0x600;        // Timer Unit 1 Control Register (TMR1, 16-bit)
+PilotIO.TCTL                    = 0;
+PilotIO.TCTL_TEN                    = 0x0001;       // timer enable
+PilotIO.TCTL_CLKSOURCE              = 0x000E;       // clock source
+PilotIO.CLKSOURCE_STOPCOUNT         =    0x0;
+PilotIO.CLKSOURCE_SYSTEMCLOCK       =    0x2;       // input clock = system clock
+PilotIO.CLKSOURCE_SYSTEMCLOCKDIV16  =    0x4;       // input clock = system clock / 16
+PilotIO.CLKSOURCE_TINPIN            =    0x6;
+PilotIO.CLKSOURCE_32OR38KHZ         =    0x8;
+PilotIO.TCTL_IRQEN                  = 0x0010;       // reference event interrupt enable
+PilotIO.TCTL_OM                     = 0x0020;       // output mode
+PilotIO.TCTL_CAPTUREEDGE            = 0x00C0;       // capture edge
+PilotIO.TCTL_FRR                    = 0x0100;       // free run/restart
+
+PilotIO.DBREG_TPRER1        = 0x602;        // Timer Unit 1 Prescaler Register (16-bit)
+PilotIO.TPRER                   = 1;        // the value TPRER_PRESCALER+1 is used to divide the input clock
+PilotIO.TPRER_PRESCALER             = 0x00FF;
+
+PilotIO.DBREG_TCMP1         = 0x604;        // Timer Unit 1 Compare Register (16-bit)
+PilotIO.TCMP                    = 2;
+
+PilotIO.DBREG_TCR1          = 0x606;        // Timer Unit 1 Capture Register (16-bit, R/O)
+PilotIO.TCR                     = 3;
+
+PilotIO.DBREG_TCN1          = 0x608;        // Timer Unit 1 Counter Register (16-bit, R/O)
+PilotIO.TCN                     = 4;
+
+PilotIO.DBREG_TSTAT1        = 0x60A;        // Timer Unit 1 Status Register (16-bit)
+PilotIO.TSTAT                   = 5;
+PilotIO.TSTAT_COMP                  = 0x0001;       // compare event
+PilotIO.TSTAT_CAPT                  = 0x0002;       // capture event
+
+PilotIO.TSTAT_LASTREAD          = 6;        // this isn't a real register, just something we maintain internally
+PilotIO.TMR_REGS                = 7;        // total # of TMR registers
+
+PilotIO.DBREG_TCTL2         = 0x60C;        // Timer Unit 2 Control Register (TMR2, 16-bit)
+PilotIO.DBREG_TPRER2        = 0x60E;        // Timer Unit 2 Prescaler Register (16-bit)
+
+/**
+ * On a Pilot, TCMP2 is set to 0xD7E4, or 55268.  Since TCTL2 sets the input clock to the system clock,
+ * and TPRER2 is set to 2 (which divides the input clock by 3), 100 interrupts per second are generated
+ * (16580608 / 3 / 55268).
+ */
+PilotIO.DBREG_TCMP2         = 0x610;        // Timer Unit 2 Compare Register (16-bit)
+PilotIO.DBREG_TCR2          = 0x612;        // Timer Unit 2 Capture Register (16-bit, R/O)
+PilotIO.DBREG_TCN2          = 0x614;        // Timer Unit 2 Counter Register (16-bit, R/O)
+PilotIO.DBREG_TSTAT2        = 0x616;        // Timer Unit 2 Status Register (16-bit)
+PilotIO.DBREG_WCSR          = 0x618;        // Watchdog Control and Status Register
+PilotIO.DBREG_WRR           = 0x61A;        // Watchdog Compare Register
+PilotIO.DBREG_WCN           = 0x61C;        // Watchdog Counter Register
+
+PilotIO.DBREG_SPISR         = 0x700;        // SPIS (Serial Peripheral Interface Slave) Register (16-bit)
+
+PilotIO.DBREG_SPIMDATA      = 0x800;        // SPIM (Serial Peripheral Interface Master) Data Register (16-bit)
+PilotIO.DBREG_SPIMCONT      = 0x802;        // SPIM (Serial Peripheral Interface Master) Control/Status Register (16-bit)
+PilotIO.SPIMCONT_BITCOUNT           = 0x000F;
+PilotIO.SPIMCONT_POL                = 0x0010;       // polarity
+PilotIO.SPIMCONT_PHA                = 0x0020;       // phase
+PilotIO.SPIMCONT_IRQEN              = 0x0040;       // interrupt request enable
+PilotIO.SPIMCONT_SPIMIRQ            = 0x0080;
+PilotIO.SPIMCONT_XCH                = 0x0100;
+PilotIO.SPIMCONT_SPIMEN             = 0x0200;       // SPI master enable
+PilotIO.SPIMCONT_DATARATE           = 0xE000;
+
+PilotIO.DBREG_USTCNT        = 0x900;        // UART Status/Control Register
+PilotIO.DBREG_UBAUD         = 0x902;        // UART Baud Control Register
+PilotIO.DBREG_URX           = 0x904;        // UART RX Register
+PilotIO.DBREG_UTX           = 0x906;        // UART TX Register
+PilotIO.DBREG_UMISC         = 0x908;        // UART Misc Register
+
+PilotIO.LCDREG_SSA          = 0x00;         // LCD Screen Starting Address Register (LSSA, 32-bit)
+PilotIO.LCDREG_VPW          = 0x05;         // LCD Virtual Page Width Register (LVPW, 8-bit, normally set to 10, units are words)
+PilotIO.LCDREG_XMAX         = 0x08;         // LCD Screen Width Register (LXMAX, 16-bit)
+PilotIO.LCDREG_YMAX         = 0x0A;         // LCD Screen Height Register (LYMAX, 16-bit)
+PilotIO.LCDREG_CXP          = 0x18;         // LCD Cursor X Position Register (LCXP, 16-bit)
+PilotIO.LCDREG_CYP          = 0x1A;         // LCD Cursor Y Position Register (LCYP, 16-bit)
+PilotIO.LCDREG_CWCH         = 0x1C;         // LCD Cursor Width & Height Register (LCWCH, 16-bit)
+PilotIO.LCDREG_BLKC         = 0x1F;         // LCD Blink Control Register (LBLKC, 8-bit)
+PilotIO.LCDREG_PICF         = 0x20;         // LCD Panel Interface Configuration Register (LPICF, 8-bit)
+                                            //  (bit 0 normally clear for 1-bit mode, set for 2-bit mode)
+PilotIO.LCDREG_POLCF        = 0x21;         // LCD Polarity Configuration Register (LPOLCF, 8-bit)
+PilotIO.LCDREG_ACDRC        = 0x23;         // ACD (M) Rate Control Register (LACDRC, 8-bit)
+PilotIO.LCDREG_PXCD         = 0x25;         // LCD Pixel Clock Divider Register (LPXCD, 8-bit)
+PilotIO.LCDREG_CKCON        = 0x27;         // LCD Clocking Control Register (LCKCON, 8-bit)
+PilotIO.CKCON_LCDON               = 0x80;   // bit 7 enables LCD controller if set, disables if clear
+PilotIO.LCDREG_LBAR         = 0x29;         // LCD Last Buffer Address Register (LLBAR, 8-bit, normally same as VPW)
+PilotIO.LCDREG_OTCR         = 0x2B;         // LCD Octet Terminal Count Register (LOTCR, 8-bit)
+PilotIO.LCDREG_POSR         = 0x2D;         // LCD Panning Offset Register (LPOSR, 8-bit)
+PilotIO.LCDREG_FRCM         = 0x31;         // LCD Frame-Rate Modulation Control Register (LFRCM, 8-bit)
+PilotIO.LCDREG_GPMR         = 0x32;         // LCD Gray Palette Mapping Register (LGPMR, 16-bit)
+
+PilotIO.DEF_SCREEN_WIDTH    = 160;
+PilotIO.DEF_SCREEN_HEIGHT   = 160;
+
+PilotIO.DBREG_RHMSR         = 0xB00;        // RTC Hours Minutes Seconds Register (32-bit)
+PilotIO.RHMSR_HOURS                 = 0x1f000000;
+PilotIO.RHMSR_HOURS_SHIFT           = 24;
+PilotIO.RHMSR_MINUTES               = 0x003f0000;
+PilotIO.RHMSR_MINUTES_SHIFT         = 16;
+PilotIO.RHMSR_SECONDS               = 0x0000003f;
+PilotIO.RHMSR_SECONDS_SHIFT         = 0;
+PilotIO.DBREG_RALARM        = 0xB04;        // RTC Alarm Register
+PilotIO.DBREG_RCTL          = 0xB0C;        // RTC Control Register
+PilotIO.DBREG_RISR          = 0xB0E;        // RTC Interrupt Status Register
+PilotIO.DBREG_RIENR         = 0xB10;        // RTC Interrupt Enable Register
+PilotIO.DBREG_RSTPWCH       = 0xB12;        // RTC Stopwatch Register
+
+PilotIO.abRegsInit = {
+    [PilotIO.DBREG_PCTLR]:    0x1F,
+    [PilotIO.DBREG_PDPUEN]:   0xFF,
+    [PilotIO.DBREG_PEPUEN]:   0x80,
+    [PilotIO.DBREG_PESEL]:    0x80,
+    [PilotIO.DBREG_PFPUEN]:   0xFF,
+    [PilotIO.DBREG_PFSEL]:    0xFF,
+    [PilotIO.DBREG_PGPUEN]:   0xFF,
+    [PilotIO.DBREG_PGSEL]:    0xFF,
+    [PilotIO.DBREG_PKPUEN]:   0x3F,
+    [PilotIO.DBREG_PKSEL]:    0x3F,
+    [PilotIO.DBREG_PMPUEN]:   0xFF,
+    [PilotIO.DBREG_PMSEL]:    0x02,
+    [PilotIO.LCDREG_VPW]:     (PilotIO.DEF_SCREEN_WIDTH/8)/2,
+    [PilotIO.LCDREG_BLKC]:    0x7F,
+    [PilotIO.LCDREG_CKCON]:   0x40,                                   // LCD controller initially disabled
+    [PilotIO.LCDREG_LBAR]:    (PilotIO.DEF_SCREEN_WIDTH/8)/2,         // we initialize this to 10, they seem to prefer 9, hmmm
+    [PilotIO.LCDREG_OTCR]:    0x3F,
+    [PilotIO.LCDREG_FRCM]:    0xB9
 };
 
-PilotIO.STATUS1 = {
-    PORT:       1,
-    CREDIT:     0x01,               // credit (coin slot)
-    P2:         0x02,               // 1 = 2P start
-    P1:         0x04,               // 1 = 1P start
-    P1_FIRE:    0x10,               // 1 = fire (P1 fire if cocktail machine?)
-    P1_LEFT:    0x20,               // 1 = left (P1 left if cocktail machine?)
-    P1_RIGHT:   0x40,               // 1 = right (P1 right if cocktail machine?)
-    ALWAYS_SET: 0x08                // always set
+PilotIO.awRegsInit = {
+    [PilotIO.DBREG_PLLCR]:    0x2400,
+    [PilotIO.DBREG_PLLFSR]:   0x0123,         // sets Q counter to 0x1, P counter to 0x23
+    [PilotIO.DBREG_TCMP1]:    0xFFFF,
+    [PilotIO.DBREG_TCMP2]:    0xFFFF,
+    [PilotIO.DBREG_WCSR]:     0x0001,
+    [PilotIO.DBREG_WRR]:      0xFFFF,
+    [PilotIO.DBREG_UBAUD]:    0x003F,
+    [PilotIO.LCDREG_XMAX]:    0x03FF,
+    [PilotIO.LCDREG_YMAX]:    0x01FF,
+    [PilotIO.LCDREG_CWCH]:    0x0101,
+    [PilotIO.LCDREG_GPMR]:    0x1073
 };
 
-PilotIO.STATUS2 = {
-    PORT:       2,
-    DIP1_2:     0x03,               // 00 = 3 ships, 01 = 4 ships, 10 = 5 ships, 11 = 6 ships
-    TILT:       0x04,               // 1 = tilt detected
-    DIP4:       0x08,               // 0 = extra ship at 1500, 1 = extra ship at 1000
-    P2_FIRE:    0x10,               // 1 = P2 fire (cocktail machines only?)
-    P2_LEFT:    0x20,               // 1 = P2 left (cocktail machines only?)
-    P2_RIGHT:   0x40,               // 1 = P2 right (cocktail machines only?)
-    DIP7:       0x80,               // 0 = display coin info on demo ("attract") screen
-    ALWAYS_SET: 0x00
-};
-
-PilotIO.SHIFT_RESULT = {            // bits 0-7 of barrel shifter result
-    PORT:       3
-};
-
-PilotIO.SHIFT_COUNT = {
-    PORT:       2,
-    MASK:       0x07
-};
-
-PilotIO.SOUND1 = {
-    PORT:       3,
-    UFO:        0x01,
-    SHOT:       0x02,
-    PDEATH:     0x04,
-    IDEATH:     0x08,
-    EXPLAY:     0x10,
-    AMP_ENABLE: 0x20
-};
-
-PilotIO.SHIFT_DATA = {
-    PORT:       4
-};
-
-PilotIO.SOUND2 = {
-    PORT:       5,
-    FLEET1:     0x01,
-    FLEET2:     0x02,
-    FLEET3:     0x04,
-    FLEET4:     0x08,
-    UFO_HIT:    0x10
-};
-
-PilotIO.STATUS1.KEYMAP = {
-    "1p":       PilotIO.STATUS1.P1,
-    "2p":       PilotIO.STATUS1.P2,
-    "coin":     PilotIO.STATUS1.CREDIT,
-    "left":     PilotIO.STATUS1.P1_LEFT,
-    "right":    PilotIO.STATUS1.P1_RIGHT,
-    "fire":     PilotIO.STATUS1.P1_FIRE
-};
-
-PilotIO.REGTABLE = {
-    0: [PilotIO.prototype.inStatus0],
-    1: [PilotIO.prototype.inStatus1],
-    2: [PilotIO.prototype.inStatus2, PilotIO.prototype.outShiftCount],
-    3: [PilotIO.prototype.inShiftResult, PilotIO.prototype.outSound1],
-    4: [null, PilotIO.prototype.outShiftData],
-    5: [null, PilotIO.prototype.outSound2],
-    6: [null, PilotIO.prototype.outWatchdog]
+PilotIO.alRegsInit = {
+    [PilotIO.DBREG_IMR]:      0x00FFFFFF,
+    [PilotIO.DBREG_IWR]:      0x00FFFFFF
 };
 
 PilotIO.CLASSES["PilotIO"] = PilotIO;
@@ -18274,7 +17889,7 @@ PilotIO.CLASSES["PilotIO"] = PilotIO;
  * @copyright https://www.pcjs.org/modules/video.js (C) 2012-2021 Jeff Parsons
  */
 
-/** @typedef {{ bufferWidth: number, bufferHeight: number, bufferRotate: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */
+/** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferRAM: boolean, bufferBits: number, bufferLeft: number, bufferRotate: number, interruptRate: number }} */
 let PilotVideoConfig;
 
 /**
@@ -18390,7 +18005,7 @@ class PilotVideo extends Monitor {
      */
     initBuffers()
     {
-        /*
+        /**
          * Allocate off-screen buffers now
          */
         this.cxBuffer = this.nColsBuffer * this.cxCell;
@@ -18410,7 +18025,7 @@ class PilotVideo extends Monitor {
             }
         }
 
-        /*
+        /**
          * Since we will read video data from the bus at its default width, get that width now;
          * that width will also determine the size of a cell.
          */
@@ -18418,7 +18033,7 @@ class PilotVideo extends Monitor {
         this.imageBuffer = this.contextMonitor.createImageData(cxBuffer, cyBuffer);
         this.nPixelsPerCell = Math.trunc(this.cellWidth / this.nBitsPerPixel);
 
-        /*
+        /**
          * Since we calculated sizeBuffer as a number of bytes, convert that to the number of cells.
          */
         this.initCache(Math.ceil(this.sizeBuffer / (this.cellWidth >> 3)));
@@ -18430,7 +18045,7 @@ class PilotVideo extends Monitor {
 
         this.initColors();
 
-        /*
+        /**
          * Our 'smoothing' parameter defaults to null (which we treat the same as undefined), which means that
          * image smoothing will be selectively enabled (ie, true for text modes, false for graphics modes); otherwise,
          * we'll set image smoothing to whatever value was provided for ALL modes -- assuming the browser supports it.
@@ -18539,11 +18154,11 @@ class PilotVideo extends Monitor {
         let fUpdate = true;
         if (!fForced) {
             if (this.rateInterrupt) {
-                /*
+                /**
                  * TODO: Incorporate these hard-coded interrupt vector numbers into configuration blocks.
                  */
                 if (this.rateInterrupt == 120) {
-                    /*
+                    /**
                      * According to http://www.computerarcheology.com/Arcade/SpacePilot/Hardware.html:
                      *
                      *      The CPU's INT line is asserted via a D flip-flop at E3.
@@ -18564,12 +18179,12 @@ class PilotVideo extends Monitor {
                      * it's safe to draw the rest of the image).
                      */
                     if (!(this.nUpdates & 1)) {
-                        /*
+                        /**
                          * On even updates, call cpu.requestINTR(1), and also update our copy of the image.
                          */
                         // this.cpu.requestINTR(1);
                     } else {
-                        /*
+                        /**
                          * On odd updates, call cpu.requestINTR(2), but do NOT update our copy of the image, because
                          * the machine has presumably only updated the top half of the frame buffer at this point; it will
                          * update the bottom half of the frame buffer after acknowledging this interrupt.
@@ -18580,7 +18195,7 @@ class PilotVideo extends Monitor {
                 }
             }
 
-            /*
+            /**
              * Since this is not a forced update, if our cell cache is valid AND we allocated our own buffer AND the buffer
              * is clean, then there's nothing to do.
              */
@@ -18652,7 +18267,7 @@ class PilotVideo extends Monitor {
         }
         this.fCacheValid = true;
 
-        /*
+        /**
          * Instead of blasting the ENTIRE imageBuffer into contextBuffer, and then blasting the ENTIRE
          * canvasBuffer onto contextMonitor, even for the smallest change, let's try to be a bit smarter about
          * the update (well, to the extent that the canvas APIs permit).
@@ -18661,21 +18276,22 @@ class PilotVideo extends Monitor {
             let cxDirty = xMaxDirty - xDirty;
             let cyDirty = yMaxDirty - yDirty;
             if (this.rotateBuffer) {
-                /*
+                /**
                  * If rotateBuffer is set, then it must be -90, so we must "rotate" the dirty coordinates as well,
                  * because they are relative to the frame buffer, not the rotated image buffer.  Alternatively, you
                  * can use the following call to blast the ENTIRE imageBuffer into contextBuffer instead:
                  *
                  *      this.contextBuffer.putImageData(this.imageBuffer, 0, 0);
                  */
-                let xDirtyOrig = xDirty, cxDirtyOrig = cxDirty;
+                let xDirtyOrig = xDirty;
+                let cxDirtyOrig = cxDirty;
                 xDirty = yDirty;
                 cxDirty = cyDirty;
                 yDirty = this.cxBuffer - (xDirtyOrig + cxDirtyOrig);
                 cyDirty = cxDirtyOrig;
             }
             this.contextBuffer.putImageData(this.imageBuffer, 0, 0, xDirty, yDirty, cxDirty, cyDirty);
-            /*
+            /**
              * As originally noted in /modules/pcx86/lib/video.js, I would prefer to draw only the dirty portion of
              * canvasBuffer, but there usually isn't a 1-1 pixel mapping between canvasBuffer and contextMonitor, so
              * if we draw interior rectangles, we can end up with subpixel artifacts along the edges of those rectangles.
@@ -18808,7 +18424,7 @@ class Machine extends Device {
         this.fPageLoaded = false;
         this.setReady(false);
 
-        /*
+        /**
          * You can pass "m" commands to the machine via the "commands" parameter to turn on any desired
          * message groups, but since the Debugger is responsible for parsing those commands, and since the
          * Debugger is usually not initialized until last, messages from any earlier constructor calls will
@@ -18837,7 +18453,7 @@ class Machine extends Device {
             });
         }
 
-        /*
+        /**
          * Device initialization is now deferred until after the page is fully loaded, for the benefit
          * of devices (eg, Input) that may be dependent on page resources.
          *
@@ -18965,7 +18581,7 @@ class Machine extends Device {
             this.deviceConfigs = JSON.parse(sConfig);
             let config = this.deviceConfigs[this.idMachine];
             if (!config) {
-                /*
+                /**
                  * Pages that want to instantiate multiple machines using identical configs would normally
                  * have to create unique config files for each machine, even though the only difference between
                  * the configs would be the machine ID.  To reduce that redundancy, we'll try to identify the
@@ -18983,14 +18599,14 @@ class Machine extends Device {
             this.fAutoSave = (this.config['autoSave'] !== false);
             this.fAutoStart = (this.config['autoStart'] !== false);
             if (this.sParms) {
-                /*
+                /**
                  * Historically, my web servers have not been consistent about quoting property names inside
                  * the optional parameters object, so we must use eval() instead of JSON.parse() to parse them.
                  * Of couse, the REAL problem is that JSON.parse() is being a dick about otherwise perfectly
                  * legitimate Object syntax, but I shall not repeat my long list of gripes about JSON here.
                  */
                 let parms = /** @type {Object} */ (eval("(" + this.sParms + ")"));
-                /*
+                /**
                  * Slam all these parameters into the machine's config, overriding any matching machine configuration
                  * properties.  Any other devices that need access to these properties should use getMachineConfig().
                  */
@@ -19085,7 +18701,7 @@ Machine.BINDING = {
     RESET:      "reset",
 };
 
-/*
+/**
  * Create the designated machine FACTORY function (this should suffice for all compiled versions).
  *
  * In addition, expose the machine's COMMAND handler interface, so that it's easy to access any of the

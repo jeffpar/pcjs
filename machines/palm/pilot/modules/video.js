@@ -14,10 +14,11 @@ import Monitor from "../../../modules/monitor.js";
  * @typedef {MonitorConfig} PilotVideoConfig
  * @property {number} bufferWidth
  * @property {number} bufferHeight
- * @property {number} bufferRotate
  * @property {number} bufferAddr
+ * @property {boolean} bufferRAM
  * @property {number} bufferBits
  * @property {number} bufferLeft
+ * @property {number} bufferRotate
  * @property {number} interruptRate
  */
 
@@ -134,7 +135,7 @@ export default class PilotVideo extends Monitor {
      */
     initBuffers()
     {
-        /*
+        /**
          * Allocate off-screen buffers now
          */
         this.cxBuffer = this.nColsBuffer * this.cxCell;
@@ -154,7 +155,7 @@ export default class PilotVideo extends Monitor {
             }
         }
 
-        /*
+        /**
          * Since we will read video data from the bus at its default width, get that width now;
          * that width will also determine the size of a cell.
          */
@@ -162,7 +163,7 @@ export default class PilotVideo extends Monitor {
         this.imageBuffer = this.contextMonitor.createImageData(cxBuffer, cyBuffer);
         this.nPixelsPerCell = Math.trunc(this.cellWidth / this.nBitsPerPixel);
 
-        /*
+        /**
          * Since we calculated sizeBuffer as a number of bytes, convert that to the number of cells.
          */
         this.initCache(Math.ceil(this.sizeBuffer / (this.cellWidth >> 3)));
@@ -174,7 +175,7 @@ export default class PilotVideo extends Monitor {
 
         this.initColors();
 
-        /*
+        /**
          * Our 'smoothing' parameter defaults to null (which we treat the same as undefined), which means that
          * image smoothing will be selectively enabled (ie, true for text modes, false for graphics modes); otherwise,
          * we'll set image smoothing to whatever value was provided for ALL modes -- assuming the browser supports it.
@@ -283,11 +284,11 @@ export default class PilotVideo extends Monitor {
         let fUpdate = true;
         if (!fForced) {
             if (this.rateInterrupt) {
-                /*
+                /**
                  * TODO: Incorporate these hard-coded interrupt vector numbers into configuration blocks.
                  */
                 if (this.rateInterrupt == 120) {
-                    /*
+                    /**
                      * According to http://www.computerarcheology.com/Arcade/SpacePilot/Hardware.html:
                      *
                      *      The CPU's INT line is asserted via a D flip-flop at E3.
@@ -308,12 +309,12 @@ export default class PilotVideo extends Monitor {
                      * it's safe to draw the rest of the image).
                      */
                     if (!(this.nUpdates & 1)) {
-                        /*
+                        /**
                          * On even updates, call cpu.requestINTR(1), and also update our copy of the image.
                          */
                         // this.cpu.requestINTR(1);
                     } else {
-                        /*
+                        /**
                          * On odd updates, call cpu.requestINTR(2), but do NOT update our copy of the image, because
                          * the machine has presumably only updated the top half of the frame buffer at this point; it will
                          * update the bottom half of the frame buffer after acknowledging this interrupt.
@@ -324,7 +325,7 @@ export default class PilotVideo extends Monitor {
                 }
             }
 
-            /*
+            /**
              * Since this is not a forced update, if our cell cache is valid AND we allocated our own buffer AND the buffer
              * is clean, then there's nothing to do.
              */
@@ -396,7 +397,7 @@ export default class PilotVideo extends Monitor {
         }
         this.fCacheValid = true;
 
-        /*
+        /**
          * Instead of blasting the ENTIRE imageBuffer into contextBuffer, and then blasting the ENTIRE
          * canvasBuffer onto contextMonitor, even for the smallest change, let's try to be a bit smarter about
          * the update (well, to the extent that the canvas APIs permit).
@@ -405,21 +406,22 @@ export default class PilotVideo extends Monitor {
             let cxDirty = xMaxDirty - xDirty;
             let cyDirty = yMaxDirty - yDirty;
             if (this.rotateBuffer) {
-                /*
+                /**
                  * If rotateBuffer is set, then it must be -90, so we must "rotate" the dirty coordinates as well,
                  * because they are relative to the frame buffer, not the rotated image buffer.  Alternatively, you
                  * can use the following call to blast the ENTIRE imageBuffer into contextBuffer instead:
                  *
                  *      this.contextBuffer.putImageData(this.imageBuffer, 0, 0);
                  */
-                let xDirtyOrig = xDirty, cxDirtyOrig = cxDirty;
+                let xDirtyOrig = xDirty;
+                let cxDirtyOrig = cxDirty;
                 xDirty = yDirty;
                 cxDirty = cyDirty;
                 yDirty = this.cxBuffer - (xDirtyOrig + cxDirtyOrig);
                 cyDirty = cxDirtyOrig;
             }
             this.contextBuffer.putImageData(this.imageBuffer, 0, 0, xDirty, yDirty, cxDirty, cyDirty);
-            /*
+            /**
              * As originally noted in /modules/pcx86/lib/video.js, I would prefer to draw only the dirty portion of
              * canvasBuffer, but there usually isn't a 1-1 pixel mapping between canvasBuffer and contextMonitor, so
              * if we draw interior rectangles, we can end up with subpixel artifacts along the edges of those rectangles.

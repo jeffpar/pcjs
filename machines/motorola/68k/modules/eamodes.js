@@ -21,7 +21,7 @@ import CPU68K   from "./cpu68k.js";
  * The EAMode class already provides wrappers for combining the above methods into frequently-used operations
  * (eg, getEAData() instead of getEA() + getData()).
  */
-class EAMode
+export default class EAMode
 {
     /**
      * EAMode(mask, sign, width, type)
@@ -297,7 +297,7 @@ class EAMode
 
 }
 
-class EAModeIllegal extends EAMode {
+export class EAModeIllegal extends EAMode {
     constructor(cpu) {
         super(cpu, 0, 0, 0, 0);
     }
@@ -325,7 +325,7 @@ class EAModeIllegal extends EAMode {
     }
 }
 
-class EAModeDRegByte extends EAMode {
+export class EAModeDRegByte extends EAMode {
     constructor(cpu) {
         super(cpu, 0xff, 0x80, 8, 0);
         this.cycle2ADI = 2;
@@ -363,7 +363,7 @@ class EAModeDRegByte extends EAMode {
         this.cpu.flagCSrc = this.cpu.flagCDst = 0;
     }
 }
-class EAModeDRegWord extends EAMode {
+export class EAModeDRegWord extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffff, 0x8000, 16, 0);
         this.cycle2ADI = 2;
@@ -401,7 +401,7 @@ class EAModeDRegWord extends EAMode {
         this.cpu.flagCSrc = this.cpu.flagCDst = 0;
     }
 }
-class EAModeDRegLong extends EAMode {
+export class EAModeDRegLong extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffffffff, 0x80000000, 32, 1);
         this.cycle2Dl = this.cycle2ADI = this.cycle2ADl = 2;
@@ -440,7 +440,7 @@ class EAModeDRegLong extends EAMode {
     }
 }
 
-class EAModeARegWord extends EAMode {
+export class EAModeARegWord extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffff, 0x8000, 16, 0);
         this.cycle2ADI = 2;
@@ -465,7 +465,7 @@ class EAModeARegWord extends EAMode {
         this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
     }
 }
-class EAModeARegLong extends EAMode {
+export class EAModeARegLong extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffffffff, 0x80000000, 32, 1);
         this.cycle2ADI = this.cycle2ADl = 2;
@@ -495,7 +495,7 @@ class EAModeARegLong extends EAMode {
     }
 }
 
-class EAModeAValByte extends EAMode {
+export class EAModeAValByte extends EAMode {
     constructor(cpu) {
         super(cpu, 0xff, 0x80, 8, 0);
     }
@@ -527,7 +527,7 @@ class EAModeAValByte extends EAMode {
         this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
     }
 }
-class EAModeAValWord extends EAMode {
+export class EAModeAValWord extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffff, 0x8000, 16, 0);
     }
@@ -559,7 +559,7 @@ class EAModeAValWord extends EAMode {
         this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
     }
 }
-class EAModeAValLong extends EAMode {
+export class EAModeAValLong extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffffffff, 0x80000000, 32, 1);
     }
@@ -592,7 +592,7 @@ class EAModeAValLong extends EAMode {
     }
 }
 
-class EAModeAValIncByte extends EAMode {
+export class EAModeAValIncByte extends EAMode {
     constructor(cpu) {
         super(cpu, 0xff, 0x80, 8, 0);
     }
@@ -623,7 +623,7 @@ class EAModeAValIncByte extends EAMode {
     }
 }
 
-class EAModeAValIncWord extends EAMode {
+export class EAModeAValIncWord extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffff, 0x8000, 16, 0);
     }
@@ -653,7 +653,7 @@ class EAModeAValIncWord extends EAMode {
         this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
     }
 }
-class EAModeAValIncLong extends EAMode {
+export class EAModeAValIncLong extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffffffff, 0x80000000, 32, 1);
     }
@@ -684,7 +684,7 @@ class EAModeAValIncLong extends EAMode {
     }
 }
 
-class EAModeAValDecByte extends EAMode {
+export class EAModeAValDecByte extends EAMode {
     constructor(cpu) {
         super(cpu, 0xff, 0x80, 8, 0);
     }
@@ -714,7 +714,7 @@ class EAModeAValDecByte extends EAMode {
     }
 }
 
-class EAModeAValDecWord extends EAMode {
+export class EAModeAValDecWord extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffff, 0x8000, 16, 0);
     }
@@ -744,7 +744,7 @@ class EAModeAValDecWord extends EAMode {
     }
 }
 
-class EAModeAValDecLong extends EAMode {
+export class EAModeAValDecLong extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffffffff, 0x80000000, 32, 1);
     }
@@ -774,7 +774,7 @@ class EAModeAValDecLong extends EAMode {
     }
 }
 
-class EAModeAValDispByte extends EAMode {
+export class EAModeAValDispByte extends EAMode {
     constructor(cpu) {
         super(cpu, 0xff, 0x80, 8, 0);
     }
@@ -807,7 +807,7 @@ class EAModeAValDispByte extends EAMode {
     }
 }
 
-class EAModeAValDispWord extends EAMode {
+export class EAModeAValDispWord extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffff, 0x8000, 16, 0);
     }
@@ -840,7 +840,7 @@ class EAModeAValDispWord extends EAMode {
     }
 }
 
-class EAModeAValDispLong extends EAMode {
+export class EAModeAValDispLong extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffffffff, 0x80000000, 32, 1);
     }
@@ -873,7 +873,7 @@ class EAModeAValDispLong extends EAMode {
     }
 }
 
-class EAModeAValIndexByte extends EAMode {
+export class EAModeAValIndexByte extends EAMode {
     constructor(cpu) {
         super(cpu, 0xff, 0x80, 8, 0);
     }
@@ -906,7 +906,7 @@ class EAModeAValIndexByte extends EAMode {
     }
 }
 
-class EAModeAValIndexWord extends EAMode {
+export class EAModeAValIndexWord extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffff, 0x8000, 16, 0);
     }
@@ -939,7 +939,7 @@ class EAModeAValIndexWord extends EAMode {
     }
 }
 
-class EAModeAValIndexLong extends EAMode {
+export class EAModeAValIndexLong extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffffffff, 0x80000000, 32, 1);
     }
@@ -972,7 +972,7 @@ class EAModeAValIndexLong extends EAMode {
     }
 }
 
-class EAModeAbs16Byte extends EAMode {
+export class EAModeAbs16Byte extends EAMode {
     constructor(cpu) {
         super(cpu, 0xff, 0x80, 8, 0);
     }
@@ -1004,7 +1004,7 @@ class EAModeAbs16Byte extends EAMode {
         this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
     }
 }
-class EAModeAbs16Word extends EAMode {
+export class EAModeAbs16Word extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffff, 0x8000, 16, 0);
     }
@@ -1037,7 +1037,7 @@ class EAModeAbs16Word extends EAMode {
     }
 }
 
-class EAModeAbs16Long extends EAMode {
+export class EAModeAbs16Long extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffffffff, 0x80000000, 32, 1);
     }
@@ -1070,7 +1070,7 @@ class EAModeAbs16Long extends EAMode {
     }
 }
 
-class EAModeAbs32Byte extends EAMode {
+export class EAModeAbs32Byte extends EAMode {
     constructor(cpu) {
         super(cpu, 0xff, 0x80, 8, 0);
     }
@@ -1102,7 +1102,7 @@ class EAModeAbs32Byte extends EAMode {
         this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
     }
 }
-class EAModeAbs32Word extends EAMode {
+export class EAModeAbs32Word extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffff, 0x8000, 16, 0);
     }
@@ -1135,7 +1135,7 @@ class EAModeAbs32Word extends EAMode {
     }
 }
 
-class EAModeAbs32Long extends EAMode {
+export class EAModeAbs32Long extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffffffff, 0x80000000, 32, 1);
     }
@@ -1168,7 +1168,7 @@ class EAModeAbs32Long extends EAMode {
     }
 }
 
-class EAModePCValDispByte extends EAMode {
+export class EAModePCValDispByte extends EAMode {
     constructor(cpu) {
         super(cpu, 0xff, 0x80, 8, 0);
     }
@@ -1201,7 +1201,7 @@ class EAModePCValDispByte extends EAMode {
     }
 }
 
-class EAModePCValDispWord extends EAMode {
+export class EAModePCValDispWord extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffff, 0x8000, 16, 0);
     }
@@ -1234,7 +1234,7 @@ class EAModePCValDispWord extends EAMode {
     }
 }
 
-class EAModePCValDispLong extends EAMode {
+export class EAModePCValDispLong extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffffffff, 0x80000000, 32, 1);
     }
@@ -1267,7 +1267,7 @@ class EAModePCValDispLong extends EAMode {
     }
 }
 
-class EAModePCValIndexByte extends EAMode {
+export class EAModePCValIndexByte extends EAMode {
     constructor(cpu) {
         super(cpu, 0xff, 0x80, 8, 0);
     }
@@ -1300,7 +1300,7 @@ class EAModePCValIndexByte extends EAMode {
     }
 }
 
-class EAModePCValIndexWord extends EAMode {
+export class EAModePCValIndexWord extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffff, 0x8000, 16, 0);
     }
@@ -1333,7 +1333,7 @@ class EAModePCValIndexWord extends EAMode {
     }
 }
 
-class EAModePCValIndexLong extends EAMode {
+export class EAModePCValIndexLong extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffffffff, 0x80000000, 32, 1);
     }
@@ -1366,7 +1366,7 @@ class EAModePCValIndexLong extends EAMode {
     }
 }
 
-class EAModeImmediateByte extends EAMode {
+export class EAModeImmediateByte extends EAMode {
     constructor(cpu) {
         super(cpu, 0xff, 0x80, 8, 0);
         this.cycle2ADI = 2;
@@ -1402,7 +1402,7 @@ class EAModeImmediateByte extends EAMode {
     }
 }
 
-class EAModeImmediateWord extends EAMode {
+export class EAModeImmediateWord extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffff, 0x8000, 16, 0);
         this.cycle2ADI = 2;
@@ -1438,7 +1438,7 @@ class EAModeImmediateWord extends EAMode {
     }
 }
 
-class EAModeImmediateLong extends EAMode {
+export class EAModeImmediateLong extends EAMode {
     constructor(cpu) {
         super(cpu, 0xffffffff, 0x80000000, 32, 1);
         this.cycle2ADI = 2;

@@ -33,14 +33,14 @@ export default class CPU extends Device {
         config['class'] = "CPU";
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * If a Debugger is loaded, it will call connectDebugger().  Having access to the Debugger
          * allows our toString() function to include the instruction, via toInstruction(), and conversely,
          * the Debugger will enjoy access to all our defined register names.
          */
         this.dbg = undefined;
 
-        /*
+        /**
          * regPC is the CPU's program counter, which all CPUs are required to have.
          *
          * regPCLast is an internal register that snapshots the PC at the start of every instruction;
@@ -49,14 +49,14 @@ export default class CPU extends Device {
          */
         this.regPC = this.regPCLast = 0;
 
-        /*
+        /**
          * Get access to the Time device, so we can give it our clock and update functions.
          */
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.time.addClock(this);
         this.time.addUpdate(this);
 
-        /*
+        /**
          * nCyclesStart and nCyclesRemain are initialized on every startClock() invocation.
          * The number of cycles executed during the current burst is nCyclesStart - nCyclesRemain,
          * and the burst is complete when nCyclesRemain has been exhausted (ie, is <= 0).
