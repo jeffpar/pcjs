@@ -120,7 +120,7 @@ export default class CPU68K extends CPU
             nnn = op1 & 0x7;
             rrr = (op1 >> 9) & 0x7;
 
-stage1:     switch ((op1 >> 12) & 0xf) {
+    stage1: switch ((op1 >> 12) & 0xf) {
 
             case 0x0:
                 //  case 0x0000:   ori      [00000000sswwwnnn, format ????????sswwwnnn, p.258]

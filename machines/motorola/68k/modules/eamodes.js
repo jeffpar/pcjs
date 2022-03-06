@@ -24,7 +24,7 @@ import CPU68K   from "./cpu68k.js";
 export default class EAMode
 {
     /**
-     * EAMode(mask, sign, width, type)
+     * EAMode(cpu, mask, sign, width, type)
      *
      * @this {EAMode}
      * @param {CPU68K} cpu
