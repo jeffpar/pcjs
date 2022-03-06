@@ -1,5 +1,5 @@
 /**
- * @fileoverview Implements Palm Pilot I/O ports
+ * @fileoverview Implements Palm Pilot I/O Registers
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -7,37 +7,36 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import Device from "../../../modules/device.js";
 import Input from "../../../modules/input.js";
-import Ports from "../../../modules/ports.js";
 
 /**
- * @typedef {PortsConfig} PilotPortsConfig
+ * @typedef {IOConfig} PilotIOConfig
  * @property {number} addr
  * @property {number} size
  * @property {Object} switches
  */
 
 /**
- * @class {PilotPorts}
+ * @class {PilotIO}
  * @unrestricted
- * @property {PilotPortsConfig} config
+ * @property {PilotIOConfig} config
  */
-export default class PilotPorts extends Ports {
+export default class PilotIO extends Device {
     /**
-     * PilotPorts(idMachine, idDevice, config)
+     * PilotIO(idMachine, idDevice, config)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {string} idMachine
      * @param {string} idDevice
-     * @param {PilotPortsConfig} [config]
+     * @param {PilotIOConfig} [config]
      */
     constructor(idMachine, idDevice, config)
     {
         super(idMachine, idDevice, config);
-        this.addIOTable(this, PilotPorts.IOTABLE);
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input"));
         let onButton = this.onButton.bind(this);
-        let buttonIDs = Object.keys(PilotPorts.STATUS1.KEYMAP);
+        let buttonIDs = Object.keys(PilotIO.STATUS1.KEYMAP);
         for (let i = 0; i < buttonIDs.length; i++) {
             this.input.addListener(Input.TYPE.IDMAP, buttonIDs[i], onButton);
         }
@@ -50,9 +49,9 @@ export default class PilotPorts extends Ports {
     /**
      * loadState(state)
      *
-     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
+     * Memory and I/O register states are managed by the Bus onLoad() handler, which calls our loadState() handler.
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {Array|undefined} state
      * @returns {boolean}
      */
@@ -76,9 +75,9 @@ export default class PilotPorts extends Ports {
     /**
      * saveState(state)
      *
-     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
+     * Memory and I/O register states are managed by the Bus onSave() handler, which calls our saveState() handler.
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {Array} state
      */
     saveState(state)
@@ -95,13 +94,13 @@ export default class PilotPorts extends Ports {
     /**
      * onButton(id, down)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {string} id
      * @param {boolean} down
      */
     onButton(id, down)
     {
-        let bit = PilotPorts.STATUS1.KEYMAP[id];
+        let bit = PilotIO.STATUS1.KEYMAP[id];
         this.bStatus1 = (this.bStatus1 & ~bit) | (down? bit : 0);
     }
 
@@ -110,7 +109,7 @@ export default class PilotPorts extends Ports {
      *
      * Called by the Machine device to provide notification of a reset event.
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      */
     onReset()
     {
@@ -124,22 +123,24 @@ export default class PilotPorts extends Ports {
     /**
      * setSwitches(switches)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number|undefined} switches
      */
     setSwitches(switches)
     {
-        /*
+        /**
          * switches may be undefined when called from loadState() if a "pre-switches" state was loaded.
          */
         if (switches == undefined) return;
-        /*
+
+        /**
          * If this.switches is undefined, then this is the first setSwitches() call, so we should set func
          * to onSwitch(); otherwise, we omit func so that all addListener() will do is initialize the visual
          * state of the SWITCH controls.
          */
         let func = this.switches == undefined? this.onSwitch.bind(this) : null;
-        /*
+
+        /**
          * Now we can set the actual switches to the supplied setting, and initialize each of the (8) switches.
          */
         this.switches = switches;
@@ -151,7 +152,7 @@ export default class PilotPorts extends Ports {
     /**
      * onSwitch(id, state)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {string} id
      * @param {boolean} state
      */
@@ -179,125 +180,125 @@ export default class PilotPorts extends Ports {
     /**
      * inStatus0(port)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x00)
      * @returns {number} simulated port value
      */
     inStatus0(port)
     {
         let value = this.bStatus0;
-        this.printf(Ports.MESSAGE.BUS, "inStatus0(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "inStatus0(%#04x): %#04x\n", port, value);
         return value;
     }
 
     /**
      * inStatus1(port)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x01)
      * @returns {number} simulated port value
      */
     inStatus1(port)
     {
         let value = this.bStatus1;
-        this.printf(Ports.MESSAGE.PORTS, "inStatus1(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "inStatus1(%#04x): %#04x\n", port, value);
         return value;
     }
 
     /**
      * inStatus2(port)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x02)
      * @returns {number} simulated port value
      */
     inStatus2(port)
     {
-        let value = this.bStatus2 | (this.switches & (PilotPorts.STATUS2.DIP1_2 | PilotPorts.STATUS2.DIP4 | PilotPorts.STATUS2.DIP7));
-        this.printf(Ports.MESSAGE.PORTS, "inStatus2(%#04x): %#04x\n", port, value);
+        let value = this.bStatus2 | (this.switches & (PilotIO.STATUS2.DIP1_2 | PilotIO.STATUS2.DIP4 | PilotIO.STATUS2.DIP7));
+        this.printf(Device.MESSAGE.BUS, "inStatus2(%#04x): %#04x\n", port, value);
         return value;
     }
 
     /**
      * inShiftResult(port)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x03)
      * @returns {number} simulated port value
      */
     inShiftResult(port)
     {
         let value = (this.wShiftData >> (8 - this.bShiftCount)) & 0xff;
-        this.printf(Ports.MESSAGE.PORTS, "inShiftResult(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "inShiftResult(%#04x): %#04x\n", port, value);
         return value;
     }
 
     /**
      * outShiftCount(port, value)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x02)
      * @param {number} value
      */
     outShiftCount(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outShiftCount(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "outShiftCount(%#04x): %#04x\n", port, value);
         this.bShiftCount = value;
     }
 
     /**
      * outSound1(port, value)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x03)
      * @param {number} value
      */
     outSound1(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outSound1(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "outSound1(%#04x): %#04x\n", port, value);
         this.bSound1 = value;
     }
 
     /**
      * outShiftData(port, value)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x04)
      * @param {number} value
      */
     outShiftData(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outShiftData(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "outShiftData(%#04x): %#04x\n", port, value);
         this.wShiftData = (value << 8) | (this.wShiftData >> 8);
     }
 
     /**
      * outSound2(port, value)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x05)
      * @param {number} value
      */
     outSound2(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outSound2(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "outSound2(%#04x): %#04x\n", port, value);
         this.bSound2 = value;
     }
 
     /**
      * outWatchdog(port, value)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x06)
      * @param {number} value
      */
     outWatchdog(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outWatchDog(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "outWatchDog(%#04x): %#04x\n", port, value);
     }
 }
 
-PilotPorts.STATUS0 = {           // NOTE: STATUS0 not used by the SI1978 ROMs; refer to STATUS1 instead
+PilotIO.STATUS0 = {                 // NOTE: STATUS0 not used by the SI1978 ROMs; refer to STATUS1 instead
     PORT:       0,
     DIP4:       0x01,               // self-test request at power up?
     FIRE:       0x10,               // 1 = fire
@@ -307,7 +308,7 @@ PilotPorts.STATUS0 = {           // NOTE: STATUS0 not used by the SI1978 ROMs; r
     ALWAYS_SET: 0x0E                // always set
 };
 
-PilotPorts.STATUS1 = {
+PilotIO.STATUS1 = {
     PORT:       1,
     CREDIT:     0x01,               // credit (coin slot)
     P2:         0x02,               // 1 = 2P start
@@ -318,7 +319,7 @@ PilotPorts.STATUS1 = {
     ALWAYS_SET: 0x08                // always set
 };
 
-PilotPorts.STATUS2 = {
+PilotIO.STATUS2 = {
     PORT:       2,
     DIP1_2:     0x03,               // 00 = 3 ships, 01 = 4 ships, 10 = 5 ships, 11 = 6 ships
     TILT:       0x04,               // 1 = tilt detected
@@ -330,16 +331,16 @@ PilotPorts.STATUS2 = {
     ALWAYS_SET: 0x00
 };
 
-PilotPorts.SHIFT_RESULT = {      // bits 0-7 of barrel shifter result
+PilotIO.SHIFT_RESULT = {            // bits 0-7 of barrel shifter result
     PORT:       3
 };
 
-PilotPorts.SHIFT_COUNT = {
+PilotIO.SHIFT_COUNT = {
     PORT:       2,
     MASK:       0x07
 };
 
-PilotPorts.SOUND1 = {
+PilotIO.SOUND1 = {
     PORT:       3,
     UFO:        0x01,
     SHOT:       0x02,
@@ -349,11 +350,11 @@ PilotPorts.SOUND1 = {
     AMP_ENABLE: 0x20
 };
 
-PilotPorts.SHIFT_DATA = {
+PilotIO.SHIFT_DATA = {
     PORT:       4
 };
 
-PilotPorts.SOUND2 = {
+PilotIO.SOUND2 = {
     PORT:       5,
     FLEET1:     0x01,
     FLEET2:     0x02,
@@ -362,23 +363,23 @@ PilotPorts.SOUND2 = {
     UFO_HIT:    0x10
 };
 
-PilotPorts.STATUS1.KEYMAP = {
-    "1p":       PilotPorts.STATUS1.P1,
-    "2p":       PilotPorts.STATUS1.P2,
-    "coin":     PilotPorts.STATUS1.CREDIT,
-    "left":     PilotPorts.STATUS1.P1_LEFT,
-    "right":    PilotPorts.STATUS1.P1_RIGHT,
-    "fire":     PilotPorts.STATUS1.P1_FIRE
+PilotIO.STATUS1.KEYMAP = {
+    "1p":       PilotIO.STATUS1.P1,
+    "2p":       PilotIO.STATUS1.P2,
+    "coin":     PilotIO.STATUS1.CREDIT,
+    "left":     PilotIO.STATUS1.P1_LEFT,
+    "right":    PilotIO.STATUS1.P1_RIGHT,
+    "fire":     PilotIO.STATUS1.P1_FIRE
 };
 
-PilotPorts.IOTABLE = {
-    0: [PilotPorts.prototype.inStatus0],
-    1: [PilotPorts.prototype.inStatus1],
-    2: [PilotPorts.prototype.inStatus2, PilotPorts.prototype.outShiftCount],
-    3: [PilotPorts.prototype.inShiftResult, PilotPorts.prototype.outSound1],
-    4: [null, PilotPorts.prototype.outShiftData],
-    5: [null, PilotPorts.prototype.outSound2],
-    6: [null, PilotPorts.prototype.outWatchdog]
+PilotIO.REGTABLE = {
+    0: [PilotIO.prototype.inStatus0],
+    1: [PilotIO.prototype.inStatus1],
+    2: [PilotIO.prototype.inStatus2, PilotIO.prototype.outShiftCount],
+    3: [PilotIO.prototype.inShiftResult, PilotIO.prototype.outSound1],
+    4: [null, PilotIO.prototype.outShiftData],
+    5: [null, PilotIO.prototype.outSound2],
+    6: [null, PilotIO.prototype.outWatchdog]
 };
 
-PilotPorts.CLASSES["PilotPorts"] = PilotPorts;
+PilotIO.CLASSES["PilotIO"] = PilotIO;

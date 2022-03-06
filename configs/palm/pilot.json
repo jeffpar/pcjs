@@ -32863,12 +32863,6 @@
       232,192,112,114,101,102,0,0,0,197,233,86,0,0,0,0
     ]
   },
-  "ports": {
-    "class": "PilotPorts",
-    "bus": "busIO",
-    "addr": 0,
-    "size": 256
-  },
   "video": {
     "class": "PilotVideo",
     "bus": "busMemory",
@@ -32878,7 +32872,6 @@
     "bufferAddr": 9216,
     "bufferWidth": 256,
     "bufferHeight": 224,
-    "bufferRotate": -90,
     "bufferBits": 1,
     "bufferLeft": 0,
     "interruptRate": 120,

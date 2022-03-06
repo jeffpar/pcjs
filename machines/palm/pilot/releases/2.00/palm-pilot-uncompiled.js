@@ -8626,7 +8626,7 @@ class Memory extends Device {
         this.size = this.config['size'];
         this.type = this.config['type'] || Memory.TYPE.NONE;
 
-        /*
+        /**
          * If no Bus ID was provided, then we fallback to the default Bus.
          */
         let idBus = this.config['bus'];
@@ -8695,7 +8695,7 @@ class Memory extends Device {
             break;
         }
 
-        /*
+        /**
          * Additional block properties used for trapping reads/writes
          */
         this.nReadTraps = this.nWriteTraps = 0;
@@ -8752,7 +8752,7 @@ class Memory extends Device {
             if (this.fUseArrayBuffer) {
                 this.buffer = new ArrayBuffer(this.size);
                 this.dataView = new DataView(this.buffer, 0, this.size);
-                /*
+                /**
                  * If littleEndian is true, we can use valuePairs[] and valueQuads[] directly; well, we can use
                  * them whenever the offset is a multiple of 1, 2 or 4, respectively.  Otherwise, we must fallback
                  * to dv.getUint8()/dv.setUint8(), dv.getUint16()/dv.setUint16() and dv.getInt32()/dv.setInt32().
@@ -8762,7 +8762,7 @@ class Memory extends Device {
                 this.valueQuads = new Int32Array(this.buffer, 0, this.size >> 2);
             }
             else {
-                /*
+                /**
                  * TODO: I used to call fill(this.dataLimit), but is there really any reason to do that?
                  */
                 this.values = new Array(this.size).fill(0);
@@ -9609,7 +9609,7 @@ class Memory extends Device {
     }
 }
 
-/*
+/**
  * Memory block types use discrete bits so that enumBlocks() can be passed a set of combined types,
  * by OR'ing the desired types together.
  */
@@ -9617,7 +9617,7 @@ Memory.TYPE = {
     NONE:               0x01,
     READONLY:           0x02,
     READWRITE:          0x04,
-    /*
+    /**
      * The rest are not discrete memory types, but rather sets of types that are handy for enumBlocks().
      */
     READABLE:           0x0E,
@@ -9625,203 +9625,6 @@ Memory.TYPE = {
 };
 
 Memory.CLASSES["Memory"] = Memory;
-
-/**
- * @copyright https://www.pcjs.org/modules/ports.js (C) 2012-2021 Jeff Parsons
- */
-
-/** @typedef {{ addr: (number|undefined), size: number }} */
-let PortsConfig;
-
-/**
- * @class {Ports}
- * @unrestricted
- * @property {PortsConfig} config
- * @property {number} addr
- * @property {number} size
- * @property {number} type
- * @property {Array.<function(number)>} aInData
- * @property {Array.<function(number,number)>} aOutData
- * @property {Array.<function(number,boolean)>} aInPair
- * @property {Array.<function(number,number)>} aOutPair
- */
-class Ports extends Memory {
-    /**
-     * Ports(idMachine, idDevice, config)
-     *
-     * @this {Ports}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {PortsConfig} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-        this.aInData = [];
-        this.aOutData = [];
-        this.aInPair = [];
-        this.aOutPair = [];
-        /*
-         * Some machines instantiate a Ports device through their configuration, which must include an 'addr';
-         * it's also possible that a device may dynamically allocate a Ports device and add it to the Bus itself
-         * (eg, the PDP11 IOPage).
-         */
-        if (this.config['addr'] != undefined) {
-            this.bus.addBlocks(this.config['addr'], this.config['size'], Memory.TYPE.NONE, this);
-        }
-    }
-
-    /**
-     * addIOHandlers(device, portLo, portHi, inData, outData, inPair, outPair)
-     *
-     * @this {Ports}
-     * @param {Device} device
-     * @param {number} portLo
-     * @param {number} portHi
-     * @param {function(number)|null} [inData]
-     * @param {function(number,number)|null} [outData]
-     * @param {function(number,boolean)|null} [inPair]
-     * @param {function(number,number)|null} [outPair]
-     */
-    addIOHandlers(device, portLo, portHi, inData, outData, inPair, outPair)
-    {
-        let port, success;
-        for (port = portLo; port <= portHi; port++) {
-            success = false;
-            if (inData) {
-                if (this.aInData[port]) break;
-                this.aInData[port] = inData.bind(device);
-            }
-            if (outData) {
-                if (this.aOutData[port]) break;
-                this.aOutData[port] = outData.bind(device);
-            }
-            if (inPair) {
-                if (this.aInPair[port]) break;
-                this.aInPair[port] = inPair.bind(device);
-            }
-            if (outPair) {
-                if (this.aOutPair[port]) break;
-                this.aOutPair[port] = outPair.bind(device);
-            }
-            success = true;
-        }
-        if (!success) {
-            throw new Error(this.sprintf("handler for port %#0x already exists", port));
-        }
-    }
-
-    /**
-     * addIOTable(device, table, portBase)
-     *
-     * @this {Ports}
-     * @param {Device} device
-     * @param {Object} table
-     * @param {number} [portBase]
-     */
-    addIOTable(device, table, portBase = 0)
-    {
-        for (let port in table) {
-            let handlers = table[port];
-            this.addIOHandlers(device, +port + portBase, +port + portBase, handlers[0], handlers[1], handlers[2], handlers[3]);
-        }
-    }
-
-    /**
-     * readNone(offset)
-     *
-     * This overrides the default readNone() function, which is the default handler for all I/O ports.
-     *
-     * @this {Ports}
-     * @param {number} offset
-     * @returns {number}
-     */
-    readNone(offset)
-    {
-        let func, port = this.addr + offset, value, read;
-        if ((func = this.aInData[port])) {
-            value = func(port);
-            read = true;
-        }
-        else if ((func = this.aInPair[port])) {
-            if (!(port & 0x1)) {
-                value = func(port) & this.dataLimit;
-                read = true;
-            } else {
-                value = func(port & ~0x1) >> this.dataWidth;
-                read = true;
-            }
-        }
-        else if (port & 0x1) {
-            port &= ~0x1;
-            if ((func = this.aInPair[port])) {
-                value = func(port) >> this.dataWidth;
-                read = true;
-            }
-            else if ((func = this.aInData[port])) {
-                value = func(port);
-                read = true;
-            }
-        }
-        if (!read) {
-            this.bus.fault(port, 0);
-            this.printf(Memory.MESSAGE.PORTS + Memory.MESSAGE.MISC, "readNone(%#04x): unknown port\n", port);
-            value = super.readNone(offset);
-        }
-        return value;
-    }
-
-    /**
-     * writeNone(offset, value)
-     *
-     * This overrides the default writeNone() function, which is the default handler for all I/O ports.
-     *
-     * @this {Ports}
-     * @param {number} offset
-     * @param {number} value
-     */
-    writeNone(offset, value)
-    {
-        let func, port = this.addr + offset, written;
-        if ((func = this.aOutData[port])) {
-            func(port, value);
-            written = true;
-        }
-        else if ((func = this.aOutPair[port])) {
-            /*
-             * If an outPair() handler exists, call the inPair() handler first to get the original data
-             * (with preWrite set to true) and call outPair() with the new data inserted into the original data.
-             */
-            let data = this.aInPair[port]? this.aInPair[port](port, true) : 0;
-            if (!(port & 0x1)) {
-                func(port, (data & ~this.dataLimit) | value);
-                written = true;
-            } else {
-                func(port, (data & this.dataLimit) | (value << this.dataWidth));
-                written = true;
-            }
-        }
-        else if (port & 0x1) {
-            port &= ~0x1;
-            if ((func = this.aOutPair[port])) {
-                let data = this.aInPair[port]? this.aInPair[port](port, true) : 0;
-                func(port, (data & this.dataLimit) | (value << this.dataWidth));
-                written = true;
-            }
-            else if ((func = this.aOutData[port])) {
-                func(port, value);
-                written = true;
-            }
-        }
-        if (!written) {
-            this.bus.fault(port, 1);
-            this.printf(Memory.MESSAGE.PORTS + Memory.MESSAGE.MISC, "writeNone(%#04x,%#04x): unknown port\n", port, value);
-            super.writeNone(offset, value);
-        }
-    }
-}
-
-Ports.CLASSES["Ports"] = Ports;
 
 /**
  * @copyright https://www.pcjs.org/modules/ram.js (C) 2012-2021 Jeff Parsons
@@ -12982,7 +12785,7 @@ Debugger.DECOP_PRECEDENCE = {
 
 
 /**
- * Emulation of a 68K CPU
+ * 68K CPU Emulation
  *
  * @class {CPU68K}
  * @unrestricted
@@ -13003,17 +12806,17 @@ class CPU68K extends CPU
     {
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * Initialize the CPU.
          */
         this.initCPU();
 
-        /*
+        /**
          * Get access to the Bus that provides access to physical memory.
          */
         this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['busMemory']));
 
-        /*
+        /**
          * Get access to the Input device, so we can call setFocus() as needed.
          */
         this.inputDevice = /** @type {Input} */ (this.findDeviceByClass("Input", false));
@@ -13035,6 +12838,8 @@ class CPU68K extends CPU
         let aEAModes = this.aEAModes;
         let dataNew, dataTmp, cBits, cRegs, fCond;
         let op1, op2, reg, ss, rrr, nnn, eaModeSrc, eaModeDst, iModeSrc, iModeDst, iMask;
+
+        this.nCyclesRemain = nCycles;
 
         while (this.nCyclesRemain > 0) {
 
@@ -13603,7 +13408,7 @@ stage1:     switch ((op1 >> 12) & 0xf) {
                             if (this.dbg.break(this.regPCThis, true)) {
                                 this.regPC = this.regPCThis;
                                 this.fCPU |= CPU68K.CPU_BREAKPOINT;
-                                return;                         // BUGBUG: nExecute + 1;
+                                return;
                             }
                         }
                         this.regPCTrap = this.regPCThis;        // keep track the last trap encountered
@@ -14570,7 +14375,6 @@ stage1:     switch ((op1 >> 12) & 0xf) {
                         this.dataDst = dataNew;
                     }
                     eaModeDst.setDataFlagsZNClearV(this.dataDst);
-                    // eslint-disable-next-line no-labels
                     break stage1;
                 }
                 break;
@@ -14580,7 +14384,7 @@ stage1:     switch ((op1 >> 12) & 0xf) {
                     if (this.dbg.break(this.regPCThis, true)) { // see if the debugger wants us to break
                         this.regPC = this.regPCThis;
                         this.fCPU |= CPU68K.CPU_BREAKPOINT;
-                        return;     // nExecute + 1;
+                        return;
                     }
                 }
                 this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
@@ -14595,23 +14399,15 @@ stage1:     switch ((op1 >> 12) & 0xf) {
                 this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
             }
 
-            ++this.nOpcodesUncycled;
-            ++this.nOpcodes;
-
             if ((this.fCPU & CPU68K.CPU_BREAKFLAGS) != 0) {
                 //
-                // If CPU_TRACING was the sole breaking condition, make sure that CPU_STEPPING was not also set;
-                // otherwise, we should continue executing, because CPU_STEPPING means that nExecute is a step count.
+                // If CPU_TRACING was the sole breaking condition, make sure that CPU_STEPPING was not also set.
+                // otherwise, we should continue executing.
                 //
                 if ((this.fCPU & (CPU68K.CPU_BREAKFLAGS | CPU68K.CPU_STEPPING)) != (CPU68K.CPU_TRACING | CPU68K.CPU_STEPPING)) {
-                    // nExecute--; // over-decrement nExecute, since we won't be revisiting the post-decrementing while-loop again...
                     break;
                 }
             }
-        }
-
-        if (this.nOpcodes < 0) {        // if the opcode count underflows, reset all the counters
-            this.resetCounters();
         }
 
         // Note that we've added CPU_BREAKPOINT to the list of flags that can kick us out of the execution loop.
@@ -14622,8 +14418,6 @@ stage1:     switch ((op1 >> 12) & 0xf) {
         // the Debugger).  We can't stop the instruction from executing, because not all emulated instruction are
         // "restartable" (eg, instructions that do pre-decrement or post-increment), so we have to let it finish and
         // then wind out of ExecuteOpcodes() normally, here at the bottom....
-
-        return;                         // nExecute + 1;
     }
 
     /**
@@ -15481,22 +15275,6 @@ stage1:     switch ((op1 >> 12) & 0xf) {
         this.nStep = 0;                 // instruction step counter
         this.iPendingException = CPU68K.EXCEPTION_NONE;
         this.addrPendingException = 0;  // set to exception-specific address, if any (eg, EA from EXCEPTION_ADDRESS_ERROR)
-        this.resetCounters();
-        this.nOpcodesUncycled = 0;      // no need to reset this in ResetCounters() because it's not allowed to become arbitrarily large
-    }
-
-    /**
-     * resetCounters()
-     *
-     * @this {CPU68K}
-     */
-    resetCounters()
-    {
-        this.nCycles = 0;               // cycle counter
-        this.nCyclesDebug = 0;          // cycle counter maintained in DEBUG only
-        this.nOpcodes = 0;              // opcode (instruction) counter
-        this.nOpcodesUncycled = 0;      // count of opcodes that have not been attributed to cCycles
-        this.nInterrupts = 0;           // count of interrupts
     }
 
     /**
@@ -15511,18 +15289,14 @@ stage1:     switch ((op1 >> 12) & 0xf) {
     }
 
     /**
-     * addCycles(nCyclesAdd)
+     * addCycles(nCycles)
      *
      * @this {CPU68K}
-     * @param {number} nCyclesAdd
+     * @param {number} nCycles
      */
-    addCycles(nCyclesAdd)
+    addCycles(nCycles)
     {
-        this.nCyclesDebug += nCyclesAdd;
-
-        if (this.nCyclesDebug < 0) {    // if the cycle count underflows, reset all the counters
-            this.resetCounters();
-        }
+        this.nCyclesRemain -= nCycles;
     }
 
     /**
@@ -18123,33 +17897,32 @@ class EAModeImmediateLong extends EAMode {
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/ports.js (C) 2012-2021 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/ioregs.js (C) 2012-2021 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, switches: Object }} */
-let PilotPortsConfig;
+let PilotIOConfig;
 
 /**
- * @class {PilotPorts}
+ * @class {PilotIO}
  * @unrestricted
- * @property {PilotPortsConfig} config
+ * @property {PilotIOConfig} config
  */
-class PilotPorts extends Ports {
+class PilotIO extends Device {
     /**
-     * PilotPorts(idMachine, idDevice, config)
+     * PilotIO(idMachine, idDevice, config)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {string} idMachine
      * @param {string} idDevice
-     * @param {PilotPortsConfig} [config]
+     * @param {PilotIOConfig} [config]
      */
     constructor(idMachine, idDevice, config)
     {
         super(idMachine, idDevice, config);
-        this.addIOTable(this, PilotPorts.IOTABLE);
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input"));
         let onButton = this.onButton.bind(this);
-        let buttonIDs = Object.keys(PilotPorts.STATUS1.KEYMAP);
+        let buttonIDs = Object.keys(PilotIO.STATUS1.KEYMAP);
         for (let i = 0; i < buttonIDs.length; i++) {
             this.input.addListener(Input.TYPE.IDMAP, buttonIDs[i], onButton);
         }
@@ -18162,9 +17935,9 @@ class PilotPorts extends Ports {
     /**
      * loadState(state)
      *
-     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
+     * Memory and I/O register states are managed by the Bus onLoad() handler, which calls our loadState() handler.
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {Array|undefined} state
      * @returns {boolean}
      */
@@ -18188,9 +17961,9 @@ class PilotPorts extends Ports {
     /**
      * saveState(state)
      *
-     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
+     * Memory and I/O register states are managed by the Bus onSave() handler, which calls our saveState() handler.
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {Array} state
      */
     saveState(state)
@@ -18207,13 +17980,13 @@ class PilotPorts extends Ports {
     /**
      * onButton(id, down)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {string} id
      * @param {boolean} down
      */
     onButton(id, down)
     {
-        let bit = PilotPorts.STATUS1.KEYMAP[id];
+        let bit = PilotIO.STATUS1.KEYMAP[id];
         this.bStatus1 = (this.bStatus1 & ~bit) | (down? bit : 0);
     }
 
@@ -18222,7 +17995,7 @@ class PilotPorts extends Ports {
      *
      * Called by the Machine device to provide notification of a reset event.
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      */
     onReset()
     {
@@ -18236,22 +18009,24 @@ class PilotPorts extends Ports {
     /**
      * setSwitches(switches)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number|undefined} switches
      */
     setSwitches(switches)
     {
-        /*
+        /**
          * switches may be undefined when called from loadState() if a "pre-switches" state was loaded.
          */
         if (switches == undefined) return;
-        /*
+
+        /**
          * If this.switches is undefined, then this is the first setSwitches() call, so we should set func
          * to onSwitch(); otherwise, we omit func so that all addListener() will do is initialize the visual
          * state of the SWITCH controls.
          */
         let func = this.switches == undefined? this.onSwitch.bind(this) : null;
-        /*
+
+        /**
          * Now we can set the actual switches to the supplied setting, and initialize each of the (8) switches.
          */
         this.switches = switches;
@@ -18263,7 +18038,7 @@ class PilotPorts extends Ports {
     /**
      * onSwitch(id, state)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {string} id
      * @param {boolean} state
      */
@@ -18291,125 +18066,125 @@ class PilotPorts extends Ports {
     /**
      * inStatus0(port)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x00)
      * @returns {number} simulated port value
      */
     inStatus0(port)
     {
         let value = this.bStatus0;
-        this.printf(Ports.MESSAGE.BUS, "inStatus0(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "inStatus0(%#04x): %#04x\n", port, value);
         return value;
     }
 
     /**
      * inStatus1(port)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x01)
      * @returns {number} simulated port value
      */
     inStatus1(port)
     {
         let value = this.bStatus1;
-        this.printf(Ports.MESSAGE.PORTS, "inStatus1(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "inStatus1(%#04x): %#04x\n", port, value);
         return value;
     }
 
     /**
      * inStatus2(port)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x02)
      * @returns {number} simulated port value
      */
     inStatus2(port)
     {
-        let value = this.bStatus2 | (this.switches & (PilotPorts.STATUS2.DIP1_2 | PilotPorts.STATUS2.DIP4 | PilotPorts.STATUS2.DIP7));
-        this.printf(Ports.MESSAGE.PORTS, "inStatus2(%#04x): %#04x\n", port, value);
+        let value = this.bStatus2 | (this.switches & (PilotIO.STATUS2.DIP1_2 | PilotIO.STATUS2.DIP4 | PilotIO.STATUS2.DIP7));
+        this.printf(Device.MESSAGE.BUS, "inStatus2(%#04x): %#04x\n", port, value);
         return value;
     }
 
     /**
      * inShiftResult(port)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x03)
      * @returns {number} simulated port value
      */
     inShiftResult(port)
     {
         let value = (this.wShiftData >> (8 - this.bShiftCount)) & 0xff;
-        this.printf(Ports.MESSAGE.PORTS, "inShiftResult(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "inShiftResult(%#04x): %#04x\n", port, value);
         return value;
     }
 
     /**
      * outShiftCount(port, value)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x02)
      * @param {number} value
      */
     outShiftCount(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outShiftCount(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "outShiftCount(%#04x): %#04x\n", port, value);
         this.bShiftCount = value;
     }
 
     /**
      * outSound1(port, value)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x03)
      * @param {number} value
      */
     outSound1(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outSound1(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "outSound1(%#04x): %#04x\n", port, value);
         this.bSound1 = value;
     }
 
     /**
      * outShiftData(port, value)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x04)
      * @param {number} value
      */
     outShiftData(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outShiftData(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "outShiftData(%#04x): %#04x\n", port, value);
         this.wShiftData = (value << 8) | (this.wShiftData >> 8);
     }
 
     /**
      * outSound2(port, value)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x05)
      * @param {number} value
      */
     outSound2(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outSound2(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "outSound2(%#04x): %#04x\n", port, value);
         this.bSound2 = value;
     }
 
     /**
      * outWatchdog(port, value)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {number} port (0x06)
      * @param {number} value
      */
     outWatchdog(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outWatchDog(%#04x): %#04x\n", port, value);
+        this.printf(Device.MESSAGE.BUS, "outWatchDog(%#04x): %#04x\n", port, value);
     }
 }
 
-PilotPorts.STATUS0 = {           // NOTE: STATUS0 not used by the SI1978 ROMs; refer to STATUS1 instead
+PilotIO.STATUS0 = {                 // NOTE: STATUS0 not used by the SI1978 ROMs; refer to STATUS1 instead
     PORT:       0,
     DIP4:       0x01,               // self-test request at power up?
     FIRE:       0x10,               // 1 = fire
@@ -18419,7 +18194,7 @@ PilotPorts.STATUS0 = {           // NOTE: STATUS0 not used by the SI1978 ROMs; r
     ALWAYS_SET: 0x0E                // always set
 };
 
-PilotPorts.STATUS1 = {
+PilotIO.STATUS1 = {
     PORT:       1,
     CREDIT:     0x01,               // credit (coin slot)
     P2:         0x02,               // 1 = 2P start
@@ -18430,7 +18205,7 @@ PilotPorts.STATUS1 = {
     ALWAYS_SET: 0x08                // always set
 };
 
-PilotPorts.STATUS2 = {
+PilotIO.STATUS2 = {
     PORT:       2,
     DIP1_2:     0x03,               // 00 = 3 ships, 01 = 4 ships, 10 = 5 ships, 11 = 6 ships
     TILT:       0x04,               // 1 = tilt detected
@@ -18442,16 +18217,16 @@ PilotPorts.STATUS2 = {
     ALWAYS_SET: 0x00
 };
 
-PilotPorts.SHIFT_RESULT = {      // bits 0-7 of barrel shifter result
+PilotIO.SHIFT_RESULT = {            // bits 0-7 of barrel shifter result
     PORT:       3
 };
 
-PilotPorts.SHIFT_COUNT = {
+PilotIO.SHIFT_COUNT = {
     PORT:       2,
     MASK:       0x07
 };
 
-PilotPorts.SOUND1 = {
+PilotIO.SOUND1 = {
     PORT:       3,
     UFO:        0x01,
     SHOT:       0x02,
@@ -18461,11 +18236,11 @@ PilotPorts.SOUND1 = {
     AMP_ENABLE: 0x20
 };
 
-PilotPorts.SHIFT_DATA = {
+PilotIO.SHIFT_DATA = {
     PORT:       4
 };
 
-PilotPorts.SOUND2 = {
+PilotIO.SOUND2 = {
     PORT:       5,
     FLEET1:     0x01,
     FLEET2:     0x02,
@@ -18474,26 +18249,26 @@ PilotPorts.SOUND2 = {
     UFO_HIT:    0x10
 };
 
-PilotPorts.STATUS1.KEYMAP = {
-    "1p":       PilotPorts.STATUS1.P1,
-    "2p":       PilotPorts.STATUS1.P2,
-    "coin":     PilotPorts.STATUS1.CREDIT,
-    "left":     PilotPorts.STATUS1.P1_LEFT,
-    "right":    PilotPorts.STATUS1.P1_RIGHT,
-    "fire":     PilotPorts.STATUS1.P1_FIRE
+PilotIO.STATUS1.KEYMAP = {
+    "1p":       PilotIO.STATUS1.P1,
+    "2p":       PilotIO.STATUS1.P2,
+    "coin":     PilotIO.STATUS1.CREDIT,
+    "left":     PilotIO.STATUS1.P1_LEFT,
+    "right":    PilotIO.STATUS1.P1_RIGHT,
+    "fire":     PilotIO.STATUS1.P1_FIRE
 };
 
-PilotPorts.IOTABLE = {
-    0: [PilotPorts.prototype.inStatus0],
-    1: [PilotPorts.prototype.inStatus1],
-    2: [PilotPorts.prototype.inStatus2, PilotPorts.prototype.outShiftCount],
-    3: [PilotPorts.prototype.inShiftResult, PilotPorts.prototype.outSound1],
-    4: [null, PilotPorts.prototype.outShiftData],
-    5: [null, PilotPorts.prototype.outSound2],
-    6: [null, PilotPorts.prototype.outWatchdog]
+PilotIO.REGTABLE = {
+    0: [PilotIO.prototype.inStatus0],
+    1: [PilotIO.prototype.inStatus1],
+    2: [PilotIO.prototype.inStatus2, PilotIO.prototype.outShiftCount],
+    3: [PilotIO.prototype.inShiftResult, PilotIO.prototype.outSound1],
+    4: [null, PilotIO.prototype.outShiftData],
+    5: [null, PilotIO.prototype.outSound2],
+    6: [null, PilotIO.prototype.outWatchdog]
 };
 
-PilotPorts.CLASSES["PilotPorts"] = PilotPorts;
+PilotIO.CLASSES["PilotIO"] = PilotIO;
 
 /**
  * @copyright https://www.pcjs.org/modules/video.js (C) 2012-2021 Jeff Parsons

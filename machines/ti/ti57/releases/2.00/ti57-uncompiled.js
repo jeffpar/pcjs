@@ -8162,7 +8162,7 @@ class Memory extends Device {
         this.size = this.config['size'];
         this.type = this.config['type'] || Memory.TYPE.NONE;
 
-        /*
+        /**
          * If no Bus ID was provided, then we fallback to the default Bus.
          */
         let idBus = this.config['bus'];
@@ -8231,7 +8231,7 @@ class Memory extends Device {
             break;
         }
 
-        /*
+        /**
          * Additional block properties used for trapping reads/writes
          */
         this.nReadTraps = this.nWriteTraps = 0;
@@ -8288,7 +8288,7 @@ class Memory extends Device {
             if (this.fUseArrayBuffer) {
                 this.buffer = new ArrayBuffer(this.size);
                 this.dataView = new DataView(this.buffer, 0, this.size);
-                /*
+                /**
                  * If littleEndian is true, we can use valuePairs[] and valueQuads[] directly; well, we can use
                  * them whenever the offset is a multiple of 1, 2 or 4, respectively.  Otherwise, we must fallback
                  * to dv.getUint8()/dv.setUint8(), dv.getUint16()/dv.setUint16() and dv.getInt32()/dv.setInt32().
@@ -8298,7 +8298,7 @@ class Memory extends Device {
                 this.valueQuads = new Int32Array(this.buffer, 0, this.size >> 2);
             }
             else {
-                /*
+                /**
                  * TODO: I used to call fill(this.dataLimit), but is there really any reason to do that?
                  */
                 this.values = new Array(this.size).fill(0);
@@ -9145,7 +9145,7 @@ class Memory extends Device {
     }
 }
 
-/*
+/**
  * Memory block types use discrete bits so that enumBlocks() can be passed a set of combined types,
  * by OR'ing the desired types together.
  */
@@ -9153,7 +9153,7 @@ Memory.TYPE = {
     NONE:               0x01,
     READONLY:           0x02,
     READWRITE:          0x04,
-    /*
+    /**
      * The rest are not discrete memory types, but rather sets of types that are handy for enumBlocks().
      */
     READABLE:           0x0E,

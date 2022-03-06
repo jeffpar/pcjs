@@ -394,7 +394,6 @@
       "./machines/modules/time.js",
       "./machines/modules/bus.js",
       "./machines/modules/memory.js",
-      "./machines/modules/ports.js",
       "./machines/modules/ram.js",
       "./machines/modules/rom.js",
       "./machines/modules/cpu.js",
@@ -402,7 +401,7 @@
       "./machines/motorola/68k/modules/cpu68k.js",
       "./machines/motorola/68k/modules/dbg68k.js",
       "./machines/motorola/68k/modules/eamodes.js",
-      "./machines/palm/pilot/modules/ports.js",
+      "./machines/palm/pilot/modules/ioregs.js",
       "./machines/palm/pilot/modules/video.js",
       "./machines/modules/machine.js"
     ]
