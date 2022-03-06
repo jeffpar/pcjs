@@ -1,5 +1,5 @@
 /**
- * @fileoverview Emulation of 68K CPUs
+ * @fileoverview 68K CPU Emulation
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -53,7 +53,7 @@ import EAModeImmediateWord  from "eamodes.js";
 import EAModeImmediateLong  from "eamodes.js";
 
 /**
- * Emulation of a 68K CPU
+ * 68K CPU Emulation
  *
  * @class {CPU68K}
  * @unrestricted
@@ -74,17 +74,17 @@ export default class CPU68K extends CPU
     {
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * Initialize the CPU.
          */
         this.initCPU();
 
-        /*
+        /**
          * Get access to the Bus that provides access to physical memory.
          */
         this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['busMemory']));
 
-        /*
+        /**
          * Get access to the Input device, so we can call setFocus() as needed.
          */
         this.inputDevice = /** @type {Input} */ (this.findDeviceByClass("Input", false));
@@ -106,6 +106,8 @@ export default class CPU68K extends CPU
         let aEAModes = this.aEAModes;
         let dataNew, dataTmp, cBits, cRegs, fCond;
         let op1, op2, reg, ss, rrr, nnn, eaModeSrc, eaModeDst, iModeSrc, iModeDst, iMask;
+
+        this.nCyclesRemain = nCycles;
 
         while (this.nCyclesRemain > 0) {
 
@@ -674,7 +676,7 @@ stage1:     switch ((op1 >> 12) & 0xf) {
                             if (this.dbg.break(this.regPCThis, true)) {
                                 this.regPC = this.regPCThis;
                                 this.fCPU |= CPU68K.CPU_BREAKPOINT;
-                                return;                         // BUGBUG: nExecute + 1;
+                                return;
                             }
                         }
                         this.regPCTrap = this.regPCThis;        // keep track the last trap encountered
@@ -1641,7 +1643,6 @@ stage1:     switch ((op1 >> 12) & 0xf) {
                         this.dataDst = dataNew;
                     }
                     eaModeDst.setDataFlagsZNClearV(this.dataDst);
-                    // eslint-disable-next-line no-labels
                     break stage1;
                 }
                 break;
@@ -1651,7 +1652,7 @@ stage1:     switch ((op1 >> 12) & 0xf) {
                     if (this.dbg.break(this.regPCThis, true)) { // see if the debugger wants us to break
                         this.regPC = this.regPCThis;
                         this.fCPU |= CPU68K.CPU_BREAKPOINT;
-                        return;     // nExecute + 1;
+                        return;
                     }
                 }
                 this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
@@ -1666,23 +1667,15 @@ stage1:     switch ((op1 >> 12) & 0xf) {
                 this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
             }
 
-            ++this.nOpcodesUncycled;
-            ++this.nOpcodes;
-
             if ((this.fCPU & CPU68K.CPU_BREAKFLAGS) != 0) {
                 //
-                // If CPU_TRACING was the sole breaking condition, make sure that CPU_STEPPING was not also set;
-                // otherwise, we should continue executing, because CPU_STEPPING means that nExecute is a step count.
+                // If CPU_TRACING was the sole breaking condition, make sure that CPU_STEPPING was not also set.
+                // otherwise, we should continue executing.
                 //
                 if ((this.fCPU & (CPU68K.CPU_BREAKFLAGS | CPU68K.CPU_STEPPING)) != (CPU68K.CPU_TRACING | CPU68K.CPU_STEPPING)) {
-                    // nExecute--; // over-decrement nExecute, since we won't be revisiting the post-decrementing while-loop again...
                     break;
                 }
             }
-        }
-
-        if (this.nOpcodes < 0) {        // if the opcode count underflows, reset all the counters
-            this.resetCounters();
         }
 
         // Note that we've added CPU_BREAKPOINT to the list of flags that can kick us out of the execution loop.
@@ -1693,8 +1686,6 @@ stage1:     switch ((op1 >> 12) & 0xf) {
         // the Debugger).  We can't stop the instruction from executing, because not all emulated instruction are
         // "restartable" (eg, instructions that do pre-decrement or post-increment), so we have to let it finish and
         // then wind out of ExecuteOpcodes() normally, here at the bottom....
-
-        return;                         // nExecute + 1;
     }
 
     /**
@@ -2552,22 +2543,6 @@ stage1:     switch ((op1 >> 12) & 0xf) {
         this.nStep = 0;                 // instruction step counter
         this.iPendingException = CPU68K.EXCEPTION_NONE;
         this.addrPendingException = 0;  // set to exception-specific address, if any (eg, EA from EXCEPTION_ADDRESS_ERROR)
-        this.resetCounters();
-        this.nOpcodesUncycled = 0;      // no need to reset this in ResetCounters() because it's not allowed to become arbitrarily large
-    }
-
-    /**
-     * resetCounters()
-     *
-     * @this {CPU68K}
-     */
-    resetCounters()
-    {
-        this.nCycles = 0;               // cycle counter
-        this.nCyclesDebug = 0;          // cycle counter maintained in DEBUG only
-        this.nOpcodes = 0;              // opcode (instruction) counter
-        this.nOpcodesUncycled = 0;      // count of opcodes that have not been attributed to cCycles
-        this.nInterrupts = 0;           // count of interrupts
     }
 
     /**
@@ -2582,18 +2557,14 @@ stage1:     switch ((op1 >> 12) & 0xf) {
     }
 
     /**
-     * addCycles(nCyclesAdd)
+     * addCycles(nCycles)
      *
      * @this {CPU68K}
-     * @param {number} nCyclesAdd
+     * @param {number} nCycles
      */
-    addCycles(nCyclesAdd)
+    addCycles(nCycles)
     {
-        this.nCyclesDebug += nCyclesAdd;
-
-        if (this.nCyclesDebug < 0) {    // if the cycle count underflows, reset all the counters
-            this.resetCounters();
-        }
+        this.nCyclesRemain -= nCycles;
     }
 
     /**
