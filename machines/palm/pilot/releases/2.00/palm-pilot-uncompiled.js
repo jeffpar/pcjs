@@ -6452,20 +6452,20 @@ class Monitor extends Device {
                 textarea.setAttribute("id", id);
             }
             textarea.setAttribute("class", "pcjs-overlay");
-            /*
-            * The soft keyboard on an iOS device tends to pop up with the SHIFT key depressed, which is not the
-            * initial keyboard state we prefer, so hopefully turning off these "auto" attributes will help.
-            */
+            /**
+             * The soft keyboard on an iOS device tends to pop up with the SHIFT key depressed, which is not the
+             * initial keyboard state we prefer, so hopefully turning off these "auto" attributes will help.
+             */
             if (this.isUserAgent("iOS")) {
                 this.disableAuto(textarea);
-                /*
-                * One of the problems on iOS devices is that after a soft-key control is clicked, we need to give
-                * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS may
-                * also "zoom" the page rather jarringly.  While it's a simple matter to completely disable zooming,
-                * by fiddling with the page's viewport, that prevents the user from intentionally zooming.  A bit of
-                * Googling reveals that another way to prevent those jarring unintentional zooms is to simply set the
-                * font-size of the text control to 16px.  So that's what we do.
-                */
+                /**
+                 * One of the problems on iOS devices is that after a soft-key control is clicked, we need to give
+                 * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS may
+                 * also "zoom" the page rather jarringly.  While it's a simple matter to completely disable zooming,
+                 * by fiddling with the page's viewport, that prevents the user from intentionally zooming.  A bit of
+                 * Googling reveals that another way to prevent those jarring unintentional zooms is to simply set the
+                 * font-size of the text control to 16px.  So that's what we do.
+                 */
                 textarea.style.fontSize = "16px";
             }
             this.monitor.appendChild(textarea);
@@ -18641,11 +18641,11 @@ class Machine extends Device {
                     if (device.config['class'] != "CPU" || machine.fAutoStart || machine.isReady()) {
                         device.onPower(on);
                     } else {
-                        /*
-                        * If we're not going to start the CPU on the first power notification, then we should
-                        * we fake a transition to the "stopped" state, so that the Debugger will display the current
-                        * machine state.
-                        */
+                        /**
+                         * If we're not going to start the CPU on the first power notification, then we should
+                         * we fake a transition to the "stopped" state, so that the Debugger will display the current
+                         * machine state.
+                         */
                         device.time.update(true);
                     }
                 }

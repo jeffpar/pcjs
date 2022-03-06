@@ -14395,9 +14395,9 @@ class CPUx86 extends CPULib {
             if (aBlocks[iBlock]) {
                 aBlocks[iBlock].addBreakpoint(addr & this.nBlockLimit, fWrite);
                 /*
-                * When a physical memory breakpoint is added, a fresh setPhysBlock() call is REQUIRED for any
-                * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
-                */
+                 * When a physical memory breakpoint is added, a fresh setPhysBlock() call is REQUIRED for any
+                 * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
+                 */
                 if (fPhysical) this.flushPageBlocks();
                 return true;
             }

@@ -35,7 +35,7 @@ export default class IOPage extends Ports {
             let outData = handlers[1];
             let inPair = handlers[2];
             let outPair = handlers[3];
-            /*
+            /**
              * When handlers are being registered for these BYTE-granular UNIBUS addresses,
              * we must install fallback handlers for all BYTE accesses.
              */

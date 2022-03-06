@@ -12811,9 +12811,9 @@ class PDP11Ops extends CPU {
     static fnNEG(src, dst)
     {
         let result = -dst;
-        /*
-        * If the sign bit of both dst and result are set, the original value must have been 0x8000, triggering overflow.
-        */
+        /**
+         * If the sign bit of both dst and result are set, the original value must have been 0x8000, triggering overflow.
+         */
         this.updateAllFlags(result, result & dst & 0x8000);
         return result & 0xffff;
     }
@@ -12829,9 +12829,9 @@ class PDP11Ops extends CPU {
     static fnNEGB(src, dst)
     {
         let result = -dst;
-        /*
-        * If the sign bit of both dst and result are set, the original value must have been 0x80, which triggers overflow.
-        */
+        /**
+         * If the sign bit of both dst and result are set, the original value must have been 0x80, which triggers overflow.
+         */
         this.updateAllFlags(result << 8, (result & dst & 0x80) << 8);
         return result & 0xff;
     }
@@ -12937,9 +12937,9 @@ class PDP11Ops extends CPU {
     static fnSWAB(src, dst)
     {
         let result = (dst << 8) | (dst >> 8);
-        /*
-        * N and Z are based on the low byte of the result, which is the same as the high byte of dst.
-        */
+        /**
+         * N and Z are based on the low byte of the result, which is the same as the high byte of dst.
+         */
         this.updateNZVCFlags(dst & 0xff00);
         return result & 0xffff;
     }
@@ -13484,9 +13484,9 @@ class PDP11Ops extends CPU {
         if (opcode & 0x2) this.clearVF();
         if (opcode & 0x4) this.clearZF();
         if (opcode & 0x8) this.clearNF();
-        /*
-        * TODO: Review whether this class of undocumented instructions really has a constant cycle time.
-        */
+        /**
+         * TODO: Review whether this class of undocumented instructions really has a constant cycle time.
+         */
         this.nCyclesRemain -= (4 + 1);
     }
 
@@ -13501,9 +13501,9 @@ class PDP11Ops extends CPU {
         let src = this.readSrcWord(opcode);
         let dst = this.readDstWord(opcode);
         let result = (src = (src < 0? this.regsGen[-src-1] : src)) - dst;
-        /*
-        * NOTE: CMP calculates (src - dst) rather than (dst - src), so src and dst updateSubFlags() parms must be reversed.
-        */
+        /**
+         * NOTE: CMP calculates (src - dst) rather than (dst - src), so src and dst updateSubFlags() parms must be reversed.
+         */
         this.updateSubFlags(result, dst, src);
         this.nCyclesRemain -= (this.dstMode? (3 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 1) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
     }
@@ -13519,9 +13519,9 @@ class PDP11Ops extends CPU {
         let src = this.readSrcByte(opcode);
         let dst = this.readDstByte(opcode);
         let result = (src = (src < 0? (this.regsGen[-src-1] & 0xff): src) << 8) - (dst <<= 8);
-        /*
-        * NOTE: CMP calculates (src - dst) rather than (dst - src), so src and dst updateSubFlags() parms must be reversed.
-        */
+        /**
+         * NOTE: CMP calculates (src - dst) rather than (dst - src), so src and dst updateSubFlags() parms must be reversed.
+         */
         this.updateSubFlags(result, dst, src);
         this.nCyclesRemain -= (this.dstMode? (3 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 1) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
     }
@@ -13596,9 +13596,9 @@ class PDP11Ops extends CPU {
      */
     static opDIV(opcode)
     {
-        /*
-        * TODO: Review and determine if flag updates can be encapsulated in an updateDivFlags() function.
-        */
+        /**
+         * TODO: Review and determine if flag updates can be encapsulated in an updateDivFlags() function.
+         */
        let src = this.readDstWord(opcode);
         if (!src) {
             this.flagN = 0;         // NZVC
@@ -13654,51 +13654,51 @@ class PDP11Ops extends CPU {
             this.trap(PDP11.TRAP.BUS, 0, PDP11.REASON.HALT);
         } else {
             if (this.panel) {
-                /*
-                * The PDP-11/20 Handbook (1971) says that HALT does the following:
-                *
-                *      Causes the processor operation to cease. The console is given control of the bus.
-                *      The console data lights display the contents of RO; the console address lights display
-                *      the address after the halt instruction. Transfers on the UNIBUS are terminated immediately.
-                *      The PC points to the next instruction to be executed. Pressing the continue key on the
-                *      console causes processor operation to resume. No INIT signal is given.
-                *
-                * However, the PDP-11/70 Handbook (1979) suggests some slight differences:
-                *
-                *      Causes the processor operation to cease. The console is given control of the processor.
-                *      The data lights display the contents of the PC (which is the address of the HALT instruction
-                *      plus 2). Transfers on the UNIBUS are terminated immediately. Pressing the continue key on
-                *      the console causes processor operation to resume.
-                *
-                * Given that the 11/70 doesn't saying anything about displaying R0 on a HALT, and also given that
-                * the 11/70 CPU EXERCISER diagnostic writes a value to the Console Switch/Display Register immediately
-                * before HALT'ing, I'm going to assume that updating the data display with R0 is unique to the 11/20.
-                *
-                * Also, I'm a little suspicious of the 11/70 comment that the "data lights display the contents of
-                * the PC," since previous models display the PC on the ADDRESS lights, not the DATA lights.  And as
-                * I already explained, doing anything to the data lights at this point would undo what the 11/70
-                * diagnostics do.
-                */
+                /**
+                 * The PDP-11/20 Handbook (1971) says that HALT does the following:
+                 *
+                 *      Causes the processor operation to cease. The console is given control of the bus.
+                 *      The console data lights display the contents of RO; the console address lights display
+                 *      the address after the halt instruction. Transfers on the UNIBUS are terminated immediately.
+                 *      The PC points to the next instruction to be executed. Pressing the continue key on the
+                 *      console causes processor operation to resume. No INIT signal is given.
+                 *
+                 * However, the PDP-11/70 Handbook (1979) suggests some slight differences:
+                 *
+                 *      Causes the processor operation to cease. The console is given control of the processor.
+                 *      The data lights display the contents of the PC (which is the address of the HALT instruction
+                 *      plus 2). Transfers on the UNIBUS are terminated immediately. Pressing the continue key on
+                 *      the console causes processor operation to resume.
+                 *
+                 * Given that the 11/70 doesn't saying anything about displaying R0 on a HALT, and also given that
+                 * the 11/70 CPU EXERCISER diagnostic writes a value to the Console Switch/Display Register immediately
+                 * before HALT'ing, I'm going to assume that updating the data display with R0 is unique to the 11/20.
+                 *
+                 * Also, I'm a little suspicious of the 11/70 comment that the "data lights display the contents of
+                 * the PC," since previous models display the PC on the ADDRESS lights, not the DATA lights.  And as
+                 * I already explained, doing anything to the data lights at this point would undo what the 11/70
+                 * diagnostics do.
+                 */
                 if (this.model == PDP11.MODEL_1120) {
                     this.panel.setData(this.regsGen[0], true);
                 }
             }
             if (!this.dbg) {
-                /*
-                * This will leave the PC exactly where it's supposed to be: at the address of the HALT + 2.
-                */
+                /**
+                 * This will leave the PC exactly where it's supposed to be: at the address of the HALT + 2.
+                 */
                 this.time.stop();
             } else {
-                /*
-                * When the Debugger is present, this call will rewind PC by 2 so that the HALT instruction is
-                * displayed, making it clear why the processor stopped; the user could also use the "dh" command
-                * to dump the Debugger's instruction history buffer to see why it stopped, assuming the history
-                * buffer is enabled, but that's more work.
-                *
-                * Because rewinding is not normal CPU behavior, attempting to Run again (or use the Debugger's
-                * "g" command) would cause an immediate HALT again -- except that checkInstruction() checks for that
-                * precise condition, so if the CPU starts on a HALT, checkInstruction() will skip over it.
-                */
+                /**
+                 * When the Debugger is present, this call will rewind PC by 2 so that the HALT instruction is
+                 * displayed, making it clear why the processor stopped; the user could also use the "dh" command
+                 * to dump the Debugger's instruction history buffer to see why it stopped, assuming the history
+                 * buffer is enabled, but that's more work.
+                 *
+                 * Because rewinding is not normal CPU behavior, attempting to Run again (or use the Debugger's
+                 * "g" command) would cause an immediate HALT again -- except that checkInstruction() checks for that
+                 * precise condition, so if the CPU starts on a HALT, checkInstruction() will skip over it.
+                 */
                 this.dbg.stopCPU("halt");
             }
         }
@@ -13749,7 +13749,7 @@ class PDP11Ops extends CPU {
      */
     static opJMP(opcode)
     {
-        /*
+        /**
          * Since JMP and JSR opcodes have their own unique timings for the various dst modes,
          * we snapshot nCyclesRemain before decoding the mode and use that to update nCyclesRemain.
          */
@@ -13766,13 +13766,13 @@ class PDP11Ops extends CPU {
      */
     static opJSR(opcode)
     {
-        /*
+        /**
          * Since JMP and JSR opcodes have their own unique timings for the various dst modes,
          * we snapshot nCyclesRemain before decoding the mode and use that to update nCyclesRemain.
          */
         this.nCyclesSnapped = this.nCyclesRemain;
         let addr = this.readDstAddr(opcode);
-        /*
+        /**
          * As per the WARNING in readSrcWord(), reading the SRC register AFTER decoding the DST operand
          * is entirely appropriate.
          */
@@ -13874,7 +13874,7 @@ class PDP11Ops extends CPU {
      */
     static opMOV(opcode)
     {
-        /*
+        /**
          * Since MOV opcodes have their own unique timings for the various dst modes,
          * we snapshot nCyclesRemain after decoding the src mode and use that to update nCyclesRemain.
          */
@@ -13905,7 +13905,7 @@ class PDP11Ops extends CPU {
      */
     static opMTPD(opcode)
     {
-        /*
+        /**
          * Since MTPD and MTPI opcodes have their own unique timings for the various dst modes,
          * we snapshot nCyclesRemain before decoding the mode and use that to update nCyclesRemain.
          */
@@ -13924,7 +13924,7 @@ class PDP11Ops extends CPU {
      */
     static opMTPI(opcode)
     {
-        /*
+        /**
          * Since MTPD and MTPI opcodes have their own unique timings for the various dst modes,
          * we snapshot nCyclesRemain before decoding the mode and use that to update nCyclesRemain.
          */
@@ -14017,50 +14017,50 @@ class PDP11Ops extends CPU {
             this.resetCPU();
 
             if (this.panel) {
-                /*
-                * The PDP-11/70 XXDP test "EKBBF0" reports the following, with PANEL messages on ("m panel on"):
-                *
-                *      CNSW.writeWord(177570,000101) @033502
-                *      CNSW.readWord(177570): 000000 @032114
-                *      LOOK AT THE CONSOLE LIGHTS
-                *      THE DATA LIGHTS SHOULD READ 166667
-                *      THE ADDRESS LIGHTS SHOULD READ  CNSW.readWord(177570): 000000 @032150
-                *      032236
-                *      CHANGE SWITCH 7 TO CONTINUE
-                *      CNSW.readWord(177570): 000000 @032236
-                *      stopped (31518011 instructions, 358048873 cycles, 58644 ms, 6105465 hz)
-                *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
-                *      SP=001074 PC=032236 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
-                *      032236: 032737 000200 177570   BIT   #200,@#177570
-                *      >> tr
-                *      CNSW.readWord(177570): 000000 @032236 (cpu halted)
-                *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
-                *      SP=001074 PC=032244 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
-                *      032244: 001773                 BEQ   032234                 ;cycles=0
-                *      >> tr
-                *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
-                *      SP=001074 PC=032234 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
-                *      032234: 000005                 RESET                        ;cycles=5
-                *
-                * It's a little hard to see why the DATA lights should read 166667, since the PANEL messages indicate
-                * that the last CNSW.writeWord(177570) was for 000101, not 166667.  So I'm guessing that the RESET
-                * instruction is supposed to propagate R0 to the console's DISPLAY register.
-                *
-                * This is similar to what we do for the HALT instruction (but only if this.model == PDP11.MODEL_1120).
-                * These Console features do not seem to be very well documented, assuming they exist.
-                *
-                * UPDATE: This behavior appears to be confirmed by remarks in the PDP-11/20 Processor Handbook (1971),
-                * p. 141:
-                *
-                *      HALT - displays processor register R0 when bus control is transferred to console during a HALT
-                *      instruction.
-                *
-                *      RESET - displays register R0 for during [duration?] of RESET (70 msec).
-                *
-                * I haven't found similar remarks in the PDP-11/70 Processor Handbooks, so I'm not sure if that's an
-                * oversight or if 11/70 panels are slightly different in this regard.  It's also not clear what they meant
-                * by "for duration of RESET".  Is something supposed to happen to the DATA lights after the RESET is done?
-                */
+                /**
+                 * The PDP-11/70 XXDP test "EKBBF0" reports the following, with PANEL messages on ("m panel on"):
+                 *
+                 *      CNSW.writeWord(177570,000101) @033502
+                 *      CNSW.readWord(177570): 000000 @032114
+                 *      LOOK AT THE CONSOLE LIGHTS
+                 *      THE DATA LIGHTS SHOULD READ 166667
+                 *      THE ADDRESS LIGHTS SHOULD READ  CNSW.readWord(177570): 000000 @032150
+                 *      032236
+                 *      CHANGE SWITCH 7 TO CONTINUE
+                 *      CNSW.readWord(177570): 000000 @032236
+                 *      stopped (31518011 instructions, 358048873 cycles, 58644 ms, 6105465 hz)
+                 *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
+                 *      SP=001074 PC=032236 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
+                 *      032236: 032737 000200 177570   BIT   #200,@#177570
+                 *      >> tr
+                 *      CNSW.readWord(177570): 000000 @032236 (cpu halted)
+                 *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
+                 *      SP=001074 PC=032244 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
+                 *      032244: 001773                 BEQ   032234                 ;cycles=0
+                 *      >> tr
+                 *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
+                 *      SP=001074 PC=032234 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
+                 *      032234: 000005                 RESET                        ;cycles=5
+                 *
+                 * It's a little hard to see why the DATA lights should read 166667, since the PANEL messages indicate
+                 * that the last CNSW.writeWord(177570) was for 000101, not 166667.  So I'm guessing that the RESET
+                 * instruction is supposed to propagate R0 to the console's DISPLAY register.
+                 *
+                 * This is similar to what we do for the HALT instruction (but only if this.model == PDP11.MODEL_1120).
+                 * These Console features do not seem to be very well documented, assuming they exist.
+                 *
+                 * UPDATE: This behavior appears to be confirmed by remarks in the PDP-11/20 Processor Handbook (1971),
+                 * p. 141:
+                 *
+                 *      HALT - displays processor register R0 when bus control is transferred to console during a HALT
+                 *      instruction.
+                 *
+                 *      RESET - displays register R0 for during [duration?] of RESET (70 msec).
+                 *
+                 * I haven't found similar remarks in the PDP-11/70 Processor Handbooks, so I'm not sure if that's an
+                 * oversight or if 11/70 panels are slightly different in this regard.  It's also not clear what they meant
+                 * by "for duration of RESET".  Is something supposed to happen to the DATA lights after the RESET is done?
+                 */
                 this.panel.setData(this.regsGen[0], true);
             }
         }
@@ -14124,14 +14124,14 @@ class PDP11Ops extends CPU {
     static opRTI(opcode)
     {
         this.trapReturn();
-        /*
-        * Unlike RTT, RTI permits an immediate trace, which we resolve by propagating PSW.TF to OPFLAG.TRAP_TF
-        * (which, as written below, requires that both flags have the same bit value; see defines.js).
-        *
-        * NOTE: This RTI trace behavior is NEW for machines that have both RTI and RTT.  Early models didn't have RTT,
-        * so the old RTI behaved exactly like the new RTT.  Which is why the 11/20 jump table below calls opRTT() instead
-        * of opRTI() for RTI.
-        */
+        /**
+         * Unlike RTT, RTI permits an immediate trace, which we resolve by propagating PSW.TF to OPFLAG.TRAP_TF
+         * (which, as written below, requires that both flags have the same bit value; see defines.js).
+         *
+         * NOTE: This RTI trace behavior is NEW for machines that have both RTI and RTT.  Early models didn't have RTT,
+         * so the old RTI behaved exactly like the new RTT.  Which is why the 11/20 jump table below calls opRTT() instead
+         * of opRTI() for RTI.
+         */
         this.opFlags |= (this.regPSW & PDP11.PSW.TF);
         this.nCyclesRemain -= (10 + 3);
     }
@@ -14150,9 +14150,9 @@ class PDP11Ops extends CPU {
         }
         let src = this.popWord();
         let reg = opcode & PDP11.OPREG.MASK;
-        /*
-        * When the popular "RTS PC" form is used, we might as well eliminate the useless setting of PC...
-        */
+        /**
+         * When the popular "RTS PC" form is used, we might as well eliminate the useless setting of PC...
+         */
         if (reg == PDP11.REG.PC) {
             this.setPC(src);
         } else {
@@ -14258,9 +14258,9 @@ class PDP11Ops extends CPU {
         if (opcode & 0x2) this.setVF();
         if (opcode & 0x4) this.setZF();
         if (opcode & 0x8) this.setNF();
-        /*
-        * TODO: Review whether this class of undocumented instructions really has a constant cycle time.
-        */
+        /**
+         * TODO: Review whether this class of undocumented instructions really has a constant cycle time.
+         */
         this.nCyclesRemain -= (4 + 1);
     }
 
@@ -14412,44 +14412,44 @@ class PDP11Ops extends CPU {
      */
     static opWAIT(opcode)
     {
-        /*
-        * The original PDP-11 emulation code would actually stop emulating instructions now, relying on assorted
-        * setTimeout() callbacks, setInterval() callbacks, device XHR (XMLHttpRequest) callbacks, etc, to eventually
-        * call interrupt(), which would then transition the CPU out of its "wait" state and kickstart emulate() again.
-        *
-        * That approach isn't compatible with PCjs emulators, which prefer to rely on the simulated CPU clock to
-        * drive all simulated device updates.  This means components should call the CPU's setTimer() function, which
-        * invokes the provided callback when the number of CPU cycles that correspond to the requested number of
-        * milliseconds have elapsed.  This also gives us the ability to scale device response times as needed if the
-        * user decides to crank up CPU speed, and to freeze them along with the CPU whenever the user halts the machine.
-        *
-        * However, the PCjs approach requires the CPU to continue running.  One simple solution to this dilemma:
-        *
-        *      1) opWAIT() sets a new opFlags bit (OPFLAG.WAIT)
-        *      2) Rewind the PC back to the WAIT instruction
-        *      3) Whenever stepCPU() detects OPFLAG.WAIT, call checkInterrupts()
-        *      4) If checkInterrupts() detects an interrupt, advance PC past the WAIT and then dispatch the interrupt
-        *
-        * Technically, the PC is already exactly where it's supposed to be, so why are we wasting time with steps
-        * 2 and 4?  It's largely for the Debugger's sake, so that as long as execution is "blocked" by a WAIT, that's
-        * what you'll see in the Debugger.  I could make those steps conditioned on the presence of the Debugger,
-        * but I feel it's better to keep all code paths the same.
-        *
-        * NOTE: It's almost always a bad idea to add more checks to the inner stepCPU() loop, because every additional
-        * check can have a measurable (negative) impact on performance.  Which is why it's important to use opFlags bits
-        * whenever possible, since we can test for multiple (up to 32) exceptional conditions with a single check.
-        *
-        * We also used to update the machine's display(s) whenever transitioning to the WAIT state.  However, that
-        * caused this instruction to generate enormous overhead, and it's no longer necessary, since we now rely on
-        * a timer (the PDP-11's own KW11 60Hz Line Clock timer, to be precise) to generate periodic display updates.
-        *
-        *      if (!(this.opFlags & PDP11.OPFLAG.WAIT) && this.cmp) this.cmp.updateDisplays();
-        *
-        * Finally, it's been noted several places online that the WAIT instruction puts the contents of R0 into the
-        * Front Panel's "DATA PATH" (and possibly even directly into the "DISPLAY REGISTER", making the DATASEL switch
-        * setting irrelevant).  I can't find any supporting DEC documentation regarding this, but for now, we'll go
-        * with popular lore and propagate R0 to the panel's "active" data register.
-        */
+        /**
+         * The original PDP-11 emulation code would actually stop emulating instructions now, relying on assorted
+         * setTimeout() callbacks, setInterval() callbacks, device XHR (XMLHttpRequest) callbacks, etc, to eventually
+         * call interrupt(), which would then transition the CPU out of its "wait" state and kickstart emulate() again.
+         *
+         * That approach isn't compatible with PCjs emulators, which prefer to rely on the simulated CPU clock to
+         * drive all simulated device updates.  This means components should call the CPU's setTimer() function, which
+         * invokes the provided callback when the number of CPU cycles that correspond to the requested number of
+         * milliseconds have elapsed.  This also gives us the ability to scale device response times as needed if the
+         * user decides to crank up CPU speed, and to freeze them along with the CPU whenever the user halts the machine.
+         *
+         * However, the PCjs approach requires the CPU to continue running.  One simple solution to this dilemma:
+         *
+         *      1) opWAIT() sets a new opFlags bit (OPFLAG.WAIT)
+         *      2) Rewind the PC back to the WAIT instruction
+         *      3) Whenever stepCPU() detects OPFLAG.WAIT, call checkInterrupts()
+         *      4) If checkInterrupts() detects an interrupt, advance PC past the WAIT and then dispatch the interrupt
+         *
+         * Technically, the PC is already exactly where it's supposed to be, so why are we wasting time with steps
+         * 2 and 4?  It's largely for the Debugger's sake, so that as long as execution is "blocked" by a WAIT, that's
+         * what you'll see in the Debugger.  I could make those steps conditioned on the presence of the Debugger,
+         * but I feel it's better to keep all code paths the same.
+         *
+         * NOTE: It's almost always a bad idea to add more checks to the inner stepCPU() loop, because every additional
+         * check can have a measurable (negative) impact on performance.  Which is why it's important to use opFlags bits
+         * whenever possible, since we can test for multiple (up to 32) exceptional conditions with a single check.
+         *
+         * We also used to update the machine's display(s) whenever transitioning to the WAIT state.  However, that
+         * caused this instruction to generate enormous overhead, and it's no longer necessary, since we now rely on
+         * a timer (the PDP-11's own KW11 60Hz Line Clock timer, to be precise) to generate periodic display updates.
+         *
+         *      if (!(this.opFlags & PDP11.OPFLAG.WAIT) && this.cmp) this.cmp.updateDisplays();
+         *
+         * Finally, it's been noted several places online that the WAIT instruction puts the contents of R0 into the
+         * Front Panel's "DATA PATH" (and possibly even directly into the "DISPLAY REGISTER", making the DATASEL switch
+         * setting irrelevant).  I can't find any supporting DEC documentation regarding this, but for now, we'll go
+         * with popular lore and propagate R0 to the panel's "active" data register.
+         */
         if (this.panel) {
             this.panel.setAddr(this.regsGen[7], true);
             this.panel.setData(this.regsGen[0], true);
@@ -15046,30 +15046,6 @@ PDP11Ops.aOp8DXn_1140 = [
  * @copyright https://www.pcjs.org/modules/pdp11.js (C) 2012-2021 Jeff Parsons
  */
 
-/*
- * Overview of Device Interrupt Support
- *
- * Originally, the CPU maintained a queue of requested interrupts.  Entries in this queue recorded a device's
- * priority, vector, and delay (ie, a number of instructions to execute before dispatching the interrupt).  This
- * queue would constantly grow and shrink as requests were issued and dispatched, and as long as there was something
- * in the queue, the CPU was constantly examining it.
- *
- * Now we are trying something more efficient.  First, for devices that require delays (like the SerialPort's receiver
- * and transmitter buffer registers, which are supposed to "clock" the data in and out at a specific baud rate), the
- * CPU offers timer services that will "fire" a callback after a specified delay, which are much more efficient than
- * requiring the CPU to dive into an interrupt queue and decrement delay counts on every instruction.
- *
- * Second, devices that generate interrupts will allocate an IRQ object during initialization; we will no longer
- * be creating and destroying interrupt event objects and inserting/deleting them in a constantly changing queue.
- * Each IRQ contains properties that never change (eg, the vector and priority), along with a "next" pointer that's
- * only used when the IRQ is active.
- *
- * When a device decides it's time to interrupt (either at the end of some I/O operation or when a timer has fired),
- * it will simply set the IRQ, which basically means that the IRQ will be linked onto a list of active IRQs, in
- * priority order, so that when the CPU is ready to acknowledge interrupts, it need only check the top of the active
- * IRQ list.
- */
-
 /** @typedef {{ vector: number, priority: number, message: number, next: (IRQ|null) }} */
 let IRQ;
 
@@ -15123,7 +15099,7 @@ class PDP11 extends PDP11Ops {
         this.model = +this.config['model'] || PDP11.MODEL_1170;
         this.addrReset = +this.config['addrReset'] || 0;
 
-        /*
+        /**
          * Get access to the Bus device and create an IOPage block for it.  We assume that the bus
          * has been defined with an 8K blockSize and an 8-bit dataWidth, because our buses are defined
          * in terms of their MINIMUM data size, not their maximum.  All read/write operations must be
@@ -15135,19 +15111,19 @@ class PDP11 extends PDP11Ops {
         this.blockIOPage = /** @type {IOPage} */ (this.findDeviceByClass("IOPage"));
         this.panel = /** @type {Device} */ (this.findDeviceByClass("Panel", false));
 
-        /*
+        /**
          * We also need some IOPage bookkeeping variables, such as the current IOPage address
          * and the previous block (if any) at that address.
          */
         this.addrIOPage = 0;
         this.blockIOPagePrev = null;
 
-        /*
+        /**
          * Get access to the Input device, so we can call setFocus() as needed.
          */
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
 
-        /*
+        /**
          * Initialize processor operation to match the requested model.
          *
          * offRegSrc is a bias added to the register index calculated in readSrcWord() and readSrcByte(),
@@ -15169,7 +15145,7 @@ class PDP11 extends PDP11Ops {
         } else {
             this.opDecode = PDP11.op1140.bind(this);
             this.checkStackLimit = this.checkStackLimit1140;
-            /*
+            /**
              * The alternate register set (REGSET) doesn't exist on the 11/20 or 11/40; it's available on the 11/45 and 11/70.
              * Ditto for separate I/D spaces, SUPER mode, and the instructions MFPD, MTPD, and SPL.
              */
@@ -15190,7 +15166,7 @@ class PDP11 extends PDP11Ops {
         this.dstMode = this.dstReg = this.dstAddr = 0;
         this.nReadBreaks = this.nWriteBreaks = 0;
 
-        /*
+        /**
          * We can now initialize the CPU.
          */
         this.initCPU();
@@ -15220,7 +15196,7 @@ class PDP11 extends PDP11Ops {
      */
     initCPU()
     {
-        /*
+        /**
          * TODO: Verify the initial state of all PDP-11 flags and registers (are they well-documented?)
          */
         let f = 0xffff;
@@ -15262,12 +15238,12 @@ class PDP11 extends PDP11Ops {
         this.pswTrap = -1;
         this.regMBR = 0;
 
-        /*
+        /**
          * opFlags contains various conditions that stepCPU() needs to be aware of.
          */
         this.opFlags = 0;
 
-        /*
+        /**
          * srcMode and srcReg are set by SRCMODE decodes, and dstMode and dstReg are set for DSTMODE decodes,
          * indicating to the opcode handlers the mode(s) and register(s) used as part of the current opcode, so
          * that they can calculate the correct number of cycles.  dstAddr is set for byte operations that also
@@ -15326,17 +15302,17 @@ class PDP11 extends PDP11Ops {
         this.mmuMask = 0x3ffff;
         this.mapMMR3 = [4,2,0,1];   // map from mode to MMR3 I/D bit
 
-        /*
+        /**
          * This is queried and displayed by the Panel when it's not displaying its own ADDRESS register
          * (which takes precedence when, for example, you've manually halted the CPU and are independently
          * examining the contents of other addresses).
          *
-         * We initialize it to whatever the current PC is, because according to @paulnank's pdp11.js: "Reset
+         * We initialize it to whatever the current PC is, because according to paulnank's pdp11.js: "Reset
          * displays next instruction address" and initMMU() is called on a RESET.
          */
         this.addrLast = this.regsGen[7];
 
-        /*
+        /**
          * This stores the PC in the lower 16 bits, and any auto-incs or auto-decs from the last opcode in the
          * upper 16 bits;  the lower 16 bits are used to update MMR2, and the upper 16 bits are used to update MMR1.
          * The upper bits are automatically zeroed at the start of every operation when the PC is copied to opLast.
@@ -15396,7 +15372,7 @@ class PDP11 extends PDP11Ops {
 
         if (this.regMMR0 != newMMR0) {
             if (newMMR0 & PDP11.MMR0.ABORT) {
-                /*
+                /**
                  * If updates to MMR0[1-7], MMR1, and MMR2 are being shut off (ie, MMR0.ABORT bits are transitioning
                  * from clear to set), then do one final sync with their real-time counterparts in opLast.
                  */
@@ -15405,7 +15381,7 @@ class PDP11 extends PDP11Ops {
                     this.regMMR2 = this.opLast & 0xffff;
                 }
             }
-            /*
+            /**
              * NOTE: We are not protecting the read-only state of the COMPLETED bit here; that's handled by writeMMR0().
              */
             this.regMMR0 = newMMR0;
@@ -15431,7 +15407,7 @@ class PDP11 extends PDP11Ops {
      */
     getMMR1()
     {
-        /*
+        /**
          * If updates to MMR1 have not been shut off (ie, MMR0.ABORT bits are clear), then we are allowed
          * to sync MMR1 with its real-time counterpart in opLast.
          *
@@ -15458,7 +15434,7 @@ class PDP11 extends PDP11Ops {
      */
     getMMR2()
     {
-        /*
+        /**
          * If updates to MMR2 have not been shut off (ie, MMR0.ABORT bits are clear), then we are allowed
          * to sync MMR2 with its real-time counterpart in opLast.
          *
@@ -15492,7 +15468,7 @@ class PDP11 extends PDP11Ops {
      */
     setMMR3(newMMR3)
     {
-        /*
+        /**
          * Don't allow non-11/70 models to use 22-bit addressing or the UNIBUS map.
          */
         if (this.model < PDP11.MODEL_1170) {
@@ -15837,7 +15813,7 @@ class PDP11 extends PDP11Ops {
     getOpcode()
     {
         let pc = this.opLast = this.regsGen[PDP11.REG.PC];
-        /*
+        /**
          * If PC is unaligned, a BUS trap will be generated, and because it will generate an
          * exception, the next line (the equivalent of advancePC(2)) will not be executed, ensuring that
          * original unaligned PC will be pushed onto the stack by trap().
@@ -16002,7 +15978,7 @@ class PDP11 extends PDP11Ops {
                 } while (irqPrev);
             }
         }
-        /*
+        /**
          * See the writeXCSR() function for an explanation of why signalling an IRQ hardware interrupt
          * should be done using IRQ_DELAY rather than setting IRQ directly.
          */
@@ -16030,7 +16006,7 @@ class PDP11 extends PDP11Ops {
                 irqPrev = irqNext;
             }
         }
-        /*
+        /**
          * We could also set irq.next to null now, but strictly speaking, that shouldn't be necessary.
          *
          * Last but not least, if there's still an IRQ on the active IRQ list, we need to make sure IRQ_DELAY
@@ -16173,7 +16149,7 @@ class PDP11 extends PDP11Ops {
             }
         }
         else if (this.opFlags & PDP11.OPFLAG.IRQ_DELAY) {
-            /*
+            /**
              * We know that IRQ (bit 2) is clear, so since IRQ_DELAY (bit 0) is set, incrementing opFlags
              * will eventually transform IRQ_DELAY into IRQ, without affecting any other (higher) bits.
              */
@@ -16311,7 +16287,7 @@ class PDP11 extends PDP11Ops {
         this.flagV = newPSW << 14;
         this.flagC = newPSW << 16;
         if ((newPSW ^ this.regPSW) & this.pswRegSet) {
-            /*
+            /**
              * Swap register sets
              */
             for (let i = this.regsAlt.length; --i >= 0;) {
@@ -16323,7 +16299,7 @@ class PDP11 extends PDP11Ops {
         this.pswMode = (newPSW >> PDP11.PSW.SHIFT.CMODE) & PDP11.MODE.MASK;
         let oldMode = (this.regPSW >> PDP11.PSW.SHIFT.CMODE) & PDP11.MODE.MASK;
         if (this.pswMode != oldMode) {
-            /*
+            /**
              * Swap stack pointers
              */
             this.regsAltStack[oldMode] = this.regsGen[6];
@@ -16331,7 +16307,7 @@ class PDP11 extends PDP11Ops {
         }
         this.regPSW = newPSW;
 
-        /*
+        /**
          * Trigger a call to checkInterrupts(), just in case.  If there's an active IRQ, then setting
          * OPFLAG.IRQ is a no-brainer, but even if not, we set IRQ_DELAY in case the priority was lowered
          * enough to permit a programmed interrupt (via regPIR).
@@ -16461,7 +16437,7 @@ class PDP11 extends PDP11Ops {
     updateDecFlags(result, dst)
     {
         this.flagN = this.flagZ = result;
-        /*
+        /**
          * Because src is always 1 (with a zero sign bit), it can be optimized out of this calculation.
          */
         this.flagV = (/* src ^ */ dst) & (dst ^ result);
@@ -16479,7 +16455,7 @@ class PDP11 extends PDP11Ops {
     updateIncFlags(result, dst)
     {
         this.flagN = this.flagZ = result;
-        /*
+        /**
          * Because src is always 1 (with a zero sign bit), it can be optimized out of this calculation.
          */
         this.flagV = (/* src ^ */ result) & (dst ^ result);
@@ -16570,7 +16546,7 @@ class PDP11 extends PDP11Ops {
                 reason = PDP11.REASON.PANIC;
             }
             this.opFlags |= PDP11.OPFLAG.TRAP_RED;
-            /*
+            /**
              * The next two lines used to be deferred until after the setPSW() below, but
              * I'm not seeing any dependencies on these registers, so I'm consolidating the code.
              */
@@ -16579,7 +16555,7 @@ class PDP11 extends PDP11Ops {
         }
 
         if (reason != PDP11.REASON.PANIC) {
-            /*
+            /**
              * NOTE: Pre-setting the auto-dec values for MMR1 to 0xF6F6 is a work-around for an "EKBEE1"
              * diagnostic (PC 056710), which tests what happens when a misaligned read triggers a BUS trap,
              * and that trap then triggers an MMU trap during the first pushWord() below.
@@ -16593,14 +16569,14 @@ class PDP11 extends PDP11Ops {
              */
             this.opLast = vector | 0xf6f60000;
 
-            /*
+            /**
              * Read from kernel D space
              */
             this.pswMode = 0;
             let newPC = this.readWord(vector | this.addrDSpace);
             let newPSW = this.readWord(((vector + 2) & 0xffff) | this.addrDSpace);
 
-            /*
+            /**
              * Set new PSW with previous mode
              */
             this.setPSW((newPSW & ~PDP11.PSW.PMODE) | ((this.pswTrap >> 2) & PDP11.PSW.PMODE));
@@ -16610,14 +16586,14 @@ class PDP11 extends PDP11Ops {
             this.setPC(newPC);
         }
 
-        /*
+        /**
          * TODO: Determine the appropriate number of cycles for traps; all I've done for now is move the
          * cycle charge from opTrap() to here, and reduced the amount the other opcode handlers that call
          * trap() charge by a corresponding amount (5).
          */
         this.nStepCycles -= (4 + 1);
 
-        /*
+        /**
          * DEC's "TRAP TEST" (MAINDEC-11-D0NA-PB) triggers a RESERVED trap with an invalid opcode and the
          * stack deliberately set too low, and expects the stack overflow trap to be "sprung" immediately
          * afterward, so we only want to "lose interest" in the TRAP flag(s) that were set on entry, not ALL
@@ -16652,7 +16628,7 @@ class PDP11 extends PDP11Ops {
 
         this.pswTrap = -1;                                  // reset flag that we have a trap within a trap
 
-        /*
+        /**
          * These next properties (in conjunction with setting PDP11.OPFLAG.TRAP_LAST) are purely an aid for the Debugger;
          * see getTrapStatus().
          */
@@ -16672,14 +16648,14 @@ class PDP11 extends PDP11Ops {
      */
     trapReturn()
     {
-        /*
+        /**
          * This code used to defer updating regsGen[6] (SP) until after BOTH words had been popped, which seems
          * safer, but if we're going to do pushes in trap(), then I see no reason to avoid doing pops in trapReturn().
          */
         let addr = this.popWord();
         let newPSW = this.popWord();
         if (this.regPSW & PDP11.PSW.CMODE) {
-            /*
+            /**
              * Keep SPL and allow lower only for modes and register set.
              *
              * TODO: Review, because it seems a bit odd to only CLEAR the PRI bits in the new PSW, and then to OR in
@@ -16743,17 +16719,17 @@ class PDP11 extends PDP11Ops {
         let idx = (addr >> 13) & 0x1F;
         if (idx < 31) {
             if (this.regMMR3 & PDP11.MMR3.UNIBUS_MAP) {
-                /*
+                /**
                  * The UNIBUS map relocation is enabled
                  */
                 addr = (this.regsUNIMap[idx] + (addr & 0x1FFF)) & PDP11.MASK_22BIT;
-                /*
+                /**
                  * TODO: Review this assertion.
                  *
                  *
                  */
             } else {
-                /*
+                /**
                  * Since UNIBUS map relocation is NOT enabled, then as explained above:
                  *
                  *      If the UNIBUS map relocation is not enabled, an incoming 18-bit UNIBUS address has 4 leading zeroes added for
@@ -16868,7 +16844,7 @@ class PDP11 extends PDP11Ops {
     {
         let page, pdr, addr;
 
-        /*
+        /**
          * This can happen when the MAINT bit of MMR0 is set but not the ENABLED bit.
          */
         if (!(access & this.mmuEnable)) {
@@ -16886,7 +16862,7 @@ class PDP11 extends PDP11Ops {
 
         if (this.nDisableTraps) return addr;
 
-        /*
+        /**
          * TEST #122 ("KT BEND") in the "EKBEE1" diagnostic (PC 076060) triggers a NOMEMORY error using
          * this instruction:
          *
@@ -16896,10 +16872,10 @@ class PDP11 extends PDP11Ops {
          *
          *      076356: 005037 140001          CLR   @#140001
          *
-         * @paulnank: So it turns out that the memory management unit that does odd address and non-existent
+         * paulnank: So it turns out that the memory management unit that does odd address and non-existent
          * memory trapping: who knew? :-)  I thought these would have been handled at access time.
          *
-         * @jeffpar: We're assuming, at least, that the MMU does its "NEXM" (NOMEMORY) non-existent memory test
+         * jeffpar: We're assuming, at least, that the MMU does its "NEXM" (NOMEMORY) non-existent memory test
          * very simplistically, by range-checking the address against something like the memory SIZE registers,
          * because otherwise the MMU would have to wait for a bus time-out: something so prohibitively expensive
          * that the MMU could not afford to do it.  I rely on addrInvalid, which is derived from the same Bus
@@ -16948,7 +16924,7 @@ class PDP11 extends PDP11Ops {
         }
 
         if ((pdr & (PDP11.PDR.PLF | PDP11.PDR.ED)) != PDP11.PDR.PLF) {      // skip checking most common case (hopefully)
-            /*
+            /**
              * The Page Descriptor Register (PDR) Page Length Field (PLF) is a 7-bit block number, where a block
              * is 64 bytes.  Since the bit 0 of the block number is located at bit 8 of the PDR, we shift the PDR
              * right 2 bits and then clear the bottom 6 bits by masking it with 0x1FC0.
@@ -16966,7 +16942,7 @@ class PDP11 extends PDP11Ops {
             }
         }
 
-        /*
+        /**
          * Aborts and traps: log FIRST trap and MOST RECENT abort
          */
         this.regsPDR[this.pswMode][page] = pdr;
@@ -16985,7 +16961,7 @@ class PDP11 extends PDP11Ops {
 
                     this.setMMR0((this.regMMR0 & ~PDP11.MMR0.UPDATE) | (newMMR0 & PDP11.MMR0.UPDATE));
                 }
-                /*
+                /**
                  * NOTE: In unusual circumstances, if regMMR0 already indicated an ABORT condition above,
                  * we run the risk of infinitely looping; eg, we call trap(), which calls mapVirtualToPhysical()
                  * on the trap vector, which faults again, etc.
@@ -16997,7 +16973,7 @@ class PDP11 extends PDP11Ops {
                 this.trap(PDP11.TRAP.MMU, PDP11.OPFLAG.TRAP_MMU, PDP11.REASON.ABORT);
             }
             if (!(this.regMMR0 & (PDP11.MMR0.ABORT | PDP11.MMR0.TRAP_MMU))) {
-                /*
+                /**
                  * TODO: Review the code below, because the address range seems over-inclusive.
                  */
                 if (addr < ((PDP11.IOPAGE_22BIT | PDP11.UNIBUS.SIPDR0) & this.mmuMask) ||
@@ -17089,12 +17065,12 @@ class PDP11 extends PDP11Ops {
         let addrVirtual, step;
         let addrDSpace = (access & PDP11.ACCESS.VIRT)? 0 : this.addrDSpace;
 
-        /*
+        /**
          * Modes that need to auto-increment or auto-decrement will break, in order to perform
          * the update; others will return an address immediately.
          */
         switch (mode) {
-        /*
+        /**
          * Mode 0: Registers don't have a virtual address, so trap.
          *
          * NOTE: Most instruction code paths never call getAddrByMode() when the mode is zero;
@@ -17106,7 +17082,7 @@ class PDP11 extends PDP11Ops {
             this.trap(PDP11.TRAP.BUS, 0, PDP11.REASON.ILLEGAL);
             return 0;
 
-        /*
+        /**
          * Mode 1: (R)
          */
         case 1:
@@ -17114,7 +17090,7 @@ class PDP11 extends PDP11Ops {
             this.nStepCycles -= (2 + 1);
             return (reg == 7? this.regsGen[reg] : (this.regsGen[reg] | addrDSpace));
 
-        /*
+        /**
          * Mode 2: (R)+
          */
         case 2:
@@ -17128,7 +17104,7 @@ class PDP11 extends PDP11Ops {
             this.nStepCycles -= (2 + 1);
             break;
 
-        /*
+        /**
          * Mode 3: @(R)+
          */
         case 3:
@@ -17140,7 +17116,7 @@ class PDP11 extends PDP11Ops {
             this.nStepCycles -= (5 + 2);
             break;
 
-        /*
+        /**
          * Mode 4: -(R)
          */
         case 4:
@@ -17152,7 +17128,7 @@ class PDP11 extends PDP11Ops {
             this.nStepCycles -= (3 + 1);
             break;
 
-        /*
+        /**
          * Mode 5: @-(R)
          */
         case 5:
@@ -17163,7 +17139,7 @@ class PDP11 extends PDP11Ops {
             this.nStepCycles -= (6 + 2);
             break;
 
-        /*
+        /**
          * Mode 6: d(R)
          */
         case 6:
@@ -17173,7 +17149,7 @@ class PDP11 extends PDP11Ops {
             this.nStepCycles -= (4 + 2);
             return addrVirtual | addrDSpace;
 
-        /*
+        /**
          * Mode 7: @d(R)
          */
         case 7:
@@ -17200,7 +17176,7 @@ class PDP11 extends PDP11Ops {
      */
     checkStackLimit1120(access, step, addr)
     {
-        /*
+        /**
          * NOTE: DEC's "TRAP TEST" (MAINDEC-11-D0NA-PB) expects "TST -(SP)" to trap when SP is 150,
          * so we ignore the access parameter.  Also, strangely, it does NOT expect this instruction
          * to trap:
@@ -17212,7 +17188,7 @@ class PDP11 extends PDP11Ops {
          * so if the step parameter is positive, we let it go.
          */
         if (!this.pswMode && step <= 0 && addr <= this.regSLR) {
-            /*
+            /**
              * On older machines (eg, the PDP-11/20), there is no "YELLOW" and "RED" distinction, and the
              * instruction is always allowed to complete, so the trap must always be issued in this fashion.
              */
@@ -17231,7 +17207,7 @@ class PDP11 extends PDP11Ops {
     checkStackLimit1140(access, step, addr)
     {
         if (!this.pswMode) {
-            /*
+            /**
              * NOTE: The 11/70 CPU Instruction Exerciser does NOT expect reads to trigger a stack overflow,
              * so we check the access parameter.
              *
@@ -17247,7 +17223,7 @@ class PDP11 extends PDP11Ops {
              */
             if (addr >= 0xFFFE) addr |= ~0xFFFF;
             if ((access & PDP11.ACCESS.WRITE) && addr <= this.regSLR) {
-                /*
+                /**
                  * regSLR can never fall below 0xFF, so this subtraction can never go negative, so this comparison
                  * is always safe.
                  */
@@ -17530,7 +17506,7 @@ class PDP11 extends PDP11Ops {
         } else {
             let addr = this.getAddrByMode(mode, reg, PDP11.ACCESS.WRITE_WORD);
             if (!(access & PDP11.ACCESS.DSPACE)) addr &= 0xffff;
-            /*
+            /**
              * TODO: Consider replacing the following code with writeWord(), by adding optional pswMode
              * parameters for each of the discrete mapVirtualToPhysical() and writePair() operations, because
              * as it stands, this is the only remaining call to mapVirtualToPhysical() outside of our
@@ -17734,12 +17710,12 @@ class PDP11 extends PDP11Ops {
         let mode = this.dstMode = (opcode & PDP11.OPMODE.MASK) >> PDP11.OPMODE.SHIFT;
         if (!mode) {
             if (!data) {
-                /*
+                /**
                  * Potentially worthless optimization (but it looks good on "paper").
                  */
                 this.regsGen[reg] &= ~writeFlags;
             } else {
-                /*
+                /**
                  * Potentially worthwhile optimization: skipping the sign-extending data shifts
                  * if writeFlags is WRITE.BYTE (but that requires an extra test and separate code paths).
                  */
@@ -17824,7 +17800,7 @@ class PDP11 extends PDP11Ops {
                 let bits = 16;
                 if (reg[1] == 'F') bits = 1;
                 let value = this.getRegister(reg);
-                /*
+                /**
                  * We must call the Debugger's sprintf() instead of our own in order to use its custom formatters (eg, %n).
                  */
                 if (value != undefined) s += this.dbg.sprintf("%s=%*n ", reg, bits, value);
@@ -17834,7 +17810,7 @@ class PDP11 extends PDP11Ops {
     }
 }
 
-/*
+/**
  * CPU model numbers (supported)
  *
  * The 11/20 includes the 11/10, which is not identified separately because there was
@@ -17854,7 +17830,7 @@ PDP11.MODEL_1140 = 1140;
 PDP11.MODEL_1145 = 1145;
 PDP11.MODEL_1170 = 1170;
 
-/*
+/**
  * This constant is used to mark points in the code where the physical address being returned
  * is invalid and should not be used.
  *
@@ -17873,7 +17849,7 @@ PDP11.MODEL_1170 = 1170;
  */
 PDP11.ADDR_INVALID = -1;
 
-/*
+/**
  * Processor modes
  */
 PDP11.MODE = {
@@ -17884,7 +17860,7 @@ PDP11.MODE = {
     MASK:       0x3
 };
 
-/*
+/**
  * Processor Status Word (stored in regPSW) at 177776
  */
 PDP11.PSW = {
@@ -17895,12 +17871,12 @@ PDP11.PSW = {
     TF:         0x0010,         // bit  4     (000020)  Trap Flag
     PRI:        0x00E0,         // bits 5-7   (000340)  Priority
     UNUSED:     0x0700,         // bits 8-10  (003400)  UNUSED
-    /*
+    /**
      * The REGSET bit (and the alternate register set stored in regsAlt) came into existence
      * with the 11/45; (ie, they were not present on the 11/10, 11/20, or 11/40).
      */
     REGSET:     0x0800,         // bit  11    (004000)  Register Set
-    /*
+    /**
      * The MODE bits came into existence with the 11/40 (eg, not present on the 11/10 or 11/20).
      */
     PMODE:      0x3000,         // bits 12-13 (030000)  Prev Mode (see PDP11.MODE)
@@ -17917,7 +17893,7 @@ PDP11.PSW = {
     }
 };
 
-/*
+/**
  * Program Interrupt Register (stored in regPIR) at 177772
  *
  * The PIA bits at 5-7 are designed to align with PRI bits 5-7 in the PSW.
@@ -17931,7 +17907,7 @@ PDP11.PIR = {
     }
 };
 
-/*
+/**
  * PDP-11 trap vectors
  */
 PDP11.TRAP = {
@@ -17947,7 +17923,7 @@ PDP11.TRAP = {
     MMU:        0xA8            // 250  MMU: aborts and traps
 };
 
-/*
+/**
  * PDP-11 trap reasons; the reason may also be a non-negative address indicating a BUS memory error
  * (unaligned address or non-existent memory).  Any reason >= RED (which includes BUS memory errors) generate
  * immediate (thrown) traps, as they are considered ABORTs; the rest generate synchronous traps.
@@ -17979,7 +17955,7 @@ PDP11.REASONS = [
     "INTERRUPT"
 ];
 
-/*
+/**
  * Assorted common opcodes
  */
 PDP11.OPCODE = {
@@ -17998,7 +17974,7 @@ PDP11.OPCODE = {
     INVALID:    0xFFFF          // far from the only invalid opcode, just a KNOWN invalid opcode
 };
 
-/*
+/**
  * Internal operation state flags
  */
 PDP11.OPFLAG = {
@@ -18016,14 +17992,14 @@ PDP11.OPFLAG = {
     TRAP_RED:   0x0100,         // set whenever a RED trap occurs, used to catch double RED traps (time to PANIC)
 };
 
-/*
+/**
  * Opcode reg (opcode bits 2-0)
  */
 PDP11.OPREG = {
     MASK:       0x07
 };
 
-    /*
+    /**
      * Opcode modes (opcode bits 5-3)
      */
 PDP11.OPMODE = {
@@ -18058,7 +18034,7 @@ PDP11.REG = {
     PC:         7,
 };
 
-/*
+/**
  * Internal memory access flags
  */
 PDP11.ACCESS = {
@@ -18072,7 +18048,7 @@ PDP11.ACCESS = {
     DSPACE:     0x10000         // getVirtualByMode() sets bit 17 in any 16-bit virtual address that refers to D space (as opposed to I space)
 };
 
-/*
+/**
  * Internal flags passed to writeDstByte()
  *
  * The BYTE and SBYTE values have been chosen so that they can be used directly as masks.
@@ -18151,7 +18127,7 @@ PDP11.PDR = {
     BC:         0x8000          // bypass cache (11/44 only)
 };
 
-/*
+/**
  * Assorted special (UNIBUS) addresses
  *
  * Within the PDP-11/45's 18-bit address space, of the 0x40000 possible addresses (256Kb), the top 0x2000
@@ -18318,7 +18294,7 @@ PDP11.UNIBUS = {                // 16-bit     18-bit      22-bit    Description
     R5SET1:     0o177715,       //
     R6SUPER:    0o177716,       //
     R6USER:     0o177717,       //
-    /*
+    /**
      * This next group of registers is largely ignored; all accesses are routed to regsControl[],
      * and therefore are managed as a block of 8 "CTRL" registers.
      */
@@ -18536,7 +18512,7 @@ PDP11.RL11 = {                  // RL11 Disk Controller
     RLBA: {                     // 174402: Bus Address Register
         WMASK:  0xFFFE          // bit 0 is effectively not writable (always zero)
     },
-    /*
+    /**
      * This register has 3 formats: one for Seek, another for Read/Write, and a third for Get Status
      */
     RLDA: {                     // 174404: Disk Address Register
@@ -18554,7 +18530,7 @@ PDP11.RL11 = {                  // RL11 Disk Controller
             RW_CA:  7
         }
     },
-    /*
+    /**
      * This register has 3 formats: one for Read Header, another for Read/Write, and a third for Get Status
      */
     RLMP: {                     // 177406: Multi-Purpose Register
@@ -18634,7 +18610,7 @@ PDP11.RX11 = {                  // RX11 Disk Controller
         MASK:   0x001F
     },
     RXES: {
-        /*
+        /**
          * The DRDY bit is only valid when retrieved via a Read Status function or at completion of Initialize when it indicates
          * status of drive O.  It is asserted if the unit currently selected exists, is properly supplied with power, has a diskette
          * installed correctly, has its door closed, and has a diskette up to speed.
@@ -18717,7 +18693,7 @@ PDP11.ACCESS.WRITE_BYTE  = PDP11.ACCESS.BYTE | PDP11.ACCESS.WRITE;      // forme
 PDP11.ACCESS.UPDATE_WORD = PDP11.ACCESS.WORD | PDP11.ACCESS.UPDATE;     // formerly MODIFY_WORD (2 | 4)
 PDP11.ACCESS.UPDATE_BYTE = PDP11.ACCESS.BYTE | PDP11.ACCESS.UPDATE;     // formerly MODIFY_BYTE (1 | 2 | 4)
 
-/*
+/**
  * PSW arithmetic flags are NOT stored directly into the PSW register; they are maintained across separate flag registers.
  */
 PDP11.PSW.FLAGS         = (PDP11.PSW.NF | PDP11.PSW.ZF | PDP11.PSW.VF | PDP11.PSW.CF);
@@ -18817,11 +18793,13 @@ class PDP11Dbg extends Debugger {
          * @returns {string|Array.<string>}
          */
         let getOperand = (opcode, type) => {
-            /*
+            /**
              * Take care of OP_OTHER opcodes first; then all we'll have to worry about
              * next are OP_SRC or OP_DST opcodes.
              */
-            let sOperand = "", disp, addr;
+            let sOperand = "";
+            let disp;
+            let addr;
             let typeOther = type & PDP11Dbg.OP_OTHER;
             if (typeOther == PDP11Dbg.OP_BRANCH) {
                 disp = ((opcode & 0xff) << 24) >> 23;
@@ -18846,12 +18824,12 @@ class PDP11Dbg extends Debugger {
                 sOperand = this.toBase(disp, 0, 8, "");
             }
             else {
-                /*
+                /**
                  * Isolate all OP_SRC or OP_DST bits from opcode in the mode variable.
                  */
                 let mode = opcode & type;
 
-                /*
+                /**
                  * Convert OP_SRC bits into OP_DST bits, since they use the same format.
                  */
                 if (type & PDP11Dbg.OP_SRC) {
@@ -18862,7 +18840,7 @@ class PDP11Dbg extends Debugger {
                     let wIndex;
                     let sTarget = null;
                     let reg = mode & PDP11Dbg.OP_DSTREG;
-                    /*
+                    /**
                      * Note that opcodes that specify only REG bits in the type mask (ie, no MOD bits)
                      * will automatically default to OPMODE_REG below.
                      */
@@ -18881,7 +18859,7 @@ class PDP11Dbg extends Debugger {
                         if (reg < 7) {
                             sOperand = '(' + getRegName(reg) + ")+";
                         } else {
-                            /*
+                            /**
                              * When using R7 (aka PC), POST-INCREMENT is known as IMMEDIATE
                              */
                             wIndex = getNextWord();
@@ -18893,7 +18871,7 @@ class PDP11Dbg extends Debugger {
                         if (reg < 7) {
                             sOperand = "@(" + getRegName(reg) + ")+";
                         } else {
-                            /*
+                            /**
                              * When using R7 (aka PC), POST-INCREMENT DEFERRED is known as ABSOLUTE
                              */
                             wIndex = getNextWord();
@@ -18914,7 +18892,7 @@ class PDP11Dbg extends Debugger {
                         wIndex = getNextWord();
                         sOperand = toBaseWord(wIndex) + '(' + getRegName(reg) + ')';
                         if (reg == 7) {
-                            /*
+                            /**
                              * When using R7 (aka PC), INDEX is known as RELATIVE.  However, instead of displaying
                              * such an instruction like this:
                              *
@@ -18937,7 +18915,7 @@ class PDP11Dbg extends Debugger {
                         wIndex = getNextWord();
                         sOperand = '@' + toBaseWord(wIndex) + '(' + getRegName(reg) + ')';
                         if (reg == 7) {
-                            /*
+                            /**
                              * When using R7 (aka PC), INDEX DEFERRED is known as RELATIVE DEFERRED.  And for the same
                              * reasons articulated above, we now display the effective address inline.
                              *
@@ -19019,7 +18997,7 @@ class PDP11Dbg extends Debugger {
                 break;
             }
 
-            /*
+            /**
              * If getOperand() returns an Array rather than a string, then the first element is the original
              * operand, and the second element contains additional information (eg, the target) of the operand.
              */
@@ -19044,7 +19022,7 @@ class PDP11Dbg extends Debugger {
     }
 }
 
-/*
+/**
  * CPU opcode IDs
  *
  * Not listed: BLO (same as BCS) and BHIS (same as BCC).
@@ -19065,7 +19043,7 @@ PDP11Dbg.OPS = {
     SXT:    96,     TST:    97,     TSTB:   98,     WAIT:   99,     MUL:    100,    DIV:    101,    ASH:    102,    ASHC:   103,
     XOR:    104,    SOB:    105,    EMT:    106,    TRAP:   107,    SPL:    108,    IOT:    109,    RTT:    110,    MFPT:   111
 };
-/*
+/**
  * CPU opcode names, indexed by CPU opcode ordinal (above)
  */
 PDP11Dbg.OPNAMES = [
@@ -19084,7 +19062,7 @@ PDP11Dbg.OPNAMES = [
     "SXT",          "TST",          "TSTB",         "WAIT",         "MUL",          "DIV",          "ASH",          "ASHC",
     "XOR",          "SOB",          "EMT",          "TRAP",         "SPL",          "IOT",          "RTT",          "MFPT"
 ];
-/*
+/**
  * Register numbers 0-7 are reserved for cpu.regsGen, 8-15 are reserved for cpu.regsAlt, and 16-19 for cpu.regsAltStack.
  */
 PDP11Dbg.REG_PS        = 20;
@@ -19121,7 +19099,7 @@ PDP11Dbg.REGNAMES = [
     "AR", "DR", "SR"
 ];
 PDP11Dbg.MODES = ["KI","KD","SI","SD","??","??","UI","UD"];
-/*
+/**
  * Operand type masks; anything that's not covered by OP_SRC or OP_DST must be a OP_OTHER value.
  */
 PDP11Dbg.OP_DSTREG   = PDP11.OPREG.MASK;
@@ -19136,7 +19114,7 @@ PDP11Dbg.OP_DSTNUM3  = 0x3000;       // DST 3-bit number (ie, just the DSTREG fi
 PDP11Dbg.OP_DSTNUM6  = 0x6000;       // DST 6-bit number (ie, both the DSTREG and DSTMODE fields)
 PDP11Dbg.OP_DSTNUM8  = 0x8000;       // DST 8-bit number
 PDP11Dbg.OP_OTHER    = 0xF000;
-/*
+/**
  * The OPTABLE contains opcode masks, and each mask refers to table of possible values, and each
  * value refers to an array that contains:
  *
@@ -19280,7 +19258,7 @@ PDP11Dbg.OPTABLE = {
     }
 };
 PDP11Dbg.OPNONE = [PDP11Dbg.OPS.NONE];
-/*
+/**
  * Table of opcodes added to the 11/40 and newer
  */
 PDP11Dbg.OP1140 = [
@@ -19296,7 +19274,7 @@ PDP11Dbg.OP1140 = [
     PDP11Dbg.OPS.XOR,
     PDP11Dbg.OPS.SOB
 ];
-/*
+/**
  * Table of opcodes added to the 11/45 and newer
  */
 PDP11Dbg.OP1145 = [
@@ -19334,7 +19312,7 @@ class IOPage extends Ports {
             let outData = handlers[1];
             let inPair = handlers[2];
             let outPair = handlers[3];
-            /*
+            /**
              * When handlers are being registered for these BYTE-granular UNIBUS addresses,
              * we must install fallback handlers for all BYTE accesses.
              */
@@ -19524,13 +19502,13 @@ class DL11 extends Device {
         this.ports = /** @type {Ports} */ (this.findDeviceByClass("IOPage"));
         this.ports.addIOTable(this, DL11.IOTABLE);
 
-        /*
+        /**
          * No connection until initConnection() is called.
          */
         this.sDataReceived = "";
         this.connection = this.sendData = this.updateStatus = null;
 
-        /*
+        /**
          * Export all functions required by initConnection().
          */
         this['exports'] = {
@@ -19678,7 +19656,7 @@ class DL11 extends Device {
      */
     getBaudTimeout(nBaud)
     {
-        /*
+        /**
          * TODO: Do a better job computing this, based on actual numbers of start, stop and parity bits,
          * instead of hard-coding the total number of bits per byte to 10.
          */
@@ -19810,7 +19788,7 @@ class DL11 extends Device {
         if (this.sendData && this.sendData.call(this.connection, b)) {
             fTransmitted = true;
         }
-        /*
+        /**
          * NOTE: When debugging issues involving the SerialPort, such as debugging code between a pair of
          * transmitted bytes, you can pass 0 instead of getBaudTimeout() to setTimer() to minimize the amount
          * of time spent waiting for XCSR.READY to be set again.
@@ -19873,7 +19851,7 @@ class DL11 extends Device {
     {
         let delta = (data ^ this.regRCSR);
         this.regRCSR = (this.regRCSR & ~PDP11.DL11.RCSR.WMASK) | (data & PDP11.DL11.RCSR.WMASK);
-        /*
+        /**
          * Whenever DTR or RTS changes, we also want to notify any connected machine, via updateStatus().
          */
         if (this.updateStatus) {
@@ -19936,7 +19914,7 @@ class DL11 extends Device {
      */
     writeXCSR(data, addr)
     {
-        /*
+        /**
          * If the device is READY, and TIE is being set, then request a hardware interrupt.
          *
          * Conversely, if TIE is being cleared, remove the request; this resolves a problem within
@@ -20022,7 +20000,7 @@ class PC11 extends Device {
         this.baudReceive = +this.config['baudReceive'] || PDP11.PC11.PRS.BAUD;
         this.library = this.config['library'] || [];
         this.mediaLoaded = null;
-        /*
+        /**
          * Support for local tape images is currently limited to desktop browsers with FileReader support;
          * when this flag is set, setBinding() allows local tape bindings and informs initBus() to update the
          * LIST_TAPES binding accordingly.
@@ -20071,7 +20049,7 @@ class PC11 extends Device {
         let nTarget = PC11.TARGET.NONE;
 
         switch (binding) {
-        /*
+        /**
          * "readTape" operation must do pretty much everything that the "loadTape" does, but whereas the load
          * operation records the bytes in aTapeData, the read operation stuffs them directly into the machine's memory;
          * the former sets nTarget to TARGET.READER, while the latter sets it to TARGET.MEMORY.
@@ -20095,7 +20073,7 @@ class PC11 extends Device {
             elementInput = /** @type {Object} */ (element);
             if (!this.fLocalTapes) {
                 this.printf("Local tape support not available\n");
-                /*
+                /**
                  * We could also simply hide the element; eg:
                  *
                  *      elementInput.style.display = "none";
@@ -20106,7 +20084,7 @@ class PC11 extends Device {
                 break;
             }
 
-            /*
+            /**
              * Enable "Mount" button only if a file is actually selected
              */
             elementInput.addEventListener('change', function() {
@@ -20119,12 +20097,12 @@ class PC11 extends Device {
             elementInput.onsubmit = function(event) {
                 let file = event.currentTarget[1].files[0];
                 if (file) {
-                    /*
+                    /**
                      * TODO: Provide a way to mount tapes into MEMORY as well as READER.
                      */
                     pc11.loadMedia({"name": this.getBaseName(file.name, true), "path": file.name}, PC11.TARGET.READER, file);
                 }
-                /*
+                /**
                  * Prevent reloading of web page after form submission
                  */
                 return false;
@@ -20255,7 +20233,7 @@ class PC11 extends Device {
             return true;
         }
 
-        /*
+        /**
          * If the special PC11.SOURCE.REMOTE path is selected, then we want to prompt the user for a URL.
          * Oh, and make sure we pass an empty string as the 2nd parameter to prompt(), so that IE won't display
          * "undefined" -- because after all, undefined and "undefined" are EXACTLY the same thing, right?
@@ -20375,7 +20353,7 @@ class PC11 extends Device {
         this.input.addSelect(this, PC11.BINDING.LIST_TAPES, "Remote Tape", PC11.SOURCE.REMOTE);
         this.setReady(true);
 
-        /*
+        /**
          * Now that the media library, if any, is loaded, look up the autoLoad media, if any.
          */
         let i = -1;
@@ -20395,14 +20373,14 @@ class PC11 extends Device {
             }
         }
         if (this.autoLoad) {
-            /*
+            /**
              * TODO: Provide a way to autoLoad tapes into MEMORY as well as READER.
              */
             if (!this.loadMedia(/** @type {Media} */ (this.autoLoad), PC11.TARGET.READER)) {
                 this.setReady(false);
             }
         } else {
-            /*
+            /**
              * This likely happened because there was no autoLoad setting (or it was overridden with an empty value),
              * so just make sure the current selection is set to "None".
              */
@@ -20427,7 +20405,7 @@ class PC11 extends Device {
         this.setReady(true);
 
         if (this.nTarget == PC11.TARGET.MEMORY) {
-            /*
+            /**
              * Use parseTape() service to do our dirty work.  If the load succeeds, then depending on whether there
              * was also exec address, either the CPU will be stopped or the PC wil be reset.
              *
@@ -20440,7 +20418,7 @@ class PC11 extends Device {
              * "Bootstrap Loader".
              */
             if (!this.parseTape(aBytes, addrLoad, addrExec, null, false)) {
-                /*
+                /**
                  * This doesn't seem to serve any purpose, other than to be annoying, because perhaps you accidentally
                  * clicked "Read" instead of "Load"....
                  *
@@ -20481,7 +20459,7 @@ class PC11 extends Device {
     {
         let fStop = false;
         let fLoaded = false;
-        /*
+        /**
          * Data on tapes in the "Absolute Format" is organized into blocks; each block begins with
          * a 6-byte header:
          *
@@ -20572,7 +20550,7 @@ class PC11 extends Device {
             }
         }
         if (fLoaded) {
-            /*
+            /**
              * Set the start address to whatever the caller provided, or failing that, whatever start
              * address was specified inside the image.
              *
@@ -20601,7 +20579,7 @@ class PC11 extends Device {
     {
         if (this.mediaLoaded || fLoading === false) {
             this.mediaLoaded = null;
-            /*
+            /**
              * Avoid any unnecessary hysteresis regarding the display if this unload is merely a prelude to another load.
              */
             if (!fLoading) {
@@ -20624,7 +20602,7 @@ class PC11 extends Device {
      */
     getBaudTimeout(nBaud)
     {
-        /*
+        /**
          * TODO: Do a better job computing this, based on actual numbers of start, stop and parity bits,
          * instead of hard-coding the total number of bits per byte to 10.
          */
@@ -20646,7 +20624,7 @@ class PC11 extends Device {
         if ((this.regPRS & (PDP11.PC11.PRS.RE | PDP11.PC11.PRS.ERROR)) == PDP11.PC11.PRS.RE) {
             if (!(this.regPRS & PDP11.PC11.PRS.DONE)) {
                 if (this.iTapeData < this.aTapeData.length) {
-                    /*
+                    /**
                      * Here, as elsewhere (eg, the DL11 component), even if I trusted all incoming data
                      * to be byte values (which I don't), there's also the risk that it could be signed data
                      * (eg, -128 to 127, instead of 0 to 255).  Both risks are good reasons to always mask
@@ -20696,7 +20674,7 @@ class PC11 extends Device {
     writePRS(data, addr)
     {
         if (data & PDP11.PC11.PRS.RE) {
-            /*
+            /**
              * From the 1976 Peripherals Handbook, p. 4-378:
              *
              *      Set [RE] to allow the Reader to fetch one character. The setting of this bit clears Done,
@@ -20712,7 +20690,7 @@ class PC11 extends Device {
                 this.regPRS &= ~PDP11.PC11.PRS.DONE;
                 this.regPRS |= PDP11.PC11.PRS.BUSY;
                 this.regPRB = 0;
-                /*
+                /**
                  * The PC11, by virtue of its "high speed", is supposed to deliver characters at 300 CPS, so
                  * that's the rate we'll choose as well (ie, 1000ms / 300).  As an aside, the original "low speed"
                  * version of the reader ran at 10 CPS.
@@ -20732,7 +20710,7 @@ class PC11 extends Device {
      */
     readPRB(addr)
     {
-        /*
+        /**
          * I'm guessing that the DONE and BUSY bits always remain more-or-less inverses of each other.  They definitely
          * start out that way when writePRS() sets the reader enable (RE) bit, and so that's how we treat them elsewhere, too.
          */
@@ -20810,7 +20788,7 @@ class PC11 extends Device {
     }
 }
 
-/*
+/**
  * There's nothing super special about these values, except that NONE should be falsey and the others should not.
  */
 PC11.SOURCE = {
@@ -21176,11 +21154,11 @@ class Machine extends Device {
                     if (device.config['class'] != "CPU" || machine.fAutoStart || machine.isReady()) {
                         device.onPower(on);
                     } else {
-                        /*
-                        * If we're not going to start the CPU on the first power notification, then we should
-                        * we fake a transition to the "stopped" state, so that the Debugger will display the current
-                        * machine state.
-                        */
+                        /**
+                         * If we're not going to start the CPU on the first power notification, then we should
+                         * we fake a transition to the "stopped" state, so that the Debugger will display the current
+                         * machine state.
+                         */
                         device.time.update(true);
                     }
                 }

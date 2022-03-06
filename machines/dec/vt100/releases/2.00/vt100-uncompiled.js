@@ -6452,20 +6452,20 @@ class Monitor extends Device {
                 textarea.setAttribute("id", id);
             }
             textarea.setAttribute("class", "pcjs-overlay");
-            /*
-            * The soft keyboard on an iOS device tends to pop up with the SHIFT key depressed, which is not the
-            * initial keyboard state we prefer, so hopefully turning off these "auto" attributes will help.
-            */
+            /**
+             * The soft keyboard on an iOS device tends to pop up with the SHIFT key depressed, which is not the
+             * initial keyboard state we prefer, so hopefully turning off these "auto" attributes will help.
+             */
             if (this.isUserAgent("iOS")) {
                 this.disableAuto(textarea);
-                /*
-                * One of the problems on iOS devices is that after a soft-key control is clicked, we need to give
-                * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS may
-                * also "zoom" the page rather jarringly.  While it's a simple matter to completely disable zooming,
-                * by fiddling with the page's viewport, that prevents the user from intentionally zooming.  A bit of
-                * Googling reveals that another way to prevent those jarring unintentional zooms is to simply set the
-                * font-size of the text control to 16px.  So that's what we do.
-                */
+                /**
+                 * One of the problems on iOS devices is that after a soft-key control is clicked, we need to give
+                 * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS may
+                 * also "zoom" the page rather jarringly.  While it's a simple matter to completely disable zooming,
+                 * by fiddling with the page's viewport, that prevents the user from intentionally zooming.  A bit of
+                 * Googling reveals that another way to prevent those jarring unintentional zooms is to simply set the
+                 * font-size of the text control to 16px.  So that's what we do.
+                 */
                 textarea.style.fontSize = "16px";
             }
             this.monitor.appendChild(textarea);
@@ -13002,18 +13002,18 @@ class CPUx80 extends CPU {
     {
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * Initialize the CPU.
          */
         this.initCPU();
 
-        /*
+        /**
          * Get access to the Bus devices, so we have access to the I/O and memory address spaces.
          */
         this.busIO = /** @type {Bus} */ (this.findDevice(this.config['busIO']));
         this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['busMemory']));
 
-        /*
+        /**
          * Get access to the Input device, so we can call setFocus() as needed.
          */
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
@@ -13032,7 +13032,7 @@ class CPUx80 extends CPU {
      */
     execute(nCycles)
     {
-        /*
+        /**
          * If checkINTR() returns false, INTFLAG.HALT must be set, so no instructions should be executed.
          */
         if (!this.checkINTR()) return;
@@ -13071,7 +13071,7 @@ class CPUx80 extends CPU {
         this.defineRegister("HL", this.getHL, this.setHL);
         this.defineRegister(Debugger.REGISTER.PC, this.getPC, this.setPC);
 
-        /*
+        /**
          * This 256-entry array of opcode functions is at the heart of the CPU engine.
          *
          * It might be worth trying a switch() statement instead, to see how the performance compares,
@@ -14547,13 +14547,13 @@ class CPUx80 extends CPU {
     opHLT()
     {
         this.nCyclesRemain -= 7;
-        /*
+        /**
          * The CPU is never REALLY halted by a HLT instruction; instead, we call requestHALT(), which
          * which sets INTFLAG.HALT and then ends the current burst; the CPU should not execute any
          * more instructions until checkINTR() indicates that a hardware interrupt has been requested.
          */
         this.requestHALT();
-        /*
+        /**
          * If interrupts have been disabled, then the machine is dead in the water (there is no NMI
          * NMI generation mechanism for this CPU), so let's stop the CPU; similarly, if the HALT message
          * category is enabled, then the Debugger must want us to stop the CPU.
@@ -16122,19 +16122,19 @@ class CPUx80 extends CPU {
         this.setSP(0);
         this.setPC(this.addrReset);
 
-        /*
+        /**
          * regPCLast is an internal register that simply snapshots the PC at the start of every instruction;
          * this is useful not only for CPUs that need to support instruction restartability, but also for
          * diagnostic/debugging purposes.
          */
         this.regPCLast = this.regPC;
 
-        /*
+        /**
          * This resets the Processor Status flags (regPS), along with all the internal "result registers".
          */
         this.setPS(0);
 
-        /*
+        /**
          * intFlags contains some internal states we use to indicate whether a hardware interrupt (INTFLAG.INTR) or
          * Trap software interrupt (INTR.TRAP) has been requested, as well as when we're in a "HLT" state (INTFLAG.HALT)
          * that requires us to wait for a hardware interrupt (INTFLAG.INTR) before continuing execution.
@@ -16797,7 +16797,7 @@ class CPUx80 extends CPU {
      */
     checkINTR()
     {
-        /*
+        /**
          * If the Debugger is single-stepping, isRunning() will be false, which we take advantage
          * of here to avoid processing interrupts.  The Debugger will have to issue a "g" command
          * to resume normal interrupt processing.
@@ -16815,7 +16815,7 @@ class CPUx80 extends CPU {
             }
         }
         if (this.intFlags & CPUx80.INTFLAG.HALT) {
-            /*
+            /**
              * As discussed in opHLT(), the CPU is never REALLY halted by a HLT instruction; instead, opHLT()
              * calls requestHALT(), which sets INTFLAG.HALT and then ends the current burst; the CPU should not
              * execute any more instructions until checkINTR() indicates a hardware interrupt has been requested.
@@ -16902,18 +16902,18 @@ class CPUx80 extends CPU {
     }
 }
 
-/*
+/**
  * CPU model numbers (supported); future supported models could include the Z80.
  */
 CPUx80.MODEL_8080 = 8080;
 
-/*
+/**
  * This constant is used to mark points in the code where the physical address being returned
  * is invalid and should not be used.
  */
 CPUx80.ADDR_INVALID = undefined;
 
-/*
+/**
  * Processor Status flag definitions (stored in regPS)
  */
 CPUx80.PS = {
@@ -16930,19 +16930,19 @@ CPUx80.PS = {
     IF:     0x0200      // bit 9: Interrupt Flag (set if interrupts enabled; Intel calls this the INTE bit)
 };
 
-/*
+/**
  * These are the internal PS bits (outside of PS.MASK) that getPS() and setPS() can get and set,
  * but which cannot be seen with any of the documented instructions.
  */
 CPUx80.PS.INTERNAL = CPUx80.PS.IF;
 
-/*
+/**
  * PS "arithmetic" flags are NOT stored in regPS; they are maintained across separate result registers,
  * hence the RESULT designation.
  */
 CPUx80.PS.RESULT   = CPUx80.PS.CF | CPUx80.PS.PF | CPUx80.PS.AF | CPUx80.PS.ZF | CPUx80.PS.SF;
 
-/*
+/**
  * These are the "always set" PS bits for the 8080.
  */
 CPUx80.PS.SET      = CPUx80.PS.BIT1;
@@ -16966,7 +16966,7 @@ CPUx80.PARITY = [          // 256-byte array with a 1 wherever the number of set
     1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1
 ];
 
-/*
+/**
  * Interrupt-related flags (stored in intFlags)
  */
 CPUx80.INTFLAG = {
@@ -16975,7 +16975,7 @@ CPUx80.INTFLAG = {
     HALT:   0x0100      // halt requested; see opHLT()
 };
 
-/*
+/**
  * Opcode definitions
  */
 CPUx80.OPCODE = {
@@ -17089,7 +17089,7 @@ class Dbgx80 extends Debugger {
          * @returns {string} operand
          */
         let getRegOperand = (iReg, type) => {
-            /*
+            /**
              * Although this breaks with 8080 assembler conventions, I'm going to experiment with some different
              * mnemonics; specifically, "[HL]" instead of "M".  This is also more in keeping with how getImmOperand()
              * displays memory references (ie, by enclosing them in brackets).
@@ -17171,7 +17171,7 @@ class Dbgx80 extends Debugger {
 Dbgx80.STYLE_8080 = "8080";
 Dbgx80.STYLE_8086 = "8086";
 
-/*
+/**
  * CPU instruction ordinals
  */
 Dbgx80.INS = {
@@ -17187,7 +17187,7 @@ Dbgx80.INS = {
     STC:   72,  SUB:   73,  SUI:   74,  XCHG:  75,  XRA:   76,  XRI:   77,  XTHL:  78
 };
 
-/*
+/**
  * CPU instruction names (mnemonics), indexed by CPU instruction ordinal (above)
  *
  * If you change the default style, using the "s" command (eg, "s 8086"), then the 8086 table
@@ -17235,7 +17235,7 @@ Dbgx80.REG_PC     = 0x0C;
 Dbgx80.REG_PS     = 0x0D;
 Dbgx80.REG_PSW    = 0x0E;      // aka AF if Z80-style mnemonics
 
-/*
+/**
  * NOTE: "PS" is the complete processor status, which includes bits like the Interrupt flag (IF),
  * which is NOT the same as "PSW", which is the low 8 bits of "PS" combined with "A" in the high byte.
  */
@@ -17243,7 +17243,7 @@ Dbgx80.REGS = [
     "B", "C", "D", "E", "H", "L", "M", "A", "BC", "DE", "HL", "SP", "PC", "PS", "PSW"
 ];
 
-/*
+/**
  * Operand type descriptor masks and definitions
  */
 Dbgx80.TYPE_SIZE  = 0x000F;    // size field
@@ -17251,7 +17251,7 @@ Dbgx80.TYPE_MODE  = 0x00F0;    // mode field
 Dbgx80.TYPE_IREG  = 0x0F00;    // implied register field
 Dbgx80.TYPE_OTHER = 0xF000;    // "other" field
 
-/*
+/**
  * TYPE_SIZE values
  */
 Dbgx80.TYPE_NONE  = 0x0000;    // (all other TYPE fields ignored)
@@ -17259,7 +17259,7 @@ Dbgx80.TYPE_BYTE  = 0x0001;    // byte, regardless of operand size
 Dbgx80.TYPE_SBYTE = 0x0002;    // byte sign-extended to word
 Dbgx80.TYPE_WORD  = 0x0003;    // word (16-bit value)
 
-/*
+/**
  * TYPE_MODE values
  */
 Dbgx80.TYPE_REG   = 0x0010;    // register
@@ -17268,7 +17268,7 @@ Dbgx80.TYPE_ADDR  = 0x0033;    // immediate (word) address
 Dbgx80.TYPE_MEM   = 0x0040;    // memory reference
 Dbgx80.TYPE_INT   = 0x0080;    // interrupt level encoded in instruction (bits 3-5)
 
-/*
+/**
  * TYPE_IREG values, based on the REG_* constants.
  *
  * Note that TYPE_M isn't really a register, just an alternative form of TYPE_HL | TYPE_MEM.
@@ -17288,7 +17288,7 @@ Dbgx80.TYPE_SP    = (Dbgx80.REG_SP << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
 Dbgx80.TYPE_PC    = (Dbgx80.REG_PC << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
 Dbgx80.TYPE_PSW   = (Dbgx80.REG_PSW<< 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
 
-/*
+/**
  * TYPE_OTHER bit definitions
  */
 Dbgx80.TYPE_IN    = 0x1000;    // operand is input
@@ -17297,7 +17297,7 @@ Dbgx80.TYPE_BOTH  = (Dbgx80.TYPE_IN | Dbgx80.TYPE_OUT);
 Dbgx80.TYPE_OPT   = 0x4000;    // optional operand (ie, normally omitted in 8080 assembly language)
 Dbgx80.TYPE_UNDOC = 0x8000;    // opcode is an undocumented alternative encoding
 
-/*
+/**
  * The aaOpDescs array is indexed by opcode, and each element is a sub-array (aOpDesc) that describes
  * the corresponding opcode. The sub-elements are as follows:
  *
@@ -20513,11 +20513,11 @@ class Machine extends Device {
                     if (device.config['class'] != "CPU" || machine.fAutoStart || machine.isReady()) {
                         device.onPower(on);
                     } else {
-                        /*
-                        * If we're not going to start the CPU on the first power notification, then we should
-                        * we fake a transition to the "stopped" state, so that the Debugger will display the current
-                        * machine state.
-                        */
+                        /**
+                         * If we're not going to start the CPU on the first power notification, then we should
+                         * we fake a transition to the "stopped" state, so that the Debugger will display the current
+                         * machine state.
+                         */
                         device.time.update(true);
                     }
                 }
