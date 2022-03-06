@@ -1,5 +1,5 @@
 /**
- * @fileoverview Implements the PCX80 Keyboard component
+ * @fileoverview Implements the PCx80 Keyboard component
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -15,7 +15,7 @@ if (typeof module !== "undefined") {
     var Component = require("../../shared/lib/component");
     var Keys = require("../../shared/lib/keys");
     var State = require("../../shared/lib/state");
-    var PCX80 = require("./defines");
+    var PCx80 = require("./defines");
     var ChipSetX80 = require("./chipset");
     var MessagesX80 = require("./messages");
 }
@@ -1055,12 +1055,12 @@ class KeyboardX80 extends Component {
      */
     static init()
     {
-        var aeKbd = Component.getElementsByClass(document, PCX80.APPCLASS, "keyboard");
+        var aeKbd = Component.getElementsByClass(document, PCx80.APPCLASS, "keyboard");
         for (var iKbd = 0; iKbd < aeKbd.length; iKbd++) {
             var eKbd = aeKbd[iKbd];
             var parmsKbd = Component.getComponentParms(eKbd);
             var kbd = new KeyboardX80(parmsKbd);
-            Component.bindComponentControls(kbd, eKbd, PCX80.APPCLASS);
+            Component.bindComponentControls(kbd, eKbd, PCx80.APPCLASS);
         }
     }
 }

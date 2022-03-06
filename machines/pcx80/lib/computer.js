@@ -1,5 +1,5 @@
 /**
- * @fileoverview Implements the PCX80 Computer component
+ * @fileoverview Implements the PCx80 Computer component
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -17,7 +17,7 @@ if (typeof module !== "undefined") {
     var ReportAPI = require("../../shared/lib/reportapi");
     var Component = require("../../shared/lib/component");
     var State = require("../../shared/lib/state");
-    var PCX80 = require("./defines");
+    var PCx80 = require("./defines");
     var BusX80 = require("./bus");
     var MessagesX80 = require("./messages");
 }
@@ -176,7 +176,7 @@ class ComputerX80 extends Component {
             }
         }
 
-        this.println(PCX80.APPNAME + " v" + PCX80.APPVERSION + "\n" + COPYRIGHT + "\n" + LICENSE);
+        this.println(PCx80.APPNAME + " v" + PCx80.APPVERSION + "\n" + COPYRIGHT + "\n" + LICENSE);
 
         if (DEBUG && this.messageEnabled()) this.printMessage("TYPEDARRAYS: " + TYPEDARRAYS);
 
@@ -229,7 +229,7 @@ class ComputerX80 extends Component {
                 this.resume = ComputerX80.RESUME_NONE;
             }
             if (this.resume) {
-                this.stateComputer = new State(this, PCX80.APPVERSION);
+                this.stateComputer = new State(this, PCx80.APPVERSION);
                 if (this.stateComputer.load()) {
                     sStatePath = null;
                 } else {
@@ -441,7 +441,7 @@ class ComputerX80 extends Component {
     validateState(stateComputer)
     {
         var fValid = true;
-        var stateValidate = new State(this, PCX80.APPVERSION, ComputerX80.STATE_VALIDATE);
+        var stateValidate = new State(this, PCx80.APPVERSION, ComputerX80.STATE_VALIDATE);
         if (stateValidate.load() && stateValidate.parse()) {
             var sTimestampValidate = stateValidate.get(ComputerX80.STATE_TIMESTAMP);
             var sTimestampComputer = stateComputer? stateComputer.get(ComputerX80.STATE_TIMESTAMP) : "unknown";
@@ -484,7 +484,7 @@ class ComputerX80 extends Component {
         var fRepower = false;
         var fRestore = false;
         this.fRestoreError = false;
-        var stateComputer = this.stateComputer || new State(this, PCX80.APPVERSION);
+        var stateComputer = this.stateComputer || new State(this, PCx80.APPVERSION);
 
         if (resume == ComputerX80.RESUME_REPOWER) {
             fRepower = true;
@@ -497,7 +497,7 @@ class ComputerX80 extends Component {
                  * Which means, of course, that if a previous "failsafe" checkpoint already exists, something bad
                  * may have happened the last time around.
                  */
-                this.stateFailSafe = new State(this, PCX80.APPVERSION, ComputerX80.STATE_FAILSAFE);
+                this.stateFailSafe = new State(this, PCx80.APPVERSION, ComputerX80.STATE_FAILSAFE);
                 if (this.stateFailSafe.load()) {
                     this.powerReport(stateComputer);
                     /*
@@ -517,7 +517,7 @@ class ComputerX80 extends Component {
                 this.stateFailSafe.store();
 
                 var fValidate = this.resume && !this.fServerState;
-                if (resume == ComputerX80.RESUME_AUTO || Component.confirmUser("Click OK to restore the previous " + PCX80.APPNAME + " machine state, or CANCEL to reset the machine.")) {
+                if (resume == ComputerX80.RESUME_AUTO || Component.confirmUser("Click OK to restore the previous " + PCx80.APPNAME + " machine state, or CANCEL to reset the machine.")) {
                     fRestore = stateComputer.parse();
                     if (fRestore) {
                         var sCode = /** @type {string} */ (stateComputer.get(UserAPI.RES.CODE));
@@ -795,10 +795,10 @@ class ComputerX80 extends Component {
         //
         // This is all we can realistically do for now.
         //
-        Web.onError("There may be a problem with your " + PCX80.APPNAME + " machine.");
+        Web.onError("There may be a problem with your " + PCx80.APPNAME + " machine.");
         //
-        // if (Component.confirmUser("There may be a problem with your " + PCX80.APPNAME + " machine.\n\nTo help us diagnose it, click OK to send this " + PCX80.APPNAME + " machine state to " + SITEURL + ".")) {
-        //     Web.sendReport(PCX80.APPNAME, PCX80.APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
+        // if (Component.confirmUser("There may be a problem with your " + PCx80.APPNAME + " machine.\n\nTo help us diagnose it, click OK to send this " + PCx80.APPNAME + " machine state to " + SITEURL + ".")) {
+        //     Web.sendReport(PCx80.APPNAME, PCx80.APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
         // }
         //
     }
@@ -848,8 +848,8 @@ class ComputerX80 extends Component {
         }
         this.nPowerChange--;
 
-        var stateComputer = new State(this, PCX80.APPVERSION);
-        var stateValidate = new State(this, PCX80.APPVERSION, ComputerX80.STATE_VALIDATE);
+        var stateComputer = new State(this, PCx80.APPVERSION);
+        var stateValidate = new State(this, PCx80.APPVERSION, ComputerX80.STATE_VALIDATE);
 
         var sTimestamp = Usr.getTimestamp();
         stateValidate.set(ComputerX80.STATE_TIMESTAMP, sTimestamp);
@@ -1205,7 +1205,7 @@ class ComputerX80 extends Component {
             if (DEBUG && this.messageEnabled()) {
                 this.printMessage(ComputerX80.STATE_USERID + " for load: " + this.sUserID);
             }
-            sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, PCX80.APPVERSION);
+            sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, PCx80.APPVERSION);
         } else {
             if (DEBUG && this.messageEnabled()) {
                 this.printMessage(ComputerX80.STATE_USERID + " unavailable");
@@ -1273,7 +1273,7 @@ class ComputerX80 extends Component {
         var dataPost = {};
         dataPost[UserAPI.QUERY.REQ] = UserAPI.REQ.STORE;
         dataPost[UserAPI.QUERY.USER] = sUserID;
-        dataPost[UserAPI.QUERY.STATE] = State.getKey(this, PCX80.APPVERSION);
+        dataPost[UserAPI.QUERY.STATE] = State.getKey(this, PCx80.APPVERSION);
         dataPost[UserAPI.QUERY.DATA] = sState;
         var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT;
         if (!fSync) {
@@ -1342,7 +1342,7 @@ class ComputerX80 extends Component {
              * I used to bypass the prompt if this.resume == ComputerX80.RESUME_AUTO, setting fSave to true automatically,
              * but that gives the user no means of resetting a resumable machine that contains errors in its resume state.
              */
-            var fSave = (/* this.resume == ComputerX80.RESUME_AUTO || */ Component.confirmUser("Click OK to save changes to this " + PCX80.APPNAME + " machine.\n\nWARNING: If you CANCEL, all disk changes will be discarded."));
+            var fSave = (/* this.resume == ComputerX80.RESUME_AUTO || */ Component.confirmUser("Click OK to save changes to this " + PCx80.APPNAME + " machine.\n\nWARNING: If you CANCEL, all disk changes will be discarded."));
             this.powerOff(fSave, true);
             /*
              * Forcing the page to reload is an expedient option, but ugly. It's preferable to call powerOn()
@@ -1488,14 +1488,14 @@ class ComputerX80 extends Component {
      */
     static init()
     {
-        var aeMachines = Component.getElementsByClass(document, PCX80.APPCLASS + "-machine");
+        var aeMachines = Component.getElementsByClass(document, PCx80.APPCLASS + "-machine");
 
         for (var iMachine = 0; iMachine < aeMachines.length; iMachine++) {
 
             var eMachine = aeMachines[iMachine];
             var parmsMachine = Component.getComponentParms(eMachine);
 
-            var aeComputers = Component.getElementsByClass(eMachine, PCX80.APPCLASS, "computer");
+            var aeComputers = Component.getElementsByClass(eMachine, PCx80.APPCLASS, "computer");
 
             for (var iComputer = 0; iComputer < aeComputers.length; iComputer++) {
 
@@ -1517,7 +1517,7 @@ class ComputerX80 extends Component {
                  * but "reset" now provides a way to force the machine to start from scratch again, so "erase"
                  * may be redundant now.
                  */
-                Component.bindComponentControls(computer, eComputer, PCX80.APPCLASS);
+                Component.bindComponentControls(computer, eComputer, PCx80.APPCLASS);
 
                 /*
                  * Power on the computer, giving every component the opportunity to reset or restore itself.
@@ -1538,7 +1538,7 @@ class ComputerX80 extends Component {
      */
     static show()
     {
-        var aeComputers = Component.getElementsByClass(document, PCX80.APPCLASS, "computer");
+        var aeComputers = Component.getElementsByClass(document, PCx80.APPCLASS, "computer");
         for (var iComputer = 0; iComputer < aeComputers.length; iComputer++) {
             var eComputer = aeComputers[iComputer];
             var parmsComputer = Component.getComponentParms(eComputer);
@@ -1594,7 +1594,7 @@ class ComputerX80 extends Component {
      */
     static exit()
     {
-        var aeComputers = Component.getElementsByClass(document, PCX80.APPCLASS, "computer");
+        var aeComputers = Component.getElementsByClass(document, PCx80.APPCLASS, "computer");
         for (var iComputer = 0; iComputer < aeComputers.length; iComputer++) {
             var eComputer = aeComputers[iComputer];
             var parmsComputer = Component.getComponentParms(eComputer);

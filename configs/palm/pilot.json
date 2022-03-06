@@ -23,7 +23,7 @@
   },
   "clock": {
     "class": "Time",
-    "cyclesPerSecond": 2000000,
+    "cyclesPerSecond": 16580608,
     "bindings": {
       "run": "runPilot",
       "setSpeed": "setSpeedPilot",
@@ -43,7 +43,11 @@
   "cpu": {
     "class": "CPU68K",
     "busIO": "busIO",
-    "busMemory": "busMemory"
+    "busMemory": "busMemory",
+    "addrReset": 281018918,
+    "@doc": [
+      "addrReset is 0x10C00226, which should match the 32-bit value at offset 0x0004 in the ROM header"
+    ]
   },
   "input": {
     "class": "Input",

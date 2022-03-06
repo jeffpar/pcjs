@@ -10103,13 +10103,18 @@ ROM.CLASSES["ROM"] = ROM;
  * @copyright https://www.pcjs.org/modules/cpu.js (C) 2012-2021 Jeff Parsons
  */
 
+/** @typedef {{ addrReset: number }} */
+let CPUConfig;
+
 /**
  * @class {CPU}
  * @unrestricted
  * @property {Time} time
  * @property {Debugger} dbg
+ * @property {number} addrReset
  * @property {number} nCyclesStart
  * @property {number} nCyclesRemain
+ * @property {number} nCyclesSnapped
  * @property {number} regPC
  * @property {number} regPCLast
  */
@@ -10120,7 +10125,7 @@ class CPU extends Device {
      * @this {CPU}
      * @param {string} idMachine
      * @param {string} idDevice
-     * @param {Config} [config]
+     * @property {CPUConfig} config
      */
     constructor(idMachine, idDevice, config)
     {
@@ -10142,6 +10147,7 @@ class CPU extends Device {
          * diagnostic/debugging purposes.
          */
         this.regPC = this.regPCLast = 0;
+        this.addrReset = this.config['addrReset'] || 0;
 
         /**
          * Get access to the Time device, so we can give it our clock and update functions.

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Implements the PCX80 Video component
+ * @fileoverview Implements the PCx80 Video component
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -15,7 +15,7 @@ if (typeof module !== "undefined") {
     var DumpAPI = require("../../shared/lib/dumpapi");
     var Component = require("../../shared/lib/component");
     var State = require("../../shared/lib/state");
-    var PCX80 = require("./defines");
+    var PCx80 = require("./defines");
     var ChipSetX80 = require("./chipset");
     var MemoryX80 = require("./memory");
     var MessagesX80 = require("./messages");
@@ -1348,7 +1348,7 @@ class VideoX80 extends Component {
      */
     static init()
     {
-        var aeVideo = Component.getElementsByClass(document, PCX80.APPCLASS, "video");
+        var aeVideo = Component.getElementsByClass(document, PCx80.APPCLASS, "video");
         for (var iVideo = 0; iVideo < aeVideo.length; iVideo++) {
 
             var element = aeVideo[iVideo];
@@ -1496,7 +1496,7 @@ class VideoX80 extends Component {
              * Bind any video-specific controls (eg, the Refresh button). There are no essential controls, however;
              * even the "Refresh" button is just a diagnostic tool, to ensure that the screen contents are up-to-date.
              */
-            Component.bindComponentControls(video, element, PCX80.APPCLASS);
+            Component.bindComponentControls(video, element, PCx80.APPCLASS);
         }
     }
 }

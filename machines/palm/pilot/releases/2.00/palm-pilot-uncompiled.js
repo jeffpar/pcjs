@@ -9906,13 +9906,18 @@ ROM.CLASSES["ROM"] = ROM;
  * @copyright https://www.pcjs.org/modules/cpu.js (C) 2012-2021 Jeff Parsons
  */
 
+/** @typedef {{ addrReset: number }} */
+let CPUConfig;
+
 /**
  * @class {CPU}
  * @unrestricted
  * @property {Time} time
  * @property {Debugger} dbg
+ * @property {number} addrReset
  * @property {number} nCyclesStart
  * @property {number} nCyclesRemain
+ * @property {number} nCyclesSnapped
  * @property {number} regPC
  * @property {number} regPCLast
  */
@@ -9923,7 +9928,7 @@ class CPU extends Device {
      * @this {CPU}
      * @param {string} idMachine
      * @param {string} idDevice
-     * @param {Config} [config]
+     * @property {CPUConfig} config
      */
     constructor(idMachine, idDevice, config)
     {
@@ -9945,6 +9950,7 @@ class CPU extends Device {
          * diagnostic/debugging purposes.
          */
         this.regPC = this.regPCLast = 0;
+        this.addrReset = this.config['addrReset'] || 0;
 
         /**
          * Get access to the Time device, so we can give it our clock and update functions.
@@ -12850,8 +12856,7 @@ class CPU68K extends CPU
 
             let nCyclesCur = nCycles;           // make sure the next opcode generates a non-zero cycle count
 
-            this.regPCLast = this.regPCThis;    // save previously current opcode address
-            this.regPCThis = this.regPC;        // and update currently current opcode address
+            this.regPCLast = this.regPC;        // update current opcode address
             op1 = this.getPCWord();             // get next instruction (don't forget this can be a signed integer if the opcode is a signed word)
 
             ss = 0;                             // (ssBYTE << 6)
@@ -13410,13 +13415,13 @@ stage1:     switch ((op1 >> 12) & 0xf) {
                     case 0x4:
                         //  case 0x4e40:   trap     [........0100vvvv, format none, p.293]
                         if (this.dbg) {                         // see if the debugger wants us to break
-                            if (this.dbg.break(this.regPCThis, true)) {
-                                this.regPC = this.regPCThis;
+                            if (this.dbg.break(this.regPCLast, true)) {
+                                this.regPC = this.regPCLast;
                                 this.fCPU |= CPU68K.CPU_BREAKPOINT;
                                 return;
                             }
                         }
-                        this.regPCTrap = this.regPCThis;        // keep track the last trap encountered
+                        this.regPCTrap = this.regPCLast;        // keep track the last trap encountered
                         this.callException((op1 & 0xf) + 0x20);
                         this.addCycles(34);
                         break stage1;
@@ -14386,8 +14391,8 @@ stage1:     switch ((op1 >> 12) & 0xf) {
 
             case 0xf:
                 if (this.dbg && (op1 & CPU68K.OP_MYBREAKPOINT_MASK) == CPU68K.OP_MYBREAKPOINT) {
-                    if (this.dbg.break(this.regPCThis, true)) { // see if the debugger wants us to break
-                        this.regPC = this.regPCThis;
+                    if (this.dbg.break(this.regPCLast, true)) { // see if the debugger wants us to break
+                        this.regPC = this.regPCLast;
                         this.fCPU |= CPU68K.CPU_BREAKPOINT;
                         return;
                     }
@@ -15252,7 +15257,6 @@ stage1:     switch ((op1 >> 12) & 0xf) {
     {
         this.fCPU = 0;
         this.regPC = 0;                 // program counter
-        this.regPCThis = 0;             // program counter for the current instruction
         this.regPCLast = 0;             // program counter for the previous instruction
         this.regPCTrap = 0;             // program counter for the last TRAP executed
         this.regSSP = 0;                // supervisor stack pointer
@@ -15277,20 +15281,10 @@ stage1:     switch ((op1 >> 12) & 0xf) {
         for (let i = 0; i < this.regA.length; i++) {
             this.regA[i] = 0;
         }
+        this.regPC = this.regPCLast = this.addrReset;
         this.nStep = 0;                 // instruction step counter
         this.iPendingException = CPU68K.EXCEPTION_NONE;
         this.addrPendingException = 0;  // set to exception-specific address, if any (eg, EA from EXCEPTION_ADDRESS_ERROR)
-    }
-
-    /**
-     * setReset(addr)
-     *
-     * @this {CPU68K}
-     * @param {number} addr
-     */
-    setReset(addr)
-    {
-        this.addrReset = this.regPC = addr;
     }
 
     /**
