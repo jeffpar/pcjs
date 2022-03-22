@@ -400,7 +400,10 @@ FileDump.prototype.setData = function(buf, iStart, nSkip, sExt)
             }
             if (json) {
                 let values, bytes;
-                if ((values = json['data'])) {
+                if ((values = json['values'])) {
+                    bytes = (json['width'] / 8);
+                }
+                else if ((values = json['data'])) {
                     bytes = 4;
                 } else if ((values = json['words'])) {
                     bytes = 2;
