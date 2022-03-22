@@ -403,7 +403,7 @@ FileDump.prototype.setData = function(buf, iStart, nSkip, sExt)
                 if ((values = json['values'])) {
                     bytes = (json['width'] / 8);
                 }
-                else if ((values = json['data'])) {
+                else if ((values = json['longs']) || (values = json['data'])) {
                     bytes = 4;
                 } else if ((values = json['words'])) {
                     bytes = 2;
