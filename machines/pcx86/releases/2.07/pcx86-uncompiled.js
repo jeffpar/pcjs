@@ -46605,6 +46605,10 @@ class Kbdx86 extends Component {
         this.printf(Messages.KBD + Messages.PORT, "keyboard reset\n");
         this.abBuffer = [];
         this.setResponse(Kbdx86.CMDRES.BAT_OK);
+        /*
+         * BUGFIX for 8042 POST on LTE/286
+         */
+        this.abBuffer.unshift(Kbdx86.CMDRES.BAT_OK);
     }
 
     /**
