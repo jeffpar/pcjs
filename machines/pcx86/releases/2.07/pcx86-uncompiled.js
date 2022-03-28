@@ -46608,7 +46608,7 @@ class Kbdx86 extends Component {
         /*
          * BUGFIX for 8042 POST on LTE/286
          */
-        this.abBuffer.unshift(Kbdx86.CMDRES.BAT_OK);
+        if (this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) this.abBuffer.unshift(Kbdx86.CMDRES.BAT_OK);
     }
 
     /**
