@@ -89,6 +89,13 @@
         "@title": "DeskPro 286",
         "@documents": [
           {
+            "@title": "COMPAQ Enhanced Color Graphics Board COMPAQ Color Monitor Technical Reference Guide (Dec 1986)",
+            "@file": "COMPAQ_Enhanced_Color_Graphics_Board_1986_12.jpg",
+            "@link": "https://archive.org/embed/trg-enhanced-color-graphics-board-1986-12",
+            "@cover": ".jpg",
+            "@source": "https://archive.org/embed/trg-enhanced-color-graphics-board-1986-12"
+          },
+          {
             "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, May 1987)"
           },
           {
