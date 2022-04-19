@@ -14,6 +14,8 @@ machines:
       B: "Word for Windows 2.0c (Disk 1)"
 ---
 
+The first **Word for Windows 2.0c** diskette has been loaded into Drive B in the machine below.  You can double-click **SETUP.EXE** from the Windows File Manager to install it.
+
 {% include machine.html id="ibm5170" %}
 
 ### Directory of Word for Windows 2.0c (Disk 1)
