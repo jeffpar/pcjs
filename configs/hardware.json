@@ -96,7 +96,11 @@
             "@source": "https://archive.org/embed/trg-enhanced-color-graphics-board-1986-12"
           },
           {
-            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, May 1987)"
+            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, May 1987)",
+            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol1_1987-05.jpg",
+            "@link": "https://archive.org/embed/trg-80286-vol-1-1987-05",
+            "@cover": ".jpg",
+            "@source": "https://archive.org/embed/trg-80286-vol-1-1987-05"
           },
           {
             "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, May 1987)",
