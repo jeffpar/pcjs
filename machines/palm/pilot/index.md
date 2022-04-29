@@ -11,6 +11,8 @@ machines:
     unbundled: true
 ---
 
+The emulation below is not yet operational.  It's a port-in-progress, based on the [PIMulator](https://web.archive.org/web/20020627015208/http://www.pimcity.com/welcome.htm), a Java-based Palm Pilot emulator I wrote over 20 years ago.  Check back this summer for further updates.
+
 {% include machine.html id="palm-pilot" %}
 
 ### Resources
