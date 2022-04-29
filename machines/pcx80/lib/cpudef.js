@@ -1,5 +1,5 @@
 /**
- * @fileoverview Defines PCX80 CPU constants
+ * @fileoverview Defines PCx80 CPU constants
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>

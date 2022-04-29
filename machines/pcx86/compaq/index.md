@@ -164,6 +164,10 @@ Also see [Wikipedia](https://en.wikipedia.org/wiki/Compaq_LTE).
 
 #### COMPAQ LTE 286
 
+[ROM Dump](/machines/pcx86/compaq/lte286/rom/) (REV B.1, 1989-09-07).
+
+[Machine Configurations](/machines/pcx86/compaq/lte286/)
+
 Various models, such as the [Model 40](http://www.overclockers.com/compaq-lte-286-model-40/).
 
 #### COMPAQ LTE 386

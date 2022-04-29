@@ -106,7 +106,7 @@ export default class Dbgx80 extends Debugger {
          * @returns {string} operand
          */
         let getRegOperand = (iReg, type) => {
-            /*
+            /**
              * Although this breaks with 8080 assembler conventions, I'm going to experiment with some different
              * mnemonics; specifically, "[HL]" instead of "M".  This is also more in keeping with how getImmOperand()
              * displays memory references (ie, by enclosing them in brackets).
@@ -188,7 +188,7 @@ export default class Dbgx80 extends Debugger {
 Dbgx80.STYLE_8080 = "8080";
 Dbgx80.STYLE_8086 = "8086";
 
-/*
+/**
  * CPU instruction ordinals
  */
 Dbgx80.INS = {
@@ -204,7 +204,7 @@ Dbgx80.INS = {
     STC:   72,  SUB:   73,  SUI:   74,  XCHG:  75,  XRA:   76,  XRI:   77,  XTHL:  78
 };
 
-/*
+/**
  * CPU instruction names (mnemonics), indexed by CPU instruction ordinal (above)
  *
  * If you change the default style, using the "s" command (eg, "s 8086"), then the 8086 table
@@ -252,7 +252,7 @@ Dbgx80.REG_PC     = 0x0C;
 Dbgx80.REG_PS     = 0x0D;
 Dbgx80.REG_PSW    = 0x0E;      // aka AF if Z80-style mnemonics
 
-/*
+/**
  * NOTE: "PS" is the complete processor status, which includes bits like the Interrupt flag (IF),
  * which is NOT the same as "PSW", which is the low 8 bits of "PS" combined with "A" in the high byte.
  */
@@ -260,7 +260,7 @@ Dbgx80.REGS = [
     "B", "C", "D", "E", "H", "L", "M", "A", "BC", "DE", "HL", "SP", "PC", "PS", "PSW"
 ];
 
-/*
+/**
  * Operand type descriptor masks and definitions
  */
 Dbgx80.TYPE_SIZE  = 0x000F;    // size field
@@ -268,7 +268,7 @@ Dbgx80.TYPE_MODE  = 0x00F0;    // mode field
 Dbgx80.TYPE_IREG  = 0x0F00;    // implied register field
 Dbgx80.TYPE_OTHER = 0xF000;    // "other" field
 
-/*
+/**
  * TYPE_SIZE values
  */
 Dbgx80.TYPE_NONE  = 0x0000;    // (all other TYPE fields ignored)
@@ -276,7 +276,7 @@ Dbgx80.TYPE_BYTE  = 0x0001;    // byte, regardless of operand size
 Dbgx80.TYPE_SBYTE = 0x0002;    // byte sign-extended to word
 Dbgx80.TYPE_WORD  = 0x0003;    // word (16-bit value)
 
-/*
+/**
  * TYPE_MODE values
  */
 Dbgx80.TYPE_REG   = 0x0010;    // register
@@ -285,7 +285,7 @@ Dbgx80.TYPE_ADDR  = 0x0033;    // immediate (word) address
 Dbgx80.TYPE_MEM   = 0x0040;    // memory reference
 Dbgx80.TYPE_INT   = 0x0080;    // interrupt level encoded in instruction (bits 3-5)
 
-/*
+/**
  * TYPE_IREG values, based on the REG_* constants.
  *
  * Note that TYPE_M isn't really a register, just an alternative form of TYPE_HL | TYPE_MEM.
@@ -305,7 +305,7 @@ Dbgx80.TYPE_SP    = (Dbgx80.REG_SP << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
 Dbgx80.TYPE_PC    = (Dbgx80.REG_PC << 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
 Dbgx80.TYPE_PSW   = (Dbgx80.REG_PSW<< 8 | Dbgx80.TYPE_REG | Dbgx80.TYPE_WORD);
 
-/*
+/**
  * TYPE_OTHER bit definitions
  */
 Dbgx80.TYPE_IN    = 0x1000;    // operand is input
@@ -314,7 +314,7 @@ Dbgx80.TYPE_BOTH  = (Dbgx80.TYPE_IN | Dbgx80.TYPE_OUT);
 Dbgx80.TYPE_OPT   = 0x4000;    // optional operand (ie, normally omitted in 8080 assembly language)
 Dbgx80.TYPE_UNDOC = 0x8000;    // opcode is an undocumented alternative encoding
 
-/*
+/**
  * The aaOpDescs array is indexed by opcode, and each element is a sub-array (aOpDesc) that describes
  * the corresponding opcode. The sub-elements are as follows:
  *

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Implements the PCX80 CPU component
+ * @fileoverview Implements the PCx80 CPU component
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -13,9 +13,9 @@ if (typeof module !== "undefined") {
     var Web = require("../../shared/lib/weblib");
     var Component = require("../../shared/lib/component");
     var State = require("../../shared/lib/state");
-    var PCX80 = require("./defines");
+    var PCx80 = require("./defines");
     var CPUDefX80 = require("./cpudef");
-    var CPUX80 = require("./cpu");
+    var CPUx80 = require("./cpu");
     var MemoryX80 = require("./memory");
     var MessagesX80 = require("./messages");
 }
@@ -27,7 +27,7 @@ if (typeof module !== "undefined") {
  *
  * @unrestricted
  */
-class CPUStateX80 extends CPUX80 {
+class CPUStateX80 extends CPUx80 {
     /**
      * CPUStateX80(parmsCPU)
      *
@@ -1142,12 +1142,12 @@ class CPUStateX80 extends CPUX80 {
      */
     static init()
     {
-        var aeCPUs = Component.getElementsByClass(document, PCX80.APPCLASS, "cpu");
+        var aeCPUs = Component.getElementsByClass(document, PCx80.APPCLASS, "cpu");
         for (var iCPU = 0; iCPU < aeCPUs.length; iCPU++) {
             var eCPU = aeCPUs[iCPU];
             var parmsCPU = Component.getComponentParms(eCPU);
             var cpu = new CPUStateX80(parmsCPU);
-            Component.bindComponentControls(cpu, eCPU, PCX80.APPCLASS);
+            Component.bindComponentControls(cpu, eCPU, PCx80.APPCLASS);
         }
     }
 }

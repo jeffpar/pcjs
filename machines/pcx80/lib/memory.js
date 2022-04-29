@@ -1,5 +1,5 @@
 /**
- * @fileoverview Implements the PCX80 Memory component
+ * @fileoverview Implements the PCx80 Memory component
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>

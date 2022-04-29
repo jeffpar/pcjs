@@ -1,8 +1,8 @@
 {
-  "_JSONDoc": {
+  "@doc": {
     "overview": [
       "The top-level keys in machines.json are unique machine types; they are are used to form the names of the",
-      "compiled js packages; exceptions include any type beginning with an underscore (eg, '_JSONDoc') and 'shared',",
+      "compiled js packages; exceptions include any type beginning with an address sign (eg, '@doc') and 'shared',",
       "which contains properties common to multiple machines.",
       "",
       "'name' defines the external (displayed) name of the machine (eg, 'PCx86').  For machines that use XSL",
@@ -394,14 +394,14 @@
       "./machines/modules/time.js",
       "./machines/modules/bus.js",
       "./machines/modules/memory.js",
-      "./machines/modules/ports.js",
       "./machines/modules/ram.js",
       "./machines/modules/rom.js",
       "./machines/modules/cpu.js",
       "./machines/modules/debugger.js",
       "./machines/motorola/68k/modules/cpu68k.js",
       "./machines/motorola/68k/modules/dbg68k.js",
-      "./machines/palm/pilot/modules/ports.js",
+      "./machines/motorola/68k/modules/eamodes.js",
+      "./machines/palm/pilot/modules/ioregs.js",
       "./machines/palm/pilot/modules/video.js",
       "./machines/modules/machine.js"
     ]

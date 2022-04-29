@@ -78,7 +78,7 @@ Defs.MAXDEBUG   = MAXDEBUG;
 Defs.REPOSITORY = REPOSITORY;
 Defs.VERSION    = VERSION;
 
-/*
+/**
  * The following globals CANNOT be overridden.
  *
  * LITTLE_ENDIAN is true if the browser's ArrayBuffer storage is little-endian.  If LITTLE_ENDIAN matches
@@ -90,7 +90,7 @@ Defs.LITTLE_ENDIAN = function() {
     return new Uint16Array(buffer)[0] === 256;
 }();
 
-/*
+/**
  * List of standard message groups.  The messages properties defines the set of active message
  * groups, and their names are defined by MESSAGE_NAMES.  See the Device class for more message
  * group definitions.
@@ -104,7 +104,7 @@ Defs.MESSAGE = {
     BUFFER:     0x800000000000,
 };
 
-/*
+/**
  * RS-232 DB-25 Pin Definitions, mapped to bits 1-25 in a 32-bit status value.
  *
  * Serial devices in PCjs machines are considered DTE (Data Terminal Equipment), which means they should be "virtually"
@@ -308,13 +308,14 @@ class NumIO extends Defs {
                 chSuffix = '000000000';
             }
             if (ch != chSuffix) s = s.slice(0, -1) + chSuffix;
-            /*
+            /**
              * This adds support for the MACRO-10 binary shifting (Bn) suffix, which must be stripped from the
              * number before parsing, and then applied to the value after parsing.  If n is omitted, 35 is assumed,
              * which is a net shift of zero.  If n < 35, then a left shift of (35 - n) is required; if n > 35, then
              * a right shift of -(35 - n) is required.
              */
-            let v, shift = 0;
+            let v;
+            let shift = 0;
             if (base <= 10) {
                 let match = s.match(/(-?[0-9]+)B([0-9]*)$/);
                 if (match) {
@@ -323,13 +324,13 @@ class NumIO extends Defs {
                 }
             }
             if (this.isInt(s, base) && !isNaN(v = parseInt(s, base))) {
-                /*
+                /**
                  * With the need to support larger (eg, 36-bit) integers, truncating to 32 bits is no longer helpful.
                  *
                  *      value = v|0;
                  */
                 if (shift) {
-                    /*
+                    /**
                      * Since binary shifting is a logical operation, and since shifting by division only works properly
                      * with positive numbers, we must convert a negative value to a positive value, by computing the two's
                      * complement.
@@ -387,7 +388,7 @@ class NumIO extends Defs {
                 let a, ib, data;
 
                 if (sData.substr(0, 1) == "<") {    // if the "data" begins with a "<"...
-                    /*
+                    /**
                      * Early server configs reported an error (via the nErrorCode parameter) if a tape URL was invalid,
                      * but more recent server configs now display a somewhat friendlier HTML error page.  The downside,
                      * however, is that the original error has been buried, and we've received "data" that isn't actually
@@ -396,7 +397,7 @@ class NumIO extends Defs {
                     throw new Error(sData);
                 }
 
-                /*
+                /**
                  * TODO: IE9 is rather unfriendly and restrictive with regard to how much data it's willing to
                  * eval().  In particular, the 10Mb disk image we use for the Windows 1.01 demo config fails in
                  * IE9 with an "Out of memory" exception.  One work-around would be to chop the data into chunks
@@ -442,7 +443,7 @@ class NumIO extends Defs {
                     resource.aBytes = a;
                 }
                 else if ((a = data['words'])) {
-                    /*
+                    /**
                      * Convert all words into bytes
                      */
                     resource.aBytes = new Array(a.length * 2);
@@ -453,7 +454,7 @@ class NumIO extends Defs {
                     }
                 }
                 else if ((a = data['longs'])) {
-                    /*
+                    /**
                      * Convert all dwords (longs) into bytes
                      */
                     resource.aBytes = new Array(a.length * 4);
@@ -489,7 +490,7 @@ class NumIO extends Defs {
             }
         }
         else {
-            /*
+            /**
              * Parse the data manually; we assume it's a series of hex byte-values separated by whitespace.
              */
             let ab = [];
@@ -524,7 +525,7 @@ class NumIO extends Defs {
         if (!sws) {
             switches = switchesDefault;
         } else {
-            /*
+            /**
              * NOTE: It's not convenient to use parseInt() with a base of 2, in part because both bit order
              * and bit sense are reversed, but also because we use this function to parse switch masks, which
              * contain non-digits.  See the "switches" defined in invaders.json for examples.
@@ -563,7 +564,7 @@ class NumIO extends Defs {
      */
     toBase(n, base, bits = 0, prefix = undefined, nGrouping = 0)
     {
-        /*
+        /**
          * We can't rely entirely on isNaN(), because isNaN(null) returns false, and we can't rely
          * entirely on typeof either, because typeof NaN returns "number".  Sigh.
          *
@@ -571,7 +572,9 @@ class NumIO extends Defs {
          * since JavaScript coerces such operands to zero, but I think there's "value" in seeing those
          * values displayed differently.
          */
-        let s = "", suffix = "", cch = -1;
+        let s = "";
+        let suffix = "";
+        let cch = -1;
         if (!base) base = this.nDefaultRadix || 10;
         if (bits) cch = Math.ceil(bits / Math.log2(base));
         if (prefix == undefined) {
@@ -594,14 +597,14 @@ class NumIO extends Defs {
             n = undefined;
             prefix = suffix = "";
         } else {
-            /*
+            /**
              * Callers that produced an input by dividing by a power of two rather than shifting (in order
              * to access more than 32 bits) may produce a fractional result, which ordinarily we would simply
              * ignore, but if the integer portion is zero and the sign is negative, we should probably treat
              * this value as a sign-extension.
              */
             if (n < 0 && n > -1) n = -1;
-            /*
+            /**
              * Negative values should be twos-complemented to produce a positive value for conversion purposes,
              * but we can only do that if/when we're given the number of bits; Math.pow(base, cch) is equivalent
              * to Math.pow(2, bits), but less precise for bases that aren't a power of two (eg, base 10).
@@ -743,7 +746,7 @@ class NumIO extends Defs {
     }
 }
 
-/*
+/**
  * Assorted constants
  */
 NumIO.TWO_POW32 = Math.pow(2, 32);
@@ -793,7 +796,7 @@ class StdIO extends NumIO {
     constructor()
     {
         super();
-        /*
+        /**
          * We populate the sprintf() formatters table with null functions for all the predefined (built-in) types,
          * so that type validation has only one look-up to perform.
          *
@@ -865,7 +868,7 @@ class StdIO extends NumIO {
         let i = sFileName.lastIndexOf('/');
         if (i >= 0) sBaseName = sFileName.substr(i + 1);
 
-        /*
+        /**
          * This next bit is a kludge to clean up names that are part of a URL that includes unsightly query parameters.
          * However, don't do that if fAllowAmp (which will be true, for example, when parsing 8.3 filenames in diskimage.js).
          */
@@ -926,7 +929,7 @@ class StdIO extends NumIO {
             if (s.indexOf(':') < 0) {
                 s += ' ' + (args[1] || "00:00:00 UTC");
             } else if (s.match(/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/)) {
-                /*
+                /**
                  * I don't care to support all the possible time zone specifiers just to determine whether or not
                  * a time zone was provided, so for now, I simply look for common date+time patterns I use, such as
                  * the "timestamp" pattern above.  TODO: Make this general-purpose someday.
@@ -1024,7 +1027,7 @@ class StdIO extends NumIO {
      */
     sprintf(format, ...args)
     {
-        /*
+        /**
          * This isn't just a nice optimization; it's also important if the caller is simply trying
          * to printf() a string that may also contain '%' and doesn't want or expect any formatting.
          */
@@ -1041,7 +1044,7 @@ class StdIO extends NumIO {
             buffer += aParts[iPart];
             let arg, type = aParts[iPart+5];
 
-            /*
+            /**
              * Check for unrecognized types immediately, so we don't inadvertently pop any arguments.
              */
             if (this.formatters[type] === undefined) {
@@ -1074,7 +1077,7 @@ class StdIO extends NumIO {
             let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L'; we also allow 'w' (instead of 'h') and 'b' (instead of 'hh')
             let ach = null, s, radix = 0, prefix = "";
 
-            /*
+            /**
              * The following non-standard sprintf() format types provide handy alternatives to the
              * PHP date() format types that we previously used with the old datelib.formatDate() function:
              *
@@ -1120,7 +1123,8 @@ class StdIO extends NumIO {
              *
              * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
              */
-            let ch, date = /** @type {Date} */ ("ACDFHGMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
+            let ch;
+            let date = /** @type {Date} */ ("ACDFHGMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
 
             switch(type) {
             case 'C':
@@ -1193,14 +1197,14 @@ class StdIO extends NumIO {
 
             switch(type) {
             case 'b':
-                /*
+                /**
                  * "%b" for boolean-like values is a non-standard format specifier that seems handy.
                  */
                 buffer += (arg? "true" : "false");
                 break;
 
             case 'd':
-                /*
+                /**
                  * I could use "arg |= 0", but there may be some value to supporting integers > 32 bits,
                  * so I use Math.trunc() instead.  Bit-wise operators also mask a lot of evils, by converting
                  * complete nonsense into zero, so while I'm ordinarily a fan, that's not desirable here.
@@ -1221,7 +1225,7 @@ class StdIO extends NumIO {
                  * is zero, since parseInt() happily stops parsing when it reaches the first non-radix 10 digit.
                  */
                 arg = Math.trunc(arg);
-                /*
+                /**
                  * Before falling into the decimal floating-point code, we take this opportunity to convert
                  * the precision value, if any, to the minimum number of digits to print.  Which basically means
                  * setting zeroPad to true, width to precision, and then unsetting precision.
@@ -1258,7 +1262,7 @@ class StdIO extends NumIO {
                 break;
 
             case 'j':
-                /*
+                /**
                  * 'j' is one of our non-standard extensions to the sprintf() interface; it signals that
                  * the caller is providing an Object that should be rendered as JSON.  If a width is included
                  * (eg, "%2j"), it's used as an indentation value; otherwise, no whitespace is added.
@@ -1271,7 +1275,7 @@ class StdIO extends NumIO {
                 /* falls through */
 
             case 's':
-                /*
+                /**
                  * 's' includes some non-standard benefits, such as coercing non-strings to strings first;
                  * we know undefined and null values don't have a toString() method, but hopefully everything
                  * else does.
@@ -1309,7 +1313,7 @@ class StdIO extends NumIO {
                 if (!radix) radix = 16;
                 if (!prefix && hash) prefix = "0x";
                 if (!ach) ach = StdIO.HexLowerCase;
-                /*
+                /**
                  * For all the same reasons articulated above (for type 'd'), we pass the arg through Math.trunc(),
                  * and we honor precision, if any, as the minimum number of digits to print.
                  */
@@ -1320,7 +1324,7 @@ class StdIO extends NumIO {
                     precision = -1;
                 }
                 if (zeroPad && !width) {
-                    /*
+                    /**
                      * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
                      */
                     if (length == 'b') {
@@ -1398,13 +1402,13 @@ class StdIO extends NumIO {
     }
 }
 
-/*
+/**
  * Global variables
  */
 StdIO.PrintBuffer = "";
 StdIO.PrintTime = null;
 
-/*
+/**
  * Global constants
  */
 StdIO.HexLowerCase = "0123456789abcdef";
@@ -1443,7 +1447,7 @@ class WebIO extends StdIO {
         super();
         this.bindings = {};
         this.messages = 0;
-        /*
+        /**
          * If this is the machine device, initialize a set of per-machine variables; if it's not,
          * the Device constructor will update this.machine with the actual machine device (see addDevice()).
          */
@@ -1476,7 +1480,7 @@ class WebIO extends StdIO {
 
         case WebIO.BINDING.PRINT:
             this.disableAuto(element);
-            /*
+            /**
              * An onKeyDown handler has been added to this element to intercept special (non-printable) keys, such as
              * the UP and DOWN arrow keys, which are used to implement a simple command history/recall feature.
              */
@@ -1486,7 +1490,7 @@ class WebIO extends StdIO {
                     webIO.onCommandEvent(event, true);
                 }
             );
-            /*
+            /**
              * One purpose of the onKeyPress handler for this element is to stop event propagation, so that if the
              * element has been explicitly given focus, any key presses won't be picked up by the Input device (which,
              * as that device's constructor explains, is monitoring key presses for the entire document).
@@ -1523,7 +1527,7 @@ class WebIO extends StdIO {
         if (!this.config.bindings) {
             this.config.bindings = bindings;
         }
-        /*
+        /**
          * To relieve every device from having to explicitly declare its own container, set up a default.
          * When using direct bindings, the default is simply 'container'; otherwise, the default 'container'
          * element ID is whatever the device ID is.
@@ -1543,7 +1547,7 @@ class WebIO extends StdIO {
             if (fDirectBindings) {
                 binding = id;
             } else {
-                /*
+                /**
                  * This new bit of code allows us to define a binding like this:
                  *
                  *      "label": "0"
@@ -1682,7 +1686,7 @@ class WebIO extends StdIO {
         element.setAttribute("autocomplete", "off");
         element.setAttribute("autocorrect", "off");
         element.setAttribute("spellcheck", "false");
-        /*
+        /**
          * This was added for Firefox (Safari will clear the <textarea> on a page reload, but Firefox does not).
          */
         element.value = "";
@@ -1977,7 +1981,7 @@ class WebIO extends StdIO {
                 let fDiag = false;
                 let sErrorMessage, resource;
                 if (nErrorCode) {
-                    /*
+                    /**
                      * Errors can happen for innocuous reasons, such as the user switching away too quickly, forcing
                      * the request to be cancelled.  And unfortunately, the browser cancels XMLHttpRequest requests
                      * BEFORE it notifies any page event handlers, so if the machine is being powered down, we won't
@@ -2036,7 +2040,7 @@ class WebIO extends StdIO {
                 return;
             }
 
-            /*
+            /**
              * The following line was recommended for WebKit, as a work-around to prevent the handler firing multiple
              * times when debugging.  Unfortunately, that's not the only XMLHttpRequest problem that occurs when
              * debugging, so I think the WebKit problem is deeper than that.  When we have multiple XMLHttpRequests
@@ -2047,7 +2051,7 @@ class WebIO extends StdIO {
              */
             sResource = xmlHTTP.responseText;
 
-            /*
+            /**
              * The normal "success" case is an HTTP status code of 200, but when testing with files loaded
              * from the local file system (ie, when using the "file:" protocol), we have to be a bit more "flexible".
              */
@@ -2078,7 +2082,7 @@ class WebIO extends StdIO {
             parms = {};
             if (window) {
                 if (!sParms) {
-                    /*
+                    /**
                      * Note that window.location.href returns the entire URL, whereas window.location.search
                      * returns only parameters, if any (starting with the '?', which we skip over with a substr() call).
                      */
@@ -2219,10 +2223,10 @@ class WebIO extends StdIO {
                 let consume = false, s;
                 let text = element.value;
                 let i = text.lastIndexOf('\n');
-                /*
-                * Checking for BACKSPACE is not as important as the UP and DOWN arrows, but it's helpful to ensure
-                * that BACKSPACE only erases characters on the final line; consume it otherwise.
-                */
+                /**
+                 * Checking for BACKSPACE is not as important as the UP and DOWN arrows, but it's helpful to ensure
+                 * that BACKSPACE only erases characters on the final line; consume it otherwise.
+                 */
                 if (keyCode == WebIO.KEYCODE.BS) {
                     if (element.selectionStart <= i + 1) {
                         consume = true;
@@ -2248,7 +2252,7 @@ class WebIO extends StdIO {
             else {
                 let charCode = keyCode;
                 let char = String.fromCharCode(charCode);
-                /*
+                /**
                  * Move the caret to the end of any text in the textarea, unless it's already
                  * past the final LF (because it's OK to insert characters on the last line).
                  */
@@ -2257,12 +2261,12 @@ class WebIO extends StdIO {
                 if (element.selectionStart <= i) {
                     element.setSelectionRange(text.length, text.length);
                 }
-                /*
+                /**
                  * Don't let the Input device's document-based keypress handler see any key presses
                  * that came to this element first.
                  */
                 event.stopPropagation();
-                /*
+                /**
                  * If '@' is pressed as the first character on the line, then append the last command
                  * that parseCommands() processed, and transform '@' into ENTER.
                  */
@@ -2272,7 +2276,7 @@ class WebIO extends StdIO {
                         char = '\r';
                     }
                 }
-                /*
+                /**
                  * On the ENTER key, call parseCommands() to look for any COMMAND handlers and invoke
                  * them until one of them returns true.
                  *
@@ -2281,7 +2285,7 @@ class WebIO extends StdIO {
                  * as ASCII character '\n' (aka LINEFEED aka LF).
                  */
                 if (char == '\r') {
-                    /*
+                    /**
                      * At the time we call any command handlers, a LINEFEED will not yet have been
                      * appended to the text, so for consistency, we prevent the default behavior and
                      * add the LINEFEED ourselves.  Unfortunately, one side-effect is that we must
@@ -2322,7 +2326,7 @@ class WebIO extends StdIO {
             if (typeof fnPrev !== 'function') {
                 window[sFunc] = fn;
             } else {
-                /*
+                /**
                  * TODO: Determine whether there's any value in receiving/sending the Event object that the
                  * browser provides when it generates the original event.
                  */
@@ -2487,20 +2491,20 @@ class WebIO extends StdIO {
         if (!fBuffer) {
             let element = this.findBinding(WebIO.BINDING.PRINT, true);
             if (element) {
-                /*
+                /**
                  * To help avoid situations where the element can get overwhelmed by the same repeated string,
                  * don't add the string if it already appears at the end.
                  */
                 if (element.value.substr(-s.length) != s) {
                     element.value += s;
-                    /*
+                    /**
                      * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
                      */
                     if (!WebIO.DEBUG && element.value.length > 8192) {
                         element.value = element.value.substr(element.value.length - 4096);
                     }
                     element.scrollTop = element.scrollHeight;
-                    /*
+                    /**
                      * Safari requires this, to keep the caret at the end; Chrome and Firefox, not so much.  Go figure.
                      *
                      * However, if I do this in Safari on iPadOS WHILE the app is full-screen, Safari cancels full-screen
@@ -2644,7 +2648,7 @@ WebIO.MESSAGE_COMMANDS = [
     "m ... [on|off]\tturn selected messages on or off"
 ];
 
-/*
+/**
  * NOTE: The first name is automatically omitted from global "on" and "off" operations.
  */
 WebIO.MESSAGE_NAMES = {
@@ -2656,7 +2660,7 @@ WebIO.HANDLER = {
     COMMAND:    "command"
 };
 
-/*
+/**
  * Codes provided by KeyboardEvent.keyCode on a "keypress" event (aka ASCII codes).
  */
 WebIO.CHARCODE = {
@@ -2715,7 +2719,7 @@ WebIO.CHARCODE = {
     /* 0x7A */ z:           122
 };
 
-/*
+/**
  * Codes provided by KeyboardEvent.keyCode on "keydown" and "keyup" events.
  */
 WebIO.KEYCODE = {
@@ -2845,7 +2849,7 @@ WebIO.KEYCODE = {
                 VIRTUAL:    1000        // bias used by other devices to define "virtual" keyCodes
 };
 
-/*
+/**
  * Maps Firefox-specific keyCodes to their more common keyCode counterparts.
  */
 WebIO.FF_KEYCODE = {
@@ -2855,7 +2859,7 @@ WebIO.FF_KEYCODE = {
     [WebIO.KEYCODE.FF_CMD]:     WebIO.KEYCODE.CMD       // 224 -> 91
 };
 
-/*
+/**
  * Supported values that a browser may store in the 'location' property of a keyboard event object.
  */
 WebIO.LOCATION = {
@@ -2864,7 +2868,7 @@ WebIO.LOCATION = {
     NUMPAD:     3
 };
 
-/*
+/**
  * This maps KEYCODE values to ASCII character (or a string representation for non-ASCII keys).
  */
 WebIO.KEYNAME = {
@@ -3158,13 +3162,13 @@ class Device extends WebIO {
             this.printf("warning: machine configuration contains multiple '%s' devices\n", this.idDevice);
         }
         Device.Machines[this.idMachine][this.idDevice] = this;
-        /*
+        /**
          * The new Device classes don't use the Components array or machine+device IDs, but we need to continue
          * updating both of those for backward compatibility with older PCjs machines.
          */
         this['id'] = this.idMachine == this.idDevice? this.idMachine : this.idMachine + '.' + this.idDevice;
         Device.Components.push(this);
-        /*
+        /**
          * The WebIO constructor set this.machine tentatively, so that it could define any per-machine variables
          * it needed; we now set it definitively.
          */
@@ -3208,7 +3212,7 @@ class Device extends WebIO {
      */
     checkConfig(config, overrides)
     {
-        /*
+        /**
          * If this device's config contains an "overrides" array, then any of the properties listed in
          * that array may be overridden with a URL parameter.  We don't impose any checks on the overriding
          * value, so it is the responsibility of the component with overridable properties to validate them.
@@ -3381,7 +3385,7 @@ class Device extends WebIO {
         let devices = Device.Machines[idMachine];
         let device = devices && devices[idDevice] || null;
         if (!device) {
-            /*
+            /**
              * Also check the old list of PCjs machine component IDs, to maintain backward compatibility.
              */
             for (i = 0; i < Device.Components.length; i++) {
@@ -3467,7 +3471,7 @@ class Device extends WebIO {
         if (this != this.machine || !this.ready) {
             return this.ready;
         }
-        /*
+        /**
          * Machine readiness is more complicated: check the readiness of all devices.  This is easily
          * checked with an enumDevices() function that returns false if a device isn't ready yet, which
          * in turn terminates the enumeration and returns false.
@@ -3537,7 +3541,7 @@ class Device extends WebIO {
     printf(format, ...args)
     {
         if (typeof format == "number" && this.isMessageOn(format)) {
-            /*
+            /**
              * The following call will execute at most once, because findDeviceByClass() returns either a Device or null,
              * neither of which is undefined.
              */
@@ -3548,7 +3552,7 @@ class Device extends WebIO {
                 this.dbg.notifyMessage(format);
             }
             if (this.machine.messages & Device.MESSAGE.ADDR) {
-                /*
+                /**
                  * Same rules as above apply here.  Hopefully no message-based printf() calls will arrive with MESSAGE.ADDR
                  * set *before* the CPU device has been initialized.
                  */
@@ -3616,7 +3620,7 @@ Device.Machines = typeof window != "undefined"? window['PCjs']['Machines'] : {};
  */
 Device.Components = typeof window != "undefined"? window['PCjs']['Components'] : [];
 
-/*
+/**
  * List of additional message groups, extending the base set defined in lib/webio.js.
  *
  * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
@@ -3769,7 +3773,7 @@ class Input extends Device {
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.machine = /** @type {Machine} */ (this.findDeviceByClass("Machine"));
 
-        /*
+        /**
          * If 'drag' is true, then the onInput() handler will be called whenever the current col and/or row
          * changes, even if the mouse hasn't been released since the previous onInput() call.
          *
@@ -3779,32 +3783,32 @@ class Input extends Device {
          */
         this.fDrag = this.getDefaultBoolean('drag', false);
 
-        /*
+        /**
          * If 'scroll' is true, then we do NOT call preventDefault() on touch events; this permits the input
          * surface to be scrolled like any other part of the page.  The default is false, because this has other
          * side-effects (eg, inadvertent zooms).
          */
         this.fScroll = this.getDefaultBoolean('scroll', false);
 
-        /*
+        /**
          * If 'hexagonal' is true, then we treat the input grid as hexagonal, where even rows of the associated
          * display are offset.
          */
         this.fHexagonal = this.getDefaultBoolean('hexagonal', false);
 
-        /*
+        /**
          * The 'releaseDelay' setting is necessary for devices (eg, old calculators) that are either too slow to
          * notice every input transition and/or have debouncing logic that would otherwise be defeated.
          */
         this.releaseDelay = this.getDefaultNumber('releaseDelay', 0);
 
-        /*
+        /**
          * This is set on receipt of the first 'touch' event of any kind, and is used by the 'mouse' event
          * handlers to disregard mouse events if set.
          */
         this.fTouch = false;
 
-        /*
+        /**
          * There are two supported configuration maps: a two-dimensional grid (gridMap) and a list of IDs (idMap).
          *
          * The two-dimensional button layouts do not (currently) support individual listeners; instead, any key event
@@ -3914,7 +3918,7 @@ class Input extends Device {
             }
             return false;
         }
-        /*
+        /**
          * The visual state of a SWITCH control (which could be a div or button or any other element) is controlled
          * by its class attribute -- specifically, the last class name in the attribute.  You must define two classes:
          * one that ends with "-on" for the on (true) state and another that ends with "-off" for the off (false) state.
@@ -3987,14 +3991,14 @@ class Input extends Device {
                             if (typeof clickBinding == "number") {
                                 keyCode = clickBinding;
                             } else {
-                                /*
+                                /**
                                  * If clickBinding is not a number, the only other possibility currently supported
                                  * is an Array where the first entry is a keyCode modifier; specifically, KEYCODE.LOCK.
                                  */
                                 keyCode = clickBinding[0];
 
                                 if (keyCode == Input.KEYCODE.LOCK) {
-                                    /*
+                                    /**
                                      * In the case of KEYCODE.LOCK, the next entry is the actual keyCode, and we look
                                      * to the element's "data-value" attribute for whether clicking the element should
                                      * "lock" the keyCode ("0") or "unlock" it ("1").  Locking a key is a simple matter
@@ -4048,7 +4052,7 @@ class Input extends Device {
      */
     addSurface(inputElement, focusElement, location = [])
     {
-        /*
+        /**
          * The location array, eg:
          *
          *      "location": [139, 325, 368, 478, 0.34, 0.5, 640, 853, 180, 418, 75, 36],
@@ -4095,7 +4099,7 @@ class Input extends Device {
                 state.hGap = state.vGap = 0;
             }
 
-            /*
+            /**
              * To calculate the average button width (cxButton), we know that the overall width
              * must equal the sum of all the button widths + the sum of all the button gaps:
              *
@@ -4111,7 +4115,7 @@ class Input extends Device {
             state.cxGap = (state.cxButton * state.hGap)|0;
             state.cyGap = (state.cyButton * state.vGap)|0;
 
-            /*
+            /**
              * xStart and yStart record the last 'touchstart' or 'mousedown' position on the surface
              * image; they will be reset to -1 when movement has ended (eg, 'touchend' or 'mouseup').
              */
@@ -4120,7 +4124,7 @@ class Input extends Device {
             this.captureMouse(inputElement, state);
             this.captureTouch(inputElement, state);
 
-            /*
+            /**
              * We use a timer for the touch/mouse release events, to ensure that the machine had
              * enough time to notice the input before releasing it.
              */
@@ -4135,7 +4139,7 @@ class Input extends Device {
         }
 
         if (this.gridMap || this.idMap || this.keyMap) {
-            /*
+            /**
              * This auto-releases the last key reported after an appropriate delay, to ensure that
              * the machine had enough time to notice the corresponding button was pressed.
              */
@@ -4146,7 +4150,7 @@ class Input extends Device {
                 });
             }
 
-            /*
+            /**
              * I used to maintain a single-key buffer (this.keyPressed) and would immediately release
              * that key as soon as another key was pressed, but it appears that the ROM wants a minimum
              * delay between release and the next press -- probably for de-bouncing purposes.  So we
@@ -4158,7 +4162,7 @@ class Input extends Device {
             this.keyActive = "";
             this.keysPressed = [];
 
-            /*
+            /**
              * I'm attaching my key event handlers to the document object, since image elements are
              * not focusable.  I'm disinclined to do what I've done with other machines (ie, create an
              * invisible <textarea> overlay), because in this case, I don't really want a soft keyboard
@@ -4175,7 +4179,7 @@ class Input extends Device {
                 if (!this.focusElement && focusElement.nodeName == "BUTTON") {
                     element = document;
                     this.focusElement = focusElement;
-                    /*
+                    /**
                      * Although we've elected to attach key handlers to the document object in this case,
                      * we also attach to the inputElement as an alternative.
                      */
@@ -4367,7 +4371,7 @@ class Input extends Device {
                     let used = input.onKeyCode(keyCode, false, false, event);
                     printEvent("Up", keyCode);
                     if (used) event.preventDefault();
-                    /*
+                    /**
                      * We reset the contents of any textarea element being used exclusively
                      * for keyboard input, to prevent its contents from growing uncontrollably.
                      */
@@ -4376,7 +4380,7 @@ class Input extends Device {
             }
         );
 
-        /*
+        /**
          * The following onBlur() and onFocus() handlers are currently just for debugging purposes, but
          * PCx86 experience suggests that we may also eventually need them for future pointer-locking support.
          */
@@ -4411,7 +4415,7 @@ class Input extends Device {
             'mousedown',
             function onMouseDown(event) {
                 if (input.fTouch) return;
-                /*
+                /**
                  * If there are any text input elements on the page that might currently have focus,
                  * this is a good time to divert focus to a focusable element of our own (eg, focusElement).
                  * Otherwise, key presses could be confusingly processed in two places.
@@ -4473,14 +4477,14 @@ class Input extends Device {
     {
         let input = this;
 
-        /*
+        /**
          * NOTE: The mouse event handlers below deal only with events where the left button is involved
          * (ie, left button is pressed, down, or released).
          */
         element.addEventListener(
             'touchstart',
             function onTouchStart(event) {
-                /*
+                /**
                  * Under normal circumstances (ie, when fScroll is false), when any touch events arrive,
                  * onSurfaceEvent() calls preventDefault(), which prevents a variety of potentially annoying
                  * behaviors (ie, zooming, scrolling, fake mouse events, etc).  Under non-normal circumstances,
@@ -4530,7 +4534,7 @@ class Input extends Device {
                         msDelayMin = msDelay;
                     }
                 } else {
-                    /*
+                    /**
                      * Because the key is already in the auto-release state, this next call guarantees that the
                      * key will be removed from the array; a consequence of that removal, however, is that we must
                      * reset our array index to zero.
@@ -4662,7 +4666,7 @@ class Input extends Device {
                 keyMod >>= 1;
             }
             if (keyMod) {
-                /*
+                /**
                  * Firefox generates only keyDown events for CAPS-LOCK, whereas Chrome generates only keyDown
                  * when it's locking and keyUp when it's unlocking.  To support Firefox, we must simply toggle the
                  * current state on a down.
@@ -4680,7 +4684,7 @@ class Input extends Device {
         } else {
             keyCode = 0;
             keyName = String.fromCharCode(code).toUpperCase();
-            /*
+            /**
              * Since code is presumably a charCode, this is a good opportunity to update keyMods with
              * with the *real* CAPS-LOCK setting; that is, we will assume CAPS-LOCK is "off" whenever
              * a lower-case letter arrives and "on" whenever an upper-case letter arrives when neither
@@ -4747,7 +4751,7 @@ class Input extends Device {
                 } else {
                     this.removeActiveKey(keyNum);
                 }
-                /*
+                /**
                  * At this point, I used to return true, indicating that we're not interested in a keypress
                  * event, but in fact, onkeyCode() is now interested in them only insofar as letters can convey
                  * information about the state of CAPS-LOCK (see above).
@@ -4788,20 +4792,20 @@ class Input extends Device {
      */
     onReset()
     {
-        /*
+        /**
          * As keyDown events are encountered, the event keyCode is checked against the active keyMap, if any.
          * If the keyCode exists in the keyMap, then each keyNum in the keyMap is added to the aActiveKeys array.
          * As each key is released (or auto-released), its entry is removed from the array.
          */
         this.aActiveKeys = [];
 
-        /*
+        /**
          * The current (assumed) physical states of the various shift/lock "modifier" keys (formerly bitsState);
          * the browser doesn't provide a way to query them, so all we can do is infer them as events arrive.
          */
         this.keyMods = 0;               // zero or more KEYMOD bits
 
-        /*
+        /**
          * Finally, the active input state.  If there is no active input, col and row are -1.  After
          * this point, these variables will be updated by setPosition().
          */
@@ -4839,7 +4843,7 @@ class Input extends Device {
                 fMultiTouch = (event.targetTouches.length > 1);
             }
 
-            /*
+            /**
              * The following code replaces the older code below it.  It requires that we use clientX and clientY
              * instead of pageX and pageY from the targetTouches array.  The older code seems to be completely broken
              * whenever the page is full-screen, hence this change.
@@ -4848,7 +4852,7 @@ class Input extends Device {
             x -= rect.left;
             y -= rect.top;
 
-            /*
+            /**
              * Touch coordinates (that is, the pageX and pageY properties) are relative to the page, so to make
              * them relative to the element, we must subtract the element's left and top positions.  This Apple document:
              *
@@ -4870,7 +4874,7 @@ class Input extends Device {
              *      y -= yOffset;
              */
 
-            /*
+            /**
              * Due to the responsive nature of our pages, the displayed size of the surface image may be smaller than
              * the original size, and the coordinates we receive from events are based on the currently displayed size.
              */
@@ -4880,7 +4884,7 @@ class Input extends Device {
             xInput = x - state.xInput;
             yInput = y - state.yInput;
 
-            /*
+            /**
              * fInput is set if the event occurred somewhere within the input region (ie, the calculator keypad),
              * either on a button or between buttons, whereas fButton is set if the event occurred squarely (rectangularly?)
              * on a button.  fPower deals separately with the power button; it is set if the event occurred on the
@@ -4889,13 +4893,13 @@ class Input extends Device {
             fInput = fButton = false;
             fPower = (x >= state.xPower && x < state.xPower + state.cxPower && y >= state.yPower && y < state.yPower + state.cyPower);
 
-            /*
+            /**
              * I use the top of the input region, less some gap, to calculate a dividing line, above which
              * default actions should be allowed, and below which they should not.  Ditto for any event inside
              * the power button.
              */
             if (xInput >= 0 && xInput < state.cxInput && yInput + state.cyGap >= 0 || fPower) {
-                /*
+                /**
                  * If we allow touch events to be processed, they will generate mouse events as well, causing
                  * confusion and delays.  We can sidestep that problem by preventing default actions on any event
                  * that occurs within the input region.  One downside is that you can no longer scroll or zoom the
@@ -4908,7 +4912,7 @@ class Input extends Device {
 
                 if (xInput >= 0 && xInput < state.cxInput && yInput >= 0 && yInput < state.cyInput) {
                     fInput = true;
-                    /*
+                    /**
                      * The width and height of each column and row could be determined by computing cxGap + cxButton
                      * and cyGap + cyButton, respectively, but those gap and button sizes are merely estimates, and should
                      * only be used to help with the final button coordinate checks farther down.
@@ -4918,7 +4922,7 @@ class Input extends Device {
                     let colInput = (xInput / cxCol) | 0;
                     let rowInput = (yInput / cyCol) | 0;
 
-                    /*
+                    /**
                      * If the grid is hexagonal (aka "Lite-Brite" mode), then the cells of even-numbered rows are
                      * offset horizontally by 1/2 cell.  In addition, the last cell in those rows is unused, so if
                      * after compensating by 1/2 cell, the target column is the last cell, we set xInput to -1,
@@ -4930,7 +4934,7 @@ class Input extends Device {
                         if (colInput == state.nCols - 1) xInput = -1;
                     }
 
-                    /*
+                    /**
                      * (xCol,yCol) will be the top left corner of the button closest to the point of input.  However, that's
                      * based on our gap estimate.  If things seem "too tight", shrink the gap estimates, which will automatically
                      * increase the button size estimates.
@@ -4954,18 +4958,18 @@ class Input extends Device {
         if (fMultiTouch) return;
 
         if (action == Input.ACTION.PRESS) {
-            /*
+            /**
              * Record the position of the event, transitioning xStart and yStart to non-negative values.
              */
             state.xStart = x;
             state.yStart = y;
             if (fInput) {
-                /*
+                /**
                  * The event occurred in the input region, so we call setPosition() regardless of whether
                  * it hit or missed a button.
                  */
                 this.setPosition(col, row);
-                /*
+                /**
                  * On the other hand, if it DID hit a button, then we arm the auto-release timer, to ensure
                  * a minimum amount of time (ie, releaseDelay).
                  */
@@ -4985,7 +4989,7 @@ class Input extends Device {
             }
         }
         else if (action == Input.ACTION.RELEASE) {
-            /*
+            /**
              * Don't immediately signal the release if the release timer is active (let the timer take care of it).
              */
             if (!this.releaseDelay || !this.time.isTimerSet(this.timerInputRelease)) {
@@ -5008,7 +5012,7 @@ class Input extends Device {
      */
     setFocus()
     {
-        /*
+        /**
          * In addition, we now check machine.isReady(), to avoid jerking the page's focus around when a machine is first
          * powered; it won't be marked ready until all the onPower() calls have completed, including the CPU's onPower()
          * call, which in turn calls setFocus().
@@ -5071,7 +5075,7 @@ Input.TYPE = {                  // types for addListener()
     SWITCH:     "switch"
 };
 
-/*
+/**
  * To keep track of the state of modifier keys, I've grabbed a copy of the same bit definitions
  * used by /modules/pcx86/lib/keyboard.js, since it's only important that we have a set of unique
  * values; what the values are isn't critical.
@@ -5244,7 +5248,7 @@ class LED extends Device {
         this.colorHighlight = this.getRGBAColor(this.colorOn, 1.0, 2.0);
         this.colorBackground = this.getRGBColor(this.config['backgroundColor']);
 
-        /*
+        /**
          * We generally want our view canvas to be "responsive", not "fixed" (ie, to automatically resize
          * with changes to the overall window size), so we apply the following style attributes:
          *
@@ -5259,13 +5263,13 @@ class LED extends Device {
             canvasView.style.height = "auto";
         }
 
-        /*
+        /**
          * Hexagonal (aka "Lite-Brite" mode) and highlighting options
          */
         this.fHexagonal = this.getDefaultBoolean('hexagonal', false);
         this.fHighlight = this.getDefaultBoolean('highlight', true);
 
-        /*
+        /**
          * Persistent LEDS are the default, except for LED.TYPE.DIGIT, which is used with calculator displays
          * whose underlying hardware must constantly "refresh" the LEDs to prevent them from going dark.
          */
@@ -5277,7 +5281,7 @@ class LED extends Device {
         container.appendChild(canvasView);
         this.contextView = /** @type {CanvasRenderingContext2D} */ (canvasView.getContext("2d"));
 
-        /*
+        /**
          * canvasGrid is where all LED segments are composited; then they're drawn onto canvasView.
          */
         this.canvasGrid = /** @type {HTMLCanvasElement} */ (document.createElement("canvas"));
@@ -5287,7 +5291,7 @@ class LED extends Device {
             this.contextGrid = this.canvasGrid.getContext("2d");
         }
 
-        /*
+        /**
          * Time to allocate our internal LED buffer.  Other devices access the buffer through interfaces
          * like setLEDState() and getLEDState().  The LED buffer contains four per elements per LED cell:
          *
@@ -5306,7 +5310,7 @@ class LED extends Device {
         this.bufferClone = null;
         this.nBufferIncExtra = (this.colsView < this.cols? (this.cols - this.colsView) * 4 : 0);
 
-        /*
+        /**
          * fBufferModified is straightforward: set to true by any setLEDState() call that actually
          * changed something in the LED buffer, set to false after every drawBuffer() call, periodic
          * or otherwise.
@@ -5322,14 +5326,14 @@ class LED extends Device {
         this.msLastDraw = 0;
         this.fDisplayOn = true;
 
-        /*
+        /**
          * nShiftedLeft is an optimization that tells drawGrid() when it can minimize the number of
          * individual cells to redraw, by shifting the entire grid image leftward and redrawing only
          * the rightmost cells.
          */
         this.nShiftedLeft = 0;
 
-        /*
+        /**
          * This records the location of the most recent LED buffer location updated via setLEDState(),
          * in case we want to highlight it.
          */
@@ -5453,7 +5457,7 @@ class LED extends Device {
             let xStart = this.widthCell * this.nShiftedLeft;
             let cxVisible = this.widthCell * colRedraw;
             this.contextGrid.drawImage(this.canvasGrid, xStart, 0, cxVisible, this.heightGrid, 0, 0, cxVisible, this.heightGrid);
-            /*
+            /**
              * At this point, the only grid drawing we might need to do now is the column at colRedraw,
              * but we still loop over the entire buffer to ensure all the cell MODIFIED states are in sync.
              */
@@ -5529,7 +5533,7 @@ class LED extends Device {
         let xDst = col * this.widthCell + xOffset;
         let yDst = row * this.heightCell;
 
-        /*
+        /**
          * If this is NOT a persistent LED display, then drawGrid() will have done a preliminary clearGrid(),
          * eliminating the need to clear individual cells.  Whereas if this IS a persistent LED display, then
          * we need to clear cells on an as-drawn basis.  If we don't, there could be residual "bleed over"
@@ -5546,7 +5550,7 @@ class LED extends Device {
             this.contextGrid.beginPath();
             this.contextGrid.arc(xDst + coords[0], yDst + coords[1], coords[2], 0, Math.PI * 2);
             if (fTransparent) {
-                /*
+                /**
                  * The following code works as well:
                  *
                  *      this.contextGrid.save();
@@ -5657,7 +5661,7 @@ class LED extends Device {
      */
     drawView()
     {
-        /*
+        /**
          * Setting the 'globalCompositeOperation' property of a 2D context is something you rarely need to do,
          * because the default draw behavior ("source-over") is fine for most cases.  One case where it is NOT
          * fine is when we're using a transparent background color, because it doesn't copy over any transparent
@@ -5936,7 +5940,7 @@ class LED extends Device {
         let buffer = state.shift();
         if (colorOn == this.colorOn && colorBackground == this.colorBackground && buffer && buffer.length == this.buffer.length) {
             this.buffer = buffer;
-            /*
+            /**
              * Loop over all the buffer colors to fix a legacy problem (ie, before we started storing null for colorTransparent)
              */
             for (let i = 0; i <= this.buffer.length - this.nBufferInc; i += this.nBufferInc) {
@@ -6152,7 +6156,7 @@ LED.STATE = {
     ON:         1
 };
 
-/*
+/**
  * NOTE: Although technically the MODIFIED flag is an internal flag, it may be set explicitly as well;
  * the ROM device uses the setLEDState() flags parameter to set it, in order to trigger highlighting of
  * the most recently active LED.
@@ -6177,7 +6181,7 @@ LED.SIZES = [
     [96, 128]           // LED.TYPE.DIGIT
 ];
 
-/*
+/**
  * The segments are arranged roughly as follows, in a 96x128 grid:
  *
  *      AAAA
@@ -6204,7 +6208,7 @@ LED.SEGMENTS = {
     'P':        [80, 102,  8]
 };
 
-/*
+/**
  * Segmented symbols are formed with the following segments.
  */
 LED.SYMBOL_SEGMENTS = {
@@ -6286,7 +6290,7 @@ class Monitor extends Device {
 
         this.monitor = this.bindings[Monitor.BINDING.MONITOR];
         if (this.monitor) {
-            /*
+            /**
              * Making sure the monitor had a "tabindex" attribute seemed like a nice way of ensuring we
              * had a single focusable surface that we could pass to our Input device, but that would be too
              * simple.  Safari once again bites us in the butt, just like it did when we tried to add the
@@ -6299,7 +6303,7 @@ class Monitor extends Device {
         }
         this.container = this.findBinding(Monitor.BINDING.CONTAINER) || this.monitor;
 
-        /*
+        /**
          * Create the Monitor canvas if we weren't given a predefined canvas; we'll assume that an existing
          * canvas is already contained within the monitor.
          */
@@ -6319,7 +6323,7 @@ class Monitor extends Device {
         }
         this.canvasMonitor = canvas;
 
-        /*
+        /**
          * The "contenteditable" attribute on a canvas is a simple way of creating a display surface that can
          * also receive focus and generate input events.  Unfortunately, in Safari, that attribute NOTICEABLY
          * slows down canvas operations whenever it has focus.  All you have to do is click away from the canvas,
@@ -6332,7 +6336,7 @@ class Monitor extends Device {
         let context = canvas.getContext("2d");
         this.contextMonitor = context;
 
-        /*
+        /**
          * HACK: A canvas style of "auto" provides for excellent responsive canvas scaling in EVERY browser
          * except IE9/IE10, so I recalculate the appropriate CSS height every time the parent div is resized;
          * IE11 works without this hack, so we take advantage of the fact that IE11 doesn't identify as "MSIE".
@@ -6349,7 +6353,7 @@ class Monitor extends Device {
             this.monitor.onresize();
         }
 
-        /*
+        /**
          * The following is a related hack that allows the user to force the monitor to use a particular aspect
          * ratio if an 'aspect' attribute or URL parameter is set.  Initially, it's just for testing purposes
          * until we figure out a better UI.  And note that we use our onPageEvent() helper function to make sure
@@ -6357,14 +6361,14 @@ class Monitor extends Device {
          */
         let aspect = +(this.config['aspect'] || this.getURLParms()['aspect']);
 
-        /*
+        /**
          * No 'aspect' parameter yields NaN, which is falsey, and anything else must satisfy my arbitrary
          * constraints of 0.3 <= aspect <= 3.33, to prevent any useless (or worse, browser-blowing) results.
          */
         if (aspect && aspect >= 0.3 && aspect <= 3.33) {
             this.onPageEvent('onresize', function(parentElement, childElement, aspectRatio) {
                 return function onResizeWindow() {
-                    /*
+                    /**
                      * Since aspectRatio is the target width/height, we have:
                      *
                      *      parentElement.clientWidth / childElement.style.height = aspectRatio
@@ -6382,7 +6386,7 @@ class Monitor extends Device {
             window['onresize']();
         }
 
-        /*
+        /**
          * Here's the gross code to handle full-screen support across all supported browsers.  Most of the crud is
          * now buried inside findProperty(), which checks for all the browser prefix variations (eg, "moz", "webkit")
          * and deals with certain property name variations, like 'Fullscreen' (new) vs 'FullScreen' (old).
@@ -6415,7 +6419,7 @@ class Monitor extends Device {
             }
         }
 
-        /*
+        /**
          * The 'touchType' config property can be set to true for machines that require a full keyboard.  If set,
          * we create a transparent textarea "overlay" on top of the canvas and provide it to the Input device
          * via addSurface(), making it easy for the user to activate the on-screen keyboard for touch-type devices.
@@ -6448,26 +6452,26 @@ class Monitor extends Device {
                 textarea.setAttribute("id", id);
             }
             textarea.setAttribute("class", "pcjs-overlay");
-            /*
-            * The soft keyboard on an iOS device tends to pop up with the SHIFT key depressed, which is not the
-            * initial keyboard state we prefer, so hopefully turning off these "auto" attributes will help.
-            */
+            /**
+             * The soft keyboard on an iOS device tends to pop up with the SHIFT key depressed, which is not the
+             * initial keyboard state we prefer, so hopefully turning off these "auto" attributes will help.
+             */
             if (this.isUserAgent("iOS")) {
                 this.disableAuto(textarea);
-                /*
-                * One of the problems on iOS devices is that after a soft-key control is clicked, we need to give
-                * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS may
-                * also "zoom" the page rather jarringly.  While it's a simple matter to completely disable zooming,
-                * by fiddling with the page's viewport, that prevents the user from intentionally zooming.  A bit of
-                * Googling reveals that another way to prevent those jarring unintentional zooms is to simply set the
-                * font-size of the text control to 16px.  So that's what we do.
-                */
+                /**
+                 * One of the problems on iOS devices is that after a soft-key control is clicked, we need to give
+                 * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS may
+                 * also "zoom" the page rather jarringly.  While it's a simple matter to completely disable zooming,
+                 * by fiddling with the page's viewport, that prevents the user from intentionally zooming.  A bit of
+                 * Googling reveals that another way to prevent those jarring unintentional zooms is to simply set the
+                 * font-size of the text control to 16px.  So that's what we do.
+                 */
                 textarea.style.fontSize = "16px";
             }
             this.monitor.appendChild(textarea);
         }
 
-        /*
+        /**
          * If there's an Input device, make sure it is associated with our default input surface.
          */
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
@@ -6475,14 +6479,14 @@ class Monitor extends Device {
             this.input.addSurface(textarea || this.monitor, this.findBinding(this.config['focusBinding'], true));
         }
 
-        /*
+        /**
          * These variables are here in case we want/need to add support for borders later...
          */
         this.xMonitorOffset = this.yMonitorOffset = 0;
         this.cxMonitorOffset = this.cxMonitor;
         this.cyMonitorOffset = this.cyMonitor;
 
-        /*
+        /**
          * Support for disabling (or, less commonly, enabling) image smoothing, which all browsers
          * seem to support now (well, OK, I still have to test the latest MS Edge browser), despite
          * it still being labelled "experimental technology".  Let's hope the browsers standardize
@@ -6499,7 +6503,7 @@ class Monitor extends Device {
         if (this.rotateMonitor) {
             this.rotateMonitor = this.rotateMonitor % 360;
             if (this.rotateMonitor > 0) this.rotateMonitor -= 360;
-            /*
+            /**
              * TODO: Consider also disallowing any rotateMonitor value if bufferRotate was already set; setting
              * both is most likely a mistake, but who knows, maybe someone wants to use both for 180-degree rotation?
              */
@@ -6528,7 +6532,7 @@ class Monitor extends Device {
         switch(binding) {
         case Monitor.BINDING.FULLSCREEN:
             element.onclick = function onClickFullScreen() {
-                /*
+                /**
                  * I've encountered situations in Safari on iPadOS where full-screen mode was cancelled without
                  * notification via onFullScreen() (eg, diagnostic printf() calls that used to inadvertently change
                  * focus), so we'd mistakenly think we were still full-screen.
@@ -6572,7 +6576,7 @@ class Monitor extends Device {
         let fSuccess = false;
         if (Monitor.DEBUG) this.printf(Device.MESSAGE.MONITOR, "doFullScreen()\n");
         if (this.container && this.container.doFullScreen) {
-            /*
+            /**
              * Styling the container with a width of "100%" and a height of "auto" works great when the aspect ratio
              * of our virtual monitor is at least roughly equivalent to the physical screen's aspect ratio, but now that
              * we support virtual VGA monitors with an aspect ratio of 1.33, that's very much out of step with modern
@@ -6600,7 +6604,7 @@ class Monitor extends Device {
                 this.container.style.width = sWidth;
                 this.container.style.height = sHeight;
             } else {
-                /*
+                /**
                  * Sadly, the above code doesn't work for Firefox (nor for Chrome, as of Chrome 75 or so), because as
                  * http://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Using_full_screen_mode explains:
                  *
@@ -6762,14 +6766,15 @@ class Time extends Device {
         this.nStepping = 0;
         this.idStepTimeout = this.idAnimationTimeout = 0;
 
-        /*
+        /**
          * I avoid hard-coding the use of requestAnimationFrame() and cancelAnimationFrame() so that
          * we can still use the older setTimeout() and clearTimeout() functions if need be (or want be).
          * However, I've done away with all the old code that used to calculate the optimal setTimeout()
          * delay; in either case, run() is simply called N frames/second, and it's up to calcSpeed() to
          * calculate the appropriate number of cycles to execute per "frame" (nCyclesDepositPerFrame).
          */
-        let sRequestAnimationTimeout = this.findProperty(window, 'requestAnimationFrame'), timeout;
+        let sRequestAnimationTimeout = this.findProperty(window, 'requestAnimationFrame');
+        let timeout;
         if (!sRequestAnimationTimeout) {
             sRequestAnimationTimeout = 'setTimeout';
             timeout = this.msFrameDefault;
@@ -6778,7 +6783,7 @@ class Time extends Device {
         let sCancelAnimationTimeout = this.findProperty(window, 'cancelAnimationFrame') || 'clearTimeout';
         this.cancelAnimationTimeout = window[sCancelAnimationTimeout].bind(window);
 
-        /*
+        /**
          * Assorted bookkeeping variables.  A running machine actually performs one long series of "runs"
          * (aka animation frames), each followed by a yield back to the browser.  And each "run" consists of
          * one or more "bursts"; the size and number of "bursts" depends on how often the machine's timers
@@ -6789,7 +6794,7 @@ class Time extends Device {
         this.nCyclesBurst = 0;          // number of cycles requested for the next "burst"
         this.nCyclesRemain = 0;         // number of cycles remaining in the next "burst"
 
-        /*
+        /**
          * Now that clocking is driven exclusively by animation frames, calcSpeed() calculates how many
          * cycles each animation frame should "deposit" in our cycle bank:
          *
@@ -6805,7 +6810,7 @@ class Time extends Device {
          */
         this.nCyclesDeposited = this.nCyclesDepositPerFrame = 0;
 
-        /*
+        /**
          * Reset speed to the base multiplier and perform an initial calcSpeed().
          */
         this.resetSpeed();
@@ -6955,7 +6960,7 @@ class Time extends Device {
             this.printf(Device.MESSAGE.TIME, "calcSpeed(%d cycles, %5.3fms): %5.3fMhz\n", nCycles, msElapsed, mhz);
             if (msFrame > this.msFrameDefault) {
                 if (this.nTargetMultiplier > 1) {
-                    /*
+                    /**
                      * Alternatively, we could call setSpeed(this.nTargetMultiplier >> 1) at this point, but the
                      * advantages of quietly reduing the target multiplier here are: 1) it will still slow us down,
                      * and 2) allow the next attempt to increase speed via setSpeed() to detect that we didn't
@@ -6964,7 +6969,7 @@ class Time extends Device {
                     this.nTargetMultiplier >>= 1;
                     this.printf(Device.MESSAGE.WARN, "warning: frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
                 }
-                /*
+                /**
                  * If we (potentially) took too long on this last run, we pass that time back as an adjustment,
                  * which runStop() can add to msStartThisRun, thereby reducing the likelihood that the next runStart()
                  * will (potentially) misinterpret the excessive time as browser throttling.
@@ -6974,7 +6979,7 @@ class Time extends Device {
         }
         this.mhzCurrent = mhz;
         this.nCurrentMultiplier = mhz / this.mhzBase;
-        /*
+        /**
          * If we're running twice as fast as the base speed (say, 4Mhz instead of 2Mhz), then the current multiplier
          * will be 2; similarly, if we're running at half the base speed (say, 1Mhz instead of 2Mhz), the current
          * multiplier will be 0.5.  And if all we needed to do was converge on the base speed, we would simply divide
@@ -7271,7 +7276,7 @@ class Time extends Device {
     onPower(on)
     {
         this.fPowered = on;
-        /*
+        /**
          * This is also a good time to get access to the Debugger, if any, and add our dump extensions.
          */
         if (this.dbg === undefined) {
@@ -7403,7 +7408,7 @@ class Time extends Device {
         try {
             this.fYield = false;
             do {
-                /*
+                /**
                  * Execute a normal burst and then update all timers.
                  */
                 this.notifyTimers(this.endBurst(this.doBurst(this.getCyclesPerRun())));
@@ -7424,7 +7429,7 @@ class Time extends Device {
     runStart(t)
     {
         let msStartThisRun = Date.now();
-        /*
+        /**
          * If there was no interruption between the last run and this run (ie, msEndRun wasn't zeroed by
          * intervening setSpeed() or stop()/start() calls), and there was an unusual delay between the two
          * runs, then we assume that "browser throttling" is occurring due to visibility or redraw issues
@@ -7435,7 +7440,7 @@ class Time extends Device {
          * so we must try to estimate and incorporate that delay into our overall run time.
          */
         if (this.msEndRun) {
-            /*
+            /**
              * In a perfect world, the difference between the start of this run and the start of the last run
              * (which is still in this.msStartThisRun since we haven't updated it yet) would be msFrameDefault;
              * if it's more than twice that, we assume the browser is either throttling us or is simply too
@@ -7482,7 +7487,7 @@ class Time extends Device {
     setSpeed(nMultiplier)
     {
         if (nMultiplier !== undefined) {
-            /*
+            /**
              * If the multiplier is invalid, or we haven't reached 90% of the current target speed,
              * revert to the base multiplier.
              */
@@ -7512,7 +7517,7 @@ class Time extends Device {
      */
     setSpeedThrottle()
     {
-        /*
+        /**
          * We're not going to assume any direct relationship between the slider's min/max/value
          * and our own nCyclesMinimum/nCyclesMaximum/nCyclesPerSecond.  We're just going to calculate
          * a new target nCyclesPerSecond that is proportional, and then convert that to a speed multiplier.
@@ -7548,7 +7553,7 @@ class Time extends Device {
             let timer = this.aTimers[iTimer-1];
             if (fReset || timer.nCyclesLeft < 0) {
                 nCycles = this.getCyclesPerMS(ms);
-                /*
+                /**
                  * If we're currently executing a burst of cycles, the number of cycles executed in the burst
                  * so far must NOT be charged against the cycle timeout we're about to set.  The simplest way to
                  * resolve that is to immediately call endBurst() and bias the cycle timeout by the number of
@@ -7596,7 +7601,7 @@ class Time extends Device {
                 this.nStepping = nRepeat;
             }
             if (this.nStepping) {
-                /*
+                /**
                  * Execute a minimum-cycle burst and then update all timers.
                  */
                 this.nStepping--;
@@ -7742,6 +7747,10 @@ let BusConfig;
  * @property {number} blockLimit
  * @property {number} dataWidth
  * @property {number} dataLimit
+ * @property {number} pairWidth
+ * @property {number} pairLimit
+ * @property {number} quadWidth
+ * @property {number} quadLimit
  * @property {boolean} littleEndian
  * @property {Array.<Memory>} blocks
  * @property {number} nTraps (number of blocks currently being trapped)
@@ -7772,7 +7781,7 @@ class Bus extends Device {
     constructor(idMachine, idDevice, config)
     {
         super(idMachine, idDevice, config);
-        /*
+        /**
          * Our default type is DYNAMIC for the sake of older device configs (eg, TI-57)
          * which didn't specify a type and need a dynamic bus to ensure that their LED ROM array
          * (if any) gets updated on ROM accesses.
@@ -7792,6 +7801,10 @@ class Bus extends Device {
         this.blockLimit = (1 << this.blockShift) - 1;
         this.dataWidth = this.config['dataWidth'] || 8;
         this.dataLimit = Math.pow(2, this.dataWidth) - 1;
+        this.pairWidth = this.dataWidth << 1;
+        this.pairLimit = Math.pow(2, this.pairWidth) - 1;
+        this.quadWidth = this.dataWidth << 2;
+        this.quadLimit = Math.pow(2, this.quadWidth) - 1;
         this.littleEndian = this.config['littleEndian'] !== false;
         this.blocks = new Array(this.blockTotal);
         this.nTraps = 0;
@@ -7832,7 +7845,7 @@ class Bus extends Device {
             let sizeBlock = this.blockSize - (addrNext - addrBlock);
             if (sizeBlock > sizeLeft) sizeBlock = sizeLeft;
             let blockExisting = this.blocks[iBlock];
-            /*
+            /**
              * If addrNext does not equal addrBlock, or sizeBlock does not equal this.blockSize, then either
              * the current block doesn't start on a block boundary or the size is something other than a block;
              * while we might support such requests down the road, that is currently a configuration error.
@@ -7841,21 +7854,21 @@ class Bus extends Device {
 
                 return false;
             }
-            /*
+            /**
              * Make sure that no block exists at the specified address, or if so, make sure its type is NONE.
              */
             if (blockExisting && blockExisting.type != Memory.TYPE.NONE) {
 
                 return false;
             }
-            /*
+            /**
              * When no block is provided, we must allocate one that matches the specified type (and remaining size).
              */
             let idBlock = this.idDevice + '[' + this.toBase(addrNext, 16, this.addrWidth) + ']';
             if (!block) {
                 blockNew = new Memory(this.idMachine, idBlock, {type, addr: addrNext, size: sizeBlock, "bus": this.idDevice});
             } else {
-                /*
+                /**
                  * When a block is provided, make sure its size matches the default Bus block size, and use it if so.
                  */
                 if (block.size == this.blockSize) {
@@ -7981,7 +7994,7 @@ class Bus extends Device {
     {
         this.fFault = true;
         if (!this.nDisableFaults) {
-            /*
+            /**
              * We must call the Debugger's printf() instead of our own in order to use its custom formatters (eg, %n).
              */
             if (this.dbg) {
@@ -8061,7 +8074,7 @@ class Bus extends Device {
      */
     onReset()
     {
-        /*
+        /**
          * The following logic isn't needed because Memory and Port objects are Devices as well,
          * so their onReset() handlers will be invoked automatically.
          *
@@ -8212,6 +8225,25 @@ class Bus extends Device {
     }
 
     /**
+     * readValueQuadBE(addr)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readValueQuadBE(addr)
+    {
+
+        if (addr & 0x3) {
+            return this.readPair((addr + 2) & this.addrLimit) | (this.readPair(addr) << this.pairWidth);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
+    }
+
+    /**
      * readValuePairLE(addr)
      *
      * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
@@ -8231,6 +8263,25 @@ class Bus extends Device {
     }
 
     /**
+     * readValueQuadLE(addr)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readValueQuadLE(addr)
+    {
+
+        if (addr & 0x3) {
+            return this.readPair(addr) | (this.readPair((addr + 2) & this.addrLimit) << this.pairWidth);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
+    }
+
+    /**
      * readDynamicPair(addr)
      *
      * Unlike the readValuePairLE()/readValuePairBE() interfaces, we pass any offset -- even or odd -- directly to the block's
@@ -8247,6 +8298,25 @@ class Bus extends Device {
             return this.littleEndian? this.readValuePairLE(addr) : this.readValuePairBE(addr);
         }
         return this.blocks[addr >>> this.blockShift].readPair(addr & this.blockLimit);
+    }
+
+    /**
+     * readDynamicQuad(addr)
+     *
+     * Unlike the readValueQuadLE()/readValueQuadBE() interfaces, we pass any offset -- even or odd -- directly to the block's
+     * readQuad() interface.  Our only special concern here is whether the request straddles two blocks.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readDynamicQuad(addr)
+    {
+
+        if ((addr & this.blockLimit) + 3 > this.blockLimit) {
+            return this.littleEndian? this.readValueQuadLE(addr) : this.readValueQuadBE(addr);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
     }
 
     /**
@@ -8271,6 +8341,27 @@ class Bus extends Device {
     }
 
     /**
+     * writeValueQuadBE(addr, value)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeValueQuadBE(addr, value)
+    {
+
+        if (addr & 0x3) {
+            this.writePair(addr, value >> this.pairWidth);
+            this.writePair((addr + 2) & this.addrLimit, value & this.pairLimit);
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
+    }
+
+    /**
      * writeValuePairLE(addr, value)
      *
      * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
@@ -8289,6 +8380,27 @@ class Bus extends Device {
             return;
         }
         this.blocks[addr >>> this.blockShift].writePair(addr & this.blockLimit, value);
+    }
+
+    /**
+     * writeValueQuadLE(addr, value)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeValueQuadLE(addr, value)
+    {
+
+        if (addr & 0x3) {
+            this.writePair(addr, value & this.pairLimit);
+            this.writeData((addr + 2) & this.addrLimit, value >> this.pairWidth);
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
     }
 
     /**
@@ -8316,6 +8428,30 @@ class Bus extends Device {
     }
 
     /**
+     * writeDynamicQuad(addr, value)
+     *
+     * Unlike the writeValueQuadLE()/writeValueQuadBE() interfaces, we pass any offset -- even or odd -- directly to the block's
+     * writeDynamicQuad() interface.  Our only special concern here is whether the request straddles two blocks.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeDynamicQuad(addr, value)
+    {
+
+        if ((addr & this.blockLimit) + 3 > this.blockLimit) {
+            if (this.littleEndian) {
+                this.writeValueQuadLE(addr, value);
+            } else {
+                this.writeValueQuadBE(addr, value);
+            }
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
+    }
+
+    /**
      * selectInterface(n)
      *
      * @this {Bus}
@@ -8331,14 +8467,20 @@ class Bus extends Device {
             this.writeData = this.writeValue;
             if (this.type == Bus.TYPE.DYNAMIC) {
                 this.readPair = this.readDynamicPair;
+                this.readQuad = this.readDynamicQuad;
                 this.writePair = this.writeDynamicPair;
+                this.writeQuad = this.writeDynamicQuad;
             }
             else if (!this.littleEndian) {
                 this.readPair = this.readValuePairBE;
+                this.readQuad = this.readValueQuadBE;
                 this.writePair = this.writeValuePairBE;
+                this.writeQuad = this.writeValueQuadBE;
             } else {
                 this.readPair = this.readValuePairLE;
+                this.readQuad = this.readValueQuadLE;
                 this.writePair = this.writeValuePairLE;
+                this.writeQuad = this.writeValueQuadLE;
             }
         }
     }
@@ -8415,7 +8557,7 @@ class Bus extends Device {
     }
 }
 
-/*
+/**
  * A "dynamic" bus (eg, an I/O bus) is one where block accesses must always be performed via function (no direct
  * value access) because there's "logic" on the other end, whereas a "static" bus can be accessed either way, via
  * function or value.
@@ -8450,7 +8592,10 @@ let MemoryConfig;
  * @property {Bus} bus
  * @property {number} dataWidth
  * @property {number} dataLimit
+ * @property {number} pairWidth
  * @property {number} pairLimit
+ * @property {number} quadWidth
+ * @property {number} quadLimit
  * @property {boolean} littleEndian
  * @property {ArrayBuffer|null} buffer
  * @property {DataView|null} dataView
@@ -8464,6 +8609,8 @@ let MemoryConfig;
  * @property {function(number,number)|null} writeDataOrig
  * @property {function(number)|null} readPairOrig
  * @property {function(number,number)|null} writePairOrig
+ * @property {function(number)|null} readQuadOrig
+ * @property {function(number,number)|null} writeQuadOrig
  * @property {function((number|undefined),number,number)|null} readTrap
  * @property {function((number|undefined),number,number)|null} writeTrap
  */
@@ -8484,7 +8631,7 @@ class Memory extends Device {
         this.size = this.config['size'];
         this.type = this.config['type'] || Memory.TYPE.NONE;
 
-        /*
+        /**
          * If no Bus ID was provided, then we fallback to the default Bus.
          */
         let idBus = this.config['bus'];
@@ -8493,7 +8640,10 @@ class Memory extends Device {
 
         this.dataWidth = this.bus.dataWidth;
         this.dataLimit = Math.pow(2, this.dataWidth) - 1;
-        this.pairLimit = Math.pow(2, this.dataWidth * 2) - 1;
+        this.pairWidth = this.dataWidth << 1;
+        this.pairLimit = Math.pow(2, this.pairWidth) - 1;
+        this.quadWidth = this.dataWidth << 2;
+        this.quadLimit = Math.pow(2, this.quadWidth) - 1;
 
         this.fDirty = this.fUseArrayBuffer = false;
         this.littleEndian = this.bus.littleEndian !== false;
@@ -8504,14 +8654,19 @@ class Memory extends Device {
         let writeValue = this.writeValue;
         let readPair = this.littleEndian? this.readDynamicPairLE : this.readDynamicPairBE;
         let writePair = this.littleEndian? this.writeDynamicPairLE : this.writeDynamicPairBE;
+        let readQuad = this.littleEndian? this.readDynamicQuadLE : this.readDynamicQuadBE;
+        let writeQuad = this.littleEndian? this.writeDynamicQuadLE : this.writeDynamicQuadBE;
 
         if (this.bus.type == Bus.TYPE.STATIC) {
             writeValue = this.writeValueDirty;
             readPair = this.littleEndian? this.readValuePairLE : this.readValuePairBE;
+            readQuad = this.littleEndian? this.readValueQuadLE : this.readValueQuadBE;
             writePair = this.writeValuePairDirty;
+            writeQuad = this.writeValueQuadDirty;
             if (this.dataWidth == 8 && this.getMachineConfig('ArrayBuffer') !== false) {
                 this.fUseArrayBuffer = true;
                 readPair = this.littleEndian == Memory.LITTLE_ENDIAN? this.readValuePair16 : this.readValuePair16SE;
+                readQuad = this.littleEndian == Memory.LITTLE_ENDIAN? this.readValueQuad32 : this.readValueQuad32SE;
             }
         }
 
@@ -8521,31 +8676,38 @@ class Memory extends Device {
             this.writeData = this.writeNone;
             this.readPair = this.readNonePair;
             this.writePair = this.writeNonePair;
+            this.readQuad = this.readNoneQuad;
+            this.writeQuad = this.writeNoneQuad;
             break;
         case Memory.TYPE.READONLY:
             this.readData = readValue;
             this.writeData = this.writeNone;
             this.readPair = readPair;
             this.writePair = this.writeNone;
+            this.readQuad = readQuad;
+            this.writeQuad = this.writeNone;
             break;
         case Memory.TYPE.READWRITE:
             this.readData = readValue;
             this.writeData = writeValue;
             this.readPair = readPair;
             this.writePair = writePair;
+            this.readQuad = readQuad;
+            this.writeQuad = writeQuad;
             break;
         default:
 
             break;
         }
 
-        /*
+        /**
          * Additional block properties used for trapping reads/writes
          */
         this.nReadTraps = this.nWriteTraps = 0;
         this.readTrap = this.writeTrap = null;
         this.readDataOrig = this.writeDataOrig = null;
         this.readPairOrig = this.writePairOrig = null;
+        this.readQuadOrig = this.writeQuadOrig = null;
 
         this.getValues(this.config['values']);
         this.initValues();
@@ -8595,7 +8757,7 @@ class Memory extends Device {
             if (this.fUseArrayBuffer) {
                 this.buffer = new ArrayBuffer(this.size);
                 this.dataView = new DataView(this.buffer, 0, this.size);
-                /*
+                /**
                  * If littleEndian is true, we can use valuePairs[] and valueQuads[] directly; well, we can use
                  * them whenever the offset is a multiple of 1, 2 or 4, respectively.  Otherwise, we must fallback
                  * to dv.getUint8()/dv.setUint8(), dv.getUint16()/dv.setUint16() and dv.getInt32()/dv.setInt32().
@@ -8605,7 +8767,7 @@ class Memory extends Device {
                 this.valueQuads = new Int32Array(this.buffer, 0, this.size >> 2);
             }
             else {
-                /*
+                /**
                  * TODO: I used to call fill(this.dataLimit), but is there really any reason to do that?
                  */
                 this.values = new Array(this.size).fill(0);
@@ -8662,9 +8824,11 @@ class Memory extends Device {
                 if (!this.nWriteTraps) {
                     this.writeData = this.writeValueDirty;
                     this.writePair = this.writeValuePairDirty;
+                    this.writeQuad = this.writeValueQuadDirty;
                 } else {
                     this.writeDataOrig = this.writeValueDirty;
                     this.writePairOrig = this.writeValuePairDirty;
+                    this.writeQuadOrig = this.writeValueQuadDirty;
                 }
             }
             return true;
@@ -8699,6 +8863,22 @@ class Memory extends Device {
             return this.readNone(offset + 1) | (this.readNone(offset) << this.dataWidth);
         }
     }
+
+    /**
+     * readNoneQuad(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @returns {number}
+     */
+     readNoneQuad(offset)
+     {
+         if (this.littleEndian) {
+             return this.readNonePair(offset) | (this.readNonePair(offset + 2) << this.pairWidth);
+         } else {
+             return this.readNonePair(offset + 2) | (this.readNonePair(offset) << this.pairWidth);
+         }
+     }
 
     /**
      * readDirect(offset)
@@ -8742,6 +8922,18 @@ class Memory extends Device {
     }
 
     /**
+     * readValueQuadBE(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @returns {number}
+     */
+    readValueQuadBE(offset)
+    {
+         return this.readValuePairBE(offset + 2) | (this.readValuePairBE(offset) << this.pairWidth);
+    }
+
+    /**
      * readValuePairLE(offset)
      *
      * @this {Memory}
@@ -8754,6 +8946,18 @@ class Memory extends Device {
     }
 
     /**
+     * readValueQuadLE(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @returns {number}
+     */
+    readValueQuadLE(offset)
+    {
+         return this.readValuePairLE(offset) | (this.readValuePairLE(offset + 2) << this.pairWidth);
+    }
+
+    /**
      * readValuePair16(offset)
      *
      * @this {Memory}
@@ -8763,6 +8967,18 @@ class Memory extends Device {
     readValuePair16(offset)
     {
         return this.valuePairs[offset >>> 1];
+    }
+
+    /**
+     * readValueQuad32(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-4 block offset)
+     * @returns {number}
+     */
+    readValueQuad32(offset)
+    {
+         return this.valueQuads[offset >>> 2];
     }
 
     /**
@@ -8782,9 +8998,25 @@ class Memory extends Device {
     }
 
     /**
+     * readValueQuad32SE(offset)
+     *
+     * This function is neither big-endian (BE) or little-endian (LE), but rather "swap-endian" (SE), which
+     * means there's a mismatch between our emulated machine and the host machine, so we call the appropriate
+     * DataView function with the desired littleEndian setting.
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @returns {number}
+     */
+    readValueQuad32SE(offset)
+    {
+        return this.dataView.getInt32(offset, this.littleEndian);
+    }
+
+    /**
      * readDynamicPairBE(offset)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -8797,9 +9029,24 @@ class Memory extends Device {
     }
 
     /**
+     * readDynamicQuadBE(offset)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @returns {number}
+     */
+    readDynamicQuadBE(offset)
+    {
+
+        return this.readPair(offset + 2) | (this.readPair(offset) << this.pairWidth);
+    }
+
+    /**
      * readDynamicPairLE(offset)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -8809,6 +9056,21 @@ class Memory extends Device {
     {
 
         return this.readValue(offset) | (this.readValue(offset + 1) << this.dataWidth);
+    }
+
+    /**
+     * readDynamicPairLE(offset)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @returns {number}
+     */
+    readDynamicQuadLE(offset)
+    {
+
+        return this.readPair(offset) | (this.readPair(offset + 2) << this.pairWidth);
     }
 
     /**
@@ -8839,6 +9101,24 @@ class Memory extends Device {
             this.writeNone(offset + 1, value & this.dataLimit);
         }
     }
+
+    /**
+     * writeNoneQuad(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @param {number} value
+     */
+     writeNoneQuad(offset, value)
+     {
+         if (this.littleEndian) {
+             this.writeNonePair(offset, value & this.pairLimit);
+             this.writeNonePair(offset + 2, value >> this.pairWidth);
+         } else {
+             this.writeNonePair(offset, value >> this.pairWidth);
+             this.writeNonePair(offset + 2, value & this.pairLimit);
+         }
+     }
 
     /**
      * writeDirect(offset, value)
@@ -8902,6 +9182,20 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuadBE(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuadBE(offset, value)
+    {
+
+        this.writeValuePairBE(offset, value >> this.pairWidth);
+        this.writeValuePairBE(offset + 2, value & this.pairLimit);
+    }
+
+    /**
      * writeValuePairLE(offset, value)
      *
      * @this {Memory}
@@ -8916,6 +9210,20 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuadLE(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuadLE(offset, value)
+    {
+
+        this.writeValuePairLE(offset, value & this.pairLimit);
+        this.writeValuePairLE(offset + 2, value >> this.pairWidth);
+    }
+
+    /**
      * writeValuePair16(offset, value)
      *
      * @this {Memory}
@@ -8927,6 +9235,20 @@ class Memory extends Device {
         let off = offset >>> 1;
 
         this.valuePairs[off] = value;
+    }
+
+    /**
+     * writeValueQuad32(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuad32(offset, value)
+    {
+        let off = offset >>> 2;
+
+        this.valueQuads[off] = value;
     }
 
     /**
@@ -8947,9 +9269,26 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuad32SE(offset, value)
+     *
+     * This function is neither big-endian (BE) or little-endian (LE), but rather "swap-endian" (SE), which
+     * means there's a mismatch between our emulated machine and the host machine, so we call the appropriate
+     * DataView function with the desired littleEndian setting.
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuad32SE(offset, value)
+    {
+
+        this.dataView.setInt32(offset, value, this.littleEndian);
+    }
+
+    /**
      * writeDynamicPairBE(offset, value)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -8963,9 +9302,25 @@ class Memory extends Device {
     }
 
     /**
+     * writeDynamicQuadBE(offset, value)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @param {number} value
+     */
+    writeDynamicQuadBE(offset, value)
+    {
+
+        this.writePair(offset, value >> this.pairWidth);
+        this.writePair(offset + 2, value & this.pairLimit);
+    }
+
+    /**
      * writeDynamicPairLE(offset, value)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -8979,10 +9334,26 @@ class Memory extends Device {
     }
 
     /**
+     * writeDynamicQuadLE(offset, value)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @param {number} value
+     */
+    writeDynamicQuadLE(offset, value)
+    {
+
+        this.writePair(offset, value & this.pairLimit);
+        this.writePair(offset + 2, value >> this.pairWidth);
+    }
+
+    /**
      * writeValuePairDirty(offset, value)
      *
      * @this {Memory}
-     * @param {number} offset (must be an even block offset, because we will halve it to obtain a pair offset)
+     * @param {number} offset (must be an even block offset)
      * @param {number} value
      */
     writeValuePairDirty(offset, value)
@@ -9023,6 +9394,50 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuadDirty(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four offset)
+     * @param {number} value
+     */
+     writeValueQuadDirty(offset, value)
+     {
+         if (!this.buffer) {
+             if (this.littleEndian) {
+                 this.writeValueQuadLE(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuadLE;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuadLE;
+                 }
+             } else {
+                 this.writeValueQuadBE(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuadBE;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuadBE;
+                 }
+             }
+         } else {
+             if (this.littleEndian == Memory.LITTLE_ENDIAN) {
+                 this.writeValueQuad32(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuad32;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuad32;
+                 }
+             } else {
+                 this.writeValueQuad32SE(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuad32SE;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuad32SE;
+                 }
+             }
+         }
+     }
+
+    /**
      * trapRead(func)
      *
      * I've decided to call the trap handler AFTER reading the value, so that we can pass the value
@@ -9043,6 +9458,7 @@ class Memory extends Device {
             this.readTrap = func;
             this.readDataOrig = this.readData;
             this.readPairOrig = this.readPair;
+            this.readQuadOrig = this.readQuad;
             this.readData = function readDataTrap(offset) {
                 let value = block.readDataOrig(offset);
                 block.readTrap(block.addr, offset, value);
@@ -9052,6 +9468,14 @@ class Memory extends Device {
                 let value = block.readPairOrig(offset);
                 block.readTrap(block.addr, offset, value);
                 block.readTrap(block.addr, offset + 1, value);
+                return value;
+            };
+            this.readQuad = function readQuadTrap(offset) {
+                let value = block.readQuadOrig(offset);
+                block.readTrap(block.addr, offset, value);
+                block.readTrap(block.addr, offset + 1, value);
+                block.readTrap(block.addr, offset + 2, value);
+                block.readTrap(block.addr, offset + 3, value);
                 return value;
             };
             return true;
@@ -9081,6 +9505,7 @@ class Memory extends Device {
             this.writeTrap = func;
             this.writeDataOrig = this.writeData;
             this.writePairOrig = this.writePair;
+            this.writeQuadOrig = this.writeQuad;
             this.writeData = function writeDataTrap(offset, value) {
                 block.writeTrap(block.addr, offset, value);
                 block.writeDataOrig(offset, value);
@@ -9089,6 +9514,13 @@ class Memory extends Device {
                 block.writeTrap(block.addr, offset, value);
                 block.writeTrap(block.addr, offset + 1, value);
                 block.writePairOrig(offset, value);
+            };
+            this.writeQuad = function writeQuadTrap(offset, value) {
+                block.writeTrap(block.addr, offset, value);
+                block.writeTrap(block.addr, offset + 1, value);
+                block.writeTrap(block.addr, offset + 2, value);
+                block.writeTrap(block.addr, offset + 3, value);
+                block.writeQuadOrig(offset, value);
             };
             return true;
         }
@@ -9112,7 +9544,8 @@ class Memory extends Device {
             if (!--this.nReadTraps) {
                 this.readData = this.readDataOrig;
                 this.readPair = this.readPairOrig;
-                this.readDataOrig = this.readPairOrig = this.readTrap = null;
+                this.readQuad = this.readQuadOrig;
+                this.readDataOrig = this.readPairOrig = this.readQuadOrig = this.readTrap = null;
             }
 
             return true;
@@ -9133,7 +9566,8 @@ class Memory extends Device {
             if (!--this.nWriteTraps) {
                 this.writeData = this.writeDataOrig;
                 this.writePair = this.writePairOrig;
-                this.writeDataOrig = this.writePairOrig = this.writeTrap = null;
+                this.writeQuad = this.writeQuadOrig;
+                this.writeDataOrig = this.writePairOrig = this.writeQuadOrig = this.writeTrap = null;
             }
 
             return true;
@@ -9180,7 +9614,7 @@ class Memory extends Device {
     }
 }
 
-/*
+/**
  * Memory block types use discrete bits so that enumBlocks() can be passed a set of combined types,
  * by OR'ing the desired types together.
  */
@@ -9188,7 +9622,7 @@ Memory.TYPE = {
     NONE:               0x01,
     READONLY:           0x02,
     READWRITE:          0x04,
-    /*
+    /**
      * The rest are not discrete memory types, but rather sets of types that are handy for enumBlocks().
      */
     READABLE:           0x0E,
@@ -9196,203 +9630,6 @@ Memory.TYPE = {
 };
 
 Memory.CLASSES["Memory"] = Memory;
-
-/**
- * @copyright https://www.pcjs.org/modules/ports.js (C) 2012-2021 Jeff Parsons
- */
-
-/** @typedef {{ addr: (number|undefined), size: number }} */
-let PortsConfig;
-
-/**
- * @class {Ports}
- * @unrestricted
- * @property {PortsConfig} config
- * @property {number} addr
- * @property {number} size
- * @property {number} type
- * @property {Array.<function(number)>} aInData
- * @property {Array.<function(number,number)>} aOutData
- * @property {Array.<function(number,boolean)>} aInPair
- * @property {Array.<function(number,number)>} aOutPair
- */
-class Ports extends Memory {
-    /**
-     * Ports(idMachine, idDevice, config)
-     *
-     * @this {Ports}
-     * @param {string} idMachine
-     * @param {string} idDevice
-     * @param {PortsConfig} [config]
-     */
-    constructor(idMachine, idDevice, config)
-    {
-        super(idMachine, idDevice, config);
-        this.aInData = [];
-        this.aOutData = [];
-        this.aInPair = [];
-        this.aOutPair = [];
-        /*
-         * Some machines instantiate a Ports device through their configuration, which must include an 'addr';
-         * it's also possible that a device may dynamically allocate a Ports device and add it to the Bus itself
-         * (eg, the PDP11 IOPage).
-         */
-        if (this.config['addr'] != undefined) {
-            this.bus.addBlocks(this.config['addr'], this.config['size'], Memory.TYPE.NONE, this);
-        }
-    }
-
-    /**
-     * addIOHandlers(device, portLo, portHi, inData, outData, inPair, outPair)
-     *
-     * @this {Ports}
-     * @param {Device} device
-     * @param {number} portLo
-     * @param {number} portHi
-     * @param {function(number)|null} [inData]
-     * @param {function(number,number)|null} [outData]
-     * @param {function(number,boolean)|null} [inPair]
-     * @param {function(number,number)|null} [outPair]
-     */
-    addIOHandlers(device, portLo, portHi, inData, outData, inPair, outPair)
-    {
-        let port, success;
-        for (port = portLo; port <= portHi; port++) {
-            success = false;
-            if (inData) {
-                if (this.aInData[port]) break;
-                this.aInData[port] = inData.bind(device);
-            }
-            if (outData) {
-                if (this.aOutData[port]) break;
-                this.aOutData[port] = outData.bind(device);
-            }
-            if (inPair) {
-                if (this.aInPair[port]) break;
-                this.aInPair[port] = inPair.bind(device);
-            }
-            if (outPair) {
-                if (this.aOutPair[port]) break;
-                this.aOutPair[port] = outPair.bind(device);
-            }
-            success = true;
-        }
-        if (!success) {
-            throw new Error(this.sprintf("handler for port %#0x already exists", port));
-        }
-    }
-
-    /**
-     * addIOTable(device, table, portBase)
-     *
-     * @this {Ports}
-     * @param {Device} device
-     * @param {Object} table
-     * @param {number} [portBase]
-     */
-    addIOTable(device, table, portBase = 0)
-    {
-        for (let port in table) {
-            let handlers = table[port];
-            this.addIOHandlers(device, +port + portBase, +port + portBase, handlers[0], handlers[1], handlers[2], handlers[3]);
-        }
-    }
-
-    /**
-     * readNone(offset)
-     *
-     * This overrides the default readNone() function, which is the default handler for all I/O ports.
-     *
-     * @this {Ports}
-     * @param {number} offset
-     * @returns {number}
-     */
-    readNone(offset)
-    {
-        let func, port = this.addr + offset, value, read;
-        if ((func = this.aInData[port])) {
-            value = func(port);
-            read = true;
-        }
-        else if ((func = this.aInPair[port])) {
-            if (!(port & 0x1)) {
-                value = func(port) & this.dataLimit;
-                read = true;
-            } else {
-                value = func(port & ~0x1) >> this.dataWidth;
-                read = true;
-            }
-        }
-        else if (port & 0x1) {
-            port &= ~0x1;
-            if ((func = this.aInPair[port])) {
-                value = func(port) >> this.dataWidth;
-                read = true;
-            }
-            else if ((func = this.aInData[port])) {
-                value = func(port);
-                read = true;
-            }
-        }
-        if (!read) {
-            this.bus.fault(port, 0);
-            this.printf(Memory.MESSAGE.PORTS + Memory.MESSAGE.MISC, "readNone(%#04x): unknown port\n", port);
-            value = super.readNone(offset);
-        }
-        return value;
-    }
-
-    /**
-     * writeNone(offset, value)
-     *
-     * This overrides the default writeNone() function, which is the default handler for all I/O ports.
-     *
-     * @this {Ports}
-     * @param {number} offset
-     * @param {number} value
-     */
-    writeNone(offset, value)
-    {
-        let func, port = this.addr + offset, written;
-        if ((func = this.aOutData[port])) {
-            func(port, value);
-            written = true;
-        }
-        else if ((func = this.aOutPair[port])) {
-            /*
-             * If an outPair() handler exists, call the inPair() handler first to get the original data
-             * (with preWrite set to true) and call outPair() with the new data inserted into the original data.
-             */
-            let data = this.aInPair[port]? this.aInPair[port](port, true) : 0;
-            if (!(port & 0x1)) {
-                func(port, (data & ~this.dataLimit) | value);
-                written = true;
-            } else {
-                func(port, (data & this.dataLimit) | (value << this.dataWidth));
-                written = true;
-            }
-        }
-        else if (port & 0x1) {
-            port &= ~0x1;
-            if ((func = this.aOutPair[port])) {
-                let data = this.aInPair[port]? this.aInPair[port](port, true) : 0;
-                func(port, (data & this.dataLimit) | (value << this.dataWidth));
-                written = true;
-            }
-            else if ((func = this.aOutData[port])) {
-                func(port, value);
-                written = true;
-            }
-        }
-        if (!written) {
-            this.bus.fault(port, 1);
-            this.printf(Memory.MESSAGE.PORTS + Memory.MESSAGE.MISC, "writeNone(%#04x,%#04x): unknown port\n", port, value);
-            super.writeNone(offset, value);
-        }
-    }
-}
-
-Ports.CLASSES["Ports"] = Ports;
 
 /**
  * @copyright https://www.pcjs.org/modules/ram.js (C) 2012-2021 Jeff Parsons
@@ -9489,7 +9726,7 @@ class ROM extends Memory {
         this.bus.addBlocks(this.config['addr'], this.config['size'], this.config['type'], this);
         this.whenReady(this.onReset.bind(this));
 
-        /*
+        /**
          * If an "array" binding has been supplied, then create an LED array sufficiently large to represent the
          * entire ROM.  If data.length is an odd power-of-two, then we will favor a slightly wider array over a taller
          * one, by virtue of using Math.ceil() instead of Math.floor() for the columns calculation.
@@ -9583,7 +9820,7 @@ class ROM extends Memory {
                 success = false;
             }
         }
-        /*
+        /**
          * Version 1.21 and up also saves the ROM contents, since our "mini-debugger" has been updated
          * with an edit command ("e") to enable ROM patching.  However, we prefer to detect improvements
          * in saved state based on the length of the array, not the version number.
@@ -9611,13 +9848,13 @@ class ROM extends Memory {
      */
     onPower(on)
     {
-        /*
+        /**
          * We only care about the first power event, because it's a safe opportunity to find the CPU.
          */
         if (this.cpu === undefined) {
             this.cpu = /** @type {CPU} */ (this.findDeviceByClass("CPU"));
         }
-        /*
+        /**
          * This is also a good time to get access to the Debugger, if any, and pass it symbol information, if any.
          */
         if (this.dbg === undefined) {
@@ -9669,13 +9906,18 @@ ROM.CLASSES["ROM"] = ROM;
  * @copyright https://www.pcjs.org/modules/cpu.js (C) 2012-2021 Jeff Parsons
  */
 
+/** @typedef {{ addrReset: number }} */
+let CPUConfig;
+
 /**
  * @class {CPU}
  * @unrestricted
  * @property {Time} time
  * @property {Debugger} dbg
+ * @property {number} addrReset
  * @property {number} nCyclesStart
  * @property {number} nCyclesRemain
+ * @property {number} nCyclesSnapped
  * @property {number} regPC
  * @property {number} regPCLast
  */
@@ -9686,21 +9928,21 @@ class CPU extends Device {
      * @this {CPU}
      * @param {string} idMachine
      * @param {string} idDevice
-     * @param {Config} [config]
+     * @property {CPUConfig} config
      */
     constructor(idMachine, idDevice, config)
     {
         config['class'] = "CPU";
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * If a Debugger is loaded, it will call connectDebugger().  Having access to the Debugger
          * allows our toString() function to include the instruction, via toInstruction(), and conversely,
          * the Debugger will enjoy access to all our defined register names.
          */
         this.dbg = undefined;
 
-        /*
+        /**
          * regPC is the CPU's program counter, which all CPUs are required to have.
          *
          * regPCLast is an internal register that snapshots the PC at the start of every instruction;
@@ -9708,15 +9950,16 @@ class CPU extends Device {
          * diagnostic/debugging purposes.
          */
         this.regPC = this.regPCLast = 0;
+        this.addrReset = this.config['addrReset'] || 0;
 
-        /*
+        /**
          * Get access to the Time device, so we can give it our clock and update functions.
          */
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.time.addClock(this);
         this.time.addUpdate(this);
 
-        /*
+        /**
          * nCyclesStart and nCyclesRemain are initialized on every startClock() invocation.
          * The number of cycles executed during the current burst is nCyclesStart - nCyclesRemain,
          * and the burst is complete when nCyclesRemain has been exhausted (ie, is <= 0).
@@ -9850,7 +10093,7 @@ class Debugger extends Device {
         config['class'] = "Debugger";
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * Default radix (base).  This is used by our own functions (eg, parseExpression()),
          * but not by those we inherited (eg, parseInt()), which still use base 10 by default;
          * however, you can always coerce values to any base in any of those functions with
@@ -9858,24 +10101,24 @@ class Debugger extends Device {
          */
         this.nDefaultRadix = this.config['defaultRadix'] || 16;
 
-        /*
+        /**
          * Default endian (0 = little, 1 = big).
          */
         this.nDefaultEndian = 0;                // TODO: Use it or lose it
 
-        /*
+        /**
          * Default maximum instruction (opcode) length, overridden by the CPU-specific debugger.
          */
         this.maxOpcodeLength = 1;
 
-        /*
+        /**
          * Default parsing parameters, sub-expression and address delimiters.
          */
         this.nASCIIBits = 8;                    // change to 7 for MACRO-10 compatibility
         this.achGroup = ['(',')'];
         this.achAddress = ['[',']'];
 
-        /*
+        /**
          * Add a new format type ('a') that understands Address objects, where width represents
          * the size of the address in bits, and uses the Debugger's default radix.
          *
@@ -9897,7 +10140,7 @@ class Debugger extends Device {
             (type, flags, width, precision, address) => this.toBase(address.off, this.nDefaultRadix, width)
         );
 
-        /*
+        /**
          * Add a new format type ('n') for numbers, where width represents the size of the value in bits,
          * and uses the Debugger's default radix.
          */
@@ -9913,7 +10156,7 @@ class Debugger extends Device {
             (type, flags, width, precision, value) => this.toBase(value, this.nDefaultRadix, width, flags.indexOf('#') < 0? "" : undefined)
         );
 
-        /*
+        /**
          * This controls how we stop the CPU on a break condition.  If fExceptionOnBreak is true, we'll
          * throw an exception, which the CPU will catch and halt; however, the downside of that approach
          * is that, in some cases, it may leave the CPU in an inconsistent state.  It's generally safer to
@@ -9922,18 +10165,18 @@ class Debugger extends Device {
          */
         this.fExceptionOnBreak = false;
 
-        /*
+        /**
          * If greater than zero, decremented on every instruction until it hits zero, then CPU is stopped.
          */
         this.counterBreak = 0;
 
-        /*
+        /**
          * If set to MESSAGE.ALL, then we break on all messages.  It can be set to a subset of message bits,
          * but there is currently no UI for that.
          */
         this.messagesBreak = Device.MESSAGE.NONE;
 
-        /*
+        /**
          * variables is an object with properties that grow as setVariable() assigns more variables;
          * each property corresponds to one variable, where the property name is the variable name (ie,
          * a string beginning with a non-digit, followed by zero or more symbol characters and/or digits)
@@ -9949,25 +10192,25 @@ class Debugger extends Device {
          */
         this.variables = {};
 
-        /*
+        /**
          * Arrays of Symbol objects, one sorted by name and the other sorted by value; see addSymbols().
          */
         this.symbolsByName = [];
         this.symbolsByValue = [];
 
-        /*
+        /**
          * Get access to the CPU, so that in part so we can connect to all its registers; the Debugger has
          * no registers of its own, so we simply replace our registers with the CPU's.
          */
         this.cpu = /** @type {CPU} */ (this.findDeviceByClass("CPU"));
         this.registers = this.cpu.connectDebugger(this);
 
-        /*
+        /**
          * Get access to the Input device, so that we can switch focus whenever we start the machine.
          */
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
 
-        /*
+        /**
          * Get access to the Bus devices, so we have access to the I/O and memory address spaces.
          * To minimize configuration redundancy, we rely on the CPU's configuration to get the Bus device IDs.
          */
@@ -9986,7 +10229,7 @@ class Debugger extends Device {
         this.nDefaultBits = this.busMemory.addrWidth;
         this.addrMask = (Math.pow(2, this.nDefaultBits) - 1)|0;
 
-        /*
+        /**
          * Since we want to be able to clear/disable/enable/list break addresses by index number, we maintain
          * an array (aBreakIndexes) that maps index numbers to address array entries.  The mapping values are
          * a combination of BREAKTYPE (high byte) and break address entry (low byte).
@@ -10012,14 +10255,14 @@ class Debugger extends Device {
         this.tempBreak = null;                  // temporary auto-cleared break address managed by setTemp() and clearTemp()
         this.cInstructions = 0;                 // instruction counter (updated only if history is enabled)
 
-        /*
+        /**
          * Get access to the Time device, so we can stop and start time as needed.
          */
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.time.addUpdate(this);
         this.cTransitions = 0;
 
-        /*
+        /**
          * Initialize additional properties required for our onCommand() handler, including
          * support for dump extensions (which we use ourselves to implement the "d state" command).
          */
@@ -10523,7 +10766,7 @@ class Debugger extends Device {
      */
     evalAND(dst, src)
     {
-        /*
+        /**
          * We AND the low 32 bits separately from the higher bits, and then combine them with addition.
          * Since all bits above 32 will be zero, and since 0 AND 0 is 0, no special masking for the higher
          * bits is required.
@@ -10535,7 +10778,7 @@ class Debugger extends Device {
         if (this.nDefaultBits <= 32) {
             return dst & src;
         }
-        /*
+        /**
          * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
          */
         dst = this.truncate(dst, 0, true);
@@ -10573,7 +10816,7 @@ class Debugger extends Device {
      */
     evalIOR(dst, src)
     {
-        /*
+        /**
          * We OR the low 32 bits separately from the higher bits, and then combine them with addition.
          * Since all bits above 32 will be zero, and since 0 OR 0 is 0, no special masking for the higher
          * bits is required.
@@ -10585,7 +10828,7 @@ class Debugger extends Device {
         if (this.nDefaultBits <= 32) {
             return dst | src;
         }
-        /*
+        /**
          * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
          */
         dst = this.truncate(dst, 0, true);
@@ -10607,7 +10850,7 @@ class Debugger extends Device {
      */
     evalXOR(dst, src)
     {
-        /*
+        /**
          * We XOR the low 32 bits separately from the higher bits, and then combine them with addition.
          * Since all bits above 32 will be zero, and since 0 XOR 0 is 0, no special masking for the higher
          * bits is required.
@@ -10619,7 +10862,7 @@ class Debugger extends Device {
         if (this.nDefaultBits <= 32) {
             return dst ^ src;
         }
-        /*
+        /**
          * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
          */
         dst = this.truncate(dst, 0, true);
@@ -10729,14 +10972,14 @@ class Debugger extends Device {
             case '_':
             case '^_':
                 valNew = val1;
-                /*
+                /**
                  * While we always try to avoid assuming any particular number of bits of precision, the 'B' shift
                  * operator (which we've converted to '^_') is unique to the MACRO-10 environment, which imposes the
                  * following restrictions on the shift count.
                  */
                 if (chOp == '^_') val2 = 35 - (val2 & 0xff);
                 if (val2) {
-                    /*
+                    /**
                      * Since binary shifting is a logical (not arithmetic) operation, and since shifting by division only
                      * works properly with positive numbers, we call truncate() to produce an unsigned value.
                      */
@@ -10818,7 +11061,7 @@ class Debugger extends Device {
                     sOp = (iValue < iLimit? asValues[iValue++] : "");
                 }
                 else {
-                    /*
+                    /**
                      * When parseExpression() calls us, it has collapsed all runs of whitespace into single spaces,
                      * and although it allows single spaces to divide the elements of the expression, a space is neither
                      * a unary nor binary operator.  It's essentially a no-op.  If we encounter it here, then it followed
@@ -10875,7 +11118,7 @@ class Debugger extends Device {
 
             aVals.push(this.truncate(v));
 
-            /*
+            /**
              * When parseExpression() calls us, it has collapsed all runs of whitespace into single spaces,
              * and although it allows single spaces to divide the elements of the expression, a space is neither
              * a unary nor binary operator.  It's essentially a no-op.  If we encounter it here, then it followed
@@ -10904,7 +11147,7 @@ class Debugger extends Device {
             }
             aOps.push(sOp);
 
-            /*
+            /**
              * The MACRO-10 binary shifting operator assumes a base-10 shift count, regardless of the current
              * base, so we must override the current base to ensure the count is parsed correctly.
              */
@@ -11002,7 +11245,7 @@ class Debugger extends Device {
     {
         let value;
         if (expr) {
-            /*
+            /**
              * The default delimiting characters for grouped expressions are braces; they can be changed by altering
              * achGroup, but when that happens, instead of changing our regular expressions and operator tables,
              * we simply replace all achGroup characters with braces in the given expression.
@@ -11016,7 +11259,7 @@ class Debugger extends Device {
                 expr = expr.split(this.achGroup[0]).join('{').split(this.achGroup[1]).join('}');
             }
 
-            /*
+            /**
              * Quoted ASCII characters can have a numeric value, too, which must be converted now, to avoid any
              * conflicts with the operators below.
              *
@@ -11028,7 +11271,7 @@ class Debugger extends Device {
             expr = this.parseASCII(expr, "'", 6);
             if (!expr) return value;
 
-            /*
+            /**
              * All browsers (including, I believe, IE9 and up) support the following idiosyncrasy of a RegExp split():
              * when the RegExp uses a capturing pattern, the resulting array will include entries for all the pattern
              * matches along with the non-matches.  This effectively means that, in the set of expressions that we
@@ -11133,7 +11376,7 @@ class Debugger extends Device {
                 if (value == undefined) {
                     value = this.getVariable(sValue);
                     if (value == undefined) {
-                        /*
+                        /**
                          * A feature of MACRO-10 is that any single-digit number is automatically interpreted as base-10.
                          */
                         value = this.parseInt(sValue, sValue.length > 1 || this.nDefaultRadix > 10? this.nDefaultRadix : 10);
@@ -11558,7 +11801,7 @@ class Debugger extends Device {
         if (n >= 0) this.counterBreak = n;
         result += "instruction break count: " + (this.counterBreak > 0? this.counterBreak : "disabled") + "\n";
         if (n > 0) {
-            /*
+            /**
              * It doesn't hurt to always call enableHistory(), but avoiding the call minimizes unnecessary messages.
              */
             if (!this.historyBuffer.length) result += this.enableHistory(true);
@@ -11744,7 +11987,7 @@ class Debugger extends Device {
     {
         message = this.sprintf(message, ...args);
         if (this.time.isRunning() && this.fExceptionOnBreak) {
-            /*
+            /**
              * We don't print the message in this case, because the CPU's exception handler already
              * does that; it has to be prepared for any kind of exception, not just those that we throw.
              */
@@ -12006,7 +12249,7 @@ class Debugger extends Device {
             this.stopCPU("break on message");
             return;
         }
-        /*
+        /**
          * This is an effort to help keep the browser responsive when lots of messages are being generated.
          */
         this.time.yield();
@@ -12049,7 +12292,7 @@ class Debugger extends Device {
             cmd = this.sDumpPrev || cmd;
         }
 
-        /*
+        /**
          * We refrain from reporting potentially undefined symbols until after we've checked for dump extensions.
          */
         if (cmd[0] != 's' && aUndefined.length) {
@@ -12182,7 +12425,7 @@ class Debugger extends Device {
         case 's':
             enable = this.parseBoolean(option);
             if (cmd[1] == 'h') {
-                /*
+                /**
                  * Don't let the user turn off history if any breaks (which may depend on history) are still set.
                  */
                 if (this.cBreaks || this.counterBreak > 0) {
@@ -12428,7 +12671,7 @@ Debugger.ADDRESS = {
     REAL:       0x00
 };
 
-/*
+/**
  * The required characteristics of these assigned values are as follows: all even values must be read
  * operations and all odd values must be write operations; all busMemory operations must come before all
  * busIO operations; and INPUT must be the first busIO operation.
@@ -12447,7 +12690,7 @@ Debugger.BREAKCMD = {
     [Debugger.BREAKTYPE.OUTPUT]:   "bo"
 };
 
-/*
+/**
  * Predefined "virtual registers" that we expect the CPU to support.
  */
 Debugger.REGISTER = {
@@ -12474,7 +12717,7 @@ Debugger.SYMBOL_TYPES = {
 
 Debugger.HISTORY_LIMIT = 100000;
 
-/*
+/**
  * These are our operator precedence tables.  Operators toward the bottom (with higher values) have
  * higher precedence.  BINOP_PRECEDENCE was our original table; we had to add DECOP_PRECEDENCE because
  * the precedence of operators in DEC's MACRO-10 expressions differ.  Having separate tables also allows
@@ -12546,16 +12789,22 @@ Debugger.DECOP_PRECEDENCE = {
  * @copyright https://www.pcjs.org/modules/cpu68k.js (C) 2012-2021 Jeff Parsons
  */
 
+/* eslint-disable no-labels */
+/* eslint-disable no-extra-label */
+/* eslint-disable sort-imports */
+/* eslint-disable no-duplicate-imports */
+
+
 /**
- * Emulation of 68K CPUs
+ * 68K Emulator
  *
  * @class {CPU68K}
  * @unrestricted
- * @property {Bus} busIO
  * @property {Bus} busMemory
  * @property {Input} input
  */
-class CPU68K extends CPU {
+class CPU68K extends CPU
+{
     /**
      * CPU68K(idMachine, idDevice, config)
      *
@@ -12568,21 +12817,20 @@ class CPU68K extends CPU {
     {
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * Initialize the CPU.
          */
         this.initCPU();
 
-        /*
-         * Get access to the Bus devices, so we have access to the I/O and memory address spaces.
+        /**
+         * Get access to the Bus that provides access to physical memory.
          */
-        this.busIO = /** @type {Bus} */ (this.findDevice(this.config['busIO']));
         this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['busMemory']));
 
-        /*
+        /**
          * Get access to the Input device, so we can call setFocus() as needed.
          */
-        this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
+        this.inputDevice = /** @type {Input} */ (this.findDeviceByClass("Input", false));
     }
 
     /**
@@ -12598,14 +12846,1588 @@ class CPU68K extends CPU {
      */
     execute(nCycles)
     {
-        /*
-         * If checkINTR() returns false, INTFLAG.HALT must be set, so no instructions should be executed.
-         */
-        if (!this.checkINTR()) return;
+        let aEAModes = this.aEAModes;
+        let dataNew, dataTmp, cBits, cRegs, fCond;
+        let op1, op2, reg, ss, rrr, nnn, eaModeSrc, eaModeDst, iModeSrc, iModeDst, iMask;
+
+        this.nCyclesRemain = nCycles;
+
         while (this.nCyclesRemain > 0) {
-            this.regPCLast = this.regPC;
-            this.aOps[this.getPCByte()].call(this);
+
+            let nCyclesCur = nCycles;           // make sure the next opcode generates a non-zero cycle count
+
+            this.regPCLast = this.regPC;        // update current opcode address
+            op1 = this.getPCWord();             // get next instruction (don't forget this can be a signed integer if the opcode is a signed word)
+
+            ss = 0;                             // (ssBYTE << 6)
+            nnn = op1 & 0x7;
+            rrr = (op1 >> 9) & 0x7;
+
+    stage1: switch ((op1 >> 12) & 0xf) {
+
+            case 0x0:
+                //  case 0x0000:   ori      [00000000sswwwnnn, format ????????sswwwnnn, p.258]
+                //  case 0x003c:   ori      [0000000000111100, format none,             p.260]
+                //  case 0x007c:   ori      [0000000001111100, format none,             p.482]
+                //  case 0x0100:   btst     [0000rrr100yyynnn, format ??????????yyynnn, p.166]
+                //  case 0x0108:   movep    [0000rrr100001nnn, format none,             p.236]
+                //  case 0x0140:   bchg     [0000rrr101bbbnnn, format ??????????bbbnnn, p.132]
+                //  case 0x0148:   movep    [0000rrr101001nnn, format none,             p.236]
+                //  case 0x0180:   bclr     [0000rrr110bbbnnn, format ??????????bbbnnn, p.135]
+                //  case 0x0188:   movep    [0000rrr110001nnn, format none,             p.236]
+                //  case 0x01c0:   bset     [0000rrr111bbbnnn, format ??????????bbbnnn, p.161]
+                //  case 0x01c8:   movep    [0000rrr111001nnn, format none,             p.236]
+                //  case 0x0200:   andi     [00000010sswwwnnn, format ????????sswwwnnn, p.123]
+                //  case 0x023c:   andi     [0000001000111100, format none,             p.125]
+                //  case 0x027c:   andi     [0000001001111100, format none,             p.457]
+                //  case 0x0400:   subi     [00000100sswwwnnn, format ????????sswwwnnn, p.284]
+                //  case 0x0600:   addi     [00000110sswwwnnn, format ????????sswwwnnn, p.114]
+                //  case 0x0800:   btst     [0000100000zzznnn, format ??????????zzznnn, p.166]
+                //  case 0x0840:   bchg     [0000100001bbbnnn, format ??????????bbbnnn, p.132]
+                //  case 0x0880:   bclr     [0000100010bbbnnn, format ??????????bbbnnn, p.135]
+                //  case 0x08c0:   bset     [0000100011bbbnnn, format ??????????bbbnnn, p.161]
+                //  case 0x0a00:   eori     [00001010sswwwnnn, format ????????sswwwnnn, p.207]
+                //  case 0x0a3c:   eori     [0000101000111100, format none,             p.209]
+                //  case 0x0a7c:   eori     [0000101001111100, format none,             p.465]
+                //  case 0x0c00:   cmpi     [00001100sswwwnnn, format ????????sswwwnnn, p.184]
+
+                iModeSrc = CPU68K.EAMODEINDEX_DREG_LONG;
+
+                switch ((op1 >> 8) & 0xf) {
+
+                case 0x0:
+                    //  case 0x0000:   ori      [....0000sswwwnnn, format ????????sswwwnnn, p.258]
+                    //  case 0x003c:   ori      [....000000111100, format none,             p.260]
+                    //  case 0x007c:   ori      [....000001111100, format none,             p.482]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    this.dataSrc = eaModeSrc.getEAData(0);
+                    if ((op1 & 0x3f) != 0x3c) {
+                        if (op1 == 0 && this.dataSrc == 0) {
+                            // BUGBUG: This isn't really an illegal instruction, but it probably
+                            // wouldn't be found under normal circumstances, so let's help ourselves
+                            // out by flagging it as an illegal instruction for now.... -JP
+                            this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                        }
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst | this.dataSrc);
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0000) {
+                        this.setORFlagsCCR(this.dataSrc);
+                        this.addCycles(20);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0040) {
+                        this.setORFlagsSR(this.dataSrc);
+                        this.addCycles(20);
+                    }
+                    else {
+                        this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                    }
+                    break stage1;
+
+                case 0x2:
+                    //  case 0x0200:   andi     [....0010sswwwnnn, format ????????sswwwnnn, p.123]
+                    //  case 0x023c:   andi     [....001000111100, format none,             p.125]
+                    //  case 0x027c:   andi     [....001001111100, format none,             p.457]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    this.dataSrc = eaModeSrc.getEAData(0);
+                    if ((op1 & 0x3f) != 0x3c) {
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst & this.dataSrc);
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD - eaModeDst.cycle2Dl);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0000) {
+                        this.setANDFlagsCCR(this.dataSrc);
+                        this.addCycles(20);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0040) {
+                        this.setANDFlagsSR(this.dataSrc);
+                        this.addCycles(20);
+                    }
+                    else {
+                        this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                    }
+                    break stage1;
+
+                case 0x4:
+                    //  case 0x0400:   subi     [....0100sswwwnnn, format ????????sswwwnnn, p.284]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    this.dataSrc = eaModeSrc.getEAData(0);
+                    eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    eaModeDst.setDataFlags(this.dataDst - this.dataSrc);
+                    this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD);
+                    break stage1;
+
+                case 0x6:
+                    //  case 0x0600:   addi     [....0110sswwwnnn, format ????????sswwwnnn, p.114]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    this.dataSrc = eaModeSrc.getEAData(0);
+                    eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    eaModeDst.setDataFlagsForAdd(this.dataDst + this.dataSrc);
+                    this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD);
+                    break stage1;
+
+                case 0x8:
+                    //  case 0x0800:   btst     [....100000zzznnn, format ??????????zzznnn, p.166]
+                    //  case 0x0840:   bchg     [....100001bbbnnn, format ??????????bbbnnn, p.132]
+                    //  case 0x0880:   bclr     [....100010bbbnnn, format ??????????bbbnnn, p.135]
+                    //  case 0x08c0:   bset     [....100011bbbnnn, format ??????????bbbnnn, p.161]
+                    iModeSrc = CPU68K.EAMODEINDEX_IMMEDIATE_WORD;
+                    rrr = 0;
+                    break;
+
+                case 0xa:
+                    //  case 0x0a00:   eori     [....1010sswwwnnn, format ????????sswwwnnn, p.207]
+                    //  case 0x0a3c:   eori     [....101000111100, format none,             p.209]
+                    //  case 0x0a7c:   eori     [....101001111100, format none,             p.465]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    this.dataSrc = eaModeSrc.getEAData(0);
+                    if ((op1 & 0x3f) != 0x3c) {
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst ^ this.dataSrc);
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0000) {
+                        this.setEORFlagsCCR(this.dataSrc);
+                        this.addCycles(20);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0040) {
+                        this.setEORFlagsSR(this.dataSrc);
+                        this.addCycles(20);
+                    }
+                    else {
+                        this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                    }
+                    break stage1;
+
+                case 0xc:
+                    //  case 0x0c00:   cmpi     [....1100sswwwnnn, format ????????sswwwnnn, p.184]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    this.dataSrc = eaModeSrc.getEAData(0);
+                    eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    eaModeDst.updateFlagsExceptX(this.dataDst - this.dataSrc);
+                    this.addCycles(4 + eaModeDst.cycle2Dl);
+                    break stage1;
+
+                case 0xe:
+                    this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                    break stage1;
+
+                case 0x1:
+                    //  case 0x0100:   btst     [....rrr100yyynnn, format ??????????yyynnn, p.166]
+                    //  case 0x0108:   movep    [....rrr100001nnn, format none,             p.236]
+                    //  case 0x0140:   bchg     [....rrr101bbbnnn, format ??????????bbbnnn, p.132]
+                    //  case 0x0148:   movep    [....rrr101001nnn, format none,             p.236]
+                    //  case 0x0180:   bclr     [....rrr110bbbnnn, format ??????????bbbnnn, p.135]
+                    //  case 0x0188:   movep    [....rrr110001nnn, format none,             p.236]
+                    //  case 0x01c0:   bset     [....rrr111bbbnnn, format ??????????bbbnnn, p.161]
+                    //  case 0x01c8:   movep    [....rrr111001nnn, format none,             p.236]
+                    rrr = 0;
+                    break;
+                case 0x3:
+                    rrr = 1;
+                    break;
+                case 0x5:
+                    rrr = 2;
+                    break;
+                case 0x7:
+                    rrr = 3;
+                    break;
+                case 0x9:
+                    rrr = 4;
+                    break;
+                case 0xb:
+                    rrr = 5;
+                    break;
+                case 0xd:
+                    rrr = 6;
+                    break;
+                case 0xf:
+                    rrr = 7;
+                    break;
+                }
+
+                if ((op1 & 0x0038) == 0x0008) {
+                    //  case 0x0108:   movep    [....rrr100001nnn, format none, p.236]
+                    //  case 0x0148:   movep    [....rrr101001nnn, format none, p.236]
+                    //  case 0x0188:   movep    [....rrr110001nnn, format none, p.236]
+                    //  case 0x01c8:   movep    [....rrr111001nnn, format none, p.236]
+                    this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
+                    this.addCycles(16 + this.eaModeDRegLong.cycle4l*2);
+                }
+                else {
+                    //  case 0x0100:   btst     [....rrr100yyynnn, format ??????????yyynnn, p.166]
+                    //  case 0x0140:   bchg     [....rrr101bbbnnn, format ??????????bbbnnn, p.132]
+                    //  case 0x0180:   bclr     [....rrr110bbbnnn, format ??????????bbbnnn, p.135]
+                    //  case 0x01c0:   bset     [....rrr111bbbnnn, format ??????????bbbnnn, p.161]
+                    eaModeSrc = aEAModes[iModeSrc];
+                    this.dataSrc = eaModeSrc.getEAData(rrr);
+                    if ((op1 & 0x0038) == 0x0000) {
+                        this.dataSrc = (1 << (this.dataSrc & 31));
+                        eaModeDst = this.eaModeDRegLong;        // aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                    }
+                    else {
+                        this.dataSrc = (1 << (this.dataSrc & 7));
+                        if ((op1 & 0x00c0) == 0)
+                            eaModeDst = aEAModes[this.abModes401[op1 & 0x3f]];  // +(ssBYTE << 6)
+                        else
+                            eaModeDst = aEAModes[this.abModes407[op1 & 0x3f]];  // +(ssBYTE << 6)
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                    }
+                    switch ((op1 >> 6) & 0x3) {
+                    case 0:
+                        //  case 0x0800:   btst     [....100000zzznnn, format ??????????zzznnn, p.166]
+                        eaModeDst.updateFlagZ(this.dataDst & this.dataSrc);
+                        this.addCycles(4 + (iModeSrc == CPU68K.EAMODEINDEX_DREG_LONG? 0 : 4) + eaModeDst.cycle2l);
+                        break;
+                    case 1:
+                        //  case 0x0840:   bchg     [....100001bbbnnn, format ??????????bbbnnn, p.132]
+                        eaModeDst.setData(this.dataDst ^ this.dataSrc);
+                        eaModeDst.updateFlagZ(this.dataDst & this.dataSrc);
+                        this.addCycles(8 + (iModeSrc == CPU68K.EAMODEINDEX_DREG_LONG? 0 : 4));
+                        break;
+
+                    case 2:
+                        //  case 0x0880:   bclr     [....100010bbbnnn, format ??????????bbbnnn, p.135]
+                        eaModeDst.setData(this.dataDst & ~this.dataSrc);
+                        eaModeDst.updateFlagZ(this.dataDst & this.dataSrc);
+                        this.addCycles(8 + (iModeSrc == CPU68K.EAMODEINDEX_DREG_LONG? 0 : 4) + eaModeDst.cycle2l);
+                        break;
+
+                    case 3:
+                        //  case 0x08c0:   bset     [....100011bbbnnn, format ??????????bbbnnn, p.161]
+                        eaModeDst.setData(this.dataDst | this.dataSrc);
+                        eaModeDst.updateFlagZ(this.dataDst & this.dataSrc);
+                        this.addCycles(8 + (iModeSrc == CPU68K.EAMODEINDEX_DREG_LONG? 0 : 4));
+                        break;
+                    }
+                }
+                break stage1;
+
+            case 0x2:
+                ss += 0x40;     // fall through...
+
+            case 0x3:
+                ss += 0x40;     // fall through...
+
+            case 0x1:
+                //  case 0x1000:   move     [00ssrrrwwwmmmnnn, format ??ssrrrwwwmmmnnn, p.221]
+                //  case 0x1040:   movea    [00ssrrr001mmmnnn, format ??ss??????mmmnnn, p.224]
+                eaModeSrc = aEAModes[this.abModes000[ss + (op1 & 0x3f)]];
+                this.dataSrc = eaModeSrc.getEAData(nnn);
+                if ((op1 & 0x01c0) != 0x0040) {
+                    //  case 0x1000:   move     [00ssrrrwwwmmmnnn, format ??ssrrrwwwmmmnnn, p.221]
+                    eaModeDst = aEAModes[this.abModesMove[ss + ((op1 >> 6) & 0x3f)]];
+                    eaModeDst.setEADataFlagsZNClearCV(rrr, this.dataSrc);
+                    this.addCycles(4);
+                }
+                else {
+                    //  case 0x1040:   movea    [00ssrrr001mmmnnn, format ??ss??????mmmnnn, p.224]
+                    this.regA[rrr] = this.dataSrc;
+                    this.addCycles(4);
+                }
+                break stage1;
+
+            case 0x4:
+                //  case 0x4000:   negx     [01000000sswwwnnn, format ????????sswwwnnn, p.250]
+                //  case 0x40c0:   move     [0100000011wwwnnn, format ??????????wwwnnn, p.230]
+                //  case 0x4180:   chk      [0100rrr110xxxnnn, format ??????????xxxnnn, p.174]
+                //  case 0x41c0:   lea      [0100rrr111pppnnn, format ??????????pppnnn, p.215]
+                //  case 0x4200:   clr      [01000010sswwwnnn, format ????????sswwwnnn, p.178]
+                //  case 0x42c0:   move     [0100001011wwwnnn, format ??????????wwwnnn, p.226]
+                //  case 0x4400:   neg      [01000100sswwwnnn, format ????????sswwwnnn, p.248]
+                //  case 0x44c0:   move     [0100010011xxxnnn, format ??????????xxxnnn, p.228]
+                //  case 0x4600:   not      [01000110sswwwnnn, format ????????sswwwnnn, p.253]
+                //  case 0x46c0:   move     [0100011011xxxnnn, format ??????????xxxnnn, p.474]
+                //  case 0x4800:   nbcd     [0100100000wwwnnn, format ??????????wwwnnn, p.246]
+                //  case 0x4840:   pea      [0100100001pppnnn, format ??????????pppnnn, p.264]
+                //  case 0x4840:   swap     [0100100001000nnn, format none,             p.290]
+                //  case 0x4880:   ext      [0100100010000nnn, format none,             p.211]
+                //  case 0x4880:   movem    [010010001kuuunnn, format ?????????kuuunnn, p.233]
+                //  case 0x48c0:   ext      [0100100011000nnn, format none,             p.211]
+                //  case 0x49c0:   ext      [0100100111000nnn, format none,             p.211]
+                //  case 0x4a00:   tst      [01001010ssmmmnnn, format ????????ssmmmnnn, p.297]
+                //  case 0x4ac0:   tas      [0100101011wwwnnn, format ??????????wwwnnn, p.291]
+                //  case 0x4afc:   illegal  [0100101011111100, format none,             p.212]
+                //  case 0x4c80:   movem    [010011001ktttnnn, format ?????????ktttnnn, p.233]
+                //  case 0x4e40:   trap     [010011100100vvvv, format none,             p.293]
+                //  case 0x4e50:   link     [0100111001010nnn, format none,             p.216]
+                //  case 0x4e58:   unlk     [0100111001011nnn, format none,             p.299]
+                //  case 0x4e60:   move     [0100111001100nnn, format none,             p.476]
+                //  case 0x4e68:   move     [0100111001101nnn, format none,             p.476]
+                //  case 0x4e70:   reset    [0100111001110000, format none,             p.538]
+                //  case 0x4e71:   nop      [0100111001110001, format none,             p.253]
+                //  case 0x4e72:   stop     [0100111001110010, format none,             p.540]
+                //  case 0x4e73:   rte      [0100111001110011, format none,             p.539]
+                //  case 0x4e75:   rts      [0100111001110101, format none,             p.274]
+                //  case 0x4e76:   trapv    [0100111001110110, format none,             p.296]
+                //  case 0x4e77:   rtr      [0100111001110111, format none,             p.273]
+                //  case 0x4e80:   jsr      [0100111010pppnnn, format ??????????pppnnn, p.214]
+                //  case 0x4ec0:   jmp      [0100111011pppnnn, format ??????????pppnnn, p.213]
+
+                switch ((op1 >> 8) & 0xf) {
+
+                case 0x0:
+                    if ((op1 & 0x00c0) != 0x00c0) {
+                        //  case 0x4000:   negx     [....0000sswwwnnn, format ????????sswwwnnn, p.250]
+                        // I have to code this up to make it look like we're modifying a
+                        // source rather than a destination, because even though the effective
+                        // address should be considered the "destination", we are subtracting from zero,
+                        // not from the destination.
+                        this.dataDst = 0;
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                        this.dataSrc = eaModeDst.getEAData(nnn) - this.getFlagX();
+                        this.flagZTmp = this.flagZNew;
+                        eaModeDst.setDataFlags(-this.dataSrc);
+                        if (this.flagZNew == 0) {
+                            this.flagZNew = this.flagZTmp;
+                        }
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD - eaModeDst.cycle2ADl);
+                    }
+                    else {              // MOVE SR,%s
+                        //  case 0x40c0:   move     [....000011wwwnnn, format ??????????wwwnnn, p.230]
+                        eaModeDst = aEAModes[this.abModes407[(op1 & 0x3f)+0x40]];    // +(ssWORD << 6)
+                        eaModeDst.setEAData(nnn, this.getFlags());
+                        this.addCycles(8 - eaModeDst.cycle2ADI);
+                    }
+                    break stage1;
+
+                case 0x2:
+                    if ((op1 & 0x00c0) != 0x00c0) {
+                        //  case 0x4200:   clr      [....0010sswwwnnn, format ????????sswwwnnn, p.178]
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                      //this.dataDst = eaModeDst.getEAData(nnn);         // technically, we're supposed to read the data from EA first,
+                        eaModeDst.setEADataFlagsZNClearCV(nnn, 0);  // even though all we're going to do is immediately overwrite it -JP
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD - eaModeDst.cycle2ADl);
+                    }
+                    else {              // MOVE CCR,%s
+                        //  case 0x42c0:   move     [....001011wwwnnn, format ??????????wwwnnn, p.226]
+                        eaModeDst = aEAModes[this.abModes407[(op1 & 0x3f)+0x40]];    // +(ssWORD << 6)
+                        eaModeDst.setEAData(nnn, this.getFlags() & CPU68K.FLAGS_CCR);
+                        this.addCycles(8 - eaModeDst.cycle2ADI);   // BUGBUG: Need to confirm this is the same as "MOVE SR,%s" -JP
+                    }
+                    break stage1;
+
+                case 0x4:
+                    if ((op1 & 0x00c0) != 0x00c0) {
+                        //  case 0x4400:   neg      [....0100sswwwnnn, format ????????sswwwnnn, p.248]
+                        // I have to code this up to make it look like we're modifying a
+                        // source rather than a destination, because even though the effective
+                        // address should be considered the "destination", we are subtracting from zero,
+                        // not from the destination.
+                        this.dataDst = 0;
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                        this.dataSrc = eaModeDst.getEAData(nnn);
+                        eaModeDst.setDataFlags(-this.dataSrc);
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD - eaModeDst.cycle2ADl);
+                    }
+                    else {              // MOVE %s,CCR
+                        //  case 0x44c0:   move     [....010011xxxnnn, format ??????????xxxnnn, p.228]
+                        eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];    // +(ssWORD << 6)
+                        this.setFlagsCCR(eaModeSrc.getEAData(nnn));
+                        this.addCycles(12);
+                    }
+                    break stage1;
+
+                case 0x6:
+                    if ((op1 & 0x00c0) != 0x00c0) {
+                        //  case 0x4600:   not      [....0110sswwwnnn, format ????????sswwwnnn, p.253]
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                        eaModeDst.setDataFlagsZNClearCV(~this.dataDst);
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD - eaModeDst.cycle2ADl);
+                    }
+                    else {              // MOVE %s,SR
+                        //  case 0x46c0:   move     [....011011xxxnnn, format ??????????xxxnnn, p.474]
+                        eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];    // +(ssWORD << 6)
+                        this.setFlagsSR(eaModeSrc.getEAData(nnn));
+                        this.addCycles(12);
+                    }
+                    break stage1;
+
+                case 0x8:
+                    //  case 0x4800:   nbcd     [....100000wwwnnn, format ??????????wwwnnn, p.246]
+                    //  case 0x4840:   pea      [....100001pppnnn, format ??????????pppnnn, p.264]
+                    //  case 0x4840:   swap     [....100001000nnn, format none,             p.290]
+                    //  case 0x4880:   ext      [....100010000nnn, format none,             p.211]
+                    //  case 0x4880:   movem    [....10001kuuunnn, format ?????????kuuunnn, p.233]
+                    //  case 0x48c0:   ext      [....100011000nnn, format none,             p.211]
+                    switch ((op1 >> 6) & 0x3) {
+                    case 0x0:
+                        //  case 0x4800:   nbcd     [........00wwwnnn, format ??????????wwwnnn, p.246]
+                        this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
+                        this.addCycles(8 - eaModeDst.cycle2ADI);
+                        break stage1;
+
+                    case 0x1:
+                        if ((op1 & 0x0038) == 0) {
+                            //  case 0x4840:   swap     [........01000nnn, format none, p.290]
+                            eaModeDst = this.eaModeDRegLong;    // aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                            this.dataDst = eaModeDst.getEAData(nnn);
+                            eaModeDst.setDataFlagsZNClearCV((this.dataDst >>> 16) | ((this.dataDst & 0xffff) << 16));
+                            this.addCycles(4);
+                        }
+                        else {
+                            //  case 0x4840:   pea      [........01pppnnn, format ??????????pppnnn, p.264]
+                            eaModeSrc = aEAModes[this.abModesD81[(op1 & 0x3f)+0x80]];// +(ssLONG << 6)
+                            this.dataSrc = eaModeSrc.getEA(nnn);
+                            this.pushLong(this.dataSrc);        // aEAModes[CPU68K.EAMODEINDEX_AREG_PUSHLONG].setEAData(7, this.dataSrc);
+                            this.addCycles(4);                  // BUGBUG: approximate -JP
+                        }
+                        break stage1;
+
+                    case 0x2:
+                        if ((op1 & 0x0038) == 0) {
+                            //  case 0x4880:   ext      [........10000nnn, format none, p.211]
+                            eaModeDst = aEAModes[CPU68K.EAMODEINDEX_DREG_WORD];
+                            this.dataDst = eaModeDst.getEAData(nnn);
+                            eaModeDst.setDataFlagsZNClearCV(this.dataDst << 24 >> 24);
+                            this.addCycles(4);
+                            break stage1;
+                        }
+                        /* falls through (BUGBUG: verify) */
+
+                    case 0x3:
+                        if ((op1 & 0x0038) == 0) {
+                            //  case 0x4880:   ext      [........10000nnn, format none, p.211]
+                            eaModeDst = this.eaModeDRegLong;    // aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                            this.dataDst = eaModeDst.getEAData(nnn);
+                            eaModeDst.setDataFlagsZNClearCV(this.dataDst << 16 >> 16);
+                            this.addCycles(4);
+                            break stage1;
+                        }
+                        /* falls through (BUGBUG: verify) */
+                    }
+
+                    //  case 0x4880:   movem    [........1kuuunnn, format ?????????kuuunnn, p.233]
+                    //  NOTES: 1) This is a register-to-memory operation
+                    //         2) For pre-decrement, the order of storing is A7 to A0, then D7 to D0 (bit 0 to bit 15)
+                    //         3) For all other modes, the order of storing is D0 to D7, then A0 to A7 (bit 0 to bit 15)
+                    //         4) Any register used in pre-decrement mode is stored before being decremented
+                    iModeSrc = this.getPCWord();
+                    eaModeDst = aEAModes[this.abModesD07[(op1 - 0x40) & 0xff]];
+                    cRegs = 0;
+                    reg = this.regA[nnn];
+                    eaModeDst.getEA(nnn);
+                    iMask = 0x1;
+                    if ((op1 & 0x38) == 0x20) {
+                        //
+                        // Pre-decrement (NOTE: If the address register used in pre-decrement mode is also
+                        // one of the source operands, the 68000 writes the register's initial value, not its
+                        // decremented value, hence it's important that we call setEAData(a[i]) instead of
+                        // getEA() followed by setData(a[i]) -JP)
+                        //
+                        for (let i = 7; i >= 0; i--, iMask <<= 1) {
+                            if ((iModeSrc & iMask) != 0) {
+                                if (cRegs++ != 0) {
+                                    reg = this.regA[nnn];
+                                    eaModeDst.advanceEA(nnn);
+                                }
+                                if (i != nnn) reg = this.regA[i];
+                                eaModeDst.setData(reg);
+                            }
+                        }
+                        for (let i = 7; i >= 0; i--, iMask <<= 1) {
+                            if ((iModeSrc & iMask) != 0) {
+                                if (cRegs++ != 0) eaModeDst.advanceEA(nnn);
+                                eaModeDst.setData(this.regD[i]);
+                            }
+                        }
+                        if (cRegs == 0) this.regA[nnn] = reg;
+                    }
+                    else {
+                        // All other modes
+                        for (let i = 0; i <= 7; i++, iMask <<= 1) {
+                            if ((iModeSrc & iMask) != 0) {
+                                if (cRegs++ != 0) eaModeDst.advanceEA(nnn);
+                                eaModeDst.setData(this.regD[i]);
+                            }
+                        }
+                        for (let i = 0; i <= 7; i++, iMask <<= 1) {
+                            if ((iModeSrc & iMask) != 0) {
+                                if (cRegs++ != 0) eaModeDst.advanceEA(nnn);
+                                eaModeDst.setData(this.regA[i]);
+                            }
+                        }
+                    }
+                    this.addCycles((4+eaModeDst.cycle4l)*cRegs);
+                    break stage1;
+
+                case 0xa:
+                    if ((op1 & 0xc0) != 0xc0) {
+                        //  case 0x4a00:   tst      [........ssmmmnnn, format ????????ssmmmnnn, p.297]
+                        eaModeDst = aEAModes[this.abModes000[op1 & 0xff]];
+                        eaModeDst.updateFlagsZNClearCV(eaModeDst.getEAData(nnn));
+                        this.addCycles(4);
+                    }
+                    else if ((op1 & 0x3f) != 0x3c) {
+                        //  case 0x4ac0:   tas      [........11wwwnnn, format ??????????wwwnnn, p.291]
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0x3f]];           // +(ssBYTE << 6)
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                        eaModeDst.updateFlagsZNClearCV(this.dataSrc);
+                        eaModeDst.setData(this.dataSrc | 0x80);
+                        this.addCycles(14 - eaModeDst.cycle2ADI*5);
+                    }
+                    else {
+                        //  case 0x4afc:   illegal  [........11111100, format none, p.212]
+                        this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                    }
+                    break stage1;
+
+                case 0xc:
+                    //  case 0x4c80:   movem    [....11001ktttnnn, format ?????????ktttnnn, p.233]
+                    //  NOTES: 1) This is a memory-to-register operation
+                    //         2) For all modes, the order of storing is D0 to D7, then A0 to A7 (bit 0 to bit 15)
+                    //         3) Any register used in post-increment mode is not affected by the value loaded for it (if any)
+                    iModeDst = this.getPCWord();
+                    iModeSrc = op1 & 0x38;
+                    eaModeSrc = aEAModes[this.abModesC81[(op1 - 0x40) & 0xff]];
+                    cRegs = 0;
+                    reg = this.regA[nnn];
+                    eaModeSrc.getEA(nnn);
+                    iMask = 0x1;
+                    for (let i = 0; i <= 7; i++, iMask <<= 1)
+                        if ((iModeDst & iMask) != 0) {
+                            if (cRegs++ != 0) eaModeSrc.advanceEA(nnn);
+                            this.regD[i] = eaModeSrc.getData();
+                        }
+                    for (let i = 0; i <= 7; i++, iMask <<= 1)
+                        if ((iModeDst & iMask) != 0) {
+                            if (cRegs++ != 0) eaModeSrc.advanceEA(nnn);
+                            op2 = eaModeSrc.getData();
+                            if (iModeSrc != 0x18 || i != nnn) { // if mode is "A[i]+" and i == nnn, then we must not set A[i]
+                                this.regA[i] = op2;
+                            }
+                        }
+                    if (cRegs == 0) this.regA[nnn] = reg;
+                    this.addCycles(4 + (4+eaModeDst.cycle4l)*cRegs);
+                    break stage1;
+
+                case 0xe:
+                    switch ((op1 >> 4) & 0xf) {
+                    case 0x4:
+                        //  case 0x4e40:   trap     [........0100vvvv, format none, p.293]
+                        if (this.dbg) {                         // see if the debugger wants us to break
+                            if (this.dbg.break(this.regPCLast, true)) {
+                                this.regPC = this.regPCLast;
+                                this.fCPU |= CPU68K.CPU_BREAKPOINT;
+                                return;
+                            }
+                        }
+                        this.regPCTrap = this.regPCLast;        // keep track the last trap encountered
+                        this.callException((op1 & 0xf) + 0x20);
+                        this.addCycles(34);
+                        break stage1;
+
+                    case 0x5:
+                        if ((op1 & 0x8) == 0) {
+                            //  case 0x4e50:   link     [........01010nnn, format none, p.216]
+                            this.pushLong(this.regA[nnn]);      // aEAModes[CPU68K.EAMODEINDEX_AREG_PUSHLONG].setEAData(7, this.regA[nnn]);
+                            this.regA[nnn] = this.regA[7];
+                            this.regA[7] += this.getPCWord();   // aEAModes[CPU68K.EAMODEINDEX_IMMEDIATE_WORD].getEAData(0);
+                            this.addCycles(16);
+                        }
+                        else {
+                            //  case 0x4e58:   unlk     [........01011nnn, format none, p.299]
+                            op2 = this.regA[7];         // this is strictly for MarkDataAccess's benefit (see below)
+                            this.regA[7] = this.regA[nnn];
+                            this.regA[nnn] = this.popLong();
+                            this.addCycles(12);
+                            if (this.dbg != null) {
+                                //
+                                // Mark the entire frame just removed as "uninitialized", to
+                                // help catch more errors.  There are other places where it might
+                                // be nice to do this as well, like after we've returned to the
+                                // caller and he's removed his args from the stack with an "ADD #xxx,A7",
+                                // but we don't want to slow things down *too* much.... -JP
+                                //
+                                this.dbg.markDataAccess(op2, this.regA[7]-op2, Dbg68K.DATAACCESS_UNINIT);
+                            }
+                        }
+                        break stage1;
+
+                    case 0x6:
+                        //  case 0x4e60:   move     [........01100nnn, format none, p.476]
+                        //  case 0x4e68:   move     [........01101nnn, format none, p.476]
+                        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+                            this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
+                            break stage1;
+                        }
+                        if ((op1 & 0x8) == 0) {
+                            this.regUSP = this.regA[nnn];
+                        }
+                        else {
+                            this.regA[nnn] = this.regUSP;
+                        }
+                        this.addCycles(4);
+                        break stage1;
+
+                    case 0x7:
+                        switch (op1 & 0xf) {
+                        case 0x0:
+                            //  case 0x4e70:   reset    [........01110000, format none, p.538]
+                            this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
+                            this.addCycles(132);
+                            break stage1;
+
+                        case 0x1:
+                            //  case 0x4e71:   nop      [........01110001, format none, p.253]
+                            this.addCycles(4);
+                            break stage1;
+
+                        case 0x2:
+                            //  case 0x4e72:   stop     [........01110010, format none, p.540]
+                            if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+                                this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
+                                break stage1;
+                            }
+                            op2 = this.getPCWord() & 0xffff;
+                            // Check for OP_STOP_TRACE, OP_STOP_FREEZE, OP_STOP_INJECT
+                            if (op2 < (CPU68K.OP_STOP_TRACE & 0xffff)) {
+                                this.setFlagsSR(op2);
+                            }
+                            else {
+                                //
+                                // The definition of both OP_STOP_FREEZE and OP_STOP_INJECT is to reset
+                                // the stack to PC, and then pop the next 'long' into PC.  This effectively
+                                // "returns" us from a call injected by ScriptVarFunc.Call().
+                                //
+                                this.regA[7] = this.regPC;
+                                this.regPC = this.popLong();
+                                //
+                                // OP_STOP_FREEZE also means that since the CPU was frozen at the time of
+                                // the injection, that we should re-freeze the CPU now.  We're not really allowed
+                                // to set CPU_FREEZE ourselves (that bit is "owned" by CPUThread), but setting
+                                // CPU_FREEZEONSTOP should be good enough, since we're also setting CPU_STOPPED....
+                                //
+                                if (op2 == (CPU68K.OP_STOP_TRACE & 0xffff)) {
+                                    this.fCPU |= CPU68K.CPU_TRACEONSTOP;
+                                }
+                                else if (op2 == (CPU68K.OP_STOP_FREEZE & 0xffff)) {
+                                    this.fCPU |= CPU68K.CPU_FREEZEONSTOP;
+                                }
+                            }
+                            this.fCPU |= CPU68K.CPU_STOPPED;
+                            this.addCycles(4);
+                            break stage1;
+
+                        case 0x3:
+                            //  case 0x4e73:   rte      [........01110011, format none, p.539]
+                            this.returnFromException();
+                            this.addCycles(20);
+                            break stage1;
+
+                        case 0x5:
+                            //  case 0x4e75:   rts      [........01110101, format none, p.274]
+                            this.regPC = this.popLong();        // aEAModes[CPU68K.EAMODEINDEX_AREG_POPLONG].getEAData(7);
+                            this.addCycles(16);
+                            break stage1;
+
+                        case 0x6:
+                            //  case 0x4e76:   trapv    [........01110110, format none, p.296]
+                            if (this.getFlagV() != 0) {
+                                this.genException(CPU68K.EXCEPTION_TRAPV_OVERFLOW);
+                                this.addCycles(34);
+                                break stage1;
+                            }
+                            this.addCycles(4);
+                            break stage1;
+
+                        case 0x7:
+                            //  case 0x4e77:   rtr      [........01110111, format none, p.273]
+                            this.setFlagsCCR(aEAModes[CPU68K.EAMODEINDEX_AREG_INCWORD].getEAData(7));
+                            this.regPC = this.popLong();                // aEAModes[CPU68K.EAMODEINDEX_AREG_POPLONG].getEAData(7);
+                            this.addCycles(20);
+                            break stage1;
+
+                        case 0x8:
+                        case 0x9:
+                        case 0xa:
+                        case 0xb:
+                        case 0xc:
+                        case 0xd:
+                        case 0xe:
+                        case 0xf:
+                            break;              // end up at this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION)
+                        }
+                        /* falls through (BUGBUG: verify) */
+
+                    case 0x8:
+                    case 0x9:
+                    case 0xa:
+                    case 0xb:
+                        //  case 0x4e80:   jsr      [........10pppnnn, format ??????????pppnnn, p.214]
+                        eaModeSrc = aEAModes[this.abModesD81[(op1 & 0x3f)+0x80]];    // +(ssLONG << 6)
+                        this.dataSrc = eaModeSrc.getEA(nnn);
+                        this.pushLong(this.regPC);              // aEAModes[CPU68K.EAMODEINDEX_AREG_PUSHLONG].setEAData(7, this.regPC);
+                        this.regPC = this.dataSrc;
+                        this.addCycles(6);                      // BUGBUG: approximate -JP
+                        break stage1;
+
+                    case 0xc:
+                    case 0xd:
+                    case 0xe:
+                    case 0xf:
+                        //  case 0x4ec0:   jmp      [........11pppnnn, format ??????????pppnnn, p.213]
+                        eaModeSrc = aEAModes[this.abModesD81[(op1 & 0x3f)+0x80]];    // +(ssLONG << 6)
+                        this.regPC = eaModeSrc.getEA(nnn);
+                        break stage1;
+                    }
+                    this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                    break stage1;
+
+                case 0x1:
+                    //  case 0x4180:   chk      [....rrr110xxxnnn, format ??????????xxxnnn, p.174]
+                    //  case 0x41c0:   lea      [....rrr111pppnnn, format ??????????pppnnn, p.215]
+                    rrr = 0;
+                    break;
+                case 0x3:
+                    rrr = 1;
+                    break;
+                case 0x5:
+                    rrr = 2;
+                    break;
+                case 0x7:
+                    rrr = 3;
+                    break;
+                case 0x9:
+                    if ((op1 & 0x00f8) == 0x00c0) {
+                        //  case 0x49c0:   ext      [....100111000nnn, format none, p.211]
+                        eaModeDst = this.eaModeDRegLong;        // aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst << 24 >> 24);
+                        this.addCycles(4);
+                        break stage1;
+                    }
+                    rrr = 4;
+                    break;
+                case 0xb:
+                    rrr = 5;
+                    break;
+                case 0xd:
+                    rrr = 6;
+                    break;
+                case 0xf:
+                    rrr = 7;
+                    break;
+                }
+
+                if ((op1 & 0x00c0) == 0x0080) {
+                    //  case 0x4180:   chk      [....rrr110xxxnnn, format ??????????xxxnnn, p.174]
+                    eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    this.dataDst = this.regD[rrr] << 16 >> 16;
+                    if (this.dataDst < 0) {
+                        this.setFlagN(-1);
+                        this.genException(CPU68K.EXCEPTION_CHK_INSTRUCTION);
+                        this.addCycles(40);
+                    }
+                    else if (this.dataDst > this.dataSrc) {
+                        this.setFlagN(0);
+                        this.genException(CPU68K.EXCEPTION_CHK_INSTRUCTION);
+                        this.addCycles(40);
+                    }
+                    else
+                        this.addCycles(10);
+                }
+                else {
+                    //  case 0x41c0:   lea      [....rrr111pppnnn, format ??????????pppnnn, p.215]
+                    eaModeSrc = aEAModes[this.abModesD81[(op1 & 0x3f)+0x80]];        // +(ssLONG << 6)
+                    this.regA[rrr] = eaModeSrc.getEA(nnn);
+                }
+                break stage1;
+
+            case 0x5:
+                //  case 0x5000:   addq     [0101qqq0ssvvvnnn, format ????????ssvvvnnn, p.116]
+                //  case 0x50c0:   scc      [0101cccc11wwwnnn, format ????cccc??wwwnnn, p.277]
+                //  case 0x50c8:   dbcc     [0101cccc11001nnn, format ????cccc????????, p.195]
+                //  case 0x5100:   subq     [0101qqq1ssvvvnnn, format ????????ssvvvnnn, p.286]
+                if ((op1 & 0x00c0) != 0x00c0) {
+                    this.dataSrc = CPU68K.aByteQuick[rrr];
+                    iModeDst = op1 & 0xf8;
+                    if (iModeDst == 0x48 || iModeDst == 0x88) { // EAMODEINDEX_AREG_WORD or EAMODEINDEX_AREG_LONG
+                        if ((op1 & 0x0100) == 0x0000) {         // affects entire A register and does not affect flags
+                            this.regA[nnn] += this.dataSrc;
+                            this.addCycles(8);                  // BUGBUG: For word accesses, table 8.5 says this is only 4 cycles (but only for ADDQ, not SUBQ) -JP
+                        }
+                        else {
+                            this.regA[nnn] -= this.dataSrc;
+                            this.addCycles(8);
+                        }
+                        break stage1;
+                    }
+                    eaModeDst = aEAModes[this.abModes007[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    if ((op1 & 0x0100) == 0x0000) {
+                        //  case 0x5000:   addq     [0101qqq0ssvvvnnn, format ????????ssvvvnnn, p.116]
+                        eaModeDst.setDataFlagsForAdd(this.dataDst + this.dataSrc);
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD);
+                    }
+                    else {
+                        //  case 0x5100:   subq     [0101qqq1ssvvvnnn, format ????????ssvvvnnn. p.286]
+                        eaModeDst.setDataFlags(this.dataDst - this.dataSrc);
+                        this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD + eaModeDst.cycle4Aw);
+                    }
+                }
+                else {
+                    if ((op1 & 0x0038) != 0x0008) {
+                        //  case 0x50c0:   scc      [0101cccc11wwwnnn, format ????cccc??wwwnnn, p.277]
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0x3f]];           // +(ssBYTE << 6)
+                        eaModeDst.getEA(nnn);
+                        op2 = 0;                // prevent "used before initialization" warning
+                        switch ((op1 >> 8) & 0xf) {
+                        case 0x0:               // ST
+                            op2 = -1;
+                            break;
+                        case 0x1:               // SF
+                            op2 = 0;
+                            break;
+                        case 0x2:               // SHI
+                            op2 = this.getFlagHI();
+                            break;
+                        case 0x3:               // SLS
+                            op2 = ~this.getFlagHI();
+                            break;
+                        case 0x4:               // SCC
+                            op2 = ~this.getFlagC();
+                            break;
+                        case 0x5:               // SCS
+                            op2 = this.getFlagC();
+                            break;
+                        case 0x6:               // SNE
+                            op2 = ~this.getFlagZ();
+                            break;
+                        case 0x7:               // SEQ
+                            op2 = this.getFlagZ();
+                            break;
+                        case 0x8:               // SVC
+                            op2 = ~this.getFlagV();
+                            break;
+                        case 0x9:               // SVS
+                            op2 = this.getFlagV();
+                            break;
+                        case 0xa:               // SPL
+                            op2 = ~this.getFlagN();
+                            break;
+                        case 0xb:               // SMI
+                            op2 = this.getFlagN();
+                            break;
+                        case 0xc:               // SGE
+                            op2 = this.getFlagGE();
+                            break;
+                        case 0xd:               // SLT
+                            op2 = this.getFlagLT();
+                            break;
+                        case 0xe:               // SGT
+                            op2 = this.getFlagGT();
+                            break;
+                        case 0xf:               // SLE
+                            op2 = this.getFlagLE();
+                            break;
+                        }
+                        eaModeDst.setData(op2);
+                        this.addCycles(8 - eaModeDst.cycle2ADI - (op2 == 0? eaModeDst.cycle2ADI : 0));
+                        break stage1;
+                    }
+                    else {
+                        //  case 0x50c8:   dbcc     [0101cccc11001nnn, format ????cccc????????, p.195]
+                        let fCond = -1;
+                        switch ((op1 >> 8) & 0xf) {
+                        case 0x0:               // BUGBUG: Valid? -JP
+                          //fCond = -1;
+                            break;
+                        case 0x1:               // DBRA
+                            fCond = 0;
+                            break;
+                        case 0x2:               // DBHI
+                            fCond = this.getFlagHI();
+                            break;
+                        case 0x3:               // DBLS
+                            fCond = this.getFlagHI()+1;
+                            break;
+                        case 0x4:               // DBCC
+                            fCond = this.getFlagC()+1;
+                            break;
+                        case 0x5:               // DBCS
+                            fCond = this.getFlagC();
+                            break;
+                        case 0x6:               // DBNE
+                            fCond = this.getFlagZ()+1;
+                            break;
+                        case 0x7:               // DBEQ
+                            fCond = this.getFlagZ();
+                            break;
+                        case 0x8:               // DBVC
+                            fCond = this.getFlagV()+1;
+                            break;
+                        case 0x9:               // DBVS
+                            fCond = this.getFlagV();
+                            break;
+                        case 0xa:               // DBPL
+                            fCond = this.getFlagN()+1;
+                            break;
+                        case 0xb:               // DBMI
+                            fCond = this.getFlagN();
+                            break;
+                        case 0xc:               // DBGE
+                            fCond = this.getFlagGE();
+                            break;
+                        case 0xd:               // DBLT
+                            fCond = this.getFlagLT();
+                            break;
+                        case 0xe:               // DBGT
+                            fCond = this.getFlagGT();
+                            break;
+                        case 0xf:               // DBLE
+                            fCond = this.getFlagLE();
+                            break;
+                        }
+                        this.dataSrc = this.getPCWord() - 2;    // aEAModes[CPU68K.EAMODEINDEX_IMMEDIATE_WORD].GetEAData(0) - 2;
+                        if (fCond == 0) {
+                            //
+                            // The DBcc instructions are hard-coded to decrement ONLY the low-order
+                            // 16 bits of the data register, so we need both of the following lines, not
+                            // simply "this.dataDst = --d[nnn]"...
+                            //
+                            this.dataDst = (this.regD[nnn] << 16 >> 16) - 1;
+                            this.regD[nnn] = (this.regD[nnn] & ~0xffff) | (this.dataDst & 0xffff);
+
+                            if (this.dataDst != -1) {
+                                this.regPC += this.dataSrc;
+                                this.addCycles(10);
+                            }
+                            else {
+                                this.addCycles(14);
+                            }
+                        }
+                        else {
+                            this.addCycles(12);
+                        }
+                        break stage1;
+                    }
+                }
+                break;
+
+            case 0x6:
+                //  case 0x6000:   bcc      [0110ccccdddddddd, format ????ccccdddddddd, p.130]
+                //  case 0x6100:   bsr      [01100001dddddddd, format none,             p.164]
+                fCond = -1;
+                this.dataSrc = op1 << 24 >> 24;
+                op2 = 0;
+                if (this.dataSrc == 0) {
+                    this.dataSrc = this.getPCWord() - 2;        // aEAModes[CPU68K.EAMODEINDEX_IMMEDIATE_WORD].GetEAData(0) - 2;
+                    op2 = 4;
+                }
+
+                switch ((op1 >> 8) & 0xf) {
+                case 0x0:               // BRA
+                  //fCond = -1;
+                    break;
+                case 0x1:               // BSR
+                    this.pushLong(this.regPC);                  // aEAModes[CPU68K.EAMODEINDEX_AREG_PUSHLONG].setEAData(7, this.regPC);
+                    this.regPC += this.dataSrc;
+                    this.addCycles(18);
+                    break stage1;
+                case 0x2:               // BHI
+                    fCond = this.getFlagHI();
+                    break;
+                case 0x3:               // BLS
+                    fCond = this.getFlagHI()+1;
+                    break;
+                case 0x4:               // BCC
+                    fCond = this.getFlagC()+1;
+                    break;
+                case 0x5:               // BCS
+                    fCond = this.getFlagC();
+                    break;
+                case 0x6:               // BNE
+                    fCond = this.getFlagZ()+1;
+                    break;
+                case 0x7:               // BEQ
+                    fCond = this.getFlagZ();
+                    break;
+                case 0x8:               // BVC
+                    fCond = this.getFlagV()+1;
+                    break;
+                case 0x9:               // BVS
+                    fCond = this.getFlagV();
+                    break;
+                case 0xa:               // BPL
+                    fCond = this.getFlagN()+1;
+                    break;
+                case 0xb:               // BMI
+                    fCond = this.getFlagN();
+                    break;
+                case 0xc:               // BGE
+                    fCond = this.getFlagGE();
+                    break;
+                case 0xd:               // BLT
+                    fCond = this.getFlagLT();
+                    break;
+                case 0xe:               // BGT
+                    fCond = this.getFlagGT();
+                    break;
+                case 0xf:               // BLE
+                    fCond = this.getFlagLE();
+                    break;
+                }
+                if (fCond != 0) {
+                    this.regPC += this.dataSrc;
+                    this.addCycles(10);
+                }
+                else {
+                    this.addCycles(8 + op2);
+                }
+                break stage1;
+
+            case 0x7:
+                //  case 0x7000:   moveq    [0111rrr0dddddddd, format none, p.239]
+                this.eaModeDRegLong.setEADataFlagsZNClearCV(rrr, op1 << 24 >> 24);
+                this.addCycles(4);
+                break stage1;
+
+            case 0x8:
+                //  case 0x8100:   sbcd     [1000rrr10000knnn, format ????rrr?bbkkknnn, p.275]
+                //  case 0x80c0:   divu     [1000rrr011xxxnnn, format ??????????xxxnnn, p.201]
+                //  case 0x81c0:   divs     [1000rrr111xxxnnn, format ??????????xxxnnn, p.197]
+                //  case 0x8000:   or       [1000rrr0ssxxxnnn, format ????????ssxxxnnn, p.255]
+                //  case 0x8100:   or       [1000rrr1ssuuunnn, format ????????ssuuunnn, p.255]
+                if ((op1 & 0x01f0) == 0x0100) {
+                    //  case 0x8100:   sbcd     [1000rrr10000knnn, format ????rrr?bbkkknnn, p.275]
+                    this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
+                    if ((op1 & 0x8) == 0)
+                        this.addCycles(6);
+                    break stage1;
+                }
+                if ((op1 & 0x01c0) == 0x00c0) {
+                    //  case 0x80c0:   divu     [1000rrr011xxxnnn, format ??????????xxxnnn, p.201]
+                    eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                    this.dataSrc = eaModeSrc.getEAData(nnn) & 0xffff;
+                    if (this.dataSrc == 0) {
+                        this.genException(CPU68K.EXCEPTION_INT_DIVIDE_BY_ZERO);
+                        this.addCycles(38);
+                    }
+                    else {
+                        eaModeDst = this.eaModeDRegLong;        // this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                        this.dataDst = eaModeDst.getEAData(rrr);
+                        dataTmp = this.dataDst >>> 0;           // make dividend unsigned
+                        dataNew = (dataTmp / this.dataSrc)|0;
+                        dataTmp = (dataTmp % this.dataSrc)|0;
+                        if ((dataNew & 0xffff0000) != 0) {
+                            this.setFlagV(-1);
+                        }
+                        else {                                  // flags are based on quotient (dataNew), not the quotient+remainder combo
+                            eaModeDst.setData((dataNew & 0xffff) | (dataTmp << 16));
+                            eaModeDst.updateFlagsZNClearCV(dataNew);
+                        }
+                        this.addCycles(140);
+                    }
+                    break stage1;
+                }
+                if ((op1 & 0x01c0) == 0x01c0) {
+                    //  case 0x81c0:   divs     [1000rrr111xxxnnn, format ??????????xxxnnn, p.197]
+                    eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    if (this.dataSrc == 0) {
+                        this.genException(CPU68K.EXCEPTION_INT_DIVIDE_BY_ZERO);
+                        this.addCycles(38);
+                    }
+                    else {
+                        eaModeDst = this.eaModeDRegLong;        // this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                        this.dataDst = eaModeDst.getEAData(rrr);
+                        dataNew = (this.dataDst / this.dataSrc)|0;
+                        dataTmp = (this.dataDst % this.dataSrc)|0;
+                        if ((dataNew & 0xffff0000) != 0 && (dataNew & 0xffff0000) != 0xffff0000)
+                            this.setFlagV(-1);
+                        else {                                  // flags are based on quotient (dataNew), not the quotient+remainder combo
+                            eaModeDst.setData((dataNew & 0xffff) | (dataTmp << 16));
+                            eaModeDst.updateFlagsZNClearCV(dataNew);
+                        }
+                        this.addCycles(158);
+                    }
+                    break stage1;
+                }
+                if ((op1 & 0x0100) == 0x0000) { // EA is src
+                    //  case 0x8000:   or       [1000rrr0ssxxxnnn, format ????????ssxxxnnn, p.255]
+                    eaModeSrc = aEAModes[this.abModes400[op1 & 0xff]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst | this.dataSrc);
+                    this.addCycles(4 + eaModeSrc.cycle2l + eaModeSrc.cycle2ADI);
+                }
+                else {                          // EA is dst
+                    //  case 0x8100:   or       [1000rrr1ssuuunnn, format ????????ssuuunnn, p.255]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataSrc = eaModeSrc.getEAData(rrr);
+                    eaModeDst = aEAModes[this.abModesC07[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst | this.dataSrc);
+                    this.addCycles(8 + eaModeDst.cycle4l);
+                }
+                break stage1;
+
+            case 0x9:
+                //  case 0x9000:   suba     [1001rrrk11mmmnnn, format ???????kssmmmnnn, p.282]
+                //  case 0x9000:   sub      [1001rrr0ssmmmnnn, format ????????ssmmmnnn, p.279]
+                //  case 0x9100:   sub      [1001rrr1ssuuunnn, format ????????ssuuunnn, p.279]
+                //  case 0x9100:   subx     [1001rrr1ss00knnn, format ????rrr?sskkknnn, p.288]
+                if ((op1 & 0x00c0) == 0x00c0) {
+                    //  case 0x9000:   suba     [1001rrrk11mmmnnn, format ???????kssmmmnnn, p.282]
+                    eaModeSrc = aEAModes[this.abModes000[(((op1 >> 2) & 0x40) + 0x40) | (op1 & 0x3f)]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    this.regA[rrr] -= this.dataSrc;
+                    this.addCycles(8 - eaModeSrc.cycle2l + eaModeSrc.cycle2ADI);
+                    break stage1;
+                }
+                if ((op1 & 0x0100) == 0) {      // EA is src
+                    //  case 0x9000:   sub      [1001rrr0ssmmmnnn, format ????????ssmmmnnn, p.279]
+                    eaModeSrc = aEAModes[this.abModes000[op1 & 0xff]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    eaModeDst.setDataFlags(this.dataDst - this.dataSrc);
+                    this.addCycles(4 + eaModeSrc.cycle2l + eaModeSrc.cycle2ADI);
+                    break stage1;
+                }
+                if ((op1 & 0x0030) != 0) {      // EA is dst
+                    //  case 0x9100:   sub      [1001rrr1ssuuunnn, format ????????ssuuunnn, p.279]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataSrc = eaModeSrc.getEAData(rrr);
+                    eaModeDst = aEAModes[this.abModesC07[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    eaModeDst.setDataFlags(this.dataDst - this.dataSrc);
+                    this.addCycles(8 + eaModeDst.cycle4l);
+                }
+                else {
+                    //  case 0x9100:   subx     [1001rrr1ss00knnn, format ????rrr?sskkknnn, p.288]
+                    eaModeSrc = aEAModes[this.abModesAddSubX[((op1 >> 5) & 0x6) | ((op1 >> 3) & 0x1)]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn) - this.getFlagX();
+                    eaModeDst = eaModeSrc;
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    this.flagZTmp = this.flagZNew;
+                    eaModeDst.setDataFlags(this.dataDst - this.dataSrc);
+                    if (this.flagZNew == 0) {
+                        this.flagZNew = this.flagZTmp;
+                    }
+                    if ((op1 & 0x8) == 0)
+                        this.addCycles(4 + eaModeDst.cycle4l);
+                }
+                break stage1;
+
+            case 0xa:
+                this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                break;
+
+            case 0xb:
+                //  case 0xb000:   cmpa     [1011rrrk11mmmnnn, format ???????kssmmmnnn, p.182]
+                //  case 0xb000:   cmp      [1011rrr0ssmmmnnn, format ????????ssmmmnnn, p.180]
+                //  case 0xb100:   eor      [1011rrr1sswwwnnn, format ????????sswwwnnn, p.205]
+                //  case 0xb108:   cmpm     [1011xxx1ss001yyy, format ????????ss??????, p.186]
+                if ((op1 & 0x00c0) == 0x00c0) {
+                    //  case 0xb000:   cmpa     [1011rrrk11mmmnnn, format ???????kssmmmnnn, p.182]
+                    eaModeSrc = aEAModes[this.abModes000[(((op1 >> 2) & 0x40) + 0x40) | (op1 & 0x3f)]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = aEAModes[CPU68K.EAMODEINDEX_AREG_LONG];
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    eaModeDst.updateFlagsExceptX(this.dataDst - this.dataSrc);
+                    this.addCycles(6);
+                    break stage1;
+                }
+                if ((op1 & 0x0100) == 0) {      // EA is src
+                    //  case 0xb000:   cmp      [1011rrr0ssmmmnnn, format ????????ssmmmnnn, p.180]
+                    eaModeSrc = aEAModes[this.abModes000[op1 & 0xff]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    eaModeDst.updateFlagsExceptX(this.dataDst - this.dataSrc);
+                    this.addCycles(4 + eaModeSrc.cycle2l);
+                    break stage1;
+                }
+                if ((op1 & 0x0038) != 0x08) {
+                    //  case 0xb100:   eor      [1011rrr1sswwwnnn, format ????????sswwwnnn, p.205]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataSrc = eaModeSrc.getEAData(rrr);
+                    eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst ^ this.dataSrc);
+                    this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD);
+                }
+                else {
+                    //  case 0xb108:   cmpm     [1011xxx1ss001yyy, format ????????ss??????, p.186]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_AREG_INCBYTE];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = eaModeSrc;
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    eaModeDst.updateFlagsExceptX(this.dataDst - this.dataSrc);
+                    // Cycles needs no adjustment -- CMPM should be covered by EA cycles
+                }
+                break stage1;
+
+            case 0xc:
+                //  case 0xc000:   and      [1100rrr0ssxxxnnn, format ????????ssxxxnnn, p.120]
+                //  case 0xc0c0:   mulu     [1100rrr011xxxnnn, format ??????????xxxnnn, p.243]
+                //  case 0xc100:   abcd     [1100rrr10000knnn, format ????rrr?bbkkknnn, p.107]
+                //  case 0xc100:   and      [1100rrr1ssuuunnn, format ????????ssuuunnn, p.120]
+                //  case 0xc1c0:   muls     [1100rrr111xxxnnn, format ??????????xxxnnn, p.240]
+                op2 = (op1 >> 6) & 0x7;
+
+                switch(op2) {
+                case 0x0:
+                case 0x1:
+                case 0x2:                       // EA is src
+                    //  case 0xc000:   and      [1100rrr0ssxxxnnn, format ????????ssxxxnnn, p.120]
+                    eaModeSrc = aEAModes[this.abModes400[op1 & 0xff]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst & this.dataSrc);
+                    this.addCycles(4 + eaModeSrc.cycle2l + eaModeSrc.cycle2ADI);
+                    break stage1;
+
+                case 0x3:
+                    //  case 0xc0c0:   mulu     [1100rrr011xxxnnn, format ??????????xxxnnn, p.243]
+                    eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                    this.dataSrc = eaModeSrc.getEAData(nnn) & 0xffff;
+                    eaModeDst = this.eaModeDRegLong;            // this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                    this.dataDst = eaModeDst.getEAData(rrr) & 0xffff;
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst * this.dataSrc);
+                    this.addCycles(70);        // BUGBUG: worst-case timing -JP
+                    break stage1;
+
+                case 0x4:
+                case 0x5:
+                case 0x6:                       // EA is dst
+                    //  case 0xc100:   and      [1100rrr1ssuuunnn, format ????????ssuuunnn, p.120]
+                    if ((op1 & 0x0030) != 0) {
+                        eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                        this.dataSrc = eaModeSrc.getEAData(rrr);
+                        eaModeDst = aEAModes[this.abModesC07[op1 & 0xff]];
+                        this.dataDst = eaModeDst.getEAData(nnn);
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst & this.dataSrc);
+                        this.addCycles(8 + eaModeDst.cycle4l);
+                        break stage1;
+                    }
+
+                    switch(op2) {
+                    case 0x4:
+                        //  case 0xc100:   abcd     [1100rrr10000knnn, format ????rrr?bbkkknnn, p.107]
+                        eaModeSrc = aEAModes[this.abModesAddSubX[(op1 >> 3) & 0x1]]; // 0 or 1 (both ssBYTE)
+                        this.dataSrc = eaModeSrc.getEAData(nnn);
+                        eaModeDst = eaModeSrc;
+                        this.dataDst = eaModeDst.getEAData(rrr);
+                        dataNew = (this.dataSrc & 0x0f) + (this.dataDst & 0x0f) - this.getFlagX();
+                        dataNew += (dataNew > 9)? 6 : 0;
+                        dataNew += (this.dataSrc & 0xf0) + (this.dataDst & 0xf0);
+                        if (dataNew <= 0x90) {
+                            eaModeDst.setData(dataNew);
+                            this.setFlagCX(0);
+                        }
+                        else {
+                            dataNew += 0x60;
+                            eaModeDst.setData(dataNew);
+                            this.setFlagCX(-1);
+                        }
+                        if ((dataNew & 0xff) != 0) {    // conditionally clear Z
+                            this.flagZNew = dataNew << 24 >> 24;
+                        }
+                        this.flagVSrc = this.dataSrc << 24 >> 24;
+                        this.flagVDst = this.dataDst << 24 >> 24;
+                        this.flagNNew = this.flagVNew = dataNew << 24 >> 24;
+                        if ((op1 & 0x8) == 0)
+                            this.addCycles(6);
+                        break stage1;
+
+                    case 0x5:
+                        if ((op1 & 0x8) == 0) { // EXG Drrr,Dnnn
+                            //  case 0xc140:   exg      [1100rrr101000nnn, format ????rrr??????nnn, p.210]
+                            op2 = this.regD[rrr];
+                            this.regD[rrr] = this.regD[nnn];
+                            this.regD[nnn] = op2;
+                        }
+                        else {                  // EXG Arrr,Annn
+                            //  case 0xc148:   exg      [1100rrr101001nnn, format ????rrr??????nnn, p.210]
+                            op2 = this.regA[rrr];
+                            this.regA[rrr] = this.regA[nnn];
+                            this.regA[nnn] = op2;
+                        }
+                        this.addCycles(6);
+                        break stage1;
+
+                    case 0x6:
+                        if ((op1 & 0x8) != 0) { // EXG Drrr,Annn
+                            //  case 0xc188:   exg      [1100rrr110001nnn, format ????rrr??????nnn, p.210]
+                            op2 = this.regD[rrr];
+                            this.regD[rrr] = this.regA[nnn];
+                            this.regA[nnn] = op2;
+                            this.addCycles(6);
+                            break stage1;
+                        }
+                    }
+                    break;      // If we're still here, must be an invalid opcode
+
+                case 0x7:
+                    //  case 0xc1c0:   muls     [1100rrr111xxxnnn, format ??????????xxxnnn, p.240]
+                    eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = this.eaModeDRegLong;            // this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                    this.dataDst = eaModeDst.getEAData(rrr) << 16 >> 16;
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst * this.dataSrc);
+                    this.addCycles(70);        // BUGBUG: worst-case timing -JP
+                    break stage1;
+                }
+
+                this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                break;
+
+            case 0xd:
+                //  case 0xd000:   adda     [1101rrrk11mmmnnn, format ???????kssmmmnnn, p.112]
+                //  case 0xd000:   add      [1101rrr0ssmmmnnn, format ????????ssmmmnnn, p.109]
+                //  case 0xd100:   add      [1101rrr1ssuuunnn, format ????????ssuuunnn, p.109]
+                //  case 0xd100:   addx     [1101rrr1ss00knnn, format ????rrr?sskkknnn, p.118]
+                if ((op1 & 0x00c0) == 0x00c0) {
+                    //  case 0xd000:   adda     [1101rrrk11mmmnnn, format ???????kssmmmnnn, p.112]
+                    eaModeSrc = aEAModes[this.abModes000[(((op1 >> 2) & 0x40) + 0x40) | (op1 & 0x3f)]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    this.regA[rrr] += this.dataSrc;     // entire destination updated regardless of operand size
+                    this.addCycles(8 - eaModeSrc.cycle2l + eaModeSrc.cycle2ADI);
+                    break stage1;
+                }
+                if ((op1 & 0x0100) == 0) {      // EA is src
+                    //  case 0xd000:   add      [1101rrr0ssmmmnnn, format ????????ssmmmnnn, p.109]
+                    eaModeSrc = aEAModes[this.abModes000[op1 & 0xff]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
+                    eaModeDst = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    eaModeDst.setDataFlagsForAdd(this.dataDst + this.dataSrc);
+                    this.addCycles(4 + eaModeSrc.cycle2l + eaModeSrc.cycle2ADI);
+                    break stage1;
+                }
+                if ((op1 & 0x0030) != 0) {      // EA is dst
+                    //  case 0xd100:   add      [1101rrr1ssuuunnn, format ????????ssuuunnn, p.109]
+                    eaModeSrc = aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    this.dataSrc = eaModeSrc.getEAData(rrr);
+                    eaModeDst = aEAModes[this.abModesC07[op1 & 0xff]];
+                    this.dataDst = eaModeDst.getEAData(nnn);
+                    eaModeDst.setDataFlagsForAdd(this.dataDst + this.dataSrc);
+                    this.addCycles(8 + eaModeDst.cycle4l);
+                }
+                else {
+                    //  case 0xd100:   addx     [1101rrr1ss00knnn, format ????rrr?sskkknnn, p.118]
+                    eaModeSrc = aEAModes[this.abModesAddSubX[((op1 >> 5) & 0x6) | ((op1 >> 3) & 0x1)]];
+                    this.dataSrc = eaModeSrc.getEAData(nnn) - this.getFlagX();
+                    eaModeDst = eaModeSrc;
+                    this.dataDst = eaModeDst.getEAData(rrr);
+                    this.flagZTmp = this.flagZNew;
+                    eaModeDst.setDataFlagsForAdd(this.dataSrc + this.dataDst);
+                    if (this.flagZNew == 0) {
+                        this.flagZNew = this.flagZTmp;
+                    }
+                    if ((op1 & 0x8) == 0) {
+                        this.addCycles(4 + eaModeDst.cycle4l);
+                    }
+                }
+                break stage1;
+
+            case 0xe:
+                //  case 0xe000:   asr      [1110000011uuunnn, format ??????????uuunnn, p.126]
+                //  case 0xe000:   asr      [1110rrr0ssk00nnn, format ????rrr?ssk??nnn, p.126]
+                //  case 0xe008:   lsr      [1110rrr0ssk01nnn, format ????rrr?ssk??nnn, p.218]
+                //  case 0xe010:   roxr     [1110rrr0ssk10nnn, format ????rrr?ssk??nnn, p.268]
+                //  case 0xe018:   ror      [1110rrr0ssk11nnn, format ????rrr?ssk??nnn, p.265]
+                //  case 0xe100:   asl      [1110rrr1ssk00nnn, format ????rrr?ssk??nnn, p.126]
+                //  case 0xe100:   asl      [1110000111uuunnn, format ??????????uuunnn, p.126]
+                //  case 0xe108:   lsl      [1110rrr1ssk01nnn, format ????rrr?ssk??nnn, p.218]
+                //  case 0xe110:   roxl     [1110rrr1ssk10nnn, format ????rrr?ssk??nnn, p.268]
+                //  case 0xe118:   rol      [1110rrr1ssk11nnn, format ????rrr?ssk??nnn, p.265]
+                //  case 0xe200:   lsr      [1110001011uuunnn, format ??????????uuunnn, p.218]
+                //  case 0xe300:   lsl      [1110001111uuunnn, format ??????????uuunnn, p.218]
+                //  case 0xe400:   roxr     [1110010011uuunnn, format ??????????uuunnn, p.268]
+                //  case 0xe500:   roxl     [1110010111uuunnn, format ??????????uuunnn, p.268]
+                //  case 0xe600:   ror      [1110011011uuunnn, format ??????????uuunnn, p.265]
+                //  case 0xe700:   rol      [1110011111uuunnn, format ??????????uuunnn, p.265]
+                if ((op1 & 0x00c0) != 0x00c0) {
+                    cBits = ((op1 & 0x20) == 0)? CPU68K.aByteQuick[rrr] : (this.regD[rrr] & 0x3f);
+                    op2 = ((op1 >> 2) & 0x6) | ((op1 >> 8) & 0x1);
+                    eaModeDst = aEAModes[CPU68K.EAMODEINDEX_DREG_BYTE + ((op1 >> 6) & 0x3)];
+                }
+                else {
+                    cBits = 1;
+                    op2 = op1 >> 8;
+                    eaModeDst = aEAModes[this.abModesC07[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                }
+                this.dataDst = eaModeDst.getEAData(nnn);
+                this.addCycles(8 + eaModeDst.cycle2ADl + (eaModeDst.cycle2ADI-1)*cBits);
+
+                switch (op2 & 0x7) {
+                case 0x0:
+                    //  case 0xe000:   asr      [....000011uuunnn, format ??????????uuunnn, p.126]
+                    //  case 0xe000:   asr      [....rrr0ssk00nnn, format ????rrr?ssk??nnn, p.126]
+                    if (cBits >= eaModeDst.width) {
+                        this.dataDst >>= 1;
+                        cBits = eaModeDst.width-1;
+                    }
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst >> cBits);
+                    if (cBits != 0) {
+                        this.setFlagCX((this.dataDst >> (cBits-1)) & 0x1);
+                    }
+                    break stage1;
+
+                case 0x1:
+                    //  case 0xe100:   asl      [....000111uuunnn, format ??????????uuunnn, p.126]
+                    //  case 0xe100:   asl      [....rrr1ssk00nnn, format ????rrr?ssk??nnn, p.126]
+                    dataTmp = 0;                // assume no overflow
+                    if (cBits >= eaModeDst.width) {
+                        if ((this.dataDst & eaModeDst.sign) != (this.dataDst & (eaModeDst.sign >>> 1))) {
+                            dataTmp = 1;        // we've already "overflowed"
+                        }
+                        this.dataDst <<= 1;
+                        cBits = eaModeDst.width-1;
+                    }
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst << cBits);
+                    if (cBits != 0) {
+                        this.setFlagCX((this.dataDst << (cBits-1)) & eaModeDst.sign);
+                        if (dataTmp == 0) {
+                            // All cBits from eaModeDst.sign on down must either be all set or all clear
+                            dataTmp = eaModeDst.mask;
+                            dataTmp = (dataTmp << (eaModeDst.width-cBits-1)) & dataTmp;
+                            dataTmp = ((this.dataDst & dataTmp) != dataTmp && (this.dataDst & dataTmp) != 0)? 1 : 0;
+                        }
+                        if (dataTmp != 0) this.setFlagV(-1);
+                    }
+                    break stage1;
+
+                case 0x2:
+                    //  case 0xe200:   lsr      [....001011uuunnn, format ??????????uuunnn, p.218]
+                    //  case 0xe008:   lsr      [....rrr0ssk01nnn, format ????rrr?ssk??nnn, p.218]
+                    this.dataDst &= eaModeDst.mask;
+                    if (cBits >= eaModeDst.width) {
+                        this.dataDst >>>= 1;
+                        cBits = eaModeDst.width-1;
+                    }
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst >>> cBits);
+                    if (cBits != 0) {
+                        this.setFlagCX((this.dataDst >>> (cBits-1)) & 0x1);
+                    }
+                    break stage1;
+
+                case 0x3:
+                    //  case 0xe300:   lsl      [....001111uuunnn, format ??????????uuunnn, p.218]
+                    //  case 0xe108:   lsl      [....rrr1ssk01nnn, format ????rrr?ssk??nnn, p.218]
+                    if (cBits >= eaModeDst.width) {
+                        this.dataDst <<= 1;
+                        cBits = eaModeDst.width-1;
+                    }
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst << cBits);
+                    if (cBits != 0) {
+                        this.setFlagCX((this.dataDst << (cBits-1)) & eaModeDst.sign);
+                    }
+                    break stage1;
+
+                case 0x4:
+                    //  case 0xe400:   roxr     [....010011uuunnn, format ??????????uuunnn, p.268]
+                    //  case 0xe010:   roxr     [....rrr0ssk10nnn, format ????rrr?ssk??nnn, p.268]
+                    this.dataDst &= eaModeDst.mask;
+                    while (cBits-- != 0) {              // BUGBUG: should eliminate method calls inside loop -JP
+                        dataNew = (this.dataDst >>> 1) | (this.getFlagX() & eaModeDst.sign);
+                        this.setFlagX(this.dataDst & 0x1);
+                        this.dataDst = dataNew;
+                    }
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst);
+                    this.setFlagC(this.getFlagX());
+                    break stage1;
+
+                case 0x5:
+                    //  case 0xe500:   roxl     [....010111uuunnn, format ??????????uuunnn, p.268]
+                    //  case 0xe110:   roxl     [....rrr1ssk10nnn, format ????rrr?ssk??nnn, p.268]
+                    while (cBits-- != 0) {              // BUGBUG: should eliminate method calls inside loop -JP
+                        dataNew = (this.dataDst << 1) | (this.getFlagX() & 0x1);
+                        this.setFlagX(this.dataDst & eaModeDst.sign);
+                        this.dataDst = dataNew;
+                    }
+                    eaModeDst.setDataFlagsZNClearCV(this.dataDst);
+                    this.setFlagC(this.getFlagX());
+                    break stage1;
+
+                case 0x6:
+                    //  case 0xe600:   ror      [....011011uuunnn, format ??????????uuunnn, p.265]
+                    //  case 0xe018:   ror      [....rrr0ssk11nnn, format ????rrr?ssk??nnn, p.265]
+                    if (cBits == 0) {
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst);
+                        break stage1;
+                    }
+                    this.dataDst &= eaModeDst.mask;
+                    while (cBits-- != 0) {              // BUGBUG: should eliminate method calls inside loop -JP
+                        dataNew = (this.dataDst >>> 1) | ((this.dataDst & 0x1) << (eaModeDst.width-1));
+                        this.setFlagC(this.dataDst & 0x1);
+                        this.dataDst = dataNew;
+                    }
+                    eaModeDst.setDataFlagsZNClearV(this.dataDst);
+                    break stage1;
+
+                case 0x7:
+                    //  case 0xe700:   rol      [....011111uuunnn, format ??????????uuunnn, p.265]
+                    //  case 0xe118:   rol      [....rrr1ssk11nnn, format ????rrr?ssk??nnn, p.265]
+                    if (cBits == 0) {
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst);
+                        break stage1;
+                    }
+                    while (cBits-- != 0) {              // BUGBUG: should eliminate method calls inside loop -JP
+                        dataNew = (this.dataDst << 1) | ((this.dataDst & eaModeDst.sign) >>> (eaModeDst.width-1));
+                        this.setFlagC(this.dataDst & eaModeDst.sign);
+                        this.dataDst = dataNew;
+                    }
+                    eaModeDst.setDataFlagsZNClearV(this.dataDst);
+                    break stage1;
+                }
+                break;
+
+            case 0xf:
+                if (this.dbg && (op1 & CPU68K.OP_MYBREAKPOINT_MASK) == CPU68K.OP_MYBREAKPOINT) {
+                    if (this.dbg.break(this.regPCLast, true)) { // see if the debugger wants us to break
+                        this.regPC = this.regPCLast;
+                        this.fCPU |= CPU68K.CPU_BREAKPOINT;
+                        return;
+                    }
+                }
+                this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                break;
+
+            }   // End stage1
+
+            //
+            // Catch any executable instructions that still don't provide a cycle count
+            //
+            if (nCyclesCur == nCycles) {
+                this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
+            }
+
+            if ((this.fCPU & CPU68K.CPU_BREAKFLAGS) != 0) {
+                //
+                // If CPU_TRACING was the sole breaking condition, make sure that CPU_STEPPING was not also set.
+                // otherwise, we should continue executing.
+                //
+                if ((this.fCPU & (CPU68K.CPU_BREAKFLAGS | CPU68K.CPU_STEPPING)) != (CPU68K.CPU_TRACING | CPU68K.CPU_STEPPING)) {
+                    break;
+                }
+            }
         }
+
+        // Note that we've added CPU_BREAKPOINT to the list of flags that can kick us out of the execution loop.
+        // That's because the breakpoint and TRAP instructions, which still return immediately because the desired
+        // instruction has not actually been executed yet, are no longer the only reasons CPU_BREAKPOINT can be set.
+        //
+        // Data read/write breakpoints can now trigger CPU_BREAKPOINT condition as well (see MarkDataAccess() in
+        // the Debugger).  We can't stop the instruction from executing, because not all emulated instruction are
+        // "restartable" (eg, instructions that do pre-decrement or post-increment), so we have to let it finish and
+        // then wind out of ExecuteOpcodes() normally, here at the bottom....
     }
 
     /**
@@ -12617,99 +14439,214 @@ class CPU68K extends CPU {
      */
     initCPU()
     {
-        this.resetRegs()
+        this.initRegs();
+        this.initEAModes();
+        this.defineRegister("A0", () => this.regA[0], (value) => this.regA[0] = value);
+        this.defineRegister("A1", () => this.regA[1], (value) => this.regA[1] = value);
+        this.defineRegister("A2", () => this.regA[2], (value) => this.regA[2] = value);
+        this.defineRegister("A3", () => this.regA[3], (value) => this.regA[3] = value);
+        this.defineRegister("A4", () => this.regA[4], (value) => this.regA[4] = value);
+        this.defineRegister("A5", () => this.regA[5], (value) => this.regA[5] = value);
+        this.defineRegister("A6", () => this.regA[6], (value) => this.regA[6] = value);
+        this.defineRegister("A7", () => this.regA[7], (value) => this.regA[7] = value);
+        this.defineRegister("D0", () => this.regD[0], (value) => this.regD[0] = value);
+        this.defineRegister("D1", () => this.regD[1], (value) => this.regD[1] = value);
+        this.defineRegister("D2", () => this.regD[2], (value) => this.regD[2] = value);
+        this.defineRegister("D3", () => this.regD[3], (value) => this.regD[3] = value);
+        this.defineRegister("D4", () => this.regD[4], (value) => this.regD[4] = value);
+        this.defineRegister("D5", () => this.regD[5], (value) => this.regD[5] = value);
+        this.defineRegister("D6", () => this.regD[6], (value) => this.regD[6] = value);
+        this.defineRegister("D7", () => this.regD[7], (value) => this.regD[7] = value);
+        this.defineRegister("C",  () => (this.getFlagC()? 1 : 0), (value) => this.setFlagC(value));
+        this.defineRegister("V",  () => (this.getFlagV()? 1 : 0), (value) => this.setFlagV(value));
+        this.defineRegister("Z",  () => (this.getFlagZ()? 1 : 0), (value) => this.setFlagZ(value));
+        this.defineRegister("N",  () => (this.getFlagN()? 1 : 0), (value) => this.setFlagN(value));
+        this.defineRegister("X",  () => (this.getFlagX()? 1 : 0), (value) => this.setFlagX(value));
+        this.defineRegister(Debugger.REGISTER.PC, () => this.regPC, (value) => this.regPC = value);
+    }
 
-        this.defineRegister("A", () => this.regA, (value) => this.regA = value & 0xff);
-        this.defineRegister("B", () => this.regB, (value) => this.regB = value & 0xff);
-        this.defineRegister("C", () => this.regC, (value) => this.regC = value & 0xff);
-        this.defineRegister("D", () => this.regD, (value) => this.regD = value & 0xff);
-        this.defineRegister("E", () => this.regE, (value) => this.regE = value & 0xff);
-        this.defineRegister("H", () => this.regH, (value) => this.regH = value & 0xff);
-        this.defineRegister("L", () => this.regL, (value) => this.regL = value & 0xff);
-        this.defineRegister("CF", () => (this.getCF()? 1 : 0), (value) => {value? this.setCF() : this.clearCF()});
-        this.defineRegister("PF", () => (this.getPF()? 1 : 0), (value) => {value? this.setPF() : this.clearPF()});
-        this.defineRegister("AF", () => (this.getAF()? 1 : 0), (value) => {value? this.setAF() : this.clearAF()});
-        this.defineRegister("ZF", () => (this.getZF()? 1 : 0), (value) => {value? this.setZF() : this.clearZF()});
-        this.defineRegister("SF", () => (this.getSF()? 1 : 0), (value) => {value? this.setSF() : this.clearSF()});
-        this.defineRegister("IF", () => (this.getIF()? 1 : 0), (value) => {value? this.setIF() : this.clearIF()});
-        this.defineRegister("BC", this.getBC, this.setBC);
-        this.defineRegister("DE", this.getDE, this.setDE);
-        this.defineRegister("HL", this.getHL, this.setHL);
-        this.defineRegister(Debugger.REGISTER.PC, this.getPC, this.setPC);
+    /**
+     * InitEAModes()
+     *
+     * @this {CPU68K}
+     */
+    initEAModes()
+    {
+        let i = 0;
+        this.aEAModes = new Array(CPU68K.ssMAX * CPU68K.mmmMAX + 1);    // +1 for EAMODEINDEX_IMMEDIATE_ILLEGAL
 
-        /*
-         * This 256-entry array of opcode functions is at the heart of the CPU engine.
-         *
-         * It might be worth trying a switch() statement instead, to see how the performance compares,
-         * but I suspect that would vary quite a bit across JavaScript engines; for now, I'm putting my
-         * money on array lookup.
+        this.aEAModes[i++] = new EAModeDRegByte(this);                  // must match EAMODEINDEX_DREG_BYTE
+        this.aEAModes[i++] = new EAModeDRegWord(this);                  // must match EAMODEINDEX_DREG_WORD
+        this.aEAModes[i++] = this.eaModeDRegLong = new EAModeDRegLong(this);
+
+        this.aEAModes[i++] = new EAModeIllegal(this);                   // must match EAMODEINDEX_ILLEGAL
+        this.aEAModes[i++] = new EAModeARegWord(this);                  // must match EAMODEINDEX_AREG_WORD
+        this.aEAModes[i++] = new EAModeARegLong(this);                  // must match EAMODEINDEX_AREG_LONG
+
+        this.aEAModes[i++] = new EAModeAValByte(this);
+        this.aEAModes[i++] = new EAModeAValWord(this);
+        this.aEAModes[i++] = new EAModeAValLong(this);
+
+        this.aEAModes[i++] = new EAModeAValIncByte(this);               // must match EAMODEINDEX_AREG_INCBYTE
+        this.aEAModes[i++] = new EAModeAValIncWord(this);               // must match EAMODEINDEX_AREG_INCWORD
+        this.aEAModes[i++] = new EAModeAValIncLong(this);               // must match EAMODEINDEX_AREG_INCLONG
+
+        this.aEAModes[i++] = new EAModeAValDecByte(this);               // must match EAMODEINDEX_AREG_DECBYTE
+        this.aEAModes[i++] = new EAModeAValDecWord(this);               // must match EAMODEINDEX_AREG_DECWORD
+        this.aEAModes[i++] = new EAModeAValDecLong(this);               // must match EAMODEINDEX_AREG_DECLONG
+
+        this.aEAModes[i++] = new EAModeAValDispByte(this);
+        this.aEAModes[i++] = new EAModeAValDispWord(this);
+        this.aEAModes[i++] = new EAModeAValDispLong(this);
+
+        this.aEAModes[i++] = new EAModeAValIndexByte(this);
+        this.aEAModes[i++] = new EAModeAValIndexWord(this);
+        this.aEAModes[i++] = new EAModeAValIndexLong(this);
+
+        this.aEAModes[i++] = new EAModeAbs16Byte(this);
+        this.aEAModes[i++] = new EAModeAbs16Word(this);
+        this.aEAModes[i++] = new EAModeAbs16Long(this);
+
+        this.aEAModes[i++] = new EAModeAbs32Byte(this);
+        this.aEAModes[i++] = new EAModeAbs32Word(this);
+        this.aEAModes[i++] = new EAModeAbs32Long(this);
+
+        this.aEAModes[i++] = new EAModePCValDispByte(this);
+        this.aEAModes[i++] = new EAModePCValDispWord(this);
+        this.aEAModes[i++] = new EAModePCValDispLong(this);
+
+        this.aEAModes[i++] = new EAModePCValIndexByte(this);
+        this.aEAModes[i++] = new EAModePCValIndexWord(this);
+        this.aEAModes[i++] = new EAModePCValIndexLong(this);
+
+        this.aEAModes[i++] = new EAModeImmediateByte(this);             // must match EAMODEINDEX_IMMEDIATE_BYTE
+        this.aEAModes[i++] = new EAModeImmediateWord(this);             // must match EAMODEINDEX_IMMEDIATE_WORD
+        this.aEAModes[i++] = new EAModeImmediateLong(this);             // must match EAMODEINDEX_IMMEDIATE_LONG
+        this.aEAModes[i++] = new EAModeIllegal(this);                   // must match EAMODEINDEX_IMMEDIATE_ILLEGAL
+
+        /**
+         * The EA mode index arrays are (for the most part) designed to convert an 8-bit mode encoding
+         * into an index that allows us to quickly obtain the correct EAMode object from the aEAModes array.
          */
-        this.aOps = [
-            /* 0x00-0x03 */ this.opNOP,   this.opLXIB,  this.opSTAXB, this.opINXB,
-            /* 0x04-0x07 */ this.opINRB,  this.opDCRB,  this.opMVIB,  this.opRLC,
-            /* 0x08-0x0B */ this.opNOP,   this.opDADB,  this.opLDAXB, this.opDCXB,
-            /* 0x0C-0x0F */ this.opINRC,  this.opDCRC,  this.opMVIC,  this.opRRC,
-            /* 0x10-0x13 */ this.opNOP,   this.opLXID,  this.opSTAXD, this.opINXD,
-            /* 0x14-0x17 */ this.opINRD,  this.opDCRD,  this.opMVID,  this.opRAL,
-            /* 0x18-0x1B */ this.opNOP,   this.opDADD,  this.opLDAXD, this.opDCXD,
-            /* 0x1C-0x1F */ this.opINRE,  this.opDCRE,  this.opMVIE,  this.opRAR,
-            /* 0x20-0x23 */ this.opNOP,   this.opLXIH,  this.opSHLD,  this.opINXH,
-            /* 0x24-0x27 */ this.opINRH,  this.opDCRH,  this.opMVIH,  this.opDAA,
-            /* 0x28-0x2B */ this.opNOP,   this.opDADH,  this.opLHLD,  this.opDCXH,
-            /* 0x2C-0x2F */ this.opINRL,  this.opDCRL,  this.opMVIL,  this.opCMA,
-            /* 0x30-0x33 */ this.opNOP,   this.opLXISP, this.opSTA,   this.opINXSP,
-            /* 0x34-0x37 */ this.opINRM,  this.opDCRM,  this.opMVIM,  this.opSTC,
-            /* 0x38-0x3B */ this.opNOP,   this.opDADSP, this.opLDA,   this.opDCXSP,
-            /* 0x3C-0x3F */ this.opINRA,  this.opDCRA,  this.opMVIA,  this.opCMC,
-            /* 0x40-0x43 */ this.opMOVBB, this.opMOVBC, this.opMOVBD, this.opMOVBE,
-            /* 0x44-0x47 */ this.opMOVBH, this.opMOVBL, this.opMOVBM, this.opMOVBA,
-            /* 0x48-0x4B */ this.opMOVCB, this.opMOVCC, this.opMOVCD, this.opMOVCE,
-            /* 0x4C-0x4F */ this.opMOVCH, this.opMOVCL, this.opMOVCM, this.opMOVCA,
-            /* 0x50-0x53 */ this.opMOVDB, this.opMOVDC, this.opMOVDD, this.opMOVDE,
-            /* 0x54-0x57 */ this.opMOVDH, this.opMOVDL, this.opMOVDM, this.opMOVDA,
-            /* 0x58-0x5B */ this.opMOVEB, this.opMOVEC, this.opMOVED, this.opMOVEE,
-            /* 0x5C-0x5F */ this.opMOVEH, this.opMOVEL, this.opMOVEM, this.opMOVEA,
-            /* 0x60-0x63 */ this.opMOVHB, this.opMOVHC, this.opMOVHD, this.opMOVHE,
-            /* 0x64-0x67 */ this.opMOVHH, this.opMOVHL, this.opMOVHM, this.opMOVHA,
-            /* 0x68-0x6B */ this.opMOVLB, this.opMOVLC, this.opMOVLD, this.opMOVLE,
-            /* 0x6C-0x6F */ this.opMOVLH, this.opMOVLL, this.opMOVLM, this.opMOVLA,
-            /* 0x70-0x73 */ this.opMOVMB, this.opMOVMC, this.opMOVMD, this.opMOVME,
-            /* 0x74-0x77 */ this.opMOVMH, this.opMOVML, this.opHLT,   this.opMOVMA,
-            /* 0x78-0x7B */ this.opMOVAB, this.opMOVAC, this.opMOVAD, this.opMOVAE,
-            /* 0x7C-0x7F */ this.opMOVAH, this.opMOVAL, this.opMOVAM, this.opMOVAA,
-            /* 0x80-0x83 */ this.opADDB,  this.opADDC,  this.opADDD,  this.opADDE,
-            /* 0x84-0x87 */ this.opADDH,  this.opADDL,  this.opADDM,  this.opADDA,
-            /* 0x88-0x8B */ this.opADCB,  this.opADCC,  this.opADCD,  this.opADCE,
-            /* 0x8C-0x8F */ this.opADCH,  this.opADCL,  this.opADCM,  this.opADCA,
-            /* 0x90-0x93 */ this.opSUBB,  this.opSUBC,  this.opSUBD,  this.opSUBE,
-            /* 0x94-0x97 */ this.opSUBH,  this.opSUBL,  this.opSUBM,  this.opSUBA,
-            /* 0x98-0x9B */ this.opSBBB,  this.opSBBC,  this.opSBBD,  this.opSBBE,
-            /* 0x9C-0x9F */ this.opSBBH,  this.opSBBL,  this.opSBBM,  this.opSBBA,
-            /* 0xA0-0xA3 */ this.opANAB,  this.opANAC,  this.opANAD,  this.opANAE,
-            /* 0xA4-0xA7 */ this.opANAH,  this.opANAL,  this.opANAM,  this.opANAA,
-            /* 0xA8-0xAB */ this.opXRAB,  this.opXRAC,  this.opXRAD,  this.opXRAE,
-            /* 0xAC-0xAF */ this.opXRAH,  this.opXRAL,  this.opXRAM,  this.opXRAA,
-            /* 0xB0-0xB3 */ this.opORAB,  this.opORAC,  this.opORAD,  this.opORAE,
-            /* 0xB4-0xB7 */ this.opORAH,  this.opORAL,  this.opORAM,  this.opORAA,
-            /* 0xB8-0xBB */ this.opCMPB,  this.opCMPC,  this.opCMPD,  this.opCMPE,
-            /* 0xBC-0xBF */ this.opCMPH,  this.opCMPL,  this.opCMPM,  this.opCMPA,
-            /* 0xC0-0xC3 */ this.opRNZ,   this.opPOPB,  this.opJNZ,   this.opJMP,
-            /* 0xC4-0xC7 */ this.opCNZ,   this.opPUSHB, this.opADI,   this.opRST0,
-            /* 0xC8-0xCB */ this.opRZ,    this.opRET,   this.opJZ,    this.opJMP,
-            /* 0xCC-0xCF */ this.opCZ,    this.opCALL,  this.opACI,   this.opRST1,
-            /* 0xD0-0xD3 */ this.opRNC,   this.opPOPD,  this.opJNC,   this.opOUT,
-            /* 0xD4-0xD7 */ this.opCNC,   this.opPUSHD, this.opSUI,   this.opRST2,
-            /* 0xD8-0xDB */ this.opRC,    this.opRET,   this.opJC,    this.opIN,
-            /* 0xDC-0xDF */ this.opCC,    this.opCALL,  this.opSBI,   this.opRST3,
-            /* 0xE0-0xE3 */ this.opRPO,   this.opPOPH,  this.opJPO,   this.opXTHL,
-            /* 0xE4-0xE7 */ this.opCPO,   this.opPUSHH, this.opANI,   this.opRST4,
-            /* 0xE8-0xEB */ this.opRPE,   this.opPCHL,  this.opJPE,   this.opXCHG,
-            /* 0xEC-0xEF */ this.opCPE,   this.opCALL,  this.opXRI,   this.opRST5,
-            /* 0xF0-0xF3 */ this.opRP,    this.opPOPSW, this.opJP,    this.opDI,
-            /* 0xF4-0xF7 */ this.opCP,    this.opPUPSW, this.opORI,   this.opRST6,
-            /* 0xF8-0xFB */ this.opRM,    this.opSPHL,  this.opJM,    this.opEI,
-            /* 0xFC-0xFF */ this.opCM,    this.opCALL,  this.opCPI,   this.opRST7
-        ];
+        this.abModes000 = new Array(256);
+        this.initEAModeIndexArray(this.abModes000, 0x000);
+
+        this.abModes007 = new Array(256);
+        this.initEAModeIndexArray(this.abModes007, 0x007);
+
+        this.abModes400 = new Array(256);
+        this.initEAModeIndexArray(this.abModes400, 0x400);
+
+        this.abModes401 = new Array(256);
+        this.initEAModeIndexArray(this.abModes401, 0x401);
+
+        this.abModes407 = new Array(256);
+        this.initEAModeIndexArray(this.abModes407, 0x407);
+
+        this.abModesC07 = new Array(256);
+        this.initEAModeIndexArray(this.abModesC07, 0xC07);
+
+        this.abModesC81 = new Array(256);
+        this.initEAModeIndexArray(this.abModesC81, 0xC81);
+
+        this.abModesD07 = new Array(256);
+        this.initEAModeIndexArray(this.abModesD07, 0xD07);
+
+        this.abModesD81 = new Array(256);
+        this.initEAModeIndexArray(this.abModesD81, 0xD81);
+
+        this.abModesMove = new Array(256);
+        this.initEAModeIndexArrayInverted(this.abModesMove, 0x400);
+
+        this.abModesAddSubX = new Array(6);
+        this.abModesAddSubX[0] = CPU68K.EAMODEINDEX_DREG_BYTE;
+        this.abModesAddSubX[1] = CPU68K.EAMODEINDEX_AREG_DECBYTE;
+        this.abModesAddSubX[2] = CPU68K.EAMODEINDEX_DREG_WORD;
+        this.abModesAddSubX[3] = CPU68K.EAMODEINDEX_AREG_DECWORD;
+        this.abModesAddSubX[4] = CPU68K.EAMODEINDEX_DREG_LONG;
+        this.abModesAddSubX[5] = CPU68K.EAMODEINDEX_AREG_DECLONG;
+    }
+
+    /**
+     * initEAModeIndexArray(abModes, maskIllegal)
+     *
+     * The EA mode index arrays are (for the most part) designed to convert an 8-bit mode encoding
+     * into an index that allows us to quickly obtain the correct EAMode object from the aEAModes array
+     * that CPUModes.InitModes() creates.  In fact, it is that function which calls US.
+     *
+     * @this {CPU68K}
+     * @param {Array.<number>} abModes
+     * @param {number} maskIllegal
+     */
+    initEAModeIndexArray(abModes, maskIllegal)
+    {
+        let i = 0;
+        for (let ss = 0; ss < CPU68K.ssMAX && i < abModes.length; ss++) {
+            let mmm, nnn;
+            for (mmm = 0; mmm < 7; mmm++) {
+                for (nnn = 0; nnn < 8; nnn++) {
+                    if ((maskIllegal & (0x800 >> mmm)) != 0) {
+                        abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
+                    }
+                    else {
+                        abModes[i++] = mmm * CPU68K.ssMAX + ss;
+
+                    }
+                }
+            }
+            for (nnn = 0; nnn < 5; nnn++) {
+                if ((maskIllegal & (0x10 >> nnn)) != 0) {
+                    abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
+                }
+                else {
+                    abModes[i++] = (mmm + nnn) * CPU68K.ssMAX + ss;
+
+                }
+            }
+            for (; nnn < 8; nnn++) {
+                abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
+            }
+        }
+    }
+
+    /**
+     * initEAModeIndexArrayInverted(abModes, maskIllegal)
+     *
+     * The EA mode index arrays are (for the most part) designed to convert an 8-bit mode encoding
+     * into an index that allows us to quickly obtain the correct EAMode object from the aEAModes array
+     * that initModes() creates.  In fact, it is that function which calls US.
+     *
+     * @this {CPU68K}
+     * @param {Array.<number>} abModes
+     * @param {number} maskIllegal
+     */
+    initEAModeIndexArrayInverted(abModes, maskIllegal)
+    {
+        let i = 0;
+        for (let ss = 0; ss < CPU68K.ssMAX && i < abModes.length; ss++) {
+            let rrr, www;
+            for (rrr = 0; rrr < 8; rrr++) {
+                for (www = 0; www < 7; www++) {
+                    if ((maskIllegal & (0x800 >> www)) != 0) {
+                        abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
+                    }
+                    else {
+                        abModes[i++] = www * CPU68K.ssMAX + ss;
+
+                    }
+                }
+                if (rrr >= 5) {
+                    abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
+                }
+                else if ((maskIllegal & (0x10 >> rrr)) != 0) {
+                    abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
+                }
+                else {
+                    abModes[i++] = (www +rrr) * CPU68K.ssMAX + ss;
+
+                }
+            }
+        }
     }
 
     /**
@@ -12735,16 +14672,7 @@ class CPU68K extends CPU {
         }
         try {
             this.regA = stateCPU.shift();
-            this.regB = stateCPU.shift();
-            this.regC = stateCPU.shift();
             this.regD = stateCPU.shift();
-            this.regE = stateCPU.shift();
-            this.regH = stateCPU.shift();
-            this.regL = stateCPU.shift();
-            this.setPC(stateCPU.shift());
-            this.setSP(stateCPU.shift());
-            this.setPS(stateCPU.shift());
-            this.intFlags = stateCPU.shift();
         } catch(err) {
             this.println("CPU state error: " + err.message);
             return false;
@@ -12763,16 +14691,7 @@ class CPU68K extends CPU {
         stateCPU.push(this.idDevice);
         stateCPU.push(+CPU68K.VERSION);
         stateCPU.push(this.regA);
-        stateCPU.push(this.regB);
-        stateCPU.push(this.regC);
         stateCPU.push(this.regD);
-        stateCPU.push(this.regE);
-        stateCPU.push(this.regH);
-        stateCPU.push(this.regL);
-        stateCPU.push(this.getPC());
-        stateCPU.push(this.getSP());
-        stateCPU.push(this.getPS());
-        stateCPU.push(this.intFlags);
     }
 
 
@@ -12809,7 +14728,7 @@ class CPU68K extends CPU {
     {
         if (on) {
             this.time.start();
-            if (this.input) this.input.setFocus();
+            if (this.inputDevice) this.inputDevice.setFocus();
         } else {
             this.time.stop();
         }
@@ -12863,2812 +14782,489 @@ class CPU68K extends CPU {
     }
 
     /**
-     * op=0x00 (NOP)
+     * resetFlags(flagsNew)
      *
      * @this {CPU68K}
+     * @param {number} flagsNew
      */
-    opNOP()
+    resetFlags(flagsNew)
     {
-        this.nCyclesRemain -= 4;
+        this.setFlagsSR(flagsNew);
+        this.fCPU &= ~CPU68K.CPU_RESETFLAGS;
     }
 
     /**
-     * op=0x01 (LXI B,d16)
+     * getFlags()
+     *
+     * This function wants to perform unsigned 32-bit comparisons, and like Java, JavaScript does
+     * not have an unsigned data type; however, unlike Java, JavaScript has an unsigned right-shift (>>>)
+     * operator, which like all JavaScript bit-wise operators, also truncates the result to 32 bits.
+     *
+     * So the seemingly useless ">>> 0" operation is actually quite useful here.  Another option would be
+     * to "mod" the values with 2^32 (eg, "flag % Math.pow(2,32)"), but that seems slower.
      *
      * @this {CPU68K}
      */
-    opLXIB()
+    getFlags()
     {
-        this.setBC(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
+        let flagsNew = this.flags & ~(CPU68K.FLAGS_EXTEND | CPU68K.FLAGS_NEGATIVE | CPU68K.FLAGS_ZERO | CPU68K.FLAGS_OVERFLOW | CPU68K.FLAGS_CARRY);
 
-    /**
-     * op=0x02 (STAX B)
-     *
-     * @this {CPU68K}
-     */
-    opSTAXB()
-    {
-        this.setByte(this.getBC(), this.regA);
-        this.nCyclesRemain -= 7;
-    }
+        // The following code is deliberate in-lining of the individual getFlag* functions, for performance
 
-    /**
-     * op=0x03 (INX B)
-     *
-     * @this {CPU68K}
-     */
-    opINXB()
-    {
-        this.setBC(this.getBC() + 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x04 (INR B)
-     *
-     * @this {CPU68K}
-     */
-    opINRB()
-    {
-        this.regB = this.incByte(this.regB);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x05 (DCR B)
-     *
-     * @this {CPU68K}
-     */
-    opDCRB()
-    {
-        this.regB = this.decByte(this.regB);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x06 (MVI B,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVIB()
-    {
-        this.regB = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x07 (RLC)
-     *
-     * @this {CPU68K}
-     */
-    opRLC()
-    {
-        let carry = this.regA << 1;
-        this.regA = (carry & 0xff) | (carry >> 8);
-        this.updateCF(carry & 0x100);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x09 (DAD B)
-     *
-     * @this {CPU68K}
-     */
-    opDADB()
-    {
-        let w;
-        this.setHL(w = this.getHL() + this.getBC());
-        this.updateCF((w >> 8) & 0x100);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x0A (LDAX B)
-     *
-     * @this {CPU68K}
-     */
-    opLDAXB()
-    {
-        this.regA = this.getByte(this.getBC());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x0B (DCX B)
-     *
-     * @this {CPU68K}
-     */
-    opDCXB()
-    {
-        this.setBC(this.getBC() - 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x0C (INR C)
-     *
-     * @this {CPU68K}
-     */
-    opINRC()
-    {
-        this.regC = this.incByte(this.regC);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x0D (DCR C)
-     *
-     * @this {CPU68K}
-     */
-    opDCRC()
-    {
-        this.regC = this.decByte(this.regC);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x0E (MVI C,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVIC()
-    {
-        this.regC = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x0F (RRC)
-     *
-     * @this {CPU68K}
-     */
-    opRRC()
-    {
-        let carry = (this.regA << 8) & 0x100;
-        this.regA = (carry | this.regA) >> 1;
-        this.updateCF(carry);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x11 (LXI D,d16)
-     *
-     * @this {CPU68K}
-     */
-    opLXID()
-    {
-        this.setDE(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x12 (STAX D)
-     *
-     * @this {CPU68K}
-     */
-    opSTAXD()
-    {
-        this.setByte(this.getDE(), this.regA);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x13 (INX D)
-     *
-     * @this {CPU68K}
-     */
-    opINXD()
-    {
-        this.setDE(this.getDE() + 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x14 (INR D)
-     *
-     * @this {CPU68K}
-     */
-    opINRD()
-    {
-        this.regD = this.incByte(this.regD);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x15 (DCR D)
-     *
-     * @this {CPU68K}
-     */
-    opDCRD()
-    {
-        this.regD = this.decByte(this.regD);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x16 (MVI D,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVID()
-    {
-        this.regD = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x17 (RAL)
-     *
-     * @this {CPU68K}
-     */
-    opRAL()
-    {
-        let carry = this.regA << 1;
-        this.regA = (carry & 0xff) | this.getCF();
-        this.updateCF(carry & 0x100);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x19 (DAD D)
-     *
-     * @this {CPU68K}
-     */
-    opDADD()
-    {
-        let w;
-        this.setHL(w = this.getHL() + this.getDE());
-        this.updateCF((w >> 8) & 0x100);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x1A (LDAX D)
-     *
-     * @this {CPU68K}
-     */
-    opLDAXD()
-    {
-        this.regA = this.getByte(this.getDE());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x1B (DCX D)
-     *
-     * @this {CPU68K}
-     */
-    opDCXD()
-    {
-        this.setDE(this.getDE() - 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x1C (INR E)
-     *
-     * @this {CPU68K}
-     */
-    opINRE()
-    {
-        this.regE = this.incByte(this.regE);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x1D (DCR E)
-     *
-     * @this {CPU68K}
-     */
-    opDCRE()
-    {
-        this.regE = this.decByte(this.regE);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x1E (MVI E,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVIE()
-    {
-        this.regE = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x1F (RAR)
-     *
-     * @this {CPU68K}
-     */
-    opRAR()
-    {
-        let carry = (this.regA << 8);
-        this.regA = ((this.getCF() << 8) | this.regA) >> 1;
-        this.updateCF(carry & 0x100);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x21 (LXI H,d16)
-     *
-     * @this {CPU68K}
-     */
-    opLXIH()
-    {
-        this.setHL(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x22 (SHLD a16)
-     *
-     * @this {CPU68K}
-     */
-    opSHLD()
-    {
-        this.setWord(this.getPCWord(), this.getHL());
-        this.nCyclesRemain -= 16;
-    }
-
-    /**
-     * op=0x23 (INX H)
-     *
-     * @this {CPU68K}
-     */
-    opINXH()
-    {
-        this.setHL(this.getHL() + 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x24 (INR H)
-     *
-     * @this {CPU68K}
-     */
-    opINRH()
-    {
-        this.regH = this.incByte(this.regH);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x25 (DCR H)
-     *
-     * @this {CPU68K}
-     */
-    opDCRH()
-    {
-        this.regH = this.decByte(this.regH);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x26 (MVI H,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVIH()
-    {
-        this.regH = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x27 (DAA)
-     *
-     * @this {CPU68K}
-     */
-    opDAA()
-    {
-        let src = 0;
-        let CF = this.getCF();
-        let AF = this.getAF();
-        if (AF || (this.regA & 0x0F) > 9) {
-            src |= 0x06;
+        if (this.flagZNew == 0) {
+            flagsNew |= CPU68K.FLAGS_ZERO;
         }
-        if (CF || this.regA >= 0x9A) {
-            src |= 0x60;
-            CF = CPU68K.PS.CF;
+
+        if (this.flagNNew < 0) {
+            flagsNew |= CPU68K.FLAGS_NEGATIVE;
         }
-        this.regA = this.addByte(src);
-        this.updateCF(CF? 0x100 : 0);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x29 (DAD H)
-     *
-     * @this {CPU68K}
-     */
-    opDADH()
-    {
-        let w;
-        this.setHL(w = this.getHL() + this.getHL());
-        this.updateCF((w >> 8) & 0x100);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x2A (LHLD a16)
-     *
-     * @this {CPU68K}
-     */
-    opLHLD()
-    {
-        this.setHL(this.getWord(this.getPCWord()));
-        this.nCyclesRemain -= 16;
-    }
-
-    /**
-     * op=0x2B (DCX H)
-     *
-     * @this {CPU68K}
-     */
-    opDCXH()
-    {
-        this.setHL(this.getHL() - 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x2C (INR L)
-     *
-     * @this {CPU68K}
-     */
-    opINRL()
-    {
-        this.regL = this.incByte(this.regL);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x2D (DCR L)
-     *
-     * @this {CPU68K}
-     */
-    opDCRL()
-    {
-        this.regL = this.decByte(this.regL);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x2E (MVI L,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVIL()
-    {
-        this.regL = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x2F (CMA)
-     *
-     * @this {CPU68K}
-     */
-    opCMA()
-    {
-        this.regA = ~this.regA & 0xff;
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x31 (LXI SP,d16)
-     *
-     * @this {CPU68K}
-     */
-    opLXISP()
-    {
-        this.setSP(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x32 (STA a16)
-     *
-     * @this {CPU68K}
-     */
-    opSTA()
-    {
-        this.setByte(this.getPCWord(), this.regA);
-        this.nCyclesRemain -= 13;
-    }
-
-    /**
-     * op=0x33 (INX SP)
-     *
-     * @this {CPU68K}
-     */
-    opINXSP()
-    {
-        this.setSP(this.getSP() + 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x34 (INR M)
-     *
-     * @this {CPU68K}
-     */
-    opINRM()
-    {
-        let addr = this.getHL();
-        this.setByte(addr, this.incByte(this.getByte(addr)));
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x35 (DCR M)
-     *
-     * @this {CPU68K}
-     */
-    opDCRM()
-    {
-        let addr = this.getHL();
-        this.setByte(addr, this.decByte(this.getByte(addr)));
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x36 (MVI M,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVIM()
-    {
-        this.setByte(this.getHL(), this.getPCByte());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x37 (STC)
-     *
-     * @this {CPU68K}
-     */
-    opSTC()
-    {
-        this.setCF();
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x39 (DAD SP)
-     *
-     * @this {CPU68K}
-     */
-    opDADSP()
-    {
-        let w;
-        this.setHL(w = this.getHL() + this.getSP());
-        this.updateCF((w >> 8) & 0x100);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0x3A (LDA a16)
-     *
-     * @this {CPU68K}
-     */
-    opLDA()
-    {
-        this.regA = this.getByte(this.getPCWord());
-        this.nCyclesRemain -= 13;
-    }
-
-    /**
-     * op=0x3B (DCX SP)
-     *
-     * @this {CPU68K}
-     */
-    opDCXSP()
-    {
-        this.setSP(this.getSP() - 1);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x3C (INR A)
-     *
-     * @this {CPU68K}
-     */
-    opINRA()
-    {
-        this.regA = this.incByte(this.regA);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x3D (DCR A)
-     *
-     * @this {CPU68K}
-     */
-    opDCRA()
-    {
-        this.regA = this.decByte(this.regA);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x3E (MVI A,d8)
-     *
-     * @this {CPU68K}
-     */
-    opMVIA()
-    {
-        this.regA = this.getPCByte();
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x3F (CMC)
-     *
-     * @this {CPU68K}
-     */
-    opCMC()
-    {
-        this.updateCF(this.getCF()? 0 : 0x100);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x40 (MOV B,B)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBB()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x41 (MOV B,C)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBC()
-    {
-        this.regB = this.regC;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x42 (MOV B,D)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBD()
-    {
-        this.regB = this.regD;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x43 (MOV B,E)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBE()
-    {
-        this.regB = this.regE;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x44 (MOV B,H)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBH()
-    {
-        this.regB = this.regH;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x45 (MOV B,L)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBL()
-    {
-        this.regB = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x46 (MOV B,M)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBM()
-    {
-        this.regB = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x47 (MOV B,A)
-     *
-     * @this {CPU68K}
-     */
-    opMOVBA()
-    {
-        this.regB = this.regA;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x48 (MOV C,B)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCB()
-    {
-        this.regC = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x49 (MOV C,C)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCC()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4A (MOV C,D)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCD()
-    {
-        this.regC = this.regD;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4B (MOV C,E)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCE()
-    {
-        this.regC = this.regE;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4C (MOV C,H)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCH()
-    {
-        this.regC = this.regH;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4D (MOV C,L)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCL()
-    {
-        this.regC = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x4E (MOV C,M)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCM()
-    {
-        this.regC = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x4F (MOV C,A)
-     *
-     * @this {CPU68K}
-     */
-    opMOVCA()
-    {
-        this.regC = this.regA;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x50 (MOV D,B)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDB()
-    {
-        this.regD = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x51 (MOV D,C)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDC()
-    {
-        this.regD = this.regC;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x52 (MOV D,D)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDD()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x53 (MOV D,E)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDE()
-    {
-        this.regD = this.regE;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x54 (MOV D,H)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDH()
-    {
-        this.regD = this.regH;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x55 (MOV D,L)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDL()
-    {
-        this.regD = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x56 (MOV D,M)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDM()
-    {
-        this.regD = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x57 (MOV D,A)
-     *
-     * @this {CPU68K}
-     */
-    opMOVDA()
-    {
-        this.regD = this.regA;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x58 (MOV E,B)
-     *
-     * @this {CPU68K}
-     */
-    opMOVEB()
-    {
-        this.regE = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x59 (MOV E,C)
-     *
-     * @this {CPU68K}
-     */
-    opMOVEC()
-    {
-        this.regE = this.regC;
-        this.nCyclesRemain -= 5;
-    }
 
-    /**
-     * op=0x5A (MOV E,D)
-     *
-     * @this {CPU68K}
-     */
-    opMOVED()
-    {
-        this.regE = this.regD;
-        this.nCyclesRemain -= 5;
-    }
+        if ((this.flagCSrc >>> 0) > (this.flagCDst >>> 0)) {
+            flagsNew |= CPU68K.FLAGS_CARRY;
+        }
 
-    /**
-     * op=0x5B (MOV E,E)
-     *
-     * @this {CPU68K}
-     */
-    opMOVEE()
-    {
-        this.nCyclesRemain -= 5;
-    }
+        if ((this.flagXSrc >>> 0) > (this.flagXDst >>> 0)) {
+            flagsNew |= CPU68K.FLAGS_EXTEND;
+        }
 
-    /**
-     * op=0x5C (MOV E,H)
-     *
-     * @this {CPU68K}
-     */
-    opMOVEH()
-    {
-        this.regE = this.regH;
-        this.nCyclesRemain -= 5;
-    }
+        if ((this.flagVNew < 0) != (this.flagVDst < 0) && (this.flagVSrc < 0) != (this.flagVDst < 0)) {
+            flagsNew |= CPU68K.FLAGS_OVERFLOW;
+        }
 
-    /**
-     * op=0x5D (MOV E,L)
-     *
-     * @this {CPU68K}
-     */
-    opMOVEL()
-    {
-        this.regE = this.regL;
-        this.nCyclesRemain -= 5;
-    }
+        // BUGBUG: No one should be depending on getFlags() propagating the arithmetic states to the CCR bits.
+        // The main motivation for NOT propagating is that the debugger calls getFlags(), and we don't want the
+        // debugger to have any side-effects (even supposedly innocuous ones). -JP
+        //
+        // return flags = flagsNew;
 
-    /**
-     * op=0x5E (MOV E,M)
-     *
-     * @this {CPU68K}
-     */
-    opMOVEM()
-    {
-        this.regE = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
+        return flagsNew;
     }
 
     /**
-     * op=0x5F (MOV E,A)
+     * getFlagC()
      *
-     * @this {CPU68K}
-     */
-    opMOVEA()
-    {
-        this.regE = this.regA;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x60 (MOV H,B)
+     * This function wants to perform an unsigned 32-bit comparison, and like Java, JavaScript does
+     * not have an unsigned data type; however, unlike Java, JavaScript has an unsigned right-shift (>>>)
+     * operator, which like all JavaScript bit-wise operators, also truncates the result to 32 bits.
      *
-     * @this {CPU68K}
-     */
-    opMOVHB()
-    {
-        this.regH = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x61 (MOV H,C)
+     * So the seemingly useless ">>> 0" operation is actually quite useful here.  Another option would be
+     * to "mod" the values with 2^32 (eg, "flag % Math.pow(2,32)"), but that seems slower.
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVHC()
-    {
-        this.regH = this.regC;
-        this.nCyclesRemain -= 5;
-    }
+     getFlagC()
+     {
+         //
+         // This needs to be an unsigned comparison, but unfortunately, Java doesn't
+         // have unsigned data types.  The easiest thing to do is promote our variables to
+         // 64-bit longs, and then mask them to 32 bits, insuring that we are comparing
+         // positive values.
+         //
+         // NOTE: the 'L' appended to each 0xffffffff mask is essential, since otherwise
+         // the masks would be treated as signed integers, and automatic promotion to longs
+         // would turn them into 0xffffffffffffffff instead of 0x00000000ffffffff.
+         //
+         // return (((long)flagCSrc & 0xffffffffL) > ((long)flagCDst & 0xffffffffL))? -1 : 0;
+         //
+         return ((this.flagCSrc >>> 0) > (this.flagCDst >>> 0))? -1 : 0;
+     }
 
     /**
-     * op=0x62 (MOV H,D)
+     * getFlagV()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVHD()
-    {
-        this.regH = this.regD;
-        this.nCyclesRemain -= 5;
-    }
+     getFlagV()
+     {
+         return ((this.flagVNew < 0) != (this.flagVDst < 0) && (this.flagVSrc < 0) != (this.flagVDst < 0))? -1 : 0;
+     }
 
     /**
-     * op=0x63 (MOV H,E)
+     * getFlagZ()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVHE()
+    getFlagZ()
     {
-        this.regH = this.regE;
-        this.nCyclesRemain -= 5;
+        return (this.flagZNew == 0)? -1 : 0;
     }
 
     /**
-     * op=0x64 (MOV H,H)
+     * getFlagN()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVHH()
+    getFlagN()
     {
-        this.nCyclesRemain -= 5;
+        return (this.flagNNew < 0)? -1 : 0;
     }
 
     /**
-     * op=0x65 (MOV H,L)
+     * getFlagX()
      *
-     * @this {CPU68K}
-     */
-    opMOVHL()
-    {
-        this.regH = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x66 (MOV H,M)
+     * This function wants to perform an unsigned 32-bit comparison, and like Java, JavaScript does
+     * not have an unsigned data type; however, unlike Java, JavaScript has an unsigned right-shift (>>>)
+     * operator, which like all JavaScript bit-wise operators, also truncates the result to 32 bits.
      *
-     * @this {CPU68K}
-     */
-    opMOVHM()
-    {
-        this.regH = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x67 (MOV H,A)
+     * So the seemingly useless ">>> 0" operation is actually quite useful here.  Another option would be
+     * to "mod" the values with 2^32 (eg, "flag % Math.pow(2,32)"), but that seems slower.
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVHA()
+    getFlagX()
     {
-        this.regH = this.regA;
-        this.nCyclesRemain -= 5;
+        //
+        // This needs to be an unsigned comparison, but unfortunately, Java doesn't
+        // have unsigned data types.  The easiest thing to do is promote our variables to
+        // 64-bit longs, and then mask them to 32 bits, insuring that we are comparing
+        // positive values.
+        //
+        // NOTE: the 'L' appended to each 0xffffffff mask is essential, since otherwise
+        // the masks would be treated as signed integers, and automatic promotion to longs
+        // would turn them into 0xffffffffffffffff instead of 0x00000000ffffffff.
+        //
+        // return (((long)flagXSrc & 0xffffffffL) > ((long)flagXDst & 0xffffffffL))? -1 : 0;
+        //
+        return ((this.flagXSrc >>> 0) > (this.flagXDst >>> 0))? -1 : 0;
     }
 
     /**
-     * op=0x68 (MOV L,B)
+     * getFlagHI()
      *
-     * @this {CPU68K}
-     */
-    opMOVLB()
-    {
-        this.regL = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x69 (MOV L,C)
+     * This function wants to perform an unsigned 32-bit comparison, and like Java, JavaScript does
+     * not have an unsigned data type; however, unlike Java, JavaScript has an unsigned right-shift (>>>)
+     * operator, which like all JavaScript bit-wise operators, also truncates the result to 32 bits.
      *
-     * @this {CPU68K}
-     */
-    opMOVLC()
-    {
-        this.regL = this.regC;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x6A (MOV L,D)
+     * So the seemingly useless ">>> 0" operation is actually quite useful here.  Another option would be
+     * to "mod" the values with 2^32 (eg, "flag % Math.pow(2,32)"), but that seems slower.
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVLD()
+    getFlagHI()
     {
-        this.regL = this.regD;
-        this.nCyclesRemain -= 5;
+        return (/* getFlagC() == 0 */ (this.flagCSrc >>> 0) <= (this.flagCDst >>> 0) && /* getFlagZ() == 0 */ this.flagZNew != 0)? -1 : 0;
     }
 
     /**
-     * op=0x6B (MOV L,E)
+     * getFlagGE()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVLE()
+    getFlagGE()
     {
-        this.regL = this.regE;
-        this.nCyclesRemain -= 5;
+        let N = this.getFlagN() != 0;
+        let V = this.getFlagV() != 0;
+        return (N && V || !N && !V)? -1 : 0;
     }
 
     /**
-     * op=0x6C (MOV L,H)
+     * getFlagLT()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVLH()
+    getFlagLT()
     {
-        this.regL = this.regH;
-        this.nCyclesRemain -= 5;
+        let N = this.getFlagN() != 0;
+        let V = this.getFlagV() != 0;
+        return (N && !V || !N && V)? -1 : 0;
     }
 
     /**
-     * op=0x6D (MOV L,L)
+     * getFlagGT()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVLL()
+    getFlagGT()
     {
-        this.nCyclesRemain -= 5;
+        let Z = this.getFlagZ() != 0;
+        let N = this.getFlagN() != 0;
+        let V = this.getFlagV() != 0;
+        return (N && V && !Z || !N && !V && !Z)? -1 : 0;
     }
 
     /**
-     * op=0x6E (MOV L,M)
+     * getFlagLE()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVLM()
+    getFlagLE()
     {
-        this.regL = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
+        let Z = this.getFlagZ() != 0;
+        let N = this.getFlagN() != 0;
+        let V = this.getFlagV() != 0;
+        return (Z || N && !V || !N && V)? -1 : 0;
     }
 
     /**
-     * op=0x6F (MOV L,A)
+     * getFlagIPM()
      *
      * @this {CPU68K}
+     * @returns {number}
      */
-    opMOVLA()
+    getFlagIPM()
     {
-        this.regL = this.regA;
-        this.nCyclesRemain -= 5;
+        return (this.flags & CPU68K.FLAGS_IPM) >> CPU68K.FLAGS_IPM_SHIFT;
     }
 
     /**
-     * op=0x70 (MOV M,B)
+     * setFlagsCCR(flags)
      *
-     * @this {CPU68K}
-     */
-    opMOVMB()
-    {
-        this.setByte(this.getHL(), this.regB);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x71 (MOV M,C)
+     * Formerly setFlags(byte flags), setFlagsCCR() effectively sets the low byte of SR.
      *
      * @this {CPU68K}
+     * @param {number} flags
      */
-    opMOVMC()
+    setFlagsCCR(flags)
     {
-        this.setByte(this.getHL(), this.regC);
-        this.nCyclesRemain -= 7;
-    }
+        this.flagNNew = 0;
+        this.flagCSrc = this.flagCDst = 0;
+        this.flagVNew = this.flagVDst = 0;
+        this.flagXSrc = this.flagXDst = 0;
+        this.flagZNew = this.flagZTmp = 0;
 
-    /**
-     * op=0x72 (MOV M,D)
-     *
-     * @this {CPU68K}
-     */
-    opMOVMD()
-    {
-        this.setByte(this.getHL(), this.regD);
-        this.nCyclesRemain -= 7;
-    }
+        if ((flags & CPU68K.FLAGS_ZERO) == 0) {
+            this.flagZNew = -1;
+        }
 
-    /**
-     * op=0x73 (MOV M,E)
-     *
-     * @this {CPU68K}
-     */
-    opMOVME()
-    {
-        this.setByte(this.getHL(), this.regE);
-        this.nCyclesRemain -= 7;
-    }
+        if ((flags & CPU68K.FLAGS_NEGATIVE) != 0) {
+            this.flagNNew = -1;
+        }
 
-    /**
-     * op=0x74 (MOV M,H)
-     *
-     * @this {CPU68K}
-     */
-    opMOVMH()
-    {
-        this.setByte(this.getHL(), this.regH);
-        this.nCyclesRemain -= 7;
-    }
+        if ((flags & CPU68K.FLAGS_CARRY) != 0) {
+            this.flagCSrc = -1;
+        }
 
-    /**
-     * op=0x75 (MOV M,L)
-     *
-     * @this {CPU68K}
-     */
-    opMOVML()
-    {
-        this.setByte(this.getHL(), this.regL);
-        this.nCyclesRemain -= 7;
-    }
+        if ((flags & CPU68K.FLAGS_EXTEND) != 0) {
+            this.flagXSrc = -1;
+        }
 
-    /**
-     * op=0x76 (HLT)
-     *
-     * @this {CPU68K}
-     */
-    opHLT()
-    {
-        this.nCyclesRemain -= 7;
-        /*
-         * The CPU is never REALLY halted by a HLT instruction; instead, we call requestHALT(), which
-         * which sets INTFLAG.HALT and then ends the current burst; the CPU should not execute any
-         * more instructions until checkINTR() indicates that a hardware interrupt has been requested.
-         */
-        this.requestHALT();
-        /*
-         * If interrupts have been disabled, then the machine is dead in the water (there is no NMI
-         * NMI generation mechanism for this CPU), so let's stop the CPU; similarly, if the HALT message
-         * category is enabled, then the Debugger must want us to stop the CPU.
-         */
-        if (!this.getIF() || this.isMessageOn(CPU.MESSAGE.HALT)) {
-            let addr = this.getPC() - 1;
-            this.setPC(addr);           // this is purely for the Debugger's benefit, to show the HLT
-            this.time.stop();
+        if ((flags & CPU68K.FLAGS_OVERFLOW) != 0) {
+            this.flagVNew = this.flagVSrc = -1;
         }
     }
 
     /**
-     * op=0x77 (MOV M,A)
+     * setFlagsSR(flags)
      *
-     * @this {CPU68K}
-     */
-    opMOVMA()
-    {
-        this.setByte(this.getHL(), this.regA);
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x78 (MOV A,B)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAB()
-    {
-        this.regA = this.regB;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x79 (MOV A,C)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAC()
-    {
-        this.regA = this.regC;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7A (MOV A,D)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAD()
-    {
-        this.regA = this.regD;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7B (MOV A,E)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAE()
-    {
-        this.regA = this.regE;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7C (MOV A,H)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAH()
-    {
-        this.regA = this.regH;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7D (MOV A,L)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAL()
-    {
-        this.regA = this.regL;
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x7E (MOV A,M)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAM()
-    {
-        this.regA = this.getByte(this.getHL());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x7F (MOV A,A)
-     *
-     * @this {CPU68K}
-     */
-    opMOVAA()
-    {
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0x80 (ADD B)
-     *
-     * @this {CPU68K}
-     */
-    opADDB()
-    {
-        this.regA = this.addByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x81 (ADD C)
-     *
-     * @this {CPU68K}
-     */
-    opADDC()
-    {
-        this.regA = this.addByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x82 (ADD D)
-     *
-     * @this {CPU68K}
-     */
-    opADDD()
-    {
-        this.regA = this.addByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x83 (ADD E)
-     *
-     * @this {CPU68K}
-     */
-    opADDE()
-    {
-        this.regA = this.addByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x84 (ADD H)
-     *
-     * @this {CPU68K}
-     */
-    opADDH()
-    {
-        this.regA = this.addByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x85 (ADD L)
-     *
-     * @this {CPU68K}
-     */
-    opADDL()
-    {
-        this.regA = this.addByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x86 (ADD M)
-     *
-     * @this {CPU68K}
-     */
-    opADDM()
-    {
-        this.regA = this.addByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x87 (ADD A)
-     *
-     * @this {CPU68K}
-     */
-    opADDA()
-    {
-        this.regA = this.addByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x88 (ADC B)
-     *
-     * @this {CPU68K}
-     */
-    opADCB()
-    {
-        this.regA = this.addByteCarry(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x89 (ADC C)
-     *
-     * @this {CPU68K}
-     */
-    opADCC()
-    {
-        this.regA = this.addByteCarry(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8A (ADC D)
-     *
-     * @this {CPU68K}
-     */
-    opADCD()
-    {
-        this.regA = this.addByteCarry(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8B (ADC E)
-     *
-     * @this {CPU68K}
-     */
-    opADCE()
-    {
-        this.regA = this.addByteCarry(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8C (ADC H)
-     *
-     * @this {CPU68K}
-     */
-    opADCH()
-    {
-        this.regA = this.addByteCarry(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8D (ADC L)
-     *
-     * @this {CPU68K}
-     */
-    opADCL()
-    {
-        this.regA = this.addByteCarry(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x8E (ADC M)
-     *
-     * @this {CPU68K}
-     */
-    opADCM()
-    {
-        this.regA = this.addByteCarry(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x8F (ADC A)
-     *
-     * @this {CPU68K}
-     */
-    opADCA()
-    {
-        this.regA = this.addByteCarry(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x90 (SUB B)
-     *
-     * @this {CPU68K}
-     */
-    opSUBB()
-    {
-        this.regA = this.subByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x91 (SUB C)
-     *
-     * @this {CPU68K}
-     */
-    opSUBC()
-    {
-        this.regA = this.subByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x92 (SUB D)
-     *
-     * @this {CPU68K}
-     */
-    opSUBD()
-    {
-        this.regA = this.subByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x93 (SUB E)
-     *
-     * @this {CPU68K}
-     */
-    opSUBE()
-    {
-        this.regA = this.subByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x94 (SUB H)
-     *
-     * @this {CPU68K}
-     */
-    opSUBH()
-    {
-        this.regA = this.subByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x95 (SUB L)
-     *
-     * @this {CPU68K}
-     */
-    opSUBL()
-    {
-        this.regA = this.subByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x96 (SUB M)
-     *
-     * @this {CPU68K}
-     */
-    opSUBM()
-    {
-        this.regA = this.subByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x97 (SUB A)
-     *
-     * @this {CPU68K}
-     */
-    opSUBA()
-    {
-        this.regA = this.subByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x98 (SBB B)
-     *
-     * @this {CPU68K}
-     */
-    opSBBB()
-    {
-        this.regA = this.subByteBorrow(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x99 (SBB C)
-     *
-     * @this {CPU68K}
-     */
-    opSBBC()
-    {
-        this.regA = this.subByteBorrow(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9A (SBB D)
-     *
-     * @this {CPU68K}
-     */
-    opSBBD()
-    {
-        this.regA = this.subByteBorrow(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9B (SBB E)
-     *
-     * @this {CPU68K}
-     */
-    opSBBE()
-    {
-        this.regA = this.subByteBorrow(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9C (SBB H)
-     *
-     * @this {CPU68K}
-     */
-    opSBBH()
-    {
-        this.regA = this.subByteBorrow(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9D (SBB L)
-     *
-     * @this {CPU68K}
-     */
-    opSBBL()
-    {
-        this.regA = this.subByteBorrow(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0x9E (SBB M)
-     *
-     * @this {CPU68K}
-     */
-    opSBBM()
-    {
-        this.regA = this.subByteBorrow(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0x9F (SBB A)
-     *
-     * @this {CPU68K}
-     */
-    opSBBA()
-    {
-        this.regA = this.subByteBorrow(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA0 (ANA B)
-     *
-     * @this {CPU68K}
-     */
-    opANAB()
-    {
-        this.regA = this.andByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA1 (ANA C)
-     *
-     * @this {CPU68K}
-     */
-    opANAC()
-    {
-        this.regA = this.andByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA2 (ANA D)
-     *
-     * @this {CPU68K}
-     */
-    opANAD()
-    {
-        this.regA = this.andByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA3 (ANA E)
-     *
-     * @this {CPU68K}
-     */
-    opANAE()
-    {
-        this.regA = this.andByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA4 (ANA H)
-     *
-     * @this {CPU68K}
-     */
-    opANAH()
-    {
-        this.regA = this.andByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA5 (ANA L)
-     *
-     * @this {CPU68K}
-     */
-    opANAL()
-    {
-        this.regA = this.andByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA6 (ANA M)
-     *
-     * @this {CPU68K}
-     */
-    opANAM()
-    {
-        this.regA = this.andByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xA7 (ANA A)
-     *
-     * @this {CPU68K}
-     */
-    opANAA()
-    {
-        this.regA = this.andByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA8 (XRA B)
-     *
-     * @this {CPU68K}
-     */
-    opXRAB()
-    {
-        this.regA = this.xorByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xA9 (XRA C)
-     *
-     * @this {CPU68K}
-     */
-    opXRAC()
-    {
-        this.regA = this.xorByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAA (XRA D)
-     *
-     * @this {CPU68K}
-     */
-    opXRAD()
-    {
-        this.regA = this.xorByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAB (XRA E)
-     *
-     * @this {CPU68K}
-     */
-    opXRAE()
-    {
-        this.regA = this.xorByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAC (XRA H)
-     *
-     * @this {CPU68K}
-     */
-    opXRAH()
-    {
-        this.regA = this.xorByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAD (XRA L)
-     *
-     * @this {CPU68K}
-     */
-    opXRAL()
-    {
-        this.regA = this.xorByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xAE (XRA M)
-     *
-     * @this {CPU68K}
-     */
-    opXRAM()
-    {
-        this.regA = this.xorByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xAF (XRA A)
-     *
-     * @this {CPU68K}
-     */
-    opXRAA()
-    {
-        this.regA = this.xorByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB0 (ORA B)
-     *
-     * @this {CPU68K}
-     */
-    opORAB()
-    {
-        this.regA = this.orByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB1 (ORA C)
-     *
-     * @this {CPU68K}
-     */
-    opORAC()
-    {
-        this.regA = this.orByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB2 (ORA D)
-     *
-     * @this {CPU68K}
-     */
-    opORAD()
-    {
-        this.regA = this.orByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB3 (ORA E)
-     *
-     * @this {CPU68K}
-     */
-    opORAE()
-    {
-        this.regA = this.orByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB4 (ORA H)
-     *
-     * @this {CPU68K}
-     */
-    opORAH()
-    {
-        this.regA = this.orByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB5 (ORA L)
-     *
-     * @this {CPU68K}
-     */
-    opORAL()
-    {
-        this.regA = this.orByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB6 (ORA M)
-     *
-     * @this {CPU68K}
-     */
-    opORAM()
-    {
-        this.regA = this.orByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xB7 (ORA A)
-     *
-     * @this {CPU68K}
-     */
-    opORAA()
-    {
-        this.regA = this.orByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB8 (CMP B)
-     *
-     * @this {CPU68K}
-     */
-    opCMPB()
-    {
-        this.subByte(this.regB);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xB9 (CMP C)
-     *
-     * @this {CPU68K}
-     */
-    opCMPC()
-    {
-        this.subByte(this.regC);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBA (CMP D)
-     *
-     * @this {CPU68K}
-     */
-    opCMPD()
-    {
-        this.subByte(this.regD);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBB (CMP E)
-     *
-     * @this {CPU68K}
-     */
-    opCMPE()
-    {
-        this.subByte(this.regE);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBC (CMP H)
-     *
-     * @this {CPU68K}
-     */
-    opCMPH()
-    {
-        this.subByte(this.regH);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBD (CMP L)
-     *
-     * @this {CPU68K}
-     */
-    opCMPL()
-    {
-        this.subByte(this.regL);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xBE (CMP M)
-     *
-     * @this {CPU68K}
-     */
-    opCMPM()
-    {
-        this.subByte(this.getByte(this.getHL()));
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xBF (CMP A)
-     *
-     * @this {CPU68K}
-     */
-    opCMPA()
-    {
-        this.subByte(this.regA);
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xC0 (RNZ)
+     * Formerly setFlags(int flags), setFlagsSR() sets both the high and low (CCR) bytes of SR.
      *
      * @this {CPU68K}
+     * @param {number} flags
      */
-    opRNZ()
+    setFlagsSR(flags)
     {
-        if (!this.getZF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
+        // Before we blow away the original flag bits, let's see if the interrupt level
+        // is dropping; if so, we'll want to set CPU_CHECKINTS....
+        if ((flags & CPU68K.FLAGS_IPM) < (this.flags & CPU68K.FLAGS_IPM)) {
+            this.fCPU |= CPU68K.CPU_CHECKINTS;
         }
-        this.nCyclesRemain -= 5;
+
+        // Clear everything outside the CCR bits.
+        this.flags &= CPU68K.FLAGS_CCR;
+
+        // We probably don't need to carefully exclude the caller's CCR bits at this step,
+        // since the CCR bits are always computed dynamically, but let's avoid any confusion.
+        this.flags |= (flags & ~CPU68K.FLAGS_CCR);
+
+        this.setFlagsCCR(flags);
     }
 
     /**
-     * op=0xC1 (POP B)
+     * setFlagC(c)
      *
      * @this {CPU68K}
+     * @param {number} c
      */
-    opPOPB()
-    {
-        this.setBC(this.popWord());
-        this.nCyclesRemain -= 10;
-    }
+     setFlagC(c)
+     {
+         this.flagCSrc = this.flagCDst = 0;
+         if (c != 0) {
+             this.flagCSrc = -1;
+         }
+     }
 
     /**
-     * op=0xC2 (JNZ a16)
+     * setFlagV(v)
      *
      * @this {CPU68K}
+     * @param {number} v
      */
-    opJNZ()
+    setFlagV(v)
     {
-        let w = this.getPCWord();
-        if (!this.getZF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xC3 (JMP a16)
-     *
-     * @this {CPU68K}
-     */
-    opJMP()
-    {
-        this.setPC(this.getPCWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xC4 (CNZ a16)
-     *
-     * @this {CPU68K}
-     */
-    opCNZ()
-    {
-        let w = this.getPCWord();
-        if (!this.getZF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
+        this.flagVNew = this.flagVDst = 0;
+        if (v != 0) {
+            this.flagVNew = this.flagVSrc = -1;
         }
-        this.nCyclesRemain -= 11;
     }
 
     /**
-     * op=0xC5 (PUSH B)
+     * setFlagZ(z)
      *
      * @this {CPU68K}
+     * @param {number} z
      */
-    opPUSHB()
+    setFlagZ(z)
     {
-        this.pushWord(this.getBC());
-        this.nCyclesRemain -= 11;
+        this.flagZNew = (z == 0)? -1 : 0;
     }
 
     /**
-     * op=0xC6 (ADI d8)
+     * setFlagN(n)
      *
      * @this {CPU68K}
+     * @param {number} n
      */
-    opADI()
+    setFlagN(n)
     {
-        this.regA = this.addByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
+        this.flagNNew = (n != 0)? -1 : 0;
     }
 
     /**
-     * op=0xC7 (RST 0)
+     * setFlagX(x)
      *
      * @this {CPU68K}
+     * @param {number} x
      */
-    opRST0()
+    setFlagX(x)
     {
-        this.pushWord(this.getPC());
-        this.setPC(0);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xC8 (RZ)
-     *
-     * @this {CPU68K}
-     */
-    opRZ()
-    {
-        if (this.getZF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
+        this.flagXSrc = this.flagXDst = 0;
+        if (x != 0) {
+            this.flagXSrc = -1;
         }
-        this.nCyclesRemain -= 5;
     }
 
     /**
-     * op=0xC9 (RET)
+     * setFlagCX(c)
      *
      * @this {CPU68K}
+     * @param {number} c
      */
-    opRET()
+    setFlagCX(c)
     {
-        this.setPC(this.popWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xCA (JZ a16)
-     *
-     * @this {CPU68K}
-     */
-    opJZ()
-    {
-        let w = this.getPCWord();
-        if (this.getZF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xCC (CZ a16)
-     *
-     * @this {CPU68K}
-     */
-    opCZ()
-    {
-        let w = this.getPCWord();
-        if (this.getZF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
+        this.flagCSrc = this.flagCDst = 0;
+        this.flagXSrc = this.flagXDst = 0;
+        if (c != 0) {
+            this.flagCSrc = this.flagXSrc = -1;
         }
-        this.nCyclesRemain -= 11;
     }
 
     /**
-     * op=0xCD (CALL a16)
+     * setORFlagsCCR(b)
      *
      * @this {CPU68K}
+     * @param {number} b
      */
-    opCALL()
+    setORFlagsCCR(b)                    // used to OR flags into CCR
     {
-        let w = this.getPCWord();
-        this.pushWord(this.getPC());
-        this.setPC(w);
-        this.nCyclesRemain -= 17;
+        this.setFlagsCCR(this.getFlags() | b);
     }
 
     /**
-     * op=0xCE (ACI d8)
+     * setORFlagsSR(s)
      *
      * @this {CPU68K}
+     * @param {number} s
      */
-    opACI()
+    setORFlagsSR(s)                     // used to OR flags into SR (PRIVILEGED)
     {
-        this.regA = this.addByteCarry(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xCF (RST 1)
-     *
-     * @this {CPU68K}
-     */
-    opRST1()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x08);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xD0 (RNC)
-     *
-     * @this {CPU68K}
-     */
-    opRNC()
-    {
-        if (!this.getCF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
+        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+            this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
+            return;
         }
-        this.nCyclesRemain -= 5;
+        this.setFlagsSR(this.getFlags() | s);
     }
 
     /**
-     * op=0xD1 (POP D)
+     * setANDFlagsCCR(b)
      *
      * @this {CPU68K}
+     * @param {number} b
      */
-    opPOPD()
+    setANDFlagsCCR(b)                   // used to AND flags out of CCR
     {
-        this.setDE(this.popWord());
-        this.nCyclesRemain -= 10;
+        this.setFlagsCCR(this.getFlags() & b);
     }
 
     /**
-     * op=0xD2 (JNC a16)
+     * setANDFlagsSR(s)
      *
      * @this {CPU68K}
+     * @param {number} s
      */
-    opJNC()
+    setANDFlagsSR(s)                    // used to AND flags out of SR (PRIVILEGED)
     {
-        let w = this.getPCWord();
-        if (!this.getCF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xD3 (OUT d8)
-     *
-     * @this {CPU68K}
-     */
-    opOUT()
-    {
-        let port = this.getPCByte();
-        this.busIO.writeData(port, this.regA);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xD4 (CNC a16)
-     *
-     * @this {CPU68K}
-     */
-    opCNC()
-    {
-        let w = this.getPCWord();
-        if (!this.getCF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
+        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+            this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
+            return;
         }
-        this.nCyclesRemain -= 11;
+        this.setFlagsSR(this.getFlags() & s);
     }
 
     /**
-     * op=0xD5 (PUSH D)
+     * setEORFlagsCCR(b)
      *
      * @this {CPU68K}
+     * @param {number} b
      */
-    opPUSHD()
+    setEORFlagsCCR(b)                   // used to EOR flags in CCR
     {
-        this.pushWord(this.getDE());
-        this.nCyclesRemain -= 11;
+        this.setFlagsCCR(this.getFlags() ^ b);
     }
 
     /**
-     * op=0xD6 (SUI d8)
+     * setEORFlagsSR(s)
      *
      * @this {CPU68K}
+     * @param {number} s
      */
-    opSUI()
+    setEORFlagsSR(s)                    // used to EOR flags in SR (PRIVILEGED)
     {
-        this.regA = this.subByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xD7 (RST 2)
-     *
-     * @this {CPU68K}
-     */
-    opRST2()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x10);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xD8 (RC)
-     *
-     * @this {CPU68K}
-     */
-    opRC()
-    {
-        if (this.getCF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
+        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+            this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
+            return;
         }
-        this.nCyclesRemain -= 5;
+        this.setFlagsSR(this.getFlags() ^ s);
     }
 
     /**
-     * op=0xDA (JC a16)
+     * setFlagIPM(iLevel)
      *
      * @this {CPU68K}
+     * @param {number} iLevel
      */
-    opJC()
+    setFlagIPM(iLevel)
     {
-        let w = this.getPCWord();
-        if (this.getCF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
+        this.flags &= ~CPU68K.FLAGS_IPM;
+        this.flags |= (iLevel << CPU68K.FLAGS_IPM_SHIFT);
     }
 
     /**
-     * op=0xDB (IN d8)
+     * initRegs()
      *
      * @this {CPU68K}
      */
-    opIN()
+    initRegs()
     {
-        let port = this.getPCByte();
-        this.regA = this.busIO.readData(port) & 0xff;
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xDC (CC a16)
-     *
-     * @this {CPU68K}
-     */
-    opCC()
-    {
-        let w = this.getPCWord();
-        if (this.getCF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xDE (SBI d8)
-     *
-     * @this {CPU68K}
-     */
-    opSBI()
-    {
-        this.regA = this.subByteBorrow(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xDF (RST 3)
-     *
-     * @this {CPU68K}
-     */
-    opRST3()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x18);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xE0 (RPO)
-     *
-     * @this {CPU68K}
-     */
-    opRPO()
-    {
-        if (!this.getPF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xE1 (POP H)
-     *
-     * @this {CPU68K}
-     */
-    opPOPH()
-    {
-        this.setHL(this.popWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xE2 (JPO a16)
-     *
-     * @this {CPU68K}
-     */
-    opJPO()
-    {
-        let w = this.getPCWord();
-        if (!this.getPF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xE3 (XTHL)
-     *
-     * @this {CPU68K}
-     */
-    opXTHL()
-    {
-        let w = this.popWord();
-        this.pushWord(this.getHL());
-        this.setHL(w);
-        this.nCyclesRemain -= 18;
-    }
-
-    /**
-     * op=0xE4 (CPO a16)
-     *
-     * @this {CPU68K}
-     */
-    opCPO()
-    {
-        let w = this.getPCWord();
-        if (!this.getPF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xE5 (PUSH H)
-     *
-     * @this {CPU68K}
-     */
-    opPUSHH()
-    {
-        this.pushWord(this.getHL());
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xE6 (ANI d8)
-     *
-     * @this {CPU68K}
-     */
-    opANI()
-    {
-        this.regA = this.andByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xE7 (RST 4)
-     *
-     * @this {CPU68K}
-     */
-    opRST4()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x20);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xE8 (RPE)
-     *
-     * @this {CPU68K}
-     */
-    opRPE()
-    {
-        if (this.getPF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xE9 (PCHL)
-     *
-     * @this {CPU68K}
-     */
-    opPCHL()
-    {
-        this.setPC(this.getHL());
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xEA (JPE a16)
-     *
-     * @this {CPU68K}
-     */
-    opJPE()
-    {
-        let w = this.getPCWord();
-        if (this.getPF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xEB (XCHG)
-     *
-     * @this {CPU68K}
-     */
-    opXCHG()
-    {
-        let w = this.getHL();
-        this.setHL(this.getDE());
-        this.setDE(w);
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xEC (CPE a16)
-     *
-     * @this {CPU68K}
-     */
-    opCPE()
-    {
-        let w = this.getPCWord();
-        if (this.getPF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xEE (XRI d8)
-     *
-     * @this {CPU68K}
-     */
-    opXRI()
-    {
-        this.regA = this.xorByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xEF (RST 5)
-     *
-     * @this {CPU68K}
-     */
-    opRST5()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x28);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xF0 (RP)
-     *
-     * @this {CPU68K}
-     */
-    opRP()
-    {
-        if (!this.getSF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xF1 (POP PSW)
-     *
-     * @this {CPU68K}
-     */
-    opPOPSW()
-    {
-        this.setPSW(this.popWord());
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xF2 (JP a16)
-     *
-     * @this {CPU68K}
-     */
-    opJP()
-    {
-        let w = this.getPCWord();
-        if (!this.getSF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xF3 (DI)
-     *
-     * @this {CPU68K}
-     */
-    opDI()
-    {
-        this.clearIF();
-        this.nCyclesRemain -= 4;
-    }
-
-    /**
-     * op=0xF4 (CP a16)
-     *
-     * @this {CPU68K}
-     */
-    opCP()
-    {
-        let w = this.getPCWord();
-        if (!this.getSF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xF5 (PUSH PSW)
-     *
-     * @this {CPU68K}
-     */
-    opPUPSW()
-    {
-        this.pushWord(this.getPSW());
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xF6 (ORI d8)
-     *
-     * @this {CPU68K}
-     */
-    opORI()
-    {
-        this.regA = this.orByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xF7 (RST 6)
-     *
-     * @this {CPU68K}
-     */
-    opRST6()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x30);
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xF8 (RM)
-     *
-     * @this {CPU68K}
-     */
-    opRM()
-    {
-        if (this.getSF()) {
-            this.setPC(this.popWord());
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xF9 (SPHL)
-     *
-     * @this {CPU68K}
-     */
-    opSPHL()
-    {
-        this.setSP(this.getHL());
-        this.nCyclesRemain -= 5;
-    }
-
-    /**
-     * op=0xFA (JM a16)
-     *
-     * @this {CPU68K}
-     */
-    opJM()
-    {
-        let w = this.getPCWord();
-        if (this.getSF()) this.setPC(w);
-        this.nCyclesRemain -= 10;
-    }
-
-    /**
-     * op=0xFB (EI)
-     *
-     * @this {CPU68K}
-     */
-    opEI()
-    {
-        this.setIF();
-        this.nCyclesRemain -= 4;
-        this.checkINTR();
-    }
-
-    /**
-     * op=0xFC (CM a16)
-     *
-     * @this {CPU68K}
-     */
-    opCM()
-    {
-        let w = this.getPCWord();
-        if (this.getSF()) {
-            this.pushWord(this.getPC());
-            this.setPC(w);
-            this.nCyclesRemain -= 6;
-        }
-        this.nCyclesRemain -= 11;
-    }
-
-    /**
-     * op=0xFE (CPI d8)
-     *
-     * @this {CPU68K}
-     */
-    opCPI()
-    {
-        this.subByte(this.getPCByte());
-        this.nCyclesRemain -= 7;
-    }
-
-    /**
-     * op=0xFF (RST 7)
-     *
-     * @this {CPU68K}
-     */
-    opRST7()
-    {
-        this.pushWord(this.getPC());
-        this.setPC(0x38);
-        this.nCyclesRemain -= 11;
+        this.fCPU = 0;
+        this.regPC = 0;                 // program counter
+        this.regPCLast = 0;             // program counter for the previous instruction
+        this.regPCTrap = 0;             // program counter for the last TRAP executed
+        this.regSSP = 0;                // supervisor stack pointer
+        this.regUSP = 0;                // user stack pointer (to save/restore a[7] on user/supervisor transitions)
+        this.regD = [0,0,0,0,0,0,0,0];  // data registers
+        this.regA = [0,0,0,0,0,0,0,0];  // address registers
+        this.dataSrc = this.dataDst = 0;// internal data operands (exposed to the EAMode classes)
+        this.resetRegs();
     }
 
     /**
@@ -15678,582 +15274,108 @@ class CPU68K extends CPU {
      */
     resetRegs()
     {
-        this.regA = 0;
-        this.regB = 0;
-        this.regC = 0;
-        this.regD = 0;
-        this.regE = 0;
-        this.regH = 0;
-        this.regL = 0;
-        this.setSP(0);
-        this.setPC(this.addrReset);
-
-        /*
-         * regPCLast is an internal register that simply snapshots the PC at the start of every instruction;
-         * this is useful not only for CPUs that need to support instruction restartability, but also for
-         * diagnostic/debugging purposes.
-         */
-        this.regPCLast = this.regPC;
-
-        /*
-         * This resets the Processor Status flags (regPS), along with all the internal "result registers".
-         */
-        this.setPS(0);
-
-        /*
-         * intFlags contains some internal states we use to indicate whether a hardware interrupt (INTFLAG.INTR) or
-         * Trap software interrupt (INTR.TRAP) has been requested, as well as when we're in a "HLT" state (INTFLAG.HALT)
-         * that requires us to wait for a hardware interrupt (INTFLAG.INTR) before continuing execution.
-         */
-        this.intFlags = CPU68K.INTFLAG.NONE;
+        this.resetFlags(CPU68K.FLAGS_SU);
+        for (let i = 0; i < this.regD.length; i++) {
+            this.regD[i] = 0;
+        }
+        for (let i = 0; i < this.regA.length; i++) {
+            this.regA[i] = 0;
+        }
+        this.regPC = this.regPCLast = this.addrReset;
+        this.nStep = 0;                 // instruction step counter
+        this.iPendingException = CPU68K.EXCEPTION_NONE;
+        this.addrPendingException = 0;  // set to exception-specific address, if any (eg, EA from EXCEPTION_ADDRESS_ERROR)
     }
 
     /**
-     * setReset(addr)
+     * addCycles(nCycles)
      *
      * @this {CPU68K}
-     * @param {number} addr
+     * @param {number} nCycles
      */
-    setReset(addr)
+    addCycles(nCycles)
     {
-        this.addrReset = addr;
-        this.setPC(addr);
+        this.nCyclesRemain -= nCycles;
     }
 
     /**
-     * getBC()
+     * callException(iVector)
      *
      * @this {CPU68K}
-     * @returns {number}
+     * @param {number} iVector
      */
-    getBC()
+     callException(iVector)
+     {
+        // TODO: use getLongEX() to avoid triggering "null (or almost null) pointer detection"
+        let handler = this.getLong(CPU68K.EVT_BASE + iVector*4);
+
+        if (handler == 0) {                      // we're outta here
+            this.genException(CPU68K.EXCEPTION_INVALID_HANDLER);
+        }
+
+        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+            this.regUSP = this.regA[7];
+            this.regA[7] = this.regSSP;
+        }
+        this.pushLong(this.regPC);
+        this.regA[7] -= 2;
+        this.setWord(this.regA[7], this.getFlags());
+        this.flags |= CPU68K.FLAGS_SU;          // indicates we're in supervisor mode now
+        this.flags &= ~CPU68K.FLAGS_T1;         // the trace bit is also supposed to be cleared
+        this.regPC = handler;
+
+        //
+        //  BUGBUG: EXCEPTION_ACCESS_FAULT isn't being generated anywhere (I assume it should occur when an address
+        //  outside valid ranges is encountered), and even EXCEPTION_ADDRESS_ERROR is only being generated in DEBUG builds,
+        //  by MarkDataAccess_Debug().  Don't forget to call the "GenerateException(iVector, addr)" form whenever these
+        //  particular exceptions are being generated. -JP
+        //
+        if (iVector == CPU68K.EXCEPTION_ACCESS_FAULT || iVector == CPU68K.EXCEPTION_ADDRESS_ERROR) {
+            //
+            //  BUGBUG: This is documented as "instruction register", but I'm not sure what that means; perhaps the
+            //  16-bit instruction that triggered the exception?  Documentation is weak, but I didn't look too hard yet. -JP
+            //
+            this.pushWord(0);
+            this.pushLong(this.addrPendingException);
+            //
+            //  BUGBUG: This is documented as "R/W" (bit 4), where Write=0 and Read=1, "I/N" (bit 3),
+            //  where Instruction=0 and Not=1, and "Function Code" (bits 2-0), but the 68K Programmer's Reference Manual doesn't
+            //  document. -JP
+            //
+            this.pushWord(0);
+        }
+     }
+
+    /**
+     * returnFromException()
+     *
+     * @this {CPU68K}
+     */
+    returnFromException()
     {
-        return (this.regB << 8) | this.regC;
+        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+            this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
+            return;
+        }
+        this.setFlagsSR(this.getWord(this.regA[7]));
+        this.regA[7] += 2;
+        this.regPC = this.popLong();
+        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+            this.regSSP = this.regA[7];
+            this.regA[7] = this.regUSP;
+        }
     }
 
     /**
-     * setBC(w)
+     * genException(iVector, sMessage)
      *
      * @this {CPU68K}
-     * @param {number} w
+     * @param {number} iVector
+     * @param {string} [sMessage]
      */
-    setBC(w)
+    genException(iVector, sMessage)
     {
-        this.regB = (w >> 8) & 0xff;
-        this.regC = w & 0xff;
-    }
-
-    /**
-     * getDE()
-     *
-     * @this {CPU68K}
-     * @returns {number}
-     */
-    getDE()
-    {
-        return (this.regD << 8) | this.regE;
-    }
-
-    /**
-     * setDE(w)
-     *
-     * @this {CPU68K}
-     * @param {number} w
-     */
-    setDE(w)
-    {
-        this.regD = (w >> 8) & 0xff;
-        this.regE = w & 0xff;
-    }
-
-    /**
-     * getHL()
-     *
-     * @this {CPU68K}
-     * @returns {number}
-     */
-    getHL()
-    {
-        return (this.regH << 8) | this.regL;
-    }
-
-    /**
-     * setHL(w)
-     *
-     * @this {CPU68K}
-     * @param {number} w
-     */
-    setHL(w)
-    {
-        this.regH = (w >> 8) & 0xff;
-        this.regL = w & 0xff;
-    }
-
-    /**
-     * getSP()
-     *
-     * @this {CPU68K}
-     * @returns {number}
-     */
-    getSP()
-    {
-        return this.regSP;
-    }
-
-    /**
-     * setSP(off)
-     *
-     * @this {CPU68K}
-     * @param {number} off
-     */
-    setSP(off)
-    {
-        this.regSP = off & 0xffff;
-    }
-
-    /**
-     * getPC()
-     *
-     * @this {CPU68K}
-     * @returns {number}
-     */
-    getPC()
-    {
-        return this.regPC;
-    }
-
-    /**
-     * offPC()
-     *
-     * @this {CPU68K}
-     * @param {number} off
-     * @returns {number}
-     */
-    offPC(off)
-    {
-        return (this.regPC + off) & 0xffff;
-    }
-
-    /**
-     * setPC(off)
-     *
-     * @this {CPU68K}
-     * @param {number} off
-     */
-    setPC(off)
-    {
-        this.regPC = off & 0xffff;
-    }
-
-    /**
-     * clearCF()
-     *
-     * @this {CPU68K}
-     */
-    clearCF()
-    {
-        this.resultZeroCarry &= 0xff;
-    }
-
-    /**
-     * getCF()
-     *
-     * @this {CPU68K}
-     * @returns {number} 0 or 1 (CPU68K.PS.CF)
-     */
-    getCF()
-    {
-        return (this.resultZeroCarry & 0x100)? CPU68K.PS.CF : 0;
-    }
-
-    /**
-     * setCF()
-     *
-     * @this {CPU68K}
-     */
-    setCF()
-    {
-        this.resultZeroCarry |= 0x100;
-    }
-
-    /**
-     * updateCF(CF)
-     *
-     * @this {CPU68K}
-     * @param {number} CF (0x000 or 0x100)
-     */
-    updateCF(CF)
-    {
-        this.resultZeroCarry = (this.resultZeroCarry & 0xff) | CF;
-    }
-
-    /**
-     * clearPF()
-     *
-     * @this {CPU68K}
-     */
-    clearPF()
-    {
-        if (this.getPF()) this.resultParitySign ^= 0x1;
-    }
-
-    /**
-     * getPF()
-     *
-     * @this {CPU68K}
-     * @returns {number} 0 or CPU68K.PS.PF
-     */
-    getPF()
-    {
-        return (CPU68K.PARITY[this.resultParitySign & 0xff])? CPU68K.PS.PF : 0;
-    }
-
-    /**
-     * setPF()
-     *
-     * @this {CPU68K}
-     */
-    setPF()
-    {
-        if (!this.getPF()) this.resultParitySign ^= 0x1;
-    }
-
-    /**
-     * clearAF()
-     *
-     * @this {CPU68K}
-     */
-    clearAF()
-    {
-        this.resultAuxOverflow = (this.resultParitySign & 0x10) | (this.resultAuxOverflow & ~0x10);
-    }
-
-    /**
-     * getAF()
-     *
-     * @this {CPU68K}
-     * @returns {number} 0 or CPU68K.PS.AF
-     */
-    getAF()
-    {
-        return ((this.resultParitySign ^ this.resultAuxOverflow) & 0x10)? CPU68K.PS.AF : 0;
-    }
-
-    /**
-     * setAF()
-     *
-     * @this {CPU68K}
-     */
-    setAF()
-    {
-        this.resultAuxOverflow = (~this.resultParitySign & 0x10) | (this.resultAuxOverflow & ~0x10);
-    }
-
-    /**
-     * clearZF()
-     *
-     * @this {CPU68K}
-     */
-    clearZF()
-    {
-        this.resultZeroCarry |= 0xff;
-    }
-
-    /**
-     * getZF()
-     *
-     * @this {CPU68K}
-     * @returns {number} 0 or CPU68K.PS.ZF
-     */
-    getZF()
-    {
-        return (this.resultZeroCarry & 0xff)? 0 : CPU68K.PS.ZF;
-    }
-
-    /**
-     * setZF()
-     *
-     * @this {CPU68K}
-     */
-    setZF()
-    {
-        this.resultZeroCarry &= ~0xff;
-    }
-
-    /**
-     * clearSF()
-     *
-     * @this {CPU68K}
-     */
-    clearSF()
-    {
-        if (this.getSF()) this.resultParitySign ^= 0xc0;
-    }
-
-    /**
-     * getSF()
-     *
-     * @this {CPU68K}
-     * @returns {number} 0 or CPU68K.PS.SF
-     */
-    getSF()
-    {
-        return (this.resultParitySign & 0x80)? CPU68K.PS.SF : 0;
-    }
-
-    /**
-     * setSF()
-     *
-     * @this {CPU68K}
-     */
-    setSF()
-    {
-        if (!this.getSF()) this.resultParitySign ^= 0xc0;
-    }
-
-    /**
-     * clearIF()
-     *
-     * @this {CPU68K}
-     */
-    clearIF()
-    {
-        this.regPS &= ~CPU68K.PS.IF;
-    }
-
-    /**
-     * getIF()
-     *
-     * @this {CPU68K}
-     * @returns {number} 0 or CPU68K.PS.IF
-     */
-    getIF()
-    {
-        return (this.regPS & CPU68K.PS.IF);
-    }
-
-    /**
-     * setIF()
-     *
-     * @this {CPU68K}
-     */
-    setIF()
-    {
-        this.regPS |= CPU68K.PS.IF;
-    }
-
-    /**
-     * getPS()
-     *
-     * @this {CPU68K}
-     * @returns {number}
-     */
-    getPS()
-    {
-        return (this.regPS & ~CPU68K.PS.RESULT) | (this.getSF() | this.getZF() | this.getAF() | this.getPF() | this.getCF());
-    }
-
-    /**
-     * setPS(regPS)
-     *
-     * @this {CPU68K}
-     * @param {number} regPS
-     */
-    setPS(regPS)
-    {
-        this.resultZeroCarry = this.resultParitySign = this.resultAuxOverflow = 0;
-        if (regPS & CPU68K.PS.CF) this.resultZeroCarry |= 0x100;
-        if (!(regPS & CPU68K.PS.PF)) this.resultParitySign |= 0x01;
-        if (regPS & CPU68K.PS.AF) this.resultAuxOverflow |= 0x10;
-        if (!(regPS & CPU68K.PS.ZF)) this.resultZeroCarry |= 0xff;
-        if (regPS & CPU68K.PS.SF) this.resultParitySign ^= 0xc0;
-        this.regPS = (this.regPS & ~(CPU68K.PS.RESULT | CPU68K.PS.INTERNAL)) | (regPS & CPU68K.PS.INTERNAL) | CPU68K.PS.SET;
-
-    }
-
-    /**
-     * getPSW()
-     *
-     * @this {CPU68K}
-     * @returns {number}
-     */
-    getPSW()
-    {
-        return (this.getPS() & CPU68K.PS.MASK) | (this.regA << 8);
-    }
-
-    /**
-     * setPSW(w)
-     *
-     * @this {CPU68K}
-     * @param {number} w
-     */
-    setPSW(w)
-    {
-        this.setPS((w & CPU68K.PS.MASK) | (this.regPS & ~CPU68K.PS.MASK));
-        this.regA = w >> 8;
-    }
-
-    /**
-     * addByte(src)
-     *
-     * @this {CPU68K}
-     * @param {number} src
-     * @returns {number} regA + src
-     */
-    addByte(src)
-    {
-        this.resultAuxOverflow = this.regA ^ src;
-        return this.resultParitySign = (this.resultZeroCarry = this.regA + src) & 0xff;
-    }
-
-    /**
-     * addByteCarry(src)
-     *
-     * @this {CPU68K}
-     * @param {number} src
-     * @returns {number} regA + src + carry
-     */
-    addByteCarry(src)
-    {
-        this.resultAuxOverflow = this.regA ^ src;
-        return this.resultParitySign = (this.resultZeroCarry = this.regA + src + ((this.resultZeroCarry & 0x100)? 1 : 0)) & 0xff;
-    }
-
-    /**
-     * andByte(src)
-     *
-     * Ordinarily, one would expect the Auxiliary Carry flag (AF) to be clear after this operation,
-     * but apparently the 8080 will set AF if bit 3 in either operand is set.
-     *
-     * @this {CPU68K}
-     * @param {number} src
-     * @returns {number} regA & src
-     */
-    andByte(src)
-    {
-        this.resultZeroCarry = this.resultParitySign = this.resultAuxOverflow = this.regA & src;
-        if ((this.regA | src) & 0x8) this.resultAuxOverflow ^= 0x10;        // set AF by inverting bit 4 in resultAuxOverflow
-        return this.resultZeroCarry;
-    }
-
-    /**
-     * decByte(b)
-     *
-     * We perform this operation using 8-bit two's complement arithmetic, by negating and then adding
-     * the implied src of 1.  This appears to mimic how the 8080 manages the Auxiliary Carry flag (AF).
-     *
-     * @this {CPU68K}
-     * @param {number} b
-     * @returns {number}
-     */
-    decByte(b)
-    {
-        this.resultAuxOverflow = b ^ 0xff;
-        b = this.resultParitySign = (b + 0xff) & 0xff;
-        this.resultZeroCarry = (this.resultZeroCarry & ~0xff) | b;
-        return b;
-    }
-
-    /**
-     * incByte(b)
-     *
-     * @this {CPU68K}
-     * @param {number} b
-     * @returns {number}
-     */
-    incByte(b)
-    {
-        this.resultAuxOverflow = b;
-        b = this.resultParitySign = (b + 1) & 0xff;
-        this.resultZeroCarry = (this.resultZeroCarry & ~0xff) | b;
-        return b;
-    }
-
-    /**
-     * orByte(src)
-     *
-     * @this {CPU68K}
-     * @param {number} src
-     * @returns {number} regA | src
-     */
-    orByte(src)
-    {
-        return this.resultParitySign = this.resultZeroCarry = this.resultAuxOverflow = this.regA | src;
-    }
-
-    /**
-     * subByte(src)
-     *
-     * We perform this operation using 8-bit two's complement arithmetic, by inverting src, adding
-     * src + 1, and then inverting the resulting carry (resultZeroCarry ^ 0x100).  This appears to mimic
-     * how the 8080 manages the Auxiliary Carry flag (AF).
-     *
-     * This function is also used as a cmpByte() function; compare instructions simply ignore the
-     * return value.
-     *
-     * Example: A=66, SUI $10
-     *
-     * If we created the two's complement of 0x10 by negating it, there would just be one addition:
-     *
-     *      0110 0110   (0x66)
-     *    + 1111 0000   (0xF0)  (ie, -0x10)
-     *      ---------
-     *    1 0101 0110   (0x56)
-     *
-     * But in order to mimic the 8080's AF flag, we must perform the two's complement of src in two steps,
-     * inverting it before the add, and then incrementing after the add; eg:
-     *
-     *      0110 0110   (0x66)
-     *    + 1110 1111   (0xEF)  (ie, ~0x10)
-     *      ---------
-     *    1 0101 0101   (0x55)
-     *    + 0000 0001   (0x01)
-     *      ---------
-     *    1 0101 0110   (0x56)
-     *
-     * @this {CPU68K}
-     * @param {number} src
-     * @returns {number} regA - src
-     */
-    subByte(src)
-    {
-        src ^= 0xff;
-        this.resultAuxOverflow = this.regA ^ src;
-        return this.resultParitySign = (this.resultZeroCarry = (this.regA + src + 1) ^ 0x100) & 0xff;
-    }
-
-    /**
-     * subByteBorrow(src)
-     *
-     * We perform this operation using 8-bit two's complement arithmetic, using logic similar to subByte(),
-     * but changing the final increment to a conditional increment, because if the Carry flag (CF) is set, then
-     * we don't need to perform the increment at all.
-     *
-     * This mimics the behavior of subByte() when the Carry flag (CF) is clear, and hopefully also mimics how the
-     * 8080 manages the Auxiliary Carry flag (AF) when the Carry flag (CF) is set.
-     *
-     * @this {CPU68K}
-     * @param {number} src
-     * @returns {number} regA - src - carry
-     */
-    subByteBorrow(src)
-    {
-        src ^= 0xff;
-        this.resultAuxOverflow = this.regA ^ src;
-        return this.resultParitySign = (this.resultZeroCarry = (this.regA + src + ((this.resultZeroCarry & 0x100)? 0 : 1)) ^ 0x100) & 0xff;
-    }
-
-    /**
-     * xorByte(src)
-     *
-     * @this {CPU68K}
-     * @param {number} src
-     * @returns {number} regA ^ src
-     */
-    xorByte(src)
-    {
-        return this.resultParitySign = this.resultZeroCarry = this.resultAuxOverflow = this.regA ^ src;
+        // TODO
     }
 
     /**
@@ -16281,6 +15403,18 @@ class CPU68K extends CPU {
     }
 
     /**
+     * getLong(addr)
+     *
+     * @this {CPU68K}
+     * @param {number} addr is a linear address
+     * @returns {number} long (32-bit) value at that address
+     */
+    getLong(addr)
+    {
+        return this.busMemory.readQuad(addr);
+    }
+
+    /**
      * setByte(addr, b)
      *
      * @this {CPU68K}
@@ -16305,6 +15439,18 @@ class CPU68K extends CPU {
     }
 
     /**
+     * setLoad(addr, l)
+     *
+     * @this {CPU68K}
+     * @param {number} addr is a linear address
+     * @param {number} l is the long (32-bit) value to write (which we truncate to 32 bits to be safe)
+     */
+    setLong(addr, l)
+    {
+        this.busMemory.writeQuad(addr, l & 0xffffffff);
+    }
+
+    /**
      * getPCByte()
      *
      * @this {CPU68K}
@@ -16313,7 +15459,7 @@ class CPU68K extends CPU {
     getPCByte()
     {
         let b = this.getByte(this.regPC);
-        this.setPC(this.regPC + 1);
+        this.regPC += 1;
         return b;
     }
 
@@ -16326,117 +15472,77 @@ class CPU68K extends CPU {
     getPCWord()
     {
         let w = this.getWord(this.regPC);
-        this.setPC(this.regPC + 2);
+        this.regPC += 2;
         return w;
+    }
+
+    /**
+     * getPCLong()
+     *
+     * @this {CPU68K}
+     * @returns {number} word at the current PC; PC advanced by 4
+     */
+    getPCLong()
+    {
+        let l = this.getLong(this.regPC);
+        this.regPC += 4;
+        return l;
     }
 
     /**
      * popWord()
      *
+     * Pop one word from the default stack.
+     *
      * @this {CPU68K}
-     * @returns {number} word popped from the current SP; SP increased by 2
+     * @returns {number}
      */
     popWord()
     {
-        let w = this.getWord(this.regSP);
-        this.setSP(this.regSP + 2);
+        let w = this.getWord(this.regA[7]);
+        this.regA[7] += 2;
         return w;
     }
 
     /**
-     * pushWord(w)
+     * pushWord(data)
+     *
+     * Push one word onto the default stack.
      *
      * @this {CPU68K}
-     * @param {number} w is the word (16-bit) value to push at current SP; SP decreased by 2
+     * @param {number} data
      */
-    pushWord(w)
+    pushWord(data)
     {
-        this.setSP(this.regSP - 2);
-        this.setWord(this.regSP, w);
+        this.setWord(this.regA[7] -= 2, data);
     }
 
     /**
-     * checkINTR()
+     * popLong()
+     *
+     * Pop one long from the default stack.
      *
      * @this {CPU68K}
-     * @returns {boolean} true if execution may proceed, false if not
+     * @returns {number}
      */
-    checkINTR()
+    popLong()
     {
-        /*
-         * If the Debugger is single-stepping, isRunning() will be false, which we take advantage
-         * of here to avoid processing interrupts.  The Debugger will have to issue a "g" command
-         * to resume normal interrupt processing.
-         */
-        if (this.time.isRunning()) {
-            if ((this.intFlags & CPU68K.INTFLAG.INTR) && this.getIF()) {
-                let nLevel;
-                for (nLevel = 0; nLevel < 8; nLevel++) {
-                    if (this.intFlags & (1 << nLevel)) break;
-                }
-                this.clearINTR(nLevel);
-                this.clearIF();
-                this.intFlags &= ~CPU68K.INTFLAG.HALT;
-                this.aOps[CPU68K.OPCODE.RST0 | (nLevel << 3)].call(this);
-            }
-        }
-        if (this.intFlags & CPU68K.INTFLAG.HALT) {
-            /*
-             * As discussed in opHLT(), the CPU is never REALLY halted by a HLT instruction; instead, opHLT()
-             * calls requestHALT(), which sets INTFLAG.HALT and then ends the current burst; the CPU should not
-             * execute any more instructions until checkINTR() indicates a hardware interrupt has been requested.
-             */
-            this.time.endBurst();
-            return false;
-        }
-        return true;
+        let l = this.getLong(this.regA[7]);
+        this.regA[7] += 4;
+        return l;
     }
 
     /**
-     * clearINTR(nLevel)
+     * pushLong(data)
      *
-     * Clear the corresponding interrupt level.
-     *
-     * nLevel can either be a valid interrupt level (0-7), or undefined to clear all pending interrupts
-     * (eg, in the event of a system-wide reset).
+     * Push one long onto the default stack.
      *
      * @this {CPU68K}
-     * @param {number} [nLevel] (0-7, or undefined for all)
+     * @param {number} data
      */
-    clearINTR(nLevel = -1)
+    pushLong(data)
     {
-        let bitsClear = nLevel < 0? 0xff : (1 << nLevel);
-        this.intFlags &= ~bitsClear;
-    }
-
-    /**
-     * requestHALT()
-     *
-     * @this {CPU68K}
-     */
-    requestHALT()
-    {
-        this.intFlags |= CPU68K.INTFLAG.HALT;
-        this.time.endBurst();
-    }
-
-    /**
-     * requestINTR(nLevel)
-     *
-     * Request the corresponding interrupt level.
-     *
-     * Each interrupt level (0-7) has its own intFlags bit (0-7).  If the Interrupt Flag (IF) is also
-     * set, then we know that checkINTR() will want to issue the interrupt, so we end the current burst.
-     *
-     * @this {CPU68K}
-     * @param {number} nLevel (0-7)
-     */
-    requestINTR(nLevel)
-    {
-        this.intFlags |= (1 << nLevel);
-        if (this.getIF()) {
-            this.time.endBurst();
-        }
+        this.setLong(this.regA[7] -= 4, data);
     }
 
     /**
@@ -16457,100 +15563,237 @@ class CPU68K extends CPU {
     /**
      * toString()
      *
-     * Returns a string representation of the current CPU state.
+     * Returns a string representation of the current CPU state.  For example, my original 68K Java emulator displayed:
+     *
+     *      D0=00002604 D1=000008fc D2=00000000 D3=00005e56
+     *      D4=10c4b47e D5=00000000 D6=10c6e44c D7=00000001
+     *      A0=fffff000 A1=10c068b6 A2=fffff000 A3=000071e0
+     *      A4=00007abc A5=0000551e A6=000074b8 A7=000074a4 SR=2000 IC=1358690
+     *      10c07148: 4e75            RTS                                             ;xnzvc
      *
      * @this {CPU68K}
      * @returns {string}
      */
     toString()
     {
-        return this.sprintf("A=%02X BC=%04X DE=%04X HL=%04X SP=%04X I%d S%d Z%d A%d P%d C%d\n%s", this.regA, this.getBC(), this.getDE(), this.getHL(), this.getSP(), this.getIF()?1:0, this.getSF()?1:0, this.getZF()?1:0, this.getAF()?1:0, this.getPF()?1:0, this.getCF()?1:0, this.toInstruction(this.regPC));
+        return this.sprintf("D0=%08x D1=%08x D2=%08x D3=%08x\nD4=%08x D5=%08x D6=%08x D7=%08x\nA0=%08x A1=%08x A2=%08x A3=%08x\nA4=%08x A5=%08x A6=%08x A7=%08x SR=%04x\n", this.regD[0], this.regD[1], this.regD[2], this.regD[3], this.regD[4], this.regD[5], this.regD[6], this.regD[7], this.regA[0], this.regA[1], this.regA[2], this.regA[3], this.regA[4], this.regA[5], this.regA[6], this.regA[7], this.getFlags());
     }
 }
 
-/*
- * CPU model numbers (supported); future supported models could include the Z80.
+/**
+ * Definitions ported from CPUDefs.java
+ *
+ * Exception vector assignments (see p.631)
  */
-CPU68K.MODEL_8080 = 8080;
+CPU68K.EXCEPTION_NONE                  = 0x00;  // vector 0 contains reset SSP, vector 1 contains reset PC
+CPU68K.EXCEPTION_ACCESS_FAULT          = 0x02;  // aka "Bus Error"
+CPU68K.EXCEPTION_ADDRESS_ERROR         = 0x03;
+CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION   = 0x04;
+CPU68K.EXCEPTION_INT_DIVIDE_BY_ZERO    = 0x05;
+CPU68K.EXCEPTION_CHK_INSTRUCTION       = 0x06;
+CPU68K.EXCEPTION_TRAPV_OVERFLOW        = 0x07;
+CPU68K.EXCEPTION_PRIVILEGE_VIOLATION   = 0x08;
+CPU68K.EXCEPTION_TRACE                 = 0x09;
+CPU68K.EXCEPTION_UNINITIALIZED_IVR     = 0x0f;  // where interrupts go when the IVR hasn't been initialized yet
 
-/*
- * This constant is used to mark points in the code where the physical address being returned
- * is invalid and should not be used.
+CPU68K.EXCEPTION_TRAP_0xF              = 0x2f;  // TRAP 0xf uses vector 0x2f (ie, TRAP n uses vector 0x2n)
+
+CPU68K.TRAP_0xF_PALMOS_API             = 0xa000;// PalmOS encodes API numbers in the word following the OP_TRAP_0xF instruction, starting with this value
+
+/**
+ * Exception vector numbers < 0 are used for internal "warning exceptions" and can be ignored
  */
-CPU68K.ADDR_INVALID = undefined;
+CPU68K.EXCEPTION_INVALID_CODE          = -1;
+CPU68K.EXCEPTION_INVALID_DATA          = -2;
+CPU68K.EXCEPTION_UNIMPLEMENTED_CODE    = -3;
+CPU68K.EXCEPTION_UNINITIALIZED_DATA    = -4;
 
-/*
- * Processor Status flag definitions (stored in regPS)
+/**
+ * Exception vector numbers >= 256 are used for internal "error exceptions" (eg, assertion failures) and cannot be ignored
  */
-CPU68K.PS = {
-    CF:     0x0001,     // bit 0: Carry Flag
-    BIT1:   0x0002,     // bit 1: reserved, always set
-    PF:     0x0004,     // bit 2: Parity Flag
-    BIT3:   0x0008,     // bit 3: reserved, always clear
-    AF:     0x0010,     // bit 4: Auxiliary Carry Flag
-    BIT5:   0x0020,     // bit 5: reserved, always clear
-    ZF:     0x0040,     // bit 6: Zero Flag
-    SF:     0x0080,     // bit 7: Sign Flag
-    ALL:    0x00D5,     // all "arithmetic" flags (CF, PF, AF, ZF, SF)
-    MASK:   0x00FF,     //
-    IF:     0x0200      // bit 9: Interrupt Flag (set if interrupts enabled; Intel calls this the INTE bit)
-};
+CPU68K.EXCEPTION_UNSUPP_INSTRUCTION    = 0x100; // unsupported instruction
+CPU68K.EXCEPTION_INVALID_HANDLER       = 0x101; // exception handler is invalid (eg, corrupt vector contents)
 
-/*
- * These are the internal PS bits (outside of PS.MASK) that getPS() and setPS() can get and set,
- * but which cannot be seen with any of the documented instructions.
+/**
+ * Opcodes that we have special checks for in various places...
  */
-CPU68K.PS.INTERNAL = CPU68K.PS.IF;
+CPU68K.OP_TRAP                         = 0x4e40;
+CPU68K.OP_TRAP_MASK                    = 0xfff0;
+CPU68K.OP_TRAP_0xF                     = 0x4e4f;// vectors via EXCEPTION_TRAP_0xF
+CPU68K.OP_TRAP_0xF_MASK                = 0xffff;
+CPU68K.OP_LINK                         = 0x4e50;
+CPU68K.OP_LINK_MASK                    = 0xfff8;
+CPU68K.OP_STOP                         = 0x4e72;
+CPU68K.OP_STOP_TRACE                   = 0x4e72fffd;
+CPU68K.OP_STOP_FREEZE                  = 0x4e72fffe;
+CPU68K.OP_STOP_INJECT                  = 0x4e72ffff;
+CPU68K.OP_RTE                          = 0x4e73;
+CPU68K.OP_RTS                          = 0x4e75;
+CPU68K.OP_JSR                          = 0x4e80;
+CPU68K.OP_JSR_MASK                     = 0xffc0;
+CPU68K.OP_JSR_PC_REL                   = 0x4eba;
+CPU68K.OP_JSR_PC_REL_INDEX             = 0x4ebb;
+CPU68K.OP_JMP_PC_REL                   = 0x4efa;
+CPU68K.OP_JMP_PC_REL_INDEX             = 0x4efb;
+CPU68K.OP_BSR                          = 0x6100;
+CPU68K.OP_BSR_MASK                     = 0xff00;
+CPU68K.OP_MYBREAKPOINT                 = 0xf003;// my "unofficial" breakpoint instruction
+CPU68K.OP_MYBREAKPOINT_MASK            = 0xffff;// mask needed only because opcode happens to be a signed value
 
-/*
- * PS "arithmetic" flags are NOT stored in regPS; they are maintained across separate result registers,
- * hence the RESULT designation.
+/**
+ * Descriptions of known memory locations/limits.  See CPUMem for a description of the entire
+ * memory map.  Suffice to say here that we only provide for (at most) 32Mb unique addresses, because
+ * CPUMem masks the top 7 bits from all effective addresses.  In other words, all unique memory
+ * locations must be unique in the low 25 bits.  Also note that those locations are effectively
+ * replicated 128 times throughout the entire 4Gb (32-bit) address space.  RAM_LIMIT is set to the
+ * largest power-of-two RAM size (0x800000 or 8Mb) that fits within that unique address space (32Mb)
+ * AND still leaves enough room for a ROM (typically starting around 0x10c00000, equivalent to 0xc00000
+ * after masking, or 12Mb).
+ *
+ * RAM must also be mirrored at offset 0x10000000.  The exact extent and behavior (eg, write-protection)
+ * of the mirrored region is TBD, until we have a better understanding of the hardware.  The fact that
+ * we're masking the top two hex digits from all effective addresses provides sufficiently compatible
+ * mirroring for now.
  */
-CPU68K.PS.RESULT   = CPU68K.PS.CF | CPU68K.PS.PF | CPU68K.PS.AF | CPU68K.PS.ZF | CPU68K.PS.SF;
+CPU68K.EVT_BASE                = 0x00000000;
+CPU68K.EVT_SIZE                = 4*256;
+CPU68K.RAM_BASE                = 0x00000000;
+CPU68K.RAM_LIMIT               = 0x00800000;    // 8Mb
+CPU68K.RAM_MIRROR              = 0x10000000;
 
-/*
- * These are the "always set" PS bits for the 8080.
+/**
+ * CPU states
+ *
+ * CPU_STARTED is set by CPUThread.Start(), and cleared by the CPU thread itself (inside CPUThread.run())
+ * in response to seeing CPU_KILLED (at which time the CPU thread clears CPU_KILLED as well).  CPUThread.Stop()
+ * only has work to do if CPU_STARTED is set.  CPUThread.Thaw() automatically calls CPUThread.Start() to
+ * insure the CPU has been started.  Start() and Thaw(), as well as Resume(), along with Stop() and Freeze(),
+ * are all synchronized.
+ *
+ * CPU_RUNNING is set by the CPU thread immediately before executing any opcodes (before ExecuteOpcodes()).
+ * After it has finished executing some number of opcodes, it calls WaitResume(), which then clears
+ * CPU_RUNNING.  WaitResume() then wakes up anyone who's blocked in Freeze(), Halt() or WaitStep(), as
+ * they wait for their blocking request to be honored.  Freeze(), Halt(), WaitStep() and WaitResume() are
+ * all synchronized.  WaitResume() returns and allows the CPU to continue running once it has been unblocked
+ * or killed.
+ *
+ * NOTE: CPU_RUNNING is an internal state, used to detect when the CPU has acknowledged a pending freeze or
+ * suspend or halt.  For example, if the CPU encounters a "STOP", CPU_RUNNING will be cleared, but only temporarily,
+ * so use IsHalted() to accurately determine the CPU's "run state".
+ *
+ * CPU_FROZEN, CPU_SUSPENDED, CPU_STOPPED, and CPU_TRACING have similar effects (ie, to block CPU execution) but
+ * are necessarily independent.  The CPU_SUSPENDED state may change as the needs of the device change (eg, it may
+ * be set when a "STOP" instruction is encountered, and it may be cleared when a simulated hardware interrupt
+ * fires), and the debugger is not allowed to modify that state.  On the other hand, CPU_TRACING is specifically
+ * for the debugger alone to modify.  Unlike other debuggers that must use the hardware's trace flag, our
+ * debugger prefers to not interfere with the hardware, making it possible even to debug software trace handlers.
+ * As for CPU_FROZEN, that happens when the CPU needs to be stopped externally, such as when the device is being
+ * powered down, memory is being reinitialized, calls are being injected, or possibly if/when we decide to replace
+ * selected OS functions with native functions that must block the CPU until the native function is done.
+ *
+ * NOTE: CPU_SUSPENDED is not currently used with "STOP" instructions, largely because we aren't using an
+ * external event (eg, separate thread) to drive our virtual timer hardware.  Instead, we are depending on
+ * the CPU to execute instructions regularly, and then we're using the instruction count to simulate a
+ * virtual cycle count that in turn drives the virtual timer(s).  That means the CPU thread can only yield/sleep
+ * briefly on "STOP" instructions, otherwise the timer(s) would never advance.
+ *
+ * Also, it's easy to be confused about why we need CPU_TRACING *and* CPU_STEPPING *and* a stepping count.
+ * Here's why: the debugger can't use CPU_SUSPENDED to stop the CPU because that would interfere with the
+ * device's simulated suspend state (well, IF we were using CPU_SUSPENDED on "STOP" instructions that is),
+ * so CPU_TRACING serves the same purpose, exclusively for the debugger.  Second, yes, a stepping count is the
+ * only other thing the debugger would need to implement single-stepping, but that would require any code
+ * monitoring changes in the CPU's state to check TWO variables;  by changing one more bit (CPU_STEPPING)
+ * whenever the debugger also changes the stepping count, the state change can be detected more simply.
+ *
+ * Finally, why is CPU_WATCHALL also separate?  Because instruction watching is yet another state completely
+ * independent of whether or not the device is suspended (eg, powered down, dozing, or whatever) and also
+ * independent of whether or not the debugger is currently single-stepping, running free until a breakpoint, etc.
  */
-CPU68K.PS.SET      = CPU68K.PS.BIT1;
 
-CPU68K.PARITY = [          // 256-byte array with a 1 wherever the number of set bits of the array index is EVEN
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1
-];
+CPU68K.CPU_NONE             = 0x00000000;
+CPU68K.CPU_STARTED          = 0x00000001;   // CPU thread created
+CPU68K.CPU_RUNNING          = 0x00000002;   // CPU thread executing opcodes
+CPU68K.CPU_WAITING          = 0x00000004;   // CPU thread waiting (to be unfrozen, unsuspended or untraced)
+CPU68K.CPU_KILLED           = 0x00000008;   // CPU thread needs to be shut down
+CPU68K.CPU_FROZEN           = 0x00000010;   // block execution until unfrozen (asynchronous)
+CPU68K.CPU_SUSPENDED        = 0x00000020;   // block execution until resumed (synchronous)
+CPU68K.CPU_TRACING          = 0x00000040;   // used by debugger to block execution (independent of CPU_FROZEN and CPU_SUSPENDED)
+CPU68K.CPU_STEPPING         = 0x00000080;   // used by debugger to single-step instruction(s) until step count goes to zero
+CPU68K.CPU_STOPPED          = 0x00000100;   // this is how we currently implement STOP (instead of CPU_SUSPENDED)
+CPU68K.CPU_WATCHHW          = 0x00000200;   // used by debugger to watch hardware accesses
+CPU68K.CPU_WATCHALL         = 0x00000400;   // used by debugger to single-step and display every instruction
+CPU68K.CPU_BREAKPOINT       = 0x00000800;   // ExecuteOpcodes detected one of the debugger's breakpoints
+CPU68K.CPU_EXCEPTION        = 0x00001000;   // CPUThread.run() caught an exception
+CPU68K.CPU_CHECKINTS        = 0x00002000;   // some condition has changed warranting interrupt check
+CPU68K.CPU_CHECKLCD         = 0x00004000;   // some condition has changed warranting LCD screen check
+CPU68K.CPU_TRACEONSTOP      = 0x00008000;   // auto-trace the CPU on STOP
+CPU68K.CPU_FREEZEONSTOP     = 0x00010000;   // auto-freeze the CPU on STOP
+CPU68K.CPU_INJECTING        = 0x00020000;   // in the process of injecting a call
+CPU68K.CPU_PAGING           = 0x00040000;   // in the process of demand-paging some memory
+CPU68K.CPU_MEMINIT          = 0x10000000;   // memory subsystem initialized (CPUMem.InitMem has been called)
+CPU68K.CPU_VALID            = 0x20000000;   // CPU loaded from valid server
 
-/*
- * Interrupt-related flags (stored in intFlags)
+CPU68K.CPU_RESETFLAGS       = (CPU68K.CPU_STOPPED | CPU68K.CPU_WATCHHW | CPU68K.CPU_WATCHALL | CPU68K.CPU_BREAKPOINT | CPU68K.CPU_EXCEPTION | CPU68K.CPU_CHECKINTS | CPU68K.CPU_CHECKLCD | CPU68K.CPU_TRACEONSTOP | CPU68K.CPU_FREEZEONSTOP | CPU68K.CPU_INJECTING);
+CPU68K.CPU_BREAKFLAGS       = (CPU68K.CPU_KILLED | CPU68K.CPU_FROZEN | CPU68K.CPU_SUSPENDED | CPU68K.CPU_STOPPED | CPU68K.CPU_TRACING | CPU68K.CPU_BREAKPOINT | CPU68K.CPU_CHECKINTS | CPU68K.CPU_CHECKLCD);
+
+CPU68K.aByteInc         = [1, 1, 1, 1, 1, 1, 1, 2];
+CPU68K.aByteQuick       = [8, 1, 2, 3, 4, 5, 6, 7];
+
+CPU68K.ssBYTE           = 0;
+CPU68K.ssWORD           = 1;
+CPU68K.ssLONG           = 2;
+CPU68K.ssMAX            = 3;
+
+CPU68K.mmmDREG          = 0;
+CPU68K.mmmAREG          = 1;
+CPU68K.mmmAVAL          = 2;
+CPU68K.mmmAVALINC       = 3;
+CPU68K.mmmAVALDEC       = 4;
+CPU68K.mmmAVALDISP      = 5;
+CPU68K.mmmAVALINDEX     = 6;
+CPU68K.mmmABS16         = 7;
+CPU68K.mmmABS32         = 8;
+CPU68K.mmmPCVALDISP     = 9;
+CPU68K.mmmPCVALINDEX    = 10;
+CPU68K.mmmIMMEDIATE     = 11;
+CPU68K.mmmMAX           = 12;
+
+CPU68K.EAMODEINDEX_DREG                 = 0;
+CPU68K.EAMODEINDEX_DREG_BYTE            = 0;
+CPU68K.EAMODEINDEX_DREG_WORD            = 1;
+CPU68K.EAMODEINDEX_DREG_LONG            = 2;
+CPU68K.EAMODEINDEX_ILLEGAL              = 3;
+CPU68K.EAMODEINDEX_AREG_WORD            = 4;
+CPU68K.EAMODEINDEX_AREG_LONG            = 5;
+CPU68K.EAMODEINDEX_AREG_INCBYTE         = 9;
+CPU68K.EAMODEINDEX_AREG_INCWORD         = 10;
+CPU68K.EAMODEINDEX_AREG_INCLONG         = 11;
+CPU68K.EAMODEINDEX_AREG_DECBYTE         = 12;
+CPU68K.EAMODEINDEX_AREG_DECWORD         = 13;
+CPU68K.EAMODEINDEX_AREG_DECLONG         = 14;
+CPU68K.EAMODEINDEX_IMMEDIATE            = 33;
+CPU68K.EAMODEINDEX_IMMEDIATE_BYTE       = 33;
+CPU68K.EAMODEINDEX_IMMEDIATE_WORD       = 34;
+CPU68K.EAMODEINDEX_IMMEDIATE_LONG       = 35;
+CPU68K.EAMODEINDEX_IMMEDIATE_ILLEGAL    = 36;
+
+/**
+ * Definitions ported from CPUFlags.java
  */
-CPU68K.INTFLAG = {
-    NONE:   0x0000,
-    INTR:   0x00ff,     // mask for 8 bits, representing interrupt levels 0-7
-    HALT:   0x0100      // halt requested; see opHLT()
-};
-
-/*
- * Opcode definitions
- */
-CPU68K.OPCODE = {
-    HLT:    0x76,       // Halt
-    ACI:    0xCE,       // Add with Carry Immediate (affects PS.ALL)
-    CALL:   0xCD,       // Call
-    RST0:   0xC7
-    // to be continued....
-};
+CPU68K.FLAGS_CARRY        = 0x0001;
+CPU68K.FLAGS_OVERFLOW     = 0x0002;
+CPU68K.FLAGS_ZERO         = 0x0004;
+CPU68K.FLAGS_NEGATIVE     = 0x0008;
+CPU68K.FLAGS_EXTEND       = 0x0010;
+CPU68K.FLAGS_CCR          = 0x001f;
+CPU68K.FLAGS_RESERVED1    = 0x00e0;
+CPU68K.FLAGS_IPM          = 0x0700;             // Interrupt Priority Mask
+CPU68K.FLAGS_IPM_SHIFT    = 8;
+CPU68K.FLAGS_RESERVED2    = 0x0800;
+CPU68K.FLAGS_MI           = 0x1000;             // (always 0 on 68000)
+CPU68K.FLAGS_SU           = 0x2000;             // 1 == supervisor mode
+CPU68K.FLAGS_T0           = 0x4000;             // (always 0 on 68000)
+CPU68K.FLAGS_T1           = 0x8000;             // 1 == trace on any instruction
 
 CPU68K.CLASSES["CPU68K"] = CPU68K;
 
@@ -16558,8 +15801,12 @@ CPU68K.CLASSES["CPU68K"] = CPU68K;
  * @copyright https://www.pcjs.org/modules/dbg68k.js (C) 2012-2021 Jeff Parsons
  */
 
+/* eslint-disable no-labels */
+/* eslint-disable no-extra-label */
+
+
 /**
- * Debugger for 68K CPUs
+ * 68K Debugger
  *
  * @class {Dbg68K}
  * @unrestricted
@@ -16576,15 +15823,90 @@ class Dbg68K extends Debugger {
     constructor(idMachine, idDevice, config)
     {
         super(idMachine, idDevice, config);
-        this.styles = [Dbg68K.STYLE_8080, Dbg68K.STYLE_8086];
-        this.style = Dbg68K.STYLE_8086;
-        this.maxOpcodeLength = 3;
+        this.maxOpcodeLength = 6;
+
+        let i = 0;
+        this.aEAModes = [];
+        this.aEAModes[i++] = new DbgModeDRegByte(this);         // must match EAMODEINDEX_DREG_BYTE
+        this.aEAModes[i++] = new DbgModeDRegWord(this);         // must match EAMODEINDEX_DREG_WORD
+        this.aEAModes[i++] = new DbgModeDRegLong(this);         // must match EAMODEINDEX_DREG_LONG
+
+        this.aEAModes[i++] = new DbgModeIllegal(this);          // must match EAMODEINDEX_ILLEGAL
+        this.aEAModes[i++] = new DbgModeARegWord(this);         // must match EAMODEINDEX_AREG_WORD
+        this.aEAModes[i++] = new DbgModeARegLong(this);         // must match EAMODEINDEX_AREG_LONG
+
+        this.aEAModes[i++] = new DbgModeAValByte(this);
+        this.aEAModes[i++] = new DbgModeAValWord(this);
+        this.aEAModes[i++] = new DbgModeAValLong(this);
+
+        this.aEAModes[i++] = new DbgModeAValIncByte(this);      // must match EAMODEINDEX_AREG_INCBYTE
+        this.aEAModes[i++] = new DbgModeAValIncWord(this);      // must match EAMODEINDEX_AREG_INCWORD
+        this.aEAModes[i++] = new DbgModeAValIncLong(this);      // must match EAMODEINDEX_AREG_INCLONG
+
+        this.aEAModes[i++] = new DbgModeAValDecByte(this);      // must match EAMODEINDEX_AREG_DECBYTE
+        this.aEAModes[i++] = new DbgModeAValDecWord(this);      // must match EAMODEINDEX_AREG_DECWORD
+        this.aEAModes[i++] = new DbgModeAValDecLong(this);      // must match EAMODEINDEX_AREG_DECLONG
+
+        this.aEAModes[i++] = new DbgModeAValDispByte(this);
+        this.aEAModes[i++] = new DbgModeAValDispWord(this);
+        this.aEAModes[i++] = new DbgModeAValDispLong(this);
+
+        this.aEAModes[i++] = new DbgModeAValIndexByte(this);
+        this.aEAModes[i++] = new DbgModeAValIndexWord(this);
+        this.aEAModes[i++] = new DbgModeAValIndexLong(this);
+
+        this.aEAModes[i++] = new DbgModeAbs16Byte(this);
+        this.aEAModes[i++] = new DbgModeAbs16Word(this);
+        this.aEAModes[i++] = new DbgModeAbs16Long(this);
+
+        this.aEAModes[i++] = new DbgModeAbs32Byte(this);
+        this.aEAModes[i++] = new DbgModeAbs32Word(this);
+        this.aEAModes[i++] = new DbgModeAbs32Long(this);
+
+        this.aEAModes[i++] = new DbgModePCValDispByte(this);
+        this.aEAModes[i++] = new DbgModePCValDispWord(this);
+        this.aEAModes[i++] = new DbgModePCValDispLong(this);
+
+        this.aEAModes[i++] = new DbgModePCValIndexByte(this);
+        this.aEAModes[i++] = new DbgModePCValIndexWord(this);
+        this.aEAModes[i++] = new DbgModePCValIndexLong(this);
+
+        this.aEAModes[i++] = new DbgModeImmediateByte(this);    // must match EAMODEINDEX_IMMEDIATE_BYTE
+        this.aEAModes[i++] = new DbgModeImmediateWord(this);    // must match EAMODEINDEX_IMMEDIATE_WORD
+        this.aEAModes[i++] = new DbgModeImmediateLong(this);    // must match EAMODEINDEX_IMMEDIATE_LONG
+        this.aEAModes[i++] = new DbgModeIllegal(this);          // must match EAMODEINDEX_IMMEDIATE_ILLEGAL
+    }
+
+    /**
+     * break(addr, fArmed)
+     *
+     * @this {Dbg68K}
+     * @param {number} addr
+     * @param {boolean} fArmed
+     * @returns {boolean}
+     */
+    break(addr, fArmed)
+    {
+        return false;       // TODO
+    }
+
+    /**
+     * markDataAccess(addr, length, iAccess)
+     *
+     * @this {Dbg68K}
+     * @param {number} addr
+     * @param {number} length
+     * @param {number} iAccess
+     */
+    markDataAccess(addr, length, iAccess)
+    {
+        // TODO
     }
 
     /**
      * unassemble(address, opcodes, annotation)
      *
-     * Overrides Debugger's default unassemble() function with one that understands 8080 instructions.
+     * Overrides Debugger's default unassemble() function with one that understands 68K instructions.
      *
      * @this {Dbg68K}
      * @param {Address} address (advanced by the number of processed opcodes)
@@ -16594,598 +15916,3421 @@ class Dbg68K extends Debugger {
      */
     unassemble(address, opcodes, annotation)
     {
-        let sAddr = this.dumpAddress(address), sBytes = "";
-        let sLabel = this.getSymbolName(address, Debugger.SYMBOL.LABEL);
-        let sComment = this.getSymbolName(address, Debugger.SYMBOL.COMMENT);
+        let sBytes = null, sOp = null, sSrc = null, sDst = null;
+        let op1 = 0, op2, ss, rrr, nnn, iMask, iModeSrc, iModeDst;
+        let fError = false, fDispEA = false;
+        let eaModeSrc = null, eaModeDst = null;
 
-        /**
-         * getNextByte()
-         *
-         * @returns {number}
-         */
-        let getNextByte = () => {
-            let byte = opcodes.shift();
-            sBytes += this.toBase(byte, 16, 8, "");
-            this.addAddress(address, 1);
-            return byte;
-        };
+        try {
 
-        /**
-         * getNextWord()
-         *
-         * @returns {number}
-         */
-        let getNextWord = () => getNextByte() | (getNextByte() << 8);
+            this.curPC = address;                       // use specified addr instead of cpu.pc
+            op1 = this.cpu.getWord(this.curPC);       // get next instruction (don't forget this can be a signed integer if the opcode is a signed word)
+            this.curPC += 2;
 
-        /**
-         * getImmOperand(type)
-         *
-         * @param {number} type
-         * @returns {string} operand
-         */
-        let getImmOperand = (type) => {
-            let sOperand = ' ';
-            let typeSize = type & Dbg68K.TYPE_SIZE;
-            switch (typeSize) {
-            case Dbg68K.TYPE_BYTE:
-                sOperand = this.toBase(getNextByte(), 16, 8, "");
-                break;
-            case Dbg68K.TYPE_SBYTE:
-                sOperand = this.toBase((getNextWord() << 24) >> 24, 16, 16, "");
-                break;
-            case Dbg68K.TYPE_WORD:
-                sOperand = this.toBase(getNextWord(), 16, 16, "");
-                break;
-            default:
-                return "imm(" + this.toBase(type, 16, 16, "") + ')';
-            }
-            if (this.style == Dbg68K.STYLE_8086 && (type & Dbg68K.TYPE_MEM)) {
-                sOperand = '[' + sOperand + ']';
-            } else if (!(type & Dbg68K.TYPE_REG)) {
-                sOperand = (this.style == Dbg68K.STYLE_8080? '$' : "0x") + sOperand;
-            }
-            return sOperand;
-        };
+            ss = CPU68K.ssBYTE;
+            nnn = op1 & 0x7;
+            rrr = (op1 >> 9) & 0x7;
 
-        /**
-         * getRegOperand(iReg, type)
-         *
-         * @param {number} iReg
-         * @param {number} type
-         * @returns {string} operand
-         */
-        let getRegOperand = (iReg, type) => {
-            /*
-             * Although this breaks with 8080 assembler conventions, I'm going to experiment with some different
-             * mnemonics; specifically, "[HL]" instead of "M".  This is also more in keeping with how getImmOperand()
-             * displays memory references (ie, by enclosing them in brackets).
-             */
-            let sOperand = Dbg68K.REGS[iReg];
-            if (this.style == Dbg68K.STYLE_8086 && (type & Dbg68K.TYPE_MEM)) {
-                if (iReg == Dbg68K.REG_M) {
-                    sOperand = "HL";
+    stage1: switch ((op1 >> 12) & 0xf) {
+
+            case 0x0:
+                //  case 0x0000:   ori      [00000000sswwwnnn, format ????????sswwwnnn]
+                //  case 0x003c:   ori      [0000000000111100, format none]
+                //  case 0x007c:   ori      [0000000001111100, format none]
+                //  case 0x0100:   btst     [0000rrr100yyynnn, format ??????????yyynnn]
+                //  case 0x0108:   movep    [0000rrr100001nnn, format none]
+                //  case 0x0140:   bchg     [0000rrr101bbbnnn, format ??????????bbbnnn]
+                //  case 0x0148:   movep    [0000rrr101001nnn, format none]
+                //  case 0x0180:   bclr     [0000rrr110bbbnnn, format ??????????bbbnnn]
+                //  case 0x0188:   movep    [0000rrr110001nnn, format none]
+                //  case 0x01c0:   bset     [0000rrr111bbbnnn, format ??????????bbbnnn]
+                //  case 0x01c8:   movep    [0000rrr111001nnn, format none]
+                //  case 0x0200:   andi     [00000010sswwwnnn, format ????????sswwwnnn]
+                //  case 0x023c:   andi     [0000001000111100, format none]
+                //  case 0x027c:   andi     [0000001001111100, format none]
+                //  case 0x0400:   subi     [00000100sswwwnnn, format ????????sswwwnnn]
+                //  case 0x0600:   addi     [00000110sswwwnnn, format ????????sswwwnnn]
+                //  case 0x0800:   btst     [0000100000zzznnn, format ??????????zzznnn]
+                //  case 0x0840:   bchg     [0000100001bbbnnn, format ??????????bbbnnn]
+                //  case 0x0880:   bclr     [0000100010bbbnnn, format ??????????bbbnnn]
+                //  case 0x08c0:   bset     [0000100011bbbnnn, format ??????????bbbnnn]
+                //  case 0x0a00:   eori     [00001010sswwwnnn, format ????????sswwwnnn]
+                //  case 0x0a3c:   eori     [0000101000111100, format none]
+                //  case 0x0a7c:   eori     [0000101001111100, format none]
+                //  case 0x0c00:   cmpi     [00001100sswwwnnn, format ????????sswwwnnn]
+
+                iModeSrc = CPU68K.EAMODEINDEX_DREG_LONG;
+
+                switch ((op1 >> 8) & 0xf) {
+
+                case 0x0:
+                    //  case 0x0000:   ori      [....0000sswwwnnn, format ????????sswwwnnn]
+                    //  case 0x003c:   ori      [....000000111100, format none]
+                    //  case 0x007c:   ori      [....000001111100, format none]
+                    sOp = "ORI";
+                    eaModeSrc = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    sSrc = eaModeSrc.getString(0);
+                    if ((op1 & 0x3f) != 0x3c) {
+                        eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
+                        sDst = eaModeDst.getString(nnn);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0000)
+                        sDst = "CCR";
+                    else if ((op1 & 0x00c0) == 0x0040)
+                        sDst = "SR";
+                    break stage1;
+
+                case 0x2:
+                    //  case 0x0200:   andi     [....0010sswwwnnn, format ????????sswwwnnn]
+                    //  case 0x023c:   andi     [....001000111100, format none]
+                    //  case 0x027c:   andi     [....001001111100, format none]
+                    sOp = "ANDI";
+                    eaModeSrc = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    sSrc = eaModeSrc.getString(0);
+                    if ((op1 & 0x3f) != 0x3c) {
+                        eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
+                        sDst = eaModeDst.getString(nnn);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0000)
+                        sDst = "CCR";
+                    else if ((op1 & 0x00c0) == 0x0040)
+                        sDst = "SR";
+                    break stage1;
+
+                case 0x4:
+                    //  case 0x0400:   subi     [....0100sswwwnnn, format ????????sswwwnnn]
+                    sOp = "SUBI";
+                    eaModeSrc = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    sSrc = eaModeSrc.getString(0);
+                    eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
+                    sDst = eaModeDst.getString(nnn);
+                    break stage1;
+
+                case 0x6:
+                    //  case 0x0600:   addi     [....0110sswwwnnn, format ????????sswwwnnn]
+                    sOp = "ADDI";
+                    eaModeSrc = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    sSrc = eaModeSrc.getString(0);
+                    eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
+                    sDst = eaModeDst.getString(nnn);
+                    break stage1;
+
+                case 0x8:
+                    //  case 0x0800:   btst     [....100000zzznnn, format ??????????zzznnn]
+                    //  case 0x0840:   bchg     [....100001bbbnnn, format ??????????bbbnnn]
+                    //  case 0x0880:   bclr     [....100010bbbnnn, format ??????????bbbnnn]
+                    //  case 0x08c0:   bset     [....100011bbbnnn, format ??????????bbbnnn]
+                    iModeSrc = CPU68K.EAMODEINDEX_IMMEDIATE_WORD;
+                    rrr = 0;
+                    break;
+
+                case 0xa:
+                    //  case 0x0a00:   eori     [....1010sswwwnnn, format ????????sswwwnnn]
+                    //  case 0x0a3c:   eori     [....101000111100, format none]
+                    //  case 0x0a7c:   eori     [....101001111100, format none]
+                    sOp = "EORI";
+                    eaModeSrc = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    sSrc = eaModeSrc.getString(0);
+                    if ((op1 & 0x3f) != 0x3c) {
+                        eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
+                        sDst = eaModeDst.getString(nnn);
+                    }
+                    else if ((op1 & 0x00c0) == 0x0000)
+                        sDst = "CCR";
+                    else if ((op1 & 0x00c0) == 0x0040)
+                        sDst = "SR";
+                    break stage1;
+
+                case 0xc:
+                    //  case 0x0c00:   cmpi     [....1100sswwwnnn, format ????????sswwwnnn]
+                    sOp = "CMPI";
+                    eaModeSrc = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_IMMEDIATE];
+                    sSrc = eaModeSrc.getString(0);
+                    eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
+                    sDst = eaModeDst.getString(nnn);
+                    break stage1;
+
+                case 0xe:                   // undefined
+                    break stage1;
+
+                case 0x1:
+                    //  case 0x0100:   btst     [....rrr100yyynnn, format ??????????yyynnn]
+                    //  case 0x0108:   movep    [....rrr100001nnn, format none]
+                    //  case 0x0140:   bchg     [....rrr101bbbnnn, format ??????????bbbnnn]
+                    //  case 0x0148:   movep    [....rrr101001nnn, format none]
+                    //  case 0x0180:   bclr     [....rrr110bbbnnn, format ??????????bbbnnn]
+                    //  case 0x0188:   movep    [....rrr110001nnn, format none]
+                    //  case 0x01c0:   bset     [....rrr111bbbnnn, format ??????????bbbnnn]
+                    //  case 0x01c8:   movep    [....rrr111001nnn, format none]
+                    rrr = 0;
+                    break;
+                case 0x3:
+                    rrr = 1;
+                    break;
+                case 0x5:
+                    rrr = 2;
+                    break;
+                case 0x7:
+                    rrr = 3;
+                    break;
+                case 0x9:
+                    rrr = 4;
+                    break;
+                case 0xb:
+                    rrr = 5;
+                    break;
+                case 0xd:
+                    rrr = 6;
+                    break;
+                case 0xf:
+                    rrr = 7;
+                    break;
                 }
-                sOperand = '[' + sOperand + ']';
-            }
-            return sOperand;
-        };
 
-        let opcode = getNextByte();
+                if ((op1 & 0x0038) == 0x0008) {
+                    //  case 0x0108:   movep    [....rrr100001nnn, format none]
+                    //  case 0x0148:   movep    [....rrr101001nnn, format none]
+                    //  case 0x0188:   movep    [....rrr110001nnn, format none]
+                    //  case 0x01c8:   movep    [....rrr111001nnn, format none]
+                    sOp = "MOVEP";  sSrc = "???";
+                }
+                else {
+                    //  case 0x0100:   btst     [....rrr100yyynnn, format ??????????yyynnn]
+                    //  case 0x0140:   bchg     [....rrr101bbbnnn, format ??????????bbbnnn]
+                    //  case 0x0180:   bclr     [....rrr110bbbnnn, format ??????????bbbnnn]
+                    //  case 0x01c0:   bset     [....rrr111bbbnnn, format ??????????bbbnnn]
 
-        let asOpcodes = this.style != Dbg68K.STYLE_8086? Dbg68K.INS_NAMES : Dbg68K.INS_NAMES_8086;
-        let aOpDesc = Dbg68K.aaOpDescs[opcode];
-        let opNum = aOpDesc[0];
+                    eaModeSrc = this.aEAModes[iModeSrc];
+                    sSrc = eaModeSrc.getString(rrr);
+                    if ((op1 & 0x0038) == 0x0000) {
+                        //dataSrc = (1 << (dataSrc & 31));
+                        eaModeDst = this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                        sDst = eaModeDst.getString(nnn);
+                    }
+                    else {
+                        //dataSrc = (1 << (dataSrc & 7));
+                        if ((op1 & 0x00c0) == 0)
+                            eaModeDst = this.aEAModes[this.cpu.abModes401[op1 & 0x3f]];
+                        else
+                            eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0x3f]];
+                        sDst = eaModeDst.getString(nnn);
+                    }
+                    switch ((op1 >> 6) & 0x3) {
+                    case 0:
+                        //  case 0x0800:   btst     [....100000zzznnn, format ??????????zzznnn]
+                        sOp = "BTST";
+                        break;
+                    case 1:
+                        //  case 0x0840:   bchg     [....100001bbbnnn, format ??????????bbbnnn]
+                        sOp = "BCHG";
+                        break;
 
-        let sOperands = "";
-        let sOpcode = asOpcodes[opNum];
-        let cOperands = aOpDesc.length - 1;
-        let typeSizeDefault = Dbg68K.TYPE_NONE, type;
+                    case 2:
+                        //  case 0x0880:   bclr     [....100010bbbnnn, format ??????????bbbnnn]
+                        sOp = "BCLR";
+                        break;
 
-        for (let iOperand = 1; iOperand <= cOperands; iOperand++) {
+                    case 3:
+                        //  case 0x08c0:   bset     [....100011bbbnnn, format ??????????bbbnnn]
+                        sOp = "BSET";
+                        break;
+                    }
+                }
+                break stage1;
 
-            let sOperand = "";
+            case 0x2:
+                ss++;   // fall through...
 
-            type = aOpDesc[iOperand];
-            if (type === undefined) continue;
-            if ((type & Dbg68K.TYPE_OPT) && this.style == Dbg68K.STYLE_8080) continue;
+            case 0x3:
+                ss++;   // fall through...
 
-            let typeMode = type & Dbg68K.TYPE_MODE;
-            if (!typeMode) continue;
+            case 0x1:
+                //  case 0x1000:   move     [00ssrrrwwwmmmnnn, format ??ssrrrwwwmmmnnn]
+                //  case 0x1040:   movea    [00ssrrr001mmmnnn, format ??ss??????mmmnnn]
+                ss <<= 6;
+                if ((op1 & 0x01c0) != 0x0040) {
+                    //  case 0x1000:   move     [00ssrrrwwwmmmnnn, format ??ssrrrwwwmmmnnn]
+                    sOp = "MOVE";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes000[ss + (op1 & 0x3f)]];
+                    sSrc = eaModeSrc.getString(nnn);
+                    eaModeDst = this.aEAModes[this.cpu.abModesMove[ss + ((op1 >> 6) & 0x3f)]];
+                    sDst = eaModeDst.getString(rrr);
+                }
+                else {
+                    //  case 0x1040:   movea    [00ssrrr001mmmnnn, format ??ss??????mmmnnn]
+                    sOp = "MOVEA";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes000[ss + (op1 & 0x3f)]];
+                    sSrc = eaModeSrc.getString(nnn);
+                    eaModeDst = this.aEAModes[CPU68K.EAMODEINDEX_AREG_LONG];
+                    sDst = eaModeDst.getString(rrr);
+                }
+                break stage1;
 
-            let typeSize = type & Dbg68K.TYPE_SIZE;
-            if (!typeSize) {
-                type |= typeSizeDefault;
-            } else {
-                typeSizeDefault = typeSize;
-            }
+            case 0x4:
+                //  case 0x4000:   negx     [01000000sswwwnnn, format ????????sswwwnnn]
+                //  case 0x40c0:   move     [0100000011wwwnnn, format ??????????wwwnnn]
+                //  case 0x4180:   chk      [0100rrr110xxxnnn, format ??????????xxxnnn, p.174]
+                //  case 0x41c0:   lea      [0100rrr111pppnnn, format ??????????pppnnn, p.215]
+                //  case 0x4200:   clr      [01000010sswwwnnn, format ????????sswwwnnn]
+                //  case 0x42c0:   move     [0100001011wwwnnn, format ??????????wwwnnn]
+                //  case 0x4400:   neg      [01000100sswwwnnn, format ????????sswwwnnn]
+                //  case 0x44c0:   move     [0100010011xxxnnn, format ??????????xxxnnn]
+                //  case 0x4600:   not      [01000110sswwwnnn, format ????????sswwwnnn]
+                //  case 0x46c0:   move     [0100011011xxxnnn, format ??????????xxxnnn]
+                //  case 0x4800:   nbcd     [0100100000wwwnnn, format ??????????wwwnnn]
+                //  case 0x4840:   pea      [0100100001pppnnn, format ??????????pppnnn]
+                //  case 0x4840:   swap     [0100100001000nnn, format none]
+                //  case 0x4880:   ext      [0100100010000nnn, format none]
+                //  case 0x4880:   movem    [010010001kuuunnn, format ?????????kuuunnn, p.233]
+                //  case 0x48c0:   ext      [0100100011000nnn, format none]
+                //  case 0x49c0:   ext      [0100100111000nnn, format none]
+                //  case 0x4a00:   tst      [01001010ssmmmnnn, format ????????ssmmmnnn]
+                //  case 0x4ac0:   tas      [0100101011wwwnnn, format ??????????wwwnnn]
+                //  case 0x4afc:   illegal  [0100101011111100, format none]
+                //  case 0x4c80:   movem    [010011001ktttnnn, format ?????????ktttnnn, p.233]
+                //  case 0x4e40:   trap     [010011100100vvvv, format none]
+                //  case 0x4e50:   link     [0100111001010nnn, format none]
+                //  case 0x4e58:   unlk     [0100111001011nnn, format none]
+                //  case 0x4e60:   move     [0100111001100nnn, format none]
+                //  case 0x4e68:   move     [0100111001101nnn, format none]
+                //  case 0x4e70:   reset    [0100111001110000, format none]
+                //  case 0x4e71:   nop      [0100111001110001, format none]
+                //  case 0x4e72:   stop     [0100111001110010, format none]
+                //  case 0x4e73:   rte      [0100111001110011, format none]
+                //  case 0x4e75:   rts      [0100111001110101, format none]
+                //  case 0x4e76:   trapv    [0100111001110110, format none]
+                //  case 0x4e77:   rtr      [0100111001110111, format none]
+                //  case 0x4e80:   jsr      [0100111010pppnnn, format ??????????pppnnn]
+                //  case 0x4ec0:   jmp      [0100111011pppnnn, format ??????????pppnnn]
 
-            let typeOther = type & Dbg68K.TYPE_OTHER;
-            if (!typeOther) {
-                type |= (iOperand == 1? Dbg68K.TYPE_OUT : Dbg68K.TYPE_IN);
-            }
+                switch ((op1 >> 8) & 0xf) {
 
-            if (typeMode & Dbg68K.TYPE_IMM) {
-                sOperand = getImmOperand(type);
-            }
-            else if (typeMode & Dbg68K.TYPE_REG) {
-                sOperand = getRegOperand((type & Dbg68K.TYPE_IREG) >> 8, type);
-            }
-            else if (typeMode & Dbg68K.TYPE_INT) {
-                sOperand = ((opcode >> 3) & 0x7).toString();
-            }
+                case 0x0:
+                    if ((op1 & 0x00c0) != 0x00c0) {
+                        //  case 0x4000:   negx     [....0000sswwwnnn, format ????????sswwwnnn]
+                        // I have to code this up to make it look like we're modifying a
+                        // source rather than a destination, because even though the effective
+                        // address should be considered the "destination", we are subtracting from zero,
+                        // not from the destination.
+                        sOp = "NEGX";
+                        eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
+                        sSrc = eaModeDst.getString(nnn); // - GetFlagX();
+                    }
+                    else {                  // MOVE SR,%s
+                        //  case 0x40c0:   move     [....000011wwwnnn, format ??????????wwwnnn]
+                        sOp = "MOVE";  sSrc = "SR";
+                        eaModeDst = this.aEAModes[this.cpu.abModes407[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                        sDst = eaModeDst.getString(nnn);
+                    }
+                    break stage1;
 
-            if (!sOperand || !sOperand.length) {
-                sOperands = "INVALID";
+                case 0x2:
+                    if ((op1 & 0x00c0) != 0x00c0) {
+                        //  case 0x4200:   clr      [....0010sswwwnnn, format ????????sswwwnnn]
+                        sOp = "CLR";
+                        eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
+                        sDst = eaModeDst.getString(nnn);
+                    }
+                    else {                  // MOVE CCR,%s
+                        //  case 0x42c0:   move     [....001011wwwnnn, format ??????????wwwnnn]
+                        sOp = "MOVE";  sSrc = "CCR";
+                        eaModeDst = this.aEAModes[this.cpu.abModes407[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                        sDst = eaModeDst.getString(nnn);
+                    }
+                    break stage1;
+
+                case 0x4:
+                    if ((op1 & 0x00c0) != 0x00c0) {
+                        //  case 0x4400:   neg      [....0100sswwwnnn, format ????????sswwwnnn]
+                        // I have to code this up to make it look like we're modifying a
+                        // source rather than a destination, because even though the effective
+                        // address should be considered the "destination", we are subtracting from zero,
+                        // not from the destination.
+                        sOp = "NEG";
+                        eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
+                        sSrc = eaModeDst.getString(nnn);
+                    }
+                    else {                  // MOVE %s,CCR
+                        //  case 0x44c0:   move     [....010011xxxnnn, format ??????????xxxnnn]
+                        sOp = "MOVE";  sDst = "CCR";
+                        eaModeSrc = this.aEAModes[this.cpu.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                        sSrc = eaModeSrc.getString(nnn);
+                    }
+                    break stage1;
+
+                case 0x6:
+                    if ((op1 & 0x00c0) != 0x00c0) {
+                        //  case 0x4600:   not      [....0110sswwwnnn, format ????????sswwwnnn]
+                        sOp = "NOT";
+                        eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
+                        sDst = eaModeDst.getString(nnn);
+                    }
+                    else {                  // MOVE %s,SR
+                        //  case 0x46c0:   move     [....011011xxxnnn, format ??????????xxxnnn]
+                        sOp = "MOVE";  sDst = "SR";
+                        eaModeSrc = this.aEAModes[this.cpu.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
+                        sSrc = eaModeSrc.getString(nnn);
+                    }
+                    break stage1;
+
+                case 0x8:
+                    //  case 0x4800:   nbcd     [....100000wwwnnn, format ??????????wwwnnn]
+                    //  case 0x4840:   pea      [....100001pppnnn, format ??????????pppnnn]
+                    //  case 0x4840:   swap     [....100001000nnn, format none]
+                    //  case 0x4880:   ext      [....100010000nnn, format none]
+                    //  case 0x4880:   movem    [....10001kuuunnn, format ?????????kuuunnn, p.233]
+                    //  case 0x48c0:   ext      [....100011000nnn, format none]
+                    switch ((op1 >> 6) & 0x3) {
+                    case 0x0:
+                        //  case 0x4800:   nbcd     [........00wwwnnn, format ??????????wwwnnn]
+                        sOp = "NBCD";  sSrc = "???";
+                        break stage1;
+
+                    case 0x1:
+                        if ((op1 & 0x0038) == 0) {
+                            //  case 0x4840:   swap     [........01000nnn, format none]
+                            sOp = "SWAP";
+                            eaModeDst = this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                            sDst = eaModeDst.getString(nnn);
+                        }
+                        else {
+                            //  case 0x4840:   pea      [........01pppnnn, format ??????????pppnnn, p.264]
+                            sOp = "PEA";
+                            eaModeSrc = this.aEAModes[this.cpu.abModesD81[(op1 & 0x3f)+0x80]];    // +(ssLONG << 6)
+                            sSrc = eaModeSrc.getString(nnn);
+                            if (sSrc.endsWith(".l"))
+                                sSrc = sSrc.substring(0, sSrc.length-2);
+                        }
+                        break stage1;
+
+                    case 0x2:
+                        if ((op1 & 0x0038) == 0) {
+                            //  case 0x4880:   ext      [........10000nnn, format none]
+                            sOp = "EXT";
+                            eaModeDst = this.aEAModes[CPU68K.EAMODEINDEX_DREG_WORD];
+                            sDst = eaModeDst.getString(nnn);
+                            break stage1;
+                        }
+                        /* falls through (BUGBUG: verify) */
+
+                    case 0x3:
+                        if ((op1 & 0x0038) == 0) {
+                            //  case 0x4880:   ext      [........10000nnn, format none]
+                            sOp = "EXT";
+                            eaModeDst = this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                            sDst = eaModeDst.getString(nnn);
+                            break stage1;
+                        }
+                    }
+                    //  case 0x4880:   movem    [........1kuuunnn, format ?????????kuuunnn, p.233]
+                    //  NOTES: 1) This is a register-to-memory operation
+                    //         2) For pre-decrement, the order of storing is A7 to A0, then D7 to D0 (bit 0 to bit 15)
+                    //         3) For all other modes, the order of storing is D0 to D7, then A0 to A7 (bit 0 to bit 15)
+                    //         4) Any register used in pre-decrement mode is stored before being decremented
+                    sOp = "MOVEM";
+                    iModeSrc = this.cpu.getWord(this.curPC);
+                    this.curPC += 2;
+                    sSrc = "{";
+                    if ((op1 & 0x38) == 0x20) {
+                        // Pre-decrement
+                        iMask = 0x1;
+                        for (let i = 7; i >= 0; i--, iMask <<= 1) {
+                            if ((iModeSrc & iMask) != 0) {
+                                if (sSrc.length > 1) sSrc = sSrc + ",";
+                                sSrc = sSrc + "A" + i;
+                            }
+                        }
+                        for (let i = 7; i >= 0; i--, iMask <<= 1) {
+                            if ((iModeSrc & iMask) != 0) {
+                                if (sSrc.length > 1) sSrc = sSrc + ",";
+                                sSrc = sSrc + "D" + i;
+                            }
+                        }
+                    }
+                    else {
+                        // All other modes
+                        iMask = 0x1;
+                        for (let i = 0; i <= 7; i++, iMask <<= 1) {
+                            if ((iModeSrc & iMask) != 0) {
+                                if (sSrc.length > 1) sSrc = sSrc + ",";
+                                sSrc = sSrc + "D" + i;
+                            }
+                        }
+                        for (let i = 0; i <= 7; i++, iMask <<= 1) {
+                            if ((iModeSrc & iMask) != 0) {
+                                if (sSrc.length > 1) sSrc = sSrc + ",";
+                                sSrc = sSrc + "A" + i;
+                            }
+                        }
+                    }
+                    sSrc = sSrc + "}";
+                    sDst = this.aEAModes[this.cpu.abModesD07[(op1 - 0x40) & 0xff]].getString(nnn);
+                    break stage1;
+
+                case 0xa:
+                    if ((op1 & 0xc0) != 0xc0) {
+                        //  case 0x4a00:   tst      [........ssmmmnnn, format ????????ssmmmnnn]
+                        sOp = "TST";
+                        eaModeDst = this.aEAModes[this.cpu.abModes000[op1 & 0xff]];
+                        sDst = eaModeDst.getString(nnn);
+                    }
+                    else if ((op1 & 0x3f) != 0x3c) {
+                        //  case 0x4ac0:   tas      [........11wwwnnn, format ??????????wwwnnn]
+                        sOp = "TAS";
+                        eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0x3f]];               // +(ssBYTE << 6)
+                        sDst = eaModeDst.getString(nnn);
+                    }
+                    else {
+                        //  case 0x4afc:   illegal  [........11111100, format none]
+                        sOp = "ILLEGAL";
+                    }
+                    break stage1;
+
+                case 0xc:
+                    //  case 0x4c80:   movem    [....11001ktttnnn, format ?????????ktttnnn, p.233]
+                    //  NOTES: 1) This is a memory-to-register operation
+                    //         2) For all modes, the order of storing is D0 to D7, then A0 to A7 (bit 0 to bit 15)
+                    //         3) Any register used in post-increment mode is not affected by the value loaded for it (if any)
+                    sOp = "MOVEM";
+                    iModeDst = this.cpu.getWord(this.curPC);
+                    this.curPC += 2;
+                    sSrc = this.aEAModes[this.cpu.abModesC81[(op1 - 0x40) & 0xff]].getString(nnn);
+                    sDst = "{";
+                    iMask = 0x1;
+                    for (let i = 0; i <= 7; i++, iMask <<= 1) {
+                        if ((iModeDst & iMask) != 0) {
+                            if (sDst.length > 1) sDst = sDst + ",";
+                            sDst = sDst + "D" + i;
+                        }
+                    }
+                    for (let i = 0; i <= 7; i++, iMask <<= 1) {
+                        if ((iModeDst & iMask) != 0) {
+                            if (sDst.length > 1) sDst = sDst + ",";
+                            sDst = sDst + "A" + i;
+                        }
+                    }
+                    sDst = sDst + "}";
+                    break stage1;
+
+                case 0xe:
+                    switch ((op1 >> 4) & 0xf) {
+                    case 0x4:
+                        //  case 0x4e40:   trap     [........0100vvvv, format none]
+                        sOp = "TRAP";
+                        op2 = (op1 & 0xf);
+                        if (op2 != 0xf)
+                            sSrc = this.sprintf("%x", op2);
+                        else {
+                            op2 = this.cpu.getWord(this.curPC);
+                            this.curPC += 2;
+                            sSrc = "API"; // TODO: PalmOSTypes.getAPIName(op2);
+                        }
+                        break stage1;
+
+                    case 0x5:
+                        if ((op1 & 0x8) == 0) {
+                            //  case 0x4e50:   link     [........01010nnn, format none, p.216]
+                            sOp = "LINK";
+                            sSrc = "A" + nnn;
+                            sDst = this.aEAModes[CPU68K.EAMODEINDEX_IMMEDIATE_WORD].getString(0);
+                        }
+                        else {
+                            //  case 0x4e58:   unlk     [........01011nnn, format none]
+                            sOp = "UNLK";
+                            sSrc = "A" + nnn;
+                        }
+                        break stage1;
+
+                    case 0x6:
+                        //  case 0x4e60:   move     [........01100nnn, format none]
+                        //  case 0x4e68:   move     [........01101nnn, format none]
+                        sOp = "MOVE";
+                        if ((op1 & 0x8) == 0) {
+                            sSrc = "A" + nnn;
+                            sDst = "USP";
+                        }
+                        else {
+                            sSrc = "USP";
+                            sDst = "A" + nnn;
+                        }
+                        break stage1;
+
+                    case 0x7:
+                        switch (op1 & 0xf) {
+                        case 0x0:
+                            //  case 0x4e70:   reset    [........01110000, format none]
+                            sOp = "RESET";
+                            break stage1;
+
+                        case 0x1:
+                            //  case 0x4e71:   nop      [........01110001, format none]
+                            sOp = "NOP";
+                            break stage1;
+
+                        case 0x2:
+                            //  case 0x4e72:   stop     [........01110010, format none]
+                            sOp = "STOP";
+                            sSrc = this.getImmediateHexString(this.cpu.getWord(this.curPC) & 0xffff);
+                            this.curPC += 2;
+                            break stage1;
+
+                        case 0x3:
+                            //  case 0x4e73:   rte      [........01110011, format none]
+                            sOp = "RTE";
+                            break stage1;
+
+                        case 0x5:
+                            //  case 0x4e75:   rts      [........01110101, format none]
+                            sOp = "RTS";
+                            break stage1;
+
+                        case 0x6:
+                            //  case 0x4e76:   trapv    [........01110110, format none]
+                            sOp = "TRAPV";
+                            break stage1;
+
+                        case 0x7:
+                            //  case 0x4e77:   rtr      [........01110111, format none]
+                            sOp = "RTR";
+                            break stage1;
+                        }
+                        /* falls through (BUGBUG: verify) */
+
+                    case 0x8:
+                    case 0x9:
+                    case 0xa:
+                    case 0xb:
+                        //  case 0x4e80:   jsr      [........10pppnnn, format ??????????pppnnn, p.214]
+                        sOp = "JSR";
+                        eaModeSrc = this.aEAModes[this.cpu.abModesD81[(op1 & 0x3f)+0x80]];        // +(ssLONG << 6)
+                        sSrc = eaModeSrc.getString(nnn);
+                        if (sSrc.endsWith(".l"))
+                            sSrc = sSrc.substring(0, sSrc.length-2);
+                        break stage1;
+
+                    case 0xc:
+                    case 0xd:
+                    case 0xe:
+                    case 0xf:
+                        //  case 0x4ec0:   jmp      [........11pppnnn, format ??????????pppnnn, p.213]
+                        sOp = "JMP";
+                        eaModeSrc = this.aEAModes[this.cpu.abModesD81[(op1 & 0x3f)+0x80]];        // +(ssLONG << 6)
+                        sSrc = eaModeSrc.getString(nnn);
+                        if (sSrc.endsWith(".l"))
+                            sSrc = sSrc.substring(0, sSrc.length-2);
+                        break stage1;
+                    }
+                    break stage1;
+
+                case 0x1:
+                    //  case 0x4180:   chk      [....rrr110xxxnnn, format ??????????xxxnnn, p.174]
+                    //  case 0x41c0:   lea      [....rrr111pppnnn, format ??????????pppnnn, p.215]
+                    rrr = 0;
+                    break;
+                case 0x3:
+                    rrr = 1;
+                    break;
+                case 0x5:
+                    rrr = 2;
+                    break;
+                case 0x7:
+                    rrr = 3;
+                    break;
+                case 0x9:
+                    if ((op1 & 0x00f8) == 0x00c0) {
+                        //  case 0x49c0:   ext      [....100111000nnn, format none]
+                        sOp = "EXT";
+                        eaModeDst = this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                        sDst = eaModeDst.getString(nnn);
+                        break stage1;
+                    }
+                    rrr = 4;
+                    break;
+                case 0xb:
+                    rrr = 5;
+                    break;
+                case 0xd:
+                    rrr = 6;
+                    break;
+                case 0xf:
+                    rrr = 7;
+                    break;
+                }
+
+                if ((op1 & 0x00c0) == 0x0080) {
+                    //  case 0x4180:   chk      [....rrr110xxxnnn, format ??????????xxxnnn, p.174]
+                    sOp = "CHK";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes400[(op1 & 0x3f)+0x40]];            // +(ssWORD << 6)
+                    sSrc = eaModeSrc.getString(nnn);
+                    if (sSrc.endsWith(".w"))
+                        sSrc = sSrc.substring(0, sSrc.length-2);
+                    sDst = "D" + rrr;
+                }
+                else {
+                    //  case 0x41c0:   lea      [....rrr111pppnnn, format ??????????pppnnn, p.215]
+                    sOp = "LEA";
+                    eaModeSrc = this.aEAModes[this.cpu.abModesD81[(op1 & 0x3f)+0x80]];            // +(ssLONG << 6)
+                    sSrc = eaModeSrc.getString(nnn);
+                    if (sSrc.endsWith(".l"))
+                        sSrc = sSrc.substring(0, sSrc.length-2);
+                    sDst = "A" + rrr;
+                }
+                break stage1;
+
+            case 0x5:
+                //  case 0x5000:   addq     [0101qqq0ssvvvnnn, format ????????ssvvvnnn]
+                //  case 0x50c0:   scc      [0101cccc11wwwnnn, format ????cccc??wwwnnn]
+                //  case 0x50c8:   dbcc     [0101cccc11001nnn, format ????cccc????????]
+                //  case 0x5100:   subq     [0101qqq1ssvvvnnn, format ????????ssvvvnnn]
+                if ((op1 & 0x00c0) != 0x00c0) {
+                    sSrc = "#" + (CPU68K.aByteQuick[rrr]);
+                    eaModeDst = this.aEAModes[this.cpu.abModes007[op1 & 0xff]];
+                    sDst = eaModeDst.getString(nnn);
+                    if ((op1 & 0x0100) == 0x0000) {
+                        //  case 0x5000:   addq     [0101qqq0ssvvvnnn, format ????????ssvvvnnn]
+                        sOp = "ADDQ";
+                    }
+                    else {
+                        //  case 0x5100:   subq     [0101qqq1ssvvvnnn, format ????????ssvvvnnn]
+                        sOp = "SUBQ";
+                    }
+                    break stage1;
+                }
+                else {
+                    if ((op1 & 0x0038) != 0x0008) {
+                        //  case 0x50c0:   scc      [0101cccc11wwwnnn, format ????cccc??wwwnnn]
+                        eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0x3f]];               // +(ssBYTE << 6)
+                        sDst = eaModeDst.getString(nnn);
+                        switch ((op1 >> 8) & 0xf) {
+                        case 0x0:               // ST
+                            sOp = "ST";
+                            break stage1;
+                        case 0x1:               // SF
+                            sOp = "SF";
+                            break stage1;
+                        case 0x2:               // SHI
+                            sOp = "SHI";
+                            break stage1;
+                        case 0x3:               // SLS
+                            sOp = "SLS";
+                            break stage1;
+                        case 0x4:               // SCC
+                            sOp = "SCC";
+                            break stage1;
+                        case 0x5:               // SCS
+                            sOp = "SCS";
+                            break stage1;
+                        case 0x6:               // SNE
+                            sOp = "SNE";
+                            break stage1;
+                        case 0x7:               // SEQ
+                            sOp = "SEQ";
+                            break stage1;
+                        case 0x8:               // SVC
+                            sOp = "SVC";
+                            break stage1;
+                        case 0x9:               // SVS
+                            sOp = "SVS";
+                            break stage1;
+                        case 0xa:               // SPL
+                            sOp = "SPL";
+                            break stage1;
+                        case 0xb:               // SMI
+                            sOp = "SMI";
+                            break stage1;
+                        case 0xc:               // SGE
+                            sOp = "SGE";
+                            break stage1;
+                        case 0xd:               // SLT
+                            sOp = "SLT";
+                            break stage1;
+                        case 0xe:               // SGT
+                            sOp = "SGT";
+                            break stage1;
+                        case 0xf:               // SLE
+                            sOp = "SLE";
+                            break stage1;
+                        }
+                    }
+                    else {
+                        //  case 0x50c8:   dbcc     [0101cccc11001nnn, format ????cccc????????]
+                        switch ((op1 >> 8) & 0xf) {
+                        case 0x0:               // DBT
+                            sOp = "DBT";
+                            break;
+                        case 0x1:               // DBRA/DBF
+                            sOp = "DBRA";
+                            break;
+                        case 0x2:               // DBHI
+                            sOp = "DBHI";
+                            break;
+                        case 0x3:               // DBLS
+                            sOp = "DBLS";
+                            break;
+                        case 0x4:               // DBCC
+                            sOp = "DBCC";
+                            break;
+                        case 0x5:               // DBCS
+                            sOp = "DBCS";
+                            break;
+                        case 0x6:               // DBNE
+                            sOp = "DBNE";
+                            break;
+                        case 0x7:               // DBEQ
+                            sOp = "DBEQ";
+                            break;
+                        case 0x8:               // DBVC
+                            sOp = "DBVC";
+                            break;
+                        case 0x9:               // DBVS
+                            sOp = "DBVS";
+                            break;
+                        case 0xa:               // DBPL
+                            sOp = "DBPL";
+                            break;
+                        case 0xb:               // DBMI
+                            sOp = "DBMI";
+                            break;
+                        case 0xc:               // DBGE
+                            sOp = "DBGE";
+                            break;
+                        case 0xd:               // DBLT
+                            sOp = "DBLT";
+                            break;
+                        case 0xe:               // DBGT
+                            sOp = "DBGT";
+                            break;
+                        case 0xf:               // DBLE
+                            sOp = "DBLE";
+                            break;
+                        }
+                        sSrc = "D" + (nnn);
+                        sDst = this.sprintf("%x", this.curPC + this.cpu.getWord(this.curPC));
+                        this.curPC += 2;
+                        break stage1;
+                    }
+                }
                 break;
+
+            case 0x6:
+                //  case 0x6000:   bcc      [0110ccccdddddddd, format ????ccccdddddddd]
+                //  case 0x6100:   bsr      [01100001dddddddd, format none]
+                switch ((op1 >> 8) & 0xf) {
+                case 0x0:               // BRA
+                    sOp = "BRA";
+                    break;
+                case 0x1:               // BSR
+                    sOp = "BSR";
+                    break;
+                case 0x2:               // BHI
+                    sOp = "BHI";
+                    break;
+                case 0x3:               // BLS
+                    sOp = "BLS";
+                    break;
+                case 0x4:               // BCC
+                    sOp = "BCC";
+                    break;
+                case 0x5:               // BCS
+                    sOp = "BCS";
+                    break;
+                case 0x6:               // BNE
+                    sOp = "BNE";
+                    break;
+                case 0x7:               // BEQ
+                    sOp = "BEQ";
+                    break;
+                case 0x8:               // BVC
+                    sOp = "BVC";
+                    break;
+                case 0x9:               // BVS
+                    sOp = "BVS";
+                    break;
+                case 0xa:               // BPL
+                    sOp = "BPL";
+                    break;
+                case 0xb:               // BMI
+                    sOp = "BMI";
+                    break;
+                case 0xc:               // BGE
+                    sOp = "BGE";
+                    break;
+                case 0xd:               // BLT
+                    sOp = "BLT";
+                    break;
+                case 0xe:               // BGT
+                    sOp = "BGT";
+                    break;
+                case 0xf:               // BLE
+                    sOp = "BLE";
+                    break;
+                }
+                if (op1 & 0xff) {
+                    sSrc = this.sprintf("%x", this.curPC + (op1 << 24 >> 24));
+                } else {
+                    sSrc = this.sprintf("%x", this.curPC + this.cpu.getWord(this.curPC));
+                    this.curPC += 2;
+                }
+                break stage1;
+
+            case 0x7:
+                //  case 0x7000:   moveq    [0111rrr0dddddddd, format none]
+                sOp = "MOVEQ";
+                sSrc = "#" + (op1 << 24 >> 24);
+                sDst = this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG].getString(rrr);
+                break stage1;
+
+            case 0x8:
+                //  case 0x8100:   sbcd     [1000rrr10000knnn, format ????rrr?bbkkknnn, p.275]
+                //  case 0x80c0:   divu     [1000rrr011xxxnnn, format ??????????xxxnnn, p.201]
+                //  case 0x81c0:   divs     [1000rrr111xxxnnn, format ??????????xxxnnn, p.197]
+                //  case 0x8000:   or       [1000rrr0ssxxxnnn, format ????????ssxxxnnn, p.255]
+                //  case 0x8100:   or       [1000rrr1ssuuunnn, format ????????ssuuunnn, p.255]
+                if ((op1 & 0x01f0) == 0x0100) {
+                    //  case 0x8100:   sbcd     [1000rrr10000knnn, format ????rrr?bbkkknnn, p.275]
+                    sOp = "SBCD";  sSrc = "???";
+                    break stage1;
+                }
+                if ((op1 & 0x01c0) == 0x00c0) {
+                    //  case 0x80c0:   divu     [1000rrr011xxxnnn, format ??????????xxxnnn, p.201]
+                    sOp = "DIVU";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes400[(op1 & 0x3f)+0x40]];            // +(ssWORD << 6)
+                    sSrc = eaModeSrc.getString(nnn); // & 0xffff;
+                    eaModeDst = this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                    sDst = eaModeDst.getString(rrr);
+                    break stage1;
+                }
+                if ((op1 & 0x01c0) == 0x01c0) {
+                    //  case 0x81c0:   divs     [1000rrr111xxxnnn, format ??????????xxxnnn, p.197]
+                    sOp = "DIVS";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes400[(op1 & 0x3f)+0x40]];            // +(ssWORD << 6)
+                    sSrc = eaModeSrc.getString(nnn);
+                    eaModeDst = this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                    sDst = eaModeDst.getString(rrr);
+                    break stage1;
+                }
+                if ((op1 & 0x0100) == 0x0000) { // EA is src
+                    //  case 0x8000:   or       [1000rrr0ssxxxnnn, format ????????ssxxxnnn, p.255]
+                    sOp = "OR";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes400[op1 & 0xff]];
+                    sSrc = eaModeSrc.getString(nnn);
+                    eaModeDst = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    sDst = eaModeDst.getString(rrr);
+                }
+                else {                          // EA is dst
+                    //  case 0x8100:   or       [1000rrr1ssuuunnn, format ????????ssuuunnn, p.255]
+                    sOp = "OR";
+                    eaModeSrc = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    sSrc = eaModeSrc.getString(rrr);
+                    eaModeDst = this.aEAModes[this.cpu.abModesC07[op1 & 0xff]];
+                    sDst = eaModeDst.getString(nnn);
+                }
+                break stage1;
+
+            case 0x9:
+                //  case 0x9000:   suba     [1001rrrk11mmmnnn, format ???????kssmmmnnn, p.282]
+                //  case 0x9000:   sub      [1001rrr0ssmmmnnn, format ????????ssmmmnnn, p.279]
+                //  case 0x9100:   sub      [1001rrr1ssuuunnn, format ????????ssuuunnn, p.279]
+                //  case 0x9100:   subx     [1001rrr1ss00knnn, format ????rrr?sskkknnn, p.288]
+                if ((op1 & 0x00c0) == 0x00c0) {
+                    //  case 0x9000:   suba     [1001rrrk11mmmnnn, format ???????kssmmmnnn, p.282]
+                    sOp = "SUBA";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes000[(((op1 >> 2) & 0x40) + 0x40) | (op1 & 0x3f)]];
+                    sSrc = eaModeSrc.getString(nnn);
+                    eaModeDst = this.aEAModes[((op1 >> 8) & 0x1) + CPU68K.EAMODEINDEX_AREG_WORD];
+                    sDst = eaModeDst.getString(rrr);
+                    break stage1;
+                }
+                if ((op1 & 0x0100) == 0) {      // EA is src
+                    //  case 0x9000:   sub      [1001rrr0ssmmmnnn, format ????????ssmmmnnn, p.279]
+                    sOp = "SUB";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes000[op1 & 0xff]];
+                    sSrc = eaModeSrc.getString(nnn);
+                    eaModeDst = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    sDst = eaModeDst.getString(rrr);
+                    break stage1;
+                }
+                if ((op1 & 0x0030) != 0) {      // EA is dst
+                    //  case 0x9100:   sub      [1001rrr1ssuuunnn, format ????????ssuuunnn, p.279]
+                    sOp = "SUB";
+                    eaModeSrc = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    sSrc = eaModeSrc.getString(rrr);
+                    eaModeDst = this.aEAModes[this.cpu.abModesC07[op1 & 0xff]];
+                    sDst = eaModeDst.getString(nnn);
+                }
+                else {
+                    //  case 0x9100:   subx     [1001rrr1ss00knnn, format ????rrr?sskkknnn, p.288]
+                    sOp = "SUBX";
+                    eaModeSrc = this.aEAModes[this.cpu.abModesAddSubX[((op1 >> 5) & 0x6) | ((op1 >> 3) & 0x1)]];
+                    sSrc = eaModeSrc.getString(nnn); // - GetFlagX();
+                    eaModeDst = eaModeSrc;
+                    sDst = eaModeDst.getString(rrr);
+                }
+                break stage1;
+
+            case 0xa:                       // undefined
+                break;
+
+            case 0xb:
+                //  case 0xb000:   cmpa     [1011rrrk11mmmnnn, format ???????kssmmmnnn, p.182]
+                //  case 0xb000:   cmp      [1011rrr0ssmmmnnn, format ????????ssmmmnnn, p.180]
+                //  case 0xb100:   eor      [1011rrr1sswwwnnn, format ????????sswwwnnn, p.205]
+                //  case 0xb108:   cmpm     [1011xxx1ss001yyy, format ????????ss??????, p.186]
+                if ((op1 & 0x00c0) == 0x00c0) {
+                    //  case 0xb000:   cmpa     [1011rrrk11mmmnnn, format ???????kssmmmnnn, p.182]
+                    sOp = "CMPA";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes000[(((op1 >> 2) & 0x40) + 0x40) | (op1 & 0x3f)]];
+                    sSrc = eaModeSrc.getString(nnn);
+                    eaModeDst = this.aEAModes[((op1 >> 8) & 0x1) + CPU68K.EAMODEINDEX_AREG_WORD];
+                    sDst = eaModeDst.getString(rrr);
+                    break stage1;
+                }
+                if ((op1 & 0x0100) == 0) {      // EA is src
+                    //  case 0xb000:   cmp      [1011rrr0ssmmmnnn, format ????????ssmmmnnn, p.180]
+                    sOp = "CMP";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes000[op1 & 0xff]];
+                    sSrc = eaModeSrc.getString(nnn);
+                    eaModeDst = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    sDst = eaModeDst.getString(rrr);
+                    break stage1;
+                }
+                if ((op1 & 0x0038) != 0x08) {
+                    //  case 0xb100:   eor      [1011rrr1sswwwnnn, format ????????sswwwnnn, p.205]
+                    sOp = "EOR";
+                    eaModeSrc = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    sSrc = eaModeSrc.getString(rrr);
+                    eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
+                    sDst = eaModeDst.getString(nnn);
+                }
+                else {
+                    //  case 0xb108:   cmpm     [1011xxx1ss001yyy, format ????????ss??????, p.186]
+                    sOp = "CMPM";
+                    eaModeSrc = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_AREG_INCBYTE];
+                    sSrc = eaModeSrc.getString(nnn);
+                    eaModeDst = eaModeSrc;
+                    sDst = eaModeDst.getString(rrr);
+                }
+                break stage1;
+
+            case 0xc:
+                //  case 0xc000:   and      [1100rrr0ssxxxnnn, format ????????ssxxxnnn]
+                //  case 0xc0c0:   mulu     [1100rrr011xxxnnn, format ??????????xxxnnn]
+                //  case 0xc100:   abcd     [1100rrr10000knnn, format ????rrr?bbkkknnn]
+                //  case 0xc100:   and      [1100rrr1ssuuunnn, format ????????ssuuunnn]
+                //  case 0xc1c0:   muls     [1100rrr111xxxnnn, format ??????????xxxnnn]
+                op2 = (op1 >> 6) & 0x7;
+
+                switch(op2) {
+                case 0x0:
+                case 0x1:
+                case 0x2:                       // EA is src
+                    //  case 0xc000:   and      [1100rrr0ssxxxnnn, format ????????ssxxxnnn, p.120]
+                    sOp = "AND";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes400[op1 & 0xff]];
+                    sSrc = eaModeSrc.getString(nnn);
+                    eaModeDst = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    sDst = eaModeDst.getString(rrr);
+                    break stage1;
+
+                case 0x3:
+                    //  case 0xc0c0:   mulu     [1100rrr011xxxnnn, format ??????????xxxnnn, p.243]
+                    sOp = "MULU";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes400[(op1 & 0x3f)+0x40]];            // +(ssWORD << 6)
+                    sSrc = eaModeSrc.getString(nnn);
+                    eaModeDst = this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                    sDst = eaModeDst.getString(rrr);
+                    break stage1;
+
+                case 0x4:
+                case 0x5:
+                case 0x6:                       // EA is dst
+                    //  case 0xc100:   and      [1100rrr1ssuuunnn, format ????????ssuuunnn, p.120]
+                    if ((op1 & 0x0030) != 0) {
+                        sOp = "AND";
+                        eaModeSrc = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                        sSrc = eaModeSrc.getString(rrr);
+                        eaModeDst = this.aEAModes[this.cpu.abModesC07[op1 & 0xff]];
+                        sDst = eaModeDst.getString(nnn);
+                        break stage1;
+                    }
+
+                    switch(op2) {
+                    case 0x4:
+                        //  case 0xc100:   abcd     [1100rrr10000knnn, format ????rrr?bbkkknnn, p.107]
+                        sOp = "ABCD";
+                        eaModeSrc = this.aEAModes[this.cpu.abModesAddSubX[(op1 >> 3) & 0x1]];     // 0 or 1 (both ssBYTE)
+                        sSrc = eaModeSrc.getString(nnn);
+                        eaModeDst = eaModeSrc;
+                        sDst = eaModeDst.getString(rrr);
+                        break stage1;
+
+                    case 0x5:
+                        if ((op1 & 0x8) == 0) { // EXG Drrr,Dnnn
+                            //  case 0xc140:   exg      [1100rrr101000nnn, format ????rrr??????nnn, p.210]
+                            sOp = "EXG";
+                            sSrc = "D" + rrr;
+                            sDst = "D" + nnn;
+                        }
+                        else {                  // EXG Arrr,Annn
+                            //  case 0xc148:   exg      [1100rrr101001nnn, format ????rrr??????nnn, p.210]
+                            sOp = "EXG";
+                            sSrc = "A" + rrr;
+                            sDst = "A" + nnn;
+                        }
+                        break stage1;
+
+                    case 0x6:
+                        if ((op1 & 0x8) != 0) { // EXG Drrr,Annn
+                            //  case 0xc188:   exg      [1100rrr110001nnn, format ????rrr??????nnn, p.210]
+                            sOp = "EXG";
+                            sSrc = "D" + rrr;
+                            sDst = "A" + nnn;
+                            break stage1;
+                        }
+                    }
+                    break;      // If we're still here, must be an invalid opcode
+
+                case 0x7:
+                    //  case 0xc1c0:   muls     [1100rrr111xxxnnn, format ??????????xxxnnn, p.240]
+                    sOp = "MULS";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes400[(op1 & 0x3f)+0x40]];            // +(ssWORD << 6)
+                    sSrc = eaModeSrc.getString(nnn);
+                    eaModeDst = this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
+                    sDst = eaModeDst.getString(rrr);
+                    break stage1;
+                }
+                break;
+
+            case 0xd:
+                //  case 0xd000:   adda     [1101rrrk11mmmnnn, format ???????kssmmmnnn, p.112]
+                //  case 0xd000:   add      [1101rrr0ssmmmnnn, format ????????ssmmmnnn, p.109]
+                //  case 0xd100:   add      [1101rrr1ssuuunnn, format ????????ssuuunnn, p.109]
+                //  case 0xd100:   addx     [1101rrr1ss00knnn, format ????rrr?sskkknnn, p.118]
+                if ((op1 & 0x00c0) == 0x00c0) {
+                    //  case 0xd000:   adda     [1101rrrk11mmmnnn, format ???????kssmmmnnn, p.112]
+                    sOp = "ADDA";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes000[(((op1 >> 2) & 0x40) + 0x40) | (op1 & 0x3f)]];
+                    sSrc = eaModeSrc.getString(nnn);
+                    eaModeDst = this.aEAModes[((op1 >> 8) & 0x1) + CPU68K.EAMODEINDEX_AREG_WORD];
+                    sDst = eaModeDst.getString(rrr);
+                    break stage1;
+                }
+                if ((op1 & 0x0100) == 0) {      // EA is src
+                    //  case 0xd000:   add      [1101rrr0ssmmmnnn, format ????????ssmmmnnn, p.109]
+                    sOp = "ADD";
+                    eaModeSrc = this.aEAModes[this.cpu.abModes000[op1 & 0xff]];
+                    sSrc = eaModeSrc.getString(nnn);
+                    eaModeDst = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    sDst = eaModeDst.getString(rrr);
+                    break stage1;
+                }
+                if ((op1 & 0x0030) != 0) {      // EA is dst
+                    //  case 0xd100:   add      [1101rrr1ssuuunnn, format ????????ssuuunnn, p.109]
+                    sOp = "ADD";
+                    eaModeSrc = this.aEAModes[((op1 >> 6) & 0x3) + CPU68K.EAMODEINDEX_DREG];
+                    sSrc = eaModeSrc.getString(rrr);
+                    eaModeDst = this.aEAModes[this.cpu.abModesC07[op1 & 0xff]];
+                    sDst = eaModeDst.getString(nnn);
+                }
+                else {
+                    //  case 0xd100:   addx     [1101rrr1ss00knnn, format ????rrr?sskkknnn, p.118]
+                    sOp = "ADDX";
+                    eaModeSrc = this.aEAModes[this.cpu.abModesAddSubX[((op1 >> 5) & 0x6) | ((op1 >> 3) & 0x1)]];
+                    sSrc = eaModeSrc.getString(nnn); // - GetFlagX();
+                    eaModeDst = eaModeSrc;
+                    sDst = eaModeDst.getString(rrr);
+                }
+                break stage1;
+
+            case 0xe:
+                //  case 0xe000:   asr      [1110000011uuunnn, format ??????????uuunnn, p.126]
+                //  case 0xe000:   asr      [1110rrr0ssk00nnn, format ????rrr?ssk??nnn, p.126]
+                //  case 0xe008:   lsr      [1110rrr0ssk01nnn, format ????rrr?ssk??nnn, p.218]
+                //  case 0xe010:   roxr     [1110rrr0ssk10nnn, format ????rrr?ssk??nnn, p.268]
+                //  case 0xe018:   ror      [1110rrr0ssk11nnn, format ????rrr?ssk??nnn, p.265]
+                //  case 0xe100:   asl      [1110rrr1ssk00nnn, format ????rrr?ssk??nnn, p.126]
+                //  case 0xe100:   asl      [1110000111uuunnn, format ??????????uuunnn, p.126]
+                //  case 0xe108:   lsl      [1110rrr1ssk01nnn, format ????rrr?ssk??nnn, p.218]
+                //  case 0xe110:   roxl     [1110rrr1ssk10nnn, format ????rrr?ssk??nnn, p.268]
+                //  case 0xe118:   rol      [1110rrr1ssk11nnn, format ????rrr?ssk??nnn, p.265]
+                //  case 0xe200:   lsr      [1110001011uuunnn, format ??????????uuunnn, p.218]
+                //  case 0xe300:   lsl      [1110001111uuunnn, format ??????????uuunnn, p.218]
+                //  case 0xe400:   roxr     [1110010011uuunnn, format ??????????uuunnn, p.268]
+                //  case 0xe500:   roxl     [1110010111uuunnn, format ??????????uuunnn, p.268]
+                //  case 0xe600:   ror      [1110011011uuunnn, format ??????????uuunnn, p.265]
+                //  case 0xe700:   rol      [1110011111uuunnn, format ??????????uuunnn, p.265]
+                if ((op1 & 0x00c0) != 0x00c0) {
+                    sSrc = ((op1 & 0x20) == 0)? ("#" + CPU68K.aByteQuick[rrr]) : ("D" + rrr);
+                    op2 = ((op1 >> 2) & 0x6) | ((op1 >> 8) & 0x1);
+                    eaModeDst = this.aEAModes[CPU68K.EAMODEINDEX_DREG_BYTE + ((op1 >> 6) & 0x3)];
+                }
+                else {
+                    sSrc = "1";
+                    op2 = op1 >> 8;
+                    eaModeDst = this.aEAModes[this.cpu.abModesC07[(op1 & 0x3f)+0x40]];            // +(ssWORD << 6)
+                }
+                sDst = eaModeDst.getString(nnn);
+                switch (op2 & 0x7) {
+                case 0x0:
+                    //  case 0xe000:   asr      [....000011uuunnn, format ??????????uuunnn, p.126]
+                    //  case 0xe000:   asr      [....rrr0ssk00nnn, format ????rrr?ssk??nnn, p.126]
+                    sOp = "ASR";
+                    break stage1;
+
+                case 0x1:
+                    //  case 0xe100:   asl      [....000111uuunnn, format ??????????uuunnn, p.126]
+                    //  case 0xe100:   asl      [....rrr1ssk00nnn, format ????rrr?ssk??nnn, p.126]
+                    sOp = "ASL";
+                    break stage1;
+
+                case 0x2:
+                    //  case 0xe200:   lsr      [....001011uuunnn, format ??????????uuunnn, p.218]
+                    //  case 0xe008:   lsr      [....rrr0ssk01nnn, format ????rrr?ssk??nnn, p.218]
+                    sOp = "LSR";
+                    break stage1;
+
+                case 0x3:
+                    //  case 0xe300:   lsl      [....001111uuunnn, format ??????????uuunnn, p.218]
+                    //  case 0xe108:   lsl      [....rrr1ssk01nnn, format ????rrr?ssk??nnn, p.218]
+                    sOp = "LSL";
+                    break stage1;
+
+                case 0x4:
+                    //  case 0xe400:   roxr     [....010011uuunnn, format ??????????uuunnn, p.268]
+                    //  case 0xe010:   roxr     [....rrr0ssk10nnn, format ????rrr?ssk??nnn, p.268]
+                    sOp = "ROXR";
+                    break stage1;
+
+                case 0x5:
+                    //  case 0xe500:   roxl     [....010111uuunnn, format ??????????uuunnn, p.268]
+                    //  case 0xe110:   roxl     [....rrr1ssk10nnn, format ????rrr?ssk??nnn, p.268]
+                    sOp = "ROXL";
+                    break stage1;
+
+                case 0x6:
+                    //  case 0xe600:   ror      [....011011uuunnn, format ??????????uuunnn, p.265]
+                    //  case 0xe018:   ror      [....rrr0ssk11nnn, format ????rrr?ssk??nnn, p.265]
+                    sOp = "ROR";
+                    break stage1;
+
+                case 0x7:
+                    //  case 0xe700:   rol      [....011111uuunnn, format ??????????uuunnn, p.265]
+                    //  case 0xe118:   rol      [....rrr1ssk11nnn, format ????rrr?ssk??nnn, p.265]
+                    sOp = "ROL";
+                    break stage1;
+                }
+                break;
+
+            case 0xf:                       // undefined
+                break;
+
+            }   // End stage1
+
+
+            if (sOp == null)
+                sOp = "???";
+
+            if (sSrc != null && sDst != null) {
+                // If there are both src and dst operands, collapse any common ".b", ".w" or ".l" suffixes
+                // into a single suffix on the opcode instead.  Also do the collapse if the src operand is an
+                // immediate value (ie, prefixed with '#') or register list (ie, prefixed with '{').  And then
+                // finally collapse both operands into a a single src operand, separated by commas, to further
+                // simplify the code that follows.
+                let iSrc = sSrc.length;
+                let iDst = sDst.length;
+                if (iSrc >= 2 && iDst >= 2) {
+                    if (sSrc.charAt(iSrc-2) == '.' && sDst.charAt(iDst-2) == '.' && sSrc.charAt(iSrc-1) == sDst.charAt(iDst-1)) {
+                        iSrc -= 2;
+                        iDst -= 2;
+                        sOp = sOp + sSrc.substring(iSrc);
+                        sSrc = sSrc.substring(0,iSrc);
+                        sDst = sDst.substring(0,iDst);
+                    }
+                    else if ((sSrc.charAt(0) == '#' || sSrc.charAt(0) == '{') && sDst.charAt(iDst-2) == '.') {
+                        iDst -= 2;
+                        sOp = sOp + sDst.substring(iDst);
+                        sDst = sDst.substring(0,iDst);
+                    }
+                    else if (sSrc.charAt(iSrc-2) == '.' && sDst.charAt(0) == '{') {
+                        iSrc -= 2;
+                        sOp = sOp + sSrc.substring(iSrc);
+                        sSrc = sSrc.substring(0,iSrc);
+                    }
+                }
+                sSrc = sSrc + "," + sDst;
             }
-            if (sOperands.length > 0) sOperands += ',';
-            sOperands += (sOperand || "???");
+            else {
+                if (sSrc == null)
+                    sSrc = sDst;
+                if (sSrc != null) {
+                    let iSrc = sSrc.length;
+                    if (iSrc >= 2 && sSrc.charAt(iSrc-2) == '.') {
+                        iSrc -= 2;
+                        sOp = sOp + sSrc.substring(iSrc);
+                        sSrc = sSrc.substring(0,iSrc);
+                    }
+                }
+            }
+
+            // Prefix the opcode mnemonic with the code words (up to 3 of them)
+
+            sBytes = "";
+            for (let i = 0; i < 6; i += 2) {
+                if (((address + i) >>> 1) >= (this.curPC >>> 1)) break;
+                sBytes = sBytes + this.sprintf("%04x", this.cpu.getWord(address+i) & 0xffff) + " ";
+            }
+
+        }
+        catch (e) {sBytes = "error"; fError = true;}
+
+        if (fError) {
+            try {
+                // See if we're currently *inside* an API call...
+                if (address == this.cpu.getLong(CPU68K.EXCEPTION_TRAP_0xF * 4)) {
+                    sBytes = null;
+                    sOp = "INSIDE";
+                    try {
+                        let addrPC = this.cpu.getLong(this.cpu.regA[7]+2)-4;
+                        // Could check "this.cpu.getWord(addrPC) == 0x4e4f" too,
+                        // to make sure it's really a TRAP 0x0F instruction....
+                        sSrc = "API";  // TODO: PalmOSTypes.getAPIName(this.cpu.getWord(addrPC+2));
+                    }
+                    catch (e) {
+                        sSrc = "???";
+                    }
+                }
+            }
+            catch (e) {}
         }
 
-        let result = this.sprintf("%s %-7s%s %-7s %s", sAddr, sBytes, (type & Dbg68K.TYPE_UNDOC)? '*' : ' ', sOpcode, sOperands);
-        if (!annotation) {
-            if (sComment) annotation = sComment;
-        } else {
-            if (sComment) annotation += " " + sComment;
+        let addrCodeDump = this.curPC;
+
+        if (sSrc != null && (fDispEA || op1 == CPU68K.OP_JMP_PC_REL || op1 == CPU68K.OP_JSR_PC_REL)) {
+
+            // BUGBUG: This breaks down when both src and dst modes are the same,
+            // because we might be using the same "eaMode" object for both operands, hence
+            // its "ea" value for the src might have been overwritten by the value for the dst
+            // (since normally the dst is decoded after the src).
+
+            // Hopefully, this is not a problem anywhere in the emulator, as the normal operation
+            // of the CPU is to extract the src data from the src ea before processing the dst,
+            // but it can definitely affect the debugger, and it's something to be on the lookout
+            // for in the emulator as well.  -JP
+
+            let eaMode = eaModeSrc;
+            if (eaMode == null || eaMode.sPrefix.startsWith("#"))
+                eaMode = eaModeDst;
+            if (eaMode != null && !eaMode.sPrefix.startsWith("#")) {
+
+                // Check "eaMode.ea" for belonging to a debugger symbol group
+                sSrc = sSrc + "  [" + eaMode.sPrefix/* + GetAddressSymbol(eaMode.ea, -1) */;
+
+                if (sOp != "LEA" && sOp != "PEA" && sOp != "JMP" && sOp != "JSR") {
+                    try {
+                        sSrc = sSrc + "=" + this.sprintf("%x", eaMode.getData());
+                    }
+                    catch(e) {
+                        sSrc = sSrc + "=???";
+                    }
+                }
+                sSrc = sSrc + "]";
+            }
         }
-        if (annotation) result = this.sprintf("%-32s; %s", result, annotation);
-        if (sLabel) result = sLabel + ":\n" + result;
-        return result + "\n";
+        return this.sprintf("%08x: %-15s %-8s %-40s;", address, sBytes, sOp, sSrc);
+    }
+
+    /**
+     * getSignedHexString(i)
+     *
+     * Convert value to signed hex string (since the unsigned value should already appear in the disassembly)
+     *
+     * @this {Dbg68K}
+     * @param {number} i
+     * @returns {string}
+     */
+    getSignedHexString(i)
+    {
+        let s = i.toString(16);         // use toString() instead of sprintf() for signed conversion
+        if (s.charAt(0) != '-')
+            return "0x" + s;
+        else
+            return "-0x" + s.substring(1);
+    }
+
+    /**
+     * getImmediateHexString(i)
+     *
+     * Convert immediate value to signed hex string (since the unsigned value should already appear in the disassembly)
+     *
+     * @this {Dbg68K}
+     * @param {number} i
+     * @returns {string}
+     */
+    getImmediateHexString(i)
+    {
+        return '#' + this.getSignedHexString(i);
+    }
+
+    /**
+     * getIndexAddr(base)
+     *
+     * @this {Dbg68K}
+     * @param {number} base
+     * @returns {number}
+     */
+    getIndexAddr(base)
+    {
+        let addr = this.cpu.getWord(this.curPC);
+        let i = (addr & 0x7000) >> 12, bAddr = addr << 24 >> 24;
+        if ((addr & 0x0800) != 0) {
+            if ((addr & 0x8000) != 0) {
+                return base + this.cpu.regA[i] + bAddr;
+            } else {
+                return base + this.cpu.regD[i] + bAddr;
+            }
+        }
+        else {
+            if ((addr & 0x8000) != 0) {
+                return base + (this.cpu.regA[i] << 16 >> 16) + bAddr;
+            } else {
+                return base + (this.cpu.regD[i] << 16 >> 16) + bAddr;
+            }
+        }
+    }
+
+    /**
+     * getIndexAddrString(nnn)
+     *
+     * @this {Dbg68K}
+     * @param {number} nnn
+     * @returns {string}
+     */
+    getIndexAddrString(nnn)
+    {
+        let addr = this.cpu.getWord(this.curPC);
+        this.curPC += 2;
+        let i = (addr >> 12) & 0x7, bAddr = addr << 24 >> 24;
+        return "(" + (bAddr != 0? this.getSignedHexString(bAddr) + "," : "") +
+                ((nnn < 0)? "PC" : ("A" + nnn)) +
+                ((addr & 0x8000) != 0? ",A":",D") + i + ((addr & 0x0800) != 0? ".l":".w") + ")";
     }
 }
 
-Dbg68K.STYLE_8080 = "8080";
-Dbg68K.STYLE_8086 = "8086";
-
-/*
- * CPU instruction ordinals
- */
-Dbg68K.INS = {
-    NONE:   0,  ACI:    1,  ADC:    2,  ADD:    3,  ADI:    4,  ANA:    5,  ANI:    6,  CALL:   7,
-    CC:     8,  CM:     9,  CNC:   10,  CNZ:   11,  CP:    12,  CPE:   13,  CPO:   14,  CZ:    15,
-    CMA:   16,  CMC:   17,  CMP:   18,  CPI:   19,  DAA:   20,  DAD:   21,  DCR:   22,  DCX:   23,
-    DI:    24,  EI:    25,  HLT:   26,  IN:    27,  INR:   28,  INX:   29,  JMP:   30,  JC:    31,
-    JM:    32,  JNC:   33,  JNZ:   34,  JP:    35,  JPE:   36,  JPO:   37,  JZ:    38,  LDA:   39,
-    LDAX:  40,  LHLD:  41,  LXI:   42,  MOV:   43,  MVI:   44,  NOP:   45,  ORA:   46,  ORI:   47,
-    OUT:   48,  PCHL:  49,  POP:   50,  PUSH:  51,  RAL:   52,  RAR:   53,  RET:   54,  RC:    55,
-    RM:    56,  RNC:   57,  RNZ:   58,  RP:    59,  RPE:   60,  RPO:   61,  RZ:    62,  RLC:   63,
-    RRC:   64,  RST:   65,  SBB:   66,  SBI:   67,  SHLD:  68,  SPHL:  69,  STA:   70,  STAX:  71,
-    STC:   72,  SUB:   73,  SUI:   74,  XCHG:  75,  XRA:   76,  XRI:   77,  XTHL:  78
-};
-
-/*
- * CPU instruction names (mnemonics), indexed by CPU instruction ordinal (above)
+/**
+ * All DbgMode subclasses must implement the following abstract methods:
  *
- * If you change the default style, using the "s" command (eg, "s 8086"), then the 8086 table
- * will be used instead.  TODO: Add a "s z80" command for Z80-style mnemonics.
+ *  getString: get effective address (ea) string
+ *  getData: get data at effective address
  */
-Dbg68K.INS_NAMES = [
-    "NONE",     "ACI",      "ADC",      "ADD",      "ADI",      "ANA",      "ANI",      "CALL",
-    "CC",       "CM",       "CNC",      "CNZ",      "CP",       "CPE",      "CPO",      "CZ",
-    "CMA",      "CMC",      "CMP",      "CPI",      "DAA",      "DAD",      "DCR",      "DCX",
-    "DI",       "EI",       "HLT",      "IN",       "INR",      "INX",      "JMP",      "JC",
-    "JM",       "JNC",      "JNZ",      "JP",       "JPE",      "JPO",      "JZ",       "LDA",
-    "LDAX",     "LHLD",     "LXI",      "MOV",      "MVI",      "NOP",      "ORA",      "ORI",
-    "OUT",      "PCHL",     "POP",      "PUSH",     "RAL",      "RAR",      "RET",      "RC",
-    "RM",       "RNC",      "RNZ",      "RP",       "RPE",      "RPO",      "RZ",       "RLC",
-    "RRC",      "RST",      "SBB",      "SBI",      "SHLD",     "SPHL",     "STA",      "STAX",
-    "STC",      "SUB",      "SUI",      "XCHG",     "XRA",      "XRI",      "XTHL"
-];
 
-Dbg68K.INS_NAMES_8086 = [
-    "NONE",     "ADC",      "ADC",      "ADD",      "ADD",      "AND",      "AND",      "CALL",
-    "CALLC",    "CALLS",    "CALLNC",   "CALLNZ",   "CALLNS",   "CALLP",    "CALLNP",   "CALLZ",
-    "NOT",      "CMC",      "CMP",      "CMP",      "DAA",      "ADD",      "DEC",      "DEC",
-    "CLI",      "STI",      "HLT",      "IN",       "INC",      "INC",      "JMP",      "JC",
-    "JS",       "JNC",      "JNZ",      "JNS",      "JP",       "JNP",      "JZ",       "MOV",
-    "MOV",      "MOV",      "MOV",      "MOV",      "MOV",      "NOP",      "OR",       "OR",
-    "OUT",      "JMP",      "POP",      "PUSH",     "RCL",      "RCR",      "RET",      "RETC",
-    "RETS",     "RETNC",    "RETNZ",    "RETNS",    "RETP",     "RETNP",    "RETZ",     "ROL",
-    "ROR",      "RST",      "SBB",      "SBB",      "MOV",      "MOV",      "MOV",      "MOV",
-    "STC",      "SUB",      "SUB",      "XCHG",     "XOR",      "XOR",      "XCHG"
-];
+class DbgMode
+{
+    /**
+     * DbgMode(dbg, sPrefix)
+     *
+     * @this {DbgMode}
+     * @param {Dbg68K} dbg
+     * @param {string} [sPrefix]
+     */
+    constructor(dbg, sPrefix)
+    {
+        this.dbg = dbg;
+        this.sPrefix = sPrefix || "";
+        this.cpu = dbg.cpu;
+        this.ea = 0;
+    }
 
-Dbg68K.REG_B      = 0x00;
-Dbg68K.REG_C      = 0x01;
-Dbg68K.REG_D      = 0x02;
-Dbg68K.REG_E      = 0x03;
-Dbg68K.REG_H      = 0x04;
-Dbg68K.REG_L      = 0x05;
-Dbg68K.REG_M      = 0x06;
-Dbg68K.REG_A      = 0x07;
-Dbg68K.REG_BC     = 0x08;
-Dbg68K.REG_DE     = 0x09;
-Dbg68K.REG_HL     = 0x0A;
-Dbg68K.REG_SP     = 0x0B;
-Dbg68K.REG_PC     = 0x0C;
-Dbg68K.REG_PS     = 0x0D;
-Dbg68K.REG_PSW    = 0x0E;      // aka AF if Z80-style mnemonics
+    /**
+     * getString(nnn)
+     *
+     * @this {DbgMode}
+     * @param {number} nnn
+     * @returns {string}
+     */
+    getString(nnn)
+    {
+        return "";
+    }
 
-/*
- * NOTE: "PS" is the complete processor status, which includes bits like the Interrupt flag (IF),
- * which is NOT the same as "PSW", which is the low 8 bits of "PS" combined with "A" in the high byte.
+    /**
+     * getData()
+     *
+     * @this {DbgMode}
+     * @returns {number}
+     */
+    getData(nnn)
+    {
+        return 0;
+    }
+}
+
+class DbgModeIllegal extends DbgMode
+{
+    getString(nnn) {
+        return "???";
+    }
+
+    getData() {
+        return 0;
+    }
+}
+
+class DbgModeDRegByte extends DbgMode {
+    constructor(dbg) {
+        super(dbg, "D");
+    }
+
+    getString(nnn) {
+        this.ea = nnn;
+        return this.sPrefix + this.ea + ".b";
+    }
+
+    getData() {
+        return this.cpu.regD[this.ea] & 0xff;
+    }
+}
+
+class DbgModeDRegWord extends DbgMode {
+    constructor(dbg) {
+        super(dbg, "D");
+    }
+
+    getString(nnn) {
+        this.ea = nnn;
+        return this.sPrefix + this.ea + ".w";
+    }
+
+    getData() {
+        return this.cpu.regD[this.ea] & 0xffff;
+    }
+}
+
+class DbgModeDRegLong extends DbgMode {
+    constructor(dbg) {
+        super(dbg, "D");
+    }
+
+    getString(nnn) {
+        this.ea = nnn;
+        return this.sPrefix + this.ea + ".l";
+    }
+
+    getData() {
+        return this.cpu.regD[this.ea];
+    }
+}
+
+class DbgModeARegWord extends DbgMode {
+    constructor(dbg) {
+        super(dbg, "A");
+    }
+
+    getString(nnn) {
+        this.ea = nnn;
+        return this.sPrefix + this.ea + ".w";
+    }
+
+    getData() {
+        return this.cpu.regA[this.ea] & 0xffff;
+    }
+}
+
+class DbgModeARegLong extends DbgMode {
+    constructor(dbg) {
+        super(dbg, "A");
+    }
+
+    getString(nnn) {
+        this.ea = nnn;
+        return this.sPrefix + this.ea + ".l";
+    }
+
+    getData() {
+        return this.cpu.regA[this.ea];
+    }
+}
+
+class DbgModeAValByte extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.regA[nnn];
+        return "(A" + nnn + ").b";
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea) & 0xff;
+    }
+}
+
+class DbgModeAValWord extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.regA[nnn];
+        return "(A" + nnn + ").w";
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea) & 0xffff;
+    }
+}
+
+class DbgModeAValLong extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.regA[nnn];
+        return "(A" + nnn + ").l";
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+}
+
+class DbgModeAValIncByte extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.regA[nnn];
+        return "(A" + nnn + ")+.b";
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea) & 0xff;
+    }
+}
+
+class DbgModeAValIncWord extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.regA[nnn];
+        return "(A" + nnn + ")+.w";
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea) & 0xffff;
+    }
+}
+
+class DbgModeAValIncLong extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.regA[nnn];
+        return "(A" + nnn + ")+.l";
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+}
+
+class DbgModeAValDecByte extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.regA[nnn] - CPU68K.aByteInc[nnn];
+        return "-(A" + nnn + ").b";
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea) & 0xff;
+    }
+}
+
+class DbgModeAValDecWord extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.regA[nnn] - 2;
+        return "-(A" + nnn + ").w";
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea) & 0xffff;
+    }
+}
+
+class DbgModeAValDecLong extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.regA[nnn] - 4;
+        return "-(A" + nnn + ").l";
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+}
+
+class DbgModeAValDispByte extends DbgMode {
+    getString(nnn) {
+        let i = this.cpu.getWord(this.dbg.curPC);
+        this.dbg.curPC += 2;
+        this.ea = this.cpu.regA[nnn] + i;
+        return (i != 0? this.dbg.getSignedHexString(i) : "") + "(A" + nnn + ").b";
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea) & 0xff;
+    }
+}
+
+class DbgModeAValDispWord extends DbgMode {
+    getString(nnn) {
+        let i = this.cpu.getWord(this.dbg.curPC);
+        this.dbg.curPC += 2;
+        this.ea = this.cpu.regA[nnn] + i;
+        return (i != 0? this.dbg.getSignedHexString(i) : "") + "(A" + nnn + ").w";
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea) & 0xffff;
+    }
+}
+
+class DbgModeAValDispLong extends DbgMode {
+    getString(nnn) {
+        let i = this.cpu.getWord(this.dbg.curPC);
+        this.dbg.curPC += 2;
+        this.ea = this.cpu.regA[nnn] + i;
+        return (i != 0? this.dbg.getSignedHexString(i) : "") + "(A" + nnn + ").l";
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+}
+
+class DbgModeAValIndexByte extends DbgMode {
+    getString(nnn) {
+        this.ea = this.dbg.getIndexAddr(this.cpu.regA[nnn]);
+        return this.dbg.getIndexAddrString(nnn) + ".b";
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea) & 0xff;
+    }
+}
+
+class DbgModeAValIndexWord extends DbgMode {
+    getString(nnn) {
+        this.ea = this.dbg.getIndexAddr(this.cpu.regA[nnn]);
+        return this.dbg.getIndexAddrString(nnn) + ".w";
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea) & 0xffff;
+    }
+}
+
+class DbgModeAValIndexLong extends DbgMode {
+    getString(nnn) {
+        this.ea = this.dbg.getIndexAddr(this.cpu.regA[nnn]);
+        return this.dbg.getIndexAddrString(nnn) + ".l";
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+}
+
+class DbgModeAbs16Byte extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.getWord(this.dbg.curPC);
+        this.dbg.curPC += 2;
+        return this.dbg.sprintf("(%x).b", this.ea);
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea) & 0xff;
+    }
+}
+
+class DbgModeAbs16Word extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.getWord(this.dbg.curPC);
+        this.dbg.curPC += 2;
+        return this.dbg.sprintf("(%x).w", this.ea);
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea) & 0xffff;
+    }
+}
+
+class DbgModeAbs16Long extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.getWord(this.dbg.curPC);
+        this.dbg.curPC += 2;
+        return this.dbg.sprintf("(%x).l", this.ea);
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+}
+
+class DbgModeAbs32Byte extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.getLong(this.dbg.curPC);
+        this.dbg.curPC += 4;
+        return this.dbg.sprintf("(%x).b", this.ea);
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea) & 0xff;
+    }
+}
+
+class DbgModeAbs32Word extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.getLong(this.dbg.curPC);
+        this.dbg.curPC += 4;
+        return this.dbg.sprintf("(%x).w", this.ea);
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea) & 0xffff;
+    }
+}
+
+class DbgModeAbs32Long extends DbgMode {
+    getString(nnn) {
+        this.ea = this.cpu.getLong(this.dbg.curPC);
+        this.dbg.curPC += 4;
+        return this.dbg.sprintf("(%x).l", this.ea);
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+}
+
+class DbgModePCValDispByte extends DbgMode {
+    getString(nnn) {
+        let i = this.cpu.getWord(this.dbg.curPC);
+        this.ea = this.dbg.curPC + i;
+        this.dbg.curPC += 2;
+        return (i? this.dbg.getSignedHexString(i) : "") + "(PC).b";
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea) & 0xff;
+    }
+}
+
+class DbgModePCValDispWord extends DbgMode {
+    getString(nnn) {
+        let i = this.cpu.getWord(this.dbg.curPC);
+        this.ea = this.dbg.curPC + i;
+        this.dbg.curPC += 2;
+        return (i? this.dbg.getSignedHexString(i) : "") + "(PC).w";
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea) & 0xffff;
+    }
+}
+
+class DbgModePCValDispLong extends DbgMode {
+    getString(nnn) {
+        let i = this.cpu.getWord(this.dbg.curPC);
+        this.ea = this.dbg.curPC + i;
+        this.dbg.curPC += 2;
+        return (i? this.dbg.getSignedHexString(i) : "") + "(PC).l";
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+}
+
+class DbgModePCValIndexByte extends DbgMode {
+    getString(nnn) {
+        this.ea = this.dbg.getIndexAddr(this.dbg.curPC);
+        return this.dbg.getIndexAddrString(-1) + ".b";
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea) & 0xff;
+    }
+}
+class DbgModePCValIndexWord extends DbgMode {
+    getString(nnn) {
+        this.ea = this.dbg.getIndexAddr(this.dbg.curPC);
+        return this.dbg.getIndexAddrString(-1) + ".w";
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea) & 0xffff;
+    }
+}
+class DbgModePCValIndexLong extends DbgMode {
+    getString(nnn) {
+        this.ea = this.dbg.getIndexAddr(this.dbg.curPC);
+        return this.dbg.getIndexAddrString(-1) + ".l";
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+}
+
+class DbgModeImmediateByte extends DbgMode {
+    constructor(dbg) {
+        super(dbg, "#");
+    }
+
+    getString(nnn) {
+        this.ea = this.dbg.curPC + 1;
+        this.dbg.curPC += 2;
+        return this.dbg.getImmediateHexString(this.cpu.getByte(this.ea));     // + ".b";
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea) & 0xff;
+    }
+}
+
+class DbgModeImmediateWord extends DbgMode {
+    constructor(dbg) {
+        super(dbg, "#");
+    }
+
+    getString(nnn) {
+        this.ea = this.dbg.curPC;
+        this.dbg.curPC += 2;
+        return this.dbg.getImmediateHexString(this.cpu.getWord(this.ea));     // + ".w";
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea) & 0xffff;
+    }
+}
+
+class DbgModeImmediateLong extends DbgMode {
+    constructor(dbg) {
+        super(dbg, "#");
+    }
+
+    getString(nnn) {
+        this.ea = this.dbg.curPC;
+        this.dbg.curPC += 4;
+        return this.dbg.getImmediateHexString(this.cpu.getLong(this.ea));     // + ".l";
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+}
+
+/**
+ * Definitions ported from DebuggerInterface.java
  */
-Dbg68K.REGS = [
-    "B", "C", "D", "E", "H", "L", "M", "A", "BC", "DE", "HL", "SP", "PC", "PS", "PSW"
-];
+Dbg68K.MEMTYPE_ROM         = 0;
+Dbg68K.MEMTYPE_DEVICE      = 1;
+Dbg68K.MEMTYPE_CODE        = 2;
+Dbg68K.MEMTYPE_DATA        = 3;
 
-/*
- * Operand type descriptor masks and definitions
- */
-Dbg68K.TYPE_SIZE  = 0x000F;    // size field
-Dbg68K.TYPE_MODE  = 0x00F0;    // mode field
-Dbg68K.TYPE_IREG  = 0x0F00;    // implied register field
-Dbg68K.TYPE_OTHER = 0xF000;    // "other" field
-
-/*
- * TYPE_SIZE values
- */
-Dbg68K.TYPE_NONE  = 0x0000;    // (all other TYPE fields ignored)
-Dbg68K.TYPE_BYTE  = 0x0001;    // byte, regardless of operand size
-Dbg68K.TYPE_SBYTE = 0x0002;    // byte sign-extended to word
-Dbg68K.TYPE_WORD  = 0x0003;    // word (16-bit value)
-
-/*
- * TYPE_MODE values
- */
-Dbg68K.TYPE_REG   = 0x0010;    // register
-Dbg68K.TYPE_IMM   = 0x0020;    // immediate data
-Dbg68K.TYPE_ADDR  = 0x0033;    // immediate (word) address
-Dbg68K.TYPE_MEM   = 0x0040;    // memory reference
-Dbg68K.TYPE_INT   = 0x0080;    // interrupt level encoded in instruction (bits 3-5)
-
-/*
- * TYPE_IREG values, based on the REG_* constants.
- *
- * Note that TYPE_M isn't really a register, just an alternative form of TYPE_HL | TYPE_MEM.
- */
-Dbg68K.TYPE_A     = (Dbg68K.REG_A  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE);
-Dbg68K.TYPE_B     = (Dbg68K.REG_B  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE);
-Dbg68K.TYPE_C     = (Dbg68K.REG_C  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE);
-Dbg68K.TYPE_D     = (Dbg68K.REG_D  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE);
-Dbg68K.TYPE_E     = (Dbg68K.REG_E  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE);
-Dbg68K.TYPE_H     = (Dbg68K.REG_H  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE);
-Dbg68K.TYPE_L     = (Dbg68K.REG_L  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE);
-Dbg68K.TYPE_M     = (Dbg68K.REG_M  << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_BYTE | Dbg68K.TYPE_MEM);
-Dbg68K.TYPE_BC    = (Dbg68K.REG_BC << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_WORD);
-Dbg68K.TYPE_DE    = (Dbg68K.REG_DE << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_WORD);
-Dbg68K.TYPE_HL    = (Dbg68K.REG_HL << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_WORD);
-Dbg68K.TYPE_SP    = (Dbg68K.REG_SP << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_WORD);
-Dbg68K.TYPE_PC    = (Dbg68K.REG_PC << 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_WORD);
-Dbg68K.TYPE_PSW   = (Dbg68K.REG_PSW<< 8 | Dbg68K.TYPE_REG | Dbg68K.TYPE_WORD);
-
-/*
- * TYPE_OTHER bit definitions
- */
-Dbg68K.TYPE_IN    = 0x1000;    // operand is input
-Dbg68K.TYPE_OUT   = 0x2000;    // operand is output
-Dbg68K.TYPE_BOTH  = (Dbg68K.TYPE_IN | Dbg68K.TYPE_OUT);
-Dbg68K.TYPE_OPT   = 0x4000;    // optional operand (ie, normally omitted in 8080 assembly language)
-Dbg68K.TYPE_UNDOC = 0x8000;    // opcode is an undocumented alternative encoding
-
-/*
- * The aaOpDescs array is indexed by opcode, and each element is a sub-array (aOpDesc) that describes
- * the corresponding opcode. The sub-elements are as follows:
- *
- *      [0]: {number} of the opcode name (see INS.*)
- *      [1]: {number} containing the destination operand descriptor bit(s), if any
- *      [2]: {number} containing the source operand descriptor bit(s), if any
- *      [3]: {number} containing the occasional third operand descriptor bit(s), if any
- *
- * These sub-elements are all optional. If [0] is not present, the opcode is undefined; if [1] is not
- * present (or contains zero), the opcode has no (or only implied) operands; if [2] is not present, the
- * opcode has only a single operand.  And so on.
- *
- * Additional default rules:
- *
- *      1) If no TYPE_OTHER bits are specified for the first (destination) operand, TYPE_OUT is assumed;
- *      2) If no TYPE_OTHER bits are specified for the second (source) operand, TYPE_IN is assumed;
- *      3) If no size is specified for the second operand, the size is assumed to match the first operand.
- */
-Dbg68K.aaOpDescs = [
-/* 0x00 */  [Dbg68K.INS.NOP],
-/* 0x01 */  [Dbg68K.INS.LXI,   Dbg68K.TYPE_BC,    Dbg68K.TYPE_IMM],
-/* 0x02 */  [Dbg68K.INS.STAX,  Dbg68K.TYPE_BC   | Dbg68K.TYPE_MEM, Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT],
-/* 0x03 */  [Dbg68K.INS.INX,   Dbg68K.TYPE_BC],
-/* 0x04 */  [Dbg68K.INS.INR,   Dbg68K.TYPE_B],
-/* 0x05 */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_B],
-/* 0x06 */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_B,     Dbg68K.TYPE_IMM],
-/* 0x07 */  [Dbg68K.INS.RLC],
-/* 0x08 */  [Dbg68K.INS.NOP,   Dbg68K.TYPE_UNDOC],
-/* 0x09 */  [Dbg68K.INS.DAD,   Dbg68K.TYPE_HL   | Dbg68K.TYPE_OPT, Dbg68K.TYPE_BC],
-/* 0x0A */  [Dbg68K.INS.LDAX,  Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_BC   | Dbg68K.TYPE_MEM],
-/* 0x0B */  [Dbg68K.INS.DCX,   Dbg68K.TYPE_BC],
-/* 0x0C */  [Dbg68K.INS.INR,   Dbg68K.TYPE_C],
-/* 0x0D */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_C],
-/* 0x0E */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_C,     Dbg68K.TYPE_IMM],
-/* 0x0F */  [Dbg68K.INS.RRC],
-/* 0x10 */  [Dbg68K.INS.NOP,   Dbg68K.TYPE_UNDOC],
-/* 0x11 */  [Dbg68K.INS.LXI,   Dbg68K.TYPE_DE,    Dbg68K.TYPE_IMM],
-/* 0x12 */  [Dbg68K.INS.STAX,  Dbg68K.TYPE_DE   | Dbg68K.TYPE_MEM, Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT],
-/* 0x13 */  [Dbg68K.INS.INX,   Dbg68K.TYPE_DE],
-/* 0x14 */  [Dbg68K.INS.INR,   Dbg68K.TYPE_D],
-/* 0x15 */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_D],
-/* 0x16 */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_D,     Dbg68K.TYPE_IMM],
-/* 0x17 */  [Dbg68K.INS.RAL],
-/* 0x18 */  [Dbg68K.INS.NOP,   Dbg68K.TYPE_UNDOC],
-/* 0x19 */  [Dbg68K.INS.DAD,   Dbg68K.TYPE_HL   | Dbg68K.TYPE_OPT, Dbg68K.TYPE_DE],
-/* 0x1A */  [Dbg68K.INS.LDAX,  Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_DE   | Dbg68K.TYPE_MEM],
-/* 0x1B */  [Dbg68K.INS.DCX,   Dbg68K.TYPE_DE],
-/* 0x1C */  [Dbg68K.INS.INR,   Dbg68K.TYPE_E],
-/* 0x1D */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_E],
-/* 0x1E */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_E,     Dbg68K.TYPE_IMM],
-/* 0x1F */  [Dbg68K.INS.RAR],
-/* 0x20 */  [Dbg68K.INS.NOP,   Dbg68K.TYPE_UNDOC],
-/* 0x21 */  [Dbg68K.INS.LXI,   Dbg68K.TYPE_HL,    Dbg68K.TYPE_IMM],
-/* 0x22 */  [Dbg68K.INS.SHLD,  Dbg68K.TYPE_ADDR | Dbg68K.TYPE_MEM, Dbg68K.TYPE_HL   | Dbg68K.TYPE_OPT],
-/* 0x23 */  [Dbg68K.INS.INX,   Dbg68K.TYPE_HL],
-/* 0x24 */  [Dbg68K.INS.INR,   Dbg68K.TYPE_H],
-/* 0x25 */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_H],
-/* 0x26 */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_H,     Dbg68K.TYPE_IMM],
-/* 0x27 */  [Dbg68K.INS.DAA],
-/* 0x28 */  [Dbg68K.INS.NOP,   Dbg68K.TYPE_UNDOC],
-/* 0x29 */  [Dbg68K.INS.DAD,   Dbg68K.TYPE_HL   | Dbg68K.TYPE_OPT, Dbg68K.TYPE_HL],
-/* 0x2A */  [Dbg68K.INS.LHLD,  Dbg68K.TYPE_HL   | Dbg68K.TYPE_OPT, Dbg68K.TYPE_ADDR | Dbg68K.TYPE_MEM],
-/* 0x2B */  [Dbg68K.INS.DCX,   Dbg68K.TYPE_HL],
-/* 0x2C */  [Dbg68K.INS.INR,   Dbg68K.TYPE_L],
-/* 0x2D */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_L],
-/* 0x2E */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_L,     Dbg68K.TYPE_IMM],
-/* 0x2F */  [Dbg68K.INS.CMA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT],
-/* 0x30 */  [Dbg68K.INS.NOP,   Dbg68K.TYPE_UNDOC],
-/* 0x31 */  [Dbg68K.INS.LXI,   Dbg68K.TYPE_SP,    Dbg68K.TYPE_IMM],
-/* 0x32 */  [Dbg68K.INS.STA,   Dbg68K.TYPE_ADDR | Dbg68K.TYPE_MEM, Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT],
-/* 0x33 */  [Dbg68K.INS.INX,   Dbg68K.TYPE_SP],
-/* 0x34 */  [Dbg68K.INS.INR,   Dbg68K.TYPE_M],
-/* 0x35 */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_M],
-/* 0x36 */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_M,     Dbg68K.TYPE_IMM],
-/* 0x37 */  [Dbg68K.INS.STC],
-/* 0x38 */  [Dbg68K.INS.NOP,   Dbg68K.TYPE_UNDOC],
-/* 0x39 */  [Dbg68K.INS.DAD,   Dbg68K.TYPE_HL   | Dbg68K.TYPE_OPT, Dbg68K.TYPE_SP],
-/* 0x3A */  [Dbg68K.INS.LDA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_ADDR | Dbg68K.TYPE_MEM],
-/* 0x3B */  [Dbg68K.INS.DCX,   Dbg68K.TYPE_SP],
-/* 0x3C */  [Dbg68K.INS.INR,   Dbg68K.TYPE_A],
-/* 0x3D */  [Dbg68K.INS.DCR,   Dbg68K.TYPE_A],
-/* 0x3E */  [Dbg68K.INS.MVI,   Dbg68K.TYPE_A,     Dbg68K.TYPE_IMM],
-/* 0x3F */  [Dbg68K.INS.CMC],
-/* 0x40 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_B],
-/* 0x41 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_C],
-/* 0x42 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_D],
-/* 0x43 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_E],
-/* 0x44 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_H],
-/* 0x45 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_L],
-/* 0x46 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_M],
-/* 0x47 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_B,     Dbg68K.TYPE_A],
-/* 0x48 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_B],
-/* 0x49 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_C],
-/* 0x4A */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_D],
-/* 0x4B */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_E],
-/* 0x4C */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_H],
-/* 0x4D */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_L],
-/* 0x4E */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_M],
-/* 0x4F */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_C,     Dbg68K.TYPE_A],
-/* 0x50 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_B],
-/* 0x51 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_C],
-/* 0x52 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_D],
-/* 0x53 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_E],
-/* 0x54 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_H],
-/* 0x55 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_L],
-/* 0x56 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_M],
-/* 0x57 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_D,     Dbg68K.TYPE_A],
-/* 0x58 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_B],
-/* 0x59 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_C],
-/* 0x5A */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_D],
-/* 0x5B */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_E],
-/* 0x5C */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_H],
-/* 0x5D */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_L],
-/* 0x5E */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_M],
-/* 0x5F */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_E,     Dbg68K.TYPE_A],
-/* 0x60 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_B],
-/* 0x61 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_C],
-/* 0x62 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_D],
-/* 0x63 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_E],
-/* 0x64 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_H],
-/* 0x65 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_L],
-/* 0x66 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_M],
-/* 0x67 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_H,     Dbg68K.TYPE_A],
-/* 0x68 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_B],
-/* 0x69 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_C],
-/* 0x6A */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_D],
-/* 0x6B */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_E],
-/* 0x6C */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_H],
-/* 0x6D */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_L],
-/* 0x6E */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_M],
-/* 0x6F */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_L,     Dbg68K.TYPE_A],
-/* 0x70 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_M,     Dbg68K.TYPE_B],
-/* 0x71 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_M,     Dbg68K.TYPE_C],
-/* 0x72 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_M,     Dbg68K.TYPE_D],
-/* 0x73 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_M,     Dbg68K.TYPE_E],
-/* 0x74 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_M,     Dbg68K.TYPE_H],
-/* 0x75 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_M,     Dbg68K.TYPE_L],
-/* 0x76 */  [Dbg68K.INS.HLT],
-/* 0x77 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_M,     Dbg68K.TYPE_A],
-/* 0x78 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_B],
-/* 0x79 */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_C],
-/* 0x7A */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_D],
-/* 0x7B */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_E],
-/* 0x7C */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_H],
-/* 0x7D */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_L],
-/* 0x7E */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_M],
-/* 0x7F */  [Dbg68K.INS.MOV,   Dbg68K.TYPE_A,     Dbg68K.TYPE_A],
-/* 0x80 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0x81 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0x82 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0x83 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0x84 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0x85 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0x86 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0x87 */  [Dbg68K.INS.ADD,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0x88 */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0x89 */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0x8A */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0x8B */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0x8C */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0x8D */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0x8E */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0x8F */  [Dbg68K.INS.ADC,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0x90 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0x91 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0x92 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0x93 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0x94 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0x95 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0x96 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0x97 */  [Dbg68K.INS.SUB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0x98 */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0x99 */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0x9A */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0x9B */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0x9C */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0x9D */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0x9E */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0x9F */  [Dbg68K.INS.SBB,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0xA0 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0xA1 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0xA2 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0xA3 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0xA4 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0xA5 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0xA6 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0xA7 */  [Dbg68K.INS.ANA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0xA8 */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0xA9 */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0xAA */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0xAB */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0xAC */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0xAD */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0xAE */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0xAF */  [Dbg68K.INS.XRA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0xB0 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0xB1 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0xB2 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0xB3 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0xB4 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0xB5 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0xB6 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0xB7 */  [Dbg68K.INS.ORA,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0xB8 */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_B],
-/* 0xB9 */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_C],
-/* 0xBA */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_D],
-/* 0xBB */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_E],
-/* 0xBC */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_H],
-/* 0xBD */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_L],
-/* 0xBE */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_M],
-/* 0xBF */  [Dbg68K.INS.CMP,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_A],
-/* 0xC0 */  [Dbg68K.INS.RNZ],
-/* 0xC1 */  [Dbg68K.INS.POP,   Dbg68K.TYPE_BC],
-/* 0xC2 */  [Dbg68K.INS.JNZ,   Dbg68K.TYPE_ADDR],
-/* 0xC3 */  [Dbg68K.INS.JMP,   Dbg68K.TYPE_ADDR],
-/* 0xC4 */  [Dbg68K.INS.CNZ,   Dbg68K.TYPE_ADDR],
-/* 0xC5 */  [Dbg68K.INS.PUSH,  Dbg68K.TYPE_BC],
-/* 0xC6 */  [Dbg68K.INS.ADI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xC7 */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT],
-/* 0xC8 */  [Dbg68K.INS.RZ],
-/* 0xC9 */  [Dbg68K.INS.RET],
-/* 0xCA */  [Dbg68K.INS.JZ,    Dbg68K.TYPE_ADDR],
-/* 0xCB */  [Dbg68K.INS.JMP,   Dbg68K.TYPE_ADDR | Dbg68K.TYPE_UNDOC],
-/* 0xCC */  [Dbg68K.INS.CZ,    Dbg68K.TYPE_ADDR],
-/* 0xCD */  [Dbg68K.INS.CALL,  Dbg68K.TYPE_ADDR],
-/* 0xCE */  [Dbg68K.INS.ACI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xCF */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT],
-/* 0xD0 */  [Dbg68K.INS.RNC],
-/* 0xD1 */  [Dbg68K.INS.POP,   Dbg68K.TYPE_DE],
-/* 0xD2 */  [Dbg68K.INS.JNC,   Dbg68K.TYPE_ADDR],
-/* 0xD3 */  [Dbg68K.INS.OUT,   Dbg68K.TYPE_IMM  | Dbg68K.TYPE_BYTE,Dbg68K.TYPE_A   | Dbg68K.TYPE_OPT],
-/* 0xD4 */  [Dbg68K.INS.CNC,   Dbg68K.TYPE_ADDR],
-/* 0xD5 */  [Dbg68K.INS.PUSH,  Dbg68K.TYPE_DE],
-/* 0xD6 */  [Dbg68K.INS.SUI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xD7 */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT],
-/* 0xD8 */  [Dbg68K.INS.RC],
-/* 0xD9 */  [Dbg68K.INS.RET,   Dbg68K.TYPE_UNDOC],
-/* 0xDA */  [Dbg68K.INS.JC,    Dbg68K.TYPE_ADDR],
-/* 0xDB */  [Dbg68K.INS.IN,    Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xDC */  [Dbg68K.INS.CC,    Dbg68K.TYPE_ADDR],
-/* 0xDD */  [Dbg68K.INS.CALL,  Dbg68K.TYPE_ADDR | Dbg68K.TYPE_UNDOC],
-/* 0xDE */  [Dbg68K.INS.SBI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xDF */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT],
-/* 0xE0 */  [Dbg68K.INS.RPO],
-/* 0xE1 */  [Dbg68K.INS.POP,   Dbg68K.TYPE_HL],
-/* 0xE2 */  [Dbg68K.INS.JPO,   Dbg68K.TYPE_ADDR],
-/* 0xE3 */  [Dbg68K.INS.XTHL,  Dbg68K.TYPE_SP   | Dbg68K.TYPE_MEM| Dbg68K.TYPE_OPT,  Dbg68K.TYPE_HL | Dbg68K.TYPE_OPT],
-/* 0xE4 */  [Dbg68K.INS.CPO,   Dbg68K.TYPE_ADDR],
-/* 0xE5 */  [Dbg68K.INS.PUSH,  Dbg68K.TYPE_HL],
-/* 0xE6 */  [Dbg68K.INS.ANI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xE7 */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT],
-/* 0xE8 */  [Dbg68K.INS.RPE],
-/* 0xE9 */  [Dbg68K.INS.PCHL,  Dbg68K.TYPE_HL],
-/* 0xEA */  [Dbg68K.INS.JPE,   Dbg68K.TYPE_ADDR],
-/* 0xEB */  [Dbg68K.INS.XCHG,  Dbg68K.TYPE_HL   | Dbg68K.TYPE_OPT, Dbg68K.TYPE_DE  | Dbg68K.TYPE_OPT],
-/* 0xEC */  [Dbg68K.INS.CPE,   Dbg68K.TYPE_ADDR],
-/* 0xED */  [Dbg68K.INS.CALL,  Dbg68K.TYPE_ADDR | Dbg68K.TYPE_UNDOC],
-/* 0xEE */  [Dbg68K.INS.XRI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xEF */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT],
-/* 0xF0 */  [Dbg68K.INS.RP],
-/* 0xF1 */  [Dbg68K.INS.POP,   Dbg68K.TYPE_PSW],
-/* 0xF2 */  [Dbg68K.INS.JP,    Dbg68K.TYPE_ADDR],
-/* 0xF3 */  [Dbg68K.INS.DI],
-/* 0xF4 */  [Dbg68K.INS.CP,    Dbg68K.TYPE_ADDR],
-/* 0xF5 */  [Dbg68K.INS.PUSH,  Dbg68K.TYPE_PSW],
-/* 0xF6 */  [Dbg68K.INS.ORI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xF7 */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT],
-/* 0xF8 */  [Dbg68K.INS.RM],
-/* 0xF9 */  [Dbg68K.INS.SPHL,  Dbg68K.TYPE_SP   | Dbg68K.TYPE_OPT, Dbg68K.TYPE_HL  | Dbg68K.TYPE_OPT],
-/* 0xFA */  [Dbg68K.INS.JM,    Dbg68K.TYPE_ADDR],
-/* 0xFB */  [Dbg68K.INS.EI],
-/* 0xFC */  [Dbg68K.INS.CM,    Dbg68K.TYPE_ADDR],
-/* 0xFD */  [Dbg68K.INS.CALL,  Dbg68K.TYPE_ADDR | Dbg68K.TYPE_UNDOC],
-/* 0xFE */  [Dbg68K.INS.CPI,   Dbg68K.TYPE_A    | Dbg68K.TYPE_OPT, Dbg68K.TYPE_IMM | Dbg68K.TYPE_BYTE],
-/* 0xFF */  [Dbg68K.INS.RST,   Dbg68K.TYPE_INT]
-];
+Dbg68K.DATAACCESS_NONE     = 0;
+Dbg68K.DATAACCESS_READ     = 1;
+Dbg68K.DATAACCESS_WRITE    = 2;
+Dbg68K.DATAACCESS_UNINIT   = 3;
 
 Dbg68K.CLASSES["Dbg68K"] = Dbg68K;
 
 /**
- * @copyright https://www.pcjs.org/modules/ports.js (C) 2012-2021 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/eamodes.js (C) 2012-2021 Jeff Parsons
  */
-
-/** @typedef {{ addr: number, size: number, switches: Object }} */
-let PilotPortsConfig;
 
 /**
- * @class {PilotPorts}
- * @unrestricted
- * @property {PilotPortsConfig} config
+ * All EAMode subclasses must implement the following abstract methods:
+ *
+ *  getEA: calculate and set an effective address (ea)
+ *  getData: get data from the effective address (ea)
+ *  setData: set data at the effective address (ea)
+ *  updateFlagZ: update Z flag
+ *  updateFlagV: update V flag (WARNING: updateFlagZ must be called first)
+ *
+ * The EAMode class already provides wrappers for combining the above methods into frequently-used operations
+ * (eg, getEAData() instead of getEA() + getData()).
  */
-class PilotPorts extends Ports {
+class EAMode
+{
     /**
-     * PilotPorts(idMachine, idDevice, config)
+     * EAMode(cpu, mask, sign, width, type)
      *
-     * @this {PilotPorts}
+     * @this {EAMode}
+     * @param {CPU68K} cpu
+     * @param {number} mask
+     * @param {number} sign
+     * @param {number} width
+     * @param {number} type
+     */
+    constructor(cpu, mask, sign, width, type)
+    {
+        this.cpu = cpu;
+        this.ea = 0;
+        this.mask = mask;
+        this.sign = sign;
+        this.width = width;
+        this.cycle2l = type * 2;
+        this.cycle4l = type * 4;
+        this.cycle2ADI = this.cycle2Dl = this.cycle4Aw = this.cycle4AD = this.cycle2ADl = this.cycle4ADl = 0;
+    }
+
+    /**
+     * getEA(nnn)
+     *
+     * @this {EAMode}
+     * @param {number} nnn
+     * @returns {number}
+     */
+    getEA(nnn) {
+        return this.ea = nnn;
+    }
+
+    /**
+     * getData()
+     *
+     * @this {EAMode}
+     * @returns {number}
+     */
+    getData() {
+        return 0;
+    }
+
+    /**
+     * setData(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+     setData(data) {
+     }
+
+    /**
+     * updateFlagZ(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    updateFlagZ(data) {
+    }
+
+    /**
+     * updateFlagV()
+     *
+     * @this {EAMode}
+     */
+    updateFlagV() {
+    }
+
+    /**
+     * advanceEA(nnn)
+     *
+     * @this {EAMode}
+     * @param {number} nnn
+     */
+    advanceEA(nnn)
+    {
+        let nCycles = this.cpu.nCyclesDebug;
+        this.getEA(nnn);
+        this.cpu.nCyclesDebug = nCycles;
+    }
+
+    /**
+     * getEAData(nnn)
+     *
+     * @this {EAMode}
+     * @param {number} nnn
+     * @returns {number}
+     */
+    getEAData(nnn)
+    {
+        this.getEA(nnn);
+        return this.getData();
+    }
+
+    /**
+     * setEAData(nnn, data)
+     *
+     * @this {EAMode}
+     * @param {number} nnn
+     * @param {number} data
+     */
+    setEAData(nnn, data)
+    {
+        this.getEA(nnn);
+        this.setData(data);
+    }
+
+    /**
+     * updateFlagsZNClearCV(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    updateFlagsZNClearCV(data)
+    {
+        this.updateFlagZ(data);
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVNew = this.cpu.flagVDst = 0;
+        this.cpu.flagCSrc = this.cpu.flagCDst = 0;
+    }
+
+    /**
+     * setDataFlagsZNClearV(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    setDataFlagsZNClearV(data)
+    {
+        this.setData(data);
+        this.updateFlagZ(data);
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = 0;
+        this.cpu.flagVNew = 0;
+    }
+
+    /**
+     * setDataFlagsZNClearCV(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    setDataFlagsZNClearCV(data)
+    {
+        this.setData(data);
+        this.updateFlagZ(data);
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVNew = this.cpu.flagVDst = 0;
+        this.cpu.flagCSrc = this.cpu.flagCDst = 0;
+    }
+
+    /**
+     * setDataFlagsExceptXClearCV(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    setDataFlagsExceptXClearCV(data)
+    {
+        this.setData(data);
+        this.updateFlagZ(data);
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVNew = this.cpu.flagVDst = 0;
+        this.cpu.flagCSrc = this.cpu.flagCDst = 0;
+    }
+
+    /**
+     * setEADataFlagsZNClearCV(nnn, data)
+     *
+     * @this {EAMode}
+     * @param {number} nnn
+     * @param {number} data
+     */
+    setEADataFlagsZNClearCV(nnn, data)
+    {
+        this.getEA(nnn);
+        this.setData(data);
+        this.updateFlagZ(data);
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVNew = this.cpu.flagVDst = 0;
+        this.cpu.flagCSrc = this.cpu.flagCDst = 0;
+    }
+
+    // The rest of the Flags functions require that both dataSrc and dataDst be set first
+
+    /**
+     * updateFlags(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    updateFlags(data)
+    {
+        this.updateFlagZ(data);
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.updateFlagV();
+        this.cpu.flagCSrc = this.cpu.flagXSrc = this.cpu.flagVSrc;
+        this.cpu.flagCDst = this.cpu.flagXDst = this.cpu.flagVDst;
+    }
+
+    /**
+     * updateFlagsExceptX(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    updateFlagsExceptX(data)
+    {
+        this.updateFlagZ(data);
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.updateFlagV();
+        this.cpu.flagCSrc = this.cpu.flagVSrc;
+        this.cpu.flagCDst = this.cpu.flagVDst;
+    }
+
+    /**
+     * setDataFlags(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    setDataFlags(data)
+    {
+        this.setData(data);
+        this.updateFlags(data);
+    }
+
+    /**
+     * setDataFlagsForAdd(data)
+     *
+     * @this {EAMode}
+     * @param {number} data
+     */
+    setDataFlagsForAdd(data)
+    {
+        this.setData(data);
+        this.updateFlags(data);
+        this.cpu.flagVSrc = ~this.cpu.flagVSrc;
+        this.cpu.flagCDst = this.cpu.flagXDst = ~this.cpu.flagCDst;
+    }
+
+    /**
+     * getIndexAddr(base)
+     *
+     * @this {EAMode}
+     * @param {number} base
+     * @returns {number}
+     */
+    getIndexAddr(base)
+    {
+        let addr = this.cpu.getPCWord();
+        let i = (addr & 0x7000) >> 12;
+
+        if ((addr & 0x0800) != 0) {
+            if ((addr & 0x8000) != 0) {
+                return base + this.cpu.regA[i] + (addr << 24 >> 24);
+            }
+            else {
+                return base + this.cpu.regD[i] + (addr << 24 >> 24);
+            }
+        }
+        else {
+            if ((addr & 0x8000) != 0) {
+                return base + (this.cpu.regA[i] << 16 >> 16) + (addr << 24 >> 24);
+            }
+            else {
+                return base + (this.cpu.regD[i] << 16 >> 16) + (addr << 24 >> 24);
+            }
+        }
+    }
+
+}
+
+class EAModeIllegal extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0, 0, 0, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+        return 0;
+    }
+
+    getData() {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+        return 0;
+    }
+
+    setData(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagV() {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+}
+
+class EAModeDRegByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+        this.cycle2ADI = 2;
+        this.cycle4AD = 4;
+    }
+
+    getData() {
+        return this.cpu.regD[this.ea] << 24 >> 24;
+    }
+
+    getEAData(nnn) {                            // overrides default method, for speed
+        return this.cpu.regD[this.ea = nnn] << 24 >> 24;
+    }
+
+    setData(data) {
+        this.cpu.regD[this.ea] = (this.cpu.regD[this.ea] & ~0xff) | (data & 0xff);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+
+    setEADataFlagsZNClearCV(nnn, data) {        // overrides default method, for speed
+        this.ea = nnn;
+        this.cpu.regD[this.ea] = (this.cpu.regD[this.ea] & ~0xff) | (data & 0xff);
+        this.cpu.flagZNew = data << 24 >> 24;
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVNew = this.cpu.flagVDst = 0;
+        this.cpu.flagCSrc = this.cpu.flagCDst = 0;
+    }
+}
+class EAModeDRegWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+        this.cycle2ADI = 2;
+        this.cycle4AD = 4;
+    }
+
+    getData() {
+        return this.cpu.regD[this.ea] << 16 >> 16;
+    }
+
+    getEAData(nnn) {                            // overrides default method, for speed
+        return this.cpu.regD[this.ea = nnn] << 16 >> 16;
+    }
+
+    setData(data) {
+        this.cpu.regD[this.ea] = (this.cpu.regD[this.ea] & ~0xffff) | (data & 0xffff);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+
+    setEADataFlagsZNClearCV(nnn, data) {        // overrides default method, for speed
+        this.ea = nnn;
+        this.cpu.regD[this.ea] = (this.cpu.regD[this.ea] & ~0xffff) | (data & 0xffff);
+        this.cpu.flagZNew = data << 16 >> 16;
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVNew = this.cpu.flagVDst = 0;
+        this.cpu.flagCSrc = this.cpu.flagCDst = 0;
+    }
+}
+class EAModeDRegLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+        this.cycle2Dl = this.cycle2ADI = this.cycle2ADl = 2;
+        this.cycle4AD = this.cycle4ADl = 4;
+    }
+
+    getData() {
+        return this.cpu.regD[this.ea];
+    }
+
+    getEAData(nnn) {                            // overrides default method, for speed
+        return this.cpu.regD[this.ea = nnn];
+    }
+
+    setData(data) {
+        this.cpu.regD[this.ea] = data;
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+
+    setEADataFlagsZNClearCV(nnn, data) {        // overrides default method, for speed
+        this.ea = nnn;
+        this.cpu.regD[this.ea] = data;
+        this.cpu.flagZNew = data;
+        this.cpu.flagNNew = this.cpu.flagZNew;
+        this.cpu.flagVNew = this.cpu.flagVDst = 0;
+        this.cpu.flagCSrc = this.cpu.flagCDst = 0;
+    }
+}
+
+class EAModeARegWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+        this.cycle2ADI = 2;
+        this.cycle4Aw = this.cycle4AD = 4;
+    }
+
+    getData() {
+        return this.cpu.regA[this.ea] << 16 >> 16;
+    }
+
+    setData(data) {
+        this.cpu.regA[this.ea] = data;          // NOTE: the entire A register is always updated, and byte operations are illegal
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+class EAModeARegLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+        this.cycle2ADI = this.cycle2ADl = 2;
+        this.cycle4AD = this.cycle4ADl = 4;
+    }
+
+    getData() {
+        return this.cpu.regA[this.ea];
+    }
+
+    setData(data) {
+        this.cpu.regA[this.ea] = data;
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+
+    setEAData(nnn, data) {                      // overrides default method, for speed
+        this.cpu.regA[this.ea = nnn] = data;
+    }
+}
+
+class EAModeAValByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);
+        return this.ea = this.cpu.regA[nnn];
+    }
+
+    advanceEA(nnn) {
+        this.ea += 1;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+class EAModeAValWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);
+        return this.ea = this.cpu.regA[nnn];
+    }
+
+    advanceEA(nnn) {
+        this.ea += 2;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+class EAModeAValLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        return this.ea = this.cpu.regA[nnn];
+    }
+
+    advanceEA(nnn) {
+        this.ea += 4;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModeAValIncByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);
+        this.ea = this.cpu.regA[nnn];
+        this.cpu.regA[nnn] += CPU68K.aByteInc[nnn];
+        return this.ea;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+
+class EAModeAValIncWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);
+        this.ea = this.cpu.regA[nnn];
+        this.cpu.regA[nnn] += 2;
+        return this.ea;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+class EAModeAValIncLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        this.ea = this.cpu.regA[nnn];
+        this.cpu.regA[nnn] += 4;
+        return this.ea;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModeAValDecByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);                  // BUGBUG: 6 if source operand (allocate separate EAMode instances for source and dest operands?) -JP
+        this.cpu.regA[nnn] -= CPU68K.aByteInc[nnn];
+        return this.ea = this.cpu.regA[nnn];
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+
+class EAModeAValDecWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);                  // BUGBUG: 6 if source operand (allocate separate EAMode instances for source and dest operands?) -JP
+        this.cpu.regA[nnn] -= 2;
+        return this.ea = this.cpu.regA[nnn];
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+
+class EAModeAValDecLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);                  // BUGBUG: 10 if source operand (allocate separate EAMode instances for source and dest operands?) -JP
+        this.cpu.regA[nnn] -= 4;
+        return this.ea = this.cpu.regA[nnn];
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModeAValDispByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        return this.ea = this.cpu.regA[nnn] + this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 1;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+
+class EAModeAValDispWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        return this.ea = this.cpu.regA[nnn] + this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 2;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+
+class EAModeAValDispLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(12);
+        return this.ea = this.cpu.regA[nnn] + this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 4;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModeAValIndexByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(10);
+        return this.ea = this.getIndexAddr(this.cpu.regA[nnn]);
+    }
+
+    advanceEA(nnn) {
+        this.ea += 1;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+
+class EAModeAValIndexWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(10);
+        return this.ea = this.getIndexAddr(this.cpu.regA[nnn]);
+    }
+
+    advanceEA(nnn) {
+        this.ea += 2;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+
+class EAModeAValIndexLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(14);
+        return this.ea = this.getIndexAddr(this.cpu.regA[nnn]);
+    }
+
+    advanceEA(nnn) {
+        this.ea += 4;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModeAbs16Byte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        return this.ea = this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 1;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+class EAModeAbs16Word extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        return this.ea = this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 2;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+
+class EAModeAbs16Long extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(12);
+        return this.ea = this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 4;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModeAbs32Byte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(12);
+        return this.ea = this.cpu.getPCLong();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 1;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+class EAModeAbs32Word extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(12);
+        return this.ea = this.cpu.getPCLong();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 2;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+
+class EAModeAbs32Long extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(16);
+        return this.ea = this.cpu.getPCLong();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 4;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModePCValDispByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        return this.ea = this.cpu.regPC + this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 1;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+
+class EAModePCValDispWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        return this.ea = this.cpu.regPC + this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 2;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+
+class EAModePCValDispLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(12);
+        return this.ea = this.cpu.regPC + this.cpu.getPCWord();
+    }
+
+    advanceEA(nnn) {
+        this.ea += 4;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModePCValIndexByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(10);
+        return this.ea = this.getIndexAddr(this.cpu.regPC);
+    }
+
+    advanceEA(nnn) {
+        this.ea += 1;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setByte(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 24 >> 24;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 24 >> 24;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 24 >> 24;
+    }
+}
+
+class EAModePCValIndexWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(10);
+        return this.ea = this.getIndexAddr(this.cpu.regPC);
+    }
+
+    advanceEA(nnn) {
+        this.ea += 2;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setWord(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data << 16 >> 16;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst << 16 >> 16;
+        this.cpu.flagVSrc = this.cpu.dataSrc << 16 >> 16;
+    }
+}
+
+class EAModePCValIndexLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(14);
+        return this.ea = this.getIndexAddr(this.cpu.regPC);
+    }
+
+    advanceEA(nnn) {
+        this.ea += 4;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    setData(data) {
+        this.cpu.setLong(this.ea, data);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.flagZNew = data;
+    }
+
+    updateFlagV() {
+        this.cpu.flagVNew = this.cpu.flagZNew;
+        this.cpu.flagVDst = this.cpu.dataDst;
+        this.cpu.flagVSrc = this.cpu.dataSrc;
+    }
+}
+
+class EAModeImmediateByte extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xff, 0x80, 8, 0);
+        this.cycle2ADI = 2;
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);
+        this.ea = this.cpu.regPC+1;
+        this.cpu.regPC += 2;
+        return this.ea;
+    }
+
+    getData() {
+        return this.cpu.getByte(this.ea);
+    }
+
+    getEAData(nnn) {                            // overrides default method, for speed
+        this.cpu.addCycles(4);
+        this.ea = this.cpu.regPC+1;
+        return this.cpu.getPCWord() << 24 >> 24;
+    }
+
+    setData(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagV() {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+}
+
+class EAModeImmediateWord extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffff, 0x8000, 16, 0);
+        this.cycle2ADI = 2;
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(4);
+        this.ea = this.cpu.regPC;
+        this.cpu.regPC += 2;
+        return this.ea;
+    }
+
+    getData() {
+        return this.cpu.getWord(this.ea);
+    }
+
+    getEAData(nnn) {                            // overrides default method, for speed
+        this.cpu.addCycles(4);
+        this.ea = this.cpu.regPC;
+        return this.cpu.getPCWord();
+    }
+
+    setData(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagV() {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+}
+
+class EAModeImmediateLong extends EAMode {
+    constructor(cpu) {
+        super(cpu, 0xffffffff, 0x80000000, 32, 1);
+        this.cycle2ADI = 2;
+    }
+
+    getEA(nnn) {
+        this.cpu.addCycles(8);
+        this.ea = this.cpu.regPC;
+        this.cpu.regPC += 4;
+        return this.ea;
+    }
+
+    getData() {
+        return this.cpu.getLong(this.ea);
+    }
+
+    getEAData(nnn) {                            // overrides default method, for speed
+        this.cpu.addCycles(8);
+        this.ea = this.cpu.regPC;
+        return this.cpu.getPCLong();
+    }
+
+    setData(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagZ(data) {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+
+    updateFlagV() {
+        this.cpu.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+    }
+}
+
+/**
+ * @copyright https://www.pcjs.org/modules/ioregs.js (C) 2012-2021 Jeff Parsons
+ */
+
+/** @typedef {{ addr: number, size: number }} */
+let PilotIOConfig;
+
+/**
+ * @class {PilotIO}
+ * @unrestricted
+ * @property {PilotIOConfig} config
+ */
+class PilotIO extends Memory {
+    /**
+     * PilotIO(idMachine, idDevice, config)
+     *
+     * @this {PilotIO}
      * @param {string} idMachine
      * @param {string} idDevice
-     * @param {PilotPortsConfig} [config]
+     * @param {PilotIOConfig} [config]
      */
     constructor(idMachine, idDevice, config)
     {
         super(idMachine, idDevice, config);
-        this.addIOTable(this, PilotPorts.IOTABLE);
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input"));
-        let onButton = this.onButton.bind(this);
-        let buttonIDs = Object.keys(PilotPorts.STATUS1.KEYMAP);
-        for (let i = 0; i < buttonIDs.length; i++) {
-            this.input.addListener(Input.TYPE.IDMAP, buttonIDs[i], onButton);
-        }
-        this.switchConfig = this.config['switches'] || {};
-        this.defaultSwitches = this.parseSwitches(this.switchConfig['default'], 0xff);
-        this.setSwitches(this.defaultSwitches);
+        this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['bus']));
+        this.busMemory.addBlocks(PilotIO.DBREGS_BASE, PilotIO.DBREGS_SIZE, Memory.TYPE.READWRITE, this);
         this.onReset();
     }
 
     /**
      * loadState(state)
      *
-     * Memory and Ports states are managed by the Bus onLoad() handler, which calls our loadState() handler.
+     * Memory and I/O register states are managed by the Bus onLoad() handler, which calls our loadState() handler.
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {Array|undefined} state
      * @returns {boolean}
      */
@@ -17194,12 +19339,6 @@ class PilotPorts extends Ports {
         if (state) {
             let idDevice = state.shift();
             if (this.idDevice == idDevice) {
-                this.bStatus0 = state.shift();
-                this.bStatus1 = state.shift();
-                this.bStatus2 = state.shift();
-                this.wShiftData = state.shift();
-                this.bShiftCount = state.shift();
-                this.setSwitches(state.shift());
                 return true;
             }
         }
@@ -17209,33 +19348,25 @@ class PilotPorts extends Ports {
     /**
      * saveState(state)
      *
-     * Memory and Ports states are managed by the Bus onSave() handler, which calls our saveState() handler.
+     * Memory and I/O register states are managed by the Bus onSave() handler, which calls our saveState() handler.
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {Array} state
      */
     saveState(state)
     {
         state.push(this.idDevice);
-        state.push(this.bStatus0);
-        state.push(this.bStatus1);
-        state.push(this.bStatus2);
-        state.push(this.wShiftData);
-        state.push(this.bShiftCount);
-        state.push(this.switches);
     }
 
     /**
      * onButton(id, down)
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      * @param {string} id
      * @param {boolean} down
      */
     onButton(id, down)
     {
-        let bit = PilotPorts.STATUS1.KEYMAP[id];
-        this.bStatus1 = (this.bStatus1 & ~bit) | (down? bit : 0);
     }
 
     /**
@@ -17243,284 +19374,450 @@ class PilotPorts extends Ports {
      *
      * Called by the Machine device to provide notification of a reset event.
      *
-     * @this {PilotPorts}
+     * @this {PilotIO}
      */
     onReset()
     {
-        this.bStatus0 = 0;
-        this.bStatus1 = 0;
-        this.bStatus2 = 0;
-        this.wShiftData = 0;
-        this.bShiftCount = 0;
-    }
-
-    /**
-     * setSwitches(switches)
-     *
-     * @this {PilotPorts}
-     * @param {number|undefined} switches
-     */
-    setSwitches(switches)
-    {
-        /*
-         * switches may be undefined when called from loadState() if a "pre-switches" state was loaded.
-         */
-        if (switches == undefined) return;
-        /*
-         * If this.switches is undefined, then this is the first setSwitches() call, so we should set func
-         * to onSwitch(); otherwise, we omit func so that all addListener() will do is initialize the visual
-         * state of the SWITCH controls.
-         */
-        let func = this.switches == undefined? this.onSwitch.bind(this) : null;
-        /*
-         * Now we can set the actual switches to the supplied setting, and initialize each of the (8) switches.
-         */
-        this.switches = switches;
-        for (let i = 1; i <= 8; i++) {
-            this.input.addListener(Input.TYPE.SWITCH, "sw"+i, func, !(switches & (1 << (i - 1))));
+        for (let offset in PilotIO.abRegsInit) {
+            this.printf("reset byte I/O register 0x%08x to 0x%02x\n", PilotIO.DBREGS_BASE + offset, PilotIO.abRegsInit[offset]);
         }
     }
 
     /**
-     * onSwitch(id, state)
+     * readData(offset)
      *
-     * @this {PilotPorts}
-     * @param {string} id
-     * @param {boolean} state
+     * Implements the required Memory interface for reading a single value (ie, byte) at the given offset.
+     *
+     * @this {PilotIO}
+     * @param {number} offset
+     * @returns {number}
      */
-    onSwitch(id, state)
+    readData(offset)
     {
-        let desc;
-        let i = +id.slice(-1) - 1, bit = 1 << i;
-        if (!state) {
-            this.switches |= bit;
-        } else {
-            this.switches &= ~bit;
-        }
-        for (let sws in this.switchConfig) {
-            if (sws == "default" || sws[i] != '0' && sws[i] != '1') continue;
-            let mask = this.parseSwitches(sws, -1);
-            let switches = this.parseSwitches(sws);
-            if (switches == (this.switches & mask)) {
-                desc = this.switchConfig[sws];
-                break;
-            }
-        }
-        this.printf("%s: %b (%s)\n", id, state, desc);
+        let data = 0;
+        this.printf("PilotIO.readData(0x%08x): 0x%02x\n", PilotIO.DBREGS_BASE + offset, data);
+        return data;
     }
 
     /**
-     * inStatus0(port)
+     * writeData(offset, data)
      *
-     * @this {PilotPorts}
-     * @param {number} port (0x00)
-     * @returns {number} simulated port value
-     */
-    inStatus0(port)
-    {
-        let value = this.bStatus0;
-        this.printf(Ports.MESSAGE.BUS, "inStatus0(%#04x): %#04x\n", port, value);
-        return value;
-    }
-
-    /**
-     * inStatus1(port)
+     * Implements the required Memory interface for writing a single value (ie, byte) at the given offset.
      *
-     * @this {PilotPorts}
-     * @param {number} port (0x01)
-     * @returns {number} simulated port value
+     * @this {Memory}
+     * @param {number} offset
+     * @param {number} data
      */
-    inStatus1(port)
-    {
-        let value = this.bStatus1;
-        this.printf(Ports.MESSAGE.PORTS, "inStatus1(%#04x): %#04x\n", port, value);
-        return value;
-    }
+     writeData(offset, data)
+     {
+        this.printf("PilotIO.writeData(0x%08x, 0x%02x)\n", PilotIO.DBREGS_BASE + offset, data);
+     }
 
-    /**
-     * inStatus2(port)
-     *
-     * @this {PilotPorts}
-     * @param {number} port (0x02)
-     * @returns {number} simulated port value
-     */
-    inStatus2(port)
-    {
-        let value = this.bStatus2 | (this.switches & (PilotPorts.STATUS2.DIP1_2 | PilotPorts.STATUS2.DIP4 | PilotPorts.STATUS2.DIP7));
-        this.printf(Ports.MESSAGE.PORTS, "inStatus2(%#04x): %#04x\n", port, value);
-        return value;
-    }
+  }
 
-    /**
-     * inShiftResult(port)
-     *
-     * @this {PilotPorts}
-     * @param {number} port (0x03)
-     * @returns {number} simulated port value
-     */
-    inShiftResult(port)
-    {
-        let value = (this.wShiftData >> (8 - this.bShiftCount)) & 0xff;
-        this.printf(Ports.MESSAGE.PORTS, "inShiftResult(%#04x): %#04x\n", port, value);
-        return value;
-    }
+/**
+ * List of supported DragonBall h/w registers (see p.24 of MC68328 User's Manual 12/9/97)
+ */
+PilotIO.DBREGS_BASE         = 0xfffff000;
+PilotIO.DBREGS_SIZE         = 0x00001000;
+PilotIO.DBREGS_LIMIT        = PilotIO.DBREGS_BASE + PilotIO.DBREGS_SIZE;
 
-    /**
-     * outShiftCount(port, value)
-     *
-     * @this {PilotPorts}
-     * @param {number} port (0x02)
-     * @param {number} value
-     */
-    outShiftCount(port, value)
-    {
-        this.printf(Ports.MESSAGE.PORTS, "outShiftCount(%#04x): %#04x\n", port, value);
-        this.bShiftCount = value;
-    }
+/**
+ * System Control Register
+ */
+PilotIO.DBREG_SCR           = 0x000;
 
-    /**
-     * outSound1(port, value)
-     *
-     * @this {PilotPorts}
-     * @param {number} port (0x03)
-     * @param {number} value
-     */
-    outSound1(port, value)
-    {
-        this.printf(Ports.MESSAGE.PORTS, "outSound1(%#04x): %#04x\n", port, value);
-        this.bSound1 = value;
-    }
+/**
+ * Mask Revision Register
+ */
+PilotIO.DBREG_MRR           = 0x004;
 
-    /**
-     * outShiftData(port, value)
-     *
-     * @this {PilotPorts}
-     * @param {number} port (0x04)
-     * @param {number} value
-     */
-    outShiftData(port, value)
-    {
-        this.printf(Ports.MESSAGE.PORTS, "outShiftData(%#04x): %#04x\n", port, value);
-        this.wShiftData = (value << 8) | (this.wShiftData >> 8);
-    }
+/**
+ * Chip Select Base Registers
+ */
+PilotIO.DBREG_GRPBASEA      = 0x100;
+PilotIO.DBREG_GRPBASEB      = 0x102;
+PilotIO.DBREG_GRPBASEC      = 0x104;
+PilotIO.DBREG_GRPBASED      = 0x106;
 
-    /**
-     * outSound2(port, value)
-     *
-     * @this {PilotPorts}
-     * @param {number} port (0x05)
-     * @param {number} value
-     */
-    outSound2(port, value)
-    {
-        this.printf(Ports.MESSAGE.PORTS, "outSound2(%#04x): %#04x\n", port, value);
-        this.bSound2 = value;
-    }
+/**
+ * Chip Select A Mask Registers
+ */
+PilotIO.DBREG_GRPMASKA      = 0x108;
+PilotIO.DBREG_GRPMASKB      = 0x10A;
+PilotIO.DBREG_GRPMASKC      = 0x10C;
+PilotIO.DBREG_GRPMASKD      = 0x10E;
 
-    /**
-     * outWatchdog(port, value)
-     *
-     * @this {PilotPorts}
-     * @param {number} port (0x06)
-     * @param {number} value
-     */
-    outWatchdog(port, value)
-    {
-        this.printf(Ports.MESSAGE.PORTS, "outWatchDog(%#04x): %#04x\n", port, value);
-    }
-}
+/**
+ * Group Chip Select Option Registers
+ */
+PilotIO.DBREG_CSA0          = 0x110;
+PilotIO.DBREG_CSA1          = 0x114;
+PilotIO.DBREG_CSA2          = 0x118;
+PilotIO.DBREG_CSA3          = 0x11C;
+PilotIO.DBREG_CSB0          = 0x120;
+PilotIO.DBREG_CSB1          = 0x124;
+PilotIO.DBREG_CSB2          = 0x128;
+PilotIO.DBREG_CSB3          = 0x12C;
+PilotIO.DBREG_CSC0          = 0x130;
+PilotIO.DBREG_CSC1          = 0x134;
+PilotIO.DBREG_CSC2          = 0x138;
+PilotIO.DBREG_CSC3          = 0x13C;
+PilotIO.DBREG_CSD0          = 0x140;
+PilotIO.DBREG_CSD1          = 0x144;
+PilotIO.DBREG_CSD2          = 0x148;
+PilotIO.DBREG_CSD3          = 0x14C;
 
-PilotPorts.STATUS0 = {           // NOTE: STATUS0 not used by the SI1978 ROMs; refer to STATUS1 instead
-    PORT:       0,
-    DIP4:       0x01,               // self-test request at power up?
-    FIRE:       0x10,               // 1 = fire
-    LEFT:       0x20,               // 1 = left
-    RIGHT:      0x40,               // 1 = right
-    PORT7:      0x80,               // some connection to (undocumented) port 7
-    ALWAYS_SET: 0x0E                // always set
+PilotIO.CHIP_SELECT_DEFAULT = 0x00010006;
+
+/**
+ * PLL (Phase-Locked Loop Clock Generator) Control Register (16-bit)
+ *
+ * To put the CPU in "sleep mode", the simplest approach is to wait until PLLFSR_CLK32 in DBREG_PLLFSR goes high,
+ * and then shut down the PLL by setting PLLCR_DISPLL in DBREG_PLLCR.  Any interrupt specified as a "wake up" interrupt
+ * in DBREG_IWR can take the CPU out of "sleep mode" (true even if the interrupt is masked).  For example:
+ *
+ *      lea     #$fff202,A1     ; point to the Freq Sel reg.
+ *      lea     #$fff200,A0     ; point to the Ctrl reg.
+ *  l1: move.w  (A1),D0         ; sync to rising CLK32 edge
+ *      bpl.w   l1              ; wait for CLK32 to go high
+ *      bset    #3,(A0)         ; disable PLL
+ *      stop    #$2000          ; stop fetching and wait for any IRQ
+ *
+ * It's also good practice to disable CLKO before sleeping and re-enabling after wake-up (but I'm not sure if this
+ * is a software recommendation or a hardware-only issue).  There's also the potential for an external device to try to power
+ * itself from the DragonBall's output pins, in which case it may be best to insure the pin(s) are in the "low state"
+ * (which again may be a hardware-only issue).
+ */
+PilotIO.DBREG_PLLCR         = 0x200;
+PilotIO.PLLCR_DISPLL                = 0x0008;       // disables PLL if set (to put the CPU in "sleep mode")
+PilotIO.PLLCR_CLKEN                 = 0x0010;       // enables CLKO pin if set
+PilotIO.PLLCR_SYSCLK                = 0x0700;       // sets system clock to VCO/(2^(SYSCLK+1)), or to VCO if SYSCLK >= 4
+PilotIO.PLLCR_PIXCLK                = 0x3800;       // sets LCD pixel clock to VCO/(2^(PIXCLK+1)), or to VCO if PIXCLK >= 4
+
+/**
+ * PLL (Phase-Locked Loop Clock Generator) Frequency Select Register (16-bit)
+ *
+ * On a Pilot, PLLFSR's default value of 0x0123 is used, which means that P is 35 and Q is 1.  P and Q and used to form
+ * what's called the "PLL Divisor", using the following formula:  14*(P+1) + Q+1.  So the default PLL Divisor is 506.
+ * When choosing other divisors, Q must range from 1 to 14, and P must be greater than Q (which also means that not
+ * all divisor values below 225 are possible).
+ *
+ * The PLL Divisor is used to generate the master frequency, aka system clock.  Assuming a 32.768Khz crystal, multiply that
+ * by 506 to get a master frequency of 16.580608Mhz.  DragonBall documentation says 506 was chosen since it can generate standard
+ * baud frequencies with an error of only 0.05% (they say an "accuracy of 0.05%" but I think they misspoke :-)).
+ */
+PilotIO.DBREG_PLLFSR        = 0x202;
+PilotIO.PLLFSR_PCOUNT               = 0x00FF;       // P counter
+PilotIO.PLLFSR_QCOUNT               = 0x0F00;       // Q counter
+PilotIO.PLLFSR_PROT                 = 0x4000;       // protects P and Q counters from additional writes
+PilotIO.PLLFSR_CLK32                = 0x8000;       // current state of the CLK32 signal (BUGBUG: we just toggle it -JP)
+
+/**
+ * Power Control Register (8-bit, but could also be accessed as a word at 0x206, where bits 8-15 are reserved)
+ */
+PilotIO.DBREG_PCTLR         = 0x207;
+PilotIO.PCTLR_WIDTH                 = 0x1f;         // # of 1/31 the clock is bursted
+PilotIO.PCTLR_STOP                  = 0x40;         // immediately enters power-saving mode ("doze mode")
+PilotIO.PCTLR_PCEN                  = 0x80;         // enables power controller (disabled by interrupts)
+
+/**
+ * Interrupt Vector Register (8-bit)
+ */
+PilotIO.DBREG_IVR           = 0x300;
+
+/**
+ * Interrupt levels (7 is highest priority, 1 is lowest).  The interrupt vector
+ * number for an interrupt is formed by the low 3 bits of the level and the high 5 bits
+ * of the IVR (the low 3 bits of the IVR are always zero).  If an interrupt occurs
+ * before the IVR has been programmed, vector number 0xf is generated by default.
+ * The vector number is then multiplied by 4 to form the corresponding vector address (ie,
+ * there is no vector base register (VBR); the 68000's vector base is hard-coded to zero).
+ */
+PilotIO.INTLVL_IRQ7             = 7;
+PilotIO.INTLVL_SPIS             = 6;        // Serial Peripheral Interface Slave
+PilotIO.INTLVL_TMR1             = 6;
+PilotIO.INTLVL_IRQ6             = 6;
+PilotIO.INTLVL_PEN              = 5;
+PilotIO.INTLVL_SPIM             = 4;        // Serial Peripheral Interface Master
+PilotIO.INTLVL_TMR2             = 4;
+PilotIO.INTLVL_UART             = 4;
+PilotIO.INTLVL_WDT              = 4;        // Watchdog Timer
+PilotIO.INTLVL_RTC              = 4;
+PilotIO.INTLVL_KBD              = 4;
+PilotIO.INTLVL_PWM              = 4;
+PilotIO.INTLVL_INT              = 4;
+PilotIO.INTLVL_IRQ3             = 3;
+PilotIO.INTLVL_IRQ2             = 2;
+PilotIO.INTLVL_IRQ1             = 1;
+
+PilotIO.abIMRLvl = [4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1, 2, 3, 6, 5, 6, 6, 7];
+
+/**
+ * Interrupt Control Register (16-bit)
+ */
+PilotIO.DBREG_ICR           = 0x302;
+PilotIO.ICR_ET6                     = 0x0100;
+PilotIO.ICR_ET3                     = 0x0200;
+PilotIO.ICR_ET2                     = 0x0400;
+PilotIO.ICR_ET1                     = 0x0800;
+
+/**
+ * Interrupt Mask Register (32-bit)
+ */
+PilotIO.DBREG_IMR           = 0x304;
+PilotIO.IMR_SPIM                    = 0x00000001;
+PilotIO.IMR_TMR2                    = 0x00000002;
+PilotIO.IMR_UART                    = 0x00000004;
+PilotIO.IMR_WDT                     = 0x00000008;
+PilotIO.IMR_RTC                     = 0x00000010;
+PilotIO.IMR_KBD                     = 0x00000040;
+PilotIO.IMR_PWM                     = 0x00000080;
+PilotIO.IMR_INT0                    = 0x00000100;
+PilotIO.IMR_INT1                    = 0x00000200;
+PilotIO.IMR_INT2                    = 0x00000400;
+PilotIO.IMR_INT3                    = 0x00000800;
+PilotIO.IMR_INT4                    = 0x00001000;
+PilotIO.IMR_INT5                    = 0x00002000;
+PilotIO.IMR_INT6                    = 0x00004000;
+PilotIO.IMR_INT7                    = 0x00008000;
+PilotIO.IMR_IRQ1                    = 0x00010000;
+PilotIO.IMR_IRQ2                    = 0x00020000;
+PilotIO.IMR_IRQ3                    = 0x00040000;
+PilotIO.IMR_IRQ6                    = 0x00080000;
+PilotIO.IMR_PEN                     = 0x00100000;
+PilotIO.IMR_SPIS                    = 0x00200000;
+PilotIO.IMR_TMR1                    = 0x00400000;
+PilotIO.IMR_IRQ7                    = 0x00800000;
+
+PilotIO.DBREG_IWR           = 0x308;        // Interrupt Wakeup Enable Register (32-bit)
+PilotIO.DBREG_ISR           = 0x30C;        // Interrupt Status Register (32-bit)
+PilotIO.DBREG_IPR           = 0x310;        // Interrupt Pending Register (32-bit)
+
+/**
+ * Port registers (all 8-bit)
+ */
+PilotIO.DBREG_PADIR         = 0x400;
+PilotIO.DBREG_PADATA        = 0x401;
+PilotIO.DBREG_PASEL         = 0x403;
+PilotIO.DBREG_PBDIR         = 0x408;
+PilotIO.DBREG_PBDATA        = 0x409;
+PilotIO.DBREG_PBSEL         = 0x40B;
+PilotIO.DBREG_PCDIR         = 0x410;
+
+/**
+ * I don't know the details of the Port C Data register (PCDATA), but I do know that in PalmOS 3.3,
+ * in a routine called PrvLowBatteryShutdownNow, if it doesn't see bit 4 (value 0x10) set in PCDATA,
+ * then it wants to go to sleep (ie, TRAP HwrSleep).  Let's avoid that for now.  ;-) -JP
+ */
+PilotIO.DBREG_PCDATA        = 0x411;
+PilotIO.DBREG_PCSEL         = 0x413;
+
+/**
+ * The Port D Data register contains bits that map to the hardware button interrupt lines:
+ *      Bit 0:  DeviceInterface.BUTTON_POWER
+ *      Bit 1:  DeviceInterface.BUTTON_UP
+ *      Bit 2:  DeviceInterface.BUTTON_DOWN
+ *      Bit 3:  DeviceInterface.BUTTON_DATEBOOK
+ *      Bit 4:  DeviceInterface.BUTTON_ADDRESS
+ *      Bit 5:  DeviceInterface.BUTTON_TODOLIST
+ *      Bit 6:  DeviceInterface.BUTTON_MEMOPAD
+ *      Bit 7:  Undefined
+ */
+PilotIO.DBREG_PDDIR         = 0x418;
+PilotIO.DBREG_PDDATA        = 0x419;
+PilotIO.DBREG_PDPUEN        = 0x41A;
+PilotIO.DBREG_PDPOL         = 0x41C;
+PilotIO.DBREG_PDIRQEN       = 0x41D;
+PilotIO.DBREG_PDIRQEDGE     = 0x41F;
+PilotIO.DBREG_PEDIR         = 0x420;
+PilotIO.DBREG_PEDATA        = 0x421;
+PilotIO.DBREG_PEPUEN        = 0x422;
+PilotIO.DBREG_PESEL         = 0x423;
+PilotIO.DBREG_PFDIR         = 0x428;
+
+/**
+ * The Port F Data register contains bits that control the LCD display.  The most important one is bit 4 (0x10).
+ */
+PilotIO.DBREG_PFDATA        = 0x429;
+PilotIO.PFDATA_LCDENABLE            = 0x10;
+PilotIO.DBREG_PFPUEN        = 0x42A;
+PilotIO.DBREG_PFSEL         = 0x42B;
+PilotIO.DBREG_PGDIR         = 0x430;
+PilotIO.DBREG_PGDATA        = 0x431;
+PilotIO.DBREG_PGPUEN        = 0x432;
+PilotIO.DBREG_PGSEL         = 0x433;
+PilotIO.DBREG_PJDIR         = 0x438;
+PilotIO.DBREG_PJDATA        = 0x439;
+PilotIO.DBREG_PJSEL         = 0x43B;
+PilotIO.DBREG_PKDIR         = 0x440;
+PilotIO.DBREG_PKDATA        = 0x441;
+PilotIO.DBREG_PKPUEN        = 0x442;
+PilotIO.DBREG_PKSEL         = 0x443;
+PilotIO.DBREG_PMDIR         = 0x448;
+PilotIO.DBREG_PMDATA        = 0x449;
+PilotIO.DBREG_PMPUEN        = 0x44A;
+PilotIO.DBREG_PMSEL         = 0x44B;
+
+PilotIO.DBREG_PWMC          = 0x500;        // PWM Control Register
+PilotIO.DBREG_PWMP          = 0x502;        // PWM Period Register
+PilotIO.DBREG_PWMW          = 0x504;        // PWM Width Register
+PilotIO.DBREG_PWMCNT        = 0x506;        // PWM Counter Register
+
+PilotIO.DBREG_TCTL1         = 0x600;        // Timer Unit 1 Control Register (TMR1, 16-bit)
+PilotIO.TCTL                    = 0;
+PilotIO.TCTL_TEN                    = 0x0001;       // timer enable
+PilotIO.TCTL_CLKSOURCE              = 0x000E;       // clock source
+PilotIO.CLKSOURCE_STOPCOUNT         =    0x0;
+PilotIO.CLKSOURCE_SYSTEMCLOCK       =    0x2;       // input clock = system clock
+PilotIO.CLKSOURCE_SYSTEMCLOCKDIV16  =    0x4;       // input clock = system clock / 16
+PilotIO.CLKSOURCE_TINPIN            =    0x6;
+PilotIO.CLKSOURCE_32OR38KHZ         =    0x8;
+PilotIO.TCTL_IRQEN                  = 0x0010;       // reference event interrupt enable
+PilotIO.TCTL_OM                     = 0x0020;       // output mode
+PilotIO.TCTL_CAPTUREEDGE            = 0x00C0;       // capture edge
+PilotIO.TCTL_FRR                    = 0x0100;       // free run/restart
+
+PilotIO.DBREG_TPRER1        = 0x602;        // Timer Unit 1 Prescaler Register (16-bit)
+PilotIO.TPRER                   = 1;        // the value TPRER_PRESCALER+1 is used to divide the input clock
+PilotIO.TPRER_PRESCALER             = 0x00FF;
+
+PilotIO.DBREG_TCMP1         = 0x604;        // Timer Unit 1 Compare Register (16-bit)
+PilotIO.TCMP                    = 2;
+
+PilotIO.DBREG_TCR1          = 0x606;        // Timer Unit 1 Capture Register (16-bit, R/O)
+PilotIO.TCR                     = 3;
+
+PilotIO.DBREG_TCN1          = 0x608;        // Timer Unit 1 Counter Register (16-bit, R/O)
+PilotIO.TCN                     = 4;
+
+PilotIO.DBREG_TSTAT1        = 0x60A;        // Timer Unit 1 Status Register (16-bit)
+PilotIO.TSTAT                   = 5;
+PilotIO.TSTAT_COMP                  = 0x0001;       // compare event
+PilotIO.TSTAT_CAPT                  = 0x0002;       // capture event
+
+PilotIO.TSTAT_LASTREAD          = 6;        // this isn't a real register, just something we maintain internally
+PilotIO.TMR_REGS                = 7;        // total # of TMR registers
+
+PilotIO.DBREG_TCTL2         = 0x60C;        // Timer Unit 2 Control Register (TMR2, 16-bit)
+PilotIO.DBREG_TPRER2        = 0x60E;        // Timer Unit 2 Prescaler Register (16-bit)
+
+/**
+ * On a Pilot, TCMP2 is set to 0xD7E4, or 55268.  Since TCTL2 sets the input clock to the system clock,
+ * and TPRER2 is set to 2 (which divides the input clock by 3), 100 interrupts per second are generated
+ * (16580608 / 3 / 55268).
+ */
+PilotIO.DBREG_TCMP2         = 0x610;        // Timer Unit 2 Compare Register (16-bit)
+PilotIO.DBREG_TCR2          = 0x612;        // Timer Unit 2 Capture Register (16-bit, R/O)
+PilotIO.DBREG_TCN2          = 0x614;        // Timer Unit 2 Counter Register (16-bit, R/O)
+PilotIO.DBREG_TSTAT2        = 0x616;        // Timer Unit 2 Status Register (16-bit)
+PilotIO.DBREG_WCSR          = 0x618;        // Watchdog Control and Status Register
+PilotIO.DBREG_WRR           = 0x61A;        // Watchdog Compare Register
+PilotIO.DBREG_WCN           = 0x61C;        // Watchdog Counter Register
+
+PilotIO.DBREG_SPISR         = 0x700;        // SPIS (Serial Peripheral Interface Slave) Register (16-bit)
+
+PilotIO.DBREG_SPIMDATA      = 0x800;        // SPIM (Serial Peripheral Interface Master) Data Register (16-bit)
+PilotIO.DBREG_SPIMCONT      = 0x802;        // SPIM (Serial Peripheral Interface Master) Control/Status Register (16-bit)
+PilotIO.SPIMCONT_BITCOUNT           = 0x000F;
+PilotIO.SPIMCONT_POL                = 0x0010;       // polarity
+PilotIO.SPIMCONT_PHA                = 0x0020;       // phase
+PilotIO.SPIMCONT_IRQEN              = 0x0040;       // interrupt request enable
+PilotIO.SPIMCONT_SPIMIRQ            = 0x0080;
+PilotIO.SPIMCONT_XCH                = 0x0100;
+PilotIO.SPIMCONT_SPIMEN             = 0x0200;       // SPI master enable
+PilotIO.SPIMCONT_DATARATE           = 0xE000;
+
+PilotIO.DBREG_USTCNT        = 0x900;        // UART Status/Control Register
+PilotIO.DBREG_UBAUD         = 0x902;        // UART Baud Control Register
+PilotIO.DBREG_URX           = 0x904;        // UART RX Register
+PilotIO.DBREG_UTX           = 0x906;        // UART TX Register
+PilotIO.DBREG_UMISC         = 0x908;        // UART Misc Register
+
+PilotIO.LCDREG_SSA          = 0x00;         // LCD Screen Starting Address Register (LSSA, 32-bit)
+PilotIO.LCDREG_VPW          = 0x05;         // LCD Virtual Page Width Register (LVPW, 8-bit, normally set to 10, units are words)
+PilotIO.LCDREG_XMAX         = 0x08;         // LCD Screen Width Register (LXMAX, 16-bit)
+PilotIO.LCDREG_YMAX         = 0x0A;         // LCD Screen Height Register (LYMAX, 16-bit)
+PilotIO.LCDREG_CXP          = 0x18;         // LCD Cursor X Position Register (LCXP, 16-bit)
+PilotIO.LCDREG_CYP          = 0x1A;         // LCD Cursor Y Position Register (LCYP, 16-bit)
+PilotIO.LCDREG_CWCH         = 0x1C;         // LCD Cursor Width & Height Register (LCWCH, 16-bit)
+PilotIO.LCDREG_BLKC         = 0x1F;         // LCD Blink Control Register (LBLKC, 8-bit)
+PilotIO.LCDREG_PICF         = 0x20;         // LCD Panel Interface Configuration Register (LPICF, 8-bit)
+                                            //  (bit 0 normally clear for 1-bit mode, set for 2-bit mode)
+PilotIO.LCDREG_POLCF        = 0x21;         // LCD Polarity Configuration Register (LPOLCF, 8-bit)
+PilotIO.LCDREG_ACDRC        = 0x23;         // ACD (M) Rate Control Register (LACDRC, 8-bit)
+PilotIO.LCDREG_PXCD         = 0x25;         // LCD Pixel Clock Divider Register (LPXCD, 8-bit)
+PilotIO.LCDREG_CKCON        = 0x27;         // LCD Clocking Control Register (LCKCON, 8-bit)
+PilotIO.CKCON_LCDON               = 0x80;   // bit 7 enables LCD controller if set, disables if clear
+PilotIO.LCDREG_LBAR         = 0x29;         // LCD Last Buffer Address Register (LLBAR, 8-bit, normally same as VPW)
+PilotIO.LCDREG_OTCR         = 0x2B;         // LCD Octet Terminal Count Register (LOTCR, 8-bit)
+PilotIO.LCDREG_POSR         = 0x2D;         // LCD Panning Offset Register (LPOSR, 8-bit)
+PilotIO.LCDREG_FRCM         = 0x31;         // LCD Frame-Rate Modulation Control Register (LFRCM, 8-bit)
+PilotIO.LCDREG_GPMR         = 0x32;         // LCD Gray Palette Mapping Register (LGPMR, 16-bit)
+
+PilotIO.DEF_SCREEN_WIDTH    = 160;
+PilotIO.DEF_SCREEN_HEIGHT   = 160;
+
+PilotIO.DBREG_RHMSR         = 0xB00;        // RTC Hours Minutes Seconds Register (32-bit)
+PilotIO.RHMSR_HOURS                 = 0x1f000000;
+PilotIO.RHMSR_HOURS_SHIFT           = 24;
+PilotIO.RHMSR_MINUTES               = 0x003f0000;
+PilotIO.RHMSR_MINUTES_SHIFT         = 16;
+PilotIO.RHMSR_SECONDS               = 0x0000003f;
+PilotIO.RHMSR_SECONDS_SHIFT         = 0;
+PilotIO.DBREG_RALARM        = 0xB04;        // RTC Alarm Register
+PilotIO.DBREG_RCTL          = 0xB0C;        // RTC Control Register
+PilotIO.DBREG_RISR          = 0xB0E;        // RTC Interrupt Status Register
+PilotIO.DBREG_RIENR         = 0xB10;        // RTC Interrupt Enable Register
+PilotIO.DBREG_RSTPWCH       = 0xB12;        // RTC Stopwatch Register
+
+PilotIO.abRegsInit = {
+    [PilotIO.DBREG_PCTLR]:    0x1F,
+    [PilotIO.DBREG_PDPUEN]:   0xFF,
+    [PilotIO.DBREG_PEPUEN]:   0x80,
+    [PilotIO.DBREG_PESEL]:    0x80,
+    [PilotIO.DBREG_PFPUEN]:   0xFF,
+    [PilotIO.DBREG_PFSEL]:    0xFF,
+    [PilotIO.DBREG_PGPUEN]:   0xFF,
+    [PilotIO.DBREG_PGSEL]:    0xFF,
+    [PilotIO.DBREG_PKPUEN]:   0x3F,
+    [PilotIO.DBREG_PKSEL]:    0x3F,
+    [PilotIO.DBREG_PMPUEN]:   0xFF,
+    [PilotIO.DBREG_PMSEL]:    0x02,
+    [PilotIO.LCDREG_VPW]:     (PilotIO.DEF_SCREEN_WIDTH/8)/2,
+    [PilotIO.LCDREG_BLKC]:    0x7F,
+    [PilotIO.LCDREG_CKCON]:   0x40,                                   // LCD controller initially disabled
+    [PilotIO.LCDREG_LBAR]:    (PilotIO.DEF_SCREEN_WIDTH/8)/2,         // we initialize this to 10, they seem to prefer 9, hmmm
+    [PilotIO.LCDREG_OTCR]:    0x3F,
+    [PilotIO.LCDREG_FRCM]:    0xB9
 };
 
-PilotPorts.STATUS1 = {
-    PORT:       1,
-    CREDIT:     0x01,               // credit (coin slot)
-    P2:         0x02,               // 1 = 2P start
-    P1:         0x04,               // 1 = 1P start
-    P1_FIRE:    0x10,               // 1 = fire (P1 fire if cocktail machine?)
-    P1_LEFT:    0x20,               // 1 = left (P1 left if cocktail machine?)
-    P1_RIGHT:   0x40,               // 1 = right (P1 right if cocktail machine?)
-    ALWAYS_SET: 0x08                // always set
+PilotIO.awRegsInit = {
+    [PilotIO.DBREG_PLLCR]:    0x2400,
+    [PilotIO.DBREG_PLLFSR]:   0x0123,         // sets Q counter to 0x1, P counter to 0x23
+    [PilotIO.DBREG_TCMP1]:    0xFFFF,
+    [PilotIO.DBREG_TCMP2]:    0xFFFF,
+    [PilotIO.DBREG_WCSR]:     0x0001,
+    [PilotIO.DBREG_WRR]:      0xFFFF,
+    [PilotIO.DBREG_UBAUD]:    0x003F,
+    [PilotIO.LCDREG_XMAX]:    0x03FF,
+    [PilotIO.LCDREG_YMAX]:    0x01FF,
+    [PilotIO.LCDREG_CWCH]:    0x0101,
+    [PilotIO.LCDREG_GPMR]:    0x1073
 };
 
-PilotPorts.STATUS2 = {
-    PORT:       2,
-    DIP1_2:     0x03,               // 00 = 3 ships, 01 = 4 ships, 10 = 5 ships, 11 = 6 ships
-    TILT:       0x04,               // 1 = tilt detected
-    DIP4:       0x08,               // 0 = extra ship at 1500, 1 = extra ship at 1000
-    P2_FIRE:    0x10,               // 1 = P2 fire (cocktail machines only?)
-    P2_LEFT:    0x20,               // 1 = P2 left (cocktail machines only?)
-    P2_RIGHT:   0x40,               // 1 = P2 right (cocktail machines only?)
-    DIP7:       0x80,               // 0 = display coin info on demo ("attract") screen
-    ALWAYS_SET: 0x00
+PilotIO.alRegsInit = {
+    [PilotIO.DBREG_IMR]:      0x00FFFFFF,
+    [PilotIO.DBREG_IWR]:      0x00FFFFFF
 };
 
-PilotPorts.SHIFT_RESULT = {      // bits 0-7 of barrel shifter result
-    PORT:       3
-};
-
-PilotPorts.SHIFT_COUNT = {
-    PORT:       2,
-    MASK:       0x07
-};
-
-PilotPorts.SOUND1 = {
-    PORT:       3,
-    UFO:        0x01,
-    SHOT:       0x02,
-    PDEATH:     0x04,
-    IDEATH:     0x08,
-    EXPLAY:     0x10,
-    AMP_ENABLE: 0x20
-};
-
-PilotPorts.SHIFT_DATA = {
-    PORT:       4
-};
-
-PilotPorts.SOUND2 = {
-    PORT:       5,
-    FLEET1:     0x01,
-    FLEET2:     0x02,
-    FLEET3:     0x04,
-    FLEET4:     0x08,
-    UFO_HIT:    0x10
-};
-
-PilotPorts.STATUS1.KEYMAP = {
-    "1p":       PilotPorts.STATUS1.P1,
-    "2p":       PilotPorts.STATUS1.P2,
-    "coin":     PilotPorts.STATUS1.CREDIT,
-    "left":     PilotPorts.STATUS1.P1_LEFT,
-    "right":    PilotPorts.STATUS1.P1_RIGHT,
-    "fire":     PilotPorts.STATUS1.P1_FIRE
-};
-
-PilotPorts.IOTABLE = {
-    0: [PilotPorts.prototype.inStatus0],
-    1: [PilotPorts.prototype.inStatus1],
-    2: [PilotPorts.prototype.inStatus2, PilotPorts.prototype.outShiftCount],
-    3: [PilotPorts.prototype.inShiftResult, PilotPorts.prototype.outSound1],
-    4: [null, PilotPorts.prototype.outShiftData],
-    5: [null, PilotPorts.prototype.outSound2],
-    6: [null, PilotPorts.prototype.outWatchdog]
-};
-
-PilotPorts.CLASSES["PilotPorts"] = PilotPorts;
+PilotIO.CLASSES["PilotIO"] = PilotIO;
 
 /**
  * @copyright https://www.pcjs.org/modules/video.js (C) 2012-2021 Jeff Parsons
  */
 
-/** @typedef {{ bufferWidth: number, bufferHeight: number, bufferRotate: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */
+/** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferRAM: boolean, bufferBits: number, bufferLeft: number, bufferRotate: number, interruptRate: number }} */
 let PilotVideoConfig;
 
 /**
@@ -17636,7 +19933,7 @@ class PilotVideo extends Monitor {
      */
     initBuffers()
     {
-        /*
+        /**
          * Allocate off-screen buffers now
          */
         this.cxBuffer = this.nColsBuffer * this.cxCell;
@@ -17656,7 +19953,7 @@ class PilotVideo extends Monitor {
             }
         }
 
-        /*
+        /**
          * Since we will read video data from the bus at its default width, get that width now;
          * that width will also determine the size of a cell.
          */
@@ -17664,7 +19961,7 @@ class PilotVideo extends Monitor {
         this.imageBuffer = this.contextMonitor.createImageData(cxBuffer, cyBuffer);
         this.nPixelsPerCell = Math.trunc(this.cellWidth / this.nBitsPerPixel);
 
-        /*
+        /**
          * Since we calculated sizeBuffer as a number of bytes, convert that to the number of cells.
          */
         this.initCache(Math.ceil(this.sizeBuffer / (this.cellWidth >> 3)));
@@ -17676,7 +19973,7 @@ class PilotVideo extends Monitor {
 
         this.initColors();
 
-        /*
+        /**
          * Our 'smoothing' parameter defaults to null (which we treat the same as undefined), which means that
          * image smoothing will be selectively enabled (ie, true for text modes, false for graphics modes); otherwise,
          * we'll set image smoothing to whatever value was provided for ALL modes -- assuming the browser supports it.
@@ -17785,11 +20082,11 @@ class PilotVideo extends Monitor {
         let fUpdate = true;
         if (!fForced) {
             if (this.rateInterrupt) {
-                /*
+                /**
                  * TODO: Incorporate these hard-coded interrupt vector numbers into configuration blocks.
                  */
                 if (this.rateInterrupt == 120) {
-                    /*
+                    /**
                      * According to http://www.computerarcheology.com/Arcade/SpacePilot/Hardware.html:
                      *
                      *      The CPU's INT line is asserted via a D flip-flop at E3.
@@ -17810,23 +20107,23 @@ class PilotVideo extends Monitor {
                      * it's safe to draw the rest of the image).
                      */
                     if (!(this.nUpdates & 1)) {
-                        /*
+                        /**
                          * On even updates, call cpu.requestINTR(1), and also update our copy of the image.
                          */
-                        this.cpu.requestINTR(1);
+                        // this.cpu.requestINTR(1);
                     } else {
-                        /*
+                        /**
                          * On odd updates, call cpu.requestINTR(2), but do NOT update our copy of the image, because
                          * the machine has presumably only updated the top half of the frame buffer at this point; it will
                          * update the bottom half of the frame buffer after acknowledging this interrupt.
                          */
-                        this.cpu.requestINTR(2);
+                        // this.cpu.requestINTR(2);
                         fUpdate = false;
                     }
                 }
             }
 
-            /*
+            /**
              * Since this is not a forced update, if our cell cache is valid AND we allocated our own buffer AND the buffer
              * is clean, then there's nothing to do.
              */
@@ -17898,7 +20195,7 @@ class PilotVideo extends Monitor {
         }
         this.fCacheValid = true;
 
-        /*
+        /**
          * Instead of blasting the ENTIRE imageBuffer into contextBuffer, and then blasting the ENTIRE
          * canvasBuffer onto contextMonitor, even for the smallest change, let's try to be a bit smarter about
          * the update (well, to the extent that the canvas APIs permit).
@@ -17907,21 +20204,22 @@ class PilotVideo extends Monitor {
             let cxDirty = xMaxDirty - xDirty;
             let cyDirty = yMaxDirty - yDirty;
             if (this.rotateBuffer) {
-                /*
+                /**
                  * If rotateBuffer is set, then it must be -90, so we must "rotate" the dirty coordinates as well,
                  * because they are relative to the frame buffer, not the rotated image buffer.  Alternatively, you
                  * can use the following call to blast the ENTIRE imageBuffer into contextBuffer instead:
                  *
                  *      this.contextBuffer.putImageData(this.imageBuffer, 0, 0);
                  */
-                let xDirtyOrig = xDirty, cxDirtyOrig = cxDirty;
+                let xDirtyOrig = xDirty;
+                let cxDirtyOrig = cxDirty;
                 xDirty = yDirty;
                 cxDirty = cyDirty;
                 yDirty = this.cxBuffer - (xDirtyOrig + cxDirtyOrig);
                 cyDirty = cxDirtyOrig;
             }
             this.contextBuffer.putImageData(this.imageBuffer, 0, 0, xDirty, yDirty, cxDirty, cyDirty);
-            /*
+            /**
              * As originally noted in /modules/pcx86/lib/video.js, I would prefer to draw only the dirty portion of
              * canvasBuffer, but there usually isn't a 1-1 pixel mapping between canvasBuffer and contextMonitor, so
              * if we draw interior rectangles, we can end up with subpixel artifacts along the edges of those rectangles.
@@ -18054,7 +20352,7 @@ class Machine extends Device {
         this.fPageLoaded = false;
         this.setReady(false);
 
-        /*
+        /**
          * You can pass "m" commands to the machine via the "commands" parameter to turn on any desired
          * message groups, but since the Debugger is responsible for parsing those commands, and since the
          * Debugger is usually not initialized until last, messages from any earlier constructor calls will
@@ -18083,7 +20381,7 @@ class Machine extends Device {
             });
         }
 
-        /*
+        /**
          * Device initialization is now deferred until after the page is fully loaded, for the benefit
          * of devices (eg, Input) that may be dependent on page resources.
          *
@@ -18211,7 +20509,7 @@ class Machine extends Device {
             this.deviceConfigs = JSON.parse(sConfig);
             let config = this.deviceConfigs[this.idMachine];
             if (!config) {
-                /*
+                /**
                  * Pages that want to instantiate multiple machines using identical configs would normally
                  * have to create unique config files for each machine, even though the only difference between
                  * the configs would be the machine ID.  To reduce that redundancy, we'll try to identify the
@@ -18229,14 +20527,14 @@ class Machine extends Device {
             this.fAutoSave = (this.config['autoSave'] !== false);
             this.fAutoStart = (this.config['autoStart'] !== false);
             if (this.sParms) {
-                /*
+                /**
                  * Historically, my web servers have not been consistent about quoting property names inside
                  * the optional parameters object, so we must use eval() instead of JSON.parse() to parse them.
                  * Of couse, the REAL problem is that JSON.parse() is being a dick about otherwise perfectly
                  * legitimate Object syntax, but I shall not repeat my long list of gripes about JSON here.
                  */
                 let parms = /** @type {Object} */ (eval("(" + this.sParms + ")"));
-                /*
+                /**
                  * Slam all these parameters into the machine's config, overriding any matching machine configuration
                  * properties.  Any other devices that need access to these properties should use getMachineConfig().
                  */
@@ -18271,11 +20569,11 @@ class Machine extends Device {
                     if (device.config['class'] != "CPU" || machine.fAutoStart || machine.isReady()) {
                         device.onPower(on);
                     } else {
-                        /*
-                        * If we're not going to start the CPU on the first power notification, then we should
-                        * we fake a transition to the "stopped" state, so that the Debugger will display the current
-                        * machine state.
-                        */
+                        /**
+                         * If we're not going to start the CPU on the first power notification, then we should
+                         * we fake a transition to the "stopped" state, so that the Debugger will display the current
+                         * machine state.
+                         */
                         device.time.update(true);
                     }
                 }
@@ -18331,7 +20629,7 @@ Machine.BINDING = {
     RESET:      "reset",
 };
 
-/*
+/**
  * Create the designated machine FACTORY function (this should suffice for all compiled versions).
  *
  * In addition, expose the machine's COMMAND handler interface, so that it's easy to access any of the

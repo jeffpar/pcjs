@@ -89,7 +89,18 @@
         "@title": "DeskPro 286",
         "@documents": [
           {
-            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, May 1987)"
+            "@title": "COMPAQ Enhanced Color Graphics Board COMPAQ Color Monitor Technical Reference Guide (Dec 1986)",
+            "@file": "COMPAQ_Enhanced_Color_Graphics_Board_1986_12.jpg",
+            "@link": "https://archive.org/embed/trg-enhanced-color-graphics-board-1986-12",
+            "@cover": ".jpg",
+            "@source": "https://archive.org/embed/trg-enhanced-color-graphics-board-1986-12"
+          },
+          {
+            "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, May 1987)",
+            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol1_1987-05.jpg",
+            "@link": "https://archive.org/embed/trg-80286-vol-1-1987-05",
+            "@cover": ".jpg",
+            "@source": "https://archive.org/embed/trg-80286-vol-1-1987-05"
           },
           {
             "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, May 1987)",
@@ -151,6 +162,25 @@
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq5BThwmEpfyp0EBdA?e=53SAyY",
             "@cover": ".jpg",
             "@source": "PCjs"
+          },
+          {
+            "@title": "COMPAQ DeskPro 386/25 Technical Reference Guide (Volume II, Aug 1988)",
+            "@file": "COMPAQ_DeskPro_386-25_Technical_Reference_Guide_Vol2_1988-08.jpg",
+            "@link": "https://archive.org/embed/trg-lte-deskpro-386-25-1988-08",
+            "@cover": ".jpg",
+            "@source": "https://archive.org/embed/trg-lte-deskpro-386-25-1988-08"
+          }
+        ]
+      },
+      "lte286": {
+        "@title": "LTE/286",
+        "@documents": [
+          {
+            "@title": "Technical Reference Guide COMPAQ LTE Personal Computer COMPAQ LTE/286 Personal Computer (Mar 1990)",
+            "@file": "COMPAQ_LTE_LTE286_Technical_Reference_Guide_1990_03.jpg",
+            "@link": "https://archive.org/embed/trg-lte-lte-286-1990-03",
+            "@cover": ".jpg",
+            "@source": "https://archive.org/embed/trg-lte-lte-286-1990-03"
           }
         ]
       }

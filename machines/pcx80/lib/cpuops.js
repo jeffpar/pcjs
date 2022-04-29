@@ -1,5 +1,5 @@
 /**
- * @fileoverview Implements PCX80 opcode handlers
+ * @fileoverview Implements PCx80 opcode handlers
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>

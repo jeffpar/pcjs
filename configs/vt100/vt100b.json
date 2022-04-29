@@ -11,7 +11,7 @@
       "clear": "clearVT100b",
       "print": "printVT100b"
     },
-    "_JSONDoc": [
+    "@doc": [
       "Configuration properties managed by the Machine device:",
       "- autoSave: preserves machine state across page loads, calling all onLoad()",
       "and onSave() handlers; default is true",
@@ -39,7 +39,7 @@
     "type": "static",
     "addrWidth": 16,
     "dataWidth": 8,
-    "_JSONDoc": [
+    "@doc": [
       "You can also specify a 'blockSize'; otherwise, it defaults to 1024 (1K) for machines",
       "with an 'addrWidth' of 16, or 4096 (4K) if 'addrWidth' is greater than 16.  The use of",
       "blocks means that if the debugger wants to watch accesses on a specific memory address,",
@@ -165,7 +165,7 @@
     "addr": 0,
     "size": 8192,
     "bus": "busMemory",
-    "_JSONDoc": [
+    "@doc": [
       "The following ROM dump was generated with 'filedump --file=/machines/dec/vt100/rom/VT100.bin --format=bytes --decimal --symbols=array'"
     ],
     "values": [
@@ -923,7 +923,7 @@
   "keyboard": {
     "class": "VT100Keyboard",
     "leds": ["ledLocal", "ledLocked", "led1", "led2", "led3", "led4"],
-    "_JSONDoc": [
+    "@doc": [
       "We used to use an Array of direct bindings, but since we want to support multiple machines on the same page, we can no longer do that."
     ],
     "bindings": {
@@ -962,7 +962,7 @@
     },
     "diagnostics": true,
     "touchType": true,
-    "_JSONDoc": [
+    "@doc": [
       "The following ROM dump was generated with 'filedump --file=/machines/dec/vt100/rom/23-018E2.bin --format=bytes --decimal'"
     ],
     "fontROM": [
@@ -1098,7 +1098,7 @@
   },
   "debugger": {
     "class": "Dbgx80",
-    "_JSONDoc": [
+    "@doc": [
       "It's best to initialize the Debugger last, so that it can find any device it wants -- at the very least, the CPU."
     ]
   }

@@ -53,6 +53,23 @@
       ]
     },
     {
+      "name": "Node: filedump.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/old/filedump/bin/filedump",
+      "args": [
+        "--file=machines/palm/pilot/roms/pilot.rom",
+        "--format=bytes",
+        "--decimal"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: pdfparse.js",
       "type": "node",
       "request": "launch",

@@ -21,21 +21,21 @@ if (typeof module != "undefined") {     // we can't simply test for NODE, since 
     var http    = require("http");
     var mkdirp  = require("mkdirp");
     var crypto  = require("crypto");
-    var defines = require("../../../machines/shared/lib/defines");
-    var net     = require("../../../machines/shared/lib/netlib");
-    var proc    = require("../../../machines/shared/lib/proclib");
-    var str     = require("../../../machines/shared/lib/strlib");
-    var usr     = require("../../../machines/shared/lib/usrlib");
-    var web     = require("../../../machines/shared/lib/weblib");
-    var DiskAPI = require("../../../machines/shared/lib/diskapi");
-    var DumpAPI = require("../../../machines/shared/lib/dumpapi");
-    var X86     = require("../../../machines/pcx86/lib/x86");
+    var defines = require("../../../../machines/shared/lib/defines");
+    var net     = require("../../../../machines/shared/lib/netlib");
+    var proc    = require("../../../../machines/shared/lib/proclib");
+    var str     = require("../../../../machines/shared/lib/strlib");
+    var usr     = require("../../../../machines/shared/lib/usrlib");
+    var web     = require("../../../../machines/shared/lib/weblib");
+    var DiskAPI = require("../../../../machines/shared/lib/diskapi");
+    var DumpAPI = require("../../../../machines/shared/lib/dumpapi");
+    var X86     = require("../../../../machines/pcx86/lib/x86");
     /**
      * @class exports
      * @property {string} name
      * @property {string} version
      */
-    var pkg = require("../../../package.json");
+    var pkg = require("../../../../package.json");
 }
 
 /*

@@ -12,11 +12,11 @@
 var fs      = require("fs");
 var path    = require("path");
 var mkdirp  = require("mkdirp");
-var defines = require("../../../machines/shared/lib/defines");
-var net     = require("../../../machines/shared/lib/netlib");
-var proc    = require("../../../machines/shared/lib/proclib");
-var str     = require("../../../machines/shared/lib/strlib");
-var DumpAPI = require("../../../machines/shared/lib/dumpapi");
+var defines = require("../../../../machines/shared/lib/defines.js");
+var net     = require("../../../../machines/shared/lib/netlib");
+var proc    = require("../../../../machines/shared/lib/proclib");
+var str     = require("../../../../machines/shared/lib/strlib");
+var DumpAPI = require("../../../../machines/shared/lib/dumpapi");
 
 /**
  * FileDump()
@@ -400,7 +400,10 @@ FileDump.prototype.setData = function(buf, iStart, nSkip, sExt)
             }
             if (json) {
                 let values, bytes;
-                if ((values = json['data'])) {
+                if ((values = json['values'])) {
+                    bytes = (json['width'] / 8);
+                }
+                else if ((values = json['longs']) || (values = json['data'])) {
                     bytes = 4;
                 } else if ((values = json['words'])) {
                     bytes = 2;

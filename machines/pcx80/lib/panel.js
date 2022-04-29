@@ -1,5 +1,5 @@
 /**
- * @fileoverview Implements the PCX80 Panel component
+ * @fileoverview Implements the PCx80 Panel component
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -12,7 +12,7 @@
 if (typeof module !== "undefined") {
     var Web = require("../../shared/lib/weblib");
     var Component = require("../../shared/lib/component");
-    var PCX80 = require("./defines");
+    var PCx80 = require("./defines");
     var BusX80 = require("./bus");
     var CPUDefX80 = require("./cpudef");
     var MemoryX80 = require("./memory");
@@ -144,7 +144,7 @@ class PanelX80 extends Component {
     static init()
     {
         var fReady = false;
-        var aePanels = Component.getElementsByClass(document, PCX80.APPCLASS, "panel");
+        var aePanels = Component.getElementsByClass(document, PCx80.APPCLASS, "panel");
         for (var iPanel=0; iPanel < aePanels.length; iPanel++) {
             var ePanel = aePanels[iPanel];
             var parmsPanel = Component.getComponentParms(ePanel);
@@ -153,7 +153,7 @@ class PanelX80 extends Component {
                 fReady = true;
                 panel = new PanelX80(parmsPanel);
             }
-            Component.bindComponentControls(panel, ePanel, PCX80.APPCLASS);
+            Component.bindComponentControls(panel, ePanel, PCx80.APPCLASS);
             if (fReady) panel.setReady();
         }
     }

@@ -42,13 +42,13 @@ export default class DL11 extends Device {
         this.ports = /** @type {Ports} */ (this.findDeviceByClass("IOPage"));
         this.ports.addIOTable(this, DL11.IOTABLE);
 
-        /*
+        /**
          * No connection until initConnection() is called.
          */
         this.sDataReceived = "";
         this.connection = this.sendData = this.updateStatus = null;
 
-        /*
+        /**
          * Export all functions required by initConnection().
          */
         this['exports'] = {
@@ -196,7 +196,7 @@ export default class DL11 extends Device {
      */
     getBaudTimeout(nBaud)
     {
-        /*
+        /**
          * TODO: Do a better job computing this, based on actual numbers of start, stop and parity bits,
          * instead of hard-coding the total number of bits per byte to 10.
          */
@@ -328,7 +328,7 @@ export default class DL11 extends Device {
         if (this.sendData && this.sendData.call(this.connection, b)) {
             fTransmitted = true;
         }
-        /*
+        /**
          * NOTE: When debugging issues involving the SerialPort, such as debugging code between a pair of
          * transmitted bytes, you can pass 0 instead of getBaudTimeout() to setTimer() to minimize the amount
          * of time spent waiting for XCSR.READY to be set again.
@@ -391,7 +391,7 @@ export default class DL11 extends Device {
     {
         let delta = (data ^ this.regRCSR);
         this.regRCSR = (this.regRCSR & ~PDP11.DL11.RCSR.WMASK) | (data & PDP11.DL11.RCSR.WMASK);
-        /*
+        /**
          * Whenever DTR or RTS changes, we also want to notify any connected machine, via updateStatus().
          */
         if (this.updateStatus) {
@@ -454,7 +454,7 @@ export default class DL11 extends Device {
      */
     writeXCSR(data, addr)
     {
-        /*
+        /**
          * If the device is READY, and TIE is being set, then request a hardware interrupt.
          *
          * Conversely, if TIE is being cleared, remove the request; this resolves a problem within

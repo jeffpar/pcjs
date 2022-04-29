@@ -34,13 +34,13 @@ class Reg64 extends Device {
         this.cpu = cpu;
         this.name = id;
 
-        /*
+        /**
          * Each Reg64 register contains 16 BCD/Hex digits, which we store as 16 independent 4-bit numbers,
          * where [0] is D0, aka DIGIT 0, and [15] is D15, aka DIGIT 15.
          */
         this.digits = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
-        /*
+        /**
          * Automatically add direct bindings for this new register and all its digits to the caller's bindings.
          */
         if (!fInternal) {
@@ -360,7 +360,7 @@ export default class CPU1500 extends CPU {
 
         this.regMap = {};
 
-        /*
+        /**
          * Four (4) Operational Registers (A-D)
          */
         this.regsO = new Array(4);
@@ -368,7 +368,7 @@ export default class CPU1500 extends CPU {
             this.regsO[i] = new Reg64(this, String.fromCharCode(0x41+i));
         }
 
-        /*
+        /**
          * Aliases for each of the Operational Registers, since some instructions use hard-coded registers,
          * rather than calculating a register index (0-3).
          */
@@ -377,7 +377,7 @@ export default class CPU1500 extends CPU {
         this.regC = this.regsO[2];
         this.regD = this.regsO[3];
 
-        /*
+        /**
          * Eight (8) Storage Registers (X0-X7)
          */
         this.regsX = new Array(8);
@@ -385,7 +385,7 @@ export default class CPU1500 extends CPU {
             this.regsX[i] = new Reg64(this, "X" + i);
         }
 
-        /*
+        /**
          * Eight (8) Storage Registers (Y0-Y7)
          */
         this.regsY = new Array(8);
@@ -399,14 +399,14 @@ export default class CPU1500 extends CPU {
         this.base = 10;
         this.fCOND = false;
 
-        /*
+        /**
          * RAB (Register Address Buffer) is a 3-bit register "selectively loadable by the I4-I6 bits of an
          * instruction word" and "also selectively loadable from the three least significant bits of the number
          * stored in R5 register".
          */
         this.regRAB = 0;
 
-        /*
+        /**
          * R5 is "an eight bit shift register which may be selectively loaded from either the serial output from
          * arithmetic unit" or "may be loaded on lines KR1-3 and KR5-7 via gates from keyboard logic (at which
          * times the MSB of each digit in Register R5 is loaded with a zero via gates according to the keyboard code
@@ -414,7 +414,7 @@ export default class CPU1500 extends CPU {
          */
         this.regR5 = 0;
 
-        /*
+        /**
          * The "Output Register" is twelve bit register, one bit for each digit of the display.  This essentially
          * provides column information for the LED display, while the next register (regScanGen) provides row
          * information.
@@ -426,7 +426,7 @@ export default class CPU1500 extends CPU {
          */
         // this.regOut = 0;
 
-        /*
+        /**
          * The "Scan Generator Counter" is a 3-bit register.  It is updated once each instruction cycle.
          * It "does not count sequentially, but during eight instruction cycle provides the three bit binary
          * representations of zero through seven."  Here's the sequence from "Reference A" of Fig. 11e:
@@ -454,7 +454,7 @@ export default class CPU1500 extends CPU {
          */
         // this.regScanGen = 0;
 
-        /*
+        /**
          * The "Segment/Keyboard Scan" is an 8-bit register "arranged as a ring counter for shifting a logical zero
          * to a different stage during each instruction cycle....  [It is] further interconnected with the RESET signal
          * for inserting a logical one into all stages of the counter."  The outputs from the stages are connected to
@@ -467,7 +467,7 @@ export default class CPU1500 extends CPU {
          */
         // this.regSegKbdScan = 0xff;
 
-        /*
+        /**
          * The "State Time Generator" is represented by a 5-bit register that contains values 00000b through 11111b
          * for each of the 32 state times that occur during a single instruction cycle.  And since each "state time"
          * consists of four clock pulses, designated Φ1, P1, Φ2, and P2, we keep track of which pulse we're on, too.
@@ -480,7 +480,7 @@ export default class CPU1500 extends CPU {
         // this.regStateTime = 0;
         // this.regPulseTime = 0;
 
-        /*
+        /**
          * The "Program Counter" (regPC) is an 11-bit register that automatically increments unless a HOLD signal
          * is applied, effectively locking execution on a single instruction.
          *
@@ -488,7 +488,7 @@ export default class CPU1500 extends CPU {
          */
         // this.regPC = 0;
 
-        /*
+        /**
          * regPCLast is a non-standard register that simply snapshots the PC at the start of every
          * instruction; this is useful not only for CPUs that need to support instruction restartability,
          * but also for diagnostic/debugging purposes.
@@ -497,12 +497,12 @@ export default class CPU1500 extends CPU {
          */
         // this.regPCLast = this.regPC;
 
-        /*
+        /**
          * If non-zero, a key is being pressed.  Bits 0-3 are the row (0-based) and bits 4-7 are the col (1-based).
          */
         this.regKey = 0;
 
-        /*
+        /**
          * The "Subroutine Stack".  "When an unconditional branch instruction is decoded by branch logic 32b, the
          * CALL signal goes to zero permitting the present ROM address plus one to be loaded into subroutine stack
          * register 33a....  Addresses previously loaded into subroutine stack/registers 33a and 33b are shifted
@@ -515,18 +515,18 @@ export default class CPU1500 extends CPU {
          */
         this.stack = [-1, -1, -1];
 
-        /*
+        /**
          * Get access to the Input device, so we can add our click functions.
          */
         this.input = /** @type {Input} */ (this.findDevice(this.config['input']));
         this.input.addInput(this.onInput.bind(this));
 
-        /*
+        /**
          * Get access to the LED device, so we can update its display.
          */
         this.led = /** @type {LED} */ (this.findDevice(this.config['output'], false));
 
-        /*
+        /**
          * Get access to the Bus device, so we have access to the address space.
          * NOTE: We're kinda breaking the rules about searching for these devices by class,
          * simply because we know that this particular machine has only one Bus and one ROM.
@@ -534,14 +534,14 @@ export default class CPU1500 extends CPU {
         this.bus = /** @type {Bus} */ (this.findDeviceByClass("Bus"));
         this.rom = /** @type {ROM} */ (this.findDeviceByClass("ROM"));
 
-        /*
+        /**
          * To add support for indicators like "2nd" and "INV", I use a set of flags to reflect
          * the state of the external indicator.  They are initially undefined and will be updated
          * by updateIndicators() whenever the internal and external states differ.
          */
         this.f2nd = this.fINV = this.angleMode = undefined;
 
-        /*
+        /**
          * The following set of properties are all debugger-related; see onCommand().
          */
         this.addrPrev = -1;
@@ -675,7 +675,7 @@ export default class CPU1500 extends CPU {
     {
         if (opcode & 0x1000) {
             if (opcode & 0x0800) {  // BRC/BRNC
-                /*
+                /**
                  * As TI patent 4078251 states:
                  *
                  *      There being only ten bits in the address for the “branch on condition” instruction, when the
@@ -686,7 +686,7 @@ export default class CPU1500 extends CPU {
                     this.regPC = (this.regPC & 0x0400) | (opcode & 0x03FF);
                 }
             } else {                // CALL
-                /*
+                /**
                  * As TI patent 4078251 states:
                  *
                  *      Since the “branch unconditionally” address contains 11 bits and since the program counter 32a
@@ -791,7 +791,7 @@ export default class CPU1500 extends CPU {
             b = 1 << ((opcode & CPU1500.IW_FF.B_MASK) >> CPU1500.IW_FF.B_SHIFT);
             if (!d) break;
             d += 12;
-            /*
+            /**
              * For the following bit operations (SET, RESET, TEST, and TOGGLE, displayed by toInstruction()
              * as "SET", "CLR", "TST", and "NOT") are rather trivial, so I didn't bother adding Reg64 methods
              * for them (eg, setBit, resetBit, testBit, toggleBit).
@@ -821,7 +821,7 @@ export default class CPU1500 extends CPU {
                 this.regRAB = (opcode >> 4) & 0x7;
                 break;
             case CPU1500.IW_PF.BRR5:        // 0x0002: Branch to R5
-                /*
+                /**
                  * TODO: Determine whether this type of BRANCH should set fCOND to false like other branches do
                  */
                 this.regPC = this.regR5;
@@ -955,7 +955,7 @@ export default class CPU1500 extends CPU {
 
         case 'e':
             for (let i = 0; i < values.length; i++) {
-                /*
+                /**
                  * We use the readDirect() and writeDirect() functions, so that reads won't affect the
                  * ROM LED array (if any) and writes will be allowed (since ROM is normally unwritable).
                  */
@@ -1210,7 +1210,7 @@ export default class CPU1500 extends CPU {
             this.updateIndicators();
         }
 
-        /*
+        /**
          * The TI patents indicate that DISP operations slow the clock by a factor of 4, and on top of
          * that, the display scan generator uses a HOLD signal to prevent the Program Counter from being
          * incremented while it cycles through all 8 possible segments for all digits, so the total delay
@@ -1236,7 +1236,7 @@ export default class CPU1500 extends CPU {
      */
     pop()
     {
-        /*
+        /**
          * Normally, you would simply decrement a stack pointer, but that's not how this stack was implemented.
          */
         let addr = this.stack[0];
@@ -1255,11 +1255,11 @@ export default class CPU1500 extends CPU {
      */
     push(addr)
     {
-        /*
+        /**
          * Normally, you would simply increment a stack pointer, but that's not how this stack was implemented.
          */
         let i = this.stack.length - 1;
-        /*
+        /**
          * Apparently, legitimate values are allowed to fall off the end of the stack, so we can't assert overflow.
          *
          *      this.assert(this.stack[i] < 0, "stack overflow");
@@ -1742,7 +1742,7 @@ CPU1500.RANGE = {
 
 CPU1500.OP_CYCLES = 128;                    // default number of cycles per instruction
 
-/*
+/**
  * Table of operations used by toInstruction() for "masked" operations
  */
 CPU1500.OP = {
@@ -1778,7 +1778,7 @@ CPU1500.SFORMAT = {
     COMPACT:    1
 };
 
-/*
+/**
  * Table of operational inputs used by toInstruction() for "masked" operations
  */
 CPU1500.OP_INPUTS = ["A","B","C","D","1","?","R5L","R5"];

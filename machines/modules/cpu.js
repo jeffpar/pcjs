@@ -10,12 +10,19 @@
 import Device from "./device.js";
 
 /**
+ * @typedef {Config} CPUConfig
+ * @property {number} addrReset
+ */
+
+/**
  * @class {CPU}
  * @unrestricted
  * @property {Time} time
  * @property {Debugger} dbg
+ * @property {number} addrReset
  * @property {number} nCyclesStart
  * @property {number} nCyclesRemain
+ * @property {number} nCyclesSnapped
  * @property {number} regPC
  * @property {number} regPCLast
  */
@@ -26,21 +33,21 @@ export default class CPU extends Device {
      * @this {CPU}
      * @param {string} idMachine
      * @param {string} idDevice
-     * @param {Config} [config]
+     * @property {CPUConfig} config
      */
     constructor(idMachine, idDevice, config)
     {
         config['class'] = "CPU";
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * If a Debugger is loaded, it will call connectDebugger().  Having access to the Debugger
          * allows our toString() function to include the instruction, via toInstruction(), and conversely,
          * the Debugger will enjoy access to all our defined register names.
          */
         this.dbg = undefined;
 
-        /*
+        /**
          * regPC is the CPU's program counter, which all CPUs are required to have.
          *
          * regPCLast is an internal register that snapshots the PC at the start of every instruction;
@@ -48,15 +55,16 @@ export default class CPU extends Device {
          * diagnostic/debugging purposes.
          */
         this.regPC = this.regPCLast = 0;
+        this.addrReset = this.config['addrReset'] || 0;
 
-        /*
+        /**
          * Get access to the Time device, so we can give it our clock and update functions.
          */
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.time.addClock(this);
         this.time.addUpdate(this);
 
-        /*
+        /**
          * nCyclesStart and nCyclesRemain are initialized on every startClock() invocation.
          * The number of cycles executed during the current burst is nCyclesStart - nCyclesRemain,
          * and the burst is complete when nCyclesRemain has been exhausted (ie, is <= 0).

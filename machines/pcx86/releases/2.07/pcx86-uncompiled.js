@@ -14395,9 +14395,9 @@ class CPUx86 extends CPULib {
             if (aBlocks[iBlock]) {
                 aBlocks[iBlock].addBreakpoint(addr & this.nBlockLimit, fWrite);
                 /*
-                * When a physical memory breakpoint is added, a fresh setPhysBlock() call is REQUIRED for any
-                * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
-                */
+                 * When a physical memory breakpoint is added, a fresh setPhysBlock() call is REQUIRED for any
+                 * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
+                 */
                 if (fPhysical) this.flushPageBlocks();
                 return true;
             }
@@ -46605,6 +46605,10 @@ class Kbdx86 extends Component {
         this.printf(Messages.KBD + Messages.PORT, "keyboard reset\n");
         this.abBuffer = [];
         this.setResponse(Kbdx86.CMDRES.BAT_OK);
+        /*
+         * BUGFIX for 8042 POST on LTE/286
+         */
+        if (this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) this.abBuffer.unshift(Kbdx86.CMDRES.BAT_OK);
     }
 
     /**
@@ -70576,7 +70580,7 @@ class JSONLib {
                     for (let i = 0; i < media.length; i++) {
                         let item = media[i];
                         if (!item['@diskette']) continue;
-                        /*
+                        /**
                          * One advantage of the new JSON library manifest is that it gives us more information about the
                          * available diskettes before loading any of them.  For example, if the drives support only one head,
                          * we can avoid including any diskette whose '@format' is "PC320K", "PC360K", etc; and if the drives
@@ -70635,7 +70639,7 @@ class JSONLib {
                             'name': name,
                             'path': path
                         };
-                        /*
+                        /**
                          * The FDC calls us with drive limits, and all it cares about is the 'name' and 'path' of each diskette,
                          * so we use those two facts to limit what each diskette object returns.  Other callers, like the DiskImage
                          * utility, want ALL the diskette details.

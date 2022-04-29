@@ -13,7 +13,7 @@
       "print": "printInvaders"
     },
     "ArrayBuffer": true,
-    "_JSONDoc": [
+    "@doc": [
       "Configuration properties managed by the Machine device:",
       "- autoSave: preserves machine state across page loads, calling all onLoad() and onSave() handlers; default is true",
       "- autoStart: automatically powers all CPUs during the initial onPower() if no initialization errors; default is true",
@@ -37,7 +37,7 @@
     "type": "static",
     "addrWidth": 16,
     "dataWidth": 8,
-    "_JSONDoc": [
+    "@doc": [
       "For the 8080 Memory bus, we let the Bus device choose whatever block size it prefers.  This means that if a debugger",
       "wants to watch accesses on a specific memory address, it will get notified on every access to the block and will have",
       "to filter the address itself."
@@ -675,14 +675,14 @@
       "fullScreen": "zoomInvaders"
     },
     "focusBinding": "power",
-    "_JSONDoc": [
+    "@doc": [
       "This Video device has a monitor refresh timer that's responsible for signaling vertical retrace interrupts to the CPU",
       "so it must be initialized AFTER the CPU."
     ]
   },
   "debugger": {
     "class": "Dbgx80",
-    "_JSONDoc": [
+    "@doc": [
       "It's best to initialize the Debugger last, so that it can find any device it wants -- at the very least, the CPU."
     ]
   }

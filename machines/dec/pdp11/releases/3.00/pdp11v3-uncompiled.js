@@ -78,7 +78,7 @@ Defs.MAXDEBUG   = MAXDEBUG;
 Defs.REPOSITORY = REPOSITORY;
 Defs.VERSION    = VERSION;
 
-/*
+/**
  * The following globals CANNOT be overridden.
  *
  * LITTLE_ENDIAN is true if the browser's ArrayBuffer storage is little-endian.  If LITTLE_ENDIAN matches
@@ -90,7 +90,7 @@ Defs.LITTLE_ENDIAN = function() {
     return new Uint16Array(buffer)[0] === 256;
 }();
 
-/*
+/**
  * List of standard message groups.  The messages properties defines the set of active message
  * groups, and their names are defined by MESSAGE_NAMES.  See the Device class for more message
  * group definitions.
@@ -104,7 +104,7 @@ Defs.MESSAGE = {
     BUFFER:     0x800000000000,
 };
 
-/*
+/**
  * RS-232 DB-25 Pin Definitions, mapped to bits 1-25 in a 32-bit status value.
  *
  * Serial devices in PCjs machines are considered DTE (Data Terminal Equipment), which means they should be "virtually"
@@ -308,13 +308,14 @@ class NumIO extends Defs {
                 chSuffix = '000000000';
             }
             if (ch != chSuffix) s = s.slice(0, -1) + chSuffix;
-            /*
+            /**
              * This adds support for the MACRO-10 binary shifting (Bn) suffix, which must be stripped from the
              * number before parsing, and then applied to the value after parsing.  If n is omitted, 35 is assumed,
              * which is a net shift of zero.  If n < 35, then a left shift of (35 - n) is required; if n > 35, then
              * a right shift of -(35 - n) is required.
              */
-            let v, shift = 0;
+            let v;
+            let shift = 0;
             if (base <= 10) {
                 let match = s.match(/(-?[0-9]+)B([0-9]*)$/);
                 if (match) {
@@ -323,13 +324,13 @@ class NumIO extends Defs {
                 }
             }
             if (this.isInt(s, base) && !isNaN(v = parseInt(s, base))) {
-                /*
+                /**
                  * With the need to support larger (eg, 36-bit) integers, truncating to 32 bits is no longer helpful.
                  *
                  *      value = v|0;
                  */
                 if (shift) {
-                    /*
+                    /**
                      * Since binary shifting is a logical operation, and since shifting by division only works properly
                      * with positive numbers, we must convert a negative value to a positive value, by computing the two's
                      * complement.
@@ -387,7 +388,7 @@ class NumIO extends Defs {
                 let a, ib, data;
 
                 if (sData.substr(0, 1) == "<") {    // if the "data" begins with a "<"...
-                    /*
+                    /**
                      * Early server configs reported an error (via the nErrorCode parameter) if a tape URL was invalid,
                      * but more recent server configs now display a somewhat friendlier HTML error page.  The downside,
                      * however, is that the original error has been buried, and we've received "data" that isn't actually
@@ -396,7 +397,7 @@ class NumIO extends Defs {
                     throw new Error(sData);
                 }
 
-                /*
+                /**
                  * TODO: IE9 is rather unfriendly and restrictive with regard to how much data it's willing to
                  * eval().  In particular, the 10Mb disk image we use for the Windows 1.01 demo config fails in
                  * IE9 with an "Out of memory" exception.  One work-around would be to chop the data into chunks
@@ -442,7 +443,7 @@ class NumIO extends Defs {
                     resource.aBytes = a;
                 }
                 else if ((a = data['words'])) {
-                    /*
+                    /**
                      * Convert all words into bytes
                      */
                     resource.aBytes = new Array(a.length * 2);
@@ -453,7 +454,7 @@ class NumIO extends Defs {
                     }
                 }
                 else if ((a = data['longs'])) {
-                    /*
+                    /**
                      * Convert all dwords (longs) into bytes
                      */
                     resource.aBytes = new Array(a.length * 4);
@@ -489,7 +490,7 @@ class NumIO extends Defs {
             }
         }
         else {
-            /*
+            /**
              * Parse the data manually; we assume it's a series of hex byte-values separated by whitespace.
              */
             let ab = [];
@@ -524,7 +525,7 @@ class NumIO extends Defs {
         if (!sws) {
             switches = switchesDefault;
         } else {
-            /*
+            /**
              * NOTE: It's not convenient to use parseInt() with a base of 2, in part because both bit order
              * and bit sense are reversed, but also because we use this function to parse switch masks, which
              * contain non-digits.  See the "switches" defined in invaders.json for examples.
@@ -563,7 +564,7 @@ class NumIO extends Defs {
      */
     toBase(n, base, bits = 0, prefix = undefined, nGrouping = 0)
     {
-        /*
+        /**
          * We can't rely entirely on isNaN(), because isNaN(null) returns false, and we can't rely
          * entirely on typeof either, because typeof NaN returns "number".  Sigh.
          *
@@ -571,7 +572,9 @@ class NumIO extends Defs {
          * since JavaScript coerces such operands to zero, but I think there's "value" in seeing those
          * values displayed differently.
          */
-        let s = "", suffix = "", cch = -1;
+        let s = "";
+        let suffix = "";
+        let cch = -1;
         if (!base) base = this.nDefaultRadix || 10;
         if (bits) cch = Math.ceil(bits / Math.log2(base));
         if (prefix == undefined) {
@@ -594,14 +597,14 @@ class NumIO extends Defs {
             n = undefined;
             prefix = suffix = "";
         } else {
-            /*
+            /**
              * Callers that produced an input by dividing by a power of two rather than shifting (in order
              * to access more than 32 bits) may produce a fractional result, which ordinarily we would simply
              * ignore, but if the integer portion is zero and the sign is negative, we should probably treat
              * this value as a sign-extension.
              */
             if (n < 0 && n > -1) n = -1;
-            /*
+            /**
              * Negative values should be twos-complemented to produce a positive value for conversion purposes,
              * but we can only do that if/when we're given the number of bits; Math.pow(base, cch) is equivalent
              * to Math.pow(2, bits), but less precise for bases that aren't a power of two (eg, base 10).
@@ -743,7 +746,7 @@ class NumIO extends Defs {
     }
 }
 
-/*
+/**
  * Assorted constants
  */
 NumIO.TWO_POW32 = Math.pow(2, 32);
@@ -793,7 +796,7 @@ class StdIO extends NumIO {
     constructor()
     {
         super();
-        /*
+        /**
          * We populate the sprintf() formatters table with null functions for all the predefined (built-in) types,
          * so that type validation has only one look-up to perform.
          *
@@ -865,7 +868,7 @@ class StdIO extends NumIO {
         let i = sFileName.lastIndexOf('/');
         if (i >= 0) sBaseName = sFileName.substr(i + 1);
 
-        /*
+        /**
          * This next bit is a kludge to clean up names that are part of a URL that includes unsightly query parameters.
          * However, don't do that if fAllowAmp (which will be true, for example, when parsing 8.3 filenames in diskimage.js).
          */
@@ -926,7 +929,7 @@ class StdIO extends NumIO {
             if (s.indexOf(':') < 0) {
                 s += ' ' + (args[1] || "00:00:00 UTC");
             } else if (s.match(/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/)) {
-                /*
+                /**
                  * I don't care to support all the possible time zone specifiers just to determine whether or not
                  * a time zone was provided, so for now, I simply look for common date+time patterns I use, such as
                  * the "timestamp" pattern above.  TODO: Make this general-purpose someday.
@@ -1024,7 +1027,7 @@ class StdIO extends NumIO {
      */
     sprintf(format, ...args)
     {
-        /*
+        /**
          * This isn't just a nice optimization; it's also important if the caller is simply trying
          * to printf() a string that may also contain '%' and doesn't want or expect any formatting.
          */
@@ -1041,7 +1044,7 @@ class StdIO extends NumIO {
             buffer += aParts[iPart];
             let arg, type = aParts[iPart+5];
 
-            /*
+            /**
              * Check for unrecognized types immediately, so we don't inadvertently pop any arguments.
              */
             if (this.formatters[type] === undefined) {
@@ -1074,7 +1077,7 @@ class StdIO extends NumIO {
             let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L'; we also allow 'w' (instead of 'h') and 'b' (instead of 'hh')
             let ach = null, s, radix = 0, prefix = "";
 
-            /*
+            /**
              * The following non-standard sprintf() format types provide handy alternatives to the
              * PHP date() format types that we previously used with the old datelib.formatDate() function:
              *
@@ -1120,7 +1123,8 @@ class StdIO extends NumIO {
              *
              * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
              */
-            let ch, date = /** @type {Date} */ ("ACDFHGMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
+            let ch;
+            let date = /** @type {Date} */ ("ACDFHGMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
 
             switch(type) {
             case 'C':
@@ -1193,14 +1197,14 @@ class StdIO extends NumIO {
 
             switch(type) {
             case 'b':
-                /*
+                /**
                  * "%b" for boolean-like values is a non-standard format specifier that seems handy.
                  */
                 buffer += (arg? "true" : "false");
                 break;
 
             case 'd':
-                /*
+                /**
                  * I could use "arg |= 0", but there may be some value to supporting integers > 32 bits,
                  * so I use Math.trunc() instead.  Bit-wise operators also mask a lot of evils, by converting
                  * complete nonsense into zero, so while I'm ordinarily a fan, that's not desirable here.
@@ -1221,7 +1225,7 @@ class StdIO extends NumIO {
                  * is zero, since parseInt() happily stops parsing when it reaches the first non-radix 10 digit.
                  */
                 arg = Math.trunc(arg);
-                /*
+                /**
                  * Before falling into the decimal floating-point code, we take this opportunity to convert
                  * the precision value, if any, to the minimum number of digits to print.  Which basically means
                  * setting zeroPad to true, width to precision, and then unsetting precision.
@@ -1258,7 +1262,7 @@ class StdIO extends NumIO {
                 break;
 
             case 'j':
-                /*
+                /**
                  * 'j' is one of our non-standard extensions to the sprintf() interface; it signals that
                  * the caller is providing an Object that should be rendered as JSON.  If a width is included
                  * (eg, "%2j"), it's used as an indentation value; otherwise, no whitespace is added.
@@ -1271,7 +1275,7 @@ class StdIO extends NumIO {
                 /* falls through */
 
             case 's':
-                /*
+                /**
                  * 's' includes some non-standard benefits, such as coercing non-strings to strings first;
                  * we know undefined and null values don't have a toString() method, but hopefully everything
                  * else does.
@@ -1309,7 +1313,7 @@ class StdIO extends NumIO {
                 if (!radix) radix = 16;
                 if (!prefix && hash) prefix = "0x";
                 if (!ach) ach = StdIO.HexLowerCase;
-                /*
+                /**
                  * For all the same reasons articulated above (for type 'd'), we pass the arg through Math.trunc(),
                  * and we honor precision, if any, as the minimum number of digits to print.
                  */
@@ -1320,7 +1324,7 @@ class StdIO extends NumIO {
                     precision = -1;
                 }
                 if (zeroPad && !width) {
-                    /*
+                    /**
                      * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
                      */
                     if (length == 'b') {
@@ -1398,13 +1402,13 @@ class StdIO extends NumIO {
     }
 }
 
-/*
+/**
  * Global variables
  */
 StdIO.PrintBuffer = "";
 StdIO.PrintTime = null;
 
-/*
+/**
  * Global constants
  */
 StdIO.HexLowerCase = "0123456789abcdef";
@@ -1443,7 +1447,7 @@ class WebIO extends StdIO {
         super();
         this.bindings = {};
         this.messages = 0;
-        /*
+        /**
          * If this is the machine device, initialize a set of per-machine variables; if it's not,
          * the Device constructor will update this.machine with the actual machine device (see addDevice()).
          */
@@ -1476,7 +1480,7 @@ class WebIO extends StdIO {
 
         case WebIO.BINDING.PRINT:
             this.disableAuto(element);
-            /*
+            /**
              * An onKeyDown handler has been added to this element to intercept special (non-printable) keys, such as
              * the UP and DOWN arrow keys, which are used to implement a simple command history/recall feature.
              */
@@ -1486,7 +1490,7 @@ class WebIO extends StdIO {
                     webIO.onCommandEvent(event, true);
                 }
             );
-            /*
+            /**
              * One purpose of the onKeyPress handler for this element is to stop event propagation, so that if the
              * element has been explicitly given focus, any key presses won't be picked up by the Input device (which,
              * as that device's constructor explains, is monitoring key presses for the entire document).
@@ -1523,7 +1527,7 @@ class WebIO extends StdIO {
         if (!this.config.bindings) {
             this.config.bindings = bindings;
         }
-        /*
+        /**
          * To relieve every device from having to explicitly declare its own container, set up a default.
          * When using direct bindings, the default is simply 'container'; otherwise, the default 'container'
          * element ID is whatever the device ID is.
@@ -1543,7 +1547,7 @@ class WebIO extends StdIO {
             if (fDirectBindings) {
                 binding = id;
             } else {
-                /*
+                /**
                  * This new bit of code allows us to define a binding like this:
                  *
                  *      "label": "0"
@@ -1682,7 +1686,7 @@ class WebIO extends StdIO {
         element.setAttribute("autocomplete", "off");
         element.setAttribute("autocorrect", "off");
         element.setAttribute("spellcheck", "false");
-        /*
+        /**
          * This was added for Firefox (Safari will clear the <textarea> on a page reload, but Firefox does not).
          */
         element.value = "";
@@ -1977,7 +1981,7 @@ class WebIO extends StdIO {
                 let fDiag = false;
                 let sErrorMessage, resource;
                 if (nErrorCode) {
-                    /*
+                    /**
                      * Errors can happen for innocuous reasons, such as the user switching away too quickly, forcing
                      * the request to be cancelled.  And unfortunately, the browser cancels XMLHttpRequest requests
                      * BEFORE it notifies any page event handlers, so if the machine is being powered down, we won't
@@ -2036,7 +2040,7 @@ class WebIO extends StdIO {
                 return;
             }
 
-            /*
+            /**
              * The following line was recommended for WebKit, as a work-around to prevent the handler firing multiple
              * times when debugging.  Unfortunately, that's not the only XMLHttpRequest problem that occurs when
              * debugging, so I think the WebKit problem is deeper than that.  When we have multiple XMLHttpRequests
@@ -2047,7 +2051,7 @@ class WebIO extends StdIO {
              */
             sResource = xmlHTTP.responseText;
 
-            /*
+            /**
              * The normal "success" case is an HTTP status code of 200, but when testing with files loaded
              * from the local file system (ie, when using the "file:" protocol), we have to be a bit more "flexible".
              */
@@ -2078,7 +2082,7 @@ class WebIO extends StdIO {
             parms = {};
             if (window) {
                 if (!sParms) {
-                    /*
+                    /**
                      * Note that window.location.href returns the entire URL, whereas window.location.search
                      * returns only parameters, if any (starting with the '?', which we skip over with a substr() call).
                      */
@@ -2219,10 +2223,10 @@ class WebIO extends StdIO {
                 let consume = false, s;
                 let text = element.value;
                 let i = text.lastIndexOf('\n');
-                /*
-                * Checking for BACKSPACE is not as important as the UP and DOWN arrows, but it's helpful to ensure
-                * that BACKSPACE only erases characters on the final line; consume it otherwise.
-                */
+                /**
+                 * Checking for BACKSPACE is not as important as the UP and DOWN arrows, but it's helpful to ensure
+                 * that BACKSPACE only erases characters on the final line; consume it otherwise.
+                 */
                 if (keyCode == WebIO.KEYCODE.BS) {
                     if (element.selectionStart <= i + 1) {
                         consume = true;
@@ -2248,7 +2252,7 @@ class WebIO extends StdIO {
             else {
                 let charCode = keyCode;
                 let char = String.fromCharCode(charCode);
-                /*
+                /**
                  * Move the caret to the end of any text in the textarea, unless it's already
                  * past the final LF (because it's OK to insert characters on the last line).
                  */
@@ -2257,12 +2261,12 @@ class WebIO extends StdIO {
                 if (element.selectionStart <= i) {
                     element.setSelectionRange(text.length, text.length);
                 }
-                /*
+                /**
                  * Don't let the Input device's document-based keypress handler see any key presses
                  * that came to this element first.
                  */
                 event.stopPropagation();
-                /*
+                /**
                  * If '@' is pressed as the first character on the line, then append the last command
                  * that parseCommands() processed, and transform '@' into ENTER.
                  */
@@ -2272,7 +2276,7 @@ class WebIO extends StdIO {
                         char = '\r';
                     }
                 }
-                /*
+                /**
                  * On the ENTER key, call parseCommands() to look for any COMMAND handlers and invoke
                  * them until one of them returns true.
                  *
@@ -2281,7 +2285,7 @@ class WebIO extends StdIO {
                  * as ASCII character '\n' (aka LINEFEED aka LF).
                  */
                 if (char == '\r') {
-                    /*
+                    /**
                      * At the time we call any command handlers, a LINEFEED will not yet have been
                      * appended to the text, so for consistency, we prevent the default behavior and
                      * add the LINEFEED ourselves.  Unfortunately, one side-effect is that we must
@@ -2322,7 +2326,7 @@ class WebIO extends StdIO {
             if (typeof fnPrev !== 'function') {
                 window[sFunc] = fn;
             } else {
-                /*
+                /**
                  * TODO: Determine whether there's any value in receiving/sending the Event object that the
                  * browser provides when it generates the original event.
                  */
@@ -2487,20 +2491,20 @@ class WebIO extends StdIO {
         if (!fBuffer) {
             let element = this.findBinding(WebIO.BINDING.PRINT, true);
             if (element) {
-                /*
+                /**
                  * To help avoid situations where the element can get overwhelmed by the same repeated string,
                  * don't add the string if it already appears at the end.
                  */
                 if (element.value.substr(-s.length) != s) {
                     element.value += s;
-                    /*
+                    /**
                      * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
                      */
                     if (!WebIO.DEBUG && element.value.length > 8192) {
                         element.value = element.value.substr(element.value.length - 4096);
                     }
                     element.scrollTop = element.scrollHeight;
-                    /*
+                    /**
                      * Safari requires this, to keep the caret at the end; Chrome and Firefox, not so much.  Go figure.
                      *
                      * However, if I do this in Safari on iPadOS WHILE the app is full-screen, Safari cancels full-screen
@@ -2644,7 +2648,7 @@ WebIO.MESSAGE_COMMANDS = [
     "m ... [on|off]\tturn selected messages on or off"
 ];
 
-/*
+/**
  * NOTE: The first name is automatically omitted from global "on" and "off" operations.
  */
 WebIO.MESSAGE_NAMES = {
@@ -2656,7 +2660,7 @@ WebIO.HANDLER = {
     COMMAND:    "command"
 };
 
-/*
+/**
  * Codes provided by KeyboardEvent.keyCode on a "keypress" event (aka ASCII codes).
  */
 WebIO.CHARCODE = {
@@ -2715,7 +2719,7 @@ WebIO.CHARCODE = {
     /* 0x7A */ z:           122
 };
 
-/*
+/**
  * Codes provided by KeyboardEvent.keyCode on "keydown" and "keyup" events.
  */
 WebIO.KEYCODE = {
@@ -2845,7 +2849,7 @@ WebIO.KEYCODE = {
                 VIRTUAL:    1000        // bias used by other devices to define "virtual" keyCodes
 };
 
-/*
+/**
  * Maps Firefox-specific keyCodes to their more common keyCode counterparts.
  */
 WebIO.FF_KEYCODE = {
@@ -2855,7 +2859,7 @@ WebIO.FF_KEYCODE = {
     [WebIO.KEYCODE.FF_CMD]:     WebIO.KEYCODE.CMD       // 224 -> 91
 };
 
-/*
+/**
  * Supported values that a browser may store in the 'location' property of a keyboard event object.
  */
 WebIO.LOCATION = {
@@ -2864,7 +2868,7 @@ WebIO.LOCATION = {
     NUMPAD:     3
 };
 
-/*
+/**
  * This maps KEYCODE values to ASCII character (or a string representation for non-ASCII keys).
  */
 WebIO.KEYNAME = {
@@ -3158,13 +3162,13 @@ class Device extends WebIO {
             this.printf("warning: machine configuration contains multiple '%s' devices\n", this.idDevice);
         }
         Device.Machines[this.idMachine][this.idDevice] = this;
-        /*
+        /**
          * The new Device classes don't use the Components array or machine+device IDs, but we need to continue
          * updating both of those for backward compatibility with older PCjs machines.
          */
         this['id'] = this.idMachine == this.idDevice? this.idMachine : this.idMachine + '.' + this.idDevice;
         Device.Components.push(this);
-        /*
+        /**
          * The WebIO constructor set this.machine tentatively, so that it could define any per-machine variables
          * it needed; we now set it definitively.
          */
@@ -3208,7 +3212,7 @@ class Device extends WebIO {
      */
     checkConfig(config, overrides)
     {
-        /*
+        /**
          * If this device's config contains an "overrides" array, then any of the properties listed in
          * that array may be overridden with a URL parameter.  We don't impose any checks on the overriding
          * value, so it is the responsibility of the component with overridable properties to validate them.
@@ -3381,7 +3385,7 @@ class Device extends WebIO {
         let devices = Device.Machines[idMachine];
         let device = devices && devices[idDevice] || null;
         if (!device) {
-            /*
+            /**
              * Also check the old list of PCjs machine component IDs, to maintain backward compatibility.
              */
             for (i = 0; i < Device.Components.length; i++) {
@@ -3467,7 +3471,7 @@ class Device extends WebIO {
         if (this != this.machine || !this.ready) {
             return this.ready;
         }
-        /*
+        /**
          * Machine readiness is more complicated: check the readiness of all devices.  This is easily
          * checked with an enumDevices() function that returns false if a device isn't ready yet, which
          * in turn terminates the enumeration and returns false.
@@ -3537,7 +3541,7 @@ class Device extends WebIO {
     printf(format, ...args)
     {
         if (typeof format == "number" && this.isMessageOn(format)) {
-            /*
+            /**
              * The following call will execute at most once, because findDeviceByClass() returns either a Device or null,
              * neither of which is undefined.
              */
@@ -3548,7 +3552,7 @@ class Device extends WebIO {
                 this.dbg.notifyMessage(format);
             }
             if (this.machine.messages & Device.MESSAGE.ADDR) {
-                /*
+                /**
                  * Same rules as above apply here.  Hopefully no message-based printf() calls will arrive with MESSAGE.ADDR
                  * set *before* the CPU device has been initialized.
                  */
@@ -3616,7 +3620,7 @@ Device.Machines = typeof window != "undefined"? window['PCjs']['Machines'] : {};
  */
 Device.Components = typeof window != "undefined"? window['PCjs']['Components'] : [];
 
-/*
+/**
  * List of additional message groups, extending the base set defined in lib/webio.js.
  *
  * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
@@ -3769,7 +3773,7 @@ class Input extends Device {
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.machine = /** @type {Machine} */ (this.findDeviceByClass("Machine"));
 
-        /*
+        /**
          * If 'drag' is true, then the onInput() handler will be called whenever the current col and/or row
          * changes, even if the mouse hasn't been released since the previous onInput() call.
          *
@@ -3779,32 +3783,32 @@ class Input extends Device {
          */
         this.fDrag = this.getDefaultBoolean('drag', false);
 
-        /*
+        /**
          * If 'scroll' is true, then we do NOT call preventDefault() on touch events; this permits the input
          * surface to be scrolled like any other part of the page.  The default is false, because this has other
          * side-effects (eg, inadvertent zooms).
          */
         this.fScroll = this.getDefaultBoolean('scroll', false);
 
-        /*
+        /**
          * If 'hexagonal' is true, then we treat the input grid as hexagonal, where even rows of the associated
          * display are offset.
          */
         this.fHexagonal = this.getDefaultBoolean('hexagonal', false);
 
-        /*
+        /**
          * The 'releaseDelay' setting is necessary for devices (eg, old calculators) that are either too slow to
          * notice every input transition and/or have debouncing logic that would otherwise be defeated.
          */
         this.releaseDelay = this.getDefaultNumber('releaseDelay', 0);
 
-        /*
+        /**
          * This is set on receipt of the first 'touch' event of any kind, and is used by the 'mouse' event
          * handlers to disregard mouse events if set.
          */
         this.fTouch = false;
 
-        /*
+        /**
          * There are two supported configuration maps: a two-dimensional grid (gridMap) and a list of IDs (idMap).
          *
          * The two-dimensional button layouts do not (currently) support individual listeners; instead, any key event
@@ -3914,7 +3918,7 @@ class Input extends Device {
             }
             return false;
         }
-        /*
+        /**
          * The visual state of a SWITCH control (which could be a div or button or any other element) is controlled
          * by its class attribute -- specifically, the last class name in the attribute.  You must define two classes:
          * one that ends with "-on" for the on (true) state and another that ends with "-off" for the off (false) state.
@@ -3987,14 +3991,14 @@ class Input extends Device {
                             if (typeof clickBinding == "number") {
                                 keyCode = clickBinding;
                             } else {
-                                /*
+                                /**
                                  * If clickBinding is not a number, the only other possibility currently supported
                                  * is an Array where the first entry is a keyCode modifier; specifically, KEYCODE.LOCK.
                                  */
                                 keyCode = clickBinding[0];
 
                                 if (keyCode == Input.KEYCODE.LOCK) {
-                                    /*
+                                    /**
                                      * In the case of KEYCODE.LOCK, the next entry is the actual keyCode, and we look
                                      * to the element's "data-value" attribute for whether clicking the element should
                                      * "lock" the keyCode ("0") or "unlock" it ("1").  Locking a key is a simple matter
@@ -4048,7 +4052,7 @@ class Input extends Device {
      */
     addSurface(inputElement, focusElement, location = [])
     {
-        /*
+        /**
          * The location array, eg:
          *
          *      "location": [139, 325, 368, 478, 0.34, 0.5, 640, 853, 180, 418, 75, 36],
@@ -4095,7 +4099,7 @@ class Input extends Device {
                 state.hGap = state.vGap = 0;
             }
 
-            /*
+            /**
              * To calculate the average button width (cxButton), we know that the overall width
              * must equal the sum of all the button widths + the sum of all the button gaps:
              *
@@ -4111,7 +4115,7 @@ class Input extends Device {
             state.cxGap = (state.cxButton * state.hGap)|0;
             state.cyGap = (state.cyButton * state.vGap)|0;
 
-            /*
+            /**
              * xStart and yStart record the last 'touchstart' or 'mousedown' position on the surface
              * image; they will be reset to -1 when movement has ended (eg, 'touchend' or 'mouseup').
              */
@@ -4120,7 +4124,7 @@ class Input extends Device {
             this.captureMouse(inputElement, state);
             this.captureTouch(inputElement, state);
 
-            /*
+            /**
              * We use a timer for the touch/mouse release events, to ensure that the machine had
              * enough time to notice the input before releasing it.
              */
@@ -4135,7 +4139,7 @@ class Input extends Device {
         }
 
         if (this.gridMap || this.idMap || this.keyMap) {
-            /*
+            /**
              * This auto-releases the last key reported after an appropriate delay, to ensure that
              * the machine had enough time to notice the corresponding button was pressed.
              */
@@ -4146,7 +4150,7 @@ class Input extends Device {
                 });
             }
 
-            /*
+            /**
              * I used to maintain a single-key buffer (this.keyPressed) and would immediately release
              * that key as soon as another key was pressed, but it appears that the ROM wants a minimum
              * delay between release and the next press -- probably for de-bouncing purposes.  So we
@@ -4158,7 +4162,7 @@ class Input extends Device {
             this.keyActive = "";
             this.keysPressed = [];
 
-            /*
+            /**
              * I'm attaching my key event handlers to the document object, since image elements are
              * not focusable.  I'm disinclined to do what I've done with other machines (ie, create an
              * invisible <textarea> overlay), because in this case, I don't really want a soft keyboard
@@ -4175,7 +4179,7 @@ class Input extends Device {
                 if (!this.focusElement && focusElement.nodeName == "BUTTON") {
                     element = document;
                     this.focusElement = focusElement;
-                    /*
+                    /**
                      * Although we've elected to attach key handlers to the document object in this case,
                      * we also attach to the inputElement as an alternative.
                      */
@@ -4367,7 +4371,7 @@ class Input extends Device {
                     let used = input.onKeyCode(keyCode, false, false, event);
                     printEvent("Up", keyCode);
                     if (used) event.preventDefault();
-                    /*
+                    /**
                      * We reset the contents of any textarea element being used exclusively
                      * for keyboard input, to prevent its contents from growing uncontrollably.
                      */
@@ -4376,7 +4380,7 @@ class Input extends Device {
             }
         );
 
-        /*
+        /**
          * The following onBlur() and onFocus() handlers are currently just for debugging purposes, but
          * PCx86 experience suggests that we may also eventually need them for future pointer-locking support.
          */
@@ -4411,7 +4415,7 @@ class Input extends Device {
             'mousedown',
             function onMouseDown(event) {
                 if (input.fTouch) return;
-                /*
+                /**
                  * If there are any text input elements on the page that might currently have focus,
                  * this is a good time to divert focus to a focusable element of our own (eg, focusElement).
                  * Otherwise, key presses could be confusingly processed in two places.
@@ -4473,14 +4477,14 @@ class Input extends Device {
     {
         let input = this;
 
-        /*
+        /**
          * NOTE: The mouse event handlers below deal only with events where the left button is involved
          * (ie, left button is pressed, down, or released).
          */
         element.addEventListener(
             'touchstart',
             function onTouchStart(event) {
-                /*
+                /**
                  * Under normal circumstances (ie, when fScroll is false), when any touch events arrive,
                  * onSurfaceEvent() calls preventDefault(), which prevents a variety of potentially annoying
                  * behaviors (ie, zooming, scrolling, fake mouse events, etc).  Under non-normal circumstances,
@@ -4530,7 +4534,7 @@ class Input extends Device {
                         msDelayMin = msDelay;
                     }
                 } else {
-                    /*
+                    /**
                      * Because the key is already in the auto-release state, this next call guarantees that the
                      * key will be removed from the array; a consequence of that removal, however, is that we must
                      * reset our array index to zero.
@@ -4662,7 +4666,7 @@ class Input extends Device {
                 keyMod >>= 1;
             }
             if (keyMod) {
-                /*
+                /**
                  * Firefox generates only keyDown events for CAPS-LOCK, whereas Chrome generates only keyDown
                  * when it's locking and keyUp when it's unlocking.  To support Firefox, we must simply toggle the
                  * current state on a down.
@@ -4680,7 +4684,7 @@ class Input extends Device {
         } else {
             keyCode = 0;
             keyName = String.fromCharCode(code).toUpperCase();
-            /*
+            /**
              * Since code is presumably a charCode, this is a good opportunity to update keyMods with
              * with the *real* CAPS-LOCK setting; that is, we will assume CAPS-LOCK is "off" whenever
              * a lower-case letter arrives and "on" whenever an upper-case letter arrives when neither
@@ -4747,7 +4751,7 @@ class Input extends Device {
                 } else {
                     this.removeActiveKey(keyNum);
                 }
-                /*
+                /**
                  * At this point, I used to return true, indicating that we're not interested in a keypress
                  * event, but in fact, onkeyCode() is now interested in them only insofar as letters can convey
                  * information about the state of CAPS-LOCK (see above).
@@ -4788,20 +4792,20 @@ class Input extends Device {
      */
     onReset()
     {
-        /*
+        /**
          * As keyDown events are encountered, the event keyCode is checked against the active keyMap, if any.
          * If the keyCode exists in the keyMap, then each keyNum in the keyMap is added to the aActiveKeys array.
          * As each key is released (or auto-released), its entry is removed from the array.
          */
         this.aActiveKeys = [];
 
-        /*
+        /**
          * The current (assumed) physical states of the various shift/lock "modifier" keys (formerly bitsState);
          * the browser doesn't provide a way to query them, so all we can do is infer them as events arrive.
          */
         this.keyMods = 0;               // zero or more KEYMOD bits
 
-        /*
+        /**
          * Finally, the active input state.  If there is no active input, col and row are -1.  After
          * this point, these variables will be updated by setPosition().
          */
@@ -4839,7 +4843,7 @@ class Input extends Device {
                 fMultiTouch = (event.targetTouches.length > 1);
             }
 
-            /*
+            /**
              * The following code replaces the older code below it.  It requires that we use clientX and clientY
              * instead of pageX and pageY from the targetTouches array.  The older code seems to be completely broken
              * whenever the page is full-screen, hence this change.
@@ -4848,7 +4852,7 @@ class Input extends Device {
             x -= rect.left;
             y -= rect.top;
 
-            /*
+            /**
              * Touch coordinates (that is, the pageX and pageY properties) are relative to the page, so to make
              * them relative to the element, we must subtract the element's left and top positions.  This Apple document:
              *
@@ -4870,7 +4874,7 @@ class Input extends Device {
              *      y -= yOffset;
              */
 
-            /*
+            /**
              * Due to the responsive nature of our pages, the displayed size of the surface image may be smaller than
              * the original size, and the coordinates we receive from events are based on the currently displayed size.
              */
@@ -4880,7 +4884,7 @@ class Input extends Device {
             xInput = x - state.xInput;
             yInput = y - state.yInput;
 
-            /*
+            /**
              * fInput is set if the event occurred somewhere within the input region (ie, the calculator keypad),
              * either on a button or between buttons, whereas fButton is set if the event occurred squarely (rectangularly?)
              * on a button.  fPower deals separately with the power button; it is set if the event occurred on the
@@ -4889,13 +4893,13 @@ class Input extends Device {
             fInput = fButton = false;
             fPower = (x >= state.xPower && x < state.xPower + state.cxPower && y >= state.yPower && y < state.yPower + state.cyPower);
 
-            /*
+            /**
              * I use the top of the input region, less some gap, to calculate a dividing line, above which
              * default actions should be allowed, and below which they should not.  Ditto for any event inside
              * the power button.
              */
             if (xInput >= 0 && xInput < state.cxInput && yInput + state.cyGap >= 0 || fPower) {
-                /*
+                /**
                  * If we allow touch events to be processed, they will generate mouse events as well, causing
                  * confusion and delays.  We can sidestep that problem by preventing default actions on any event
                  * that occurs within the input region.  One downside is that you can no longer scroll or zoom the
@@ -4908,7 +4912,7 @@ class Input extends Device {
 
                 if (xInput >= 0 && xInput < state.cxInput && yInput >= 0 && yInput < state.cyInput) {
                     fInput = true;
-                    /*
+                    /**
                      * The width and height of each column and row could be determined by computing cxGap + cxButton
                      * and cyGap + cyButton, respectively, but those gap and button sizes are merely estimates, and should
                      * only be used to help with the final button coordinate checks farther down.
@@ -4918,7 +4922,7 @@ class Input extends Device {
                     let colInput = (xInput / cxCol) | 0;
                     let rowInput = (yInput / cyCol) | 0;
 
-                    /*
+                    /**
                      * If the grid is hexagonal (aka "Lite-Brite" mode), then the cells of even-numbered rows are
                      * offset horizontally by 1/2 cell.  In addition, the last cell in those rows is unused, so if
                      * after compensating by 1/2 cell, the target column is the last cell, we set xInput to -1,
@@ -4930,7 +4934,7 @@ class Input extends Device {
                         if (colInput == state.nCols - 1) xInput = -1;
                     }
 
-                    /*
+                    /**
                      * (xCol,yCol) will be the top left corner of the button closest to the point of input.  However, that's
                      * based on our gap estimate.  If things seem "too tight", shrink the gap estimates, which will automatically
                      * increase the button size estimates.
@@ -4954,18 +4958,18 @@ class Input extends Device {
         if (fMultiTouch) return;
 
         if (action == Input.ACTION.PRESS) {
-            /*
+            /**
              * Record the position of the event, transitioning xStart and yStart to non-negative values.
              */
             state.xStart = x;
             state.yStart = y;
             if (fInput) {
-                /*
+                /**
                  * The event occurred in the input region, so we call setPosition() regardless of whether
                  * it hit or missed a button.
                  */
                 this.setPosition(col, row);
-                /*
+                /**
                  * On the other hand, if it DID hit a button, then we arm the auto-release timer, to ensure
                  * a minimum amount of time (ie, releaseDelay).
                  */
@@ -4985,7 +4989,7 @@ class Input extends Device {
             }
         }
         else if (action == Input.ACTION.RELEASE) {
-            /*
+            /**
              * Don't immediately signal the release if the release timer is active (let the timer take care of it).
              */
             if (!this.releaseDelay || !this.time.isTimerSet(this.timerInputRelease)) {
@@ -5008,7 +5012,7 @@ class Input extends Device {
      */
     setFocus()
     {
-        /*
+        /**
          * In addition, we now check machine.isReady(), to avoid jerking the page's focus around when a machine is first
          * powered; it won't be marked ready until all the onPower() calls have completed, including the CPU's onPower()
          * call, which in turn calls setFocus().
@@ -5071,7 +5075,7 @@ Input.TYPE = {                  // types for addListener()
     SWITCH:     "switch"
 };
 
-/*
+/**
  * To keep track of the state of modifier keys, I've grabbed a copy of the same bit definitions
  * used by /modules/pcx86/lib/keyboard.js, since it's only important that we have a set of unique
  * values; what the values are isn't critical.
@@ -5244,7 +5248,7 @@ class LED extends Device {
         this.colorHighlight = this.getRGBAColor(this.colorOn, 1.0, 2.0);
         this.colorBackground = this.getRGBColor(this.config['backgroundColor']);
 
-        /*
+        /**
          * We generally want our view canvas to be "responsive", not "fixed" (ie, to automatically resize
          * with changes to the overall window size), so we apply the following style attributes:
          *
@@ -5259,13 +5263,13 @@ class LED extends Device {
             canvasView.style.height = "auto";
         }
 
-        /*
+        /**
          * Hexagonal (aka "Lite-Brite" mode) and highlighting options
          */
         this.fHexagonal = this.getDefaultBoolean('hexagonal', false);
         this.fHighlight = this.getDefaultBoolean('highlight', true);
 
-        /*
+        /**
          * Persistent LEDS are the default, except for LED.TYPE.DIGIT, which is used with calculator displays
          * whose underlying hardware must constantly "refresh" the LEDs to prevent them from going dark.
          */
@@ -5277,7 +5281,7 @@ class LED extends Device {
         container.appendChild(canvasView);
         this.contextView = /** @type {CanvasRenderingContext2D} */ (canvasView.getContext("2d"));
 
-        /*
+        /**
          * canvasGrid is where all LED segments are composited; then they're drawn onto canvasView.
          */
         this.canvasGrid = /** @type {HTMLCanvasElement} */ (document.createElement("canvas"));
@@ -5287,7 +5291,7 @@ class LED extends Device {
             this.contextGrid = this.canvasGrid.getContext("2d");
         }
 
-        /*
+        /**
          * Time to allocate our internal LED buffer.  Other devices access the buffer through interfaces
          * like setLEDState() and getLEDState().  The LED buffer contains four per elements per LED cell:
          *
@@ -5306,7 +5310,7 @@ class LED extends Device {
         this.bufferClone = null;
         this.nBufferIncExtra = (this.colsView < this.cols? (this.cols - this.colsView) * 4 : 0);
 
-        /*
+        /**
          * fBufferModified is straightforward: set to true by any setLEDState() call that actually
          * changed something in the LED buffer, set to false after every drawBuffer() call, periodic
          * or otherwise.
@@ -5322,14 +5326,14 @@ class LED extends Device {
         this.msLastDraw = 0;
         this.fDisplayOn = true;
 
-        /*
+        /**
          * nShiftedLeft is an optimization that tells drawGrid() when it can minimize the number of
          * individual cells to redraw, by shifting the entire grid image leftward and redrawing only
          * the rightmost cells.
          */
         this.nShiftedLeft = 0;
 
-        /*
+        /**
          * This records the location of the most recent LED buffer location updated via setLEDState(),
          * in case we want to highlight it.
          */
@@ -5453,7 +5457,7 @@ class LED extends Device {
             let xStart = this.widthCell * this.nShiftedLeft;
             let cxVisible = this.widthCell * colRedraw;
             this.contextGrid.drawImage(this.canvasGrid, xStart, 0, cxVisible, this.heightGrid, 0, 0, cxVisible, this.heightGrid);
-            /*
+            /**
              * At this point, the only grid drawing we might need to do now is the column at colRedraw,
              * but we still loop over the entire buffer to ensure all the cell MODIFIED states are in sync.
              */
@@ -5529,7 +5533,7 @@ class LED extends Device {
         let xDst = col * this.widthCell + xOffset;
         let yDst = row * this.heightCell;
 
-        /*
+        /**
          * If this is NOT a persistent LED display, then drawGrid() will have done a preliminary clearGrid(),
          * eliminating the need to clear individual cells.  Whereas if this IS a persistent LED display, then
          * we need to clear cells on an as-drawn basis.  If we don't, there could be residual "bleed over"
@@ -5546,7 +5550,7 @@ class LED extends Device {
             this.contextGrid.beginPath();
             this.contextGrid.arc(xDst + coords[0], yDst + coords[1], coords[2], 0, Math.PI * 2);
             if (fTransparent) {
-                /*
+                /**
                  * The following code works as well:
                  *
                  *      this.contextGrid.save();
@@ -5657,7 +5661,7 @@ class LED extends Device {
      */
     drawView()
     {
-        /*
+        /**
          * Setting the 'globalCompositeOperation' property of a 2D context is something you rarely need to do,
          * because the default draw behavior ("source-over") is fine for most cases.  One case where it is NOT
          * fine is when we're using a transparent background color, because it doesn't copy over any transparent
@@ -5936,7 +5940,7 @@ class LED extends Device {
         let buffer = state.shift();
         if (colorOn == this.colorOn && colorBackground == this.colorBackground && buffer && buffer.length == this.buffer.length) {
             this.buffer = buffer;
-            /*
+            /**
              * Loop over all the buffer colors to fix a legacy problem (ie, before we started storing null for colorTransparent)
              */
             for (let i = 0; i <= this.buffer.length - this.nBufferInc; i += this.nBufferInc) {
@@ -6152,7 +6156,7 @@ LED.STATE = {
     ON:         1
 };
 
-/*
+/**
  * NOTE: Although technically the MODIFIED flag is an internal flag, it may be set explicitly as well;
  * the ROM device uses the setLEDState() flags parameter to set it, in order to trigger highlighting of
  * the most recently active LED.
@@ -6177,7 +6181,7 @@ LED.SIZES = [
     [96, 128]           // LED.TYPE.DIGIT
 ];
 
-/*
+/**
  * The segments are arranged roughly as follows, in a 96x128 grid:
  *
  *      AAAA
@@ -6204,7 +6208,7 @@ LED.SEGMENTS = {
     'P':        [80, 102,  8]
 };
 
-/*
+/**
  * Segmented symbols are formed with the following segments.
  */
 LED.SYMBOL_SEGMENTS = {
@@ -6298,14 +6302,15 @@ class Time extends Device {
         this.nStepping = 0;
         this.idStepTimeout = this.idAnimationTimeout = 0;
 
-        /*
+        /**
          * I avoid hard-coding the use of requestAnimationFrame() and cancelAnimationFrame() so that
          * we can still use the older setTimeout() and clearTimeout() functions if need be (or want be).
          * However, I've done away with all the old code that used to calculate the optimal setTimeout()
          * delay; in either case, run() is simply called N frames/second, and it's up to calcSpeed() to
          * calculate the appropriate number of cycles to execute per "frame" (nCyclesDepositPerFrame).
          */
-        let sRequestAnimationTimeout = this.findProperty(window, 'requestAnimationFrame'), timeout;
+        let sRequestAnimationTimeout = this.findProperty(window, 'requestAnimationFrame');
+        let timeout;
         if (!sRequestAnimationTimeout) {
             sRequestAnimationTimeout = 'setTimeout';
             timeout = this.msFrameDefault;
@@ -6314,7 +6319,7 @@ class Time extends Device {
         let sCancelAnimationTimeout = this.findProperty(window, 'cancelAnimationFrame') || 'clearTimeout';
         this.cancelAnimationTimeout = window[sCancelAnimationTimeout].bind(window);
 
-        /*
+        /**
          * Assorted bookkeeping variables.  A running machine actually performs one long series of "runs"
          * (aka animation frames), each followed by a yield back to the browser.  And each "run" consists of
          * one or more "bursts"; the size and number of "bursts" depends on how often the machine's timers
@@ -6325,7 +6330,7 @@ class Time extends Device {
         this.nCyclesBurst = 0;          // number of cycles requested for the next "burst"
         this.nCyclesRemain = 0;         // number of cycles remaining in the next "burst"
 
-        /*
+        /**
          * Now that clocking is driven exclusively by animation frames, calcSpeed() calculates how many
          * cycles each animation frame should "deposit" in our cycle bank:
          *
@@ -6341,7 +6346,7 @@ class Time extends Device {
          */
         this.nCyclesDeposited = this.nCyclesDepositPerFrame = 0;
 
-        /*
+        /**
          * Reset speed to the base multiplier and perform an initial calcSpeed().
          */
         this.resetSpeed();
@@ -6491,7 +6496,7 @@ class Time extends Device {
             this.printf(Device.MESSAGE.TIME, "calcSpeed(%d cycles, %5.3fms): %5.3fMhz\n", nCycles, msElapsed, mhz);
             if (msFrame > this.msFrameDefault) {
                 if (this.nTargetMultiplier > 1) {
-                    /*
+                    /**
                      * Alternatively, we could call setSpeed(this.nTargetMultiplier >> 1) at this point, but the
                      * advantages of quietly reduing the target multiplier here are: 1) it will still slow us down,
                      * and 2) allow the next attempt to increase speed via setSpeed() to detect that we didn't
@@ -6500,7 +6505,7 @@ class Time extends Device {
                     this.nTargetMultiplier >>= 1;
                     this.printf(Device.MESSAGE.WARN, "warning: frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
                 }
-                /*
+                /**
                  * If we (potentially) took too long on this last run, we pass that time back as an adjustment,
                  * which runStop() can add to msStartThisRun, thereby reducing the likelihood that the next runStart()
                  * will (potentially) misinterpret the excessive time as browser throttling.
@@ -6510,7 +6515,7 @@ class Time extends Device {
         }
         this.mhzCurrent = mhz;
         this.nCurrentMultiplier = mhz / this.mhzBase;
-        /*
+        /**
          * If we're running twice as fast as the base speed (say, 4Mhz instead of 2Mhz), then the current multiplier
          * will be 2; similarly, if we're running at half the base speed (say, 1Mhz instead of 2Mhz), the current
          * multiplier will be 0.5.  And if all we needed to do was converge on the base speed, we would simply divide
@@ -6807,7 +6812,7 @@ class Time extends Device {
     onPower(on)
     {
         this.fPowered = on;
-        /*
+        /**
          * This is also a good time to get access to the Debugger, if any, and add our dump extensions.
          */
         if (this.dbg === undefined) {
@@ -6939,7 +6944,7 @@ class Time extends Device {
         try {
             this.fYield = false;
             do {
-                /*
+                /**
                  * Execute a normal burst and then update all timers.
                  */
                 this.notifyTimers(this.endBurst(this.doBurst(this.getCyclesPerRun())));
@@ -6960,7 +6965,7 @@ class Time extends Device {
     runStart(t)
     {
         let msStartThisRun = Date.now();
-        /*
+        /**
          * If there was no interruption between the last run and this run (ie, msEndRun wasn't zeroed by
          * intervening setSpeed() or stop()/start() calls), and there was an unusual delay between the two
          * runs, then we assume that "browser throttling" is occurring due to visibility or redraw issues
@@ -6971,7 +6976,7 @@ class Time extends Device {
          * so we must try to estimate and incorporate that delay into our overall run time.
          */
         if (this.msEndRun) {
-            /*
+            /**
              * In a perfect world, the difference between the start of this run and the start of the last run
              * (which is still in this.msStartThisRun since we haven't updated it yet) would be msFrameDefault;
              * if it's more than twice that, we assume the browser is either throttling us or is simply too
@@ -7018,7 +7023,7 @@ class Time extends Device {
     setSpeed(nMultiplier)
     {
         if (nMultiplier !== undefined) {
-            /*
+            /**
              * If the multiplier is invalid, or we haven't reached 90% of the current target speed,
              * revert to the base multiplier.
              */
@@ -7048,7 +7053,7 @@ class Time extends Device {
      */
     setSpeedThrottle()
     {
-        /*
+        /**
          * We're not going to assume any direct relationship between the slider's min/max/value
          * and our own nCyclesMinimum/nCyclesMaximum/nCyclesPerSecond.  We're just going to calculate
          * a new target nCyclesPerSecond that is proportional, and then convert that to a speed multiplier.
@@ -7084,7 +7089,7 @@ class Time extends Device {
             let timer = this.aTimers[iTimer-1];
             if (fReset || timer.nCyclesLeft < 0) {
                 nCycles = this.getCyclesPerMS(ms);
-                /*
+                /**
                  * If we're currently executing a burst of cycles, the number of cycles executed in the burst
                  * so far must NOT be charged against the cycle timeout we're about to set.  The simplest way to
                  * resolve that is to immediately call endBurst() and bias the cycle timeout by the number of
@@ -7132,7 +7137,7 @@ class Time extends Device {
                 this.nStepping = nRepeat;
             }
             if (this.nStepping) {
-                /*
+                /**
                  * Execute a minimum-cycle burst and then update all timers.
                  */
                 this.nStepping--;
@@ -7278,6 +7283,10 @@ let BusConfig;
  * @property {number} blockLimit
  * @property {number} dataWidth
  * @property {number} dataLimit
+ * @property {number} pairWidth
+ * @property {number} pairLimit
+ * @property {number} quadWidth
+ * @property {number} quadLimit
  * @property {boolean} littleEndian
  * @property {Array.<Memory>} blocks
  * @property {number} nTraps (number of blocks currently being trapped)
@@ -7308,7 +7317,7 @@ class Bus extends Device {
     constructor(idMachine, idDevice, config)
     {
         super(idMachine, idDevice, config);
-        /*
+        /**
          * Our default type is DYNAMIC for the sake of older device configs (eg, TI-57)
          * which didn't specify a type and need a dynamic bus to ensure that their LED ROM array
          * (if any) gets updated on ROM accesses.
@@ -7328,6 +7337,10 @@ class Bus extends Device {
         this.blockLimit = (1 << this.blockShift) - 1;
         this.dataWidth = this.config['dataWidth'] || 8;
         this.dataLimit = Math.pow(2, this.dataWidth) - 1;
+        this.pairWidth = this.dataWidth << 1;
+        this.pairLimit = Math.pow(2, this.pairWidth) - 1;
+        this.quadWidth = this.dataWidth << 2;
+        this.quadLimit = Math.pow(2, this.quadWidth) - 1;
         this.littleEndian = this.config['littleEndian'] !== false;
         this.blocks = new Array(this.blockTotal);
         this.nTraps = 0;
@@ -7368,7 +7381,7 @@ class Bus extends Device {
             let sizeBlock = this.blockSize - (addrNext - addrBlock);
             if (sizeBlock > sizeLeft) sizeBlock = sizeLeft;
             let blockExisting = this.blocks[iBlock];
-            /*
+            /**
              * If addrNext does not equal addrBlock, or sizeBlock does not equal this.blockSize, then either
              * the current block doesn't start on a block boundary or the size is something other than a block;
              * while we might support such requests down the road, that is currently a configuration error.
@@ -7377,21 +7390,21 @@ class Bus extends Device {
 
                 return false;
             }
-            /*
+            /**
              * Make sure that no block exists at the specified address, or if so, make sure its type is NONE.
              */
             if (blockExisting && blockExisting.type != Memory.TYPE.NONE) {
 
                 return false;
             }
-            /*
+            /**
              * When no block is provided, we must allocate one that matches the specified type (and remaining size).
              */
             let idBlock = this.idDevice + '[' + this.toBase(addrNext, 16, this.addrWidth) + ']';
             if (!block) {
                 blockNew = new Memory(this.idMachine, idBlock, {type, addr: addrNext, size: sizeBlock, "bus": this.idDevice});
             } else {
-                /*
+                /**
                  * When a block is provided, make sure its size matches the default Bus block size, and use it if so.
                  */
                 if (block.size == this.blockSize) {
@@ -7517,7 +7530,7 @@ class Bus extends Device {
     {
         this.fFault = true;
         if (!this.nDisableFaults) {
-            /*
+            /**
              * We must call the Debugger's printf() instead of our own in order to use its custom formatters (eg, %n).
              */
             if (this.dbg) {
@@ -7597,7 +7610,7 @@ class Bus extends Device {
      */
     onReset()
     {
-        /*
+        /**
          * The following logic isn't needed because Memory and Port objects are Devices as well,
          * so their onReset() handlers will be invoked automatically.
          *
@@ -7748,6 +7761,25 @@ class Bus extends Device {
     }
 
     /**
+     * readValueQuadBE(addr)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readValueQuadBE(addr)
+    {
+
+        if (addr & 0x3) {
+            return this.readPair((addr + 2) & this.addrLimit) | (this.readPair(addr) << this.pairWidth);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
+    }
+
+    /**
      * readValuePairLE(addr)
      *
      * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
@@ -7767,6 +7799,25 @@ class Bus extends Device {
     }
 
     /**
+     * readValueQuadLE(addr)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readValueQuadLE(addr)
+    {
+
+        if (addr & 0x3) {
+            return this.readPair(addr) | (this.readPair((addr + 2) & this.addrLimit) << this.pairWidth);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
+    }
+
+    /**
      * readDynamicPair(addr)
      *
      * Unlike the readValuePairLE()/readValuePairBE() interfaces, we pass any offset -- even or odd -- directly to the block's
@@ -7783,6 +7834,25 @@ class Bus extends Device {
             return this.littleEndian? this.readValuePairLE(addr) : this.readValuePairBE(addr);
         }
         return this.blocks[addr >>> this.blockShift].readPair(addr & this.blockLimit);
+    }
+
+    /**
+     * readDynamicQuad(addr)
+     *
+     * Unlike the readValueQuadLE()/readValueQuadBE() interfaces, we pass any offset -- even or odd -- directly to the block's
+     * readQuad() interface.  Our only special concern here is whether the request straddles two blocks.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readDynamicQuad(addr)
+    {
+
+        if ((addr & this.blockLimit) + 3 > this.blockLimit) {
+            return this.littleEndian? this.readValueQuadLE(addr) : this.readValueQuadBE(addr);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
     }
 
     /**
@@ -7807,6 +7877,27 @@ class Bus extends Device {
     }
 
     /**
+     * writeValueQuadBE(addr, value)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeValueQuadBE(addr, value)
+    {
+
+        if (addr & 0x3) {
+            this.writePair(addr, value >> this.pairWidth);
+            this.writePair((addr + 2) & this.addrLimit, value & this.pairLimit);
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
+    }
+
+    /**
      * writeValuePairLE(addr, value)
      *
      * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
@@ -7825,6 +7916,27 @@ class Bus extends Device {
             return;
         }
         this.blocks[addr >>> this.blockShift].writePair(addr & this.blockLimit, value);
+    }
+
+    /**
+     * writeValueQuadLE(addr, value)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeValueQuadLE(addr, value)
+    {
+
+        if (addr & 0x3) {
+            this.writePair(addr, value & this.pairLimit);
+            this.writeData((addr + 2) & this.addrLimit, value >> this.pairWidth);
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
     }
 
     /**
@@ -7852,6 +7964,30 @@ class Bus extends Device {
     }
 
     /**
+     * writeDynamicQuad(addr, value)
+     *
+     * Unlike the writeValueQuadLE()/writeValueQuadBE() interfaces, we pass any offset -- even or odd -- directly to the block's
+     * writeDynamicQuad() interface.  Our only special concern here is whether the request straddles two blocks.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeDynamicQuad(addr, value)
+    {
+
+        if ((addr & this.blockLimit) + 3 > this.blockLimit) {
+            if (this.littleEndian) {
+                this.writeValueQuadLE(addr, value);
+            } else {
+                this.writeValueQuadBE(addr, value);
+            }
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
+    }
+
+    /**
      * selectInterface(n)
      *
      * @this {Bus}
@@ -7867,14 +8003,20 @@ class Bus extends Device {
             this.writeData = this.writeValue;
             if (this.type == Bus.TYPE.DYNAMIC) {
                 this.readPair = this.readDynamicPair;
+                this.readQuad = this.readDynamicQuad;
                 this.writePair = this.writeDynamicPair;
+                this.writeQuad = this.writeDynamicQuad;
             }
             else if (!this.littleEndian) {
                 this.readPair = this.readValuePairBE;
+                this.readQuad = this.readValueQuadBE;
                 this.writePair = this.writeValuePairBE;
+                this.writeQuad = this.writeValueQuadBE;
             } else {
                 this.readPair = this.readValuePairLE;
+                this.readQuad = this.readValueQuadLE;
                 this.writePair = this.writeValuePairLE;
+                this.writeQuad = this.writeValueQuadLE;
             }
         }
     }
@@ -7951,7 +8093,7 @@ class Bus extends Device {
     }
 }
 
-/*
+/**
  * A "dynamic" bus (eg, an I/O bus) is one where block accesses must always be performed via function (no direct
  * value access) because there's "logic" on the other end, whereas a "static" bus can be accessed either way, via
  * function or value.
@@ -7986,7 +8128,10 @@ let MemoryConfig;
  * @property {Bus} bus
  * @property {number} dataWidth
  * @property {number} dataLimit
+ * @property {number} pairWidth
  * @property {number} pairLimit
+ * @property {number} quadWidth
+ * @property {number} quadLimit
  * @property {boolean} littleEndian
  * @property {ArrayBuffer|null} buffer
  * @property {DataView|null} dataView
@@ -8000,6 +8145,8 @@ let MemoryConfig;
  * @property {function(number,number)|null} writeDataOrig
  * @property {function(number)|null} readPairOrig
  * @property {function(number,number)|null} writePairOrig
+ * @property {function(number)|null} readQuadOrig
+ * @property {function(number,number)|null} writeQuadOrig
  * @property {function((number|undefined),number,number)|null} readTrap
  * @property {function((number|undefined),number,number)|null} writeTrap
  */
@@ -8020,7 +8167,7 @@ class Memory extends Device {
         this.size = this.config['size'];
         this.type = this.config['type'] || Memory.TYPE.NONE;
 
-        /*
+        /**
          * If no Bus ID was provided, then we fallback to the default Bus.
          */
         let idBus = this.config['bus'];
@@ -8029,7 +8176,10 @@ class Memory extends Device {
 
         this.dataWidth = this.bus.dataWidth;
         this.dataLimit = Math.pow(2, this.dataWidth) - 1;
-        this.pairLimit = Math.pow(2, this.dataWidth * 2) - 1;
+        this.pairWidth = this.dataWidth << 1;
+        this.pairLimit = Math.pow(2, this.pairWidth) - 1;
+        this.quadWidth = this.dataWidth << 2;
+        this.quadLimit = Math.pow(2, this.quadWidth) - 1;
 
         this.fDirty = this.fUseArrayBuffer = false;
         this.littleEndian = this.bus.littleEndian !== false;
@@ -8040,14 +8190,19 @@ class Memory extends Device {
         let writeValue = this.writeValue;
         let readPair = this.littleEndian? this.readDynamicPairLE : this.readDynamicPairBE;
         let writePair = this.littleEndian? this.writeDynamicPairLE : this.writeDynamicPairBE;
+        let readQuad = this.littleEndian? this.readDynamicQuadLE : this.readDynamicQuadBE;
+        let writeQuad = this.littleEndian? this.writeDynamicQuadLE : this.writeDynamicQuadBE;
 
         if (this.bus.type == Bus.TYPE.STATIC) {
             writeValue = this.writeValueDirty;
             readPair = this.littleEndian? this.readValuePairLE : this.readValuePairBE;
+            readQuad = this.littleEndian? this.readValueQuadLE : this.readValueQuadBE;
             writePair = this.writeValuePairDirty;
+            writeQuad = this.writeValueQuadDirty;
             if (this.dataWidth == 8 && this.getMachineConfig('ArrayBuffer') !== false) {
                 this.fUseArrayBuffer = true;
                 readPair = this.littleEndian == Memory.LITTLE_ENDIAN? this.readValuePair16 : this.readValuePair16SE;
+                readQuad = this.littleEndian == Memory.LITTLE_ENDIAN? this.readValueQuad32 : this.readValueQuad32SE;
             }
         }
 
@@ -8057,31 +8212,38 @@ class Memory extends Device {
             this.writeData = this.writeNone;
             this.readPair = this.readNonePair;
             this.writePair = this.writeNonePair;
+            this.readQuad = this.readNoneQuad;
+            this.writeQuad = this.writeNoneQuad;
             break;
         case Memory.TYPE.READONLY:
             this.readData = readValue;
             this.writeData = this.writeNone;
             this.readPair = readPair;
             this.writePair = this.writeNone;
+            this.readQuad = readQuad;
+            this.writeQuad = this.writeNone;
             break;
         case Memory.TYPE.READWRITE:
             this.readData = readValue;
             this.writeData = writeValue;
             this.readPair = readPair;
             this.writePair = writePair;
+            this.readQuad = readQuad;
+            this.writeQuad = writeQuad;
             break;
         default:
 
             break;
         }
 
-        /*
+        /**
          * Additional block properties used for trapping reads/writes
          */
         this.nReadTraps = this.nWriteTraps = 0;
         this.readTrap = this.writeTrap = null;
         this.readDataOrig = this.writeDataOrig = null;
         this.readPairOrig = this.writePairOrig = null;
+        this.readQuadOrig = this.writeQuadOrig = null;
 
         this.getValues(this.config['values']);
         this.initValues();
@@ -8131,7 +8293,7 @@ class Memory extends Device {
             if (this.fUseArrayBuffer) {
                 this.buffer = new ArrayBuffer(this.size);
                 this.dataView = new DataView(this.buffer, 0, this.size);
-                /*
+                /**
                  * If littleEndian is true, we can use valuePairs[] and valueQuads[] directly; well, we can use
                  * them whenever the offset is a multiple of 1, 2 or 4, respectively.  Otherwise, we must fallback
                  * to dv.getUint8()/dv.setUint8(), dv.getUint16()/dv.setUint16() and dv.getInt32()/dv.setInt32().
@@ -8141,7 +8303,7 @@ class Memory extends Device {
                 this.valueQuads = new Int32Array(this.buffer, 0, this.size >> 2);
             }
             else {
-                /*
+                /**
                  * TODO: I used to call fill(this.dataLimit), but is there really any reason to do that?
                  */
                 this.values = new Array(this.size).fill(0);
@@ -8198,9 +8360,11 @@ class Memory extends Device {
                 if (!this.nWriteTraps) {
                     this.writeData = this.writeValueDirty;
                     this.writePair = this.writeValuePairDirty;
+                    this.writeQuad = this.writeValueQuadDirty;
                 } else {
                     this.writeDataOrig = this.writeValueDirty;
                     this.writePairOrig = this.writeValuePairDirty;
+                    this.writeQuadOrig = this.writeValueQuadDirty;
                 }
             }
             return true;
@@ -8235,6 +8399,22 @@ class Memory extends Device {
             return this.readNone(offset + 1) | (this.readNone(offset) << this.dataWidth);
         }
     }
+
+    /**
+     * readNoneQuad(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @returns {number}
+     */
+     readNoneQuad(offset)
+     {
+         if (this.littleEndian) {
+             return this.readNonePair(offset) | (this.readNonePair(offset + 2) << this.pairWidth);
+         } else {
+             return this.readNonePair(offset + 2) | (this.readNonePair(offset) << this.pairWidth);
+         }
+     }
 
     /**
      * readDirect(offset)
@@ -8278,6 +8458,18 @@ class Memory extends Device {
     }
 
     /**
+     * readValueQuadBE(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @returns {number}
+     */
+    readValueQuadBE(offset)
+    {
+         return this.readValuePairBE(offset + 2) | (this.readValuePairBE(offset) << this.pairWidth);
+    }
+
+    /**
      * readValuePairLE(offset)
      *
      * @this {Memory}
@@ -8290,6 +8482,18 @@ class Memory extends Device {
     }
 
     /**
+     * readValueQuadLE(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @returns {number}
+     */
+    readValueQuadLE(offset)
+    {
+         return this.readValuePairLE(offset) | (this.readValuePairLE(offset + 2) << this.pairWidth);
+    }
+
+    /**
      * readValuePair16(offset)
      *
      * @this {Memory}
@@ -8299,6 +8503,18 @@ class Memory extends Device {
     readValuePair16(offset)
     {
         return this.valuePairs[offset >>> 1];
+    }
+
+    /**
+     * readValueQuad32(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-4 block offset)
+     * @returns {number}
+     */
+    readValueQuad32(offset)
+    {
+         return this.valueQuads[offset >>> 2];
     }
 
     /**
@@ -8318,9 +8534,25 @@ class Memory extends Device {
     }
 
     /**
+     * readValueQuad32SE(offset)
+     *
+     * This function is neither big-endian (BE) or little-endian (LE), but rather "swap-endian" (SE), which
+     * means there's a mismatch between our emulated machine and the host machine, so we call the appropriate
+     * DataView function with the desired littleEndian setting.
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @returns {number}
+     */
+    readValueQuad32SE(offset)
+    {
+        return this.dataView.getInt32(offset, this.littleEndian);
+    }
+
+    /**
      * readDynamicPairBE(offset)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -8333,9 +8565,24 @@ class Memory extends Device {
     }
 
     /**
+     * readDynamicQuadBE(offset)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @returns {number}
+     */
+    readDynamicQuadBE(offset)
+    {
+
+        return this.readPair(offset + 2) | (this.readPair(offset) << this.pairWidth);
+    }
+
+    /**
      * readDynamicPairLE(offset)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -8345,6 +8592,21 @@ class Memory extends Device {
     {
 
         return this.readValue(offset) | (this.readValue(offset + 1) << this.dataWidth);
+    }
+
+    /**
+     * readDynamicPairLE(offset)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @returns {number}
+     */
+    readDynamicQuadLE(offset)
+    {
+
+        return this.readPair(offset) | (this.readPair(offset + 2) << this.pairWidth);
     }
 
     /**
@@ -8375,6 +8637,24 @@ class Memory extends Device {
             this.writeNone(offset + 1, value & this.dataLimit);
         }
     }
+
+    /**
+     * writeNoneQuad(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @param {number} value
+     */
+     writeNoneQuad(offset, value)
+     {
+         if (this.littleEndian) {
+             this.writeNonePair(offset, value & this.pairLimit);
+             this.writeNonePair(offset + 2, value >> this.pairWidth);
+         } else {
+             this.writeNonePair(offset, value >> this.pairWidth);
+             this.writeNonePair(offset + 2, value & this.pairLimit);
+         }
+     }
 
     /**
      * writeDirect(offset, value)
@@ -8438,6 +8718,20 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuadBE(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuadBE(offset, value)
+    {
+
+        this.writeValuePairBE(offset, value >> this.pairWidth);
+        this.writeValuePairBE(offset + 2, value & this.pairLimit);
+    }
+
+    /**
      * writeValuePairLE(offset, value)
      *
      * @this {Memory}
@@ -8452,6 +8746,20 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuadLE(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuadLE(offset, value)
+    {
+
+        this.writeValuePairLE(offset, value & this.pairLimit);
+        this.writeValuePairLE(offset + 2, value >> this.pairWidth);
+    }
+
+    /**
      * writeValuePair16(offset, value)
      *
      * @this {Memory}
@@ -8463,6 +8771,20 @@ class Memory extends Device {
         let off = offset >>> 1;
 
         this.valuePairs[off] = value;
+    }
+
+    /**
+     * writeValueQuad32(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuad32(offset, value)
+    {
+        let off = offset >>> 2;
+
+        this.valueQuads[off] = value;
     }
 
     /**
@@ -8483,9 +8805,26 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuad32SE(offset, value)
+     *
+     * This function is neither big-endian (BE) or little-endian (LE), but rather "swap-endian" (SE), which
+     * means there's a mismatch between our emulated machine and the host machine, so we call the appropriate
+     * DataView function with the desired littleEndian setting.
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuad32SE(offset, value)
+    {
+
+        this.dataView.setInt32(offset, value, this.littleEndian);
+    }
+
+    /**
      * writeDynamicPairBE(offset, value)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -8499,9 +8838,25 @@ class Memory extends Device {
     }
 
     /**
+     * writeDynamicQuadBE(offset, value)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @param {number} value
+     */
+    writeDynamicQuadBE(offset, value)
+    {
+
+        this.writePair(offset, value >> this.pairWidth);
+        this.writePair(offset + 2, value & this.pairLimit);
+    }
+
+    /**
      * writeDynamicPairLE(offset, value)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -8515,10 +8870,26 @@ class Memory extends Device {
     }
 
     /**
+     * writeDynamicQuadLE(offset, value)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @param {number} value
+     */
+    writeDynamicQuadLE(offset, value)
+    {
+
+        this.writePair(offset, value & this.pairLimit);
+        this.writePair(offset + 2, value >> this.pairWidth);
+    }
+
+    /**
      * writeValuePairDirty(offset, value)
      *
      * @this {Memory}
-     * @param {number} offset (must be an even block offset, because we will halve it to obtain a pair offset)
+     * @param {number} offset (must be an even block offset)
      * @param {number} value
      */
     writeValuePairDirty(offset, value)
@@ -8559,6 +8930,50 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuadDirty(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four offset)
+     * @param {number} value
+     */
+     writeValueQuadDirty(offset, value)
+     {
+         if (!this.buffer) {
+             if (this.littleEndian) {
+                 this.writeValueQuadLE(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuadLE;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuadLE;
+                 }
+             } else {
+                 this.writeValueQuadBE(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuadBE;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuadBE;
+                 }
+             }
+         } else {
+             if (this.littleEndian == Memory.LITTLE_ENDIAN) {
+                 this.writeValueQuad32(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuad32;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuad32;
+                 }
+             } else {
+                 this.writeValueQuad32SE(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuad32SE;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuad32SE;
+                 }
+             }
+         }
+     }
+
+    /**
      * trapRead(func)
      *
      * I've decided to call the trap handler AFTER reading the value, so that we can pass the value
@@ -8579,6 +8994,7 @@ class Memory extends Device {
             this.readTrap = func;
             this.readDataOrig = this.readData;
             this.readPairOrig = this.readPair;
+            this.readQuadOrig = this.readQuad;
             this.readData = function readDataTrap(offset) {
                 let value = block.readDataOrig(offset);
                 block.readTrap(block.addr, offset, value);
@@ -8588,6 +9004,14 @@ class Memory extends Device {
                 let value = block.readPairOrig(offset);
                 block.readTrap(block.addr, offset, value);
                 block.readTrap(block.addr, offset + 1, value);
+                return value;
+            };
+            this.readQuad = function readQuadTrap(offset) {
+                let value = block.readQuadOrig(offset);
+                block.readTrap(block.addr, offset, value);
+                block.readTrap(block.addr, offset + 1, value);
+                block.readTrap(block.addr, offset + 2, value);
+                block.readTrap(block.addr, offset + 3, value);
                 return value;
             };
             return true;
@@ -8617,6 +9041,7 @@ class Memory extends Device {
             this.writeTrap = func;
             this.writeDataOrig = this.writeData;
             this.writePairOrig = this.writePair;
+            this.writeQuadOrig = this.writeQuad;
             this.writeData = function writeDataTrap(offset, value) {
                 block.writeTrap(block.addr, offset, value);
                 block.writeDataOrig(offset, value);
@@ -8625,6 +9050,13 @@ class Memory extends Device {
                 block.writeTrap(block.addr, offset, value);
                 block.writeTrap(block.addr, offset + 1, value);
                 block.writePairOrig(offset, value);
+            };
+            this.writeQuad = function writeQuadTrap(offset, value) {
+                block.writeTrap(block.addr, offset, value);
+                block.writeTrap(block.addr, offset + 1, value);
+                block.writeTrap(block.addr, offset + 2, value);
+                block.writeTrap(block.addr, offset + 3, value);
+                block.writeQuadOrig(offset, value);
             };
             return true;
         }
@@ -8648,7 +9080,8 @@ class Memory extends Device {
             if (!--this.nReadTraps) {
                 this.readData = this.readDataOrig;
                 this.readPair = this.readPairOrig;
-                this.readDataOrig = this.readPairOrig = this.readTrap = null;
+                this.readQuad = this.readQuadOrig;
+                this.readDataOrig = this.readPairOrig = this.readQuadOrig = this.readTrap = null;
             }
 
             return true;
@@ -8669,7 +9102,8 @@ class Memory extends Device {
             if (!--this.nWriteTraps) {
                 this.writeData = this.writeDataOrig;
                 this.writePair = this.writePairOrig;
-                this.writeDataOrig = this.writePairOrig = this.writeTrap = null;
+                this.writeQuad = this.writeQuadOrig;
+                this.writeDataOrig = this.writePairOrig = this.writeQuadOrig = this.writeTrap = null;
             }
 
             return true;
@@ -8716,7 +9150,7 @@ class Memory extends Device {
     }
 }
 
-/*
+/**
  * Memory block types use discrete bits so that enumBlocks() can be passed a set of combined types,
  * by OR'ing the desired types together.
  */
@@ -8724,7 +9158,7 @@ Memory.TYPE = {
     NONE:               0x01,
     READONLY:           0x02,
     READWRITE:          0x04,
-    /*
+    /**
      * The rest are not discrete memory types, but rather sets of types that are handy for enumBlocks().
      */
     READABLE:           0x0E,
@@ -8768,7 +9202,7 @@ class Ports extends Memory {
         this.aOutData = [];
         this.aInPair = [];
         this.aOutPair = [];
-        /*
+        /**
          * Some machines instantiate a Ports device through their configuration, which must include an 'addr';
          * it's also possible that a device may dynamically allocate a Ports device and add it to the Bus itself
          * (eg, the PDP11 IOPage).
@@ -8895,7 +9329,7 @@ class Ports extends Memory {
             written = true;
         }
         else if ((func = this.aOutPair[port])) {
-            /*
+            /**
              * If an outPair() handler exists, call the inPair() handler first to get the original data
              * (with preWrite set to true) and call outPair() with the new data inserted into the original data.
              */
@@ -9025,7 +9459,7 @@ class ROM extends Memory {
         this.bus.addBlocks(this.config['addr'], this.config['size'], this.config['type'], this);
         this.whenReady(this.onReset.bind(this));
 
-        /*
+        /**
          * If an "array" binding has been supplied, then create an LED array sufficiently large to represent the
          * entire ROM.  If data.length is an odd power-of-two, then we will favor a slightly wider array over a taller
          * one, by virtue of using Math.ceil() instead of Math.floor() for the columns calculation.
@@ -9119,7 +9553,7 @@ class ROM extends Memory {
                 success = false;
             }
         }
-        /*
+        /**
          * Version 1.21 and up also saves the ROM contents, since our "mini-debugger" has been updated
          * with an edit command ("e") to enable ROM patching.  However, we prefer to detect improvements
          * in saved state based on the length of the array, not the version number.
@@ -9147,13 +9581,13 @@ class ROM extends Memory {
      */
     onPower(on)
     {
-        /*
+        /**
          * We only care about the first power event, because it's a safe opportunity to find the CPU.
          */
         if (this.cpu === undefined) {
             this.cpu = /** @type {CPU} */ (this.findDeviceByClass("CPU"));
         }
-        /*
+        /**
          * This is also a good time to get access to the Debugger, if any, and pass it symbol information, if any.
          */
         if (this.dbg === undefined) {
@@ -9205,13 +9639,18 @@ ROM.CLASSES["ROM"] = ROM;
  * @copyright https://www.pcjs.org/modules/cpu.js (C) 2012-2021 Jeff Parsons
  */
 
+/** @typedef {{ addrReset: number }} */
+let CPUConfig;
+
 /**
  * @class {CPU}
  * @unrestricted
  * @property {Time} time
  * @property {Debugger} dbg
+ * @property {number} addrReset
  * @property {number} nCyclesStart
  * @property {number} nCyclesRemain
+ * @property {number} nCyclesSnapped
  * @property {number} regPC
  * @property {number} regPCLast
  */
@@ -9222,21 +9661,21 @@ class CPU extends Device {
      * @this {CPU}
      * @param {string} idMachine
      * @param {string} idDevice
-     * @param {Config} [config]
+     * @property {CPUConfig} config
      */
     constructor(idMachine, idDevice, config)
     {
         config['class'] = "CPU";
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * If a Debugger is loaded, it will call connectDebugger().  Having access to the Debugger
          * allows our toString() function to include the instruction, via toInstruction(), and conversely,
          * the Debugger will enjoy access to all our defined register names.
          */
         this.dbg = undefined;
 
-        /*
+        /**
          * regPC is the CPU's program counter, which all CPUs are required to have.
          *
          * regPCLast is an internal register that snapshots the PC at the start of every instruction;
@@ -9244,15 +9683,16 @@ class CPU extends Device {
          * diagnostic/debugging purposes.
          */
         this.regPC = this.regPCLast = 0;
+        this.addrReset = this.config['addrReset'] || 0;
 
-        /*
+        /**
          * Get access to the Time device, so we can give it our clock and update functions.
          */
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.time.addClock(this);
         this.time.addUpdate(this);
 
-        /*
+        /**
          * nCyclesStart and nCyclesRemain are initialized on every startClock() invocation.
          * The number of cycles executed during the current burst is nCyclesStart - nCyclesRemain,
          * and the burst is complete when nCyclesRemain has been exhausted (ie, is <= 0).
@@ -9386,7 +9826,7 @@ class Debugger extends Device {
         config['class'] = "Debugger";
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * Default radix (base).  This is used by our own functions (eg, parseExpression()),
          * but not by those we inherited (eg, parseInt()), which still use base 10 by default;
          * however, you can always coerce values to any base in any of those functions with
@@ -9394,24 +9834,24 @@ class Debugger extends Device {
          */
         this.nDefaultRadix = this.config['defaultRadix'] || 16;
 
-        /*
+        /**
          * Default endian (0 = little, 1 = big).
          */
         this.nDefaultEndian = 0;                // TODO: Use it or lose it
 
-        /*
+        /**
          * Default maximum instruction (opcode) length, overridden by the CPU-specific debugger.
          */
         this.maxOpcodeLength = 1;
 
-        /*
+        /**
          * Default parsing parameters, sub-expression and address delimiters.
          */
         this.nASCIIBits = 8;                    // change to 7 for MACRO-10 compatibility
         this.achGroup = ['(',')'];
         this.achAddress = ['[',']'];
 
-        /*
+        /**
          * Add a new format type ('a') that understands Address objects, where width represents
          * the size of the address in bits, and uses the Debugger's default radix.
          *
@@ -9433,7 +9873,7 @@ class Debugger extends Device {
             (type, flags, width, precision, address) => this.toBase(address.off, this.nDefaultRadix, width)
         );
 
-        /*
+        /**
          * Add a new format type ('n') for numbers, where width represents the size of the value in bits,
          * and uses the Debugger's default radix.
          */
@@ -9449,7 +9889,7 @@ class Debugger extends Device {
             (type, flags, width, precision, value) => this.toBase(value, this.nDefaultRadix, width, flags.indexOf('#') < 0? "" : undefined)
         );
 
-        /*
+        /**
          * This controls how we stop the CPU on a break condition.  If fExceptionOnBreak is true, we'll
          * throw an exception, which the CPU will catch and halt; however, the downside of that approach
          * is that, in some cases, it may leave the CPU in an inconsistent state.  It's generally safer to
@@ -9458,18 +9898,18 @@ class Debugger extends Device {
          */
         this.fExceptionOnBreak = false;
 
-        /*
+        /**
          * If greater than zero, decremented on every instruction until it hits zero, then CPU is stopped.
          */
         this.counterBreak = 0;
 
-        /*
+        /**
          * If set to MESSAGE.ALL, then we break on all messages.  It can be set to a subset of message bits,
          * but there is currently no UI for that.
          */
         this.messagesBreak = Device.MESSAGE.NONE;
 
-        /*
+        /**
          * variables is an object with properties that grow as setVariable() assigns more variables;
          * each property corresponds to one variable, where the property name is the variable name (ie,
          * a string beginning with a non-digit, followed by zero or more symbol characters and/or digits)
@@ -9485,25 +9925,25 @@ class Debugger extends Device {
          */
         this.variables = {};
 
-        /*
+        /**
          * Arrays of Symbol objects, one sorted by name and the other sorted by value; see addSymbols().
          */
         this.symbolsByName = [];
         this.symbolsByValue = [];
 
-        /*
+        /**
          * Get access to the CPU, so that in part so we can connect to all its registers; the Debugger has
          * no registers of its own, so we simply replace our registers with the CPU's.
          */
         this.cpu = /** @type {CPU} */ (this.findDeviceByClass("CPU"));
         this.registers = this.cpu.connectDebugger(this);
 
-        /*
+        /**
          * Get access to the Input device, so that we can switch focus whenever we start the machine.
          */
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
 
-        /*
+        /**
          * Get access to the Bus devices, so we have access to the I/O and memory address spaces.
          * To minimize configuration redundancy, we rely on the CPU's configuration to get the Bus device IDs.
          */
@@ -9522,7 +9962,7 @@ class Debugger extends Device {
         this.nDefaultBits = this.busMemory.addrWidth;
         this.addrMask = (Math.pow(2, this.nDefaultBits) - 1)|0;
 
-        /*
+        /**
          * Since we want to be able to clear/disable/enable/list break addresses by index number, we maintain
          * an array (aBreakIndexes) that maps index numbers to address array entries.  The mapping values are
          * a combination of BREAKTYPE (high byte) and break address entry (low byte).
@@ -9548,14 +9988,14 @@ class Debugger extends Device {
         this.tempBreak = null;                  // temporary auto-cleared break address managed by setTemp() and clearTemp()
         this.cInstructions = 0;                 // instruction counter (updated only if history is enabled)
 
-        /*
+        /**
          * Get access to the Time device, so we can stop and start time as needed.
          */
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.time.addUpdate(this);
         this.cTransitions = 0;
 
-        /*
+        /**
          * Initialize additional properties required for our onCommand() handler, including
          * support for dump extensions (which we use ourselves to implement the "d state" command).
          */
@@ -10059,7 +10499,7 @@ class Debugger extends Device {
      */
     evalAND(dst, src)
     {
-        /*
+        /**
          * We AND the low 32 bits separately from the higher bits, and then combine them with addition.
          * Since all bits above 32 will be zero, and since 0 AND 0 is 0, no special masking for the higher
          * bits is required.
@@ -10071,7 +10511,7 @@ class Debugger extends Device {
         if (this.nDefaultBits <= 32) {
             return dst & src;
         }
-        /*
+        /**
          * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
          */
         dst = this.truncate(dst, 0, true);
@@ -10109,7 +10549,7 @@ class Debugger extends Device {
      */
     evalIOR(dst, src)
     {
-        /*
+        /**
          * We OR the low 32 bits separately from the higher bits, and then combine them with addition.
          * Since all bits above 32 will be zero, and since 0 OR 0 is 0, no special masking for the higher
          * bits is required.
@@ -10121,7 +10561,7 @@ class Debugger extends Device {
         if (this.nDefaultBits <= 32) {
             return dst | src;
         }
-        /*
+        /**
          * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
          */
         dst = this.truncate(dst, 0, true);
@@ -10143,7 +10583,7 @@ class Debugger extends Device {
      */
     evalXOR(dst, src)
     {
-        /*
+        /**
          * We XOR the low 32 bits separately from the higher bits, and then combine them with addition.
          * Since all bits above 32 will be zero, and since 0 XOR 0 is 0, no special masking for the higher
          * bits is required.
@@ -10155,7 +10595,7 @@ class Debugger extends Device {
         if (this.nDefaultBits <= 32) {
             return dst ^ src;
         }
-        /*
+        /**
          * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
          */
         dst = this.truncate(dst, 0, true);
@@ -10265,14 +10705,14 @@ class Debugger extends Device {
             case '_':
             case '^_':
                 valNew = val1;
-                /*
+                /**
                  * While we always try to avoid assuming any particular number of bits of precision, the 'B' shift
                  * operator (which we've converted to '^_') is unique to the MACRO-10 environment, which imposes the
                  * following restrictions on the shift count.
                  */
                 if (chOp == '^_') val2 = 35 - (val2 & 0xff);
                 if (val2) {
-                    /*
+                    /**
                      * Since binary shifting is a logical (not arithmetic) operation, and since shifting by division only
                      * works properly with positive numbers, we call truncate() to produce an unsigned value.
                      */
@@ -10354,7 +10794,7 @@ class Debugger extends Device {
                     sOp = (iValue < iLimit? asValues[iValue++] : "");
                 }
                 else {
-                    /*
+                    /**
                      * When parseExpression() calls us, it has collapsed all runs of whitespace into single spaces,
                      * and although it allows single spaces to divide the elements of the expression, a space is neither
                      * a unary nor binary operator.  It's essentially a no-op.  If we encounter it here, then it followed
@@ -10411,7 +10851,7 @@ class Debugger extends Device {
 
             aVals.push(this.truncate(v));
 
-            /*
+            /**
              * When parseExpression() calls us, it has collapsed all runs of whitespace into single spaces,
              * and although it allows single spaces to divide the elements of the expression, a space is neither
              * a unary nor binary operator.  It's essentially a no-op.  If we encounter it here, then it followed
@@ -10440,7 +10880,7 @@ class Debugger extends Device {
             }
             aOps.push(sOp);
 
-            /*
+            /**
              * The MACRO-10 binary shifting operator assumes a base-10 shift count, regardless of the current
              * base, so we must override the current base to ensure the count is parsed correctly.
              */
@@ -10538,7 +10978,7 @@ class Debugger extends Device {
     {
         let value;
         if (expr) {
-            /*
+            /**
              * The default delimiting characters for grouped expressions are braces; they can be changed by altering
              * achGroup, but when that happens, instead of changing our regular expressions and operator tables,
              * we simply replace all achGroup characters with braces in the given expression.
@@ -10552,7 +10992,7 @@ class Debugger extends Device {
                 expr = expr.split(this.achGroup[0]).join('{').split(this.achGroup[1]).join('}');
             }
 
-            /*
+            /**
              * Quoted ASCII characters can have a numeric value, too, which must be converted now, to avoid any
              * conflicts with the operators below.
              *
@@ -10564,7 +11004,7 @@ class Debugger extends Device {
             expr = this.parseASCII(expr, "'", 6);
             if (!expr) return value;
 
-            /*
+            /**
              * All browsers (including, I believe, IE9 and up) support the following idiosyncrasy of a RegExp split():
              * when the RegExp uses a capturing pattern, the resulting array will include entries for all the pattern
              * matches along with the non-matches.  This effectively means that, in the set of expressions that we
@@ -10669,7 +11109,7 @@ class Debugger extends Device {
                 if (value == undefined) {
                     value = this.getVariable(sValue);
                     if (value == undefined) {
-                        /*
+                        /**
                          * A feature of MACRO-10 is that any single-digit number is automatically interpreted as base-10.
                          */
                         value = this.parseInt(sValue, sValue.length > 1 || this.nDefaultRadix > 10? this.nDefaultRadix : 10);
@@ -11094,7 +11534,7 @@ class Debugger extends Device {
         if (n >= 0) this.counterBreak = n;
         result += "instruction break count: " + (this.counterBreak > 0? this.counterBreak : "disabled") + "\n";
         if (n > 0) {
-            /*
+            /**
              * It doesn't hurt to always call enableHistory(), but avoiding the call minimizes unnecessary messages.
              */
             if (!this.historyBuffer.length) result += this.enableHistory(true);
@@ -11280,7 +11720,7 @@ class Debugger extends Device {
     {
         message = this.sprintf(message, ...args);
         if (this.time.isRunning() && this.fExceptionOnBreak) {
-            /*
+            /**
              * We don't print the message in this case, because the CPU's exception handler already
              * does that; it has to be prepared for any kind of exception, not just those that we throw.
              */
@@ -11542,7 +11982,7 @@ class Debugger extends Device {
             this.stopCPU("break on message");
             return;
         }
-        /*
+        /**
          * This is an effort to help keep the browser responsive when lots of messages are being generated.
          */
         this.time.yield();
@@ -11585,7 +12025,7 @@ class Debugger extends Device {
             cmd = this.sDumpPrev || cmd;
         }
 
-        /*
+        /**
          * We refrain from reporting potentially undefined symbols until after we've checked for dump extensions.
          */
         if (cmd[0] != 's' && aUndefined.length) {
@@ -11718,7 +12158,7 @@ class Debugger extends Device {
         case 's':
             enable = this.parseBoolean(option);
             if (cmd[1] == 'h') {
-                /*
+                /**
                  * Don't let the user turn off history if any breaks (which may depend on history) are still set.
                  */
                 if (this.cBreaks || this.counterBreak > 0) {
@@ -11964,7 +12404,7 @@ Debugger.ADDRESS = {
     REAL:       0x00
 };
 
-/*
+/**
  * The required characteristics of these assigned values are as follows: all even values must be read
  * operations and all odd values must be write operations; all busMemory operations must come before all
  * busIO operations; and INPUT must be the first busIO operation.
@@ -11983,7 +12423,7 @@ Debugger.BREAKCMD = {
     [Debugger.BREAKTYPE.OUTPUT]:   "bo"
 };
 
-/*
+/**
  * Predefined "virtual registers" that we expect the CPU to support.
  */
 Debugger.REGISTER = {
@@ -12010,7 +12450,7 @@ Debugger.SYMBOL_TYPES = {
 
 Debugger.HISTORY_LIMIT = 100000;
 
-/*
+/**
  * These are our operator precedence tables.  Operators toward the bottom (with higher values) have
  * higher precedence.  BINOP_PRECEDENCE was our original table; we had to add DECOP_PRECEDENCE because
  * the precedence of operators in DEC's MACRO-10 expressions differ.  Having separate tables also allows
@@ -12377,9 +12817,9 @@ class PDP11Ops extends CPU {
     static fnNEG(src, dst)
     {
         let result = -dst;
-        /*
-        * If the sign bit of both dst and result are set, the original value must have been 0x8000, triggering overflow.
-        */
+        /**
+         * If the sign bit of both dst and result are set, the original value must have been 0x8000, triggering overflow.
+         */
         this.updateAllFlags(result, result & dst & 0x8000);
         return result & 0xffff;
     }
@@ -12395,9 +12835,9 @@ class PDP11Ops extends CPU {
     static fnNEGB(src, dst)
     {
         let result = -dst;
-        /*
-        * If the sign bit of both dst and result are set, the original value must have been 0x80, which triggers overflow.
-        */
+        /**
+         * If the sign bit of both dst and result are set, the original value must have been 0x80, which triggers overflow.
+         */
         this.updateAllFlags(result << 8, (result & dst & 0x80) << 8);
         return result & 0xff;
     }
@@ -12503,9 +12943,9 @@ class PDP11Ops extends CPU {
     static fnSWAB(src, dst)
     {
         let result = (dst << 8) | (dst >> 8);
-        /*
-        * N and Z are based on the low byte of the result, which is the same as the high byte of dst.
-        */
+        /**
+         * N and Z are based on the low byte of the result, which is the same as the high byte of dst.
+         */
         this.updateNZVCFlags(dst & 0xff00);
         return result & 0xffff;
     }
@@ -13050,9 +13490,9 @@ class PDP11Ops extends CPU {
         if (opcode & 0x2) this.clearVF();
         if (opcode & 0x4) this.clearZF();
         if (opcode & 0x8) this.clearNF();
-        /*
-        * TODO: Review whether this class of undocumented instructions really has a constant cycle time.
-        */
+        /**
+         * TODO: Review whether this class of undocumented instructions really has a constant cycle time.
+         */
         this.nCyclesRemain -= (4 + 1);
     }
 
@@ -13067,9 +13507,9 @@ class PDP11Ops extends CPU {
         let src = this.readSrcWord(opcode);
         let dst = this.readDstWord(opcode);
         let result = (src = (src < 0? this.regsGen[-src-1] : src)) - dst;
-        /*
-        * NOTE: CMP calculates (src - dst) rather than (dst - src), so src and dst updateSubFlags() parms must be reversed.
-        */
+        /**
+         * NOTE: CMP calculates (src - dst) rather than (dst - src), so src and dst updateSubFlags() parms must be reversed.
+         */
         this.updateSubFlags(result, dst, src);
         this.nCyclesRemain -= (this.dstMode? (3 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 1) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
     }
@@ -13085,9 +13525,9 @@ class PDP11Ops extends CPU {
         let src = this.readSrcByte(opcode);
         let dst = this.readDstByte(opcode);
         let result = (src = (src < 0? (this.regsGen[-src-1] & 0xff): src) << 8) - (dst <<= 8);
-        /*
-        * NOTE: CMP calculates (src - dst) rather than (dst - src), so src and dst updateSubFlags() parms must be reversed.
-        */
+        /**
+         * NOTE: CMP calculates (src - dst) rather than (dst - src), so src and dst updateSubFlags() parms must be reversed.
+         */
         this.updateSubFlags(result, dst, src);
         this.nCyclesRemain -= (this.dstMode? (3 + 1) + (this.srcReg && this.dstReg >= 6? 1 : 0) : (this.srcMode? (3 + 1) : (2 + 1)) + (this.dstReg == 7? 2 : 0));
     }
@@ -13162,9 +13602,9 @@ class PDP11Ops extends CPU {
      */
     static opDIV(opcode)
     {
-        /*
-        * TODO: Review and determine if flag updates can be encapsulated in an updateDivFlags() function.
-        */
+        /**
+         * TODO: Review and determine if flag updates can be encapsulated in an updateDivFlags() function.
+         */
        let src = this.readDstWord(opcode);
         if (!src) {
             this.flagN = 0;         // NZVC
@@ -13220,51 +13660,51 @@ class PDP11Ops extends CPU {
             this.trap(PDP11.TRAP.BUS, 0, PDP11.REASON.HALT);
         } else {
             if (this.panel) {
-                /*
-                * The PDP-11/20 Handbook (1971) says that HALT does the following:
-                *
-                *      Causes the processor operation to cease. The console is given control of the bus.
-                *      The console data lights display the contents of RO; the console address lights display
-                *      the address after the halt instruction. Transfers on the UNIBUS are terminated immediately.
-                *      The PC points to the next instruction to be executed. Pressing the continue key on the
-                *      console causes processor operation to resume. No INIT signal is given.
-                *
-                * However, the PDP-11/70 Handbook (1979) suggests some slight differences:
-                *
-                *      Causes the processor operation to cease. The console is given control of the processor.
-                *      The data lights display the contents of the PC (which is the address of the HALT instruction
-                *      plus 2). Transfers on the UNIBUS are terminated immediately. Pressing the continue key on
-                *      the console causes processor operation to resume.
-                *
-                * Given that the 11/70 doesn't saying anything about displaying R0 on a HALT, and also given that
-                * the 11/70 CPU EXERCISER diagnostic writes a value to the Console Switch/Display Register immediately
-                * before HALT'ing, I'm going to assume that updating the data display with R0 is unique to the 11/20.
-                *
-                * Also, I'm a little suspicious of the 11/70 comment that the "data lights display the contents of
-                * the PC," since previous models display the PC on the ADDRESS lights, not the DATA lights.  And as
-                * I already explained, doing anything to the data lights at this point would undo what the 11/70
-                * diagnostics do.
-                */
+                /**
+                 * The PDP-11/20 Handbook (1971) says that HALT does the following:
+                 *
+                 *      Causes the processor operation to cease. The console is given control of the bus.
+                 *      The console data lights display the contents of RO; the console address lights display
+                 *      the address after the halt instruction. Transfers on the UNIBUS are terminated immediately.
+                 *      The PC points to the next instruction to be executed. Pressing the continue key on the
+                 *      console causes processor operation to resume. No INIT signal is given.
+                 *
+                 * However, the PDP-11/70 Handbook (1979) suggests some slight differences:
+                 *
+                 *      Causes the processor operation to cease. The console is given control of the processor.
+                 *      The data lights display the contents of the PC (which is the address of the HALT instruction
+                 *      plus 2). Transfers on the UNIBUS are terminated immediately. Pressing the continue key on
+                 *      the console causes processor operation to resume.
+                 *
+                 * Given that the 11/70 doesn't saying anything about displaying R0 on a HALT, and also given that
+                 * the 11/70 CPU EXERCISER diagnostic writes a value to the Console Switch/Display Register immediately
+                 * before HALT'ing, I'm going to assume that updating the data display with R0 is unique to the 11/20.
+                 *
+                 * Also, I'm a little suspicious of the 11/70 comment that the "data lights display the contents of
+                 * the PC," since previous models display the PC on the ADDRESS lights, not the DATA lights.  And as
+                 * I already explained, doing anything to the data lights at this point would undo what the 11/70
+                 * diagnostics do.
+                 */
                 if (this.model == PDP11.MODEL_1120) {
                     this.panel.setData(this.regsGen[0], true);
                 }
             }
             if (!this.dbg) {
-                /*
-                * This will leave the PC exactly where it's supposed to be: at the address of the HALT + 2.
-                */
+                /**
+                 * This will leave the PC exactly where it's supposed to be: at the address of the HALT + 2.
+                 */
                 this.time.stop();
             } else {
-                /*
-                * When the Debugger is present, this call will rewind PC by 2 so that the HALT instruction is
-                * displayed, making it clear why the processor stopped; the user could also use the "dh" command
-                * to dump the Debugger's instruction history buffer to see why it stopped, assuming the history
-                * buffer is enabled, but that's more work.
-                *
-                * Because rewinding is not normal CPU behavior, attempting to Run again (or use the Debugger's
-                * "g" command) would cause an immediate HALT again -- except that checkInstruction() checks for that
-                * precise condition, so if the CPU starts on a HALT, checkInstruction() will skip over it.
-                */
+                /**
+                 * When the Debugger is present, this call will rewind PC by 2 so that the HALT instruction is
+                 * displayed, making it clear why the processor stopped; the user could also use the "dh" command
+                 * to dump the Debugger's instruction history buffer to see why it stopped, assuming the history
+                 * buffer is enabled, but that's more work.
+                 *
+                 * Because rewinding is not normal CPU behavior, attempting to Run again (or use the Debugger's
+                 * "g" command) would cause an immediate HALT again -- except that checkInstruction() checks for that
+                 * precise condition, so if the CPU starts on a HALT, checkInstruction() will skip over it.
+                 */
                 this.dbg.stopCPU("halt");
             }
         }
@@ -13315,7 +13755,7 @@ class PDP11Ops extends CPU {
      */
     static opJMP(opcode)
     {
-        /*
+        /**
          * Since JMP and JSR opcodes have their own unique timings for the various dst modes,
          * we snapshot nCyclesRemain before decoding the mode and use that to update nCyclesRemain.
          */
@@ -13332,13 +13772,13 @@ class PDP11Ops extends CPU {
      */
     static opJSR(opcode)
     {
-        /*
+        /**
          * Since JMP and JSR opcodes have their own unique timings for the various dst modes,
          * we snapshot nCyclesRemain before decoding the mode and use that to update nCyclesRemain.
          */
         this.nCyclesSnapped = this.nCyclesRemain;
         let addr = this.readDstAddr(opcode);
-        /*
+        /**
          * As per the WARNING in readSrcWord(), reading the SRC register AFTER decoding the DST operand
          * is entirely appropriate.
          */
@@ -13440,7 +13880,7 @@ class PDP11Ops extends CPU {
      */
     static opMOV(opcode)
     {
-        /*
+        /**
          * Since MOV opcodes have their own unique timings for the various dst modes,
          * we snapshot nCyclesRemain after decoding the src mode and use that to update nCyclesRemain.
          */
@@ -13471,7 +13911,7 @@ class PDP11Ops extends CPU {
      */
     static opMTPD(opcode)
     {
-        /*
+        /**
          * Since MTPD and MTPI opcodes have their own unique timings for the various dst modes,
          * we snapshot nCyclesRemain before decoding the mode and use that to update nCyclesRemain.
          */
@@ -13490,7 +13930,7 @@ class PDP11Ops extends CPU {
      */
     static opMTPI(opcode)
     {
-        /*
+        /**
          * Since MTPD and MTPI opcodes have their own unique timings for the various dst modes,
          * we snapshot nCyclesRemain before decoding the mode and use that to update nCyclesRemain.
          */
@@ -13583,50 +14023,50 @@ class PDP11Ops extends CPU {
             this.resetCPU();
 
             if (this.panel) {
-                /*
-                * The PDP-11/70 XXDP test "EKBBF0" reports the following, with PANEL messages on ("m panel on"):
-                *
-                *      CNSW.writeWord(177570,000101) @033502
-                *      CNSW.readWord(177570): 000000 @032114
-                *      LOOK AT THE CONSOLE LIGHTS
-                *      THE DATA LIGHTS SHOULD READ 166667
-                *      THE ADDRESS LIGHTS SHOULD READ  CNSW.readWord(177570): 000000 @032150
-                *      032236
-                *      CHANGE SWITCH 7 TO CONTINUE
-                *      CNSW.readWord(177570): 000000 @032236
-                *      stopped (31518011 instructions, 358048873 cycles, 58644 ms, 6105465 hz)
-                *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
-                *      SP=001074 PC=032236 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
-                *      032236: 032737 000200 177570   BIT   #200,@#177570
-                *      >> tr
-                *      CNSW.readWord(177570): 000000 @032236 (cpu halted)
-                *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
-                *      SP=001074 PC=032244 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
-                *      032244: 001773                 BEQ   032234                 ;cycles=0
-                *      >> tr
-                *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
-                *      SP=001074 PC=032234 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
-                *      032234: 000005                 RESET                        ;cycles=5
-                *
-                * It's a little hard to see why the DATA lights should read 166667, since the PANEL messages indicate
-                * that the last CNSW.writeWord(177570) was for 000101, not 166667.  So I'm guessing that the RESET
-                * instruction is supposed to propagate R0 to the console's DISPLAY register.
-                *
-                * This is similar to what we do for the HALT instruction (but only if this.model == PDP11.MODEL_1120).
-                * These Console features do not seem to be very well documented, assuming they exist.
-                *
-                * UPDATE: This behavior appears to be confirmed by remarks in the PDP-11/20 Processor Handbook (1971),
-                * p. 141:
-                *
-                *      HALT - displays processor register R0 when bus control is transferred to console during a HALT
-                *      instruction.
-                *
-                *      RESET - displays register R0 for during [duration?] of RESET (70 msec).
-                *
-                * I haven't found similar remarks in the PDP-11/70 Processor Handbooks, so I'm not sure if that's an
-                * oversight or if 11/70 panels are slightly different in this regard.  It's also not clear what they meant
-                * by "for duration of RESET".  Is something supposed to happen to the DATA lights after the RESET is done?
-                */
+                /**
+                 * The PDP-11/70 XXDP test "EKBBF0" reports the following, with PANEL messages on ("m panel on"):
+                 *
+                 *      CNSW.writeWord(177570,000101) @033502
+                 *      CNSW.readWord(177570): 000000 @032114
+                 *      LOOK AT THE CONSOLE LIGHTS
+                 *      THE DATA LIGHTS SHOULD READ 166667
+                 *      THE ADDRESS LIGHTS SHOULD READ  CNSW.readWord(177570): 000000 @032150
+                 *      032236
+                 *      CHANGE SWITCH 7 TO CONTINUE
+                 *      CNSW.readWord(177570): 000000 @032236
+                 *      stopped (31518011 instructions, 358048873 cycles, 58644 ms, 6105465 hz)
+                 *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
+                 *      SP=001074 PC=032236 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
+                 *      032236: 032737 000200 177570   BIT   #200,@#177570
+                 *      >> tr
+                 *      CNSW.readWord(177570): 000000 @032236 (cpu halted)
+                 *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
+                 *      SP=001074 PC=032244 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
+                 *      032244: 001773                 BEQ   032234                 ;cycles=0
+                 *      >> tr
+                 *      R0=166667 R1=002362 R2=000000 R3=000000 R4=000000 R5=026642
+                 *      SP=001074 PC=032234 PS=000344 SR=00000000 T0 N0 Z1 V0 C0
+                 *      032234: 000005                 RESET                        ;cycles=5
+                 *
+                 * It's a little hard to see why the DATA lights should read 166667, since the PANEL messages indicate
+                 * that the last CNSW.writeWord(177570) was for 000101, not 166667.  So I'm guessing that the RESET
+                 * instruction is supposed to propagate R0 to the console's DISPLAY register.
+                 *
+                 * This is similar to what we do for the HALT instruction (but only if this.model == PDP11.MODEL_1120).
+                 * These Console features do not seem to be very well documented, assuming they exist.
+                 *
+                 * UPDATE: This behavior appears to be confirmed by remarks in the PDP-11/20 Processor Handbook (1971),
+                 * p. 141:
+                 *
+                 *      HALT - displays processor register R0 when bus control is transferred to console during a HALT
+                 *      instruction.
+                 *
+                 *      RESET - displays register R0 for during [duration?] of RESET (70 msec).
+                 *
+                 * I haven't found similar remarks in the PDP-11/70 Processor Handbooks, so I'm not sure if that's an
+                 * oversight or if 11/70 panels are slightly different in this regard.  It's also not clear what they meant
+                 * by "for duration of RESET".  Is something supposed to happen to the DATA lights after the RESET is done?
+                 */
                 this.panel.setData(this.regsGen[0], true);
             }
         }
@@ -13690,14 +14130,14 @@ class PDP11Ops extends CPU {
     static opRTI(opcode)
     {
         this.trapReturn();
-        /*
-        * Unlike RTT, RTI permits an immediate trace, which we resolve by propagating PSW.TF to OPFLAG.TRAP_TF
-        * (which, as written below, requires that both flags have the same bit value; see defines.js).
-        *
-        * NOTE: This RTI trace behavior is NEW for machines that have both RTI and RTT.  Early models didn't have RTT,
-        * so the old RTI behaved exactly like the new RTT.  Which is why the 11/20 jump table below calls opRTT() instead
-        * of opRTI() for RTI.
-        */
+        /**
+         * Unlike RTT, RTI permits an immediate trace, which we resolve by propagating PSW.TF to OPFLAG.TRAP_TF
+         * (which, as written below, requires that both flags have the same bit value; see defines.js).
+         *
+         * NOTE: This RTI trace behavior is NEW for machines that have both RTI and RTT.  Early models didn't have RTT,
+         * so the old RTI behaved exactly like the new RTT.  Which is why the 11/20 jump table below calls opRTT() instead
+         * of opRTI() for RTI.
+         */
         this.opFlags |= (this.regPSW & PDP11.PSW.TF);
         this.nCyclesRemain -= (10 + 3);
     }
@@ -13716,9 +14156,9 @@ class PDP11Ops extends CPU {
         }
         let src = this.popWord();
         let reg = opcode & PDP11.OPREG.MASK;
-        /*
-        * When the popular "RTS PC" form is used, we might as well eliminate the useless setting of PC...
-        */
+        /**
+         * When the popular "RTS PC" form is used, we might as well eliminate the useless setting of PC...
+         */
         if (reg == PDP11.REG.PC) {
             this.setPC(src);
         } else {
@@ -13824,9 +14264,9 @@ class PDP11Ops extends CPU {
         if (opcode & 0x2) this.setVF();
         if (opcode & 0x4) this.setZF();
         if (opcode & 0x8) this.setNF();
-        /*
-        * TODO: Review whether this class of undocumented instructions really has a constant cycle time.
-        */
+        /**
+         * TODO: Review whether this class of undocumented instructions really has a constant cycle time.
+         */
         this.nCyclesRemain -= (4 + 1);
     }
 
@@ -13978,44 +14418,44 @@ class PDP11Ops extends CPU {
      */
     static opWAIT(opcode)
     {
-        /*
-        * The original PDP-11 emulation code would actually stop emulating instructions now, relying on assorted
-        * setTimeout() callbacks, setInterval() callbacks, device XHR (XMLHttpRequest) callbacks, etc, to eventually
-        * call interrupt(), which would then transition the CPU out of its "wait" state and kickstart emulate() again.
-        *
-        * That approach isn't compatible with PCjs emulators, which prefer to rely on the simulated CPU clock to
-        * drive all simulated device updates.  This means components should call the CPU's setTimer() function, which
-        * invokes the provided callback when the number of CPU cycles that correspond to the requested number of
-        * milliseconds have elapsed.  This also gives us the ability to scale device response times as needed if the
-        * user decides to crank up CPU speed, and to freeze them along with the CPU whenever the user halts the machine.
-        *
-        * However, the PCjs approach requires the CPU to continue running.  One simple solution to this dilemma:
-        *
-        *      1) opWAIT() sets a new opFlags bit (OPFLAG.WAIT)
-        *      2) Rewind the PC back to the WAIT instruction
-        *      3) Whenever stepCPU() detects OPFLAG.WAIT, call checkInterrupts()
-        *      4) If checkInterrupts() detects an interrupt, advance PC past the WAIT and then dispatch the interrupt
-        *
-        * Technically, the PC is already exactly where it's supposed to be, so why are we wasting time with steps
-        * 2 and 4?  It's largely for the Debugger's sake, so that as long as execution is "blocked" by a WAIT, that's
-        * what you'll see in the Debugger.  I could make those steps conditioned on the presence of the Debugger,
-        * but I feel it's better to keep all code paths the same.
-        *
-        * NOTE: It's almost always a bad idea to add more checks to the inner stepCPU() loop, because every additional
-        * check can have a measurable (negative) impact on performance.  Which is why it's important to use opFlags bits
-        * whenever possible, since we can test for multiple (up to 32) exceptional conditions with a single check.
-        *
-        * We also used to update the machine's display(s) whenever transitioning to the WAIT state.  However, that
-        * caused this instruction to generate enormous overhead, and it's no longer necessary, since we now rely on
-        * a timer (the PDP-11's own KW11 60Hz Line Clock timer, to be precise) to generate periodic display updates.
-        *
-        *      if (!(this.opFlags & PDP11.OPFLAG.WAIT) && this.cmp) this.cmp.updateDisplays();
-        *
-        * Finally, it's been noted several places online that the WAIT instruction puts the contents of R0 into the
-        * Front Panel's "DATA PATH" (and possibly even directly into the "DISPLAY REGISTER", making the DATASEL switch
-        * setting irrelevant).  I can't find any supporting DEC documentation regarding this, but for now, we'll go
-        * with popular lore and propagate R0 to the panel's "active" data register.
-        */
+        /**
+         * The original PDP-11 emulation code would actually stop emulating instructions now, relying on assorted
+         * setTimeout() callbacks, setInterval() callbacks, device XHR (XMLHttpRequest) callbacks, etc, to eventually
+         * call interrupt(), which would then transition the CPU out of its "wait" state and kickstart emulate() again.
+         *
+         * That approach isn't compatible with PCjs emulators, which prefer to rely on the simulated CPU clock to
+         * drive all simulated device updates.  This means components should call the CPU's setTimer() function, which
+         * invokes the provided callback when the number of CPU cycles that correspond to the requested number of
+         * milliseconds have elapsed.  This also gives us the ability to scale device response times as needed if the
+         * user decides to crank up CPU speed, and to freeze them along with the CPU whenever the user halts the machine.
+         *
+         * However, the PCjs approach requires the CPU to continue running.  One simple solution to this dilemma:
+         *
+         *      1) opWAIT() sets a new opFlags bit (OPFLAG.WAIT)
+         *      2) Rewind the PC back to the WAIT instruction
+         *      3) Whenever stepCPU() detects OPFLAG.WAIT, call checkInterrupts()
+         *      4) If checkInterrupts() detects an interrupt, advance PC past the WAIT and then dispatch the interrupt
+         *
+         * Technically, the PC is already exactly where it's supposed to be, so why are we wasting time with steps
+         * 2 and 4?  It's largely for the Debugger's sake, so that as long as execution is "blocked" by a WAIT, that's
+         * what you'll see in the Debugger.  I could make those steps conditioned on the presence of the Debugger,
+         * but I feel it's better to keep all code paths the same.
+         *
+         * NOTE: It's almost always a bad idea to add more checks to the inner stepCPU() loop, because every additional
+         * check can have a measurable (negative) impact on performance.  Which is why it's important to use opFlags bits
+         * whenever possible, since we can test for multiple (up to 32) exceptional conditions with a single check.
+         *
+         * We also used to update the machine's display(s) whenever transitioning to the WAIT state.  However, that
+         * caused this instruction to generate enormous overhead, and it's no longer necessary, since we now rely on
+         * a timer (the PDP-11's own KW11 60Hz Line Clock timer, to be precise) to generate periodic display updates.
+         *
+         *      if (!(this.opFlags & PDP11.OPFLAG.WAIT) && this.cmp) this.cmp.updateDisplays();
+         *
+         * Finally, it's been noted several places online that the WAIT instruction puts the contents of R0 into the
+         * Front Panel's "DATA PATH" (and possibly even directly into the "DISPLAY REGISTER", making the DATASEL switch
+         * setting irrelevant).  I can't find any supporting DEC documentation regarding this, but for now, we'll go
+         * with popular lore and propagate R0 to the panel's "active" data register.
+         */
         if (this.panel) {
             this.panel.setAddr(this.regsGen[7], true);
             this.panel.setData(this.regsGen[0], true);
@@ -14612,30 +15052,6 @@ PDP11Ops.aOp8DXn_1140 = [
  * @copyright https://www.pcjs.org/modules/pdp11.js (C) 2012-2021 Jeff Parsons
  */
 
-/*
- * Overview of Device Interrupt Support
- *
- * Originally, the CPU maintained a queue of requested interrupts.  Entries in this queue recorded a device's
- * priority, vector, and delay (ie, a number of instructions to execute before dispatching the interrupt).  This
- * queue would constantly grow and shrink as requests were issued and dispatched, and as long as there was something
- * in the queue, the CPU was constantly examining it.
- *
- * Now we are trying something more efficient.  First, for devices that require delays (like the SerialPort's receiver
- * and transmitter buffer registers, which are supposed to "clock" the data in and out at a specific baud rate), the
- * CPU offers timer services that will "fire" a callback after a specified delay, which are much more efficient than
- * requiring the CPU to dive into an interrupt queue and decrement delay counts on every instruction.
- *
- * Second, devices that generate interrupts will allocate an IRQ object during initialization; we will no longer
- * be creating and destroying interrupt event objects and inserting/deleting them in a constantly changing queue.
- * Each IRQ contains properties that never change (eg, the vector and priority), along with a "next" pointer that's
- * only used when the IRQ is active.
- *
- * When a device decides it's time to interrupt (either at the end of some I/O operation or when a timer has fired),
- * it will simply set the IRQ, which basically means that the IRQ will be linked onto a list of active IRQs, in
- * priority order, so that when the CPU is ready to acknowledge interrupts, it need only check the top of the active
- * IRQ list.
- */
-
 /** @typedef {{ vector: number, priority: number, message: number, next: (IRQ|null) }} */
 let IRQ;
 
@@ -14689,7 +15105,7 @@ class PDP11 extends PDP11Ops {
         this.model = +this.config['model'] || PDP11.MODEL_1170;
         this.addrReset = +this.config['addrReset'] || 0;
 
-        /*
+        /**
          * Get access to the Bus device and create an IOPage block for it.  We assume that the bus
          * has been defined with an 8K blockSize and an 8-bit dataWidth, because our buses are defined
          * in terms of their MINIMUM data size, not their maximum.  All read/write operations must be
@@ -14701,19 +15117,19 @@ class PDP11 extends PDP11Ops {
         this.blockIOPage = /** @type {IOPage} */ (this.findDeviceByClass("IOPage"));
         this.panel = /** @type {Device} */ (this.findDeviceByClass("Panel", false));
 
-        /*
+        /**
          * We also need some IOPage bookkeeping variables, such as the current IOPage address
          * and the previous block (if any) at that address.
          */
         this.addrIOPage = 0;
         this.blockIOPagePrev = null;
 
-        /*
+        /**
          * Get access to the Input device, so we can call setFocus() as needed.
          */
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
 
-        /*
+        /**
          * Initialize processor operation to match the requested model.
          *
          * offRegSrc is a bias added to the register index calculated in readSrcWord() and readSrcByte(),
@@ -14735,7 +15151,7 @@ class PDP11 extends PDP11Ops {
         } else {
             this.opDecode = PDP11.op1140.bind(this);
             this.checkStackLimit = this.checkStackLimit1140;
-            /*
+            /**
              * The alternate register set (REGSET) doesn't exist on the 11/20 or 11/40; it's available on the 11/45 and 11/70.
              * Ditto for separate I/D spaces, SUPER mode, and the instructions MFPD, MTPD, and SPL.
              */
@@ -14756,7 +15172,7 @@ class PDP11 extends PDP11Ops {
         this.dstMode = this.dstReg = this.dstAddr = 0;
         this.nReadBreaks = this.nWriteBreaks = 0;
 
-        /*
+        /**
          * We can now initialize the CPU.
          */
         this.initCPU();
@@ -14786,7 +15202,7 @@ class PDP11 extends PDP11Ops {
      */
     initCPU()
     {
-        /*
+        /**
          * TODO: Verify the initial state of all PDP-11 flags and registers (are they well-documented?)
          */
         let f = 0xffff;
@@ -14828,12 +15244,12 @@ class PDP11 extends PDP11Ops {
         this.pswTrap = -1;
         this.regMBR = 0;
 
-        /*
+        /**
          * opFlags contains various conditions that stepCPU() needs to be aware of.
          */
         this.opFlags = 0;
 
-        /*
+        /**
          * srcMode and srcReg are set by SRCMODE decodes, and dstMode and dstReg are set for DSTMODE decodes,
          * indicating to the opcode handlers the mode(s) and register(s) used as part of the current opcode, so
          * that they can calculate the correct number of cycles.  dstAddr is set for byte operations that also
@@ -14892,17 +15308,17 @@ class PDP11 extends PDP11Ops {
         this.mmuMask = 0x3ffff;
         this.mapMMR3 = [4,2,0,1];   // map from mode to MMR3 I/D bit
 
-        /*
+        /**
          * This is queried and displayed by the Panel when it's not displaying its own ADDRESS register
          * (which takes precedence when, for example, you've manually halted the CPU and are independently
          * examining the contents of other addresses).
          *
-         * We initialize it to whatever the current PC is, because according to @paulnank's pdp11.js: "Reset
+         * We initialize it to whatever the current PC is, because according to paulnank's pdp11.js: "Reset
          * displays next instruction address" and initMMU() is called on a RESET.
          */
         this.addrLast = this.regsGen[7];
 
-        /*
+        /**
          * This stores the PC in the lower 16 bits, and any auto-incs or auto-decs from the last opcode in the
          * upper 16 bits;  the lower 16 bits are used to update MMR2, and the upper 16 bits are used to update MMR1.
          * The upper bits are automatically zeroed at the start of every operation when the PC is copied to opLast.
@@ -14962,7 +15378,7 @@ class PDP11 extends PDP11Ops {
 
         if (this.regMMR0 != newMMR0) {
             if (newMMR0 & PDP11.MMR0.ABORT) {
-                /*
+                /**
                  * If updates to MMR0[1-7], MMR1, and MMR2 are being shut off (ie, MMR0.ABORT bits are transitioning
                  * from clear to set), then do one final sync with their real-time counterparts in opLast.
                  */
@@ -14971,7 +15387,7 @@ class PDP11 extends PDP11Ops {
                     this.regMMR2 = this.opLast & 0xffff;
                 }
             }
-            /*
+            /**
              * NOTE: We are not protecting the read-only state of the COMPLETED bit here; that's handled by writeMMR0().
              */
             this.regMMR0 = newMMR0;
@@ -14997,7 +15413,7 @@ class PDP11 extends PDP11Ops {
      */
     getMMR1()
     {
-        /*
+        /**
          * If updates to MMR1 have not been shut off (ie, MMR0.ABORT bits are clear), then we are allowed
          * to sync MMR1 with its real-time counterpart in opLast.
          *
@@ -15024,7 +15440,7 @@ class PDP11 extends PDP11Ops {
      */
     getMMR2()
     {
-        /*
+        /**
          * If updates to MMR2 have not been shut off (ie, MMR0.ABORT bits are clear), then we are allowed
          * to sync MMR2 with its real-time counterpart in opLast.
          *
@@ -15058,7 +15474,7 @@ class PDP11 extends PDP11Ops {
      */
     setMMR3(newMMR3)
     {
-        /*
+        /**
          * Don't allow non-11/70 models to use 22-bit addressing or the UNIBUS map.
          */
         if (this.model < PDP11.MODEL_1170) {
@@ -15403,7 +15819,7 @@ class PDP11 extends PDP11Ops {
     getOpcode()
     {
         let pc = this.opLast = this.regsGen[PDP11.REG.PC];
-        /*
+        /**
          * If PC is unaligned, a BUS trap will be generated, and because it will generate an
          * exception, the next line (the equivalent of advancePC(2)) will not be executed, ensuring that
          * original unaligned PC will be pushed onto the stack by trap().
@@ -15568,7 +15984,7 @@ class PDP11 extends PDP11Ops {
                 } while (irqPrev);
             }
         }
-        /*
+        /**
          * See the writeXCSR() function for an explanation of why signalling an IRQ hardware interrupt
          * should be done using IRQ_DELAY rather than setting IRQ directly.
          */
@@ -15596,7 +16012,7 @@ class PDP11 extends PDP11Ops {
                 irqPrev = irqNext;
             }
         }
-        /*
+        /**
          * We could also set irq.next to null now, but strictly speaking, that shouldn't be necessary.
          *
          * Last but not least, if there's still an IRQ on the active IRQ list, we need to make sure IRQ_DELAY
@@ -15739,7 +16155,7 @@ class PDP11 extends PDP11Ops {
             }
         }
         else if (this.opFlags & PDP11.OPFLAG.IRQ_DELAY) {
-            /*
+            /**
              * We know that IRQ (bit 2) is clear, so since IRQ_DELAY (bit 0) is set, incrementing opFlags
              * will eventually transform IRQ_DELAY into IRQ, without affecting any other (higher) bits.
              */
@@ -15877,7 +16293,7 @@ class PDP11 extends PDP11Ops {
         this.flagV = newPSW << 14;
         this.flagC = newPSW << 16;
         if ((newPSW ^ this.regPSW) & this.pswRegSet) {
-            /*
+            /**
              * Swap register sets
              */
             for (let i = this.regsAlt.length; --i >= 0;) {
@@ -15889,7 +16305,7 @@ class PDP11 extends PDP11Ops {
         this.pswMode = (newPSW >> PDP11.PSW.SHIFT.CMODE) & PDP11.MODE.MASK;
         let oldMode = (this.regPSW >> PDP11.PSW.SHIFT.CMODE) & PDP11.MODE.MASK;
         if (this.pswMode != oldMode) {
-            /*
+            /**
              * Swap stack pointers
              */
             this.regsAltStack[oldMode] = this.regsGen[6];
@@ -15897,7 +16313,7 @@ class PDP11 extends PDP11Ops {
         }
         this.regPSW = newPSW;
 
-        /*
+        /**
          * Trigger a call to checkInterrupts(), just in case.  If there's an active IRQ, then setting
          * OPFLAG.IRQ is a no-brainer, but even if not, we set IRQ_DELAY in case the priority was lowered
          * enough to permit a programmed interrupt (via regPIR).
@@ -16027,7 +16443,7 @@ class PDP11 extends PDP11Ops {
     updateDecFlags(result, dst)
     {
         this.flagN = this.flagZ = result;
-        /*
+        /**
          * Because src is always 1 (with a zero sign bit), it can be optimized out of this calculation.
          */
         this.flagV = (/* src ^ */ dst) & (dst ^ result);
@@ -16045,7 +16461,7 @@ class PDP11 extends PDP11Ops {
     updateIncFlags(result, dst)
     {
         this.flagN = this.flagZ = result;
-        /*
+        /**
          * Because src is always 1 (with a zero sign bit), it can be optimized out of this calculation.
          */
         this.flagV = (/* src ^ */ result) & (dst ^ result);
@@ -16136,7 +16552,7 @@ class PDP11 extends PDP11Ops {
                 reason = PDP11.REASON.PANIC;
             }
             this.opFlags |= PDP11.OPFLAG.TRAP_RED;
-            /*
+            /**
              * The next two lines used to be deferred until after the setPSW() below, but
              * I'm not seeing any dependencies on these registers, so I'm consolidating the code.
              */
@@ -16145,7 +16561,7 @@ class PDP11 extends PDP11Ops {
         }
 
         if (reason != PDP11.REASON.PANIC) {
-            /*
+            /**
              * NOTE: Pre-setting the auto-dec values for MMR1 to 0xF6F6 is a work-around for an "EKBEE1"
              * diagnostic (PC 056710), which tests what happens when a misaligned read triggers a BUS trap,
              * and that trap then triggers an MMU trap during the first pushWord() below.
@@ -16159,14 +16575,14 @@ class PDP11 extends PDP11Ops {
              */
             this.opLast = vector | 0xf6f60000;
 
-            /*
+            /**
              * Read from kernel D space
              */
             this.pswMode = 0;
             let newPC = this.readWord(vector | this.addrDSpace);
             let newPSW = this.readWord(((vector + 2) & 0xffff) | this.addrDSpace);
 
-            /*
+            /**
              * Set new PSW with previous mode
              */
             this.setPSW((newPSW & ~PDP11.PSW.PMODE) | ((this.pswTrap >> 2) & PDP11.PSW.PMODE));
@@ -16176,14 +16592,14 @@ class PDP11 extends PDP11Ops {
             this.setPC(newPC);
         }
 
-        /*
+        /**
          * TODO: Determine the appropriate number of cycles for traps; all I've done for now is move the
          * cycle charge from opTrap() to here, and reduced the amount the other opcode handlers that call
          * trap() charge by a corresponding amount (5).
          */
         this.nStepCycles -= (4 + 1);
 
-        /*
+        /**
          * DEC's "TRAP TEST" (MAINDEC-11-D0NA-PB) triggers a RESERVED trap with an invalid opcode and the
          * stack deliberately set too low, and expects the stack overflow trap to be "sprung" immediately
          * afterward, so we only want to "lose interest" in the TRAP flag(s) that were set on entry, not ALL
@@ -16218,7 +16634,7 @@ class PDP11 extends PDP11Ops {
 
         this.pswTrap = -1;                                  // reset flag that we have a trap within a trap
 
-        /*
+        /**
          * These next properties (in conjunction with setting PDP11.OPFLAG.TRAP_LAST) are purely an aid for the Debugger;
          * see getTrapStatus().
          */
@@ -16238,14 +16654,14 @@ class PDP11 extends PDP11Ops {
      */
     trapReturn()
     {
-        /*
+        /**
          * This code used to defer updating regsGen[6] (SP) until after BOTH words had been popped, which seems
          * safer, but if we're going to do pushes in trap(), then I see no reason to avoid doing pops in trapReturn().
          */
         let addr = this.popWord();
         let newPSW = this.popWord();
         if (this.regPSW & PDP11.PSW.CMODE) {
-            /*
+            /**
              * Keep SPL and allow lower only for modes and register set.
              *
              * TODO: Review, because it seems a bit odd to only CLEAR the PRI bits in the new PSW, and then to OR in
@@ -16309,17 +16725,17 @@ class PDP11 extends PDP11Ops {
         let idx = (addr >> 13) & 0x1F;
         if (idx < 31) {
             if (this.regMMR3 & PDP11.MMR3.UNIBUS_MAP) {
-                /*
+                /**
                  * The UNIBUS map relocation is enabled
                  */
                 addr = (this.regsUNIMap[idx] + (addr & 0x1FFF)) & PDP11.MASK_22BIT;
-                /*
+                /**
                  * TODO: Review this assertion.
                  *
                  *
                  */
             } else {
-                /*
+                /**
                  * Since UNIBUS map relocation is NOT enabled, then as explained above:
                  *
                  *      If the UNIBUS map relocation is not enabled, an incoming 18-bit UNIBUS address has 4 leading zeroes added for
@@ -16434,7 +16850,7 @@ class PDP11 extends PDP11Ops {
     {
         let page, pdr, addr;
 
-        /*
+        /**
          * This can happen when the MAINT bit of MMR0 is set but not the ENABLED bit.
          */
         if (!(access & this.mmuEnable)) {
@@ -16452,7 +16868,7 @@ class PDP11 extends PDP11Ops {
 
         if (this.nDisableTraps) return addr;
 
-        /*
+        /**
          * TEST #122 ("KT BEND") in the "EKBEE1" diagnostic (PC 076060) triggers a NOMEMORY error using
          * this instruction:
          *
@@ -16462,10 +16878,10 @@ class PDP11 extends PDP11Ops {
          *
          *      076356: 005037 140001          CLR   @#140001
          *
-         * @paulnank: So it turns out that the memory management unit that does odd address and non-existent
+         * paulnank: So it turns out that the memory management unit that does odd address and non-existent
          * memory trapping: who knew? :-)  I thought these would have been handled at access time.
          *
-         * @jeffpar: We're assuming, at least, that the MMU does its "NEXM" (NOMEMORY) non-existent memory test
+         * jeffpar: We're assuming, at least, that the MMU does its "NEXM" (NOMEMORY) non-existent memory test
          * very simplistically, by range-checking the address against something like the memory SIZE registers,
          * because otherwise the MMU would have to wait for a bus time-out: something so prohibitively expensive
          * that the MMU could not afford to do it.  I rely on addrInvalid, which is derived from the same Bus
@@ -16514,7 +16930,7 @@ class PDP11 extends PDP11Ops {
         }
 
         if ((pdr & (PDP11.PDR.PLF | PDP11.PDR.ED)) != PDP11.PDR.PLF) {      // skip checking most common case (hopefully)
-            /*
+            /**
              * The Page Descriptor Register (PDR) Page Length Field (PLF) is a 7-bit block number, where a block
              * is 64 bytes.  Since the bit 0 of the block number is located at bit 8 of the PDR, we shift the PDR
              * right 2 bits and then clear the bottom 6 bits by masking it with 0x1FC0.
@@ -16532,7 +16948,7 @@ class PDP11 extends PDP11Ops {
             }
         }
 
-        /*
+        /**
          * Aborts and traps: log FIRST trap and MOST RECENT abort
          */
         this.regsPDR[this.pswMode][page] = pdr;
@@ -16551,7 +16967,7 @@ class PDP11 extends PDP11Ops {
 
                     this.setMMR0((this.regMMR0 & ~PDP11.MMR0.UPDATE) | (newMMR0 & PDP11.MMR0.UPDATE));
                 }
-                /*
+                /**
                  * NOTE: In unusual circumstances, if regMMR0 already indicated an ABORT condition above,
                  * we run the risk of infinitely looping; eg, we call trap(), which calls mapVirtualToPhysical()
                  * on the trap vector, which faults again, etc.
@@ -16563,7 +16979,7 @@ class PDP11 extends PDP11Ops {
                 this.trap(PDP11.TRAP.MMU, PDP11.OPFLAG.TRAP_MMU, PDP11.REASON.ABORT);
             }
             if (!(this.regMMR0 & (PDP11.MMR0.ABORT | PDP11.MMR0.TRAP_MMU))) {
-                /*
+                /**
                  * TODO: Review the code below, because the address range seems over-inclusive.
                  */
                 if (addr < ((PDP11.IOPAGE_22BIT | PDP11.UNIBUS.SIPDR0) & this.mmuMask) ||
@@ -16655,12 +17071,12 @@ class PDP11 extends PDP11Ops {
         let addrVirtual, step;
         let addrDSpace = (access & PDP11.ACCESS.VIRT)? 0 : this.addrDSpace;
 
-        /*
+        /**
          * Modes that need to auto-increment or auto-decrement will break, in order to perform
          * the update; others will return an address immediately.
          */
         switch (mode) {
-        /*
+        /**
          * Mode 0: Registers don't have a virtual address, so trap.
          *
          * NOTE: Most instruction code paths never call getAddrByMode() when the mode is zero;
@@ -16672,7 +17088,7 @@ class PDP11 extends PDP11Ops {
             this.trap(PDP11.TRAP.BUS, 0, PDP11.REASON.ILLEGAL);
             return 0;
 
-        /*
+        /**
          * Mode 1: (R)
          */
         case 1:
@@ -16680,7 +17096,7 @@ class PDP11 extends PDP11Ops {
             this.nStepCycles -= (2 + 1);
             return (reg == 7? this.regsGen[reg] : (this.regsGen[reg] | addrDSpace));
 
-        /*
+        /**
          * Mode 2: (R)+
          */
         case 2:
@@ -16694,7 +17110,7 @@ class PDP11 extends PDP11Ops {
             this.nStepCycles -= (2 + 1);
             break;
 
-        /*
+        /**
          * Mode 3: @(R)+
          */
         case 3:
@@ -16706,7 +17122,7 @@ class PDP11 extends PDP11Ops {
             this.nStepCycles -= (5 + 2);
             break;
 
-        /*
+        /**
          * Mode 4: -(R)
          */
         case 4:
@@ -16718,7 +17134,7 @@ class PDP11 extends PDP11Ops {
             this.nStepCycles -= (3 + 1);
             break;
 
-        /*
+        /**
          * Mode 5: @-(R)
          */
         case 5:
@@ -16729,7 +17145,7 @@ class PDP11 extends PDP11Ops {
             this.nStepCycles -= (6 + 2);
             break;
 
-        /*
+        /**
          * Mode 6: d(R)
          */
         case 6:
@@ -16739,7 +17155,7 @@ class PDP11 extends PDP11Ops {
             this.nStepCycles -= (4 + 2);
             return addrVirtual | addrDSpace;
 
-        /*
+        /**
          * Mode 7: @d(R)
          */
         case 7:
@@ -16766,7 +17182,7 @@ class PDP11 extends PDP11Ops {
      */
     checkStackLimit1120(access, step, addr)
     {
-        /*
+        /**
          * NOTE: DEC's "TRAP TEST" (MAINDEC-11-D0NA-PB) expects "TST -(SP)" to trap when SP is 150,
          * so we ignore the access parameter.  Also, strangely, it does NOT expect this instruction
          * to trap:
@@ -16778,7 +17194,7 @@ class PDP11 extends PDP11Ops {
          * so if the step parameter is positive, we let it go.
          */
         if (!this.pswMode && step <= 0 && addr <= this.regSLR) {
-            /*
+            /**
              * On older machines (eg, the PDP-11/20), there is no "YELLOW" and "RED" distinction, and the
              * instruction is always allowed to complete, so the trap must always be issued in this fashion.
              */
@@ -16797,7 +17213,7 @@ class PDP11 extends PDP11Ops {
     checkStackLimit1140(access, step, addr)
     {
         if (!this.pswMode) {
-            /*
+            /**
              * NOTE: The 11/70 CPU Instruction Exerciser does NOT expect reads to trigger a stack overflow,
              * so we check the access parameter.
              *
@@ -16813,7 +17229,7 @@ class PDP11 extends PDP11Ops {
              */
             if (addr >= 0xFFFE) addr |= ~0xFFFF;
             if ((access & PDP11.ACCESS.WRITE) && addr <= this.regSLR) {
-                /*
+                /**
                  * regSLR can never fall below 0xFF, so this subtraction can never go negative, so this comparison
                  * is always safe.
                  */
@@ -17096,7 +17512,7 @@ class PDP11 extends PDP11Ops {
         } else {
             let addr = this.getAddrByMode(mode, reg, PDP11.ACCESS.WRITE_WORD);
             if (!(access & PDP11.ACCESS.DSPACE)) addr &= 0xffff;
-            /*
+            /**
              * TODO: Consider replacing the following code with writeWord(), by adding optional pswMode
              * parameters for each of the discrete mapVirtualToPhysical() and writePair() operations, because
              * as it stands, this is the only remaining call to mapVirtualToPhysical() outside of our
@@ -17300,12 +17716,12 @@ class PDP11 extends PDP11Ops {
         let mode = this.dstMode = (opcode & PDP11.OPMODE.MASK) >> PDP11.OPMODE.SHIFT;
         if (!mode) {
             if (!data) {
-                /*
+                /**
                  * Potentially worthless optimization (but it looks good on "paper").
                  */
                 this.regsGen[reg] &= ~writeFlags;
             } else {
-                /*
+                /**
                  * Potentially worthwhile optimization: skipping the sign-extending data shifts
                  * if writeFlags is WRITE.BYTE (but that requires an extra test and separate code paths).
                  */
@@ -17390,7 +17806,7 @@ class PDP11 extends PDP11Ops {
                 let bits = 16;
                 if (reg[1] == 'F') bits = 1;
                 let value = this.getRegister(reg);
-                /*
+                /**
                  * We must call the Debugger's sprintf() instead of our own in order to use its custom formatters (eg, %n).
                  */
                 if (value != undefined) s += this.dbg.sprintf("%s=%*n ", reg, bits, value);
@@ -17400,7 +17816,7 @@ class PDP11 extends PDP11Ops {
     }
 }
 
-/*
+/**
  * CPU model numbers (supported)
  *
  * The 11/20 includes the 11/10, which is not identified separately because there was
@@ -17420,7 +17836,7 @@ PDP11.MODEL_1140 = 1140;
 PDP11.MODEL_1145 = 1145;
 PDP11.MODEL_1170 = 1170;
 
-/*
+/**
  * This constant is used to mark points in the code where the physical address being returned
  * is invalid and should not be used.
  *
@@ -17439,7 +17855,7 @@ PDP11.MODEL_1170 = 1170;
  */
 PDP11.ADDR_INVALID = -1;
 
-/*
+/**
  * Processor modes
  */
 PDP11.MODE = {
@@ -17450,7 +17866,7 @@ PDP11.MODE = {
     MASK:       0x3
 };
 
-/*
+/**
  * Processor Status Word (stored in regPSW) at 177776
  */
 PDP11.PSW = {
@@ -17461,12 +17877,12 @@ PDP11.PSW = {
     TF:         0x0010,         // bit  4     (000020)  Trap Flag
     PRI:        0x00E0,         // bits 5-7   (000340)  Priority
     UNUSED:     0x0700,         // bits 8-10  (003400)  UNUSED
-    /*
+    /**
      * The REGSET bit (and the alternate register set stored in regsAlt) came into existence
      * with the 11/45; (ie, they were not present on the 11/10, 11/20, or 11/40).
      */
     REGSET:     0x0800,         // bit  11    (004000)  Register Set
-    /*
+    /**
      * The MODE bits came into existence with the 11/40 (eg, not present on the 11/10 or 11/20).
      */
     PMODE:      0x3000,         // bits 12-13 (030000)  Prev Mode (see PDP11.MODE)
@@ -17483,7 +17899,7 @@ PDP11.PSW = {
     }
 };
 
-/*
+/**
  * Program Interrupt Register (stored in regPIR) at 177772
  *
  * The PIA bits at 5-7 are designed to align with PRI bits 5-7 in the PSW.
@@ -17497,7 +17913,7 @@ PDP11.PIR = {
     }
 };
 
-/*
+/**
  * PDP-11 trap vectors
  */
 PDP11.TRAP = {
@@ -17513,7 +17929,7 @@ PDP11.TRAP = {
     MMU:        0xA8            // 250  MMU: aborts and traps
 };
 
-/*
+/**
  * PDP-11 trap reasons; the reason may also be a non-negative address indicating a BUS memory error
  * (unaligned address or non-existent memory).  Any reason >= RED (which includes BUS memory errors) generate
  * immediate (thrown) traps, as they are considered ABORTs; the rest generate synchronous traps.
@@ -17545,7 +17961,7 @@ PDP11.REASONS = [
     "INTERRUPT"
 ];
 
-/*
+/**
  * Assorted common opcodes
  */
 PDP11.OPCODE = {
@@ -17564,7 +17980,7 @@ PDP11.OPCODE = {
     INVALID:    0xFFFF          // far from the only invalid opcode, just a KNOWN invalid opcode
 };
 
-/*
+/**
  * Internal operation state flags
  */
 PDP11.OPFLAG = {
@@ -17582,14 +17998,14 @@ PDP11.OPFLAG = {
     TRAP_RED:   0x0100,         // set whenever a RED trap occurs, used to catch double RED traps (time to PANIC)
 };
 
-/*
+/**
  * Opcode reg (opcode bits 2-0)
  */
 PDP11.OPREG = {
     MASK:       0x07
 };
 
-    /*
+    /**
      * Opcode modes (opcode bits 5-3)
      */
 PDP11.OPMODE = {
@@ -17624,7 +18040,7 @@ PDP11.REG = {
     PC:         7,
 };
 
-/*
+/**
  * Internal memory access flags
  */
 PDP11.ACCESS = {
@@ -17638,7 +18054,7 @@ PDP11.ACCESS = {
     DSPACE:     0x10000         // getVirtualByMode() sets bit 17 in any 16-bit virtual address that refers to D space (as opposed to I space)
 };
 
-/*
+/**
  * Internal flags passed to writeDstByte()
  *
  * The BYTE and SBYTE values have been chosen so that they can be used directly as masks.
@@ -17717,7 +18133,7 @@ PDP11.PDR = {
     BC:         0x8000          // bypass cache (11/44 only)
 };
 
-/*
+/**
  * Assorted special (UNIBUS) addresses
  *
  * Within the PDP-11/45's 18-bit address space, of the 0x40000 possible addresses (256Kb), the top 0x2000
@@ -17884,7 +18300,7 @@ PDP11.UNIBUS = {                // 16-bit     18-bit      22-bit    Description
     R5SET1:     0o177715,       //
     R6SUPER:    0o177716,       //
     R6USER:     0o177717,       //
-    /*
+    /**
      * This next group of registers is largely ignored; all accesses are routed to regsControl[],
      * and therefore are managed as a block of 8 "CTRL" registers.
      */
@@ -18102,7 +18518,7 @@ PDP11.RL11 = {                  // RL11 Disk Controller
     RLBA: {                     // 174402: Bus Address Register
         WMASK:  0xFFFE          // bit 0 is effectively not writable (always zero)
     },
-    /*
+    /**
      * This register has 3 formats: one for Seek, another for Read/Write, and a third for Get Status
      */
     RLDA: {                     // 174404: Disk Address Register
@@ -18120,7 +18536,7 @@ PDP11.RL11 = {                  // RL11 Disk Controller
             RW_CA:  7
         }
     },
-    /*
+    /**
      * This register has 3 formats: one for Read Header, another for Read/Write, and a third for Get Status
      */
     RLMP: {                     // 177406: Multi-Purpose Register
@@ -18200,7 +18616,7 @@ PDP11.RX11 = {                  // RX11 Disk Controller
         MASK:   0x001F
     },
     RXES: {
-        /*
+        /**
          * The DRDY bit is only valid when retrieved via a Read Status function or at completion of Initialize when it indicates
          * status of drive O.  It is asserted if the unit currently selected exists, is properly supplied with power, has a diskette
          * installed correctly, has its door closed, and has a diskette up to speed.
@@ -18283,7 +18699,7 @@ PDP11.ACCESS.WRITE_BYTE  = PDP11.ACCESS.BYTE | PDP11.ACCESS.WRITE;      // forme
 PDP11.ACCESS.UPDATE_WORD = PDP11.ACCESS.WORD | PDP11.ACCESS.UPDATE;     // formerly MODIFY_WORD (2 | 4)
 PDP11.ACCESS.UPDATE_BYTE = PDP11.ACCESS.BYTE | PDP11.ACCESS.UPDATE;     // formerly MODIFY_BYTE (1 | 2 | 4)
 
-/*
+/**
  * PSW arithmetic flags are NOT stored directly into the PSW register; they are maintained across separate flag registers.
  */
 PDP11.PSW.FLAGS         = (PDP11.PSW.NF | PDP11.PSW.ZF | PDP11.PSW.VF | PDP11.PSW.CF);
@@ -18383,11 +18799,13 @@ class PDP11Dbg extends Debugger {
          * @returns {string|Array.<string>}
          */
         let getOperand = (opcode, type) => {
-            /*
+            /**
              * Take care of OP_OTHER opcodes first; then all we'll have to worry about
              * next are OP_SRC or OP_DST opcodes.
              */
-            let sOperand = "", disp, addr;
+            let sOperand = "";
+            let disp;
+            let addr;
             let typeOther = type & PDP11Dbg.OP_OTHER;
             if (typeOther == PDP11Dbg.OP_BRANCH) {
                 disp = ((opcode & 0xff) << 24) >> 23;
@@ -18412,12 +18830,12 @@ class PDP11Dbg extends Debugger {
                 sOperand = this.toBase(disp, 0, 8, "");
             }
             else {
-                /*
+                /**
                  * Isolate all OP_SRC or OP_DST bits from opcode in the mode variable.
                  */
                 let mode = opcode & type;
 
-                /*
+                /**
                  * Convert OP_SRC bits into OP_DST bits, since they use the same format.
                  */
                 if (type & PDP11Dbg.OP_SRC) {
@@ -18428,7 +18846,7 @@ class PDP11Dbg extends Debugger {
                     let wIndex;
                     let sTarget = null;
                     let reg = mode & PDP11Dbg.OP_DSTREG;
-                    /*
+                    /**
                      * Note that opcodes that specify only REG bits in the type mask (ie, no MOD bits)
                      * will automatically default to OPMODE_REG below.
                      */
@@ -18447,7 +18865,7 @@ class PDP11Dbg extends Debugger {
                         if (reg < 7) {
                             sOperand = '(' + getRegName(reg) + ")+";
                         } else {
-                            /*
+                            /**
                              * When using R7 (aka PC), POST-INCREMENT is known as IMMEDIATE
                              */
                             wIndex = getNextWord();
@@ -18459,7 +18877,7 @@ class PDP11Dbg extends Debugger {
                         if (reg < 7) {
                             sOperand = "@(" + getRegName(reg) + ")+";
                         } else {
-                            /*
+                            /**
                              * When using R7 (aka PC), POST-INCREMENT DEFERRED is known as ABSOLUTE
                              */
                             wIndex = getNextWord();
@@ -18480,7 +18898,7 @@ class PDP11Dbg extends Debugger {
                         wIndex = getNextWord();
                         sOperand = toBaseWord(wIndex) + '(' + getRegName(reg) + ')';
                         if (reg == 7) {
-                            /*
+                            /**
                              * When using R7 (aka PC), INDEX is known as RELATIVE.  However, instead of displaying
                              * such an instruction like this:
                              *
@@ -18503,7 +18921,7 @@ class PDP11Dbg extends Debugger {
                         wIndex = getNextWord();
                         sOperand = '@' + toBaseWord(wIndex) + '(' + getRegName(reg) + ')';
                         if (reg == 7) {
-                            /*
+                            /**
                              * When using R7 (aka PC), INDEX DEFERRED is known as RELATIVE DEFERRED.  And for the same
                              * reasons articulated above, we now display the effective address inline.
                              *
@@ -18585,7 +19003,7 @@ class PDP11Dbg extends Debugger {
                 break;
             }
 
-            /*
+            /**
              * If getOperand() returns an Array rather than a string, then the first element is the original
              * operand, and the second element contains additional information (eg, the target) of the operand.
              */
@@ -18610,7 +19028,7 @@ class PDP11Dbg extends Debugger {
     }
 }
 
-/*
+/**
  * CPU opcode IDs
  *
  * Not listed: BLO (same as BCS) and BHIS (same as BCC).
@@ -18631,7 +19049,7 @@ PDP11Dbg.OPS = {
     SXT:    96,     TST:    97,     TSTB:   98,     WAIT:   99,     MUL:    100,    DIV:    101,    ASH:    102,    ASHC:   103,
     XOR:    104,    SOB:    105,    EMT:    106,    TRAP:   107,    SPL:    108,    IOT:    109,    RTT:    110,    MFPT:   111
 };
-/*
+/**
  * CPU opcode names, indexed by CPU opcode ordinal (above)
  */
 PDP11Dbg.OPNAMES = [
@@ -18650,7 +19068,7 @@ PDP11Dbg.OPNAMES = [
     "SXT",          "TST",          "TSTB",         "WAIT",         "MUL",          "DIV",          "ASH",          "ASHC",
     "XOR",          "SOB",          "EMT",          "TRAP",         "SPL",          "IOT",          "RTT",          "MFPT"
 ];
-/*
+/**
  * Register numbers 0-7 are reserved for cpu.regsGen, 8-15 are reserved for cpu.regsAlt, and 16-19 for cpu.regsAltStack.
  */
 PDP11Dbg.REG_PS        = 20;
@@ -18687,7 +19105,7 @@ PDP11Dbg.REGNAMES = [
     "AR", "DR", "SR"
 ];
 PDP11Dbg.MODES = ["KI","KD","SI","SD","??","??","UI","UD"];
-/*
+/**
  * Operand type masks; anything that's not covered by OP_SRC or OP_DST must be a OP_OTHER value.
  */
 PDP11Dbg.OP_DSTREG   = PDP11.OPREG.MASK;
@@ -18702,7 +19120,7 @@ PDP11Dbg.OP_DSTNUM3  = 0x3000;       // DST 3-bit number (ie, just the DSTREG fi
 PDP11Dbg.OP_DSTNUM6  = 0x6000;       // DST 6-bit number (ie, both the DSTREG and DSTMODE fields)
 PDP11Dbg.OP_DSTNUM8  = 0x8000;       // DST 8-bit number
 PDP11Dbg.OP_OTHER    = 0xF000;
-/*
+/**
  * The OPTABLE contains opcode masks, and each mask refers to table of possible values, and each
  * value refers to an array that contains:
  *
@@ -18846,7 +19264,7 @@ PDP11Dbg.OPTABLE = {
     }
 };
 PDP11Dbg.OPNONE = [PDP11Dbg.OPS.NONE];
-/*
+/**
  * Table of opcodes added to the 11/40 and newer
  */
 PDP11Dbg.OP1140 = [
@@ -18862,7 +19280,7 @@ PDP11Dbg.OP1140 = [
     PDP11Dbg.OPS.XOR,
     PDP11Dbg.OPS.SOB
 ];
-/*
+/**
  * Table of opcodes added to the 11/45 and newer
  */
 PDP11Dbg.OP1145 = [
@@ -18900,7 +19318,7 @@ class IOPage extends Ports {
             let outData = handlers[1];
             let inPair = handlers[2];
             let outPair = handlers[3];
-            /*
+            /**
              * When handlers are being registered for these BYTE-granular UNIBUS addresses,
              * we must install fallback handlers for all BYTE accesses.
              */
@@ -19090,13 +19508,13 @@ class DL11 extends Device {
         this.ports = /** @type {Ports} */ (this.findDeviceByClass("IOPage"));
         this.ports.addIOTable(this, DL11.IOTABLE);
 
-        /*
+        /**
          * No connection until initConnection() is called.
          */
         this.sDataReceived = "";
         this.connection = this.sendData = this.updateStatus = null;
 
-        /*
+        /**
          * Export all functions required by initConnection().
          */
         this['exports'] = {
@@ -19244,7 +19662,7 @@ class DL11 extends Device {
      */
     getBaudTimeout(nBaud)
     {
-        /*
+        /**
          * TODO: Do a better job computing this, based on actual numbers of start, stop and parity bits,
          * instead of hard-coding the total number of bits per byte to 10.
          */
@@ -19376,7 +19794,7 @@ class DL11 extends Device {
         if (this.sendData && this.sendData.call(this.connection, b)) {
             fTransmitted = true;
         }
-        /*
+        /**
          * NOTE: When debugging issues involving the SerialPort, such as debugging code between a pair of
          * transmitted bytes, you can pass 0 instead of getBaudTimeout() to setTimer() to minimize the amount
          * of time spent waiting for XCSR.READY to be set again.
@@ -19439,7 +19857,7 @@ class DL11 extends Device {
     {
         let delta = (data ^ this.regRCSR);
         this.regRCSR = (this.regRCSR & ~PDP11.DL11.RCSR.WMASK) | (data & PDP11.DL11.RCSR.WMASK);
-        /*
+        /**
          * Whenever DTR or RTS changes, we also want to notify any connected machine, via updateStatus().
          */
         if (this.updateStatus) {
@@ -19502,7 +19920,7 @@ class DL11 extends Device {
      */
     writeXCSR(data, addr)
     {
-        /*
+        /**
          * If the device is READY, and TIE is being set, then request a hardware interrupt.
          *
          * Conversely, if TIE is being cleared, remove the request; this resolves a problem within
@@ -19588,7 +20006,7 @@ class PC11 extends Device {
         this.baudReceive = +this.config['baudReceive'] || PDP11.PC11.PRS.BAUD;
         this.library = this.config['library'] || [];
         this.mediaLoaded = null;
-        /*
+        /**
          * Support for local tape images is currently limited to desktop browsers with FileReader support;
          * when this flag is set, setBinding() allows local tape bindings and informs initBus() to update the
          * LIST_TAPES binding accordingly.
@@ -19637,7 +20055,7 @@ class PC11 extends Device {
         let nTarget = PC11.TARGET.NONE;
 
         switch (binding) {
-        /*
+        /**
          * "readTape" operation must do pretty much everything that the "loadTape" does, but whereas the load
          * operation records the bytes in aTapeData, the read operation stuffs them directly into the machine's memory;
          * the former sets nTarget to TARGET.READER, while the latter sets it to TARGET.MEMORY.
@@ -19661,7 +20079,7 @@ class PC11 extends Device {
             elementInput = /** @type {Object} */ (element);
             if (!this.fLocalTapes) {
                 this.printf("Local tape support not available\n");
-                /*
+                /**
                  * We could also simply hide the element; eg:
                  *
                  *      elementInput.style.display = "none";
@@ -19672,7 +20090,7 @@ class PC11 extends Device {
                 break;
             }
 
-            /*
+            /**
              * Enable "Mount" button only if a file is actually selected
              */
             elementInput.addEventListener('change', function() {
@@ -19685,12 +20103,12 @@ class PC11 extends Device {
             elementInput.onsubmit = function(event) {
                 let file = event.currentTarget[1].files[0];
                 if (file) {
-                    /*
+                    /**
                      * TODO: Provide a way to mount tapes into MEMORY as well as READER.
                      */
                     pc11.loadMedia({"name": this.getBaseName(file.name, true), "path": file.name}, PC11.TARGET.READER, file);
                 }
-                /*
+                /**
                  * Prevent reloading of web page after form submission
                  */
                 return false;
@@ -19821,7 +20239,7 @@ class PC11 extends Device {
             return true;
         }
 
-        /*
+        /**
          * If the special PC11.SOURCE.REMOTE path is selected, then we want to prompt the user for a URL.
          * Oh, and make sure we pass an empty string as the 2nd parameter to prompt(), so that IE won't display
          * "undefined" -- because after all, undefined and "undefined" are EXACTLY the same thing, right?
@@ -19941,7 +20359,7 @@ class PC11 extends Device {
         this.input.addSelect(this, PC11.BINDING.LIST_TAPES, "Remote Tape", PC11.SOURCE.REMOTE);
         this.setReady(true);
 
-        /*
+        /**
          * Now that the media library, if any, is loaded, look up the autoLoad media, if any.
          */
         let i = -1;
@@ -19961,14 +20379,14 @@ class PC11 extends Device {
             }
         }
         if (this.autoLoad) {
-            /*
+            /**
              * TODO: Provide a way to autoLoad tapes into MEMORY as well as READER.
              */
             if (!this.loadMedia(/** @type {Media} */ (this.autoLoad), PC11.TARGET.READER)) {
                 this.setReady(false);
             }
         } else {
-            /*
+            /**
              * This likely happened because there was no autoLoad setting (or it was overridden with an empty value),
              * so just make sure the current selection is set to "None".
              */
@@ -19993,7 +20411,7 @@ class PC11 extends Device {
         this.setReady(true);
 
         if (this.nTarget == PC11.TARGET.MEMORY) {
-            /*
+            /**
              * Use parseTape() service to do our dirty work.  If the load succeeds, then depending on whether there
              * was also exec address, either the CPU will be stopped or the PC wil be reset.
              *
@@ -20006,7 +20424,7 @@ class PC11 extends Device {
              * "Bootstrap Loader".
              */
             if (!this.parseTape(aBytes, addrLoad, addrExec, null, false)) {
-                /*
+                /**
                  * This doesn't seem to serve any purpose, other than to be annoying, because perhaps you accidentally
                  * clicked "Read" instead of "Load"....
                  *
@@ -20047,7 +20465,7 @@ class PC11 extends Device {
     {
         let fStop = false;
         let fLoaded = false;
-        /*
+        /**
          * Data on tapes in the "Absolute Format" is organized into blocks; each block begins with
          * a 6-byte header:
          *
@@ -20138,7 +20556,7 @@ class PC11 extends Device {
             }
         }
         if (fLoaded) {
-            /*
+            /**
              * Set the start address to whatever the caller provided, or failing that, whatever start
              * address was specified inside the image.
              *
@@ -20167,7 +20585,7 @@ class PC11 extends Device {
     {
         if (this.mediaLoaded || fLoading === false) {
             this.mediaLoaded = null;
-            /*
+            /**
              * Avoid any unnecessary hysteresis regarding the display if this unload is merely a prelude to another load.
              */
             if (!fLoading) {
@@ -20190,7 +20608,7 @@ class PC11 extends Device {
      */
     getBaudTimeout(nBaud)
     {
-        /*
+        /**
          * TODO: Do a better job computing this, based on actual numbers of start, stop and parity bits,
          * instead of hard-coding the total number of bits per byte to 10.
          */
@@ -20212,7 +20630,7 @@ class PC11 extends Device {
         if ((this.regPRS & (PDP11.PC11.PRS.RE | PDP11.PC11.PRS.ERROR)) == PDP11.PC11.PRS.RE) {
             if (!(this.regPRS & PDP11.PC11.PRS.DONE)) {
                 if (this.iTapeData < this.aTapeData.length) {
-                    /*
+                    /**
                      * Here, as elsewhere (eg, the DL11 component), even if I trusted all incoming data
                      * to be byte values (which I don't), there's also the risk that it could be signed data
                      * (eg, -128 to 127, instead of 0 to 255).  Both risks are good reasons to always mask
@@ -20262,7 +20680,7 @@ class PC11 extends Device {
     writePRS(data, addr)
     {
         if (data & PDP11.PC11.PRS.RE) {
-            /*
+            /**
              * From the 1976 Peripherals Handbook, p. 4-378:
              *
              *      Set [RE] to allow the Reader to fetch one character. The setting of this bit clears Done,
@@ -20278,7 +20696,7 @@ class PC11 extends Device {
                 this.regPRS &= ~PDP11.PC11.PRS.DONE;
                 this.regPRS |= PDP11.PC11.PRS.BUSY;
                 this.regPRB = 0;
-                /*
+                /**
                  * The PC11, by virtue of its "high speed", is supposed to deliver characters at 300 CPS, so
                  * that's the rate we'll choose as well (ie, 1000ms / 300).  As an aside, the original "low speed"
                  * version of the reader ran at 10 CPS.
@@ -20298,7 +20716,7 @@ class PC11 extends Device {
      */
     readPRB(addr)
     {
-        /*
+        /**
          * I'm guessing that the DONE and BUSY bits always remain more-or-less inverses of each other.  They definitely
          * start out that way when writePRS() sets the reader enable (RE) bit, and so that's how we treat them elsewhere, too.
          */
@@ -20376,7 +20794,7 @@ class PC11 extends Device {
     }
 }
 
-/*
+/**
  * There's nothing super special about these values, except that NONE should be falsey and the others should not.
  */
 PC11.SOURCE = {
@@ -20525,7 +20943,7 @@ class Machine extends Device {
         this.fPageLoaded = false;
         this.setReady(false);
 
-        /*
+        /**
          * You can pass "m" commands to the machine via the "commands" parameter to turn on any desired
          * message groups, but since the Debugger is responsible for parsing those commands, and since the
          * Debugger is usually not initialized until last, messages from any earlier constructor calls will
@@ -20554,7 +20972,7 @@ class Machine extends Device {
             });
         }
 
-        /*
+        /**
          * Device initialization is now deferred until after the page is fully loaded, for the benefit
          * of devices (eg, Input) that may be dependent on page resources.
          *
@@ -20682,7 +21100,7 @@ class Machine extends Device {
             this.deviceConfigs = JSON.parse(sConfig);
             let config = this.deviceConfigs[this.idMachine];
             if (!config) {
-                /*
+                /**
                  * Pages that want to instantiate multiple machines using identical configs would normally
                  * have to create unique config files for each machine, even though the only difference between
                  * the configs would be the machine ID.  To reduce that redundancy, we'll try to identify the
@@ -20700,14 +21118,14 @@ class Machine extends Device {
             this.fAutoSave = (this.config['autoSave'] !== false);
             this.fAutoStart = (this.config['autoStart'] !== false);
             if (this.sParms) {
-                /*
+                /**
                  * Historically, my web servers have not been consistent about quoting property names inside
                  * the optional parameters object, so we must use eval() instead of JSON.parse() to parse them.
                  * Of couse, the REAL problem is that JSON.parse() is being a dick about otherwise perfectly
                  * legitimate Object syntax, but I shall not repeat my long list of gripes about JSON here.
                  */
                 let parms = /** @type {Object} */ (eval("(" + this.sParms + ")"));
-                /*
+                /**
                  * Slam all these parameters into the machine's config, overriding any matching machine configuration
                  * properties.  Any other devices that need access to these properties should use getMachineConfig().
                  */
@@ -20742,11 +21160,11 @@ class Machine extends Device {
                     if (device.config['class'] != "CPU" || machine.fAutoStart || machine.isReady()) {
                         device.onPower(on);
                     } else {
-                        /*
-                        * If we're not going to start the CPU on the first power notification, then we should
-                        * we fake a transition to the "stopped" state, so that the Debugger will display the current
-                        * machine state.
-                        */
+                        /**
+                         * If we're not going to start the CPU on the first power notification, then we should
+                         * we fake a transition to the "stopped" state, so that the Debugger will display the current
+                         * machine state.
+                         */
                         device.time.update(true);
                     }
                 }
@@ -20802,7 +21220,7 @@ Machine.BINDING = {
     RESET:      "reset",
 };
 
-/*
+/**
  * Create the designated machine FACTORY function (this should suffice for all compiled versions).
  *
  * In addition, expose the machine's COMMAND handler interface, so that it's easy to access any of the

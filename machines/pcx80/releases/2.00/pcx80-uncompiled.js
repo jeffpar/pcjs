@@ -4724,9 +4724,9 @@ var TYPEDARRAYS = (typeof ArrayBuffer !== 'undefined');
 
 /*
  * Combine all the shared globals and machine-specific globals into one machine-specific global object,
- * which all machine components should start using; eg: "if (PCX80.DEBUG) ..." instead of "if (DEBUG) ...".
+ * which all machine components should start using; eg: "if (PCx80.DEBUG) ..." instead of "if (DEBUG) ...".
  */
-var PCX80 = {
+var PCx80 = {
     APPCLASS:    APPCLASS,
     APPNAME:     APPNAME,
     APPVERSION:  APPVERSION,    // shared
@@ -5044,7 +5044,7 @@ class PanelX80 extends Component {
     static init()
     {
         var fReady = false;
-        var aePanels = Component.getElementsByClass(document, PCX80.APPCLASS, "panel");
+        var aePanels = Component.getElementsByClass(document, PCx80.APPCLASS, "panel");
         for (var iPanel=0; iPanel < aePanels.length; iPanel++) {
             var ePanel = aePanels[iPanel];
             var parmsPanel = Component.getComponentParms(ePanel);
@@ -5053,7 +5053,7 @@ class PanelX80 extends Component {
                 fReady = true;
                 panel = new PanelX80(parmsPanel);
             }
-            Component.bindComponentControls(panel, ePanel, PCX80.APPCLASS);
+            Component.bindComponentControls(panel, ePanel, PCx80.APPCLASS);
             if (fReady) panel.setReady();
         }
     }
@@ -6995,11 +6995,11 @@ if (TYPEDARRAYS) {
  *
  * @unrestricted
  */
-class CPUX80 extends Component {
+class CPUx80 extends Component {
     /**
-     * CPUX80(parmsCPU, nCyclesDefault)
+     * CPUx80(parmsCPU, nCyclesDefault)
      *
-     * The CPUX80 class supports the following (parmsCPU) properties:
+     * The CPUx80 class supports the following (parmsCPU) properties:
      *
      *      cycles: the machine's base cycles per second; the CPUStateX80 constructor
      *      will provide us with a default (based on the CPU model) to use as a fallback.
@@ -7024,7 +7024,7 @@ class CPUX80 extends Component {
      *
      * It is extended by the CPUStateX80 component, where the simulation control logic resides.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {Object} parmsCPU
      * @param {number} nCyclesDefault
      */
@@ -7090,10 +7090,10 @@ class CPUX80 extends Component {
     /**
      * initBus(cmp, bus, cpu, dbg)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {ComputerX80} cmp
      * @param {BusX80} bus
-     * @param {CPUX80} cpu
+     * @param {CPUx80} cpu
      * @param {DebuggerX80} dbg
      */
     initBus(cmp, bus, cpu, dbg)
@@ -7102,9 +7102,9 @@ class CPUX80 extends Component {
         this.bus = bus;
         this.dbg = dbg;
 
-        for (var i = 0; i < CPUX80.BUTTONS.length; i++) {
-            var control = this.bindings[CPUX80.BUTTONS[i]];
-            if (control) this.cmp.setBinding("", CPUX80.BUTTONS[i], control);
+        for (var i = 0; i < CPUx80.BUTTONS.length; i++) {
+            var control = this.bindings[CPUx80.BUTTONS[i]];
+            if (control) this.cmp.setBinding("", CPUx80.BUTTONS[i], control);
         }
 
         /*
@@ -7126,7 +7126,7 @@ class CPUX80 extends Component {
     /**
      * reset()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      */
     reset()
     {
@@ -7137,7 +7137,7 @@ class CPUX80 extends Component {
      *
      * This is a placeholder for save support (overridden by the CPUStateX80 component).
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {Object|null}
      */
     save()
@@ -7150,7 +7150,7 @@ class CPUX80 extends Component {
      *
      * This is a placeholder for restore support (overridden by the CPUStateX80 component).
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {Object} data
      * @return {boolean} true if restore successful, false if not
      */
@@ -7162,7 +7162,7 @@ class CPUX80 extends Component {
     /**
      * powerUp(data, fRepower)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
      * @return {boolean} true if successful, false if failure
@@ -7199,7 +7199,7 @@ class CPUX80 extends Component {
     /**
      * powerDown(fSave, fShutdown)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
      * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
@@ -7218,7 +7218,7 @@ class CPUX80 extends Component {
     /**
      * autoStart()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {boolean} true if started, false if not
      */
     autoStart()
@@ -7241,7 +7241,7 @@ class CPUX80 extends Component {
     /**
      * isPowered()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {boolean}
      */
     isPowered()
@@ -7256,7 +7256,7 @@ class CPUX80 extends Component {
     /**
      * isRunning()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {boolean}
      */
     isRunning()
@@ -7269,7 +7269,7 @@ class CPUX80 extends Component {
      *
      * This will be implemented by the CPUStateX80 component.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
@@ -7284,7 +7284,7 @@ class CPUX80 extends Component {
      * cycle counter that will trigger the next displayChecksum(); called by resetCycles(), which is called whenever
      * the CPU is reset or restored.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {boolean} true if checksum generation enabled, false if not
      */
     resetChecksum()
@@ -7313,7 +7313,7 @@ class CPUX80 extends Component {
      * the exact number cycles that were actually executed.  This should give us instruction-granular checksums
      * at precise intervals that are 100% repeatable.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} nCycles
      */
     updateChecksum(nCycles)
@@ -7348,7 +7348,7 @@ class CPUX80 extends Component {
      * checksums generated at the specified cycle intervals, as specified by the "csStart" and "csInterval" parmsCPU
      * properties).
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      */
     displayChecksum()
     {
@@ -7361,7 +7361,7 @@ class CPUX80 extends Component {
      * This is principally for displaying register values, but in reality, it can be used to display any
      * numeric (hex) value bound to the given label.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {string} sLabel
      * @param {number} nValue
      * @param {number} cch
@@ -7392,7 +7392,7 @@ class CPUX80 extends Component {
     /**
      * setBinding(sHTMLType, sBinding, control, sValue)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {string} sHTMLType is the type of the HTML control (eg, "button", "list", "text", "submit", "textarea", "canvas")
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
@@ -7463,7 +7463,7 @@ class CPUX80 extends Component {
      * NOTE: In this context, "timer" refers to a timer chip (eg, an Intel 8253) being emulated by
      * by the ChipSet component, not the timers managed by the CPU (eg, addTimer(), setTimer(), etc).
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} nCycles is the target number of cycles to drop the current burst to
      * @return {boolean}
      */
@@ -7490,7 +7490,7 @@ class CPUX80 extends Component {
     /**
      * addCycles(nCycles, fEndStep)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} nCycles
      * @param {boolean} [fEndStep]
      */
@@ -7513,7 +7513,7 @@ class CPUX80 extends Component {
      * we expected the virtual hardware to take (eg, 1000ms/50 or 20ms), and if we still have time remaining,
      * we sleep the remaining time (or 0ms if there's no remaining time), and then restart runCPU().
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {boolean} [fRecalc] is true if the caller wants to recalculate thresholds based on the most recent
      * speed calculation (see calcSpeed).
      */
@@ -7529,8 +7529,8 @@ class CPUX80 extends Component {
             }
         }
 
-        this.msPerYield = Math.round(1000 / CPUX80.YIELDS_PER_SECOND);
-        this.nCyclesPerYield = Math.floor(this.nCyclesPerSecond / CPUX80.YIELDS_PER_SECOND * vMultiplier);
+        this.msPerYield = Math.round(1000 / CPUx80.YIELDS_PER_SECOND);
+        this.nCyclesPerYield = Math.floor(this.nCyclesPerSecond / CPUx80.YIELDS_PER_SECOND * vMultiplier);
 
         /*
          * And initialize "next" yield values to the "per" values.
@@ -7554,7 +7554,7 @@ class CPUX80 extends Component {
      * nTotalCycles eventually get reset by calcSpeed(), to avoid overflow, so components that rely on
      * getCycles() returning steadily increasing values should also be prepared for a reset at any time.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {boolean} [fScaled] is true if the caller wants a cycle count relative to a multiplier of 1
      * @return {number}
      */
@@ -7590,7 +7590,7 @@ class CPUX80 extends Component {
      *
      * This returns the CPU's "base" speed (ie, the original cycles per second defined for the machine)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {number}
      */
     getCyclesPerSecond()
@@ -7605,7 +7605,7 @@ class CPUX80 extends Component {
      * It's important that this be called BEFORE the actual restore() call, because restore() may want to call setSpeed(),
      * which in turn assumes that all the cycle counts have been initialized to sensible values.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      */
     resetCycles()
     {
@@ -7619,7 +7619,7 @@ class CPUX80 extends Component {
     /**
      * getSpeed()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {number} the current speed multiplier
      */
     getSpeed()
@@ -7630,7 +7630,7 @@ class CPUX80 extends Component {
     /**
      * getSpeedCurrent()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {string} the current speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedCurrent()
@@ -7644,7 +7644,7 @@ class CPUX80 extends Component {
     /**
      * getSpeedTarget()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {string} the target speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedTarget()
@@ -7664,7 +7664,7 @@ class CPUX80 extends Component {
      * so that the next effective speed calculation obtains sensible results.  In fact, when runCPU() initially calls
      * setSpeed() with no parameters, that's all this function does (it doesn't change the current speed setting).
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} [nMultiplier] is the new proposed multiplier (reverts to 1 if the target was too high)
      * @param {boolean} [fUpdateFocus] is true to update Computer focus
      * @return {boolean} true if successful, false if not
@@ -7703,7 +7703,7 @@ class CPUX80 extends Component {
     /**
      * calcSpeed(nCycles, msElapsed)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} nCycles
      * @param {number} msElapsed
      */
@@ -7721,7 +7721,7 @@ class CPUX80 extends Component {
     /**
      * calcStartTime()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      */
     calcStartTime()
     {
@@ -7777,7 +7777,7 @@ class CPUX80 extends Component {
     /**
      * calcRemainingTime()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {number}
      */
     calcRemainingTime()
@@ -7873,7 +7873,7 @@ class CPUX80 extends Component {
      *
      * Why not use JavaScript's setTimeout() instead?  Good question.  For a good answer, see setTimer() below.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {string} id
      * @param {function()} callBack
      * @param {number} [ms] (if set, enables automatic setTimer calls)
@@ -7890,7 +7890,7 @@ class CPUX80 extends Component {
     /**
      * findTimer(id)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {string} id
      * @return {Array|null}
      */
@@ -7918,7 +7918,7 @@ class CPUX80 extends Component {
      * use setTimer(); however, due to legacy code (ie, code that predates these functions) and/or laziness,
      * that's currently not the case.  TODO: Fix.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} iTimer
      * @param {number} ms (converted into a cycle countdown internally)
      * @param {boolean} [fReset] (true if the timer should be reset even if already armed)
@@ -7949,7 +7949,7 @@ class CPUX80 extends Component {
     /**
      * getMSCycles(ms)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} ms
      * @return {number} number of corresponding cycles
      */
@@ -7963,7 +7963,7 @@ class CPUX80 extends Component {
      *
      * Used by runCPU() to get min(nCycles,[timer cycle counts])
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} nCycles (number of cycles about to execute)
      * @return {number} (either nCycles or less if a timer needs to fire)
      */
@@ -7987,7 +7987,7 @@ class CPUX80 extends Component {
      * this is the function that actually "fires" any timer(s) whose countdown has reached (or dropped below)
      * zero, invoking their callback function.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} nCycles (number of cycles actually executed)
      */
     updateTimers(nCycles)
@@ -8016,7 +8016,7 @@ class CPUX80 extends Component {
     /**
      * endBurst(fReset)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {boolean} [fReset]
      * @return {number} (number of cycles executed in the most recent burst)
      */
@@ -8031,7 +8031,7 @@ class CPUX80 extends Component {
     /**
      * runCPU(fUpdateFocus)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {boolean} [fUpdateFocus] is true to update Computer focus
      */
     runCPU(fUpdateFocus)
@@ -8084,7 +8084,7 @@ class CPUX80 extends Component {
                 this.nCyclesNextYield -= nCycles;
                 if (this.nCyclesNextYield <= 0) {
                     this.nCyclesNextYield += this.nCyclesPerYield;
-                    if (++this.nYieldsSinceStatusUpdate >= CPUX80.YIELDS_PER_STATUS) {
+                    if (++this.nYieldsSinceStatusUpdate >= CPUx80.YIELDS_PER_STATUS) {
                         if (this.cmp) this.cmp.updateStatus();
                         this.nYieldsSinceStatusUpdate = 0;
                     }
@@ -8139,7 +8139,7 @@ class CPUX80 extends Component {
      *
      * This will be implemented by the CPUStateX80 component.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
      * @return {number} of cycles executed; 0 indicates that the last instruction was not executed
      */
@@ -8156,7 +8156,7 @@ class CPUX80 extends Component {
      * This similar to yieldCPU(), but it doesn't need to zero nCyclesNextYield to break out of runCPU();
      * it simply needs to clear fRunning (well, "simply" may be oversimplifying a bit....)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {boolean} [fComplete]
      */
     stopCPU(fComplete)
@@ -8182,7 +8182,7 @@ class CPUX80 extends Component {
      * other callers of stepCPU(), such as the Debugger, the combination of stepCPU() + updateCPU()
      * provides the old behavior.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {boolean} [fForce] (true to force a video update; used by the Debugger)
      */
     updateCPU(fForce)
@@ -8199,7 +8199,7 @@ class CPUX80 extends Component {
      * Similar to stopCPU() with regard to how it resets various cycle countdown values, but the CPU
      * remains in a "running" state.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      */
     yieldCPU()
     {
@@ -8222,17 +8222,17 @@ class CPUX80 extends Component {
  * calcCycles(), which uses the nCyclesPerSecond passed to the constructor as a starting
  * point and computes the following variables:
  *
- *      this.nCyclesPerYield:    (this.nCyclesPerSecond / CPUX80.YIELDS_PER_SECOND)
+ *      this.nCyclesPerYield:    (this.nCyclesPerSecond / CPUx80.YIELDS_PER_SECOND)
  *
  * The above variables are also multiplied by any cycle multiplier in effect, via setSpeed(),
  * and then they're used to initialize another set of variables for each runCPU() iteration:
  *
  *      this.nCyclesNextYield:   this.nCyclesPerYield
  */
-CPUX80.YIELDS_PER_SECOND       = 30;           // just a gut feeling for the MINIMUM number of yields per second
-CPUX80.YIELDS_PER_STATUS       = 15;           // every 15 yields (ie, twice per second), perform CPU status updates
+CPUx80.YIELDS_PER_SECOND       = 30;           // just a gut feeling for the MINIMUM number of yields per second
+CPUx80.YIELDS_PER_STATUS       = 15;           // every 15 yields (ie, twice per second), perform CPU status updates
 
-CPUX80.BUTTONS = ["power", "reset"];
+CPUx80.BUTTONS = ["power", "reset"];
 
 
 /**
@@ -8247,7 +8247,7 @@ CPUX80.BUTTONS = ["power", "reset"];
  *
  * @unrestricted
  */
-class CPUStateX80 extends CPUX80 {
+class CPUStateX80 extends CPUx80 {
     /**
      * CPUStateX80(parmsCPU)
      *
@@ -9362,12 +9362,12 @@ class CPUStateX80 extends CPUX80 {
      */
     static init()
     {
-        var aeCPUs = Component.getElementsByClass(document, PCX80.APPCLASS, "cpu");
+        var aeCPUs = Component.getElementsByClass(document, PCx80.APPCLASS, "cpu");
         for (var iCPU = 0; iCPU < aeCPUs.length; iCPU++) {
             var eCPU = aeCPUs[iCPU];
             var parmsCPU = Component.getComponentParms(eCPU);
             var cpu = new CPUStateX80(parmsCPU);
-            Component.bindComponentControls(cpu, eCPU, PCX80.APPCLASS);
+            Component.bindComponentControls(cpu, eCPU, PCx80.APPCLASS);
         }
     }
 }
@@ -13017,12 +13017,12 @@ class ChipSetX80 extends Component {
      */
     static init()
     {
-        var aeChipSet = Component.getElementsByClass(document, PCX80.APPCLASS, "chipset");
+        var aeChipSet = Component.getElementsByClass(document, PCx80.APPCLASS, "chipset");
         for (var iChip = 0; iChip < aeChipSet.length; iChip++) {
             var eChipSet = aeChipSet[iChip];
             var parmsChipSet = Component.getComponentParms(eChipSet);
             var chipset = new ChipSetX80(parmsChipSet);
-            Component.bindComponentControls(chipset, eChipSet, PCX80.APPCLASS);
+            Component.bindComponentControls(chipset, eChipSet, PCx80.APPCLASS);
         }
     }
 }
@@ -13317,7 +13317,7 @@ ChipSetX80.VT100.INIT = [
              *      stored in the ROM allow the terminal to work.
              *
              * but I think what they meant to say is that default settings are stored in the RAM copy of NVR.  So then
-             * I went into SET-UP, pressed SHIFT-S to save those settings back to NVR, and then used the PCX80 debugger
+             * I went into SET-UP, pressed SHIFT-S to save those settings back to NVR, and then used the PCx80 debugger
              * "d nvr" command to dump the NVR contents.  The results are below.
              *
              * The first dump actually contains only two modifications to the factory defaults: enabling ONLINE instead
@@ -13404,11 +13404,11 @@ Web.onInit(ChipSetX80.init);
  *
  * @unrestricted
  */
-class ROMX80 extends Component {
+class ROMx80 extends Component {
     /**
-     * ROMX80(parmsROM)
+     * ROMx80(parmsROM)
      *
-     * The ROMX80 component expects the following (parmsROM) properties:
+     * The ROMx80 component expects the following (parmsROM) properties:
      *
      *      addr: physical address of ROM
      *      size: amount of ROM, in bytes
@@ -13421,7 +13421,7 @@ class ROMX80 extends Component {
      * Also, while the size parameter may seem redundant, I consider it useful to confirm that the ROM you received
      * is the ROM you expected.
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      * @param {Object} parmsROM
      */
     constructor(parmsROM)
@@ -13470,7 +13470,7 @@ class ROMX80 extends Component {
     /**
      * initBus(cmp, bus, cpu, dbg)
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      * @param {ComputerX80} cmp
      * @param {BusX80} bus
      * @param {CPUStateX80} cpu
@@ -13487,7 +13487,7 @@ class ROMX80 extends Component {
     /**
      * powerUp(data, fRepower)
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
      * @return {boolean} true if successful, false if failure
@@ -13515,7 +13515,7 @@ class ROMX80 extends Component {
      * useful down the road, like user-defined symbols (ie, symbols that the Debugger may have
      * created, above and beyond those symbols we automatically loaded, if any, along with the ROM).
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
      * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
@@ -13528,7 +13528,7 @@ class ROMX80 extends Component {
     /**
      * doneLoad(sURL, sROMData, nErrorCode)
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      * @param {string} sURL
      * @param {string} sROMData
      * @param {number} nErrorCode (response from server if anything other than 200)
@@ -13611,7 +13611,7 @@ class ROMX80 extends Component {
      * until after initBus() has received the Bus component AND doneLoad() has received the abROM data.  When both
      * those criteria are satisfied, the component becomes "ready".
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      */
     copyROM()
     {
@@ -13666,7 +13666,7 @@ class ROMX80 extends Component {
     /**
      * addROM(addr)
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      * @param {number} addr
      * @return {boolean}
      */
@@ -13696,7 +13696,7 @@ class ROMX80 extends Component {
      * Now that the Bus component provides low-level getMemoryBlocks() and setMemoryBlocks() methods
      * to manually get and set the blocks of any memory range, it is now possible to create true aliases.
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      * @param {number} addr
      */
     cloneROM(addr)
@@ -13706,21 +13706,21 @@ class ROMX80 extends Component {
     }
 
     /**
-     * ROMX80.init()
+     * ROMx80.init()
      *
      * This function operates on every HTML element of class "rom", extracting the
-     * JSON-encoded parameters for the ROMX80 constructor from the element's "data-value"
-     * attribute, invoking the constructor to create a ROMX80 component, and then binding
+     * JSON-encoded parameters for the ROMx80 constructor from the element's "data-value"
+     * attribute, invoking the constructor to create a ROMx80 component, and then binding
      * any associated HTML controls to the new component.
      */
     static init()
     {
-        var aeROM = Component.getElementsByClass(document, PCX80.APPCLASS, "rom");
+        var aeROM = Component.getElementsByClass(document, PCx80.APPCLASS, "rom");
         for (var iROM = 0; iROM < aeROM.length; iROM++) {
             var eROM = aeROM[iROM];
             var parmsROM = Component.getComponentParms(eROM);
-            var rom = new ROMX80(parmsROM);
-            Component.bindComponentControls(rom, eROM, PCX80.APPCLASS);
+            var rom = new ROMx80(parmsROM);
+            Component.bindComponentControls(rom, eROM, PCx80.APPCLASS);
         }
     }
 }
@@ -13739,9 +13739,9 @@ class ROMX80 extends Component {
  */
 
 /*
- * Initialize all the ROMX80 modules on the page.
+ * Initialize all the ROMx80 modules on the page.
  */
-Web.onInit(ROMX80.init);
+Web.onInit(ROMx80.init);
 
 
 /**
@@ -13756,11 +13756,11 @@ Web.onInit(ROMX80.init);
  *
  * @unrestricted
  */
-class RAMX80 extends Component {
+class RAMx80 extends Component {
     /**
-     * RAMX80(parmsRAM)
+     * RAMx80(parmsRAM)
      *
-     * The RAMX80 component expects the following (parmsRAM) properties:
+     * The RAMx80 component expects the following (parmsRAM) properties:
      *
      *      addr: starting physical address of RAM (default is 0)
      *      size: amount of RAM, in bytes (default is 0, which means defer to motherboard switch settings)
@@ -13771,7 +13771,7 @@ class RAMX80 extends Component {
      * NOTE: We make a note of the specified size, but no memory is initially allocated for the RAM until the
      * Computer component calls powerUp().
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {Object} parmsRAM
      */
     constructor(parmsRAM)
@@ -13814,7 +13814,7 @@ class RAMX80 extends Component {
     /**
      * initBus(cmp, bus, cpu, dbg)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {ComputerX80} cmp
      * @param {BusX80} bus
      * @param {CPUStateX80} cpu
@@ -13831,7 +13831,7 @@ class RAMX80 extends Component {
     /**
      * powerUp(data, fRepower)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
      * @return {boolean} true if successful, false if failure
@@ -13850,7 +13850,7 @@ class RAMX80 extends Component {
     /**
      * powerDown(fSave, fShutdown)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
      * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
@@ -13869,7 +13869,7 @@ class RAMX80 extends Component {
     /**
      * doneLoad(sURL, sData, nErrorCode)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {string} sURL
      * @param {string} sData
      * @param {number} nErrorCode (response from server if anything other than 200)
@@ -13902,7 +13902,7 @@ class RAMX80 extends Component {
      * until after initBus() has received the Bus component AND doneLoad() has received the data.  When both those
      * criteria are satisfied, the component becomes "ready".
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      */
     initRAM()
     {
@@ -13934,9 +13934,9 @@ class RAMX80 extends Component {
                      * (namely, 0x0000, which is the CP/M reset vector, and 0x0005, which is the CP/M system call vector) and
                      * then telling the CPU to call us whenever a HLT occurs, so we can check PC for one of these addresses.
                      */
-                    if (this.addrExec == RAMX80.CPM.INIT) {
-                        for (i = 0; i < RAMX80.CPM.VECTORS.length; i++) {
-                            this.bus.setByteDirect(RAMX80.CPM.VECTORS[i], CPUDefX80.OPCODE.HLT);
+                    if (this.addrExec == RAMx80.CPM.INIT) {
+                        for (i = 0; i < RAMx80.CPM.VECTORS.length; i++) {
+                            this.bus.setByteDirect(RAMx80.CPM.VECTORS[i], CPUDefX80.OPCODE.HLT);
                         }
 
                         this.cpu.addHaltCheck(function(rom) {
@@ -13960,7 +13960,7 @@ class RAMX80 extends Component {
     /**
      * reset()
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      */
     reset()
     {
@@ -13972,24 +13972,24 @@ class RAMX80 extends Component {
     /**
      * checkCPMVector(addr)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {number} addr (of the HLT opcode)
      * @return {boolean} true if special processing performed, false if not
      */
     checkCPMVector(addr)
     {
-        var i = RAMX80.CPM.VECTORS.indexOf(addr);
+        var i = RAMx80.CPM.VECTORS.indexOf(addr);
         if (i >= 0) {
             var fCPM = false;
             var cpu = this.cpu;
             var dbg = this.dbg;
-            if (addr == RAMX80.CPM.BDOS.VECTOR) {
+            if (addr == RAMx80.CPM.BDOS.VECTOR) {
                 fCPM = true;
                 switch(cpu.regC) {
-                case RAMX80.CPM.BDOS.FUNC.CON_WRITE:
+                case RAMx80.CPM.BDOS.FUNC.CON_WRITE:
                     this.writeCPMString(this.getCPMChar(cpu.regE));
                     break;
-                case RAMX80.CPM.BDOS.FUNC.STR_WRITE:
+                case RAMx80.CPM.BDOS.FUNC.STR_WRITE:
                     this.writeCPMString(this.getCPMString(cpu.getDE(), '$'));
                     break;
                 default:
@@ -14013,7 +14013,7 @@ class RAMX80 extends Component {
     /**
      * getCPMChar(ch)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {number} ch
      * @return {string}
      */
@@ -14025,7 +14025,7 @@ class RAMX80 extends Component {
     /**
      * getCPMString(addr, chEnd)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {number} addr (of a string)
      * @param {string|number} [chEnd] (terminating character, default is 0)
      * @return {string}
@@ -14046,7 +14046,7 @@ class RAMX80 extends Component {
     /**
      * writeCPMString(s)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {string} s
      */
     writeCPMString(s)
@@ -14055,26 +14055,26 @@ class RAMX80 extends Component {
     }
 
     /**
-     * RAMX80.init()
+     * RAMx80.init()
      *
      * This function operates on every HTML element of class "ram", extracting the
-     * JSON-encoded parameters for the RAMX80 constructor from the element's "data-value"
-     * attribute, invoking the constructor to create a RAMX80 component, and then binding
+     * JSON-encoded parameters for the RAMx80 constructor from the element's "data-value"
+     * attribute, invoking the constructor to create a RAMx80 component, and then binding
      * any associated HTML controls to the new component.
      */
     static init()
     {
-        var aeRAM = Component.getElementsByClass(document, PCX80.APPCLASS, "ram");
+        var aeRAM = Component.getElementsByClass(document, PCx80.APPCLASS, "ram");
         for (var iRAM = 0; iRAM < aeRAM.length; iRAM++) {
             var eRAM = aeRAM[iRAM];
             var parmsRAM = Component.getComponentParms(eRAM);
-            var ram = new RAMX80(parmsRAM);
-            Component.bindComponentControls(ram, eRAM, PCX80.APPCLASS);
+            var ram = new RAMx80(parmsRAM);
+            Component.bindComponentControls(ram, eRAM, PCx80.APPCLASS);
         }
     }
 }
 
-RAMX80.CPM = {
+RAMx80.CPM = {
     BIOS: {
         VECTOR:         0x0000
     },
@@ -14097,12 +14097,12 @@ RAMX80.CPM = {
     INIT:               0x100
 };
 
-RAMX80.CPM.VECTORS = [RAMX80.CPM.BIOS.VECTOR, RAMX80.CPM.BDOS.VECTOR];
+RAMx80.CPM.VECTORS = [RAMx80.CPM.BIOS.VECTOR, RAMx80.CPM.BDOS.VECTOR];
 
 /*
- * Initialize all the RAMX80 modules on the page.
+ * Initialize all the RAMx80 modules on the page.
  */
-Web.onInit(RAMX80.init);
+Web.onInit(RAMx80.init);
 
 
 /**
@@ -15145,12 +15145,12 @@ class KeyboardX80 extends Component {
      */
     static init()
     {
-        var aeKbd = Component.getElementsByClass(document, PCX80.APPCLASS, "keyboard");
+        var aeKbd = Component.getElementsByClass(document, PCx80.APPCLASS, "keyboard");
         for (var iKbd = 0; iKbd < aeKbd.length; iKbd++) {
             var eKbd = aeKbd[iKbd];
             var parmsKbd = Component.getComponentParms(eKbd);
             var kbd = new KeyboardX80(parmsKbd);
-            Component.bindComponentControls(kbd, eKbd, PCX80.APPCLASS);
+            Component.bindComponentControls(kbd, eKbd, PCx80.APPCLASS);
         }
     }
 }
@@ -16871,7 +16871,7 @@ class VideoX80 extends Component {
      */
     static init()
     {
-        var aeVideo = Component.getElementsByClass(document, PCX80.APPCLASS, "video");
+        var aeVideo = Component.getElementsByClass(document, PCx80.APPCLASS, "video");
         for (var iVideo = 0; iVideo < aeVideo.length; iVideo++) {
 
             var element = aeVideo[iVideo];
@@ -17019,7 +17019,7 @@ class VideoX80 extends Component {
              * Bind any video-specific controls (eg, the Refresh button). There are no essential controls, however;
              * even the "Refresh" button is just a diagnostic tool, to ensure that the screen contents are up-to-date.
              */
-            Component.bindComponentControls(video, element, PCX80.APPCLASS);
+            Component.bindComponentControls(video, element, PCx80.APPCLASS);
         }
     }
 }
@@ -17874,12 +17874,12 @@ class SerialPortX80 extends Component {
      */
     static init()
     {
-        var aeSerial = Component.getElementsByClass(document, PCX80.APPCLASS, "serial");
+        var aeSerial = Component.getElementsByClass(document, PCx80.APPCLASS, "serial");
         for (var iSerial = 0; iSerial < aeSerial.length; iSerial++) {
             var eSerial = aeSerial[iSerial];
             var parmsSerial = Component.getComponentParms(eSerial);
             var serial = new SerialPortX80(parmsSerial);
-            Component.bindComponentControls(serial, eSerial, PCX80.APPCLASS);
+            Component.bindComponentControls(serial, eSerial, PCx80.APPCLASS);
         }
     }
 }
@@ -19443,12 +19443,12 @@ class DebuggerX80 extends DbgLib {
              */
             var dbg = this;
             if (window) {
-                if (window[PCX80.APPCLASS] === undefined) {
-                    window[PCX80.APPCLASS] = function(s) { return dbg.doCommands(s); };
+                if (window[PCx80.APPCLASS] === undefined) {
+                    window[PCx80.APPCLASS] = function(s) { return dbg.doCommands(s); };
                 }
             } else {
-                if (global[PCX80.APPCLASS] === undefined) {
-                    global[PCX80.APPCLASS] = function(s) { return dbg.doCommands(s); };
+                if (global[PCx80.APPCLASS] === undefined) {
+                    global[PCx80.APPCLASS] = function(s) { return dbg.doCommands(s); };
                 }
             }
 
@@ -20316,7 +20316,7 @@ class DebuggerX80 extends DbgLib {
          * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
          * message, to effectively end the current burst and start fresh.
          *
-         * TODO: See CPUX80.calcStartTime() for a discussion of why we might want to call yieldCPU() *before*
+         * TODO: See CPUx80.calcStartTime() for a discussion of why we might want to call yieldCPU() *before*
          * we display the message.
          */
         if (this.cpu) this.cpu.yieldCPU();
@@ -20352,7 +20352,7 @@ class DebuggerX80 extends DbgLib {
      */
     init()
     {
-        this.println("Type ? for help with PCX80 Debugger commands");
+        this.println("Type ? for help with PCx80 Debugger commands");
         this.updateStatus();
         if (this.sInitCommands) {
             var sCmds = this.sInitCommands;
@@ -23116,7 +23116,7 @@ class DebuggerX80 extends DbgLib {
                         }
                         break;
                     }
-                    this.println((PCX80.APPNAME || "PCX80") + " version " + PCX80.APPVERSION + " (" + this.cpu.model + (PCX80.COMPILED? ",RELEASE" : (PCX80.DEBUG? ",DEBUG" : ",NODEBUG")) + (PCX80.TYPEDARRAYS? ",TYPEDARRAYS" : (PCX80.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")) + ')');
+                    this.println((PCx80.APPNAME || "PCx80") + " version " + PCx80.APPVERSION + " (" + this.cpu.model + (PCx80.COMPILED? ",RELEASE" : (PCx80.DEBUG? ",DEBUG" : ",NODEBUG")) + (PCx80.TYPEDARRAYS? ",TYPEDARRAYS" : (PCx80.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")) + ')');
                     this.println(Web.getUserAgent());
                     break;
                 case '?':
@@ -23174,12 +23174,12 @@ class DebuggerX80 extends DbgLib {
      */
     static init()
     {
-        var aeDbg = Component.getElementsByClass(document, PCX80.APPCLASS, "debugger");
+        var aeDbg = Component.getElementsByClass(document, PCx80.APPCLASS, "debugger");
         for (var iDbg = 0; iDbg < aeDbg.length; iDbg++) {
             var eDbg = aeDbg[iDbg];
             var parmsDbg = Component.getComponentParms(eDbg);
             var dbg = new DebuggerX80(parmsDbg);
-            Component.bindComponentControls(dbg, eDbg, PCX80.APPCLASS);
+            Component.bindComponentControls(dbg, eDbg, PCx80.APPCLASS);
         }
     }
 }
@@ -23804,7 +23804,7 @@ class ComputerX80 extends Component {
             }
         }
 
-        this.println(PCX80.APPNAME + " v" + PCX80.APPVERSION + "\n" + COPYRIGHT + "\n" + LICENSE);
+        this.println(PCx80.APPNAME + " v" + PCx80.APPVERSION + "\n" + COPYRIGHT + "\n" + LICENSE);
 
         if (DEBUG && this.messageEnabled()) this.printMessage("TYPEDARRAYS: " + TYPEDARRAYS);
 
@@ -23857,7 +23857,7 @@ class ComputerX80 extends Component {
                 this.resume = ComputerX80.RESUME_NONE;
             }
             if (this.resume) {
-                this.stateComputer = new State(this, PCX80.APPVERSION);
+                this.stateComputer = new State(this, PCx80.APPVERSION);
                 if (this.stateComputer.load()) {
                     sStatePath = null;
                 } else {
@@ -24069,7 +24069,7 @@ class ComputerX80 extends Component {
     validateState(stateComputer)
     {
         var fValid = true;
-        var stateValidate = new State(this, PCX80.APPVERSION, ComputerX80.STATE_VALIDATE);
+        var stateValidate = new State(this, PCx80.APPVERSION, ComputerX80.STATE_VALIDATE);
         if (stateValidate.load() && stateValidate.parse()) {
             var sTimestampValidate = stateValidate.get(ComputerX80.STATE_TIMESTAMP);
             var sTimestampComputer = stateComputer? stateComputer.get(ComputerX80.STATE_TIMESTAMP) : "unknown";
@@ -24112,7 +24112,7 @@ class ComputerX80 extends Component {
         var fRepower = false;
         var fRestore = false;
         this.fRestoreError = false;
-        var stateComputer = this.stateComputer || new State(this, PCX80.APPVERSION);
+        var stateComputer = this.stateComputer || new State(this, PCx80.APPVERSION);
 
         if (resume == ComputerX80.RESUME_REPOWER) {
             fRepower = true;
@@ -24125,7 +24125,7 @@ class ComputerX80 extends Component {
                  * Which means, of course, that if a previous "failsafe" checkpoint already exists, something bad
                  * may have happened the last time around.
                  */
-                this.stateFailSafe = new State(this, PCX80.APPVERSION, ComputerX80.STATE_FAILSAFE);
+                this.stateFailSafe = new State(this, PCx80.APPVERSION, ComputerX80.STATE_FAILSAFE);
                 if (this.stateFailSafe.load()) {
                     this.powerReport(stateComputer);
                     /*
@@ -24145,7 +24145,7 @@ class ComputerX80 extends Component {
                 this.stateFailSafe.store();
 
                 var fValidate = this.resume && !this.fServerState;
-                if (resume == ComputerX80.RESUME_AUTO || Component.confirmUser("Click OK to restore the previous " + PCX80.APPNAME + " machine state, or CANCEL to reset the machine.")) {
+                if (resume == ComputerX80.RESUME_AUTO || Component.confirmUser("Click OK to restore the previous " + PCx80.APPNAME + " machine state, or CANCEL to reset the machine.")) {
                     fRestore = stateComputer.parse();
                     if (fRestore) {
                         var sCode = /** @type {string} */ (stateComputer.get(UserAPI.RES.CODE));
@@ -24423,10 +24423,10 @@ class ComputerX80 extends Component {
         //
         // This is all we can realistically do for now.
         //
-        Web.onError("There may be a problem with your " + PCX80.APPNAME + " machine.");
+        Web.onError("There may be a problem with your " + PCx80.APPNAME + " machine.");
         //
-        // if (Component.confirmUser("There may be a problem with your " + PCX80.APPNAME + " machine.\n\nTo help us diagnose it, click OK to send this " + PCX80.APPNAME + " machine state to " + SITEURL + ".")) {
-        //     Web.sendReport(PCX80.APPNAME, PCX80.APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
+        // if (Component.confirmUser("There may be a problem with your " + PCx80.APPNAME + " machine.\n\nTo help us diagnose it, click OK to send this " + PCx80.APPNAME + " machine state to " + SITEURL + ".")) {
+        //     Web.sendReport(PCx80.APPNAME, PCx80.APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
         // }
         //
     }
@@ -24476,8 +24476,8 @@ class ComputerX80 extends Component {
         }
         this.nPowerChange--;
 
-        var stateComputer = new State(this, PCX80.APPVERSION);
-        var stateValidate = new State(this, PCX80.APPVERSION, ComputerX80.STATE_VALIDATE);
+        var stateComputer = new State(this, PCx80.APPVERSION);
+        var stateValidate = new State(this, PCx80.APPVERSION, ComputerX80.STATE_VALIDATE);
 
         var sTimestamp = Usr.getTimestamp();
         stateValidate.set(ComputerX80.STATE_TIMESTAMP, sTimestamp);
@@ -24833,7 +24833,7 @@ class ComputerX80 extends Component {
             if (DEBUG && this.messageEnabled()) {
                 this.printMessage(ComputerX80.STATE_USERID + " for load: " + this.sUserID);
             }
-            sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, PCX80.APPVERSION);
+            sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, PCx80.APPVERSION);
         } else {
             if (DEBUG && this.messageEnabled()) {
                 this.printMessage(ComputerX80.STATE_USERID + " unavailable");
@@ -24901,7 +24901,7 @@ class ComputerX80 extends Component {
         var dataPost = {};
         dataPost[UserAPI.QUERY.REQ] = UserAPI.REQ.STORE;
         dataPost[UserAPI.QUERY.USER] = sUserID;
-        dataPost[UserAPI.QUERY.STATE] = State.getKey(this, PCX80.APPVERSION);
+        dataPost[UserAPI.QUERY.STATE] = State.getKey(this, PCx80.APPVERSION);
         dataPost[UserAPI.QUERY.DATA] = sState;
         var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT;
         if (!fSync) {
@@ -24970,7 +24970,7 @@ class ComputerX80 extends Component {
              * I used to bypass the prompt if this.resume == ComputerX80.RESUME_AUTO, setting fSave to true automatically,
              * but that gives the user no means of resetting a resumable machine that contains errors in its resume state.
              */
-            var fSave = (/* this.resume == ComputerX80.RESUME_AUTO || */ Component.confirmUser("Click OK to save changes to this " + PCX80.APPNAME + " machine.\n\nWARNING: If you CANCEL, all disk changes will be discarded."));
+            var fSave = (/* this.resume == ComputerX80.RESUME_AUTO || */ Component.confirmUser("Click OK to save changes to this " + PCx80.APPNAME + " machine.\n\nWARNING: If you CANCEL, all disk changes will be discarded."));
             this.powerOff(fSave, true);
             /*
              * Forcing the page to reload is an expedient option, but ugly. It's preferable to call powerOn()
@@ -25116,14 +25116,14 @@ class ComputerX80 extends Component {
      */
     static init()
     {
-        var aeMachines = Component.getElementsByClass(document, PCX80.APPCLASS + "-machine");
+        var aeMachines = Component.getElementsByClass(document, PCx80.APPCLASS + "-machine");
 
         for (var iMachine = 0; iMachine < aeMachines.length; iMachine++) {
 
             var eMachine = aeMachines[iMachine];
             var parmsMachine = Component.getComponentParms(eMachine);
 
-            var aeComputers = Component.getElementsByClass(eMachine, PCX80.APPCLASS, "computer");
+            var aeComputers = Component.getElementsByClass(eMachine, PCx80.APPCLASS, "computer");
 
             for (var iComputer = 0; iComputer < aeComputers.length; iComputer++) {
 
@@ -25145,7 +25145,7 @@ class ComputerX80 extends Component {
                  * but "reset" now provides a way to force the machine to start from scratch again, so "erase"
                  * may be redundant now.
                  */
-                Component.bindComponentControls(computer, eComputer, PCX80.APPCLASS);
+                Component.bindComponentControls(computer, eComputer, PCx80.APPCLASS);
 
                 /*
                  * Power on the computer, giving every component the opportunity to reset or restore itself.
@@ -25166,7 +25166,7 @@ class ComputerX80 extends Component {
      */
     static show()
     {
-        var aeComputers = Component.getElementsByClass(document, PCX80.APPCLASS, "computer");
+        var aeComputers = Component.getElementsByClass(document, PCx80.APPCLASS, "computer");
         for (var iComputer = 0; iComputer < aeComputers.length; iComputer++) {
             var eComputer = aeComputers[iComputer];
             var parmsComputer = Component.getComponentParms(eComputer);
@@ -25222,7 +25222,7 @@ class ComputerX80 extends Component {
      */
     static exit()
     {
-        var aeComputers = Component.getElementsByClass(document, PCX80.APPCLASS, "computer");
+        var aeComputers = Component.getElementsByClass(document, PCx80.APPCLASS, "computer");
         for (var iComputer = 0; iComputer < aeComputers.length; iComputer++) {
             var eComputer = aeComputers[iComputer];
             var parmsComputer = Component.getComponentParms(eComputer);

@@ -67,7 +67,7 @@ export default class ROM extends Memory {
         this.bus.addBlocks(this.config['addr'], this.config['size'], this.config['type'], this);
         this.whenReady(this.onReset.bind(this));
 
-        /*
+        /**
          * If an "array" binding has been supplied, then create an LED array sufficiently large to represent the
          * entire ROM.  If data.length is an odd power-of-two, then we will favor a slightly wider array over a taller
          * one, by virtue of using Math.ceil() instead of Math.floor() for the columns calculation.
@@ -161,7 +161,7 @@ export default class ROM extends Memory {
                 success = false;
             }
         }
-        /*
+        /**
          * Version 1.21 and up also saves the ROM contents, since our "mini-debugger" has been updated
          * with an edit command ("e") to enable ROM patching.  However, we prefer to detect improvements
          * in saved state based on the length of the array, not the version number.
@@ -189,13 +189,13 @@ export default class ROM extends Memory {
      */
     onPower(on)
     {
-        /*
+        /**
          * We only care about the first power event, because it's a safe opportunity to find the CPU.
          */
         if (this.cpu === undefined) {
             this.cpu = /** @type {CPU} */ (this.findDeviceByClass("CPU"));
         }
-        /*
+        /**
          * This is also a good time to get access to the Debugger, if any, and pass it symbol information, if any.
          */
         if (this.dbg === undefined) {
