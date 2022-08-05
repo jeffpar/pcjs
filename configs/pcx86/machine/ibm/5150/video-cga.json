@@ -7,7 +7,7 @@
   "screenColor": "black",
   "charCols": 80,
   "charRows": 25,
-  "fontROM": "/machines/pcx86/ibm/video/cga/IBM-CGA.json",
+  "fontROM": "/machines/pcx86/ibm/video/cga/IBM-CGA.json5",
   "flicker": 0.5,
   "overlay": true,
   "autoLock": true,

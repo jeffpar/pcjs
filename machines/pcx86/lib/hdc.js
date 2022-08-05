@@ -3293,9 +3293,9 @@ HDC.aDriveTypes = [
      * aDriveTypes[0] is for the IBM PC XT (XTC) controller.
      */
     {
-         0: [306, 2],
-         1: [375, 8],
-         2: [306, 6],
+         0: [306, 2],           //  5Mb ( 5.08Mb: 306*2*17*512 or  5,326,848 bytes)
+         1: [375, 8],           // 25Mb (24.90Mb: 375*8*17*512 or 26,112,000 bytes)
+         2: [306, 6],           // 15Mb (15.24Mb: 306*6*17*512 or 15,980,544 bytes)
          3: [306, 4]            // 10Mb (10.16Mb: 306*4*17*512 or 10,653,696 bytes) (default XTC drive type: 3)
     },
     /*

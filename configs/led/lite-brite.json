@@ -4,7 +4,7 @@
     "type": "LED",
     "name": "Lite-Brite Demo",
     "version": 2.00,
-    "autoStart": false,
+    "autoStart": true,
     "bindings": {
       "reset": "resetLB",
       "clear": "clearLB",

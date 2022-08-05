@@ -279,7 +279,7 @@ CPUx86.DESC = {         // Descriptor Table Entry
     INVALID: 0          // use CPUx86.DESC.INVALID for invalid DESC values
 };
 
-CPUx86.LADDR = {                // linear address
+CPUx86.LADDR = {        // linear address
     PDE: {              // index of page directory entry
         MASK:   0xFFC00000|0,
         SHIFT:  20      // (addr & DIR.MASK) >>> DIR.SHIFT yields a page directory offset (ie, index * 4)

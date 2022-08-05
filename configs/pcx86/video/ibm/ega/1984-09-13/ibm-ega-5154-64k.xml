@@ -9,5 +9,5 @@
 			<control type="button" binding="fullScreen" padLeft="8px;line-height:1em">Full Screen</control>
 		</control>
 	</menu>
-	<rom id="romEGA" addr="0xc0000" size="0x4000" file="/machines/pcx86/ibm/video/ega/IBM-EGA.json" notify="videoEGA"/>
+	<rom id="romEGA" addr="0xc0000" size="0x4000" file="/machines/pcx86/ibm/video/ega/IBM-EGA.json5" notify="videoEGA"/>
 </video>

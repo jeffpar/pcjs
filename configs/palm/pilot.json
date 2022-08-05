@@ -5,7 +5,7 @@
     "name": "Palm Pilot",
     "version": 2.00,
     "autoSave": true,
-    "autoStart": true,
+    "autoStart": false,
     "bindings": {
       "power": "powerPilot",
       "reset": "resetPilot",

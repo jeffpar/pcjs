@@ -298,7 +298,7 @@ export default class Machine extends Device {
                 /**
                  * Historically, my web servers have not been consistent about quoting property names inside
                  * the optional parameters object, so we must use eval() instead of JSON.parse() to parse them.
-                 * Of couse, the REAL problem is that JSON.parse() is being a dick about otherwise perfectly
+                 * Of course, the REAL problem is that JSON.parse() is being a dick about otherwise perfectly
                  * legitimate Object syntax, but I shall not repeat my long list of gripes about JSON here.
                  */
                 let parms = /** @type {Object} */ (eval("(" + this.sParms + ")"));
@@ -334,7 +334,7 @@ export default class Machine extends Device {
             if (on) this.println("power on");
             this.enumDevices(function onDevicePower(device) {
                 if (device.onPower && device != machine) {
-                    if (device.config['class'] != "CPU" || machine.fAutoStart || machine.isReady()) {
+                    if (device.config['class'] != "CPU" || machine.fAutoStart && machine.isReady()) {
                         device.onPower(on);
                     } else {
                         /**

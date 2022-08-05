@@ -11,7 +11,7 @@ and it is *identical* the CGA portion of the [IBM CGA](/machines/pcx86/ibm/video
 
 ### Columbia Data Products CGA Character ROM
 
-There is only one known Columbia Data Products CGA Character ROM ([MPC_VID-10.json](MPC_VID-1.0.json)), and it is
+There is only one known Columbia Data Products CGA Character ROM ([MPC_VID-1.0](MPC_VID-1.0.json5)), and it is
 *identical* to the CGA portion of the [IBM CGA](/machines/pcx86/ibm/video/cga/) character ROM.
 
 For reference, here are the first 0x80 bytes at offset 0x0000 from this ROM, which contain the font data for the first

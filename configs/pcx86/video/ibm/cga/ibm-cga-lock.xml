@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<video id="videoCGA" screenWidth="1280" screenHeight="800" touchScreen="mouse" autoLock="true" fontROM="/machines/pcx86/ibm/video/cga/IBM-CGA.json" padding="8px">
+<video id="videoCGA" screenWidth="1280" screenHeight="800" touchScreen="mouse" autoLock="true" fontROM="/machines/pcx86/ibm/video/cga/IBM-CGA.json5" padding="8px">
 	<menu>
 		<title>Color Display</title>
 		<control type="container" pos="right">

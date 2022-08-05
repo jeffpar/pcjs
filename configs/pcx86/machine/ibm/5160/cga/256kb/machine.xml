@@ -4,9 +4,9 @@
 	<name pos="center">IBM PC XT, 256Kb RAM, 10Mb Hard Disk, CGA</name>
 	<computer id="xt-cga-256k" name="IBM PC XT"/>
 	<ram id="ramLow" addr="0x00000" test="false"/>
-	<rom id="romHDC" addr="0xc8000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/hdc/IBM-XEBEC-1982.json"/>
-	<rom id="romBASIC" addr="0xf6000" size="0x8000" file="/machines/pcx86/ibm/5160/rom/basic/BASIC110.json"/>
-	<rom id="romBIOS" addr="0xfe000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/bios/1982-11-08/XTBIOS-REV1.json"/>
+	<rom id="romHDC" addr="0xc8000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/hdc/IBM-XEBEC-1982.json5"/>
+	<rom id="romBASIC" addr="0xf6000" size="0x8000" file="/machines/pcx86/ibm/5160/rom/basic/BASIC110.json5"/>
+	<rom id="romBIOS" addr="0xfe000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/bios/1982-11-08/XTBIOS-REV1.json5"/>
 	<video ref="/configs/pcx86/video/ibm/cga/ibm-cga-lock.xml"/>
 	<fdc ref="/configs/pcx86/fdc/library.xml"/>
 	<hdc id="hdcXT" drives='[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/harddisks/pcx86/10mb/PCDOS200-C400.json"}]'/>

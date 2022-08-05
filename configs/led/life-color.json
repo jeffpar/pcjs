@@ -4,7 +4,7 @@
     "type": "LED",
     "name": "Game of Life",
     "version": 2.00,
-    "autoStart": false,
+    "autoStart": true,
     "bindings": {
       "reset": "resetLife",
       "clear": "clearLife",

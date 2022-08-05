@@ -7,7 +7,7 @@ redirect_from: /devices/pcx86/video/ibm/mda/
 
 ### IBM MDA Character ROM
 
-There is only one known MDA Character ROM ([ibm-mda.json](ibm-mda.json)), and it is identical to the CGA Character ROM,
+There is only one known MDA Character ROM ([IBM-MDA](IBM-MDA.json5)), and it is identical to the CGA Character ROM,
 because the ROM contains both the 8x14 MDA and 8x8 CGA fonts.
 
 As documented in [video.js](/machines/pcx86/lib/video.js):

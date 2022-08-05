@@ -16,7 +16,7 @@ and merge them into a single 64Kb file, using the PCjs [FileDump](/tools/old/fil
 
 Then, within the resulting 64Kb file, we extract the ROM code+data from the upper 32Kb:
 
-	filedump --file=1988-11-11/archive/VGA_Wonder_V3-1.02.rom --offset=32768 --format=bytes --comments --output=1988-11-11/VGA_Wonder_V3-1.02.json
+	filedump --file=1988-11-11/archive/VGA_Wonder_V3-1.02.rom --offset=32768 --format=bytes --comments --output=1988-11-11/VGA_Wonder_V3-1.02.json5
 
 And now we have a JSON-encoded ROM image that PCjs machines can load.
 
@@ -24,9 +24,9 @@ And now we have a JSON-encoded ROM image that PCjs machines can load.
 
 To create a human-readable dump, you can use the following command:
 
-	filedump --file=1988-11-11/VGA_Wonder_V3-1.02.json --format=bytes --comments
+	filedump --file=1988-11-11/VGA_Wonder_V3-1.02.json5 --format=bytes --comments
 
-Here are the first 12 lines from [VGA_Wonder_V3-1.02.json](1988-11-11/VGA_Wonder_V3-1.02.json):
+Here are the first 12 lines from [VGA_Wonder_V3-1.02.json5](1988-11-11/VGA_Wonder_V3-1.02.json5):
 
 	0x55,0xAA,0x40,0xEB,0x63,0x37,0x34,0x30,0x30,0x3E,0xFF,0xFF,0x81,0x00,0x88,0x2C, // 0x00000000 U.@.c7400......,
 	0xCE,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x49,0x42, // 0x00000010 ..............IB
