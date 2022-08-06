@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/other/sc3/1.00/
 machines:
   - id: ibm5160-sc3
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5160/cga/640kb/machine.xml
+    config: /machines/pcx86/machine/ibm/5160/cga/640kb/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)

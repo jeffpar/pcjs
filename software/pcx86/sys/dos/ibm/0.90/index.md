@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/0.90/
 machines:
   - id: ibm5150-pcdos090
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    config: /machines/pcx86/machine/ibm/5150/cga/256kb/machine.xml
     autoMount:
       A:
         name: PC DOS 0.90

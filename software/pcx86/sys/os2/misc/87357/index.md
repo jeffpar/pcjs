@@ -7,7 +7,7 @@ machines:
   - id: deskpro386
     type: pcx86
     debugger: true
-    config: /configs/pcx86/machine/compaq/deskpro386/ega/2048kb/debugger/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/ega/2048kb/debugger/machine.xml
     autoMount:
       A:
         name: OS/2 FOOTBALL (v4.41.00)

@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/shareware/pcdiskmag/
 machines:
   - id: pcdm
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5160/ega/640kb/machine.xml
+    config: /machines/pcx86/machine/ibm/5160/ega/640kb/machine.xml
     resume: 1
     drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'
     autoMount:

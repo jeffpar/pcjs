@@ -1,0 +1,496 @@
+{
+  "@doc": {
+    "overview": [
+      "The top-level keys in machines.json are unique machine types; they are are used to form the names of the",
+      "compiled js packages; exceptions include any type beginning with an address sign (eg, '@doc') and 'shared',",
+      "which contains properties common to multiple machines.",
+      "",
+      "'name' defines the external (displayed) name of the machine (eg, 'PCx86').  For machines that use XSL",
+      "template files, it is also propagated to the APPNAME XSL variable.",
+      "",
+      "'folder' defines the name of the 'machines' source code folder as well as the prefix for the machine's CSS classes;",
+      "if not defined, the machine type is used.  For machines that use XSL template files, the value is propagated to",
+      "the APPCLASS XSL variable.",
+      "",
+      "'copy' is an optional property used by new machines to refer to another machine configuration that will be used",
+      "for all other machine properties; it saves a bit repetition for machines that are very similar.",
+      "",
+      "'scripts' is a list of all the JavaScript files that comprise the machine; PCjs 'gulp' tasks will concatenate and",
+      "compile the files in the order listed, and if the web server is configured to load uncompiled files, they will also",
+      "be loaded on their respective web pages in the order listed."
+    ]
+  },
+  "pcx86": {
+    "name": "PCx86",
+    "version": "2.07",
+    "defines": [
+      "APPVERSION",
+      "DEBUGGER",
+      "SITEURL",
+      "BACKTRACK",
+      "I386"
+    ],
+    "factory": "embedPCx86",
+    "scripts": [
+      "./machines/shared/lib/defines.js",
+      "./machines/shared/lib/diskapi.js",
+      "./machines/shared/lib/dumpapi.js",
+      "./machines/shared/lib/reportapi.js",
+      "./machines/shared/lib/userapi.js",
+      "./machines/shared/lib/keys.js",
+      "./machines/shared/lib/strlib.js",
+      "./machines/shared/lib/usrlib.js",
+      "./machines/shared/lib/weblib.js",
+      "./machines/shared/lib/component.js",
+      "./machines/pcx86/lib/defines.js",
+      "./machines/pcx86/lib/x86.js",
+      "./machines/pcx86/lib/interrupts.js",
+      "./machines/pcx86/lib/messages.js",
+      "./machines/pcx86/lib/panel.js",
+      "./machines/pcx86/lib/bus.js",
+      "./machines/pcx86/lib/memory.js",
+      "./machines/pcx86/lib/cpu.js",
+      "./machines/pcx86/lib/cpux86.js",
+      "./machines/pcx86/lib/fpux86.js",
+      "./machines/pcx86/lib/segx86.js",
+      "./machines/pcx86/lib/x86func.js",
+      "./machines/pcx86/lib/x86help.js",
+      "./machines/pcx86/lib/x86mods.js",
+      "./machines/pcx86/lib/x86ops.js",
+      "./machines/pcx86/lib/x86op0f.js",
+      "./machines/pcx86/lib/chipset.js",
+      "./machines/pcx86/lib/rom.js",
+      "./machines/pcx86/lib/ram.js",
+      "./machines/pcx86/lib/keyboard.js",
+      "./machines/pcx86/lib/video.js",
+      "./machines/pcx86/lib/parallel.js",
+      "./machines/pcx86/lib/serial.js",
+      "./machines/pcx86/lib/testctl.js",
+      "./machines/pcx86/lib/testmon.js",
+      "./machines/pcx86/lib/mouse.js",
+      "./machines/pcx86/lib/disk.js",
+      "./machines/pcx86/lib/fdc.js",
+      "./machines/pcx86/lib/hdc.js",
+      "./machines/modules/jsonlib.js",
+      "./machines/shared/lib/debugger.js",
+      "./machines/pcx86/lib/debugger.js",
+      "./machines/pcx86/lib/computer.js",
+      "./machines/shared/lib/state.js",
+      "./machines/shared/lib/embed.js",
+      "./machines/shared/lib/save.js"
+    ]
+  },
+  "pcx86v3": {
+    "name": "PCx86",
+    "folder": "pcx86",
+    "version": "3.00",
+    "defines": [
+      "FACTORY",
+      "VERSION"
+    ],
+    "factory": "PCx86v3",
+    "scripts": [
+      "./machines/modules/defs.js",
+      "./machines/modules/numio.js",
+      "./machines/modules/stdio.js",
+      "./machines/modules/webio.js",
+      "./machines/modules/device.js",
+      "./machines/modules/input.js",
+      "./machines/modules/led.js",
+      "./machines/modules/monitor.js",
+      "./machines/modules/time.js",
+      "./machines/modules/bus.js",
+      "./machines/modules/memory.js",
+      "./machines/modules/ram.js",
+      "./machines/modules/rom.js",
+      "./machines/modules/cpu.js",
+      "./machines/modules/debugger.js",
+      "./machines/pcx86/modules/cpux86.js",
+      "./machines/pcx86/modules/dbgx86.js",
+      "./machines/pcx86/modules/video.js",
+      "./machines/modules/machine.js"
+    ]
+  },
+  "c1p": {
+    "name": "C1Pjs",
+    "folder": "osi/c1p",
+    "defines": [
+      "APPVERSION",
+      "DEBUGGER",
+      "SITEURL"
+    ],
+    "factory": "embedC1P",
+    "scripts": [
+      "./machines/shared/lib/defines.js",
+      "./machines/shared/lib/dumpapi.js",
+      "./machines/shared/lib/reportapi.js",
+      "./machines/shared/lib/strlib.js",
+      "./machines/shared/lib/usrlib.js",
+      "./machines/shared/lib/weblib.js",
+      "./machines/shared/lib/component.js",
+      "./machines/osi/c1p/lib/defines.js",
+      "./machines/osi/c1p/lib/panel.js",
+      "./machines/osi/c1p/lib/cpu.js",
+      "./machines/osi/c1p/lib/rom.js",
+      "./machines/osi/c1p/lib/ram.js",
+      "./machines/osi/c1p/lib/keyboard.js",
+      "./machines/osi/c1p/lib/video.js",
+      "./machines/osi/c1p/lib/serial.js",
+      "./machines/osi/c1p/lib/disk.js",
+      "./machines/osi/c1p/lib/debugger.js",
+      "./machines/osi/c1p/lib/computer.js",
+      "./machines/shared/lib/embed.js"
+    ],
+    "styles": [
+      "./machines/c1p/xsl/components.css"
+    ],
+    "css": [
+      "./machines/c1p/xsl/common.css",
+      "./machines/c1p/xsl/components.css"
+    ],
+    "xsl": [
+      "./machines/c1p/xsl/common.xsl",
+      "./machines/c1p/xsl/components.xsl",
+      "./machines/c1p/xsl/machine.xsl"
+    ]
+  },
+  "pcx80": {
+    "name": "PCx80",
+    "defines": [
+      "APPVERSION",
+      "DEBUGGER",
+      "SITEURL"
+    ],
+    "factory": "embedPCx80",
+    "scripts": [
+      "./machines/shared/lib/defines.js",
+      "./machines/shared/lib/dumpapi.js",
+      "./machines/shared/lib/reportapi.js",
+      "./machines/shared/lib/userapi.js",
+      "./machines/shared/lib/keys.js",
+      "./machines/shared/lib/strlib.js",
+      "./machines/shared/lib/usrlib.js",
+      "./machines/shared/lib/weblib.js",
+      "./machines/shared/lib/component.js",
+      "./machines/pcx80/lib/defines.js",
+      "./machines/pcx80/lib/cpudef.js",
+      "./machines/pcx80/lib/messages.js",
+      "./machines/pcx80/lib/panel.js",
+      "./machines/pcx80/lib/bus.js",
+      "./machines/pcx80/lib/memory.js",
+      "./machines/pcx80/lib/cpu.js",
+      "./machines/pcx80/lib/cpustate.js",
+      "./machines/pcx80/lib/cpuops.js",
+      "./machines/pcx80/lib/chipset.js",
+      "./machines/pcx80/lib/rom.js",
+      "./machines/pcx80/lib/ram.js",
+      "./machines/pcx80/lib/keyboard.js",
+      "./machines/pcx80/lib/video.js",
+      "./machines/pcx80/lib/serial.js",
+      "./machines/shared/lib/debugger.js",
+      "./machines/pcx80/lib/debugger.js",
+      "./machines/pcx80/lib/computer.js",
+      "./machines/shared/lib/state.js",
+      "./machines/shared/lib/embed.js"
+    ]
+  },
+  "pdp10": {
+    "name": "PDPjs",
+    "folder": "dec/pdp10",
+    "defines": [
+      "APPVERSION",
+      "DEBUGGER",
+      "SITEURL"
+    ],
+    "factory": "embedPDP10",
+    "scripts": [
+      "./machines/shared/lib/defines.js",
+      "./machines/shared/lib/dumpapi.js",
+      "./machines/shared/lib/reportapi.js",
+      "./machines/shared/lib/userapi.js",
+      "./machines/shared/lib/keys.js",
+      "./machines/shared/lib/strlib.js",
+      "./machines/shared/lib/usrlib.js",
+      "./machines/shared/lib/weblib.js",
+      "./machines/shared/lib/component.js",
+      "./machines/dec/pdp10/lib/defines.js",
+      "./machines/dec/pdp10/lib/messages.js",
+      "./machines/dec/pdp10/lib/panel.js",
+      "./machines/dec/pdp10/lib/bus.js",
+      "./machines/dec/pdp10/lib/device.js",
+      "./machines/dec/pdp10/lib/memory.js",
+      "./machines/dec/pdp10/lib/cpu.js",
+      "./machines/dec/pdp10/lib/cpustate.js",
+      "./machines/dec/pdp10/lib/cpuops.js",
+      "./machines/dec/pdp10/lib/rom.js",
+      "./machines/dec/pdp10/lib/ram.js",
+      "./machines/dec/pdp10/lib/serial.js",
+      "./machines/shared/lib/debugger.js",
+      "./machines/dec/pdp10/lib/debugger.js",
+      "./machines/dec/pdp10/lib/macro10.js",
+      "./machines/dec/pdp10/lib/computer.js",
+      "./machines/shared/lib/state.js",
+      "./machines/shared/lib/embed.js"
+    ]
+  },
+  "pdp11": {
+    "name": "PDPjs",
+    "folder": "dec/pdp11",
+    "defines": [
+      "APPVERSION",
+      "DEBUGGER",
+      "SITEURL"
+    ],
+    "factory": "embedPDP11",
+    "scripts": [
+      "./machines/shared/lib/defines.js",
+      "./machines/shared/lib/diskapi.js",
+      "./machines/shared/lib/dumpapi.js",
+      "./machines/shared/lib/reportapi.js",
+      "./machines/shared/lib/userapi.js",
+      "./machines/shared/lib/keys.js",
+      "./machines/shared/lib/strlib.js",
+      "./machines/shared/lib/usrlib.js",
+      "./machines/shared/lib/weblib.js",
+      "./machines/shared/lib/component.js",
+      "./machines/dec/pdp11/lib/defines.js",
+      "./machines/dec/pdp11/lib/messages.js",
+      "./machines/dec/pdp11/lib/panel.js",
+      "./machines/dec/pdp11/lib/bus.js",
+      "./machines/dec/pdp11/lib/device.js",
+      "./machines/dec/pdp11/lib/memory.js",
+      "./machines/dec/pdp11/lib/cpu.js",
+      "./machines/dec/pdp11/lib/cpustate.js",
+      "./machines/dec/pdp11/lib/cpuops.js",
+      "./machines/dec/pdp11/lib/rom.js",
+      "./machines/dec/pdp11/lib/ram.js",
+      "./machines/dec/pdp11/lib/keyboard.js",
+      "./machines/dec/pdp11/lib/serial.js",
+      "./machines/dec/pdp11/lib/pc11.js",
+      "./machines/dec/pdp11/lib/disk.js",
+      "./machines/dec/pdp11/lib/drive.js",
+      "./machines/dec/pdp11/lib/rk11.js",
+      "./machines/dec/pdp11/lib/rl11.js",
+      "./machines/dec/pdp11/lib/rx11.js",
+      "./machines/shared/lib/debugger.js",
+      "./machines/dec/pdp11/lib/debugger.js",
+      "./machines/dec/pdp11/lib/computer.js",
+      "./machines/shared/lib/state.js",
+      "./machines/shared/lib/embed.js"
+    ]
+  },
+  "ti57": {
+    "name": "TI57",
+    "folder": "ti/ti57",
+    "version": "2.00",
+    "defines": [
+      "FACTORY",
+      "VERSION"
+    ],
+    "factory": "TMS1500",
+    "scripts": [
+      "./machines/modules/defs.js",
+      "./machines/modules/numio.js",
+      "./machines/modules/stdio.js",
+      "./machines/modules/webio.js",
+      "./machines/modules/device.js",
+      "./machines/modules/input.js",
+      "./machines/modules/led.js",
+      "./machines/modules/time.js",
+      "./machines/modules/bus.js",
+      "./machines/modules/memory.js",
+      "./machines/modules/rom.js",
+      "./machines/modules/cpu.js",
+      "./machines/ti/modules/cpu1500.js",
+      "./machines/modules/machine.js"
+    ]
+  },
+  "ti55": {
+    "name": "TI55",
+    "folder": "ti/ti55",
+    "copy": "ti57"
+  },
+  "ti42": {
+    "name": "TI42",
+    "folder": "ti/ti42",
+    "copy": "ti57"
+  },
+  "invaders": {
+    "name": "Space Invaders",
+    "folder": "arcade/invaders",
+    "version": "2.00",
+    "defines": [
+      "FACTORY",
+      "VERSION"
+    ],
+    "factory": "Invaders",
+    "scripts": [
+      "./machines/modules/defs.js",
+      "./machines/modules/numio.js",
+      "./machines/modules/stdio.js",
+      "./machines/modules/webio.js",
+      "./machines/modules/device.js",
+      "./machines/modules/input.js",
+      "./machines/modules/led.js",
+      "./machines/modules/monitor.js",
+      "./machines/modules/time.js",
+      "./machines/modules/bus.js",
+      "./machines/modules/memory.js",
+      "./machines/modules/ports.js",
+      "./machines/modules/ram.js",
+      "./machines/modules/rom.js",
+      "./machines/modules/cpu.js",
+      "./machines/modules/debugger.js",
+      "./machines/pcx80/modules/cpux80.js",
+      "./machines/pcx80/modules/dbgx80.js",
+      "./machines/arcade/invaders/modules/ports.js",
+      "./machines/arcade/invaders/modules/video.js",
+      "./machines/modules/machine.js"
+    ]
+  },
+  "led": {
+    "name": "LED",
+    "version": "2.00",
+    "defines": [
+      "FACTORY",
+      "VERSION"
+    ],
+    "factory": "LEDs",
+    "scripts": [
+      "./machines/modules/defs.js",
+      "./machines/modules/numio.js",
+      "./machines/modules/stdio.js",
+      "./machines/modules/webio.js",
+      "./machines/modules/device.js",
+      "./machines/modules/bus.js",
+      "./machines/modules/memory.js",
+      "./machines/modules/rom.js",
+      "./machines/modules/input.js",
+      "./machines/modules/led.js",
+      "./machines/modules/time.js",
+      "./machines/modules/cpu.js",
+      "./machines/modules/ledctrl.js",
+      "./machines/modules/machine.js"
+    ]
+  },
+  "palm-pilot": {
+    "name": "Palm Pilot",
+    "folder": "palm/pilot",
+    "version": "2.00",
+    "defines": [
+      "FACTORY",
+      "VERSION"
+    ],
+    "factory": "Pilot",
+    "scripts": [
+      "./machines/modules/defs.js",
+      "./machines/modules/numio.js",
+      "./machines/modules/stdio.js",
+      "./machines/modules/webio.js",
+      "./machines/modules/device.js",
+      "./machines/modules/input.js",
+      "./machines/modules/led.js",
+      "./machines/modules/monitor.js",
+      "./machines/modules/time.js",
+      "./machines/modules/bus.js",
+      "./machines/modules/memory.js",
+      "./machines/modules/ram.js",
+      "./machines/modules/rom.js",
+      "./machines/modules/cpu.js",
+      "./machines/modules/debugger.js",
+      "./machines/motorola/68k/modules/cpu68k.js",
+      "./machines/motorola/68k/modules/dbg68k.js",
+      "./machines/motorola/68k/modules/eamodes.js",
+      "./machines/palm/pilot/modules/ioregs.js",
+      "./machines/palm/pilot/modules/video.js",
+      "./machines/modules/machine.js"
+    ]
+  },
+  "vt100": {
+    "name": "VT100",
+    "folder": "dec/vt100",
+    "version": "2.00",
+    "defines": [
+      "FACTORY",
+      "VERSION"
+    ],
+    "factory": "VT100",
+    "scripts": [
+      "./machines/modules/defs.js",
+      "./machines/modules/numio.js",
+      "./machines/modules/stdio.js",
+      "./machines/modules/webio.js",
+      "./machines/modules/device.js",
+      "./machines/modules/input.js",
+      "./machines/modules/led.js",
+      "./machines/modules/monitor.js",
+      "./machines/modules/time.js",
+      "./machines/modules/bus.js",
+      "./machines/modules/memory.js",
+      "./machines/modules/ports.js",
+      "./machines/modules/ram.js",
+      "./machines/modules/rom.js",
+      "./machines/modules/cpu.js",
+      "./machines/modules/debugger.js",
+      "./machines/pcx80/modules/cpux80.js",
+      "./machines/pcx80/modules/dbgx80.js",
+      "./machines/dec/vt100/modules/chips.js",
+      "./machines/dec/vt100/modules/keyboard.js",
+      "./machines/dec/vt100/modules/serial.js",
+      "./machines/dec/vt100/modules/video.js",
+      "./machines/modules/machine.js"
+    ]
+  },
+  "pdp11v3": {
+    "name": "PDP-11",
+    "folder": "dec/pdp11",
+    "version": "3.00",
+    "defines": [
+      "FACTORY",
+      "VERSION"
+    ],
+    "factory": "PDP11v3",
+    "scripts": [
+      "./machines/modules/defs.js",
+      "./machines/modules/numio.js",
+      "./machines/modules/stdio.js",
+      "./machines/modules/webio.js",
+      "./machines/modules/device.js",
+      "./machines/modules/input.js",
+      "./machines/modules/led.js",
+      "./machines/modules/time.js",
+      "./machines/modules/bus.js",
+      "./machines/modules/memory.js",
+      "./machines/modules/ports.js",
+      "./machines/modules/ram.js",
+      "./machines/modules/rom.js",
+      "./machines/modules/cpu.js",
+      "./machines/modules/debugger.js",
+      "./machines/dec/pdp11/modules/pdp11ops.js",
+      "./machines/dec/pdp11/modules/pdp11.js",
+      "./machines/dec/pdp11/modules/pdp11dbg.js",
+      "./machines/dec/pdp11/modules/iopage.js",
+      "./machines/dec/pdp11/modules/dl11.js",
+      "./machines/dec/pdp11/modules/pc11.js",
+      "./machines/modules/machine.js"
+    ]
+  },
+  "shared": {
+    "version": "2.00",
+    "externs": [
+      "./machines/shared/lib/externs.js"
+    ],
+    "styles": [
+      "./machines/shared/xsl/components.css"
+    ],
+    "css": [
+      "./machines/shared/xsl/common.css",
+      "./machines/shared/xsl/components.css"
+    ],
+    "xsl": [
+      "./machines/shared/xsl/common.xsl",
+      "./machines/shared/xsl/components.xsl",
+      "./machines/shared/xsl/machine.xsl"
+    ]
+  }
+}

@@ -5,7 +5,7 @@ permalink: /software/pcx86/game/other/1992/dune2/
 machines:
   - id: compaq386
     type: pcx86
-    config: /configs/pcx86/machine/compaq/deskpro386/vga/2048kb/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/vga/2048kb/machine.xml
     drives: '[{name:"47Mb Hard Disk",type:5,path:"https://gamedisks.pcjs.org/pcx86/game/other/1992/dune2/DUNE2-47MB.json"}]'
     autoMount:
       A: None

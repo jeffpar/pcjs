@@ -21,7 +21,7 @@ while I can understand some whitespace inconsistencies across web servers, I wou
 on the server to modify file contents.
 
 I finally confirmed that the files were indeed modified on the server, by using Azure's FTP browser.  For example,
-[us83-buttons-minimal.xml](/configs/pcx86/keyboard/us83-buttons-minimal.xml) is currently 622 bytes locally, but on the
+[us83-buttons-minimal.xml](/machines/pcx86/keyboard/us83-buttons-minimal.xml) is currently 622 bytes locally, but on the
 Azure server, the reported size is 632 bytes -- one extra CR for each of the file's 10 lines.  After a little more
 digging, I [learned something new](http://git-scm.com/book/ch7-1.html#Formatting-and-Whitespace) about **Git**: it
 has a setting called `core.autocrlf` which, for me on OS X, defaults to `input` (meaning "convert CR/LF to LF on commit

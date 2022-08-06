@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/machines/pcx80/xsl/machine.xsl"?>
+<machine id="test8080" type="pcx80" border="1" pos="center" background="default">
+	<name pos="center">8080 CPUTEST Machine</name>
+	<computer id="computer" busWidth="16"/>
+	<cpu id="cpu8080" model="8080" cycles="2000000"/>
+	<ram id="ram64K" addr="0x0000" size="0x10000" file="/machines/pcx80/ram/exerciser/CPUTEST.json5" load="0x100" exec="0x100"/>
+	<panel ref="/machines/pcx80/panel/wide.xml"/>
+	<debugger id="debugger"/>
+</machine>

@@ -8,7 +8,7 @@ machines:
   - id: ibm5170
     type: pcx86
     debugger: true
-    config: /configs/pcx86/machine/ibm/5170/ega/2048kb/rev3/debugger/machine.xml
+    config: /machines/pcx86/machine/ibm/5170/ega/2048kb/rev3/debugger/machine.xml
     drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/IBMOS210-EGA.json"}]'
     autoMount:
       A:

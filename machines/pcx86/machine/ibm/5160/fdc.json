@@ -1,0 +1,53 @@
+{
+  "id": "fdcNEC",
+  "class": "fdc",
+  "autoMount": {
+    "A": {"name": "PC DOS 2.00 (Disk 1)"},
+    "B": {"name": "PC DOS 2.00 (Disk 2)"}
+  },
+  "diskettes": "/machines/pcx86/diskettes.json,/machines/pcx86/private.json,/machines/pcx86/pcsig08a.json,/machines/pcx86/pcsig08b.json",
+  "server": "/diskettes",
+  "style": {
+    "float": "left",
+    "padding-right": "8px",
+    "padding-bottom": "8px"
+  },
+  "controls": [
+    {
+      "type": "group"
+    },
+    {
+      "id": "listDrives",
+      "type": "list"
+    },
+    {
+      "id": "listDisks",
+      "type": "list"
+    },
+    {
+      "id": "loadDisk",
+      "type": "button",
+      "label": "Load"
+    },
+    {
+      "id": "saveDisk",
+      "type": "button",
+      "label": "Save",
+      "style": {
+        "padding-right": "8px"
+      }
+    },
+    {
+      "id": "descDisk",
+      "type": "description",
+      "style": {
+        "padding-right": "8px"
+      }
+    },
+    {
+      "id": "mountDisk",
+      "type": "file",
+      "label": "Mount"
+    }
+  ]
+}

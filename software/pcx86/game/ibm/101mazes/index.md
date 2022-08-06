@@ -6,7 +6,7 @@ preview: images/screenshot.png
 machines:
   - id: ibm5150-101mazes
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/mda/64kb/machine.json
+    config: /machines/pcx86/machine/ibm/5150/mda/64kb/machine.json
     resume: 1
     autoMount:
       A:

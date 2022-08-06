@@ -7,7 +7,7 @@ machines:
   - id: lifeDemo
     type: led
     name: Game of Life (Mono)
-    config: /configs/led/life-mono.json
+    config: /machines/led/life-mono.json
     layout: /_includes/led/life-mono.html
 ---
 

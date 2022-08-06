@@ -5,7 +5,7 @@ permalink: /software/pcx86/diag/compaq/5.02/
 machines:
   - id: deskpro386
     type: pcx86
-    config: /configs/pcx86/machine/compaq/deskpro386/cga/640kb/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/cga/640kb/machine.xml
     autoGen: true
     autoMount:
       B: "COMPAQ Diagnostics 5.02"

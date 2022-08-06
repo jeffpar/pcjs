@@ -6,7 +6,7 @@ redirect_from: /devices/pcx86/machine/5150/cga/64kb/debugger/
 machines:
   - id: ibm-5150-cga
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/cga/64kb/debugger/machine.json
+    config: /machines/pcx86/machine/ibm/5150/cga/64kb/debugger/machine.json
     testRAM: false
     autoStart: true
     autoType: $date\r

@@ -5,7 +5,7 @@ permalink: /machines/pcx86/ibm/5150/cga/ssdd/
 machines:
   - id: ibm-5150-cga
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/cga/64kb/machine.json
+    config: /machines/pcx86/machine/ibm/5150/cga/64kb/machine.json
     floppyDrives: '[{heads:1},{heads:1}]'
     autoType: $date\r
 ---

@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/microsoft/winword/2.0c/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml
+    config: /machines/pcx86/machine/ibm/5170/vga/2048kb/machine.xml
     drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json"}]'
     autoGen: true
     autoMount:

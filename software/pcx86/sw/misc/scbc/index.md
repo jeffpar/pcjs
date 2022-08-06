@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/shareware/scbc/
 machines:
   - id: scbc
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5160/ega/640kb/machine.xml
+    config: /machines/pcx86/machine/ibm/5160/ega/640kb/machine.xml
     autoMount:
       B:
         name: "Small Computer Book Club (1990)"

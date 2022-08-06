@@ -6,7 +6,7 @@ permalink: /blog/2018/03/10/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/ega/640kb/rev1/testmon/machine.xml
+    config: /machines/pcx86/machine/ibm/5170/ega/640kb/rev1/testmon/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:1,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'
     autoMount:
       A:

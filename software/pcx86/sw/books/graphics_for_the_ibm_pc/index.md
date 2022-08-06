@@ -7,7 +7,7 @@ machines:
   - id: xt-cga-256k-1
     type: pcx86
     state: 02-03.json
-    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    config: /machines/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)
@@ -16,7 +16,7 @@ machines:
   - id: xt-cga-256k-2
     type: pcx86
     state: 04-01.json
-    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    config: /machines/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)

@@ -22,7 +22,7 @@ old COMPAQ MS-DOS [SETUP Disk](/software/pcx86/sys/dos/compaq/3.31/#directory-of
 *also* reports version 3.31.  That makes at *least* three revisions of a single version of COMPAQ MS-DOS.
 
 The good news is that large (&gt;32Mb) partition support in [COMPAQ MS-DOS 3.31](/software/pcx86/sys/dos/compaq/3.31/) works
-fine in PCjs.  See the [47Mb Hard Drive](/configs/pcx86/hdc/47mb/) page for additional information.
+fine in PCjs.  See the [47Mb Hard Drive](/machines/pcx86/hdc/47mb/) page for additional information.
 
 ### A New Old COMPAQ ROM
 
@@ -39,7 +39,7 @@ Sure enough, attempting to use the [first 32Kb](/machines/pcx86/compaq/deskpro38
 "ROM Error", no doubt due to a checksum mismatch.  However, the [second 32Kb](/machines/pcx86/compaq/deskpro386/rom/1986-09-04/1986-09-04-HI.json) appeared
 to work fine.  I can't guarantee that its contents are identical to the original `Rev F` ROM, because the ROM may
 have been self-modifying, but it works, and it's all we've got.  All our EGA-based COMPAQ machine configurations
-(eg, [COMPAQ DeskPro 386 (2Mb) with IBM EGA](/configs/pcx86/machine/compaq/deskpro386/ega/2048kb/machine.xml))
+(eg, [COMPAQ DeskPro 386 (2Mb) with IBM EGA](/machines/pcx86/compaq/deskpro386/ega/2048kb/machine.xml))
 have been updated to use that ROM.
 
 My collection of COMPAQ DeskPro 386 ROMs still has several holes, but I'm very happy to have finally found one of the

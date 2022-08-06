@@ -7,7 +7,7 @@ machines:
   - id: ibm5170
     type: pcx86
     debugger: true
-    config: /configs/pcx86/machine/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
+    config: /machines/pcx86/machine/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
     autoMount:
       A:
         name: OS/2 1.0 Debugger (1988)

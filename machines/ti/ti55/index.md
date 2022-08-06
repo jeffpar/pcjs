@@ -10,7 +10,7 @@ machines:
   - id: ti55
     type: ti55
     name: TI-55 Programmable Calculator
-    config: /configs/ti55/ti55.json
+    config: /machines/ti55/ti55.json
     layout: /_includes/ti55/ti55-full.html
 ---
 

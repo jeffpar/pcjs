@@ -9,7 +9,7 @@ preview: images/screenshot.png
 machines:
   - id: compaq-portable-vdu
     type: pcx86
-    config: /configs/pcx86/machine/compaq/portable/vdu/128kb/machine.xml
+    config: /machines/pcx86/compaq/portable/vdu/128kb/machine.xml
     autoType: $date\r$time\rDEMO\r
 ---
 

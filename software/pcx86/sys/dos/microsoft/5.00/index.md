@@ -9,7 +9,7 @@ redirect_from:
 machines:
   - id: ibm5170-msdos500
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/ega/640kb/rev1/machine.xml
+    config: /machines/pcx86/machine/ibm/5170/ega/640kb/rev1/machine.xml
     autoMount:
       A:
         name: MS-DOS 5.00 (360K Disk 1)

@@ -27,7 +27,7 @@
 ### Bugs
 
   - This [COMPAQ machine](https://www.pcjs.org/software/pcx86/sys/dos/compaq/1.12/) does not appear to run their DEMO correctly; either there's an MDA bug or COMPAQ VDU emulation isn't up to the task.
-  - This [COMPAQ machine](https://www/pcjs.org/configs/pcx86/machine/compaq/deskpro386/other/2048kb/debugger/visual/machine.xml) doesn't initialize its VGA successfully, and has other other issues as well.
+  - This [COMPAQ machine](https://www/pcjs.org/machines/pcx86/compaq/deskpro386/other/2048kb/debugger/visual/machine.xml) doesn't initialize its VGA successfully, and has other other issues as well.
   - 8088 machines are allowed to execute instructions like POPA and OUTS; that should not be allowed
 
 ### Mysteries

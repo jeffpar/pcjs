@@ -7,7 +7,7 @@ redirect_from:
 machines:
   - id: ibm5160
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    config: /machines/pcx86/machine/ibm/5160/cga/256kb/machine.xml
     autoGen: true
     autoMount:
       B: "Flight Simulator (1984)"

@@ -7,13 +7,13 @@ machines:
   - id: vt100
     type: vt100
     name: DEC VT100
-    config: /configs/vt100/vt100.json
+    config: /machines/vt100/vt100.json
     layout: /_includes/vt100/vt100.html
     connection: serialPort->ibm5170.com2
   - id: ibm5170
     type: pcx86
     connection: com2->vt100.serialPort
-    config: /configs/pcx86/machine/ibm/5170/ega/2048kb/rev3/machine.xml
+    config: /machines/pcx86/machine/ibm/5170/ega/2048kb/rev3/machine.xml
     autoType: \r\rCTTY COM2\r
 ---
 

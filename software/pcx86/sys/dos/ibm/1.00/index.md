@@ -9,7 +9,7 @@ redirect_from:
 machines:
   - id: ibm5150-pcdos100
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/mda/64kb/machine.json
+    config: /machines/pcx86/machine/ibm/5150/mda/64kb/machine.json
     autoType: $date\r
     resume: 1
 ---

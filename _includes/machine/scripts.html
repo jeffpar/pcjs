@@ -67,7 +67,7 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- assign machine_data = site.data.machines[machine_type] -%}
   {%- unless machine_data -%}
     {%- assign machine_data = site.data -%}
-    {%- assign machine_paths = machine.config | replace: "/configs/", "" | replace: ".json", "" | split: "/" -%}
+    {%- assign machine_paths = machine.config | replace: "/machines/","" | replace: ".json","" | split: "/" -%}
     {%- for machine_path in machine_paths -%}{%- assign machine_data = machine_data[machine_path] -%}{%- endfor -%}
     {%- assign machine_data = machine_data.machine -%}
   {%- endunless -%}
@@ -230,7 +230,7 @@ template doesn't add them to the Computer component anymore, since we started su
     {%- capture page_scripts -%}{{ page_scripts }}{{ page_script }}{%- endcapture -%}
   {%- endif -%}
   {%- if machine_config contains ".xml" and machine_template == "" -%}
-    {%- capture machine_template -%}{{ site.baseurl }}/configs/{{ machine_type }}/xsl/components.xsl{%- endcapture -%}
+    {%- capture machine_template -%}{{ site.baseurl }}/machines/{{ machine_type }}/xsl/components.xsl{%- endcapture -%}
   {%- endif -%}
   {%- if machine_factory contains "embed" %}
     <script>{{ machine_factory }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});</script>

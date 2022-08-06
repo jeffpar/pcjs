@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/borland/pascal/2.00/
 machines:
   - id: ibm-5150-cga
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/cga/64kb/machine.json
+    config: /machines/pcx86/machine/ibm/5150/cga/64kb/machine.json
     sizeRAM: 512
     testRAM: false
     autoMount:

@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/diags/compaq/6.12/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
       A: "COMPAQ Diagnostics 6.12"

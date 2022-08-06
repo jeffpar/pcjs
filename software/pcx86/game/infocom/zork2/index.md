@@ -7,7 +7,7 @@ machines:
   - id: ibm5150-zork2
     type: pcx86
     resume: 1
-    config: /configs/pcx86/machine/ibm/5150/cga/64kb/machine.json
+    config: /machines/pcx86/machine/ibm/5150/cga/64kb/machine.json
     flicker: 0
     sizeRAM: 256
     testRAM: false

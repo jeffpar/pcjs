@@ -1,0 +1,54 @@
+{
+  "name": "IBM PC, 64Kb RAM, LPT1, COM1, MDA and CGA",
+  "defaults": {
+    "ram": "64K",
+    "fpu": "None",
+    "fdc": "2 diskette drives",
+    "parallel": "LPT1",
+    "serial": "COM1"
+  },
+  "components": [
+    {
+      "id": "pcDual",
+      "class": "computer"
+    },
+    "/machines/pcx86/machine/ibm/5150/rom-basic-100.json",
+    "/machines/pcx86/machine/ibm/5150/rom-bios-rev1.json",
+    {
+      "config": "/machines/pcx86/machine/ibm/5150/video-mda.json",
+      "model": "mda"
+    },
+    {
+      "config": "/machines/pcx86/machine/ibm/5150/video-cga.json",
+      "model": "cga",
+      "controls": "none"
+    },
+    "/machines/pcx86/machine/ibm/5150/fdc.json",
+    "/machines/pcx86/machine/ibm/5150/ram.json",
+    "/machines/pcx86/machine/ibm/5150/cpu.json",
+    "/machines/pcx86/machine/ibm/5150/keyboard.json",
+    {
+      "id": "chipset",
+      "class": "chipset",
+      "model": 5150,
+      "scaleTimers": false,
+      "sw1": "01000001",
+      "sw2": "11111000",
+      "@note": "The above switch settings indicate '64K, No FPU, Monochrome Monitor, 2 Floppy Drives'.",
+      "sound": true,
+      "floppies": "",
+      "monitor": "",
+      "dateRTC": ""
+    },
+    {
+      "id": "lpt1",
+      "class": "parallel",
+      "adapter": 2
+    },
+    {
+      "id": "com1",
+      "class": "serial",
+      "adapter": 1
+    }
+  ]
+}

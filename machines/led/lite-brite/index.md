@@ -8,7 +8,7 @@ machines:
   - id: lbDemo
     type: led
     name: Lite-Brite
-    config: /configs/led/lite-brite-xmas.json
+    config: /machines/led/lite-brite-xmas.json
     layout: /_includes/led/lite-brite.html
 ---
 

@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/games/other/1991/lemmings/
 machines:
   - id: deskpro386
     type: pcx86
-    config: /configs/pcx86/machine/compaq/deskpro386/vga/2048kb/debugger/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:1,path:"/harddisks/pcx86/10mb/COMPAQ331-LEMMINGS.json"}]'
     autoMount:
       A:

@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/microsoft/basic/quickbasic/4.00/
 machines:
   - id: ibm5170-msdos320
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/ega/640kb/rev3/machine.xml
+    config: /machines/pcx86/machine/ibm/5170/ega/640kb/rev3/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:1,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'
     floppyDrives: '[{boot:false},{}]'
     autoMount:

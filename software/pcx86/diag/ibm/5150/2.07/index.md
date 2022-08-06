@@ -7,7 +7,7 @@ machines:
   - id: ibm5150
     type: pcx86
     debugger: true
-    config: /configs/pcx86/machine/ibm/5150/cga/64kb/debugger/machine.xml
+    config: /machines/pcx86/machine/ibm/5150/cga/64kb/debugger/machine.xml
     autoMount:
       A:
         name: IBM PC Diagnostics 2.07

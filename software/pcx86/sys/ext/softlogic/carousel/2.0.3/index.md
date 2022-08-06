@@ -7,7 +7,7 @@ preview: https://diskettes.pcjs.org/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTW
 machines:
   - id: ibm5170
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoMount:
       A: "PC DOS 3.00 (Disk 1)"
       B: "Software Carousel 2.0.3"

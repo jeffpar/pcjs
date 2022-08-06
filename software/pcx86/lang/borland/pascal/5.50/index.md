@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/borland/pascal/5.50/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "Borland Turbo Pascal 5.50 (INSTALL)"

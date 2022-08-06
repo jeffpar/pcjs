@@ -7,7 +7,7 @@ preview: images/screenshot.png
 machines:
   - id: ibm5150
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/cga/64kb/machine.xml
+    config: /machines/pcx86/machine/ibm/5150/cga/64kb/machine.xml
     autoMount:
       A:
         name: "IBM Multiplan 1.00 (Program)"

@@ -7,7 +7,7 @@ preview: images/screenshot.png
 machines:
   - id: cpm-mda-256k
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/mda/256kb/machine.xml
+    config: /machines/pcx86/machine/ibm/5150/mda/256kb/machine.xml
     autoMount:
       A:
         name: Eagle CP/M-86 1.1B (Disk 1)

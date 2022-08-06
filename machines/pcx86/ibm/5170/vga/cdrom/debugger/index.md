@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/drives/cdrom/debugger/
 machines:
   - id: ibm-5170-vga
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/vga/2048kb/cdrom/debugger/machine.xml
+    config: /machines/pcx86/machine/ibm/5170/vga/2048kb/cdrom/debugger/machine.xml
 ---
 
 {% include machine.html id="ibm-5170-vga" %}

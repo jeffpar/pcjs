@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/1.10/
 machines:
   - id: ibm5150-pcdos110
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/mda/64kb/machine.xml
+    config: /machines/pcx86/machine/ibm/5150/mda/64kb/machine.xml
     resume: 1
     autoMount:
       A:

@@ -6,7 +6,7 @@ redirect_from: /devices/pcx86/machine/5160/mda/256kb/debugger/
 machines:
   - id: ibm-5160-mda
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5160/mda/256kb/debugger/machine.json
+    config: /machines/pcx86/machine/ibm/5160/mda/256kb/debugger/machine.json
 ---
 
 {% include machine.html id="ibm-5160-mda" %}

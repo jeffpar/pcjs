@@ -7,7 +7,7 @@ description: >
   programmable calculators, and arcade machines are available, along with an archive of historical software and documentation.
 author: Jeff Parsons
 logo: /assets/img/logo-home.png
-data_dir: configs
+data_dir: machines
 left_brace: "{"
 right_brace: "}"
 encoding: UTF-8

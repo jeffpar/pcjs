@@ -6,7 +6,7 @@ redirect_from: /devices/pdp11/machine/1120/bootstrap/
 machines:
   - id: test1120
     type: pdp11
-    config: /configs/pdp11/machine/1120/bootstrap/machine.xml
+    config: /machines/pdp11/machine/1120/bootstrap/machine.xml
     autoMount:
       PTR:
         path: /software/dec/pdp11/tapes/absloader/DEC-11-L2PC-PO.json

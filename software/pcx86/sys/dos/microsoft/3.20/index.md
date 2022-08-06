@@ -8,7 +8,7 @@ redirect_from:
 machines:
   - id: ibm5170-msdos320
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/ega/640kb/rev1/machine.xml
+    config: /machines/pcx86/machine/ibm/5170/ega/640kb/rev1/machine.xml
     autoMount:
       A:
         name: MS-DOS 3.20 (Disk 1)
@@ -127,7 +127,7 @@ MSDOS.SYS and COMMAND.COM.
 
 ### Surprisingly Bad Bug in MS-DOS 3.20
 
-If you attempt to boot MS-DOS 3.20 on an [IBM PC Model 5150](/configs/pcx86/machine/ibm/5150/cga/384kb/debugger/machine.xml)
+If you attempt to boot MS-DOS 3.20 on an [IBM PC Model 5150](/machines/pcx86/machine/ibm/5150/cga/384kb/debugger/machine.xml)
 (with either an MDA or CGA video card), the machine will appear to crash after printing the first character.
 
 When MS-DOS 3.20 prints characters to the screen, it uses this code:

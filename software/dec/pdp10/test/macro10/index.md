@@ -6,7 +6,7 @@ redirect_from: /apps/pdp10/tests/macro10/
 machines:
   - id: testka10
     type: pdp10
-    config: /configs/pdp10/machine/ka10/test/debugger/machine.xml
+    config: /machines/pdp10/machine/ka10/test/debugger/machine.xml
     debugger: true
     commands: a 100 TEXT.MAC; db 100 l4
 ---

@@ -8,7 +8,7 @@ redirect_from:
 machines:
   - id: ibm5170
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "MS Macro Assembler 5.10 (Disk 1)"

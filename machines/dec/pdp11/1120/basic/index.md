@@ -6,7 +6,7 @@ redirect_from: /devices/pdp11/machine/1120/basic/
 machines:
   - id: test1120
     type: pdp11
-    config: /configs/pdp11/machine/1120/basic/machine.xml
+    config: /machines/pdp11/machine/1120/basic/machine.xml
     autoMount: ''
 ---
 

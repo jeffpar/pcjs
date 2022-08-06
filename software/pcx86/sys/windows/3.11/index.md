@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/windows/3.11/
 machines:
   - id: deskpro386
     type: pcx86
-    config: /configs/pcx86/machine/compaq/deskpro386/vga/2048kb/debugger/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/machine.xml
     drives: '[{name:"20Mb Hard Disk",type:2}]'
     autoMount:
       B:

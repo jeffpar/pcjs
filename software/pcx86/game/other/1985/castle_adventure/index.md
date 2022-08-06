@@ -7,7 +7,7 @@ machines:
   - id: ibm5160-castle-adventure
     type: pcx86
     resume: 1
-    config: /configs/pcx86/machine/ibm/5160/cga/640kb/machine.xml
+    config: /machines/pcx86/machine/ibm/5160/cga/640kb/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)

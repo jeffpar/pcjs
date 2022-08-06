@@ -10,7 +10,7 @@ machines:
   - id: ti42
     type: ti42
     name: TI-42 Programmable Calculator
-    config: /configs/ti42/ti42.json
+    config: /machines/ti42/ti42.json
     layout: /_includes/ti42/ti42-full.html
 ---
 

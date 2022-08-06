@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/7.00/
 machines:
   - id: ibm5170-pcdos700
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/ega/2048kb/rev3/machine.xml
+    config: /machines/pcx86/machine/ibm/5170/ega/2048kb/rev3/machine.xml
     autoMount:
       A:
         name: PC DOS 7.00 (Disk 1)

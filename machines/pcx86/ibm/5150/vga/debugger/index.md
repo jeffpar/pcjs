@@ -5,7 +5,7 @@ permalink: /machines/pcx86/ibm/5150/vga/debugger/
 machines:
   - id: ibm-5150-vga
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/vga/64kb/debugger/machine.json
+    config: /machines/pcx86/machine/ibm/5150/vga/64kb/debugger/machine.json
 ---
 
 {% include machine.html id="ibm-5150-vga" %}
