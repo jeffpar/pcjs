@@ -7,7 +7,7 @@ preview: images/screenshot.png
 machines:
   - id: ibm5160-esuite
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5160/mda/256kb/fake188/machine.xml
+    config: /machines/pcx86/ibm/5160/mda/256kb/fake188/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)

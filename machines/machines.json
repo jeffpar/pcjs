@@ -142,16 +142,16 @@
       "./machines/shared/lib/embed.js"
     ],
     "styles": [
-      "./machines/c1p/xsl/components.css"
+      "./machines/osi/c1p/xsl/components.css"
     ],
     "css": [
-      "./machines/c1p/xsl/common.css",
-      "./machines/c1p/xsl/components.css"
+      "./machines/osi/c1p/xsl/common.css",
+      "./machines/osi/c1p/xsl/components.css"
     ],
     "xsl": [
-      "./machines/c1p/xsl/common.xsl",
-      "./machines/c1p/xsl/components.xsl",
-      "./machines/c1p/xsl/machine.xsl"
+      "./machines/osi/c1p/xsl/common.xsl",
+      "./machines/osi/c1p/xsl/components.xsl",
+      "./machines/osi/c1p/xsl/machine.xsl"
     ]
   },
   "pcx80": {

@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/microsoft/mouse/6.00/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "MS Mouse 6.14 (SETUP)"

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/machines/dec/pdp11/xsl/machine.xsl"?>
+<machine id="test1170" type="pdp11" border="1" pos="center" background="default">
+	<name pos="center">PDP-11/70 with 4Mb and Front Panel</name>
+	<computer id="computer" busWidth="22"/>
+	<cpu id="cpu" model="1170" cycles="6666667"/>
+	<ram id="ram" addr="0x00000" size="0x3C0000" file="/software/dec/pdp11/boot/monitor/BOOTMON.json"/>
+	<device id="default" type="default"/>
+	<serial id="dl11" adapter="0" binding="print"/>
+	<panel ref="/machines/dec/pdp11/panel/1170/front.xml"/>
+	<device ref="/machines/dec/pdp11/pc11/default.xml"/>
+	<device ref="/machines/dec/pdp11/rk11/default.xml"/>
+	<device ref="/machines/dec/pdp11/rl11/default.xml"/>
+</machine>

@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/dresearch/pascal/3.11/
 machines:
   - id: ibm5150
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
     autoGen: true
     autoMount:
       B: "DR Pascal/MT+ 3.11 (Disk 1)"

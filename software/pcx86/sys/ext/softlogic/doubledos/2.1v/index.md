@@ -7,7 +7,7 @@ preview: https://diskettes.pcjs.org/pcx86/sys/ext/softlogic/doubledos/2.1v/DOUBL
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "DoubleDOS 2.1V (Disk 1)"

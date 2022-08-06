@@ -7,7 +7,7 @@ machines:
   - id: test1120
     type: pdp11
     debugger: true
-    config: /machines/pdp11/machine/1120/basic/debugger/machine.xml
+    config: /machines/dec/pdp11/1120/basic/debugger/machine.xml
     autoMount: ''
 ---
 

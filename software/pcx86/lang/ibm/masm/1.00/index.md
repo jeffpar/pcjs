@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/ibm/masm/1.00/
 machines:
   - id: ibm-5150-mda
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5150/mda/64kb/debugger/machine.json
+    config: /machines/pcx86/ibm/5150/mda/64kb/debugger/machine.json
 ---
 
 [Documentation](#documents) and directory listing of the 160Kb distribution diskette are provided below.

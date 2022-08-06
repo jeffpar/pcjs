@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/dresearch/6.00/
 machines:
   - id: ibm5170-drdos600
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5170/ega/1024kb/rev1/machine.xml
+    config: /machines/pcx86/ibm/5170/ega/1024kb/rev1/machine.xml
     drives: '[{name:"DR DOS 6.00 (20Mb)",type:2,path:"/harddisks/pcx86/20mb/DRDOS600.json"}]'
     floppyDrives: '[{boot:false}]'
     autoMount:

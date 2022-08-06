@@ -6,7 +6,7 @@ redirect_from: /devices/pdp11/machine/1145/vt100/
 machines:
   - id: test1145
     type: pdp11
-    config: /machines/pdp11/machine/1145/vt100/machine.xml
+    config: /machines/dec/pdp11/1145/vt100/machine.xml
     connection: dl11->vt100.serialPort
   - id: vt100
     type: pcx80

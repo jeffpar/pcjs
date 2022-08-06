@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/pctools/1.03/
 machines:
   - id: ibm5150
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5150/cga/64kb/machine.json
+    config: /machines/pcx86/ibm/5150/cga/64kb/machine.json
     sizeRAM: 256
     testRAM: false
     autoMount:

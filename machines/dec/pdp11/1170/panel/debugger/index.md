@@ -7,7 +7,7 @@ machines:
   - id: test1170
     type: pdp11
     debugger: true
-    config: /machines/pdp11/machine/1170/panel/debugger/machine-slim.xml
+    config: /machines/dec/pdp11/1170/panel/debugger/machine-slim.xml
 ---
 
 The machine below is a PDP-11/70 with a stripped-down interface that includes our stylized Front Panel and
@@ -31,7 +31,7 @@ For more full-featured PDP-11/70 machines that also include a Debugger, see:
 
 As DEC notes in the [PDP-11/70 Maintenance Service Guide](https://1drv.ms/b/s!ArcO_mFRe1Z9gp5EUrgOBIlXswxuQg?e=fmoskM),
 Chapter 4: "There are several useful toggle-ins that are probably not very well known."  Excerpts are provided below.  If you're
-not sure how to "toggle in" code using a Front Panel, check out [Front Panel Basics](/machines/pdp11/panel/1170/#front-panel-basics).
+not sure how to "toggle in" code using a Front Panel, check out [Front Panel Basics](/machines/dec/pdp11/panel/1170/#front-panel-basics).
 
 However, since the above machine also includes the PDPjs Debugger, you'll find that it's much easier to use the
 Debugger commands described below to load and execute these "toggle-ins". 

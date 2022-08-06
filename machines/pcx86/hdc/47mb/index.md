@@ -17,7 +17,7 @@ yielding a capacity of 49,090,560 bytes (940 * 6 * 17 * 512), or approximately 4
 For example:
 
   - [COMPAQ DeskPro 386](/machines/pcx86/compaq/deskpro386/ega/2048kb/machine.xml)
-  - [IBM PC AT (Model 5170) with Enhanced Color Display](/machines/pcx86/machine/ibm/5170/ega/640kb/rev1/enhanced/machine.xml)
+  - [IBM PC AT (Model 5170) with Enhanced Color Display](/machines/pcx86/ibm/5170/ega/640kb/rev1/enhanced/machine.xml)
 
 Note that in order to use an unformatted fixed disk with DOS, it must first be partitioned using `FDISK`
 and then formatted using `FORMAT`.  Moreover, you should use DOS 3.30 or newer if you want to make full use

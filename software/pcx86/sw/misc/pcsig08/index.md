@@ -8,7 +8,7 @@ machines:
   - id: pcsig08
     type: pcx86
     resume: 1
-    config: /machines/pcx86/machine/ibm/5160/ega/512kb/pcsig08/machine.xml
+    config: /machines/pcx86/ibm/5160/ega/512kb/pcsig08/machine.xml
 ---
 
 The machine below has access to all 2,121 diskette images from the

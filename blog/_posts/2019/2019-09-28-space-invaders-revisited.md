@@ -8,7 +8,7 @@ machines:
   - id: invaders
     type: invaders
     name: Space Invaders
-    config: /machines/invaders/invaders.json
+    config: /machines/arcade/invaders/invaders.json
     layout: /_includes/invaders/invaders-diag.html
 ---
 
@@ -69,7 +69,7 @@ wasn't really to make yet another clone of Space Invaders.  I just wanted to mak
 fix some things that have long bugged me, make the animation smoother, improve debugging and machine configuration, and so on.
 
 The new Space Invaders emulation should be running below.  Keys are mapped by the [Input](/machines/modules/input.js) device
-to the machine's buttons using "map" data provided in the machine [configuration file](/machines/invaders/invaders.json).
+to the machine's buttons using "map" data provided in the machine [configuration file](/machines/arcade/invaders/invaders.json).
 Here's a summary:
 
 - **1**: One Player

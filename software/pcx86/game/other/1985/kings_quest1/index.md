@@ -5,7 +5,7 @@ permalink: /software/pcx86/game/other/1985/kings_quest1/
 machines:
   - id: ibm-5160-cga
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5160/cga/640kb/debugger/machine.xml
+    config: /machines/pcx86/ibm/5160/cga/640kb/debugger/machine.xml
     autoMount:
       A:
         name: "King's Quest (1985-09-04 #1)"

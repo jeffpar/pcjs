@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/borland/skplus/1.00a/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "Borland SideKick Plus 1.00A (Disk 1)"

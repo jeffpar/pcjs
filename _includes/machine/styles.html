@@ -4,29 +4,38 @@
 {%- assign page_styles_exist = false %}
 {%- unless page_styles -%}
   {%- for machine in page.machines -%}
-    {%- if site.data[machine.type].styles -%}
+    {%- assign machine_group = machine.type | slice: 0,2 %}
+    {%- if machine_group == "ti" %}
+      {%- assign page_styles = site.data['ti'][machine.type].styles -%}
+    {%- elsif machine_group == "c1" %}
+      {%- assign page_styles = site.data['osi'][machine.type].styles -%}
+    {%- elsif machine_group == "pd" or machine_group == "vt" %}
+      {%- assign page_styles = site.data['dec'][machine.type].styles -%}
+    {%- elsif machine_group == "in" %}
+      {%- assign page_styles = site.data['arcade'][machine.type].styles -%}
+    {%- else %}
       {%- assign page_styles = site.data[machine.type].styles -%}
-      {%- if page_styles -%}
-        {%- if page_styles_exist == false %}
+    {%- endif %}
+    {%- if page_styles -%}
+      {%- if page_styles_exist == false %}
     <style>
-          {%- assign page_styles_exist = true -%}
-        {%- endif -%}
-        {%- for id in page_styles %}
-          {%- if id[0] contains "_" %}
-      #{{ id[0] | remove_first:"_" }} {
-            {%- for style in id[1] -%}{{ style[0] }}:{{ style[1] }}{%- endfor -%}
-      }
-          {%- elsif id[0] == "font-face" %}
-      @{{ id[0] }} {
-            {%- for style in id[1] -%}{{ style[0] }}:{{ style[1] }}{%- endfor -%}
-      }
-          {%- else %}
-      {{ id[0] }} {
-            {%- for style in id[1] -%}{{ style[0] }}:{{ style[1] }}{%- endfor -%}
-      }
-          {%- endif %}
-        {%- endfor -%}
+        {%- assign page_styles_exist = true -%}
       {%- endif -%}
+      {%- for id in page_styles %}
+        {%- if id[0] contains "_" %}
+      #{{ id[0] | remove_first:"_" }} {
+          {%- for style in id[1] -%}{{ style[0] }}:{{ style[1] }}{%- endfor -%}
+      }
+        {%- elsif id[0] == "font-face" %}
+      @{{ id[0] }} {
+          {%- for style in id[1] -%}{{ style[0] }}:{{ style[1] }}{%- endfor -%}
+      }
+        {%- else %}
+      {{ id[0] }} {
+          {%- for style in id[1] -%}{{ style[0] }}:{{ style[1] }}{%- endfor -%}
+      }
+        {%- endif %}
+      {%- endfor -%}
     {%- endif -%}
   {%- endfor -%}
   {%- if page_styles_exist == true %}

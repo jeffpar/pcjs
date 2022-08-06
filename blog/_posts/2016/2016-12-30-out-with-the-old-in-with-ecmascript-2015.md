@@ -142,7 +142,7 @@ appropriate.
 
 Last but not least, does the new ES6 code really work in Node, too?  Happily, it does.  To test, I wrote
 a small JavaScript shell app, [pdp11]({{ site.github.pages }}/machines/dec/pdp11/bin/pdp11), which reads a machine XML file
-(like [this one](/machines/pdp11/machine/1170/panel/debugger/machine.xml)), simulates the loading and initialization
+(like [this one](/machines/dec/pdp11/1170/panel/debugger/machine.xml)), simulates the loading and initialization
 process that a web browser would perform, and then connects *stdin* and *stdout* to the machine's serial port:
 
 Here's a sample run, from a macOS Terminal window:

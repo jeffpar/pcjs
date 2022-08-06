@@ -19,11 +19,11 @@ The DEC disk images we have archived are organized by type:
 	* [RT-11 v3.0](/software/dec/pdp11/disks/rx01/rt11v3/) [[Source](http://www.headcrashers.org/comp/rx01/)]
 
 RK03 (or more precisely, RK03-KA) disks are single-platter cartridges with a capacity of 2.38Mb.
-They are used in RK05 disk drives in conjunction with an [RK11 Disk Controller](/machines/pdp11/rk11/).
+They are used in RK05 disk drives in conjunction with an [RK11 Disk Controller](/machines/dec/pdp11/rk11/).
 
 RL01K and RL02K disks are single-platter cartridges with capacities of 5Mb and 10Mb, respectively,
-They are used in RL01 and RL02 disk drives with an [RL11 Disk Controller](/machines/pdp11/rl11/).
+They are used in RL01 and RL02 disk drives with an [RL11 Disk Controller](/machines/dec/pdp11/rl11/).
 
 RX01 diskettes are single-sided, with 77 tracks per side, 26 sectors per track, and a sector size of 128 bytes,
 for a total capacity of 250Kb (256,256 bytes).  They are used in RX01 disk drives in conjunction with an
-[RX11 Disk Controller](/machines/pdp11/rx11/).
+[RX11 Disk Controller](/machines/dec/pdp11/rx11/).

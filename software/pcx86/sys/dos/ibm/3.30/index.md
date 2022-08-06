@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/3.30/
 machines:
   - id: ibm5170-pcdos330
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5170/ega/2048kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/ega/2048kb/rev3/machine.xml
     resume: 1
     autoMount:
       A:

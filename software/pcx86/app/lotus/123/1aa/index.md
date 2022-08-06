@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/lotus/123/1as/
 machines:
   - id: ibm5150-123-1aa
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
     autoMount:
       B:
         name: Lotus 1-2-3 1A* (1-System)

@@ -5,7 +5,7 @@ permalink: /machines/pcx86/ibm/5150/dual/debugger/
 machines:
   - id: ibm-5150-dual
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5150/dual/64kb/debugger/machine.json
+    config: /machines/pcx86/ibm/5150/dual/64kb/debugger/machine.json
     autoMount:
       A: PC DOS 2.00 (Disk 1)
     autoType: $date\r$time\r

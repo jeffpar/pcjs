@@ -7,7 +7,7 @@ redirect_from: /disks/dec/rk03/
 
 RK03 (or more precisely, RK03-KA) disks are single-platter cartridges with 203 tracks per side, 12 sectors per
 track, and a sector size of 256 words (512 bytes), for a total capacity of 2.38Mb (2,494,464 bytes).  They are
-used in RK05 disk drives in conjunction with an [RK11 Disk Controller](/machines/pdp11/rk11/).
+used in RK05 disk drives in conjunction with an [RK11 Disk Controller](/machines/dec/pdp11/rk11/).
 
 Below is a summary of RK03 disk images archived here.
 

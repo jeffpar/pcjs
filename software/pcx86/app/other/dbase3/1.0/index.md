@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/other/dbase3/1.0/
 machines:
   - id: ibm5160
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5160/cga/512kb/machine.xml
+    config: /machines/pcx86/ibm/5160/cga/512kb/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)

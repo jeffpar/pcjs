@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/borland/sidekick/1.56/
 machines:
   - id: ibm5160
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
     autoGen: true
     autoMount:
       B: "Borland Sidekick 1.56"

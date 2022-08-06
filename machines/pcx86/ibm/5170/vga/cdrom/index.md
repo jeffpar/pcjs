@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/drives/cdrom/
 machines:
   - id: ibm-5170-vga
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5170/vga/2048kb/cdrom/machine.xml
+    config: /machines/pcx86/ibm/5170/vga/2048kb/cdrom/machine.xml
 ---
 
 The original IBM PC AT's fixed disk controller was originally referred to as an **AT Attachment**

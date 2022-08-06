@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/norton/6.01/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "Norton Utilities 6.01 (Install)"

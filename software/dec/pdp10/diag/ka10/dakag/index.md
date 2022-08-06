@@ -7,7 +7,7 @@ machines:
   - id: testka10
     type: pdp10
     debugger: true
-    config: /machines/pdp10/machine/ka10/test/debugger/machine.xml
+    config: /machines/dec/pdp10/ka10/test/debugger/machine.xml
     commands: a 30724 DAKAG.MAC
 ---
 

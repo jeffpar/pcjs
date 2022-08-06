@@ -6,10 +6,10 @@ redirect_from: /devices/pcx86/machine/5160/cga/256kb/array/
 machines:
   - id: ibm5160-1
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5160/cga/256kb/array/machine.xml
+    config: /machines/pcx86/ibm/5160/cga/256kb/array/machine.xml
   - id: ibm5160-2
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5160/cga/256kb/array/machine.xml
+    config: /machines/pcx86/ibm/5160/cga/256kb/array/machine.xml
 ---
 
 The simulations below are identical PC XT configurations, each with a clock speed of 4.77Mhz, 256Kb of RAM,

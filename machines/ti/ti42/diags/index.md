@@ -8,7 +8,7 @@ machines:
     type: ti42
     uncompiled: true
     name: TI-42 Programmable Calculator
-    config: /machines/ti42/ti42.json
+    config: /machines/ti/ti42/ti42.json
     layout: /_includes/ti42/ti42-diag.html
 ---
 

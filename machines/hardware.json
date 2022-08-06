@@ -1073,12 +1073,12 @@
         "@title": "Challenger 1P \"Array\"",
         "@redirect_from": "/devices/c1p/machine/8kb/array/",
         "machines": [
-          {"id": "osi1", "config": "/machines/c1p/xml/c1p8k-small.xml"},
-          {"id": "osi2", "config": "/machines/c1p/xml/c1p8k-small.xml"},
-          {"id": "osi3", "config": "/machines/c1p/xml/c1p8k-small.xml"},
-          {"id": "osi4", "config": "/machines/c1p/xml/c1p8k-small.xml"},
-          {"id": "osi5", "config": "/machines/c1p/xml/c1p8k-small.xml"},
-          {"id": "osi6", "config": "/machines/c1p/xml/c1p8k-small.xml"}
+          {"id": "osi1", "config": "/machines/osi/c1p/xml/c1p8k-small.xml"},
+          {"id": "osi2", "config": "/machines/osi/c1p/xml/c1p8k-small.xml"},
+          {"id": "osi3", "config": "/machines/osi/c1p/xml/c1p8k-small.xml"},
+          {"id": "osi4", "config": "/machines/osi/c1p/xml/c1p8k-small.xml"},
+          {"id": "osi5", "config": "/machines/osi/c1p/xml/c1p8k-small.xml"},
+          {"id": "osi6", "config": "/machines/osi/c1p/xml/c1p8k-small.xml"}
         ]
       },
       "c1p/debugger": {

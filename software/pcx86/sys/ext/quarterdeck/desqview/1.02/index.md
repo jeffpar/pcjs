@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/desqview/1.02/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5170/ega/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/ega/640kb/rev3/machine.xml
     autoMount:
       A:
         name: "PC DOS 3.00 (Disk 1)"

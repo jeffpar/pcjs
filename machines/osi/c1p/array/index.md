@@ -6,22 +6,22 @@ redirect_from: /devices/c1p/machine/8kb/array/
 machines:
   - id: osi1
     type: c1p
-    config: /machines/c1p/xml/c1p8k-small.xml
+    config: /machines/osi/c1p/xml/c1p8k-small.xml
   - id: osi2
     type: c1p
-    config: /machines/c1p/xml/c1p8k-small.xml
+    config: /machines/osi/c1p/xml/c1p8k-small.xml
   - id: osi3
     type: c1p
-    config: /machines/c1p/xml/c1p8k-small.xml
+    config: /machines/osi/c1p/xml/c1p8k-small.xml
   - id: osi4
     type: c1p
-    config: /machines/c1p/xml/c1p8k-small.xml
+    config: /machines/osi/c1p/xml/c1p8k-small.xml
   - id: osi5
     type: c1p
-    config: /machines/c1p/xml/c1p8k-small.xml
+    config: /machines/osi/c1p/xml/c1p8k-small.xml
   - id: osi6
     type: c1p
-    config: /machines/c1p/xml/c1p8k-small.xml
+    config: /machines/osi/c1p/xml/c1p8k-small.xml
 ---
 
 {% include machine.html id="osi1" %}

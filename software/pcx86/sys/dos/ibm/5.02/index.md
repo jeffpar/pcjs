@@ -7,7 +7,7 @@ machines:
   - id: ibm5170-pcdos502
     type: pcx86
     debugger: true
-    config: /machines/pcx86/machine/ibm/5170/ega/2048kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/ega/2048kb/rev3/machine.xml
     autoMount:
       A:
         name: PC DOS 5.02 (Disk 1)

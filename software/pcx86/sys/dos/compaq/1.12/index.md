@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/compaq/1.12/
 machines:
   - id: ibm5150-compaq112
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5150/mda/256kb/machine.xml
+    config: /machines/pcx86/ibm/5150/mda/256kb/machine.xml
     autoMount:
       A:
         name: COMPAQ MS-DOS 1.12

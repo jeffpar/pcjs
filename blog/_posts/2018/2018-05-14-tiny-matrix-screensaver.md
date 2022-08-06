@@ -7,7 +7,7 @@ preview: /blog/images/tiny-matrix-screensaver.png
 machines:
   - id: matrix-demo
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5170/mda/640kb/rev3/debugger/machine.xml
+    config: /machines/pcx86/ibm/5170/mda/640kb/rev3/debugger/machine.xml
     testRAM: false
     autoStart: true
     autoType: \r\rb:debug\r$10a\rles bx,[si]\rlahf\rstosw\rinc di\rinc di\rjmp 101\r\rrsi\r100\rg\r

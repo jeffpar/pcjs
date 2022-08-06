@@ -10,7 +10,7 @@ machines:
     debugger: true
     uncompiled: true
     commands: bp &060E:0005 "dh;h"
-    config: /machines/pcx86/machine/ibm/5160/ega/640kb/debugger/machine.xml
+    config: /machines/pcx86/ibm/5160/ega/640kb/debugger/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)

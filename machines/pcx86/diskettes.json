@@ -425,7 +425,7 @@
           "2.0c": {
             "@title": "Word for Windows 2.0c",
             "@hardware": {
-              "config": "/machines/pcx86/machine/ibm/5170/vga/2048kb/machine.xml",
+              "config": "/machines/pcx86/ibm/5170/vga/2048kb/machine.xml",
               "drives": "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]"
             },
             "@media": [

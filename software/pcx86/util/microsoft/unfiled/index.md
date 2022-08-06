@@ -5,7 +5,7 @@ permalink: /software/pcx86/util/microsoft/unfiled/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
     autoMount:
       B:
         name: "MS Unfiled Utilities"

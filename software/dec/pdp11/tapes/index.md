@@ -6,7 +6,7 @@ redirect_from: /apps/pdp11/tapes/
 ---
 
 To load any of the DEC PDP-11 paper tapes listed below, you will need to use a [PDPjs Machine](/machines/dec/pdp11/)
-with a [PC11 High-Speed Paper Tape Reader/Punch](/machines/pdp11/pc11/), such as this
+with a [PC11 High-Speed Paper Tape Reader/Punch](/machines/dec/pdp11/pc11/), such as this
 [PDP-11/20](/machines/dec/pdp11/1120/basic/debugger), and then perform the following steps:
 
 - **Read** the [DEC PDP-11 Bootstrap Loader](/software/dec/pdp11/boot/bootstrap/)
@@ -47,7 +47,7 @@ that described all of the above software in greater detail, and it included some
 - LINK-11S LINKER
 
 Thanks to the [iamvirtual.ca](http://iamvirtual.ca/PDP-11/PTS-11/PTS-11.htm) website, most of the above programs are
-available as paper tape image files and are included in our "Default" [PC11 High-Speed Paper Tape Reader/Punch](/machines/pdp11/pc11/)
+available as paper tape image files and are included in our "Default" [PC11 High-Speed Paper Tape Reader/Punch](/machines/dec/pdp11/pc11/)
 configuration.
 
 Some additional information on DEC's Paper Tape Software is available at [retrotechnology.com](http://retrotechnology.com/pdp11/11_20_PTS.html).

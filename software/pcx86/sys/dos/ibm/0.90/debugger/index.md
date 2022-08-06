@@ -7,7 +7,7 @@ machines:
   - id: ibm5150-pcdos090
     type: pcx86
     debugger: true
-    config: /machines/pcx86/machine/ibm/5150/mda/256kb/debugger/machine.xml
+    config: /machines/pcx86/ibm/5150/mda/256kb/debugger/machine.xml
     resume: 1
     autoMount:
       A:

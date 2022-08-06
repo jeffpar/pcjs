@@ -7,7 +7,7 @@ machines:
   - id: ibm5160
     type: pcx86
     debugger: true
-    config: /machines/pcx86/machine/ibm/5160/cga/640kb/debugger/machine.xml
+    config: /machines/pcx86/ibm/5160/cga/640kb/debugger/machine.xml
     drives: '[{name:"XENIX 8086 (10Mb Hard Disk)",type:3,path:"/harddisks/pcx86/10mb/XENIX086.json"}]'
     autoMount:
       A:

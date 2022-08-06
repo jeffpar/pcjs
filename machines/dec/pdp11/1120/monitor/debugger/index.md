@@ -7,7 +7,7 @@ machines:
   - id: test1120
     type: pdp11
     debugger: true
-    config: /machines/pdp11/machine/1120/monitor/debugger/machine.xml
+    config: /machines/dec/pdp11/1120/monitor/debugger/machine.xml
 ---
 
 The machine below pre-loads the [PDP-11 Boot Monitor](/software/dec/pdp11/boot/monitor/) into RAM:

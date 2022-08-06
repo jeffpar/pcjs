@@ -1,0 +1,283 @@
+{
+  "name": "OSI Challenger 1P with Debugger",
+  "style": {
+    "border": "1px solid black",
+    "border-radius": "10px",
+    "overflow": "auto",
+    "background-color": "#FAEBD7",
+    "padding-bottom": "8px"
+  },
+  "components": [
+    {
+      "id": "c1p",
+      "class": "computer",
+      "name": "Challenger 1P",
+      "modules": [
+        {
+          "id": "cpu6502",
+          "type": "cpu",
+          "start": "0x0000",
+          "end": "0xffff"
+        },
+        {
+          "id": "ram8K",
+          "type": "ram",
+          "start": "0x0000",
+          "end": "0x1fff"
+        },
+        {
+          "id": "romNull",
+          "type": "rom",
+          "start": "0x2000",
+          "end": "0x9fff"
+        },
+        {
+          "id": "romBASIC",
+          "type": "rom",
+          "start": "0xa000",
+          "end": "0xbfff"
+        },
+        {
+          "id": "video",
+          "type": "video",
+          "start": "0xd000",
+          "end": "0xd3ff"
+        },
+        {
+          "id": "keyboard",
+          "type": "keyboard",
+          "start": "0xdf00",
+          "end": "0xdfff"
+        },
+        {
+          "id": "serialPort",
+          "type": "serial",
+          "start": "0xf000",
+          "end": "0xf0ff"
+        },
+        {
+          "id": "romSystem",
+          "type": "rom",
+          "start": "0xf800",
+          "end": "0xffff"
+        }
+      ]
+    },
+    {
+      "id": "cpu6502",
+      "class": "cpu"
+    },
+    {
+      "id": "debugger",
+      "class": "debugger"
+    },
+    {
+      "id": "ram8K",
+      "class": "ram",
+      "size": "0x2000"
+    },
+    {
+      "id": "romNull",
+      "class": "rom",
+      "size": "0x8000"
+    },
+    {
+      "id": "romBASIC",
+      "class": "rom",
+      "size": "0x2000",
+      "file": "/machines/osi/c1p/rom/basic-gcpatch.hex"
+    },
+    {
+      "id": "romSystem",
+      "class": "rom",
+      "size": "0x0800",
+      "file": "/machines/osi/c1p/rom/system.hex"
+    },
+    {
+      "id": "video",
+      "class": "video",
+      "title": "Challenger 1P",
+      "model": 600,
+      "screenWidth": 1024,
+      "screenHeight": 800,
+      "screenColor": "black",
+      "charCols": 32,
+      "charRows": 32,
+      "fontROM": "/machines/osi/c1p/video/chargen4x.png"
+    },
+    {
+      "id": "keyboard",
+      "class": "keyboard",
+      "model": 600,
+      "controls": [
+        {
+          "id": "ctrl-c",
+          "type": "button",
+          "label": "CTRL-C"
+        },
+        {
+          "id": "ctrl-o",
+          "type": "button",
+          "label": "CTRL-O"
+        },
+        {
+          "id": "break",
+          "type": "button",
+          "label": "BREAK"
+        }
+      ]
+    },
+    {
+      "config": "/machines/osi/c1p/serial.json"
+    },
+    {
+      "id": "panel",
+      "class": "panel",
+      "title": "PCjs Debugger",
+      "style": {
+        "width": "auto",
+        "max-width": "100%",
+        "padding": "8px",
+        "clear": "both"
+      },
+      "controls": [
+        {
+          "type": "group",
+          "class": "pcjs-panel",
+          "style": {
+            "width": "60%"
+          }
+        },
+        {
+          "id": "print",
+          "type": "textarea",
+          "height": "260px",
+          "style": {
+            "width": "100%"
+          }
+        },
+        {
+          "id": "debugInput",
+          "type": "text",
+          "style": {
+            "clear": "both"
+          }
+        },
+        {
+          "id": "debugEnter",
+          "type": "button",
+          "label": "Enter"
+        },
+        {
+          "id": "clear",
+          "type": "button",
+          "label": "Clear"
+        },
+        {
+          "type": "group",
+          "style": {
+            "padding-left": "8px",
+            "width": "35%"
+          }
+        },
+        {
+          "id": "A",
+          "type": "register"
+        },
+        {
+          "id": "X",
+          "type": "register"
+        },
+        {
+          "id": "Y",
+          "type": "register"
+        },
+        {
+          "id": "S",
+          "type": "register"
+        },
+        {
+          "id": "PC",
+          "type": "register"
+        },
+        {
+          "type": "group",
+          "style": {
+            "padding-left": "8px",
+            "width": "35%"
+          }
+        },
+        {
+          "id": "C",
+          "type": "flag"
+        },
+        {
+          "id": "Z",
+          "type": "flag"
+        },
+        {
+          "id": "I",
+          "type": "flag"
+        },
+        {
+          "id": "D",
+          "type": "flag"
+        },
+        {
+          "id": "B",
+          "type": "flag"
+        },
+        {
+          "id": "V",
+          "type": "flag"
+        },
+        {
+          "id": "N",
+          "type": "flag"
+        },
+        {
+          "type": "group",
+          "style": {
+            "padding-bottom": "8px",
+            "padding-left": "8px"
+          }
+        },
+        {
+          "id": "run",
+          "type": "button",
+          "label": "Run"
+        },
+        {
+          "id": "step",
+          "type": "button",
+          "label": "Step"
+        },
+        {
+          "id": "reset",
+          "type": "button",
+          "label": "Reset"
+        },
+        {
+          "id": "setSpeed",
+          "type": "button",
+          "label": "Fast"
+        },
+        {
+          "type": "description",
+          "label": "Speed:",
+          "style": {
+            "padding-left": "4px"
+          }
+        },
+        {
+          "id": "speed",
+          "type": "description",
+          "label": "Stopped",
+          "style": {
+            "padding-left": "4px"
+          }
+        }
+      ]
+    }
+  ]
+}

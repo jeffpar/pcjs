@@ -6,7 +6,7 @@ machines:
   - id: ibm-5170-kq1
     type: pcx86
     resume: 1
-    config: /machines/pcx86/machine/ibm/5170/ega/1024kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml
     autoMount:
       A:
         name: "PC DOS 3.30 (Disk 1)"

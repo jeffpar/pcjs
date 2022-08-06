@@ -7,7 +7,7 @@ machines:
   - id: ibm5170
     type: pcx86
     debugger: true
-    config: /machines/pcx86/machine/ibm/5170/cga/640kb/rev3/debugger/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/debugger/machine.xml
     autoMount:
       A:
         name: IBM PC AT Diagnostics 1.01 (Adv)

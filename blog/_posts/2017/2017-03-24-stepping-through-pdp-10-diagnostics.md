@@ -6,7 +6,7 @@ permalink: /blog/2017/03/24/
 machines:
   - id: testka10
     type: pdp10
-    config: /machines/pdp10/machine/ka10/test/debugger/machine.xml
+    config: /machines/dec/pdp10/ka10/test/debugger/machine.xml
     debugger: true
     commands: a 30724 /software/dec/pdp10/diags/ka10/dakaa/DAKAA.MAC
 ---

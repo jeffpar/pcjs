@@ -8,7 +8,7 @@ redirect_from:
 machines:
   - id: ibm5150-pcdos100
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5150/mda/64kb/debugger/machine.json
+    config: /machines/pcx86/ibm/5150/mda/64kb/debugger/machine.json
     autoType: $date\r
 ---
 

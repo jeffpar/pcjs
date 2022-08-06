@@ -70578,7 +70578,7 @@ class JSONLib {
                          * that may contain:
                          *
                          *      'url':      URL of the preferred machine to run the software (eg, "/machines/pcx86/ibm/5150/cga/")
-                         *      'config':   a specific configuration file (eg, "/machines/pcx86/machine/ibm/5170/vga/2048kb/machine.xml")
+                         *      'config':   a specific configuration file (eg, "/machines/pcx86/ibm/5170/vga/2048kb/machine.xml")
                          *      'drives':   one of more hard drive configs (eg, "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]")
                          *      'options':  assorted hardware options (eg, "mouse")
                          *      'autoType': if present, overrides any '@autoType' set for the software

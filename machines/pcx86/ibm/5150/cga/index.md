@@ -8,7 +8,7 @@ redirect_from:
 machines:
   - id: ibm-5150-cga
     type: pcx86
-    config: /machines/pcx86/machine/ibm/5150/cga/64kb/machine.json
+    config: /machines/pcx86/ibm/5150/cga/64kb/machine.json
     debugger: available
     autoType: $date\r
 ---
