@@ -9,7 +9,7 @@ machines:
     debug: true
     uncompiled: true
     compiled: false
-    config: /machines/pcx86/machine/compaq/lte286/cga/debugger/machine.xml
+    config: /machines/pcx86/compaq/lte286/cga/debugger/machine.xml
     autoType: $date\r$time\rDEMO\r
 ---
 
@@ -18,7 +18,7 @@ The LTE/286 came standard with the 12Mhz 80C286 cpu, 640Kb internal RAM and a 1.
 [Link to Overclockers Review](https://www.overclockers.com/compaq-lte-286-model-40/)
 
 Emulated Configurations ([ROM REV B.1](/machines/pcx86/compaq/lte286/rom/)):
-  - [LTE/286 Model 1](/machines/pcx86/compaq/lte286/cga/machine.xml) ([Debugger](/machines/pcx86/machine/compaq/lte286/cga/debugger/machine.xml))
+  - [LTE/286 Model 1](/machines/pcx86/compaq/lte286/cga/machine.xml) ([Debugger](/machines/pcx86/compaq/lte286/cga/debugger/machine.xml))
   - LTE/286 Model 20 with 1Mb
   - LTE/286 Model 20 with 2Mb
   - LTE/286 Model 40 with 2Mb

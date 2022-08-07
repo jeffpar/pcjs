@@ -49,18 +49,13 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- if candidate.components or candidate.config -%}
     {%- assign machine = candidate -%}
   {%- else -%}
-    {%- assign machine_group = machine_type | slice: 0,2 %}
-    {%- if machine_group == "ti" %}
-      {%- assign machine = site.data['ti'][machine_type][candidate.id] -%}
-    {%- elsif machine_group == "c1" %}
-      {%- assign machine = site.data['osi'][machine_type][candidate.id] -%}
-    {%- elsif machine_group == "pd" or machine_group == "vt" %}
-      {%- assign machine = site.data['dec'][machine_type][candidate.id] -%}
-    {%- elsif machine_group == "in" %}
-      {%- assign machine = site.data['arcade'][machine_type][candidate.id] -%}
-    {%- else %}
+    {%- assign machine_group = site.data.machines[machine_type].folder | split: '/' -%}
+    {%- unless machine_group[1] %}
       {%- assign machine = site.data[machine_type][candidate.id] -%}
-    {%- endif %}
+    {%- else %}
+      {%- assign machine_group = machine_group[0] -%}
+      {%- assign machine = site.data[machine_group][machine_type][candidate.id] -%}
+    {%- endunless %}
   {%- endif -%}
   {%- unless machine -%}
     {%- continue -%}

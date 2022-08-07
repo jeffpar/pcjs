@@ -618,7 +618,7 @@ function processDisk(di, diskFile, argv, diskette)
                     "compaq": [sDefaultCOMPAQModel, "portable","deskpro386"]
                 }[manufacturer]);
                 let video = findOption(["*","mda","cga","ega","vga","vdu"]);
-                let configFile = hardware.config || findConfig("/machines/pcx86/machine/" + manufacturer + '/' + model + '/' + video + "/**/machine.xml");
+                let configFile = hardware.config || findConfig("/machines/pcx86/" + manufacturer + '/' + model + '/' + video + "/**/machine.xml");
                 if (configFile == "none") configFile = "";
                 if (configFile) {
                     let bootDisk = findOption(["", "DOS"]);
