@@ -1119,7 +1119,7 @@
           "@redirect_from": ["/devices/ti55/", "/devices/ti55/machine"]
         },
         "diags": {
-          "@title": "TI-57 with Diagnostics",
+          "@title": "TI-55 with Diagnostics",
           "@redirect_from": "/devices/ti55/machine/diags/"
         }
       }

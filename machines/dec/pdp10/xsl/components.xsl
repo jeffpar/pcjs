@@ -11,6 +11,7 @@
 	<xsl:param name="generator" select="'client'"/>
 
 	<xsl:variable name="MACHINETYPE">pc</xsl:variable>
+	<xsl:variable name="MACHINECLASS">dec</xsl:variable>
 	<xsl:variable name="APPCLASS">pdp10</xsl:variable>
 	<xsl:variable name="APPNAME">PDPjs</xsl:variable>
 	<xsl:variable name="APPVERSION">2.00</xsl:variable>
@@ -19,12 +20,12 @@
 	<xsl:variable name="BGNDCOLOR">#fff8e7</xsl:variable>
 
 	<xsl:template name="componentStyles">
-		<link rel="stylesheet" type="text/css" href="/machines/{$APPCLASS}/xsl/components.css"/>
+		<link rel="stylesheet" type="text/css" href="/machines/{$MACHINECLASS}/{$APPCLASS}/xsl/components.css"/>
 	</xsl:template>
 
 	<xsl:template name="componentScripts">
 		<xsl:param name="component"/>
-		<script src="/machines/{$APPCLASS}/releases/{$APPVERSION}/{$component}.js"> </script>
+		<script src="/machines/{$MACHINECLASS}/{$APPCLASS}/releases/{$APPVERSION}/{$component}.js"> </script>
 	</xsl:template>
 
 	<xsl:template name="componentIncludes">

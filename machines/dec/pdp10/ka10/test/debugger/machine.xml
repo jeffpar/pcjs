@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="/machines/dec/pdp11/xsl/machine.xsl"?>
+<?xml-stylesheet type="text/xsl" href="/machines/dec/pdp10/xsl/machine.xsl"?>
 <machine id="testka10" type="pdp10" border="1" pos="center" background="default">
 	<name pos="center">PDP-10 (Model KA10) with Debugger</name>
 	<computer id="computer" busWidth="18"/>
