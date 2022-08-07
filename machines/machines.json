@@ -13,10 +13,10 @@
       "the APPCLASS XSL variable.",
       "",
       "'copy' is an optional property used by new machines to refer to another machine configuration that will be used",
-      "for all other machine properties; it saves a bit repetition for machines that are very similar.",
+      "for all other machine properties; it saves a bit of repetition for machines that are very similar.",
       "",
       "'scripts' is a list of all the JavaScript files that comprise the machine; PCjs 'gulp' tasks will concatenate and",
-      "compile the files in the order listed, and if the web server is configured to load uncompiled files, they will also",
+      "compile the files in the order listed, and if the web server is configured to load uncompiled files, they will",
       "be loaded on their respective web pages in the order listed."
     ]
   },

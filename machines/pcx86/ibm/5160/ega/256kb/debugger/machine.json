@@ -21,7 +21,7 @@
     "/machines/pcx86/ibm/5160/rom-bios-rev1.json",
     "/machines/pcx86/ibm/5160/rom-ega.json",
     "/machines/pcx86/ibm/5160/rom-hdc.json",
-    "/machines/pcx86/ibm/5160/video-ega-5154-128k.json",
+    "/machines/pcx86/ibm/5160/ega/5154-128k.json",
     "/machines/pcx86/ibm/5160/fdc.json",
     "/machines/pcx86/ibm/5160/hdc.json",
     {
