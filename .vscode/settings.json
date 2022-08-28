@@ -325,6 +325,7 @@
     "EFLAGS",
     "EISA",
     "EKBBF",
+    "embeddable",
     "endcapture",
     "endcomment",
     "ENDEX",
