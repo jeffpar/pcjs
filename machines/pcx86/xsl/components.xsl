@@ -10,7 +10,7 @@
 	<xsl:param name="rootDir" select="''"/>
 	<xsl:param name="generator" select="'client'"/>
 
-	<xsl:variable name="MACHINETYPE">pc</xsl:variable>
+	<xsl:variable name="MACHINECLASS">pcx86</xsl:variable>
 	<xsl:variable name="APPCLASS">pcx86</xsl:variable>
 	<xsl:variable name="APPNAME">PCx86</xsl:variable>
 	<xsl:variable name="APPVERSION">2.07</xsl:variable>
@@ -19,12 +19,12 @@
 	<xsl:variable name="BGNDCOLOR">#fff8e7</xsl:variable>
 
 	<xsl:template name="componentStyles">
-		<link rel="stylesheet" type="text/css" href="/assets/css/pcjs.css"/>
+		<link rel="stylesheet" type="text/css" href="/machines/{$MACHINECLASS}/xsl/components.css"/>
 	</xsl:template>
 
 	<xsl:template name="componentScripts">
 		<xsl:param name="component"/>
-		<script src="/machines/{$APPCLASS}/releases/{$APPVERSION}/{$component}.js"> </script>
+		<script src="/machines/{$MACHINECLASS}/releases/{$APPVERSION}/{$component}.js"> </script>
 	</xsl:template>
 
 	<xsl:template name="componentIncludes">

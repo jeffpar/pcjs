@@ -10,7 +10,6 @@
 	<xsl:param name="rootDir" select="''"/>
 	<xsl:param name="generator" select="'client'"/>
 
-	<xsl:variable name="MACHINETYPE">pc</xsl:variable>
 	<xsl:variable name="MACHINECLASS">dec</xsl:variable>
 	<xsl:variable name="APPCLASS">pdp10</xsl:variable>
 	<xsl:variable name="APPNAME">PDPjs</xsl:variable>
