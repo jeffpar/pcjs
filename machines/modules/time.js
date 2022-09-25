@@ -1,7 +1,7 @@
 /**
  * @fileoverview Provides support for both time-based and cycle-based callbacks
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -127,14 +127,15 @@ export default class Time extends Device {
         this.nStepping = 0;
         this.idStepTimeout = this.idAnimationTimeout = 0;
 
-        /*
+        /**
          * I avoid hard-coding the use of requestAnimationFrame() and cancelAnimationFrame() so that
          * we can still use the older setTimeout() and clearTimeout() functions if need be (or want be).
          * However, I've done away with all the old code that used to calculate the optimal setTimeout()
          * delay; in either case, run() is simply called N frames/second, and it's up to calcSpeed() to
          * calculate the appropriate number of cycles to execute per "frame" (nCyclesDepositPerFrame).
          */
-        let sRequestAnimationTimeout = this.findProperty(window, 'requestAnimationFrame'), timeout;
+        let sRequestAnimationTimeout = this.findProperty(window, 'requestAnimationFrame');
+        let timeout;
         if (!sRequestAnimationTimeout) {
             sRequestAnimationTimeout = 'setTimeout';
             timeout = this.msFrameDefault;
@@ -143,7 +144,7 @@ export default class Time extends Device {
         let sCancelAnimationTimeout = this.findProperty(window, 'cancelAnimationFrame') || 'clearTimeout';
         this.cancelAnimationTimeout = window[sCancelAnimationTimeout].bind(window);
 
-        /*
+        /**
          * Assorted bookkeeping variables.  A running machine actually performs one long series of "runs"
          * (aka animation frames), each followed by a yield back to the browser.  And each "run" consists of
          * one or more "bursts"; the size and number of "bursts" depends on how often the machine's timers
@@ -154,7 +155,7 @@ export default class Time extends Device {
         this.nCyclesBurst = 0;          // number of cycles requested for the next "burst"
         this.nCyclesRemain = 0;         // number of cycles remaining in the next "burst"
 
-        /*
+        /**
          * Now that clocking is driven exclusively by animation frames, calcSpeed() calculates how many
          * cycles each animation frame should "deposit" in our cycle bank:
          *
@@ -170,7 +171,7 @@ export default class Time extends Device {
          */
         this.nCyclesDeposited = this.nCyclesDepositPerFrame = 0;
 
-        /*
+        /**
          * Reset speed to the base multiplier and perform an initial calcSpeed().
          */
         this.resetSpeed();
@@ -320,7 +321,7 @@ export default class Time extends Device {
             this.printf(Device.MESSAGE.TIME, "calcSpeed(%d cycles, %5.3fms): %5.3fMhz\n", nCycles, msElapsed, mhz);
             if (msFrame > this.msFrameDefault) {
                 if (this.nTargetMultiplier > 1) {
-                    /*
+                    /**
                      * Alternatively, we could call setSpeed(this.nTargetMultiplier >> 1) at this point, but the
                      * advantages of quietly reduing the target multiplier here are: 1) it will still slow us down,
                      * and 2) allow the next attempt to increase speed via setSpeed() to detect that we didn't
@@ -329,7 +330,7 @@ export default class Time extends Device {
                     this.nTargetMultiplier >>= 1;
                     this.printf(Device.MESSAGE.WARN, "warning: frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
                 }
-                /*
+                /**
                  * If we (potentially) took too long on this last run, we pass that time back as an adjustment,
                  * which runStop() can add to msStartThisRun, thereby reducing the likelihood that the next runStart()
                  * will (potentially) misinterpret the excessive time as browser throttling.
@@ -339,7 +340,7 @@ export default class Time extends Device {
         }
         this.mhzCurrent = mhz;
         this.nCurrentMultiplier = mhz / this.mhzBase;
-        /*
+        /**
          * If we're running twice as fast as the base speed (say, 4Mhz instead of 2Mhz), then the current multiplier
          * will be 2; similarly, if we're running at half the base speed (say, 1Mhz instead of 2Mhz), the current
          * multiplier will be 0.5.  And if all we needed to do was converge on the base speed, we would simply divide
@@ -636,7 +637,7 @@ export default class Time extends Device {
     onPower(on)
     {
         this.fPowered = on;
-        /*
+        /**
          * This is also a good time to get access to the Debugger, if any, and add our dump extensions.
          */
         if (this.dbg === undefined) {
@@ -768,7 +769,7 @@ export default class Time extends Device {
         try {
             this.fYield = false;
             do {
-                /*
+                /**
                  * Execute a normal burst and then update all timers.
                  */
                 this.notifyTimers(this.endBurst(this.doBurst(this.getCyclesPerRun())));
@@ -789,7 +790,7 @@ export default class Time extends Device {
     runStart(t)
     {
         let msStartThisRun = Date.now();
-        /*
+        /**
          * If there was no interruption between the last run and this run (ie, msEndRun wasn't zeroed by
          * intervening setSpeed() or stop()/start() calls), and there was an unusual delay between the two
          * runs, then we assume that "browser throttling" is occurring due to visibility or redraw issues
@@ -800,7 +801,7 @@ export default class Time extends Device {
          * so we must try to estimate and incorporate that delay into our overall run time.
          */
         if (this.msEndRun) {
-            /*
+            /**
              * In a perfect world, the difference between the start of this run and the start of the last run
              * (which is still in this.msStartThisRun since we haven't updated it yet) would be msFrameDefault;
              * if it's more than twice that, we assume the browser is either throttling us or is simply too
@@ -847,7 +848,7 @@ export default class Time extends Device {
     setSpeed(nMultiplier)
     {
         if (nMultiplier !== undefined) {
-            /*
+            /**
              * If the multiplier is invalid, or we haven't reached 90% of the current target speed,
              * revert to the base multiplier.
              */
@@ -877,7 +878,7 @@ export default class Time extends Device {
      */
     setSpeedThrottle()
     {
-        /*
+        /**
          * We're not going to assume any direct relationship between the slider's min/max/value
          * and our own nCyclesMinimum/nCyclesMaximum/nCyclesPerSecond.  We're just going to calculate
          * a new target nCyclesPerSecond that is proportional, and then convert that to a speed multiplier.
@@ -913,7 +914,7 @@ export default class Time extends Device {
             let timer = this.aTimers[iTimer-1];
             if (fReset || timer.nCyclesLeft < 0) {
                 nCycles = this.getCyclesPerMS(ms);
-                /*
+                /**
                  * If we're currently executing a burst of cycles, the number of cycles executed in the burst
                  * so far must NOT be charged against the cycle timeout we're about to set.  The simplest way to
                  * resolve that is to immediately call endBurst() and bias the cycle timeout by the number of
@@ -961,7 +962,7 @@ export default class Time extends Device {
                 this.nStepping = nRepeat;
             }
             if (this.nStepping) {
-                /*
+                /**
                  * Execute a minimum-cycle burst and then update all timers.
                  */
                 this.nStepping--;

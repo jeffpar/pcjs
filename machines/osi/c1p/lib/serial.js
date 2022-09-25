@@ -1,7 +1,7 @@
 /**
  * @fileoverview This file implements the C1Pjs SerialPort component
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -294,37 +294,37 @@ class C1PSerialPort extends Component {
     {
         if (this.sInput) {
             /*
-            * QUESTION: Is this setFocus() call strictly necessary?  We're being called in the
-            * context of getResource(), not some user action.  If there was an original user action,
-            * then the handler for THAT action should take care to switch focus back, not us.
-            */
+             * QUESTION: Is this setFocus() call strictly necessary?  We're being called in the
+             * context of getResource(), not some user action.  If there was an original user action,
+             * then the handler for THAT action should take care to switch focus back, not us.
+             */
             this.cpu.setFocus();
             /*
-            * We interpret the presence of a "." at the beginning of the file as a "65V Monitor"
-            * address-mode command, and consequently treat the file as 6502 HEX command file.
-            *
-            * Anything else is treated as commands for the BASIC interpreter, which we re-initialize
-            * with "NEW" and "LOAD" commands.  To prevent that behavior, halt the CPU, perform the load,
-            * and then start it running again.  BASIC will start reading the data as soon as you type
-            * LOAD.
-            */
+             * We interpret the presence of a "." at the beginning of the file as a "65V Monitor"
+             * address-mode command, and consequently treat the file as 6502 HEX command file.
+             *
+             * Anything else is treated as commands for the BASIC interpreter, which we re-initialize
+             * with "NEW" and "LOAD" commands.  To prevent that behavior, halt the CPU, perform the load,
+             * and then start it running again.  BASIC will start reading the data as soon as you type
+             * LOAD.
+             */
             if (this.sInput.charAt(0) != '.') {
                 this.autoLoad = C1PSerialPort.AUTOLOAD_BASIC;
                 this.kbd.injectKeys("NEW\nLOAD\n");
             }
             else {
                 /*
-                * Set autoLoad to AUTOLOAD_6502 before the reset, so that when our reset() method is called,
-                * we'll take care to preserve all the data we just loaded.
-                */
+                 * Set autoLoad to AUTOLOAD_6502 before the reset, so that when our reset() method is called,
+                 * we'll take care to preserve all the data we just loaded.
+                 */
                 this.autoLoad = C1PSerialPort.AUTOLOAD_6502;
                 /*
-                * Although the Keyboard allows us to inject any key, even the BREAK key, like so:
-                *
-                *      this.kbd.injectKeys(String.fromCharCode(this.kbd.CHARCODE_BREAK))
-                *
-                * it's easier to initiate a reset() ourselves and then start the machine-language load process
-                */
+                 * Although the Keyboard allows us to inject any key, even the BREAK key, like so:
+                 *
+                 *      this.kbd.injectKeys(String.fromCharCode(this.kbd.CHARCODE_BREAK))
+                 *
+                 * it's easier to initiate a reset() ourselves and then start the machine-language load process
+                 */
                 if (fReset) this.cmp.reset(true);
                 this.kbd.injectKeys("ML");
             }

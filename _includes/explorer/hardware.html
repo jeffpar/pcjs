@@ -4,6 +4,11 @@
               {%- for machine in site.data.hardware %}
                 {%- capture machine_type -%}{{ machine[0] }}{%- endcapture -%}
                 {%- capture hardware_path1 -%}/machines/{{ machine[0] }}{%- endcapture %}
+                {%- unless site.developer -%}
+                  {%- if machine[1]['@hidden'] -%}
+                    {%- continue -%}
+                  {%- endif -%}
+                {%- endunless -%}
                 <li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ machine[1]['@title'] }}
                   <ul>
                   {%- for category in machine[1] -%}

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Maps keyboard, mouse, and touch inputs to device inputs
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -136,7 +136,7 @@ export default class Input extends Device {
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.machine = /** @type {Machine} */ (this.findDeviceByClass("Machine"));
 
-        /*
+        /**
          * If 'drag' is true, then the onInput() handler will be called whenever the current col and/or row
          * changes, even if the mouse hasn't been released since the previous onInput() call.
          *
@@ -146,32 +146,32 @@ export default class Input extends Device {
          */
         this.fDrag = this.getDefaultBoolean('drag', false);
 
-        /*
+        /**
          * If 'scroll' is true, then we do NOT call preventDefault() on touch events; this permits the input
          * surface to be scrolled like any other part of the page.  The default is false, because this has other
          * side-effects (eg, inadvertent zooms).
          */
         this.fScroll = this.getDefaultBoolean('scroll', false);
 
-        /*
+        /**
          * If 'hexagonal' is true, then we treat the input grid as hexagonal, where even rows of the associated
          * display are offset.
          */
         this.fHexagonal = this.getDefaultBoolean('hexagonal', false);
 
-        /*
+        /**
          * The 'releaseDelay' setting is necessary for devices (eg, old calculators) that are either too slow to
          * notice every input transition and/or have debouncing logic that would otherwise be defeated.
          */
         this.releaseDelay = this.getDefaultNumber('releaseDelay', 0);
 
-        /*
+        /**
          * This is set on receipt of the first 'touch' event of any kind, and is used by the 'mouse' event
          * handlers to disregard mouse events if set.
          */
         this.fTouch = false;
 
-        /*
+        /**
          * There are two supported configuration maps: a two-dimensional grid (gridMap) and a list of IDs (idMap).
          *
          * The two-dimensional button layouts do not (currently) support individual listeners; instead, any key event
@@ -281,7 +281,7 @@ export default class Input extends Device {
             }
             return false;
         }
-        /*
+        /**
          * The visual state of a SWITCH control (which could be a div or button or any other element) is controlled
          * by its class attribute -- specifically, the last class name in the attribute.  You must define two classes:
          * one that ends with "-on" for the on (true) state and another that ends with "-off" for the off (false) state.
@@ -354,14 +354,14 @@ export default class Input extends Device {
                             if (typeof clickBinding == "number") {
                                 keyCode = clickBinding;
                             } else {
-                                /*
+                                /**
                                  * If clickBinding is not a number, the only other possibility currently supported
                                  * is an Array where the first entry is a keyCode modifier; specifically, KEYCODE.LOCK.
                                  */
                                 keyCode = clickBinding[0];
                                 input.assert(keyCode == Input.KEYCODE.LOCK);
                                 if (keyCode == Input.KEYCODE.LOCK) {
-                                    /*
+                                    /**
                                      * In the case of KEYCODE.LOCK, the next entry is the actual keyCode, and we look
                                      * to the element's "data-value" attribute for whether clicking the element should
                                      * "lock" the keyCode ("0") or "unlock" it ("1").  Locking a key is a simple matter
@@ -415,7 +415,7 @@ export default class Input extends Device {
      */
     addSurface(inputElement, focusElement, location = [])
     {
-        /*
+        /**
          * The location array, eg:
          *
          *      "location": [139, 325, 368, 478, 0.34, 0.5, 640, 853, 180, 418, 75, 36],
@@ -462,7 +462,7 @@ export default class Input extends Device {
                 state.hGap = state.vGap = 0;
             }
 
-            /*
+            /**
              * To calculate the average button width (cxButton), we know that the overall width
              * must equal the sum of all the button widths + the sum of all the button gaps:
              *
@@ -478,7 +478,7 @@ export default class Input extends Device {
             state.cxGap = (state.cxButton * state.hGap)|0;
             state.cyGap = (state.cyButton * state.vGap)|0;
 
-            /*
+            /**
              * xStart and yStart record the last 'touchstart' or 'mousedown' position on the surface
              * image; they will be reset to -1 when movement has ended (eg, 'touchend' or 'mouseup').
              */
@@ -487,7 +487,7 @@ export default class Input extends Device {
             this.captureMouse(inputElement, state);
             this.captureTouch(inputElement, state);
 
-            /*
+            /**
              * We use a timer for the touch/mouse release events, to ensure that the machine had
              * enough time to notice the input before releasing it.
              */
@@ -502,7 +502,7 @@ export default class Input extends Device {
         }
 
         if (this.gridMap || this.idMap || this.keyMap) {
-            /*
+            /**
              * This auto-releases the last key reported after an appropriate delay, to ensure that
              * the machine had enough time to notice the corresponding button was pressed.
              */
@@ -513,7 +513,7 @@ export default class Input extends Device {
                 });
             }
 
-            /*
+            /**
              * I used to maintain a single-key buffer (this.keyPressed) and would immediately release
              * that key as soon as another key was pressed, but it appears that the ROM wants a minimum
              * delay between release and the next press -- probably for de-bouncing purposes.  So we
@@ -525,7 +525,7 @@ export default class Input extends Device {
             this.keyActive = "";
             this.keysPressed = [];
 
-            /*
+            /**
              * I'm attaching my key event handlers to the document object, since image elements are
              * not focusable.  I'm disinclined to do what I've done with other machines (ie, create an
              * invisible <textarea> overlay), because in this case, I don't really want a soft keyboard
@@ -542,7 +542,7 @@ export default class Input extends Device {
                 if (!this.focusElement && focusElement.nodeName == "BUTTON") {
                     element = document;
                     this.focusElement = focusElement;
-                    /*
+                    /**
                      * Although we've elected to attach key handlers to the document object in this case,
                      * we also attach to the inputElement as an alternative.
                      */
@@ -734,7 +734,7 @@ export default class Input extends Device {
                     let used = input.onKeyCode(keyCode, false, false, event);
                     printEvent("Up", keyCode);
                     if (used) event.preventDefault();
-                    /*
+                    /**
                      * We reset the contents of any textarea element being used exclusively
                      * for keyboard input, to prevent its contents from growing uncontrollably.
                      */
@@ -743,7 +743,7 @@ export default class Input extends Device {
             }
         );
 
-        /*
+        /**
          * The following onBlur() and onFocus() handlers are currently just for debugging purposes, but
          * PCx86 experience suggests that we may also eventually need them for future pointer-locking support.
          */
@@ -778,7 +778,7 @@ export default class Input extends Device {
             'mousedown',
             function onMouseDown(event) {
                 if (input.fTouch) return;
-                /*
+                /**
                  * If there are any text input elements on the page that might currently have focus,
                  * this is a good time to divert focus to a focusable element of our own (eg, focusElement).
                  * Otherwise, key presses could be confusingly processed in two places.
@@ -840,14 +840,14 @@ export default class Input extends Device {
     {
         let input = this;
 
-        /*
+        /**
          * NOTE: The mouse event handlers below deal only with events where the left button is involved
          * (ie, left button is pressed, down, or released).
          */
         element.addEventListener(
             'touchstart',
             function onTouchStart(event) {
-                /*
+                /**
                  * Under normal circumstances (ie, when fScroll is false), when any touch events arrive,
                  * onSurfaceEvent() calls preventDefault(), which prevents a variety of potentially annoying
                  * behaviors (ie, zooming, scrolling, fake mouse events, etc).  Under non-normal circumstances,
@@ -897,7 +897,7 @@ export default class Input extends Device {
                         msDelayMin = msDelay;
                     }
                 } else {
-                    /*
+                    /**
                      * Because the key is already in the auto-release state, this next call guarantees that the
                      * key will be removed from the array; a consequence of that removal, however, is that we must
                      * reset our array index to zero.
@@ -1029,7 +1029,7 @@ export default class Input extends Device {
                 keyMod >>= 1;
             }
             if (keyMod) {
-                /*
+                /**
                  * Firefox generates only keyDown events for CAPS-LOCK, whereas Chrome generates only keyDown
                  * when it's locking and keyUp when it's unlocking.  To support Firefox, we must simply toggle the
                  * current state on a down.
@@ -1047,7 +1047,7 @@ export default class Input extends Device {
         } else {
             keyCode = 0;
             keyName = String.fromCharCode(code).toUpperCase();
-            /*
+            /**
              * Since code is presumably a charCode, this is a good opportunity to update keyMods with
              * with the *real* CAPS-LOCK setting; that is, we will assume CAPS-LOCK is "off" whenever
              * a lower-case letter arrives and "on" whenever an upper-case letter arrives when neither
@@ -1114,7 +1114,7 @@ export default class Input extends Device {
                 } else {
                     this.removeActiveKey(keyNum);
                 }
-                /*
+                /**
                  * At this point, I used to return true, indicating that we're not interested in a keypress
                  * event, but in fact, onkeyCode() is now interested in them only insofar as letters can convey
                  * information about the state of CAPS-LOCK (see above).
@@ -1155,20 +1155,20 @@ export default class Input extends Device {
      */
     onReset()
     {
-        /*
+        /**
          * As keyDown events are encountered, the event keyCode is checked against the active keyMap, if any.
          * If the keyCode exists in the keyMap, then each keyNum in the keyMap is added to the aActiveKeys array.
          * As each key is released (or auto-released), its entry is removed from the array.
          */
         this.aActiveKeys = [];
 
-        /*
+        /**
          * The current (assumed) physical states of the various shift/lock "modifier" keys (formerly bitsState);
          * the browser doesn't provide a way to query them, so all we can do is infer them as events arrive.
          */
         this.keyMods = 0;               // zero or more KEYMOD bits
 
-        /*
+        /**
          * Finally, the active input state.  If there is no active input, col and row are -1.  After
          * this point, these variables will be updated by setPosition().
          */
@@ -1206,7 +1206,7 @@ export default class Input extends Device {
                 fMultiTouch = (event.targetTouches.length > 1);
             }
 
-            /*
+            /**
              * The following code replaces the older code below it.  It requires that we use clientX and clientY
              * instead of pageX and pageY from the targetTouches array.  The older code seems to be completely broken
              * whenever the page is full-screen, hence this change.
@@ -1215,7 +1215,7 @@ export default class Input extends Device {
             x -= rect.left;
             y -= rect.top;
 
-            /*
+            /**
              * Touch coordinates (that is, the pageX and pageY properties) are relative to the page, so to make
              * them relative to the element, we must subtract the element's left and top positions.  This Apple document:
              *
@@ -1237,7 +1237,7 @@ export default class Input extends Device {
              *      y -= yOffset;
              */
 
-            /*
+            /**
              * Due to the responsive nature of our pages, the displayed size of the surface image may be smaller than
              * the original size, and the coordinates we receive from events are based on the currently displayed size.
              */
@@ -1247,7 +1247,7 @@ export default class Input extends Device {
             xInput = x - state.xInput;
             yInput = y - state.yInput;
 
-            /*
+            /**
              * fInput is set if the event occurred somewhere within the input region (ie, the calculator keypad),
              * either on a button or between buttons, whereas fButton is set if the event occurred squarely (rectangularly?)
              * on a button.  fPower deals separately with the power button; it is set if the event occurred on the
@@ -1256,13 +1256,13 @@ export default class Input extends Device {
             fInput = fButton = false;
             fPower = (x >= state.xPower && x < state.xPower + state.cxPower && y >= state.yPower && y < state.yPower + state.cyPower);
 
-            /*
+            /**
              * I use the top of the input region, less some gap, to calculate a dividing line, above which
              * default actions should be allowed, and below which they should not.  Ditto for any event inside
              * the power button.
              */
             if (xInput >= 0 && xInput < state.cxInput && yInput + state.cyGap >= 0 || fPower) {
-                /*
+                /**
                  * If we allow touch events to be processed, they will generate mouse events as well, causing
                  * confusion and delays.  We can sidestep that problem by preventing default actions on any event
                  * that occurs within the input region.  One downside is that you can no longer scroll or zoom the
@@ -1275,7 +1275,7 @@ export default class Input extends Device {
 
                 if (xInput >= 0 && xInput < state.cxInput && yInput >= 0 && yInput < state.cyInput) {
                     fInput = true;
-                    /*
+                    /**
                      * The width and height of each column and row could be determined by computing cxGap + cxButton
                      * and cyGap + cyButton, respectively, but those gap and button sizes are merely estimates, and should
                      * only be used to help with the final button coordinate checks farther down.
@@ -1285,7 +1285,7 @@ export default class Input extends Device {
                     let colInput = (xInput / cxCol) | 0;
                     let rowInput = (yInput / cyCol) | 0;
 
-                    /*
+                    /**
                      * If the grid is hexagonal (aka "Lite-Brite" mode), then the cells of even-numbered rows are
                      * offset horizontally by 1/2 cell.  In addition, the last cell in those rows is unused, so if
                      * after compensating by 1/2 cell, the target column is the last cell, we set xInput to -1,
@@ -1297,7 +1297,7 @@ export default class Input extends Device {
                         if (colInput == state.nCols - 1) xInput = -1;
                     }
 
-                    /*
+                    /**
                      * (xCol,yCol) will be the top left corner of the button closest to the point of input.  However, that's
                      * based on our gap estimate.  If things seem "too tight", shrink the gap estimates, which will automatically
                      * increase the button size estimates.
@@ -1321,18 +1321,18 @@ export default class Input extends Device {
         if (fMultiTouch) return;
 
         if (action == Input.ACTION.PRESS) {
-            /*
+            /**
              * Record the position of the event, transitioning xStart and yStart to non-negative values.
              */
             state.xStart = x;
             state.yStart = y;
             if (fInput) {
-                /*
+                /**
                  * The event occurred in the input region, so we call setPosition() regardless of whether
                  * it hit or missed a button.
                  */
                 this.setPosition(col, row);
-                /*
+                /**
                  * On the other hand, if it DID hit a button, then we arm the auto-release timer, to ensure
                  * a minimum amount of time (ie, releaseDelay).
                  */
@@ -1352,7 +1352,7 @@ export default class Input extends Device {
             }
         }
         else if (action == Input.ACTION.RELEASE) {
-            /*
+            /**
              * Don't immediately signal the release if the release timer is active (let the timer take care of it).
              */
             if (!this.releaseDelay || !this.time.isTimerSet(this.timerInputRelease)) {
@@ -1375,7 +1375,7 @@ export default class Input extends Device {
      */
     setFocus()
     {
-        /*
+        /**
          * In addition, we now check machine.isReady(), to avoid jerking the page's focus around when a machine is first
          * powered; it won't be marked ready until all the onPower() calls have completed, including the CPU's onPower()
          * call, which in turn calls setFocus().
@@ -1438,7 +1438,7 @@ Input.TYPE = {                  // types for addListener()
     SWITCH:     "switch"
 };
 
-/*
+/**
  * To keep track of the state of modifier keys, I've grabbed a copy of the same bit definitions
  * used by /modules/pcx86/lib/keyboard.js, since it's only important that we have a set of unique
  * values; what the values are isn't critical.

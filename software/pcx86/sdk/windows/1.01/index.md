@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/microsoft/windows/sdk/1.01/
 machines:
   - id: ibm5160
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
     autoGen: true
     autoMount:
       B: "Windows SDK 1.01 (Disk 1)"

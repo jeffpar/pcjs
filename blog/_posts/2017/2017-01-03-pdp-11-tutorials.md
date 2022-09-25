@@ -7,11 +7,11 @@ machines:
   - id: test1170
     type: pdp11
     debugger: true
-    config: /configs/pdp11/machine/1170/vt100/debugger/machine.xml
+    config: /machines/dec/pdp11/1170/vt100/debugger/machine.xml
     connection: dl11->vt100.serialPort
   - id: vt100
     type: pcx80
-    config: /configs/pcx80/machine/vt100/machine.xml
+    config: /machines/pcx80/machine/vt100/machine.xml
     connection: serialPort->test1170.dl11
 ---
 
@@ -31,7 +31,7 @@ In an effort to remedy that situation, I'm adding some new features to PCjs.  Th
 	machines:
 	  - id: vt100
 	    type: pcx80
-	    config: /configs/pcx80/machine/vt100/machine.xml
+	    config: /machines/pcx80/machine/vt100/machine.xml
 	    connection: serialPort->test1170.dl11
 	    sticky: top
 

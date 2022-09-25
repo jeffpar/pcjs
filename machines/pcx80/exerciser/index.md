@@ -7,7 +7,7 @@ machines:
   - id: test8080
     type: pcx80
     debugger: true
-    config: /configs/pcx80/machine/exerciser/machine.xml
+    config: /machines/pcx80/machine/exerciser/machine.xml
 ---
 
 This is a test of [PCx80]({{ site.github.pages }}/machines/pcx80/), a new 8080-based machine emulator recently

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Implements PCx86 CPU support
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -260,9 +260,9 @@ class CPUx86 extends CPULib {
             if (aBlocks[iBlock]) {
                 aBlocks[iBlock].addBreakpoint(addr & this.nBlockLimit, fWrite);
                 /*
-                * When a physical memory breakpoint is added, a fresh setPhysBlock() call is REQUIRED for any
-                * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
-                */
+                 * When a physical memory breakpoint is added, a fresh setPhysBlock() call is REQUIRED for any
+                 * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
+                 */
                 if (fPhysical) this.flushPageBlocks();
                 return true;
             }

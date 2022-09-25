@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/machines/dec/pdp11/xsl/machine.xsl"?>
+<machine id="test1145" type="pdp11" border="1" pos="center" background="default">
+	<name pos="center">PDP-11/45 with 256Kb, Front Panel and Debugger</name>
+	<computer id="computer" busWidth="18"/>
+	<cpu id="cpu" model="1145" cycles="6666667"/>
+	<ram id="ram" addr="0x00000" size="0x3E000" file="/software/dec/pdp11/boot/monitor/BOOTMON.json"/>
+	<rom id="m9312" addr="0xEA00" size="0x200" file="/machines/dec/pdp11/rom/M9312/23-616F1.json5"/>
+	<device id="default" type="default"/>
+	<serial id="dl11" adapter="0" binding="print"/>
+	<panel ref="/machines/dec/pdp11/panel/1145/debugger/front.xml"/>
+	<debugger id="debugger" base="8" messages="" commands=""/>
+	<device ref="/machines/dec/pdp11/pc11/default.xml"/>
+	<device ref="/machines/dec/pdp11/rk11/default.xml"/>
+	<device ref="/machines/dec/pdp11/rl11/default.xml"/>
+</machine>

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Simulates the instructions of an x96 CPU
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -279,7 +279,7 @@ CPUx86.DESC = {         // Descriptor Table Entry
     INVALID: 0          // use CPUx86.DESC.INVALID for invalid DESC values
 };
 
-CPUx86.LADDR = {                // linear address
+CPUx86.LADDR = {        // linear address
     PDE: {              // index of page directory entry
         MASK:   0xFFC00000|0,
         SHIFT:  20      // (addr & DIR.MASK) >>> DIR.SHIFT yields a page directory offset (ie, index * 4)

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Simulates LEDs
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -154,7 +154,7 @@ export default class LED extends Device {
         this.colorHighlight = this.getRGBAColor(this.colorOn, 1.0, 2.0);
         this.colorBackground = this.getRGBColor(this.config['backgroundColor']);
 
-        /*
+        /**
          * We generally want our view canvas to be "responsive", not "fixed" (ie, to automatically resize
          * with changes to the overall window size), so we apply the following style attributes:
          *
@@ -169,13 +169,13 @@ export default class LED extends Device {
             canvasView.style.height = "auto";
         }
 
-        /*
+        /**
          * Hexagonal (aka "Lite-Brite" mode) and highlighting options
          */
         this.fHexagonal = this.getDefaultBoolean('hexagonal', false);
         this.fHighlight = this.getDefaultBoolean('highlight', true);
 
-        /*
+        /**
          * Persistent LEDS are the default, except for LED.TYPE.DIGIT, which is used with calculator displays
          * whose underlying hardware must constantly "refresh" the LEDs to prevent them from going dark.
          */
@@ -187,7 +187,7 @@ export default class LED extends Device {
         container.appendChild(canvasView);
         this.contextView = /** @type {CanvasRenderingContext2D} */ (canvasView.getContext("2d"));
 
-        /*
+        /**
          * canvasGrid is where all LED segments are composited; then they're drawn onto canvasView.
          */
         this.canvasGrid = /** @type {HTMLCanvasElement} */ (document.createElement("canvas"));
@@ -197,7 +197,7 @@ export default class LED extends Device {
             this.contextGrid = this.canvasGrid.getContext("2d");
         }
 
-        /*
+        /**
          * Time to allocate our internal LED buffer.  Other devices access the buffer through interfaces
          * like setLEDState() and getLEDState().  The LED buffer contains four per elements per LED cell:
          *
@@ -216,7 +216,7 @@ export default class LED extends Device {
         this.bufferClone = null;
         this.nBufferIncExtra = (this.colsView < this.cols? (this.cols - this.colsView) * 4 : 0);
 
-        /*
+        /**
          * fBufferModified is straightforward: set to true by any setLEDState() call that actually
          * changed something in the LED buffer, set to false after every drawBuffer() call, periodic
          * or otherwise.
@@ -232,14 +232,14 @@ export default class LED extends Device {
         this.msLastDraw = 0;
         this.fDisplayOn = true;
 
-        /*
+        /**
          * nShiftedLeft is an optimization that tells drawGrid() when it can minimize the number of
          * individual cells to redraw, by shifting the entire grid image leftward and redrawing only
          * the rightmost cells.
          */
         this.nShiftedLeft = 0;
 
-        /*
+        /**
          * This records the location of the most recent LED buffer location updated via setLEDState(),
          * in case we want to highlight it.
          */
@@ -363,7 +363,7 @@ export default class LED extends Device {
             let xStart = this.widthCell * this.nShiftedLeft;
             let cxVisible = this.widthCell * colRedraw;
             this.contextGrid.drawImage(this.canvasGrid, xStart, 0, cxVisible, this.heightGrid, 0, 0, cxVisible, this.heightGrid);
-            /*
+            /**
              * At this point, the only grid drawing we might need to do now is the column at colRedraw,
              * but we still loop over the entire buffer to ensure all the cell MODIFIED states are in sync.
              */
@@ -439,7 +439,7 @@ export default class LED extends Device {
         let xDst = col * this.widthCell + xOffset;
         let yDst = row * this.heightCell;
 
-        /*
+        /**
          * If this is NOT a persistent LED display, then drawGrid() will have done a preliminary clearGrid(),
          * eliminating the need to clear individual cells.  Whereas if this IS a persistent LED display, then
          * we need to clear cells on an as-drawn basis.  If we don't, there could be residual "bleed over"
@@ -456,7 +456,7 @@ export default class LED extends Device {
             this.contextGrid.beginPath();
             this.contextGrid.arc(xDst + coords[0], yDst + coords[1], coords[2], 0, Math.PI * 2);
             if (fTransparent) {
-                /*
+                /**
                  * The following code works as well:
                  *
                  *      this.contextGrid.save();
@@ -567,7 +567,7 @@ export default class LED extends Device {
      */
     drawView()
     {
-        /*
+        /**
          * Setting the 'globalCompositeOperation' property of a 2D context is something you rarely need to do,
          * because the default draw behavior ("source-over") is fine for most cases.  One case where it is NOT
          * fine is when we're using a transparent background color, because it doesn't copy over any transparent
@@ -846,7 +846,7 @@ export default class LED extends Device {
         let buffer = state.shift();
         if (colorOn == this.colorOn && colorBackground == this.colorBackground && buffer && buffer.length == this.buffer.length) {
             this.buffer = buffer;
-            /*
+            /**
              * Loop over all the buffer colors to fix a legacy problem (ie, before we started storing null for colorTransparent)
              */
             for (let i = 0; i <= this.buffer.length - this.nBufferInc; i += this.nBufferInc) {
@@ -1062,7 +1062,7 @@ LED.STATE = {
     ON:         1
 };
 
-/*
+/**
  * NOTE: Although technically the MODIFIED flag is an internal flag, it may be set explicitly as well;
  * the ROM device uses the setLEDState() flags parameter to set it, in order to trigger highlighting of
  * the most recently active LED.
@@ -1087,7 +1087,7 @@ LED.SIZES = [
     [96, 128]           // LED.TYPE.DIGIT
 ];
 
-/*
+/**
  * The segments are arranged roughly as follows, in a 96x128 grid:
  *
  *      AAAA
@@ -1114,7 +1114,7 @@ LED.SEGMENTS = {
     'P':        [80, 102,  8]
 };
 
-/*
+/**
  * Segmented symbols are formed with the following segments.
  */
 LED.SYMBOL_SEGMENTS = {

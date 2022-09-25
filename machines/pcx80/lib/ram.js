@@ -1,7 +1,7 @@
 /**
- * @fileoverview Implements the PCX80 RAM component
+ * @fileoverview Implements the PCx80 RAM component
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -15,7 +15,7 @@ if (typeof module !== "undefined") {
     var DumpAPI = require("../../shared/lib/dumpapi");
     var Component = require("../../shared/lib/component");
     var State = require("../../shared/lib/state");
-    var PCX80 = require("./defines");
+    var PCx80 = require("./defines");
     var CPUDefX80 = require("./cpudef");
     var MemoryX80 = require("./memory");
 }
@@ -27,11 +27,11 @@ if (typeof module !== "undefined") {
  *
  * @unrestricted
  */
-class RAMX80 extends Component {
+class RAMx80 extends Component {
     /**
-     * RAMX80(parmsRAM)
+     * RAMx80(parmsRAM)
      *
-     * The RAMX80 component expects the following (parmsRAM) properties:
+     * The RAMx80 component expects the following (parmsRAM) properties:
      *
      *      addr: starting physical address of RAM (default is 0)
      *      size: amount of RAM, in bytes (default is 0, which means defer to motherboard switch settings)
@@ -42,7 +42,7 @@ class RAMX80 extends Component {
      * NOTE: We make a note of the specified size, but no memory is initially allocated for the RAM until the
      * Computer component calls powerUp().
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {Object} parmsRAM
      */
     constructor(parmsRAM)
@@ -85,7 +85,7 @@ class RAMX80 extends Component {
     /**
      * initBus(cmp, bus, cpu, dbg)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {ComputerX80} cmp
      * @param {BusX80} bus
      * @param {CPUStateX80} cpu
@@ -102,7 +102,7 @@ class RAMX80 extends Component {
     /**
      * powerUp(data, fRepower)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
      * @return {boolean} true if successful, false if failure
@@ -121,7 +121,7 @@ class RAMX80 extends Component {
     /**
      * powerDown(fSave, fShutdown)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
      * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
@@ -140,7 +140,7 @@ class RAMX80 extends Component {
     /**
      * doneLoad(sURL, sData, nErrorCode)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {string} sURL
      * @param {string} sData
      * @param {number} nErrorCode (response from server if anything other than 200)
@@ -173,7 +173,7 @@ class RAMX80 extends Component {
      * until after initBus() has received the Bus component AND doneLoad() has received the data.  When both those
      * criteria are satisfied, the component becomes "ready".
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      */
     initRAM()
     {
@@ -205,9 +205,9 @@ class RAMX80 extends Component {
                      * (namely, 0x0000, which is the CP/M reset vector, and 0x0005, which is the CP/M system call vector) and
                      * then telling the CPU to call us whenever a HLT occurs, so we can check PC for one of these addresses.
                      */
-                    if (this.addrExec == RAMX80.CPM.INIT) {
-                        for (i = 0; i < RAMX80.CPM.VECTORS.length; i++) {
-                            this.bus.setByteDirect(RAMX80.CPM.VECTORS[i], CPUDefX80.OPCODE.HLT);
+                    if (this.addrExec == RAMx80.CPM.INIT) {
+                        for (i = 0; i < RAMx80.CPM.VECTORS.length; i++) {
+                            this.bus.setByteDirect(RAMx80.CPM.VECTORS[i], CPUDefX80.OPCODE.HLT);
                         }
 
                         this.cpu.addHaltCheck(function(rom) {
@@ -231,7 +231,7 @@ class RAMX80 extends Component {
     /**
      * reset()
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      */
     reset()
     {
@@ -243,24 +243,24 @@ class RAMX80 extends Component {
     /**
      * checkCPMVector(addr)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {number} addr (of the HLT opcode)
      * @return {boolean} true if special processing performed, false if not
      */
     checkCPMVector(addr)
     {
-        var i = RAMX80.CPM.VECTORS.indexOf(addr);
+        var i = RAMx80.CPM.VECTORS.indexOf(addr);
         if (i >= 0) {
             var fCPM = false;
             var cpu = this.cpu;
             var dbg = this.dbg;
-            if (addr == RAMX80.CPM.BDOS.VECTOR) {
+            if (addr == RAMx80.CPM.BDOS.VECTOR) {
                 fCPM = true;
                 switch(cpu.regC) {
-                case RAMX80.CPM.BDOS.FUNC.CON_WRITE:
+                case RAMx80.CPM.BDOS.FUNC.CON_WRITE:
                     this.writeCPMString(this.getCPMChar(cpu.regE));
                     break;
-                case RAMX80.CPM.BDOS.FUNC.STR_WRITE:
+                case RAMx80.CPM.BDOS.FUNC.STR_WRITE:
                     this.writeCPMString(this.getCPMString(cpu.getDE(), '$'));
                     break;
                 default:
@@ -284,7 +284,7 @@ class RAMX80 extends Component {
     /**
      * getCPMChar(ch)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {number} ch
      * @return {string}
      */
@@ -296,7 +296,7 @@ class RAMX80 extends Component {
     /**
      * getCPMString(addr, chEnd)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {number} addr (of a string)
      * @param {string|number} [chEnd] (terminating character, default is 0)
      * @return {string}
@@ -317,7 +317,7 @@ class RAMX80 extends Component {
     /**
      * writeCPMString(s)
      *
-     * @this {RAMX80}
+     * @this {RAMx80}
      * @param {string} s
      */
     writeCPMString(s)
@@ -326,26 +326,26 @@ class RAMX80 extends Component {
     }
 
     /**
-     * RAMX80.init()
+     * RAMx80.init()
      *
      * This function operates on every HTML element of class "ram", extracting the
-     * JSON-encoded parameters for the RAMX80 constructor from the element's "data-value"
-     * attribute, invoking the constructor to create a RAMX80 component, and then binding
+     * JSON-encoded parameters for the RAMx80 constructor from the element's "data-value"
+     * attribute, invoking the constructor to create a RAMx80 component, and then binding
      * any associated HTML controls to the new component.
      */
     static init()
     {
-        var aeRAM = Component.getElementsByClass(document, PCX80.APPCLASS, "ram");
+        var aeRAM = Component.getElementsByClass(document, PCx80.APPCLASS, "ram");
         for (var iRAM = 0; iRAM < aeRAM.length; iRAM++) {
             var eRAM = aeRAM[iRAM];
             var parmsRAM = Component.getComponentParms(eRAM);
-            var ram = new RAMX80(parmsRAM);
-            Component.bindComponentControls(ram, eRAM, PCX80.APPCLASS);
+            var ram = new RAMx80(parmsRAM);
+            Component.bindComponentControls(ram, eRAM, PCx80.APPCLASS);
         }
     }
 }
 
-RAMX80.CPM = {
+RAMx80.CPM = {
     BIOS: {
         VECTOR:         0x0000
     },
@@ -368,11 +368,11 @@ RAMX80.CPM = {
     INIT:               0x100
 };
 
-RAMX80.CPM.VECTORS = [RAMX80.CPM.BIOS.VECTOR, RAMX80.CPM.BDOS.VECTOR];
+RAMx80.CPM.VECTORS = [RAMx80.CPM.BIOS.VECTOR, RAMx80.CPM.BDOS.VECTOR];
 
 /*
- * Initialize all the RAMX80 modules on the page.
+ * Initialize all the RAMx80 modules on the page.
  */
-Web.onInit(RAMX80.init);
+Web.onInit(RAMx80.init);
 
-if (typeof module !== "undefined") module.exports = RAMX80;
+if (typeof module !== "undefined") module.exports = RAMx80;

@@ -1,7 +1,7 @@
 /**
  * @fileoverview PCx86-specific BIOS/DOS interrupt definitions
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -355,7 +355,7 @@ if (DEBUGGER) {
 }
 
 /*
- * DOS function reference (from https://sites.google.com/site/pcdosretro/dosfuncs)
+ * DOS function reference (from https://pcdosretro.github.io/dosfunc.txt)
  *
  *      INT 20 Program terminate (1.0+)
  *      Entry: CS=PSP
@@ -1638,7 +1638,7 @@ if (DEBUGGER) {
  *      52 Cannot make directory entry
  *      53 Fail on INT 24
  *
- * DOS table and structure reference (from https://sites.google.com/site/pcdosretro/dostables)
+ * DOS table and structure reference (from https://pcdosretro.github.io/dosblks.txt)
  *
  *      Program Segment Prefix (100h bytes)
  *      00 INT 20

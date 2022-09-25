@@ -110,7 +110,7 @@ function parseDiskettes(library, propPath = "/pcx86")
  */
 function processFiles(sDir, fDebug, fFix)
 {
-    let sDiskettes = path.join(sDir, "/configs/pcx86/software.json");
+    let sDiskettes = path.join(sDir, "/machines/pcx86/software.json");
     if (fileExists(sDiskettes)) {
         parseDiskettes(JSON.parse(fs.readFileSync(sDiskettes, {encoding: "utf8"})));
     }
@@ -204,7 +204,7 @@ function processFiles(sDir, fDebug, fFix)
             if (!fileExists(sFile)) {
                 printf("%s: config not found: %s\n", sFilePath, sFile);
                 if (fFix) {
-                    let sCorrection = match[2].replace(/^\/devices\/pcx86\/machine/, "/configs/pcx86/machine");
+                    let sCorrection = match[2].replace(/^\/devices\/pcx86\/machine/, "/machines/pcx86");
                     if (sCorrection != match[2]) {
                         printf("%s: replacing '%s' with '%s'\n", match[2], sCorrection);
                         sText = sText.substr(0, match.index) + match[1] + sCorrection + sText.substr(match.index + match[0].length);

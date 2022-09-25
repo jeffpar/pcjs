@@ -1,7 +1,7 @@
 /**
- * @fileoverview Controls the PCX80 CPU component
+ * @fileoverview Controls the PCx80 CPU component
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -22,11 +22,11 @@ if (typeof module !== "undefined") {
  *
  * @unrestricted
  */
-class CPUX80 extends Component {
+class CPUx80 extends Component {
     /**
-     * CPUX80(parmsCPU, nCyclesDefault)
+     * CPUx80(parmsCPU, nCyclesDefault)
      *
-     * The CPUX80 class supports the following (parmsCPU) properties:
+     * The CPUx80 class supports the following (parmsCPU) properties:
      *
      *      cycles: the machine's base cycles per second; the CPUStateX80 constructor
      *      will provide us with a default (based on the CPU model) to use as a fallback.
@@ -51,7 +51,7 @@ class CPUX80 extends Component {
      *
      * It is extended by the CPUStateX80 component, where the simulation control logic resides.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {Object} parmsCPU
      * @param {number} nCyclesDefault
      */
@@ -117,10 +117,10 @@ class CPUX80 extends Component {
     /**
      * initBus(cmp, bus, cpu, dbg)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {ComputerX80} cmp
      * @param {BusX80} bus
-     * @param {CPUX80} cpu
+     * @param {CPUx80} cpu
      * @param {DebuggerX80} dbg
      */
     initBus(cmp, bus, cpu, dbg)
@@ -129,9 +129,9 @@ class CPUX80 extends Component {
         this.bus = bus;
         this.dbg = dbg;
 
-        for (var i = 0; i < CPUX80.BUTTONS.length; i++) {
-            var control = this.bindings[CPUX80.BUTTONS[i]];
-            if (control) this.cmp.setBinding("", CPUX80.BUTTONS[i], control);
+        for (var i = 0; i < CPUx80.BUTTONS.length; i++) {
+            var control = this.bindings[CPUx80.BUTTONS[i]];
+            if (control) this.cmp.setBinding("", CPUx80.BUTTONS[i], control);
         }
 
         /*
@@ -153,7 +153,7 @@ class CPUX80 extends Component {
     /**
      * reset()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      */
     reset()
     {
@@ -164,7 +164,7 @@ class CPUX80 extends Component {
      *
      * This is a placeholder for save support (overridden by the CPUStateX80 component).
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {Object|null}
      */
     save()
@@ -177,7 +177,7 @@ class CPUX80 extends Component {
      *
      * This is a placeholder for restore support (overridden by the CPUStateX80 component).
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {Object} data
      * @return {boolean} true if restore successful, false if not
      */
@@ -189,7 +189,7 @@ class CPUX80 extends Component {
     /**
      * powerUp(data, fRepower)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
      * @return {boolean} true if successful, false if failure
@@ -226,7 +226,7 @@ class CPUX80 extends Component {
     /**
      * powerDown(fSave, fShutdown)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
      * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
@@ -245,7 +245,7 @@ class CPUX80 extends Component {
     /**
      * autoStart()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {boolean} true if started, false if not
      */
     autoStart()
@@ -268,7 +268,7 @@ class CPUX80 extends Component {
     /**
      * isPowered()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {boolean}
      */
     isPowered()
@@ -283,7 +283,7 @@ class CPUX80 extends Component {
     /**
      * isRunning()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {boolean}
      */
     isRunning()
@@ -296,7 +296,7 @@ class CPUX80 extends Component {
      *
      * This will be implemented by the CPUStateX80 component.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
@@ -311,7 +311,7 @@ class CPUX80 extends Component {
      * cycle counter that will trigger the next displayChecksum(); called by resetCycles(), which is called whenever
      * the CPU is reset or restored.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {boolean} true if checksum generation enabled, false if not
      */
     resetChecksum()
@@ -340,7 +340,7 @@ class CPUX80 extends Component {
      * the exact number cycles that were actually executed.  This should give us instruction-granular checksums
      * at precise intervals that are 100% repeatable.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} nCycles
      */
     updateChecksum(nCycles)
@@ -375,7 +375,7 @@ class CPUX80 extends Component {
      * checksums generated at the specified cycle intervals, as specified by the "csStart" and "csInterval" parmsCPU
      * properties).
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      */
     displayChecksum()
     {
@@ -388,7 +388,7 @@ class CPUX80 extends Component {
      * This is principally for displaying register values, but in reality, it can be used to display any
      * numeric (hex) value bound to the given label.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {string} sLabel
      * @param {number} nValue
      * @param {number} cch
@@ -419,7 +419,7 @@ class CPUX80 extends Component {
     /**
      * setBinding(sHTMLType, sBinding, control, sValue)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {string} sHTMLType is the type of the HTML control (eg, "button", "list", "text", "submit", "textarea", "canvas")
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
@@ -490,7 +490,7 @@ class CPUX80 extends Component {
      * NOTE: In this context, "timer" refers to a timer chip (eg, an Intel 8253) being emulated by
      * by the ChipSet component, not the timers managed by the CPU (eg, addTimer(), setTimer(), etc).
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} nCycles is the target number of cycles to drop the current burst to
      * @return {boolean}
      */
@@ -517,7 +517,7 @@ class CPUX80 extends Component {
     /**
      * addCycles(nCycles, fEndStep)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} nCycles
      * @param {boolean} [fEndStep]
      */
@@ -540,7 +540,7 @@ class CPUX80 extends Component {
      * we expected the virtual hardware to take (eg, 1000ms/50 or 20ms), and if we still have time remaining,
      * we sleep the remaining time (or 0ms if there's no remaining time), and then restart runCPU().
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {boolean} [fRecalc] is true if the caller wants to recalculate thresholds based on the most recent
      * speed calculation (see calcSpeed).
      */
@@ -556,8 +556,8 @@ class CPUX80 extends Component {
             }
         }
 
-        this.msPerYield = Math.round(1000 / CPUX80.YIELDS_PER_SECOND);
-        this.nCyclesPerYield = Math.floor(this.nCyclesPerSecond / CPUX80.YIELDS_PER_SECOND * vMultiplier);
+        this.msPerYield = Math.round(1000 / CPUx80.YIELDS_PER_SECOND);
+        this.nCyclesPerYield = Math.floor(this.nCyclesPerSecond / CPUx80.YIELDS_PER_SECOND * vMultiplier);
 
         /*
          * And initialize "next" yield values to the "per" values.
@@ -581,7 +581,7 @@ class CPUX80 extends Component {
      * nTotalCycles eventually get reset by calcSpeed(), to avoid overflow, so components that rely on
      * getCycles() returning steadily increasing values should also be prepared for a reset at any time.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {boolean} [fScaled] is true if the caller wants a cycle count relative to a multiplier of 1
      * @return {number}
      */
@@ -617,7 +617,7 @@ class CPUX80 extends Component {
      *
      * This returns the CPU's "base" speed (ie, the original cycles per second defined for the machine)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {number}
      */
     getCyclesPerSecond()
@@ -632,7 +632,7 @@ class CPUX80 extends Component {
      * It's important that this be called BEFORE the actual restore() call, because restore() may want to call setSpeed(),
      * which in turn assumes that all the cycle counts have been initialized to sensible values.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      */
     resetCycles()
     {
@@ -646,7 +646,7 @@ class CPUX80 extends Component {
     /**
      * getSpeed()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {number} the current speed multiplier
      */
     getSpeed()
@@ -657,7 +657,7 @@ class CPUX80 extends Component {
     /**
      * getSpeedCurrent()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {string} the current speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedCurrent()
@@ -671,7 +671,7 @@ class CPUX80 extends Component {
     /**
      * getSpeedTarget()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {string} the target speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedTarget()
@@ -691,7 +691,7 @@ class CPUX80 extends Component {
      * so that the next effective speed calculation obtains sensible results.  In fact, when runCPU() initially calls
      * setSpeed() with no parameters, that's all this function does (it doesn't change the current speed setting).
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} [nMultiplier] is the new proposed multiplier (reverts to 1 if the target was too high)
      * @param {boolean} [fUpdateFocus] is true to update Computer focus
      * @return {boolean} true if successful, false if not
@@ -730,7 +730,7 @@ class CPUX80 extends Component {
     /**
      * calcSpeed(nCycles, msElapsed)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} nCycles
      * @param {number} msElapsed
      */
@@ -748,7 +748,7 @@ class CPUX80 extends Component {
     /**
      * calcStartTime()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      */
     calcStartTime()
     {
@@ -804,7 +804,7 @@ class CPUX80 extends Component {
     /**
      * calcRemainingTime()
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @return {number}
      */
     calcRemainingTime()
@@ -900,7 +900,7 @@ class CPUX80 extends Component {
      *
      * Why not use JavaScript's setTimeout() instead?  Good question.  For a good answer, see setTimer() below.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {string} id
      * @param {function()} callBack
      * @param {number} [ms] (if set, enables automatic setTimer calls)
@@ -917,7 +917,7 @@ class CPUX80 extends Component {
     /**
      * findTimer(id)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {string} id
      * @return {Array|null}
      */
@@ -945,7 +945,7 @@ class CPUX80 extends Component {
      * use setTimer(); however, due to legacy code (ie, code that predates these functions) and/or laziness,
      * that's currently not the case.  TODO: Fix.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} iTimer
      * @param {number} ms (converted into a cycle countdown internally)
      * @param {boolean} [fReset] (true if the timer should be reset even if already armed)
@@ -976,7 +976,7 @@ class CPUX80 extends Component {
     /**
      * getMSCycles(ms)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} ms
      * @return {number} number of corresponding cycles
      */
@@ -990,7 +990,7 @@ class CPUX80 extends Component {
      *
      * Used by runCPU() to get min(nCycles,[timer cycle counts])
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} nCycles (number of cycles about to execute)
      * @return {number} (either nCycles or less if a timer needs to fire)
      */
@@ -1014,7 +1014,7 @@ class CPUX80 extends Component {
      * this is the function that actually "fires" any timer(s) whose countdown has reached (or dropped below)
      * zero, invoking their callback function.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} nCycles (number of cycles actually executed)
      */
     updateTimers(nCycles)
@@ -1043,7 +1043,7 @@ class CPUX80 extends Component {
     /**
      * endBurst(fReset)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {boolean} [fReset]
      * @return {number} (number of cycles executed in the most recent burst)
      */
@@ -1058,7 +1058,7 @@ class CPUX80 extends Component {
     /**
      * runCPU(fUpdateFocus)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {boolean} [fUpdateFocus] is true to update Computer focus
      */
     runCPU(fUpdateFocus)
@@ -1111,7 +1111,7 @@ class CPUX80 extends Component {
                 this.nCyclesNextYield -= nCycles;
                 if (this.nCyclesNextYield <= 0) {
                     this.nCyclesNextYield += this.nCyclesPerYield;
-                    if (++this.nYieldsSinceStatusUpdate >= CPUX80.YIELDS_PER_STATUS) {
+                    if (++this.nYieldsSinceStatusUpdate >= CPUx80.YIELDS_PER_STATUS) {
                         if (this.cmp) this.cmp.updateStatus();
                         this.nYieldsSinceStatusUpdate = 0;
                     }
@@ -1166,7 +1166,7 @@ class CPUX80 extends Component {
      *
      * This will be implemented by the CPUStateX80 component.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
      * @return {number} of cycles executed; 0 indicates that the last instruction was not executed
      */
@@ -1183,7 +1183,7 @@ class CPUX80 extends Component {
      * This similar to yieldCPU(), but it doesn't need to zero nCyclesNextYield to break out of runCPU();
      * it simply needs to clear fRunning (well, "simply" may be oversimplifying a bit....)
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {boolean} [fComplete]
      */
     stopCPU(fComplete)
@@ -1209,7 +1209,7 @@ class CPUX80 extends Component {
      * other callers of stepCPU(), such as the Debugger, the combination of stepCPU() + updateCPU()
      * provides the old behavior.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      * @param {boolean} [fForce] (true to force a video update; used by the Debugger)
      */
     updateCPU(fForce)
@@ -1226,7 +1226,7 @@ class CPUX80 extends Component {
      * Similar to stopCPU() with regard to how it resets various cycle countdown values, but the CPU
      * remains in a "running" state.
      *
-     * @this {CPUX80}
+     * @this {CPUx80}
      */
     yieldCPU()
     {
@@ -1249,16 +1249,16 @@ class CPUX80 extends Component {
  * calcCycles(), which uses the nCyclesPerSecond passed to the constructor as a starting
  * point and computes the following variables:
  *
- *      this.nCyclesPerYield:    (this.nCyclesPerSecond / CPUX80.YIELDS_PER_SECOND)
+ *      this.nCyclesPerYield:    (this.nCyclesPerSecond / CPUx80.YIELDS_PER_SECOND)
  *
  * The above variables are also multiplied by any cycle multiplier in effect, via setSpeed(),
  * and then they're used to initialize another set of variables for each runCPU() iteration:
  *
  *      this.nCyclesNextYield:   this.nCyclesPerYield
  */
-CPUX80.YIELDS_PER_SECOND       = 30;           // just a gut feeling for the MINIMUM number of yields per second
-CPUX80.YIELDS_PER_STATUS       = 15;           // every 15 yields (ie, twice per second), perform CPU status updates
+CPUx80.YIELDS_PER_SECOND       = 30;           // just a gut feeling for the MINIMUM number of yields per second
+CPUx80.YIELDS_PER_STATUS       = 15;           // every 15 yields (ie, twice per second), perform CPU status updates
 
-CPUX80.BUTTONS = ["power", "reset"];
+CPUx80.BUTTONS = ["power", "reset"];
 
-if (typeof module !== "undefined") module.exports = CPUX80;
+if (typeof module !== "undefined") module.exports = CPUx80;

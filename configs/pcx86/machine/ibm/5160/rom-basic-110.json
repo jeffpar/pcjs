@@ -1,8 +1,0 @@
-{
-  "id": "romBASIC",
-  "class": "rom",
-  "addr": "0xf6000",
-  "size": "0x08000",
-  "alias": null,
-  "file": "/machines/pcx86/ibm/5160/rom/basic/BASIC110.json"
-}

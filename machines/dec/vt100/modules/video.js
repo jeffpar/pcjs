@@ -1,14 +1,14 @@
 /**
  * @fileoverview Implements VT100 video hardware
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Memory  from "../../../lib/memory.js";
-import Monitor from "../../../lib/monitor.js";
+import Memory  from "../../../modules/memory.js";
+import Monitor from "../../../modules/monitor.js";
 
 /**
  * @typedef {MonitorConfig} VT100VideoConfig

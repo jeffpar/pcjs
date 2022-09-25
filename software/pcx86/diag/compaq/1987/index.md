@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/diags/compaq/utilities/1987/
 machines:
   - id: deskpro386
     type: pcx86
-    config: /configs/pcx86/machine/compaq/deskpro386/cga/640kb/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/cga/640kb/machine.xml
     autoGen: true
     autoMount:
       A: "COMPAQ User Programs (1987)"

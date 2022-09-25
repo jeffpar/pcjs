@@ -1,7 +1,7 @@
 /**
  * @fileoverview JSON library
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -46,7 +46,7 @@ export default class JSONLib {
                     for (let i = 0; i < media.length; i++) {
                         let item = media[i];
                         if (!item['@diskette']) continue;
-                        /*
+                        /**
                          * One advantage of the new JSON library manifest is that it gives us more information about the
                          * available diskettes before loading any of them.  For example, if the drives support only one head,
                          * we can avoid including any diskette whose '@format' is "PC320K", "PC360K", etc; and if the drives
@@ -105,7 +105,7 @@ export default class JSONLib {
                             'name': name,
                             'path': path
                         };
-                        /*
+                        /**
                          * The FDC calls us with drive limits, and all it cares about is the 'name' and 'path' of each diskette,
                          * so we use those two facts to limit what each diskette object returns.  Other callers, like the DiskImage
                          * utility, want ALL the diskette details.
@@ -114,7 +114,7 @@ export default class JSONLib {
                          * that may contain:
                          *
                          *      'url':      URL of the preferred machine to run the software (eg, "/machines/pcx86/ibm/5150/cga/")
-                         *      'config':   a specific configuration file (eg, "/configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml")
+                         *      'config':   a specific configuration file (eg, "/machines/pcx86/ibm/5170/vga/2048kb/machine.xml")
                          *      'drives':   one of more hard drive configs (eg, "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]")
                          *      'options':  assorted hardware options (eg, "mouse")
                          *      'autoType': if present, overrides any '@autoType' set for the software

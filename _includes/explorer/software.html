@@ -75,7 +75,13 @@
                   {%- capture software_path1 -%}{{ machine[1]['@path'] }}{%- endcapture -%}
                   {%- capture machine_url -%}/machines{{ software_path1 }}/{%- endcapture -%}
                   {%- assign diskette_drives = machine[1]['@diskette_drives'] -%}
-                  {%- assign categories = site.data[machine_type][software_type] %}
+                  {%- assign machine_group = site.data.machines[machine_type].folder | split: '/' -%}
+                  {%- unless machine_group[1] %}
+                    {%- assign categories = site.data[machine_type][software_type] -%}
+                  {%- else %}
+                    {%- assign machine_group = machine_group[0] -%}
+                    {%- assign categories = site.data[machine_group][machine_type][software_type] -%}
+                  {%- endunless %}
                     <li id="software-{{ machine_type }}" class="pcjs-explorer-platform pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ machine[1]['@title'] | default: machine_type }}
                       <ul>
                     {%- for category in categories -%}

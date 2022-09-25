@@ -1,0 +1,60 @@
+{
+  "pdp1120": {
+    "class": "Machine",
+    "type": "Computer",
+    "name": "PDP-11/20",
+    "version": 2.00,
+    "autoSave": false,
+    "autoStart": false,
+    "bindings": {
+      "print": "printPDP11",
+      "reset": "resetPDP11",
+      "clear": "clearPDP11"
+    }
+  },
+  "clock": {
+    "class": "Time",
+    "cyclesPerSecond": 6666667
+  },
+  "bus": {
+    "class": "Bus",
+    "type": "dynamic",
+    "addrWidth": 16,
+    "dataWidth": 8,
+    "blockSize": 8192,
+    "@doc": [
+      "The PDP-11 has a single bus (UNIBUS) which accomodates RAM, ROM, and I/O, so the bus type must be 'dynamic'."
+    ]
+  },
+  "input": {
+    "class": "Input"
+  },
+  "ram": {
+    "class": "RAM",
+    "addr": 0,
+    "size": 16384
+  },
+  "iopage": {
+    "class": "IOPage"
+  },
+  "dl11": {
+    "class": "DL11"
+  },
+  "pc11": {
+    "class": "PC11",
+    "name": "PTR",
+    "library": "/machines/dec/pdp11/software.json",
+    "autoLoad": "BASIC (Single User)"
+  },
+  "cpu": {
+    "class": "PDP11",
+    "model": "KA11"
+  },
+  "debugger": {
+    "class": "PDP11Dbg",
+    "defaultRadix": 8,
+    "@doc": [
+      "It's best to initialize the Debugger last, so that it can find any device it wants -- at the very least, the CPU."
+    ]
+  }
+}

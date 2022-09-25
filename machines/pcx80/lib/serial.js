@@ -1,7 +1,7 @@
 /**
- * @fileoverview Implements the PCX80 SerialPort component
+ * @fileoverview Implements the PCx80 SerialPort component
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -14,7 +14,7 @@ if (typeof module !== "undefined") {
     var Web = require("../../shared/lib/weblib");
     var Component = require("../../shared/lib/component");
     var State = require("../../shared/lib/state");
-    var PCX80 = require("./defines");
+    var PCx80 = require("./defines");
     var MessagesX80 = require("./messages");
 }
 
@@ -817,12 +817,12 @@ class SerialPortX80 extends Component {
      */
     static init()
     {
-        var aeSerial = Component.getElementsByClass(document, PCX80.APPCLASS, "serial");
+        var aeSerial = Component.getElementsByClass(document, PCx80.APPCLASS, "serial");
         for (var iSerial = 0; iSerial < aeSerial.length; iSerial++) {
             var eSerial = aeSerial[iSerial];
             var parmsSerial = Component.getComponentParms(eSerial);
             var serial = new SerialPortX80(parmsSerial);
-            Component.bindComponentControls(serial, eSerial, PCX80.APPCLASS);
+            Component.bindComponentControls(serial, eSerial, PCx80.APPCLASS);
         }
     }
 }

@@ -7,9 +7,9 @@ redirect_from: /devices/c1p/rom/
 
 The following ROMs are available:
 
-- [BASIC (8Kb)](basic.json) ([HEX](basic.hex))
-- [BASIC (8Kb) with GC Patch](basic-gcpatch.json) ([HEX](basic-gcpatch.hex))
-- [SYSTEM (2Kb)](system.json) ([HEX](system.hex))
+- [BASIC (8Kb)](basic.json5) ([HEX](basic.hex))
+- [BASIC (8Kb) with GC Patch](basic-gcpatch.json5) ([HEX](basic-gcpatch.hex))
+- [SYSTEM (2Kb)](system.json5) ([HEX](system.hex))
 
 ### BASIC Garbage Collection (GC) Patch
 

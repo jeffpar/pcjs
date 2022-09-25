@@ -1,7 +1,7 @@
 /**
  * @fileoverview PCx80 compile-time definitions
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -54,9 +54,9 @@ var TYPEDARRAYS = (typeof ArrayBuffer !== 'undefined');
 
 /*
  * Combine all the shared globals and machine-specific globals into one machine-specific global object,
- * which all machine components should start using; eg: "if (PCX80.DEBUG) ..." instead of "if (DEBUG) ...".
+ * which all machine components should start using; eg: "if (PCx80.DEBUG) ..." instead of "if (DEBUG) ...".
  */
-var PCX80 = {
+var PCx80 = {
     APPCLASS:    APPCLASS,
     APPNAME:     APPNAME,
     APPVERSION:  APPVERSION,    // shared
@@ -77,6 +77,6 @@ if (typeof module !== "undefined") {
     global.DEBUGGER    = DEBUGGER;
     global.BYTEARRAYS  = BYTEARRAYS;
     global.TYPEDARRAYS = TYPEDARRAYS;
-    global.PCX80       = PCX80;
-    module.exports     = PCX80;
+    global.PCx80       = PCx80;
+    module.exports     = PCx80;
 }

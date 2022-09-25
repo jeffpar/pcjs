@@ -1,7 +1,7 @@
 /**
- * @fileoverview Implements the PCX80 ROM component
+ * @fileoverview Implements the PCx80 ROM component
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -14,7 +14,7 @@ if (typeof module !== "undefined") {
     var Web = require("../../shared/lib/weblib");
     var DumpAPI = require("../../shared/lib/dumpapi");
     var Component = require("../../shared/lib/component");
-    var PCX80 = require("./defines");
+    var PCx80 = require("./defines");
     var MemoryX80 = require("./memory");
 }
 
@@ -25,11 +25,11 @@ if (typeof module !== "undefined") {
  *
  * @unrestricted
  */
-class ROMX80 extends Component {
+class ROMx80 extends Component {
     /**
-     * ROMX80(parmsROM)
+     * ROMx80(parmsROM)
      *
-     * The ROMX80 component expects the following (parmsROM) properties:
+     * The ROMx80 component expects the following (parmsROM) properties:
      *
      *      addr: physical address of ROM
      *      size: amount of ROM, in bytes
@@ -42,7 +42,7 @@ class ROMX80 extends Component {
      * Also, while the size parameter may seem redundant, I consider it useful to confirm that the ROM you received
      * is the ROM you expected.
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      * @param {Object} parmsROM
      */
     constructor(parmsROM)
@@ -91,7 +91,7 @@ class ROMX80 extends Component {
     /**
      * initBus(cmp, bus, cpu, dbg)
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      * @param {ComputerX80} cmp
      * @param {BusX80} bus
      * @param {CPUStateX80} cpu
@@ -108,7 +108,7 @@ class ROMX80 extends Component {
     /**
      * powerUp(data, fRepower)
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
      * @return {boolean} true if successful, false if failure
@@ -136,7 +136,7 @@ class ROMX80 extends Component {
      * useful down the road, like user-defined symbols (ie, symbols that the Debugger may have
      * created, above and beyond those symbols we automatically loaded, if any, along with the ROM).
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
      * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
@@ -149,7 +149,7 @@ class ROMX80 extends Component {
     /**
      * doneLoad(sURL, sROMData, nErrorCode)
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      * @param {string} sURL
      * @param {string} sROMData
      * @param {number} nErrorCode (response from server if anything other than 200)
@@ -232,7 +232,7 @@ class ROMX80 extends Component {
      * until after initBus() has received the Bus component AND doneLoad() has received the abROM data.  When both
      * those criteria are satisfied, the component becomes "ready".
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      */
     copyROM()
     {
@@ -287,7 +287,7 @@ class ROMX80 extends Component {
     /**
      * addROM(addr)
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      * @param {number} addr
      * @return {boolean}
      */
@@ -317,7 +317,7 @@ class ROMX80 extends Component {
      * Now that the Bus component provides low-level getMemoryBlocks() and setMemoryBlocks() methods
      * to manually get and set the blocks of any memory range, it is now possible to create true aliases.
      *
-     * @this {ROMX80}
+     * @this {ROMx80}
      * @param {number} addr
      */
     cloneROM(addr)
@@ -327,21 +327,21 @@ class ROMX80 extends Component {
     }
 
     /**
-     * ROMX80.init()
+     * ROMx80.init()
      *
      * This function operates on every HTML element of class "rom", extracting the
-     * JSON-encoded parameters for the ROMX80 constructor from the element's "data-value"
-     * attribute, invoking the constructor to create a ROMX80 component, and then binding
+     * JSON-encoded parameters for the ROMx80 constructor from the element's "data-value"
+     * attribute, invoking the constructor to create a ROMx80 component, and then binding
      * any associated HTML controls to the new component.
      */
     static init()
     {
-        var aeROM = Component.getElementsByClass(document, PCX80.APPCLASS, "rom");
+        var aeROM = Component.getElementsByClass(document, PCx80.APPCLASS, "rom");
         for (var iROM = 0; iROM < aeROM.length; iROM++) {
             var eROM = aeROM[iROM];
             var parmsROM = Component.getComponentParms(eROM);
-            var rom = new ROMX80(parmsROM);
-            Component.bindComponentControls(rom, eROM, PCX80.APPCLASS);
+            var rom = new ROMx80(parmsROM);
+            Component.bindComponentControls(rom, eROM, PCx80.APPCLASS);
         }
     }
 }
@@ -360,8 +360,8 @@ class ROMX80 extends Component {
  */
 
 /*
- * Initialize all the ROMX80 modules on the page.
+ * Initialize all the ROMx80 modules on the page.
  */
-Web.onInit(ROMX80.init);
+Web.onInit(ROMx80.init);
 
-if (typeof module !== "undefined") module.exports = ROMX80;
+if (typeof module !== "undefined") module.exports = ROMx80;

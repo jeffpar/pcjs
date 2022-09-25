@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/games/other/1984/wizardry1/
 machines:
   - id: ibm5150-wizardry1
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
     autoMount:
       A:
         name: Wizardry I - Master Disk

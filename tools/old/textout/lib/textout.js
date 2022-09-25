@@ -1,7 +1,7 @@
 /**
  * @fileoverview Provides miscellaneous text-munging services
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -12,10 +12,10 @@
 var fs      = require("fs");
 var path    = require("path");
 var mkdirp  = require("mkdirp");
-var defines = require("../../shared/lib/defines");
-var net     = require("../../shared/lib/netlib");
-var proc    = require("../../shared/lib/proclib");
-var str     = require("../../shared/lib/strlib");
+var defines = require("../../../../machines/shared/lib/defines");
+var net     = require("../../../../machines/shared/lib/netlib");
+var proc    = require("../../../../machines/shared/lib/proclib");
+var str     = require("../../../../machines/shared/lib/strlib");
 
 /**
  * TextOut()

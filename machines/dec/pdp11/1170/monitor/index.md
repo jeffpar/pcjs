@@ -6,7 +6,7 @@ redirect_from: /devices/pdp11/machine/1170/monitor/
 machines:
   - id: test1170
     type: pdp11
-    config: /configs/pdp11/machine/1170/monitor/machine.xml
+    config: /machines/dec/pdp11/1170/monitor/machine.xml
 ---
 
 {% include machine.html id="test1170" %}

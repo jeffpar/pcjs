@@ -1,7 +1,7 @@
 /**
  * @fileoverview Implements I/O ports
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -43,7 +43,7 @@ export default class Ports extends Memory {
         this.aOutData = [];
         this.aInPair = [];
         this.aOutPair = [];
-        /*
+        /**
          * Some machines instantiate a Ports device through their configuration, which must include an 'addr';
          * it's also possible that a device may dynamically allocate a Ports device and add it to the Bus itself
          * (eg, the PDP11 IOPage).
@@ -170,7 +170,7 @@ export default class Ports extends Memory {
             written = true;
         }
         else if ((func = this.aOutPair[port])) {
-            /*
+            /**
              * If an outPair() handler exists, call the inPair() handler first to get the original data
              * (with preWrite set to true) and call outPair() with the new data inserted into the original data.
              */

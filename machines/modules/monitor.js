@@ -1,7 +1,7 @@
 /**
  * @fileoverview Implements the Monitor device
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -63,7 +63,7 @@ export default class Monitor extends Device {
 
         this.monitor = this.bindings[Monitor.BINDING.MONITOR];
         if (this.monitor) {
-            /*
+            /**
              * Making sure the monitor had a "tabindex" attribute seemed like a nice way of ensuring we
              * had a single focusable surface that we could pass to our Input device, but that would be too
              * simple.  Safari once again bites us in the butt, just like it did when we tried to add the
@@ -76,7 +76,7 @@ export default class Monitor extends Device {
         }
         this.container = this.findBinding(Monitor.BINDING.CONTAINER) || this.monitor;
 
-        /*
+        /**
          * Create the Monitor canvas if we weren't given a predefined canvas; we'll assume that an existing
          * canvas is already contained within the monitor.
          */
@@ -96,7 +96,7 @@ export default class Monitor extends Device {
         }
         this.canvasMonitor = canvas;
 
-        /*
+        /**
          * The "contenteditable" attribute on a canvas is a simple way of creating a display surface that can
          * also receive focus and generate input events.  Unfortunately, in Safari, that attribute NOTICEABLY
          * slows down canvas operations whenever it has focus.  All you have to do is click away from the canvas,
@@ -109,7 +109,7 @@ export default class Monitor extends Device {
         let context = canvas.getContext("2d");
         this.contextMonitor = context;
 
-        /*
+        /**
          * HACK: A canvas style of "auto" provides for excellent responsive canvas scaling in EVERY browser
          * except IE9/IE10, so I recalculate the appropriate CSS height every time the parent div is resized;
          * IE11 works without this hack, so we take advantage of the fact that IE11 doesn't identify as "MSIE".
@@ -126,7 +126,7 @@ export default class Monitor extends Device {
             this.monitor.onresize();
         }
 
-        /*
+        /**
          * The following is a related hack that allows the user to force the monitor to use a particular aspect
          * ratio if an 'aspect' attribute or URL parameter is set.  Initially, it's just for testing purposes
          * until we figure out a better UI.  And note that we use our onPageEvent() helper function to make sure
@@ -134,14 +134,14 @@ export default class Monitor extends Device {
          */
         let aspect = +(this.config['aspect'] || this.getURLParms()['aspect']);
 
-        /*
+        /**
          * No 'aspect' parameter yields NaN, which is falsey, and anything else must satisfy my arbitrary
          * constraints of 0.3 <= aspect <= 3.33, to prevent any useless (or worse, browser-blowing) results.
          */
         if (aspect && aspect >= 0.3 && aspect <= 3.33) {
             this.onPageEvent('onresize', function(parentElement, childElement, aspectRatio) {
                 return function onResizeWindow() {
-                    /*
+                    /**
                      * Since aspectRatio is the target width/height, we have:
                      *
                      *      parentElement.clientWidth / childElement.style.height = aspectRatio
@@ -159,7 +159,7 @@ export default class Monitor extends Device {
             window['onresize']();
         }
 
-        /*
+        /**
          * Here's the gross code to handle full-screen support across all supported browsers.  Most of the crud is
          * now buried inside findProperty(), which checks for all the browser prefix variations (eg, "moz", "webkit")
          * and deals with certain property name variations, like 'Fullscreen' (new) vs 'FullScreen' (old).
@@ -192,7 +192,7 @@ export default class Monitor extends Device {
             }
         }
 
-        /*
+        /**
          * The 'touchType' config property can be set to true for machines that require a full keyboard.  If set,
          * we create a transparent textarea "overlay" on top of the canvas and provide it to the Input device
          * via addSurface(), making it easy for the user to activate the on-screen keyboard for touch-type devices.
@@ -225,26 +225,26 @@ export default class Monitor extends Device {
                 textarea.setAttribute("id", id);
             }
             textarea.setAttribute("class", "pcjs-overlay");
-            /*
-            * The soft keyboard on an iOS device tends to pop up with the SHIFT key depressed, which is not the
-            * initial keyboard state we prefer, so hopefully turning off these "auto" attributes will help.
-            */
+            /**
+             * The soft keyboard on an iOS device tends to pop up with the SHIFT key depressed, which is not the
+             * initial keyboard state we prefer, so hopefully turning off these "auto" attributes will help.
+             */
             if (this.isUserAgent("iOS")) {
                 this.disableAuto(textarea);
-                /*
-                * One of the problems on iOS devices is that after a soft-key control is clicked, we need to give
-                * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS may
-                * also "zoom" the page rather jarringly.  While it's a simple matter to completely disable zooming,
-                * by fiddling with the page's viewport, that prevents the user from intentionally zooming.  A bit of
-                * Googling reveals that another way to prevent those jarring unintentional zooms is to simply set the
-                * font-size of the text control to 16px.  So that's what we do.
-                */
+                /**
+                 * One of the problems on iOS devices is that after a soft-key control is clicked, we need to give
+                 * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS may
+                 * also "zoom" the page rather jarringly.  While it's a simple matter to completely disable zooming,
+                 * by fiddling with the page's viewport, that prevents the user from intentionally zooming.  A bit of
+                 * Googling reveals that another way to prevent those jarring unintentional zooms is to simply set the
+                 * font-size of the text control to 16px.  So that's what we do.
+                 */
                 textarea.style.fontSize = "16px";
             }
             this.monitor.appendChild(textarea);
         }
 
-        /*
+        /**
          * If there's an Input device, make sure it is associated with our default input surface.
          */
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
@@ -252,14 +252,14 @@ export default class Monitor extends Device {
             this.input.addSurface(textarea || this.monitor, this.findBinding(this.config['focusBinding'], true));
         }
 
-        /*
+        /**
          * These variables are here in case we want/need to add support for borders later...
          */
         this.xMonitorOffset = this.yMonitorOffset = 0;
         this.cxMonitorOffset = this.cxMonitor;
         this.cyMonitorOffset = this.cyMonitor;
 
-        /*
+        /**
          * Support for disabling (or, less commonly, enabling) image smoothing, which all browsers
          * seem to support now (well, OK, I still have to test the latest MS Edge browser), despite
          * it still being labelled "experimental technology".  Let's hope the browsers standardize
@@ -276,7 +276,7 @@ export default class Monitor extends Device {
         if (this.rotateMonitor) {
             this.rotateMonitor = this.rotateMonitor % 360;
             if (this.rotateMonitor > 0) this.rotateMonitor -= 360;
-            /*
+            /**
              * TODO: Consider also disallowing any rotateMonitor value if bufferRotate was already set; setting
              * both is most likely a mistake, but who knows, maybe someone wants to use both for 180-degree rotation?
              */
@@ -305,7 +305,7 @@ export default class Monitor extends Device {
         switch(binding) {
         case Monitor.BINDING.FULLSCREEN:
             element.onclick = function onClickFullScreen() {
-                /*
+                /**
                  * I've encountered situations in Safari on iPadOS where full-screen mode was cancelled without
                  * notification via onFullScreen() (eg, diagnostic printf() calls that used to inadvertently change
                  * focus), so we'd mistakenly think we were still full-screen.
@@ -349,7 +349,7 @@ export default class Monitor extends Device {
         let fSuccess = false;
         if (Monitor.DEBUG) this.printf(Device.MESSAGE.MONITOR, "doFullScreen()\n");
         if (this.container && this.container.doFullScreen) {
-            /*
+            /**
              * Styling the container with a width of "100%" and a height of "auto" works great when the aspect ratio
              * of our virtual monitor is at least roughly equivalent to the physical screen's aspect ratio, but now that
              * we support virtual VGA monitors with an aspect ratio of 1.33, that's very much out of step with modern
@@ -377,7 +377,7 @@ export default class Monitor extends Device {
                 this.container.style.width = sWidth;
                 this.container.style.height = sHeight;
             } else {
-                /*
+                /**
                  * Sadly, the above code doesn't work for Firefox (nor for Chrome, as of Chrome 75 or so), because as
                  * http://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Using_full_screen_mode explains:
                  *

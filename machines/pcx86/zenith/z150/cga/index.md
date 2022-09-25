@@ -8,7 +8,7 @@ redirect_from:
 machines:
   - id: z150
     type: pcx86
-    config: /configs/pcx86/machine/zenith/z150/cga/640kb/machine.xml
+    config: /machines/pcx86/zenith/z150/cga/640kb/machine.xml
 ---
 
 {% include machine.html id="z150" %}

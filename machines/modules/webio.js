@@ -1,7 +1,7 @@
 /**
  * @fileoverview Class for basic browser-based support
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -46,7 +46,7 @@ export default class WebIO extends StdIO {
         super();
         this.bindings = {};
         this.messages = 0;
-        /*
+        /**
          * If this is the machine device, initialize a set of per-machine variables; if it's not,
          * the Device constructor will update this.machine with the actual machine device (see addDevice()).
          */
@@ -79,7 +79,7 @@ export default class WebIO extends StdIO {
 
         case WebIO.BINDING.PRINT:
             this.disableAuto(element);
-            /*
+            /**
              * An onKeyDown handler has been added to this element to intercept special (non-printable) keys, such as
              * the UP and DOWN arrow keys, which are used to implement a simple command history/recall feature.
              */
@@ -89,7 +89,7 @@ export default class WebIO extends StdIO {
                     webIO.onCommandEvent(event, true);
                 }
             );
-            /*
+            /**
              * One purpose of the onKeyPress handler for this element is to stop event propagation, so that if the
              * element has been explicitly given focus, any key presses won't be picked up by the Input device (which,
              * as that device's constructor explains, is monitoring key presses for the entire document).
@@ -126,7 +126,7 @@ export default class WebIO extends StdIO {
         if (!this.config.bindings) {
             this.config.bindings = bindings;
         }
-        /*
+        /**
          * To relieve every device from having to explicitly declare its own container, set up a default.
          * When using direct bindings, the default is simply 'container'; otherwise, the default 'container'
          * element ID is whatever the device ID is.
@@ -146,7 +146,7 @@ export default class WebIO extends StdIO {
             if (fDirectBindings) {
                 binding = id;
             } else {
-                /*
+                /**
                  * This new bit of code allows us to define a binding like this:
                  *
                  *      "label": "0"
@@ -285,7 +285,7 @@ export default class WebIO extends StdIO {
         element.setAttribute("autocomplete", "off");
         element.setAttribute("autocorrect", "off");
         element.setAttribute("spellcheck", "false");
-        /*
+        /**
          * This was added for Firefox (Safari will clear the <textarea> on a page reload, but Firefox does not).
          */
         element.value = "";
@@ -580,7 +580,7 @@ export default class WebIO extends StdIO {
                 let fDiag = false;
                 let sErrorMessage, resource;
                 if (nErrorCode) {
-                    /*
+                    /**
                      * Errors can happen for innocuous reasons, such as the user switching away too quickly, forcing
                      * the request to be cancelled.  And unfortunately, the browser cancels XMLHttpRequest requests
                      * BEFORE it notifies any page event handlers, so if the machine is being powered down, we won't
@@ -639,7 +639,7 @@ export default class WebIO extends StdIO {
                 return;
             }
 
-            /*
+            /**
              * The following line was recommended for WebKit, as a work-around to prevent the handler firing multiple
              * times when debugging.  Unfortunately, that's not the only XMLHttpRequest problem that occurs when
              * debugging, so I think the WebKit problem is deeper than that.  When we have multiple XMLHttpRequests
@@ -650,7 +650,7 @@ export default class WebIO extends StdIO {
              */
             sResource = xmlHTTP.responseText;
 
-            /*
+            /**
              * The normal "success" case is an HTTP status code of 200, but when testing with files loaded
              * from the local file system (ie, when using the "file:" protocol), we have to be a bit more "flexible".
              */
@@ -681,7 +681,7 @@ export default class WebIO extends StdIO {
             parms = {};
             if (window) {
                 if (!sParms) {
-                    /*
+                    /**
                      * Note that window.location.href returns the entire URL, whereas window.location.search
                      * returns only parameters, if any (starting with the '?', which we skip over with a substr() call).
                      */
@@ -822,10 +822,10 @@ export default class WebIO extends StdIO {
                 let consume = false, s;
                 let text = element.value;
                 let i = text.lastIndexOf('\n');
-                /*
-                * Checking for BACKSPACE is not as important as the UP and DOWN arrows, but it's helpful to ensure
-                * that BACKSPACE only erases characters on the final line; consume it otherwise.
-                */
+                /**
+                 * Checking for BACKSPACE is not as important as the UP and DOWN arrows, but it's helpful to ensure
+                 * that BACKSPACE only erases characters on the final line; consume it otherwise.
+                 */
                 if (keyCode == WebIO.KEYCODE.BS) {
                     if (element.selectionStart <= i + 1) {
                         consume = true;
@@ -851,7 +851,7 @@ export default class WebIO extends StdIO {
             else {
                 let charCode = keyCode;
                 let char = String.fromCharCode(charCode);
-                /*
+                /**
                  * Move the caret to the end of any text in the textarea, unless it's already
                  * past the final LF (because it's OK to insert characters on the last line).
                  */
@@ -860,12 +860,12 @@ export default class WebIO extends StdIO {
                 if (element.selectionStart <= i) {
                     element.setSelectionRange(text.length, text.length);
                 }
-                /*
+                /**
                  * Don't let the Input device's document-based keypress handler see any key presses
                  * that came to this element first.
                  */
                 event.stopPropagation();
-                /*
+                /**
                  * If '@' is pressed as the first character on the line, then append the last command
                  * that parseCommands() processed, and transform '@' into ENTER.
                  */
@@ -875,7 +875,7 @@ export default class WebIO extends StdIO {
                         char = '\r';
                     }
                 }
-                /*
+                /**
                  * On the ENTER key, call parseCommands() to look for any COMMAND handlers and invoke
                  * them until one of them returns true.
                  *
@@ -884,7 +884,7 @@ export default class WebIO extends StdIO {
                  * as ASCII character '\n' (aka LINEFEED aka LF).
                  */
                 if (char == '\r') {
-                    /*
+                    /**
                      * At the time we call any command handlers, a LINEFEED will not yet have been
                      * appended to the text, so for consistency, we prevent the default behavior and
                      * add the LINEFEED ourselves.  Unfortunately, one side-effect is that we must
@@ -925,7 +925,7 @@ export default class WebIO extends StdIO {
             if (typeof fnPrev !== 'function') {
                 window[sFunc] = fn;
             } else {
-                /*
+                /**
                  * TODO: Determine whether there's any value in receiving/sending the Event object that the
                  * browser provides when it generates the original event.
                  */
@@ -1090,20 +1090,20 @@ export default class WebIO extends StdIO {
         if (!fBuffer) {
             let element = this.findBinding(WebIO.BINDING.PRINT, true);
             if (element) {
-                /*
+                /**
                  * To help avoid situations where the element can get overwhelmed by the same repeated string,
                  * don't add the string if it already appears at the end.
                  */
                 if (element.value.substr(-s.length) != s) {
                     element.value += s;
-                    /*
+                    /**
                      * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
                      */
                     if (!WebIO.DEBUG && element.value.length > 8192) {
                         element.value = element.value.substr(element.value.length - 4096);
                     }
                     element.scrollTop = element.scrollHeight;
-                    /*
+                    /**
                      * Safari requires this, to keep the caret at the end; Chrome and Firefox, not so much.  Go figure.
                      *
                      * However, if I do this in Safari on iPadOS WHILE the app is full-screen, Safari cancels full-screen
@@ -1247,7 +1247,7 @@ WebIO.MESSAGE_COMMANDS = [
     "m ... [on|off]\tturn selected messages on or off"
 ];
 
-/*
+/**
  * NOTE: The first name is automatically omitted from global "on" and "off" operations.
  */
 WebIO.MESSAGE_NAMES = {
@@ -1259,7 +1259,7 @@ WebIO.HANDLER = {
     COMMAND:    "command"
 };
 
-/*
+/**
  * Codes provided by KeyboardEvent.keyCode on a "keypress" event (aka ASCII codes).
  */
 WebIO.CHARCODE = {
@@ -1318,7 +1318,7 @@ WebIO.CHARCODE = {
     /* 0x7A */ z:           122
 };
 
-/*
+/**
  * Codes provided by KeyboardEvent.keyCode on "keydown" and "keyup" events.
  */
 WebIO.KEYCODE = {
@@ -1448,7 +1448,7 @@ WebIO.KEYCODE = {
                 VIRTUAL:    1000        // bias used by other devices to define "virtual" keyCodes
 };
 
-/*
+/**
  * Maps Firefox-specific keyCodes to their more common keyCode counterparts.
  */
 WebIO.FF_KEYCODE = {
@@ -1458,7 +1458,7 @@ WebIO.FF_KEYCODE = {
     [WebIO.KEYCODE.FF_CMD]:     WebIO.KEYCODE.CMD       // 224 -> 91
 };
 
-/*
+/**
  * Supported values that a browser may store in the 'location' property of a keyboard event object.
  */
 WebIO.LOCATION = {
@@ -1467,7 +1467,7 @@ WebIO.LOCATION = {
     NUMPAD:     3
 };
 
-/*
+/**
  * This maps KEYCODE values to ASCII character (or a string representation for non-ASCII keys).
  */
 WebIO.KEYNAME = {

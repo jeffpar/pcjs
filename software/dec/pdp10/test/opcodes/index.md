@@ -7,7 +7,7 @@ machines:
   - id: testka10
     type: pdp10
     debugger: true
-    config: /configs/pdp10/machine/ka10/test/debugger/machine.xml
+    config: /machines/dec/pdp10/ka10/test/debugger/machine.xml
 ---
 
 The PDP-10 machine below loads the following PDPjs opcode test:

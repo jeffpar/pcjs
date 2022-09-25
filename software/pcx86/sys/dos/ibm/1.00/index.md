@@ -9,7 +9,7 @@ redirect_from:
 machines:
   - id: ibm5150-pcdos100
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/mda/64kb/machine.json
+    config: /machines/pcx86/ibm/5150/mda/64kb/machine.json
     autoType: $date\r
     resume: 1
 ---
@@ -82,7 +82,7 @@ CHKDSK reports:
 
 ### Feature Summary
 
-Courtesy of [PC DOS Retro](https://sites.google.com/site/pcdosretro/doshist):
+Courtesy of [PC DOS Retro](https://pcdosretro.github.io/doshist.txt):
 
   - distributed on 1 160KB floppy disk
   - initial release (equivalent to 86-DOS 1.14)

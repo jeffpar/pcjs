@@ -9,7 +9,7 @@ redirect_from:
 machines:
   - id: ibm5170-msdos622
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/ega/640kb/rev1/machine.xml
+    config: /machines/pcx86/ibm/5170/ega/640kb/rev1/machine.xml
     autoMount:
       A:
         name: MS-DOS 6.22 (1.2M Disk 1)

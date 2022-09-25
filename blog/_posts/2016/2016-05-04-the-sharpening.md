@@ -8,7 +8,7 @@ permalink: /blog/2016/05/04/
 This was the week of The Sharpening.
 
 A while back, I updated most of the machines to use higher-resolution "screens".  For example, a typical
-[EGA video configuration](/configs/pcx86/video/ibm/ega/1984-09-13/ibm-ega-5154-128k-autolockfs.xml) now
+[EGA video configuration](/machines/pcx86/video/ibm/ega/1984-09-13/ibm-ega-5154-128k-autolockfs.xml) now
 specifies a *screenWidth* of 1280 and *screenHeight* of 700, dimensions which are exactly twice the standard EGA resolution.
 
 That change had no effect on the machine's operation, but it did improve the machine's appearance, because
@@ -16,7 +16,7 @@ most people are using much higher resolution monitors today, so by using a highe
 less interpolation is happening when a machine's screen image is scaled up to fill your browser window.
 
 The amount of scaling *also* depends on whether the machine allows itself to be stretched to fill the browser window.
-For example, this [machine](/configs/pcx86/machine/ibm/5160/ega/640kb/array/machine.xml) (used by the
+For example, this [machine](/machines/pcx86/ibm/5160/ega/640kb/array/machine.xml) (used by the
 [EGA Machine Array Demo](/software/pcx86/sys/windows/1.01/array/)) is limited to an overall *width* of 680 pixels,
 no matter how large you make your browser window:
 

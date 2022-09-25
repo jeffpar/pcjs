@@ -6,7 +6,7 @@ redirect_from: /disks/dec/rl02k/xxdp/ekbad0/
 machines:
   - id: test1170
     type: pdp11
-    config: /configs/pdp11/machine/1170/panel/debugger/machine.xml
+    config: /machines/dec/pdp11/1170/panel/debugger/machine.xml
     debugger: true
     autoStart: true
 machineScripts:

@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/apps/other/wordstar/3.24/
 machines:
   - id: ibm5150
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/mda/256kb/machine.xml
+    config: /machines/pcx86/ibm/5150/mda/256kb/machine.xml
     autoMount:
       A:
         name: PC DOS 2.00 (Disk 1)

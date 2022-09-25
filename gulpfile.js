@@ -1,7 +1,7 @@
 /**
  * @fileoverview Gulp file for pcjs.org
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -14,7 +14,7 @@
  *
  *          Recompiles all machine scripts in their respective release folder that are out-of-date with
  *          respect to the individual files (under /machines).  The target version comes from
- *          configs/machines.json:shared.version.
+ *          machines/machines.json:shared.version.
  *
  *          It does this by running the `concat` and `compile` tasks for all machines.
  *
@@ -43,7 +43,7 @@
  *      version
  *
  *          Updates the version number in all project machine XML files to match the version contained in
- *          configs/machines.json:shared.version.
+ *          machines/machines.json:shared.version.
  *
  *      copyright
  *
@@ -97,7 +97,7 @@ var argv = args.argv;
 /**
  * @type {Object.<string,Machine>}
  */
-var machines = require("./configs/machines.json");
+var machines = require("./machines/machines.json");
 var siteHost = "https://www.pcjs.org";
 
 if (pkg.homepage) {
@@ -110,7 +110,7 @@ var aConcatTasks = [], aCompileTasks = [];
 var aScripts = [];
 
 aMachines.forEach(function(machineID) {
-    if (machineID[0] == '_' || machineID == "shared") return;
+    if (machineID[0] == '@' || machineID == "shared") return;
 
     /**
      * @type {Machine}
@@ -216,7 +216,7 @@ aMachines.forEach(function(machineID) {
                     .pipe(gulpReplace(/(var\s+VERSION\s*=\s*)"[0-9.]*"/g, '$1"' + machineVersion + '"'))
                     .pipe(gulpReplace(/(^|\n)[ \t]*(['"])use strict\2;?/g, ""))
                     .pipe(gulpReplace(/^(import)[ \t]+[^\n]*\n/gm, ""))
-                    .pipe(gulpReplace(/^export[ \t]+(default[ \t]+|\{.*?\};)/gm, ""))
+                    .pipe(gulpReplace(/^export[ \t]+(default[ \t]+|\{.*?\};|)/gm, ""))
                     .pipe(gulpReplace(/^[ \t]*var\s+\S+\s*=\s*require\((['"]).*?\1\)[^;]*;/gm, ""))
                     .pipe(gulpReplace(/^[ \t]*(if\s+\(NODE\)\s*|)module\.exports\s*=\s*[^;]*;/gm, ""))
                     .pipe(gulpReplace(/\/\*\*\s*\*\s*@fileoverview[\s\S]*?\*\/\s*/g, ""))
@@ -288,7 +288,7 @@ gulp.task("compile/v3", gulp.parallel(
 
 gulp.task("version", function() {
     let baseDir = "./";
-    return gulp.src(["configs/**/*.xml"], {base: baseDir})
+    return gulp.src(["machines/**/*.xml"], {base: baseDir})
         .pipe(gulpReplace(/href="\/machines\/([^/]*)\/releases\/[0-9.]*\/(machine|manifest|outline)\.xsl"/g, 'href="/machines/$1/releases/' + machines.shared.version + '/$2.xsl"'))
         .pipe(gulp.dest(baseDir));
 });

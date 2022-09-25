@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fdc id="fdcNEC" autoMount='{A:{name:"PC DOS 2.00 (Disk 1)"}, B:{name:"PC DOS 2.00 (Disk 2)"}}' diskettes="/machines/pcx86/diskettes.json,/machines/pcx86/private.json" server="/diskettes" sortBy="name" pos="left" padLeft="8px" padBottom="8px">
+	<control type="list" binding="listDrives"/>
+	<control type="list" binding="listDisks">
+	</control>
+	<control type="button" binding="loadDisk">Load</control>
+	<control type="button" binding="saveDisk" padRight="8px">Save</control>
+	<control type="description" binding="descDisk" padRight="8px"/>
+	<control type="file" binding="mountDisk"/>
+</fdc>

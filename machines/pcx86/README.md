@@ -18,7 +18,7 @@ Examples of non-device components include visual components like [panel.js](lib/
 which separate the CPU functionality of [x86.js](lib/x86.js) into more manageable pieces.
 
 These components should always be loaded or compiled in the order listed by the *pcx86.scripts* property in
-[machines.json](https://github.com/jeffpar/pcjs/blob/master/_data/machines.json), which includes all the necessary
+[machines.json](https://github.com/jeffpar/pcjs/blob/master/machines/machines.json), which includes all the necessary
 [shared components](../shared/lib/) as well.
 
 At the time of this writing, the recommended order is:
@@ -110,7 +110,7 @@ to the same BackTrack object, using BackTrack indexes containing offsets 1-511.
 
 **WARNING**: BackTrack support is controlled by a global define (**BACKTRACK** in [defines.js](lib/defines.js)) which is
 *false* in the compiled version of PCx86, because it imposes a huge performance penalty.  The only way to use the feature
-is with a [machine](/blog/2015/01/17/) explicitly configured to use "uncompiled" source *and* with the PCjs Debugger
+is with a [machine](https://www.pcjs.org/blog/2015/01/17/) explicitly configured to use "uncompiled" source *and* with the PCjs Debugger
 enabled (since, without the debugger, the feature is more or less useless).
 
 Machines using "uncompiled" source also enable additional checks controlled by the global define **DEBUG**, which is
@@ -129,9 +129,9 @@ NOTE: The above file has already moved once (without any redirect), so just in c
 
 It references two Microsoft KnowledgeBase (KB) Articles of note:
 
-- [Q12230: IRQ Settings and Mouse Installation](/pubs/pc/reference/microsoft/kb/Q12230/)
-- [Q46369: InPort/Bus Mouse Comparison and Overview](/pubs/pc/reference/microsoft/kb/Q46369/)
+- [Q12230: IRQ Settings and Mouse Installation](https://jeffpar.github.io/kbarchive/kb/012/Q12230/)
+- [Q46369: InPort/Bus Mouse Comparison and Overview](https://jeffpar.github.io/kbarchive/kb/046/Q46369/)
 
 Over the years, Microsoft has sporadically published and then deleted those and many other KnowledgeBase articles,
-for reasons known only to itself.  See the blog post [Corporations Are Crappy Archivists](/blog/2017/10/13/) for further
+for reasons known only to itself.  See the blog post [Corporations Are Crappy Archivists](https://www.pcjs.org/blog/2017/10/13/) for further
 discussion.

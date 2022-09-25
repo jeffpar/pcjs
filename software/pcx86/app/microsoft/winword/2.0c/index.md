@@ -6,13 +6,15 @@ redirect_from: /disks/pcx86/apps/microsoft/winword/2.0c/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml
+    config: /machines/pcx86/ibm/5170/vga/2048kb/machine.xml
     drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json"}]'
     autoGen: true
     autoMount:
       A: "None"
       B: "Word for Windows 2.0c (Disk 1)"
 ---
+
+The first **Word for Windows 2.0c** diskette has been loaded into Drive B in the machine below.  You can double-click **SETUP.EXE** from the Windows File Manager to install it.
 
 {% include machine.html id="ibm5170" %}
 

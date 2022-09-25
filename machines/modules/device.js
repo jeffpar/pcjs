@@ -1,7 +1,7 @@
 /**
  * @fileoverview Base class for devices, with assorted handy services
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -102,13 +102,13 @@ export default class Device extends WebIO {
             this.printf("warning: machine configuration contains multiple '%s' devices\n", this.idDevice);
         }
         Device.Machines[this.idMachine][this.idDevice] = this;
-        /*
+        /**
          * The new Device classes don't use the Components array or machine+device IDs, but we need to continue
          * updating both of those for backward compatibility with older PCjs machines.
          */
         this['id'] = this.idMachine == this.idDevice? this.idMachine : this.idMachine + '.' + this.idDevice;
         Device.Components.push(this);
-        /*
+        /**
          * The WebIO constructor set this.machine tentatively, so that it could define any per-machine variables
          * it needed; we now set it definitively.
          */
@@ -152,7 +152,7 @@ export default class Device extends WebIO {
      */
     checkConfig(config, overrides)
     {
-        /*
+        /**
          * If this device's config contains an "overrides" array, then any of the properties listed in
          * that array may be overridden with a URL parameter.  We don't impose any checks on the overriding
          * value, so it is the responsibility of the component with overridable properties to validate them.
@@ -325,7 +325,7 @@ export default class Device extends WebIO {
         let devices = Device.Machines[idMachine];
         let device = devices && devices[idDevice] || null;
         if (!device) {
-            /*
+            /**
              * Also check the old list of PCjs machine component IDs, to maintain backward compatibility.
              */
             for (i = 0; i < Device.Components.length; i++) {
@@ -411,7 +411,7 @@ export default class Device extends WebIO {
         if (this != this.machine || !this.ready) {
             return this.ready;
         }
-        /*
+        /**
          * Machine readiness is more complicated: check the readiness of all devices.  This is easily
          * checked with an enumDevices() function that returns false if a device isn't ready yet, which
          * in turn terminates the enumeration and returns false.
@@ -481,7 +481,7 @@ export default class Device extends WebIO {
     printf(format, ...args)
     {
         if (typeof format == "number" && this.isMessageOn(format)) {
-            /*
+            /**
              * The following call will execute at most once, because findDeviceByClass() returns either a Device or null,
              * neither of which is undefined.
              */
@@ -492,7 +492,7 @@ export default class Device extends WebIO {
                 this.dbg.notifyMessage(format);
             }
             if (this.machine.messages & Device.MESSAGE.ADDR) {
-                /*
+                /**
                  * Same rules as above apply here.  Hopefully no message-based printf() calls will arrive with MESSAGE.ADDR
                  * set *before* the CPU device has been initialized.
                  */
@@ -560,7 +560,7 @@ Device.Machines = typeof window != "undefined"? window['PCjs']['Machines'] : {};
  */
 Device.Components = typeof window != "undefined"? window['PCjs']['Components'] : [];
 
-/*
+/**
  * List of additional message groups, extending the base set defined in lib/webio.js.
  *
  * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.

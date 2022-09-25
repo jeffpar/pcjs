@@ -1,7 +1,7 @@
 /**
  * @fileoverview String-related helper functions
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -456,6 +456,7 @@ class Str {
         let i = sFileName.lastIndexOf(".");
         if (i >= 0) {
             sExtension = sFileName.substr(i + 1).toLowerCase();
+            if (sExtension == "json5") sExtension = "json";
         }
         return sExtension;
     }

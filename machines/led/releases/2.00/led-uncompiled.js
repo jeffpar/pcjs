@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * @copyright https://www.pcjs.org/modules/defs.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/defs.js (C) 2012-2021 Jeff Parsons
  */
 
 /**
@@ -47,7 +47,7 @@ const MAXDEBUG = false;
 
 /**
  * VERSION is the current PCjs Project release number, updated somewhat arbitrarily and usually only
- * after significant changes.  It will be overriden the machine's "version" string in machines.json.
+ * after significant changes.  It will be overridden the machine's "version" string in machines.json.
  *
  * @define {string}
  */
@@ -61,7 +61,7 @@ const VERSION = "2.04";
  */
 const REPOSITORY = "pcjs.org";
 
-const COPYRIGHT = "Copyright © 2012-2021 Jeff Parsons <Jeff@pcjs.org>";
+const COPYRIGHT = "Copyright © 2012-2022 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
  * @class {Defs}
@@ -78,7 +78,7 @@ Defs.MAXDEBUG   = MAXDEBUG;
 Defs.REPOSITORY = REPOSITORY;
 Defs.VERSION    = VERSION;
 
-/*
+/**
  * The following globals CANNOT be overridden.
  *
  * LITTLE_ENDIAN is true if the browser's ArrayBuffer storage is little-endian.  If LITTLE_ENDIAN matches
@@ -90,7 +90,7 @@ Defs.LITTLE_ENDIAN = function() {
     return new Uint16Array(buffer)[0] === 256;
 }();
 
-/*
+/**
  * List of standard message groups.  The messages properties defines the set of active message
  * groups, and their names are defined by MESSAGE_NAMES.  See the Device class for more message
  * group definitions.
@@ -104,7 +104,7 @@ Defs.MESSAGE = {
     BUFFER:     0x800000000000,
 };
 
-/*
+/**
  * RS-232 DB-25 Pin Definitions, mapped to bits 1-25 in a 32-bit status value.
  *
  * Serial devices in PCjs machines are considered DTE (Data Terminal Equipment), which means they should be "virtually"
@@ -153,7 +153,7 @@ Defs.CLASSES = {};
 Defs.CLASSES["Defs"] = Defs;
 
 /**
- * @copyright https://www.pcjs.org/modules/numio.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/numio.js (C) 2012-2021 Jeff Parsons
  */
 
 /**
@@ -308,13 +308,14 @@ class NumIO extends Defs {
                 chSuffix = '000000000';
             }
             if (ch != chSuffix) s = s.slice(0, -1) + chSuffix;
-            /*
+            /**
              * This adds support for the MACRO-10 binary shifting (Bn) suffix, which must be stripped from the
              * number before parsing, and then applied to the value after parsing.  If n is omitted, 35 is assumed,
              * which is a net shift of zero.  If n < 35, then a left shift of (35 - n) is required; if n > 35, then
              * a right shift of -(35 - n) is required.
              */
-            let v, shift = 0;
+            let v;
+            let shift = 0;
             if (base <= 10) {
                 let match = s.match(/(-?[0-9]+)B([0-9]*)$/);
                 if (match) {
@@ -323,13 +324,13 @@ class NumIO extends Defs {
                 }
             }
             if (this.isInt(s, base) && !isNaN(v = parseInt(s, base))) {
-                /*
+                /**
                  * With the need to support larger (eg, 36-bit) integers, truncating to 32 bits is no longer helpful.
                  *
                  *      value = v|0;
                  */
                 if (shift) {
-                    /*
+                    /**
                      * Since binary shifting is a logical operation, and since shifting by division only works properly
                      * with positive numbers, we must convert a negative value to a positive value, by computing the two's
                      * complement.
@@ -387,7 +388,7 @@ class NumIO extends Defs {
                 let a, ib, data;
 
                 if (sData.substr(0, 1) == "<") {    // if the "data" begins with a "<"...
-                    /*
+                    /**
                      * Early server configs reported an error (via the nErrorCode parameter) if a tape URL was invalid,
                      * but more recent server configs now display a somewhat friendlier HTML error page.  The downside,
                      * however, is that the original error has been buried, and we've received "data" that isn't actually
@@ -396,7 +397,7 @@ class NumIO extends Defs {
                     throw new Error(sData);
                 }
 
-                /*
+                /**
                  * TODO: IE9 is rather unfriendly and restrictive with regard to how much data it's willing to
                  * eval().  In particular, the 10Mb disk image we use for the Windows 1.01 demo config fails in
                  * IE9 with an "Out of memory" exception.  One work-around would be to chop the data into chunks
@@ -442,7 +443,7 @@ class NumIO extends Defs {
                     resource.aBytes = a;
                 }
                 else if ((a = data['words'])) {
-                    /*
+                    /**
                      * Convert all words into bytes
                      */
                     resource.aBytes = new Array(a.length * 2);
@@ -453,7 +454,7 @@ class NumIO extends Defs {
                     }
                 }
                 else if ((a = data['longs'])) {
-                    /*
+                    /**
                      * Convert all dwords (longs) into bytes
                      */
                     resource.aBytes = new Array(a.length * 4);
@@ -489,7 +490,7 @@ class NumIO extends Defs {
             }
         }
         else {
-            /*
+            /**
              * Parse the data manually; we assume it's a series of hex byte-values separated by whitespace.
              */
             let ab = [];
@@ -524,7 +525,7 @@ class NumIO extends Defs {
         if (!sws) {
             switches = switchesDefault;
         } else {
-            /*
+            /**
              * NOTE: It's not convenient to use parseInt() with a base of 2, in part because both bit order
              * and bit sense are reversed, but also because we use this function to parse switch masks, which
              * contain non-digits.  See the "switches" defined in invaders.json for examples.
@@ -563,7 +564,7 @@ class NumIO extends Defs {
      */
     toBase(n, base, bits = 0, prefix = undefined, nGrouping = 0)
     {
-        /*
+        /**
          * We can't rely entirely on isNaN(), because isNaN(null) returns false, and we can't rely
          * entirely on typeof either, because typeof NaN returns "number".  Sigh.
          *
@@ -571,7 +572,9 @@ class NumIO extends Defs {
          * since JavaScript coerces such operands to zero, but I think there's "value" in seeing those
          * values displayed differently.
          */
-        let s = "", suffix = "", cch = -1;
+        let s = "";
+        let suffix = "";
+        let cch = -1;
         if (!base) base = this.nDefaultRadix || 10;
         if (bits) cch = Math.ceil(bits / Math.log2(base));
         if (prefix == undefined) {
@@ -594,14 +597,14 @@ class NumIO extends Defs {
             n = undefined;
             prefix = suffix = "";
         } else {
-            /*
+            /**
              * Callers that produced an input by dividing by a power of two rather than shifting (in order
              * to access more than 32 bits) may produce a fractional result, which ordinarily we would simply
              * ignore, but if the integer portion is zero and the sign is negative, we should probably treat
              * this value as a sign-extension.
              */
             if (n < 0 && n > -1) n = -1;
-            /*
+            /**
              * Negative values should be twos-complemented to produce a positive value for conversion purposes,
              * but we can only do that if/when we're given the number of bits; Math.pow(base, cch) is equivalent
              * to Math.pow(2, bits), but less precise for bases that aren't a power of two (eg, base 10).
@@ -743,7 +746,7 @@ class NumIO extends Defs {
     }
 }
 
-/*
+/**
  * Assorted constants
  */
 NumIO.TWO_POW32 = Math.pow(2, 32);
@@ -751,7 +754,7 @@ NumIO.TWO_POW32 = Math.pow(2, 32);
 NumIO.CLASSES["NumIO"] = NumIO;
 
 /**
- * @copyright https://www.pcjs.org/modules/stdio.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/stdio.js (C) 2012-2021 Jeff Parsons
  */
 
 /** @typedef {Function} */
@@ -793,7 +796,7 @@ class StdIO extends NumIO {
     constructor()
     {
         super();
-        /*
+        /**
          * We populate the sprintf() formatters table with null functions for all the predefined (built-in) types,
          * so that type validation has only one look-up to perform.
          *
@@ -865,7 +868,7 @@ class StdIO extends NumIO {
         let i = sFileName.lastIndexOf('/');
         if (i >= 0) sBaseName = sFileName.substr(i + 1);
 
-        /*
+        /**
          * This next bit is a kludge to clean up names that are part of a URL that includes unsightly query parameters.
          * However, don't do that if fAllowAmp (which will be true, for example, when parsing 8.3 filenames in diskimage.js).
          */
@@ -926,7 +929,7 @@ class StdIO extends NumIO {
             if (s.indexOf(':') < 0) {
                 s += ' ' + (args[1] || "00:00:00 UTC");
             } else if (s.match(/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/)) {
-                /*
+                /**
                  * I don't care to support all the possible time zone specifiers just to determine whether or not
                  * a time zone was provided, so for now, I simply look for common date+time patterns I use, such as
                  * the "timestamp" pattern above.  TODO: Make this general-purpose someday.
@@ -1024,7 +1027,7 @@ class StdIO extends NumIO {
      */
     sprintf(format, ...args)
     {
-        /*
+        /**
          * This isn't just a nice optimization; it's also important if the caller is simply trying
          * to printf() a string that may also contain '%' and doesn't want or expect any formatting.
          */
@@ -1041,7 +1044,7 @@ class StdIO extends NumIO {
             buffer += aParts[iPart];
             let arg, type = aParts[iPart+5];
 
-            /*
+            /**
              * Check for unrecognized types immediately, so we don't inadvertently pop any arguments.
              */
             if (this.formatters[type] === undefined) {
@@ -1074,7 +1077,7 @@ class StdIO extends NumIO {
             let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L'; we also allow 'w' (instead of 'h') and 'b' (instead of 'hh')
             let ach = null, s, radix = 0, prefix = "";
 
-            /*
+            /**
              * The following non-standard sprintf() format types provide handy alternatives to the
              * PHP date() format types that we previously used with the old datelib.formatDate() function:
              *
@@ -1120,7 +1123,8 @@ class StdIO extends NumIO {
              *
              * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
              */
-            let ch, date = /** @type {Date} */ ("ACDFHGMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
+            let ch;
+            let date = /** @type {Date} */ ("ACDFHGMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
 
             switch(type) {
             case 'C':
@@ -1193,14 +1197,14 @@ class StdIO extends NumIO {
 
             switch(type) {
             case 'b':
-                /*
+                /**
                  * "%b" for boolean-like values is a non-standard format specifier that seems handy.
                  */
                 buffer += (arg? "true" : "false");
                 break;
 
             case 'd':
-                /*
+                /**
                  * I could use "arg |= 0", but there may be some value to supporting integers > 32 bits,
                  * so I use Math.trunc() instead.  Bit-wise operators also mask a lot of evils, by converting
                  * complete nonsense into zero, so while I'm ordinarily a fan, that's not desirable here.
@@ -1221,7 +1225,7 @@ class StdIO extends NumIO {
                  * is zero, since parseInt() happily stops parsing when it reaches the first non-radix 10 digit.
                  */
                 arg = Math.trunc(arg);
-                /*
+                /**
                  * Before falling into the decimal floating-point code, we take this opportunity to convert
                  * the precision value, if any, to the minimum number of digits to print.  Which basically means
                  * setting zeroPad to true, width to precision, and then unsetting precision.
@@ -1258,7 +1262,7 @@ class StdIO extends NumIO {
                 break;
 
             case 'j':
-                /*
+                /**
                  * 'j' is one of our non-standard extensions to the sprintf() interface; it signals that
                  * the caller is providing an Object that should be rendered as JSON.  If a width is included
                  * (eg, "%2j"), it's used as an indentation value; otherwise, no whitespace is added.
@@ -1271,7 +1275,7 @@ class StdIO extends NumIO {
                 /* falls through */
 
             case 's':
-                /*
+                /**
                  * 's' includes some non-standard benefits, such as coercing non-strings to strings first;
                  * we know undefined and null values don't have a toString() method, but hopefully everything
                  * else does.
@@ -1309,7 +1313,7 @@ class StdIO extends NumIO {
                 if (!radix) radix = 16;
                 if (!prefix && hash) prefix = "0x";
                 if (!ach) ach = StdIO.HexLowerCase;
-                /*
+                /**
                  * For all the same reasons articulated above (for type 'd'), we pass the arg through Math.trunc(),
                  * and we honor precision, if any, as the minimum number of digits to print.
                  */
@@ -1320,7 +1324,7 @@ class StdIO extends NumIO {
                     precision = -1;
                 }
                 if (zeroPad && !width) {
-                    /*
+                    /**
                      * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
                      */
                     if (length == 'b') {
@@ -1398,13 +1402,13 @@ class StdIO extends NumIO {
     }
 }
 
-/*
+/**
  * Global variables
  */
 StdIO.PrintBuffer = "";
 StdIO.PrintTime = null;
 
-/*
+/**
  * Global constants
  */
 StdIO.HexLowerCase = "0123456789abcdef";
@@ -1415,7 +1419,7 @@ StdIO.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "
 StdIO.CLASSES["StdIO"] = StdIO;
 
 /**
- * @copyright https://www.pcjs.org/modules/webio.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/webio.js (C) 2012-2021 Jeff Parsons
  */
 
 /** @typedef {{ name: string, path: string }} */
@@ -1443,7 +1447,7 @@ class WebIO extends StdIO {
         super();
         this.bindings = {};
         this.messages = 0;
-        /*
+        /**
          * If this is the machine device, initialize a set of per-machine variables; if it's not,
          * the Device constructor will update this.machine with the actual machine device (see addDevice()).
          */
@@ -1476,7 +1480,7 @@ class WebIO extends StdIO {
 
         case WebIO.BINDING.PRINT:
             this.disableAuto(element);
-            /*
+            /**
              * An onKeyDown handler has been added to this element to intercept special (non-printable) keys, such as
              * the UP and DOWN arrow keys, which are used to implement a simple command history/recall feature.
              */
@@ -1486,7 +1490,7 @@ class WebIO extends StdIO {
                     webIO.onCommandEvent(event, true);
                 }
             );
-            /*
+            /**
              * One purpose of the onKeyPress handler for this element is to stop event propagation, so that if the
              * element has been explicitly given focus, any key presses won't be picked up by the Input device (which,
              * as that device's constructor explains, is monitoring key presses for the entire document).
@@ -1523,7 +1527,7 @@ class WebIO extends StdIO {
         if (!this.config.bindings) {
             this.config.bindings = bindings;
         }
-        /*
+        /**
          * To relieve every device from having to explicitly declare its own container, set up a default.
          * When using direct bindings, the default is simply 'container'; otherwise, the default 'container'
          * element ID is whatever the device ID is.
@@ -1543,7 +1547,7 @@ class WebIO extends StdIO {
             if (fDirectBindings) {
                 binding = id;
             } else {
-                /*
+                /**
                  * This new bit of code allows us to define a binding like this:
                  *
                  *      "label": "0"
@@ -1682,7 +1686,7 @@ class WebIO extends StdIO {
         element.setAttribute("autocomplete", "off");
         element.setAttribute("autocorrect", "off");
         element.setAttribute("spellcheck", "false");
-        /*
+        /**
          * This was added for Firefox (Safari will clear the <textarea> on a page reload, but Firefox does not).
          */
         element.value = "";
@@ -1977,7 +1981,7 @@ class WebIO extends StdIO {
                 let fDiag = false;
                 let sErrorMessage, resource;
                 if (nErrorCode) {
-                    /*
+                    /**
                      * Errors can happen for innocuous reasons, such as the user switching away too quickly, forcing
                      * the request to be cancelled.  And unfortunately, the browser cancels XMLHttpRequest requests
                      * BEFORE it notifies any page event handlers, so if the machine is being powered down, we won't
@@ -2036,7 +2040,7 @@ class WebIO extends StdIO {
                 return;
             }
 
-            /*
+            /**
              * The following line was recommended for WebKit, as a work-around to prevent the handler firing multiple
              * times when debugging.  Unfortunately, that's not the only XMLHttpRequest problem that occurs when
              * debugging, so I think the WebKit problem is deeper than that.  When we have multiple XMLHttpRequests
@@ -2047,7 +2051,7 @@ class WebIO extends StdIO {
              */
             sResource = xmlHTTP.responseText;
 
-            /*
+            /**
              * The normal "success" case is an HTTP status code of 200, but when testing with files loaded
              * from the local file system (ie, when using the "file:" protocol), we have to be a bit more "flexible".
              */
@@ -2078,7 +2082,7 @@ class WebIO extends StdIO {
             parms = {};
             if (window) {
                 if (!sParms) {
-                    /*
+                    /**
                      * Note that window.location.href returns the entire URL, whereas window.location.search
                      * returns only parameters, if any (starting with the '?', which we skip over with a substr() call).
                      */
@@ -2219,10 +2223,10 @@ class WebIO extends StdIO {
                 let consume = false, s;
                 let text = element.value;
                 let i = text.lastIndexOf('\n');
-                /*
-                * Checking for BACKSPACE is not as important as the UP and DOWN arrows, but it's helpful to ensure
-                * that BACKSPACE only erases characters on the final line; consume it otherwise.
-                */
+                /**
+                 * Checking for BACKSPACE is not as important as the UP and DOWN arrows, but it's helpful to ensure
+                 * that BACKSPACE only erases characters on the final line; consume it otherwise.
+                 */
                 if (keyCode == WebIO.KEYCODE.BS) {
                     if (element.selectionStart <= i + 1) {
                         consume = true;
@@ -2248,7 +2252,7 @@ class WebIO extends StdIO {
             else {
                 let charCode = keyCode;
                 let char = String.fromCharCode(charCode);
-                /*
+                /**
                  * Move the caret to the end of any text in the textarea, unless it's already
                  * past the final LF (because it's OK to insert characters on the last line).
                  */
@@ -2257,12 +2261,12 @@ class WebIO extends StdIO {
                 if (element.selectionStart <= i) {
                     element.setSelectionRange(text.length, text.length);
                 }
-                /*
+                /**
                  * Don't let the Input device's document-based keypress handler see any key presses
                  * that came to this element first.
                  */
                 event.stopPropagation();
-                /*
+                /**
                  * If '@' is pressed as the first character on the line, then append the last command
                  * that parseCommands() processed, and transform '@' into ENTER.
                  */
@@ -2272,7 +2276,7 @@ class WebIO extends StdIO {
                         char = '\r';
                     }
                 }
-                /*
+                /**
                  * On the ENTER key, call parseCommands() to look for any COMMAND handlers and invoke
                  * them until one of them returns true.
                  *
@@ -2281,7 +2285,7 @@ class WebIO extends StdIO {
                  * as ASCII character '\n' (aka LINEFEED aka LF).
                  */
                 if (char == '\r') {
-                    /*
+                    /**
                      * At the time we call any command handlers, a LINEFEED will not yet have been
                      * appended to the text, so for consistency, we prevent the default behavior and
                      * add the LINEFEED ourselves.  Unfortunately, one side-effect is that we must
@@ -2322,7 +2326,7 @@ class WebIO extends StdIO {
             if (typeof fnPrev !== 'function') {
                 window[sFunc] = fn;
             } else {
-                /*
+                /**
                  * TODO: Determine whether there's any value in receiving/sending the Event object that the
                  * browser provides when it generates the original event.
                  */
@@ -2487,20 +2491,20 @@ class WebIO extends StdIO {
         if (!fBuffer) {
             let element = this.findBinding(WebIO.BINDING.PRINT, true);
             if (element) {
-                /*
+                /**
                  * To help avoid situations where the element can get overwhelmed by the same repeated string,
                  * don't add the string if it already appears at the end.
                  */
                 if (element.value.substr(-s.length) != s) {
                     element.value += s;
-                    /*
+                    /**
                      * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
                      */
                     if (!WebIO.DEBUG && element.value.length > 8192) {
                         element.value = element.value.substr(element.value.length - 4096);
                     }
                     element.scrollTop = element.scrollHeight;
-                    /*
+                    /**
                      * Safari requires this, to keep the caret at the end; Chrome and Firefox, not so much.  Go figure.
                      *
                      * However, if I do this in Safari on iPadOS WHILE the app is full-screen, Safari cancels full-screen
@@ -2644,7 +2648,7 @@ WebIO.MESSAGE_COMMANDS = [
     "m ... [on|off]\tturn selected messages on or off"
 ];
 
-/*
+/**
  * NOTE: The first name is automatically omitted from global "on" and "off" operations.
  */
 WebIO.MESSAGE_NAMES = {
@@ -2656,7 +2660,7 @@ WebIO.HANDLER = {
     COMMAND:    "command"
 };
 
-/*
+/**
  * Codes provided by KeyboardEvent.keyCode on a "keypress" event (aka ASCII codes).
  */
 WebIO.CHARCODE = {
@@ -2715,7 +2719,7 @@ WebIO.CHARCODE = {
     /* 0x7A */ z:           122
 };
 
-/*
+/**
  * Codes provided by KeyboardEvent.keyCode on "keydown" and "keyup" events.
  */
 WebIO.KEYCODE = {
@@ -2845,7 +2849,7 @@ WebIO.KEYCODE = {
                 VIRTUAL:    1000        // bias used by other devices to define "virtual" keyCodes
 };
 
-/*
+/**
  * Maps Firefox-specific keyCodes to their more common keyCode counterparts.
  */
 WebIO.FF_KEYCODE = {
@@ -2855,7 +2859,7 @@ WebIO.FF_KEYCODE = {
     [WebIO.KEYCODE.FF_CMD]:     WebIO.KEYCODE.CMD       // 224 -> 91
 };
 
-/*
+/**
  * Supported values that a browser may store in the 'location' property of a keyboard event object.
  */
 WebIO.LOCATION = {
@@ -2864,7 +2868,7 @@ WebIO.LOCATION = {
     NUMPAD:     3
 };
 
-/*
+/**
  * This maps KEYCODE values to ASCII character (or a string representation for non-ASCII keys).
  */
 WebIO.KEYNAME = {
@@ -3067,7 +3071,7 @@ WebIO.LocalStorage = {
 WebIO.CLASSES["WebIO"] = WebIO;
 
 /**
- * @copyright https://www.pcjs.org/modules/device.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/device.js (C) 2012-2021 Jeff Parsons
  */
 
 /** @typedef {{ get: function(), set: (function(number)|null) }} */
@@ -3158,13 +3162,13 @@ class Device extends WebIO {
             this.printf("warning: machine configuration contains multiple '%s' devices\n", this.idDevice);
         }
         Device.Machines[this.idMachine][this.idDevice] = this;
-        /*
+        /**
          * The new Device classes don't use the Components array or machine+device IDs, but we need to continue
          * updating both of those for backward compatibility with older PCjs machines.
          */
         this['id'] = this.idMachine == this.idDevice? this.idMachine : this.idMachine + '.' + this.idDevice;
         Device.Components.push(this);
-        /*
+        /**
          * The WebIO constructor set this.machine tentatively, so that it could define any per-machine variables
          * it needed; we now set it definitively.
          */
@@ -3208,7 +3212,7 @@ class Device extends WebIO {
      */
     checkConfig(config, overrides)
     {
-        /*
+        /**
          * If this device's config contains an "overrides" array, then any of the properties listed in
          * that array may be overridden with a URL parameter.  We don't impose any checks on the overriding
          * value, so it is the responsibility of the component with overridable properties to validate them.
@@ -3381,7 +3385,7 @@ class Device extends WebIO {
         let devices = Device.Machines[idMachine];
         let device = devices && devices[idDevice] || null;
         if (!device) {
-            /*
+            /**
              * Also check the old list of PCjs machine component IDs, to maintain backward compatibility.
              */
             for (i = 0; i < Device.Components.length; i++) {
@@ -3467,7 +3471,7 @@ class Device extends WebIO {
         if (this != this.machine || !this.ready) {
             return this.ready;
         }
-        /*
+        /**
          * Machine readiness is more complicated: check the readiness of all devices.  This is easily
          * checked with an enumDevices() function that returns false if a device isn't ready yet, which
          * in turn terminates the enumeration and returns false.
@@ -3537,7 +3541,7 @@ class Device extends WebIO {
     printf(format, ...args)
     {
         if (typeof format == "number" && this.isMessageOn(format)) {
-            /*
+            /**
              * The following call will execute at most once, because findDeviceByClass() returns either a Device or null,
              * neither of which is undefined.
              */
@@ -3548,7 +3552,7 @@ class Device extends WebIO {
                 this.dbg.notifyMessage(format);
             }
             if (this.machine.messages & Device.MESSAGE.ADDR) {
-                /*
+                /**
                  * Same rules as above apply here.  Hopefully no message-based printf() calls will arrive with MESSAGE.ADDR
                  * set *before* the CPU device has been initialized.
                  */
@@ -3616,7 +3620,7 @@ Device.Machines = typeof window != "undefined"? window['PCjs']['Machines'] : {};
  */
 Device.Components = typeof window != "undefined"? window['PCjs']['Components'] : [];
 
-/*
+/**
  * List of additional message groups, extending the base set defined in lib/webio.js.
  *
  * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
@@ -3685,7 +3689,7 @@ Device.MESSAGE_NAMES["halt"]    = Device.MESSAGE.HALT;
 Device.CLASSES["Device"] = Device;
 
 /**
- * @copyright https://www.pcjs.org/modules/bus.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/bus.js (C) 2012-2021 Jeff Parsons
  */
 
 /** @typedef {{ type: string, addrWidth: number, dataWidth: number, blockSize: (number|undefined), littleEndian: (boolean|undefined) }} */
@@ -3705,6 +3709,10 @@ let BusConfig;
  * @property {number} blockLimit
  * @property {number} dataWidth
  * @property {number} dataLimit
+ * @property {number} pairWidth
+ * @property {number} pairLimit
+ * @property {number} quadWidth
+ * @property {number} quadLimit
  * @property {boolean} littleEndian
  * @property {Array.<Memory>} blocks
  * @property {number} nTraps (number of blocks currently being trapped)
@@ -3735,7 +3743,7 @@ class Bus extends Device {
     constructor(idMachine, idDevice, config)
     {
         super(idMachine, idDevice, config);
-        /*
+        /**
          * Our default type is DYNAMIC for the sake of older device configs (eg, TI-57)
          * which didn't specify a type and need a dynamic bus to ensure that their LED ROM array
          * (if any) gets updated on ROM accesses.
@@ -3755,6 +3763,10 @@ class Bus extends Device {
         this.blockLimit = (1 << this.blockShift) - 1;
         this.dataWidth = this.config['dataWidth'] || 8;
         this.dataLimit = Math.pow(2, this.dataWidth) - 1;
+        this.pairWidth = this.dataWidth << 1;
+        this.pairLimit = Math.pow(2, this.pairWidth) - 1;
+        this.quadWidth = this.dataWidth << 2;
+        this.quadLimit = Math.pow(2, this.quadWidth) - 1;
         this.littleEndian = this.config['littleEndian'] !== false;
         this.blocks = new Array(this.blockTotal);
         this.nTraps = 0;
@@ -3795,7 +3807,7 @@ class Bus extends Device {
             let sizeBlock = this.blockSize - (addrNext - addrBlock);
             if (sizeBlock > sizeLeft) sizeBlock = sizeLeft;
             let blockExisting = this.blocks[iBlock];
-            /*
+            /**
              * If addrNext does not equal addrBlock, or sizeBlock does not equal this.blockSize, then either
              * the current block doesn't start on a block boundary or the size is something other than a block;
              * while we might support such requests down the road, that is currently a configuration error.
@@ -3804,22 +3816,22 @@ class Bus extends Device {
 
                 return false;
             }
-            /*
+            /**
              * Make sure that no block exists at the specified address, or if so, make sure its type is NONE.
              */
             if (blockExisting && blockExisting.type != Memory.TYPE.NONE) {
 
                 return false;
             }
-            /*
+            /**
              * When no block is provided, we must allocate one that matches the specified type (and remaining size).
              */
             let idBlock = this.idDevice + '[' + this.toBase(addrNext, 16, this.addrWidth) + ']';
             if (!block) {
                 blockNew = new Memory(this.idMachine, idBlock, {type, addr: addrNext, size: sizeBlock, "bus": this.idDevice});
             } else {
-                /*
-                 * When a block is provided, make sure its size maches the default Bus block size, and use it if so.
+                /**
+                 * When a block is provided, make sure its size matches the default Bus block size, and use it if so.
                  */
                 if (block.size == this.blockSize) {
                     blockNew = block;
@@ -3944,7 +3956,7 @@ class Bus extends Device {
     {
         this.fFault = true;
         if (!this.nDisableFaults) {
-            /*
+            /**
              * We must call the Debugger's printf() instead of our own in order to use its custom formatters (eg, %n).
              */
             if (this.dbg) {
@@ -4024,7 +4036,7 @@ class Bus extends Device {
      */
     onReset()
     {
-        /*
+        /**
          * The following logic isn't needed because Memory and Port objects are Devices as well,
          * so their onReset() handlers will be invoked automatically.
          *
@@ -4175,6 +4187,25 @@ class Bus extends Device {
     }
 
     /**
+     * readValueQuadBE(addr)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readValueQuadBE(addr)
+    {
+
+        if (addr & 0x3) {
+            return this.readPair((addr + 2) & this.addrLimit) | (this.readPair(addr) << this.pairWidth);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
+    }
+
+    /**
      * readValuePairLE(addr)
      *
      * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
@@ -4194,6 +4225,25 @@ class Bus extends Device {
     }
 
     /**
+     * readValueQuadLE(addr)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readValueQuadLE(addr)
+    {
+
+        if (addr & 0x3) {
+            return this.readPair(addr) | (this.readPair((addr + 2) & this.addrLimit) << this.pairWidth);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
+    }
+
+    /**
      * readDynamicPair(addr)
      *
      * Unlike the readValuePairLE()/readValuePairBE() interfaces, we pass any offset -- even or odd -- directly to the block's
@@ -4210,6 +4260,25 @@ class Bus extends Device {
             return this.littleEndian? this.readValuePairLE(addr) : this.readValuePairBE(addr);
         }
         return this.blocks[addr >>> this.blockShift].readPair(addr & this.blockLimit);
+    }
+
+    /**
+     * readDynamicQuad(addr)
+     *
+     * Unlike the readValueQuadLE()/readValueQuadBE() interfaces, we pass any offset -- even or odd -- directly to the block's
+     * readQuad() interface.  Our only special concern here is whether the request straddles two blocks.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @returns {number}
+     */
+    readDynamicQuad(addr)
+    {
+
+        if ((addr & this.blockLimit) + 3 > this.blockLimit) {
+            return this.littleEndian? this.readValueQuadLE(addr) : this.readValueQuadBE(addr);
+        }
+        return this.blocks[addr >>> this.blockShift].readQuad(addr & this.blockLimit);
     }
 
     /**
@@ -4234,6 +4303,27 @@ class Bus extends Device {
     }
 
     /**
+     * writeValueQuadBE(addr, value)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeValueQuadBE(addr, value)
+    {
+
+        if (addr & 0x3) {
+            this.writePair(addr, value >> this.pairWidth);
+            this.writePair((addr + 2) & this.addrLimit, value & this.pairLimit);
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
+    }
+
+    /**
      * writeValuePairLE(addr, value)
      *
      * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
@@ -4252,6 +4342,27 @@ class Bus extends Device {
             return;
         }
         this.blocks[addr >>> this.blockShift].writePair(addr & this.blockLimit, value);
+    }
+
+    /**
+     * writeValueQuadLE(addr, value)
+     *
+     * NOTE: Any addr we are passed is assumed to be properly masked; however, any address that we
+     * we calculate ourselves (ie, addr + 1) must be masked ourselves.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeValueQuadLE(addr, value)
+    {
+
+        if (addr & 0x3) {
+            this.writePair(addr, value & this.pairLimit);
+            this.writeData((addr + 2) & this.addrLimit, value >> this.pairWidth);
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
     }
 
     /**
@@ -4279,6 +4390,30 @@ class Bus extends Device {
     }
 
     /**
+     * writeDynamicQuad(addr, value)
+     *
+     * Unlike the writeValueQuadLE()/writeValueQuadBE() interfaces, we pass any offset -- even or odd -- directly to the block's
+     * writeDynamicQuad() interface.  Our only special concern here is whether the request straddles two blocks.
+     *
+     * @this {Bus}
+     * @param {number} addr
+     * @param {number} value
+     */
+    writeDynamicQuad(addr, value)
+    {
+
+        if ((addr & this.blockLimit) + 3 > this.blockLimit) {
+            if (this.littleEndian) {
+                this.writeValueQuadLE(addr, value);
+            } else {
+                this.writeValueQuadBE(addr, value);
+            }
+            return;
+        }
+        this.blocks[addr >>> this.blockShift].writeQuad(addr & this.blockLimit, value);
+    }
+
+    /**
      * selectInterface(n)
      *
      * @this {Bus}
@@ -4294,14 +4429,20 @@ class Bus extends Device {
             this.writeData = this.writeValue;
             if (this.type == Bus.TYPE.DYNAMIC) {
                 this.readPair = this.readDynamicPair;
+                this.readQuad = this.readDynamicQuad;
                 this.writePair = this.writeDynamicPair;
+                this.writeQuad = this.writeDynamicQuad;
             }
             else if (!this.littleEndian) {
                 this.readPair = this.readValuePairBE;
+                this.readQuad = this.readValueQuadBE;
                 this.writePair = this.writeValuePairBE;
+                this.writeQuad = this.writeValueQuadBE;
             } else {
                 this.readPair = this.readValuePairLE;
+                this.readQuad = this.readValueQuadLE;
                 this.writePair = this.writeValuePairLE;
+                this.writeQuad = this.writeValueQuadLE;
             }
         }
     }
@@ -4378,7 +4519,7 @@ class Bus extends Device {
     }
 }
 
-/*
+/**
  * A "dynamic" bus (eg, an I/O bus) is one where block accesses must always be performed via function (no direct
  * value access) because there's "logic" on the other end, whereas a "static" bus can be accessed either way, via
  * function or value.
@@ -4398,7 +4539,7 @@ Bus.TYPE = {
 Bus.CLASSES["Bus"] = Bus;
 
 /**
- * @copyright https://www.pcjs.org/modules/memory.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/memory.js (C) 2012-2021 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), size: number, type: (number|undefined), littleEndian: (boolean|undefined), values: (Array.<number>|string|undefined) }} */
@@ -4413,7 +4554,10 @@ let MemoryConfig;
  * @property {Bus} bus
  * @property {number} dataWidth
  * @property {number} dataLimit
+ * @property {number} pairWidth
  * @property {number} pairLimit
+ * @property {number} quadWidth
+ * @property {number} quadLimit
  * @property {boolean} littleEndian
  * @property {ArrayBuffer|null} buffer
  * @property {DataView|null} dataView
@@ -4427,6 +4571,8 @@ let MemoryConfig;
  * @property {function(number,number)|null} writeDataOrig
  * @property {function(number)|null} readPairOrig
  * @property {function(number,number)|null} writePairOrig
+ * @property {function(number)|null} readQuadOrig
+ * @property {function(number,number)|null} writeQuadOrig
  * @property {function((number|undefined),number,number)|null} readTrap
  * @property {function((number|undefined),number,number)|null} writeTrap
  */
@@ -4447,7 +4593,7 @@ class Memory extends Device {
         this.size = this.config['size'];
         this.type = this.config['type'] || Memory.TYPE.NONE;
 
-        /*
+        /**
          * If no Bus ID was provided, then we fallback to the default Bus.
          */
         let idBus = this.config['bus'];
@@ -4456,7 +4602,10 @@ class Memory extends Device {
 
         this.dataWidth = this.bus.dataWidth;
         this.dataLimit = Math.pow(2, this.dataWidth) - 1;
-        this.pairLimit = Math.pow(2, this.dataWidth * 2) - 1;
+        this.pairWidth = this.dataWidth << 1;
+        this.pairLimit = Math.pow(2, this.pairWidth) - 1;
+        this.quadWidth = this.dataWidth << 2;
+        this.quadLimit = Math.pow(2, this.quadWidth) - 1;
 
         this.fDirty = this.fUseArrayBuffer = false;
         this.littleEndian = this.bus.littleEndian !== false;
@@ -4467,14 +4616,19 @@ class Memory extends Device {
         let writeValue = this.writeValue;
         let readPair = this.littleEndian? this.readDynamicPairLE : this.readDynamicPairBE;
         let writePair = this.littleEndian? this.writeDynamicPairLE : this.writeDynamicPairBE;
+        let readQuad = this.littleEndian? this.readDynamicQuadLE : this.readDynamicQuadBE;
+        let writeQuad = this.littleEndian? this.writeDynamicQuadLE : this.writeDynamicQuadBE;
 
         if (this.bus.type == Bus.TYPE.STATIC) {
             writeValue = this.writeValueDirty;
             readPair = this.littleEndian? this.readValuePairLE : this.readValuePairBE;
+            readQuad = this.littleEndian? this.readValueQuadLE : this.readValueQuadBE;
             writePair = this.writeValuePairDirty;
+            writeQuad = this.writeValueQuadDirty;
             if (this.dataWidth == 8 && this.getMachineConfig('ArrayBuffer') !== false) {
                 this.fUseArrayBuffer = true;
                 readPair = this.littleEndian == Memory.LITTLE_ENDIAN? this.readValuePair16 : this.readValuePair16SE;
+                readQuad = this.littleEndian == Memory.LITTLE_ENDIAN? this.readValueQuad32 : this.readValueQuad32SE;
             }
         }
 
@@ -4484,31 +4638,38 @@ class Memory extends Device {
             this.writeData = this.writeNone;
             this.readPair = this.readNonePair;
             this.writePair = this.writeNonePair;
+            this.readQuad = this.readNoneQuad;
+            this.writeQuad = this.writeNoneQuad;
             break;
         case Memory.TYPE.READONLY:
             this.readData = readValue;
             this.writeData = this.writeNone;
             this.readPair = readPair;
             this.writePair = this.writeNone;
+            this.readQuad = readQuad;
+            this.writeQuad = this.writeNone;
             break;
         case Memory.TYPE.READWRITE:
             this.readData = readValue;
             this.writeData = writeValue;
             this.readPair = readPair;
             this.writePair = writePair;
+            this.readQuad = readQuad;
+            this.writeQuad = writeQuad;
             break;
         default:
 
             break;
         }
 
-        /*
+        /**
          * Additional block properties used for trapping reads/writes
          */
         this.nReadTraps = this.nWriteTraps = 0;
         this.readTrap = this.writeTrap = null;
         this.readDataOrig = this.writeDataOrig = null;
         this.readPairOrig = this.writePairOrig = null;
+        this.readQuadOrig = this.writeQuadOrig = null;
 
         this.getValues(this.config['values']);
         this.initValues();
@@ -4558,7 +4719,7 @@ class Memory extends Device {
             if (this.fUseArrayBuffer) {
                 this.buffer = new ArrayBuffer(this.size);
                 this.dataView = new DataView(this.buffer, 0, this.size);
-                /*
+                /**
                  * If littleEndian is true, we can use valuePairs[] and valueQuads[] directly; well, we can use
                  * them whenever the offset is a multiple of 1, 2 or 4, respectively.  Otherwise, we must fallback
                  * to dv.getUint8()/dv.setUint8(), dv.getUint16()/dv.setUint16() and dv.getInt32()/dv.setInt32().
@@ -4568,7 +4729,7 @@ class Memory extends Device {
                 this.valueQuads = new Int32Array(this.buffer, 0, this.size >> 2);
             }
             else {
-                /*
+                /**
                  * TODO: I used to call fill(this.dataLimit), but is there really any reason to do that?
                  */
                 this.values = new Array(this.size).fill(0);
@@ -4625,9 +4786,11 @@ class Memory extends Device {
                 if (!this.nWriteTraps) {
                     this.writeData = this.writeValueDirty;
                     this.writePair = this.writeValuePairDirty;
+                    this.writeQuad = this.writeValueQuadDirty;
                 } else {
                     this.writeDataOrig = this.writeValueDirty;
                     this.writePairOrig = this.writeValuePairDirty;
+                    this.writeQuadOrig = this.writeValueQuadDirty;
                 }
             }
             return true;
@@ -4662,6 +4825,22 @@ class Memory extends Device {
             return this.readNone(offset + 1) | (this.readNone(offset) << this.dataWidth);
         }
     }
+
+    /**
+     * readNoneQuad(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @returns {number}
+     */
+     readNoneQuad(offset)
+     {
+         if (this.littleEndian) {
+             return this.readNonePair(offset) | (this.readNonePair(offset + 2) << this.pairWidth);
+         } else {
+             return this.readNonePair(offset + 2) | (this.readNonePair(offset) << this.pairWidth);
+         }
+     }
 
     /**
      * readDirect(offset)
@@ -4705,6 +4884,18 @@ class Memory extends Device {
     }
 
     /**
+     * readValueQuadBE(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @returns {number}
+     */
+    readValueQuadBE(offset)
+    {
+         return this.readValuePairBE(offset + 2) | (this.readValuePairBE(offset) << this.pairWidth);
+    }
+
+    /**
      * readValuePairLE(offset)
      *
      * @this {Memory}
@@ -4717,6 +4908,18 @@ class Memory extends Device {
     }
 
     /**
+     * readValueQuadLE(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @returns {number}
+     */
+    readValueQuadLE(offset)
+    {
+         return this.readValuePairLE(offset) | (this.readValuePairLE(offset + 2) << this.pairWidth);
+    }
+
+    /**
      * readValuePair16(offset)
      *
      * @this {Memory}
@@ -4726,6 +4929,18 @@ class Memory extends Device {
     readValuePair16(offset)
     {
         return this.valuePairs[offset >>> 1];
+    }
+
+    /**
+     * readValueQuad32(offset)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-4 block offset)
+     * @returns {number}
+     */
+    readValueQuad32(offset)
+    {
+         return this.valueQuads[offset >>> 2];
     }
 
     /**
@@ -4745,9 +4960,25 @@ class Memory extends Device {
     }
 
     /**
+     * readValueQuad32SE(offset)
+     *
+     * This function is neither big-endian (BE) or little-endian (LE), but rather "swap-endian" (SE), which
+     * means there's a mismatch between our emulated machine and the host machine, so we call the appropriate
+     * DataView function with the desired littleEndian setting.
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @returns {number}
+     */
+    readValueQuad32SE(offset)
+    {
+        return this.dataView.getInt32(offset, this.littleEndian);
+    }
+
+    /**
      * readDynamicPairBE(offset)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -4760,9 +4991,24 @@ class Memory extends Device {
     }
 
     /**
+     * readDynamicQuadBE(offset)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @returns {number}
+     */
+    readDynamicQuadBE(offset)
+    {
+
+        return this.readPair(offset + 2) | (this.readPair(offset) << this.pairWidth);
+    }
+
+    /**
      * readDynamicPairLE(offset)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -4772,6 +5018,21 @@ class Memory extends Device {
     {
 
         return this.readValue(offset) | (this.readValue(offset + 1) << this.dataWidth);
+    }
+
+    /**
+     * readDynamicPairLE(offset)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @returns {number}
+     */
+    readDynamicQuadLE(offset)
+    {
+
+        return this.readPair(offset) | (this.readPair(offset + 2) << this.pairWidth);
     }
 
     /**
@@ -4802,6 +5063,24 @@ class Memory extends Device {
             this.writeNone(offset + 1, value & this.dataLimit);
         }
     }
+
+    /**
+     * writeNoneQuad(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @param {number} value
+     */
+     writeNoneQuad(offset, value)
+     {
+         if (this.littleEndian) {
+             this.writeNonePair(offset, value & this.pairLimit);
+             this.writeNonePair(offset + 2, value >> this.pairWidth);
+         } else {
+             this.writeNonePair(offset, value >> this.pairWidth);
+             this.writeNonePair(offset + 2, value & this.pairLimit);
+         }
+     }
 
     /**
      * writeDirect(offset, value)
@@ -4865,6 +5144,20 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuadBE(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuadBE(offset, value)
+    {
+
+        this.writeValuePairBE(offset, value >> this.pairWidth);
+        this.writeValuePairBE(offset + 2, value & this.pairLimit);
+    }
+
+    /**
      * writeValuePairLE(offset, value)
      *
      * @this {Memory}
@@ -4879,6 +5172,20 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuadLE(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuadLE(offset, value)
+    {
+
+        this.writeValuePairLE(offset, value & this.pairLimit);
+        this.writeValuePairLE(offset + 2, value >> this.pairWidth);
+    }
+
+    /**
      * writeValuePair16(offset, value)
      *
      * @this {Memory}
@@ -4890,6 +5197,20 @@ class Memory extends Device {
         let off = offset >>> 1;
 
         this.valuePairs[off] = value;
+    }
+
+    /**
+     * writeValueQuad32(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuad32(offset, value)
+    {
+        let off = offset >>> 2;
+
+        this.valueQuads[off] = value;
     }
 
     /**
@@ -4910,9 +5231,26 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuad32SE(offset, value)
+     *
+     * This function is neither big-endian (BE) or little-endian (LE), but rather "swap-endian" (SE), which
+     * means there's a mismatch between our emulated machine and the host machine, so we call the appropriate
+     * DataView function with the desired littleEndian setting.
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four block offset)
+     * @param {number} value
+     */
+    writeValueQuad32SE(offset, value)
+    {
+
+        this.dataView.setInt32(offset, value, this.littleEndian);
+    }
+
+    /**
      * writeDynamicPairBE(offset, value)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -4926,9 +5264,25 @@ class Memory extends Device {
     }
 
     /**
+     * writeDynamicQuadBE(offset, value)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @param {number} value
+     */
+    writeDynamicQuadBE(offset, value)
+    {
+
+        this.writePair(offset, value >> this.pairWidth);
+        this.writePair(offset + 2, value & this.pairLimit);
+    }
+
+    /**
      * writeDynamicPairLE(offset, value)
      *
-     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accomodate odd offsets.
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
      *
      * @this {Memory}
      * @param {number} offset
@@ -4942,10 +5296,26 @@ class Memory extends Device {
     }
 
     /**
+     * writeDynamicQuadLE(offset, value)
+     *
+     * This slow version is used with a dynamic (eg, I/O) bus only, and it must also accommodate odd offsets.
+     *
+     * @this {Memory}
+     * @param {number} offset
+     * @param {number} value
+     */
+    writeDynamicQuadLE(offset, value)
+    {
+
+        this.writePair(offset, value & this.pairLimit);
+        this.writePair(offset + 2, value >> this.pairWidth);
+    }
+
+    /**
      * writeValuePairDirty(offset, value)
      *
      * @this {Memory}
-     * @param {number} offset (must be an even block offset, because we will halve it to obtain a pair offset)
+     * @param {number} offset (must be an even block offset)
      * @param {number} value
      */
     writeValuePairDirty(offset, value)
@@ -4986,6 +5356,50 @@ class Memory extends Device {
     }
 
     /**
+     * writeValueQuadDirty(offset, value)
+     *
+     * @this {Memory}
+     * @param {number} offset (must be a multiple-of-four offset)
+     * @param {number} value
+     */
+     writeValueQuadDirty(offset, value)
+     {
+         if (!this.buffer) {
+             if (this.littleEndian) {
+                 this.writeValueQuadLE(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuadLE;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuadLE;
+                 }
+             } else {
+                 this.writeValueQuadBE(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuadBE;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuadBE;
+                 }
+             }
+         } else {
+             if (this.littleEndian == Memory.LITTLE_ENDIAN) {
+                 this.writeValueQuad32(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuad32;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuad32;
+                 }
+             } else {
+                 this.writeValueQuad32SE(offset, value);
+                 if (!this.nWriteTraps) {
+                     this.writeQuad = this.writeValueQuad32SE;
+                 } else {
+                     this.writeQuadOrig = this.writeValueQuad32SE;
+                 }
+             }
+         }
+     }
+
+    /**
      * trapRead(func)
      *
      * I've decided to call the trap handler AFTER reading the value, so that we can pass the value
@@ -5006,6 +5420,7 @@ class Memory extends Device {
             this.readTrap = func;
             this.readDataOrig = this.readData;
             this.readPairOrig = this.readPair;
+            this.readQuadOrig = this.readQuad;
             this.readData = function readDataTrap(offset) {
                 let value = block.readDataOrig(offset);
                 block.readTrap(block.addr, offset, value);
@@ -5015,6 +5430,14 @@ class Memory extends Device {
                 let value = block.readPairOrig(offset);
                 block.readTrap(block.addr, offset, value);
                 block.readTrap(block.addr, offset + 1, value);
+                return value;
+            };
+            this.readQuad = function readQuadTrap(offset) {
+                let value = block.readQuadOrig(offset);
+                block.readTrap(block.addr, offset, value);
+                block.readTrap(block.addr, offset + 1, value);
+                block.readTrap(block.addr, offset + 2, value);
+                block.readTrap(block.addr, offset + 3, value);
                 return value;
             };
             return true;
@@ -5044,6 +5467,7 @@ class Memory extends Device {
             this.writeTrap = func;
             this.writeDataOrig = this.writeData;
             this.writePairOrig = this.writePair;
+            this.writeQuadOrig = this.writeQuad;
             this.writeData = function writeDataTrap(offset, value) {
                 block.writeTrap(block.addr, offset, value);
                 block.writeDataOrig(offset, value);
@@ -5052,6 +5476,13 @@ class Memory extends Device {
                 block.writeTrap(block.addr, offset, value);
                 block.writeTrap(block.addr, offset + 1, value);
                 block.writePairOrig(offset, value);
+            };
+            this.writeQuad = function writeQuadTrap(offset, value) {
+                block.writeTrap(block.addr, offset, value);
+                block.writeTrap(block.addr, offset + 1, value);
+                block.writeTrap(block.addr, offset + 2, value);
+                block.writeTrap(block.addr, offset + 3, value);
+                block.writeQuadOrig(offset, value);
             };
             return true;
         }
@@ -5075,7 +5506,8 @@ class Memory extends Device {
             if (!--this.nReadTraps) {
                 this.readData = this.readDataOrig;
                 this.readPair = this.readPairOrig;
-                this.readDataOrig = this.readPairOrig = this.readTrap = null;
+                this.readQuad = this.readQuadOrig;
+                this.readDataOrig = this.readPairOrig = this.readQuadOrig = this.readTrap = null;
             }
 
             return true;
@@ -5096,7 +5528,8 @@ class Memory extends Device {
             if (!--this.nWriteTraps) {
                 this.writeData = this.writeDataOrig;
                 this.writePair = this.writePairOrig;
-                this.writeDataOrig = this.writePairOrig = this.writeTrap = null;
+                this.writeQuad = this.writeQuadOrig;
+                this.writeDataOrig = this.writePairOrig = this.writeQuadOrig = this.writeTrap = null;
             }
 
             return true;
@@ -5115,13 +5548,15 @@ class Memory extends Device {
      */
     loadState(state)
     {
-        let idDevice = state.shift();
-        if (this.idDevice == idDevice) {
-            this.fDirty = state.shift();
-            state.shift();      // formerly fDirtyEver, now unused
-            let values = state.shift();
-            if (values) this.initValues(this.decompress(values, this.size));
-            return true;
+        if (state) {
+            let idDevice = state.shift();
+            if (this.idDevice == idDevice) {
+                this.fDirty = state.shift();
+                state.shift();      // formerly fDirtyEver, now unused
+                let values = state.shift();
+                if (values) this.initValues(this.decompress(values, this.size));
+                return true;
+            }
         }
         return false;
     }
@@ -5143,7 +5578,7 @@ class Memory extends Device {
     }
 }
 
-/*
+/**
  * Memory block types use discrete bits so that enumBlocks() can be passed a set of combined types,
  * by OR'ing the desired types together.
  */
@@ -5151,7 +5586,7 @@ Memory.TYPE = {
     NONE:               0x01,
     READONLY:           0x02,
     READWRITE:          0x04,
-    /*
+    /**
      * The rest are not discrete memory types, but rather sets of types that are handy for enumBlocks().
      */
     READABLE:           0x0E,
@@ -5161,7 +5596,7 @@ Memory.TYPE = {
 Memory.CLASSES["Memory"] = Memory;
 
 /**
- * @copyright https://www.pcjs.org/modules/rom.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/rom.js (C) 2012-2021 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, values: Array.<number>, file: string, reference: string, chipID: string, revision: (number|undefined), colorROM: (string|undefined), backgroundColorROM: (string|undefined) }} */
@@ -5210,7 +5645,7 @@ class ROM extends Memory {
         this.bus.addBlocks(this.config['addr'], this.config['size'], this.config['type'], this);
         this.whenReady(this.onReset.bind(this));
 
-        /*
+        /**
          * If an "array" binding has been supplied, then create an LED array sufficiently large to represent the
          * entire ROM.  If data.length is an odd power-of-two, then we will favor a slightly wider array over a taller
          * one, by virtue of using Math.ceil() instead of Math.floor() for the columns calculation.
@@ -5304,7 +5739,7 @@ class ROM extends Memory {
                 success = false;
             }
         }
-        /*
+        /**
          * Version 1.21 and up also saves the ROM contents, since our "mini-debugger" has been updated
          * with an edit command ("e") to enable ROM patching.  However, we prefer to detect improvements
          * in saved state based on the length of the array, not the version number.
@@ -5332,13 +5767,13 @@ class ROM extends Memory {
      */
     onPower(on)
     {
-        /*
+        /**
          * We only care about the first power event, because it's a safe opportunity to find the CPU.
          */
         if (this.cpu === undefined) {
             this.cpu = /** @type {CPU} */ (this.findDeviceByClass("CPU"));
         }
-        /*
+        /**
          * This is also a good time to get access to the Debugger, if any, and pass it symbol information, if any.
          */
         if (this.dbg === undefined) {
@@ -5387,7 +5822,7 @@ ROM.BINDING = {
 ROM.CLASSES["ROM"] = ROM;
 
 /**
- * @copyright https://www.pcjs.org/modules/input.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/input.js (C) 2012-2021 Jeff Parsons
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), location: Array.<number>, map: (Array.<Array.<number>>|Object|undefined), drag: (boolean|undefined), scroll: (boolean|undefined), hexagonal: (boolean|undefined), releaseDelay: (number|undefined) }} */
@@ -5471,7 +5906,7 @@ class Input extends Device {
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.machine = /** @type {Machine} */ (this.findDeviceByClass("Machine"));
 
-        /*
+        /**
          * If 'drag' is true, then the onInput() handler will be called whenever the current col and/or row
          * changes, even if the mouse hasn't been released since the previous onInput() call.
          *
@@ -5481,32 +5916,32 @@ class Input extends Device {
          */
         this.fDrag = this.getDefaultBoolean('drag', false);
 
-        /*
+        /**
          * If 'scroll' is true, then we do NOT call preventDefault() on touch events; this permits the input
          * surface to be scrolled like any other part of the page.  The default is false, because this has other
          * side-effects (eg, inadvertent zooms).
          */
         this.fScroll = this.getDefaultBoolean('scroll', false);
 
-        /*
+        /**
          * If 'hexagonal' is true, then we treat the input grid as hexagonal, where even rows of the associated
          * display are offset.
          */
         this.fHexagonal = this.getDefaultBoolean('hexagonal', false);
 
-        /*
+        /**
          * The 'releaseDelay' setting is necessary for devices (eg, old calculators) that are either too slow to
          * notice every input transition and/or have debouncing logic that would otherwise be defeated.
          */
         this.releaseDelay = this.getDefaultNumber('releaseDelay', 0);
 
-        /*
+        /**
          * This is set on receipt of the first 'touch' event of any kind, and is used by the 'mouse' event
          * handlers to disregard mouse events if set.
          */
         this.fTouch = false;
 
-        /*
+        /**
          * There are two supported configuration maps: a two-dimensional grid (gridMap) and a list of IDs (idMap).
          *
          * The two-dimensional button layouts do not (currently) support individual listeners; instead, any key event
@@ -5616,7 +6051,7 @@ class Input extends Device {
             }
             return false;
         }
-        /*
+        /**
          * The visual state of a SWITCH control (which could be a div or button or any other element) is controlled
          * by its class attribute -- specifically, the last class name in the attribute.  You must define two classes:
          * one that ends with "-on" for the on (true) state and another that ends with "-off" for the off (false) state.
@@ -5689,14 +6124,14 @@ class Input extends Device {
                             if (typeof clickBinding == "number") {
                                 keyCode = clickBinding;
                             } else {
-                                /*
+                                /**
                                  * If clickBinding is not a number, the only other possibility currently supported
                                  * is an Array where the first entry is a keyCode modifier; specifically, KEYCODE.LOCK.
                                  */
                                 keyCode = clickBinding[0];
 
                                 if (keyCode == Input.KEYCODE.LOCK) {
-                                    /*
+                                    /**
                                      * In the case of KEYCODE.LOCK, the next entry is the actual keyCode, and we look
                                      * to the element's "data-value" attribute for whether clicking the element should
                                      * "lock" the keyCode ("0") or "unlock" it ("1").  Locking a key is a simple matter
@@ -5750,7 +6185,7 @@ class Input extends Device {
      */
     addSurface(inputElement, focusElement, location = [])
     {
-        /*
+        /**
          * The location array, eg:
          *
          *      "location": [139, 325, 368, 478, 0.34, 0.5, 640, 853, 180, 418, 75, 36],
@@ -5797,7 +6232,7 @@ class Input extends Device {
                 state.hGap = state.vGap = 0;
             }
 
-            /*
+            /**
              * To calculate the average button width (cxButton), we know that the overall width
              * must equal the sum of all the button widths + the sum of all the button gaps:
              *
@@ -5813,7 +6248,7 @@ class Input extends Device {
             state.cxGap = (state.cxButton * state.hGap)|0;
             state.cyGap = (state.cyButton * state.vGap)|0;
 
-            /*
+            /**
              * xStart and yStart record the last 'touchstart' or 'mousedown' position on the surface
              * image; they will be reset to -1 when movement has ended (eg, 'touchend' or 'mouseup').
              */
@@ -5822,7 +6257,7 @@ class Input extends Device {
             this.captureMouse(inputElement, state);
             this.captureTouch(inputElement, state);
 
-            /*
+            /**
              * We use a timer for the touch/mouse release events, to ensure that the machine had
              * enough time to notice the input before releasing it.
              */
@@ -5837,7 +6272,7 @@ class Input extends Device {
         }
 
         if (this.gridMap || this.idMap || this.keyMap) {
-            /*
+            /**
              * This auto-releases the last key reported after an appropriate delay, to ensure that
              * the machine had enough time to notice the corresponding button was pressed.
              */
@@ -5848,7 +6283,7 @@ class Input extends Device {
                 });
             }
 
-            /*
+            /**
              * I used to maintain a single-key buffer (this.keyPressed) and would immediately release
              * that key as soon as another key was pressed, but it appears that the ROM wants a minimum
              * delay between release and the next press -- probably for de-bouncing purposes.  So we
@@ -5860,7 +6295,7 @@ class Input extends Device {
             this.keyActive = "";
             this.keysPressed = [];
 
-            /*
+            /**
              * I'm attaching my key event handlers to the document object, since image elements are
              * not focusable.  I'm disinclined to do what I've done with other machines (ie, create an
              * invisible <textarea> overlay), because in this case, I don't really want a soft keyboard
@@ -5877,7 +6312,7 @@ class Input extends Device {
                 if (!this.focusElement && focusElement.nodeName == "BUTTON") {
                     element = document;
                     this.focusElement = focusElement;
-                    /*
+                    /**
                      * Although we've elected to attach key handlers to the document object in this case,
                      * we also attach to the inputElement as an alternative.
                      */
@@ -6069,7 +6504,7 @@ class Input extends Device {
                     let used = input.onKeyCode(keyCode, false, false, event);
                     printEvent("Up", keyCode);
                     if (used) event.preventDefault();
-                    /*
+                    /**
                      * We reset the contents of any textarea element being used exclusively
                      * for keyboard input, to prevent its contents from growing uncontrollably.
                      */
@@ -6078,7 +6513,7 @@ class Input extends Device {
             }
         );
 
-        /*
+        /**
          * The following onBlur() and onFocus() handlers are currently just for debugging purposes, but
          * PCx86 experience suggests that we may also eventually need them for future pointer-locking support.
          */
@@ -6113,7 +6548,7 @@ class Input extends Device {
             'mousedown',
             function onMouseDown(event) {
                 if (input.fTouch) return;
-                /*
+                /**
                  * If there are any text input elements on the page that might currently have focus,
                  * this is a good time to divert focus to a focusable element of our own (eg, focusElement).
                  * Otherwise, key presses could be confusingly processed in two places.
@@ -6175,14 +6610,14 @@ class Input extends Device {
     {
         let input = this;
 
-        /*
+        /**
          * NOTE: The mouse event handlers below deal only with events where the left button is involved
          * (ie, left button is pressed, down, or released).
          */
         element.addEventListener(
             'touchstart',
             function onTouchStart(event) {
-                /*
+                /**
                  * Under normal circumstances (ie, when fScroll is false), when any touch events arrive,
                  * onSurfaceEvent() calls preventDefault(), which prevents a variety of potentially annoying
                  * behaviors (ie, zooming, scrolling, fake mouse events, etc).  Under non-normal circumstances,
@@ -6232,7 +6667,7 @@ class Input extends Device {
                         msDelayMin = msDelay;
                     }
                 } else {
-                    /*
+                    /**
                      * Because the key is already in the auto-release state, this next call guarantees that the
                      * key will be removed from the array; a consequence of that removal, however, is that we must
                      * reset our array index to zero.
@@ -6364,7 +6799,7 @@ class Input extends Device {
                 keyMod >>= 1;
             }
             if (keyMod) {
-                /*
+                /**
                  * Firefox generates only keyDown events for CAPS-LOCK, whereas Chrome generates only keyDown
                  * when it's locking and keyUp when it's unlocking.  To support Firefox, we must simply toggle the
                  * current state on a down.
@@ -6382,7 +6817,7 @@ class Input extends Device {
         } else {
             keyCode = 0;
             keyName = String.fromCharCode(code).toUpperCase();
-            /*
+            /**
              * Since code is presumably a charCode, this is a good opportunity to update keyMods with
              * with the *real* CAPS-LOCK setting; that is, we will assume CAPS-LOCK is "off" whenever
              * a lower-case letter arrives and "on" whenever an upper-case letter arrives when neither
@@ -6449,7 +6884,7 @@ class Input extends Device {
                 } else {
                     this.removeActiveKey(keyNum);
                 }
-                /*
+                /**
                  * At this point, I used to return true, indicating that we're not interested in a keypress
                  * event, but in fact, onkeyCode() is now interested in them only insofar as letters can convey
                  * information about the state of CAPS-LOCK (see above).
@@ -6490,20 +6925,20 @@ class Input extends Device {
      */
     onReset()
     {
-        /*
+        /**
          * As keyDown events are encountered, the event keyCode is checked against the active keyMap, if any.
          * If the keyCode exists in the keyMap, then each keyNum in the keyMap is added to the aActiveKeys array.
          * As each key is released (or auto-released), its entry is removed from the array.
          */
         this.aActiveKeys = [];
 
-        /*
+        /**
          * The current (assumed) physical states of the various shift/lock "modifier" keys (formerly bitsState);
          * the browser doesn't provide a way to query them, so all we can do is infer them as events arrive.
          */
         this.keyMods = 0;               // zero or more KEYMOD bits
 
-        /*
+        /**
          * Finally, the active input state.  If there is no active input, col and row are -1.  After
          * this point, these variables will be updated by setPosition().
          */
@@ -6541,7 +6976,7 @@ class Input extends Device {
                 fMultiTouch = (event.targetTouches.length > 1);
             }
 
-            /*
+            /**
              * The following code replaces the older code below it.  It requires that we use clientX and clientY
              * instead of pageX and pageY from the targetTouches array.  The older code seems to be completely broken
              * whenever the page is full-screen, hence this change.
@@ -6550,7 +6985,7 @@ class Input extends Device {
             x -= rect.left;
             y -= rect.top;
 
-            /*
+            /**
              * Touch coordinates (that is, the pageX and pageY properties) are relative to the page, so to make
              * them relative to the element, we must subtract the element's left and top positions.  This Apple document:
              *
@@ -6572,7 +7007,7 @@ class Input extends Device {
              *      y -= yOffset;
              */
 
-            /*
+            /**
              * Due to the responsive nature of our pages, the displayed size of the surface image may be smaller than
              * the original size, and the coordinates we receive from events are based on the currently displayed size.
              */
@@ -6582,7 +7017,7 @@ class Input extends Device {
             xInput = x - state.xInput;
             yInput = y - state.yInput;
 
-            /*
+            /**
              * fInput is set if the event occurred somewhere within the input region (ie, the calculator keypad),
              * either on a button or between buttons, whereas fButton is set if the event occurred squarely (rectangularly?)
              * on a button.  fPower deals separately with the power button; it is set if the event occurred on the
@@ -6591,13 +7026,13 @@ class Input extends Device {
             fInput = fButton = false;
             fPower = (x >= state.xPower && x < state.xPower + state.cxPower && y >= state.yPower && y < state.yPower + state.cyPower);
 
-            /*
+            /**
              * I use the top of the input region, less some gap, to calculate a dividing line, above which
              * default actions should be allowed, and below which they should not.  Ditto for any event inside
              * the power button.
              */
             if (xInput >= 0 && xInput < state.cxInput && yInput + state.cyGap >= 0 || fPower) {
-                /*
+                /**
                  * If we allow touch events to be processed, they will generate mouse events as well, causing
                  * confusion and delays.  We can sidestep that problem by preventing default actions on any event
                  * that occurs within the input region.  One downside is that you can no longer scroll or zoom the
@@ -6610,7 +7045,7 @@ class Input extends Device {
 
                 if (xInput >= 0 && xInput < state.cxInput && yInput >= 0 && yInput < state.cyInput) {
                     fInput = true;
-                    /*
+                    /**
                      * The width and height of each column and row could be determined by computing cxGap + cxButton
                      * and cyGap + cyButton, respectively, but those gap and button sizes are merely estimates, and should
                      * only be used to help with the final button coordinate checks farther down.
@@ -6620,7 +7055,7 @@ class Input extends Device {
                     let colInput = (xInput / cxCol) | 0;
                     let rowInput = (yInput / cyCol) | 0;
 
-                    /*
+                    /**
                      * If the grid is hexagonal (aka "Lite-Brite" mode), then the cells of even-numbered rows are
                      * offset horizontally by 1/2 cell.  In addition, the last cell in those rows is unused, so if
                      * after compensating by 1/2 cell, the target column is the last cell, we set xInput to -1,
@@ -6632,7 +7067,7 @@ class Input extends Device {
                         if (colInput == state.nCols - 1) xInput = -1;
                     }
 
-                    /*
+                    /**
                      * (xCol,yCol) will be the top left corner of the button closest to the point of input.  However, that's
                      * based on our gap estimate.  If things seem "too tight", shrink the gap estimates, which will automatically
                      * increase the button size estimates.
@@ -6656,18 +7091,18 @@ class Input extends Device {
         if (fMultiTouch) return;
 
         if (action == Input.ACTION.PRESS) {
-            /*
+            /**
              * Record the position of the event, transitioning xStart and yStart to non-negative values.
              */
             state.xStart = x;
             state.yStart = y;
             if (fInput) {
-                /*
+                /**
                  * The event occurred in the input region, so we call setPosition() regardless of whether
                  * it hit or missed a button.
                  */
                 this.setPosition(col, row);
-                /*
+                /**
                  * On the other hand, if it DID hit a button, then we arm the auto-release timer, to ensure
                  * a minimum amount of time (ie, releaseDelay).
                  */
@@ -6687,7 +7122,7 @@ class Input extends Device {
             }
         }
         else if (action == Input.ACTION.RELEASE) {
-            /*
+            /**
              * Don't immediately signal the release if the release timer is active (let the timer take care of it).
              */
             if (!this.releaseDelay || !this.time.isTimerSet(this.timerInputRelease)) {
@@ -6710,7 +7145,7 @@ class Input extends Device {
      */
     setFocus()
     {
-        /*
+        /**
          * In addition, we now check machine.isReady(), to avoid jerking the page's focus around when a machine is first
          * powered; it won't be marked ready until all the onPower() calls have completed, including the CPU's onPower()
          * call, which in turn calls setFocus().
@@ -6773,7 +7208,7 @@ Input.TYPE = {                  // types for addListener()
     SWITCH:     "switch"
 };
 
-/*
+/**
  * To keep track of the state of modifier keys, I've grabbed a copy of the same bit definitions
  * used by /modules/pcx86/lib/keyboard.js, since it's only important that we have a set of unique
  * values; what the values are isn't critical.
@@ -6816,7 +7251,7 @@ Input.KEYCODEMOD = {
 Input.CLASSES["Input"] = Input;
 
 /**
- * @copyright https://www.pcjs.org/modules/led.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/led.js (C) 2012-2021 Jeff Parsons
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), type: number, width: (number|undefined), height: (number|undefined), cols: (number|undefined), colsExtra: (number|undefined), rows: (number|undefined), rowsExtra: (number|undefined), color: (string|undefined), backgroundColor: (string|undefined), fixed: (boolean|undefined), hexagonal: (boolean|undefined), highlight: (boolean|undefined), persistent: (boolean|undefined) }} */
@@ -6946,7 +7381,7 @@ class LED extends Device {
         this.colorHighlight = this.getRGBAColor(this.colorOn, 1.0, 2.0);
         this.colorBackground = this.getRGBColor(this.config['backgroundColor']);
 
-        /*
+        /**
          * We generally want our view canvas to be "responsive", not "fixed" (ie, to automatically resize
          * with changes to the overall window size), so we apply the following style attributes:
          *
@@ -6961,13 +7396,13 @@ class LED extends Device {
             canvasView.style.height = "auto";
         }
 
-        /*
+        /**
          * Hexagonal (aka "Lite-Brite" mode) and highlighting options
          */
         this.fHexagonal = this.getDefaultBoolean('hexagonal', false);
         this.fHighlight = this.getDefaultBoolean('highlight', true);
 
-        /*
+        /**
          * Persistent LEDS are the default, except for LED.TYPE.DIGIT, which is used with calculator displays
          * whose underlying hardware must constantly "refresh" the LEDs to prevent them from going dark.
          */
@@ -6979,7 +7414,7 @@ class LED extends Device {
         container.appendChild(canvasView);
         this.contextView = /** @type {CanvasRenderingContext2D} */ (canvasView.getContext("2d"));
 
-        /*
+        /**
          * canvasGrid is where all LED segments are composited; then they're drawn onto canvasView.
          */
         this.canvasGrid = /** @type {HTMLCanvasElement} */ (document.createElement("canvas"));
@@ -6989,7 +7424,7 @@ class LED extends Device {
             this.contextGrid = this.canvasGrid.getContext("2d");
         }
 
-        /*
+        /**
          * Time to allocate our internal LED buffer.  Other devices access the buffer through interfaces
          * like setLEDState() and getLEDState().  The LED buffer contains four per elements per LED cell:
          *
@@ -7008,7 +7443,7 @@ class LED extends Device {
         this.bufferClone = null;
         this.nBufferIncExtra = (this.colsView < this.cols? (this.cols - this.colsView) * 4 : 0);
 
-        /*
+        /**
          * fBufferModified is straightforward: set to true by any setLEDState() call that actually
          * changed something in the LED buffer, set to false after every drawBuffer() call, periodic
          * or otherwise.
@@ -7024,14 +7459,14 @@ class LED extends Device {
         this.msLastDraw = 0;
         this.fDisplayOn = true;
 
-        /*
+        /**
          * nShiftedLeft is an optimization that tells drawGrid() when it can minimize the number of
          * individual cells to redraw, by shifting the entire grid image leftward and redrawing only
          * the rightmost cells.
          */
         this.nShiftedLeft = 0;
 
-        /*
+        /**
          * This records the location of the most recent LED buffer location updated via setLEDState(),
          * in case we want to highlight it.
          */
@@ -7155,7 +7590,7 @@ class LED extends Device {
             let xStart = this.widthCell * this.nShiftedLeft;
             let cxVisible = this.widthCell * colRedraw;
             this.contextGrid.drawImage(this.canvasGrid, xStart, 0, cxVisible, this.heightGrid, 0, 0, cxVisible, this.heightGrid);
-            /*
+            /**
              * At this point, the only grid drawing we might need to do now is the column at colRedraw,
              * but we still loop over the entire buffer to ensure all the cell MODIFIED states are in sync.
              */
@@ -7231,7 +7666,7 @@ class LED extends Device {
         let xDst = col * this.widthCell + xOffset;
         let yDst = row * this.heightCell;
 
-        /*
+        /**
          * If this is NOT a persistent LED display, then drawGrid() will have done a preliminary clearGrid(),
          * eliminating the need to clear individual cells.  Whereas if this IS a persistent LED display, then
          * we need to clear cells on an as-drawn basis.  If we don't, there could be residual "bleed over"
@@ -7248,7 +7683,7 @@ class LED extends Device {
             this.contextGrid.beginPath();
             this.contextGrid.arc(xDst + coords[0], yDst + coords[1], coords[2], 0, Math.PI * 2);
             if (fTransparent) {
-                /*
+                /**
                  * The following code works as well:
                  *
                  *      this.contextGrid.save();
@@ -7359,7 +7794,7 @@ class LED extends Device {
      */
     drawView()
     {
-        /*
+        /**
          * Setting the 'globalCompositeOperation' property of a 2D context is something you rarely need to do,
          * because the default draw behavior ("source-over") is fine for most cases.  One case where it is NOT
          * fine is when we're using a transparent background color, because it doesn't copy over any transparent
@@ -7638,7 +8073,7 @@ class LED extends Device {
         let buffer = state.shift();
         if (colorOn == this.colorOn && colorBackground == this.colorBackground && buffer && buffer.length == this.buffer.length) {
             this.buffer = buffer;
-            /*
+            /**
              * Loop over all the buffer colors to fix a legacy problem (ie, before we started storing null for colorTransparent)
              */
             for (let i = 0; i <= this.buffer.length - this.nBufferInc; i += this.nBufferInc) {
@@ -7854,7 +8289,7 @@ LED.STATE = {
     ON:         1
 };
 
-/*
+/**
  * NOTE: Although technically the MODIFIED flag is an internal flag, it may be set explicitly as well;
  * the ROM device uses the setLEDState() flags parameter to set it, in order to trigger highlighting of
  * the most recently active LED.
@@ -7879,7 +8314,7 @@ LED.SIZES = [
     [96, 128]           // LED.TYPE.DIGIT
 ];
 
-/*
+/**
  * The segments are arranged roughly as follows, in a 96x128 grid:
  *
  *      AAAA
@@ -7906,7 +8341,7 @@ LED.SEGMENTS = {
     'P':        [80, 102,  8]
 };
 
-/*
+/**
  * Segmented symbols are formed with the following segments.
  */
 LED.SYMBOL_SEGMENTS = {
@@ -7934,7 +8369,7 @@ LED.SYMBOL_SEGMENTS = {
 LED.CLASSES["LED"] = LED;
 
 /**
- * @copyright https://www.pcjs.org/modules/time.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/time.js (C) 2012-2021 Jeff Parsons
  */
 
 /** @typedef {{ id: string, callBack: function(), msAuto: number, nCyclesLeft: number }} */
@@ -8000,14 +8435,15 @@ class Time extends Device {
         this.nStepping = 0;
         this.idStepTimeout = this.idAnimationTimeout = 0;
 
-        /*
+        /**
          * I avoid hard-coding the use of requestAnimationFrame() and cancelAnimationFrame() so that
          * we can still use the older setTimeout() and clearTimeout() functions if need be (or want be).
          * However, I've done away with all the old code that used to calculate the optimal setTimeout()
          * delay; in either case, run() is simply called N frames/second, and it's up to calcSpeed() to
          * calculate the appropriate number of cycles to execute per "frame" (nCyclesDepositPerFrame).
          */
-        let sRequestAnimationTimeout = this.findProperty(window, 'requestAnimationFrame'), timeout;
+        let sRequestAnimationTimeout = this.findProperty(window, 'requestAnimationFrame');
+        let timeout;
         if (!sRequestAnimationTimeout) {
             sRequestAnimationTimeout = 'setTimeout';
             timeout = this.msFrameDefault;
@@ -8016,7 +8452,7 @@ class Time extends Device {
         let sCancelAnimationTimeout = this.findProperty(window, 'cancelAnimationFrame') || 'clearTimeout';
         this.cancelAnimationTimeout = window[sCancelAnimationTimeout].bind(window);
 
-        /*
+        /**
          * Assorted bookkeeping variables.  A running machine actually performs one long series of "runs"
          * (aka animation frames), each followed by a yield back to the browser.  And each "run" consists of
          * one or more "bursts"; the size and number of "bursts" depends on how often the machine's timers
@@ -8027,7 +8463,7 @@ class Time extends Device {
         this.nCyclesBurst = 0;          // number of cycles requested for the next "burst"
         this.nCyclesRemain = 0;         // number of cycles remaining in the next "burst"
 
-        /*
+        /**
          * Now that clocking is driven exclusively by animation frames, calcSpeed() calculates how many
          * cycles each animation frame should "deposit" in our cycle bank:
          *
@@ -8043,7 +8479,7 @@ class Time extends Device {
          */
         this.nCyclesDeposited = this.nCyclesDepositPerFrame = 0;
 
-        /*
+        /**
          * Reset speed to the base multiplier and perform an initial calcSpeed().
          */
         this.resetSpeed();
@@ -8193,7 +8629,7 @@ class Time extends Device {
             this.printf(Device.MESSAGE.TIME, "calcSpeed(%d cycles, %5.3fms): %5.3fMhz\n", nCycles, msElapsed, mhz);
             if (msFrame > this.msFrameDefault) {
                 if (this.nTargetMultiplier > 1) {
-                    /*
+                    /**
                      * Alternatively, we could call setSpeed(this.nTargetMultiplier >> 1) at this point, but the
                      * advantages of quietly reduing the target multiplier here are: 1) it will still slow us down,
                      * and 2) allow the next attempt to increase speed via setSpeed() to detect that we didn't
@@ -8202,7 +8638,7 @@ class Time extends Device {
                     this.nTargetMultiplier >>= 1;
                     this.printf(Device.MESSAGE.WARN, "warning: frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
                 }
-                /*
+                /**
                  * If we (potentially) took too long on this last run, we pass that time back as an adjustment,
                  * which runStop() can add to msStartThisRun, thereby reducing the likelihood that the next runStart()
                  * will (potentially) misinterpret the excessive time as browser throttling.
@@ -8212,7 +8648,7 @@ class Time extends Device {
         }
         this.mhzCurrent = mhz;
         this.nCurrentMultiplier = mhz / this.mhzBase;
-        /*
+        /**
          * If we're running twice as fast as the base speed (say, 4Mhz instead of 2Mhz), then the current multiplier
          * will be 2; similarly, if we're running at half the base speed (say, 1Mhz instead of 2Mhz), the current
          * multiplier will be 0.5.  And if all we needed to do was converge on the base speed, we would simply divide
@@ -8509,7 +8945,7 @@ class Time extends Device {
     onPower(on)
     {
         this.fPowered = on;
-        /*
+        /**
          * This is also a good time to get access to the Debugger, if any, and add our dump extensions.
          */
         if (this.dbg === undefined) {
@@ -8641,7 +9077,7 @@ class Time extends Device {
         try {
             this.fYield = false;
             do {
-                /*
+                /**
                  * Execute a normal burst and then update all timers.
                  */
                 this.notifyTimers(this.endBurst(this.doBurst(this.getCyclesPerRun())));
@@ -8662,7 +9098,7 @@ class Time extends Device {
     runStart(t)
     {
         let msStartThisRun = Date.now();
-        /*
+        /**
          * If there was no interruption between the last run and this run (ie, msEndRun wasn't zeroed by
          * intervening setSpeed() or stop()/start() calls), and there was an unusual delay between the two
          * runs, then we assume that "browser throttling" is occurring due to visibility or redraw issues
@@ -8673,7 +9109,7 @@ class Time extends Device {
          * so we must try to estimate and incorporate that delay into our overall run time.
          */
         if (this.msEndRun) {
-            /*
+            /**
              * In a perfect world, the difference between the start of this run and the start of the last run
              * (which is still in this.msStartThisRun since we haven't updated it yet) would be msFrameDefault;
              * if it's more than twice that, we assume the browser is either throttling us or is simply too
@@ -8720,7 +9156,7 @@ class Time extends Device {
     setSpeed(nMultiplier)
     {
         if (nMultiplier !== undefined) {
-            /*
+            /**
              * If the multiplier is invalid, or we haven't reached 90% of the current target speed,
              * revert to the base multiplier.
              */
@@ -8750,7 +9186,7 @@ class Time extends Device {
      */
     setSpeedThrottle()
     {
-        /*
+        /**
          * We're not going to assume any direct relationship between the slider's min/max/value
          * and our own nCyclesMinimum/nCyclesMaximum/nCyclesPerSecond.  We're just going to calculate
          * a new target nCyclesPerSecond that is proportional, and then convert that to a speed multiplier.
@@ -8786,7 +9222,7 @@ class Time extends Device {
             let timer = this.aTimers[iTimer-1];
             if (fReset || timer.nCyclesLeft < 0) {
                 nCycles = this.getCyclesPerMS(ms);
-                /*
+                /**
                  * If we're currently executing a burst of cycles, the number of cycles executed in the burst
                  * so far must NOT be charged against the cycle timeout we're about to set.  The simplest way to
                  * resolve that is to immediately call endBurst() and bias the cycle timeout by the number of
@@ -8834,7 +9270,7 @@ class Time extends Device {
                 this.nStepping = nRepeat;
             }
             if (this.nStepping) {
-                /*
+                /**
                  * Execute a minimum-cycle burst and then update all timers.
                  */
                 this.nStepping--;
@@ -8960,16 +9396,21 @@ Time.BINDING = {
 Time.CLASSES["Time"] = Time;
 
 /**
- * @copyright https://www.pcjs.org/modules/cpu.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/cpu.js (C) 2012-2021 Jeff Parsons
  */
+
+/** @typedef {{ addrReset: number }} */
+let CPUConfig;
 
 /**
  * @class {CPU}
  * @unrestricted
  * @property {Time} time
  * @property {Debugger} dbg
+ * @property {number} addrReset
  * @property {number} nCyclesStart
  * @property {number} nCyclesRemain
+ * @property {number} nCyclesSnapped
  * @property {number} regPC
  * @property {number} regPCLast
  */
@@ -8980,21 +9421,21 @@ class CPU extends Device {
      * @this {CPU}
      * @param {string} idMachine
      * @param {string} idDevice
-     * @param {Config} [config]
+     * @property {CPUConfig} config
      */
     constructor(idMachine, idDevice, config)
     {
         config['class'] = "CPU";
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * If a Debugger is loaded, it will call connectDebugger().  Having access to the Debugger
          * allows our toString() function to include the instruction, via toInstruction(), and conversely,
          * the Debugger will enjoy access to all our defined register names.
          */
         this.dbg = undefined;
 
-        /*
+        /**
          * regPC is the CPU's program counter, which all CPUs are required to have.
          *
          * regPCLast is an internal register that snapshots the PC at the start of every instruction;
@@ -9002,15 +9443,16 @@ class CPU extends Device {
          * diagnostic/debugging purposes.
          */
         this.regPC = this.regPCLast = 0;
+        this.addrReset = this.config['addrReset'] || 0;
 
-        /*
+        /**
          * Get access to the Time device, so we can give it our clock and update functions.
          */
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.time.addClock(this);
         this.time.addUpdate(this);
 
-        /*
+        /**
          * nCyclesStart and nCyclesRemain are initialized on every startClock() invocation.
          * The number of cycles executed during the current burst is nCyclesStart - nCyclesRemain,
          * and the burst is complete when nCyclesRemain has been exhausted (ie, is <= 0).
@@ -9108,7 +9550,7 @@ class CPU extends Device {
 // CPU.CLASSES["CPU"] = CPU;
 
 /**
- * @copyright https://www.pcjs.org/modules/ledctrl.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/ledctrl.js (C) 2012-2021 Jeff Parsons
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), wrap: (boolean|undefined), font: (string|undefined), rule: (string|undefined), pattern: (string|undefined), patterns: (Object|undefined), message: (string|undefined), toggleColor: (boolean|undefined), colors: (Object|undefined) }} */
@@ -9148,7 +9590,7 @@ class LEDCtrl extends CPU {
     {
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * These are grid "behavior" properties.  If 'wrap' is true, then any off-grid neighbor cell
          * locations are mapped to the opposite edge; otherwise, they are mapped to the LED "scratch" row.
          */
@@ -9159,32 +9601,32 @@ class LEDCtrl extends CPU {
         this.sPattern = this.getDefaultString('pattern', "");
         this.setMessage(this.sMessageInit = this.getDefaultString('message', ""));
 
-        /*
+        /**
          * The 'toggleColor' property currently affects only grids that have a color palette: if true,
          * then only an LED's color is toggled; otherwise, only its state (ie, ON or OFF) is toggled.
          */
         this.fToggleColor = this.getDefaultBoolean('toggleColor', false);
 
-        /*
+        /**
          * Since all bindings should have been completed by super(), we can make a preliminary call
          * to getCounts() to determine how many counts are stored per LED, to preallocate a count buffer.
          */
         this.countBuffer = new Array(this.getCounts().length);
 
-        /*
+        /**
          * Get access to the LED device, so we can update its display.
          */
         let leds = /** @type {LED} */ (this.findDeviceByClass("LED", false));
         if (leds) {
             this.leds = leds;
 
-            /*
+            /**
              * If loadPattern() didn't load anything into the LED array, then call
              * clearBuffer(true), which performs a combination of clearBuffer() and drawBuffer().
              */
             if (!this.loadPattern()) leds.clearBuffer(true);
 
-            /*
+            /**
              * Get access to the Input device, so we can propagate its properties as needed.
              */
             this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
@@ -9209,7 +9651,7 @@ class LEDCtrl extends CPU {
             this.updateColorSwatches();
             this.updateBackgroundImage(this.config[LEDCtrl.BINDING.IMAGE_SELECTION]);
 
-            /*
+            /**
              * Establish an onCommand() handler.
              */
             this.addHandler(LED.HANDLER.COMMAND, this.onCommand.bind(this));
@@ -9291,7 +9733,7 @@ class LEDCtrl extends CPU {
                 };
                 break;
             }
-            /*
+            /**
              * This code allows you to bind a specific control (ie, a button) to a specific pattern;
              * however, it's preferable to use the PATTERN_SELECTION binding above, and use a single list.
              */
@@ -9421,7 +9863,7 @@ class LEDCtrl extends CPU {
         let bufferClone = leds.getBufferClone();
         let nCols = leds.colsView;
         let nRows = leds.rows;
-        /*
+        /**
          * The number of LED buffer elements per cell is an LED implementation detail that should not be
          * assumed, so we obtain it from the LED object, and use it to calculate the per-cell increment,
          * per-row increment, and per-grid increment; the latter gives us the offset of the LED buffer's
@@ -9506,7 +9948,7 @@ class LEDCtrl extends CPU {
             }
         }
 
-        /*
+        /**
          * swapBuffers() takes care of setting the buffer-wide modified flags (leds.fBufferModified), so we don't have to.
          */
         leds.swapBuffers();
@@ -9531,7 +9973,7 @@ class LEDCtrl extends CPU {
             for (let col = 0; col < nCols; col++) {
                 if (!leds.getLEDCounts(col, row, counts)) continue;
                 cActive++;
-                /*
+                /**
                  * Here's the layout of each cell's counts (which mirrors the LEDCtrl.COUNTS layout):
                  *
                  *      [0] is the "working" count
@@ -9602,14 +10044,14 @@ class LEDCtrl extends CPU {
         let leds = this.leds;
         let nCols = leds.cols, nRows = leds.rows;
 
-        /*
+        /**
          * If nShiftedLeft is already set, we can't allow another shift until the display has been redrawn.
          */
         if (leds.nShiftedLeft) {
             return 0;
         }
 
-        /*
+        /**
          * The way the code is currently written, shifting more than two cells at a time creates gap issues.
          */
 
@@ -9720,7 +10162,7 @@ class LEDCtrl extends CPU {
                 let option = element.options[element.selectedIndex];
                 if (option) {
                     init = +option.value || 0;
-                    /*
+                    /**
                      * A more regular pattern results if we stick to a range of counts equal to the
                      * sum of the ON and OFF counts.  Let's get that sum now.  However, this assumes
                      * that the user is starting with an initial count of ZERO.  Also, we're only going
@@ -9762,7 +10204,7 @@ class LEDCtrl extends CPU {
         let iCol = -1, iRow = -1, width, height, rule, sPattern = "";
 
         if (!id) {
-            /*
+            /**
              * If no id is provided, then we fallback to sPattern, which can be either an
              * id (if it doesn't start with a digit) or one of our own extended pattern strings.
              */
@@ -9856,20 +10298,22 @@ class LEDCtrl extends CPU {
         let rgb = [0, 0, 0, 1], counts = 0;
         let fColors = false, fCounts = false;
 
-        /*
+        /**
          * TODO: Cache these pattern splits.
          */
         let aTokens = sPattern.split(/([a-z$])/i);
 
         if (!fOverwrite) leds.clearBuffer();
 
-        /*
+        /**
          * We could add checks that verify that col and row stay within the bounds of the specified
          * width and height of the pattern, but it's possible that there are some legit patterns out
          * there that didn't get their bounds quite right.  And in any case, no harm can come of it,
          * because setLEDState() will ignore any parameters outside the LED's array bounds.
          */
-        let i = 0, iCol = col, colMax = 0;
+        let i = 0;
+        let iCol = col;
+        let colMax = 0;
         while (i < aTokens.length - 1) {
             let n = aTokens[i++];
             let token = aTokens[i++];
@@ -10351,11 +10795,13 @@ class LEDCtrl extends CPU {
             }
         };
 
-        /*
+        /**
          * Before we begin, see if either fMinWidth or fMinHeight are set, requiring a bounds prescan.
          */
-        let colMin = 0, colMax = leds.cols - 1;
-        let rowMin = 0, rowMax = leds.rows - 1;
+        let colMin = 0;
+        let colMax = leds.cols - 1;
+        let rowMin = 0;
+        let rowMax = leds.rows - 1;
         if (fMinWidth || fMinHeight) {
             if (fMinWidth) {
                 colMin = colMax; colMax = 0;
@@ -10384,7 +10830,7 @@ class LEDCtrl extends CPU {
             if (nRows < 0) nRows = 0;
         }
 
-        /*
+        /**
          * Begin pattern generation.
          */
         for (let row = rowMin; row <= rowMax; row++) {
@@ -10397,7 +10843,7 @@ class LEDCtrl extends CPU {
             flushRun(true);
         }
 
-        /*
+        /**
          * Remove all '$' at the beginning of the pattern, if we've asked for the minimum height (or no minimums at all)
          */
         if (fMinHeight || !fMinWidth) {
@@ -10407,7 +10853,7 @@ class LEDCtrl extends CPU {
             }
         }
 
-        /*
+        /**
          * Similarly, remove all '$$' at the end of the pattern.
          */
         while (sPattern.slice(-2) == '$$') {
@@ -10416,7 +10862,7 @@ class LEDCtrl extends CPU {
         }
         if (sPattern == '$') nRows = 0;
 
-        /*
+        /**
          * If we've asked for either the minimum width or height, then don't bother including starting col and row (which
          * we only want for patterns used to save/restore the state of the entire grid).
          */
@@ -10582,7 +11028,7 @@ class LEDCtrl extends CPU {
     updateColorSwatches(binding)
     {
         let i = 1, elementSwatch;
-        /*
+        /**
          * Some machines use a single swatch called COLOR_SWATCH_SELECTED; update as appropriate.
          */
         if (!binding) {
@@ -10593,7 +11039,7 @@ class LEDCtrl extends CPU {
                 }
             }
         }
-        /*
+        /**
          * Other machines use a series of swatches named COLOR_SWATCH + "1", COLOR_SWATCH + "2", etc;
          * for each color in colorPalette, update the next available swatch.
          */
@@ -10614,7 +11060,7 @@ class LEDCtrl extends CPU {
                 elementSwatch.style.backgroundColor = color;
             }
         }
-        /*
+        /**
          * Finally, for any remaining swatches in the series (ie, because the current palette doesn't need
          * them all), hide them.
          */
@@ -10678,7 +11124,7 @@ LEDCtrl.MESSAGE_CMD = {
     ON:         "on"
 };
 
-/*
+/**
  * The symbol `$` is used as a prefix to embed "command codes" in an LED message.  Current command codes include:
  *
  *      $b (blank the display; turns all LEDs off)
@@ -10717,7 +11163,7 @@ LEDCtrl.RULES = {
     LIFE1:      "B3/S23"    // Game of Life v1.0 (births require 3 neighbors, survivors require 2 or 3)
 };
 
-/*
+/**
  * Symbols can be formed with the following grid patterns.
  */
 LEDCtrl.FONTS = {
@@ -10853,7 +11299,7 @@ LEDCtrl.FONTS = {
 LEDCtrl.CLASSES["LEDCtrl"] = LEDCtrl;
 
 /**
- * @copyright https://www.pcjs.org/modules/machine.js (C) 2012-2020 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/machine.js (C) 2012-2021 Jeff Parsons
  */
 
 /**
@@ -10967,7 +11413,7 @@ class Machine extends Device {
         this.fPageLoaded = false;
         this.setReady(false);
 
-        /*
+        /**
          * You can pass "m" commands to the machine via the "commands" parameter to turn on any desired
          * message groups, but since the Debugger is responsible for parsing those commands, and since the
          * Debugger is usually not initialized until last, messages from any earlier constructor calls will
@@ -10996,7 +11442,7 @@ class Machine extends Device {
             });
         }
 
-        /*
+        /**
          * Device initialization is now deferred until after the page is fully loaded, for the benefit
          * of devices (eg, Input) that may be dependent on page resources.
          *
@@ -11124,7 +11570,7 @@ class Machine extends Device {
             this.deviceConfigs = JSON.parse(sConfig);
             let config = this.deviceConfigs[this.idMachine];
             if (!config) {
-                /*
+                /**
                  * Pages that want to instantiate multiple machines using identical configs would normally
                  * have to create unique config files for each machine, even though the only difference between
                  * the configs would be the machine ID.  To reduce that redundancy, we'll try to identify the
@@ -11142,14 +11588,14 @@ class Machine extends Device {
             this.fAutoSave = (this.config['autoSave'] !== false);
             this.fAutoStart = (this.config['autoStart'] !== false);
             if (this.sParms) {
-                /*
+                /**
                  * Historically, my web servers have not been consistent about quoting property names inside
                  * the optional parameters object, so we must use eval() instead of JSON.parse() to parse them.
-                 * Of couse, the REAL problem is that JSON.parse() is being a dick about otherwise perfectly
+                 * Of course, the REAL problem is that JSON.parse() is being a dick about otherwise perfectly
                  * legitimate Object syntax, but I shall not repeat my long list of gripes about JSON here.
                  */
                 let parms = /** @type {Object} */ (eval("(" + this.sParms + ")"));
-                /*
+                /**
                  * Slam all these parameters into the machine's config, overriding any matching machine configuration
                  * properties.  Any other devices that need access to these properties should use getMachineConfig().
                  */
@@ -11181,14 +11627,14 @@ class Machine extends Device {
             if (on) this.println("power on");
             this.enumDevices(function onDevicePower(device) {
                 if (device.onPower && device != machine) {
-                    if (device.config['class'] != "CPU" || machine.fAutoStart || machine.isReady()) {
+                    if (device.config['class'] != "CPU" || machine.fAutoStart && machine.isReady()) {
                         device.onPower(on);
                     } else {
-                        /*
-                        * If we're not going to start the CPU on the first power notification, then we should
-                        * we fake a transition to the "stopped" state, so that the Debugger will display the current
-                        * machine state.
-                        */
+                        /**
+                         * If we're not going to start the CPU on the first power notification, then we should
+                         * we fake a transition to the "stopped" state, so that the Debugger will display the current
+                         * machine state.
+                         */
                         device.time.update(true);
                     }
                 }
@@ -11244,7 +11690,7 @@ Machine.BINDING = {
     RESET:      "reset",
 };
 
-/*
+/**
  * Create the designated machine FACTORY function (this should suffice for all compiled versions).
  *
  * In addition, expose the machine's COMMAND handler interface, so that it's easy to access any of the

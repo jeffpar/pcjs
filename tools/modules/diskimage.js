@@ -1,7 +1,7 @@
 /**
  * @fileoverview Command-line interface to disk image processing module
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -618,7 +618,7 @@ function processDisk(di, diskFile, argv, diskette)
                     "compaq": [sDefaultCOMPAQModel, "portable","deskpro386"]
                 }[manufacturer]);
                 let video = findOption(["*","mda","cga","ega","vga","vdu"]);
-                let configFile = hardware.config || findConfig("/configs/pcx86/machine/" + manufacturer + '/' + model + '/' + video + "/**/machine.xml");
+                let configFile = hardware.config || findConfig("/machines/pcx86/" + manufacturer + '/' + model + '/' + video + "/**/machine.xml");
                 if (configFile == "none") configFile = "";
                 if (configFile) {
                     let bootDisk = findOption(["", "DOS"]);
@@ -735,7 +735,7 @@ function readAll(argv)
 {
     let family = "pcx86";
     let cConfigs = 0, cDisks = 0;
-    let asFiles = glob.sync(path.join(rootDir, "/configs/" + family + "/*.json"));
+    let asFiles = glob.sync(path.join(rootDir, "/machines/" + family + "/*.json"));
 
     let messages;
     if (argv['quiet']) {

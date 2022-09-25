@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rom id="romBIOS" addr="0xfc000" size="0x4000" file="/machines/pcx86/olivetti/m24/rom/BIOS-143.json5"/>

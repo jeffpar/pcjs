@@ -1,7 +1,7 @@
 /**
  * @fileoverview Debugger Services
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -73,7 +73,7 @@ export default class Debugger extends Device {
         config['class'] = "Debugger";
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * Default radix (base).  This is used by our own functions (eg, parseExpression()),
          * but not by those we inherited (eg, parseInt()), which still use base 10 by default;
          * however, you can always coerce values to any base in any of those functions with
@@ -81,24 +81,24 @@ export default class Debugger extends Device {
          */
         this.nDefaultRadix = this.config['defaultRadix'] || 16;
 
-        /*
+        /**
          * Default endian (0 = little, 1 = big).
          */
         this.nDefaultEndian = 0;                // TODO: Use it or lose it
 
-        /*
+        /**
          * Default maximum instruction (opcode) length, overridden by the CPU-specific debugger.
          */
         this.maxOpcodeLength = 1;
 
-        /*
-         * Default parsing parameters, subexpression and address delimiters.
+        /**
+         * Default parsing parameters, sub-expression and address delimiters.
          */
         this.nASCIIBits = 8;                    // change to 7 for MACRO-10 compatibility
         this.achGroup = ['(',')'];
         this.achAddress = ['[',']'];
 
-        /*
+        /**
          * Add a new format type ('a') that understands Address objects, where width represents
          * the size of the address in bits, and uses the Debugger's default radix.
          *
@@ -120,7 +120,7 @@ export default class Debugger extends Device {
             (type, flags, width, precision, address) => this.toBase(address.off, this.nDefaultRadix, width)
         );
 
-        /*
+        /**
          * Add a new format type ('n') for numbers, where width represents the size of the value in bits,
          * and uses the Debugger's default radix.
          */
@@ -136,7 +136,7 @@ export default class Debugger extends Device {
             (type, flags, width, precision, value) => this.toBase(value, this.nDefaultRadix, width, flags.indexOf('#') < 0? "" : undefined)
         );
 
-        /*
+        /**
          * This controls how we stop the CPU on a break condition.  If fExceptionOnBreak is true, we'll
          * throw an exception, which the CPU will catch and halt; however, the downside of that approach
          * is that, in some cases, it may leave the CPU in an inconsistent state.  It's generally safer to
@@ -145,18 +145,18 @@ export default class Debugger extends Device {
          */
         this.fExceptionOnBreak = false;
 
-        /*
-         * If greater than zero, decremented on every instruction until it hits zero, then CPU is stoppped.
+        /**
+         * If greater than zero, decremented on every instruction until it hits zero, then CPU is stopped.
          */
         this.counterBreak = 0;
 
-        /*
+        /**
          * If set to MESSAGE.ALL, then we break on all messages.  It can be set to a subset of message bits,
          * but there is currently no UI for that.
          */
         this.messagesBreak = Device.MESSAGE.NONE;
 
-        /*
+        /**
          * variables is an object with properties that grow as setVariable() assigns more variables;
          * each property corresponds to one variable, where the property name is the variable name (ie,
          * a string beginning with a non-digit, followed by zero or more symbol characters and/or digits)
@@ -172,25 +172,25 @@ export default class Debugger extends Device {
          */
         this.variables = {};
 
-        /*
+        /**
          * Arrays of Symbol objects, one sorted by name and the other sorted by value; see addSymbols().
          */
         this.symbolsByName = [];
         this.symbolsByValue = [];
 
-        /*
+        /**
          * Get access to the CPU, so that in part so we can connect to all its registers; the Debugger has
          * no registers of its own, so we simply replace our registers with the CPU's.
          */
         this.cpu = /** @type {CPU} */ (this.findDeviceByClass("CPU"));
         this.registers = this.cpu.connectDebugger(this);
 
-        /*
+        /**
          * Get access to the Input device, so that we can switch focus whenever we start the machine.
          */
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
 
-        /*
+        /**
          * Get access to the Bus devices, so we have access to the I/O and memory address spaces.
          * To minimize configuration redundancy, we rely on the CPU's configuration to get the Bus device IDs.
          */
@@ -209,7 +209,7 @@ export default class Debugger extends Device {
         this.nDefaultBits = this.busMemory.addrWidth;
         this.addrMask = (Math.pow(2, this.nDefaultBits) - 1)|0;
 
-        /*
+        /**
          * Since we want to be able to clear/disable/enable/list break addresses by index number, we maintain
          * an array (aBreakIndexes) that maps index numbers to address array entries.  The mapping values are
          * a combination of BREAKTYPE (high byte) and break address entry (low byte).
@@ -235,14 +235,14 @@ export default class Debugger extends Device {
         this.tempBreak = null;                  // temporary auto-cleared break address managed by setTemp() and clearTemp()
         this.cInstructions = 0;                 // instruction counter (updated only if history is enabled)
 
-        /*
+        /**
          * Get access to the Time device, so we can stop and start time as needed.
          */
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.time.addUpdate(this);
         this.cTransitions = 0;
 
-        /*
+        /**
          * Initialize additional properties required for our onCommand() handler, including
          * support for dump extensions (which we use ourselves to implement the "d state" command).
          */
@@ -746,7 +746,7 @@ export default class Debugger extends Device {
      */
     evalAND(dst, src)
     {
-        /*
+        /**
          * We AND the low 32 bits separately from the higher bits, and then combine them with addition.
          * Since all bits above 32 will be zero, and since 0 AND 0 is 0, no special masking for the higher
          * bits is required.
@@ -758,7 +758,7 @@ export default class Debugger extends Device {
         if (this.nDefaultBits <= 32) {
             return dst & src;
         }
-        /*
+        /**
          * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
          */
         dst = this.truncate(dst, 0, true);
@@ -796,7 +796,7 @@ export default class Debugger extends Device {
      */
     evalIOR(dst, src)
     {
-        /*
+        /**
          * We OR the low 32 bits separately from the higher bits, and then combine them with addition.
          * Since all bits above 32 will be zero, and since 0 OR 0 is 0, no special masking for the higher
          * bits is required.
@@ -808,7 +808,7 @@ export default class Debugger extends Device {
         if (this.nDefaultBits <= 32) {
             return dst | src;
         }
-        /*
+        /**
          * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
          */
         dst = this.truncate(dst, 0, true);
@@ -830,7 +830,7 @@ export default class Debugger extends Device {
      */
     evalXOR(dst, src)
     {
-        /*
+        /**
          * We XOR the low 32 bits separately from the higher bits, and then combine them with addition.
          * Since all bits above 32 will be zero, and since 0 XOR 0 is 0, no special masking for the higher
          * bits is required.
@@ -842,7 +842,7 @@ export default class Debugger extends Device {
         if (this.nDefaultBits <= 32) {
             return dst ^ src;
         }
-        /*
+        /**
          * Negative values don't yield correct results when dividing, so pass them through an unsigned truncate().
          */
         dst = this.truncate(dst, 0, true);
@@ -952,14 +952,14 @@ export default class Debugger extends Device {
             case '_':
             case '^_':
                 valNew = val1;
-                /*
+                /**
                  * While we always try to avoid assuming any particular number of bits of precision, the 'B' shift
                  * operator (which we've converted to '^_') is unique to the MACRO-10 environment, which imposes the
                  * following restrictions on the shift count.
                  */
                 if (chOp == '^_') val2 = 35 - (val2 & 0xff);
                 if (val2) {
-                    /*
+                    /**
                      * Since binary shifting is a logical (not arithmetic) operation, and since shifting by division only
                      * works properly with positive numbers, we call truncate() to produce an unsigned value.
                      */
@@ -1041,7 +1041,7 @@ export default class Debugger extends Device {
                     sOp = (iValue < iLimit? asValues[iValue++] : "");
                 }
                 else {
-                    /*
+                    /**
                      * When parseExpression() calls us, it has collapsed all runs of whitespace into single spaces,
                      * and although it allows single spaces to divide the elements of the expression, a space is neither
                      * a unary nor binary operator.  It's essentially a no-op.  If we encounter it here, then it followed
@@ -1098,7 +1098,7 @@ export default class Debugger extends Device {
 
             aVals.push(this.truncate(v));
 
-            /*
+            /**
              * When parseExpression() calls us, it has collapsed all runs of whitespace into single spaces,
              * and although it allows single spaces to divide the elements of the expression, a space is neither
              * a unary nor binary operator.  It's essentially a no-op.  If we encounter it here, then it followed
@@ -1127,7 +1127,7 @@ export default class Debugger extends Device {
             }
             aOps.push(sOp);
 
-            /*
+            /**
              * The MACRO-10 binary shifting operator assumes a base-10 shift count, regardless of the current
              * base, so we must override the current base to ensure the count is parsed correctly.
              */
@@ -1225,7 +1225,7 @@ export default class Debugger extends Device {
     {
         let value;
         if (expr) {
-            /*
+            /**
              * The default delimiting characters for grouped expressions are braces; they can be changed by altering
              * achGroup, but when that happens, instead of changing our regular expressions and operator tables,
              * we simply replace all achGroup characters with braces in the given expression.
@@ -1239,19 +1239,19 @@ export default class Debugger extends Device {
                 expr = expr.split(this.achGroup[0]).join('{').split(this.achGroup[1]).join('}');
             }
 
-            /*
+            /**
              * Quoted ASCII characters can have a numeric value, too, which must be converted now, to avoid any
              * conflicts with the operators below.
              *
              * NOTE: MACRO-10 packs up to 5 7-bit ASCII codes from a double-quoted value, and up to 6 6-bit ASCII
-             * (SIXBIT) codes from a sinqle-quoted value.
+             * (SIXBIT) codes from a single-quoted value.
              */
             expr = this.parseASCII(expr, '"', this.nASCIIBits);
             if (!expr) return value;
             expr = this.parseASCII(expr, "'", 6);
             if (!expr) return value;
 
-            /*
+            /**
              * All browsers (including, I believe, IE9 and up) support the following idiosyncrasy of a RegExp split():
              * when the RegExp uses a capturing pattern, the resulting array will include entries for all the pattern
              * matches along with the non-matches.  This effectively means that, in the set of expressions that we
@@ -1356,7 +1356,7 @@ export default class Debugger extends Device {
                 if (value == undefined) {
                     value = this.getVariable(sValue);
                     if (value == undefined) {
-                        /*
+                        /**
                          * A feature of MACRO-10 is that any single-digit number is automatically interpreted as base-10.
                          */
                         value = this.parseInt(sValue, sValue.length > 1 || this.nDefaultRadix > 10? this.nDefaultRadix : 10);
@@ -1781,7 +1781,7 @@ export default class Debugger extends Device {
         if (n >= 0) this.counterBreak = n;
         result += "instruction break count: " + (this.counterBreak > 0? this.counterBreak : "disabled") + "\n";
         if (n > 0) {
-            /*
+            /**
              * It doesn't hurt to always call enableHistory(), but avoiding the call minimizes unnecessary messages.
              */
             if (!this.historyBuffer.length) result += this.enableHistory(true);
@@ -1967,7 +1967,7 @@ export default class Debugger extends Device {
     {
         message = this.sprintf(message, ...args);
         if (this.time.isRunning() && this.fExceptionOnBreak) {
-            /*
+            /**
              * We don't print the message in this case, because the CPU's exception handler already
              * does that; it has to be prepared for any kind of exception, not just those that we throw.
              */
@@ -2229,7 +2229,7 @@ export default class Debugger extends Device {
             this.stopCPU("break on message");
             return;
         }
-        /*
+        /**
          * This is an effort to help keep the browser responsive when lots of messages are being generated.
          */
         this.time.yield();
@@ -2272,7 +2272,7 @@ export default class Debugger extends Device {
             cmd = this.sDumpPrev || cmd;
         }
 
-        /*
+        /**
          * We refrain from reporting potentially undefined symbols until after we've checked for dump extensions.
          */
         if (cmd[0] != 's' && aUndefined.length) {
@@ -2405,7 +2405,7 @@ export default class Debugger extends Device {
         case 's':
             enable = this.parseBoolean(option);
             if (cmd[1] == 'h') {
-                /*
+                /**
                  * Don't let the user turn off history if any breaks (which may depend on history) are still set.
                  */
                 if (this.cBreaks || this.counterBreak > 0) {
@@ -2651,7 +2651,7 @@ Debugger.ADDRESS = {
     REAL:       0x00
 };
 
-/*
+/**
  * The required characteristics of these assigned values are as follows: all even values must be read
  * operations and all odd values must be write operations; all busMemory operations must come before all
  * busIO operations; and INPUT must be the first busIO operation.
@@ -2670,7 +2670,7 @@ Debugger.BREAKCMD = {
     [Debugger.BREAKTYPE.OUTPUT]:   "bo"
 };
 
-/*
+/**
  * Predefined "virtual registers" that we expect the CPU to support.
  */
 Debugger.REGISTER = {
@@ -2697,7 +2697,7 @@ Debugger.SYMBOL_TYPES = {
 
 Debugger.HISTORY_LIMIT = 100000;
 
-/*
+/**
  * These are our operator precedence tables.  Operators toward the bottom (with higher values) have
  * higher precedence.  BINOP_PRECEDENCE was our original table; we had to add DECOP_PRECEDENCE because
  * the precedence of operators in DEC's MACRO-10 expressions differ.  Having separate tables also allows

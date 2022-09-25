@@ -7,7 +7,7 @@ redirect_from: /devices/pcx86/video/ibm/cga/
 
 ### IBM CGA Character ROM
 
-There is only one known CGA Character ROM ([ibm-cga.json](ibm-cga.json)), and it is identical to the MDA Character ROM,
+There is only one known CGA Character ROM ([IBM-CGA](IBM-CGA.json5)), and it is identical to the MDA Character ROM,
 because the ROM contains both the 8x14 MDA and 8x8 CGA fonts.
 
 As documented in [video.js](/machines/pcx86/lib/video.js):

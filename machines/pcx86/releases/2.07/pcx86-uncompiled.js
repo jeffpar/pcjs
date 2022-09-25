@@ -9,7 +9,7 @@
  */
 var APPVERSION = "2.07";                // this @define is overridden by the Closure Compiler with the version in machines.json
 
-var COPYRIGHT = "Copyright © 2012-2021 Jeff Parsons <Jeff@pcjs.org>";
+var COPYRIGHT = "Copyright © 2012-2022 Jeff Parsons <Jeff@pcjs.org>";
 
 var LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
 
@@ -1208,6 +1208,7 @@ class Str {
         let i = sFileName.lastIndexOf(".");
         if (i >= 0) {
             sExtension = sFileName.substr(i + 1).toLowerCase();
+            if (sExtension == "json5") sExtension = "json";
         }
         return sExtension;
     }
@@ -6292,7 +6293,7 @@ if (DEBUGGER) {
 }
 
 /*
- * DOS function reference (from https://sites.google.com/site/pcdosretro/dosfuncs)
+ * DOS function reference (from https://pcdosretro.github.io/dosfunc.txt)
  *
  *      INT 20 Program terminate (1.0+)
  *      Entry: CS=PSP
@@ -7575,7 +7576,7 @@ if (DEBUGGER) {
  *      52 Cannot make directory entry
  *      53 Fail on INT 24
  *
- * DOS table and structure reference (from https://sites.google.com/site/pcdosretro/dostables)
+ * DOS table and structure reference (from https://pcdosretro.github.io/dosblks.txt)
  *
  *      Program Segment Prefix (100h bytes)
  *      00 INT 20
@@ -14395,9 +14396,9 @@ class CPUx86 extends CPULib {
             if (aBlocks[iBlock]) {
                 aBlocks[iBlock].addBreakpoint(addr & this.nBlockLimit, fWrite);
                 /*
-                * When a physical memory breakpoint is added, a fresh setPhysBlock() call is REQUIRED for any
-                * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
-                */
+                 * When a physical memory breakpoint is added, a fresh setPhysBlock() call is REQUIRED for any
+                 * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
+                 */
                 if (fPhysical) this.flushPageBlocks();
                 return true;
             }
@@ -69886,9 +69887,9 @@ HDC.aDriveTypes = [
      * aDriveTypes[0] is for the IBM PC XT (XTC) controller.
      */
     {
-         0: [306, 2],
-         1: [375, 8],
-         2: [306, 6],
+         0: [306, 2],           //  5Mb ( 5.08Mb: 306*2*17*512 or  5,326,848 bytes)
+         1: [375, 8],           // 25Mb (24.90Mb: 375*8*17*512 or 26,112,000 bytes)
+         2: [306, 6],           // 15Mb (15.24Mb: 306*6*17*512 or 15,980,544 bytes)
          3: [306, 4]            // 10Mb (10.16Mb: 306*4*17*512 or 10,653,696 bytes) (default XTC drive type: 3)
     },
     /*
@@ -70576,7 +70577,7 @@ class JSONLib {
                     for (let i = 0; i < media.length; i++) {
                         let item = media[i];
                         if (!item['@diskette']) continue;
-                        /*
+                        /**
                          * One advantage of the new JSON library manifest is that it gives us more information about the
                          * available diskettes before loading any of them.  For example, if the drives support only one head,
                          * we can avoid including any diskette whose '@format' is "PC320K", "PC360K", etc; and if the drives
@@ -70635,7 +70636,7 @@ class JSONLib {
                             'name': name,
                             'path': path
                         };
-                        /*
+                        /**
                          * The FDC calls us with drive limits, and all it cares about is the 'name' and 'path' of each diskette,
                          * so we use those two facts to limit what each diskette object returns.  Other callers, like the DiskImage
                          * utility, want ALL the diskette details.
@@ -70644,7 +70645,7 @@ class JSONLib {
                          * that may contain:
                          *
                          *      'url':      URL of the preferred machine to run the software (eg, "/machines/pcx86/ibm/5150/cga/")
-                         *      'config':   a specific configuration file (eg, "/configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml")
+                         *      'config':   a specific configuration file (eg, "/machines/pcx86/ibm/5170/vga/2048kb/machine.xml")
                          *      'drives':   one of more hard drive configs (eg, "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]")
                          *      'options':  assorted hardware options (eg, "mouse")
                          *      'autoType': if present, overrides any '@autoType' set for the software
@@ -82649,8 +82650,14 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                  * Third-party sites that don't use the PCjs server will ALWAYS want to specify a fully-qualified
                  * path to the XSL file, unless they choose to mirror our folder structure.
                  */
-                sXSLFile = "/configs/" + sAppClass + "/xsl/components.xsl";
+                sXSLFile = "/machines/" + sAppClass + "/xsl/components.xsl";
             }
+
+            /*
+             * If sAppClass specified a folder (eg, "osi/c1p"), that was required for the location of the XSL file,
+             * but now all we want is the final folder name (eg, "c1p") for any XSL "APPCLASS" variable replacement.
+             */
+            sAppClass = sAppClass.split('/').pop();
 
             let processXML = function(sURL, sXML, xml) {
                 if (!xml) {
@@ -82808,7 +82815,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("C1Pjs", "c1p", idMachine, sXMLFile, sXSLFile, undefined, sClass);
+    return embedMachine("C1Pjs", "osi/c1p", idMachine, sXMLFile, sXSLFile, undefined, sClass);
 }
 
 /**
@@ -82856,7 +82863,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PDPjs", "pdp10", idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PDPjs", "dec/pdp10", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**
@@ -82872,7 +82879,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PDPjs", "pdp11", idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PDPjs", "dec/pdp11", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**

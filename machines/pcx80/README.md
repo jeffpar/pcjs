@@ -1,9 +1,9 @@
 PCx80 is our 8080-based machine emulation module.  The code is derived from [PCx86]({{ site.github.pages }}/machines/pcx86/).
 
-See the list of available [PCx80 Machines](/machines/pcx80/configs/), which includes
+See the list of available [PCx80 Machines](/machines/pcx80/), which includes
 [Space Invaders (1978)](/machines/arcade/invaders/) and the [DEC VT100 Terminal](/machines/dec/vt100/).
 
-PCx80 is comprised of the following non-shared components, as listed in [machines.json](/configs/machines.json) (see the *pcx80.scripts* property):
+PCx80 is comprised of the following non-shared components, as listed in [machines.json](/machines/machines.json) (see the *pcx80.scripts* property):
 
   - [defines.js](/machines/pcx80/lib/defines.js)
   - [cpudef.js](/machines/pcx80/lib/cpudef.js)

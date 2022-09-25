@@ -1,7 +1,7 @@
 /**
  * @fileoverview Class with stdio-like functions
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -57,7 +57,7 @@ export default class StdIO extends NumIO {
     constructor()
     {
         super();
-        /*
+        /**
          * We populate the sprintf() formatters table with null functions for all the predefined (built-in) types,
          * so that type validation has only one look-up to perform.
          *
@@ -129,7 +129,7 @@ export default class StdIO extends NumIO {
         let i = sFileName.lastIndexOf('/');
         if (i >= 0) sBaseName = sFileName.substr(i + 1);
 
-        /*
+        /**
          * This next bit is a kludge to clean up names that are part of a URL that includes unsightly query parameters.
          * However, don't do that if fAllowAmp (which will be true, for example, when parsing 8.3 filenames in diskimage.js).
          */
@@ -190,7 +190,7 @@ export default class StdIO extends NumIO {
             if (s.indexOf(':') < 0) {
                 s += ' ' + (args[1] || "00:00:00 UTC");
             } else if (s.match(/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/)) {
-                /*
+                /**
                  * I don't care to support all the possible time zone specifiers just to determine whether or not
                  * a time zone was provided, so for now, I simply look for common date+time patterns I use, such as
                  * the "timestamp" pattern above.  TODO: Make this general-purpose someday.
@@ -288,7 +288,7 @@ export default class StdIO extends NumIO {
      */
     sprintf(format, ...args)
     {
-        /*
+        /**
          * This isn't just a nice optimization; it's also important if the caller is simply trying
          * to printf() a string that may also contain '%' and doesn't want or expect any formatting.
          */
@@ -305,7 +305,7 @@ export default class StdIO extends NumIO {
             buffer += aParts[iPart];
             let arg, type = aParts[iPart+5];
 
-            /*
+            /**
              * Check for unrecognized types immediately, so we don't inadvertently pop any arguments.
              */
             if (this.formatters[type] === undefined) {
@@ -338,7 +338,7 @@ export default class StdIO extends NumIO {
             let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L'; we also allow 'w' (instead of 'h') and 'b' (instead of 'hh')
             let ach = null, s, radix = 0, prefix = "";
 
-            /*
+            /**
              * The following non-standard sprintf() format types provide handy alternatives to the
              * PHP date() format types that we previously used with the old datelib.formatDate() function:
              *
@@ -384,7 +384,8 @@ export default class StdIO extends NumIO {
              *
              * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
              */
-            let ch, date = /** @type {Date} */ ("ACDFHGMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
+            let ch;
+            let date = /** @type {Date} */ ("ACDFHGMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
 
             switch(type) {
             case 'C':
@@ -457,14 +458,14 @@ export default class StdIO extends NumIO {
 
             switch(type) {
             case 'b':
-                /*
+                /**
                  * "%b" for boolean-like values is a non-standard format specifier that seems handy.
                  */
                 buffer += (arg? "true" : "false");
                 break;
 
             case 'd':
-                /*
+                /**
                  * I could use "arg |= 0", but there may be some value to supporting integers > 32 bits,
                  * so I use Math.trunc() instead.  Bit-wise operators also mask a lot of evils, by converting
                  * complete nonsense into zero, so while I'm ordinarily a fan, that's not desirable here.
@@ -485,7 +486,7 @@ export default class StdIO extends NumIO {
                  * is zero, since parseInt() happily stops parsing when it reaches the first non-radix 10 digit.
                  */
                 arg = Math.trunc(arg);
-                /*
+                /**
                  * Before falling into the decimal floating-point code, we take this opportunity to convert
                  * the precision value, if any, to the minimum number of digits to print.  Which basically means
                  * setting zeroPad to true, width to precision, and then unsetting precision.
@@ -522,7 +523,7 @@ export default class StdIO extends NumIO {
                 break;
 
             case 'j':
-                /*
+                /**
                  * 'j' is one of our non-standard extensions to the sprintf() interface; it signals that
                  * the caller is providing an Object that should be rendered as JSON.  If a width is included
                  * (eg, "%2j"), it's used as an indentation value; otherwise, no whitespace is added.
@@ -535,7 +536,7 @@ export default class StdIO extends NumIO {
                 /* falls through */
 
             case 's':
-                /*
+                /**
                  * 's' includes some non-standard benefits, such as coercing non-strings to strings first;
                  * we know undefined and null values don't have a toString() method, but hopefully everything
                  * else does.
@@ -573,7 +574,7 @@ export default class StdIO extends NumIO {
                 if (!radix) radix = 16;
                 if (!prefix && hash) prefix = "0x";
                 if (!ach) ach = StdIO.HexLowerCase;
-                /*
+                /**
                  * For all the same reasons articulated above (for type 'd'), we pass the arg through Math.trunc(),
                  * and we honor precision, if any, as the minimum number of digits to print.
                  */
@@ -584,7 +585,7 @@ export default class StdIO extends NumIO {
                     precision = -1;
                 }
                 if (zeroPad && !width) {
-                    /*
+                    /**
                      * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
                      */
                     if (length == 'b') {
@@ -662,13 +663,13 @@ export default class StdIO extends NumIO {
     }
 }
 
-/*
+/**
  * Global variables
  */
 StdIO.PrintBuffer = "";
 StdIO.PrintTime = null;
 
-/*
+/**
  * Global constants
  */
 StdIO.HexLowerCase = "0123456789abcdef";

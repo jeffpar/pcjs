@@ -2,7 +2,7 @@
 /**
  * @fileoverview Node command-line XML extraction tool
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -11,9 +11,9 @@
 "use strict";
 
 var fs = require("fs");
-var defines = require("../../shared/lib/defines");
-var Str = require("../../shared/lib/strlib");
-var Proc = require("../../shared/lib/proclib");
+var defines = require("../../../../machines/shared/lib/defines");
+var Str = require("../../../../machines/shared/lib/strlib");
+var Proc = require("../../../../machines/shared/lib/proclib");
 var args = Proc.getArgs();
 
 /**

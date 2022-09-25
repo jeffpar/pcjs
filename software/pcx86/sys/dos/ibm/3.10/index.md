@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/3.10/
 machines:
   - id: ibm5170-pcdos310
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/ega/640kb/rev1/machine.xml
+    config: /machines/pcx86/ibm/5170/ega/640kb/rev1/machine.xml
     resume: 1
     autoMount:
       A:
@@ -35,7 +35,7 @@ with 4 NOP (0x90) bytes as follows:
 
 Different websites (e.g.,
 [16BitOS](http://16bitos.com/310ibm.htm),
-[PC DOS Retro](https://sites.google.com/site/pcdosretro/disklistings#TOC-PCDOS310))
+[PC DOS Retro](https://pcdosretro.github.io/pcdos-disks.htm#PCDOS310))
 list different "authoritative" directory listings for PC DOS 3.10, which helps confirm that both variations of Disk 1
 are authentic (as opposed to someone's random changes) and that IBM quietly slipped in these last-minute changes during
 the first month of its release.  And "quietly" seems to be a fair assessment, since I've so far been unable to locate

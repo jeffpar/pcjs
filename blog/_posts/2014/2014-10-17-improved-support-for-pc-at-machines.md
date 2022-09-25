@@ -6,7 +6,7 @@ category: Releases
 permalink: /blog/2014/10/17/
 ---
 
-The [8Mhz IBM PC AT](/configs/pcx86/machine/ibm/5170/ega/1024kb/rev3/debugger/machine.xml) machine configuration
+The [8Mhz IBM PC AT](/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml) machine configuration
 now boots in [PCjs v1.15.5](https://github.com/jeffpar/pcjs/releases/tag/v1.15.5), which includes the following fixes:
 
 + The BIOS expects memory refresh to occur roughly every 16us, which I've resolved by tying the state

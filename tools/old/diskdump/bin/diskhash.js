@@ -2,7 +2,7 @@
 /**
  * @fileoverview Disk image hashing tool
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -14,8 +14,8 @@ var fs = require("fs");
 var path = require("path");
 var crypto = require('crypto');
 
-var Str = require("../../shared/lib/strlib");
-var Proc = require("../../shared/lib/proclib");
+var Str = require("../../../../machines/shared/lib/strlib");
+var Proc = require("../../../../machines/shared/lib/proclib");
 var args = Proc.getArgs();
 
 /**

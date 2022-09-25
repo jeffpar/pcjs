@@ -2,7 +2,7 @@
 /**
  * @fileoverview Implements the PCx86 command-line interface
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -29,7 +29,7 @@ if (argv['debug'] !== undefined) fDebug = argv['debug'];
 var lib = path.join(path.dirname(fs.realpathSync(__filename)), "../lib/");
 
 try {
-    var machines = require(lib + "../../../configs/machines.json");
+    var machines = require(lib + "../../../machines/machines.json");
     var scriptsPCx86 = /** @type {Array.<string>} */ (machines['pcx86'].scripts);
 } catch(err) {
     console.log(err.message);

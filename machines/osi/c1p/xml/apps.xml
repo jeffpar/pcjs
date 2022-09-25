@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serial id="serialPort" pos="left" padLeft="8px">
+	<control type="list" binding="listSerial">
+		<item ref="/software/osi/c1p/6502/jeffpar/assembler/ASSEMBLER-4K.json">6502 4K Assembler (JP)</item>
+		<item ref="/software/osi/c1p/6502/jeffpar/assembler/ASSEMBLER-8K.json">6502 8K Assembler (JP)</item>
+		<item ref="/software/osi/c1p/6502/jeffpar/basicext/BASICEXT.json">6502 BASIC Extensions (JP)</item>
+		<item ref="/software/osi/c1p/6502/jeffpar/life/LIFE.json">6502 Game of Life (JP)</item>
+		<item ref="/software/osi/c1p/6502/tests/bcd/bcd.json">6502 BCD Tests</item>
+		<item ref="/software/osi/c1p/6502/tests/vflag/vflag.json">6502 VFLAG Tests</item>
+		<item ref="/software/osi/c1p/basic/jeffpar/checkers/CHECKERS.BAS">CHECKERS (JP)</item>
+		<item ref="/software/osi/c1p/basic/jeffpar/hangwoman/HANGWOMAN.BAS">HANGWOMAN (JP)</item>
+		<item ref="/software/osi/c1p/basic/jeffpar/life/LIFE.BAS">LIFE (JP)</item>
+		<item ref="/software/osi/c1p/basic/jeffpar/othello/OTHELLO.BAS">OTHELLO (JP)</item>
+		<item ref="/software/osi/c1p/basic/jeffpar/soforecast/SOFORECAST.BAS">SOFORECAST (JP)</item>
+		<item ref="/software/osi/c1p/basic/jeffpar/tubelist/TUBELIST.BAS">TUBELIST (JP)</item>
+		<item ref="/software/osi/c1p/basic/osi/math/MATH.BAS">BASIC MATH</item>
+		<item ref="/software/osi/c1p/basic/osi/checking/CHECKING.BAS">CHECKING</item>
+		<item ref="/software/osi/c1p/basic/osi/counter/COUNTER.BAS">COUNTER</item>
+		<item ref="/software/osi/c1p/basic/osi/poker/POKER.BAS">POKER</item>
+		<item ref="/software/osi/c1p/basic/osi/presidents/PRESIDENTS.BAS">PRESIDENTS</item>
+		<item ref="/software/osi/c1p/basic/osi/starwars/STARWARS.BAS">STAR WARS</item>
+		<item ref="/software/osi/c1p/basic/osi/trigtutor/TRIGTUTOR.BAS">TRIG TUTOR</item>
+		<item ref="/software/osi/c1p/basic/other/osiweb/SPACEWAR.BAS">SPACEWAR</item>
+	</control>
+	<control type="button" binding="loadSerial">Load</control>
+	<control type="file" binding="mountSerial" style="padding-left:16px"/>
+</serial>

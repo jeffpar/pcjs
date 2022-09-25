@@ -6,7 +6,7 @@ redirect_from: /apps/pcx86/1983/adventmath/
 machines:
   - id: ibm5150-adventmath
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/cga/64kb/machine.xml
+    config: /machines/pcx86/ibm/5150/cga/64kb/machine.xml
     resume: 1
     autoMount:
       A:

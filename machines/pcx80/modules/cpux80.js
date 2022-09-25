@@ -1,14 +1,14 @@
 /**
  * @fileoverview Emulation of the 8080 CPU
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import CPU      from "../../lib/cpu.js";
-import Debugger from "../../lib/debugger.js";
+import CPU      from "../../modules/cpu.js";
+import Debugger from "../../modules/debugger.js";
 
 /**
  * Emulation of the 8080 CPU
@@ -32,18 +32,18 @@ export default class CPUx80 extends CPU {
     {
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * Initialize the CPU.
          */
         this.initCPU();
 
-        /*
+        /**
          * Get access to the Bus devices, so we have access to the I/O and memory address spaces.
          */
         this.busIO = /** @type {Bus} */ (this.findDevice(this.config['busIO']));
         this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['busMemory']));
 
-        /*
+        /**
          * Get access to the Input device, so we can call setFocus() as needed.
          */
         this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
@@ -62,7 +62,7 @@ export default class CPUx80 extends CPU {
      */
     execute(nCycles)
     {
-        /*
+        /**
          * If checkINTR() returns false, INTFLAG.HALT must be set, so no instructions should be executed.
          */
         if (!this.checkINTR()) return;
@@ -101,7 +101,7 @@ export default class CPUx80 extends CPU {
         this.defineRegister("HL", this.getHL, this.setHL);
         this.defineRegister(Debugger.REGISTER.PC, this.getPC, this.setPC);
 
-        /*
+        /**
          * This 256-entry array of opcode functions is at the heart of the CPU engine.
          *
          * It might be worth trying a switch() statement instead, to see how the performance compares,
@@ -1577,13 +1577,13 @@ export default class CPUx80 extends CPU {
     opHLT()
     {
         this.nCyclesRemain -= 7;
-        /*
+        /**
          * The CPU is never REALLY halted by a HLT instruction; instead, we call requestHALT(), which
          * which sets INTFLAG.HALT and then ends the current burst; the CPU should not execute any
          * more instructions until checkINTR() indicates that a hardware interrupt has been requested.
          */
         this.requestHALT();
-        /*
+        /**
          * If interrupts have been disabled, then the machine is dead in the water (there is no NMI
          * NMI generation mechanism for this CPU), so let's stop the CPU; similarly, if the HALT message
          * category is enabled, then the Debugger must want us to stop the CPU.
@@ -3152,19 +3152,19 @@ export default class CPUx80 extends CPU {
         this.setSP(0);
         this.setPC(this.addrReset);
 
-        /*
+        /**
          * regPCLast is an internal register that simply snapshots the PC at the start of every instruction;
          * this is useful not only for CPUs that need to support instruction restartability, but also for
          * diagnostic/debugging purposes.
          */
         this.regPCLast = this.regPC;
 
-        /*
+        /**
          * This resets the Processor Status flags (regPS), along with all the internal "result registers".
          */
         this.setPS(0);
 
-        /*
+        /**
          * intFlags contains some internal states we use to indicate whether a hardware interrupt (INTFLAG.INTR) or
          * Trap software interrupt (INTR.TRAP) has been requested, as well as when we're in a "HLT" state (INTFLAG.HALT)
          * that requires us to wait for a hardware interrupt (INTFLAG.INTR) before continuing execution.
@@ -3827,7 +3827,7 @@ export default class CPUx80 extends CPU {
      */
     checkINTR()
     {
-        /*
+        /**
          * If the Debugger is single-stepping, isRunning() will be false, which we take advantage
          * of here to avoid processing interrupts.  The Debugger will have to issue a "g" command
          * to resume normal interrupt processing.
@@ -3845,7 +3845,7 @@ export default class CPUx80 extends CPU {
             }
         }
         if (this.intFlags & CPUx80.INTFLAG.HALT) {
-            /*
+            /**
              * As discussed in opHLT(), the CPU is never REALLY halted by a HLT instruction; instead, opHLT()
              * calls requestHALT(), which sets INTFLAG.HALT and then ends the current burst; the CPU should not
              * execute any more instructions until checkINTR() indicates a hardware interrupt has been requested.
@@ -3932,18 +3932,18 @@ export default class CPUx80 extends CPU {
     }
 }
 
-/*
+/**
  * CPU model numbers (supported); future supported models could include the Z80.
  */
 CPUx80.MODEL_8080 = 8080;
 
-/*
+/**
  * This constant is used to mark points in the code where the physical address being returned
  * is invalid and should not be used.
  */
 CPUx80.ADDR_INVALID = undefined;
 
-/*
+/**
  * Processor Status flag definitions (stored in regPS)
  */
 CPUx80.PS = {
@@ -3960,19 +3960,19 @@ CPUx80.PS = {
     IF:     0x0200      // bit 9: Interrupt Flag (set if interrupts enabled; Intel calls this the INTE bit)
 };
 
-/*
+/**
  * These are the internal PS bits (outside of PS.MASK) that getPS() and setPS() can get and set,
  * but which cannot be seen with any of the documented instructions.
  */
 CPUx80.PS.INTERNAL = CPUx80.PS.IF;
 
-/*
+/**
  * PS "arithmetic" flags are NOT stored in regPS; they are maintained across separate result registers,
  * hence the RESULT designation.
  */
 CPUx80.PS.RESULT   = CPUx80.PS.CF | CPUx80.PS.PF | CPUx80.PS.AF | CPUx80.PS.ZF | CPUx80.PS.SF;
 
-/*
+/**
  * These are the "always set" PS bits for the 8080.
  */
 CPUx80.PS.SET      = CPUx80.PS.BIT1;
@@ -3996,7 +3996,7 @@ CPUx80.PARITY = [          // 256-byte array with a 1 wherever the number of set
     1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1
 ];
 
-/*
+/**
  * Interrupt-related flags (stored in intFlags)
  */
 CPUx80.INTFLAG = {
@@ -4005,7 +4005,7 @@ CPUx80.INTFLAG = {
     HALT:   0x0100      // halt requested; see opHLT()
 };
 
-/*
+/**
  * Opcode definitions
  */
 CPUx80.OPCODE = {

@@ -7,7 +7,7 @@ machines:
   - id: ibm5150
     type: pcx86
     debugger: true
-    config: /configs/pcx86/machine/ibm/5150/cga/64kb/debugger/machine.json
+    config: /machines/pcx86/ibm/5150/cga/64kb/debugger/machine.json
     autoMount:
       A:
         name: PC DOS 1.00

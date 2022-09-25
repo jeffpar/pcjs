@@ -7,7 +7,7 @@ redirect_from: /disks/pcx86/apps/ibm/exploring/5150/mda/
 machines:
   - id: ibm5150
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/mda/256kb/machine.xml
+    config: /machines/pcx86/ibm/5150/mda/256kb/machine.xml
     autoGen: true
     autoMount:
       A: "Exploring the IBM PC (MDA)"

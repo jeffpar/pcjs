@@ -7,7 +7,7 @@ preview: images/screenshot1.jpg
 machines:
   - id: deskpro386
     type: pcx86
-    config: /configs/pcx86/machine/compaq/deskpro386/vga/2048kb/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/vga/2048kb/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:1,path:"/harddisks/pcx86/10mb/COMPAQ331-WOLF3D.json"}]'
     floppyDrives: '[{boot:false},{boot:false}]'
     autoMount:

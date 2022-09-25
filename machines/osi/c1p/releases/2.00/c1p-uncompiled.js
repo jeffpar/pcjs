@@ -9,7 +9,7 @@
  */
 var APPVERSION = "2.00";                // this @define is overridden by the Closure Compiler with the version in machines.json
 
-var COPYRIGHT = "Copyright © 2012-2021 Jeff Parsons <Jeff@pcjs.org>";
+var COPYRIGHT = "Copyright © 2012-2022 Jeff Parsons <Jeff@pcjs.org>";
 
 var LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
 
@@ -620,6 +620,7 @@ class Str {
         let i = sFileName.lastIndexOf(".");
         if (i >= 0) {
             sExtension = sFileName.substr(i + 1).toLowerCase();
+            if (sExtension == "json5") sExtension = "json";
         }
         return sExtension;
     }
@@ -10623,37 +10624,37 @@ class C1PSerialPort extends Component {
     {
         if (this.sInput) {
             /*
-            * QUESTION: Is this setFocus() call strictly necessary?  We're being called in the
-            * context of getResource(), not some user action.  If there was an original user action,
-            * then the handler for THAT action should take care to switch focus back, not us.
-            */
+             * QUESTION: Is this setFocus() call strictly necessary?  We're being called in the
+             * context of getResource(), not some user action.  If there was an original user action,
+             * then the handler for THAT action should take care to switch focus back, not us.
+             */
             this.cpu.setFocus();
             /*
-            * We interpret the presence of a "." at the beginning of the file as a "65V Monitor"
-            * address-mode command, and consequently treat the file as 6502 HEX command file.
-            *
-            * Anything else is treated as commands for the BASIC interpreter, which we re-initialize
-            * with "NEW" and "LOAD" commands.  To prevent that behavior, halt the CPU, perform the load,
-            * and then start it running again.  BASIC will start reading the data as soon as you type
-            * LOAD.
-            */
+             * We interpret the presence of a "." at the beginning of the file as a "65V Monitor"
+             * address-mode command, and consequently treat the file as 6502 HEX command file.
+             *
+             * Anything else is treated as commands for the BASIC interpreter, which we re-initialize
+             * with "NEW" and "LOAD" commands.  To prevent that behavior, halt the CPU, perform the load,
+             * and then start it running again.  BASIC will start reading the data as soon as you type
+             * LOAD.
+             */
             if (this.sInput.charAt(0) != '.') {
                 this.autoLoad = C1PSerialPort.AUTOLOAD_BASIC;
                 this.kbd.injectKeys("NEW\nLOAD\n");
             }
             else {
                 /*
-                * Set autoLoad to AUTOLOAD_6502 before the reset, so that when our reset() method is called,
-                * we'll take care to preserve all the data we just loaded.
-                */
+                 * Set autoLoad to AUTOLOAD_6502 before the reset, so that when our reset() method is called,
+                 * we'll take care to preserve all the data we just loaded.
+                 */
                 this.autoLoad = C1PSerialPort.AUTOLOAD_6502;
                 /*
-                * Although the Keyboard allows us to inject any key, even the BREAK key, like so:
-                *
-                *      this.kbd.injectKeys(String.fromCharCode(this.kbd.CHARCODE_BREAK))
-                *
-                * it's easier to initiate a reset() ourselves and then start the machine-language load process
-                */
+                 * Although the Keyboard allows us to inject any key, even the BREAK key, like so:
+                 *
+                 *      this.kbd.injectKeys(String.fromCharCode(this.kbd.CHARCODE_BREAK))
+                 *
+                 * it's easier to initiate a reset() ourselves and then start the machine-language load process
+                 */
                 if (fReset) this.cmp.reset(true);
                 this.kbd.injectKeys("ML");
             }
@@ -15001,8 +15002,14 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                  * Third-party sites that don't use the PCjs server will ALWAYS want to specify a fully-qualified
                  * path to the XSL file, unless they choose to mirror our folder structure.
                  */
-                sXSLFile = "/configs/" + sAppClass + "/xsl/components.xsl";
+                sXSLFile = "/machines/" + sAppClass + "/xsl/components.xsl";
             }
+
+            /*
+             * If sAppClass specified a folder (eg, "osi/c1p"), that was required for the location of the XSL file,
+             * but now all we want is the final folder name (eg, "c1p") for any XSL "APPCLASS" variable replacement.
+             */
+            sAppClass = sAppClass.split('/').pop();
 
             let processXML = function(sURL, sXML, xml) {
                 if (!xml) {
@@ -15160,7 +15167,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("C1Pjs", "c1p", idMachine, sXMLFile, sXSLFile, undefined, sClass);
+    return embedMachine("C1Pjs", "osi/c1p", idMachine, sXMLFile, sXSLFile, undefined, sClass);
 }
 
 /**
@@ -15208,7 +15215,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PDPjs", "pdp10", idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PDPjs", "dec/pdp10", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**
@@ -15224,7 +15231,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PDPjs", "pdp11", idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PDPjs", "dec/pdp11", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**

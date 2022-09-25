@@ -10,7 +10,7 @@ redirect_from:
 ### 8080 Firmware (8Kb)
 
 The DEC VT100 Terminal used four 2Kb ROMs to store all the firmware used by the 8080 processor.
-The combined contents of those ROMs have been stored as an 8Kb JSON image in [VT100.json](VT100.json).
+The combined contents of those ROMs have been stored as an 8Kb JSON image in [VT100](VT100.json5).
 
 As Trammell Hudson's [VT100 Page](https://trmm.net/VT100) explains:
 
@@ -42,12 +42,12 @@ produces a perfect match for Trammell Hudson's [VT100.bin](http://trmm.net/image
 
 ### Character Generator (2Kb)
 
-The VT100 also used one 2Kb character generator ROM, which is stored in [23-018E2.json](23-018E2.json).
+The VT100 also used one 2Kb character generator ROM, which is stored in [23-018E2](23-018E2.json5).
 The ROM contains 128 rows of character data, 16 bytes per character.  Only 10 of each of the 16 bytes are used.
 
 To understand the format of the character data, let's take a look at the data for the letter "A", which has an ASCII code
 of 65 (0x41).  That means the data for "A" should start at offset 0x41 * 0x10, or 0x410.  Here's the corresponding line from
-[23-018E2.json](23-018E2.json):
+[23-018E2](23-018E2.json5):
 
 	0x10,0x28,0x44,0x82,0xFE,0x82,0x82,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, // 0x00000410 .(D.............
 
@@ -133,14 +133,14 @@ Finally, I verified that reassembling [VT100.asm](VT100.asm) with [asm8080](http
 original VT100.bin; after adding the correct number of `nop` instructions to the end to the source file, the binaries matched.
 
 The other advantage of reassembling the code is that the resulting [VT100.txt](VT100.txt) makes it easy to export comments
-and other symbolic information to [VT100.map](VT100.map), which can then be included in the [VT100.json](VT100.json) ROM dump
+and other symbolic information to [VT100.map](VT100.map), which can then be included in the [VT100](VT100.json5) ROM dump
 and passed on to the PCx80 Debugger.  Here are the rebuild steps:
 
 	asm8080 -lVT100.txt VT100.asm
 	grep -E "[0-9]+ [0-9A-D]+.*;;" VT100.txt | sed -E "s/ *[0-9]+ ([0-9A-F]+).*;(;.*)/     \1   .   \2/" > VT100.map
-	filedump --file=VT100.bin --format=bytes --output=VT100.json --comments --overwrite
+	filedump --file=VT100.bin --format=bytes --output=VT100.json5 --comments --overwrite
 
-You can omit `--comments` from the filedump command to reduce the size of the [VT100.json](VT100.json) file.
+You can omit `--comments` from the filedump command to reduce the size of the [VT100](VT100.json5) file.
 
 Some [VT100.asm](VT100.asm) clean-up remains, because there are still chunks of data that were incorrectly disassembled as code.
 From a reassembly standpoint, it doesn't matter too much, because all the 8080 instructions unambiguously reassemble into their

@@ -7,26 +7,24 @@ machines:
   - id: ibm5160-msdos320
     type: pcx86
     debugger: true
-    config: /configs/pcx86/machine/ibm/5160/ega/640kb/debugger/machine.xml
+    config: /machines/pcx86/ibm/5160/ega/640kb/debugger/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'
     autoMount:
       A:
         name: None
       B:
-        name: IBM PC XT BIOS Sources (V1)
+        name: IBM PC XT BIOS Source (V1)
     autoStart: true
 ---
 
-PCjs has created and archived a collection IBM PC XT ROM BIOS diskettes.  Their contents are thanks to the
-[PC DOS Retro](https://sites.google.com/site/pcdosretro/) website.  [Directory Listings](#directory-of-ibm-pc-xt-bios-sources-v1)
-and [Version Notes](#5160v1-notes-from-pc-dos-retro) are provided below.
+PCjs has created and archived a collection IBM PC XT ROM BIOS diskettes.  Their contents are thanks to the [PC DOS Retro](https://pcdosretro.github.io) website.  [Directory Listings](#directory-of-ibm-pc-xt-bios-source-v1) and [Version Notes](#5160v1-notes-from-pc-dos-retro) are provided below.
 
 {% include machine.html id="ibm5160-msdos320" %}
 
-### Directory of IBM PC XT BIOS Sources (V1)
+### Directory of IBM PC XT BIOS Source (V1)
 
-     Volume in drive A is 5160V1
-     Directory of A:\
+     Volume in drive B is 5160V1
+     Directory of B:\
 
     5160V1   TXT       980   3-27-20   3:00p
     README   TXT      3460   3-27-20   3:00p
@@ -35,10 +33,10 @@ and [Version Notes](#5160v1-notes-from-pc-dos-retro) are provided below.
             4 file(s)     197556 bytes
                           122880 bytes free
 
-### Directory of IBM PC XT BIOS Sources (V2)
+### Directory of IBM PC XT BIOS Source (V2)
 
-     Volume in drive A is 5160V2
-     Directory of A:\
+     Volume in drive B is 5160V2
+     Directory of B:\
 
     5160V2   TXT       542   3-27-20   3:00p
     BIOS1    ASM      9426   3-27-20   3:00p
@@ -59,10 +57,10 @@ and [Version Notes](#5160v1-notes-from-pc-dos-retro) are provided below.
            16 file(s)     328219 bytes
                            24576 bytes free
 
-### Directory of IBM PC XT BIOS Sources (V3)
+### Directory of IBM PC XT BIOS Source (V3)
 
-     Volume in drive A is 5160V3
-     Directory of A:\
+     Volume in drive B is 5160V3
+     Directory of B:\
 
     5160V3   TXT       563   3-27-20   3:00p
     BIOS1    ASM      9426   3-27-20   3:00p

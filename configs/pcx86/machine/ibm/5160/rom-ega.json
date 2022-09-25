@@ -1,9 +1,0 @@
-{
-  "id": "romEGA",
-  "class": "rom",
-  "addr": "0xc0000",
-  "size": "0x04000",
-  "alias": null,
-  "notify": "videoEGA",
-  "file": "/machines/pcx86/ibm/video/ega/IBM-EGA.json"
-}

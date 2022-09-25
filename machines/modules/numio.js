@@ -1,7 +1,7 @@
 /**
  * @fileoverview Class with number processing functions
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -161,13 +161,14 @@ export default class NumIO extends Defs {
                 chSuffix = '000000000';
             }
             if (ch != chSuffix) s = s.slice(0, -1) + chSuffix;
-            /*
+            /**
              * This adds support for the MACRO-10 binary shifting (Bn) suffix, which must be stripped from the
              * number before parsing, and then applied to the value after parsing.  If n is omitted, 35 is assumed,
              * which is a net shift of zero.  If n < 35, then a left shift of (35 - n) is required; if n > 35, then
              * a right shift of -(35 - n) is required.
              */
-            let v, shift = 0;
+            let v;
+            let shift = 0;
             if (base <= 10) {
                 let match = s.match(/(-?[0-9]+)B([0-9]*)$/);
                 if (match) {
@@ -176,13 +177,13 @@ export default class NumIO extends Defs {
                 }
             }
             if (this.isInt(s, base) && !isNaN(v = parseInt(s, base))) {
-                /*
+                /**
                  * With the need to support larger (eg, 36-bit) integers, truncating to 32 bits is no longer helpful.
                  *
                  *      value = v|0;
                  */
                 if (shift) {
-                    /*
+                    /**
                      * Since binary shifting is a logical operation, and since shifting by division only works properly
                      * with positive numbers, we must convert a negative value to a positive value, by computing the two's
                      * complement.
@@ -240,7 +241,7 @@ export default class NumIO extends Defs {
                 let a, ib, data;
 
                 if (sData.substr(0, 1) == "<") {    // if the "data" begins with a "<"...
-                    /*
+                    /**
                      * Early server configs reported an error (via the nErrorCode parameter) if a tape URL was invalid,
                      * but more recent server configs now display a somewhat friendlier HTML error page.  The downside,
                      * however, is that the original error has been buried, and we've received "data" that isn't actually
@@ -249,7 +250,7 @@ export default class NumIO extends Defs {
                     throw new Error(sData);
                 }
 
-                /*
+                /**
                  * TODO: IE9 is rather unfriendly and restrictive with regard to how much data it's willing to
                  * eval().  In particular, the 10Mb disk image we use for the Windows 1.01 demo config fails in
                  * IE9 with an "Out of memory" exception.  One work-around would be to chop the data into chunks
@@ -295,7 +296,7 @@ export default class NumIO extends Defs {
                     resource.aBytes = a;
                 }
                 else if ((a = data['words'])) {
-                    /*
+                    /**
                      * Convert all words into bytes
                      */
                     resource.aBytes = new Array(a.length * 2);
@@ -306,7 +307,7 @@ export default class NumIO extends Defs {
                     }
                 }
                 else if ((a = data['longs'])) {
-                    /*
+                    /**
                      * Convert all dwords (longs) into bytes
                      */
                     resource.aBytes = new Array(a.length * 4);
@@ -342,7 +343,7 @@ export default class NumIO extends Defs {
             }
         }
         else {
-            /*
+            /**
              * Parse the data manually; we assume it's a series of hex byte-values separated by whitespace.
              */
             let ab = [];
@@ -377,7 +378,7 @@ export default class NumIO extends Defs {
         if (!sws) {
             switches = switchesDefault;
         } else {
-            /*
+            /**
              * NOTE: It's not convenient to use parseInt() with a base of 2, in part because both bit order
              * and bit sense are reversed, but also because we use this function to parse switch masks, which
              * contain non-digits.  See the "switches" defined in invaders.json for examples.
@@ -416,7 +417,7 @@ export default class NumIO extends Defs {
      */
     toBase(n, base, bits = 0, prefix = undefined, nGrouping = 0)
     {
-        /*
+        /**
          * We can't rely entirely on isNaN(), because isNaN(null) returns false, and we can't rely
          * entirely on typeof either, because typeof NaN returns "number".  Sigh.
          *
@@ -424,7 +425,9 @@ export default class NumIO extends Defs {
          * since JavaScript coerces such operands to zero, but I think there's "value" in seeing those
          * values displayed differently.
          */
-        let s = "", suffix = "", cch = -1;
+        let s = "";
+        let suffix = "";
+        let cch = -1;
         if (!base) base = this.nDefaultRadix || 10;
         if (bits) cch = Math.ceil(bits / Math.log2(base));
         if (prefix == undefined) {
@@ -447,14 +450,14 @@ export default class NumIO extends Defs {
             n = undefined;
             prefix = suffix = "";
         } else {
-            /*
+            /**
              * Callers that produced an input by dividing by a power of two rather than shifting (in order
              * to access more than 32 bits) may produce a fractional result, which ordinarily we would simply
              * ignore, but if the integer portion is zero and the sign is negative, we should probably treat
              * this value as a sign-extension.
              */
             if (n < 0 && n > -1) n = -1;
-            /*
+            /**
              * Negative values should be twos-complemented to produce a positive value for conversion purposes,
              * but we can only do that if/when we're given the number of bits; Math.pow(base, cch) is equivalent
              * to Math.pow(2, bits), but less precise for bases that aren't a power of two (eg, base 10).
@@ -596,7 +599,7 @@ export default class NumIO extends Defs {
     }
 }
 
-/*
+/**
  * Assorted constants
  */
 NumIO.TWO_POW32 = Math.pow(2, 32);

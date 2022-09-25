@@ -6,7 +6,7 @@ redirect_from: /devices/pcx86/machine/5160/mda/256kb/
 machines:
   - id: ibm-5160-mda
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5160/mda/256kb/machine.json
+    config: /machines/pcx86/ibm/5160/mda/256kb/machine.json
     debugger: available
     autoType: $date\r$time\r
 ---
@@ -17,7 +17,7 @@ machines:
 
 Other IBM PC XT machines with a Monochrome Display Adapter (MDA) include:
 
-- [IBM PC XT, 256Kb RAM, 10Mb Hard Disk (Unformatted)](/configs/pcx86/machine/ibm/5160/mda/256kb/machine.xml)
+- [IBM PC XT, 256Kb RAM, 10Mb Hard Disk (Unformatted)](/machines/pcx86/ibm/5160/mda/256kb/machine.xml)
 
 To initialize the hard disk, use the `FDISK` command to create a DOS partition, restart the machine, and then run `FORMAT C:`.
 

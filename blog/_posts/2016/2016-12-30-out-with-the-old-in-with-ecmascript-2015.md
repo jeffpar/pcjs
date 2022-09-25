@@ -142,7 +142,7 @@ appropriate.
 
 Last but not least, does the new ES6 code really work in Node, too?  Happily, it does.  To test, I wrote
 a small JavaScript shell app, [pdp11]({{ site.github.pages }}/machines/dec/pdp11/bin/pdp11), which reads a machine XML file
-(like [this one](/configs/pdp11/machine/1170/panel/debugger/machine.xml)), simulates the loading and initialization
+(like [this one](/machines/dec/pdp11/1170/panel/debugger/machine.xml)), simulates the loading and initialization
 process that a web browser would perform, and then connects *stdin* and *stdout* to the machine's serial port:
 
 Here's a sample run, from a macOS Terminal window:
@@ -161,7 +161,7 @@ Here's a sample run, from a macOS Terminal window:
 	Debugger object created: test1170.debugger
 	bus: 8Kb H/W at 17760000
 	PDPjs v1.x.x
-	Copyright © 2012-2021 Jeff Parsons <Jeff@pcjs.org>
+	Copyright © 2012-2016 Jeff Parsons <Jeff@pcjs.org>
 	License: MIT <https://www.pcjs.org/LICENSE.txt>
 	Portions adapted from the PDP-11/70 Emulator v1.4 by Paul Nankervis <paulnank@hotmail.com>
 	bus: 256Kb RAM at 000000

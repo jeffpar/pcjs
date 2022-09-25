@@ -1,0 +1,81 @@
+{
+  "lbDemo": {
+    "class": "Machine",
+    "type": "LED",
+    "name": "Lite-Brite Demo",
+    "version": 2.00,
+    "autoStart": true,
+    "bindings": {
+      "reset": "resetLB",
+      "clear": "clearLB",
+      "print": "printLB"
+    },
+    "overrides": ["autoStart"]
+  },
+  "lbClock": {
+    "class": "Time",
+    "cyclesPerSecond": 1,
+    "cyclesMinimum": 1,
+    "cyclesMaximum": 120,
+    "bindings": {
+      "run": "runLB",
+      "speed": "speedLB",
+      "step": "stepLB",
+      "throttle": "throttleLB"
+    },
+    "overrides": ["cyclesPerSecond","cyclesMinimum","cyclesMaximum"]
+  },
+  "lbDisplay": {
+    "class": "LED",
+    "type": 1,
+    "cols": 45,
+    "rows": 39,
+    "backgroundColor": "black",
+    "hexagonal": true,
+    "highlight": false,
+    "bindings": {
+      "container": "displayLB"
+    },
+    "overrides": ["color","backgroundColor"]
+  },
+  "lbInput": {
+    "class": "Input",
+    "drag": true
+  },
+  "lbCtrl": {
+    "class": "LEDCtrl",
+    "rule": "A4",
+    "toggleColor": true,
+    "bindings": {
+      "colorPalette": "colorPaletteLB",
+      "colorSelection": "colorSelectionLB",
+      "colorSwatch1": "colorSwatchLB1",
+      "colorSwatch2": "colorSwatchLB2",
+      "colorSwatch3": "colorSwatchLB3",
+      "colorSwatch4": "colorSwatchLB4",
+      "colorSwatch5": "colorSwatchLB5",
+      "colorSwatch6": "colorSwatchLB6",
+      "colorSwatch7": "colorSwatchLB7",
+      "colorSwatch8": "colorSwatchLB8",
+      "countInit": "countInit",
+      "countOn": "countOn",
+      "countOff": "countOff",
+      "countCycle": "countCycle",
+      "backgroundImage": "backgroundImage",
+      "saveToURL": "saveLB"
+    },
+    "colors": {
+      "Original": {
+        "Blue":   "#3067c1",
+        "Green":  "#2f9a27",
+        "Violet": "#9f3c92",
+        "Red":    "#ff0000",
+        "Orange": "#fa7d14",
+        "Pink":   "#ff1493",
+        "Yellow": "#fadc4e",
+        "White":  "#fffff9"
+      }
+    },
+    "overrides": ["blue","green","violet","red","orange","pink","yellow","white","wrap","backgroundImage","pattern"]
+  }
+}

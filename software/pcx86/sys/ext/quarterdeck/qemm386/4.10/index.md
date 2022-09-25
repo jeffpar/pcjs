@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/qemm386/4.10/
 machines:
   - id: deskpro386
     type: pcx86
-    config: /configs/pcx86/machine/compaq/deskpro386/cga/640kb/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/cga/640kb/machine.xml
     autoType: 
     autoGen: true
     autoMount:

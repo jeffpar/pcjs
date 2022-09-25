@@ -9,7 +9,7 @@
 {% assign doc_style = include.style | default: "center" %}
 {% assign doc_tag = include.tag | default: "" %}
 {%- assign docs_exist = false -%}
-{%- assign cur_path = "" -%}
+{%- assign cur_path = "" -%}{%- assign parent = "" %}
 {%- for part in path_parts -%}
   {%- if part == "" -%}{% continue %}{%- endif -%}
   {%- capture cur_path -%}{{ cur_path }}/{{ part }}{%- endcapture -%}
@@ -32,7 +32,8 @@
       {%- endfor -%}
     {%- else -%}
       {%- if data[part] -%}
-        {%- assign data = data[part] %}
+      {%- assign parent = part %}
+      {%- assign data = data[part] %}
         {%- if data['']['@type'] -%}
           {%- assign type = data['']['@type'] -%}
           {%- assign data = site.data[part][type] -%}
@@ -56,6 +57,9 @@
         {%- if data['@type'] -%}
           {%- assign type = data['@type'] -%}
           {%- assign data = site.data[part][type] -%}
+          {%- unless data %}
+            {%- assign data = site.data[parent][part][type] -%}
+          {%- endunless %}
         {%- endif -%}
       {%- endif -%}
       {%- unless data -%}{%- break -%}{%- endunless %}
@@ -67,11 +71,11 @@
     {%- if include.target == nil or cur_path == include.target %}
       {%- if docs -%}
         {%- if docs_exist == false and title != "None" -%}
-        {%- if include.target == nil -%}
-    <h3 id="{{ group_id }}">{%- if group_link -%}<a href="{{ group_link }}">{{ title }}</a>{%- else -%}{{ title }}{%- endif -%}</h3>
-        {%- else -%}
-    <h4 id="{{ group_id }}">{%- if group_link -%}<a href="{{ group_link }}">{{ title }}</a>{%- else -%}{{ title }}{%- endif -%}</h4>
-        {%- endif -%}
+          {%- if include.target == nil -%}
+  <h3 id="{{ group_id }}">{%- if group_link -%}<a href="{{ group_link }}">{{ title }}</a>{%- else -%}{{ title }}{%- endif -%}</h3>
+          {%- else -%}
+  <h4 id="{{ group_id }}">{%- if group_link -%}<a href="{{ group_link }}">{{ title }}</a>{%- else -%}{{ title }}{%- endif -%}</h4>
+          {%- endif -%}
         {%- endif -%}
         {%- assign doc_embed = "" -%}
         {%- assign docs_exist = true -%}

@@ -7,7 +7,7 @@ machines:
   - id: test1170
     type: pdp11
     debugger: true
-    config: /configs/pdp11/machine/1170/panel/debugger/machine.xml
+    config: /machines/dec/pdp11/1170/panel/debugger/machine.xml
     autoStart: true
     autoMount:
       RL0:
@@ -45,7 +45,7 @@ This machine is ready to boot [XXDP+ Diagnostics](/software/dec/pdp11/disks/rl02
 ### Instructions 
 
 We need to select a drive to load the [RL02K XXDP+ Diagnostics Disk](/software/dec/pdp11/disks/rl02k/xxdp/), and since it is
-an RL02K disk, we need to use an RL02 drive.  A typical PDP-11 machine with a single [RL11 Disk Controller](/configs/pdp11/rl11/)
+an RL02K disk, we need to use an RL02 drive.  A typical PDP-11 machine with a single [RL11 Disk Controller](/machines/dec/pdp11/rl11/)
 could contain up to four such drives, which we refer to as RL0 through RL3.  And since we want to boot the XXDP
 disk, we need to select drive RL0, since the boot code on the disk appears to assume drive 0. 
 

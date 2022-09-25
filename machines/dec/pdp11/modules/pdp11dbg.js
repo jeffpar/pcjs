@@ -1,13 +1,13 @@
 /**
  * @fileoverview Debugger for PDP-11 CPUs
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Debugger from "../../../lib/debugger.js";
+import Debugger from "../../../modules/debugger.js";
 
 /**
  * Debugger for PDP-11 CPUs
@@ -87,11 +87,13 @@ export default class PDP11Dbg extends Debugger {
          * @returns {string|Array.<string>}
          */
         let getOperand = (opcode, type) => {
-            /*
+            /**
              * Take care of OP_OTHER opcodes first; then all we'll have to worry about
              * next are OP_SRC or OP_DST opcodes.
              */
-            let sOperand = "", disp, addr;
+            let sOperand = "";
+            let disp;
+            let addr;
             let typeOther = type & PDP11Dbg.OP_OTHER;
             if (typeOther == PDP11Dbg.OP_BRANCH) {
                 disp = ((opcode & 0xff) << 24) >> 23;
@@ -116,12 +118,12 @@ export default class PDP11Dbg extends Debugger {
                 sOperand = this.toBase(disp, 0, 8, "");
             }
             else {
-                /*
+                /**
                  * Isolate all OP_SRC or OP_DST bits from opcode in the mode variable.
                  */
                 let mode = opcode & type;
 
-                /*
+                /**
                  * Convert OP_SRC bits into OP_DST bits, since they use the same format.
                  */
                 if (type & PDP11Dbg.OP_SRC) {
@@ -132,7 +134,7 @@ export default class PDP11Dbg extends Debugger {
                     let wIndex;
                     let sTarget = null;
                     let reg = mode & PDP11Dbg.OP_DSTREG;
-                    /*
+                    /**
                      * Note that opcodes that specify only REG bits in the type mask (ie, no MOD bits)
                      * will automatically default to OPMODE_REG below.
                      */
@@ -151,7 +153,7 @@ export default class PDP11Dbg extends Debugger {
                         if (reg < 7) {
                             sOperand = '(' + getRegName(reg) + ")+";
                         } else {
-                            /*
+                            /**
                              * When using R7 (aka PC), POST-INCREMENT is known as IMMEDIATE
                              */
                             wIndex = getNextWord();
@@ -163,7 +165,7 @@ export default class PDP11Dbg extends Debugger {
                         if (reg < 7) {
                             sOperand = "@(" + getRegName(reg) + ")+";
                         } else {
-                            /*
+                            /**
                              * When using R7 (aka PC), POST-INCREMENT DEFERRED is known as ABSOLUTE
                              */
                             wIndex = getNextWord();
@@ -184,7 +186,7 @@ export default class PDP11Dbg extends Debugger {
                         wIndex = getNextWord();
                         sOperand = toBaseWord(wIndex) + '(' + getRegName(reg) + ')';
                         if (reg == 7) {
-                            /*
+                            /**
                              * When using R7 (aka PC), INDEX is known as RELATIVE.  However, instead of displaying
                              * such an instruction like this:
                              *
@@ -207,7 +209,7 @@ export default class PDP11Dbg extends Debugger {
                         wIndex = getNextWord();
                         sOperand = '@' + toBaseWord(wIndex) + '(' + getRegName(reg) + ')';
                         if (reg == 7) {
-                            /*
+                            /**
                              * When using R7 (aka PC), INDEX DEFERRED is known as RELATIVE DEFERRED.  And for the same
                              * reasons articulated above, we now display the effective address inline.
                              *
@@ -289,7 +291,7 @@ export default class PDP11Dbg extends Debugger {
                 break;
             }
 
-            /*
+            /**
              * If getOperand() returns an Array rather than a string, then the first element is the original
              * operand, and the second element contains additional information (eg, the target) of the operand.
              */
@@ -314,7 +316,7 @@ export default class PDP11Dbg extends Debugger {
     }
 }
 
-/*
+/**
  * CPU opcode IDs
  *
  * Not listed: BLO (same as BCS) and BHIS (same as BCC).
@@ -335,7 +337,7 @@ PDP11Dbg.OPS = {
     SXT:    96,     TST:    97,     TSTB:   98,     WAIT:   99,     MUL:    100,    DIV:    101,    ASH:    102,    ASHC:   103,
     XOR:    104,    SOB:    105,    EMT:    106,    TRAP:   107,    SPL:    108,    IOT:    109,    RTT:    110,    MFPT:   111
 };
-/*
+/**
  * CPU opcode names, indexed by CPU opcode ordinal (above)
  */
 PDP11Dbg.OPNAMES = [
@@ -354,7 +356,7 @@ PDP11Dbg.OPNAMES = [
     "SXT",          "TST",          "TSTB",         "WAIT",         "MUL",          "DIV",          "ASH",          "ASHC",
     "XOR",          "SOB",          "EMT",          "TRAP",         "SPL",          "IOT",          "RTT",          "MFPT"
 ];
-/*
+/**
  * Register numbers 0-7 are reserved for cpu.regsGen, 8-15 are reserved for cpu.regsAlt, and 16-19 for cpu.regsAltStack.
  */
 PDP11Dbg.REG_PS        = 20;
@@ -391,7 +393,7 @@ PDP11Dbg.REGNAMES = [
     "AR", "DR", "SR"
 ];
 PDP11Dbg.MODES = ["KI","KD","SI","SD","??","??","UI","UD"];
-/*
+/**
  * Operand type masks; anything that's not covered by OP_SRC or OP_DST must be a OP_OTHER value.
  */
 PDP11Dbg.OP_DSTREG   = PDP11.OPREG.MASK;
@@ -406,7 +408,7 @@ PDP11Dbg.OP_DSTNUM3  = 0x3000;       // DST 3-bit number (ie, just the DSTREG fi
 PDP11Dbg.OP_DSTNUM6  = 0x6000;       // DST 6-bit number (ie, both the DSTREG and DSTMODE fields)
 PDP11Dbg.OP_DSTNUM8  = 0x8000;       // DST 8-bit number
 PDP11Dbg.OP_OTHER    = 0xF000;
-/*
+/**
  * The OPTABLE contains opcode masks, and each mask refers to table of possible values, and each
  * value refers to an array that contains:
  *
@@ -550,7 +552,7 @@ PDP11Dbg.OPTABLE = {
     }
 };
 PDP11Dbg.OPNONE = [PDP11Dbg.OPS.NONE];
-/*
+/**
  * Table of opcodes added to the 11/40 and newer
  */
 PDP11Dbg.OP1140 = [
@@ -566,7 +568,7 @@ PDP11Dbg.OP1140 = [
     PDP11Dbg.OPS.XOR,
     PDP11Dbg.OPS.SOB
 ];
-/*
+/**
  * Table of opcodes added to the 11/45 and newer
  */
 PDP11Dbg.OP1145 = [

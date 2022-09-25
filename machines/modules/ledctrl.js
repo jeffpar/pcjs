@@ -1,7 +1,7 @@
 /**
  * @fileoverview Simulates an LED Controller
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -64,7 +64,7 @@ export default class LEDCtrl extends CPU {
     {
         super(idMachine, idDevice, config);
 
-        /*
+        /**
          * These are grid "behavior" properties.  If 'wrap' is true, then any off-grid neighbor cell
          * locations are mapped to the opposite edge; otherwise, they are mapped to the LED "scratch" row.
          */
@@ -75,32 +75,32 @@ export default class LEDCtrl extends CPU {
         this.sPattern = this.getDefaultString('pattern', "");
         this.setMessage(this.sMessageInit = this.getDefaultString('message', ""));
 
-        /*
+        /**
          * The 'toggleColor' property currently affects only grids that have a color palette: if true,
          * then only an LED's color is toggled; otherwise, only its state (ie, ON or OFF) is toggled.
          */
         this.fToggleColor = this.getDefaultBoolean('toggleColor', false);
 
-        /*
+        /**
          * Since all bindings should have been completed by super(), we can make a preliminary call
          * to getCounts() to determine how many counts are stored per LED, to preallocate a count buffer.
          */
         this.countBuffer = new Array(this.getCounts().length);
 
-        /*
+        /**
          * Get access to the LED device, so we can update its display.
          */
         let leds = /** @type {LED} */ (this.findDeviceByClass("LED", false));
         if (leds) {
             this.leds = leds;
 
-            /*
+            /**
              * If loadPattern() didn't load anything into the LED array, then call
              * clearBuffer(true), which performs a combination of clearBuffer() and drawBuffer().
              */
             if (!this.loadPattern()) leds.clearBuffer(true);
 
-            /*
+            /**
              * Get access to the Input device, so we can propagate its properties as needed.
              */
             this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
@@ -125,7 +125,7 @@ export default class LEDCtrl extends CPU {
             this.updateColorSwatches();
             this.updateBackgroundImage(this.config[LEDCtrl.BINDING.IMAGE_SELECTION]);
 
-            /*
+            /**
              * Establish an onCommand() handler.
              */
             this.addHandler(LED.HANDLER.COMMAND, this.onCommand.bind(this));
@@ -207,7 +207,7 @@ export default class LEDCtrl extends CPU {
                 };
                 break;
             }
-            /*
+            /**
              * This code allows you to bind a specific control (ie, a button) to a specific pattern;
              * however, it's preferable to use the PATTERN_SELECTION binding above, and use a single list.
              */
@@ -337,7 +337,7 @@ export default class LEDCtrl extends CPU {
         let bufferClone = leds.getBufferClone();
         let nCols = leds.colsView;
         let nRows = leds.rows;
-        /*
+        /**
          * The number of LED buffer elements per cell is an LED implementation detail that should not be
          * assumed, so we obtain it from the LED object, and use it to calculate the per-cell increment,
          * per-row increment, and per-grid increment; the latter gives us the offset of the LED buffer's
@@ -422,7 +422,7 @@ export default class LEDCtrl extends CPU {
             }
         }
         this.assert(iCell == nIncPerGrid);
-        /*
+        /**
          * swapBuffers() takes care of setting the buffer-wide modified flags (leds.fBufferModified), so we don't have to.
          */
         leds.swapBuffers();
@@ -447,7 +447,7 @@ export default class LEDCtrl extends CPU {
             for (let col = 0; col < nCols; col++) {
                 if (!leds.getLEDCounts(col, row, counts)) continue;
                 cActive++;
-                /*
+                /**
                  * Here's the layout of each cell's counts (which mirrors the LEDCtrl.COUNTS layout):
                  *
                  *      [0] is the "working" count
@@ -518,14 +518,14 @@ export default class LEDCtrl extends CPU {
         let leds = this.leds;
         let nCols = leds.cols, nRows = leds.rows;
 
-        /*
+        /**
          * If nShiftedLeft is already set, we can't allow another shift until the display has been redrawn.
          */
         if (leds.nShiftedLeft) {
             return 0;
         }
 
-        /*
+        /**
          * The way the code is currently written, shifting more than two cells at a time creates gap issues.
          */
         this.assert(shift <= 2);
@@ -636,7 +636,7 @@ export default class LEDCtrl extends CPU {
                 let option = element.options[element.selectedIndex];
                 if (option) {
                     init = +option.value || 0;
-                    /*
+                    /**
                      * A more regular pattern results if we stick to a range of counts equal to the
                      * sum of the ON and OFF counts.  Let's get that sum now.  However, this assumes
                      * that the user is starting with an initial count of ZERO.  Also, we're only going
@@ -678,7 +678,7 @@ export default class LEDCtrl extends CPU {
         let iCol = -1, iRow = -1, width, height, rule, sPattern = "";
 
         if (!id) {
-            /*
+            /**
              * If no id is provided, then we fallback to sPattern, which can be either an
              * id (if it doesn't start with a digit) or one of our own extended pattern strings.
              */
@@ -772,20 +772,22 @@ export default class LEDCtrl extends CPU {
         let rgb = [0, 0, 0, 1], counts = 0;
         let fColors = false, fCounts = false;
 
-        /*
+        /**
          * TODO: Cache these pattern splits.
          */
         let aTokens = sPattern.split(/([a-z$])/i);
 
         if (!fOverwrite) leds.clearBuffer();
 
-        /*
+        /**
          * We could add checks that verify that col and row stay within the bounds of the specified
          * width and height of the pattern, but it's possible that there are some legit patterns out
          * there that didn't get their bounds quite right.  And in any case, no harm can come of it,
          * because setLEDState() will ignore any parameters outside the LED's array bounds.
          */
-        let i = 0, iCol = col, colMax = 0;
+        let i = 0;
+        let iCol = col;
+        let colMax = 0;
         while (i < aTokens.length - 1) {
             let n = aTokens[i++];
             let token = aTokens[i++];
@@ -1267,11 +1269,13 @@ export default class LEDCtrl extends CPU {
             }
         };
 
-        /*
+        /**
          * Before we begin, see if either fMinWidth or fMinHeight are set, requiring a bounds prescan.
          */
-        let colMin = 0, colMax = leds.cols - 1;
-        let rowMin = 0, rowMax = leds.rows - 1;
+        let colMin = 0;
+        let colMax = leds.cols - 1;
+        let rowMin = 0;
+        let rowMax = leds.rows - 1;
         if (fMinWidth || fMinHeight) {
             if (fMinWidth) {
                 colMin = colMax; colMax = 0;
@@ -1300,7 +1304,7 @@ export default class LEDCtrl extends CPU {
             if (nRows < 0) nRows = 0;
         }
 
-        /*
+        /**
          * Begin pattern generation.
          */
         for (let row = rowMin; row <= rowMax; row++) {
@@ -1313,7 +1317,7 @@ export default class LEDCtrl extends CPU {
             flushRun(true);
         }
 
-        /*
+        /**
          * Remove all '$' at the beginning of the pattern, if we've asked for the minimum height (or no minimums at all)
          */
         if (fMinHeight || !fMinWidth) {
@@ -1323,7 +1327,7 @@ export default class LEDCtrl extends CPU {
             }
         }
 
-        /*
+        /**
          * Similarly, remove all '$$' at the end of the pattern.
          */
         while (sPattern.slice(-2) == '$$') {
@@ -1332,7 +1336,7 @@ export default class LEDCtrl extends CPU {
         }
         if (sPattern == '$') nRows = 0;
 
-        /*
+        /**
          * If we've asked for either the minimum width or height, then don't bother including starting col and row (which
          * we only want for patterns used to save/restore the state of the entire grid).
          */
@@ -1498,7 +1502,7 @@ export default class LEDCtrl extends CPU {
     updateColorSwatches(binding)
     {
         let i = 1, elementSwatch;
-        /*
+        /**
          * Some machines use a single swatch called COLOR_SWATCH_SELECTED; update as appropriate.
          */
         if (!binding) {
@@ -1509,7 +1513,7 @@ export default class LEDCtrl extends CPU {
                 }
             }
         }
-        /*
+        /**
          * Other machines use a series of swatches named COLOR_SWATCH + "1", COLOR_SWATCH + "2", etc;
          * for each color in colorPalette, update the next available swatch.
          */
@@ -1530,7 +1534,7 @@ export default class LEDCtrl extends CPU {
                 elementSwatch.style.backgroundColor = color;
             }
         }
-        /*
+        /**
          * Finally, for any remaining swatches in the series (ie, because the current palette doesn't need
          * them all), hide them.
          */
@@ -1594,7 +1598,7 @@ LEDCtrl.MESSAGE_CMD = {
     ON:         "on"
 };
 
-/*
+/**
  * The symbol `$` is used as a prefix to embed "command codes" in an LED message.  Current command codes include:
  *
  *      $b (blank the display; turns all LEDs off)
@@ -1633,7 +1637,7 @@ LEDCtrl.RULES = {
     LIFE1:      "B3/S23"    // Game of Life v1.0 (births require 3 neighbors, survivors require 2 or 3)
 };
 
-/*
+/**
  * Symbols can be formed with the following grid patterns.
  */
 LEDCtrl.FONTS = {

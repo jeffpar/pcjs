@@ -7,7 +7,7 @@ machines:
   - id: ibm5160
     type: pcx86
     debugger: available
-    config: /configs/pcx86/machine/ibm/5160/cga/640kb/machine.xml
+    config: /machines/pcx86/ibm/5160/cga/640kb/machine.xml
     drives: '[{name:"QNX 1.2 (10Mb)",type:3,path:"/harddisks/pcx86/10mb/QNX12.json"}]'
     autoMount:
       A:

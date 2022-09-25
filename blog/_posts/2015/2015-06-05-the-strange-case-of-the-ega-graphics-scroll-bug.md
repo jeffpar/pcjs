@@ -7,7 +7,7 @@ permalink: /blog/2015/06/05/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/ega/640kb/rev1/testmon/machine.xml
+    config: /machines/pcx86/ibm/5170/ega/640kb/rev1/testmon/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:1,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'
     autoMount:
       A:
@@ -16,7 +16,7 @@ machines:
         name: None
 ---
 
-I was playing with different video modes using an [IBM PC AT w/EGA](/configs/pcx86/machine/ibm/5170/ega/640kb/rev1/machine.xml)
+I was playing with different video modes using an [IBM PC AT w/EGA](/machines/pcx86/ibm/5170/ega/640kb/rev1/machine.xml)
 and I discovered an odd problem.  NOTE: In the machine below, you can also switch control to the TestMonitor window using
 the "CTTY COM2" DOS command and then type the TestMonitor's "mode0e" command to replicate the SYMDEB sequence described below.
 

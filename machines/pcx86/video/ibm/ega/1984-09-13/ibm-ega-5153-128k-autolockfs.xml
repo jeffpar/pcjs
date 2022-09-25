@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<video id="videoEGA" model="ega" memory="0x20000" screenWidth="1280" screenHeight="800" switches="0001" touchScreen="mouse" autoLock="true" pos="center" padding="8px">
+	<menu>
+		<title>Color Display</title>
+		<control type="container" pos="right">
+			<control type="led" label="Caps" binding="caps-lock" padLeft="8px"/>
+			<control type="led" label="Num" binding="num-lock" padLeft="8px"/>
+			<control type="led" label="Scroll" binding="scroll-lock" padLeft="8px"/>
+			<control type="button" binding="fullScreen" padLeft="8px;line-height:1em">Full Screen</control>
+		</control>
+	</menu>
+	<rom id="romEGA" addr="0xc0000" size="0x4000" file="/machines/pcx86/ibm/video/ega/IBM-EGA.json5" notify="videoEGA"/>
+</video>

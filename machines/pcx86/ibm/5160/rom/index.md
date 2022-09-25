@@ -7,10 +7,10 @@ redirect_from: /devices/pcx86/rom/5160/
 
 IBM PC XT (Model 5160) BIOS ROMs include:
 
-- [Model 5160: Aug 16, 1982](bios/1982-08-16/XTBIOS-REV0.json) (included with [IBM BASIC C1.10](basic/BASIC110.json))
-- [Model 5160: Nov 08, 1982](bios/1982-11-08/XTBIOS-REV1.json) (included with [IBM BASIC C1.10](basic/BASIC110.json))
-- [Model 5160: Jan 10, 1986](bios/1986-01-10/XTBIOS-REV2.json) (includes [IBM BASIC C1.10](basic/BASIC110.json))
-- [Model 5160: May 09, 1986](bios/1986-05-09/XTBIOS-REV3.json) (includes [IBM BASIC C1.10](basic/BASIC110.json))
+- [Model 5160: Aug 16, 1982](bios/1982-08-16/XTBIOS-REV0.json5) (included with [IBM BASIC C1.10](basic/BASIC110.json5))
+- [Model 5160: Nov 08, 1982](bios/1982-11-08/XTBIOS-REV1.json5) (included with [IBM BASIC C1.10](basic/BASIC110.json5))
+- [Model 5160: Jan 10, 1986](bios/1986-01-10/XTBIOS-REV2.json5) (includes [IBM BASIC C1.10](basic/BASIC110.json5))
+- [Model 5160: May 09, 1986](bios/1986-05-09/XTBIOS-REV3.json5) (includes [IBM BASIC C1.10](basic/BASIC110.json5))
 
 and the following expansion card ROMs:
 

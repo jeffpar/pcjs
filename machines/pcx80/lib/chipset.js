@@ -1,7 +1,7 @@
 /**
  * @fileoverview Implements the PCx80 ChipSet component
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -15,7 +15,7 @@ if (typeof module !== "undefined") {
     var Web = require("../../shared/lib/weblib");
     var Component = require("../../shared/lib/component");
     var State = require("../../shared/lib/state");
-    var PCX80 = require("./defines");
+    var PCx80 = require("./defines");
     var CPUDefX80 = require("./cpudef");
     var MessagesX80 = require("./messages");
 }
@@ -744,12 +744,12 @@ class ChipSetX80 extends Component {
      */
     static init()
     {
-        var aeChipSet = Component.getElementsByClass(document, PCX80.APPCLASS, "chipset");
+        var aeChipSet = Component.getElementsByClass(document, PCx80.APPCLASS, "chipset");
         for (var iChip = 0; iChip < aeChipSet.length; iChip++) {
             var eChipSet = aeChipSet[iChip];
             var parmsChipSet = Component.getComponentParms(eChipSet);
             var chipset = new ChipSetX80(parmsChipSet);
-            Component.bindComponentControls(chipset, eChipSet, PCX80.APPCLASS);
+            Component.bindComponentControls(chipset, eChipSet, PCx80.APPCLASS);
         }
     }
 }
@@ -1044,7 +1044,7 @@ ChipSetX80.VT100.INIT = [
              *      stored in the ROM allow the terminal to work.
              *
              * but I think what they meant to say is that default settings are stored in the RAM copy of NVR.  So then
-             * I went into SET-UP, pressed SHIFT-S to save those settings back to NVR, and then used the PCX80 debugger
+             * I went into SET-UP, pressed SHIFT-S to save those settings back to NVR, and then used the PCx80 debugger
              * "d nvr" command to dump the NVR contents.  The results are below.
              *
              * The first dump actually contains only two modifications to the factory defaults: enabling ONLINE instead

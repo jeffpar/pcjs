@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/machines/dec/pdp10/xsl/machine.xsl"?>
+<machine id="testka10" type="pdp10" border="1" pos="center" background="default">
+	<name pos="center">PDP-10 Test Machine</name>
+	<computer id="computer" busWidth="18"/>
+	<cpu id="cpu" model="1001" cycles="1000000"/>
+	<ram id="ram" addr="0x0000" size="0x8000" file="/software/dec/pdp10/test/opcodes/OPTEST01.json"/>
+	<device id="default" type="default"/>
+	<serial id="serial" adapter="0" binding="print" upperCase="true"/>
+	<panel ref="/machines/dec/pdp10/panel/test/terminal.xml"/>
+</machine>

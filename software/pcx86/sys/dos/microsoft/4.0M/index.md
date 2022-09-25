@@ -5,14 +5,14 @@ permalink: /software/pcx86/sys/dos/microsoft/4.0M/
 redirect_from:
   - /disks/pcx86/dos/microsoft/4.0M/
   - /disks/pc/dos/microsoft/4.0M/
-  - /configs/pc/machines/5160/cga/640kb/dos400m/
+  - /machines/pc/machines/5160/cga/640kb/dos400m/
   - /devices/pc/machine/5160/cga/640kb/dos400m/
   - /videos/pcjs/
 machines:
   - id: ibm5160
     type: pcx86
     debugger: true
-    config: /configs/pcx86/machine/ibm/5160/cga/640kb/debugger/machine.xml
+    config: /machines/pcx86/ibm/5160/cga/640kb/debugger/machine.xml
     autoMount:
       A:
         name: MS-DOS 4.0M (Disk 1)
@@ -38,7 +38,7 @@ you may need to click the "Keys" button and use the **Alt** key on the on-screen
 
 ### Additional Information
 
-Courtesy of [PC DOS Retro](https://sites.google.com/site/pcdosretro/multitaskingdos4):
+Courtesy of [PC DOS Retro](https://pcdosretro.github.io/multitaskingmsdos4.htm):
 
 Multitasking MS-DOS 4.0 was a little known and separate development of DOS done in parallel with the development
 of DOS 3.0 and 3.1 and was released in late 1985.  It should not be confused with the later retail DOS 4.0 that was

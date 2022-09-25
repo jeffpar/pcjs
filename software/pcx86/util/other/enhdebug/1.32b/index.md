@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/enhdebug/
 machines:
   - id: ibm5160-pcdos200
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5160/cga/256kb/machine.xml
+    config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
     resume: 1
     autoMount:
       A:
@@ -16,11 +16,9 @@ machines:
     autoType: $date\r$time\rB:DEBUGX /F\r?\r$20\r$10v\r$10\r
 ---
 
-[Enhanced DEBUG](https://sites.google.com/site/pcdosretro/enhdebug) is a debugger for DOS that is
-maintained by [PC DOS Retro](https://sites.google.com/site/pcdosretro/).
+[Enhanced DEBUG](https://pcdosretro.github.io/enhdebug.htm) is a debugger for DOS that is maintained by [PC DOS Retro](https://pcdosretro.github.io).
 
-A [Directory Listing](#directory-of-enhanced-debug-132b), along with copies of [README.TXT](#readmetxt) and
-[HISTORY.TXT](#historytxt) for v1.32b, are provided below.
+A [Directory Listing](#directory-of-enhanced-debug-132b), along with copies of [README.TXT](#readmetxt) and [HISTORY.TXT](#historytxt) for v1.32b, are provided below.
 
 {% include machine.html id="ibm5160-pcdos200" %}
 

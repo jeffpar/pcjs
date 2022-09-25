@@ -9,7 +9,7 @@ In preparation for adding programmable font support for EGA and VGA video cards,
 font that PCjs was using was an 8x14 font, not the "higher resolution" 8x16 font introduced with the VGA.  This was by
 virtue of hard-coded ROM font offsets that all PCjs machines were passing to the Video component:
 
-    <rom id="romVGA" addr="0xc0000" size="0x6000" file="/devices/pcx86/video/ibm/vga/1986-10-27/ibm-vga.json" notify="videoVGA[0x378d,0x3f8d]"/>
+    <rom id="romVGA" addr="0xc0000" size="0x6000" file="/devices/pcx86/video/ibm/vga/1986-10-27/IBM-VGA.json5" notify="videoVGA[0x378d,0x3f8d]"/>
 
 After the Video ROM is loaded, the Video component is passed an array containing two addresses:
 

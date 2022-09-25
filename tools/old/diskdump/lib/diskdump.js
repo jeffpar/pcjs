@@ -1,7 +1,7 @@
 /**
  * @fileoverview Converts disk images to/from JSON
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -21,21 +21,21 @@ if (typeof module != "undefined") {     // we can't simply test for NODE, since 
     var http    = require("http");
     var mkdirp  = require("mkdirp");
     var crypto  = require("crypto");
-    var defines = require("../../../machines/shared/lib/defines");
-    var net     = require("../../../machines/shared/lib/netlib");
-    var proc    = require("../../../machines/shared/lib/proclib");
-    var str     = require("../../../machines/shared/lib/strlib");
-    var usr     = require("../../../machines/shared/lib/usrlib");
-    var web     = require("../../../machines/shared/lib/weblib");
-    var DiskAPI = require("../../../machines/shared/lib/diskapi");
-    var DumpAPI = require("../../../machines/shared/lib/dumpapi");
-    var X86     = require("../../../machines/pcx86/lib/x86");
+    var defines = require("../../../../machines/shared/lib/defines");
+    var net     = require("../../../../machines/shared/lib/netlib");
+    var proc    = require("../../../../machines/shared/lib/proclib");
+    var str     = require("../../../../machines/shared/lib/strlib");
+    var usr     = require("../../../../machines/shared/lib/usrlib");
+    var web     = require("../../../../machines/shared/lib/weblib");
+    var DiskAPI = require("../../../../machines/shared/lib/diskapi");
+    var DumpAPI = require("../../../../machines/shared/lib/dumpapi");
+    var X86     = require("../../../../machines/pcx86/lib/x86");
     /**
      * @class exports
      * @property {string} name
      * @property {string} version
      */
-    var pkg = require("../../../package.json");
+    var pkg = require("../../../../package.json");
 }
 
 /*
@@ -2505,7 +2505,7 @@ DiskDump.prototype.buildMBR = function(cHeads, cSectorsPerTrack, cbSector, cTota
      * Next 3 bytes: CHS (Cylinder/Head/Sector) of first partition sector
      */
     abSector[offSector++] = 0x00;           // head: 0
-    abSector[offSector++] = 0x02;           // sector: 1 (bits 0-5), cyclinder bits 8-9: 0 (bits 6-7)
+    abSector[offSector++] = 0x02;           // sector: 1 (bits 0-5), cylinder bits 8-9: 0 (bits 6-7)
     abSector[offSector++] = 0x00;           // cylinder bits 0-7: 0
 
     /*

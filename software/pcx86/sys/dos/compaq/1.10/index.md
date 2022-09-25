@@ -8,7 +8,7 @@ redirect_from:
 machines:
   - id: compaq-portable-128kb
     type: pcx86
-    config: /configs/pcx86/machine/compaq/portable/vdu/128kb/machine.xml
+    config: /machines/pcx86/compaq/portable/vdu/128kb/machine.xml
     autoType: \r\r$20demo\r
 ---
 

@@ -1,7 +1,7 @@
 /**
- * @fileoverview Implements the PCX80 Debugger component
+ * @fileoverview Implements the PCx80 Debugger component
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -17,9 +17,9 @@ if (typeof module !== "undefined") {
     var DbgLib = require("../../shared/lib/debugger");
     var Keys = require("../../shared/lib/keys");
     var State = require("../../shared/lib/state");
-    var PCX80 = require("./defines");
+    var PCx80 = require("./defines");
     var CPUDefX80 = require("./cpudef");
-    var CPUX80 = require("./cpu");
+    var CPUx80 = require("./cpu");
     var MemoryX80 = require("./memory");
     var MessagesX80 = require("./messages");
 }
@@ -146,12 +146,12 @@ class DebuggerX80 extends DbgLib {
              */
             var dbg = this;
             if (window) {
-                if (window[PCX80.APPCLASS] === undefined) {
-                    window[PCX80.APPCLASS] = function(s) { return dbg.doCommands(s); };
+                if (window[PCx80.APPCLASS] === undefined) {
+                    window[PCx80.APPCLASS] = function(s) { return dbg.doCommands(s); };
                 }
             } else {
-                if (global[PCX80.APPCLASS] === undefined) {
-                    global[PCX80.APPCLASS] = function(s) { return dbg.doCommands(s); };
+                if (global[PCx80.APPCLASS] === undefined) {
+                    global[PCx80.APPCLASS] = function(s) { return dbg.doCommands(s); };
                 }
             }
 
@@ -1019,7 +1019,7 @@ class DebuggerX80 extends DbgLib {
          * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
          * message, to effectively end the current burst and start fresh.
          *
-         * TODO: See CPUX80.calcStartTime() for a discussion of why we might want to call yieldCPU() *before*
+         * TODO: See CPUx80.calcStartTime() for a discussion of why we might want to call yieldCPU() *before*
          * we display the message.
          */
         if (this.cpu) this.cpu.yieldCPU();
@@ -1055,7 +1055,7 @@ class DebuggerX80 extends DbgLib {
      */
     init()
     {
-        this.println("Type ? for help with PCX80 Debugger commands");
+        this.println("Type ? for help with PCx80 Debugger commands");
         this.updateStatus();
         if (this.sInitCommands) {
             var sCmds = this.sInitCommands;
@@ -3819,7 +3819,7 @@ class DebuggerX80 extends DbgLib {
                         }
                         break;
                     }
-                    this.println((PCX80.APPNAME || "PCX80") + " version " + PCX80.APPVERSION + " (" + this.cpu.model + (PCX80.COMPILED? ",RELEASE" : (PCX80.DEBUG? ",DEBUG" : ",NODEBUG")) + (PCX80.TYPEDARRAYS? ",TYPEDARRAYS" : (PCX80.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")) + ')');
+                    this.println((PCx80.APPNAME || "PCx80") + " version " + PCx80.APPVERSION + " (" + this.cpu.model + (PCx80.COMPILED? ",RELEASE" : (PCx80.DEBUG? ",DEBUG" : ",NODEBUG")) + (PCx80.TYPEDARRAYS? ",TYPEDARRAYS" : (PCx80.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")) + ')');
                     this.println(Web.getUserAgent());
                     break;
                 case '?':
@@ -3877,12 +3877,12 @@ class DebuggerX80 extends DbgLib {
      */
     static init()
     {
-        var aeDbg = Component.getElementsByClass(document, PCX80.APPCLASS, "debugger");
+        var aeDbg = Component.getElementsByClass(document, PCx80.APPCLASS, "debugger");
         for (var iDbg = 0; iDbg < aeDbg.length; iDbg++) {
             var eDbg = aeDbg[iDbg];
             var parmsDbg = Component.getComponentParms(eDbg);
             var dbg = new DebuggerX80(parmsDbg);
-            Component.bindComponentControls(dbg, eDbg, PCX80.APPCLASS);
+            Component.bindComponentControls(dbg, eDbg, PCx80.APPCLASS);
         }
     }
 }

@@ -1,13 +1,13 @@
 /**
  * @fileoverview Implements PDP-11 High-Speed Paper Tape Reader/Punch (eg, PC11)
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2021 Jeff Parsons
+ * @copyright © 2012-2022 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "../../../lib/device.js";
+import Device from "../../../modules/device.js";
 
 Device.MESSAGE.PC11             = 0x000200000000;
 Device.MESSAGE_NAMES["pc11"]    = Device.MESSAGE.PC11;
@@ -61,7 +61,7 @@ export default class PC11 extends Device {
         this.baudReceive = +this.config['baudReceive'] || PDP11.PC11.PRS.BAUD;
         this.library = this.config['library'] || [];
         this.mediaLoaded = null;
-        /*
+        /**
          * Support for local tape images is currently limited to desktop browsers with FileReader support;
          * when this flag is set, setBinding() allows local tape bindings and informs initBus() to update the
          * LIST_TAPES binding accordingly.
@@ -110,7 +110,7 @@ export default class PC11 extends Device {
         let nTarget = PC11.TARGET.NONE;
 
         switch (binding) {
-        /*
+        /**
          * "readTape" operation must do pretty much everything that the "loadTape" does, but whereas the load
          * operation records the bytes in aTapeData, the read operation stuffs them directly into the machine's memory;
          * the former sets nTarget to TARGET.READER, while the latter sets it to TARGET.MEMORY.
@@ -134,7 +134,7 @@ export default class PC11 extends Device {
             elementInput = /** @type {Object} */ (element);
             if (!this.fLocalTapes) {
                 this.printf("Local tape support not available\n");
-                /*
+                /**
                  * We could also simply hide the element; eg:
                  *
                  *      elementInput.style.display = "none";
@@ -145,7 +145,7 @@ export default class PC11 extends Device {
                 break;
             }
 
-            /*
+            /**
              * Enable "Mount" button only if a file is actually selected
              */
             elementInput.addEventListener('change', function() {
@@ -158,12 +158,12 @@ export default class PC11 extends Device {
             elementInput.onsubmit = function(event) {
                 let file = event.currentTarget[1].files[0];
                 if (file) {
-                    /*
+                    /**
                      * TODO: Provide a way to mount tapes into MEMORY as well as READER.
                      */
                     pc11.loadMedia({"name": this.getBaseName(file.name, true), "path": file.name}, PC11.TARGET.READER, file);
                 }
-                /*
+                /**
                  * Prevent reloading of web page after form submission
                  */
                 return false;
@@ -294,7 +294,7 @@ export default class PC11 extends Device {
             return true;
         }
 
-        /*
+        /**
          * If the special PC11.SOURCE.REMOTE path is selected, then we want to prompt the user for a URL.
          * Oh, and make sure we pass an empty string as the 2nd parameter to prompt(), so that IE won't display
          * "undefined" -- because after all, undefined and "undefined" are EXACTLY the same thing, right?
@@ -414,7 +414,7 @@ export default class PC11 extends Device {
         this.input.addSelect(this, PC11.BINDING.LIST_TAPES, "Remote Tape", PC11.SOURCE.REMOTE);
         this.setReady(true);
 
-        /*
+        /**
          * Now that the media library, if any, is loaded, look up the autoLoad media, if any.
          */
         let i = -1;
@@ -434,14 +434,14 @@ export default class PC11 extends Device {
             }
         }
         if (this.autoLoad) {
-            /*
+            /**
              * TODO: Provide a way to autoLoad tapes into MEMORY as well as READER.
              */
             if (!this.loadMedia(/** @type {Media} */ (this.autoLoad), PC11.TARGET.READER)) {
                 this.setReady(false);
             }
         } else {
-            /*
+            /**
              * This likely happened because there was no autoLoad setting (or it was overridden with an empty value),
              * so just make sure the current selection is set to "None".
              */
@@ -466,7 +466,7 @@ export default class PC11 extends Device {
         this.setReady(true);
 
         if (this.nTarget == PC11.TARGET.MEMORY) {
-            /*
+            /**
              * Use parseTape() service to do our dirty work.  If the load succeeds, then depending on whether there
              * was also exec address, either the CPU will be stopped or the PC wil be reset.
              *
@@ -479,7 +479,7 @@ export default class PC11 extends Device {
              * "Bootstrap Loader".
              */
             if (!this.parseTape(aBytes, addrLoad, addrExec, null, false)) {
-                /*
+                /**
                  * This doesn't seem to serve any purpose, other than to be annoying, because perhaps you accidentally
                  * clicked "Read" instead of "Load"....
                  *
@@ -520,7 +520,7 @@ export default class PC11 extends Device {
     {
         let fStop = false;
         let fLoaded = false;
-        /*
+        /**
          * Data on tapes in the "Absolute Format" is organized into blocks; each block begins with
          * a 6-byte header:
          *
@@ -611,7 +611,7 @@ export default class PC11 extends Device {
             }
         }
         if (fLoaded) {
-            /*
+            /**
              * Set the start address to whatever the caller provided, or failing that, whatever start
              * address was specified inside the image.
              *
@@ -640,7 +640,7 @@ export default class PC11 extends Device {
     {
         if (this.mediaLoaded || fLoading === false) {
             this.mediaLoaded = null;
-            /*
+            /**
              * Avoid any unnecessary hysteresis regarding the display if this unload is merely a prelude to another load.
              */
             if (!fLoading) {
@@ -663,7 +663,7 @@ export default class PC11 extends Device {
      */
     getBaudTimeout(nBaud)
     {
-        /*
+        /**
          * TODO: Do a better job computing this, based on actual numbers of start, stop and parity bits,
          * instead of hard-coding the total number of bits per byte to 10.
          */
@@ -685,7 +685,7 @@ export default class PC11 extends Device {
         if ((this.regPRS & (PDP11.PC11.PRS.RE | PDP11.PC11.PRS.ERROR)) == PDP11.PC11.PRS.RE) {
             if (!(this.regPRS & PDP11.PC11.PRS.DONE)) {
                 if (this.iTapeData < this.aTapeData.length) {
-                    /*
+                    /**
                      * Here, as elsewhere (eg, the DL11 component), even if I trusted all incoming data
                      * to be byte values (which I don't), there's also the risk that it could be signed data
                      * (eg, -128 to 127, instead of 0 to 255).  Both risks are good reasons to always mask
@@ -735,7 +735,7 @@ export default class PC11 extends Device {
     writePRS(data, addr)
     {
         if (data & PDP11.PC11.PRS.RE) {
-            /*
+            /**
              * From the 1976 Peripherals Handbook, p. 4-378:
              *
              *      Set [RE] to allow the Reader to fetch one character. The setting of this bit clears Done,
@@ -751,7 +751,7 @@ export default class PC11 extends Device {
                 this.regPRS &= ~PDP11.PC11.PRS.DONE;
                 this.regPRS |= PDP11.PC11.PRS.BUSY;
                 this.regPRB = 0;
-                /*
+                /**
                  * The PC11, by virtue of its "high speed", is supposed to deliver characters at 300 CPS, so
                  * that's the rate we'll choose as well (ie, 1000ms / 300).  As an aside, the original "low speed"
                  * version of the reader ran at 10 CPS.
@@ -771,7 +771,7 @@ export default class PC11 extends Device {
      */
     readPRB(addr)
     {
-        /*
+        /**
          * I'm guessing that the DONE and BUSY bits always remain more-or-less inverses of each other.  They definitely
          * start out that way when writePRS() sets the reader enable (RE) bit, and so that's how we treat them elsewhere, too.
          */
@@ -849,7 +849,7 @@ export default class PC11 extends Device {
     }
 }
 
-/*
+/**
  * There's nothing super special about these values, except that NONE should be falsey and the others should not.
  */
 PC11.SOURCE = {

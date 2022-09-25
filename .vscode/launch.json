@@ -18,7 +18,7 @@
       ]
     },
     {
-      "name": "Node: diskdump.js (deprecated; use diskimage.js)",
+      "name": "Node: diskdump.js (deprecated)",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/old/diskdump/bin/diskdump",
@@ -44,6 +44,23 @@
         "--all",
         "--checkpage",
         "--rebuild"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: filedump.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/old/filedump/bin/filedump",
+      "args": [
+        "--file=machines/palm/pilot/roms/pilot.rom",
+        "--format=bytes",
+        "--decimal"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -240,7 +257,7 @@
       "name": "Ohio Scientific Challenger 1P with Debugger (XML)",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:4000/configs/c1p/xml/c1p8k-debugger.xml",
+      "url": "http://localhost:4000/machines/osi/c1p/xml/c1p8k-debugger.xml",
       "webRoot": "${workspaceFolder}"
     },
     {
@@ -248,6 +265,20 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/osi/c1p/array/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Palm Pilot",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/palm/pilot/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Space Invaders",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/arcade/invaders/",
       "webRoot": "${workspaceFolder}"
     },
     {
