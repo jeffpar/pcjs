@@ -9,7 +9,7 @@ machines:
   - id: ibm5160
     type: pcx86
     debugger: true
-    config: /configs/pcx86/machine/ibm/5160/ega/256kb/color/debugger/machine.xml
+    config: /machines/pcx86/ibm/5160/ega/256kb/color/debugger/machine.xml
     state: state.json
     autoMount:
       A:

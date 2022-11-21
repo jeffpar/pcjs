@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/machines/osi/c1p/xsl/machine.xsl"?>
+<machine id="c1p8kb" type="c1p" border="1" width="100%" background="default" style="padding-bottom:8px">
+	<name>Ohio Scientific Challenger 1P, 8K RAM</name>
+	<computer id="c1p" name="Challenger 1P">
+		<module type="cpu" refid="cpu6502" start="0x0000" end="0xffff"/>
+		<module type="ram" refid="ram8K" start="0x0000" end="0x1fff"/>
+		<module type="rom" refid="romNull" start="0x2000" end="0x9fff"/>
+		<module type="rom" refid="romBasic" start="0xa000" end="0xbfff"/>
+		<module type="video" refid="video" start="0xd000" end="0xd3ff"/>
+		<module type="keyboard" refid="keyboard" start="0xdf00" end="0xdfff"/>
+		<module type="serial" refid="serialPort" start="0xf000" end="0xf0ff"/>
+		<module type="rom" refid="romSystem" start="0xf800" end="0xffff"/>
+	</computer>
+	<cpu id="cpu6502"/>
+	<ram id="ram8K" size="0x2000"/>
+	<rom id="romNull" size="0x8000"/>
+	<rom id="romBasic" size="0x2000" image="/machines/osi/c1p/rom/basic-gcpatch.hex"/>
+	<rom id="romSystem" size="0x0800" image="/machines/osi/c1p/rom/system.hex"/>
+	<video id="video" screenWidth="1024" screenHeight="800" cols="32" rows="32" charSet="/machines/osi/c1p/video/chargen4x.png" width="512px" padding="8px">
+		<name>Video Display</name>
+	</video>
+	<keyboard id="keyboard" padLeft="8px">
+		<control type="button" binding="ctrl-c">CTRL-C</control>
+		<control type="button" binding="ctrl-o">CTRL-O</control>
+		<control type="button" binding="break">BREAK</control>
+	</keyboard>
+	<serial ref="/machines/osi/c1p/xml/apps.xml"/>
+</machine>

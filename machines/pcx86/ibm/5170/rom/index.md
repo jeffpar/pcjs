@@ -18,7 +18,7 @@ respectively).  All revisions included [IBM BASIC C1.10](/machines/pcx86/ibm/515
 
 ### IBM PC AT ROM BIOS (Rev 1)
 
-[ATBIOS-REV1.json](bios/1984-01-10/ATBIOS-REV1.json) contains the original IBM PC AT BIOS, dated January 10, 1984
+[ATBIOS-REV1](bios/1984-01-10/ATBIOS-REV1.json5) contains the original IBM PC AT BIOS, dated January 10, 1984
 ("01/10/84").  It was produced for [5170 Models 68 and 99](/machines/pcx86/ibm/5170/#models-68-and-99),
 announced August 14, 1984.
 
@@ -47,17 +47,17 @@ From [http://minuszerodegrees.net/bios/BIOS_5170_10JAN84_6MHZ.zip](http://minusz
 
 The JSON-encoded ROM image that PCjs uses was created using the *FileDump* command-line *merge* option:
 
-	filedump --file=/machines/pcx86/ibm/5170/rom/bios/1984-01-10/BIOS_5170_10JAN84_U27_6181028_27256_6MHZ.BIN --merge=/machines/pcx86/ibm/5170/rom/bios/1984-01-10/BIOS_5170_10JAN84_U47_6181029_27256_6MHZ.BIN --output=ATBIOS-REV1.json --overwrite
+	filedump --file=/machines/pcx86/ibm/5170/rom/bios/1984-01-10/BIOS_5170_10JAN84_U27_6181028_27256_6MHZ.BIN --merge=/machines/pcx86/ibm/5170/rom/bios/1984-01-10/BIOS_5170_10JAN84_U47_6181029_27256_6MHZ.BIN --output=ATBIOS-REV1.json5 --overwrite
 	
 Since a MAP file ([bios/ATBIOS-REV1.map](bios/1984-01-10/ATBIOS-REV1.map)) exists as well, it is automatically appended to the JSON file
-([ATBIOS-REV1.json](bios/1984-01-10/ATBIOS-REV1.json)) when using a ROM input file (or JSON output file) with a matching filename.
+([ATBIOS-REV1](bios/1984-01-10/ATBIOS-REV1.json5)) when using a ROM input file (or JSON output file) with a matching filename.
 
 It is also possible to create a merged binary ROM image ([ATBIOS-REV1.rom](bios/1984-01-10/ATBIOS-REV1.rom))
 by adding *--format=rom* to the command-line (the default is *--format=json*).
 
 ### IBM PC AT ROM BIOS (Rev 2)
 
-[ATBIOS-REV2.json](bios/1985-06-10/ATBIOS-REV2.json) contains the second IBM PC AT BIOS, dated June 10, 1985.
+[ATBIOS-REV2](bios/1985-06-10/ATBIOS-REV2.json5) contains the second IBM PC AT BIOS, dated June 10, 1985.
 
 This BIOS was produced for [5170 Model 239](/machines/pcx86/ibm/5170/#model-239), announced October 10,
 1985.  It increased the number of supported hard disk types from 15 to 23, fixed some bugs, and added support for 720Kb
@@ -84,11 +84,11 @@ From [http://minuszerodegrees.net/bios/BIOS_5170_10JUN85_6MHZ.zip](http://minusz
 
 The JSON-encoded ROM image that PCjs uses was created using the *FileDump* command-line *merge* option:
 
-	filedump --file=/machines/pcx86/ibm/5170/rom/bios/1985-06-10/BIOS_5170_10JUN85_U27_6480090_27256.BIN --merge=/machines/pcx86/ibm/5170/rom/bios/1985-06-10/BIOS_5170_10JUN85_U47_6480091_27256.BIN --output=ATBIOS-REV2.json --overwrite
+	filedump --file=/machines/pcx86/ibm/5170/rom/bios/1985-06-10/BIOS_5170_10JUN85_U27_6480090_27256.BIN --merge=/machines/pcx86/ibm/5170/rom/bios/1985-06-10/BIOS_5170_10JUN85_U47_6480091_27256.BIN --output=ATBIOS-REV2.json5 --overwrite
 
 ### IBM PC AT ROM BIOS (Rev 3)
 
-[ATBIOS-REV3.json](bios/1985-11-15/ATBIOS-REV3.json) contains the third (and last) IBM PC AT BIOS, dated November 15, 1985.
+[ATBIOS-REV3](bios/1985-11-15/ATBIOS-REV3.json5) contains the third (and last) IBM PC AT BIOS, dated November 15, 1985.
 
 This BIOS was produced for [5170 Models 319 and 339](/machines/pcx86/ibm/5170/#models-319-and-339),
 announced April 2, 1986.  It added support for 101-key keyboards and 1.44Mb 3.5-inch floppy diskette drives.
@@ -118,4 +118,4 @@ From [http://minuszerodegrees.net/bios/BIOS_5170_15NOV85_8MHZ_VARIATION_2.zip](h
 
 The JSON-encoded ROM image that PCjs uses was created using the *FileDump* command-line *merge* option:
 
-	filedump --file=/machines/pcx86/ibm/5170/rom/bios/1985-11-15/BIOS_5170_15NOV85_U27_61X9266_27256.BIN --merge=/machines/pcx86/ibm/5170/rom/bios/1985-11-15/BIOS_5170_15NOV85_U47_61X9265_27256.BIN --output=ATBIOS-REV3.json --overwrite
+	filedump --file=/machines/pcx86/ibm/5170/rom/bios/1985-11-15/BIOS_5170_15NOV85_U27_61X9266_27256.BIN --merge=/machines/pcx86/ibm/5170/rom/bios/1985-11-15/BIOS_5170_15NOV85_U47_61X9265_27256.BIN --output=ATBIOS-REV3.json5 --overwrite

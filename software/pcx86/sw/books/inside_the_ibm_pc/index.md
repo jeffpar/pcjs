@@ -5,7 +5,7 @@ permalink: /software/pcx86/sw/books/inside_the_ibm_pc/
 machines:
   - id: ibm5150
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
     autoGen: true
     autoMount:
       B: "Inside the IBM PC (Disk 1)"

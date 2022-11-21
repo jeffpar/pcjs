@@ -1,0 +1,8 @@
+{
+  "id": "romBASIC",
+  "class": "rom",
+  "addr": "0xf6000",
+  "size": "0x08000",
+  "alias": null,
+  "file": "/machines/pcx86/ibm/5150/rom/basic/BASIC100.json5"
+}

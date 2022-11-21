@@ -979,6 +979,7 @@ class Str {
         let i = sFileName.lastIndexOf(".");
         if (i >= 0) {
             sExtension = sFileName.substr(i + 1).toLowerCase();
+            if (sExtension == "json5") sExtension = "json";
         }
         return sExtension;
     }
@@ -26086,8 +26087,14 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                  * Third-party sites that don't use the PCjs server will ALWAYS want to specify a fully-qualified
                  * path to the XSL file, unless they choose to mirror our folder structure.
                  */
-                sXSLFile = "/configs/" + sAppClass + "/xsl/components.xsl";
+                sXSLFile = "/machines/" + sAppClass + "/xsl/components.xsl";
             }
+
+            /*
+             * If sAppClass specified a folder (eg, "osi/c1p"), that was required for the location of the XSL file,
+             * but now all we want is the final folder name (eg, "c1p") for any XSL "APPCLASS" variable replacement.
+             */
+            sAppClass = sAppClass.split('/').pop();
 
             let processXML = function(sURL, sXML, xml) {
                 if (!xml) {
@@ -26245,7 +26252,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("C1Pjs", "c1p", idMachine, sXMLFile, sXSLFile, undefined, sClass);
+    return embedMachine("C1Pjs", "osi/c1p", idMachine, sXMLFile, sXSLFile, undefined, sClass);
 }
 
 /**
@@ -26293,7 +26300,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PDPjs", "pdp10", idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PDPjs", "dec/pdp10", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**
@@ -26309,7 +26316,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PDPjs", "pdp11", idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PDPjs", "dec/pdp11", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**

@@ -6,7 +6,7 @@ redirect_from: /apps/pcx86/1982/ratbas/
 machines:
   - id: ibm5150-ratbas
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
     autoMount:
       A:
         name: PC DOS 1.10

@@ -8,7 +8,7 @@ redirect_from:
 machines:
   - id: mpc1600
     type: pcx86
-    config: /configs/pcx86/machine/cdp/mpc1600/cga/640kb/machine.xml
+    config: /machines/pcx86/cdp/mpc1600/cga/640kb/machine.xml
 ---
 
 {% include machine.html id="mpc1600" %}

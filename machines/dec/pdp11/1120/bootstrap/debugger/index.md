@@ -7,7 +7,7 @@ machines:
   - id: test1120
     type: pdp11
     debugger: true
-    config: /configs/pdp11/machine/1120/bootstrap/debugger/machine.xml
+    config: /machines/dec/pdp11/1120/bootstrap/debugger/machine.xml
     autoMount:
       PTR:
         path: /software/dec/pdp11/tapes/absloader/DEC-11-L2PC-PO.json

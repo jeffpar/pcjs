@@ -8,7 +8,7 @@ machines:
     type: pdp11
     debugger: true
     autoMount: ''
-    config: /configs/pdp11/machine/1120/basic/debugger/machine.xml
+    config: /machines/dec/pdp11/1120/basic/debugger/machine.xml
 ---
 
 [![DEC-11-AJPB-PB](DEC-11-AJPB-PB.jpg)](DEC-11-AJPB-PB.json)

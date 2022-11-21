@@ -54,5 +54,5 @@ add the 8x14 and 8x8 font data offsets to the ROM component's *notify* attribute
 For example, here's how we deal with the font data offsets used by the IBM VGA:
 
 ```xml
-<rom id="romVGA" addr="0xc0000" size="0x6000" file="IBM-VGA.json" notify="videoVGA[0x378d,0x3f8d]"/>
+<rom id="romVGA" addr="0xc0000" size="0x6000" file="IBM-VGA.json5" notify="videoVGA[0x378d,0x3f8d]"/>
 ```

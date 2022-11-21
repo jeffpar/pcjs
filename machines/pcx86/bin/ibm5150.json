@@ -21,14 +21,14 @@
       "name": "",
       "addr": "0xf6000",
       "size": "0x08000",
-      "file": "/machines/pcx86/ibm/5150/rom/basic/BASIC100.json",
+      "file": "/machines/pcx86/ibm/5150/rom/basic/BASIC100.json5",
       "notify": ""
     },
     { "id": "romBIOS",
       "name": "",
       "addr": "0xfe000",
       "size": "0x02000",
-      "file": "/machines/pcx86/ibm/5150/rom/bios/1981-04-24/PCBIOS-REV1.json",
+      "file": "/machines/pcx86/ibm/5150/rom/bios/1981-04-24/PCBIOS-REV1.json5",
       "notify": ""
     }
   ],
@@ -42,7 +42,7 @@
       "scale": true,
       "charCols": 80,
       "charRows": 25,
-      "fontROM": "/machines/pcx86/ibm/video/mda/IBM-MDA.json",
+      "fontROM": "/machines/pcx86/ibm/video/mda/IBM-MDA.json5",
       "screenColor": "black",
       "touchScreen": false
     }
@@ -86,5 +86,5 @@
     "name": "",
     "messages": ""
   },
-  "xml": "/configs/pcx86/machine/ibm/5150/mda/64kb/machine.xml"
+  "xml": "/machines/pcx86/ibm/5150/mda/64kb/machine.xml"
 }

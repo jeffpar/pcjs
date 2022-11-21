@@ -135,7 +135,7 @@ This application was tested with current versions of Safari, Firefox, Chrome and
 current versions will probably work as well, with the exception of Internet Explorer, which did not add support for
 the &lt;canvas&gt; tag until IE9.
 
-C1Pjs is built from the following components, as listed in [machines.json](/configs/machines.json) (see the *c1p.scripts* property):
+C1Pjs is built from the following components, as listed in [machines.json](/machines/machines.json) (see the *c1p.scripts* property):
 
   - [defines.js](lib/defines.js)
   - [panel.js](lib/panel.js)

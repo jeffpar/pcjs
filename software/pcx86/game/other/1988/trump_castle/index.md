@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/games/other/1988/trump_castle/
 machines:
   - id: ibm5170-trump120
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/ega/640kb/rev1/enhanced/machine.xml
+    config: /machines/pcx86/ibm/5170/ega/640kb/rev1/enhanced/machine.xml
     autoMount:
       A:
         name: PC DOS 3.30 (Disk 1)

@@ -8,7 +8,7 @@ machines:
     type: pcx86
     debugger: true
     messages: fault
-    config: /configs/pcx86/machine/ibm/5170/vga/4096kb/debugger/machine.xml
+    config: /machines/pcx86/ibm/5170/vga/4096kb/debugger/machine.xml
     drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/IBMOS211-VGA.json"}]'
     autoMount:
       A:

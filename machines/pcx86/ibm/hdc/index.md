@@ -5,7 +5,7 @@ permalink: /machines/pcx86/ibm/hdc/
 redirect_from: /disks/pcx86/drives/
 ---
 
-See the [PC Hard Drive Types](/configs/pcx86/hdc/) supported by PCjs.
+See the [PC Hard Drive Types](/machines/pcx86/hdc/) supported by PCjs.
 
 NOTE: Although IBM's preferred term at the time was "Fixed Disk," the more common term became **Hard Disk**.
 

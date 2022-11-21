@@ -9586,13 +9586,15 @@ class Memory extends Device {
      */
     loadState(state)
     {
-        let idDevice = state.shift();
-        if (this.idDevice == idDevice) {
-            this.fDirty = state.shift();
-            state.shift();      // formerly fDirtyEver, now unused
-            let values = state.shift();
-            if (values) this.initValues(this.decompress(values, this.size));
-            return true;
+        if (state) {
+            let idDevice = state.shift();
+            if (this.idDevice == idDevice) {
+                this.fDirty = state.shift();
+                state.shift();      // formerly fDirtyEver, now unused
+                let values = state.shift();
+                if (values) this.initValues(this.decompress(values, this.size));
+                return true;
+            }
         }
         return false;
     }
@@ -13059,7 +13061,7 @@ CPUx86.DESC = {         // Descriptor Table Entry
     INVALID: 0          // use CPUx86.DESC.INVALID for invalid DESC values
 };
 
-CPUx86.LADDR = {                // linear address
+CPUx86.LADDR = {        // linear address
     PDE: {              // index of page directory entry
         MASK:   0xFFC00000|0,
         SHIFT:  20      // (addr & DIR.MASK) >>> DIR.SHIFT yields a page directory offset (ie, index * 4)
@@ -14223,7 +14225,7 @@ class Machine extends Device {
                 /**
                  * Historically, my web servers have not been consistent about quoting property names inside
                  * the optional parameters object, so we must use eval() instead of JSON.parse() to parse them.
-                 * Of couse, the REAL problem is that JSON.parse() is being a dick about otherwise perfectly
+                 * Of course, the REAL problem is that JSON.parse() is being a dick about otherwise perfectly
                  * legitimate Object syntax, but I shall not repeat my long list of gripes about JSON here.
                  */
                 let parms = /** @type {Object} */ (eval("(" + this.sParms + ")"));
@@ -14259,7 +14261,7 @@ class Machine extends Device {
             if (on) this.println("power on");
             this.enumDevices(function onDevicePower(device) {
                 if (device.onPower && device != machine) {
-                    if (device.config['class'] != "CPU" || machine.fAutoStart || machine.isReady()) {
+                    if (device.config['class'] != "CPU" || machine.fAutoStart && machine.isReady()) {
                         device.onPower(on);
                     } else {
                         /**

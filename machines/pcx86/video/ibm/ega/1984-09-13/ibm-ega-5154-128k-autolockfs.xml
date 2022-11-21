@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<video id="videoEGA" model="ega" memory="0x20000" screenWidth="1280" screenHeight="700" touchScreen="mouse" autoLock="true" pos="center" padding="8px">
+	<comment>
+		If [Wikipedia](https://en.wikipedia.org/wiki/Enhanced_Graphics_Adapter) is correct that the IBM EGA
+		(presumably when paired with an IBM 5154 EGA monitor) has a "pixel aspect ratio" of 1:1.37 at its highest
+		resolution (640x350), that suggests we should "stretch" our screen size vertically to 350 * 1.37, or 640x480
+		(or something proportional, like 1280x960), assuming the native display has a "pixel aspect ratio" of 1:1.
+		But testing reveals that round images appear roundest when we stick with a screen size proportional to 640x350.
+		Also note that 1280x700 produces crisper results than 640x350, and 2560x1400 is sharper still (at least when
+		using Chrome).  I'm going to split the difference and go with 1280x700.
+	</comment>
+	<menu>
+		<title>Enhanced Color Display</title>
+		<control type="container" pos="right">
+			<control type="led" label="Caps" binding="caps-lock" padLeft="8px"/>
+			<control type="led" label="Num" binding="num-lock" padLeft="8px"/>
+			<control type="led" label="Scroll" binding="scroll-lock" padLeft="8px"/>
+			<control type="button" binding="fullScreen" padLeft="8px;line-height:1em">Full Screen</control>
+		</control>
+	</menu>
+	<rom id="romEGA" addr="0xc0000" size="0x4000" file="/machines/pcx86/ibm/video/ega/IBM-EGA.json5" notify="videoEGA"/>
+</video>

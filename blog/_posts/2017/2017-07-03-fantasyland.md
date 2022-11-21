@@ -7,7 +7,7 @@ machines:
   - id: ibm5160-msdos320
     type: pcx86
     state: /software/pcx86/lang/logitech/modula2/1.10/state.json
-    config: /configs/pcx86/machine/ibm/5160/ega/256kb/debugger/machine.xml
+    config: /machines/pcx86/ibm/5160/ega/256kb/debugger/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'
     autoMount:
       A:
@@ -121,355 +121,355 @@ exactly what I've done "below the fold".
 
 ### Transcript of the EGATEST Build Process (as of July 3, 2017)
 
-	PCx86 v1.35.2
-	Copyright © 2012-2017 Jeff Parsons <Jeff@pcjs.org>
-	License: MIT <https://www.pcjs.org/LICENSE.txt>
-	Loading /devices/pcx86/hdc/ibm-xebec-1982.json.......
-	Loading /devices/pcx86/rom/5160/basic/BASIC110.json.......
-	Loading /devices/pcx86/rom/5160/1982-11-08/XTBIOS-REV1.json.......
-	Loading /devices/pcx86/video/ibm/ega/1984-09-13/ibm-ega.json.......
-	HDC: Type 3 "10Mb Hard Disk" is fixed disk 0
-	Loading /disks/pcx86/drives/10mb/MSDOS320-C400.json.........
-	Loading /apps/pcx86/1984/modula2/state.json.........
-	Bus: 8Kb ROM at 000C8000
-	Bus: 8Kb ROM at 000FE000
-	Bus: 32Kb ROM at 000F6000
-	Bus: 16Kb ROM at 000C0000
-	HDC: Mounted disk "10Mb Hard Disk" in drive C
-	Bus: 640Kb RAM at 0000
-	RAM: 0xa0000 (640Kb) size overrides SW1
-	RAM: ROM BIOS memory test has been disabled
-	Bus: 32Kb VIDEO at 000B8000
-	Type ? for help with PCx86 Debugger commands
-	AX=0100 BX=0004 CX=00F9 DX=007F SP=09F6 BP=0000 SI=00D3 DI=01A9 
-	SS=028C DS=028C ES=028C PS=F202 V0 D0 I1 T0 S0 Z0 A0 P0 C0 
-	&028C:14AD 2E              CS:     
-	&028C:14AE 8F068005        POP      WORD [0580]
-	running
-	Loading /disks/pcx86/shareware/pctj/PCTJ8610.json.......
-	FDC: Mounted diskette "PC Tech Journal (1986-10)" in drive A
-	
-	C:\>mkdir egatest
-	
-	C:\>cd egatest
-	
-	C:\EGATEST>copy a:*.*
-	A:DOTTIME.DEF
-	A:DOTTIME.MOD
-	A:DRAWPOLY.DEF
-	A:DRAWPOLY.MOD
-	A:EDITBLCK
-	A:EGAMAKE.BAT
-	A:EGATEST.EXE
-	A:EGATEST.MOD
-	A:FONTBUMP.DEF
-	A:FONTBUMP.MOD
-	A:INFO
-	A:LOWEGA.DEF
-	A:LOWEGA.MOD
-	A:OPCODES.DEF
-	A:OPCODES.MOD
-	A:OTHRFONT.DAT
-	A:PAUSES.DEF
-	A:PAUSES.MOD
-	A:POINTLIB.DEF
-	A:POINTLIB.MOD
-	       20 File(s) copied
-	
-	C:\EGATEST>egamake
-	
-	C:\EGATEST>rem
-	
-	C:\EGATEST>rem compile files in this order to avoid version conflicts
-	
-	C:\EGATEST>rem
-	
-	C:\EGATEST>m2 comp  opcodes.def
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> opcodes.def
-	
-	Syntax Analysis
-	target speed: 9.54Mhz
-	Declaration Analysis
-	target speed: 19.08Mhz
-	Symbol File Generation
-	Termination
-	End Compilation
-	
-	C:\EGATEST>m2 comp  pointlib.def
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, target speed: 38.16Mhz
-	Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> pointlib.def
-	
-	Syntax Analysis
-	Declaration Analysis
-	Symbol File Generation
-	Termination
-	End Compilation
-	
-	C:\EGATEST>m2 comp  lowega.def
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> lowega.def
-	
-	Syntax Analysis
-	   PointLib in file: C:PointLib.SYM
-	Declaration Analysis
-	Symbol File Generation
-	Termination
-	End Compilation
-	
-	C:\EGATEST>m2 comp  pauses.def
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> pauses.def
-	
-	Syntax Analysis
-	Declaration Analysis
-	Symbol File Generation
-	Termination
-	End Compilation
-	
-	C:\EGATEST>m2 comp  drawpoly.def
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> drawpoly.def
-	
-	Syntax Analysis
-	   LowEGA   in file: C:LowEGA.SYM
-	   PointLib in file: C:PointLib.SYM
-	Declaration Analysis
-	Symbol File Generation
-	Termination
-	End Compilation
-	
-	C:\EGATEST>m2 comp  dottime.def
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> dottime.def
-	
-	Syntax Analysis
-	Declaration Analysis
-	Symbol File Generation
-	Termination
-	End Compilation
-	
-	C:\EGATEST>m2 comp  fontbump.def
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> fontbump.def
-	
-	Syntax Analysis
-	Declaration Analysis
-	Symbol File Generation
-	Termination
-	End Compilation
-	
-	C:\EGATEST>m2 comp  lowega.mod
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> lowega.mod
-	
-	Syntax Analysis
-	   LowEGA   in file: C:LowEGA.SYM
-	   PointLib in file: C:PointLib.SYM
-	   Opcodes  in file: C:Opcodes.SYM
-	Declaration Analysis
-	Block Analysis
-	Code Generation
-	Termination
-	   The interactive setting of the options was: S+ /R+ /T+ 
-	   Codesize:   5342 bytes   Datasize:     94 bytes
-	End Compilation
-	
-	C:\EGATEST>m2 comp  egatest.mod
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> egatest.mod
-	
-	Syntax Analysis
-	   Terminal in file: C:\M2LIB\SYM\Terminal.SYM
-	   InOut    in file: C:\M2LIB\SYM\InOut.SYM
-	   LowEGA   in file: C:LowEGA.SYM
-	   PointLib in file: C:PointLib.SYM
-	   FontBump in file: C:FontBump.SYM
-	   Conversi in file: C:\M2LIB\SYM\Conversi.SYM
-	   Strings  in file: C:\M2LIB\SYM\Strings.SYM
-	   Pauses   in file: C:Pauses.SYM
-	   DrawPoly in file: C:DrawPoly.SYM
-	   DotTime  in file: C:DotTime.SYM
-	Declaration Analysis
-	Block Analysis
-	Code Generation
-	Termination
-	   The interactive setting of the options was: S+ /R+ /T+ 
-	   Codesize:   5362 bytes   Datasize:    294 bytes
-	End Compilation
-	
-	C:\EGATEST>m2 comp  fontbump.mod
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> fontbump.mod
-	
-	Syntax Analysis
-	   FontBump in file: C:FontBump.SYM
-	   FileSyst in file: C:\M2LIB\SYM\FileSyst.SYM
-	   LowEGA   in file: C:LowEGA.SYM
-	   Opcodes  in file: C:Opcodes.SYM
-	   Pauses   in file: C:Pauses.SYM
-	Declaration Analysis
-	Block Analysis
-	Code Generation
-	Termination
-	   The interactive setting of the options was: S+ /R+ /T+ 
-	   Codesize:    715 bytes   Datasize:   3638 bytes
-	End Compilation
-	
-	C:\EGATEST>m2 comp  pointlib.mod
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> pointlib.mod
-	
-	Syntax Analysis
-	   PointLib in file: C:PointLib.SYM
-	Declaration Analysis
-	Block Analysis
-	Code Generation
-	Termination
-	   The interactive setting of the options was: S+ /R+ /T+ 
-	   Codesize:     97 bytes   Datasize:      0 bytes
-	End Compilation
-	
-	C:\EGATEST>m2 comp  opcodes.mod
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> opcodes.mod
-	
-	Syntax Analysis
-	   Opcodes  in file: C:Opcodes.SYM
-	Declaration Analysis
-	Block Analysis
-	Code Generation
-	Termination
-	   The interactive setting of the options was: S+ /R+ /T+ 
-	   Codesize:     17 bytes   Datasize:      0 bytes
-	End Compilation
-	
-	C:\EGATEST>m2 comp  pauses.mod
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> pauses.mod
-	
-	Syntax Analysis
-	   Pauses   in file: C:Pauses.SYM
-	   Terminal in file: C:\M2LIB\SYM\Terminal.SYM
-	   LowEGA   in file: C:LowEGA.SYM
-	   PointLib in file: C:PointLib.SYM
-	Declaration Analysis
-	Block Analysis
-	Code Generation
-	Termination
-	   The interactive setting of the options was: S+ /R+ /T+ 
-	   Codesize:    483 bytes   Datasize:      0 bytes
-	End Compilation
-	
-	C:\EGATEST>m2 comp  dottime.mod
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> dottime.mod
-	
-	Syntax Analysis
-	   DotTime  in file: C:DotTime.SYM
-	   Terminal in file: C:\M2LIB\SYM\Terminal.SYM
-	   LowEGA   in file: C:LowEGA.SYM
-	   TimeDate in file: DK:TimeDate.SYM
-	  ---- file not found
-	   TimeDate in file>  ---- DK:Pass1.LOD warning
-	Termination
-	End Compilation
-	
-	===>  warning, file DK:M2COMP.LOD
-	^C
-	
-	Terminate batch job (Y/N)? n
-	C:\EGATEST>m2 comp  drawpoly.mod
-	LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   source file> drawpoly.mod
-	
-	Syntax Analysis
-	   DrawPoly in file: C:DrawPoly.SYM
-	   LowEGA   in file: C:LowEGA.SYM
-	   PointLib in file: C:PointLib.SYM
-	Declaration Analysis
-	Block Analysis
-	Code Generation
-	Termination
-	   The interactive setting of the options was: S+ /R+ /T+ 
-	   Codesize:    781 bytes   Datasize:      0 bytes
-	End Compilation
-	
-	C:\EGATEST>rem
-	
-	C:\EGATEST>rem Linker requires manual entry of two real-number library file
-	
-	C:\EGATEST>rem names unless you have renamed one set of the E87, C87, or M87
-	
-	C:\EGATEST>rem libraries to be your standard set.  If not, add prefix E87, C87,
-	
-	C:\EGATEST>rem or M87 to library names realc.lnk and reals.lnk & enter manually
-	
-	C:\EGATEST>rem in response to linker query.   See section 5.7.2 in red manual.
-	
-	C:\EGATEST>rem
-	
-	C:\EGATEST>m2 link  egatest
-	LOGITECH MODULA-2/86 Linker, DOS 8086, Rel. 1.10, Nov 84
-	Copyright (C) 1983, 1984 LOGITECH.
-	
-	   master file  > egatest.LNK
-	   linked with:
-	      Terminal      in file : C:\M2LIB\LNK\Terminal.LNK
-	      Termbase      in file : C:\M2LIB\LNK\Termbase.LNK
-	      System        in file : C:\M2LIB\LNK\System.LNK
-	      Keyboard      in file : C:\M2LIB\LNK\Keyboard.LNK
-	      ASCII         in file : C:\M2LIB\LNK\ASCII.LNK
-	      Display       in file : C:\M2LIB\LNK\Display.LNK
-	      InOut         in file : C:\M2LIB\LNK\InOut.LNK
-	      FileSystem    in file : C:\M2LIB\LNK\FileSyst.LNK
-	      DiskFiles     in file : C:\M2LIB\LNK\DiskFile.LNK
-	      LowEGA        in file : C:LowEGA.LNK
-	      PointLib      in file : C:PointLib.LNK
-	      Opcodes       in file : C:Opcodes.LNK
-	      FontBumper    in file : C:FontBump.LNK
-	      Pauses        in file : C:Pauses.LNK
-	      Conversions   in file : C:\M2LIB\LNK\Conversi.LNK
-	      Strings       in file : C:\M2LIB\LNK\Strings.LNK
-	      DrawPoly      in file : C:DrawPoly.LNK
-	      DotTime       in file : DK:DotTime.LNK
-	  ---- file not found
-	      DotTime       in file > 
-	===>  warning, file DK:M2LINK.LOD
-	
-	C:\EGATEST>m2 lod2exe egatest
-	lod2exe.LOD<NUL><NUL><NUL><NUL> not found in current directory or in \M2LOD
-	C:\EGATEST>
-	C:\EGATEST>
-	C:\EGATEST>
+    PCx86 v1.35.2
+    Copyright © 2012-2017 Jeff Parsons <Jeff@pcjs.org>
+    License: MIT <https://www.pcjs.org/LICENSE.txt>
+    Loading /machines/pcx86/ibm/5160/rom/hdc/IBM-XEBEC-1982.json5.......
+    Loading /machines/pcx86/ibm/5160/rom/basic/BASIC110.json5.......
+    Loading /machines/pcx86/ibm/5160/rom/bios/1982-11-08/XTBIOS-REV1.json5.......
+    Loading /machines/pcx86/ibm/video/ega/1984-09-13/IBM-EGA.json5.......
+    HDC: Type 3 "10Mb Hard Disk" is fixed disk 0
+    Loading /harddisks/pcx86/10mb/MSDOS320-C400.json.......
+    Loading /software/pcx86/lang/logitech/modula2/1.10/state.json........
+    Bus: 8Kb ROM at 000C8000
+    Bus: 8Kb ROM at 000FE000
+    Bus: 32Kb ROM at 000F6000
+    Bus: 16Kb ROM at 000C0000
+    HDC: Mounted disk "10Mb Hard Disk" in drive C
+    Bus: 640Kb RAM at 0000
+    RAM: 0xa0000 (640Kb) size overrides SW1
+    RAM: ROM BIOS memory test has been disabled
+    Bus: 32Kb VIDEO at 000B8000
+    Type ? for help with PCx86 Debugger commands
+    AX=0100 BX=0004 CX=00F9 DX=007F SP=09F6 BP=0000 SI=00D3 DI=01A9 
+    SS=028C DS=028C ES=028C PS=F202 V0 D0 I1 T0 S0 Z0 A0 P0 C0 
+    &028C:14AD 2E              CS:     
+    &028C:14AE 8F068005        POP      WORD [0580]
+    running
+    Loading /disks/pcx86/shareware/pctj/PCTJ8610.json.......
+    FDC: Mounted diskette "PC Tech Journal (1986-10)" in drive A
+
+    C:\>mkdir egatest
+
+    C:\>cd egatest
+
+    C:\EGATEST>copy a:*.*
+    A:DOTTIME.DEF
+    A:DOTTIME.MOD
+    A:DRAWPOLY.DEF
+    A:DRAWPOLY.MOD
+    A:EDITBLCK
+    A:EGAMAKE.BAT
+    A:EGATEST.EXE
+    A:EGATEST.MOD
+    A:FONTBUMP.DEF
+    A:FONTBUMP.MOD
+    A:INFO
+    A:LOWEGA.DEF
+    A:LOWEGA.MOD
+    A:OPCODES.DEF
+    A:OPCODES.MOD
+    A:OTHRFONT.DAT
+    A:PAUSES.DEF
+    A:PAUSES.MOD
+    A:POINTLIB.DEF
+    A:POINTLIB.MOD
+            20 File(s) copied
+
+    C:\EGATEST>egamake
+
+    C:\EGATEST>rem
+
+    C:\EGATEST>rem compile files in this order to avoid version conflicts
+
+    C:\EGATEST>rem
+
+    C:\EGATEST>m2 comp  opcodes.def
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> opcodes.def
+
+    Syntax Analysis
+    target speed: 9.54Mhz
+    Declaration Analysis
+    target speed: 19.08Mhz
+    Symbol File Generation
+    Termination
+    End Compilation
+
+    C:\EGATEST>m2 comp  pointlib.def
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, target speed: 38.16Mhz
+    Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> pointlib.def
+
+    Syntax Analysis
+    Declaration Analysis
+    Symbol File Generation
+    Termination
+    End Compilation
+
+    C:\EGATEST>m2 comp  lowega.def
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> lowega.def
+
+    Syntax Analysis
+        PointLib in file: C:PointLib.SYM
+    Declaration Analysis
+    Symbol File Generation
+    Termination
+    End Compilation
+
+    C:\EGATEST>m2 comp  pauses.def
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> pauses.def
+
+    Syntax Analysis
+    Declaration Analysis
+    Symbol File Generation
+    Termination
+    End Compilation
+
+    C:\EGATEST>m2 comp  drawpoly.def
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> drawpoly.def
+
+    Syntax Analysis
+        LowEGA   in file: C:LowEGA.SYM
+        PointLib in file: C:PointLib.SYM
+    Declaration Analysis
+    Symbol File Generation
+    Termination
+    End Compilation
+
+    C:\EGATEST>m2 comp  dottime.def
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> dottime.def
+
+    Syntax Analysis
+    Declaration Analysis
+    Symbol File Generation
+    Termination
+    End Compilation
+
+    C:\EGATEST>m2 comp  fontbump.def
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> fontbump.def
+
+    Syntax Analysis
+    Declaration Analysis
+    Symbol File Generation
+    Termination
+    End Compilation
+
+    C:\EGATEST>m2 comp  lowega.mod
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> lowega.mod
+
+    Syntax Analysis
+        LowEGA   in file: C:LowEGA.SYM
+        PointLib in file: C:PointLib.SYM
+        Opcodes  in file: C:Opcodes.SYM
+    Declaration Analysis
+    Block Analysis
+    Code Generation
+    Termination
+        The interactive setting of the options was: S+ /R+ /T+ 
+        Codesize:   5342 bytes   Datasize:     94 bytes
+    End Compilation
+
+    C:\EGATEST>m2 comp  egatest.mod
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> egatest.mod
+
+    Syntax Analysis
+        Terminal in file: C:\M2LIB\SYM\Terminal.SYM
+        InOut    in file: C:\M2LIB\SYM\InOut.SYM
+        LowEGA   in file: C:LowEGA.SYM
+        PointLib in file: C:PointLib.SYM
+        FontBump in file: C:FontBump.SYM
+        Conversi in file: C:\M2LIB\SYM\Conversi.SYM
+        Strings  in file: C:\M2LIB\SYM\Strings.SYM
+        Pauses   in file: C:Pauses.SYM
+        DrawPoly in file: C:DrawPoly.SYM
+        DotTime  in file: C:DotTime.SYM
+    Declaration Analysis
+    Block Analysis
+    Code Generation
+    Termination
+        The interactive setting of the options was: S+ /R+ /T+ 
+        Codesize:   5362 bytes   Datasize:    294 bytes
+    End Compilation
+
+    C:\EGATEST>m2 comp  fontbump.mod
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> fontbump.mod
+
+    Syntax Analysis
+        FontBump in file: C:FontBump.SYM
+        FileSyst in file: C:\M2LIB\SYM\FileSyst.SYM
+        LowEGA   in file: C:LowEGA.SYM
+        Opcodes  in file: C:Opcodes.SYM
+        Pauses   in file: C:Pauses.SYM
+    Declaration Analysis
+    Block Analysis
+    Code Generation
+    Termination
+        The interactive setting of the options was: S+ /R+ /T+ 
+        Codesize:    715 bytes   Datasize:   3638 bytes
+    End Compilation
+
+    C:\EGATEST>m2 comp  pointlib.mod
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> pointlib.mod
+
+    Syntax Analysis
+        PointLib in file: C:PointLib.SYM
+    Declaration Analysis
+    Block Analysis
+    Code Generation
+    Termination
+        The interactive setting of the options was: S+ /R+ /T+ 
+        Codesize:     97 bytes   Datasize:      0 bytes
+    End Compilation
+
+    C:\EGATEST>m2 comp  opcodes.mod
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> opcodes.mod
+
+    Syntax Analysis
+        Opcodes  in file: C:Opcodes.SYM
+    Declaration Analysis
+    Block Analysis
+    Code Generation
+    Termination
+        The interactive setting of the options was: S+ /R+ /T+ 
+        Codesize:     17 bytes   Datasize:      0 bytes
+    End Compilation
+
+    C:\EGATEST>m2 comp  pauses.mod
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> pauses.mod
+
+    Syntax Analysis
+        Pauses   in file: C:Pauses.SYM
+        Terminal in file: C:\M2LIB\SYM\Terminal.SYM
+        LowEGA   in file: C:LowEGA.SYM
+        PointLib in file: C:PointLib.SYM
+    Declaration Analysis
+    Block Analysis
+    Code Generation
+    Termination
+        The interactive setting of the options was: S+ /R+ /T+ 
+        Codesize:    483 bytes   Datasize:      0 bytes
+    End Compilation
+
+    C:\EGATEST>m2 comp  dottime.mod
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> dottime.mod
+
+    Syntax Analysis
+        DotTime  in file: C:DotTime.SYM
+        Terminal in file: C:\M2LIB\SYM\Terminal.SYM
+        LowEGA   in file: C:LowEGA.SYM
+        TimeDate in file: DK:TimeDate.SYM
+        ---- file not found
+        TimeDate in file>  ---- DK:Pass1.LOD warning
+    Termination
+    End Compilation
+
+    ===>  warning, file DK:M2COMP.LOD
+    ^C
+
+    Terminate batch job (Y/N)? n
+    C:\EGATEST>m2 comp  drawpoly.mod
+    LOGITECH MODULA-2/86 Compiler, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        source file> drawpoly.mod
+
+    Syntax Analysis
+        DrawPoly in file: C:DrawPoly.SYM
+        LowEGA   in file: C:LowEGA.SYM
+        PointLib in file: C:PointLib.SYM
+    Declaration Analysis
+    Block Analysis
+    Code Generation
+    Termination
+        The interactive setting of the options was: S+ /R+ /T+ 
+        Codesize:    781 bytes   Datasize:      0 bytes
+    End Compilation
+
+    C:\EGATEST>rem
+
+    C:\EGATEST>rem Linker requires manual entry of two real-number library file
+
+    C:\EGATEST>rem names unless you have renamed one set of the E87, C87, or M87
+
+    C:\EGATEST>rem libraries to be your standard set.  If not, add prefix E87, C87,
+
+    C:\EGATEST>rem or M87 to library names realc.lnk and reals.lnk & enter manually
+
+    C:\EGATEST>rem in response to linker query.   See section 5.7.2 in red manual.
+
+    C:\EGATEST>rem
+
+    C:\EGATEST>m2 link  egatest
+    LOGITECH MODULA-2/86 Linker, DOS 8086, Rel. 1.10, Nov 84
+    Copyright (C) 1983, 1984 LOGITECH.
+
+        master file  > egatest.LNK
+        linked with:
+            Terminal      in file : C:\M2LIB\LNK\Terminal.LNK
+            Termbase      in file : C:\M2LIB\LNK\Termbase.LNK
+            System        in file : C:\M2LIB\LNK\System.LNK
+            Keyboard      in file : C:\M2LIB\LNK\Keyboard.LNK
+            ASCII         in file : C:\M2LIB\LNK\ASCII.LNK
+            Display       in file : C:\M2LIB\LNK\Display.LNK
+            InOut         in file : C:\M2LIB\LNK\InOut.LNK
+            FileSystem    in file : C:\M2LIB\LNK\FileSyst.LNK
+            DiskFiles     in file : C:\M2LIB\LNK\DiskFile.LNK
+            LowEGA        in file : C:LowEGA.LNK
+            PointLib      in file : C:PointLib.LNK
+            Opcodes       in file : C:Opcodes.LNK
+            FontBumper    in file : C:FontBump.LNK
+            Pauses        in file : C:Pauses.LNK
+            Conversions   in file : C:\M2LIB\LNK\Conversi.LNK
+            Strings       in file : C:\M2LIB\LNK\Strings.LNK
+            DrawPoly      in file : C:DrawPoly.LNK
+            DotTime       in file : DK:DotTime.LNK
+        ---- file not found
+            DotTime       in file > 
+    ===>  warning, file DK:M2LINK.LOD
+
+    C:\EGATEST>m2 lod2exe egatest
+    lod2exe.LOD<NUL><NUL><NUL><NUL> not found in current directory or in \M2LOD
+    C:\EGATEST>
+    C:\EGATEST>
+    C:\EGATEST>

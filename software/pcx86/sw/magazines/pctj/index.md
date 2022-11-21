@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/shareware/pctj/
 machines:
   - id: pctj
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/ega/640kb/rev1/machine.xml
+    config: /machines/pcx86/ibm/5170/ega/640kb/rev1/machine.xml
     testRAM: false
     drives: '[{name:"10Mb Hard Disk",type:1,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'
     autoMount:

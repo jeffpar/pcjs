@@ -8,7 +8,7 @@ machines:
   - id: lifeColorDemo
     type: led
     name: Game of Life
-    config: /configs/led/life-color.json
+    config: /machines/led/life-color.json
     layout: /_includes/led/life-color.html
 ---
 

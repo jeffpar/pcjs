@@ -6,7 +6,7 @@ preview: /software/pcx86/demo/ibm/exploring/1.00-MDA/images/screenshot.png
 machines:
   - id: ibm5170
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
       A: "Exploring the IBM PC AT 1.00"

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rom id="romBIOS" addr="0xf8000" size="0x8000" file="/machines/pcx86/zenith/z150/rom/BIOS-Z150-1988.json5"/>

@@ -1022,13 +1022,15 @@ export default class Memory extends Device {
      */
     loadState(state)
     {
-        let idDevice = state.shift();
-        if (this.idDevice == idDevice) {
-            this.fDirty = state.shift();
-            state.shift();      // formerly fDirtyEver, now unused
-            let values = state.shift();
-            if (values) this.initValues(this.decompress(values, this.size));
-            return true;
+        if (state) {
+            let idDevice = state.shift();
+            if (this.idDevice == idDevice) {
+                this.fDirty = state.shift();
+                state.shift();      // formerly fDirtyEver, now unused
+                let values = state.shift();
+                if (values) this.initValues(this.decompress(values, this.size));
+                return true;
+            }
         }
         return false;
     }

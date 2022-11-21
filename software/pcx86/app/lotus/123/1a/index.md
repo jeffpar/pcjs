@@ -7,7 +7,7 @@ preview: images/screenshot.png
 machines:
   - id: ibm5150-123-1a
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/cga/256kb/machine.xml
+    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
     autoMount:
       B:
         name: Lotus 1-2-3 1A (1-System)

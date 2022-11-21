@@ -12,7 +12,7 @@ machines:
   - id: invaders
     type: invaders
     name: Space Invaders
-    config: /configs/invaders/invaders.json
+    config: /machines/arcade/invaders/invaders.json
     layout: /_includes/invaders/invaders-diag.html
 ---
 

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rom id="romBIOS" addr="0xfd000" size="0x3000" file="/machines/pcx86/cdp/mpc1600/rom/BIOS-434.json5"/>

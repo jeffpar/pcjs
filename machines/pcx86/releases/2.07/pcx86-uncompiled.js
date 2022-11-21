@@ -1208,6 +1208,7 @@ class Str {
         let i = sFileName.lastIndexOf(".");
         if (i >= 0) {
             sExtension = sFileName.substr(i + 1).toLowerCase();
+            if (sExtension == "json5") sExtension = "json";
         }
         return sExtension;
     }
@@ -46605,10 +46606,6 @@ class Kbdx86 extends Component {
         this.printf(Messages.KBD + Messages.PORT, "keyboard reset\n");
         this.abBuffer = [];
         this.setResponse(Kbdx86.CMDRES.BAT_OK);
-        /*
-         * BUGFIX for 8042 POST on LTE/286
-         */
-        if (this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) this.abBuffer.unshift(Kbdx86.CMDRES.BAT_OK);
     }
 
     /**
@@ -69890,9 +69887,9 @@ HDC.aDriveTypes = [
      * aDriveTypes[0] is for the IBM PC XT (XTC) controller.
      */
     {
-         0: [306, 2],
-         1: [375, 8],
-         2: [306, 6],
+         0: [306, 2],           //  5Mb ( 5.08Mb: 306*2*17*512 or  5,326,848 bytes)
+         1: [375, 8],           // 25Mb (24.90Mb: 375*8*17*512 or 26,112,000 bytes)
+         2: [306, 6],           // 15Mb (15.24Mb: 306*6*17*512 or 15,980,544 bytes)
          3: [306, 4]            // 10Mb (10.16Mb: 306*4*17*512 or 10,653,696 bytes) (default XTC drive type: 3)
     },
     /*
@@ -70648,7 +70645,7 @@ class JSONLib {
                          * that may contain:
                          *
                          *      'url':      URL of the preferred machine to run the software (eg, "/machines/pcx86/ibm/5150/cga/")
-                         *      'config':   a specific configuration file (eg, "/configs/pcx86/machine/ibm/5170/vga/2048kb/machine.xml")
+                         *      'config':   a specific configuration file (eg, "/machines/pcx86/ibm/5170/vga/2048kb/machine.xml")
                          *      'drives':   one of more hard drive configs (eg, "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]")
                          *      'options':  assorted hardware options (eg, "mouse")
                          *      'autoType': if present, overrides any '@autoType' set for the software
@@ -82653,8 +82650,14 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                  * Third-party sites that don't use the PCjs server will ALWAYS want to specify a fully-qualified
                  * path to the XSL file, unless they choose to mirror our folder structure.
                  */
-                sXSLFile = "/configs/" + sAppClass + "/xsl/components.xsl";
+                sXSLFile = "/machines/" + sAppClass + "/xsl/components.xsl";
             }
+
+            /*
+             * If sAppClass specified a folder (eg, "osi/c1p"), that was required for the location of the XSL file,
+             * but now all we want is the final folder name (eg, "c1p") for any XSL "APPCLASS" variable replacement.
+             */
+            sAppClass = sAppClass.split('/').pop();
 
             let processXML = function(sURL, sXML, xml) {
                 if (!xml) {
@@ -82812,7 +82815,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("C1Pjs", "c1p", idMachine, sXMLFile, sXSLFile, undefined, sClass);
+    return embedMachine("C1Pjs", "osi/c1p", idMachine, sXMLFile, sXSLFile, undefined, sClass);
 }
 
 /**
@@ -82860,7 +82863,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PDPjs", "pdp10", idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PDPjs", "dec/pdp10", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**
@@ -82876,7 +82879,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
     if (fAsync) Web.enablePageEvents(false);
-    return embedMachine("PDPjs", "pdp11", idMachine, sXMLFile, sXSLFile, sParms, sClass);
+    return embedMachine("PDPjs", "dec/pdp11", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
 /**

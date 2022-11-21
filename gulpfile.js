@@ -14,7 +14,7 @@
  *
  *          Recompiles all machine scripts in their respective release folder that are out-of-date with
  *          respect to the individual files (under /machines).  The target version comes from
- *          configs/machines.json:shared.version.
+ *          machines/machines.json:shared.version.
  *
  *          It does this by running the `concat` and `compile` tasks for all machines.
  *
@@ -43,7 +43,7 @@
  *      version
  *
  *          Updates the version number in all project machine XML files to match the version contained in
- *          configs/machines.json:shared.version.
+ *          machines/machines.json:shared.version.
  *
  *      copyright
  *
@@ -97,7 +97,7 @@ var argv = args.argv;
 /**
  * @type {Object.<string,Machine>}
  */
-var machines = require("./configs/machines.json");
+var machines = require("./machines/machines.json");
 var siteHost = "https://www.pcjs.org";
 
 if (pkg.homepage) {
@@ -288,7 +288,7 @@ gulp.task("compile/v3", gulp.parallel(
 
 gulp.task("version", function() {
     let baseDir = "./";
-    return gulp.src(["configs/**/*.xml"], {base: baseDir})
+    return gulp.src(["machines/**/*.xml"], {base: baseDir})
         .pipe(gulpReplace(/href="\/machines\/([^/]*)\/releases\/[0-9.]*\/(machine|manifest|outline)\.xsl"/g, 'href="/machines/$1/releases/' + machines.shared.version + '/$2.xsl"'))
         .pipe(gulp.dest(baseDir));
 });

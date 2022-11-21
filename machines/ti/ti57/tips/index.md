@@ -7,7 +7,7 @@ machines:
   - id: ti57-rev0
     type: ti57
     name: TI-57 Programmable Calculator
-    config: /configs/ti57/ti57-rev0.json
+    config: /machines/ti/ti57/rev0/ti57.json
     layout: /_includes/ti57/ti57-bare.html
 ---
 

@@ -8,7 +8,7 @@ machines:
     type: pdp11
     debugger: true
     autoMount: ''
-    config: /configs/pdp11/machine/1120/basic/debugger/machine.xml
+    config: /machines/dec/pdp11/1120/basic/debugger/machine.xml
 ---
 
 PDPjs can now simulate a PDP-11/20.  It was one of the first PDP-11 models, and since it had no MMU,
@@ -19,7 +19,7 @@ The first PDPjs test of a PDP-11/20 machine was running [PDP-11 BASIC](/software
 it directly into memory from the original paper tape image.  This required changes to the [RAM](/machines/dec/pdp11/lib/ram.js)
 component, including a new *loadImage()* interface that understands DEC's paper tape format.
 
-To provide a more "authentic" experience, there is also a new [PC11 Paper Tape](/configs/pdp11/pc11/) component,
+To provide a more "authentic" experience, there is also a new [PC11 Paper Tape](/machines/dec/pdp11/pc11/) component,
 and machines can now be configured to include a virtual paper tape reader, with an [assortment of paper tapes](/software/dec/pdp11/tapes/)
 ready to be loaded.
 

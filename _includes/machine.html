@@ -30,13 +30,13 @@
     {%- assign machine = nil -%}
     {%- assign machine_does_not_exist = false -%}
     {%- comment -%}Machines that explicitly include an HTML layout file do not need any additional layout work performed below.{%- endcomment -%}
-  {%- elsif machine_config contains "/configs/" -%}
+  {%- elsif machine_config contains "/machines/" -%}
     {%- assign machine_data = site.data -%}
-    {%- assign machine_paths = machine_config | replace: "/configs/", "" | replace: ".json", "" | split: "/" -%}
+    {%- assign machine_paths = machine_config | replace: "/machines/", "" | replace: ".json", "" | split: "/" -%}
     {%- for machine_path in machine_paths -%}{%- assign machine_data = machine_data[machine_path] -%}{%- endfor -%}
     {%- assign machine = machine_data -%}
     {%- assign machine_data = machine.machine -%}
-    {%- comment -%}Any JSON configuration file in the /configs folder should be accessible through site.data, driving layout generation below.{%- endcomment -%}
+    {%- comment -%}Any JSON configuration file in the /machines folder should be accessible through site.data, driving layout generation below.{%- endcomment -%}
     {%- unless machine %}
       {%- capture machine_errors %}{{ machine_errors }}
 <p class="machine-error">Missing machine configuration file: {{ machine_config }}</p>
@@ -48,7 +48,13 @@
   {%- endif -%}
 {%- elsif machine -%}
   {%- unless machine.components -%}
-    {%- assign machine = site.data[machine_type][machine_id] -%}
+    {%- assign machine_group = site.data.machines[machine_type].folder | split: '/' -%}
+    {%- unless machine_group[1] %}
+      {%- assign machine = site.data[machine_type][machine_id] -%}
+    {%- else %}
+      {%- assign machine_group = machine_group[0] -%}
+      {%- assign machine = site.data[machine_group][machine_type][machine_id] -%}
+    {%- endunless %}
     {%- unless machine -%}
       {%- capture machine_errors %}{{ machine_errors }}
 <p class="machine-error">Missing machine configuration for {{ machine_id }}</p>
@@ -89,7 +95,7 @@
     {%- if machine_component.config -%}{%- assign config = machine_component.config -%}{%- elsif machine_component.id == nil -%}{%- assign config = machine_component -%}{%- endif -%}
     {%- if config -%}
       {%- assign config_data = site.data -%}
-      {%- assign config_paths = config | replace: "/configs/", "" | replace: ".json", "" | split: "/" -%}
+      {%- assign config_paths = config | replace: "/machines/", "" | replace: ".json", "" | split: "/" -%}
       {%- for config_path in config_paths -%}{%- assign config_data = config_data[config_path] -%}{%- endfor -%}
       {%- assign component = config_data -%}
       {%- unless component and machine_component.class == nil or component.class == machine_component.class %}

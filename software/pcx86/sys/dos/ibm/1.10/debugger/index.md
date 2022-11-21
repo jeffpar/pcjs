@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/dos/ibm/1.10/
 machines:
   - id: ibm5150-256k
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/mda/256kb/debugger/machine.xml
+    config: /machines/pcx86/ibm/5150/mda/256kb/debugger/machine.xml
     floppyDrives: '[{heads:2},{heads:2}]'
     autoMount:
       A:

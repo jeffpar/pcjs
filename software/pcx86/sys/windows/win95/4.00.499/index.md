@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/windows/win95/4.00.499/
 machines:
   - id: deskpro386
     type: pcx86
-    config: /configs/pcx86/machine/compaq/deskpro386/vga/4096kb/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/vga/4096kb/machine.xml
     autoMount:
         A: "MS-DOS 5.00 (720K Disk 1)"
         B: "None"

@@ -6,7 +6,7 @@ redirect_from: /devices/pdp11/machine/1170/4mb/
 machines:
   - id: test1170
     type: pdp11
-    config: /configs/pdp11/machine/1170/4mb/machine.xml
+    config: /machines/dec/pdp11/1170/4mb/machine.xml
     autoMount:
       RL0:
         path: /decdisks/pdp11/rl01k/RL01K-RSTS-V70.json

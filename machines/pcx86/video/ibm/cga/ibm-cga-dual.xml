@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<video id="videoCGA" model="cga" screenWidth="1280" screenHeight="800" fontROM="/machines/pcx86/ibm/video/cga/IBM-CGA.json5" pos="center" padding="8px">
+	<menu>
+		<title>Color Display</title>
+	</menu>
+</video>

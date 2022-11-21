@@ -5,7 +5,7 @@ permalink: /software/pcx86/lang/microsoft/masm/5.10x/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "MS MASM 5.10 (Feb 1988 Disk 1)"
@@ -311,4 +311,3 @@ From the **MS Macro Assembler 5.10A** Diskette:
 	          not defined" errors when used with text equates.
 	     
 	     o    Text macro expansions no longer cause GP faults.
-

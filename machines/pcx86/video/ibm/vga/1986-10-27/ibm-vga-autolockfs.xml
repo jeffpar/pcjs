@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<video id="videoVGA" model="vga" screenWidth="1280" screenHeight="960" touchScreen="mouse" autoLock="true" pos="center" padding="8px">
+	<menu>
+		<title>VGA Color Display</title>
+		<control type="container" pos="right">
+			<control type="led" label="Caps" binding="caps-lock" padLeft="8px"/>
+			<control type="led" label="Num" binding="num-lock" padLeft="8px"/>
+			<control type="led" label="Scroll" binding="scroll-lock" padLeft="8px"/>
+			<control type="button" binding="fullScreen" padLeft="8px;line-height:1em">Full Screen</control>
+		</control>
+	</menu>
+	<rom id="romVGA" addr="0xc0000" size="0x6000" file="/machines/pcx86/ibm/video/vga/1986-10-27/IBM-VGA.json5" notify="videoVGA[0x378d,0x3f8d,0x4eba]"/>
+</video>

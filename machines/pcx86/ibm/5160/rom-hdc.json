@@ -1,0 +1,8 @@
+{
+  "id": "romHDC",
+  "class": "rom",
+  "addr": "0xc8000",
+  "size": "0x02000",
+  "alias": null,
+  "file": "/machines/pcx86/ibm/5160/rom/hdc/IBM-XEBEC-1982.json5"
+}

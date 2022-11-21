@@ -7,7 +7,7 @@ preview: /blog/images/pcmag-1982-12-user-to-user.jpg
 machines:
   - id: ibm5150
     type: pcx86
-    config: /configs/pcx86/machine/ibm/5150/mda/256kb/machine.xml
+    config: /machines/pcx86/ibm/5150/mda/256kb/machine.xml
     floppyDrives: '[{heads:1},{heads:1}]'
     autoMount:
       A:

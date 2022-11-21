@@ -7,13 +7,13 @@ machines:
   - id: ibm5160-msdos320
     type: pcx86
     debugger: true
-    config: /configs/pcx86/machine/ibm/5160/ega/640kb/debugger/machine.xml
+    config: /machines/pcx86/ibm/5160/ega/640kb/debugger/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'
     autoMount:
       A:
         name: None
       B:
-        name: IBM PC BIOS Source (V1)
+        name: IBM PC BIOS Sources (V1)
     autoStart: true
 ---
 
@@ -21,7 +21,7 @@ PCjs has created and archived a collection IBM PC ROM BIOS diskettes.  Their con
 
 {% include machine.html id="ibm5160-msdos320" %}
 
-### Directory of IBM PC BIOS Source (V1)
+### Directory of IBM PC BIOS Sources (V1)
 
      Volume in drive B is 5150V1
      Directory of B:\
@@ -33,7 +33,7 @@ PCjs has created and archived a collection IBM PC ROM BIOS diskettes.  Their con
             4 file(s)     195517 bytes
                           124928 bytes free
 
-### Directory of IBM PC BIOS Source (V2)
+### Directory of IBM PC BIOS Sources (V2)
 
      Volume in drive B is 5150V2
      Directory of B:\
@@ -45,7 +45,7 @@ PCjs has created and archived a collection IBM PC ROM BIOS diskettes.  Their con
             4 file(s)     195461 bytes
                           124928 bytes free
 
-### Directory of IBM PC BIOS Source (V3)
+### Directory of IBM PC BIOS Sources (V3)
 
      Volume in drive B is 5150V3
      Directory of B:\

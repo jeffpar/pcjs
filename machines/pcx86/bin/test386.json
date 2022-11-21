@@ -37,7 +37,7 @@
       "scale": true,
       "charCols": 80,
       "charRows": 25,
-      "fontROM": "/machines/pcx86/ibm/video/mda/IBM-MDA.json",
+      "fontROM": "/machines/pcx86/ibm/video/mda/IBM-MDA.json5",
       "screenColor": "black",
       "touchScreen": false
     }

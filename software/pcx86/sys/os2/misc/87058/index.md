@@ -8,7 +8,7 @@ machines:
     type: pcx86
     debugger: true
     messages: warn
-    config: /configs/pcx86/machine/compaq/deskpro386/ega/4096kb/debugger/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/ega/4096kb/debugger/machine.xml
     autoMount:
       A:
         name: OS/2 FOOTBALL (v7.68.17)
@@ -401,4 +401,3 @@ Microsoft *football* alias on Saturday, February 28, 1987, at 5:02pm.
 	THEN
 	    MapIn foreground 3xBox;
 	    Dispatch interrupt;
-

@@ -1,0 +1,92 @@
+{
+  "lifeColorDemo": {
+    "class": "Machine",
+    "type": "LED",
+    "name": "Game of Life",
+    "version": 2.00,
+    "autoStart": true,
+    "bindings": {
+      "reset": "resetLife",
+      "clear": "clearLife",
+      "print": "printLife"
+    },
+    "overrides": ["autoStart"]
+  },
+  "lifeClock": {
+    "class": "Time",
+    "cyclesPerSecond": 1,
+    "cyclesMinimum": 1,
+    "cyclesMaximum": 120,
+    "bindings": {
+      "run": "runLife",
+      "speed": "speedLife",
+      "step": "stepLife",
+      "throttle": "throttleLife"
+    },
+    "overrides": ["cyclesPerSecond","cyclesMinimum","cyclesMaximum"]
+  },
+  "lifeDisplay": {
+    "class": "LED",
+    "type": 1,
+    "cols": 38,
+    "rows": 26,
+    "color": "green",
+    "backgroundColor": "black",
+    "bindings": {
+      "container": "displayLife"
+    },
+    "overrides": ["color","backgroundColor"]
+  },
+  "lifeInput": {
+    "class": "Input",
+    "drag": true
+  },
+  "lifeCtrl": {
+    "class": "LEDCtrl",
+    "rule": "B3/S23",
+    "pattern": "gliderGun",
+    "patterns": {
+      "gliderGun": [
+        "#N Gosper Glider Gun",
+        "#C This was the first gun discovered.",
+        "#C As its name suggests, it was discovered by Bill Gosper.",
+        "x = 36, y = 9, rule = B3/S23",
+        "24bo$22bobo$12b2o6b2o12b2o$11bo3bo4b2o12b2o$2o8bo5bo3b2o$2o8bo3bob2o4b",
+        "obo$10bo5bo7bo$11bo3bo$12b2o!"
+      ]
+    },
+    "bindings": {
+      "colorPalette": "colorPaletteLife",
+      "colorSelection": "colorSelectionLife",
+      "colorSwatchSelected": "colorSwatchLife",
+      "patterns": "patternsLife",
+      "saveToURL": "saveLife"
+    },
+    "colors": {
+      "Primary": {
+        "Navy":    "#000080",
+        "Green":   "#008000",
+        "Teal":    "#008080",
+        "Maroon":  "#800000",
+        "Purple":  "#800080",
+        "Olive":   "#808000",
+        "Gray":    "#808080",
+        "Blue":    "#0000ff",
+        "Lime":    "#00ff00",
+        "Cyan":    "#00ffff",
+        "Red":     "#ff0000",
+        "Magenta": "#ff00ff",
+        "Yellow":  "#ffff00",
+        "White":   "#ffffff"
+      },
+      "Pastels": {
+        "Pink":    "#ffb3ba",
+        "Beige":   "#ffdfba",
+        "Yellow":  "#ffffba",
+        "Green":	 "#baffc9",
+        "Blue":	 "#bae1ff"
+      }
+    },
+    "overrides": ["wrap","pattern"]
+  }
+}
