@@ -4,9 +4,6 @@ title: PC Hard Drive Types
 permalink: /machines/pcx86/hdc/
 redirect_from:
   - /disks/pcx86/drives/
-  - /disks/pcx86/drives/10mb/
-  - /disks/pcx86/drives/20mb/
-  - /disks/pcx86/drives/47mb/
   - /disks/pcx86/drives/68mb/
 ---
 

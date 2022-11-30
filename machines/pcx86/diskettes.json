@@ -7509,29 +7509,70 @@
             "@title": "MINIX 1.1",
             "@media": [
               {
-                "@title": "MINIX (Disk 1: Boot)",
-                "@diskette": "MINIX11-DISK1-BOOT.json",
+                "@title": "MINIX 1.1 (1.2M Disk 1: Boot)",
+                "@diskette": "MINIX11-1200K-DISK1-BOOT.json",
+                "@photo": ".jpg",
                 "@format": "PC1200K"
               },
               {
-                "@title": "MINIX (Disk 2: Root)",
-                "@diskette": "MINIX11-DISK2-ROOT.json",
+                "@title": "MINIX 1.1 (1.2M Disk 2: Root)",
+                "@diskette": "MINIX11-1200K-DISK2-ROOT.json",
                 "@format": "PC1200K"
               },
               {
-                "@title": "MINIX (Disk 3: User)",
-                "@diskette": "MINIX11-DISK3-USR.json",
+                "@title": "MINIX 1.1 (1.2M Disk 3: Usr)",
+                "@diskette": "MINIX11-1200K-DISK3-USR.json",
                 "@format": "PC1200K"
               },
               {
-                "@title": "MINIX (Disk 4: Kernel)",
-                "@diskette": "MINIX11-DISK4-KERNEL.json",
+                "@title": "MINIX 1.1 (1.2M Disk 4: Kernel)",
+                "@diskette": "MINIX11-1200K-DISK4-KERNEL.json",
                 "@format": "PC1200K"
               },
               {
-                "@title": "MINIX (Disk 5: Tools)",
-                "@diskette": "MINIX11-DISK5-TOOLS.json",
+                "@title": "MINIX 1.1 (1.2M Disk 5: Tools)",
+                "@diskette": "MINIX11-1200K-DISK5-TOOLS.json",
                 "@format": "PC1200K"
+              },
+              {
+                "@title": "MINIX 1.1 (360K Disk 1: Boot)",
+                "@diskette": "MINIX11-360K-DISK1-BOOT.json",
+                "@format": "PC360K"
+              },
+              {
+                "@title": "MINIX 1.1 (360K Disk 2: Root)",
+                "@diskette": "MINIX11-360K-DISK2-ROOT.json",
+                "@format": "PC360K"
+              },
+              {
+                "@title": "MINIX 1.1 (360K Disk 3: Usr)",
+                "@diskette": "MINIX11-360K-DISK3-USR.json",
+                "@format": "PC360K"
+              },
+              {
+                "@title": "MINIX 1.1 (360K Disk 4: User)",
+                "@diskette": "MINIX11-360K-DISK4-USER.json",
+                "@format": "PC360K"
+              },
+              {
+                "@title": "MINIX 1.1 (360K Disk 5: Sources)",
+                "@diskette": "MINIX11-360K-DISK5-SRC1.json",
+                "@format": "PC360K"
+              },
+              {
+                "@title": "MINIX 1.1 (360K Disk 6: Sources)",
+                "@diskette": "MINIX11-360K-DISK6-SRC2.json",
+                "@format": "PC360K"
+              },
+              {
+                "@title": "MINIX 1.1 (360K Disk 7: Sources)",
+                "@diskette": "MINIX11-360K-DISK7-SRC3.json",
+                "@format": "PC360K"
+              },
+              {
+                "@title": "MINIX 1.1 (360K Disk 8: Sources)",
+                "@diskette": "MINIX11-360K-DISK8-SRC4.json",
+                "@format": "PC360K"
               }
             ]
           }

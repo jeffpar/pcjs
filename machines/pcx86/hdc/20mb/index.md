@@ -2,6 +2,9 @@
 layout: page
 title: PC 20Mb Hard Drives
 permalink: /machines/pcx86/hdc/20mb/
+redirect_from:
+  - /disks/pcx86/drives/20mb/
+  - /configs/pcx86/hdc/20mb/
 ---
 
 PCjs includes 20Mb drives in selected IBM PC AT and COMPAQ DeskPro machines,
