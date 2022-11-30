@@ -63540,11 +63540,11 @@ class FDC extends Component {
         /*
          * This establishes "name" as the default; if we decide we'd prefer "none" to be the default (ie, the order
          * to use when no sortBy value is specified), we can just drop the '|| "name"', because an undefined value is
-         * just as falsey as null.
+         * just as falsy as null.
          *
-         * The code that actually performs the sorting (in setBinding()) first checks that sortBy is not falsey, and
-         * then assumes that the non-falsey value must be either "path" or "name", and since it explicitly checks for
-         * "path" first, any non-sensical value will be treated as "name" (which is fine, since that's our current default).
+         * The code that actually performs the sorting (in setBinding()) first checks that sortBy is not falsy, and
+         * then assumes that the non-falsy value must be either "path" or "name", and since it explicitly checks for
+         * "path" first, any nonsensical value will be treated as "name" (which is fine, since that's our current default).
          */
         this.sortBy = parmsFDC['sortBy'] || "name";
         if (this.sortBy == "none") this.sortBy = null;
@@ -64284,7 +64284,7 @@ class FDC extends Component {
          * but I'm using per-drive variables so that the FDC component can be a good client to both the CPU and other components.
          *
          * COMPATIBILITY ALERT: The MODEL_5170 BIOS ("DSKETTE_SETUP") attempts to discern the drive type (double-density vs.
-         * high-capacity) by "slapping" the heads around -- "litrally" (it uses a constant named "TRK_SLAP" equal to 48).
+         * high-capacity) by "slapping" the heads around -- literally (it uses a constant named "TRK_SLAP" equal to 48).
          * After seeking to "TRK_SLAP", the BIOS performs a series of seeks, looking for the precise point where the heads
          * return to track 0.
          *
@@ -65816,7 +65816,7 @@ class FDC extends Component {
          * with the initial version of requestInterrupt(), which had an additional fCondition parameter into which I
          * was passing the entire "drive && fIRQ && !(drive.resCode & FDC.REG_DATA.RES.NOT_READY)" expression.  Note
          * that if "drive" was undefined, the entire expression would be "undefined", which I assumed would translate
-         * to a "falsey" fCondition, but the fCondition parameter was also declared with a default value of true,
+         * to a "falsy" fCondition, but the fCondition parameter was also declared with a default value of true,
          * and default values are used not only when NO value is supplied but ALSO when an "undefined" value is supplied.
          *
          * Oops.
@@ -66078,10 +66078,10 @@ class FDC extends Component {
         drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
         if (drive.disk) {
             if (this.messageEnabled()) {
-                this.printf("%s.doRead(drive=%d,CHS=%d:%d:%d,LBA=%d,addr=%#X)\n",
+                this.printf("%s.doRead(drive=%d,CHS=%d:%d:%d,LBA=%d,bytes=%d,addr=%#X)\n",
                             this.idComponent, drive.iDrive, drive.bCylinder, drive.bHead, drive.bSector,
                             (drive.bCylinder * (drive.disk.nHeads * drive.disk.nSectors) + drive.bHead * drive.disk.nSectors + drive.bSector-1),
-                            this.chipset.checkDMA(ChipSet.DMA_FDC));
+                            drive.nBytes, this.chipset.checkDMA(ChipSet.DMA_FDC));
             }
             if (drive.bHead > drive.nHeads - 1) {
                 drive.resCode = FDC.REG_DATA.RES.NO_DATA | FDC.REG_DATA.RES.INCOMPLETE;
@@ -66114,10 +66114,10 @@ class FDC extends Component {
         drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
         if (drive.disk) {
             if (this.messageEnabled()) {
-                this.printf("%s.doWrite(drive=%d,CHS=%d:%d:%d,LBA=%d,addr=%#X)\n",
+                this.printf("%s.doWrite(drive=%d,CHS=%d:%d:%d,LBA=%d,bytes=%d,addr=%#X)\n",
                             this.idComponent, drive.iDrive, drive.bCylinder, drive.bHead, drive.bSector,
                             (drive.bCylinder * (drive.disk.nHeads * drive.disk.nSectors) + drive.bHead * drive.disk.nSectors + drive.bSector-1),
-                            this.chipset.checkDMA(ChipSet.DMA_FDC));
+                            drive.nBytes, this.chipset.checkDMA(ChipSet.DMA_FDC));
             }
             if (drive.bHead > drive.nHeads - 1) {
                 drive.resCode = FDC.REG_DATA.RES.NO_DATA | FDC.REG_DATA.RES.INCOMPLETE;

@@ -2,7 +2,9 @@
 layout: page
 title: PC 10Mb Hard Drives
 permalink: /machines/pcx86/hdc/10mb/
-redirect_from: /disks/pcx86/drives/10mb/
+redirect_from:
+  - /disks/pcx86/drives/10mb/
+  - /configs/pcx86/hdc/10mb/
 ---
 
 PCjs includes 10Mb drives in selected IBM PC XT, IBM PC AT, and COMPAQ DeskPro machines,
