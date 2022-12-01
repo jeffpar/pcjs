@@ -1,7 +1,7 @@
 /**
  * @fileoverview Implements the PCx86 ChipSet component
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2022 Jeff Parsons
+ * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -17,7 +17,7 @@ if (typeof module !== "undefined") {
     var State       = require("../../shared/lib/state");
     var PCx86       = require("./defines");
     var Interrupts  = require("./interrupts");
-    var Kbdx86      = require("./keyboard");
+    var KbdX86      = require("./keyboard");
     var Messages    = require("./messages");
     var X86         = require("./x86");
 }

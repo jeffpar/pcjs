@@ -1,7 +1,7 @@
 /**
  * @fileoverview Implements Disk support for FDC and HDC components
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2022 Jeff Parsons
+ * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -213,7 +213,7 @@ if (typeof module !== "undefined") {
 /**
  * @typedef {Object} FileModule
  * @property {string} name
- * @property {string} sDescription
+ * @property {string} description
  * @property {Object.<FileSegment>} [segments]
  */
 
@@ -1040,11 +1040,11 @@ class Disk extends Component {
                  * data, there could well be "holes" in the file table (ie, entries that were used to
                  * describe a volume label or some other directory entry that has no associated sectors).
                  */
-                if (!file || !file.module || file.module.name != sModule) continue;
-                let segment = file.module.segments[nSegment];
+                if (!file || !file.module || file.module['name'] != sModule) continue;
+                let segment = file.module['segments'] && file.module['segments'][nSegment];
                 if (!segment) continue;
-                for (let ord in segment.ordinals) {
-                    let entry = segment.ordinals[ord];
+                for (let ord in segment['ordinals']) {
+                    let entry = segment['ordinals'][ord];
                     /*
                      * entry[1] is the symbol name, which becomes the index, and entry[0] is the offset.
                      */
@@ -1082,12 +1082,12 @@ class Disk extends Component {
                  * describe a volume label or some other directory entry that has no associated sectors).
                  */
                 if (!file || !file.module) continue;
-                for (let seg in file.module.segments) {
-                    let segment = file.module.segments[seg];
-                    for (let ord in segment.ordinals) {
-                        let entry = segment.ordinals[ord];
+                for (let seg in file.module['segments']) {
+                    let segment = file.module['segments'][seg];
+                    for (let ord in segment['ordinals']) {
+                        let entry = segment['ordinals'][ord];
                         if (entry['s'] && entry['s'].indexOf(sSymbolUpper) >= 0) {
-                            aInfo.push([entry['s'], file.name, +seg, entry['o'], segment.offEnd - segment.offStart]);
+                            aInfo.push([entry['s'], file.name, +seg, entry['o'], segment['offEnd'] - segment['offStart']]);
                         }
                     }
                 }
@@ -2217,23 +2217,23 @@ class FileInfo {
     {
         let sSymbol = null;
         if (this.module) {
-            let segments = this.module.segments;
+            let segments = this.module['segments'];
             for (let seg in segments) {
                 let segment = segments[seg];
-                if (off >= segment.offStart && off <= segment.offEnd) {
+                if (off >= segment['offStart'] && off <= segment['offEnd']) {
                     /*
                      * This is the one and only segment we need to check, so we can make off segment-relative now.
                      */
-                    off -= segment.offStart;
+                    off -= segment['offStart'];
                     /*
                      * To support fNearest, save the entry where (off - entry[0]) yields the smallest positive result.
                      */
                     let cbNearest = off, entryNearest;
-                    for (let ord in segment.ordinals) {
-                        let entry = segment.ordinals[ord];
+                    for (let ord in segment['ordinals']) {
+                        let entry = segment['ordinals'][ord];
                         let cb = off - entry['o'];
                         if (!cb) {
-                            sSymbol = this.module.name + '!' + entry['s'];
+                            sSymbol = this.module['name'] + '!' + entry['s'];
                             break;
                         }
                         if (fNearest && cb > 0 && cb < cbNearest) {
@@ -2242,7 +2242,7 @@ class FileInfo {
                         }
                     }
                     if (!sSymbol && entryNearest) {
-                        sSymbol = this.module.name + '!' + entryNearest[1] + "+" + Str.toHex(cbNearest, 0, true);
+                        sSymbol = this.module['name'] + '!' + entryNearest[1] + "+" + Str.toHex(cbNearest, 0, true);
                     }
                     break;
                 }
